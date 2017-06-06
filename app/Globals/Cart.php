@@ -72,7 +72,7 @@ class Cart
                 unset($_cart["cart"]);
                 $insert = $_cart;
             }
-            
+
             $insert["cart"][$product_id]["product_id"]        = $product_id;
             $insert["cart"][$product_id]["quantity"]          = $quantity;
             $insert["cart"][$product_id]["shop_id"]           = $shop_id;
@@ -713,6 +713,8 @@ class Cart
         $data["tbl_customer"]['country_id']     = 420;
         $data["tbl_customer"]['tin_number']     = (isset($customer_information["tin_number"]) ? $customer_information["tin_number"] : (isset($data["tbl_customer"]['tin_number']) ? $data["tbl_customer"]['tin_number'] : null));
         $data["tbl_customer"]['username']     = (isset($customer_information["username"]) ? $customer_information["username"] : (isset($data["tbl_customer"]['username']) ? $data["tbl_customer"]['username'] : null));
+        $data["tbl_customer"]['company']     = (isset($customer_information["company"]) ? $customer_information["company"] : (isset($data["tbl_customer"]['company']) ? $data["tbl_customer"]['company'] : null));
+        $data["tbl_customer"]['is_corporate']     = (isset($customer_information["is_corporate"]) ? $customer_information["is_corporate"] : (isset($data["tbl_customer"]['is_corporate']) ? $data["tbl_customer"]['is_corporate'] : 0));
 
         $data['load_wallet']['ec_order_load'] = isset($customer_information['load_wallet']['ec_order_load']) == true ? $customer_information['load_wallet']['ec_order_load'] : 0 ;
         $data['load_wallet']['ec_order_load_number'] = isset($customer_information['load_wallet']['ec_order_load_number']) == true ? $customer_information['load_wallet']['ec_order_load_number'] : 0;
@@ -735,6 +737,8 @@ class Cart
             $data["tbl_customer"]['country_id']       = 420;
             $data["tbl_customer"]['tin_number']       = $current->tin_number;
             $data["tbl_customer"]['username']         = $current->username;
+            $data["tbl_customer"]['company']          = $current->company;
+            $data["tbl_customer"]['is_corporate']     = $current->is_corporate;
         }
 
         /* SET MLM SLOT */

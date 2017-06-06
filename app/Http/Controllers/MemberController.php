@@ -118,6 +118,11 @@ class MemberController extends Controller
         return strtolower( trim( substr($first_name, 0, 6) . "." . substr($last_name, 0, 3) ) );
     }
 
+    public function locale_id_to_name($locale_id)
+    {
+        return Tbl_locale::where("locale_id", $locale_id)->pluck("locale_name");
+    }
+
     public function register()
     {
         $data['country'] = Tbl_country::get();
@@ -129,7 +134,7 @@ class MemberController extends Controller
     {
         // return json_encode($_POST);
 
-        $info['is_coporate']       = Request::input('customer_type');
+        $info['is_corporate']      = Request::input('customer_type');
         $info['company']           = Request::input('customer_type') == 1 ? Request::input('company') : "";
         $info['country']           = Request::input('country');
         $info['email']             = Request::input('email');
@@ -148,7 +153,7 @@ class MemberController extends Controller
         $rules['password_confirm'] = 'required|min:6';
         $rules['email']            = 'required';
 
-        if($info['is_coporate'] == 1)
+        if($info['is_corporate'] == 1)
         {
             $rules['company'] = 'required';
         }
@@ -197,13 +202,14 @@ class MemberController extends Controller
                         $customer_info["username"]         = $info["username"];
                         $customer_info["slot_sponsor"]     = $info["sponsor"];
                         $customer_info["customer_contact"] = $info["customer_mobile"];
+                        $customer_info["is_corporate"]     = $info["is_corporate"];
+                        $customer_info["company"]          = $info["company"];
                         $customer_set_info_response        = Cart::customer_set_info(Self::$shop_id, $customer_info);
 
                         if($customer_set_info_response["status"] == "error")
                         { 
                             $data['status'] = 'warning';
                             $data['message'][0] = $customer_set_info_response["status_message"];
-                            return $data;
                         }
                         else
                         {
@@ -502,18 +508,16 @@ class MemberController extends Controller
 
     public function shipping_post()
     {
-        dd(Request::input());
-        $s['first_name'] = Request::input('first_name');
-        $s['last_name'] = Request::input('last_name');
-        $s['contact_info'] = Request::input('contact_info');
-        $s['contact_other'] = Request::input('contact_other');
-        $s['shipping_address'] = Request::input('shipping_address');
+        $s['customer_state'] = $this->locale_id_to_name(Request::input('customer_state'));
+        $s['customer_city'] = $this->locale_id_to_name(Request::input('customer_city'));
+        $s['customer_zip'] = $this->locale_id_to_name(Request::input('customer_zip'));
+        $s['customer_street'] = Request::input('customer_street');
+    
+        $rules['customer_state'] = 'required';
+        $rules['customer_city'] = 'required';
+        $rules['customer_zip'] = 'required';
+        $rules['customer_street'] = 'required';
 
-        $rules['first_name'] = 'required';
-        $rules['last_name'] = 'required';
-        $rules['contact_info'] = 'required';
-        $rules['contact_other'] = 'required';
-        $rules['shipping_address'] = 'required';
         $validator = Validator::make($s, $rules);
         if (!$validator->passes()) 
          {
@@ -523,10 +527,25 @@ class MemberController extends Controller
          }
          else
          {
-            Session::put('mlm_register_step_3', $s);
-            $data['status'] = 'success';
-            $data['message'][0] = 'Sucess!';
-            $data['link'] = '/member/register/payment';
+            $customer_info["shipping_state"]   = $s["customer_state"];
+            $customer_info["shipping_city"]    = $s["customer_city"];
+            $customer_info["shipping_zip"]     = $s["customer_zip"];
+            $customer_info["shipping_street"]  = $s["customer_street"];
+            $customer_set_info_response        = Cart::customer_set_info(Self::$shop_id, $customer_info);
+
+            if($customer_set_info_response["status"] == "error")
+            { 
+                $data['status'] = 'warning';
+                $data['message'][0] = $customer_set_info_response["status_message"];
+            }
+            else
+            {
+                /* Redirect */
+                Session::put('mlm_register_step_3', $s);
+                $data['status'] = 'success';
+                $data['message'][0] = 'Sucess!';
+                $data['link'] = '/member/register/payment';
+            }
 
             return json_encode($data);
          }

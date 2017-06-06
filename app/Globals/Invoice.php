@@ -307,7 +307,7 @@ class Invoice
                 $insert_line['invline_ref_id']          = $item_line['ref_id'];
                 $insert_line['invline_amount']          = $amount;
                 $insert_line['date_created']            = Carbon::now();
-
+                
                 Tbl_customer_invoice_line::insert($insert_line);
 
                 $item_type = Item::get_item_type($item_line['item_id']);

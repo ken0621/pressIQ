@@ -787,12 +787,12 @@ class Item_code
                                     $shop_id = $order->shop_id; 
                                     $insert['slot_no'] = Mlm_plan::set_slot_no($shop_id, $v_value->ec_product_membership);
                                     $insert['shop_id'] = $shop_id;
-                                    $insert['slot_owner'] = $v_value->order_slot_customer_id;
+                                    $insert['slot_owner'] = $tbl_ec_order_slot->order_slot_customer_id;
                                     $insert['slot_created_date'] = Carbon::now();
                                     $insert['slot_membership'] =    $v_value->ec_product_membership;
                                     $insert['slot_status'] = 'PS';
-                                    $insert['slot_placement'] = $v_value->order_slot_sponsor;
-                                    $insert['slot_sponsor'] = $v_value->order_slot_sponsor;
+                                    $insert['slot_placement'] = $tbl_ec_order_slot->order_slot_sponsor;
+                                    $insert['slot_sponsor'] = $tbl_ec_order_slot->order_slot_sponsor;
 
                                     $id = Tbl_mlm_slot::insertGetId($insert);
                                     $a = Mlm_compute::entry($id);

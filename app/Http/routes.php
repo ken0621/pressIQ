@@ -922,6 +922,10 @@ Route::controller('/member/accounting/journal', 'Member\JournalEntryController')
 Route::controller('/member/maintenance/terms', 'Member\TermsOfPaymentController');
 /* End */
 
+/* MEMBER SHIPPING*/
+Route::controller('/member/register/shipping', 'MemberController');
+/* End */
+
 Route::controller('/tester','TesterController');
 
 // test lang load

@@ -686,7 +686,7 @@ class Ec_order
         }
 
         /* Email Password */
-        if ($order_info["new_account"]) 
+        if ($order_info["new_account"] == true) 
         {
             $data["template"]                 = Tbl_email_template::where("shop_id", $order_info["tbl_ec_order"]["shop_id"])->first();
             $data['mail_to']                       = $order_info["tbl_ec_order"]["customer_email"];

@@ -15,6 +15,8 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_membership_package;
 use App\Models\Tbl_membership_code;
 use App\Models\Tbl_membership_package_has;
+use App\Models\Tbl_locale;
+
 use App\Models\Tbl_ec_product;
 use Validator;
 use Session;
@@ -24,7 +26,7 @@ use App\Globals\Item;
 use App\Globals\Mlm_plan;
 use App\Globals\Mlm_compute;
 use App\Globals\Mlm_gc;
-use App\Globals\dragonpay\RequestPayment;
+use App\Globals\Dragonpay2\Dragon_RequestPayment;
 use App\Globals\Cart;
 class MemberController extends Controller
 {
@@ -113,12 +115,13 @@ class MemberController extends Controller
 
     public function generate_username($first_name, $last_name)
     {
-        
+        return strtolower( trim( substr($first_name, 0, 6) . "." . substr($last_name, 0, 3) ) );
     }
 
     public function register()
     {
         $data['country'] = Tbl_country::get();
+        $data['current'] = Cart::get_info(Self::$shop_id);
         return view("mlm.register.register", $data);
     }
 
@@ -149,7 +152,7 @@ class MemberController extends Controller
         $rules['last_name'] = 'required';
         $rules['password'] = 'required|min:6';
         $rules['password_confirm'] = 'required|min:6';
-        $rules['email'] = 'required';
+        $rules['email']            = 'required';
         if(!isset($_POST['terms']))
         {
             $data['status'] = 'warning';
@@ -178,12 +181,14 @@ class MemberController extends Controller
 
                     if($info['password'] == $info['password_confirm'])
                     {
+
                         /* Set Product Temporarily */
+                        Cart::clear_all(Self::$shop_id);
                         $product = Tbl_ec_product::where("eprod_shop_id", Self::$shop_id)->where("archived", 0)->first();
                         Cart::add_to_cart($product->eprod_id, 1, Self::$shop_id, true);
 
                         /* Set Customer Info */
-                        $customer_info["new_account"]      = false;
+                        $customer_info["new_account"]      = true;
                         $customer_info["first_name"]       = $info["first_name"];
                         $customer_info["last_name"]        = $info["last_name"];
                         $customer_info["email"]            = $info["email"];
@@ -411,7 +416,7 @@ class MemberController extends Controller
         $shop_id = Self::$shop_id;
         Session::put('shop_id_session', $shop_id);
         
-        $requestpayment = new RequestPayment($this->_merchantkey);
+        $requestpayment = new Dragon_RequestPayment($this->_merchantkey);
 
         $this->_data = array(
             'merchantid'    => $requestpayment->setMerchantId($this->_merchantid),
@@ -423,7 +428,7 @@ class MemberController extends Controller
             'digest'        => $requestpayment->getdigest(),
         );
 
-        RequestPayment::make($this->_merchantkey, $this->_data);
+        Dragon_RequestPayment::make($this->_merchantkey, $this->_data);
         die("Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.");
     }
 
@@ -444,35 +449,29 @@ class MemberController extends Controller
         }
         $warehouse_id = Ecom_Product::getWarehouseId(Self::$shop_id);
         $data['_product'] = Tbl_ec_product::itemVariant()->inventory($warehouse_id)->price()->where("eprod_shop_id",  Self::$shop_id)->where("tbl_ec_product.archived", 0)->get();
-        // dd($data['_product']);
+
         return view("mlm.register.package", $data);
     }
 
     public function package_post()
     {
-        $info['membership'] = Request::input('membership');
-        $info['package'] = Request::input('package');
-        if($info['membership'] != null)
+        $info['product_id'] = Request::input('product_id');
+        if(isset($info['product_id']))
         {
-            if(isset($info['package'][$info['membership']]))
-            {
-                $d['membership'] = $info['membership'];
-                $d['package'] = $info['package'][$info['membership']];
-                Session::put('mlm_register_step_2', $d);
-                $data['status'] = 'success';
-                $data['message'][0] = 'Sucess!';
-                $data['link'] = '/member/register/shipping';
-            }
-            else
-            {
-                $data['status'] = 'warning';
-                $data['message'][0] = 'Email already used.';
-            }
+            /* Add Package */
+            Cart::add_to_cart($info["product_id"], 1, Self::$shop_id, true);
+
+            /* Redirect */
+            $d['product_id'] = $info['product_id'];
+            Session::put('mlm_register_step_2', $d);
+            $data['status'] = 'success';
+            $data['message'][0] = 'Sucess!';
+            $data['link'] = '/member/register/shipping';
         }
         else
         {
             $data['status'] = 'warning';
-            $data['message'][0] = 'Invalid Membership';
+            $data['message'][0] = 'Invalid Package.';
         }
         return json_encode($data);
     }
@@ -491,7 +490,14 @@ class MemberController extends Controller
             return Redirect::to('/member/register/package');
         }
 
-        return view("mlm.register.shipping");
+
+        $data["_province"]  = Tbl_locale::where("locale_parent", 0)->get();
+        $city_parent        = Request::input("city_parent") ? Request::input("city_parent") : $data["_province"][0]->locale_id; 
+        $data["_city"]      = Tbl_locale::where("locale_parent", $city_parent)->get();
+        $barangay_parent    = Request::input("barangay_parent") ? Request::input("barangay_parent") : $data["_city"][0]->locale_id; 
+        $data["_barangay"]  = Tbl_locale::where("locale_parent", $barangay_parent)->get();
+
+        return view("mlm.register.shipping", $data);
     }
 
     public function shipping_post()
@@ -523,6 +529,14 @@ class MemberController extends Controller
 
             return json_encode($data);
          }
+    }
+
+    public function getLocale($id)
+    {
+        $json["status"] = "success";
+        $json["locale"] = Tbl_locale::where("locale_parent", $id)->get();
+
+        return json_encode($json);
     }
 
     public function session()

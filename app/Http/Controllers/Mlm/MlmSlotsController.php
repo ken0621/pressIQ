@@ -23,8 +23,6 @@ class MlmSlotsController extends Mlm
 {
     public function index()
     {
-    	if(Self::$slot_id != null)
-    	{
     		$data = [];
             $check_if_enabled = Tbl_mlm_plan_setting::where("shop_id",Self::$shop_id)->where("plan_settings_upgrade_slot",1)->first();
             if($check_if_enabled)
@@ -41,11 +39,6 @@ class MlmSlotsController extends Mlm
             $data["all_slots_show"] = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->membership()->get();
     		$data["_item_code"]     = Tbl_item_code::where("customer_id",Self::$customer_id)->where("used",0)->where("blocked",0)->where("archived",0)->get();
     		return view('mlm.slots.index', $data);
-    	}
-        else
-        {
-        	return Self::show_no_access();
-        }
     }
     public function set_nickname()
     {

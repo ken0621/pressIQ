@@ -79,9 +79,10 @@ class TesterController extends Controller
 
         // dd(json_decode($response));
 
-        $data["open_invoice"]       = Invoice::invoiceStatus()["open"];
-        $data["overdue_invoice"]    = Invoice::invoiceStatus()["overdue"];
-        $data["paid_invoice"]       = Invoice::invoiceStatus()["paid"];
+        // $data["open_invoice"]       = Invoice::invoiceStatus()["open"];
+        // $data["overdue_invoice"]    = Invoice::invoiceStatus()["overdue"];
+        $date["days"]               = "30";
+        $data["paid_invoice"]       = Invoice::invoiceStatus("days_ago", $date)["paid"];
 
         dd($data);
     }

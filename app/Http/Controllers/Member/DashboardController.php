@@ -78,7 +78,9 @@ class DashboardController extends Member
 	{
 		$data["open_invoice"] 		= Invoice::invoiceStatus()["open"];
 		$data["overdue_invoice"] 	= Invoice::invoiceStatus()["overdue"];
-		$data["paid_invoice"] 		= Invoice::invoiceStatus()["paid"];
+
+		$date["days"] 				= "30";
+		$data["paid_invoice"] 		= Invoice::invoiceStatus("days_ago", $date)["paid"];
 
 		return view('member.dashboard.dashboard', $data);
 	}

@@ -7484,13 +7484,13 @@ class PayrollController extends Member
      public function report_13th_month_pay()
      {
           //dd(Self::shop_id());
-          $data['start_date'] = NULL;
-          $data['end_date']   = NULL;
+          $data['start_date']      = NULL;
+          $data['end_date']        = NULL;
           $data['company_id']      = 0;
           $data['department_id']   = 0;
           $data['emp_id']          = 0;
 
-          if(Request::has('start_date') && Request::has('end_date') && Request::has('company_id') && Request::has('department_id') && Request::has('emp_id'))
+          if(Request::has('start_date') && Request::has('end_date'))
           {
                $data['start_date']      = date('Y-m-d', strtotime(Request::input('start_date')));
                $data['end_date']        = date('Y-m-d', strtotime(Request::input('end_date')));
@@ -7505,9 +7505,7 @@ class PayrollController extends Member
           $data['_company']        = Payroll::company_heirarchy(Self::shop_id());
           $data['_department']     = Tbl_payroll_department::sel(Self::shop_id(), 0)->get();
           $data['_active']         = Self::report_13th_month_pay_table($data['start_date'], $data['end_date'], $data['company_id'], $data['department_id'], $data['emp_id']);
-          //$data['_active'] = Self::report_13th_month_pay_table('2017-04-01', '2017-05-01', 39);
-          //dd($data['department_id']);
-          //dd($data['_active']);
+          
           return view('member.payroll.report_13th_month_pay', $data);
      }
 
@@ -7615,19 +7613,48 @@ class PayrollController extends Member
           $end_date           = NULL;
           $company_id         = 0;
           $department_id      = 0;
-          $emp_id             = 0;    
+          $emp_id             = 0;
+
+          $date_range = Carbon::now()->format('M d, y');
+
+          if(Request::has('start_date') && Request::has('end_date'))
+          {
+               $start_date    = date('Y-m-d', strtotime(Request::input('start_date')));
+               $end_date      = date('Y-m-d', strtotime(Request::input('end_date')));
+               $date_range    = date('M d, y', strtotime(Request::input('start_date'))). ' - ' .date('M d, y', strtotime(Request::input('end_date')));;
+          }  
+
+          $company_id      = Request::input('company_id');
+          $department_id   = Request::input('department_id');
+          $emp_id          = Request::input('emp_id');     
 
           $_record = Self::report_13th_month_pay_table($start_date, $end_date, $company_id, $department_id, $emp_id);
           
-          //$data = array;
+          $data = array();
+          $record = array();
+          $header = ['Employee Name', 'Department', 'Job Title', 'Payroll Period', 'Basic Salary', '13 Month', 'Sub Total'];
+          /*$record = ['name', 'depart', 'job', 'period', 'alary', '13', 'sub'];*/
+          array_push($data, $header);
+         
+          foreach($_record as $active){
+               foreach($active as $a){
+                     $record = [ 
+                         $a['name'],
+                         $a['department'],
+                         $a['job_title'],
+                         $a['period'],
+                         $a['basic_salary'],
+                         $a['amount_of_13'],
+                         $a['sub_total'],
+                         ];
+                    array_push($data, $record);                                                         
+               }
+          }     
 
+          $title = '13th Month pay Report ('.$date_range.')';
+          //dd($title);
 
-          foreach ($_record as $key => $value) {
-               $data = ($value[$key]);
-               break;
-          }
-          
-          return Excel::create('example', function($excel) use ($data) {
+          return Excel::create($title, function($excel) use ($data) {
 
                $date = 'reports';
                $excel->setTitle('Payroll');
@@ -7635,16 +7662,14 @@ class PayrollController extends Member
                $excel->setDescription('payroll file');
 
                $excel->sheet($date, function($sheet) use ($data) {
-                    $sheet->fromArray($data, null, 'A1', true, true);
+                    $sheet->fromArray($data, null, 'A1', true, false);
                     $sheet->setColumnFormat(array(
                          'B:BZ' => '0.00'
                          ));
                });
 
           })->download('xlsx');  
-     }  
-
-     
+     }       
      /* end 13th month pay report*/
 
 }

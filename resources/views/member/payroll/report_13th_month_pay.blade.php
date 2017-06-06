@@ -21,13 +21,13 @@
 		      	<div class="pull-right export_excel">
 			        <button class="btn btn-custom-primary dropdown-toggle " type="button" data-toggle="dropdown"><i class="fa fa-file-excel-o"></i>&nbsp;Export From Excel
 			        </button> 
-	     		</div> 
-		      	<div class="pull-right margin-lr-5" >
-		      		<input type="text" class="datepicker form-control start-date" name="start_date" placeholder="Start Date" value="{{$start_date}}"/>
-		      	</div>
+	     		</div> 		      	
 		      	<div class="pull-right">
 		      		<input type="text" class="datepicker form-control end-date" name="end_date" placeholder="End Date" value="{{$end_date}}" />
 		      	</div>       
+		      	<div class="pull-right margin-lr-5" >
+		      		<input type="text" class="datepicker form-control start-date" name="start_date" placeholder="Start Date" value="{{$start_date}}"/>
+		      	</div>
 	      	</div>
 	      	<input type="hidden" name="_token" value="{{csrf_token()}}" id="_token">
 	    </div>
@@ -63,7 +63,8 @@
             </select>
           </div>
           
-          <div class="col-md-4 pull-right padding-lr-1 search-form">
+          <div class="col-md-4 pull-right padding-lr-1">
+          <div class="search_emp">
             <small>Search Employee</small>
             <select class="form-control filter-change emp_id">
               <option value="">Select Employee</option>
@@ -77,6 +78,7 @@
 					@endforeach
 				@endif
             </select>        
+          	</div>
           </div>
 
         </div>
@@ -150,15 +152,17 @@ function payroll_journal_entry()
 
 	function on_event()
 	{
-		$('body').on('change', '.start-date, .end-date, .department_id, .company_id, .emp_id', function(event) {
+		$('body').on('change', '.start-date, .end-date, .emp_id', function(event) {
 			action_get_data_table();	
 		});
 		$('body').on('change', '.department_id, .company_id', function(event) {
-			action_get_data_table('.search-form');	
+			action_get_data_table();
+			action_get_data_table('.search_emp');	
 		});
 		//onclick button export to excel
 		$('body').on('click', '.export_excel', function(event) {
-			console.log('button click');
+			/*console.log('button click');*/
+			action_export_excel();
 			 //$("#w3s").attr("href", "https://www.w3schools.com/jquery");
 		});
 	}
@@ -183,9 +187,25 @@ function payroll_journal_entry()
 		
 		$(target).load("/member/payroll/report_13th_month_pay?start_date=" +start +"&&end_date=" +end +"&&department_id="+department_id +"&&company_id="+company_id +"&&emp_id="+emp_id+" "+target, function()
 		{
-			toastr.success("Generated");
+			if(target == '.load-data')
+			{
+				toastr.success("Generated");	
+			}			
 		})
 		/* Act on the event */	
+	}
+
+	function action_export_excel()
+	{
+		event.preventDefault();
+		var start 			= $(".start-date").val();
+		var end 			= $(".end-date").val();
+		var department_id 	= $(".department_id").val();
+		var company_id 		= $(".company_id").val();
+		var emp_id			= $(".emp_id").val();
+	
+		location.href = "/member/payroll/report_13th_month_pay/excel_export?start_date=" +start +"&&end_date=" +end +"&&department_id="+department_id +"&&company_id="+company_id +"&&emp_id="+emp_id;
+		
 	}
 }
 

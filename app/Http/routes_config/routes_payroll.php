@@ -282,9 +282,11 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* HOLIDAY DEFAULT START */
 	Route::any('/holiday_default/modal_create_holiday_default',"Member\PayrollController@modal_create_holiday_default");
 	Route::any('/holiday_default/modal_save_holiday_default',"Member\PayrollController@modal_save_holiday_default");	
-
 	Route::any('/holiday_default/modal_edit_holiday_default/{id}',"Member\PayrollController@modal_edit_holiday_default");
+	Route::any('/holiday_default/modal_archive_holiday_default/{archived}/{id}',"Member\PayrollController@modal_archive_holiday_default");
+	Route::any('/holiday_default/archive_holiday_default',"Member\PayrollController@archive_holiday_default");
 	Route::any('/holiday_default/update_holiday_default',"Member\PayrollController@update_holiday_default");
+
 	/* HOLIDAY END */
 
 

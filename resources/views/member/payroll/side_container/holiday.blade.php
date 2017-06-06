@@ -1,12 +1,12 @@
 <div class="form-horizontal">
 	<div class="form-group">
 		<div class="col-md-12">
-			<h4>Holiday<button class="btn btn-custom-primary pull-right popup" link="/member/payroll/holiday/modal_create_holiday">Create Holiday</button></h4>
+			<h4>{{$title}}<button class="btn btn-custom-primary pull-right popup" link="{!!$create!!}">Create Holiday</button></h4>
 		</div>
 	</div>
 	<ul class="nav nav-tabs">
-		<li class="active"><a data-toggle="tab" href="#active-holiday"><i class="fa fa-star"></i>&nbsp;Active Holiday Title</a></li>
-		<li><a data-toggle="tab" href="#archived-holiday"><i class="fa fa-trash-o"></i>&nbsp;Archived Holiday Title</a></li>
+		<li class="active"><a data-toggle="tab" href="#active-holiday"><i class="fa fa-star"></i>&nbsp;Active Holiday</a></li>
+		<li><a data-toggle="tab" href="#archived-holiday"><i class="fa fa-trash-o"></i>&nbsp;Archived Holiday</a></li>
 	</ul>
 	<div class="tab-content padding-10">
 		<div id="active-holiday" class="tab-pane fade in active">
@@ -39,10 +39,10 @@
 										<span class="caret"></span></button>
 										<ul class="dropdown-menu dropdown-menu-custom">
 											<li>
-												<a href="#" class="popup" link="/member/payroll/holiday/modal_edit_holiday/{{$active->payroll_holiday_id}}" ><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+												<a href="#" class="popup" link="{!!$edit!!}{{$active->payroll_holiday_id}}" ><i class="fa fa-pencil"></i>&nbsp;Edit</a>
 											</li>
 											<li>
-												<a href="#" class="popup" link="/member/payroll/holiday/archive_holiday/1/{{$active->payroll_holiday_id}}" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Archived</a>
+												<a href="#" class="popup" link="{!!$archived!!}1/{{$active->payroll_holiday_id}}" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Archived</a>
 											</li>
 										</ul>
 									</div>
@@ -85,10 +85,10 @@
 										<span class="caret"></span></button>
 										<ul class="dropdown-menu dropdown-menu-custom">
 											<li>
-												<a href="#" class="popup" link="/member/payroll/holiday/modal_edit_holiday/{{$archived->payroll_holiday_id}}" ><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+												<a href="#" class="popup" link="{!!$edit!!}{{$archived->payroll_holiday_id}}" ><i class="fa fa-pencil"></i>&nbsp;Edit</a>
 											</li>
 											<li>
-												<a href="#" class="popup" link="/member/payroll/holiday/archive_holiday/0/{{$archived->payroll_holiday_id}}" size="sm"><i class="fa fa-refresh"></i>&nbsp;Restore</a>
+												<a href="#" class="popup" link="{!!$archived!!}0/{{$archived->payroll_holiday_id}}" size="sm"><i class="fa fa-refresh"></i>&nbsp;Restore</a>
 											</li>
 										</ul>
 									</div>

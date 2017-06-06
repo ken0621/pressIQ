@@ -28,7 +28,7 @@ class MemberController extends Controller
     public static $shop_id;
     public static $lead;
 
-    protected $_merchantid = 'MYPHONE' ;
+    protected $_merchantid = 'MYPHONE';
     protected $_merchantkey = 'Ez9MiNqWBS2BHuO' ;
 
     public function __construct()
@@ -107,11 +107,13 @@ class MemberController extends Controller
 	{
 		echo "hello world";
 	}
+
     public function register()
     {
         $data['country'] = Tbl_country::get();
         return view("mlm.register.register", $data);
     }
+
     public function register_post()
     {
         // return json_encode($_POST);
@@ -160,6 +162,7 @@ class MemberController extends Controller
 
                     if($info['password'] == $info['password_confirm'])
                     {
+                        dd($info);
                         Session::put('mlm_register_step_1', $info);
                         $data['status'] = 'success';
                         $data['message'][0] = 'Sucess!';
@@ -231,6 +234,7 @@ class MemberController extends Controller
 
         return view("mlm.register.payment", $data);
     }
+
     public function payment_post()
     {
         // return $_POST;
@@ -382,7 +386,6 @@ class MemberController extends Controller
         die("Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.");
     }
 
-
     public function package()
     {
         $register_session = Session::get('mlm_register_step_1');
@@ -400,6 +403,7 @@ class MemberController extends Controller
         }
         return view("mlm.register.package", $data);
     }
+
     public function package_post()
     {
         $info['membership'] = Request::input('membership');
@@ -476,29 +480,6 @@ class MemberController extends Controller
             return json_encode($data);
          }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     public function barcode( $filepath="", $text="0", $size="20", $orientation="horizontal", $code_type="code128", $print=false, $SizeFactor=1 ) 
     {
@@ -653,6 +634,7 @@ class MemberController extends Controller
         // This function call can be copied into your project and can be made from anywhere in your code
         $this->barcode( $filepath, $text, $size, $orientation, $code_type, $print, $sizefactor );
 	}
+
     public function all_slot()
     {
         $all_slot = Tbl_mlm_slot::membership()->customer()->get();
@@ -683,7 +665,6 @@ class MemberController extends Controller
             // return $pdf->inline();
             // $card = $this->
         }
-        // 
         if(Request::input('pdf') == 'true')
         {
             $pdf = App::make('snappy.pdf.wrapper');
@@ -694,9 +675,9 @@ class MemberController extends Controller
         else
         {
             return $card;
-        }
-        
+        }   
     }
+
     public function card_all($color, $name,  $membership_code)
     {
         $data['color'] = $color;
@@ -705,6 +686,7 @@ class MemberController extends Controller
 
         return view("card", $data);
     }
+
     public function card()
     {
         $data['color'] = Request::input("color");

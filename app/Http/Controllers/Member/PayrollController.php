@@ -831,43 +831,43 @@ class PayrollController extends Member
 		$requirement_mime_type		= $file->getMimeType();
 
 		$requirement_new_name 		= value(function() use ($file){
-          $filename = str_random(10). date('ymdhis') . '.' . $file->getClientOriginalExtension();
-          return strtolower($filename);
-        });
+               $filename = str_random(10). date('ymdhis') . '.' . $file->getClientOriginalExtension();
+               return strtolower($filename);
+             });
 
-        $path = '/assets/payroll/employee_requirements';
-        if (!file_exists($path)) {
+          $path = '/assets/payroll/employee_requirements';
+          if (!file_exists($path)) {
 		    mkdir($path, 0777, true);
 		}
-        $upload_success = $file->move(public_path($path), $requirement_new_name);
+          $upload_success = $file->move(public_path($path), $requirement_new_name);
 
-        $data = array();
-        $status = 'error';
-        if($upload_success)
-        {
+          $data = array();
+          $status = 'error';
+          if($upload_success)
+          {
 
-        	$insert['shop_id'] 								= Self::shop_id();
-        	$insert['payroll_requirements_path']	 		= $path.'/'.$requirement_new_name;
-        	$insert['payroll_requirements_original_name'] 	= $requirement_original_name;
-        	$insert['payroll_requirements_extension_name'] 	= $requirement_extension_name;
-        	$insert['payroll_requirements_mime_type'] 		= $requirement_mime_type;
-        	$insert['payroll_requirements_date_upload'] 	= Carbon::now();
+               $insert['shop_id'] 								= Self::shop_id();
+               $insert['payroll_requirements_path']	 		= $path.'/'.$requirement_new_name;
+               $insert['payroll_requirements_original_name'] 	= $requirement_original_name;
+               $insert['payroll_requirements_extension_name'] 	= $requirement_extension_name;
+               $insert['payroll_requirements_mime_type'] 		= $requirement_mime_type;
+               $insert['payroll_requirements_date_upload'] 	= Carbon::now();
 
-        	$payroll_requirements_id = Tbl_payroll_requirements::insertGetId($insert);
+               $payroll_requirements_id = Tbl_payroll_requirements::insertGetId($insert);
 
-        	$data['path'] 					= $path.'/'.$requirement_new_name;
-	        $data['original_name'] 			= $requirement_original_name;
-	        $data['extension'] 				= $requirement_extension_name;
-	        $data['mime_type'] 				= $requirement_mime_type;
-	        $data['payroll_requirements_id'] = $payroll_requirements_id;
-	        $status = 'success';
-        }
+               $data['path'] 					= $path.'/'.$requirement_new_name;
+               $data['original_name'] 			= $requirement_original_name;
+               $data['extension'] 				= $requirement_extension_name;
+               $data['mime_type'] 				= $requirement_mime_type;
+               $data['payroll_requirements_id'] = $payroll_requirements_id;
+               $status = 'success';
+          }
         
 
-        $return['status'] = $status;
-        $return['data']	   = $data;
+          $return['status'] = $status;
+          $return['data']	   = $data;
 
-        return json_encode($return);
+          return json_encode($return);
 	}
 
 
@@ -1747,7 +1747,6 @@ class PayrollController extends Member
 											 ->orderBy("tbl_payroll_employee_basic.payroll_employee_first_name")
 											 ->groupBy('tbl_payroll_employee_basic.payroll_employee_id')
 											 ->get();
-          // dd(Self::shop_id());
 
 		return view('member.payroll.reload.employee_list_reload', $data);
 	}
@@ -1826,41 +1825,44 @@ class PayrollController extends Member
           $data[2]['access_name'] = 'Holiday';
           $data[2]['link']        = '/member/payroll/holiday';
 
-          $data[3]['access_name'] = 'Allowances';
-          $data[3]['link']        = '/member/payroll/allowance';
+          $data[3]['access_name'] = 'Holiday Default';
+          $data[3]['link']        = '/member/payroll/holiday_default';
 
-          $data[4]['access_name'] = 'Deductions';
-          $data[4]['link']        = '/member/payroll/deduction';
+          $data[4]['access_name'] = 'Allowances';
+          $data[4]['link']        = '/member/payroll/allowance';
 
-          $data[5]['access_name'] = 'Leave';
-          $data[5]['link']        = '/member/payroll/leave';
+          $data[5]['access_name'] = 'Deductions';
+          $data[5]['link']        = '/member/payroll/deduction';
 
-          $data[6]['access_name'] = 'Payroll Group';
-          $data[6]['link']        = '/member/payroll/payroll_group';
+          $data[6]['access_name'] = 'Leave';
+          $data[6]['link']        = '/member/payroll/leave';
 
-          $data[7]['access_name'] = 'Shift Template';
-          $data[7]['link']        = '/member/payroll/shift_template';
+          $data[7]['access_name'] = 'Payroll Group';
+          $data[7]['link']        = '/member/payroll/payroll_group';
 
-          $data[8]['access_name'] = 'Journal Tags';
-          $data[8]['link']        = '/member/payroll/payroll_jouarnal';
+          $data[8]['access_name'] = 'Shift Template';
+          $data[8]['link']        = '/member/payroll/shift_template';
 
-          $data[9]['access_name'] = 'Payslip';
-          $data[9]['link']        = '/member/payroll/custom_payslip';
+          $data[9]['access_name'] = 'Journal Tags';
+          $data[9]['link']        = '/member/payroll/payroll_jouarnal';
 
-          $data[10]['access_name'] = 'Tax Period';
-          $data[10]['link']        = '/member/payroll/tax_period';
+          $data[10]['access_name'] = 'Payslip';
+          $data[10]['link']        = '/member/payroll/custom_payslip';
 
-          $data[11]['access_name'] = 'Tax Table';
-          $data[11]['link']        = '/member/payroll/tax_table_list';
+          $data[11]['access_name'] = 'Tax Period';
+          $data[11]['link']        = '/member/payroll/tax_period';
 
-          $data[12]['access_name'] = 'SSS Table';
-          $data[12]['link']        = '/member/payroll/sss_table_list';
+          $data[12]['access_name'] = 'Tax Table';
+          $data[12]['link']        = '/member/payroll/tax_table_list';
 
-          $data[13]['access_name'] = 'Philhealth Table';
-          $data[13]['link']        = '/member/payroll/philhealth_table_list';
+          $data[13]['access_name'] = 'SSS Table';
+          $data[13]['link']        = '/member/payroll/sss_table_list';
 
-          $data[14]['access_name'] = 'Pagibig/HDMF';
-          $data[14]['link']        = '/member/payroll/pagibig_formula';
+          $data[14]['access_name'] = 'Philhealth Table';
+          $data[14]['link']        = '/member/payroll/philhealth_table_list';
+
+          $data[15]['access_name'] = 'Pagibig/HDMF';
+          $data[15]['link']        = '/member/payroll/pagibig_formula';
 
           return $data;
      }
@@ -1869,11 +1871,27 @@ class PayrollController extends Member
 
 	public function company_list()
 	{
-		$data['_active'] = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->paginate($this->paginate_count);
+		// $data['_page'] = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_parent_company_id',0)->orderBy('tbl_payroll_company.payroll_company_name')->paginate($this->paginate_count);
 		$data['_archived'] = Tbl_payroll_company::selcompany(Self::shop_id(),1)->orderBy('tbl_payroll_company.payroll_company_name')->paginate($this->paginate_count);
 
+          $_active = array();
+          $data['_parent'] = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_parent_company_id',0)->orderBy('payroll_company_name')->paginate($this->paginate_count);
+
+          foreach($data['_parent'] as $parent)
+          {
+               $temp['company'] = $parent;
+               $temp['branch'] = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_parent_company_id', $parent->payroll_company_id)->orderBy('payroll_company_name')->get();
+               array_push($_active, $temp);
+          }
+
+          // $data['_active'] = Payroll::company_heirarchy(Self::shop_id(), $this->paginate_count);
+          $data['_active'] = $_active;
+          // dd($data['_active']);
 		return view('member.payroll.companylist', $data);
 	}
+
+
+     // public function company_heirarchy
 
 	public function modal_create_company()
 	{
@@ -1891,46 +1909,46 @@ class PayrollController extends Member
 
 	public function upload_company_logo()
 	{
-		$file = Request::file('file');
-        $ImagName = value(function() use ($file){
-            $filename = str_random(10). date('ymdhis') . '.' . $file->getClientOriginalExtension();
-            return strtolower($filename);
-        });
-        $path = 'assets/payroll/company_logo';
-        if (!file_exists($path)) {
+          $file = Request::file('file');
+          $ImagName = value(function() use ($file){
+               $filename = str_random(10). date('ymdhis') . '.' . $file->getClientOriginalExtension();
+               return strtolower($filename);
+          });
+          $path = 'assets/payroll/company_logo';
+          if (!file_exists($path)) {
                File::makeDirectory(public_path($path), 0775, true, true);
-		    // mkdir($path, 0777, true);
-		}
-        $file->move(public_path($path), $ImagName);
+              // mkdir($path, 0777, true);
+          }
+          $file->move(public_path($path), $ImagName);
 
-        $session_logo = 'company_logo';
-        if(Request::input('action') == 'update')
-        {
-        	$session_logo = 'company_logo_update';
-        }
+          $session_logo = 'company_logo';
+          if(Request::input('action') == 'update')
+          {
+          	$session_logo = 'company_logo_update';
+          }
 
-        Session::put($session_logo,'/'.$path.'/'.$ImagName);
+          Session::put($session_logo,'/'.$path.'/'.$ImagName);
 
-        return '/'.$path.'/'.$ImagName;
+          return '/'.$path.'/'.$ImagName;    
 	}
 
 	public function modal_save_company()
 	{
 		$insert['payroll_company_name'] 				= Request::input('payroll_company_name');
 		$insert['payroll_company_code'] 				= Request::input('payroll_company_code');
-		$insert['payroll_company_rdo'] 					= Request::input('payroll_company_rdo');
-		$insert['payroll_company_address'] 				= Request::input('payroll_company_address');
-		$insert['payroll_company_contact'] 				= Request::input('payroll_company_contact');
+		$insert['payroll_company_rdo'] 			     = Request::input('payroll_company_rdo');
+		$insert['payroll_company_address'] 		     = Request::input('payroll_company_address');
+		$insert['payroll_company_contact'] 		     = Request::input('payroll_company_contact');
 		$insert['payroll_company_email'] 				= Request::input('payroll_company_email');
 		$insert['payroll_company_nature_of_business'] 	= Request::input('payroll_company_nature_of_business');
 		$insert['payroll_company_date_started'] 		= Request::input('payroll_company_date_started');
-		$insert['payroll_company_tin'] 					= Request::input('payroll_company_tin');
-		$insert['payroll_company_sss'] 					= Request::input('payroll_company_sss');
+		$insert['payroll_company_tin'] 			     = Request::input('payroll_company_tin');
+		$insert['payroll_company_sss'] 				= Request::input('payroll_company_sss');
 		$insert['payroll_company_philhealth'] 			= Request::input('payroll_company_philhealth');
-		$insert['payroll_company_pagibig'] 				= Request::input('payroll_company_pagibig');
-		$insert['shop_id']								= Self::shop_id();
+		$insert['payroll_company_pagibig'] 			= Request::input('payroll_company_pagibig');
+		$insert['shop_id']							= Self::shop_id();
 		$insert['payroll_parent_company_id']			= Request::input('payroll_parent_company_id');
-		$insert['payroll_company_bank']					= Request::input('payroll_company_bank');
+		$insert['payroll_company_bank']				= Request::input('payroll_company_bank');
 
 		$logo = '/assets/images/no-logo.png';
 		if(Session::has('company_logo'))
@@ -1971,21 +1989,21 @@ class PayrollController extends Member
 
 	public function update_company()
 	{
-		$payroll_company_id 							= Request::input('payroll_company_id');
+		$payroll_company_id 						= Request::input('payroll_company_id');
 		$update['payroll_company_name'] 				= Request::input('payroll_company_name');
 		$update['payroll_company_code'] 				= Request::input('payroll_company_code');
-		$update['payroll_company_rdo'] 					= Request::input('payroll_company_rdo');
-		$update['payroll_company_address'] 				= Request::input('payroll_company_address');
-		$update['payroll_company_contact'] 				= Request::input('payroll_company_contact');
+		$update['payroll_company_rdo'] 				= Request::input('payroll_company_rdo');
+		$update['payroll_company_address'] 			= Request::input('payroll_company_address');
+		$update['payroll_company_contact'] 			= Request::input('payroll_company_contact');
 		$update['payroll_company_email'] 				= Request::input('payroll_company_email');
 		$update['payroll_company_nature_of_business'] 	= Request::input('payroll_company_nature_of_business');
 		$update['payroll_company_date_started'] 		= Request::input('payroll_company_date_started');
-		$update['payroll_company_tin'] 					= Request::input('payroll_company_tin');
-		$update['payroll_company_sss'] 					= Request::input('payroll_company_sss');
+		$update['payroll_company_tin'] 				= Request::input('payroll_company_tin');
+		$update['payroll_company_sss'] 				= Request::input('payroll_company_sss');
 		$update['payroll_company_philhealth'] 			= Request::input('payroll_company_philhealth');
-		$update['payroll_company_pagibig'] 				= Request::input('payroll_company_pagibig');
+		$update['payroll_company_pagibig'] 			= Request::input('payroll_company_pagibig');
 		$update['payroll_parent_company_id']			= Request::input('payroll_parent_company_id');
-		$update['payroll_company_bank']					= Request::input('payroll_company_bank');
+		$update['payroll_company_bank']				= Request::input('payroll_company_bank');
 		$logo = '/assets/images/no-logo.png';
 		if(Session::has('company_logo_update'))
 		{
@@ -2880,11 +2898,17 @@ class PayrollController extends Member
 
 		$data['_active'] = Tbl_payroll_holiday::getholiday(Self::shop_id())->orderBy('payroll_holiday_date','desc')->paginate($this->paginate_count);
 		$data['_archived'] = Tbl_payroll_holiday::getholiday(Self::shop_id(), 1)->orderBy('payroll_holiday_date','desc')->paginate($this->paginate_count);
-		/*Temporary holiday default*/ 
-		$data['_default'] = Tbl_payroll_holiday_default::orderBy('payroll_holiday_date','desc')->paginate($this->paginate_count);
+
+          $data['title']      = 'Holiday';
+          $data['create']     = '/member/payroll/holiday/modal_create_holiday';
+          $data['edit']       = '/member/payroll/holiday/modal_edit_holiday/';
+          $data['archived']   = '/member/payroll/holiday/archive_holiday/';
+		
 		return view('member.payroll.side_container.holiday',$data);
 
 	}
+
+     
 
 	public function modal_create_holiday()
 	{
@@ -4517,6 +4541,20 @@ class PayrollController extends Member
 	/* PAYROLL PERIOD END */
 
 	/*HOLIDAY DEFAULT START*/
+
+     public function default_holiday()
+     {
+          $data['_active'] = Tbl_payroll_holiday_default::getholiday()->orderBy('payroll_holiday_date','desc')->select(DB::raw('*, payroll_holiday_default_id as payroll_holiday_id'))->paginate($this->paginate_count);
+          $data['_archived'] = Tbl_payroll_holiday_default::getholiday(1)->orderBy('payroll_holiday_date','desc')->select(DB::raw('*, payroll_holiday_default_id as payroll_holiday_id'))->paginate($this->paginate_count);
+
+          $data['title']      = 'Holiday Default';
+          $data['create']     = '/holiday_default/modal_create_holiday_default';
+          $data['edit']       = '/holiday_default/modal_edit_holiday_default/';
+          $data['archived']   = '/holiday_default/modal_archive_holiday_default/';
+
+          return view('member.payroll.side_container.holiday',$data);
+     }    
+
 	public function modal_create_holiday_default()
 	{
 		/*$data = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('payroll_company_name')->get();*/
@@ -4563,7 +4601,37 @@ class PayrollController extends Member
 		$return['function_name'] 	= 'payrollconfiguration.reload_holiday';
 		return json_encode($return);
 	}
+
+     public function modal_archive_holiday_default($archived, $id)
+     {
+          $statement = 'archive';
+          if($archived == 0)
+          {
+               $statement = 'restore';
+          }
+          $query = Tbl_payroll_holiday_default::where('payroll_holiday_default_id',$id)->first();
+          // dd($_query);
+          $data['title']      = 'Do you really want to '.$statement.' holiday '.$query->payroll_holiday_name.'?';
+          $data['html']       = '';
+          $data['action']     = '/holiday_default/archive_holiday_default';
+          $data['id']         = $id;
+          $data['archived']   = $archived;
+
+          return view('member.modal.modal_confirm_archived', $data);
+     }
 	
+
+     public function archive_holiday_default()
+     {
+          $update['payroll_holiday_archived'] = Request::input('id');
+
+          $id = Request::input('id');
+          Tbl_payroll_holiday_default::where('payroll_holiday_default_id', $id)->update($update);
+
+          $return['status'] = 'success';
+          $return['function_name'] = '';
+          return collect($return)->toJson();
+     }
 	/*HOLIDAY DEFAULT END*/
 
 

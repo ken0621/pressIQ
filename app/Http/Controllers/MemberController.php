@@ -14,6 +14,7 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_membership_package;
 use App\Models\Tbl_membership_code;
 use App\Models\Tbl_membership_package_has;
+use App\Models\Tbl_ec_product;
 use Validator;
 use Session;
 use Redirect;
@@ -23,6 +24,7 @@ use App\Globals\Mlm_plan;
 use App\Globals\Mlm_compute;
 use App\Globals\Mlm_gc;
 use App\Globals\dragonpay\RequestPayment;
+use App\Globals\Cart;
 class MemberController extends Controller
 {
     public static $shop_id;
@@ -162,11 +164,36 @@ class MemberController extends Controller
 
                     if($info['password'] == $info['password_confirm'])
                     {
-                        dd($info);
-                        Session::put('mlm_register_step_1', $info);
-                        $data['status'] = 'success';
-                        $data['message'][0] = 'Sucess!';
-                        $data['link'] = '/member/register/package';
+                        /* Set Product Temporarily */
+                        $product = Tbl_ec_product::where("eprod_shop_id", Self::$shop_id)->where("archived", 0)->first();
+                        Cart::add_to_cart($product->eprod_id, 1, Self::$shop_id, true);
+
+                        /* Set Customer Info */
+                        $customer_info["new_account"]      = false;
+                        $customer_info["first_name"]       = $info["first_name"];
+                        $customer_info["last_name"]        = $info["last_name"];
+                        $customer_info["email"]            = $info["email"];
+                        $customer_info["password"]         = $info["password"];
+                        $customer_info["tin_number"]       = $info["tin_number"];
+                        $customer_info["username"]         = $info["username"];
+                        $customer_info["slot_sponsor"]     = $info["sponsor"];
+                        $customer_info["customer_contact"] = $info["customer_mobile"];
+                        $customer_set_info_response        = Cart::customer_set_info(Self::$shop_id, $customer_info);
+
+                        if($customer_set_info_response["status"] == "error")
+                        { 
+                            $data['status'] = 'warning';
+                            $data['message'][0] = $customer_set_info_response["status_message"];
+                            return $data;
+                        }
+                        else
+                        {
+                            /* Redirect */
+                            Session::put('mlm_register_step_1', $info);
+                            $data['status'] = 'success';
+                            $data['message'][0] = 'Sucess!';
+                            $data['link'] = '/member/register/package';
+                        }
                     }
                     else
                     {
@@ -479,6 +506,11 @@ class MemberController extends Controller
 
             return json_encode($data);
          }
+    }
+
+    public function session()
+    {
+        dd(Cart::get_info(Self::$shop_id));
     }
 
     public function barcode( $filepath="", $text="0", $size="20", $orientation="horizontal", $code_type="code128", $print=false, $SizeFactor=1 ) 

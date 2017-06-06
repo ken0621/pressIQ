@@ -35,7 +35,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				@foreach($_record as $record)
+				{{-- @foreach($_record as $record)
 					@if($record['total'] > 0)
 						<tr>
 							<td>{{$record['account_number']}}</td>
@@ -50,7 +50,7 @@
 					<td colspan="3"></td>
 					<td>{{currency('PHP', collect($_record)->where('normal_balance', 'debit')->sum('total'))}}</td>
 					<td>{{currency('PHP', collect($_record)->where('normal_balance', 'debit')->sum('total'))}}</td>
-				</tr>
+				</tr> --}}
 			</tbody>
 		</table>
 	</div>

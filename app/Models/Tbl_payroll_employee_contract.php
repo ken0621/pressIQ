@@ -68,6 +68,8 @@ class Tbl_payroll_employee_contract extends Model
 			$payroll_employee_contract_status[7] = 7;
 		}
 
+
+
 		$query->join('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')
 			  ->leftjoin('tbl_payroll_department','tbl_payroll_department.payroll_department_id','=','tbl_payroll_employee_contract.payroll_department_id')
 			  ->leftjoin('tbl_payroll_jobtitle','tbl_payroll_jobtitle.payroll_jobtitle_id','=','tbl_payroll_employee_contract.payroll_jobtitle_id')
@@ -89,6 +91,7 @@ class Tbl_payroll_employee_contract extends Model
 			  if($department_id != 0)
 			  {
 			  	$query->where('tbl_payroll_employee_contract.payroll_department_id', $department_id);
+			  	//dd($query->get());
 			  }
 			  if($job_title_id != 0)
 			  {

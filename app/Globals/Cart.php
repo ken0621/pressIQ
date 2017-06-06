@@ -712,7 +712,7 @@ class Cart
         $data["tbl_customer"]['customer_contact'] = (isset($customer_information["customer_contact"]) ? $customer_information["customer_contact"] : (isset($data["tbl_customer"]['customer_contact']) ? $data["tbl_customer"]['customer_contact'] : null));;
         $data["tbl_customer"]['country_id']       = 420;
         $data["tbl_customer"]['tin_number']       = (isset($customer_information["tin_number"]) ? $customer_information["tin_number"] : (isset($data["tbl_customer"]['tin_number']) ? $data["tbl_customer"]['tin_number'] : null));
-        $data["tbl_customer"]['mlm_username']     = (isset($customer_information["username"]) ? $customer_information["username"] : (isset($data["tbl_customer"]['username']) ? $data["tbl_customer"]['username'] : null));
+        $data["tbl_customer"]['mlm_username']     = (isset($customer_information["mlm_username"]) ? $customer_information["mlm_username"] : (isset($data["tbl_customer"]['mlm_username']) ? $data["tbl_customer"]['mlm_username'] : null));
         $data["tbl_customer"]['company']          = (isset($customer_information["company"]) ? $customer_information["company"] : (isset($data["tbl_customer"]['company']) ? $data["tbl_customer"]['company'] : null));
         $data["tbl_customer"]['is_corporate']     = (isset($customer_information["is_corporate"]) ? $customer_information["is_corporate"] : (isset($data["tbl_customer"]['is_corporate']) ? $data["tbl_customer"]['is_corporate'] : 0));
 

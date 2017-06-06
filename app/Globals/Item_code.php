@@ -793,7 +793,6 @@ class Item_code
                                     $insert['slot_status'] = 'PS';
                                     $insert['slot_placement'] = $tbl_ec_order_slot->order_slot_sponsor;
                                     $insert['slot_sponsor'] = $tbl_ec_order_slot->order_slot_sponsor;
-
                                     $id = Tbl_mlm_slot::insertGetId($insert);
                                     $a = Mlm_compute::entry($id);
 

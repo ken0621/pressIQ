@@ -190,9 +190,8 @@ class MemberController extends Controller
                     {
 
                         /* Set Product Temporarily */
-                        Cart::clear_all(Self::$shop_id);
-                        $product = Tbl_ec_product::where("eprod_shop_id", Self::$shop_id)->where("archived", 0)->first();
-                        Cart::add_to_cart($product->eprod_id, 1, Self::$shop_id, true);
+                        $product = Tbl_ec_product::variant()->where("eprod_shop_id", Self::$shop_id)->where("tbl_ec_product.archived", 0)->first();
+                        Cart::add_to_cart($product->evariant_id, 1, Self::$shop_id, true);
 
                         /* Set Customer Info */
                         $customer_info["new_account"]      = true;
@@ -251,6 +250,11 @@ class MemberController extends Controller
 
     public function payment()
     {
+        $customer_information["new_account"] = true;
+        $cart_info = Cart::get_info(Self::$shop_id);
+
+        Cart::customer_set_info_ec_order(Self::$shop_id, $cart_info, $customer_information);
+
         $register_session = Session::get('mlm_register_step_1');
         if($register_session == null)
         {
@@ -346,7 +350,7 @@ class MemberController extends Controller
         {
             /* Add Package */
             Cart::add_to_cart($info["variant_id"], 1, Self::$shop_id, true);
-            
+
             /* Redirect */
             $d['variant_id'] = $info['variant_id'];
             Session::put('mlm_register_step_2', $d);

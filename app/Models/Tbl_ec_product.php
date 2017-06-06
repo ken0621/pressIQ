@@ -79,4 +79,5 @@ class Tbl_ec_product extends Model
     {
         return $query->join("tbl_category","type_id","=","eprod_category_id")->whereIn("tbl_category.archived", $archived);
     }
+
 }

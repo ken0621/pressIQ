@@ -214,7 +214,12 @@ Route::get('/member/item/mulitple_price_modal/{id}', 'Member\ItemController@get_
 Route::post('/member/item/mulitple_price_modal', 'Member\ItemController@update_multiple_price_modal'); /* B */
 Route::get('/member/item/get_new_price/{id}/{qty}', 'Member\ItemController@get_item_new_price'); /* B */
 
+
 //*ITEM FOR PIS ARCY*/
+Route::any('/member/pis_counter','Member\PurchasingInventorySystemController@pis_counter');
+
+
+Route::any('/member/item/view_item_history/{id}','Member\ItemController@view_item_history');
 Route::any('/member/item/add_submit_pis','Member\ItemController@add_submit_pis');
 Route::any('/member/item/edit_submit_pis','Member\ItemController@edit_submit_pis');
 /*END ITEM FOR PIS*/
@@ -308,6 +313,7 @@ Route::any('/member/pis/agent/edit_submit','Member\AgentController@edit_submit')
 Route::any('/member/pis/agent/archived/{id}/{action}','Member\AgentController@archived');
 Route::any('/member/pis/agent/archived_submit','Member\AgentController@archived_submit');
 /* END AGENT*/
+Route::any('/member/report/agent/profit_loss','Member\ReportAgentProfitLossController@index');
 
 /*SALES LIQUIDATION*/
 Route::any('member/cashier/sales_liquidation','Member\PisSalesLiquidationController@index');
@@ -466,6 +472,7 @@ Route::any('/tablet/view_invoice_pdf/{id}','Member\TabletPISController@view_invo
 
 Route::any('/tablet/credit_memo','Member\TabletPISController@credit_memo');
 Route::any('/tablet/credit_memo/add','Member\TabletPISController@add_cm');
+Route::any('/tablet/customer/credit_memo/choose_type','Member\TabletPISController@cm_choose_type');
 Route::any('/tablet/credit_memo/add_cm_submit','Member\TabletPISController@add_cm_submit');
 Route::any('/tablet/credit_memo/edit_cm_submit','Member\TabletPISController@edit_cm_submit');
 
@@ -583,6 +590,7 @@ Route::post('/member/customer/receive_payment/update/{id}','Member\Customer_Rece
 
 /* CUSTOMER CREDIT MEMO*/
 Route::any('/member/customer/credit_memo','Member\CreditMemoController@index');
+Route::any('/member/customer/credit_memo/choose_type','Member\CreditMemoController@choose_type');
 Route::any('/member/customer/credit_memo/list',"Member\CreditMemoController@cm_list");
 Route::any('/member/customer/credit_memo/create_submit','Member\CreditMemoController@create_submit');
 Route::any('/member/customer/credit_memo/update',"Member\CreditMemoController@update_submit");
@@ -764,6 +772,8 @@ Route::group(array('prefix' => '/member/report'), function()
 	/* Accounting Sales - per item */
 	Route::any('/accounting/sale/item','Member\ReportsController@accounting_sale_items');
 
+	/* Accounting Sales - per warehouse */
+	Route::any('/accounting/sale_by_warehouse','Member\ReportsController@sale_by_warehouse');
 	/* Accounting general ledger */
 	Route::get('/accounting/general/ledger','Member\ReportsController@general_ledger');
 	Route::any('/accounting/general/ledger/get','Member\ReportsController@general_ledger_get');

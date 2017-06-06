@@ -26,6 +26,7 @@ use App\Models\Tbl_customer_search;
 use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_mlm_matching_log;
+use App\Models\Tbl_mlm_transfer_slot_log;
 use App\Models\Tbl_mlm_binary_pairing;
 use App\Globals\Item;
 use App\Globals\AuditTrail;
@@ -115,7 +116,7 @@ class MLM_SlotController extends Member
 
     }
     public function index()
-    {        
+    {      
         $access = Utilities::checkAccess('mlm-slots', 'access_page');
         if($access == 0)
         {
@@ -1019,6 +1020,59 @@ class MLM_SlotController extends Member
         else if ($code == 'fix_give_voucher')
         {
             
+        }
+    }
+    public function transfer_slot()
+    {
+        $shop_id           = $this->user_info->shop_id;
+        $slot_id           = Request::input("slot");
+        $data["slot"]      = Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",$shop_id)->first();
+
+        if(!$data["slot"])
+        {
+            dd("Please refresh the page.");
+        }
+
+        $data["_customer"] = Tbl_customer::where("shop_id",$shop_id)->where("customer_id","!=",$data["slot"]->slot_owner)->where("archived",0)->get();
+        return view('member.mlm_slot.transfer_slot', $data);
+    }
+    public function transfer_slot_post()
+    {
+        $shop_id    = $this->user_info->shop_id;
+        $slot_id    = Request::input("slot_id");
+        $slot_owner = Request::input("slot_owner");
+        $slot       = Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",$shop_id)->first();
+        $customer   = Tbl_customer::where("customer_id",$slot_owner)->where("shop_id",$shop_id)->first();
+        if(!$slot || !$customer)
+        {
+            dd("Please refresh the page.");
+        }
+        else
+        {
+            if($slot->slot_owner == $slot_owner)
+            {
+                dd("Please refresh the page.");
+            }
+
+            $update["slot_owner"] = $slot_owner;
+            Tbl_mlm_slot::where("slot_id",$slot_id)->update($update);
+            $old_data = $slot->toArray();
+            $new_data = Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",$shop_id)->first()->toArray();
+
+            AuditTrail::record_logs("Transfer","mlm_slot",$slot_id,serialize($old_data),serialize($new_data));
+
+            $return["status"] = "success_transfer";
+
+
+            $insert_log["slot_transfer_by"]           = $slot->slot_owner;
+            $insert_log["slot_transfer_to"]           = $slot_owner;; 
+            $insert_log["slot_id"]                    = $slot_id; 
+            $insert_log["transfer_slot_date"]         = Carbon::now(); 
+            $insert_log["transfer_slot_log_type"]     = "Admin"; 
+            $insert_log["transfer_slot_log_cause_id"] = $this->user_info->user_id; 
+            Tbl_mlm_transfer_slot_log::insert($insert_log);
+
+            return json_encode($return);
         }
     }
 }

@@ -2,7 +2,7 @@
     {!! csrf_field() !!}
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title layout-modallarge-title">Code</h4>
+        <h4 class="modal-title layout-modallarge-title">Transfer Slot</h4>
     </div>
     <div class="modal-body max-450 modallarge-body-layout background-white">
         <div class="form-group">

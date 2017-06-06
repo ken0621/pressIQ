@@ -82,9 +82,63 @@ class ShopCheckoutController extends Shop
             return Redirect::to("/checkout")->with('fail', 'Session has been expired. Please try again.')->send();
         }
     }
-    public function dragonpay_response()
+    public function dragonpay_return()
     {
-        dd(Request::all());
+        if (Request::input("status") == "S") 
+        {
+            $from = Request::input('param1');
+            if ($from == "checkout") 
+            {
+                $order_id = Request::input("param2");
+
+                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)))->send();
+            }
+        }
+    }
+    public function dragonpay_postback()
+    {
+        $request = Request::all();
+
+        $insert["log_date"] = Carbon::now();
+        $insert["content"]  = serialize($request);
+        DB::table("tbl_dragonpay_logs")->insert($insert);
+
+        if ($request["status"] == "S") 
+        {
+            $from = $request["param1"];
+
+            if ($from == "checkout") 
+            {
+                $order_id = $request["param2"];
+
+                try 
+                {
+                    $update['ec_order_id'] = $order_id;
+                    $update['order_status'] = "Processing";
+                    $update['payment_status'] = 1;
+                    $order = Ec_order::update_ec_order($update);
+                } 
+                catch (\Exception $e) 
+                {
+                    $last["log_date"] = Carbon::now();
+                    $last["content"]  = $e->getMessage();
+                    DB::table("tbl_dragonpay_logs")->insert($last);  
+                }      
+            }
+        }
+    }
+    public function dragonpay_logs()
+    {
+        $dragonpay = DB::table("tbl_dragonpay_logs")->orderBy("id", "DESC")->first();
+
+        if (is_serialized($dragonpay->content)) 
+        {
+            dd(unserialize($dragonpay->content));
+        }
+        else
+        {
+            dd($dragonpay->content);
+        }
     }
     /* End Payment Facilities */
 
@@ -95,6 +149,14 @@ class ShopCheckoutController extends Shop
         /* DO NOT ALLOW ON THIS PAGE IF THERE IS NOT CART */
         if (isset($data["get_cart"]['cart']) && isset($data["get_cart"]["tbl_customer"]) && isset($data["get_cart"]["tbl_customer_address"]) && isset($data["get_cart"]["tbl_ec_order"]) && isset($data["get_cart"]["tbl_ec_order_item"]) && isset($data["get_cart"]["sale_information"])) 
         {
+            $data['ec_order_load'] = 0;
+            foreach($data['get_cart']['cart'] as $key => $value)
+            {
+                if($value['cart_product_information']['item_category_id'] == 17)
+                {
+                    $data['ec_order_load'] = 1;
+                }      
+            }
             return view("checkout", $data);
         }
         else
@@ -139,6 +201,9 @@ class ShopCheckoutController extends Shop
         $customer_info["shipping_zip"] = Self::locale_id_to_name(Request::input("customer_zip"));
         $customer_info["shipping_street"] = Request::input("customer_street");
 
+        $customer_info['load_wallet']['ec_order_load'] = Request::input('ec_order_load');
+        $customer_info['load_wallet']['ec_order_load_number'] = Request::input('ec_order_load_number');
+        // dd($customer_info);
         $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_shipping", "check_name"));
 
 
@@ -154,7 +219,10 @@ class ShopCheckoutController extends Shop
     public function update_method()
     {
         $customer_info["method_id"] = Request::input("method_id");
-        $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info);
+        $old_session = $order = Cart::get_info($this->shop_info->shop_id);
+        $customer_set_info_response = Cart::customer_set_info_ec_order($this->shop_info->shop_id, $old_session, $customer_info);
+        $unique_id = Cart::get_unique_id($this->shop_info->shop_id);
+        Session::put($unique_id, $customer_set_info_response);
         echo json_encode("Success!"); 
     }
 
@@ -167,7 +235,7 @@ class ShopCheckoutController extends Shop
     {
         if(Request::isMethod("post"))
         {
-            Cart::process_payment($this->shop_info->shop_id);
+            return Cart::process_payment($this->shop_info->shop_id);
         }
         else
         {

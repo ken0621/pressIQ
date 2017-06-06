@@ -22,6 +22,7 @@ class Tbl_payroll_time_sheet_record extends Model
 	// [VARCHAR] 		payroll_time_sheet_origin
 	// [VARCHAR] 		payroll_time_sheet_status
 	// [TIME]			payroll_time_sheet_break
+	// [TEXT]			time_sheet_record_remarks
 
 
 	/* payroll_time_sheet_status [EXPLANATION] */

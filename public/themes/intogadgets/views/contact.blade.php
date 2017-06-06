@@ -1,4 +1,14 @@
 @extends('layout')
+@section("social-script")
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.9&appId=1920870814798104";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+@endsection
 @section('content')
 <div class="contact">
 	<div class="contact-header" style="background-image: url('{{ get_content($shop_theme_info, 'contact', 'contact_header_cover') }}')">
@@ -94,33 +104,38 @@
 		@endif
 	</div>
 	<div class="contact-content container">
-		<form id="email-form" action="" method="">
-			{!!Honeypot::generate('my_name','my_time')!!}
-			<div id="email-form-result">
+		<div class="row clearfix">
+			<div class="col-md-8">
+				<form id="email-form" action="" method="">
+					{!!Honeypot::generate('my_name','my_time')!!}
+					<div id="email-form-result">
 
-			</div>
-			<input type="hidden" name="_token" value="{{{ csrf_token() }}}" />
+					</div>
+					<input type="hidden" name="_token" value="{{{ csrf_token() }}}" />
 
-			<div class="col-md-6 left nopadding" style="padding-right: 25px !important;">
+					<div class="col-md-6 left right nopadding" style="width: 100%;">
 
-			<div class="field">
-				<input type="text" name="sender_name" placeholder="FULL NAME">
+						<div class="field">
+							<input type="text" name="sender_name" placeholder="FULL NAME">
+						</div>
+						<div class="field">
+							<input type="text" name="sender_contact_num" placeholder="PHONE NUMBER">
+						</div>
+						<div class="field">
+							<input type="text" name="sender_email" placeholder="YOUR EMAIL">
+						</div>
+						<div class="field">
+							<textarea name="sender_message" placeholder="Your Message Here...."></textarea>
+							<button id="send-email">Send <i class="fa fa-paper-plane-o"></i></button>
+							<img id="sending-message-loading" style="display: none;" src="../../resources/assets/img/small-loading.GIF" alt="">
+						</div>
+					</div>
+				</form>
 			</div>
-			<div class="field">
-				<input type="text" name="sender_contact_num" placeholder="PHONE NUMBER">
-			</div>
-			<div class="field">
-				<input type="text" name="sender_email" placeholder="YOUR EMAIL">
+			<div class="col-md-4" style="margin-top: 20px;">
+				<div class="fb-page" data-href="https://www.facebook.com/Intogadgetstore/" data-tabs="timeline" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote style="display: none;" cite="https://www.facebook.com/Intogadgetstore/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/Intogadgetstore/">Intogadgets</a></blockquote></div>
 			</div>
 		</div>
-		<div class="col-md-6 right nopadding">
-			<div class="field">
-				<textarea name="sender_message" placeholder="Your Message Here...."></textarea>
-				<button id="send-email">Send <i class="fa fa-paper-plane-o"></i></button>
-				<img id="sending-message-loading" style="display: none;" src="../../resources/assets/img/small-loading.GIF" alt="">
-			</div>
-		</div>
-		</form>
 	</div>
 </div>
 @endsection

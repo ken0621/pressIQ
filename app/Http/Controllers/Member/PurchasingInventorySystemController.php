@@ -18,7 +18,10 @@ use App\Models\Tbl_warehouse;
 use App\Models\Tbl_manual_invoice;
 use App\Models\Tbl_sir_cm_item;
 use App\Models\Tbl_customer_invoice;
+use App\Models\Tbl_bill;
+use App\Models\Tbl_sir_sales_report;
 use App\Models\Tbl_customer_invoice_line;
+use App\Models\Tbl_purchase_order;
 use App\Globals\UnitMeasurement;
 use App\Globals\Warehouse;
 use App\Globals\Pdf_global;
@@ -53,6 +56,32 @@ class PurchasingInventorySystemController extends Member
     {
         $data["sir"] = Purchasing_inventory_system::view_status($sir_id);
         return view("member.purchasing_inventory_system.view_status",$data);        
+    }
+    public function pis_counter()
+    {
+        $return["lof_ctr"] = 0;
+        $return["sir_ctr"] = 0;
+        $return["ilr_ctr"] = 0;
+        $return["col_ctr"] = 0;
+        $return["inv_ctr"] = 0;
+        $return["po_ctr"] = 0;
+        $return["bill_ctr"] = 0;
+        if(Purchasing_inventory_system::check() != 0)
+        {
+            $return["lof_ctr"] = Tbl_sir::where("shop_id",Purchasing_inventory_system::getShopId())->whereIn("lof_status",[1,3])->count();
+            $return["sir_ctr"] = Tbl_sir::where("shop_id",Purchasing_inventory_system::getShopId())->where("reload_sir",1)->count();
+            $return["ilr_ctr"] = Tbl_sir::where("shop_id",Purchasing_inventory_system::getShopId())->where("ilr_status",1)->count();
+
+            $return["col_ctr"] = Tbl_sir::where("shop_id",Purchasing_inventory_system::getShopId())->where("ilr_status",1)->count();
+
+            $return["inv_ctr"] = Tbl_customer_invoice::where("inv_shop_id",Purchasing_inventory_system::getShopId())->where("inv_is_paid",0)->count();
+
+            $return["po_ctr"] = Tbl_purchase_order::where("po_shop_id",Purchasing_inventory_system::getShopId())->where("po_is_billed",0)->count();
+
+            $return["bill_ctr"] = Tbl_bill::where("bill_shop_id",Purchasing_inventory_system::getShopId())->where("bill_is_paid",0)->count();
+        }
+
+        return json_encode($return);
     }
     public function update_count($sir_id, $item_id)
     {
@@ -465,6 +494,12 @@ class PurchasingInventorySystemController extends Member
         {
             $data = Purchasing_inventory_system::return_stock($sir_id);
             Purchasing_inventory_system::return_cm_item($sir_id);
+
+            $ins["sir_id"] = $sir_id;
+            $ins["report_data"] = serialize(Purchasing_inventory_system::get_report_data($sir_id));
+            $ins["report_created"] = Carbon::now();
+
+            Tbl_sir_sales_report::insert($ins);
         }
 
         $ilr = Purchasing_inventory_system::get_ilr_data($sir_id);

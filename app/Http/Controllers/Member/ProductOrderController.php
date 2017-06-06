@@ -74,13 +74,20 @@ class ProductOrderController extends Member
     }
     public function invoice_list()
     {
-        $data["ec_order_pending"]    = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Pending")->paginate(10);
-        $data["ec_order_failed"]     = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Failed")->paginate(10);
-        $data["ec_order_processing"] = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Processing")->paginate(10);
-        $data["ec_order_shipped"]    = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Shipped")->paginate(10);
-        $data["ec_order_completed"]  = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Completed")->paginate(10);
-        $data["ec_order_on_hold"]    = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","On-hold")->paginate(10);
-        $data["ec_order_cancelled"]  = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Cancelled")->paginate(10);
+        $data["ec_order_pending"]    = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Pending")
+                                        ->orderBy("ec_order_id", "DESC")->paginate(10);
+        $data["ec_order_failed"]     = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Failed")
+                                        ->orderBy("ec_order_id", "DESC")->paginate(10);
+        $data["ec_order_processing"] = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Processing")
+                                        ->orderBy("ec_order_id", "DESC")->paginate(10);
+        $data["ec_order_shipped"]    = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Shipped")
+                                        ->orderBy("ec_order_id", "DESC")->paginate(10);
+        $data["ec_order_completed"]  = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Completed")
+                                        ->orderBy("ec_order_id", "DESC")->paginate(10);
+        $data["ec_order_on_hold"]    = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","On-hold")
+                                        ->orderBy("ec_order_id", "DESC")->paginate(10);
+        $data["ec_order_cancelled"]  = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Cancelled")
+                                        ->orderBy("ec_order_id", "DESC")->paginate(10);
         return view("member.product_order.product_order",$data);
     }
     public function create_invoice()

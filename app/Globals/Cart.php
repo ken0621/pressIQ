@@ -814,13 +814,11 @@ class Cart
         $shipping_fee = 0;
 
         $_cart = Self::get_cart($shop_id)["cart"];
-
+        unset($data["tbl_ec_order_item"]);
         /* ITEM ON CART */
         foreach($_cart as $key => $cart)
         {
             $data["tbl_ec_order_item"][$key]["item_id"]     = $cart["cart_product_information"]["variant_id"];
-            $data["tbl_ec_order_item"][$key]["product_name"]= $cart["cart_product_information"]["product_name"];
-            $data["tbl_ec_order_item"][$key]["variant_name"]= $cart["cart_product_information"]["variant_name"];
             $data["tbl_ec_order_item"][$key]["price"]       = $cart["cart_product_information"]["product_price"];
             $data["tbl_ec_order_item"][$key]["quantity"]    = $cart["quantity"];
             $data["tbl_ec_order_item"][$key]["subtotal"]    = $cart["cart_product_information"]["product_price"] * $cart["quantity"];
@@ -830,7 +828,6 @@ class Cart
 
             $subtotal += $data["tbl_ec_order_item"][$key]["total"];
         }
-
        
         /* SUMMARY OF DATA FOR ORDER */
         $data["tbl_ec_order"]["customer_id"] = $data["tbl_customer"]["customer_id"];

@@ -89,12 +89,13 @@ class Accounting
 			{
 				$result[$key]["is_sub_count"] = 1;
 				$result[$key]["sub_account"] = Accounting::checkAccount($shop, $item->account_id, $sublevel + 1, $filter, $type, $search);
-
+				$result[$key]["account_new_balance"] = $item->balance + collect($result[$key]["sub_account"])->sum('account_new_balance');
 			}
 			else
 			{
 				$result[$key]["is_sub_count"] = 0;
 				$result[$key]["sub_account"] = null;
+				$result[$key]["account_new_balance"] = $item->balance;
 			}
 		}
 

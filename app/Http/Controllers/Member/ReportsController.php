@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Globals\SalesReport;
 use App\Globals\Report;
 use App\Globals\Pdf_global;
+use App\Globals\Accounting;
 
 use App\Models\Tbl_shipping;
 use App\Models\Tbl_user;
@@ -661,28 +662,9 @@ class ReportsController extends Member
         $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
 
         $account_no_balance  = array('Income', 'Expense', 'Cost of Goods Sold', 'Other Income', 'Other Expense');
-        $data['_account'] = Tbl_chart_of_account::accountType()->where("account_shop_id", $this->user_info->shop_id)->where("archived", 0)->orderBy("chart_type_id")->get();
-
-        foreach($data['_account'] as $key=>$account)
-        {
-            $data['_account'][$key]->account_journal = Tbl_journal_entry_line::journal()->account()
-                                                        ->selectRaw("*, (CASE normal_balance WHEN jline_type THEN jline_amount ELSE -jline_amount END) as 'amount'")
-                                                        ->where("jline_account_id", $account->account_id)
-                                                        ->whereRaw("DATE(je_entry_date) >= '".$data['from']."'")
-                                                        ->whereRaw("DATE(je_entry_date) <= '".$data['to']."'")
-                                                        ->get();
-                                                        
-            if(in_array($account->chart_type_name, $account_no_balance))
-            {
-                $data['_account'][$key]->balance         = "none";
-            }  
-            else
-            {
-                $data['_account'][$key]->balance         = collect($data['_account'][$key]->account_journal)->sum('amount');
-            } 
-        }   
-
-        // dd($data['_account']);
+        $data['_account'] = Accounting::getAllAccount();
+    
+        // dd($data['_account']);  
 
         /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */
         if($report_type && !$load_view)

@@ -218,8 +218,8 @@ class MLM_StairstepController extends Member
 
 	        	if($check_if_change == 0)
 	        	{
-                	$update_slot["stairstep_rank"] = 0;
-            		Tbl_mlm_slot::where("slot_id",$slot_id)->update($update_slot);
+              //   	$update_slot["stairstep_rank"] = 0;
+            		// Tbl_mlm_slot::where("slot_id",$slot_id)->update($update_slot);
 	        	}
 
 

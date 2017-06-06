@@ -686,8 +686,6 @@ class Ec_order
         }
         /* Insert Reference for slot */
         /* Email Password */
-
-
         if(isset($order_info['tbl_mlm_slot']))
         {
             if($order_info['tbl_mlm_slot']['slot_sponsor'])

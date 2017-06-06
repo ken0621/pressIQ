@@ -30,10 +30,32 @@
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label>Shipping Method</label>
-              <select class="form-control input-lg">
-                <option></option>
+              <label>Province</label>
+              <select class="form-control input-lg province" name="customer_state">
+                @foreach($_province as $key=>$locale)
+                  <option value="{{$locale->locale_id}}">{{$locale->locale_name}}</option>
+                @endforeach
               </select>
+            </div>
+            <div class="form-group load-data-municipality">
+               <div id="municipality">
+                 <label>City / Municipality</label>
+                 <select class="form-control input-lg municipality" name="customer_city"z>
+                   @foreach($_city as $key=>$locale)
+                     <option value="{{$locale->locale_id}}">{{$locale->locale_name}}</option>
+                   @endforeach
+                 </select>
+               </div>
+            </div>
+            <div class="form-group load-data-barangay">
+               <div id="barangay">
+                 <label>Barangay</label>
+                 <select class="form-control input-lg barangay" name="customer_street">
+                   @foreach($_barangay as $key=>$locale)
+                     <option value="{{$locale->locale_id}}">{{$locale->locale_name}}</option>
+                   @endforeach
+                 </select>
+               </div>
             </div>
             <div class="form-group">
               <label>Complete Shipping Address</label>
@@ -65,33 +87,46 @@
 
   function submit_form_register(link, data)
     {
-        
-        $.ajax({
-            url:link,
-            dataType:"json",
-            data:data,
-            type:"post",
-            success: function(data)
-            {
-              $('#load').addClass('hide');
-              if(data.status == 'warning')
-              {
-                var message = data.message;
-                $.each( message, function( index, value ){
-              toastr.warning(value);
-          });
-              }
-              else if(data.status == 'success')
-              {
-                window.location = data.link;                
-              }
-            },
-            error: function()
-            {
-                $('#load').addClass('hide');
-            }
-        })
+      $.ajax({
+         url:link,
+         dataType:"json",
+         data:data,
+         type:"post",
+         success: function(data)
+         {
+           $('#load').addClass('hide');
+           if(data.status == 'warning')
+           {
+             var message = data.message;
+             $.each( message, function( index, value ){
+           toastr.warning(value);
+         });
+           }
+           else if(data.status == 'success')
+           {
+             window.location = data.link;                
+           }
+         },
+         error: function()
+         {
+             $('#load').addClass('hide');
+         }
+      })
     }
+
+    $(document).on("change", "select.province", function()
+    {
+      $("select.municipality").html("<option> Loading .... </option>");
+      $("select.barangay").html("<option> Loading .... </option>");
+      $(".load-data-municipality").load("/member/register/shipping?city_parent=" + $(this).val() + " #municipality");
+      $(".load-data-barangay").load("/member/register/shipping?city_parent=" + $(this).val() + " #barangay");
+    })
+
+    $(document).on("change", "select.municipality", function()
+    {
+      $("select.barangay").html("<option> Loading .... </option>");
+      $(".load-data-barangay").load("/member/register/shipping?barangay_parent=" + $(this).val() + " #barangay");
+    })
 </script>
 @endsection
 @section("css")

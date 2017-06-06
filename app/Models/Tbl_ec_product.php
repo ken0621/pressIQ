@@ -70,8 +70,8 @@ class Tbl_ec_product extends Model
 
     public function scopePrice($query)
     {
-        $query->selectRaw("tbl_ec_product.*, min(evariant_price) as min_price, max(evariant_price) as max_price")
-              ->join("tbl_ec_variant","evariant_prod_id","=","eprod_id")
+        $query->selectRaw("tbl_ec_product.*, evariant_description as variant_desc, min(evariant_price) as min_price, max(evariant_price) as max_price")
+              ->join("tbl_ec_variant","tbl_ec_variant.evariant_prod_id","=","eprod_id")
               ->groupBy("eprod_id");
     }
 

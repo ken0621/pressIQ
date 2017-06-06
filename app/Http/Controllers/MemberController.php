@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 use Request;
 use App\Models\Tbl_mlm_slot;
 use App\Globals\Pdf_global;
+use App\Globals\Ecom_Product;
 use PDF;
 use App;
 use Carbon\Carbon;
@@ -15,6 +16,8 @@ use App\Models\Tbl_membership_package;
 use App\Models\Tbl_membership_code;
 use App\Models\Tbl_membership_package_has;
 use App\Models\Tbl_locale;
+
+use App\Models\Tbl_ec_product;
 use Validator;
 use Session;
 use Redirect;
@@ -24,6 +27,7 @@ use App\Globals\Mlm_plan;
 use App\Globals\Mlm_compute;
 use App\Globals\Mlm_gc;
 use App\Globals\dragonpay\RequestPayment;
+use App\Globals\Cart;
 class MemberController extends Controller
 {
     public static $shop_id;
@@ -109,6 +113,11 @@ class MemberController extends Controller
 		echo "hello world";
 	}
 
+    public function generate_username($first_name, $last_name)
+    {
+        
+    }
+
     public function register()
     {
         $data['country'] = Tbl_country::get();
@@ -163,11 +172,37 @@ class MemberController extends Controller
 
                     if($info['password'] == $info['password_confirm'])
                     {
-                        // dd($info);
-                        Session::put('mlm_register_step_1', $info);
-                        $data['status'] = 'success';
-                        $data['message'][0] = 'Sucess!';
-                        $data['link'] = '/member/register/package';
+
+                        /* Set Product Temporarily */
+                        $product = Tbl_ec_product::where("eprod_shop_id", Self::$shop_id)->where("archived", 0)->first();
+                        Cart::add_to_cart($product->eprod_id, 1, Self::$shop_id, true);
+
+                        /* Set Customer Info */
+                        $customer_info["new_account"]      = false;
+                        $customer_info["first_name"]       = $info["first_name"];
+                        $customer_info["last_name"]        = $info["last_name"];
+                        $customer_info["email"]            = $info["email"];
+                        $customer_info["password"]         = $info["password"];
+                        $customer_info["tin_number"]       = $info["tin_number"];
+                        $customer_info["username"]         = $info["username"];
+                        $customer_info["slot_sponsor"]     = $info["sponsor"];
+                        $customer_info["customer_contact"] = $info["customer_mobile"];
+                        $customer_set_info_response        = Cart::customer_set_info(Self::$shop_id, $customer_info);
+
+                        if($customer_set_info_response["status"] == "error")
+                        { 
+                            $data['status'] = 'warning';
+                            $data['message'][0] = $customer_set_info_response["status_message"];
+                            return $data;
+                        }
+                        else
+                        {
+                            /* Redirect */
+                            Session::put('mlm_register_step_1', $info);
+                            $data['status'] = 'success';
+                            $data['message'][0] = 'Sucess!';
+                            $data['link'] = '/member/register/package';
+                        }
                     }
                     else
                     {
@@ -402,6 +437,9 @@ class MemberController extends Controller
         {
             $data['package'][$key] = Tbl_membership_package::where('membership_id', $value->membership_id)->where('membership_package_archive', 0)->get();
         }
+        $warehouse_id = Ecom_Product::getWarehouseId(Self::$shop_id);
+        $data['_product'] = Tbl_ec_product::itemVariant()->inventory($warehouse_id)->price()->where("eprod_shop_id",  Self::$shop_id)->where("tbl_ec_product.archived", 0)->get();
+        // dd($data['_product']);
         return view("mlm.register.package", $data);
     }
 
@@ -495,6 +533,10 @@ class MemberController extends Controller
         $json["locale"] = Tbl_locale::where("locale_parent", $id)->get();
 
         return json_encode($json);
+
+    public function session()
+    {
+        dd(Cart::get_info(Self::$shop_id));
     }
 
     public function barcode( $filepath="", $text="0", $size="20", $orientation="horizontal", $code_type="code128", $print=false, $SizeFactor=1 ) 

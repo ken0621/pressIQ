@@ -17,8 +17,9 @@ use App\Models\Tbl_membership_code;
 use App\Models\Tbl_membership_package_has;
 use App\Models\Tbl_locale;
 use App\Models\Tbl_online_pymnt_method;
-
 use App\Models\Tbl_ec_product;
+use App\Models\Tbl_ec_variant;
+
 use Validator;
 use Session;
 use Redirect;
@@ -272,6 +273,10 @@ class MemberController extends Controller
         $data["_payment_method"] = Tbl_online_pymnt_method::link(Self::$shop_id)->where("method_shop_id", Self::$shop_id)->get();
 
         $data["_product"]        =  Cart::get_info(Self::$shop_id)["tbl_ec_order_item"];
+        foreach($data["_product"] as $key=>$product)
+        {
+            $data["_product"][$key]["variant_name"] = Tbl_ec_variant::where("evariant_id", $product["item_id"])->pluck("evariant_item_label");
+        }
         $data["order"]           =  Cart::get_info(Self::$shop_id)["tbl_ec_order"];
 
         return view("mlm.register.payment", $data);

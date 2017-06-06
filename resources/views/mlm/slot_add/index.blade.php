@@ -147,6 +147,7 @@
 						<label>Choose Owner</label>
 						<label><input id="your_account" type="radio" class="col-md-6" name="choose_owner" value="your" checked>Your Account</label>
 						<label><input id="new_user" type="radio" class="col-md-6" name="choose_owner" value="new">New User</label>
+						<label><input id="exist" type="radio" class="col-md-6" name="choose_owner" value="exist">Existing User</label>
 					</div>
 					<div class="col-md-12 new_form" style="display:none">
 					    <label>First Name</label>
@@ -165,6 +166,14 @@
 						<select name="country_id" class="form-control new_input" disabled>
 							@foreach($country as $ctry)
 								<option value="{{$ctry->country_id}}">{{$ctry->country_name}}</option>
+							@endforeach
+						</select>
+					</div>
+					<div class="col-md-12 exist_form" style="display:none">
+						<label>Choose an owner (Customer with no slot only)</label>
+						<select name="customer_id" class="form-control exist_input" disabled>
+							@foreach($_no_slot_customer as $no_slot_customer)
+								<option value="{{$no_slot_customer->customer_id}}">{{$no_slot_customer->first_name}} {{$no_slot_customer->middle_name}} {{$no_slot_customer->last_name}}</option>
 							@endforeach
 						</select>
 					</div>
@@ -223,6 +232,12 @@
 	         	$(".new_input").attr('disabled', false);
 	         	$(".append_error").empty();
 	        }
+	        else if (this.value == 'exist') 
+	        {
+	         	$(".exist_form").show();
+	         	$(".exist_input").attr('disabled', false);
+	         	$(".append_error").empty();
+	        }
 	    });
 	});
 
@@ -234,11 +249,11 @@
 	
 </script>
 <script>
-$(document).ready(function(){
-	$(".chosen-slot_sponsor").chosen().change(function(){
-		// alert(+$(this).val());
+$(document).ready(function()
+{
+	$(".chosen-slot_sponsor").chosen().change(function()
+	{
 		$(".new_slot_id").val($(this).val());
-		// alert(+$(".new_slot_id").val());
 	});
 });
 	

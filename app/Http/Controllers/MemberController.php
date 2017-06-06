@@ -125,7 +125,8 @@ class MemberController extends Controller
     public function register_post()
     {
         // return json_encode($_POST);
-        $info['company'] = Request::input('company');
+        $info['is_coporate'] = Request::input('customer_type');
+        $info['company'] = Request::input('customer_type') == 1 ? Request::input('company') : "";
         $info['country'] = Request::input('country');
         $info['email'] = Request::input('email');
         $info['first_name'] = Request::input('first_name');
@@ -137,6 +138,13 @@ class MemberController extends Controller
         $info['sponsor'] = Request::input('sponsor');
         $info['customer_phone'] = Request::input('contact_number');
         $info['customer_mobile'] = Request::input('contact_number');
+
+
+        if($info['is_coporate'] == 1)
+        {
+            $rules['company'] = 'required';
+        }
+
         $rules['first_name'] = 'required';
         $rules['last_name'] = 'required';
         $rules['password'] = 'required|min:6';

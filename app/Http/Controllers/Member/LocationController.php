@@ -56,29 +56,70 @@ class LocationController extends Member
         $barangay_parent    = Request::input("barangay_parent") ? Request::input("barangay_parent") : $data["_city"][0]->locale_id; 
         $data["_barangay"]  = Tbl_locale::where("locale_parent", $barangay_parent);
         if($search_barangay) $data["_barangay"]->where("locale_name","like","%" . $search_barangay . "%");
-        $data["_barangay"]      = $data["_barangay"]->get();
+        $data["_barangay"]  = $data["_barangay"]->get();
+
+        $data["parent_city"]    = $city_parent;
+        $data["parent_barangay"]= $barangay_parent ;
 
         return view('member.location.location', $data);
     }
 
-    public function getTerms()
+    public function getLocation()
     {
-        $data['name'] = "";
+        $data['name']       = "";
+        $data["parent_id"]  = Request::input("parent_id");
+        $data["title"]      = Request::input("title");
 
-        $terms_id = Request::input('id');
-        if($terms_id)
+        $location_id = Request::input('id');
+        if($location_id)
         {
-            $data["terms"] = Tbl_terms::where("terms_id", $terms_id)->where("terms_shop_id", $this->getShopId())->first(); 
+            $data["location"] = Tbl_locale::where("locale_id", $location_id)->first(); 
         }
 
-        return view('member.terms.modal_create_terms', $data);
+        return view('member.location.modal_create_location', $data);
     }
 
-    public function getLoadTerms()
+    public function postLocation()
     {
-        $data['_terms'] = Tbl_terms::where("archived", 0)->where("terms_shop_id", $this->getShopId())->get(); 
+        $data["locale_parent"]  = Request::input("parent_id");
+        $data["locale_name"]    = Request::input("location_name");
+        $location_id            = Request::input("location_id");
 
-        return view('member.load_ajax_data.load_terms', $data);
+        if(!$location_id)
+        {
+            $location_id = Tbl_locale::insertGetId($data);
+        }
+        else
+        {
+            Tbl_locale::where("locale_id", $location_id)->update($data);
+        }
+
+        $json["status"]         = "success";
+        $json["message"]        = "Success!";
+        $json["location_id"]    = $location_id;
+
+        return json_encode($json);
+    }
+
+    public function getDeleteLocation()
+    {
+        $data["location_id"]    = Request::input("id");
+        $data["location"]       = Tbl_locale::where("locale_id", $data["location_id"])->first(); 
+        $data["title"]          = Request::input("title");
+
+        return view('member.location.modal_delete_location', $data);
+    }
+
+    public function postDeleteLocation()
+    {
+        $location_id            = Request::input("location_id");
+        
+        Tbl_locale::where("locale_id", $location_id)->delete();
+
+        $json["status"]         = "success";
+        $json["message"]        = "Success!";
+
+        return json_encode($json);
     }
 	
 }

@@ -80,6 +80,7 @@ function tablet_customer_invoice()
 			$("#global_modal").modal("toggle");
 			$(".div-item-list").append(global_tablet_html);
 			$item_table = $(".div-item-list .item-table:last");
+			
 			$(".div-item-list .item-table:last").addClass("item-list-"+$(".tablet-item-id").val());
 			$(".div-item-list .item-table:last .popup").attr("link",'/tablet/invoice/add_item/'+$(".tablet-item-id").val());
 			

@@ -53,12 +53,12 @@ class Item
             {
                 $item_qty = UnitMeasurement::um_qty($item_data->item_measurement_id);
             }
-            $old[$key] = unserialize($value->new_data);
+            $old[$key] = unserialize($value->old_data);
             $amount = 0;
             if($old)
             {
-                if($item_data->item_price != $old[$key]["item_price"])
-                {
+                // if($item_data->item_price != $old[$key]["item_price"] || $old[$key]["item_price"] != 0)
+                // {
                     $len = strlen($return);
                     
                     $amount = $old[$key]["item_price"] * $item_qty;
@@ -72,7 +72,7 @@ class Item
                             $text = (substr($text, 0, 50)."...<a class='popup' size='sm' link='/member/item/view_item_history/".$item_id."'>View</a>");
                         }                        
                     }
-                }
+                // }
             }
         }   
         return $text;

@@ -4579,9 +4579,11 @@ class PayrollController extends Member
 		} 
 
 		$return['status'] = 'success';
-		$return['function_name'] = 'payrollconfiguration.reload_holiday';
+		$return['function_name'] = 'payrollconfiguration.reload_holiday_default';
 		return json_encode($return);
 	}
+
+
 
 	public function modal_edit_holiday_default($id)
 	{	
@@ -7577,7 +7579,7 @@ class PayrollController extends Member
           return view('member.payroll.report_13th_month_pay', $data);
      }
 
-      public function report_13th_month_pay_table($start_date = '0000-00-00', $end_date = '0000-00-00', $company_id=0 ,$department_id = 0, $emp_id = 0)
+     public function report_13th_month_pay_table($start_date = '0000-00-00', $end_date = '0000-00-00', $company_id=0 ,$department_id = 0, $emp_id = 0)
      {
           $arr_record    = array();
           $count         = 0;

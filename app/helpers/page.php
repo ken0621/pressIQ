@@ -1189,6 +1189,14 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
 
+    $code = "maintenance-location";
+    $nav[$page]['submenu'][$code]['label'] = "Location"; 
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/location/list";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
+
     /* -- EMPLOYEE POSITION=> LIST  */
     $code = "pis-agent-position";
     $nav[$page]['submenu'][$code]['label'] = "Agent Position";

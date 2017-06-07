@@ -235,8 +235,8 @@ class Payroll
 
 			$insert[5]['shop_id'] 			= $shop_id;
 			$insert[5]['paper_size_name']	= 'A4';
-			$insert[5]['paper_size_width']	= '14.8';
-			$insert[5]['paper_size_height']	= '21';
+			$insert[5]['paper_size_width']	= '21';
+			$insert[5]['paper_size_height']	= '29.7';
 
 			Tbl_payroll_paper_sizes::insert($insert);
 
@@ -1115,14 +1115,11 @@ class Payroll
 		
 
 		/* CHECK IF ABSENT */
+		$absent = false;
+
 		if($total_time_spent == 0 && $extra_day_today == false && $holiday_today == false && $rest_day_today == false)
 		{
 			$absent = true;
-		}
-
-		else
-		{
-			$absent = false;
 		}
 
 		// dd($total_regular_hours);

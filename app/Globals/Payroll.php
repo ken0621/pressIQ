@@ -238,6 +238,16 @@ class Payroll
 			$insert[5]['paper_size_width']	= '21';
 			$insert[5]['paper_size_height']	= '29.7';
 
+			$insert[6]['shop_id'] 			= $shop_id;
+			$insert[6]['paper_size_name']	= 'Legal';
+			$insert[6]['paper_size_width']	= '21.6';
+			$insert[6]['paper_size_height']	= '33.6';
+
+			$insert[7]['shop_id'] 			= $shop_id;
+			$insert[7]['paper_size_name']	= 'Letter';
+			$insert[7]['paper_size_width']	= '21.6';
+			$insert[7]['paper_size_height']	= '27.9';
+
 			Tbl_payroll_paper_sizes::insert($insert);
 
 			$insertlog['shop_id'] 					= $shop_id;

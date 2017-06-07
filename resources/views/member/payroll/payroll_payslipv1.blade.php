@@ -33,9 +33,8 @@
 	}
 </style>
 <div class="main-container">
-
-	<table cellpadding="5" cellspacing="0" class="" width="100%" >
-		
+	<table cellpadding="5" cellspacing="0" class="border" width="100%" >
+		<tr>
 		<?php 
 			$counter=0; 
 			$payslip_num = 100/$payslip->payslip_width;
@@ -46,23 +45,26 @@
 				
 
 				@if($counter==$payslip_num)
-					<tr></tr>
+					</tr><tr>
 					<?php $col++ ?>
 				@endif		
 
 
 				@if($col>2)
+					
 					</table>
-					<table cellpadding="5" cellspacing="0" class="padding-5" width="100%">
+					<table cellpadding="5" cellspacing="0" class="border" width="100%">
 						<tr>
-							<td><div style="page-break-after: always;"></div></td>
+							<td valign="top" width="25%"><div style="page-break-after: always;">&nbsp;</div></td>
+						</tr>
 						<tr>
+
 					<?php $col=1 ?>
 				@endif
 				
 				<?php ($counter>=$payslip_num) ? $counter=1 : $counter++ ?>
 
-				<td valign="top">
+				<td valign="top" width="{{ $payslip->payslip_width }}%">
 					<div class="div-payslip">
 						<table cellpadding="5" cellspacing="0" class="border padding-5" width="100%">
 							@if($payslip->include_company_logo == 1)
@@ -70,7 +72,7 @@
 								<td colspan="2" class="{{$logo_position}} border padding-3">
 									{{-- {{ $counter }} --}}
 									@if($logo)
-									<img src="{{$brk['company_logo']}}" style="width:50px;height:50px;object-fit: contain"><br>
+									<img src="{{ url($brk['company_logo']) }}" style="width:auto;height:50px;object-fit: contain;"><br>
 									@endif
 									<b>{{$brk['company_name']}}</b><br>
 									<small>{{$brk['company_address']}}</small>
@@ -178,5 +180,8 @@
 
 		@endforeach
 		
+		</tr>
+		</table>
 	</table>
+
 </div>

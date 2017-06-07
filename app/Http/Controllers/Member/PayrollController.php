@@ -6234,11 +6234,26 @@ class PayrollController extends Member
           
           //return view('member.payroll.payroll_payslipv1', $data);
 
+
+          $page_width    = $data['payslip']->paper_size_width * 10;
+          $page_height   = $data['payslip']->paper_size_height * 10; 
+
           $view = 'member.payroll.payroll_payslipv1';             
+          $pdf = PDF::loadView($view, $data);
+               $pdf->setOption('margin-right', 5);
+               $pdf->setOption('margin-left', 5); 
+               $pdf->setOption('margin-top', 5);
+               $pdf->setOption('margin-bottom', 5);
+               $pdf->setOption('page-width', $page_width);
+               $pdf->setOption('page-height', $page_height);
+          return $pdf->stream('Paycheque.pdf');
+
+
+          /*$view = 'member.payroll.payroll_payslipv1';             
           $pdf = PDF::loadView($view, $data);
                $pdf->setOption('margin-right',5);
                $pdf->setOption('margin-left',5);
-          return $pdf->stream('Paycheque.pdf');
+          return $pdf->stream('Paycheque.pdf');*/
 
 
          /* $view = 'member.reports.'.$blade;             

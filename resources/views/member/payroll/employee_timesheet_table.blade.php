@@ -46,6 +46,7 @@
     <tbody>
         @foreach($_timesheet as $timesheet)
         @foreach($timesheet->time_record as $key => $time_record)
+        
         <tr class="time-record {{ $key == 0 ? 'main' : '' }}" tid="0" date="{{ $timesheet->date }}" total_hours="00:00" total_normal_hours="00:00" total_early_overtime="00:00" total_late_overtime="00:00" data-id="{{ $time_record->payroll_time_sheet_record_id }}">
             @if($key == 0) <!--MAIN -->
             <input class="date" type="hidden" name="date[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->payroll_time_sheet_record_id }}">

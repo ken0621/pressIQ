@@ -183,6 +183,7 @@ class PayrollTimeSheetController extends Member
 					$data["_timesheet"][$from]->time_record[0] = new stdClass();
 					$data["_timesheet"][$from]->time_record[0]->time_in = "";
 					$data["_timesheet"][$from]->time_record[0]->time_out = "";
+					$data["_timesheet"][$from]->time_record[0]->payroll_time_sheet_record_id = 0;
 				}
 				else
 				{
@@ -236,7 +237,7 @@ class PayrollTimeSheetController extends Member
 
 		$data['_remarks'] = Payroll::view_remarks($this->user_info->shop_id, $payroll_period_company_id);
 		$data['payroll_period_company_id'] = $payroll_period_company_id;
-
+		// dd($data);
 		return view('member.payroll.employee_timesheet_table', $data);
 	}
 

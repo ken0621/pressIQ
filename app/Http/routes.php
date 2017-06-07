@@ -15,6 +15,7 @@ Route::get('/barcode', 'MemberController@barcodes');
 // Route::get('/card', 'MemberController@card');
 // Route::get('/card/all', 'MemberController@all_slot');
 
+Route::get('member/register/session', 'MemberController@session');
 Route::get('member/register', 'MemberController@register');
 Route::post('member/register/submit', 'MemberController@register_post');
 
@@ -461,6 +462,8 @@ Route::any('/tablet/create_invoices/add','Member\TabletPISController@tablet_crea
 Route::any('/tablet/create_invoice/add_submit','Member\TabletPISController@create_invoice_submit');
 Route::any('/tablet/update_invoice/edit_submit',"Member\TabletPISController@update_invoice_submit");
 
+Route::any('tablet/invoice/add_item/{id}','Member\TabletPISController@invoice_add_item');
+
 Route::any('/tablet/receive_payment','Member\TabletPISController@receive_payment');
 Route::any('/tablet/view_receive_payment/{id}','Member\TabletPISController@view_receive_payment');
 Route::any('/tablet/receive_payment/add','Member\TabletPISController@tablet_receive_payment');
@@ -775,6 +778,8 @@ Route::group(array('prefix' => '/member/report'), function()
 	/* Accounting Sales - per item */
 	Route::any('/accounting/sale/item','Member\ReportsController@accounting_sale_items');
 
+	/* Accounting Sales - per warehouse */
+	Route::any('/accounting/sale_by_warehouse','Member\ReportsController@sale_by_warehouse');
 	/* Accounting general ledger */
 	Route::get('/accounting/general/ledger','Member\ReportsController@general_ledger');
 	Route::any('/accounting/general/ledger/get','Member\ReportsController@general_ledger_get');
@@ -877,6 +882,7 @@ Route::get('/member/maintenance/load_payment_method','Member\MaintenancePaymentM
 Route::get('/member/maintenance/load_payment_gateway/{id}','Member\OnlinePaymentMethodController@load_payment_gateway');
 
 /* SettingsController */
+Route::get('/member/settings', 'Member\SettingsController@all');
 Route::get('/member/settings/{key}', 'Member\SettingsController@index');
 Route::post('/member/settings/verify/add', 'Member\SettingsController@verify');
 Route::get('/member/settings/get/{key}', 'Member\SettingsController@get_settings');
@@ -918,6 +924,10 @@ Route::controller('/member/accounting/journal', 'Member\JournalEntryController')
 /* End */
 /* TERMS OF PAYMENT*/
 Route::controller('/member/maintenance/terms', 'Member\TermsOfPaymentController');
+/* End */
+
+/* MEMBER SHIPPING*/
+Route::controller('/member/register/shipping', 'MemberController');
 /* End */
 
 Route::controller('/tester','TesterController');

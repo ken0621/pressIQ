@@ -4,6 +4,7 @@ Route::any('/member/mlm/membership', 'Member\MLM_MembershipController@index'); /
 Route::any('/member/mlm/membership/add', 'Member\MLM_MembershipController@add'); //GUILLERMO TABLIGAN
 Route::post('/member/mlm/membership/add/save', 'Member\MLM_MembershipController@save'); // LUKE GLENN JORDAN
 Route::any('/member/mlm/membership/edit/{membership_id}', 'Member\MLM_MembershipController@edit'); //GUILLERMO TABLIGAN
+Route::any('/member/mlm/membership/edit/add/member/product', 'Member\MLM_MembershipController@edit_add_membership_product'); //GUILLERMO TABLIGAN
 Route::any('/member/mlm/membership/edit/{membership_id}/add_package', 'Member\MLM_MembershipController@add_package'); //GUILLERMO TABLIGAN
 Route::any('/member/mlm/membership/popup', 'Member\MLM_MembershipController@popup'); //GUILLERMO TABLIGAN
 Route::any('/member/mlm/membership/popups', 'Member\MLM_MembershipController@popup'); //GUILLERMO TABLIGAN

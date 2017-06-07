@@ -585,7 +585,7 @@ class Purchasing_inventory_system
         $data['sdate'] = date('m/d/Y');
         $sales = $total_sold - $total_discount;
         $cm_applied = 0;
-        $data["t_sales"] = (((($sales - ($data["total_returns"]) )- $data["total_ar"]) - $cm_applied) +  $data["ar_collection"]) + $data["total_cm"];
+        $data["t_sales"] = (((($sales - ($data["total_returns"]) )- $data["total_ar"]) - $data["total_cm_applied"]) +  $data["ar_collection"]) + $data["total_cm"];
         $agent_discrepancy = ($data['t_sales'] == $data["rem_amount"] ? 0 : $data["rem_amount"] - $data['t_sales']);
 
         $data["total_discrepancy"] = $agent_discrepancy + (($loss + $over) - ($mts_loss + $mts_over));

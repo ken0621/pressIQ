@@ -78,7 +78,14 @@ class Item
     }
     public static function get_item_details($item_id = 0)
     {
-        return Tbl_item::um_item()->category()->where("item_id",$item_id)->first();
+        $data = Tbl_item::um_item()->category()->where("item_id",$item_id)->first();
+
+        if($data->item_type_id == 4)
+        {
+            $data->item_price = Item::get_item_bundle_price($item_id);
+        }
+
+        return $data;
     }
 
     public static function get_item_in_bundle($item_id = 0)
@@ -320,12 +327,12 @@ class Item
     public static function get_all_item_sir($sir_id)
     {
         $shop_id = Item::getShopId();
-
         $item = Tbl_sir_item::select_sir_item()->where("tbl_sir_item.sir_id",$sir_id)->groupBy("tbl_item.item_category_id")->get();
         foreach ($item as $key1 => $value) 
         {         
             $_category[$key1] = collect(Tbl_category::where("type_shop",$shop_id)->where("archived",0)->where("type_id",$value->item_category_id)->first())->toArray();  
         }
+
         foreach($_category as $key => $category)
         {
             $_category[$key]['item_list']   = Tbl_sir_item::select_sir_item()->where("tbl_sir_item.sir_id",$sir_id)->where("item_category_id",$category['type_id'])->groupBy("tbl_sir_item.item_id")->get()->toArray();

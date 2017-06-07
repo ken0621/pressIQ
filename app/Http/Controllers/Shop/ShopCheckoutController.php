@@ -13,6 +13,7 @@ use URL;
 use Session;
 use DB;
 
+use App\Globals\Mlm_member;
 use App\Globals\Mlm_slot_log;
 use App\Globals\Item_code;
 use App\Globals\Cart;
@@ -28,6 +29,7 @@ use App\Models\Tbl_item_code_item;
 use App\Models\Tbl_ec_order_item;
 use App\Models\Tbl_merchant_school;
 use App\Models\Tbl_locale;
+// use App\Globals\Item_code;
 // use App\Globals\Mlm_slot_log;    
 
 /*4/29/17 this will import the data/class needed by ipay88 payment mode by:brain*/
@@ -90,7 +92,18 @@ class ShopCheckoutController extends Shop
             if ($from == "checkout") 
             {
                 $order_id = Request::input("param2");
+                $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
+                if($order)
+                {
+                    Item_code::ec_order_slot($order_id);
+                    
+                    $update['ec_order_id'] = $order_id;
+                    $update['order_status'] = "Processing";
+                    $update['payment_status'] = 1;
+                    $order = Ec_order::update_ec_order($update);
 
+                    return Redirect::to('/mlm');
+                }
                 return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)))->send();
             }
         }

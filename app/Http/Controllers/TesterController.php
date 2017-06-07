@@ -82,60 +82,28 @@ class TesterController extends Controller
 
     public function getPostTracking()
     {
-        $tracking["tracking"]["slug"] = "usps";
-        $tracking["tracking"]["tracking_number"] = "ABC123456";
-        $tracking["tracking"]["title"] = "Title1";
-        $tracking["tracking"]["smses"][0] = "0986768767";
-        $tracking["tracking"]["smses"][1] = "0986768767";
+        // $curl = curl_init();
+        // curl_setopt_array($curl, array(
+        //     CURLOPT_URL => "http://api.aftership.com/v4",
+        //     CURLOPT_RETURNTRANSFER => true,
+        //     CURLOPT_ENCODING => "",
+        //     CURLOPT_MAXREDIRS => 10,
+        //     CURLOPT_TIMEOUT => 30,
+        //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        //     CURLOPT_CUSTOMREQUEST => "POST",
+        //     CURLOPT_HTTPHEADER => array(
+        //         "aftership-api-key: 118485a6-ed28-4200-a924-ee42e5019b47",
+        //         "Content-Type: application/json"
+        //     ),
+        // ));
 
-        // dd(json_encode($tracking));
+        // $response = curl_exec($curl);
+        // $err = curl_error($curl);
 
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://api.aftership.com/v4/trackings",
-            CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_HTTPHEADER => 0,
-            CURLOPT_SSL_VERIFYPEER => 0,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => json_encode($tracking),
-            CURLOPT_HTTPHEADER => array(
-                "aftership-api-key: 118485a6-ed28-4200-a924-ee42e5019b47",
-                "Content-Type: application/json"
-            ),
-        ));
+        // curl_close($curl);
 
-        $response = curl_exec($curl);
-        $err      = curl_error($curl);
+        // dd(json_decode($response));"0000-00-00 00:00:00"
 
-        curl_close($curl);
-
-        dd(json_decode($response));
-    }
-
-    public function getTracking()
-    {
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://api.aftership.com/v4/trackings",
-            CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_HTTPHEADER => 0,
-            CURLOPT_SSL_VERIFYPEER => 0,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_POSTFIELDS => [],
-            CURLOPT_HTTPHEADER => array(
-                "aftership-api-key: 118485a6-ed28-4200-a924-ee42e5019b47",
-                "Content-Type: application/json"
-            ),
-        ));
-
-        $response = curl_exec($curl);
-        $err      = curl_error($curl);
-
-        curl_close($curl);
-
-        dd(json_decode($response));
     }
 
     public function getJournal()

@@ -2,6 +2,7 @@
 @section('content')
 <form class="global-submit" action="{{$action}}" method="post">
     <input type="hidden" name="_token" value="{{csrf_token()}}"> 
+    <span class="hidden for-tablet-only">for_tablet</span>
     <input type="hidden" class="button-action" name="button_action" value="">
       <div class="form-group">
         <div class="col-md-12">

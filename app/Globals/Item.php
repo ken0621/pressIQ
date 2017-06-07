@@ -280,9 +280,14 @@ class Item
 
         return $_category;
     } 
-    public static function get_all_category_item($type = array(1,2,3,4))
+    public static function get_all_category_item($type = array(1,2,3,4) , $for_tablet = false)
     {
-        $shop_id = Item::getShopId();
+        $shop_id = Item::getShopId(); 
+        if($for_tablet == true)
+        {
+            $shop_id = Tablet_global::getShopId();
+        }
+
         $_category = Tbl_category::where("type_shop",$shop_id)->where("type_parent_id",0)->where("archived",0)->get()->toArray();
 
         // if(Purchasing_inventory_system::check() != 0)

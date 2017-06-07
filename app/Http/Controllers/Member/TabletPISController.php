@@ -86,6 +86,70 @@ class TabletPISController extends Controller
 
         return view("member.customer.credit_memo.cm_type",$data);
     }
+     public function update_action()
+    {
+        $cm_id = Request::input("cm_id");
+        $cm_type = Request::input("type");
+
+        $data["cm_data"] = Tbl_credit_memo::where("cm_id",$cm_id)->first();
+        $data["c_id"] = Tbl_credit_memo::where("cm_id",$cm_id)->pluck("cm_customer_id");
+
+        if($cm_type == "invoice")
+        {
+            $data["_customer"]      = Tbl_customer::where("customer_id",$data["c_id"])->first();
+            $data['_account']       = Accounting::getAllAccount('all','',['Bank']);
+            $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->getShopId())->get();
+            $data['action']         = "/member/customer/receive_payment/add";
+            $data["_invoice"]       = Invoice::getAllInvoiceByCustomer($data["c_id"], true);
+
+            $cm_amount = $data["cm_data"]->cm_amount;
+            $total_inv = 0;
+
+            if(count($data["_invoice"]) > 0)
+            {  
+                $data["_invoice"][0]["amount_applied"] = $cm_amount;
+                $data["_invoice"][0]["rpline_amount"] = $cm_amount;
+            }
+
+            return view("member.receive_payment.modal_receive_payment",$data);
+        }
+        if($cm_type == "invoice_tablet")
+        {
+            $data["_customer"]      = Tbl_customer::where("customer_id",$data["c_id"])->first();
+            $data['_account']       = Accounting::getAllAccount('all','',['Bank']);
+            $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->getShopId())->get();
+            $data['action']         = "/tablet/receive_payment/add_submit";
+            $data["_invoice"]       = Invoice::getAllInvoiceByCustomer($data["c_id"],true);
+
+            $cm_amount = $data["cm_data"]->cm_amount;
+            $total_inv = 0;
+
+            if(count($data["_invoice"]) > 0)
+            {  
+                $data["_invoice"][0]["amount_applied"] = $cm_amount;
+                $data["_invoice"][0]["rpline_amount"] = $cm_amount;
+            }
+            return view("member.receive_payment.modal_receive_payment",$data);
+        }
+        if($cm_type == "others")
+        {
+            $up["cm_type"] = 1;
+            $up["cm_used_ref_name"] = "others";
+
+            Tbl_credit_memo::where("cm_id",$cm_id)->update($up);
+
+            return Redirect::to("/member/customer/credit_memo/list");
+        }
+        if($cm_type == "others_tablet")
+        {
+            $up["cm_type"] = 1;
+            $up["cm_used_ref_name"] = "others";
+
+            Tbl_credit_memo::where("cm_id",$cm_id)->update($up);
+
+            return Redirect::to("/tablet/credit_memo");
+        }
+    }
     public function getShopId()
     {
         $shop_id = collect(Session::get("sales_agent"));
@@ -314,8 +378,8 @@ class TabletPISController extends Controller
         $data["sir_id"]     = Request::input("sir_id");
         $data["page"]       = "Credit Memo";
         $data["_customer"]  = Customer::getAllCustomer(true);
-        $data['_item']      = Item::get_all_category_item();
-        $data['_um']        = UnitMeasurement::load_um_multi();
+        $data['_item']      = Item::get_all_category_item([1,2,3,4],true);
+        $data['_um']        = UnitMeasurement::load_um_multi(true);
         $data["action"]     = "/tablet/credit_memo/add_cm_submit";
 
         $id = Request::input('id');
@@ -618,7 +682,7 @@ class TabletPISController extends Controller
     {
         $data["item_details"] = Item::get_item_details($id);
         $data["sir_id"] = Request::input("sir_id");
-        $data['_um']          = UnitMeasurement::load_um_multi();
+        $data['_um']          = UnitMeasurement::load_um_multi(true);
         $data['action']       = "/tablet/invoice/add_item_submit";
 
         return view('tablet.agent_transaction.invoice.add_item_modal',$data);
@@ -627,7 +691,7 @@ class TabletPISController extends Controller
     {
         $data["item_details"] = Item::get_item_details($id);
         $data["sir_id"] = Request::input("sir_id");
-        $data['_um']          = UnitMeasurement::load_um_multi();
+        $data['_um']          = UnitMeasurement::load_um_multi(true);
         $data['action']       = "/tablet/invoice/add_item_submit";
 
         return view('tablet.agent_transaction.credit_memo.add_item_modal_cm',$data);        
@@ -640,20 +704,26 @@ class TabletPISController extends Controller
         $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", $this->getShopId())->get();
         $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->getShopId())->get();
         $data['action']         = "/tablet/receive_payment/add_submit";
-        $data["_invoice"] = Invoice::getAllInvoiceByCustomer($data["c_id"]);
+        $data["_invoice"] = Invoice::getAllInvoiceByCustomer($data["c_id"], true);
 
         $id = Request::input('id');
         if($id)
         {
             $data["rcvpayment"]         = Tbl_receive_payment::where("rp_id", $id)->first();
             $data["_rcvpayment_line"]   = Tbl_receive_payment_line::where("rpline_rp_id", $id)->get();
-            $data["_invoice"]           = Invoice::getAllInvoiceByCustomerWithRcvPymnt($data["rcvpayment"]->rp_customer_id, $data["rcvpayment"]->rp_id);
+            $data["_invoice"]           = Invoice::getAllInvoiceByCustomerWithRcvPymnt($data["rcvpayment"]->rp_customer_id, $data["rcvpayment"]->rp_id, true);
             // dd($data["_invoice"]);
             $data['action']             = "/tablet/receive_payment/update/".$data["rcvpayment"]->rp_id;
         }
 
         return view("tablet.agent_transaction.receive_payment.receive_payment_transaction", $data);
 	}
+
+    public function load_customer_rp($customer_id)
+    {
+        $data["_invoice"] = Invoice::getAllInvoiceByCustomer($customer_id,true);
+        return view('member.receive_payment.load_receive_payment_items', $data);
+    }
 	public function add_receive_payment()
 	{
         //for credit memo
@@ -695,7 +765,7 @@ class TabletPISController extends Controller
                 Tbl_receive_payment_line::insert($insert_line);
                 if($insert_line["rpline_reference_name"] == 'invoice')
                 {
-                    Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
+                    Invoice::updateAmountApplied($insert_line["rpline_reference_id"],true);
                 }
             }
         }
@@ -1147,7 +1217,7 @@ class TabletPISController extends Controller
                 //     Purchasing_inventory_system::return_qty($sir_id, $value->invline_item_id, $value->invline_um, $value->invline_qty); 
                 // }
 
-                $inv_id = Invoice::updateInvoice($invoice_id, $customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
+                $inv_id = Invoice::updateInvoice($invoice_id, $customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info,true);
 
                 Tbl_sir_inventory::where("sir_inventory_ref_name","invoice")->where("sir_inventory_ref_id",$invoice_id)->delete();
                 foreach($_itemline as $key => $item_line)

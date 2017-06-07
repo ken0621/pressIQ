@@ -441,6 +441,7 @@ Route::any('/tablet/pis/sir/review/{id}',"Member\TabletPISController@review_sir"
 Route::any('/tablet/pis/sir/{id}/{action}',"Member\TabletPISController@lof_action");
 Route::any('/tablet/pis/sir/lof_action_submit',"Member\TabletPISController@lof_action_submit");
 Route::any('/tablet/selected_sir',"Member\TabletPISController@selected_sir");
+Route::any('/tablet/customer/load_rp/{id}','Member\TabletPISController@load_customer_rp');
 
 /* END PIS TABLEt*/
 Route::any('/tablet','Member\TabletPISController@login');
@@ -471,6 +472,7 @@ Route::any('/tablet/view_receive_payment/{id}','Member\TabletPISController@view_
 Route::any('/tablet/receive_payment/add','Member\TabletPISController@tablet_receive_payment');
 Route::any('/tablet/receive_payment/add_submit','Member\TabletPISController@add_receive_payment');
 Route::any('/tablet/receive_payment/update/{id}','Member\TabletPISController@update_receive_payment');
+Route::any('/tablet/customer/credit_memo/update_action',"Member\TabletPISController@update_action");
 
 Route::any('/tablet/view_invoice_view/{id}','Member\TabletPISController@view_invoices_view');
 Route::any('/tablet/view_invoice_pdf/{id}','Member\TabletPISController@view_invoice_pdf');

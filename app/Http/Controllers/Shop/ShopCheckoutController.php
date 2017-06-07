@@ -91,6 +91,11 @@ class ShopCheckoutController extends Shop
             {
                 $order_id = Request::input("param2");
 
+                $update['ec_order_id'] = $order_id;
+                $update['order_status'] = "Processing";
+                $update['payment_status'] = 1;
+                $order = Ec_order::update_ec_order($update);
+
                 return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)))->send();
             }
         }

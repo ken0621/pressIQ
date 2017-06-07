@@ -52,6 +52,10 @@ class PurchasingInventorySystemController extends Member
      * 0 - new
      * 1 - open
      * 2 - close 
+
+     * ilr_status
+     * 1 - open
+     * 2 - close 
      */
     public function view_status($sir_id)
     {

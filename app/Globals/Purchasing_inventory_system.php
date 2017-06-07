@@ -54,7 +54,6 @@ class Purchasing_inventory_system
         $check = Tbl_settings::where("settings_key","pis-jamestiong")->where("settings_value","enable")->where("shop_id",Purchasing_inventory_system::getShopId())->pluck("settings_setup_done");
         return $check;
     }
-    
     public static function get_inventory_in_sir($sir_id)
     {
         $data["sir"] = Tbl_sir::truck()->saleagent()->where("sir_id",$sir_id)->where("sir_status",1)->where("tbl_sir.archived",0)->first();

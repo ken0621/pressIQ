@@ -117,7 +117,7 @@ class MemberController extends Controller
 
     public function generate_username($first_name, $last_name)
     {
-        return strtolower( trim( substr($first_name, 0, 6) . "." . substr($last_name, 0, 3) ) );
+        return strtolower( trim( substr($first_name, 0, 3) . "." . substr($last_name, 0, 6) ) );
     }
 
     public function locale_id_to_name($locale_id)

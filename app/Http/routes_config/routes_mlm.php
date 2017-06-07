@@ -14,6 +14,8 @@ Route::post('/mlm/register', 'Mlm\MlmRegisterController@post_register');
 
 Route::get('/mlm/register/get/membership_code/{membership_code}', 'Mlm\MlmRegisterController@view_customer_info_via_mem_code');
 
+Route::get('/mlm/process_order_queue', 'Mlm\MlmDashboardController@process_order_queue'); 
+
 Route::get('/mlm', 'Mlm\MlmDashboardController@index'); 
 Route::get('/mlm/news/{id}', 'Mlm\MlmDashboardController@news_content'); 
 Route::get('/mlm/profile', 'Mlm\MlmProfileController@index'); 

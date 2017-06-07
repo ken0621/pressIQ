@@ -316,7 +316,9 @@ class Payroll
 		$data['cancel']	= array();
 		foreach($_deduction as $key => $deduction)
 		{
-			$balance = $total_amount - Tbl_payroll_deduction_payment::selbyemployee($deduction->payroll_employee_id, $deduction_id)->sum('payroll_payment_amount');
+			$payment = Tbl_payroll_deduction_payment::selbyemployee($deduction_id, $deduction->payroll_employee_id)->sum('payroll_payment_amount');
+
+			$balance = $total_amount - $payment;
 			$index = 'active';
 			if($balance <= 0)
 			{

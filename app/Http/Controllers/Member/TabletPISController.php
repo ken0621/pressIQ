@@ -318,11 +318,11 @@ class TabletPISController extends Member
         if($id)
         {
             $data["cm"]            = Tbl_credit_memo::where("cm_id", $id)->first();
-            $data["_cmline"]       = Tbl_credit_memo_line::um()->where("cmline_cm_id", $id)->get();
+            $data["_cmline"]       = Tbl_credit_memo_line::cm_item()->um()->where("cmline_cm_id", $id)->get();
             $data["action"]        = "/tablet/credit_memo/edit_cm_submit";
         }
 
-        return view("member.customer.credit_memo.credit_memo_add",$data);
+        return view("tablet.agent_transaction.credit_memo.credit_memo_transaction",$data);
     }
     public function add_cm_submit()
     {
@@ -340,19 +340,22 @@ class TabletPISController extends Member
 
         $item_info[] = null;
         $_items = Request::input("cmline_item_id");
-        foreach ($_items as $key => $value) 
-        {     
-            if($value != null)
-            {  
-            $ctr ++;              
-                $item_info[$key]['item_service_date']  = datepicker_input(Request::input('cmline_service_date')[$key]);
-                $item_info[$key]['item_id']            = Request::input('cmline_item_id')[$key];
-                $item_info[$key]['item_description']   = Request::input('cmline_description')[$key];
-                $item_info[$key]['um']                 = Request::input('cmline_um')[$key];
-                $item_info[$key]['quantity']           = str_replace(',', "",Request::input('cmline_qty')[$key]);
-                $item_info[$key]['rate']               = str_replace(',', "", Request::input('cmline_rate')[$key]);
-                $item_info[$key]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$key]);
-            }      
+        if($_items)
+        {
+            foreach ($_items as $key => $value) 
+            {     
+                if($value != null)
+                {  
+                $ctr ++;              
+                    $item_info[$key]['item_service_date']  = "";
+                    $item_info[$key]['item_id']            = Request::input('cmline_item_id')[$key];
+                    $item_info[$key]['item_description']   = Request::input('cmline_description')[$key];
+                    $item_info[$key]['um']                 = Request::input('cmline_um')[$key];
+                    $item_info[$key]['quantity']           = str_replace(',', "",Request::input('cmline_qty')[$key]);
+                    $item_info[$key]['rate']               = str_replace(',', "", Request::input('cmline_rate')[$key]);
+                    $item_info[$key]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$key]);
+                }      
+            }
         }
         if($ctr == 0)
         {
@@ -395,19 +398,22 @@ class TabletPISController extends Member
 
         $item_info[] = null;
         $_items = Request::input("cmline_item_id");
-        foreach ($_items as $key => $value) 
-        {     
-            if($value != null)
+        if($_items)
+        {
+            foreach ($_items as $key => $value) 
             {     
-                $ctr++;  
-                $item_info[$key]['item_service_date']  = datepicker_input(Request::input('cmline_service_date')[$key]);
-                $item_info[$key]['item_id']            = Request::input('cmline_item_id')[$key];
-                $item_info[$key]['item_description']   = Request::input('cmline_description')[$key];
-                $item_info[$key]['um']                 = Request::input('cmline_um')[$key];
-                $item_info[$key]['quantity']           = str_replace(',', "",Request::input('cmline_qty')[$key]);
-                $item_info[$key]['rate']               = str_replace(',', "", Request::input('cmline_rate')[$key]);
-                $item_info[$key]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$key]);
-            }
+                if($value != null)
+                {     
+                    $ctr++;  
+                    $item_info[$key]['item_service_date']  = "";
+                    $item_info[$key]['item_id']            = Request::input('cmline_item_id')[$key];
+                    $item_info[$key]['item_description']   = Request::input('cmline_description')[$key];
+                    $item_info[$key]['um']                 = Request::input('cmline_um')[$key];
+                    $item_info[$key]['quantity']           = str_replace(',', "",Request::input('cmline_qty')[$key]);
+                    $item_info[$key]['rate']               = str_replace(',', "", Request::input('cmline_rate')[$key]);
+                    $item_info[$key]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$key]);
+                }
+            }            
         }
         if($ctr == 0)
         {
@@ -617,6 +623,15 @@ class TabletPISController extends Member
 
         return view('tablet.agent_transaction.invoice.add_item_modal',$data);
     }
+    public function credit_memo_add_item($id)
+    {
+        $data["item_details"] = Item::get_item_details($id);
+        $data["sir_id"] = Request::input("sir_id");
+        $data['_um']          = UnitMeasurement::load_um_multi();
+        $data['action']       = "/tablet/invoice/add_item_submit";
+
+        return view('tablet.agent_transaction.credit_memo.add_item_modal_cm',$data);        
+    }
 	public function tablet_receive_payment()
 	{
 		$data["c_id"] = Request::input("customer_id");
@@ -637,7 +652,7 @@ class TabletPISController extends Member
             $data['action']             = "/tablet/receive_payment/update/".$data["rcvpayment"]->rp_id;
         }
 
-        return view("member.receive_payment.receive_payment", $data);
+        return view("tablet.agent_transaction.receive_payment.receive_payment_transaction", $data);
 	}
 	public function add_receive_payment()
 	{
@@ -795,30 +810,33 @@ class TabletPISController extends Member
 		$_itemline                          = Request::input('invline_item_id');
 
 		$return = 0;
-		foreach($_itemline as $key => $item_line)
-		{
-			if($item_line)
-			{
-				$item_info[$key]['item_service_date']  = "";
-				$item_info[$key]['item_id']            = Request::input('invline_item_id')[$key];
-				$item_info[$key]['item_description']   = Request::input('invline_description')[$key];
-				$item_info[$key]['um']                 = Request::input('invline_um')[$key];
-				$item_info[$key]['quantity']           = str_replace(',', "",Request::input('invline_qty')[$key]);
-				$item_info[$key]['rate']               = str_replace(',', "", Request::input('invline_rate')[$key]);
-				$item_info[$key]['discount']           = Request::input('invline_discount')[$key];
-				$item_info[$key]['discount_remark']    = Request::input('invline_discount_remark')[$key];
-				$item_info[$key]['taxable']            = Request::input('invline_taxable')[$key];
-				$item_info[$key]['amount']             = str_replace(',', "", Request::input('invline_amount')[$key]);
-                $item_info[$key]['ref_name']           = "";
-                $item_info[$key]['ref_id']             = "";
+        if($_itemline)
+        {
+            foreach($_itemline as $key => $item_line)
+            {
+                if($item_line)
+                {
+                    $item_info[$key]['item_service_date']  = "";
+                    $item_info[$key]['item_id']            = Request::input('invline_item_id')[$key];
+                    $item_info[$key]['item_description']   = Request::input('invline_description')[$key];
+                    $item_info[$key]['um']                 = Request::input('invline_um')[$key];
+                    $item_info[$key]['quantity']           = str_replace(',', "",Request::input('invline_qty')[$key]);
+                    $item_info[$key]['rate']               = str_replace(',', "", Request::input('invline_rate')[$key]);
+                    $item_info[$key]['discount']           = Request::input('invline_discount')[$key];
+                    $item_info[$key]['discount_remark']    = Request::input('invline_discount_remark')[$key];
+                    $item_info[$key]['taxable']            = Request::input('invline_taxable')[$key];
+                    $item_info[$key]['amount']             = str_replace(',', "", Request::input('invline_amount')[$key]);
+                    $item_info[$key]['ref_name']           = "";
+                    $item_info[$key]['ref_id']             = "";
 
-				$return += Purchasing_inventory_system::check_qty_sir($sir_id, Request::input('invline_item_id')[$key],Request::input('invline_um')[$key],Request::input('invline_qty')[$key],0,"tbl_customer_invoice_line");
-				if($return != 0)
-				{
-					$item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->pluck("item_name");
-				}
-			}
-		}
+                    $return += Purchasing_inventory_system::check_qty_sir($sir_id, Request::input('invline_item_id')[$key],Request::input('invline_um')[$key],Request::input('invline_qty')[$key],0,"tbl_customer_invoice_line");
+                    if($return != 0)
+                    {
+                        $item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->pluck("item_name");
+                    }
+                }
+            }
+        }
 
         //CM returns
         $cm_customer_info[] = null;
@@ -1003,34 +1021,37 @@ class TabletPISController extends Member
         $item_name = '';
         $return = 0;
 
-        foreach($_itemline as $key => $item_line)
-        {
-            if($item_line)
-            {               
-                $item_info[$key]['item_service_date']  = "";
-                $item_info[$key]['item_id']            = Request::input('invline_item_id')[$key];
-                $item_info[$key]['item_description']   = Request::input('invline_description')[$key];
-                $item_info[$key]['um']                 = Request::input('invline_um')[$key];
-                $item_info[$key]['quantity']           = str_replace(',', "",Request::input('invline_qty')[$key]);
-                $item_info[$key]['rate']               = str_replace(',', "", Request::input('invline_rate')[$key]);
-                $item_info[$key]['discount']           = Request::input('invline_discount')[$key];
-                $item_info[$key]['discount_remark']    = Request::input('invline_discount_remark')[$key];
-                $item_info[$key]['taxable']            = Request::input('invline_taxable')[$key];
-                $item_info[$key]['amount']             = str_replace(',', "", Request::input('invline_amount')[$key]);
-                $item_info[$key]['ref_name']           = "";
-                $item_info[$key]['ref_id']             = "";
+        if($_itemline)
+        {           
+            foreach($_itemline as $key => $item_line)
+            {
+                if($item_line)
+                {               
+                    $item_info[$key]['item_service_date']  = "";
+                    $item_info[$key]['item_id']            = Request::input('invline_item_id')[$key];
+                    $item_info[$key]['item_description']   = Request::input('invline_description')[$key];
+                    $item_info[$key]['um']                 = Request::input('invline_um')[$key];
+                    $item_info[$key]['quantity']           = str_replace(',', "",Request::input('invline_qty')[$key]);
+                    $item_info[$key]['rate']               = str_replace(',', "", Request::input('invline_rate')[$key]);
+                    $item_info[$key]['discount']           = Request::input('invline_discount')[$key];
+                    $item_info[$key]['discount_remark']    = Request::input('invline_discount_remark')[$key];
+                    $item_info[$key]['taxable']            = Request::input('invline_taxable')[$key];
+                    $item_info[$key]['amount']             = str_replace(',', "", Request::input('invline_amount')[$key]);
+                    $item_info[$key]['ref_name']           = "";
+                    $item_info[$key]['ref_id']             = "";
 
 
-                $return += Purchasing_inventory_system::check_qty_sir($sir_id, Request::input('invline_item_id')[$key],Request::input('invline_um')[$key],Request::input('invline_qty')[$key],$invoice_id,"tbl_customer_invoice_line");
-                if($return != 0)
-                {
-                    $item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->pluck("item_name");
+                    $return += Purchasing_inventory_system::check_qty_sir($sir_id, Request::input('invline_item_id')[$key],Request::input('invline_um')[$key],Request::input('invline_qty')[$key],$invoice_id,"tbl_customer_invoice_line");
+                    if($return != 0)
+                    {
+                        $item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->pluck("item_name");
+                    }
+
+                    // $um_info = UnitMeasurement::um_info(Request::input("invline_um")[$key]);
+                    // $product_consume[$key]["quantity"] = (isset($um_info->unit_qty) ? $um_info->unit_qty : 1) * $item_info[$key]['quantity'];
+                    // $product_consume[$key]["product_id"] = Request::input('invline_item_id')[$key];
                 }
-
-                // $um_info = UnitMeasurement::um_info(Request::input("invline_um")[$key]);
-                // $product_consume[$key]["quantity"] = (isset($um_info->unit_qty) ? $um_info->unit_qty : 1) * $item_info[$key]['quantity'];
-                // $product_consume[$key]["product_id"] = Request::input('invline_item_id')[$key];
-            }
+            } 
         }
         //CREDIT MEMO / RETURNS
         $cm_customer_info[] = null;
@@ -1380,7 +1401,7 @@ class TabletPISController extends Member
             }
         }
 
-        return view('member.customer.sales_receipt.create_sale_receipt', $data);
+        return view('tablet.agent_transaction.sales_receipt.sales_receipt_transaction', $data);
     }
     public function sales_receipt_list()
     {
@@ -1439,7 +1460,7 @@ class TabletPISController extends Member
         {
             if($item_line)
             {
-                $item_info[$key]['item_service_date']  = Request::input('invline_service_date')[$key];
+                $item_info[$key]['item_service_date']  = "";
                 $item_info[$key]['item_id']            = Request::input('invline_item_id')[$key];
                 $item_info[$key]['item_description']   = Request::input('invline_description')[$key];
                 $item_info[$key]['um']                 = Request::input('invline_um')[$key];
@@ -1449,8 +1470,8 @@ class TabletPISController extends Member
                 $item_info[$key]['discount_remark']    = Request::input('invline_discount_remark')[$key];
                 $item_info[$key]['taxable']            = Request::input('invline_taxable')[$key];
                 $item_info[$key]['amount']             = str_replace(',', "", Request::input('invline_amount')[$key]);
-                $item_info[$key]['ref_name']           = Request::input('invline_ref_name')[$key];
-                $item_info[$key]['ref_id']             = Request::input('invline_ref_id')[$key];
+                $item_info[$key]['ref_name']           = "";
+                $item_info[$key]['ref_id']             = "";
 
                 $return += Purchasing_inventory_system::check_qty_sir($sir_id, Request::input('invline_item_id')[$key],Request::input('invline_um')[$key],Request::input('invline_qty')[$key],0,"tbl_customer_invoice_line");
                 if($return != 0)

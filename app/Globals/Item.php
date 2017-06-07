@@ -16,6 +16,7 @@ use DB;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
+use App\Globals\Tablet_global;
 use Session;
 use Carbon\carbon;
 
@@ -207,9 +208,14 @@ class Item
         }
     }
 
-    public static function get_returnable_item()
-    {
-        $data = Tbl_item::category()->where("shop_id",Item::getShopId())
+    public static function get_returnable_item($for_tablet = false)
+    {        
+        $shop_id = Item::getShopId();
+        if($for_tablet == true)
+        {
+            $shop_id = Tablet_global::getShopId();
+        }
+        $data = Tbl_item::category()->where("shop_id",$shop_id)
                                     ->where("tbl_item.archived",0)
                                     ->where("is_mts",1)
                                     ->groupBy("tbl_item.item_id")
@@ -324,9 +330,13 @@ class Item
         return $_category;
     } 
    
-    public static function get_all_item_sir($sir_id)
+    public static function get_all_item_sir($sir_id, $for_tablet = false)
     {
         $shop_id = Item::getShopId();
+        if($for_tablet == true)
+        {
+            $shop_id = Tablet_global::getShopId();
+        }
         $item = Tbl_sir_item::select_sir_item()->where("tbl_sir_item.sir_id",$sir_id)->groupBy("tbl_item.item_category_id")->get();
         foreach ($item as $key1 => $value) 
         {         

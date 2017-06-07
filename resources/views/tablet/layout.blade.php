@@ -214,11 +214,6 @@
     </style>
     <script type="text/javascript" src="/assets/member/global.js"></script>
 
-    <!-- Testing only -->
-    <script type="text/javascript" src="/assets/member/settings/settings_global.js"></script>
-    <script type="text/javascript" src="/assets/member/mlm/global_slot.js"></script>
-    <!-- End -->
-
     <script src="/assets/external/jquery_ui/jquery_ui.js"></script>
     <script src="/assets/member/scripts/e1d08589.bootstrap.min.js"></script>
     <script src="/assets/member/scripts/9f7a46ed.proton.js"></script>

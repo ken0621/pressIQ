@@ -9,6 +9,7 @@ use App\Models\Tbl_user;
 use App\Models\Tbl_item;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_vendor;
+use App\Globals\Tablet_global;
 use Log;
 use Request;
 use Session;
@@ -36,9 +37,13 @@ class Accounting
 	 * @param array  	$type      	Filter of type of Chart of Account (eg: Accounts Payable)
 	 * @param boolean  	$balance    If it will show total balance of each account (true, false) (always true)
 	 */
-	public static function getAllAccount($filter = 'all', $parent_id = null, $type = null, $search = null, $balance = false)
+	public static function getAllAccount($filter = 'all', $parent_id = null, $type = null, $search = null, $balance = false, $for_tablet = false)
 	{
 		$shop = Accounting::getShopId();
+		if($for_tablet == true)
+        {
+            $shop = Tablet_global::getShopId();
+        }
 
 		if($parent_id)
 		{

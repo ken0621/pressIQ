@@ -10,6 +10,7 @@ use App\Models\Tbl_user;
 use App\Models\Tbl_item;
 use App\Models\Tbl_credit_memo;
 use App\Globals\AuditTrail;
+use App\Globals\Tablet_global;
 use App\Globals\CreditMemo;
 use DB;
 use Log;
@@ -89,7 +90,7 @@ class Invoice
 	 * @param array  $total_info   	        (total_item_price => '', total_addons => [[0]label => '', [0]value => ''], 
 	 *										 total_discount_type => '', total_discount_value => '', total_overall_price => '')
 	 */
-	public static function postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info, $is_sales_receipt = '')
+	public static function postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info, $is_sales_receipt = '', $for_tablet = false)
 	{
         /* SUBTOTAL */
         $subtotal_price = collect($item_info)->sum('amount');
@@ -107,7 +108,12 @@ class Invoice
         /* OVERALL TOTAL */
         $overall_price  = convertToNumber($subtotal_price) - $ewt - $discount + $tax;
 
-        $insert['inv_shop_id']                  = Invoice::getShopId();  
+        $shop_id = Invoice::getShopId();
+        if($for_tablet == true)
+        {
+            $shop_id = Tablet_global::getShopId();
+        }
+        $insert['inv_shop_id']                  = $shop_id;  
 		$insert['inv_customer_id']              = $customer_info['customer_id'];        
         $insert['inv_customer_email']           = $customer_info['customer_email'];
         $insert['new_inv_id']                   = $invoice_info['new_inv_id'];

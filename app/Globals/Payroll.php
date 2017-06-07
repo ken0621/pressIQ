@@ -1074,7 +1074,7 @@ class Payroll
 				$total_hours = 0;
 			}
 
-			$total_rest_day_hours = $total_hours;
+			$total_rest_day_hours = $total_regular_hours;
 			$total_regular_hours = 0;
 			$rest_day_today = true;
 		}
@@ -1088,10 +1088,12 @@ class Payroll
 			}
 			else
 			{
-				$total_hours += c_time_to_int($break);
+				// $total_hours += c_time_to_int($break);
 			}
+			
+			// $total_extra_day_hours = $total_hours;
+			$total_extra_day_hours	= $total_regular_hours;
 			$total_regular_hours = 0;
-			$total_extra_day_hours = $total_hours;
 			$extra_day_today = true;
 		}
 

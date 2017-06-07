@@ -94,12 +94,27 @@ class DashboardController extends Member
 		$data["paid_invoice"] 		= Invoice::invoiceStatus($from, $to)["paid"];
 
 
-		$data["_expenses"]          = Tbl_journal_entry_line::account()->journal()->totalAmount()
-                                    ->where("je_shop_id", $this->getShopId())
-                                    ->whereIn("chart_type_name", ['Expense', 'Other Expense', 'Cost of Good Sold'])
-                                    ->whereRaw("DATE(je_entry_date) >= '$from'")
-                                    ->whereRaw("DATE(je_entry_date) <= '$to'")
-                                    ->get();
+		$data["_expenses"]   = Tbl_journal_entry_line::account()->journal()->totalAmount()
+                            ->where("je_shop_id", $this->getShopId())
+                            ->whereIn("chart_type_name", ['Expense', 'Other Expense', 'Cost of Good Sold'])
+                            ->whereRaw("DATE(je_entry_date) >= '$from'")
+                            ->whereRaw("DATE(je_entry_date) <= '$to'")
+                            ->get();
+
+		$data["_income"]     = Tbl_journal_entry_line::account()->journal()
+							->selectRaw("*")
+							->amount()
+                            ->where("je_shop_id", $this->getShopId())
+                            ->whereIn("chart_type_name", ['Income', 'Other Income'])
+                            ->whereRaw("DATE(je_entry_date) >= '$from'")
+                            ->whereRaw("DATE(je_entry_date) <= '$to'")
+                            ->groupBy(DB::raw("DATE(je_entry_date)"))
+                            ->get();
+
+        $data["_bank"]		= Tbl_journal_entry_line::account()->journal()->totalAmount()
+                            ->where("je_shop_id", $this->getShopId())
+                            ->whereIn("chart_type_name", ['Bank'])
+                            ->get();
 
 		return view('member.dashboard.dashboard', $data);
 	}

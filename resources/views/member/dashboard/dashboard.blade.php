@@ -139,6 +139,11 @@
             <a class="btn btn-primary" href="">Add a domain</a>
         </div>
     </div> -->
+    <div class="col-md-12">
+    <div class="chart-container" style="position: relative; height:40vh; width:80vw">
+        <canvas id="myChart"></canvas>
+    </div>
+    </div>
 </div>
 
 @endif
@@ -149,6 +154,7 @@
 <link rel="stylesheet" type="text/css" href="/assets/member/css/dashboard.css">
 @endsection
 @section('script')
+
 <script type="text/javascript">
     $(".drop-down-any").globalDropList();
     @if(Session::has('success'))
@@ -168,5 +174,43 @@
             }
         }
     });
+</script>
+<script>
+var data = {
+  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+  datasets: [{
+    label: "Dataset #1",
+    backgroundColor: "rgba(255,99,132,0.2)",
+    borderColor: "rgba(255,99,132,1)",
+    borderWidth: 2,
+    hoverBackgroundColor: "rgba(255,99,132,0.4)",
+    hoverBorderColor: "rgba(255,99,132,1)",
+    data: [65, 59, 20, 81, 56, 55, 40],
+  }]
+};
+
+var option = {
+  responsive: true,
+  maintainAspectRatio : true,
+  scales: {
+    yAxes: [{
+      stacked: true,
+      gridLines: {
+        display: true,
+        color: "rgba(255,99,132,0.2)"
+      }
+    }],
+    xAxes: [{
+      gridLines: {
+        display: false
+      }
+    }]
+  }
+};
+
+Chart.Bar('myChart', {
+  options: option,
+  data: data
+});
 </script>
 @endsection

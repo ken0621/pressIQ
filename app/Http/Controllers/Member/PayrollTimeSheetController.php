@@ -178,7 +178,7 @@ class PayrollTimeSheetController extends Member
 				$data["_timesheet"][$from]->payroll_time_sheet_approved = $data["timesheet_info"]->payroll_time_sheet_approved;
 				$_timesheet_record = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $data["timesheet_info"]->payroll_time_sheet_id)->get();
 				
-				$data["_timesheet"][$from]->time_record[0]->payroll_time_sheet_record_id = 0;
+				// $data["_timesheet"][$from]->time_record[0]->payroll_time_sheet_record_id = 0;
 				
 				if($_timesheet_record->isEmpty())
 				{

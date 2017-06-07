@@ -19,48 +19,44 @@
 
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
      <div class="panel-body">
-        
-        <div class="search-filter-box">
-            <div class="col-md-4 col-md-offset-8" style="padding: 10px">
-                <div class="input-group">
-                    <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                    <input type="text" class="form-control global-search" url="" data-value="1" placeholder="Press Enter to Search" aria-describedby="basic-addon1">
+        <div class="tab-content col-md-4">
+            <div class="input-group">
+                <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+                <input type="text" class="form-control global-search-custom" var-name="search_province" url="" data-value="1" placeholder="Press Enter to Search" aria-describedby="basic-addon1">
+            </div>
+            <div id="active" class="tab-pane fade in active">
+                <div class="load-data" target="province_location">
+                    <div id="province_location">
+                         @include('member.location.load_location_tbl', ['_location' => $_province, 'title' => "PROVINCE"])
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="tab-content">
+        <div class="tab-content col-md-4">
+            <div class="input-group">
+                <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+                <input type="text" class="form-control global-search-custom" var-name="search_city" url="" data-value="1" placeholder="Press Enter to Search" aria-describedby="basic-addon1">
+            </div>
             <div id="active" class="tab-pane fade in active">
-                <div class="load-data" target="active_location" filter="active">
-                    <div id="active_location">
-                         <div class="table-responsive">
-                            <table class="table table-hover table-bordered table-striped table-condensed">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">Name</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($_location as $location)
-                                    <tr>
-                                        <td class="text-center">{{ $location->locale_name }}</td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="text-center pull-right">
-                            {!!$_location->render()!!}
-                        </div>
+                <div class="load-data" target="city_location">
+                    <div id="city_location">
+                         @include('member.location.load_location_tbl', ['_location' => $_city, 'title' => "MUNICIPALITY / CITY"])
                     </div>
                 </div>
             </div>
-            <!-- <div id="inactive" class="tab-pane fade in">
-                <div class="load-data" target="inactive_location" filter="inactive">
-                    <div id="inactive_location">
-                        
+        </div>
+        <div class="tab-content col-md-4">
+            <div class="input-group">
+                <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+                <input type="text" class="form-control global-search-custom" var-name="" url="" data-value="1" placeholder="Press Enter to Search" aria-describedby="basic-addon1">
+            </div>
+            <div id="active" class="tab-pane fade in active">
+                <div class="load-data" target="barangay_location">
+                    <div id="barangay_location">
+                         @include('member.location.load_location_tbl', ['_location' => $_barangay, 'title' => "BARANGAY"])
                     </div>
                 </div>
-            </div> -->
+            </div>
         </div>
 
     </div>
@@ -81,7 +77,45 @@ function coupon_code()
 
     function document_ready()
     {
+        action_global_search_custom();
+        event_province_click();
+        event_city_click()
+    }
 
+    function action_global_search_custom() // Bryan Kier
+    {
+        $(document).on("change", ".global-search-custom", function(e)
+        {
+            e.preventDefault();
+            var url     = $(this).attr("url");
+            var value   = $(this).val().replace(/ /g, "%20");
+            var var_name= $(this).attr("var-name");
+
+            $load_content =  $(this).closest(".tab-content").find(".load-data");
+
+            $($load_content).load(url+"?"+var_name+"="+value+" #"+$load_content.attr("target"));
+        })
+    }
+
+    function event_province_click()
+    {
+        $(document).on("change", "#province_location.location_data", function(e)
+        {
+            var id = $(this).find(".location-id").html();
+            $(".load-data:target['city_location']").load("/member/maintenance/location/list?city_parent="+id +" #city_location");
+            $(".load-data:target['barangay_location']").load("/member/maintenance/location/list?city_parent="+id +" #barangay_location");
+
+        }
+    }
+
+    function event_city_click()
+    {
+        $(document).on("change", "#city_location.location_data", function(e)
+        {
+            var id = $(this).find(".location-id").html();
+            $(".load-data:target['barangay_location']").load("/member/maintenance/location/list?barangay_parent="+id +" #barangay_location");
+
+        }
     }
 }
 
@@ -99,5 +133,7 @@ function submit_done(data)
         toastr.error(data.message);
     }
 }
+
+
 </script>
 @endsection

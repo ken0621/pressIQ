@@ -38,7 +38,25 @@ class LocationController extends Member
 
     public function getList()
     {
-        $data['_location'] = Tbl_locale::paginate(50);
+        $search_province    = Request::input("search_province");
+        $search_city        = Request::input("search_city");
+        $search_barangay    = Request::input("search_barangay");
+
+
+        $data["_province"]  = Tbl_locale::where("locale_parent", 0);
+        if($search_province) $data["_province"]->where("locale_name","like","%" . $search_province . "%");
+        $data["_province"]  = $data["_province"]->get();
+
+        $city_parent        = Request::input("city_parent") ? Request::input("city_parent") : $data["_province"][0]->locale_id; 
+        $data["_city"]      = Tbl_locale::where("locale_parent", $city_parent);
+        if($search_city) $data["_city"]->where("locale_name","like","%" . $search_city . "%");
+        $data["_city"]      = $data["_city"]->get();
+
+
+        $barangay_parent    = Request::input("barangay_parent") ? Request::input("barangay_parent") : $data["_city"][0]->locale_id; 
+        $data["_barangay"]  = Tbl_locale::where("locale_parent", $barangay_parent);
+        if($search_barangay) $data["_barangay"]->where("locale_name","like","%" . $search_barangay . "%");
+        $data["_barangay"]      = $data["_barangay"]->get();
 
         return view('member.location.location', $data);
     }

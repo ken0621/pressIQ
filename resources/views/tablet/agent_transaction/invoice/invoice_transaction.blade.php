@@ -204,7 +204,7 @@
 </form>
 <div class="tablet-div-script hide">
     <div class="item-table">
-        <div style="border: 1px solid #999999; padding: 10px;margin: 5px">
+        <div style="border: 1px solid #999999; padding: 10px;margin: 5px" class="popup" size="md" link="">
             <a class="btn-remove col-xs-12 text-right" style="margin-top: -10px;margin-bottom: -10px">
                 Remove
             </a>

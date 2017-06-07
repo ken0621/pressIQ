@@ -1386,7 +1386,7 @@ class TabletPISController extends Member
         {
             $data["inv"]            = Tbl_customer_invoice::where("inv_id", $id)->first();
             
-            $data["_invline"]       = Tbl_customer_invoice_line::um()->where("invline_inv_id", $id)->get();
+            $data["_invline"]       = Tbl_customer_invoice_line::invoice_item()->um()->where("invline_inv_id", $id)->get();
             $data["_cmline"]       = Tbl_customer_invoice::returns_item()->where("inv_id", $id)->get();
             $data["action"]         = "/tablet/sales_receipt/update_submit";
 

@@ -148,7 +148,7 @@
                 </table>
             </div>
         </div>
-        <div id="all" class="tab-pane fade in active">
+        <div id="all" class="tab-pane fade in">
             <div class="form-group order-tags"></div>
             <div class="table-responsive">
                 <table class="table table-bordered table-condensed">

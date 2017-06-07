@@ -23,7 +23,7 @@ use Carbon\Carbon;
 use Session;
 class Warehouse
 {   
-    public static function select_item_warehouse_per_bundle($warehouse_id)
+    public static function select_item_warehouse_per_bundle($warehouse_id = null)
     {
         $bundle = Tbl_item::where("item_type_id",4)->where("shop_id",Warehouse::getShopId())->get();
 

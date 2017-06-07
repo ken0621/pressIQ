@@ -235,8 +235,8 @@ class Payroll
 
 			$insert[5]['shop_id'] 			= $shop_id;
 			$insert[5]['paper_size_name']	= 'A4';
-			$insert[5]['paper_size_width']	= '14.8';
-			$insert[5]['paper_size_height']	= '21';
+			$insert[5]['paper_size_width']	= '21';
+			$insert[5]['paper_size_height']	= '29.7';
 
 			Tbl_payroll_paper_sizes::insert($insert);
 
@@ -798,7 +798,6 @@ class Payroll
 			{
 				$time_in = c_time_to_int($time_record->payroll_time_sheet_approved_in);
 				$time_out = c_time_to_int($time_record->payroll_time_sheet_approved_out);
-
 				$time_in_str = $time_record->payroll_time_sheet_approved_in;
 				$time_out_str = $time_record->payroll_time_sheet_approved_out;
 			}
@@ -856,7 +855,7 @@ class Payroll
 			}
 			
 			$regular_hours = $time_spent;
-			// dd($time_out_str);
+			
 			$float_in 		= Payroll::time_float($time_in_str);
 			$float_out 		= Payroll::time_float($time_out_str);
 			$float_nd_in 	= Payroll::time_float('22:00');
@@ -901,18 +900,9 @@ class Payroll
 
 				if($float_in < $def_in_float && $float_in != 0)
 				{
-					// if($float_out < $def_in_float)
-					// {
-					// 	$early_overtime = $float_out - $float_in;
-					// 	$regular_hours = 0;
-					// 	dd($early_overtime);
-					// }
-					// else
-					// {
-						$early_overtime = $def_in_float - $float_in;
-						$early_overtime = c_time_to_int(Payroll::float_time($early_overtime));
-						$regular_hours = $regular_hours - $early_overtime;
-					// }
+					$early_overtime = $def_in_float - $float_in;
+					$early_overtime = c_time_to_int(Payroll::float_time($early_overtime));
+					$regular_hours = $regular_hours - $early_overtime;
 				}
 
 				/* CHECK IF LATE OVERTIME */
@@ -926,7 +916,6 @@ class Payroll
 					}
 					else
 					{
-						// dd($float_in);
 						$late_overtime = $float_out - $def_out_float;
 						$late_overtime = c_time_to_int(Payroll::float_time($late_overtime));
 						$regular_hours = $regular_hours - $late_overtime;
@@ -1060,7 +1049,7 @@ class Payroll
 
 		if($total_hours > 0)
 		{
-			$total_hours -= c_time_to_int($break);
+			// $total_hours -= c_time_to_int($break);
 		}
 		
 		/* COMPUTE EXTRA DAY AND REST DAY */
@@ -1085,7 +1074,7 @@ class Payroll
 				$total_hours = 0;
 			}
 
-			$total_rest_day_hours = $total_hours;
+			$total_rest_day_hours = $total_regular_hours;
 			$total_regular_hours = 0;
 			$rest_day_today = true;
 		}
@@ -1099,10 +1088,12 @@ class Payroll
 			}
 			else
 			{
-				$total_hours += c_time_to_int($break);
+				// $total_hours += c_time_to_int($break);
 			}
+			
+			// $total_extra_day_hours = $total_hours;
+			$total_extra_day_hours	= $total_regular_hours;
 			$total_regular_hours = 0;
-			$total_extra_day_hours = $total_hours;
 			$extra_day_today = true;
 		}
 
@@ -1124,15 +1115,14 @@ class Payroll
 		
 
 		/* CHECK IF ABSENT */
+		$absent = false;
+
 		if($total_time_spent == 0 && $extra_day_today == false && $holiday_today == false && $rest_day_today == false)
 		{
 			$absent = true;
 		}
 
-		else
-		{
-			$absent = false;
-		}
+		// dd($total_regular_hours);
 
 		$return->time_spent 		= convert_seconds_to_hours_minutes("H:i", $total_time_spent);
 		$return->regular_hours 		= convert_seconds_to_hours_minutes("H:i", $total_regular_hours);

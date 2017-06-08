@@ -329,8 +329,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <span class="nav-text">Profile</span>
                     </a>
                 </li>
+                <?php 
+                $access_repurchase['alphaglobal'] = '/mlm/repurchase';
+                $link_repurchase = '/mlm/repurchase';
+                if(!isset($access_repurchase[$shop_info->shop_key]))
+                {
+                  $link_repurchase = '/';
+                }
+                ?>
                 <li class="{{Request::segment(2) == 'repurchase' ? 'active' : '' }}">
-                    <a href="/">
+                    <a href="{{$link_repurchase}}">
                         <i class="icon-shopping-cart nav-icon"></i>
                         <span class="nav-text">Repurchase</span>
                     </a>

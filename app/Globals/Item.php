@@ -11,8 +11,11 @@ use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_sir_item;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_item_discount;
+use App\Models\Tbl_audit_trail;
 use DB;
 use App\Globals\Item;
+use App\Globals\UnitMeasurement;
+use App\Globals\Purchasing_inventory_system;
 use Session;
 use Carbon\carbon;
 
@@ -33,6 +36,45 @@ class Item
         }
 
         return $return;
+    }
+    public static function get_item_price_history($item_id, $show_all = false)
+    {
+        $item_data = Item::get_item_details($item_id);
+        $return = "";
+        $text = "";
+        $trail = Tbl_audit_trail::where("source","item")->where("source_id",$item_id)->orderBy("created_at","DESC")->get();
+  
+        foreach ($trail as $key => $value) 
+        {
+            $item_qty = 1;
+            $check = Purchasing_inventory_system::check();
+            if($check != 0)
+            {
+                $item_qty = UnitMeasurement::um_qty($item_data->item_measurement_id);
+            }
+            $old[$key] = unserialize($value->new_data);
+            $amount = 0;
+            if($old)
+            {
+                if($item_data->item_price != $old[$key]["item_price"])
+                {
+                    $len = strlen($return);
+                    
+                    $amount = $old[$key]["item_price"] * $item_qty;
+                    $return .= currency("PHP ",$amount)." (".date('m/d/Y',strtotime($value->created_at)).")<br>";
+
+                    $text = $return;
+                    if($show_all == false)
+                    {
+                        if($len > 25)
+                        {
+                            $text = (substr($text, 0, 50)."...<a class='popup' size='sm' link='/member/item/view_item_history/".$item_id."'>View</a>");
+                        }                        
+                    }
+                }
+            }
+        }   
+        return $text;
     }
     public static function get_item_details($item_id = 0)
     {
@@ -369,17 +411,17 @@ class Item
     }    
     public static function get_item_bundle($item_id = null)
     {
-        $data = Tbl_item::where("item_type_id", 4);
         $items = [];
 
         if($item_id)
         {
-            $items           = $data->where("item_id", $item_id)->first()->toArray();
+            $items           = Tbl_item::where("item_id", $item_id)->first()->toArray();
+
             $items["bundle"] = Tbl_item_bundle::item()->where("bundle_bundle_id", $item_id)->get()->toArray();
         }
         else
         {
-            $_item = $data->get()->toArray();
+            $_item = Tbl_item::get()->toArray();
 
             foreach($_item as $key=>$item)
             {

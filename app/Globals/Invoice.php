@@ -129,6 +129,7 @@ class Invoice
         if($is_sales_receipt != '')
         {
             $insert['inv_payment_applied']        = $overall_price;
+            $insert['inv_is_paid']                = 1;
             $insert['is_sales_receipt']           = 1;
             $transaction_type = "sales-receipt";
             $transaction = "sales_receipt";
@@ -225,10 +226,9 @@ class Invoice
         if($is_sales_receipt != '')
         {
             $update["inv_payment_applied"] = $overall_price;
-
-            Invoice::update_rcv_payment("invoice",$invoice_id,$overall_price);
             $transaction_type = "sales-receipt";
             $transaction = "sales_receipt";
+            Invoice::updateIsPaid($invoice_id);
         }
         else
         {
@@ -399,6 +399,42 @@ class Invoice
         else                                    $data["inv_is_paid"] = 0;
 
         Tbl_customer_invoice::where("inv_id", $inv_id)->update($data);
+    }
+
+
+    /**
+     * Check number of invoices tha is open, overdue and paid
+     *
+     * @param   string      $period     period of the report
+     * @return  array[3]    open | overdue | paid   
+     */
+    public static function invoiceStatus($from, $to)
+    {
+        $now    = datepicker_input("today");
+
+        $data["open"]       = Tbl_customer_invoice::where("inv_shop_id", Invoice::getShopId())
+                            ->where("is_sales_receipt", 0)
+                            ->whereRaw("DATE(inv_date) >= '$from'")
+                            ->whereRaw("DATE(inv_date) <= '$to'")
+                            ->whereRaw("inv_overall_price <> inv_payment_applied")
+                            ->get();
+
+        $data["overdue"]    = Tbl_customer_invoice::where("inv_shop_id", Invoice::getShopId())
+                            ->where("is_sales_receipt", 0)
+                            ->whereRaw("DATE(inv_date) >= '$from'")
+                            ->whereRaw("DATE(inv_date) <= '$to'")
+                            ->whereRaw("DATE(inv_due_date) <= '$now'")
+                            ->get();
+
+        $data["paid"]       = Tbl_customer_invoice::where("inv_shop_id", Invoice::getShopId())
+                            ->where("is_sales_receipt", 0)
+                            ->whereRaw("DATE(inv_date) >= '$from'")
+                            ->whereRaw("DATE(inv_date) <= '$to'")
+                            ->whereRaw("inv_overall_price = inv_payment_applied")
+                            ->get();
+
+
+        return $data;
     }
   
 }

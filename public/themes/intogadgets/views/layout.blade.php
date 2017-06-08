@@ -445,6 +445,7 @@
    <script type="text/javascript" src="http://arrow.scrolltotop.com/arrow33.js"></script>
    <script src="resources/assets/slider/dist/slippry.min.js"></script>
    <script src="resources/assets/footable/js/footable.js" type="text/javascript"></script>
+   <script type="text/javascript" src="js/match-height.js"></script>
    <script type="text/javascript" src="/resources/assets/slick/slick.min.js"></script>
    <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
    <script type="text/javascript" src="/assets/front/js/global.js"></script>
@@ -518,14 +519,18 @@
       
    </script>
    <script type="text/javascript">
-      jQuery(document).ready(function(){   
-      
-        $(".exit").click(function(){
-      
+      jQuery(document).ready(function()
+      {   
+        $(".exit").click(function()
+        {
             $(".footer-add").remove();
-      
         });
       });
+
+      jQuery(window).load(function()
+      {
+         $(".match-height").matchHeight();
+      })
       
       jQuery(document).ready( function($) {
       

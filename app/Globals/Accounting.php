@@ -158,7 +158,6 @@ class Accounting
 			Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_name", "Accounts Payable")->update(['account_code'=>"accounting-payable"]);
 			$account_payable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("account_code","accounting-payable")->pluck("account_id");
 		}
-
 		/* END */
 
 		/* IF THERE IS A SPECIFIED ACCOUNT ID FOR THE MAIN ACCOUNT (ACCOUNT THAT IS SELECTED IN THE TRANSACTION | OVERWRITE THE DEFAULT VALUE OF ACCOUNTS RECEIVABLE OR PAYABLE) */ /* !!!! FOR NOW IT IS FOR CASH ONLY */ 
@@ -465,7 +464,7 @@ class Accounting
 		$journal_entry['je_entry_date'] 		= $entry['entry_date'];
 		$journal_entry['created_at'] 			= Carbon::now();
 		$journal_entry['je_remarks']			= $remarks;
-
+		
 		/* CHECK IF JOURNAL EXIST - IF THERE IS A JOURNAL ID */
 		if(!$entry['je_id'])
 		{
@@ -478,7 +477,7 @@ class Accounting
 			Tbl_journal_entry::where("je_id", $entry['je_id'])->update($journal_entry);
 			$line_data["je_id"] = $entry['je_id'];
 		}
-
+		
 		foreach($entry_data as $line)
 		{
 			$line_data["jline_name_id"]			= $line["name_id"];
@@ -493,7 +492,7 @@ class Accounting
 
 		return $line_data["je_id"];
 	}
-
+	
 	public static function insertJournalLine($line)
 	{
 		$journal_line['jline_je_id']			= $line["je_id"];

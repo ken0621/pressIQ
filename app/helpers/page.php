@@ -143,7 +143,7 @@ function page_list()
     
     /* MLM */
     $page = "mlm";  
-    $nav[$page]['name'] = "Multilevel Marketing";
+    $nav[$page]['name'] = "Loyalty Reward System";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "braille";
     $nav[$page]['type']     = "menu";

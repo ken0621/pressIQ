@@ -134,7 +134,7 @@
             </div>
           </div>
           <div class="panel-body">
-            <canvas id="ChartGraph" ></canvas>
+            <canvas id="line-chart"></canvas>
           </div>
         </div>
       </div>

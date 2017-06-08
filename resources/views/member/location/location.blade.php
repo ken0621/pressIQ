@@ -1,7 +1,10 @@
 
 @extends('member.layout')
 <style type="text/css">
-    
+    tbody tr.active
+    {
+        color: #fff!important;
+    }
 </style>
 @section('content')
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -31,7 +34,7 @@
                     <div id="province_location">
                          @include('member.location.load_location_tbl', ['_location' => $_province, 'title' => "PROVINCE"])
                     </div>
-                </div>ap
+                </div>
             </div>
         </div>
         <div class="tab-content col-md-4">
@@ -42,7 +45,7 @@
             <div id="active" class="tab-pane fade in active">
                 <div class="load-data" target="city_location">
                     <div id="city_location">
-                         @include('member.location.load_location_tbl', ['_location' => $_city, 'title' => "MUNICIPALITY/CITY", 'var_name' => 'city_parent', 'parent_id' => $parent_city])
+                         @include('member.location.load_location_tbl', ['_location' => $_city, 'title' => "MUNICIPALITY/CITY", 'var_name' => 'city_parent', 'parent_id' => $parent_city, 'parent_name' => $parent_city_name])
                     </div>
                 </div>
             </div>
@@ -55,7 +58,7 @@
             <div id="active" class="tab-pane fade in active">
                 <div class="load-data" target="barangay_location">
                     <div id="barangay_location">
-                         @include('member.location.load_location_tbl', ['_location' => $_barangay, 'title' => "BARANGAY", 'var_name' => 'barangay_parent', 'parent_id' => $parent_barangay])
+                         @include('member.location.load_location_tbl', ['_location' => $_barangay, 'title' => "BARANGAY", 'var_name' => 'barangay_parent', 'parent_id' => $parent_barangay, 'parent_name' => $parent_barangay_name])
                     </div>
                 </div>
             </div>
@@ -106,13 +109,16 @@ function coupon_code()
     {
         $(document).on("click", "#province_location .location-data:not('span')", function(e)
         {
-            var id = $(this).find(".location-id").html();
-
+            var id = $(this).closest("tr").find(".location-id").html();
+            console.log($(this));
             $(".load-data[target='city_location']").find("tbody tr").html("<td>Loading...</td>");
             $(".load-data[target='barangay_location']").find("tbody tr").html("<td>Loading...</td>");
 
             $(".load-data[target='city_location']").load("/member/maintenance/location/list?city_parent="+id +" #city_location");
             $(".load-data[target='barangay_location']").load("/member/maintenance/location/list?city_parent="+id +" #barangay_location");
+
+            // $(this).closest("tbody").find("tr").removeClass("active");
+            // $(this).closest("tr").addClass("active");
 
         });
     }
@@ -121,9 +127,12 @@ function coupon_code()
     {
         $(document).on("click", "#city_location .location-data:not('span')", function(e)
         {
-            var id = $(this).find(".location-id").html();
+            var id = $(this).closest("tr").find(".location-id").html();
             $(".load-data[target='barangay_location']").find("tbody tr").html("<td>Loading...</td>");
             $(".load-data[target='barangay_location']").load("/member/maintenance/location/list?barangay_parent="+id +" #barangay_location");
+
+            // $(this).closest("tbody").find("tr").removeClass("active");
+            // $(this).closest("tr").addClass("active");
 
         });
     }

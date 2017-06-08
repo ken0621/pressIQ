@@ -45,21 +45,24 @@ class LocationController extends Member
 
         $data["_province"]  = Tbl_locale::where("locale_parent", 0);
         if($search_province) $data["_province"]->where("locale_name","like","%" . $search_province . "%");
-        $data["_province"]  = $data["_province"]->get();
+        $data["_province"]  = $data["_province"]->orderBy("locale_name")->get();
 
         $city_parent        = Request::input("city_parent") ? Request::input("city_parent") : $data["_province"][0]->locale_id; 
         $data["_city"]      = Tbl_locale::where("locale_parent", $city_parent);
         if($search_city) $data["_city"]->where("locale_name","like","%" . $search_city . "%");
-        $data["_city"]      = $data["_city"]->get();
+        $data["_city"]      = $data["_city"]->orderBy("locale_name")->get();
 
 
         $barangay_parent    = Request::input("barangay_parent") ? Request::input("barangay_parent") : $data["_city"][0]->locale_id; 
         $data["_barangay"]  = Tbl_locale::where("locale_parent", $barangay_parent);
         if($search_barangay) $data["_barangay"]->where("locale_name","like","%" . $search_barangay . "%");
-        $data["_barangay"]  = $data["_barangay"]->get();
+        $data["_barangay"]  = $data["_barangay"]->orderBy("locale_name")->get();
 
-        $data["parent_city"]    = $city_parent;
-        $data["parent_barangay"]= $barangay_parent ;
+        $data["parent_city"]        = $city_parent;
+        $data["parent_city_name"]   = Tbl_locale::where("locale_id", $city_parent)->pluck("locale_name");
+
+        $data["parent_barangay"]    = $barangay_parent;
+        $data["parent_barangay_name"]= Tbl_locale::where("locale_id", $barangay_parent)->pluck("locale_name");
 
         return view('member.location.location', $data);
     }

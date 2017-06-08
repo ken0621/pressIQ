@@ -1,8 +1,8 @@
 <div class="table-responsive">
-    <table class="table table-hover table-bordered table-striped table-condensed">
+    <table class="table table-hover table-bordered table-condensed">
         <thead>
             <tr>
-                <th class="text-center" colspan="3">{{$title}} 
+                <th class="text-center" colspan="3">{{$title}} {{isset($parent_name) ? 'of '.$parent_name : ''}}
                     <a href="javascript:" link="/member/maintenance/location/location?parent_id={{ $parent_id or 0}}&title={{$title}}" size="md" class="pull-right popup">
                     <span class="fa fa-plus"></span>
                     </a>
@@ -11,7 +11,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($_location as $location)
+            @foreach($_location as $key=>$location)
             <tr class="">
                 <td class="hidden location-id">{{ $location->locale_id}} </td>
                 <td class="text-left location-data">

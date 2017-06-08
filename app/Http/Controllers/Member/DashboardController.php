@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Controllers\Member;
+
 use App\Http\Controllers\Controller;
+// use App\Http\Middleware\RandomColor;
 use App\Globals\Accounting;
 use App\Globals\Category;
 use App\Globals\Item;
@@ -15,9 +17,11 @@ use App\Models\Tbl_User;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_unit_measurement;
 use App\Models\Tbl_journal_entry_line;
+
 use Carbon\Carbon;
 use Request;
 use DB;
+
 class DashboardController extends Member
 {
 
@@ -28,6 +32,7 @@ class DashboardController extends Member
 
 	public function index()
 	{
+
 		$period 		= Request::input("period");
 		$period 		= "days_ago";
 		$date["days"] 	= "365";
@@ -50,6 +55,20 @@ class DashboardController extends Member
                             ->whereRaw("DATE(je_entry_date) <= '$to'")
                             ->get();
 
+        $data["expense_name"]	= [];
+        $data["expense_color"]	= [];
+        $data["expense_value"]	= [];
+        foreach($data["_expenses"] as $key=>$expense)
+        {
+        	$data["_expenses"][$key]->percentage = currency('',(($expense->amount / collect($data["_expenses"])->sum('amount')) * 100));
+        	array_push($data["expense_name"], currency('',(($expense->amount / collect($data["_expenses"])->sum('amount')) * 100)) ."% " .$expense->account_name);
+        	array_push($data["expense_value"], currency('',(($expense->amount / collect($data["_expenses"])->sum('amount')) * 100)));
+        	array_push($data["expense_color"], $this->random_color());
+        }
+        $data["expense_name"]	= json_encode($data["expense_name"]);
+        $data["expense_value"] 	= json_encode($data["expense_value"]);
+        $data["expense_color"]	= json_encode($data["expense_color"]);
+
 		$data["_income"]     = Tbl_journal_entry_line::account()->journal()
 							->selectRaw("*")
 							->amount()
@@ -66,6 +85,14 @@ class DashboardController extends Member
                             ->get();
 
 		return view('member.dashboard.dashboardv1', $data);
+	}
+
+	public function random_color_part() {
+    	return str_pad( dechex( mt_rand( 0, 255 ) ), 2, '0', STR_PAD_LEFT);
+	}
+
+	public function random_color() {	
+	    return '#'.$this->random_color_part() .''. $this->random_color_part() .''. $this->random_color_part();
 	}
 
 	public function change_warehouse()

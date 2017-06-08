@@ -24,48 +24,51 @@ function dashboard()
 
         type: 'doughnut',
         data: {
-          labels: ["Africa", "Asia"],
+          labels: expense_name,
           datasets: [{
-            backgroundColor: [
-              "#01837E",
-              "#00A6A4",
-            ],
-            data: [100, 20,]
+            backgroundColor: expense_color,
+            data: expense_value
           }]
         }
       });
   }
+  // "#254d6f",
+  // "#3682c3",
+  // "#0963b1",
+  // "#0963b1",
+  // "#76a9d6",
+
   function action_linegraph_chart()
   {
     var ctx = document.getElementById('ChartGraph').getContext('2d');
     var myChart = new Chart(ctx, {
-    type: 'line',
-      data: {
-      labels: ['Apr 1', '', '', '', '', '', 'Apr 30'],
-      datasets: [{
-        data: [12, 19, 3, 17, 6, 3, 7],
-        backgroundColor: "rgba(255,153,0,0.6)"
-      },
-      ]
-    }
-  });
+      type: 'line',
+        data: {
+        labels: ['Apr 1', '', '', '', '', '', 'Apr 30'],
+        datasets: [{
+          data: [12, 19, 3, 17, 6, 3, 7],
+          backgroundColor: "#79b941"
+        },
+        ]
+      }
+    });
   }
 
   function action_bar_stackedP_chart()
   {
     var barChartData = {
-            labels: [""],
+            labels: ["Invoice"],
             datasets: [{
                 label: 'Open',
-                backgroundColor: "rgba(220,220,220,0.5)",
+                backgroundColor: "#fbb850",
                 data: [open_invoice]
             }, {
                 label: 'Overdue',
-                backgroundColor: "rgba(151,187,205,0.5)",
+                backgroundColor: "#f58c1f",
                 data: [overdue_invoice]
             }, {
                 label: 'Paid',
-                backgroundColor: "rgba(160,120,205,0.5)",
+                backgroundColor: "#f9a32c",
                 data: [paid_invoice]
             }]
 
@@ -93,6 +96,13 @@ function dashboard()
         }
     });
   }
+
+  var randomColorFactor = function() {
+        return Math.round(Math.random() * 255);
+  };
+  var randomColor = function(opacity) {
+      return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + (opacity || '.3') + ')';
+  };
 }
 
 

@@ -28,7 +28,7 @@
                </div>
                <div class="panel-body">
                   <div class="row">
-                     <div class="col-md-7">
+                     <div class="col-md-12">
                         <!--PIE GRAPH-->
                         <div class="pg-title">
                            Last Month
@@ -38,10 +38,12 @@
                         </div>
                         <!--END OF PG-->
                      </div>
-                     <div class="col-md-5" id="right-pane-exp">
-                        <text>94% </text><br>
-                        <text>Purchases S </text> <br>
-                     </div>
+                     <!-- <div class="col-md-5" id="right-pane-exp">
+                        @foreach($_expenses as $key=>$expense)
+                           <text><b>{{$expense->percentage}} %</b></text><br>
+                           <text>{{$expense->account_name}}</text> <br>
+                        @endforeach
+                     </div> -->
                   </div>
                </div>
             </div>
@@ -51,7 +53,7 @@
                <div class="panel-heading">
                   <div class="pull-left" id="font1">Income</div>
                   <div class="pull-right">
-                     Last 465 days
+                     Last 365 days
                   </div>
                   <br>
                </div>
@@ -82,6 +84,33 @@
                </div>
             </div>
          </div>
+         <div class="col-md-4">
+            <div class="panel panel-default" id="panel-height">
+               <div class="panel-heading">
+                  Sales
+                  <div class="pull-right">
+                     <div class="dropdown">
+                        <div class="dropdown-toggle" type="button" data-toggle="dropdown">Last Month
+                           <span class="caret"></span>
+                        </div>
+                        <ul class="dropdown-menu">
+                           <li><a href="#">Last Year</a></li>
+                           <li><a href="#">This Month</a></li>
+                           <li><a href="#">This Year</a></li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+               <div class="panel-body">
+                  <canvas id="ChartGraph" ></canvas>
+               </div>
+            </div>
+         </div>
+         
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-md-12">
          <div class="col-md-4">
             <div class="panel panel-default" id="panel-height">
                <div class="panel-heading">
@@ -116,32 +145,6 @@
                </div>
             </div>
          </div>
-      </div>
-   </div>
-   <div class="row">
-      <div class="col-md-12">
-         <div class="col-md-4">
-            <div class="panel panel-default" id="panel-height">
-               <div class="panel-heading">
-                  Sales
-                  <div class="pull-right">
-                     <div class="dropdown">
-                        <div class="dropdown-toggle" type="button" data-toggle="dropdown">Last Month
-                           <span class="caret"></span>
-                        </div>
-                        <ul class="dropdown-menu">
-                           <li><a href="#">Last Year</a></li>
-                           <li><a href="#">This Month</a></li>
-                           <li><a href="#">This Year</a></li>
-                        </ul>
-                     </div>
-                  </div>
-               </div>
-               <div class="panel-body">
-                  <canvas id="ChartGraph" ></canvas>
-               </div>
-            </div>
-         </div>
          <div class="col-md-4">
             <div class="panel panel-default" id="panel-height">
                <div class="panel-heading">
@@ -156,9 +159,15 @@
 @endsection
 @section('script')
 <script type="text/javascript">
+
 var open_invoice    = {{count($open_invoice)}};
 var overdue_invoice = {{count($overdue_invoice)}};
 var paid_invoice    = {{count($paid_invoice)}};
+
+var expense_value    = {!!$expense_value or ''!!};
+var expense_name     = {!!$expense_name or ''!!};
+var expense_color    = {!!$expense_color or ''!!};
+
 </script>
 <script type="text/javascript" src='/assets/member/js/dashboard_chart.js'></script>
 @endsection

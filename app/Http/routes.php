@@ -167,7 +167,6 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 
 
 Route::get('/member', 'Member\DashboardController@index');
-Route::get('/dashboard', 'Member\DashboardVr1Controller@index');
 Route::post('/member/change_warehouse', 'Member\DashboardController@change_warehouse');
 Route::any('/member/setup', 'Member\SetupController@index');
 Route::any('/member/product/service_list', 'Member\Product_ServiceListController@index'); //GUILLERMO TABLGIAN

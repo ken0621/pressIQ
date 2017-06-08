@@ -76,6 +76,7 @@ use App\Models\Tbl_payroll_shift_template;
 use App\Models\Tbl_payroll_shift_code;
 use App\Models\Tbl_payroll_employee_shift;
 use App\Models\Tbl_payroll_employee_schedule;
+use App\Models\Tbl_payroll_time_sheet;
 
 use App\Globals\Payroll;
 use App\Globals\PayrollJournalEntries;
@@ -1864,11 +1865,63 @@ class PayrollController extends Member
           $data[15]['access_name'] = 'Pagibig/HDMF';
           $data[15]['link']        = '/member/payroll/pagibig_formula';
 
+          $data[16]['access_name'] = 'Reset';
+          $data[16]['link']        = '/member/payroll/reset_payroll';
+
           return $data;
      }
 
-	/* COMPANY START */
 
+     /* payroll reset start */
+     public function reset_payroll()
+     {
+          return view('member.payroll.side_container.reset_payroll');
+     }
+
+     /* password for resetting payroll */
+
+     public function reset_payroll_password()
+     {
+          return 'water123';
+     }
+
+     public function reset_time_sheet()
+     {
+          $data['_period'] = Tbl_payroll_period::sel(Self::shop_id())->orderBy('payroll_period_start')->get();
+          return view('member.payroll.modal.reset_time_sheet', $data);
+     }
+
+     public function reset_time_sheet_select()
+     {
+          $period = Request::input('period');
+          $company = Tbl_payroll_period_company::selperiod($period)->orderBy('payroll_company_name')->get();
+          return $company->toJson();
+     }
+
+     public function reset_time_sheet_action()
+     {
+          $return['status'] = 'wrong password';
+          if(Request::input('password') == Self::reset_payroll_password())
+          {
+               $count = 0;
+               if(Request::has('period_company'))
+               {
+                    foreach(Request::input('period_company') as $key => $period)
+                    {
+                         $count += Tbl_payroll_time_sheet::getpercompany($period)->count();
+                         $period_list = Tbl_payroll_time_sheet::getpercompany($period)->delete();
+                    }
+               }
+
+               $return['status']   = 'success';
+               $return['affected'] = $count.' time sheet/s has been deleted';
+          }
+
+          return collect($return)->toJson();
+     }
+     /* payroll reset end */
+
+	/* COMPANY START */
 	public function company_list()
 	{
 		// $data['_page'] = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_parent_company_id',0)->orderBy('tbl_payroll_company.payroll_company_name')->paginate($this->paginate_count);

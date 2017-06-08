@@ -142,6 +142,14 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* PAGIBIG END */
 
 
+	/* reset payroll start */
+	Route::any('/reset_payroll','Member\PayrollController@reset_payroll');
+	Route::any('/reset_payroll/reset_time_sheet','Member\PayrollController@reset_time_sheet');
+	Route::any('/reset_payroll/reset_time_sheet/reset_time_sheet_select','Member\PayrollController@reset_time_sheet_select');
+	Route::any('/reset_payroll/reset_time_sheet/reset_time_sheet_action','Member\PayrollController@reset_time_sheet_action');
+	/* reset payroll end */
+
+
 	/* DEDUCTION START */
 	Route::any('/deduction',"Member\PayrollController@deduction");
 	Route::any('/deduction/modal_create_deduction',"Member\PayrollController@modal_create_deduction");

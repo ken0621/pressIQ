@@ -1,0 +1,136 @@
+#body
+{
+	overflow: auto;
+}
+.wrapper
+{
+	overflow: visible;
+}
+.row-no-padding
+{
+	margin-left: 0 !important;
+	margin-right: 0 !important;
+	> div
+	{
+		padding-left: 0 !important;
+		padding-right: 0 !important;
+	}
+}
+.dashboard
+{
+	margin-top: 25px;
+	.grid
+	{
+		.grid-item
+		{
+			.grid-item-content
+			{
+				margin-right: 15px;
+			}
+			&:last-child
+			{
+				margin-right: 0;
+				.grid-item-content
+				{
+					margin-right: 15px;
+				}
+			}
+			.grid-item-content
+			{
+				min-height: 100px;
+			    -moz-box-shadow: 0px 0px 2.5px #d4d4d4;
+			    -webkit-box-shadow: 0px 0px 2.5px #d4d4d4;
+			    box-shadow: 0px 0px 2.5px #d4d4d4;
+			    background-color: #fff;
+			    margin-bottom: 15px;
+			    font-size: 0;
+			    text-align: left;
+				.grid-title
+				{
+					-moz-box-shadow: inset 0px 0px 2.5px #d4d4d4;
+				    -webkit-box-shadow: inset 0px 0px 2.5px #d4d4d4;
+				    box-shadow: inset 0px 0px 2.5px #d4d4d4;
+					color: #bbb;
+					background-color: #fff;
+					display: inline-block;
+					padding: 2.5px 25px;
+					font-size: 14px;
+					border-bottom-left-radius: 5px;
+					border-bottom-right-radius: 5px;
+					&.active
+					{
+						color: #60718D;
+						background-color: #E2EDFF;
+					}
+				}
+				.horizontal-line
+				{
+					display: inline-block;
+					vertical-align: top;
+					height: 5px;
+					background-color: #ddd;
+					min-width: 10px;
+					border-radius: 15px;
+					margin-left: 5px;
+					margin-right: 5px;
+					margin-top: 25px;
+				}
+				.space-line
+				{
+					display: inline-block;
+					vertical-align: top;
+					height: 5px;
+					background-color: #ddd;
+					min-width: 10px;
+					border-radius: 15px;
+					margin-left: 5px;
+					margin-right: 5px;
+					margin-top: 25px;
+					opacity: 0;
+				}
+				.vertical-line
+				{
+					display: inline-block;
+					vertical-align: top;
+					width: 5px;
+					background-color: #ddd;
+					min-height: 10px;
+					border-radius: 5px;
+					margin-right: 35px;
+					margin-left: 35px;
+				}
+				.per-row
+				{
+					margin-top: 10px;
+					margin-bottom: 10px;
+				}
+				.main-holder
+				{
+					padding: 25px;
+					.holder
+					{
+						display: inline-block;
+						vertical-align: top;
+						font-size: 14px;
+						text-align: center;
+						.icon
+						{
+							img
+							{
+								width: 50px;
+								height: 50px;
+							}
+						}
+						.name
+						{
+							max-width: 75px;
+							line-height: 16px;
+							font-size: 16px;
+							margin-top: 10px;
+						}
+					}
+				}
+			}
+		}
+	}
+}

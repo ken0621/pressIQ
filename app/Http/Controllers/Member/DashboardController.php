@@ -55,6 +55,11 @@ class DashboardController extends Member
 		return view('member.dashboard.dashboard', $data);
 	}
 
+	public function new_dashboard()
+	{
+		return view('member.dashboard.new_dashboard');
+	}
+
 	public function change_warehouse()
 	{
 		if(Request::input("change_warehouse"))

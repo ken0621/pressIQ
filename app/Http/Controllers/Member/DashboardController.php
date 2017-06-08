@@ -55,7 +55,7 @@ class DashboardController extends Member
 
 		$data["sales_amount"]	= currency("PHP",Invoice::get_sales_amount($start_date, $end_date));
 
-		return view('member.dashboard.dashboard', $data);
+		return view('member.dashboard.dashboardv1', $data);
 	}
 
 	public function change_warehouse()

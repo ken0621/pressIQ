@@ -502,6 +502,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <i class="fa fa-linode"></i>
                         <span class="nav-text">My Slots</span>
                     </a>
+                </li>
+                <li  class="{{Request::segment(2) == 'lead' ? 'active' : '' }}">
+                    <a href="/mlm/lead">
+                        <i class="fa fa-address-card"></i>
+                        <span class="nav-text">Leads</span>
+                    </a>
                 </li> 
                 @endif                   
             </ul>
@@ -523,7 +529,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <div class="content-wrapper clearfix">
     <!-- Content Header (Page header) -->
     <section class="content-header hide">
-      <h1>
+      <h1>mai
         Page Header
         <small>Optional description</small>
       </h1>

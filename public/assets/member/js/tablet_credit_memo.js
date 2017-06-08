@@ -1,10 +1,10 @@
 
-var tablet_customer_invoice = new tablet_customer_invoice();
+var tablet_credit_memo = new tablet_credit_memo();
 var global_tr_html = "";
 var global_tablet_html = $(".tablet-div-script").html();
 var item_selected = ''; 
 
-function tablet_customer_invoice()
+function tablet_credit_memo()
 {
 	init();
 
@@ -77,13 +77,14 @@ function tablet_customer_invoice()
 		$(".tablet-add-item").bind("click",function()
 		{
 			$(".item-list-"+$(".tablet-item-id").val()).remove();
+
 			$("#global_modal").modal("toggle");
 			$(".div-item-list").append(global_tablet_html);
 			$item_table = $(".div-item-list .item-table:last");
-			
+
 			$(".div-item-list .item-table:last").addClass("item-list-"+$(".tablet-item-id").val());
 			$(".div-item-list .item-table:last .popup").attr("link",'/tablet/invoice/add_item/'+$(".tablet-item-id").val());
-			
+
 			//PUT VALUE TO LABEL
 			$item_table.find(".item-name").html($(".tablet-item-name").html());
 			$item_table.find(".item-rate").html($(".tablet-item-rate").val());
@@ -220,32 +221,17 @@ function tablet_customer_invoice()
       	var tablet_unit_qty = $(".tablet-droplist-um").find("option:selected").attr("qty");
       	var tablet_item_qty = $(".tablet-item-qty").val();
       	var tablet_item_rate = $(".tablet-item-rate").val();
-      	var tablet_item_disc = $(".tablet-item-disc").val();
+      	var tablet_item_disc = 0;
 
  		var total = 0.00;
 
         var qty = tablet_item_qty;
-        /* CHECK THE DISCOUNT */
-        if(tablet_item_disc.indexOf('%') >= 0)
-        {
-            $(".tablet-item-disc").val(tablet_item_disc.substring(0, tablet_item_disc.indexOf("%") + 1));
-            tablet_item_disc = (parseFloat(tablet_item_disc.substring(0, tablet_item_disc.indexOf('%'))) / 100) * (action_return_to_number(tablet_item_rate) * action_return_to_number(qty));
-        }
-        else if(tablet_item_disc == "" || tablet_item_disc == null)
-        {
-            tablet_item_disc = 0;
-        }
-        else
-        {
-            tablet_item_disc = parseFloat(tablet_item_disc);
-        }
 
         /* RETURN TO NUMBER IF THERE IS COMMA */
         var rate        = action_return_to_number(tablet_item_rate);
-        var discount    = action_return_to_number(tablet_item_disc);
 
         // console.log(qty+" * "+ rate + " - " + discount)
-        total = ((qty * rate) - discount).toFixed(2);
+        total = ((qty * rate)).toFixed(2);
 
 
         $(".tablet-item-amount").html(action_add_comma(total));
@@ -263,7 +249,7 @@ function tablet_customer_invoice()
 			{			
 				var qty 	= $(this).find(".input-item-qty").val();
 				var rate 	= $(this).find(".input-item-rate").val();
-				var discount= $(this).find(".input-item-disc").val().toString();
+				var discount= "";
 				var amount 	= $(this).find(".input-item-amount");
 				var taxable = $(this).find(".item-taxable");
 
@@ -290,7 +276,7 @@ function tablet_customer_invoice()
 				/* RETURN TO NUMBER IF THERE IS COMMA */
 				qty 		= action_return_to_number(qty);
 				rate 		= action_return_to_number(rate);
-				discount 	= action_return_to_number(discount);
+				discount 	= 0;
 
 				var total_per_tr = ((qty * rate) - discount).toFixed(2);
 
@@ -323,23 +309,23 @@ function tablet_customer_invoice()
 				}
 
 				/*CHECK IF TAXABLE*/	
-				if(taxable.html() == "Taxable")
-				{
-					total_taxable += parseFloat(total_per_tr);
-				}
+				// if(taxable.html() == "Taxable")
+				// {
+				// 	total_taxable += parseFloat(total_per_tr);
+				// }
 
 			});
 
 		}
 
 		/* action_compute EWT */
-		var ewt_value 			= $(".ewt-value").val();
+		var ewt_value 			= 0;
 
 		ewt_value = parseFloat(ewt_value) * subtotal;
 
 		/* action_compute DISCOUNT */
 		var discount_selection 	= $(".discount_selection").val();
-		var discount_txt 		= $(".discount_txt").val();
+		var discount_txt 		= 0;
 		var tax_selection 		= $(".tax_selection").val();
 		var taxable_discount 	= 0;
 
@@ -349,14 +335,7 @@ function tablet_customer_invoice()
 		}
 
 		discount_total = discount_txt;
-
-		if(discount_selection == 'percent')
-		{
-			discount_total = subtotal * (discount_txt / 100);
-			taxable_discount = total_taxable * (discount_txt / 100);
-		}
-
-		discount_total = parseFloat(discount_total);
+		discount_total = 0;
 
 		/* action_compute TOTAL */
 		var total = 0;
@@ -364,11 +343,11 @@ function tablet_customer_invoice()
 
 		/* action_compute TAX */
 		var tax   = 0;
-		if(tax_selection == 1){
-			tax = total_taxable * (12 / 100);
-		}
-		total += tax;
-
+		// if(tax_selection == 1){
+		// 	tax = total_taxable * (12 / 100);
+		// }
+		// total += tax;
+		console.log(total);
 		/* action payment applied */
 		var payment_applied   	= parseFloat($(".payment-applied").html());
 		var balance_due 		= total - payment_applied;
@@ -501,7 +480,7 @@ function tablet_customer_invoice()
             {
             	if($(this).val() != '')
             	{
-	           	    action_load_link_to_modal('/tablet/invoice/add_item/'+$(this).val(),'md');
+	           	    action_load_link_to_modal('/tablet/credit_memo/add_item/'+$(this).val(),'md');
             	}
             	// action_load_item_info();
             }
@@ -579,64 +558,40 @@ function submit_done_item(data)
     data.element.modal("hide");
 }
 
+
 function submit_done(data)
 {
-	if(data.status == "success-invoice")
+	if(data.status == "success-credit-memo")
 	{
-		console.log("succes-invoice");
-        if(data.redirect)
-        {
-        	toastr.success("Success inv");
-        	location.href = data.redirect;
-    	}
-    	else
-    	{
-    		$(".load-data:last").load(data.link+" .load-data .data-container", function()
-    		{
-    			tablet_customer_invoice.action_initialized();
-    			toastr.success("Success");
-    		})
-    	}
+        toastr.success("Success");
+        location.href = data.redirect_to;
 	}
-	else if(data.status == 'error-inv-no')
+	else if(data.status == "success-credit-memo-action")
 	{
-		action_load_link_to_modal('/member/customer/invoice/error/'+data.inv_id,'md');
+        toastr.success("Success");
+  		action_load_link_to_modal('/member/customer/credit_memo/choose_type?cm_id='+data.id, 'sm');
+	}
+	else if(data.status == "success-credit-memo-tablet")
+	{
+        toastr.success("Success");
+  		action_load_link_to_modal('/tablet/credit_memo/choose_type?cm_id='+data.id, 'sm');
 	}
 	else if(data.status == 'success-sir')
 	{		
-        toastr.success("Success sir");
+        toastr.success("Success");
        	location.href = "/member/pis/manual_invoice";
 	}
 	else if(data.status == 'success-tablet')
 	{		
         toastr.success("Success");
-       	location.href = "/tablet/invoice";
-	}
-	else if(data.status == 'success-tablet-sr')
-	{		
-        toastr.success("Success");
-       	location.href = "/tablet/sales_receipt/list";
+       	location.href = "/tablet";
 	}
     else if(data.status == "error")
     {
         toastr.warning(data.status_message);
         $(data.target).html(data.view);
     }
-
-    if(data.status == "success")
-    {
-    	if(data.type == "terms")
-    	{
-    		$(".droplist-terms").load("/member/maintenance/terms/load-terms", function()
-			{
-				$(this).globalDropList("reload");
-				$(this).val(data.terms_id).change();
-			});
-			data.element.modal("toggle");
-    	}
-    }
 }
-
 function submit_this_form()
 {
 	$("#keep_val").val("keep");

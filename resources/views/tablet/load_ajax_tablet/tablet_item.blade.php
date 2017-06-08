@@ -1,7 +1,7 @@
 @if(isset($_invline))
 	@foreach($_invline as $invline)
-	<div class="item-table">
-		<div style="border: 1px solid #999999; padding: 10px;margin: 5px">
+	<div class="item-table item-list-{{$invline->invline_item_id}}">
+		<div style="border: 1px solid #999999; padding: 10px;margin: 5px" class="popup" size="md" link="/tablet/invoice/add_item/{{$invline->invline_item_id}}">
             <a class="btn-remove col-xs-12 text-right" style="margin-top: -10px;margin-bottom: -10px">
             	Remove
             </a>

@@ -60,7 +60,7 @@
                                               </button>
                                               <ul class="dropdown-menu dropdown-menu-custom">
                                                   <!-- <li ><a class="popup" link="/member/customer/view_cm/{{$cm->cm_id}}" size="lg">View CM</a></li> -->
-                                                  <li ><a href="/tablet/credit_memo/add?id={{$cm->cm_id}}&sir_id={{$sir_id or ''}}">Edit CM</a></li>
+                                                  <li ><a href="/tablet/credit_memo/add?id={{$cm->cm_id}}&sir_id={{Session::get('sir_id')}}">Edit CM</a></li>
                                               </ul>
                                             </div>
                                         </td>

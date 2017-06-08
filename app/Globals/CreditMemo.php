@@ -16,6 +16,7 @@ use App\Globals\Warehouse;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;  
 use App\Globals\AuditTrail;   
+use App\Globals\Tablet_global;
 use DB;
 use Session;
 use Carbon\Carbon;
@@ -36,9 +37,14 @@ class CreditMemo
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
-	public static function postCM($customer_info, $item_info, $inv_id = 0)
+	public static function postCM($customer_info, $item_info, $inv_id = 0,$for_tablet = false)
 	{
-		$insert_cm["cm_shop_id"] = CreditMemo::getShopId();
+		$shop_id = CreditMemo::getShopId();
+        if($for_tablet == true)
+        {
+            $shop_id = Tablet_global::getShopId();
+        }
+		$insert_cm["cm_shop_id"] = $shop_id;
 
 		$insert_cm["cm_customer_id"] = $customer_info["cm_customer_id"];
 		$insert_cm["cm_customer_email"] = $customer_info["cm_customer_email"];
@@ -78,9 +84,6 @@ class CreditMemo
 	public static function updateCM($cm_id, $customer_info, $item_info)
 	{
         $old_data = AuditTrail::get_table_data("tbl_credit_memo","cm_id",$cm_id);
-
-		$update_cm["cm_shop_id"] = CreditMemo::getShopId();
-
 
 		$update_cm["cm_customer_id"] = $customer_info["cm_customer_id"];
 		$update_cm["cm_customer_email"] = $customer_info["cm_customer_email"];

@@ -11,7 +11,7 @@
 					<div class="col-md-8 col-xs-6">
 						<i class="fa fa-tablet"></i>
 						<h1>
-						<span class="page-title">Tablet &raquo; Credit Sales</span>
+						<span class="page-title">Tablet &raquo; Cash Sales</span>
 						<small>
 						</small>
 						</h1>

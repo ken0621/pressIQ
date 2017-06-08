@@ -223,6 +223,8 @@ Route::any('/member/pis_counter','Member\PurchasingInventorySystemController@pis
 Route::any('/member/item/view_item_history/{id}','Member\ItemController@view_item_history');
 Route::any('/member/item/add_submit_pis','Member\ItemController@add_submit_pis');
 Route::any('/member/item/edit_submit_pis','Member\ItemController@edit_submit_pis');
+
+Route::any('/member/enable_disable_pis/{pass}/{action}','Member\PurchasingInventorySystemController@enable_pis');
 /*END ITEM FOR PIS*/
 
 
@@ -440,6 +442,7 @@ Route::any('/tablet/pis/sir/review/{id}',"Member\TabletPISController@review_sir"
 Route::any('/tablet/pis/sir/{id}/{action}',"Member\TabletPISController@lof_action");
 Route::any('/tablet/pis/sir/lof_action_submit',"Member\TabletPISController@lof_action_submit");
 Route::any('/tablet/selected_sir',"Member\TabletPISController@selected_sir");
+Route::any('/tablet/customer/load_rp/{id}','Member\TabletPISController@load_customer_rp');
 
 /* END PIS TABLEt*/
 Route::any('/tablet','Member\TabletPISController@login');
@@ -463,12 +466,14 @@ Route::any('/tablet/create_invoice/add_submit','Member\TabletPISController@creat
 Route::any('/tablet/update_invoice/edit_submit',"Member\TabletPISController@update_invoice_submit");
 
 Route::any('tablet/invoice/add_item/{id}','Member\TabletPISController@invoice_add_item');
+Route::any('tablet/credit_memo/add_item/{id}','Member\TabletPISController@credit_memo_add_item');
 
 Route::any('/tablet/receive_payment','Member\TabletPISController@receive_payment');
 Route::any('/tablet/view_receive_payment/{id}','Member\TabletPISController@view_receive_payment');
 Route::any('/tablet/receive_payment/add','Member\TabletPISController@tablet_receive_payment');
 Route::any('/tablet/receive_payment/add_submit','Member\TabletPISController@add_receive_payment');
 Route::any('/tablet/receive_payment/update/{id}','Member\TabletPISController@update_receive_payment');
+Route::any('/tablet/customer/credit_memo/update_action',"Member\TabletPISController@update_action");
 
 Route::any('/tablet/view_invoice_view/{id}','Member\TabletPISController@view_invoices_view');
 Route::any('/tablet/view_invoice_pdf/{id}','Member\TabletPISController@view_invoice_pdf');

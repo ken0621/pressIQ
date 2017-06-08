@@ -16,6 +16,7 @@ use DB;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
+use App\Globals\Tablet_global;
 use Session;
 use Carbon\carbon;
 
@@ -43,33 +44,32 @@ class Item
         $return = "";
         $text = "";
         $trail = Tbl_audit_trail::where("source","item")->where("source_id",$item_id)->orderBy("created_at","DESC")->get();
-  
+        // dd($trail);
         foreach ($trail as $key => $value) 
         {
             $item_qty = 1;
-            $check = Purchasing_inventory_system::check();
-            if($check != 0)
+            if(Purchasing_inventory_system::check())
             {
                 $item_qty = UnitMeasurement::um_qty($item_data->item_measurement_id);
             }
-            $old[$key] = unserialize($value->new_data);
+            $old[$key] = unserialize($value->old_data);
             $amount = 0;
             if($old)
             {
-                if($item_data->item_price != $old[$key]["item_price"])
+                if($item_data->item_price != $old[$key]["item_price"] || $old[$key]["item_price"] != 0)
                 {
                     $len = strlen($return);
                     
                     $amount = $old[$key]["item_price"] * $item_qty;
-                    $return .= currency("PHP ",$amount)." (".date('m/d/Y',strtotime($value->created_at)).")<br>";
+                    $return .= date('m/d/Y',strtotime($value->created_at))." - ".currency("PHP ",$amount)."<br>";
 
                     $text = $return;
                     if($show_all == false)
                     {
                         if($len > 25)
                         {
-                            $text = (substr($text, 0, 50)."...<a class='popup' size='sm' link='/member/item/view_item_history/".$item_id."'>View</a>");
-                        }                        
+                            $text = (substr($text, 0, 30)."...<a class='popup' size='sm' link='/member/item/view_item_history/".$item_id."'>View</a>");
+                        }
                     }
                 }
             }
@@ -207,9 +207,14 @@ class Item
         }
     }
 
-    public static function get_returnable_item()
-    {
-        $data = Tbl_item::category()->where("shop_id",Item::getShopId())
+    public static function get_returnable_item($for_tablet = false)
+    {        
+        $shop_id = Item::getShopId();
+        if($for_tablet == true)
+        {
+            $shop_id = Tablet_global::getShopId();
+        }
+        $data = Tbl_item::category()->where("shop_id",$shop_id)
                                     ->where("tbl_item.archived",0)
                                     ->where("is_mts",1)
                                     ->groupBy("tbl_item.item_id")
@@ -274,9 +279,14 @@ class Item
 
         return $_category;
     } 
-    public static function get_all_category_item($type = array(1,2,3,4))
+    public static function get_all_category_item($type = array(1,2,3,4) , $for_tablet = false)
     {
-        $shop_id = Item::getShopId();
+        $shop_id = Item::getShopId(); 
+        if($for_tablet == true)
+        {
+            $shop_id = Tablet_global::getShopId();
+        }
+
         $_category = Tbl_category::where("type_shop",$shop_id)->where("type_parent_id",0)->where("archived",0)->get()->toArray();
 
         // if(Purchasing_inventory_system::check() != 0)
@@ -324,9 +334,13 @@ class Item
         return $_category;
     } 
    
-    public static function get_all_item_sir($sir_id)
+    public static function get_all_item_sir($sir_id, $for_tablet = false)
     {
         $shop_id = Item::getShopId();
+        if($for_tablet == true)
+        {
+            $shop_id = Tablet_global::getShopId();
+        }
         $item = Tbl_sir_item::select_sir_item()->where("tbl_sir_item.sir_id",$sir_id)->groupBy("tbl_item.item_category_id")->get();
         foreach ($item as $key1 => $value) 
         {         

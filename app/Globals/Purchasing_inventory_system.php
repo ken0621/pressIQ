@@ -32,6 +32,7 @@ use App\Models\Tbl_customer_invoice_line;
 use App\Models\Tbl_receive_payment_line;
 use App\Models\Tbl_settings;
 use App\Globals\UnitMeasurement;
+use App\Globals\Tablet_global;
 use DB;
 use Carbon\Carbon;
 use Session;
@@ -49,12 +50,17 @@ use Session;
      */
 class Purchasing_inventory_system
 {
-    public static function check()
+    public static function check($for_tablet = false)
     {
-        $check = Tbl_settings::where("settings_key","pis-jamestiong")->where("settings_value","enable")->where("shop_id",Purchasing_inventory_system::getShopId())->pluck("settings_setup_done");
+        $shop_id = Purchasing_inventory_system::getShopId();
+        if($for_tablet == true)
+        {
+            $shop_id = Tablet_global::getShopId();
+        }
+
+        $check = Tbl_settings::where("settings_key","pis-jamestiong")->where("settings_value","enable")->where("shop_id",$shop_id)->pluck("settings_setup_done");
         return $check;
     }
-    
     public static function get_inventory_in_sir($sir_id)
     {
         $data["sir"] = Tbl_sir::truck()->saleagent()->where("sir_id",$sir_id)->where("sir_status",1)->where("tbl_sir.archived",0)->first();

@@ -22,10 +22,6 @@
     </div>
 
     <div class="panel panel-default panel-block panel-title-block panel-gray">
-       <!--  <ul class="nav nav-tabs">
-            <li class="active cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#pending-codes"><i class="fa fa-star"></i> Invoice Information</a></li>
-            <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#used-codes"><i class="fa fa-list"></i> Activities</a></li>
-        </ul> -->
         <div class="tab-content">
             <div class="row">
                 <div class="col-md-12" style="padding: 10px 30px;">
@@ -75,16 +71,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="row clearfix">
-                        <div class="col-sm-4">  
-                            <label>Order Status</label>
-                            <select class="form-control" name="order_status">
-                            <option value="Unpaid" {{isset($inv) ? $inv->order_status == "Unpaid" ? 'selected' : '' : ''}}> Unpaid </option>
-                            <option value="Paid" {{isset($inv) ? $inv->order_status == "Paid" ? 'selected' : '' : ''}}> Paid </option>
-                            <option value="Void" {{isset($inv) ? $inv->order_status == "Void" ? 'selected' : '' : ''}}> Void </option>
-                            </select>
-                        </div>
-                    </div>` -->
                     
                     <div class="row clearfix">
                         <div class="col-sm-2">

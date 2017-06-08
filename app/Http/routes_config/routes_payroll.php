@@ -177,6 +177,10 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/holiday/modal_update_holiday',"Member\PayrollController@modal_update_holiday");
 	/* HOLIDAY END */
 
+	/* HOLIDAY DEFAULT START */
+	Route::any('/holiday_default',"Member\PayrollController@default_holiday");
+	/* HOLIDAY DEFAULT END */
+
 	/* ALLOWANCE START */
 	Route::any('/allowance',"Member\PayrollController@allowance");
 	Route::any('/allowance/modal_create_allowance',"Member\PayrollController@modal_create_allowance");
@@ -278,9 +282,11 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* HOLIDAY DEFAULT START */
 	Route::any('/holiday_default/modal_create_holiday_default',"Member\PayrollController@modal_create_holiday_default");
 	Route::any('/holiday_default/modal_save_holiday_default',"Member\PayrollController@modal_save_holiday_default");	
-
 	Route::any('/holiday_default/modal_edit_holiday_default/{id}',"Member\PayrollController@modal_edit_holiday_default");
+	Route::any('/holiday_default/modal_archive_holiday_default/{archived}/{id}',"Member\PayrollController@modal_archive_holiday_default");
+	Route::any('/holiday_default/archive_holiday_default',"Member\PayrollController@archive_holiday_default");
 	Route::any('/holiday_default/update_holiday_default',"Member\PayrollController@update_holiday_default");
+
 	/* HOLIDAY END */
 
 
@@ -414,4 +420,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* SHIFT START */
 	Route::any('/shift_group','Member\PayrollController@shift_group');
 	/* SHIFT END */
+
+	/* PAYROLL 13TH MONTH PAY REPORT */
+	Route::get('/report_13th_month_pay','Member\PayrollController@report_13th_month_pay');
+	Route::get('/report_13th_month_pay/excel_export','Member\PayrollController@report_13th_month_pay_excel_export');
 });	 

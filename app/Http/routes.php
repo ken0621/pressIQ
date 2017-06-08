@@ -782,6 +782,8 @@ Route::group(array('prefix' => '/member/report'), function()
 	/* Accounting Sales - per item */
 	Route::any('/accounting/sale/item','Member\ReportsController@accounting_sale_items');
 
+	/* Accounting Sales - per warehouse */
+	Route::any('/accounting/sale_by_warehouse','Member\ReportsController@sale_by_warehouse');
 	/* Accounting general ledger */
 	Route::get('/accounting/general/ledger','Member\ReportsController@general_ledger');
 	Route::any('/accounting/general/ledger/get','Member\ReportsController@general_ledger_get');

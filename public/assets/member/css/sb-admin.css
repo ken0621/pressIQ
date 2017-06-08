@@ -1,50 +1,31 @@
-/*!
- * Start Bootstrap - SB Admin v4.0.0-alpha (http://startbootstrap.com/template-overviews/sb-admin)
- * Copyright 2013-2017 Start Bootstrap
- * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-sb-admin/blob/master/LICENSE)
- */
-body {
-  background: #292b2c; }
-
-body.fixed-nav {
-  padding-top: 54px; }
-  @media (min-width: 992px) {
-    body.fixed-nav {
-      padding-top: 56px; } }
-
-.content-wrapper {
-  background: white; }
-  @media (min-width: 992px) {
-    .content-wrapper {
-      margin-left: 250px; } }
-
-.scroll-to-top {
-  line-height: 45px;
-  position: fixed;
-  right: 15px;
-  bottom: 15px;
+nav.main-menu > ul > li > a:hover + ul {
+  display: block; }
+nav.main-menu > ul > li > ul {
   display: none;
-  width: 50px;
-  height: 50px;
-  text-align: center;
-  color: white;
-  background: rgba(41, 43, 44, 0.5); }
-  .scroll-to-top:hover, .scroll-to-top:focus {
-    color: white; }
-  .scroll-to-top:hover {
-    background: #292b2c; }
-
-.smaller {
-  font-size: .7rem; }
-
-.o-hidden {
-  overflow: hidden !important; }
-
-.z-0 {
-  z-index: 0; }
-
-.z-1 {
-  z-index: 1; }
+  overflow: visible; }
+  nav.main-menu > ul > li > ul:hover {
+    display: block; }
+  nav.main-menu > ul > li > ul li:hover > a {
+    background-color: #5fa2db !important;
+    color: #fff !important; }
+  nav.main-menu > ul > li > ul li ul {
+    display: none; }
+    nav.main-menu > ul > li > ul li ul:hover {
+      display: block; }
+  nav.main-menu > ul > li > ul li .nav-icon {
+    display: none; }
+  nav.main-menu > ul > li > ul li a {
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 20px;
+    padding-right: 0px;
+    background-color: transparent !important;
+    color: #999 !important; }
+    nav.main-menu > ul > li > ul li a:hover + ul {
+      display: block; }
+    nav.main-menu > ul > li > ul li a:hover {
+      color: #fff !important;
+      background-color: #5fa2db !important; }
 
 .card-block-icon {
   font-size: 5rem;
@@ -59,11 +40,9 @@ body.fixed-nav {
 @media (min-width: 576px) {
   .card-columns {
     column-count: 1; } }
-
 @media (min-width: 768px) {
   .card-columns {
     column-count: 2; } }
-
 @media (min-width: 1200px) {
   .card-columns {
     column-count: 2; } }
@@ -127,7 +106,6 @@ body.fixed-nav {
     overflow: hidden;
     max-width: none;
     text-overflow: ellipsis; }
-
 @media (min-width: 992px) {
   #mainNav .navbar-brand {
     width: 250px; }
@@ -178,3 +156,5 @@ body.fixed-nav {
         text-align: center; }
     #mainNav .navbar-collapse .navbar-nav > .nav-item.dropdown .dropdown-menu > .dropdown-item > .dropdown-message {
       max-width: 300px; } }
+
+/*# sourceMappingURL=sb-admin.css.map */

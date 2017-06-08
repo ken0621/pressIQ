@@ -1442,12 +1442,12 @@ class TabletPISController extends Controller
         $sir_id = Request::input("sir_id");
         $data["sir_id"] = $sir_id;
         $data["page"]       = "Customer Sales Receipt";
-        $data["pis"]        = Purchasing_inventory_system::check();
+        $data["pis"]        = Purchasing_inventory_system::check(true);
         $data["_customer"]  = Customer::getAllCustomer(true);
         $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", $this->getShopId())->get();
-        $data['_item']      = Item::get_all_item_sir($sir_id);
-        $data['_cm_item']   = Item::get_returnable_item();
-        $data['_um']        = UnitMeasurement::load_um_multi();
+        $data['_item']      = Item::get_all_item_sir($sir_id, true);
+        $data['_cm_item']   = Item::get_returnable_item(true);
+        $data['_um']        = UnitMeasurement::load_um_multi(true);
         $data["action"]     = "/tablet/sales_receipt/create_submit";
         $data["new_inv_id"] = Transaction::get_last_number("tbl_customer_invoice","new_inv_id","inv_shop_id"); 
         $data["c_id"] = Request::input("customer_id");

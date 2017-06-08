@@ -142,12 +142,12 @@ function submit_done(data)
 {
     if(data.status == "success")
     {
-        toastr.success(data.message);
         data.element.modal("toggle");
 
         reload_content("#province_location");
         reload_content("#city_location");
         reload_content("#barangay_location");
+        toastr.success(data.message);
     }
     else
     {

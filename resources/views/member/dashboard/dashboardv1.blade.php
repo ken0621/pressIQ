@@ -17,9 +17,13 @@
                      <div class="dropdown-toggle" type="button" data-toggle="dropdown">Last Month
                         <span class="caret"></span></div>
                         <ul class="dropdown-menu">
-                           <li><a href="#">Last Year</a></li>
+                           <li><a href="#">Last 30 days</a></li>
                            <li><a href="#">This Month</a></li>
+                           <li><a href="#">This Quarter</a></li>
                            <li><a href="#">This Year</a></li>
+                           <li><a href="#">Last Month</a></li>
+                           <li><a href="#">Last Quarter</a></li>
+                           <li><a href="#">Last Year</a></li>
                         </ul>
                      </div>
                   </div>
@@ -59,22 +63,25 @@
                <div class="panel-body">
                   <div class="row">
                      <div class="col-md-3">
-                        <!--DASH-->
-                        
-                        <div class="vertical-skills pull-right xs-center">
-                           <ul class="list-inline">
-                              <li><span class="skill" style="height:40%; background:#7DD104;"></span></li>
-                           </ul>
+                        <!--Bar - Stacked-->
+                        <div style="width: 75%">
+                           <canvas id="canvas"></canvas>
                         </div>
-                        <!--DASHEND-->
+                        <!--END-->
                      </div>
                      <div class="col-md-9" id="right-pane-inc">
-                        14 <br>
-                        OPEN INVOICES <br> <br>
-                        10 <br>
-                        OVERDUE <br> <br>
-                        3 <br>
-                        PAID LAST 30 DAYS
+                        <div>
+                           <text class="open-invoices">{{count($open_invoice)}}</text></br>
+                           <text>OPEN INVOICES</text></br></br>
+                        </div>
+                        <div>
+                           <text class="overdue-invoices">{{count($overdue_invoice)}}</text></br>
+                           <text>OVERDUE</text></br></br>
+                        </div>
+                        <div>
+                           <text class="paid-invoices">{{count($paid_invoice)}}</text></br>
+                           <text>PAID LAST 30 DAYS</text></br></br>
+                        </div>
                      </div>
                   </div>
                </div>
@@ -92,11 +99,11 @@
                
                <div class="panel-body">
                   <div class="form-group">
-                     BDO Account <br>
+                     <text class="bank-title">BDO Account</text><br>
                      <input type="text" class="form-control" name="bdoacc">
-                     BPI Bank <br>
+                     <text class="bank-title">BPI Bank</text> <br>
                      <input type="text" class="form-control" name="bpiacc">
-                     Credit Card <br>
+                     <text class="bank-title">Credit Card</text> <br>
                      <input type="text" class="form-control" name="creditc">
                   </div>
                   <div class="row" id="bank-bot-pane">
@@ -115,39 +122,38 @@
             </div>
          </div>
       </div>
-   </div>
-   <div class="row">
-      <div class="col-md-4">
-         <div class="panel panel-default" id="panel-height">
-            <div class="panel-heading">
-               Sales
-               <div class="pull-right">
-                  <div class="dropdown">
-                     <div class="dropdown-toggle" type="button" data-toggle="dropdown">Last Month
-                        <span class="caret"></span></div>
-                        <ul class="dropdown-menu">
-                           <li><a href="#">Last Year</a></li>
-                           <li><a href="#">This Month</a></li>
-                           <li><a href="#">This Year</a></li>
-                        </ul>
-                     </div>
-                  </div>
-               </div>
-               <div class="panel-body">
-                  <canvas id="ChartGraph" ></canvas>
-               </div>
-            </div>
-         </div>
+      <div class="row">
          <div class="col-md-4">
             <div class="panel panel-default" id="panel-height">
                <div class="panel-heading">
-                  Tips
+                  Sales
+                  <div class="pull-right">
+                     <div class="dropdown">
+                        <div class="dropdown-toggle" type="button" data-toggle="dropdown">Last Month
+                           <span class="caret"></span></div>
+                           <ul class="dropdown-menu">
+                              <li><a href="#">Last Year</a></li>
+                              <li><a href="#">This Month</a></li>
+                              <li><a href="#">This Year</a></li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="panel-body">
+                     <canvas id="ChartGraph" ></canvas>
+                  </div>
+               </div>
+            </div>
+            <div class="col-md-4">
+               <div class="panel panel-default" id="panel-height">
+                  <div class="panel-heading">
+                     Tips
+                  </div>
                </div>
             </div>
          </div>
       </div>
-   </div>
-   @endsection
-   @section('script')
-   <script type="text/javascript" src='/assets/member/js/dashboard_chart.js'></script>
-   @endsection
+      @endsection
+      @section('script')
+      <script type="text/javascript" src='/assets/member/js/dashboard_chart.js'></script>
+      @endsection

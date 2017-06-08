@@ -27,8 +27,12 @@ function dashboard()
               "#01837E",
               "#00A6A4",
             ],
-            data: [100, 20, 0]
-          }]
+            data: [600, 300]
+          }],
+          labels: [
+              'Purchase S',
+              'COst Of Good Sold',
+          ]
         }
       });
   }

@@ -9,7 +9,12 @@ class Tablet_global
 {
 	public static function getShopId()
 	{
+		$id = 0;
 		$shop_id = collect(Session::get("sales_agent"));
-        return $shop_id['shop_id'];
+		if(count($shop_id) > 0)
+		{
+			$id = $shop_id['shop_id'];
+		}
+        return $id;
 	}
 }

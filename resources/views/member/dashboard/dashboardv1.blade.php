@@ -151,22 +151,8 @@
                   </div>
                </div>
             </div>
-<<<<<<< HEAD
-          </div>
-          <div class="panel-body">
-            <canvas id="line-chart"></canvas>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="panel panel-default" id="panel-height">
-          <div class="panel-heading">
-            Tips
-          </div>
-        </div>
-=======
          </div>
->>>>>>> mod_bry_dashboard
+
       </div>
       @endsection
       @section('script')

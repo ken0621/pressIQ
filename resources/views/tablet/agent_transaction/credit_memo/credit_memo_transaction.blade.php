@@ -17,7 +17,7 @@
                         </h1>
                     </div>
                     <div class="col-md-4 col-xs-6 text-right">
-                        <button data-action="save-and-new" class="btn btn-custom-white">Save and New</button>
+                        <a href="/tablet" class="btn btn-custom-white">Cancel</a>
                         <button data-action="save-and-edit" class="btn btn-primary">Save</button>
                     </div>
                 </div>

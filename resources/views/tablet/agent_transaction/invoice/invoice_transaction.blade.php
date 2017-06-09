@@ -17,7 +17,7 @@
 						</h1>
 					</div>
 					<div class="col-md-4 col-xs-6 text-right">
-						<button data-action="save-and-new" class="btn btn-custom-white">Save and New</button>
+						<a href="/tablet" class="btn btn-custom-white">Cancel</a>
 						<button data-action="save-and-edit" class="btn btn-primary">Save</button>
 					</div>
 				</div>
@@ -180,7 +180,7 @@
                         <div class="form-group">
                             <div class="col-xs-12">
                                 <label style="font-size: 15px">
-                                     <input  type="checkbox" onclick="toggle_returns('.returns-class', this)" value="returns" class="returns-check"  value="returns" name="returns" {{ isset($inv) ? ($inv->credit_memo != 0 ? 'checked' : '') : '' }}> Returns 
+                                     <input  type="checkbox" onclick="toggle_returns('.returns-class', this)" value="returns" class="returns-check"  value="returns" name="returns"> Returns 
                                 </label>
                             </div>
                         </div> 
@@ -191,7 +191,7 @@
                                 </div>
                             </div>                            
                         </div>
-                        <div class="returns-class"  style="{{isset($inv) ? ($inv->credit_memo != 0 ? 'display:none' : '') : ''}}" >
+                        <div class="returns-class"  style="display:none" >
                             <div class="form-group" >
                                 <div class="col-xs-12">
                                  <h4>Add Return Item</h4>

@@ -105,9 +105,9 @@ class MlmDashboardController extends Mlm
             ->customer()
             ->customer_address()
             ->customer_other_info()
+            ->mlm_slot()
             ->get();
-       
-
+        
         return view("mlm.dashboard.lead", $data);
     }
     public function tree_view()

@@ -21,4 +21,8 @@ class Tbl_mlm_lead extends Model
     {
     	return $query->leftjoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_other_info_id', '=' , 'tbl_mlm_lead.lead_customer_id_lead');
     }
+     public function scopeMlm_slot($query)
+    {
+    	return $query->leftjoin('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=' , 'tbl_mlm_lead.lead_slot_id_lead');
+    }
 }

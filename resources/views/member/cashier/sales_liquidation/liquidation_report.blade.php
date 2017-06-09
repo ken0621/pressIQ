@@ -120,6 +120,7 @@
                         </div>
                     </div>
                 </div>
+                <div class="{{$empties_loss = 0}} {{$empties_over = 0}} {{$total_return = 0}}"></div>
                 @if($ctr_returns != 0)
                 <div class="form-group">
                     <div class="col-md-12">
@@ -141,7 +142,7 @@
                                             <th style="width: 200px;">Info</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="{{$empties_loss = 0}} {{$empties_over = 0}} {{$total_return = 0}}">
+                                    <tbody>
                                         @if($_returns)
                                         @foreach($_returns as $keys => $return)
                                         <tr class="tr-draggable tr-draggable-html">

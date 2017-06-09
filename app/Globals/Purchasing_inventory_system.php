@@ -293,7 +293,7 @@ class Purchasing_inventory_system
             }
         }
         $data["ctr_returns"] = count($data["_returns"]);
-        $data["total_returns"] = 0;
+        $data["total_return"] = 0;
         if($data["_returns"] != null)
         {
             foreach ($data["_returns"] as $key_return => $value_return)
@@ -329,7 +329,7 @@ class Purchasing_inventory_system
                 $mts_loss += $value_return->sc_infos < 0 ? $value_return->sc_infos : 0;
                 $mts_over += $value_return->sc_infos > 0 ? $value_return->sc_infos : 0;  
 
-                $data["total_returns"] += $value_return->sc_item_qty * $value_return->sc_item_price;
+                $data["total_return"] += $value_return->sc_item_qty * $value_return->sc_item_price;
             }
         }
 
@@ -591,7 +591,7 @@ class Purchasing_inventory_system
         $data['sdate'] = date('m/d/Y');
         $sales = $total_sold - $total_discount;
         $cm_applied = 0;
-        $data["t_sales"] = (((($sales - ($data["total_returns"]) )- $data["total_ar"]) - $data["total_cm_applied"]) +  $data["ar_collection"]) + $data["total_cm"];
+        $data["t_sales"] = (((($sales - ($data["total_return"]) )- $data["total_ar"]) - $data["total_cm_applied"]) +  $data["ar_collection"]) + $data["total_cm"];
         $agent_discrepancy = ($data['t_sales'] == $data["rem_amount"] ? 0 : $data["rem_amount"] - $data['t_sales']);
 
         $data["total_discrepancy"] = $agent_discrepancy + (($loss + $over) - ($mts_loss + $mts_over));

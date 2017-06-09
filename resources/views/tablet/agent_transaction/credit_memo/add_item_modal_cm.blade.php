@@ -58,7 +58,7 @@
         <div class="col-md-6 col-xs-6"><button data-dismiss="modal" class="btn btn-custom-white form-control">Cancel</button></div>
         <div class="col-md-6 col-xs-6"><button class="btn btn-custom-blue form-control cm tablet-add-item">Done</button></div>
     </div>
-@if($is_return == false)
+@if($is_return == 'false')
 <script type="text/javascript">
     tablet_credit_memo.iniatilize_select();
     tablet_credit_memo.event_tablet_compute_class_change();

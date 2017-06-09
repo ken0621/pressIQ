@@ -183,6 +183,10 @@
                     </div>
                 </div>
                 @endif
+            </div>
+
+            <div style="page-break-after: always;">
+            
                 <div class="{{$total_disc = 0}}"></div>
                 @if(count($_inv_dsc) > 0)
                 <div>

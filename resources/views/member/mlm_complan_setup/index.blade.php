@@ -13,6 +13,10 @@
     @endif
     </div>
 </div>    
+
+    @if(isset($other_settings_myphone))
+        {!! $other_settings_myphone !!}
+    @endif
 @endsection
 @section('script')
 

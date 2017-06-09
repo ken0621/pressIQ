@@ -68,7 +68,7 @@ $data['icon'] = 'fa fa-plane';
         <div class="clearfix">
         <form class="global-submit" method="post" action="/mlm/wallet/tours/transfer">
         {!! csrf_field() !!}
-            <center>Transfer Wallet to Tours Wallet</center>
+            <center>Transfer Wallet to Airline Wallet</center>
             <label>Wallet Amount</label>
             <input type="number" class="form-control" value="0" name="wallet_amount">
             <label>Password</label>

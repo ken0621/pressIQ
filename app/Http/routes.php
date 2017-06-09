@@ -918,6 +918,9 @@ Route::controller('/member/accounting/journal', 'Member\JournalEntryController')
 /* TERMS OF PAYMENT*/
 Route::controller('/member/maintenance/terms', 'Member\TermsOfPaymentController');
 /* End */
+/* LOCATION*/
+Route::controller('/member/maintenance/location', 'Member\LocationController');
+/* End */
 
 Route::controller('/tester','TesterController');
 

@@ -17,6 +17,7 @@ use App\Models\Tbl_item_discount;
 use App\Models\Tbl_item_multiple_price;
 use App\Models\Tbl_inventory_slip;
 use App\Models\Tbl_um;
+use App\Models\Tbl_item_merchant_request;
 
 use App\Globals\Category;
 use App\Globals\AuditTrail;
@@ -49,7 +50,30 @@ class ItemController extends Member
 			$shop_id        		   = $this->user_info->shop_id;
 			$warehouse_id 			   = Tbl_warehouse::where("main_warehouse", 1)->where("warehouse_shop_id", $this->user_info->shop_id)->pluck("warehouse_id");
 	        $item 		    		   = Tbl_item::inventory()->where("tbl_item.archived",0)->where("shop_id",$shop_id)->type()->category();
-	        $item_archived  		   = Tbl_item::where("tbl_item.archived",1)->where("shop_id",$shop_id)->type()->category();
+	        
+	        /* CHECK IF THE ITEM IS ON MERCHANT REQUESTED ITEM THEN IT WOULDN'T BE INCLUDED ON ARCHIVED ITEM WHEN IT IS STILL ON PENDING STATUS */
+	        $item_archived  		   = Tbl_item::where("tbl_item.archived",1)
+	        								     ->where("shop_id",$shop_id)
+	        								     ->type()
+	        								     ->leftJoin("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+	        								     ->category()
+											     ->where(function($query)
+											     {
+											         $query->where('item_merchant_request_status',"!=","PENDING");
+											         $query->orWhereNull('item_merchant_request_status');
+											     });
+
+	        $item_pending  		       = Tbl_item::where("tbl_item.archived",1)
+        								         ->where("shop_id",$shop_id)
+        								         ->type()
+        								         ->leftJoin("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+        								         ->category()
+										         ->where(function($query)
+										         {
+										             $query->where('item_merchant_request_status',"PENDING");
+										         });
+
+										     
 	        $item_type				   = Request::input("item_type");
 	        $search_name			   = Request::input("search_name");
 

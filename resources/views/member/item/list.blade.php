@@ -21,6 +21,7 @@
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <ul class="nav nav-tabs">
         <li class="active cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#all"><i class="fa fa-star"></i> All Items</a></li>
+        <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#pending"><i class="fa fa-trash"></i> Pending Items</a></li>
         <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#archived"><i class="fa fa-trash"></i> Archived Items</a></li>
     </ul>
     <div class="search-filter-box">
@@ -91,6 +92,43 @@
                                 <div class="btn-group">
                                     <a class="btn btn-primary btn-grp-primary popup" link="/member/item/edit/{{$item->item_id}}" size="lg" href="javascript:">Edit</a>
                                     <a class="btn btn-primary btn-grp-primary popup" link="/member/item/archive/{{$item->item_id}}" size="sm" href="javascript:"> |<span class="fa fa-trash "> </span> </a>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="pending" class="tab-pane fade in">
+            <div class="form-group order-tags"></div>
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered table-striped table-condensed">
+                    <thead style="text-transform: uppercase">
+                        <tr>
+                            <th>Item ID</th>
+                            <th>Item Name</th>
+                            <th>Item SKU</th>
+                            <th>Item Category</th>
+                            <th>Item Type</th>
+                            <th>Item Price</th>
+                            <th>Item Date Created</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($_item_archived as $item)
+                        <tr>
+                            <td>{{$item->item_id}}</td>
+                            <td>{{$item->item_name}}</td>
+                            <td>{{$item->item_sku}}</td>
+                            <td>{{$item->type_name}}</td>
+                            <td>{{$item->item_type_name}}</td>
+                            <td>{{currency("PHP", $item->item_price)}}</td>
+                            <td>{{date("F d, Y", strtotime($item->item_date_created))}}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a link="/member/item/restore/{{$item->item_id}}" href="javascript:" class="btn btn-primary btn-grp-primary popup">Restore</a>
                                 </div>
                             </td>
                         </tr>

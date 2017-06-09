@@ -615,6 +615,7 @@ function tablet_customer_invoice()
 	{
 		$('.droplist-customer').globalDropList(
 		{ 
+			hasPopup : 'false',
             width : "100%",
     		placeholder : "Select Customer...",
 			link : "/member/customer/modalcreatecustomer",
@@ -626,6 +627,7 @@ function tablet_customer_invoice()
 		});
 	    $('.droplist-item').globalDropList(
         {
+			hasPopup : 'false',
             link : "/member/item/add",
             width : "100%",
             maxHeight: "309px",
@@ -700,6 +702,7 @@ function tablet_customer_invoice()
 	    });
 	    $('.droplist-item-cm').globalDropList(
         {
+			hasPopup : 'false',
             link : "/member/item/add",
             width : "100%",
             onChangeValue : function()
@@ -709,6 +712,7 @@ function tablet_customer_invoice()
         });
         $('.droplist-terms').globalDropList(
         {
+			hasPopup : 'false',
             link : "/member/maintenance/terms/terms",
             link_size : "sm",
             width : "100%",

@@ -83,7 +83,7 @@ function tablet_credit_memo()
 			$item_table = $(".div-item-list .item-table:last");
 
 			$(".div-item-list .item-table:last").addClass("item-list-"+$(".tablet-item-id").val());
-			$(".div-item-list .item-table:last .popup").attr("link",'/tablet/invoice/add_item/'+$(".tablet-item-id").val());
+			$(".div-item-list .item-table:last .popup").attr("link",'/tablet/credit_memo/add_item/'+$(".tablet-item-id").val()+'/false');
 
 			//PUT VALUE TO LABEL
 			$item_table.find(".item-name").html($(".tablet-item-name").html());
@@ -405,6 +405,7 @@ function tablet_credit_memo()
 	{
 		$('.droplist-customer').globalDropList(
 		{ 
+			hasPopup : 'false',
             width : "100%",
     		placeholder : "Select Customer...",
 			link : "/member/customer/modalcreatecustomer",
@@ -416,6 +417,7 @@ function tablet_credit_memo()
 		});
 	    $('.droplist-item').globalDropList(
         {
+			hasPopup : 'false',
             link : "/member/item/add",
             width : "100%",
             maxHeight: "309px",
@@ -444,6 +446,7 @@ function tablet_credit_memo()
 	    });
 	    $('.droplist-item-cm').globalDropList(
         {
+			hasPopup : 'false',
             link : "/member/item/add",
             width : "100%",
             onChangeValue : function()
@@ -453,6 +456,7 @@ function tablet_credit_memo()
         });
         $('.droplist-terms').globalDropList(
         {
+			hasPopup : 'false',
             link : "/member/maintenance/terms/terms",
             link_size : "sm",
             width : "100%",
@@ -480,7 +484,7 @@ function tablet_credit_memo()
             {
             	if($(this).val() != '')
             	{
-	           	    action_load_link_to_modal('/tablet/credit_memo/add_item/'+$(this).val(),'md');
+	           	    action_load_link_to_modal('/tablet/credit_memo/add_item/'+$(this).val()+'/false','md');
             	}
             	// action_load_item_info();
             }

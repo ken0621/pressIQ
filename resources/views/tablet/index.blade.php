@@ -55,7 +55,7 @@
                               @if(isset($no_sir))
                                 @if($no_sir == "no_sir")
                                 <div class="form-group">
-                                  <h2>Waiting for Warehouse to OPEN SIR #{{Session::get("sir_id")}}.</h2>
+                                  <h2>You don't have any Load Out Form yet.</h2>
                                 </div>
                                 @else
                                 <div class="form-group">

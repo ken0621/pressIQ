@@ -19,5 +19,13 @@
     @endif
 @endsection
 @section('script')
-
+<script>
+    function submit_done (data) {
+        // body...
+        if(data.status == 'success')
+        {
+            toastr.success('Settings Changed');
+        }
+    }
+</script>
 @endsection

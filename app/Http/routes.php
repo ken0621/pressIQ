@@ -452,6 +452,12 @@ Route::any('/tablet/sync_export','Member\TabletPISController@sync_export');
 Route::any('/tablet/logout','Member\TabletPISController@logout');
 Route::any('/tablet/sir_inventory/{id}','Member\TabletPISController@inventory_sir');
 
+/*TABLET CUSTOMER*/
+Route::any('/tablet/customer/modalcreatecustomer','Member\TabletPISController@edit_customer');
+/*Tablet Account Setting*/
+Route::any('/tablet/agent/edit/{id}','Member\TabletPISController@edit_agent');
+Route::any('/tablet/agent/edit_submit','Member\TabletPISController@edit_agent_submit');
+
 //RELOAD
 Route::any('/tablet/sir_reload/{id}','Member\TabletPISController@sir_reload');
 

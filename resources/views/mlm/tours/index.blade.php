@@ -18,11 +18,11 @@ $data['icon'] = 'fa fa-plane';
     <div class="panel-heading">
         <div class="clearfix">
         	<form class="global-submit" action="/mlm/wallet/tours/update">
-                <center>Airline Ticketing Account ID.</center>
+                <center></center>
                 <div class="pull-right"><span class="current_balance" style="color: green">Account Balance: {{number_format(isset($account_tours->tour_wallet_a_current_balance) ? $account_tours->tour_wallet_a_current_balance : 0 )}}</span></div>
                 <hr>
         	       {!! csrf_field() !!}
-            	<label>Trip Option Account Id:</label>
+            	<label>Airline Ticketing Account ID</label>
             	<input type="text" class="form-control" name="tour_Wallet_a_account_id" value="{{isset($account_tours->tour_Wallet_a_account_id) ? $account_tours->tour_Wallet_a_account_id : ''}}">
 
 				<hr>

@@ -245,7 +245,7 @@ function tablet_credit_memo()
 
 		if($(".div-item-list .item-table").length > 0)
 		{
-			$(".inv.item-table").each(function() 
+			$(".item-table").each(function() 
 			{			
 				var qty 	= $(this).find(".input-item-qty").val();
 				var rate 	= $(this).find(".input-item-rate").val();

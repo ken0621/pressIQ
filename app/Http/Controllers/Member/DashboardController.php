@@ -39,15 +39,17 @@ class DashboardController extends Member
 		$from  			= Report::checkDatePeriod($period, $date)['start_date'];
         $to     		= Report::checkDatePeriod($period, $date)['end_date'];
 
-		$data["open_invoice"] 		= Invoice::invoiceStatus($from, $to)["open"];
-		$data["overdue_invoice"] 	= Invoice::invoiceStatus($from, $to)["overdue"];
+        /* INVOICE DATA */
+		$data["open_invoice"] 	= Invoice::invoiceStatus($from, $to)["open"];
+		$data["overdue_invoice"]= Invoice::invoiceStatus($from, $to)["overdue"];
 
-		$date["days"] 	= "30";
-		$from  			= Report::checkDatePeriod($period, $date)['start_date'];
-        $to     		= Report::checkDatePeriod($period, $date)['end_date'];
-        
-		$data["paid_invoice"] 		= Invoice::invoiceStatus($from, $to)["paid"];
+		$date["days"] 			= "30";
+		$from  					= Report::checkDatePeriod($period, $date)['start_date'];
+        $to     				= Report::checkDatePeriod($period, $date)['end_date'];
+		$data["paid_invoice"] 	= Invoice::invoiceStatus($from, $to)["paid"];
 
+
+		/* EXPENSE DATA */
 		$data["_expenses"]   = Tbl_journal_entry_line::account()->journal()->totalAmount()
                             ->where("je_shop_id", $this->getShopId())
                             ->whereIn("chart_type_name", ['Expense', 'Other Expense', 'Cost of Good Sold'])
@@ -60,8 +62,8 @@ class DashboardController extends Member
         $data["expense_value"]	= [];
         foreach($data["_expenses"] as $key=>$expense)
         {
-        	$data["_expenses"][$key]->percentage = currency('',(($expense->amount / collect($data["_expenses"])->sum('amount')) * 100));
-        	array_push($data["expense_name"], currency('',(($expense->amount / collect($data["_expenses"])->sum('amount')) * 100)) ."% " .$expense->account_name);
+        	$data["_expenses"][$key]->percentage = currency('',(($expense->amount / collect($data["_expenses"])->sum('amount')) * 100))." %";
+        	array_push($data["expense_name"], $expense->account_name);
         	array_push($data["expense_value"], currency('',(($expense->amount / collect($data["_expenses"])->sum('amount')) * 100)));
         	array_push($data["expense_color"], $this->random_color());
         }
@@ -69,6 +71,7 @@ class DashboardController extends Member
         $data["expense_value"] 	= json_encode($data["expense_value"]);
         $data["expense_color"]	= json_encode($data["expense_color"]);
 
+        /* INCOME DATA */
 		$data["_income"]     = Tbl_journal_entry_line::account()->journal()
 							->selectRaw("*")
 							->amount()
@@ -79,6 +82,17 @@ class DashboardController extends Member
                             ->groupBy(DB::raw("DATE(je_entry_date)"))
                             ->get();
 
+        $data["income_date"]	= [];
+        $data["income_value"]	= [];
+        foreach($data["_income"] as $key=>$income)
+        {
+        	array_push($data["income_date"], dateFormat($income->je_entry_date));
+        	array_push($data["income_value"], $income->amount);
+        }
+        $data["income_date"]	= json_encode($data["income_date"]);
+        $data["income_value"] 	= json_encode($data["income_value"]);
+
+        /* BANK DATA */
         $data["_bank"]		= Tbl_journal_entry_line::account()->journal()->totalAmount()
                             ->where("je_shop_id", $this->getShopId())
                             ->whereIn("chart_type_name", ['Bank'])

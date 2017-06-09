@@ -19,18 +19,45 @@ function dashboard()
 
   function action_doughnut_chart()
   {
-    var ctx = document.getElementById("myChart").getContext('2d');
-    var myChart = new Chart(ctx, {
 
+    var ctx = document.getElementById("pie-chart").getContext('2d');
+    var myPieChart3 = new Chart(ctx, {
         type: 'doughnut',
+        responsive: true,
         data: {
           labels: expense_name,
           datasets: [{
             backgroundColor: expense_color,
             data: expense_value
           }]
-        }
-      });
+        },
+        options: {
+          // tooltipsTemplate: "<%= value %>%",
+          // multiTooltipTemplate: "<%= value %>%",
+          // legendTemplate: "<ul class=\"pie-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%> |</li><%}%></ul>",
+          legend: {
+            responsive: true,
+            display: false,
+          },
+          tooltips: {
+            callbacks: {
+              label: function(tooltipItems, data) {
+                var sum = data.datasets[0].data.reduce(add, 0);
+                function add(a, b) {
+                  return a + b;
+                }
+
+                return data.datasets[0].data[tooltipItems.index] + ' %';
+              },
+              // beforeLabel: function(tooltipItems, data) {
+              //   return data.datasets[0].data[tooltipItems.index] + ' hrs';
+              // }
+            }
+          }
+        },
+    });
+
+    $("#pie-chart-content .chart-legend").html(myPieChart3.generateLegend());
   }
   // "#254d6f",
   // "#3682c3",
@@ -38,71 +65,79 @@ function dashboard()
   // "#0963b1",
   // "#76a9d6",
 
-  function action_linegraph_chart()
-  {
-    var ctx = document.getElementById('ChartGraph').getContext('2d');
-    var myChart = new Chart(ctx, {
-      type: 'line',
-        data: {
-        labels: ['Apr 1', '', '', '', '', '', 'Apr 30'],
-        datasets: [{
-          data: [12, 19, 3, 17, 6, 3, 7],
-          backgroundColor: "#79b941"
-        },
-        ]
-      }
-    });
-  }
-
   function action_bar_stackedP_chart()
   {
     var barChartData = {
             labels: ["Invoice"],
             datasets: [{
-                label: 'Open',
+                label: open_invoice + ' Open',
                 backgroundColor: "#fbb850",
                 data: [open_invoice]
             }, {
-                label: 'Overdue',
+                label: overdue_invoice + ' Overdue',
                 backgroundColor: "#f58c1f",
                 data: [overdue_invoice]
             }, {
-                label: 'Paid',
+                label: paid_invoice + ' Paid',
                 backgroundColor: "#f9a32c",
                 data: [paid_invoice]
             }]
 
         };
 
-    var ctx = document.getElementById("income_bar_chart").getContext("2d");
-    ctx.canvas.height = 500;
-    window.myBar = new Chart(ctx, {
+    var ctx = document.getElementById("bar-chart").getContext("2d");
+    ctx.canvas.height = 250;
+    var myBarChart = new Chart(ctx, {
         responsive: true,
         type: 'bar',
         data: barChartData,
         options: {
-            tooltips: {
-                mode: 'label'
-            },
+          legend: {
             responsive: true,
-            scales: {
-                xAxes: [{
-                    stacked: true,
-                }],
-                yAxes: [{
-                    stacked: true
-                }]
-            }
-        }
+            display: false,
+          },
+          tooltips: {
+              mode: 'label'
+          },
+          scales: {
+              xAxes: [{
+                  stacked: true,
+              }],
+              yAxes: [{
+                  stacked: true
+              }]
+          }
+        },
+    });
+
+    $("#bar-chart-content .chart-legend").html(myBarChart.generateLegend());
+
+  }
+
+  function action_linegraph_chart()
+  {
+    var lineChartData = {
+        labels: income_date,
+        datasets: [{
+          data: income_value,
+          backgroundColor: "#79b941"
+        }]
+    };
+
+    var ctx = document.getElementById('line-graph').getContext('2d');
+    var myLineChart = new Chart(ctx, {
+      type: 'line',
+      responsive: true,
+      data: lineChartData,
+      options: {
+          legend: {
+            responsive: true,
+            display: false,
+          },
+        },
     });
   }
 
-  var randomColorFactor = function() {
-        return Math.round(Math.random() * 255);
-  };
-  var randomColor = function(opacity) {
-      return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + (opacity || '.3') + ')';
-  };
 }
 
 

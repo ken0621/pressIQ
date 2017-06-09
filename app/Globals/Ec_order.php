@@ -60,8 +60,8 @@ class Ec_order
         $data['inv_customer_email']= $order_info['customer']['customer_email'];
 
         $data['inv_terms_id']  = '';
-        $data['inv_date']      = '';
-        $data['inv_due_date']  = '';
+        $data['inv_date']      = Carbon::now();
+        $data['inv_due_date']  = Carbon::now();
         $data['inv_customer_billing_address']   = $order_info['customer']['customer_address']." ".$order_info['customer']['customer_city']." ".$order_info['customer']['customer_state_province'];
 
         $data['inv_message']          = '';
@@ -119,22 +119,29 @@ class Ec_order
             {
                 if(isset($settings[$item->item_id]))
                 {
-                    if($item)
+                    $count = DB::table('tbl_merchant_school_item')
+                    ->where('merchant_item_item_id', $item->item_id)
+                    ->where('merchant_item_ec_order_id', $order_id)
+                    ->count();
+                    if($count === 0)
                     {
-                        $insert['merchant_school_i_amount'] = $item->item_price;
+                        if($item)
+                        {
+                            $insert['merchant_school_i_amount'] = $item->item_price;
+                        }
+                        
+                        $insert['merchant_school_item_shop'] = $order_info['shop_id'];
+                        $insert['merchant_item_item_id'] = $item->item_id;
+                        $insert['merchant_item_ec_order_id'] = $order_id;
+                        $insert['merchant_item_customer_id'] = $order_info['customer_id'];
+
+                        $insert['merchant_item_code'] = Membership_code::random_code_generator(8);;
+                        $insert['merchant_item_pin'] = DB::table('tbl_merchant_school_item')->count() + 1;
+
+                        $insert['merchant_item_date'] = Carbon::now();
+                        $insert['merchant_item_status'] = 0;
+                        DB::table('tbl_merchant_school_item')->insert($insert);
                     }
-                    
-                    $insert['merchant_school_item_shop'] = $order_info['shop_id'];
-                    $insert['merchant_item_item_id'] = $item->item_id;
-                    $insert['merchant_item_ec_order_id'] = $order_id;
-                    $insert['merchant_item_customer_id'] = $order_info['customer_id'];
-
-                    $insert['merchant_item_code'] = Membership_code::random_code_generator(8);;
-                    $insert['merchant_item_pin'] = DB::table('tbl_merchant_school_item')->count() + 1;
-
-                    $insert['merchant_item_date'] = Carbon::now();
-                    $insert['merchant_item_status'] = 0;
-                    DB::table('tbl_merchant_school_item')->insert($insert);
                 }
             }
         }
@@ -686,13 +693,15 @@ class Ec_order
         }
 
         /* Email Password */
-        // $data["template"]         = Tbl_email_template::where("shop_id", $order_info["tbl_ec_order"]["shop_id"])->first();
-        // $data['mail_to']          = $order_info["tbl_ec_order"]["customer_email"];
-        // $data['mail_subject']     = "Account Verification";
-        // $data['account_password'] = $order_info["tbl_customer"]["password"];
+        $data["template"]                 = Tbl_email_template::where("shop_id", $order_info["tbl_ec_order"]["shop_id"])->first();
+        $data['mail_to']                       = $order_info["tbl_ec_order"]["customer_email"];
+        $data['mail_subject']             = "Account Verification";
+        $data['account_password'] = Crypt::decrypt($order_info["tbl_customer"]["password"]);
 
-        // $result = Mail_global::password_mail($data, $shop_id);
-        // Ec_order::create_merchant_school_item($order_info["tbl_ec_order"]["ec_order_id"]);
+        $result = Mail_global::password_mail($data, $order_info["tbl_ec_order"]["shop_id"]);
+
+        Ec_order::create_merchant_school_item($order_info["tbl_ec_order"]["ec_order_id"]);
+
         return $order_info["tbl_ec_order"]["ec_order_id"];
     }
 }

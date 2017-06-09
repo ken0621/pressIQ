@@ -78,12 +78,23 @@ var search_slot = 0;
 var slot_active = 0;
 var paginate = 1;
 ajax_load_membership();
-    function slot_created(data)
-    {
-        var link="/member/mlm/slot/view/" + data.slot_id;
-        action_load_link_to_modal(link, 'lg');
-        ajax_load_membership();
-    }
+function slot_created(data)
+{
+    var link="/member/mlm/slot/view/" + data.slot_id;
+    action_load_link_to_modal(link, 'lg');
+    ajax_load_membership();
+}
+
+function submit_done(data)
+{
+  if(data.status == 'success_transfer')
+  {
+    $('#global_modal').modal('toggle');
+    toastr.success("Transfer done.");
+    ajax_load_membership();
+  }
+}
+
 function ajax_load_membership()
 {
     $('.data_filtered_mlm_code').html('<center><div class="loader-16-gray"></div></center>');

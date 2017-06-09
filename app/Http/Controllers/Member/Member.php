@@ -59,7 +59,9 @@ class Member extends Controller
 					Warehouse::put_default_warehouse($this->user_info->shop_id);
 					/* Seed MLM Email */
 					Mlm_seed::seed_mlm($this->user_info->shop_id);
-					
+					/* Seed Settings Currency convertion */
+					Settings::set_currency_default($this->user_info->shop_id);
+
 					$shop_id_used    = $user_info->shop_id;
 					$check_if_dev    = Tbl_user_position::where("position_id",$this->user_info->user_level)->first();
 					$is_dev          = 0;

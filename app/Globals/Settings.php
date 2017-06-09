@@ -9,6 +9,7 @@ use App\Http\Controllers\Member\MLM_ProductController;
 use App\Models\Tbl_settings;
 use App\Models\Tbl_product_search;
 use App\Models\Tbl_shop;
+use App\Models\Tbl_mlm_encashment_currency;
 
 class Settings
 {
@@ -185,4 +186,19 @@ class Settings
 			}
 		}
 	}
+	public static function set_currency_default($shop_id)
+    {
+        $insert['en_cu_convertion'] = 1;
+        $insert['en_cu_active'] = 1;
+        $insert['iso'] = 'PHP';
+        $insert['en_cu_shop_id'] = $shop_id;
+        $insert['en_cu_default'] = 1;
+        $count = Tbl_mlm_encashment_currency::where('iso', $insert['iso'])
+        ->where('en_cu_shop_id', $shop_id)->count();
+
+        if($count == 0)
+        {
+            Tbl_mlm_encashment_currency::insert($insert);
+        }
+    }
 }

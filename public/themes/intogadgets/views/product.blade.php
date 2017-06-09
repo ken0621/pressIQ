@@ -1,4 +1,14 @@
 @extends('layout')
+@section("social-script")
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.9&appId=1920870814798104";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+@endsection
 @section('content')
 
 @if(get_content($shop_theme_info, 'product', 'product_banner') && get_content($shop_theme_info, 'product', 'product_banner_link'))
@@ -127,53 +137,66 @@
     </div>
     <div class="product-sub text-left"></div>
     <div class="product-contentie">
-        @if(count($_product) > 0)
-            <div class="grid-view">
-            	@foreach($_product as $product)
-            		@if(count($product['variant']) > 0)
-                    <div class="holder">
-                        <div class="border">
-                            <div class="img">
-                                @if($product["eprod_detail_image"])
-                                    <img class="detail" src="{{ $product["eprod_detail_image"] }}">
+        <div class="row-no-padding clearfix">
+            <div class="col-md-8">
+                @if(count($_product) > 0)
+                    <div class="grid-view">
+                        <div class="row-no-padding clearfix">
+                            @foreach($_product as $product)
+                                @if(count($product['variant']) > 0)
+                                <div class="col-md-4 col-sm-3 col-xs-6">
+                                    <div class="holder">
+                                        <div class="border match-height">
+                                            <div class="img">
+                                                @if($product["eprod_detail_image"])
+                                                    <img class="detail" src="{{ $product["eprod_detail_image"] }}">
+                                                @endif
+                                                <img class="4-3-ratio" src="{{ get_product_first_image($product) }}">
+                                            </div>
+                                            <div class="name">{{ get_product_first_name($product) }}</div>
+                                            <!-- <div class="price-left">P34,000</div> -->
+                                            <div class="price-right">{{ get_product_first_price($product) }}</div>
+                                            <div class="hover">
+                                                <a product-id="{{ $product['eprod_id'] }}" style="display: block; margin-bottom: 50px;" href="javascript:" class="text quick-add-cart">ADD TO CART</a>
+                                                <a style="display: block; margin-top: 50px;" href="/product/view/{{ $product['eprod_id'] }}" class="text">VIEW MORE</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 @endif
-                                <img class="4-3-ratio" src="{{ get_product_first_image($product) }}">
-                            </div>
-                            <div class="name">{{ get_product_first_name($product) }}</div>
-                            <!-- <div class="price-left">P34,000</div> -->
-                            <div class="price-right">{{ get_product_first_price($product) }}</div>
-                            <div class="hover">
-                                <a product-id="{{ $product['eprod_id'] }}" style="display: block; margin-bottom: 50px;" href="javascript:" class="text quick-add-cart">ADD TO CART</a>
-                                <a style="display: block; margin-top: 50px;" href="/product/view/{{ $product['eprod_id'] }}" class="text">VIEW MORE</a>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
-                    @endif
-                @endforeach
-            </div>
-            <div class="list-view hide">
-                @foreach($_product as $product)
-                    <div class="holder">
-                        <div class="img">
-                            <img src="{{ get_product_first_image($product) }}">
-                        </div>
-                        <div class="text">
-                            <div class="name">{{ get_product_first_name($product) }}</div>
-                            <!--<div class="sprice">from: <span>P34,990</span></div>-->
-                            <div class="price">{{ get_product_first_price($product) }}</div>
-                            <div class="description">{!! get_product_first_description($product) !!}</div>
-                        </div>
-                        <div class="cart">
-                            <!-- <div class="info"><span>Delivery:</span>&nbsp;1 - 5 Business Days</div> -->
-                            <!-- <div class="info"><span>Shipping Fee:</span>&nbsp;123.00</div> -->
-                            <button class="button" onclick="location.href='product/'">View Info</button>
-                        </div>
+                    <div class="list-view hide">
+                        @foreach($_product as $product)
+                            <div class="holder">
+                                <div class="img">
+                                    <img src="{{ get_product_first_image($product) }}">
+                                </div>
+                                <div class="text">
+                                    <div class="name">{{ get_product_first_name($product) }}</div>
+                                    <!--<div class="sprice">from: <span>P34,990</span></div>-->
+                                    <div class="price">{{ get_product_first_price($product) }}</div>
+                                    <div class="description">{!! get_product_first_description($product) !!}</div>
+                                </div>
+                                <div class="cart">
+                                    <!-- <div class="info"><span>Delivery:</span>&nbsp;1 - 5 Business Days</div> -->
+                                    <!-- <div class="info"><span>Shipping Fee:</span>&nbsp;123.00</div> -->
+                                    <button class="button" onclick="location.href='product/'">View Info</button>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
-                @endforeach
+                @else
+                    <h2 class="text-center" style="margin-top: 50px;">No Results</h2>
+                @endif
             </div>
-        @else
-            <h2 class="text-center" style="margin-top: 50px;">No Results</h2>
-        @endif
+            <div class="col-md-4 facebook-container">
+                <div class="sticky">
+                    <div class="fb-page" data-href="https://www.facebook.com/Intogadgetstore/" data-tabs="timeline" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote style="display: none;" cite="https://www.facebook.com/Intogadgetstore/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/Intogadgetstore/">Intogadgets</a></blockquote></div>
+                </div>
+            </div> 
+        </div>
     </div>
     <div>
         {!! $_product->appends(Request::input())->render() !!}

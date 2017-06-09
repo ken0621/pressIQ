@@ -57,13 +57,34 @@ class TesterController extends Controller
 
 	public function getIndex()
     {
-        dd(Utilities::filterPageList2(2));
+        // $curl = curl_init();
+        // curl_setopt_array($curl, array(
+        //     CURLOPT_URL => "http://api.aftership.com/v4",
+        //     CURLOPT_RETURNTRANSFER => true,
+        //     CURLOPT_ENCODING => "",
+        //     CURLOPT_MAXREDIRS => 10,
+        //     CURLOPT_TIMEOUT => 30,
+        //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        //     CURLOPT_CUSTOMREQUEST => "POST",
+        //     CURLOPT_HTTPHEADER => array(
+        //         "aftership-api-key: 118485a6-ed28-4200-a924-ee42e5019b47",
+        //         "Content-Type: application/json"
+        //     ),
+        // ));
+
+        // $response = curl_exec($curl);
+        // $err = curl_error($curl);
+
+        // curl_close($curl);
+
+        // dd(json_decode($response));"0000-00-00 00:00:00"
+
     }
 
     public function getJournal()
     {
         $data['tbl_journal_entry'] = Accounting::getJounalAll();
-
+    
         return view('member.tester_journal', $data);
     }
 

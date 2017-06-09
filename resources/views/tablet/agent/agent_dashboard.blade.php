@@ -76,7 +76,7 @@
                     <a class="btn btn-primary form-control" href="/tablet/customer"><i class="fa fa-users"></i> Customer ({{$total_customer}})</a>          
                 </div>  
                 <div class="col-md-6 col-xs-6">
-                    <a class="popup btn btn-primary form-control" link="/member/pis/agent/edit/{{$employee_id}}" ><i class="fa fa-gears"></i> Account Setting </a>
+                    <a class="popup btn btn-primary form-control" link="/tablet/agent/edit/{{$employee_id}}" ><i class="fa fa-gears"></i> Account Setting </a>
                 </div>
             </div>
           </div>

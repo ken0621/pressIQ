@@ -16,6 +16,7 @@ use App\Globals\Pdf_global;
 use App\Globals\Category;
 use App\Globals\CreditMemo;
 use App\Globals\ReceivePayment;
+use App\Globals\Tablet_global;
 
 use App\Models\Tbl_terms;
 use App\Models\Tbl_payment_method;
@@ -34,11 +35,14 @@ use App\Models\Tbl_receive_payment;
 use App\Models\Tbl_receive_payment_line;
 use App\Models\Tbl_unit_measurement_multi;
 use App\Models\Tbl_sir_inventory;
-use Session;
-use Crypt;
-use Redirect;
+use App\Models\Tbl_position;
 use App\Models\Tbl_manual_invoice;
 use App\Models\Tbl_item;
+
+use Session;
+use Crypt;
+use Validator;
+use Redirect;
 use Carbon\Carbon;
 
 class TabletPISController extends Controller
@@ -48,6 +52,71 @@ class TabletPISController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
+    public function edit_agent($id)
+    {
+        $data["_position"] = Tbl_position::where("position_code","sales_agent")->where("position_shop_id",Tablet_global::getShopId())->get();
+
+        $data["edit"] = Tbl_employee::where("employee_id",$id)->first();
+        $data["action"] = "/tablet/agent/edit_submit";
+
+        return view('member.employee.employee_edit',$data);
+    }
+    public function edit_customer()
+    {
+        
+    }
+    public function edit_agent_submit()
+    {
+        $data["status"] = null;
+        $data["status_message"] = null;
+
+        $id = Request::input("employee_id");
+
+        $first_name= Request::input("first_name");
+        $last_name = Request::input("last_name");
+        $middle_name = Request::input("middle_name");
+        $position = Request::input("position");
+        $email_address = Request::input("email_address");
+        $password = Request::input("password");
+        $username = Request::input("username");
+
+        $insert["shop_id"] = Tablet_global::getShopId();
+        $insert["first_name"] = $first_name;
+        $insert["last_name"] = $last_name;
+        $insert["middle_name"] = $middle_name;
+        $insert["position_id"] = $position;
+        $insert["email"] = $email_address;
+        $insert["password"] = Crypt::encrypt($password);
+        $insert["username"] = $username;
+        $insert["created_at"] = Carbon::now();
+
+        // dd($insert);
+        $rule["first_name"] = 'required';
+        $rule["last_name"] = 'required';
+        $rule["middle_name"] = 'required';
+        $rule["position_id"] = 'required';
+        $rule["email"] = 'required|email|unique:tbl_employee,email,'.$id.",employee_id";
+        $rule["password"] = 'required';
+        $rule["username"] = 'required|alpha_num|unique:tbl_employee,username,'.$id.",employee_id";
+
+        $validation = Validator::make($insert, $rule);
+
+        if($validation->fails())
+        {
+            $data["status"] = "error";
+            foreach ($validation->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
+            {
+                $data["status_message"] .= $message;
+            }
+        }
+        if($data["status"] == null)
+        {            
+            $data["status"] = "success";
+            Tbl_employee::where("employee_id",$id)->update($insert);
+        }
+
+        return json_encode($data);
+    }
 	public function confirm_submission()
 	{
 		$data["action"] = "close";

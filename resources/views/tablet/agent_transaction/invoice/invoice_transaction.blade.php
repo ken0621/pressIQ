@@ -17,7 +17,7 @@
 						</h1>
 					</div>
 					<div class="col-md-4 col-xs-6 text-right">
-						<button data-action="save-and-new" class="btn btn-custom-white">Save and New</button>
+						<a href="/tablet" class="btn btn-custom-white">Cancel</a>
 						<button data-action="save-and-edit" class="btn btn-primary">Save</button>
 					</div>
 				</div>
@@ -160,7 +160,7 @@
 			           		</div>
 			           	</div>
 
-			           	<div class="form-group">
+                        <div class="form-group">
                             <div class="col-xs-12">
                                 <div class="col-xs-6 digima-table-label">
                                  @if(isset($pis) && $pis != 0)
@@ -174,6 +174,64 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- returns here -->
+
+                        @if(isset($pis) && $pis != 0)
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <label style="font-size: 15px">
+                                     <input  type="checkbox" onclick="toggle_returns('.returns-class', this)" value="returns" class="returns-check"  value="returns" name="returns"> Returns 
+                                </label>
+                            </div>
+                        </div> 
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <div class="cm-div-item-list">
+                                    @include("tablet.load_ajax_tablet.tablet_cm_item")
+                                </div>
+                            </div>                            
+                        </div>
+                        <div class="returns-class"  style="display:none" >
+                            <div class="form-group" >
+                                <div class="col-xs-12">
+                                 <h4>Add Return Item</h4>
+                                </div>
+                            </div>
+                            <div class="form-group" >
+                                <div class="col-xs-12">
+                                <!-- select-item droplist-item -->
+                                    <select class="form-control tablet-droplist-item-return input-sm pull-left" name="cm_select_item_id">
+                                        @include("member.load_ajax_data.load_item", ['add_search' => "",'_item' => $_cm_item])
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <div class="col-xs-6 digima-table-label">
+                                        Returns Sub Total
+                                    </div>
+                                    <div class="col-xs-5 text-right digima-table-value">
+                                        <input type="hidden" name="subtotal_price_returns" class="subtotal-amount-input-returns" />
+                                        PHP&nbsp;<span class="sub-total-returns">0.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <div class="col-xs-6 digima-table-label">
+                                    <h3>Total<h3>
+                                </div>
+                                <div class="col-xs-5 text-right digima-table-value total">
+                                    <h3>
+                                        <input type="hidden" name="overall_price_with_return" class="total-amount-input-with-returns" />
+                                        PHP&nbsp;<span class="total-amount-with-returns">0.00</span>
+                                    </h3>
+                                </div>
+                            </h3>
+                        </div>
+
+                        @endif
                         @if(isset($inv))
                             <div class="form-group">
                                 <div class="col-xs-12">
@@ -185,6 +243,8 @@
                                         PHP&nbsp;<span class="payment-applied">{{$inv->inv_payment_applied}}</span>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="form-group">
                                 <div class="col-xs-12">
                                     <div class="col-xs-6 digima-table-label total">
                                         Balance Due
@@ -203,7 +263,7 @@
     </div>
 </form>
 <div class="tablet-div-script hide">
-    <div class="item-table">
+    <div class="inv item-table">
         <div style="border: 1px solid #999999; padding: 10px;margin: 5px" class="popup" size="md" link="">
             <a class="btn-remove col-xs-12 text-right" style="margin-top: -10px;margin-bottom: -10px">
                 Remove
@@ -237,6 +297,38 @@
                 <div class="col-xs-12">
                     <input type="hidden" name="invline_description[]" class="input-item-desc">    
                     <span style="color:#999999" class="item-desc"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="cm-tablet-div-script hide">
+    <div class="cm item-table">
+        <div style="border: 1px solid #999999; padding: 10px;margin: 5px" class="popup" size="md" link="">
+            <a class="btn-cm-remove col-xs-12 text-right" style="margin-top: -10px;margin-bottom: -10px">
+                Remove
+            </a>
+            <div class="form-group row clearfix">
+                <div class="col-xs-6">
+                    <input type="hidden" name="cmline_item_id[]" class="cm input-item-id">
+                    <h3 class="item-cm-name"></h3>
+                </div>
+                <div class="col-xs-6 text-right">
+                    <input type="hidden" name="cmline_amount[]" class="cm input-item-amount">
+                    <h3 class="item-cm-amount"></h3>
+                </div>
+            </div>
+            <div class="row clearfix">
+                <div class="col-xs-6">
+                    <input type="hidden" name="cmline_qty[]" class="cm input-item-qty">  
+                    <input type="hidden" name="cmline_rate[]" class="cm input-item-rate"> 
+                    <input type="hidden" name="cmline_um[]" class="cm input-item-um">            
+                    <h4><span class="item-cm-qty"></span> x <span class="item-cm-rate"></span> <span class="item-cm-um"></span></h4>
+                </div>
+                <div class="col-xs-12">
+                    <input type="hidden" name="cmline_description[]" class="cm input-item-desc">    
+                    <span style="color:#999999" class="item-cm-desc"></span>
                 </div>
             </div>
         </div>

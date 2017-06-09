@@ -466,7 +466,7 @@ Route::any('/tablet/create_invoice/add_submit','Member\TabletPISController@creat
 Route::any('/tablet/update_invoice/edit_submit',"Member\TabletPISController@update_invoice_submit");
 
 Route::any('tablet/invoice/add_item/{id}','Member\TabletPISController@invoice_add_item');
-Route::any('tablet/credit_memo/add_item/{id}','Member\TabletPISController@credit_memo_add_item');
+Route::any('tablet/credit_memo/add_item/{id}/{type}','Member\TabletPISController@credit_memo_add_item');
 
 Route::any('/tablet/receive_payment','Member\TabletPISController@receive_payment');
 Route::any('/tablet/view_receive_payment/{id}','Member\TabletPISController@view_receive_payment');

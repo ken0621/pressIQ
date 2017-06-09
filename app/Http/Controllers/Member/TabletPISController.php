@@ -687,12 +687,13 @@ class TabletPISController extends Controller
 
         return view('tablet.agent_transaction.invoice.add_item_modal',$data);
     }
-    public function credit_memo_add_item($id)
+    public function credit_memo_add_item($id, $is_return = false)
     {
         $data["item_details"] = Item::get_item_details($id);
         $data["sir_id"] = Request::input("sir_id");
         $data['_um']          = UnitMeasurement::load_um_multi(true);
         $data['action']       = "/tablet/invoice/add_item_submit";
+        $data["is_return"] = $is_return;
 
         return view('tablet.agent_transaction.credit_memo.add_item_modal_cm',$data);        
     }

@@ -9,14 +9,14 @@
 		<div class="form-group">
 			<div class="col-md-12">
 				<small>Allowance Name</small>
-				<input type="text" name="payroll_allowance_name" step="any" class="form-control" required value="{{$allowance->payroll_allowance_name}}">
+				<input type="text" name="payroll_allowance_name"  class="form-control" required value="{{$allowance->payroll_allowance_name}}">
 			</div>
 			
 		</div>
 		<div class="form-group">
 			<div class="col-md-6">
 				<small>Amount</small>
-				<input type="number" name="payroll_allowance_amount" class="form-control text-right" required value="{{$allowance->payroll_allowance_amount}}">
+				<input type="number" name="payroll_allowance_amount" class="form-control text-right" required value="{{$allowance->payroll_allowance_amount}}" step="any">
 			</div>
 			<div class="col-md-6">
 				<small>Category</small>

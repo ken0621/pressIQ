@@ -109,6 +109,11 @@ class DashboardController extends Member
 	    return '#'.$this->random_color_part() .''. $this->random_color_part() .''. $this->random_color_part();
 	}
 
+	public function new_dashboard()
+	{
+		return view('member.dashboard.new_dashboard');
+	}
+
 	public function change_warehouse()
 	{
 		if(Request::input("change_warehouse"))

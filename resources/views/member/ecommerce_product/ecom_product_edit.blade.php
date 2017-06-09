@@ -40,14 +40,6 @@
                                 @include("member.load_ajax_data.load_category", ['add_search' => "", 'type_id' => $product->eprod_category_id])
                             </select>
                         </div>
-                        <div class="form-group col-md-12">
-                            <label>Product Detail (Image)</label>
-                            <input class="product-detail-value" type="hidden" name="eprod_detail_image">
-                            <div class="product-detail-image" style="padding-bottom: 75%; height: 0; background-color: #ddd; background-position: center; background-size: contain; background-repeat: no-repeat; {{ $product->eprod_detail_image ? 'background-image: url("' . $product->eprod_detail_image . '")' : '' }}"></div>
-                            <div style="margin-top: 15px;">
-                                <button style="width: 100%;" class="image-gallery image-gallery-single btn btn-primary" key="product-detail"> Upload</div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -188,17 +180,6 @@
     @if(Session::has('success'))
         toastr.success('{{Session::get('success')}}');
     @endif
-
-    function submit_selected_image_done(data) 
-    { 
-        var image_url = data.image_data[0].image_path;
-
-        if (data.akey == "product-detail") 
-        {
-            $('.product-detail-value').val(image_url);
-            $('.product-detail-image').css('background-image', 'url(' + image_url + ')');
-        }
-    }
 </script>
 <script type="text/javascript" src="/assets/member/js/evariant.js"></script>
 <script type="text/javascript" src="/assets/external/selectize.js/dist/js/standalone/selectize.js"></script>

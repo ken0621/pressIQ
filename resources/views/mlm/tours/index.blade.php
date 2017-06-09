@@ -2,7 +2,7 @@
 @section('content')
 @section('content')
 <?php 
-$data['title'] = 'Tours Wallet';
+$data['title'] = 'Airline Wallet';
 $data['sub'] = '';
 $data['icon'] = 'fa fa-plane';
 
@@ -18,7 +18,7 @@ $data['icon'] = 'fa fa-plane';
     <div class="panel-heading">
         <div class="clearfix">
         	<form class="global-submit" action="/mlm/wallet/tours/update">
-                <center>Trip Option Account</center>
+                <center>Airline Ticketing Account ID.</center>
                 <div class="pull-right"><span class="current_balance" style="color: green">Account Balance: {{number_format(isset($account_tours->tour_wallet_a_current_balance) ? $account_tours->tour_wallet_a_current_balance : 0 )}}</span></div>
                 <hr>
         	       {!! csrf_field() !!}

@@ -491,7 +491,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </a> 
                             @if($shop_info->shop_wallet_tours == 1)
                                 <a href="/mlm/wallet/tours" class="subnav-text">
-                                    Tour Wallet
+                                    Airline Wallet
                                 </a> 
                             @endif
                         </li>

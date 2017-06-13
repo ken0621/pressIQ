@@ -946,6 +946,7 @@ class Cart
     }
     public static function process_payment($shop_id)
     {
+
         $data = Cart::get_info($shop_id);
         $method_id = $data["tbl_ec_order"]["payment_method_id"];
         $method_information = Self::get_method_information($shop_id, $method_id);
@@ -1125,7 +1126,6 @@ class Cart
                 $arry_log['wallet_log_slot_sponsor'] = $slot_session->slot_id;
                 $arry_log['wallet_log_details'] = $log;
                 $arry_log['wallet_log_amount'] = $sum * (-1);
-                // $sum * (-1)
                 $arry_log['wallet_log_plan'] = "REPURCHASE";
                 $arry_log['wallet_log_status'] = "released";   
                 $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 

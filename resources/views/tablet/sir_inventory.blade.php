@@ -35,7 +35,7 @@
             </div>
         </div> -->
         <div class="row clearfix draggable-container">
-            <div class="table-responsive">
+            <div class="">
              <div class="col-md-12">
                     <div class="row clearfix draggable-container ilr-container">
                         <div class="table-responsive">

@@ -4,7 +4,6 @@
     <input type="hidden" name="_token" value="{{csrf_token()}}">
     <input type="hidden" name="sir_id" value="{{$sir_id or ''}}">
     <input type="hidden" name="credit_memo_id" value="{{Request::input('id')}}" >
-    <input type="hidden" name="cm_type" value="{{Request::input('type')}}" >
     <div class="panel panel-default panel-block panel-title-block" id="top">
         <div class="panel-heading">
             <div>
@@ -193,59 +192,6 @@
                                     PHP&nbsp;<span class="sub-total">0.00</span>
                                 </div>
                             </div> 
-                         <!--    <div class="row">
-                                <div class="col-md-7 text-right digima-table-label">
-                                    <div class="row">
-                                        <div class="col-sm-6 col-sm-offset-3  padding-lr-1">
-                                            <label>EWT</label>
-                                        </div>
-                                        <div class="col-sm-3  padding-lr-1">
-                                             <input class="form-control input-sm text-right ewt_value number-input" type="text" name="ewt"> 
-                                            <select class="form-control input-sm ewt-value compute" name="ewt">  
-                                                <option value="0" {{isset($cm) ? $cm->ewt == 0 ? 'selected' : '' : ''}}></option>
-                                                <option value="0.01" {{isset($cm) ? $cm->ewt == 0.01 ? 'selected' : '' : ''}}>1%</option>
-                                                <option value="0.02" {{isset($cm) ? $cm->ewt == 0.02 ? 'selected' : '' : ''}}>2%</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-5 text-right digima-table-value">
-                                    PHP&nbsp;<span class="ewt-total">0.00</span>
-                                </div>
-                            </div> -->
-                           <!--  <div class="row">
-                                <div class="col-md-7 text-right digima-table-label">
-                                    <div class="row">
-                                        <div class="col-sm-6 col-sm-offset-4  padding-lr-1">
-                                            <select class="form-control input-sm compute discount_selection" name="cm_discount_type">  
-                                                <option value="percent" {{isset($cm) ? $cm->cm_discount_type == 'percent' ? 'selected' : '' : ''}}>Discount percentage</option>
-                                                <option value="value" {{isset($cm) ? $cm->cm_discount_type == 'value' ? 'selected' : '' : ''}}>Discount value</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-sm-2  padding-lr-1">
-                                            <input class="form-control input-sm text-right number-input discount_txt compute" type="text" name="cm_discount_value" value="{{$cm->cm_discount_value or ''}}">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-5 text-right digima-table-value">
-                                    PHP&nbsp;<span class="discount-total">0.00</span>
-                                </div>
-                            </div>  -->
-                           <!--  <div class="row">
-                                <div class="col-md-7 text-right digima-table-label">
-                                    <div class="row">
-                                        <div class="col-sm-4 col-sm-offset-8  padding-lr-1">
-                                            <select class="form-control input-sm tax_selection compute" name="taxable">  
-                                                <option value="0" {{isset($cm) ? $cm->taxable == 0 ? 'selected' : '' : ''}}>No Tax</option>
-                                                <option value="1" {{isset($cm) ? $cm->taxable == 1 ? 'selected' : '' : ''}}>Vat (12%)</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-5 text-right digima-table-value">
-                                    PHP&nbsp;<span class="tax-total">0.00</span>
-                                </div>
-                            </div>  -->
                             <div class="row">
                                 <div class="col-md-7 text-right digima-table-label">
                                     Remaining Total

@@ -22,6 +22,7 @@ use App\Models\Tbl_bill;
 use App\Models\Tbl_sir_sales_report;
 use App\Models\Tbl_customer_invoice_line;
 use App\Models\Tbl_purchase_order;
+use App\Models\Tbl_settings;
 use App\Globals\UnitMeasurement;
 use App\Globals\Warehouse;
 use App\Globals\Pdf_global;
@@ -51,11 +52,43 @@ class PurchasingInventorySystemController extends Member
      * 0 - new
      * 1 - open
      * 2 - close 
+
+     * ilr_status
+     * 1 - open
+     * 2 - close 
      */
     public function view_status($sir_id)
     {
         $data["sir"] = Purchasing_inventory_system::view_status($sir_id);
         return view("member.purchasing_inventory_system.view_status",$data);        
+    }
+    public function enable_pis($pass, $action)
+    {
+        if($pass == "water123")
+        {
+            $shop_id = Purchasing_inventory_system::getShopId();
+
+            $settings_key          =     "pis-jamestiong";
+            $settings_value        =     $action; 
+
+            $check = Purchasing_inventory_system::check();
+            if($check)
+            {
+                $update["settings_value"] = $action;
+
+                Tbl_settings::where("shop_id",$shop_id)->update($update);
+            }
+            else
+            {
+                $ins["settings_key"]        = $settings_key;
+                $ins["settings_value"]      = $settings_value;
+                $ins["settings_setup_done"] = 1;
+                $ins["shop_id"]             = $shop_id;
+
+                Tbl_settings::insert($ins);
+            }
+        }
+        return Redirect::to('/member');
     }
     public function pis_counter()
     {

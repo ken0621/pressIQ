@@ -113,6 +113,7 @@ class DebitMemoController extends Member
     }
     public function create_submit()
     {
+        dd(Request::input());
         $vendor_info[] = null;
         $vendor_info["db_vendor_id"] = Request::input("db_vendor_id");
         $vendor_info["db_vendor_email"] = Request::input("db_vendor_email");
@@ -418,6 +419,13 @@ class DebitMemoController extends Member
             $data["pis"] = Purchasing_inventory_system::check();
 
             $data["_db"] = Tbl_debit_memo::vendor()->where("vendor_shop_id", $this->getShopId())->orderBy("tbl_debit_memo.db_id","DESC")->get();
+
+            $data["_db_open"] = Tbl_debit_memo::vendor()->where("vendor_shop_id", $this->getShopId())->orderBy("tbl_debit_memo.db_id","DESC")->where("db_memo_status",0) ->get();
+
+            $data["_db_close"] = Tbl_debit_memo::vendor()->where("vendor_shop_id", $this->getShopId())->orderBy("tbl_debit_memo.db_id","DESC")->where("db_memo_status",1) ->get();
+
+
+
 
             foreach ($data["_db"] as $key => $value) 
             {

@@ -372,11 +372,11 @@ function credit_memo(){
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("price")).change();
 		$parent.find(".txt-qty").val(1).change();
 
-		$parent.find(".txt-rate").attr("disabled",false);
+		$parent.find(".txt-rate").attr("readonly",false);
 		$parent.find(".txt-discount").attr("disabled",false);
 		if($this.find("option:selected").attr("item-type") == 4)
 		{
-			$parent.find(".txt-rate").attr("disabled","disabled");
+			$parent.find(".txt-rate").attr("readonly",true);
 			$parent.find(".txt-discount").attr("disabled","disabled");
 		}
 		if($this.find("option:selected").attr("has-um") != '')
@@ -502,6 +502,16 @@ function submit_done(data)
 	{
         toastr.success("Success");
         location.href = data.redirect_to;
+	}
+	else if(data.status == "success-credit-memo-action")
+	{
+        toastr.success("Success");
+  		action_load_link_to_modal('/member/customer/credit_memo/choose_type?cm_id='+data.id, 'sm');
+	}
+	else if(data.status == "success-credit-memo-tablet")
+	{
+        toastr.success("Success");
+  		action_load_link_to_modal('/tablet/credit_memo/choose_type?cm_id='+data.id, 'sm');
 	}
 	else if(data.status == 'success-sir')
 	{		

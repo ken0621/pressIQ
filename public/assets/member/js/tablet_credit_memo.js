@@ -1,10 +1,10 @@
 
-var tablet_customer_invoice = new tablet_customer_invoice();
+var tablet_credit_memo = new tablet_credit_memo();
 var global_tr_html = "";
 var global_tablet_html = $(".tablet-div-script").html();
 var item_selected = ''; 
-var global_cm_tablet_html = $(".cm-tablet-div-script").html();
-function tablet_customer_invoice()
+
+function tablet_credit_memo()
 {
 	init();
 
@@ -62,77 +62,14 @@ function tablet_customer_invoice()
 	{
 		event_tablet_compute_class_change();
 	}
-	this.event_tablet_cm_compute_class_change = function()
-	{
-		event_tablet_cm_compute_class_change();
-	}
 	this.action_add_item_submit = function()
 	{
 		action_add_item_submit();
 	}
-	this.action_cm_compute_tablet = function()
-	{
-		action_cm_compute_tablet();
-	}
+
 	this.action_general_compute = function()
 	{
 		action_general_compute();
-	}
-
-	this.action_cm_general_compute = function()
-	{
-		action_cm_general_compute();
-	}
-	this.action_add_cm_item_submit = function()
-	{
-		action_add_cm_item_submit();
-	}
-	function action_add_cm_item_submit()
-	{
-		$(".cm.tablet-add-item").unbind("click");
-		$(".cm.tablet-add-item").bind("click",function()
-		{
-			$(".cm.item-list-"+$(".cm.tablet-item-id").val()).remove();
-			$("#global_modal").modal("toggle");
-			$(".cm-div-item-list").append(global_cm_tablet_html);
-			$item_table = $(".cm-div-item-list .cm.item-table:last");
-			
-			$(".cm-div-item-list .cm.item-table:last").addClass("item-list-"+$(".cm.tablet-item-id").val());
-			$(".cm-div-item-list .cm.item-table:last .popup").attr("link",'/tablet/credit_memo/add_item/'+$(".cm.tablet-item-id").val()+"/true");
-			
-			//PUT VALUE TO LABEL
-			$item_table.find(".item-cm-name").html($(".cm.tablet-item-name").html());
-			$item_table.find(".item-cm-rate").html($(".cm.tablet-item-rate").val());
-			$item_table.find(".item-cm-um").html($(".cm.tablet-item-um").find("option:selected").attr("abbrev"));
-			$item_table.find(".item-cm-amount").html($(".cm.tablet-item-amount").html());
-			$item_table.find(".item-cm-qty").html($(".cm.tablet-item-qty").val());
-
-			// if($(".cm.tablet-item-disc").val())
-			// {
-			// 	$item_table.find(".disc-content").removeClass("hidden");	
-			// 	$item_table.find(".item-disc").html($(".cm.tablet-item-disc").val());
-			// }
-			// var tax = 0;
-			// $item_table.find(".item-taxable").html("Non-Taxable");
-			// if($(".tablet-item-taxable").is(":checked"))
-			// {
-			// 	tax = 1;
-			// 	$item_table.find(".item-taxable").html("Taxable");
-			// }
-			$item_table.find(".item-cm-desc").html($(".cm.tablet-item-desc").val());
-
-			//PUT VALUE TO INPUT
-			$item_table.find(".cm.input-item-id").val($(".cm.tablet-item-id").val());
-			$item_table.find(".cm.input-item-amount").val($(".cm.tablet-item-amount").html());
-			$item_table.find(".cm.input-item-rate").val($(".cm.tablet-item-rate").val());
-			$item_table.find(".cm.input-item-remarks").val($(".cm.tablet-item-remark").val());
-			$item_table.find(".cm.input-item-qty").val($(".cm.tablet-item-qty").val());
-			$item_table.find(".cm.input-item-um").val($(".cm.tablet-item-um").val());
-			$item_table.find(".cm.input-item-desc").val($(".cm.tablet-item-desc").val());
-
-			action_general_compute();
-
-		});
 	}
 	function action_add_item_submit()
 	{
@@ -146,7 +83,7 @@ function tablet_customer_invoice()
 			$item_table = $(".div-item-list .item-table:last");
 
 			$(".div-item-list .item-table:last").addClass("item-list-"+$(".tablet-item-id").val());
-			$(".div-item-list .item-table:last .popup").attr("link",'/tablet/invoice/add_item/'+$(".tablet-item-id").val());
+			$(".div-item-list .item-table:last .popup").attr("link",'/tablet/credit_memo/add_item/'+$(".tablet-item-id").val()+'/false');
 
 			//PUT VALUE TO LABEL
 			$item_table.find(".item-name").html($(".tablet-item-name").html());
@@ -279,55 +216,13 @@ function tablet_customer_invoice()
 			action_compute_tablet();
 		});
 	}
-	function event_tablet_cm_compute_class_change()
-	{
-		$(document).on("change",".cm.tablet-compute", function()
-		{
-			action_cm_compute_tablet();
-		});
-	}
-
 	function action_compute_tablet()
 	{
       	var tablet_unit_qty = $(".tablet-droplist-um").find("option:selected").attr("qty");
       	var tablet_item_qty = $(".tablet-item-qty").val();
       	var tablet_item_rate = $(".tablet-item-rate").val();
-      	var tablet_item_disc = $(".tablet-item-disc").val();
+      	var tablet_item_disc = 0;
 
- 		var total = 0.00;
-
-        var qty = tablet_item_qty;
-        /* CHECK THE DISCOUNT */
-        if(tablet_item_disc.indexOf('%') >= 0)
-        {
-            $(".tablet-item-disc").val(tablet_item_disc.substring(0, tablet_item_disc.indexOf("%") + 1));
-            tablet_item_disc = (parseFloat(tablet_item_disc.substring(0, tablet_item_disc.indexOf('%'))) / 100) * (action_return_to_number(tablet_item_rate) * action_return_to_number(qty));
-        }
-        else if(tablet_item_disc == "" || tablet_item_disc == null)
-        {
-            tablet_item_disc = 0;
-        }
-        else
-        {
-            tablet_item_disc = parseFloat(tablet_item_disc);
-        }
-
-        /* RETURN TO NUMBER IF THERE IS COMMA */
-        var rate        = action_return_to_number(tablet_item_rate);
-        var discount    = action_return_to_number(tablet_item_disc);
-
-        // console.log(qty+" * "+ rate + " - " + discount)
-        total = ((qty * rate) - discount).toFixed(2);
-
-
-        $(".tablet-item-amount").html(action_add_comma(total));
-
-	}
-	function action_cm_compute_tablet()
-	{
-		var tablet_unit_qty = $(".cm.tablet-droplist-um").find("option:selected").attr("qty");
-      	var tablet_item_qty = $(".cm.tablet-item-qty").val();
-      	var tablet_item_rate = $(".cm.tablet-item-rate").val();
  		var total = 0.00;
 
         var qty = tablet_item_qty;
@@ -336,41 +231,7 @@ function tablet_customer_invoice()
         var rate        = action_return_to_number(tablet_item_rate);
 
         // console.log(qty+" * "+ rate + " - " + discount)
-        total = (qty * rate).toFixed(2);
-
-        $(".cm.tablet-item-amount").html(action_add_comma(total));
-	}
-	function action_compute_tablet()
-	{
-      	var tablet_unit_qty = $(".tablet-droplist-um").find("option:selected").attr("qty");
-      	var tablet_item_qty = $(".tablet-item-qty").val();
-      	var tablet_item_rate = $(".tablet-item-rate").val();
-      	var tablet_item_disc = $(".tablet-item-disc").val();
-
- 		var total = 0.00;
-
-        var qty = tablet_item_qty;
-        /* CHECK THE DISCOUNT */
-        if(tablet_item_disc.indexOf('%') >= 0)
-        {
-            $(".tablet-item-disc").val(tablet_item_disc.substring(0, tablet_item_disc.indexOf("%") + 1));
-            tablet_item_disc = (parseFloat(tablet_item_disc.substring(0, tablet_item_disc.indexOf('%'))) / 100) * (action_return_to_number(tablet_item_rate) * action_return_to_number(qty));
-        }
-        else if(tablet_item_disc == "" || tablet_item_disc == null)
-        {
-            tablet_item_disc = 0;
-        }
-        else
-        {
-            tablet_item_disc = parseFloat(tablet_item_disc);
-        }
-
-        /* RETURN TO NUMBER IF THERE IS COMMA */
-        var rate        = action_return_to_number(tablet_item_rate);
-        var discount    = action_return_to_number(tablet_item_disc);
-
-        // console.log(qty+" * "+ rate + " - " + discount)
-        total = ((qty * rate) - discount).toFixed(2);
+        total = ((qty * rate)).toFixed(2);
 
 
         $(".tablet-item-amount").html(action_add_comma(total));
@@ -382,21 +243,13 @@ function tablet_customer_invoice()
 		var subtotal = 0;
 		var total_taxable = 0;
 
-		var subtotal_returns = 0;
-		var total_returns_with_returns = 0;
-
 		if($(".div-item-list .item-table").length > 0)
 		{
-			$(".inv.item-table").each(function() 
+			$(".item-table").each(function() 
 			{			
 				var qty 	= $(this).find(".input-item-qty").val();
-				// console.lo
 				var rate 	= $(this).find(".input-item-rate").val();
-				var discount = "";
-				if($(this).find(".input-item-disc").val())
-				{
-					discount.toString();
-				}
+				var discount= "";
 				var amount 	= $(this).find(".input-item-amount");
 				var taxable = $(this).find(".item-taxable");
 
@@ -423,7 +276,7 @@ function tablet_customer_invoice()
 				/* RETURN TO NUMBER IF THERE IS COMMA */
 				qty 		= action_return_to_number(qty);
 				rate 		= action_return_to_number(rate);
-				discount 	= action_return_to_number(discount);
+				discount 	= 0;
 
 				var total_per_tr = ((qty * rate) - discount).toFixed(2);
 
@@ -456,23 +309,23 @@ function tablet_customer_invoice()
 				}
 
 				/*CHECK IF TAXABLE*/	
-				if(taxable.html() == "Taxable")
-				{
-					total_taxable += parseFloat(total_per_tr);
-				}
+				// if(taxable.html() == "Taxable")
+				// {
+				// 	total_taxable += parseFloat(total_per_tr);
+				// }
 
 			});
 
 		}
 
 		/* action_compute EWT */
-		var ewt_value 			= $(".ewt-value").val();
+		var ewt_value 			= 0;
 
 		ewt_value = parseFloat(ewt_value) * subtotal;
 
 		/* action_compute DISCOUNT */
 		var discount_selection 	= $(".discount_selection").val();
-		var discount_txt 		= $(".discount_txt").val();
+		var discount_txt 		= 0;
 		var tax_selection 		= $(".tax_selection").val();
 		var taxable_discount 	= 0;
 
@@ -482,14 +335,7 @@ function tablet_customer_invoice()
 		}
 
 		discount_total = discount_txt;
-
-		if(discount_selection == 'percent')
-		{
-			discount_total = subtotal * (discount_txt / 100);
-			taxable_discount = total_taxable * (discount_txt / 100);
-		}
-
-		discount_total = parseFloat(discount_total);
+		discount_total = 0;
 
 		/* action_compute TOTAL */
 		var total = 0;
@@ -497,11 +343,11 @@ function tablet_customer_invoice()
 
 		/* action_compute TAX */
 		var tax   = 0;
-		if(tax_selection == 1){
-			tax = total_taxable * (12 / 100);
-		}
-		total += tax;
-
+		// if(tax_selection == 1){
+		// 	tax = total_taxable * (12 / 100);
+		// }
+		// total += tax;
+		console.log(total);
 		/* action payment applied */
 		var payment_applied   	= parseFloat($(".payment-applied").html());
 		var balance_due 		= total - payment_applied;
@@ -517,62 +363,6 @@ function tablet_customer_invoice()
 		$(".total-amount-input").val(total.toFixed(2));
 
 		$(".balance-due").html(action_add_comma(balance_due.toFixed(2)));
-
-		if($(".cm-div-item-list .cm.item-table").length > 0)
-		{			
-			$(".cm.item-table").each(function()
-			{
-				/* GET ALL DATA */
-				var cm_qty 	= $(this).find(".cm.input-item-qty").val();
-				var cm_rate = $(this).find(".cm.input-item-rate").val();
-				var cm_amount = $(this).find(".cm.input-item-amount");
-				
-				/* CHECK IF QUANTITY IS EMPTY */
-				if(cm_qty == "" || cm_qty == null)
-				{
-					cm_qty = 1;
-				}
-
-
-				/* RETURN TO NUMBER IF THERE IS COMMA */
-				cm_qty 		= action_return_to_number(cm_qty);
-				cm_rate 	= action_return_to_number(cm_rate);
-
-				var cm_total_per_tr = (cm_qty * cm_rate).toFixed(2);
-
-				/* action_compute SUB TOTAL PER LINE */
-				subtotal_returns += parseFloat(cm_total_per_tr);
-
-				/* CONVERT TO INTEGER */
-				var amount_val = cm_amount.val();
-				
-				if(amount_val != '' && amount_val != null && cm_total_per_tr == '') //IF QUANTITY, RATE IS [NOT EMPTY]
-				{
-					var sub = parseFloat(action_return_to_number(amount_val));
-					if(isNaN(sub))
-					{
-						sub = 0;
-					}
-					subtotal_returns += sub;
-					cm_total_per_tr = sub;
-					cm_amount.val(action_add_comma(sub));
-				}
-				else //IF QUANTITY, RATE IS [EMPTY]
-				{
-					cm_amount.val(action_add_comma(cm_total_per_tr));
-				}
-			});
-		}
-
-		console.log(subtotal_returns);
-		$(".sub-total-returns").html(action_add_comma(subtotal_returns.toFixed(2)));
-		$(".subtotal-amount-input-returns").val(action_add_comma(subtotal_returns.toFixed(2)));
-
-
-		$(".total-amount-with-returns").html(action_add_comma((total - subtotal_returns).toFixed(2)));
-		$(".total-amount-input-with-returns").val((total - subtotal_returns).toFixed(2));
-
-
 	}     
 	function action_convert_number()
 	{
@@ -642,52 +432,6 @@ function tablet_customer_invoice()
             }
         });
 
-        $('.cm.tablet-droplist-um').globalDropList(
-	    {
-	        hasPopup: "false",
-	        width : "100%",
-	        placeholder : "U/M..",
-	        onChangeValue: function()
-	        {
-	        	$(".cm.tablet-item-rate").val(($(this).find("option:selected").attr("qty") * $(".cm.tablet-price-per-item").val()).toFixed(2));
-	            action_cm_compute_tablet();
-	        }
-
-	    });
-        $('.tablet-droplist-um').globalDropList(
-	    {
-	        hasPopup: "false",
-	        width : "100%",
-	        placeholder : "U/M..",
-	        onChangeValue: function()
-	        {
-	        	$(".tablet-item-rate").val(($(this).find("option:selected").attr("qty") * $(".tablet-price-per-item").val()).toFixed(2));
-	            action_compute_tablet();
-	        }
-
-	    });
-        $('.tablet-droplist-item-return').globalDropList({
-
-            hasPopup : 'false',
-            width : "100%",
-            maxHeight: "309px",
-    		placeholder : "Select Return Item...",
-            onCreateNew : function()
-            {
-            	item_selected = $(this);
-            	console.log($(this));
-            },
-            onChangeValue : function()
-            {
-            	console.log($(this).val());
-            	if($(this).val() != '' || $(this).val() != null)
-            	{
-	           	    action_load_link_to_modal('/tablet/credit_memo/add_item/'+$(this).val()+"/true",'md');
-            	}
-            	// action_load_item_info();
-            }
-        });
-
         $('.tablet-droplist-um').globalDropList(
 	    {
 	        hasPopup: "false",
@@ -740,7 +484,7 @@ function tablet_customer_invoice()
             {
             	if($(this).val() != '')
             	{
-	           	    action_load_link_to_modal('/tablet/invoice/add_item/'+$(this).val(),'md');
+	           	    action_load_link_to_modal('/tablet/credit_memo/add_item/'+$(this).val()+'/false','md');
             	}
             	// action_load_item_info();
             }
@@ -782,6 +526,9 @@ function tablet_customer_invoice()
 	    return sValue.length < iPadBy ? LPad("0" + sValue, iPadBy) : sValue;
 	}
 	
+	
+
+	
 	function event_button_action_click()
 	{
 		$(document).on("click","button[type='submit']", function()
@@ -815,64 +562,40 @@ function submit_done_item(data)
     data.element.modal("hide");
 }
 
+
 function submit_done(data)
 {
-	if(data.status == "success-invoice")
+	if(data.status == "success-credit-memo")
 	{
-		console.log("succes-invoice");
-        if(data.redirect)
-        {
-        	toastr.success("Success inv");
-        	location.href = data.redirect;
-    	}
-    	else
-    	{
-    		$(".load-data:last").load(data.link+" .load-data .data-container", function()
-    		{
-    			tablet_customer_invoice.action_initialized();
-    			toastr.success("Success");
-    		})
-    	}
+        toastr.success("Success");
+        location.href = data.redirect_to;
 	}
-	else if(data.status == 'error-inv-no')
+	else if(data.status == "success-credit-memo-action")
 	{
-		action_load_link_to_modal('/member/customer/invoice/error/'+data.inv_id,'md');
+        toastr.success("Success");
+  		action_load_link_to_modal('/member/customer/credit_memo/choose_type?cm_id='+data.id, 'sm');
+	}
+	else if(data.status == "success-credit-memo-tablet")
+	{
+        toastr.success("Success");
+  		action_load_link_to_modal('/tablet/credit_memo/choose_type?cm_id='+data.id, 'sm');
 	}
 	else if(data.status == 'success-sir')
 	{		
-        toastr.success("Success sir");
+        toastr.success("Success");
        	location.href = "/member/pis/manual_invoice";
 	}
 	else if(data.status == 'success-tablet')
 	{		
         toastr.success("Success");
-       	location.href = "/tablet/invoice";
-	}
-	else if(data.status == 'success-tablet-sr')
-	{		
-        toastr.success("Success");
-       	location.href = "/tablet/sales_receipt/list";
+       	location.href = "/tablet";
 	}
     else if(data.status == "error")
     {
         toastr.warning(data.status_message);
         $(data.target).html(data.view);
     }
-
-    if(data.status == "success")
-    {
-    	if(data.type == "terms")
-    	{
-    		$(".droplist-terms").load("/member/maintenance/terms/load-terms", function()
-			{
-				$(this).globalDropList("reload");
-				$(this).val(data.terms_id).change();
-			});
-			data.element.modal("toggle");
-    	}
-    }
 }
-
 function submit_this_form()
 {
 	$("#keep_val").val("keep");

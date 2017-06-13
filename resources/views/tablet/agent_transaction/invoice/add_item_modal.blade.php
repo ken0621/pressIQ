@@ -71,7 +71,7 @@
         </div>
         <div class="form-group clearfix row">
             <div class="col-xs-12">
-                <input type="checkbox" name="taxable" class="tablet-item-taxable"> <span>Taxable</span>
+                <label><input type="checkbox" name="taxable" class="tablet-item-taxable"> <span>Taxable</span></label>
             </div>
         </div>
     </div>
@@ -84,4 +84,5 @@
     tablet_customer_invoice.event_tablet_compute_class_change();
     tablet_customer_invoice.action_compute_tablet();
     tablet_customer_invoice.action_add_item_submit();
+    tablet_customer_invoice.action_add_cm_item_submit();
 </script>

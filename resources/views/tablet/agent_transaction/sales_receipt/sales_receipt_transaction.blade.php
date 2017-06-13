@@ -5,85 +5,85 @@
     <input type="hidden" class="token" name="sir_id" value="{{$sir_id}}" >
     <input type="hidden" name="invoice_id" value="{{Request::input('id')}}" >
     <div class="form-group">
-    	<div class="col-md-12">
-			<div class="panel panel-default panel-block panel-title-block" id="top">
-				<div class="panel-heading">
-					<div class="col-md-8 col-xs-6">
-						<i class="fa fa-tablet"></i>
-						<h1>
-						<span class="page-title">Tablet &raquo; Credit Sales</span>
-						<small>
-						</small>
-						</h1>
-					</div>
-					<div class="col-md-4 col-xs-6 text-right">
-						<a href="/tablet" class="btn btn-custom-white">Cancel</a>
-						<button data-action="save-and-edit" class="btn btn-primary">Save</button>
-					</div>
-				</div>
-			</div>
-			<div class="panel panel-default panel-block panel-title-block" id="top">
-			   <div class="tab-content panel-body form-horizontal tablet-container">
-			        <div id="invoice" class="tab-pane fade in active">
-			           <div class="form-group">
-			           		<div class="col-xs-3">
-			           			<label >Invoice No.</label>
-		           			</div>
-			           		<div class="col-xs-4">
-			           			<input type="text" class="form-control input-sm" name="new_invoice_id" value="{{$inv->new_inv_id or $new_inv_id}}">
-			           		</div>
-			           </div>
+        <div class="col-md-12">
+            <div class="panel panel-default panel-block panel-title-block" id="top">
+                <div class="panel-heading">
+                    <div class="col-md-8 col-xs-6">
+                        <i class="fa fa-tablet"></i>
+                        <h1>
+                        <span class="page-title">Tablet &raquo; Credit Sales</span>
+                        <small>
+                        </small>
+                        </h1>
+                    </div>
+                    <div class="col-md-4 col-xs-6 text-right">
+                        <a href="/tablet" class="btn btn-custom-white">Cancel</a>
+                        <button data-action="save-and-edit" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default panel-block panel-title-block" id="top">
+               <div class="tab-content panel-body form-horizontal tablet-container">
+                    <div id="invoice" class="tab-pane fade in active">
+                       <div class="form-group">
+                            <div class="col-xs-3">
+                                <label >Invoice No.</label>
+                            </div>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control input-sm" name="new_invoice_id" value="{{$inv->new_inv_id or $new_inv_id}}">
+                            </div>
+                       </div>
 
-			           <div class="form-group">
-			           		<div class="col-md-12">
+                       <div class="form-group">
+                            <div class="col-md-12">
                                 <input type="hidden" class="form-control input-sm customer-email" name="inv_customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$inv->inv_customer_email or ''}}"/>
-			           			<select class="form-control droplist-customer input-sm pull-left" name="inv_customer_id" data-placeholder="Select a Customer" required>
-                                	@include('member.load_ajax_data.load_customer', ['customer_id' => isset($inv) ? $inv->inv_customer_id : (isset($c_id) ? $c_id : '') ]);
+                                <select class="form-control droplist-customer input-sm pull-left" name="inv_customer_id" data-placeholder="Select a Customer" required>
+                                    @include('member.load_ajax_data.load_customer', ['customer_id' => isset($inv) ? $inv->inv_customer_id : (isset($c_id) ? $c_id : '') ]);
                                 </select>
-		           			</div>
-			           </div>
+                            </div>
+                       </div>
                        <div class="form-group">
                            <div class="col-xs-12">                           
                                 <textarea class="form-control input-sm textarea-expand" name="inv_customer_billing_address" placeholder="Billing Address">{{$inv->inv_customer_billing_address or ''}}</textarea>                               
                            </div>
                        </div>
-			           <div class="form-group">
-			           		<div class="col-md-12">
-				           		<label>Terms</label>
-				           	</div>
-			           		<div class="col-md-12">
-			           			<select class="form-control input-sm droplist-terms" name="inv_terms_id">
+                       <div class="form-group">
+                            <div class="col-md-12">
+                                <label>Terms</label>
+                            </div>
+                            <div class="col-md-12">
+                                <select class="form-control input-sm droplist-terms" name="inv_terms_id">
                                     @include("member.load_ajax_data.load_terms", ['terms_id' => isset($inv) ? $inv->inv_terms_id : ''])
                                 </select>
-			           		</div>
-			           	</div>
-			            <div class="form-group">
-			           		<div class="col-xs-6">
-			           			<label>Invoice Date</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label>Invoice Date</label>
                                 <input type="text" class="datepicker form-control input-sm" name="inv_date" value="{{isset($inv) ? dateFormat($inv->inv_date) : date('m/d/y')}}"/>
-			           		</div>
-			           		<div class="col-xs-6">
-			           			<label>Due Date</label>
-			           			<input type="text" class="datepicker form-control input-sm" name="inv_due_date" value="{{isset($inv) ? dateFormat($inv->inv_due_date) : date('m/d/y')}}" />
-			           		</div>
-			           	</div>
-			           	<div class="div-item-list">
+                            </div>
+                            <div class="col-xs-6">
+                                <label>Due Date</label>
+                                <input type="text" class="datepicker form-control input-sm" name="inv_due_date" value="{{isset($inv) ? dateFormat($inv->inv_due_date) : date('m/d/y')}}" />
+                            </div>
+                        </div>
+                        <div class="div-item-list">
                              @include('tablet.load_ajax_tablet.tablet_item')
                         </div>
 
-			           	<div class="form-group">
-			           		<div class="col-md-12">
-			           		 <h3>Add Item</h3>
-			           		</div>
-			           	</div>
-			           	<div class="form-group">
-			           		<div class="col-md-12">
-			           		<!-- select-item droplist-item -->
-				           		<select class="form-control tablet-droplist-item input-sm pull-left" name="select_item_id">
-	                                @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
-	                            </select>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                             <h3>Add Item</h3>
                             </div>
-			           	</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                            <!-- select-item droplist-item -->
+                                <select class="form-control tablet-droplist-item input-sm pull-left" name="select_item_id">
+                                    @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-group">
                              <div class="col-xs-6">
                                 <label>Message</label>
@@ -94,8 +94,8 @@
                                 <textarea class="form-control input-sm textarea-expand" name="inv_memo" placeholder="">{{$inv->inv_memo or ''}}</textarea>  
                             </div>
                         </div>
-			           	<div class="form-group">
-			           		<div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-12">
                                 <div class="col-xs-6 digima-table-label">
                                     Sub Total
                                 </div>
@@ -157,8 +157,8 @@
                                     PHP&nbsp;<span class="tax-total">0.00</span>
                                 </div>
                             </div> 
-			           		</div>
-			           	</div>
+                            </div>
+                        </div>
 
                         <div class="form-group">
                             <div class="col-xs-12">
@@ -180,7 +180,7 @@
                         <div class="form-group">
                             <div class="col-xs-12">
                                 <label style="font-size: 15px">
-                                     <input  type="checkbox" onclick="toggle_returns('.returns-class', this)" value="returns" class="returns-check"  value="returns" name="returns"> Returns 
+                                     <input  type="checkbox" onclick="toggle_returns('.returns-class', this)" value="returns" class="returns-check"  value="returns" name="returns" > Returns 
                                 </label>
                             </div>
                         </div> 
@@ -256,10 +256,10 @@
                                 </div>
                             </div>
                         @endif
-			        </div>
-			   </div>
-			</div>
-    	</div>
+                    </div>
+               </div>
+            </div>
+        </div>
     </div>
 </form>
 <div class="tablet-div-script hide">

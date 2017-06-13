@@ -51,6 +51,10 @@
     {
         cursor: pointer;
     }
+    #body
+    {
+        overflow-y: auto;
+    }
     </style>
     <link rel="stylesheet" type="text/css" href="/assets/member/css/global.css">
     @yield('css')
@@ -88,19 +92,19 @@
 
     <div class="modal-loader hidden"></div>
     <!-- Modal -->
-        <div class="modal fade" id="myModal" role="dialog">
-            <div class="modal-dialog">
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
 
-            <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Modal Header</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>Some text in the modal.</p>
-                    </div>
-                    <div class="modal-footer">
+        <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Some text in the modal.</p>
+                </div>
+                <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -209,11 +213,6 @@
     
     </style>
     <script type="text/javascript" src="/assets/member/global.js"></script>
-
-    <!-- Testing only -->
-    <script type="text/javascript" src="/assets/member/settings/settings_global.js"></script>
-    <script type="text/javascript" src="/assets/member/mlm/global_slot.js"></script>
-    <!-- End -->
 
     <script src="/assets/external/jquery_ui/jquery_ui.js"></script>
     <script src="/assets/member/scripts/e1d08589.bootstrap.min.js"></script>

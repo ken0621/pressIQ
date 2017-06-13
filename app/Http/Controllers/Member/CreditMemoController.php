@@ -17,6 +17,7 @@ use App\Globals\CreditMemo;
 use App\Globals\Accounting;
 use App\Globals\Warehouse;
 use App\Globals\Invoice;
+use App\Globals\Tablet_global;
 use App\Http\Controllers\Controller;
 use Request;
 use Redirect;

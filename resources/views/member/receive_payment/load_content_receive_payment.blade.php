@@ -12,9 +12,9 @@
                 </select>
                 @endif
             </div>
-            <div class="col-sm-4">
+           <!--  <div class="col-sm-4">
                 <button class="btn btn-custom-white btn-sm" data-placement="bottom" data-html="true" id="example" data-content="<form><br><input type='text' class='form-control input-sm' ><br><a style='cursor:pointer' class='pull-left' onclick='$(&quot;#example&quot;).popover(&quot;hide&quot;);'>Cancel</a><a style='cursor:pointer' class='pull-right'>Find</a><br></form>" data-toggle="popover">Find by invoice no.</button>
-            </div>
+            </div> -->
         </div>
     </div>
                     

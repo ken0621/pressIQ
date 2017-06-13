@@ -123,7 +123,7 @@ class Ec_order
                     ->where('merchant_item_item_id', $item->item_id)
                     ->where('merchant_item_ec_order_id', $order_id)
                     ->count();
-                    if($count == 0)
+                    if($count === 0)
                     {
                         if($item)
                         {

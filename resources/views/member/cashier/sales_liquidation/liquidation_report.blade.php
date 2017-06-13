@@ -120,6 +120,7 @@
                         </div>
                     </div>
                 </div>
+                <div class="{{$empties_loss = 0}} {{$empties_over = 0}} {{$total_return = 0}}"></div>
                 @if($ctr_returns != 0)
                 <div class="form-group">
                     <div class="col-md-12">
@@ -141,7 +142,7 @@
                                             <th style="width: 200px;">Info</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="{{$empties_loss = 0}} {{$empties_over = 0}} {{$total_return = 0}}">
+                                    <tbody>
                                         @if($_returns)
                                         @foreach($_returns as $keys => $return)
                                         <tr class="tr-draggable tr-draggable-html">
@@ -182,6 +183,10 @@
                     </div>
                 </div>
                 @endif
+            </div>
+
+            <div style="page-break-after: always;">
+            
                 <div class="{{$total_disc = 0}}"></div>
                 @if(count($_inv_dsc) > 0)
                 <div>
@@ -263,7 +268,48 @@
                 </div>
                 @else
                 <div class="form-group">
-                    <h3>NO CREDIT MEMOT - OTHERS GIVEN</h3>
+                    <h3>NO CREDIT MEMO - OTHERS GIVEN</h3>
+                </div>
+                @endif
+
+                 @if(count($_cm_applied) > 0)
+                <div>
+                    <div class="form-group">
+                        <h2>Credit Memo - Applied</h2>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row clearfix draggable-container empties-container">
+                            <div class="col-sm-12">
+                                <table class="digima-table" style="width: 100%">
+                                    <thead >
+                                        <tr>
+                                            <th style="width: 30px;" class="text-center">#</th>
+                                            <th style="width: 200px;">Customer</th>
+                                            <th style="width: 200px;">Description</th>
+                                            <th style="width: 200px;">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody >
+                                        @foreach($_cm_applied as $key_applied => $cm_applied)
+                                        <tr>
+                                            <td>{{$key_applied + 1}}</td>
+                                            <td>{{$cm_applied->customer_name}}</td>
+                                            <td>{{$cm_applied->cm_id}}</td>
+                                            <td class="text-right">{{currency('Php',$cm_applied->cm_applied_amount)}}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-sm-12 text-right">
+                                <h4><strong>Total CM - Applied</strong> {{currency('Php',$total_cm_applied)}}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @else
+                <div class="form-group">
+                    <h3>NO CREDIT MEMO - APPLIED</h3>
                 </div>
                 @endif
             </div>
@@ -393,7 +439,7 @@
                     <table class="text-center" style="width: 100%;font-size: 12px;">
                         <tr>
                             <td style="width: 33%">{{currency('PHP', $ar_collection)}}</td>
-                            <td style="width: 33%">{{currency('PHP', 0)}}</td>
+                            <td style="width: 33%">{{currency('PHP', $total_cm_applied)}}</td>
                             <td style="width: 33%">{{currency('PHP', $total_cm)}}</td>
                         </tr>
                         <tr>
@@ -431,7 +477,7 @@
                             <tr>
                                 <td style="width: 40%"><h4><strong>AMOUNT TO BE REMITTED : </strong></h4></td>
                                 <td style="width: 60%" {{ $sales = $total_sold - $total_disc }}>
-                                    <div style="border-bottom: 1px solid #000;width: 100%" class="{{$total_amount_tobe_remitted = (((($sales - $total_return) - $total_ar) - $cm_applied) +  $ar_collection) + $total_cm }}">
+                                    <div style="border-bottom: 1px solid #000;width: 100%" class="{{$total_amount_tobe_remitted = (((($sales - $total_return) - $total_ar) - $total_cm_applied) +  $ar_collection) + $total_cm }}">
                                         <h4>{{currency('PHP', $total_amount_tobe_remitted)}} </h4>
                                     </div>
                                 </td>

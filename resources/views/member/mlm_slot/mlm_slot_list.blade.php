@@ -47,7 +47,12 @@
                 <option value="CD">CD Slot</option>
             </select>
         </div>
-        <div class="col-md-4 col-md-offset-4" style="padding: 10px">
+        <div class="col-md-4">
+            <div class="checkbox" style="font-size: 17px; padding-top: 5px;">
+                <label><input type="checkbox" class="check_search_sponsor" name="check_search_sponsor" style="height: 20px;">Search by Sponsor</label>
+            </div>
+        </div>
+        <div class="col-md-4" style="padding: 10px">
             <div class="input-group">
                 <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
                 <input type="text" class="form-control search_filter" placeholder="Search by Customer ID or Slot ID" aria-describedby="basic-addon1" onkeyup="search_slot_f(this)">
@@ -78,12 +83,14 @@ var search_slot = 0;
 var slot_active = 0;
 var paginate = 1;
 ajax_load_membership();
-    function slot_created(data)
-    {
+
+function slot_created(data)
+{
         var link="/member/mlm/slot/view/" + data.slot_id;
         action_load_link_to_modal(link, 'lg');
         ajax_load_membership();
-    }
+}
+
 function ajax_load_membership()
 {
     $('.data_filtered_mlm_code').html('<center><div class="loader-16-gray"></div></center>');
@@ -124,6 +131,18 @@ function ajax_load_membership()
             request  = request + "&";
         }
         request  = request + "page=" + paginate ;
+    }
+    
+    var check_search_sponsor = $('.check_search_sponsor').val();
+    if ($('.check_search_sponsor').is(':checked')) {
+        if(check_search_sponsor)
+        {
+            if(request != "?")
+            {
+                request  = request + "&";
+            }
+            request  = request + "check_search_sponsor=" + check_search_sponsor ;
+        }
     }
     $('.data_filtered_mlm_code').load(request);
 }

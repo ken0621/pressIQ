@@ -116,8 +116,6 @@ class MLM_SlotController extends Member
     }
     public function index()
     {        
-        // $slot = Mlm_compute::get_slot_info(609);
-        // return Mlm_complan_manager_repurchase::stairstep($slot, 1467);
         $access = Utilities::checkAccess('mlm-slots', 'access_page');
         if($access == 0)
         {
@@ -132,20 +130,19 @@ class MLM_SlotController extends Member
         {
             return redirect('/member/mlm/slot/head');
         }
-        //end
 
         $data['membership'] = Tbl_membership::archive(0)->where('shop_id', $shop_id)->get();
         $data['count_all_slot_active'] = Tbl_mlm_slot::where('shop_id', $shop_id)->where('slot_active', 0)->count();
         $data['count_all_slot_inactive'] =  Tbl_mlm_slot::where('shop_id', $shop_id)->where('slot_active', 1)->count();
         $data['customer_account'] = Tbl_customer::where('shop_id', $shop_id)->where('ismlm', 1)->count();
-        // dd($data['customer_account_w_slot']);
+        
         $data['membership_count'] = [];
         foreach($data['membership'] as $key => $value)
         {
             $data['membership_count'][$key] = Tbl_mlm_slot::where('slot_membership', $value->membership_id)->count();
         }
 
-        // dd($data);
+        
         if(Request::ajax()) 
         {
             return $this->code_filter($shop_id, Request::input());
@@ -159,46 +156,88 @@ class MLM_SlotController extends Member
         ->orderBy('slot_id')
         ->customer()->membership();
 
-        $membership                     = Request::input("membership");
-        $membership_type                = Request::input("membership_type");
-        $search_slot                    = Request::input("search_slot");
-        $slot_active                    = Request::input('slot_active');
+        $data["check_search_sponsor"] = Request::input('check_search_sponsor');
+
+        if($data["check_search_sponsor"])
+        {
+                $membership                     = Request::input("membership");
+                $membership_type                = Request::input("membership_type");
+                $search_slot                    = Request::input("search_slot");
+                $slot_active                    = Request::input('slot_active');
+                
+                $slot_ID = Tbl_mlm_slot::where('slot_no', $search_slot)->where('shop_id', $shop_id)->first();
+
+
+                if($slot_ID)
+                {
+                    // tbl_tree_sponsor
+                    // sponsor_tree_parent_id
+                    $sponsor_tree_parent_ID = Tbl_tree_sponsor::where('sponsor_tree_parent_id', $slot_ID->slot_id)->where('tbl_tree_sponsor.shop_id', $shop_id)
+                    ->child_info()
+                    ->membership()
+                    ->customer();
+                    // sponsor_tree_child_id
+                    $data['binary_settings'] = Tbl_mlm_plan::where('shop_id', $shop_id)
+                    ->where('marketing_plan_code', 'BINARY')
+                    ->where('marketing_plan_enable', 1)
+                    ->where('marketing_plan_trigger', 'Slot Creation')
+                    ->first();
+                    // $data["code_selected"]  = $code->where('slot_sponsor', $slot_ID->slot_id)->paginate(10);
+                    $data["code_selected"]  = $sponsor_tree_parent_ID->paginate(10);
+                }
+                else
+                {
+                    echo "No Sponsor Found";
+                }
+                // dd($sponsor_tree_parent_ID);
+        }
         
-        if($membership != null || $membership != 0)
+        else
         {
-            $code->where(function ($query) use($membership) 
-                    {
-                        $query ->where("slot_membership", $membership);
+
+                $membership                     = Request::input("membership");
+                $membership_type                = Request::input("membership_type");
+                $search_slot                    = Request::input("search_slot");
+                $slot_active                    = Request::input('slot_active');
+                
+                if($membership != null || $membership != 0)
+                {
+                    $code->where(function ($query) use($membership) 
+                            {
+                                $query ->where("slot_membership", $membership);
+                            });
+                }
+                if($membership_type != null || $membership_type != 0)
+                {
+                    $code->where(function ($query) use($membership_type) 
+                            {
+                                $query ->where("slot_status", $membership_type);
+                            });
+                }
+                if($search_slot != null || $search_slot != 0)
+                {
+                    $code->where(function ($query) use($search_slot)
+                    {$query ->where("slot_owner","LIKE","%".$search_slot."%")
+                            ->orWhere("slot_no","LIKE","%".$search_slot."%")
+                            ->orWhere("slot_membership","LIKE","%".$search_slot."%")
+                            ->orWhere("slot_id","LIKE","%".$search_slot."%");
                     });
+                }
+                if($slot_active != null)
+                {
+                    $code->where(function ($query) use($slot_active) 
+                            {
+                                $query ->where("slot_active", $slot_active);
+                            });
+                }
+                $data['binary_settings'] = Tbl_mlm_plan::where('shop_id', $shop_id)
+                    ->where('marketing_plan_code', 'BINARY')
+                    ->where('marketing_plan_enable', 1)
+                    ->where('marketing_plan_trigger', 'Slot Creation')
+                    ->first();
+                $data["code_selected"]  = $code->paginate(10);
         }
-        if($membership_type != null || $membership_type != 0)
-        {
-            $code->where(function ($query) use($membership_type) 
-                    {
-                        $query ->where("slot_status", $membership_type);
-                    });
-        }
-        if($search_slot != null || $search_slot != 0)
-        {
-            $code->where(function ($query) use($search_slot)
-            {$query ->where("slot_owner","LIKE","%".$search_slot."%")
-                    ->orWhere("slot_no","LIKE","%".$search_slot."%")
-                    ->orWhere("slot_id","LIKE","%".$search_slot."%");
-            });
-        }
-        if($slot_active != null)
-        {
-            $code->where(function ($query) use($slot_active) 
-                    {
-                        $query ->where("slot_active", $slot_active);
-                    });
-        }
-        $data['binary_settings'] = Tbl_mlm_plan::where('shop_id', $shop_id)
-            ->where('marketing_plan_code', 'BINARY')
-            ->where('marketing_plan_enable', 1)
-            ->where('marketing_plan_trigger', 'Slot Creation')
-            ->first();
-        $data["code_selected"]  = $code->paginate(10);
+
         // dd($data);
         return view('member.mlm_slot.mlm_slot_ajax', $data);
     }

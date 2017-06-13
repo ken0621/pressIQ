@@ -953,7 +953,7 @@ class Cart
         $order["customer_id"]                    = $customer_id;
         return Ec_order::create_ec_order_from_cart($order);   
     }
-    public static function process_payment($shop_id)
+    public static function process_payment($shop_id, $from = "checkout")
     {
         $data = Cart::get_info($shop_id);
         $method_id = $data["tbl_ec_order"]["payment_method_id"];
@@ -963,9 +963,9 @@ class Cart
             switch ($method_information->link_reference_name)
             {
                 case 'paypal2': dd("UNDER DEVELOPMENT"); break;
-                case 'paymaya': Cart::submit_using_paymaya($data, $shop_id, $method_information); break;
+                case 'paymaya': Cart::submit_using_paymaya($data, $shop_id, $method_information, $from); break;
                 case 'paynamics': dd("UNDER DEVELOPMENT"); break;
-                case 'dragonpay': return Cart::submit_using_dragonpay($data, $shop_id, $method_information); break;
+                case 'dragonpay': return Cart::submit_using_dragonpay($data, $shop_id, $method_information, $from); break;
                 case 'ipay88': return Cart::submit_using_ipay88($data, $shop_id, $method_information); break;
                 case 'other': return Cart::submit_using_proof_of_payment($shop_id, $method_information);  break;
                 case 'e_wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
@@ -977,7 +977,7 @@ class Cart
             return Redirect::back()->with("error", "Please choose payment method.")->send();
         }
     }
-    public static function submit_using_paymaya($data, $shop_id, $method_information)
+    public static function submit_using_paymaya($data, $shop_id, $method_information, $from)
     {
         echo "Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.";
         $api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)->join("tbl_online_pymnt_gateway", "tbl_online_pymnt_gateway.gateway_id", "=", "tbl_online_pymnt_api.api_gateway_id")->where("gateway_code_name", "paymaya")->first();
@@ -1019,12 +1019,12 @@ class Cart
             $item[$key] = new Item();
             $item[$key]->name = $product->evariant_item_label;
             $item[$key]->code = $product_item->item_sku;
-            $item[$key]->description = $product->item_sales_information;
-            $item[$key]->quantity = $value["quantity"];
+            $item[$key]->description = $product->item_sales_information ? $product->item_sales_information : "Product #" . $product->evariant_id;
+            $item[$key]->quantity = (string)$value["quantity"];
             $item[$key]->amount = $itemAmount;
             $item[$key]->totalAmount = $itemTotalAmount;
         }
-
+   
         $payment_status = 0;
         $order_status   = "Pending";
         $customer       = Cart::get_customer();
@@ -1038,7 +1038,7 @@ class Cart
         $itemCheckout->totalAmount = $totalAmount;
         $itemCheckout->requestReferenceNumber = $shop_id . time();
         $itemCheckout->redirectUrl = array(
-            "success" =>  URL::to("/payment/paymaya/success?order_id=" . Crypt::encrypt($order_id)),
+            "success" =>  URL::to("/payment/paymaya/success?order_id=" . Crypt::encrypt($order_id) . "&from=" . $from),
             "failure" => URL::to("/payment/paymaya/failure"),
             "cancel" => URL::to("/payment/paymaya/cancel")
         );
@@ -1049,7 +1049,7 @@ class Cart
         // echo $itemCheckout->url; // Checkout URL
         return Redirect::to($itemCheckout->url)->send();
     }
-    public static function submit_using_dragonpay($data, $shop_id, $method_information)
+    public static function submit_using_dragonpay($data, $shop_id, $method_information, $from)
     {
         $gateway = DB::table("tbl_online_pymnt_gateway")->where("tbl_online_pymnt_api.api_shop_id", $shop_id)
                                                         ->where("tbl_online_pymnt_gateway.gateway_code_name", $method_information->link_reference_name)
@@ -1094,7 +1094,7 @@ class Cart
                 'description'   => $requestpayment->setDescription($request['description']),
                 'email'         => $requestpayment->setEmail($request['email']),
                 'digest'        => $requestpayment->getdigest(),
-                'param1'        => "checkout",
+                'param1'        => $from,
                 'param2'        => $order_id
             );
 

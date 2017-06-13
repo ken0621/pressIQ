@@ -16,22 +16,22 @@ class User
 
 	public function __construct()
 	{
-		$this->firstName = "John";
-		$this->middleName = "Michaels";
-		$this->lastName = "Doe";
+		$this->firstName = "---";
+		$this->middleName = "---";
+		$this->lastName = "---";
 
 		// Contact
 		$this->contact = new Contact();
-		$this->contact->phone = "+63(2)1234567890";
-		$this->contact->email = "paymayabuyer1@gmail.com";
+		$this->contact->phone = "";
+		$this->contact->email = "";
 
 		// Address
 		$address = new Address();
-		$address->line1 = "9F Robinsons Cybergate 3";
-		$address->line2 = "Pioneer Street";
-		$address->city = "Mandaluyong City";
-		$address->state = "Metro Manila";
-		$address->zipCode = "12345";
+		$address->line1 = "---";
+		$address->line2 = "";
+		$address->city = "---";
+		$address->state = "---";
+		$address->zipCode = "";
 		$address->countryCode = "PH";
 		$this->shippingAddress = $address;
 		$this->billingAddress = $address;

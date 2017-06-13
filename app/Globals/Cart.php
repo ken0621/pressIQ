@@ -1019,12 +1019,12 @@ class Cart
             $item[$key] = new Item();
             $item[$key]->name = $product->evariant_item_label;
             $item[$key]->code = $product_item->item_sku;
-            $item[$key]->description = $product->item_sales_information;
-            $item[$key]->quantity = $value["quantity"];
+            $item[$key]->description = $product->item_sales_information ? $product->item_sales_information : "Product #" . $product->evariant_id;
+            $item[$key]->quantity = (string)$value["quantity"];
             $item[$key]->amount = $itemAmount;
             $item[$key]->totalAmount = $itemTotalAmount;
         }
-
+   
         $payment_status = 0;
         $order_status   = "Pending";
         $customer       = Cart::get_customer();

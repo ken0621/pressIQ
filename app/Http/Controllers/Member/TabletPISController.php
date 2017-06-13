@@ -717,7 +717,7 @@ class TabletPISController extends Controller
 	{         
 		$sir_id = Request::input("sir_id");
         $data["c_id"] = Request::input("customer_id");
-        $data["pis"]       = Purchasing_inventory_system::check();
+        $data["pis"]       = Purchasing_inventory_system::check(true);
         
 		$data["_customer"]  = Customer::getAllCustomer(true);
         $data['_um']        = UnitMeasurement::load_um_multi(true);
@@ -982,7 +982,7 @@ class TabletPISController extends Controller
         $cm_customer_info[] = null;
         $cm_item_info = null;
         $item_returns = null;    
-        if(Request::input("returns") != null && Purchasing_inventory_system::check() != 0)
+        if(Request::input("returns") != null && Purchasing_inventory_system::check(true) != 0)
         {
             $cm_customer_info["cm_customer_id"] = Request::input('inv_customer_id');
             $cm_customer_info["cm_customer_email"] = Request::input('inv_customer_email');
@@ -1198,7 +1198,7 @@ class TabletPISController extends Controller
         $item_returns = null; 
         $_cm_items = Request::input("cmline_item_id");
         $cm_item_info = null;
-        if(Request::input("returns") != null && Purchasing_inventory_system::check() != 0)
+        if(Request::input("returns") != null && Purchasing_inventory_system::check(true) != 0)
         {
             $cm_customer_info["cm_customer_id"] = Request::input('inv_customer_id');
             $cm_customer_info["cm_customer_email"] = Request::input('inv_customer_email');
@@ -1512,12 +1512,12 @@ class TabletPISController extends Controller
         $sir_id = Request::input("sir_id");
         $data["sir_id"] = $sir_id;
         $data["page"]       = "Customer Sales Receipt";
-        $data["pis"]        = Purchasing_inventory_system::check();
+        $data["pis"]        = Purchasing_inventory_system::check(true);
         $data["_customer"]  = Customer::getAllCustomer(true);
         $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", $this->getShopId())->get();
-        $data['_item']      = Item::get_all_item_sir($sir_id);
-        $data['_cm_item']   = Item::get_returnable_item();
-        $data['_um']        = UnitMeasurement::load_um_multi();
+        $data['_item']      = Item::get_all_item_sir($sir_id, true);
+        $data['_cm_item']   = Item::get_returnable_item(true);
+        $data['_um']        = UnitMeasurement::load_um_multi(true);
         $data["action"]     = "/tablet/sales_receipt/create_submit";
         $data["new_inv_id"] = Transaction::get_last_number("tbl_customer_invoice","new_inv_id","inv_shop_id"); 
         $data["c_id"] = Request::input("customer_id");
@@ -1625,7 +1625,7 @@ class TabletPISController extends Controller
         $cm_customer_info[] = null;
         $cm_item_info = null;
         $item_returns = null;    
-        if(Request::input("returns") != null && Purchasing_inventory_system::check() != 0)
+        if(Request::input("returns") != null && Purchasing_inventory_system::check(true) != 0)
         {
             $cm_customer_info["cm_customer_id"] = Request::input('inv_customer_id');
             $cm_customer_info["cm_customer_email"] = Request::input('inv_customer_email');
@@ -1866,7 +1866,7 @@ class TabletPISController extends Controller
         $item_returns = null; 
         $_cm_items = Request::input("cmline_item_id");
         $cm_item_info = null;
-        if(Request::input("returns") != null && Purchasing_inventory_system::check() != 0)
+        if(Request::input("returns") != null && Purchasing_inventory_system::check(true) != 0)
         {
             $cm_customer_info["cm_customer_id"] = Request::input('inv_customer_id');
             $cm_customer_info["cm_customer_email"] = Request::input('inv_customer_email');

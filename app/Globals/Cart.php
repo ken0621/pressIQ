@@ -1024,7 +1024,7 @@ class Cart
             $item[$key]->amount = $itemAmount;
             $item[$key]->totalAmount = $itemTotalAmount;
         }
-        dd($item);
+    
         $payment_status = 0;
         $order_status   = "Pending";
         $customer       = Cart::get_customer();

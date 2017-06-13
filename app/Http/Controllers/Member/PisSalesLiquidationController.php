@@ -80,8 +80,9 @@ class PisSalesLiquidationController extends Member
 
             $return = serialize(Purchasing_inventory_system::get_report_data($sir_id));
         }
-        
         $data = unserialize($return);
+
+        // dd($data);
 
         $html = view("member.cashier.sales_liquidation.liquidation_report",$data);
         $footer = 'REF#'.$sir_id;

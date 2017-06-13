@@ -4,6 +4,7 @@ namespace App\Globals;
 use DB;
 use App\Models\Tbl_category;
 use App\Models\Tbl_user;
+use App\Globals\Tablet_global;
 
 class Category
 {
@@ -34,9 +35,15 @@ class Category
 		return $data;
 	}
 
-	public static function getAllCategory($cat_type = array("all","services","inventory","non-inventory","bundles"))
+	public static function getAllCategory($cat_type = array("all","services","inventory","non-inventory","bundles"), $for_tablet = false)
 	{
-		$data = Category::re_select_raw(Category::getShopId(), 0, $cat_type);
+		$shop_id = Category::getShopId();
+		if($for_tablet == true)
+		{
+			$shop_id = Tablet_global::getShopId();
+		}
+
+		$data = Category::re_select_raw($shop_id, 0, $cat_type);
 		return $data;
 	}
 

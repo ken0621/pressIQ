@@ -84,6 +84,11 @@ class Customer_InvoiceController extends Member
     {
         $data["_invoices"] = Tbl_customer_invoice::manual_invoice()->customer()->orderBy("tbl_customer_invoice.inv_id","DESC")->where("inv_shop_id",$this->user_info->shop_id)
             ->where("is_sales_receipt",0)->get();
+        $data["_invoices_unpaid"] = Tbl_customer_invoice::manual_invoice()->customer()->orderBy("tbl_customer_invoice.inv_id","DESC")->where("inv_shop_id",$this->user_info->shop_id)
+            ->where("is_sales_receipt",0)->where("inv_is_paid",0)->get();
+        
+        $data["_invoices_paid"] = Tbl_customer_invoice::manual_invoice()->customer()->orderBy("tbl_customer_invoice.inv_id","DESC")->where("inv_shop_id",$this->user_info->shop_id)
+            ->where("is_sales_receipt",0)->where("inv_is_paid",1)->get();
 
         foreach ($data["_invoices"] as $key => $value) 
         {

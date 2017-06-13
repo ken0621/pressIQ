@@ -106,6 +106,7 @@ class TesterController extends Controller
         // dd(json_decode($response));"0000-00-00 00:00:00"
 
 
+
         $tracking["tracking"]["slug"] = "usps";
         $tracking["tracking"]["tracking_number"] = "ABC123456";
         $tracking["tracking"]["title"] = "Title1";
@@ -160,6 +161,8 @@ class TesterController extends Controller
         curl_close($curl);
 
         dd(json_decode($response));
+=======
+>>>>>>> testing
 
     }
 

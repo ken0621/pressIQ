@@ -1003,12 +1003,12 @@ class Cart
 
             $itemAmount = new ItemAmount();
             $itemAmount->currency = "PHP";
-            $itemAmount->value = (string)$product->evariant_price;
+            $itemAmount->value = (string)number_format($product->evariant_price, 2, '.', '');
             $itemAmount->details = $itemAmountDetails;
 
             $itemTotalAmount = new ItemAmount();
             $itemTotalAmount->currency = "PHP";
-            $itemTotalAmount->value = (string)$product->evariant_price * $value["quantity"];
+            $itemTotalAmount->value = (string)number_format($product->evariant_price * $value["quantity"], 2, '.', '');
             $itemTotalAmount->details = $itemAmountDetails;
 
             $totalAmount->currency = "PHP";
@@ -1024,7 +1024,7 @@ class Cart
             $item[$key]->amount = $itemAmount;
             $item[$key]->totalAmount = $itemTotalAmount;
         }
-        dd($item);
+   
         $payment_status = 0;
         $order_status   = "Pending";
         $customer       = Cart::get_customer();
@@ -1032,7 +1032,7 @@ class Cart
         $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null);
         Cart::clear_all($shop_id);
 
-        $totalAmount->value = $total;
+        $totalAmount->value = number_format($total, 2, '.', '');
 
         $itemCheckout->items = $item;
         $itemCheckout->totalAmount = $totalAmount;

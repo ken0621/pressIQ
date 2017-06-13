@@ -36,7 +36,7 @@
                             <a href="/tablet/dashboard"><< Back to Dashboard</a>
                         </div> 
                     </div>
-                    <div class="table-responsive">
+                    <div class="">
                         <table class="table table-bordered table-condensed">
                             <thead style="text-transform: uppercase">
                                 <tr>

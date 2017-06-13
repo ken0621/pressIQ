@@ -26,7 +26,7 @@
             <div id="invoice" class="tab-pane fade in active">
                 <div class="form-group">
                     <div class="col-md-4 col-xs-6">
-                        <a class="btn btn-primary form-control popup" link="/member/customer/modalcreatecustomer?stat=not-approved" size="lg">Create Customer</a>
+                      <!--   <a class="btn btn-primary form-control popup" link="/tablet/customer/modalcreatecustomer?stat=not-approved" size="lg">Create Customer</a> -->
                     </div>
                     <div class="col-md-8 col-xs-6 text-right">
                         <a href="/tablet/dashboard"><< Back to Dashboard</a>

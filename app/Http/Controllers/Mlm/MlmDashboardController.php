@@ -98,6 +98,18 @@ class MlmDashboardController extends Mlm
 
         return view("mlm.dashboard", $data);
     }
+    public function lead()
+    {
+        $data['page'] = 'Lead';
+        $data['leads'] = Tbl_mlm_lead::where('lead_customer_id_sponsor', Self::$customer_id)
+            ->customer()
+            ->customer_address()
+            ->customer_other_info()
+            ->mlm_slot()
+            ->get();
+        
+        return view("mlm.dashboard.lead", $data);
+    }
     public function tree_view()
     {
         $slot_tree = Tbl_tree_placement::child(4098)->orderby("placement_tree_level", "asc")->distinct_level()->parentslot()->membership()->get();

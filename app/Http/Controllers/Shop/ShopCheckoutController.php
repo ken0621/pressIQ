@@ -153,6 +153,22 @@ class ShopCheckoutController extends Shop
             dd($dragonpay->content);
         }
     }
+    public function paymaya_success()
+    {
+        echo "Success";
+    }
+    public function paymaya_failure()
+    {
+        echo "There seems to have been an error initializing or updating your transaction. Please wait a minute and try again or contact support for assistance.";
+        sleep(5);
+        return Redirect::to("/");
+    }
+    public function paymaya_cancel()
+    {
+        echo "There seems to have been an error initializing or updating your transaction. Please wait a minute and try again or contact support for assistance.";
+        sleep(5);
+        return Redirect::to("/");
+    }
     /* End Payment Facilities */
 
     public function index()

@@ -29,8 +29,17 @@ use Crypt;
 use Config;
 use URL;
 use App\Globals\Mlm_slot_log;
+// IPAY 88
 use App\IPay88\RequestPayment;
+// DRAGON PAY
 use App\Globals\Dragonpay2\Dragon_RequestPayment;
+// PAYMAYA
+use App\Globals\PayMaya\PayMayaSDK;
+use App\Globals\PayMaya\API\Checkout;
+use App\Globals\PayMaya\Core\CheckoutAPIManager;
+use App\Globals\PayMaya\Checkout\User;
+use App\Globals\PayMaya\Model\Checkout\ItemAmountDetails;
+use App\Globals\PayMaya\Model\Checkout\ItemAmount;
 
 class Cart
 {
@@ -954,7 +963,7 @@ class Cart
             switch ($method_information->link_reference_name)
             {
                 case 'paypal2': dd("UNDER DEVELOPMENT"); break;
-                case 'paymaya': dd("UNDER DEVELOPMENT"); break;
+                case 'paymaya': Cart::submit_using_paymaya($data, $shop_id, $method_information); break;
                 case 'paynamics': dd("UNDER DEVELOPMENT"); break;
                 case 'dragonpay': return Cart::submit_using_dragonpay($data, $shop_id, $method_information); break;
                 case 'ipay88': return Cart::submit_using_ipay88($data, $shop_id, $method_information); break;
@@ -968,6 +977,78 @@ class Cart
             return Redirect::back()->with("error", "Please choose payment method.")->send();
         }
     }
+    public static function submit_using_paymaya($data, $shop_id, $method_information)
+    {
+        echo "Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.";
+        $api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)->join("tbl_online_pymnt_gateway", "tbl_online_pymnt_gateway.gateway_id", "=", "tbl_online_pymnt_api.api_gateway_id")->where("gateway_code_name", "paymaya")->first();
+
+        PayMayaSDK::getInstance()->initCheckout($api->api_client_id, $api->api_secret_id, "SANDBOX");
+        
+        // Checkout
+        $itemCheckout = new Checkout();
+        $user = new User();
+        $itemCheckout->buyer = $user->buyerInfo();
+
+        $totalAmount = new ItemAmount();
+        $total = 0;
+        foreach (array_values($data["cart"]) as $key => $value) 
+        {
+            $product = Tbl_ec_variant::where("evariant_id", $value["product_id"])->first();
+            $product_item = Tbl_item::where("item_id", $product->evariant_item_id)->first();
+            // Item
+            $itemAmountDetails = new ItemAmountDetails();
+            $itemAmountDetails->shippingFee = "0.00";
+            $itemAmountDetails->tax = "0.00";
+            $itemAmountDetails->subtotal = "0.00";
+
+            $itemAmount = new ItemAmount();
+            $itemAmount->currency = "PHP";
+            $itemAmount->value = number_format($product->evariant_price, 2);
+            $itemAmount->details = $itemAmountDetails;
+
+            $itemTotalAmount = new ItemAmount();
+            $itemTotalAmount->currency = "PHP";
+            $itemTotalAmount->value = number_format($product->evariant_price * $value["quantity"], 2);
+            $itemTotalAmount->details = $itemAmountDetails;
+
+            $totalAmount->currency = "PHP";
+            $totalAmount->value = 0;
+            $totalAmount->details = $itemAmountDetails;
+            $total += $product->evariant_price * $value["quantity"];
+
+            $item[$key] = new Item();
+            $item[$key]->name = $product->evariant_item_label;
+            $item[$key]->code = $product_item->item_sku;
+            $item[$key]->description = $product->item_sales_information;
+            $item[$key]->quantity = $value["quantity"];
+            $item[$key]->amount = $itemAmount;
+            $item[$key]->totalAmount = $itemTotalAmount;
+        }
+
+        $payment_status = 0;
+        $order_status   = "Pending";
+        $customer       = Cart::get_customer();
+
+        $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null);
+        Cart::clear_all($shop_id);
+
+        $totalAmount->value = number_format($total, 2);
+
+        $itemCheckout->items = $item;
+        $itemCheckout->totalAmount = $totalAmount;
+        $itemCheckout->requestReferenceNumber = $shop_id . time();
+        $itemCheckout->redirectUrl = array(
+            "success" =>  URL::to("/payment/paymaya/success?order_id=" . Crypt::encrypt($order_id)),
+            "failure" => URL::to("/payment/paymaya/failure"),
+            "cancel" => URL::to("/payment/paymaya/cancel")
+        );
+
+        $itemCheckout->execute();
+
+        // echo $itemCheckout->id; // Checkout ID
+        // echo $itemCheckout->url; // Checkout URL
+        return Redirect::to($itemCheckout->url)->send();
+    }
     public static function submit_using_dragonpay($data, $shop_id, $method_information)
     {
         $gateway = DB::table("tbl_online_pymnt_gateway")->where("tbl_online_pymnt_api.api_shop_id", $shop_id)
@@ -976,6 +1057,18 @@ class Cart
                                                         ->first();
         if ($gateway) 
         {
+            foreach ($data['tbl_ec_order_item'] as $key => $value) 
+            {
+                if ($key != count($data["cart"])) 
+                {
+                    $product_summary = "Product #" . $value["item_id"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["price"]) . "";
+                }
+                else
+                {
+                    $product_summary = "Product #" . $value["item_id"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["price"]) . ", ";
+                }
+            }
+
             $merchant_id  = $gateway->api_client_id;
             $merchant_key = $gateway->api_secret_id;
 
@@ -983,7 +1076,7 @@ class Cart
             $request["txnid"]  = $shop_id . time();
             $request["amount"] = $data["tbl_ec_order"]["total"];
             $request["ccy"]    = "PHP";
-            $request["description"] = "Item Name (x1) - PHP. 100.00";
+            $request["description"] = $product_summary;
             $request["email"] = $data["tbl_ec_order"]["customer_email"];
 
             $payment_status = 0;

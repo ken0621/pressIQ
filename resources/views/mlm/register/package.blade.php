@@ -22,14 +22,10 @@
                 <div class="text-holder">
                   <div class="name">
                     <div class="radio">
-                      <label><input type="radio" name="variant_id" value="{{$value->evariant_id}}"> {{$value->eprod_name}}</label>
+                      <label style="font-size: 25px;"><input type="radio" class="img_header_{{$value->eprod_id}}" name="variant_id" value="{{$value->evariant_id}}"> {{$value->eprod_name}}</label>
                     </div>
                   </div>
-                  <div class="membership-price">{{currency('PHP', $value->min_price)}}</div>
-                  <div class="info">
-                    {!! $value->inventory_count <= 0 ? "<span style='color: red'>Out of Stock</span>" : "Current Stocks : " . number_format($value->inventory_count) !!}
-                    <input type="hidden" name="product_stocks[{{$value->evariant_id}}]" value="{{$value->inventory_count}}">
-                  </div>                  
+                  <div class="membership-price">{{currency('PHP', $value->min_price)}}</div>                  
                 </div>
               </div>              
             </div>
@@ -96,6 +92,17 @@ function change_picture_a(ito)
         })
     }
 </script>
+
+<script>
+  $(document).ready(function(){
+      $('img').click(function(){
+          var imgClass = this.className;
+          console.log(imgClass);
+          $('input.'+imgClass).attr("checked", true);
+      });
+  });  
+</script>
+
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="/assets/mlm/css/register-package.css">

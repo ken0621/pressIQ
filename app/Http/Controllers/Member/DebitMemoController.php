@@ -113,6 +113,7 @@ class DebitMemoController extends Member
     }
     public function create_submit()
     {
+        dd(Request::input());
         $vendor_info[] = null;
         $vendor_info["db_vendor_id"] = Request::input("db_vendor_id");
         $vendor_info["db_vendor_email"] = Request::input("db_vendor_email");

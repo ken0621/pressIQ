@@ -1064,8 +1064,8 @@ class TabletPISController extends Controller
 		{
 		    $inv = Transaction::check_number_existense("tbl_customer_invoice","new_inv_id","inv_shop_id",Request::input('new_invoice_id'), true);
 
-	        if($inv == 0 || Request::input("keep_val") == "keep")
-	        {
+	        // if($inv == 0 || Request::input("keep_val") == "keep")
+	        // {
 		   		$invoice_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info,'',true);
 
 
@@ -1109,12 +1109,12 @@ class TabletPISController extends Controller
 					$data["status"] = "error";
 					$data["status_message"] = "error";
 			   }
-			}
-			else
-			{
-				$data["inv_id"] = Request::input("new_invoice_id");            
-            	$data["status"] = "error-inv-no";
-			}
+			// }
+			// else
+			// {
+			// 	$data["inv_id"] = Request::input("new_invoice_id");            
+   //          	$data["status"] = "error-inv-no";
+			// }
 		}
 		else
 		{
@@ -1278,8 +1278,8 @@ class TabletPISController extends Controller
 
             $inv = Transaction::check_number_existense("tbl_customer_invoice","new_inv_id","inv_shop_id",Request::input('new_invoice_id'),true);
 
-            if($inv <= 1 || Request::input("keep_val") == "keep")
-            {
+            // if($inv <= 1 || Request::input("keep_val") == "keep")
+            // {
                 // $inv_item = Tbl_customer_invoice_line::where("invline_inv_id",$invoice_id)->get();
                 // // dd($inv_item);
                 // foreach ($inv_item as $keys => $value) 
@@ -1331,12 +1331,12 @@ class TabletPISController extends Controller
                     }
                 }
                 $data["status"] = "success-tablet";
-            }
-            else
-            {
-                $data["inv_id"] = Request::input("new_invoice_id");            
-                $data["status"] = "error-inv-no";
-            }
+            // }
+            // else
+            // {
+            //     $data["inv_id"] = Request::input("new_invoice_id");            
+            //     $data["status"] = "error-inv-no";
+            // }
         }
         else
         {
@@ -1707,8 +1707,8 @@ class TabletPISController extends Controller
         {
             $inv = Transaction::check_number_existense("tbl_customer_invoice","new_inv_id","inv_shop_id",Request::input('new_invoice_id'), true);
 
-            if($inv == 0 || Request::input("keep_val") == "keep")
-            {
+            // if($inv == 0 || Request::input("keep_val") == "keep")
+            // {
                 $invoice_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info,"sales_receipt", true);
 
                 /* SUBTOTAL */
@@ -1780,12 +1780,12 @@ class TabletPISController extends Controller
                     $data["status"] = "error";
                     $data["status_message"] = "error";
                }
-            }
-            else
-            {
-                $data["inv_id"] = Request::input("new_invoice_id");            
-                $data["status"] = "error-inv-no";
-            }
+            // }
+            // else
+            // {
+            //     $data["inv_id"] = Request::input("new_invoice_id");            
+            //     $data["status"] = "error-inv-no";
+            // }
         }
         else
         {
@@ -1946,8 +1946,8 @@ class TabletPISController extends Controller
 
             $inv = Transaction::check_number_existense("tbl_customer_invoice","new_inv_id","inv_shop_id",Request::input('new_invoice_id'),true);
 
-            if($inv <= 1 || Request::input("keep_val") == "keep")
-            {
+            // if($inv <= 1 || Request::input("keep_val") == "keep")
+            // {
                 // $inv_item = Tbl_customer_invoice_line::where("invline_inv_id",$invoice_id)->get();
                 // // dd($inv_item);
                 // foreach ($inv_item as $keys => $value) 
@@ -2020,12 +2020,12 @@ class TabletPISController extends Controller
                     }
                 }
                 $data["status"] = "success-tablet-sr";
-            }
-            else
-            {
-                $data["inv_id"] = Request::input("new_invoice_id");            
-                $data["status"] = "error-inv-no";
-            }
+            // }
+            // else
+            // {
+            //     $data["inv_id"] = Request::input("new_invoice_id");            
+            //     $data["status"] = "error-inv-no";
+            // }
         }
         else
         {

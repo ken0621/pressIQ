@@ -155,7 +155,13 @@ class ShopCheckoutController extends Shop
     }
     public function paymaya_success()
     {
-        echo "Success";
+        $order_id = Crypt::decrypt(Request::input("order_id"));
+        $update['ec_order_id'] = $order_id;
+        $update['order_status'] = "Processing";
+        $update['payment_status'] = 1;
+        $order = Ec_order::update_ec_order($update);
+
+        return Redirect("/");
     }
     public function paymaya_failure()
     {

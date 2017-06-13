@@ -161,8 +161,6 @@ class TesterController extends Controller
         curl_close($curl);
 
         dd(json_decode($response));
-=======
->>>>>>> testing
 
     }
 

@@ -28,18 +28,6 @@
 					</tr>
 				</thead>
 				<tbody>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <div class="as-track-button" data-size="small" data-domain="bryanxkier.aftership.com"  data-tracking-number="ABC12345"  data-hide-tracking-number="true">
-                            </div>
-                        </td>    
                     @if(count($_order) > 0)
     					@foreach($_order as $order)
                         <tr>
@@ -51,10 +39,16 @@
                             <td data-title="Proof Image"><a order-id="1" class="add-proof">Add</a></td>
                             <td><a href="/account/invoice/{{ $order->ec_order_id }}" target="_blank">Invoice</a></td>
                             <td><a href="/account/order?cancel_id={{ $order->ec_order_id }}">Cancel</a></td>
-                            <td>
-                                <div class="as-track-button" data-size="large" data-domain="bryanxkier.aftership.com"  data-tracking-number="{{ $order->tracking_no }}"  data-hide-tracking-number="true">
-                                </div>
-                            </td>
+                            
+                            @if($order->tracking_no)
+                                <td>
+                                    <div class="as-track-button" data-size="small" data-domain="bryanxkier.aftership.com"  data-tracking-number="{{ $order->tracking_no }}"  data-hide-tracking-number="true">
+                                    </div>
+                                </td>
+                            @else
+                                <td>None</td>
+                            @endif                                
+                            
                         </tr>
                         @endforeach
                     @else

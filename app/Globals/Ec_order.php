@@ -460,6 +460,8 @@ class Ec_order
             }
             else if($order_status == "Shipped")
 
+        $settings = null;
+
         $settings = Ec_order::check_settings($shop_id);
 
         if($settings == null)
@@ -626,7 +628,7 @@ class Ec_order
             return $response;
         }
 	}
-
+}
     public static function update_inventory($type,$ec_order_id, $shop_id)
     {
         $ec_order     = Tbl_ec_order::where("ec_order_id",$ec_order_id)->first();

@@ -22,11 +22,11 @@ class TrackingsController extends Member
         return view('member.trackings.trackings');
     }
 
-    public function postCreateShipment()
+    public function getCreateShipment()
     {
         $tracking["tracking"]["slug"]               = "usps";       
-        $tracking["tracking"]["tracking_number"]    = "ABC123456";    //required
-        $tracking["tracking"]["title"]              = "Title1";
+        $tracking["tracking"]["tracking_number"]    = "ABC123498";    //required
+        $tracking["tracking"]["title"]              = "Title2";
         $tracking["tracking"]["smses"][0]           = "0986768767";
         $tracking["tracking"]["smses"][1]           = "0986768767";
         $tracking["tracking"]["emails"][1]          = "abc@gmail.com";

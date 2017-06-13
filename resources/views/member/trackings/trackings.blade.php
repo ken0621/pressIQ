@@ -24,6 +24,7 @@
 @endsection
 @section('script')
 <script>
+
 var trackings = new trackings();
 
 function trackings()

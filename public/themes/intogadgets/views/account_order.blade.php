@@ -24,9 +24,22 @@
 						<td>Proof Image</td>
 						<td style="width: 1%;"></td>
 						<td style="width: 1%;"></td>
+                        <td>Tracking Button</td>
 					</tr>
 				</thead>
 				<tbody>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <div class="as-track-button" data-size="small" data-domain="bryanxkier.aftership.com"  data-tracking-number="ABC12345"  data-hide-tracking-number="true">
+                            </div>
+                        </td>    
                     @if(count($_order) > 0)
     					@foreach($_order as $order)
                         <tr>
@@ -38,6 +51,10 @@
                             <td data-title="Proof Image"><a order-id="1" class="add-proof">Add</a></td>
                             <td><a href="/account/invoice/{{ $order->ec_order_id }}" target="_blank">Invoice</a></td>
                             <td><a href="/account/order?cancel_id={{ $order->ec_order_id }}">Cancel</a></td>
+                            <td>
+                                <div class="as-track-button" data-size="large" data-domain="bryanxkier.aftership.com"  data-tracking-number="{{ $order->tracking_no }}"  data-hide-tracking-number="true">
+                                </div>
+                            </td>
                         </tr>
                         @endforeach
                     @else
@@ -134,6 +151,11 @@
 <script>
 	$('tr:odd').css('background-color', '#f2f4f6');
 	$('tr:even').css('background-color', 'white');
+
+
+(function(e,t,n){var r,i=e.getElementsByTagName(t)[0];if(e.getElementById(n))return;
+r=e.createElement(t);r.id=n;r.src="//button.aftership.com/all.js";i.parentNode.insertBefore(r,i)})(document,"script","aftership-jssdk")
+
 </script>
 <script type="text/javascript" src="resources/assets/rutsen/js/account_order.js"></script>
 @endsection

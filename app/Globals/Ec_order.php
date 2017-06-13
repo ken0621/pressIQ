@@ -399,6 +399,9 @@ class Ec_order
         $shop_id                 = isset($data["shop_id"]) ? $data["shop_id"] : $order->shop_id ;
         $response                = "nothing";
 
+        /*For tracking no.*/
+        $update['tracking_no']  = $data["tracking_no"];
+
         if($order->order_status == "Pending" || $order->order_status == "Failed" || $order->order_status == "Cancelled")
         {
             if($order_status == "Processing")

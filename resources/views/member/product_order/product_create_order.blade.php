@@ -99,6 +99,13 @@
                             <label>Due Date</label>
                             <input {{isset($inv) ? 'disabled' : ''}} type="text" class="datepicker form-control input-sm" name="inv_due_date" value="{{isset($inv) ? dateFormat($inv->due_date) : ''}}" />
                         </div>
+
+                        {{-- Tracking Number --}}
+                        <div class="col-sm-2">
+                            <label>Tracking Number</label>
+                            <input type="text" class="form-control input-sm input_tracking_no" name="tracking_no" value="{{$inv->tracking_no or ''}}" >
+                        </div>
+
                         <div class="col-sm-2">
                             @if(isset($inv))
                                 @if($inv->payment_status == 1)

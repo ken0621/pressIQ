@@ -445,12 +445,30 @@ class Ec_order
         $shop_id                 = isset($data["shop_id"]) ? $data["shop_id"] : $order->shop_id ;
         $response                = "nothing";
 
+        /*For tracking no.*/
+        $update['tracking_no']  = $data["tracking_no"];
+
+        if($order->order_status == "Pending" || $order->order_status == "Failed" || $order->order_status == "Cancelled")
+        {
+            if($order_status == "Processing")
+            {
+                $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);
+            }
+            else if($order_status == "Completed")
+            {
+                $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);  
+            }
+            else if($order_status == "Shipped")
+
+        $settings = null;
+
         $settings = Ec_order::check_settings($shop_id);
 
         if($settings == null)
         {            
             //original codes
             if($order->order_status == "Pending" || $order->order_status == "Failed" || $order->order_status == "Cancelled")
+
             {
                 if($order_status == "Processing")
                 {
@@ -610,7 +628,7 @@ class Ec_order
             return $response;
         }
 	}
-
+}
     public static function update_inventory($type,$ec_order_id, $shop_id)
     {
         $ec_order     = Tbl_ec_order::where("ec_order_id",$ec_order_id)->first();

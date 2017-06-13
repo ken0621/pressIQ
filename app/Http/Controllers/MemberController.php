@@ -35,9 +35,6 @@ class MemberController extends Controller
     public static $shop_id;
     public static $lead;
 
-    protected $_merchantid = 'MYPHONE';
-    protected $_merchantkey = 'Ez9MiNqWBS2BHuO' ;
-
     public function __construct()
     {   
         $domain = Request::url();
@@ -134,8 +131,6 @@ class MemberController extends Controller
 
     public function register_post()
     {
-        // return json_encode($_POST);
-
         $info['is_corporate']      = Request::input('customer_type');
         $info['company']           = Request::input('customer_type') == 1 ? Request::input('company') : "";
         $info['country']           = Request::input('country');
@@ -298,33 +293,8 @@ class MemberController extends Controller
         }
         else
         {
-            return Cart::process_payment(Self::$shop_id);
+            return Cart::process_payment(Self::$shop_id, "register");
         }
-    }
-
-    public function post_dragonpay()
-    {
-        $info = Session::get('mlm_register_step_1');
-        $package = Session::get('mlm_register_step_2');
-        $package_price = Tbl_membership::where('membership_id', $package['membership'])->first();
-        $package_price_a = $package_price->membership_price;
-        $shop_id = Self::$shop_id;
-        Session::put('shop_id_session', $shop_id);
-        
-        $requestpayment = new Dragon_RequestPayment($this->_merchantkey);
-
-        $this->_data = array(
-            'merchantid'    => $requestpayment->setMerchantId($this->_merchantid),
-            'txnid'         => $requestpayment->setTxnId(Self::$shop_id . time()),
-            'amount'        => $requestpayment->setAmount($package_price_a),
-            'ccy'           => $requestpayment->setCcy('PHP'),
-            'description'   => $requestpayment->setDescription($package_price->membership_name . " Package"),
-            'email'         => $requestpayment->setEmail($info['email']),
-            'digest'        => $requestpayment->getdigest(),
-        );
-
-        Dragon_RequestPayment::make($this->_merchantkey, $this->_data);
-        die("Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.");
     }
 
     public function package()

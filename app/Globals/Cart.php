@@ -1003,12 +1003,12 @@ class Cart
 
             $itemAmount = new ItemAmount();
             $itemAmount->currency = "PHP";
-            $itemAmount->value = (string)number_format($product->evariant_price, 2);
+            $itemAmount->value = (int)number_format($product->evariant_price, 2);
             $itemAmount->details = $itemAmountDetails;
 
             $itemTotalAmount = new ItemAmount();
             $itemTotalAmount->currency = "PHP";
-            $itemTotalAmount->value = (string)number_format($product->evariant_price * $value["quantity"], 2);
+            $itemTotalAmount->value = (int)number_format($product->evariant_price * $value["quantity"], 2);
             $itemTotalAmount->details = $itemAmountDetails;
 
             $totalAmount->currency = "PHP";

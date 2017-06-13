@@ -51,6 +51,8 @@ class ProductOrderController extends Member
             $data["action"]         = "/member/ecommerce/product_order/create_order/update_invoice";
 
             $sir                    = Tbl_ec_order::where("ec_order_id",$id)->first();
+
+            dd();
             if($sir)
             {
                 if($sir->coupon_id != null)

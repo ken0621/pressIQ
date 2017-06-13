@@ -446,7 +446,7 @@ class Ec_order
         $response                = "nothing";
 
         /*For tracking no.*/
-        $update['tracking_no']  = $data["tracking_no"];
+        $update['tracking_no']  = isset($data["tracking_no"]) ? $data["tracking_no"] : "";
 
         if($order->order_status == "Pending" || $order->order_status == "Failed" || $order->order_status == "Cancelled")
         {

@@ -52,7 +52,7 @@ class ProductOrderController extends Member
 
             $sir                    = Tbl_ec_order::where("ec_order_id",$id)->first();
 
-            dd();
+            //dd(Request::all());
             if($sir)
             {
                 if($sir->coupon_id != null)

@@ -398,59 +398,12 @@
 							</div>
 							<div class="form-group">
 								<div class="col-md-12">
-									<table class="table table-condensed table-bordered timesheet">
-										<thead>
-											<tr>
-												<th rowspan="2" valign="center" class="text-center">Day</th>
-												<th rowspan="2" valign="center" class="text-center">Target Hours</th>
-												<th colspan="2" class="text-center">Work Schedule</th>
-												<th colspan="2" class="text-center">Break Schedule</th>
-												<th rowspan="2" class="text-center">Flexi Time</th>
-												<th rowspan="2" class="text-center">Rest Day</th>
-												<th rowspan="2" class="text-center">Extra Day</th>
-											</tr>
-											<tr>
-												<th class="text-center">Start</th>
-												<th class="text-center">End</th>
-												<th class="text-center">Start</th>
-												<th class="text-center">End</th>
-											</tr>
-										</thead>
-										<tbody>
-											@foreach($_day as $key => $day)
-											<tr class="editable">
-												<td>
-													{{$day['day']}}
-													<input type="hidden" name="day[]" value="{{$day['day']}}">
-												</td>
-												<td>
-													<input type="number" name="target_hours[]" class="form-control text-center" step="any" value="{{$day['target_hours']}}">
-												</td>
-												<td class="editable">
-													<input type="text" name="work_start[]" class="text-table time-entry" value="{{date('H:i a', strtotime($day['work_start']))}}">
-												</td>
-												<td class="editable">
-													<input type="text" name="work_end[]" class="text-table time-entry" value="{{date('H:i a', strtotime($day['work_end']))}}">
-												</td>
-												<td class="editable">
-													<input type="text" name="break_start[]" class="text-table time-entry" value="{{date('H:i a', strtotime($day['break_start']))}}">
-												</td>
-												<td class="editable">
-													<input type="text" name="break_end[]" class="text-table time-entry" value="{{date('H:i a', strtotime($day['break_end']))}}">
-												</td>
-												<td class="text-center">
-													<input type="checkbox" name="flexi_{{$key}}" value="1" {{$day['flexi'] == 1 ? 'checked="checked"':''}}>
-												</td>
-												<td class="text-center">
-													<input type="checkbox" name="rest_day_{{$key}}" class="restday-check" value="1" {{$day['rest_day'] == 1 ? 'checked="checked"':''}}>
-												</td>
-												<td class="text-center">
-													<input type="checkbox" name="extra_day_{{$key}}" class="extraday-check" value="1" {{$day['extra_day'] == 1 ? 'checked="checked"':''}}>
-												</td>
-											</tr>
-											@endforeach
-										</tbody>
-									</table>
+									<small>Default Shift Template</small>
+									<select class="form-control shift_code_id" name="shift_code_id">
+										@foreach($_shift_code as $key => $value)
+											<option value="{{ $value->shift_code_id }}" {{ ($group->shift_code_id == $value->shift_code_id) ? 'selected' : '' }}>{{ $value->shift_code_name }}</option>
+										@endforeach
+									</select>
 								</div>
 							</div>
 						</div>

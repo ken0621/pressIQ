@@ -396,10 +396,10 @@
 								</div>
 								<div class="col-md-12">
 									<small>Default Shift Template</small>
-									<select class="form-control">
-										<option>Morning Shift</option>
-										<option>Night Shift</option>
-										<option>Graveyard Shift</option>
+									<select class="form-control shift_code_id" name="shift_code_id">
+										@foreach($_shift_code as $key => $value)
+											<option value="{{ $value->shift_code_id }}">{{ $value->shift_code_name }}</option>
+										@endforeach
 									</select>
 								</div>
 							</div>
@@ -418,6 +418,7 @@
 <!-- <script type="text/javascript" src="/assets/member/payroll/js/timesheet.js"></script> -->
 <script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.plugin.min.js"></script>
 <script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.min.js"></script>
+<script type="text/javascript" src="/assets/member/js/payroll/payroll_group.js"></script>
 
 <script type="text/javascript">
 	$(".restday-check").unbind("change");

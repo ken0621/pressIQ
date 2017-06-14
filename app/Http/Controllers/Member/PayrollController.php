@@ -3455,17 +3455,22 @@ class PayrollController extends Member
 		$data['_day'] 			= Payroll::restday_checked(); 
           $data['_period']         = Tbl_payroll_tax_period::check(Self::shop_id())->get();
 
-		return view('member.payroll.modal.modal_create_payroll_group', $data);
+          $data['_shift_code']     = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->get();
+
+          //dd($data['_shift_temp']);
+          return view('member.payroll.modal.modal_create_payroll_group', $data);
 	}
 
 	public function modal_save_payroll_group()
 	{
 		
 		$insert['shop_id']								= Self::shop_id();
-		$insert['payroll_group_code'] 					= Request::input('payroll_group_code');
-		$insert['payroll_group_salary_computation'] 	= Request::input('payroll_group_salary_computation');
+		$insert['payroll_group_code'] 			     = Request::input('payroll_group_code');
+		$insert['payroll_group_salary_computation']          = Request::input('payroll_group_salary_computation');
 		$insert['payroll_group_period'] 				= Request::input('payroll_group_period');
 		$insert['payroll_group_13month_basis'] 			= Request::input('payroll_group_13month_basis');
+
+          $insert['shift_code_id']                      = Request::input('shift_code_id');
 		
 		if( Request::has('payroll_group_deduct_before_absences'))
 		{
@@ -3661,6 +3666,8 @@ class PayrollController extends Member
 		$data['_overtime_rate']  = Tbl_payroll_overtime_rate::where('payroll_group_id',$id)->get();
 		$data['_day'] 			= Payroll::restday_checked($id); 
           $data['_period']         = Tbl_payroll_tax_period::check(Self::shop_id())->get();
+
+          $data['_shift_code']     = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->get();
 		return view('member.payroll.modal.modal_edit_payroll_group',$data);
 	}
 
@@ -3676,6 +3683,8 @@ class PayrollController extends Member
 		$update['payroll_group_grace_time'] 			= Request::input('payroll_group_grace_time');
 		// $update['payroll_group_break']					= Request::input('payroll_group_break');
 		$update['payroll_group_agency_fee'] 			= Request::input('payroll_group_agency_fee');
+
+          $update['shift_code_id']                          = Request::input('shift_code_id');
 		
 		$payroll_group_deduct_before_absences 			= 0;
 		if( Request::has('payroll_group_deduct_before_absences'))
@@ -3812,45 +3821,6 @@ class PayrollController extends Member
 		// }
 
           Tbl_payroll_shift::where('payroll_group_id', $payroll_group_id)->delete();
-
-          $insert_shift = array();
-
-          foreach(Request::input('day') as $key => $day)
-          {
-
-               $temp_shift['payroll_group_id']    = $payroll_group_id;
-               $temp_shift['day']                 = $day;
-               $temp_shift['target_hours']        = Request::input('target_hours')[$key];
-               $temp_shift['work_start']          = date('H:i:s a', strtotime(Request::input('work_start')[$key]));
-               $temp_shift['work_end']            = date('H:i:s a', strtotime(Request::input('work_end')[$key]));
-               $temp_shift['break_start']         = date('H:i:s a', strtotime(Request::input('break_start')[$key]));
-               $temp_shift['break_end']           = date('H:i:s a', strtotime(Request::input('break_end')[$key]));
-
-               $flexi         = 0;
-               $rest_day      = 0;
-               $extra_day     = 0;
-
-               if(Request::has('flexi_'.$key))
-               {
-                    $flexi = Request::input('flexi_'.$key);
-               }
-
-               if(Request::has('rest_day_'.$key))
-               {
-                    $rest_day = Request::input('rest_day_'.$key);
-               }
-
-               if(Request::has('extra_day_'.$key))
-               {
-                    $extra_day = Request::input('extra_day_'.$key);
-               }
-
-               $temp_shift['flexi']               = $flexi;
-               $temp_shift['rest_day']            = $rest_day;
-               $temp_shift['extra_day']           = $extra_day;
-
-               array_push($insert_shift, $temp_shift);
-          }
 
           if(!empty($insert_shift))
           {

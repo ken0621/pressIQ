@@ -32,9 +32,6 @@ function dashboard()
           }]
         },
         options: {
-          // tooltipsTemplate: "<%= value %>%",
-          // multiTooltipTemplate: "<%= value %>%",
-          // legendTemplate: "<ul class=\"pie-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%> |</li><%}%></ul>",
           legend: {
             responsive: true,
             display: false,

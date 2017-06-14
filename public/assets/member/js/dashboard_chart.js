@@ -99,9 +99,11 @@ function dashboard()
           scales: {
               xAxes: [{
                   stacked: true,
+                  display: false
               }],
               yAxes: [{
-                  stacked: true
+                  stacked: true,
+                  display: false
               }]
           }
         },

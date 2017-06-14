@@ -3,6 +3,7 @@ namespace App\Globals;
 use DB;
 use App\Models\Tbl_manufacturer;
 use App\Models\Tbl_item;
+use App\Models\Tbl_ec_product;
 use App\Globals\Ecom_Product;
 use Log;
 use Request;
@@ -19,11 +20,14 @@ class Ec_brand
      *
      * @return array      List of Brands
      */
-    public static function getBrands($shop_id)
+    public static function getAllBrands($shop_id)
     {
         if ($shop_id) 
         {
-            $brand = Tbl_manufacturer::where("manufacturer_shop_id", $shop_id)->where("archived", 0)->get();
+            return Tbl_manufacturer::where("manufacturer_shop_id", $shop_id)
+                                    ->leftJoin("tbl_image", "tbl_manufacturer.manufacturer_image", "=", "tbl_image.image_id")
+                                    ->where("archived", 0)
+                                    ->get();
         }
         else
         {
@@ -35,12 +39,11 @@ class Ec_brand
      *
      * @return array      List of Product by Brands
      */
-    public static function getBrands($manufacturer_id, $shop_id)
+    public static function getProductBrands($manufacturer_id, $shop_id)
     {
         if ($shop_id) 
         {
-            $product = Tbl_ec_product::where("tbl_ec_product.archived", 0)->where("tbl_ec_product.eprod_shop_id")->scopeVariant()->get();
-            dd($product);
+            return Ecom_Product::getAllProduct($shop_id,$manufacturer_id);
         }
         else
         {

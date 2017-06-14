@@ -17,10 +17,14 @@ class ShopHomeController extends Shop
 {
     public function index()
     {
-    	$brand = Ec_brand::getBrands(4, $this->shop_info->shop_id);
-    	dd($brand);
         $data["page"]      = "Home";
         $data["_product"] = Ecom_Product::getAllProduct($this->shop_info->shop_id);
+
+        /* Intogadgets Exclusive */
+        if ($this->shop_info->shop_theme == "intogadgets") 
+        {
+        	$data["_brand"] = Ec_brand::getAllBrands($this->shop_info->shop_id);
+        }
      	
         return view("home", $data);
     }

@@ -58,8 +58,9 @@ class Ecom_Product
 	 * Getting all Product w/ variants and options. If shop_id is null, the current shop id that logged on will be used.
 	 *
 	 * @param int    $shop_id 	Shop id of the products that you wnat to get. null if auto get
+	 * @param int    $manufacturer 	Get all product by manufacturer_id
 	 */
-	public static function getAllProduct($shop_id = null)
+	public static function getAllProduct($shop_id = null, $manufacturer_id = null)
 	{
 		if(!$shop_id)
 		{
@@ -70,7 +71,7 @@ class Ecom_Product
 		
 		foreach($_product as $key=>$product)
 		{
-			$_product[$key]			 	= Ecom_Product::getProduct($product["eprod_id"], $shop_id);
+			$_product[$key]			 	= Ecom_Product::getProduct($product["eprod_id"], $shop_id, $manufacturer_id);
 			// $_product[$key]["variant"] = Tbl_ec_variant::where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
 
 			// foreach($_product[$key]["variant"] as $key2=>$variant)
@@ -237,8 +238,9 @@ class Ecom_Product
 	 * B
 	 * @param int    $product_id 	Product ID of the specific product.
 	 * @param int    $shop_id 		Shop id of the products that you wnat to get. null if auto get
+	 * @param int    $manufacturer 	Get all product by manufacturer_id
 	 */
-	public static function getProduct($product_id, $shop_id = null)
+	public static function getProduct($product_id, $shop_id = null, $manufacturer_id = null)
 	{
 		if(!$shop_id)
 		{
@@ -251,7 +253,7 @@ class Ecom_Product
 		{
 			$product = collect($product)->toArray();
 			$product			   	= $product;
-			$product["variant"] 	= Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId($shop_id))->where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
+			$product["variant"] 	= Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId($shop_id))->manufacturer($manufacturer_id)->where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
 
 			foreach($product["variant"] as $key2=>$variant)
 			{

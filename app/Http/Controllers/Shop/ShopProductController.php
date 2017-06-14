@@ -10,6 +10,8 @@ use App\Globals\Category;
 use App\Globals\Ecom_Product;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use App\Globals\Ec_brand;
+use DB;
 
 class ShopProductController extends Shop
 {
@@ -31,8 +33,9 @@ class ShopProductController extends Shop
         }
         elseif($brand)
         {
-            $data["get_product"] = Ecom_product::getProductByCategoryName($brand, $this->shop_info->shop_id);
-            $data["breadcrumbs"][0]["type_name"] = $brand;
+            $data["get_product"] = Ec_brand::getProductBrands($brand, $this->shop_info->shop_id);
+            $manufacturer = DB::table("tbl_manufacturer")->where("manufacturer_id", $brand)->first();
+            $data["breadcrumbs"][0]["type_name"] = $manufacturer->manufacturer_name;
         }
         else
         {

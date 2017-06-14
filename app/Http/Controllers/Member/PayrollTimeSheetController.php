@@ -55,6 +55,7 @@ class PayrollTimeSheetController extends Member
 		{
 			return Redirect::to('/member/payroll/time_keeping')->send();
 		}
+		
 		$data['payroll_period_company_id'] = $id;
 		$data['company'] = Tbl_payroll_period_company::sel($id)->select('tbl_payroll_company.*','tbl_payroll_period.*','tbl_payroll_period_company.*')->first();
 		$data['_employee'] = Tbl_payroll_employee_contract::employeefilter($data['company']->payroll_company_id, 0, 0, $data['company']->payroll_period_end, $this->user_info->shop_id)
@@ -62,7 +63,7 @@ class PayrollTimeSheetController extends Member
 							->where('tbl_payroll_group.payroll_group_period', $data['company']->payroll_period_category)
 							->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
 							->get();
-		// dd($data['company']);
+		
 		$payroll_employee_id = 0;
 		if(isset($data['_employee'][0]))
 		{

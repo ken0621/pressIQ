@@ -25,9 +25,18 @@ function action_add_serial()
 	{
 		$(".input-serial-list .serial-number-txt").each(function()
 		{
-			console.log($(this).val());
-			text_serial += $(this).val();
+			if($(this).val())
+			{
+				text_serial += $(this).val() + "-";
+			}
 		});
+		console.log(text_serial);
+		$(".txt-serial-number").val(text_serial);
+		$("#global_modal").modal("toggle");
 	});
 	// console.log("serial - " + text_serial);
+}
+function consolelog(console_text)
+{
+	console.log(console_text);
 }

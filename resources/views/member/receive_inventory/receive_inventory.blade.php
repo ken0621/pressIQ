@@ -153,8 +153,8 @@
                                                         <th style="width: 120px;">Rate</th>
                                                         <th style="width: 120px;">Amount</th>
                                                         @if($serial) 
-                                                        <th style="width: 120px;">Serial Number</th> 
-                                                        <th style="width: 15px;"></th> 
+                                                        <th style="width: 200px;">Serial Number</th> 
+                                                        <!-- <th style="width: 15px;"></th>  -->
                                                         @endif
                                                         <th style="width: 15px;"></th>
                                                     </tr>
@@ -216,14 +216,7 @@
                                                         <td><input class="text-center number-input txt-qty compute" type="text" name="itemline_qty[]"/></td>
                                                         <td><input class="text-right number-input txt-rate compute" type="text" name="itemline_rate[]"/></td>
                                                         <td><input class="text-right number-input txt-amount" type="text" name="itemline_amount[]"/></td>
-                                                        @if($serial)
-                                                        <td>
-                                                         <textarea class="txt-serial-number"></textarea>
-                                                        </td>
-                                                        <td>
-                                                            <a class="popup" link="/member/input/serial_number" size="md"><i class="fa fa-upload"></i></a>
-                                                        </td>
-                                                        @endif
+                                                        @include("member.load_ajax_data.load_td_serial_number");
                                                         <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                     </tr>
                                                 </tbody>

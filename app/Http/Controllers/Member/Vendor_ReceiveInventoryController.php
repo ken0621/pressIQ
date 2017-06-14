@@ -119,6 +119,8 @@ class Vendor_ReceiveInventoryController extends Member
     {
         $button_action = Request::input('button_action');
 
+        $serial_number = Request::input("serial_number");
+
         $vendor_info                         = [];
         $vendor_info['bill_vendor_id']       = Request::input('bill_vendor_id');
         $vendor_info['bill_vendor_email']    = Request::input('bill_vendor_email');
@@ -142,6 +144,7 @@ class Vendor_ReceiveInventoryController extends Member
 
         $ctr_items = 0;
         $item_refill = [];
+        $item_serial = [];
         foreach($_itemline as $key => $item_line)
         {
             if($item_line)
@@ -162,7 +165,15 @@ class Vendor_ReceiveInventoryController extends Member
                 {
                     $um_qty = UnitMeasurement::um_qty(Request::input("itemline_um")[$key]);
                     $item_refill[$key]["quantity"] = $um_qty * $item_info[$key]['itemline_qty'];
-                    $item_refill[$key]["product_id"] = Request::input('itemline_item_id')[$key];                       
+                    $item_refill[$key]["product_id"] = Request::input('itemline_item_id')[$key];   
+                    
+                    if($serial_number[$key])
+                    {
+                        // $serial_number[$key]
+                        $item_serial[$key]["quantity"] = $um_qty * $item_info[$key]['itemline_qty'];
+                        $item_serial[$key]["item_id"] = Request::input('itemline_item_id')[$key];
+                        $item_serial[$key]["serials"] = $serial_number[$key];                            
+                    }
                 }
             }
         }
@@ -227,7 +238,7 @@ class Vendor_ReceiveInventoryController extends Member
                 $warehouse_id       = $this->current_warehouse->warehouse_id;
                 $transaction_type   = "receive_inventory";
                 $transaction_id     = $bill_id;
-                $data               = Warehouse::inventory_refill($warehouse_id, $transaction_type, $transaction_id, $remarks, $item_refill, 'array');
+                $data               = Warehouse::inventory_refill($warehouse_id, $transaction_type, $transaction_id, $remarks, $item_refill, 'array',null,$item_serial);
             }
 
             $json["status"]         = "success-receive-inventory";

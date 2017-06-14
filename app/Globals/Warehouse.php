@@ -680,7 +680,7 @@ class Warehouse
         }
         return $data;
     }
-    public static function inventory_refill($warehouse_id = 0, $reason_refill = '', $refill_source = 0, $remarks = '', $warehouse_refill_product = array(), $return = 'array', $is_return = null)
+    public static function inventory_refill($warehouse_id = 0, $reason_refill = '', $refill_source = 0, $remarks = '', $warehouse_refill_product = array(), $return = 'array', $is_return = null, $item_serial = array())
     {
         $shop_id = Warehouse::get_shop_id($warehouse_id);
 
@@ -721,6 +721,11 @@ class Warehouse
                 $success++;
 
                 $inventory_id = Tbl_warehouse_inventory::insertGetId($insert_refill);
+
+                if(count($item_serial) > 0)
+                {
+                    
+                }
 
                 $for_serial_item[$key]["quantity"] = $refill_product['quantity'];
                 $for_serial_item[$key]["product_id"] = $refill_product['product_id'];

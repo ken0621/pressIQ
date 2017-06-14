@@ -14,6 +14,21 @@ use App\Models\Tbl_settings;
 use App\Globals\Settings;
 class SettingsController extends Member
 {   
+    public function all()
+    {
+        $shop_id = $this->user_info->shop_id;
+        $data['settings_setup'] = $this->setup();
+        $data['selected_settings'] = 'all';
+        $settings_active = Tbl_settings::where('shop_id', $shop_id)->get();
+        $settings_active = Tbl_settings::where('shop_id', $shop_id)->get();
+        $data['settings_active'] = [];
+        foreach($settings_active as $settings)
+        {
+            $data['settings_active'][$settings->settings_key]['settings_value'] = $settings->settings_value;
+            $data['settings_active'][$settings->settings_key]['settings_setup_done'] = $settings->settings_setup_done;
+        }
+        return view('member.settings.settings_all', $data);
+    }
     public function index($key)
     {
         $shop_id = $this->user_info->shop_id;

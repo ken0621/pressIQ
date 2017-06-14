@@ -490,9 +490,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 Wallet Encashment
                             </a> 
                             @if($shop_info->shop_wallet_tours == 1)
-                              <a href="/mlm/wallet/tours" class="subnav-text">
-                                  Tour Wallet
-                              </a> 
+                              @if($slot_now->slot_membership == 4)
+                                <a href="/mlm/wallet/tours" class="subnav-text">
+                                    Tour Wallet
+                                </a> 
+                              @endif
                             @endif
                         </li>
                     </ul> 
@@ -501,6 +503,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <a href="/mlm/slots">
                         <i class="fa fa-linode"></i>
                         <span class="nav-text">My Slots</span>
+                    </a>
+                </li>
+                <li  class="{{Request::segment(2) == 'lead' ? 'active' : '' }}">
+                    <a href="/mlm/lead">
+                        <i class="fa fa-address-card"></i>
+                        <span class="nav-text">Leads</span>
                     </a>
                 </li> 
                 @endif                   
@@ -523,7 +531,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <div class="content-wrapper clearfix">
     <!-- Content Header (Page header) -->
     <section class="content-header hide">
-      <h1>
+      <h1>mai
         Page Header
         <small>Optional description</small>
       </h1>

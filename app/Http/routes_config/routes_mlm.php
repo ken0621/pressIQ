@@ -14,11 +14,14 @@ Route::post('/mlm/register', 'Mlm\MlmRegisterController@post_register');
 
 Route::get('/mlm/register/get/membership_code/{membership_code}', 'Mlm\MlmRegisterController@view_customer_info_via_mem_code');
 
+Route::get('/mlm/process_order_queue', 'Mlm\MlmDashboardController@process_order_queue'); 
+
 Route::get('/mlm', 'Mlm\MlmDashboardController@index'); 
 Route::get('/mlm/news/{id}', 'Mlm\MlmDashboardController@news_content'); 
 Route::get('/mlm/profile', 'Mlm\MlmProfileController@index'); 
 Route::get('/mlm/notification', 'Mlm\MlmNotificationController@index'); 
 Route::any('/mlm/claim/slot', 'Mlm\MlmDashboardController@claim_slot'); 
+Route::get('/mlm/lead', 'Mlm\MlmDashboardController@lead'); 
 
 Route::any('/mlm/network/binary', 'Mlm\MlmNetworkController@binary'); 
 Route::any('/mlm/network/unilevel', 'Mlm\MlmNetworkController@unilevel'); 

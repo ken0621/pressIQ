@@ -76,6 +76,11 @@ class Developer_StatusController extends Member
 			DB::table('tbl_item_code')->where('shop_id', $shop_id)->delete();
 			DB::table('tbl_item_code_item')->whereIn('item_code_invoice_id', $tbl_membership_code_invoice_filtered)->delete();
 			DB::table('tbl_item_code_invoice')->where('shop_id', $shop_id)->delete();
+
+			DB::table('tbl_mlm_triangle_repurchase_slot')->whereIn('repurchase_slot_slot_id', $slots_where_in)
+			->join('tbl_mlm_triangle_repurchase_tree', 'tbl_mlm_triangle_repurchase_tree.tree_repurchase_slot_child', '=', 'tbl_mlm_triangle_repurchase_slot.repurchase_slot_id')
+			->truncate();
+			DB::statement('SET FOREIGN_KEY_CHECKS=0');
 		}
 		else
 		{

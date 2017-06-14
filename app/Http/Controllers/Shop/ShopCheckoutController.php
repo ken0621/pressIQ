@@ -13,6 +13,7 @@ use URL;
 use Session;
 use DB;
 
+use App\Globals\Mlm_member;
 use App\Globals\Mlm_slot_log;
 use App\Globals\Item_code;
 use App\Globals\Cart;
@@ -28,6 +29,7 @@ use App\Models\Tbl_item_code_item;
 use App\Models\Tbl_ec_order_item;
 use App\Models\Tbl_merchant_school;
 use App\Models\Tbl_locale;
+// use App\Globals\Item_code;
 // use App\Globals\Mlm_slot_log;    
 
 /*4/29/17 this will import the data/class needed by ipay88 payment mode by:brain*/
@@ -90,8 +92,34 @@ class ShopCheckoutController extends Shop
             if ($from == "checkout") 
             {
                 $order_id = Request::input("param2");
+                $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
 
-                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)))->send();
+                if($order)
+                {  
+                    $update['ec_order_id'] = $order_id;
+                    $update['order_status'] = "Processing";
+                    $update['payment_status'] = 1;
+                    $order = Ec_order::update_ec_order($update);
+
+                    return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)));
+                }
+            }
+            elseif ($from == "register")
+            {
+                $order_id = Request::input("param2");
+                $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
+
+                if($order)
+                {
+                    Item_code::ec_order_slot($order_id);
+                    
+                    $update['ec_order_id'] = $order_id;
+                    $update['order_status'] = "Processing";
+                    $update['payment_status'] = 1;
+                    $order = Ec_order::update_ec_order($update);
+
+                    return Redirect::to('/mlm/login?notify=1');
+                }
             }
         }
     }
@@ -103,27 +131,36 @@ class ShopCheckoutController extends Shop
         $insert["content"]  = serialize($request);
         DB::table("tbl_dragonpay_logs")->insert($insert);
 
-        if ($request["status"] == "S") 
+        if (Request::input("status") == "S") 
         {
-            $from = $request["param1"];
-
+            $from = Request::input('param1');
             if ($from == "checkout") 
             {
-                $order_id = $request["param2"];
+                $order_id = Request::input("param2");
+                $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
 
-                try 
-                {
+                if($order)
+                {  
                     $update['ec_order_id'] = $order_id;
                     $update['order_status'] = "Processing";
                     $update['payment_status'] = 1;
                     $order = Ec_order::update_ec_order($update);
-                } 
-                catch (\Exception $e) 
+                }
+            }
+            elseif ($from == "register")
+            {
+                $order_id = Request::input("param2");
+                $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
+
+                if($order)
                 {
-                    $last["log_date"] = Carbon::now();
-                    $last["content"]  = $e->getMessage();
-                    DB::table("tbl_dragonpay_logs")->insert($last);  
-                }      
+                    Item_code::ec_order_slot($order_id);
+                    
+                    $update['ec_order_id'] = $order_id;
+                    $update['order_status'] = "Processing";
+                    $update['payment_status'] = 1;
+                    $order = Ec_order::update_ec_order($update);
+                }
             }
         }
     }
@@ -139,6 +176,43 @@ class ShopCheckoutController extends Shop
         {
             dd($dragonpay->content);
         }
+    }
+    public function paymaya_success()
+    {
+        $order_id = Crypt::decrypt(Request::input("order_id"));
+        $from = Request::input("from");
+
+        $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
+        if($order)
+        {
+            Item_code::ec_order_slot($order_id);
+
+            $update['ec_order_id'] = $order_id;
+            $update['order_status'] = "Processing";
+            $update['payment_status'] = 1;
+            $order = Ec_order::update_ec_order($update);
+
+            if ($from == "checkout") 
+            {
+                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)));
+            }
+            elseif ($from == "register")
+            {
+                return Redirect::to('/mlm/login?notify=1');
+            }
+        }
+    }
+    public function paymaya_failure()
+    {
+        echo "There seems to have been an error initializing or updating your transaction. Please wait a minute and try again or contact support for assistance.";
+        sleep(5);
+        return Redirect::to("/");
+    }
+    public function paymaya_cancel()
+    {
+        echo "There seems to have been an error initializing or updating your transaction. Please wait a minute and try again or contact support for assistance.";
+        sleep(5);
+        return Redirect::to("/");
     }
     /* End Payment Facilities */
 

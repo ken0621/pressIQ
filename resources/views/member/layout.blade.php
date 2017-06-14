@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="/assets/member/styles/vendor/animate.css">
     <link rel="stylesheet" href="/assets/member/css/customBTN.css" type="text/css" />
     <link rel="stylesheet" href="/assets/external/chosen/chosen/chosen.css" media="screen"/>
-    
+   
     <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
     <script src="/assets/member/scripts/vendor/respond.min.js"></script>
@@ -37,6 +37,7 @@
     <link rel="stylesheet" type="text/css" href="/assets/member/css/windows8.css">
     <link rel="stylesheet" type="text/css" href="/assets/member/css/pis_ctr.css">
     <link rel="stylesheet" type="text/css" href="/assets/member/css/image_gallery.css">
+    
     <link rel="stylesheet" type="text/css" href="/assets/member/plugin/dropzone/basic.css">
     <link rel="stylesheet" type="text/css" href="/assets/custom_plugin/myDropList/css/myDropList.css">
 

@@ -2562,23 +2562,14 @@ class Payroll
 		$data['total_deduction']	+= $data['sss_contribution_ee'];
 		$data['total_deduction']	+= $data['pagibig_contribution'];
 		$data['total_deduction']	+= $data['philhealth_contribution_ee'];
+
+		// dd(($data['philhealth_contribution_ee']) );
+
 		$data['total_deduction']	+= $data['absent_deduction'];
 		$data['total_deduction']	+= $data['late_deduction'];
 		$data['total_deduction']	+= $data['under_time'];
 		$data['total_deduction']	+= $data['agency_deduction'];
 		$data['total_deduction']	+= $data['break_deduction'];
-
-		// DEDUCTION START [LOANS, CASH ADVANCE, CASH BOND AND OTHER DEDUCTION]
-		$deduction = Payroll::getdeduction($employee_id, $date,$period_category, $payroll_period_category, $shop_id);
-
-		$data['deduction'] 			= $deduction['deduction'];
-		$data['total_deduction'] 	+= $deduction['total_deduction'] + $adjustment_deductions_total;
-
-		$data['total_net'] 					= ($data['total_gross'] - $data['total_deduction']) + $total_deminimis + $data['13_month'];
-
-		$data['total_gross'] 				+=  $total_deminimis + $data['13_month'];
-		
-		// dd($data['total_gross']);
 
 		if($data['total_deduction'] > $data['total_gross'])
 		{
@@ -2592,9 +2583,24 @@ class Payroll
 			$data['agency_deduction'] 			= 0;
 		}
 
+		// DEDUCTION START [LOANS, CASH ADVANCE, CASH BOND AND OTHER DEDUCTION]
+		$deduction = Payroll::getdeduction($employee_id, $date,$period_category, $payroll_period_category, $shop_id);
+
+		$data['deduction'] 			= $deduction['deduction'];
+		$data['total_deduction'] 	+= $deduction['total_deduction'] + $adjustment_deductions_total;
+
+		$data['total_net'] 					= ($data['total_gross'] - $data['total_deduction']) + $total_deminimis + $data['13_month'];
+
+
+
+		$data['total_gross'] 				+=  $total_deminimis + $data['13_month'];
 		
+		// dd($data['total_gross']);
+
 		
 
+		
+	
 		$data['total_regular_days']			= round($data['total_regular_days'], 2);
 		$data['total_rest_days']			= round($data['total_rest_days'], 2);
 		$data['total_extra_days']			= round($data['total_extra_days'], 2);
@@ -2606,7 +2612,7 @@ class Payroll
 
 		$data['total_worked_days'] = $data['total_regular_days'] + $data['total_rest_days'] + $data['total_extra_days'] + $data['total_rh'] + $data['total_sh'] + $data['leave_count_w_pay'] + $data['leave_count_wo_pay'];
 
-		// dd($data['total_net']);
+		
 		return $data;
 	}
 

@@ -314,7 +314,7 @@
                                 <div class="col-md-12">
                                     <label>
                                         <h3>
-                                            <input {{isset($inv->credit_memo) != 0 ? 'checked' : ''}} type="checkbox" onclick="toggle_returns('.returns-class', this)" value="returns" class="returns-check"  value="returns" name="returns"> Returns 
+                                            <input type="checkbox" onclick="toggle_returns('.returns-class', this)" value="returns" class="returns-check"  value="returns" name="returns" {{ isset($inv) ? ($inv->credit_memo != null ? 'checked' : '') : '' }} > Returns 
                                         </h3>
                                     </label>
                                 </div>

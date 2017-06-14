@@ -654,6 +654,7 @@ function timesheet()
 					$(this).find(".approved-out").css("color", "red").addClass("load-overtime-form");
 				}
 			}
+
 			else
 			{
 				$(this).find(".time-entry.time-in").val("");
@@ -674,13 +675,13 @@ function timesheet()
 				$(this).find(".table-check").removeClass("fa-unlock-alt").addClass("fa-lock").css("color", "black");
 				$(this).find(".create-sub-time").hide();
 			}
+
 			else
 			{
-				$(this).find(".table-check").removeClass("fa-lock").addClass("fa--unlock-alt").css("color", "gray");
+				$(this).find(".table-check").removeClass("fa-lock").addClass("fa-unlock-alt").css("color", "gray");
 			}
+
 		});
-
-
 
 	}
 	function action_convert_time_str_to_seconds(time_str)

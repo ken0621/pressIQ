@@ -17,6 +17,7 @@ use App\Models\Tbl_vendor;
 use App\Models\Tbl_terms;
 
 use App\Globals\Vendor;
+use App\Globals\ItemSerial;
 use App\Globals\AuditTrail;
 use App\Globals\Accounting;
 use App\Globals\Purchase_Order;
@@ -91,6 +92,8 @@ class Vendor_ReceiveInventoryController extends Member
                $data['_account']   = Accounting::getAllAccount();
                $data['action']     = "/member/vendor/receive_inventory/update";
             }
+
+            $data["serial"] = ItemSerial::check_setting();
             
             return view("member.receive_inventory.receive_inventory",$data);
         }

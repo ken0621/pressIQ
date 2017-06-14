@@ -1,6 +1,6 @@
-var shift_temp = new shift_temp();
+var payroll_group = new payroll_group();
 
-function shift_temp()
+function payroll_group()
 {
 	
 	init();
@@ -15,50 +15,24 @@ function shift_temp()
 
 	function document_ready()
 	{
-		custom_drop_down($(".shift_code"));	
+		custom_drop_down('.shift_code_id');	
 	}
 
 	function custom_drop_down(target)
 	{
 		$(target).globalDropList(
 		{  
-		  hasPopup                : "true",
-		  link                    : "/member/customer/modalcreatecustomer",
+		  hasPopup                : "false",
+		  link                    : "/member/payroll/shift_template/modal_create_shift_template",
 		  link_size               : "lg",
 		  width                   : "100%",
 		  maxHeight				  : "129px",
 		  placeholder             : "Search....",
 		  no_result_message       : "No result found!",
 		  onChangeValue           : function(){},
-		  onCreateNew             : function(){},
-		})
-	}
-
-	function event_click_btn()
-	{
-		$("body").on("click", ".btn", function(e)
-		{
-			action_show_quote_of_button($(e.currentTarget));
-			action_highlight_button($(e.currentTarget));
-			action_get_customer_data();
+		  onCreateNew             : function(){
+		  								
+		  							},
 		});
 	}
-	function action_get_customer_data()
-	{
-		$.ajax(
-		{
-			url:"/home_ajax_customer",
-			dataType:"json",
-			type:"get",
-			success: function(data)
-			{
-				$.each(data._customer, function(key, val)
-				{
-					$(".btn-container").append("<button class='btn btn-default' description='" + val.first_name + "'>" + val.last_name.toUpperCase() + "</button>")
-
-				});
-			}
-		})
-	}
-
 }

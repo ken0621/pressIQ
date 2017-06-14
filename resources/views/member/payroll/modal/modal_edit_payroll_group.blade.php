@@ -419,6 +419,7 @@
 </form>
 <script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.plugin.min.js"></script>
 <script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.min.js"></script>
+<script type="text/javascript" src="/assets/member/js/payroll/payroll_group.js"></script>
 <script type="text/javascript">
 	$(".restday-check").unbind("change");
 	$(".restday-check").bind("change", function () {

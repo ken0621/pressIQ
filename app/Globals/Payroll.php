@@ -2563,7 +2563,7 @@ class Payroll
 		$data['total_deduction']	+= $data['pagibig_contribution'];
 		$data['total_deduction']	+= $data['philhealth_contribution_ee'];
 
-		// dd(($data['philhealth_contribution_ee']) );
+		// dd((p$data['philhealth_contribution_ee']) );
 
 		$data['total_deduction']	+= $data['absent_deduction'];
 		$data['total_deduction']	+= $data['late_deduction'];
@@ -2595,12 +2595,6 @@ class Payroll
 
 		$data['total_gross'] 				+=  $total_deminimis + $data['13_month'];
 		
-		// dd($data['total_gross']);
-
-		
-
-		
-	
 		$data['total_regular_days']			= round($data['total_regular_days'], 2);
 		$data['total_rest_days']			= round($data['total_rest_days'], 2);
 		$data['total_extra_days']			= round($data['total_extra_days'], 2);

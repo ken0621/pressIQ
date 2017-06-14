@@ -677,7 +677,7 @@ class Purchasing_inventory_system
         $sales = $total_sold - $total_disc;
         $total_amount = (((($sales -  $total_empties) - $sir_data['total_ar']) - $sir_data['total_cm_applied']) +  $sir_data['ar_collection']) + $sir_data['total_cm'] ;
         // dd($sales." | ".$total_empties." | ".$sir_data["total_ar"]." | ".$sir_data["ar_collection"]);
-        return $total_amount;
+        return round($total_amount,2);
 
     }
     public static function insert_sir_inventory($sir_id, $item, $ref_name, $ref_id)

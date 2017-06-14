@@ -48,7 +48,7 @@ class Mlm_ComplanSetupController extends Member
 		$tours_wallet = $this->user_info->shop_wallet_tours;
 		if($tours_wallet == 1)
 		{
-			$data['links'][2]['label'] = 'Tours Wallet';
+			$data['links'][2]['label'] = 'Airline Ticketing';
 			$data['links'][2]['link'] = '/member/mlm/tours_wallet';
 		}
 

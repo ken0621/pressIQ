@@ -8,11 +8,11 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>Digima House - Login</title>
+	<base href="http://digimahouse.com/">
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<base href="{{ URL::to('digima/public') }}">
 	<link rel="stylesheet" href="assets/member/styles/92bc1fe4.bootstrap.css">
-	
 	<link rel="stylesheet" href="assets/member/styles/aaf5c053.proton.css">
 	<link rel="stylesheet" href="assets/member/styles/vendor/animate.css">
 	

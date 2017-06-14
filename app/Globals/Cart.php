@@ -775,23 +775,32 @@ class Cart
             $data["tbl_customer_address"]["billing"]["customer_street"] = $data["tbl_customer_address"]["shipping"]["customer_street"];
             $data["tbl_customer_address"]["billing"]["purpose"] = "billing"; 
         }
-        $data = Cart::customer_set_info_ec_order($shop_id, $data, $customer_information);
-        /* VALIDATIONS */
-        $check_account = Cart::customer_set_info_check_account($shop_id, $data["new_account"], $data["tbl_customer"]['email'], $data["tbl_customer"]["password"]);
-        $check_name = "success";
-        $check_address = "success";
-        $check_contact = "success";
+        if (isset(Self::get_cart($shop_id)["cart"])) 
+        {
+            $data = Cart::customer_set_info_ec_order($shop_id, $data, $customer_information);
+            /* VALIDATIONS */
+            $check_account = Cart::customer_set_info_check_account($shop_id, $data["new_account"], $data["tbl_customer"]['email'], $data["tbl_customer"]["password"]);
+            $check_name = "success";
+            $check_address = "success";
+            $check_contact = "success";
 
-        /* VALIDATIONS RETURN MESSAGE */
-        if((in_array("check_account", $validation)) && $check_account != "success")
-        {
-            $message["status"] = "error";
-            $message["status_message"] = $check_account;
-        }
-        elseif((in_array("check_name", $validation)) && $check_name != "success")
-        {
-            $message["status"] = "error";
-            $message["status_message"] = $check_account;
+            /* VALIDATIONS RETURN MESSAGE */
+            if((in_array("check_account", $validation)) && $check_account != "success")
+            {
+                $message["status"] = "error";
+                $message["status_message"] = $check_account;
+            }
+            elseif((in_array("check_name", $validation)) && $check_name != "success")
+            {
+                $message["status"] = "error";
+                $message["status_message"] = $check_account;
+            }
+            else
+            {
+                Session::put($unique_id, $data);
+                $message["status"]         = "success";
+                $message["status_message"] = "Customer Information Successfully Updated"; 
+            }
         }
         else
         {

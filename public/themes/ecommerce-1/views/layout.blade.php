@@ -9,6 +9,7 @@
         <title>{{ ucfirst($shop_info->shop_key) }} |  {{ isset($page) ? $page : 'Home' }}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name='B-verify' content='8b63efb2920a681d6f877a59a414659d09831140' />
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
@@ -91,14 +92,16 @@
 	    		<div class="holder"><div class="linya"></div></div>
 	    		<div class="holder"><a href="/contact">Contact Us</a></div>
                 <div class="holder"><div class="linya"></div></div>
-                <div class="holder"><a href="http://tour.philtechglobalinc.com">Travel and Tours</a></div>
+                <div class="holder"><a href="http://tour.philtechglobalinc.com">Airline Ticketing</a></div>
+                <div class="holder"><div class="linya"></div></div>
+                <div class="holder"><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a></div>
     		</div>
     	</div>
     	<div class="header-nav-middle">
     		<div class="container">
     			<div class="row clearfix">
 	    			<div class="col-md-3">
-                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/philtech-official-logo.png">            
+                        <img class="img-responsive" src="{{ $company_info['company_logo']->value }}">            
                     </div>
 	    			<div class="col-md-6">
 

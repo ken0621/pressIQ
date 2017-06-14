@@ -15,6 +15,7 @@ Route::get('/barcode', 'MemberController@barcodes');
 // Route::get('/card', 'MemberController@card');
 // Route::get('/card/all', 'MemberController@all_slot');
 
+Route::get('member/register/session', 'MemberController@session');
 Route::get('member/register', 'MemberController@register');
 Route::post('member/register/submit', 'MemberController@register_post');
 
@@ -83,7 +84,7 @@ Route::any('/member/developer/reset_slot/submit/retro_product_sales', 'Member\De
 Route::any('/member/developer/reset_slot/submit/re_tree', 'Member\Developer_StatusController@re_tree'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/re_com_phil_lost', 'Member\Developer_StatusController@re_com_phil_lost'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/re_com_phil_uni', 'Member\Developer_StatusController@re_com_phil_uni'); //GUILLERMO TABLIGAN
-
+Route::any('/member/developer/reset_slot/submit/recompute', 'Member\Developer_StatusController@recompute'); //GUILLERMO TABLIGAN
 
 /* END MEMBER - VENDOR - GUILLERMO TABLIGAN */
 
@@ -167,6 +168,7 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 
 
 Route::get('/member', 'Member\DashboardController@index');
+Route::get('/member/new', 'Member\DashboardController@new_dashboard');
 Route::post('/member/change_warehouse', 'Member\DashboardController@change_warehouse');
 Route::any('/member/setup', 'Member\SetupController@index');
 Route::any('/member/product/service_list', 'Member\Product_ServiceListController@index'); //GUILLERMO TABLGIAN
@@ -214,9 +216,16 @@ Route::get('/member/item/mulitple_price_modal/{id}', 'Member\ItemController@get_
 Route::post('/member/item/mulitple_price_modal', 'Member\ItemController@update_multiple_price_modal'); /* B */
 Route::get('/member/item/get_new_price/{id}/{qty}', 'Member\ItemController@get_item_new_price'); /* B */
 
+
 //*ITEM FOR PIS ARCY*/
+Route::any('/member/pis_counter','Member\PurchasingInventorySystemController@pis_counter');
+
+
+Route::any('/member/item/view_item_history/{id}','Member\ItemController@view_item_history');
 Route::any('/member/item/add_submit_pis','Member\ItemController@add_submit_pis');
 Route::any('/member/item/edit_submit_pis','Member\ItemController@edit_submit_pis');
+
+Route::any('/member/enable_disable_pis/{pass}/{action}','Member\PurchasingInventorySystemController@enable_pis');
 /*END ITEM FOR PIS*/
 
 
@@ -308,6 +317,7 @@ Route::any('/member/pis/agent/edit_submit','Member\AgentController@edit_submit')
 Route::any('/member/pis/agent/archived/{id}/{action}','Member\AgentController@archived');
 Route::any('/member/pis/agent/archived_submit','Member\AgentController@archived_submit');
 /* END AGENT*/
+Route::any('/member/report/agent/profit_loss','Member\ReportAgentProfitLossController@index');
 
 /*SALES LIQUIDATION*/
 Route::any('member/cashier/sales_liquidation','Member\PisSalesLiquidationController@index');
@@ -429,12 +439,14 @@ Route::any('/member/customer/invoice/manual_invoice_update',"Member\ManualInvoic
 Route::any('/member/pis/view_invoices/{id}','Member\ManualInvoiceController@view_invoices');
 /* END PIS ARCY*/
 
+
+/* START TABLET FUNCTIONS */
 Route::any('/tablet/pis/sir/review/{id}',"Member\TabletPISController@review_sir");
 Route::any('/tablet/pis/sir/{id}/{action}',"Member\TabletPISController@lof_action");
 Route::any('/tablet/pis/sir/lof_action_submit',"Member\TabletPISController@lof_action_submit");
 Route::any('/tablet/selected_sir',"Member\TabletPISController@selected_sir");
+Route::any('/tablet/customer/load_rp/{id}','Member\TabletPISController@load_customer_rp');
 
-/* END PIS TABLEt*/
 Route::any('/tablet','Member\TabletPISController@login');
 Route::any('/tablet/login_submit','Member\TabletPISController@login_submit');
 Route::any('/tablet/dashboard','Member\TabletPISController@index');
@@ -442,6 +454,11 @@ Route::any('/tablet/sync_import',"Member\TabletPISController@sync_import");
 Route::any('/tablet/sync_export','Member\TabletPISController@sync_export');
 Route::any('/tablet/logout','Member\TabletPISController@logout');
 Route::any('/tablet/sir_inventory/{id}','Member\TabletPISController@inventory_sir');
+
+/*TABLET CUSTOMER*/
+Route::any('/tablet/customer/modalcreatecustomer','Member\TabletPISController@edit_customer');
+Route::any('/tablet/agent/edit/{id}','Member\TabletPISController@edit_agent');
+Route::any('/tablet/agent/edit_submit','Member\TabletPISController@edit_agent_submit');
 
 //RELOAD
 Route::any('/tablet/sir_reload/{id}','Member\TabletPISController@sir_reload');
@@ -455,19 +472,25 @@ Route::any('/tablet/create_invoices/add','Member\TabletPISController@tablet_crea
 Route::any('/tablet/create_invoice/add_submit','Member\TabletPISController@create_invoice_submit');
 Route::any('/tablet/update_invoice/edit_submit',"Member\TabletPISController@update_invoice_submit");
 
+Route::any('tablet/invoice/add_item/{id}','Member\TabletPISController@invoice_add_item');
+Route::any('tablet/credit_memo/add_item/{id}/{type}','Member\TabletPISController@credit_memo_add_item');
+
 Route::any('/tablet/receive_payment','Member\TabletPISController@receive_payment');
 Route::any('/tablet/view_receive_payment/{id}','Member\TabletPISController@view_receive_payment');
 Route::any('/tablet/receive_payment/add','Member\TabletPISController@tablet_receive_payment');
 Route::any('/tablet/receive_payment/add_submit','Member\TabletPISController@add_receive_payment');
 Route::any('/tablet/receive_payment/update/{id}','Member\TabletPISController@update_receive_payment');
+Route::any('/tablet/customer/credit_memo/update_action',"Member\TabletPISController@update_action");
 
 Route::any('/tablet/view_invoice_view/{id}','Member\TabletPISController@view_invoices_view');
 Route::any('/tablet/view_invoice_pdf/{id}','Member\TabletPISController@view_invoice_pdf');
 
 Route::any('/tablet/credit_memo','Member\TabletPISController@credit_memo');
 Route::any('/tablet/credit_memo/add','Member\TabletPISController@add_cm');
+Route::any('/tablet/customer/credit_memo/choose_type','Member\TabletPISController@cm_choose_type');
 Route::any('/tablet/credit_memo/add_cm_submit','Member\TabletPISController@add_cm_submit');
 Route::any('/tablet/credit_memo/edit_cm_submit','Member\TabletPISController@edit_cm_submit');
+Route::any('/tablet/credit_memo/choose_type','Member\TabletPISController@cm_choose_type');
 
 Route::any('/tablet/sales_receipt','Member\TabletPISController@sales_receipt');
 Route::any('/tablet/sales_receipt/list','Member\TabletPISController@sales_receipt_list');
@@ -476,7 +499,7 @@ Route::any('/tablet/sales_receipt/update_submit','Member\TabletPISController@upd
 
 Route::any('/tablet/submit_all_transaction','Member\TabletPISController@confirm_submission');
 Route::any('/tablet/submit_all_transaction/submit','Member\TabletPISController@submit_transactions');
-/* END PIS TABLEt*/
+/* END PIS TABLET*/
 
  //form
 
@@ -583,10 +606,13 @@ Route::post('/member/customer/receive_payment/update/{id}','Member\Customer_Rece
 
 /* CUSTOMER CREDIT MEMO*/
 Route::any('/member/customer/credit_memo','Member\CreditMemoController@index');
+Route::any('/member/customer/credit_memo/choose_type','Member\CreditMemoController@choose_type');
 Route::any('/member/customer/credit_memo/list',"Member\CreditMemoController@cm_list");
 Route::any('/member/customer/credit_memo/create_submit','Member\CreditMemoController@create_submit');
 Route::any('/member/customer/credit_memo/update',"Member\CreditMemoController@update_submit");
 
+Route::any('/member/customer/credit_memo/update_action',"Member\CreditMemoController@update_action");
+Route::any('/member/customer/credit_memo/choose_type','Member\CreditMemoController@choose_type');
 
 /* Vendor Debit MEMO*/
 Route::any('/member/vendor/debit_memo','Member\DebitMemoController@index');
@@ -764,6 +790,8 @@ Route::group(array('prefix' => '/member/report'), function()
 	/* Accounting Sales - per item */
 	Route::any('/accounting/sale/item','Member\ReportsController@accounting_sale_items');
 
+	/* Accounting Sales - per warehouse */
+	Route::any('/accounting/sale_by_warehouse','Member\ReportsController@sale_by_warehouse');
 	/* Accounting general ledger */
 	Route::get('/accounting/general/ledger','Member\ReportsController@general_ledger');
 	Route::any('/accounting/general/ledger/get','Member\ReportsController@general_ledger_get');
@@ -866,6 +894,7 @@ Route::get('/member/maintenance/load_payment_method','Member\MaintenancePaymentM
 Route::get('/member/maintenance/load_payment_gateway/{id}','Member\OnlinePaymentMethodController@load_payment_gateway');
 
 /* SettingsController */
+Route::get('/member/settings', 'Member\SettingsController@all');
 Route::get('/member/settings/{key}', 'Member\SettingsController@index');
 Route::post('/member/settings/verify/add', 'Member\SettingsController@verify');
 Route::get('/member/settings/get/{key}', 'Member\SettingsController@get_settings');
@@ -909,18 +938,30 @@ Route::controller('/member/accounting/journal', 'Member\JournalEntryController')
 Route::controller('/member/maintenance/terms', 'Member\TermsOfPaymentController');
 /* End */
 
+
+/* LOCATION*/
+Route::controller('/member/maintenance/location', 'Member\LocationController');
+/* End */
+
+/* TRACKINGS */
+Route::controller('/member/ecommerce/trackings', 'Member\TrackingsController');
+/* END */
+
+
+
+/* MEMBER SHIPPING*/
+Route::controller('/member/register/shipping', 'MemberController');
+/* End */
+
+
 Route::controller('/tester','TesterController');
 
 // test lang load
 Route::any("/member/load_position","Member\EmployeePositionController@load_position");
 
-
 /* PAYROLL START */
-
-
 // Route::group(array('prefix' => '/member/payroll'), function()
 // {
-
 // 	/* COMPANY START */
 // 	Route::any('/company_list','Member\PayrollController@company_list');
 // 	Route::any('/company_list/modal_create_company','Member\PayrollController@modal_create_company');
@@ -967,13 +1008,9 @@ Route::any("/member/load_position","Member\EmployeePositionController@load_posit
 // 	Route::any("/jobtitlelist/modal_update_jobtitle","Member\PayrollController@modal_update_jobtitle");
 // 	/* JOB TITLE END */
 // });
-
 include_once('routes_config/routes_payroll.php');
-
 /* PAYROLL END */
 
+/* PAYMENT FACILITIES */
+include_once('routes_config/routes_payment.php');
 
-Route::get('/payment/dragonpay', 'PaymentController@index');
-Route::post('/payment/dragonpay', 'PaymentController@onSubmitPayment');
-Route::get('/payment/dragonpay/postback', 'PaymentController@postback_url'); //confirmation upon payment
-Route::get('/payment/dragonpay/return', 'PaymentController@return_url'); //

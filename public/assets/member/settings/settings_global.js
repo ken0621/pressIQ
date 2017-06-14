@@ -47,7 +47,7 @@ function get_settings(key)
     return json;
 }
 var load= 0;
-check_if_new_settings();
+// check_if_new_settings();
 function check_if_new_settings()
 {
     $('.settings_checking').load('/member/settings/all', function(){

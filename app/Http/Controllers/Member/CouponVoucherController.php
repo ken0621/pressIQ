@@ -38,9 +38,9 @@ class CouponVoucherController extends Member
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
 
-    public function index()
+    public function getIndex()
     {
-        
+
     }
 
     public function getList()

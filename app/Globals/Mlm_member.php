@@ -240,6 +240,27 @@ class Mlm_member
                                 $new                  = 1;
                             }
                         }
+                        else if(Request::input("choose_owner") == "exist")
+                        {
+                            $check_exist_account = Tbl_customer::where("tbl_customer.shop_id",$shop_id)
+                                                               ->where("slot_id",null)
+                                                               ->where("tbl_customer.customer_id",Request::input("customer_id"))
+                                                               ->leftJoin("tbl_mlm_slot","slot_owner","=","tbl_customer.customer_id")
+                                                               ->select("*","tbl_customer.shop_id as customer_shop_id")
+                                                               ->first();
+
+                            if($check_exist_account)
+                            {
+                                $insert['slot_owner'] = Request::input("customer_id");
+                            }   
+                            else
+                            {
+                                $proceed = 0;
+                                $get_data["message"] = "Chosen account does not exists.";
+                            }                               
+                        }
+
+
 
                         if($proceed == 1)
                         {
@@ -400,6 +421,12 @@ class Mlm_member
                                               ->first();
 
         $data['_slots']    = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->customer()->get();
+        $data["_no_slot_customer"] = Tbl_customer::where("tbl_customer.shop_id",$shop_id)
+                                                 ->where("slot_id",null)
+                                                 ->leftJoin("tbl_mlm_slot","slot_owner","=","tbl_customer.customer_id")
+                                                 ->select("*","tbl_customer.shop_id as customer_shop_id")
+                                                 ->get();
+ 
         $data['country']   = Tbl_country::get();
         $data['position']  = Request::input('position');
         $data['placement'] = Request::input('placement');
@@ -423,7 +450,7 @@ class Mlm_member
             $session = Session::get('mlm_member');
             return $session['slot_now'];
         }
-    }
+    }    
 
     public static function add_new_customer($send,$shop_id)
     {

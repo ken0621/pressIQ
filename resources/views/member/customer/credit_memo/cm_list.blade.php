@@ -9,10 +9,10 @@
             <h1>
                 <span class="page-title">Credit Memo</span>
                 <small>
-                    List of Customer CM
+                    List of Customer Credit Memo
                 </small>
             </h1>
-            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/customer/credit_memo" >Create CM</a>
+            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/customer/credit_memo" >Create Credit Memo</a>
         </div>
     </div>
 </div>

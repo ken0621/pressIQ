@@ -48,6 +48,7 @@ use App\Models\Tbl_item_code_invoice;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_journal_entry_line;
 use App\Globals\Category;
+use App\Models\Tbl_mlm_slot_wallet_log_transfer;
 use Crypt;
 class MLM_ReportController extends Member
 {
@@ -77,6 +78,21 @@ class MLM_ReportController extends Member
         $data['report_list_d']['e_wallet']['from'] = Carbon::now();
         $data['report_list_d']['e_wallet']['to'] = Carbon::now();
         $data['report_list_d']['e_wallet']['count'] = $slot;
+        // -----------------------------------------------------------------
+        $data['report_list']['e_wallet_transfer'] = 'E-Wallet Transfer Report';
+        $data['report_list_d']['e_wallet_transfer']['from'] = Carbon::now();
+        $data['report_list_d']['e_wallet_transfer']['to'] = Carbon::now();
+        $data['report_list_d']['e_wallet_transfer']['count'] = 999;
+        // -----------------------------------------------------------------
+        $data['report_list']['e_wallet_refill'] = 'E-Wallet Refill Report';
+        $data['report_list_d']['e_wallet_refill']['from'] = Carbon::now();
+        $data['report_list_d']['e_wallet_refill']['to'] = Carbon::now();
+        $data['report_list_d']['e_wallet_refill']['count'] = 999;
+        // -----------------------------------------------------------------
+        $data['report_list']['e_wallet_tour'] = 'E-Wallet -> Tour Wallet Report';
+        $data['report_list_d']['e_wallet_tour']['from'] = Carbon::now();
+        $data['report_list_d']['e_wallet_tour']['to'] = Carbon::now();
+        $data['report_list_d']['e_wallet_tour']['count'] = 999;
         // -----------------------------------------------------------------
         $data['report_list']['slot_count'] = 'Slot Count';
         $data['report_list_d']['slot_count']['from'] = Carbon::now();
@@ -232,6 +248,11 @@ class MLM_ReportController extends Member
         $data['report_list_d']['product_sales_report_consolidated']['from'] = Carbon::now();
         $data['report_list_d']['product_sales_report_consolidated']['to'] = Carbon::now();
         $data['report_list_d']['product_sales_report_consolidated']['count'] = 0;
+
+        $data['report_list']['warehouse_consiladated'] = 'Warehouse Sales Report';
+        $data['report_list_d']['warehouse_consiladated']['from'] = Carbon::now();
+        $data['report_list_d']['warehouse_consiladated']['to'] = Carbon::now();
+        $data['report_list_d']['warehouse_consiladated']['count'] = 0;
 
         foreach($data['report_list_d'] as $key => $value)
         {

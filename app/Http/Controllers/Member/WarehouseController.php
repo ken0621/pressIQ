@@ -15,6 +15,8 @@ use App\Models\Tbl_inventory_slip;
 use App\Models\Tbl_settings;
 use App\Models\Tbl_sir;
 use App\Models\Tbl_sir_inventory;
+use App\Models\Tbl_sir_item;
+use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_unit_measurement_multi;
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
@@ -94,7 +96,7 @@ class WarehouseController extends Member
                     
                     $all_item = Tbl_sub_warehouse::select_item($value->warehouse_id)
                                                  ->get();
-
+                    $qty = 0;
                     foreach ($all_item as $key2 => $value2) 
                     {
                         $qty = Tbl_warehouse_inventory::where("warehouse_id",$value2->warehouse_id)->leftjoin("tbl_item","inventory_item_id","=","item_id")->where("tbl_item.archived",0)->sum("inventory_count");
@@ -125,7 +127,7 @@ class WarehouseController extends Member
                     $cost_price_a = 0;
                     $archive_item = Tbl_sub_warehouse::select_item($value3->warehouse_id)
                                                  ->get();
-
+                    $qty = 0;
                     foreach ($archive_item as $key4 => $value4) 
                     {
                         $qty = Tbl_warehouse_inventory::where("warehouse_id",$value4->warehouse_id)->leftjoin("tbl_item","inventory_item_id","=","item_id")->where("tbl_item.archived",0)->sum("inventory_count");
@@ -376,7 +378,8 @@ class WarehouseController extends Member
             }
             $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$id)->first();
             $data["warehouse_item"] = Warehouse::select_item_warehouse_single_w_page($id,'array');
-            // dd(collect($data["warehouse_item"])->toArray());
+            $data["warehouse_item_bundle"] = Warehouse::select_item_warehouse_per_bundle($id,'array');
+            // dd(collect($data["warehouse_item_bundle"])->toArray());
             $data["pis"] = Purchasing_inventory_system::check();
             return view("member.warehouse.warehouse_view",$data);
         }
@@ -393,18 +396,53 @@ class WarehouseController extends Member
 
             $qty = 0;
             $data["item_details"] = Item::get_item_details($item_id);
-            foreach ($data["_sir"] as $key => $value) 
-            {           
-                $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$data["item_details"]->item_measurement_id)->where("is_base",0)->pluck("multi_id");
-                $qty = Tbl_sir_inventory::where("sir_item_id",$item_id)->where("inventory_sir_id",$value->sir_id)->sum("sir_inventory_count");
-                if($qty > 0)
-                {
-                    $data["_sir"][$key]->per_agent_qty = UnitMeasurement::um_view($qty,$data["item_details"]->item_measurement_id,$um_issued);
+            if($data["item_details"])
+            {
+                foreach ($data["_sir"] as $key => $value) 
+                {   
+
+                    $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$data["item_details"]->item_measurement_id)->where("is_base",0)->pluck("multi_id");
+
+                    if($data["item_details"]->item_type_id != 4)
+                    {        
+                        $qty = Tbl_sir_inventory::where("sir_item_id",$item_id)->where("inventory_sir_id",$value->sir_id)->sum("sir_inventory_count");                       
+                    }
+                    else
+                    {
+                        $sir_bundle_item = Tbl_sir_item::where("sir_id",$value->sir_id)->where("item_id",$item_id)->get();
+                        $rem_bundle_qty_sir = 0;
+
+                        foreach ($sir_bundle_item as $key_sir => $value_sir) 
+                        {
+                            $bundle_item = Tbl_item_bundle::where("bundle_bundle_id",$item_id)->get();
+
+                            $total_bundle_qty = 0;
+                            $total_sold_bundle_qty = 0;
+                            $rem_bundle_qty = 0;
+                            foreach ($bundle_item as $key_bundle => $value_bundle)
+                            {
+                               $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty;
+
+                               $issued_bundle_qty_item = (UnitMeasurement::um_qty($value_sir->related_um_type) * $value_sir->item_qty) * $bundle_qty;
+
+                               $total_sold_bundle_qty = Tbl_sir_inventory::where("sir_item_id",$value_bundle->bundle_item_id)->where("inventory_sir_id",$value->sir_id)->where("sir_inventory_count","<",0)->sum("sir_inventory_count");
+                               $rem_bundle_qty = round(($issued_bundle_qty_item - abs($total_sold_bundle_qty)) / $bundle_qty);
+                            }
+                            $qty += $rem_bundle_qty; 
+                        }     
+                    }
+
+                    if($qty > 0)
+                    {
+                        $data["_sir"][$key]->per_agent_qty = UnitMeasurement::um_view($qty,$data["item_details"]->item_measurement_id,$um_issued);
+                    }
+                    else
+                    {
+                        unset($data["_sir"][$key]);
+                    } 
                 }
-                else
-                {
-                    unset($data["_sir"][$key]);
-                }
+               
+
             }
         }
 
@@ -1026,7 +1064,7 @@ class WarehouseController extends Member
         if($data['status'] == 'success')
         {
             $w_data = AuditTrail::get_table_data("tbl_warehouse","warehouse_id",$warehouse_id);
-            AuditTrail::record_logs("Edited","warehouse",$id,serialize($old_data),serialize($w_data));
+            AuditTrail::record_logs("Edited","warehouse",$warehouse_id,serialize($old_data),serialize($w_data));
         }
 
              return json_encode($data);

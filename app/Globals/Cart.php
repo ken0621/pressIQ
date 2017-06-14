@@ -13,6 +13,9 @@ use App\Models\Tbl_ec_variant;
 use App\Models\Tbl_ec_order;
 use App\Models\Tbl_ec_order_item;
 use App\Models\Tbl_online_pymnt_method;
+use App\Models\Tbl_email_template;
+use App\Models\Tbl_online_pymnt_api;
+use App\Models\Tbl_mlm_slot;
 use App\Globals\Ecom_Product;
 use DB;
 use Session;
@@ -23,7 +26,20 @@ use App\Globals\Mlm_member;
 use App\Models\Tbl_mlm_item_points;
 use App\Globals\Mlm_plan;
 use Crypt;
+use Config;
+use URL;
 use App\Globals\Mlm_slot_log;
+// IPAY 88
+use App\IPay88\RequestPayment;
+// DRAGON PAY
+use App\Globals\Dragonpay2\Dragon_RequestPayment;
+// PAYMAYA
+use App\Globals\PayMaya\PayMayaSDK;
+use App\Globals\PayMaya\API\Checkout;
+use App\Globals\PayMaya\Core\CheckoutAPIManager;
+use App\Globals\PayMaya\Checkout\User;
+use App\Globals\PayMaya\Model\Checkout\ItemAmountDetails;
+use App\Globals\PayMaya\Model\Checkout\ItemAmount;
 
 class Cart
 {
@@ -36,7 +52,7 @@ class Cart
         $shop_info = Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
         return $shop_info;
     }
-    public static function add_to_cart($product_id,$quantity,$shop_id = null)
+    public static function add_to_cart($product_id,$quantity,$shop_id = null,$clear = false)
     {
         if (!$shop_id) 
         {
@@ -59,12 +75,18 @@ class Cart
         else
         {
             $_cart                                            = Session::get($unique_id);
+
+            if ($clear == true) 
+            {
+                unset($_cart["cart"]);
+                $insert = $_cart;
+            }
+
             $insert["cart"][$product_id]["product_id"]        = $product_id;
             $insert["cart"][$product_id]["quantity"]          = $quantity;
             $insert["cart"][$product_id]["shop_id"]           = $shop_id;
             $insert["cart"][$product_id]["unique_id_per_pc"]  = $unique_id;
             $insert["cart"][$product_id]["date_added"]        = Carbon::now();
-
 
             if($_cart && isset($_cart["cart"]))
             {
@@ -641,15 +663,12 @@ class Cart
         return $message;
     }
 
-
     /* return content of SESSION */
     public static function get_info($shop_id)
     {
         $data = Session::get(Cart::get_unique_id($shop_id));
         return $data;
     }
-
-
 
     /*
      * TITLE: CUSTOMER SET INFO
@@ -692,16 +711,23 @@ class Cart
         $data["billing_equals_shipping"] = (isset($customer_information["billing_equals_shipping"]) ? $customer_information["billing_equals_shipping"] : (isset($data["billing_equals_shipping"]) ? $data["billing_equals_shipping"] : true));;
 
         /* SET BASIC INFORMATION */
-        $data["tbl_customer"]['customer_id']    = Tbl_customer::max("customer_id") + 1;
-        $data["tbl_customer"]['first_name']     = (isset($customer_information["first_name"]) ? $customer_information["first_name"] : (isset($data["tbl_customer"]['first_name']) ? $data["tbl_customer"]['first_name'] : null));
-        $data["tbl_customer"]['last_name']      = (isset($customer_information["last_name"]) ? $customer_information["last_name"] : (isset($data["tbl_customer"]['last_name']) ? $data["tbl_customer"]['last_name'] : null));
-        $data["tbl_customer"]['middle_name']    = (isset($customer_information["middle_name"]) ? $customer_information["middle_name"] : (isset($data["tbl_customer"]['middle_name']) ? $data["tbl_customer"]['middle_name'] : null));
-        $data["tbl_customer"]['email']          = (isset($customer_information["email"]) ? $customer_information["email"] : (isset($data["tbl_customer"]['email']) ? $data["tbl_customer"]['email'] : null));
-        $data["tbl_customer"]['password']       = isset($customer_information["password"]) ? $customer_information["password"] : randomPassword();
-        $data["tbl_customer"]['shop_id']        = $shop_id;
+        $data["tbl_customer"]['customer_id']      = Tbl_customer::max("customer_id") + 1;
+        $data["tbl_customer"]['first_name']       = (isset($customer_information["first_name"]) ? $customer_information["first_name"] : (isset($data["tbl_customer"]['first_name']) ? $data["tbl_customer"]['first_name'] : null));
+        $data["tbl_customer"]['last_name']        = (isset($customer_information["last_name"]) ? $customer_information["last_name"] : (isset($data["tbl_customer"]['last_name']) ? $data["tbl_customer"]['last_name'] : null));
+        $data["tbl_customer"]['middle_name']      = (isset($customer_information["middle_name"]) ? $customer_information["middle_name"] : (isset($data["tbl_customer"]['middle_name']) ? $data["tbl_customer"]['middle_name'] : null));
+        $data["tbl_customer"]['email']            = (isset($customer_information["email"]) ? $customer_information["email"] : (isset($data["tbl_customer"]['email']) ? $data["tbl_customer"]['email'] : null));
+        $data["tbl_customer"]['password']         = isset($customer_information["password"]) ? $customer_information["password"] : randomPassword();
+        $data["tbl_customer"]['shop_id']          = $shop_id;
         $data["tbl_customer"]['customer_contact'] = (isset($customer_information["customer_contact"]) ? $customer_information["customer_contact"] : (isset($data["tbl_customer"]['customer_contact']) ? $data["tbl_customer"]['customer_contact'] : null));;
-        $data["tbl_customer"]['country_id']     = 420;
+        $data["tbl_customer"]['country_id']       = 420;
+        $data["tbl_customer"]['tin_number']       = (isset($customer_information["tin_number"]) ? $customer_information["tin_number"] : (isset($data["tbl_customer"]['tin_number']) ? $data["tbl_customer"]['tin_number'] : null));
+        $data["tbl_customer"]['mlm_username']     = (isset($customer_information["mlm_username"]) ? $customer_information["mlm_username"] : (isset($data["tbl_customer"]['mlm_username']) ? $data["tbl_customer"]['mlm_username'] : null));
+        $data["tbl_customer"]['company']          = (isset($customer_information["company"]) ? $customer_information["company"] : (isset($data["tbl_customer"]['company']) ? $data["tbl_customer"]['company'] : null));
+        $data["tbl_customer"]['is_corporate']     = (isset($customer_information["is_corporate"]) ? $customer_information["is_corporate"] : (isset($data["tbl_customer"]['is_corporate']) ? $data["tbl_customer"]['is_corporate'] : 0));
 
+        $data['load_wallet']['ec_order_load']        = isset($customer_information['load_wallet']['ec_order_load']) == true ? $customer_information['load_wallet']['ec_order_load'] : 0 ;
+        $data['load_wallet']['ec_order_load_number'] = isset($customer_information['load_wallet']['ec_order_load_number']) == true ? $customer_information['load_wallet']['ec_order_load_number'] : 0;
+        
         /* CURRENT LOGGED IN */
         if (isset($customer_information["current_user"])) 
         {
@@ -718,7 +744,18 @@ class Cart
             $data["tbl_customer"]['shop_id']          = $shop_id;
             $data["tbl_customer"]['customer_contact'] = $other_info->customer_mobile;
             $data["tbl_customer"]['country_id']       = 420;
+            $data["tbl_customer"]['tin_number']       = $current->tin_number;
+            $data["tbl_customer"]['mlm_username']     = $current->mlm_username;
+            $data["tbl_customer"]['company']          = $current->company;
+            $data["tbl_customer"]['is_corporate']     = $current->is_corporate;
         }
+
+        /* SET MLM SLOT */
+        $data["tbl_mlm_slot"]['slot_id'] = Tbl_mlm_slot::max("slot_id") + 1;
+        $data["tbl_mlm_slot"]['shop_id'] = $shop_id;
+        $data["tbl_mlm_slot"]['slot_owner'] = (isset($customer_information["slot_owner"]) ? $customer_information["slot_owner"] : (isset($data["tbl_mlm_slot"]['slot_owner']) ? $data["tbl_mlm_slot"]['slot_owner'] : null));
+        $data["tbl_mlm_slot"]['slot_sponsor'] = (isset($customer_information["slot_sponsor"]) ? $customer_information["slot_sponsor"] : (isset($data["tbl_mlm_slot"]['slot_sponsor']) ? $data["tbl_mlm_slot"]['slot_sponsor'] : null));
+        $data["tbl_mlm_slot"]['slot_membership'] = (isset($customer_information["slot_membership"]) ? $customer_information["slot_membership"] : (isset($data["tbl_mlm_slot"]['slot_membership']) ? $data["tbl_mlm_slot"]['slot_membership'] : null));
 
         /* SET SHIPPINGING INFROMATION */
         $data["tbl_customer_address"]["shipping"]["country_id"] = 420;
@@ -738,25 +775,32 @@ class Cart
             $data["tbl_customer_address"]["billing"]["customer_street"] = $data["tbl_customer_address"]["shipping"]["customer_street"];
             $data["tbl_customer_address"]["billing"]["purpose"] = "billing"; 
         }
-
-        $data = Cart::customer_set_info_ec_order($shop_id, $data, $customer_information);
-
-        /* VALIDATIONS */
-        $check_account = Cart::customer_set_info_check_account($shop_id, $data["new_account"], $data["tbl_customer"]['email'], $data["tbl_customer"]["password"]);
-        $check_name = "success";
-        $check_address = "success";
-        $check_contact = "success";
-
-        /* VALIDATIONS RETURN MESSAGE */
-        if((in_array("check_account", $validation)) && $check_account != "success")
+        if (isset(Self::get_cart($shop_id)["cart"])) 
         {
-            $message["status"] = "error";
-            $message["status_message"] = $check_account;
-        }
-        elseif((in_array("check_name", $validation)) && $check_name != "success")
-        {
-            $message["status"] = "error";
-            $message["status_message"] = $check_account;
+            $data = Cart::customer_set_info_ec_order($shop_id, $data, $customer_information);
+            /* VALIDATIONS */
+            $check_account = Cart::customer_set_info_check_account($shop_id, $data["new_account"], $data["tbl_customer"]['email'], $data["tbl_customer"]["password"]);
+            $check_name = "success";
+            $check_address = "success";
+            $check_contact = "success";
+
+            /* VALIDATIONS RETURN MESSAGE */
+            if((in_array("check_account", $validation)) && $check_account != "success")
+            {
+                $message["status"] = "error";
+                $message["status_message"] = $check_account;
+            }
+            elseif((in_array("check_name", $validation)) && $check_name != "success")
+            {
+                $message["status"] = "error";
+                $message["status_message"] = $check_account;
+            }
+            else
+            {
+                Session::put($unique_id, $data);
+                $message["status"]         = "success";
+                $message["status_message"] = "Customer Information Successfully Updated"; 
+            }
         }
         else
         {
@@ -767,7 +811,13 @@ class Cart
 
         return $message;
     }
-
+    public static function customer_update_method_a($shop_id, $customer_info)
+    {
+        if(isset($customer_info['method_id']))
+        {
+            $old_session = $order = Cart::get_info($shop_id);
+        }
+    }
     public static function customer_set_info_ec_order($shop_id, $data, $customer_information)
     { 
         $data["tbl_ec_order"]["ec_order_id"] = Tbl_ec_order::max("ec_order_id") + 1;
@@ -782,21 +832,20 @@ class Cart
         $shipping_fee = 0;
 
         $_cart = Self::get_cart($shop_id)["cart"];
-
+        unset($data["tbl_ec_order_item"]);
         /* ITEM ON CART */
         foreach($_cart as $key => $cart)
         {
-            $data["tbl_ec_order_item"][$key]["item_id"] = $cart["cart_product_information"]["item_id"];
-            $data["tbl_ec_order_item"][$key]["price"] = $cart["cart_product_information"]["product_price"];
-            $data["tbl_ec_order_item"][$key]["quantity"] = $cart["quantity"];
-            $data["tbl_ec_order_item"][$key]["subtotal"] = $cart["cart_product_information"]["product_price"] * $cart["quantity"];
-            $data["tbl_ec_order_item"][$key]["total"] = $cart["cart_product_information"]["product_price"] * $cart["quantity"];
-            $data["tbl_ec_order_item"][$key]["tax"] = 0;
+            $data["tbl_ec_order_item"][$key]["item_id"]     = $cart["cart_product_information"]["variant_id"];
+            $data["tbl_ec_order_item"][$key]["price"]       = $cart["cart_product_information"]["product_price"];
+            $data["tbl_ec_order_item"][$key]["quantity"]    = $cart["quantity"];
+            $data["tbl_ec_order_item"][$key]["subtotal"]    = $cart["cart_product_information"]["product_price"] * $cart["quantity"];
+            $data["tbl_ec_order_item"][$key]["total"]       = $cart["cart_product_information"]["product_price"] * $cart["quantity"];
+            $data["tbl_ec_order_item"][$key]["tax"]         = 0;
             $data["tbl_ec_order_item"][$key]["ec_order_id"] = $data["tbl_ec_order"]["ec_order_id"];
 
             $subtotal += $data["tbl_ec_order_item"][$key]["total"];
         }
-
        
         /* SUMMARY OF DATA FOR ORDER */
         $data["tbl_ec_order"]["customer_id"] = $data["tbl_customer"]["customer_id"];
@@ -830,6 +879,8 @@ class Cart
 
 
         /*  OTHER INFO WITH SERVICE FEE */
+        $data['tbl_ec_order']['ec_order_load'] = intval(isset($data['load_wallet']['ec_order_load']) == true ? $data['load_wallet']['ec_order_load'] : 0);
+        $data['tbl_ec_order']['ec_order_load_number'] = isset($data['load_wallet']['ec_order_load_number']) == true ? $data['load_wallet']['ec_order_load_number'] : 0 ;
         $data["tbl_ec_order"]["service_fee"] = $service_fee;
         $data["tbl_ec_order"]["total"] = $total;
         $data["tbl_ec_order"]["coupon_id"] = null;
@@ -839,8 +890,6 @@ class Cart
         $data["tbl_ec_order"]["shipping_group"] = null;
         $data["tbl_ec_order"]["order_status"] = "Pending";
         $data["tbl_ec_order"]["payment_status"] = 0;
-        
-
         return $data;
     }
     public static function get_method_information($shop_id, $payment_method_id)
@@ -895,46 +944,264 @@ class Cart
      *
      * @param
      *    $shop_id (int) - Current Shop ID (for validation)
-     *    $order_id (int) - Current Order ID (for updating)
      *    $payment_status (int) - 0 = not paid, 1 = paid
      *    $order_status (str) - Pending, Failed, Processing, Shipped, Completed, On-Hold, Cancelled
+     *    $customer_id (int) - current logged in
      *
      * @return (array)
-     *    - order data (query)
+     *    - order_id
      *
      * @author (Edward Guevarra)
      *
      */
-    public static function submit_order($order_id, $shop_id, $payment_status, $order_status)
+    public static function submit_order($shop_id, $payment_status, $order_status, $customer_id = null)
     {
-        $update["ec_order_id"]    = $order_id;
-        $update["shop_id"]        = $shop_id;
-        $update["payment_status"] = $payment_status;
-        $update["order_status"]   = $order_status;
-
-        return Ec_order::update_ec_order($update);   
+        $order = Cart::get_info($shop_id);
+        $order["tbl_ec_order"]["payment_status"] = $payment_status;
+        $order["tbl_ec_order"]["order_status"]   = $order_status;
+        $order["customer_id"]                    = $customer_id;
+        return Ec_order::create_ec_order_from_cart($order);   
     }
-
-    public static function process_payment($shop_id)
+    public static function process_payment($shop_id, $from = "checkout")
     {
-        $data = Self::get_info($shop_id);
+        $data = Cart::get_info($shop_id);
         $method_id = $data["tbl_ec_order"]["payment_method_id"];
         $method_information = Self::get_method_information($shop_id, $method_id);
-        
         if ( isset($method_id) && isset($method_information) )
         {
             switch ($method_information->link_reference_name)
             {
-                case 'ipay88': Redirect::to("/postPaymentWithIPay88")->send(); break;
-                case 'e-wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
-                case 'paypal2': die("UNDER DEVELOPMENT"); break;
-                default: die("UNDER DEVELOPMENT"); break;
+                case 'paypal2': dd("UNDER DEVELOPMENT"); break;
+                case 'paymaya': Cart::submit_using_paymaya($data, $shop_id, $method_information, $from); break;
+                case 'paynamics': dd("UNDER DEVELOPMENT"); break;
+                case 'dragonpay': return Cart::submit_using_dragonpay($data, $shop_id, $method_information, $from); break;
+                case 'ipay88': return Cart::submit_using_ipay88($data, $shop_id, $method_information); break;
+                case 'other': return Cart::submit_using_proof_of_payment($shop_id, $method_information);  break;
+                case 'e_wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
+                default: dd("UNDER DEVELOPMENT"); break;
             }
         }
         else
         {
-            die("An error has occurred. Please try again later.");
+            return Redirect::back()->with("error", "Please choose payment method.")->send();
         }
+    }
+    public static function submit_using_paymaya($data, $shop_id, $method_information, $from)
+    {
+        echo "Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.";
+        $api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)->join("tbl_online_pymnt_gateway", "tbl_online_pymnt_gateway.gateway_id", "=", "tbl_online_pymnt_api.api_gateway_id")->where("gateway_code_name", "paymaya")->first();
+
+        PayMayaSDK::getInstance()->initCheckout($api->api_client_id, $api->api_secret_id, "SANDBOX");
+        
+        // Checkout
+        $itemCheckout = new Checkout();
+        $user = new User();
+        $itemCheckout->buyer = $user->buyerInfo();
+
+        $totalAmount = new ItemAmount();
+        $total = 0;
+        foreach (array_values($data["cart"]) as $key => $value) 
+        {
+            $product = Tbl_ec_variant::where("evariant_id", $value["product_id"])->first();
+            $product_item = Tbl_item::where("item_id", $product->evariant_item_id)->first();
+            // Item
+            $itemAmountDetails = new ItemAmountDetails();
+            $itemAmountDetails->shippingFee = "0.00";
+            $itemAmountDetails->tax = "0.00";
+            $itemAmountDetails->subtotal = "0.00";
+
+            $itemAmount = new ItemAmount();
+            $itemAmount->currency = "PHP";
+            $itemAmount->value = (string)number_format($product->evariant_price, 2, '.', '');
+            $itemAmount->details = $itemAmountDetails;
+
+            $itemTotalAmount = new ItemAmount();
+            $itemTotalAmount->currency = "PHP";
+            $itemTotalAmount->value = (string)number_format($product->evariant_price * $value["quantity"], 2, '.', '');
+            $itemTotalAmount->details = $itemAmountDetails;
+
+            $totalAmount->currency = "PHP";
+            $totalAmount->value = 0;
+            $totalAmount->details = $itemAmountDetails;
+            $total += $product->evariant_price * $value["quantity"];
+
+            $item[$key] = new Item();
+            $item[$key]->name = $product->evariant_item_label;
+            $item[$key]->code = $product_item->item_sku;
+            $item[$key]->description = $product->item_sales_information ? $product->item_sales_information : "Product #" . $product->evariant_id;
+            $item[$key]->quantity = (string)$value["quantity"];
+            $item[$key]->amount = $itemAmount;
+            $item[$key]->totalAmount = $itemTotalAmount;
+        }
+   
+        $payment_status = 0;
+        $order_status   = "Pending";
+        $customer       = Cart::get_customer();
+
+        $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null);
+        Cart::clear_all($shop_id);
+
+        $totalAmount->value = number_format($total, 2, '.', '');
+
+        $itemCheckout->items = $item;
+        $itemCheckout->totalAmount = $totalAmount;
+        $itemCheckout->requestReferenceNumber = $shop_id . time();
+        $itemCheckout->redirectUrl = array(
+            "success" =>  URL::to("/payment/paymaya/success?order_id=" . Crypt::encrypt($order_id) . "&from=" . $from),
+            "failure" => URL::to("/payment/paymaya/failure"),
+            "cancel" => URL::to("/payment/paymaya/cancel")
+        );
+
+        $itemCheckout->execute();
+
+        // echo $itemCheckout->id; // Checkout ID
+        // echo $itemCheckout->url; // Checkout URL
+        return Redirect::to($itemCheckout->url)->send();
+    }
+    public static function submit_using_dragonpay($data, $shop_id, $method_information, $from)
+    {
+        $gateway = DB::table("tbl_online_pymnt_gateway")->where("tbl_online_pymnt_api.api_shop_id", $shop_id)
+                                                        ->where("tbl_online_pymnt_gateway.gateway_code_name", $method_information->link_reference_name)
+                                                        ->join("tbl_online_pymnt_api", "tbl_online_pymnt_api.api_gateway_id" , "=", "tbl_online_pymnt_gateway.gateway_id")
+                                                        ->first();
+        if ($gateway) 
+        {
+            foreach ($data['tbl_ec_order_item'] as $key => $value) 
+            {
+                if ($key != count($data["cart"])) 
+                {
+                    $product_summary = "Product #" . $value["item_id"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["price"]) . "";
+                }
+                else
+                {
+                    $product_summary = "Product #" . $value["item_id"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["price"]) . ", ";
+                }
+            }
+
+            $merchant_id  = $gateway->api_client_id;
+            $merchant_key = $gateway->api_secret_id;
+
+            $requestpayment    = new Dragon_RequestPayment($merchant_key);
+            $request["txnid"]  = $shop_id . time();
+            $request["amount"] = $data["tbl_ec_order"]["total"];
+            $request["ccy"]    = "PHP";
+            $request["description"] = $product_summary;
+            $request["email"] = $data["tbl_ec_order"]["customer_email"];
+
+            $payment_status = 0;
+            $order_status   = "Pending";
+            $customer       = Cart::get_customer();
+
+            $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null);
+            Cart::clear_all($shop_id);
+            
+            $dragon_request = array(
+                'merchantid'    => $requestpayment->setMerchantId($merchant_id),
+                'txnid'         => $requestpayment->setTxnId($request['txnid']),
+                'amount'        => $requestpayment->setAmount($request['amount']),
+                'ccy'           => $requestpayment->setCcy($request['ccy']),
+                'description'   => $requestpayment->setDescription($request['description']),
+                'email'         => $requestpayment->setEmail($request['email']),
+                'digest'        => $requestpayment->getdigest(),
+                'param1'        => $from,
+                'param2'        => $order_id
+            );
+
+            Dragon_RequestPayment::make($merchant_key, $dragon_request); 
+        }  
+        else
+        {
+            dd("Some error occurred. Please contact the administrator.");
+        }
+    }
+    public static function submit_using_ipay88($data, $shop_id, $method_information)
+    {
+        echo "Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.";
+        $api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)->join("tbl_online_pymnt_gateway", "tbl_online_pymnt_gateway.gateway_id", "=", "tbl_online_pymnt_api.api_gateway_id")->where("gateway_code_name", "ipay88")->first();
+
+        /* DELIMETER */
+        switch ($method_information->link_delimeter) 
+        {  
+            /* Credit Card */
+            case 1: $data["paymentId"] = 1; break;
+            /* Bancnet */
+            case 5: $data["paymentId"] = 5; break;
+            /* Default (Credit Card) */
+            default: $data["paymentId"] = 1; break;
+        }
+
+        $data["refNo"] = $shop_id . time();
+        $data["amount"] = $data["tbl_ec_order"]["total"];
+
+        /* REASTRUCTURE */
+        $product_summary = array();
+        foreach ($data['tbl_ec_order_item'] as $key => $value) 
+        {
+            if ($key != count($data["cart"])) 
+            {
+                $product_summary = "Product #" . $value["item_id"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["price"]) . "";
+            }
+            else
+            {
+                $product_summary = "Product #" . $value["item_id"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["price"]) . ", ";
+            }
+        }
+
+        $data["currency"] = "PHP";
+        $data["prodDesc"] = $product_summary;
+        $data["userName"] = $data["tbl_customer"]["first_name"] . " " . $data["tbl_customer"]["last_name"];
+        $data["userEmail"] = $data["tbl_ec_order"]["customer_email"];
+        $data["userContact"] = $data["tbl_customer"]["customer_contact"];
+        $data["remark"] = "Remarks";
+        $data["lang"] = "UTF-8";
+        $data["responseUrl"] = URL::to('/ipay88_response');
+        $data["backendUrl"] = URL::to('/ipay88_response');
+        $data["merchantKey"] = $api->api_secret_id;
+        $data["merchantCode"] = $api->api_client_id;
+        $requestpayment = new RequestPayment($data["merchantKey"]);
+
+        $ipay88request = array(
+            'merchantCode'  => $requestpayment->setMerchantCode($data["merchantCode"]),
+            'paymentId'     => $requestpayment->setPaymentId($data["paymentId"]),
+            'refNo'         => $requestpayment->setRefNo($data["refNo"]),
+            'amount'        => $requestpayment->setAmount($data["amount"]),
+            // 'amount'        => $requestpayment->setAmount(15),
+            'currency'      => $requestpayment->setCurrency($data["currency"]),
+            'prodDesc'      => $requestpayment->setProdDesc($data["prodDesc"]),
+            'userName'      => $requestpayment->setUserName($data["userName"]),
+            'userEmail'     => $requestpayment->setUserEmail($data["userEmail"]),
+            'userContact'   => $requestpayment->setUserContact($data["userContact"]),
+            'remark'        => $requestpayment->setRemark($data["remark"]),
+            'lang'          => $requestpayment->setLang($data["lang"]),
+            'signature'     => $requestpayment->getSignature(),
+            'responseUrl'   => $requestpayment->setResponseUrl($data["responseUrl"]),
+            'backendUrl'    => $requestpayment->setBackendUrl($data["backendUrl"])
+        );
+
+        RequestPayment::make($data["merchantKey"], $ipay88request);  
+    }
+    public static function submit_using_proof_of_payment($shop_id, $method_information)
+    {
+        $payment_status = 0;
+        $order_status   = "Pending";
+        $customer       = Cart::get_customer();
+
+        $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null);
+        Cart::clear_all($shop_id);
+
+        $tbl_order = DB::table("tbl_ec_order")->where("tbl_ec_order.ec_order_id", $order_id)->leftJoin("tbl_customer", "tbl_customer.customer_id", "=", "tbl_ec_order.customer_id")->first();
+      
+        $data["template"] = Tbl_email_template::where("shop_id", $shop_id)->first();
+        $data['mail_to'] = $tbl_order->customer_email;
+        $data['mail_username'] = Config::get('mail.username');
+        $data['mail_subject'] = "Verify Payment";
+        $data['payment_detail'] = $method_information->other_description;
+        $data['customer_full_name'] = $tbl_order->first_name . " " . $tbl_order->middle_name . " " . $tbl_order->last_name;
+        $data['order_id'] = Crypt::encrypt($tbl_order->ec_order_id);
+
+        $result = Mail_global::payment_mail($data, $shop_id);
+        
+        return Redirect::to("/email_payment?email=" . $tbl_order->customer_email)->send();
     }
     public static function submit_using_ewallet($cart, $shop_id)
     {
@@ -946,6 +1213,11 @@ class Cart
         if($slot_session != null)
         {
             $check_wallet = Mlm_slot_log::get_sum_wallet($slot_session->slot_id);
+            $payment_status = 0;
+            $order_status   = "Pending";
+            $customer       = Cart::get_customer();
+
+            $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null);
             if($check_wallet >= $sum )
             {
                 // return $check_wallet;
@@ -961,7 +1233,10 @@ class Cart
                 $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
                 
                 Mlm_slot_log::slot_array($arry_log);
-                $cart["order_status"] = "Processing";
+                $update['ec_order_id'] = $order_id;
+                $update['order_status'] = "Processing";
+                $update['payment_status'] = 1;
+                $order = Ec_order::update_ec_order($update);
             }
             else
             {
@@ -981,6 +1256,17 @@ class Cart
         Cart::clear_all($shop_id);
         $result['status'] = 'success';
         return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)))->send();
+    }
+    public static function get_customer()
+    {
+        if(Session::get('mlm_member') != null)
+        {
+            return Session::get('mlm_member');
+        }
+        else
+        {
+            return null;
+        }
     }
     public static function get_userip()
     {

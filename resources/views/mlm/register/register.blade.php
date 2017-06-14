@@ -4,39 +4,38 @@
 <div class="container-fluid">
 	<div class="register">
 		<div class="title">Create a Brown ID</div>
-		<div class="sub">Nulla dolor lacus, viverra sed laoreet a, tristique ut elit.</div>
 		<form method="post" class="register-submit" action="/member/register/submit" >
-		{!! csrf_field() !!}
+			{!! csrf_field() !!}
 			<div class="form-container">
 				<div class="row clearfix">
 					<div class="col-md-6">
 						<div class="form-group">
 							<label>First Name</label>
-							<input type="text" class="form-control input-lg" name="first_name" value="{{Request::old('first_name')}}" required>
+							<input type="text" class="form-control input-lg" name="first_name" value="{{ Request::old('first_name') ? Request::old('first_name') : ( isset($current['tbl_customer']['first_name']) ? $current['tbl_customer']['first_name'] : '' ) }}" required>
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
 							<label>Last Name</label>
-							<input type="text" class="form-control input-lg" name="last_name" required>
+							<input type="text" class="form-control input-lg" name="last_name" value="{{ Request::old('last_name') ? Request::old('last_name') : ( isset($current['tbl_customer']['last_name']) ? $current['tbl_customer']['last_name'] : '' ) }}" required>
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
 							<label>Email</label>
-							<input type="email" class="form-control input-lg" name="email" required>
+							<input type="email" class="form-control input-lg" name="email" value="{{ Request::old('email') ? Request::old('email') : ( isset($current['tbl_customer']['email']) ? $current['tbl_customer']['email'] : '' ) }}" required>
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
 							<label>Contact Number</label>
-							<input type="text" class="form-control input-lg" name="contact_number" required>
+							<input type="text" class="form-control input-lg" name="contact_number" value="{{ Request::old('contact_number') ? Request::old('contact_number') : ( isset($current['tbl_customer']['customer_contact']) ? $current['tbl_customer']['customer_contact'] : '' ) }}" required>
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
 							<label>Tin No.</label>
-							<input type="text" class="form-control input-lg" name="tin_number" required>
+							<input type="text" class="form-control input-lg" name="tin_number" value="{{ Request::old('tin_number') ? Request::old('tin_number') : ( isset($current['tbl_customer']['tin_number']) ? $current['tbl_customer']['tin_number'] : '' ) }}" required>
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -53,28 +52,34 @@
 			</div>
 			<div class="form-container second">
 				<div class="row clearfix">
+					<div class="col-md-12">
+						<div class="form-group">
+							<label>Sponsor</label>
+							<input type="text" class="form-control input-lg" name="sponsor" value="{{ Request::old('slot_sponsor') ? Request::old('slot_sponsor') : ( isset($current['tbl_mlm_slot']['slot_sponsor']) ? $current['tbl_mlm_slot']['slot_sponsor'] : '' ) }}" required>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-container third">
+				<div class="row clearfix text-center">
 					<div class="col-md-6">
 						<div class="form-group">
-							<label>Username</label>
-							<input type="text" class="form-control input-lg" name="username" required>
+							<label><input type="radio" name="customer_type" onclick="toggle('.corporate-type','personal', this)" value="0"> Individual</label>
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label>Sponsor (Optional)</label>
-							<input type="text" class="form-control input-lg" name="sponsor" required>
+							<label><input type="radio" name="customer_type" onclick="toggle('.corporate-type','corporate', this)" value="1"> Corporate</label>
 						</div>
 					</div>
-					<div class="col-md-6">
+				</div>
+			</div>
+			<div class="form-container fourth corporate-type" style="display: none" >
+				<div class="row clearfix">
+					<div class="col-md-12">
 						<div class="form-group">
-							<label>Password</label>
-							<input type="password" class="form-control input-lg" name="password">
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="form-group">
-							<label>Confirm Password</label>
-							<input type="password" class="form-control input-lg" name="password_confirm">
+							<label>Company</label>
+							<input type="text" class="form-control input-lg" name="company">
 						</div>
 					</div>
 				</div>
@@ -101,6 +106,17 @@
 @endsection
 @section('script')
 <script type="text/javascript">
+	function toggle(className,type, obj) 
+	{
+		if(type == 'personal')
+		{
+			$(className).slideUp()
+		}
+		if(type == 'corporate')
+		{
+			$(className).slideDown()
+		}
+    }
 	$(document).on("submit", ".register-submit", function(e)
         {
             var data = $(e.currentTarget).serialize();

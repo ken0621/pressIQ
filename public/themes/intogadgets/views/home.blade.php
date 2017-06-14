@@ -68,13 +68,11 @@
     <!-- Place somewhere in the <body> of your page -->
     <div class="flexslider">
       <ul class="slides">
-        @if(is_serialized(get_content($shop_theme_info, 'home', 'home_brand_image', '')))
-            @foreach(unserialize(get_content($shop_theme_info, 'home', 'home_brand_image', '')) as $brand)
-            <li>
-              <a href="/product?brand={{ $brand['link'] }}"><img src="{{ $brand['image'] }}"></a>
-            </li>
-            @endforeach
-        @endif
+          @foreach($_brand as $brand)
+          <li>
+            <a href="/product?brand={{ $brand->manufacturer_id }}"><img src="{{ $brand->image_path }}"></a>
+          </li>
+          @endforeach
         <!-- items mirrored twice, total of 12 -->
       </ul>
     </div>

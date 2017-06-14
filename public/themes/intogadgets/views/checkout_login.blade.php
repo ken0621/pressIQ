@@ -16,7 +16,7 @@
 					<form method="post">
 						<input type="hidden" name="_token" value="{{ csrf_token() }}">
 						<div class="form-group">
-							<input value="{{ old('email') }}" type="email" class="the-email form-control" placeholder="Enter your email address" name="email">
+							<input required value="{{ old('email') }}" type="email" class="the-email form-control" placeholder="Enter your email address" name="email">
 						</div>
 						<div class="form-group">
 							<div class="radio">
@@ -27,7 +27,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<input disabled type="password" class="the-password form-control" placeholder="Enter your password" name="password">
+							<input required disabled type="password" class="the-password form-control" placeholder="Enter your password" name="password">
 						</div>
 						<div class="form-group">
 							<button class="btn btn-primary">CONTINUE</button>

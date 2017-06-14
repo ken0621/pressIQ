@@ -8,6 +8,7 @@ function dashboard()
 		$(document).ready(function()
 		{
 			document_ready();
+			action_change_to_insights();
 		});
 	}
 	function document_ready()
@@ -16,9 +17,15 @@ function dashboard()
 	}
 	function event_connected_arrow()
 	{
+			
+	}
+	
+	function action_connected_arrow()
+	{
 		
 	}
-	function action_connected_arrow()
+
+	function action_change_to_insights()
 	{
 		
 	}

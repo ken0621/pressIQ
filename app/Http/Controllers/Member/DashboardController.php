@@ -98,7 +98,7 @@ class DashboardController extends Member
                             ->whereIn("chart_type_name", ['Bank'])
                             ->get();
 
-		return view('member.dashboard.dashboardv1', $data);
+		return view('member.dashboard.new_dashboard', $data);
 	}
 
 	public function random_color_part() {

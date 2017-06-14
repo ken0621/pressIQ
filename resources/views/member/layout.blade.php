@@ -37,7 +37,6 @@
     <link rel="stylesheet" type="text/css" href="/assets/member/css/windows8.css">
     <link rel="stylesheet" type="text/css" href="/assets/member/css/pis_ctr.css">
     <link rel="stylesheet" type="text/css" href="/assets/member/css/image_gallery.css">
-    <link rel="stylesheet" type="text/css" href="/assets/member/css/dashboard.css">
     
     <link rel="stylesheet" type="text/css" href="/assets/member/plugin/dropzone/basic.css">
     <link rel="stylesheet" type="text/css" href="/assets/custom_plugin/myDropList/css/myDropList.css">

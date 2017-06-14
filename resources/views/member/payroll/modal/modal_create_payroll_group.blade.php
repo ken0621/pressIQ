@@ -387,69 +387,20 @@
 							
 							<div class="form-group">
 								<div class="col-md-6">
-									<small>Working Days(per month)</small>
+									<small>Working Days (per month)</small>
 									<input type="number" name="payroll_group_working_day_month" class="form-control text-center" step="any" required>
 								</div>
 								<div class="col-md-6">
-									<small>Grace Time Period</small>
+									<small>Late Grace Time Period</small>
 									<input type="number" name="payroll_group_grace_time" class="form-control text-center" step="any" required>
 								</div>
-							</div>
-							<div class="form-group">
 								<div class="col-md-12">
-									<table class="table table-condensed table-bordered timesheet">
-										<thead>
-											<tr>
-												<th rowspan="2" valign="center" class="text-center">Day</th>
-												<th rowspan="2" valign="center" class="text-center">Target Hours</th>
-												<th colspan="2" class="text-center">Work Schedule</th>
-												<th colspan="2" class="text-center">Break Schedule</th>
-												<th rowspan="2" class="text-center">Flexi Time</th>
-												<th rowspan="2" class="text-center">Rest Day</th>
-												<th rowspan="2" class="text-center">Extra Day</th>
-											</tr>
-											<tr>
-												<th class="text-center">Start</th>
-												<th class="text-center">End</th>
-												<th class="text-center">Start</th>
-												<th class="text-center">End</th>
-											</tr>
-										</thead>
-										<tbody>
-											@foreach($_day as $key => $day)
-											<tr class="editable">
-												<td>
-													{{$day['day']}}
-													<input type="hidden" name="day[]" value="{{$day['day']}}">
-												</td>
-												<td>
-													<input type="number" name="target_hours[]" class="form-control text-center" step="any" >
-												</td>
-												<td class="editable">
-													<input type="text" name="work_start[]" class="text-table time-entry" >
-												</td>
-												<td class="editable">
-													<input type="text" name="work_end[]" class="text-table time-entry" >
-												</td>
-												<td class="editable">
-													<input type="text" name="break_start[]" class="text-table time-entry" >
-												</td>
-												<td class="editable">
-													<input type="text" name="break_end[]" class="text-table time-entry" >
-												</td>
-												<td class="text-center">
-													<input type="checkbox" name="flexi_{{$key}}" value="1">
-												</td>
-												<td class="text-center">
-													<input type="checkbox" name="rest_day_{{$key}}" class="restday-check" value="1">
-												</td>
-												<td class="text-center">
-													<input type="checkbox" name="extra_day_{{$key}}" class="extraday-check" value="1">
-												</td>
-											</tr>
-											@endforeach
-										</tbody>
-									</table>
+									<small>Default Shift Template</small>
+									<select class="form-control">
+										<option>Morning Shift</option>
+										<option>Night Shift</option>
+										<option>Graveyard Shift</option>
+									</select>
 								</div>
 							</div>
 						</div>
@@ -469,19 +420,6 @@
 <script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.min.js"></script>
 
 <script type="text/javascript">
-
-	var shifting = new shifting();
-
-	function shifting()
-	{
-		init();
-
-		function init()
-		{
-			
-		}
-	}
-
 	$(".restday-check").unbind("change");
 	$(".restday-check").bind("change", function () {
 		var parent = $(this).parents('tr').find('.extraday-check');

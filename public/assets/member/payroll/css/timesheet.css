@@ -10,7 +10,7 @@
 .timesheet thead {
   background-color: #FBFBFB; }
 .timesheet tbody tr {
-  cursor: pointer; }
+  cursor: default; }
   .timesheet tbody tr td {
     padding: 5px !important; }
     .timesheet tbody tr td textarea {
@@ -23,13 +23,15 @@
       border-radius: 3px;
       padding: 8px; }
     .timesheet tbody tr td input[type=text] {
-      border: none;
+      border: 1px solid transparent;
       width: 100%;
       text-align: center;
-      padding: 5px;
+      padding: 2px;
       background-color: transparent;
       cursor: pointer;
-      border-radius: 3px; }
+      border-radius: 3px;
+      margin-top: 2px !important;
+      margin-bottom: 2px !important; }
     .timesheet tbody tr td .button {
       display: block;
       padding: 5px;

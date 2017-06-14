@@ -55,6 +55,9 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_timesheet','Member\PayrollTimeSheetController@index');
 	Route::any('/company_timesheet/{id}','Member\PayrollTimeSheetController@company_timesheet');
 
+	Route::any('/company_timesheet2/{company_id}','Member\PayrollTimeSheet2Controller@index');
+	Route::any('/company_timesheet2/{company_id}/{employee_id}','Member\PayrollTimeSheet2Controller@timesheet');
+
 	Route::any('/employee_timesheet/timesheet/{id}/{period_id}','Member\PayrollTimeSheetController@timesheet');
 	Route::any('/employee_timesheet/json_process_time','Member\PayrollTimeSheetController@json_process_time');
 	Route::any('/employee_timesheet/json_process_time_single/{date}/{employee_id}','Member\PayrollTimeSheetController@json_process_time_single');
@@ -282,6 +285,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* SHIFT TEMPLATE START */
      Route::any('/shift_template',"Member\PayrollController@shift_template");
      Route::any('/shift_template/modal_create_shift_template',"Member\PayrollController@modal_create_shift_template");
+     Route::any('/shift_template/modal_update_shift_template',"Member\PayrollController@modal_update_shift_template");
      Route::any('/shift_template/modal_save_shift_template',"Member\PayrollController@modal_save_shift_template");
      Route::any('/shift_template/modal_view_shift_template/{id}',"Member\PayrollController@modal_view_shift_template");
      Route::any('/shift_template/modal_update_shift_template',"Member\PayrollController@modal_update_shift_template");

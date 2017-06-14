@@ -22,12 +22,9 @@
 			<div class="panel panel-default">
 				<div class="panel-body background-white">
 					<div class="list-group">
-
-
 						@foreach($_link as $link)
 							<a href="{{$link['link']}}" class="list-group-item  a-navigation-configuration">{{$link['access_name']}}</a>
 						@endforeach
-
 					</div>
 					
 				</div>
@@ -44,4 +41,6 @@
 @section('script')
 
 <script type="text/javascript" src="/assets/member/js/payroll/payrollconfiguration.js"></script>
+<script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.plugin.min.js"></script>
+<script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.min.js"></script>
 @endsection

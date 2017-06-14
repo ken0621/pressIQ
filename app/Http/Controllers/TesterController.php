@@ -57,7 +57,7 @@ class TesterController extends Controller
 
 	public function getIndex()
     {
-
+        dd(Accounting::getAllAccount());
     }
 
     public function getJournal()

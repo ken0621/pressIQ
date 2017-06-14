@@ -214,5 +214,5 @@ var expense_color    = {!!$expense_color !!};
 var income_date     = {!! $income_date !!}
 var income_value    = {!! $income_value !!}
 </script>
-<script type="text/javascript" src='/assets/member/js/dashboard_chart.js?v=2'></script>
+<script type="text/javascript" src='assets/member/js/dashboard_chart.js?v=2'></script>
 @endsection

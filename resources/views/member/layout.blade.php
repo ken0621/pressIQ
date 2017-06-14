@@ -53,7 +53,7 @@
         cursor: pointer;
     }
     </style>
-    <link rel="stylesheet" type="text/css" href="/assets/member/css/global.css">
+    <link rel="stylesheet" type="text/css" href="assets/member/css/global.css">
     @yield('css')
     <script>
     (function () {
@@ -457,6 +457,31 @@
             return  num=="-" ? acc : num + (i && !(i % 3) ? "," : "") + acc;
         }, "") + "." + p[1];
     }
+
+    $(document).ready(function()
+    {
+        $("script").each(function(index, el) 
+        {
+            var current = $(el).attr("src");
+            if (current && current.indexOf("/assets") != -1) 
+            {
+                var replace = current.replace('/assets', 'assets');
+                $(el).remove();
+                $('<script type="text/javascript">').attr('src', replace).prependTo('body');
+            } 
+        });
+
+        $("link").each(function(index, el) 
+        {
+            var current = $(el).attr("href");
+            if (current && current.indexOf("/assets") != -1) 
+            {
+                var replace = current.replace('/assets', 'assets');
+                $(el).remove();
+                $('<link rel="stylesheet" type="text/css">').attr('href', replace).appendTo('head');
+            } 
+        });
+    })
 	</script>
     @yield('script')
 </body>

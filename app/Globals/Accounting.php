@@ -485,7 +485,7 @@ class Accounting
 		$journal_entry['je_entry_date'] 		= $entry['entry_date'];
 		$journal_entry['created_at'] 			= Carbon::now();
 		$journal_entry['je_remarks']			= $remarks;
-
+		
 		/* CHECK IF JOURNAL EXIST - IF THERE IS A JOURNAL ID */
 		if(!$entry['je_id'])
 		{
@@ -498,7 +498,7 @@ class Accounting
 			Tbl_journal_entry::where("je_id", $entry['je_id'])->update($journal_entry);
 			$line_data["je_id"] = $entry['je_id'];
 		}
-
+		
 		foreach($entry_data as $line)
 		{
 			$line_data["jline_name_id"]			= $line["name_id"];
@@ -513,7 +513,7 @@ class Accounting
 
 		return $line_data["je_id"];
 	}
-
+	
 	public static function insertJournalLine($line)
 	{
 		$journal_line['jline_je_id']			= $line["je_id"];

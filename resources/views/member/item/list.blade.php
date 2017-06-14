@@ -108,11 +108,9 @@
                         <tr>
                             <th>Item ID</th>
                             <th>Item Name</th>
-                            <th>Item SKU</th>
-                            <th>Item Category</th>
-                            <th>Item Type</th>
+                            <th>Warehouse/Merchant</th>
                             <th>Item Price</th>
-                            <th>Item Date Created</th>
+                            <th>Added By</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -121,14 +119,15 @@
                         <tr>
                             <td>{{$item->item_id}}</td>
                             <td>{{$item->item_name}}</td>
-                            <td>{{$item->item_sku}}</td>
-                            <td>{{$item->type_name}}</td>
-                            <td>{{$item->item_type_name}}</td>
-                            <td>{{currency("PHP", $item->item_price)}}</td>
-                            <td>{{date("F d, Y", strtotime($item->item_date_created))}}</td>
+                            <td>{{$item->warehouse_name}}</td>
+                            <td>{{$item->item_price}}</td>
+                            <td>{{$item->customer_name}}</td>
                             <td>
                                 <div class="btn-group">
-                                    <a link="/member/item/restore/{{$item->item_id}}" href="javascript:" class="btn btn-primary btn-grp-primary popup">Restore</a>
+                                    <a link="/member/item/approve_request/{{$item->item_id}}" href="javascript:" class="btn btn-primary btn-grp-primary popup">Approve</a>
+                                </div>
+                                <div class="btn-group">
+                                    <a link="/member/item/decline_request/{{$item->item_id}}" href="javascript:" class="btn btn-primary btn-grp-primary popup">Decline</a>
                                 </div>
                             </td>
                         </tr>

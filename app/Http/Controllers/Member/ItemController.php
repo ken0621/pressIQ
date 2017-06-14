@@ -64,9 +64,11 @@ class ItemController extends Member
 											     });
 
 	        $item_pending  		       = Tbl_item::where("tbl_item.archived",1)
-        								         ->where("shop_id",$shop_id)
+        								         ->where("tbl_item.shop_id",$shop_id)
         								         ->type()
         								         ->leftJoin("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+        								         ->leftJoin("tbl_warehouse","tbl_warehouse.warehouse_id","=","tbl_item_merchant_request.merchant_warehouse_id")
+        								         ->leftJoin("tbl_customer","tbl_customer.customer_id","=","tbl_item_merchant_request.item_merchant_requested_by")
         								         ->category()
 										         ->where(function($query)
 										         {
@@ -128,6 +130,7 @@ class ItemController extends Member
 				}
 			}
 			$data["_item_archived"]	   = $item_archived->get();
+			$data["_item_pending"]	   = $item_pending->get();
 
 		    return view('member.item.list',$data);
         }

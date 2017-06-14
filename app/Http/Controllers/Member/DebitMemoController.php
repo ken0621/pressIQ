@@ -419,6 +419,13 @@ class DebitMemoController extends Member
 
             $data["_db"] = Tbl_debit_memo::vendor()->where("vendor_shop_id", $this->getShopId())->orderBy("tbl_debit_memo.db_id","DESC")->get();
 
+            $data["_db_open"] = Tbl_debit_memo::vendor()->where("vendor_shop_id", $this->getShopId())->orderBy("tbl_debit_memo.db_id","DESC")->where("db_memo_status",0) ->get();
+
+            $data["_db_close"] = Tbl_debit_memo::vendor()->where("vendor_shop_id", $this->getShopId())->orderBy("tbl_debit_memo.db_id","DESC")->where("db_memo_status",1) ->get();
+
+
+
+
             foreach ($data["_db"] as $key => $value) 
             {
                 if($data["_db"][$key]->db_memo_status == 1)

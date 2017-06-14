@@ -443,18 +443,17 @@ footer
 			border: 1px solid #d6d6d6;
 		}
 	}
+	.slider3-title{
+		padding-bottom: 5px;
+		font-size: 12px;
+	}
 
 	.slider3{
 		position: relative;
 		overflow: hidden;
 		width: 463px;
-		height: 115px;
+		height: 120px;
 		background-color: #fff;
-
-		.slider3-title{
-			padding-bottom: 5px;
-			font-size: 12px;
-		}
 
 		.slider3-per-container{
 			float: left;

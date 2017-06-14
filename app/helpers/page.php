@@ -143,7 +143,7 @@ function page_list()
     
     /* MLM */
     $page = "mlm";  
-    $nav[$page]['name'] = "Multilevel Marketing";
+    $nav[$page]['name'] = "Loyalty Reward System";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "braille";
     $nav[$page]['type']     = "menu";
@@ -1185,6 +1185,14 @@ function page_list()
     $nav[$page]['submenu'][$code]['label'] = "Terms"; 
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/terms/list";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
+
+    $code = "maintenance-location";
+    $nav[$page]['submenu'][$code]['label'] = "Location"; 
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/location/list";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";

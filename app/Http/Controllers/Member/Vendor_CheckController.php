@@ -48,6 +48,7 @@ class Vendor_CheckController extends Member
     {
         Session::forget("po_item");
         $data["_vendor"]    = Vendor::getAllVendor('active');
+        $data["_name"]      = Tbl_customer::unionVendor(WriteCheck::getShopId())->get();
         $data['_item']      = Item::get_all_category_item();
         $data['_account']   = Accounting::getAllAccount();
         $data['_um']        = UnitMeasurement::load_um_multi();
@@ -72,8 +73,21 @@ class Vendor_CheckController extends Member
     }
     public function check_list()
     {
-        $data["_check"] = Tbl_write_check::vendor()->where("wc_shop_id",$this->user_info->shop_id)->get();
+        $data["_check"] = Tbl_write_check::where("wc_shop_id",$this->user_info->shop_id)->get();
         
+        foreach ($data["_check"] as $key => $value) 
+        {
+            $v_data = Tbl_vendor::where("vendor_id",$value->wc_reference_id)->first();
+            $name = isset($v_data) ? ($v_data->vendor_company != "" ? $v_data->vendor_company : $v_data->vendor_first_name." ".$v_data->vendor_last_name) : "";
+            if($value->wc_reference_name == "customer")
+            {
+                $c_data = Tbl_customer::where("customer_id",$value->wc_reference_id)->first();
+                $name = isset($c_data) ? ($c_data->company != "" ? $c_data->company : $v_data->first_name." ".$c_data->last_name) : "";
+            }
+
+            $data["_check"][$key]->name = $name;
+        }
+
 
         return view("member.vendor.check.check_list",$data);
     }
@@ -82,9 +96,10 @@ class Vendor_CheckController extends Member
     {
         $button_action = Request::input('button_action');
 
-        $vendor_info                         = [];
-        $vendor_info['wc_vendor_id']       = Request::input('wc_vendor_id');
-        $vendor_info['wc_vendor_email']    = Request::input('wc_vendor_email');
+        $vendor_info                       = [];
+        $vendor_info['wc_reference_id']    = Request::input('wc_reference_id');
+        $vendor_info['wc_reference_name']  = Request::input('wc_reference_name');
+        $vendor_info['wc_customer_vendor_email']    = Request::input('wc_customer_vendor_email');
         $vendor_info['wc_mailing_address'] = Request::input('wc_mailing_address');
 
         $wc_info                            = [];
@@ -211,8 +226,9 @@ class Vendor_CheckController extends Member
         $button_action = Request::input('button_action');
 
         $vendor_info                         = [];
-        $vendor_info['wc_vendor_id']       = Request::input('wc_vendor_id');
-        $vendor_info['wc_vendor_email']    = Request::input('wc_vendor_email');
+        $vendor_info['wc_reference_id']    = Request::input('wc_reference_id');
+        $vendor_info['wc_reference_name']  = Request::input('wc_reference_name');
+        $vendor_info['wc_customer_vendor_email']    = Request::input('wc_customer_vendor_email');
         $vendor_info['wc_mailing_address'] = Request::input('wc_mailing_address');
 
         $wc_info                            = [];

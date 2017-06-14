@@ -35,6 +35,8 @@ use App\Models\Tbl_voucher_item;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_mlm_slot_wallet_log_transfer;
 use App\Models\Tbl_mlm_slot_wallet_log_refill;
+use App\Models\Tbl_ec_order;
+use App\Models\Tbl_inventory_slip;
 class Mlm_report
 {   
     public static function general($shop_id, $filter)
@@ -702,7 +704,44 @@ class Mlm_report
 
         return view('member.mlm_report.report.encashment_processed', $data);
     }
+    public static function warehouse_consiladated($shop_id, $filters)
+    {
+            $all_warehouse = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->where('archived', 0)->get();
+            foreach($all_warehouse as $key => $value)
+            {
+                if($value->main_warehouse == 2)
+                {
+                    $product = Tbl_ec_order::where('shop_id', $shop_id)
+                    ->where('created_date', '>=', $filters['from'])
+                    ->where('created_date', '<=', $filters['to'])
+                    ->where('payment_status', 1)
+                    ->sum('total');
+                }
+                else
+                {
+                    $product = Tbl_item_code_invoice::where('tbl_item_code_invoice.shop_id', $shop_id)
+                    ->where('item_code_date_created', '>=', $filters['from'])
+                    ->where('item_code_date_created', '<=', $filters['to'])
+                    ->where('warehouse_id', $value->warehouse_id)
+                    ->sum('item_total');
+                }
+                if($product == null)
+                {
+                    $product = 0;
+                }      
 
+                $all_warehouse[$key]->product_sales =   $product; 
+            }
+            $data['sales']['product_sales'] = 'Product Sales';
+            $data['page'] = 'warehouse_consolidated';
+            $data['warehouse'] = $all_warehouse;
+            if(Request::input('pdf') == 'excel')
+            {
+                return $data;
+            }
+
+        return view('member.mlm_report.report.warehouse_consolidated', $data);
+    }
     public static function product_sales_report($shop_id, $filters)
     {
         $data['filteru'] = $filters;

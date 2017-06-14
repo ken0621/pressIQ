@@ -33,5 +33,9 @@ class ItemSerial
     {
     	return Tbl_settings::where("settings_key","item_serial")->where("settings_value",'enable')->where("shop_id",ItemSerial::getShopId())->first();
     }
+    public static function insert_item_serial()
+    {
+    	
+    }
 
 }

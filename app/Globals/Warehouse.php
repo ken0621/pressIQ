@@ -16,6 +16,7 @@ use App\Models\Tbl_user_warehouse_access ;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 
+use App\Globals\ItemSerial;
 use App\Globals\AuditTrail;
 use App\Models\Tbl_unit_measurement_multi;
 use DB;
@@ -724,7 +725,7 @@ class Warehouse
 
                 if(count($item_serial) > 0)
                 {
-                    
+                    ItemSerial::insert_item_serial($item_serial, $inventory_id);
                 }
 
                 $for_serial_item[$key]["quantity"] = $refill_product['quantity'];

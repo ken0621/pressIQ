@@ -12,7 +12,7 @@
           <div class="row clearfix">
             {{-- <div class="col-md-3">
               <div class="holder">
-                <div class="img"><img src="/assets/mlm/img/payment/paypal.jpg"></div>
+                <div class="img"><img src="assets/mlm/img/payment/paypal.jpg"></div>
                 <div class="name">
                   <div class="radio">
                     <label><input type="radio" name="payment_type" value="paypal"> PAYPAL</label>
@@ -23,7 +23,7 @@
             </div>
             <div class="col-md-3">
               <div class="holder">
-                <div class="img"><img src="/assets/mlm/img/payment/credit-card.jpg"></div>
+                <div class="img"><img src="assets/mlm/img/payment/credit-card.jpg"></div>
                 <div class="name">
                   <div class="radio">
                     <label><input type="radio" name="payment_type" value="credit"> Credit Card</label>
@@ -34,7 +34,7 @@
             </div> --}}
             <div class="col-md-3">
               <div class="holder">
-                <div class="img match-height"><img style="width: 100%;" src="/assets/front/img/dragonpay.png"></div>
+                <div class="img match-height"><img style="width: 100%;" src="assets/front/img/dragonpay.png"></div>
                 <div class="name">
                   <div class="radio">
                     <label><input type="radio" name="payment_type" value="dragonpay"> Dragon Pay</label>
@@ -45,7 +45,7 @@
             </div>
             <div class="col-md-3">
               <div class="holder">
-                <div class="img match-height"><img src="/assets/mlm/img/payment/bank-deposit.jpg"></div>
+                <div class="img match-height"><img src="assets/mlm/img/payment/bank-deposit.jpg"></div>
                 <div class="name">
                   <div class="radio">
                     <label><input type="radio" name="payment_type" value="bank"> Bank Deposit</label>
@@ -77,7 +77,7 @@
             </div>
             <div class="col-md-3 hide">
               <div class="holder">
-                <div class="img"><img src="/assets/mlm/img/payment/bank-deposit.jpg"></div>
+                <div class="img"><img src="assets/mlm/img/payment/bank-deposit.jpg"></div>
                 <div class="name">
                   <div class="radio">
                     <label><input type="radio" name="payment_type" value="membership_code"> Membership Code</label>
@@ -295,5 +295,5 @@
 </script>
 @endsection
 @section("css")
-<link rel="stylesheet" type="text/css" href="/assets/mlm/css/register-payment.css">
+<link rel="stylesheet" type="text/css" href="assets/mlm/css/register-payment.css">
 @endsection

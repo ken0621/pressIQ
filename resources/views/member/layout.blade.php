@@ -13,38 +13,38 @@
     <base href="{{ URL::to('digima/public') }}">
 
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker-standalone.min.css">
-    <link rel="stylesheet" href="/assets/member/styles/92bc1fe4.bootstrap.css">
-    <link rel="stylesheet" href="/assets/member/styles/vendor/jquery.pnotify.default.css">
-    <link rel="stylesheet" href="/assets/member/styles/vendor/select2/select2.css">
-    <link rel="stylesheet" href="/assets/member/styles/vendor/datatables.css" media="screen"/> 
-    <link rel="stylesheet" href="/assets/member/styles/aaf5c053.proton.css">
-    <link rel="stylesheet" href="/assets/member/styles/vendor/animate.css">
-    <link rel="stylesheet" href="/assets/member/css/customBTN.css" type="text/css" />
-    <link rel="stylesheet" href="/assets/external/chosen/chosen/chosen.css" media="screen"/>
+    <link rel="stylesheet" href="assets/member/styles/92bc1fe4.bootstrap.css">
+    <link rel="stylesheet" href="assets/member/styles/vendor/jquery.pnotify.default.css">
+    <link rel="stylesheet" href="assets/member/styles/vendor/select2/select2.css">
+    <link rel="stylesheet" href="assets/member/styles/vendor/datatables.css" media="screen"/> 
+    <link rel="stylesheet" href="assets/member/styles/aaf5c053.proton.css">
+    <link rel="stylesheet" href="assets/member/styles/vendor/animate.css">
+    <link rel="stylesheet" href="assets/member/css/customBTN.css" type="text/css" />
+    <link rel="stylesheet" href="assets/external/chosen/chosen/chosen.css" media="screen"/>
     
     <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
-    <script src="/assets/member/scripts/vendor/respond.min.js"></script>
+    <script src="assets/member/scripts/vendor/respond.min.js"></script>
     <![endif]-->
     
-    <link rel="stylesheet" type="text/css" href="/assets/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/assets/member/styles/6227bbe5.font-awesome.css" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="assets/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/member/styles/6227bbe5.font-awesome.css" type="text/css"/>
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" type="text/css"/> -->
-    <link rel="stylesheet" href="/assets/member/styles/40ff7bd7.font-titillium.css" type="text/css"/>
-    <link rel="stylesheet" href="/assets/member/css/member.css" type="text/css"/>
-    <link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
-    <link rel="stylesheet" type="text/css" href="/assets/member/css/notice.css">
-    <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
-    <link rel="stylesheet" type="text/css" href="/assets/member/css/windows8.css">
-    <link rel="stylesheet" type="text/css" href="/assets/member/css/image_gallery.css">
-    <link rel="stylesheet" type="text/css" href="/assets/member/plugin/dropzone/basic.css">
-    <link rel="stylesheet" type="text/css" href="/assets/custom_plugin/myDropList/css/myDropList.css">
+    <link rel="stylesheet" href="assets/member/styles/40ff7bd7.font-titillium.css" type="text/css"/>
+    <link rel="stylesheet" href="assets/member/css/member.css" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="assets/member/plugin/toaster/toastr.css">
+    <link rel="stylesheet" type="text/css" href="assets/member/css/notice.css">
+    <link rel="stylesheet" type="text/css" href="assets/member/css/loader.css">
+    <link rel="stylesheet" type="text/css" href="assets/member/css/windows8.css">
+    <link rel="stylesheet" type="text/css" href="assets/member/css/image_gallery.css">
+    <link rel="stylesheet" type="text/css" href="assets/member/plugin/dropzone/basic.css">
+    <link rel="stylesheet" type="text/css" href="assets/custom_plugin/myDropList/css/myDropList.css">
 
-    <!-- <link rel="stylesheet" type="text/css" href="/assets/chartist/chartist.css"> -->
-    <!-- <link rel="stylesheet" type="text/css" href="/assets/member/plugin/dropzone/dropzone.min.css"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="assets/chartist/chartist.css"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="assets/member/plugin/dropzone/dropzone.min.css"> -->
 
-    <link rel="stylesheet" href="/assets/external/jquery_css/jquery-ui.css">
-    <link rel="stylesheet" type="text/css" href="/assets/mlm/pace.css">
+    <link rel="stylesheet" href="assets/external/jquery_css/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="assets/mlm/pace.css">
 
     <style type="text/css">
     a
@@ -58,15 +58,15 @@
     (function () {
     var js;
     if (typeof JSON !== 'undefined' && 'querySelector' in document && 'addEventListener' in window) {
-    js = '/assets/external/jquery.minv2.js';
+    js = 'assets/external/jquery.minv2.js';
     } else {
-    js = '/assets/external/jquery.minv1.js';
+    js = 'assets/external/jquery.minv1.js';
     }
     document.write('<script src="' + js + '"><\/script>');
     }());
     </script>
-    <script src="/assets/member/scripts/vendor/modernizr.js"></script>
-    <script src="/assets/member/scripts/vendor/jquery.cookie.js"></script>
+    <script src="assets/member/scripts/vendor/modernizr.js"></script>
+    <script src="assets/member/scripts/vendor/jquery.cookie.js"></script>
     <script>
     $(function()
     {
@@ -442,28 +442,28 @@
     <div class="settings_checking hide" id="do_not_remove_please"></div>
     
     
-    <script type="text/javascript" src="/assets/member/global.js"></script>
+    <script type="text/javascript" src="assets/member/global.js"></script>
 
     <!-- Testing only -->
-    <script type="text/javascript" src="/assets/member/settings/settings_global.js"></script>
-    <script type="text/javascript" src="/assets/member/mlm/global_slot.js"></script>
+    <script type="text/javascript" src="assets/member/settings/settings_global.js"></script>
+    <script type="text/javascript" src="assets/member/mlm/global_slot.js"></script>
     <!-- End -->
 
-    <script src="/assets/external/jquery_ui/jquery_ui.js"></script>
-    <script src="/assets/member/scripts/e1d08589.bootstrap.min.js"></script>
-    <script src="/assets/member/scripts/9f7a46ed.proton.js"></script>
-    <script type="text/javascript" src="/assets/member/scripts/vendor/jquery.pnotify.min.js"></script>
-    <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
+    <script src="assets/external/jquery_ui/jquery_ui.js"></script>
+    <script src="assets/member/scripts/e1d08589.bootstrap.min.js"></script>
+    <script src="assets/member/scripts/9f7a46ed.proton.js"></script>
+    <script type="text/javascript" src="assets/member/scripts/vendor/jquery.pnotify.min.js"></script>
+    <script type="text/javascript" src="assets/member/plugin/toaster/toastr.min.js"></script>
     <!--<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js'></script>-->
-    <script type="text/javascript" src='/assets/member/js/notice.js'></script>
-    <script type="text/javascript" src="/assets/external/chosen/chosen/chosen.jquery.js"></script>
-    <script type="text/javascript" src='/assets/member/plugin/dropzone/dropzone.js'></script>
-    <script type="text/javascript" src='/assets/member/js/image_gallery.js'></script>
-    <script type="text/javascript" src='/assets/custom_plugin/myDropList/js/myDropList.js'></script>
-    <script type="text/javascript" src="/assets/member/js/prompt_serial_number.js"></script>
-    <script type="text/javascript" src='/assets/member/js/match-height.js'></script>
-    <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
-    <script type="text/javascript" src="/assets/mlm/pace.min.js"></script>
+    <script type="text/javascript" src='assets/member/js/notice.js'></script>
+    <script type="text/javascript" src="assets/external/chosen/chosen/chosen.jquery.js"></script>
+    <script type="text/javascript" src='assets/member/plugin/dropzone/dropzone.js'></script>
+    <script type="text/javascript" src='assets/member/js/image_gallery.js'></script>
+    <script type="text/javascript" src='assets/custom_plugin/myDropList/js/myDropList.js'></script>
+    <script type="text/javascript" src="assets/member/js/prompt_serial_number.js"></script>
+    <script type="text/javascript" src='assets/member/js/match-height.js'></script>
+    <script type="text/javascript" src='assets/chartjs/Chart.bundle.min.js'></script>
+    <script type="text/javascript" src="assets/mlm/pace.min.js"></script>
 
     <script type="text/javascript">
 	  $(document).ajaxStart(function() { Pace.restart(); }); 

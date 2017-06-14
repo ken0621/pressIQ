@@ -101,7 +101,7 @@
                                     <span>Don't have an account yet?</span>
                                 </div>
                                 <p class="register button"> 
-                                    <input type="button" value="Create an Account" onClick="location.href='/mlm/register'" /> 
+                                    <input type="button" value="Create an Account" onClick="location.href='/member/register'" /> 
                                 </p>
                                 <p>
                                     <a href="/mlm/login/forgot_password" style="text-decoration: none">Forgot Password ?</a>

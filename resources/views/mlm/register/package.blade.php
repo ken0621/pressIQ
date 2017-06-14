@@ -22,10 +22,10 @@
                   @if($pack->membership_package_imgage != null)
                   <img style="object-fit: contain; height: 250px;" class="img_header_{{$value->membership_id}}" src="{{$pack->membership_package_imgage}}">
                   @else 
-                  <img style="object-fit: contain; height: 250px;" class="img_header_{{$value->membership_id}}" src="/assets/mlm/img/placeholder.jpg">
+                  <img style="object-fit: contain; height: 250px;" class="img_header_{{$value->membership_id}}" src="assets/mlm/img/placeholder.jpg">
                   @endif
               @else
-                <img style="object-fit: contain; height: 250px;" class="img_header_{{$value->membership_id}}" src="/assets/mlm/img/placeholder.jpg">
+                <img style="object-fit: contain; height: 250px;" class="img_header_{{$value->membership_id}}" src="assets/mlm/img/placeholder.jpg">
               @endif
               
             </div>
@@ -115,5 +115,5 @@ function change_picture_a(ito)
 </script>
 @endsection
 @section("css")
-<link rel="stylesheet" type="text/css" href="/assets/mlm/css/register-package.css">
+<link rel="stylesheet" type="text/css" href="assets/mlm/css/register-package.css">
 @endsection

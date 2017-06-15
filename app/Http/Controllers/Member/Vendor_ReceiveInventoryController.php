@@ -88,6 +88,10 @@ class Vendor_ReceiveInventoryController extends Member
                $data["bill"] = Tbl_bill::where("bill_id",$id)->first();
                $data["_po"] = Tbl_purchase_order::where("po_vendor_id",$data["bill"]->bill_vendor_id)->where("po_is_billed",0)->get();
                $data["_bill_item_line"] = Tbl_bill_item_line::um()->where("itemline_bill_id",$id)->get();
+               foreach ($data["_bill_item_line"] as $key => $value) 
+               {
+                    $data["_bill_item_line"][$key]->serial_number = ItemSerial::get_serial("receive_inventory",$id,$value->itemline_item_id);
+               }
                $data['_item']      = Item::get_all_category_item();
                $data['_account']   = Accounting::getAllAccount();
                $data['action']     = "/member/vendor/receive_inventory/update";
@@ -172,12 +176,11 @@ class Vendor_ReceiveInventoryController extends Member
                         // $serial_number[$key]
                         $item_serial[$key]["quantity"] = $um_qty * $item_info[$key]['itemline_qty'];
                         $item_serial[$key]["item_id"] = Request::input('itemline_item_id')[$key];
-                        $item_serial[$key]["serials"] = $serial_number[$key];                            
+                        $item_serial[$key]["serials"] = $serial_number[$key];
                     }
                 }
             }
         }
-
         // --> for bundles
         foreach ($_itemline as $keyitem => $value_item) 
         {
@@ -223,39 +226,60 @@ class Vendor_ReceiveInventoryController extends Member
         }
         // <-- end bundle
 
-        if($ctr_items != 0)
+        $json["status"] = null;
+        $json["status_message"] = null;
+        if(count($item_serial) > 0)
         {
-            $bill_id = Billing::postBill($vendor_info, $bill_info, $bill_other_info, $item_info, $total_info);
+            foreach ($item_serial as $key_item_serial => $value_item_serial)
+            {
+                $check_qty_serial = ItemSerial::check_item_serial($value_item_serial);
 
-            if(count(Session::get("po_item")) > 0)
-            {
-                Billing::insertPotoBill($bill_id, Session::get("po_item"));
-            }
-            
-            if(count($item_refill) > 0)
-            {
-                $remarks            = "Refill Items with RECEIVE INVENTORY #". $bill_id;
-                $warehouse_id       = $this->current_warehouse->warehouse_id;
-                $transaction_type   = "receive_inventory";
-                $transaction_id     = $bill_id;
-                $data               = Warehouse::inventory_refill($warehouse_id, $transaction_type, $transaction_id, $remarks, $item_refill, 'array',null,$item_serial);
+                if($check_qty_serial)
+                {
+                    $json["status"] = "error";
+                    $json["status_message"] .= "The item ".Item::get_item_details($value_item_serial["item_id"])->item_name." has more serial than the quantity <br>";
+                }
             }
 
-            $json["status"]         = "success-receive-inventory";
-            if($button_action == "save-and-edit")
-            {
-                $json["redirect"]    = "/member/vendor/receive_inventory/list";
-            }
-            elseif($button_action == "save-and-new")
-            {
-                $json["redirect"]   = '/member/vendor/receive_inventory';
-            }
-            Request::session()->flash('success', 'Successfully Created');
         }
-        else
+
+        if($json["status"] == null)
         {
-            $json["status"] = "error";
-            $json["status_message"] = "Please insert Item.";
+            if($ctr_items != 0)
+            {
+                $bill_id = Billing::postBill($vendor_info, $bill_info, $bill_other_info, $item_info, $total_info);
+
+                if(count(Session::get("po_item")) > 0)
+                {
+                    Billing::insertPotoBill($bill_id, Session::get("po_item"));
+                }
+                
+                if(count($item_refill) > 0)
+                {
+                    $remarks            = "Refill Items with RECEIVE INVENTORY #". $bill_id;
+                    $warehouse_id       = $this->current_warehouse->warehouse_id;
+                    $transaction_type   = "receive_inventory";
+                    $transaction_id     = $bill_id;
+                    $data               = Warehouse::inventory_refill($warehouse_id, $transaction_type, $transaction_id, $remarks, $item_refill, 'array',null,$item_serial);
+                }
+
+                $json["status"]         = "success-receive-inventory";
+                if($button_action == "save-and-edit")
+                {
+                    $json["redirect"]    = "/member/vendor/receive_inventory/list";
+                }
+                elseif($button_action == "save-and-new")
+                {
+                    $json["redirect"]   = '/member/vendor/receive_inventory';
+                }
+                Request::session()->flash('success', 'Successfully Created');
+            }
+            else
+            {
+                $json["status"] = "error";
+                $json["status_message"] = "Please insert Item.";
+            }
+
         }
 
 
@@ -266,6 +290,7 @@ class Vendor_ReceiveInventoryController extends Member
     {
         $bill_id = Request::input("bill_id");
         $button_action = Request::input('button_action');
+        $serial_number = Request::input('serial_number');
 
         $vendor_info                         = [];
         $vendor_info['bill_vendor_id']       = Request::input('bill_vendor_id');
@@ -290,6 +315,7 @@ class Vendor_ReceiveInventoryController extends Member
 
         $ctr_items = 0;
         $item_refill = [];
+        $item_serial = [];
         foreach($_itemline as $key => $item_line)
         {
             if($item_line)
@@ -311,6 +337,13 @@ class Vendor_ReceiveInventoryController extends Member
                     $um_qty = UnitMeasurement::um_qty(Request::input("itemline_um")[$key]);
                     $item_refill[$key]["quantity"] = $um_qty * $item_info[$key]['itemline_qty'];
                     $item_refill[$key]["product_id"] = Request::input('itemline_item_id')[$key];
+
+                    if($serial_number[$key])
+                    {
+                        $item_serial[$key]["quantity"] = $um_qty * $item_info[$key]['itemline_qty'];
+                        $item_serial[$key]["item_id"] = Request::input('itemline_item_id')[$key];
+                        $item_serial[$key]["serials"] = $serial_number[$key];
+                    }
                 }
             }
         }
@@ -360,36 +393,56 @@ class Vendor_ReceiveInventoryController extends Member
         }
         // <-- end bundle
 
-        if($ctr_items != 0)
+        $json["status"] = null;
+        $json["status_message"] = null;
+        if(count($item_serial) > 0)
         {
-            $bill_id = Billing::updateBill($bill_id, $vendor_info, $bill_info, $bill_other_info, $item_info, $total_info);
+            foreach ($item_serial as $key_item_serial => $value_item_serial)
+            {
+                $check_qty_serial = ItemSerial::check_item_serial($value_item_serial);
 
-            if(count(Request::input("itemline_ref_id")) > 0)
-            {
-                Billing::updatePotoBill($bill_id, Request::input("itemline_ref_id"));
-            }
-            if(count($item_refill) > 0)
-            {
-                $transaction_id = $bill_id;
-                $transaction_type = "receive_inventory";
-                $json = Warehouse::inventory_update_returns($transaction_id, $transaction_type, $item_refill, $return = 'array');
+                if($check_qty_serial)
+                {
+                    $json["status"] = "error";
+                    $json["status_message"] .= "The item ".Item::get_item_details($value_item_serial["item_id"])->item_name." has more serial than the quantity <br>";
+                }
             }
 
-            $json["status"]         = "success-receive-inventory";
-            if($button_action == "save-and-edit")
-            {
-                $json["redirect"]    = "/member/vendor/receive_inventory/list";
-            }
-            elseif($button_action == "save-and-new")
-            {
-                $json["redirect"]   = '/member/vendor/receive_inventory';
-            }
-            Request::session()->flash('success', 'Successfully Created');
         }
-        else
+
+        if($json["status"] == null)
         {
-            $json["status"] = "error";
-            $json["status_message"] = "Please insert Item.";
+            if($ctr_items != 0)
+            {
+                $bill_id = Billing::updateBill($bill_id, $vendor_info, $bill_info, $bill_other_info, $item_info, $total_info);
+
+                if(count(Request::input("itemline_ref_id")) > 0)
+                {
+                    Billing::updatePotoBill($bill_id, Request::input("itemline_ref_id"));
+                }
+                if(count($item_refill) > 0)
+                {
+                    $transaction_id = $bill_id;
+                    $transaction_type = "receive_inventory";
+                    $json = Warehouse::inventory_update_returns($transaction_id, $transaction_type, $item_refill, $return = 'array', $item_serial);
+                }
+
+                $json["status"]         = "success-receive-inventory";
+                if($button_action == "save-and-edit")
+                {
+                    $json["redirect"]    = "/member/vendor/receive_inventory/list";
+                }
+                elseif($button_action == "save-and-new")
+                {
+                    $json["redirect"]   = '/member/vendor/receive_inventory';
+                }
+                Request::session()->flash('success', 'Successfully Created');
+            }
+            else
+            {
+                $json["status"] = "error";
+                $json["status_message"] = "Please insert Item.";
+            }            
         }
 
         return json_encode($json);

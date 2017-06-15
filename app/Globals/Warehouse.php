@@ -578,14 +578,14 @@ class Warehouse
         return $data;
 
     }
-    public static function inventory_update_returns($transaction_id = 0, $transaction_type = '', $transaction_item_inventory = array(), $return = 'array' )
+    public static function inventory_update_returns($transaction_id = 0, $transaction_type = '', $transaction_item_inventory = array(), $return = 'array', $item_serial  = array())
     {
         //inventory source reason = $transaction_type
         //inventory source id = $transaction_id
         $inventory_slip = Tbl_inventory_slip::where("inventory_source_id",$transaction_id)->where("inventroy_source_reason",$transaction_type)->first();
         
         Tbl_warehouse_inventory::where("inventory_slip_id",$inventory_slip->inventory_slip_id)->delete();
-
+        
         foreach($transaction_item_inventory as $key2 => $value2)
         {     
                 $insert["inventory_item_id"] = $value2["product_id"];
@@ -594,7 +594,14 @@ class Warehouse
                 $insert["warehouse_id"] = $inventory_slip->warehouse_id;
                 $insert["inventory_slip_id"] = $inventory_slip->inventory_slip_id;
 
-                Tbl_warehouse_inventory::insert($insert);
+                $inventory_id = Tbl_warehouse_inventory::insertGetId($insert);
+                if(count($item_serial) > 0)
+                {
+                    if($item_serial[$key2]["item_id"] == $value2["product_id"])
+                    {
+                        ItemSerial::insert_item_serial($item_serial[$key2], $inventory_id);
+                    }
+                }
                 $data["status"] = "success";
         }
 
@@ -725,7 +732,10 @@ class Warehouse
 
                 if(count($item_serial) > 0)
                 {
-                    ItemSerial::insert_item_serial($item_serial, $inventory_id);
+                    if($item_serial[$key]["item_id"] == $refill_product['product_id'])
+                    {
+                        ItemSerial::insert_item_serial($item_serial[$key], $inventory_id);
+                    }
                 }
 
                 $for_serial_item[$key]["quantity"] = $refill_product['quantity'];

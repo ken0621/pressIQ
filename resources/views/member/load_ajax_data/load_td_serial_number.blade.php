@@ -1,4 +1,4 @@
-@if($serial)
+@if(isset($serial))
 <td>
 	<textarea class="txt-serial-number" name="serial_number[]"></textarea>
 </td>

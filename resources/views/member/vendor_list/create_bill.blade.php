@@ -167,6 +167,10 @@
                                                         <th style="width: 70px;">Qty</th>
                                                         <th style="width: 120px;">Rate</th>
                                                         <th style="width: 120px;">Amount</th>
+                                                        @if(isset($serial)) 
+                                                        <th style="width: 200px;">Serial Number</th> 
+                                                        <!-- <th style="width: 15px;"></th>  -->
+                                                        @endif
                                                         <th style="width: 15px;"></th>
                                                     </tr>
                                                 </thead>
@@ -201,6 +205,9 @@
                                                             <td><input class="text-center number-input txt-qty compute" type="text" value="{{$item->itemline_qty}}" name="itemline_qty[]"/></td>
                                                             <td><input class="text-right number-input txt-rate compute" type="text" value="{{$item->itemline_rate}}" name="itemline_rate[]"/></td>
                                                             <td><input class="text-right number-input txt-amount" type="text" value="{{$item->itemline_amount}}" name="itemline_amount[]"/></td>
+                                                            <td>
+                                                                <textarea class="txt-serial-number" name="serial_number[]">{{$item->serial_number}}</textarea>
+                                                            </td>
                                                             <td  tr_id="{{$item->itemline_ref_id}}" linked_in="{{$item->itemline_ref_name}}" class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                         </tr>
                                                         @endforeach
@@ -227,6 +234,7 @@
                                                         <td><input class="text-center number-input txt-qty compute" type="text" name="itemline_qty[]"/></td>
                                                         <td><input class="text-right number-input txt-rate compute" type="text" name="itemline_rate[]"/></td>
                                                         <td><input class="text-right number-input txt-amount" type="text" name="itemline_amount[]"/></td>
+                                                        @include("member.load_ajax_data.load_td_serial_number");
                                                         <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                     </tr>
                                                 </tbody>
@@ -288,6 +296,7 @@
             <td><input class="text-center number-input txt-qty compute" type="text" name="itemline_qty[]"/></td>
             <td><input class="text-right number-input txt-rate compute" type="text" name="itemline_rate[]"/></td>
             <td><input class="text-right number-input txt-amount" type="text" name="itemline_amount[]"/></td>
+            @include("member.load_ajax_data.load_td_serial_number");
             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
         </tr>
     </table>

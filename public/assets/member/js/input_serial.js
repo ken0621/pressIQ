@@ -27,7 +27,7 @@ function action_add_serial()
 		{
 			if($(this).val())
 			{
-				text_serial += $(this).val() + "-";
+				text_serial += $(this).val() + ",";
 			}
 		});
 		console.log(text_serial);

@@ -36,6 +36,26 @@ class ItemSerial
     {
     	return Tbl_settings::where("settings_key","item_serial")->where("settings_value",'enable')->where("shop_id",ItemSerial::getShopId())->first();
     }
+ 	public static function check_item_serial($item_serial)
+    {
+    	$return = null;
+    	$serials = explode(",", $item_serial["serials"]);
+
+    	foreach ($serials as $key => $value) 
+    	{
+    		if($value == "" || $value == null)
+    		{
+    			unset($serials[$key]);
+    		}
+    	}
+
+    	if(count($serials) > $item_serial["quantity"])
+		{
+			$return = "serial_are_more_than_quantity";
+		}
+		return $return;
+    }
+    /* REFILLING SERIAL NUMBER */
     public static function insert_item_serial($item_serial = array(), $inventory_id = 0)
     {
     	if($inventory_id)
@@ -49,7 +69,7 @@ class ItemSerial
 	    			{
 	    				$ins["serial_inventory_id"] = $inventory_id;
 	    				$ins["item_id"] = $item_serial["item_id"];
-	    				$ins["serial_number"] = $value;
+	    				$ins["serial_number"] = trim($value);
 	    				$ins["serial_created"] = Carbon::now();
 	    				$ins["item_count"] = $key + 1;
 
@@ -67,7 +87,7 @@ class ItemSerial
     	{
     		if($value)
     		{
-    			$chk = Tbl_inventory_serial_number::item()->where("shop_id",ItemSerial::getShopId())->where("tbl_item.item_id","!=",$item_id)->where("serial_number",$value)->first();
+    			$chk = Tbl_inventory_serial_number::item()->where("shop_id",ItemSerial::getShopId())->where("tbl_item.item_id","!=",$item_id)->where("serial_number",trim($value))->first();
     			if($chk)
     			{
     				$return .= "The serial number ".$value." was duplicate to the serial number of item ".Item::get_item_details($chk->serial_item_id)->item_name ."<br>";
@@ -97,24 +117,72 @@ class ItemSerial
 
     	return $return;
     }
-    public static function check_item_serial($item_serial)
-    {
-    	$return = null;
-    	$serials = explode(",", $item_serial["serials"]);
+    /* END REFILLING SERIAL NUMBER */
 
+   
+    /* CONSUMING SERIAL NUMBER */
+    public static function get_consume_serial($source_reason = "", $source_id = 0, $item_id = 0)
+    {    	
+		$serials = Tbl_inventory_serial_number::where("consume_source",$source_reason)->where("consume_source_id",$source_id)->where("item_id",$item_id)->get();
+		$return = "";
+		foreach ($serials as $key => $value) 
+		{
+			$return .= $value->serial_number .",";
+		}
+    	
+    	return $return;
+    }
+    public static function check_existing($item_serial = array())
+    {
+    	$return = "";
+    	$serials = explode(",", $item_serial["serials"]);
     	foreach ($serials as $key => $value) 
     	{
-    		if($value == "" || $value == null)
+    		if($value)
     		{
-    			unset($serials[$key]);
+    			$check = Tbl_inventory_serial_number::item()->where("shop_id",ItemSerial::getShopId())->where("tbl_item.item_id",$item_serial["item_id"])->where("serial_number",trim($value))->first();
+    			if(!$check)
+    			{
+    				$return .= "The serial number ".$value." does not exist in inventory <br>";
+    			}
     		}
     	}
-
-    	if(count($serials) > $item_serial["quantity"])
-		{
-			$return = "serial_are_more_than_quantity";
-		}
-		return $return;
+    	return $return;
     }
+
+    public static function consume_item_serial($item_serial = array(), $transaction_type = '', $transaction_id = 0)
+    {
+    	$up["sold"] = 1;
+    	$up["item_consumed"] = 1;
+    	$up["consume_source"] = $transaction_type;
+    	$up["consume_source_id"] = $transaction_id;
+
+    	$serials = explode(",", $item_serial["serials"]);
+    	foreach ($serials as $key => $value) 
+    	{
+    		if($value)
+    		{
+		    	$check = Tbl_inventory_serial_number::item()->where("shop_id",ItemSerial::getShopId())->where("tbl_item.item_id",$item_serial["item_id"])->where("serial_number",trim($value))->first();
+		    	if($check)
+		    	{
+		    		Tbl_inventory_serial_number::item()->where("shop_id",ItemSerial::getShopId())->where("tbl_item.item_id",$item_serial["item_id"])->where("serial_number",trim($value))->update($up);
+		    	}    			
+    		}
+	    }
+    }
+    public static function return_original_serial($transaction_type = "", $transaction_id = 0)
+    {
+    	if($transaction_type && $transaction_id)
+    	{
+	    	$up["sold"] = 0;
+	    	$up["item_consumed"] = 0;
+	    	$up["consume_source"] = "";
+	    	$up["consume_source_id"] = "";
+
+	    	Tbl_inventory_serial_number::where("consume_source",$transaction_type)->where("consume_source_id",$transaction_id)->update($up);
+    	}
+    }
+
+    /* END CONSUMING SERIAL NUMBER */    
 
 }

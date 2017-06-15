@@ -518,13 +518,16 @@ class Warehouse
     * vendor
     * other
     */
-    public static function inventory_update($transaction_id = 0, $transaction_type = '', $transaction_item_inventory = array(), $return = 'array', $allow_out_of_stock = false)
+    public static function inventory_update($transaction_id = 0, $transaction_type = '', $transaction_item_inventory = array(), $return = 'array', $allow_out_of_stock = false , $item_serial = array())
     {
         //inventory source reason = $transaction_type
         //inventory source id = $transaction_id
         $inventory_slip = Tbl_inventory_slip::where("inventory_source_id",$transaction_id)->where("inventroy_source_reason",$transaction_type)->first();
         
         Tbl_warehouse_inventory::where("inventory_slip_id",$inventory_slip->inventory_slip_id)->delete();
+
+        /*RETURN All TO ORIGINAL*/
+        ItemSerial::return_original_serial($transaction_type,$transaction_id);
 
         foreach($transaction_item_inventory as $key2 => $value2)
         {            
@@ -563,6 +566,14 @@ class Warehouse
                     $data["status_message"] = "The quantity is not enough";
                 }
             }
+
+            if(count($item_serial) > 0)
+            {
+                if($item_serial[$key2]["item_id"] == $value2['product_id'])
+                {
+                    ItemSerial::consume_item_serial($item_serial[$key2], $transaction_type, $transaction_id);
+                }
+            }
         }
 
         if($data["status"] != "error" && $inventory_slip != null)
@@ -585,7 +596,7 @@ class Warehouse
         $inventory_slip = Tbl_inventory_slip::where("inventory_source_id",$transaction_id)->where("inventroy_source_reason",$transaction_type)->first();
         
         Tbl_warehouse_inventory::where("inventory_slip_id",$inventory_slip->inventory_slip_id)->delete();
-        
+
         foreach($transaction_item_inventory as $key2 => $value2)
         {     
                 $insert["inventory_item_id"] = $value2["product_id"];
@@ -781,7 +792,7 @@ class Warehouse
         }
         return $data;
     }
-    public static function inventory_consume($warehouse_id = 0, $remarks = '', $consume_product ,$consumer_id = 0, $consume_cause = '', $return = 'array', $transaction_type = '', $transaction_id = 0,$allow_out_of_stock = false)
+    public static function inventory_consume($warehouse_id = 0, $remarks = '', $consume_product ,$consumer_id = 0, $consume_cause = '', $return = 'array', $transaction_type = '', $transaction_id = 0,$allow_out_of_stock = false, $item_serial = array())
     {
         $shop_id = Warehouse::get_shop_id($warehouse_id);
         $insert_slip['inventory_slip_id_sibling']     = 0;
@@ -854,6 +865,15 @@ class Warehouse
 
                 }                
             }
+
+            if(count($item_serial) > 0)
+            {
+                if($item_serial[$key]["item_id"] == $product['product_id'])
+                {
+                    ItemSerial::consume_item_serial($item_serial[$key], $transaction_type, $transaction_id);
+                }
+            }
+
         }
 
         $data['status'] = '';

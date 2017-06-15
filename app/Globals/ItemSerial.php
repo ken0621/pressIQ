@@ -132,7 +132,7 @@ class ItemSerial
     	
     	return $return;
     }
-    public static function check_existing($item_serial = array())
+    public static function check_existing($item_serial = array() ,$transaction_type = "", $transaction_id = "")
     {
     	$return = "";
     	$serials = explode(",", $item_serial["serials"]);
@@ -144,6 +144,12 @@ class ItemSerial
     			if(!$check)
     			{
     				$return .= "The serial number ".$value." does not exist in inventory <br>";
+    			}
+    			else if($check->item_consumed == 1 && $check->sold == 1 && $check->consume_source != $transaction_type && $check->consume_source_id != $transaction_id )
+    			{
+	    			$check = Tbl_inventory_serial_number::item()->where("shop_id",ItemSerial::getShopId())->where("tbl_item.item_id",$item_serial["item_id"])->where("serial_number",trim($value))->first();
+
+    				$return .= "The serial number ".$value." was already consume <br>";
     			}
     		}
     	}

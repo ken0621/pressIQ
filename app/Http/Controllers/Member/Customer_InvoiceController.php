@@ -595,10 +595,10 @@ class Customer_InvoiceController extends Member
                     $json["status_message"] .= "The item ".Item::get_item_details($value_item_serial["item_id"])->item_name." has more serial than the quantity <br>";
                 }
 
-                if(ItemSerial::check_existing($item_serial[$key_item_serial]))
+                if(ItemSerial::check_existing($item_serial[$key_item_serial],"invoice",$invoice_id))
                 {
                     $json["status"] = "error";
-                    $json["status_message"] .= ItemSerial::check_existing($item_serial[$key_item_serial]);
+                    $json["status_message"] .= ItemSerial::check_existing($item_serial[$key_item_serial],"invoice",$invoice_id);
                 }
             }
         }

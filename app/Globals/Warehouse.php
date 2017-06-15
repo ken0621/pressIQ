@@ -567,12 +567,13 @@ class Warehouse
                 }
             }
 
-            if(count($item_serial) > 0)
+        }
+
+        if(count($item_serial) > 0)
+        {
+            foreach ($item_serial as $key_item_serial => $value_item_serial) 
             {
-                if($item_serial[$key2]["item_id"] == $value2['product_id'])
-                {
-                    ItemSerial::consume_item_serial($item_serial[$key2], $transaction_type, $transaction_id);
-                }
+                ItemSerial::consume_item_serial($item_serial[$key_item_serial], $transaction_type, $transaction_id);
             }
         }
 
@@ -807,7 +808,7 @@ class Warehouse
         $insert_slip['inventory_slip_consume_refill'] = 'consume';
         $insert_slip['inventory_slip_consumer_id']    =  $consumer_id;
         $insert_slip['inventory_slip_consume_cause']  =  $consume_cause;
-        $insert_slip['slip_user_id']= Warehouse::getUserid() or 0;
+        $insert_slip['slip_user_id'] = Warehouse::getUserid() or 0;
 
         $inventory_slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
 
@@ -865,15 +866,13 @@ class Warehouse
 
                 }                
             }
-
-            if(count($item_serial) > 0)
+        }
+        if(count($item_serial) > 0)
+        {
+            foreach ($item_serial as $key_item_serial => $value_item_serial) 
             {
-                if($item_serial[$key]["item_id"] == $product['product_id'])
-                {
-                    ItemSerial::consume_item_serial($item_serial[$key], $transaction_type, $transaction_id);
-                }
+                ItemSerial::consume_item_serial($item_serial[$key_item_serial], $transaction_type, $transaction_id);
             }
-
         }
 
         $data['status'] = '';

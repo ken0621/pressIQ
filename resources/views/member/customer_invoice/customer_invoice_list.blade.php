@@ -54,7 +54,7 @@
         </div>  
     </div> -->
     <div class="form-group tab-content panel-body sir_container">
-        <div id="paid" class="tab-pane fade in">
+        <div id="paid" class="tab-pane fade in active">
             <div class="form-group order-tags"></div>
             <div class="table-responsive">
                 <table class="table table-bordered table-condensed">
@@ -101,7 +101,7 @@
                 </table>
             </div>
         </div>
-        <div id="unpaid" class="tab-pane fade in active">
+        <div id="unpaid" class="tab-pane fade in">
             <div class="form-group order-tags"></div>
             <div class="table-responsive">
                 <table class="table table-bordered table-condensed">

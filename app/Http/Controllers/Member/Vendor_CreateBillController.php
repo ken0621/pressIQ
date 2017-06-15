@@ -48,6 +48,10 @@ class Vendor_CreateBillController extends Member
         { 
             $data["_bill_list"] = Tbl_bill::vendor()->where("bill_shop_id",Billing::getShopId())->orderBy("bill_id","DESC")->get();
 
+            $data["_bill_list_paid"] = Tbl_bill::vendor()->where("bill_shop_id",Billing::getShopId())->orderBy("bill_id","DESC") -> where("bill_is_paid", 1) ->get();
+
+            $data["_bill_list_unpaid"] = Tbl_bill::vendor()->where("bill_shop_id",Billing::getShopId())->orderBy("bill_id","DESC") -> where("bill_is_paid", 0) ->get();
+
             foreach ($data["_bill_list"] as $key => $value) 
             {
                $price = 0;

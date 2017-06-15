@@ -17,6 +17,24 @@
     </div>
 </div>
 
+ <div class="form-group">
+            <div class="col-md-6">
+                <ul class="nav nav-tabs">
+                  <li id="all-list" class="active"><a data-toggle="tab" href="#unpaid"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;Unpaid</a></li>
+
+                  <li id="archived-list"><a data-toggle="tab" href="#paid"><i class="fa fa-check" aria-hidden="true"></i>&nbsp;Paid</a></li>
+
+                   <li id="archived-list"><a data-toggle="tab" href="#all"><i class="fa fa-star" aria-hidden="true"></i>&nbsp;All Items</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4 pull-right">
+                <div class="input-group">
+                    <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+                    <input type="search" name="" class="form-control srch-warehouse-txt" placeholder="Start typing warehouse">
+                </div>
+            </div>
+        </div>
+
 <!-- NO PRODUCT YET -->
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
    <!--  <ul class="nav nav-tabs">
@@ -34,7 +52,103 @@
         </div>  
     </div> -->
     <div class="form-group tab-content panel-body sir_container">
-        <div id="all" class="tab-pane fade in active">
+        <div id="paid" class="tab-pane fade in ">
+            <div class="form-group order-tags"></div>
+            <div class="table-responsive">
+                <table class="table table-bordered table-condensed">
+                    <thead style="text-transform: uppercase">
+                        <tr>
+                            <th>Bill No</th>
+                            <th>Vendor Name</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @if($_bill_list_paid)
+                        @foreach($_bill_list_paid as $bill_list)
+                            <tr>
+                                <td>{{$bill_list->bill_id}}</td>
+                                <td>{{$bill_list->vendor_company}}</td>
+                                <td>{{currency("PHP",$bill_list->bill_total_amount)}}</td>
+                                <td>
+                                    @if($bill_list->bill_is_paid == 0)
+                                    <a class="btn btn-warning form-control">Open</a>
+                                    @else
+                                    <a class="btn form-control" style="background-color: #78C500;color: #fff">Paid</a>
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group">
+                                      <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Action <span class="caret"></span>
+                                      </button>
+                                      <ul class="dropdown-menu dropdown-menu-custom">
+                                        @if($bill_list->bill_is_paid == 0)
+                                        <li><a href="/member/vendor/create_bill?id={{$bill_list->bill_id}}">Edit Bill </a></li>
+                                        <li><a href="/member/vendor/paybill?bill_id={{$bill_list->bill_id}}&vendor_id={{$bill_list->vendor_id}}">Pay Bill</a></li>
+                                        @endif
+                                      </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="unpaid" class="tab-pane fade in active">
+            <div class="form-group order-tags"></div>
+            <div class="table-responsive">
+                <table class="table table-bordered table-condensed">
+                    <thead style="text-transform: uppercase">
+                        <tr>
+                            <th>Bill No</th>
+                            <th>Vendor Name</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @if($_bill_list_unpaid)
+                        @foreach($_bill_list_unpaid as $bill_list)
+                            <tr>
+                                <td>{{$bill_list->bill_id}}</td>
+                                <td>{{$bill_list->vendor_company}}</td>
+                                <td>{{currency("PHP",$bill_list->bill_total_amount)}}</td>
+                                <td>
+                                    @if($bill_list->bill_is_paid == 0)
+                                    <a class="btn btn-warning form-control">Open</a>
+                                    @else
+                                    <a class="btn form-control" style="background-color: #78C500;color: #fff">Paid</a>
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group">
+                                      <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Action <span class="caret"></span>
+                                      </button>
+                                      <ul class="dropdown-menu dropdown-menu-custom">
+                                        @if($bill_list->bill_is_paid == 0)
+                                        <li><a href="/member/vendor/create_bill?id={{$bill_list->bill_id}}">Edit Bill </a></li>
+                                        <li><a href="/member/vendor/paybill?bill_id={{$bill_list->bill_id}}&vendor_id={{$bill_list->vendor_id}}">Pay Bill</a></li>
+                                        @endif
+                                      </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="all" class="tab-pane fade in ">
             <div class="form-group order-tags"></div>
             <div class="table-responsive">
                 <table class="table table-bordered table-condensed">
@@ -81,6 +195,7 @@
                 </table>
             </div>
         </div>
+
     </div>
     
     

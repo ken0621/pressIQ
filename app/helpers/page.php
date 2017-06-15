@@ -462,7 +462,7 @@ function page_list()
 
     /* PAYROLL PROCESS */
     $code = "payroll-process";
-    $nav[$page]['submenu'][$code]['label'] = "Payroll Process";
+    $nav[$page]['submenu'][$code]['label'] = "Payroll Processing";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_process";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
@@ -471,7 +471,7 @@ function page_list()
 
     /* PAYROLL REGISTER */
     $code = "payroll-register";
-    $nav[$page]['submenu'][$code]['label'] = "Payroll Register";
+    $nav[$page]['submenu'][$code]['label'] = "Payroll Registered";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_register";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
@@ -480,7 +480,7 @@ function page_list()
 
     /* PAYROLL POST */
     $code = "payroll-post";
-    $nav[$page]['submenu'][$code]['label'] = "Payroll Post";
+    $nav[$page]['submenu'][$code]['label'] = "Payroll Posted";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_post";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];

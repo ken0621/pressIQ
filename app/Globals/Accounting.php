@@ -43,7 +43,8 @@ class Accounting
 	 * @param string  	$filter 	(all, active, inactive)
 	 * @param integer  	$parent_id  Id of the Chart of Accoutn where will it start
 	 * @param array  	$type      	Filter of type of Chart of Account (eg: Accounts Payable)
-	 * @param boolean  	$balance    If it will show total balance of each account (true, false) (always true)
+	 * @param $search 	$string 	If there is specific account name / number
+	 * @param boolean  	$balance    (always true)
 	 */
 	public static function getAllAccount($filter = 'all', $parent_id = null, $type = null, $search = null, $balance = false, $for_tablet = false)
 	{
@@ -117,7 +118,6 @@ class Accounting
 	}
 
 	/**
-	 * Getting all the list of accounts including sub-accounts
 	 *
 	 * @param string  	$account_id 	account id of specific account
 	 */
@@ -130,7 +130,7 @@ class Accounting
 		return json_encode($result);
 	}
 
-	public static function getItemAccount($item_id, $balance = false)
+	public static function getItemAccount($item_id)
 	{
 		$asset 		= Tbl_item::where("item_id", $item_id)->accountAsset()
 								->first(['account_id','account_name','chart_type_name','account_description'])->toArray();
@@ -150,7 +150,7 @@ class Accounting
 	 *
 	 * @param array  	$entry 			$entry["reference_module"] , $entry["reference_id"] , $entry["name_id"], $entry["name_reference"] $entry["total"] , 
 	 *									$entry["vatable"] , $entry["discount"] , $entry["ewt"], $entry["account_id"]
-	 * @param array  	$entry_data     $entry_data[0]['item_id'] or $entry[0]['account_id'], $entry_data[0]['vatable']
+	 * @param array  	$entry_data     $entry_data[0]['item_id'] or $entry_data[0]['account_id'], $entry_data[0]['vatable']
 	 *									$entry_data[0]['discount'] , $entry_data[0]['entry_amount'] , $entry_data[0]['entry_desription']
 	 * @param boolean  	$remarks   		Description of the journal entry
 	 */
@@ -165,7 +165,7 @@ class Accounting
 		/* GETTING THE DEFAULT ACCOUNTS RECEIVABLE AND ACCOUNTS PAYABLE */
 		$account_receivable	= Tbl_chart_of_account::accountInfo($shop_id)->where("account_code","accounting-receivable")->pluck("account_id");
 		$account_payable	= Tbl_chart_of_account::accountInfo($shop_id)->where("account_code","accounting-payable")->pluck("account_id");
-		$account_cash		= Accounting::getCashInBank($for_tablet);
+		$account_cash		= Accounting::getCashInBank();
 
 		/* FOR OLD DATABASE - CHECKING IF THERE IS ALREADY AN ACCOUNT CODE*/
 		if(!$account_receivable)
@@ -485,7 +485,7 @@ class Accounting
 		$journal_entry['je_entry_date'] 		= $entry['entry_date'];
 		$journal_entry['created_at'] 			= Carbon::now();
 		$journal_entry['je_remarks']			= $remarks;
-
+		
 		/* CHECK IF JOURNAL EXIST - IF THERE IS A JOURNAL ID */
 		if(!$entry['je_id'])
 		{
@@ -498,7 +498,7 @@ class Accounting
 			Tbl_journal_entry::where("je_id", $entry['je_id'])->update($journal_entry);
 			$line_data["je_id"] = $entry['je_id'];
 		}
-
+		
 		foreach($entry_data as $line)
 		{
 			$line_data["jline_name_id"]			= $line["name_id"];
@@ -513,7 +513,7 @@ class Accounting
 
 		return $line_data["je_id"];
 	}
-
+	
 	public static function insertJournalLine($line)
 	{
 		$journal_line['jline_je_id']			= $line["je_id"];

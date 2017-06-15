@@ -168,6 +168,7 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 
 
 Route::get('/member', 'Member\DashboardController@index');
+Route::get('/member/new', 'Member\DashboardController@new_dashboard');
 Route::post('/member/change_warehouse', 'Member\DashboardController@change_warehouse');
 Route::any('/member/setup', 'Member\SetupController@index');
 Route::any('/member/product/service_list', 'Member\Product_ServiceListController@index'); //GUILLERMO TABLGIAN
@@ -936,13 +937,22 @@ Route::controller('/member/accounting/journal', 'Member\JournalEntryController')
 /* TERMS OF PAYMENT*/
 Route::controller('/member/maintenance/terms', 'Member\TermsOfPaymentController');
 /* End */
+
+
 /* LOCATION*/
 Route::controller('/member/maintenance/location', 'Member\LocationController');
 /* End */
 
+/* TRACKINGS */
+Route::controller('/member/ecommerce/trackings', 'Member\TrackingsController');
+/* END */
+
+
+
 /* MEMBER SHIPPING*/
 Route::controller('/member/register/shipping', 'MemberController');
 /* End */
+
 
 Route::controller('/tester','TesterController');
 

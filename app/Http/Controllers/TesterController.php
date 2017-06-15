@@ -12,7 +12,7 @@ use App\Models\Tbl_vendor;
 use App\Models\Tbl_user;
 use App\Models\Tbl_item;
 use App\Models\Tbl_ec_product;
-
+    
 use App\Globals\Accounting;
 use App\Globals\Account;
 use App\Globals\Invoice;
@@ -82,27 +82,32 @@ class TesterController extends Controller
 
     public function getPostTracking()
     {
-        // $curl = curl_init();
-        // curl_setopt_array($curl, array(
-        //     CURLOPT_URL => "http://api.aftership.com/v4",
-        //     CURLOPT_RETURNTRANSFER => true,
-        //     CURLOPT_ENCODING => "",
-        //     CURLOPT_MAXREDIRS => 10,
-        //     CURLOPT_TIMEOUT => 30,
-        //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        //     CURLOPT_CUSTOMREQUEST => "POST",
-        //     CURLOPT_HTTPHEADER => array(
-        //         "aftership-api-key: 118485a6-ed28-4200-a924-ee42e5019b47",
-        //         "Content-Type: application/json"
-        //     ),
-        // ));
 
-        // $response = curl_exec($curl);
-        // $err = curl_error($curl);
+    }
 
-        // curl_close($curl);
+    public function getTracking()
+    {
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.aftership.com/v4/trackings",
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_HTTPHEADER => 0,
+            CURLOPT_SSL_VERIFYPEER => 0,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_POSTFIELDS => [],
+            CURLOPT_HTTPHEADER => array(
+                "aftership-api-key: 118485a6-ed28-4200-a924-ee42e5019b47",
+                "Content-Type: application/json"
+            ),
+        ));
 
-        // dd(json_decode($response));"0000-00-00 00:00:00"
+        $response = curl_exec($curl);
+        $err      = curl_error($curl);
+
+        curl_close($curl);
+
+        dd(json_decode($response));
 
     }
 

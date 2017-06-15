@@ -252,6 +252,12 @@ class Vendor_CreateBillController extends Member
                     $json["status"] = "error";
                     $json["status_message"] .= "The item ".Item::get_item_details($value_item_serial["item_id"])->item_name." has more serial than the quantity <br>";
                 }
+
+                if(ItemSerial::check_duplicate_serial($value_item_serial["item_id"],$value_item_serial["serials"]))
+                {
+                    $json["status"] = "error";
+                    $json["status_message"] .= ItemSerial::check_duplicate_serial($value_item_serial["item_id"],$value_item_serial["serials"]);
+                }
             }
 
         }
@@ -414,6 +420,12 @@ class Vendor_CreateBillController extends Member
                 {
                     $json["status"] = "error";
                     $json["status_message"] .= "The item ".Item::get_item_details($value_item_serial["item_id"])->item_name." has more serial than the quantity <br>";
+                }
+
+                if(ItemSerial::check_duplicate_serial($value_item_serial["item_id"],$value_item_serial["serials"]))
+                {
+                    $json["status"] = "error";
+                    $json["status_message"] .= ItemSerial::check_duplicate_serial($value_item_serial["item_id"],$value_item_serial["serials"]);
                 }
             }
 

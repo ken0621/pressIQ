@@ -59,6 +59,23 @@ class ItemSerial
     		}
     	}
     }
+    public static function check_duplicate_serial($item_id = 0 ,$serial_number = "")
+    {
+    	$serials = explode(",", $serial_number);
+    	$return = "";
+    	foreach ($serials as $key => $value) 
+    	{
+    		if($value)
+    		{
+    			$chk = Tbl_inventory_serial_number::item()->where("shop_id",ItemSerial::getShopId())->where("tbl_item.item_id","!=",$item_id)->where("serial_number",$value)->first();
+    			if($chk)
+    			{
+    				$return .= "The serial number ".$value." was duplicate to the serial number of item ".Item::get_item_details($chk->serial_item_id)->item_name ."<br>";
+    			}
+    		}
+    	}
+    	return $return;
+    }
     public static function get_serial($soure_reason = "", $soure_id = 0, $item_id = 0)
     {
     	$slip = Tbl_inventory_slip::where("inventroy_source_reason",$soure_reason)->where("inventory_source_id",$soure_id)->first();

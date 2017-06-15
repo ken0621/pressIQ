@@ -21,22 +21,18 @@
 
 <!--mai-->
 <div class="form-group">
-            <div class="col-md-6">
-                <ul class="nav nav-tabs">
-                  <li id="all-list" class="active"><a data-toggle="tab" href="#open"><i class="fa fa-check" aria-hidden="true"></i>&nbsp;Open</a></li>
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <ul class="nav nav-tabs">
+              <li id="all-list" class="active"><a data-toggle="tab" href="#open"><i class="fa fa-check" aria-hidden="true"></i>&nbsp;Open</a></li>
 
-                  <li id="archived-list"><a data-toggle="tab" href="#close"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;Close</a></li>
+              <li id="archived-list"><a data-toggle="tab" href="#close"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;Close</a></li>
 
-                  <li id="archived-list"><a data-toggle="tab" href="#all"><i class="fa fa-star" aria-hidden="true"></i>&nbsp;All Items</a></li>
-                </ul>
-            </div>
-            <div class="col-md-4 pull-right">
-                <div class="input-group">
-                    <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                    <input type="search" name="" class="form-control srch-warehouse-txt" placeholder="Start typing warehouse">
-                </div>
-            </div>
+              <li id="archived-list"><a data-toggle="tab" href="#all"><i class="fa fa-star" aria-hidden="true"></i>&nbsp;All</a></li>
+            </ul>
         </div>
+    </div>
+</div>
 <!--end-->
 
 <!-- NO PRODUCT YET -->

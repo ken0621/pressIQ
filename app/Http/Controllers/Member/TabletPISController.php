@@ -1537,7 +1537,7 @@ class TabletPISController extends Controller
             {
                 $data["sir_id"] = $sir->sir_id;
                 $data["action"] = "/tablet/sales_receipt/update_submit";
-                $data['_item'] = Item::get_all_item_sir($sir->sir_id);
+                $data['_item'] = Item::get_all_item_sir($sir->sir_id, true);
             }
         }
 

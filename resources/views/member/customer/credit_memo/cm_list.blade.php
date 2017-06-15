@@ -60,6 +60,9 @@
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-custom">
                                           <!-- <li ><a class="popup" link="/member/customer/view_cm/{{$cm->cm_id}}" size="lg">View CM</a></li> -->
+                                        @if($cm->cm_used_ref_name == "others")
+                                          <li ><a class="popup" link="/member/customer/credit_memo/update_action?type=invoice&cm_id={{$cm->cm_id}}" size="lg">Apply to Invoice</a></li>
+                                        @endif
                                         @if($cm->manual_cm_id == null)
                                           <li ><a href="/member/customer/credit_memo?id={{$cm->cm_id}}">Edit CM</a></li>
                                         @endif

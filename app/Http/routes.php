@@ -438,13 +438,14 @@ Route::any('/member/customer/invoice/manual_invoice_update',"Member\ManualInvoic
 Route::any('/member/pis/view_invoices/{id}','Member\ManualInvoiceController@view_invoices');
 /* END PIS ARCY*/
 
+
+/* START TABLET FUNCTIONS */
 Route::any('/tablet/pis/sir/review/{id}',"Member\TabletPISController@review_sir");
 Route::any('/tablet/pis/sir/{id}/{action}',"Member\TabletPISController@lof_action");
 Route::any('/tablet/pis/sir/lof_action_submit',"Member\TabletPISController@lof_action_submit");
 Route::any('/tablet/selected_sir',"Member\TabletPISController@selected_sir");
 Route::any('/tablet/customer/load_rp/{id}','Member\TabletPISController@load_customer_rp');
 
-/* END PIS TABLEt*/
 Route::any('/tablet','Member\TabletPISController@login');
 Route::any('/tablet/login_submit','Member\TabletPISController@login_submit');
 Route::any('/tablet/dashboard','Member\TabletPISController@index');
@@ -455,7 +456,6 @@ Route::any('/tablet/sir_inventory/{id}','Member\TabletPISController@inventory_si
 
 /*TABLET CUSTOMER*/
 Route::any('/tablet/customer/modalcreatecustomer','Member\TabletPISController@edit_customer');
-/*Tablet Account Setting*/
 Route::any('/tablet/agent/edit/{id}','Member\TabletPISController@edit_agent');
 Route::any('/tablet/agent/edit_submit','Member\TabletPISController@edit_agent_submit');
 
@@ -498,7 +498,7 @@ Route::any('/tablet/sales_receipt/update_submit','Member\TabletPISController@upd
 
 Route::any('/tablet/submit_all_transaction','Member\TabletPISController@confirm_submission');
 Route::any('/tablet/submit_all_transaction/submit','Member\TabletPISController@submit_transactions');
-/* END PIS TABLEt*/
+/* END PIS TABLET*/
 
  //form
 
@@ -935,6 +935,9 @@ Route::controller('/member/accounting/journal', 'Member\JournalEntryController')
 /* End */
 /* TERMS OF PAYMENT*/
 Route::controller('/member/maintenance/terms', 'Member\TermsOfPaymentController');
+/* End */
+/* LOCATION*/
+Route::controller('/member/maintenance/location', 'Member\LocationController');
 /* End */
 
 /* MEMBER SHIPPING*/

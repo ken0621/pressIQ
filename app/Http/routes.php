@@ -1014,5 +1014,5 @@ include_once('routes_config/routes_payroll.php');
 /* PAYROLL END */
 
 /* PAYMENT FACILITIES */
-include_once('routes_config/routes_payment.php');
+// include_once('routes_config/routes_payment.php');
 

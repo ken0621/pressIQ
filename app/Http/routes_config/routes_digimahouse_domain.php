@@ -1,6 +1,8 @@
 <?php
-if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "digimatest.com" && $domain != "brown.com.ph") || (hasSubdomain() && $domain != "my168shop-primia.c9users.io"))
+if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "digimatest.com") || (hasSubdomain() && $domain != "my168shop-primia.c9users.io"))
 {
+	include_once('routes_config/routes_payment.php');
+
 	Route::get('/', 'Shop\ShopHomeController@index');
 	Route::get('/cart', 'Shop\ShopCartController@index');
 	Route::get('/mini_cart', 'Shop\ShopCartController@mini_cart');

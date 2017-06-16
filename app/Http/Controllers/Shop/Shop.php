@@ -71,6 +71,7 @@ class Shop extends Controller
                 }
                 else
                 {
+                    $check_domain = Tbl_shop::where("shop_domain", $domain)->first();
                     if($check_domain)
                     {
                         $this->shop_info = $check_domain;

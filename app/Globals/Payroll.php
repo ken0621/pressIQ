@@ -420,6 +420,7 @@ class Payroll
 		$time_sheet_info = Tbl_payroll_time_sheet::where("payroll_time_date", Carbon::parse($date)->format("Y-m-d"))->where("payroll_employee_id", $employee_id)->first();
 		$_rest_day = Tbl_payroll_group_rest_day::where("payroll_group_id", $employee_information->payroll_group_id)->get();
 
+		
 
 		if($time_sheet_info->payroll_time_sheet_approved == 0) //ONLY UPDATE THOSE WHO ARE NOT APPROVED
 		{
@@ -463,7 +464,7 @@ class Payroll
 						$payroll_time_sheet_approved_out = $time_record->payroll_time_sheet_out;
 					}
 
-					/* IF ONE OF THE TIME IS ZERO */
+					// /* IF ONE OF THE TIME IS ZERO */
 					if($time_record->payroll_time_sheet_in == "00:00:00" || $time_record->payroll_time_sheet_out == "00:00:00")
 					{
 						$payroll_time_sheet_approved_in = "00:00";
@@ -611,6 +612,9 @@ class Payroll
 		// 		$return->approved_timesheet = Payroll::process_time_regulartime($data, $date);
 		// 	break;
 		// }
+
+
+		//Payroll::adjust_payroll_approved_in_and_out($employee_information->payroll_employee_id, $date);
 
 		$data["compute_approved"] = 0;
 		$return->pending_timesheet = Payroll::process_time_regulartime($data, $date, $data["time_rule"]);

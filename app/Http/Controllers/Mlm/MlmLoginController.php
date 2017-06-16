@@ -250,7 +250,7 @@ class MlmLoginController extends Controller
                 if($count >= 1)
                 {
                     $enc_pass = Crypt::encrypt($password);
-                    $user = Tbl_customer::where('mlm_username', $username)
+                    $user = Tbl_customer::where('email', $username)
                     ->first();
                     $user_pass = Crypt::decrypt($user->password);
                     // return $user->archived;

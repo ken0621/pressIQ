@@ -122,6 +122,17 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
+
+    /* -- PRODUCTS => PRODUCT SHIPMENT STATUS */
+    $code = "product-trackings";
+    $nav[$page]['submenu'][$code]['label'] = "Trackings";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/trackings";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
+
+
     
     /* -- E-COMMERCE => SHIPPING */
     // $code = "ecommerce-shipping";
@@ -638,6 +649,86 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "Still developing";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
     
+
+    /* VENDORS */
+    $page = "vendor";  
+    $nav[$page]['name'] = "Vendors";
+    $nav[$page]['segment'] = $page;
+    $nav[$page]['icon'] = "user-secret";
+    $nav[$page]['type']     = "menu";
+    
+    /* -- VENDORS => LIST  */
+    $code = "vendor-list";
+    $nav[$page]['submenu'][$code]['label'] = "Vendor List";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/list";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','edit'];
+    $nav[$page]['submenu'][$code]['status'] = "Layout Only";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
+    
+    /* -- VENDORS => PURCHASE ORDER  */
+    $code = "vendor-purchase-order";
+    $nav[$page]['submenu'][$code]['label'] = "Purchase Order <span class='blink-ctr ctr-span hidden po-count pull-right'></span>";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/purchase_order/list";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Layout Only";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+    
+    /* -- VENDORS => RECEIVE INVENTORY  */
+    $code = "vendor-receive-inventory";
+    $nav[$page]['submenu'][$code]['label'] = "Receive Inventory";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/receive_inventory/list";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+    
+    /* -- VENDORS => PAY BILLS  */
+    $code = "vendor-bill";
+    $nav[$page]['submenu'][$code]['label'] = "Receive Inventory w/ Bill";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/bill_list";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
+    /* -- VENDORS => PAY BILLS  */
+    $code = "vendor-pay-bills";
+    $nav[$page]['submenu'][$code]['label'] = "Pay Bills <span class='blink-ctr ctr-span hidden bill-count pull-right'></span>";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/paybill/list";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
+    /* -- VENDORS => CHECK  */
+    $code = "vendor-check";
+    $nav[$page]['submenu'][$code]['label'] = "Write Check";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/write_check/list";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+    
+    /* -- VENDORS => BAD ORDERS  */
+    $code = "vendor-debit-memo";
+    $nav[$page]['submenu'][$code]['label'] = "Debit Memo";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/debit_memo/list";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
+    /* -- VENDORS => IMPORT  */
+    $code = "vendor-import-list";
+    $nav[$page]['submenu'][$code]['label'] = "Import";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . "/vendors" . "/import/vendor";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
+
     /* CUSTOMERS */
     $page = "customer";  
     $nav[$page]['name'] = "Customers";
@@ -717,84 +808,93 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
 
-    /* VENDORS */
-    $page = "vendor";  
-    $nav[$page]['name'] = "Vendors";
-    $nav[$page]['segment'] = $page;
-    $nav[$page]['icon'] = "user-secret";
+    
+        /* PURCHASING INVENTORY SYSTEM */
+    $page = "pis";
+    $nav[$page]['name']     = "PIS";
+    $nav[$page]['segment']  = $page;
+    $nav[$page]['icon']     = "truck";
     $nav[$page]['type']     = "menu";
-    
-    /* -- VENDORS => LIST  */
-    $code = "vendor-list";
-    $nav[$page]['submenu'][$code]['label'] = "Vendor List";
+
+        $segment = "submenu-sales-delivery";
+        $nav[$page]['submenu'][$segment]['name']   = "Sales & Delivery";
+        $nav[$page]['submenu'][$segment]['segment']= $segment;
+        $nav[$page]['submenu'][$segment]['type']   = "submenu";
+
+             /* -- PIS => SIR */
+            $code = "pis-lof";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Load Out Form <span class='blink-ctr ctr-span hidden lof-count pull-right'></span>";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/lof";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
+             /* -- PIS ['submenu'][$segment]=> SIR */
+            $code = "pis-sir";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Stock Issuance Report <span class='blink-ctr ctr-span hidden sir-count pull-right'></span>";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/sir";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
+             /* -- PIS ['submenu'][$segment]=> ILR */
+            $code = "pis-ilr";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Incoming Load Report <span class='blink-ctr ctr-span hidden ilr-count pull-right'></span>";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/ilr";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','processed-ilr'];
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
+    // /* -- PIS => Manual Invoicing */
+    // $code = "pis-manual-invoicing";
+    // $nav[$page]['submenu'][$code]['label'] = "Manual Invoicing";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page ."/manual_invoice";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    // $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    // $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
+        $segment = "submenu-cashier";
+        $nav[$page]['submenu'][$segment]['name']   = "Cashier";
+        $nav[$page]['submenu'][$segment]['segment']= $segment;
+        $nav[$page]['submenu'][$segment]['type']   = "submenu";
+
+            $code = "agent-collectiong";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Collection <span class='blink-ctr ctr-span hidden col-count pull-right'></span>";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "cashier/collection";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
+            $code = "pis-agent";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Agent List";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "cashier/agent_list";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','add','edit','archived'];
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No progress Yet";  
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
+            $code = "pis-sales-liquidation";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Sales Liquidation";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path ."cashier/sales_liquidation";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No progress Yet";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
+    /* -- PIS => SIR */
+    $code = "tablet-sir";
+    $nav[$page]['submenu'][$code]['label'] = "Login Tablet";
     $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/list";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','edit'];
-    $nav[$page]['submenu'][$code]['status'] = "Layout Only";
-    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
-    
-    /* -- VENDORS => PURCHASE ORDER  */
-    $code = "vendor-purchase-order";
-    $nav[$page]['submenu'][$code]['label'] = "Purchase Order <span class='blink-ctr ctr-span hidden po-count pull-right'></span>";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/purchase_order/list";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "Layout Only";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
-    
-    /* -- VENDORS => RECEIVE INVENTORY  */
-    $code = "vendor-receive-inventory";
-    $nav[$page]['submenu'][$code]['label'] = "Receive Inventory";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/receive_inventory/list";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
-    
-    /* -- VENDORS => PAY BILLS  */
-    $code = "vendor-bill";
-    $nav[$page]['submenu'][$code]['label'] = "Receive Inventory w/ Bill";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/bill_list";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['url'] = "/tablet";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','create-invoice'];
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
 
-    /* -- VENDORS => PAY BILLS  */
-    $code = "vendor-pay-bills";
-    $nav[$page]['submenu'][$code]['label'] = "Pay Bills <span class='blink-ctr ctr-span hidden bill-count pull-right'></span>";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/paybill/list";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
-
-    /* -- VENDORS => CHECK  */
-    $code = "vendor-check";
-    $nav[$page]['submenu'][$code]['label'] = "Check";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/write_check/list";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
-    
-    /* -- VENDORS => BAD ORDERS  */
-    $code = "vendor-debit-memo";
-    $nav[$page]['submenu'][$code]['label'] = "Debit Memo";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/debit_memo/list";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
-
-    /* -- VENDORS => IMPORT  */
-    $code = "vendor-import-list";
-    $nav[$page]['submenu'][$code]['label'] = "Import";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . "/vendors" . "/import/vendor";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "";
-    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
 
     /* REPORTS  */
     $page = "report"; 
@@ -952,91 +1052,6 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "Developing";
     $nav[$page]['submenu'][$code]['developer'] = "ARCY";
 
-    /* PURCHASING INVENTORY SYSTEM */
-    $page = "pis";
-    $nav[$page]['name']     = "PIS";
-    $nav[$page]['segment']  = $page;
-    $nav[$page]['icon']     = "truck";
-    $nav[$page]['type']     = "menu";
-
-        $segment = "submenu-sales-delivery";
-        $nav[$page]['submenu'][$segment]['name']   = "Sales & Delivery";
-        $nav[$page]['submenu'][$segment]['segment']= $segment;
-        $nav[$page]['submenu'][$segment]['type']   = "submenu";
-
-             /* -- PIS => SIR */
-            $code = "pis-lof";
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Load Out Form <span class='blink-ctr ctr-span hidden lof-count pull-right'></span>";
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/lof";
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
-
-             /* -- PIS ['submenu'][$segment]=> SIR */
-            $code = "pis-sir";
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Stock Issuance Report <span class='blink-ctr ctr-span hidden sir-count pull-right'></span>";
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/sir";
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
-
-             /* -- PIS ['submenu'][$segment]=> ILR */
-            $code = "pis-ilr";
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Incoming Load Report <span class='blink-ctr ctr-span hidden ilr-count pull-right'></span>";
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/ilr";
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','processed-ilr'];
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
-
-    // /* -- PIS => Manual Invoicing */
-    // $code = "pis-manual-invoicing";
-    // $nav[$page]['submenu'][$code]['label'] = "Manual Invoicing";
-    // $nav[$page]['submenu'][$code]['code'] = $code;
-    // $nav[$page]['submenu'][$code]['url'] = $path . $page ."/manual_invoice";
-    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    // $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
-    // $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
-
-        $segment = "submenu-cashier";
-        $nav[$page]['submenu'][$segment]['name']   = "Cashier";
-        $nav[$page]['submenu'][$segment]['segment']= $segment;
-        $nav[$page]['submenu'][$segment]['type']   = "submenu";
-
-            $code = "agent-collectiong";
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Collection <span class='blink-ctr ctr-span hidden col-count pull-right'></span>";
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "cashier/collection";
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
-
-            $code = "pis-agent";
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Agent List";
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "cashier/agent_list";
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','add','edit','archived'];
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No progress Yet";  
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
-
-            $code = "pis-sales-liquidation";
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Sales Liquidation";
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path ."cashier/sales_liquidation";
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No progress Yet";
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
-
-    /* -- PIS => SIR */
-    $code = "tablet-sir";
-    $nav[$page]['submenu'][$code]['label'] = "Login Tablet";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = "/tablet";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','create-invoice'];
-    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
     
     /* MANAGE CONTENT  */
     $page = "page"; 

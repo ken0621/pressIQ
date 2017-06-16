@@ -60,6 +60,12 @@ function global()
     }
     function action_global_submit(link, data, modal)
     {
+        console.log(link);
+        console.log(link.charAt(0));
+        if(link.charAt(0) != '/')
+        {
+            link = '/' + link;
+        }
         $(".modal-loader").removeClass("hidden");
         $.ajax({
             url:link,

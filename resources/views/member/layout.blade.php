@@ -440,8 +440,27 @@
         beforeSend: function(jqXHR, settings) {
                 // show progress spinner
                 var base = $("base").attr("href");
-                settings.url = base + settings.url;
-            }
+                var new_url = window.location.protocol + "//" + window.location.host + "/";
+                var new_base = settings.url.replace(new_url,base);
+                var old_base = settings.url.replace(new_url,"");
+                var split = old_base.split("/");
+                var old_new_base = ''; 
+                if(split[0] == 'digima')
+                {
+
+                    var i;
+                    for (i = 0; i < split.length; ++i) {
+                        if(i != 0)
+                        {
+                            old_new_base = old_new_base + '/' + split[i];
+                        }
+                    }
+                    settings.url = base + old_new_base;
+                }
+            },
+        ajaxSuccess : function (){
+            load_assets();
+        }    
         });
 	  $(document).ajaxStart(function() { Pace.restart(); }); 
       $('.select_current_warehouse').click(function(event) 
@@ -467,6 +486,10 @@
 
     $(document).ready(function()
     {
+
+    });
+    load_assets();
+    function load_assets(){
         $("script").each(function(index, el) 
         {
             var current = $(el).attr("src");
@@ -488,7 +511,7 @@
                 $('<link rel="stylesheet" type="text/css">').attr('href', replace).appendTo('head');
             } 
         });
-    })
+    }
 
     
 	</script>

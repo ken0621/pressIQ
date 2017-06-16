@@ -928,8 +928,8 @@ Route::any("/member/load_position","Member\EmployeePositionController@load_posit
 
 //core dev testing
 
-Route::any("/core","Core\Times2@TimeExist");
-
+Route::any("/kim/core","Core\Times2@TimeExist");
+Route::any("/kim/timeshift","Core\Times2@time_shift");
 //end core testing
 
 /* PAYROLL START */

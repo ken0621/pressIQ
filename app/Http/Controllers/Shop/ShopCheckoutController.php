@@ -86,7 +86,6 @@ class ShopCheckoutController extends Shop
     }
     public function dragonpay_return()
     {
-        dd(Request::input());
         if (Request::input("status") == "S") 
         {
             $from = Request::input('param1');

@@ -1057,6 +1057,10 @@ class Cart
 
         // echo $itemCheckout->id; // Checkout ID
         // echo $itemCheckout->url; // Checkout URL
+        $logs_insert["checkout_id"] = $itemCheckout->id;
+        $logs_insert["log_date"]    = Carbon::now();
+        DB::table("tbl_paymaya_logs")->insert($logs_insert);
+        
         return Redirect::to($itemCheckout->url)->send();
     }
     public static function submit_using_dragonpay($data, $shop_id, $method_information, $from)

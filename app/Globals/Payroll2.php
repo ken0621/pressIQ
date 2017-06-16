@@ -55,5 +55,21 @@ class Payroll2
 	/* TIME GLOBALS */
 	public static function time_check_if_exist_between($check_exist, $between_in, $between_out)
 	{
+		$ifCheckExist=false;
+		$time_exist_array = explode(":", $check_exist);
+		$time_in_array = explode(":", $between_in);
+		$time_out_array = explode(":",$between_out);
+
+		$check_exist =($time_exist_array[0]*3600) + ($time_exist_array[1]*60) + $time_exist_array[2]."<br>";
+		$between_in = ($time_in_array[0]*3600) + ($time_in_array[1]*60) + $time_in_array[2]."<br>";
+		$between_out = ($time_out_array[0]*3600) + ($time_out_array[1]*60) + $time_out_array[2]."<br>";
+
+		if (($check_exist>=$between_in)&&($check_exist<=$between_out)) {
+			$ifCheckExist=true;
+		}
+
+		return $ifCheckExist;
 	}
+
+
 }

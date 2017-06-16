@@ -1,5 +1,7 @@
 <?php
 
+
+
 Route::get('/member/mail_setting', 'Member\MailSettingController@index');
 Route::post('/member/mail_setting', 'Member\MailSettingController@submit');
 
@@ -921,6 +923,14 @@ Route::controller('/tester','TesterController');
 
 // test lang load
 Route::any("/member/load_position","Member\EmployeePositionController@load_position");
+
+
+
+//core dev testing
+
+Route::any("/core","Core\Times2@TimeExist");
+
+//end core testing
 
 /* PAYROLL START */
 // Route::group(array('prefix' => '/member/payroll'), function()

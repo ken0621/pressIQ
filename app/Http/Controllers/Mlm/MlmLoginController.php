@@ -246,8 +246,40 @@ class MlmLoginController extends Controller
 			}
 			else
 			{
-				$data['type'] = 'error';
-				$data['message'] = 'Username Does Not Exist';
+                $count = Tbl_customer::where('email', $username)->count();
+                if($count >= 1)
+                {
+                    $enc_pass = Crypt::encrypt($password);
+                    $user = Tbl_customer::where('mlm_username', $username)
+                    ->first();
+                    $user_pass = Crypt::decrypt($user->password);
+                    // return $user->archived;
+                    if($user->archived == 0)
+                    {
+                        if($password == $user_pass)
+                        {
+                            $shop_id = $user->shop_id;
+                            Mlm_member::add_to_session($shop_id, $user->customer_id);
+                            $data['type'] = 'success';
+                            $data['message'] = 'You will be redirected.';
+                        }
+                        else
+                        {
+                            $data['type'] = 'error';
+                            $data['message'] = 'Invalid Username/Password';
+                        }
+                    }
+                    else
+                    {
+                        $data['type'] = 'error';
+                        $data['message'] = 'Sorry Your Account is Disabled, Please Contact the Administrator.';
+                    }
+                }
+                else
+                {
+                    $data['type'] = 'error';
+                    $data['message'] = 'Username Does Not Exist';
+                }
 			}
 		}
 		else

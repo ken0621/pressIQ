@@ -29,12 +29,35 @@
 		</div>
 	</div>
 </div>			
-
+<div class="panel panel-default panel-block panel-title-block panel-gray col-md-6">
+    <div class="tab-content">
+        <div id="all-orders" class="tab-pane fade in active">
+        	<div class="modal-header">
+        		<form class="global-submit" method="post" action="/member/settings/terms/set">
+        		{!! csrf_field() !!}
+        		<table class="table">
+            		<tr>
+            			<td><label>Terms and Agreement</label></td>
+            		</tr>
+            		<tr>
+            			<td><textarea class="form-control input-sm tinymce" name="terms_and_agreement">{!! isset($terms_and_agreement->settings_value) ?  $terms_and_agreement->settings_value : '' !!}</textarea></td>
+            		</tr>
+	            	<tr>
+	            		<td><button class="pull-right btn btn-primary">Submit</button></td>
+	            	</tr>
+        		</table>
+        		</form>
+            </div>
+        </div>
+    </div>
+</div>        
 
 
 @endsection
 
 @section('script')
+<script type="text/javascript" src="/assets/member/js/tinymce.min.js"></script>
+<script>tinymce.init({ selector:'.tinymce',menubar:false,height:200, content_css : "/assets/member/css/tinymce.css"});</script>
 <script>
 @if(isset($settings_active))
 	@if(count($settings_active) != 0)

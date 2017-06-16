@@ -148,6 +148,7 @@ class MemberController extends Controller
         $data['country'] = Tbl_country::get();
         $data['current'] = Cart::get_info(Self::$shop_id);
         $data['sponsor_r'] = $this->check_if_required_sponsor(Self::$shop_id);
+        $data['terms_and_agreement'] = Tbl_settings::where('shop_id', Self::$shop_id)->where('settings_key', 'terms_and_agreement')->first();
         return view("mlm.register.register", $data);
     }
     public function check_if_required_sponsor($shop_id)
@@ -408,6 +409,10 @@ class MemberController extends Controller
         return json_encode($data);
     }
 
+    public function package_get_details_product()
+    {
+        
+    }
     public function shipping()
     {
         $register_session = Session::get('mlm_register_step_1');

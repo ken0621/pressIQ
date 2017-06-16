@@ -111,14 +111,14 @@ class ShopCheckoutController extends Shop
 
                 if($order)
                 {
-                    Item_code::ec_order_slot($order_id);
+                    // Item_code::ec_order_slot($order_id);
                     
-                    $update['ec_order_id'] = $order_id;
-                    $update['order_status'] = "Processing";
-                    $update['payment_status'] = 1;
-                    $order = Ec_order::update_ec_order($update);
+                    // $update['ec_order_id'] = $order_id;
+                    // $update['order_status'] = "Processing";
+                    // $update['payment_status'] = 1;
+                    // $order = Ec_order::update_ec_order($update);
 
-                    return Redirect::to('/mlm/login?notify=1');
+                    return Redirect::to('/mlm/login?notify=1&success=1');
                 }
             }
         }

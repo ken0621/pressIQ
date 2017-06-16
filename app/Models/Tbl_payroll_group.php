@@ -49,7 +49,18 @@ class Tbl_payroll_group extends Model
 	// [DOUBLE]			break_deduction
 	// [VARCHAR]		break_time
 	// [DOUBLE]			taxable_salary
-
+    public function scopeShift($query)
+    {
+    	$query->join("tbl_payroll_shift_code", "tbl_payroll_shift_code.shift_code_id", "=", "tbl_payroll_group.shift_code_id");
+    }
+    public function scopeDay($query)
+    {
+    	$query->join("tbl_payroll_shift_day", "tbl_payroll_shift_day.shift_code_id", "=", "tbl_payroll_shift_code.shift_code_id");
+    }
+    public function scopeTime($query)
+    {
+    	$query->join("tbl_payroll_shift_time", "tbl_payroll_shift_time.shift_day_id", "=", "tbl_payroll_shift_day.shift_day_id");
+    }
 	public function scopesel($query, $shop_id = 0, $payroll_group_archived = 0)
 	{
 		$query->where('shop_id',$shop_id)->where('payroll_group_archived',$payroll_group_archived);

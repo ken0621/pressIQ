@@ -11,7 +11,9 @@ use App\Models\Tbl_payroll_employee_contract;
 use App\Models\Tbl_payroll_employee_basic;
 use App\Models\Tbl_payroll_time_sheet;
 use App\Models\Tbl_payroll_time_sheet_record;
-use App\Globals\Payroll;
+use App\Models\Tbl_payroll_time_sheet_record_approved;
+use App\Models\Tbl_payroll_group;
+use App\Globals\Payroll2;
 
 class PayrollTimeSheet2Controller extends Member
 {
@@ -35,12 +37,13 @@ class PayrollTimeSheet2Controller extends Member
 	public function timesheet($period_id, $employee_id)
 	{
 		$data["page"] = "Employee Timesheet";
-		$data["employee_id"] = $employee_id;
+		$data["employee_id"] = $this->$employee_id = $employee_id;
 		$data["employee_info"] = $this->db_get_employee_information($employee_id); 
 		$data["company_period"] = $this->db_get_company_period_information($period_id);
 		$data["show_period_start"] = date("F d, Y", strtotime($data["company_period"]->payroll_period_start));
 		$data["show_period_end"] = date("F d, Y", strtotime($data["company_period"]->payroll_period_end));
 		$data["_timesheet"] = $this->timesheet_info($data["company_period"], $employee_id);
+
 		return view('member.payroll2.employee_timesheet', $data);
 	}
 	public function timesheet_info($company_period, $employee_id) 
@@ -58,9 +61,11 @@ class PayrollTimeSheet2Controller extends Member
 			$_timesheet[$from]->day_number = Carbon::parse($from)->format("d");
 			$_timesheet[$from]->day_word = Carbon::parse($from)->format("D");
 			$_timesheet[$from]->record = $this->timesheet_process_in_out($timesheet_db);
-			$_timesheet[$from]->daily_info = $this->timesheet_process_daily_info($timesheet_db);
+			$_timesheet[$from]->daily_info = $this->timesheet_process_daily_info($employee_id, $from, $timesheet_db);
 			$from = Carbon::parse($from)->addDay()->format("Y-m-d");
 		}
+
+		dd($_timesheet);
 
 		return $_timesheet;
 	}
@@ -83,14 +88,27 @@ class PayrollTimeSheet2Controller extends Member
 
 		return $_timesheet_record;
 	}
-	public function timesheet_process_daily_info($timesheet_db)
+	public function timesheet_process_daily_info($employee_id, $date, $timesheet_db)
 	{
 		$return = new stdClass();
 
 		if($timesheet_db)
 		{
-			$return->for_approval = 0;
-			$return->daily_salary = 500;
+			$approved_record = $this->db_get_time_sheet_record_of_in_and_out_approved($timesheet_db->payroll_time_sheet_id);
+			$approved = false;
+
+			if(count($approved_record) > 0)
+			{
+				$_record = $approved_record;
+				$approved = true;
+			}
+			else
+			{
+				$_record = $this->db_get_time_sheet_record_of_in_and_out($timesheet_db->payroll_time_sheet_id);
+			}
+
+
+			$return = $this->timesheet_process_daily_info_record($employee_id, $date, $approved, $_record);
 		}
 		else
 		{
@@ -98,6 +116,27 @@ class PayrollTimeSheet2Controller extends Member
 			$return->daily_salary = 0;
 		}
 
+		return $return;
+	}
+	public function timesheet_process_daily_info_record($employee_id, $date, $approved, $_time)
+	{
+		$return = new stdClass();
+		$return->for_approval = ($approved == true ? 0 : 1);
+		$return->daily_salary = 0;
+		$employee_contract = $this->db_get_current_employee_contract($employee_id);
+		$_shift = $this->db_get_shift_based_on_payroll_group($employee_contract->payroll_group_id, $date);
+		$mode = "daily";
+
+		if($return->for_approval == 1)
+		{
+			$return->approved_shift = Payroll2::time_shift_create_format_based_on_conflict($_time, $_shift);
+		}
+		else
+		{
+			$return->approved_shift = $_time;
+		}
+		
+		$return->compute = Payroll2::compute_day_pay($mode, $_time, $_shift);
 		return $return;
 	}
 	public function timesheet_process_in_out_default()
@@ -110,6 +149,8 @@ class PayrollTimeSheet2Controller extends Member
 	}
 	public function timesheet_process_in_out_record($_timesheet_record_db)
 	{
+		$_timesheet_record = null;
+
 		foreach($_timesheet_record_db as $key => $record)
 		{
 			$_timesheet_record[$key] = new stdClass();
@@ -151,5 +192,17 @@ class PayrollTimeSheet2Controller extends Member
 	public function db_get_time_sheet_record_of_in_and_out($time_sheet_id)
 	{
 		return Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $time_sheet_id)->get();
+	}
+	public function db_get_time_sheet_record_of_in_and_out_approved($time_sheet_id)
+	{
+		return Tbl_payroll_time_sheet_record_approved::where("payroll_time_sheet_id", $time_sheet_id)->get();
+	}
+	public function db_get_current_employee_contract($employee_id)
+	{
+		return Tbl_payroll_employee_contract::where("payroll_employee_id", $employee_id)->orderBy("payroll_employee_contract_id", "desc")->first();
+	}
+	public function db_get_shift_based_on_payroll_group($payroll_group_id, $date)
+	{
+		return Tbl_payroll_group::where("payroll_group_id", $payroll_group_id)->shift()->day()->where("shift_day", date("D", strtotime($date)))->time()->get();
 	}
 }

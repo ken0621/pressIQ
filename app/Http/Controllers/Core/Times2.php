@@ -5,11 +5,11 @@ use App\Globals\Payroll2;
 
 class Times2 extends Controller
 {
-	public function TimeExist(){
+	public function time_exist(){
 
-		$ifTimeExist = Payroll2::time_check_if_exist_between("01:00:12","11:00:00","13:00:00");
+		$if_check_exist = Payroll2::time_check_if_exist_between("11:00:00","11:00:00","13:00:00");
 
-		if ($ifTimeExist) {
+		if ($if_check_exist) {
 			echo "Time is in Between!";
 		}
 		else

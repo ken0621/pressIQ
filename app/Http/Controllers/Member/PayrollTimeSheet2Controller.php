@@ -125,6 +125,8 @@ class PayrollTimeSheet2Controller extends Member
 		$return->daily_salary = 0;
 		$employee_contract = $this->db_get_current_employee_contract($employee_id);
 		$_shift = $this->db_get_shift_based_on_payroll_group($employee_contract->payroll_group_id, $date);
+		$_shift_raw = $this->shift_raw($_shift);
+		$_time_raw = $this->time_raw($_shift);
 		$mode = "daily";
 
 		if($return->for_approval == 1)
@@ -162,6 +164,10 @@ class PayrollTimeSheet2Controller extends Member
 		return $_timesheet_record;
 	}
 	/* GLOBAL FUNCTION FOR THIS CONTROLLER */
+	public function shift_raw($_shift)
+	{
+
+	}
 	public function gb_convert_time_from_db_to_timesheet($db_time)
 	{
 		if($db_time == "00:00:00")

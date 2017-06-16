@@ -105,12 +105,14 @@ class MlmDashboardController extends Mlm
         if(isset(Self::$slot_now->slot_start_status))
         {
             $slot = Tbl_mlm_slot::where('slot_id', Self::$slot_id)->first();
-            if($slot->slot_start_status == 0)
-            {
-                $update['slot_start_status'] = 1;
-                Tbl_mlm_slot::where('slot_id', Self::$slot_id)->update($update);
-                $data = [];
-                return view('mlm.dashboard.myphone_start');
+            if(isset($slot)){
+                if($slot->slot_start_status == 0)
+                {
+                    $update['slot_start_status'] = 1;
+                    Tbl_mlm_slot::where('slot_id', Self::$slot_id)->update($update);
+                    $data = [];
+                    return view('mlm.dashboard.myphone_start');
+                }
             }
         }
     }

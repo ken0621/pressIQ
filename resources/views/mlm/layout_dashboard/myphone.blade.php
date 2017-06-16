@@ -1,5 +1,8 @@
 @extends('mlm.layout')
 @section('content')
+   @if($slot_start_status)
+      {!! $slot_start_status !!}
+   @else
 <div class="row">
    <div class="col-md-12 col-sm-12 col-xs-12">
       <div class="dashboard_graph">
@@ -145,6 +148,9 @@
       </div>
    </div>
 </div>
+   @endif
+
+
 @endsection
 @section('js')
 

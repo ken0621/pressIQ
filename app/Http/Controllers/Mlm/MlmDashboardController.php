@@ -46,6 +46,7 @@ class MlmDashboardController extends Mlm
         }
         if(Self::$shop_info->member_layout == 'myphone')
         {
+            $data['slot_start_status'] = $this->slot_start_status();
             $data['direct']      = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)->where('wallet_log_plan', 'DIRECT')->sum('wallet_log_amount');
             $data['binary']      = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)->where('wallet_log_plan', 'BINARY')->sum('wallet_log_amount');
 
@@ -97,6 +98,18 @@ class MlmDashboardController extends Mlm
         $data['news'] = Self::news();
 
         return view("mlm.dashboard", $data);
+    }
+    public function slot_start_status()
+    {
+        $return = null;
+        if(isset(Self::$slot_now->slot_start_status))
+        {
+            if(Self::$slot_now->slot_start_status == 0)
+            {
+                $data = [];
+                return view('mlm.dashboard.myphone_start');
+            }
+        }
     }
     public function lead()
     {

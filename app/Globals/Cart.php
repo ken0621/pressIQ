@@ -988,6 +988,7 @@ class Cart
                 case 'ipay88': return Cart::submit_using_ipay88($data, $shop_id, $method_information); break;
                 case 'other': return Cart::submit_using_proof_of_payment($shop_id, $method_information);  break;
                 case 'e_wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
+                case 'cashondelivery': return Cart::submit_using_cash_on_delivery($shop_id, $method_information); break;
                 default: dd("UNDER DEVELOPMENT"); break;
             }
         }
@@ -1066,6 +1067,10 @@ class Cart
 
         // echo $itemCheckout->id; // Checkout ID
         // echo $itemCheckout->url; // Checkout URL
+        $logs_insert["checkout_id"] = $itemCheckout->id;
+        $logs_insert["log_date"]    = Carbon::now();
+        DB::table("tbl_paymaya_logs")->insert($logs_insert);
+        
         return Redirect::to($itemCheckout->url)->send();
     }
     public static function submit_using_dragonpay($data, $shop_id, $method_information, $from)
@@ -1265,6 +1270,19 @@ class Cart
         Cart::clear_all($shop_id);
         $result['status'] = 'success';
         return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)))->send();
+    }
+    public static function submit_using_cash_on_delivery($shop_id, $method_information)
+    {
+        $payment_status = 0;
+        $order_status   = "Pending";
+        $customer       = Cart::get_customer();
+
+        $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null);
+        Cart::clear_all($shop_id);
+
+        $tbl_order = DB::table("tbl_ec_order")->where("tbl_ec_order.ec_order_id", $order_id)->leftJoin("tbl_customer", "tbl_customer.customer_id", "=", "tbl_ec_order.customer_id")->first();
+        
+        return Redirect::to("/")->send();
     }
     public static function get_customer()
     {

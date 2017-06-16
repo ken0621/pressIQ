@@ -735,7 +735,6 @@ class Payroll
 		$def_out_float 	= Payroll::time_float($default_time_out);
 
 		$time_rule 				= $data["time_rule"];
-	
 		$_time_record 			= $data["_time_record"];
 		$default_working_hours 	= $data["default_working_hours"];
 		$late_grace_time 		= $data["employee_information"]->payroll_group_grace_time * 60;
@@ -744,8 +743,7 @@ class Payroll
 
 		/* for flexi time */
 		
-		
-
+	
 		$return = new stdClass();
 		$data["default_working_hours"] = $default_working_hours = c_time_to_int($default_working_hours);
 
@@ -806,11 +804,14 @@ class Payroll
 
 			if($compute_approved == 1)
 			{
-				$time_in = c_time_to_int($time_record->payroll_time_sheet_approved_in);
-				$time_out = c_time_to_int($time_record->payroll_time_sheet_approved_out);
-				$time_in_str = $time_record->payroll_time_sheet_approved_in;
-				$time_out_str = $time_record->payroll_time_sheet_approved_out;
+				$time_in 	= c_time_to_int($time_record->payroll_time_sheet_approved_in);
+				$time_out 	= c_time_to_int($time_record->payroll_time_sheet_approved_out);
+
+
+				$time_in_str 	= $time_record->payroll_time_sheet_approved_in;
+				$time_out_str 	= $time_record->payroll_time_sheet_approved_out;
 			}
+
 			else
 			{
 				$time_in 	= c_time_to_int($time_record->payroll_time_sheet_in);
@@ -821,8 +822,7 @@ class Payroll
 			}
 
 			$time_in_str = date('H:i', strtotime($time_in_str));
-			// dd($time_in_str);
-
+			
 			if($time_in == 0) //SET BOTH TO BLANK IF TIME IN HAS NO INPUT
 			{
 				$time_rec[$key]["time_in"] = "";
@@ -876,36 +876,6 @@ class Payroll
 			
 			if($flexi == 0)
 			{
-				/* CHECK IF EARLY OVERTIME */
-				// if($time_in < $default_time_in && $time_out != 0)
-				// {
-				// 	if($time_out < $default_time_in)
-				// 	{
-				// 		$early_overtime = $time_out - $time_in;
-				// 		$regular_hours = 0;
-				// 	}
-				// 	else
-				// 	{
-				// 		$early_overtime = $default_time_in - $time_in;
-				// 		$regular_hours = $regular_hours - $early_overtime;
-				// 	}
-				// }
-
-				/* CHECK IF LATE OVERTIME */
-				// if($time_out > $default_time_out && $time_out != 0)
-				// {
-				// 	if($time_in > $default_time_out)
-				// 	{
-				// 		$late_overtime = $time_out - $time_in;
-				// 		$regular_hours = 0;
-				// 	}
-				// 	else
-				// 	{
-				// 		$late_overtime = $time_out - $default_time_out;
-				// 		$regular_hours = $regular_hours - $late_overtime;
-				// 	}
-				// }
-
 				/* CHECK IF EARLY OVERTIME */
 
 				if($float_in < $def_in_float && $float_in != 0)
@@ -1059,7 +1029,7 @@ class Payroll
 
 		if($total_hours > 0)
 		{
-			// $total_hours -= c_time_to_int($break);
+			// $total_hours -= 2($break);
 		}
 		
 		/* COMPUTE EXTRA DAY AND REST DAY */
@@ -1075,8 +1045,6 @@ class Payroll
 			$date = $data["time_sheet_info"]->payroll_time_date;
 		}
 
-
-	
 		if($rest_day == 1)
 		{
 			if($total_hours == '00:00:00' || $total_hours == '00:00')
@@ -2563,7 +2531,7 @@ class Payroll
 		$data['total_deduction']	+= $data['pagibig_contribution'];
 		$data['total_deduction']	+= $data['philhealth_contribution_ee'];
 
-		// dd(($data['philhealth_contribution_ee']) );
+		// dd((p$data['philhealth_contribution_ee']) );
 
 		$data['total_deduction']	+= $data['absent_deduction'];
 		$data['total_deduction']	+= $data['late_deduction'];
@@ -2595,12 +2563,6 @@ class Payroll
 
 		$data['total_gross'] 				+=  $total_deminimis + $data['13_month'];
 		
-		// dd($data['total_gross']);
-
-		
-
-		
-	
 		$data['total_regular_days']			= round($data['total_regular_days'], 2);
 		$data['total_rest_days']			= round($data['total_rest_days'], 2);
 		$data['total_extra_days']			= round($data['total_extra_days'], 2);

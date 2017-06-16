@@ -12,7 +12,12 @@ class CreateTblPaymayaLogs extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('tbl_paymaya_logs', function (Blueprint $table) 
+        {
+            $table->increments('id');
+            $table->dateTime('log_date');
+            $table->string('checkout_id');
+        });
     }
 
     /**

@@ -77,7 +77,7 @@ class Shop extends Controller
                     }
                     else
                     {
-                        die("Page not found.");
+                        die("Page not found. 1");
                     }
                 }
             }
@@ -91,7 +91,7 @@ class Shop extends Controller
             }
             else
             {
-                die("Page not found.");
+                die("Page not found. 2");
             }
         	
         }

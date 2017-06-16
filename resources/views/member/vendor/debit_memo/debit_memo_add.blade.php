@@ -77,10 +77,7 @@
                                             <!-- <th style="width: 100px;">Discount</th> -->
                                             <!-- <th style="width: 100px;">Remark</th> -->
                                             <th style="width: 100px;">Amount</th>
-                                            @if(isset($serial)) 
-                                            <th style="width: 200px;">Serial Number</th> 
-                                            <!-- <th style="width: 15px;"></th>  -->
-                                            @endif
+                                            @include("member.load_ajax_data.load_th_serial_number");
                                             <!-- <th style="width: 10px;">Tax</th> -->
                                             <th width="10"></th>
                                         </tr>

@@ -108,10 +108,7 @@
                                             <tr>
                                                 <th style="" ></th>
                                                 <th style="">Service Date</th>
-                                                @if(isset($serial)) 
-                                                <th style="width: 200px;">Serial Number</th> 
-                                                <!-- <th style="width: 15px;"></th>  -->
-                                                @endif
+                                                @include("member.load_ajax_data.load_th_serial_number");
                                                 <th style="" class="text-right">#</th>
                                                 <th style="width: 200px">Product/Service</th>
                                                 <th style="">Description</th>

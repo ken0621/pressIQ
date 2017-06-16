@@ -49,8 +49,13 @@ class MemberController extends Controller
             {
                 $check_domain = Tbl_customer::where('mlm_username', $key)->first();
                 $lead_e = $check_domain;
+
+                if($check_domain == null)
+                {
+                    $key = 'myphone';
+                    $check_domain = Tbl_shop::where('shop_key', $key)->first();
+                }
             }
-            
         }
         if($check_domain != null)
         {

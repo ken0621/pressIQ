@@ -132,10 +132,19 @@ class ShopCheckoutController extends Shop
 
                 if($order)
                 {  
-                    $update['ec_order_id'] = $order_id;
-                    $update['order_status'] = "Processing";
-                    $update['payment_status'] = 1;
-                    $order = Ec_order::update_ec_order($update);
+                    try 
+                    {
+                        $update['ec_order_id'] = $order_id;
+                        $update['order_status'] = "Processing";
+                        $update['payment_status'] = 1;
+                        $order = Ec_order::update_ec_order($update);
+                    } 
+                    catch (\Exception $e) 
+                    {
+                        $last["log_date"] = Carbon::now();
+                        $last["content"]  = $e->getMessage();
+                        DB::table("tbl_dragonpay_logs")->insert($last);  
+                    }   
                 }
             }
             elseif ($from == "register")
@@ -145,12 +154,21 @@ class ShopCheckoutController extends Shop
 
                 if($order)
                 {
-                    Item_code::ec_order_slot($order_id);
-                    
-                    $update['ec_order_id'] = $order_id;
-                    $update['order_status'] = "Processing";
-                    $update['payment_status'] = 1;
-                    $order = Ec_order::update_ec_order($update);
+                    try 
+                    {
+                        Item_code::ec_order_slot($order_id);
+                        
+                        $update['ec_order_id'] = $order_id;
+                        $update['order_status'] = "Processing";
+                        $update['payment_status'] = 1;
+                        $order = Ec_order::update_ec_order($update);
+                    } 
+                    catch (\Exception $e) 
+                    {
+                        $last["log_date"] = Carbon::now();
+                        $last["content"]  = $e->getMessage();
+                        DB::table("tbl_dragonpay_logs")->insert($last);  
+                    }  
                 }
             }
         }

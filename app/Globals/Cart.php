@@ -1057,8 +1057,19 @@ class Cart
         $itemCheckout->items = $item;
         $itemCheckout->totalAmount = $totalAmount;
         $itemCheckout->requestReferenceNumber = $shop_id . time();
+
+        $shop = DB::table('tbl_shop')->where('shop_id', $shop_id)->first();
+        $link = '/payment/paymaya/success?notify=0&';
+        if($shop)
+        {
+            if($shop->shop_key == 'myphone')
+            {
+                $link = '/mlm/login?notify=1&';
+            }
+        }
+
         $itemCheckout->redirectUrl = array(
-            "success" =>  URL::to("/payment/paymaya/success?order_id=" . Crypt::encrypt($order_id) . "&from=" . $from),
+            "success" =>  URL::to($link + "order_id=" . Crypt::encrypt($order_id) . "&from=" . $from),
             "failure" => URL::to("/payment/paymaya/failure"),
             "cancel" => URL::to("/payment/paymaya/cancel")
         );

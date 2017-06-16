@@ -7,7 +7,7 @@ Route::any('/payment/dragonpay/logs', 'Shop\ShopCheckoutController@dragonpay_log
 Route::get('/payment/dragonpay/return', 'Shop\ShopCheckoutController@dragonpay_return');
 /* End Dragon Pay */
 
-/* Payment Integration with iPay88 */
+/* Payment Integration with iPay88 */	
 Route::any("/ipay88_response","Shop\ShopCheckoutController@ipay88_response"); //Brain
 /* End iPay88 */
 

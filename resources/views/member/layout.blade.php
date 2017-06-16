@@ -460,6 +460,7 @@
             },
         ajaxSuccess : function (){
             load_assets();
+            console.log('ajaxSuccess');
         }    
         });
 	  $(document).ajaxStart(function() { Pace.restart(); }); 

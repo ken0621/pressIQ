@@ -147,6 +147,7 @@ class MemberController extends Controller
 
     public function register()
     {
+        Session::forget('mlm_member');
         $data['country'] = Tbl_country::get();
         $data['current'] = Cart::get_info(Self::$shop_id);
         $data['sponsor_r'] = $this->check_if_required_sponsor(Self::$shop_id);

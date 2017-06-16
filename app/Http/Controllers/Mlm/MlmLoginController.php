@@ -101,7 +101,7 @@ class MlmLoginController extends Controller
     }
     public function index()
     {
-    	Session::forget('mlm_member');
+    	
         $data["page"] = "Login";
         $notify = Request::input('notify');
         $data['notify'] = 0;

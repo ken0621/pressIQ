@@ -70,6 +70,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	Route::any('/timesheet/send_reminder','Member\PayrollTimeSheetController@send_reminder');
 	Route::any('/timesheet/modal_timesheet_comment/{id}','Member\PayrollTimeSheetController@modal_timesheet_comment');
+	Route::any('/timesheet/modal_choose_company/{id}','Member\PayrollTimeSheetController@modal_choose_company');
+	Route::any('/timesheet/choose_company_save','Member\PayrollTimeSheetController@choose_company_save');
 	Route::any('/timesheet/time_sheet_comment_save','Member\PayrollTimeSheetController@time_sheet_comment_save');
 	/* TIMESHEET END */
 

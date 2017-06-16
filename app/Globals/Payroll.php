@@ -806,8 +806,7 @@ class Payroll
 			{
 				$time_in 	= c_time_to_int($time_record->payroll_time_sheet_approved_in);
 				$time_out 	= c_time_to_int($time_record->payroll_time_sheet_approved_out);
-
-
+				
 				$time_in_str 	= $time_record->payroll_time_sheet_approved_in;
 				$time_out_str 	= $time_record->payroll_time_sheet_approved_out;
 			}

@@ -270,6 +270,7 @@ function timesheet()
 					/* UPDATE DATA FOR NEW SUB */
 					$("tbody").find(".time-record.new-sub").attr("date", date);
 					$("tbody").find(".time-record.new-sub").attr("data-id", result);
+					$("tbody").find(".time-record.new-sub").attr("id", result);
 					// $("tbody").find(".time-record.new-sub").find(".date").val(date);
 					$("tbody").find(".time-record.new-sub").find(".date").val(result);
 					$("tbody").find(".time-record.new-sub").find(".time-in").val('');
@@ -286,6 +287,12 @@ function timesheet()
 					var remarks = $("tbody").find(".time-record.new-sub").find(".new-comment");
 					var remark_link = remarks.attr('link');
 					remarks.attr('link', remark_link + result);
+
+
+					/* for company */
+					var company = $("tbody").find(".time-record.new-sub").find(".new-comment");
+					var company_link = company.attr('link');
+					company_link.attr('link', company_link + result);
 
 					/* ADD EVENT TO NEW SUB */
 					event_time_entry();
@@ -795,4 +802,8 @@ function submit_done(data)
 	}
 	catch(err){}
 	data.element.modal("toggle");
+	if(data.function_name == 'get_company')
+	{	
+		$("#"+data.id).find('.fa-university').attr('title', data.company);
+	}
 }	

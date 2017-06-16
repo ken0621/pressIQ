@@ -7572,6 +7572,7 @@ class PayrollController extends Member
           $data['_bank']      = Tbl_payroll_bank_convertion::orderBy('bank_name')->get();
           $data['id']         = $id;
           $data['company']    = Tbl_payroll_company::getbyperiod($id)->first();
+
           return view('member.payroll.modal.modal_bank', $data);
      }
 
@@ -7600,9 +7601,9 @@ class PayrollController extends Member
                $fileText .= $compute['payroll_employee_atm_number']."\t".number_format($compute['total_net'], 2,'.','')."\r\n";
           }
 
-          $myName = $company_code.$upload_date.$batch_no.".txt";
+          $myName = $company_code.$upload_date.$batch_no;
 
-          $headers = ['Content-type'=>'text/plain', 'test'=>'YoYo', 'Content-Disposition'=>sprintf('attachment; filename="%s"', $myName),'X-BooYAH'=>'WorkyWorky','Content-Length'=>sizeof($fileText)];
+          $headers = ['Content-type'=>'text/plain', 'test'=>'YoYo', 'Content-Disposition'=>sprintf('attachment; filename="%s"', $myName.".txt"),'X-BooYAH'=>'WorkyWorky','Content-Length'=>sizeof($fileText)];
 
           return Response::make($fileText, 200, $headers);
      }

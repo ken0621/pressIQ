@@ -103,8 +103,21 @@ class MlmLoginController extends Controller
     {
     	Session::forget('mlm_member');
         $data["page"] = "Login";
+        $notify = Request::input('notify');
+        $data['notify'] = 0;
+        $data['notify_data'] = '';
+        if($notify)
+        {
+            $data['notify'] = 1;
+            $data['notify_data'] = $this->notify_steps();
+        }
         return view("mlm.login", $data);
     }   
+    public function notify_steps()
+    {
+        $data =[];
+        return view('mlm.login.notify', $data);
+    }
     public function forgot_password()
     {
         $data["page"] = "Forgot Password";

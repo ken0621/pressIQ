@@ -447,7 +447,6 @@
                 var old_new_base = ''; 
                 if(split[0] == 'digima')
                 {
-
                     var i;
                     for (i = 0; i < split.length; ++i) {
                         if(i != 0)
@@ -456,10 +455,26 @@
                         }
                     }
                     settings.url = base + old_new_base;
+
                 }
+                else
+                {
+                    var i;
+                    for (i = 0; i < split.length; ++i) 
+                    {
+                        old_new_base = old_new_base + '/' + split[i];
+                    }
+
+                    settings.url = '{{url()}}' + old_new_base;
+                }
+                console.log("settings.url: " + settings.url);
+            },
+        afterSend: function(jqXHR, settings) {
+            load_assets();
+            console.log(1);
             },
         ajaxSuccess : function (){
-            load_assets();
+            load_assets();  
             console.log('ajaxSuccess');
         }    
         });

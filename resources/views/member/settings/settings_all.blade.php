@@ -57,7 +57,8 @@
 
 @section('script')
 <script type="text/javascript" src="/assets/member/js/tinymce.min.js"></script>
-<script>tinymce.init({ selector:'.tinymce',menubar:false,height:200, content_css : "/assets/member/css/tinymce.css"});</script>
+
+<script>load_assets(); var base = $("base").attr("href"); tinymce.init({ selector:'.tinymce',menubar:false,height:200, content_css : base +"/assets/member/css/tinymce.css"}); </script>
 <script>
 @if(isset($settings_active))
 	@if(count($settings_active) != 0)
@@ -71,5 +72,8 @@
 @endif
 </script>
 <script type="text/javascript" src="/assets/member/settings/setting_single.js"></script>
+<script type="text/javascript">
+	load_assets();
+</script>
 @endsection
 

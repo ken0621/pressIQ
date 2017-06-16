@@ -98,7 +98,7 @@ function submit_done(data)
 function ajax_load_membership()
 {
     $('.data_filtered_mlm_code').html('<center><div class="loader-16-gray"></div></center>');
-    var request = "?";
+    var request = "member/mlm/slot?";
     if(membership != 0)
     {
         request  = request + "membership=" + membership;

@@ -118,7 +118,7 @@
 </div>
 @endsection
 @section("css")
-<link rel="stylesheet" type="text/css" href="/assets/mlm/css/register.css">
+<link rel="stylesheet" type="text/css" href="assets/mlm/css/register.css">
 <style type="text/css">
 	.modal-body {
     max-height: calc(100vh - 212px);

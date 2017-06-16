@@ -1069,7 +1069,7 @@ class Cart
         }
 
         $itemCheckout->redirectUrl = array(
-            "success" =>  URL::to($link + "order_id=" . Crypt::encrypt($order_id) . "&from=" . $from),
+            "success" =>  URL::to("/payment/paymaya/success?order_id=" . Crypt::encrypt($order_id) . "&from=" . $from),
             "failure" => URL::to("/payment/paymaya/failure"),
             "cancel" => URL::to("/payment/paymaya/cancel")
         );

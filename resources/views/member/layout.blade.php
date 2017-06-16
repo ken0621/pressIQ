@@ -436,6 +436,13 @@
     <script type="text/javascript" src="assets/mlm/pace.min.js"></script>
 
     <script type="text/javascript">
+      $.ajaxSetup({
+        beforeSend: function(jqXHR, settings) {
+                // show progress spinner
+                var base = $("base").attr("href");
+                settings.url = base + settings.url;
+            }
+        });
 	  $(document).ajaxStart(function() { Pace.restart(); }); 
       $('.select_current_warehouse').click(function(event) 
       {
@@ -482,6 +489,8 @@
             } 
         });
     })
+
+    
 	</script>
     @yield('script')
 </body>

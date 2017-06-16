@@ -71,7 +71,14 @@ class Shop extends Controller
                 }
                 else
                 {
-                    die("Page not found.");
+                    if($check_domain)
+                    {
+                        $this->shop_info = $check_domain;
+                    }
+                    else
+                    {
+                        die("Page not found.");
+                    }
                 }
             }
         }

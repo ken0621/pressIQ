@@ -106,21 +106,12 @@ class ShopCheckoutController extends Shop
             }
             elseif ($from == "register")
             {
-                $order_id = Request::input("param2");
-                $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
-
-                if($order)
-                {
-                    // Item_code::ec_order_slot($order_id);
-                    
-                    // $update['ec_order_id'] = $order_id;
-                    // $update['order_status'] = "Processing";
-                    // $update['payment_status'] = 1;
-                    // $order = Ec_order::update_ec_order($update);
-
-                    return Redirect::to('/mlm/login?notify=1&success=1');
-                }
+                return Redirect::to('/mlm/login?notify=1&success=1');
             }
+        }
+        else
+        {
+            return Redirect::to('/mlm/login?notify=2&success=1');
         }
     }
     public function dragonpay_postback()

@@ -92,6 +92,12 @@ class CreditMemoController extends Member
             }
             return view("member.receive_payment.modal_receive_payment",$data);
         }
+
+        if($cm_type == "refund")
+        {
+            return view("member.customer.credit_memo.cm_give_refund",$data);
+        }
+
         if($cm_type == "others")
         {
             $up["cm_type"] = 1;

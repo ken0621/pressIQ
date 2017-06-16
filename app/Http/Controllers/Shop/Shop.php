@@ -75,13 +75,18 @@ class Shop extends Controller
                 }
             }
         }
-        elseif($check_domain)
-        {
-        	$this->shop_info = $check_domain;
-        }
         else
         {
-        	die("Page not found.");
+
+            if($check_domain)
+            {
+                $this->shop_info = $check_domain;
+            }
+            else
+            {
+                die("Page not found.");
+            }
+        	
         }
 
         $shop_theme_info        = $this->get_shop_theme_info();

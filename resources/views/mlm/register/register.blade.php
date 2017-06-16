@@ -3,7 +3,7 @@
 
 <div class="container-fluid">
 	<div class="register">
-		<div class="title">Create a Brown ID</div>
+		<div class="title"><b><h1>CHANGE</h1><h3>HAPPENS HERE</h3></b><h5>Join & be part of the biggest movement</h5></div>
 		<form method="post" class="register-submit" action="/member/register/submit" >
 			{!! csrf_field() !!}
 			<div class="form-container">
@@ -22,7 +22,7 @@
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label>Email</label>
+							<label>E-Mail</label>
 							<input type="email" class="form-control input-lg" name="email" value="{{ Request::old('email') ? Request::old('email') : ( isset($current['tbl_customer']['email']) ? $current['tbl_customer']['email'] : '' ) }}" required>
 						</div>
 					</div>
@@ -54,13 +54,9 @@
 	                        </select> -->
 						</div>
 					</div>
-				</div>
-			</div>
-			<div class="form-container second">
-				<div class="row clearfix">
-					<div class="col-md-12">
+					<div class="col-md-6">
 						<div class="form-group">
-							<label>Sponsor {{$sponsor_r == 1 ? '' : '(Optional)'}}</label>
+							<label>Refferal Code {{$sponsor_r == 1 ? '' : '(Optional)'}}</label>
 							<input type="text" class="form-control input-lg" name="sponsor" value="{{ Request::old('slot_sponsor') ? Request::old('slot_sponsor') : ( isset($current['tbl_mlm_slot']['slot_sponsor']) ? $current['tbl_mlm_slot']['slot_sponsor'] : '' ) }}" 
 							{{$sponsor_r == 1 ? 'required' : ''}}
 							>

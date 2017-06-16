@@ -34,9 +34,9 @@
             <br>
             <br>
             <div class="form-group">
-                <!-- <div class="col-md-12 col-xs-12">
+                <div class="col-md-12 col-xs-12">
                     <a class="btn btn-success form-control popup" size="lg" link="/member/customer/credit_memo/update_action?type=refund&cm_id={{$cm_id or ''}}">Give a Refund</a>
-                </div> -->
+                </div>
             </div>
             <br>
             <br>

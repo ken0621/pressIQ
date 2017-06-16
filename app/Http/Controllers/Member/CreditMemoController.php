@@ -9,6 +9,7 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_payment_method;
 use App\Models\Tbl_user;
+use App\Models\Tbl_customer_invoice;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Customer;
@@ -57,7 +58,7 @@ class CreditMemoController extends Member
             $data["_customer"]      = Tbl_customer::where("customer_id",$data["c_id"])->first();
             $data['_account']       = Accounting::getAllAccount('all','',['Bank']);
             $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->getShopId())->get();
-            $data['action']         = "/member/customer/receive_payment/add";
+            $data['action']         = "/member/customer/credit_memo/applied_to_invoice";
             $data["_invoice"]       = Invoice::getAllInvoiceByCustomer($data["c_id"]);
 
             $cm_amount = $data["cm_data"]->cm_amount;
@@ -65,23 +66,13 @@ class CreditMemoController extends Member
 
             if(count($data["_invoice"]) > 0)
             {  
-            //     foreach ($data["_invoice"] as $key => $value)  
-            //     {
-            //         $total_inv += $value["inv_overall_price"];
-            //         if($cm_amount > $total_inv)
-            //         {
-            //             $data["_invoice"][$key]["amount_applied"] = $value["inv_overall_price"];
-            //             $data["_invoice"][$key]["rpline_amount"] = $value["inv_overall_price"];
-            //         }
-            //     }
-            // if($data["_invoice"][0]["inv_overall_price"] > $cm_amount)
-            // {
                 $data["_invoice"][0]["amount_applied"] = $cm_amount;
                 $data["_invoice"][0]["rpline_amount"] = $cm_amount;
-            // }
             }
 
-            return view("member.receive_payment.modal_receive_payment",$data);
+            $data["cm_amount"] = $cm_amount;
+
+            return view("member.customer.credit_memo.cm_applied_to_invoice",$data);
         }
         if($cm_type == "invoice_tablet")
         {
@@ -119,6 +110,26 @@ class CreditMemoController extends Member
 
             return Redirect::to("/tablet/credit_memo");
         }
+    }
+    public function applied_to_invoice()
+    {
+        $invoice = Request::input("invoice_number");
+        $cm_id = Request::input("cm_id");
+        $cm_amount = Request::input("cm_amount_applied")[$invoice];
+
+        $invoice_data = Tbl_customer_invoice::where("inv_id",$invoice)->first();
+        if($invoice_data)
+        {
+            $up["credit_memo_id"] = $cm_id;
+            $up["inv_payment_applied"] = $invoice_data->inv_payment_applied + $cm_amount;
+
+            Tbl_customer_invoice::where("inv_id",$invoice)->update($up);            
+        }
+
+        $data["status"] = "success";
+        $data["redirect_to"] = "/member/customer/credit_memo/list";
+
+        return json_encode($data);
     }
     public function index()
     {

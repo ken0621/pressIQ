@@ -1,9 +1,4 @@
-@extends('mlm.layout')
-@section('content')
-   @if($slot_start_status)
-      {!! $slot_start_status !!}
-   @else
-      <div class="row">
+<div class="row">
          <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="dashboard_graph">
                <div class="row x_title">
@@ -148,60 +143,3 @@
             </div>
          </div>
       </div>
-   @endif
-@endsection
-@section('js')
-<script type="text/javascript">
-   var ctx = "income_chart";
-   var ctx = $("#income_chart");
-   const colors = {
-        backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)'
-        ],
-        borderColor: [
-            'rgba(255,99,132,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-        ],
-        borderWidth: 1,
-    };
-   data = {
-    datasets: [{
-        data: [10, 20, 30]
-    }],
-    labels: [
-        'Red',
-        'Yellow',
-        'Blue'
-    ]
-};
-options = {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
-            }]
-        }
-    };
-
-    
-
-var myDoughnutChart = new Chart(ctx, {
-       type: 'doughnut',
-       data: data,
-       options: options
-   });
-</script>
-@endsection
-@section('css')
-
-@endsection

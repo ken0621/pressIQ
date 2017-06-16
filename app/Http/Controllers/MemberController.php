@@ -173,10 +173,18 @@ class MemberController extends Controller
         $info['email']             = Request::input('email');
         $info['first_name']        = Request::input('first_name');
         $info['last_name']         = Request::input('last_name');
+        // 
+        $info['middle_name']       = Request::input('middle_name');
+        $info['permanent_address'] = Request::input('permanent_address');
+        $info['date_of_birth']     = Request::input('date_of_birth');
+        $info['gender']            = Request::input('gender');
+        $info['confirm_email']     = Request::input('confirm_email');
+        $info['confirm_tin_number'] = Request::input('confirm_tin_number');
+        // 
         $info['password']          = randomPassword();
         $info['password_confirm']  = $info['password'];
         $info['tin_number']        = Request::input('tin_number');
-        $info['mlm_username']          = $this->generate_username($info["first_name"], $info["last_name"]);
+        $info['mlm_username']      = $this->generate_username($info["first_name"], $info["last_name"]);
         $info['sponsor']           = Request::input('sponsor');
         $info['customer_phone']    = Request::input('contact_number');
         $info['customer_mobile']   = Request::input('contact_number');
@@ -185,7 +193,14 @@ class MemberController extends Controller
         $rules['password']         = 'required|min:6';
         $rules['password_confirm'] = 'required|min:6';
         $rules['email']            = 'required';
-
+        // 
+        $rules['middle_name'] = 'required';
+        $rules['permanent_address'] = 'required';
+        $rules['date_of_birth'] = 'required';
+        $rules['gender'] = 'required';
+        $rules['confirm_email'] = 'required|same:email';
+        $rules['confirm_tin_number'] = 'required|same:tin_number';
+        // 
         $sponsor_r = $this->check_if_required_sponsor(Self::$shop_id);
         if($info['is_corporate'] == 1)
         {
@@ -239,7 +254,12 @@ class MemberController extends Controller
                         $customer_info["customer_contact"] = $info["customer_mobile"];
                         $customer_info["is_corporate"]     = $info["is_corporate"];
                         $customer_info["company"]          = $info["company"];
-
+                        // 
+                        $customer_info['middle_name']       = Request::input('middle_name');
+                        $customer_info['customer_full_address'] = Request::input('permanent_address');
+                        $customer_info['b_day']     = Request::input('date_of_birth');
+                        $customer_info['customer_gender']            = Request::input('gender');
+                        // 
                         $customer_set_info_response        = Cart::customer_set_info(Self::$shop_id, $customer_info);
 
                         if($customer_set_info_response["status"] == "error")

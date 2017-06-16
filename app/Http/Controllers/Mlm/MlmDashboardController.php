@@ -104,8 +104,11 @@ class MlmDashboardController extends Mlm
         $return = null;
         if(isset(Self::$slot_now->slot_start_status))
         {
-            if(Self::$slot_now->slot_start_status == 0)
+            $slot = Tbl_mlm_slot::where('slot_id', Self::$slot_id)->first();
+            if($slot->slot_start_status == 0)
             {
+                $update['slot_start_status'] = 1;
+                Tbl_mlm_slot::where('slot_id', Self::$slot_id)->update($update);
                 $data = [];
                 return view('mlm.dashboard.myphone_start');
             }
@@ -122,6 +125,10 @@ class MlmDashboardController extends Mlm
             ->get();
         
         return view("mlm.dashboard.lead", $data);
+    }
+    public function charts()
+    {
+        
     }
     public function tree_view()
     {

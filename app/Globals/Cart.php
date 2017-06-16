@@ -724,7 +724,16 @@ class Cart
         $data["tbl_customer"]['mlm_username']     = (isset($customer_information["mlm_username"]) ? $customer_information["mlm_username"] : (isset($data["tbl_customer"]['mlm_username']) ? $data["tbl_customer"]['mlm_username'] : null));
         $data["tbl_customer"]['company']          = (isset($customer_information["company"]) ? $customer_information["company"] : (isset($data["tbl_customer"]['company']) ? $data["tbl_customer"]['company'] : null));
         $data["tbl_customer"]['is_corporate']     = (isset($customer_information["is_corporate"]) ? $customer_information["is_corporate"] : (isset($data["tbl_customer"]['is_corporate']) ? $data["tbl_customer"]['is_corporate'] : 0));
-
+        // 
+        $data["tbl_customer"]['middle_name']     = (isset($customer_information["middle_name"]) ? $customer_information["middle_name"] : (isset($data["tbl_customer"]['middle_name']) ? $data["tbl_customer"]['middle_name'] : null));
+        $data["tbl_customer"]['customer_full_address']     = (isset($customer_information["customer_full_address"]) ? $customer_information["customer_full_address"] : (isset($data["tbl_customer"]['customer_full_address']) ? $data["tbl_customer"]['customer_full_address'] : null));
+        $data["tbl_customer"]['b_day']     = (isset($customer_information["b_day"]) ? $customer_information["b_day"] : (isset($data["tbl_customer"]['b_day']) ? $data["tbl_customer"]['b_day'] : null));
+        $data["tbl_customer"]['customer_gender']     = (isset($customer_information["customer_gender"]) ? $customer_information["customer_gender"] : (isset($data["tbl_customer"]['customer_gender']) ? $data["tbl_customer"]['customer_gender'] : 'Male'));
+        
+        
+        
+        
+        // 
         $data['load_wallet']['ec_order_load']        = isset($customer_information['load_wallet']['ec_order_load']) == true ? $customer_information['load_wallet']['ec_order_load'] : 0 ;
         $data['load_wallet']['ec_order_load_number'] = isset($customer_information['load_wallet']['ec_order_load_number']) == true ? $customer_information['load_wallet']['ec_order_load_number'] : 0;
         

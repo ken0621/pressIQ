@@ -16,14 +16,14 @@
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label>Last Name</label>
-							<input type="text" class="form-control input-lg" name="last_name" value="{{ Request::old('last_name') ? Request::old('last_name') : ( isset($current['tbl_customer']['last_name']) ? $current['tbl_customer']['last_name'] : '' ) }}" required>
+							<label>Date of Birth</label>
+							<input type="date" class="form-control input-lg" name="date_of_birth" value="{{ Request::old('date_of_birth') ? Request::old('date_of_birth') : ( isset($current['tbl_customer']['date_of_birth']) ? $current['tbl_customer']['date_of_birth'] : '' ) }}" required>
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label>E-Mail</label>
-							<input type="email" class="form-control input-lg" name="email" value="{{ Request::old('email') ? Request::old('email') : ( isset($current['tbl_customer']['email']) ? $current['tbl_customer']['email'] : '' ) }}" required>
+							<label>Middle Name</label>
+							<input type="text" class="form-control input-lg" name="middle_name" value="{{ Request::old('middle_name') ? Request::old('middle_name') : ( isset($current['tbl_customer']['middle_name']) ? $current['tbl_customer']['middle_name'] : '' ) }}" required>
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -34,8 +34,8 @@
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label>Tin No.</label>
-							<input type="text" class="form-control input-lg" name="tin_number" value="{{ Request::old('tin_number') ? Request::old('tin_number') : ( isset($current['tbl_customer']['tin_number']) ? $current['tbl_customer']['tin_number'] : '' ) }}" required>
+							<label>Last Name</label>
+							<input type="text" class="form-control input-lg" name="last_name" value="{{ Request::old('last_name') ? Request::old('last_name') : ( isset($current['tbl_customer']['last_name']) ? $current['tbl_customer']['last_name'] : '' ) }}" required>
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -56,7 +56,57 @@
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label>Refferal Code {{$sponsor_r == 1 ? '' : '(Optional)'}}</label>
+							<label>Permanent Address</label>
+							<!-- <input type="text" class="form-control input-lg" name="permanent_address" value="{{ Request::old('permanent_address') ? Request::old('permanent_address') : ( isset($current['tbl_customer']['permanent_address']) ? $current['tbl_customer']['permanent_address'] : '' ) }}" required> -->
+							<textarea class="form-control input-lg" name="permanent_address">{{ Request::old('permanent_address') ? Request::old('permanent_address') : ( isset($current['tbl_customer']['permanent_address']) ? $current['tbl_customer']['permanent_address'] : '' ) }}</textarea>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Gender</label>
+							<div class="row clearfix">
+								<div class="col-md-12">
+									<div class="form-group">
+										<label><input type="radio" name="gender"  value="Male" checked> Male</label>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group">
+										<label><input type="radio" name="gender" value="Female"> Female</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>E-Mail</label>
+							<input type="email" class="form-control input-lg" name="email" value="{{ Request::old('email') ? Request::old('email') : ( isset($current['tbl_customer']['email']) ? $current['tbl_customer']['email'] : '' ) }}" required>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Confirm E-Mail</label>
+							<input type="email" class="form-control input-lg" name="confirm_email" value="{{ Request::old('confirm_email') ? Request::old('confirm_email') : ( isset($current['tbl_customer']['confirm_email']) ? $current['tbl_customer']['confirm_email'] : '' ) }}" required>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Tin</label>
+							<input type="text" class="form-control input-lg" name="tin_number" value="{{ Request::old('tin_number') ? Request::old('tin_number') : ( isset($current['tbl_customer']['tin_number']) ? $current['tbl_customer']['tin_number'] : '' ) }}" required>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Confirm Tin</label>
+							<input type="text" class="form-control input-lg" name="confirm_tin_number" value="{{ Request::old('confirm_tin_number') ? Request::old('confirm_tin_number') : ( isset($current['tbl_customer']['confirm_tin_number']) ? $current['tbl_customer']['confirm_tin_number'] : '' ) }}" required>
+						</div>
+					</div>
+					
+					
+					<div class="col-md-12">
+						<div class="form-group">
+							<label> Refferal Code {{$sponsor_r == 1 ? '' : '(Optional)'}}</label>
 							<input type="text" class="form-control input-lg" name="sponsor" value="{{ Request::old('slot_sponsor') ? Request::old('slot_sponsor') : ( isset($current['tbl_mlm_slot']['slot_sponsor']) ? $current['tbl_mlm_slot']['slot_sponsor'] : '' ) }}" 
 							{{$sponsor_r == 1 ? 'required' : ''}}
 							>
@@ -64,7 +114,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="form-container third">
+			<div class="form-container third hide">
 				<div class="row clearfix text-center">
 					<div class="col-md-6">
 						<div class="form-group">

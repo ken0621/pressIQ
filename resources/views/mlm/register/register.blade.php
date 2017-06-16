@@ -118,9 +118,6 @@
 </div>
 @endsection
 @section("css")
-<<<<<<< HEAD
-<link rel="stylesheet" type="text/css" href="assets/mlm/css/register.css">
-=======
 <link rel="stylesheet" type="text/css" href="/assets/mlm/css/register.css">
 <style type="text/css">
 	.modal-body {
@@ -134,7 +131,6 @@
     	background-color: transparent;
 	}
 </style>
->>>>>>> origin/mod_luk_myphone_settings
 @endsection
 @section('script')
 <script type="text/javascript">

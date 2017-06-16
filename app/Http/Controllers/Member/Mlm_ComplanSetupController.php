@@ -77,7 +77,7 @@ class Mlm_ComplanSetupController extends Member
 	}
 	public function myphone_other_settings()
 	{
-		$shop_id = $this->user_info->shop_key;
+		$shop_id = $this->user_info->shop_id;
 		$settings = Tbl_settings::where('shop_id', $shop_id)->get()->keyBy('settings_key');
 
 		if(isset($settings['myphone_require_sponsor']))
@@ -102,6 +102,12 @@ class Mlm_ComplanSetupController extends Member
 		$settings_key = Request::input('settings_key');
 		$settings_value = Request::input('settings_value');
 		Settings::update_settings($settings_key, $settings_value);
+
+		$data['status'] = 'success';
+		$data['message'] = 'settings_changed';
+
+		return json_encode($data);
+
 	}
 	public function binary_promotions()
 	{

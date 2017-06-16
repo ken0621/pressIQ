@@ -76,7 +76,7 @@
 								<select class="form-control" name="membership_id[{{$key}}]">
 									<option value="0">None</option>
 								@foreach($membership_product as $mem_key => $mem_value)
-									<option value="{{$mem_value->membership_id}}" {{$value->ec_product_membership == $mem_value->membership_id ? 'selected' : ''}}>{{$mem_value->membership_name}}</option>
+									<option value="{{$mem_value->membership_id}}" @if(isset($value->ec_product_membership)){{$value->ec_product_membership == $mem_value->membership_id ? 'selected' : ''}} @endif>{{$mem_value->membership_name}}</option>
 								@endforeach
 								</select>
 							</td>

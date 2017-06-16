@@ -21,6 +21,7 @@ Route::post('member/register/submit', 'MemberController@register_post');
 
 Route::get('member/register/package', 'MemberController@package');
 Route::post('member/register/package/submit', 'MemberController@package_post');
+Route::get('member/register/package/product/{product_id}', 'MemberController@package_get_details_product');
 
 Route::get('member/register/payment', 'MemberController@payment');
 Route::post('member/register/payment/submit', 'MemberController@payment_post');
@@ -899,6 +900,7 @@ Route::get('/member/settings/{key}', 'Member\SettingsController@index');
 Route::post('/member/settings/verify/add', 'Member\SettingsController@verify');
 Route::get('/member/settings/get/{key}', 'Member\SettingsController@get_settings');
 Route::get('/member/settings/setup/initial', 'Member\SettingsController@initial_setup');
+Route::post('/member/settings/terms/set', 'Member\SettingsController@set_terms');
 /* End SettingsController */
 
 /* USER / UTILITIES*/

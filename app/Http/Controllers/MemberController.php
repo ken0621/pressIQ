@@ -19,6 +19,7 @@ use App\Models\Tbl_locale;
 use App\Models\Tbl_online_pymnt_method;
 use App\Models\Tbl_ec_product;
 use App\Models\Tbl_ec_variant;
+use App\Models\Tbl_settings;
 
 use Validator;
 use Session;
@@ -119,7 +120,24 @@ class MemberController extends Controller
 
     public function generate_username($first_name, $last_name)
     {
-        return strtolower( trim( substr($first_name, 0, 3) . "." . substr($last_name, 0, 6) ) );
+        $f_name = $first_name;
+        $l_name = $last_name;
+        // return strtolower( trim( substr($first_name, 0, 3) . "." . substr($last_name, 0, 6) ) );
+        $last_name = strtolower(substr($last_name, 0, 6));
+        $first_name = strtolower(substr($first_name, 0, 3));
+        $nickname = $last_name . '.' . $first_name;
+        $count_username = Tbl_customer::where('first_name', $f_name)
+        ->where('last_name', $l_name)
+        ->count();
+        if($count_username == 0)
+        {
+            return $nickname;
+        }
+        else
+        {
+            $nickname = $nickname . ($count_username + 1);
+            return $nickname;
+        }
     }
 
     public function locale_id_to_name($locale_id)
@@ -131,9 +149,22 @@ class MemberController extends Controller
     {
         $data['country'] = Tbl_country::get();
         $data['current'] = Cart::get_info(Self::$shop_id);
+        $data['sponsor_r'] = $this->check_if_required_sponsor(Self::$shop_id);
+        $data['terms_and_agreement'] = Tbl_settings::where('shop_id', Self::$shop_id)->where('settings_key', 'terms_and_agreement')->first();
         return view("mlm.register.register", $data);
     }
-
+    public function check_if_required_sponsor($shop_id)
+    {
+        $settings = Tbl_settings::where('settings_key', 'myphone_require_sponsor')->where('shop_id', Self::$shop_id)->first();
+        if($settings)
+        {
+            return $settings->settings_value;
+        }
+        else
+        {
+            return 1;
+        }
+    }
     public function register_post()
     {
         $info['is_corporate']      = Request::input('customer_type');
@@ -155,6 +186,7 @@ class MemberController extends Controller
         $rules['password_confirm'] = 'required|min:6';
         $rules['email']            = 'required';
 
+        $sponsor_r = $this->check_if_required_sponsor(Self::$shop_id);
         if($info['is_corporate'] == 1)
         {
             $rules['company'] = 'required';
@@ -175,17 +207,19 @@ class MemberController extends Controller
                 $count_username = Tbl_customer::where('mlm_username', $info['mlm_username'])->count();
                 if($count_username == 0)
                 {
-                    if($info['sponsor'] != null)
+                    if($sponsor_r == 1)
                     {
-                        $count_slot = Tbl_mlm_slot::where('slot_nick_name', $info['sponsor'])->count();
-                        if($count_slot == 0)
+                        if($info['sponsor'] != null)
                         {
-                            $data['status'] = 'warning';
-                            $data['message'][0] = 'Sponsor does not exist';
-                            return $data;
+                            $count_slot = Tbl_mlm_slot::where('slot_nick_name', $info['sponsor'])->count();
+                            if($count_slot == 0)
+                            {
+                                $data['status'] = 'warning';
+                                $data['message'][0] = 'Sponsor does not exist';
+                                return $data;
+                            }
                         }
                     }
-
                     if($info['password'] == $info['password_confirm'])
                     {
 
@@ -352,6 +386,10 @@ class MemberController extends Controller
         return json_encode($data);
     }
 
+    public function package_get_details_product()
+    {
+        
+    }
     public function shipping()
     {
         $register_session = Session::get('mlm_register_step_1');
@@ -613,10 +651,6 @@ class MemberController extends Controller
             $name = name_format_from_customer_info($value);
             $membership_code = $value->slot_no;
             $card .= $this->card_all($color, $name,  $membership_code);
-            // $pdf = App::make('snappy.pdf.wrapper');
-            // $pdf->loadHTML($card);
-            // return $pdf->inline();
-            // $card = $this->
         }
         if(Request::input('pdf') == 'true')
         {

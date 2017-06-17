@@ -46,10 +46,10 @@
                 <table class="table table-hover table-bordered table-striped table-condensed">
                     <thead style="text-transform: uppercase">
                         <tr>
-                            <th>Item Number</th>
+                            <th>Item ID</th>
                             <th>Item Name</th>
-                            <th>Qty on Hand</th>
-                            <th class="text-center">Sales Price</th>
+                            <th>Inventory</th>
+                            <th class="text-center">Sale Price</th>
                             <th>Item Details</th>
                             <th>Item Price History</th>
                             <th>Action</th>

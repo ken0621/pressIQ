@@ -143,7 +143,7 @@
                     <div class="grid-view">
                         <div class="row-no-padding clearfix">
                             @foreach($_product as $product)
-                                @if(count($product['variant']) > 0)
+                                {{-- @if(count($product['variant']) > 0) --}}
                                 <div class="col-md-4 col-sm-3 col-xs-6">
                                     <div class="holder">
                                         <div class="border match-height">
@@ -163,7 +163,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @endif
+                                {{-- @endif --}}
                             @endforeach
                         </div>
                     </div>
@@ -182,7 +182,7 @@
                                 <div class="cart">
                                     <!-- <div class="info"><span>Delivery:</span>&nbsp;1 - 5 Business Days</div> -->
                                     <!-- <div class="info"><span>Shipping Fee:</span>&nbsp;123.00</div> -->
-                                    <button class="button" onclick="location.href='product/'">View Info</button>
+                                    <button class="button" onclick="location.href='product/view/{{ $product['eprod_id'] }}'">View Info</button>
                                 </div>
                             </div>
                         @endforeach

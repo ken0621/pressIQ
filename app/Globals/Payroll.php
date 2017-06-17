@@ -2973,8 +2973,6 @@ class Payroll
 
 		$tax_contribution = 0;
 
-		
-
 		// if($rate >= $tax->tax_first_range && $rate < $tax->tax_second_range)
 		if($tax->tax_first_range >= $rate && $tax->tax_second_range < $rate)
 		{

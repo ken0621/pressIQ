@@ -253,7 +253,14 @@ class Ecom_Product
 		{
 			$product = collect($product)->toArray();
 			$product			   	= $product;
-			$product["variant"] 	= Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId($shop_id))->manufacturer($manufacturer_id)->where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
+			if ($manufacturer_id) 
+			{
+				$product["variant"] 	= Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId($shop_id))->manufacturer($manufacturer_id)->where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
+			}
+			else
+			{
+				$product["variant"] 	= Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId($shop_id))->where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
+			}
 
 			foreach($product["variant"] as $key2=>$variant)
 			{

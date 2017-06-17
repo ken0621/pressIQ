@@ -182,7 +182,8 @@
                                 <div class="cart">
                                     <!-- <div class="info"><span>Delivery:</span>&nbsp;1 - 5 Business Days</div> -->
                                     <!-- <div class="info"><span>Shipping Fee:</span>&nbsp;123.00</div> -->
-                                    <button class="button" onclick="location.href='product/view/{{ $product['eprod_id'] }}'">View Info</button>
+                                    <a class="button text-center" href='/product/view/{{ $product['eprod_id'] }}'">View Info</a>
+                                   {{--  <button class="button" onclick="location.href='product/view/{{ $product['eprod_id'] }}'">View Info</button> --}}
                                 </div>
                             </div>
                         @endforeach

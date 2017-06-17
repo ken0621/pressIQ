@@ -60,4 +60,12 @@
 			<option value="1">Enable</option>
 		</select>
 	</div>
+	<div class="settings" id="myphone_require_sponsor">
+		Required Sponsor
+		<input type="hidden" name="settings_key" value="myphone_require_sponsor">
+		<select name="settings_value" class="form-control">
+			<option value="0">Disable</option>
+			<option value="1">Enable</option>
+		</select>
+	</div>
 <!-- Item Serial Settings -->

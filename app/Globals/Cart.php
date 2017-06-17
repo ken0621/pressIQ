@@ -724,7 +724,16 @@ class Cart
         $data["tbl_customer"]['mlm_username']     = (isset($customer_information["mlm_username"]) ? $customer_information["mlm_username"] : (isset($data["tbl_customer"]['mlm_username']) ? $data["tbl_customer"]['mlm_username'] : null));
         $data["tbl_customer"]['company']          = (isset($customer_information["company"]) ? $customer_information["company"] : (isset($data["tbl_customer"]['company']) ? $data["tbl_customer"]['company'] : null));
         $data["tbl_customer"]['is_corporate']     = (isset($customer_information["is_corporate"]) ? $customer_information["is_corporate"] : (isset($data["tbl_customer"]['is_corporate']) ? $data["tbl_customer"]['is_corporate'] : 0));
-
+        // 
+        $data["tbl_customer"]['middle_name']     = (isset($customer_information["middle_name"]) ? $customer_information["middle_name"] : (isset($data["tbl_customer"]['middle_name']) ? $data["tbl_customer"]['middle_name'] : null));
+        $data["tbl_customer"]['customer_full_address']     = (isset($customer_information["customer_full_address"]) ? $customer_information["customer_full_address"] : (isset($data["tbl_customer"]['customer_full_address']) ? $data["tbl_customer"]['customer_full_address'] : null));
+        $data["tbl_customer"]['b_day']     = (isset($customer_information["b_day"]) ? $customer_information["b_day"] : (isset($data["tbl_customer"]['b_day']) ? $data["tbl_customer"]['b_day'] : null));
+        $data["tbl_customer"]['customer_gender']     = (isset($customer_information["customer_gender"]) ? $customer_information["customer_gender"] : (isset($data["tbl_customer"]['customer_gender']) ? $data["tbl_customer"]['customer_gender'] : 'Male'));
+        
+        
+        
+        
+        // 
         $data['load_wallet']['ec_order_load']        = isset($customer_information['load_wallet']['ec_order_load']) == true ? $customer_information['load_wallet']['ec_order_load'] : 0 ;
         $data['load_wallet']['ec_order_load_number'] = isset($customer_information['load_wallet']['ec_order_load_number']) == true ? $customer_information['load_wallet']['ec_order_load_number'] : 0;
         
@@ -964,6 +973,7 @@ class Cart
     }
     public static function process_payment($shop_id, $from = "checkout")
     {
+
         $data = Cart::get_info($shop_id);
         $method_id = $data["tbl_ec_order"]["payment_method_id"];
         $method_information = Self::get_method_information($shop_id, $method_id);
@@ -978,6 +988,7 @@ class Cart
                 case 'ipay88': return Cart::submit_using_ipay88($data, $shop_id, $method_information); break;
                 case 'other': return Cart::submit_using_proof_of_payment($shop_id, $method_information);  break;
                 case 'e_wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
+                case 'cashondelivery': return Cart::submit_using_cash_on_delivery($shop_id, $method_information); break;
                 default: dd("UNDER DEVELOPMENT"); break;
             }
         }
@@ -1046,6 +1057,17 @@ class Cart
         $itemCheckout->items = $item;
         $itemCheckout->totalAmount = $totalAmount;
         $itemCheckout->requestReferenceNumber = $shop_id . time();
+
+        $shop = DB::table('tbl_shop')->where('shop_id', $shop_id)->first();
+        $link = '/payment/paymaya/success?notify=0&';
+        if($shop)
+        {
+            if($shop->shop_key == 'myphone')
+            {
+                $link = '/mlm/login?notify=1&';
+            }
+        }
+
         $itemCheckout->redirectUrl = array(
             "success" =>  URL::to("/payment/paymaya/success?order_id=" . Crypt::encrypt($order_id) . "&from=" . $from),
             "failure" => URL::to("/payment/paymaya/failure"),
@@ -1056,6 +1078,10 @@ class Cart
 
         // echo $itemCheckout->id; // Checkout ID
         // echo $itemCheckout->url; // Checkout URL
+        $logs_insert["checkout_id"] = $itemCheckout->id;
+        $logs_insert["log_date"]    = Carbon::now();
+        DB::table("tbl_paymaya_logs")->insert($logs_insert);
+        
         return Redirect::to($itemCheckout->url)->send();
     }
     public static function submit_using_dragonpay($data, $shop_id, $method_information, $from)
@@ -1227,7 +1253,6 @@ class Cart
                 $arry_log['wallet_log_slot_sponsor'] = $slot_session->slot_id;
                 $arry_log['wallet_log_details'] = $log;
                 $arry_log['wallet_log_amount'] = $sum * (-1);
-                // $sum * (-1)
                 $arry_log['wallet_log_plan'] = "REPURCHASE";
                 $arry_log['wallet_log_status'] = "released";   
                 $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
@@ -1256,6 +1281,19 @@ class Cart
         Cart::clear_all($shop_id);
         $result['status'] = 'success';
         return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)))->send();
+    }
+    public static function submit_using_cash_on_delivery($shop_id, $method_information)
+    {
+        $payment_status = 0;
+        $order_status   = "Pending";
+        $customer       = Cart::get_customer();
+
+        $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null);
+        Cart::clear_all($shop_id);
+
+        $tbl_order = DB::table("tbl_ec_order")->where("tbl_ec_order.ec_order_id", $order_id)->leftJoin("tbl_customer", "tbl_customer.customer_id", "=", "tbl_ec_order.customer_id")->first();
+        
+        return Redirect::to("/")->send();
     }
     public static function get_customer()
     {

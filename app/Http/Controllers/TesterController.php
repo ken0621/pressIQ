@@ -82,7 +82,7 @@ class TesterController extends Controller
 
     public function getPostTracking()
     {
-
+        dd(Accounting::getAllAccount());
     }
 
     public function getTracking()

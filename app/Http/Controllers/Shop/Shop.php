@@ -71,17 +71,30 @@ class Shop extends Controller
                 }
                 else
                 {
-                    die("Page not found.");
+                    $check_domain = Tbl_shop::where("shop_domain", $domain)->first();
+                    if($check_domain)
+                    {
+                        $this->shop_info = $check_domain;
+                    }
+                    else
+                    {
+                        die("Page not found. 1");
+                    }
                 }
             }
         }
-        elseif($check_domain)
-        {
-        	$this->shop_info = $check_domain;
-        }
         else
         {
-        	die("Page not found.");
+
+            if($check_domain)
+            {
+                $this->shop_info = $check_domain;
+            }
+            else
+            {
+                die("Page not found. 2");
+            }
+        	
         }
 
         $shop_theme_info        = $this->get_shop_theme_info();

@@ -33,11 +33,11 @@ class Developer_DocumentationController extends Member
 		$data["documentation_globalDropList_reload"] = view('member.developer.documentation_globalDropList_reload');
         $data["documentation_paginate_html"] = view('member.developer.documentation_paginate_html');
 
-		$data['_account']       = Accounting::getAllAccount();
-		$data['_category']      = Category::getAllCategory();
-		$data['_customer']      = Customer::getAllCustomer();
-		$data['_item']			= Item::get_all_category_item();
-		$data["_vendor"] 		= Vendor::getAllVendor();
+		$data['_account']           = Accounting::getAllAccount();
+		$data['_category']          = Category::getAllCategory();
+		$data['_customer']          = Customer::getAllCustomer();
+		$data['_item']			    = Item::get_all_category_item();
+		$data["_vendor"] 		    = Vendor::getAllVendor();
 		$data["dropdown_vendor"] 	= view('member.developer.documentation_no_16.documentation_dropdown_vendor');
 		$data["dropdown_customer"] 	= view('member.developer.documentation_no_16.documentation_dropdown_customer');
 		$data["dropdown_coa"] 		= view('member.developer.documentation_no_16.documentation_dropdown_coa');

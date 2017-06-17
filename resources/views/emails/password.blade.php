@@ -16,11 +16,17 @@
                         <tr>
                             <td align="left" valign="top">
                                     <div style="background-color: #557DA1; color: #ffffff; font-family: 'Helvetica Neue',Helvetica,Roboto,Arial,sans-serif;font-size: 30px;font-weight: 300;line-height: 150%;margin: 0;text-align: left;padding: 36px 48px;display: block;">
-                                            Thank you for your purchasing
+                                            Thank you for purchasing your brown product and joining the movement.
                                     </div>
                                     <div style="padding: 48px;">
                                            <p> Your account has been created by purchasing to our site. Click <a href="{{ URL::to('/') }}">here</a> to login and change your password.</p>
                                             <p>Password : {{ $account_password }}</p>
+                                            @if(isset($mlm_username))
+                                            <p>Username : {{ $mlm_username }} </p>
+                                            @endif
+                                            @if(isset($mlm_email))
+                                            <p>Email : {{ $mlm_email }} </p>
+                                            @endif
                                     </div>
                             </td>
                         </tr>

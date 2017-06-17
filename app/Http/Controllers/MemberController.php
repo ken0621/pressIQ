@@ -19,6 +19,7 @@ use App\Models\Tbl_locale;
 use App\Models\Tbl_online_pymnt_method;
 use App\Models\Tbl_ec_product;
 use App\Models\Tbl_ec_variant;
+use App\Models\Tbl_settings;
 
 use Validator;
 use Session;
@@ -49,8 +50,13 @@ class MemberController extends Controller
             {
                 $check_domain = Tbl_customer::where('mlm_username', $key)->first();
                 $lead_e = $check_domain;
+
+                if($check_domain == null)
+                {
+                    $key = 'myphone';
+                    $check_domain = Tbl_shop::where('shop_key', $key)->first();
+                }
             }
-            
         }
         if($check_domain != null)
         {
@@ -114,7 +120,25 @@ class MemberController extends Controller
 
     public function generate_username($first_name, $last_name)
     {
-        return strtolower( trim( substr($first_name, 0, 3) . "." . substr($last_name, 0, 6) ) );
+        $f_name = $first_name;
+        $l_name = $last_name;
+        $last_name = str_replace(' ', '', $last_name);
+        $first_name = str_replace(' ', '', $first_name);
+        $last_name = strtolower(substr($last_name, 0, 3));
+        $first_name = strtolower(substr($first_name, 0, 6));
+        $nickname = $first_name . '.' . $last_name;
+        $count_username = Tbl_customer::where('first_name', $f_name)
+        ->where('last_name', $l_name)
+        ->count();
+        if($count_username == 0)
+        {
+            return $nickname;
+        }
+        else
+        {
+            $nickname = $nickname . ($count_username + 1);
+            return $nickname;
+        }
     }
 
     public function locale_id_to_name($locale_id)
@@ -124,11 +148,25 @@ class MemberController extends Controller
 
     public function register()
     {
+        Session::forget('mlm_member');
         $data['country'] = Tbl_country::get();
         $data['current'] = Cart::get_info(Self::$shop_id);
+        $data['sponsor_r'] = $this->check_if_required_sponsor(Self::$shop_id);
+        $data['terms_and_agreement'] = Tbl_settings::where('shop_id', Self::$shop_id)->where('settings_key', 'terms_and_agreement')->first();
         return view("mlm.register.register", $data);
     }
-
+    public function check_if_required_sponsor($shop_id)
+    {
+        $settings = Tbl_settings::where('settings_key', 'myphone_require_sponsor')->where('shop_id', Self::$shop_id)->first();
+        if($settings)
+        {
+            return $settings->settings_value;
+        }
+        else
+        {
+            return 1;
+        }
+    }
     public function register_post()
     {
         $info['is_corporate']      = Request::input('customer_type');
@@ -137,10 +175,18 @@ class MemberController extends Controller
         $info['email']             = Request::input('email');
         $info['first_name']        = Request::input('first_name');
         $info['last_name']         = Request::input('last_name');
+        // 
+        $info['middle_name']       = Request::input('middle_name');
+        $info['permanent_address'] = Request::input('permanent_address');
+        $info['date_of_birth']     = Request::input('date_of_birth');
+        $info['gender']            = Request::input('gender');
+        $info['confirm_email']     = Request::input('confirm_email');
+        $info['confirm_tin_number'] = Request::input('confirm_tin_number');
+        // 
         $info['password']          = randomPassword();
         $info['password_confirm']  = $info['password'];
         $info['tin_number']        = Request::input('tin_number');
-        $info['mlm_username']          = $this->generate_username($info["first_name"], $info["last_name"]);
+        $info['mlm_username']      = $this->generate_username($info["first_name"], $info["last_name"]);
         $info['sponsor']           = Request::input('sponsor');
         $info['customer_phone']    = Request::input('contact_number');
         $info['customer_mobile']   = Request::input('contact_number');
@@ -149,7 +195,15 @@ class MemberController extends Controller
         $rules['password']         = 'required|min:6';
         $rules['password_confirm'] = 'required|min:6';
         $rules['email']            = 'required';
-
+        // 
+        $rules['middle_name'] = 'required';
+        $rules['permanent_address'] = 'required';
+        $rules['date_of_birth'] = 'required';
+        $rules['gender'] = 'required';
+        $rules['confirm_email'] = 'required|same:email';
+        $rules['confirm_tin_number'] = 'required|same:tin_number';
+        // 
+        $sponsor_r = $this->check_if_required_sponsor(Self::$shop_id);
         if($info['is_corporate'] == 1)
         {
             $rules['company'] = 'required';
@@ -170,17 +224,19 @@ class MemberController extends Controller
                 $count_username = Tbl_customer::where('mlm_username', $info['mlm_username'])->count();
                 if($count_username == 0)
                 {
-                    if($info['sponsor'] != null)
+                    if($sponsor_r == 1)
                     {
-                        $count_slot = Tbl_mlm_slot::where('slot_nick_name', $info['sponsor'])->count();
-                        if($count_slot == 0)
+                        if($info['sponsor'] != null)
                         {
-                            $data['status'] = 'warning';
-                            $data['message'][0] = 'Sponsor does not exist';
-                            return $data;
+                            $count_slot = Tbl_mlm_slot::where('slot_nick_name', $info['sponsor'])->count();
+                            if($count_slot == 0)
+                            {
+                                $data['status'] = 'warning';
+                                $data['message'][0] = 'Sponsor does not exist';
+                                return $data;
+                            }
                         }
                     }
-
                     if($info['password'] == $info['password_confirm'])
                     {
 
@@ -200,7 +256,12 @@ class MemberController extends Controller
                         $customer_info["customer_contact"] = $info["customer_mobile"];
                         $customer_info["is_corporate"]     = $info["is_corporate"];
                         $customer_info["company"]          = $info["company"];
-
+                        // 
+                        $customer_info['middle_name']       = Request::input('middle_name');
+                        $customer_info['customer_full_address'] = Request::input('permanent_address');
+                        $customer_info['b_day']     = Request::input('date_of_birth');
+                        $customer_info['customer_gender']            = Request::input('gender');
+                        // 
                         $customer_set_info_response        = Cart::customer_set_info(Self::$shop_id, $customer_info);
 
                         if($customer_set_info_response["status"] == "error")
@@ -347,6 +408,10 @@ class MemberController extends Controller
         return json_encode($data);
     }
 
+    public function package_get_details_product()
+    {
+        
+    }
     public function shipping()
     {
         $register_session = Session::get('mlm_register_step_1');
@@ -608,10 +673,6 @@ class MemberController extends Controller
             $name = name_format_from_customer_info($value);
             $membership_code = $value->slot_no;
             $card .= $this->card_all($color, $name,  $membership_code);
-            // $pdf = App::make('snappy.pdf.wrapper');
-            // $pdf->loadHTML($card);
-            // return $pdf->inline();
-            // $card = $this->
         }
         if(Request::input('pdf') == 'true')
         {

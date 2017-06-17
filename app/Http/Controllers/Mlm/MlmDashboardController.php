@@ -6,7 +6,7 @@ use Redirect;
 use Request;
 use View;
 use Validator;
-
+use DB;
 use App\Globals\Mlm_member;
 use App\Models\Tbl_mlm_plan;
 use App\Models\Tbl_mlm;
@@ -50,29 +50,46 @@ class MlmDashboardController extends Mlm
             $data['direct']      = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)->where('wallet_log_plan', 'DIRECT')->sum('wallet_log_amount');
             $data['binary']      = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)->where('wallet_log_plan', 'BINARY')->sum('wallet_log_amount');
 
-            $sum = $data['direct'] + $data['binary'];
-            if($data['direct'] == 0)
-            {
-                $data['direct'] = 0;
-            }
-            if($data['binary'] == 0)
-            {
-                $data['binary'] = 0;
-            }
-            if($sum == 0)
-            {
-                $sum = 1;
-            }
-            $data['direct_percent'] = ($data['direct']/$sum) * 100;
-            $data['binary_percent'] = ($data['binary']/$sum) * 100;
+            $data['income_per_complan'] = Tbl_mlm_slot_wallet_log::slot()
+            ->leftjoin('tbl_mlm_plan', 'tbl_mlm_plan.marketing_plan_code', '=','tbl_mlm_slot_wallet_log.wallet_log_plan')
+            ->customer()
+            ->where('tbl_mlm_slot.slot_id', Self::$slot_id)
+            ->select(DB::raw('wallet_log_plan as wallet_log_plan'), DB::raw('sum(wallet_log_amount ) as wallet_log_amount'), DB::raw('wallet_log_slot as wallet_log_slot'))
+            ->groupBy(DB::raw('wallet_log_plan') )
+            ->get();
+
+            $data['complan'] = Tbl_mlm_plan::where('shop_id', Self::$shop_id)->get()->keyBy('marketing_plan_code');
+
+            $data['count_per_level'][1] = 2;
+            $data['count_per_level'][2] = 4;
+            $data['count_per_level'][3] = 8;
+            $data['count_per_level'][4] = 16;
+            $data['count_per_level'][5] = 32;
+            $data['count_per_level'][6] = 64;
+            $data['count_per_level'][7] = 128;
+            $data['count_per_level'][8] = 256;
+            $data['count_per_level'][9] = 512;
+            $data['count_per_level'][10] = 1024;
+            $data['count_per_level'][11] = 2048;
+            $data['count_per_level'][12] = 4096;
+
+            $data['tree_count'] = Tbl_tree_placement::where('placement_tree_parent_id', Self::$slot_id)
+            ->where('placement_tree_position', 'left')
+            ->select(DB::raw('count(placement_tree_level ) as count_slot'), DB::raw('tbl_tree_placement.*'))
+            ->groupBy(DB::raw('placement_tree_level') )
+            ->groupBy('placement_tree_parent_id')
+            ->orderBy('placement_tree_level', 'ASC')->get()->keyBy('placement_tree_level');
 
             $data['count_downline'] = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)->count();
+            
             $data['count_downline_per_countr_data'] = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)
             ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_tree_sponsor.sponsor_tree_child_id')
             ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
             ->join('tbl_country', 'tbl_country.country_id', '=','tbl_customer.country_id')
             ->get();
+
             $data['country_name'] = [];
+
             foreach($data['count_downline_per_countr_data'] as $key => $value)
             {
                 if(isset($data['country_name'][$value->country_name]))
@@ -85,11 +102,14 @@ class MlmDashboardController extends Mlm
                 }
                 
             }
+
             foreach($data['country_name'] as $key => $value)
             {
                 $data['country_name'][$key] = ($value/$data['count_downline']) * 100;
             }
+
             $data['recent_activity'] = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)->orderBy('wallet_log_id', 'DESC')->paginate(5);
+
             foreach($data['recent_activity'] as $key => $value)
             {
                 $data['recent_activity'][$key]->ago =Carbon::createFromTimeStamp(strtotime($value->wallet_log_date_created))->diffForHumans();

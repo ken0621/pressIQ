@@ -21,6 +21,12 @@
                                     <div style="padding: 48px;">
                                            <p> Your account has been created by purchasing to our site. Click <a href="{{ URL::to('/') }}">here</a> to login and change your password.</p>
                                             <p>Password : {{ $account_password }}</p>
+                                            @if(isset($mlm_username))
+                                            <p>Username : {{ $mlm_username }} </p>
+                                            @endif
+                                            @if(isset($mlm_email))
+                                            <p>Email : {{ $mlm_email }} </p>
+                                            @endif
                                     </div>
                             </td>
                         </tr>

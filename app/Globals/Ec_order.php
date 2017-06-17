@@ -882,7 +882,8 @@ class Ec_order
             $data['mail_to']                       = $order_info["tbl_ec_order"]["customer_email"];
             $data['mail_subject']             = "Account Verification";
             $data['account_password'] = Crypt::decrypt($order_info["tbl_customer"]["password"]);
-
+            $data['mlm_username'] = $order_info["tbl_customer"]["mlm_username"];
+            $data['mlm_email'] = $order_info["tbl_customer"]["email"]; 
             $result = Mail_global::password_mail($data, $order_info["tbl_ec_order"]["shop_id"]);
         }
         

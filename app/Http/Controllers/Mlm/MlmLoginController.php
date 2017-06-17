@@ -13,6 +13,7 @@ use Config;
 use App\Globals\Settings;
 use App\Globals\Mlm_member;
 use App\Globals\EmailContent;
+use App\Globals\Myphone;
 use App\Models\Tbl_shop;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_membership_code;
@@ -102,6 +103,7 @@ class MlmLoginController extends Controller
     public function index()
     {
     	Session::forget('mlm_member');
+        Myphone::forgetSession();
         $data["page"] = "Login";
         return view("mlm.login", $data);
     }   
@@ -216,6 +218,7 @@ class MlmLoginController extends Controller
                     {
                         $shop_id = $user->shop_id;
                         Mlm_member::add_to_session($shop_id, $user->customer_id);
+                        Myphone::putSession();
                         $data['type'] = 'success';
                         $data['message'] = 'You will be redirected.';
                     }

@@ -14,10 +14,10 @@
 <br>
 <br>
 <br>
+@foreach($sales as $key => $value)
 <?php 
     $sub_total = 0;
 ?>
-@foreach($sales as $key => $value)
 <div class="panel panel-default panel-block panel-title-block col-md-4" id="top">
     <div class="panel-heading">
         <div>

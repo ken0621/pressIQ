@@ -122,10 +122,11 @@ class MemberController extends Controller
     {
         $f_name = $first_name;
         $l_name = $last_name;
-        // return strtolower( trim( substr($first_name, 0, 3) . "." . substr($last_name, 0, 6) ) );
-        $last_name = strtolower(substr($last_name, 0, 6));
-        $first_name = strtolower(substr($first_name, 0, 3));
-        $nickname = $last_name . '.' . $first_name;
+        $last_name = str_replace(' ', '', $last_name);
+        $first_name = str_replace(' ', '', $first_name);
+        $last_name = strtolower(substr($last_name, 0, 3));
+        $first_name = strtolower(substr($first_name, 0, 6));
+        $nickname = $first_name . '.' . $last_name;
         $count_username = Tbl_customer::where('first_name', $f_name)
         ->where('last_name', $l_name)
         ->count();

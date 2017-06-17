@@ -642,13 +642,18 @@ $dropDown       : false;
                     font-size: 12px;
                     font-weight: 600;
                 }
-                 @media screen and (max-width: 731px)
+                @media screen and (max-width: 980px)
                 {
-                    margin: 10px 10px;
                     font-size: 10px;
                     font-weight: 600;
+                    margin-left: 2.5px;
+                    margin-right: 2.5px;
                 }
-                 @media screen and (max-width: 462px)
+                @media screen and (max-width: 900px)
+                {
+                    font-size: 8px;
+                }
+                 @media screen and (max-width: 610px)
                 {
                     margin: 10px 10px;
                     font-size: 10px;
@@ -701,9 +706,20 @@ $dropDown       : false;
             font-size: 14px;
             text-align: right;
             margin-right: 25px;
-             @media screen and (max-width: 1250px)
+            @media screen and (max-width: 1005px)
+            {
+                position: absolute;
+                top: 0;
+                right: 0;
+            }
+            @media screen and (max-width: 1250px)
             {
                 font-size: 12px;
+                font-weight: 600;
+            }
+            @media screen and (max-width: 745px)
+            {
+                font-size: 10px;
                 font-weight: 600;
             }
             .text
@@ -716,9 +732,18 @@ $dropDown       : false;
                 {
                     margin: 37px 10px !important;
                 }
-                @media screen and (max-width: 980px)
+                @media screen and (max-width: 745px)
+                {
+                    margin-left: 5px;
+                    margin-right: 5px;
+                }
+                @media screen and (max-width: 730px)
                 {
                     display: none;
+                }
+                @media screen and (max-width: 600px)
+                {
+                    display: inline-block;
                 }
                 &:hover
                 {

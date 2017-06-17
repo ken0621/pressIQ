@@ -128,13 +128,18 @@
                         </a>
                      </li>
                      @endforeach
+                     @foreach($_categories as $key => $categories)
                      <li class="sub-menu">
-                        <a href="#menupos1"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" class="list-group-item" data-toggle="collapse" data-parent="#mainmenu">ACCESSORIES <span class="menu-ico-collapse"><i class="glyphicon glyphicon-chevron-down"></i></span></a>
-                        <div class="collapse pos-absolute" id="menupos1">
-                           <a href="/product?type=1&brand=" data-toggle="collapse" data-target="#menupos1" class="list-group-item sub-item">Test</a>
+                        <a href="#menupos{{ $key }}"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" class="list-group-item" data-toggle="collapse" data-parent="#mainmenu">{{ $categories['type_name'] }} <span class="menu-ico-collapse"><i class="glyphicon glyphicon-chevron-down"></i></span></a>
+                        <div class="collapse pos-absolute" id="menupos{{ $key }}">
+                           @foreach($categories['subcategory'] as $subcategories)
+                           <a href="/product?type={{ $subcategories['type_id'] }}" data-toggle="collapse" data-target="#menupos{{ $key }}" class="list-group-item sub-item">{{ $subcategories['type_name'] }} ({{ $subcategories['product_count'] }})</a>
+                           @endforeach
                         </div>
                      </li>
-                     <li class="sub-menu">
+                     @endforeach
+                     
+                     {{-- <li class="sub-menu">
                         <a href="#menupos2"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" class="list-group-item" data-toggle="collapse" data-parent="#mainmenu">SMART PHONE <span class="menu-ico-collapse"><i class="glyphicon glyphicon-chevron-down"></i></span></a>
                         <div class="collapse pos-absolute" id="menupos2">
                            <a href="/product?type=3&brand=" data-toggle="collapse" data-target="#menupos1" class="list-group-item sub-item">Test</a>
@@ -151,7 +156,7 @@
                         <div class="collapse pos-absolute" id="menupos4">
                            <a href="/product?type=5&brand=" data-toggle="collapse" data-target="#menupos1" class="list-group-item sub-item">Test</a>
                         </div>
-                     </li>
+                     </li> --}}
                   </ul>
                   <form method="GET" action="/product" class="navbar-form search-container" role="search">
                      <div class="searchie">

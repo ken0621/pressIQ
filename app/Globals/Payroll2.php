@@ -50,9 +50,8 @@ class Payroll2
 	}
 	public static function compute_day_pay_daily($_time, $_shift)
 	{
-
 	}
-	/* TIME GLOBALS */
+	/* GLOBALS */
 	public static function time_check_if_exist_between($check_exist, $between_in, $between_out)
 	{
 		$if_check_exist=false;

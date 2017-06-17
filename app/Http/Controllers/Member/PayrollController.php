@@ -7681,12 +7681,11 @@ class PayrollController extends Member
                return Self::equicom_bank_template($data);
           }
 
+          /* use bdo as default */
           else
           {
                return Self::bdo_bank_template($data);
           }
-
-
 
           // $myName = $company_code.$upload_date.$batch_no;
 

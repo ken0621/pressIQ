@@ -2974,58 +2974,62 @@ class Payroll
 		$tax_contribution = 0;
 
 		// if($rate >= $tax->tax_first_range && $rate < $tax->tax_second_range)
-		if($tax->tax_first_range >= $rate && $tax->tax_second_range < $rate)
+		if($tax != null)
 		{
-			$tax_index = 'tax_first_range';
-		}
+			if($tax->tax_first_range >= $rate && $tax->tax_second_range < $rate)
+			{
+				$tax_index = 'tax_first_range';
+			}
 
-		if($tax->tax_second_range >= $rate && $tax->tax_third_range < $rate)
-		{
-			$tax_index = 'tax_second_range';
-		}
+			if($tax->tax_second_range >= $rate && $tax->tax_third_range < $rate)
+			{
+				$tax_index = 'tax_second_range';
+			}
 
-		if($tax->tax_second_range >= $rate && $tax->tax_third_range < $rate)
-		{
-			$tax_index = 'tax_second_range';
-		}
+			if($tax->tax_second_range >= $rate && $tax->tax_third_range < $rate)
+			{
+				$tax_index = 'tax_second_range';
+			}
 
-		if($tax->tax_third_range >= $rate && $tax->tax_fourth_range < $rate)
-		{
-			$tax_index = 'tax_third_range';
-		}
+			if($tax->tax_third_range >= $rate && $tax->tax_fourth_range < $rate)
+			{
+				$tax_index = 'tax_third_range';
+			}
 
-		if($tax->tax_fourth_range >= $rate && $tax->tax_fifth_range < $rate)
-		{
-			$tax_index = 'tax_fourth_range';
-		}
+			if($tax->tax_fourth_range >= $rate && $tax->tax_fifth_range < $rate)
+			{
+				$tax_index = 'tax_fourth_range';
+			}
 
+			
+			if($tax->tax_fifth_range >= $rate && $tax->taxt_sixth_range < $rate)
+			{
+				$tax_index = 'tax_fifth_range';
+			}
+
+
+			if($rate >= $tax->taxt_sixth_range &&  $rate < $tax->tax_seventh_range)
+			{
+				$tax_index = 'taxt_sixth_range';
+			}
+
+
+			if($rate <= $tax->tax_seventh_range && $rate > $tax->taxt_sixth_range)
+			{
+				$tax_index = 'tax_seventh_range';
+			}
+
+
+			if($tax_index != '')
+			{
+				$exemption_num = $exemption->$tax_index;
+				$status_num = $status->$tax_index;
+				// dd($status_num);
+
+				$tax_contribution = (($rate - $tax->$tax_index) * ($status_num / 100)) + $exemption_num;
+			}
+		}
 		
-		if($tax->tax_fifth_range >= $rate && $tax->taxt_sixth_range < $rate)
-		{
-			$tax_index = 'tax_fifth_range';
-		}
-
-
-		if($rate >= $tax->taxt_sixth_range &&  $rate < $tax->tax_seventh_range)
-		{
-			$tax_index = 'taxt_sixth_range';
-		}
-
-
-		if($rate <= $tax->tax_seventh_range && $rate > $tax->taxt_sixth_range)
-		{
-			$tax_index = 'tax_seventh_range';
-		}
-
-
-		if($tax_index != '')
-		{
-			$exemption_num = $exemption->$tax_index;
-			$status_num = $status->$tax_index;
-			// dd($status_num);
-
-			$tax_contribution = (($rate - $tax->$tax_index) * ($status_num / 100)) + $exemption_num;
-		}
 
 
 		return round($tax_contribution, 2);

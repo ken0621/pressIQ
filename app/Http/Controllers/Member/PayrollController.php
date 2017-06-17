@@ -7671,14 +7671,19 @@ class PayrollController extends Member
                return Self::bdo_bank_template($data);
           }
 
-          if($bank_name == 'Metro Bank')
+          else if($bank_name == 'Metro Bank')
           {
                return Self::metro_bank_template($data);
           }
 
-          if($bank_name == 'Equicom')
+          else if($bank_name == 'Equicom')
           {
                return Self::equicom_bank_template($data);
+          }
+
+          else
+          {
+               return Self::bdo_bank_template($data);
           }
 
 

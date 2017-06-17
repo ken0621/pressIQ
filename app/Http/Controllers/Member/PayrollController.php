@@ -4977,18 +4977,36 @@ class PayrollController extends Member
      public function save_schedule_leave_tag()
      {
           // Tbl_payroll_leave_schedule
-          $payroll_schedule_leave = Request::input('payroll_schedule_leave');
+          $payroll_schedule_leave = datepicker_input(Request::input('payroll_schedule_leave'));
           if(Request::has('employee_tag'))
           {
                $insert = array();
 
                foreach(Request::input('employee_tag') as $tag)
                {
-                    $temp['payroll_leave_employee_id']    = $tag;
-                    $temp['payroll_schedule_leave']       = datepicker_input($payroll_schedule_leave);
-                    $temp['shop_id']                      = Self::shop_id();
+                    
 
-                    array_push($insert, $temp);
+                    if(Request::has('single_date_only'))
+                    {
+                         $temp['payroll_leave_employee_id']    = $tag;
+                         $temp['payroll_schedule_leave']       = $payroll_schedule_leave;
+                         $temp['shop_id']                      = Self::shop_id();
+                         array_push($insert, $temp);
+                    }
+
+                    else
+                    {
+                         $end = datepicker_input(Request::input('payroll_schedule_leave_end'));
+                         while($payroll_schedule_leave <= $end)
+                         {
+                              $temp['payroll_leave_employee_id']    = $tag;
+                              $temp['payroll_schedule_leave']       = $payroll_schedule_leave;
+                              $temp['shop_id']                      = Self::shop_id();
+                              array_push($insert, $temp);
+                              $payroll_schedule_leave = Carbon::parse($payroll_schedule_leave)->addDay()->format("Y-m-d");
+                         }
+                    }
+                    
                }
                if(!empty($insert))
                {

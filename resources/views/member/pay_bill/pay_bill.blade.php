@@ -70,13 +70,13 @@
                             <input type="text" class="form-control input-sm" />
                         </div>
                         <div class="col-sm-3">
-                            <label>Deposit to</label>
+                            <label>Payment Account</label>
                             <select class="drop-down-coa" name="paybill_ap_id" required>
                                 @include("member.load_ajax_data.load_chart_account", ['add_search' => "", "account_id" => isset($paybill) ? $paybill->paybill_ap_id : ''])
                             </select>
                         </div>
                         <div class="col-sm-2 pull-right">
-                        	<label>Amount Received</label>
+                        	<label>Total Payment</label>
                         	<input type="text" name="paybill_total_amount" class="input-sm form-control amount-received" value="{{$paybill->paybill_total_amount or ''}}">
                         </div>
                     </div>

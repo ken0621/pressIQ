@@ -57,13 +57,13 @@ class TesterController extends Controller
 
 	public function getIndex()
     {
-        dd(Utilities::filterPageList2(2));
+        dd(Accounting::getAllAccount());
     }
 
     public function getJournal()
     {
         $data['tbl_journal_entry'] = Accounting::getJounalAll();
-
+    
         return view('member.tester_journal', $data);
     }
 

@@ -16,6 +16,6 @@ class Tbl_credit_memo_line extends Model
     }
     public function scopeCm_item($query)
     {
-    	return $query->join("tbl_item","tbl_item.item_id","=","cmline_item_id");
+    	return $query->leftjoin("tbl_item","tbl_item.item_id","=","cmline_item_id");
     }
 }

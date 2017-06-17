@@ -114,6 +114,24 @@
 						@endforeach
 					</div>
 				</div>
+				<div class="hot-deals-container">
+					<center>
+						<ins class="bookingaff" data-aid="1292959" data-target_aid="1292802" data-prod="banner" data-width="200" data-height="200" data-banner_id="48509">
+						    <!-- Anything inside will go away once widget is loaded. -->
+						    <a href="//www.booking.com?aid=1292802">Booking.com</a>
+						</ins>
+					</center>
+					<script type="text/javascript">
+					    (function(d, sc, u) {
+					      var s = d.createElement(sc), p = d.getElementsByTagName(sc)[0];
+					      s.type = 'text/javascript';
+					      s.async = true;
+					      s.src = u + '?v=' + (+new Date());
+					      p.parentNode.insertBefore(s,p);
+					      })(document, 'script', '//aff.bstatic.com/static/affiliate_base/js/flexiproduct.js');
+					</script>
+
+				</div>
 				<div class="special-offers-container">
 					<div class="left-container-title">
 						<span>SPECIAL OFFERS</span>

@@ -21,6 +21,7 @@ use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_tree_sponsor;
 use App\Models\Tbl_country;
 use App\Models\Tbl_tree_placement;
+use App\Models\Tbl_ec_order;
 use Carbon\Carbon;
 use App\Globals\Mlm_slot_log;
 class MlmDashboardController extends Mlm
@@ -45,8 +46,9 @@ class MlmDashboardController extends Mlm
         }
         if(Self::$shop_info->member_layout == 'myphone')
         {
-            $data['direct'] = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)->where('wallet_log_plan', 'DIRECT')->sum('wallet_log_amount');
-            $data['binary'] = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)->where('wallet_log_plan', 'BINARY')->sum('wallet_log_amount');
+            $data['direct']      = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)->where('wallet_log_plan', 'DIRECT')->sum('wallet_log_amount');
+            $data['binary']      = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)->where('wallet_log_plan', 'BINARY')->sum('wallet_log_amount');
+
             $sum = $data['direct'] + $data['binary'];
             if($data['direct'] == 0)
             {
@@ -95,6 +97,18 @@ class MlmDashboardController extends Mlm
         $data['news'] = Self::news();
 
         return view("mlm.dashboard", $data);
+    }
+    public function lead()
+    {
+        $data['page'] = 'Lead';
+        $data['leads'] = Tbl_mlm_lead::where('lead_customer_id_sponsor', Self::$customer_id)
+            ->customer()
+            ->customer_address()
+            ->customer_other_info()
+            ->mlm_slot()
+            ->get();
+        
+        return view("mlm.dashboard.lead", $data);
     }
     public function tree_view()
     {
@@ -371,5 +385,17 @@ class MlmDashboardController extends Mlm
     {
     	$data = [];
     	return view('mlm.dashboard.password');
+    }
+    public static function process_order_queue()
+    {
+        $data["slot_count"]  = Tbl_mlm_slot::where("slot_owner",Self::$customer_id)->count();
+        $data['first_order'] = Tbl_ec_order::where("customer_id",Self::$customer_id)->orderBy("ec_order_id","ASC")->first();
+
+        if($data["slot_count"] != 0)
+        {
+            return Redirect::to("mlm");
+        }
+
+        return view("mlm.processing_order", $data);
     }
 }

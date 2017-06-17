@@ -54,6 +54,19 @@
          @endif
          <div class="header">
             <a href="/" class="logo"><img src="/resources/assets/frontend/img/intogadgets-logo.png"></a>
+            <div class="mobile-searchie">
+               <div class="form-group">
+                  <input type="text" name="search" autocomplete="off" id="search-pokus" class="form-control search-input" placeholder="Search...">
+               </div>
+               <button type="submit" class="btn search-button"><i class="fa fa-search"></i></button>
+               <div class="search-popup" style="display:none;">
+                  <div class="live-search-loading search-popup-holder">  
+                     <img src="/resources/assets/img/small-loading.GIF" alt="laoding.png">
+                  </div>
+                  <div class="live-search-result-content">
+                  </div>
+               </div>
+            </div>
             <div class="header-nav text-left">
                <a href="/about" class="nabigation">
                   <div class="nabigation-hover"></div>
@@ -94,7 +107,7 @@
                <!-- HEADER SPACE -->
             </div>
          </div>
-         <nav class="navbar navbar-default  ">
+         <nav class="navbar navbar-default">
             <div>
                <!-- Brand and toggle get grouped for better mobile display -->
                <div class="navbar-header">
@@ -154,6 +167,35 @@
                      </li>
                   </ul>
                   <form method="GET" action="/product" class="navbar-form search-container" role="search">
+                     <div class="mobile-nabigayshon">
+                        <a href="/about" class="nabigation">
+                           <div class="nabigation-text">ABOUT</div>
+                        </a>
+                        <a href="/contact" class="nabigation">
+                           <div class="nabigation-text">CONTACT</div>
+                        </a>
+                        <a href="/career" class="nabigation">
+                           <div class="nabigation-text">CAREERS</div>
+                        </a>
+                        <a href="/how" class="nabigation">
+                           <div class="nabigation-text">HOW TO ORDER</div>
+                        </a>
+                        <a href="/youwin" class="nabigation">
+                           <div class="nabigation-text">YOUWIN AFTERSALES</div>
+                        </a>
+                        <a href="/events" class="nabigation">
+                           <div class="nabigation-text">EVENTS</div>
+                        </a>
+                     </div>
+                     <div class="mobile-account">
+                        @if($customer_info_a)
+                           <a href="/account/order" class="text">MY ORDERS</a>
+                           <a href="/account/logout" class="text">LOGOUT</a>
+                        @else
+                           <a data-remodal-target="login" href="#" class="text">LOGIN</a>
+                           <a href="/account/register" class="text">REGISTER</a>
+                        @endif
+                     </div>
                      <div class="searchie">
                         <div class="form-group">
                            <input type="text" name="search" autocomplete="off" id="search-pokus" class="form-control search-input" placeholder="Search...">

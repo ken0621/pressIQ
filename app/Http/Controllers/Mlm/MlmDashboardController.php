@@ -71,8 +71,15 @@ class MlmDashboardController extends Mlm
             $data['count_per_level'][9] = 512;
             $data['count_per_level'][10] = 1024;
             $data['count_per_level'][11] = 2048;
-            $data['count_per_level'][12] = 4096;
+            // $data['count_per_level'][12] = 4096;
 
+            $data['new_member'] = Tbl_mlm_slot::where('slot_sponsor', Self::$slot_id)
+            ->customer()
+            ->orderBy('slot_id', 'DESC')
+            ->take(6)
+            ->get();
+
+        
             $data['tree_count'] = Tbl_tree_placement::where('placement_tree_parent_id', Self::$slot_id)
             ->where('placement_tree_position', 'left')
             ->select(DB::raw('count(placement_tree_level ) as count_slot'), DB::raw('tbl_tree_placement.*'))

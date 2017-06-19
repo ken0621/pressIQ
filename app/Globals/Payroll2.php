@@ -4,7 +4,7 @@ use stdClass;
 
 class Payroll2
 {
-	public static function time_shift_create_format_based_on_conflict($_time, $_shift, $testing = false)
+	public static function clean_shift($_time, $_shift, $testing = false)
 	{
 		$output_ctr = 0;
 		$_output = null;
@@ -212,6 +212,7 @@ class Payroll2
 	}
 	public static function time_shift_output($_output, $index, $time_in, $time_out, $auto_approved, $reason = "")
 	{
+		$reason = "TEMPORARY NULL";
 		$_output[$index] = new stdClass();
 		$_output[$index]->time_in = $time_in;
 		$_output[$index]->time_out = $time_out;

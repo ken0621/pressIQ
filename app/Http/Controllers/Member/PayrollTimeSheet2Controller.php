@@ -126,12 +126,15 @@ class PayrollTimeSheet2Controller extends Member
 		$employee_contract = $this->db_get_current_employee_contract($employee_id);
 		$_shift = $this->db_get_shift_based_on_payroll_group($employee_contract->payroll_group_id, $date);
 		$_shift_raw = $this->shift_raw($_shift);
-		$_time_raw = $this->time_raw($_shift);
+		$_time_raw = $this->time_raw($_time);
 		$mode = "daily";
+
+		$return->_time = $_time_raw;
+		$return->_shift = $_shift_raw;
 
 		if($return->for_approval == 1)
 		{
-			$return->approved_shift = Payroll2::time_shift_create_format_based_on_conflict($_time_raw, $_shift_raw);
+			$return->clean_shift = Payroll2::clean_shift($_time_raw, $_shift_raw);
 		}
 		else
 		{
@@ -170,9 +173,12 @@ class PayrollTimeSheet2Controller extends Member
 
 		foreach($_shift as $key => $shift)
 		{
-			$_shift_raw[$key] = new stdClass();
-			$_shift_raw[$key]->shift_in = $shift->shift_work_start;
-			$_shift_raw[$key]->shift_out = $shift->shift_work_end;
+			if($shift->shift_work_start != null && $shift->shift_work_end != null)
+			{
+				$_shift_raw[$key] = new stdClass();
+				$_shift_raw[$key]->shift_in = $shift->shift_work_start;
+				$_shift_raw[$key]->shift_out = $shift->shift_work_end;
+			}
 		}
 
 		return $_shift_raw;
@@ -184,9 +190,12 @@ class PayrollTimeSheet2Controller extends Member
 
 		foreach($_time as $key => $time)
 		{
-			$_time_raw[$key] = new stdClass();
-			$_time_raw[$key]->time_in = $time->payroll_time_shift_in;
-			$_time_raw[$key]->time_out = $time->payroll_time_shift_out;
+			if($time->payroll_time_sheet_in)
+			{
+				$_time_raw[$key] = new stdClass();
+				$_time_raw[$key]->time_in = $time->payroll_time_sheet_in;
+				$_time_raw[$key]->time_out = $time->payroll_time_sheet_out;
+			}
 		}
 
 		return $_time_raw;

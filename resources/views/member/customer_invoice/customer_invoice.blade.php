@@ -108,6 +108,7 @@
                                             <tr>
                                                 <th style="" ></th>
                                                 <th style="">Service Date</th>
+                                                @include("member.load_ajax_data.load_th_serial_number");
                                                 <th style="" class="text-right">#</th>
                                                 <th style="width: 200px">Product/Service</th>
                                                 <th style="">Description</th>
@@ -128,7 +129,11 @@
                                                         <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
 
                                                         <td><input type="text" class="for-datepicker" name="invline_service_date[]" value="{{$invline->invline_service_date}}" /></td>
-
+                                                        @if(isset($serial)) 
+                                                        <td>
+                                                            <textarea class="txt-serial-number" name="serial_number[]">{{$invline->serial_number}}</textarea>
+                                                        </td>
+                                                        @endif
                                                         <td class="invoice-number-td text-right">
                                                             1
                                                         </td>
@@ -168,8 +173,8 @@
                                                  <tr class="tr-draggable">
                                                     <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
 
-                                                    <td><input type="text" class="for-datepicker" name="invline_service_date[]"/></td>
-
+                                                    <td><input type="text" class="for-datepicker" name="invline_service_date[]"/></td>    
+                                                    @include("member.load_ajax_data.load_td_serial_number");
                                                     <td class="invoice-number-td text-right">
                                                         1
                                                     </td>
@@ -469,6 +474,7 @@
         <tr class="tr-draggable">
             <td class="text-center cursor-move move" ><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
             <td><input type="text" class="for-datepicker"  name="invline_service_date[]"/></td>
+            @include("member.load_ajax_data.load_td_serial_number");
             <td class="invoice-number-td text-right">
                 2
             </td>

@@ -93,11 +93,11 @@
                         </div>
                         <div class="col-sm-2">
                             <label>Invoice Date</label>
-                            <input {{isset($inv) ? 'disabled' : ''}} type="text" class="datepicker form-control input-sm" name="inv_date" value="{{isset($inv) ? dateFormat($inv->invoice_date) : ''}}"/>
+                            <input {{isset($inv) ? 'disabled' : ''}} type="text" class="datepicker form-control input-sm" name="inv_date" value="{{isset($inv) ? dateFormat($inv->invoice_date) : date('m/d/y')}}"/>
                         </div>
                         <div class="col-sm-2">
                             <label>Due Date</label>
-                            <input {{isset($inv) ? 'disabled' : ''}} type="text" class="datepicker form-control input-sm" name="inv_due_date" value="{{isset($inv) ? dateFormat($inv->due_date) : ''}}" />
+                            <input {{isset($inv) ? 'disabled' : ''}} type="text" class="datepicker form-control input-sm" name="inv_due_date" value="{{isset($inv) ? dateFormat($inv->due_date) : date('m/d/y')}}" />
                         </div>
                         <div class="col-sm-2">
                             @if(isset($inv))

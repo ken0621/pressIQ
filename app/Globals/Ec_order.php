@@ -856,7 +856,9 @@ class Ec_order
             if(isset($order_info['tbl_mlm_slot']['slot_sponsor']))
             {
 
-                $slot_sponsor = Tbl_mlm_slot::where('slot_nick_name', $order_info['tbl_mlm_slot']['slot_sponsor'])->first();
+                $slot_sponsor = Tbl_mlm_slot::where('slot_nick_name', $order_info['tbl_mlm_slot']['slot_sponsor'])
+                ->where('slot_defaul', 1)
+                ->first();
                 if($slot_sponsor)
                 {
                     $insert_slot_ref['order_slot_ec_order_id']  = $order_info["tbl_ec_order"]["ec_order_id"];

@@ -148,12 +148,118 @@ class MemberController extends Controller
 
     public function register()
     {
-        Session::forget('mlm_member');
+        $customer_session = Session::get('mlm_member');
+        if($customer_session)
+        {
+            return $this->register_logged_in();
+        }
+        
         $data['country'] = Tbl_country::get();
         $data['current'] = Cart::get_info(Self::$shop_id);
         $data['sponsor_r'] = $this->check_if_required_sponsor(Self::$shop_id);
         $data['terms_and_agreement'] = Tbl_settings::where('shop_id', Self::$shop_id)->where('settings_key', 'terms_and_agreement')->first();
         return view("mlm.register.register", $data);
+    }
+    public function register_logged_in()
+    {
+
+        $data = [];
+
+        $data['sponsor_r'] = $this->check_if_required_sponsor(Self::$shop_id);
+
+        $customer_session = Session::get('mlm_member');
+
+        if(isset($customer_session['customer_info']->mlm_username))
+        {
+            $data['sponsor'] =  $customer_session['customer_info']->mlm_username;
+        }
+        else
+        {
+            $data['sponsor'] =  $customer_session['customer_info']->mlm_username;
+        }
+
+        return view('mlm.register.logged_in', $data);
+    }
+    public function register_logged_in_post()
+    {
+
+        // Check if is sponsor is required and existing
+        $info['sponsor'] = Request::input('sponsor');
+        $info['account_use'] = Request::input('account_use');
+        $sponsor_r = $this->check_if_required_sponsor(Self::$shop_id);
+        if($sponsor_r == 1)
+        {   
+            if($info['sponsor'] != null)
+            {
+                $count_slot = Tbl_mlm_slot::where('slot_nick_name', $info['sponsor'])->count();
+                if($count_slot == 0)
+                {
+                    $data['status'] = 'warning';
+                    $data['message'][0] = 'Sponsor does not exist';
+                    return $data;
+                }
+            }
+        }
+        else
+        {
+            if($info['sponsor'] != null)
+            {
+                $count_slot = Tbl_mlm_slot::where('slot_nick_name', $info['sponsor'])->count();
+                if($count_slot == 0)
+                {
+                    $data['status'] = 'warning';
+                    $data['message'][0] = 'Sponsor does not exist';
+                    return $data;
+                }
+            }
+        }  
+        if($info['account_use'] == 1)
+        {
+            Session::forget('mlm_member');
+            $data['status'] = 'success';
+            $data['link']   =  '/member/register';
+            return $data;
+        }
+        else
+        {
+            $customer_session = Session::get('mlm_member');
+            $customer_id = $customer_session['customer_info']->customer_id;
+
+            $customer_info["current_user"] = Tbl_customer::where('customer_id', $customer_id)->first();
+            $slot = Tbl_customer::where('mlm_username', $info['sponsor'])
+                    ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_owner', '=', 'tbl_customer.customer_id')
+                    ->where('slot_defaul', 1)
+                    ->first();
+            if($slot)
+            {
+                $customer_info["slot_sponsor"]     = $info['sponsor'];
+            }
+            
+
+            /* Set Product Temporarily */
+            $product = Tbl_ec_product::variant()->where("eprod_shop_id", Self::$shop_id)->where("tbl_ec_product.archived", 0)->first();
+            Cart::add_to_cart($product->evariant_id, 1, Self::$shop_id, true);
+
+            $customer_set_info_response        = Cart::customer_set_info(Self::$shop_id, $customer_info);
+
+            if($customer_set_info_response["status"] == "error")
+            { 
+                $data['status'] = 'warning';
+                $data['message'][0] = $customer_set_info_response["status_message"];
+
+                return $data;
+            }
+            else
+            {
+                /* Redirect */
+                Session::put('mlm_register_step_1', $customer_session['customer_info']);
+                $data['status'] = 'success';
+                $data['message'][0] = 'Sucess!';
+                $data['link'] = '/member/register/package';
+
+                return $data;
+            }
+        }
     }
     public function check_if_required_sponsor($shop_id)
     {
@@ -190,6 +296,7 @@ class MemberController extends Controller
         $info['sponsor']           = Request::input('sponsor');
         $info['customer_phone']    = Request::input('contact_number');
         $info['customer_mobile']   = Request::input('contact_number');
+
         $rules['first_name']       = 'required';
         $rules['last_name']        = 'required';
         $rules['password']         = 'required|min:6';
@@ -251,15 +358,15 @@ class MemberController extends Controller
                         $customer_info["email"]            = $info["email"];
                         $customer_info["password"]         = $info["password"];
                         $customer_info["tin_number"]       = $info["tin_number"];
-                        $customer_info["mlm_username"]         = $info["mlm_username"];
+                        $customer_info["mlm_username"]     = $info["mlm_username"];
                         $customer_info["slot_sponsor"]     = $info["sponsor"];
                         $customer_info["customer_contact"] = $info["customer_mobile"];
                         $customer_info["is_corporate"]     = $info["is_corporate"];
                         $customer_info["company"]          = $info["company"];
                         // 
-                        $customer_info['middle_name']       = Request::input('middle_name');
-                        $customer_info['customer_full_address'] = Request::input('permanent_address');
-                        $customer_info['b_day']     = Request::input('date_of_birth');
+                        $customer_info['middle_name']                = Request::input('middle_name');
+                        $customer_info['customer_full_address']      = Request::input('permanent_address');
+                        $customer_info['b_day']                      = Request::input('date_of_birth');
                         $customer_info['customer_gender']            = Request::input('gender');
                         // 
                         $customer_set_info_response        = Cart::customer_set_info(Self::$shop_id, $customer_info);

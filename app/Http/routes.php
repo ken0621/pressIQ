@@ -17,6 +17,7 @@ Route::get('/barcode', 'MemberController@barcodes');
 
 Route::get('member/register/session', 'MemberController@session');
 Route::get('member/register', 'MemberController@register');
+Route::post('member/register/logged_in', 'MemberController@register_logged_in_post');
 Route::post('member/register/submit', 'MemberController@register_post');
 
 Route::get('member/register/package', 'MemberController@package');

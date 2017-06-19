@@ -172,7 +172,7 @@
                            <li><a href="/mlm"> Home <span class="fa fa-chevron-down"></span></a></li>
                            <li><a href="/mlm/profile"> Profile <span class="fa fa-chevron-down"></span></a></li>
                            <li><a href="/mlm/notification"> Notification <span class="fa fa-chevron-down"></span></a></li>
-                           <li><a href="/mlm/repurchase"> Repurchase <span class="fa fa-chevron-down"></span></a></li>
+                           <li><a href="/member/register"> Repurchase <span class="fa fa-chevron-down"></span></a></li>
                            <li>
                             <a> Genealogy <span class="fa fa-chevron-down"></span></a>
                             <ul style="display: none;">

@@ -4,6 +4,29 @@ use stdClass;
 
 class Payroll2
 {
+    /*
+     * TITLE: CLEAN SHIFT
+     * 
+     * Returns a clean TIME IN and TIME OUT when cross reference with SHIFTING SCHEDULES.
+     *
+     * @param
+     *    $_time (array)
+     *		- time_in
+     *		- time_out
+     *
+     *	  $_shift (array)
+     *		- shift_in
+     *		- shift_out
+     *
+     * @return (array)
+     *    	- time_in
+     *		- time_out
+     *		- auto_approve
+     *		- reason
+     *
+     * @author (Kim Briel Oraya)
+     *
+     */
 	public static function clean_shift($_time, $_shift, $testing = false)
 	{
 		$output_ctr = 0;
@@ -16,7 +39,6 @@ class Payroll2
 		{
 			foreach ($_time as $time) 
 			{
-
 				$_output = Payroll2::time_shift_output($_output, $output_ctr++, $time->time_in, $time->time_out, 0);
 			}
 		}

@@ -38,7 +38,12 @@
                                     <input value="{{ $record->time_sheet_activity }}" type="text" class="text-table time-entry is-timeEntry" name="">
                                     @endforeach
                                 </td>
-                                <td class="text-center"><a href="javascript:" class="daily-salary" amount="{{ $timesheet->daily_info->daily_salary }}">PHP {{ number_format($timesheet->daily_info->daily_salary, 2) }}</a></td>
+                                @if($timesheet->daily_info->shift_approved == true)
+                                    <td class="text-center"><a href="javascript:" class="daily-salary" amount="{{ $timesheet->daily_info->daily_salary }}">PHP {{ number_format($timesheet->daily_info->daily_salary, 2) }}</a></td>
+                                @else
+                                    <td class="text-center"><a onclick="action_load_link_to_modal('/member/payroll/company_timesheet_day_summary/{{ $timesheet->payroll_time_sheet_id }}', 'lg')" style="color: red;" href="javascript:" class="daily-salary" amount="{{ $timesheet->daily_info->daily_salary }}">PHP {{ number_format($timesheet->daily_info->daily_salary, 2) }}</a></td>
+                                @endif
+                                
                             </tr>
                             @endforeach
                             <tr style="font-weight: bold;">

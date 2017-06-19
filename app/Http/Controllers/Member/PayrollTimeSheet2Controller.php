@@ -57,6 +57,7 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			$timesheet_db = $this->timesheet_info_db($employee_id, $from);
 			$_timesheet[$from] = new stdClass();
+			$_timesheet[$from]->payroll_time_sheet_id = $timesheet_db->payroll_time_sheet_id;
 			$_timesheet[$from]->date = Carbon::parse($from)->format("Y-m-d");
 			$_timesheet[$from]->day_number = Carbon::parse($from)->format("d");
 			$_timesheet[$from]->day_word = Carbon::parse($from)->format("D");
@@ -65,14 +66,9 @@ class PayrollTimeSheet2Controller extends Member
 			$from = Carbon::parse($from)->addDay()->format("Y-m-d");
 		}
 
-		dd($_timesheet);
-
 		return $_timesheet;
 	}
-	public function timesheet_info_db($employee_id, $date)
-	{
-		return Tbl_payroll_time_sheet::where("payroll_time_date", Carbon::parse($date)->format("Y-m-d"))->where("payroll_employee_id", $employee_id)->first();
-	}
+
 	public function timesheet_process_in_out($timesheet_db)
 	{
 		$_timesheet_record = null;
@@ -132,13 +128,15 @@ class PayrollTimeSheet2Controller extends Member
 		$return->_time = $_time_raw;
 		$return->_shift = $_shift_raw;
 
-		if($return->for_approval == 1)
+		if($return->for_approval == 1) //PENDING
 		{
 			$return->clean_shift = Payroll2::clean_shift($_time_raw, $_shift_raw);
+			$return->shift_approved = $this->check_if_shift_approved($return->clean_shift);
 		}
-		else
+		else //APPROVED
 		{
-			$return->approved_shift = $_time;
+			$return->clean_shift = $_time;
+			$return->shift_approved = true;
 		}
 		
 		$return->compute = Payroll2::compute_day_pay($mode, $_time, $_shift);
@@ -165,6 +163,13 @@ class PayrollTimeSheet2Controller extends Member
 		}
 
 		return $_timesheet_record;
+	}
+	public function day_summary($timesheet_id)
+	{
+		$data["timesheet_db"] = $timesheet_db = $this->timesheet_info_db_by_id($timesheet_id);
+		$data["employee_info"] = $this->db_get_employee_information($timesheet_db->payroll_employee_id); 
+		$data["timesheet_info"] = $timesheet_info =$this->timesheet_process_daily_info($timesheet_db->payroll_employee_id, $timesheet_db->payroll_time_date, $timesheet_db);
+		return view('member.payroll2.employee_day_summary', $data);
 	}
 	/* GLOBAL FUNCTION FOR THIS CONTROLLER */
 	public function shift_raw($_shift)
@@ -213,6 +218,27 @@ class PayrollTimeSheet2Controller extends Member
 
 		return $return;
 	}
+	public function check_if_shift_approved($_time)
+	{
+		$auto_approve = true;
+
+		if($_time == null)
+		{
+			$auto_approve = true;
+		}
+		else
+		{
+			foreach($_time as $time)
+			{
+				if($time->auto_approved == 0)
+				{
+					$auto_approve = false;
+				}
+			}
+		}
+
+		return $auto_approve;
+	}
 
 	/* DB CONNECT FUNCTIONS */
 	public function db_get_employee_information($employee_id)
@@ -242,5 +268,13 @@ class PayrollTimeSheet2Controller extends Member
 	public function db_get_shift_based_on_payroll_group($payroll_group_id, $date)
 	{
 		return Tbl_payroll_group::where("payroll_group_id", $payroll_group_id)->shift()->day()->where("shift_day", date("D", strtotime($date)))->time()->get();
+	}
+	public function timesheet_info_db($employee_id, $date)
+	{
+		return Tbl_payroll_time_sheet::where("payroll_time_date", Carbon::parse($date)->format("Y-m-d"))->where("payroll_employee_id", $employee_id)->first();
+	}
+	public function timesheet_info_db_by_id($timesheet_id)
+	{
+		return Tbl_payroll_time_sheet::where("payroll_time_sheet_id", $timesheet_id)->first();
 	}
 }

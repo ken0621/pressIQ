@@ -131,7 +131,7 @@ class PayrollTimeSheet2Controller extends Member
 
 		if($return->for_approval == 1)
 		{
-			$return->approved_shift = Payroll2::time_shift_create_format_based_on_conflict($_time, $_shift);
+			$return->approved_shift = Payroll2::time_shift_create_format_based_on_conflict($_time_raw, $_shift_raw);
 		}
 		else
 		{
@@ -166,7 +166,30 @@ class PayrollTimeSheet2Controller extends Member
 	/* GLOBAL FUNCTION FOR THIS CONTROLLER */
 	public function shift_raw($_shift)
 	{
+		$_shift_raw = null;
 
+		foreach($_shift as $key => $shift)
+		{
+			$_shift_raw[$key] = new stdClass();
+			$_shift_raw[$key]->shift_in = $shift->shift_work_start;
+			$_shift_raw[$key]->shift_out = $shift->shift_work_end;
+		}
+
+		return $_shift_raw;
+	}
+	/* GLOBAL FUNCTION FOR THIS CONTROLLER */
+	public function time_raw($_time)
+	{
+		$_time_raw = null;
+
+		foreach($_time as $key => $time)
+		{
+			$_time_raw[$key] = new stdClass();
+			$_time_raw[$key]->time_in = $time->payroll_time_shift_in;
+			$_time_raw[$key]->time_out = $time->payroll_time_shift_out;
+		}
+
+		return $_time_raw;
 	}
 	public function gb_convert_time_from_db_to_timesheet($db_time)
 	{

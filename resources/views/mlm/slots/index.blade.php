@@ -27,7 +27,7 @@ $data['icon'] = 'icon-sitemap';
     </div>
     </form>
   </div>
-  <div class="box clearfix" style="overflow: hidden !important;">
+  <div class="box clearfix" style="overflow: hidden !important; display: none;">
     <div class="box-header with-border">
       <h3 class="box-title">Code Vault</h3>
     </div>

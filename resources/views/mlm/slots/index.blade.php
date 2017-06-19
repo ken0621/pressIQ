@@ -106,7 +106,7 @@ $data['icon'] = 'icon-sitemap';
   <div class="box">
     <div class="box-header with-border">
       <h3 class="box-title">SLOT LIST </h3>
-      <button class="btn btn-primary pull-right popup" link="/mlm/slots/manual_add_slot">Add new slot</button>
+      <!-- <button class="btn btn-primary pull-right popup" link="/mlm/slots/manual_add_slot">Add new slot</button> -->
     </div>
     <!-- /.box-header -->
     <div class="box-body">

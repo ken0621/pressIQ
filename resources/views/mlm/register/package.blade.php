@@ -46,7 +46,14 @@
                       <label style="font-size: 20px;"><input type="radio" class="membership_id_{{$value->ec_product_membership}} other_membership hide" membership_id="{{$value->ec_product_membership}}" name="variant_id" value="{{$value->evariant_id}}"> {{$value->eprod_name}}</label>
                     </div>
                   </div>
-                  <div class="membership-price" style="font-size: 15px;">{{currency('PHP', $value->min_price)}}</div>       
+                  <div class="membership-price" style="font-size: 15px;">{{currency('PHP', $value->min_price)}}</div>   
+                  <br> 
+                  <div class="choose_prodcut">
+                    <a href="javascript:" class="view_details modal-button-primary btn btn-md btn-blue">
+                      CHOOSE PRODUCT
+                    </a>
+                  </div>    
+                  <br>   
                   <div class="view_details">
                     <a href="javascript:" class="view_details modal-button-primary btn btn-md btn-blue" onClick="$('#modal_id_{{$value->eprod_id}}').modal('toggle');">
                       VIEW DETAILS

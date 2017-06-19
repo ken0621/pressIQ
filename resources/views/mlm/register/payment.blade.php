@@ -86,7 +86,7 @@
                         <tr>
                            <td></td>
                            <td class="text-right"><b>Shipping Fee</b></td>
-                           <td colspan="2" class="total text-left" style="word-break: break-all;">{{currency("P", $order["shipping_fee"])}}</td>
+                           <td colspan="2" class="total text-left" style="word-break: break-all;">@if( $order["shipping_fee"] == 0) INCLUDED @else {{currency("P", $order["shipping_fee"])}} @endif </td>
                         </tr>
                          <tr>
                            <td></td>

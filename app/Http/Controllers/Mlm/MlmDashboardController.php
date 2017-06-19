@@ -58,6 +58,20 @@ class MlmDashboardController extends Mlm
             ->groupBy(DB::raw('wallet_log_plan') )
             ->get();
 
+            foreach ($data['income_per_complan'] as $key => $value) 
+            {
+                # code...
+                if($value->wallet_log_plan == 'DIRECT')
+                {
+                    // $data['income_per_complan'][$key]->wallet_log_plan = 'Referral';
+                    $data['income_per_complan'][$key]->wallet_log_amount = $data['direct'];
+                }
+                if($value->wallet_log_plan == 'BINARY')
+                {
+                    // $data['income_per_complan'][$key]->wallet_log_plan = 'Matrix Bonus';
+                    $data['income_per_complan'][$key]->wallet_log_amount = $data['binary'];
+                }
+            }
             $data['complan'] = Tbl_mlm_plan::where('shop_id', Self::$shop_id)->get()->keyBy('marketing_plan_code');
 
             $data['count_per_level'][1] = 2;
@@ -81,7 +95,7 @@ class MlmDashboardController extends Mlm
 
         
             $data['tree_count'] = Tbl_tree_placement::where('placement_tree_parent_id', Self::$slot_id)
-            ->where('placement_tree_position', 'left')
+            // ->where('placement_tree_position', 'left')
             ->select(DB::raw('count(placement_tree_level ) as count_slot'), DB::raw('tbl_tree_placement.*'))
             ->groupBy(DB::raw('placement_tree_level') )
             ->groupBy('placement_tree_parent_id')

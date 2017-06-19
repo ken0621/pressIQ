@@ -850,7 +850,6 @@ class Ec_order
         }
 
         /* Insert Reference for slot */
-        /* Email Password */
         if(isset($order_info['tbl_mlm_slot']))
         {
             if(isset($order_info['tbl_mlm_slot']['slot_sponsor']))
@@ -876,6 +875,7 @@ class Ec_order
                 }
             }
         }
+        /* Email Password */
         if ($order_info["new_account"]) 
         {
             $data["template"]                 = Tbl_email_template::where("shop_id", $order_info["tbl_ec_order"]["shop_id"])->first();

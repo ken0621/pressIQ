@@ -55,17 +55,19 @@
          <div class="header">
             <a href="/" class="logo"><img src="/resources/assets/frontend/img/intogadgets-logo.png"></a>
             <div class="mobile-searchie">
-               <div class="form-group">
-                  <input type="text" name="search" autocomplete="off" id="search-pokus" class="form-control search-input" placeholder="Search...">
-               </div>
-               <button type="submit" class="btn search-button"><i class="fa fa-search"></i></button>
-               <div class="search-popup" style="display:none;">
-                  <div class="live-search-loading search-popup-holder">  
-                     <img src="/resources/assets/img/small-loading.GIF" alt="laoding.png">
+               <form method="GET" action="/product">
+                  <div class="form-group">
+                     <input value="{{ Request::input('search') }}" type="text" name="search" autocomplete="off" id="search-pokus" class="form-control search-input" placeholder="Search...">
                   </div>
-                  <div class="live-search-result-content">
+                  <button type="submit" class="btn search-button"><i class="fa fa-search"></i></button>
+                  <div class="search-popup" style="display:none;">
+                     <div class="live-search-loading search-popup-holder">  
+                        <img src="/resources/assets/img/small-loading.GIF" alt="laoding.png">
+                     </div>
+                     <div class="live-search-result-content">
+                     </div>
                   </div>
-               </div>
+               </form>
             </div>
             <div class="header-nav text-left">
                <a href="/about" class="nabigation">

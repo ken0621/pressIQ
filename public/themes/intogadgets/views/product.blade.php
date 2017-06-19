@@ -138,13 +138,13 @@
     <div class="product-sub text-left"></div>
     <div class="product-contentie">
         <div class="row-no-padding clearfix">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 @if(count($_product) > 0)
                     <div class="grid-view">
                         <div class="row-no-padding clearfix">
                             @foreach($_product as $product)
                                 {{-- @if(count($product['variant']) > 0) --}}
-                                <div class="col-md-4 col-sm-3 col-xs-6">
+                                <div class="col-md-3 col-sm-3 col-xs-6">
                                     <div class="holder">
                                         <div class="border match-height">
                                             <div class="img">
@@ -192,11 +192,6 @@
                     <h2 class="text-center" style="margin-top: 50px;">No Results</h2>
                 @endif
             </div>
-            <div class="col-md-4 facebook-container">
-                <div class="sticky">
-                    <div class="fb-page" data-href="https://www.facebook.com/Intogadgetstore/" data-tabs="timeline" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote style="display: none;" cite="https://www.facebook.com/Intogadgetstore/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/Intogadgetstore/">Intogadgets</a></blockquote></div>
-                </div>
-            </div> 
         </div>
     </div>
     <div>
@@ -233,6 +228,13 @@
                     </div>
                 </a>    
             @endforeach
+        </div>
+        <div class="holder">
+            <div class="facebook-container">
+                <div class="sticky">
+                    <div class="fb-page" data-href="https://www.facebook.com/Intogadgetstore/" data-tabs="timeline" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote style="display: none;" cite="https://www.facebook.com/Intogadgetstore/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/Intogadgetstore/">Intogadgets</a></blockquote></div>
+                </div>
+            </div>
         </div>
     </form>
 </div>

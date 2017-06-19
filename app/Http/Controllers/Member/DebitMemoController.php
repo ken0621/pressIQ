@@ -264,7 +264,6 @@ class DebitMemoController extends Member
             //CHECK IF SERIAL NUMBER IS EXISTING
             foreach ($item_serial as $key_item_serial => $value_item_serial)
             {
-
                 $check_qty_serial = ItemSerial::check_item_serial($value_item_serial);
 
                 if($check_qty_serial)
@@ -280,31 +279,30 @@ class DebitMemoController extends Member
                 }
             }
         }
-        dd($item_serial);
         if($data["status"] == null)
         {
             if($ctr_items != 0)
             {
                     $db_id = DebitMemo::postdb($vendor_info, $item_info);
 
+                    $transaction_type   = "debit_memo";
+                    $transaction_id     = $db_id;
                     if(count($product_consume) > 0)
                     {
-                        $transaction_type   = "debit_memo";
-                        $transaction_id     = $db_id;
                         if($vendor_info["type"] == 0)
                         {
                             $remarks            = "Consume by DEBIT MEMO #".$db_id;
                             $warehouse_id       = $this->current_warehouse->warehouse_id;
                             $data               = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume, 0, '' ,  'array', $transaction_type, $transaction_id,false,$item_serial);                        
                         }
-                        else
+                    }
+                    if($vendor_info["type"] == 1)
+                    {
+                        if(count($item_serial) > 0)
                         {
-                            if(count($item_serial) > 0)
+                            foreach ($item_serial as $key => $value) 
                             {
-                                foreach ($item_serial as $key => $value) 
-                                {
-                                    ItemSerial::consume_item_serial($value, $transaction_type, $transaction_id);
-                                }
+                                ItemSerial::consume_item_serial($value, $transaction_type, $transaction_id);
                             }
                         }
                     }

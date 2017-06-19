@@ -77,15 +77,17 @@
           <strong><i class="fa fa-book margin-r-5"></i>Date Joined</strong>
 
           <p class="text-muted">
-            {{$customer_info->created_date}}
+            @if(isset($slot_now->slot_created_date))
+            {{$slot_now->slot_created_date}}
+            @endif
           </p>
 
           <hr>
 
           <strong><i class="fa fa-map-marker margin-r-5"></i> Location</strong>
 
-          <p class="text-muted">{{address_customer_info($customer_info)}}</p>
-
+          <p class="text-muted">{{$customer_info->customer_full_address}}</p>
+          <!-- address_customer_infos -->
         </div>
         <!-- /.box-body -->
       </div>
@@ -151,13 +153,13 @@
                     </tr>
                     <tr>
                         <td>
-                            <label>Street</label>
+                            <label>Barangay</label>
                             <input id="first-name" name="customer_zipcode" class="form-control"  value="{{isset($customer_address->customer_zipcode) ? $customer_address->customer_zipcode : ''}}">
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label>Zip Code</label>
+                            <label>Full Address</label>
                             <input id="first-name" name="customer_street" class="form-control"  value="{{isset($customer_address->customer_street) ? $customer_address->customer_street : ''}}">
                         </td>
                     </tr>

@@ -6856,16 +6856,11 @@ class PayrollController extends Member
           foreach($record['_total'] as $total)
           {
                $total = round(n2z($total), 2);
-               // if($total == 0)
-               // {
-               //      $total = number_format(n2z($total), 2);
-               // }
                array_push($total_array, round(n2z($total), 2));
           }
           array_push($data, $total_array);
 
-          // dd($data);
-
+      
           $title    = Tbl_payroll_reports::where('payroll_reports_id', $payroll_reports_id)->pluck('payroll_reports_name');
 
           return Excel::create($title, function($excel) use ($data) {
@@ -6876,9 +6871,12 @@ class PayrollController extends Member
                $excel->setDescription('payroll file');
 
                $excel->sheet($date, function($sheet) use ($data) {
+
+                    $columns = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE','AF','AG','AH','AI'];
+
                     $sheet->fromArray($data, null, 'A1', true, false);
                     $sheet->setColumnFormat(array(
-                         'B:BZ' => '0.00'
+                         'B3:'.$columns[count($data[1]) - 1].count($data) => '#,##0.00',
                          ));
                });
 
@@ -6895,7 +6893,16 @@ class PayrollController extends Member
           $column_space       = array();
           
 
-          $_entity = collect(Tbl_payroll_entity::orderBy('entity_name')->get()->toArray())->groupBy('entity_category');
+          $_entity = collect(Tbl_payroll_entity::orderBy('entity_category')->orderBy('entity_name')->get()->toArray())->groupBy('entity_category');
+
+          $group = ['','Basic','Deductions','Deminimis','Goverment',''];
+
+          $header  = array();
+
+          $temp_header['name']     = '';
+          $temp_header['count']    = 1;
+
+          array_push($header, $temp_header);
 
           /* for column start */
           foreach($_entity as $key => $data_entity)
@@ -6910,6 +6917,20 @@ class PayrollController extends Member
                     {
                          array_push($columns, $entity['entity_name']);
                          array_push($column_space, '');
+
+                         /* check if column header exists */
+                         $search = collect($header)->search(ucfirst($entity['entity_category']));
+                         if($search == false)
+                         {
+                              $temp_header['name']     = ucfirst($entity['entity_category']);
+                              $temp_header['count']    = 1;
+                              array_push($header, $temp_header);
+                         }
+                         else
+                         {
+                              $header[$search]['count']++;
+                         }
+
                     }
 
 
@@ -6931,6 +6952,8 @@ class PayrollController extends Member
 
                }
           }
+
+          // dd($header);
 
           /* for column end */
 

@@ -6919,17 +6919,17 @@ class PayrollController extends Member
                          array_push($column_space, '');
 
                          /* check if column header exists */
-                         $search = collect($header)->search(ucfirst($entity['entity_category']));
-                         if($search == false)
-                         {
-                              $temp_header['name']     = ucfirst($entity['entity_category']);
-                              $temp_header['count']    = 1;
-                              array_push($header, $temp_header);
-                         }
-                         else
-                         {
-                              $header[$search]['count']++;
-                         }
+                         // $search = collect($header)->search(ucfirst($entity['entity_category']));
+                         // if($search == false)
+                         // {
+                         //      $temp_header['name']     = ucfirst($entity['entity_category']);
+                         //      $temp_header['count']    = 1;
+                         //      array_push($header, $temp_header);
+                         // }
+                         // else
+                         // {
+                         //      $header[$search]['count']++;
+                         // }
 
                     }
 

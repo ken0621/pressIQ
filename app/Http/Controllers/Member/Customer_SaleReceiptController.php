@@ -13,9 +13,11 @@ use App\Globals\Purchasing_inventory_system;
 use App\Globals\Transaction;
 use App\Globals\Customer;
 use App\Globals\ItemSerial;
+use App\Globals\Estimate;
 
 use App\Models\Tbl_customer;
 use App\Models\Tbl_item_bundle;
+use App\Models\Tbl_customer_estimate;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_credit_memo;
 use App\Models\Tbl_credit_memo_line;
@@ -47,6 +49,7 @@ class Customer_SaleReceiptController extends Member
 
     public function index()
     {
+        Session::forget('est_item');
         $data["page"]       = "Customer Sales Receipt";
 
         $data["serial"] = ItemSerial::check_setting();
@@ -60,10 +63,12 @@ class Customer_SaleReceiptController extends Member
         $data["action"]     = "/member/customer/sales_receipt/create";
         $data["new_inv_id"] = Transaction::get_last_number("tbl_customer_invoice","new_inv_id","inv_shop_id"); 
         $data["c_id"] = Request::input("customer_id");
+        $data["_estimate"] = Tbl_customer_estimate::where("est_customer_id",$data["c_id"])->where("est_status",'accepted')->get();
         $id = Request::input('id');
         if($id)
         {
             $data["inv"]            = Tbl_customer_invoice::where("inv_id", $id)->first();
+            $data["_estimate"] = Tbl_customer_estimate::where("est_customer_id",$data["inv"]->inv_customer_id)->where("est_status",'accepted')->get();
             
             $data["_invline"]       = Tbl_customer_invoice_line::um()->where("invline_inv_id", $id)->get();
             $data["_cmline"]       = Tbl_customer_invoice::returns_item()->where("inv_id", $id)->get();
@@ -334,6 +339,10 @@ class Customer_SaleReceiptController extends Member
                     if(str_replace(",","",Request::input("subtotal_price_returns")) < str_replace(",","",Request::input("overall_price")))
                     {
                          $inv_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info, "sales_receipt");
+                        if(count(Session::get('est_item')) > 0)
+                        {
+                            Estimate::update_all_estimate(Session::get('est_item'), $inv_id);
+                        }
                     
                         if($cm_customer_info != null && $cm_item_info != null)
                         {
@@ -627,6 +636,11 @@ class Customer_SaleReceiptController extends Member
                 if($ctr_item != 0)
                 {
                     $inv_id = Invoice::updateInvoice($invoice_id, $customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info,'sales_receipt');
+
+                    if(count(Session::get('est_item')) > 0)
+                    {
+                        Estimate::update_all_estimate(Session::get('est_item'), $inv_id);
+                    }
 
                     if($cm_customer_info != null && $cm_item_info != null)
                     {

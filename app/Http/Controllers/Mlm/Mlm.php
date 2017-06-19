@@ -43,7 +43,6 @@ class Mlm extends Controller
 
             Self::$shop_id = $session['shop_info']->shop_id;
             Self::$shop_info = $this->get_new_session_shop(Self::$shop_id);
-
             if($session['slot_now'])
             {
                 Self::$slot_id = $session['slot_now']->slot_id;

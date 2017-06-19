@@ -178,12 +178,12 @@
                             <ul style="display: none;">
                               <li>
                                   <a href="/mlm/genealogy/binary">
-                                      Binary Genealogy
+                                      Genealogy
                                   </a> 
                               </li>
                               <li>
                                 <a href="/mlm/network/binary">
-                                  Binary Network List
+                                  Network List
                                 </a>
                               </li>
                               @if(count($complan_repurchase) >=1)
@@ -280,7 +280,7 @@
                            </a>
                            <ul class="dropdown-menu dropdown-usermenu pull-right">
                               <li><a href="javascript:;"> Profile</a></li>
-                              <li>
+                              <li style="display:none;">
                                  <a href="javascript:;">
                                  <span class="badge bg-red pull-right">50%</span>
                                  <span>Settings</span>

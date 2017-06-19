@@ -258,7 +258,7 @@ class Mlm_complan_manager
             ->level()->distinct_level()->parentslot()->get();
             foreach($notify_max_level as $key => $value)
             {
-                $log = "Sorry, Your Slot has already reached the max level for binary. Slot " . $slot_info->slot_no . "'s binary points will not be added.";
+                $log = "Sorry, Your Slot has already reached the max level for matrix. Slot " . $slot_info->slot_no . "'s matrix points will not be added.";
                 $arry_log['wallet_log_slot']            = $value->slot_id;
                 $arry_log['shop_id']                    = $value->shop_id;
                 $arry_log['wallet_log_slot_sponsor']    = $slot_info->slot_id;
@@ -350,7 +350,7 @@ class Mlm_complan_manager
 
         foreach($notify_max_level as $key => $value)
         {
-            $log = "Sorry, Your Slot has already reached the max level for binary. Slot " . $slot_info->slot_no . "'s binary matrix income will not be added.";
+            $log = "Sorry, Your Slot has already reached the max level for matrix. Slot " . $slot_info->slot_no . "'s matrix income will not be added.";
             $arry_log['wallet_log_slot']            = $value->slot_id;
             $arry_log['shop_id']                    = $value->shop_id;
             $arry_log['wallet_log_slot_sponsor']    = $slot_info->slot_id;
@@ -425,7 +425,7 @@ class Mlm_complan_manager
                 {
                     $log = 
                     'Congratulations you earned ' . $bonus . 
-                    ' from binary single line. Slot sponsor: #' . $slot_info->slot_no;
+                    ' from matrix single line. Slot sponsor: #' . $slot_info->slot_no;
                     $arry_log['wallet_log_slot']            = $reciever->slot_id;
                     $arry_log['shop_id']                    = $slot_info->shop_id;
                     $arry_log['wallet_log_slot_sponsor']    = $slot_info->slot_id;
@@ -467,7 +467,7 @@ class Mlm_complan_manager
                     foreach ($slot_tree as $key => $slot) 
                     {
                         # code...
-                        $log = "You have Earned " . $bonus . ". from Binary Single Line Bonus. Sponsor: " . $slot_info->slot_no;
+                        $log = "You have Earned " . $bonus . ". from Matrix Single Line Bonus. Sponsor: " . $slot_info->slot_no;
                         $arry_log['wallet_log_slot']            = $slot->slot_id;
                         $arry_log['shop_id']                    = $slot->shop_id;
                         $arry_log['wallet_log_slot_sponsor']    = $slot->slot_id;
@@ -679,7 +679,7 @@ class Mlm_complan_manager
                                     }
                                     if($earning_2 == 0)
                                     {
-                                        $log = "You have reached your binary max income, " . $earning . " will not be added.";
+                                        $log = "You have reached your matrix max income, " . $earning . " will not be added.";
                                         $arry_log['wallet_log_slot']            = $slot->slot_id;
                                         $arry_log['shop_id']                    = $slot->shop_id;
                                         $arry_log['wallet_log_slot_sponsor']    = $slot->slot_id;
@@ -702,7 +702,7 @@ class Mlm_complan_manager
                                         
                                         if($earning_2 >= $earning)
                                         {
-                                            $log = "Congratulations! You Paired ".$pair_this_pairing." From Slot " .$slot->slot_no ." Earned " . $earning . " By Binary Pairing Bonus and flushed " . $flush;
+                                            $log = "Congratulations! You Paired ".$pair_this_pairing." From Slot " .$slot->slot_no ." Earned " . $earning . " By Matrix Pairing Bonus and flushed " . $flush;
                                             $arry_log['wallet_log_slot']            = $slot->slot_id;
                                             $arry_log['shop_id']                    = $slot->shop_id;
                                             $arry_log['wallet_log_slot_sponsor']    = $slot->slot_id;
@@ -725,7 +725,7 @@ class Mlm_complan_manager
                                         {
 
                                             $max_income_a = $earning - $earning_2;
-                                            $log = "You have reached your binary max income, " . $max_income_a . " will not be added.";
+                                            $log = "You have reached your matrix max income, " . $max_income_a . " will not be added.";
                                             $arry_log['wallet_log_slot']            = $slot->slot_id;
                                             $arry_log['shop_id']                    = $slot->shop_id;
                                             $arry_log['wallet_log_slot_sponsor']    = $slot->slot_id;
@@ -746,7 +746,7 @@ class Mlm_complan_manager
 
 
                                             $earning_less_max = $earning - $max_income_a;
-                                            $log = "Congratulations! You Paired ".$pair_this_pairing." From Slot " .$slot->slot_no ." Earned " . $earning_less_max . " By Binary Pairing Bonus and flushed " . $flush;
+                                            $log = "Congratulations! You Paired ".$pair_this_pairing." From Slot " .$slot->slot_no ." Earned " . $earning_less_max . " By Matrix Pairing Bonus and flushed " . $flush;
                                             $arry_log['wallet_log_slot']            = $slot->slot_id;
                                             $arry_log['shop_id']                    = $slot->shop_id;
                                             $arry_log['wallet_log_slot_sponsor']    = $slot->slot_id;

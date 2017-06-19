@@ -18,9 +18,61 @@ use App\Globals\Pdf_global;
 use Input;
 use File;
 use App\Globals\Mlm_repurchase_member;
+use App\Models\Tbl_tree_sponsor;
+use App\Globals\Mlm_slot_log;
 class MlmProfileController extends Mlm
 {
-    public function index()
+	public function index()
+	{
+		$data['customer_info'] = Tbl_customer::where('tbl_customer.customer_id', Self::$customer_id)
+		// ->info()
+		->first();
+
+		$data['slot_info'] = Tbl_mlm_slot::where('slot_id', Self::$slot_id)
+		->join('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_mlm_slot.slot_membership')
+		->first();
+
+		$data['direct_count'] = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)
+		->where('sponsor_tree_level', 1)
+		->count();
+
+		$data['current_wallet'] = Mlm_slot_log::get_sum_wallet(Self::$slot_id);
+
+		$data['country'] = DB::table('tbl_country')->get();
+		$data['customer_address'] = DB::table('tbl_customer_address')->where('customer_id', Self::$customer_id)->first();
+    	$data['other_info'] = DB::table('tbl_customer_other_info')->where('customer_id', Self::$customer_id)->first();
+    	$data['cus_info'] = Mlm_member::get_customer_info(Self::$customer_id);
+
+    	if(Self::$slot_id != null)
+    	{
+    		$access['PhilTECH'] = 'PhilTECH';
+    		$access['sovereign'] = 'sovereign';
+    		$access['alphaglobal'] = 'alphaglobal';
+    		if(isset($access[Self::$shop_info->shop_key]))
+    		{
+    			$shop_id = Self::$shop_id;
+    			$data['cus_info'] = Mlm_member::get_customer_info_w_slot(Self::$customer_id, Self::$slot_id);
+	    		$data['card'] = $this->card(Self::$slot_id);
+	    		$data['bank'] = DB::table('tbl_encashment_bank_deposit')->where('shop_id', Self::$shop_id)->where('encashment_bank_deposit_archive', 0)->get();
+	    		$data['customer_payout'] = DB::table('tbl_customer_payout')->where('customer_id', Self::$customer_id)->first();
+	    		$data['encashment_settings'] = Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->first();
+
+	    		$data['encashment'] =  view('mlm.profile.encashment', $data);
+	    		if(Request::input('pdf') == 'true')
+	    		{
+	    			return Pdf_global::show_image($data['card']);
+	    		}
+    		}
+    	}
+    	$data['new_member'] = Tbl_mlm_slot::where('slot_sponsor', Self::$slot_id)
+    	->customer()
+    	->orderBy('slot_id', 'DESC')
+    	->take(6)
+    	->get();
+
+		return view('mlm.profile.profilev2', $data);
+	}
+    public function index2()
     {
     	$data = [];
     	$data['country'] = DB::table('tbl_country')->get();
@@ -43,13 +95,10 @@ class MlmProfileController extends Mlm
 	    		{
 	    			return Pdf_global::show_image($data['card']);
 	    		}
-
-	    		
-            	// dd($data);
     		}
     	}
 
-    	return view('mlm.profile.new', $data);
+    	return view('mlm.profile.profilev2', $data);
     }
     public function password()
     {

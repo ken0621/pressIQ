@@ -28,13 +28,13 @@ use App\Models\Tbl_email_template;
 use App\Globals\EmailContent;
 use App\Globals\Mlm_plan;
 use App\Models\Tbl_mlm_item_points;
+use App\Globals\Ec_order;
 use Mail;
 use App\Globals\Accounting;
 class Item_code
 {
 	public static function add_code($data,$shop_id, $user_id, $warehouse_id)
 	{ 
-
         ignore_user_abort(true);
         set_time_limit(0);
         flush();
@@ -189,6 +189,7 @@ class Item_code
         $tendered = 0;
         $tendered_amount = 0;
         $data['response_status']      = "warning";
+
         if(isset($data['payment_type_choose']))
         {
             if($data['payment_type_choose'] == '3')
@@ -308,7 +309,6 @@ class Item_code
         $item_discount            = 0;
         $item_discount_percentage = 0;
 
-        
     	$validator = Validator::make($insert,$rules,$messages);
     	if ($validator->passes())
     	{
@@ -540,7 +540,6 @@ class Item_code
                         
                         }
                         Tbl_item_code_item::insert($insert_item_per);
-                        
                         Mlm_voucher::give_voucher_prod_code($invoice_id);
                         if($gc == 2)
                         {
@@ -756,7 +755,64 @@ class Item_code
     public static function completed_order_action($order_id)
     {
         Item_code::give_item_code_ec_order($order_id);
+        Ec_order::create_merchant_school_item($order_id);
         Item_code::merchant_school_active_codes($order_id);
+        Item_code::ec_order_slot($order_id);
+    }
+    public static function ec_order_slot($order_id)
+    {
+        $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
+        $tbl_ec_order_slot = DB::table('tbl_ec_order_slot')->where('order_slot_ec_order_id', $order_id)->first();
+        if($tbl_ec_order_slot)
+        {
+            if($tbl_ec_order_slot->order_slot_customer_id    != 0 &&  $tbl_ec_order_slot->order_slot_used           != 1)
+            {
+                $table_ec_order_slot = $tbl_ec_order_slot;
+                $tbl_ec_order_item = DB::table('tbl_ec_order_item')->where('ec_order_id', $order_id)
+                ->get();
+                if($tbl_ec_order_item)
+                {
+                    foreach ($tbl_ec_order_item as $key => $order_item) 
+                    {
+                        $tbl_ec_variant = DB::table('tbl_ec_variant')
+                                            ->where('evariant_id', $order_item->item_id)
+                                            ->join("tbl_ec_product","eprod_id","=","evariant_prod_id")
+                                            ->get();                                
+                        if($tbl_ec_variant)
+                        {
+                            foreach ($tbl_ec_variant as $v_key => $v_value) 
+                            {
+                                if($v_value->ec_product_membership != 0)
+                                {
+                                    $shop_id = $order->shop_id; 
+                                    $insert['slot_no'] = Mlm_plan::set_slot_no($shop_id, $v_value->ec_product_membership);
+                                    $insert['shop_id'] = $shop_id;
+                                    $insert['slot_owner'] = $tbl_ec_order_slot->order_slot_customer_id;
+                                    $insert['slot_created_date'] = Carbon::now();
+                                    $insert['slot_membership'] =    $v_value->ec_product_membership;
+                                    $insert['slot_status'] = 'PS';
+                                    if($tbl_ec_order_slot->order_slot_sponsor != 0)
+                                    {
+                                         // $insert['slot_placement'] = $tbl_ec_order_slot->order_slot_sponsor;
+                                    }
+                                    if($tbl_ec_order_slot->order_slot_sponsor != 0)
+                                    {
+                                         $insert['slot_sponsor'] = $tbl_ec_order_slot->order_slot_sponsor;
+                                    }
+                                    $id = Tbl_mlm_slot::insertGetId($insert);
+                                    $a = Mlm_compute::entry($id);
+
+                                    $update_s['order_slot_used'] = 1;
+                                    DB::table('tbl_ec_order_slot')->where('order_slot_ec_order_id', $order_id)->update($update_s);
+
+                                    Mlm_member::add_to_session_edit($shop_id, $tbl_ec_order_slot->order_slot_customer_id, $id);
+                                }
+                            }
+                        }                 
+                    }
+                }
+            }
+        }
     }
     public static function insert_product_merchant_school($order_id)
     {
@@ -774,6 +830,10 @@ class Item_code
             $insert['merchant_school_amount'] = $value->merchant_school_i_amount;
             // $insert['merchant_school_s_id'] = 
             // $insert['merchant_school_s_name'] = 
+            if($all_wallet == null)
+            {
+                $all_wallet = 0;
+            }
             $insert['merchant_school_remarks'] = 'Top up from E-commerce order';
             $insert['merchant_school_date'] = Carbon::now();
             $insert['merchant_school_custmer_id'] = $value->merchant_item_customer_id;

@@ -399,6 +399,24 @@ function write_check()
 
 			}
 		});
+		$('.drop-down-name').globalDropList(
+		{ 
+			width : "100%",
+			hasPopup : "false",
+		    placeholder : 'Customer or Vendor',
+			onChangeValue: function()
+			{
+				$(".customer-email").val($(this).find("option:selected").attr("email"));
+				$(".wc-ref-name").val($(this).find("option:selected").attr("reference"));
+				if($(this).find("option:selected").attr("reference") == "vendor")
+				{
+					load_purchase_order_vendor($(this).find("option:selected").attr("value"));
+				}
+			}
+		});
+
+
+		
 		$(".drop-down-customer").globalDropList(
 		{
 		    link 		: '/member/customer/modalcreatecustomer',
@@ -631,10 +649,10 @@ function submit_done_customer(result)
 function submit_done_item(data)
 {
 	toastr.success("Success");
-    $(".tbody-item .select-item").load("/member/item/load_item_category", function()
+    item_selected.load("/member/item/load_item_category", function()
     {                
-         $(".tbody-item .select-item").globalDropList("reload"); 
-         item_selected.val(data.item_id).change();  
+         $(this).globalDropList("reload"); 
+         $(this).val(data.item_id).change();  
     });
     data.element.modal("hide");
 }
@@ -665,10 +683,11 @@ function submit_done(data)
        toastr.success("Success");
 	    $(".droplist-vendor").load("/member/vendor/load_vendor", function()
 	    {                
-	         $(".droplist-vendor").globalDropList("reload");
-	         $(".droplist-vendor").val(data.vendor_id).change();          
+	         $(this).globalDropList("reload");
+	         $(this).val(data.vendor_id).change();          
 	    });
     	data.element.modal("hide");
+    	console.log(data);
 	}
 	else if(data.status == 'success-write-check')
 	{		

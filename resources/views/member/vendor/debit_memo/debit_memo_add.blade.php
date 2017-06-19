@@ -9,7 +9,7 @@
             <div>
                 <i class="fa fa-tags"></i>
                 <h1>
-                    <span class="page-title">Create {{strtoupper(str_replace("_"," ",Request::input('type')))}}</span>
+                    <span class="page-title">Create {{$type or ''}}</span>
                     <small>
                     
                     </small>

@@ -63,7 +63,7 @@ body{
 				font-size: 36px;
 				line-height: 38px;
 			}
-			@media screen and (max-width: 500px)
+			@media screen and (max-width: 375px)
 			{
 				font-size: 30px;
 				line-height: 35px;
@@ -71,6 +71,10 @@ body{
 			@media screen and (max-width: 360px)
 			{
 				font-size: 26px;
+			}
+			@media screen and (max-width: 320px)
+			{
+				font-size: 22px;
 			}
 		}
 		.slider-title-details{
@@ -98,16 +102,16 @@ body{
 	font-family: 'Fjalla One', sans-serif;
 	font-size: 26px;
 	color: #151515;
-	padding: 0px 0px 15px 10px;
 	
-	@media screen and (max-width: 500px)
-	{
-		padding: 15px 0px 10px 5px;
-	}
 	@media screen and (max-width: 960px)
 	{
 		padding: 15px 0px 10px 5px;
 	}
+	@media screen and (max-width: 500px)
+	{
+		padding: 15px 0px 10px 5px;
+	}
+
 }
 /* OUR LATEST NEWS */
 
@@ -140,34 +144,48 @@ body{
 
 	.news-details{
 		padding-left: 10px;
-		@media screen and (max-width: 960px)
+		@media screen and (max-width: 900px)
 		{
 
 			width: 80%;
 			float: right;
-			margin-top: -142px;
+			margin-top: -127px;
+		}
+		@media screen and (max-width: 768px)
+		{
+
+			width: 80%;
+			float: right;
+			margin-top: -108px;
 		}
 		@media screen and (max-width: 600px)
 		{
 
 			width: 80%;
 			float: right;
-			margin-top: -90px;
+			margin-top: -84px;
 		}
-		@media screen and (max-width: 500px)
+		@media screen and (max-width: 414px)
 		{
 
 			width: 60%;
 			float: right;
-			margin-top: -139px;
+			margin-top: -111px;
 		}
-		@media screen and (max-width: 420px)
+		@media screen and (max-width: 375px)
 		{
-			margin-top: -120px;
+
+			width: 60%;
+			float: right;
+			margin-top: -99px;
 		}
 		@media screen and (max-width: 360px)
 		{
-			margin-top: -105px;
+			margin-top: -91px;
+		}
+		@media screen and (max-width: 320px)
+		{
+			margin-top: -83px;
 		}
 	}
 	.news-title{
@@ -232,14 +250,16 @@ body{
 	padding: 25px 10px 25px 10px;
 
 	.btn-container{
-			padding: 15px;
+			padding: 14px;
 			float: right;
-			@media screen and (max-width: 960px)
+			@media screen and (max-width: 900px)
 			{
+				padding: 15px 0px 15px 20px;
 				float: left;
 			}
-			@media screen and (max-width: 500px)
+			@media screen and (max-width: 600px)
 			{
+				padding: 15px 0px 15px 0px;
 				float: left;
 			}
 
@@ -248,9 +268,24 @@ body{
 				color: #fff;
 				font-size: 14px;
 				background-color: #252728;
-				padding: 13px 57px 13px 57px;
+				padding: 13px 40px 13px 40px;
 				border: solid 3px #252728;
 				border-radius: 4px;
+				@media screen and (max-width: 375px)
+				{
+					float: left;
+					padding: 13px 126px 13px 126px;
+				}
+				@media screen and (max-width: 360px)
+				{
+					float: left;
+					padding: 13px 118px 13px 118px;
+				}
+				@media screen and (max-width: 320px)
+				{
+					float: left;
+					padding: 13px 98px 13px 98px;
+				}
 			}
 			.learn-more-btn:hover{
 				background-color: transparent;
@@ -268,6 +303,10 @@ body{
 			font-size: 26px;
 			color: #252728;
 			padding-left: 20px;
+			@media screen and (max-width: 600px)
+			{
+				padding-left: 0px;
+			}
 
 			.highlight{
 				color: #fff;
@@ -280,6 +319,10 @@ body{
 			font-size: 14px;
 			font-weight: 500;
 			padding-left: 20px;
+			@media screen and (max-width: 600px)
+			{
+				padding-left: 0px;
+			}
 
 		}		
 	}
@@ -334,30 +377,10 @@ body{
 				}
 
 				.gallery-img-holder{
-					
-					padding-bottom: 32px;
-					@media screen and (max-width: 600px)
-					{
-						padding-bottom: 0px;
-					}
-					@media screen and (max-width: 500px)
-					{
-						padding-bottom: 0px;
-					}
 
 					img{
 						width: 100%;
 						border: 3px solid #fff;
-						@media screen and (max-width: 600px)
-						{
-							width: 50%;
-							float: left;
-						}
-						@media screen and (max-width: 500px)
-						{
-							width: 50%;
-							float: left;
-						}
 
 						&:hover{
 							cursor: pointer;
@@ -367,10 +390,7 @@ body{
 							box-shadow:1px 1px 16px rgba(0,0,0,1);
 						}
 					}
-					&:last-child
-					{
-						padding-bottom: 0;
-					}
+
 				}
 			}
 			.carousel-control{
@@ -395,22 +415,37 @@ body{
 			.carousel-control.left{
 				background-image: linear-gradient(to right,rgba(0,0,0,.5) 20%,rgba(0,0,0,.0001) 100%);
 				background-repeat: repeat-x;
+				@media screen and (max-width: 600px)
+				{
+					background-image: none;
+				}
 				img{
 					position: relative;
 					left: -5px;
+					top: 8px;
 					@media screen and (max-width: 600px)
 					{
-						left: 435px;
+						left: 482px;
 						top: -140px;
 					}
-					@media screen and (max-width: 500px)
+					@media screen and (max-width: 414px)
 					{
-						left: 290px;
+						left: 302px;
 						top: -114px;
 					}
-					@media screen and (max-width: 500px)
+					@media screen and (max-width: 375px)
 					{
-						left: 250px;
+						left: 267px;
+						top: -114px;
+					}
+					@media screen and (max-width: 360px)
+					{
+						left: 255px;
+					}
+					@media screen and (max-width: 320px)
+					{
+						left: 210px;
+						top: -105px;
 					}
 				}
 				&:hover{
@@ -422,19 +457,34 @@ body{
 				left: auto;
 				background-image: linear-gradient(to right,rgba(0,0,0,.0001) 20%,rgba(0,0,0,.5) 100%);
 				background-repeat: repeat-x;
+				@media screen and (max-width: 600px)
+				{
+					background-image: none;					
+				}
 				img{
 					position: relative;
 					right: -5px;
+					top: 8px;
 					@media screen and (max-width: 600px)
 					{
 						right: 0px;
 						top: -140px;
 					}
-					@media screen and (max-width: 500px)
+					@media screen and (max-width: 414px)
 					{
 						right: 0px;
 						top: -114px;
 					}
+					@media screen and (max-width: 375px)
+					{
+						right: 0px;
+						top: -114px;
+					}
+					@media screen and (max-width: 320px)
+					{
+						top: -105px;
+					}
+
 				}
 				&:hover{
 					background-image: linear-gradient(to left,rgba(0,0,0,.5) 40%,rgba(0,0,0,.0001) 100%);
@@ -456,17 +506,18 @@ body{
 	.btn-container{
 			padding: 55px 15px 0px 0px;
 			float: right;
-			@media screen and (max-width: 960px)
+			@media screen and (max-width: 900px)
 			{
+				padding: 15px 0px 15px 20px;
+				margin-top: -5px;
 				float: left;
-				padding-left: 20px;
-				margin-top: -36px;
 			}
-			@media screen and (max-width: 500px)
+
+			@media screen and (max-width: 600px)
 			{
+				padding: 15px 0px 15px 0px;
+				margin-top: -5px;
 				float: left;
-				padding-left: 20px;
-				margin-top: -36px;
 			}
 
 			.learn-more-btn{
@@ -477,6 +528,22 @@ body{
 				padding: 10px 30px 10px 30px;
 				border: none;
 				border-radius: 4px;
+
+				@media screen and (max-width: 375px)
+				{
+					float: left;
+					padding: 13px 126px 13px 126px;
+				}
+				@media screen and (max-width: 360px)
+				{
+					float: left;
+					padding: 13px 118px 13px 118px;
+				}
+				@media screen and (max-width: 320px)
+				{
+					float: left;
+					padding: 13px 98px 13px 98px;
+				}
 			}
 		}
 
@@ -488,6 +555,10 @@ body{
 			font-size: 26px;
 			color: #252728;
 			padding-left: 20px;
+			@media screen and (max-width: 600px)
+			{
+				padding-left: 0px;
+			}
 
 		}
 		.bottom-container-details{
@@ -496,6 +567,10 @@ body{
 			padding-left: 20px;
 			padding-top: 10px;
 			line-height: 20px;
+			@media screen and (max-width: 600px)
+			{
+				padding-left: 0px;
+			}
 
 		}		
 	}

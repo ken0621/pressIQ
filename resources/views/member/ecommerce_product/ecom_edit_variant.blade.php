@@ -16,6 +16,7 @@
             @endif
             <li class="{{$default == 3 ? 'active' : ''}} cursor-pointer tab" data-id="3"><a class="cursor-pointer" data-toggle="tab" href="#price"><i class="fa fa-info"></i> Price</a></li>
             <li class="{{$default == 4 ? 'active' : ''}} cursor-pointer tab" data-id="4"><a class="cursor-pointer" data-toggle="tab" href="#image"><i class="fa fa-picture-o"></i> Images</a></li>
+            <li class="{{$default == 5 ? 'active' : ''}} cursor-pointer tab" data-id="5"><a class="cursor-pointer" data-toggle="tab" href="#detail"><i class="fa fa-info-circle" aria-hidden="true"></i> Detail</a></li>
         </ul> 
     </div>
 
@@ -99,7 +100,7 @@
                 <div class="form-box-divider">
                     <div class="clearfix">
                         <div class="title pull-left">Images</div>
-                        <a class="image-button pull-right image-gallery" href="javascript:"><i class="fa fa-hand-o-up"></i> Select Image</a>
+                        <a class="image-button pull-right image-gallery" href="javascript:" key="product-variant"><i class="fa fa-hand-o-up"></i> Select Image</a>
                         <input id="product-main-image" type="hidden" name="product_main_image" value="">
                     </div>
                     <div class="dividers half"></div>
@@ -146,6 +147,18 @@
                             @endif
                             </span>
                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade in {{$default == 5 ? 'active' : ''}}" id="detail">
+            <div class="clearfix row">
+                <div class="form-group col-md-6 col-md-offset-3">
+                    <label>Product Detail (Image)</label>
+                    <input class="product-detail-value" type="hidden" name="eprod_detail_image">
+                    <div class="product-detail-image" style="padding-bottom: 75%; height: 0; background-color: #ddd; background-position: center; background-size: contain; background-repeat: no-repeat; {{ $product->eprod_detail_image ? 'background-image: url("' . $product->eprod_detail_image . '")' : '' }}"></div>
+                    <div style="margin-top: 15px;">
+                        <button style="width: 100%;" class="image-gallery image-gallery-single btn btn-primary" key="product-detail"> Upload</div>
                     </div>
                 </div>
             </div>

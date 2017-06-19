@@ -16,7 +16,7 @@
 					@if(session("error"))
 					    <div class="alert alert-danger">
 					        <ul>
-					                <li>{{ session("error") }}</li>
+					        	<li>{{ session("error") }}</li>
 					        </ul>
 					    </div>
 					@endif

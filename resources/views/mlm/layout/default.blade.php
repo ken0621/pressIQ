@@ -148,7 +148,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <i class="fa fa-bell-o"></i>
               <span class="label label-warning">@if(isset($notification_count)) @if($notification_count >= 1) ({{$notification_count}}) @else 0 @endif @else 0 @endif</span>
             </a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu" style="width: 350px !important">
               <li class="header">You have @if(isset($notification_count)) @if($notification_count >= 1) ({{$notification_count}}) @else 0 @endif @else 0 @endif notifications</li>
               <li>
                 <!-- Inner Menu: contains the notifications -->
@@ -157,7 +157,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     @foreach($notification as $key => $value)
                     <li><!-- start notification -->
                       <a href="/mlm/notification">
-                        <i class="fa fa-users text-aqua"></i> {{$value->wallet_log_details}}
+                        <!-- <i class="fa fa-users text-aqua"></i> {{$value->wallet_log_details}} -->
+                        <div class="box-comment">
+                          <!-- User image -->
+                          <img class="img-circle img-sm" src="{{mlm_profile_link($value)}}" alt="User Image">
+
+                          <div class="comment-text">
+                                <span class="username">
+                                  {{$value->slot_no}}
+                                  <span class="text-muted pull-right">{{$value->wallet_log_date_created}}</span>
+                                  <br>
+                                  <?php 
+                                    $in = $value->wallet_log_details;
+                                    $out = strlen($in) > 40 ? substr($in,0,40)."..." : $in;
+                                    echo $out;
+                                  ?>
+                                </span><!-- /.username -->
+                                <br>
+                                <span class="text-muted"><p></p></span>
+                            
+                          </div>
+                          <!-- /.comment-text -->
+                        </div>
                       </a>
                     </li>
                     @endforeach
@@ -308,8 +329,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <span class="nav-text">Profile</span>
                     </a>
                 </li>
+                <?php 
+                $access_repurchase['alphaglobal'] = '/mlm/repurchase';
+                $link_repurchase = '/mlm/repurchase';
+                if(!isset($access_repurchase[$shop_info->shop_key]))
+                {
+                  $link_repurchase = '/';
+                }
+                ?>
                 <li class="{{Request::segment(2) == 'repurchase' ? 'active' : '' }}">
-                    <a href="/">
+                    <a href="{{$link_repurchase}}">
                         <i class="icon-shopping-cart nav-icon"></i>
                         <span class="nav-text">Repurchase</span>
                     </a>
@@ -461,9 +490,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 Wallet Encashment
                             </a> 
                             @if($shop_info->shop_wallet_tours == 1)
-                              <a href="/mlm/wallet/tours" class="subnav-text">
-                                  Tour Wallet
-                              </a> 
+                                <a href="/mlm/wallet/tours" class="subnav-text">
+                                    Airline Wallet
+                                </a> 
                             @endif
                         </li>
                     </ul> 
@@ -472,6 +501,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <a href="/mlm/slots">
                         <i class="fa fa-linode"></i>
                         <span class="nav-text">My Slots</span>
+                    </a>
+                </li>
+                <li  class="{{Request::segment(2) == 'lead' ? 'active' : '' }}">
+                    <a href="/mlm/lead">
+                        <i class="fa fa-address-card"></i>
+                        <span class="nav-text">Leads</span>
                     </a>
                 </li> 
                 @endif                   
@@ -494,7 +529,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <div class="content-wrapper clearfix">
     <!-- Content Header (Page header) -->
     <section class="content-header hide">
-      <h1>
+      <h1>mai
         Page Header
         <small>Optional description</small>
       </h1>

@@ -1,4 +1,4 @@
-\@extends('member.layout')
+@extends('member.layout')
 @section('content')
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
@@ -81,13 +81,15 @@
 								                        	</select>
 								                        </div>
 								                        <div class="row form-group text-left">
-								                        	<div class="col-md-6">
-								                        		<label>Charge Value</label>
-								                        		<input type="text" class="form-control float-format" name="link_discount_fixed" value="{{$method->link_discount_fixed or 0}}">
-								                        	</div>
-								                        	<div class="col-md-6">
-								                        		<label>Charge Percentage</label>
-								                        		<input type="text" class="form-control int-format" name="link_discount_percentage" value="{{$method->link_discount_percentage or 0}}">
+								                        	<div class="row clearfix">
+								                        		<div class="col-md-6">
+									                        		<label>Charge Value</label>
+									                        		<input type="text" class="form-control float-format" name="link_discount_fixed" value="{{$method->link_discount_fixed or 0}}">
+									                        	</div>
+									                        	<div class="col-md-6">
+									                        		<label>Charge Percentage</label>
+									                        		<input type="text" class="form-control int-format" name="link_discount_percentage" value="{{$method->link_discount_percentage or 0}}">
+									                        	</div>
 								                        	</div>
 								                        </div>
 								                        <div class="row form-group text-left">
@@ -125,24 +127,35 @@
 			            </div>
 			            <div class="col-md-10">
 				            <div class="tab-content">
-
 				            	@foreach($_gateway as $key=>$gateway)
 					            	<div class="tab-pane fade in {{$key == 0 ? 'active' : ''}}" id="{{$gateway->gateway_code_name}}">
 					            		<form class="global-submit" action="/member/maintenance/online_payment/save-gateway" method="post">
 					            			<input type="hidden" name="_token" value="{{ csrf_token() }}">
 						            		<input type="hidden" name="gateway_code_name" class="form-control input-sm" value="{{$gateway->gateway_code_name}}">
 						            		<input type="hidden" name="api_gateway_id" class="form-control input-sm" value="{{$gateway->gateway_id}}">
-						            		@if($gateway->gateway_code_name != 'other')
+						            		@if($gateway->gateway_code_name == 'cashondelivery')
 								                <div class="form-group col-md-12">
-								                    <label>{{ $gateway->gateway_code_name == "ipay88" ? 'Merchant Code' : 'Client ID'}}</label>
+								                    <label>{{ $gateway->gateway_first_label }}</label>
+								                    <input type="text" name="api_client_id" class="form-control input-sm" value="Cash on delivery" disabled>
+								                </div>
+								                <div class="form-group col-md-12">
+								                    <label>{{ $gateway->gateway_second_label }}</label>
+								                    <input type="text" name="api_secret_id" class="form-control input-sm" value="Cash on delivery" disabled>
+								                </div>
+								                <div class="col-md-12">
+								            		<button type="submit" class="panel-buttons btn btn-custom-primary pull-right">Save</button>
+								            	</div>
+						            		@elseif($gateway->gateway_code_name != 'other')
+								                <div class="form-group col-md-12">
+								                    <label>{{ $gateway->gateway_first_label }}</label>
 								                    <input type="text" name="api_client_id" class="form-control input-sm" value="{{$gateway->api_client_id or ''}}">
 								                </div>
 								                <div class="form-group col-md-12">
-								                    <label>{{ $gateway->gateway_code_name == "ipay88" ? 'Merchant Key' : 'Secret ID'}}</label>
+								                    <label>{{ $gateway->gateway_second_label }}</label>
 								                    <input type="text" name="api_secret_id" class="form-control input-sm" value="{{$gateway->api_secret_id or ''}}">
 								                </div>
 								                <div class="col-md-12">
-								            		<button type="submit" class="panel-buttons btn btn-custom-primary pull-right">save</button>
+								            		<button type="submit" class="panel-buttons btn btn-custom-primary pull-right">Save</button>
 								            	</div>
 							                @else
 							                	<div class="other-load-data">
@@ -158,7 +171,6 @@
 									                </div>
 								                </div>
 						                    @endif
-						                    
 						                </form>
 					            	</div>
 					            @endforeach

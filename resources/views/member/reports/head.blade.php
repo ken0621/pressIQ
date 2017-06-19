@@ -2,6 +2,7 @@
     .table
     {
         width: inherit;
+        min-width: 650px;
         margin: auto;
     }
     
@@ -13,6 +14,9 @@
     .panel-report
     {
         display: inline-block;
+        width: 100%;
+        overflow-x: scroll;
+
     }
 </style>
 
@@ -42,15 +46,8 @@
             minusButton: '&#9660; '
         });
 
-        if(collapse = false)
-        {
-            $(".act-more").closest("tr").find(".total-report").addClass("hide");
-        }
-        else
-        {
-            $(".act-more").closest("tr").find(".total-report").removeClass("hide");
-        }
-
+        if(collapse)    $(".act-more").closest("tr").find(".total-report").removeClass("hide");
+        else            $(".act-more").closest("tr").find(".total-report").addClass("hide");
     }
 
     $(document).on("click", ".act-more", function()

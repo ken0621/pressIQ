@@ -15,7 +15,8 @@
         <link rel="stylesheet" type="text/css" href="resources/assets/login/css/animate-custom.css" />
         <!-- CUSTOM CSS -->
         <link rel="stylesheet" href="assets/external/jquery_css/jquery-ui.css">
-        <link rel="stylesheet" href="assets/member/styles/92bc1fe4.bootstrap.css">
+        <!-- <link rel="stylesheet" href="assets/member/styles/92bc1fe4.bootstrap.css"> -->
+        <link href="assets/member-theme/myphone/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="assets/member/styles/vendor/jquery.pnotify.default.css">
         <link rel="stylesheet" href="assets/member/styles/vendor/select2/select2.css">
         <link rel="stylesheet" href="assets/member/styles/vendor/datatables.css" media="screen"/> 
@@ -42,9 +43,9 @@
         (function () {
         var js;
         if (typeof JSON !== 'undefined' && 'querySelector' in document && 'addEventListener' in window) {
-        js = '/assets/external/jquery.minv2.js';
+        js = 'assets/external/jquery.minv2.js';
         } else {
-        js = '/assets/external/jquery.minv1.js';
+        js = 'assets/external/jquery.minv1.js';
         }
         document.write('<script src="' + js + '"><\/script>');
         }());
@@ -101,7 +102,7 @@
                                     <span>Don't have an account yet?</span>
                                 </div>
                                 <p class="register button"> 
-                                    <input type="button" value="Create an Account" onClick="location.href='/mlm/register'" /> 
+                                    <input type="button" value="Create an Account" onClick="location.href='/member/register'" /> 
                                 </p>
                                 <p>
                                     <a href="/mlm/login/forgot_password" style="text-decoration: none">Forgot Password ?</a>
@@ -112,9 +113,30 @@
                 </div>  
             </section>
         </div>
+        <div class="modal fade" id="modal_notify" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content clearfix">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                {!! $notify_data !!}
+              </div>
+            </div>
+          </div>
+        </div>
+
         <script type="text/javascript" src="assets/member/global.js"></script>
         <script type="text/javascript" src="assets/member/plugin/toaster/toastr.min.js"></script>
+        <script src="assets/member-theme/myphone/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+
         <script type="text/javascript">
+
+        @if($notify == 1)
+            $('#modal_notify').modal('toggle');
+        @endif
         function submit_done(data)
         {
             console.log(data);

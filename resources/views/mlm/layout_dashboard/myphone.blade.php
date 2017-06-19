@@ -3,25 +3,23 @@
    @if($slot_start_status)
       {!! $slot_start_status !!}
    @else
-   <div class="col-md-6">
+   <div class="col-md-4">
       <div class="box box-primary">
-        <div class="box-body">
-          <canvas id="doughnut-chart" width="800" height="450"></canvas>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="box box-primary">
-        <div class="box-body">
+        <div class="box-header">
           <center>Matrix Per Level</center>
+        </div>
+        <div class="box-body">
+          
           <table class="table">
             <th>Level</th>
             <th>Count</th>
+            <th>Percentage</th>
 
             @foreach($count_per_level as $key => $value)
-              <tr>
+              <tr class="width_tr_a" percentage="@if(isset($tree_count[$key])){{($tree_count[$key]->count_slot/$value) * 100}}@else{{0}}@endif">
                 <td>{{$key}}</td>
                 <td>@if(isset($tree_count[$key])) {{$tree_count[$key]->count_slot}}/{{$value}} @else 0/{{$value}} @endif</td>
+                <td>@if(isset($tree_count[$key])){{($tree_count[$key]->count_slot/$value) * 100}}@else{{0}}@endif %</td>
               </tr>
             @endforeach
 
@@ -29,6 +27,71 @@
         </div>
       </div>
     </div>
+     <div class="col-md-4">
+        <div class="box box-primary">
+          <div class="box-body">
+            <canvas id="doughnut-chart" width="800" height="450"></canvas>
+          </div>
+        </div>
+      </div>
+    
+      @if(isset($new_member))
+      <div class="col-md-4">
+        <div class="box box-success">
+          <div class="box-header with-border">
+            <h3 class="box-title">New Referral</h3>
+
+            <div class="box-tools pull-right">
+              <span class="label label-success">{{count($new_member)}} New Members</span>
+            </div>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body no-padding">
+            <ul class="users-list ">
+              @foreach($new_member as $key => $value)
+                  <li class="clearfix"
+                  style="width: 50% !important">
+                      {{name_format_from_customer_info($value)}}
+                    <span class="users-list-date">{{$value->slot_created_date}}</span>
+                  </li>
+              @endforeach
+            </ul>
+            <!-- /.users-list -->
+          </div>
+          <!-- /.box-body -->
+        </div>
+      </div>
+      @endif
+
+      <div class="col-md-8 ">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">Recent Activities</h3>
+            </div>
+            <div class="box-body clearfix">
+                <div class="dashboard-widget-content">
+                   <ul class="list-unstyled timeline widget">
+                      <li>
+                         <div class="block">
+                            <div class="block_content">
+                               @foreach($recent_activity as $key => $value)
+                               <h2 class="title">
+                                  <a>{{$value->wallet_log_details}}</a>
+                               </h2>
+                               <div class="byline">
+                                  <span>{{$value->ago}}</span>
+                               </div>
+                               <p class="excerpt"> Wallet Amount: {{$value->wallet_log_amount}}<a class="hide">Details</a>
+                               </p>
+                               @endforeach
+                            </div>
+                         </div>
+                      </li>
+                   </ul>
+                </div>
+            </div>
+        </div>
+      </div>
    @endif
 @endsection
 @section('js')
@@ -52,6 +115,19 @@ new Chart(document.getElementById("doughnut-chart"), {
       }
     }
 });
+
+$('.width_tr_a').each(function () {
+    var percentage = $(this).attr('percentage');
+    var col1="#B8CDD3";
+    var col2="#EDEDED";
+    var t = $(this);
+    $(this).css('background', "-webkit-gradient(linear, left top,right top, color-stop("+percentage+"%,"+col1+"), color-stop("+percentage+"%,"+col2+"))");
+    $(this).css('background',  "-moz-linear-gradient(left center,"+col1+" "+percentage+"%, "+col2+" "+percentage+"%)");
+    $(this).css('background',  "-o-linear-gradient(left,"+col1+" "+percentage+"%, "+col2+" "+percentage+"%)");
+    $(this).css('background',  "linear-gradient(to right,"+col1+" "+percentage+"%, "+col2+" "+percentage+"%)");
+});
+
+
 </script>
 @endsection
 @section('css')

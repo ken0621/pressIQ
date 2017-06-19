@@ -63,7 +63,6 @@
           $com = $com_a[0];
           $url_a = 'http://' . $username . '.' . $domain . '.' .$com . '/mlm/register';
         ?>
-          <a href="{{$url_a}}" target="_blank" class="btn btn-primary btn-block"><b>Leads Link</b></a>
         </div>
         <!-- /.box-body -->
       </div>
@@ -91,31 +90,7 @@
         <!-- /.box-body -->
       </div>
       @endif
-      @if($slot_info)
-      <div class="box box-success">
-        <div class="box-header with-border">
-          <h3 class="box-title">New Referral</h3>
-
-          <div class="box-tools pull-right">
-            <span class="label label-success">{{count($new_member)}} New Members</span>
-          </div>
-        </div>
-        <!-- /.box-header -->
-        <div class="box-body no-padding">
-          <ul class="users-list clearfix">
-            @foreach($new_member as $key => $value)
-                <li class="clearfix"
-                style="width: 50% !important">
-                    {{name_format_from_customer_info($value)}}
-                  <span class="users-list-date">{{$value->slot_created_date}}</span>
-                </li>
-            @endforeach
-          </ul>
-          <!-- /.users-list -->
-        </div>
-        <!-- /.box-body -->
-      </div>
-      @endif
+      
       <!-- /.box -->
     </div>
     <!-- /.col -->

@@ -141,7 +141,7 @@ class ItemSerial
     		if($value)
     		{
     			$check = Tbl_inventory_serial_number::item()->where("shop_id",ItemSerial::getShopId())->where("tbl_item.item_id",$item_serial["item_id"])->where("serial_number",trim($value))->first();
-    			if(!$check)
+    			if($check == null)
     			{
     				$return .= "The serial number ".$value." does not exist in inventory <br>";
     			}

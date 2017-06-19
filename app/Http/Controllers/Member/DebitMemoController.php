@@ -44,6 +44,7 @@ class DebitMemoController extends Member
         { 
 
             $data["serial"] = ItemSerial::check_setting();
+
             $data["type"] = "Debit Memo";
             if(Request::input("type") == "bad_order")
             {
@@ -130,7 +131,6 @@ class DebitMemoController extends Member
         $vendor_info["db_amount"] = Request::input("overall_price");
 
         $serial_number = Request::input("serial_number");
-
         $vendor_info["type"] = 0;
         if(Request::input("type") == "bad_order")
         {
@@ -174,12 +174,27 @@ class DebitMemoController extends Member
                         }
                     }                    
                 }
+                else
+                {
+                    if($serial_number[$key])
+                    {
+                        $um_qty = UnitMeasurement::um_qty(Request::input("dbline_um")[$key]);
+                        $item_serial[$key]["quantity"] = $um_qty * $item_info[$key]['quantity'];
+                        $item_serial[$key]["item_id"] = Request::input('dbline_item_id')[$key];
+                        $item_serial[$key]["serials"] = $serial_number[$key];                        
+                    }
+                }
             }
         }
 
+
+        $data["status"] = null;
+        $data["status_message"] = null;
+
+
         if($vendor_info["type"] == 0)
         {
-        //START if bundle inventory_consume arcy
+            //START if bundle inventory_consume arcy
             foreach ($_items as $keyitem => $value_item) 
             {
                 $item_bundle_info = Tbl_item::where("item_id",Request::input("dbline_item_id")[$keyitem])->where("item_type_id",4)->first();
@@ -216,10 +231,6 @@ class DebitMemoController extends Member
                     unset($product_consume[$key_items]);
                 }           
             }
-
-            $data["status"] = null;
-            $data["status_message"] = null;
-
             $warehouse_id       = $this->current_warehouse->warehouse_id;
             if(count($product_consume) > 0)
             {
@@ -269,9 +280,8 @@ class DebitMemoController extends Member
                 }
             }
         }
-
-
-        if(!$data["status"])
+        dd($item_serial);
+        if($data["status"] == null)
         {
             if($ctr_items != 0)
             {
@@ -279,18 +289,33 @@ class DebitMemoController extends Member
 
                     if(count($product_consume) > 0)
                     {
+                        $transaction_type   = "debit_memo";
+                        $transaction_id     = $db_id;
                         if($vendor_info["type"] == 0)
                         {
                             $remarks            = "Consume by DEBIT MEMO #".$db_id;
                             $warehouse_id       = $this->current_warehouse->warehouse_id;
-                            $transaction_type   = "debit_memo";
-                            $transaction_id     = $db_id;
                             $data               = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume, 0, '' ,  'array', $transaction_type, $transaction_id,false,$item_serial);                        
+                        }
+                        else
+                        {
+                            if(count($item_serial) > 0)
+                            {
+                                foreach ($item_serial as $key => $value) 
+                                {
+                                    ItemSerial::consume_item_serial($value, $transaction_type, $transaction_id);
+                                }
+                            }
                         }
                     }
 
                     $data["status"] = "success-debit-memo";
                     $data["redirect_to"] = "/member/vendor/debit_memo?id=".$db_id;        
+                    if($vendor_info["type"] == 1)
+                    {
+
+                        $data["redirect_to"] = "/member/vendor/debit_memo/replace/".$db_id;                                
+                    }
             }
             else
             {
@@ -486,6 +511,10 @@ class DebitMemoController extends Member
         $access = Utilities::checkAccess('vendor-debit-memo', 'access_page');
         if($access == 1)
         { 
+
+            $data["debit_memo"] = DebitMemo::check_setting("debit_memo");
+            $data["bad_order"] = DebitMemo::check_setting("bad_order");
+
             $data["pis"] = Purchasing_inventory_system::check();
 
             $data["_db"] = Tbl_debit_memo::vendor()->where("vendor_shop_id", $this->getShopId())->orderBy("tbl_debit_memo.db_id","DESC")->get();

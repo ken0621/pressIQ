@@ -40,6 +40,27 @@
 	</div>
 <!-- Item Serial Settings -->
 
+<!-- Bad Order Settings -->
+	<hr>
+	<center>Debit Memo</center>
+	<div class="settings" id="debit_memo">
+		Enable Debit Memo For Service Type transaction
+		<input type="hidden" name="settings_key" value="debit_memo">
+		<select name="settings_value" class="form-control">
+			<option value="enable">Enable</option>
+			<option value="disable">Disable</option>
+		</select>
+	</div>
+	<div class="settings" id="bad_order">
+		Enable Bad Oder for Replacing Item
+		<input type="hidden" name="settings_key" value="bad_order">
+		<select name="settings_value" class="form-control">
+			<option value="enable">Enable</option>
+			<option value="disable">Disable</option>
+		</select>
+	</div>
+<!-- Bad Order Settings -->
+
 	<hr>
 	<center>MLM</center>
 <!-- Item Serial Settings -->

@@ -17,7 +17,7 @@
 
             @foreach($count_per_level as $key => $value)
               <tr class="width_tr_a" percentage="@if(isset($tree_count[$key])){{($tree_count[$key]->count_slot/$value) * 100}}@else{{0}}@endif">
-                <td>{{$key}}</td>
+                <td>{{$key + 1}}</td>
                 <td>@if(isset($tree_count[$key])) {{$tree_count[$key]->count_slot}}/{{$value}} @else 0/{{$value}} @endif</td>
                 <td>@if(isset($tree_count[$key])){{($tree_count[$key]->count_slot/$value) * 100}}@else{{0}}@endif %</td>
               </tr>
@@ -47,14 +47,21 @@
           </div>
           <!-- /.box-header -->
           <div class="box-body no-padding">
+
             <ul class="users-list ">
-              @foreach($new_member as $key => $value)
-                  <li class="clearfix"
-                  style="width: 50% !important">
-                      {{name_format_from_customer_info($value)}}
-                    <span class="users-list-date">{{$value->slot_created_date}}</span>
+                @if(count($new_member) >= 1)
+                    @foreach($new_member as $key => $value)
+                        <li class="clearfix"
+                        style="width: 50% !important">
+                            {{name_format_from_customer_info($value)}}
+                          <span class="users-list-date">{{$value->slot_created_date}}</span>
+                        </li>
+                    @endforeach
+                @else
+                  <li class="clearfix" style="width: 100% !important">
+                    <center>---No referral---</center>
                   </li>
-              @endforeach
+                @endif
             </ul>
             <!-- /.users-list -->
           </div>
@@ -74,16 +81,25 @@
                       <li>
                          <div class="block">
                             <div class="block_content">
-                               @foreach($recent_activity as $key => $value)
-                               <h2 class="title">
-                                  <a>{{$value->wallet_log_details}}</a>
-                               </h2>
-                               <div class="byline">
-                                  <span>{{$value->ago}}</span>
-                               </div>
-                               <p class="excerpt"> Wallet Amount: {{$value->wallet_log_amount}}<a class="hide">Details</a>
-                               </p>
-                               @endforeach
+                              @if(count($recent_activity) >= 1)
+                                 @foreach($recent_activity as $key => $value)
+                                 <h2 class="title">
+                                    <a>{{$value->wallet_log_details}}</a>
+                                 </h2>
+                                 <div class="byline">
+                                    <span>{{$value->ago}}</span>
+                                 </div>
+                                 <p class="excerpt"> Wallet Amount: {{$value->wallet_log_amount}}<a class="hide">Details</a>
+                                 </p>
+                                 @endforeach
+                              @else
+                                <h2 class="title">
+                                    No Recent Activity
+                                </h2>
+                                <div class="byline">
+                                    <span>Now</span>
+                                </div>
+                              @endif 
                             </div>
                          </div>
                       </li>

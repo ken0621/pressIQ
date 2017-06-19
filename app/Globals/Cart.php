@@ -1002,7 +1002,7 @@ class Cart
         echo "Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.";
         $api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)->join("tbl_online_pymnt_gateway", "tbl_online_pymnt_gateway.gateway_id", "=", "tbl_online_pymnt_api.api_gateway_id")->where("gateway_code_name", "paymaya")->first();
 
-        PayMayaSDK::getInstance()->initCheckout($api->api_client_id, $api->api_secret_id, "SANDBOX");
+        PayMayaSDK::getInstance()->initCheckout($api->api_client_id, $api->api_secret_id, "PRODUCTION");
         
         // Checkout
         $itemCheckout = new Checkout();
@@ -1015,6 +1015,7 @@ class Cart
         {
             $product = Tbl_ec_variant::where("evariant_id", $value["product_id"])->first();
             $product_item = Tbl_item::where("item_id", $product->evariant_item_id)->first();
+            
             // Item
             $itemAmountDetails = new ItemAmountDetails();
             $itemAmountDetails->shippingFee = "0.00";

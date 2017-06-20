@@ -89,14 +89,14 @@ class Times2 extends Controller
 
 		/* INPUT TIME */
 		$_time[0] = new stdClass();
-		$_time[0]->time_in = "7:30:00"; //6:00 AM
+		$_time[0]->time_in = "6:30:00"; //6:00 AM
 		$_time[0]->time_out = "9:30:00"; //10:30 AM
 		$_time[1] = new stdClass();
 		$_time[1]->time_in = "10:45:00"; //2:00 PM
 		$_time[1]->time_out = "13:00:00"; //8:00 PM
 		$_time[2] = new stdClass();
-		$_time[2]->time_in = "14:00:00"; //2:00 PM
-		$_time[2]->time_out = "23:00:00"; //8:00 PM
+		$_time[2]->time_in = "13:30:00"; //2:00 PM
+		$_time[2]->time_out = "15:00:00"; //8:00 PM
 
 		//INPUT SHIFT 
 		$_shift[0] = new stdClass();
@@ -122,13 +122,20 @@ class Times2 extends Controller
 		$_output = Payroll2::clean_shift($_time, $_shift, false);
 
 		$time_spent="00:00";
-
+		$late_hours = 0;
+		$under_time = 0;
+		$count=0;
 		foreach ($_output as $output) 
 		{
+
+			$late_hours = Payroll::sum_time($late_hours,$output->late);
+			
+
 			$time_in = explode(":", $output->time_in);
 			$time_in = $time_in[0].":".$time_in[1];
 			$time_out = explode(":", $output->time_out);
 			$time_out = $time_out[0].":".$time_out[1];
+
 
 			$time_in_minutes = explode(":", $output->time_in);
 			$time_out_minutes = explode(":", $output->time_out);
@@ -137,17 +144,14 @@ class Times2 extends Controller
 
 			$time_spent = Payroll::sum_time($time_spent,Payroll::time_diff($time_in,$time_out));
 
-			foreach ($_shift as $shift) 
-			{
-				$shift_in_minutes = explode(":", $shift->shift_in);
-				$shift_out_minutes = explode(":", $shift->shift_out);
-				$shift_in_minutes = ($shift_in_minutes[0]*60)+$shift_in_minutes[1];
-				$shift_out_minutes = ($shift_out_minutes[0]*60)+$shift_out_minutes[1];
-
-			}
+		
+				
 		}
+		echo "Late Hours ".$late_hours."<br>";
+		echo "Late Hours ".$late_hours."<br>";
+		echo "Time Spent ".$time_spent;
 
-		echo $time_spent=="00:00" ? "absent":$time_spent;
+		//echo $time_spent=="00:00" ? "absent":$time_spent;
 		
 		//Payroll2::time_sched_report($_output, true);
 		

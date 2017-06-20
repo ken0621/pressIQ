@@ -110,7 +110,7 @@ class Mlm_member
 	public static function breakdown_wallet($slot_id)
 	{
 		$data['slot'] = Tbl_mlm_slot::where('slot_id', $slot_id)->customer()->first();
-        
+        $data['complan'] = Tbl_mlm_plan::where('shop_id', $data['slot']->shop_id)->get()->keyBy('marketing_plan_code');
         $data['wallet_log'] = Tbl_mlm_slot_wallet_log::where('tbl_mlm_slot_wallet_log.shop_id', $data['slot']->shop_id)
         ->orderBy('wallet_log_date_created', 'ASC')
         ->where('wallet_log_slot', $slot_id)

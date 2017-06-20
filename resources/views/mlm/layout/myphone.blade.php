@@ -242,7 +242,8 @@
                             </li>
                             </ul>
                             </li>
-                              <li><a href="/mlm/slots"> My Slots <span class="fa fa-chevron-down"></span></a></li>
+                            <li><a href="/mlm/slots">My Slots <span class="fa fa-chevron-down"></span></a></li>
+                            <li><a href="/mlm/process_order_queue">Orders<span class="fa fa-chevron-down"></span></a></li>
                               <!-- <li><a href="/mlm/lead"> Lead <span class="fa fa-address-card"></span></a></li> -->
                         </ul>
                      </div>

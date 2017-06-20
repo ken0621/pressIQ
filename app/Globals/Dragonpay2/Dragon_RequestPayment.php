@@ -6,7 +6,8 @@ use App\Globals\Dragonpay2\RequestForm;
 
 class Dragon_RequestPayment
 {
-    public static $paymentUrl = 'http://test.dragonpay.ph/Pay.aspx';
+    // public static $paymentUrl = 'http://test.dragonpay.ph/Pay.aspx';
+    public static $paymentUrl = 'https://gw.dragonpay.ph/Pay.aspx';
 
 	private $merchantkey;
 

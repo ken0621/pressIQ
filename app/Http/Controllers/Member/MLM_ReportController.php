@@ -249,7 +249,7 @@ class MLM_ReportController extends Member
         $data['report_list_d']['product_sales_report_consolidated']['to'] = Carbon::now();
         $data['report_list_d']['product_sales_report_consolidated']['count'] = 0;
 
-        $data['report_list']['warehouse_consiladated'] = 'Warehouse Sales Report';
+        $data['report_list']['warehouse_consiladated'] = 'Consolidated Report';
         $data['report_list_d']['warehouse_consiladated']['from'] = Carbon::now();
         $data['report_list_d']['warehouse_consiladated']['to'] = Carbon::now();
         $data['report_list_d']['warehouse_consiladated']['count'] = 0;

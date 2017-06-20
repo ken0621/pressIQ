@@ -182,8 +182,13 @@ class MlmWalletAbsController extends Mlm
 
         if($password == $password_dec)
         {
-            $sum_wallet = Mlm_slot_log::get_sum_wallet(Self::$shop_id);
+            $sum_wallet = Mlm_slot_log::get_sum_wallet(Self::$slot_id);
+            if($sum_wallet == null)
+            {
 
+                $status['status'] = 0;
+                $status['message'] = 'Insuficient Wallet Amount';
+            }
             if($sum_wallet >= $wallet_amount)
             {
                 $tour = Tbl_tour_wallet::where('tour_wallet_customer_id', Self::$customer_id)

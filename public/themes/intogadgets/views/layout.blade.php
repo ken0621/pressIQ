@@ -54,6 +54,21 @@
          @endif
          <div class="header">
             <a href="/" class="logo"><img src="/resources/assets/frontend/img/intogadgets-logo.png"></a>
+            <div class="mobile-searchie">
+               <form method="GET" action="/product">
+                  <div class="form-group">
+                     <input value="{{ Request::input('search') }}" type="text" name="search" autocomplete="off" id="search-pokus" class="form-control search-input" placeholder="Search...">
+                  </div>
+                  <button type="submit" class="btn search-button"><i class="fa fa-search"></i></button>
+                  <div class="search-popup" style="display:none;">
+                     <div class="live-search-loading search-popup-holder">  
+                        <img src="/resources/assets/img/small-loading.GIF" alt="laoding.png">
+                     </div>
+                     <div class="live-search-result-content">
+                     </div>
+                  </div>
+               </form>
+            </div>
             <div class="header-nav text-left">
                <a href="/about" class="nabigation">
                   <div class="nabigation-hover"></div>
@@ -94,7 +109,7 @@
                <!-- HEADER SPACE -->
             </div>
          </div>
-         <nav class="navbar navbar-default  ">
+         <nav class="navbar navbar-default">
             <div>
                <!-- Brand and toggle get grouped for better mobile display -->
                <div class="navbar-header">
@@ -128,13 +143,18 @@
                         </a>
                      </li>
                      @endforeach
+                     @foreach($_categories as $key => $categories)
                      <li class="sub-menu">
-                        <a href="#menupos1"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" class="list-group-item" data-toggle="collapse" data-parent="#mainmenu">ACCESSORIES <span class="menu-ico-collapse"><i class="glyphicon glyphicon-chevron-down"></i></span></a>
-                        <div class="collapse pos-absolute" id="menupos1">
-                           <a href="/product?type=1&brand=" data-toggle="collapse" data-target="#menupos1" class="list-group-item sub-item">Test</a>
+                        <a href="#menupos{{ $key }}"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" class="list-group-item" data-toggle="collapse" data-parent="#mainmenu">{{ $categories['type_name'] }} <span class="menu-ico-collapse"><i class="glyphicon glyphicon-chevron-down"></i></span></a>
+                        <div class="collapse pos-absolute" id="menupos{{ $key }}">
+                           @foreach($categories['subcategory'] as $subcategories)
+                           <a href="/product?type={{ $subcategories['type_id'] }}" data-toggle="collapse" data-target="#menupos{{ $key }}" class="list-group-item sub-item">{{ $subcategories['type_name'] }} ({{ $subcategories['product_count'] }})</a>
+                           @endforeach
                         </div>
                      </li>
-                     <li class="sub-menu">
+                     @endforeach
+                     
+                     {{-- <li class="sub-menu">
                         <a href="#menupos2"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" class="list-group-item" data-toggle="collapse" data-parent="#mainmenu">SMART PHONE <span class="menu-ico-collapse"><i class="glyphicon glyphicon-chevron-down"></i></span></a>
                         <div class="collapse pos-absolute" id="menupos2">
                            <a href="/product?type=3&brand=" data-toggle="collapse" data-target="#menupos1" class="list-group-item sub-item">Test</a>
@@ -151,9 +171,38 @@
                         <div class="collapse pos-absolute" id="menupos4">
                            <a href="/product?type=5&brand=" data-toggle="collapse" data-target="#menupos1" class="list-group-item sub-item">Test</a>
                         </div>
-                     </li>
+                     </li> --}}
                   </ul>
                   <form method="GET" action="/product" class="navbar-form search-container" role="search">
+                     <div class="mobile-nabigayshon">
+                        <a href="/about" class="nabigation">
+                           <div class="nabigation-text">ABOUT</div>
+                        </a>
+                        <a href="/contact" class="nabigation">
+                           <div class="nabigation-text">CONTACT</div>
+                        </a>
+                        <a href="/career" class="nabigation">
+                           <div class="nabigation-text">CAREERS</div>
+                        </a>
+                        <a href="/how" class="nabigation">
+                           <div class="nabigation-text">HOW TO ORDER</div>
+                        </a>
+                        <a href="/youwin" class="nabigation">
+                           <div class="nabigation-text">YOUWIN AFTERSALES</div>
+                        </a>
+                        <a href="/events" class="nabigation">
+                           <div class="nabigation-text">EVENTS</div>
+                        </a>
+                     </div>
+                     <div class="mobile-account">
+                        @if($customer_info_a)
+                           <a href="/account/order" class="text">MY ORDERS</a>
+                           <a href="/account/logout" class="text">LOGOUT</a>
+                        @else
+                           <a data-remodal-target="login" href="#" class="text">LOGIN</a>
+                           <a href="/account/register" class="text">REGISTER</a>
+                        @endif
+                     </div>
                      <div class="searchie">
                         <div class="form-group">
                            <input type="text" name="search" autocomplete="off" id="search-pokus" class="form-control search-input" placeholder="Search...">

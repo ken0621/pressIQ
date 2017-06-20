@@ -177,7 +177,10 @@ class MemberController extends Controller
         {
             $data['sponsor'] =  $customer_session['customer_info']->mlm_username;
         }
-
+        if(Request::input('slot') == 0)
+        {
+            $data['sponsor'] = null;
+        }
         return view('mlm.register.logged_in', $data);
     }
     public function register_logged_in_post()

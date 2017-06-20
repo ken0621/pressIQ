@@ -931,7 +931,7 @@ Route::any("/member/load_position","Member\EmployeePositionController@load_posit
 
 Route::any("/kim/core","Core\Times2@TimeExist");
 Route::any("/kim/timeshift","Core\Times2@time_shift");
-
+Route::any("/kim/compute_time","Core\Times2@compute_time");
 //end core testing
 
 /* PAYROLL START */

@@ -198,6 +198,67 @@ class Payroll2
 		return $_output;
 	}
 
+    /*
+     * TITLE: COMPUTE TIME MODE FOR REGULAR
+     * 
+     * Returns breakdown of hours depending on the shift schedule.
+     *
+     * @param
+     *    $_time (array)
+     *		- time_in (time 00:00:00)
+     *		- time_out (time 00:00:00)
+     *		- overtime (time 00:00:00)
+     *		- late (time 00:00:00)
+     *		- undertime (time 00:00:00)
+     *		- overtime_approved (boolean true/false)
+     *	  $_shift (array)
+     *		- shift_in (time 00:00:00)
+     *		- shift_out (time 00:00:00)
+     *	  $late_grace_time (time 00:00:00)
+     *	  $day_type (string "regular", "rest_day", "extra_day")
+     *    $is_holiday (string "not_holiday", "special", "regular")
+     *    $leave (time 00:00:00)
+     * @return (array)
+     *    	- time_spent
+     *		- is_absent (boolean true/false)
+     *		- late (time 00:00:00)
+     *		- undertime (time 00:00:00)
+     *		- overtime (time 00:00:00)
+     *		- regular_hours (time 00:00:00)
+     *		- rest_day_hours (time 00:00:00)
+     *		- extra_day_hours (time 00:00:00)
+     *		- regular_holiday_hours (time 00:00:00)
+     *		- special_holiday_hours (time 00:00:00)
+     *		- leave_hours (time 00:00:00)
+     *		- total_hours (time 00:00:00)
+     *		- night_differential (time 00:00:00)
+     *		- is_half_day (boolean true/false)
+     *
+     * @author (Kim Briel Oraya)
+     *
+     */
+	public static function compute_time_mode_regular($_time, $_shift, $late_grace_time = "00:15:00", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00")
+	{
+		$return["time_spent"] = "00:00:00";
+		$return["is_absent"] = false;
+		$return["late"] = "00:00:00";
+		$return["undertime"] = "00:00:00";
+		$return["overtime"] = "00:00:00";
+		$return["regular_hours"] = "00:00:00";
+		$return["rest_day_hours"] = "00:00:00";
+		$return["extra_day_hours"] = "00:00:00";
+		$return["regular_holiday_hours"] = "00:00:00";
+		$return["special_holiday_hours"] = "00:00:00";
+		$return["leave_hours"] = "00:00:00";
+		$return["total_hours"] = "00:00:00";
+		$return["night_differential"] = "00:00:00";
+		$return["is_half_day"] = false;
+		
+		return $return;
+	}
+	public static function compute_time_mode_flexitime($_time, $target_hours = 0, $day_type = "regular", $is_holiday = 0, $leave = "00:00:00")
+	{
+	}
 	//,$_time_out,$status_time_sched
 	public static function time_sched_report($_output,$testing = false)
 	{

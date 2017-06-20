@@ -139,7 +139,7 @@
       </div>
     </div> -->
     <div class="button-holder">
-      <button class="btn btn-green btn-lg">PROCEED</button>
+      <button class="btn btn-green btn-lg" onclick="$(this).addClass('hide');">PROCEED</button>
     </div>
   </div>
 </div>

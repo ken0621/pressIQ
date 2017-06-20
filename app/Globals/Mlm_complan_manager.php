@@ -95,6 +95,26 @@ class Mlm_complan_manager
                 $arry_log['wallet_log_plan'] = "DIRECT";
                 $arry_log['wallet_log_status'] = "n_ready";   
                 $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('DIRECT', $slot_info->shop_id); 
+
+                $binary_advance_pairing = Tbl_mlm_binary_setttings::where('shop_id', $slot_info->shop_id)->first();
+                if(isset($binary_advance_pairing->binary_settings_max_tree_level))
+                {
+                    $binary_settings_max_tree_level = $binary_advance_pairing->binary_settings_max_tree_level;
+                   
+                    if($binary_settings_max_tree_level != 0)
+                    {
+                        $tree_level = Tbl_tree_placement::where('placement_tree_parent_id',  $slot_sponsor->slot_id)
+                        ->where('placement_tree_child_id', $slot_info->slot_id)->first();
+                        if(isset($tree_level->placement_tree_level))
+                        {
+                            if($tree_level->placement_tree_level > $binary_settings_max_tree_level)
+                            {
+                                $arry_log['wallet_log_details'] = 'Sorry you have reached the maximum level direct referral. Direct refferral reward from ' . $slot_info->slot_no . ' will not be added';
+                                $arry_log['wallet_log_amount'] = 0;
+                            }
+                        }
+                    }
+                }
                 Mlm_slot_log::slot_array($arry_log);
             }
         }   
@@ -350,7 +370,7 @@ class Mlm_complan_manager
 
         foreach($notify_max_level as $key => $value)
         {
-            $log = "Sorry, Your Slot has already reached the max level for matrix. Slot " . $slot_info->slot_no . "'s matrix income will not be added.";
+            $log = "Sorry, Your Slot has already reached the max level for matrix. Slot " . $slot_info->slot_no . "'s pairing reward will not be added.";
             $arry_log['wallet_log_slot']            = $value->slot_id;
             $arry_log['shop_id']                    = $value->shop_id;
             $arry_log['wallet_log_slot_sponsor']    = $slot_info->slot_id;

@@ -115,12 +115,12 @@
 new Chart(document.getElementById("doughnut-chart"), {
     type: 'doughnut',
     data: {
-      labels: [ @if(count($income_per_complan) == 0) 'No Income Summary Available' @endif @foreach($income_per_complan as $key => $value) "{{$complan[$value->wallet_log_plan]->marketing_plan_label}} {{currency('PHP', $value->wallet_log_amount)}}",  @endforeach ],
+      labels: [ @if(count($income_per_complan) == 0) 'No Income Summary Available' @endif @foreach($income_per_complan as $key => $value) @if($value->wallet_log_amount >= 1 )"{{$complan[$value->wallet_log_plan]->marketing_plan_label}} {{currency('PHP', $value->wallet_log_amount)}}",@endif  @endforeach ],
       datasets: [
         {
           label: "Income",
           backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
-          data: [ @if(count($income_per_complan) == 0) 0 @endif @foreach($income_per_complan as $key => $value) "{{$value->wallet_log_amount}}", @endforeach ],
+          data: [ @if(count($income_per_complan) == 0) 0 @endif @foreach($income_per_complan as $key => $value) @if($value->wallet_log_amount>=1)"{{$value->wallet_log_amount}}",@endif @endforeach ],
         }
       ]
     },

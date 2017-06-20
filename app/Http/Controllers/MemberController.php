@@ -464,7 +464,15 @@ class MemberController extends Controller
         }
         else
         {
-            return Cart::process_payment(Self::$shop_id, "register");
+            if (isset(Cart::get_info(Self::$shop_id)["tbl_ec_order"]["payment_method_id"])) 
+            {
+                return Cart::process_payment(Self::$shop_id, "register");
+            }
+            else
+            {
+                $data['status'] = 'warning';
+                return Redirect::to("/member/register")->send();
+            }
         }
     }
 
@@ -499,7 +507,7 @@ class MemberController extends Controller
                 $d['variant_id'] = $info['variant_id'];
                 Session::put('mlm_register_step_2', $d);
                 $data['status'] = 'success';
-                $data['message'][0] = 'Sucess!';
+                $data['message'][0] = 'Success!';
                 $data['link'] = '/member/register/shipping';
             }
             else

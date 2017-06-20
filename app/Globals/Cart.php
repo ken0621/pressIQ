@@ -956,6 +956,7 @@ class Cart
      *    $payment_status (int) - 0 = not paid, 1 = paid
      *    $order_status (str) - Pending, Failed, Processing, Shipped, Completed, On-Hold, Cancelled
      *    $customer_id (int) - current logged in
+     *    $notification (int) - 0 = no notif, 1 = yes notif
      *
      * @return (array)
      *    - order_id
@@ -963,17 +964,17 @@ class Cart
      * @author (Edward Guevarra)
      *
      */
-    public static function submit_order($shop_id, $payment_status, $order_status, $customer_id = null)
+    public static function submit_order($shop_id, $payment_status, $order_status, $customer_id = null, $notification = 1)
     {
         $order = Cart::get_info($shop_id);
         $order["tbl_ec_order"]["payment_status"] = $payment_status;
         $order["tbl_ec_order"]["order_status"]   = $order_status;
         $order["customer_id"]                    = $customer_id;
+        $order["notification"]                   = $notification;
         return Ec_order::create_ec_order_from_cart($order);   
     }
     public static function process_payment($shop_id, $from = "checkout")
     {
-
         $data = Cart::get_info($shop_id);
         $method_id = $data["tbl_ec_order"]["payment_method_id"];
         $method_information = Self::get_method_information($shop_id, $method_id);
@@ -1003,6 +1004,7 @@ class Cart
         $api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)->join("tbl_online_pymnt_gateway", "tbl_online_pymnt_gateway.gateway_id", "=", "tbl_online_pymnt_api.api_gateway_id")->where("gateway_code_name", "paymaya")->first();
 
         PayMayaSDK::getInstance()->initCheckout($api->api_client_id, $api->api_secret_id, "PRODUCTION");
+        // PayMayaSDK::getInstance()->initCheckout($api->api_client_id, $api->api_secret_id, "SANDBOX");
         
         // Checkout
         $itemCheckout = new Checkout();
@@ -1050,7 +1052,7 @@ class Cart
         $order_status   = "Pending";
         $customer       = Cart::get_customer();
 
-        $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null);
+        $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null, 0);
         Cart::clear_all($shop_id);
 
         $totalAmount->value = number_format($total, 2, '.', '');
@@ -1071,8 +1073,8 @@ class Cart
 
         $itemCheckout->redirectUrl = array(
             "success" =>  URL::to("/payment/paymaya/success?order_id=" . Crypt::encrypt($order_id) . "&from=" . $from),
-            "failure" => URL::to("/payment/paymaya/failure"),
-            "cancel" => URL::to("/payment/paymaya/cancel")
+            "failure" => URL::to("/payment/paymaya/failure?order_id=" . Crypt::encrypt($order_id)),
+            "cancel" => URL::to("/payment/paymaya/cancel?order_id=" . Crypt::encrypt($order_id))
         );
 
         $itemCheckout->execute();
@@ -1119,7 +1121,7 @@ class Cart
             $order_status   = "Pending";
             $customer       = Cart::get_customer();
 
-            $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null);
+            $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null, 0);
             Cart::clear_all($shop_id);
             
             $dragon_request = array(

@@ -9,6 +9,7 @@
         <title>BROWN</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <base href="{{ URL::to('/') }}">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <link href="https://fonts.googleapis.com/css?family=Roboto:700" rel="stylesheet">
         <link rel="stylesheet" href="assets/initializr/css/bootstrap.min.css">

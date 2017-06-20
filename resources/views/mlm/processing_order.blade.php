@@ -13,7 +13,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   ?>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Still processing...</title>
+  <title>Order Status</title>
   <base href="{{ URL::to('digima/public') }}">
   <!-- Bootstrap -->
   <link href="assets/member-theme/myphone/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -192,7 +192,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </tr>
             <tr>
               <td></td>
-              <td><a href="/member/register?slot=0">Click Order New</a></td>
+              <td><a href="/member/register?slot=0">Click Here for new purchase</a></td>
             </tr>
           </table>
         </div>

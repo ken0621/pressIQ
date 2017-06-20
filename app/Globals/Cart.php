@@ -975,7 +975,6 @@ class Cart
     }
     public static function process_payment($shop_id, $from = "checkout")
     {
-
         $data = Cart::get_info($shop_id);
         $method_id = $data["tbl_ec_order"]["payment_method_id"];
         $method_information = Self::get_method_information($shop_id, $method_id);

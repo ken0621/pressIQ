@@ -20,6 +20,8 @@ use App\Models\Tbl_mlm_slot_points_log;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_tree_sponsor;
 use App\Models\Tbl_country;
+use App\Models\Tbl_ec_product;
+use App\Models\Tbl_ec_variant;
 use App\Models\Tbl_tree_placement;
 use App\Models\Tbl_ec_order;
 use Carbon\Carbon;
@@ -454,11 +456,18 @@ class MlmDashboardController extends Mlm
         $data["slot_count"]  = Tbl_mlm_slot::where("slot_owner",Self::$customer_id)->count();
         $data['first_orders'] = Tbl_ec_order::where("customer_id",Self::$customer_id)->orderBy("ec_order_id","ASC")->get();
 
+        $orders = [];
+        $data['first_orders_item'] = [];
+        foreach ($data['first_orders'] as $key => $value) {
+            $data['first_orders_item'][$key] = Tbl_ec_variant::product()
+            ->join('tbl_ec_order_item', 'tbl_ec_order_item.item_id', '=', 'tbl_ec_variant.evariant_id')
+            ->where('ec_order_id', $value->ec_order_id)
+            ->get();
+        }
         if($data["slot_count"] != 0)
         {
             return Redirect::to("mlm");
         }
-
         return view("mlm.processing_order", $data);
     }
 }

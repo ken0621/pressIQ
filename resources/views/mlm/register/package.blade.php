@@ -12,6 +12,7 @@
           <?php 
             $package_count = count($_product);
             $md = 4;
+            $offset =0;
             switch ($package_count) {
               case 2:
                 $md = 6;
@@ -20,7 +21,8 @@
                 $md = 4;
                 break;
               case 1:
-                $md = 12;
+                $offset = 4;
+                $md = 4;
                 break;  
               default:
                 # code...
@@ -28,7 +30,7 @@
             }
           ?>
           @foreach($_product as $key => $value)
-            <div class="col-md-{{$md}}  product_choice" membership_id="{{$value->ec_product_membership}}">
+            <div class="col-md-offset-{{$offset}} col-md-{{$md}}  product_choice" membership_id="{{$value->ec_product_membership}}">
               <div class="holder">
                 <br>
                 <div class="img">

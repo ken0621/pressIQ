@@ -29,6 +29,8 @@ use App\Models\Tbl_item_code_item;
 use App\Models\Tbl_ec_order_item;
 use App\Models\Tbl_merchant_school;
 use App\Models\Tbl_locale;
+use App\Models\Tbl_email_template;
+use App\Globals\Mail_global;
 // use App\Globals\Item_code;
 // use App\Globals\Mlm_slot_log;    
 
@@ -196,10 +198,25 @@ class ShopCheckoutController extends Shop
         {
             Item_code::ec_order_slot($order_id);
 
-            $update['ec_order_id'] = $order_id;
-            $update['order_status'] = "Processing";
+            $update['ec_order_id']    = $order_id;
+            $update['order_status']   = "Processing";
             $update['payment_status'] = 1;
             $order = Ec_order::update_ec_order($update);
+
+            /* Email Checkout */
+            $data_order                = DB::table("tbl_ec_order")->where("ec_order_id", $order_id)->first();
+            $data_customer             = DB::table("tbl_customer")->where("customer_id", $data_order->customer_id)->first();
+            if ($data_order) 
+            {
+                $data["template"]         = Tbl_email_template::where("shop_id", $this->shop_info->shop_id)->first();
+                $data['mail_to']          = $data_order->customer_email;
+                $data['mail_subject']     = "Account Verification";
+                $data['account_password'] = Crypt::decrypt($data_customer->password);
+                $data['mlm_username']     = $data_customer->mlm_username;
+                $data['mlm_email']        = $data_customer->email; 
+                $result = Mail_global::password_mail($data, $data_order->shop_id);
+            }
+            /* End Email Checkout */
 
             if ($from == "checkout") 
             {
@@ -213,15 +230,35 @@ class ShopCheckoutController extends Shop
     }
     public function paymaya_failure()
     {
-        echo "There seems to have been an error initializing or updating your transaction. Please wait a minute and try again or contact support for assistance.";
-        sleep(5);
-        return Redirect::to("/");
+        $order_id = Crypt::decrypt(Request::input("order"));
+        $this->failmaya($order_id);
+        return Redirect::to('/mlm/login?notify=3');
     }
     public function paymaya_cancel()
     {
-        echo "There seems to have been an error initializing or updating your transaction. Please wait a minute and try again or contact support for assistance.";
-        sleep(5);
-        return Redirect::to("/");
+        $order_id = Crypt::decrypt(Request::input("order"));
+        $this->failmaya($order_id);
+        return Redirect::to('/mlm/login?notify=4');
+    }
+    public function failmaya($order_id)
+    {
+        $update['ec_order_id']    = $order_id;
+        $update['order_status']   = "Failed";
+        $update['payment_status'] = 0;
+        $order = Ec_order::update_ec_order($update);
+
+        // $customer = DB::table("tbl_ec_order")->select("tbl_ec_order.ec_order_id", "tbl_ec_order.customer_id as order_customer_id", "tbl_customer.*")
+        //                                      ->join("tbl_customer", "tbl_customer.customer_id", "=", "tbl_ec_order.customer_id")
+        //                                      ->where("tbl_ec_order.ec_order_id", $order_id)
+        //                                      ->first();
+    
+        // $update_customer["email"] = "f_" . $customer->email;
+        // $update_customer["first_name"] = "f_" . $customer->first_name;
+        // $update_customer["last_name"] = "f_" . $customer->last_name;
+        // $update_customer["middle_name"] = "f_" . $customer->middle_name;
+        // $update_customer["mlm_username"] = "f_" . $customer->mlm_username;
+
+        // DB::table("tbl_customer")->where("customer_id", $customer->customer_id)->update($update_customer);
     }
     /* End Payment Facilities */
 

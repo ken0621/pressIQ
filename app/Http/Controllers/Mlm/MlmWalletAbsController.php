@@ -202,7 +202,7 @@ class MlmWalletAbsController extends Mlm
 
                 $base_uri = Self::$shop_info->shop_wallet_tours_uri;
                 $status = AbsMain::transfer_wallet($base_uri, $host->tour_Wallet_a_account_id, $host->tour_wallet_a_username, $host->tour_wallet_a_base_password, $tour->tour_Wallet_a_account_id, $wallet_amount);
-
+                $status['message'] = 'Wallet Transfer Success';
                 if($status['status'] == 1)
                 {
                     $wallet_nega = $wallet_amount * (-1);
@@ -278,8 +278,12 @@ class MlmWalletAbsController extends Mlm
                     DB::table('tbl_tour_wallet_logs')->insert($insert);
                     
                 }
+                else
+                {
+                    $status['status'] = 0;
+                    $status['message'] = $stat['message'];
+                }
                 
-                $status['message'] = 'Wallet Transfer Success';
             }
             else
             {

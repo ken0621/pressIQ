@@ -463,7 +463,7 @@ class MlmGenealogyController extends Mlm
 
             return  '   <li class="width-reference">
                             <a id="add_slot_modal_open_'.$position.'" href="#animatedModal" color="#EFEFEF" onClick="return false;" style="text-decoration:none"  position="'.$position.'" placement="'.$placement.'" >
-                                <span class="positioning parent parent-reference VC add_slot_membership_code" position="'.$position.'" placement="'.$placement.'" y="'.$slot_info->first_name.'">
+                                <span class="positioning parent parent-reference VC " position="'.$position.'" placement="'.$placement.'" y="'.$slot_info->first_name.'">
                                     <div class="id">+</div>
                                 </span>
                             </a>

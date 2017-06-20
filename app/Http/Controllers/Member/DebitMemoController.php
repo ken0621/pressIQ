@@ -113,11 +113,9 @@ class DebitMemoController extends Member
 
 
             $data["_db_item"][$key]->dbline_replace_qty_um = UnitMeasurement::um_view($value->dbline_replace_qty,$value->item_measurement_id,$value->dbline_um);
-
         }
 
       $pdf = view('member.vendor.debit_memo.debit_memo_pdf', $data);
-      // return $pdf;
       return Pdf_global::show_pdf($pdf);
     }
     public function create_submit()
@@ -492,6 +490,17 @@ class DebitMemoController extends Member
                         $data = Warehouse::inventory_update($transaction_id, $transaction_type, $product_consume, $return = 'array',false,$item_serial);
                     }               
                 }
+                if($vendor_info["type"] == 1)
+                {
+                    if(count($item_serial) > 0)
+                    {
+                        foreach ($item_serial as $key => $value) 
+                        {
+                            ItemSerial::consume_item_serial($value, $transaction_type, $transaction_id);
+                        }
+                    }
+                }
+                
                 $data["status"] = "success-debit-memo";
                 $data["redirect_to"] = "/member/vendor/debit_memo?id=".$db_id;
             }
@@ -551,6 +560,7 @@ class DebitMemoController extends Member
     }
     public function replace($debit_memo_id)
     {
+        $data["serial"] = ItemSerial::check_setting();
         $data["debit_memo_id"] = $debit_memo_id;
         $data["_db_item"] = Tbl_debit_memo_line::replace_dbitem()->db_item()->where("dbline_db_id",$debit_memo_id)->get();
 
@@ -562,7 +572,8 @@ class DebitMemoController extends Member
         $data["_dbline"]       = Tbl_debit_memo_line::um()->where("dbline_db_id", $debit_memo_id)->get();
 
 
-        $data["action"] = "/member/vendor/debit_memo/save_replace_submit";
+        // $data["action"] = "/member/vendor/debit_memo/save_replace_submit";
+        $data["action"] = "/member/vendor/debit_memo/confirm_submit/".$debit_memo_id;
 
         foreach($data["_db_item"] as $key => $value) 
         {
@@ -743,15 +754,27 @@ class DebitMemoController extends Member
     public function confirm_submit($db_id)
     {
         $dbline_data = Tbl_debit_memo_line::replace_dbitem()->db_item()->where("dbline_db_id",$db_id)->get();
-        
+
+
+        $serial_number = Request::input("serial_number");
+
+        dd($serial_number);
+        $product_consume = [];
+        $item_refill = [];
         foreach ($dbline_data as $key => $value) 
         {
             $item_type = Tbl_item::where("item_id",$value->dbline_item_id)->pluck("item_type_id");
             if($item_type == 4 || $item_type == 1)
             {
                 $um_qty = UnitMeasurement::um_qty($value->dbline_um);
-                $product_consume[$key]["quantity"] = ($um_qty * $value->dbline_qty) - $value->dbline_replace_qty;
+                $product_consume[$key]["quantity"] = $um_qty * $value->dbline_qty;
                 $product_consume[$key]["product_id"] = $value->dbline_item_id;
+
+                if($value->dbline_replace_qty > 0)
+                {
+                    $item_refill[$key]["quantity"] = $value->dbline_replace_qty;
+                    $item_refill[$key]["product_id"] = $value->dbline_item_id;                    
+                }
             }
         }
 
@@ -769,9 +792,17 @@ class DebitMemoController extends Member
                     $_bundle[$key_bundle]['product_id'] = $value_bundle->bundle_item_id;
                     $_bundle[$key_bundle]['quantity'] = (($value_item->dbline_qty * $qty) - $value_item->dbline_replace_qty) * ($value_bundle->bundle_qty * $bundle_qty);
 
+                    if($value_item->dbline_replace_qty > 0)
+                    {
+                        $_bundle2[$key_bundle]['product_id'] = $value_bundle->bundle_item_id;
+                        $_bundle2[$key_bundle]['quantity'] = $value_item->dbline_replace_qty * ($value_bundle->bundle_qty * $bundle_qty);
+
+                        array_push($item_refill, $_bundle2[$key_bundle]);
+                    }
+
                     array_push($product_consume, $_bundle[$key_bundle]);
                 }
-            } 
+            }
         }
         foreach ($product_consume as $key_items => $value_items) 
         {
@@ -793,78 +824,137 @@ class DebitMemoController extends Member
             }           
         }
 
+
+        if($item_refill != null)
+        {
+            foreach ($item_refill as $key_items_r => $value_items_r) 
+            {
+                 $j = null;
+                 foreach ($dbline_data as $keyitemline_r => $valueitemline_r)
+                 {
+                    if($valueitemline_r->dbline_replace_qty > 0)
+                    {
+                        $type = Tbl_item::where("item_id",$valueitemline_r->dbline_item_id)->pluck("item_type_id");
+                        if($type == 4)
+                        {
+                            if($valueitemline_r->dbline_item_id == $value_items_r['product_id'])
+                            {
+                                $j = "true";
+                            }                    
+                        }
+                    }
+                    
+                 }
+                if($j != null)
+                {
+                    unset($item_refill[$key_items_r]);
+                }           
+            }
+        }
+
         $data["status"] = null;
         $data["status_message"] = null;
 
-        $warehouse_id       = $this->current_warehouse->warehouse_id;
-        if(count($product_consume) > 0)
+        if(count($item_serial) > 0)
         {
-            foreach ($product_consume as $key => $value) 
+            foreach ($item_serial as $key_item_serial => $value_item_serial)
             {
-               $inventory_consume_product[$key]["product_id"] = $value["product_id"];
-               $inventory_consume_product[$key]["quantity"] = $value["quantity"];
+                $check_qty_serial = ItemSerial::check_item_serial($value_item_serial);
 
-               $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value["product_id"])->pluck('inventory_count');
-                if($count_on_hand == null)
+                if($check_qty_serial)
                 {
-                    $count_on_hand = 0;   
-                }
-                if($value['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $value['quantity'])
-                {
-
-                }
-                else
-                {
-                    $item_name = Tbl_item::where("item_id",$value["product_id"])->pluck("item_name");
-
                     $data["status"] = "error";
-                    $data["status_message"] .= "<li style='list-style:none'>The quantity of item ".$item_name." is not enough to consume </li>";
+                    $data["status_message"] .= "The item ".Item::get_item_details($value_item_serial["item_id"])->item_name." has more serial than the quantity <br>";
                 }
-            }                
+
+                if(ItemSerial::check_duplicate_serial($value_item_serial["item_id"],$value_item_serial["serials"]))
+                {
+                    $data["status"] = "error";
+                    $data["status_message"] .= ItemSerial::check_duplicate_serial($value_item_serial["item_id"],$value_item_serial["serials"]);
+                }
+            }
+
         }
 
         if($data["status"] == null)
         {
-            $db_data = Tbl_debit_memo::where("db_id",$db_id)->first();
-
-            if($db_data->db_memo_status != 1)
+            $warehouse_id       = $this->current_warehouse->warehouse_id;
+            if(count($product_consume) > 0)
             {
-                if(count($product_consume) > 0)
+                foreach ($product_consume as $key => $value) 
                 {
-                    $remarks            = "Debit Memo Report";
-                    $warehouse_id       = $this->current_warehouse->warehouse_id;
-                    $transaction_type   = "debit_memo";
-                    $transaction_id     = $db_id;
-                    $data               = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume, 0, '' ,  'array', $transaction_type, $transaction_id);
+                   $inventory_consume_product[$key]["product_id"] = $value["product_id"];
+                   $inventory_consume_product[$key]["quantity"] = $value["quantity"];
 
-                    $data["status"] = "success-condemned-all";
-                }
-                else
-                {
-                    $data["status"] = "success-replace-all";   
-                }
+                   $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value["product_id"])->pluck('inventory_count');
+                    if($count_on_hand == null)
+                    {
+                        $count_on_hand = 0;   
+                    }
+                    if($value['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $value['quantity'])
+                    {
 
-                $update["db_memo_status"] = 1;
-                Tbl_debit_memo::where("db_id",$db_id)->update($update);
+                    }
+                    else
+                    {
+                        $item_name = Tbl_item::where("item_id",$value["product_id"])->pluck("item_name");
 
+                        $data["status"] = "error";
+                        $data["status_message"] .= "<li style='list-style:none'>The quantity of item ".$item_name." is not enough to consume </li>";
+                    }
+                }                
             }
-            else
-            {
-                $transaction_id = $db_id;
-                $transaction_type = "debit_memo";
-                $warehouse_id       = Warehouse::getWarehouseIdFromSlip($transaction_id, $transaction_type);
-                if(count($product_consume) > 0)
-                {
-                    $data = Warehouse::inventory_update($transaction_id, $transaction_type, $product_consume, $return = 'array');
 
-                    $data["status"] = "success-condemned-all";
+            if($data["status"] == null)
+            {
+                $db_data = Tbl_debit_memo::where("db_id",$db_id)->first();
+
+                if($db_data->db_memo_status != 1)
+                {
+                    if(count($product_consume) > 0)
+                    {
+                        $remarks            = "Debit Memo Report";
+                        $warehouse_id       = $this->current_warehouse->warehouse_id;
+                        $transaction_type   = "debit_memo";
+                        $transaction_id     = $db_id;
+                        $data               = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume, 0, '' ,  'array', $transaction_type, $transaction_id);
+
+                        $data["status"] = "success-condemned-all";
+                    }
+                    else
+                    {
+                        $data["status"] = "success-replace-all";   
+                    }
+
+                    if(count($item_refill) > 0)
+                    {
+                        $remarks            = "Item replaced with Bad Order #". $db_id;
+                        $warehouse_id       = $this->current_warehouse->warehouse_id;
+                        $transaction_type   = "debit_memo_replace";
+                        $transaction_id     = $db_id;
+                        $data               = Warehouse::inventory_refill($warehouse_id, $transaction_type, $transaction_id, $remarks, $item_refill, 'array',null,$item_serial);
+                    }
+
+                    $update["db_memo_status"] = 1;
+                    Tbl_debit_memo::where("db_id",$db_id)->update($update);
+
                 }
                 else
                 {
+                    $transaction_id = $db_id;
+                    $transaction_type = "debit_memo";
+                    $warehouse_id       = Warehouse::getWarehouseIdFromSlip($transaction_id, $transaction_type);
+                    if(count($product_consume) > 0)
+                    {
+                        $data = Warehouse::inventory_update($transaction_id, $transaction_type, $product_consume, $return = 'array');
 
-                    $data["status"] = "success-replace-all"; 
+                        $data["status"] = "success-condemned-all";
+                    }
+                    else
+                    {
+                        $data["status"] = "success-replace-all"; 
+                    }
                 }
-
             }
         }
 

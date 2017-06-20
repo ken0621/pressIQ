@@ -201,6 +201,7 @@
                            </li>
                            <li><a> Report <span class="fa fa-chevron-down"></span></a>
                             <ul style="display: none;">
+
                               @if(count($complan) >=1)
                                   @foreach($complan as $value)
                                   <li>

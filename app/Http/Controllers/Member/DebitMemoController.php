@@ -758,9 +758,9 @@ class DebitMemoController extends Member
 
         $serial_number = Request::input("serial_number");
 
-        dd($serial_number);
         $product_consume = [];
         $item_refill = [];
+        $item_serial = [];
         foreach ($dbline_data as $key => $value) 
         {
             $item_type = Tbl_item::where("item_id",$value->dbline_item_id)->pluck("item_type_id");
@@ -773,7 +773,11 @@ class DebitMemoController extends Member
                 if($value->dbline_replace_qty > 0)
                 {
                     $item_refill[$key]["quantity"] = $value->dbline_replace_qty;
-                    $item_refill[$key]["product_id"] = $value->dbline_item_id;                    
+                    $item_refill[$key]["product_id"] = $value->dbline_item_id;  
+
+                    $item_serial[$key]["quantity"] = $value->dbline_replace_qty;
+                    $item_serial[$key]["item_id"] = $value->dbline_item_id;
+                    $item_serial[$key]["serials"] = $serial_number[$key];                  
                 }
             }
         }
@@ -854,7 +858,6 @@ class DebitMemoController extends Member
 
         $data["status"] = null;
         $data["status_message"] = null;
-
         if(count($item_serial) > 0)
         {
             foreach ($item_serial as $key_item_serial => $value_item_serial)
@@ -875,7 +878,7 @@ class DebitMemoController extends Member
             }
 
         }
-
+        dd($data);
         if($data["status"] == null)
         {
             $warehouse_id       = $this->current_warehouse->warehouse_id;

@@ -275,6 +275,7 @@ class Payroll
 	}
 
 
+
 	/* TABLE FOR EMPLOYEE SEARCH INSERT OR UPDATE */
 	public static function generate_emplyoee_search($employee_id = 0)
 	{

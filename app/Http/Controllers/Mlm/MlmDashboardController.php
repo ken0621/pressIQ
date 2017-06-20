@@ -72,7 +72,7 @@ class MlmDashboardController extends Mlm
                     $data['income_per_complan'][$key]->wallet_log_amount = $data['binary'];
                 }
             }
-            $data['complan'] = Tbl_mlm_plan::where('shop_id', Self::$shop_id)->get()->keyBy('marketing_plan_code');
+            $data['complan'] = Tbl_mlm_plan::where('shop_id', Self::$shop_id)->where('marketing_plan_enable', 1)->get()->keyBy('marketing_plan_code');
 
             $data['count_per_level'][1] = 2;
             $data['count_per_level'][2] = 4;

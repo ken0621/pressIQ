@@ -425,7 +425,7 @@ class MlmGenealogyController extends Mlm
                                         </div>
                                         <div>' . $slot_info->slot_status . '</div>
                                         <div>' . "Count - L:".$l." R:".$r.'</div>
-                                        <div>' . "Points - L:".$slot_info->slot_binary_left." R:".$slot_info->slot_binary_right.'</div>
+                                        
                                         <div>
                                         </div>
                                     </div>
@@ -460,9 +460,9 @@ class MlmGenealogyController extends Mlm
         else if($position) 
         {
             $slot_info = Tbl_mlm_slot::where('slot_id',$placement)->customer()->first();
-
+            
             return  '   <li class="width-reference">
-                            <a id="add_slot_modal_open_'.$position.'" href="#animatedModal" color="#EFEFEF" onClick="return false;" style="text-decoration:none"  position="'.$position.'" placement="'.$placement.'" >
+                            <a href="#animatedModal" color="#EFEFEF" onClick="return false;" style="text-decoration:none"  position="'.$position.'" placement="'.$placement.'" >
                                 <span class="positioning parent parent-reference VC " position="'.$position.'" placement="'.$placement.'" y="'.$slot_info->first_name.'">
                                     <div class="id">+</div>
                                 </span>

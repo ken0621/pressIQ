@@ -452,7 +452,7 @@ class MlmDashboardController extends Mlm
     public static function process_order_queue()
     {
         $data["slot_count"]  = Tbl_mlm_slot::where("slot_owner",Self::$customer_id)->count();
-        $data['first_order'] = Tbl_ec_order::where("customer_id",Self::$customer_id)->orderBy("ec_order_id","ASC")->first();
+        $data['first_orders'] = Tbl_ec_order::where("customer_id",Self::$customer_id)->orderBy("ec_order_id","ASC")->get();
 
         if($data["slot_count"] != 0)
         {

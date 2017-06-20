@@ -161,9 +161,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
       </style>
 </head>
 <body>
-   @if($first_order)
+   @if($first_orders)
+
    <br>
-   <div class="col-md-offset-2 col-md-8">
+   @foreach($first_orders as $key => $first_order)
+   <div class="col-md-offset-3 col-md-6" style="font-size: 16px">
       <div class="box box-primary">
         <div class="box-header">
           <center>Your order status: {{$first_order->order_status}}</center>
@@ -186,18 +188,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <td>Billing Adress:</td>
               <td>{{$first_order->billing_address}}</td>
             </tr>
-            <tr>
-              <td></td>
-              <td><a href="/mlm/login">Click here to Logout</a></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td><a href="/member/register?slot=0">Click Here for new purchase</a></td>
-            </tr>
+            
           </table>
         </div>
       </div>
     </div>
+   @endforeach
+    <div class="col-md-offset-3 col-md-6" style="font-size: 16px">
+      <div class="box box-primary">
+        <div class="box-body">
+         <table class="table">
+            <tr>
+              <td></td>
+              <td><a href="/member/register?slot=0" class="btn btn-default pull-right">Click Here for new purchase</a>
+                  <a href="/mlm/login" class="btn btn-default pull-right">Click here to Logout</a>
+              </td>
+            </tr>
+         </table>
+        </div>
+      </div>   
+   </div>
   @else
   <div class="panel-heading">No slot</div>
   @endif  

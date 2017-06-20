@@ -936,6 +936,12 @@ class ItemController extends Member
 		}
 		if($return["message"] == "Success" || $return['status'] = 'success-serial')
 		{
+			$access_warehouse = Utilities::checkAccess('item-warehouse', 'merchantwarehouse');
+			if($access_warehouse == 1)
+			{
+				dd()
+			}
+
 			Session::forget("item_temporary_data");
 			$insert["item_id"] = $item_id;
 	        AuditTrail::record_logs("Added","item",$item_id,"",serialize($insert));

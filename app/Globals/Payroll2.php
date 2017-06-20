@@ -147,11 +147,11 @@ class Payroll2
 							$_output = Payroll2::time_shift_output($_output, $output_ctr++, $time->time_in, $time->time_out, 0, $reason);
 						}
 						
-						//sandwich overtime, shift out is between next shift in and out
+						//sandwich overtime, time out is between next shift in and out
 						if (($time_in_seconds<$shift_out_seconds)&&
 							($time_out_seconds>=$next_shift_in_seconds)) 
 						{ 
-							$reason = "<b>answer: ".Payroll2::convert_to_12_hour($shift->shift_out)." to ".Payroll2::convert_to_12_hour($_shift[$count_shift]->shift_in)." (0)- <span style='color: green; text-transform: uppercase'>sandwich overtime, shift out is between next shift in and out<span><br></b>";
+							$reason = "<b>answer: ".Payroll2::convert_to_12_hour($shift->shift_out)." to ".Payroll2::convert_to_12_hour($_shift[$count_shift]->shift_in)." (0)- <span style='color: green; text-transform: uppercase'>sandwich overtime, time in is between next shift in and out<span><br></b>";
 							echo $testing == true ? $reason : "";
 							$_output = Payroll2::time_shift_output($_output, $output_ctr++, $shift->shift_out, $_shift[$count_shift]->shift_in, 0, $reason);
 						}
@@ -210,7 +210,7 @@ class Payroll2
 	{
 		return date("h:i A", strtotime($strDate));
 	}
-	public static function time_shift_output($_output, $index, $time_in, $time_out, $auto_approved, $reason = "")
+	public static function time_shift_output($_output, $index, $time_in, $time_out, $auto_approved, $reason = "",$late,$undertime,$overtime)
 	{
 		$_output[$index] = new stdClass();
 		$_output[$index]->time_in = $time_in;

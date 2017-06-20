@@ -118,7 +118,7 @@ class Times2 extends Controller
 			18:00 PM to 21:00  (1)
 		*/
 
-		$_output = Payroll2::time_shift_create_format_based_on_conflict($_time, null, false);
+		$_output = Payroll2::time_shift_create_format_based_on_conflict($_time, $_shift, true);
 	
 		dd($_output);
 	}

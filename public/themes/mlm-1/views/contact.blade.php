@@ -2,11 +2,13 @@
 @section("content")
 <!-- OUR VALUES -->
 <div class="content">
-	<div class="container-fluid">
-		<div class="top-bg-container">
-			<img src="{{ get_content($shop_theme_info, "contactus", "contactus_banner_img") }}">
-			<div class="top-bg-detail-container"><span style="color: #ffc10e;">{{ get_content($shop_theme_info, "contactus", "contactus_banner_title_first_word") }}</span>&nbsp;{{ get_content($shop_theme_info, "contactus", "contactus_banner_title_highlight") }}</div>
-		</div>
+
+	<div class="top-bg-container">
+		<img src="{{ get_content($shop_theme_info, "contactus", "contactus_banner_img") }}">
+		<div class="top-bg-detail-container"><span style="color: #ffc10e;">{{ get_content($shop_theme_info, "contactus", "contactus_banner_title_first_word") }}</span>&nbsp;{{ get_content($shop_theme_info, "contactus", "contactus_banner_title_highlight") }}</div>
+	</div>
+
+	<div class="container">
 		<div class="row clearfix content">
 		<!-- CONTENT -->
 			<div class="content">

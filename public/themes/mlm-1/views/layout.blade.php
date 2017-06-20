@@ -12,7 +12,8 @@
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Fjalla+One" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css?family=Fjalla+One" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700" rel="stylesheet">
         <!-- BOOTSTRAP -->
         <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap.min.css">
         <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap-theme.min.css">
@@ -57,12 +58,13 @@
     </div>
 
     <!-- HEADER -->
-    <div class="header-container">
+    {{-- <div class="header-container"> --}}
+    <div class="container">
         <div class="container-fluid">
             <div class="row clearfix">
                 <div class="col-md-2">
                     <div class="image-logo-holder">
-                        <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/company-logo.png"></a>    
+                        <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/default-logo.png"></a>    
                         <div class="menu-nav">
                             <span></span>
                             <span></span>
@@ -74,13 +76,12 @@
                 <!-- NAVIGATION -->
                     <nav class="navirino">
                         <a href="/" class="head-button link-nav {{ Request::segment(1) == '' ? 'active' : '' }}" id="home">HOME</a>
-                        <a href="/about" class="head-button link-nav {{ Request::segment(1) == 'about' ? 'active' : '' }}" id="company-profile">COMPANY PROFILE</a>
-                        <a href="/runruno" class="head-button link-nav {{ Request::segment(1) == 'runruno' ? 'active' : '' }}" id="runruno">RUNRUNO</a>
-                        <a href="javascript:" class="head-button link-nav {{ Request::segment(1) == 'news' ? 'active' : '' }}" id="news">NEWS</a>
-                        <a href="/contact" class="head-button link-nav {{ Request::segment(1) == 'contact' ? 'active' : '' }}" id="contact-us">CONTACT US</a>
+                        <a href="/about" class="head-button link-nav {{ Request::segment(1) == 'about' ? 'active' : '' }}" id="company-profile">PRODUCTS</a>
+                        <a href="/runruno" class="head-button link-nav {{ Request::segment(1) == 'runruno' ? 'active' : '' }}" id="runruno">COMPANY</a>
+                        <a href="/contact" class="head-button link-nav {{ Request::segment(1) == 'contact' ? 'active' : '' }}" id="contact-us">CONTACT</a>
+                        <a href="#" class="head-button-join-us-today link-nav {{ Request::segment(1) == 'joinus' ? 'active' : '' }}" id="news">JOIN US TODAY</a>
                     </nav>
                 </div>
-                
             </div>
         </div>
         <!-- LIGHTBOX -->
@@ -90,7 +91,7 @@
         </div>
 
         <!-- NEWS DROPDOWN3 -->
-        <div class="slider3-wrapper" style="display: none;">
+        {{-- <div class="slider3-wrapper" style="display: none;">
             <div class="slider3-button-container">
                 <button id="gotoleft">&laquo;</button> 
                 <button id="gotoright">&raquo;</button>
@@ -163,7 +164,7 @@
                 @endif
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
     
     <!-- CONTENT -->
@@ -171,8 +172,91 @@
 	   @yield("content")
     </div>
 
+    {{-- PRE-FOOTER --}}
+    <div class="pre-footer">
+        <div style="background-image: url('/themes/{{ $shop_theme }}/img/pre-footer.png');">
+            
+            <div class="container">
+
+                <div class="logo">
+                    <img src="/themes/{{ $shop_theme }}/img/default-logo2.png">
+                </div>
+
+                <div class="row clearfix">
+                    <div class="col-md-6">
+                        <a href="#">Head Quarters</a>
+                    </div>
+
+                    <div class="col-md-6">
+                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo<br>ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    {{-- FOOTER --}}
+    <footer>
+        <div style="background-image: url('/themes/{{ $shop_theme }}/img/footer-bg.png');">
+            <div class="container">
+                <div class="ftr-readmore-container row clearfix">
+                    <div class="col-md-6">
+                        <div class="paragraph">Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="ftr-btn-container">
+                            <button class="read-more-btn">READ MORE</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ftr-content row clearfix">
+                    <div class="col-md-3">
+                        <div class="ftr-title">INFORMATION</div>
+                        <br>
+                        <a class="sub-title" href="#">HOME</a><br>
+                        <a class="sub-title" href="#">PRODUCTS</a><br>
+                        <a class="sub-title" href="#">COMPANY</a><br>
+                        <a class="sub-title" href="#">CONTACT</a><br>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="ftr-title">CONTACT US</div>
+                        <br>
+                        <a class="sub-title" href="#">TEL NO.</a><br>
+                        <a class="sub-title" href="#">MOBILE NO.</a><br>
+                        <a class="sub-title" href="#">EMAIL</a><br>
+                        <a class="sub-title" href="#">FAX</a><br>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="ftr-title">NEWS LETTER</div>
+                        <br>
+                        <div class="sub-title">Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. </div>
+                        <br>
+                        <form>
+                            <input type="text" name="email" placeholder="Enter your email here">
+                            <button type="submit">Submit</button>
+                        </form>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="ftr-title">FOLLOW US ON</div>
+                        <br>
+                        <div>
+                        <a href="#"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>
+                        &nbsp
+                        <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                        &nbsp
+                        <a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
     <!-- FOOTER -->
-  	<footer>
+  	{{-- <footer>
         <div class="container-fluid">
             <div class="row clearfix">
                 <div class="col-md-6">
@@ -210,13 +294,16 @@
                 </div>
             </div>
         </div>
- 	</footer>
+ 	</footer> --}}
 
     <footer id="bottom-footer">
         <div class="container bottom">
-            <div class="row clearfix">
-                <div class="col-md-12">                            
-                    <div class="ftr-title">Copyright 2017 FCF Minerals | Powered By : DIGIMA Web Solutions, Inc.</div>
+            <div class="row clearfix border">
+                <div class="col-md-6">                            
+                    <div class="ftr-title1">Terms & Conditions &nbsp|&nbsp API Use Policy &nbsp|&nbsp Privacy Policy &nbsp|&nbsp Cookies.</div>
+                </div>
+                 <div class="col-md-6">                            
+                    <div class="ftr-title2">© 2015 - 2016 Digima Web Solutions. All Rights Reserved.</div>
                 </div>
             </div>
         </div>

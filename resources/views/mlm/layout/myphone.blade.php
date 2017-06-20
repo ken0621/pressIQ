@@ -230,10 +230,10 @@
                                 <a href="/mlm/wallet" class="subnav-text">
                                     Wallet Logs
                                 </a> 
-                                <a href="/mlm/refill" class="subnav-text">
+                                <a href="/mlm/refill" class="subnav-text hide">
                                     Wallet Refill
                                 </a> 
-                                <a href="/mlm/transfer" class="subnav-text">
+                                <a href="/mlm/transfer" class="subnav-text hide">
                                     Wallet Transfer
                                 </a> 
                                 <a href="/mlm/encashment" class="subnav-text">

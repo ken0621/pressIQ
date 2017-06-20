@@ -221,13 +221,13 @@ class ShopCheckoutController extends Shop
     }
     public function paymaya_failure()
     {
-        $order_id = Crypt::decrypt(Request::input("order"));
+        $order_id = Crypt::decrypt(Request::input("order_id"));
         $this->failmaya($order_id);
         return Redirect::to('/mlm/login?notify=3');
     }
     public function paymaya_cancel()
     {
-        $order_id = Crypt::decrypt(Request::input("order"));
+        $order_id = Crypt::decrypt(Request::input("order_id"));
         $this->failmaya($order_id);
         return Redirect::to('/mlm/login?notify=4');
     }

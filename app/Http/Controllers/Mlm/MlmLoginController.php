@@ -111,7 +111,7 @@ class MlmLoginController extends Controller
         $data['notify_data'] = '';
         if($notify)
         {
-            $data['notify'] = $notify;
+            $data['notify'] = 1;
             $data['notify_data'] = $this->notify_steps();
         }
         return view("mlm.login", $data);

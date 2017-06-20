@@ -140,6 +140,8 @@ class ShopCheckoutController extends Shop
                         $update['order_status'] = "Processing";
                         $update['payment_status'] = 1;
                         $order = Ec_order::update_ec_order($update);
+
+                        $this->after_email_payment($order_id);
                     } 
                     catch (\Exception $e) 
                     {
@@ -164,6 +166,8 @@ class ShopCheckoutController extends Shop
                         $update['order_status'] = "Processing";
                         $update['payment_status'] = 1;
                         $order = Ec_order::update_ec_order($update);
+
+                        $this->after_email_payment($order_id);
                     } 
                     catch (\Exception $e) 
                     {
@@ -203,20 +207,7 @@ class ShopCheckoutController extends Shop
             $update['payment_status'] = 1;
             $order = Ec_order::update_ec_order($update);
 
-            /* Email Checkout */
-            $data_order                = DB::table("tbl_ec_order")->where("ec_order_id", $order_id)->first();
-            $data_customer             = DB::table("tbl_customer")->where("customer_id", $data_order->customer_id)->first();
-            if ($data_order) 
-            {
-                $data["template"]         = Tbl_email_template::where("shop_id", $this->shop_info->shop_id)->first();
-                $data['mail_to']          = $data_order->customer_email;
-                $data['mail_subject']     = "Account Verification";
-                $data['account_password'] = Crypt::decrypt($data_customer->password);
-                $data['mlm_username']     = $data_customer->mlm_username;
-                $data['mlm_email']        = $data_customer->email; 
-                $result = Mail_global::password_mail($data, $data_order->shop_id);
-            }
-            /* End Email Checkout */
+            $this->after_email_payment($order_id);
 
             if ($from == "checkout") 
             {
@@ -259,6 +250,23 @@ class ShopCheckoutController extends Shop
         // $update_customer["mlm_username"] = "f_" . $customer->mlm_username;
 
         // DB::table("tbl_customer")->where("customer_id", $customer->customer_id)->update($update_customer);
+    }
+    public function after_email_payment($order_id)
+    {
+        /* Email Checkout */
+        $data_order                = DB::table("tbl_ec_order")->where("ec_order_id", $order_id)->first();
+        $data_customer             = DB::table("tbl_customer")->where("customer_id", $data_order->customer_id)->first();
+        if ($data_order) 
+        {
+            $data["template"]         = Tbl_email_template::where("shop_id", $this->shop_info->shop_id)->first();
+            $data['mail_to']          = $data_order->customer_email;
+            $data['mail_subject']     = "Account Verification";
+            $data['account_password'] = Crypt::decrypt($data_customer->password);
+            $data['mlm_username']     = $data_customer->mlm_username;
+            $data['mlm_email']        = $data_customer->email; 
+            $result = Mail_global::password_mail($data, $data_order->shop_id);
+        }
+        /* End Email Checkout */
     }
     /* End Payment Facilities */
 

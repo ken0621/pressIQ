@@ -1121,7 +1121,7 @@ class Cart
             $order_status   = "Pending";
             $customer       = Cart::get_customer();
 
-            $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null);
+            $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null, 0);
             Cart::clear_all($shop_id);
             
             $dragon_request = array(

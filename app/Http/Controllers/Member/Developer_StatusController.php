@@ -14,7 +14,13 @@ use App\Globals\Mlm_complan_manager;
 use App\Models\Tbl_item_code;
 use App\Globals\Mlm_complan_manager_repurchase;
 use App\Models\Tbl_mlm_slot;
+use App\Models\Tbl_customer;
+use App\Globals\Mlm_plan;
+use App\Models\Tbl_customer_other_info;
+use App\Models\Tbl_customer_address;
+use App\Models\Tbl_customer_search;
 use Carbon\Carbon;
+use Excel;
 class Developer_StatusController extends Member
 {
 	public function index()
@@ -267,4 +273,114 @@ class Developer_StatusController extends Member
 			}
 		}
 	}
+	public function import_excel()
+	{
+		$shop_id = $this->user_info->shop_id;
+		Excel::load(public_path().'/assets/mlm/brown.xlsx', function($reader) 
+            {
+                $results = $reader->get()->toArray();
+                $restructure = [];
+                $shop_id = $this->user_info->shop_id;
+                foreach($results[0] as $key => $value)
+                {
+                    
+                    $id = $value['id'];
+                    $first_name = $value['first_name'];
+                    $middle_name = $value['middle_name'];
+                    $last_name = $value['last_name']; 
+                    $email = $value['email']; 
+                    $contact = $value['contact']; 
+                    $sponsor_id = $value['sponsor_id']; 
+                    $tin = $value['tin']; 
+                    if($first_name == null)
+                    {
+                        $this->import_excel_v2($restructure);
+                        dd(1);
+                    }
+                    $insert['shop_id'] = $shop_id;
+                    $insert['country_id'] = 420;
+                    $insert['title_name'] = '';
+                    $insert['first_name'] =  $first_name;
+                    $insert['middle_name'] = $middle_name;
+                    $insert['last_name'] = $last_name;
+                    $insert['suffix_name'] = '';
+                    $insert['email'] =   $email;
+                    $insert['ismlm'] = 1;
+                    $insert['mlm_username'] = $this->generate_username($first_name, $last_name);
+                    $insert['password'] = 'myphone';
+                    $insert['tin_number'] = $tin;
+                    $insert['company'] = '';
+                    $insert['created_date'] = Carbon::now();
+
+                    $customer_id = Tbl_customer::insertGetId($insert);
+
+                    $restructure[$id]['customer_id'] = $customer_id;
+                    $restructure[$id]['sponsor_id'] = $sponsor_id;
+                    
+                    $insertSearch['customer_id'] = $customer_id;
+                    $insertSearch['body'] = $insert['title_name'].' '.$insert['first_name'].' '.$insert['middle_name'].' '.$insert['last_name'].' '.$insert['suffix_name'].' '.$insert['email'].' '.$insert['company'];
+
+                    Tbl_customer_search::insert($insertSearch);
+
+                    $insertInfo['customer_id'] = $customer_id;
+                    $insertInfo['customer_mobile'] = $contact;
+                    Tbl_customer_other_info::insert($insertInfo);
+
+                    $insertAddress[0]['customer_id'] = $customer_id;
+                    $insertAddress[0]['country_id'] = 420;
+                    $insertAddress[0]['purpose'] = 'billing';
+                    $insertAddress[0]['customer_street'] = '';
+                    
+                    $insertAddress[1]['customer_id'] = $customer_id;
+                    $insertAddress[1]['country_id'] = 420;
+                    $insertAddress[1]['purpose'] = 'shipping';
+                    $insertAddress[1]['customer_street'] = '';
+                    Tbl_customer_address::insert($insertAddress);
+                }
+            });
+
+			
+	}
+	public function import_excel_v2($restructure)
+	{
+		$shop_id = $this->user_info->shop_id;
+		foreach ($restructure as $key => $value) 
+		{
+            $insert['slot_no'] = Mlm_plan::set_slot_no($shop_id, null);
+            $insert['shop_id'] = $shop_id;
+            $insert['slot_owner'] = $value['customer_id'];
+            $insert['slot_created_date'] = Carbon::now();
+            $insert['slot_membership'] =  7;
+            $insert['slot_status'] = 'PS';
+            if(isset($restructure[$value['sponsor_id']]['slot_id']))
+            {
+                 $insert['slot_sponsor'] = $restructure[$value['sponsor_id']]['slot_id'];
+            }
+            $id = Tbl_mlm_slot::insertGetId($insert);
+            $restructure[$key]['slot_id'] = $id;
+            $a = Mlm_compute::entry($id, 0);
+		}
+	}
+	public function generate_username($first_name, $last_name)
+    {
+        $f_name = $first_name;
+        $l_name = $last_name;
+        $last_name = str_replace(' ', '', $last_name);
+        $first_name = str_replace(' ', '', $first_name);
+        $last_name = strtolower(substr($last_name, 0, 3));
+        $first_name = strtolower(substr($first_name, 0, 6));
+        $nickname = $first_name . '.' . $last_name;
+        $count_username = Tbl_customer::where('first_name', $f_name)
+        ->where('last_name', $l_name)
+        ->count();
+        if($count_username == 0)
+        {
+            return $nickname;
+        }
+        else
+        {
+            $nickname = $nickname . ($count_username + 1);
+            return $nickname;
+        }
+    }
 }

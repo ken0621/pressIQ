@@ -88,6 +88,7 @@ Route::any('/member/developer/reset_slot/submit/re_com_phil_lost', 'Member\Devel
 Route::any('/member/developer/reset_slot/submit/re_com_phil_uni', 'Member\Developer_StatusController@re_com_phil_uni'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/recompute', 'Member\Developer_StatusController@recompute'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/recompute_myphone', 'Member\Developer_StatusController@recompute_myphone'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/reset_slot/submit/import_excel_myphone', 'Member\Developer_StatusController@import_excel'); //GUILLERMO TABLIGAN
 
 /* END MEMBER - VENDOR - GUILLERMO TABLIGAN */
 

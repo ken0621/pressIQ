@@ -85,7 +85,8 @@
                                                 <td>
                                                 <input type="hidden" name="" class="txt-amount" value="{{$dbline->dbline_amount - $dbline->dbline_replace_amount}}">
                                                 <span>{{number_format(($dbline->dbline_amount - $dbline->dbline_replace_amount),2)}}</span></td>
-                                                @include("member.load_ajax_data.load_td_serial_number")
+                                                <td>
+                                                    <input type="text" name="serial_number[]" value="{{$dbline->serial_number}}"></td>
                                                 <td class="text-center"><input disabled type="checkbox" {{$dbline->dbline_replace_status == 1 ? 'checked' : '' }} name=""></td>
                                             </tr>
                                         @endforeach

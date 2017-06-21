@@ -64,9 +64,9 @@
       <div class="invoice">
         <div class="title">INVOICE</div>
         <div class="holder">
-          <div class="detail-row">Bill To : {{ $info->first_name }} {{ $info->middle_name }} {{ $info->last_name }}</div>
-          <div class="detail-row">Shipping Address : {{ $info->customer_state }}, {{ $info->customer_city }}, {{ $info->customer_zipcode }}, {{ $info->customer_street }}</div>
-          <div class="detail-row">TIN : {{ $info->tin_number }}</div>
+          <div class="detail-row"><strong>Bill To :</strong> {{ $info->first_name }} {{ $info->middle_name }} {{ $info->last_name }}</div>
+          <div class="detail-row"><strong>Shipping Address :</strong> {{ $info->customer_state }}, {{ $info->customer_city }}, {{ $info->customer_zipcode }}, {{ $info->customer_street }}</div>
+          <div class="detail-row"><strong>TIN :</strong> {{ $info->tin_number }}</div>
         </div>
         <div class="sub-title">INVOICE DETAILS:</div>
         <div class="holder invoice-details">
@@ -106,9 +106,9 @@
         <div class="holder">
           <div class="clearfix">
             <div class="payment-detail pull-left">
-              <div class="detail-row">Bill To : {{ $info->first_name }} {{ $info->middle_name }} {{ $info->last_name }}</div>
-              <div class="detail-row">Shipping Address : {{ $info->customer_state }}, {{ $info->customer_city }}, {{ $info->customer_zipcode }}, {{ $info->customer_street }}</div>
-              <div class="detail-row">TIN : {{ $info->tin_number }}</div>
+              <div class="detail-row"><strong>Bill To :</strong> {{ $info->first_name }} {{ $info->middle_name }} {{ $info->last_name }}</div>
+              <div class="detail-row"><strong>Shipping Address :</strong> {{ $info->customer_state }}, {{ $info->customer_city }}, {{ $info->customer_zipcode }}, {{ $info->customer_street }}</div>
+              <div class="detail-row"><strong>TIN :</strong> {{ $info->tin_number }}</div>
             </div>
             <div class="total-summary pull-right">
               <div class="rows">TOTAL PAID AMOUNT : PHP. {{ number_format($summary['subtotal'], 2) }}</div>

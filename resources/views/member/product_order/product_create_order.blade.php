@@ -16,6 +16,9 @@
                     </small>
                 </h1>
                 <button type="submit" class="panel-buttons btn btn-custom-primary pull-right">Save</button>
+                @if($inv->payment_status == 1)
+                    <a href="/member/ecommerce/product_order/custom_invoice?order={{ $ec_order_id }}" target="_blank" class="panel-buttons btn btn-custom-primary pull-right">View Invoice</a>
+                @endif
                 <a href="/member/ecommerce/product_order" class="panel-buttons btn btn-default pull-right btn-custom-white">&laquo; Back</a>
             </div>
         </div>

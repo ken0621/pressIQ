@@ -6,6 +6,7 @@ use App\Globals\Pdf_global;
 use App\Globals\Ecom_Product;
 use PDF;
 use App;
+use DB;
 use Carbon\Carbon;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_country;
@@ -20,6 +21,8 @@ use App\Models\Tbl_online_pymnt_method;
 use App\Models\Tbl_ec_product;
 use App\Models\Tbl_ec_variant;
 use App\Models\Tbl_settings;
+use App\Models\Tbl_ec_order;
+use App\Models\Tbl_ec_order_item;
 
 use Validator;
 use Session;
@@ -32,6 +35,7 @@ use App\Globals\Mlm_compute;
 use App\Globals\Mlm_gc;
 use App\Globals\Dragonpay2\Dragon_RequestPayment;
 use App\Globals\Cart;
+use App\Globals\UnitMeasurement;
 class MemberController extends Controller
 {
     public static $shop_id;
@@ -836,5 +840,69 @@ class MemberController extends Controller
         $data['membership_code'] = Request::input("membership_code");
 
         return view("card", $data);
+    }
+
+    public function set_invoice_number()
+    {
+        $order = DB::table("tbl_ec_order")->where("payment_status", 1)->where("archived", 0)->where("invoice_number", NULL)->get();
+        foreach ($order as $key => $value) 
+        {
+            $last = DB::table("tbl_ec_order")->where("payment_status", 1)->where("archived", 0)->max("invoice_number");
+            if ($last) 
+            {
+                $update["invoice_number"] = $last + 1;
+                DB::table('tbl_ec_order')->where("ec_order_id", $value->ec_order_id)->update($update);            
+            }
+            else
+            {
+                $update["invoice_number"] = 11000000;
+                DB::table('tbl_ec_order')->where("ec_order_id", $value->ec_order_id)->update($update);
+            }
+        }
+    }
+
+    public function custom_view_invoice()
+    {
+        $this->set_invoice_number();
+        $order_id = Request::input("order");
+        if ($order_id) 
+        {
+            $data['info']   = Tbl_ec_order::where("tbl_ec_order.ec_order_id", $order_id)
+                                            ->select("*", "tbl_ec_order.created_date as order_created_date")
+                                            ->where("tbl_customer_address.purpose", "shipping")
+                                            ->join("tbl_customer", "tbl_customer.customer_id", "=", "tbl_ec_order.customer_id")
+                                            ->leftJoin("tbl_customer_address", "tbl_customer_address.customer_id", "=", "tbl_customer.customer_id")
+                                            ->leftJoin("tbl_online_pymnt_method", "tbl_online_pymnt_method.method_id", "=", "tbl_ec_order.payment_method_id")
+                                            ->first();
+            
+            if ($data['info']) 
+            {
+                $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $order_id)
+                                                   ->leftJoin('tbl_ec_variant', 'tbl_ec_order_item.item_id', '=', 'evariant_id')
+                                                   ->get();
+
+                if ($data['_order']) 
+                {
+                    $data['summary'] = [];
+                    $subtotal = 0;
+                    $shipping = 0;
+                    $total = 0;
+
+                    foreach ($data['_order'] as $key => $value) 
+                    {
+                        $subtotal += $value->total;
+                    }
+                    
+                    $data['summary']['subtotal']       = $subtotal;
+                    $data['summary']['vat']            = $subtotal / 1.12 * 0.12;
+                    $data['summary']['vatable']        = $data['summary']['subtotal'] - $data['summary']['vat'];
+                    $data['order_id']                  = $order_id;
+
+                    $html = view("custom_invoice", $data);
+                    $pdf = Pdf_global::show_pdf($html);
+                    return $pdf;
+                }
+            }
+        }
     }
 }

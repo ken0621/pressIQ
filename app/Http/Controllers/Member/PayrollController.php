@@ -4957,7 +4957,7 @@ class PayrollController extends Member
           {
                $insert = array();
 
-               foreach(Request::input('employee_tag') as $tag)
+               foreach(Request::input('employee_tag') as $key => $tag)
                {
                     
 
@@ -4966,6 +4966,18 @@ class PayrollController extends Member
                          $temp['payroll_leave_employee_id']    = $tag;
                          $temp['payroll_schedule_leave']       = $payroll_schedule_leave;
                          $temp['shop_id']                      = Self::shop_id();
+                         $temp['leave_whole_day']              = 0;
+                         $temp['leave_hours']                  = '00:00:00';
+
+                         if(Request::has('whole_day_'.$tag))
+                         {
+                              $temp['leave_whole_day']           = 1;
+                         }
+                         if(Request::has('leave_hours_'.$tag))
+                         {
+                              $temp['leave_hours']               = date('h:i:s', strtotime(Request::input('leave_hours_'.$tag)));
+                         }
+                         
                          array_push($insert, $temp);
                     }
 
@@ -4977,6 +4989,17 @@ class PayrollController extends Member
                               $temp['payroll_leave_employee_id']    = $tag;
                               $temp['payroll_schedule_leave']       = $payroll_schedule_leave;
                               $temp['shop_id']                      = Self::shop_id();
+                              $temp['leave_whole_day']              = 0;
+                              $temp['leave_hours']                  = '00:00:00';
+
+                              if(Request::has('whole_day_'.$tag))
+                              {
+                                   $temp['leave_whole_day']           = 1;
+                              }
+                              if(Request::has('leave_hours_'.$tag))
+                              {
+                                   $temp['leave_hours']               = date('h:i:s', strtotime(Request::input('leave_hours_'.$tag)));
+                              }
                               array_push($insert, $temp);
                               $payroll_schedule_leave = Carbon::parse($payroll_schedule_leave)->addDay()->format("Y-m-d");
                          }

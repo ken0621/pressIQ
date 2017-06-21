@@ -140,7 +140,7 @@ function employee_tag_schedule_leave()
 			_token:misc('_token')
 		};
 		var function_name = "modal_create_deduction.remove_tag";
-		$(target).html('<tr><td colspan="2">'+misc('loader') + '</td></tr>');
+		$(target).html('<tr><td colspan="4">'+misc('loader') + '</td></tr>');
 		$.ajax({
 			url 	: 	action,
 			type 	: 	method,
@@ -154,6 +154,8 @@ function employee_tag_schedule_leave()
 					html += tbl_tag(data);
 				});
 				$(target).html(html);
+				event_time_entry();
+				whole_time_check();
 				remove_tag();
 			},
 			error 	: 	function(err)
@@ -200,8 +202,10 @@ function employee_tag_schedule_leave()
 
 	function tbl_tag(data)
 	{
-		var html = '<tr>';
+		var html = '<tr class="time-record main">';
 		html += '<td>' + data.payroll_employee_title_name + ' ' + data.payroll_employee_first_name + ' ' + data.payroll_employee_middle_name  + ' ' + data.payroll_employee_last_name  + ' ' + data.payroll_employee_suffix_name  + ' <input type="hidden" name="employee_tag[]" value="'+data.payroll_leave_employee_id+'"></td>';
+		html += '<td class="text-center"><input type="checkbox" checked="checked" class="whole_day" name="whole_day_'+data.payroll_leave_employee_id+'" value="1"></td>';
+		html += '<td class="text-center edit-data zerotogray" width="25%"><input type="text" name="leave_hours_'+data.payroll_leave_employee_id+'" placeholder="00:00" class="text-center form-control break time-entry time-target time-entry-24 is-timeEntry" disabled></td>';
 		html += '<td class="text-center"><a href="#" class="btn-remove-tag" data-content="'+data.payroll_employee_id+'"><i class="fa fa-times"></i></a></td>';
 		html += '</tr>';
 		return html;
@@ -212,7 +216,34 @@ function employee_tag_schedule_leave()
 		toastr.error("Error, something went wrong.");
 	}
 
+
+	function event_time_entry()
+	{
+		$(".time-entry").timeEntry('destroy');
+		$(".time-entry-24").timeEntry('destroy');
+		$(".time-entry.time-in").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 0, 0, 0)});
+		$(".time-entry.time-out").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 12, 0, 0)});
+		$(".time-entry-24").timeEntry({show24Hours: true, defaultTime: new Date(0, 0, 0, 0, 0, 0)});
+	}
 	
+	function whole_time_check()
+	{
+		$(".whole_day").unbind("change");
+		$(".whole_day").bind("change", function()
+		{
+			var target = $(this).parents('tr').find('.time-target');
+			if($(this).is(":checked"))
+			{
+				target.attr('disabled',true);
+				target.removeAttr('required');
+			}
+			else
+			{
+				target.attr('disabled',false);
+				target.attr('required',true);
+			}
+		});
+	}
 
 	function misc(str){
 		var spinner = '<i class="fa fa-spinner fa-pulse fa-fw"></i><span class="sr-only">Loading...</span>';

@@ -202,10 +202,6 @@ class MLM_ReportController extends Member
         $view =  Mlm_report::$report($shop_id, $filter);
         $data['status'] = 'success';
         
-
-
-        
-
         // return $view;
         $from = Request::input('from');
         if($from == 'paginate')

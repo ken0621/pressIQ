@@ -42,7 +42,7 @@ class Mlm_report
     public static function order_count($shop_id, $filter)
     {
         $data['customer_id'] = Tbl_customer::where('shop_id', $shop_id)->get()->keyBy('customer_id');
-        $order = Tbl_ec_order::where('shop_id', $shop_id)->get();
+        $order = Tbl_ec_order::where('shop_id', $shop_id)->where('payment_status', 1)->get();
 
         $order_by_customer = [];
         foreach ($order as $key => $value) {

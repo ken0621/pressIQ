@@ -750,7 +750,6 @@ class Ec_order
             $order_info["tbl_customer"]["password"] = $customer->password;
             $order_info["tbl_customer"]["customer_mobile"] = $customer_other_info->customer_mobile;
             $order_info["tbl_ec_order"]["customer_id"] = $customer->customer_id;
-
         }
         else
         {
@@ -850,13 +849,14 @@ class Ec_order
         }
 
         /* Insert Reference for slot */
-        /* Email Password */
         if(isset($order_info['tbl_mlm_slot']))
         {
             if(isset($order_info['tbl_mlm_slot']['slot_sponsor']))
             {
 
-                $slot_sponsor = Tbl_mlm_slot::where('slot_nick_name', $order_info['tbl_mlm_slot']['slot_sponsor'])->first();
+                $slot_sponsor = Tbl_mlm_slot::where('slot_nick_name', $order_info['tbl_mlm_slot']['slot_sponsor'])
+                ->where('slot_defaul', 1)
+                ->first();
                 if($slot_sponsor)
                 {
                     $insert_slot_ref['order_slot_ec_order_id']  = $order_info["tbl_ec_order"]["ec_order_id"];
@@ -876,14 +876,19 @@ class Ec_order
                 }
             }
         }
+        /* Email Password */
         if ($order_info["new_account"]) 
         {
-            $data["template"]                 = Tbl_email_template::where("shop_id", $order_info["tbl_ec_order"]["shop_id"])->first();
-            $data['mail_to']                       = $order_info["tbl_ec_order"]["customer_email"];
-            $data['mail_subject']             = "Account Verification";
+            $data["template"]         = Tbl_email_template::where("shop_id", $order_info["tbl_ec_order"]["shop_id"])->first();
+            $data['mail_to']          = $order_info["tbl_ec_order"]["customer_email"];
+            $data['mail_subject']     = "Account Verification";
             $data['account_password'] = Crypt::decrypt($order_info["tbl_customer"]["password"]);
-
-            $result = Mail_global::password_mail($data, $order_info["tbl_ec_order"]["shop_id"]);
+            $data['mlm_username']     = $order_info["tbl_customer"]["mlm_username"];
+            $data['mlm_email']        = $order_info["tbl_customer"]["email"]; 
+            if ($order_info["notification"] == 1) 
+            {
+                $result = Mail_global::password_mail($data, $order_info["tbl_ec_order"]["shop_id"]);
+            }
         }
         
         // Ec_order::create_merchant_school_item($order_info["tbl_ec_order"]["ec_order_id"]);

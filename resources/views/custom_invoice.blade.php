@@ -65,7 +65,7 @@
         <div class="title">INVOICE</div>
         <div class="holder">
           <div class="detail-row"><strong>Bill To :</strong> {{ $info->first_name }} {{ $info->middle_name }} {{ $info->last_name }}</div>
-          <div class="detail-row"><strong>Shipping Address :</strong> {{ $info->customer_state }}, {{ $info->customer_city }}, {{ $info->customer_zipcode }}, {{ $info->customer_street }}</div>
+          <div class="detail-row"><strong>Shipping Address :</strong>{{ $info->customer_street }}, {{ $info->customer_state }}, {{ $info->customer_city }}, {{ $info->customer_zipcode }}</div>
           <div class="detail-row"><strong>TIN :</strong> {{ $info->tin_number }}</div>
         </div>
         <div class="sub-title">INVOICE DETAILS:</div>
@@ -86,18 +86,18 @@
                 <td>{{ $order->item_id }}</td>
                 <td>{{ $order->evariant_item_label }}</td>
                 <td>{{ $order->quantity }}</td>
-                <td>PHP. {{ number_format($order->price, 2) }}</td>
-                <td>PHP. {{ number_format($order->total, 2) }}</td>
+                <td>PHP {{ number_format($order->price, 2) }}</td>
+                <td>PHP {{ number_format($order->total, 2) }}</td>
               </tr>
               @endforeach
             </tbody>
           </table>
           <!-- TOTAL SUMMARY -->
-          <div class="total-border">
-            <div class="total-summary">
-              <div class="rows">VATable : PHP. {{ number_format($summary['vatable'], 2) }}</div>
-              <div class="rows">VAT 12% : PHP. {{ number_format($summary['vat'], 2) }}</div>
-              <div class="rows">TOTAL AMOUNT : PHP. {{ number_format($summary['subtotal'], 2) }}</div>
+          <div class="total-border clearfix">
+            <div class="total-summary" style="margin-bottom: 15px;">
+              <div class="rows"><span style="width: 115px; display: inline-block;">VATable</span><span style="display: inline-block;">: PHP {{ number_format($summary['vatable'], 2) }}</span></div>
+              <div class="rows"><span style="width: 115px; display: inline-block;">VAT 12%</span><span style="display: inline-block;">: PHP {{ number_format($summary['vat'], 2) }}</span></div>
+              <div class="rows"><span style="width: 115px; display: inline-block;">TOTAL AMOUNT</span><span style="display: inline-block;">: PHP {{ number_format($summary['subtotal'], 2) }}</span></div>
             </div>  
           </div>
           <!-- END TOTAL SUMMARY -->
@@ -106,12 +106,12 @@
         <div class="holder">
           <div class="clearfix">
             <div class="payment-detail pull-left">
-              <div class="detail-row"><strong>Payment Date :</strong> {{ date("F d, Y", strtotime($info->order_created_date)) }}</div>
-              <div class="detail-row"><strong>Payment Type :</strong> {{ $info->method_name ? $info->method_name : 'Unknown' }}</div>
-              <div class="detail-row"><strong>Payment Receipt Number :</strong> {{ $info->checkout_id }}</div>
+              <div class="rows"><strong>Payment Date :</strong> {{ date("F d, Y", strtotime($info->order_created_date)) }}</div>
+              <div class="rows"><strong>Payment Type :</strong> {{ $info->method_name ? $info->method_name : 'Unknown' }}</div>
+              <div class="rows"><strong>Payment Receipt Number :</strong> {{ $info->checkout_id }}</div>
             </div>
             <div class="total-summary pull-right">
-              <div class="rows">TOTAL PAID AMOUNT : PHP. {{ number_format($summary['subtotal'], 2) }}</div>
+              <div class="rows">TOTAL PAID AMOUNT : PHP {{ number_format($summary['subtotal'], 2) }}</div>
             </div>
           </div>
         </div>

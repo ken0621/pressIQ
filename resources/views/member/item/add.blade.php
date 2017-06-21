@@ -556,3 +556,4 @@
         overflow: visible;
     }
 </style>
+<script type="text/javascript">load_assets();</script>

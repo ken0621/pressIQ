@@ -54,7 +54,7 @@
             			<td><label>Register Disable Message</label></td>
             		</tr>
             		<tr>
-            			<td><textarea class="form-control input-sm tinymce" name="regirter_page_disable_text">{!! isset($regirter_page_disable_text->settings_value) ?  $terms_and_agreement->settings_value : '' !!}</textarea></td>
+            			<td><textarea class="form-control input-sm tinymce" name="regirter_page_disable_text">{!! isset($regirter_page_disable_text->settings_value) ?  $regirter_page_disable_text->settings_value : '' !!}</textarea></td>
             		</tr>
 	            	<tr>
 	            		<td><button class="pull-right btn btn-primary">Submit</button></td>

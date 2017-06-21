@@ -742,7 +742,7 @@ class Warehouse
 
                 $inventory_id = Tbl_warehouse_inventory::insertGetId($insert_refill);
 
-                if(count($item_serial) > 0)
+                if(count($item_serial) > 0 && $is_return == null) 
                 {
                     if($item_serial[$key]["item_id"] == $refill_product['product_id'])
                     {

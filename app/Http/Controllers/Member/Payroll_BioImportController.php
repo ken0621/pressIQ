@@ -517,6 +517,8 @@ class Payroll_BioImportController extends Member
     				$time_in = Self::findfirstlast_mustard($time);
     				$time_out = Self::findfirstlast_mustard($time,'last');
 
+    				// dd($time_out);
+
     				$company_id = Self::getemployeeId($time['employee_no'],'payroll_employee_company_id');
 
     				if($time['company_code'] != null)
@@ -579,12 +581,14 @@ class Payroll_BioImportController extends Member
 
     	if($find == 'last')
     	{
-    		$_param = ['in_6','out_6','in_5','out_5','in_4','out_4','in_3','out_3','in_2','out_2','in_1','out_1'];
+    		// $_param = ['in_6','out_6','in_5','out_5','in_4','out_4','in_3','out_3','in_2','out_2','in_1','out_1'];
+    		$_param = ['out_6','in_6','out_5','in_5','out_4','in_4','out_3','in_3','out_2','in_2','out_1','in_1'];
     	}
   
     	foreach($_param as $param)
     	{
-    		if($_time[$param] != null)
+    		
+    		if($_time[$param] != null && $_time[$param] != ' ' && $_time[$param] != '' && $_time[$param] != 'null')
     		{
     			$time = date('H:i:s', strtotime($_time[$param]));
     			break;
@@ -702,8 +706,8 @@ class Payroll_BioImportController extends Member
     public function delete_blank($payroll_time_sheet_id = 0)
     {
     	Tbl_payroll_time_sheet_record::where('payroll_time_sheet_id', $payroll_time_sheet_id)
-    								 ->where('payroll_time_sheet_in','0000-00-00')
-    								 ->where('payroll_time_sheet_out','0000-00-00')
+    								 ->where('payroll_time_sheet_in','00:00:00')
+    								 ->where('payroll_time_sheet_out','00:00:00')
     								 ->delete();
     }
 

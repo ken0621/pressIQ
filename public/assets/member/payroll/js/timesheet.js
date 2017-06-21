@@ -809,6 +809,7 @@ function submit_done(data)
 		data = JSON.parse(data);
 	}
 	catch(err){}
+	
 	data.element.modal("toggle");
 	if(data.function_name == 'get_company')
 	{	

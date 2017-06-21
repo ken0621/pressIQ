@@ -95,9 +95,9 @@
           <!-- TOTAL SUMMARY -->
           <div class="total-border clearfix">
             <div class="total-summary" style="margin-bottom: 15px;">
-              <div class="rows">VATable : PHP. {{ number_format($summary['vatable'], 2) }}</div>
-              <div class="rows">VAT 12% : PHP. {{ number_format($summary['vat'], 2) }}</div>
-              <div class="rows">TOTAL AMOUNT : PHP. {{ number_format($summary['subtotal'], 2) }}</div>
+              <div class="rows"><span style="width: 115px; display: inline-block;">VATable</span><span style="display: inline-block;">: PHP. {{ number_format($summary['vatable'], 2) }}</span></div>
+              <div class="rows"><span style="width: 115px; display: inline-block;">VAT 12%</span><span style="display: inline-block;">: PHP. {{ number_format($summary['vat'], 2) }}</span></div>
+              <div class="rows"><span style="width: 115px; display: inline-block;">TOTAL AMOUNT</span><span style="display: inline-block;">: PHP. {{ number_format($summary['subtotal'], 2) }}</span></div>
             </div>  
           </div>
           <!-- END TOTAL SUMMARY -->

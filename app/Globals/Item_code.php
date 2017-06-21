@@ -793,10 +793,6 @@ class Item_code
                                     $insert['slot_status'] = 'PS';
                                     if($tbl_ec_order_slot->order_slot_sponsor != 0)
                                     {
-                                         // $insert['slot_placement'] = $tbl_ec_order_slot->order_slot_sponsor;
-                                    }
-                                    if($tbl_ec_order_slot->order_slot_sponsor != 0)
-                                    {
                                          $insert['slot_sponsor'] = $tbl_ec_order_slot->order_slot_sponsor;
                                     }
 
@@ -804,7 +800,7 @@ class Item_code
                                     DB::table('tbl_ec_order_slot')->where('order_slot_ec_order_id', $order_id)->update($update_s);
 
                                     $id = Tbl_mlm_slot::insertGetId($insert);
-                                    $a = Mlm_compute::entry($id);
+                                    $a = Mlm_compute::entry($id, 0);
 
                                     Mlm_member::add_to_session_edit($shop_id, $tbl_ec_order_slot->order_slot_customer_id, $id);
                                 }

@@ -137,6 +137,7 @@ class Mlm_tree
                 }
             }
         }
+
     }
     public static function auto_place_slot_binary_left_to_right_v2($slot_info)
     {

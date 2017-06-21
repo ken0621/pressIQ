@@ -231,4 +231,40 @@ class Developer_StatusController extends Member
 		}
 		dd($invoice);
 	}
+	public function recompute_myphone()
+	{
+		ini_set('max_execution_time', 5000);
+		$password = Request::input('password');
+		if($password == 'water123')
+		{
+			DB::table('tbl_tree_placement')->delete();
+			DB::table('tbl_tree_sponsor')->delete();
+			DB::table('tbl_mlm_slot_wallet_log')->delete();
+			
+			// JESUS CHAM 351           15 - 1   (4187)
+			// CHRISTIAN PARO-AN 352    33 - 5   (4196, 4185, 4182, 4180, 4176)
+			// KELVIN CHAM 354		  4 - 1	  (4192)
+			// JOHN PAUL HORNEDO 361     2 - 1	  (4209)
+			$whereIn['4187'] = 4187;
+			$whereIn['4196'] = 4196;
+			$whereIn['4185'] = 4185;
+			$whereIn['4182'] = 4182;
+			$whereIn['4180'] = 4180;
+			$whereIn['4176'] = 4176;
+			$whereIn['4192'] = 4192;
+			$whereIn['4209'] = 4209;
+			Tbl_mlm_slot::whereIn('slot_id', $whereIn)->delete();
+
+			$update['slot_placement'] = 0;
+			$update['slot_position'] = 'left';
+			$update['current_level'] = 0;
+			$update['auto_balance_position'] = 1;
+			
+			Tbl_mlm_slot::orderBy('slot_id', 'ASC')->update($update);
+			$slots = Tbl_mlm_slot::orderBy('slot_id', 'ASC')->get();
+			foreach ($slots as $key => $value) {
+				Mlm_compute::entry($value->slot_id);
+			}
+		}
+	}
 }

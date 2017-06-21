@@ -66,7 +66,6 @@ class Mlm_compute
         if($type == 0)
         {
             Mlm_tree::insert_tree_sponsor($slot_info, $slot_info, 1); /* TREE RECORD FOR SPONSORSHIP GENEALOGY TREE */    
-
             // check if binart is active 
                 $plan_settings_count = Tbl_mlm_plan::where('shop_id', $slot_info->shop_id)
                 ->where('marketing_plan_code', 'BINARY')
@@ -99,9 +98,7 @@ class Mlm_compute
                         }
                     }
                 }
-            // end Tree
         }
-        
 
         // Mlm Computation Plan
             $plan_settings = Tbl_mlm_plan::where('shop_id', $slot_info->shop_id)

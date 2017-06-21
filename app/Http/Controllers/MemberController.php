@@ -905,4 +905,25 @@ class MemberController extends Controller
             }
         }
     }
+
+    public function paymaya_maintenance()
+    {
+        $data["_paymaya"] = DB::table("tbl_paymaya_logs")->get();
+        return view("paymaya.paymaya_maintenance", $data);
+    }
+
+    public function paymaya_maintenance_edit($id)
+    {
+        $data["paymaya"] = DB::table("tbl_paymaya_logs")->where("id", $id)->first();
+        $data["_order"] = DB::table("tbl_ec_order")->get();
+        return view("paymaya.edit", $data);
+    }
+
+    public function paymaya_maintenance_edit_post($id)
+    {
+        $update["order_id"] = Request::input("order_id");
+        DB::table("tbl_paymaya_logs")->where("id", $id)->update($update);
+
+        return Redirect::to("/payment/paymaya/maintenance");
+    }
 }

@@ -765,6 +765,7 @@ class Item_code
         $tbl_ec_order_slot = DB::table('tbl_ec_order_slot')->where('order_slot_ec_order_id', $order_id)->first();
         if($tbl_ec_order_slot)
         {
+            dd($tbl_ec_order_slot->order_slot_used);
             if($tbl_ec_order_slot->order_slot_customer_id    != 0 &&  $tbl_ec_order_slot->order_slot_used           != 1)
             {
                 $table_ec_order_slot = $tbl_ec_order_slot;

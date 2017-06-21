@@ -198,7 +198,6 @@ class ShopCheckoutController extends Shop
     {
         $order_id = Crypt::decrypt(Request::input("order_id"));
         $from = Request::input("from");
-        dd($order_id);
         $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
         if($order)
         {

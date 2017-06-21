@@ -8,6 +8,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>Digima House</title>
         <meta name="description" content="">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
         <link rel="stylesheet" href="{{ public_path() }}/assets/initializr/css/bootstrap.min.css">
         <link rel="stylesheet" href="{{ public_path() }}/assets/initializr/css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="{{ public_path() }}/assets/member/css/custom_invoice.css">

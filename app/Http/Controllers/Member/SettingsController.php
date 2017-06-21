@@ -28,6 +28,7 @@ class SettingsController extends Member
             $data['settings_active'][$settings->settings_key]['settings_setup_done'] = $settings->settings_setup_done;
         }
         $data['terms_and_agreement'] = Tbl_settings::where('shop_id', $shop_id)->where('settings_key', 'terms_and_agreement')->first();
+        $data['regirter_page_disable_text'] = Tbl_settings::where('shop_id', $shop_id)->where('settings_key', 'regirter_page_disable_text')->first();
         return view('member.settings.settings_all', $data);
     }
     public function index($key)

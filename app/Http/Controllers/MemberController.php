@@ -535,7 +535,7 @@ class MemberController extends Controller
                 if($select_free)
                 {
                     foreach ($select_free as $key => $value) {
-                        Cart::add_to_cart($value->evariant_id, 1, Self::$shop_id);
+                        Cart::add_to_cart($value->evariant_id, 1, Self::$shop_id, false);
                     }
                 }
             }

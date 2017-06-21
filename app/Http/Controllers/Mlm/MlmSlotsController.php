@@ -57,7 +57,7 @@ class MlmSlotsController extends Mlm
                     {
                         $user_count = Tbl_mlm_slot::where('slot_no', $nickname)->where('slot_owner', '!=', $customer_id)->count();
                         $user_count_2 = Tbl_mlm_slot::where('slot_nick_name', $nickname)->where('slot_owner', '!=', $customer_id)->count();
-                        $user_count_3 = Tbl_customer::where('mlm_username', $nickname)->count();
+                        $user_count_3 = Tbl_customer::where('mlm_username', $nickname)->where('customer_id', '!=', $customer_id)->count();
                         $all = $user_count + $user_count_2 + $user_count_3;
                         if($all == 0)
                         {

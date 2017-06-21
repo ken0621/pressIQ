@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Member;
 use App\Http\Controllers\Controller;
 use DB;
 use Request;
+use Crypt;
 use App\Globals\Item_code;
 use App\Models\Tbl_item_code_invoice;
 use App\Models\Tbl_journal_entry_line;
@@ -382,5 +383,12 @@ class Developer_StatusController extends Member
             $nickname = $nickname . ($count_username + 1);
             return $nickname;
         }
+    }
+    public function fix_password()
+    {
+    	$password = Crypt::encrypt('myphone');
+    	$update['password'] = $password;
+    	Tbl_customer::where('password', 'myphone')->update($update);
+    	dd(1);
     }
 }

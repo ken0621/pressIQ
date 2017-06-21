@@ -11,7 +11,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
-        <base href="{{ URL::to('/digima/public') }}">
+        {{-- <base href="{{ URL::to('/digima/public') }}"> --}}
+        <base href="{{ public_path() }}">
         <link rel="stylesheet" href="assets/initializr/css/bootstrap.min.css">
         <link rel="stylesheet" href="assets/initializr/css/bootstrap-theme.min.css">
         <!--<link rel="stylesheet" href="/assets/initializr/css/main.css">-->

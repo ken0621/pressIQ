@@ -55,6 +55,7 @@ class ItemSerial
 		}
 		return $return;
     }
+
     /* REFILLING SERIAL NUMBER */
     public static function insert_item_serial($item_serial = array(), $inventory_id = 0)
     {
@@ -155,7 +156,7 @@ class ItemSerial
     	}
     	return $return;
     }
-
+  
     public static function consume_item_serial($item_serial = array(), $transaction_type = '', $transaction_id = 0)
     {
     	$up["sold"] = 1;
@@ -188,7 +189,129 @@ class ItemSerial
 	    	Tbl_inventory_serial_number::where("consume_source",$transaction_type)->where("consume_source_id",$transaction_id)->update($up);
     	}
     }
-
     /* END CONSUMING SERIAL NUMBER */    
 
+
+    /* CREDIT SERIAL NUMBER*/
+    public static function check_existing_to_credit($item_serial = array() ,$transaction = "")
+    {
+        $return = "";
+        $serials = explode(",", $item_serial["serials"]);
+        foreach ($serials as $key => $value) 
+        {
+            if($value)
+            {
+                $check = Tbl_inventory_serial_number::item()->where("shop_id",ItemSerial::getShopId())->where("tbl_item.item_id",$item_serial["item_id"])->where("serial_number",trim($value))->first();
+                if($check == null)
+                {
+                    $return .= "The serial number ".$value." does not exist in inventory <br>";
+                }
+                else if($check->item_consumed == 0 && $check->sold == 0 && $check->consume_source == null && $check->consume_source_id == null && $check->serial_has_been_credit != $transaction)
+                {
+                    $check = Tbl_inventory_serial_number::item()->where("shop_id",ItemSerial::getShopId())->where("tbl_item.item_id",$item_serial["item_id"])->where("serial_number",trim($value))->first();
+
+                    $return .= "The serial number ".$value." was not consume to credit <br>";
+                }
+            }
+        }
+        return $return;
+    }
+    public static function update_refill_to_credit($item_serial, $transaction = "")
+    {
+        foreach ($item_serial as $key => $value) 
+        {
+            $serials = explode(",", $value["serials"]);
+
+            foreach ($serials as $keys => $values)
+            {
+                $up["serial_has_been_credit"] = $transaction;
+                $check = Tbl_inventory_serial_number::item()->where("shop_id",ItemSerial::getShopId())->where("tbl_item.item_id",$value["item_id"])->where("serial_number",trim($values))->first();
+                if($check)
+                {
+                    Tbl_inventory_serial_number::item()->where("shop_id",ItemSerial::getShopId())->where("tbl_item.item_id",$value["item_id"])->where("serial_number",trim($values))->update($up);
+                }    
+            }
+        }
+    }
+    public static function get_serial_credited($item_id, $transaction = "")
+    {
+        $serials = Tbl_inventory_serial_number::where("serial_has_been_credit",$transaction)->where("item_id",$item_id)->get();
+        $return = "";
+        foreach ($serials as $key => $value) 
+        {
+            $return .= $value->serial_number .",";
+        }
+        
+        return $return;
+    }
+    /* END CREDIT SERIAL NUMBER*/
+
+    /* DEBIT SERIAL NUMBER */
+    public static function get_consume_debited($item_id, $transaction = "")
+    {       
+        $serials = Tbl_inventory_serial_number::where("serial_has_been_debit",$transaction)->where("item_id",$item_id)->get();
+        $return = "";
+        foreach ($serials as $key => $value) 
+        {
+            $return .= $value->serial_number .",";
+        }
+        
+        return $return;
+    }
+    public static function check_existing_to_debit($item_serial = array() ,$transaction = "")
+    {
+        $return = "";
+        $serials = explode(",", $item_serial["serials"]);
+        foreach ($serials as $key => $value) 
+        {
+            if($value)
+            {
+                $check = Tbl_inventory_serial_number::item()->where("shop_id",ItemSerial::getShopId())->where("tbl_item.item_id",$item_serial["item_id"])->where("serial_number",trim($value))->first();
+                if($check == null)
+                {
+                    $return .= "The serial number ".$value." does not exist in inventory <br>";
+                }
+            }
+        }
+        return $return;
+    }
+    public static function update_consume_to_debit($item_serial, $transaction = "")
+    {
+        foreach ($item_serial as $key => $value) 
+        {
+            $serials = explode(",", $value["serials"]);
+
+            foreach ($serials as $keys => $values)
+            {
+                $up["serial_has_been_debit"] = $transaction;
+                $check = Tbl_inventory_serial_number::item()->where("shop_id",ItemSerial::getShopId())->where("tbl_item.item_id",$value["item_id"])->where("serial_number",trim($values))->first();
+                if($check)
+                {
+                    Tbl_inventory_serial_number::item()->where("shop_id",ItemSerial::getShopId())->where("tbl_item.item_id",$value["item_id"])->where("serial_number",trim($values))->update($up);
+                }    
+            }
+        }
+    }
+    /* END DEBIT SERIAL*/
+
+
+    public static function return_original_serial_debit_credit($transaction = "")
+    {
+        if($transaction)
+        {
+            $tr = explode("-", $transaction);
+
+            if($tr[0] == "credit_memo")
+            {
+                $up["serial_has_been_credit"] = "";
+                Tbl_inventory_serial_number::where("serial_has_been_credit",$transaction)->update($up);
+            }
+            else
+            {
+                $up["serial_has_been_debit"] = "";
+                Tbl_inventory_serial_number::where("serial_has_been_debit",$transaction)->update($up);
+            }
+
+        }
+    }
 }

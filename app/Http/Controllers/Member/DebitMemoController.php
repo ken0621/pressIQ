@@ -65,7 +65,7 @@ class DebitMemoController extends Member
 
                 foreach ($data["_dbline"] as $key => $value) 
                 {
-                    $data["_dbline"][$key]->serial_number = ItemSerial::get_consume_serial("debit_memo",$id,$value->dbline_item_id); 
+                    $data["_dbline"][$key]->serial_number = ItemSerial::get_consume_debited($value->dbline_item_id,"debit_memo-".$id);
                 }
                 $data["action"]         = "/member/vendor/debit_memo/update";
             }
@@ -273,10 +273,10 @@ class DebitMemoController extends Member
                     $data["status_message"] .= "The item ".Item::get_item_details($value_item_serial["item_id"])->item_name." has more serial than the quantity <br>";
                 }
 
-                if(ItemSerial::check_existing($item_serial[$key_item_serial]))
+                if(ItemSerial::check_existing_to_debit($item_serial[$key_item_serial]))
                 {
                     $data["status"] = "error";
-                    $data["status_message"] .= ItemSerial::check_existing($item_serial[$key_item_serial]);
+                    $data["status_message"] .= ItemSerial::check_existing_to_debit($item_serial[$key_item_serial]);
                 }
             }
         }
@@ -294,18 +294,14 @@ class DebitMemoController extends Member
                         {
                             $remarks            = "Consume by DEBIT MEMO #".$db_id;
                             $warehouse_id       = $this->current_warehouse->warehouse_id;
-                            $data               = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume, 0, '' ,  'array', $transaction_type, $transaction_id,false,$item_serial);                        
+                            $data               = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume, 0, '' ,  'array', $transaction_type, $transaction_id,false);                        
                         }
                     }
-                    if($vendor_info["type"] == 1)
+                    
+                    if(count($item_serial) > 0)
                     {
-                        if(count($item_serial) > 0)
-                        {
-                            foreach ($item_serial as $key => $value) 
-                            {
-                                ItemSerial::consume_item_serial($value, $transaction_type, $transaction_id);
-                            }
-                        }
+                            $transaction = $transaction_type."-".$transaction_id;
+                            ItemSerial::update_consume_to_debit($item_serial, $transaction);
                     }
 
                     $data["status"] = "success-debit-memo";
@@ -460,8 +456,7 @@ class DebitMemoController extends Member
         if(count($item_serial) > 0)
         {
             //CHECK IF SERIAL NUMBER IS EXISTING
-            foreach ($item_serial as $key_item_serial => $value_item_serial)
-            {
+            foreach ($item_serial as $key_item_serial => $value_item_serial)            {
 
                 $check_qty_serial = ItemSerial::check_item_serial($value_item_serial);
 
@@ -471,10 +466,10 @@ class DebitMemoController extends Member
                     $data["status_message"] .= "The item ".Item::get_item_details($value_item_serial["item_id"])->item_name." has more serial than the quantity <br>";
                 }
 
-                if(ItemSerial::check_existing($item_serial[$key_item_serial], "debit_memo",$db_id))
+                if(ItemSerial::check_existing_to_debit($item_serial[$key_item_serial], "debit_memo-".$db_id))
                 {
                     $data["status"] = "error";
-                    $data["status_message"] .= ItemSerial::check_existing($item_serial[$key_item_serial], "debit_memo",$db_id);
+                    $data["status_message"] .= ItemSerial::check_existing_to_debit($item_serial[$key_item_serial], "debit_memo-".$db_id);
                 }
             }
         }
@@ -484,23 +479,21 @@ class DebitMemoController extends Member
             if($ctr_items != 0)
             {            
                 DebitMemo::updatedb($db_id, $vendor_info, $item_info);
+                $transaction_type = "debit_memo";
+                $transaction_id = $db_id;
                 if(count($product_consume) > 0)
                 {
                     if($vendor_info["type"] == 0)
                     {
-                        $transaction_type = "debit_memo";
-                        $transaction_id = $db_id;
-                        $data = Warehouse::inventory_update($transaction_id, $transaction_type, $product_consume, $return = 'array',false,$item_serial);
+                        $data = Warehouse::inventory_update($transaction_id, $transaction_type, $product_consume, $return = 'array',false);
                     }               
                 }
-                if($vendor_info["type"] == 1)
+                if(count($item_serial) > 0)
                 {
-                    if(count($item_serial) > 0)
+                    ItemSerial::return_original_serial_debit_credit($transaction_type."-".$transaction_id);
+                    foreach ($item_serial as $key => $value) 
                     {
-                        foreach ($item_serial as $key => $value) 
-                        {
-                            ItemSerial::consume_item_serial($value, $transaction_type, $transaction_id);
-                        }
+                        ItemSerial::update_consume_to_debit($value, $transaction_type."-".$transaction_id);
                     }
                 }
                 

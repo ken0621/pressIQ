@@ -77,4 +77,14 @@
 			<option value="1">Enable</option>
 		</select>
 	</div>
+
+	<div class="settings" id="regirter_page_disable">
+		Register Page
+		<input type="hidden" name="settings_key" value="regirter_page_disable">
+		<select name="settings_value" class="form-control">
+			<option value="0">Disable</option>
+			<option value="1">Enable</option>
+		</select>
+	</div>
+	
 <!-- Item Serial Settings -->

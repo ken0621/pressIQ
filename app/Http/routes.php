@@ -906,6 +906,7 @@ Route::post('/member/settings/verify/add', 'Member\SettingsController@verify');
 Route::get('/member/settings/get/{key}', 'Member\SettingsController@get_settings');
 Route::get('/member/settings/setup/initial', 'Member\SettingsController@initial_setup');
 Route::post('/member/settings/terms/set', 'Member\SettingsController@set_terms');
+Route::post('/member/settings/terms/set/2', 'Member\SettingsController@disbable_text_a');
 /* End SettingsController */
 
 /* USER / UTILITIES*/

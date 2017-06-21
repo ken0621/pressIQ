@@ -36,6 +36,11 @@ use App\Models\Tbl_warehouse;
 use App\Models\Tbl_mlm_slot_wallet_log_transfer;
 use App\Models\Tbl_mlm_slot_wallet_log_refill;
 use App\Models\Tbl_ec_order;
+use App\Models\Tbl_item;
+use App\Models\Tbl_ec_order_item;
+use App\Models\Tbl_ec_product;
+use App\Models\Tbl_ec_variant;
+
 use App\Models\Tbl_inventory_slip;
 class Mlm_report
 {   
@@ -1229,4 +1234,98 @@ class Mlm_report
         return view('member.mlm_report.report.inventory_consilidated', $data);
 
     }
+
+    public static function e_commerce_sales_report($shop_id, $filters)
+    {
+        // dd($filters);
+        $from   = date('Y-m-d H:i:s', strtotime($filters['from']));
+        $to     = date('Y-m-d H:i:s', strtotime($filters['to']));
+       /* $from   = date('Y-m-d H:i:s', strtotime('2017-06-16 13:24:07'));
+        $to     = date('Y-m-d H:i:s', strtotime('2017-06-16 13:24:07'));*/
+        
+        $_arr_record    = array();
+
+        $query_invoice =  Tbl_ec_order::customer()->where("shop_id",$shop_id)
+                            ->where('created_date', '>=', $from)
+                            ->where('created_date', '<=', $to);                          
+                      
+        if($filters['inv_status'] != '0')
+        {
+
+            $query_invoice->where("order_status", $filters['inv_status']);
+        }
+
+
+
+        $_invoice = $query_invoice->orderBy("ec_order_id", "DESC")->get();
+
+        foreach ($_invoice as $key_inv => $value_inv) 
+        {
+            $_invline       = Tbl_ec_order_item::where("ec_order_id", $value_inv->ec_order_id)->get();   
+            
+
+            foreach ($_invline as $key => $value) 
+            {
+
+                $variant     = Tbl_ec_variant::where("evariant_id", $value->item_id)
+                                ->where("archived", 0)
+                                ->first();
+
+                $product     = Tbl_ec_product::where("eprod_id", $variant->evariant_prod_id)
+                                ->where("archived", 0)
+                                ->first();
+
+                if ($key == 0) 
+                {
+                    $record[$key] = array(
+                        'ec_order_id'       => $value_inv['ec_order_id'],
+                        'eprod_name'        =>$product['eprod_name'], 
+                        'created_date'      =>$value_inv['created_date'], 
+                        'full_name'         =>$value_inv['first_name'].' '.$value_inv['last_name'], 
+                        'payment_status'    => $value_inv['payment_status'] == 1 ? 'Paid' : 'Unpaid',
+                        'billing_address'   =>$value_inv['billing_address'],
+                        'subtotal'          =>$value_inv['subtotal'],  
+                        );
+                } 
+                    else
+                {
+                    $record[$key] = array(
+                        'ec_order_id'       => '',
+                        'eprod_name'        =>$product['eprod_name'], 
+                        'created_date'      =>'', 
+                        'full_name'         =>'', 
+                        'payment_status'    =>'',
+                        'billing_address'   =>'',
+                        'subtotal'          =>$value_inv['subtotal'],  
+                        );
+                }                
+
+                array_push($_arr_record, $record);
+
+                if(count($_invline)-1 >= $key)
+                {
+                    $record[$key] = array(
+                        'ec_order_id'       => '',
+                        'eprod_name'        => '', 
+                        'created_date'      => '', 
+                        'full_name'         => '', 
+                        'payment_status'    => '',
+                        'billing_address'   => 'Sub Total',
+                        'subtotal'          => $value_inv['total'],  
+                        );
+                        array_push($_arr_record, $record);
+                }
+            }            
+        }
+
+        //dd($_arr_record);
+        $data['_arr_record'] = $_arr_record;
+        $data['page'] = 'e_commerce_sales_report';
+        if(Request::input('pdf') == 'excel')
+        {
+            return $data;
+        }
+        return view('member.mlm_report.report.e_commerce_sales_report', $data);
+    }
+
 }

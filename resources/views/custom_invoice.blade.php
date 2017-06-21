@@ -11,11 +11,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
-        <base href="{{ URL::to('/digima/public') }}">
+        <base href="{{ public_path("/public") }}">
         <link rel="stylesheet" href="assets/initializr/css/bootstrap.min.css">
         <link rel="stylesheet" href="assets/initializr/css/bootstrap-theme.min.css">
         <!--<link rel="stylesheet" href="/assets/initializr/css/main.css">-->
-        <link rel="stylesheet" href="public/assets/member/css/custom_invoice.css">
+        <link rel="stylesheet" href="assets/member/css/custom_invoice.css">
         <script src="assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
@@ -33,7 +33,7 @@
                   <tbody>
                     <tr>
                       <td class="img">
-                        <img src="public/assets/front/img/myphone-emblem.png">
+                        <img src="assets/front/img/myphone-emblem.png">
                       </td>
                       <td class="text">
                         <div class="title">MYSOLID TECHNOLOGIES & DEVICES CORPORATION</div>

@@ -451,12 +451,12 @@ class Ec_order
 
         //isset($data["tracking_no"]) ? Tbl_ec_order::where("ec_order_id",$ec_order_id)->update(array('tracking_no' => $update['tracking_no'])): '';
 
-        ($order->order_status == 'Processing') ? 
-            isset($data["tracking_no"]) ? Tbl_ec_order::where("ec_order_id",$ec_order_id)->update(array('tracking_no' => $update['tracking_no']))
-                : ''
-            : '';   
+        // ($order->order_status == 'Processing') ? 
+        //     isset($data["tracking_no"]) ? Tbl_ec_order::where("ec_order_id",$ec_order_id)->update(array('tracking_no' => $update['tracking_no']))
+        //         : ''
+        //     : '';   
 
-        if($order->order_status == "Pending" || $order->order_status == "Failed" || $order->order_status == "Cancelled")
+        if($order->order_status == "Pending" || $order->order_status == "Failed" || $order->order_status == "Cancelled" || $order->order_status == "Processing")
         {
             if($order_status == "Processing")
             {              
@@ -473,7 +473,7 @@ class Ec_order
             $settings = Ec_order::check_settings($shop_id);
 
             if($settings == null)
-            {            
+            {         
                 //original codes
                 if($order->order_status == "Pending" || $order->order_status == "Failed" || $order->order_status == "Cancelled")
 
@@ -550,7 +550,6 @@ class Ec_order
                 }
 
             }
-
 
             if($order_status == "Completed")
             {

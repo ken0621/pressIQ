@@ -148,6 +148,9 @@ class MemberController extends Controller
 
     public function register()
     {
+
+        return 'Under Construction';
+        
         $customer_session = Session::get('mlm_member');
         if($customer_session)
         {

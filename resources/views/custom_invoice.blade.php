@@ -93,8 +93,8 @@
             </tbody>
           </table>
           <!-- TOTAL SUMMARY -->
-          <div class="total-border">
-            <div class="total-summary">
+          <div class="total-border clearfix">
+            <div class="total-summary" style="margin-bottom: 15px;">
               <div class="rows">VATable : PHP. {{ number_format($summary['vatable'], 2) }}</div>
               <div class="rows">VAT 12% : PHP. {{ number_format($summary['vat'], 2) }}</div>
               <div class="rows">TOTAL AMOUNT : PHP. {{ number_format($summary['subtotal'], 2) }}</div>
@@ -106,9 +106,9 @@
         <div class="holder">
           <div class="clearfix">
             <div class="payment-detail pull-left">
-              <div class="detail-row"><strong>Payment Date :</strong> {{ date("F d, Y", strtotime($info->order_created_date)) }}</div>
-              <div class="detail-row"><strong>Payment Type :</strong> {{ $info->method_name ? $info->method_name : 'Unknown' }}</div>
-              <div class="detail-row"><strong>Payment Receipt Number :</strong> {{ $info->checkout_id }}</div>
+              <div class="rows"><strong>Payment Date :</strong> {{ date("F d, Y", strtotime($info->order_created_date)) }}</div>
+              <div class="rows"><strong>Payment Type :</strong> {{ $info->method_name ? $info->method_name : 'Unknown' }}</div>
+              <div class="rows"><strong>Payment Receipt Number :</strong> {{ $info->checkout_id }}</div>
             </div>
             <div class="total-summary pull-right">
               <div class="rows">TOTAL PAID AMOUNT : PHP. {{ number_format($summary['subtotal'], 2) }}</div>

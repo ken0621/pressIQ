@@ -86,8 +86,8 @@
                 <td>{{ $order->item_id }}</td>
                 <td>{{ $order->evariant_item_label }}</td>
                 <td>{{ $order->quantity }}</td>
-                <td>PHP. {{ number_format($order->price, 2) }}</td>
-                <td>PHP. {{ number_format($order->total, 2) }}</td>
+                <td>PHP {{ number_format($order->price, 2) }}</td>
+                <td>PHP {{ number_format($order->total, 2) }}</td>
               </tr>
               @endforeach
             </tbody>
@@ -95,9 +95,9 @@
           <!-- TOTAL SUMMARY -->
           <div class="total-border clearfix">
             <div class="total-summary" style="margin-bottom: 15px;">
-              <div class="rows"><span style="width: 115px; display: inline-block;">VATable</span><span style="display: inline-block;">: PHP. {{ number_format($summary['vatable'], 2) }}</span></div>
-              <div class="rows"><span style="width: 115px; display: inline-block;">VAT 12%</span><span style="display: inline-block;">: PHP. {{ number_format($summary['vat'], 2) }}</span></div>
-              <div class="rows"><span style="width: 115px; display: inline-block;">TOTAL AMOUNT</span><span style="display: inline-block;">: PHP. {{ number_format($summary['subtotal'], 2) }}</span></div>
+              <div class="rows"><span style="width: 115px; display: inline-block;">VATable</span><span style="display: inline-block;">: PHP {{ number_format($summary['vatable'], 2) }}</span></div>
+              <div class="rows"><span style="width: 115px; display: inline-block;">VAT 12%</span><span style="display: inline-block;">: PHP {{ number_format($summary['vat'], 2) }}</span></div>
+              <div class="rows"><span style="width: 115px; display: inline-block;">TOTAL AMOUNT</span><span style="display: inline-block;">: PHP {{ number_format($summary['subtotal'], 2) }}</span></div>
             </div>  
           </div>
           <!-- END TOTAL SUMMARY -->
@@ -111,7 +111,7 @@
               <div class="rows"><strong>Payment Receipt Number :</strong> {{ $info->checkout_id }}</div>
             </div>
             <div class="total-summary pull-right">
-              <div class="rows">TOTAL PAID AMOUNT : PHP. {{ number_format($summary['subtotal'], 2) }}</div>
+              <div class="rows">TOTAL PAID AMOUNT : PHP {{ number_format($summary['subtotal'], 2) }}</div>
             </div>
           </div>
         </div>

@@ -14,7 +14,7 @@
 						
 						<div class="col-md-12">	
 							<div class="form-group">
-								<label> Refferal Code {{$sponsor_r == 1 ? '' : '(Optional)'}}</label>
+								<label> Referrer/Upline</label>
 								<input type="text" class="form-control input-lg" name="sponsor" value="{{$sponsor}}" 
 								{{$sponsor_r == 1 ? 'required' : ''}} 
 								>

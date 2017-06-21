@@ -39,6 +39,41 @@ use App\Models\Tbl_ec_order;
 use App\Models\Tbl_inventory_slip;
 class Mlm_report
 {   
+    public static function order_count($shop_id, $filter)
+    {
+        $data['customer_id'] = Tbl_customer::where('shop_id', $shop_id)->get()->keyBy('customer_id');
+        $order = Tbl_ec_order::where('shop_id', $shop_id)->get();
+
+        $order_by_customer = [];
+        foreach ($order as $key => $value) {
+            # code...
+            if(isset($order_by_customer[$value->customer_id][$value->order_status]))
+            {
+                $order_by_customer[$value->customer_id][$value->order_status] += 1;
+            }
+            else
+            {
+                $order_by_customer[$value->customer_id][$value->order_status] = 1;
+            }
+        }
+
+        $count_per_customer = [];
+        foreach ($data['customer_id'] as $key => $value) {
+            $count_per_customer[$value->customer_id] = Tbl_mlm_slot::where('slot_owner', $value->customer_id)->count();
+        }
+
+        $data['order'] = $order;
+        $data['order_by_customer'] = $order_by_customer;
+        $data['count_per_customer'] = $count_per_customer;
+
+        $data['page'] = 'count_order';
+        if(Request::input('pdf') == 'excel')
+        {
+            return $data;
+        }
+        // return $data;
+        return view('member.mlm_report.report.count_order', $data);
+    }
     public static function general($shop_id, $filter)
     {
     	$data['membership'] = Tbl_membership::archive(0)->where('shop_id', $shop_id)->get();

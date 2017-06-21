@@ -158,21 +158,30 @@ scratch. This page gets rid of all links and provides the needed markup only.
         {
           margin-top: 5px;
         }
+        .modal-button {
+            color: #21cc21;
+            border-color: #21cc21;
+            background-color: transparent;
+        }
       </style>
 </head>
 <body>
-   @if($first_order)
+   @if($first_orders)
+
    <br>
-   <div class="col-md-offset-2 col-md-8">
+   @foreach($first_orders as $key => $first_order)
+
+   <div class="col-md-offset-3 col-md-6" style="font-size: 16px">
+
       <div class="box box-primary">
-        <div class="box-header">
-          <center>Your order status: {{$first_order->order_status}}</center>
+        <div class="box-header" style="background-color: #D0EBF2">
+          <h3><i class="fa fa-check-circle" aria-hidden="true"></i> Order #{{$first_order->ec_order_id}}</h3>
         </div>
         <div class="box-body">
           <table class="table table-bordered">
             <tr>
-              <td>Order Number:</td>
-              <td>{{$first_order->ec_order_id}}</td>
+              <td>Your order status:</td>
+              <td>{{$first_order->order_status}}</td>
             </tr>
             <tr>
               <td>Customer Email:</td>
@@ -186,18 +195,50 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <td>Billing Adress:</td>
               <td>{{$first_order->billing_address}}</td>
             </tr>
-            <tr>
-              <td></td>
-              <td><a href="/mlm/login">Click here to Logout</a></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td><a href="/member/register?slot=0">Click Here for new purchase</a></td>
-            </tr>
+            
           </table>
         </div>
+        <div class="box-header" style="background-color: #D0EBF2">
+          <h4><i class="fa fa-archive" aria-hidden="true"></i>Products</h4>
+        </div>
+        <div class="box-body">
+          <table class="table table-bordered">
+            @if(isset($first_orders_item[$key]))
+              @foreach($first_orders_item[$key] as $key2 => $items)
+                <tr>
+                  <td>
+                    @if($items->eprod_detail_image != null)
+                    <img style="object-fit: contain; height: 250px; width: 100%;" class="" src="{{$items->eprod_detail_image}}">
+                    @else 
+                    <img style="object-fit: contain; height: 250px; width: 100%; " class="" src="/assets/mlm/img/placeholder.jpg">
+                    @endif
+                  </td>
+                  <td>
+                    <div class="col-md-12">Item Name: {{$items->eprod_name}}</div>
+                    <div class="col-md-12">Quantity: {{$items->quantity}}</div>
+                  </td>
+                </tr>
+              @endforeach
+            @endif
+          </table>
+        </div>  
       </div>
     </div>
+   @endforeach
+    <div class="col-md-offset-3 col-md-6" style="font-size: 16px">
+      <div class="box box-primary">
+        <div class="box-body">
+         <table class="table">
+            <tr>
+              <td></td>
+              <td><a href="/member/register?slot=0" class="btn btn-lg modal-button pull-right">NEW PURCHASE</a>
+                  <a href="/mlm/login" class="btn btn-lg modal-button pull-right">LOGOUT</a>
+              </td>
+            </tr>
+         </table>
+        </div>
+      </div>   
+   </div>
   @else
   <div class="panel-heading">No slot</div>
   @endif  

@@ -68,4 +68,13 @@
 			<option value="1">Enable</option>
 		</select>
 	</div>
+
+	<div class="settings" id="myphone_eon_card">
+		Eon Card
+		<input type="hidden" name="settings_key" value="myphone_eon_card">
+		<select name="settings_value" class="form-control">
+			<option value="0">Disable</option>
+			<option value="1">Enable</option>
+		</select>
+	</div>
 <!-- Item Serial Settings -->

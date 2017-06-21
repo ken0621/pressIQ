@@ -74,7 +74,7 @@
                            <tr>
                               <td>{{$product["variant_name"] or ''}}</td>
                               <td>{{$product['quantity']}}</td>
-                              <td style="padding-left: 0; padding-right: 0;">{{currency("P", $product['total'])}}</td>
+                              <td style="padding-left: 0; padding-right: 0;">@if($product['total'] == 0) Free @else {{currency("P", $product['total'])}} @endif </td>
                               <td style="padding-left: 0px; padding-right: 0px; width: 10px;"><a style="color: red;" href="/cart/remove?redirect=1&amp;variation_id=45"><i class="fa fa-close"></i></a></td>
                            </tr>
                         @endforeach

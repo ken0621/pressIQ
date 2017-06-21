@@ -108,11 +108,13 @@ class ShopCheckoutController extends Shop
             }
             elseif ($from == "register")
             {
+                $this->after_email_payment($order_id);
                 return Redirect::to('/mlm/login?notify=1&success=1');
             }
         }
         else
         {
+             $this->after_email_payment($order_id);
             return Redirect::to('/mlm/login?notify=2&success=1');
         }
     }
@@ -196,7 +198,6 @@ class ShopCheckoutController extends Shop
     {
         $order_id = Crypt::decrypt(Request::input("order_id"));
         $from = Request::input("from");
-
         $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
         if($order)
         {
@@ -206,7 +207,6 @@ class ShopCheckoutController extends Shop
             $update['order_status']   = "Processing";
             $update['payment_status'] = 1;
             $order = Ec_order::update_ec_order($update);
-
             $this->after_email_payment($order_id);
 
             if ($from == "checkout") 
@@ -237,6 +237,7 @@ class ShopCheckoutController extends Shop
         $update['order_status']   = "Failed";
         $update['payment_status'] = 0;
         $order = Ec_order::update_ec_order($update);
+        $this->after_email_payment($order_id);
 
         // $customer = DB::table("tbl_ec_order")->select("tbl_ec_order.ec_order_id", "tbl_ec_order.customer_id as order_customer_id", "tbl_customer.*")
         //                                      ->join("tbl_customer", "tbl_customer.customer_id", "=", "tbl_ec_order.customer_id")

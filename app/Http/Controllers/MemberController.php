@@ -27,6 +27,7 @@ use App\Models\Tbl_ec_order_item;
 use Validator;
 use Session;
 use Redirect;
+use Crypt;
 use App\Globals\Mlm_member;
 use App\Globals\Item;
 use App\Globals\Mlm_plan;
@@ -152,6 +153,8 @@ class MemberController extends Controller
 
     public function register()
     {
+        return 'Under Construction';
+
         $customer_session = Session::get('mlm_member');
         if($customer_session)
         {
@@ -500,30 +503,42 @@ class MemberController extends Controller
     {
         $info['variant_id'] = Request::input('variant_id');
         $product_stocks = Request::input('product_stocks');
-        if($product_stocks[$info['variant_id']] > 0)
+        $accept_with_out_stocks = Request::input('accept_with_out_stocks');
+        if($product_stocks[$info['variant_id']] < 0)
         {
-            if(isset($info['variant_id']))
-            {
-                /* Add Package */
-                Cart::add_to_cart($info["variant_id"], 1, Self::$shop_id, true);
-
-                /* Redirect */
-                $d['variant_id'] = $info['variant_id'];
-                Session::put('mlm_register_step_2', $d);
-                $data['status'] = 'success';
-                $data['message'][0] = 'Success!';
-                $data['link'] = '/member/register/shipping';
-            }
-            else
+            if($accept_with_out_stocks != 1)
             {
                 $data['status'] = 'warning';
-                $data['message'][0] = 'Invalid Package.';
+                $data['message'][0] = 'Out of stocks.';
+                return json_encode($data);
             }
+        }
+        if(isset($info['variant_id']))
+        {
+            /* Add Package */
+            Cart::add_to_cart($info["variant_id"], 1, Self::$shop_id, true);
+            $tbl_ec_product = Tbl_ec_variant::where('evariant_id', $info["variant_id"])->product()->first();
+            if($tbl_ec_product)
+            {
+                $select_free = Tbl_ec_product::where('ec_product_membership_eon', $tbl_ec_product->ec_product_membership)->variant()->get();
+                if($select_free)
+                {
+                    foreach ($select_free as $key => $value) {
+                        Cart::add_to_cart($value->evariant_id, 1, Self::$shop_id);
+                    }
+                }
+            }
+            /* Redirect */
+            $d['variant_id'] = $info['variant_id'];
+            Session::put('mlm_register_step_2', $d);
+            $data['status'] = 'success';
+            $data['message'][0] = 'Success!';
+            $data['link'] = '/member/register/shipping';
         }
         else
         {
             $data['status'] = 'warning';
-            $data['message'][0] = 'Out of Stock';
+            $data['message'][0] = 'Invalid Package.';
         }
 
 

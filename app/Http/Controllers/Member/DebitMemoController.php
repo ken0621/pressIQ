@@ -113,6 +113,9 @@ class DebitMemoController extends Member
 
 
             $data["_db_item"][$key]->dbline_replace_qty_um = UnitMeasurement::um_view($value->dbline_replace_qty,$value->item_measurement_id,$value->dbline_um);
+
+            $data["_db_item"][$key]->serial_number_consume =ItemSerial::get_consume_serial("debit_memo",$db_id,$value->dbline_item_id);
+            $data["_db_item"][$key]->serial_number_replace = ItemSerial::get_serial("debit_memo_replace",$db_id,$value->dbline_item_id);
         }
 
       $pdf = view('member.vendor.debit_memo.debit_memo_pdf', $data);
@@ -952,7 +955,7 @@ class DebitMemoController extends Member
                     if(count($item_refill) > 0)
                     {
                         $transaction_type = "debit_memo_replace";
-                        $data = Warehouse::inventory_update_returns($transaction_id, $transaction_type, $item_refill, $return = 'array', $item_serial);
+                        Warehouse::inventory_update_returns($transaction_id, $transaction_type, $item_refill, $return = 'array', $item_serial);
                     }
 
                     if(count($product_consume) > 0)

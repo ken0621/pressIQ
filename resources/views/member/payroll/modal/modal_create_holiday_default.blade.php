@@ -46,4 +46,21 @@
 			$(".company-check").prop("checked", false);
 		}
 	});
+
+
+	$(".datepicker").unbind("change");
+	$(".datepicker").bind("change", function()
+	{
+		if($(this).is(':checked'))
+		{
+			$(".company-check").prop("checked", true);
+		}	
+		else
+		{
+			$(".company-check").prop("checked", false);
+		}
+	});
+
+
+
 </script>

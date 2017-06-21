@@ -235,8 +235,18 @@ class Payroll
 
 			$insert[5]['shop_id'] 			= $shop_id;
 			$insert[5]['paper_size_name']	= 'A4';
-			$insert[5]['paper_size_width']	= '14.8';
-			$insert[5]['paper_size_height']	= '21';
+			$insert[5]['paper_size_width']	= '21';
+			$insert[5]['paper_size_height']	= '29.7';
+
+			$insert[6]['shop_id'] 			= $shop_id;
+			$insert[6]['paper_size_name']	= 'Legal';
+			$insert[6]['paper_size_width']	= '21.6';
+			$insert[6]['paper_size_height']	= '33.6';
+
+			$insert[7]['shop_id'] 			= $shop_id;
+			$insert[7]['paper_size_name']	= 'Letter';
+			$insert[7]['paper_size_width']	= '21.6';
+			$insert[7]['paper_size_height']	= '27.9';
 
 			Tbl_payroll_paper_sizes::insert($insert);
 
@@ -316,7 +326,9 @@ class Payroll
 		$data['cancel']	= array();
 		foreach($_deduction as $key => $deduction)
 		{
-			$balance = $total_amount - Tbl_payroll_deduction_payment::selbyemployee($deduction->payroll_employee_id, $deduction_id)->sum('payroll_payment_amount');
+			$payment = Tbl_payroll_deduction_payment::selbyemployee($deduction_id, $deduction->payroll_employee_id)->sum('payroll_payment_amount');
+
+			$balance = $total_amount - $payment;
 			$index = 'active';
 			if($balance <= 0)
 			{
@@ -401,6 +413,7 @@ class Payroll
 		return $data;
 	}
 
+
 	public static function adjust_payroll_approved_in_and_out($employee_id, $date)
 	{
 		/* GET INITIAL INFORMATION AND DATABASE */
@@ -408,6 +421,7 @@ class Payroll
 		$time_sheet_info = Tbl_payroll_time_sheet::where("payroll_time_date", Carbon::parse($date)->format("Y-m-d"))->where("payroll_employee_id", $employee_id)->first();
 		$_rest_day = Tbl_payroll_group_rest_day::where("payroll_group_id", $employee_information->payroll_group_id)->get();
 
+		$schedule = Payroll::getshift_emp($employee_id, $date, $employee_information->payroll_group_id);
 
 		if($time_sheet_info->payroll_time_sheet_approved == 0) //ONLY UPDATE THOSE WHO ARE NOT APPROVED
 		{
@@ -433,25 +447,28 @@ class Payroll
 				if($employee_information->payroll_group_is_flexi_time == 0)
 				{
 					/* OVERTIME RULE */
-					if(c_time_to_int($time_record->payroll_time_sheet_in) < c_time_to_int($employee_information->payroll_group_start))
+					// if(c_time_to_int($time_record->payroll_time_sheet_in) < c_time_to_int($employee_information->payroll_group_start))
+					if(c_time_to_int($time_record->payroll_time_sheet_in) < c_time_to_int($schedule->work_start))
 					{
-						$payroll_time_sheet_approved_in = $employee_information->payroll_group_start;
+						// $payroll_time_sheet_approved_in = $employee_information->payroll_group_start;
+						$payroll_time_sheet_approved_in = $schedule->work_start;
 					}
 					else
 					{
 						$payroll_time_sheet_approved_in = $time_record->payroll_time_sheet_in;
 					}
 
-					if(c_time_to_int($time_record->payroll_time_sheet_out) > c_time_to_int($employee_information->payroll_group_end))
+					// if(c_time_to_int($time_record->payroll_time_sheet_out) > c_time_to_int($employee_information->payroll_group_end))
+					if(c_time_to_int($time_record->payroll_time_sheet_out) > c_time_to_int($schedule->work_end))
 					{
-						$payroll_time_sheet_approved_out = $employee_information->payroll_group_end;
+						$payroll_time_sheet_approved_out = $schedule->work_end;
 					}
 					else
 					{
 						$payroll_time_sheet_approved_out = $time_record->payroll_time_sheet_out;
 					}
 
-					/* IF ONE OF THE TIME IS ZERO */
+					// /* IF ONE OF THE TIME IS ZERO */
 					if($time_record->payroll_time_sheet_in == "00:00:00" || $time_record->payroll_time_sheet_out == "00:00:00")
 					{
 						$payroll_time_sheet_approved_in = "00:00";
@@ -459,14 +476,14 @@ class Payroll
 					}
 
 					/* IF TIME IN IS LATER THAN DEFAULT TIME OUT */
-					if($time_record->payroll_time_sheet_in > $employee_information->payroll_group_end)
+					if($time_record->payroll_time_sheet_in > $schedule->work_end)
 					{
 						$payroll_time_sheet_approved_in = "00:00";
 						$payroll_time_sheet_approved_out = "00:00";
 					}
 
 					/* IF TIME OUT IS EARLIER THAN DEFAULT TIME IN */
-					if($time_record->payroll_time_sheet_out < $employee_information->payroll_group_start)
+					if($time_record->payroll_time_sheet_out < $schedule->work_start)
 					{
 						$payroll_time_sheet_approved_in = "00:00";
 						$payroll_time_sheet_approved_out = "00:00";
@@ -496,6 +513,7 @@ class Payroll
 			}
 		}
 	}
+
 
 
 	public static function getshift_emp($payroll_employee_id = 0, $date = '0000-00-00', $payroll_group_id = 0)
@@ -599,6 +617,9 @@ class Payroll
 		// 		$return->approved_timesheet = Payroll::process_time_regulartime($data, $date);
 		// 	break;
 		// }
+
+
+		//Payroll::adjust_payroll_approved_in_and_out($employee_information->payroll_employee_id, $date);
 
 		$data["compute_approved"] = 0;
 		$return->pending_timesheet = Payroll::process_time_regulartime($data, $date, $data["time_rule"]);
@@ -723,7 +744,6 @@ class Payroll
 		$def_out_float 	= Payroll::time_float($default_time_out);
 
 		$time_rule 				= $data["time_rule"];
-	
 		$_time_record 			= $data["_time_record"];
 		$default_working_hours 	= $data["default_working_hours"];
 		$late_grace_time 		= $data["employee_information"]->payroll_group_grace_time * 60;
@@ -732,8 +752,7 @@ class Payroll
 
 		/* for flexi time */
 		
-		
-
+	
 		$return = new stdClass();
 		$data["default_working_hours"] = $default_working_hours = c_time_to_int($default_working_hours);
 
@@ -794,12 +813,13 @@ class Payroll
 
 			if($compute_approved == 1)
 			{
-				$time_in = c_time_to_int($time_record->payroll_time_sheet_approved_in);
-				$time_out = c_time_to_int($time_record->payroll_time_sheet_approved_out);
-
-				$time_in_str = $time_record->payroll_time_sheet_approved_in;
-				$time_out_str = $time_record->payroll_time_sheet_approved_out;
+				$time_in 	= c_time_to_int($time_record->payroll_time_sheet_approved_in);
+				$time_out 	= c_time_to_int($time_record->payroll_time_sheet_approved_out);
+				
+				$time_in_str 	= $time_record->payroll_time_sheet_approved_in;
+				$time_out_str 	= $time_record->payroll_time_sheet_approved_out;
 			}
+
 			else
 			{
 				$time_in 	= c_time_to_int($time_record->payroll_time_sheet_in);
@@ -810,8 +830,7 @@ class Payroll
 			}
 
 			$time_in_str = date('H:i', strtotime($time_in_str));
-			// dd($time_in_str);
-
+			
 			if($time_in == 0) //SET BOTH TO BLANK IF TIME IN HAS NO INPUT
 			{
 				$time_rec[$key]["time_in"] = "";
@@ -854,7 +873,7 @@ class Payroll
 			}
 			
 			$regular_hours = $time_spent;
-			// dd($time_out_str);
+			
 			$float_in 		= Payroll::time_float($time_in_str);
 			$float_out 		= Payroll::time_float($time_out_str);
 			$float_nd_in 	= Payroll::time_float('22:00');
@@ -866,51 +885,12 @@ class Payroll
 			if($flexi == 0)
 			{
 				/* CHECK IF EARLY OVERTIME */
-				// if($time_in < $default_time_in && $time_out != 0)
-				// {
-				// 	if($time_out < $default_time_in)
-				// 	{
-				// 		$early_overtime = $time_out - $time_in;
-				// 		$regular_hours = 0;
-				// 	}
-				// 	else
-				// 	{
-				// 		$early_overtime = $default_time_in - $time_in;
-				// 		$regular_hours = $regular_hours - $early_overtime;
-				// 	}
-				// }
-
-				/* CHECK IF LATE OVERTIME */
-				// if($time_out > $default_time_out && $time_out != 0)
-				// {
-				// 	if($time_in > $default_time_out)
-				// 	{
-				// 		$late_overtime = $time_out - $time_in;
-				// 		$regular_hours = 0;
-				// 	}
-				// 	else
-				// 	{
-				// 		$late_overtime = $time_out - $default_time_out;
-				// 		$regular_hours = $regular_hours - $late_overtime;
-				// 	}
-				// }
-
-				/* CHECK IF EARLY OVERTIME */
 
 				if($float_in < $def_in_float && $float_in != 0)
 				{
-					// if($float_out < $def_in_float)
-					// {
-					// 	$early_overtime = $float_out - $float_in;
-					// 	$regular_hours = 0;
-					// 	dd($early_overtime);
-					// }
-					// else
-					// {
-						$early_overtime = $def_in_float - $float_in;
-						$early_overtime = c_time_to_int(Payroll::float_time($early_overtime));
-						$regular_hours = $regular_hours - $early_overtime;
-					// }
+					$early_overtime = $def_in_float - $float_in;
+					$early_overtime = c_time_to_int(Payroll::float_time($early_overtime));
+					$regular_hours = $regular_hours - $early_overtime;
 				}
 
 				/* CHECK IF LATE OVERTIME */
@@ -924,7 +904,6 @@ class Payroll
 					}
 					else
 					{
-						// dd($float_in);
 						$late_overtime = $float_out - $def_out_float;
 						$late_overtime = c_time_to_int(Payroll::float_time($late_overtime));
 						$regular_hours = $regular_hours - $late_overtime;
@@ -1058,7 +1037,7 @@ class Payroll
 
 		if($total_hours > 0)
 		{
-			$total_hours -= c_time_to_int($break);
+			// $total_hours -= 2($break);
 		}
 		
 		/* COMPUTE EXTRA DAY AND REST DAY */
@@ -1074,8 +1053,6 @@ class Payroll
 			$date = $data["time_sheet_info"]->payroll_time_date;
 		}
 
-
-	
 		if($rest_day == 1)
 		{
 			if($total_hours == '00:00:00' || $total_hours == '00:00')
@@ -1083,7 +1060,7 @@ class Payroll
 				$total_hours = 0;
 			}
 
-			$total_rest_day_hours = $total_hours;
+			$total_rest_day_hours = $total_regular_hours;
 			$total_regular_hours = 0;
 			$rest_day_today = true;
 		}
@@ -1097,10 +1074,12 @@ class Payroll
 			}
 			else
 			{
-				$total_hours += c_time_to_int($break);
+				// $total_hours += c_time_to_int($break);
 			}
+			
+			// $total_extra_day_hours = $total_hours;
+			$total_extra_day_hours	= $total_regular_hours;
 			$total_regular_hours = 0;
-			$total_extra_day_hours = $total_hours;
 			$extra_day_today = true;
 		}
 
@@ -1122,15 +1101,14 @@ class Payroll
 		
 
 		/* CHECK IF ABSENT */
+		$absent = false;
+
 		if($total_time_spent == 0 && $extra_day_today == false && $holiday_today == false && $rest_day_today == false)
 		{
 			$absent = true;
 		}
 
-		else
-		{
-			$absent = false;
-		}
+		// dd($total_regular_hours);
 
 		$return->time_spent 		= convert_seconds_to_hours_minutes("H:i", $total_time_spent);
 		$return->regular_hours 		= convert_seconds_to_hours_minutes("H:i", $total_regular_hours);
@@ -2560,23 +2538,14 @@ class Payroll
 		$data['total_deduction']	+= $data['sss_contribution_ee'];
 		$data['total_deduction']	+= $data['pagibig_contribution'];
 		$data['total_deduction']	+= $data['philhealth_contribution_ee'];
+
+		// dd((p$data['philhealth_contribution_ee']) );
+
 		$data['total_deduction']	+= $data['absent_deduction'];
 		$data['total_deduction']	+= $data['late_deduction'];
 		$data['total_deduction']	+= $data['under_time'];
 		$data['total_deduction']	+= $data['agency_deduction'];
 		$data['total_deduction']	+= $data['break_deduction'];
-
-		// DEDUCTION START [LOANS, CASH ADVANCE, CASH BOND AND OTHER DEDUCTION]
-		$deduction = Payroll::getdeduction($employee_id, $date,$period_category, $payroll_period_category, $shop_id);
-
-		$data['deduction'] 			= $deduction['deduction'];
-		$data['total_deduction'] 	+= $deduction['total_deduction'] + $adjustment_deductions_total;
-
-		$data['total_net'] 					= ($data['total_gross'] - $data['total_deduction']) + $total_deminimis + $data['13_month'];
-
-		$data['total_gross'] 				+=  $total_deminimis + $data['13_month'];
-		
-		// dd($data['total_gross']);
 
 		if($data['total_deduction'] > $data['total_gross'])
 		{
@@ -2590,9 +2559,18 @@ class Payroll
 			$data['agency_deduction'] 			= 0;
 		}
 
-		
-		
+		// DEDUCTION START [LOANS, CASH ADVANCE, CASH BOND AND OTHER DEDUCTION]
+		$deduction = Payroll::getdeduction($employee_id, $date,$period_category, $payroll_period_category, $shop_id);
 
+		$data['deduction'] 			= $deduction['deduction'];
+		$data['total_deduction'] 	+= $deduction['total_deduction'] + $adjustment_deductions_total;
+
+		$data['total_net'] 					= ($data['total_gross'] - $data['total_deduction']) + $total_deminimis + $data['13_month'];
+
+
+
+		$data['total_gross'] 				+=  $total_deminimis + $data['13_month'];
+		
 		$data['total_regular_days']			= round($data['total_regular_days'], 2);
 		$data['total_rest_days']			= round($data['total_rest_days'], 2);
 		$data['total_extra_days']			= round($data['total_extra_days'], 2);
@@ -2604,7 +2582,7 @@ class Payroll
 
 		$data['total_worked_days'] = $data['total_regular_days'] + $data['total_rest_days'] + $data['total_extra_days'] + $data['total_rh'] + $data['total_sh'] + $data['leave_count_w_pay'] + $data['leave_count_wo_pay'];
 
-		// dd($data['total_net']);
+		
 		return $data;
 	}
 
@@ -2900,61 +2878,63 @@ class Payroll
 
 		$tax_contribution = 0;
 
-		
-
 		// if($rate >= $tax->tax_first_range && $rate < $tax->tax_second_range)
-		if($tax->tax_first_range >= $rate && $tax->tax_second_range < $rate)
+		if($tax != null)
 		{
-			$tax_index = 'tax_first_range';
-		}
+			if($tax->tax_first_range >= $rate && $tax->tax_second_range < $rate)
+			{
+				$tax_index = 'tax_first_range';
+			}
 
-		if($tax->tax_second_range >= $rate && $tax->tax_third_range < $rate)
-		{
-			$tax_index = 'tax_second_range';
-		}
+			if($tax->tax_second_range >= $rate && $tax->tax_third_range < $rate)
+			{
+				$tax_index = 'tax_second_range';
+			}
 
-		if($tax->tax_second_range >= $rate && $tax->tax_third_range < $rate)
-		{
-			$tax_index = 'tax_second_range';
-		}
+			if($tax->tax_second_range >= $rate && $tax->tax_third_range < $rate)
+			{
+				$tax_index = 'tax_second_range';
+			}
 
-		if($tax->tax_third_range >= $rate && $tax->tax_fourth_range < $rate)
-		{
-			$tax_index = 'tax_third_range';
-		}
+			if($tax->tax_third_range >= $rate && $tax->tax_fourth_range < $rate)
+			{
+				$tax_index = 'tax_third_range';
+			}
 
-		if($tax->tax_fourth_range >= $rate && $tax->tax_fifth_range < $rate)
-		{
-			$tax_index = 'tax_fourth_range';
-		}
+			if($tax->tax_fourth_range >= $rate && $tax->tax_fifth_range < $rate)
+			{
+				$tax_index = 'tax_fourth_range';
+			}
 
+			
+			if($tax->tax_fifth_range >= $rate && $tax->taxt_sixth_range < $rate)
+			{
+				$tax_index = 'tax_fifth_range';
+			}
+
+
+			if($rate >= $tax->taxt_sixth_range &&  $rate < $tax->tax_seventh_range)
+			{
+				$tax_index = 'taxt_sixth_range';
+			}
+
+
+			if($rate <= $tax->tax_seventh_range && $rate > $tax->taxt_sixth_range)
+			{
+				$tax_index = 'tax_seventh_range';
+			}
+
+
+			if($tax_index != '')
+			{
+				$exemption_num = $exemption->$tax_index;
+				$status_num = $status->$tax_index;
+				// dd($status_num);
+
+				$tax_contribution = (($rate - $tax->$tax_index) * ($status_num / 100)) + $exemption_num;
+			}
+		}
 		
-		if($tax->tax_fifth_range >= $rate && $tax->taxt_sixth_range < $rate)
-		{
-			$tax_index = 'tax_fifth_range';
-		}
-
-
-		if($rate >= $tax->taxt_sixth_range &&  $rate < $tax->tax_seventh_range)
-		{
-			$tax_index = 'taxt_sixth_range';
-		}
-
-
-		if($rate <= $tax->tax_seventh_range && $rate > $tax->taxt_sixth_range)
-		{
-			$tax_index = 'tax_seventh_range';
-		}
-
-
-		if($tax_index != '')
-		{
-			$exemption_num = $exemption->$tax_index;
-			$status_num = $status->$tax_index;
-			// dd($status_num);
-
-			$tax_contribution = (($rate - $tax->$tax_index) * ($status_num / 100)) + $exemption_num;
-		}
 
 
 		return round($tax_contribution, 2);

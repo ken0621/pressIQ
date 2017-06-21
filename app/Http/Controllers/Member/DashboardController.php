@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Controllers\Member;
+
 use App\Http\Controllers\Controller;
+// use App\Http\Middleware\RandomColor;
 use App\Globals\Accounting;
 use App\Globals\Category;
 use App\Globals\Item;
@@ -9,11 +11,17 @@ use App\Globals\Purchase_Order;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\Invoice;
 use App\Globals\Billing;
+use App\Globals\Report;
+
 use App\Models\Tbl_User;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_unit_measurement;
+use App\Models\Tbl_journal_entry_line;
+
 use Carbon\Carbon;
 use Request;
+use DB;
+
 class DashboardController extends Member
 {
 
@@ -24,35 +32,86 @@ class DashboardController extends Member
 
 	public function index()
 	{
-		$data["mants"] = Carbon::now()->subMonths(6);
 
-		$data["shop_name"]		= $this->user_info->shop_key;
+		$period 		= Request::input("period");
+		$period 		= "days_ago";
+		$date["days"] 	= "365";
+		$from  			= Report::checkDatePeriod($period, $date)['start_date'];
+        $to     		= Report::checkDatePeriod($period, $date)['end_date'];
 
-		$start_date = date("Y-m-d H:i:s",strtotime(Carbon::now()->subMonths(6)->format("Y-m-d") . " 00:00:00"));
-		$end_date = date("Y-m-d H:i:s",strtotime(Carbon::now()));
-		if(Request::input("start_date") && Request::input("end_date"))
-		{
-			$start_date = date("Y-m-d H:i:s",strtotime(Request::input("start_date")));
-			$end_date   = date("Y-m-d H:i:s", strtotime(Request::input("end_date")));			
-		}
+        /* INVOICE DATA */
+		$data["open_invoice"] 	= Invoice::invoiceStatus($from, $to)["open"];
+		$data["overdue_invoice"]= Invoice::invoiceStatus($from, $to)["overdue"];
 
-		$data["po_amount"]		= currency("PHP",Purchase_Order::get_po_amount($start_date, $end_date));
-		$data["count_po"]		= Purchase_Order::count_po($start_date, $end_date);
+		$date["days"] 			= "30";
+		$from  					= Report::checkDatePeriod($period, $date)['start_date'];
+        $to     				= Report::checkDatePeriod($period, $date)['end_date'];
+		$data["paid_invoice"] 	= Invoice::invoiceStatus($from, $to)["paid"];
 
-		$data["ar_amount"]		= currency("PHP",Invoice::get_ar_amount($start_date, $end_date));
-		$data["count_ar"]		= Invoice::count_ar($start_date, $end_date);
 
-		$data["ap_amount"]		= currency("PHP",Billing::get_ap_amount($start_date, $end_date));
-		$data["count_ap"]		= Billing::count_ap($start_date, $end_date);
+		/* EXPENSE DATA */
+		$data["_expenses"]   = Tbl_journal_entry_line::account()->journal()->totalAmount()
+                            ->where("je_shop_id", $this->getShopId())
+                            ->whereIn("chart_type_name", ['Expense', 'Other Expense', 'Cost of Good Sold'])
+                            ->whereRaw("DATE(je_entry_date) >= '$from'")
+                            ->whereRaw("DATE(je_entry_date) <= '$to'")
+                            ->get();
 
-		$data["pb_amount"]		= currency("PHP",Billing::get_paid_bills_amount($start_date, $end_date));
-		$data["count_pb"]		= Billing::count_paid_bills($start_date, $end_date);
+        $data["expense_name"]	= [];
+        $data["expense_color"]	= [];
+        $data["expense_value"]	= [];
+        foreach($data["_expenses"] as $key=>$expense)
+        {
+        	$data["_expenses"][$key]->percentage = currency('',(($expense->amount / collect($data["_expenses"])->sum('amount')) * 100))." %";
+        	array_push($data["expense_name"], $expense->account_name);
+        	array_push($data["expense_value"], currency('',(($expense->amount / collect($data["_expenses"])->sum('amount')) * 100)));
+        	array_push($data["expense_color"], $this->random_color());
+        }
+        $data["expense_name"]	= json_encode($data["expense_name"]);
+        $data["expense_value"] 	= json_encode($data["expense_value"]);
+        $data["expense_color"]	= json_encode($data["expense_color"]);
 
-		$data["pis"]			= Purchasing_inventory_system::check();
+        /* INCOME DATA */
+		$data["_income"]     = Tbl_journal_entry_line::account()->journal()
+							->selectRaw("*")
+							->amount()
+                            ->where("je_shop_id", $this->getShopId())
+                            ->whereIn("chart_type_name", ['Income', 'Other Income'])
+                            ->whereRaw("DATE(je_entry_date) >= '$from'")
+                            ->whereRaw("DATE(je_entry_date) <= '$to'")
+                            ->groupBy(DB::raw("DATE(je_entry_date)"))
+                            ->get();
 
-		$data["sales_amount"]	= currency("PHP",Invoice::get_sales_amount($start_date, $end_date));
+        $data["income_date"]	= [];
+        $data["income_value"]	= [];
+        foreach($data["_income"] as $key=>$income)
+        {
+        	array_push($data["income_date"], dateFormat($income->je_entry_date));
+        	array_push($data["income_value"], $income->amount);
+        }
+        $data["income_date"]	= json_encode($data["income_date"]);
+        $data["income_value"] 	= json_encode($data["income_value"]);
 
-		return view('member.dashboard.dashboard', $data);
+        /* BANK DATA */
+        $data["_bank"]		= Tbl_journal_entry_line::account()->journal()->totalAmount()
+                            ->where("je_shop_id", $this->getShopId())
+                            ->whereIn("chart_type_name", ['Bank'])
+                            ->get();
+
+		return view('member.dashboard.new_dashboard', $data);
+	}
+
+	public function random_color_part() {
+    	return str_pad( dechex( mt_rand( 0, 255 ) ), 2, '0', STR_PAD_LEFT);
+	}
+
+	public function random_color() {	
+	    return '#'.$this->random_color_part() .''. $this->random_color_part() .''. $this->random_color_part();
+	}
+
+	public function new_dashboard()
+	{
+		return view('member.dashboard.new_dashboard');
 	}
 
 	public function change_warehouse()
@@ -66,5 +125,53 @@ class DashboardController extends Member
 		{
 			dd("Error 404");
 		}
+	}
+
+	/**
+	 * Dashboard Statistics
+	 *
+	 * @return 	view
+	 */
+	public function statistics()
+	{
+		$period 		= Request::input("period");
+		$period 		= "days_ago";
+		$date["days"] 	= "365";
+		$from  			= Report::checkDatePeriod($period, $date)['start_date'];
+        $to     		= Report::checkDatePeriod($period, $date)['end_date'];
+
+		$data["open_invoice"] 		= Invoice::invoiceStatus($from, $to)["open"];
+		$data["overdue_invoice"] 	= Invoice::invoiceStatus($from, $to)["overdue"];
+
+		$date["days"] 	= "30";
+		$from  			= Report::checkDatePeriod($period, $date)['start_date'];
+        $to     		= Report::checkDatePeriod($period, $date)['end_date'];
+        
+		$data["paid_invoice"] 		= Invoice::invoiceStatus($from, $to)["paid"];
+
+
+		$data["_expenses"]   = Tbl_journal_entry_line::account()->journal()->totalAmount()
+                            ->where("je_shop_id", $this->getShopId())
+                            ->whereIn("chart_type_name", ['Expense', 'Other Expense', 'Cost of Good Sold'])
+                            ->whereRaw("DATE(je_entry_date) >= '$from'")
+                            ->whereRaw("DATE(je_entry_date) <= '$to'")
+                            ->get();
+
+		$data["_income"]     = Tbl_journal_entry_line::account()->journal()
+							->selectRaw("*")
+							->amount()
+                            ->where("je_shop_id", $this->getShopId())
+                            ->whereIn("chart_type_name", ['Income', 'Other Income'])
+                            ->whereRaw("DATE(je_entry_date) >= '$from'")
+                            ->whereRaw("DATE(je_entry_date) <= '$to'")
+                            ->groupBy(DB::raw("DATE(je_entry_date)"))
+                            ->get();
+
+        $data["_bank"]		= Tbl_journal_entry_line::account()->journal()->totalAmount()
+                            ->where("je_shop_id", $this->getShopId())
+                            ->whereIn("chart_type_name", ['Bank'])
+                            ->get();
+
+		return view('member.dashboard.dashboard', $data);
 	}
 }

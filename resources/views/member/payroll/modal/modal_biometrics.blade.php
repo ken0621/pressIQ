@@ -22,8 +22,19 @@
 		</div>
 	</form>
 	<div class="form-group">
-		<div class="col-md-12">
+		<div class="col-md-6">
 			<label class="btn btm-custom-green"><input type="file" name="" id="bio-file" class="hide" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/plain, .dat">Choose File</label>
+		</div>
+		<div class="col-md-6">
+			<select class="form-control" name="company">
+				<option value="">Select Company</option>
+				@foreach($_company as $company)
+	              <option value="{{$company['company']->payroll_company_id}}">{{$company['company']->payroll_company_name}}</option> 
+	                @foreach($company['branch'] as $branch)
+	                <option value="{{$branch->payroll_company_id}}">&nbsp;&nbsp;• {{$branch->payroll_company_name}}</option>
+	                @endforeach
+	             @endforeach
+			</select>
 		</div>
 		<div class="col-md-12">
 			<i><span class="file-name"></span></i>

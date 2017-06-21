@@ -92,7 +92,11 @@
 	    		<div class="holder"><div class="linya"></div></div>
 	    		<div class="holder"><a href="/contact">Contact Us</a></div>
                 <div class="holder"><div class="linya"></div></div>
-                <div class="holder"><a href="http://tour.philtechglobalinc.com">Travel and Tours</a></div>
+                <div class="holder"><a href="https://loadcentral.net">eLOADING BUSINESS</a></div>
+                <div class="holder"><div class="linya"></div></div>
+                <div class="holder"><a href="http://tour.philtechglobalinc.com">Airline Ticketing</a></div>
+                <div class="holder"><div class="linya"></div></div>
+                <div class="holder"><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a></div>
     		</div>
     	</div>
     	<div class="header-nav-middle">

@@ -12,11 +12,7 @@
                     List of Customer Credit Memo
                 </small>
             </h1>
-            @if($pis != 0)
-            <a class="panel-buttons btn btn-custom-primary pull-right popup" size="md" link="/member/customer/credit_memo/choose_type" >Create Credit Memo</a>
-            @else
             <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/customer/credit_memo" >Create Credit Memo</a>
-            @endif
         </div>
     </div>
 </div>

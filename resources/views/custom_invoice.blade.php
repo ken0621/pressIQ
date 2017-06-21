@@ -48,7 +48,7 @@
                     </tr>
                     <tr>
                       <td class="do-label">DATE.</td>
-                      <td class="do-value">: {{ date("F d, Y", strtotime($info->created_date)) }}</td>
+                      <td class="do-value">: {{ date("F d, Y", strtotime($info->order_created_date)) }}</td>
                     </tr>
                     <tr>
                       <td class="do-label">DO No.</td>
@@ -106,9 +106,9 @@
         <div class="holder">
           <div class="clearfix">
             <div class="payment-detail pull-left">
-              <div class="detail-row"><strong>Bill To :</strong> {{ $info->first_name }} {{ $info->middle_name }} {{ $info->last_name }}</div>
-              <div class="detail-row"><strong>Shipping Address :</strong> {{ $info->customer_state }}, {{ $info->customer_city }}, {{ $info->customer_zipcode }}, {{ $info->customer_street }}</div>
-              <div class="detail-row"><strong>TIN :</strong> {{ $info->tin_number }}</div>
+              <div class="detail-row"><strong>Payment Date :</strong> {{ date("F d, Y", strtotime($info->order_created_date)) }}</div>
+              <div class="detail-row"><strong>Payment Type :</strong> {{ $info->method_name ? $info->method_name : 'Unknown' }}</div>
+              <div class="detail-row"><strong>Payment Receipt Number :</strong> </div>
             </div>
             <div class="total-summary pull-right">
               <div class="rows">TOTAL PAID AMOUNT : PHP. {{ number_format($summary['subtotal'], 2) }}</div>

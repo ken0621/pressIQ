@@ -68,6 +68,11 @@ class MLM_ReportController extends Member
         $data['report_list_d']['cashflow']['to'] = $to;
         $data['report_list_d']['cashflow']['count'] = $count;
         // -----------------------------------------------------------------
+        $data['report_list']['order_count'] = 'Order Count';
+        $data['report_list_d']['order_count']['from'] = $from;
+        $data['report_list_d']['order_count']['to'] = $to;
+        $data['report_list_d']['order_count']['count'] = $count;
+        // -----------------------------------------------------------------
         $data['report_list']['e_wallet'] = 'E-Wallet Report';
         $data['report_list_d']['e_wallet']['from'] = $from;
         $data['report_list_d']['e_wallet']['to'] = $to;

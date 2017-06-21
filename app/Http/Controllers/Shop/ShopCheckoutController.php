@@ -207,8 +207,8 @@ class ShopCheckoutController extends Shop
             $update['order_status']   = "Processing";
             $update['payment_status'] = 1;
             $order = Ec_order::update_ec_order($update);
-            $logs["order_id"]         = $order_id;
-            DB::table("tbl_paymaya_logs")->update($logs);
+            // $logs["order_id"]         = $order_id;
+            // DB::table("tbl_paymaya_logs")->update($logs);
             $this->after_email_payment($order_id);
 
             if ($from == "checkout") 

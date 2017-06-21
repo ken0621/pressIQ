@@ -24,6 +24,7 @@ use App\Models\Tbl_settings;
 use Validator;
 use Session;
 use Redirect;
+use Crypt;
 use App\Globals\Mlm_member;
 use App\Globals\Item;
 use App\Globals\Mlm_plan;
@@ -148,9 +149,9 @@ class MemberController extends Controller
 
     public function register()
     {
-
+        return Crypt::encrypt(122);
         return 'Under Construction';
-        
+
         $customer_session = Session::get('mlm_member');
         if($customer_session)
         {

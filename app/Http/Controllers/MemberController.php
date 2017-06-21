@@ -149,7 +149,6 @@ class MemberController extends Controller
 
     public function register()
     {
-        return Crypt::encrypt(122);
         return 'Under Construction';
 
         $customer_session = Session::get('mlm_member');

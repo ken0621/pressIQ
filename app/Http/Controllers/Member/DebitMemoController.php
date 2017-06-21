@@ -114,7 +114,7 @@ class DebitMemoController extends Member
 
             $data["_db_item"][$key]->dbline_replace_qty_um = UnitMeasurement::um_view($value->dbline_replace_qty,$value->item_measurement_id,$value->dbline_um);
 
-            $data["_db_item"][$key]->serial_number_consume =ItemSerial::get_consume_serial("debit_memo",$db_id,$value->dbline_item_id);
+            $data["_db_item"][$key]->serial_number_consume =ItemSerial::get_consume_debited($value->dbline_item_id,"debit_memo-".$db_id);
             $data["_db_item"][$key]->serial_number_replace = ItemSerial::get_serial("debit_memo_replace",$db_id,$value->dbline_item_id);
         }
 

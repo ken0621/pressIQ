@@ -47,6 +47,20 @@
 	            	</tr>
         		</table>
         		</form>
+				<form class="global-submit" method="post" action="/member/settings/terms/set/2">
+        		{!! csrf_field() !!}
+        		<table class="table">
+            		<tr>
+            			<td><label>Register Disable Message</label></td>
+            		</tr>
+            		<tr>
+            			<td><textarea class="form-control input-sm tinymce" name="regirter_page_disable_text">{!! isset($regirter_page_disable_text->settings_value) ?  $terms_and_agreement->settings_value : '' !!}</textarea></td>
+            		</tr>
+	            	<tr>
+	            		<td><button class="pull-right btn btn-primary">Submit</button></td>
+	            	</tr>
+        		</table>
+        		</form>
             </div>
         </div>
     </div>

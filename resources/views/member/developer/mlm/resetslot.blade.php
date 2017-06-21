@@ -146,4 +146,18 @@
         </div>
     </div>
 </div>
+
+<div class="panel panel-default panel-block panel-title-block" id="top">
+    <div class="panel-heading">
+        <div>
+            <form method="post" action="/member/developer/reset_slot/submit/fix_password">
+            <div class="col-md-4">
+                <input type="password" class="form-control" name="password" placeholder="password">
+            </div>
+            {!! csrf_field() !!}
+            <button class="btn btn-primary">Password</button>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection

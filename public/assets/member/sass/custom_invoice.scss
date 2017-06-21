@@ -18,7 +18,7 @@
 				// width: 115px;
 				width: 75px;
 				vertical-align: middle;
-				padding: 7.5px 0;
+				padding: 10px 0;
 				img
 				{
 					width: 100%;
@@ -65,13 +65,15 @@
 	{
 		text-align: center;
 		margin: 10px 0;
-		font-size: 18px;
+		// font-size: 18px;
+		font-size: 13px;
 		font-weight: 700;
 	}
 	.sub-title
 	{
 		margin-top: 15px;
-		font-size: 16px;
+		// font-size: 16px;
+		font-size: 12px;
 		font-weight: 700; 
 		margin-bottom: 5px;
 	}
@@ -83,7 +85,8 @@
 		.detail-row
 		{
 			margin: 25px 0;
-			font-size: 16px;
+			// font-size: 16px;
+			font-size: 12px;
 			&:first-child
 			{
 				margin-top: 0;
@@ -106,7 +109,8 @@
 					th
 					{
 						border: 0;
-						font-size: 16px;
+						// font-size: 16px;
+						font-size: 12px;
 						font-weight: 400;
 					}
 				}

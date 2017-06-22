@@ -50,7 +50,7 @@
         }());
         </script>
     </head>
-    <body style="background-image: url('resources/assets/new_front/img/login-bg.jpg')">
+    <body style="background-color: #5C3424;">
         <div class="modal-loader hidden"></div>
         <!-- Modal -->
             <div class="modal fade" id="myModal" role="dialog">
@@ -86,7 +86,7 @@
                         <div id="login" class="animate form">
                             <form method="post" action="/mlm/login/forgot_password/submit" class="global-submit" autocomplete="on"> 
                                 <input type="hidden" class="token" name="_token" value="{{ csrf_token() }}">
-                                <div class="lol-title"><span>Forgot</span> Password</div>
+                                <div class="lol-title"><span style="color: #5C3424;">Forgot</span> Password</div>
                                 <p>
                                     <h3>Lost Password</h3>
                                     <small>Follow these simple steps to reset your password</small>
@@ -103,7 +103,7 @@
                                     <input id="email" name="email" required="required" type="text" placeholder="Email Address"/>
                                 </p>
                                 <p class="login button"> 
-                                    <input type="submit" value="Get New Password"> 
+                                    <input style="background-color: #5C3424;" type="submit" value="Get New Password"> 
                                 </p>
                             </form>
                         </div>

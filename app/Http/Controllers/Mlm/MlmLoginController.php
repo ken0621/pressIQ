@@ -171,11 +171,11 @@ class MlmLoginController extends Controller
 
                     $change_content = $txt;
 
-                    $return["content"] = EmailContent::email_txt_replace($content_key, $change_content);
+                    $return["content"] = EmailContent::email_txt_replace($content_key, $change_content, Self::$shop_id);
 
                     $update_new_password["password"] = Crypt::encrypt($new_password);
                     Tbl_customer::where("customer_id",$ctr_email->customer_id)->update($update_new_password);
-
+                    
                     Mail::send('emails.test', $return, function ($message) use ($return)
                     {
                         $message->from(env('MAIL_USERNAME'), $return["shop_key"]);

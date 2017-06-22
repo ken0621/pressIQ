@@ -50,8 +50,16 @@
         document.write('<script src="' + js + '"><\/script>');
         }());
         </script>
+        <style type="text/css">
+        #wrapper p.button.register input:hover 
+        {
+            background-color: #5C3424 !important;
+            color: #fff !important;
+        }
+
+        </style>
     </head>
-    <body style="background-image: url('resources/assets/new_front/img/login-bg.jpg')">
+    <body style="background-color: #5C3424;">
         <div class="modal-loader hidden"></div>
         <!-- Modal -->
             <div class="modal fade" id="myModal" role="dialog">
@@ -87,7 +95,7 @@
                         <div id="login" class="animate form">
                             <form method="post" action="/mlm/login" class="global-submit" autocomplete="on"> 
                             <input type="hidden" class="token" name="_token" value="{{ csrf_token() }}">
-                                <div class="lol-title"><span>Members</span> Login</div>
+                                <div class="lol-title"><span style="color: #5C3424;">Members</span> Login</div>
                                 <p> 
                                     <input id="username" name="user" required="required" type="text" placeholder="Username"/>
                                 </p>
@@ -95,17 +103,17 @@
                                     <input id="password" name="pass" required="required" type="password" placeholder="Password" /> 
                                 </p>
                                 <p class="login button"> 
-                                    <input type="submit" value="Login" > 
+                                    <input style="background-color: #5C3424;" type="submit" value="Login" > 
                                 </p>
                                 <div class="divider-holder" style="margin-bottom: 15px;">
                                     <div class="divider"></div>
                                     <span>Don't have an account yet?</span>
                                 </div>
                                 <p class="register button"> 
-                                    <input type="button" value="Create an Account" onClick="location.href='/member/register'" /> 
+                                    <input style="color: #5C3424; border-color: #5C3424;" type="button" value="Create an Account" onClick="location.href='/member/register'" /> 
                                 </p>
-                                <p>
-                                    <a href="/mlm/login/forgot_password" style="text-decoration: none">Forgot Password ?</a>
+                                <p style="text-align: center;">
+                                    <a style="color: #5C3424; text-decoration: none;" href="/mlm/login/forgot_password" style="text-decoration: none">Forgot Password ?</a>
                                 </p>
                             </form>
                         </div>

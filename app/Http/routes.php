@@ -172,6 +172,9 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 	//product order end
 	Route::get('paymaya/verify', 'Member\ProductOrderController@paymaya_verify');
 	Route::get('paymaya/verify/{id}', 'Member\ProductOrderController@paymaya_verify_id');
+	Route::get('paymaya/verify/order/{id}', 'Member\ProductOrderController@paymaya_verify_id_order');
+	Route::post('paymaya/verify/order/update/slot', 'Member\ProductOrderController@paymaya_verify_id_order_update_slot');
+	Route::post('paymaya/verify/order/update/slot/payment', 'Member\ProductOrderController@paymaya_verify_id_order_update_slot_payment');
 });
 
 

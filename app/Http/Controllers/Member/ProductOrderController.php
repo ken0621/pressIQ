@@ -9,6 +9,7 @@ use App\Globals\UnitMeasurement;
 use App\Globals\Warehouse;
 use App\Globals\Ecom_Product;
 use App\Globals\Pdf_global;
+use App\Globals\Item_code;
 
 use App\Models\Tbl_customer;
 use App\Models\Tbl_warehousea;
@@ -22,7 +23,9 @@ use App\Models\Tbl_ec_order_item;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_coupon_code;
 use App\Models\Tbl_online_pymnt_method;
+use App\Models\Tbl_mlm_slot;
 
+use DB;
 use Request;
 use Input;
 use File;
@@ -366,9 +369,108 @@ class ProductOrderController extends Member
         }
         else
         {
-
+             $data['order'] = Tbl_ec_order::join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_ec_order.customer_id')->where(DB::raw("CONCAT(tbl_customer.first_name, ' ', tbl_customer.middle_name, ' ', tbl_customer.last_name)"), 'LIKE', "%".$search."%")->get();
         }
 
         return view('member.product_order.verfiy.search', $data);
+    }
+    public function paymaya_verify_id_order($page, $oder_id ='')
+    {
+        $data = [];
+        $data['order'] = Tbl_ec_order::where('ec_order_id', $oder_id)
+        ->leftjoin('tbl_paymaya_logs', 'tbl_paymaya_logs.order_id','=',  'tbl_ec_order.ec_order_id')
+        ->leftjoin('tbl_online_pymnt_method', 'tbl_online_pymnt_method.method_id', '=', 'tbl_ec_order.payment_method_id')
+        ->leftjoin('tbl_ec_order_slot', 'tbl_ec_order_slot.order_slot_ec_order_id', '=', 'tbl_ec_order.ec_order_id')
+        ->leftjoin('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_ec_order_slot.order_slot_id_c')
+        ->customer()->first();
+
+        $data['slots'] = Tbl_mlm_slot::get()->keyBy('slot_id');
+        return view('member.product_order.verfiy.order', $data);
+    }
+    public function paymaya_verify_id_order_update_slot()
+    {
+        $order_slot_id = Request::input('order_slot_id');
+        $referrer = Request::input('referrer');
+        $ec_order_id = Request::input('ec_order_id');
+        $order = Tbl_ec_order::where('ec_order_id', $ec_order_id)->first();
+        if($order)
+        {
+            if($order_slot_id)
+            {
+                $tbl_ec_order_slot = DB::table('tbl_ec_order_slot')->where('order_slot_id', $order_slot_id)->first();
+                if($tbl_ec_order_slot)
+                {
+                    Item_code::ec_order_slot($order->ec_order_id);
+                    $data['status'] = 'success';
+                    $data['message'] = 'Slot Created';
+                    return json_encode($data);
+                }
+                else
+                {
+                    $data['status'] = 'error';
+                    $data['message'] = 'Invalid, please reload the page';
+                    return json_encode($data);
+                }
+            }
+            else
+            {
+                $count = DB::table('tbl_ec_order_slot')->where('order_slot_ec_order_id', $ec_order_id)->count();
+                if($count == 0)
+                {
+                    $insert['order_slot_ec_order_id'] = $order->ec_order_id;
+                    $insert['order_slot_customer_id'] = $order->customer_id;
+                    // $insert['order_slot_sponsor'] = 
+                    if($referrer)
+                    {
+                        $check_sponsor = Tbl_mlm_slot::where('slot_nick_name', $referrer)->where('slot_defaul', 1)->first();
+                        if($check_sponsor)
+                        {
+                            $insert['order_slot_sponsor'] = $check_sponsor->slot_id;
+                        }
+                        else
+                        {
+                            $check_sponsor = Tbl_mlm_slot::where('slot_no', $referrer)->first();
+                            if($check_sponsor)
+                            {
+                                $insert['order_slot_sponsor'] = $check_sponsor->slot_id;
+                            }
+                            else{ $data['status'] = 'error'; $data['message'] = 'Invalid Referrer'; return json_encode($data); }
+                        }
+                    }
+                    DB::table('tbl_ec_order_slot')->insert($insert);
+                    Item_code::ec_order_slot($order->ec_order_id);
+                    $data['status'] = 'success'; $data['message'] = 'Slot Created'; return json_encode($data);
+                }
+                else
+                {
+                    $data['status'] = 'error'; $data['message'] = 'Already have a slot'; return json_encode($data);
+                }
+            }
+        }
+        else
+        {
+            $data['status'] ='error';
+            $data['message'] = 'Invalid order please refresh the page';
+            return json_encode($data);
+        }
+    }
+    public  function paymaya_verify_id_order_update_slot_payment()
+    {
+        $update['payment_status'] = 1;
+        $update['order_status'] = 'Processing';
+
+        $ec_order_id = Request::input('ec_order_id');
+        $order = Tbl_ec_order::where('ec_order_id', $ec_order_id)->first();
+        if($order)
+        {
+            $order = Tbl_ec_order::where('ec_order_id', $ec_order_id)->update($update);
+            return $this->paymaya_verify_id_order_update_slot();  
+        }
+        else
+        {
+            $data['status'] ='error';
+            $data['message'] = 'Invalid order please refresh the page';
+            return json_encode($data);
+        }
     }
 }

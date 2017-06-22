@@ -614,3 +614,17 @@ function get_address_customer()
 {
     
 }
+function ec_order_payment_status($status)
+{
+    switch ($status) {
+        case 1:
+            return 'Paid';
+            break;
+        case 0:
+            return 'Unpaid';
+            break;
+        default:
+            return 'Unpaid';
+            break;
+    }
+}

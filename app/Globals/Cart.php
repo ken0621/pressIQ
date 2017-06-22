@@ -1059,7 +1059,7 @@ class Cart
 
         $itemCheckout->items = $item;
         $itemCheckout->totalAmount = $totalAmount;
-        $itemCheckout->requestReferenceNumber = $shop_id . time();
+        $itemCheckout->requestReferenceNumber = $order_id;
 
         $shop = DB::table('tbl_shop')->where('shop_id', $shop_id)->first();
         $link = '/payment/paymaya/success?notify=0&';
@@ -1112,7 +1112,7 @@ class Cart
             $merchant_key = $gateway->api_secret_id;
 
             $requestpayment    = new Dragon_RequestPayment($merchant_key);
-            $request["txnid"]  = $shop_id . time();
+            
             $request["amount"] = $data["tbl_ec_order"]["total"];
             $request["ccy"]    = "PHP";
             $request["description"] = $product_summary;
@@ -1123,6 +1123,7 @@ class Cart
             $customer       = Cart::get_customer();
 
             $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null, 0);
+            $request["txnid"]  = $order_id;
             Cart::clear_all($shop_id);
             
             $dragon_request = array(

@@ -179,10 +179,12 @@ class MLM_SlotController extends Member
         }
         if($search_slot != null || $search_slot != 0)
         {
+            // $code->leftJoin("tbl_customer", "tbl_customer.customer_id", "=", "tbl_mlm_slot.slot_owner");
             $code->where(function ($query) use($search_slot)
             {$query ->where("slot_owner","LIKE","%".$search_slot."%")
                     ->orWhere("slot_no","LIKE","%".$search_slot."%")
-                    ->orWhere("slot_id","LIKE","%".$search_slot."%");
+                    ->orWhere("slot_id","LIKE","%".$search_slot."%")
+                    ->orWhere(DB::raw("CONCAT(tbl_customer.first_name, ' ', tbl_customer.middle_name, ' ', tbl_customer.last_name)"), 'LIKE', "%".$search_slot."%");
             });
         }
         if($slot_active != null)

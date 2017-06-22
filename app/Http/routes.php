@@ -170,6 +170,8 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 	Route::any('product_order/create_order/submit_payment_upload','Member\ProductOrderController@submit_payment_upload');
 	Route::get('product_order/custom_invoice','MemberController@custom_view_invoice');
 	//product order end
+	Route::get('paymaya/verify', 'Member\ProductOrderController@paymaya_verify');
+	Route::get('paymaya/verify/{id}', 'Member\ProductOrderController@paymaya_verify_id');
 });
 
 
@@ -202,6 +204,8 @@ Route::any("/member/ecommerce/product/collection/edit_submit","Member\Collection
 Route::any("/member/ecommerce/product/collection/set_active","Member\CollectionController@set_active");
 Route::any("/member/ecommerce/product/collection/archived/{id}/{action}","Member\CollectionController@archived");
 Route::any("/member/ecommerce/product/collection/archived_submit","Member\CollectionController@archived_submit");
+
+
 
 Route::get("/member/ecommerce/wishlist/list","Member\WishlistController@list");
 

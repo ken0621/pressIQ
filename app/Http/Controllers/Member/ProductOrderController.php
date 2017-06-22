@@ -351,4 +351,24 @@ class ProductOrderController extends Member
           $pdf = view('member.customer_invoice.invoice_pdf', $data);
           return Pdf_global::show_pdf($pdf);
     }
+    public function paymaya_verify()
+    {
+        $data = [];
+
+        return view('member.product_order.verfiy.paymaya', $data);
+    }
+    public function paymaya_verify_id($page, $search ='')
+    {
+        $data = [];
+        if(is_numeric($search))
+        {
+            $data['order'] = Tbl_ec_order::where('ec_order_id', $search)->customer()->get();
+        }
+        else
+        {
+
+        }
+
+        return view('member.product_order.verfiy.search', $data);
+    }
 }

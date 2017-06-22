@@ -132,6 +132,14 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
 
+    /* -- PRODUCTS => PRODUCT SHIPMENT STATUS */
+    $code = "paymaya-verify";
+    $nav[$page]['submenu'][$code]['label'] = "Verify Payment Paymaya";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/paymaya/verify";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Luke Glenn Jordan</span>";
 
     
     /* -- E-COMMERCE => SHIPPING */

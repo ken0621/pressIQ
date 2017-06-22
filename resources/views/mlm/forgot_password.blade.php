@@ -93,7 +93,7 @@
                                 </p>
                                 <p>
                                     <ul style="list-style: none">
-                                        <li>1. Enter your <a style="text-decoration: none">{{$_SERVER['SERVER_NAME']}}</a> E-mail Address</li>
+                                        <li>1. Enter your <a style="text-decoration: none; color: #5C3424;">{{$_SERVER['SERVER_NAME']}}</a> E-mail Address</li>
                                         <li>2. Wait for your recovery details to be sent</li>
                                         <li>3. Follow instruction to login your account again.</li>
                                     </ul>

@@ -54,7 +54,7 @@
 </form>
 @endsection
 @section('script')
-<link rel="stylesheet" type="text/css" href="/assets/mlm/css/register-payment.css">
+<link rel="stylesheet" type="text/css" href="assets/mlm/css/register-payment.css">
 <script type="text/javascript">
   $(document).on("submit", ".register-submit", function(e)
         {

@@ -234,6 +234,9 @@ Route::any("/member/item/view_serials/{id}","Member\ItemSerialController@index")
 Route::any("/member/item/serial_number/{id}",'Member\ItemSerialController@view_serial');
 Route::any("/member/item/save_serial",'Member\ItemSerialController@save_serial');
 
+Route::any('/member/input/serial_number','Member\ItemSerialController@input_serial');
+
+
 Route::any('/member/functiontester', 'Member\FunctionTesterController@index'); /* ERWIN */
 Route::any('/member/functiontester/clear_all', 'Member\FunctionTesterController@clear_all'); /* ERWIN */
 Route::any('/member/functiontester/clear_one', 'Member\FunctionTesterController@clear_one'); /* ERWIN */

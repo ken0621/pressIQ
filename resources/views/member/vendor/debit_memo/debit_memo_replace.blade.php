@@ -65,6 +65,7 @@
                                             <th style="width: 100px;">Rate</th>
                                             <th style="width: 100px;">Amount</th>
                                             <th style="width: 100px;">Total Amount</th>
+                                            @include("member.load_ajax_data.load_th_serial_number")
                                             <th style="width: 100px;">Condemned</th>
                                         </tr>
                                     </thead>
@@ -84,6 +85,8 @@
                                                 <td>
                                                 <input type="hidden" name="" class="txt-amount" value="{{$dbline->dbline_amount - $dbline->dbline_replace_amount}}">
                                                 <span>{{number_format(($dbline->dbline_amount - $dbline->dbline_replace_amount),2)}}</span></td>
+                                                <td>
+                                                    <input type="text" name="serial_number[]" value="{{$dbline->serial_number}}"></td>
                                                 <td class="text-center"><input disabled type="checkbox" {{$dbline->dbline_replace_status == 1 ? 'checked' : '' }} name=""></td>
                                             </tr>
                                         @endforeach

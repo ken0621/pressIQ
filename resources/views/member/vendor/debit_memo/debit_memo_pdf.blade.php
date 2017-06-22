@@ -67,6 +67,16 @@
 							<td class="text-center"><input disabled type="checkbox" {{$dbline->dbline_replace_status == 1 ? 'checked' : '' }} name=""></td>
 							@endif
 						</tr>
+						<tr>
+							<td ></td>
+							<td colspan="8"> SERIAL NUMBER CONSUMED <br> {{$dbline->serial_number_consume}} </td>
+						</tr>
+							@if($db->is_bad_order == 1)
+							<tr>
+								<td ></td>
+								<td colspan="8"> SERIAL NUMBER REPLACED <br> {{$dbline->serial_number_replace}}</td>
+							</tr>
+							@endif
 						@endforeach
 					</tbody>
 				</table>

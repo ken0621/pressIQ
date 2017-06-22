@@ -709,6 +709,11 @@ class Mlm_report
             $all_warehouse = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->where('archived', 0)->get();
             foreach($all_warehouse as $key => $value)
             {
+                $membership = 0;
+                $e_wallet_refill = 0;
+                $e_wallet_transfer = 0;
+                $e_wallet_tours = 0;
+                $e_wallet_school = 0;
                 if($value->main_warehouse == 2)
                 {
                     $product = Tbl_ec_order::where('shop_id', $shop_id)
@@ -719,6 +724,37 @@ class Mlm_report
                 }
                 else
                 {
+                    if($value->main_warehouse == 1)
+                    {
+                        $membership = Tbl_membership_code_invoice::where('shop_id', $shop_id)
+                        ->where('membership_code_date_created', '>=', $filters['from'])
+                        ->where('membership_code_date_created', '<=', $filters['to'])
+                        ->sum('membership_total');
+
+                        $e_wallet_refill = Tbl_mlm_slot_wallet_log_refill::where('tbl_mlm_slot_wallet_log_refill.shop_id', $shop_id)
+                        ->where('wallet_log_refill_date', '>=', $filters['from'])
+                        ->where('wallet_log_refill_date', '<=', $filters['to'])
+                        ->sum('wallet_log_refill_amount');
+
+                        $e_wallet_transfer = Tbl_mlm_slot_wallet_log_transfer::where('tbl_mlm_slot_wallet_log_transfer.shop_id', $shop_id)
+                        ->where('wallet_log_transfer_date', '>=', $filters['from'])
+                        ->where('wallet_log_transfer_date', '<=', $filters['to'])
+                        ->sum('wallet_log_transfer_slot_trans');
+
+                        $e_wallet_tours = DB::table('tbl_tour_wallet_logs')
+                        ->where('tbl_customer.shop_id', $shop_id)
+                        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_tour_wallet_logs.tour_wallet_logs_customer_id')
+                        ->groupBy('tour_wallet_logs_id')
+                        ->where('tour_wallet_logs_date', '>=', $filters['from'])
+                        ->where('tour_wallet_logs_date', '<=', $filters['to'])
+                        ->sum('tour_wallet_logs_wallet_amount');
+
+                        $e_wallet_school = DB::table('tbl_merchant_school_item')->where('merchant_school_item_shop', $shop_id)
+                        ->where('merchant_item_date', '>=', $filters['from'])
+                        ->where('merchant_item_date', '<=', $filters['to'])
+                        ->sum('merchant_school_i_amount');
+
+                    }
                     $product = Tbl_item_code_invoice::where('tbl_item_code_invoice.shop_id', $shop_id)
                     ->where('item_code_date_created', '>=', $filters['from'])
                     ->where('item_code_date_created', '<=', $filters['to'])
@@ -731,8 +767,23 @@ class Mlm_report
                 }      
 
                 $all_warehouse[$key]->product_sales =   $product; 
+                $all_warehouse[$key]->membership_sales =   $membership;
+                $all_warehouse[$key]->e_wallet_refill =   $e_wallet_refill;
+                $all_warehouse[$key]->e_wallet_transfer =   $e_wallet_transfer;
+                $all_warehouse[$key]->e_wallet_tours =   $e_wallet_tours;
+                $all_warehouse[$key]->e_wallet_school =   $e_wallet_school;
+
             }
+
+            
+
             $data['sales']['product_sales'] = 'Product Sales';
+            $data['sales']['membership_sales'] = 'Membership Sales';
+            $data['sales']['e_wallet_refill'] = 'E-Wallet Refill';
+            $data['sales']['e_wallet_transfer'] = 'E-Wallet Transfer';
+            $data['sales']['e_wallet_tours'] = 'Travel and Tours E-Wallet Sales Report';
+            $data['sales']['e_wallet_school'] = 'School Wallet Sales Report';
+
             $data['page'] = 'warehouse_consolidated';
             $data['warehouse'] = $all_warehouse;
             if(Request::input('pdf') == 'excel')

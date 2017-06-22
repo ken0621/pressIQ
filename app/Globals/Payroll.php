@@ -413,6 +413,7 @@ class Payroll
 		return $data;
 	}
 
+
 	public static function adjust_payroll_approved_in_and_out($employee_id, $date)
 	{
 		/* GET INITIAL INFORMATION AND DATABASE */
@@ -420,6 +421,7 @@ class Payroll
 		$time_sheet_info = Tbl_payroll_time_sheet::where("payroll_time_date", Carbon::parse($date)->format("Y-m-d"))->where("payroll_employee_id", $employee_id)->first();
 		$_rest_day = Tbl_payroll_group_rest_day::where("payroll_group_id", $employee_information->payroll_group_id)->get();
 
+		$schedule = Payroll::getshift_emp($employee_id, $date, $employee_information->payroll_group_id);
 
 		if($time_sheet_info->payroll_time_sheet_approved == 0) //ONLY UPDATE THOSE WHO ARE NOT APPROVED
 		{
@@ -445,25 +447,28 @@ class Payroll
 				if($employee_information->payroll_group_is_flexi_time == 0)
 				{
 					/* OVERTIME RULE */
-					if(c_time_to_int($time_record->payroll_time_sheet_in) < c_time_to_int($employee_information->payroll_group_start))
+					// if(c_time_to_int($time_record->payroll_time_sheet_in) < c_time_to_int($employee_information->payroll_group_start))
+					if(c_time_to_int($time_record->payroll_time_sheet_in) < c_time_to_int($schedule->work_start))
 					{
-						$payroll_time_sheet_approved_in = $employee_information->payroll_group_start;
+						// $payroll_time_sheet_approved_in = $employee_information->payroll_group_start;
+						$payroll_time_sheet_approved_in = $schedule->work_start;
 					}
 					else
 					{
 						$payroll_time_sheet_approved_in = $time_record->payroll_time_sheet_in;
 					}
 
-					if(c_time_to_int($time_record->payroll_time_sheet_out) > c_time_to_int($employee_information->payroll_group_end))
+					// if(c_time_to_int($time_record->payroll_time_sheet_out) > c_time_to_int($employee_information->payroll_group_end))
+					if(c_time_to_int($time_record->payroll_time_sheet_out) > c_time_to_int($schedule->work_end))
 					{
-						$payroll_time_sheet_approved_out = $employee_information->payroll_group_end;
+						$payroll_time_sheet_approved_out = $schedule->work_end;
 					}
 					else
 					{
 						$payroll_time_sheet_approved_out = $time_record->payroll_time_sheet_out;
 					}
 
-					/* IF ONE OF THE TIME IS ZERO */
+					// /* IF ONE OF THE TIME IS ZERO */
 					if($time_record->payroll_time_sheet_in == "00:00:00" || $time_record->payroll_time_sheet_out == "00:00:00")
 					{
 						$payroll_time_sheet_approved_in = "00:00";
@@ -471,14 +476,14 @@ class Payroll
 					}
 
 					/* IF TIME IN IS LATER THAN DEFAULT TIME OUT */
-					if($time_record->payroll_time_sheet_in > $employee_information->payroll_group_end)
+					if($time_record->payroll_time_sheet_in > $schedule->work_end)
 					{
 						$payroll_time_sheet_approved_in = "00:00";
 						$payroll_time_sheet_approved_out = "00:00";
 					}
 
 					/* IF TIME OUT IS EARLIER THAN DEFAULT TIME IN */
-					if($time_record->payroll_time_sheet_out < $employee_information->payroll_group_start)
+					if($time_record->payroll_time_sheet_out < $schedule->work_start)
 					{
 						$payroll_time_sheet_approved_in = "00:00";
 						$payroll_time_sheet_approved_out = "00:00";
@@ -508,6 +513,7 @@ class Payroll
 			}
 		}
 	}
+
 
 
 	public static function getshift_emp($payroll_employee_id = 0, $date = '0000-00-00', $payroll_group_id = 0)
@@ -611,6 +617,9 @@ class Payroll
 		// 		$return->approved_timesheet = Payroll::process_time_regulartime($data, $date);
 		// 	break;
 		// }
+
+
+		//Payroll::adjust_payroll_approved_in_and_out($employee_information->payroll_employee_id, $date);
 
 		$data["compute_approved"] = 0;
 		$return->pending_timesheet = Payroll::process_time_regulartime($data, $date, $data["time_rule"]);
@@ -806,8 +815,7 @@ class Payroll
 			{
 				$time_in 	= c_time_to_int($time_record->payroll_time_sheet_approved_in);
 				$time_out 	= c_time_to_int($time_record->payroll_time_sheet_approved_out);
-
-
+				
 				$time_in_str 	= $time_record->payroll_time_sheet_approved_in;
 				$time_out_str 	= $time_record->payroll_time_sheet_approved_out;
 			}
@@ -2870,61 +2878,63 @@ class Payroll
 
 		$tax_contribution = 0;
 
-		
-
 		// if($rate >= $tax->tax_first_range && $rate < $tax->tax_second_range)
-		if($tax->tax_first_range >= $rate && $tax->tax_second_range < $rate)
+		if($tax != null)
 		{
-			$tax_index = 'tax_first_range';
-		}
+			if($tax->tax_first_range >= $rate && $tax->tax_second_range < $rate)
+			{
+				$tax_index = 'tax_first_range';
+			}
 
-		if($tax->tax_second_range >= $rate && $tax->tax_third_range < $rate)
-		{
-			$tax_index = 'tax_second_range';
-		}
+			if($tax->tax_second_range >= $rate && $tax->tax_third_range < $rate)
+			{
+				$tax_index = 'tax_second_range';
+			}
 
-		if($tax->tax_second_range >= $rate && $tax->tax_third_range < $rate)
-		{
-			$tax_index = 'tax_second_range';
-		}
+			if($tax->tax_second_range >= $rate && $tax->tax_third_range < $rate)
+			{
+				$tax_index = 'tax_second_range';
+			}
 
-		if($tax->tax_third_range >= $rate && $tax->tax_fourth_range < $rate)
-		{
-			$tax_index = 'tax_third_range';
-		}
+			if($tax->tax_third_range >= $rate && $tax->tax_fourth_range < $rate)
+			{
+				$tax_index = 'tax_third_range';
+			}
 
-		if($tax->tax_fourth_range >= $rate && $tax->tax_fifth_range < $rate)
-		{
-			$tax_index = 'tax_fourth_range';
-		}
+			if($tax->tax_fourth_range >= $rate && $tax->tax_fifth_range < $rate)
+			{
+				$tax_index = 'tax_fourth_range';
+			}
 
+			
+			if($tax->tax_fifth_range >= $rate && $tax->taxt_sixth_range < $rate)
+			{
+				$tax_index = 'tax_fifth_range';
+			}
+
+
+			if($rate >= $tax->taxt_sixth_range &&  $rate < $tax->tax_seventh_range)
+			{
+				$tax_index = 'taxt_sixth_range';
+			}
+
+
+			if($rate <= $tax->tax_seventh_range && $rate > $tax->taxt_sixth_range)
+			{
+				$tax_index = 'tax_seventh_range';
+			}
+
+
+			if($tax_index != '')
+			{
+				$exemption_num = $exemption->$tax_index;
+				$status_num = $status->$tax_index;
+				// dd($status_num);
+
+				$tax_contribution = (($rate - $tax->$tax_index) * ($status_num / 100)) + $exemption_num;
+			}
+		}
 		
-		if($tax->tax_fifth_range >= $rate && $tax->taxt_sixth_range < $rate)
-		{
-			$tax_index = 'tax_fifth_range';
-		}
-
-
-		if($rate >= $tax->taxt_sixth_range &&  $rate < $tax->tax_seventh_range)
-		{
-			$tax_index = 'taxt_sixth_range';
-		}
-
-
-		if($rate <= $tax->tax_seventh_range && $rate > $tax->taxt_sixth_range)
-		{
-			$tax_index = 'tax_seventh_range';
-		}
-
-
-		if($tax_index != '')
-		{
-			$exemption_num = $exemption->$tax_index;
-			$status_num = $status->$tax_index;
-			// dd($status_num);
-
-			$tax_contribution = (($rate - $tax->$tax_index) * ($status_num / 100)) + $exemption_num;
-		}
 
 
 		return round($tax_contribution, 2);

@@ -25,6 +25,14 @@ class ItemSerialController extends Member
         }
         return view("member.item_serial.item_serial",$data);
     }
+
+    public function input_serial()
+    {
+        $data[] = null;
+
+
+        return view("member.item_serial.input_serial",$data);
+    }
     public function save_serial()
     {
         $data["status_message"] = "";

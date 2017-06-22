@@ -33,6 +33,7 @@
                                             <th style="width: 15px;" class="text-center">Serial Number</th>
                                             <th style="width: 15px;" class="text-center"></th>
                                             <th style="width: 15px;" class="text-center">Sold</th>
+                                            <th style="width: 15px;" class="text-center">Pull out</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -47,7 +48,8 @@
                                                 <i class="fa fa-edit fa-2x btn-edit-{{$serial->serial_id}}" onclick="view_edit({{$serial->serial_id}})"></i>
                                                 <i class="fa fa-floppy-o fa-2x btn-save-{{$serial->serial_id}} hidden" onclick="save_edit({{$serial->serial_id}})"></i>
                                             </td>
-                                            <td class="text-center"><input type="checkbox" name="sold_serial"></td>
+                                            <td class="text-center"><input type="checkbox" disabled name="sold_serial" {{$serial->item_consumed == 1 && $serial->sold == 1 ? 'checked' : ''}}></td>
+                                            <td class="text-center"><input type="checkbox" disabled name="pull_out_seiral" {{$serial->item_consumed == 1 && $serial->sold == 0 ? 'checked' : ''}}></td>
                                         </tr>
                                     @endforeach
                                     </tbody>                                   

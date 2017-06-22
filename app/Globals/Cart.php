@@ -724,7 +724,16 @@ class Cart
         $data["tbl_customer"]['mlm_username']     = (isset($customer_information["mlm_username"]) ? $customer_information["mlm_username"] : (isset($data["tbl_customer"]['mlm_username']) ? $data["tbl_customer"]['mlm_username'] : null));
         $data["tbl_customer"]['company']          = (isset($customer_information["company"]) ? $customer_information["company"] : (isset($data["tbl_customer"]['company']) ? $data["tbl_customer"]['company'] : null));
         $data["tbl_customer"]['is_corporate']     = (isset($customer_information["is_corporate"]) ? $customer_information["is_corporate"] : (isset($data["tbl_customer"]['is_corporate']) ? $data["tbl_customer"]['is_corporate'] : 0));
-
+        // 
+        $data["tbl_customer"]['middle_name']     = (isset($customer_information["middle_name"]) ? $customer_information["middle_name"] : (isset($data["tbl_customer"]['middle_name']) ? $data["tbl_customer"]['middle_name'] : null));
+        $data["tbl_customer"]['customer_full_address']     = (isset($customer_information["customer_full_address"]) ? $customer_information["customer_full_address"] : (isset($data["tbl_customer"]['customer_full_address']) ? $data["tbl_customer"]['customer_full_address'] : null));
+        $data["tbl_customer"]['b_day']     = (isset($customer_information["b_day"]) ? $customer_information["b_day"] : (isset($data["tbl_customer"]['b_day']) ? $data["tbl_customer"]['b_day'] : null));
+        $data["tbl_customer"]['customer_gender']     = (isset($customer_information["customer_gender"]) ? $customer_information["customer_gender"] : (isset($data["tbl_customer"]['customer_gender']) ? $data["tbl_customer"]['customer_gender'] : 'Male'));
+        
+        
+        
+        
+        // 
         $data['load_wallet']['ec_order_load']        = isset($customer_information['load_wallet']['ec_order_load']) == true ? $customer_information['load_wallet']['ec_order_load'] : 0 ;
         $data['load_wallet']['ec_order_load_number'] = isset($customer_information['load_wallet']['ec_order_load_number']) == true ? $customer_information['load_wallet']['ec_order_load_number'] : 0;
         
@@ -947,6 +956,7 @@ class Cart
      *    $payment_status (int) - 0 = not paid, 1 = paid
      *    $order_status (str) - Pending, Failed, Processing, Shipped, Completed, On-Hold, Cancelled
      *    $customer_id (int) - current logged in
+     *    $notification (int) - 0 = no notif, 1 = yes notif
      *
      * @return (array)
      *    - order_id
@@ -954,17 +964,19 @@ class Cart
      * @author (Edward Guevarra)
      *
      */
-    public static function submit_order($shop_id, $payment_status, $order_status, $customer_id = null)
+    public static function submit_order($shop_id, $payment_status, $order_status, $customer_id = null, $notification = 1)
     {
         $order = Cart::get_info($shop_id);
         $order["tbl_ec_order"]["payment_status"] = $payment_status;
         $order["tbl_ec_order"]["order_status"]   = $order_status;
         $order["customer_id"]                    = $customer_id;
+        $order["notification"]                   = $notification;
         return Ec_order::create_ec_order_from_cart($order);   
     }
     public static function process_payment($shop_id, $from = "checkout")
     {
-
+        ini_set('xdebug.max_nesting_level', 200);
+        
         $data = Cart::get_info($shop_id);
         $method_id = $data["tbl_ec_order"]["payment_method_id"];
         $method_information = Self::get_method_information($shop_id, $method_id);
@@ -993,7 +1005,8 @@ class Cart
         echo "Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.";
         $api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)->join("tbl_online_pymnt_gateway", "tbl_online_pymnt_gateway.gateway_id", "=", "tbl_online_pymnt_api.api_gateway_id")->where("gateway_code_name", "paymaya")->first();
 
-        PayMayaSDK::getInstance()->initCheckout($api->api_client_id, $api->api_secret_id, "SANDBOX");
+        PayMayaSDK::getInstance()->initCheckout($api->api_client_id, $api->api_secret_id, "PRODUCTION");
+        // PayMayaSDK::getInstance()->initCheckout($api->api_client_id, $api->api_secret_id, "SANDBOX");
         
         // Checkout
         $itemCheckout = new Checkout();
@@ -1006,6 +1019,7 @@ class Cart
         {
             $product = Tbl_ec_variant::where("evariant_id", $value["product_id"])->first();
             $product_item = Tbl_item::where("item_id", $product->evariant_item_id)->first();
+            
             // Item
             $itemAmountDetails = new ItemAmountDetails();
             $itemAmountDetails->shippingFee = "0.00";
@@ -1040,7 +1054,7 @@ class Cart
         $order_status   = "Pending";
         $customer       = Cart::get_customer();
 
-        $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null);
+        $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null, 0);
         Cart::clear_all($shop_id);
 
         $totalAmount->value = number_format($total, 2, '.', '');
@@ -1048,10 +1062,21 @@ class Cart
         $itemCheckout->items = $item;
         $itemCheckout->totalAmount = $totalAmount;
         $itemCheckout->requestReferenceNumber = $shop_id . time();
+
+        $shop = DB::table('tbl_shop')->where('shop_id', $shop_id)->first();
+        $link = '/payment/paymaya/success?notify=0&';
+        if($shop)
+        {
+            if($shop->shop_key == 'myphone')
+            {
+                $link = '/mlm/login?notify=1&';
+            }
+        }
+
         $itemCheckout->redirectUrl = array(
             "success" =>  URL::to("/payment/paymaya/success?order_id=" . Crypt::encrypt($order_id) . "&from=" . $from),
-            "failure" => URL::to("/payment/paymaya/failure"),
-            "cancel" => URL::to("/payment/paymaya/cancel")
+            "failure" => URL::to("/payment/paymaya/failure?order_id=" . Crypt::encrypt($order_id)),
+            "cancel" => URL::to("/payment/paymaya/cancel?order_id=" . Crypt::encrypt($order_id))
         );
 
         $itemCheckout->execute();
@@ -1098,7 +1123,7 @@ class Cart
             $order_status   = "Pending";
             $customer       = Cart::get_customer();
 
-            $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null);
+            $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null, 0);
             Cart::clear_all($shop_id);
             
             $dragon_request = array(

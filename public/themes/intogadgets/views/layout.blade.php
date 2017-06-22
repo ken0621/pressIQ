@@ -145,7 +145,7 @@
                      @endforeach
                      @foreach($_categories as $key => $categories)
                      <li class="sub-menu">
-                        <a href="#menupos{{ $key }}"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" class="list-group-item" data-toggle="collapse" data-parent="#mainmenu">{{ $categories['type_name'] }} <span class="menu-ico-collapse"><i class="glyphicon glyphicon-chevron-down"></i></span></a>
+                        <a href="{{ count($categories['subcategory']) > 0 ? "#menupos" . $key : "/product?type=" . $categories['type_id'] }}"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" {{ count($categories['subcategory']) > 0 ? 'class="list-group-item" data-toggle="collapse" data-parent="#mainmenu"' : "" }}>{{ $categories['type_name'] }} <span class="menu-ico-collapse {{ count($categories['subcategory']) > 0 ? "" : "hide" }}"><i class="glyphicon glyphicon-chevron-down"></i></span></a>
                         <div class="collapse pos-absolute" id="menupos{{ $key }}">
                            @foreach($categories['subcategory'] as $subcategories)
                            <a href="/product?type={{ $subcategories['type_id'] }}" data-toggle="collapse" data-target="#menupos{{ $key }}" class="list-group-item sub-item">{{ $subcategories['type_name'] }} ({{ $subcategories['product_count'] }})</a>

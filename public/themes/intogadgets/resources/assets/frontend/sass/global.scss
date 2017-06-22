@@ -1677,7 +1677,7 @@ $dropDown       : false;
                     border: none;
                     margin-bottom: 15px;
                     padding: 10px 10px 10px 80px;
-                    @media screen and (max-width: 410px)
+                    @media screen and (max-width: 435px)
                     {
                         width: 100%;
                         border: 1px solid #D1D1D1;
@@ -1701,7 +1701,7 @@ $dropDown       : false;
                     outline: none;
                     border: none;
                     padding: 10px 10px 10px 80px;
-                    @media screen and (max-width: 410px)
+                    @media screen and (max-width: 435px)
                     {
                         width: 100%;
                         border: 1px solid #D1D1D1;
@@ -2112,6 +2112,10 @@ html.remodal-is-locked .navbar
             padding: 5px 0;
         }
     }
+    .footable-row-detail-inner
+    {
+        margin: auto;
+    }
     .cart-content
     {
         border-collapse: collapse;
@@ -2122,10 +2126,8 @@ html.remodal-is-locked .navbar
         color: #39393b;
         font-size: 14px;
         font-family: "Open Sans", sans-serif;
-
         .cart-content-header
         {
-            display: table-row;
             background-color: #B3B3B3;
             border-top: 1px solid #aeb0b6;
             color: white;
@@ -2134,6 +2136,7 @@ html.remodal-is-locked .navbar
                 display: table-cell;
                 width: 2%;
                 padding: 5px 10px;
+                text-align: center;
             }
         }
         .cart-content-item
@@ -2170,7 +2173,10 @@ html.remodal-is-locked .navbar
                     padding: 3px 10px;
                     color: #777;
                     font-weight: bold;
-
+                    @media screen and (max-width: 705px)
+                    {
+                        display: none;
+                    }
                     &:hover
                     {
                         background-color: #EDEDED;
@@ -2258,7 +2264,13 @@ html.remodal-is-locked .navbar
         -webkit-column-count: 3; /* Chrome, Safari, Opera */
         -moz-column-count: 3; /* Firefox */
         column-count: 3;
-
+        &:first-child
+        {
+            @media screen and (min-width: 694px)
+            {
+                margin-right: 10px;
+            }
+        }
         img
         {
             margin: 0 10px;

@@ -873,6 +873,14 @@ class Ec_order
                     DB::table('tbl_ec_order_slot')->insert($insert_slot_ref);
                 }
             }
+            else
+            {
+                $insert_slot_ref['order_slot_ec_order_id']  = $order_info["tbl_ec_order"]["ec_order_id"];
+                $insert_slot_ref['order_slot_customer_id']  = $customer_id;
+                $insert_slot_ref['order_slot_used']         = 0;
+                $insert_slot_ref['order_slot_sponsor']      = 0;
+                DB::table('tbl_ec_order_slot')->insert($insert_slot_ref);
+            }
         }
         /* Email Password */
         if ($order_info["new_account"]) 

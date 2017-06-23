@@ -7472,6 +7472,7 @@ class PayrollController extends Member
                               $temp_query = $query;
                               $amount = $temp_query->select('payroll_cola')->sum('payroll_cola');
                               array_push($data, $amount);
+                              // array_push($data, '150');
                          }
 
                          if($entity['entity_name'] == 'Special Holiday Pay')
@@ -7559,12 +7560,20 @@ class PayrollController extends Member
                               $temp_query = $query;
                               $amount = $temp_query->select('tax_contribution')->sum('tax_contribution');
                               array_push($data, $amount);
+                              // array_push($data, 500);
+                              // dd($amount);
                          }
 
                          if($entity['entity_name'] == 'Cash Advance')
                          {
                               $amount = Tbl_payroll_deduction_payment::getrecord($payroll_record_id_list , 'Cash Advance')->select('tbl_payroll_deduction_payment.payroll_payment_amount')->sum('tbl_payroll_deduction_payment.payroll_payment_amount');
 
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Late')
+                         {
+                              $amount = $temp_query->select('late_deduction')->sum('late_deduction');
                               array_push($data, $amount);
                          }
 

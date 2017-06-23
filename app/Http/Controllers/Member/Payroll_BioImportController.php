@@ -144,6 +144,11 @@ class Payroll_BioImportController extends Member
 			return Self::import_zkteco_TX628($file, $company);
 		}
 
+		if($biometric == 'ZKTeco- YH 803A (UPS)')
+		{
+			return Self::import_zkteco_yh803aups($file, $company);
+		}
+
 		if($biometric == 'Digital Persona')
 		{
 			return Self::import_Digital_Persona($file, $company);
@@ -322,6 +327,83 @@ class Payroll_BioImportController extends Member
 
     	return $message;
     	
+    }
+
+    public function import_zkteco_yh803aups($file, $company)
+    {
+    	$message = '<center><i><span class="color-red"><b>Invalid File Format</b></span></i></center>';
+
+    	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('ac_no','time'));
+    	// dd($_time);
+
+    	if(isset($_time[0]['ac_no']) && isset($_time[0]['time']))
+    	{
+	    	$success_count = 0;
+	    	$temp_date = '';
+	    	$insert_time_record = array();
+	    	$time_sheet = array();
+	    	foreach($_time as $key => $time)
+	    	{
+	    		$temp_record['employee_number'] = (string)$time['ac_no'];
+	    		$temp_record['time']			= date('H:i:s', strtotime($time['time']));
+	    		$temp_record['date']			= date('Y-m-d', strtotime($time['time']));
+	    		array_push($time_sheet, $temp_record);
+	    	}
+
+	    	$_date_collect = collect($time_sheet)->groupBy('employee_number','date');
+
+	    	foreach($_date_collect as $key => $date_collect)
+	    	{
+	    		$_date = collect($date_collect)->groupBy('date');
+	    		$temp = '';
+	    		foreach($_date as $date)
+	    		{
+	    			$start 	= $date[0];
+	    			$end 	= $date[count($date) - 1];
+	    			if(Self::check_employee_number($start['employee_number']))
+	    			{
+	    				
+		    			$payroll_time_sheet_id = Self::getTimeSheetId(Self::getemployeeId($start['employee_number']), $start['date']);
+
+		    			$temp_array['payroll_time_sheet_id'] 		= $payroll_time_sheet_id;
+		    			$temp_array['payroll_time_sheet_in'] 		= $start['time'];
+		    			$temp_array['payroll_time_sheet_out'] 		= $end['time'];
+		    			$temp_array['payroll_time_sheet_origin'] 	= 'ZKTime 5.0';
+
+		    			$temp_array['payroll_company_id']			= Self::getemployeeId($start['employee_number'],'payroll_employee_company_id');
+
+
+		    			if($company != '' || $company != 0 || $company != null)
+		    			{
+		    				$temp_array['payroll_company_id'] = $company;
+		    			}
+		    			
+
+		    			$count_record = Tbl_payroll_time_sheet_record::wherearray($temp_array)->count();
+		    			if($count_record == 0)
+		    			{
+		    				array_push($insert_time_record, $temp_array);
+		    			}
+
+		    			/* delete all 00:00:00 value */
+		    			Self::delete_blank($payroll_time_sheet_id);
+	    			}
+	    			
+	    		}
+	    		
+	    	}
+	    	$message = '<center><span class="color-gray">Nothing to insert</span></center>';
+	    	if(!empty($insert_time_record))
+	    	{
+	    		Tbl_payroll_time_sheet_record::insert($insert_time_record);
+	    		$count_inserted = count($insert_time_record);
+	    		$message = '<center><span class="color-green">'.$count_inserted.' new record/s inserted.</span></center>';
+	    	}
+	    	
+	    	// return $message;
+    	}
+
+    	return $message;
     }
 
     public function import_Digital_Persona($file, $company)

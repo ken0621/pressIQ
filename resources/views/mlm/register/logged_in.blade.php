@@ -30,11 +30,11 @@
 									<label><input type="radio" name="account_use"  value="0" checked> Use Old Account</label>
 								</div>
 							</div>
-							<div class="col-md-6">
-								<div class="form-group">
-									<label><input type="radio" name="account_use"  value="1"> Create New Account</label>
-								</div>
-							</div>
+							<!--<div class="col-md-6">-->
+							<!--	<div class="form-group">-->
+							<!--		<label><input type="radio" name="account_use"  value="1"> Create New Account</label>-->
+							<!--	</div>-->
+							<!--</div>-->
 						</div>
 						<div class="col-md-12 text-center">
 							<div class="button-holder">

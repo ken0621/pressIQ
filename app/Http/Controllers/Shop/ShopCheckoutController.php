@@ -202,11 +202,13 @@ class ShopCheckoutController extends Shop
         if($order)
         {
             Item_code::ec_order_slot($order_id);
-            
+
             $update['ec_order_id']    = $order_id;
             $update['order_status']   = "Processing";
             $update['payment_status'] = 1;
             $order = Ec_order::update_ec_order($update);
+            $this->after_email_payment($order_id);
+
             $this->after_email_payment($order_id);
 
             if ($from == "checkout") 
@@ -221,13 +223,21 @@ class ShopCheckoutController extends Shop
     }
     public function paymaya_failure()
     {
+
         $order_id = Crypt::decrypt(Request::input("order_id"));
+
+        // $order_id = Crypt::decrypt(Request::input("order"));
+
         $this->failmaya($order_id);
         return Redirect::to('/mlm/login?notify=3');
     }
     public function paymaya_cancel()
     {
+
         $order_id = Crypt::decrypt(Request::input("order_id"));
+
+        // $order_  id = Crypt::decrypt(Request::input("order"));
+
         $this->failmaya($order_id);
         return Redirect::to('/mlm/login?notify=4');
     }
@@ -237,7 +247,9 @@ class ShopCheckoutController extends Shop
         $update['order_status']   = "Failed";
         $update['payment_status'] = 0;
         $order = Ec_order::update_ec_order($update);
+
         $this->after_email_payment($order_id);
+
 
         // $customer = DB::table("tbl_ec_order")->select("tbl_ec_order.ec_order_id", "tbl_ec_order.customer_id as order_customer_id", "tbl_customer.*")
         //                                      ->join("tbl_customer", "tbl_customer.customer_id", "=", "tbl_ec_order.customer_id")

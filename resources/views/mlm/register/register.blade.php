@@ -106,7 +106,9 @@
 					
 					<div class="col-md-12">
 						<div class="form-group">
+
 							<label> Referrer/Upline</label>
+
 							<input type="text" class="form-control input-lg" name="sponsor" value="{{ Request::old('slot_sponsor') ? Request::old('slot_sponsor') : ( isset($current['tbl_mlm_slot']['slot_sponsor']) ? $current['tbl_mlm_slot']['slot_sponsor'] : '' ) }}" 
 							{{$sponsor_r == 1 ? 'required' : ''}}
 							>

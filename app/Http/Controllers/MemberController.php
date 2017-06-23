@@ -118,10 +118,10 @@ class MemberController extends Controller
         }
     }
 
-	public function index()
-	{
-		echo "hello world";
-	}
+    public function index()
+    {
+        echo "hello world";
+    }
 
     public function generate_username($first_name, $last_name)
     {
@@ -153,6 +153,7 @@ class MemberController extends Controller
 
     public function register()
     {
+
         $settings_disable = DB::table('tbl_settings')->where('shop_id', Self::$shop_id)->where('settings_key', 'regirter_page_disable')->pluck('settings_value');
         $settings_disable_message = DB::table('tbl_settings')->where('shop_id', Self::$shop_id)->where('settings_key', 'regirter_page_disable_text')->pluck('settings_value');
         if($settings_disable)
@@ -166,6 +167,7 @@ class MemberController extends Controller
         {
             return $settings_disable_message ;
         }
+
         $customer_session = Session::get('mlm_member');
         if($customer_session)
         {
@@ -195,10 +197,12 @@ class MemberController extends Controller
         {
             $data['sponsor'] =  $customer_session['customer_info']->mlm_username;
         }
+
         if(Request::input('slot') == 0)
         {
             $data['sponsor'] = null;
         }
+
         return view('mlm.register.logged_in', $data);
     }
     public function register_logged_in_post()
@@ -519,9 +523,21 @@ class MemberController extends Controller
         {
             if($accept_with_out_stocks != 1)
             {
+
                 $data['status'] = 'warning';
                 $data['message'][0] = 'Out of stocks.';
                 return json_encode($data);
+
+                /* Add Package */
+                //Cart::add_to_cart($info["variant_id"], 1, Self::$shop_id, true);
+
+                /* Redirect */
+                /*$d['variant_id'] = $info['variant_id'];
+                Session::put('mlm_register_step_2', $d);
+                $data['status'] = 'success';
+                $data['message'][0] = 'Success!';
+                $data['link'] = '/member/register/shipping';*/
+
             }
         }
         if(isset($info['variant_id']))
@@ -773,8 +789,8 @@ class MemberController extends Controller
         }
     }
 
-	public function barcodes()
-	{
+    public function barcodes()
+    {
         /*
          *  Author  David S. Tufts
          *  Company davidscotttufts.com
@@ -794,7 +810,7 @@ class MemberController extends Controller
 
         // This function call can be copied into your project and can be made from anywhere in your code
         $this->barcode( $filepath, $text, $size, $orientation, $code_type, $print, $sizefactor );
-	}
+    }
 
     public function all_slot()
     {

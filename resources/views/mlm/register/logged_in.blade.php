@@ -24,7 +24,7 @@
 						</div>	
 
 					
-						<div class="col-md-12">
+						<div class="col-md-12 hide">
 							<div class="col-md-6">
 								<div class="form-group">
 									<label><input type="radio" name="account_use"  value="0" checked> Use Old Account</label>

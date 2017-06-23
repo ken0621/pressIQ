@@ -943,14 +943,140 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Developing";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Bryan Kier Aradanas";
 
-    /* -- REPORT => AGENT TRANSACTIONS */
-    $code = "report-agent-transaction";
-    $nav[$page]['submenu'][$code]['label'] = "Agent Profit & Loss";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/agent/profit_loss";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "Developing";
-    $nav[$page]['submenu'][$code]['developer'] = "ARCY";
+     /* -- REPORT => PIS */
+    $segment = "submenu-pis";
+    $nav[$page]['submenu'][$segment]['name']   = "PIS";
+    $nav[$page]['submenu'][$segment]['segment']= $segment;
+    $nav[$page]['submenu'][$segment]['type']   = "submenu";
+
+        /* -- REPORT => AGENT TRANSACTIONS  */
+        $code = "report-agent-transaction";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Sales of Sales Agent";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/agent/profit_loss";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "ARCY";
+
+        /* -- REPORT => SALES PER VENDOR  */
+        $code = "report-sales-vendor";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Sales Of Vendor";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/agent/profit_loss";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "ARCY";
+
+        /* -- REPORT => VENDOR SALES PER SALES AGENT  */
+        $code = "report-sales-vendor-sales-agent";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Vendor Sales Per Sales Agent";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/agent/profit_loss";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "ARCY";
+
+        /* -- REPORT => Rangking of Customer based on purchase */
+        $code = "report-rangking-customer";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Rangking of Customer based on purchase";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/agent/profit_loss";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "ARCY";
+
+
+        /* -- REPORT => Rangking of Customer per Vendor */
+        $code = "report-rangking-customer-vendor";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Rangking of Customer per Vendor";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/agent/profit_loss";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "ARCY";
+
+
+        /* -- REPORT => Rangking of Customer per Vendor per sales agent */
+        $code = "report-rangking-customer-vendor-agent";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Rangking of Customer per Vendor per sales agent";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/agent/profit_loss";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "ARCY";
+
+        /* -- REPORT => Product Sales per Item per Vendor
+ */
+        $code = "report-sales-item-vendor";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Product Sales per Item per Vendor";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/agent/profit_loss";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "ARCY";
+
+        /* -- REPORT => Total Volume per Item per Vendor per Customer */
+        $code = "report-rangking-item-vendor-customer";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Total Volume per Item per Vendor per Customer";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/agent/profit_loss";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "ARCY";
+
+        /* -- REPORT => Active customer Monitoring Report */
+        $code = "report-active-customer-monitoring";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Active Customer Monitoring Report";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/agent/profit_loss";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "ARCY";
+
+        /* -- REPORT => Customer Master List */
+        $code = "report-customer-masterlist";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Customer Master List";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/agent/profit_loss";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "ARCY";
+
+        /* -- REPORT => Sales History Report */
+        $code = "report-sales-history";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Sales History Report";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/agent/profit_loss";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "ARCY";
+
+        /* -- REPORT => Customer Avarage Purchase per Month */
+        $code = "report-customer-avarage-sales";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Customer Avarage Purchase per Month";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/agent/profit_loss";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "ARCY";
+
+        /* -- REPORT => Customer Outstanding Accounts */
+        $code = "report-customer-outstanding-accounts";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Customer Outstanding Accounts";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/agent/profit_loss";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "ARCY";
+
+        /* -- REPORT => Customer Master List */
+        $code = "report-sales-forecast";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Sales Forecast";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/agent/profit_loss";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "ARCY";
 
     /* PURCHASING INVENTORY SYSTEM */
     $page = "pis";

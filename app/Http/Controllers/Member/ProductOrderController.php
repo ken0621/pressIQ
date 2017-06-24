@@ -494,10 +494,13 @@ class ProductOrderController extends Member
         $c_from = Carbon::parse($from)->endOfDay();
 
         $data['order'] = Tbl_ec_order::where('tbl_ec_order.created_date', '>=', $c_from)
-                    ->where('tbl_ec_order.created_date', '<=', $c_to)
-
+                    ->where('tbl_ec_order.created_date', '<=', $c_to);
+        if($filter != 'all')
+        {
+            $data['order'] = $data['order']->where('order_status', $filter);
+        }            
                     // customer
-                    ->leftjoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_ec_order.customer_id')
+        $data['order'] = $data['order']->leftjoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_ec_order.customer_id')
                     ->leftjoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_customer.customer_id')
                     ->where('purpose', 'shipping')
                     ->orWhereNull('purpose', null)
@@ -550,8 +553,8 @@ class ProductOrderController extends Member
         $data['headers']['checkout_id'] = 'Checkout Id';
         $data['headers']['method_name'] = 'Payment Method';
         $data['headers']['name'] = 'Customer Name';
-        $data['headers']['tin_number'] = 'Username';
-        $data['headers']['mlm_username'] = 'TIN';
+        $data['headers']['mlm_username'] = 'Username';
+        $data['headers']['tin_number'] = 'TIN';
         $data['headers']['email'] = 'Email';
         $data['headers']['slot_no'] = 'Slot #';
         Excel::create('New file', function($excel) use($data) {

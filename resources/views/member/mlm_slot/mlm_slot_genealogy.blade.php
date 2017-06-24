@@ -2,16 +2,16 @@
 @if($slot)
 <html>
     <head>
-        <base href="{{URL::to('/')}}">
+        <base href="{{URL::to('/digima/public')}}">
         <!-- <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script> -->
-        <script type="text/javascript" src="/assets/external/jquery.minv1.js"></script>
-        <script type="text/javascript" src="/assets/slot_genealogy/genealogy/drag.js"></script>
-        <link rel="stylesheet" type="text/css" href="/assets/slot_genealogy/member/css/genealogy.css" />
+        <script type="text/javascript" src="assets/external/jquery.minv1.js"></script>
+        <script type="text/javascript" src="assets/slot_genealogy/genealogy/drag.js"></script>
+        <link rel="stylesheet" type="text/css" href="assets/slot_genealogy/member/css/genealogy.css" />
 
         <!-- Trial-->
-        <link rel="stylesheet" href="/resources/assets/remodal/src/jquery.remodal.css">
-        <link rel="stylesheet" href="/resources/assets/remodal/src/remodal-default-theme.css">
-        <link rel="stylesheet" href="/assets/external/chosen/chosen/chosen.css" media="screen"/>
+        <link rel="stylesheet" href="resources/assets/remodal/src/jquery.remodal.css">
+        <link rel="stylesheet" href="resources/assets/remodal/src/remodal-default-theme.css">
+        <link rel="stylesheet" href="assets/external/chosen/chosen/chosen.css" media="screen"/>
         <style type="text/css">
         </style>
         <title>Genealogy</title>
@@ -30,7 +30,7 @@
                             <span class="downline parent parent-reference PS" x="{{ $slot->slot_id }}">   
                                 <div id="info">
                                     <div id="photo">
-                                        <img src="/assets/slot_genealogy/member/img/default-image.jpg">
+                                        <img src="assets/slot_genealogy/member/img/default-image.jpg">
                                     </div>
                                     <div id="cont">
                                         <div>{{ strtoupper($slot->first_name) }}</div>
@@ -59,8 +59,8 @@
     </body>
     <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
     <!-- Trial -->
-    <script src="/resources/assets/remodal/src/jquery.remodal.js"></script>
-    <script type="text/javascript" src="/assets/external/chosen/chosen/chosen.jquery.js"></script> 
+    <script src="resources/assets/remodal/src/jquery.remodal.js"></script>
+    <script type="text/javascript" src="assets/external/chosen/chosen/chosen.jquery.js"></script> 
     <script type="text/javascript">
         var mode = "{{ Request::input('mode') }}";
         var g_width = 0;

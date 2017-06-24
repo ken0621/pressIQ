@@ -290,12 +290,12 @@
                               @if(isset($slot) && $slot)
                                   @foreach(limit_foreach($slot, 10) as $slots)
                                     <li>
-                                     <a href="javascript:">SLOT #{{$slots->slot_no}}</a></li> 
-                                     <form class="" action="/mlm/changeslot" method="post">
-                                        {!! csrf_field() !!}
-                                        <input type="hidden" name="slot_id" value="{{$slots->slot_id}}">
-                                      </form>  
+                                     <a class="change-slot-button" slot-id="{{ $slots->slot_id }}" style="cursor: pointer;">SLOT #{{ $slots->slot_no }}</a></li> 
                                     </li>
+                                    <form class="change-slot-form" slot-id="{{ $slots->slot_id }}" action="/mlm/changeslot" method="post">
+                                       {!! csrf_field() !!}
+                                       <input type="hidden" name="slot_id" value="{{$slots->slot_id}}">
+                                    </form>
                                    @endforeach
                                    @if(count($slot) > 10)
                                        <li>
@@ -489,6 +489,26 @@
       @if (Session::has('warning'))
       toastr.warning("{{ Session::get('warning') }}");
       @endif  
+      
+      $(document).ready(function()
+      {
+          event_quick_change_slot();
+      });
+      
+      function event_quick_change_slot()
+      {
+          $('.change-slot-button').unbind("click");
+          $('.change-slot-button').bind("click", function(e)
+          {
+            action_quick_change_slot(e.currentTarget);
+          });
+      }
+      
+      function action_quick_change_slot(x)
+      {
+        var slot_id = $(x).attr("slot-id");
+        $('.change-slot-form[slot-id="' + slot_id + '"]').submit();
+      }
       </script>
 
       @yield('js')   

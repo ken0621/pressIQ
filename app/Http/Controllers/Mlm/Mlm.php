@@ -91,11 +91,11 @@ class Mlm extends Controller
             }
 
             $all_slot = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)
-            ->membershipcode()
+            // ->membershipcode()
             ->membership()
-            ->take(10)
+            ->take(11)
             ->get();
-
+            
             $plan_settings = Tbl_mlm_plan::where('shop_id', Self::$shop_id)
             ->where('marketing_plan_enable', 1)
             ->where('marketing_plan_trigger', 'Slot Creation')
@@ -232,7 +232,7 @@ class Mlm extends Controller
                     {
                         if($customer_payout->encashment_bank_deposit_id == 0)
                         {
-                            Session::flash('warning', "Please set your encashment settings at the profile tab.");
+                            Session::flash('warning', "Please set your encashment settings at the Wallet Encashment tab.");
                         }
                         else
                         {
@@ -243,7 +243,7 @@ class Mlm extends Controller
                             }
                             else
                             {
-                                Session::flash('warning', "Please set your encashment settings at the profile tab.");
+                                Session::flash('warning', "Please set your encashment settings at the Wallet Encashment tab.");
                             }
                         }
                     }

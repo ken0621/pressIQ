@@ -234,8 +234,14 @@ $('.btn_i_agree_modal').on('click', function(){
             	}
             	else if(data.status == 'success')
             	{
-						window.location = data.link;            		
+					window.location = data.link;            		
             	}
+            	else if(data.status == 'popup-warning')
+	            {
+					var message = data.message;
+					$('.warning-text').text(message[0]);
+					$("#popup-warning").modal();             
+	            }
             },
             error: function()
             {

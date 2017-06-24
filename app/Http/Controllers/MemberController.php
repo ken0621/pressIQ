@@ -163,11 +163,7 @@ class MemberController extends Controller
             {
                 if($settings_disable == 0)
                 {
-                    
-                    else
-                    {
-                        return $settings_disable_message;
-                    }
+                    return $settings_disable_message;
                 }
             }
             else

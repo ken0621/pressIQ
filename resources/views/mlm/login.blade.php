@@ -59,7 +59,7 @@
 
         </style>
     </head>
-    <body style="background-color: #5C3424;">
+    <body style="background: none; background-color: #5C3424;">
         <div class="modal-loader hidden"></div>
         <!-- Modal -->
             <div class="modal fade" id="myModal" role="dialog">

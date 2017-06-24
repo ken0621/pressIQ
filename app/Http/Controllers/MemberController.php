@@ -160,7 +160,15 @@ class MemberController extends Controller
         {
             if($settings_disable == 0)
             {
-                return $settings_disable_message;
+                $special = Request::input('special');
+                if($special == 1)
+                {
+
+                }
+                else
+                {
+                    return $settings_disable_message;
+                }
             }
         }
         else

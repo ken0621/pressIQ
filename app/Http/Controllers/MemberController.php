@@ -156,20 +156,16 @@ class MemberController extends Controller
 
         $settings_disable = DB::table('tbl_settings')->where('shop_id', Self::$shop_id)->where('settings_key', 'regirter_page_disable')->pluck('settings_value');
         $settings_disable_message = DB::table('tbl_settings')->where('shop_id', Self::$shop_id)->where('settings_key', 'regirter_page_disable_text')->pluck('settings_value');
-        $special = Request::input('special');
-        if($special != 'asd')
+        if($settings_disable)
         {
-            if($settings_disable)
+            if($settings_disable == 0)
             {
-                if($settings_disable == 0)
-                {
-                    return $settings_disable_message;
-                }
+                return $settings_disable_message;
             }
-            else
-            {
-                return $settings_disable_message ;
-            }
+        }
+        else
+        {
+            return $settings_disable_message ;
         }
 
         $customer_session = Session::get('mlm_member');
@@ -211,7 +207,6 @@ class MemberController extends Controller
     }
     public function register_logged_in_post()
     {
-
         // Check if is sponsor is required and existing
         $info['sponsor'] = Request::input('sponsor');
         $info['account_use'] = Request::input('account_use');
@@ -375,43 +370,51 @@ class MemberController extends Controller
                     }
                     if($info['password'] == $info['password_confirm'])
                     {
-
-                        /* Set Product Temporarily */
-                        $product = Tbl_ec_product::variant()->where("eprod_shop_id", Self::$shop_id)->where("tbl_ec_product.archived", 0)->first();
-                        Cart::add_to_cart($product->evariant_id, 1, Self::$shop_id, true);
-
-                        /* Set Customer Info */
-                        $customer_info["new_account"]      = true;
-                        $customer_info["first_name"]       = $info["first_name"];
-                        $customer_info["last_name"]        = $info["last_name"];
-                        $customer_info["email"]            = $info["email"];
-                        $customer_info["password"]         = $info["password"];
-                        $customer_info["tin_number"]       = $info["tin_number"];
-                        $customer_info["mlm_username"]     = $info["mlm_username"];
-                        $customer_info["slot_sponsor"]     = $info["sponsor"];
-                        $customer_info["customer_contact"] = $info["customer_mobile"];
-                        $customer_info["is_corporate"]     = $info["is_corporate"];
-                        $customer_info["company"]          = $info["company"];
-                        // 
-                        $customer_info['middle_name']                = Request::input('middle_name');
-                        $customer_info['customer_full_address']      = Request::input('permanent_address');
-                        $customer_info['b_day']                      = Request::input('date_of_birth');
-                        $customer_info['customer_gender']            = Request::input('gender');
-                        // 
-                        $customer_set_info_response        = Cart::customer_set_info(Self::$shop_id, $customer_info);
-
-                        if($customer_set_info_response["status"] == "error")
-                        { 
-                            $data['status'] = 'warning';
-                            $data['message'][0] = $customer_set_info_response["status_message"];
+                        $check_tin = Tbl_customer::where('tin_number', $info['tin_number'])->count();
+                        if ($check_tin == 0) 
+                        {
+                            /* Set Product Temporarily */
+                            $product = Tbl_ec_product::variant()->where("eprod_shop_id", Self::$shop_id)->where("tbl_ec_product.archived", 0)->first();
+                            Cart::add_to_cart($product->evariant_id, 1, Self::$shop_id, true);
+    
+                            /* Set Customer Info */
+                            $customer_info["new_account"]      = true;
+                            $customer_info["first_name"]       = $info["first_name"];
+                            $customer_info["last_name"]        = $info["last_name"];
+                            $customer_info["email"]            = $info["email"];
+                            $customer_info["password"]         = $info["password"];
+                            $customer_info["tin_number"]       = $info["tin_number"];
+                            $customer_info["mlm_username"]     = $info["mlm_username"];
+                            $customer_info["slot_sponsor"]     = $info["sponsor"];
+                            $customer_info["customer_contact"] = $info["customer_mobile"];
+                            $customer_info["is_corporate"]     = $info["is_corporate"];
+                            $customer_info["company"]          = $info["company"];
+                            // 
+                            $customer_info['middle_name']                = Request::input('middle_name');
+                            $customer_info['customer_full_address']      = Request::input('permanent_address');
+                            $customer_info['b_day']                      = Request::input('date_of_birth');
+                            $customer_info['customer_gender']            = Request::input('gender');
+                            // 
+                            $customer_set_info_response        = Cart::customer_set_info(Self::$shop_id, $customer_info);
+    
+                            if($customer_set_info_response["status"] == "error")
+                            { 
+                                $data['status'] = 'warning';
+                                $data['message'][0] = $customer_set_info_response["status_message"];
+                            }
+                            else
+                            {
+                                /* Redirect */
+                                Session::put('mlm_register_step_1', $info);
+                                $data['status'] = 'success';
+                                $data['message'][0] = 'Sucess!';
+                                $data['link'] = '/member/register/package';
+                            }
                         }
                         else
                         {
-                            /* Redirect */
-                            Session::put('mlm_register_step_1', $info);
-                            $data['status'] = 'success';
-                            $data['message'][0] = 'Sucess!';
-                            $data['link'] = '/member/register/package';
+                            $data['status'] = 'popup-warning';
+                            $data['message'][0] = "Sorry, the tin number is already used. Please contact the customer service.";
                         }
                     }
                     else

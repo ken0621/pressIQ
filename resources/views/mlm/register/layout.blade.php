@@ -47,6 +47,27 @@
       @yield("content")
     </div>
     
+    <!-- Modal -->
+    <div class="modal fade" id="popup-warning" role="dialog">
+      <div class="modal-dialog">
+      
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Warning</h4>
+          </div>
+          <div class="modal-body alert alert-danger" style="margin: 0;">
+            <div class="warning-text" style="margin: 0;">Some text in the modal.</div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="assets/initializr/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
     <script src="assets/initializr/js/vendor/bootstrap.min.js"></script>

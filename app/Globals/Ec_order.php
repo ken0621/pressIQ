@@ -723,7 +723,7 @@ class Ec_order
         {
             $customer_id = $order_info["tbl_customer"]["customer_id"]; 
         }
-
+   
         /* Check if Customer Account Exist */
         $customer_query = DB::table("tbl_customer")->where("customer_id", $customer_id);
         $customer = $customer_query->first();

@@ -155,7 +155,7 @@
                   <!-- menu profile quick info -->
                   <div class="profile clearfix">
                      <div class="profile_pic">
-                        <img src="{{$profile}}" alt="..." class="img-circle profile_img" height="65spx;">
+                        <img src="{{ ltrim($profile, '/') }}" alt="..." class="img-circle profile_img" height="65spx;">
                      </div>
                      <div class="profile_info">
                         <span>Magandang Araw (Good Day) ,</span>

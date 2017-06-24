@@ -156,7 +156,7 @@ class MemberController extends Controller
 
         $settings_disable = DB::table('tbl_settings')->where('shop_id', Self::$shop_id)->where('settings_key', 'regirter_page_disable')->pluck('settings_value');
         $settings_disable_message = DB::table('tbl_settings')->where('shop_id', Self::$shop_id)->where('settings_key', 'regirter_page_disable_text')->pluck('settings_value');
-        if(!Request::('special')){
+        if(!Request::input('special')){
             if($settings_disable)
             {
                 if($settings_disable == 0)

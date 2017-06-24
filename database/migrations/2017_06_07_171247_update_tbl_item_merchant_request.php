@@ -20,7 +20,7 @@ class UpdateTblItemMerchantRequest extends Migration
             $table->integer('item_merchant_accepted_by')->nullable()->unsigned();
             $table->integer('merchant_warehouse_id')->unsigned();
             $table->integer('merchant_item_id')->unsigned();
-            $table->dateTime('item_merchant_accepted_date');
+            $table->dateTime('item_merchant_accepted_date')->nullable();
             $table->dateTime('date_created');
         });
     }

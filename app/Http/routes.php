@@ -214,6 +214,12 @@ Route::get('/member/item/mulitple_price_modal/{id}', 'Member\ItemController@get_
 Route::post('/member/item/mulitple_price_modal', 'Member\ItemController@update_multiple_price_modal'); /* B */
 Route::get('/member/item/get_new_price/{id}/{qty}', 'Member\ItemController@get_item_new_price'); /* B */
 
+Route::get('/member/item/approve_request/{id}', 'Member\ItemController@merchant_approve_request'); /* ERWIN */
+Route::post('/member/item/approve_request_post/{id}', 'Member\ItemController@merchant_approve_request_post'); /* ERWIN */
+
+Route::get('/member/item/decline_request/{id}', 'Member\ItemController@merchant_decline_request'); /* ERWIN */
+Route::post('/member/item/decline_request_post/{id}', 'Member\ItemController@merchant_decline_request_post'); /* ERWIN */
+
 
 //*ITEM FOR PIS ARCY*/
 Route::any('/member/pis_counter','Member\PurchasingInventorySystemController@pis_counter');

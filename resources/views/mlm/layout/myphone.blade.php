@@ -155,7 +155,7 @@
                   <!-- menu profile quick info -->
                   <div class="profile clearfix">
                      <div class="profile_pic">
-                        <img src="{{ ltrim($profile, '/') }}" alt="..." class="img-circle profile_img" height="65spx;">
+                        <img src="{{ ltrim($profile, '/') }}" alt="..." class="img-circle profile_img" style="object-fit: cover;">
                      </div>
                      <div class="profile_info">
                         <span>Magandang Araw (Good Day) ,</span>
@@ -277,18 +277,33 @@
                      <ul class="nav navbar-nav navbar-right">
                         <li class="">
                            <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                           <img src="{{ ltrim($profile, '/') }}" alt="">{{$customer_info->title_name}} {{$customer_info->first_name}} {{$customer_info->last_name}} {{$customer_info->suffix_name}}
-                           <span class=" fa fa-angle-down"></span>
+                               <img src="{{ ltrim($profile, '/') }}" alt="">
+                               {{$customer_info->mlm_username}}
+                               @if(isset($slot_now->slot_id))
+                                <span>#{{ $slot_now->slot_no }}</span>
+                               @endif
+                               <span class=" fa fa-angle-down"></span>
                            </a>
                            <ul class="dropdown-menu dropdown-usermenu pull-right">
-                              <li><a href="javascript:;"> Profile</a></li>
-                              <li style="display:none;">
-                                 <a href="javascript:;">
-                                 <span class="badge bg-red pull-right">50%</span>
-                                 <span>Settings</span>
-                                 </a>
-                              </li>
-                              <li><a href="javascript:;">Help</a></li>
+                              <li><a href="/mlm/profile"> Profile</a></li>
+                              <!--CHANGE SLOTS-->
+                              @if(isset($slot) && $slot)
+                                  @foreach(limit_foreach($slot, 10) as $slots)
+                                    <li>
+                                     <a href="javascript:">SLOT #{{$slots->slot_no}}</a></li> 
+                                     <form class="" action="/mlm/changeslot" method="post">
+                                        {!! csrf_field() !!}
+                                        <input type="hidden" name="slot_id" value="{{$slots->slot_id}}">
+                                      </form>  
+                                    </li>
+                                   @endforeach
+                                   @if(count($slot) > 10)
+                                       <li>
+                                           <a href="/mlm/slots">View More Slots</a>
+                                       </li>
+                                   @endif
+                                @endif
+                                <!--END CHANGE SLOTS-->
                               <li><a href="/mlm/login"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
                            </ul>
                         </li>

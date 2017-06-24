@@ -23,7 +23,7 @@
             <div class="col-md-6">
                 <div class="text-holder">
                     <div class="name">{{ get_product_first_name($product) }}</div>
-                    <div class="desc">{{ get_product_first_description($product) }}</div>
+                    <div class="desc">{!! get_product_first_description($product) !!}</div>
                 </div>
                 <div class="text-holder">
                     <div class="name">Price</div>

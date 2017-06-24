@@ -95,7 +95,7 @@ class Shop extends Controller
         $product_category       = Ecom_Product::getAllCategory($this->shop_info->shop_id);
         $global_cart            = Cart::get_cart($this->shop_info->shop_id);
         $country                = Tbl_country::get();
-
+        
         if ($this->shop_theme == "sovereign") 
         {
             $products = Ecom_Product::getAllProduct($this->shop_info->shop_id);

@@ -197,7 +197,7 @@
                             </div>
                             <div class="text">
                                 <div class="text-label">EMAIL US TODAY</div>
-                                <div class="text-value">info@youremail.com</div>
+                                <div class="text-value">{{ $company_info["company_email"]->value }}</div>
                             </div>
                         </div>
                     </div>
@@ -227,7 +227,7 @@
                 <h2>CONTACT US</h2>
                 <ul>
                     <li>Tel No. (+852) 9472 6184 (+852) 9145 7698</li>
-                    <li>EMAIL: youremailhere@company.com</li>
+                    <li>EMAIL: {{ $company_info["company_email"]->value }}</li>
                 </ul>
             </div>
             <div class="col-md-4">

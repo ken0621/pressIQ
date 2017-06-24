@@ -79,6 +79,8 @@ class ProductOrderController extends Member
     }
     public function invoice_list()
     {
+        
+
         $data["ec_order_pending"]    = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Pending")
                                         ->orderBy("ec_order_id", "DESC");
         $data["ec_order_failed"]     = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Failed")
@@ -107,7 +109,14 @@ class ProductOrderController extends Member
         /* PUT THE DATA HERE IF IT IS NOT FROM EC_ORDER TABLE */
         $data["_filter"]             = Tbl_online_pymnt_method::where("method_shop_id",$this->user_info->shop_id)->get();
 
-
+        $data['filtera']['All'] = 'All';
+        $data['filtera']['Pending'] = 'Pending';
+        $data['filtera']['Failed'] = 'Failed';
+        $data['filtera']['Processing'] = 'Processing';
+        $data['filtera']['Shipped'] = 'Shipped';
+        $data['filtera']['Completed'] = 'Completed';
+        $data['filtera']['On-hold'] = 'On-hold';
+        $data['filtera']['Cancelled'] = 'Cancelled';
 
         return view("member.product_order.product_order",$data);
     }
@@ -472,5 +481,30 @@ class ProductOrderController extends Member
             $data['message'] = 'Invalid order please refresh the page';
             return json_encode($data);
         }
+    }
+    public function report_e_commerce()
+    {
+        $to = Request::input('to');
+        $from = Request::input('from');
+        $filter = Request::input('filter');
+
+        $c_to = Carbon::parse($to);
+        $c_from = Carbon::parse($from)->endOfDay();
+
+        $order = Tbl_ec_order::where('tbl_ec_order.created_date', '>=', $c_from)
+                    ->where('tbl_ec_order.created_date', '<=', $c_to)
+
+                    // customer
+                    ->leftjoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_ec_order.customer_id')
+                    // slot
+                    ->leftjoin('tbl_ec_order_slot', 'tbl_ec_order_slot.order_slot_ec_order_id', '=', 'tbl_ec_order.ec_order_id')
+                    ->leftjoin('tbl_mlm_slot as slot', 'slot.slot_id', '=', 'tbl_ec_order_slot.order_slot_id_c')
+                    ->leftjoin('tbl_mlm_slot as sponsor', 'sponsor.slot_id', '=', 'slot.slot_sponsor')
+                    ->leftjoin('tbl_paymaya_logs', 'tbl_paymaya_logs.order_id','=', 'tbl_ec_order.ec_order_id' )
+                    // get
+                    ->select('tbl_ec_order.*','tbl_ec_order_slot.*','slot.*', 'sponsor.slot_no as sponsor_slot_no', 'tbl_paymaya_logs.*')
+                    ->get();
+
+        dd($order[320]);            
     }
 }

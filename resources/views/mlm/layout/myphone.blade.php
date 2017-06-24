@@ -277,7 +277,7 @@
                      <ul class="nav navbar-nav navbar-right">
                         <li class="">
                            <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                           <img src="{{$profile}}" alt="">{{$customer_info->title_name}} {{$customer_info->first_name}} {{$customer_info->last_name}} {{$customer_info->suffix_name}}
+                           <img src="{{ ltrim($profile, '/') }}" alt="">{{$customer_info->title_name}} {{$customer_info->first_name}} {{$customer_info->last_name}} {{$customer_info->suffix_name}}
                            <span class=" fa fa-angle-down"></span>
                            </a>
                            <ul class="dropdown-menu dropdown-usermenu pull-right">

@@ -1053,14 +1053,14 @@ class Cart
         $customer       = Cart::get_customer();
 
         $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null, 0);
-        Cart::clear_all($shop_id);
+        // Cart::clear_all($shop_id);
 
         $totalAmount->value = number_format($total, 2, '.', '');
 
         $itemCheckout->items = $item;
         $itemCheckout->totalAmount = $totalAmount;
 
-        $itemCheckout->requestReferenceNumber = $order_id;
+        $itemCheckout->requestReferenceNumber = (string)$order_id;
 
         //$itemCheckout->requestReferenceNumber = $shop_id . time();
 

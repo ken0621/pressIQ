@@ -495,7 +495,7 @@ class ProductOrderController extends Member
 
         $data['order'] = Tbl_ec_order::where('tbl_ec_order.created_date', '>=', $c_from)
                     ->where('tbl_ec_order.created_date', '<=', $c_to);
-        if($filter != 'all')
+        if($filter != 'All')
         {
             $data['order'] = $data['order']->where('order_status', $filter);
         }            

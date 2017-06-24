@@ -273,6 +273,7 @@ class Developer_StatusController extends Member
 				Mlm_compute::entry($value->slot_id);
 			}
 		}
+		dd('ok');
 	}
 	public function import_excel()
 	{

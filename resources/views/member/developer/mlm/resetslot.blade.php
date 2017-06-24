@@ -128,7 +128,7 @@
                 <input type="password" class="form-control" name="password" placeholder="password">
             </div>
             {!! csrf_field() !!}
-            <button class="btn btn-primary">Myphone</button>
+            <button class="btn btn-primary">Recompute</button>
             </form>
         </div>
     </div>

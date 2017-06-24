@@ -156,17 +156,20 @@ class MemberController extends Controller
 
         $settings_disable = DB::table('tbl_settings')->where('shop_id', Self::$shop_id)->where('settings_key', 'regirter_page_disable')->pluck('settings_value');
         $settings_disable_message = DB::table('tbl_settings')->where('shop_id', Self::$shop_id)->where('settings_key', 'regirter_page_disable_text')->pluck('settings_value');
-        if($settings_disable)
-        {
-            if($settings_disable == 0)
+        if(!Request::('special')){
+            if($settings_disable)
             {
-                return $settings_disable_message;
+                if($settings_disable == 0)
+                {
+                    return $settings_disable_message;
+                }
+            }
+            else
+            {
+                return $settings_disable_message ;
             }
         }
-        else
-        {
-            return $settings_disable_message ;
-        }
+        
 
         $customer_session = Session::get('mlm_member');
         if($customer_session)

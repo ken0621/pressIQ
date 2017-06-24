@@ -163,6 +163,7 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 
 	//product order start
 	Route::get('product_order','Member\ProductOrderController@invoice_list');
+	Route::get('product_order/report','Member\ProductOrderController@report_e_commerce');
 	Route::get('product_order/create_order','Member\ProductOrderController@index');
 	Route::post('product_order/create_order/create_invoice','Member\ProductOrderController@create_invoice');
 	Route::post('product_order/create_order/update_invoice','Member\ProductOrderController@update_invoice');
@@ -788,6 +789,7 @@ Route::group(array('prefix' => '/member/report'), function()
 	Route::get('/sale/month','Member\ReportsController@monthlysale');
 	Route::get('/sale/product_variant','Member\ReportsController@variantProduct');
 	Route::get('/sale/product','Member\ReportsController@saleProduct');
+	Route::get('/sale/e_commerce','Member\ReportsController@e_commerce');
 	Route::get('/sale/customer','Member\ReportsController@saleCustomer');
 	Route::get('/sale/customerOverTime','Member\ReportsController@customerOverTime');
 	Route::post('/sale/ajax/monthlysale','Member\ReportsController@monthlysaleAjax');

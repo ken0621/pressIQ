@@ -25,6 +25,7 @@ use App\Models\Tbl_coupon_code;
 use App\Models\Tbl_online_pymnt_method;
 use App\Models\Tbl_mlm_slot;
 
+use Excel;
 use DB;
 use Request;
 use Input;
@@ -484,6 +485,7 @@ class ProductOrderController extends Member
     }
     public function report_e_commerce()
     {
+        $this->set_invoice_number();
         $to = Request::input('to');
         $from = Request::input('from');
         $filter = Request::input('filter');
@@ -491,20 +493,97 @@ class ProductOrderController extends Member
         $c_to = Carbon::parse($to);
         $c_from = Carbon::parse($from)->endOfDay();
 
-        $order = Tbl_ec_order::where('tbl_ec_order.created_date', '>=', $c_from)
-                    ->where('tbl_ec_order.created_date', '<=', $c_to)
-
+        $data['order'] = Tbl_ec_order::where('tbl_ec_order.created_date', '>=', $c_from)
+                    ->where('tbl_ec_order.created_date', '<=', $c_to);
+        if($filter != 'All')
+        {
+            $data['order'] = $data['order']->where('order_status', $filter);
+        }            
                     // customer
-                    ->leftjoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_ec_order.customer_id')
+        $data['order'] = $data['order']->leftjoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_ec_order.customer_id')
+                    ->leftjoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_customer.customer_id')
+                    ->where('purpose', 'shipping')
+                    ->orWhereNull('purpose', null)
                     // slot
                     ->leftjoin('tbl_ec_order_slot', 'tbl_ec_order_slot.order_slot_ec_order_id', '=', 'tbl_ec_order.ec_order_id')
                     ->leftjoin('tbl_mlm_slot as slot', 'slot.slot_id', '=', 'tbl_ec_order_slot.order_slot_id_c')
                     ->leftjoin('tbl_mlm_slot as sponsor', 'sponsor.slot_id', '=', 'slot.slot_sponsor')
                     ->leftjoin('tbl_paymaya_logs', 'tbl_paymaya_logs.order_id','=', 'tbl_ec_order.ec_order_id' )
-                    // get
-                    ->select('tbl_ec_order.*','tbl_ec_order_slot.*','slot.*', 'sponsor.slot_no as sponsor_slot_no', 'tbl_paymaya_logs.*')
-                    ->get();
+                    // item
+                    ->join('tbl_ec_order_item', 'tbl_ec_order_item.ec_order_id', '=', 'tbl_ec_order.ec_order_id')
+                    ->join('tbl_ec_variant', 'tbl_ec_variant.evariant_id', '=', 'tbl_ec_order_item.item_id')
+                    ->join('tbl_item', 'tbl_item.item_id', '=', 'tbl_ec_variant.evariant_item_id')
+                    ->join('tbl_category', 'tbl_category.type_id', '=', 'item_category_id')
+                    ->where('price','>', 0)
+                    ->orWhereNull('price', null)
+                    // payment metho
+                    ->leftjoin('tbl_online_pymnt_method', 'tbl_online_pymnt_method.method_id', '=', 'tbl_ec_order.payment_method_id')
 
-        dd($order[320]);            
+                    // get
+                    ->select(
+                            'tbl_customer_address.*',
+                            'tbl_ec_order.*',
+                            'tbl_ec_order_slot.*',
+                            'slot.*', 
+                            'sponsor.slot_no as sponsor_slot_no', 
+                            'tbl_paymaya_logs.*',
+                            'tbl_online_pymnt_method.*',
+                            'tbl_ec_order_item.*',
+                            'tbl_ec_variant.*',
+                            'tbl_item.*',
+                            'tbl_category.*',
+                            DB::raw("CONCAT(tbl_customer_address.customer_state, ' ', tbl_customer_address.customer_city, ' ', tbl_customer_address.customer_zipcode, ' ', tbl_customer_address.customer_street) as address"),
+                            DB::raw("CONCAT(tbl_customer.first_name, ' ', tbl_customer.middle_name, ' ', tbl_customer.last_name) as name"),
+                            'tbl_customer.*'
+                            )
+                    
+                    ->get();
+        $data['headers']['ec_order_id'] = 'Order ID'; 
+        $data['headers']['order_status'] = 'Order Status';
+        $data['headers']['invoice_number'] = 'Invoice Number';
+        $data['headers']['created_date'] = 'Document Date';
+        $data['headers']['created_date'] = 'Due Date';
+        $data['headers']['address'] = 'Ship To';
+        $data['headers']['customer_state'] = 'Region';
+        $data['headers']['type_name'] = 'Category';
+        $data['headers']['item_sku'] = 'Item Code/Sku';
+        $data['headers']['item_name'] = 'Model';
+        $data['headers']['price'] = 'Price';
+        $data['headers']['quantity'] = 'Quantity';
+        $data['headers']['checkout_id'] = 'Checkout Id';
+        $data['headers']['method_name'] = 'Payment Method';
+        $data['headers']['name'] = 'Customer Name';
+        $data['headers']['mlm_username'] = 'Username';
+        $data['headers']['tin_number'] = 'TIN';
+        $data['headers']['email'] = 'Email';
+        $data['headers']['slot_no'] = 'Slot #';
+        Excel::create('New file', function($excel) use($data) {
+
+            $excel->sheet('New sheet', function($sheet) use($data) {
+
+                $sheet->loadView('member.product_order.report.all', $data);
+
+            });
+
+        })->export('xls');            
+                  
+    }
+    public function set_invoice_number()
+    {
+        $order = DB::table("tbl_ec_order")->where("payment_status", 1)->where("archived", 0)->where("invoice_number", NULL)->get();
+        foreach ($order as $key => $value) 
+        {
+            $last = DB::table("tbl_ec_order")->where("payment_status", 1)->where("archived", 0)->max("invoice_number");
+            if ($last) 
+            {
+                $update["invoice_number"] = $last + 1;
+                DB::table('tbl_ec_order')->where("ec_order_id", $value->ec_order_id)->update($update);            
+            }
+            else
+            {
+                $update["invoice_number"] = 11000000;
+                DB::table('tbl_ec_order')->where("ec_order_id", $value->ec_order_id)->update($update);
+            }
+        }
     }
 }

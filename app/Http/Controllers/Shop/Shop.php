@@ -46,7 +46,10 @@ class Shop extends Controller
 			$subdomains = array_slice($host, 0, count($host) - 2 );
 			$subdomain = $subdomains[0];
         	$this->shop_info = $shop_info = Tbl_shop::where("shop_key", $subdomain)->first();
-
+            if(!$this->shop_info)
+            {
+                $this->shop_info = $shop_info = Tbl_shop::where("shop_domain", $subdomain)->first();
+            }
             if(!$this->shop_info)
             {
                 $check_domain = Tbl_customer::where('mlm_username', $subdomain)->first();

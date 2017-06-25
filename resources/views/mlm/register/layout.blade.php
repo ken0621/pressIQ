@@ -30,7 +30,7 @@
         </style>
         <script src="assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
         <!-- polyfiller file to detect and load polyfills -->
-        <script src="http://cdn.jsdelivr.net/webshim/1.12.4/polyfiller.js"></script>
+        <script src="//cdn.jsdelivr.net/webshim/1.12.4/polyfiller.js"></script>
         <script>
           webshims.setOptions('waitReady', false);
           webshims.setOptions('forms-ext', {types: 'date'});

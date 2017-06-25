@@ -33,7 +33,7 @@
                     <div class="choose-payment-method holder" method_id="{{ $payment_method->method_id }}" description="{{ $payment_method->link_description }}">
                       <div class="match-height" style="line-height: 12.5px;">{{ $payment_method->method_name }}</div>
                       <div class="image" style="margin-top: 7.5px;">
-                        <img src="{{ $payment_method->image_path ? $payment_method->image_path : '/assets/front/img/default.jpg' }}">
+                        <img src="{{ $payment_method->image_path ? ltrim($payment_method->image_path, '/') : 'assets/front/img/default.jpg' }}">
                       </div>
                       <div class="radio" style="margin-bottom: 0;">
                         <label >

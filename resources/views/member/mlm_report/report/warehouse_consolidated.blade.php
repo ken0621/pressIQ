@@ -29,19 +29,29 @@
     
                 
                 @foreach($warehouse as $w_key => $w_val)
-                <tr>
-                    <td>{{$w_val->warehouse_name}}</td>
-                    <td>{{currency('PHP', $w_val->$key)}}</td>
-                </tr>
-                <?php 
-                    $sub_total += $w_val->$key; 
-                    $grand_total +=  $sub_total;
-                ?>
+                    @if($key == 'e_wallet_transfer' || $key == 'e_wallet_tours')
+                        @if($w_val->main_warehouse == 1)
+                            <tr>
+                                <td>PHILTECH MAIN OFFICE</td>
+                                <td>{{currency('PHP', $w_val->$key)}}</td>
+                            </tr>
+                        @endif
+                    @else
+                        <tr>
+                            <td>{{$w_val->warehouse_name}}</td>
+                            <td>{{currency('PHP', $w_val->$key)}}</td>
+                        </tr>
+                     @endif
+                    <?php 
+                        $sub_total += $w_val->$key; 
+                    ?>
                 @endforeach
                 <tr>
                     <td><span class="pull-right"><small>SUBTOTAL:</small></span></td>
                     <td>{{currency('PHP', $sub_total)}}</td>
-
+                <?php 
+                    $grand_total +=  $sub_total;
+                ?>
                 </tr>
                 
             </table>

@@ -143,6 +143,9 @@ class MLM_WalletController extends Member
             $update['wallet_log_refill_approved'] = 1;
             $update['wallet_log_refill_remarks'] = $var['wallet_log_refill_remarks'];
             $update['wallet_log_refill_remarks_admin'] = $var['wallet_log_refill_remarks_admin'];
+            $warehouse_id = $this->current_warehouse->warehouse_id;
+            $update['wallet_log_refill_attachment_warehouse'] = $warehouse_id;
+
             Tbl_mlm_slot_wallet_log_refill::where('wallet_log_refill_id', $var['wallet_log_refill_id'])->update($update);
 
             $slot_info = Tbl_mlm_slot::where('slot_id', $var['slot_id'])->first();

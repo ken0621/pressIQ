@@ -886,22 +886,22 @@ class DebitMemoController extends Member
                    $inventory_consume_product[$key]["product_id"] = $value["product_id"];
                    $inventory_consume_product[$key]["quantity"] = $value["quantity"];
 
-                   // $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value["product_id"])->pluck('inventory_count');
-                   //  if($count_on_hand == null)
-                   //  {
-                   //      $count_on_hand = 0;   
-                   //  }
-                   //  if($value['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $value['quantity'])
-                   //  {
+                   $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value["product_id"])->pluck('inventory_count');
+                    if($count_on_hand == null)
+                    {
+                        $count_on_hand = 0;   
+                    }
+                    if($value['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $value['quantity'])
+                    {
 
-                   //  }
-                   //  else
-                   //  {
-                   //      $item_name = Tbl_item::where("item_id",$value["product_id"])->pluck("item_name");
+                    }
+                    else
+                    {
+                        $item_name = Tbl_item::where("item_id",$value["product_id"])->pluck("item_name");
 
-                   //      $data["status"] = "error";
-                   //      $data["status_message"] .= "<li style='list-style:none'>The quantity of item ".$item_name." is not enough to consume </li>";
-                   //  }
+                        $data["status"] = "error";
+                        $data["status_message"] .= "<li style='list-style:none'>The quantity of item ".$item_name." is not enough to consume </li>";
+                    }
                 }                
             }
 
@@ -921,11 +921,11 @@ class DebitMemoController extends Member
                     }
                     if(count($product_consume) > 0)
                     {
-                        // $remarks            = "Debit Memo Report";
-                        // $warehouse_id       = $this->current_warehouse->warehouse_id;
-                        // $transaction_type   = "debit_memo";
-                        // $transaction_id     = $db_id;
-                        // $data               = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume, 0, '' ,  'array', $transaction_type, $transaction_id);
+                        $remarks            = "Debit Memo Report";
+                        $warehouse_id       = $this->current_warehouse->warehouse_id;
+                        $transaction_type   = "debit_memo";
+                        $transaction_id     = $db_id;
+                        $data               = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume, 0, '' ,  'array', $transaction_type, $transaction_id);
 
                         $data["status"] = "success-condemned-all";
                     }

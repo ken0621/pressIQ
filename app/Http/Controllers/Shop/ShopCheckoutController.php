@@ -222,7 +222,6 @@ class ShopCheckoutController extends Shop
     public function paymaya_webhook_success()
     {
         $order_id = Crypt::decrypt(Request::input("order_id"));
-        $from = Request::input("from");
         $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
         if($order)
         {
@@ -250,39 +249,47 @@ class ShopCheckoutController extends Shop
     }
     public function paymaya_webhook_failure()
     {
-        try 
-        {
-            $update["response"] = serialize(Request::input());
-            DB::table("tbl_paymaya_logs")->where("checkout_id", Request::input('id'))
-                                         ->update($update);
-        } 
-        catch (\Exception $e) 
-        {
-            $update["response"] = $e->getMessage();
-            DB::table("tbl_paymaya_logs")->where("checkout_id", Request::input('id'))
-                                         ->update($update);
-        }  
-        
         $order_id = Crypt::decrypt(Request::input("order_id"));
-        $this->failmaya($order_id);
+        $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
+        if($order)
+        {
+            try 
+            {
+                $update["response"] = serialize(Request::input());
+                DB::table("tbl_paymaya_logs")->where("checkout_id", Request::input('id'))
+                                             ->update($update);
+            } 
+            catch (\Exception $e) 
+            {
+                $update["response"] = $e->getMessage();
+                DB::table("tbl_paymaya_logs")->where("checkout_id", Request::input('id'))
+                                             ->update($update);
+            }  
+            
+            $this->failmaya($order_id);
+        }
     }
     public function paymaya_webhook_cancel()
     {
-        try 
-        {
-            $update["response"] = serialize(Request::input());
-            DB::table("tbl_paymaya_logs")->where("checkout_id", Request::input('id'))
-                                         ->update($update);
-        } 
-        catch (\Exception $e) 
-        {
-            $update["response"] = $e->getMessage();
-            DB::table("tbl_paymaya_logs")->where("checkout_id", Request::input('id'))
-                                         ->update($update);
-        }  
-            
         $order_id = Crypt::decrypt(Request::input("order_id"));
-        $this->failmaya($order_id);
+        $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
+        if($order)
+        {
+            try 
+            {
+                $update["response"] = serialize(Request::input());
+                DB::table("tbl_paymaya_logs")->where("checkout_id", Request::input('id'))
+                                             ->update($update);
+            } 
+            catch (\Exception $e) 
+            {
+                $update["response"] = $e->getMessage();
+                DB::table("tbl_paymaya_logs")->where("checkout_id", Request::input('id'))
+                                             ->update($update);
+            }  
+            
+            $this->failmaya($order_id);
+        }
     }
     public function paymaya_logs()
     {

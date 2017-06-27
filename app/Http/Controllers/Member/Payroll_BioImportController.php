@@ -166,7 +166,7 @@ class Payroll_BioImportController extends Member
 
     /* BIO METRICS START */
 
-    public function import_zkteco_TX628($file)
+    public function import_zkteco_TX628($file, $company)
     {
     	$_test = file($file, FILE_IGNORE_NEW_LINES);
 

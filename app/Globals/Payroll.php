@@ -1145,14 +1145,18 @@ class Payroll
 			$break = '00:00';
 		}
 
-		if($data['time_sheet_info']->is_break_update == 1)
+		if(isset($data['time_sheet_info']->is_break_update))
 		{
-			$break = date('h:i',strtotime($data['time_sheet_info']->payroll_time_sheet_break));
-			if($data['time_sheet_info']->payroll_time_sheet_break == '00:00:00')
+			if($data['time_sheet_info']->is_break_update == 1)
 			{
-				$break = '00:00';
-			}	
+				$break = date('h:i',strtotime($data['time_sheet_info']->payroll_time_sheet_break));
+				if($data['time_sheet_info']->payroll_time_sheet_break == '00:00:00')
+				{
+					$break = '00:00';
+				}	
+			}
 		}
+		
 
 		$return->break 				= $break;
 		$return->time_record 		= $time_rec;

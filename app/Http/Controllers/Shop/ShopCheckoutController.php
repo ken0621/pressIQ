@@ -250,11 +250,37 @@ class ShopCheckoutController extends Shop
     }
     public function paymaya_webhook_failure()
     {
+        try 
+        {
+            $update["response"] = serialize(Request::input());
+            DB::table("tbl_paymaya_logs")->where("checkout_id", Request::input('id'))
+                                         ->update($update);
+        } 
+        catch (\Exception $e) 
+        {
+            $update["response"] = $e->getMessage();
+            DB::table("tbl_paymaya_logs")->where("checkout_id", Request::input('id'))
+                                         ->update($update);
+        }  
+        
         $order_id = Crypt::decrypt(Request::input("order_id"));
         $this->failmaya($order_id);
     }
     public function paymaya_webhook_cancel()
     {
+        try 
+        {
+            $update["response"] = serialize(Request::input());
+            DB::table("tbl_paymaya_logs")->where("checkout_id", Request::input('id'))
+                                         ->update($update);
+        } 
+        catch (\Exception $e) 
+        {
+            $update["response"] = $e->getMessage();
+            DB::table("tbl_paymaya_logs")->where("checkout_id", Request::input('id'))
+                                         ->update($update);
+        }  
+            
         $order_id = Crypt::decrypt(Request::input("order_id"));
         $this->failmaya($order_id);
     }

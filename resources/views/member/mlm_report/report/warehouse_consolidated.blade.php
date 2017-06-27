@@ -61,13 +61,17 @@
 </div>   
       
 @endforeach
-<div class="panel panel-default panel-block panel-title-block col-md-4" id="top">
+<div class="panel panel-default panel-block panel-title-block col-md-12" id="top">
     <div class="panel-heading">
         <div>
             <table class="table">
                 <tr>
-                    <th><span class="pull-right">Grand Total :</span> </th>
+                    <th><span class="pull-right">Grand Total: </span></th>
                     <th>{{currency('PHP', $grand_total)}}</th>
+                </tr>
+                <tr>
+                    <th><span class="pull-right">Overall Grand Total: </span></th>
+                    <th>{{currency('PHP', $g_over_total)}}</th>
                 </tr>
             </table>
         </div>

@@ -3520,6 +3520,7 @@ class PayrollController extends Member
 		// Tbl_payroll_overtime_rate
 		$data['_active'] = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->paginate($this->paginate_count);
 		$data['_archived'] = Tbl_payroll_group::sel(Self::shop_id(), 1)->orderBy('payroll_group_code')->paginate($this->paginate_count);
+          // dd($data);
 		return view('member.payroll.side_container.payroll_group', $data);
 	}
 
@@ -3549,6 +3550,18 @@ class PayrollController extends Member
           if(Request::has("payroll_group_before_tax"))
           {
                $payroll_group_before_tax = Request::input('payroll_group_before_tax');
+          }
+
+          $insert['display_monthly_rate']    = 0;
+          $insert['display_daily_rate']      = 0;
+          if(Request::has("display_monthly_rate"))
+          {
+               $insert['display_monthly_rate'] = 1;
+          }
+
+          if(Request::has("display_daily_rate"))
+          {
+               $insert['display_daily_rate'] = 1;
           }
 		
           $insert['payroll_group_before_tax']               = $payroll_group_before_tax;
@@ -3760,6 +3773,19 @@ class PayrollController extends Member
           if(Request::has('payroll_group_before_tax'))
           {
                $payroll_group_before_tax = Request::has('payroll_group_before_tax');
+          }
+
+          $update['display_monthly_rate']    = 0;
+          $update['display_daily_rate']      = 0;
+
+          if(Request::has('display_monthly_rate'))
+          {
+               $update['display_monthly_rate']    = 1;
+          }
+
+          if(Request::has('display_daily_rate'))
+          {
+               $update['display_daily_rate']    = 1;
           }
 
           $update['payroll_group_before_tax']               = $payroll_group_before_tax;
@@ -5450,18 +5476,24 @@ class PayrollController extends Member
           $temp['sub']        = array();
           array_push($salary, $temp);
 
-          $temp = array();
-          $temp['name']       = 'Monthly Rate';
-          $temp['amount']     = number_format($process['salary_monthly'], 2);
-          $temp['sub']        = array();
-          array_push($salary, $temp);
-
-          $temp = array();
-          $temp['name']       = 'Daily Rate';
-          $temp['amount']     = number_format($process['salary_daily'], 2);
-          $temp['sub']        = array();
-          array_push($salary, $temp);
+          if($process['display_monthly_rate'] == 1)
+          {
+               $temp = array();
+               $temp['name']       = 'Monthly Rate';
+               $temp['amount']     = number_format($process['salary_monthly'], 2);
+               $temp['sub']        = array();
+               array_push($salary, $temp);
+          }
           
+          if($process['display_daily_rate'] == 1)
+          {
+               $temp = array();
+               $temp['name']       = 'Daily Rate';
+               $temp['amount']     = number_format($process['salary_daily'], 2);
+               $temp['sub']        = array();
+               array_push($salary, $temp);
+          }
+
           /* ALL POSITIVE */
 
           $temp = array();

@@ -1200,7 +1200,6 @@ class Mlm_complan_manager
 	                        Mlm_slot_log::slot_array($arry_log);
                         }
                         Tbl_mlm_matching_log::insert($insert);
-                        
                     }                  
                 }
             }

@@ -84,7 +84,7 @@ Route::any('/member/developer/reset_slot/submit/re_tree', 'Member\Developer_Stat
 Route::any('/member/developer/reset_slot/submit/re_com_phil_lost', 'Member\Developer_StatusController@re_com_phil_lost'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/re_com_phil_uni', 'Member\Developer_StatusController@re_com_phil_uni'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/recompute', 'Member\Developer_StatusController@recompute'); //GUILLERMO TABLIGAN
-
+Route::any('/member/developer/reset_slot/submit/recompute/membership_matching', 'Member\Developer_StatusController@recompute_membership_matching'); //GUILLERMO TABLIGAN
 /* END MEMBER - VENDOR - GUILLERMO TABLIGAN */
 
 /* MEMBER - ACCOUNTING - CHART OF ACCOUNTS */

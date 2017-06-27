@@ -275,6 +275,7 @@ class Payroll
 	}
 
 
+
 	/* TABLE FOR EMPLOYEE SEARCH INSERT OR UPDATE */
 	public static function generate_emplyoee_search($employee_id = 0)
 	{
@@ -772,10 +773,24 @@ class Payroll
 		$absent						= false;
 		$leave 						= Payroll::check_if_employee_leave($data["employee_information"]->payroll_employee_id, $date);
 
-		$break 						= Payroll::time_diff(date('H:s', strtotime($break_start)), date('H:i', strtotime($break_end)));
+		$break 						= Payroll::time_diff(date('H:i', strtotime($break_start)), date('H:i', strtotime($break_end)));
 
 
 		$break_nd = 0;
+
+		if(isset($data['time_sheet_info']->is_break_update))
+		{
+			if($data['time_sheet_info']->is_break_update == 1)
+			{
+				$break = date('h:i',strtotime($data['time_sheet_info']->payroll_time_sheet_break));
+				if($data['time_sheet_info']->payroll_time_sheet_break == '00:00:00')
+				{
+					$break = '00:00';
+				}	
+			}
+		}
+
+		
 
 
 
@@ -1130,7 +1145,20 @@ class Payroll
 			$break = '00:00';
 		}
 
-		$return->break 				=  $break;
+		if(isset($data['time_sheet_info']->is_break_update))
+		{
+			if($data['time_sheet_info']->is_break_update == 1)
+			{
+				$break = date('h:i',strtotime($data['time_sheet_info']->payroll_time_sheet_break));
+				if($data['time_sheet_info']->payroll_time_sheet_break == '00:00:00')
+				{
+					$break = '00:00';
+				}	
+			}
+		}
+		
+
+		$return->break 				= $break;
 		$return->time_record 		= $time_rec;
 		$return->absent 			= $absent;
 		$return->leave 				= $leave;

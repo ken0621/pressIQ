@@ -2,10 +2,11 @@
 <table style="table-layout: fixed;" class="timesheet table table-condensed table-bordered table-sale-month">
     <thead style="text-transform: uppercase;">
         <tr>
-            <th width="40px" class="text-center"></th>
-            <th width="40px" class="text-center"></th>
-            <th width="40px" class="text-center"></th>
-            <th width="40px" class="text-center"></th>
+            <th width="35px" class="text-center"></th>
+            <th width="35px" class="text-center"></th>
+            <th width="35px" class="text-center"></th>
+            <th width="35px" class="text-center"></th>
+            <th width="35px" class="text-center"></th>
             <th width="160px" class="text-center" colspan="2">Actual</th>
             <th width="160px" class="text-center" colspan="2">Approved</th>
             
@@ -15,11 +16,12 @@
             <th width="55px" class="text-center"></th>
             <th width="110px" colspan="2" class="text-center">Overtime</th>
             <th width="275px" colspan="5" class="text-center">Non-Reg Day</th>
-            <th width="55px" class="text-center"></th>
+            <th width="35px" class="text-center"></th>
         </tr>
         <tr>
-            <th width="40px" class="text-center"></th>
-            <th width="40px" class="text-center"></th>
+            <th width="35px" class="text-center"></th>
+            <th width="35px" class="text-center"></th>
+            <th width="35px" class="text-center"></th>
             <th class="text-center" colspan="2">Day</th>
             <th class="text-center">In</th>
             <th class="text-center">Out</th>
@@ -47,7 +49,7 @@
         @foreach($_timesheet as $timesheet)
         @foreach($timesheet->time_record as $key => $time_record)
         
-        <tr class="time-record {{ $key == 0 ? 'main' : '' }}" tid="0" date="{{ $timesheet->date }}" total_hours="00:00" total_normal_hours="00:00" total_early_overtime="00:00" total_late_overtime="00:00" data-id="{{ $time_record->payroll_time_sheet_record_id }}">
+        <tr class="time-record {{ $key == 0 ? 'main' : '' }}" tid="0" date="{{ $timesheet->date }}" total_hours="00:00" total_normal_hours="00:00" total_early_overtime="00:00" total_late_overtime="00:00" data-id="{{ $time_record->payroll_time_sheet_record_id }}" id="{{ $time_record->payroll_time_sheet_record_id }}">
             @if($key == 0) <!--MAIN -->
             <input class="date" type="hidden" name="date[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->payroll_time_sheet_record_id }}">
             <td class="text-center table-loading tr-icons">
@@ -57,6 +59,9 @@
             </td>
             <td class="text-center">
                <i class="fa fa-comment-o popup" link="/member/payroll/timesheet/modal_timesheet_comment/{{ $time_record->payroll_time_sheet_record_id }}"></i>
+            </td>
+            <td class="text-center">
+                <i class="fa fa-university popup" link="/member/payroll/timesheet/modal_choose_company/{{ $time_record->payroll_time_sheet_record_id }}" title="{{$time_record->company}}" size="sm"></i>
             </td>
             <td class="text-center edit-data day-number">{!! $timesheet->day_number !!}</td>
             <td class="text-center edit-data day-word">{!! $timesheet->day_word !!}</td>
@@ -93,6 +98,9 @@
             <td class="text-center edit-data day-number"></td>
             <td class="text-center edit-data day-number">
                 <i class="fa fa-comment-o popup" link="/member/payroll/timesheet/modal_timesheet_comment/{{ $time_record->payroll_time_sheet_record_id }}"></i>
+            </td>
+            <td class="text-center">
+                <i class="fa fa-university popup" link="/member/payroll/timesheet/modal_choose_company/{{ $time_record->payroll_time_sheet_record_id }}" size="sm" title="{{$time_record->company}}"></i>
             </td>
             <td class="text-center edit-data day-number"></td>
             <td class="text-center edit-data day-word"></td>
@@ -131,6 +139,9 @@
             <td class="text-center edit-data"></td>
             <td class="text-center edit-data">
                 <i class="fa fa-comment-o popup new-comment" link="/member/payroll/timesheet/modal_timesheet_comment/"></i>
+            </td>
+            <td class="text-center">
+                <i class="fa fa-university popup new-company" size="sm" link="/member/payroll/timesheet/modal_choose_company/" title="" size="sm"></i>
             </td>
             <td class="text-center edit-data"></td>
             <td class="text-center edit-data"></td>

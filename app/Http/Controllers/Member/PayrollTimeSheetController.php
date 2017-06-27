@@ -165,9 +165,8 @@ class PayrollTimeSheetController extends Member
 	
 			if($approved->payroll_time_sheet_approved == 1)
 			{
-				$data['_timesheet'][$from]->color 			= 'color-green';
+				$data['_timesheet'][$from]->color = 'color-green';
 			}
-
 
 			/* GET DATA FOR SPECIFIC DATE */
 			$data["timesheet_info"] = Tbl_payroll_time_sheet::where("payroll_time_date", Carbon::parse($from)->format("Y-m-d"))->where("payroll_employee_id", $employee_id)->first();
@@ -186,24 +185,19 @@ class PayrollTimeSheetController extends Member
 				$data["_timesheet"][$from]->break = "01:00";
 				$data["_timesheet"][$from]->time_record_count = 1;
 				$data["_timesheet"][$from]->payroll_time_sheet_approved = $data["timesheet_info"]->payroll_time_sheet_approved;
-				$_timesheet_record = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $data["timesheet_info"]->payroll_time_sheet_id)->get();
-
-				// dd($_timesheet_record);
+				$_timesheet_record = Tbl_payroll_time_sheet_record::getrecord($data["timesheet_info"]->payroll_time_sheet_id)->get();
+				// $_timesheet_record = Tbl_payroll_time_sheet_record::where('payroll_time_sheet_id',$data["timesheet_info"]->payroll_time_sheet_id)->get();
 				
 				if($_timesheet_record->isEmpty())
 				{
-					// $data["_timesheet"][$from]->time_record[0] = new stdClass();
-					// $data["_timesheet"][$from]->time_record[0]->time_in = "";
-					// $data["_timesheet"][$from]->time_record[0]->time_out = "";
-					// $data["_timesheet"][$from]->time_record[0]->payroll_time_sheet_record_id = 0;
-
 					/* insert new record if empty */
 					$temp_time_insert['payroll_time_sheet_id'] = $data["timesheet_info"]->payroll_time_sheet_id;
 					$temp_time_insert['payroll_time_sheet_in'] = '00:00:00';
 					$temp_time_insert['payroll_time_sheet_out'] = '00:00:00';
 					Tbl_payroll_time_sheet_record::insert($temp_time_insert);
 
-					$_timesheet_record = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $data["timesheet_info"]->payroll_time_sheet_id)->get();
+					$_timesheet_record = Tbl_payroll_time_sheet_record::getrecord($data["timesheet_info"]->payroll_time_sheet_id)->get();
+					// $_timesheet_record = Tbl_payroll_time_sheet_record::where('payroll_time_sheet_id',$data["timesheet_info"]->payroll_time_sheet_id)->get();
 				}
 				// else
 				// {
@@ -212,31 +206,38 @@ class PayrollTimeSheetController extends Member
 						$data["_timesheet"][$from]->time_record[$key] = new stdClass();
 
 						$data["_timesheet"][$from]->time_record[$key]->payroll_time_sheet_record_id = $timesheet_record->payroll_time_sheet_record_id;
+						$data['_timesheet'][$from]->time_record[$key]->company = $timesheet_record->payroll_company_name;
+
+						// if($timesheet_record->payroll_time_sheet_out == "00:00:00" || $timesheet_record->payroll_time_sheet_out == null || $timesheet_record->payroll_time_sheet_out == '')
+						// {
+						// 	$data["_timesheet"][$from]->time_record[$key]->time_in = "";
+						// 	$data["_timesheet"][$from]->time_record[$key]->time_out = "";
+						// }
+
+						$data["_timesheet"][$from]->time_record[$key]->time_in = "";
+						$data["_timesheet"][$from]->time_record[$key]->time_out = "";
 
 
-
-						if($timesheet_record->payroll_time_sheet_out == "00:00:00")
-						{
-							$data["_timesheet"][$from]->time_record[$key]->time_in = "";
-							$data["_timesheet"][$from]->time_record[$key]->time_out = "";
-						}
-						else
+						if($timesheet_record->payroll_time_sheet_out != "00:00:00" || $timesheet_record->payroll_time_sheet_out != null || $timesheet_record->payroll_time_sheet_out != '')
+						
 						{
 							if($data["timesheet_info"]->payroll_time_sheet_approved == 1)
 							{
 								$data["_timesheet"][$from]->time_record[$key]->time_in =  Carbon::parse($timesheet_record->payroll_time_sheet_approved_in)->format("h:i A");
+
 								$data["_timesheet"][$from]->time_record[$key]->time_out = Carbon::parse($timesheet_record->payroll_time_sheet_approved_out)->format("h:i A");
+								
 							}
 							else
 							{
 								$data["_timesheet"][$from]->time_record[$key]->time_in =  Carbon::parse($timesheet_record->payroll_time_sheet_in)->format("h:i A");
+
 								$data["_timesheet"][$from]->time_record[$key]->time_out = Carbon::parse($timesheet_record->payroll_time_sheet_out)->format("h:i A");
 							}
 						}
 
 						$data["_timesheet"][$from]->time_record[$key]->activities =  $timesheet_record->payroll_time_shee_activity;
 
-						// dd($data["_timesheet"][$from]->time_record);
 					}
 				// }
 
@@ -357,12 +358,8 @@ class PayrollTimeSheetController extends Member
 
 			$from = Carbon::parse($from)->addDay()->format("Y-m-d");
 
-			// $temp['total_late_hours'] = $total_late_hours;
-			// $temp['late_hours']	= $approved_timesheet->late_hours;
-			// $temp['date'] = $from;
-			// array_push($array, $temp);
 		}
-		// dd($array);
+		
 		$total_working_days += (round($regular_day_count, 2) + round($rest_day_count, 2) + round($extra_day_count, 2) + round($special_holiday_count, 2) + round($regular_holiday_count, 2)) + round($leave_with_pay, 2);
 
 		$data['time_spent'] 			= Payroll::if_zero_time($total_time_spent);
@@ -388,7 +385,7 @@ class PayrollTimeSheetController extends Member
 		$data['absent']					= Payroll::if_zero($absent);
 		$data['leave_wo_pay']			= Payroll::if_zero($leave_wo_pay);
 		$data['leave_with_pay']			= Payroll::if_zero($leave_with_pay);
-		// dd($data);
+		
 		return $data;
 	}
 
@@ -418,9 +415,7 @@ class PayrollTimeSheetController extends Member
 		$date 			= date('Y-m-d', strtotime(Request::input('date')));
 		$employee_id 	= Request::input('employee_id');
 		$break 			= Request::input('break_');
-		// $origin 		= 'Payroll Time Sheet';
 		$record 		= array();		
-
 
 		$payroll_time_sheet = Tbl_payroll_time_sheet::where("payroll_time_date", $date)->where("payroll_employee_id", $employee_id)->first();
 
@@ -464,12 +459,15 @@ class PayrollTimeSheetController extends Member
 
 		$time 			= Tbl_payroll_time_sheet::where('payroll_time_date', $date)->where('payroll_employee_id', $employee_id)->first();
 
+		$company 		= Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->pluck('payroll_employee_company_id');
+
 		$payroll_time_sheet_id = 0;
 
 		if($time == null)
 		{
-			$date_insert['payroll_time_date'] = $date;
+			$date_insert['payroll_time_date'] 	= $date;
 			$date_insert['payroll_employee_id'] = $employee_id;
+
 			$payroll_time_sheet_id = Tbl_payroll_time_sheet::insertGetId($date_insert);
 		}
 		else
@@ -479,8 +477,11 @@ class PayrollTimeSheetController extends Member
 
 		$insert['payroll_time_sheet_id'] 		= $payroll_time_sheet_id;
 		$insert['payroll_time_sheet_origin'] 	= 'Payroll Time Sheet';
-		
-		return Tbl_payroll_time_sheet_record::insertGetId($insert);
+		$insert['payroll_company_id']			= $company;
+
+		$return['id'] 		= Tbl_payroll_time_sheet_record::insertGetId($insert);
+		$return['company'] 	= Tbl_payroll_company::where('payroll_company_id',$company)->pluck('payroll_company_name');
+		return collect($return)->toJson();
 	}
 
 	public function remove_time_record()
@@ -786,6 +787,29 @@ class PayrollTimeSheetController extends Member
 		return view('member.payroll.modal.modal_timesheet_comment', $data);
 	}
 
+	public function modal_choose_company($id)
+	{
+		$data['_company'] = Payroll::company_heirarchy($this->user_info->shop_id);
+		$data['record']	  = Tbl_payroll_time_sheet_record::where('payroll_time_sheet_record_id', $id)->first();
+		return view('member.payroll.modal.modal_choose_company', $data);
+	}
+
+	public function choose_company_save()
+	{
+		$payroll_time_sheet_record_id = Request::input('payroll_time_sheet_record_id');
+		$update['payroll_company_id'] = Request::input('payroll_company_id');
+		Tbl_payroll_time_sheet_record::where('payroll_time_sheet_record_id', $payroll_time_sheet_record_id)->update($update);
+
+		$company = Tbl_payroll_company::where('payroll_company_id',Request::input('payroll_company_id'))->pluck('payroll_company_name');
+
+		$return['status'] 			= 'success';
+		$return['function_name'] 	= 'get_company';
+		$return['id']	 			= $payroll_time_sheet_record_id;
+		$return['company']			= $company;
+
+		return collect($return)->toJson();
+	}
+
 	public function time_sheet_comment_save()
 	{
 		$payroll_time = Request::input('payroll_time');
@@ -796,6 +820,8 @@ class PayrollTimeSheetController extends Member
 		$return['function_name'] = '';
 		return collect($return)->toJson();
 	}
+
+
 
 	/* time sheet comment end */
 }

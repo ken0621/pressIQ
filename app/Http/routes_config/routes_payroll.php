@@ -70,6 +70,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	Route::any('/timesheet/send_reminder','Member\PayrollTimeSheetController@send_reminder');
 	Route::any('/timesheet/modal_timesheet_comment/{id}','Member\PayrollTimeSheetController@modal_timesheet_comment');
+	Route::any('/timesheet/modal_choose_company/{id}','Member\PayrollTimeSheetController@modal_choose_company');
+	Route::any('/timesheet/choose_company_save','Member\PayrollTimeSheetController@choose_company_save');
 	Route::any('/timesheet/time_sheet_comment_save','Member\PayrollTimeSheetController@time_sheet_comment_save');
 	/* TIMESHEET END */
 
@@ -140,6 +142,14 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* saving default data for developer */
 	Route::any('/pagibig_formula/pagibig_formula_save_default',"Member\PayrollController@pagibig_formula_save_default");
 	/* PAGIBIG END */
+
+
+	/* reset payroll start */
+	Route::any('/reset_payroll','Member\PayrollController@reset_payroll');
+	Route::any('/reset_payroll/reset_time_sheet','Member\PayrollController@reset_time_sheet');
+	Route::any('/reset_payroll/reset_time_sheet/reset_time_sheet_select','Member\PayrollController@reset_time_sheet_select');
+	Route::any('/reset_payroll/reset_time_sheet/reset_time_sheet_action','Member\PayrollController@reset_time_sheet_action');
+	/* reset payroll end */
 
 
 	/* DEDUCTION START */

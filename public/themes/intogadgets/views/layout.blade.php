@@ -145,7 +145,7 @@
                      @endforeach
                      @foreach($_categories as $key => $categories)
                      <li class="sub-menu">
-                        <a href="#menupos{{ $key }}"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" class="list-group-item" data-toggle="collapse" data-parent="#mainmenu">{{ $categories['type_name'] }} <span class="menu-ico-collapse"><i class="glyphicon glyphicon-chevron-down"></i></span></a>
+                        <a href="{{ count($categories['subcategory']) > 0 ? "#menupos" . $key : "/product?type=" . $categories['type_id'] }}"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" {{ count($categories['subcategory']) > 0 ? 'class="list-group-item" data-toggle="collapse" data-parent="#mainmenu"' : "" }}>{{ $categories['type_name'] }} <span class="menu-ico-collapse {{ count($categories['subcategory']) > 0 ? "" : "hide" }}"><i class="glyphicon glyphicon-chevron-down"></i></span></a>
                         <div class="collapse pos-absolute" id="menupos{{ $key }}">
                            @foreach($categories['subcategory'] as $subcategories)
                            <a href="/product?type={{ $subcategories['type_id'] }}" data-toggle="collapse" data-target="#menupos{{ $key }}" class="list-group-item sub-item">{{ $subcategories['type_name'] }} ({{ $subcategories['product_count'] }})</a>
@@ -248,7 +248,7 @@
          @endif
          <div class="footer clear">
             <div class="container">
-               <div class="footer-holder col-md-3 col-sm-6 first-border text-left">
+               <div class="footer-holder col-md-3 col-sm-6 first-border text-left match-height">
                   <div class="footer-header">INFORMATION</div>
                   <div class="footer-content">
                      <a href="/" class="footer-text link" data-hover="Home">
@@ -337,9 +337,13 @@
                </div>
                <div class="col-md-12">
                   <div class="popular-tags">
-                     @foreach($_popular_tags as $popular_tags)
-                     <a href="/product?search={{ $popular_tags->keyword }}"><span>#{{ $popular_tags->keyword }}</span></a>
-                     @endforeach
+                     <div class="row clearfix">
+                        @foreach($_popular_tags as $popular_tags)
+                        <div class="col-md-2 col-sm-4 col-xs-6">
+                           <a class="fit-text" href="/product?search={{ $popular_tags->keyword }}"><span>#{{ $popular_tags->keyword }}</span></a>
+                        </div>
+                        @endforeach
+                     </div>
                   </div>
                </div>
             </div>
@@ -500,6 +504,7 @@
    <script type="text/javascript" src="/assets/front/js/global.js"></script>
    <script type="text/javascript" src="/assets/member/global.js"></script>
     <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
+    <script type="text/javascript" src="resources/assets/frontend/js/jquery.fittext.js"></script>
     <script type="text/javascript">
     function submit_done(data)
     {
@@ -602,6 +607,8 @@
         });  
           
       });
+      
+      jQuery(".fit-text").fitText(0.8, { minFontSize: '10px', maxFontSize: '16px' });
    </script>
    <!-- // <script src="/resources/assets/rutsen/js/subscribe.js"></script> -->
    <!--Start of Zopim Live Chat Script-->

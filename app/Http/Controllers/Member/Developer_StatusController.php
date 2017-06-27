@@ -231,4 +231,18 @@ class Developer_StatusController extends Member
 		}
 		dd($invoice);
 	}
+	public function recompute_membership_matching()
+	{
+		$shop_id = $this->user_info->shop_id;
+
+		$platinum = Tbl_mlm_slot::where('slot_membership', 4)->where('tbl_mlm_slot.shop_id', $shop_id)
+		->where('slot_matched_membership', 0)
+		->membership()->membership_points()->customer()->get();
+
+		foreach ($platinum as $key => $value) {
+			Mlm_complan_manager::membership_matching($value);
+		}
+
+		dd($platinum);
+	}
 }

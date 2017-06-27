@@ -707,17 +707,25 @@ class Mlm_report
     public static function warehouse_consiladated($shop_id, $filters)
     {
             $all_warehouse = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->where('archived', 0)->get();
+            $g_total = 0;
             foreach($all_warehouse as $key => $value)
             {
                 $membership = 0;
+                $product = 0;
                 $e_wallet_refill = 0;
                 $e_wallet_transfer = 0;
                 $e_wallet_tours = 0;
                 $e_wallet_school = 0;
+
                 if($value->main_warehouse == 2)
                 {
                     $product = Tbl_ec_order::where('shop_id', $shop_id)
                     ->where('created_date', '>=', $filters['from'])
+                    ->where('created_date', '<=', $filters['to'])
+                    ->where('payment_status', 1)
+                    ->sum('total');
+
+                    $g_total += Tbl_ec_order::where('shop_id', $shop_id)
                     ->where('created_date', '<=', $filters['to'])
                     ->where('payment_status', 1)
                     ->sum('total');
@@ -728,8 +736,17 @@ class Mlm_report
                     ->where('wallet_log_refill_attachment_warehouse', $value->warehouse_id)
                     ->sum('wallet_log_refill_amount');
 
+                    $g_total += Tbl_mlm_slot_wallet_log_refill::where('tbl_mlm_slot_wallet_log_refill.shop_id', $shop_id)
+                    ->where('wallet_log_refill_date', '<=', $filters['to'])
+                    ->where('wallet_log_refill_attachment_warehouse', $value->warehouse_id)
+                    ->sum('wallet_log_refill_amount');
+
                     $e_wallet_school = DB::table('tbl_merchant_school_item')->where('merchant_school_item_shop', $shop_id)
                     ->where('merchant_item_date', '>=', $filters['from'])
+                    ->where('merchant_item_date', '<=', $filters['to'])
+                    ->sum('merchant_school_i_amount');
+
+                    $g_total += DB::table('tbl_merchant_school_item')->where('merchant_school_item_shop', $shop_id)
                     ->where('merchant_item_date', '<=', $filters['to'])
                     ->sum('merchant_school_i_amount');
                 }
@@ -741,10 +758,19 @@ class Mlm_report
                     ->where('wallet_log_refill_attachment_warehouse', $value->warehouse_id)
                     ->sum('wallet_log_refill_amount');
 
+                    $g_total += Tbl_mlm_slot_wallet_log_refill::where('tbl_mlm_slot_wallet_log_refill.shop_id', $shop_id)
+                    ->where('wallet_log_refill_date', '<=', $filters['to'])
+                    ->where('wallet_log_refill_attachment_warehouse', $value->warehouse_id)
+                    ->sum('wallet_log_refill_amount');
+
                     if($value->main_warehouse == 1)
                     {
                         $membership = Tbl_membership_code_invoice::where('shop_id', $shop_id)
                         ->where('membership_code_date_created', '>=', $filters['from'])
+                        ->where('membership_code_date_created', '<=', $filters['to'])
+                        ->sum('membership_total');
+
+                        $g_total += Tbl_membership_code_invoice::where('shop_id', $shop_id)
                         ->where('membership_code_date_created', '<=', $filters['to'])
                         ->sum('membership_total');
 
@@ -754,8 +780,17 @@ class Mlm_report
                         ->where('wallet_log_refill_attachment_warehouse', 0)
                         ->sum('wallet_log_refill_amount');
 
+                        $g_total += Tbl_mlm_slot_wallet_log_refill::where('tbl_mlm_slot_wallet_log_refill.shop_id', $shop_id)
+                        ->where('wallet_log_refill_date', '<=', $filters['to'])
+                        ->where('wallet_log_refill_attachment_warehouse', 0)
+                        ->sum('wallet_log_refill_amount');
+
                         $e_wallet_transfer = Tbl_mlm_slot_wallet_log_transfer::where('tbl_mlm_slot_wallet_log_transfer.shop_id', $shop_id)
                         ->where('wallet_log_transfer_date', '>=', $filters['from'])
+                        ->where('wallet_log_transfer_date', '<=', $filters['to'])
+                        ->sum('wallet_log_transfer_slot_trans');
+
+                        $g_total += Tbl_mlm_slot_wallet_log_transfer::where('tbl_mlm_slot_wallet_log_transfer.shop_id', $shop_id)
                         ->where('wallet_log_transfer_date', '<=', $filters['to'])
                         ->sum('wallet_log_transfer_slot_trans');
 
@@ -767,6 +802,12 @@ class Mlm_report
                         ->where('tour_wallet_logs_date', '<=', $filters['to'])
                         ->sum('tour_wallet_logs_wallet_amount');
 
+                        $g_total += DB::table('tbl_tour_wallet_logs')
+                        ->where('tbl_customer.shop_id', $shop_id)
+                        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_tour_wallet_logs.tour_wallet_logs_customer_id')
+                        ->groupBy('tour_wallet_logs_id')
+                        ->where('tour_wallet_logs_date', '<=', $filters['to'])
+                        ->sum('tour_wallet_logs_wallet_amount');
                         
 
                     }
@@ -777,6 +818,10 @@ class Mlm_report
                     ->where('warehouse_id', $value->warehouse_id)
                     ->sum('item_total');
 
+                    $g_total += Tbl_item_code_invoice::where('tbl_item_code_invoice.shop_id', $shop_id)
+                    ->where('item_code_date_created', '<=', $filters['to'])
+                    ->where('warehouse_id', $value->warehouse_id)
+                    ->sum('item_total');
                     
                 }
                 if($product == null)
@@ -801,7 +846,7 @@ class Mlm_report
             $data['sales']['e_wallet_transfer'] = 'E-Wallet Transfer';
             $data['sales']['e_wallet_tours'] = 'Travel and Tours E-Wallet Sales Report';
             $data['sales']['e_wallet_school'] = 'School Wallet Sales Report';
-
+            $data['g_over_total'] = $g_total;
             $data['page'] = 'warehouse_consolidated';
             $data['warehouse'] = $all_warehouse;
             if(Request::input('pdf') == 'excel')

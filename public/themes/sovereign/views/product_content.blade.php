@@ -17,7 +17,7 @@
         <div class="row clearfix">
             <div class="col-md-6">
                 <div class="img-holder">
-                    <img src="{{ get_product_first_image($product) }}">
+                    <img class="img-responsive" style="margin: auto;" src="{{ get_product_first_image($product) }}">
                 </div> 
             </div>
             <div class="col-md-6">

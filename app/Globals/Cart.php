@@ -1077,7 +1077,7 @@ class Cart
         $cancelWebhook->name = Webhook::CHECKOUT_DROPOUT;
         $cancelWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/paymaya/cancel?order_id=" . Crypt::encrypt($order_id));
         $cancelWebhook->register();
-        dd(Webhook::retrieve());
+        
         // Checkout
         $itemCheckout = new Checkout();
         $user = new User();

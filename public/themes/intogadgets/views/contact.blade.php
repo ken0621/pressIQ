@@ -82,20 +82,20 @@
 				<thead>
 					<tr>
 						<th data-hide="phone">Store Image</th>
-						<th>Store Name</th>
+						<th data-hide="phone,tablet">Store Name</th>
 						<th data-hide="phone">Store Branch</th>
 						<th data-hide="phone,tablet">Contact Number</th>
-						<th data-hide="phone,tablet">Location</th>
+						<th>Location</th>
 					</tr>
 				</thead>
 				<tbody>
 					@foreach(unserialize(get_content($shop_theme_info, "contact", "contact_store_maintenance")) as $store)
 					<tr>
 						<td><a data-fancybox-group='gallery' class='fancybox' id='fancyboxes' href='{{ $store["image"] }}'><img src='{{ $store["image"] }}'></img></a></td>
-						<td class="storename">{{$store["name"]}}</td>
+						<td>{{$store["name"]}}</td>
 						<td>{{$store["branch"]}}</td>
 						<td>{{$store["contact"]}}</td>
-						<td><a href='{{ $store["link"] }}'>View</a></td>
+						<td class="storename">{{ $store["address"] }}</td>
 					</tr>
 					@endforeach
 				</tbody>

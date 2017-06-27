@@ -1062,7 +1062,7 @@ class Cart
                 }
             }
         }
-        dd(Webhook::retrieve());
+        
         $successWebhook = new Webhook();
         $successWebhook->name = Webhook::CHECKOUT_SUCCESS;
         $successWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/success?order_id=" . Crypt::encrypt($order_id) . "&from=" . $from);
@@ -1077,7 +1077,7 @@ class Cart
         $cancelWebhook->name = Webhook::CHECKOUT_DROPOUT;
         $cancelWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/paymaya/cancel?order_id=" . Crypt::encrypt($order_id));
         $cancelWebhook->register();
-        
+        dd(Webhook::retrieve());
         // Checkout
         $itemCheckout = new Checkout();
         $user = new User();

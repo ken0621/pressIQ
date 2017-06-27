@@ -721,9 +721,26 @@ class Mlm_report
                     ->where('created_date', '<=', $filters['to'])
                     ->where('payment_status', 1)
                     ->sum('total');
+
+                    $e_wallet_refill = Tbl_mlm_slot_wallet_log_refill::where('tbl_mlm_slot_wallet_log_refill.shop_id', $shop_id)
+                    ->where('wallet_log_refill_date', '>=', $filters['from'])
+                    ->where('wallet_log_refill_date', '<=', $filters['to'])
+                    ->where('wallet_log_refill_attachment_warehouse', $value->warehouse_id)
+                    ->sum('wallet_log_refill_amount');
+
+                    $e_wallet_school = DB::table('tbl_merchant_school_item')->where('merchant_school_item_shop', $shop_id)
+                    ->where('merchant_item_date', '>=', $filters['from'])
+                    ->where('merchant_item_date', '<=', $filters['to'])
+                    ->sum('merchant_school_i_amount');
                 }
                 else
                 {
+                    $e_wallet_refill = Tbl_mlm_slot_wallet_log_refill::where('tbl_mlm_slot_wallet_log_refill.shop_id', $shop_id)
+                    ->where('wallet_log_refill_date', '>=', $filters['from'])
+                    ->where('wallet_log_refill_date', '<=', $filters['to'])
+                    ->where('wallet_log_refill_attachment_warehouse', $value->warehouse_id)
+                    ->sum('wallet_log_refill_amount');
+
                     if($value->main_warehouse == 1)
                     {
                         $membership = Tbl_membership_code_invoice::where('shop_id', $shop_id)
@@ -731,9 +748,10 @@ class Mlm_report
                         ->where('membership_code_date_created', '<=', $filters['to'])
                         ->sum('membership_total');
 
-                        $e_wallet_refill = Tbl_mlm_slot_wallet_log_refill::where('tbl_mlm_slot_wallet_log_refill.shop_id', $shop_id)
+                        $e_wallet_refill = $e_wallet_refill +  Tbl_mlm_slot_wallet_log_refill::where('tbl_mlm_slot_wallet_log_refill.shop_id', $shop_id)
                         ->where('wallet_log_refill_date', '>=', $filters['from'])
                         ->where('wallet_log_refill_date', '<=', $filters['to'])
+                        ->where('wallet_log_refill_attachment_warehouse', 0)
                         ->sum('wallet_log_refill_amount');
 
                         $e_wallet_transfer = Tbl_mlm_slot_wallet_log_transfer::where('tbl_mlm_slot_wallet_log_transfer.shop_id', $shop_id)
@@ -749,17 +767,17 @@ class Mlm_report
                         ->where('tour_wallet_logs_date', '<=', $filters['to'])
                         ->sum('tour_wallet_logs_wallet_amount');
 
-                        $e_wallet_school = DB::table('tbl_merchant_school_item')->where('merchant_school_item_shop', $shop_id)
-                        ->where('merchant_item_date', '>=', $filters['from'])
-                        ->where('merchant_item_date', '<=', $filters['to'])
-                        ->sum('merchant_school_i_amount');
+                        
 
                     }
+
                     $product = Tbl_item_code_invoice::where('tbl_item_code_invoice.shop_id', $shop_id)
                     ->where('item_code_date_created', '>=', $filters['from'])
                     ->where('item_code_date_created', '<=', $filters['to'])
                     ->where('warehouse_id', $value->warehouse_id)
                     ->sum('item_total');
+
+                    
                 }
                 if($product == null)
                 {

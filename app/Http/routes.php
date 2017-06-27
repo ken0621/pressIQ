@@ -21,6 +21,7 @@ Route::post('member/register/submit', 'MemberController@register_post');
 
 Route::get('member/register/package', 'MemberController@package');
 Route::post('member/register/package/submit', 'MemberController@package_post');
+Route::get('member/register/package/product/{product_id}', 'MemberController@package_get_details_product');
 
 Route::get('member/register/payment', 'MemberController@payment');
 Route::post('member/register/payment/submit', 'MemberController@payment_post');
@@ -232,6 +233,9 @@ Route::any('/member/enable_disable_pis/{pass}/{action}','Member\PurchasingInvent
 Route::any("/member/item/view_serials/{id}","Member\ItemSerialController@index");
 Route::any("/member/item/serial_number/{id}",'Member\ItemSerialController@view_serial');
 Route::any("/member/item/save_serial",'Member\ItemSerialController@save_serial');
+
+Route::any('/member/input/serial_number','Member\ItemSerialController@input_serial');
+
 
 Route::any('/member/functiontester', 'Member\FunctionTesterController@index'); /* ERWIN */
 Route::any('/member/functiontester/clear_all', 'Member\FunctionTesterController@clear_all'); /* ERWIN */
@@ -899,6 +903,7 @@ Route::get('/member/settings/{key}', 'Member\SettingsController@index');
 Route::post('/member/settings/verify/add', 'Member\SettingsController@verify');
 Route::get('/member/settings/get/{key}', 'Member\SettingsController@get_settings');
 Route::get('/member/settings/setup/initial', 'Member\SettingsController@initial_setup');
+Route::post('/member/settings/terms/set', 'Member\SettingsController@set_terms');
 /* End SettingsController */
 
 /* USER / UTILITIES*/

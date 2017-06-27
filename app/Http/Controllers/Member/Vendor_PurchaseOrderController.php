@@ -22,6 +22,7 @@ use App\Models\Tbl_vendor;
 use App\Globals\Vendor;
 use App\Globals\AuditTrail;
 use App\Globals\Purchase_Order;
+use App\Globals\ItemSerial;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_purchase_order_line;
 use App\Models\Tbl_terms;
@@ -45,6 +46,7 @@ class Vendor_PurchaseOrderController extends Member
 
         $data['_item']      = Item::get_all_category_item();
         $data['_um']        = UnitMeasurement::load_um_multi();
+        $data["serial"] = ItemSerial::check_setting();
 
         return view('member.load_ajax_data.load_po_session_item',$data);
 

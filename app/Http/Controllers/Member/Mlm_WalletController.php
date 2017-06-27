@@ -84,7 +84,9 @@ class MLM_WalletController extends Member
         $shop_id = $this->user_info->shop_id;
         Mlm_pre::pre_req($shop_id);
         $data['settings'] = Tbl_mlm_slot_wallet_log_refill_settings::where('shop_id', $shop_id)->first();
-        $request = Tbl_mlm_slot_wallet_log_refill::where('tbl_mlm_slot_wallet_log_refill.shop_id', $shop_id)->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id','=', 'tbl_mlm_slot_wallet_log_refill.slot_id');
+        $request = Tbl_mlm_slot_wallet_log_refill::where('tbl_mlm_slot_wallet_log_refill.shop_id', $shop_id)
+        ->orderBy('wallet_log_refill_id', 'DESC')
+        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id','=', 'tbl_mlm_slot_wallet_log_refill.slot_id');
         $search = Request::input('search');
         if($search != null)
         {

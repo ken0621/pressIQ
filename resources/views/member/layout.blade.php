@@ -465,7 +465,7 @@
                         old_new_base = old_new_base + '/' + split[i];
                     }
 
-                    settings.url = '{{url()}}' + old_new_base;
+                    settings.url = '{{ URL::to("") }}' + old_new_base;
                 }
                 console.log("settings.url: " + settings.url);
             },

@@ -5603,13 +5603,35 @@ class PayrollController extends Member
           }    
 
           $temp = array();
+          // $total_13_month = $process['13_month'] + $process['adjustment']['total_13_month'];
+
           if($process['13_month'] > 0)
           {    
                $temp['name']       = '13 month Pay';
                $temp['amount']     = number_format($process['13_month'], 2);
                $temp['sub']        = array();
                array_push($salary, $temp);
-          }   
+          }  
+
+          if($process['adjustment']['total_13_month'] > 0)
+          {
+               foreach($process['adjustment']['13_month'] as $n13month)
+               {
+                    $temp['name'] = $n13month->payroll_adjustment_name.' (13 month pay)';
+
+                    if($status == 'processed')
+                    {
+                         $temp['name'].=Self::btn_adjustment($n13month->payroll_adjustment_id);
+                    }
+
+                    $temp['amount'] = number_format($n13month->payroll_adjustment_amount, 2);
+                    $temp['sub']        = array();
+                    array_push($salary, $temp);
+               }
+          }
+
+          // dd($salary);
+
 
           $temp = array();
           if($process['payroll_cola'] > 0)
@@ -7424,6 +7446,9 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('13_month')->sum('13_month');
+
+                              $amount += Tbl_payroll_adjustment::getrecord($employee_id, $payroll_period_company_id_list, '13 month pay')->select('payroll_adjustment_amount')->sum('payroll_adjustment_amount');
+                              
                               $positive_value += $amount;
                               array_push($data, $amount);
                          }

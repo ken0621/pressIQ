@@ -580,7 +580,7 @@ class Item_code
 
                             }
                         }
-                        Item_code::use_item_code_all_invoice($invoice_id);
+                        // Item_code::use_item_code_all_invoice($invoice_id);
         	            /* FORGET ALL SESSION FOR PURCHASED ITEM */
         	            Session::forget("sell_item_codes_session");
                         $send["response_status"] = "success_process";    

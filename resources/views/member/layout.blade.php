@@ -459,12 +459,17 @@
                 }
                 else
                 {
+                    split = jQuery.grep(split, function(value) 
+                    {
+                      return value != "httpss:";
+                    });
+                    
                     var i;
                     for (i = 0; i < split.length; ++i) 
                     {
                         old_new_base = old_new_base + '/' + split[i];
                     }
-                    console.log(split);
+
                     settings.url = '{{url()}}' + old_new_base;
                 }
                 console.log("settings.url: " + settings.url);

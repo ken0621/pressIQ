@@ -1,8 +1,7 @@
 @extends('tablet.layout')
 @section('content')
 <div class="form-group">
-	<div class="col-md-12">
-		
+	<div class="col-md-12">		
 		<form class="global-submit form-to-submit-add" action="/tablet/login_submit" method="post">
 			<input type="hidden" name="_token" value="{{csrf_token()}}">
 			<div class="panel panel-default panel-block panel-title-block" id="top">
@@ -46,6 +45,10 @@
 				</div>
 			</div>
 		</form>
+
+		<div class="form-group text-center">
+			<button type="button" class="btn btn-primary sync-data ">SYNC</button>
+		</div>
 	</div>
 </div>
 @endsection
@@ -64,5 +67,45 @@
 	$(data.target).html(data.view);
 	}
 	}
+</script>
+<script type="text/javascript" src="/assets/tablet/create_table.js"></script>
+<script type="text/javascript">
+var db = openDatabase("my168shop", "1.0", "Address Book", 200000); 
+	
+// query.forEach(function(single_query) 
+// {
+//     createTableName(single_query);
+// });
+
+$(".sync-data").unbind("click");
+$(".sync-data").bind("click", function()
+{
+	$.ajax({
+		url : "/tablet/sync_data/shop",
+		dataType: "json",
+		data : {},
+		type : "get",
+		success : function(data)
+		{
+    		createTableName($data);
+		}
+	});
+});
+
+function createTableName(query)
+{
+	db.transaction(function (tx){ tx.executeSql(query,[],
+		function(txt, result)
+		{
+			console.log(result);
+		},
+		onError);
+	});
+}
+
+function onError(tx, error)
+{
+	console.log(error.message);
+}
 </script>
 @endsection

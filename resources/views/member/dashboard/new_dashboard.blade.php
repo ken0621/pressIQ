@@ -1,5 +1,16 @@
 @extends('member.layout')
 @section('content')
+<form class="hide" type="post" action="member/utilities/make-developer">
+    <input type="hidden" name="_token" value="{{csrf_token()}}">
+    <div class="col-md-8">
+        <div class="input-group">
+            <input type="text" class="form-control" name="pwd" placeholder="Type developer password here (hint: as usual)">
+            <span class="input-group-btn">
+                <button class="btn btn-secondary" type="submit">Let Me Access All Page</button>
+            </span>
+        </div>
+    </div>
+</form>
 <div class="button-wrapper clearfix" style="margin-top: 15px; min-height: 55px">
    <div class="dashboard-home cursor-pointer dashboard-arrow">
       <span class="fa fa-angle-left fa-4x"></span>

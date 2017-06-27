@@ -162,7 +162,7 @@ function reload_content(element)
 
     $load_content =  $(element).closest(".tab-content").find(".load-data");
 
-    $($load_content).load("?"+parent_var_name+"="+parent_id+" #"+$load_content.attr("target"));
+    $($load_content).load("/member/maintenance/location/list?"+parent_var_name+"="+parent_id+" #"+$load_content.attr("target"));
 }
 
 

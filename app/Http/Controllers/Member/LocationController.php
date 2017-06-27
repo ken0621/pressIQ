@@ -47,7 +47,7 @@ class LocationController extends Member
         if($search_province) $data["_province"]->where("locale_name","like","%" . $search_province . "%");
         $data["_province"]  = $data["_province"]->orderBy("locale_name")->get();
 
-        if(isset($data["_province"][0]->locale_id))
+        if(isset($data["_province"][0]) && isset($data["_province"][0]->locale_id))
         {
             $province = $data["_province"][0]->locale_id;
         }
@@ -61,7 +61,7 @@ class LocationController extends Member
         if($search_city) $data["_city"]->where("locale_name","like","%" . $search_city . "%");
         $data["_city"]      = $data["_city"]->orderBy("locale_name")->get();
 
-        if(isset($data["_city"][0]->locale_id))
+        if(isset($data["_city"][0]) && isset($data["_city"][0]->locale_id))
         {
             $city_a = $data["_city"][0]->locale_id;
         }

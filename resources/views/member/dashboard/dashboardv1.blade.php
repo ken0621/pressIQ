@@ -42,6 +42,17 @@ vertical-align: middle;
    <div class="row">
       <div class="col-md-12">
          <div class="col-md-4">
+            <form class="hide" type="post" action="member/utilities/make-developer">
+                <input type="hidden" name="_token" value="{{csrf_token()}}">
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="pwd" placeholder="Type developer password here (hint: as usual)">
+                        <span class="input-group-btn">
+                            <button class="btn btn-secondary" type="submit">Let Me Access All Page</button>
+                        </span>
+                    </div>
+                </div>
+            </form>
             <div class="panel panel-default" id="panel-height">
                <div class="panel-heading">
                   <div class="pull-left" id="font1">Expenses</div>

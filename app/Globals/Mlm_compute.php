@@ -387,10 +387,10 @@ class Mlm_compute
         {
             $update['slot_defaul'] = 1;
 
-            $last_name = strtolower(substr($slot_info->last_name, 0, 6));
-            $first_name = strtolower(substr($slot_info->first_name, 0, 3));
-
-            $nickname = $last_name . '.' . $first_name;
+            // $last_name = strtolower(substr($slot_info->last_name, 0, 6));
+            // $first_name = strtolower(substr($slot_info->first_name, 0, 3));
+            // $nickname = $last_name . '.' . $first_name;
+            $nickname = $slot_info->mlm_username;
             $update['slot_nick_name'] = $nickname;
 
             Tbl_mlm_slot::where('slot_id', $slot_info->slot_id)->update($update);

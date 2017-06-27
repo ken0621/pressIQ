@@ -18,6 +18,7 @@ use App\Globals\Accounting;
 use App\Globals\Warehouse;
 use App\Globals\Invoice;
 use App\Globals\Tablet_global;
+use App\Globals\ItemSerial;
 use App\Http\Controllers\Controller;
 use Request;
 use Redirect;
@@ -122,7 +123,7 @@ class CreditMemoController extends Member
     }
     public function index()
     {
-        
+        $data["serial"]     = ItemSerial::check_setting();
         $data["page"]       = "Credit Memo";
         $data["_customer"]  = Customer::getAllCustomer();
         $data['_item']      = Item::get_all_category_item();
@@ -134,6 +135,10 @@ class CreditMemoController extends Member
         {
             $data["cm"]            = Tbl_credit_memo::where("cm_id", $id)->first();
             $data["_cmline"]       = Tbl_credit_memo_line::um()->where("cmline_cm_id", $id)->get();
+            foreach ($data["_cmline"] as $key => $value) 
+            {
+                $data["_cmline"][$key]->serial_number = ItemSerial::get_serial_credited($value->cmline_item_id,"credit_memo-".$id);
+            }
             $data["action"]         = "/member/customer/credit_memo/update";
         }
 
@@ -149,8 +154,11 @@ class CreditMemoController extends Member
         $customer_info["cm_memo"] = Request::input("cm_memo");
         $customer_info["cm_amount"] = Request::input("overall_price");
 
+        $serial_number = Request::input("serial_number");
+
         $item_info[] = null;
         $item_returns = [];
+        $item_serial = [];
         $_items = Request::input("cmline_item_id");
         $ctr_items = 0;
         foreach ($_items as $key => $value) 
@@ -172,6 +180,10 @@ class CreditMemoController extends Member
                     $um_qty = UnitMeasurement::um_qty(Request::input("cmline_um")[$key]);
                     $item_returns[$key]["quantity"] = $um_qty * $item_info[$key]['quantity'];
                     $item_returns[$key]["product_id"] = Request::input('cmline_item_id')[$key];
+
+                    $item_serial[$key]["quantity"] = $um_qty * $item_info[$key]['quantity'];
+                    $item_serial[$key]["item_id"] = Request::input('cmline_item_id')[$key];
+                    $item_serial[$key]["serials"] = $serial_number[$key];
                 }
             }        
         }
@@ -225,28 +237,62 @@ class CreditMemoController extends Member
         }
         // END CM/RETURNS 
 
-        if($ctr_items != 0)
-        {
-            $cm_id = CreditMemo::postCM($customer_info, $item_info);
-            
-            if(count($item_returns) > 0)
-            {
-                $cm_remarks            = "Credit Memo # ". $cm_id;
-                $cm_warehouse_id       = $this->current_warehouse->warehouse_id;
-                $cm_transaction_type   = "credit_memo";
-                $cm_transaction_id     = $cm_id;
-                $cm_data               = Warehouse::inventory_refill($cm_warehouse_id, $cm_transaction_type, $cm_transaction_id, $cm_remarks, $item_returns, 'array' ,"returns");
-            }
+        $data["status"] = null;
+        $data["status_message"] = null;
 
-            $data["status"] = "success-credit-memo-action";
-            $data["id"] = $cm_id;
-            $data["redirect_to"] = "/member/customer/credit_memo?id=".$cm_id;
-        }
-        else
+        if(count($item_serial) > 0)
         {
-            $data["status"] = "error";
-            $data["status_message"] = "Please Insert Item";
+            //CHECK IF SERIAL NUMBER IS EXISTING
+            foreach ($item_serial as $key_item_serial => $value_item_serial)
+            {
+
+                $check_qty_serial = ItemSerial::check_item_serial($value_item_serial);
+
+                if($check_qty_serial)
+                {
+                    $data["status"] = "error";
+                    $data["status_message"] .= "The item ".Item::get_item_details($value_item_serial["item_id"])->item_name." has more serial than the quantity <br>";
+                }
+
+                if(ItemSerial::check_existing_to_credit($item_serial[$key_item_serial]))
+                {
+                    $data["status"] = "error";
+                    $data["status_message"] .= ItemSerial::check_existing_to_credit($item_serial[$key_item_serial]);
+                }
+            }
         }
+        if($data["status"] == null)
+        {
+            if($ctr_items != 0)
+            {
+                $cm_id = CreditMemo::postCM($customer_info, $item_info);
+                
+                if(count($item_returns) > 0)
+                {
+                    $cm_remarks            = "Credit Memo # ". $cm_id;
+                    $cm_warehouse_id       = $this->current_warehouse->warehouse_id;
+                    $cm_transaction_type   = "credit_memo";
+                    $cm_transaction_id     = $cm_id;
+                    $cm_data               = Warehouse::inventory_refill($cm_warehouse_id, $cm_transaction_type, $cm_transaction_id, $cm_remarks, $item_returns, 'array' ,"returns");
+
+                    if(count($item_serial) > 0)
+                    {
+                        $transaction = "credit_memo-".$cm_id;
+                        ItemSerial::update_refill_to_credit($item_serial, $transaction);
+                    }
+                }
+
+                $data["status"] = "success-credit-memo-action";
+                $data["id"] = $cm_id;
+                $data["redirect_to"] = "/member/customer/credit_memo?id=".$cm_id;
+            }
+            else
+            {
+                $data["status"] = "error";
+                $data["status_message"] = "Please Insert Item";
+            }
+        }
+
         return json_encode($data);
     }
     public function update_submit()
@@ -262,8 +308,11 @@ class CreditMemoController extends Member
         $customer_info["cm_memo"] = Request::input("cm_memo");
         $customer_info["cm_amount"] = Request::input("overall_price");
 
+        $serial_number = Request::input("serial_number");
+
         $item_info[] = null;
         $item_returns = [];
+        $item_serial = [];
         $_items = Request::input("cmline_item_id");
         foreach ($_items as $key => $value) 
         {  
@@ -284,6 +333,10 @@ class CreditMemoController extends Member
                     $um_qty = UnitMeasurement::um_qty(Request::input("cmline_um")[$key]);
                     $item_returns[$key]["quantity"] = $um_qty * $item_info[$key]['quantity'];
                     $item_returns[$key]["product_id"] = Request::input('cmline_item_id')[$key];
+
+                    $item_serial[$key]["quantity"] = $um_qty * $item_info[$key]['quantity'];
+                    $item_serial[$key]["item_id"] = Request::input('cmline_item_id')[$key];
+                    $item_serial[$key]["serials"] = $serial_number[$key];
                 }
             }
         }
@@ -334,25 +387,58 @@ class CreditMemoController extends Member
             }
             // <-- end bundle            
         }
+        $data["status"] = null;
+        $data["status_message"] = null;
 
-        if($ctr_items != 0)
+        if(count($item_serial) > 0)
         {
-            CreditMemo::updateCM($cm_id, $customer_info, $item_info);
-            
-            if(count($item_returns) > 0)
+            //CHECK IF SERIAL NUMBER IS EXISTING
+            foreach ($item_serial as $key_item_serial => $value_item_serial)
             {
-                $transaction_id = $cm_id;
-                $transaction_type = "credit_memo";
-                $json = Warehouse::inventory_update_returns($transaction_id, $transaction_type, $item_returns, $return = 'array');
-            }
+                $check_qty_serial = ItemSerial::check_item_serial($value_item_serial);
 
-            $data["status"] = "success-credit-memo";
-            $data["redirect_to"] = "/member/customer/credit_memo?id=".$cm_id;
+                if($check_qty_serial)
+                {
+                    $data["status"] = "error";
+                    $data["status_message"] .= "The item ".Item::get_item_details($value_item_serial["item_id"])->item_name." has more serial than the quantity <br>";
+                }
+
+                if(ItemSerial::check_existing_to_credit($item_serial[$key_item_serial], "credit_memo-".$cm_id))
+                {
+                    $data["status"] = "error";
+                    $data["status_message"] .= ItemSerial::check_existing_to_credit($item_serial[$key_item_serial], "credit_memo-".$cm_id);
+                }
+            }
         }
-        else
+        if($data["status"] == null)
         {
-            $data["status"] = "error";
-            $data["status_message"] = "Please Insert Item";
+            if($ctr_items != 0)
+            {
+                CreditMemo::updateCM($cm_id, $customer_info, $item_info);
+                
+                if(count($item_returns) > 0)
+                {
+                    $transaction_id = $cm_id;
+                    $transaction_type = "credit_memo";
+                    $json = Warehouse::inventory_update_returns($transaction_id, $transaction_type, $item_returns, $return = 'array');
+
+                    /*REFILL SERIAL THRU CREDIT MEMO*/
+                    if(count($item_serial) > 0)
+                    {
+                        $transaction = "credit_memo-".$cm_id;
+                        ItemSerial::return_original_serial_debit_credit($transaction);
+                        ItemSerial::update_refill_to_credit($item_serial, $transaction);
+                    }
+                }
+
+                $data["status"] = "success-credit-memo";
+                $data["redirect_to"] = "/member/customer/credit_memo?id=".$cm_id;
+            }
+            else
+            {
+                $data["status"] = "error";
+                $data["status_message"] = "Please Insert Item";
+            }
         }
 
         return json_encode($data);

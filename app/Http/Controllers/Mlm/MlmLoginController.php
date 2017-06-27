@@ -173,7 +173,7 @@ class MlmLoginController extends Controller
                 {
                     $data["type"] = "error";
 
-                    $data["message"] = "Something wen't wrong!";
+                    $data["message"] = "Something went wrong!";
 
                 }
                 

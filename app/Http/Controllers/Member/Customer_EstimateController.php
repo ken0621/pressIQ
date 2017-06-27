@@ -13,6 +13,7 @@ use App\Globals\CreditMemo;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\Transaction;
 use App\Globals\Customer;
+use App\Globals\ItemSerial;
 
 use App\Models\Tbl_customer;
 use App\Models\Tbl_item_bundle;
@@ -52,6 +53,7 @@ class Customer_EstimateController extends Member
     public function add_item($est_id)
     {
         // Session::forget('est_item');
+        $data["serial"] = ItemSerial::check_setting();
         $est_data = Tbl_customer_estimate_line::estimate()->um()->where("estline_est_id",$est_id)->get();
         foreach ($est_data as $key => $value) 
         {

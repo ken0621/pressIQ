@@ -33,7 +33,7 @@
             <div>
                 <i class="fa fa-tags"></i>
                 <h1>
-                    <span class="page-title">Vendor &raquo; Check</span>
+                    <span class="page-title">Write Checks</span>
                     <small>
                     <!--Add a product on your website-->
                     </small>

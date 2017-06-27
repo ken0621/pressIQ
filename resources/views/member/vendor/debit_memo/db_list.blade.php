@@ -12,11 +12,11 @@
                     List of Vendor Debit Memo
                 </small>
             </h1>
-            @if($pis != 0)
-            <a class="panel-buttons btn btn-custom-primary pull-right popup" size="md" 
-             link="/member/vendor/debit_memo/choose_type">Create Debit Memo</a>
-            @else
-            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/vendor/debit_memo">Create Debit Memo</a>            
+            @if($debit_memo)
+            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/vendor/debit_memo">Create Debit Memo</a>
+            @endif
+            @if($bad_order)
+            <a class="panel-buttons btn btn-custom-white pull-right" href="/member/vendor/debit_memo?type=bad_order">Create Bad Order</a>
             @endif
         </div>
     </div>

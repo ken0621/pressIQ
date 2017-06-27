@@ -375,21 +375,7 @@
 
 <script type="text/javascript">
 
-//  window.fbAsyncInit = function()
 
-//  {
-
-//  FB.init({
-
-//  appId      : '{{config::get("app.fb_app_id")}}',
-
-//  xfbml      : true,
-
-//  version    : 'v2.3'
-
-//  });
-
-// };
 
       window.fbAsyncInit = function() {
 

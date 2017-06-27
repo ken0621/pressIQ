@@ -93,6 +93,20 @@
 						}
 					}
 				}
+				@media screen and (max-width: 768px)
+				{
+					.main-event
+					{
+						width: 100%;
+						display: block;
+						padding: 0;
+					}
+					.side-event
+					{
+						width: 100%;
+						display: block;
+					}
+				}
 			}
 		}
 	}	

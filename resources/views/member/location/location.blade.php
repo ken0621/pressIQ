@@ -68,7 +68,7 @@
 </div>
 @endsection
 @section('script')
-<script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
+<script type="text/javascript" src="assets/member/js/paginate_ajax_multiple.js"></script>
 <script>
 var coupon_code = new coupon_code();
 

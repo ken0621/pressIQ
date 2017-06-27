@@ -1032,7 +1032,7 @@ class Cart
         
         // Set Webhook
         $webhook = Webhook::retrieve();
-        if ($webhook && count($webhook) > 0) 
+        if (isset($webhook) && $webhook && count($webhook) > 0) 
         {
             foreach ($webhook as $value) 
             {

@@ -464,8 +464,8 @@
                     {
                         old_new_base = old_new_base + '/' + split[i];
                     }
-
-                    settings.url = old_new_base;
+                    console.log(old_new_base);
+                    settings.url = '{{url()}}' + old_new_base;
                 }
                 console.log("settings.url: " + settings.url);
             },

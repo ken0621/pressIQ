@@ -429,6 +429,7 @@ class MLM_SlotController extends Member
             $insert['slot_membership'] = $membership->membership_id;
             $insert['slot_status'] = $membership->membership_type;
             $insert['slot_placement'] = 'left';
+            $insert['auto_balance_position'] = 1;
             $slot_id = Tbl_mlm_slot::insertGetId($insert);
             
             $update['used'] = 1;

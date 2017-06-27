@@ -155,13 +155,6 @@
 			"default":"BRANDS",
 			"size":"12"
 		},
-		"home_brand_image" :
-		{
-			"label":"Brand Images",
-			"type":"brand",
-			"default":"",
-			"size":"12"
-		},
  		"home_new_arrival_title" :
 		{
 			"label":"New Arrival Title",

@@ -3104,11 +3104,22 @@ class Payroll
 												 ->orderBy('payroll_allowance_name')
 												 ->get();
 
+		$group = Tbl_payroll_employee_contract::selemployee($employee_id)->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')->first();
+
 		$data['allowance']					= array();
 		$data['deduction']					= array();
 
 		$data['_total_unused_leave']		= 0;
 		$data['_unused_leave']				= array();
+
+		$data['display_monthly_rate']		= 1;
+		$data['display_daily_rate']			= 1;
+
+		if($group != null)
+		{
+			$data['display_monthly_rate']		= $group->display_monthly_rate;
+			$data['display_daily_rate']			= $group->display_daily_rate;
+		}
 
 		$total_allowance = 0;
 		$total_deduction = 0;

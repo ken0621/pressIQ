@@ -7,5 +7,5 @@ class Tbl_manufacturer extends Model
 {
 	protected $table = 'tbl_manufacturer';
 	protected $primaryKey = "manufacturer_id";
-    public $timestamps = false;
+    public $timestamps = true;
 }

@@ -8,7 +8,7 @@ class Tbl_manual_credit_memo extends Model
 {
     protected $table = 'tbl_manual_credit_memo';
 	protected $primaryKey = "manual_cm_id";
-    public $timestamps = false;
+    public $timestamps = true;
 
     public static function scopeSir($query)
     {

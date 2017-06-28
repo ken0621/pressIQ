@@ -26,12 +26,12 @@ th, td
     vertical-align: top;
 }
 </style>
-
 <!-- HTML Code: Place this code in the document's body (between the 'body' tags) where the table should appear -->
 <table class="GeneratedTable">
   <thead>
     <tr>
       <th>Order ID</th>
+      <th>Date</th>
       <th></th>
       <th>Response</th>
     </tr>
@@ -40,6 +40,7 @@ th, td
     @foreach($_dragonpay as $dragonpay)
     <tr>
       <td>{{ $dragonpay->order_id }}</td>
+      <td>{{ $dragonpay->log_date }}</td>
       <td><a href="/payment/paymaya/logs/view/{{ $dragonpay->order_id }}">Check</a></td>
       <td><pre>{{ is_serialized($dragonpay->response) ? var_dump(unserialize($dragonpay->response)) : $dragonpay->response }}</pre></td>
     </tr>

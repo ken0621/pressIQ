@@ -227,6 +227,7 @@ class ShopCheckoutController extends Shop
         {
             $insert["order_id"] = $order_id;
             $insert["log_date"] = Carbon::now();
+            $insert["ip_address"] = get_current_ip();
             
             try 
             {
@@ -285,6 +286,7 @@ class ShopCheckoutController extends Shop
     {
         $insert["order_id"] = $order_id;
         $insert["log_date"] = Carbon::now();
+        $insert["ip_address"] = get_current_ip();
         try
         {
             $insert["response"] = serialize(Request::input());

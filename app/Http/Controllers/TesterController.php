@@ -87,9 +87,7 @@ class TesterController extends Controller
 
     public function getTracking()
     {
-<<<<<<< HEAD
-        dd(Accounting::getAllAccount());
-=======
+
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://api.aftership.com/v4/trackings",
@@ -112,7 +110,6 @@ class TesterController extends Controller
 
         dd(json_decode($response));
 
->>>>>>> master
     }
 
     public function getJournal()

@@ -4995,7 +4995,7 @@ class PayrollController extends Member
                          $temp['payroll_leave_employee_id']    = $tag;
                          $temp['payroll_schedule_leave']       = $payroll_schedule_leave;
                          $temp['shop_id']                      = Self::shop_id();
-<<<<<<< HEAD
+
                          $temp['leave_whole_day']              = 0;
                          $temp['leave_hours']                  = '00:00:00';
 
@@ -5008,8 +5008,7 @@ class PayrollController extends Member
                               $temp['leave_hours']               = date('h:i:s', strtotime(Request::input('leave_hours_'.$tag)));
                          }
                          
-=======
->>>>>>> master
+
                          array_push($insert, $temp);
                     }
 
@@ -5021,7 +5020,7 @@ class PayrollController extends Member
                               $temp['payroll_leave_employee_id']    = $tag;
                               $temp['payroll_schedule_leave']       = $payroll_schedule_leave;
                               $temp['shop_id']                      = Self::shop_id();
-<<<<<<< HEAD
+
                               $temp['leave_whole_day']              = 0;
                               $temp['leave_hours']                  = '00:00:00';
 
@@ -5033,8 +5032,7 @@ class PayrollController extends Member
                               {
                                    $temp['leave_hours']               = date('h:i:s', strtotime(Request::input('leave_hours_'.$tag)));
                               }
-=======
->>>>>>> master
+
                               array_push($insert, $temp);
                               $payroll_schedule_leave = Carbon::parse($payroll_schedule_leave)->addDay()->format("Y-m-d");
                          }
@@ -6937,10 +6935,10 @@ class PayrollController extends Member
                $excel->setCreator('Laravel')->setCompany('DIGIMA');
                $excel->setDescription('payroll file');
 
-<<<<<<< HEAD
-               $excel->sheet($date, function($sheet) use ($data) {
-                    $sheet->fromArray($data, null, 'A1', true, false);
-=======
+
+               // $excel->sheet($date, function($sheet) use ($data) {
+               //      $sheet->fromArray($data, null, 'A1', true, false);
+
                $excel->sheet($date, function($sheet) use ($data_export) {
 
                     /* column in excel */
@@ -6985,7 +6983,7 @@ class PayrollController extends Member
                     
 
                     $sheet->fromArray($data_export['data'], null, 'A2', true, false);
->>>>>>> master
+
                     $sheet->setColumnFormat(array(
                          'B4:'.$columns[count($data_export['data'][1]) - 1].(count($data_export['data']) + 1) => '#,##0.00',
                          ));
@@ -7867,7 +7865,7 @@ class PayrollController extends Member
           if($bank_name == 'BDO')
           {
                return Self::bdo_bank_template($data);
-<<<<<<< HEAD
+
           }
 
           else if($bank_name == 'Metro Bank')
@@ -7937,77 +7935,6 @@ class PayrollController extends Member
                     $sheet->fromArray($column, null, 'A1', true, false);
                });
 
-=======
-          }
-
-          else if($bank_name == 'Metro Bank')
-          {
-               return Self::metro_bank_template($data);
-          }
-
-          else if($bank_name == 'Equicom')
-          {
-               return Self::equicom_bank_template($data);
-          }
-
-          /* use bdo as default */
-          else
-          {
-               return Self::bdo_bank_template($data);
-          }
-
-          // $myName = $company_code.$upload_date.$batch_no;
-
-          // $headers = ['Content-type'=>'text/plain', 'test'=>'YoYo', 'Content-Disposition'=>sprintf('attachment; filename="%s"', $myName.".txt"),'X-BooYAH'=>'WorkyWorky','Content-Length'=>sizeof($fileText)];
-
-          // return Response::make($fileText, 200, $headers);
-     }
-
-
-     public function bdo_bank_template($data = array(), $title = '')
-     {
-          $column = array();
-
-          $temp = array();
-          $temp['account_number']  = 'ACCOUNT NUMBER';
-          $temp['amount']          = 'AMOUNT';
-          $temp['name']            = 'NAME';
-
-          array_push($column, $temp);
-          $total = 0;
-
-          $data = collect($data)->sortBy('payroll_employee_first_name');
-
-          foreach($data as $bdo)
-          {
-               $temp = array();
-               $temp['account_number'] = $bdo['payroll_employee_atm_number'];
-               $temp['amount'] = $bdo['total_net'];
-               $temp['name'] = $bdo['payroll_employee_title_name'].' '.$bdo['payroll_employee_first_name'].' '.$bdo['payroll_employee_middle_name'].' '.$bdo['payroll_employee_last_name'].' '.$bdo['payroll_employee_suffix_name'];
-
-               array_push($column, $temp);
-               $total += $bdo['total_net'];
-          }
-
-          $temp = array();
-          $temp['account_number'] = '';
-          $temp['amount'] = $total;
-          $temp['name'] = '';
-
-          array_push($column, $temp);
-
-          return Excel::create($title, function($excel) use ($column) {
-
-               $date = 'BDO';
-               $excel->setTitle('Payroll');
-               $excel->setCreator('Laravel')->setCompany('DIGIMA');
-               $excel->setDescription('payroll file');
-
-               $excel->sheet($date, function($sheet) use ($column) {
-                    $sheet->fromArray($column, null, 'A1', true, false);
-               });
-
->>>>>>> master
           })->download('xlsx');
 
      }

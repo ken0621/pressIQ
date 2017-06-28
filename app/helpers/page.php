@@ -1052,7 +1052,6 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "Developing";
     $nav[$page]['submenu'][$code]['developer'] = "ARCY";
 
-<<<<<<< HEAD
     /* PURCHASING INVENTORY SYSTEM */
     $page = "pis";
     $nav[$page]['name']     = "PIS";
@@ -1138,8 +1137,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','create-invoice'];
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
-=======
->>>>>>> master
+
     
     /* MANAGE CONTENT  */
     $page = "page"; 

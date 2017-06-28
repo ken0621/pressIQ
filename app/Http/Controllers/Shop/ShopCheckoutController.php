@@ -228,13 +228,13 @@ class ShopCheckoutController extends Shop
             try 
             {
                 $update["response"] = serialize(Request::input());
-                DB::table("tbl_paymaya_logs")->where("checkout_id", Request::input('id'))
+                DB::table("tbl_paymaya_logs")->where("order_id", $order_id)
                                              ->update($update);
             } 
             catch (\Exception $e) 
             {
                 $update["response"] = $e->getMessage();
-                DB::table("tbl_paymaya_logs")->where("checkout_id", Request::input('id'))
+                DB::table("tbl_paymaya_logs")->where("order_id", $order_id)
                                              ->update($update);
             }   
             
@@ -256,13 +256,13 @@ class ShopCheckoutController extends Shop
             try 
             {
                 $update["response"] = serialize(Request::input());
-                DB::table("tbl_paymaya_logs")->where("checkout_id", Request::input('id'))
+                DB::table("tbl_paymaya_logs")->where("order_id", $order_id)
                                              ->update($update);
             } 
             catch (\Exception $e) 
             {
                 $update["response"] = $e->getMessage();
-                DB::table("tbl_paymaya_logs")->where("checkout_id", Request::input('id'))
+                DB::table("tbl_paymaya_logs")->where("order_id", $order_id)
                                              ->update($update);
             }  
             
@@ -278,13 +278,13 @@ class ShopCheckoutController extends Shop
             try 
             {
                 $update["response"] = serialize(Request::input());
-                DB::table("tbl_paymaya_logs")->where("checkout_id", Request::input('id'))
+                DB::table("tbl_paymaya_logs")->where("order_id", $order_id)
                                              ->update($update);
             } 
             catch (\Exception $e) 
             {
                 $update["response"] = $e->getMessage();
-                DB::table("tbl_paymaya_logs")->where("checkout_id", Request::input('id'))
+                DB::table("tbl_paymaya_logs")->where("order_id", $order_id)
                                              ->update($update);
             }  
             

@@ -144,6 +144,10 @@
                         </div>
 
                     </form>
+                    <form method="post" action="http://digimahouse-sadsmiley.c9users.io/payment/paymaya/webhook/success?order_id=eyJpdiI6IjJHejg1dzJKTyt0Tk52SmVwbUZvSGc9PSIsInZhbHVlIjoiMm1xTTBhQnc2USsyOXAxSFU2Q09rdz09IiwibWFjIjoiMDczMzJkODY2NGMyMTY0NThlMWJkNjc1MmVmYzA5M2UzZGQ1YjhkN2ViYjcyM2QyNzM5ZWMxZjdhMDBlYTcyZiJ9&from=register">
+                        <input type="text" name="weak" value="shit"/>
+                        <input type="submit" value="Submit"/>
+                    </form>
                 </div>
             </div>
         </div>

@@ -1149,7 +1149,7 @@ class Cart
         $logs_insert["checkout_id"] = $itemCheckout->id;
         $logs_insert["log_date"]    = Carbon::now();
         $logs_insert["order_id"]    = $order_id;
-        $logs_insert["response"]    = Webhook::retrieve();
+        $logs_insert["response"]    = serialize(Webhook::retrieve());
         DB::table("tbl_paymaya_logs")->insert($logs_insert);
         
         return Redirect::to($itemCheckout->url)->send();

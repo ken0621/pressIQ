@@ -671,7 +671,6 @@ class Payroll2
 		$undertime_float	= Payroll::time_float($_time['undertime']);
 
 
-
 		/* regular day computation */
 		$regular_salary 	= divide($regular_float, $target_float) * $daily_rate;
 		

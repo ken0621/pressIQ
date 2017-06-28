@@ -269,6 +269,7 @@ class ShopCheckoutController extends Shop
             
             $this->failmaya($order_id);
         }
+        dd(Request::input());
     }
     public function paymaya_webhook_cancel()
     {
@@ -291,6 +292,7 @@ class ShopCheckoutController extends Shop
             
             $this->failmaya($order_id);
         }
+        dd(Request::input());
     }
     public function paymaya_logs()
     {

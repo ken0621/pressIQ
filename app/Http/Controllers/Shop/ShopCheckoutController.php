@@ -245,6 +245,7 @@ class ShopCheckoutController extends Shop
             $update['payment_status'] = 1;
             $order = Ec_order::update_ec_order($update);
             $this->after_email_payment($order_id);
+            dd(Request::input());
         }
     }
     public function paymaya_webhook_failure()

@@ -792,7 +792,7 @@ class DebitMemoController extends Member
                     $qty = UnitMeasurement::um_qty($value_item->dbline_um);
                     $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id);
                     $_bundle[$key_bundle]['product_id'] = $value_bundle->bundle_item_id;
-                    $_bundle[$key_bundle]['quantity'] = (($value_item->dbline_qty * $qty) - $value_item->dbline_replace_qty) * ($value_bundle->bundle_qty * $bundle_qty);
+                    $_bundle[$key_bundle]['quantity'] = ($value_item->dbline_qty * $qty) * ($value_bundle->bundle_qty * $bundle_qty);
 
                     if($value_item->dbline_replace_qty > 0)
                     {
@@ -911,6 +911,14 @@ class DebitMemoController extends Member
 
                 if($db_data->db_memo_status != 1)
                 {
+                    if(count($item_refill) > 0)
+                    {
+                        $remarks            = "Item replaced with Bad Order #". $db_id;
+                        $warehouse_id       = $this->current_warehouse->warehouse_id;
+                        $transaction_type   = "debit_memo_replace";
+                        $transaction_id     = $db_id;
+                        $json               = Warehouse::inventory_refill($warehouse_id, $transaction_type, $transaction_id, $remarks, $item_refill, 'array',null,$item_serial);
+                    }
                     if(count($product_consume) > 0)
                     {
                         $remarks            = "Debit Memo Report";
@@ -925,16 +933,6 @@ class DebitMemoController extends Member
                     {
                         $data["status"] = "success-replace-all";   
                     }
-
-                    if(count($item_refill) > 0)
-                    {
-                        $remarks            = "Item replaced with Bad Order #". $db_id;
-                        $warehouse_id       = $this->current_warehouse->warehouse_id;
-                        $transaction_type   = "debit_memo_replace";
-                        $transaction_id     = $db_id;
-                        $data               = Warehouse::inventory_refill($warehouse_id, $transaction_type, $transaction_id, $remarks, $item_refill, 'array',null,$item_serial);
-                    }
-
                     $update["db_memo_status"] = 1;
                     Tbl_debit_memo::where("db_id",$db_id)->update($update);
 

@@ -77,12 +77,11 @@ use App\Models\Tbl_payroll_shift_code;
 use App\Models\Tbl_payroll_employee_shift;
 use App\Models\Tbl_payroll_employee_schedule;
 use App\Models\Tbl_payroll_time_sheet;
-<<<<<<< HEAD
+
 
 use App\Models\Tbl_payroll_shift_day;
 use App\Models\Tbl_payroll_shift_time;
-=======
->>>>>>> master
+
 
 use App\Globals\Payroll;
 use App\Globals\PayrollJournalEntries;
@@ -1837,7 +1836,6 @@ class PayrollController extends Member
 
           $data[4]['access_name'] = 'Allowances';
           $data[4]['link']        = '/member/payroll/allowance';
-<<<<<<< HEAD
 
           $data[5]['access_name'] = 'Deductions';
           $data[5]['link']        = '/member/payroll/deduction';
@@ -1872,42 +1870,7 @@ class PayrollController extends Member
           $data[15]['access_name'] = 'Pagibig/HDMF';
           $data[15]['link']        = '/member/payroll/pagibig_formula';
 
-=======
 
-          $data[5]['access_name'] = 'Deductions';
-          $data[5]['link']        = '/member/payroll/deduction';
-
-          $data[6]['access_name'] = 'Leave';
-          $data[6]['link']        = '/member/payroll/leave';
-
-          $data[7]['access_name'] = 'Payroll Group';
-          $data[7]['link']        = '/member/payroll/payroll_group';
-
-          $data[8]['access_name'] = 'Shift Template';
-          $data[8]['link']        = '/member/payroll/shift_template';
-
-          $data[9]['access_name'] = 'Journal Tags';
-          $data[9]['link']        = '/member/payroll/payroll_jouarnal';
-
-          $data[10]['access_name'] = 'Payslip';
-          $data[10]['link']        = '/member/payroll/custom_payslip';
-
-          $data[11]['access_name'] = 'Tax Period';
-          $data[11]['link']        = '/member/payroll/tax_period';
-
-          $data[12]['access_name'] = 'Tax Table';
-          $data[12]['link']        = '/member/payroll/tax_table_list';
-
-          $data[13]['access_name'] = 'SSS Table';
-          $data[13]['link']        = '/member/payroll/sss_table_list';
-
-          $data[14]['access_name'] = 'Philhealth Table';
-          $data[14]['link']        = '/member/payroll/philhealth_table_list';
-
-          $data[15]['access_name'] = 'Pagibig/HDMF';
-          $data[15]['link']        = '/member/payroll/pagibig_formula';
-
->>>>>>> master
           $data[16]['access_name'] = 'Reset';
           $data[16]['link']        = '/member/payroll/reset_payroll';
 

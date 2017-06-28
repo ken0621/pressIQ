@@ -225,17 +225,18 @@ class ShopCheckoutController extends Shop
         $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
         if($order)
         {
+            $insert["order_id"] = $order_id;
+            $insert["log_date"] = Carbon::now();
+            
             try 
             {
-                $update["response"] = serialize(Request::input());
-                DB::table("tbl_paymaya_logs")->where("order_id", $order_id)
-                                             ->update($update);
+                $insert["response"] = serialize(Request::input());
+                DB::table("tbl_paymaya_logs_other")->insert($insert);
             } 
             catch (\Exception $e) 
             {
-                $update["response"] = $e->getMessage();
-                DB::table("tbl_paymaya_logs")->where("order_id", $order_id)
-                                             ->update($update);
+                $insert["response"] = $e->getMessage();
+                DB::table("tbl_paymaya_logs")->insert($insert);
             }   
             
             Item_code::ec_order_slot($order_id);
@@ -251,47 +252,13 @@ class ShopCheckoutController extends Shop
     public function paymaya_webhook_failure()
     {
         $order_id = Crypt::decrypt(Request::input("order_id"));
-        $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
-        if($order)
-        {
-            try 
-            {
-                $update["response"] = serialize(Request::input());
-                DB::table("tbl_paymaya_logs")->where("order_id", $order_id)
-                                             ->update($update);
-            } 
-            catch (\Exception $e) 
-            {
-                $update["response"] = $e->getMessage();
-                DB::table("tbl_paymaya_logs")->where("order_id", $order_id)
-                                             ->update($update);
-            }  
-            
-            $this->failmaya($order_id);
-        }
+        $this->failmaya($order_id);
         dd(Request::input());
     }
     public function paymaya_webhook_cancel()
     {
         $order_id = Crypt::decrypt(Request::input("order_id"));
-        $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
-        if($order)
-        {
-            try 
-            {
-                $update["response"] = serialize(Request::input());
-                DB::table("tbl_paymaya_logs")->where("order_id", $order_id)
-                                             ->update($update);
-            } 
-            catch (\Exception $e) 
-            {
-                $update["response"] = $e->getMessage();
-                DB::table("tbl_paymaya_logs")->where("order_id", $order_id)
-                                             ->update($update);
-            }  
-            
-            $this->failmaya($order_id);
-        }
+        $this->failmaya($order_id);
         dd(Request::input());
     }
     public function paymaya_logs()
@@ -306,26 +273,25 @@ class ShopCheckoutController extends Shop
     }
     public function failmaya($order_id)
     {
+        $insert["order_id"] = $order_id;
+        $insert["log_date"] = Carbon::now();
+        try
+        {
+            $insert["response"] = serialize(Request::input());
+            DB::table("tbl_paymaya_logs_other")->insert($insert);
+        } 
+        catch (\Exception $e) 
+        {
+            $insert["response"] = $e->getMessage();
+            DB::table("tbl_paymaya_logs")->insert($insert);
+        }
+        
         $update['ec_order_id']    = $order_id;
         $update['order_status']   = "Failed";
         $update['payment_status'] = 0;
         $order = Ec_order::update_ec_order($update);
 
         $this->after_email_payment($order_id);
-
-
-        // $customer = DB::table("tbl_ec_order")->select("tbl_ec_order.ec_order_id", "tbl_ec_order.customer_id as order_customer_id", "tbl_customer.*")
-        //                                      ->join("tbl_customer", "tbl_customer.customer_id", "=", "tbl_ec_order.customer_id")
-        //                                      ->where("tbl_ec_order.ec_order_id", $order_id)
-        //                                      ->first();
-    
-        // $update_customer["email"] = "f_" . $customer->email;
-        // $update_customer["first_name"] = "f_" . $customer->first_name;
-        // $update_customer["last_name"] = "f_" . $customer->last_name;
-        // $update_customer["middle_name"] = "f_" . $customer->middle_name;
-        // $update_customer["mlm_username"] = "f_" . $customer->mlm_username;
-
-        // DB::table("tbl_customer")->where("customer_id", $customer->customer_id)->update($update_customer);
     }
     public function after_email_payment($order_id)
     {

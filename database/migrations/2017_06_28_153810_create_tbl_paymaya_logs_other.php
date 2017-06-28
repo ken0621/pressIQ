@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTblCustomerNullableBday extends Migration
+class CreateTblPaymayaLogsOther extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +12,12 @@ class UpdateTblCustomerNullableBday extends Migration
      */
     public function up()
     {
-        Schema::table('tbl_paymaya_logs', function (Blueprint $table) 
+        Schema::create('tbl_paymaya_logs_other', function (Blueprint $table) 
         {
-            $table->date('b_day')->nullable();
+            $table->increments('id');
+            $table->dateTime('log_date');
+            $table->integer('order_id');
+            $table->binary('response');
         });
     }
 

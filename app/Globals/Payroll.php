@@ -426,10 +426,10 @@ class Payroll
 
 		// dd($schedule);
 
-		if($time_sheet_info == null)
-		{
-			dd($date);
-		}
+		// if($time_sheet_info == null)
+		// {
+		// 	dd($date);
+		// }
 
 		if($time_sheet_info->payroll_time_sheet_approved == 0) //ONLY UPDATE THOSE WHO ARE NOT APPROVED
 		{

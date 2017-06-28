@@ -293,16 +293,20 @@ class ShopCheckoutController extends Shop
     }
     public function paymaya_logs()
     {
-        $dragonpay = DB::table("tbl_paymaya_logs")->orderBy("id", "DESC")->first();
-    
-        if (is_serialized($dragonpay->response)) 
+        $data["_dragonpay"] = DB::table("tbl_paymaya_logs")->orderBy("id", "DESC")->get();
+        foreach ($data["_dragonpay"] as $key => $value) 
         {
-            dd(unserialize($dragonpay->response));
+            if (is_serialized($value->response)) 
+            {
+                $data["_dragonpay"][$key]->extracted = unserialize($value->response);
+            }
+            else
+            {
+                $data["_dragonpay"][$key]->extracted = $value->response;
+            }
         }
-        else
-        {
-            dd($dragonpay->response);
-        }
+        
+        return view("paymaya.logs", $data);
     }
     public function failmaya($order_id)
     {

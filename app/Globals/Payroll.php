@@ -275,6 +275,7 @@ class Payroll
 	}
 
 
+
 	/* TABLE FOR EMPLOYEE SEARCH INSERT OR UPDATE */
 	public static function generate_emplyoee_search($employee_id = 0)
 	{
@@ -772,10 +773,24 @@ class Payroll
 		$absent						= false;
 		$leave 						= Payroll::check_if_employee_leave($data["employee_information"]->payroll_employee_id, $date);
 
-		$break 						= Payroll::time_diff(date('H:s', strtotime($break_start)), date('H:i', strtotime($break_end)));
+		$break 						= Payroll::time_diff(date('H:i', strtotime($break_start)), date('H:i', strtotime($break_end)));
 
 
 		$break_nd = 0;
+
+		if(isset($data['time_sheet_info']->is_break_update))
+		{
+			if($data['time_sheet_info']->is_break_update == 1)
+			{
+				$break = date('h:i',strtotime($data['time_sheet_info']->payroll_time_sheet_break));
+				if($data['time_sheet_info']->payroll_time_sheet_break == '00:00:00')
+				{
+					$break = '00:00';
+				}	
+			}
+		}
+
+		
 
 
 
@@ -1130,7 +1145,20 @@ class Payroll
 			$break = '00:00';
 		}
 
-		$return->break 				=  $break;
+		if(isset($data['time_sheet_info']->is_break_update))
+		{
+			if($data['time_sheet_info']->is_break_update == 1)
+			{
+				$break = date('h:i',strtotime($data['time_sheet_info']->payroll_time_sheet_break));
+				if($data['time_sheet_info']->payroll_time_sheet_break == '00:00:00')
+				{
+					$break = '00:00';
+				}	
+			}
+		}
+		
+
+		$return->break 				= $break;
 		$return->time_record 		= $time_rec;
 		$return->absent 			= $absent;
 		$return->leave 				= $leave;
@@ -2112,6 +2140,9 @@ class Payroll
 		$data['payroll_group_salary_computation'] = $payroll_group_salary_computation;
 
 
+		$data['display_monthly_rate'] 	= $group->display_monthly_rate;
+		$data['display_daily_rate']		= $group->display_daily_rate;
+
 		/* get monthly cola start */
 		$monthly_cola = $cola * $group->payroll_group_working_day_month;
 		/* get monthly cola end */
@@ -2232,6 +2263,11 @@ class Payroll
 
 		$adjustment_incentives_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Incentives')->sum('payroll_adjustment_amount');
 
+		/* 13 month pay */
+		$adjustment_13_month = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, '13 month pay')->get();
+
+		$adjustment_13_month_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , '13 month pay')->sum('payroll_adjustment_amount');
+
 		/* deductions */
 		$adjustment_deductions = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Deductions')->get();
 
@@ -2248,6 +2284,9 @@ class Payroll
 
 		$data['adjustment']['commission'] 			= $adjustment_commission;
 		$data['adjustment']['total_commission'] 	= $adjustment_commission_total;
+
+		$data['adjustment']['13_month'] 			= $adjustment_13_month;
+		$data['adjustment']['total_13_month'] 		= $adjustment_13_month_total;
 
 		$data['adjustment']['deductions'] 			= $adjustment_deductions;
 		$data['adjustment']['total_deductions'] 	= $adjustment_deductions_total;
@@ -2562,14 +2601,13 @@ class Payroll
 		// DEDUCTION START [LOANS, CASH ADVANCE, CASH BOND AND OTHER DEDUCTION]
 		$deduction = Payroll::getdeduction($employee_id, $date,$period_category, $payroll_period_category, $shop_id);
 
+
 		$data['deduction'] 			= $deduction['deduction'];
 		$data['total_deduction'] 	+= $deduction['total_deduction'] + $adjustment_deductions_total;
 
+
 		$data['total_net'] 					= ($data['total_gross'] - $data['total_deduction']) + $total_deminimis + $data['13_month'];
-
-
-
-		$data['total_gross'] 				+=  $total_deminimis + $data['13_month'];
+		$data['total_gross'] 				+=  $total_deminimis + $data['13_month'] + $adjustment_13_month_total;
 		
 		$data['total_regular_days']			= round($data['total_regular_days'], 2);
 		$data['total_rest_days']			= round($data['total_rest_days'], 2);
@@ -2886,6 +2924,7 @@ class Payroll
 				$tax_index = 'tax_first_range';
 			}
 
+
 			if($tax->tax_second_range >= $rate && $tax->tax_third_range < $rate)
 			{
 				$tax_index = 'tax_second_range';
@@ -2919,6 +2958,7 @@ class Payroll
 			}
 
 
+
 			if($rate <= $tax->tax_seventh_range && $rate > $tax->taxt_sixth_range)
 			{
 				$tax_index = 'tax_seventh_range';
@@ -2930,13 +2970,10 @@ class Payroll
 				$exemption_num = $exemption->$tax_index;
 				$status_num = $status->$tax_index;
 				// dd($status_num);
-
 				$tax_contribution = (($rate - $tax->$tax_index) * ($status_num / 100)) + $exemption_num;
 			}
 		}
 		
-
-
 		return round($tax_contribution, 2);
 	}
 
@@ -3076,11 +3113,22 @@ class Payroll
 												 ->orderBy('payroll_allowance_name')
 												 ->get();
 
+		$group = Tbl_payroll_employee_contract::selemployee($employee_id)->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')->first();
+
 		$data['allowance']					= array();
 		$data['deduction']					= array();
 
 		$data['_total_unused_leave']		= 0;
 		$data['_unused_leave']				= array();
+
+		$data['display_monthly_rate']		= 1;
+		$data['display_daily_rate']			= 1;
+
+		if($group != null)
+		{
+			$data['display_monthly_rate']		= $group->display_monthly_rate;
+			$data['display_daily_rate']			= $group->display_daily_rate;
+		}
 
 		$total_allowance = 0;
 		$total_deduction = 0;
@@ -3125,6 +3173,11 @@ class Payroll
 
 		$adjustment_incentives_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Incentives')->sum('payroll_adjustment_amount');
 
+		/* 13 month pay */
+		$adjustment_13_month = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, '13 month pay')->get();
+
+		$adjustment_13_month_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , '13 month pay')->sum('payroll_adjustment_amount');
+
 		/* deductions */
 		$adjustment_deductions = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Deductions')->get();
 
@@ -3143,12 +3196,15 @@ class Payroll
 		$data['adjustment']['commission'] 			= $adjustment_commission;
 		$data['adjustment']['total_commission'] 	= $adjustment_commission_total;
 
+		$data['adjustment']['13_month'] 			= $adjustment_13_month;
+		$data['adjustment']['total_13_month'] 		= $adjustment_13_month_total;
+
 		$data['adjustment']['deductions'] 			= $adjustment_deductions;
 		$data['adjustment']['total_deductions'] 	= $adjustment_deductions_total;
 
 		// $total_contribution 				= $data['']
 		$data['total_gross'] = 0;
-		$data['total_gross'] += ($data['extra_salary'] + $data['extra_early_overtime'] + $data['extra_reg_overtime'] + $data['extra_night_diff'] + $data['regular_salary'] + $data['regular_early_overtime'] + $data['regular_reg_overtime'] + $data['regular_night_diff'] + $data['rest_day_salary'] + $data['rest_day_early_overtime'] + $data['rest_day_reg_overtime'] + $data['rest_day_night_diff'] + $data['rest_day_sh'] + $data['rest_day_sh_early_overtime'] + $data['rest_day_sh_reg_overtime'] + $data['rest_day_sh_night_diff'] + $data['rest_day_rh'] + $data['rest_day_rh_early_overtime'] + $data['rest_day_rh_reg_overtime'] + $data['rest_day_rh_night_diff'] + $data['rh_salary'] + $data['rh_early_overtime'] + $data['rh_reg_overtime'] + $data['rh_night_diff'] + $data['sh_salary'] + $data['sh_early_overtime'] + $data['sh_reg_overtime'] + $data['sh_night_diff']) + $adjustment_allowance_total + $adjustment_incentives_total + $adjustment_commission_total ;
+		$data['total_gross'] += ($data['extra_salary'] + $data['extra_early_overtime'] + $data['extra_reg_overtime'] + $data['extra_night_diff'] + $data['regular_salary'] + $data['regular_early_overtime'] + $data['regular_reg_overtime'] + $data['regular_night_diff'] + $data['rest_day_salary'] + $data['rest_day_early_overtime'] + $data['rest_day_reg_overtime'] + $data['rest_day_night_diff'] + $data['rest_day_sh'] + $data['rest_day_sh_early_overtime'] + $data['rest_day_sh_reg_overtime'] + $data['rest_day_sh_night_diff'] + $data['rest_day_rh'] + $data['rest_day_rh_early_overtime'] + $data['rest_day_rh_reg_overtime'] + $data['rest_day_rh_night_diff'] + $data['rh_salary'] + $data['rh_early_overtime'] + $data['rh_reg_overtime'] + $data['rh_night_diff'] + $data['sh_salary'] + $data['sh_early_overtime'] + $data['sh_reg_overtime'] + $data['sh_night_diff']) + $adjustment_allowance_total + $adjustment_incentives_total + $adjustment_commission_total + $adjustment_13_month_total;
 
 
 		/* COMPUTE UNUSED LEAVE  START */

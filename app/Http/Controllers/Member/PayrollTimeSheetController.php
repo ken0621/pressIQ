@@ -423,8 +423,10 @@ class PayrollTimeSheetController extends Member
 		{
 			if($break != null)
 			{
+				// dd($break);
 				$break = date('H:i', strtotime($break));
 				$update['payroll_time_sheet_break'] = $break;
+				$update['is_break_update'] = 1;
 				Tbl_payroll_time_sheet::where("payroll_time_date", $date)->where("payroll_employee_id", $employee_id)->update($update);
 			}
 

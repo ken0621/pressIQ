@@ -182,7 +182,8 @@ class MLM_SlotController extends Member
             $code->where(function ($query) use($search_slot)
             {$query ->where("slot_owner","LIKE","%".$search_slot."%")
                     ->orWhere("slot_no","LIKE","%".$search_slot."%")
-                    ->orWhere("slot_id","LIKE","%".$search_slot."%");
+                    ->orWhere("slot_id","LIKE","%".$search_slot."%")
+                    ->orWhere(DB::raw("CONCAT(tbl_customer.first_name, ' ', tbl_customer.middle_name, ' ', tbl_customer.last_name)"), 'LIKE', "%".$search_slot."%");
             });
         }
         if($slot_active != null)
@@ -428,6 +429,7 @@ class MLM_SlotController extends Member
             $insert['slot_membership'] = $membership->membership_id;
             $insert['slot_status'] = $membership->membership_type;
             $insert['slot_placement'] = 'left';
+            $insert['auto_balance_position'] = 1;
             $slot_id = Tbl_mlm_slot::insertGetId($insert);
             
             $update['used'] = 1;

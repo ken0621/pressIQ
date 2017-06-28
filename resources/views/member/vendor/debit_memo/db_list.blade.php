@@ -12,15 +12,32 @@
                     List of Vendor Debit Memo
                 </small>
             </h1>
-            @if($pis != 0)
-            <a class="panel-buttons btn btn-custom-primary pull-right popup" size="md" 
-             link="/member/vendor/debit_memo/choose_type">Create Debit Memo</a>
-            @else
-            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/vendor/debit_memo">Create Debit Memo</a>            
+            @if($debit_memo)
+            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/vendor/debit_memo">Create Debit Memo</a>
+            @endif
+            @if($bad_order)
+            <a class="panel-buttons btn btn-custom-white pull-right" href="/member/vendor/debit_memo?type=bad_order">Create Bad Order</a>
             @endif
         </div>
     </div>
 </div>
+
+<!--mai-->
+<div class="form-group">
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <ul class="nav nav-tabs">
+              <li id="all-list" class="active"><a data-toggle="tab" href="#open"><i class="fa fa-check" aria-hidden="true"></i>&nbsp;Open</a></li>
+
+              <li id="archived-list"><a data-toggle="tab" href="#close"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;Close</a></li>
+
+              <li id="archived-list"><a data-toggle="tab" href="#all"><i class="fa fa-star" aria-hidden="true"></i>&nbsp;All</a></li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+<!--end-->
 
 <!--mai-->
 <div class="form-group">

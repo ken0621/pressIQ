@@ -39,7 +39,7 @@ $data['icon'] = 'icon-sitemap';
       <select name="membership_code_id" class="form-control">
         @if(count($_code) != 0)
           @foreach($_code as $code)
-            <option value="{{$code->membership_code_id}}">{{$code->membership_activation_code}} {{$code->membership_type}}</option>
+            <option value="{{$code->membership_code_id}}">{{$code->membership_activation_code}} {{$code->membership_type}} ({{$code->membership_name}})</option>
           @endforeach
         @else
             <option>NO MEMBERSHIP CODE</option>
@@ -86,19 +86,17 @@ $data['icon'] = 'icon-sitemap';
         <h3 class="box-title">Product Codes</h3>
       </div>
       <!-- /.box-header -->
-      <form class="global-submit" method="POST" action="/mlm/slots/check_item_code">
-      {!! csrf_field() !!}
       <div class="box-body">
           <label>Code</label>
-          <select name="item_code_id" class="form-control">
+          <select name="item_code_id" class="form-control item_code_id">
               @foreach($_item_code as $item_code)
                   <option value="{{$item_code->item_code_id}}">{{$item_code->item_activation_code}}</option>
               @endforeach
           </select>
         <hr>
-        <button class="btn btn-primary pull-right">Use code</button>
+        <button class="btn btn-primary pull-right use_prod_code" style="margin-left:20px;">Use code</button>
+        <button class="btn btn-primary pull-right trans_prod_code">Transfer code</button>
       </div>
-      </form>
     </div>
   @endif
 </div>  
@@ -165,6 +163,7 @@ $data['icon'] = 'icon-sitemap';
 @endsection
 @section('js')
 <script type="text/javascript">
+on_click();
 
 function submit_done(data)
 {
@@ -227,10 +226,29 @@ function submit_done(data)
     toastr.success('Done.');
     window.location = "/mlm/slots";
   }
+  else if(data.status == 'success-transfer-prod-code')
+  {
+    toastr.success('Done.');
+    window.location = "/mlm/slots";
+  }
   else
   {
     toastr.warning(data.message);
   }
+}
+
+function on_click()
+{
+  $(".use_prod_code").click(function()
+  {
+    var link = "/mlm/slots/item_code?item_code_id="+$(".item_code_id").val();
+    action_load_main_modal(link,"");
+  });
+  $(".trans_prod_code").click(function()
+  {
+    var link = "/mlm/slots/transfer_item_code?item_code_id="+$(".item_code_id").val();
+    action_load_main_modal(link,"");
+  });
 }
 
 </script>

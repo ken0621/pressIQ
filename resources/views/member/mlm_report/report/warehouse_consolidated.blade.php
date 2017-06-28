@@ -29,6 +29,7 @@
     
                 
                 @foreach($warehouse as $w_key => $w_val)
+<<<<<<< HEAD
                 <tr>
                     <td>{{$w_val->warehouse_name}}</td>
                     <td>{{currency('PHP', $w_val->$key)}}</td>
@@ -37,11 +38,35 @@
                     $sub_total += $w_val->$key; 
                     $grand_total +=  $sub_total;
                 ?>
+=======
+                    @if($key == 'e_wallet_transfer' || $key == 'e_wallet_tours')
+                        @if($w_val->main_warehouse == 1)
+                            <tr>
+                                <td>PHILTECH MAIN OFFICE</td>
+                                <td>{{currency('PHP', $w_val->$key)}}</td>
+                            </tr>
+                        @endif
+                    @else
+                        <tr>
+                            <td>{{$w_val->warehouse_name}}</td>
+                            <td>{{currency('PHP', $w_val->$key)}}</td>
+                        </tr>
+                     @endif
+                    <?php 
+                        $sub_total += $w_val->$key; 
+                    ?>
+>>>>>>> 88c016b33bc3359be6bd3344a22baa96f02fd552
                 @endforeach
                 <tr>
                     <td><span class="pull-right"><small>SUBTOTAL:</small></span></td>
                     <td>{{currency('PHP', $sub_total)}}</td>
+<<<<<<< HEAD
 
+=======
+                <?php 
+                    $grand_total +=  $sub_total;
+                ?>
+>>>>>>> 88c016b33bc3359be6bd3344a22baa96f02fd552
                 </tr>
                 
             </table>
@@ -51,14 +76,28 @@
 </div>   
       
 @endforeach
+<<<<<<< HEAD
 <div class="panel panel-default panel-block panel-title-block col-md-4" id="top">
+=======
+<div class="panel panel-default panel-block panel-title-block col-md-12" id="top">
+>>>>>>> 88c016b33bc3359be6bd3344a22baa96f02fd552
     <div class="panel-heading">
         <div>
             <table class="table">
                 <tr>
+<<<<<<< HEAD
                     <th><span class="pull-right">Grand Total :</span> </th>
                     <th>{{currency('PHP', $grand_total)}}</th>
                 </tr>
+=======
+                    <th><span class="pull-right">Grand Total: </span></th>
+                    <th>{{currency('PHP', $grand_total)}}</th>
+                </tr>
+                <tr>
+                    <th><span class="pull-right">Overall Grand Total: </span></th>
+                    <th>{{currency('PHP', $g_over_total)}}</th>
+                </tr>
+>>>>>>> 88c016b33bc3359be6bd3344a22baa96f02fd552
             </table>
         </div>
     </div>

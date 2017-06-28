@@ -116,6 +116,13 @@
                 </a>    
             @endforeach
         </div>
+        <div class="holder">
+            <div class="facebook-container" style="margin-top: 15px; margin-bottom: 15px;">
+                <div class="sticky">
+                    <div class="fb-page" data-href="https://www.facebook.com/Intogadgetstore/" data-tabs="timeline" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote style="display: none;" cite="https://www.facebook.com/Intogadgetstore/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/Intogadgetstore/">Intogadgets</a></blockquote></div>
+                </div>
+            </div>
+        </div>
     </form>
 </div>
 
@@ -138,13 +145,20 @@
     <div class="product-sub text-left"></div>
     <div class="product-contentie">
         <div class="row-no-padding clearfix">
+<<<<<<< HEAD
             <div class="col-md-8">
+=======
+            <div class="col-md-12">
+>>>>>>> 88c016b33bc3359be6bd3344a22baa96f02fd552
                 @if(count($_product) > 0)
                     <div class="grid-view">
                         <div class="row-no-padding clearfix">
                             @foreach($_product as $product)
                                 @if(count($product['variant']) > 0)
+<<<<<<< HEAD
                                 <div class="col-md-4 col-sm-3 col-xs-6">
+=======
+>>>>>>> 88c016b33bc3359be6bd3344a22baa96f02fd552
                                     <div class="holder">
                                         <div class="border match-height">
                                             <div class="img">
@@ -162,13 +176,17 @@
                                             </div>
                                         </div>
                                     </div>
+<<<<<<< HEAD
                                 </div>
+=======
+>>>>>>> 88c016b33bc3359be6bd3344a22baa96f02fd552
                                 @endif
                             @endforeach
                         </div>
                     </div>
                     <div class="list-view hide">
                         @foreach($_product as $product)
+<<<<<<< HEAD
                             <div class="holder">
                                 <div class="img">
                                     <img src="{{ get_product_first_image($product) }}">
@@ -185,17 +203,41 @@
                                     <button class="button" onclick="location.href='product/'">View Info</button>
                                 </div>
                             </div>
+=======
+                            @if(count($product['variant']) > 0)
+                                <div class="holder">
+                                    <div class="img">
+                                        <img src="{{ get_product_first_image($product) }}">
+                                    </div>
+                                    <div class="text">
+                                        <div class="name">{{ get_product_first_name($product) }}</div>
+                                        <!--<div class="sprice">from: <span>P34,990</span></div>-->
+                                        <div class="price">{{ get_product_first_price($product) }}</div>
+                                        <div class="description">{!! get_product_first_description($product) !!}</div>
+                                    </div>
+                                    <div class="cart">
+                                        <!-- <div class="info"><span>Delivery:</span>&nbsp;1 - 5 Business Days</div> -->
+                                        <!-- <div class="info"><span>Shipping Fee:</span>&nbsp;123.00</div> -->
+                                        <a class="button text-center" href='/product/view/{{ $product['eprod_id'] }}'">View Info</a>
+                                       {{--  <button class="button" onclick="location.href='product/view/{{ $product['eprod_id'] }}'">View Info</button> --}}
+                                    </div>
+                                </div>
+                            @endif
+>>>>>>> 88c016b33bc3359be6bd3344a22baa96f02fd552
                         @endforeach
                     </div>
                 @else
                     <h2 class="text-center" style="margin-top: 50px;">No Results</h2>
                 @endif
             </div>
+<<<<<<< HEAD
             <div class="col-md-4 facebook-container">
                 <div class="sticky">
                     <div class="fb-page" data-href="https://www.facebook.com/Intogadgetstore/" data-tabs="timeline" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote style="display: none;" cite="https://www.facebook.com/Intogadgetstore/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/Intogadgetstore/">Intogadgets</a></blockquote></div>
                 </div>
             </div> 
+=======
+>>>>>>> 88c016b33bc3359be6bd3344a22baa96f02fd552
         </div>
     </div>
     <div>
@@ -233,6 +275,13 @@
                 </a>    
             @endforeach
         </div>
+        {{-- <div class="holder">
+            <div class="facebook-container" style="margin-top: 15px;">
+                <div class="sticky">
+                    <div class="fb-page" data-href="https://www.facebook.com/Intogadgetstore/" data-tabs="timeline" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote style="display: none;" cite="https://www.facebook.com/Intogadgetstore/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/Intogadgetstore/">Intogadgets</a></blockquote></div>
+                </div>
+            </div>
+        </div> --}}
     </form>
 </div>
 <div id="quick-add-cart" class="modal fade" role="dialog">

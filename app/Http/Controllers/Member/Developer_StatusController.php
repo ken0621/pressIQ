@@ -268,7 +268,7 @@ class Developer_StatusController extends Member
 			$update['auto_balance_position'] = 1;
 			
 			Tbl_mlm_slot::orderBy('slot_id', 'ASC')->update($update);
-			$slots = Tbl_mlm_slot::orderBy('slot_id', 'ASC')->get();
+			$slots = Tbl_mlm_slot::orderBy('slot_created_date', 'ASC')->get();
 			foreach ($slots as $key => $value) {
 				Mlm_compute::entry($value->slot_id);
 			}

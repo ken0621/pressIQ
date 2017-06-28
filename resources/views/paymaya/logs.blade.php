@@ -1,5 +1,9 @@
 <!-- CSS Code: Place this code in the document's head (between the 'head' tags) -->
 <style>
+*
+{
+  font-family: "Arial", sans-serif;
+}
 table.GeneratedTable {
   width: 100%;
   background-color: #ffffff;
@@ -8,6 +12,7 @@ table.GeneratedTable {
   border-color: #ffcc00;
   border-style: solid;
   color: #000000;
+  table-layout: fixed;
 }
 
 table.GeneratedTable td, table.GeneratedTable th {
@@ -24,15 +29,16 @@ table.GeneratedTable thead {
 th, td
 {
     vertical-align: top;
+    text-align: center;
 }
 </style>
 <!-- HTML Code: Place this code in the document's body (between the 'body' tags) where the table should appear -->
 <table class="GeneratedTable">
   <thead>
     <tr>
-      <th>Order ID</th>
-      <th>Date</th>
-      <th></th>
+      <th width="50px">Order ID</th>
+      <th width="150px">Date</th>
+      <th width="50px"></th>
       <th>Response</th>
     </tr>
   </thead>
@@ -42,7 +48,7 @@ th, td
       <td>{{ $dragonpay->order_id }}</td>
       <td>{{ date("F d, Y h:i:s A", strtotime($dragonpay->log_date)) }}</td>
       <td><a href="/payment/paymaya/logs/view/{{ $dragonpay->order_id }}">Check</a></td>
-      <td><pre>{{ is_serialized($dragonpay->response) ? var_dump(unserialize($dragonpay->response)) : $dragonpay->response }}</pre></td>
+      <td><pre style="overflow-x: auto; text-align: left;">{{ is_serialized($dragonpay->response) ? var_dump(unserialize($dragonpay->response)) : $dragonpay->response }}</pre></td>
     </tr>
     @endforeach
   </tbody>

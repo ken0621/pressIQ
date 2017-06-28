@@ -98,23 +98,23 @@ class ShopCheckoutController extends Shop
 
                 if($order)
                 {  
-                    $update['ec_order_id'] = $order_id;
-                    $update['order_status'] = "Processing";
-                    $update['payment_status'] = 1;
-                    $order = Ec_order::update_ec_order($update);
+                    // $update['ec_order_id'] = $order_id;
+                    // $update['order_status'] = "Processing";
+                    // $update['payment_status'] = 1;
+                    // $order = Ec_order::update_ec_order($update);
 
                     return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)));
                 }
             }
             elseif ($from == "register")
             {
-                $this->after_email_payment($order_id);
+                // $this->after_email_payment($order_id);
                 return Redirect::to('/mlm/login?notify=1&success=1');
             }
         }
         else
         {
-             $this->after_email_payment($order_id);
+            //  $this->after_email_payment($order_id);
             return Redirect::to('/mlm/login?notify=2&success=1');
         }
     }
@@ -201,16 +201,6 @@ class ShopCheckoutController extends Shop
         $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
         if($order)
         {
-            Item_code::ec_order_slot($order_id);
-
-            $update['ec_order_id']    = $order_id;
-            $update['order_status']   = "Processing";
-            $update['payment_status'] = 1;
-            $order = Ec_order::update_ec_order($update);
-            $this->after_email_payment($order_id);
-
-            $this->after_email_payment($order_id);
-
             if ($from == "checkout") 
             {
                 return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)));
@@ -223,23 +213,96 @@ class ShopCheckoutController extends Shop
     }
     public function paymaya_failure()
     {
-
-        $order_id = Crypt::decrypt(Request::input("order_id"));
-
-        // $order_id = Crypt::decrypt(Request::input("order"));
-
-        $this->failmaya($order_id);
         return Redirect::to('/mlm/login?notify=3');
     }
     public function paymaya_cancel()
     {
-
-        $order_id = Crypt::decrypt(Request::input("order_id"));
-
-        // $order_  id = Crypt::decrypt(Request::input("order"));
-
-        $this->failmaya($order_id);
         return Redirect::to('/mlm/login?notify=4');
+    }
+    public function paymaya_webhook_success()
+    {
+        $order_id = Crypt::decrypt(Request::input("order_id"));
+        $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
+        if($order)
+        {
+            try 
+            {
+                $update["response"] = serialize(Request::input());
+                DB::table("tbl_paymaya_logs")->where("checkout_id", Request::input('id'))
+                                             ->update($update);
+            } 
+            catch (\Exception $e) 
+            {
+                $update["response"] = $e->getMessage();
+                DB::table("tbl_paymaya_logs")->where("checkout_id", Request::input('id'))
+                                             ->update($update);
+            }   
+            
+            Item_code::ec_order_slot($order_id);
+
+            $update['ec_order_id']    = $order_id;
+            $update['order_status']   = "Processing";
+            $update['payment_status'] = 1;
+            $order = Ec_order::update_ec_order($update);
+            $this->after_email_payment($order_id);
+        }
+    }
+    public function paymaya_webhook_failure()
+    {
+        $order_id = Crypt::decrypt(Request::input("order_id"));
+        $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
+        if($order)
+        {
+            try 
+            {
+                $update["response"] = serialize(Request::input());
+                DB::table("tbl_paymaya_logs")->where("checkout_id", Request::input('id'))
+                                             ->update($update);
+            } 
+            catch (\Exception $e) 
+            {
+                $update["response"] = $e->getMessage();
+                DB::table("tbl_paymaya_logs")->where("checkout_id", Request::input('id'))
+                                             ->update($update);
+            }  
+            
+            $this->failmaya($order_id);
+        }
+    }
+    public function paymaya_webhook_cancel()
+    {
+        $order_id = Crypt::decrypt(Request::input("order_id"));
+        $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
+        if($order)
+        {
+            try 
+            {
+                $update["response"] = serialize(Request::input());
+                DB::table("tbl_paymaya_logs")->where("checkout_id", Request::input('id'))
+                                             ->update($update);
+            } 
+            catch (\Exception $e) 
+            {
+                $update["response"] = $e->getMessage();
+                DB::table("tbl_paymaya_logs")->where("checkout_id", Request::input('id'))
+                                             ->update($update);
+            }  
+            
+            $this->failmaya($order_id);
+        }
+    }
+    public function paymaya_logs()
+    {
+        $dragonpay = DB::table("tbl_paymaya_logs")->orderBy("id", "DESC")->first();
+    
+        if (is_serialized($dragonpay->response)) 
+        {
+            dd(unserialize($dragonpay->response));
+        }
+        else
+        {
+            dd($dragonpay->response);
+        }
     }
     public function failmaya($order_id)
     {

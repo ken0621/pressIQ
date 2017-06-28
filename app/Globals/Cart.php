@@ -36,6 +36,8 @@ use App\Globals\Dragonpay2\Dragon_RequestPayment;
 // PAYMAYA
 use App\Globals\PayMaya\PayMayaSDK;
 use App\Globals\PayMaya\API\Checkout;
+use App\Globals\PayMaya\API\Customization;
+use App\Globals\PayMaya\API\Webhook;
 use App\Globals\PayMaya\Core\CheckoutAPIManager;
 use App\Globals\PayMaya\Checkout\User;
 use App\Globals\PayMaya\Model\Checkout\ItemAmountDetails;
@@ -45,7 +47,7 @@ class Cart
 {
     public static function get_unique_id($shop_id)
     {
-        return "cart:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+        return "cart:".getUserIP()."_".$shop_id;
     }
     public static function get_shop_info()
     {
@@ -1002,9 +1004,79 @@ class Cart
     {
         echo "Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.";
         $api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)->join("tbl_online_pymnt_gateway", "tbl_online_pymnt_gateway.gateway_id", "=", "tbl_online_pymnt_api.api_gateway_id")->where("gateway_code_name", "paymaya")->first();
+        
+        if (get_domain() == "c9users.io") 
+        {
+            PayMayaSDK::getInstance()->initCheckout($api->api_client_id, $api->api_secret_id, "SANDBOX");
+        }
+        else
+        {
+            PayMayaSDK::getInstance()->initCheckout($api->api_client_id, $api->api_secret_id, "PRODUCTION");   
+        }
+        
+        // Customization
+        $shopCustomization = new Customization();
+        $shopCustomization->logoUrl = "https://brown.com.ph/images/Brown_Logo2.png";
+        $shopCustomization->iconUrl = "https://paymaya.com/assets/favicon.ico";
+        $shopCustomization->appleTouchIconUrl = "https://paymaya.com/assets/favicon.ico";
+        $shopCustomization->customTitle = "Brown and Proud - Checkout";
+        $shopCustomization->colorScheme = "#5B3425";
+        $shopCustomization->set();
+        
+        // Put Order
+        $payment_status = 0;
+        $order_status   = "Pending";
+        $customer       = Cart::get_customer();
 
-        PayMayaSDK::getInstance()->initCheckout($api->api_client_id, $api->api_secret_id, "PRODUCTION");
-        // PayMayaSDK::getInstance()->initCheckout($api->api_client_id, $api->api_secret_id, "SANDBOX");
+        $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null, 0);
+        
+        // Set Webhook
+        $webhook = Webhook::retrieve();
+        if (isset($webhook) && $webhook && count($webhook) > 0) 
+        {
+            foreach ($webhook as $value) 
+            {
+                if ($value->name == "CHECKOUT_SUCCESS") 
+                {
+                    $updateWebhook = new Webhook();
+                    $updateWebhook->name = Webhook::CHECKOUT_SUCCESS;
+                    $updateWebhook->id = $value->id;
+                    $updateWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/success?order_id=" . Crypt::encrypt($order_id) . "&from=" . $from);
+                    $updateWebhook->delete();
+                }
+                elseif($value->name == "CHECKOUT_FAILURE")
+                {
+                    $updateWebhook = new Webhook();
+                    $updateWebhook->name = Webhook::CHECKOUT_FAILURE;
+                    $updateWebhook->id = $value->id;
+                    $updateWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/paymaya/failure?order_id=" . Crypt::encrypt($order_id));
+                    $updateWebhook->delete();
+                }
+                elseif($value->name == "CHECKOUT_DROPOUT")
+                {
+                    $updateWebhook = new Webhook();
+                    $updateWebhook->name = Webhook::CHECKOUT_DROPOUT;
+                    $updateWebhook->id = $value->id;
+                    $updateWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/paymaya/cancel?order_id=" . Crypt::encrypt($order_id));
+                    $updateWebhook->delete();
+                }
+            }
+        }
+        
+        $successWebhook = new Webhook();
+        $successWebhook->name = Webhook::CHECKOUT_SUCCESS;
+        $successWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/success?order_id=" . Crypt::encrypt($order_id) . "&from=" . $from);
+        $successWebhook->register();
+        
+        $failureWebhook = new Webhook();
+        $failureWebhook->name = Webhook::CHECKOUT_FAILURE;
+        $failureWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/paymaya/failure?order_id=" . Crypt::encrypt($order_id));
+        $failureWebhook->register();
+        
+        $cancelWebhook = new Webhook();
+        $cancelWebhook->name = Webhook::CHECKOUT_DROPOUT;
+        $cancelWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/paymaya/cancel?order_id=" . Crypt::encrypt($order_id));
+        $cancelWebhook->register();
         
         // Checkout
         $itemCheckout = new Checkout();
@@ -1047,23 +1119,14 @@ class Cart
             $item[$key]->amount = $itemAmount;
             $item[$key]->totalAmount = $itemTotalAmount;
         }
-   
-        $payment_status = 0;
-        $order_status   = "Pending";
-        $customer       = Cart::get_customer();
-
-        $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null, 0);
-        // Cart::clear_all($shop_id);
 
         $totalAmount->value = number_format($total, 2, '.', '');
-
         $itemCheckout->items = $item;
         $itemCheckout->totalAmount = $totalAmount;
-
         $itemCheckout->requestReferenceNumber = (string)$order_id;
-
-        //$itemCheckout->requestReferenceNumber = $shop_id . time();
-
+        
+        // Clear Cart
+        Cart::clear_all($shop_id);
 
         $shop = DB::table('tbl_shop')->where('shop_id', $shop_id)->first();
         $link = '/payment/paymaya/success?notify=0&';
@@ -1076,18 +1139,17 @@ class Cart
         }
 
         $itemCheckout->redirectUrl = array(
-            "success" =>  URL::to("/payment/paymaya/success?order_id=" . Crypt::encrypt($order_id) . "&from=" . $from),
+            "success" => URL::to("/payment/paymaya/success?order_id=" . Crypt::encrypt($order_id) . "&from=" . $from),
             "failure" => URL::to("/payment/paymaya/failure?order_id=" . Crypt::encrypt($order_id)),
             "cancel" => URL::to("/payment/paymaya/cancel?order_id=" . Crypt::encrypt($order_id))
         );
 
         $itemCheckout->execute();
 
-        // echo $itemCheckout->id; // Checkout ID
-        // echo $itemCheckout->url; // Checkout URL
         $logs_insert["checkout_id"] = $itemCheckout->id;
         $logs_insert["log_date"]    = Carbon::now();
         $logs_insert["order_id"]    = $order_id;
+        $logs_insert["response"]    = serialize(Webhook::retrieve());
         DB::table("tbl_paymaya_logs")->insert($logs_insert);
         
         return Redirect::to($itemCheckout->url)->send();

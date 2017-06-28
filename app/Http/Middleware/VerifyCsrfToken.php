@@ -16,6 +16,9 @@ class VerifyCsrfToken extends BaseVerifier
         '/ipay88_response',
         '/checkout',
         '/payment/dragonpay/postback',
-        '/payment/dragonpay/post'   
+        '/payment/dragonpay/post',
+        '/payment/paymaya/webhook/success',
+        '/payment/paymaya/webhook/failure',
+        '/payment/paymaya/webhook/cancel'
     ];
 }

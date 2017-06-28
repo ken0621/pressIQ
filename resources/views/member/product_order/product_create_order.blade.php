@@ -444,13 +444,13 @@
 </style>
 @endsection
 @section('script')
-<script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
+<script type="text/javascript" src="assets/member/js/textExpand.js"></script>
 @if(!isset($inv))
-<script type="text/javascript" src="/assets/member/js/draggable_row.js"></script>
+<script type="text/javascript" src="assets/member/js/draggable_row.js"></script>
 @endif
 <script type="text/javascript">
     var order_id    = "{{$ec_order_id or null}}";
     var file_path   = "{{$inv->payment_upload or ''}}";
 </script>
-<script type="text/javascript" src="/assets/member/js/product_create_order.js"></script>
+<script type="text/javascript" src="assets/member/js/product_create_order.js"></script>
 @endsection

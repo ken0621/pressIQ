@@ -15,7 +15,13 @@ Route::any("/ipay88_response","Shop\ShopCheckoutController@ipay88_response"); //
 Route::any('/payment/paymaya/success', 'Shop\ShopCheckoutController@paymaya_success');
 Route::any('/payment/paymaya/failure', 'Shop\ShopCheckoutController@paymaya_failure');
 Route::any('/payment/paymaya/cancel', 'Shop\ShopCheckoutController@paymaya_cancel');
+/* Webhook */
+Route::any('/payment/paymaya/webhook/success', 'Shop\ShopCheckoutController@paymaya_webhook_success');
+Route::any('/payment/paymaya/webhook/failure', 'Shop\ShopCheckoutController@paymaya_webhook_failure');
+Route::any('/payment/paymaya/webhook/cancel', 'Shop\ShopCheckoutController@paymaya_webhook_cancel');
+/* End Webhook */
 Route::any('/payment/paymaya/maintenance', 'MemberController@paymaya_maintenance');
 Route::get('/payment/paymaya/maintenance/edit/{id}', 'MemberController@paymaya_maintenance_edit');
 Route::post('/payment/paymaya/maintenance/edit/{id}', 'MemberController@paymaya_maintenance_edit_post');
+Route::any('/payment/paymaya/logs', 'Shop\ShopCheckoutController@paymaya_logs');
 /* End Paymaya */

@@ -35,9 +35,9 @@
                 <br>
                 <div class="img">
                   @if($value->eprod_detail_image != null)
-                  <img style="object-fit: contain; height: 250px; width: 100%;" class="" src="{{$value->eprod_detail_image}}">
+                  <img style="object-fit: contain; height: 250px; width: 100%;" class="" src="{{ ltrim($value->eprod_detail_image, '/') }}">
                   @else 
-                  <img style="object-fit: contain; height: 250px; width: 100%; " class="" src="/assets/mlm/img/placeholder.jpg">
+                  <img style="object-fit: contain; height: 250px; width: 100%; " class="" src="assets/mlm/img/placeholder.jpg">
                   @endif
                 </div>
                 <div class="text-holder">
@@ -78,9 +78,9 @@
                           <div class="img clearfix">
                             <div class="col-md-4 hide">
                               @if($value->eprod_detail_image != null)
-                              <img style="object-fit: contain; height: 250px; width: 100%;" class="" src="{{$value->eprod_detail_image}}">
+                              <img style="object-fit: contain; height: 250px; width: 100%;" class="" src="{{ ltrim($value->eprod_detail_image, '/') }}">
                               @else 
-                              <img style="object-fit: contain; height: 250px; width: 100%; " class="" src="/assets/mlm/img/placeholder.jpg">
+                              <img style="object-fit: contain; height: 250px; width: 100%; " class="" src="assets/mlm/img/placeholder.jpg">
                               @endif
                             </div>
                             <div class="col-md-12">

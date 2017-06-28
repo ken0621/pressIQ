@@ -8,6 +8,7 @@ class Webhook
 {
 	const CHECKOUT_SUCCESS = "CHECKOUT_SUCCESS";
 	const CHECKOUT_FAILURE = "CHECKOUT_FAILURE";
+	const CHECKOUT_DROPOUT = "CHECKOUT_DROPOUT";
 
 	public $id;
 	public $name;
@@ -41,6 +42,10 @@ class Webhook
 		$webhookInformation = json_decode(json_encode($this), true);
 		$response = $this->apiManager->registerWebhook($webhookInformation);
 		$responseArr = json_decode($response, true);
+		if (!isset($responseArr["id"]))
+		{
+			dd($response);
+		}
 
 		$this->id = $responseArr["id"];
 
@@ -52,6 +57,10 @@ class Webhook
 		$webhookInformation = json_decode(json_encode($this), true);
 		$response = $this->apiManager->updateWebhook($this->id, $webhookInformation);
 		$responseArr = json_decode($response, true);
+		if (!isset($responseArr["id"]))
+		{
+			dd($response);
+		}
 
 		$this->id = $responseArr["id"];
 		$this->name = $responseArr["name"];

@@ -198,13 +198,6 @@
 			"default":"COMPANY PROFILE",
 			"size":"4"
 		},
-		"about_company_profile_context_logo" :
-		{
-			"label":"Company Profile Context Logo",
-			"type":"image",
-			"default":"/themes/fcf/img/company-logo.png",
-			"size":"4"
-		},
 		"about_company_profile_context" :
 		{
 			"label":"Company Profile Context",

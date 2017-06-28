@@ -38,7 +38,6 @@
 					<div class="content-title">
 						{{ get_content($shop_theme_info, "about", "about_company_profile_title") }}
 					</div>
-					<div class="content-logo"><img src="/themes/{{ $shop_theme }}/img/company-logo.png"></div>
 					<p>
 						{!! get_content($shop_theme_info, "about", "about_company_profile_context") !!}
 					</p>

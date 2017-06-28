@@ -65,7 +65,7 @@ class PayrollTimeSheet2Controller extends Member
 			$_timesheet[$from]->daily_info = $this->timesheet_process_daily_info($employee_id, $from, $timesheet_db);
 			$from = Carbon::parse($from)->addDay()->format("Y-m-d");
 		}
-
+		//dd($_timesheet);
 		return $_timesheet;
 	}
 
@@ -139,7 +139,18 @@ class PayrollTimeSheet2Controller extends Member
 			$return->shift_approved = true;
 		}
 		
-		$return->compute = Payroll2::compute_day_pay($mode, $_time, $_shift);
+		$late_grace_time = "00:00:00";
+		$grace_time_rule_late = "per_shift";
+		$overtime_grace_time = "00:00:00";
+		$grace_time_rule_overtime = "per_shift";
+		$day_type = "regular";
+		$is_holiday = "not_holiday";
+		$leave = "00:00:00";
+		$leave_fill_late = 0;
+		$leave_fill_undertime = 0;
+		$return->time_output = Payroll2::compute_time_mode_regular($return->clean_shift, $_shift_raw, $late_grace_time, $grace_time_rule_late, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday , $leave, $leave_fill_late, $leave_fill_undertime, false);
+		$return->compute = Payroll2::compute_income_day_pay($return->time_output, 500, $employee_contract->payroll_group_id);
+		// dd($return);
 		return $return;
 	}
 	public function timesheet_process_in_out_default()

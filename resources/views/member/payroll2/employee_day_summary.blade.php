@@ -8,6 +8,7 @@
         <div class="clearfix">
             <div class="col-md-12">
                 <div class="table-responsive">
+                    @if($timesheet_info->clean_shift)
                     <table class="table table-bordered table-condensed timesheet">
                         <thead style="text-transform: uppercase">
                             <tr>
@@ -19,17 +20,20 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($timesheet_info->clean_shift as $record)
-                            <tr>
-                                <td><input value="{{ $record->time_in }}" type="text" placeholder="NO TIME" class="text-table text-center time-entry time-in is-timeEntry" name=""></td>
-                                <td><input value="{{ $record->time_out }}" type="text" placeholder="NO TIME" class="text-table text-center time-entry time-in is-timeEntry" name=""></td>
-                                <td><input value="" type="text" class="text-table time-entry is-timeEntry" name=""></td>
-                                <td class="text-center"><input {{ $record->auto_approved == 1 ? 'checked disabled hidden' : '' }} type="checkbox" class="text-table time-entry is-timeEntry" name=""></td>
-                                <td class="text-center"><input {{ $record->auto_approved == 1 ? 'hidden' : 'checked' }} type="checkbox" class="text-table time-entry is-timeEntry" name=""></td>
-                            </tr>
-                            @endforeach
+                            
+                                @foreach($timesheet_info->clean_shift as $record)
+                                <tr>
+                                    <td><input value="{{ $record->time_in }}" type="text" placeholder="NO TIME" class="text-table text-center time-entry time-in is-timeEntry" name=""></td>
+                                    <td><input value="{{ $record->time_out }}" type="text" placeholder="NO TIME" class="text-table text-center time-entry time-in is-timeEntry" name=""></td>
+                                    <td><input value="" type="text" class="text-table time-entry is-timeEntry" name=""></td>
+                                    <td class="text-center"><input {{ $record->auto_approved == 1 ? 'checked disabled hidden' : '' }} type="checkbox" class="text-table time-entry is-timeEntry" name=""></td>
+                                    <td class="text-center"><input {{ $record->auto_approved == 1 ? 'hidden' : 'checked' }} type="checkbox" class="text-table time-entry is-timeEntry" name=""></td>
+                                </tr>
+                                @endforeach
+                            
                         </tbody>
                     </table>
+                    @endif
                 </div>
             </div>
         </div>
@@ -37,9 +41,13 @@
             <div class="col-md-6">
                 <div style="padding: 10px; color: #bbb">
                     <div class="text-bold">SHIFT FOR THE DAY</div>
-                    @foreach($timesheet_info->_shift as $record)
-                    <div>{{ date("h:i A", strtotime($record->shift_in)) }} to {{ date("h:i A", strtotime($record->shift_out)) }}</div>
-                    @endforeach
+                    @if($timesheet_info->_shift)
+                        @foreach($timesheet_info->_shift as $record)
+                        <div>{{ date("h:i A", strtotime($record->shift_in)) }} to {{ date("h:i A", strtotime($record->shift_out)) }}</div>
+                        @endforeach
+                    @else
+                        NO SHIFT FOR THE DAY
+                    @endif
                 </div>
             </div>
             <div class="col-md-6 text-right">
@@ -48,32 +56,35 @@
                     <tr>
                         <td>Daily Rate</td>
                         <td width="100px"></td>
-                        <td>PHP 755.00</td>
+                        <td>PHP {{ number_format($timesheet_info->compute->daily_rate, 2) }}</td>
                     </tr>
-                    <tr>
-                        <td>Overtime</td>
-                        <td width="100px" class="text-center" style="color: #bbb" width="100px">01:32</td>
-                        <td width="100px">PHP 123.00</td>
-                    </tr>
-                    <tr>
-                        <td class="text-bold" >Subtotal</td>
-                        <td class="text-center" style="color: #bbb" width="100px"></td>
-                        <td class="text-bold" width="100px">PHP 878.00</td>
-                    </tr>
-                    <tr>
-                        <td>Less: Late Deduction</td>
-                        <td class="text-center" style="color: #bbb" width="100px">00:30</td>
-                        <td width="100px">PHP 52.00</td>
-                    </tr>
-                    <tr>
-                        <td>Less: Undertime</td>
-                        <td class="text-center" style="color: #bbb" width="100px">00:15</td>
-                        <td width="100px">PHP 21.50</td>
-                    </tr>
+                    @if(isset($timesheet_info->compute->_breakdown_addition))
+                        @foreach($timesheet_info->compute->_breakdown_addition as $key => $breakdown)
+                        <tr>
+                            <td>{{ ucfirst($key) }}</td>
+                            <td width="100px" class="text-center" style="color: #bbb" width="100px">{{ $breakdown["time"] }}</td>
+                            <td width="100px">PHP {{ number_format($breakdown["rate"], 2) }}</td>
+                        </tr>
+                        @endforeach
+                        <tr>
+                            <td class="text-bold" >Subtotal</td>
+                            <td class="text-center" style="color: #bbb" width="100px"></td>
+                            <td class="text-bold" width="100px">PHP {{ number_format($timesheet_info->compute->subtotal_after_addition, 2) }}</td>
+                        </tr>
+                    @endif
+                    @if(isset($timesheet_info->compute->_breakdown_deduction))
+                        @foreach($timesheet_info->compute->_breakdown_deduction as $key => $breakdown)
+                        <tr>
+                            <td>Less: {{ ucfirst($key) }}</td>
+                            <td width="100px" class="text-center" style="color: #bbb" width="100px">{{ $breakdown["time"] }}</td>
+                            <td width="100px">PHP {{ number_format($breakdown["rate"], 2) }}</td>
+                        </tr>
+                        @endforeach
+                    @endif
                     <tr style="color: #1682ba; font-size: 18px;">
                         <td class="text-bold">Total</td>
                         <td class="text-center" style="color: #bbb" width="100px"></td>
-                        <td class="text-bold" width="100px">PHP 804.50</td>
+                        <td class="text-bold" width="100px">PHP {{ number_format($timesheet_info->compute->total_day_income, 2) }}</td>
                     </tr>
                     </tbody>
                 </table>

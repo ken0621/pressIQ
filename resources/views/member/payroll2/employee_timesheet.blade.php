@@ -40,9 +40,9 @@
                                     @endforeach
                                 </td>
                                 @if($timesheet->daily_info->shift_approved == true)
-                                    <td class="text-center"><a href="javascript:" class="daily-salary" amount="{{ $timesheet->daily_info->daily_salary }}">PHP {{ number_format($timesheet->daily_info->daily_salary, 2) }}</a></td>
+                                    <td class="text-center"><a onclick="action_load_link_to_modal('/member/payroll/company_timesheet_day_summary/{{ $timesheet->payroll_time_sheet_id }}', 'lg')" href="javascript:" class="daily-salary" amount="{{ $timesheet->daily_info->daily_salary }}">PHP {{ number_format($timesheet->daily_info->compute->total_day_income, 2) }}</a></td>
                                 @else
-                                    <td class="text-center"><a onclick="action_load_link_to_modal('/member/payroll/company_timesheet_day_summary/{{ $timesheet->payroll_time_sheet_id }}', 'lg')" style="color: red;" href="javascript:" class="daily-salary" amount="{{ $timesheet->daily_info->daily_salary }}">PHP {{ number_format($timesheet->daily_info->daily_salary, 2) }}</a></td>
+                                    <td class="text-center"><a onclick="action_load_link_to_modal('/member/payroll/company_timesheet_day_summary/{{ $timesheet->payroll_time_sheet_id }}', 'lg')" style="color: red;" href="javascript:" class="daily-salary" amount="{{ $timesheet->daily_info->daily_salary }}">PHP {{ number_format($timesheet->daily_info->compute->total_day_income, 2) }}</a></td>
                                 @endif
                                 
                             </tr>

@@ -296,7 +296,7 @@ class ShopCheckoutController extends Shop
         $data["_dragonpay"] = DB::table("tbl_paymaya_logs")->orderBy("id", "DESC")->get();
         foreach ($data["_dragonpay"] as $key => $value) 
         {
-            $data["_dragonpay"][$key]->extracted = $value->response ? unserialize($value->response) : $value->response;
+            $data["_dragonpay"][$key]->extracted = unserialize($value->response);
         }
         
         return view("paymaya.logs", $data);

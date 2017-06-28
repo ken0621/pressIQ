@@ -198,13 +198,6 @@
 			"default":"COMPANY PROFILE",
 			"size":"4"
 		},
-		"about_company_profile_context_logo" :
-		{
-			"label":"Company Profile Context Logo",
-			"type":"image",
-			"default":"/themes/fcf/img/company-logo.png",
-			"size":"4"
-		},
 		"about_company_profile_context" :
 		{
 			"label":"Company Profile Context",
@@ -216,29 +209,8 @@
 		{
 			"label":"Company Profile Context Image 1",
 			"type":"image",
-			"default":"/themes/fcf/img/full1.jpg",
-			"size":"3"
-		},
-		"about_company_profile_context_img2" :
-		{
-			"label":"Company Profile Context Image 2",
-			"type":"image",
-			"default":"/themes/fcf/img/full1.jpg",
-			"size":"3"
-		},
-		"about_company_profile_context_img3" :
-		{
-			"label":"Company Profile Context Image 3",
-			"type":"image",
-			"default":"/themes/fcf/img/full23.jpg",
-			"size":"3"
-		},
-		"about_company_profile_context_img4" :
-		{
-			"label":"Company Profile Context Image 4",
-			"type":"image",
-			"default":"/themes/fcf/img/full12.jpg",
-			"size":"3"
+			"default":"/themes/fcf/img/full01.jpg",
+			"size":"9"
 		},
 		"about_company_responsibility_title" :
 		{

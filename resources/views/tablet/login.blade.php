@@ -87,7 +87,21 @@ $(".sync-data").bind("click", function()
 		type : "get",
 		success : function(data)
 		{
-    		createTableName($data);
+			// console.log(data);
+			db.transaction(function (tx){
+
+			$(data).each(function(a, b)
+			{
+				query = data[a];
+				console.log(query);
+				tx.executeSql(query,[],	function(txt, result)
+				{
+					console.log(result);	
+				},
+				onError);				
+			});
+    			// createTableName($data);
+			});
 		}
 	});
 });

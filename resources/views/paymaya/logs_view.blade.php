@@ -32,7 +32,6 @@ th, td
   <thead>
     <tr>
       <th>Order ID</th>
-      <th></th>
       <th>Response</th>
     </tr>
   </thead>
@@ -40,7 +39,6 @@ th, td
     @foreach($_dragonpay as $dragonpay)
     <tr>
       <td>{{ $dragonpay->order_id }}</td>
-      <td><a href="/payment/paymaya/logs/view/{{ $dragonpay->order_id }}">Check</a></td>
       <td><pre>{{ is_serialized($dragonpay->response) ? var_dump(unserialize($dragonpay->response)) : $dragonpay->response }}</pre></td>
     </tr>
     @endforeach

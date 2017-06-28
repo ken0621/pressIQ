@@ -24,4 +24,5 @@ Route::any('/payment/paymaya/maintenance', 'MemberController@paymaya_maintenance
 Route::get('/payment/paymaya/maintenance/edit/{id}', 'MemberController@paymaya_maintenance_edit');
 Route::post('/payment/paymaya/maintenance/edit/{id}', 'MemberController@paymaya_maintenance_edit_post');
 Route::any('/payment/paymaya/logs', 'Shop\ShopCheckoutController@paymaya_logs');
+Route::any('/payment/paymaya/logs/view/{id}', 'Shop\ShopCheckoutController@paymaya_logs_view');
 /* End Paymaya */

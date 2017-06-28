@@ -271,6 +271,16 @@ class ShopCheckoutController extends Shop
         
         return view("paymaya.logs", $data);
     }
+    public function paymaya_logs_view($id)
+    {
+        $data["_dragonpay"] = DB::table("tbl_paymaya_logs_other")->where("order_id", $id)->get();
+        foreach ($data["_dragonpay"] as $key => $value) 
+        {
+            $data["_dragonpay"][$key]->extracted = is_serialized($value->response) ? unserialize($value->response) : $value->response;
+        }
+        
+        return view("paymaya.logs_view", $data);
+    }
     public function failmaya($order_id)
     {
         $insert["order_id"] = $order_id;

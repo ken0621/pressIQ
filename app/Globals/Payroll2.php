@@ -12,16 +12,16 @@ class Payroll2
      *
      * @param
      *    $_time (array)
-     *		- time_in
-     *		- time_out
+     *		- time_in (time 00:00:00)
+     *		- time_out (time 00:00:00)
      *
      *	  $_shift (array)
-     *		- shift_in
-     *		- shift_out
+     *		- shift_in (time 00:00:00)
+     *		- shift_out (time 00:00:00)
      *
      * @return (array)
-     *    	- time_in
-     *		- time_out
+     *    	- time_in (time 00:00:00)
+     *		- time_out (time 00:00:00)
      *		- auto_approve
      *		- reason
      *		- status time sched
@@ -33,8 +33,6 @@ class Payroll2
 
 	public static function clean_shift($_time, $_shift, $testing = false)
 	{
-
-
 		$output_ctr = 0;
 		$_output = null;
 		if ($_time == null) 
@@ -452,6 +450,15 @@ class Payroll2
 		
 		return $return;
 	}
+
+
+
+	public static function compute_income_daily()
+	{
+
+	}
+
+
 	public static function compute_time_mode_flexitime($_time, $target_hours = 0, $day_type = "regular", $is_holiday = 0, $leave = "00:00:00")
 	{
 
@@ -515,7 +522,7 @@ class Payroll2
 		switch ($mode)
 		{
 			case 'hourly': Self::compute_day_pay_hourly($_time, $_shift); break;
-			default: Self::compute_day_pay_daily($_time, $_shift); break;
+			default: Self::compute_income_day_pay($_time, $_shift); break;
 		}
 	}
 
@@ -523,7 +530,73 @@ class Payroll2
 	{
 	}
 
-	public static function compute_day_pay_daily($_time, $_shift)
+    /*
+     * TITLE: COMPUTE INCOME FOR EMPLOYEE DAILY
+     * 
+     * Returns breakdown of hours depending on the shift schedule.
+     *
+     * @param
+     *	  $daily_rate (double)
+     *    $_overtime_rates (array)
+     *		- regular_plus_overtime (double)
+     *		- regular_plus_night_shift (double)
+	 *		- regular_day (double)
+	 *		- regular_day_plus_over_time (double)
+	 * 		- regular_day_plus_night_diff (double)
+	 *		- regular_day_plus_rest_day (double)
+	 * 		- regular_day_plus_rest_day_plus_over_time (double)
+	 * 		- regular_day_plus_rest_day_plus_night_diff (double)
+	 *		- legal_holiday (double)
+	 * 		- legal_holiday_plus_over_time (double)
+	 *		- legal_holiday_plus_night_diff (double)
+	 * 		- legal_holiday_plus_rest_day (double)
+	 * 		- legal_holiday_plus_rest_day_plus_over_time (double)
+	 * 		- legal_holiday_plus_rest_day_plus_night_diff (double)
+	 * 		- special_holiday (double)
+	 * 		- special_holiday_plus_over_time (double)
+	 *		- special_holiday_plus_night_diff (double)
+	 *		- special_holiday_plus_rest_day (double)
+	 * 		- special_holiday_plus_rest_day_plus_over_time (double)
+	 * 		- special_holiday_plus_rest_day_plus_night_diff (double)
+     *    $time_spent (time 00:00:00)
+     *    $is_absent (time 00:00:00)
+     *    $late (time 00:00:00)
+     *    $undertime (time 00:00:00)
+     *    $overtime (time 00:00:00)
+     *    $target_hours (time 00:00:00)
+     *    $excess_leave_hours (time 00:00:00)
+     *    $regular_hours (time 00:00:00)
+     *    $rest_day_hours (time 00:00:00)
+     *    $regular_holiday_hours (time 00:00:00)
+     *    $special_holiday_hours (time 00:00:00)
+     *    $leave_hours (time 00:00:00)
+     *    $total_hours (time 00:00:00)
+     *    $night_differential (time 00:00:00)
+     *    $is_half_day (time 00:00:00)
+     *    
+     * @return (array)
+     *    $daily_income_breakdown (array)
+     *		- daily_rate (array)
+     *			- hours (time 00:00:00)
+     *			- income (double)
+     *			- formula (string "plus" or "minus")
+     *		- overtime (array)
+     *			- hours (time 00:00:00)
+     *			- income (double)
+     *			- formula (string "plus" or "minus")
+     *      - late (array)
+     *			- hours (time 00:00:00)
+     *			- income (double)
+     *			- formula (string "plus" or "minus")
+     *    $daily_income (double)
+     *
+     * @author (Jimar Zape)
+     *
+     */
+	public static function compute_income_day_pay($_overtime, $time_spent)
+	{
+	}
+	public static function compute_income_month_pay()
 	{
 	}
 

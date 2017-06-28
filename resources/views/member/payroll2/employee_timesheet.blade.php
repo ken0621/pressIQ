@@ -8,7 +8,7 @@
         <div class="clearfix">
             <div class="col-md-12">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-condensed timesheet">
+                    <table class="table table-bordered table-condensed timesheet table-timesheet">
                         <thead style="text-transform: uppercase">
                             <tr>
                                 <th class="text-center" colspan="2">Day</th>
@@ -20,22 +20,22 @@
                         </thead>
                         <tbody>
                             @foreach($_timesheet as $timesheet)
-                            <tr>
+                            <tr class="tr-parent">
                                 <td class="text-center" width="50px">{{ $timesheet->day_number }}</td>
                                 <td class="text-center" width="50px">{{ $timesheet->day_word }}</td>
-                                <td>
+                                <td class="time-in-td">
                                     @foreach($timesheet->record as $record)
-                                    <input value="{{ $record->time_sheet_in }}" type="text" placeholder="NO TIME" class="text-table text-center time-entry time-in is-timeEntry" name="">
+                                    <input mintime="12:00 AM" maxtime="11:59 PM" value="{{ $record->time_sheet_in }}" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-in is-timeEntry" name="">
                                     @endforeach
                                 </td>
-                                <td>
+                                <td class="time-out-td">
                                     @foreach($timesheet->record as $record)
-                                    <input value="{{ $record->time_sheet_out }}" type="text" placeholder="NO TIME" class="text-table text-center time-entry time-out is-timeEntry" name="">
+                                    <input mintime="12:00 AM" maxtime="11:59 PM" value="{{ $record->time_sheet_out }}" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-out is-timeEntry" name="">
                                     @endforeach
                                 </td>
-                                <td>
+                                <td class="time-comment-td">
                                     @foreach($timesheet->record as $record)
-                                    <input value="{{ $record->time_sheet_activity }}" type="text" class="text-table time-entry is-timeEntry" name="">
+                                    <input value="{{ $record->time_sheet_activity }}" type="text" class="new-time-event text-table time-entry is-timeEntry" name="">
                                     @endforeach
                                 </td>
                                 @if($timesheet->daily_info->shift_approved == true)

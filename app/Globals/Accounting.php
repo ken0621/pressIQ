@@ -9,6 +9,7 @@ use App\Models\Tbl_user;
 use App\Models\Tbl_item;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_vendor;
+use App\Globals\Tablet_global;
 use App\Models\Tbl_warehouse;
 use Log;
 use Request;
@@ -26,7 +27,14 @@ class Accounting
 {
 	public static function getShopId()
 	{
-		return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+		$shop_id = Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+
+		if(Tablet_global::getShopId() == $shop_id || $shop_id == null)
+		{
+			$shop_id = Tablet_global::getShopId();
+		}
+
+		return $shop_id;
 	}
 
 	/**
@@ -35,11 +43,16 @@ class Accounting
 	 * @param string  	$filter 	(all, active, inactive)
 	 * @param integer  	$parent_id  Id of the Chart of Accoutn where will it start
 	 * @param array  	$type      	Filter of type of Chart of Account (eg: Accounts Payable)
-	 * @param boolean  	$balance    If it will show total balance of each account (true, false) (always true)
+	 * @param $search 	$string 	If there is specific account name / number
+	 * @param boolean  	$balance    (always true)
 	 */
-	public static function getAllAccount($filter = 'all', $parent_id = null, $type = null, $search = null, $balance = false)
+	public static function getAllAccount($filter = 'all', $parent_id = null, $type = null, $search = null, $balance = false, $for_tablet = false)
 	{
 		$shop = Accounting::getShopId();
+		if($for_tablet == true)
+        {
+            $shop = Tablet_global::getShopId();
+        }
 
 		if($parent_id)
 		{
@@ -105,7 +118,6 @@ class Accounting
 	}
 
 	/**
-	 * Getting all the list of accounts including sub-accounts
 	 *
 	 * @param string  	$account_id 	account id of specific account
 	 */
@@ -118,7 +130,7 @@ class Accounting
 		return json_encode($result);
 	}
 
-	public static function getItemAccount($item_id, $balance = false)
+	public static function getItemAccount($item_id)
 	{
 		$asset 		= Tbl_item::where("item_id", $item_id)->accountAsset()
 								->first(['account_id','account_name','chart_type_name','account_description'])->toArray();
@@ -136,29 +148,35 @@ class Accounting
 	/**
 	 * Create a journal entry for the transaction 
 	 *
-	 * @param array  	$entry 			$entry["reference_module"] , $entry["reference_id"] , $entry["name_id"], $entry["total"] , 
+	 * @param array  	$entry 			$entry["reference_module"] , $entry["reference_id"] , $entry["name_id"], $entry["name_reference"] $entry["total"] , 
 	 *									$entry["vatable"] , $entry["discount"] , $entry["ewt"], $entry["account_id"]
-	 * @param array  	$entry_data     $entry_data[0]['item_id'] or $entry[0]['account_id'], $entry_data[0]['vatable']
+	 * @param array  	$entry_data     $entry_data[0]['item_id'] or $entry_data[0]['account_id'], $entry_data[0]['vatable']
 	 *									$entry_data[0]['discount'] , $entry_data[0]['entry_amount'] , $entry_data[0]['entry_desription']
 	 * @param boolean  	$remarks   		Description of the journal entry
 	 */
-	public static function postJournalEntry($entry, $entry_data, $remarks = '')
+	public static function postJournalEntry($entry, $entry_data, $remarks = '', $for_tablet = false)
 	{
+		$shop_id = Accounting::getShopId();
+        if($for_tablet == true)
+        {
+            $shop_id = Tablet_global::getShopId();
+        }
+
 		/* GETTING THE DEFAULT ACCOUNTS RECEIVABLE AND ACCOUNTS PAYABLE */
-		$account_receivable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("account_code","accounting-receivable")->pluck("account_id");
-		$account_payable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("account_code","accounting-payable")->pluck("account_id");
+		$account_receivable	= Tbl_chart_of_account::accountInfo($shop_id)->where("account_code","accounting-receivable")->pluck("account_id");
+		$account_payable	= Tbl_chart_of_account::accountInfo($shop_id)->where("account_code","accounting-payable")->pluck("account_id");
 		$account_cash		= Accounting::getCashInBank();
 
 		/* FOR OLD DATABASE - CHECKING IF THERE IS ALREADY AN ACCOUNT CODE*/
 		if(!$account_receivable)
 		{
-			Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_name", "Accounts Receivable")->update(['account_code'=>"accounting-receivable"]);
-			$account_receivable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("account_code","accounting-receivable")->pluck("account_id");
+			Tbl_chart_of_account::where("account_shop_id", $shop_id)->where("account_name", "Accounts Receivable")->update(['account_code'=>"accounting-receivable"]);
+			$account_receivable	= Tbl_chart_of_account::accountInfo($shop_id)->where("account_code","accounting-receivable")->pluck("account_id");
 		}
 		if(!$account_payable)
 		{
-			Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_name", "Accounts Payable")->update(['account_code'=>"accounting-payable"]);
-			$account_payable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("account_code","accounting-payable")->pluck("account_id");
+			Tbl_chart_of_account::where("account_shop_id", $shop_id)->where("account_name", "Accounts Payable")->update(['account_code'=>"accounting-payable"]);
+			$account_payable	= Tbl_chart_of_account::accountInfo($shop_id)->where("account_code","accounting-payable")->pluck("account_id");
 		}
 		/* END */
 
@@ -169,7 +187,7 @@ class Accounting
 		}
 
 		/* INSERT JOURNAL ENTRY */
-		$journal_entry['je_shop_id'] 			= Accounting::getShopId();
+		$journal_entry['je_shop_id'] 			= $shop_id;
 		$journal_entry['je_reference_module'] 	= $entry["reference_module"];
 		$journal_entry['je_reference_id'] 		= $entry["reference_id"];
 		$journal_entry['je_entry_date'] 		= carbon::now();
@@ -193,7 +211,8 @@ class Accounting
 		}
 
 		$line_data["item_id"]				= '';
-		$line_data["jline_name_reference"] 	= Accounting::checkTransaction($entry["reference_module"])['name'];
+		if(isset($entry["name_reference"]))	$line_data["jline_name_reference"] = $entry["name_reference"];
+		else   $line_data["jline_name_reference"] 	= Accounting::checkTransaction($entry["reference_module"])['name'];
 		$line_data["jline_name_id"]			= $entry["name_id"];
 
 		/* RECIVABLE OR PAYABLE OR CASH */
@@ -466,7 +485,7 @@ class Accounting
 		$journal_entry['je_entry_date'] 		= $entry['entry_date'];
 		$journal_entry['created_at'] 			= Carbon::now();
 		$journal_entry['je_remarks']			= $remarks;
-
+		
 		/* CHECK IF JOURNAL EXIST - IF THERE IS A JOURNAL ID */
 		if(!$entry['je_id'])
 		{
@@ -479,7 +498,7 @@ class Accounting
 			Tbl_journal_entry::where("je_id", $entry['je_id'])->update($journal_entry);
 			$line_data["je_id"] = $entry['je_id'];
 		}
-
+		
 		foreach($entry_data as $line)
 		{
 			$line_data["jline_name_id"]			= $line["name_id"];
@@ -494,7 +513,7 @@ class Accounting
 
 		return $line_data["je_id"];
 	}
-
+	
 	public static function insertJournalLine($line)
 	{
 		$journal_line['jline_je_id']			= $line["je_id"];

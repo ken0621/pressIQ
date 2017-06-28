@@ -19,6 +19,7 @@ use App\Models\Tbl_ec_order_item;
 use App\Models\Tbl_position;
 use App\Models\Tbl_coupon_code;
 use App\Models\Tbl_ec_variant;
+use App\Models\Tbl_settings;
 use App\Models\Tbl_item;
 use App\Models\Tbl_email_template;
 use Log;
@@ -29,7 +30,7 @@ use Redirect;
 use Crypt;
 use Carbon\Carbon;
 use App\Models\Tbl_merchant_school;
-
+use App\Models\Tbl_mlm_slot;
 class Ec_order
 {
     public static function getShopId()
@@ -328,37 +329,77 @@ class Ec_order
         $ec_order['created_date']                   = Carbon::now();
         $ec_order['archived']                       = 0;
 
+        $settings = Ec_order::check_settings($ec_order['shop_id']);
 
-        if($ec_order["order_status"] == "Processing" || $ec_order["order_status"] == "Completed" || $ec_order["order_status"] == "On-hold")
+
+        if($settings == null)
         {
-            $warehouse_id = Ecom_Product::getWarehouseId();
-            $ctr = 0;
-            
-            foreach($ec_order_item as $ordered)
-            {  
-                $get_prod_id                                   = Tbl_ec_variant::where("evariant_id",$ordered["item_id"])->first();
-                $check_type                                    = Tbl_item::where("item_id",$get_prod_id->evariant_item_id)->first();
-                if($check_type->item_type_id == 1)
-                {
-                    $warehouse_consume_product[$ctr]["product_id"] = $get_prod_id->evariant_item_id;             
-                    $warehouse_consume_product[$ctr]["quantity"]   = $ordered["quantity"];
-                    $ctr++;             
-                }
-            }
-
-            if($ctr != 0)
+            if($ec_order["order_status"] == "Processing" || $ec_order["order_status"] == "Completed" || $ec_order["order_status"] == "On-hold")
             {
-                $warehouse_consume_remarks  = "";                                                            
-                $warehouse_consumer_id      = $ec_order["customer_id"];                          
-                $warehouse_consume_reason   = "";                              
-                $return_type                = "array";              
-                $warehouse_response         = Warehouse::inventory_consume($warehouse_id, $warehouse_consume_remarks, $warehouse_consume_product, $warehouse_consumer_id, $warehouse_consume_reason, $return_type);
-
-                if($warehouse_response["status"] == "error")
-                {
-                    return $warehouse_response;
+                $warehouse_id = Ecom_Product::getWarehouseId();
+                $ctr = 0;
+                
+                foreach($ec_order_item as $ordered)
+                {  
+                    $get_prod_id                                   = Tbl_ec_variant::where("evariant_id",$ordered["item_id"])->first();
+                    $check_type                                    = Tbl_item::where("item_id",$get_prod_id->evariant_item_id)->first();
+                    if($check_type->item_type_id == 1)
+                    {
+                        $warehouse_consume_product[$ctr]["product_id"] = $get_prod_id->evariant_item_id;             
+                        $warehouse_consume_product[$ctr]["quantity"]   = $ordered["quantity"];
+                        $ctr++;             
+                    }
                 }
-            }
+
+                if($ctr != 0)
+                {
+                    $warehouse_consume_remarks  = "";                                                            
+                    $warehouse_consumer_id      = $ec_order["customer_id"];                          
+                    $warehouse_consume_reason   = "";                              
+                    $return_type                = "array";              
+                    $warehouse_response         = Warehouse::inventory_consume($warehouse_id, $warehouse_consume_remarks, $warehouse_consume_product, $warehouse_consumer_id, $warehouse_consume_reason, $return_type);
+
+                    if($warehouse_response["status"] == "error")
+                    {
+                        return $warehouse_response;
+                    }
+                }
+            }            
+        }
+        else
+        {
+            if($ec_order["order_status"] == "Pending" || $ec_order["order_status"] == "Processing" || $ec_order["order_status"] == "Completed" || $ec_order["order_status"] == "On-hold" )
+            {
+                $warehouse_id = Ecom_Product::getWarehouseId();
+                $ctr = 0;
+                
+                foreach($ec_order_item as $ordered)
+                {  
+                    $get_prod_id                                   = Tbl_ec_variant::where("evariant_id",$ordered["item_id"])->first();
+                    $check_type                                    = Tbl_item::where("item_id",$get_prod_id->evariant_item_id)->first();
+                    if($check_type->item_type_id == 1)
+                    {
+                        $warehouse_consume_product[$ctr]["product_id"] = $get_prod_id->evariant_item_id;             
+                        $warehouse_consume_product[$ctr]["quantity"]   = $ordered["quantity"];
+                        $ctr++;             
+                    }
+                }
+
+                if($ctr != 0)
+                {
+                    $warehouse_consume_remarks  = "";                                                            
+                    $warehouse_consumer_id      = $ec_order["customer_id"];                          
+                    $warehouse_consume_reason   = "";                              
+                    $return_type                = "array";              
+                    $warehouse_response         = Warehouse::inventory_consume($warehouse_id, $warehouse_consume_remarks, $warehouse_consume_product, $warehouse_consumer_id, $warehouse_consume_reason, $return_type);
+
+                    if($warehouse_response["status"] == "error")
+                    {
+                        return $warehouse_response;
+                    }
+                }
+            }          
+
         }
 
         $ec_order_id 								= Tbl_ec_order::insertGetId($ec_order);
@@ -368,6 +409,11 @@ class Ec_order
        	return $ec_order_id;
 	}
 
+    public static function check_settings($shop_id)
+    {  
+        $settings = Tbl_settings::where("settings_key","enable_consume_on_pending")->where("settings_value",1)->where("shop_id",$shop_id)->first();
+        return $settings;
+    }
 	public static function create_ec_order_item($ec_order_id,$ec_order_item)
 	{  
 		foreach($ec_order_item as $ordered)
@@ -399,10 +445,21 @@ class Ec_order
         $shop_id                 = isset($data["shop_id"]) ? $data["shop_id"] : $order->shop_id ;
         $response                = "nothing";
 
+
+        /*For tracking no.*/
+        $update['tracking_no']  = isset($data["tracking_no"]) ? $data["tracking_no"] : "";
+
+        //isset($data["tracking_no"]) ? Tbl_ec_order::where("ec_order_id",$ec_order_id)->update(array('tracking_no' => $update['tracking_no'])): '';
+
+        ($order->order_status == 'Processing') ? 
+            isset($data["tracking_no"]) ? Tbl_ec_order::where("ec_order_id",$ec_order_id)->update(array('tracking_no' => $update['tracking_no']))
+                : ''
+            : '';   
+
         if($order->order_status == "Pending" || $order->order_status == "Failed" || $order->order_status == "Cancelled")
         {
             if($order_status == "Processing")
-            {
+            {              
                 $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);
             }
             else if($order_status == "Completed")
@@ -410,55 +467,145 @@ class Ec_order
                 $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);  
             }
             else if($order_status == "Shipped")
-            {
-                $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);   
-            }
-            else if($order_status == "On-hold")
-            {
-                $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);
-            }
-        }
-        else if($order->order_status == "Processing" || $order->order_status == "Completed" || $order->order_status == "On-hold" || $order->order_status == "Shipped")
-        {
-            if($order_status == "Pending")
-            {
-                $response = Ec_order::update_inventory("add",$ec_order_id,$shop_id);
-            }
-            else if($order_status == "Failed")
-            {
-                $response = Ec_order::update_inventory("add",$ec_order_id,$shop_id);   
-            }
-            else if($order_status == "Cancelled")
-            {
-                $response = Ec_order::update_inventory("add",$ec_order_id,$shop_id);
-            }
-        }
 
-        if($order_status == "Completed")
-        {
-            if($update['payment_status'] == 0)
-            {
-                $response                    = null;
-                $response['status']          = "error";
-                $response['status_message']  = "Cannot Complete Order with unpaid status";
-                return $response;
-            }
-            else{
-                Item_code::completed_order_action($ec_order_id);
-            }
-        }
+            $settings = null;
 
+            $settings = Ec_order::check_settings($shop_id);
 
-        if(isset($response["status"]))
-        { 
-            if($response["status"] == "error")
-            {
-                return $response;
+            if($settings == null)
+            {            
+                //original codes
+                if($order->order_status == "Pending" || $order->order_status == "Failed" || $order->order_status == "Cancelled")
+
+                {
+                    if($order_status == "Processing")
+                    {
+                        $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);
+                    }
+                    else if($order_status == "Completed")
+                    {
+                        $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);  
+                    }
+                    else if($order_status == "Shipped")
+                    {
+                        $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);   
+                    }
+                    else if($order_status == "On-hold")
+                    {
+                        $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);
+                    }
+                }
+                else if($order->order_status == "Processing" || $order->order_status == "Completed" || $order->order_status == "On-hold" || $order->order_status == "Shipped")
+                {
+                    if($order_status == "Pending")
+                    {
+                        $response = Ec_order::update_inventory("add",$ec_order_id,$shop_id);
+                    }
+                    else if($order_status == "Failed")
+                    {
+                        $response = Ec_order::update_inventory("add",$ec_order_id,$shop_id);   
+                    }
+                    else if($order_status == "Cancelled")
+                    {
+                        $response = Ec_order::update_inventory("add",$ec_order_id,$shop_id);
+                    }
+                }
             }
             else
             {
-                Tbl_ec_order::where("ec_order_id",$ec_order_id)->update($update);
+                 //new codes
+                if($order->order_status == "Failed" || $order->order_status == "Cancelled")
+                {
+                    if($order_status == "Processing")
+                    {
+                        $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);
+                    }
+                    else if($order_status == "Completed")
+                    {
+                        $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);  
+                    }
+                    else if($order_status == "Shipped")
+                    {
+                        $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);   
+                    }
+                    else if($order_status == "On-hold")
+                    {
+                        $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);
+                    }
+                    else if($order_status == "Pending")
+                    {
+                        $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);
+                    }
+                }
+                else if($order->order_status == "Processing" || $order->order_status == "Pending"  || $order->order_status == "Completed" || $order->order_status == "On-hold" || $order->order_status == "Shipped")
+                {
+                    if($order_status == "Failed")
+                    {
+                        $response = Ec_order::update_inventory("add",$ec_order_id,$shop_id);   
+                    }
+                    else if($order_status == "Cancelled")
+                    {
+                        $response = Ec_order::update_inventory("add",$ec_order_id,$shop_id);
+                    }
+                }
 
+            }
+
+
+            if($order_status == "Completed")
+            {
+                if($update['payment_status'] == 0)
+                {
+                    $response                    = null;
+                    $response['status']          = "error";
+                    $response['status_message']  = "Cannot Complete Order with unpaid status";
+                    return $response;
+                }
+                else{
+                    Item_code::completed_order_action($ec_order_id);
+                }
+            }
+
+
+            if(isset($response["status"]))
+            { 
+                if($response["status"] == "error")
+                {
+                    return $response;
+                }
+                else
+                {
+                    Tbl_ec_order::where("ec_order_id",$ec_order_id)->update($update);
+
+                    if($order_status == "Completed")
+                    {
+                        $_order = Tbl_ec_order::where("ec_order_id", $ec_order_id)->first();
+                        /* TRANSACTION JOURNAL */  
+                        $entry["reference_module"]  = "product-order";
+                        $entry["reference_id"]      = $ec_order_id;
+                        $entry["name_id"]           = $_order->customer_id;
+                        $entry["total"]             = $_order->total;
+
+                        $_order_item = Tbl_ec_order_item::where("ec_order_id", $ec_order_id)->get();
+
+                        foreach($_order_item as $key=>$item)
+                        {
+                            $entry_data[$key]['item_id']            = $item->item_id;
+                            $entry_data[$key]['entry_qty']          = $item->quantity;
+                            $entry_data[$key]['vatable']            = 0;
+                            $entry_data[$key]['discount']           = $item->discount_amount;
+                            $entry_data[$key]['entry_amount']       = $item->total;
+                            $entry_data[$key]['entry_description']  = $item->description;
+                        }
+
+                        $product_order_journal = Accounting::postJournalEntry($entry, $entry_data);
+                    }
+                    
+                    return $response; 
+                }
+            }
+            else
+            {
                 if($order_status == "Completed")
                 {
                     $_order = Tbl_ec_order::where("ec_order_id", $ec_order_id)->first();
@@ -482,42 +629,14 @@ class Ec_order
 
                     $product_order_journal = Accounting::postJournalEntry($entry, $entry_data);
                 }
-                
-                return $response; 
+
+                Tbl_ec_order::where("ec_order_id",$ec_order_id)->update($update);
+                $response           = null;
+                $response["status"] = "success";
+                return $response;
             }
-        }
-        else
-        {
-            if($order_status == "Completed")
-            {
-                $_order = Tbl_ec_order::where("ec_order_id", $ec_order_id)->first();
-                /* TRANSACTION JOURNAL */  
-                $entry["reference_module"]  = "product-order";
-                $entry["reference_id"]      = $ec_order_id;
-                $entry["name_id"]           = $_order->customer_id;
-                $entry["total"]             = $_order->total;
-
-                $_order_item = Tbl_ec_order_item::where("ec_order_id", $ec_order_id)->get();
-
-                foreach($_order_item as $key=>$item)
-                {
-                    $entry_data[$key]['item_id']            = $item->item_id;
-                    $entry_data[$key]['entry_qty']          = $item->quantity;
-                    $entry_data[$key]['vatable']            = 0;
-                    $entry_data[$key]['discount']           = $item->discount_amount;
-                    $entry_data[$key]['entry_amount']       = $item->total;
-                    $entry_data[$key]['entry_description']  = $item->description;
-                }
-
-                $product_order_journal = Accounting::postJournalEntry($entry, $entry_data);
-            }
-
-            Tbl_ec_order::where("ec_order_id",$ec_order_id)->update($update);
-            $response           = null;
-            $response["status"] = "success";
-            return $response;
-        }
-	}
+    	}
+    }
 
     public static function update_inventory($type,$ec_order_id, $shop_id)
     {
@@ -692,15 +811,87 @@ class Ec_order
             DB::table("tbl_ec_order_item")->insert($value);
         }
 
+        /* Inventory Consume */
+        $settings = Ec_order::check_settings($order_info["tbl_ec_order"]["shop_id"]);
+
+        if($settings)
+        {
+            $warehouse_id = Ecom_Product::getWarehouseId($order_info["tbl_ec_order"]["shop_id"]);
+            $ctr = 0;
+
+            foreach ($order_info["tbl_ec_order_item"] as $key_ec_item => $value_ec_item) 
+            {
+                $get_prod_id                                   = Tbl_ec_variant::where("evariant_id",$value_ec_item["item_id"])->first();
+                $check_type                                    = Tbl_item::where("item_id",$get_prod_id->evariant_item_id)->first();
+                if($check_type->item_type_id == 1)
+                {
+                    $warehouse_consume_product[$ctr]["product_id"] = $get_prod_id->evariant_item_id;             
+                    $warehouse_consume_product[$ctr]["quantity"]   = $value_ec_item["quantity"];
+                    $ctr++;             
+                }
+
+            }
+
+            if($ctr != 0)
+            {
+                $warehouse_consume_remarks  = "";                                                            
+                $warehouse_consumer_id      = $customer_id;                          
+                $warehouse_consume_reason   = "";                              
+                $return_type                = "array";              
+                $warehouse_response         = Warehouse::inventory_consume($warehouse_id, $warehouse_consume_remarks, $warehouse_consume_product, $warehouse_consumer_id, $warehouse_consume_reason, $return_type);
+
+                if($warehouse_response["status"] == "error")
+                {
+                    return $warehouse_response;
+                }
+            }
+            
+        }
+
+        /* Insert Reference for slot */
+        if(isset($order_info['tbl_mlm_slot']))
+        {
+            if(isset($order_info['tbl_mlm_slot']['slot_sponsor']))
+            {
+
+                $slot_sponsor = Tbl_mlm_slot::where('slot_nick_name', $order_info['tbl_mlm_slot']['slot_sponsor'])
+                ->where('slot_defaul', 1)
+                ->first();
+                if($slot_sponsor)
+                {
+                    $insert_slot_ref['order_slot_ec_order_id']  = $order_info["tbl_ec_order"]["ec_order_id"];
+                    $insert_slot_ref['order_slot_customer_id']  = $customer_id;
+                    $insert_slot_ref['order_slot_used']         = 0;
+                    $insert_slot_ref['order_slot_sponsor']      = $slot_sponsor->slot_id;
+
+                    DB::table('tbl_ec_order_slot')->insert($insert_slot_ref);
+                }
+                else
+                {
+                    $insert_slot_ref['order_slot_ec_order_id']  = $order_info["tbl_ec_order"]["ec_order_id"];
+                    $insert_slot_ref['order_slot_customer_id']  = $customer_id;
+                    $insert_slot_ref['order_slot_used']         = 0;
+                    $insert_slot_ref['order_slot_sponsor']      = 0;
+                    DB::table('tbl_ec_order_slot')->insert($insert_slot_ref);
+                }
+            }
+        }
         /* Email Password */
-        $data["template"]                 = Tbl_email_template::where("shop_id", $order_info["tbl_ec_order"]["shop_id"])->first();
-        $data['mail_to']                       = $order_info["tbl_ec_order"]["customer_email"];
-        $data['mail_subject']             = "Account Verification";
-        $data['account_password'] = Crypt::decrypt($order_info["tbl_customer"]["password"]);
-
-        $result = Mail_global::password_mail($data, $order_info["tbl_ec_order"]["shop_id"]);
-
-        Ec_order::create_merchant_school_item($order_info["tbl_ec_order"]["ec_order_id"]);
+        if ($order_info["new_account"]) 
+        {
+            $data["template"]         = Tbl_email_template::where("shop_id", $order_info["tbl_ec_order"]["shop_id"])->first();
+            $data['mail_to']          = $order_info["tbl_ec_order"]["customer_email"];
+            $data['mail_subject']     = "Account Verification";
+            $data['account_password'] = Crypt::decrypt($order_info["tbl_customer"]["password"]);
+            $data['mlm_username']     = $order_info["tbl_customer"]["mlm_username"];
+            $data['mlm_email']        = $order_info["tbl_customer"]["email"]; 
+            if ($order_info["notification"] == 1) 
+            {
+                $result = Mail_global::password_mail($data, $order_info["tbl_ec_order"]["shop_id"]);
+            }
+        }
+        
+        // Ec_order::create_merchant_school_item($order_info["tbl_ec_order"]["ec_order_id"]);
 
         return $order_info["tbl_ec_order"]["ec_order_id"];
     }

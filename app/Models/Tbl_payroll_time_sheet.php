@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class Tbl_payroll_time_sheet extends Model
 {
@@ -30,6 +31,18 @@ class Tbl_payroll_time_sheet extends Model
 	public function scopecheckdata($query, $payroll_employee_id = 0, $payroll_time_date = '0000-00-00')
 	{
 		return $query->where('payroll_employee_id', $payroll_employee_id)->where('payroll_time_date',$payroll_time_date);
+	}
+
+	public function scopegetpercompany($query, $payroll_period_company_id = 0)
+	{
+		$query->join('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_time_sheet.payroll_employee_id')
+			 ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_company_id','=','tbl_payroll_employee_basic.payroll_employee_company_id')
+			 ->join('tbl_payroll_period','tbl_payroll_period.payroll_period_id','=','tbl_payroll_period_company.payroll_period_id')
+			 ->where('tbl_payroll_period_company.payroll_period_company_id', $payroll_period_company_id)
+			 ->where('tbl_payroll_time_sheet.payroll_time_date' ,'>=',DB::raw('tbl_payroll_period.payroll_period_start'))
+			 ->where('tbl_payroll_time_sheet.payroll_time_date' ,'<=',DB::raw('tbl_payroll_period.payroll_period_end'));
+		
+		return $query;
 	}
 
 }

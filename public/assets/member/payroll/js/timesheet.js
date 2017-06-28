@@ -261,6 +261,12 @@ function timesheet()
 				},
 				success	: 	function(result)
 				{
+					try
+					{
+						result = JSON.parse(result);
+					}
+					catch(err){}
+
 					icon.html(html);
 					$append = $(".sub-time-container").html();
 					$(".time-record[date='" + date + "']:last").after($append);
@@ -269,9 +275,10 @@ function timesheet()
 
 					/* UPDATE DATA FOR NEW SUB */
 					$("tbody").find(".time-record.new-sub").attr("date", date);
-					$("tbody").find(".time-record.new-sub").attr("data-id", result);
+					$("tbody").find(".time-record.new-sub").attr("data-id", result.id);
+					$("tbody").find(".time-record.new-sub").attr("id", result.id);
 					// $("tbody").find(".time-record.new-sub").find(".date").val(date);
-					$("tbody").find(".time-record.new-sub").find(".date").val(result);
+					$("tbody").find(".time-record.new-sub").find(".date").val(result.id);
 					$("tbody").find(".time-record.new-sub").find(".time-in").val('');
 					$("tbody").find(".time-record.new-sub").find(".time-out").val('');
 					$arr_count = new_sub_ctr++;
@@ -285,7 +292,15 @@ function timesheet()
 					/* for comment/remarks */
 					var remarks = $("tbody").find(".time-record.new-sub").find(".new-comment");
 					var remark_link = remarks.attr('link');
-					remarks.attr('link', remark_link + result);
+					remarks.attr('link', remark_link + result.id);
+					remarks.removeClass('new-comment');
+
+					/* for company */
+					var company = $("tbody").find(".time-record.new-sub").find(".new-company");
+					var company_link = company.attr('link');
+					company.attr('link', company_link + result.id);
+					company.attr('title', result.company);
+					company.removeClass('new-company');
 
 					/* ADD EVENT TO NEW SUB */
 					event_time_entry();
@@ -654,6 +669,7 @@ function timesheet()
 					$(this).find(".approved-out").css("color", "red").addClass("load-overtime-form");
 				}
 			}
+
 			else
 			{
 				$(this).find(".time-entry.time-in").val("");
@@ -674,13 +690,13 @@ function timesheet()
 				$(this).find(".table-check").removeClass("fa-unlock-alt").addClass("fa-lock").css("color", "black");
 				$(this).find(".create-sub-time").hide();
 			}
+
 			else
 			{
-				$(this).find(".table-check").removeClass("fa-lock").addClass("fa--unlock-alt").css("color", "gray");
+				$(this).find(".table-check").removeClass("fa-lock").addClass("fa-unlock-alt").css("color", "gray");
 			}
+
 		});
-
-
 
 	}
 	function action_convert_time_str_to_seconds(time_str)
@@ -793,5 +809,10 @@ function submit_done(data)
 		data = JSON.parse(data);
 	}
 	catch(err){}
+	
 	data.element.modal("toggle");
+	if(data.function_name == 'get_company')
+	{	
+		$("#"+data.id).find('.fa-university').attr('title', data.company);
+	}
 }	

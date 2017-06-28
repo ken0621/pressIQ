@@ -81,21 +81,21 @@
 			<table id="branches">
 				<thead>
 					<tr>
-						<th>Store Image</th>
+						<th data-hide="phone">Store Image</th>
 						<th data-hide="phone,tablet">Store Name</th>
 						<th data-hide="phone">Store Branch</th>
 						<th data-hide="phone,tablet">Contact Number</th>
-						<th data-hide="phone,tablet">Location</th>
+						<th>Location</th>
 					</tr>
 				</thead>
 				<tbody>
 					@foreach(unserialize(get_content($shop_theme_info, "contact", "contact_store_maintenance")) as $store)
 					<tr>
 						<td><a data-fancybox-group='gallery' class='fancybox' id='fancyboxes' href='{{ $store["image"] }}'><img src='{{ $store["image"] }}'></img></a></td>
-						<td class="storename">{{$store["name"]}}</td>
+						<td>{{$store["name"]}}</td>
 						<td>{{$store["branch"]}}</td>
 						<td>{{$store["contact"]}}</td>
-						<td><a href='{{ $store["link"] }}'>View</a></td>
+						<td class="storename">{{ $store["address"] }}</td>
 					</tr>
 					@endforeach
 				</tbody>
@@ -150,16 +150,16 @@
 	<script type="text/javascript">
 		$(document).ready(function()
 		{
-			$('body').on('click', '.footable .footable-row-detail', function(event) 
-			{
-				event.preventDefault();
-				$(event.currentTarget).prev("tr").toggleClass("hid");
-			});
+			// $('body').on('click', '.footable .footable-row-detail', function(event) 
+			// {
+			// 	event.preventDefault();
+			// 	$(event.currentTarget).prev("tr").toggleClass("hid");
+			// });
 
-			$('.footable-toggle').trigger('click');
-			$('.footable-toggle').trigger('click');
+			// $('.footable-toggle').trigger('click');
+			// $('.footable-toggle').trigger('click');
 
-			$('.footable .footable-row-detail').prev("tr").addClass("hid");
+			// $('.footable .footable-row-detail').prev("tr").addClass("hid");
 			
 			var $message_result = $('#email-form-result');
 			$('button#send-email').on('click', function(e)

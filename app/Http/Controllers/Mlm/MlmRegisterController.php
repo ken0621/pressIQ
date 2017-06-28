@@ -14,6 +14,7 @@ use App\Models\Tbl_mlm_lead;
 use App\Globals\Mlm_member;
 use App\Globals\Sms;
 use App\Models\Tbl_email_template;
+use App\Models\Tbl_shop;
 use App\Globals\EmailContent;
 use App\Globals\Settings;
 use Mail;
@@ -38,6 +39,17 @@ class MlmRegisterController extends MlmLoginController
         	->get();
         	$data['customer_info'] = Mlm_member::get_customer_info($data['lead']->customer_id);
         } 
+        else
+        {
+            $check_shop = Tbl_shop::where("shop_id",Self::$shop_id)->first();
+            if($check_shop)
+            {
+                if($check_shop->shop_key == "alphaglobal")
+                {
+                    return Redirect::to("/");
+                }
+            }
+        }
         
         $data['country'] = Tbl_country::get();
         return view("mlm.register", $data);

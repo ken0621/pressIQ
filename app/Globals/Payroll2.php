@@ -40,6 +40,7 @@ class Payroll2
 	{
 		$output_ctr = 0;
 		$_output = null;
+		
 		if ($_time == null) 
 		{
 			

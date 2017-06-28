@@ -49,20 +49,42 @@ function timesheet()
 	function event_time_focus_out_recompute()
 	{
 		/* STORE INITITAL VALUE */
-		$(".time-entry").focusin(function(e)
+		$(".table-timesheet").on("focusin", ".time-entry", function(e)
 		{
 			$focus_value = $(e.currentTarget).val();
 			$(e.currentTarget).attr("focus_value", $focus_value);
 		});
 
 		/* CHECK IF INITIAL VALUE CHANGED AFTER FOCUS OUT */
-		$(".time-entry").focusout(function(e)
+		$(".table-timesheet").on("focusout", ".time-entry", function(e)
 		{
 			$focus_value = $(e.currentTarget).attr("focus_value");
-			if($focus_value != $(e.currentTarget).val())
+			$focus_unq = $(e.currentTarget).attr("unq");
+
+			/* CHECK IF TIME IN AND TIME OUT IS BLANK */
+			$time_in = $(".time-in[unq=" + $focus_unq + "]").val(); 
+			$time_out = $(".time-out[unq=" + $focus_unq + "]").val();
+
+
+			/* IF BOTH BLANK THEN JUST REMOVE */
+			if($time_in == "" && $time_out == "")
 			{
-				console.log("TIME CHANGED - NEED TO RECOMPUTE");
+				if($(e.currentTarget).closest(".tr-parent").find(".time-in").length > 1)
+				{
+					$(".time-in[unq=" + $focus_unq + "]").remove(); 
+					$(".time-out[unq=" + $focus_unq + "]").remove();
+					$(".comment[unq=" + $focus_unq + "]").remove();
+				}
 			}
+			else
+			{
+				/* CHECK IF FOCUS OUT VALUE CHANGED */
+				if($focus_value != $(e.currentTarget).val())
+				{
+					
+				}
+			}
+
 		});
 	}
 
@@ -104,9 +126,10 @@ function timesheet()
 
 		if($time_in_blank == false && $time_out_blank == false)
 		{
-			$target_tr.find(".time-in-td").append('<input value="" type="text" placeholder="NO TIME" class="new-time-event new-time-focus text-table text-center time-entry time-in is-timeEntry" name="">');
-			$target_tr.find(".time-out-td").append('<input value="" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-in is-timeEntry" name="">');
-			$target_tr.find(".time-comment-td").append('<input value="" type="text" class="new-time-event text-table time-entry is-timeEntry" name="">');
+			$unq = getRandomIntInclusive(10000000, 999999999);
+			$target_tr.find(".time-in-td").append('<input unq="' + $unq + '" value="" type="text" placeholder="NO TIME" class="new-time-event new-time-focus text-table text-center time-entry time-in is-timeEntry" name="">');
+			$target_tr.find(".time-out-td").append('<input unq="' + $unq + '" value="" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-out is-timeEntry" name="">');
+			$target_tr.find(".time-comment-td").append('<input unq="' + $unq + '" value="" type="text" class="comment new-time-event text-table time-entry is-timeEntry" name="">');
 			$target_tr.find(".new-time-focus").focus().removeClass("new-time-focus");
 			event_time_entry();
 		}
@@ -123,5 +146,12 @@ function timesheet()
 	        x1 = x1.replace(rgx, '$1' + ',' + '$2');
 	    }
 	    return x1 + x2;
+	}
+
+	function getRandomIntInclusive(min, max)
+	{
+	  min = Math.ceil(min);
+	  max = Math.floor(max);
+	  return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
 	}
 }	

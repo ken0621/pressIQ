@@ -3,6 +3,8 @@ namespace App\Globals;
 use stdClass;
 use App\Globals\Payroll;
 
+use App\Model\Tbl_payroll_overtime_rate;
+
 class Payroll2
 {
 
@@ -631,8 +633,54 @@ class Payroll2
      * @author (Jimar Zape)
      *
      */
-	public static function compute_income_day_pay($_overtime, $time_spent)
+	public static function compute_income_day_pay($_time = array(), $daily_rate = 0, $group_id = 0)
 	{
+		$param_rate = Tbl_payroll_overtime_rate::where('payroll_group_id', $group_id)->get()->toArray();
+		$collection = collect($param_rate);
+
+		// time_spent
+		// is_absent
+		// late
+		// undertime
+		// overtime
+		// target_hours
+		// excess_leave_hours
+		// regular_hours
+		// rest_day_hours
+		// extra_day_hours
+		// regular_holiday_hours
+		// special_holiday_hours
+		// leave_hours
+		// total_hours
+		// night_differential
+		// is_half_day
+		/* positive value */
+		$target_float 		= Payroll::time_float($_time['target_hours']);
+		$regular_float 		= Payroll::time_float($_time['regular_hours']);
+		$rest_float 		= Payroll::time_float($_time['rest_day_hours']);
+		$extra_float 		= Payroll::time_float($_time['extra_day_hours']);
+		$legal_float 		= Payroll::time_float($_time['regular_holiday_hours']);
+		$special_float 		= Payroll::time_float($_time['special_holiday_hours']);
+		$leave_float 		= Payroll::time_float($_time['leave_hours']);
+		$overtime_float 	= Payroll::time_float($_time['overtime']);
+		$night_diff_float 	= Payroll::time_float($_time['night_differential']);
+		$extra_float 		= Payroll::time_float($_time['extra_day_hours']);
+
+		/* negeative value */
+		$late_float			= Payroll::time_float($_time['late']);
+		$undertime_float	= Payroll::time_float($_time['undertime']);
+
+
+
+		/* regular day computation */
+		$regular_salary 	= divide($regular_float, $target_float) * $daily_rate;
+		
+		/* extra day computation */
+		$extra_salary 		= divide($extra_float, $target_float) * $daily_rate;
+
+		/* rest day but regular day */
+		$rest_day_salary 	= divide($rest_float, $target_float) * $daily_rate;
+
 	}
 	public static function compute_income_month_pay()
 	{

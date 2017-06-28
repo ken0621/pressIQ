@@ -113,8 +113,11 @@ class PayrollTimeSheetController extends Member
 
 		$data["employee_contract"] = Tbl_payroll_employee_contract::selemployee($employee_id)->leftJoin("tbl_payroll_group", "tbl_payroll_group.payroll_group_id", "=","tbl_payroll_employee_contract.payroll_group_id")->first();
 
-		$payroll_group_start 	= $data["employee_contract"]->payroll_group_start;
-		$payroll_group_end 		= $data["employee_contract"]->payroll_group_end;
+		// $payroll_group_start 	= $data["employee_contract"]->payroll_group_start;
+		// $payroll_group_end 		= $data["employee_contract"]->payroll_group_end;
+
+		$payroll_group_start 	= '00:00:00';
+		$payroll_group_end 		= '00:00:00';
 
 		/* INITALIZE SETTINGS FOR EMPLOYEE */
 		$time_rule = $data["time_rule"] = "regulartime"; //flexitime, regulartime
@@ -557,12 +560,21 @@ class PayrollTimeSheetController extends Member
 		// }
 
 		$schedule = Payroll::getshift_emp($employee_information->payroll_employee_id, $timesheet_info->payroll_time_date, $employee_information->payroll_group_id);
+
+		// dd($schedule);
 		
 		if($schedule->rest_day == 1)
 		{
 			$data["rest_day"] = $rest_day = true;
 		}
-		$work_end_24 = $schedule->work_end;
+		$work_end_24 = '00:00:00';
+
+		if(isset($schedule->work_end))
+		{
+			$work_end_24 = $schedule->work_end;
+		}	
+		
+
 		if(Payroll::time_float($schedule->work_end) <= 12)
 		{
 			$work_end_24 = Payroll::sum_time($schedule->work_end, '24:00');

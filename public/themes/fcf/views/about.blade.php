@@ -44,31 +44,10 @@
 					</p>
 					<!-- BOTTOM IMAGES -->
 					<div class="content-img-container row clearfix">
-						<div class="col-md-3">
+						<div class="col-md-9">
 							<div class="per-img-container">
-								<a class="lightbox" href="#goofy">
+								<a class="lightbox2" href="#goofy">
 									<img src="{{ get_content($shop_theme_info, "about", "about_company_profile_context_img1") }}">
-								</a>
-							</div>
-						</div>
-						<div class="col-md-3">
-							<div class="per-img-container">
-								<a class="lightbox" href="#goofy">
-									<img src="{{ get_content($shop_theme_info, "about", "about_company_profile_context_img2") }}">
-								</a>
-							</div>
-						</div>
-						<div class="col-md-3">
-							<div class="per-img-container">
-								<a class="lightbox" href="#goofy">
-									<img src="{{ get_content($shop_theme_info, "about", "about_company_profile_context_img3") }}">
-								</a>
-							</div>
-						</div>
-						<div class="col-md-3">
-							<div class="per-img-container">
-								<a class="lightbox" href="#goofy">
-									<img src="{{ get_content($shop_theme_info, "about", "about_company_profile_context_img4") }}">
 								</a>
 							</div>
 						</div>

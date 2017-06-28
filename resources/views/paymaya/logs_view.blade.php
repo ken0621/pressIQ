@@ -39,7 +39,7 @@ th, td
     <tr>
       <th width="50px">Order ID</th>
       <th width="150px">Date</th>
-      <th width="50px">IP</th>
+      <th width="175px">IP</th>
       <th>Response</th>
     </tr>
   </thead>

@@ -41,7 +41,7 @@ th, td
     @foreach($_dragonpay as $dragonpay)
     <tr>
       <td>{{ $dragonpay->order_id }}</td>
-      <td>{{ $dragonpay->log_date }}</td>
+      <td>{{ date("F d, Y h:i:s A", strtotime($dragonpay->log_date)) }}</td>
       <td>{{ $dragonpay->ip_address }}</td>
       <td><pre>{{ is_serialized($dragonpay->response) ? var_dump(unserialize($dragonpay->response)) : $dragonpay->response }}</pre></td>
     </tr>

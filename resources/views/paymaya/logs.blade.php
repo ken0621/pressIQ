@@ -40,7 +40,7 @@ th, td
     @foreach($_dragonpay as $dragonpay)
     <tr>
       <td>{{ $dragonpay->order_id }}</td>
-      <td>{{ $dragonpay->log_date }}</td>
+      <td>{{ date("F d, Y h:i:s A", strtotime($dragonpay->log_date)) }}</td>
       <td><a href="/payment/paymaya/logs/view/{{ $dragonpay->order_id }}">Check</a></td>
       <td><pre>{{ is_serialized($dragonpay->response) ? var_dump(unserialize($dragonpay->response)) : $dragonpay->response }}</pre></td>
     </tr>

@@ -2601,12 +2601,13 @@ class Payroll
 		// DEDUCTION START [LOANS, CASH ADVANCE, CASH BOND AND OTHER DEDUCTION]
 		$deduction = Payroll::getdeduction($employee_id, $date,$period_category, $payroll_period_category, $shop_id);
 
-
 		$data['deduction'] 			= $deduction['deduction'];
 		$data['total_deduction'] 	+= $deduction['total_deduction'] + $adjustment_deductions_total;
 
-
 		$data['total_net'] 					= ($data['total_gross'] - $data['total_deduction']) + $total_deminimis + $data['13_month'];
+
+
+
 		$data['total_gross'] 				+=  $total_deminimis + $data['13_month'] + $adjustment_13_month_total;
 		
 		$data['total_regular_days']			= round($data['total_regular_days'], 2);
@@ -2924,7 +2925,6 @@ class Payroll
 				$tax_index = 'tax_first_range';
 			}
 
-
 			if($tax->tax_second_range >= $rate && $tax->tax_third_range < $rate)
 			{
 				$tax_index = 'tax_second_range';
@@ -2956,7 +2956,6 @@ class Payroll
 			{
 				$tax_index = 'taxt_sixth_range';
 			}
-
 
 
 			if($rate <= $tax->tax_seventh_range && $rate > $tax->taxt_sixth_range)

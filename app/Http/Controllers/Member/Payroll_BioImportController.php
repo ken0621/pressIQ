@@ -329,7 +329,6 @@ class Payroll_BioImportController extends Member
     	
     }
 
-
     public function import_zkteco_yh803aups($file, $company)
     {
     	$message = '<center><i><span class="color-red"><b>Invalid File Format</b></span></i></center>';

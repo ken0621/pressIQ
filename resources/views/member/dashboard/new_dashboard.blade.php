@@ -1,7 +1,5 @@
 @extends('member.layout')
 @section('content')
-<<<<<<< HEAD
-=======
 <form class="hide" type="post" action="member/utilities/make-developer">
     <input type="hidden" name="_token" value="{{csrf_token()}}">
     <div class="col-md-8">
@@ -13,7 +11,6 @@
         </div>
     </div>
 </form>
->>>>>>> 88c016b33bc3359be6bd3344a22baa96f02fd552
 <div class="button-wrapper clearfix" style="margin-top: 15px; min-height: 55px">
    <div class="dashboard-home cursor-pointer dashboard-arrow">
       <span class="fa fa-angle-left fa-4x"></span>

@@ -421,6 +421,7 @@ class PayrollTimeSheetController extends Member
 
 		if($payroll_time_sheet != null)
 		{
+
 			if($break != null)
 			{
 				// dd($break);

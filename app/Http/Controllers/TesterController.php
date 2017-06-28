@@ -55,7 +55,7 @@ class TesterController extends Controller
         dd(Sms::SendSingleText($recipient,"Test","success_register"));
     }
 
-	public function getIndex()
+    public function getIndex()
     {  
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -87,7 +87,6 @@ class TesterController extends Controller
 
     public function getTracking()
     {
-        dd(Accounting::getAllAccount());
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://api.aftership.com/v4/trackings",
@@ -109,6 +108,7 @@ class TesterController extends Controller
         curl_close($curl);
 
         dd(json_decode($response));
+
     }
 
     public function getJournal()

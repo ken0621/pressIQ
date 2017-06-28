@@ -223,6 +223,7 @@ class ShopCheckoutController extends Shop
     {
         $order_id = Crypt::decrypt(Request::input("order_id"));
         $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
+        dd($order_id);
         if($order)
         {
             try 

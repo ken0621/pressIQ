@@ -19,6 +19,7 @@ use App\Globals\ReceivePayment;
 use App\Globals\Tablet_global;
 
 use App\Models\Tbl_terms;
+use App\Models\Tbl_category;
 use App\Models\Tbl_payment_method;
 use App\Models\Tbl_manual_credit_memo;
 use App\Models\Tbl_employee;
@@ -75,8 +76,56 @@ class TabletSyncController extends Controller
                 $return[$key] = "INSERT INTO tbl_shop (shop_id, shop_key, shop_date_created, shop_date_expiration, shop_last_active_date, shop_status, shop_country, shop_city, shop_zip, shop_street_address, shop_contact, url, shop_domain, shop_theme, shop_theme_color, member_layout, shop_wallet_tours, shop_wallet_tours_uri, shop_merchant_school) VALUES " . "(".$value->shop_id.",'".$value->shop_key."','".$value->shop_date_created."','".$value->shop_date_expiration."','".$value->shop_last_active_date."','".$value->shop_status."','".$value->shop_country."','".$value->shop_city."','".$value->shop_zip."','".$value->shop_street_address."','".$value->shop_contact."','".$value->url."','".$value->shop_domain."','".$value->shop_theme."','".$value->shop_theme_color."','".$value->member_layout."','".$value->shop_wallet_tours."','".$value->shop_wallet_tours_uri."','".$value->shop_merchant_school."')";
             }
         }
+        if($table == "category")
+        {
+            $data = Tbl_category::get();
+            foreach ($data as $key => $value) 
+            {
+                // $return[$key] = "INSERT INTO tbl_category (shop_id, shop_key, shop_date_created, shop_date_expiration, shop_last_active_date, shop_status, shop_country, shop_city, shop_zip, shop_street_address, shop_contact, url, shop_domain, shop_theme, shop_theme_color, member_layout, shop_wallet_tours, shop_wallet_tours_uri, shop_merchant_school) VALUES " . "(".$value->shop_id.",'".$value->shop_key."','".$value->shop_date_created."','".$value->shop_date_expiration."','".$value->shop_last_active_date."','".$value->shop_status."','".$value->shop_country."','".$value->shop_city."','".$value->shop_zip."','".$value->shop_street_address."','".$value->shop_contact."','".$value->url."','".$value->shop_domain."','".$value->shop_theme."','".$value->shop_theme_color."','".$value->member_layout."','".$value->shop_wallet_tours."','".$value->shop_wallet_tours_uri."','".$value->shop_merchant_school."')";
+            }
+        }
 
         return json_encode($return);
+    }
+    public function sync_update()
+    {
+        $table_name = Request::input("table");
+        $dataset = Request::input("dataset");
+        
+        $new_data = json_decode($dataset);
+        // dd($new_data);
+        foreach($new_data as $key => $value)
+        {
+            if($table_name == "tbl_shop")
+            {
+                $up["shop_key"] = $value->shop_key;
+                $up["shop_date_created"] = $value->shop_date_created;
+                $up["shop_date_expiration"] = $value->shop_date_expiration;
+                $up["shop_last_active_date"] = $value->shop_last_active_date;
+                $up["shop_status"] = $value->shop_status;
+                $up["shop_country"] = $value->shop_country;
+                $up["shop_city"] = $value->shop_city;
+                $up["shop_zip"] = $value->shop_zip;
+                $up["shop_street_address"] = $value->shop_street_address;
+                $up["shop_contact"] = $value->shop_contact;
+                $up["url"] = $value->url;
+                $up["shop_domain"] = $value->shop_domain;
+                $up["shop_theme"] = $value->shop_theme;
+                $up["shop_theme_color"] = $value->shop_theme_color;
+                $up["member_layout"] = $value->member_layout;
+                $up["shop_wallet_tours"] = $value->shop_wallet_tours;
+                $up["shop_wallet_tours_uri"] = $value->shop_wallet_tours_uri;
+                $up["shop_merchant_school"] = $value->shop_merchant_school;
+                $up["shop_wallet_tours"] = $value->shop_wallet_tours;
+                $up["created_at"] = $value->created_at;
+                $up["updated_at"] = $value->updated_at;
+                
+                Tbl_shop::where("shop_id",$value->shop_id)->update($up);
+            }
+        }
+        
+        return "success";
+        
     }
 
     /**

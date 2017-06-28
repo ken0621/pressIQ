@@ -47,7 +47,8 @@
 		</form>
 
 		<div class="form-group text-center">
-			<button type="button" class="btn btn-primary sync-data ">SYNC</button>
+			<button type="button" class="btn btn-primary sync-data">SYNC</button>
+			<button type="button" class="btn btn-primary update-sync-data">UPDATE DATA</button>
 		</div>
 	</div>
 </div>
@@ -69,80 +70,5 @@
 	}
 </script>
 <script type="text/javascript" src="/assets/tablet/create_table.js"></script>
-<script type="text/javascript">
-var db = openDatabase("my168shop", "1.0", "Address Book", 200000); 
-	
-// query.forEach(function(single_query) 
-// {
-//     createTableName(single_query);
-// });
-
-$(".sync-data").unbind("click");
-$(".sync-data").bind("click", function()
-{
-	$.ajax({
-		url : "/tablet/sync_data/shop",
-		dataType: "json",
-		data : {},
-		type : "get",
-		success : function(data)
-		{
-			// console.log(data);
-			db.transaction(function (tx)
-			{
-				$(data).each(function(a, b)
-				{
-					query = data[a];
-					console.log(query);
-					tx.executeSql(query,[],	function(txt, result)
-					{
-						console.log(result);	
-					},
-					onError);				
-				});
-    			// createTableName($data);
-			});
-		}
-	});
-});
-
-
-db.transaction( function (tx){
-	tx.executeSql("SELECT * FROM " +temp_saleItem + " WHERE sale_id = "+id,[], 
-	function (tx, result){
-		var dataset = result.rows;
-		var items;
-		var totalPusrchased = 0;
-		var totalamount = 0;
-		// alert(id);
-		for(var i = 0, items = null; i<= (dataset.length - 1); i++){
-			items = dataset.item(i);
-
-			totalPusrchased = totalPusrchased + parseFloat(items["quantity_purchased"]);
-			totalamount = totalamount + (parseFloat(items["quantity_purchased"]) * parseFloat(items["item_unit_price"]));
-			$(".itemPurchased").html(totalPusrchased.toFixed(2));
-			$(".Total").html(totalamount.toFixed(2));
-			console.log(totalamount.toFixed(2));
-
-		}
-	}, function (tx, error){
-		// console.log(error);
-	});
-});
-function createTableName(query)
-{
-	db.transaction(function (tx){ tx.executeSql(query,[],
-		function(txt, result)
-		{
-			console.log(result);
-		},
-		onError);
-	});
-}
-
-function onError(tx, error)
-{
-	console.log(error.message);
-}
-</script>
+<script type="text/javascript" src="/assets/tablet/sync_data.js"></script>
 @endsection

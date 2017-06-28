@@ -500,6 +500,7 @@ Route::any('/tablet/submit_all_transaction','Member\TabletPISController@confirm_
 Route::any('/tablet/submit_all_transaction/submit','Member\TabletPISController@submit_transactions');
 
 Route::any('/tablet/sync_data/{table}','Member\TabletSyncController@sync');
+Route::any('/tablet/update_sync_data','Member\TabletSyncController@sync_update');
 /* END PIS TABLET*/
 
  //form

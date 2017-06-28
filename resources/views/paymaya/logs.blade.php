@@ -39,7 +39,7 @@ th, td
     @foreach($_dragonpay as $dragonpay)
     <tr>
       <td>{{ $dragonpay->order_id }}</td>
-      <td>{{ is_serialized($dragonpay->response) ? var_dump(unserialize($dragonpay->response)) : $dragonpay->response }}</td>
+      <td><pre>{{ is_serialized($dragonpay->response) ? var_dump(unserialize($dragonpay->response)) : $dragonpay->response }}</pre></td>
     </tr>
     @endforeach
   </tbody>

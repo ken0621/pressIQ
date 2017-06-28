@@ -68,13 +68,11 @@
     <!-- Place somewhere in the <body> of your page -->
     <div class="flexslider">
       <ul class="slides">
-        @if(is_serialized(get_content($shop_theme_info, 'home', 'home_brand_image', '')))
-            @foreach(unserialize(get_content($shop_theme_info, 'home', 'home_brand_image', '')) as $brand)
-            <li>
-              <a href="/product?brand={{ $brand['link'] }}"><img src="{{ $brand['image'] }}"></a>
-            </li>
-            @endforeach
-        @endif
+          @foreach($_brand as $brand)
+          <li>
+            <a href="/product?brand={{ $brand->manufacturer_id }}"><img src="{{ $brand->image_path }}"></a>
+          </li>
+          @endforeach
         <!-- items mirrored twice, total of 12 -->
       </ul>
     </div>
@@ -204,11 +202,13 @@
         <div class="holder">
             <form method = "POST" id="subform" action="//intogadgets.us10.list-manage.com/subscribe/post?u=cd02508127b42de13d02bb528&id=74973f9e9e">
                 <img src="{{ get_content($shop_theme_info, 'info', 'newsletter_popup_cover_image') }}">
-                <div class="mobil">Sign up for exclusive promo and sales</div>
-                <div class="input">
-                    <input type="text" placeholder="Name" name="FNAME">
-                    <input type="text" name="EMAIL" placeholder="Email">
-                    <button type="submit">Sign up Now!</button>
+                <div class="waterino clearfix">
+                  <div class="mobil">Sign up for exclusive promo and sales</div>
+                  <div class="input">
+                      <input type="text" placeholder="Name" name="FNAME">
+                      <input type="text" name="EMAIL" placeholder="Email">
+                      <button type="submit">Sign up Now!</button>
+                  </div>
                 </div>
             </form>
         </div>

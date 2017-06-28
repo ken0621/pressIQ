@@ -74,6 +74,21 @@
 								</div>
 							</div>
 						</div>
+						<div class="form-group">
+							<div class="col-md-4">
+								<small>Display Rate</small>
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<div class="checkbox">
+											<label><input type="checkbox" name="display_monthly_rate" {{$group->display_monthly_rate == 1 ? 'checked':''}} value="1">Display Monthly rate</label>
+										</div>
+										<div class="checkbox">
+											<label><input type="checkbox" name="display_daily_rate" {{$group->display_daily_rate == 1 ? 'checked':''}}  value="1">Display Daily rate</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 					<div id="deduction-basis" class="tab-pane fade form-horizontal">
 						<div class="form-group">

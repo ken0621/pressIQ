@@ -11,7 +11,11 @@ class Tablet_global
 	{
 		$id = 0;
 		$shop_id = collect(Session::get("sales_agent"));
-		if(count($shop_id) > 0)
+
+		// if(count($shop_id) > 0)
+
+		if(isset($shop_id['shop_id']))
+
 		{
 			$id = $shop_id['shop_id'];
 		}

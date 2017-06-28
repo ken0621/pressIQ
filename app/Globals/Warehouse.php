@@ -16,6 +16,7 @@ use App\Models\Tbl_user_warehouse_access ;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 
+use App\Globals\ItemSerial;
 use App\Globals\AuditTrail;
 use App\Models\Tbl_unit_measurement_multi;
 use DB;
@@ -517,13 +518,16 @@ class Warehouse
     * vendor
     * other
     */
-    public static function inventory_update($transaction_id = 0, $transaction_type = '', $transaction_item_inventory = array(), $return = 'array', $allow_out_of_stock = false)
+    public static function inventory_update($transaction_id = 0, $transaction_type = '', $transaction_item_inventory = array(), $return = 'array', $allow_out_of_stock = false , $item_serial = array())
     {
         //inventory source reason = $transaction_type
         //inventory source id = $transaction_id
         $inventory_slip = Tbl_inventory_slip::where("inventory_source_id",$transaction_id)->where("inventroy_source_reason",$transaction_type)->first();
         
         Tbl_warehouse_inventory::where("inventory_slip_id",$inventory_slip->inventory_slip_id)->delete();
+
+        /*RETURN All TO ORIGINAL*/
+        ItemSerial::return_original_serial($transaction_type,$transaction_id);
 
         foreach($transaction_item_inventory as $key2 => $value2)
         {            
@@ -562,6 +566,15 @@ class Warehouse
                     $data["status_message"] = "The quantity is not enough";
                 }
             }
+
+        }
+
+        if(count($item_serial) > 0)
+        {
+            foreach ($item_serial as $key_item_serial => $value_item_serial) 
+            {
+                ItemSerial::consume_item_serial($item_serial[$key_item_serial], $transaction_type, $transaction_id);
+            }
         }
 
         if($data["status"] != "error" && $inventory_slip != null)
@@ -577,7 +590,7 @@ class Warehouse
         return $data;
 
     }
-    public static function inventory_update_returns($transaction_id = 0, $transaction_type = '', $transaction_item_inventory = array(), $return = 'array' )
+    public static function inventory_update_returns($transaction_id = 0, $transaction_type = '', $transaction_item_inventory = array(), $return = 'array', $item_serial  = array())
     {
         //inventory source reason = $transaction_type
         //inventory source id = $transaction_id
@@ -593,7 +606,14 @@ class Warehouse
                 $insert["warehouse_id"] = $inventory_slip->warehouse_id;
                 $insert["inventory_slip_id"] = $inventory_slip->inventory_slip_id;
 
-                Tbl_warehouse_inventory::insert($insert);
+                $inventory_id = Tbl_warehouse_inventory::insertGetId($insert);
+                if(count($item_serial) > 0)
+                {
+                    if($item_serial[$key2]["item_id"] == $value2["product_id"])
+                    {
+                        ItemSerial::insert_item_serial($item_serial[$key2], $inventory_id);
+                    }
+                }
                 $data["status"] = "success";
         }
 
@@ -680,7 +700,7 @@ class Warehouse
         }
         return $data;
     }
-    public static function inventory_refill($warehouse_id = 0, $reason_refill = '', $refill_source = 0, $remarks = '', $warehouse_refill_product = array(), $return = 'array', $is_return = null)
+    public static function inventory_refill($warehouse_id = 0, $reason_refill = '', $refill_source = 0, $remarks = '', $warehouse_refill_product = array(), $return = 'array', $is_return = null, $item_serial = array())
     {
         $shop_id = Warehouse::get_shop_id($warehouse_id);
 
@@ -721,6 +741,14 @@ class Warehouse
                 $success++;
 
                 $inventory_id = Tbl_warehouse_inventory::insertGetId($insert_refill);
+
+                if(count($item_serial) > 0 && $is_return == null) 
+                {
+                    if($item_serial[$key]["item_id"] == $refill_product['product_id'])
+                    {
+                        ItemSerial::insert_item_serial($item_serial[$key], $inventory_id);
+                    }
+                }
 
                 $for_serial_item[$key]["quantity"] = $refill_product['quantity'];
                 $for_serial_item[$key]["product_id"] = $refill_product['product_id'];
@@ -765,7 +793,7 @@ class Warehouse
         }
         return $data;
     }
-    public static function inventory_consume($warehouse_id = 0, $remarks = '', $consume_product ,$consumer_id = 0, $consume_cause = '', $return = 'array', $transaction_type = '', $transaction_id = 0,$allow_out_of_stock = false)
+    public static function inventory_consume($warehouse_id = 0, $remarks = '', $consume_product ,$consumer_id = 0, $consume_cause = '', $return = 'array', $transaction_type = '', $transaction_id = 0,$allow_out_of_stock = false, $item_serial = array())
     {
         $shop_id = Warehouse::get_shop_id($warehouse_id);
         $insert_slip['inventory_slip_id_sibling']     = 0;
@@ -780,7 +808,7 @@ class Warehouse
         $insert_slip['inventory_slip_consume_refill'] = 'consume';
         $insert_slip['inventory_slip_consumer_id']    =  $consumer_id;
         $insert_slip['inventory_slip_consume_cause']  =  $consume_cause;
-        $insert_slip['slip_user_id']= Warehouse::getUserid() or 0;
+        $insert_slip['slip_user_id'] = Warehouse::getUserid() or 0;
 
         $inventory_slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
 
@@ -837,6 +865,13 @@ class Warehouse
                     }
 
                 }                
+            }
+        }
+        if(count($item_serial) > 0)
+        {
+            foreach ($item_serial as $key_item_serial => $value_item_serial) 
+            {
+                ItemSerial::consume_item_serial($item_serial[$key_item_serial], $transaction_type, $transaction_id);
             }
         }
 

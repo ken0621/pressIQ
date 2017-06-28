@@ -77,9 +77,12 @@ use App\Models\Tbl_payroll_shift_code;
 use App\Models\Tbl_payroll_employee_shift;
 use App\Models\Tbl_payroll_employee_schedule;
 use App\Models\Tbl_payroll_time_sheet;
+<<<<<<< HEAD
 
 use App\Models\Tbl_payroll_shift_day;
 use App\Models\Tbl_payroll_shift_time;
+=======
+>>>>>>> master
 
 use App\Globals\Payroll;
 use App\Globals\PayrollJournalEntries;
@@ -1834,6 +1837,7 @@ class PayrollController extends Member
 
           $data[4]['access_name'] = 'Allowances';
           $data[4]['link']        = '/member/payroll/allowance';
+<<<<<<< HEAD
 
           $data[5]['access_name'] = 'Deductions';
           $data[5]['link']        = '/member/payroll/deduction';
@@ -1868,6 +1872,42 @@ class PayrollController extends Member
           $data[15]['access_name'] = 'Pagibig/HDMF';
           $data[15]['link']        = '/member/payroll/pagibig_formula';
 
+=======
+
+          $data[5]['access_name'] = 'Deductions';
+          $data[5]['link']        = '/member/payroll/deduction';
+
+          $data[6]['access_name'] = 'Leave';
+          $data[6]['link']        = '/member/payroll/leave';
+
+          $data[7]['access_name'] = 'Payroll Group';
+          $data[7]['link']        = '/member/payroll/payroll_group';
+
+          $data[8]['access_name'] = 'Shift Template';
+          $data[8]['link']        = '/member/payroll/shift_template';
+
+          $data[9]['access_name'] = 'Journal Tags';
+          $data[9]['link']        = '/member/payroll/payroll_jouarnal';
+
+          $data[10]['access_name'] = 'Payslip';
+          $data[10]['link']        = '/member/payroll/custom_payslip';
+
+          $data[11]['access_name'] = 'Tax Period';
+          $data[11]['link']        = '/member/payroll/tax_period';
+
+          $data[12]['access_name'] = 'Tax Table';
+          $data[12]['link']        = '/member/payroll/tax_table_list';
+
+          $data[13]['access_name'] = 'SSS Table';
+          $data[13]['link']        = '/member/payroll/sss_table_list';
+
+          $data[14]['access_name'] = 'Philhealth Table';
+          $data[14]['link']        = '/member/payroll/philhealth_table_list';
+
+          $data[15]['access_name'] = 'Pagibig/HDMF';
+          $data[15]['link']        = '/member/payroll/pagibig_formula';
+
+>>>>>>> master
           $data[16]['access_name'] = 'Reset';
           $data[16]['link']        = '/member/payroll/reset_payroll';
 
@@ -3523,6 +3563,7 @@ class PayrollController extends Member
 		// Tbl_payroll_overtime_rate
 		$data['_active'] = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->paginate($this->paginate_count);
 		$data['_archived'] = Tbl_payroll_group::sel(Self::shop_id(), 1)->orderBy('payroll_group_code')->paginate($this->paginate_count);
+          // dd($data);
 		return view('member.payroll.side_container.payroll_group', $data);
 	}
 
@@ -3558,6 +3599,18 @@ class PayrollController extends Member
           if(Request::has("payroll_group_before_tax"))
           {
                $payroll_group_before_tax = Request::input('payroll_group_before_tax');
+          }
+
+          $insert['display_monthly_rate']    = 0;
+          $insert['display_daily_rate']      = 0;
+          if(Request::has("display_monthly_rate"))
+          {
+               $insert['display_monthly_rate'] = 1;
+          }
+
+          if(Request::has("display_daily_rate"))
+          {
+               $insert['display_daily_rate'] = 1;
           }
 		
           $insert['payroll_group_before_tax']               = $payroll_group_before_tax;
@@ -3773,6 +3826,19 @@ class PayrollController extends Member
           if(Request::has('payroll_group_before_tax'))
           {
                $payroll_group_before_tax = Request::has('payroll_group_before_tax');
+          }
+
+          $update['display_monthly_rate']    = 0;
+          $update['display_daily_rate']      = 0;
+
+          if(Request::has('display_monthly_rate'))
+          {
+               $update['display_monthly_rate']    = 1;
+          }
+
+          if(Request::has('display_daily_rate'))
+          {
+               $update['display_daily_rate']    = 1;
           }
 
           $update['payroll_group_before_tax']               = $payroll_group_before_tax;
@@ -4966,6 +5032,7 @@ class PayrollController extends Member
                          $temp['payroll_leave_employee_id']    = $tag;
                          $temp['payroll_schedule_leave']       = $payroll_schedule_leave;
                          $temp['shop_id']                      = Self::shop_id();
+<<<<<<< HEAD
                          $temp['leave_whole_day']              = 0;
                          $temp['leave_hours']                  = '00:00:00';
 
@@ -4978,6 +5045,8 @@ class PayrollController extends Member
                               $temp['leave_hours']               = date('h:i:s', strtotime(Request::input('leave_hours_'.$tag)));
                          }
                          
+=======
+>>>>>>> master
                          array_push($insert, $temp);
                     }
 
@@ -4989,6 +5058,7 @@ class PayrollController extends Member
                               $temp['payroll_leave_employee_id']    = $tag;
                               $temp['payroll_schedule_leave']       = $payroll_schedule_leave;
                               $temp['shop_id']                      = Self::shop_id();
+<<<<<<< HEAD
                               $temp['leave_whole_day']              = 0;
                               $temp['leave_hours']                  = '00:00:00';
 
@@ -5000,6 +5070,8 @@ class PayrollController extends Member
                               {
                                    $temp['leave_hours']               = date('h:i:s', strtotime(Request::input('leave_hours_'.$tag)));
                               }
+=======
+>>>>>>> master
                               array_push($insert, $temp);
                               $payroll_schedule_leave = Carbon::parse($payroll_schedule_leave)->addDay()->format("Y-m-d");
                          }
@@ -5448,18 +5520,24 @@ class PayrollController extends Member
           $temp['sub']        = array();
           array_push($salary, $temp);
 
-          $temp = array();
-          $temp['name']       = 'Monthly Rate';
-          $temp['amount']     = number_format($process['salary_monthly'], 2);
-          $temp['sub']        = array();
-          array_push($salary, $temp);
-
-          $temp = array();
-          $temp['name']       = 'Daily Rate';
-          $temp['amount']     = number_format($process['salary_daily'], 2);
-          $temp['sub']        = array();
-          array_push($salary, $temp);
+          if($process['display_monthly_rate'] == 1)
+          {
+               $temp = array();
+               $temp['name']       = 'Monthly Rate';
+               $temp['amount']     = number_format($process['salary_monthly'], 2);
+               $temp['sub']        = array();
+               array_push($salary, $temp);
+          }
           
+          if($process['display_daily_rate'] == 1)
+          {
+               $temp = array();
+               $temp['name']       = 'Daily Rate';
+               $temp['amount']     = number_format($process['salary_daily'], 2);
+               $temp['sub']        = array();
+               array_push($salary, $temp);
+          }
+
           /* ALL POSITIVE */
 
           $temp = array();
@@ -5569,13 +5647,35 @@ class PayrollController extends Member
           }    
 
           $temp = array();
+          // $total_13_month = $process['13_month'] + $process['adjustment']['total_13_month'];
+
           if($process['13_month'] > 0)
           {    
                $temp['name']       = '13 month Pay';
                $temp['amount']     = number_format($process['13_month'], 2);
                $temp['sub']        = array();
                array_push($salary, $temp);
-          }   
+          }  
+
+          if($process['adjustment']['total_13_month'] > 0)
+          {
+               foreach($process['adjustment']['13_month'] as $n13month)
+               {
+                    $temp['name'] = $n13month->payroll_adjustment_name.' (13 month pay)';
+
+                    if($status == 'processed')
+                    {
+                         $temp['name'].=Self::btn_adjustment($n13month->payroll_adjustment_id);
+                    }
+
+                    $temp['amount'] = number_format($n13month->payroll_adjustment_amount, 2);
+                    $temp['sub']        = array();
+                    array_push($salary, $temp);
+               }
+          }
+
+          // dd($salary);
+
 
           $temp = array();
           if($process['payroll_cola'] > 0)
@@ -6788,6 +6888,8 @@ class PayrollController extends Member
           $date[1] = date('Y-m-d');
 
           $data = Self::generate_custom_report($id, $date);
+
+          // dd($data);
           return view('member.payroll.payroll_view_report', $data);
      }
 
@@ -6811,8 +6913,8 @@ class PayrollController extends Member
 
           $record     = Self::generate_custom_report($payroll_reports_id, $date);
 
-          $emp = $record['_emp'];
-          $columns = $record['_columns'];
+          $emp = $record['data']['_emp'];
+          $columns = $record['data']['_columns'];
 
           // dd($record);
           $data = array();
@@ -6826,7 +6928,7 @@ class PayrollController extends Member
 
           array_push($data, $columnn_array);
 
-          foreach($record['_emp'] as $emp)
+          foreach($record['data']['_emp'] as $emp)
           {
                $temp = array();
                array_push($temp, $emp['raw_name']);
@@ -6851,32 +6953,78 @@ class PayrollController extends Member
           $total_array = array();
           array_push($total_array, 'Total');
 
-          foreach($record['_total'] as $total)
+          foreach($record['data']['_total'] as $total)
           {
                $total = round(n2z($total), 2);
-               // if($total == 0)
-               // {
-               //      $total = number_format(n2z($total), 2);
-               // }
                array_push($total_array, round(n2z($total), 2));
           }
           array_push($data, $total_array);
 
-          // dd($data);
-
+      
           $title    = Tbl_payroll_reports::where('payroll_reports_id', $payroll_reports_id)->pluck('payroll_reports_name');
 
-          return Excel::create($title, function($excel) use ($data) {
+
+          $data_export['data'] = $data;
+          $data_export['header'] = $record['header'];
+
+          return Excel::create($title, function($excel) use ($data_export) {
 
                $date = 'reports';
                $excel->setTitle('Payroll');
                $excel->setCreator('Laravel')->setCompany('DIGIMA');
                $excel->setDescription('payroll file');
 
+<<<<<<< HEAD
                $excel->sheet($date, function($sheet) use ($data) {
                     $sheet->fromArray($data, null, 'A1', true, false);
+=======
+               $excel->sheet($date, function($sheet) use ($data_export) {
+
+                    /* column in excel */
+                    $columns = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE','AF','AG','AH','AI'];
+
+                    $new_range = 0;
+                    $old_range = 1;
+
+                    $column_range = array();
+                    foreach($data_export['header'] as $header)
+                    {
+                         // name
+                         // count
+                         if($new_range > 0)
+                         {
+                              $old_range = $new_range;
+                              $old_range++;
+                         }
+                        
+
+                         $new_range += $header['count'];
+                         $name = $header['name'];
+                         $sheet->mergeCells($columns[$old_range - 1].'1:'.$columns[$new_range - 1].'1', function($cell) use($name){
+                              $cells->setValue($name);
+                         });
+                         // if($header['count'] > 1)
+                         // {
+                         //      // $sheet->mergeCells($columns[$old_range - 1].'1:'.$columns[$new_range - 1].'1');
+                         // }
+
+                         // array_push($column_range, $columns[$old_range - 1].'1:'.$columns[$new_range - 1].'1');
+                         // dd($columns[$old_range - 1]);
+                         
+                         // $sheet->cells($columns[$old_range - 1].'1:'.$columns[$new_range - 1].'1', function($cells) use ($name) {
+                         // //     // manipulate the range of cells
+                         //      $cells->setValue($name);
+
+                         // });
+                    }
+
+                    // dd($column_range);
+                    
+
+                    $sheet->fromArray($data_export['data'], null, 'A2', true, false);
+>>>>>>> master
                     $sheet->setColumnFormat(array(
-                         'B:BZ' => '0.00'
+                         'B4:'.$columns[count($data_export['data'][1]) - 1].(count($data_export['data']) + 1) => '#,##0.00',
                          ));
                });
 
@@ -6893,7 +7041,16 @@ class PayrollController extends Member
           $column_space       = array();
           
 
-          $_entity = collect(Tbl_payroll_entity::orderBy('entity_name')->get()->toArray())->groupBy('entity_category');
+          $_entity = collect(Tbl_payroll_entity::orderBy('entity_category')->orderBy('entity_name')->get()->toArray())->groupBy('entity_category');
+
+          $group = ['','Basic','Deductions','Deminimis','Goverment',''];
+
+          $header  = array();
+
+          $temp_header['name']     = '';
+          $temp_header['count']    = 1;
+
+          array_push($header, $temp_header);
 
           /* for column start */
           foreach($_entity as $key => $data_entity)
@@ -6908,6 +7065,29 @@ class PayrollController extends Member
                     {
                          array_push($columns, $entity['entity_name']);
                          array_push($column_space, '');
+
+                         /* check if column header exists */
+                         $count_exist = 0;
+                         $key_exist = 0;
+                         foreach($header as $key => $head)
+                         {
+                              if($head['name'] == ucfirst($entity['entity_category']))
+                              {
+                                   $count_exist++;
+                                   $key_exist = $key;
+                              }
+                         }
+                         if($count_exist > 0)
+                         {
+                              $header[$key_exist]['count']++;
+                         }
+                         else
+                         {
+                              $temp_header['name']     = ucfirst($entity['entity_category']);;
+                              $temp_header['count']    = 1;
+                              array_push($header, $temp_header);
+                         }
+
                     }
 
 
@@ -6929,6 +7109,7 @@ class PayrollController extends Member
 
                }
           }
+
 
           /* for column end */
 
@@ -7233,8 +7414,10 @@ class PayrollController extends Member
           $data['_total']     = $_total;
           $data['_columns']   = $columns;
 
+          $return['data']     = $data;
+          $return['header']   = $header;
 
-          return $data;
+          return $return;
      }
 
      public function getsubtotal_report($_item = array())
@@ -7303,14 +7486,19 @@ class PayrollController extends Member
                     $payroll_period_company_id_list = $temp_query->select('tbl_payroll_record.payroll_period_company_id as company_record_id')->lists('company_record_id');
                     
                     // dd($payroll_period_company_id_list);
+                    $positive_value = 0;
+                    $negative_value = 0;
 
                     if($count_entity == 1)
                     {
-                         
                          if($entity['entity_name'] == '13 Month Pay')
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('13_month')->sum('13_month');
+
+                              $amount += Tbl_payroll_adjustment::getrecord($employee_id, $payroll_period_company_id_list, '13 month pay')->select('payroll_adjustment_amount')->sum('payroll_adjustment_amount');
+                              
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7318,6 +7506,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('regular_salary')->sum('regular_salary');
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7330,6 +7519,7 @@ class PayrollController extends Member
                               $amount += $temp_query->select('sh_early_overtime')->sum('rest_day_sh_early_overtime');
                               $amount += $temp_query->select('rh_early_overtime')->sum('rh_early_overtime');
                               $amount += $temp_query->select('sh_early_overtime')->sum('sh_early_overtime');
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7337,6 +7527,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('extra_salary')->sum('extra_salary');
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7344,6 +7535,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('leave_amount')->sum('leave_amount');
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7357,6 +7549,7 @@ class PayrollController extends Member
                               $amount += $temp_query->select('rest_day_rh_night_diff')->sum('rest_day_rh_night_diff');
                               $amount += $temp_query->select('sh_night_diff')->sum('sh_night_diff');
                               $amount += $temp_query->select('rh_early_overtime')->sum('rh_early_overtime');
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7364,6 +7557,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('rh_salary')->sum('rh_salary');
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7377,6 +7571,7 @@ class PayrollController extends Member
                               $amount += $temp_query->select('rest_day_rh_reg_overtime')->sum('rest_day_rh_reg_overtime');
                               $amount += $temp_query->select('rh_reg_overtime')->sum('rh_reg_overtime');
                               $amount += $temp_query->select('sh_reg_overtime')->sum('sh_reg_overtime');
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7384,6 +7579,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('rest_day_salary')->sum('rest_day_salary');
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7391,13 +7587,16 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('payroll_cola')->sum('payroll_cola');
+                              $positive_value += $amount;
                               array_push($data, $amount);
+                              // array_push($data, '150');
                          }
 
                          if($entity['entity_name'] == 'Special Holiday Pay')
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('sh_salary')->sum('sh_salary');
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7406,21 +7605,21 @@ class PayrollController extends Member
                               $amount = Tbl_payroll_allowance_record::getbyrecord($payroll_record_id_list)->select('payroll_record_allowance_amount')->sum('payroll_record_allowance_amount');
 
                               $amount += Tbl_payroll_adjustment::getrecord($employee_id, $payroll_period_company_id_list, 'Allowance')->select('payroll_adjustment_amount')->sum('payroll_adjustment_amount');
-
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
                          if($entity['entity_name'] == 'Bonus Pay')
                          {
                               $amount = Tbl_payroll_adjustment::getrecord($employee_id, $payroll_period_company_id_list, 'Bonus')->select('payroll_adjustment_amount')->sum('payroll_adjustment_amount');
-
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
                          if($entity['entity_name'] == 'Commission Pay')
                          {
                               $amount = Tbl_payroll_adjustment::getrecord($employee_id, $payroll_period_company_id_list, 'Commissions')->select('payroll_adjustment_amount')->sum('payroll_adjustment_amount');
-
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7428,7 +7627,7 @@ class PayrollController extends Member
                          {
                               $amount = Tbl_payroll_adjustment::getrecord($employee_id, $payroll_period_company_id_list, 'Incentives')->select('payroll_adjustment_amount')->sum('payroll_adjustment_amount');
 
-
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7436,6 +7635,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('pagibig_contribution')->sum('pagibig_contribution');
+                              $negative_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7443,6 +7643,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('philhealth_contribution_ee')->sum('philhealth_contribution_ee');
+                              $negative_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7450,6 +7651,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('philhealth_contribution_er')->sum('philhealth_contribution_er');
+                              // $negative_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7457,6 +7659,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('sss_contribution_ec')->sum('sss_contribution_ec');
+                              // $negative_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7464,6 +7667,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('sss_contribution_ee')->sum('sss_contribution_ee');
+                              $negative_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7471,6 +7675,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('sss_contribution_er')->sum('sss_contribution_er');
+
                               array_push($data, $amount);
                          }
 
@@ -7478,25 +7683,36 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('tax_contribution')->sum('tax_contribution');
+                              $negative_value += $amount;
                               array_push($data, $amount);
+                              // array_push($data, 500);
+                              // dd($amount);
                          }
 
                          if($entity['entity_name'] == 'Cash Advance')
                          {
                               $amount = Tbl_payroll_deduction_payment::getrecord($payroll_record_id_list , 'Cash Advance')->select('tbl_payroll_deduction_payment.payroll_payment_amount')->sum('tbl_payroll_deduction_payment.payroll_payment_amount');
+                              $negative_value += $amount;
+                              array_push($data, $amount);
+                         }
 
+                         if($entity['entity_name'] == 'Late')
+                         {
+                              $amount = $temp_query->select('late_deduction')->sum('late_deduction');
                               array_push($data, $amount);
                          }
 
                          if($entity['entity_name'] == 'Cash Bond')
                          {
                               $amount = Tbl_payroll_deduction_payment::getrecord($payroll_record_id_list , 'Cash Bond')->select('tbl_payroll_deduction_payment.payroll_payment_amount')->sum('tbl_payroll_deduction_payment.payroll_payment_amount');
+                              $negative_value += $amount;
                               array_push($data, $amount);
                          }
 
                          if($entity['entity_name'] == 'Loans')
                          {
                               $amount = Tbl_payroll_deduction_payment::getrecord($payroll_record_id_list , 'Loans')->select('tbl_payroll_deduction_payment.payroll_payment_amount')->sum('tbl_payroll_deduction_payment.payroll_payment_amount');
+                              $negative_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7505,7 +7721,7 @@ class PayrollController extends Member
                               $amount = Tbl_payroll_adjustment::getrecord($employee_id, $payroll_period_company_id_list, 'Deductions')->select('payroll_adjustment_amount')->sum('payroll_adjustment_amount');
 
                               $amount += Tbl_payroll_deduction_payment::getrecord($payroll_record_id_list , 'Other Deduction')->select('tbl_payroll_deduction_payment.payroll_payment_amount')->sum('tbl_payroll_deduction_payment.payroll_payment_amount');
-
+                              $negative_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7514,6 +7730,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('absent_deduction')->sum('absent_deduction');
+                              $negative_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7521,6 +7738,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('under_time')->sum('under_time');
+                              $negative_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7540,12 +7758,13 @@ class PayrollController extends Member
 
                                    $payroll_deduction_type_id = $sub['payroll_deduction_type_id'];
                                    $amount = Tbl_payroll_deduction_payment::getpayment($employee_id, $payroll_record_id_list, $payroll_deduction_type_id)->select('payroll_payment_amount')->sum('payroll_payment_amount');
-
+                                   $negative_value += $amount;
                                    array_push($data, $amount);
                               }
                          }
                     }
 
+                    $net = $positive_value - $negative_value;
                }
           }
 
@@ -7685,6 +7904,7 @@ class PayrollController extends Member
           if($bank_name == 'BDO')
           {
                return Self::bdo_bank_template($data);
+<<<<<<< HEAD
           }
 
           else if($bank_name == 'Metro Bank')
@@ -7754,6 +7974,77 @@ class PayrollController extends Member
                     $sheet->fromArray($column, null, 'A1', true, false);
                });
 
+=======
+          }
+
+          else if($bank_name == 'Metro Bank')
+          {
+               return Self::metro_bank_template($data);
+          }
+
+          else if($bank_name == 'Equicom')
+          {
+               return Self::equicom_bank_template($data);
+          }
+
+          /* use bdo as default */
+          else
+          {
+               return Self::bdo_bank_template($data);
+          }
+
+          // $myName = $company_code.$upload_date.$batch_no;
+
+          // $headers = ['Content-type'=>'text/plain', 'test'=>'YoYo', 'Content-Disposition'=>sprintf('attachment; filename="%s"', $myName.".txt"),'X-BooYAH'=>'WorkyWorky','Content-Length'=>sizeof($fileText)];
+
+          // return Response::make($fileText, 200, $headers);
+     }
+
+
+     public function bdo_bank_template($data = array(), $title = '')
+     {
+          $column = array();
+
+          $temp = array();
+          $temp['account_number']  = 'ACCOUNT NUMBER';
+          $temp['amount']          = 'AMOUNT';
+          $temp['name']            = 'NAME';
+
+          array_push($column, $temp);
+          $total = 0;
+
+          $data = collect($data)->sortBy('payroll_employee_first_name');
+
+          foreach($data as $bdo)
+          {
+               $temp = array();
+               $temp['account_number'] = $bdo['payroll_employee_atm_number'];
+               $temp['amount'] = $bdo['total_net'];
+               $temp['name'] = $bdo['payroll_employee_title_name'].' '.$bdo['payroll_employee_first_name'].' '.$bdo['payroll_employee_middle_name'].' '.$bdo['payroll_employee_last_name'].' '.$bdo['payroll_employee_suffix_name'];
+
+               array_push($column, $temp);
+               $total += $bdo['total_net'];
+          }
+
+          $temp = array();
+          $temp['account_number'] = '';
+          $temp['amount'] = $total;
+          $temp['name'] = '';
+
+          array_push($column, $temp);
+
+          return Excel::create($title, function($excel) use ($column) {
+
+               $date = 'BDO';
+               $excel->setTitle('Payroll');
+               $excel->setCreator('Laravel')->setCompany('DIGIMA');
+               $excel->setDescription('payroll file');
+
+               $excel->sheet($date, function($sheet) use ($column) {
+                    $sheet->fromArray($column, null, 'A1', true, false);
+               });
+
+>>>>>>> master
           })->download('xlsx');
 
      }

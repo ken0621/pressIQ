@@ -45,6 +45,14 @@ class Tbl_ec_variant extends Model
                      ->leftjoin(DB::raw("(SELECT inventory_item_id, warehouse_id, sum(inventory_count) as inventory_count, sum(inventory_count) as inventory_status FROM tbl_warehouse_inventory where `warehouse_id` = ".$warehouse_id ." GROUP BY inventory_item_id) as warehouse"), "inventory_item_id","=","item_id");
     }
 
+    /* DEPENDENT on scopeItem */
+    public function scopeManufacturer($query, $manufacturer_id)
+    {
+        $query->join("tbl_manufacturer","manufacturer_id","=", "item_manufacturer_id");
+        if($manufacturer_id)  $query->where("manufacturer_id", $manufacturer_id);
+        return $query;
+    }
+
     public function scopeOptionName($query)
     {
     	$query->leftjoin(DB::raw("tbl_variant_name AS var_name"),"evariant_id","=", "variant_id")

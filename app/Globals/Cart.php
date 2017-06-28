@@ -1205,6 +1205,13 @@ class Cart
                 'param1'        => $from,
                 'param2'        => $order_id
             );
+            
+            // Insert Dragonpay Logs
+            $insert["log_date"] = Carbon::now();
+            $insert["response"] = serialize($dragon_request);
+            $insert["order_id"] = $order_id;
+            
+            DB::table("tbl_dragonpay_logs")->insert($insert);
 
             Dragon_RequestPayment::make($merchant_key, $dragon_request); 
         }  

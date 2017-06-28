@@ -97,87 +97,52 @@ class ShopCheckoutController extends Shop
                 $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
 
                 if($order)
-                {  
-                    // $update['ec_order_id'] = $order_id;
-                    // $update['order_status'] = "Processing";
-                    // $update['payment_status'] = 1;
-                    // $order = Ec_order::update_ec_order($update);
-
+                {
                     return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)));
                 }
             }
             elseif ($from == "register")
             {
-                // $this->after_email_payment($order_id);
                 return Redirect::to('/mlm/login?notify=1&success=1');
             }
         }
         else
         {
-            //  $this->after_email_payment($order_id);
             return Redirect::to('/mlm/login?notify=2&success=1');
         }
     }
     public function dragonpay_postback()
     {
         $request = Request::all();
-
+        
+        // Insert Dragonpay Logs
         $insert["log_date"] = Carbon::now();
-        $insert["content"]  = serialize($request);
-        DB::table("tbl_dragonpay_logs")->insert($insert);
+        $insert["response"] = serialize($request);
+        $insert["order_id"] = $order_id;
+        
+        DB::table("tbl_dragonpay_logs_other")->insert($insert);
 
         if (Request::input("status") == "S") 
         {
             $from = Request::input('param1');
-            if ($from == "checkout") 
+
+            $order_id = Request::input("param2");
+            $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
+
+            if($order)
             {
-                $order_id = Request::input("param2");
-                $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
-
-                if($order)
-                {  
-                    try 
-                    {
-                        $update['ec_order_id'] = $order_id;
-                        $update['order_status'] = "Processing";
-                        $update['payment_status'] = 1;
-                        $order = Ec_order::update_ec_order($update);
-
-                        $this->after_email_payment($order_id);
-                    } 
-                    catch (\Exception $e) 
-                    {
-                        $last["log_date"] = Carbon::now();
-                        $last["content"]  = $e->getMessage();
-                        DB::table("tbl_dragonpay_logs")->insert($last);  
-                    }   
-                }
-            }
-            elseif ($from == "register")
-            {
-                $order_id = Request::input("param2");
-                $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
-
-                if($order)
+                if ($from == "register")
                 {
-                    try 
-                    {
-                        Item_code::ec_order_slot($order_id);
-                        
-                        $update['ec_order_id'] = $order_id;
-                        $update['order_status'] = "Processing";
-                        $update['payment_status'] = 1;
-                        $order = Ec_order::update_ec_order($update);
-
-                        $this->after_email_payment($order_id);
-                    } 
-                    catch (\Exception $e) 
-                    {
-                        $last["log_date"] = Carbon::now();
-                        $last["content"]  = $e->getMessage();
-                        DB::table("tbl_dragonpay_logs")->insert($last);  
-                    }  
+                    Item_code::ec_order_slot($order_id);
                 }
+                
+                $update['ec_order_id'] = $order_id;
+                $update['order_status'] = "Processing";
+                $update['payment_status'] = 1;
+                $order = Ec_order::update_ec_order($update);
+
+                $this->after_email_payment($order_id);
+
             }
         }
     }

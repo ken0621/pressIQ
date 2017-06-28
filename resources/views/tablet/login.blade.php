@@ -88,24 +88,47 @@ $(".sync-data").bind("click", function()
 		success : function(data)
 		{
 			// console.log(data);
-			db.transaction(function (tx){
-
-			$(data).each(function(a, b)
+			db.transaction(function (tx)
 			{
-				query = data[a];
-				console.log(query);
-				tx.executeSql(query,[],	function(txt, result)
+				$(data).each(function(a, b)
 				{
-					console.log(result);	
-				},
-				onError);				
-			});
+					query = data[a];
+					console.log(query);
+					tx.executeSql(query,[],	function(txt, result)
+					{
+						console.log(result);	
+					},
+					onError);				
+				});
     			// createTableName($data);
 			});
 		}
 	});
 });
 
+
+db.transaction( function (tx){
+	tx.executeSql("SELECT * FROM " +temp_saleItem + " WHERE sale_id = "+id,[], 
+	function (tx, result){
+		var dataset = result.rows;
+		var items;
+		var totalPusrchased = 0;
+		var totalamount = 0;
+		// alert(id);
+		for(var i = 0, items = null; i<= (dataset.length - 1); i++){
+			items = dataset.item(i);
+
+			totalPusrchased = totalPusrchased + parseFloat(items["quantity_purchased"]);
+			totalamount = totalamount + (parseFloat(items["quantity_purchased"]) * parseFloat(items["item_unit_price"]));
+			$(".itemPurchased").html(totalPusrchased.toFixed(2));
+			$(".Total").html(totalamount.toFixed(2));
+			console.log(totalamount.toFixed(2));
+
+		}
+	}, function (tx, error){
+		// console.log(error);
+	});
+});
 function createTableName(query)
 {
 	db.transaction(function (tx){ tx.executeSql(query,[],

@@ -638,6 +638,10 @@ class Payroll2
 		$param_rate = Tbl_payroll_overtime_rate::where('payroll_group_id', $group_id)->get()->toArray();
 		$collection = collect($param_rate);
 
+		$regular_param 	= $collection->where('payroll_overtime_name','Regular')->first();
+		$legal_param 	= $collection->where('payroll_overtime_name','Legal Holiday')->first();
+		$special_param 	= $collection->where('payroll_overtime_name','Special Holiday')->first();
+
 		// time_spent
 		// is_absent
 		// late
@@ -679,6 +683,13 @@ class Payroll2
 
 		/* rest day but regular day */
 		$rest_day_salary 	= divide($rest_float, $target_float) * $daily_rate;
+
+		/* night shift computation */
+		$night_diff_salary 	= divide($night_diff_float, $target_float) * $daily_rate;
+
+		/* over time computation */
+		$overtime_salary 	= divide($overtime_float, $target_float) * $daily_rate;
+
 
 	}
 	public static function compute_income_month_pay()

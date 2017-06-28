@@ -225,8 +225,6 @@ class ShopCheckoutController extends Shop
         $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
         if($order)
         {
-            dd(DB::table("tbl_paymaya_logs")->where("order_id", $order_id)
-                                             ->get());
             try 
             {
                 $update["response"] = serialize(Request::input());
@@ -239,7 +237,8 @@ class ShopCheckoutController extends Shop
                 DB::table("tbl_paymaya_logs")->where("order_id", $order_id)
                                              ->update($update);
             }   
-            
+            dd(DB::table("tbl_paymaya_logs")->where("order_id", $order_id)
+                                             ->get());
             Item_code::ec_order_slot($order_id);
 
             $update['ec_order_id']    = $order_id;

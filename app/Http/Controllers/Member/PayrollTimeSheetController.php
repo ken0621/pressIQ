@@ -560,12 +560,21 @@ class PayrollTimeSheetController extends Member
 		// }
 
 		$schedule = Payroll::getshift_emp($employee_information->payroll_employee_id, $timesheet_info->payroll_time_date, $employee_information->payroll_group_id);
+
+		// dd($schedule);
 		
 		if($schedule->rest_day == 1)
 		{
 			$data["rest_day"] = $rest_day = true;
 		}
-		$work_end_24 = $schedule->work_end;
+		$work_end_24 = '00:00:00';
+
+		if(isset($schedule->work_end))
+		{
+			$work_end_24 = $schedule->work_end;
+		}	
+		
+
 		if(Payroll::time_float($schedule->work_end) <= 12)
 		{
 			$work_end_24 = Payroll::sum_time($schedule->work_end, '24:00');

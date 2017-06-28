@@ -426,6 +426,11 @@ class Payroll
 
 		// dd($schedule);
 
+		if($time_sheet_info == null)
+		{
+			dd($employee_id);
+		}
+
 		if($time_sheet_info->payroll_time_sheet_approved == 0) //ONLY UPDATE THOSE WHO ARE NOT APPROVED
 		{
 			$_time_record = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $time_sheet_info->payroll_time_sheet_id)->get();
@@ -564,16 +569,8 @@ class Payroll
 
 		$data['holiday']	= Tbl_payroll_holiday_company::getholiday($payroll_company_id, $date)->select('tbl_payroll_holiday.*')->first();
 
-		/* EMPLOYEE COMPUTATION SETTINGS */
-		if($employee_information->payroll_group_is_flexi_time == 1)
-		{
-			$data["time_rule"] = "flexitime";
-		}
-		else
-		{
-			$data["time_rule"] = "regulartime";
-		}
 
+		$data["time_rule"] = "regulartime";
 		/* EMPLOYEE COMPUTATION SETTINGS */
 
 		$schedule = Payroll::getshift_emp($employee_information->payroll_employee_id, $date, $employee_information->payroll_group_id);
@@ -608,24 +605,7 @@ class Payroll
 		// dd($data["_time_record"]);
 
 		$return = new stdClass();
-		/* GET OTHER DETAILS BASED ON RECORD */
-		// switch($data["time_rule"])
-		// {
-		// 	case "flexitime": 
-		// 		//$return = Payroll::process_time_flexitime($time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours);
-		// 		$data["compute_approved"] = 0;
-		// 		$return->pending_timesheet = Payroll::process_time_regulartime($data, $date);
-		// 		$data["compute_approved"] = 1;
-		// 		$return->approved_timesheet = Payroll::process_time_regulartime($data, $date);
-		// 	break;
-
-		// 	case "regulartime":
-		// 		$data["compute_approved"] = 0;
-		// 		$return->pending_timesheet = Payroll::process_time_regulartime($data, $date);
-		// 		$data["compute_approved"] = 1;
-		// 		$return->approved_timesheet = Payroll::process_time_regulartime($data, $date);
-		// 	break;
-		// }
+	
 
 
 		Payroll::adjust_payroll_approved_in_and_out($employee_information->payroll_employee_id, $date);

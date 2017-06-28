@@ -5,6 +5,8 @@ use App\Globals\Payroll;
 
 class Payroll2
 {
+
+
     /*
      * TITLE: CLEAN SHIFT
      * 
@@ -22,10 +24,13 @@ class Payroll2
      * @return (array)
      *    	- time_in (time 00:00:00)
      *		- time_out (time 00:00:00)
-     *		- auto_approve
-     *		- reason
-     *		- status time sched
-     *		- extra time
+     *		- auto_approve (integer 0 or 1)
+     *		- reason (string 00:00:00)
+     *		- status_time_sched (time 00:00:00)
+     *		- late (time 00:00:00)
+     *		- undertime (time 00:00:00)
+     *		- overtime (time 00:00:00)
+     *		- extra time (time 00:00:00)
      *
      * @author (Kim Briel Oraya)
      *
@@ -198,6 +203,39 @@ class Payroll2
 		}
 		return $_output;
 	}
+
+    /*
+     * TITLE: CLEAN SHIFT FOR FLEXITIME
+     * 
+     * Returns a clean TIME IN and TIME OUT when cross reference with SHIFTING SCHEDULES.
+     *
+     * @param
+     *    $_time (array)
+     *		- time_in (time 00:00:00)
+     *		- time_out (time 00:00:00)
+     *
+     *	  $target_hours (time 00:00:00)
+     *
+     * @return (array)
+     *    	- time_in (time 00:00:00)
+     *		- time_out (time 00:00:00)
+     *		- auto_approve (integer 0 or 1)
+     *		- reason (string 00:00:00)
+     *		- status_time_sched (time 00:00:00)
+     *		- late (time 00:00:00)
+     *		- undertime (time 00:00:00)
+     *		- overtime (time 00:00:00)
+     *		- extra time (time 00:00:00)
+     *
+     * @author (Kim Briel Oraya)
+     *
+     */
+
+	public static function clean_shift_flexi($_time, $target_hours, $testing = false)
+	{
+		return $_output;
+	}
+
 
     /*
      * TITLE: COMPUTE TIME MODE FOR REGULAR

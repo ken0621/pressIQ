@@ -69,10 +69,13 @@ class Times2 extends Controller
 		/* INPUT TIME */
 		$_time[0] = new stdClass();
 		$_time[0]->time_in = "09:00:00"; 
-		$_time[0]->time_out = "12:00:00";
-		// $_time[1] = new stdClass();
-		// $_time[1]->time_in = "16:00:00"; 
-		// $_time[1]->time_out = "17:00:00";
+		$_time[0]->time_out = "11:00:00";
+		$_time[1] = new stdClass();
+		$_time[1]->time_in = "12:00:00"; 
+		$_time[1]->time_out = "13:00:00";
+		$_time[2] = new stdClass();
+		$_time[2]->time_in = "16:00:00"; 
+		$_time[2]->time_out = "16:45:00";
 
 		// INPUT SHIFT 
 		$_shift[0] = new stdClass();
@@ -84,7 +87,7 @@ class Times2 extends Controller
                                                   
 		$late_grace_time = "00:15:00";
 		$overtime_grace_time = "00:15:00";
-		$late_grace_time_rule = "accumulative";
+		$late_grace_time_rule = "per_shift";
 		$grace_time_rule_overtime = "per_shift";
 		$day_type = "";
 		$is_holiday = "";
@@ -92,7 +95,7 @@ class Times2 extends Controller
 		$leave_fill_late=1;
 		$leave_fill_undertime=1;
 
-		$_output = Payroll2::clean_shift($_time, $_shift, true);
+		$_output = Payroll2::clean_shift($_time, $_shift, false);
 		$time = Payroll2::compute_time_mode_regular($_output, $_shift, $late_grace_time, $late_grace_time_rule, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday, $leave, $leave_fill_late, $leave_fill_undertime, false);
 
 		dd($time);

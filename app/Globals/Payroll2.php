@@ -141,7 +141,7 @@ class Payroll2
 					{
 						$reason = "<b>answer: ". Payroll2::convert_to_12_hour($time->time_in)." to ".Payroll2::convert_to_12_hour($time->time_out)." (1)- <span style='color: green; text-transform: uppercase'>LATE AND UNDERTIME<span><br></b>";
 						echo $testing == true ? $reason : "";
-						$_output = Payroll2::time_shift_output($_output, $output_ctr++, $time->time_in, $time->time_out, 1,$reason,"LATE AND UNDERTIME",Payroll::time_diff($time->time_in,$time->time_out),Payroll::time_diff($time->time_out,$shift->shift_out),"00:00:00");
+						$_output = Payroll2::time_shift_output($_output, $output_ctr++, $time->time_in, $time->time_out, 1,$reason,"LATE AND UNDERTIME",Payroll::time_diff($shift->shift_in,$time->time_in),Payroll::time_diff($time->time_out,$shift->shift_out),"00:00:00");
 					}
 					/*END all approve shift*/
 
@@ -353,6 +353,7 @@ class Payroll2
 				//late hours computation and depends to time_grace_rule
 				if ($grace_time_rule_late=="per_shift") 
 				{
+
 					$late_minutes = Payroll2::convert_time_in_minutes($time->late);
 					//record late if late is greater than grace time
 					if ($late_minutes>Payroll2::convert_time_in_minutes($late_grace_time)) 
@@ -435,27 +436,35 @@ class Payroll2
 				$over_time="00:00";
 			}
 
+			
+
+			/*START sum time_spent late and undertime of all auto approved sched*/
+			$late_hour_temp="00:00";
+			$under_time_temp="00:00";
+			$time_spent_temp="00:00";
+			foreach ($_time as $time) 
+			{
+				if ($time->auto_approved==1) 
+				{
+					$time_spent_temp = Payroll::sum_time($time_spent_temp,$time->undertime);
+
+					$time_spent_temp = Payroll::sum_time($time_spent_temp,$time->late);
+
+					$time_spent_temp =  Payroll::sum_time($time_spent_temp,Payroll::time_diff($time->time_in,$time->time_out));
+				}
+			}
 			//record if undertime
 			//not yet sure
-			// $target_minutes = Payroll2::convert_time_in_minutes($target_hours);
-			// $time_spent_in_minutes = Payroll2::convert_time_in_minutes($time_spent);
-			// if ($time_spent_in_minutes<$target_minutes) 
-			// { 
-			// 	$under_time = Payroll::sum_time($under_time,Payroll::time_diff($time_spent,$target_hours));
-			// 	$under_time = Payroll::sum_time($under_time,$late_hours);
-			// }
+			$target_minutes = Payroll2::convert_time_in_minutes($target_hours);
+			$time_spent_in_minutes = Payroll2::convert_time_in_minutes($time_spent_temp);
+			$under_time_in_minutes = Payroll2::convert_time_in_minutes($time->undertime);
+			if ($time_spent_in_minutes<$target_minutes) 
+			{ 
+				$under_time = Payroll::sum_time($under_time,Payroll::time_diff($time_spent,$target_hours));
+				$under_time = Payroll2::minus_time($under_time_in_minutes,$under_time);
+			}
+			/*END sum time_spent late and undertime of all auto approved sched*/
 
-
-			// $late_hour_temp;
-			// $under_time_temp;
-			// $time_spent_temp;
-			// foreach ($_time as $time) 
-			// {
-			// 	if ($time->auto_approved==1) 
-			// 	{
-			// 		echo "aaaa/aa<br>";
-			// 	}
-			// }
 
 			
 			//fill late with leave hours

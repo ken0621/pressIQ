@@ -568,7 +568,7 @@ class Payroll
 		// 	$data["time_sheet_info"]->payroll_time_date;
 		// }
 
-		$data["employee_information"] = $employee_information = Tbl_payroll_employee_contract::selemployee($employee_id)->leftJoin("tbl_payroll_group", "tbl_payroll_group.payroll_group_id", "=","tbl_payroll_employee_contract.payroll_group_id")->first();
+		$data["employee_information"] = $employee_information = Tbl_payroll_employee_contract::selemployee($employee_id, $date)->leftJoin("tbl_payroll_group", "tbl_payroll_group.payroll_group_id", "=","tbl_payroll_employee_contract.payroll_group_id")->first();
 
 		/* GET HOLIDAY PER COMPANY */
 		$payroll_company_id = Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->pluck('payroll_employee_company_id');
@@ -581,7 +581,7 @@ class Payroll
 
 		if(!isset($employee_information->payroll_employee_id))
 		{
-			dd($employee_id);
+			// dd($employee_id);
 		}
 
 		$schedule = Payroll::getshift_emp($employee_information->payroll_employee_id, $date, $employee_information->payroll_group_id);

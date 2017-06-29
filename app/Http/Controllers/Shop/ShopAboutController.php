@@ -37,4 +37,10 @@ class ShopAboutController extends Shop
         $data["page"] = "contactus";
         return view("contactus", $data);
     }
+
+    public function jobs()
+    {
+        $data["page"] = "jobs";
+        return view("jobs", $data);
+    }
 }

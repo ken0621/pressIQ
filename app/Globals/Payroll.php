@@ -579,6 +579,11 @@ class Payroll
 		$data["time_rule"] = "regulartime";
 		/* EMPLOYEE COMPUTATION SETTINGS */
 
+		if(!isset($employee_information->payroll_group_id))
+		{
+			dd($employee_information->payroll_employee_id);
+		}
+
 		$schedule = Payroll::getshift_emp($employee_information->payroll_employee_id, $date, $employee_information->payroll_group_id);
 
 		$data["default_time_in"] = '00:00:00';

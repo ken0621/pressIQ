@@ -4766,10 +4766,10 @@ class PayrollController extends Member
                $temp['shift_code_id']   = $shift_code_id;
                $temp['day']             = $day;
                $temp['target_hours']    = Request::input('target_hours')[$key];
-               $temp['work_start']      = Request::input('work_start')[$key];
-               $temp['work_end']        = Request::input('work_end')[$key];
-               $temp['break_start']     = Request::input('break_start')[$key];
-               $temp['break_end']       = Request::input('break_end')[$key];
+               $temp['work_start']      = date('H:i:s a',strtotime(Request::input('work_start')[$key]));
+               $temp['work_end']        = date('H:i:s a',strtotime(Request::input('work_end')[$key]));
+               $temp['break_start']     = date('H:i:s a',strtotime(Request::input('break_start')[$key]));
+               $temp['break_end']       = date('H:i:s a',strtotime(Request::input('break_end')[$key]));
                $temp['flexi']           = 0;
                $temp['rest_day']        = 0;
                $temp['extra_day']       = 0;

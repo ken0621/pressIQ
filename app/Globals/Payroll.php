@@ -581,7 +581,7 @@ class Payroll
 
 		if(!isset($employee_information->payroll_employee_id))
 		{
-			// dd($employee_id);
+			dd($employee_id);
 		}
 
 		$schedule = Payroll::getshift_emp($employee_information->payroll_employee_id, $date, $employee_information->payroll_group_id);

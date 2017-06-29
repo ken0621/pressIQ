@@ -438,13 +438,26 @@ class Payroll2
 			}
 
 			//record if undertime
-			$target_minutes = Payroll2::convert_time_in_minutes($target_hours);
-			$time_spent_in_minutes = Payroll2::convert_time_in_minutes($time_spent);
-			if ($time_spent_in_minutes<$target_minutes) 
-			{
-				 
-				$under_time = Payroll::sum_time($under_time,Payroll::time_diff($time_spent,$target_hours));
-			}
+			//not yet sure
+			// $target_minutes = Payroll2::convert_time_in_minutes($target_hours);
+			// $time_spent_in_minutes = Payroll2::convert_time_in_minutes($time_spent);
+			// if ($time_spent_in_minutes<$target_minutes) 
+			// { 
+			// 	$under_time = Payroll::sum_time($under_time,Payroll::time_diff($time_spent,$target_hours));
+			// 	$under_time = Payroll::sum_time($under_time,$late_hours);
+			// }
+
+
+			// $late_hour_temp;
+			// $under_time_temp;
+			// $time_spent_temp;
+			// foreach ($_time as $time) 
+			// {
+			// 	if ($time->auto_approved==1) 
+			// 	{
+			// 		echo "aaaa/aa<br>";
+			// 	}
+			// }
 
 			
 			//fill late with leave hours

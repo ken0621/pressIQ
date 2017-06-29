@@ -416,13 +416,8 @@ class Payroll2
 				$count++;
 			}
 
-		
-
 			//compute regular hours
 			$regular_hours = Payroll2::time_difference($time_spent,(Payroll::sum_time($over_time,$night_differential))).":00"; //(overtime+night_diff)-time_spent
-
-			
-
 
 			//grace time for late - accumulative.
 			$late_minutes = Payroll2::convert_time_in_minutes($late_hours);

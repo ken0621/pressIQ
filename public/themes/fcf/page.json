@@ -20,34 +20,6 @@
 			"default":"OUR LATEST NEWS",
 			"size":"6"
 		},
-		"home_slogan_first" :
-		{
-			"label":"Home Slogan First Text",
-			"type":"textbox",
-			"default":"WE ARE A",
-			"size":"4"
-		},
-		"home_slogan_highlight" :
-		{
-			"label":"Home Slogan highlighted Text",
-			"type":"textbox",
-			"default":"RESPONSIBLE",
-			"size":"4"
-		},
-		"home_slogan_last" :
-		{
-			"label":"Home Slogan last Text",
-			"type":"textbox",
-			"default":"MINING COMPANY",
-			"size":"4"
-		},
-		"home_slogan_subtitle" :
-		{
-			"label":"Home Slogan subtitle",
-			"type":"textbox",
-			"default":"This drives innovative solutions for our clients and improves our understanding of the world in which we work.",
-			"size":"12"
-		},
 		"home_gallery_title" :
 		{
 			"label":"Gallery Title",
@@ -61,20 +33,6 @@
 			"type":"gallery",
 			"default":"",
 			"size":"12"
-		},
-		"home_division1_title" :
-		{
-			"label":"Home Division 1 title",
-			"type":"textbox",
-			"default":"WHO WE ARE",
-			"size":"6"
-		},
-		"home_division1_context" :
-		{
-			"label":"Home Division 2 context",
-			"type":"textarea",
-			"default":"context here",
-			"size":"6"
 		},
 		"home_division2_title" :
 		{
@@ -198,13 +156,6 @@
 			"default":"COMPANY PROFILE",
 			"size":"4"
 		},
-		"about_company_profile_context_logo" :
-		{
-			"label":"Company Profile Context Logo",
-			"type":"image",
-			"default":"/themes/fcf/img/company-logo.png",
-			"size":"4"
-		},
 		"about_company_profile_context" :
 		{
 			"label":"Company Profile Context",
@@ -216,29 +167,8 @@
 		{
 			"label":"Company Profile Context Image 1",
 			"type":"image",
-			"default":"/themes/fcf/img/full1.jpg",
-			"size":"3"
-		},
-		"about_company_profile_context_img2" :
-		{
-			"label":"Company Profile Context Image 2",
-			"type":"image",
-			"default":"/themes/fcf/img/full1.jpg",
-			"size":"3"
-		},
-		"about_company_profile_context_img3" :
-		{
-			"label":"Company Profile Context Image 3",
-			"type":"image",
-			"default":"/themes/fcf/img/full23.jpg",
-			"size":"3"
-		},
-		"about_company_profile_context_img4" :
-		{
-			"label":"Company Profile Context Image 4",
-			"type":"image",
-			"default":"/themes/fcf/img/full12.jpg",
-			"size":"3"
+			"default":"/themes/fcf/img/full01.jpg",
+			"size":"9"
 		},
 		"about_company_responsibility_title" :
 		{

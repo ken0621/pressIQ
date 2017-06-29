@@ -4482,15 +4482,32 @@ class PayrollController extends Member
                }
 
                $temp['date']                 = $date_start;
-               $temp['target_hours']         = $shift->target_hours;
-               $temp['work_start']           = $shift->work_start;
-               $temp['work_end']             = $shift->work_end;
-               $temp['break_start']          = $shift->break_start;
-               $temp['break_end']            = $shift->break_end;
-               $temp['flexi']                = $shift->flexi;
-               $temp['rest_day']             = $shift->rest_day;
-               $temp['extra_day']            = $shift->extra_day;
-               $temp['night_shift']          = $shift->night_shift;
+               if($shift != null)
+               {
+                    $temp['target_hours']         = $shift->target_hours;
+                    $temp['work_start']           = $shift->work_start;
+                    $temp['work_end']             = $shift->work_end;
+                    $temp['break_start']          = $shift->break_start;
+                    $temp['break_end']            = $shift->break_end;
+                    $temp['flexi']                = $shift->flexi;
+                    $temp['rest_day']             = $shift->rest_day;
+                    $temp['extra_day']            = $shift->extra_day;
+                    $temp['night_shift']          = $shift->night_shift;
+               }
+               else
+               {
+                    $temp['target_hours']         = 0;
+                    $temp['work_start']           = '00:00:00';
+                    $temp['work_end']             = '00:00:00';
+                    $temp['break_start']          = '00:00:00';
+                    $temp['break_end']            = '00:00:00';
+                    $temp['flexi']                = 0;
+                    $temp['rest_day']             = 0;
+                    $temp['extra_day']            = 0;
+                    $temp['night_shift']          = 0;
+               }
+               
+               
 
                array_push($data['_day'], $temp);
 
@@ -4721,8 +4738,8 @@ class PayrollController extends Member
      // Tbl_payroll_shift_code
      public function shift_template()
      {
-          $data['_active'] = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->paginate(20);
-          $data['_archived'] = Tbl_payroll_shift_code::getshift(Self::shop_id(), 1)->orderBy('shift_code_name')->paginate(20);
+          $data['_active'] = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->get();
+          $data['_archived'] = Tbl_payroll_shift_code::getshift(Self::shop_id(), 1)->orderBy('shift_code_name')->get();
           return view('member.payroll.side_container.shift_template', $data);
      }
 
@@ -4749,10 +4766,10 @@ class PayrollController extends Member
                $temp['shift_code_id']   = $shift_code_id;
                $temp['day']             = $day;
                $temp['target_hours']    = Request::input('target_hours')[$key];
-               $temp['work_start']      = Request::input('work_start')[$key];
-               $temp['work_end']        = Request::input('work_end')[$key];
-               $temp['break_start']     = Request::input('break_start')[$key];
-               $temp['break_end']       = Request::input('break_end')[$key];
+               $temp['work_start']      = date('H:i:s a',strtotime(Request::input('work_start')[$key]));
+               $temp['work_end']        = date('H:i:s a',strtotime(Request::input('work_end')[$key]));
+               $temp['break_start']     = date('H:i:s a',strtotime(Request::input('break_start')[$key]));
+               $temp['break_end']       = date('H:i:s a',strtotime(Request::input('break_end')[$key]));
                $temp['flexi']           = 0;
                $temp['rest_day']        = 0;
                $temp['extra_day']       = 0;
@@ -7798,14 +7815,18 @@ class PayrollController extends Member
                return Self::bdo_bank_template($data, $title);
           }
 
-          if($bank_name == 'Metro Bank')
+          else if($bank_name == 'Metro Bank')
           {
                return Self::metro_bank_template($data, $title);
           }
 
-          if($bank_name == 'Equicom')
+          else if($bank_name == 'Equicom')
           {
                return Self::equicom_bank_template($data, $title);
+          }
+          else
+          {
+               return Self::bdo_bank_template($data, $title);
           }
 
 

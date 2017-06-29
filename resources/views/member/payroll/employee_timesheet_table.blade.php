@@ -66,11 +66,11 @@
             <td class="text-center edit-data day-number">{!! $timesheet->day_number !!}</td>
             <td class="text-center edit-data day-word">{!! $timesheet->day_word !!}</td>
             <td class="text-center editable ">
-                <input placeholder="NO TIME" class="text-table time-entry time-entry-record time-in" type="text" name="time_in[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_in }}">
+                <input placeholder="NO TIME" class="text-table time-entry time-entry-record time-in" type="text" name="time_in[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_in }}" {{$time_record->disable}}>
                 <input class="hidden-time-in" type="hidden" name="time_in2[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_in }}">
             </td>
             <td class="text-center editable">
-                <input placeholder="NO TIME" class="text-table time-entry time-entry-record time-out"  type="text" name="time_out[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_out }}">
+                <input placeholder="NO TIME" class="text-table time-entry time-entry-record time-out"  type="text" name="time_out[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_out }}" {{$time_record->disable}} origin="{{$time_record->origin}}">
                  <input type="hidden" class="hidden-time-out" name="time_out2[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_out }}">
             </td>
             <td class="text-center editable approved-in">__:__ __</td>
@@ -105,12 +105,13 @@
             <td class="text-center edit-data day-number"></td>
             <td class="text-center edit-data day-word"></td>
             <td class="text-center editable">
-                <input placeholder="NO TIME" class="text-table time-entry time-in time-entry-record" type="text" name="time_in[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_in }}">
+                <input placeholder="NO TIME" class="text-table time-entry time-in time-entry-record" type="text" name="time_in[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_in }}" {{$time_record->disable}} origin="{{$time_record->origin}}">
 
                 <input class="hidden-time-in" type="hidden" name="time_in2[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_in }}">
             </td>
             <td class="text-center editable">
-                <input placeholder="NO TIME" class="text-table time-entry time-out time-entry-record"  type="text" name="time_out[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_out }}">
+              
+                <input placeholder="NO TIME" class="text-table time-entry time-out time-entry-record"  type="text" name="time_out[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_out }}" {{$time_record->disable}}>
 
                 <input type="hidden" class="hidden-time-out" name="time_out2[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_out }}">
             </td>

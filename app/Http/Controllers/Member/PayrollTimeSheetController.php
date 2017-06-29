@@ -139,7 +139,7 @@ class PayrollTimeSheetController extends Member
 			$holiday_class 		= '';
 			$virtural_holiday 	= '';
 			$disable 			= '';
-			$origin 			= '';
+			
 
 			/* check if holiday */
 			$holiday = Tbl_payroll_holiday_company::getholiday($data["employee_info"]->payroll_employee_company_id, Carbon::parse($from)->format("Y-m-d"))->get();
@@ -261,7 +261,7 @@ class PayrollTimeSheetController extends Member
 				$data["_timesheet"][$from]->time_record[0]->time_out = "";
 				$data["_timesheet"][$from]->time_record[0]->activities = "";
 				$data["_timesheet"][$from]->time_record[0]->disable = $disable;
-				$data["_timesheet"][$from]->time_record[0]->origin = $origin;
+				$data["_timesheet"][$from]->time_record[0]->origin = '';
 				$data["_timesheet"][$from]->payroll_time_sheet_approved = 0;
 			}
 

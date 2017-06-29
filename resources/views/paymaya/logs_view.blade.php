@@ -1,3 +1,4 @@
+<title>Paymaya Logs</title>
 <!-- CSS Code: Place this code in the document's head (between the 'head' tags) -->
 <style>
 *

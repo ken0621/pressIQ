@@ -146,19 +146,6 @@ class ShopCheckoutController extends Shop
             }
         }
     }
-    public function dragonpay_logs()
-    {
-        $dragonpay = DB::table("tbl_dragonpay_logs")->orderBy("id", "DESC")->first();
-
-        if (is_serialized($dragonpay->content)) 
-        {
-            dd(unserialize($dragonpay->content));
-        }
-        else
-        {
-            dd($dragonpay->content);
-        }
-    }
     public function paymaya_success()
     {
         $order_id = Crypt::decrypt(Request::input("order_id"));
@@ -246,6 +233,26 @@ class ShopCheckoutController extends Shop
         }
         
         return view("paymaya.logs_view", $data);
+    }
+    public function dragonpay_logs()
+    {
+        $data["_dragonpay"] = DB::table("tbl_dragonpay_logs")->orderBy("id", "DESC")->get();
+        foreach ($data["_dragonpay"] as $key => $value) 
+        {
+            $data["_dragonpay"][$key]->extracted = is_serialized($value->response) ? unserialize($value->response) : $value->response;
+        }
+        
+        return view("dragonpay.logs", $data);
+    }
+    public function dragonpay_logs_view($id)
+    {
+        $data["_dragonpay"] = DB::table("tbl_dragonpay_logs_other")->where("order_id", $id)->get();
+        foreach ($data["_dragonpay"] as $key => $value) 
+        {
+            $data["_dragonpay"][$key]->extracted = is_serialized($value->response) ? unserialize($value->response) : $value->response;
+        }
+        
+        return view("dragonpay.logs_view", $data);
     }
     public function failmaya($order_id)
     {

@@ -1,4 +1,4 @@
-<title>Paymaya Logs</title>
+<title>Dragonpay Logs</title>
 <!-- CSS Code: Place this code in the document's head (between the 'head' tags) -->
 <style>
 *
@@ -48,7 +48,7 @@ th, td
     <tr>
       <td>{{ $dragonpay->order_id }}</td>
       <td>{{ date("F d, Y h:i:s A", strtotime($dragonpay->log_date)) }}</td>
-      <td><a href="/payment/paymaya/logs/view/{{ $dragonpay->order_id }}">Check</a></td>
+      <td><a href="/payment/dragonpay/logs/view/{{ $dragonpay->order_id }}">Check</a></td>
       <td><pre style="overflow-x: auto; text-align: left;">{{ is_serialized($dragonpay->response) ? var_dump(unserialize($dragonpay->response)) : $dragonpay->response }}</pre></td>
     </tr>
     @endforeach

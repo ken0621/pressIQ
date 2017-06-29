@@ -3,6 +3,9 @@ namespace App\Globals;
 use stdClass;
 use App\Globals\Payroll;
 
+use App\Model\Tbl_payroll_overtime_rate;
+use App\Model\Tbl_payroll_group;
+
 class Payroll2
 {
 
@@ -413,13 +416,8 @@ class Payroll2
 				$count++;
 			}
 
-		
-
 			//compute regular hours
 			$regular_hours = Payroll2::time_difference($time_spent,(Payroll::sum_time($over_time,$night_differential))).":00"; //(overtime+night_diff)-time_spent
-
-			
-
 
 			//grace time for late - accumulative.
 			$late_minutes = Payroll2::convert_time_in_minutes($late_hours);
@@ -601,6 +599,7 @@ class Payroll2
      *		- excess_leave_hours (time 00:00:00) //for undefined time (regular_hours+leave_hours)-target_hours
      *		- night_differential (time 00:00:00)
      *		- is_half_day (boolean true/false)
+     *		- is_holiday ('' / 'regular' / 'special')
      *
      * @author (Kim Briel Oraya)
      *
@@ -840,65 +839,212 @@ class Payroll2
      * Returns breakdown of hours depending on the shift schedule.
      *
      * @param
-     *	  $daily_rate (double)
-     *    $_overtime_rates (array)
-     *		- regular_plus_overtime (double)
-     *		- regular_plus_night_shift (double)
-	 *		- regular_day (double)
-	 *		- regular_day_plus_over_time (double)
-	 * 		- regular_day_plus_night_diff (double)
-	 *		- regular_day_plus_rest_day (double)
-	 * 		- regular_day_plus_rest_day_plus_over_time (double)
-	 * 		- regular_day_plus_rest_day_plus_night_diff (double)
-	 *		- legal_holiday (double)
-	 * 		- legal_holiday_plus_over_time (double)
-	 *		- legal_holiday_plus_night_diff (double)
-	 * 		- legal_holiday_plus_rest_day (double)
-	 * 		- legal_holiday_plus_rest_day_plus_over_time (double)
-	 * 		- legal_holiday_plus_rest_day_plus_night_diff (double)
-	 * 		- special_holiday (double)
-	 * 		- special_holiday_plus_over_time (double)
-	 *		- special_holiday_plus_night_diff (double)
-	 *		- special_holiday_plus_rest_day (double)
-	 * 		- special_holiday_plus_rest_day_plus_over_time (double)
-	 * 		- special_holiday_plus_rest_day_plus_night_diff (double)
-     *    $time_spent (time 00:00:00)
-     *    $is_absent (time 00:00:00)
-     *    $late (time 00:00:00)
-     *    $undertime (time 00:00:00)
-     *    $overtime (time 00:00:00)
-     *    $target_hours (time 00:00:00)
-     *    $excess_leave_hours (time 00:00:00)
-     *    $regular_hours (time 00:00:00)
-     *    $rest_day_hours (time 00:00:00)
-     *    $regular_holiday_hours (time 00:00:00)
-     *    $special_holiday_hours (time 00:00:00)
-     *    $leave_hours (time 00:00:00)
-     *    $total_hours (time 00:00:00)
-     *    $night_differential (time 00:00:00)
-     *    $is_half_day (time 00:00:00)
+     * 	  $_time (array)
+	     *    => $time_spent (time 00:00:00)
+	     *    => $is_absent (time 00:00:00)
+	     *    => $late (time 00:00:00)
+	     *    => $undertime (time 00:00:00)
+	     *    => $overtime (time 00:00:00)
+	     *    => $target_hours (time 00:00:00)
+	     *    => $excess_leave_hours (time 00:00:00)
+	     *    => $regular_hours (time 00:00:00)
+	     *    => $rest_day_hours (time 00:00:00)
+	     *    => $regular_holiday_hours (time 00:00:00)
+	     *    => $special_holiday_hours (time 00:00:00)
+	     *    => $leave_hours (time 00:00:00)
+	     *    => $total_hours (time 00:00:00)
+	     *    => $night_differential (time 00:00:00)
+	     *    => $is_half_day (time 00:00:00)
+	     * 	  => $is_holiday (''/'regular'/'special')
      *    
      * @return (array)
-     *    $daily_income_breakdown (array)
-     *		- daily_rate (array)
-     *			- hours (time 00:00:00)
-     *			- income (double)
-     *			- formula (string "plus" or "minus")
-     *		- overtime (array)
-     *			- hours (time 00:00:00)
-     *			- income (double)
-     *			- formula (string "plus" or "minus")
-     *      - late (array)
-     *			- hours (time 00:00:00)
-     *			- income (double)
-     *			- formula (string "plus" or "minus")
-     *    $daily_income (double)
+     *   
+	 *	regular_salary
+	 *		=> hours (00:00:00)
+	 *		=> income (double)
+	 *		=> formula ('plus')
+	 *	extra_salary
+	 * 		=> hours (00:00:00)
+	 *		=> income (double)
+	 *		=> formula ('plus')
+	 *	leave_salary
+	 *		=> hours (00:00:00)
+	 *		=> income (double)
+	 *		=> formula ('plus')
+	 *	special_holiday_salary
+	 * 		=> hours (00:00:00)
+	 *		=> income (double)
+	 *		=> formula ('plus')
+	 *	regular_holiday_salary
+	 * 		=> hours (00:00:00)
+	 *		=> income (double)
+	 *		=> formula ('plus')
+	 * 	overtime_salary
+	 *		=> hours (00:00:00)
+	 *		=> income (double)
+	 *		=> formula ('plus')
+	 *	night_diff_salary
+	 * 		=> hours (00:00:00)
+	 *		=> income (double)
+	 *		=> formula ('plus')
+	 *	late_deduction
+	 * 		=> hours (00:00:00)
+	 *		=> income (double)
+	 *		=> formula ('plus')
+	 *	undertime_deduction
+	 * 		=> hours (00:00:00)
+	 *		=> income (double)
+	 *		=> formula ('plus')
      *
      * @author (Jimar Zape)
      *
      */
-	public static function compute_income_day_pay($_overtime, $time_spent)
+	public static function compute_income_day_pay($_time = array(), $daily_rate = 0, $group_id = 0)
 	{
+		$param_rate = Tbl_payroll_overtime_rate::where('payroll_group_id', $group_id)->get()->toArray();
+		$collection = collect($param_rate);
+		$regular_param 	= $collection->where('payroll_overtime_name','Regular')->first();
+		$legal_param 	= $collection->where('payroll_overtime_name','Legal Holiday')->first();
+		$special_param 	= $collection->where('payroll_overtime_name','Special Holiday')->first();
+
+		$group 		= Tbl_payroll_group::where('tbl_payroll_group', $group_id)->first();
+
+		/* positive value */
+		$target_float 		= Payroll::time_float($_time['target_hours']);
+		$regular_float 		= Payroll::time_float($_time['regular_hours']);
+		$rest_float 		= Payroll::time_float($_time['rest_day_hours']);
+		$extra_float 		= Payroll::time_float($_time['extra_day_hours']);
+		$legal_float 		= Payroll::time_float($_time['regular_holiday_hours']);
+		$special_float 		= Payroll::time_float($_time['special_holiday_hours']);
+		$leave_float 		= Payroll::time_float($_time['leave_hours']);
+		$overtime_float 	= Payroll::time_float($_time['overtime']);
+		$night_diff_float 	= Payroll::time_float($_time['night_differential']);
+		$extra_float 		= Payroll::time_float($_time['extra_day_hours']);
+		
+
+		/* negeative value */
+		$late_float			= Payroll::time_float($_time['late']);
+		$undertime_float	= Payroll::time_float($_time['undertime']);
+
+		/* late deduction */
+		$late_deduction = 0;
+		if($group->payroll_late_category == 'Base on Salary')
+		{
+			$late_deduction = divide($late_float, $target_float) * $daily_rate;
+		}
+
+		/* under time deduction */
+		$undertime_deduction = 0;
+		if($group->payroll_under_time_category == 'Base on Salary')
+		{
+			$undertime_deduction = divide($undertime_float, $target_float) * $daily_rate;
+		}
+
+
+		/* leave computation */
+		$leave_salary = divide($leave_float, $target_float) * $daily_rate;
+
+		/* regular day computation */
+		$regular_salary 	= divide($regular_float, $target_float) * $daily_rate;
+		
+		/* extra day computation */
+		$extra_salary 		= divide($extra_float, $target_float) * $daily_rate;
+
+		/* rest day but regular day */
+		$rest_day_salary 	= divide($rest_float, $target_float) * $daily_rate;
+
+		/* night shift computation */
+		$night_diff_salary 	= divide($night_diff_float, $target_float) * $daily_rate;
+
+		/* over time computation */
+		$overtime_salary 	= divide($overtime_float, $target_float) * $daily_rate;
+
+		/* legal / regular holiday computation */
+		$legal_salary		= divide($legal_float, $target_float) * $daily_rate;
+
+		if($_time['is_holiday'] == 'regular')
+		{
+			$legal_salary += $daily_rate * $legal_param['payroll_overtime_regular'];
+			$rest_day_salary += $daily_rate * $legal_param['payroll_overtime_rest_day'];
+			
+
+			if($rest_float > 0)
+			{
+				$overtime_salary += $daily_rate * $legal_param['payroll_overtime_rest_overtime'];
+				$night_diff_salary += $daily_rate * $legal_param['payroll_overtime_rest_night'];
+			}
+			else
+			{
+				$overtime_salary += $daily_rate * $legal_param['payroll_overtime_overtime'];
+				$night_diff_salary += $daily_rate * $legal_param['payroll_overtime_nigth_diff'];
+			}
+		}
+
+
+
+		/* special holiday computation */
+		$special_salary 	= divide($special_float, $target_float) * $daily_rate;
+		if($special_salary > 0)
+		{
+			$special_salary += $special_param['payroll_overtime_regular'];
+		}
+
+		if($_time['is_holiday'] == 'special')
+		{
+			$rest_day_salary += $daily_rate * $special_param['payroll_overtime_rest_day'];
+			
+			if($rest_float > 0)
+			{
+				$overtime_salary += $daily_rate * $special_param['payroll_overtime_rest_overtime'];
+				$night_diff_salary += $daily_rate * $special_param['payroll_overtime_rest_night'];
+			}
+			else
+			{
+				$overtime_salary += $daily_rate * $special_param['payroll_overtime_overtime'];
+				$night_diff_salary += $daily_rate * $special_param['payroll_overtime_nigth_diff'];
+			}
+		}
+
+
+		$return['regular_salary']['hours'] 				= $_time['regular_hours'];
+		$return['regular_salary']['income'] 			= $regular_salary;
+		$return['regular_salary']['formula'] 			= 'plus';
+
+		$return['extra_salary']['hours'] 				= $_time['extra_day_hours'];
+		$return['extra_salary']['income'] 				= $extra_salary;
+		$return['extra_salary']['formula'] 				= 'plus';
+
+		$return['leave_salary']['hours'] 				= $_time['leave_hours'];
+		$return['leave_salary']['income'] 				= $leave_salary;
+		$return['leave_salary']['formula'] 				= 'plus';
+
+		$return['special_holiday_salary']['hours'] 		= $_time['special_holiday_hours'];
+		$return['special_holiday_salary']['income'] 	= $special_salary;
+		$return['special_holiday_salary']['formula'] 	= 'plus';
+
+		$return['regular_holiday_salary']['hours'] 		= $_time['regular_holiday_hours'];
+		$return['regular_holiday_salary']['income'] 	= $special_salary;
+		$return['regular_holiday_salary']['formula'] 	= 'plus';
+
+		$return['overtime_salary']['hours'] 			= $_time['overtime'];
+		$return['overtime_salary']['income'] 			= $overtime_salary;
+		$return['overtime_salary']['formula'] 			= 'plus';
+
+		$return['night_diff_salary']['hours'] 			= $_time['night_differential'];
+		$return['night_diff_salary']['income'] 			= $night_diff_salary;
+		$return['night_diff_salary']['formula'] 		= 'plus';
+
+		$return['late_deduction']['hours'] 				= $_time['late'];
+		$return['late_deduction']['income'] 			= $late_deduction;
+		$return['late_deduction']['formula'] 			= 'minus';
+
+		$return['undertime_deduction']['hours'] 		= $_time['undertime'];
+		$return['undertime_deduction']['income'] 		= $undertime_deduction;
+		$return['undertime_deduction']['formula'] 		= 'minus';
+
+
+		return $return;
+
 	}
 	public static function compute_income_month_pay()
 	{

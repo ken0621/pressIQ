@@ -424,95 +424,111 @@ class Payroll
 
 		$schedule = Payroll::getshift_emp($employee_id, $date, $employee_information->payroll_group_id);
 
-		if($time_sheet_info->payroll_time_sheet_approved == 0) //ONLY UPDATE THOSE WHO ARE NOT APPROVED
+		// dd($schedule);
+
+		// if($time_sheet_info == null)
+		// {
+		// 	dd($date);
+		// }
+		if($time_sheet_info != null)
 		{
-			$_time_record = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $time_sheet_info->payroll_time_sheet_id)->get();
-
-			foreach($_time_record as $time_record)
+			if($time_sheet_info->payroll_time_sheet_approved == 0) //ONLY UPDATE THOSE WHO ARE NOT APPROVED
 			{
-				$payroll_time_sheet_approved_in = $time_record->payroll_time_sheet_in;
-				$payroll_time_sheet_approved_out = $time_record->payroll_time_sheet_out;
-				$payroll_time_sheet_in = false;
-				$payroll_time_sheet_out = false;
+				$_time_record = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $time_sheet_info->payroll_time_sheet_id)->get();
 
+				// dd($_time_record);
 
-				/* IF TIME IN HAPPENS LATER AFTER TIME OUT - LOL - SET TO ZERO */
-				// if(c_time_to_int($time_record->payroll_time_sheet_in) > c_time_to_int($time_record->payroll_time_sheet_out))
-				// {
-				// 	$payroll_time_sheet_approved_in = "00:00";
-				// 	$payroll_time_sheet_approved_out = "00:00";
-				// 	$payroll_time_sheet_in = "00:00";
-				// 	$payroll_time_sheet_out = "00:00";
-				// }
-
-				if($employee_information->payroll_group_is_flexi_time == 0)
+				foreach($_time_record as $time_record)
 				{
-					/* OVERTIME RULE */
-					// if(c_time_to_int($time_record->payroll_time_sheet_in) < c_time_to_int($employee_information->payroll_group_start))
-					if(c_time_to_int($time_record->payroll_time_sheet_in) < c_time_to_int($schedule->work_start))
+					$payroll_time_sheet_approved_in = $time_record->payroll_time_sheet_in;
+					$payroll_time_sheet_approved_out = $time_record->payroll_time_sheet_out;
+					$payroll_time_sheet_in = false;
+					$payroll_time_sheet_out = false;
+
+
+					/* IF TIME IN HAPPENS LATER AFTER TIME OUT - LOL - SET TO ZERO */
+					// if(c_time_to_int($time_record->payroll_time_sheet_in) > c_time_to_int($time_record->payroll_time_sheet_out))
+					// {
+					// 	$payroll_time_sheet_approved_in = "00:00";
+					// 	$payroll_time_sheet_approved_out = "00:00";
+					// 	$payroll_time_sheet_in = "00:00";
+					// 	$payroll_time_sheet_out = "00:00";
+					// }
+					// dd($employee_information->payroll_group_is_flexi_time);
+
+					if($schedule->flexi == 0)
 					{
-						// $payroll_time_sheet_approved_in = $employee_information->payroll_group_start;
-						$payroll_time_sheet_approved_in = $schedule->work_start;
-					}
-					else
-					{
-						$payroll_time_sheet_approved_in = $time_record->payroll_time_sheet_in;
+						/* OVERTIME RULE */
+						// if(c_time_to_int($time_record->payroll_time_sheet_in) < c_time_to_int($employee_information->payroll_group_start))
+
+						// dd($schedule->work_start);
+
+						if(c_time_to_int($time_record->payroll_time_sheet_in) < c_time_to_int($schedule->work_start))
+						{
+							// $payroll_time_sheet_approved_in = $employee_information->payroll_group_start;
+							$payroll_time_sheet_approved_in = $schedule->work_start;
+						}
+						else
+						{
+							$payroll_time_sheet_approved_in = $time_record->payroll_time_sheet_in;
+						}
+
+						// if(c_time_to_int($time_record->payroll_time_sheet_out) > c_time_to_int($employee_information->payroll_group_end))
+						if(c_time_to_int($time_record->payroll_time_sheet_out) > c_time_to_int($schedule->work_end))
+						{
+							$payroll_time_sheet_approved_out = $schedule->work_end;
+						}
+						else
+						{
+							$payroll_time_sheet_approved_out = $time_record->payroll_time_sheet_out;
+						}
+
+						// /* IF ONE OF THE TIME IS ZERO */
+						if($time_record->payroll_time_sheet_in == "00:00:00" || $time_record->payroll_time_sheet_out == "00:00:00")
+						{
+							$payroll_time_sheet_approved_in = "00:00";
+							$payroll_time_sheet_approved_out = "00:00";
+						}
+
+						/* IF TIME IN IS LATER THAN DEFAULT TIME OUT */
+						if($time_record->payroll_time_sheet_in > $schedule->work_end)
+						{
+							$payroll_time_sheet_approved_in = "00:00";
+							$payroll_time_sheet_approved_out = "00:00";
+						}
+
+						/* IF TIME OUT IS EARLIER THAN DEFAULT TIME IN */
+						if($time_record->payroll_time_sheet_out < $schedule->work_start)
+						{
+							$payroll_time_sheet_approved_in = "00:00";
+							$payroll_time_sheet_approved_out = "00:00";
+						}
 					}
 
-					// if(c_time_to_int($time_record->payroll_time_sheet_out) > c_time_to_int($employee_information->payroll_group_end))
-					if(c_time_to_int($time_record->payroll_time_sheet_out) > c_time_to_int($schedule->work_end))
+					/* REST DAY NEEDS APPROVAL */
+					// foreach($_rest_day as $rest_day)
+					// {
+					// 	if($rest_day->payroll_group_rest_day == Carbon::parse($time_sheet_info->payroll_time_date)->format("l"))
+					// 	{
+					// 		$payroll_time_sheet_approved_in = "00:00";
+					// 		$payroll_time_sheet_approved_out = "00:00";
+					// 	}
+					// }
+
+					$update["payroll_time_sheet_approved_in"] = Carbon::parse($payroll_time_sheet_approved_in)->format("H:i");
+					$update["payroll_time_sheet_approved_out"] = Carbon::parse($payroll_time_sheet_approved_out)->format("H:i");
+
+					if($payroll_time_sheet_in || $payroll_time_sheet_out)
 					{
-						$payroll_time_sheet_approved_out = $schedule->work_end;
-					}
-					else
-					{
-						$payroll_time_sheet_approved_out = $time_record->payroll_time_sheet_out;
+						$update["payroll_time_sheet_in"] = Carbon::parse($payroll_time_sheet_in)->format("H:i");
+						$update["payroll_time_sheet_out"] = Carbon::parse($payroll_time_sheet_out)->format("H:i");
 					}
 
-					// /* IF ONE OF THE TIME IS ZERO */
-					if($time_record->payroll_time_sheet_in == "00:00:00" || $time_record->payroll_time_sheet_out == "00:00:00")
-					{
-						$payroll_time_sheet_approved_in = "00:00";
-						$payroll_time_sheet_approved_out = "00:00";
-					}
-
-					/* IF TIME IN IS LATER THAN DEFAULT TIME OUT */
-					if($time_record->payroll_time_sheet_in > $schedule->work_end)
-					{
-						$payroll_time_sheet_approved_in = "00:00";
-						$payroll_time_sheet_approved_out = "00:00";
-					}
-
-					/* IF TIME OUT IS EARLIER THAN DEFAULT TIME IN */
-					if($time_record->payroll_time_sheet_out < $schedule->work_start)
-					{
-						$payroll_time_sheet_approved_in = "00:00";
-						$payroll_time_sheet_approved_out = "00:00";
-					}
+					Tbl_payroll_time_sheet_record::where("payroll_time_sheet_record_id", $time_record->payroll_time_sheet_record_id)->update($update);
 				}
-
-				/* REST DAY NEEDS APPROVAL */
-				foreach($_rest_day as $rest_day)
-				{
-					if($rest_day->payroll_group_rest_day == Carbon::parse($time_sheet_info->payroll_time_date)->format("l"))
-					{
-						$payroll_time_sheet_approved_in = "00:00";
-						$payroll_time_sheet_approved_out = "00:00";
-					}
-				}
-
-				$update["payroll_time_sheet_approved_in"] = Carbon::parse($payroll_time_sheet_approved_in)->format("H:i");
-				$update["payroll_time_sheet_approved_out"] = Carbon::parse($payroll_time_sheet_approved_out)->format("H:i");
-
-				if($payroll_time_sheet_in || $payroll_time_sheet_out)
-				{
-					$update["payroll_time_sheet_in"] = Carbon::parse($payroll_time_sheet_in)->format("H:i");
-					$update["payroll_time_sheet_out"] = Carbon::parse($payroll_time_sheet_out)->format("H:i");
-				}
-
-				Tbl_payroll_time_sheet_record::where("payroll_time_sheet_record_id", $time_record->payroll_time_sheet_record_id)->update($update);
 			}
 		}
+		
 	}
 
 
@@ -556,16 +572,8 @@ class Payroll
 
 		$data['holiday']	= Tbl_payroll_holiday_company::getholiday($payroll_company_id, $date)->select('tbl_payroll_holiday.*')->first();
 
-		/* EMPLOYEE COMPUTATION SETTINGS */
-		if($employee_information->payroll_group_is_flexi_time == 1)
-		{
-			$data["time_rule"] = "flexitime";
-		}
-		else
-		{
-			$data["time_rule"] = "regulartime";
-		}
 
+		$data["time_rule"] = "regulartime";
 		/* EMPLOYEE COMPUTATION SETTINGS */
 
 		$schedule = Payroll::getshift_emp($employee_information->payroll_employee_id, $date, $employee_information->payroll_group_id);
@@ -600,30 +608,14 @@ class Payroll
 		// dd($data["_time_record"]);
 
 		$return = new stdClass();
-		/* GET OTHER DETAILS BASED ON RECORD */
-		// switch($data["time_rule"])
-		// {
-		// 	case "flexitime": 
-		// 		//$return = Payroll::process_time_flexitime($time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours);
-		// 		$data["compute_approved"] = 0;
-		// 		$return->pending_timesheet = Payroll::process_time_regulartime($data, $date);
-		// 		$data["compute_approved"] = 1;
-		// 		$return->approved_timesheet = Payroll::process_time_regulartime($data, $date);
-		// 	break;
-
-		// 	case "regulartime":
-		// 		$data["compute_approved"] = 0;
-		// 		$return->pending_timesheet = Payroll::process_time_regulartime($data, $date);
-		// 		$data["compute_approved"] = 1;
-		// 		$return->approved_timesheet = Payroll::process_time_regulartime($data, $date);
-		// 	break;
-		// }
+	
 
 
-		//Payroll::adjust_payroll_approved_in_and_out($employee_information->payroll_employee_id, $date);
+		Payroll::adjust_payroll_approved_in_and_out($employee_information->payroll_employee_id, $date);
 
 		$data["compute_approved"] = 0;
 		$return->pending_timesheet = Payroll::process_time_regulartime($data, $date, $data["time_rule"]);
+
 		$data["compute_approved"] = 1;
 		$return->approved_timesheet = Payroll::process_time_regulartime($data, $date, $data["time_rule"]);
 
@@ -710,6 +702,7 @@ class Payroll
 	public static function process_time_regulartime($data, $date = '0000-00-00', $category = 'regulartime')
 	{
 		// dd($data);
+
 		$schedule = Tbl_payroll_employee_schedule::getschedule($data["employee_information"]->payroll_employee_id, $date)->first();
 
 		if($schedule == null)
@@ -791,9 +784,6 @@ class Payroll
 		}
 
 		
-
-
-
 		$time_record = collect($data['time_sheet_info'])->toArray();
 
 		if(isset($time_record['payroll_time_sheet_break']))
@@ -1123,7 +1113,7 @@ class Payroll
 			$absent = true;
 		}
 
-		// dd($total_regular_hours);
+
 
 		$return->time_spent 		= convert_seconds_to_hours_minutes("H:i", $total_time_spent);
 		$return->regular_hours 		= convert_seconds_to_hours_minutes("H:i", $total_regular_hours);
@@ -1138,7 +1128,6 @@ class Payroll
 		$return->special_holiday_hours = convert_seconds_to_hours_minutes("H:i", $special_holiday_hours);
 		$return->regular_holiday_hours = convert_seconds_to_hours_minutes("H:i", $regular_holiday_hours);
 
-		// dd($break);
 
 		if($break == 0)
 		{
@@ -1157,7 +1146,6 @@ class Payroll
 			}
 		}
 		
-
 		$return->break 				= $break;
 		$return->time_record 		= $time_rec;
 		$return->absent 			= $absent;

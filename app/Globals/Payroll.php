@@ -579,9 +579,9 @@ class Payroll
 		$data["time_rule"] = "regulartime";
 		/* EMPLOYEE COMPUTATION SETTINGS */
 
-		if(!isset($employee_information->payroll_group_id))
+		if(!isset($employee_information->payroll_employee_id))
 		{
-			dd($employee_information->payroll_employee_id);
+			dd($employee_information);
 		}
 
 		$schedule = Payroll::getshift_emp($employee_information->payroll_employee_id, $date, $employee_information->payroll_group_id);

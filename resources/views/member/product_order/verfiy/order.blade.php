@@ -12,7 +12,7 @@
 </tr>
 @if($order->checkout_id)
 <tr>
-	<td>Checkout ID (Paymaya) : {{$order->checkout_id}} </td>
+	<td>Checkout ID (Paymaya) : {{ str_replace("-", "", $order->checkout_id) }} </td>
 </tr>
 @endif
 <tr>

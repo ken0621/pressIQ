@@ -138,6 +138,8 @@ class PayrollTimeSheetController extends Member
 			$symbol 			= '<i class="table-check fa fa-unlock-alt hidden"></i>';
 			$holiday_class 		= '';
 			$virtural_holiday 	= '';
+			$disable 			= '';
+			$origin 			= '';
 
 			/* check if holiday */
 			$holiday = Tbl_payroll_holiday_company::getholiday($data["employee_info"]->payroll_employee_company_id, Carbon::parse($from)->format("Y-m-d"))->get();
@@ -189,7 +191,6 @@ class PayrollTimeSheetController extends Member
 				$data["_timesheet"][$from]->time_record_count = 1;
 				$data["_timesheet"][$from]->payroll_time_sheet_approved = $data["timesheet_info"]->payroll_time_sheet_approved;
 				$_timesheet_record = Tbl_payroll_time_sheet_record::getrecord($data["timesheet_info"]->payroll_time_sheet_id)->get();
-				// $_timesheet_record = Tbl_payroll_time_sheet_record::where('payroll_time_sheet_id',$data["timesheet_info"]->payroll_time_sheet_id)->get();
 				
 				if($_timesheet_record->isEmpty())
 				{
@@ -200,50 +201,56 @@ class PayrollTimeSheetController extends Member
 					Tbl_payroll_time_sheet_record::insert($temp_time_insert);
 
 					$_timesheet_record = Tbl_payroll_time_sheet_record::getrecord($data["timesheet_info"]->payroll_time_sheet_id)->get();
-					// $_timesheet_record = Tbl_payroll_time_sheet_record::where('payroll_time_sheet_id',$data["timesheet_info"]->payroll_time_sheet_id)->get();
+					
 				}
-				// else
-				// {
-					foreach($_timesheet_record as $key => $timesheet_record)
+				
+				foreach($_timesheet_record as $key => $timesheet_record)
+				{
+					$data["_timesheet"][$from]->time_record[$key] = new stdClass();
+
+					$data["_timesheet"][$from]->time_record[$key]->payroll_time_sheet_record_id = $timesheet_record->payroll_time_sheet_record_id;
+					$data['_timesheet'][$from]->time_record[$key]->company = $timesheet_record->payroll_company_name;
+
+					$data["_timesheet"][$from]->time_record[$key]->time_in = "";
+					$data["_timesheet"][$from]->time_record[$key]->time_out = "";
+
+
+					if($timesheet_record->payroll_time_sheet_out != "00:00:00" || $timesheet_record->payroll_time_sheet_out != null || $timesheet_record->payroll_time_sheet_out != '')
+					
 					{
-						$data["_timesheet"][$from]->time_record[$key] = new stdClass();
-
-						$data["_timesheet"][$from]->time_record[$key]->payroll_time_sheet_record_id = $timesheet_record->payroll_time_sheet_record_id;
-						$data['_timesheet'][$from]->time_record[$key]->company = $timesheet_record->payroll_company_name;
-
-						// if($timesheet_record->payroll_time_sheet_out == "00:00:00" || $timesheet_record->payroll_time_sheet_out == null || $timesheet_record->payroll_time_sheet_out == '')
-						// {
-						// 	$data["_timesheet"][$from]->time_record[$key]->time_in = "";
-						// 	$data["_timesheet"][$from]->time_record[$key]->time_out = "";
-						// }
-
-						$data["_timesheet"][$from]->time_record[$key]->time_in = "";
-						$data["_timesheet"][$from]->time_record[$key]->time_out = "";
-
-
-						if($timesheet_record->payroll_time_sheet_out != "00:00:00" || $timesheet_record->payroll_time_sheet_out != null || $timesheet_record->payroll_time_sheet_out != '')
-						
+						if($data["timesheet_info"]->payroll_time_sheet_approved == 1)
 						{
-							if($data["timesheet_info"]->payroll_time_sheet_approved == 1)
-							{
-								$data["_timesheet"][$from]->time_record[$key]->time_in =  Carbon::parse($timesheet_record->payroll_time_sheet_approved_in)->format("h:i A");
+							$data["_timesheet"][$from]->time_record[$key]->time_in =  Carbon::parse($timesheet_record->payroll_time_sheet_approved_in)->format("h:i A");
 
-								$data["_timesheet"][$from]->time_record[$key]->time_out = Carbon::parse($timesheet_record->payroll_time_sheet_approved_out)->format("h:i A");
-								
-							}
-							else
-							{
-								$data["_timesheet"][$from]->time_record[$key]->time_in =  Carbon::parse($timesheet_record->payroll_time_sheet_in)->format("h:i A");
-
-								$data["_timesheet"][$from]->time_record[$key]->time_out = Carbon::parse($timesheet_record->payroll_time_sheet_out)->format("h:i A");
-							}
+							$data["_timesheet"][$from]->time_record[$key]->time_out = Carbon::parse($timesheet_record->payroll_time_sheet_approved_out)->format("h:i A");
+							
 						}
+						else
+						{
+							$data["_timesheet"][$from]->time_record[$key]->time_in =  Carbon::parse($timesheet_record->payroll_time_sheet_in)->format("h:i A");
 
-						$data["_timesheet"][$from]->time_record[$key]->activities =  $timesheet_record->payroll_time_shee_activity;
-
+							$data["_timesheet"][$from]->time_record[$key]->time_out = Carbon::parse($timesheet_record->payroll_time_sheet_out)->format("h:i A");
+						}
 					}
-				// }
 
+					$data["_timesheet"][$from]->time_record[$key]->activities =  $timesheet_record->payroll_time_shee_activity;
+
+					$data["_timesheet"][$from]->time_record[$key]->origin = $timesheet_record->payroll_time_sheet_origin;
+
+					if($timesheet_record->payroll_time_sheet_origin != '' && $timesheet_record->payroll_time_sheet_origin != 'Payroll Time Sheet')
+					{
+						$disable = 'disabled="disabled"';
+					}
+
+					if($timesheet_record->payroll_time_sheet_origin == '' || $timesheet_record->payroll_time_sheet_origin == 'Payroll Time Sheet')
+					{
+						$disable = '';
+					}
+
+					$data["_timesheet"][$from]->time_record[$key]->disable = $disable;
+
+				}
+				
 			}
 			else //DEFAULT IF EMPTY RECORD
 			{
@@ -253,6 +260,8 @@ class PayrollTimeSheetController extends Member
 				$data["_timesheet"][$from]->time_record[0]->time_in = "";
 				$data["_timesheet"][$from]->time_record[0]->time_out = "";
 				$data["_timesheet"][$from]->time_record[0]->activities = "";
+				$data["_timesheet"][$from]->time_record[0]->disable = $disable;
+				$data["_timesheet"][$from]->time_record[0]->origin = $origin;
 				$data["_timesheet"][$from]->payroll_time_sheet_approved = 0;
 			}
 

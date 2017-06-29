@@ -632,7 +632,6 @@ class Payroll
 		$return->date = $payroll_time_date;
 		$return->payroll_time_sheet_approved = $payroll_time_sheet_approved;
 
-
 		return $return;
 	}
 	
@@ -736,6 +735,7 @@ class Payroll
 			$extra_day				= $schedule->extra_day;
 		}
 
+		$is_editable = false;
 	
 		$def_in_float 	= Payroll::time_float($default_time_in);
 		$def_out_float 	= Payroll::time_float($default_time_out);

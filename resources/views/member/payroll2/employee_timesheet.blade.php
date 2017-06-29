@@ -20,28 +20,29 @@
                         </thead>
                         <tbody>
                             @foreach($_timesheet as $timesheet)
+                            <?php $random_integer = rand (10000000, 999999999); ?>
                             <tr class="tr-parent">
                                 <td class="text-center" width="50px">{{ $timesheet->day_number }}</td>
                                 <td class="text-center" width="50px">{{ $timesheet->day_word }}</td>
                                 <td class="time-in-td">
                                     @foreach($timesheet->record as $record)
-                                    <input mintime="12:00 AM" maxtime="11:59 PM" value="{{ $record->time_sheet_in }}" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-in is-timeEntry" name="">
+                                    <input unq="{{ $random_integer }}" mintime="12:00 AM" maxtime="11:59 PM" value="{{ $record->time_sheet_in }}" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-in is-timeEntry" name="">
                                     @endforeach
                                 </td>
                                 <td class="time-out-td">
                                     @foreach($timesheet->record as $record)
-                                    <input mintime="12:00 AM" maxtime="11:59 PM" value="{{ $record->time_sheet_out }}" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-out is-timeEntry" name="">
+                                    <input unq="{{ $random_integer }}" mintime="12:00 AM" maxtime="11:59 PM" value="{{ $record->time_sheet_out }}" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-out is-timeEntry" name="">
                                     @endforeach
                                 </td>
                                 <td class="time-comment-td">
                                     @foreach($timesheet->record as $record)
-                                    <input value="{{ $record->time_sheet_activity }}" type="text" class="new-time-event text-table time-entry is-timeEntry" name="">
+                                    <input unq="{{ $random_integer }}" value="{{ $record->time_sheet_activity }}" type="text" class="comment new-time-event text-table time-entry is-timeEntry" name="">
                                     @endforeach
                                 </td>
                                 @if($timesheet->daily_info->shift_approved == true)
-                                    <td class="text-center"><a href="javascript:" class="daily-salary" amount="{{ $timesheet->daily_info->daily_salary }}">PHP {{ number_format($timesheet->daily_info->daily_salary, 2) }}</a></td>
+                                    <td class="text-center"><a onclick="action_load_link_to_modal('/member/payroll/company_timesheet_day_summary/{{ $timesheet->payroll_time_sheet_id }}', 'lg')" href="javascript:" class="daily-salary" amount="{{ $timesheet->daily_info->daily_salary }}">PHP {{ number_format($timesheet->daily_info->compute->total_day_income, 2) }}</a></td>
                                 @else
-                                    <td class="text-center"><a onclick="action_load_link_to_modal('/member/payroll/company_timesheet_day_summary/{{ $timesheet->payroll_time_sheet_id }}', 'lg')" style="color: red;" href="javascript:" class="daily-salary" amount="{{ $timesheet->daily_info->daily_salary }}">PHP {{ number_format($timesheet->daily_info->daily_salary, 2) }}</a></td>
+                                    <td class="text-center"><a onclick="action_load_link_to_modal('/member/payroll/company_timesheet_day_summary/{{ $timesheet->payroll_time_sheet_id }}', 'lg')" style="color: red;" href="javascript:" class="daily-salary" amount="{{ $timesheet->daily_info->daily_salary }}">PHP {{ number_format($timesheet->daily_info->compute->total_day_income, 2) }}</a></td>
                                 @endif
                                 
                             </tr>

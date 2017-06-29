@@ -81,6 +81,9 @@ use App\Models\Tbl_payroll_time_sheet;
 use App\Globals\Payroll;
 use App\Globals\PayrollJournalEntries;
 use App\Globals\Utilities;
+use DateTime;
+use App\Models\Tbl_payroll_shift_day;
+use App\Models\Tbl_payroll_shift_time;
 
 class PayrollController extends Member
 {
@@ -3529,6 +3532,8 @@ class PayrollController extends Member
           $data['_overtime_rate']  = Tbl_payroll_over_time_rate_default::get();
           $data['_day']            = Payroll::restday_checked(); 
           $data['_period']         = Tbl_payroll_tax_period::check(Self::shop_id())->get();
+          $data['_shift_code']     = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->get();
+
           return view('member.payroll.modal.modal_create_payroll_group', $data);
      }
 
@@ -3747,6 +3752,8 @@ class PayrollController extends Member
           $data['_overtime_rate']  = Tbl_payroll_overtime_rate::where('payroll_group_id',$id)->get();
           $data['_day']            = Payroll::restday_checked($id); 
           $data['_period']         = Tbl_payroll_tax_period::check(Self::shop_id())->get();
+          $data['_shift_code']     = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->get();
+
           return view('member.payroll.modal.modal_edit_payroll_group',$data);
      }
 
@@ -3762,6 +3769,8 @@ class PayrollController extends Member
           $update['payroll_group_grace_time']               = Request::input('payroll_group_grace_time');
           // $update['payroll_group_break']                      = Request::input('payroll_group_break');
           $update['payroll_group_agency_fee']               = Request::input('payroll_group_agency_fee');
+
+          $update['shift_code_id']                          = Request::input('shift_code_id');
           
           $payroll_group_deduct_before_absences             = 0;
           if( Request::has('payroll_group_deduct_before_absences'))
@@ -3912,45 +3921,6 @@ class PayrollController extends Member
 
           Tbl_payroll_shift::where('payroll_group_id', $payroll_group_id)->delete();
 
-          $insert_shift = array();
-
-          foreach(Request::input('day') as $key => $day)
-          {
-
-               $temp_shift['payroll_group_id']    = $payroll_group_id;
-               $temp_shift['day']                 = $day;
-               $temp_shift['target_hours']        = Request::input('target_hours')[$key];
-               $temp_shift['work_start']          = date('H:i:s a', strtotime(Request::input('work_start')[$key]));
-               $temp_shift['work_end']            = date('H:i:s a', strtotime(Request::input('work_end')[$key]));
-               $temp_shift['break_start']         = date('H:i:s a', strtotime(Request::input('break_start')[$key]));
-               $temp_shift['break_end']           = date('H:i:s a', strtotime(Request::input('break_end')[$key]));
-
-               $flexi         = 0;
-               $rest_day      = 0;
-               $extra_day     = 0;
-
-               if(Request::has('flexi_'.$key))
-               {
-                    $flexi = Request::input('flexi_'.$key);
-               }
-
-               if(Request::has('rest_day_'.$key))
-               {
-                    $rest_day = Request::input('rest_day_'.$key);
-               }
-
-               if(Request::has('extra_day_'.$key))
-               {
-                    $extra_day = Request::input('extra_day_'.$key);
-               }
-
-               $temp_shift['flexi']               = $flexi;
-               $temp_shift['rest_day']            = $rest_day;
-               $temp_shift['extra_day']           = $extra_day;
-
-               array_push($insert_shift, $temp_shift);
-          }
-
           if(!empty($insert_shift))
           {
                Tbl_payroll_shift::insert($insert_shift);
@@ -3961,6 +3931,7 @@ class PayrollController extends Member
           $return['function_name'] = 'payrollconfiguration.reload_payroll_group';
           return json_encode($return);
      }
+
 
 
      public function confirm_archived_payroll_group($archived, $payroll_group_id)
@@ -4482,15 +4453,32 @@ class PayrollController extends Member
                }
 
                $temp['date']                 = $date_start;
-               $temp['target_hours']         = $shift->target_hours;
-               $temp['work_start']           = $shift->work_start;
-               $temp['work_end']             = $shift->work_end;
-               $temp['break_start']          = $shift->break_start;
-               $temp['break_end']            = $shift->break_end;
-               $temp['flexi']                = $shift->flexi;
-               $temp['rest_day']             = $shift->rest_day;
-               $temp['extra_day']            = $shift->extra_day;
-               $temp['night_shift']          = $shift->night_shift;
+               if($shift != null)
+               {
+                    $temp['target_hours']         = $shift->target_hours;
+                    $temp['work_start']           = $shift->work_start;
+                    $temp['work_end']             = $shift->work_end;
+                    $temp['break_start']          = $shift->break_start;
+                    $temp['break_end']            = $shift->break_end;
+                    $temp['flexi']                = $shift->flexi;
+                    $temp['rest_day']             = $shift->rest_day;
+                    $temp['extra_day']            = $shift->extra_day;
+                    $temp['night_shift']          = $shift->night_shift;
+               }
+               else
+               {
+                    $temp['target_hours']         = 0;
+                    $temp['work_start']           = '00:00:00';
+                    $temp['work_end']             = '00:00:00';
+                    $temp['break_start']          = '00:00:00';
+                    $temp['break_end']            = '00:00:00';
+                    $temp['flexi']                = 0;
+                    $temp['rest_day']             = 0;
+                    $temp['extra_day']            = 0;
+                    $temp['night_shift']          = 0;
+               }
+               
+               
 
                array_push($data['_day'], $temp);
 
@@ -4734,56 +4722,47 @@ class PayrollController extends Member
 
      public function modal_save_shift_template()
      {
-          // $shift_code_name = Request::input('shift_code_name');
+          //dd(Request::input());
 
+          /* INSERT SHIFT CODE */
           $insert_code['shift_code_name']    = Request::input('shift_code_name');
           $insert_code['shop_id']            = Self::shop_id();
-
           $shift_code_id = Tbl_payroll_shift_code::insertGetId($insert_code);
-
           $insert_shift = array();
 
-          foreach(Request::input('day') as $key => $day)
+          /* INSERT DAY */
+          $key = 0;
+          $tc = 0;
+
+          foreach(Request::input("day") as $day)
           {
+               /* INSERT SHIFT DAY */
+               $insert_day["shift_day"] = $day;
+               $insert_day["shift_code_id"] = $shift_code_id;
+               $insert_day["shift_target_hours"] = Request::input("target_hours")[$day];
+               $insert_day["shift_rest_day"] = Request::input("rest_day_" . $day) == 1 ? 1 : 0;
+               $insert_day["shift_extra_day"] = Request::input("extra_day_" . $day) == 1 ? 1 : 0;
+               $key++;
 
-               $temp['shift_code_id']   = $shift_code_id;
-               $temp['day']             = $day;
-               $temp['target_hours']    = Request::input('target_hours')[$key];
-               $temp['work_start']      = Request::input('work_start')[$key];
-               $temp['work_end']        = Request::input('work_end')[$key];
-               $temp['break_start']     = Request::input('break_start')[$key];
-               $temp['break_end']       = Request::input('break_end')[$key];
-               $temp['flexi']           = 0;
-               $temp['rest_day']        = 0;
-               $temp['extra_day']       = 0;
-               $temp['night_shift']     = 0;
+               $shift_day_id = Tbl_payroll_shift_day::insertGetId($insert_day);
 
-               if(Request::has('flexi_'.$key))
+               /* INSERT SHIFT TIME */
+               foreach(Request::input("work_start")[$day] as $k => $time)
                {
-                    $temp['flexi']      = Request::input('flexi_'.$key);
+                    if($time != "") //MAKE SURE TIME IS NOT BLANK
+                    {
+                         $insert_time[$tc]["shift_day_id"] = $shift_day_id;
+                         $insert_time[$tc]["shift_work_start"] = DateTime::createFromFormat( 'H:i A', $time);
+                         $insert_time[$tc]["shift_work_end"] = DateTime::createFromFormat( 'H:i A', Request::input("work_end")[$day][$k]);
+                         $tc++;
+                    }
                }
 
-               if(Request::has('rest_day_'.$key))
+               if(isset($insert_time))
                {
-                    $temp['rest_day']   = Request::input('rest_day_'.$key);
-               }
-
-               if(Request::has('extra_day_'.$key))
-               {
-                    $temp['extra_day']   = Request::input('extra_day_'.$key);
-               }
-
-               // if(Request::has('night_shift_'.$key))
-               // {
-               //      $temp['night_shift']   = Request::input('night_shift_'.$key);
-               // }
-
-               array_push($insert_shift, $temp);
-          }
-
-          if(!empty($insert_shift))
-          {
-               Tbl_payroll_shift_template::insert($insert_shift);
+                    Tbl_payroll_shift_time::insert($insert_time);
+                    $insert_time = null;
+               }   
           }
 
           $return['function_name'] = 'payrollconfiguration.reload_shift_template';
@@ -4793,8 +4772,15 @@ class PayrollController extends Member
 
      public function modal_view_shift_template($id)
      {
-          $data['code'] = Tbl_payroll_shift_code::where('shift_code_id', $id)->first();
-          $data['_day'] = Payroll::restday_checked($id, 'shift_template');
+          $data['shift_code'] = Tbl_payroll_shift_code::where('shift_code_id', $id)->first();
+          $data['_day'] = Tbl_payroll_shift_day::where('shift_code_id', $id)->get();
+
+          foreach($data["_day"] as $key => $day)
+          {
+               $data["_day"][$key] = $day;
+               $data["_day"][$key]->time_shift = Tbl_payroll_shift_time::where("shift_day_id", $day->shift_day_id)->get();
+          }
+
           return view('member.payroll.modal.modal_view_shift_template', $data);
      }
 
@@ -7798,14 +7784,18 @@ class PayrollController extends Member
                return Self::bdo_bank_template($data, $title);
           }
 
-          if($bank_name == 'Metro Bank')
+          else if($bank_name == 'Metro Bank')
           {
                return Self::metro_bank_template($data, $title);
           }
 
-          if($bank_name == 'Equicom')
+          else if($bank_name == 'Equicom')
           {
                return Self::equicom_bank_template($data, $title);
+          }
+          else
+          {
+               return Self::bdo_bank_template($data, $title);
           }
 
 

@@ -112,7 +112,7 @@
 									<input type="hidden" name="order_slot_id" value="{{$order->order_slot_id}}">
 									<input type="hidden" name="ec_order_id" value="{{$order->ec_order_id}}">
 									Sponsor : 
-										@if(isset($slots[$order->order_slot_sponsor]->slot_no)) 
+										@if(isset($slots[$order->order_slot_sponsor]) && isset($slots[$order->order_slot_sponsor]->slot_no)) 
 											{{$slots[$order->order_slot_sponsor]->slot_no}} 
 										@else 
 											Independent Tree 

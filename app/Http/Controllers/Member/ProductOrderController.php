@@ -364,6 +364,11 @@ class ProductOrderController extends Member
           $pdf = view('member.customer_invoice.invoice_pdf', $data);
           return Pdf_global::show_pdf($pdf);
     }
+    public function update_manual($order_id)
+    {
+        $update["manual"] = 1;
+        DB::table("tbl_ec_order")->where("ec_order_id", $order_id)->update($update);
+    }
     public function paymaya_verify()
     {
         $data = [];
@@ -413,6 +418,10 @@ class ProductOrderController extends Member
                     Item_code::ec_order_slot($order->ec_order_id);
                     $data['status'] = 'success';
                     $data['message'] = 'Slot Created';
+                    
+                    /* Insert Logs by Edward */
+                    $this->update_manual($order->ec_order_id);
+                    
                     return json_encode($data);
                 }
                 else
@@ -449,6 +458,10 @@ class ProductOrderController extends Member
                     }
                     DB::table('tbl_ec_order_slot')->insert($insert);
                     Item_code::ec_order_slot($order->ec_order_id);
+                    
+                    /* Insert Logs by Edward */
+                    $this->update_manual($order->ec_order_id);
+                    
                     $data['status'] = 'success'; $data['message'] = 'Slot Created'; return json_encode($data);
                 }
                 else

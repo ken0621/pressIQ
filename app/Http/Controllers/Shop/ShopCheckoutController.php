@@ -173,7 +173,7 @@ class ShopCheckoutController extends Shop
     }
     public function paymaya_webhook_success()
     {
-        $order_id = Request::input("requestReferenceNumber");
+        $order_id = (int)Request::input("requestReferenceNumber");
         $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
         if($order)
         {

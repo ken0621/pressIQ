@@ -66,6 +66,7 @@
     document.write('<script src="' + js + '"><\/script>');
     }());
     </script>
+    <script src="assets/member/external/jquery.minv2.js"></script>
     <script src="assets/member/scripts/vendor/modernizr.js"></script>
     <script src="assets/member/scripts/vendor/jquery.cookie.js"></script>
     <script>

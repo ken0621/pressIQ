@@ -1065,17 +1065,17 @@ class Cart
         
         $successWebhook = new Webhook();
         $successWebhook->name = Webhook::CHECKOUT_SUCCESS;
-        $successWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/success?order_id=" . Crypt::encrypt($order_id) . "&from=" . $from);
+        $successWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/success");
         $successWebhook->register();
         
         $failureWebhook = new Webhook();
         $failureWebhook->name = Webhook::CHECKOUT_FAILURE;
-        $failureWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/paymaya/failure?order_id=" . Crypt::encrypt($order_id));
+        $failureWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/paymaya/failure");
         $failureWebhook->register();
         
         $cancelWebhook = new Webhook();
         $cancelWebhook->name = Webhook::CHECKOUT_DROPOUT;
-        $cancelWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/paymaya/cancel?order_id=" . Crypt::encrypt($order_id));
+        $cancelWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/paymaya/cancel");
         $cancelWebhook->register();
         
         // Checkout

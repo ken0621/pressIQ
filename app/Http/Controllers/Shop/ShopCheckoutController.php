@@ -173,7 +173,7 @@ class ShopCheckoutController extends Shop
     }
     public function paymaya_webhook_success()
     {
-        $order_id = Crypt::decrypt(Request::input("order_id"));
+        $order_id = Request::input("requestReferenceNumber");
         $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
         if($order)
         {
@@ -204,13 +204,13 @@ class ShopCheckoutController extends Shop
     }
     public function paymaya_webhook_failure()
     {
-        $order_id = Crypt::decrypt(Request::input("order_id"));
+        $order_id = Request::input("requestReferenceNumber");
         $this->failmaya($order_id);
         dd(Request::input());
     }
     public function paymaya_webhook_cancel()
     {
-        $order_id = Crypt::decrypt(Request::input("order_id"));
+        $order_id = Request::input("requestReferenceNumber");
         $this->failmaya($order_id);
         dd(Request::input());
     }

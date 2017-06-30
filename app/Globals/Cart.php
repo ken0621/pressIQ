@@ -1031,52 +1031,7 @@ class Cart
         $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null, 0);
         
         // Set Webhook
-        $webhook = Webhook::retrieve();
-        if (isset($webhook) && $webhook && count($webhook) > 0) 
-        {
-            foreach ($webhook as $value) 
-            {
-                if ($value->name == "CHECKOUT_SUCCESS") 
-                {
-                    $updateWebhook = new Webhook();
-                    $updateWebhook->name = Webhook::CHECKOUT_SUCCESS;
-                    $updateWebhook->id = $value->id;
-                    $updateWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/success?order_id=" . Crypt::encrypt($order_id) . "&from=" . $from);
-                    $updateWebhook->delete();
-                }
-                elseif($value->name == "CHECKOUT_FAILURE")
-                {
-                    $updateWebhook = new Webhook();
-                    $updateWebhook->name = Webhook::CHECKOUT_FAILURE;
-                    $updateWebhook->id = $value->id;
-                    $updateWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/paymaya/failure?order_id=" . Crypt::encrypt($order_id));
-                    $updateWebhook->delete();
-                }
-                elseif($value->name == "CHECKOUT_DROPOUT")
-                {
-                    $updateWebhook = new Webhook();
-                    $updateWebhook->name = Webhook::CHECKOUT_DROPOUT;
-                    $updateWebhook->id = $value->id;
-                    $updateWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/paymaya/cancel?order_id=" . Crypt::encrypt($order_id));
-                    $updateWebhook->delete();
-                }
-            }
-        }
-        
-        $successWebhook = new Webhook();
-        $successWebhook->name = Webhook::CHECKOUT_SUCCESS;
-        $successWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/success");
-        $successWebhook->register();
-        
-        $failureWebhook = new Webhook();
-        $failureWebhook->name = Webhook::CHECKOUT_FAILURE;
-        $failureWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/paymaya/failure");
-        $failureWebhook->register();
-        
-        $cancelWebhook = new Webhook();
-        $cancelWebhook->name = Webhook::CHECKOUT_DROPOUT;
-        $cancelWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/paymaya/cancel");
-        $cancelWebhook->register();
+        // here lies luke's hope and dreams
         
         // Checkout
         $itemCheckout = new Checkout();

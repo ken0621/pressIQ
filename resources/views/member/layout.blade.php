@@ -59,9 +59,9 @@
         (function () {
         var js;
         if (typeof JSON !== 'undefined' && 'querySelector' in document && 'addEventListener' in window) {
-        js = 'assets/member/external/jquery.minv2.js';
+        js = '/digima/public/assets/member/external/jquery.minv2.js';
         } else {
-        js = 'assets/member/external/jquery.minv1.js';
+        js = '/digima/public/assets/member/external/jquery.minv1.js';
         }
         document.write('<script src="' + js + '"><\/script>');
         }());

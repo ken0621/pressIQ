@@ -62,7 +62,7 @@ class GuillermoController extends Controller
 	            
 	            if(isset($response_array["requestReferenceNumber"]))
 	            {
-	                $request_number = $response_array["requestReferenceNumber"];
+	                $request_number = $response_array["requestReferenceNumber"] . " - " . $order->created_date;
 	            }
 	            else
 	            {

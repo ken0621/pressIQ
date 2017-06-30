@@ -575,6 +575,20 @@
 			"default":"Monday - Friday at 9:00am - 6:00pm",
 			"size":"6"
 		},
+		"contactus_project_site_title" :
+		{
+			"label":"Project Site Title",
+			"type":"textbox",
+			"default":"Project Site Address",
+			"size":"6"
+		},
+		"contactus_project_site_content" :
+		{
+			"label":"Project Site Address",
+			"type":"textbox",
+			"default":"Brgy. Runruno, Municipality of Quezon, Nueva Vizcaya, Philippines",
+			"size":"6"
+		},
 		"contactus_location_map" :
 		{
 			"label":"Head Quarters Location",

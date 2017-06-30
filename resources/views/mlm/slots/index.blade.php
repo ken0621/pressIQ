@@ -127,7 +127,7 @@ $data['icon'] = 'icon-sitemap';
                 <tr>
                   <td>{{$value->slot_no}}</td>
                   <td>{{$value->slot_created_date}}</td>
-                  <td>{{$value->slot_wallet_current}}</td>
+                  <td>{{currency('PHP', $sum_wallet[$key])}}</td>
                   <td class="membership_{{$value->slot_id}}">{{$value->membership_name}}</td>
                   <td><form class="global_submit" action="/mlm/changeslot" method="post">
                         {!! csrf_field() !!}

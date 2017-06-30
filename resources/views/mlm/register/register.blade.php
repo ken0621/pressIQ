@@ -168,6 +168,27 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="modal_resend_email" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+  	
+    <form class="form-horizontal put-action-here">
+    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+	    <div class="modal-content">
+		    <div class="modal-header" >
+		        <button type="button" class="close" data-dismiss="modal">&times;</button>
+		        <h4 class="modal-title layout-modallarge-title item_title">Email Verification</h4>
+		    </div>
+		    <div class="modal-body">
+		      	<h4>Your email is already used (You already have an account). In order to use your account click the resend button below. </h4>
+		    </div>
+	        <div class="modal-footer" >
+	            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+	            <button class="btn btn-success" type="submit" data-url="">Resend Verification Email</button>
+	        </div>
+	    </div>
+    </form>
+  </div>
+</div>
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="assets/mlm/css/register.css">
@@ -216,7 +237,6 @@ $('.btn_i_agree_modal').on('click', function(){
         })
 	function submit_form_register(link, data)
     {
-        
         $.ajax({
             url:link,
             dataType:"json",
@@ -241,6 +261,11 @@ $('.btn_i_agree_modal').on('click', function(){
 					var message = data.message;
 					$('.warning-text').text(message[0]);
 					$("#popup-warning").modal();             
+	            }
+	            else if(data.status == 'error-email')
+	            {
+	            	$(".put-action-here").attr("action",data.action);
+	            	$("#modal_resend_email").modal();
 	            }
             },
             error: function()

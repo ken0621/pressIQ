@@ -15,10 +15,12 @@ use App\Models\Tbl_mlm_plan_setting;
 use App\Models\Tbl_tree_placement;
 use App\Models\Tbl_mlm_transfer_slot_log;
 use App\Models\Tbl_item_code;
+use App\Models\Tbl_mlm_slot_wallet_log;
 
 use App\Globals\Mlm_compute;
 use App\Globals\Mlm_member;
 use App\Globals\Item_code;
+
 class MlmSlotsController extends Mlm
 {
     public function index()
@@ -34,6 +36,10 @@ class MlmSlotsController extends Mlm
                 $data["enabled_upgrade_slot"] = 0;
             }
             $data['all_slots_p']       = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->membership()->paginate(20);
+            foreach($data['all_slots_p'] as $key => $value)
+            {
+                $data['sum_wallet'][$key] = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $value->slot_id)->sum('wallet_log_amount');               
+            }
             $data['active']            = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->where('slot_defaul', 1)->first();
             $data['_code']             = Tbl_membership_code::where('customer_id', Self::$customer_id)->where('used', 0)->get();
             $data["all_slots_show"]    = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->membership()->get();

@@ -145,6 +145,9 @@
         @if($notify == 1)
             $('#modal_notify').modal('toggle');
         @endif
+        @if (Session::has('success'))
+       		toastr.success("{{ Session::get('success') }}");
+    	@endif
         function submit_done(data)
         {
             console.log(data);

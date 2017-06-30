@@ -10,6 +10,9 @@ Route::any('/member/instant_add_slot', 'Member\MLM_SlotController@instant_add_sl
 
 Route::any('/member/raymond', 'Member\RaymondController@index'); //RAYMOND
 
+
+
+
 /* FRONTEND - SHIGUMA RIKA */
 Route::get('/', 'Frontend\HomeController@index');
 Route::get('/barcode', 'MemberController@barcodes');
@@ -22,6 +25,8 @@ Route::get('member/register/session', 'MemberController@session');
 Route::get('member/register', 'MemberController@register');
 Route::post('member/register/logged_in', 'MemberController@register_logged_in_post');
 Route::post('member/register/submit', 'MemberController@register_post');
+
+Route::any('member/email/resend/{id}', 'MemberController@resend_email');
 
 Route::get('member/register/package', 'MemberController@package');
 Route::post('member/register/package/submit', 'MemberController@package_post');
@@ -75,6 +80,7 @@ Route::any("/member/page/store_information/update_submit","Member\ManageStoreInf
 Route::any('/member/developer/status', 'Member\Developer_StatusController@index'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/rematrix', 'Member\Developer_RematrixController@index'); //ERWIN GUEVARRA
 Route::any('/member/developer/documentation', 'Member\Developer_DocumentationController@index'); //EVERYONE
+Route::any('/member/developer/rematrix/tree', 'Member\Developer_RematrixController@tree_fixer'); //ERWIN GUEVARRA
 
 Route::any('/member/developer/auto_entry', 'Member\Developer_AutoentryController@index'); //EVERYONE
 Route::post('/member/developer/auto_entry/instant_add_slot', 'Member\Developer_AutoentryController@instant_add_slot'); //EVERYONE

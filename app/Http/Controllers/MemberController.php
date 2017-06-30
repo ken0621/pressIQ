@@ -15,6 +15,7 @@ use App\Models\Tbl_customer;
 use App\Models\Tbl_membership;
 use App\Models\Tbl_membership_package;
 use App\Models\Tbl_membership_code;
+use App\Models\Tbl_email_template;
 use App\Models\Tbl_membership_package_has;
 use App\Models\Tbl_locale;
 use App\Models\Tbl_online_pymnt_method;
@@ -29,6 +30,7 @@ use Session;
 use Redirect;
 use Crypt;
 use App\Globals\Mlm_member;
+use App\Globals\Mail_global;
 use App\Globals\Item;
 use App\Globals\Mlm_plan;
 use App\Globals\Mlm_compute;
@@ -434,8 +436,10 @@ class MemberController extends Controller
             }
             else
             {
-                $data['status'] = 'warning';
-                $data['message'][0] = 'Email already used.';
+                $customer = Tbl_customer::where('email', $info['email'])->first();
+                $ec_order = Tbl_ec_order::where("customer_id",$customer->customer_id)->first();
+                $data['status'] = 'error-email';
+                $data['action'] = "/member/email/resend/".$ec_order->ec_order_id;
             }
          }
          else
@@ -445,7 +449,23 @@ class MemberController extends Controller
          }
          return json_encode($data);
     }
-
+    
+    public function resend_email($order_id)
+    {
+        $data_order                = DB::table("tbl_ec_order")->where("ec_order_id", $order_id)->first();
+        $data_customer             = DB::table("tbl_customer")->where("customer_id", $data_order->customer_id)->first();
+        if ($data_order) 
+        {
+            $data["template"]         = Tbl_email_template::where("shop_id", Self::$shop_id)->first();
+            $data['mail_to']          = $data_order->customer_email;
+            $data['mail_subject']     = "Account Verification";
+            $data['account_password'] = Crypt::decrypt($data_customer->password);
+            $data['mlm_username']     = $data_customer->mlm_username;
+            $data['mlm_email']        = $data_customer->email; 
+            $result = Mail_global::password_mail($data, $data_order->shop_id);
+        }
+        return Redirect::to("/mlm/login")->with("success","Email Successfully Sent!");
+    }   
     public function payment()
     {
         $customer_information["new_account"] = true;

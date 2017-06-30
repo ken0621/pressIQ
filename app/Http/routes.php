@@ -1,6 +1,5 @@
 <?php
 Route::get('/member/rypt/{key}', 'Member\GuillermoController@index');
-
 Route::get('/member/cross', 'Member\GuillermoController@cross');
 
 Route::get('/member/mail_setting', 'Member\MailSettingController@index');

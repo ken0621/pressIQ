@@ -48,6 +48,7 @@
           </tr>
         </thead>
         <tbody>
+        <?php $investigation_count = 0; ?>
         @foreach($_order as $order)
           <tr class="tr-order" order_id="{{ $order->order_id }}" checkout_id="{{ $order->checkout_id }}">
             <th>{{ $order->ec_order_id }}</th>
@@ -58,8 +59,10 @@
             <td>{{ ($order->slot_id == "" ? "NO SLOT" : $order->slot_id) }}</td>
             <td style="color: red; text-center">
                 @if($order->confirm_response == "PAYMENT_SUCCESS" && $order->slot_id == "")
+                    <?php $investigation_count++; ?>
                     PAYMENT SUCESSFUL BUT THERE IS NO SLOT
                 @elseif($order->confirm_response != "PAYMENT_SUCCESS"  && $order->slot_id != "")
+                     <?php $investigation_count++; ?>
                     THERE IS A SLOT BUT PAYMENT HASN'T BEEN CONFIRMED
                 @endif
             </td>
@@ -69,6 +72,7 @@
         </tbody>
       </table>
       </div> <!-- /container -->
+      <div style="font-size: 16px; margin: 30px; text-align: center;">TOTAL NO. OF CASE PROBLEM IS <br> <span style="color: red; font-size: 20px;">{{ $investigation_count }}</span></div>
         <!-- Latest compiled and minified JavaScript -->
       <script
   src="https://code.jquery.com/jquery-2.2.4.min.js"

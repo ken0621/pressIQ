@@ -957,16 +957,18 @@ class Payroll
 
 			}	
 
+			$late_overtime_flexi = 0;
+
 			if($flexi == 1)
 			{
-				// c_time_to_int
+
 				$target_flexi = c_time_to_int(Payroll::float_time($target_hour_param));
 				$flexi_spent = $time_out - $time_in;
-				$late_overtime = $flexi_spent - $target_flexi;
+				$late_overtime_flexi = $flexi_spent - $target_flexi;
 				// dd(convert_seconds_to_hours_minutes("H:i", $late_overtime));
-				if($late_overtime < 0)
+				if($late_overtime_flexi < 0)
 				{
-					$late_overtime = 0;
+					$late_overtime_flexi = 0;
 				}
 			}
 			
@@ -999,7 +1001,7 @@ class Payroll
 			}
 
 			$total_early_overtime += $early_overtime;
-			$total_late_overtime += $late_overtime;
+			$total_late_overtime += $late_overtime + $late_overtime_flexi;
 			$total_regular_hours += $regular_hours;
 			$total_time_spent += $time_spent;
 		}
@@ -1067,11 +1069,11 @@ class Payroll
 			}
 
 			/* get late overtime */
-			$total_late_overtime = $total_time_spent - $target_hour;
-			if($total_late_overtime < 0)
-			{
-				$total_late_overtime = 0;
-			}
+			// $total_late_overtime = $total_time_spent - $target_hour;
+			// if($total_late_overtime < 0)
+			// {
+			// 	$total_late_overtime = 0;
+			// }
 		}
 
 		

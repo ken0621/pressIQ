@@ -141,7 +141,15 @@ class GuillermoController extends Controller
             {
                 if(isset($response->paymentDetails))
                 {
-                    $data["information"] = "Tried to pay using " . $response->paymentDetails->cardType ." ending in " . $response->paymentDetails->last4;
+                    if(isset($response->paymentDetails->cardType))
+                    {
+                        $data["information"] = "Tried to pay using " . $response->paymentDetails->cardType ." ending in " . $response->paymentDetails->last4;
+                    }
+                    else
+                    {
+                        $data["information"] = "Data is not accessible.";
+                    }
+                    
                 }
                 else
                 {

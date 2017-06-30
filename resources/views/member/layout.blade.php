@@ -467,6 +467,11 @@
                     
                     split = jQuery.grep(split, function(value) 
                     {
+                      return value != "";
+                    });
+                    
+                    split = jQuery.grep(split, function(value) 
+                    {
                       return value != "brown.com.ph";
                     });
                     

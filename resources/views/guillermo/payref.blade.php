@@ -30,7 +30,7 @@
     <div class="container">
       <div class="page-header">
         <h1>Paymaya Checkout Cross Reference</h1>
-        <p class="lead">This page allows to get corresponding checkout ID and status of payment.</p>
+        <p class="lead title-count">This page allows to get corresponding checkout ID and status of payment.</p>
         <button class="pull-right btn btn-primary start-re-compute"> GET DATA FROM PAYMAYA </button>
       </div>
       
@@ -49,8 +49,8 @@
           <tr class="tr-order" order_id="{{ $order->order_id }}" checkout_id="{{ $order->checkout_id }}">
             <th>{{ $order->ec_order_id }}</th>
             <td>{{ $order->checkout_id }}</td>
-            <td class="response">-</td>
-            <td class="information">-</td>
+            <td class="response">{{ $order->confirm_response }}</td>
+            <td class="information">{{ $order->confirm_response_information }}</td>
             <td class="status"><i style="color: red;" class="glyphicon glyphicon-unchecked"></i></td>
           </tr>
         @endforeach
@@ -73,10 +73,19 @@
             
             function compute($order_id)
             {
+                $(".title-count").html("Computing Order No." + $order_id);
                 $last_id = parseInt($(".tr-order:last").attr("order_id"));
                 if(parseInt($order_id) > $last_id)
                 {
                     alert("Payamaya details updated successfully.");
+                }
+                else if($(".tr-order[order_id=" + $order_id + "]").find(".response").html() != "")
+                {
+                    $(".tr-order[order_id=" + $order_id + "]").find(".status").html('<i style="color: green;" class="glyphicon glyphicon-check"></i>');
+                    setTimeout(function()
+                    {
+                        compute(parseInt($order_id) + 1);
+                    }, 100);
                 }
                 else if($(".tr-order[order_id=" + $order_id + "]").length > 0)
                 {
@@ -103,7 +112,10 @@
                 }
                 else
                 {
-                    compute($order_id + 1);
+                    setTimeout(function()
+                    {
+                        compute(parseInt($order_id) + 1);
+                    }, 100)
                 }
                 
                 return 0;

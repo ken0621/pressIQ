@@ -29,6 +29,7 @@ use App\Globals\Mlm_plan;
 use Crypt;
 use Config;
 use URL;
+use Request;
 use App\Globals\Mlm_slot_log;
 // IPAY 88
 use App\IPay88\RequestPayment;
@@ -117,6 +118,8 @@ class GuillermoController extends Controller
         curl_close($ch);
       
       
+        
+      
        // dd($response);
         if(isset($response->error))
         {
@@ -143,6 +146,13 @@ class GuillermoController extends Controller
             }
             
         }
+
+
+        $order_id = Request::input("order_id");
+        $update["confirm_response"] = $data["response"];
+        $update["confirm_response_information"] = $data["information"];
+        $update["confirm_response_array"] = serialize($response);
+        DB::table("tbl_paymaya_logs")->where("order_id", $order_id)->update($update);
 
         echo json_encode($data);
         

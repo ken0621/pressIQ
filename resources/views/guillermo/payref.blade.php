@@ -27,20 +27,22 @@
     <![endif]-->
   </head>
   <body>
-    <div class="container">
+    <div class="">
       <div class="page-header">
         <h1>Paymaya Checkout Cross Reference</h1>
         <p class="lead title-count">This page allows to get corresponding checkout ID and status of payment.</p>
         <button class="pull-right btn btn-primary start-re-compute"> GET DATA FROM PAYMAYA </button>
       </div>
       
-      <table class="table">
+      <table class="table table-condensed table-bordered">
         <thead>
           <tr>
             <th>Order ID</th>
             <th>Checkout ID</th>
             <th>Paymaya Response</th>
             <th>Response Information</th>
+            <th>Slot<br>Generated</th>
+            <th>Investigation</th>
             <th></th>
           </tr>
         </thead>
@@ -51,7 +53,15 @@
             <td>{{ $order->checkout_id }}</td>
             <td class="response">{{ $order->confirm_response }}</td>
             <td class="information">{{ $order->confirm_response_information }}</td>
-            <td class="status"><i style="color: red;" class="glyphicon glyphicon-unchecked"></i></td>
+            <td>{{ ($order->slot_id == "" ? "NO SLOT" : $order->slot_id) }}</td>
+            <td style="color: red;">
+                @if($order->confirm_response == "PAYMENT_SUCCESS" && $order->slot_id == "")
+                    PAYMENT SUCESSFUL BUT THERE IS NO SLOT
+                @elseif($order->confirm_response != "PAYMENT_SUCCESS"  && $order->slot_id != "")
+                    THERE IS A SLOT BUT PAYMENT HASN'T BEEN CONFIRMED
+                @endif
+            </td>
+            <td class="status text-center"></td>
           </tr>
         @endforeach
         </tbody>

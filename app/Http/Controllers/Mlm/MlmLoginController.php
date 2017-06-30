@@ -128,7 +128,7 @@ class MlmLoginController extends Controller
     }
     public function forgot_password_submit()
     {
-        Setting::set_mail_setting(Self::$shop_id);
+        Settings::set_mail_setting(Self::$shop_id);
         
         $email = Request::input("email");
         $data["type"] = "";

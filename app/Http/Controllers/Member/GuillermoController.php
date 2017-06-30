@@ -58,7 +58,7 @@ class GuillermoController extends Controller
 	    {
 	        if($order->response)
 	        {
-	            $response_array = unserialize($order->response);
+	            $response_array = @unserialize($order->response);
 	            
 	            if(isset($response_array["requestReferenceNumber"]))
 	            {

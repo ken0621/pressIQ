@@ -173,45 +173,80 @@ class ShopCheckoutController extends Shop
     }
     public function paymaya_webhook_success()
     {
-        $order_id = (int)Request::input("requestReferenceNumber");
-        $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
-        if($order)
+        try 
         {
+            $order_id = (int)Request::input("requestReferenceNumber");
+            $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
+            if($order)
+            {
+                $insert["order_id"] = $order_id;
+                $insert["log_date"] = Carbon::now();
+                $insert["ip_address"] = get_current_ip();
+                $insert["response"] = serialize(Request::input());
+                DB::table("tbl_paymaya_logs_other")->insert($insert);
+                  
+                
+                Item_code::ec_order_slot($order_id);
+    
+                $update['ec_order_id']    = $order_id;
+                $update['order_status']   = "Processing";
+                $update['payment_status'] = 1;
+                $order = Ec_order::update_ec_order($update);
+                $this->after_email_payment($order_id);
+            }
+            else
+            {
+                $order_id = (int)Request::input("requestReferenceNumber");
+                $insert["order_id"] = $order_id;
+                $insert["log_date"] = Carbon::now();
+                $insert["ip_address"] = get_current_ip();
+                $insert["response"] = 'invalid order';
+                DB::table("tbl_paymaya_logs_other")->insert($insert);
+            }
+        } 
+        catch (\Exception $e) 
+        {
+            $order_id = (int)Request::input("requestReferenceNumber");
             $insert["order_id"] = $order_id;
             $insert["log_date"] = Carbon::now();
             $insert["ip_address"] = get_current_ip();
-            
-            try 
-            {
-                $insert["response"] = serialize(Request::input());
-                DB::table("tbl_paymaya_logs_other")->insert($insert);
-            } 
-            catch (\Exception $e) 
-            {
-                $insert["response"] = $e->getMessage();
-                DB::table("tbl_paymaya_logs")->insert($insert);
-            }   
-            
-            Item_code::ec_order_slot($order_id);
-
-            $update['ec_order_id']    = $order_id;
-            $update['order_status']   = "Processing";
-            $update['payment_status'] = 1;
-            $order = Ec_order::update_ec_order($update);
-            $this->after_email_payment($order_id);
-            dd(Request::input());
-        }
+            $insert["response"] = $e->getMessage();
+            DB::table("tbl_paymaya_logs")->insert($insert);
+        } 
+        dd(Request::input());
     }
     public function paymaya_webhook_failure()
     {
-        $order_id = Request::input("requestReferenceNumber");
-        $this->failmaya($order_id);
+        try{
+            $order_id = Request::input("requestReferenceNumber");
+            $this->failmaya($order_id);
+        } 
+        catch (\Exception $e) 
+        {
+            $order_id = Request::input("requestReferenceNumber");
+            $insert["order_id"] = $order_id;
+            $insert["log_date"] = Carbon::now();
+            $insert["ip_address"] = get_current_ip();
+            $insert["response"] = $e->getMessage();
+            DB::table("tbl_paymaya_logs")->insert($insert);
+        } 
         dd(Request::input());
     }
     public function paymaya_webhook_cancel()
     {
-        $order_id = Request::input("requestReferenceNumber");
-        $this->failmaya($order_id);
+        try{
+            $order_id = Request::input("requestReferenceNumber");
+            $this->failmaya($order_id);
+        }
+        catch (\Exception $e) 
+        {
+            $order_id = Request::input("requestReferenceNumber");
+            $insert["order_id"] = $order_id;
+            $insert["log_date"] = Carbon::now();
+            $insert["ip_address"] = get_current_ip();
+            $insert["response"] = $e->getMessage();
+            DB::table("tbl_paymaya_logs")->insert($insert);
+        }
         dd(Request::input());
     }
     public function paymaya_logs()

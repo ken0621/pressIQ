@@ -505,18 +505,50 @@ class Payroll
 								$payroll_time_sheet_approved_out = "00:00";
 							}
 						}
+						else
+						{
+							/* OVERTIME RULE */
+							
+							$payroll_time_sheet_approved_in = $time_record->payroll_time_sheet_in;
+
+							$target = $schedule->target_hours;
+
+							$render = Payroll::time_float($time_record->payroll_time_sheet_out) - Payroll::time_float($time_record->payroll_time_sheet_in);
+
+
+							if($render > $target)
+							{
+								$new_time_out = Payroll::time_float($time_record->payroll_time_sheet_in) + $target;
+								$payroll_time_sheet_approved_out = Payroll::float_time($new_time_out);
+							}
+							else
+							{
+								$payroll_time_sheet_approved_out = $time_record->payroll_time_sheet_out;
+							}
+
+							// /* IF ONE OF THE TIME IS ZERO */
+							if($time_record->payroll_time_sheet_in == "00:00:00" || $time_record->payroll_time_sheet_out == "00:00:00")
+							{
+								$payroll_time_sheet_approved_in = "00:00";
+								$payroll_time_sheet_approved_out = "00:00";
+							}
+
+							/* IF TIME IN IS LATER THAN DEFAULT TIME OUT */
+							if($time_record->payroll_time_sheet_in > $schedule->work_end)
+							{
+								$payroll_time_sheet_approved_in = "00:00";
+								$payroll_time_sheet_approved_out = "00:00";
+							}
+
+							/* IF TIME OUT IS EARLIER THAN DEFAULT TIME IN */
+							if($time_record->payroll_time_sheet_out < $schedule->work_start)
+							{
+								$payroll_time_sheet_approved_in = "00:00";
+								$payroll_time_sheet_approved_out = "00:00";
+							}
+						}
 					}
 					
-
-					/* REST DAY NEEDS APPROVAL */
-					// foreach($_rest_day as $rest_day)
-					// {
-					// 	if($rest_day->payroll_group_rest_day == Carbon::parse($time_sheet_info->payroll_time_date)->format("l"))
-					// 	{
-					// 		$payroll_time_sheet_approved_in = "00:00";
-					// 		$payroll_time_sheet_approved_out = "00:00";
-					// 	}
-					// }
 
 					$update["payroll_time_sheet_approved_in"] = Carbon::parse($payroll_time_sheet_approved_in)->format("H:i");
 					$update["payroll_time_sheet_approved_out"] = Carbon::parse($payroll_time_sheet_approved_out)->format("H:i");
@@ -719,14 +751,14 @@ class Payroll
 
 		$default_time_in = '00:00:00';
 		$default_time_out = '00:00:00';
-		$target_hour_para = 0;
+		$target_hour_param = 0;
 		$target_hour = 0;
 		$break_start = '00:00:00';
 		$break_end = '00:00:00';
 		$flexi = 0;
 		$rest_day = 0;
 		$extra_day = 0;
-
+		// dd($schedule);
 		if($schedule != null)
 		{
 			$target_hour_param 		= $schedule->target_hours;
@@ -925,13 +957,18 @@ class Payroll
 
 			}	
 
+			$late_overtime_flexi = 0;
+
 			if($flexi == 1)
 			{
-				$late_overtime = $time_spent - $target_hour;
 
-				if($late_overtime < 0)
+				$target_flexi = c_time_to_int(Payroll::float_time($target_hour_param));
+				$flexi_spent = $time_out - $time_in;
+				$late_overtime_flexi = $flexi_spent - $target_flexi;
+				// dd(convert_seconds_to_hours_minutes("H:i", $late_overtime));
+				if($late_overtime_flexi < 0)
 				{
-					$late_overtime = 0;
+					$late_overtime_flexi = 0;
 				}
 			}
 			
@@ -964,7 +1001,7 @@ class Payroll
 			}
 
 			$total_early_overtime += $early_overtime;
-			$total_late_overtime += $late_overtime;
+			$total_late_overtime += $late_overtime + $late_overtime_flexi;
 			$total_regular_hours += $regular_hours;
 			$total_time_spent += $time_spent;
 		}
@@ -1032,11 +1069,11 @@ class Payroll
 			}
 
 			/* get late overtime */
-			$total_late_overtime = $total_time_spent - $target_hour;
-			if($total_late_overtime < 0)
-			{
-				$total_late_overtime = 0;
-			}
+			// $total_late_overtime = $total_time_spent - $target_hour;
+			// if($total_late_overtime < 0)
+			// {
+			// 	$total_late_overtime = 0;
+			// }
 		}
 
 		
@@ -1585,6 +1622,10 @@ class Payroll
 		$daily_undertime = 0;
 
 
+		/* array for dd() */
+		$array_dd = array();
+
+
 		while($start <= $end)
 		{
 			$date = Carbon::parse($start)->format("Y-m-d"); 
@@ -1697,6 +1738,8 @@ class Payroll
 				$target_hour = $custom_shift->target_hours;
 			}
 
+			// 
+			
 
 			$under_time = divide($under_time, $target_hour);
 			$data['total_regular_days']			+= divide($regular_hours, $target_hour);
@@ -1714,6 +1757,8 @@ class Payroll
 			// dd($working_day_month);
 
 			$hourly_rate = divide($daily_rate, $target_hour);
+
+			
 
 			$data['daily_rate'] = $daily_rate;
 			
@@ -1805,7 +1850,7 @@ class Payroll
 				$rh_hour['regular'] = $count_rh;
 			}
 
-		
+			// array_push($array_dd, $extra_day_hours);
 			/* EXTRA DAYS */
 			if($extra_day_hours > 0 && $regular_hour['regular'] <= 0 && $special_holiday_hours <= 0 && $regular_holiday_hours <= 0)
 			{
@@ -2131,7 +2176,9 @@ class Payroll
 
 		}
 
-		// dd($dd_array);
+
+
+		// dd($array_dd);
 		$payroll_group_salary_computation = $group->payroll_group_salary_computation;
 		$data['payroll_group_salary_computation'] = $payroll_group_salary_computation;
 

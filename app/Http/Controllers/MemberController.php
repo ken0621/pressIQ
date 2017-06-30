@@ -465,7 +465,7 @@ class MemberController extends Controller
             $data['account_password'] = Crypt::decrypt($data_customer->password);
             $data['mlm_username']     = $data_customer->mlm_username;
             $data['mlm_email']        = $data_customer->email; 
-            $result = Mail_global::password_mail($data, $data_order->shop_id);
+            $result = Mail_global::password_mailv2($data, $data_order->shop_id);
         }
         return Redirect::to("/mlm/login")->with("success","Email Successfully Sent!");
     }   

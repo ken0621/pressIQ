@@ -144,7 +144,7 @@
 </script>
 <script type="text/javascript" src="/assets/member/js/customer.js"></script>
 <script type="text/javascript" src="/assets/member/js/customerlist.js"></script>
-<script type="text/javascript" src="/assets/member/js/paginate_ajax.js"></script>
+<!--<script type="text/javascript" src="/assets/member/js/paginate_ajax.js"></script>-->
 <script type="text/javascript" >
     load_assets();
 </script>

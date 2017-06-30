@@ -74,6 +74,8 @@
 							</tr>
 						</table>
 					</div>
+					<div class="title-container project-site">Project Site Address</div>
+					<div>Brgy. Runruno, Municipality of Quezon, Nueva Vizcaya, Philippines</div>
 				</div>
 			</div>
 		</div>

@@ -96,7 +96,9 @@ class MlmLoginController extends Controller
                 }
             }
         }
-   
+        if(Self::$shop_id == null){
+            Self::$shop_id = 5;
+        }
         /* Set Email Configuration */
         Settings::set_mail_setting(Self::$shop_id);
     }
@@ -128,8 +130,6 @@ class MlmLoginController extends Controller
     }
     public function forgot_password_submit()
     {
-        Settings::set_mail_setting(Self::$shop_id);
-        
         $email = Request::input("email");
         $data["type"] = "";
         $data["message"] = "";

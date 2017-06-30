@@ -179,7 +179,13 @@
 		        <h4 class="modal-title layout-modallarge-title item_title">Email Verification</h4>
 		    </div>
 		    <div class="modal-body">
-		      	<h4>Your email is already used (You already have an account). In order to use your account click the resend button below. Your username and password will be sent to your email. Once you recieve the email, a login link will be provided. After you are logged in you can click New Purchase to purchase using your account. </h4>
+		      	<h4>
+		      	Your email is already used (You already have an account). 
+		      	In order to use your account click the resend button below. <br><br>
+		      	Your username and password will be sent to your email. 
+		      	Once you recieve the email, a login link will be provided. <br><br>
+		      	After you are logged in you can click New Purchase to purchase using your account.
+		      	</h4>
 		    </div>
 	        <div class="modal-footer" >
 	            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

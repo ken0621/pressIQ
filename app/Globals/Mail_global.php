@@ -134,7 +134,6 @@ class Mail_global
         {
             $result = 0;
         }
-        dd($result);
         return $result;
     }
     public static function mail_discount_card($discount_card_log_id)

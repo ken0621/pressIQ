@@ -120,7 +120,11 @@ class GuillermoController extends Controller
       
         
       
-       // dd($response);
+        if(Request::input("debug") == "yes")
+        {
+            dd($response);
+        }
+        
         if(isset($response->error))
         {
             $data["response"] = "Error";

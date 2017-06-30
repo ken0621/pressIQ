@@ -143,8 +143,11 @@ class MemberController extends Controller
         }
         else
         {
-            $nickname = $nickname . ($count_username + 1);
+            
+            $count_mlm_user_name = Tbl_customer::where('mlm_username', $nickname)->count();
+            $nickname = $nickname . ($count_mlm_user_name + 1);
             return $nickname;
+            
         }
     }
 

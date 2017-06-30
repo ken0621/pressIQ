@@ -132,10 +132,7 @@
     {
         var filter = $(sel).val();
         var link = '/member/customer/list?filter_slot=' + filter;
-        // location.redirect(link);
         window.location = link;
-        // $('.load-data').html('<div style="margin: 100px auto;" class="loader-16-gray"></div>');
-        // $('.load-data').load(link);
     }
     function submit_done(data)
     {

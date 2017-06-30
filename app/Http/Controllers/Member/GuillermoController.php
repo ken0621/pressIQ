@@ -80,6 +80,75 @@ class GuillermoController extends Controller
 	        
 	    }
 	}
+	public function payref()
+	{
+	    $_order = $data["_order"] = DB::table("tbl_ec_order")
+	                                                           ->join("tbl_paymaya_logs", "tbl_paymaya_logs.order_id", "=", "tbl_ec_order.ec_order_id")
+	                                                          // ->where("ec_order_id", ">", "480")
+	                                                           ->orderBy("ec_order_id", "asc")
+	                                                           ->get();
+	    return view("guillermo.payref", $data);
+	}
+	public function payref_check($checkout_id)
+	{
+	    $api = Tbl_online_pymnt_api::where('api_shop_id', 5)->join("tbl_online_pymnt_gateway", "tbl_online_pymnt_gateway.gateway_id", "=", "tbl_online_pymnt_api.api_gateway_id")->where("gateway_code_name", "paymaya")->first();
+		
+		if (get_domain() == "c9users.io") 
+        {
+            $url = "https://pg-sandbox.paymaya.com/checkout/v1/checkouts/$checkout_id";
+        }
+        else
+        {
+            $url = "https://api.paymaya.com/checkout/v1/checkouts/$checkout_id";
+        }
+        
+		
+        $ch = curl_init();
+        
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        $authorization = base64_encode($api->api_secret_id);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+          "Authorization: Basic $authorization"
+        ));
+        
+        $response = json_decode(curl_exec($ch));
+        curl_close($ch);
+      
+      
+       // dd($response);
+        if(isset($response->error))
+        {
+            $data["response"] = "Error";
+            $data["information"] = $response->error->code;
+        }
+        else
+        {
+            $data["response"] = $response->paymentStatus;
+            if($response->paymentStatus == "PAYMENT_SUCCESS")
+            {
+                $data["information"] = "PAID with " . $response->paymentDetails->cardType ." ending in " . $response->paymentDetails->last4;
+            }
+            else
+            {
+                if(isset($response->paymentDetails))
+                {
+                    $data["information"] = "Tried to pay using " . $response->paymentDetails->cardType ." ending in " . $response->paymentDetails->last4;
+                }
+                else
+                {
+                    $data["information"] = "No transaction details provided.";
+                }
+            }
+            
+        }
+
+        echo json_encode($data);
+        
+        
+
+	}
 	public function webhook()
 	{
 		$api = Tbl_online_pymnt_api::where('api_shop_id', 5)->join("tbl_online_pymnt_gateway", "tbl_online_pymnt_gateway.gateway_id", "=", "tbl_online_pymnt_api.api_gateway_id")->where("gateway_code_name", "paymaya")->first();

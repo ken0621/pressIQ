@@ -97,7 +97,7 @@
                             <input type="hidden" class="token" name="_token" value="{{ csrf_token() }}">
                                 <div class="lol-title"><span style="color: #5C3424;">Members</span> Login</div>
                                 <p> 
-                                    <input id="username" name="user" required="required" type="text" placeholder="Username"/>
+                                    <input id="username" name="user" required="required" type="text" placeholder="Username or email"/>
                                 </p>
                                 <p> 
                                     <input id="password" name="pass" required="required" type="password" placeholder="Password" /> 

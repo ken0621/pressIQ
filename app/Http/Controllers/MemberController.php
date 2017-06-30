@@ -910,11 +910,16 @@ class MemberController extends Controller
                                             ->join("tbl_customer", "tbl_customer.customer_id", "=", "tbl_ec_order.customer_id")
                                             ->leftJoin("tbl_customer_address", "tbl_customer_address.customer_id", "=", "tbl_customer.customer_id")
                                             ->leftJoin("tbl_online_pymnt_method", "tbl_online_pymnt_method.method_id", "=", "tbl_ec_order.payment_method_id")
-                                            ->leftJoin("tbl_paymaya_logs", "tbl_paymaya_logs.order_id", "=", "tbl_ec_order.ec_order_id")
+                                            // ->leftJoin("tbl_paymaya_logs", "tbl_paymaya_logs.order_id", "=", "tbl_ec_order.ec_order_id")
                                             ->first();
             
             if ($data['info']) 
             {
+                //$method = DB::table("")
+                // $data['info']->method_name = $data['info'];
+                
+               // dd($data['info']);
+                
                 $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $order_id)
                                                    ->leftJoin('tbl_ec_variant', 'tbl_ec_order_item.item_id', '=', 'evariant_id')
                                                    ->get();

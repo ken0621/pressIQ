@@ -60,7 +60,9 @@
             <td class="information">{{ $order->confirm_response_information }}</td>
             <td>{{ ($order->slot_id == "" ? "NO SLOT" : $order->slot_id) }}</td>
             <td style="color: red; text-center">
-                @if($order->confirm_response == "PAYMENT_SUCCESS" && $order->slot_id == "")
+                @if($order->confirm_response == "" || $order->confirm_response == "PENDING")
+                    TRANSACTION PENDING (NOT CONCLUSIVE YET) 
+                @elseif($order->confirm_response == "PAYMENT_SUCCESS" && $order->slot_id == "")
                     <?php $investigation_count++; ?>
                     PAYMENT SUCESSFUL BUT THERE IS NO SLOT
                 @elseif($order->confirm_response != "PAYMENT_SUCCESS"  && $order->slot_id != "")

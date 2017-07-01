@@ -40,6 +40,8 @@
             <th>Order ID</th>
             <th>Paymaya <br>Log Date</th>
             <th>Order By</th>
+            <th>Contact No</th>
+            <th>Shipping Address</th>
             <th>Checkout ID</th>
             <th>Paymaya Response</th>
             <th>Response Information</th>
@@ -55,6 +57,8 @@
             <th>{{ $order->ec_order_id }}</th>
             <th width="200px">{{ date("F d, Y  h:i A",strtotime($order->log_date)) }}</th>
             <th>{{ $order->first_name . " " . $order->last_name}}</th>
+            <td>{{ $order->customer_mobile }}</td>
+            <td>{{ $order->customer_street . ", " . $order->customer_zipcode . ", " . $order->customer_city . ", " . $order->customer_state }}</td>
             <td>{{ $order->checkout_id }}</td>
             <td class="response">{{ $order->confirm_response }}</td>
             <td class="information">{{ $order->confirm_response_information }}</td>

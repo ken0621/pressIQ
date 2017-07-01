@@ -38,7 +38,7 @@
         <thead>
           <tr>
             <th>Order ID</th>
-            <th>Order Date</th>
+            <th>Paymaya <br>Log Date</th>
             <th>Order By</th>
             <th>Checkout ID</th>
             <th>Paymaya Response</th>
@@ -53,7 +53,7 @@
         @foreach($_order as $order)
           <tr class="tr-order {{ $order->confirm_response == '' || $order->confirm_response == 'PENDING' ? 'pending' : '' }}"  order_id="{{ $order->order_id }}" checkout_id="{{ $order->checkout_id }}">
             <th>{{ $order->ec_order_id }}</th>
-            <th>{{ date("F d, Y - h:i A",strtotime($order->created_date)) }}</th>
+            <th width="200px">{{ date("F d, Y  h:i A",strtotime($order->log_date)) }}</th>
             <th>{{ $order->first_name . " " . $order->last_name}}</th>
             <td>{{ $order->checkout_id }}</td>
             <td class="response">{{ $order->confirm_response }}</td>

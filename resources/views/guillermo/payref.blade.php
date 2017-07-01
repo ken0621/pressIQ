@@ -50,7 +50,7 @@
         <tbody>
         <?php $investigation_count = 0; ?>
         @foreach($_order as $order)
-          <tr class="tr-order" order_id="{{ $order->order_id }}" checkout_id="{{ $order->checkout_id }}">
+          <tr class="tr-order {{ $order->confirm_response == '' ? 'pending' : '' }}"  order_id="{{ $order->order_id }}" checkout_id="{{ $order->checkout_id }}">
             <th>{{ $order->ec_order_id }}</th>
             <th>{{ date("F d, Y - h:i A",strtotime($order->created_date)) }}</th>
             <td>{{ $order->checkout_id }}</td>
@@ -83,7 +83,7 @@
         <script type="text/javascript">
             $(".start-re-compute").click(function(e)
             {
-                compute($(".tr-order:first").attr("order_id"));
+                compute($(".tr-order.pending:first").attr("order_id"));
             });
             
             

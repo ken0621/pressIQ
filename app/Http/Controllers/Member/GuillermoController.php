@@ -85,6 +85,7 @@ class GuillermoController extends Controller
 	{
 	    $_order = $data["_order"] = DB::table("tbl_ec_order")
 	                                                           ->join("tbl_paymaya_logs", "tbl_paymaya_logs.order_id", "=", "tbl_ec_order.ec_order_id")
+	                                                           ->leftJoin("tbl_customer", "tbl_customer.customer_id", "=", "tbl_ec_order.customer_id")
 	                                                           ->leftJoin("tbl_ec_order_slot", "tbl_ec_order_slot.order_slot_ec_order_id", "=", "tbl_ec_order.ec_order_id")
 	                                                           ->leftJoin("tbl_mlm_slot", "tbl_mlm_slot.slot_id", "=", "tbl_ec_order_slot.order_slot_id_c")
 	                                                          // ->where("ec_order_id", ">", "480")

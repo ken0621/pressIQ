@@ -103,7 +103,7 @@
                         compute(parseInt($order_id) + 1);
                     }, 100);
                 }
-                else if($(".tr-order[order_id=" + $order_id + "]").length > 0)
+                else if($(".tr-order[order_id=" + $order_id + "]").hasClass("pending"))
                 {
                     $checkout_id = $(".tr-order[order_id=" + $order_id + "]").attr("checkout_id");
                     

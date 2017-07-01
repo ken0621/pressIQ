@@ -95,7 +95,7 @@
                 {
                     alert("Payamaya details updated successfully.");
                 }
-                else if($(".tr-order[order_id=" + $order_id + "]").find(".response").html() != "")
+                else if($(".tr-order[order_id=" + $order_id + "]").find(".response").html() != "" || $(".tr-order[order_id=" + $order_id + "]").find(".response").html() != "PENDING")
                 {
                     $(".tr-order[order_id=" + $order_id + "]").find(".status").html('<i style="color: green;" class="glyphicon glyphicon-check"></i>');
                     setTimeout(function()

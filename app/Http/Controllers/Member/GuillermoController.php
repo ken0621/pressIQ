@@ -90,7 +90,7 @@ class GuillermoController extends Controller
 	                                                           ->leftJoin("tbl_mlm_slot", "tbl_mlm_slot.slot_id", "=", "tbl_ec_order_slot.order_slot_id_c")
 	                                                           ->leftJoin("tbl_customer_address", "tbl_customer_address.customer_id", "=", "tbl_customer.customer_id")
 	                                                           ->leftJoin("tbl_customer_other_info", "tbl_customer_other_info.customer_id", "=", "tbl_customer.customer_id")
-	                                                           ->where("purpose", "shipping")
+	                                                           ->groupBy("ec_order_id")
 	                                                          // ->where("ec_order_id", ">", "480")
 	                                                           ->orderBy("ec_order_id", "asc")
 	                                                           ->get();

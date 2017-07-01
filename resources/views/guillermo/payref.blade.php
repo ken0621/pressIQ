@@ -40,6 +40,7 @@
             <th>Order ID</th>
             <th>Paymaya <br>Log Date</th>
             <th>Ordered By</th>
+            <th>E-Mail</th>
             <th>Invoice #</th>
             <th>Contact No</th>
             <th>Street</th>
@@ -61,6 +62,7 @@
             <th>{{ $order->ec_order_id }}</th>
             <th width="200px">{{ date("F d, Y  h:i A",strtotime($order->log_date)) }}</th>
             <th>{{ $order->first_name . " " . $order->last_name}}</th>
+            <td>{{ $order->email }}</td>
             <td>{{ $order->invoice_number }}</td>
             <td>{{ $order->customer_mobile }}</td>
             <td>{{ $order->customer_street }}</td>

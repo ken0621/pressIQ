@@ -38,6 +38,7 @@ Route::get('/support', 'Frontend\HomeController@support');
 /* END FRONTEND - SHIGUMA RIKA */
 
 /* SHOP FRONTENT */
+
 if(get_domain() == "c9users.io")
 {
 	$domain = "my168shop-primia.c9users.io"; //USE FOR TESTING

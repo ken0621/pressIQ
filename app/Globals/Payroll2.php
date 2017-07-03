@@ -311,13 +311,13 @@ class Payroll2
 	public static function compute_time_mode_regular($_time, $_shift, $late_grace_time = "00:00:00", $grace_time_rule_late="per_shift",$overtime_grace_time = "00:00:00",$grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00",$leave_fill_late=0,$leave_fill_undertime=0,$testing = false)
 	{
 
-		$time_spent="00:00";
-		$late_hours = "00:00";
-		$under_time = "00:00";
-		$over_time = "00:00";
-		$night_differential="00:00";
-		$target_hours = "00:00";
-		$regular_hours = "00:00";
+		$time_spent="00:00:00";
+		$late_hours = "00:00:00";
+		$under_time = "00:00:00";
+		$over_time = "00:00:00";
+		$night_differential="00:00:00";
+		$target_hours = "00:00:00";
+		$regular_hours = "00:00:00";
 		$rest_day_hours = "00:00:00";
 		$extra_day_hours = "00:00:00";
 		$regular_holiday_hours = "00:00:00";
@@ -526,7 +526,8 @@ class Payroll2
 			{
 				$is_half_day=true;
 			}
-		
+		}
+
 			/*START day type and holiday type*/
 			if ($day_type=="rest") 
 			{
@@ -544,9 +545,15 @@ class Payroll2
 			{
 				$special_holiday_hours = $regular_hours;
 			}
+			if (($day_type=="rest")&&($rest_day_hours=="00:00:00")&&($is_holiday!="")) 
+			{
+				$is_holiday="";
+			}
 			/*END day type and holiday type*/ 
 
-		}
+
+			
+
 
 		$return["time_spent"] = Payroll2::convert_to_24_hour($time_spent);
 		$return["is_absent"] = $is_absent;
@@ -615,13 +622,13 @@ class Payroll2
 	public static function compute_time_mode_flexi($_time, $target_hours="00:00:00", $break_hours="00:00:00", $overtime_grace_time = "00:00:00", $grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00", $leave_fill_undertime=0, $testing = false)
 	{
 
-		$time_spent="00:00";
-		$late_hours = "00:00";
-		$under_time = "00:00";
-		$over_time = "00:00";
+		$time_spent="00:00:00";
+		$late_hours = "00:00:00";
+		$under_time = "00:00:00";
+		$over_time = "00:00:00";
 		$night_differential= Payroll2::night_differential_computation($_time,false);
 		$target_hours = Payroll::sum_time($target_hours,$break_hours);
-		$regular_hours = "00:00";
+		$regular_hours = "00:00:00";
 		$rest_day_hours = "00:00:00";
 		$extra_day_hours = "00:00:00";
 		$regular_holiday_hours = "00:00:00";
@@ -744,8 +751,13 @@ class Payroll2
 		{
 			$special_holiday_hours = $regular_hours;
 		}
+		if (($day_type=="rest")&&($rest_day_hours=="00:00:00")&&($is_holiday!="")) 
+		{
+			$is_holiday="";
+		}
 		/*END day type and holiday type*/
 
+		
 
 
 		$return["time_spent"] = Payroll2::convert_to_24_hour($time_spent);
@@ -764,6 +776,7 @@ class Payroll2
 		$return["total_hours"] = Payroll2::convert_to_24_hour($time_spent);
 		$return["night_differential"] = Payroll2::convert_to_24_hour($night_differential);
 		$return["is_half_day"] = $is_half_day;
+		$return["is_holiday"] = $is_holiday;
 		
 		return $return;
 	}
@@ -1084,11 +1097,145 @@ class Payroll2
 		$night_diff_float 	= Self::time_float($_time['night_differential']);
 		$extra_float 		= Self::time_float($_time['extra_day_hours']);
 		
-		if($overtime_float != 0)
+		/**
+		 * undocumented constant
+		 **/
+
+		if ($_time['is_holiday'] == 'not_holiday') 
 		{
-			$return->_breakdown_addition["Overtime 25%"]["time"] = $_time["overtime"]; 
-			$return->_breakdown_addition["Overtime 25%"]["rate"] = ($hourly_rate * $overtime_float) * 1.25;
-			$total_day_income = $total_day_income + $return->_breakdown_addition["Overtime 25%"]["rate"]; 
+			if ($rest_float!=0) 
+			{
+				//Rest Day
+				$return->_breakdown_addition["Rest Day ".($regular_param['payroll_overtime_rest_day'] * 100)."%"]["time"] = $_time["regular_hours"]; 
+				$return->_breakdown_addition["Rest Day ".($regular_param['payroll_overtime_rest_day'] * 100)."%"]["rate"] = ($hourly_rate * $regular_float) * ($regular_param['payroll_overtime_rest_day']);
+				$total_day_income = $total_day_income + $return->_breakdown_addition["Rest Day ".($regular_param['payroll_overtime_rest_day'] * 100)."%"]["rate"]; 			
+
+				if ($overtime_float!=0) 
+				{
+					//Rest Day Over Time
+					$return->_breakdown_addition["Over Time ".($regular_param['payroll_overtime_rest_overtime'] * 100)."%"]["time"] = $_time["overtime"]; 
+					$return->_breakdown_addition["Over Time ".($regular_param['payroll_overtime_rest_overtime'] * 100)."%"]["rate"] = ($hourly_rate * $overtime_float) * ($regular_param['payroll_overtime_rest_overtime']);
+					$total_day_income = $total_day_income + $return->_breakdown_addition["Over Time ".($regular_param['payroll_overtime_rest_overtime'] * 100)."%"]["rate"]; 
+				}
+				if ($night_diff_float!=0) 
+				{
+					//Rest Day Night Differential
+					$return->_breakdown_addition["Night Differential ".($regular_param['payroll_overtime_rest_night'] * 100)."%"]["time"] = $_time["night_differential"]; 
+					$return->_breakdown_addition["Night Differential ".($regular_param['payroll_overtime_rest_night'] * 100)."%"]["rate"] = ($hourly_rate * $night_diff_float) * ($regular_param['payroll_overtime_rest_night']);
+					$total_day_income = $total_day_income + $return->_breakdown_addition["Night Differential ".($regular_param['payroll_overtime_rest_night'] * 100)."%"]["rate"]; 
+				}
+			}
+			else
+			{
+				if ($overtime_float!=0) 
+				{
+					//Regular Over Time
+					$return->_breakdown_addition["Over Time ".($regular_param['payroll_overtime_overtime'] * 100)."%"]["time"] = $_time["overtime"]; 
+					$return->_breakdown_addition["Over Time ".($regular_param['payroll_overtime_overtime'] * 100)."%"]["rate"] = ($hourly_rate * $overtime_float) * ($regular_param['payroll_overtime_overtime']+1);
+					$total_day_income = $total_day_income + $return->_breakdown_addition["Over Time ".($regular_param['payroll_overtime_overtime'] * 100)."%"]["rate"]; 
+				}
+				if ($night_diff_float!=0) 
+				{
+					//Regular Night Differential
+					$return->_breakdown_addition["Night Differential ".($regular_param['payroll_overtime_nigth_diff'] * 100)."%"]["time"] = $_time["night_differential"]; 
+					$return->_breakdown_addition["Night Differential ".($regular_param['payroll_overtime_nigth_diff'] * 100)."%"]["rate"] = ($hourly_rate * $night_diff_float) * ($regular_param['payroll_overtime_nigth_diff']);
+					$total_day_income = $total_day_income + $return->_breakdown_addition["Night Differential ".($regular_param['payroll_overtime_nigth_diff'] * 100)."%"]["rate"]; 
+				}
+			}
+		}
+
+
+		if($_time['is_holiday'] == 'regular')
+		{
+			
+			if($rest_float > 0)
+			{
+				//Legal Holiday with rest day
+				$return->_breakdown_addition["Legal Holiday Rest Day ".($legal_param['payroll_overtime_rest_day'] * 100)."%"]["time"] = $_time["regular_holiday_hours"]; 
+				$return->_breakdown_addition["Legal Holiday Rest Day ".($legal_param['payroll_overtime_rest_day'] * 100)."%"]["rate"] = ($hourly_rate * $legal_float) * ($legal_param['payroll_overtime_rest_day']);
+				$total_day_income = $total_day_income + $return->_breakdown_addition["Legal Holiday Rest Day ".($legal_param['payroll_overtime_rest_day'] * 100)."%"]["rate"]; 
+				if ($overtime_float!=0) 
+				{
+					//Legal Holiday Rest Day Over Time
+					$return->_breakdown_addition["Over Time ".($legal_param['payroll_overtime_rest_overtime'] * 100)."%"]["time"] = $_time["overtime"]; 
+					$return->_breakdown_addition["Over Time ".($legal_param['payroll_overtime_rest_overtime'] * 100)."%"]["rate"] = ($hourly_rate * $overtime_float) * ($legal_param['payroll_overtime_rest_overtime']);
+					$total_day_income = $total_day_income + $return->_breakdown_addition["Over Time ".($legal_param['payroll_overtime_rest_overtime'] * 100)."%"]["rate"]; 
+				}
+				if ($night_diff_float!=0) 
+				{
+					//Legal Holiday Rest Day Night Differential
+					$return->_breakdown_addition["Night Differential ".($legal_param['payroll_overtime_rest_night'] * 100)."%"]["time"] = $_time["night_differential"]; 
+					$return->_breakdown_addition["Night Differential ".($legal_param['payroll_overtime_rest_night'] * 100)."%"]["rate"] = ($hourly_rate * $night_diff_float) * ($legal_param['payroll_overtime_rest_night']);
+					$total_day_income = $total_day_income + $return->_breakdown_addition["Night Differential ".($legal_param['payroll_overtime_rest_night'] * 100)."%"]["rate"]; 
+				}
+			}
+			else
+			{
+				//Legal Holiday
+				$return->_breakdown_addition["Legal Holiday ".($legal_param['payroll_overtime_regular'] * 100)."%"]["time"] = $_time["regular_holiday_hours"]; 
+				$return->_breakdown_addition["Legal Holiday ".($legal_param['payroll_overtime_regular'] * 100)."%"]["rate"] = $daily_rate * ($legal_param['payroll_overtime_regular']);
+				$total_day_income = $total_day_income + $return->_breakdown_addition["Legal Holiday ".($legal_param['payroll_overtime_regular'] * 100)."%"]["rate"];
+				if ($overtime_float!=0) 
+				{
+					//Legal Holiday Over Time
+					$return->_breakdown_addition["Over Time ".($legal_param['payroll_overtime_overtime'] * 100)."%"]["time"] = $_time["overtime"]; 
+					$return->_breakdown_addition["Over Time ".($legal_param['payroll_overtime_overtime'] * 100)."%"]["rate"] = ($hourly_rate * $overtime_float) * ($legal_param['payroll_overtime_overtime']);
+					$total_day_income = $total_day_income + $return->_breakdown_addition["Over Time ".($legal_param['payroll_overtime_overtime'] * 100)."%"]["rate"]; 
+				}
+				if ($night_diff_float!=0) 
+				{
+					//Legal Holiday Night Differential
+					$return->_breakdown_addition["Night Differential ".($legal_param['payroll_overtime_nigth_diff'] * 100)."%"]["time"] = $_time["night_differential"]; 
+					$return->_breakdown_addition["Night Differential ".($legal_param['payroll_overtime_nigth_diff'] * 100)."%"]["rate"] = ($hourly_rate * $night_diff_float) * ($legal_param['payroll_overtime_nigth_diff']);
+					$total_day_income = $total_day_income + $return->_breakdown_addition["Night Differential ".($legal_param['payroll_overtime_nigth_diff'] * 100)."%"]["rate"]; 
+				}
+			}
+		}
+
+		if ($_time['is_holiday'] == 'special')
+		{
+			if($rest_float > 0)
+			{
+				//special Holiday with rest day
+				$return->_breakdown_addition["Special Holiday Rest Day ".($special_param['payroll_overtime_rest_day'] * 100)."%"]["time"] = $_time["special_holiday_hours"]; 
+				$return->_breakdown_addition["Special Holiday Rest Day ".($special_param['payroll_overtime_rest_day'] * 100)."%"]["rate"] = ($hourly_rate * $special_float) * ($special_param['payroll_overtime_rest_day']);
+				$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday Rest Day ".($special_param['payroll_overtime_rest_day'] * 100)."%"]["rate"]; 
+				if ($overtime_float!=0) 
+				{
+					//Special Holiday Rest Day Over Time
+					$return->_breakdown_addition["Over Time ".($special_param['payroll_overtime_rest_overtime'] * 100)."%"]["time"] = $_time["overtime"]; 
+					$return->_breakdown_addition["Over Time ".($special_param['payroll_overtime_rest_overtime'] * 100)."%"]["rate"] = ($hourly_rate * $overtime_float) * ($special_param['payroll_overtime_rest_overtime']);
+					$total_day_income = $total_day_income + $return->_breakdown_addition["Over Time ".($special_param['payroll_overtime_rest_overtime'] * 100)."%"]["rate"]; 
+				}
+				if ($night_diff_float!=0) 
+				{
+					//Special Holiday Rest Day Night Differential
+					$return->_breakdown_addition["Night Differential ".($special_param['payroll_overtime_rest_night'] * 100)."%"]["time"] = $_time["night_differential"]; 
+					$return->_breakdown_addition["Night Differential ".($special_param['payroll_overtime_rest_night'] * 100)."%"]["rate"] = ($hourly_rate * $night_diff_float) * ($special_param['payroll_overtime_rest_night']);
+					$total_day_income = $total_day_income + $return->_breakdown_addition["Night Differential ".($special_param['payroll_overtime_rest_night'] * 100)."%"]["rate"]; 
+				}
+			}
+			else
+			{
+				//Special Holiday
+				$return->_breakdown_addition["Special Holiday ".($special_param['payroll_overtime_regular'] * 100)."%"]["time"] = $_time["special_holiday_hours"]; 
+				$return->_breakdown_addition["Special Holiday ".($special_param['payroll_overtime_regular'] * 100)."%"]["rate"] = $daily_rate * ($special_param['payroll_overtime_regular']);
+				$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday ".($special_param['payroll_overtime_regular'] * 100)."%"]["rate"];
+				if ($overtime_float!=0) 
+				{
+					//Special Holiday Over Time
+					$return->_breakdown_addition["Over Time ".($special_param['payroll_overtime_overtime'] * 100)."%"]["time"] = $_time["overtime"]; 
+					$return->_breakdown_addition["Over Time ".($special_param['payroll_overtime_overtime'] * 100)."%"]["rate"] = ($hourly_rate * $overtime_float) * ($special_param['payroll_overtime_overtime']);
+					$total_day_income = $total_day_income + $return->_breakdown_addition["Over Time ".($special_param['payroll_overtime_overtime'] * 100)."%"]["rate"]; 
+				}
+				if ($night_diff_float!=0) 
+				{
+					//Special Holiday Night Differential
+					$return->_breakdown_addition["Night Differential ".($special_param['payroll_overtime_nigth_diff'] * 100)."%"]["time"] = $_time["night_differential"]; 
+					$return->_breakdown_addition["Night Differential ".($special_param['payroll_overtime_nigth_diff'] * 100)."%"]["rate"] = ($hourly_rate * $night_diff_float) * ($special_param['payroll_overtime_nigth_diff']);
+					$total_day_income = $total_day_income + $return->_breakdown_addition["Night Differential ".($special_param['payroll_overtime_nigth_diff'] * 100)."%"]["rate"]; 
+				}
+			}
 		}
 
 		$subtotal_after_addition = $total_day_income;
@@ -1121,8 +1268,10 @@ class Payroll2
 		$return->subtotal_after_addition = $subtotal_after_addition;
 		$return->total_day_income = $total_day_income;
 
+		
 		return $return;
 	}
+
 	public static function compute_income_month_pay()
 	{
 

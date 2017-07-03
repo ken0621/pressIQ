@@ -725,6 +725,17 @@ class Ec_order
         }
    
         /* Check if Customer Account Exist */
+        $temporary["email"] = $order_info["tbl_customer"]["email"];
+        $temporary["password"] = Crypt::encrypt($order_info["tbl_customer"]["password"]);
+        $temporary["mlm_username"] = $order_info["tbl_customer"]["mlm_username"];
+        $temporary["tin_number"] = $order_info["tbl_customer"]["tin_number"];
+        
+        $order_info["tbl_customer"]["email"] = "";
+        $order_info["tbl_customer"]["password"] = "";
+        $order_info["tbl_customer"]["mlm_username"] = "";
+        $order_info["tbl_customer"]["tin_number"] = "";
+        $order_info["tbl_customer"]["temporary"] = serialize($temporary);
+        
         $customer_query = DB::table("tbl_customer")->where("customer_id", $customer_id);
         $customer = $customer_query->first();
 

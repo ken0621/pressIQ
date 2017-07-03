@@ -192,6 +192,7 @@ class ShopCheckoutController extends Shop
                 $update['order_status']   = "Processing";
                 $update['payment_status'] = 1;
                 $order = Ec_order::update_ec_order($update);
+                $this->put_temporary($order_id);
                 $this->after_email_payment($order_id);
             }
             else
@@ -328,6 +329,16 @@ class ShopCheckoutController extends Shop
             $result = Mail_global::password_mail($data, $data_order->shop_id);
         }
         /* End Email Checkout */
+    }
+    public function put_temporary($order_id)
+    {
+        $order = DB::table("tbl_ec_order")->where("ec_order_id", $order_id)->first();
+        $customer = DB::table("tbl_customer")->where("customer_id", $order->customer_id)->first();
+        $temporary = is_serialized($customer->temporary) ? unserialize($customer->temporary) : [];
+        if (isset($temporary) && $temporary && count($temporary) > 0) 
+        {
+            DB::table("tbl_customer")->where("customer_id", $customer->customer_id)->update($temporary);
+        }
     }
     /* End Payment Facilities */
 

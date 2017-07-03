@@ -81,14 +81,21 @@ function timesheet()
 				/* CHECK IF FOCUS OUT VALUE CHANGED */
 				if($focus_value != $(e.currentTarget).val())
 				{
-					
+					var tr_date = $(e.currentTarget).closest(".tr-parent").attr("date");
+					action_reload_rate_for_date(tr_date);
 				}
 			}
-
 		});
 	}
 
 	/* ACTIONS */
+	function action_reload_rate_for_date(tr_date)
+	{
+		$target = $(".tr-parent[date='" + tr_date + "']");
+		$target.find(".rate-output").html('<i style="color: gray" class="fa fa-spinner fa-pulse fa-fw"></i>');
+		console.log("RELOADING RATE FOR DATE");
+		console.log($target.serialize());
+	}
 	function action_sum_total_gross_salary()
 	{
 		var total_gross_salary = 0;

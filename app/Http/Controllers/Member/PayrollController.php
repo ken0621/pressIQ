@@ -4709,8 +4709,8 @@ class PayrollController extends Member
      // Tbl_payroll_shift_code
      public function shift_template()
      {
-          $data['_active'] = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->paginate(20);
-          $data['_archived'] = Tbl_payroll_shift_code::getshift(Self::shop_id(), 1)->orderBy('shift_code_name')->paginate(20);
+          $data['_active'] = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->get();
+          $data['_archived'] = Tbl_payroll_shift_code::getshift(Self::shop_id(), 1)->orderBy('shift_code_name')->get();
           return view('member.payroll.side_container.shift_template', $data);
      }
 
@@ -4734,6 +4734,7 @@ class PayrollController extends Member
           $key = 0;
           $tc = 0;
 
+<<<<<<< HEAD
           foreach(Request::input("day") as $day)
           {
                /* INSERT SHIFT DAY */
@@ -4743,6 +4744,19 @@ class PayrollController extends Member
                $insert_day["shift_rest_day"] = Request::input("rest_day_" . $day) == 1 ? 1 : 0;
                $insert_day["shift_extra_day"] = Request::input("extra_day_" . $day) == 1 ? 1 : 0;
                $key++;
+=======
+               $temp['shift_code_id']   = $shift_code_id;
+               $temp['day']             = $day;
+               $temp['target_hours']    = Request::input('target_hours')[$key];
+               $temp['work_start']      = date('H:i:s a',strtotime(Request::input('work_start')[$key]));
+               $temp['work_end']        = date('H:i:s a',strtotime(Request::input('work_end')[$key]));
+               $temp['break_start']     = date('H:i:s a',strtotime(Request::input('break_start')[$key]));
+               $temp['break_end']       = date('H:i:s a',strtotime(Request::input('break_end')[$key]));
+               $temp['flexi']           = 0;
+               $temp['rest_day']        = 0;
+               $temp['extra_day']       = 0;
+               $temp['night_shift']     = 0;
+>>>>>>> b206050f1eed8203ee711f18debb15332a900a62
 
                $shift_day_id = Tbl_payroll_shift_day::insertGetId($insert_day);
 

@@ -43,6 +43,7 @@
             <th>E-Mail</th>
             <th>Invoice #</th>
             <th>Contact No</th>
+            <th>Birthday</th>
             <th>Street</th>
             <th>Zip</th>
             <th>City</th>
@@ -65,6 +66,7 @@
             <td>{{ $order->email }}</td>
             <td>{{ $order->invoice_number }}</td>
             <td>{{ $order->customer_mobile }}</td>
+            <td>{{ date('M d, Y',strtotime($order->b_day)) }}</td>
             <td>{{ $order->customer_street }}</td>
             <td>{{ $order->customer_zipcode }}</td>
             <td>{{ $order->customer_city }}</td>

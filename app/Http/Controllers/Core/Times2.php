@@ -66,24 +66,27 @@ class Times2 extends Controller
 		// $_shift[2]->shift_in = "18:00:00"; //6:00 PM
 		// $_shift[2]->shift_out = "21:00:00"; //9:00 PM
 
-		// /* INPUT TIME */
+		/* INPUT TIME */
 		// $_time[0] = new stdClass();
 		// $_time[0]->time_in = "09:00:00"; 
 		// $_time[0]->time_out = "12:00:00";
-		$_time[1] = new stdClass();
-		$_time[1]->time_in = "16:00:00"; 
-		$_time[1]->time_out = "17:00:00";
+		// $_time[0] = new stdClass();
+		// $_time[0]->time_in = "09:00:00"; 
+		// $_time[0]->time_out = "12:00:00";
 		// $_time[1] = new stdClass();
-		// $_time[1]->time_in = "16:00:00"; 
-		// $_time[1]->time_out = "17:00:00";
+		// $_time[1]->time_in = "18:00:00"; 
+		// $_time[1]->time_out = "19:00:00";
 
-		// INPUT SHIFT 
-		$_shift[0] = new stdClass();
-		$_shift[0]->shift_in = "09:00:00"; 
-		$_shift[0]->shift_out = "12:00:00";
-		$_shift[1] = new stdClass();
-		$_shift[1]->shift_in = "16:00:00"; 
-		$_shift[1]->shift_out = "17:00:00";
+		// // INPUT SHIFT 
+		// $_shift[0] = new stdClass();
+		// $_shift[0]->shift_in = "09:00:00"; 
+		// $_shift[0]->shift_out = "12:00:00";
+		// $_shift[1] = new stdClass();
+		// $_shift[1]->shift_in = "16:00:00"; 
+		// $_shift[1]->shift_out = "17:00:00";
+		// $_shift[2] = new stdClass();
+		// $_shift[2]->shift_in = "18:00:00"; 
+		// $_shift[2]->shift_out = "19:00:00";
 
 
 		/* INPUT TIME */
@@ -103,16 +106,23 @@ class Times2 extends Controller
 		// $_time[4]->time_in = "18:00:00"; 
 		// $_time[4]->time_out = "18:10:00";
 
-		// // INPUT SHIFT 
-		// $_shift[0] = new stdClass();
-		// $_shift[0]->shift_in = "07:00:00"; 
-		// $_shift[0]->shift_out = "10:00:00";
-		// $_shift[1] = new stdClass();
-		// $_shift[1]->shift_in = "13:00:00"; 
-		// $_shift[1]->shift_out = "16:00:00";
-		// $_shift[2] = new stdClass();
-		// $_shift[2]->shift_in = "17:00:00"; 
-		// $_shift[2]->shift_out = "18:00:00";
+		$_time[0] = new stdClass();
+		$_time[0]->time_in = "10:25:00"; 
+		$_time[0]->time_out = "13:00:00";
+		$_time[1] = new stdClass();
+		$_time[1]->time_in = "13:00:00"; 
+		$_time[1]->time_out = "16:00:00";
+
+		// INPUT SHIFT 
+		$_shift[0] = new stdClass();
+		$_shift[0]->shift_in = "07:00:00"; 
+		$_shift[0]->shift_out = "10:00:00";
+		$_shift[1] = new stdClass();
+		$_shift[1]->shift_in = "13:00:00"; 
+		$_shift[1]->shift_out = "16:00:00";
+		$_shift[2] = new stdClass();
+		$_shift[2]->shift_in = "17:00:00"; 
+		$_shift[2]->shift_out = "18:00:00";
                                                   
 		$late_grace_time = "00:15:00";
 		$overtime_grace_time = "00:15:00";
@@ -125,9 +135,9 @@ class Times2 extends Controller
 		$leave_fill_undertime=1;
 
 		$_output = Payroll2::clean_shift($_time, $_shift, true);
-		$time = Payroll2::compute_time_mode_regular($_output, $_shift, $late_grace_time, $late_grace_time_rule, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday, $leave, $leave_fill_late, $leave_fill_undertime, false);
+		$time = Payroll2::compute_time_mode_regular($_output, $_shift, $late_grace_time, $late_grace_time_rule, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday, $leave, $leave_fill_late, $leave_fill_undertime,false);
 
-		//dd($time);
+		dd($time);
 		dd($_output);
 	} 
 

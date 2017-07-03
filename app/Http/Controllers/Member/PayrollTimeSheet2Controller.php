@@ -150,7 +150,7 @@ class PayrollTimeSheet2Controller extends Member
 		$leave_fill_undertime = 0;
 		$return->time_output = Payroll2::compute_time_mode_regular($return->clean_shift, $_shift_raw, $late_grace_time, $grace_time_rule_late, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday , $leave, $leave_fill_late, $leave_fill_undertime, false);
 		$return->compute = Payroll2::compute_income_day_pay($return->time_output, 800, 1);
-		// dd($return);
+	
 		return $return;
 	}
 	public function timesheet_process_in_out_default()

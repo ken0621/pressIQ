@@ -67,10 +67,15 @@
       </div>
       <div class="form-group">
         <div class="col-md-6">
-          <small><b>Print on as check as</b></small>&nbsp;
-          <div class="checkbox display-inline-block"><small for=""><input type="checkbox" name="chck_print_on_as" class="checkbox-toggle-rev check-print-name-as" data-target=".display-name-check" checked="true"/>Use display name</small></div>
-          <input type="text" name="payroll_employee_display_name" class="form-control display-name-check"/>
+          <small>Branch Location</small>
+          <select class="form-control" name="branch_location_id">
+            <option value="0">Select Branch</option>
+            @foreach($_branch as $branch)
+            <option value="{{$branch->branch_location_id}}">{{$branch->branch_location_name}}</option>
+            @endforeach
+          </select>
         </div>
+        
         <div class="col-md-6">
           <div class="col-md-6 padding-lr-1">
             <small>Gender</small>
@@ -85,6 +90,13 @@
             <i class="fa fa-calendar pos-absolute top-30 margin-left-6 color-dark-gray" aria-hidden="true"></i>
           </div>
           
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-6">
+          <small><b>Print on as check as</b></small>&nbsp;
+          <div class="checkbox display-inline-block"><small for=""><input type="checkbox" name="chck_print_on_as" class="checkbox-toggle-rev check-print-name-as" data-target=".display-name-check" checked="true"/>Use display name</small></div>
+          <input type="text" name="payroll_employee_display_name" class="form-control display-name-check"/>
         </div>
       </div>
       <div class="form-group">

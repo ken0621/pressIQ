@@ -200,6 +200,12 @@ function payrollconfiguration()
 		// jobtitle_archived(1);
 		reload_configuration("/member/payroll/jobtitlelist");
 	} 
+
+	this.reload_branch = function()
+	{
+		reload_configuration("/member/payroll/branch_name");
+	} 
+
 	
 
 	this.btn_modal_button_event = function()

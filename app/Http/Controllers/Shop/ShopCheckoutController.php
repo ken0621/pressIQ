@@ -135,6 +135,7 @@ class ShopCheckoutController extends Shop
                 {
                     if ($from == "register")
                     {
+                        $this->put_temporary($order_id);
                         Item_code::ec_order_slot($order_id);
                     }
                     
@@ -144,7 +145,6 @@ class ShopCheckoutController extends Shop
                     $order = Ec_order::update_ec_order($update);
     
                     $this->after_email_payment($order_id);
-    
                 }
             }
         } 

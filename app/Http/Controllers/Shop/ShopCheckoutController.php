@@ -123,6 +123,7 @@ class ShopCheckoutController extends Shop
             $insert["log_date"] = Carbon::now();
             $insert["response"] = serialize($request);
             $insert["order_id"] = $order_id;
+            $insert["ip_address"] = get_current_ip();
             
             DB::table("tbl_dragonpay_logs_other")->insert($insert);
     

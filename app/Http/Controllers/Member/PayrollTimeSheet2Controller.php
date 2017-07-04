@@ -184,7 +184,7 @@ class PayrollTimeSheet2Controller extends Member
 		$overtime_grace_time = "00:00:00";
 		$grace_time_rule_overtime = "per_shift";
 		$day_type = "regular";
-		$is_holiday = "not_holiday";
+		$is_holiday = "special";
 		$leave = "00:00:00";
 		$leave_fill_late = 0;
 		$leave_fill_undertime = 0;

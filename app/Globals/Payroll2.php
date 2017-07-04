@@ -91,7 +91,7 @@ class Payroll2
 						break;
 					}
 
-					//no time in in first shift
+					//no time in first shift
 					if (($count_time == 0) && ($count_shift==0)) 
 					{
 						if ($time_in_minutes>$shift_out_minutes) 
@@ -569,7 +569,7 @@ class Payroll2
 			}
 			if ($day_type=="extra") 
 			{
-				$extra_day_hours = $regular_hours;
+				$extra_day_hours = $regular_hours;	
 			}
 			if ($is_holiday=="regular") 
 			{
@@ -582,6 +582,11 @@ class Payroll2
 			if (($day_type=="rest")&&($rest_day_hours=="00:00:00")&&($is_holiday!="")) 
 			{
 				$is_holiday="";
+			}
+			//No time in and out and not holiday and just a regular day
+			if ((Self::time_float($time_spent) == 0) && ($is_holiday=="not_holiday") && ($day_type=="regular")) 
+			{
+				$is_absent = true;
 			}
 			/*END day type and holiday type*/ 
 
@@ -605,6 +610,7 @@ class Payroll2
 		$return["night_differential"] = Payroll2::convert_to_24_hour($night_differential);
 		$return["is_half_day"] = $is_half_day;
 		$return["is_holiday"] = $is_holiday;
+		$return["day_type"] = $day_type;
 		
 		return $return;
 	}
@@ -647,7 +653,7 @@ class Payroll2
      *		- excess_leave_hours (time 00:00:00) //for undefined time (regular_hours+leave_hours)-target_hours
      *		- night_differential (time 00:00:00)
      *		- is_half_day (boolean true/false)
-     *		- is_holiday ('' / 'regular' / 'special')
+     *		- is_holiday ('not_holiday' / 'regular' / 'special')
      *
      * @author (Kim Briel Oraya)
      *
@@ -768,6 +774,13 @@ class Payroll2
 
 
 		/*START day type and holiday type*/
+		if ($day_type=='regular') 
+		{
+			if (Self::time_float($time_spent)==0) 
+			{
+				$is_absent=true;
+			}
+		}
 		if ($day_type=="rest") 
 		{
 			$rest_day_hours = $regular_hours;
@@ -810,7 +823,7 @@ class Payroll2
 		$return["night_differential"] = Payroll2::convert_to_24_hour($night_differential);
 		$return["is_half_day"] = $is_half_day;
 		$return["is_holiday"] = $is_holiday;
-		
+	
 		return $return;
 	}
 
@@ -1129,10 +1142,8 @@ class Payroll2
 		$overtime_float 	= Self::time_float($_time['overtime']);
 		$night_diff_float 	= Self::time_float($_time['night_differential']);
 		$extra_float 		= Self::time_float($_time['extra_day_hours']);
-		
-		/**
-		 * undocumented constant
-		 **/
+
+
 
 		if ($_time['is_holiday'] == 'not_holiday') 
 		{
@@ -1206,7 +1217,7 @@ class Payroll2
 			{
 				//Legal Holiday
 				$return->_breakdown_addition["Legal Holiday ".($legal_param['payroll_overtime_regular'] * 100)."%"]["time"] = $_time["regular_holiday_hours"]; 
-				$return->_breakdown_addition["Legal Holiday ".($legal_param['payroll_overtime_regular'] * 100)."%"]["rate"] = $daily_rate * ($legal_param['payroll_overtime_regular']);
+				$return->_breakdown_addition["Legal Holiday ".($legal_param['payroll_overtime_regular'] * 100)."%"]["rate"] = ($regular_float * $hourly_rate) * ($legal_param['payroll_overtime_regular']);
 				$total_day_income = $total_day_income + $return->_breakdown_addition["Legal Holiday ".($legal_param['payroll_overtime_regular'] * 100)."%"]["rate"];
 				if ($overtime_float!=0) 
 				{
@@ -1252,7 +1263,7 @@ class Payroll2
 			{
 				//Special Holiday
 				$return->_breakdown_addition["Special Holiday ".($special_param['payroll_overtime_regular'] * 100)."%"]["time"] = $_time["special_holiday_hours"]; 
-				$return->_breakdown_addition["Special Holiday ".($special_param['payroll_overtime_regular'] * 100)."%"]["rate"] = $daily_rate * ($special_param['payroll_overtime_regular']);
+				$return->_breakdown_addition["Special Holiday ".($special_param['payroll_overtime_regular'] * 100)."%"]["rate"] = ($hourly_rate * $special_float) * ($special_param['payroll_overtime_regular']);
 				$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday ".($special_param['payroll_overtime_regular'] * 100)."%"]["rate"];
 				if ($overtime_float!=0) 
 				{
@@ -1270,7 +1281,6 @@ class Payroll2
 				}
 			}
 		}
-
 		$subtotal_after_addition = $total_day_income;
 
 		/* BREAKDOWN DEDUCTIONS */
@@ -1297,11 +1307,8 @@ class Payroll2
 			$return->_breakdown_deduction["undertime"]["rate"] = $undertime_float * $hourly_rate; 
 			$total_day_income = $total_day_income - $return->_breakdown_deduction["undertime"]["rate"];
 		}
-
 		$return->subtotal_after_addition = $subtotal_after_addition;
 		$return->total_day_income = $total_day_income;
-
-		
 		return $return;
 	}
 

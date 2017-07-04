@@ -42,7 +42,7 @@
             <th>Ordered By</th>
             <th>E-Mail</th>
             <th>Invoice #</th>
-       
+            <th>Contact No</th>
             <th>Checkout ID</th>
             <th>Paymaya Response</th>
             <th>Response Information</th>
@@ -62,6 +62,7 @@
               <th>{{ $order->first_name . " " . $order->last_name}}</th>
               <td>{{ $order->email }}</td>
               <td>{{ $order->invoice_number }}</td>
+              <td>{{ $order->customer_mobile }}</td>
               <td>{{ $order->checkout_id }}</td>
               <td class="response">{{ $order->confirm_response }}</td>
               <td class="information">{{ $order->confirm_response_information }}</td>

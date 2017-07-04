@@ -113,6 +113,8 @@ class ShopCheckoutController extends Shop
     }
     public function dragonpay_postback()
     {
+        $order_id = Request::input("param2");
+        
         $request = Request::all();
         
         // Insert Dragonpay Logs
@@ -125,8 +127,6 @@ class ShopCheckoutController extends Shop
         if (Request::input("status") == "S") 
         {
             $from = Request::input('param1');
-
-            $order_id = Request::input("param2");
             $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
 
             if($order)

@@ -98,6 +98,23 @@ class GuillermoController extends Controller
 	    //dd($_order);
 	    return view("guillermo.payref", $data);
 	}
+	public function draref()
+	{
+	    $_order = $data["_order"] = DB::table("tbl_ec_order")
+	                                                           ->join("tbl_dragonpay_logs", "tbl_dragonpay_logs.order_id", "=", "tbl_ec_order.ec_order_id")
+	                                                           ->leftJoin("tbl_customer", "tbl_customer.customer_id", "=", "tbl_ec_order.customer_id")
+	                                                           ->leftJoin("tbl_ec_order_slot", "tbl_ec_order_slot.order_slot_ec_order_id", "=", "tbl_ec_order.ec_order_id")
+	                                                           ->leftJoin("tbl_mlm_slot", "tbl_mlm_slot.slot_id", "=", "tbl_ec_order_slot.order_slot_id_c")
+	                                                           ->leftJoin("tbl_customer_address", "tbl_customer_address.customer_id", "=", "tbl_customer.customer_id")
+	                                                           ->leftJoin("tbl_customer_other_info", "tbl_customer_other_info.customer_id", "=", "tbl_customer.customer_id")
+	                                                           ->groupBy("ec_order_id")
+	                                                          // ->where("ec_order_id", ">", "480")
+	                                                           ->orderBy("ec_order_id", "asc")
+	                                                           ->get();
+	    
+	    //dd($_order);
+	    return view("guillermo.draref", $data);
+	}
 	public function payref_check($checkout_id)
 	{
 	    $api = Tbl_online_pymnt_api::where('api_shop_id', 5)->join("tbl_online_pymnt_gateway", "tbl_online_pymnt_gateway.gateway_id", "=", "tbl_online_pymnt_api.api_gateway_id")->where("gateway_code_name", "paymaya")->first();

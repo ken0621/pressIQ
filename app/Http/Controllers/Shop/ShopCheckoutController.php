@@ -108,7 +108,7 @@ class ShopCheckoutController extends Shop
         }
         else
         {
-            return Redirect::to('/mlm/login?notify=2&success=1');
+            return Redirect::to('/mlm/login?notify=3');
         }
     }
     public function dragonpay_postback()
@@ -435,12 +435,10 @@ class ShopCheckoutController extends Shop
         Session::put($unique_id, $customer_set_info_response);
         echo json_encode("Success!"); 
     }
-
     public function locale_id_to_name($locale_id)
     {
         return Tbl_locale::where("locale_id", $locale_id)->pluck("locale_name");
     }
-
     public function payment()
     {
         if(Request::isMethod("post"))
@@ -455,7 +453,6 @@ class ShopCheckoutController extends Shop
             return view("checkout_payment", $data);  
         }
     }
-
     public function payment_upload()
     {
         $id = Crypt::decrypt(Request::input("id"));
@@ -539,7 +536,6 @@ class ShopCheckoutController extends Shop
             return view("checkout_payment_upload", $data);
         }
     }
-    
     public function get_payment_method()
     {
         $payment_method = Tbl_online_pymnt_method::leftJoin('tbl_online_pymnt_link', 'tbl_online_pymnt_link.link_method_id', '=', 'tbl_online_pymnt_method.method_id')
@@ -551,14 +547,11 @@ class ShopCheckoutController extends Shop
 
         return $payment_method;
     }
-    
-
     public function addtocart()
     {
         $data["page"] = "Checkout - Add to Cart";
         return view("addto_cart", $data);
     }
-
     function split_name($name)
     {
         $name = trim($name);
@@ -566,7 +559,6 @@ class ShopCheckoutController extends Shop
         $first_name = trim( preg_replace('#'.$last_name.'#', '', $name ) );
         return array($first_name, $last_name);
     }
-
     public function order_placed()
     {
         $data["page"] = "Checkout - Order Placed";

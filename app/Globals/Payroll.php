@@ -650,9 +650,6 @@ class Payroll
 		$return = new stdClass();
 	
 
-
-		Payroll::adjust_payroll_approved_in_and_out($employee_information->payroll_employee_id, $date);
-
 		$data["compute_approved"] = 0;
 		$return->pending_timesheet = Payroll::process_time_regulartime($data, $date, $data["time_rule"]);
 

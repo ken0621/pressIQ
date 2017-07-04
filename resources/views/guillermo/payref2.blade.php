@@ -60,7 +60,7 @@
         <?php $investigation_count = 0; ?>
         
           @foreach($_order as $order)
-        
+            @if(($order->confirm_response == "PAYMENT_SUCCESS" && $order->slot_id == "") || ($order->confirm_response != "PAYMENT_SUCCESS"  && $order->slot_id != ""))
             <tr class="tr-order {{ $order->confirm_response == '' || $order->confirm_response == 'PENDING' ? 'pending' : '' }}"  order_id="{{ $order->order_id }}" checkout_id="{{ $order->checkout_id }}">
               <th>{{ $order->ec_order_id }}</th>
               <th width="200px">{{ date("F d, Y  h:i A",strtotime($order->log_date)) }}</th>
@@ -90,7 +90,7 @@
               </td>
               <td class="status text-center"></td>
             </tr>
-
+            @endif
           @endforeach
         </tbody>
       </table>

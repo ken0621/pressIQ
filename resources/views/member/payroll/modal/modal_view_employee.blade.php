@@ -74,7 +74,7 @@
             <select class="form-control" name="branch_location_id">
               <option value="0">Select Branch</option>
               @foreach($_branch as $branch)
-              <option value="{{$branch->branch_location_id}}">{{$branch->branch_location_name}}</option>
+              <option value="{{$branch->branch_location_id}}" {{$employee->branch_location_id == $branch->branch_location_id ? 'selected="selected"':''}}>{{$branch->branch_location_name}}</option>
               @endforeach
             </select>
           </div>

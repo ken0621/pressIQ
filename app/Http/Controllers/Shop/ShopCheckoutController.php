@@ -113,9 +113,10 @@ class ShopCheckoutController extends Shop
     }
     public function dragonpay_postback()
     {
+        $order_id = Request::input("param2");
+        
         try 
         {
-            $order_id = Request::input("param2");
             $request = Request::all();
             
             // Insert Dragonpay Logs

@@ -113,38 +113,46 @@ class ShopCheckoutController extends Shop
     }
     public function dragonpay_postback()
     {
-        $order_id = Request::input("param2");
-        
-        $request = Request::all();
-        
-        // Insert Dragonpay Logs
-        $insert["log_date"] = Carbon::now();
-        $insert["response"] = serialize($request);
-        $insert["order_id"] = $order_id;
-        
-        DB::table("tbl_dragonpay_logs_other")->insert($insert);
-
-        if (Request::input("status") == "S") 
+        try 
         {
-            $from = Request::input('param1');
-            $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
-
-            if($order)
+            $order_id = Request::input("param2");
+            $request = Request::all();
+            
+            // Insert Dragonpay Logs
+            $insert["log_date"] = Carbon::now();
+            $insert["response"] = serialize($request);
+            $insert["order_id"] = $order_id;
+            
+            DB::table("tbl_dragonpay_logs_other")->insert($insert);
+    
+            if (Request::input("status") == "S") 
             {
-                if ($from == "register")
+                $from = Request::input('param1');
+                $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
+    
+                if($order)
                 {
-                    Item_code::ec_order_slot($order_id);
+                    if ($from == "register")
+                    {
+                        Item_code::ec_order_slot($order_id);
+                    }
+                    
+                    $update['ec_order_id'] = $order_id;
+                    $update['order_status'] = "Processing";
+                    $update['payment_status'] = 1;
+                    $order = Ec_order::update_ec_order($update);
+    
+                    $this->after_email_payment($order_id);
+    
                 }
-                
-                $update['ec_order_id'] = $order_id;
-                $update['order_status'] = "Processing";
-                $update['payment_status'] = 1;
-                $order = Ec_order::update_ec_order($update);
-
-                $this->after_email_payment($order_id);
-
             }
-        }
+        } 
+        catch (\Exception $e) 
+        {
+            $insert["log_date"] = Carbon::now();
+            $insert["response"] = serialize($e->getMessage());
+            $insert["order_id"] = $order_id;
+        } 
     }
     public function paymaya_success()
     {
@@ -211,7 +219,7 @@ class ShopCheckoutController extends Shop
             $insert["order_id"] = $order_id;
             $insert["log_date"] = Carbon::now();
             $insert["ip_address"] = get_current_ip();
-            $insert["response"] = $e->getMessage();
+            $insert["response"] = serialize($e->getMessage());
             DB::table("tbl_paymaya_logs")->insert($insert);
         } 
         dd(Request::input());
@@ -228,7 +236,7 @@ class ShopCheckoutController extends Shop
             $insert["order_id"] = $order_id;
             $insert["log_date"] = Carbon::now();
             $insert["ip_address"] = get_current_ip();
-            $insert["response"] = $e->getMessage();
+            $insert["response"] = serialize($e->getMessage());
             DB::table("tbl_paymaya_logs")->insert($insert);
         } 
         dd(Request::input());
@@ -245,7 +253,7 @@ class ShopCheckoutController extends Shop
             $insert["order_id"] = $order_id;
             $insert["log_date"] = Carbon::now();
             $insert["ip_address"] = get_current_ip();
-            $insert["response"] = $e->getMessage();
+            $insert["response"] = serialize($e->getMessage());
             DB::table("tbl_paymaya_logs")->insert($insert);
         }
         dd(Request::input());
@@ -303,7 +311,7 @@ class ShopCheckoutController extends Shop
         } 
         catch (\Exception $e) 
         {
-            $insert["response"] = $e->getMessage();
+            $insert["response"] = serialize($e->getMessage());
             DB::table("tbl_paymaya_logs")->insert($insert);
         }
         

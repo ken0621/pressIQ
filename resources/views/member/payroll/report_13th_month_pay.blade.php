@@ -10,9 +10,7 @@
 		    	<i class="fa fa-building-o"></i>
 		     	 <h1>
 			      	<span class="page-title">13th Month Pay Report</span>
-			     	<small>
-			      	Payroll
-			     	 </small>
+			     	<small>Payroll</small>
 		    	</h1>
 	    	</div>
 	    	<div>

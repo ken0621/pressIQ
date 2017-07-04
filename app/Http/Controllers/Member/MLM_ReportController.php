@@ -174,7 +174,10 @@ class MLM_ReportController extends Member
             return $this->get_report();
         }
 
-        $data['users'] = Tbl_user::where('user_shop', $shop_id)->where('archived', 0)->get();
+        $data['users'] = Tbl_user::where('user_shop', $shop_id)
+        ->where('user_email', '!=', 'PhiltechDeveloper@gmail.com')
+        ->where('user_level', '>=', 2)
+        ->where('archived', 0)->get();
         $data['warehouse'] = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->where('archived', 0)->get();
         return view('member.mlm_report.index', $data);
     }

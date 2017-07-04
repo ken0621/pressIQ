@@ -70,7 +70,7 @@
             <td>{{ $order->customer_city }}</td>
             <td>{{ $order->customer_state }}</td>
             <td>{{ unserialize($order->response)["txnid"] }}</td>
-            <td>{{ ($order->slot_id == "" ? "NO SLOT" : $order->slot_id) }}</td>
+            <td>{{ ($order->slot_id == "" ? "NO SLOT" : "<span style='color: green'>$order->slot_id</span>") }}</td>
             <td class="status text-center"></td>
           </tr>
         @endforeach

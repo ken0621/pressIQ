@@ -32,6 +32,7 @@
                     <?php 
                     $total_fee = 0; 
                     $total_all = 0; 
+                    $total_credited = 0;
                     $status[0] = 'Pending';
                     $status[1] = 'Approved';
                     $status[2] = 'Denied';
@@ -45,10 +46,11 @@
                             <td>{{$value->slot_no}}</td>
                             <td>{{currency('PHP', $value->wallet_log_refill_amount_paid)}}</td>
                             <td>{{currency('PHP', $value->wallet_log_refill_processing_fee)}}</td>
-                            <td>{{currency('PHP', $value->wallet_log_refill_amount_paid)}}</td>
+                            <td>{{currency('PHP', $value->wallet_log_refill_amount)}}</td>
                             <?php 
                             $total_fee += $value->wallet_log_refill_processing_fee; 
                             $total_all += $value->wallet_log_refill_amount_paid;
+                            $total_credited += $value->wallet_log_refill_amount;
                             $count[$value->wallet_log_refill_approved]++;
                             ?>
 
@@ -67,6 +69,11 @@
                     <tr>
                         <td colspan="20">
                             Total No. of transaction : {{count($all_refill)}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="20">
+                            Total E-wallet Credited : {{currency('PHP', $total_credited)}}
                         </td>
                     </tr>
                     <tr>

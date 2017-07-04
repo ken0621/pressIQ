@@ -185,14 +185,14 @@ class ShopCheckoutController extends Shop
                 $insert["response"] = serialize(Request::input());
                 DB::table("tbl_paymaya_logs_other")->insert($insert);
                   
-                
+                $this->put_temporary($order_id);
                 Item_code::ec_order_slot($order_id);
     
                 $update['ec_order_id']    = $order_id;
                 $update['order_status']   = "Processing";
                 $update['payment_status'] = 1;
                 $order = Ec_order::update_ec_order($update);
-                $this->put_temporary($order_id);
+                
                 $this->after_email_payment($order_id);
             }
             else

@@ -33,7 +33,7 @@ th, td
     text-align: center;
 }
 </style>
-<a style="color: #000; margin-bottom: 15px; text-decoration: none; display: block; font-weight: 700; font-size: 18px;" href="/payment/paymaya/logs">&laquo; Back</a>
+<a style="color: #000; margin-bottom: 15px; text-decoration: none; display: block; font-weight: 700; font-size: 18px;" href="/payment/dragonpay/logs">&laquo; Back</a>
 <!-- HTML Code: Place this code in the document's body (between the 'body' tags) where the table should appear -->
 <table class="GeneratedTable">
   <thead>

@@ -276,6 +276,7 @@ class ShopCheckoutController extends Shop
         foreach ($data["_dragonpay"] as $key => $value) 
         {
             $data["_dragonpay"][$key]->extracted = is_serialized($value->response) ? unserialize($value->response) : $value->response;
+            $data["_dragonpay"][$key]->count = DB::table("tbl_dragonpay_logs_other")->where("order_id", $value->order_id)->count();
         }
         
         return view("dragonpay.logs", $data);

@@ -190,7 +190,6 @@ class MLM_ReportController extends Member
         $filter['skip'] = Request::input('skip');
         $filter['take'] = Request::input('take');
 
-        // return $filter;
         $report = Request::input('report_choose');
         $pdf= Request::input('pdf');
         $shop_id = $this->user_info->shop_id;

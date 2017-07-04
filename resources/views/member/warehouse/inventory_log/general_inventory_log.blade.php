@@ -54,6 +54,8 @@
                                 <th>#</th>
                                 <th>Transaction</th>
                                 <th class="text-center">Date</th>
+                                <th>Item</th>
+                                <th>Quantity Involved</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -64,6 +66,8 @@
                                     <td>{{$slip->inventory_slip_id}}</td>
                                     <td>{{strtoupper($slip->inventory_reason)}}</td>
                                     <td class="text-center">{{date("M d, Y h:i a",strtotime($slip->inventory_slip_date))}}</td>
+                                    <td>{{$slip->item_name}}</td>
+                                    <td>{{$slip->inventory_count}}</td>
                                     <td class="text-center">
                                         <a class="popup" size="lg" link="/member/item/warehouse/view_pdf/{{$slip->inventory_slip_id}}">View Report</a>
                                     </tr>

@@ -55,6 +55,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_timesheet','Member\PayrollTimeSheetController@index');
 	Route::any('/company_timesheet/{id}','Member\PayrollTimeSheetController@company_timesheet');
 
+	Route::any('/company_timesheet2/change/{period_id}/{employee_id}','Member\PayrollTimeSheet2Controller@time_change');
 	Route::any('/company_timesheet2/{company_id}','Member\PayrollTimeSheet2Controller@index');
 	Route::any('/company_timesheet2/{company_id}/{employee_id}','Member\PayrollTimeSheet2Controller@timesheet');
 	Route::any('/company_timesheet_day_summary/{time_sheet_id}','Member\PayrollTimeSheet2Controller@day_summary');

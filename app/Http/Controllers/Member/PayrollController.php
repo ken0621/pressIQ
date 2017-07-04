@@ -4709,8 +4709,8 @@ class PayrollController extends Member
      // Tbl_payroll_shift_code
      public function shift_template()
      {
-          $data['_active'] = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->paginate(20);
-          $data['_archived'] = Tbl_payroll_shift_code::getshift(Self::shop_id(), 1)->orderBy('shift_code_name')->paginate(20);
+          $data['_active'] = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->get();
+          $data['_archived'] = Tbl_payroll_shift_code::getshift(Self::shop_id(), 1)->orderBy('shift_code_name')->get();
           return view('member.payroll.side_container.shift_template', $data);
      }
 
@@ -4742,7 +4742,7 @@ class PayrollController extends Member
                $insert_day["shift_target_hours"] = Request::input("target_hours")[$day];
                $insert_day["shift_rest_day"] = Request::input("rest_day_" . $day) == 1 ? 1 : 0;
                $insert_day["shift_extra_day"] = Request::input("extra_day_" . $day) == 1 ? 1 : 0;
-               $key++;
+               
 
                $shift_day_id = Tbl_payroll_shift_day::insertGetId($insert_day);
 

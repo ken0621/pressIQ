@@ -130,14 +130,14 @@
                   <ul class="nav navbar-nav navbar-left">
                      @foreach($_categories as $categories)
                      <li class="notsub">
-                        <a href="/product?type={{ $categories['type_id'] }}">
+                        <a href="javascript:">
                            <div class="nav-text">
-                              <div onclick="location.href='/product?type={{ $categories['type_id'] }}'" class="nav-text-holder">{{ $categories['type_name'] }}</div>
-                              <div onclick="location.href='/product?type={{ $categories['type_id'] }}'" class="nav-text-hover">{{ $categories['type_name'] }}</div>
+                              <div onClick="location.href='/product?type={{ $categories['type_id'] }}'" class="nav-text-holder">{{ $categories['type_name'] }}</div>
+                              <div onClick="location.href='/product?type={{ $categories['type_id'] }}'" class="nav-text-hover">{{ $categories['type_name'] }}</div>
                            </div>
                            <div class="nav-text-more">
                               @foreach($categories['subcategory'] as $subcategories)
-                              <div onclick="location.href='/product?type={{ $subcategories['type_id'] }}&brand='" class="menu">{{ $subcategories['type_name'] }} ({{ $subcategories['product_count'] }})</div>
+                              <div onClick="location.href='/product?type={{ $subcategories['type_id'] }}'" class="menu">{{ $subcategories['type_name'] }} ({{ $subcategories['product_count'] }})</div>
                               @endforeach
                            </div>
                         </a>
@@ -145,7 +145,7 @@
                      @endforeach
                      @foreach($_categories as $key => $categories)
                      <li class="sub-menu">
-                        <a href="{{ count($categories['subcategory']) > 0 ? "#menupos" . $key : "/product?type=" . $categories['type_id'] }}"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" {{ count($categories['subcategory']) > 0 ? 'class="list-group-item" data-toggle="collapse" data-parent="#mainmenu"' : "" }}>{{ $categories['type_name'] }} <span class="menu-ico-collapse {{ count($categories['subcategory']) > 0 ? "" : "hide" }}"><i class="glyphicon glyphicon-chevron-down"></i></span></a>
+                        <a href="{{ count($categories['subcategory']) > 0 ? "#menupos" . $key : "/product?type=" . $categories['type_id'] }}"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" {{ count($categories['subcategory']) > 0 ? 'class=list-group-item data-toggle=collapse data-parent=#mainmenu' : "" }}>{{ $categories['type_name'] }} <span class="menu-ico-collapse {{ count($categories['subcategory']) > 0 ? "" : "hide" }}"><i class="glyphicon glyphicon-chevron-down"></i></span></a>
                         <div class="collapse pos-absolute" id="menupos{{ $key }}">
                            @foreach($categories['subcategory'] as $subcategories)
                            <a href="/product?type={{ $subcategories['type_id'] }}" data-toggle="collapse" data-target="#menupos{{ $key }}" class="list-group-item sub-item">{{ $subcategories['type_name'] }} ({{ $subcategories['product_count'] }})</a>
@@ -154,24 +154,24 @@
                      </li>
                      @endforeach
                      
-                     {{-- <li class="sub-menu">
-                        <a href="#menupos2"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" class="list-group-item" data-toggle="collapse" data-parent="#mainmenu">SMART PHONE <span class="menu-ico-collapse"><i class="glyphicon glyphicon-chevron-down"></i></span></a>
-                        <div class="collapse pos-absolute" id="menupos2">
-                           <a href="/product?type=3&brand=" data-toggle="collapse" data-target="#menupos1" class="list-group-item sub-item">Test</a>
-                        </div>
-                     </li>
-                     <li class="sub-menu">
-                        <a href="#menupos3"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" class="list-group-item" data-toggle="collapse" data-parent="#mainmenu">TABLET <span class="menu-ico-collapse"><i class="glyphicon glyphicon-chevron-down"></i></span></a>
-                        <div class="collapse pos-absolute" id="menupos3">
-                           <a href="/product?type=4&brand=" data-toggle="collapse" data-target="#menupos1" class="list-group-item sub-item">Test</a>
-                        </div>
-                     </li>
-                     <li class="sub-menu">
-                        <a href="#menupos4"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" class="list-group-item" data-toggle="collapse" data-parent="#mainmenu">MOBILE PHONE <span class="menu-ico-collapse"><i class="glyphicon glyphicon-chevron-down"></i></span></a>
-                        <div class="collapse pos-absolute" id="menupos4">
-                           <a href="/product?type=5&brand=" data-toggle="collapse" data-target="#menupos1" class="list-group-item sub-item">Test</a>
-                        </div>
-                     </li> --}}
+                     <!--<li class="sub-menu">-->
+                     <!--   <a href="#menupos2"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" class="list-group-item" data-toggle="collapse" data-parent="#mainmenu">SMART PHONE <span class="menu-ico-collapse"><i class="glyphicon glyphicon-chevron-down"></i></span></a>-->
+                     <!--   <div class="collapse pos-absolute" id="menupos2">-->
+                     <!--      <a href="/product?type=3&brand=" data-toggle="collapse" data-target="#menupos1" class="list-group-item sub-item">Test</a>-->
+                     <!--   </div>-->
+                     <!--</li>-->
+                     <!--<li class="sub-menu">-->
+                     <!--   <a href="#menupos3"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" class="list-group-item" data-toggle="collapse" data-parent="#mainmenu">TABLET <span class="menu-ico-collapse"><i class="glyphicon glyphicon-chevron-down"></i></span></a>-->
+                     <!--   <div class="collapse pos-absolute" id="menupos3">-->
+                     <!--      <a href="/product?type=4&brand=" data-toggle="collapse" data-target="#menupos1" class="list-group-item sub-item">Test</a>-->
+                     <!--   </div>-->
+                     <!--</li>-->
+                     <!--<li class="sub-menu">-->
+                     <!--   <a href="#menupos4"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" class="list-group-item" data-toggle="collapse" data-parent="#mainmenu">MOBILE PHONE <span class="menu-ico-collapse"><i class="glyphicon glyphicon-chevron-down"></i></span></a>-->
+                     <!--   <div class="collapse pos-absolute" id="menupos4">-->
+                     <!--      <a href="/product?type=5&brand=" data-toggle="collapse" data-target="#menupos1" class="list-group-item sub-item">Test</a>-->
+                     <!--   </div>-->
+                     <!--</li>-->
                   </ul>
                   <form method="GET" action="/product" class="navbar-form search-container" role="search">
                      <div class="mobile-nabigayshon">

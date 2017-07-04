@@ -81,14 +81,39 @@ function timesheet()
 				/* CHECK IF FOCUS OUT VALUE CHANGED */
 				if($focus_value != $(e.currentTarget).val())
 				{
-					
+					var tr_date = $(e.currentTarget).closest(".tr-parent").attr("date");
+					action_reload_rate_for_date(tr_date);
 				}
 			}
-
 		});
 	}
 
 	/* ACTIONS */
+	function action_reload_rate_for_date(tr_date)
+	{
+		$target = $(".tr-parent[date='" + tr_date + "']");
+		$target.find(".rate-output").html('<i style="color: gray" class="fa fa-spinner fa-pulse fa-fw"></i>');
+		console.log("RELOADING RATE FOR DATE");
+		$input = $(".tr-parent[date='" + tr_date + "'] :input").serialize();
+		
+		$period_id = $(".period-id").val();
+		$employee_id = $(".employee-id").val();
+		
+		$url = "/member/payroll/company_timesheet2/change/" + $period_id + "/" + $employee_id;
+		
+		$.ajax(
+		{
+			url: $url,
+			dataType: "json",
+			data: $input,
+			type:"post",
+			success: function(data)
+			{
+				console.log("TIME CHANGED SUCESS");
+				$target.find(".rate-output").html(data.string_income);
+			}
+		})
+	}
 	function action_sum_total_gross_salary()
 	{
 		var total_gross_salary = 0;
@@ -127,9 +152,9 @@ function timesheet()
 		if($time_in_blank == false && $time_out_blank == false)
 		{
 			$unq = getRandomIntInclusive(10000000, 999999999);
-			$target_tr.find(".time-in-td").append('<input unq="' + $unq + '" value="" type="text" placeholder="NO TIME" class="new-time-event new-time-focus text-table text-center time-entry time-in is-timeEntry" name="">');
-			$target_tr.find(".time-out-td").append('<input unq="' + $unq + '" value="" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-out is-timeEntry" name="">');
-			$target_tr.find(".time-comment-td").append('<input unq="' + $unq + '" value="" type="text" class="comment new-time-event text-table time-entry is-timeEntry" name="">');
+			$target_tr.find(".time-in-td").append('<input name="time-in[]" unq="' + $unq + '" value="" type="text" placeholder="NO TIME" class="new-time-event new-time-focus text-table text-center time-entry time-in is-timeEntry" >');
+			$target_tr.find(".time-out-td").append('<input name="time-out[]" unq="' + $unq + '" value="" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-out is-timeEntry">');
+			$target_tr.find(".time-comment-td").append('<input name="remarks[]" unq="' + $unq + '" value="" type="text" class="comment new-time-event text-table time-entry is-timeEntry" name="">');
 			$target_tr.find(".new-time-focus").focus().removeClass("new-time-focus");
 			event_time_entry();
 		}

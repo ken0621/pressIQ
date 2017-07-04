@@ -6629,6 +6629,7 @@ class PayrollController extends Member
           $temp['absent_count']                   = $data['absent_count'];
           $temp['break_deduction']                = $data['break_deduction'];
           $temp['break_time']                     = $data['break_time'];
+          $temp['branch_location_id']             = $data['branch_location_id'];
 
           if(!empty($data['13_month_id']))
           {

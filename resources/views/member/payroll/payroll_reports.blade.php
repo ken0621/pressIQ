@@ -7,7 +7,7 @@
 		<div>
 			<i class="fa fa-bar-chart" aria-hidden="true"></i>
 			<h1>
-			<span class="page-title">Payroll Reports</span>
+			<span class="page-title">Aphalist Report</span>
 			<small>
 			Manage Payroll Reports
 			</small>
@@ -34,6 +34,10 @@
 						<li class="list-group-item">
 							<span>13th Month Pay Report</span>
 							<a href="/member/payroll/report_13th_month_pay" class="btn btn-xs btn-custom-white pull-right">View 13th Month Pay</a>
+						</li>
+						<li class="list-group-item">
+							<span>Alpha List</span>
+							<a href="/member/payroll/payroll_reports/alphalist_report" class="btn btn-xs btn-custom-white pull-right">View Alpha List</a>
 						</li>
 						@foreach($_active as $active)
 						<li class="list-group-item">

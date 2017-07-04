@@ -6709,6 +6709,14 @@ class PayrollController extends Member
           return view('member.payroll.modal.modal_create_reports', $data);
      }
 
+     /* alpha list */
+     public function alphalist_report()
+     {
+          $data['_company']        = Payroll::company_heirarchy(Self::shop_id());
+          $data['_department']     = Tbl_payroll_department::sel(Self::shop_id(), 0)->get();
+          return view('member.payroll.payroll_reports_alphalist', $data);
+     }
+
      public function save_custom_reports()
      {
           $insert['shop_id']              = Self::shop_id();

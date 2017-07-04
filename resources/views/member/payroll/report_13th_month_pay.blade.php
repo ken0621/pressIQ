@@ -6,7 +6,7 @@
 <div class="panel panel-default panel-block panel-title-block" id="top">
 	<div class="form-group">
 	  	<div class="panel-heading">
-		    <div>	
+		    <div class="col-md-6 padding-lr-1">	
 		    	<i class="fa fa-building-o"></i>
 		     	 <h1>
 			      	<span class="page-title">13th Month Pay Report</span>
@@ -15,17 +15,18 @@
 			     	 </small>
 		    	</h1>
 	    	</div>
-	    	<div>
-		      	<div class="pull-right export_excel">
-			        <button class="btn btn-custom-primary dropdown-toggle " type="button" data-toggle="dropdown"><i class="fa fa-file-excel-o"></i>&nbsp;Export From Excel
-			        </button> 
-	     		</div> 		      	
-		      	<div class="pull-right">
-		      		<input type="text" class="datepicker form-control end-date" name="end_date" placeholder="End Date" value="{{$end_date}}" />
-		      	</div>       
-		      	<div class="pull-right margin-lr-5" >
+	    	<div class="text-right col-md-6">
+
+		      	<div class="col-md-4 padding-lr-2" >
 		      		<input type="text" class="datepicker form-control start-date" name="start_date" placeholder="Start Date" value="{{$start_date}}"/>
 		      	</div>
+		      	<div class="col-md-4 padding-lr-2">
+		      		<input type="text" class="datepicker form-control end-date" name="end_date" placeholder="End Date" value="{{$end_date}}" />
+		      	</div>       
+		      	<div class="col-md-4 padding-lr-2">
+			        <button class="btn btm-custom-green btn-block dropdown-toggle " type="button" data-toggle="dropdown"><i class="fa fa-file-excel-o"></i>&nbsp;Export From Excel
+			        </button> 
+	     		</div> 	
 	      	</div>
 	      	<input type="hidden" name="_token" value="{{csrf_token()}}" id="_token">
 	    </div>

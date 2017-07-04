@@ -43,13 +43,52 @@ class PayrollTimeSheet2Controller extends Member
 		$data["show_period_start"] = date("F d, Y", strtotime($data["company_period"]->payroll_period_start));
 		$data["show_period_end"] = date("F d, Y", strtotime($data["company_period"]->payroll_period_end));
 		$data["_timesheet"] = $this->timesheet_info($data["company_period"], $employee_id);
-
+		$data["period_id"] = $period_id;
 		return view('member.payroll2.employee_timesheet', $data);
+	}
+	public function time_change($period_id, $employee_id)
+	{
+		$data["period"] = $period = $this->db_get_company_period_information($period_id);
+		$data["request"] = Request::input();
+
+		/* GET CURRENT TIMESHEET FOR THE DAY */
+		$data["timesheet_db"] = $timesheet_db = $this->timesheet_info_db($employee_id, Request::input("date"));
+		
+		/* DELETE TIME SHEET RECORD */
+		Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->delete();
+		
+		/* INSERT NEW TIME SHEET RECORD */
+		foreach(Request::input("time-in") as $key => $time_in)
+		{
+			$time_out = Request::input("time-out")[$key];
+			$remarks = Request::input("remarks")[$key];
+			
+			$insert[$key]["payroll_time_sheet_id"] = $timesheet_db->payroll_time_sheet_id;
+			$insert[$key]["payroll_company_id"] = $period->payroll_company_id;
+			$insert[$key]["payroll_time_sheet_in"] = date("H:i:s", strtotime($time_in));
+			$insert[$key]["payroll_time_sheet_out"] = date("H:i:s ", strtotime($time_out));
+			$insert[$key]["payroll_time_shee_activity"] = $remarks;
+			$insert[$key]["payroll_time_sheet_origin"] = "Manually Encoded";
+		}
+		
+		Tbl_payroll_time_sheet_record::insert($insert);
+		
+		/* RETURN DATA TO SERVER */
+		$data["daily_info"] = $this->timesheet_process_daily_info($employee_id, Request::input("date"), $timesheet_db);
+		$daily_income = $data["daily_info"]->compute->total_day_income;
+		
+		$return["income"] = $daily_income;
+		$return["string_income"] = $this->timesheet_daily_income_to_string($timesheet_db->payroll_time_sheet_id, $return["income"]);
+		echo json_encode($return);
+	}
+	public function timesheet_daily_income_to_string($timesheet_id, $income)
+	{
+		$string = '<a onclick="action_load_link_to_modal(\'/member/payroll/company_timesheet_day_summary/' . $timesheet_id . '\', \'lg\')" href="javascript:" class="daily-salary" amount="' . $income . '">PHP ' . number_format($income, 2) . '</a>';
+		return $string;
 	}
 	public function timesheet_info($company_period, $employee_id) 
 	{
 		$_timesheet = null;
-
 		$from = $data["start_date"] = $company_period->payroll_period_start;
 		$to = $data["end_date"] = $company_period->payroll_period_end;
 
@@ -67,6 +106,7 @@ class PayrollTimeSheet2Controller extends Member
 		}
 		//dd($_timesheet);
 		return $_timesheet;
+		
 	}
 
 	public function timesheet_process_in_out($timesheet_db)
@@ -175,6 +215,7 @@ class PayrollTimeSheet2Controller extends Member
 
 		return $_timesheet_record;
 	}
+
 	public function day_summary($timesheet_id)
 	{
 		$data["timesheet_db"] = $timesheet_db = $this->timesheet_info_db_by_id($timesheet_id);

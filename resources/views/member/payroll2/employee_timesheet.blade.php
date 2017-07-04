@@ -1,3 +1,6 @@
+<input type="hidden" class="period-id" value="{{ $period_id }}" />
+<input type="hidden" class="employee-id" value="{{ $employee_id }}" />
+
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">×</button>
     <h4 class="modal-title"><b>TIME SHEET</b> &raquo; {{ $employee_info->payroll_employee_first_name }} {{ $employee_info->payroll_employee_last_name }} (Employee No. {{ $employee_info->payroll_employee_number == "" ? "00" : $employee_info->payroll_employee_number }})</h4>
@@ -20,33 +23,34 @@
                     <tbody>
                         @foreach($_timesheet as $timesheet)
                         <?php $random_integer = rand (10000000, 999999999); ?>
-                            <tr class="tr-parent" date="{{ $timesheet->date }}">
-                                <input type="hidden" name="date" value="{{ $timesheet->date }}"/>
-                                <td class="text-center" width="50px">{{ $timesheet->day_number }}</td>
-                                <td class="text-center" width="50px">{{ $timesheet->day_word }}</td>
-                                <td class="time-in-td">
-                                    @foreach($timesheet->record as $record)
-                                    <input name="time-in[]" unq="{{ $random_integer }}" mintime="12:00 AM" maxtime="11:59 PM" value="{{ $record->time_sheet_in }}" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-in is-timeEntry">
-                                    @endforeach
-                                </td>
-                                <td class="time-out-td">
-                                    @foreach($timesheet->record as $record)
-                                    <input name="time-out[]" unq="{{ $random_integer }}" mintime="12:00 AM" maxtime="11:59 PM" value="{{ $record->time_sheet_out }}" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-out is-timeEntry">
-                                    @endforeach
-                                </td>
-                                <td class="time-comment-td">
-                                    @foreach($timesheet->record as $record)
-                                    <input name="remarks[]" unq="{{ $random_integer }}" value="{{ $record->time_sheet_activity }}" type="text" class="comment new-time-event text-table time-entry is-timeEntry">
-                                    @endforeach
-                                </td>
-                                <td class="text-center rate-output">
+                        <tr class="tr-parent" date="{{ $timesheet->date }}">
+                            {{ csrf_field() }}
+                            <input type="hidden" name="date" value="{{ $timesheet->date }}"/>
+                            <td class="text-center" width="50px">{{ $timesheet->day_number }}</td>
+                            <td class="text-center" width="50px">{{ $timesheet->day_word }}</td>
+                            <td class="time-in-td">
+                                @foreach($timesheet->record as $record)
+                                <input name="time-in[]" unq="{{ $random_integer }}" mintime="12:00 AM" maxtime="11:59 PM" value="{{ $record->time_sheet_in }}" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-in is-timeEntry">
+                                @endforeach
+                            </td>
+                            <td class="time-out-td">
+                                @foreach($timesheet->record as $record)
+                                <input name="time-out[]" unq="{{ $random_integer }}" mintime="12:00 AM" maxtime="11:59 PM" value="{{ $record->time_sheet_out }}" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-out is-timeEntry">
+                                @endforeach
+                            </td>
+                            <td class="time-comment-td">
+                                @foreach($timesheet->record as $record)
+                                <input name="remarks[]" unq="{{ $random_integer }}" value="{{ $record->time_sheet_activity }}" type="text" class="comment new-time-event text-table time-entry is-timeEntry">
+                                @endforeach
+                            </td>
+                            <td class="text-center rate-output">
                                 @if($timesheet->daily_info->shift_approved == true)
                                     <a onclick="action_load_link_to_modal('/member/payroll/company_timesheet_day_summary/{{ $timesheet->payroll_time_sheet_id }}', 'lg')" href="javascript:" class="daily-salary" amount="{{ $timesheet->daily_info->daily_salary }}">PHP {{ number_format($timesheet->daily_info->compute->total_day_income, 2) }}</a>
                                 @else
                                     <a onclick="action_load_link_to_modal('/member/payroll/company_timesheet_day_summary/{{ $timesheet->payroll_time_sheet_id }}', 'lg')" style="color: red;" href="javascript:" class="daily-salary" amount="{{ $timesheet->daily_info->daily_salary }}">PHP {{ number_format($timesheet->daily_info->compute->total_day_income, 2) }}</a>
                                 @endif
-                                </td>
-                            </tr>
+                            </td>
+                        </tr>
                         @endforeach
                         <tr style="font-weight: bold;">
                             <td class="text-right" colspan="5">GROSS SALARY</td>

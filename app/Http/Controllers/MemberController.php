@@ -933,15 +933,40 @@ class MemberController extends Controller
                                             ->join("tbl_customer", "tbl_customer.customer_id", "=", "tbl_ec_order.customer_id")
                                             ->leftJoin("tbl_customer_address", "tbl_customer_address.customer_id", "=", "tbl_customer.customer_id")
                                             ->leftJoin("tbl_online_pymnt_method", "tbl_online_pymnt_method.method_id", "=", "tbl_ec_order.payment_method_id")
-                                            // ->leftJoin("tbl_paymaya_logs", "tbl_paymaya_logs.order_id", "=", "tbl_ec_order.ec_order_id")
                                             ->first();
             
             if ($data['info']) 
             {
-                //$method = DB::table("")
-                // $data['info']->method_name = $data['info'];
-                
-               // dd($data['info']);
+                $payment_method = DB::table("tbl_online_pymnt_link")->where("link_method_id", $data['info']->payment_method_id)->first();
+                if($payment_method->link_reference_name == "paymaya") 
+                {
+                    $paymaya = DB::table("tbl_paymaya_logs")->where("order_id", $order_id)->first();
+                    $data['info']->checkout_id = $paymaya->checkout_id;
+                }
+                elseif($payment_method->link_reference_name == "dragonpay")
+                {
+                    $dragonpay = DB::table("tbl_dragonpay_logs")->where("order_id", $order_id)->first();
+                    if (is_serialized($dragonpay->response)) 
+                    {
+                        $unserialize_dragonpay = unserialize($dragonpay->response);
+                        if (isset($unserialize_dragonpay['txnid']) && $unserialize_dragonpay['txnid']) 
+                        {
+                            $data['info']->checkout_id = $unserialize_dragonpay['txnid'];
+                        }
+                        else
+                        {
+                            $data['info']->checkout_id = "None";
+                        }
+                    }
+                    else
+                    {
+                        $data['info']->checkout_id = "None";
+                    }
+                }
+                else
+                {
+                    $data['info']->checkout_id = "None";
+                }
                 
                 $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $order_id)
                                                    ->leftJoin('tbl_ec_variant', 'tbl_ec_order_item.item_id', '=', 'evariant_id')

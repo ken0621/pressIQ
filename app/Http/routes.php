@@ -3,7 +3,7 @@ Route::get('/member/rypt/{key}', 'Member\GuillermoController@index');
 Route::get('/member/cross', 'Member\GuillermoController@cross');
 Route::get('/member/fix/webhook', 'Member\GuillermoController@webhook');
 Route::get('/member/payref', 'Member\GuillermoController@payref');
-Route::get('/member/payref', 'Member\GuillermoController@payref2');
+Route::get('/member/payref2', 'Member\GuillermoController@payref2');
 Route::get('/member/payref/{id}', 'Member\GuillermoController@payref_check');
 Route::get('/member/draref', 'Member\GuillermoController@draref');
 Route::get('/member/mail_setting', 'Member\MailSettingController@index');

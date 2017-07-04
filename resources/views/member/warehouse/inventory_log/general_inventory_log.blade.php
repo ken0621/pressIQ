@@ -21,6 +21,34 @@
                 <div class="form-group order-tags"></div>
                 <div class="table-responsive">
                     <table class="table table-bordered table-condensed">
+                        <tbody>
+                            <tr>
+
+                                <td>
+                                    <form method="get" action="/member/item/inventory_log">
+                                    {!! csrf_field() !!}
+                                        <div class="col-md-4">
+                                            <label><small style="color: gray">Search</small></label>
+                                            <input type="text" class="form-control" placeholder="Search by item name or sku" name="item">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label><small style="color: gray">Filter</small></label>
+                                            <select class="form-control" name="filter">
+                                                @foreach($filter_inventory as $key => $value)
+                                                    <option value="{{$key}}">{{$value}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label><small style="color: gray">Submit</small></label><br>
+                                            <button class="btn btn-primary">Search</button>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-bordered table-condensed">
                         <thead>
                             <tr>
                                 <th>#</th>

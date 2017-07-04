@@ -48,7 +48,7 @@
             <th>Zip</th>
             <th>City</th>
             <th>State</th>
-            <th>Checkout ID</th>
+            <th>TXN ID</th>
             <th>Slot</th>
             <th class="text-center">Investigation</th>
             <th></th>

@@ -1123,8 +1123,8 @@ class Cart
         $totalAmount->value = number_format($total, 2, '.', '');
         $itemCheckout->items = $item;
         $itemCheckout->totalAmount = $totalAmount;
+        dd($order_id);
         $itemCheckout->requestReferenceNumber = (string)$order_id;
-        
         // Clear Cart
         // Cart::clear_all($shop_id);
 

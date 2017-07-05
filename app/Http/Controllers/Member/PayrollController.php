@@ -122,14 +122,25 @@ class PayrollController extends Member
 		$separated_status[0] = 8;
 		$separated_status[1] = 9;
 
-		$data['_active']					= Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id())->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->paginate($this->paginate_count);
+		$data['_active']					= Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $active_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->paginate($this->paginate_count);
 
-		$data['_separated']					= Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $separated_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->paginate($this->paginate_count);
+		// $data['_separated']					= Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $separated_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->paginate($this->paginate_count);
 
-		// $data['_company']					= Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->paginate($this->paginate_count);
+          $data['_separated'] = DB::select('select * from `tbl_payroll_employee_contract` inner join `tbl_payroll_employee_basic` 
+          on `tbl_payroll_employee_basic`.`payroll_employee_id` = `tbl_payroll_employee_contract`.`payroll_employee_id` 
+          left join `tbl_payroll_department` on `tbl_payroll_department`.`payroll_department_id` = `tbl_payroll_employee_contract`.`payroll_department_id` 
+          left join `tbl_payroll_jobtitle` on `tbl_payroll_jobtitle`.`payroll_jobtitle_id` = `tbl_payroll_employee_contract`.`payroll_jobtitle_id` 
+          left join `tbl_payroll_company` on `tbl_payroll_company`.`payroll_company_id` = `tbl_payroll_employee_basic`.`payroll_employee_company_id` 
+          where (`tbl_payroll_employee_contract`.`payroll_employee_contract_date_end` >= '.date('Y-m-d').' 
+          or `tbl_payroll_employee_contract`.`payroll_employee_contract_date_end` = 0000-00-00) 
+          and `payroll_employee_contract_status` in (8, 9) and `tbl_payroll_employee_basic`.`shop_id` = '.Self::shop_id().' 
+          and `tbl_payroll_employee_contract`.`payroll_employee_contract_archived` = 0 
+          order by `tbl_payroll_employee_basic`.`payroll_employee_first_name` asc');
 
+          // dd($data['_separated']);
+		
           $data['_company']                       = Payroll::company_heirarchy(Self::shop_id());
-		// dd($data['_company']);
+		
 		$data['_status_active']				= Tbl_payroll_employment_status::whereIn('payroll_employment_status_id', $active_status)->orderBy('employment_status')->paginate($this->paginate_count);
 
 		
@@ -6629,6 +6640,7 @@ class PayrollController extends Member
           $temp['absent_count']                   = $data['absent_count'];
           $temp['break_deduction']                = $data['break_deduction'];
           $temp['break_time']                     = $data['break_time'];
+          $temp['branch_location_id']             = $data['branch_location_id'];
 
           if(!empty($data['13_month_id']))
           {

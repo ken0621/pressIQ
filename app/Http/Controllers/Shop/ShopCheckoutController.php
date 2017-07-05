@@ -106,6 +106,10 @@ class ShopCheckoutController extends Shop
                 return Redirect::to('/mlm/login?notify=1&success=1');
             }
         }
+        elseif(Request::input("status") == "P")
+        {
+            return Redirect::to('/mlm/login?notify=5&success=1');
+        }
         else
         {
             return Redirect::to('/mlm/login?notify=3');

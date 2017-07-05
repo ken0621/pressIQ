@@ -68,7 +68,7 @@
               <th>{{ $order->first_name . " " . $order->last_name}}</th>
               <td>{{ $order->email }}</td>
               <td>{{ $order->invoice_number }}</td>
-              <td>{{ $order->slot_created_date }}</td>
+              <td width="200px">{{ date("F d, Y  h:i A",strtotime($order->slot_created_date)) }}</td>
               <td>{{ $order->customer_mobile }}</td>
               <td>{{ date('M d, Y',strtotime($order->b_day)) }}</td>
               <td>{{ $order->customer_street }}</td>

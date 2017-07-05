@@ -32,6 +32,16 @@
                           <label>Required Right</label>
                           <input type="number" class="form-control" value="{{$value->binary_promotions_required_right}}" name="binary_promotions_required_right">
                       </div>
+                      <!-- Direct and PPV -->
+                        <div class="col-md-2">
+                            <label>PPV</label>
+                            <input type="number" class="form-control" value="{{$value->binary_promotions_repurchase_points}}" name="binary_promotions_repurchase_points">
+                        </div>
+                        <div class="col-md-2">
+                            <label>Direct Referral</label>
+                            <input type="number" class="form-control" value="{{$value->binary_promotions_direct}}" name="binary_promotions_direct">
+                        </div>
+                      <!-- End  -->
                       <div class="col-md-2">
                           <label>No. Of Units</label>
                           <input type="number" class="form-control" value="{{$value->binary_promotions_no_of_units}}" name="binary_promotions_no_of_units">

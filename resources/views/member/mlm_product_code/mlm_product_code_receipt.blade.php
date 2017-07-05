@@ -19,7 +19,7 @@
 <div class="panel panel-default panel-block panel-title-block panel-gray col-md-6 ">
     <ul class="nav nav-tabs">
         <li class="active cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#all"><i class="fa fa-star"></i> All Items</a></li>
-        <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#archived"><i class="fa fa-trash"></i> Archived Items</a></li>
+        <!-- <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#archived"><i class="fa fa-trash"></i> Archived Items</a></li> -->
     </ul>
     <div class="search-filter-box">
         <div class="col-md-4" style="padding: 10px">
@@ -124,7 +124,7 @@
     @if($invoice != null)
         append_to('/member/mlm/product_code/receipt/view/{{$invoice}}')
     @endif
-    var filter_date = "asc";
+    var filter_date = "default";
     var filter_to   = "";
     var filter_by   = "";
 
@@ -157,9 +157,12 @@
             var search = $(".search_email").val();
             filter_to   = $(".filter_to").val();
             filter_by   = $(".filter_by").val();
-
+            $(".modal-loader").removeClass("hidden");
             var link ='/member/mlm/product_code/receipt?filter_to='+filter_to+'&filter_by='+filter_by+'&date_filter='+filter_date+'&search_name=' + search + ' #invoice_append';
-            $('#invoice_append').load(link);  
+            $('#invoice_append').load(link,function()
+            {
+                $(".modal-loader").addClass("hidden");
+            });
         });
     }
 
@@ -192,7 +195,7 @@
             $('.filter_desc').css('font-size','20px');
             $('.filter_default').css('font-size','20px');
 
-            var link ='/member/mlm/product_code/receipt?filter_to='+filter_to+'&filter_by='+filter_by+'&date_filter='+filter_date+'&search_name=' + search + ' #invoice_append';
+            var link ='/member/mlm/product_code/receipt?filter_to='+filter_to+'&filter_by='+filter_by+'&date_filter='+filter_date+'&search_name=' + search_value + ' #invoice_append';
             $('#invoice_append').load(link,function()
             {
                 $(".modal-loader").addClass("hidden");
@@ -214,7 +217,7 @@
             $('.filter_desc').css('font-size','25px');
             $('.filter_default').css('font-size','20px');
 
-            var link ='/member/mlm/product_code/receipt?date_filter='+filter_date+'&search_name=' + search_value + ' #invoice_append';
+            var link ='/member/mlm/product_code/receipt?filter_to='+filter_to+'&filter_by='+filter_by+'&date_filter='+filter_date+'&search_name=' + search_value + ' #invoice_append';
             
             $('#invoice_append').load(link,function()
             {

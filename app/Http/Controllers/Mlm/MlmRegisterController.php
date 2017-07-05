@@ -27,7 +27,6 @@ class MlmRegisterController extends MlmLoginController
 {
     public function index()
     {
-        // return $this->mail_customer_success_register(1, 310);
         $data["page"] = "register";
         $data['lead'] = Self::$lead;
         if($data['lead'] != null)
@@ -258,6 +257,7 @@ class MlmRegisterController extends MlmLoginController
     {
                 $data["template"] = Tbl_email_template::where("shop_id",$shop_id)->first();
                 $data['customer'] = Tbl_customer::where('customer_id', $customer_id)->first();
+
                 $change_content[0]["txt_to_be_replace"] = "[name_of_registrant]";
                 $change_content[0]["txt_to_replace"] = name_format_from_customer_info($data['customer']);
 
@@ -268,6 +268,9 @@ class MlmRegisterController extends MlmLoginController
                 $change_content[2]["txt_to_be_replace"] = "[user_name]";
                 $change_content[2]["txt_to_replace"] = $data['customer']->mlm_username;
 
+                $change_content[3]["txt_to_be_replace"] = "[pass_word]";
+                $change_content[3]["txt_to_replace"] = Crypt::decrypt($data['customer']->password);
+
                 $content_key = 'success_register';
                 $data['body'] = EmailContent::email_txt_replace($content_key, $change_content, $shop_id);
 
@@ -277,7 +280,6 @@ class MlmRegisterController extends MlmLoginController
                 $data['mail_to'] = $data['customer']->email;
                 $data['mail_username'] = Config::get('mail.username');
                 $data['mail_subject'] = 'SUCCESS REGISTRATION';
-
                 Mail_global::mail($data, $shop_id);
     }
     public static function view_customer_info_via_mem_code($membership_activation_code)

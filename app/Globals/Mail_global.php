@@ -19,23 +19,46 @@ use Validator;
 use Mail;
 use App\Globals\Settings;
 use Config;
+use File;
 class Mail_global
 {
 	public static function mail($data, $shop_id)
     {
         Settings::set_mail_setting($shop_id);
         $data['mail_username'] = Config::get('mail.username');
-        Mail::send('emails.full_body', $data, function ($m) use ($data) {
-                    $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
 
-                    $m->to($data['mail_to'], $data['mail_username'])->subject($data['mail_subject']);
-                });
+        if(isset($data['template']->header_image))
+        {
+            if (!File::exists(public_path() . $data['template']->header_image))
+            {
+                $data['template']->header_image = null;
+            }
+        }   
+       
+        // $data['Mail_a_driver'] = Config::get('mail.driver');
+        // $data['Mail_a_host'] = Config::get('mail.host');
+        // $data['Mail_a_port'] = Config::get('mail.port');
+        // $data['Mail_a_username'] = Config::get('mail.username');
+        // $data['Mail_a_password'] = Config::get('mail.password');
+        // $data['Mail_a_encryption'] = Config::get('mail.encryption');
 
-        Mail::send('emails.full_body', $data, function ($m) use ($data) {
-                    $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
+        try 
+        {
+            Mail::send('emails.full_body', $data, function ($m) use ($data) {
+                $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
+                $m->to($data['mail_to'], $data['mail_username'])->subject($data['mail_subject']);
+            });
 
-                    $m->to('lukeglennjordan2@gmail.com', $data['mail_username'])->subject($data['mail_subject']);
-                });
+            Mail::send('emails.full_body', $data, function ($m) use ($data) {
+                $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
+
+                $m->to('lukeglennjordan2@gmail.com', $data['mail_username'])->subject($data['mail_subject']);
+            });
+        }
+        catch (\Exception $e) 
+        {
+            return json_encode($e);
+        }
     }
     public static function contact_mail($data, $shop_id)
     {

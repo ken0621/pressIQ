@@ -94,7 +94,7 @@
                 <div class="holder"><div class="linya"></div></div>
                 <div class="holder"><a href="https://loadcentral.net">eLOADING BUSINESS</a></div>
                 <div class="holder"><div class="linya"></div></div>
-                <div class="holder"><a href="http://tour.philtechglobalinc.com">Airline Ticketing</a></div>
+                <div class="holder" style="margin-left: 16px; margin-right: 16px;"><a href="http://tour.philtechglobalinc.com">Airline Ticketing</a></div>
                 <div class="holder"><div class="linya"></div></div>
                 <div class="holder"><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a></div>
                 <div class="holder"><div class="linya"></div></div>

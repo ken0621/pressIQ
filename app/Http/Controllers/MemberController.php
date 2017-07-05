@@ -134,20 +134,19 @@ class MemberController extends Controller
         $last_name = strtolower(substr($last_name, 0, 3));
         $first_name = strtolower(substr($first_name, 0, 6));
         $nickname = $first_name . '.' . $last_name;
+        
         $count_username = Tbl_customer::where('first_name', $f_name)
         ->where('last_name', $l_name)
         ->count();
-        if($count_username == 0)
-        {
-            return $nickname;
-        }
-        else
-        {
-            $count_mlm_user_name = Tbl_customer::where('mlm_username', 'LIKE', "%".$nickname."%")->count();
+        
+        $nickname = $first_name . '.' . $last_name;
+        $count_mlm_user_name = Tbl_customer::where('mlm_username', 'LIKE', "%".$nickname."%")->count();
+        if($count_mlm_user_name >= 1){
             $nickname = $nickname . ($count_mlm_user_name + 1);
-            return $nickname;
-            
         }
+        
+        return $nickname;
+        
     }
 
     public function locale_id_to_name($locale_id)

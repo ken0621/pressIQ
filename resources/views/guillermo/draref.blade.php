@@ -33,8 +33,8 @@
         <p class="lead title-count">This page allows to get corresponding checkout ID and status of payment.</p>
         <!--<button class="pull-right btn btn-primary start-re-compute"> GET DATA FROM PAYMAYA </button>-->
       </div>
-      
-      <table class="table table-condensed table-bordered">
+      <div style="white-space: nowrap">
+      <table class="table table-condensed table-bordered" style="display: inline-block;">
         <thead>
           <tr>
             <th>Order ID</th>
@@ -80,6 +80,7 @@
         @endforeach
         </tbody>
       </table>
+      </div>
       </div> <!-- /container -->
       
         <!-- Latest compiled and minified JavaScript -->

@@ -27,8 +27,6 @@ class MlmRegisterController extends MlmLoginController
 {
     public function index()
     {
-        $customer = Tbl_customer::where('customer_id', 892)->first();
-        return $this->mail_customer_success_register($customer->shop_id, $customer->customer_id);
         $data["page"] = "register";
         $data['lead'] = Self::$lead;
         if($data['lead'] != null)

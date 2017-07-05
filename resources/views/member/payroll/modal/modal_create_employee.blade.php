@@ -597,7 +597,7 @@
                 <li><a data-toggle="tab" href="#leave">Leave</a></li>
                 <li><a data-toggle="tab" href="#deduction">Deduction</a></li>
                 <li><a data-toggle="tab" href="#jouarnal">Journal</a></li>
-                
+                <li><a data-toggle="tab" href="#shift-schedule">Shift</a></li>
               </ul>
               <div class="tab-content tab-content-custom">
                 <div id="allowance" class="tab-pane fade in active">
@@ -627,6 +627,23 @@
                     <label><input type="checkbox" name="journal_tag[]" value="{{$tag->payroll_journal_tag_id}}">{{$tag->account_number.' • '.$tag->account_name}}</label>
                   </div>
                   @endforeach
+                </div>
+                <div id="shift-schedule" class="tab-pane fade">
+                  <div class="form-horizontal">
+                    <div class="form-group">
+                      <div class="col-md-6">
+                        <small>Choose Shift Template</small>
+                        <select class="form-control">
+                          <option value="0">Select Template</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-12">
+                        
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

@@ -820,7 +820,7 @@ class PayrollController extends Member
           $data['_deduction'] = Tbl_payroll_deduction::seldeduction(Self::shop_id())->orderBy('payroll_deduction_name')->get();
           $data['_leave'] = Tbl_payroll_leave_temp::sel(Self::shop_id())->orderBy('payroll_leave_temp_name')->get();
           $data['_journal_tag'] = Tbl_payroll_journal_tag::gettag(Self::shop_id())->orderBy('tbl_chart_of_account.account_name')->get();
-
+          // $data['_shift'] = Tbl_payroll_shift_code::
           return view("member.payroll.modal.modal_create_employee", $data);
      }
 

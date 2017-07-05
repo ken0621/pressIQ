@@ -187,7 +187,7 @@ class PayrollTimeSheet2Controller extends Member
 		$return = new stdClass();
 		$return->for_approval = ($approved == true ? 0 : 1);
 		$return->daily_salary = 0;
-		$employee_contract = $this->db_get_current_employee_contract($employee_id);
+		$employee_contract = $this->db_get_current_employee_contract($employee_id, $date);
 		$_shift = $this->db_get_shift_based_on_payroll_group($employee_contract->payroll_group_id, $date);
 		$_shift_raw = $this->shift_raw($_shift);
 		$_time_raw = $this->time_raw($_time);
@@ -207,10 +207,10 @@ class PayrollTimeSheet2Controller extends Member
 			$return->shift_approved = true;
 		}
 		
-		$return->late_grace_time = $late_grace_time = "00:00:00";
-		$return->grace_time_rule_late = $grace_time_rule_late = "per_shift";
-		$return->overtime_grace_time = $overtime_grace_time = "00:00:00";
-		$return->grace_time_rule_overtime = $grace_time_rule_overtime = "per_shift";
+		$return->late_grace_time = $late_grace_time = $employee_contract->late_grace_time;
+		$return->grace_time_rule_late = $grace_time_rule_late = $employee_contract->grace_time_rule_late;
+		$return->overtime_grace_time = $overtime_grace_time = $employee_contract->overtime_grace_time;
+		$return->grace_time_rule_overtime = $grace_time_rule_overtime = $employee_contract->grace_time_rule_overtime;
 		$return->day_type = $day_type = "regular";
 		$return->is_holiday = $is_holiday = "not_holiday";
 		$return->leave = $leave = "00:00:00";
@@ -370,9 +370,13 @@ class PayrollTimeSheet2Controller extends Member
 	{
 		return Tbl_payroll_time_sheet_record_approved::where("payroll_time_sheet_id", $time_sheet_id)->get();
 	}
-	public function db_get_current_employee_contract($employee_id)
+	public function db_get_current_employee_contract($employee_id, $date = '0000-00-00')
 	{
-		return Tbl_payroll_employee_contract::where("payroll_employee_id", $employee_id)->orderBy("payroll_employee_contract_id", "desc")->first();
+		// return Tbl_payroll_employee_contract::where("payroll_employee_id", $employee_id)->orderBy("payroll_employee_contract_id", "desc")->first();
+	
+		return Tbl_payroll_employee_contract::selemployee($employee_id, $date)
+											->join('tbl_payroll_employee_contract','tbl_payroll_employee_contract.payroll_group_id','=','tbl_payroll_group.payroll_group_id')
+											->first();
 	}
 	public function db_get_shift_based_on_payroll_group($payroll_group_id, $date)
 	{

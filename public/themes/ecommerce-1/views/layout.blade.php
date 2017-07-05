@@ -82,7 +82,7 @@
                 @else
                 <div class="holder"><a href="/mlm"><i class="fa fa-user" aria-hidden="true"></i> Member's Area
                     @if($slot_now != null)
-                        (Membership Code # {{$slot_now->slot_no}})
+                        ( # {{$slot_now->slot_no}})
                     @endif
                     </a>
                 </div>    

@@ -362,14 +362,43 @@ class MLM_ProductCodeController extends Member
         }
 
         $shop_id          = $this->user_info->shop_id;
-        $_invoice         = Tbl_item_code_invoice::customer()->orderBy('item_code_invoice_id', 'DESC')->where("tbl_item_code_invoice.shop_id",$shop_id);
+        $_invoice         = Tbl_item_code_invoice::customer()->where("tbl_item_code_invoice.shop_id",$shop_id);
+       
+        // $_invoice         = Tbl_item_code_invoice::customer()->orderBy('item_code_invoice_id', 'DESC')->where("tbl_item_code_invoice.shop_id",$shop_id);
         
         if(Request::input('search_name'))
         {
             $search_email = Request::input('search_name');
             $_invoice  = $_invoice->where("tbl_item_code_invoice.item_code_customer_email","LIKE","%".$search_email."%");
         }
-        $data["_invoice"] = $_invoice->paginate(10);;
+
+        /* FOR FILTERING */
+        if(Request::input('date_filter'))
+        {
+            if(Request::input('date_filter') == "asc")
+            {
+                $_invoice  = $_invoice->orderBy("item_code_date_created","ASC");
+                $date_filter = "asc";
+            }
+            else if(Request::input('date_filter') == "desc")
+            {
+                $_invoice  = $_invoice->orderBy("item_code_date_created","DESC");
+                $date_filter = "desc";
+            }
+            else
+            {
+                $date_filter = "default";
+            }
+        }
+        else
+        {
+            $_invoice  = $_invoice->orderBy('item_code_invoice_id', 'DESC');
+            $date_filter = "default";
+        }
+
+        $data["_invoice"]    = $_invoice->paginate(10);
+        $data["date_filter"] = $date_filter;
+
         // dd($code);
         return view('member.mlm_product_code.mlm_product_code_receipt',$data);   
     }

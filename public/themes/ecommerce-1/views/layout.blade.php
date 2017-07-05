@@ -87,8 +87,8 @@
                     </a>
                 </div>    
                 @endif
-                <div class="holder"><div class="linya"></div></div>
-                <div class="holder"><a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> My Cart</a></div>
+                <!-- <div class="holder"><div class="linya"></div></div> -->
+                <!-- <div class="holder"><a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> My Cart</a></div> -->
                 <div class="holder"><div class="linya"></div></div>
     			<div class="holder"><a href="/checkout"><i class="fa fa-check" aria-hidden="true"></i> Checkout</a></div>
 	    		<div class="holder"><div class="linya"></div></div>

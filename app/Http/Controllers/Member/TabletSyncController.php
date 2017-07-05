@@ -166,11 +166,65 @@ class TabletSyncController extends Controller
 
         if($table == "tbl_customer_invoice")
         {
-            //17
             $data = Tbl_customer_invoice::get();
             foreach ($data as $key => $value) 
             {
                 $return[$key] = "INSERT INTO tbl_customer_invoice (inv_id, new_inv_id , inv_shop_id, inv_customer_id, inv_customer_email, inv_customer_billing_address, inv_terms_id, inv_date, inv_due_date,inv_message,inv_memo,inv_discount_type,inv_discount_value,ewt,taxable,inv_subtotal_price,inv_overall_price,inv_payment_applied,inv_is_paid,inv_custom_field_id,date_created,credit_memo_id,is_sales_receipt,sale_receipt_cash_account,created_at,updated_at) VALUES " . "(".$value->inv_id.",'".$value->new_inv_id."','".$value->inv_shop_id."','".$value->inv_customer_id."','".$value->inv_customer_email."','".$value->inv_customer_billing_address."','".$value->inv_terms_id."','".$value->inv_date."','".$value->inv_due_date."','".$value->inv_message."','".$value->inv_memo."','".$value->inv_discount_type."','".$value->inv_discount_value."','".$value->ewt."','".$value->taxable."','".$value->inv_subtotal_price."','".$value->inv_overall_price."','".$value->inv_payment_applied."','".$value->inv_is_paid."','".$value->inv_custom_field_id."','".$value->date_created."','".$value->credit_memo_id."','".$value->is_sales_receipt."','".$value->sale_receipt_cash_account."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+
+        if($table == "tbl_customer_invoice_line")
+        {
+            $data = Tbl_customer_invoice_line::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_customer_invoice_line (invline_id, invline_inv_id , invline_service_date, invline_item_id, invline_description, invline_um, invline_qty, invline_rate, taxable,invline_discount,invline_discount_type,invline_discount_remark,invline_amount,date_created,invline_ref_name,invline_ref_id,created_at,updated_at) VALUES " . "(".$value->invline_id.",'".$value->invline_inv_id."','".$value->invline_service_date."','".$value->invline_item_id."','".$value->invline_description."','".$value->invline_um."','".$value->invline_qty."','".$value->invline_rate."','".$value->taxable."','".$value->invline_discount."','".$value->invline_discount_type."','".$value->invline_discount_remark."','".$value->invline_amount."','".$value->date_created."','".$value->invline_ref_name."','".$value->invline_ref_id."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+
+        if($table == "tbl_default_chart_account")
+        {
+            $data = Tbl_default_chart_account::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_default_chart_account (default_id, default_type_id, default_number, default_name, default_description, default_parent_id, default_sublevel, default_balance, default_open_balance,default_open_balance_date,is_tax_account,account_tax_code_id,default_for_code,account_protected,created_at,updated_at) VALUES " . "(".$value->default_id.",'".$value->default_type_id."','".$value->default_number."','".$value->default_name."','".$value->default_description."','".$value->default_parent_id."','".$value->default_sublevel."','".$value->default_balance."','".$value->default_open_balance."','".$value->default_open_balance_date."','".$value->is_tax_account."','".$value->account_tax_code_id."','".$value->default_for_code."','".$value->account_protected."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+
+
+        if($table == "tbl_employee")
+        {
+            $data = Tbl_employee::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_employee (employee_id, shop_id, warehouse_id, first_name, middle_name, last_name, gender, email, username,password,b_day,position_id,date_created,archived,created_at,updated_at) VALUES " . "(".$value->employee_id.",'".$value->shop_id."','".$value->warehouse_id."','".$value->first_name."','".$value->middle_name."','".$value->last_name."','".$value->gender."','".$value->email."','".$value->username."','".$value->password."','".$value->b_day."','".$value->position_id."','".$value->date_created."','".$value->archived."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+
+        if($table == "tbl_image")
+        {
+            $data = Tbl_image::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_image (image_id, image_path, image_key, image_shop, image_reason, image_reason_id, image_date_created, created_at  , updated_at) VALUES " . "(".$value->image_id.",'".$value->image_path."','".$value->image_key."','".$value->image_shop."','".$value->image_reason."','".$value->image_reason_id."','".$value->image_date_created."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+
+         if($table == "tbl_inventory_serial_number")
+        {
+            $data = Tbl_inventory_serial_number::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_inventory_serial_number (serial_id, serial_inventory_id, item_id, serial_number, serial_created, item_count, item_consumed, sold, consume_source,consume_source_id,serial_has_been_credit,serial_has_been_debit,created_at,updated_at) VALUES " . "(".$value->serial_id.",'".$value->serial_inventory_id."','".$value->item_id."','".$value->serial_number."','".$value->serial_created."','".$value->item_count."','".$value->item_consumed."','".$value->sold."','".$value->consume_source."','".$value->consume_source_id."','".$value->serial_has_been_credit."','".$value->serial_has_been_debit."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+
+         if($table == "tbl_inventory_slip")
+        {
+            $data = Tbl_inventory_slip::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_inventory_slip (inventory_slip_id, inventory_slip_id_sibling, inventory_reason, warehouse_id, inventory_remarks, inventory_slip_date, archived, inventory_slip_shop_id, slip_user_id,inventory_slip_status,inventroy_source_reason,inventory_source_id,inventory_source_name,inventory_slip_consume_refill,inventory_slip_consume_cause,inventory_slip_id,created_at,updated_at) VALUES " . "(".$value->inventory_slip_id.",'".$value->inventory_slip_id_sibling."','".$value->inventory_reason."','".$value->warehouse_id."','".$value->inventory_remarks."','".$value->inventory_slip_date."','".$value->archived."','".$value->inventory_slip_shop_id."','".$value->slip_user_id."','".$value->inventory_slip_status."','".$value->inventroy_source_reason."','".$value->inventory_source_id."','".$value->inventory_source_name."','".$value->inventory_slip_consume_refill."','".$value->inventory_slip_consume_cause."','".$value->inventory_slip_id."','".$value->created_at."','".$value->updated_at."')";
             }
         }
 

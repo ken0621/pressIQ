@@ -30,8 +30,8 @@ function sync_data()
     }
     function action_web_browser_sync_data()
     {
-        $(."web-to-browser-sync-data").unbind("click");
-        $(."web-to-browser-sync-data").bind("click", function()
+        $(".web-to-browser-sync-data").unbind("click");
+        $(".web-to-browser-sync-data").bind("click", function()
         {
             $.ajax({
                 url : "/tablet/sync_data/shop",

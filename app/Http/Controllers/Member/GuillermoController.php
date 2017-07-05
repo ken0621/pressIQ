@@ -167,7 +167,12 @@ class GuillermoController extends Controller
             dd($response);
         }
         
-        if(isset($response->error))
+        if($response == null)
+        {
+            $data["response"] = "Error";
+            $data["information"] = "PAYMAYA DID'T RETURN ANYTHING";
+        }
+        elseif(isset($response->error))
         {
             $data["response"] = "Error";
             $data["information"] = $response->error->code;

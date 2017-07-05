@@ -1471,9 +1471,11 @@ class Payroll
 
 		$data['daily_rate']					= 0;
 
+
 		$data['payroll_employee_id']		= $employee_id;
 		$data['payroll_period_company_id']	= $payroll_period_company_id;
 		$data['tax_status']					= $basic_employee->payroll_employee_tax_status;
+		$data['branch_location_id']			= $basic_employee->branch_location_id;
 		$data['salary_taxable'] 			= 0;
 		$data['salary_sss'] 				= 0;
 		$data['salary_pagibig'] 			= 0;

@@ -140,7 +140,10 @@
 </div>
 @endsection
 <style type="text/css">
-
+.footable-row-detail-name
+{
+	width: 140px;
+}
 </style>
 @section('script')
 	<script type="text/javascript" src="resources/assets/rutsen/js/contact.js"></script>

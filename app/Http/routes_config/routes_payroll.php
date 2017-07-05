@@ -75,6 +75,18 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/timesheet/time_sheet_comment_save','Member\PayrollTimeSheetController@time_sheet_comment_save');
 	/* TIMESHEET END */
 
+
+	/* BRANCH NAME START */
+	Route::any('/branch_name','Member\PayrollController@branch_name');
+	Route::any('/branch_name/modal_create_branch','Member\PayrollController@modal_create_branch');
+	Route::any('/branch_name/modal_save_branch','Member\PayrollController@modal_save_branch');
+	Route::any('/branch_name/modal_edit_branch/{id}','Member\PayrollController@modal_edit_branch');
+	Route::any('/branch_name/modal_update_branch','Member\PayrollController@modal_update_branch');
+	Route::any('/branch_name/modal_archive_branch/{archived}/{id}','Member\PayrollController@modal_archive_branch');
+	Route::any('/branch_name/archive_branch','Member\PayrollController@archive_branch');
+	/* BRANCH NAME END */
+
+
 	/* DEPARTMENT START */
 	Route::any('/departmentlist','Member\PayrollController@department_list');
 	Route::any('/departmentlist/department_modal_create','Member\PayrollController@department_modal_create');

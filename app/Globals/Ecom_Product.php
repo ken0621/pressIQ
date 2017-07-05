@@ -58,8 +58,9 @@ class Ecom_Product
 	 * Getting all Product w/ variants and options. If shop_id is null, the current shop id that logged on will be used.
 	 *
 	 * @param int    $shop_id 	Shop id of the products that you wnat to get. null if auto get
+	 * @param int    $manufacturer 	Get all product by manufacturer_id
 	 */
-	public static function getAllProduct($shop_id = null)
+	public static function getAllProduct($shop_id = null, $manufacturer_id = null)
 	{
 		if(!$shop_id)
 		{
@@ -67,10 +68,9 @@ class Ecom_Product
 		}
 		
 		$_product = Tbl_ec_product::where("eprod_shop_id", $shop_id)->where("archived", 0)->get()->toArray();
-		
 		foreach($_product as $key=>$product)
 		{
-			$_product[$key]			 	= Ecom_Product::getProduct($product["eprod_id"], $shop_id);
+			$_product[$key]			 	= Ecom_Product::getProduct($product["eprod_id"], $shop_id, $manufacturer_id);
 			// $_product[$key]["variant"] = Tbl_ec_variant::where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
 
 			// foreach($_product[$key]["variant"] as $key2=>$variant)
@@ -122,7 +122,6 @@ class Ecom_Product
 		{
 			$_product[$key]	= Ecom_Product::getProduct($product["eprod_id"], $shop_id);
 		}
-		
 		return $_product;
 	}
 
@@ -237,8 +236,9 @@ class Ecom_Product
 	 * B
 	 * @param int    $product_id 	Product ID of the specific product.
 	 * @param int    $shop_id 		Shop id of the products that you wnat to get. null if auto get
+	 * @param int    $manufacturer 	Get all product by manufacturer_id
 	 */
-	public static function getProduct($product_id, $shop_id = null)
+	public static function getProduct($product_id, $shop_id = null, $manufacturer_id = null)
 	{
 		if(!$shop_id)
 		{
@@ -251,8 +251,16 @@ class Ecom_Product
 		{
 			$product = collect($product)->toArray();
 			$product			   	= $product;
-			$product["variant"] 	= Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId($shop_id))->where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
-
+			if ($manufacturer_id) 
+			{
+				$product["variant"] 	= Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId($shop_id))->manufacturer($manufacturer_id)->where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
+			}
+			else
+			{
+				$product["variant"] 	= Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId($shop_id))->where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
+			}
+			//arcy get disc price
+			$get_min_price = [];
 			foreach($product["variant"] as $key2=>$variant)
 			{
 				$variant_option_name = Tbl_variant_name::nameOnly()->where("variant_id", $variant["evariant_id"])->get()->toArray();
@@ -264,9 +272,19 @@ class Ecom_Product
 					$variant_option_value = Tbl_option_value::where("option_value_id", $option_name["option_value_id"])->first()->toArray();
 					$product["variant"][$key2]["options"][$option_name['option_name']] = $variant_option_value["option_value"];
 				}
+				if($variant["item_discount_value"] != 0)
+				{
+					$get_min_price[$key2] = $variant["item_discount_value"];
+				}
 			}
+			if(count($get_min_price) > 0)
+			{
+				$min_price = min($get_min_price);
+				$product["min_price"] = $min_price;
+				$product["max_price"] = $min_price;
+			}
+			$product = collect($product)->toArray();
 		}
-
 		return $product;
 	}
 	public static function getMlmDiscount($shop_id, $item_id, $product_price)
@@ -505,9 +523,26 @@ class Ecom_Product
 				
 				$update["eprod_search_count"] = $value["eprod_search_count"] + 1;
 				Tbl_ec_product::where("eprod_id", $value["eprod_id"])->update($update);
-			}
-		}
 
+
+				$get_min_price = [];
+				foreach($product[$key]["variant"] as $key2=>$variant)
+				{
+					if($variant["item_discount_value"] != 0)
+					{
+						$get_min_price[$key2] = $variant["item_discount_value"];
+					}
+				}
+
+				if(count($get_min_price) > 0)
+				{
+					$min_price = min($get_min_price);
+					$product[$key]["min_price"] = $min_price;
+					$product[$key]["max_price"] = $min_price;
+				}
+			}
+			$product = collect($product)->toArray();
+		}
 		return $product;
 	}
 

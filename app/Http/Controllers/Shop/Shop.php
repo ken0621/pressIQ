@@ -49,8 +49,8 @@ class Shop extends Controller
 
             if(!$this->shop_info)
             {
-                $check_domain = Tbl_customer::where('mlm_username', $subdomain)->first();
-                $lead_e = $check_domain;
+                $check_subdomain = Tbl_customer::where('mlm_username', $subdomain)->first();
+                $lead_e = $check_subdomain;
                 if($lead_e)
                 {
                     $shop_id = $lead_e->shop_id;    
@@ -68,6 +68,10 @@ class Shop extends Controller
 
                         $data['customer_info'] = Mlm_member::get_customer_info($data['lead']->customer_id);
                     } 
+                }
+                elseif($check_domain)
+                {
+                    $this->shop_info = $check_domain;
                 }
                 else
                 {
@@ -95,7 +99,7 @@ class Shop extends Controller
         $product_category       = Ecom_Product::getAllCategory($this->shop_info->shop_id);
         $global_cart            = Cart::get_cart($this->shop_info->shop_id);
         $country                = Tbl_country::get();
-
+        
         if ($this->shop_theme == "sovereign") 
         {
             $products = Ecom_Product::getAllProduct($this->shop_info->shop_id);

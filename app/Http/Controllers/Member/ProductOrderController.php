@@ -51,6 +51,8 @@ class ProductOrderController extends Member
             $data["action"]         = "/member/ecommerce/product_order/create_order/update_invoice";
 
             $sir                    = Tbl_ec_order::where("ec_order_id",$id)->first();
+
+            //dd(Request::all());
             if($sir)
             {
                 if($sir->coupon_id != null)
@@ -257,6 +259,8 @@ class ProductOrderController extends Member
         $data["ec_order_id"]    = Request::input("ec_order_id");
         $data["order_status"]   = Request::input("order_status");
         $data["payment_status"] = Request::input("payment_status");
+
+        $data["tracking_no"] = Request::input("tracking_no");
 
         $response                           = Ec_order::update_ec_order($data);
         if(isset($response["status"]))

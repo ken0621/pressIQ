@@ -580,7 +580,7 @@ class Item_code
 
                             }
                         }
-                        Item_code::use_item_code_all_invoice($invoice_id);
+                        // Item_code::use_item_code_all_invoice($invoice_id);
         	            /* FORGET ALL SESSION FOR PURCHASED ITEM */
         	            Session::forget("sell_item_codes_session");
                         $send["response_status"] = "success_process";    
@@ -757,6 +757,62 @@ class Item_code
         Item_code::give_item_code_ec_order($order_id);
         Ec_order::create_merchant_school_item($order_id);
         Item_code::merchant_school_active_codes($order_id);
+        Item_code::ec_order_slot($order_id);
+    }
+    public static function ec_order_slot($order_id)
+    {
+        $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
+        $tbl_ec_order_slot = DB::table('tbl_ec_order_slot')->where('order_slot_ec_order_id', $order_id)->first();
+        if($tbl_ec_order_slot)
+        {
+            if($tbl_ec_order_slot->order_slot_customer_id    != 0 &&  $tbl_ec_order_slot->order_slot_used           != 1)
+            {
+                $table_ec_order_slot = $tbl_ec_order_slot;
+                $tbl_ec_order_item = DB::table('tbl_ec_order_item')->where('ec_order_id', $order_id)
+                ->get();
+                if($tbl_ec_order_item)
+                {
+                    foreach ($tbl_ec_order_item as $key => $order_item) 
+                    {
+                        $tbl_ec_variant = DB::table('tbl_ec_variant')
+                                            ->where('evariant_id', $order_item->item_id)
+                                            ->join("tbl_ec_product","eprod_id","=","evariant_prod_id")
+                                            ->get();                                
+                        if($tbl_ec_variant)
+                        {
+                            foreach ($tbl_ec_variant as $v_key => $v_value) 
+                            {
+                                if($v_value->ec_product_membership != 0)
+                                {
+                                    $shop_id = $order->shop_id; 
+                                    $insert['slot_no'] = Mlm_plan::set_slot_no($shop_id, $v_value->ec_product_membership);
+                                    $insert['shop_id'] = $shop_id;
+                                    $insert['slot_owner'] = $tbl_ec_order_slot->order_slot_customer_id;
+                                    $insert['slot_created_date'] = Carbon::now();
+                                    $insert['slot_membership'] =    $v_value->ec_product_membership;
+                                    $insert['slot_status'] = 'PS';
+                                    if($tbl_ec_order_slot->order_slot_sponsor != 0)
+                                    {
+                                         // $insert['slot_placement'] = $tbl_ec_order_slot->order_slot_sponsor;
+                                    }
+                                    if($tbl_ec_order_slot->order_slot_sponsor != 0)
+                                    {
+                                         $insert['slot_sponsor'] = $tbl_ec_order_slot->order_slot_sponsor;
+                                    }
+                                    $id = Tbl_mlm_slot::insertGetId($insert);
+                                    $a = Mlm_compute::entry($id);
+
+                                    $update_s['order_slot_used'] = 1;
+                                    DB::table('tbl_ec_order_slot')->where('order_slot_ec_order_id', $order_id)->update($update_s);
+
+                                    Mlm_member::add_to_session_edit($shop_id, $tbl_ec_order_slot->order_slot_customer_id, $id);
+                                }
+                            }
+                        }                 
+                    }
+                }
+            }
+        }
     }
     public static function insert_product_merchant_school($order_id)
     {

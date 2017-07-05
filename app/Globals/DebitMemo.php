@@ -8,6 +8,7 @@ use App\Models\Tbl_item_discount;
 use App\Models\Tbl_cart;
 use App\Models\Tbl_user;
 use App\Models\Tbl_coupon_code;
+use App\Models\Tbl_settings;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_debit_memo_line;
 use App\Models\Tbl_debit_memo;
@@ -21,6 +22,17 @@ use Carbon\Carbon;
 
 class DebitMemo
 {
+	public static function check_setting($type = "")
+    {
+    	$return = false;
+    	$settings = Tbl_settings::where("shop_id",DebitMemo::getShopId())->where("settings_key",$type)->where("settings_value","enable")->first();
+
+    	if($settings)
+    	{
+    		$return = true;
+    	}
+    	return $return;
+    }
     public static function getShopId()
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');

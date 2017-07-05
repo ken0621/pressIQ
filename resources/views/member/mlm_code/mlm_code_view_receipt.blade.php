@@ -161,7 +161,7 @@
                                             <br>
                                             <br>
                                             ______________________________________<br>
-                                            Authorized Siginature over printed name
+                                            Authorized Signature over printed name
                                         </center>
                                         </td>
                                     </tr>                                  

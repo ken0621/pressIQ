@@ -18,10 +18,9 @@ class CreateTblMerchantSchoolWallet extends Migration
             $table->string('merchant_school_s_id')->nullable();
             $table->string('merchant_school_s_name')->nullable(0);
             $table->string('merchant_school_remarks')->nullable(0);
-            $table->datetime('merchant_school_date')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->datetime('merchant_school_date')->useCurrent();
             $table->integer('merchant_school_custmer_id')->integer(0);
             $table->integer('merchant_school_slot_id')->integer(0);
-            
         });
     }
 
@@ -32,6 +31,5 @@ class CreateTblMerchantSchoolWallet extends Migration
      */
     public function down()
     {
-        //
     }
 }

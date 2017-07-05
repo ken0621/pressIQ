@@ -99,13 +99,15 @@
                                 <p class="login button"> 
                                     <input type="submit" value="Login" > 
                                 </p>
-                                <div class="divider-holder" style="margin-bottom: 15px;">
-                                    <div class="divider"></div>
-                                    <span>Don't have an account yet?</span>
-                                </div>
-                                <p class="register button"> 
-                                    <input type="button" value="Create an Account" onClick="location.href='/mlm/register'" /> 
-                                </p>
+                                @if($register_button == 1)
+                                    <div class="divider-holder" style="margin-bottom: 15px;">
+                                        <div class="divider"></div>
+                                        <span>Don't have an account yet?</span>
+                                    </div>
+                                    <p class="register button"> 
+                                        <input type="button" value="Create an Account" onClick="location.href='/mlm/register'" /> 
+                                    </p>
+                                @endif
                                 <p>
                                     <a href="/mlm/login/forgot_password" style="text-decoration: none">Forgot Password ?</a>
                                 </p>

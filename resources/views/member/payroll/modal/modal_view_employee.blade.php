@@ -70,13 +70,15 @@
         </div>
         <div class="form-group">
           <div class="col-md-6">
-
-            <small><b>Print on as check as</b></small>&nbsp;
-            <div class="checkbox display-inline-block"><label><input type="checkbox" name="chck_print_on_as" class="checkbox-toggle-rev check-print-name-as" data-target=".display-name-check" checked>Use display name</label></div>
-
-            <input type="text" name="payroll_employee_display_name" class="form-control display-name-check" value="{{$employee->payroll_employee_display_name}}">
-
+            <small>Branch Location</small>
+            <select class="form-control" name="branch_location_id">
+              <option value="0">Select Branch</option>
+              @foreach($_branch as $branch)
+              <option value="{{$branch->branch_location_id}}" {{$employee->branch_location_id == $branch->branch_location_id ? 'selected="selected"':''}}>{{$branch->branch_location_name}}</option>
+              @endforeach
+            </select>
           </div>
+          
           <div class="col-md-6">
             <div class="col-md-6 padding-lr-1">
               <small>Gender</small>
@@ -91,6 +93,13 @@
               <i class="fa fa-calendar pos-absolute top-30 margin-left-6 color-dark-gray" aria-hidden="true"></i>
             </div>
             
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-6">
+            <small><b>Print on as check as</b></small>&nbsp;
+            <div class="checkbox display-inline-block"><label><input type="checkbox" name="chck_print_on_as" class="checkbox-toggle-rev check-print-name-as" data-target=".display-name-check" checked>Use display name</label></div>
+            <input type="text" name="payroll_employee_display_name" class="form-control display-name-check" value="{{$employee->payroll_employee_display_name}}">
           </div>
         </div>
         <div class="form-group">
@@ -278,25 +287,25 @@
                       <div class="form-group">
                         <div class="col-md-12">
                           <small>Monthly Rate</small>
-                          <input type="number" step="any" name="payroll_employee_salary_monthly" class="form-control text-right" value="{{$salary->payroll_employee_salary_monthly}}" readonly>
+                          <input type="number" step="any" name="payroll_employee_salary_monthly" class="form-control text-right" value="{{isset($salary->payroll_employee_salary_monthly) ? $salary->payroll_employee_salary_monthly : ''}}" readonly>
                         </div>
                       </div>
                       <div class="form-group">
                         <div class="col-md-12">
                           <small>Daily Rate</small>
-                          <input type="number" step="any" name="payroll_employee_salary_daily" class="form-control text-right" value="{{$salary->payroll_employee_salary_daily}}" readonly>
+                          <input type="number" step="any" name="payroll_employee_salary_daily" class="form-control text-right" value="{{isset($salary->payroll_employee_salary_daily) ? $salary->payroll_employee_salary_daily : ''}}" readonly>
                         </div>
                       </div>
                       <div class="form-group">
                         <div class="col-md-12">
                           <small>COLA (Daily)</small>
-                          <input type="number" step="any" name="payroll_employee_salary_cola" class="form-control text-right" value="{{$salary->payroll_employee_salary_cola}}" readonly>
+                          <input type="number" step="any" name="payroll_employee_salary_cola" class="form-control text-right" value="{{isset($salary->payroll_employee_salary_cola) ? $salary->payroll_employee_salary_cola : ''}}" readonly>
                         </div>
                       </div>
                       <div class="form-group">
                         <div class="col-md-12">
                           <div class="checkbox">
-                            <label><input type="checkbox" name="payroll_employee_salary_minimum_wage" value="1" disabled {{$salary->payroll_employee_salary_minimum_wage == 1 ? 'checked="checked"' : ''}}>Minimum wage earner</label>
+                            <label><input type="checkbox" name="payroll_employee_salary_minimum_wage" value="1" disabled {{isset($salary->payroll_employee_salary_minimum_wage) ? ($salary->payroll_employee_salary_minimum_wage == 1 ? 'checked="checked"' : '') : ''}}>Minimum wage earner</label>
                           </div>
                         </div>
                       </div>
@@ -306,25 +315,25 @@
                       <div class="form-group">
                         <div class="col-md-12">
                           <small>Taxable Salary</small>
-                          <input type="number" name="payroll_employee_salary_taxable" class="form-control text-right" value="{{$salary->payroll_employee_salary_taxable}}" readonly>
+                          <input type="number" name="payroll_employee_salary_taxable" class="form-control text-right" value="{{isset($salary->payroll_employee_salary_taxable) ? $salary->payroll_employee_salary_taxable : ''}}" readonly>
                         </div>
                       </div>
                       <div class="form-group">
                         <div class="col-md-12">
                           <small>SSS Salary</small>
-                          <input type="number" name="payroll_employee_salary_sss" class="form-control text-right" value="{{$salary->payroll_employee_salary_sss}}" readonly>
+                          <input type="number" name="payroll_employee_salary_sss" class="form-control text-right" value="{{isset($salary->payroll_employee_salary_sss) ? $salary->payroll_employee_salary_sss : ''}}" readonly>
                         </div>
                       </div>
                       <div class="form-group">
                         <div class="col-md-12">
                           <small>PAGIBIG/HDMF Salary</small>
-                          <input type="number" name="payroll_employee_salary_pagibig" class="form-control text-right" value="{{$salary->payroll_employee_salary_pagibig}}" readonly>
+                          <input type="number" name="payroll_employee_salary_pagibig" class="form-control text-right" value="{{isset($salary->payroll_employee_salary_pagibig) ? $salary->payroll_employee_salary_pagibig : ''}}" readonly>
                         </div>
                       </div>
                       <div class="form-group">
                         <div class="col-md-12">
                           <small>PHILHEALTH Salary</small>
-                          <input type="number" name="payroll_employee_salary_philhealth" class="form-control text-right" value="{{$salary->payroll_employee_salary_philhealth}}" readonly>
+                          <input type="number" name="payroll_employee_salary_philhealth" class="form-control text-right" value="{{isset($salary->payroll_employee_salary_philhealth) ? $salary->payroll_employee_salary_philhealth : ''}}" readonly>
                         </div>
                       </div>
                     </div>
@@ -340,36 +349,36 @@
                   <div class="form-group">
                     <div class="col-md-6">
                       <div class="checkbox">
-                        <label><input type="checkbox" name="is_deduct_sss_default" disabled {{$salary->is_deduct_sss_default == 1 ? 'checked="checked"':''}}>Compute SSS base on default</label>
+                        <label><input type="checkbox" name="is_deduct_sss_default" disabled {{isset($salary->is_deduct_sss_default) ? ($salary->is_deduct_sss_default == 1 ? 'checked="checked"':'') : ''}}>Compute SSS base on default</label>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <small>SSS contribution period</small>
-                      <input type="number" name="deduct_sss_custom" class="form-control text-right" placeholder="0.00" step="any" id="sss-deduction-period" value="{{$salary->deduct_sss_custom}}" disabled>
+                      <input type="number" name="deduct_sss_custom" class="form-control text-right" placeholder="0.00" step="any" id="sss-deduction-period" value="{{isset($salary->deduct_sss_custom) ? $salary->deduct_sss_custom : ''}}" disabled>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="col-md-6">
                       <div class="checkbox">
-                        <label><input type="checkbox" name="is_deduct_philhealth_default"   disabled {{$salary->is_deduct_philhealth_default == 1 ? 'checked="checked"':''}}>Compute PHILHEALTH base on default</label>
+                        <label><input type="checkbox" name="is_deduct_philhealth_default"   disabled {{isset($salary->is_deduct_philhealth_default) ? ($salary->is_deduct_philhealth_default == 1 ? 'checked="checked"':'') : ''}}>Compute PHILHEALTH base on default</label>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <small>PHILHEALTH contribution per period</small>
-                      <input type="number" name="deduct_philhealth_custom" class="form-control text-right" placeholder="0.00" step="any" id="philhealth-deduction-period" value="{{$salary->deduct_philhealth_custom}}" disabled>
+                      <input type="number" name="deduct_philhealth_custom" class="form-control text-right" placeholder="0.00" step="any" id="philhealth-deduction-period" value="{{isset($salary->deduct_philhealth_custom) ? $salary->deduct_philhealth_custom : ''}}" disabled>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="col-md-6">
                       <div class="checkbox">
-                        <label><input type="checkbox" name="is_deduct_pagibig_default" disabled {{$salary->is_deduct_pagibig_default == 1 ? 'checked="checked"':''}}>Compute PAGIBIG base on default</label>
+                        <label><input type="checkbox" name="is_deduct_pagibig_default" disabled {{isset($salary->is_deduct_pagibig_default)  ? ($salary->is_deduct_pagibig_default == 1 ? 'checked="checked"':'') : ''}}>Compute PAGIBIG base on default</label>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <small>PAGIBIG contribution per period</small>
-                      <input type="number" name="deduct_pagibig_custom" class="form-control text-right" placeholder="0.00" step="any" id="pagibig-deduction-period" value="{{$salary->deduct_pagibig_custom}}" disabled>
+                      <input type="number" name="deduct_pagibig_custom" class="form-control text-right" placeholder="0.00" step="any" id="pagibig-deduction-period" value="{{isset($salary->deduct_pagibig_custom) ? $salary->deduct_pagibig_custom : ''}}" disabled>
                     </div>
                   </div>
                   <div class="form-group">

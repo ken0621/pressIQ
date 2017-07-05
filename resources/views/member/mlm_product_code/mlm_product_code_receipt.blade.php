@@ -38,9 +38,17 @@
                 <table class="table table-condensed">
                     <thead style="text-transform: uppercase">
                         <tr>
-                            <th>Invoice ID</th>
+                            <th>Invoice ID 
+                                <a class="filter_default" href="javascript:" @if($date_filter == "default") style="font-size: 25px;" @else style="font-size: 20px;" @endif onclick="sort_by_default()">↓</a> 
+                            </th>
+
                             <th>Customer Name</th>
-                            <th>Invoice Date Created</th>
+
+                            <th>Invoice Date Created
+                                <a class="filter_asc"  href="javascript:" @if($date_filter == "asc") style="font-size: 25px;" @else style="font-size: 20px;" @endif onclick="sort_by_asc()">↑</a>   
+                                <a class="filter_desc" href="javascript:" @if($date_filter == "desc") style="font-size: 25px;" @else style="font-size: 20px;" @endif onclick="sort_by_desc()">↓</a>
+                            </th>
+
                             <th></th>
                         </tr>
                     </thead>
@@ -94,6 +102,7 @@
     @if($invoice != null)
         append_to('/member/mlm/product_code/receipt/view/{{$invoice}}')
     @endif
+    var filter_date = "asc";
     function append_to(link)
     {
         // $('.append_receipt')..
@@ -103,8 +112,75 @@
     function search_email(ito)
     {
         var search = $(ito).val();
-        var link ='/member/mlm/product_code/receipt?search_name=' + search + ' #invoice_append';
+        var link ='/member/mlm/product_code/receipt?date_filter='+filter_date+'search_name=' + search + ' #invoice_append';
         $('#invoice_append').load(link);
+    }
+
+    function sort_by_asc()
+    {
+        // alert(123);
+        // $(".filter_asc").unbind("click");
+        // $(".filter_asc").bind( "click", function() 
+        // {
+            var search_value = $(".search_email").val();
+            filter_date = "asc";
+
+            $(".modal-loader").removeClass("hidden");
+            $('.filter_asc').css('font-size','25px');
+            $('.filter_desc').css('font-size','20px');
+            $('.filter_default').css('font-size','20px');
+
+            var link ='/member/mlm/product_code/receipt?date_filter='+filter_date+'&search_name=' + search_value + ' #invoice_append';
+            $('#invoice_append').load(link,function()
+            {
+                $(".modal-loader").addClass("hidden");
+            });
+
+        // });
+    }
+
+    function sort_by_desc()
+    {
+        // $(".filter_desc").unbind("click");
+        // $(".filter_desc").bind( "click", function() 
+        // {
+            var search_value = $(".search_email").val();
+
+            filter_date = "desc";
+            $(".modal-loader").removeClass("hidden");
+            $('.filter_asc').css('font-size','20px');
+            $('.filter_desc').css('font-size','25px');
+            $('.filter_default').css('font-size','20px');
+
+            var link ='/member/mlm/product_code/receipt?date_filter='+filter_date+'&search_name=' + search_value + ' #invoice_append';
+            
+            $('#invoice_append').load(link,function()
+            {
+                $(".modal-loader").addClass("hidden");
+            });
+        // });
+    }
+
+    function sort_by_default()
+    {
+        // $(".filter_desc").unbind("click");
+        // $(".filter_desc").bind( "click", function() 
+        // {
+            var search_value = $(".search_email").val();
+
+            filter_date = "default";
+            $(".modal-loader").removeClass("hidden");
+            $('.filter_asc').css('font-size','20px');
+            $('.filter_desc').css('font-size','20px');
+            $('.filter_default').css('font-size','25px');
+
+            var link ='/member/mlm/product_code/receipt?date_filter='+filter_date+'&search_name=' + search_value + ' #invoice_append';
+           
+            $('#invoice_append').load(link,function()
+            {
+                $(".modal-loader").addClass("hidden");
+            });
+        // });
     }
 </script>
 <script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>

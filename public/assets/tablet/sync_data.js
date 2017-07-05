@@ -2,6 +2,7 @@ var sync_data = new sync_data();
 var db = openDatabase("my168shop", "1.0", "Address Book", 200000); 
 var query = "";
 var dataset_from_browser = null; 
+var all_table = null;
 function sync_data()
 {
 	init();
@@ -15,11 +16,49 @@ function sync_data()
 	}
 	function document_ready()
 	{
-	    // action_click_sync();
-	    action_click_test_update_shop();
+	   // action_click_sync();
+	   action_click_test_update_shop();
 	   query_create_table();
 	   insert_sample();
+       all_table();
+       action_web_browser_sync_data();
 	}
+    function all_table()
+    {
+        all_table[0] = "tbl_shop";
+        all_table[0] = "tbl_category";
+    }
+    function action_web_browser_sync_data()
+    {
+        $(."web-to-browser-sync-data").unbind("click");
+        $(."web-to-browser-sync-data").bind("click", function()
+        {
+            $.ajax({
+                url : "/tablet/sync_data/shop",
+                dataType: "json",
+                data : {},
+                type : "get",
+                success : function(data)
+                {
+                    // console.log(data);
+                    db.transaction(function (tx)
+                    {
+                        $(data).each(function(a, b)
+                        {
+                            query = data[a];
+                            console.log(query);
+                            tx.executeSql(query,[], function(txt, result)
+                            {
+                                console.log(result);    
+                            },
+                            onError);               
+                        });
+                        // createTableName($data);
+                    });
+                }
+            });
+        });
+    }
 	function query_create_table()
 	{
 	    var query = [];
@@ -84,8 +123,8 @@ function sync_data()
     function action_click_test_update_shop()
     {
         $(".update-sync-data").unbind("click");
-            $(".update-sync-data").bind("click", function()
-            {
+        $(".update-sync-data").bind("click", function()
+        {
             var datetime = getDateNow();
             console.log(datetime);
             db.transaction(function (tx)
@@ -182,30 +221,7 @@ function sync_data()
         $(".sync-data").unbind("click");
         $(".sync-data").bind("click", function()
         {
-        	$.ajax({
-        		url : "/tablet/sync_data/shop",
-        		dataType: "json",
-        		data : {},
-        		type : "get",
-        		success : function(data)
-        		{
-        			// console.log(data);
-        			db.transaction(function (tx)
-        			{
-        				$(data).each(function(a, b)
-        				{
-        					query = data[a];
-        					console.log(query);
-        					tx.executeSql(query,[],	function(txt, result)
-        					{
-        						console.log(result);	
-        					},
-        					onError);				
-        				});
-            			// createTableName($data);
-        			});
-        		}
-        	});
+        	
         });
 	}
     function createTableName(query)

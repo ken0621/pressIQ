@@ -47,6 +47,7 @@
 		</form>
 
 		<div class="form-group text-center">
+			<button type="button" class="btn btn-primary web-to-browser-sync-data">WEB TO BROWSER SYNC</button>
 			<button type="button" class="btn btn-primary sync-data">SYNC</button>
 			<button type="button" class="btn btn-primary update-sync-data">UPDATE DATA</button>
 		</div>

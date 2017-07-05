@@ -22,10 +22,15 @@
         <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#archived"><i class="fa fa-trash"></i> Archived Items</a></li>
     </ul>
     <div class="search-filter-box">
-        <div class="col-md-4 col-md-offset-4" style="padding: 10px">
+        <div class="col-md-4" style="padding: 10px">
             <div class="input-group">
                 <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
                 <input type="text" class="form-control search_email" placeholder="Search by email" aria-describedby="basic-addon1" onchange="search_email(this)">
+            </div>
+        </div>  
+        <div class="col-md-2" style="padding: 10px">
+            <div class="input-group">
+                <input type="text" class="datepicker form-control input-sm" placeholder="Filter to (date)" name="inv_date" value=""/>
             </div>
         </div>  
     </div>

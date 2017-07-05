@@ -137,6 +137,43 @@ class TabletSyncController extends Controller
             }
         }
 
+        if($table == "tbl_customer")
+        {
+            $data = Tbl_customer::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_customer (customer_id, shop_id, country_id, title_name, first_name, middle_name, suffix_name, email, password, company, b_day,profile,IsWalkin, created_date, archived, ismlm,mlm_username,tin_number,is_corporate,approved,create_at,updated_at) VALUES " . "(".$value->customer_id.",'".$value->shop_id."','".$value->country_id."','".$value->title_name."','".$value->first_name."','".$value->middle_name."','".$value->suffix_name."','".$value->email."','".$value->password."','".$value->company."','".$value->b_day."','".$value->profile."','".$value->IsWalkin."','".$value->created_date."','".$value->archived."','".$value->ismlm."','".$value->mlm_username."','".$value->tin_number."','".$value->is_corporate."','".$value->approved."','".$value->create_at."','".$value->updated_at."')";
+            }
+        }
+
+        if($table == "tbl_customer_address")
+        {
+            $data = Tbl_customer_address::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_customer_address (customer_address_id, customer_id , country_id, customer_state, customer_city, customer_zipcode, customer_street, purpose, archived, created_at, updated_at) VALUES " . "(".$value->customer_address_id.",'".$value->customer_id."','".$value->country_id."','".$value->customer_state."','".$value->customer_city."','".$value->customer_zipcode."','".$value->customer_street."','".$value->purpose."','".$value->archived."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+
+        if($table == "tbl_customer_attachment")
+        {
+            $data = Tbl_customer_attachment::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_customer_attachment (customer_attachment_id, customer_id , customer_attachment_path, customer_attachment_name, customer_attachment_extension, mime_type, archived, created_at, updated_at) VALUES " . "(".$value->customer_attachment_id.",'".$value->customer_id."','".$value->customer_attachment_path."','".$value->customer_attachment_name."','".$value->customer_attachment_extension."','".$value->mime_type."','".$value->archived."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+
+        if($table == "tbl_customer_invoice")
+        {
+            //17
+            $data = Tbl_customer_invoice::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_customer_invoice (inv_id, new_inv_id , inv_shop_id, inv_customer_id, inv_customer_email, inv_customer_billing_address, inv_terms_id, inv_date, inv_due_date,inv_message,inv_memo,inv_discount_type,inv_discount_value,ewt,taxable,inv_subtotal_price,inv_overall_price,inv_payment_applied,inv_is_paid,inv_custom_field_id,date_created,credit_memo_id,is_sales_receipt,sale_receipt_cash_account,created_at,updated_at) VALUES " . "(".$value->inv_id.",'".$value->new_inv_id."','".$value->inv_shop_id."','".$value->inv_customer_id."','".$value->inv_customer_email."','".$value->inv_customer_billing_address."','".$value->inv_terms_id."','".$value->inv_date."','".$value->inv_due_date."','".$value->inv_message."','".$value->inv_memo."','".$value->inv_discount_type."','".$value->inv_discount_value."','".$value->ewt."','".$value->taxable."','".$value->inv_subtotal_price."','".$value->inv_overall_price."','".$value->inv_payment_applied."','".$value->inv_is_paid."','".$value->inv_custom_field_id."','".$value->date_created."','".$value->credit_memo_id."','".$value->is_sales_receipt."','".$value->sale_receipt_cash_account."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+
         return json_encode($return);
     }
     public function sync_update()

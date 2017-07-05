@@ -59,6 +59,10 @@
                 z-index: 100;
             }
         }
+        .header-nav .header-nav-top .holder .linya
+        {
+            width: 2px;
+        }
         </style>
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
@@ -83,8 +87,8 @@
                     </a>
                 </div>    
                 @endif
-                <!-- <div class="holder"><div class="linya"></div></div> -->
-                <!-- <div class="holder"><a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> My Cart</a></div> -->
+                <div class="holder"><div class="linya"></div></div>
+                <div class="holder"><a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> My Cart</a></div>
                 <div class="holder"><div class="linya"></div></div>
     			<div class="holder"><a href="/checkout"><i class="fa fa-check" aria-hidden="true"></i> Checkout</a></div>
 	    		<div class="holder"><div class="linya"></div></div>
@@ -94,12 +98,12 @@
                 <div class="holder"><div class="linya"></div></div>
                 <div class="holder"><a href="https://loadcentral.net">eLOADING BUSINESS</a></div>
                 <div class="holder"><div class="linya"></div></div>
-                <div class="holder" style="margin-left: 16px; margin-right: 16px;"><a href="http://tour.philtechglobalinc.com">Airline Ticketing</a></div>
+                <div class="holder"><a href="http://tour.philtechglobalinc.com">Airline Ticketing</a></div>
                 <div class="holder"><div class="linya"></div></div>
                 <div class="holder"><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a></div>
                 <div class="holder"><div class="linya"></div></div>
                 <div class="holder"><a href="https://philtechglobalinc.vmoney.com">E-money</a></div>
-                <!-- <div class="holder"><div class="linya"></div></div> -->
+                <div class="holder"><div class="linya"></div></div>
     		</div>
     	</div>
     	<div class="header-nav-middle">

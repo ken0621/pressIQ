@@ -219,12 +219,21 @@ class TabletSyncController extends Controller
             }
         }
 
-         if($table == "tbl_inventory_slip")
+        if($table == "tbl_inventory_slip")
         {
             $data = Tbl_inventory_slip::get();
             foreach ($data as $key => $value) 
             {
-                $return[$key] = "INSERT INTO tbl_inventory_slip (inventory_slip_id, inventory_slip_id_sibling, inventory_reason, warehouse_id, inventory_remarks, inventory_slip_date, archived, inventory_slip_shop_id, slip_user_id,inventory_slip_status,inventroy_source_reason,inventory_source_id,inventory_source_name,inventory_slip_consume_refill,inventory_slip_consume_cause,inventory_slip_id,created_at,updated_at) VALUES " . "(".$value->inventory_slip_id.",'".$value->inventory_slip_id_sibling."','".$value->inventory_reason."','".$value->warehouse_id."','".$value->inventory_remarks."','".$value->inventory_slip_date."','".$value->archived."','".$value->inventory_slip_shop_id."','".$value->slip_user_id."','".$value->inventory_slip_status."','".$value->inventroy_source_reason."','".$value->inventory_source_id."','".$value->inventory_source_name."','".$value->inventory_slip_consume_refill."','".$value->inventory_slip_consume_cause."','".$value->inventory_slip_id."','".$value->created_at."','".$value->updated_at."')";
+                $return[$key] = "INSERT INTO tbl_inventory_slip (inventory_slip_id, inventory_slip_id_sibling, inventory_reason, warehouse_id, inventory_remarks, inventory_slip_date, archived, inventory_slip_shop_id, slip_user_id,inventory_slip_status,inventroy_source_reason,inventory_source_id,inventory_source_name,inventory_slip_consume_refill,inventory_slip_consume_cause,inventory_slip_consumer_id,created_at,updated_at) VALUES " . "(".$value->inventory_slip_id.",'".$value->inventory_slip_id_sibling."','".$value->inventory_reason."','".$value->warehouse_id."','".$value->inventory_remarks."','".$value->inventory_slip_date."','".$value->archived."','".$value->inventory_slip_shop_id."','".$value->slip_user_id."','".$value->inventory_slip_status."','".$value->inventroy_source_reason."','".$value->inventory_source_id."','".$value->inventory_source_name."','".$value->inventory_slip_consume_refill."','".$value->inventory_slip_consume_cause."','".$value->inventory_slip_consumer_id."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+
+        if($table == "tbl_item")
+        {
+            $data = Tbl_item::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_item (item_id, item_id, item_name, item_sku, item_sales_information, item_purchasing_information, item_img, item_quantity, item_reorder_point,item_price,item_cost,item_sale_to_customer,item_purchase_from_supplier,item_type_id,item_category_id,item_asset_account_id,item_income_account_id,item_expense_account_id,item_date_tracked,item_date_created,item_date_archived,archived,shop_id,item_barcode,has_serial_number,item_measurement_id,item_vendor_id,item_manufacturer_id,packing_size,item_code,item_show_in_mlm,promo_price,start_promo_date,end_promo_date,bundle_group,created_at,updated_at) VALUES " . "(".$value->item_id.",'".$value->item_id."','".$value->item_name."','".$value->item_sku."','".$value->item_sales_information."','".$value->item_purchasing_information."','".$value->item_img."','".$value->item_quantity."','".$value->item_reorder_point."','".$value->item_price."','".$value->item_cost."','".$value->item_sale_to_customer."','".$value->item_purchase_from_supplier."','".$value->item_type_id."','".$value->item_category_id."','".$value->item_asset_account_id."','".$value->item_income_account_id."','".$value->item_expense_account_id."','".$value->item_date_tracked."','".$value->item_date_created."','".$value->item_date_archived."','".$value->archived."','".$value->shop_id."','".$value->item_barcode."','".$value->has_serial_number."','".$value->item_measurement_id."','".$value->item_vendor_id."','".$value->item_manufacturer_id."','".$value->packing_size."','".$value->item_code."','".$value->item_show_in_mlm."','".$value->promo_price."','".$value->start_promo_date."','".$value->end_promo_date."','".$value->bundle_group."','".$value->created_at."','".$value->updated_at."')";
             }
         }
 

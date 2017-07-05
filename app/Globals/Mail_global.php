@@ -29,12 +29,12 @@ class Mail_global
 
         if(isset($data['template']->header_image))
         {
-            if (!File::exists($data['template']->header_image))
+            if (!File::exists(public_path() . $data['template']->header_image))
             {
                 $data['template']->header_image = null;
             }
-        }
-        
+        }   
+       
         // $data['Mail_a_driver'] = Config::get('mail.driver');
         // $data['Mail_a_host'] = Config::get('mail.host');
         // $data['Mail_a_port'] = Config::get('mail.port');

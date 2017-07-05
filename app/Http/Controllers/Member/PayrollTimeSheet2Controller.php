@@ -87,12 +87,20 @@ class PayrollTimeSheet2Controller extends Member
 		$daily_income = $data["daily_info"]->compute->total_day_income;
 		
 		$return["income"] = $daily_income;
-		$return["string_income"] = $this->timesheet_daily_income_to_string($timesheet_db->payroll_time_sheet_id, $return["income"]);
+		$return["string_income"] = $this->timesheet_daily_income_to_string($timesheet_db->payroll_time_sheet_id, $return["income"], $data["daily_info"]->shift_approved);
 		echo json_encode($return);
 	}
-	public function timesheet_daily_income_to_string($timesheet_id, $income)
+	public function timesheet_daily_income_to_string($timesheet_id, $income, $approved)
 	{
-		$string = '<a onclick="action_load_link_to_modal(\'/member/payroll/company_timesheet_day_summary/' . $timesheet_id . '\', \'lg\')" href="javascript:" class="daily-salary" amount="' . $income . '">PHP ' . number_format($income, 2) . '</a>';
+		if($approved == true)
+		{
+			$string = '<a onclick="action_load_link_to_modal(\'/member/payroll/company_timesheet_day_summary/' . $timesheet_id . '\', \'lg\')" href="javascript:" class="daily-salary" amount="' . $income . '">PHP ' . number_format($income, 2) . '</a>';	
+		}
+		else
+		{
+			$string = '<a style="color: red;" onclick="action_load_link_to_modal(\'/member/payroll/company_timesheet_day_summary/' . $timesheet_id . '\', \'lg\')" href="javascript:" class="daily-salary" amount="' . $income . '">PHP ' . number_format($income, 2) . '</a>';
+		}
+		
 		return $string;
 	}
 	public function timesheet_info($company_period, $employee_id) 
@@ -104,6 +112,17 @@ class PayrollTimeSheet2Controller extends Member
 		while($from <= $to)
 		{
 			$timesheet_db = $this->timesheet_info_db($employee_id, $from);
+			
+			/* CREATE TIMESHEET DB IF EMPTY */
+			if(!$timesheet_db)
+			{
+				$insert = null;
+				$insert["payroll_employee_id"] = $employee_id;
+				$insert["payroll_time_date"] = $from;
+				Tbl_payroll_time_sheet::insert($insert);
+				$timesheet_db =$this->timesheet_info_db($employee_id, $from);
+			}
+			
 			$_timesheet[$from] = new stdClass();
 			$_timesheet[$from]->payroll_time_sheet_id = $timesheet_db->payroll_time_sheet_id;
 			$_timesheet[$from]->date = Carbon::parse($from)->format("Y-m-d");
@@ -113,9 +132,9 @@ class PayrollTimeSheet2Controller extends Member
 			$_timesheet[$from]->daily_info = $this->timesheet_process_daily_info($employee_id, $from, $timesheet_db);
 			$from = Carbon::parse($from)->addDay()->format("Y-m-d");
 		}
+		
 		//dd($_timesheet);
 		return $_timesheet;
-		
 	}
 
 	public function timesheet_process_in_out($timesheet_db)
@@ -188,19 +207,48 @@ class PayrollTimeSheet2Controller extends Member
 			$return->shift_approved = true;
 		}
 		
-		$late_grace_time = "00:00:00";
-		$grace_time_rule_late = "per_shift";
-		$overtime_grace_time = "00:00:00";
-		$grace_time_rule_overtime = "per_shift";
-		$day_type = "regular";
-		$is_holiday = "not_holiday";
-		$leave = "00:00:00";
-		$leave_fill_late = 0;
-		$leave_fill_undertime = 0;
+		$return->late_grace_time = $late_grace_time = "00:00:00";
+		$return->grace_time_rule_late = $grace_time_rule_late = "per_shift";
+		$return->overtime_grace_time = $overtime_grace_time = "00:00:00";
+		$return->grace_time_rule_overtime = $grace_time_rule_overtime = "per_shift";
+		$return->day_type = $day_type = "regular";
+		$return->is_holiday = $is_holiday = "not_holiday";
+		$return->leave = $leave = "00:00:00";
+		$return->leave_fill_date = $leave_fill_late = 0;
+		$return->leave_fill_undertime = $leave_fill_undertime = 0;
+		$return->default_remarks = $this->timesheet_default_remarks($return);
+		
 		$return->time_output = Payroll2::compute_time_mode_regular($return->clean_shift, $_shift_raw, $late_grace_time, $grace_time_rule_late, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday , $leave, $leave_fill_late, $leave_fill_undertime, false);
 		$return->compute = Payroll2::compute_income_day_pay($return->time_output, 800, 1);
 		// dd($return);
 		return $return;
+	}
+	public function timesheet_default_remarks($data)
+	{
+		$remarks = null;
+		if($data->day_type == "rest_day")
+		{
+			$remarks[] = "REST DAY";
+		}
+		
+		if($data->day_type == "extra_day")
+		{
+			$remarks[] = "EXTRA DAY";
+		}
+		
+		if($data->is_holiday != "not_holiday")
+		{
+			$remarks[] = "HOLIDAY";
+		}
+		if($remarks)
+		{
+			return implode(",", $remarks);
+		}
+		else
+		{
+			return "";
+		}
+		
 	}
 	public function timesheet_process_in_out_default()
 	{

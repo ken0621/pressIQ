@@ -42,6 +42,7 @@
             <th>Ordered By</th>
             <th>E-Mail</th>
             <th>Invoice #</th>
+            <th width="200px">Invoice Date</th>
             <th>Contact No</th>
             <th>Birthday</th>
             <th>Street</th>
@@ -67,6 +68,7 @@
               <th>{{ $order->first_name . " " . $order->last_name}}</th>
               <td>{{ $order->email }}</td>
               <td>{{ $order->invoice_number }}</td>
+              <td>{{ $order->slot_created_date }}</td>
               <td>{{ $order->customer_mobile }}</td>
               <td>{{ date('M d, Y',strtotime($order->b_day)) }}</td>
               <td>{{ $order->customer_street }}</td>

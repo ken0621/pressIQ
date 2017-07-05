@@ -68,8 +68,6 @@ class Tbl_payroll_employee_contract extends Model
 			$payroll_employee_contract_status[7] = 7;
 		}
 
-
-
 		$query->join('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')
 			  ->leftjoin('tbl_payroll_department','tbl_payroll_department.payroll_department_id','=','tbl_payroll_employee_contract.payroll_department_id')
 			  ->leftjoin('tbl_payroll_jobtitle','tbl_payroll_jobtitle.payroll_jobtitle_id','=','tbl_payroll_employee_contract.payroll_jobtitle_id')
@@ -81,7 +79,17 @@ class Tbl_payroll_employee_contract extends Model
 			  })
 			  ->whereIn('payroll_employee_contract_status',$payroll_employee_contract_status)
 			  ->where('tbl_payroll_employee_basic.shop_id', $shop_id)
-			  ->where('tbl_payroll_employee_contract.payroll_employee_contract_date_hired','<=',$date);
+			  ->where('tbl_payroll_employee_contract.payroll_employee_contract_archived',0);
+
+
+			  $separated_status[0] = 8;
+			  $separated_status[1] = 9;
+			  $containsSearch = count(array_intersect($separated_status, $payroll_employee_contract_status)) == count($separated_status);
+
+			  if(!$containsSearch)
+			  {
+			  	$query->where('tbl_payroll_employee_contract.payroll_employee_contract_date_hired','<=',$date);
+			  }
 
 			  if($company_id != 0)
 			  {

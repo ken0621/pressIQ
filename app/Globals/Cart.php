@@ -204,6 +204,7 @@ class Cart
                 }
                 if(Session::get('mlm_member') != null)
                 {
+
                     $session = Session::get('mlm_member');
                     if($session['slot_now'])
                     {
@@ -787,8 +788,10 @@ class Cart
         if (isset(Self::get_cart($shop_id)["cart"])) 
         {
             $data = Cart::customer_set_info_ec_order($shop_id, $data, $customer_information);
+            
             /* VALIDATIONS */
             $check_account = Cart::customer_set_info_check_account($shop_id, $data["new_account"], $data["tbl_customer"]['email'], $data["tbl_customer"]["password"]);
+            
             $check_name = "success";
             $check_address = "success";
             $check_contact = "success";
@@ -940,7 +943,17 @@ class Cart
             }
             else
             {
-                Mlm_member::add_to_session($shop_id, $check_exist->customer_id);
+                $slot_session = Mlm_member::get_session_slot();
+                if($slot_session)
+                {
+                    Mlm_member::add_to_session_edit($shop_id, $check_exist->customer_id, $slot_session->slot_id);
+                }
+                else
+                {
+                    Mlm_member::add_to_session($shop_id, $check_exist->customer_id);
+                } 
+                
+
                 return "success";
             }
         }

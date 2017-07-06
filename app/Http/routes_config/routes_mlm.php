@@ -43,6 +43,7 @@ Route::post('/mlm/repurchase/checkout/submit', 'Mlm\MlmRepurchaseController@chec
 Route::get('/mlm/vouchers', 'Mlm\MlmVouchersController@index'); 
 Route::get('/mlm/cheque', 'Mlm\MlmChequeController@index'); 
 Route::any('/mlm/changeslot', 'Mlm\Mlm@changeslot');
+Route::any('/mlm/set_eon', 'Mlm\Mlm@set_eon');
 
 Route::get('/mlm/cheque', 'Mlm\MlmChequeController@index'); 
 Route::get('/mlm/wallet', 'Mlm\MlmTransferController@index'); 

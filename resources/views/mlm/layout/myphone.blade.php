@@ -509,6 +509,9 @@
         var slot_id = $(x).attr("slot-id");
         $('.change-slot-form[slot-id="' + slot_id + '"]').submit();
       }
+      $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip(); 
+        });
       </script>
 
       @yield('js')   

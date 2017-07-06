@@ -171,10 +171,19 @@ class Mlm extends Controller
         $customer_id = Self::$customer_id;
         $new_slot_id = Request::input('slot_id'); 
         $count = Tbl_mlm_slot::where('slot_owner', $customer_id)->where('slot_id', $new_slot_id)->count();   
+        $ajax_action = Request::input('ajax_action');
         if($count == 0)
         {
             $data['response_status'] = "warning";
             $data['message'] = "You don't own the slot";
+            
+            if($ajax_action == 1)
+            {
+                $data['message'] ="You don't own the slot";
+                $data['status'] = 'warning';
+                return json_encode($data);
+            }
+        
             return Redirect::back();
         }
         else
@@ -182,9 +191,44 @@ class Mlm extends Controller
             Mlm_member::add_to_session_edit(Self::$shop_id, $customer_id, $new_slot_id);
             $data['response_status'] = "success";
             $data['message'] = "Slot Changed";
+            
+            if($ajax_action == 1)
+            {
+                $data['message'] ="Change Slot";
+                $data['status'] = 'success_change_slot_v2';
+                return json_encode($data);
+            }
+            
+            
             return Redirect::to('/mlm');
         }
+        
+        
         return json_encode($data);
+    }
+    public function set_eon()
+    {
+        $slot_id = Request::input('slot_id');
+        $slot_eon = Request::input('slot_eon');
+        
+        $count_used_slot_eon = Tbl_mlm_slot::where('slot_eon', $slot_eon)->count();
+        
+        if($count_used_slot_eon == 0)
+        {
+            $update['slot_eon']   = $slot_eon;
+            Tbl_mlm_slot::where('slot_id', $slot_id)->update($update);
+            
+            $data['status'] = 'success_change_slot';
+            $data['message'] = 'Eon Card Updated';
+            
+            return json_encode($data);
+        }
+        else
+        {
+            $data['response_status'] = 'warning_2';
+            $data['error'] = 'Eon card already used';
+            return json_encode($data);
+        }
     }
     public static function get_customer_info($customer_id)
     {
@@ -226,13 +270,12 @@ class Mlm extends Controller
             {
                 if($encashment_settings->enchasment_settings_cheque_edit == 0)
                 {
-                    //encashment_bank_deposit_id
-                    
                     if(Self::$slot_id != null)
                     {
                         if($customer_payout->encashment_bank_deposit_id == 0)
                         {
-                            Session::flash('warning', "Please set your encashment settings at the Wallet Encashment tab.");
+                            // uncomment if needed
+                            // Session::flash('warning', "Please set your encashment settings at the Wallet Encashment tab.");
                         }
                         else
                         {
@@ -243,7 +286,8 @@ class Mlm extends Controller
                             }
                             else
                             {
-                                Session::flash('warning', "Please set your encashment settings at the Wallet Encashment tab.");
+                                // uncomment if needed
+                                // Session::flash('warning', "Please set your encashment settings at the Wallet Encashment tab.");
                             }
                         }
                     }

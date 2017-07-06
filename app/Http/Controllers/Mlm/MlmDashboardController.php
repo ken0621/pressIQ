@@ -87,7 +87,6 @@ class MlmDashboardController extends Mlm
             $data['count_per_level'][9] = 512;
             $data['count_per_level'][10] = 1024;
             $data['count_per_level'][11] = 2048;
-            // $data['count_per_level'][12] = 4096;
 
             $data['new_member'] = Tbl_mlm_slot::where('slot_sponsor', Self::$slot_id)
             ->customer()

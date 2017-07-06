@@ -83,7 +83,7 @@
             <tbody>
               @foreach($_order as $order)
               <tr>
-                <td>{{ $order->item_id }}</td>
+                <td>{{ $order->item_code }}</td>
                 <td>{{ $order->evariant_item_label }}</td>
                 <td>{{ $order->quantity }}</td>
                 <td>PHP {{ number_format($order->price, 2) }}</td>

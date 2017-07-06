@@ -968,8 +968,9 @@ class MemberController extends Controller
                 
                 $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $order_id)
                                                    ->leftJoin('tbl_ec_variant', 'tbl_ec_order_item.item_id', '=', 'evariant_id')
+                                                   ->leftJoin('tbl_item', 'tbl_ec_variant.evariant_item_id', '=', 'tbl_item.item_id')
                                                    ->get();
-
+                
                 if ($data['_order']) 
                 {
                     $data['summary'] = [];

@@ -35,15 +35,37 @@ class MlmSlotsController extends Mlm
             {
                 $data["enabled_upgrade_slot"] = 0;
             }
-            $data['all_slots_p']       = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->membership()->paginate(20);
+            $data['all_slots_p']       = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->membership()->paginate(100);
             foreach($data['all_slots_p'] as $key => $value)
             {
-                $data['sum_wallet'][$key] = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $value->slot_id)->sum('wallet_log_amount');               
+                $data['sum_wallet'][$key] = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $value->slot_id)->sum('wallet_log_amount'); 
+                $data['tree_count'][$key] = Tbl_tree_placement::where('placement_tree_parent_id', $value->slot_id)->count(); 
             }
+            $data['slot_now_active'] = Self::$slot_id;
             $data['active']            = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->where('slot_defaul', 1)->first();
             $data['_code']             = Tbl_membership_code::where('customer_id', Self::$customer_id)->where('used', 0)->get();
             $data["all_slots_show"]    = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->membership()->get();
     		$data["_item_code"]        = Tbl_item_code::where("customer_id",Self::$customer_id)->where("used",0)->where("blocked",0)->where("archived",0)->get();
+    		
+    		
+    		$data['count_per_level'][1] = 2;
+            $data['count_per_level'][2] = 4;
+            $data['count_per_level'][3] = 8;
+            $data['count_per_level'][4] = 16;
+            $data['count_per_level'][5] = 32;
+            $data['count_per_level'][6] = 64;
+            $data['count_per_level'][7] = 128;
+            $data['count_per_level'][8] = 256;
+            $data['count_per_level'][9] = 512;
+            $data['count_per_level'][10] = 1024;
+            $data['count_per_level'][11] = 2048;
+            
+            $data['count_per_level_sum'] = 0;
+            foreach($data['count_per_level'] as $key => $value)
+            {
+                $data['count_per_level_sum'] += $value;
+            }
+            
     		return view('mlm.slots.index', $data);
     }
     public function set_nickname()
@@ -75,7 +97,7 @@ class MlmSlotsController extends Mlm
                             $update_new['slot_nick_name'] = $nickname;
                             Tbl_mlm_slot::where('slot_owner', $slot->slot_owner)->where('slot_id', $slot->slot_id)->update($update_new);
                             $data['message'] ='Slot Nickname/Default slot Changed!';
-                            $data['status'] = 'success';
+                            $data['status'] = 'success_change_slot';
                         }
                         else
                         {

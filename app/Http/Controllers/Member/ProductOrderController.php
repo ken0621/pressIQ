@@ -567,6 +567,10 @@ class ProductOrderController extends Member
         $data['headers']['method_name'] = 'Payment Method';
         $data['headers']['name'] = 'Customer Name';
         $data['headers']['mlm_username'] = 'Username';
+        $data['headers']['first_name'] = 'First Name';
+        $data['headers']['middle_name'] = 'Middle Name';
+        $data['headers']['last_name'] = 'Last Name';
+        $data['headers']['b_day'] = 'Date of Birth';
         $data['headers']['tin_number'] = 'TIN';
         $data['headers']['email'] = 'Email';
         $data['headers']['slot_no'] = 'Slot #';

@@ -480,12 +480,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <a href="/mlm/wallet" class="subnav-text">
                                 Wallet Logs
                             </a> 
-<!--                             <a href="/mlm/refill" class="subnav-text">
-                                Wallet Refill
-                            </a> 
-                            <a href="/mlm/transfer" class="subnav-text">
-                                Wallet Transfer
-                            </a>  -->
+
+                            @if(isset($shop_info)) 
+                              @if($shop_info->shop_key == "PhilTECH")
+                                <a href="/mlm/refill" class="subnav-text">
+                                    Wallet Refill
+                                </a> 
+                                <a href="/mlm/transfer" class="subnav-text">
+                                    Wallet Transfer
+                                </a> 
+                              @endif
+                            @endif
+
                             <a href="/mlm/encashment" class="subnav-text">
                                 Wallet Encashment
                             </a> 

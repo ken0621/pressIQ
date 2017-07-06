@@ -157,7 +157,7 @@
                                                 @if($product["eprod_detail_image"])
                                                     <img class="detail" src="{{ $product["eprod_detail_image"] }}">
                                                 @endif
-                                                <img class="4-3-ratio" src="{{ get_product_first_image($product) }}">
+                                                <img class="1-1-ratio" src="{{ get_product_first_image($product) }}">
                                             </div>
                                             <div class="name">{{ get_product_first_name($product) }}</div>
                                             <!-- <div class="price-left">P34,000</div> -->
@@ -177,7 +177,7 @@
                             @if(count($product['variant']) > 0)
                                 <div class="holder">
                                     <div class="img">
-                                        <img src="{{ get_product_first_image($product) }}">
+                                        <img class="1-1-ratio" src="{{ get_product_first_image($product) }}">
                                     </div>
                                     <div class="text">
                                         <div class="name">{{ get_product_first_name($product) }}</div>

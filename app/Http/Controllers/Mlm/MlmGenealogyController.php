@@ -410,7 +410,7 @@ class MlmGenealogyController extends Mlm
 
             $str_slot = '<span class="downline parent parent-reference PS SILVER" x="' . $slot_info->slot_id . '">';    
 
-
+            // $level = Tbl_tree_placement::where('placement_tree_parent_id', Self::$slot_id)
 
             if($slot_info->image == "")
             {
@@ -425,7 +425,6 @@ class MlmGenealogyController extends Mlm
                                         </div>
                                         <div>' . $slot_info->slot_status . '</div>
                                         <div>' . "Count - L:".$l." R:".$r.'</div>
-                                        
                                         <div>
                                         </div>
                                     </div>

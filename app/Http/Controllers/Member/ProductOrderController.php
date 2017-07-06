@@ -24,6 +24,7 @@ use App\Models\Tbl_warehouse;
 use App\Models\Tbl_coupon_code;
 use App\Models\Tbl_online_pymnt_method;
 use App\Models\Tbl_mlm_slot;
+use App\Models\Tbl_mlm_slot_wallet_log;
 
 use Excel;
 use DB;
@@ -551,6 +552,13 @@ class ProductOrderController extends Member
                             )
                     
                     ->get();
+        foreach($data['order'] as $key => $value)
+        {
+            $data['order'][$key]->wall_sum_binary = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $value->slot_id)->where('wallet_log_plan', 'DIRECT')->sum('wallet_log_amount'); 
+            $data['order'][$key]->wall_sum_direct = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $value->slot_id)->where('wallet_log_plan', 'BINARY')->sum('wallet_log_amount');
+            $data['order'][$key]->wall_sum = $data['order'][$key]->wall_sum_binary + $data['order'][$key]->wall_sum_direct;
+            
+        }            
         $data['headers']['ec_order_id'] = 'Order ID'; 
         $data['headers']['order_status'] = 'Order Status';
         $data['headers']['invoice_number'] = 'Invoice Number';
@@ -574,6 +582,11 @@ class ProductOrderController extends Member
         $data['headers']['tin_number'] = 'TIN';
         $data['headers']['email'] = 'Email';
         $data['headers']['slot_no'] = 'Slot #';
+        $data['headers']['slot_eon'] = 'Eon Account Number';
+        $data['headers']['wall_sum_binary'] = 'Wallet - Binary';
+        $data['headers']['wall_sum_direct'] = 'Wallet - Direct';
+        $data['headers']['wall_sum'] = 'Total';
+        
         Excel::create('New file', function($excel) use($data) {
 
             $excel->sheet('New sheet', function($sheet) use($data) {

@@ -39,7 +39,8 @@ class MlmSlotsController extends Mlm
             foreach($data['all_slots_p'] as $key => $value)
             {
                 $data['sum_wallet'][$key] = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $value->slot_id)->sum('wallet_log_amount'); 
-                $data['tree_count'][$key] = Tbl_tree_placement::where('placement_tree_parent_id', $value->slot_id)->count(); 
+                $data['tree_count'][$key] = Tbl_tree_placement::where('placement_tree_parent_id', $value->slot_id)
+                                            ->where('placement_tree_level', '<=', 11)->count(); 
             }
             $data['slot_now_active'] = Self::$slot_id;
             $data['active']            = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->where('slot_defaul', 1)->first();

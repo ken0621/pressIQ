@@ -16,6 +16,7 @@ use App\Models\Tbl_tree_placement;
 use App\Models\Tbl_mlm_transfer_slot_log;
 use App\Models\Tbl_item_code;
 use App\Models\Tbl_item_code_transfer_log;
+use App\Models\Tbl_membership_code_transfer_log;
 
 use App\Globals\Mlm_compute;
 use App\Globals\Mlm_member;
@@ -453,7 +454,7 @@ class MlmSlotsController extends Mlm
             else
             {
                 $data["item"]  = $item;
-                $data["_customer"] = Tbl_customer::where('shop_id', Self::$shop_id)->get();
+                $data["_customer"] = Tbl_customer::where('shop_id', Self::$shop_id)->where("customer_id","!=",Self::$customer_id)->get();
             }
         }
         else
@@ -478,7 +479,7 @@ class MlmSlotsController extends Mlm
         $item_activation_code = Request::input("item_activation_code");
         $customer_id          = Request::input("customer_id");
 
-        $customer             = Tbl_customer::where("shop_id",Self::$shop_id)->where("customer_id",$customer_id)->first();
+        $customer             = Tbl_customer::where("shop_id",Self::$shop_id)->where("customer_id",$customer_id)->where("customer_id","!=",Self::$customer_id)->first();
         $item                 = Tbl_item_code::where("item_activation_code",$item_activation_code)->first();
         
         if($customer)
@@ -513,6 +514,105 @@ class MlmSlotsController extends Mlm
                     $update["customer_id"] = $customer_id;
                     Tbl_item_code::where("item_activation_code",$item_activation_code)->update($update);
                     $data["status"] = "success-transfer-prod-code";
+                }
+            }
+            else
+            {
+                $data["message"] = "Code does not exists";
+            }
+        }
+        else
+        {
+            $data["message"] = "Customer does not exists";
+        }
+
+        return json_encode($data);
+    }
+
+    public function transfer_mem_code()
+    {
+        $mem_code_id    = Request::input("mem_code_id");
+        $mem            = Tbl_membership_code::where("membership_code_id",$mem_code_id)->package()->membership()->first();
+        if($mem)
+        {
+            if($mem->used == 1)
+            {
+                $data["message"] = "Code already used";
+            }
+            else if($mem->blocked == 1)
+            {
+                $data["message"] = "Code is blocked";
+            }
+            else if($mem->archived == 1)
+            {
+                $data["message"] = "Code doesn't exists";
+            }
+            else if($mem->customer_id != Self::$customer_id)
+            {
+                $data["message"] = "Code not found.";
+            }
+            else
+            {
+                $data["mem"]       = $mem;
+                $data["_customer"] = Tbl_customer::where('shop_id', Self::$shop_id)->where("customer_id","!=",Self::$customer_id)->get();
+            }
+        }
+        else
+        {
+            $data["message"] = "Code does not exists";
+        }
+
+
+        if(isset($data["message"]))
+        {
+            return json_encode($data["message"]);
+        }
+        else
+        {
+            return view('mlm.slots.transfer_mem_code',$data);
+        }
+    }
+
+    public function transfer_mem_code_post()
+    {
+        $membership_activation_code = Request::input("membership_activation_code");
+        $customer_id                = Request::input("customer_id");
+
+        $customer                   = Tbl_customer::where("shop_id",Self::$shop_id)->where("customer_id","!=",Self::$customer_id)->where("customer_id",$customer_id)->first();
+        $mem                        = Tbl_membership_code::where("membership_activation_code",$membership_activation_code)->first();
+        
+        if($customer)
+        {
+            if($mem)
+            {
+                if($mem->used == 1)
+                {
+                    $data["message"] = "Code already used";
+                }
+                else if($mem->blocked == 1)
+                {
+                    $data["message"] = "Code is blocked";
+                }
+                else if($mem->archived == 1)
+                {
+                    $data["message"] = "Code doesn't exists";
+                }
+                else if($mem->customer_id != Self::$customer_id)
+                {
+                    $data["message"] = "Code not found.";
+                }
+                else
+                {
+                    $insert_log["membership_code_transfer_by"]   = Self::$customer_id;
+                    $insert_log["membership_code_transfer_to"]   = $customer_id;
+                    $insert_log["membership_code_id"]            = $mem->membership_code_id; 
+                    $insert_log["membership_code_transfer_date"] = Carbon::now(); 
+                    Tbl_membership_code_transfer_log::insert($insert_log);
+
+                    
+                    $update["customer_id"] = $customer_id;
+                    Tbl_membership_code::where("membership_activation_code",$membership_activation_code)->update($update);
+                    $data["status"] = "success-transfer-mem-code";
                 }
             }
             else

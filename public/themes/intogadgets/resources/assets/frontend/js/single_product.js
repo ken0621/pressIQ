@@ -65,7 +65,7 @@ function event_slick()
 		arrows: false
 	});
 
-	$('.4-3-ratio').keepRatio({ ratio: 4/3, calculate: 'height' });
+	$('.1-1-ratio').keepRatio({ ratio: 4/3, calculate: 'height' });
 }
 
 function event_select_variation()

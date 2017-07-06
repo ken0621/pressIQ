@@ -362,14 +362,59 @@ class MLM_ProductCodeController extends Member
         }
 
         $shop_id          = $this->user_info->shop_id;
-        $_invoice         = Tbl_item_code_invoice::customer()->orderBy('item_code_invoice_id', 'DESC')->where("tbl_item_code_invoice.shop_id",$shop_id);
+        $_invoice         = Tbl_item_code_invoice::customer()->where("tbl_item_code_invoice.shop_id",$shop_id);
+       
+        // $_invoice         = Tbl_item_code_invoice::customer()->orderBy('item_code_invoice_id', 'DESC')->where("tbl_item_code_invoice.shop_id",$shop_id);
         
         if(Request::input('search_name'))
         {
             $search_email = Request::input('search_name');
             $_invoice  = $_invoice->where("tbl_item_code_invoice.item_code_customer_email","LIKE","%".$search_email."%");
         }
-        $data["_invoice"] = $_invoice->paginate(10);;
+
+        /* FOR FILTERING */
+        if(Request::input('date_filter'))
+        {
+            if(Request::input('date_filter') == "asc")
+            {
+                $_invoice  = $_invoice->orderBy("item_code_date_created","ASC");
+                $date_filter = "asc";
+            }
+            else if(Request::input('date_filter') == "desc")
+            {
+                $_invoice  = $_invoice->orderBy("item_code_date_created","DESC");
+                $date_filter = "desc";
+            }
+            else
+            {
+                $date_filter = "default";
+            }
+        }
+        else
+        {
+            $_invoice  = $_invoice->orderBy('item_code_invoice_id', 'DESC');
+            $date_filter = "default";
+        }
+
+
+        if(Request::input('filter_to'))
+        {
+            $filter_to   = date('Y-m-d 00:00:00',strtotime(Request::input('filter_to')));
+            // dd($filter_to);
+            $_invoice    = $_invoice->where("item_code_date_created",">=",$filter_to);
+        }
+
+        if(Request::input('filter_by'))
+        {
+            $filter_by   = date('Y-m-d 23:59:59',strtotime(Request::input('filter_by')));
+            $_invoice    = $_invoice->where("item_code_date_created","<=",$filter_by);
+        }
+
+
+
+        $data["_invoice"]    = $_invoice->paginate(10);
+        $data["date_filter"] = $date_filter;
+
         // dd($code);
         return view('member.mlm_product_code.mlm_product_code_receipt',$data);   
     }

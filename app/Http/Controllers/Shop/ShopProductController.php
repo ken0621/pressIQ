@@ -81,6 +81,16 @@ class ShopProductController extends Shop
         $get_product = $this->get_product($type, $brand, $search);
         $data["breadcrumbs"] = $get_product["breadcrumbs"];
         $product             = $get_product["get_product"];
+        if($brand)
+        {
+            foreach ($product as $key_brand => $value_brand) 
+            {
+                if(count($value_brand["variant"]) <= 0)
+                {
+                    unset($product[$key_brand]);
+                }
+            }
+        }
         // Count total product
         $data["total_product"] = count($product);
         // Filter Price
@@ -223,7 +233,7 @@ class ShopProductController extends Shop
         $perPage = 12;
         $data["current_count"] = count($product);
         $data["_product"] = self::paginate($product, $perPage);
-        
+        // dd($data);
         return view("product", $data);
     }
     public function paginate($items,$perPage)

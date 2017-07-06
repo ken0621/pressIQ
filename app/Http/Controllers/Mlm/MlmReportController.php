@@ -373,9 +373,11 @@ class MlmReportController extends Mlm
         foreach($data['promotions'] as $key => $value)
         {
             $date = Carbon::parse($value->binary_promotions_start_date)->format('Y-m-d');
+
             $data['current_l'][$key] = Tbl_mlm_binary_report::where('binary_report_slot', Self::$slot_id)
             ->where('binary_report_date', '>=',  $date)
             ->sum('binary_report_s_points_l'); 
+
             $data['current_r'][$key] = Tbl_mlm_binary_report::where('binary_report_slot', Self::$slot_id)
             ->where('binary_report_date', '>=',  $date)
             ->sum('binary_report_s_points_r');
@@ -384,14 +386,15 @@ class MlmReportController extends Mlm
                     ->where('promotions_request_binary_promotions_id', $value->binary_promotions_id)
                     ->count();
 
+            $data['direct_count_a'][$key] = Tbl_mlm_slot::where('slot_sponsor', Self::$slot_id)
+                                            ->where('slot_created_date', '>=', $date)
+                                            ->count(); 
 
             $data['claim_count_account'][$key] =  Tbl_mlm_plan_binary_promotions_log::join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_mlm_plan_binary_promotions_log.promotions_request_slot')
             ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
             ->where('customer_id', Self::$customer_id)
             ->count(); 
         }
-
-        // dd($data);
         $status = Session::get('status');
         if($status != null)
         {
@@ -499,8 +502,6 @@ class MlmReportController extends Mlm
                 $data['status'] = 'error';
                 $data['message'] = 'Invalid warehouse, please contact the administrator';
             }
-            // end transaction
-
         }
         else
         {

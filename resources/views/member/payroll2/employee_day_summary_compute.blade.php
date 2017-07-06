@@ -30,8 +30,8 @@
     @endif
     <tr style="color: #1682ba; font-size: 18px;">
         <td class="text-bold">Total</td>
-        <td class="text-center" style="color: #bbb" width="100px"></td>
-        <td class="text-bold" width="100px">PHP {{ number_format($timesheet_info->compute->total_day_income, 2) }}</td>
+        <td class="text-center" style="color: #bbb" width="120px"></td>
+        <td class="text-bold" width="120px">PHP {{ number_format($timesheet_info->compute->total_day_income, 2) }}</td>
     </tr>
     </tbody>
 </table>

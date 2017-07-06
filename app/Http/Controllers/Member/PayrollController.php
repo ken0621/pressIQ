@@ -819,24 +819,28 @@ class PayrollController extends Member
      {
           // $data['_company'] = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
 
-          $data['_company']  = Payroll::company_heirarchy(Self::shop_id());
-
-          $data['employement_status'] = Tbl_payroll_employment_status::get();
-          $data['tax_status'] = Tbl_payroll_tax_status::get();
-          $data['civil_status'] = Tbl_payroll_civil_status::get();
-          $data['_country'] = Tbl_country::orderBy('country_name')->get();
-          $data['_department'] = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
-          $data['_group'] = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
-          $data['_allowance'] = Tbl_payroll_allowance::sel(Self::shop_id())->orderBy('payroll_allowance_name')->get();
-          $data['_deduction'] = Tbl_payroll_deduction::seldeduction(Self::shop_id())->orderBy('payroll_deduction_name')->get();
-          $data['_leave'] = Tbl_payroll_leave_temp::sel(Self::shop_id())->orderBy('payroll_leave_temp_name')->get();
-          $data['_journal_tag'] = Tbl_payroll_journal_tag::gettag(Self::shop_id())->orderBy('tbl_chart_of_account.account_name')->get();
-          // $data['_shift'] = Tbl_payroll_shift_code::
-          $data['_branch']    = Tbl_payroll_branch_location::getdata(Self::shop_id())->orderBy('branch_location_name')->get();
+          $data['_company']             = Payroll::company_heirarchy(Self::shop_id());
+          $data['employement_status']   = Tbl_payroll_employment_status::get();
+          $data['tax_status']           = Tbl_payroll_tax_status::get();
+          $data['civil_status']         = Tbl_payroll_civil_status::get();
+          $data['_country']             = Tbl_country::orderBy('country_name')->get();
+          $data['_department']          = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+          $data['_group']               = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
+          $data['_allowance']           = Tbl_payroll_allowance::sel(Self::shop_id())->orderBy('payroll_allowance_name')->get();
+          $data['_deduction']           = Tbl_payroll_deduction::seldeduction(Self::shop_id())->orderBy('payroll_deduction_name')->get();
+          $data['_leave']               = Tbl_payroll_leave_temp::sel(Self::shop_id())->orderBy('payroll_leave_temp_name')->get();
+          $data['_journal_tag']         = Tbl_payroll_journal_tag::gettag(Self::shop_id())->orderBy('tbl_chart_of_account.account_name')->get();
+          $data['_branch']              = Tbl_payroll_branch_location::getdata(Self::shop_id())->orderBy('branch_location_name')->get();
+          $data['_shift']               = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->get();
 		return view("member.payroll.modal.modal_create_employee", $data);
 	}
 
-
+     public function shift_view()
+     {
+          $id = Request::input('id');
+          $data = Self::shift_sorting($id);
+          return view('member.payroll.misc.shift_view_multiple', $data);
+     }
 
      public function employee_updload_requirements()
      {
@@ -925,7 +929,7 @@ class PayrollController extends Member
 		$insert['payroll_employee_pagibig'] 		= Request::input('payroll_employee_pagibig');
 		$insert['payroll_employee_remarks'] 		= Request::input('payroll_employee_remarks');
           $insert['branch_location_id']                = Request::input('branch_location_id') != null ? Request::input('branch_location_id') : 0;
-
+          $insert['shift_code_id']                     = Request::input('shift_code_id') != null ? Request::input('shift_code_id') : 0;
 		$payroll_employee_id = Tbl_payroll_employee_basic::insertGetId($insert);
 
 
@@ -1206,8 +1210,10 @@ class PayrollController extends Member
           $data['_branch']    = Tbl_payroll_branch_location::getdata(Self::shop_id())->orderBy('branch_location_name')->get();
 
           $_journal_tag                 = Tbl_payroll_journal_tag::gettag(Self::shop_id())->orderBy('tbl_chart_of_account.account_name')->get()->toArray();
-
+          $data['_shift']               = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->get();
+          
           $data['_journal_tag']         = array();
+          
           foreach($_journal_tag as $tag)
           {
                $count_tag = Tbl_payroll_journal_tag_employee::checkdata($id, $tag['payroll_journal_tag_id'])->count(); 
@@ -1579,7 +1585,7 @@ class PayrollController extends Member
 		$update_basic['payroll_employee_display_name'] 	= Request::input('payroll_employee_display_name');
 
           $update_basic['branch_location_id']               = Request::input('branch_location_id') != null ? Request::input('branch_location_id') : 0;
-
+          $update_basic['shift_code_id']                    = Request::input('shift_code_id') != null ? Request::input('shift_code_id') : 0;
 		$update_basic['payroll_employee_gender'] 		= Request::input('payroll_employee_gender');
 		$update_basic['payroll_employee_street'] 		= Request::input('payroll_employee_street');
 		$update_basic['payroll_employee_city'] 			= Request::input('payroll_employee_city');
@@ -4875,6 +4881,13 @@ class PayrollController extends Member
 
      public function modal_view_shift_template($id)
      {
+          $data = Self::shift_sorting($id);
+          return view('member.payroll.modal.modal_view_shift_template', $data);
+     }
+     
+     
+     public function shift_sorting($id = 0)
+     {
           $data['shift_code'] = Tbl_payroll_shift_code::where('shift_code_id', $id)->first();
           $data['_day'] = Tbl_payroll_shift_day::where('shift_code_id', $id)->get();
 
@@ -4883,8 +4896,8 @@ class PayrollController extends Member
                $data["_day"][$key] = $day;
                $data["_day"][$key]->time_shift = Tbl_payroll_shift_time::where("shift_day_id", $day->shift_day_id)->get();
           }
-
-          return view('member.payroll.modal.modal_view_shift_template', $data);
+          
+          return $data;
      }
 
 
@@ -7905,8 +7918,6 @@ class PayrollController extends Member
           {
                return Self::bdo_bank_template($data, $title);
           }
-
-
      }
 
      public function generate_bank()

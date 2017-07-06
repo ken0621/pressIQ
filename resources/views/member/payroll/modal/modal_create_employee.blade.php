@@ -645,13 +645,16 @@
                     <div class="form-group">
                       <div class="col-md-6">
                         <small>Choose Shift Template</small>
-                        <select class="form-control">
+                        <select class="form-control shift-template-select" name="shift_code_id">
                           <option value="0">Select Template</option>
+                          @foreach($_shift as $shift)
+                          <option value="{{$shift->shift_code_id}}">{{$shift->shift_code_name}}</option> 
+                          @endforeach
                         </select>
                       </div>
                     </div>
                     <div class="form-group">
-                      <div class="col-md-12">
+                      <div class="col-md-12 shift-template table-responsive">
                         
                       </div>
                     </div>

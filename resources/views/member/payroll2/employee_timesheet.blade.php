@@ -52,7 +52,7 @@
                                     <input name="remarks[]" unq="{{ $random_integer }}" value="{{ $record->time_sheet_activity }}" type="text" class="comment new-time-event text-table">
                                     @endforeach
                                 @else
-                                    <input name="remarks[]" unq="{{ $random_integer }}" value="" type="text" class="comment new-time-event text-table">
+                                    <input name="remarks[]" unq="{{ $random_integer }}" value="{{ $timesheet->default_remarks }}" type="text" class="comment new-time-event text-table">
                                 @endif
                             </td>
                             <td class="text-center rate-output">

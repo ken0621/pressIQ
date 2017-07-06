@@ -67,14 +67,11 @@ function timesheet()
 
 
 			/* IF BOTH BLANK THEN JUST REMOVE */
-			if($time_in == "" && $time_out == "")
+			if($time_in == "" && $time_out == "" && $(e.currentTarget).closest(".tr-parent").find(".time-in").length > 1)
 			{
-				if($(e.currentTarget).closest(".tr-parent").find(".time-in").length > 1)
-				{
-					$(".time-in[unq=" + $focus_unq + "]").remove(); 
-					$(".time-out[unq=" + $focus_unq + "]").remove();
-					$(".comment[unq=" + $focus_unq + "]").remove();
-				}
+				$(".time-in[unq=" + $focus_unq + "]").remove(); 
+				$(".time-out[unq=" + $focus_unq + "]").remove();
+				$(".comment[unq=" + $focus_unq + "]").remove();
 			}
 			else
 			{

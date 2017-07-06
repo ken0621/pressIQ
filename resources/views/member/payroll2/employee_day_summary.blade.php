@@ -20,14 +20,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            
                                 @foreach($timesheet_info->clean_shift as $record)
                                 <tr>
+                                    <input type="hidden" name="payroll_time_sheet_record_id">
                                     <td><input value="{{ $record->time_in }}" type="text" placeholder="NO TIME" class="text-table text-center time-entry time-in is-timeEntry" name=""></td>
                                     <td><input value="{{ $record->time_out }}" type="text" placeholder="NO TIME" class="text-table text-center time-entry time-in is-timeEntry" name=""></td>
                                     <td><input value="" type="text" class="text-table time-entry is-timeEntry" name=""></td>
-                                    <td class="text-center"><input {{ $record->auto_approved == 1 ? 'checked disabled hidden' : '' }} type="checkbox" class="text-table time-entry is-timeEntry" name=""></td>
-                                    <td class="text-center"><input {{ $record->auto_approved == 1 ? 'hidden' : 'checked' }} type="checkbox" class="text-table time-entry is-timeEntry" name=""></td>
+                                    <td class="text-center approve-checkbox"><input {{ $record->auto_approved == 1 ? 'checked disabled hidden' : '' }} type="checkbox" class="text-table time-entry is-timeEntry" name=""></td>
+                                    <td class="text-center overtime-checkbox"><input {{ $record->auto_approved == 1 ? 'hidden' : 'checked' }} type="checkbox" class="text-table time-entry is-timeEntry" name=""></td>
                                 </tr>
                                 @endforeach
                             
@@ -49,6 +49,12 @@
                         NO SHIFT FOR THE DAY
                     @endif
                 </div>
+                @if($timesheet_info->default_remarks != "")
+                <div style="padding: 10px; color: #bbb; padding-top: 0px;">
+                    <div class="text-bold">TODAY IS</div>
+                    {{ $timesheet_info->default_remarks }}
+                </div>
+                @endif
             </div>
             <div class="col-md-6 text-right">
                 <table width="100%" style="background-color: transparent;" class="pull-right">
@@ -98,3 +104,5 @@
     </div>
 </form>
 <script type="text/javascript" src="/assets/member/payroll/js/timesheet2_day_summary.js"></script>
+
+{{ dd($timesheet_info) }}

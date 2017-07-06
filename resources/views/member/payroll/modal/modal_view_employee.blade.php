@@ -621,6 +621,7 @@
                   <li><a data-toggle="tab" href="#leave">Leave</a></li>
                   <li><a data-toggle="tab" href="#deduction">Deduction</a></li>
                   <li><a data-toggle="tab" href="#jouarnal">Journal</a></li>
+                  <li><a data-toggle="tab" href="#shift-schedule">Shift</a></li>
                 </ul>
                 <div class="tab-content tab-content-custom">
                   <div id="allowance" class="tab-pane fade in active">
@@ -651,6 +652,26 @@
                     </div>
                     @endforeach
                   </div>
+                   <div id="shift-schedule" class="tab-pane fade">
+                  <div class="form-horizontal">
+                    <div class="form-group">
+                      <div class="col-md-6">
+                        <small>Choose Shift Template</small>
+                        <select class="form-control shift-template-select" name="shift_code_id">
+                          <option value="0">Select Template</option>
+                          @foreach($_shift as $shift)
+                          <option value="{{$shift->shift_code_id}}" {{$employee->shift_code_id == $shift->shift_code_id ? 'selected="selected"':''}}>{{$shift->shift_code_name}}</option> 
+                          @endforeach
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-12 shift-template table-responsive">
+                        
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 </div>
               </div>
             </div>

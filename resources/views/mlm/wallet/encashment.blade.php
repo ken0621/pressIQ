@@ -96,7 +96,7 @@ $data['icon'] = 'fa fa-money';
     </div>
   </div>
 </div>  
-<div class="col-md-6">
+<div class="col-md-6 hide">
   <div class="box">
     <div class="box-header with-border">
       <h3 class="box-title">Encashment Details</h3>

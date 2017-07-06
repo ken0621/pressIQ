@@ -396,6 +396,22 @@ class MLM_ProductCodeController extends Member
             $date_filter = "default";
         }
 
+
+        if(Request::input('filter_to'))
+        {
+            $filter_to   = date('Y-m-d 00:00:00',strtotime(Request::input('filter_to')));
+            // dd($filter_to);
+            $_invoice    = $_invoice->where("item_code_date_created",">=",$filter_to);
+        }
+
+        if(Request::input('filter_by'))
+        {
+            $filter_by   = date('Y-m-d 23:59:59',strtotime(Request::input('filter_by')));
+            $_invoice    = $_invoice->where("item_code_date_created","<=",$filter_by);
+        }
+
+
+
         $data["_invoice"]    = $_invoice->paginate(10);
         $data["date_filter"] = $date_filter;
 

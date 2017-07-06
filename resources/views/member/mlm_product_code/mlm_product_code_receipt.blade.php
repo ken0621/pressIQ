@@ -19,15 +19,37 @@
 <div class="panel panel-default panel-block panel-title-block panel-gray col-md-6 ">
     <ul class="nav nav-tabs">
         <li class="active cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#all"><i class="fa fa-star"></i> All Items</a></li>
-        <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#archived"><i class="fa fa-trash"></i> Archived Items</a></li>
+        <!-- <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#archived"><i class="fa fa-trash"></i> Archived Items</a></li> -->
     </ul>
     <div class="search-filter-box">
-        <div class="col-md-4 col-md-offset-4" style="padding: 10px">
-            <div class="input-group">
+        <div class="col-md-4" style="padding: 10px">
+            <div class="input-group" style="padding-top:22px;">
                 <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
                 <input type="text" class="form-control search_email" placeholder="Search by email" aria-describedby="basic-addon1" onchange="search_email(this)">
             </div>
+        </div>      
+        <div class="col-md-3" style="padding: 10px">
+            <label for="name" class="control-label">Filter to:</label>
+            <div class="input-group">
+                <input type="text" class="datepicker form-control input-sm filter_to" value=""/>
+            </div>
+        </div> 
+        <div class="col-md-3" style="padding: 10px">
+            <label for="name" class="control-label">Filter by:</label>
+            <div class="input-group">
+                <input type="text" class="datepicker form-control input-sm filter_by" value=""/>
+            </div>
         </div>  
+        <div class="col-md-1" style="padding: 10px">
+            <div class="input-group" style="padding-top:21px;">
+               <button class="btn btn-primary confirm_date_filter" type="button">Filter</button>
+            </div>
+        </div>  
+<!--         <div class="col-md-1" style="padding: 10px">
+            <div class="input-group" style="padding-top:21px;">
+               <button class="btn btn-primary reset_date_filter" type="button">X</button>
+            </div>
+        </div>  --> 
     </div>
     <div class="tab-content codes_container">
         <div id="all" class="tab-pane fade in active">
@@ -102,7 +124,19 @@
     @if($invoice != null)
         append_to('/member/mlm/product_code/receipt/view/{{$invoice}}')
     @endif
-    var filter_date = "asc";
+    var filter_date = "default";
+    var filter_to   = "";
+    var filter_by   = "";
+
+    initialize();
+
+    function initialize()
+    {
+        $(".filter_to").val("");
+        $(".filter_by").val("");
+        filter_function();
+        filter_reset();
+    }
     function append_to(link)
     {
         // $('.append_receipt')..
@@ -112,8 +146,39 @@
     function search_email(ito)
     {
         var search = $(ito).val();
-        var link ='/member/mlm/product_code/receipt?date_filter='+filter_date+'search_name=' + search + ' #invoice_append';
+        var link ='/member/mlm/product_code/receipt?filter_to='+filter_to+'&filter_by='+filter_by+'&date_filter='+filter_date+'&search_name=' + search + ' #invoice_append';
         $('#invoice_append').load(link);
+    }
+
+    function filter_function()
+    {
+        $(".confirm_date_filter").click(function()
+        {
+            var search = $(".search_email").val();
+            filter_to   = $(".filter_to").val();
+            filter_by   = $(".filter_by").val();
+            $(".modal-loader").removeClass("hidden");
+            var link ='/member/mlm/product_code/receipt?filter_to='+filter_to+'&filter_by='+filter_by+'&date_filter='+filter_date+'&search_name=' + search + ' #invoice_append';
+            $('#invoice_append').load(link,function()
+            {
+                $(".modal-loader").addClass("hidden");
+            });
+        });
+    }
+
+    function filter_reset()
+    {
+        $(".reset_date_filter").click(function()
+        {
+            $(".filter_to").val("");
+            $(".filter_by").val("");
+            var search = $(".search_email").val();
+            filter_to   = "";
+            filter_by   = "";
+
+            var link ='/member/mlm/product_code/receipt?filter_to='+filter_to+'&filter_by='+filter_by+'&date_filter='+filter_date+'&search_name=' + search + ' #invoice_append';
+            $('#invoice_append').load(link);  
+        });
     }
 
     function sort_by_asc()
@@ -130,7 +195,7 @@
             $('.filter_desc').css('font-size','20px');
             $('.filter_default').css('font-size','20px');
 
-            var link ='/member/mlm/product_code/receipt?date_filter='+filter_date+'&search_name=' + search_value + ' #invoice_append';
+            var link ='/member/mlm/product_code/receipt?filter_to='+filter_to+'&filter_by='+filter_by+'&date_filter='+filter_date+'&search_name=' + search_value + ' #invoice_append';
             $('#invoice_append').load(link,function()
             {
                 $(".modal-loader").addClass("hidden");
@@ -152,7 +217,7 @@
             $('.filter_desc').css('font-size','25px');
             $('.filter_default').css('font-size','20px');
 
-            var link ='/member/mlm/product_code/receipt?date_filter='+filter_date+'&search_name=' + search_value + ' #invoice_append';
+            var link ='/member/mlm/product_code/receipt?filter_to='+filter_to+'&filter_by='+filter_by+'&date_filter='+filter_date+'&search_name=' + search_value + ' #invoice_append';
             
             $('#invoice_append').load(link,function()
             {

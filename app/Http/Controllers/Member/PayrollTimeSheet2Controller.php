@@ -348,11 +348,54 @@ class PayrollTimeSheet2Controller extends Member
 	public function day_summary($timesheet_id)
 	{
 		$data["timesheet_db"] = $timesheet_db = $this->timesheet_info_db_by_id($timesheet_id);
+		$data["payroll_time_sheet_id"] = $timesheet_db->payroll_time_sheet_id;
+		$data["employee_id"] = $timesheet_db->payroll_employee_id;
 		$data["employee_info"] = $this->db_get_employee_information($timesheet_db->payroll_employee_id); 
 		$data["timesheet_info"] = $timesheet_info =$this->timesheet_process_daily_info($timesheet_db->payroll_employee_id, $timesheet_db->payroll_time_date, $timesheet_db);
+		$data["compute_html"] = view('member.payroll2.employee_day_summary_compute', $data);
 		return view('member.payroll2.employee_day_summary', $data);
 	}
+	
+	public function day_summary_info($timesheet_id)
+	{
+		$data["timesheet_db"] = $timesheet_db = $this->timesheet_info_db_by_id($timesheet_id);
+		$data["payroll_time_sheet_id"] = $timesheet_db->payroll_time_sheet_id;
+		$data["employee_id"] = $timesheet_db->payroll_employee_id;
+		$data["employee_info"] = $this->db_get_employee_information($timesheet_db->payroll_employee_id); 
+		$data["timesheet_info"] = $timesheet_info =$this->timesheet_process_daily_info($timesheet_db->payroll_employee_id, $timesheet_db->payroll_time_date, $timesheet_db);
+		return view('member.payroll2.employee_day_summary_compute', $data);
+	}
+	public function day_summary_change()
+	{
+		$data["request"] = $request = Request::input();
+		$time_sheet_id = Request::input("payroll_time_sheet_id");
+		
+		foreach(Request::input("time-in") as $key => $time_in)
+		{
+			/* GET INITIAL INFORMATION NEEDED */
+			$payroll_time_sheet_record_id = Request::input("payroll_time_sheet_record_id")[$key];
+			$record = Tbl_payroll_time_sheet_record_approved::where("payroll_time_sheet_id", Request::input("payroll_time_sheet_id"))->where("payroll_time_sheet_record_id", Request::input("payroll_time_sheet_record_id")[$key])->first();
+			$payroll_time_serialize = unserialize($record->payroll_time_serialize);
+			$time_out = Request::input("time-out")[$key];
+			$approve_checkbox = isset($request["approve-checkbox"][$key]) ? 1 : 0;
+			$overtime_checkbox = isset($request["overtime-checkbox"][$key]) ? 1 : 0;
+			
+			/* UPDATE INFORMATION */
+			$update = null;
+			$update["payroll_time_sheet_in"] = $payroll_time_serialize->time_in = $this->c_24_hour_format($time_in);
+			$update["payroll_time_sheet_out"] = $payroll_time_serialize->time_out = $this->c_24_hour_format($time_out);
+			$update["payroll_time_sheet_auto_approved"] = $payroll_time_serialize->auto_approved = $approve_checkbox;
+			$update["payroll_time_serialize"] = serialize($payroll_time_serialize);
+			Tbl_payroll_time_sheet_record_approved::where("payroll_time_sheet_id", Request::input("payroll_time_sheet_id"))->where("payroll_time_sheet_record_id", Request::input("payroll_time_sheet_record_id")[$key])->update($update);
+		}
+		
+		echo json_encode("success");
+	}
 	/* GLOBAL FUNCTION FOR THIS CONTROLLER */
+	public function c_24_hour_format($time)
+	{
+	    return date("H:i:s", strtotime($time));
+	}
 	public function convert_to_serialize_row_from_approved_clean_shift($_time)
 	{
 		$return = null;
@@ -362,6 +405,7 @@ class PayrollTimeSheet2Controller extends Member
 			foreach($_time as $key => $time)
 			{
 				$return[$key] = unserialize($time->payroll_time_serialize);
+				$return[$key]->payroll_time_sheet_record_id = $time->payroll_time_sheet_record_id;
 			}
 		}
 		

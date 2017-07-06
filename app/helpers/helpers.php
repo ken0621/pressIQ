@@ -26,6 +26,7 @@ function convert_seconds_to_hours_minutes($format = "H:i", $d)
     date_default_timezone_set(config('app.timezone'));
     return $r;
 }
+
 function createPath($path)
 {
     if (is_dir($path)) return true;

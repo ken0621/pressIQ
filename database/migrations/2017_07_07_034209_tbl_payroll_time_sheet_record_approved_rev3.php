@@ -14,7 +14,7 @@ class TblPayrollTimeSheetRecordApprovedRev3 extends Migration
     {
         Schema::table('tbl_payroll_time_sheet_record_approved', function (Blueprint $table)
         {
-            $table->text('payroll_time_sheet_auto_approved');
+            $table->tinyInteger('payroll_time_sheet_auto_approved');
         });
     }
 

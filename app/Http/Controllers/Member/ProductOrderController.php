@@ -554,8 +554,8 @@ class ProductOrderController extends Member
                     ->get();
         foreach($data['order'] as $key => $value)
         {
-            $data['order'][$key]->wall_sum_binary = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $value->slot_id)->where('wallet_log_plan', 'BINARY')->sum('wallet_log_amount'); 
-            $data['order'][$key]->wall_sum_direct = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $value->slot_id)->where('wallet_log_plan', 'DIRECT')->sum('wallet_log_amount');
+            $data['order'][$key]->wall_sum_binary = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $value->order_slot_id_c)->where('wallet_log_plan', 'BINARY')->sum('wallet_log_amount'); 
+            $data['order'][$key]->wall_sum_direct = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $value->order_slot_id_c)->where('wallet_log_plan', 'DIRECT')->sum('wallet_log_amount');
             $data['order'][$key]->wall_sum = $data['order'][$key]->wall_sum_binary + $data['order'][$key]->wall_sum_direct;
             
         }            

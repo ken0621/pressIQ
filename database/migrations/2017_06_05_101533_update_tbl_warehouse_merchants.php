@@ -15,7 +15,7 @@ class UpdateTblWarehouseMerchants extends Migration
         Schema::table('tbl_warehouse', function (Blueprint $table) 
         {
             $table->tinyInteger('merchant_warehouse')->default(0);
-            $table->double('default_repurhcase_points_mulitplier')->default(0);
+            $table->double('default_repurchase_points_mulitplier')->default(0);
             $table->double('default_margin_per_product')->default(0);
             $table->string('merchant_logo')->default("");
         });    

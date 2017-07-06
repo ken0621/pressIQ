@@ -912,10 +912,10 @@ class WarehouseController extends Member
                 $ins_warehouse["merchant_logo"]    = "";
             }
 
-            $ins['default_repurhcase_points_mulitplier'] = Request::input("default_repurhcase_points_mulitplier"); 
+            $ins['default_repurchase_points_mulitplier'] = Request::input("default_repurchase_points_mulitplier"); 
             $ins['default_margin_per_product']           = Request::input("default_margin_per_product");
             
-            if($ins['default_repurhcase_points_mulitplier'] == null)
+            if($ins['default_repurchase_points_mulitplier'] == null)
             {
                 $data['status']         = 'error';
                 $data['status_message'] = 'Default Repurchase Points Multiplier is required';
@@ -1012,6 +1012,7 @@ class WarehouseController extends Member
             }
             $data["_item"] = Tbl_item::where("archived",0)->where("item_type_id",1)->where("shop_id",$this->user_info->shop_id)->get();
             $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$id)->first();
+            $data["merchantwarehouse"] = Utilities::checkAccess('item-warehouse', 'merchantwarehouse');
 
             $data["warehouse_item"] = Tbl_warehouse::warehouseitem()
                                                     ->selectRaw('*, tbl_sub_warehouse.item_reorder_point as sub_reorder_point')

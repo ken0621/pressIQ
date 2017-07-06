@@ -30,20 +30,20 @@
                 <input type="checkbox" name="merchant_warehouse" id="merchantwarehouse" value="1"> 
                 <label for="merchantwarehouse">Use warehouse as merchant?</label>
             </div>
-        @endif
-            <div class="col-md-6">
+
+            <div class="col-md-6 default_repurchase_class">
                 <div class="col-md-12">
                     <label for="default_repurchase">Default Repurchase Points Multiplier*</label>
                     </br>
-                    <input type="number" class="form-control" name="default_repurhcase_points_mulitplier" id="default_repurchase"> 
+                    <input type="number" class="form-control" name="default_repurchase_points_mulitplier" id="default_repurchase"> 
                 </div>
                 <div class="col-md-12">
                     <label for="default_margin">Default Margin per product (%)*</label>
                     </br>
                     <input type="number" class="form-control" name="default_margin_per_product" id="default_margin"> 
                 </div>
-            </div>  
-            @if($merchantwarehouse == 1)
+            </div> 
+
             <div class="col-md-6 merchant_logo_div">
                 <label for="default_margin">Merchant Logo</label>
                 <div class="panel panel-default">
@@ -54,7 +54,7 @@
                 </div>
                 </br>
             </div>            
-            @endif       
+        @endif       
 
         <div class="form-group">
         <div class="col-md-12"><h3>Select Item</h3></div>
@@ -158,10 +158,12 @@
         if($("#merchantwarehouse").prop("checked"))
         {
             $(".merchant_logo_div").show();
+            $(".default_repurchase_class").show();
         }
         else
         {
             $(".merchant_logo_div").hide();
+            $(".default_repurchase_class").hide();
         }   
     }
 

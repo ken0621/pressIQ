@@ -237,6 +237,223 @@ class TabletSyncController extends Controller
             }
         }
 
+        if($table == "tbl_item_bundle")
+        {
+            $data = Tbl_item_bundle::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_item_bundle (bundle_id, bundle_bundle_id, bundle_item_id, bundle_um_id, bundle_qty, bundle_display_components,created_at,updated_at) VALUES " . "(".$value->bundle_id.",'".$value->bundle_bundle_id."','".$value->bundle_item_id."','".$value->bundle_um_id."','".$value->bundle_qty."','".$value->bundle_display_components."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+
+        if($table == "tbl_item_discount")
+        {
+            $data = Tbl_item_discount::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_item_discount (item_discount_id, discount_item_id, item_discount_value, item_discount_type, item_discount_remark, item_discount_date_start,item_discount_date_end,created_at,updated_at) VALUES " . "(".$value->item_discount_id.",'".$value->discount_item_id."','".$value->item_discount_value."','".$value->item_discount_type."','".$value->item_discount_remark."','".$value->item_discount_date_start."','".$value->item_discount_date_end."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+
+        if($table == "tbl_item_multiple_price")
+        {
+            $data = Tbl_item_multiple_price::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_item_multiple_price (multiprice_id, multiprice_item_id, multiprice_qty, multiprice_price, date_created,created_at,updated_at) VALUES " . "(".$value->multiprice_id.",'".$value->multiprice_item_id."','".$value->multiprice_qty."','".$value->multiprice_price."','".$value->date_created."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+
+        if($table == "tbl_item_type")
+        {
+            $data = Tbl_item_type::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_item_type (item_type_id, item_type_name, archived, created_at,updated_at) VALUES " . "(".$value->item_type_id.",'".$value->item_type_name."','".$value->archived."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+        if($table == "tbl_journal_entry")
+        {
+            $data = Tbl_journal_entry::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_journal_entry (je_id, je_shop_id, je_reference_module, je_reference_id, je_entry_date,je_remarks ,created_at,updated_at) VALUES " . "(".$value->je_id.",'".$value->je_shop_id."','".$value->je_reference_module."','".$value->je_reference_id."','".$value->je_entry_date."','".$value->je_remarks."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+
+
+        if($table == "tbl_journal_entry_line")
+        {
+            $data = Tbl_journal_entry_line::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_journal_entry_line (jline_id, jline_je_id, jline_name_id, jline_name_reference, jline_item_id, jline_account_id, jline_type,jline_amount,jline_description, created_at,updated_at,jline_warehouse_id) VALUES " . "(".$value->jline_id.",'".$value->jline_je_id."','".$value->jline_name_id."','".$value->jline_name_reference."','".$value->jline_item_id."','".$value->jline_account_id."','".$value->jline_type."','".$value->jline_amount."','".$value->jline_description."','".$value->created_at."','".$value->updated_at."','".$value->jline_warehouse_id."')";
+            }
+        }
+
+        if($table == "tbl_manual_credit_memo")
+        {
+            $data = Tbl_manual_credit_memo::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_manual_credit_memo (manual_cm_id, sir_id, cm_id, manual_cm_date, is_sync,created_at,updated_at) VALUES " . "(".$value->manual_cm_id.",'".$value->sir_id."','".$value->cm_id."','".$value->manual_cm_date."','".$value->is_sync."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+        if($table == "tbl_manual_invoice")
+        {
+            $data = Tbl_manual_invoice::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_manual_invoice (manual_invoice_id, sir_id, inv_id, manual_invoice_date, is_sync,created_at,updated_at) VALUES " . "(".$value->manual_invoice_id.",'".$value->sir_id."','".$value->inv_id."','".$value->manual_invoice_date."','".$value->is_sync."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+
+        if($table == "tbl_manual_receive_payment")
+        {
+            $data = Tbl_manual_receive_payment::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_manual_receive_payment (manual_receive_payment_id, agent_id, rp_id, sir_id,rp_date, is_sync,created_at,updated_at) VALUES " . "(".$value->manual_receive_payment_id.",'".$value->agent_id."','".$value->rp_id."','".$value->sir_id."','".$value->rp_date."','".$value->is_sync."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+        if($table == "tbl_manufacturer")
+        {
+            $data = Tbl_manufacturer::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_manufacturer (manufacturer_id, manufacturer_name, manufacturer_address, phone_number,email_address, website,date_created,date_updated,archived, manufacturer_shop_id,manufacturer_fname,manufacturer_mname,manufacturer_lname,manufacturer_image,create_at,updated_at) VALUES " . "(".$value->manufacturer_id.",'".$value->manufacturer_name."','".$value->manufacturer_address."','".$value->phone_number."','".$value->email_address."','".$value->website."','".$value->date_created."','".$value->archived."','".$value->manufacturer_shop_id."','".$value->manufacturer_fname."','".$value->manufacturer_mname."','".$value->manufacturer_lname."','".$value->manufacturer_image."','".$value->create_at."','".$value->updated_at."')";
+            }
+        }
+        if($table == "tbl_position")
+        {
+            $data = Tbl_position::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_position (position_id, position_name, daily_rate, position_created,archived, position_code,position_shop_id,created_at,updated_at) VALUES " . "(".$value->position_id.",'".$value->position_name."','".$value->daily_rate."','".$value->position_created."','".$value->archived."','".$value->position_code."','".$value->position_shop_id."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+
+        if($table == "tbl_receive_payment")
+        {
+            $data = Tbl_receive_payment::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_receive_payment (rp_id, rp_shop_id, rp_customer_id, rp_ar_account, rp_date, rp_total_amount, rp_payment_method,rp_memo,date_created, rp_ref_name,rp_ref_id,created_at,updated_at) VALUES " . "(".$value->rp_id.",'".$value->rp_shop_id."','".$value->rp_customer_id."','".$value->rp_ar_account."','".$value->rp_date."','".$value->rp_total_amount."','".$value->rp_payment_method."','".$value->rp_memo."','".$value->date_created."','".$value->rp_ref_name."','".$value->rp_ref_id."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+        if($table == "tbl_receive_payment_line")
+        {
+            $data = Tbl_receive_payment_line::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_receive_payment_line (rpline_id, rpline_rp_id, rpline_reference_name, rpline_reference_id,rpline_amount,created_at,updated_at) VALUES " . "(".$value->rpline_id.",'".$value->rpline_rp_id."','".$value->rpline_reference_name."','".$value->rpline_reference_id."','".$value->rpline_amount."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+        if($table == "tbl_settings")
+        {
+            $data = Tbl_settings::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_settings (settings_id, settings_key, settings_value, settings_setup_done,shop_id,created_at,updated_at) VALUES " . "(".$value->settings_id.",'".$value->settings_key."','".$value->settings_value."','".$value->settings_setup_done."','".$value->shop_id."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+        if($table == "tbl_sir")
+        {
+            $data = Tbl_sir::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_sir (sir_id, sir_warehouse_id, truck_id, shop_id,sales_agent_id, date_created,archived,lof_status,sir_status, is_sync,ilr_status,rejection_reason,agent_collection,agent_collection_remarks,reload_sir,create_at,updated_at) VALUES " . "(".$value->sir_id.",'".$value->sir_warehouse_id."','".$value->truck_id."','".$value->shop_id."','".$value->sales_agent_id."','".$value->date_created."','".$value->archived."','".$value->lof_status."','".$value->sir_status."','".$value->is_sync."','".$value->ilr_status."','".$value->rejection_reason."','".$value->agent_collection."','".$value->agent_collection_remarks."','".$value->reload_sir."','".$value->create_at."','".$value->updated_at."')";
+            }
+        }
+
+        if($table == "tbl_sir_cm_item")
+        {
+            $data = Tbl_sir_cm_item::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_sir_cm_item (s_cm_item_id, sc_sir_id, sc_item_id, sc_item_qty, sc_physical_count, sc_item_price, sc_status,sc_is_updated,sc_infos ,created_at,updated_at) VALUES " . "(".$value->s_cm_item_id.",'".$value->sc_sir_id."','".$value->sc_item_id."','".$value->sc_item_qty."','".$value->sc_physical_count."','".$value->sc_item_price."','".$value->sc_status."','".$value->sc_is_updated."','".$value->sc_infos."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+
+        if($table == "tbl_sir_inventory")
+        {
+            $data = Tbl_sir_inventory::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_sir_inventory (sir_inventory_id, sir_item_id, inventory_sir_id, sir_inventory_count,sir_inventory_ref_name, sir_inventory_ref_id,created_at,updated_at) VALUES " . "(".$value->sir_inventory_id.",'".$value->sir_item_id."','".$value->inventory_sir_id."','".$value->sir_inventory_count."','".$value->sir_inventory_ref_name."','".$value->sir_inventory_ref_id."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+
+        if($table == "tbl_sir_item")
+        {
+            $data = Tbl_sir_item::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_sir_item (sir_item_id, sir_id, item_id, item_qty,archived, related_um_type,total_issued_qty,um_qty,sold_qty, remaining_qty,physical_count,status,loss_amount,sir_item_price,is_updated,infos,create_at,updated_at) VALUES " . "(".$value->sir_item_id.",'".$value->sir_id."','".$value->item_id."','".$value->item_qty."','".$value->archived."','".$value->related_um_type."','".$value->total_issued_qty."','".$value->um_qty."','".$value->sold_qty."','".$value->remaining_qty."','".$value->physical_count."','".$value->status."','".$value->loss_amount."','".$value->sir_item_price."','".$value->is_updated."','".$value->infos."','".$value->create_at."','".$value->updated_at."')";
+            }
+        }
+
+        if($table == "tbl_sir_sales_report")
+        {
+            $data = Tbl_sir_sales_report::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_sir_sales_report (sir_sales_report_id, sir_id, report_data, report_created,created_at,updated_at) VALUES " . "(".$value->sir_sales_report_id.",'".$value->sir_id."','".$value->report_data."','".$value->report_created."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+        if($table == "tbl_terms")
+        {
+            $data = Tbl_terms::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_terms (terms_id, terms_shop_id, terms_name, terms_no_of_days,archived,created_at,updated_at) VALUES " . "(".$value->terms_id.",'".$value->terms_shop_id."','".$value->terms_name."','".$value->terms_no_of_days."','".$value->archived."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+
+        if($table == "tbl_truck")
+        {
+            $data = Tbl_truck::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_truck (truck_id, plate_number, warehouse_id, date_created,archived, truck_model,truck_kilogram,truck_shop_id,created_at,updated_at) VALUES " . "(".$value->truck_id.",'".$value->plate_number."','".$value->warehouse_id."','".$value->date_created."','".$value->archived."','".$value->truck_model."','".$value->truck_kilogram."','".$value->truck_shop_id."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+
+        if($table == "tbl_um")
+        {
+            $data = Tbl_um::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_um (id, um_name, um_abbrev, is_based,um_shop_id,created_at,updated_at) VALUES " . "(".$value->id.",'".$value->um_name."','".$value->um_abbrev."','".$value->is_based."','".$value->um_shop_id."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+
+        if($table == "tbl_unit_measurement")
+        {
+            $data = Tbl_unit_measurement::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_unit_measurement (um_id, um_shop, um_name, is_multi,um_date_created, um_archived,um_type,parent_basis_um,um_item_id ,um_n_base, um_base,created_at,updated_at) VALUES " . "(".$value->um_id.",'".$value->um_shop."','".$value->um_name."','".$value->is_multi."','".$value->um_date_created."','".$value->um_archived."','".$value->um_type."','".$value->parent_basis_um."','".$value->um_item_id."','".$value->um_n_base."','".$value->um_base."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+        if($table == "tbl_unit_measurement_multi")
+        {
+            $data = Tbl_unit_measurement_multi::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_unit_measurement_multi (multi_id, multi_um_id, multi_name, multi_conversion_ratio,multi_sequence, unit_qty,multi_abbrev,is_base, created_at,updated_at) VALUES " . "(".$value->multi_id.",'".$value->multi_um_id."','".$value->multi_name."','".$value->multi_conversion_ratio."','".$value->multi_sequence."','".$value->unit_qty."','".$value->multi_abbrev."','".$value->is_base."','".$value->created_at."','".$value->updated_at."')";
+            }
+        }
+
+        if($table == "tbl_user")
+        {
+            $data = Tbl_user::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_user (user_id, user_email, user_level, user_first_name,user_last_name, user_contact_number,user_password, user_date_created, user_last_active_date, user_shop,IsWalkin,archived,create_at,updated_at) VALUES " . "(".$value->user_id.",'".$value->user_email."','".$value->user_level."','".$value->user_first_name."','".$value->user_last_name."','".$value->user_contact_number."','".$value->user_password."','".$value->user_date_created."','".$value->user_last_active_date."','".$value->user_shop."','".$value->IsWalkin."','".$value->archived."','".$value->create_at."','".$value->updated_at."')";
+            }
+        }
+
         return json_encode($return);
     }
     public function sync_update()

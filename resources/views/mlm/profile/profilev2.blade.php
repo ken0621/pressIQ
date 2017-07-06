@@ -125,6 +125,12 @@
                     </tr>
                     <tr>
                         <td>
+                            <label>Middle Name</label>
+                            <input id="first-name" name="middle_name" class="form-control" value="{{$customer_info->middle_name}}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
                             <label>Birth Date</label>
                             <input type="date" id="datepicker" name="b_day" class="form-control" style="font-family: 'Titillium Web',sans-serif !important;" value="{{$customer_info->b_day}}" placeholder="mm/dd/yyyy">     
                         </td>

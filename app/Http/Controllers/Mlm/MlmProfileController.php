@@ -235,7 +235,11 @@ class MlmProfileController extends Mlm
 				DB::table('tbl_customer_address')->insert($update);
 	    	}
 	    	
-
+			$middle_name = Request::input('middle_name');
+			if($middle_name)
+			{
+				$update_2['middle_name'] = $middle_name;
+			}
 			$update_2['b_day'] = $b_day;
 			$update_2['country_id'] = $country_id;
 			DB::table('tbl_customer')->where('customer_id', $customer_id)->update($update_2);

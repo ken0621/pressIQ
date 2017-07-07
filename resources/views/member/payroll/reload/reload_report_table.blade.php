@@ -1,3 +1,4 @@
+@if(isset($_columns))
 <table class="table table-condensed table-bordered column-fit">
 	<thead>
 		<tr>
@@ -29,3 +30,4 @@
 		</tr>
 	</tbody>
 </table>
+@endif

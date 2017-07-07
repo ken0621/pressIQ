@@ -6965,7 +6965,7 @@ class PayrollController extends Member
 
           $data = Self::generate_custom_report($id, $date);
 
-          dd($data);
+          // dd($data);
           return view('member.payroll.payroll_view_report', $data);
      }
 

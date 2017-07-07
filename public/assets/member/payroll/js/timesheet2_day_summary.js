@@ -67,7 +67,7 @@ function timesheet_day_summary()
 		$input = $(".day-summary-table :input").serialize();
 		$url = "/member/payroll/company_timesheet_day_summary/change"
 		$payroll_time_sheet_id = $(".payroll-time-sheet-id").val();
-		$(".load-detail-table").css("opacity", 0.5);
+		$(".load-detail-table").css("opacity", 0.3);
 
 		$.ajax(
 		{

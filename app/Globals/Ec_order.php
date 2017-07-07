@@ -772,7 +772,6 @@ class Ec_order
                 $middle_name = '';
                 $order_info["tbl_customer"]['middle_name'] = $middle_name;
             }
-            $order_info["tbl_customer"]["middle_name"] = "";
             $order_info["tbl_customer"]["password"] = Crypt::encrypt($order_info["tbl_customer"]["password"]);
             $customer_id = $customer_query->insertGetId($order_info["tbl_customer"]);
             

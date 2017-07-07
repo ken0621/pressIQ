@@ -62,6 +62,7 @@ class MlmSlotsController extends Mlm
             $data['count_per_level'][11] = 2048;
             
             $data['count_per_level_sum'] = 0;
+            
             foreach($data['count_per_level'] as $key => $value)
             {
                 $data['count_per_level_sum'] += $value;

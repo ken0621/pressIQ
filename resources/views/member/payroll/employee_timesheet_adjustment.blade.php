@@ -21,8 +21,8 @@
                 <tbody>
                     @foreach($_time_record as $key => $time_record)
                     <tr>
-                        <td><input name="time_in[{{ $time_record->payroll_time_sheet_record_id }}]" placeholder="NO TIME" class="over-time-entry form-control" time_max="{{ $time_record->time_in_max }}" time_min="{{ $time_record->time_in_min }}" {{ $time_record->time_in_enabled==true ? ''  : '' }}  type="text" value="{{ $time_record->time_in }}"></td>
-                        <td><input name="time_out[{{ $time_record->payroll_time_sheet_record_id }}]" placeholder="NO TIME" class="over-time-entry form-control" time_max="{{ $time_record->time_out_max }}" time_min="{{ $time_record->time_out_min }}" {{ $time_record->time_out_enabled==true ? ''  : '' }}  type="text"  value="{{ $time_record->time_out }}"></td>
+                        <td><input name="time_in[{{ $time_record->payroll_time_sheet_record_id }}]" placeholder="NO TIME" class="over-time-entry form-control" time_max="11:59:00 PM" time_min="12:01:00 AM" {{ $time_record->time_in_enabled==true ? ''  : '' }}  type="text" value="{{ $time_record->time_in }}"></td>
+                        <td><input name="time_out[{{ $time_record->payroll_time_sheet_record_id }}]" placeholder="NO TIME" class="over-time-entry form-control" time_max="11:59:00 PM" time_min="12:01:00 AM" {{ $time_record->time_out_enabled==true ? ''  : '' }}  type="text"  value="{{ $time_record->time_out }}"></td>
                     </tr>
                     @endforeach
                 </tbody>

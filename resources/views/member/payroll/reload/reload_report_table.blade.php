@@ -1,11 +1,12 @@
-@if(isset($_columns))
 <table class="table table-condensed table-bordered column-fit">
 	<thead>
 		<tr>
 			<th></th>
-			@foreach($_columns as $column)
-			<th class="block">{{$column}}</th>
-			@endforeach
+			@if(isset($_columns))
+				@foreach($_columns as $column)
+				<th class="block">{{$column}}</th>
+				@endforeach
+			@endif
 		</tr>
 	</thead>
 	<tbody>
@@ -30,4 +31,3 @@
 		</tr>
 	</tbody>
 </table>
-@endif

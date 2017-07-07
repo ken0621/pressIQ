@@ -5,6 +5,9 @@ use App\Globals\Payroll;
 
 use App\Models\Tbl_payroll_overtime_rate;
 use App\Models\Tbl_payroll_group;
+use App\Models\Tbl_payroll_adjustment;
+use App\Models\Tbl_payroll_period_company;
+use App\Models\Tbl_payroll_employee_contract;
 
 class Payroll2
 {
@@ -1533,5 +1536,88 @@ class Payroll2
 		$time = explode(":", $time);
 		$time = ($time[0] * 60.0 + $time[1] * 1.0);
 		return $time;
+	}
+
+	/*  get net salary */
+	// function cutoff_compute_net_pay()
+	// - government_employee_contribution (array)
+	// - name (string)
+	// - amount (double)
+	// - type (string - "add", "minus")
+	// - category (string)
+	// - government_employer_contribution (array)
+	// - name (string)
+	// - amount (double)
+	// - type (string - "add", "minus")
+	// - category (string)
+	// - allowances (array)
+	// - name (string)
+	// - amount (double)
+	// - type (string - "add", "minus")
+	// - deductions (array)
+	// - name (string)
+	// - amount (double)
+	// - type (string - "add", "minus")
+	// - adjustments (array)
+	// - name (string)
+	// - amount (double)
+	// - type (string - "add", "minus")
+	// - net_pay (double)
+	// - 13th_month_pay (double)
+
+	// tbl_payroll_gross
+	// - payroll_gross_id
+	// - payroll_period_company_id
+	// - employee_id
+	// - basic_pay
+	// - gross_pay
+
+	function cutoff_compute_net_pay($payroll_period_company_id, $employee_id, $basic_pay = 0, $gross_pay = 0)
+	{
+
+		/* get period details */
+		$date_query 		= Tbl_payroll_period_company::sel($payroll_period_company_id)->first();
+		$start_date 		= $date_query->payroll_period_start;
+		$end_date 			= $date_query->payroll_period_end;
+		$period_category 	= $date_query->payroll_period_category;
+
+		/* get employee contract */
+		$contract_group 	= Tbl_payroll_employee_contract::selemployee($employee_id, $start_date)
+														  ->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
+		                                                   ->first();
+		
+
+		/* PAYROLL ADJUSTMEMT START */
+		/* allowances */
+		$adjustment_allowance = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Allowance')->get();
+
+		$adjustment_allowance_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Allowance')->sum('payroll_adjustment_amount');
+
+		/* bonus */
+		$adjustment_bonus = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Bonus')->get();
+
+		$adjustment_bonus_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Bonus')->sum('payroll_adjustment_amount');
+		
+		/* commission */
+		$adjustment_commission = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Commissions')->get();
+
+		$adjustment_commission_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Commissions')->sum('payroll_adjustment_amount');
+
+		/* incentives */
+		$adjustment_incentives = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Incentives')->get();
+
+		$adjustment_incentives_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Incentives')->sum('payroll_adjustment_amount');
+
+		/* 13 month pay */
+		$adjustment_13_month = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, '13 month pay')->get();
+
+		$adjustment_13_month_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , '13 month pay')->sum('payroll_adjustment_amount');
+
+		/* deductions */
+		$adjustment_deductions = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Deductions')->get();
+
+		$adjustment_deductions_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Deductions')->sum('payroll_adjustment_amount');
+
+		
 	}
 }

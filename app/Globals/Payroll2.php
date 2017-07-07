@@ -956,13 +956,8 @@ class Payroll2
 	// 	}
 
 
-<<<<<<< HEAD
-		/* leave computation */
-		$leave_salary 		= divide($leave_float, $target_float) * $daily_rate;
-=======
 	// 	/* leave computation */
 	// 	$leave_salary = divide($leave_float, $target_float) * $daily_rate;
->>>>>>> 2c60122732548deb8f3283c24ab0cd349565b9dd
 
 	// 	/* regular day computation */
 	// 	$regular_salary 	= divide($regular_float, $target_float) * $daily_rate;

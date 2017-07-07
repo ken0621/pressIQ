@@ -10,17 +10,19 @@
 		</tr>
 	</thead>
 	<tbody>
-		@foreach($_emp as $emp)
-		<tr>
-			<td>{!!$emp['name']!!}</td>
-			@foreach($emp['_record'] as $record)
-			<td class="text-right">
-				{!!$record!!}
-			</td>
+		@if(isset($_columns))
+			@foreach($_emp as $emp)
+			<tr>
+				<td>{!!$emp['name']!!}</td>
+				@foreach($emp['_record'] as $record)
+				<td class="text-right">
+					{!!$record!!}
+				</td>
+				@endforeach
+			</tr>
+			
 			@endforeach
-		</tr>
-		
-		@endforeach
+		@endif
 		<tr>
 			<td><b>Total</b></td>
 			@foreach($_total as $total)

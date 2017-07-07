@@ -271,6 +271,7 @@ class Developer_StatusController extends Member
 			$slots = Tbl_mlm_slot::orderBy('slot_created_date', 'ASC')->get();
 			foreach ($slots as $key => $value) {
 				Mlm_compute::entry($value->slot_id);
+				sleep(2);
 			}
 		}
 		dd('ok');

@@ -400,6 +400,7 @@ class MemberController extends Controller
                             $customer_info['customer_full_address']      = Request::input('permanent_address');
                             $customer_info['b_day']                      = Request::input('date_of_birth');
                             $customer_info['customer_gender']            = Request::input('gender');
+          
                             // 
                             $customer_set_info_response        = Cart::customer_set_info(Self::$shop_id, $customer_info);
     

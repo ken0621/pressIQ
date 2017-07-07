@@ -43,6 +43,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_list/modal_save_salary','Member\PayrollController@modal_save_salary');
 	Route::any('/employee_list/modal_employee_update','Member\PayrollController@modal_employee_update');
 	Route::any('/employee_list/reload_employee_list','Member\PayrollController@reload_employee_list');
+	Route::any('/employee_list/shift_view','Member\PayrollController@shift_view');
 	/* EMPLOYEE SEARCH */
 	Route::any('/employee_list/search_employee_ahead','Member\PayrollController@search_employee_ahead');
 	Route::any('/employee_list/search_employee','Member\PayrollController@search_employee');
@@ -56,9 +57,14 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/company_timesheet/{id}','Member\PayrollTimeSheetController@company_timesheet');
 
 	Route::any('/company_timesheet2/change/{period_id}/{employee_id}','Member\PayrollTimeSheet2Controller@time_change');
+	
 	Route::any('/company_timesheet2/{company_id}','Member\PayrollTimeSheet2Controller@index');
 	Route::any('/company_timesheet2/{company_id}/{employee_id}','Member\PayrollTimeSheet2Controller@timesheet');
+	Route::any('/company_timesheet_day_summary/info/{time_sheet_id}','Member\PayrollTimeSheet2Controller@day_summary_info');
+	Route::post('/company_timesheet_day_summary/change','Member\PayrollTimeSheet2Controller@day_summary_change');
 	Route::any('/company_timesheet_day_summary/{time_sheet_id}','Member\PayrollTimeSheet2Controller@day_summary');
+	
+	
 
 	Route::any('/employee_timesheet/timesheet/{id}/{period_id}','Member\PayrollTimeSheetController@timesheet');
 	Route::any('/employee_timesheet/json_process_time','Member\PayrollTimeSheetController@json_process_time');
@@ -79,6 +85,18 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/timesheet/choose_company_save','Member\PayrollTimeSheetController@choose_company_save');
 	Route::any('/timesheet/time_sheet_comment_save','Member\PayrollTimeSheetController@time_sheet_comment_save');
 	/* TIMESHEET END */
+
+
+	/* BRANCH NAME START */
+	Route::any('/branch_name','Member\PayrollController@branch_name');
+	Route::any('/branch_name/modal_create_branch','Member\PayrollController@modal_create_branch');
+	Route::any('/branch_name/modal_save_branch','Member\PayrollController@modal_save_branch');
+	Route::any('/branch_name/modal_edit_branch/{id}','Member\PayrollController@modal_edit_branch');
+	Route::any('/branch_name/modal_update_branch','Member\PayrollController@modal_update_branch');
+	Route::any('/branch_name/modal_archive_branch/{archived}/{id}','Member\PayrollController@modal_archive_branch');
+	Route::any('/branch_name/archive_branch','Member\PayrollController@archive_branch');
+	/* BRANCH NAME END */
+
 
 	/* DEPARTMENT START */
 	Route::any('/departmentlist','Member\PayrollController@department_list');

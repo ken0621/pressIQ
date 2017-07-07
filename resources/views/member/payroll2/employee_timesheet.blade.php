@@ -29,19 +29,31 @@
                             <td class="text-center" width="50px">{{ $timesheet->day_number }}</td>
                             <td class="text-center" width="50px">{{ $timesheet->day_word }}</td>
                             <td class="time-in-td">
-                                @foreach($timesheet->record as $record)
-                                <input name="time-in[]" unq="{{ $random_integer }}" mintime="12:00 AM" maxtime="11:59 PM" value="{{ $record->time_sheet_in }}" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-in is-timeEntry">
-                                @endforeach
+                                @if($timesheet->record)
+                                    @foreach($timesheet->record as $record)
+                                    <input name="time-in[]" unq="{{ $random_integer }}" mintime="12:00 AM" maxtime="11:59 PM" value="{{ $record->time_sheet_in }}" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-in is-timeEntry">
+                                    @endforeach
+                                @else
+                                    <input name="time-in[]" unq="{{ $random_integer }}" mintime="12:00 AM" maxtime="11:59 PM" value="" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-in is-timeEntry">
+                                @endif
                             </td>
                             <td class="time-out-td">
-                                @foreach($timesheet->record as $record)
-                                <input name="time-out[]" unq="{{ $random_integer }}" mintime="12:00 AM" maxtime="11:59 PM" value="{{ $record->time_sheet_out }}" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-out is-timeEntry">
-                                @endforeach
+                                @if($timesheet->record)
+                                    @foreach($timesheet->record as $record)
+                                    <input name="time-out[]" unq="{{ $random_integer }}" mintime="12:00 AM" maxtime="11:59 PM" value="{{ $record->time_sheet_out }}" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-out is-timeEntry">
+                                    @endforeach
+                                @else
+                                    <input name="time-out[]" unq="{{ $random_integer }}" mintime="12:00 AM" maxtime="11:59 PM" value="" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-out is-timeEntry">
+                                @endif
                             </td>
                             <td class="time-comment-td">
-                                @foreach($timesheet->record as $record)
-                                <input name="remarks[]" unq="{{ $random_integer }}" value="{{ $record->time_sheet_activity }}" type="text" class="comment new-time-event text-table time-entry is-timeEntry">
-                                @endforeach
+                                @if($timesheet->record)
+                                    @foreach($timesheet->record as $record)
+                                    <input name="remarks[]" unq="{{ $random_integer }}" value="{{ $record->time_sheet_activity }}" type="text" class="comment new-time-event text-table">
+                                    @endforeach
+                                @else
+                                    <input name="remarks[]" unq="{{ $random_integer }}" value="{{ $timesheet->default_remarks }}" type="text" class="comment new-time-event text-table">
+                                @endif
                             </td>
                             <td class="text-center rate-output">
                                 @if($timesheet->daily_info->shift_approved == true)

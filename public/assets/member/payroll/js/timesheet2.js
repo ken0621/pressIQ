@@ -67,14 +67,11 @@ function timesheet()
 
 
 			/* IF BOTH BLANK THEN JUST REMOVE */
-			if($time_in == "" && $time_out == "")
+			if($time_in == "" && $time_out == "" && $(e.currentTarget).closest(".tr-parent").find(".time-in").length > 1)
 			{
-				if($(e.currentTarget).closest(".tr-parent").find(".time-in").length > 1)
-				{
-					$(".time-in[unq=" + $focus_unq + "]").remove(); 
-					$(".time-out[unq=" + $focus_unq + "]").remove();
-					$(".comment[unq=" + $focus_unq + "]").remove();
-				}
+				$(".time-in[unq=" + $focus_unq + "]").remove(); 
+				$(".time-out[unq=" + $focus_unq + "]").remove();
+				$(".comment[unq=" + $focus_unq + "]").remove();
 			}
 			else
 			{
@@ -92,7 +89,7 @@ function timesheet()
 	function action_reload_rate_for_date(tr_date)
 	{
 		$target = $(".tr-parent[date='" + tr_date + "']");
-		$target.find(".rate-output").html('<i style="color: gray" class="fa fa-spinner fa-pulse fa-fw"></i>');
+		$target.find(".rate-output").css("opacity", "0.5");
 		console.log("RELOADING RATE FOR DATE");
 		$input = $(".tr-parent[date='" + tr_date + "'] :input").serialize();
 		
@@ -110,7 +107,7 @@ function timesheet()
 			success: function(data)
 			{
 				console.log("TIME CHANGED SUCESS");
-				$target.find(".rate-output").html(data.string_income);
+				$target.find(".rate-output").html(data.string_income).css("opacity", "1");
 			}
 		})
 	}

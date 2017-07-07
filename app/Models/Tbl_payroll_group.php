@@ -49,6 +49,13 @@ class Tbl_payroll_group extends Model
 	// [DOUBLE]			break_deduction
 	// [VARCHAR]		break_time
 	// [DOUBLE]			taxable_salary
+	// [TIME]			overtime_grace_time
+	// [VARCHAR]		grace_time_rule_overtime
+	// [TIME]			late_grace_time
+	// [VARCHAR]		grace_time_rule_late
+	
+	
+	
     public function scopeShift($query)
     {
     	$query->join("tbl_payroll_shift_code", "tbl_payroll_shift_code.shift_code_id", "=", "tbl_payroll_group.shift_code_id");

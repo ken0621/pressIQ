@@ -935,33 +935,33 @@ class ItemController extends Member
 		}
 		if($return["message"] == "Success" || $return['status'] = 'success-serial')
 		{
-			$access_warehouse = Utilities::checkAccess('item-warehouse', 'merchantwarehouse');
-			if($access_warehouse == 1)
-			{
+			// $access_warehouse = Utilities::checkAccess('item-warehouse', 'merchantwarehouse');
+			// if($access_warehouse == 1)
+			// {
 				/* CHECK IF AUTO APPROVED OR NOT */
 				$auto_approved = Utilities::checkAccess('item-list', 'add_auto_approve');
 				if($auto_approved == 1)
 				{
 					/* SET THE ITEM AS APPROVED */
-					$insert["item_merchant_request_status"]	= "Accepted";			
-					$insert["item_merchant_requested_by"]	= $this->user_info->user_id;			
-					$insert["item_merchant_accepted_by"]	= $this->user_info->user_id;			
-					$insert["merchant_warehouse_id"]		= Session::get("warehouse_id_".$this->user_info->shop_id);			
-					$insert["merchant_item_id"]				= $item_id; 			
-					$insert["item_merchant_accepted_date"]	= Carbon::now();			
-					$insert["date_created"]					= Carbon::now();
+					// $insert_merchant["item_merchant_request_status"]	= "Accepted";			
+					// $insert_merchant["item_merchant_requested_by"]	    = $this->user_info->user_id;			
+					// $insert_merchant["item_merchant_accepted_by"]	    = $this->user_info->user_id;			
+					// $insert_merchant["merchant_warehouse_id"]		    = $this->current_warehouse->warehouse_id;			
+					// $insert_merchant["merchant_item_id"]			    = $item_id; 			
+					// $insert_merchant["item_merchant_accepted_date"]	    = Carbon::now();			
+					// $insert_merchant["date_created"]					= Carbon::now();
 
-					Tbl_item_merchant_request::insert($insert_merchant);
+					// Tbl_item_merchant_request::insert($insert_merchant);
 				}
 				else
 				{
-					$insert["item_merchant_request_status"]	= "Pending";			
-					$insert["item_merchant_requested_by"]	= $this->user_info->user_id;			
-					$insert["item_merchant_accepted_by"]	= null;			
-					$insert["merchant_warehouse_id"]		= Session::get("warehouse_id_".$this->user_info->shop_id);			
-					$insert["merchant_item_id"]				= $item_id; 			
-					$insert["item_merchant_accepted_date"]	= null;			
-					$insert["date_created"]					= Carbon::now();
+					$insert_merchant["item_merchant_request_status"]	= "Pending";			
+					$insert_merchant["item_merchant_requested_by"]	    = $this->user_info->user_id;			
+					$insert_merchant["item_merchant_accepted_by"]	    = null;			
+					$insert_merchant["merchant_warehouse_id"]		    = $this->current_warehouse->warehouse_id;			
+					$insert_merchant["merchant_item_id"]			    = $item_id; 			
+					$insert_merchant["item_merchant_accepted_date"]	    = null;			
+					$insert_merchant["date_created"]					= Carbon::now();
 								
 					Tbl_item_merchant_request::insert($insert_merchant);
 
@@ -970,7 +970,7 @@ class ItemController extends Member
 					$update_item["archived"] = 1;
 					Tbl_item::where("item_id",$item_id)->update($update_item);
 				}
-			}
+			// }
 
 			Session::forget("item_temporary_data");
 			$insert["item_id"] = $item_id;

@@ -28,7 +28,7 @@
         </div>
         @if($merchantwarehouse == 1)
             <div class="col-md-12">
-                <input type="checkbox" name="merchant_warehouse" id="merchantwarehouse" value="1"> 
+                <input type="checkbox" name="merchant_warehouse" id="merchantwarehouse" {{$warehouse->merchant_warehouse == 1 ? 'checked' : ''}} value="1"> 
                 <label for="merchantwarehouse">Use warehouse as merchant?</label>
             </div>
 
@@ -36,7 +36,7 @@
                 <div class="col-md-12">
                     <label for="default_repurchase">Default Repurchase Points Multiplier*</label>
                     </br>
-                    <input type="number" class="form-control" name="default_repurchase_points_mulitplier" id="default_repurchase" value="{{$warehouse->default_margin_per_product}}"> 
+                    <input type="number" class="form-control" name="default_repurchase_points_mulitplier" id="default_repurchase" value="{{$warehouse->default_repurchase_points_mulitplier}}"> 
                 </div>
                 <div class="col-md-12">
                     <label for="default_margin">Default Margin per product (%)*</label>
@@ -49,7 +49,7 @@
                 <label for="default_margin">Merchant Logo</label>
                 <div class="panel panel-default">
                     <div class="panel-body" style="text-align:center;">
-                        <img src="/assets/images/noimage.png" style="max-height: 150px; max-width: 150px; min-height: 150px; max-height: 150px;" class="merchant_logo_container image-gallery image-gallery-single" key="merchantlogo"/>
+                        <img src="{{$warehouse->merchant_logo != '' ? $warehouse->merchant_logo : '/assets/images/noimage.png'}}" style="max-height: 150px; max-width: 150px; min-height: 150px; max-height: 150px;" class="merchant_logo_container image-gallery image-gallery-single" key="merchantlogo"/>
                         <input type="hidden" class="merchant_logo_input" name="merchant_logo_input">
                     </div>
                 </div>
@@ -158,3 +158,36 @@
 <!-- <script type="text/javascript" src="/assets/member/js/draggable_row.js"></script> -->
 <!-- <script type="text/javascript" src="/assets/member/js/transfer_warehouse.js"></script> -->
 <script type="text/javascript" src="/assets/member/js/warehouse.js"></script>
+<script type="text/javascript">
+
+    // check_checkbox();
+    checkbox_change();
+
+    function submit_selected_image_done(data) 
+    { 
+        $(".merchant_logo_container").attr("src",data.image_data[0].image_path);
+        $(".merchant_logo_input").val(data.image_data[0].image_path);
+    }
+
+    function check_checkbox()
+    {
+        if($("#merchantwarehouse").prop("checked"))
+        {
+            $(".merchant_logo_div").show();
+            $(".default_repurchase_class").show();
+        }
+        else
+        {
+            $(".merchant_logo_div").hide();
+            $(".default_repurchase_class").hide();
+        }   
+    }
+
+    function checkbox_change()
+    {
+        $("input[type=checkbox]").change(function()
+        {
+            check_checkbox();
+        });
+    }
+</script>

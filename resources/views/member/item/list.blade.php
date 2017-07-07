@@ -115,7 +115,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($_item_archived as $item)
+                        @foreach($_item_pending as $item)
                         <tr>
                             <td>{{$item->item_id}}</td>
                             <td>{{$item->item_name}}</td>

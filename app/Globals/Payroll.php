@@ -2175,8 +2175,6 @@ class Payroll
 
 		}
 
-
-
 		// dd($array_dd);
 		$payroll_group_salary_computation = $group->payroll_group_salary_computation;
 		$data['payroll_group_salary_computation'] = $payroll_group_salary_computation;

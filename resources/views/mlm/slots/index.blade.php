@@ -41,10 +41,10 @@ $data['icon'] = 'icon-sitemap';
             EON <br> 
             <span class="small_gray"><small>Hover to view details</small>
           </th>
-          <th class="align_tr_center" data-toggle="tooltip" title="EON account no" >
-            Middle Name <br> 
-            <span class="small_gray"><small>Hover to view details</small>
-          </th>
+          <!--<th class="align_tr_center" data-toggle="tooltip" title="EON account no" >-->
+          <!--  Middle Name <br> -->
+          <!--  <span class="small_gray"><small>Hover to view details</small>-->
+          <!--</th>-->
           <th class="align_tr_center" data-toggle="tooltip" title="" >
             USE SLOT <br> 
             <span class="small_gray"><small>Hover to view details</small>

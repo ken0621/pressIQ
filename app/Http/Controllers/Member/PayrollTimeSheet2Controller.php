@@ -217,40 +217,28 @@ class PayrollTimeSheet2Controller extends Member
 			$return->compute_shift = $return->clean_shift;
 		}
 		
-// <<<<<<< HEAD
-// 		$late_grace_time = "00:00:00";
-// 		$grace_time_rule_late = "per_shift";
-// 		$overtime_grace_time = "00:00:00";
-// 		$grace_time_rule_overtime = "per_shift";
-// 		$day_type = "regular";
-// 		$is_holiday = "not_holiday";
-// 		$leave = "00:00:00";
-// 		$leave_fill_late = 0;
-// 		$leave_fill_undertime = 0;
-// 		$return->time_output = Payroll2::compute_time_mode_regular($return->clean_shift, $_shift_raw, $late_grace_time, $grace_time_rule_late, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday , $leave, $leave_fill_late, $leave_fill_undertime, false);
-// 		$return->compute = Payroll2::compute_income_day_pay($return->time_output, 800, 1);
+
+		$return->shift_approved = $this->check_if_shift_approved($return->clean_shift);
+		$return->compute_shift = $this->remove_not_auto_approve($return->clean_shift);
 		
-// =======
-// 		$return->shift_approved = $this->check_if_shift_approved($return->clean_shift);
-// 		$return->compute_shift = $this->remove_not_auto_approve($return->clean_shift);
+		$daily_rate = $this->getdaily_rate($employee_id, $date, $employee_contract->payroll_group_working_day_month);
 		
-// 		$daily_rate = $this->getdaily_rate($employee_id, $date, $employee_contract->payroll_group_working_day_month);
-		
-// 		$return->late_grace_time = $late_grace_time = $employee_contract->late_grace_time;
-// 		$return->grace_time_rule_late = $grace_time_rule_late = $employee_contract->grace_time_rule_late;
-// 		$return->overtime_grace_time = $overtime_grace_time = $employee_contract->overtime_grace_time;
-// 		$return->grace_time_rule_overtime = $grace_time_rule_overtime = $employee_contract->grace_time_rule_overtime;
-// 		$return->day_type = $day_type = $this->timesheet_get_day_type($employee_id, $date);
-// 		$return->is_holiday = $is_holiday = $this->timesheet_get_is_holiday($employee_id, $date);
-// 		//$return->leave = $leave = $this->timesheet_get_leave_hours($employee_id, $date, $_shift_raw);
-// 		$return->leave = $leave = "00:00:00";
-// 		$return->leave_fill_date = $leave_fill_late = 0;
-// 		$return->leave_fill_undertime = $leave_fill_undertime = 0;
-// 		$return->default_remarks = $this->timesheet_default_remarks($return);
-// 		$return->time_output = Payroll2::compute_time_mode_regular($return->compute_shift, $_shift_raw, $late_grace_time, $grace_time_rule_late, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday , $leave, $leave_fill_late, $leave_fill_undertime, false);
-// 		$return->compute = Payroll2::compute_income_day_pay($return->time_output, $daily_rate, $employee_contract->payroll_group_id);
-// 		// dd($return);
-// >>>>>>> 83246abb5c30a7b5c44595cdf8209e4063b9ff71
+		$return->late_grace_time = $late_grace_time = $employee_contract->late_grace_time;
+		$return->grace_time_rule_late = $grace_time_rule_late = $employee_contract->grace_time_rule_late;
+		$return->overtime_grace_time = $overtime_grace_time = $employee_contract->overtime_grace_time;
+		$return->grace_time_rule_overtime = $grace_time_rule_overtime = $employee_contract->grace_time_rule_overtime;
+		$return->day_type = $day_type = $this->timesheet_get_day_type($employee_id, $date);
+		$return->is_holiday = $is_holiday = $this->timesheet_get_is_holiday($employee_id, $date);
+		//$return->leave = $leave = $this->timesheet_get_leave_hours($employee_id, $date, $_shift_raw);
+		$return->leave = $leave = "00:00:00";
+		$return->leave_fill_date = $leave_fill_late = 0;
+		$return->leave_fill_undertime = $leave_fill_undertime = 0;
+		$return->default_remarks = $this->timesheet_default_remarks($return);
+		$return->time_output = Payroll2::compute_time_mode_regular($return->compute_shift, $_shift_raw, $late_grace_time, $grace_time_rule_late, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday , $leave, $leave_fill_late, $leave_fill_undertime, false);
+		//$daily_rate, $employee_contract->payroll_group_id
+		$return->compute = Payroll2::compute_income_day_pay($return->time_output, $daily_rate, $employee_contract->payroll_group_id);
+		// dd($return);
+
 		return $return;
 	}
 	public function timesheet_get_day_type($employee_id, $date)
@@ -285,7 +273,7 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			$day_type = strtolower($holiday->payroll_holiday_category);
 		}
-		
+
 		return $day_type;
 	}
 	public function timesheet_default_remarks($data)
@@ -452,7 +440,7 @@ class PayrollTimeSheet2Controller extends Member
 			
 			foreach($_time as $key => $time)
 			{
-				if($time->auto_approved == 1)
+				if($time->auto_approved != 0)
 				{
 					$return[$key] = $time;
 				}

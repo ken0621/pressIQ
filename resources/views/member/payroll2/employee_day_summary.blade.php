@@ -29,7 +29,7 @@
                                     <td><input value="{{ $record->time_in }}" type="text" placeholder="NO TIME" class="text-table text-center time-entry time-in is-timeEntry" name="time-in[{{ $key }}]"></td>
                                     <td><input value="{{ $record->time_out }}" type="text" placeholder="NO TIME" class="text-table text-center time-entry time-in is-timeEntry" name="time-out[{{ $key }}]"></td>
                                     <td><input value="" type="text" class="text-table time-entry is-timeEntry" name=""></td>
-                                    @if( $record->status_time_sched == 'OVERTIME')
+                                    @if( $record->status_time_sched == 'OVERTIME' || $timesheet_info->day_type == "rest_day" || $timesheet_info->day_type == "extra_day")
                                     <td class="text-center"><input {{ $record->auto_approved == 1 ? 'checked' : '' }} type="checkbox" class="approve-checkbox" name="approve-checkbox[{{ $key }}]"></td>
                                     <td class="text-center"><input checked type="checkbox" class="overtime-checkbox" name="overtime-checkbox[{{ $key }}]"></td>
                                     @else
@@ -77,4 +77,4 @@
 </form>
 <script type="text/javascript" src="/assets/member/payroll/js/timesheet2_day_summary.js"></script>
 
-{{-- dd($timesheet_info) --}}
+{{ dd($timesheet_info) }}

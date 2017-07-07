@@ -233,9 +233,9 @@ class PayrollTimeSheet2Controller extends Member
 		$return->leave_fill_date = $leave_fill_late = 0;
 		$return->leave_fill_undertime = $leave_fill_undertime = 0;
 		$return->default_remarks = $this->timesheet_default_remarks($return);
+
 		$return->time_output = Payroll2::compute_time_mode_regular($return->compute_shift, $_shift_raw, $late_grace_time, $grace_time_rule_late, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday , $leave, $leave_fill_late, $leave_fill_undertime, false);
 		$return->compute = Payroll2::compute_income_day_pay($return->time_output, $daily_rate, $employee_contract->payroll_group_id);
-		// dd($return);
 		return $return;
 	}
 	public function timesheet_get_day_type($employee_id, $date)

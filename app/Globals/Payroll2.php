@@ -310,7 +310,6 @@ class Payroll2
      */
 	public static function compute_time_mode_regular($_time, $_shift, $late_grace_time = "00:00:00", $grace_time_rule_late="per_shift",$overtime_grace_time = "00:00:00",$grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00",$leave_fill_late=0,$leave_fill_undertime=0,$testing = false)
 	{
-
 		$time_spent				= "00:00:00";
 		$late_hours 			= "00:00:00";
 		$under_time 			= "00:00:00";

@@ -96,7 +96,7 @@ class Payroll2
 					{
 						if ($time_in_minutes>$shift_out_minutes) 
 						{
-							$reason = "<b>answer: ". Payroll2::convert_to_12_hour($shift->shift_in) ." to ". Payroll2::convert_to_12_hour($shift->shift_out)." (0) - <span style='color: green; text-transform: uppercase'>LATE FOR FIRST SHIFT<span><br></b>";
+							$reason = "<b>answer: ". Payroll2::convert_to_12_hour($shift->shift_in) ." to ". Payroll2::convert_to_12_hour($shift->shift_out)." (2) - <span style='color: green; text-transform: uppercase'>LATE FOR FIRST SHIFT<span><br></b>";
 							echo $testing == true ? $reason : ""; 
 							$_output = Payroll2::time_shift_output($_output, $output_ctr++, $shift->shift_in, $shift->shift_out, 2, $reason, "LATE", Payroll::time_diff($shift->shift_in, $shift->shift_out),"00:00:00","00:00:00");						
 						}
@@ -108,7 +108,7 @@ class Payroll2
 					{
 						if (($time_out_minutes<=$shift_in_minutes)&&(!(($time_in_minutes>=$shift_in_minutes)&&($time_in_minutes<=$shift_out_minutes)))&&(!(($time_out_minutes>=$shift_in_minutes)&&($time_out_minutes<=$shift_out_minutes)))) 
 						{
-							$reason = "<b>answer: ". Payroll2::convert_to_12_hour($shift->shift_in)." to ". Payroll2::convert_to_12_hour($shift->shift_out)." (0) - <span style='color: green; text-transform: uppercase'>UNDERTIME IN LAST SHIFT<span><br></b>";
+							$reason = "<b>answer: ". Payroll2::convert_to_12_hour($shift->shift_in)." to ". Payroll2::convert_to_12_hour($shift->shift_out)." (2) - <span style='color: green; text-transform: uppercase'>UNDERTIME IN LAST SHIFT<span><br></b>";
 							echo $testing == true ? $reason : ""; 
 							$_output = Payroll2::time_shift_output($_output, $output_ctr++, $shift->shift_in, $shift->shift_out, 2, $reason, "UNDERTIME", "00:00:00", Payroll::time_diff($shift->shift_in, $shift->shift_out), "00:00:00");	
 						}
@@ -166,6 +166,7 @@ class Payroll2
 						$reason = "<b>answer: ". Payroll2::convert_to_12_hour($time->time_in)." to ".Payroll2::convert_to_12_hour($time->time_out)." (1)- <span style='color: green; text-transform: uppercase'>LATE AND UNDERTIME<span><br></b>";
 						echo $testing == true ? $reason : "";
 						$_output = Payroll2::time_shift_output($_output, $output_ctr++, $time->time_in, $time->time_out, 1,$reason,"LATE AND UNDERTIME",Payroll::time_diff($shift->shift_in,$time->time_in),Payroll::time_diff($time->time_out,$shift->shift_out),"00:00:00");
+						echo $shift->shift_in."  ".$time->time_in;
 					}
 					/*END all approve shift*/
 
@@ -212,7 +213,8 @@ class Payroll2
 						}
 						
 						//sandwich overtime, time out is between next shift in and out
-						if (($time_in_minutes<$shift_out_minutes)&&
+						//error: exact time_in in shift_out , solve: added equal sign in first condition
+						if (($time_in_minutes<=$shift_out_minutes)&&
 							($time_out_minutes>=$next_shift_in_minutes)) 
 						{ 
 							$reason = "<b>answer: ".Payroll2::convert_to_12_hour($shift->shift_out)." to ".Payroll2::convert_to_12_hour($_shift[$count_shift]->shift_in)." (0)- <span style='color: green; text-transform: uppercase'>sandwich overtime, time in is between next shift in and out<span><br></b>";
@@ -225,7 +227,29 @@ class Payroll2
 				$one_time=true;
 				$count_time++;
 			}
+
+		/*check if there is multimple time in and time out in a single shift*/
+		foreach ($_shift as $shift) 
+		{
+			$shift_in_minutes = explode(":", $shift->shift_in);
+			$shift_out_minutes = explode(":", $shift->shift_out);
+			$shift_in_minutes = ($shift_in_minutes[0]*60) + ($shift_in_minutes[1]);
+			$shift_out_minutes = ($shift_out_minutes[0]*60) + ($shift_out_minutes[1]);
+
+			$count_output=0;
+			foreach ($_output as $output) 
+			{
+
+			//if (isset($_output[])) 
+			//{
+				
+			//}
+
+			$count_output++;
+			}
 		}
+		
+
 		return $_output;
 	}
 
@@ -369,9 +393,11 @@ class Payroll2
 			
 			foreach ($_time as $time) 
 			{
+
+
 				echo $testing == true ? "<hr><br><br> TIME IN - ".$time->time_in." vs TIME OUT - ".$time->time_out."<br><br>":"";                                                                                                
 				//undertime computation
-
+	
 				$under_time = Payroll::sum_time($under_time,$time->undertime);
 				
 				//late hours computation and depends to time_grace_rule
@@ -389,7 +415,7 @@ class Payroll2
 					{
 						$time_spent = Payroll::sum_time($time_spent,$time->late);
 					}
-				}
+				}	
 				else if ($grace_time_rule_late=="accumulative") 
 				{
 					$late_hours = Payroll::sum_time($time->late,$late_hours);
@@ -404,9 +430,12 @@ class Payroll2
 					//all late time exempt first time shift late record
 					else
 					{
+
 						$time_spent = Payroll::sum_time($time_spent,$time->late);
 					}
+
 				}
+
 				else if ($grace_time_rule_late=="last") 
 				{
 					if ($count==sizeof($time)) 
@@ -418,9 +447,13 @@ class Payroll2
 						$time_spent = Payroll::sum_time($time_spent,$time->late);
 					}
 				}
-				
-				//time spent computation
-				$time_spent = Payroll::sum_time($time_spent,Payroll::time_diff($time->time_in,$time->time_out));
+								
+				//check if underime or late auto approved
+				if (!($time->auto_approved==2)) 
+				{
+					//time spent computation
+					$time_spent = Payroll::sum_time($time_spent,Payroll::time_diff($time->time_in,$time->time_out));
+				}
 				
 				//over time computation per shift
 				if($grace_time_rule_overtime=="per_shift")
@@ -438,8 +471,10 @@ class Payroll2
 				{
 					$over_time = Payroll::sum_time($over_time,$time->overtime);
 				}
+
 				$count++;
 			}
+
 
 			//compute regular hours
 			$regular_hours = Payroll2::time_difference($time_spent,(Payroll::sum_time($over_time,$night_differential))).":00"; //(overtime+night_diff)-time_spent
@@ -525,6 +560,7 @@ class Payroll2
 				}
 			}
 
+
 			//fill undertime with leave hours
 			if ($leave_fill_undertime==1) 
 			{
@@ -561,6 +597,7 @@ class Payroll2
 				$is_half_day=true;
 			}
 		}
+			
 
 			/*START day type and holiday type*/
 			if ($day_type=="rest") 
@@ -589,8 +626,6 @@ class Payroll2
 				$is_absent = true;
 			}
 			/*END day type and holiday type*/ 
-
-
 
 
 		$return["time_spent"] = Payroll2::convert_to_24_hour($time_spent);
@@ -803,7 +838,6 @@ class Payroll2
 		}
 		/*END day type and holiday type*/
 
-		
 
 
 		$return["time_spent"] = Payroll2::convert_to_24_hour($time_spent);
@@ -855,12 +889,17 @@ class Payroll2
 		$night_differential = "00:00";
 		foreach ($_time as $time) 
 		{
+
+
 			echo $testing == true ? "<hr><br><br> TIME IN - ".$time->time_in." vs TIME OUT - ".$time->time_out."<br><br>":"";
 			$time_in_integer = explode(":", $time->time_in);
 			$time_out_integer = explode(":", $time->time_out);
 			$time_in_integer = (int)$time_in_integer[0]."".$time_in_integer[1];
 			$time_out_integer = (int)$time_out_integer[0]."".$time_out_integer[1];
-
+			if ($time->auto_approved==2) 
+			{
+				continue;
+			}
 			/*START night differential computation*/
 			if((2200<=$time_in_integer)&&(2400>=$time_out_integer))
 			{

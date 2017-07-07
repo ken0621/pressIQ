@@ -58,20 +58,29 @@ class PayrollTimeSheet2Controller extends Member
 		Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->delete();
 		
 		/* INSERT NEW TIME SHEET RECORD */
+		
+		$insert = null;
+		
 		foreach(Request::input("time-in") as $key => $time_in)
 		{
 			$time_out = Request::input("time-out")[$key];
 			$remarks = Request::input("remarks")[$key];
 			
-			$insert[$key]["payroll_time_sheet_id"] = $timesheet_db->payroll_time_sheet_id;
-			$insert[$key]["payroll_company_id"] = $period->payroll_company_id;
-			$insert[$key]["payroll_time_sheet_in"] = date("H:i:s", strtotime($time_in));
-			$insert[$key]["payroll_time_sheet_out"] = date("H:i:s ", strtotime($time_out));
-			$insert[$key]["payroll_time_shee_activity"] = $remarks;
-			$insert[$key]["payroll_time_sheet_origin"] = "Manually Encoded";
+			if($time_in != "" || $time_out != "")
+			{
+				$insert[$key]["payroll_time_sheet_id"] = $timesheet_db->payroll_time_sheet_id;
+				$insert[$key]["payroll_company_id"] = $period->payroll_company_id;
+				$insert[$key]["payroll_time_sheet_in"] = date("H:i:s", strtotime($time_in));
+				$insert[$key]["payroll_time_sheet_out"] = date("H:i:s ", strtotime($time_out));
+				$insert[$key]["payroll_time_shee_activity"] = $remarks;
+				$insert[$key]["payroll_time_sheet_origin"] = "Manually Encoded";
+			}
 		}
 		
-		Tbl_payroll_time_sheet_record::insert($insert);
+		if($insert)
+		{
+			Tbl_payroll_time_sheet_record::insert($insert);
+		}
 		
 		/* RETURN DATA TO SERVER */
 		$data["daily_info"] = $this->timesheet_process_daily_info($employee_id, Request::input("date"), $timesheet_db);
@@ -184,7 +193,7 @@ class PayrollTimeSheet2Controller extends Member
 		$overtime_grace_time = "00:00:00";
 		$grace_time_rule_overtime = "per_shift";
 		$day_type = "regular";
-		$is_holiday = "special";
+		$is_holiday = "not_holiday";
 		$leave = "00:00:00";
 		$leave_fill_late = 0;
 		$leave_fill_undertime = 0;

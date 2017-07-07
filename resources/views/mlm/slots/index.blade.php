@@ -7,28 +7,67 @@ $data['icon'] = 'icon-sitemap';
 ?>
 @include('mlm.header.index', $data)
 
+<style type="text/css">
+  .align_tr_center
+  {
+    text-align:center;
+  }
+  .small_gray
+  {
+    font-size: 10px; 
+    color:gray;
+  }
+</style>
 <div class="col-md-12 table-responsive get_body_a" style="background-color: white;">
   <table class="table table-bordered table-hover table-striped">
     <thead style="font-weight: bold !important;font-size: 18px; text-transform: uppercase;" class="text-center">
         <tr>
-          <th style="text-align:center;" data-toggle="tooltip" title="This will be id of each slot you have." >Slot <br> <span style="font-size: 10px; color:gray"><small>Hover to view details</small></span></th>
-          <th style="text-align:center;" data-toggle="tooltip" title="Date of creation of the slot"  >Date Created <br> <span style="font-size: 10px; color:gray"><small>Hover to view details</small></th>
-          <th style="text-align:center;" data-toggle="tooltip" title="The current income/wallet of the slot" >Current Wallet <br> <span style="font-size: 10px; color:gray"><small>Hover to view details</small></th>
-          <th style="text-align:center;" data-toggle="tooltip" title="Current slots on your tree" >TREE MATRIX <br> <span style="font-size: 10px; color:gray"><small>Hover to view details</small></th>
-          <th style="text-align:center;" data-toggle="tooltip" title="EON account no" >EON <br> <span style="font-size: 10px; color:gray"><small>Hover to view details</small></th>
-          
- 
-          <th style="text-align:center;" data-toggle="tooltip" title="Upon Clicking the enter button you will be redirected to the dashboard of the selected slot. Orange means active." >USE SLOT <br> <span style="font-size: 10px; color:gray"><small>Hover to view details</small></th>
-          <th style="text-align:center;" data-toggle="tooltip" title="Upon clicking the star button, all referral using your username will put on the selected slot. Orange means active."  >DEFAULT SLOT <br> <span style="font-size: 10px; color:gray"><small>Hover to view details</small></th>
+          <th class="align_tr_center" data-toggle="tooltip" title="This will be id of each slot you have." >
+            Slot <br> 
+            <span style=""><small>Hover to view details</small></span>
+          </th>
+          <th class="align_tr_center" data-toggle="tooltip" title="Date of creation of the slot"  >
+            Date Created <br> 
+            <span class="small_gray"><small>Hover to view details</small></th>
+          <th class="align_tr_center" data-toggle="tooltip" title="The current income/wallet of the slot" >
+            Current Wallet <br> 
+            <span class="small_gray"><small>Hover to view details</small>
+          </th>
+          <th class="align_tr_center" data-toggle="tooltip" title="Current slots on your tree" >
+            TREE MATRIX <br> 
+            <span class="small_gray"><small>Hover to view details</small>
+          </th>
+          <th class="align_tr_center" data-toggle="tooltip" title="EON account no" >
+            EON <br> 
+            <span class="small_gray"><small>Hover to view details</small>
+          </th>
+          <th class="align_tr_center" data-toggle="tooltip" title="EON account no" >
+            Middle Name <br> 
+            <span class="small_gray"><small>Hover to view details</small>
+          </th>
+          <th class="align_tr_center" data-toggle="tooltip" title="" >
+            USE SLOT <br> 
+            <span class="small_gray"><small>Hover to view details</small>
+          </th>
+          <th class="align_tr_center" data-toggle="tooltip" title="Upon clicking the star button, all referral using your username will put on the selected slot. Orange means active."  >
+            DEFAULT SLOT <br> 
+            <span class="small_gray"><small>Hover to view details</small>
+          </th>
         </tr>
     </thead>
     <tbody>
         @if(count($all_slots_p) >= 1)
           @foreach($all_slots_p as $key => $value)
             <tr>
-              <td  >{{$value->slot_no}}</td>
-              <td>{{$value->slot_created_date}}</td>
-              <td>{{currency('PHP', $sum_wallet[$key])}}</td>
+              <td>
+                {{$value->slot_no}}
+              </td>
+              <td>
+                {{$value->slot_created_date}}
+              </td>
+              <td>
+                {{currency('PHP', $sum_wallet[$key])}}
+              </td>
               <td class="width_tr_a" percentage="@if(isset($tree_count[$key])){{($tree_count[$key]/$count_per_level_sum) * 100}}@else{{0}}@endif">
                 @if(isset($tree_count[$key])){{$tree_count[$key]}} / {{$count_per_level_sum}} ({{($tree_count[$key]/$count_per_level_sum) * 100}}%)@else{{0}}@endif
               </td>

@@ -242,6 +242,8 @@ class Mlm extends Controller
     public static function seed()
     {
         // Session::flash('success', "Membership Saved");
+        $customer_info = Self::$customer_info;
+        if(!$customer_info->middle_name){ Session::flash('warning', "Your middle name is not set, please set it at the profile tab or click this link <center><a href='/mlm/profile' style='color: blue'>Profile</a></center>"); }
         $customer_id = Self::$customer_id;
         $shop_id = Self::$shop_id;
         $encashment_settings = Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->first();

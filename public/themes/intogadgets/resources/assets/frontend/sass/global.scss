@@ -2664,6 +2664,7 @@ div[style="position: fixed; bottom: 5px; right: 5px; opacity: 1; cursor: pointer
     a
     {
         display: inline-block;
+        border-radius: 6px;
         vertical-align: top;
         color: #fff;
         font-weight: 700;
@@ -2671,11 +2672,11 @@ div[style="position: fixed; bottom: 5px; right: 5px; opacity: 1; cursor: pointer
         margin: 5px 2.5px;
         transition: 0.3s all ease;
         height: 40px;
-        padding-right: 38px;
-        background-image: url('/assets/front/img/tag-head.png');
-        background-size: 40px 42px;
-        background-position: right;
-        background-repeat: no-repeat;
+        // background-image: url('/assets/front/img/tag-head.png');
+        // background-size: 40px 42px;
+        // background-position: right;
+        // background-repeat: no-repeat;
+        background-color: #333;
         width: 100%;
         &:hover
         {
@@ -2684,7 +2685,7 @@ div[style="position: fixed; bottom: 5px; right: 5px; opacity: 1; cursor: pointer
         span
         {
             display: block;
-            background-color: #54bc00;
+            // background-color: #333;
             padding: 9px 15px;
             height: 40px;
         }

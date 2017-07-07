@@ -83,10 +83,10 @@ class Payroll2
 
 					echo $testing == true ?  "<hr><br><br>compare: Time (" . date("h:i A", strtotime($time->time_in)) . " - " . date("h:i A", strtotime($time->time_out)) . ") vs Shift (" . date("h:i A", strtotime($shift->shift_in)) . "-" . date("h:i A", strtotime($shift->shift_out)) . ")<br>" : "";
 					//explode(":", $shift->shift_in)
-					$shift_in_minutes = explode(":", $shift->shift_in);
-					$shift_out_minutes = explode(":", $shift->shift_out);
-					$shift_in_minutes = ($shift_in_minutes[0]*60) + ($shift_in_minutes[1]);
-					$shift_out_minutes = ($shift_out_minutes[0]*60) + ($shift_out_minutes[1]);
+					$shift_in_minutes 	= explode(":", $shift->shift_in);
+					$shift_out_minutes 	= explode(":", $shift->shift_out);
+					$shift_in_minutes 	= ($shift_in_minutes[0]*60) + ($shift_in_minutes[1]);
+					$shift_out_minutes 	= ($shift_out_minutes[0]*60) + ($shift_out_minutes[1]);
 
 
 					/*START first and between early time in*/

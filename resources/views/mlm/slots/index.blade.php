@@ -45,7 +45,7 @@ $data['icon'] = 'icon-sitemap';
           <!--  Middle Name <br> -->
           <!--  <span class="small_gray"><small>Hover to view details</small>-->
           <!--</th>-->
-          <th class="align_tr_center" data-toggle="tooltip" title="" >
+          <th class="align_tr_center" data-toggle="tooltip" title="Upon clicking the enter button, you will be redirected to the dashboard of the slots." >
             USE SLOT <br> 
             <span class="small_gray"><small>Hover to view details</small>
           </th>

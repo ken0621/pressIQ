@@ -1170,7 +1170,7 @@ class Payroll2
 
 	// }
 
-	public static function compute_income_day_pay($_time = array(), $daily_rate = 0, $group_id = 0)
+	public static function compute_income_day_pay($_time = array(), $daily_rate = 0, $group_id = 0, $cola = 50)
 	{
 		$return = new stdClass();
 		$return->daily_rate = $daily_rate;
@@ -1362,8 +1362,12 @@ class Payroll2
 			$return->_breakdown_deduction["undertime"]["rate"] = $undertime_float * $hourly_rate; 
 			$total_day_income = $total_day_income - $return->_breakdown_deduction["undertime"]["rate"];
 		}
+		
 		$return->subtotal_after_addition = $subtotal_after_addition;
+		$return->total_day_income_plus_cola = $total_day_income;
 		$return->total_day_income = $total_day_income;
+		$return->total_day_cola = $total_day_income;
+		$return->total_day_basic = $total_day_income;
 		return $return;
 	}
 

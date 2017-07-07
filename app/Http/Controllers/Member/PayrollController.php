@@ -6977,7 +6977,7 @@ class PayrollController extends Member
           $payroll_reports_id = Request::input('payroll_reports_id');
 
           $data = Self::generate_custom_report($payroll_reports_id, $date);
-
+          dd($data);
           return view('member.payroll.reload.reload_report_table', $data);
      }
 

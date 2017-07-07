@@ -221,7 +221,9 @@ class PayrollTimeSheet2Controller extends Member
 		$return->shift_approved = $this->check_if_shift_approved($return->clean_shift);
 		$return->compute_shift = $this->remove_not_auto_approve($return->clean_shift);
 		
-		$daily_rate = $this->getdaily_rate($employee_id, $date, $employee_contract->payroll_group_working_day_month);
+		$rate = $this->getdaily_rate($employee_id, $date, $employee_contract->payroll_group_working_day_month);
+		$daily_rate = $rate['daily'];
+		$cola		= $rate['cola'];
 		
 		$return->late_grace_time = $late_grace_time = $employee_contract->late_grace_time;
 		$return->grace_time_rule_late = $grace_time_rule_late = $employee_contract->grace_time_rule_late;
@@ -237,7 +239,7 @@ class PayrollTimeSheet2Controller extends Member
 
 		$return->time_output = Payroll2::compute_time_mode_regular($return->compute_shift, $_shift_raw, $late_grace_time, $grace_time_rule_late, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday , $leave, $leave_fill_late, $leave_fill_undertime, false);
 		//$daily_rate, $employee_contract->payroll_group_id
-		$return->compute = Payroll2::compute_income_day_pay($return->time_output, $daily_rate, $employee_contract->payroll_group_id);
+		$return->compute = Payroll2::compute_income_day_pay($return->time_output, $daily_rate, $employee_contract->payroll_group_id, $cola);
 
 		return $return;
 	}
@@ -330,7 +332,9 @@ class PayrollTimeSheet2Controller extends Member
 	public function getdaily_rate($employee_id, $date, $target_days)
 	{
 		$salary = Tbl_payroll_employee_salary::selemployee($employee_id, $date)->first();
-		return $salary->payroll_employee_salary_monthly / $target_days;
+		$return['daily']	=  $salary->payroll_employee_salary_monthly / $target_days;
+		$return['cola'] 	=  $salary->payroll_employee_salary_cola;
+		return $return;
 	}
 	
 	public function timesheet_process_in_out_record($_timesheet_record_db)

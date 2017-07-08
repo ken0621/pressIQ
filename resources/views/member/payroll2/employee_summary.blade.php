@@ -82,7 +82,7 @@
                                         <td class="text-center">0 DAY</td>
                                         <td class="text-center">0 DAY</td>
                                         <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/company_timesheet2/{{ $company->payroll_period_company_id }}/{{ $employee->payroll_employee_id }}', 'lg')" >TIMESHEET</a></td>
-                                        <td class="text-center"><a href="javascript: ">SUMMARY</a></td>
+                                        <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/company_timesheet2/income_summary/{{ $company->payroll_period_company_id }}/{{ $employee->payroll_employee_id }}', 'lg')"">SUMMARY</a></td>
                                     </tr>
                                     @endforeach
                                 </tbody>

@@ -2361,6 +2361,7 @@ class Payroll
 			}
 		}
 
+		// $data['total_gross'] += $data['13_month'];
 
 		if($total_hours_render > 0 || ($total_hours_render <= 0 && $payroll_group_salary_computation == 'Flat Rate'))
 		{	
@@ -2953,7 +2954,7 @@ class Payroll
 		$exemption 	= Tbl_payroll_tax_reference::sel($shop_id, 'Excemption', $payroll_tax_period)->first();
 
 		$status 	= Tbl_payroll_tax_reference::sel($shop_id, 'Status', $payroll_tax_period)->first();
-
+	
 		$tax_index 	= '';
 
 		$tax_contribution = 0;
@@ -2961,33 +2962,33 @@ class Payroll
 		// if($rate >= $tax->tax_first_range && $rate < $tax->tax_second_range)
 		if($tax != null)
 		{
-			if($tax->tax_first_range >= $rate && $tax->tax_second_range < $rate)
+			if($tax->tax_first_range <= $rate && $tax->tax_second_range > $rate)
 			{
 				$tax_index = 'tax_first_range';
 			}
 
-			if($tax->tax_second_range >= $rate && $tax->tax_third_range < $rate)
+			if($tax->tax_second_range <= $rate && $tax->tax_third_range > $rate)
 			{
 				$tax_index = 'tax_second_range';
 			}
 
-			if($tax->tax_second_range >= $rate && $tax->tax_third_range < $rate)
+			if($tax->tax_second_range <= $rate && $tax->tax_third_range > $rate)
 			{
 				$tax_index = 'tax_second_range';
 			}
 
-			if($tax->tax_third_range >= $rate && $tax->tax_fourth_range < $rate)
+			if($tax->tax_third_range <= $rate && $tax->tax_fourth_range > $rate)
 			{
 				$tax_index = 'tax_third_range';
 			}
 
-			if($tax->tax_fourth_range >= $rate && $tax->tax_fifth_range < $rate)
+			if($tax->tax_fourth_range <= $rate && $tax->tax_fifth_range > $rate)
 			{
 				$tax_index = 'tax_fourth_range';
 			}
 
 			
-			if($tax->tax_fifth_range >= $rate && $tax->taxt_sixth_range < $rate)
+			if($tax->tax_fifth_range <= $rate && $tax->taxt_sixth_range > $rate)
 			{
 				$tax_index = 'tax_fifth_range';
 			}
@@ -2999,12 +3000,12 @@ class Payroll
 			}
 
 
-			if($rate <= $tax->tax_seventh_range && $rate > $tax->taxt_sixth_range)
+			if($rate >= $tax->tax_seventh_range && $rate < $tax->taxt_sixth_range)
 			{
 				$tax_index = 'tax_seventh_range';
 			}
 
-
+			// dd($tax_index);
 			if($tax_index != '')
 			{
 				$exemption_num = $exemption->$tax_index;

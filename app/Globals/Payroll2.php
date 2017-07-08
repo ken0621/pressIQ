@@ -1070,6 +1070,8 @@ class Payroll2
 		
 		$overtime=0;
 		$nightdiff=0;
+		$breakdown_deduction=0;
+		$breakdown_addition=0;
 		$late=0;
 		$undertime=0;
 
@@ -1078,27 +1080,27 @@ class Payroll2
 			if ($rest_float!=0) 
 			{
 				//Rest Day
-				$return->_breakdown_addition["Rest Day ".($regular_param['payroll_overtime_rest_day'] * 100)."%"]["time"] = $_time["regular_hours"]; 
-				$return->_breakdown_addition["Rest Day ".($regular_param['payroll_overtime_rest_day'] * 100)."%"]["rate"] = ($hourly_rate * $regular_float) * ($regular_param['payroll_overtime_rest_day']);
-				$total_day_income = $total_day_income + $return->_breakdown_addition["Rest Day ".($regular_param['payroll_overtime_rest_day'] * 100)."%"]["rate"]; 			
-
+				$return->_breakdown_addition["Rest Day"]["time"] = $_time["regular_hours"]; 
+				$return->_breakdown_addition["Rest Day"]["rate"] = ($hourly_rate * $regular_float) * ($regular_param['payroll_overtime_rest_day']);
+				$total_day_income = $total_day_income + $return->_breakdown_addition["Rest Day"]["rate"]; 			
+				$breakdown_addition += ($hourly_rate * $regular_float) * ($regular_param['payroll_overtime_rest_day']);
 				if ($overtime_float!=0) 
 				{
 					//Rest Day Over Time
-					$return->_breakdown_addition["Over Time ".($regular_param['payroll_overtime_rest_overtime'] * 100)."%"]["time"] = $_time["overtime"]; 
-					$return->_breakdown_addition["Over Time ".($regular_param['payroll_overtime_rest_overtime'] * 100)."%"]["rate"] = ($hourly_rate * $overtime_float) * ($regular_param['payroll_overtime_rest_overtime']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Over Time ".($regular_param['payroll_overtime_rest_overtime'] * 100)."%"]["rate"]; 
+					$return->_breakdown_addition["Over Time"]["time"] = $_time["overtime"]; 
+					$return->_breakdown_addition["Over Time"]["rate"] = ($hourly_rate * $overtime_float) * ($regular_param['payroll_overtime_rest_overtime']);
+					$total_day_income = $total_day_income + $return->_breakdown_addition["Over Time"]["rate"]; 
 					$overtime = ($hourly_rate * $overtime_float) * ($regular_param['payroll_overtime_rest_overtime']);
-		
+					$breakdown_addition += $overtime;
 				}
 				if ($night_diff_float!=0) 
 				{
 					//Rest Day Night Differential
-					$return->_breakdown_addition["Night Differential ".($regular_param['payroll_overtime_rest_night'] * 100)."%"]["time"] = $_time["night_differential"]; 
-					$return->_breakdown_addition["Night Differential ".($regular_param['payroll_overtime_rest_night'] * 100)."%"]["rate"] = ($hourly_rate * $night_diff_float) * ($regular_param['payroll_overtime_rest_night']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Night Differential ".($regular_param['payroll_overtime_rest_night'] * 100)."%"]["rate"]; 
+					$return->_breakdown_addition["Night Differential"]["time"] = $_time["night_differential"]; 
+					$return->_breakdown_addition["Night Differential"]["rate"] = ($hourly_rate * $night_diff_float) * ($regular_param['payroll_overtime_rest_night']);
+					$total_day_income = $total_day_income + $return->_breakdown_addition["Night Differential"]["rate"]; 
 					$nightdiff = ($hourly_rate * $night_diff_float) * ($regular_param['payroll_overtime_rest_night']);
-					
+					$breakdown_addition += $nightdiff;
 				}
 			}
 			else
@@ -1106,20 +1108,20 @@ class Payroll2
 				if ($overtime_float!=0) 
 				{
 					//Regular Over Time
-					$return->_breakdown_addition["Over Time ".($regular_param['payroll_overtime_overtime'] * 100)."%"]["time"] = $_time["overtime"]; 
-					$return->_breakdown_addition["Over Time ".($regular_param['payroll_overtime_overtime'] * 100)."%"]["rate"] = ($hourly_rate * $overtime_float) * ($regular_param['payroll_overtime_overtime']+1);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Over Time ".($regular_param['payroll_overtime_overtime'] * 100)."%"]["rate"]; 
+					$return->_breakdown_addition["Over Time"]["time"] = $_time["overtime"]; 
+					$return->_breakdown_addition["Over Time"]["rate"] = ($hourly_rate * $overtime_float) * ($regular_param['payroll_overtime_overtime']+1);
+					$total_day_income = $total_day_income + $return->_breakdown_addition["Over Time"]["rate"]; 
 					$overtime = ($hourly_rate * $overtime_float) * ($regular_param['payroll_overtime_overtime']+1);
-					
+					$breakdown_addition += $overtime;
 				}
 				if ($night_diff_float!=0) 
 				{
 					//Regular Night Differential
-					$return->_breakdown_addition["Night Differential ".($regular_param['payroll_overtime_nigth_diff'] * 100)."%"]["time"] = $_time["night_differential"]; 
-					$return->_breakdown_addition["Night Differential ".($regular_param['payroll_overtime_nigth_diff'] * 100)."%"]["rate"] = ($hourly_rate * $night_diff_float) * ($regular_param['payroll_overtime_nigth_diff']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Night Differential ".($regular_param['payroll_overtime_nigth_diff'] * 100)."%"]["rate"]; 
+					$return->_breakdown_addition["Night Differential"]["time"] = $_time["night_differential"]; 
+					$return->_breakdown_addition["Night Differential"]["rate"] = ($hourly_rate * $night_diff_float) * ($regular_param['payroll_overtime_nigth_diff']);
+					$total_day_income = $total_day_income + $return->_breakdown_addition["Night Differential"]["rate"]; 
 					$nightdiff= ($hourly_rate * $night_diff_float) * ($regular_param['payroll_overtime_nigth_diff']);
-					
+					$breakdown_addition += $nightdiff;	
 				}
 			}
 		}
@@ -1131,50 +1133,53 @@ class Payroll2
 			if($rest_float > 0)
 			{
 				//Legal Holiday with rest day
-				$return->_breakdown_addition["Legal Holiday Rest Day ".($legal_param['payroll_overtime_rest_day'] * 100)."%"]["time"] = $_time["regular_holiday_hours"]; 
-				$return->_breakdown_addition["Legal Holiday Rest Day ".($legal_param['payroll_overtime_rest_day'] * 100)."%"]["rate"] = ($hourly_rate * $legal_float) * ($legal_param['payroll_overtime_rest_day']);
-				$total_day_income = $total_day_income + $return->_breakdown_addition["Legal Holiday Rest Day ".($legal_param['payroll_overtime_rest_day'] * 100)."%"]["rate"]; 
+				$return->_breakdown_addition["Legal Holiday Rest Day"]["time"] = $_time["regular_holiday_hours"]; 
+				$return->_breakdown_addition["Legal Holiday Rest Day"]["rate"] = ($hourly_rate * $legal_float) * ($legal_param['payroll_overtime_rest_day']);
+				$total_day_income = $total_day_income + $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"]; 
+				$breakdown_addition += ($hourly_rate * $legal_float) * ($legal_param['payroll_overtime_rest_day']);
 				if ($overtime_float!=0) 
 				{
 					//Legal Holiday Rest Day Over Time
-					$return->_breakdown_addition["Over Time ".($legal_param['payroll_overtime_rest_overtime'] * 100)."%"]["time"] = $_time["overtime"]; 
-					$return->_breakdown_addition["Over Time ".($legal_param['payroll_overtime_rest_overtime'] * 100)."%"]["rate"] = ($hourly_rate * $overtime_float) * ($legal_param['payroll_overtime_rest_overtime']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Over Time ".($legal_param['payroll_overtime_rest_overtime'] * 100)."%"]["rate"]; 
+					$return->_breakdown_addition["Over Time"]["time"] = $_time["overtime"]; 
+					$return->_breakdown_addition["Over Time"]["rate"] = ($hourly_rate * $overtime_float) * ($legal_param['payroll_overtime_rest_overtime']);
+					$total_day_income = $total_day_income + $return->_breakdown_addition["Over Time"]["rate"]; 
 					$overtime = ($hourly_rate * $overtime_float) * ($legal_param['payroll_overtime_rest_overtime']);
-					
+					$breakdown_addition += $overtime;
 				}
 				if ($night_diff_float!=0) 
 				{
 					//Legal Holiday Rest Day Night Differential
-					$return->_breakdown_addition["Night Differential ".($legal_param['payroll_overtime_rest_night'] * 100)."%"]["time"] = $_time["night_differential"]; 
-					$return->_breakdown_addition["Night Differential ".($legal_param['payroll_overtime_rest_night'] * 100)."%"]["rate"] = ($hourly_rate * $night_diff_float) * ($legal_param['payroll_overtime_rest_night']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Night Differential ".($legal_param['payroll_overtime_rest_night'] * 100)."%"]["rate"]; 
+					$return->_breakdown_addition["Night Differential"]["time"] = $_time["night_differential"]; 
+					$return->_breakdown_addition["Night Differential"]["rate"] = ($hourly_rate * $night_diff_float) * ($legal_param['payroll_overtime_rest_night']);
+					$total_day_income = $total_day_income + $return->_breakdown_addition["Night Differential"]["rate"]; 
 					$nightdiff = ($hourly_rate * $night_diff_float) * ($legal_param['payroll_overtime_rest_night']);
-					
+					$breakdown_addition += $nightdiff;
 				}
 			}
 			else
 			{
 				//Legal Holiday
-				$return->_breakdown_addition["Legal Holiday ".($legal_param['payroll_overtime_regular'] * 100)."%"]["time"] = $_time["regular_holiday_hours"]; 
-				$return->_breakdown_addition["Legal Holiday ".($legal_param['payroll_overtime_regular'] * 100)."%"]["rate"] = ($regular_float * $hourly_rate) * ($legal_param['payroll_overtime_regular']);
-				$total_day_income = $total_day_income + $return->_breakdown_addition["Legal Holiday ".($legal_param['payroll_overtime_regular'] * 100)."%"]["rate"];
+				$return->_breakdown_addition["Legal Holiday"]["time"] = $_time["regular_holiday_hours"]; 
+				$return->_breakdown_addition["Legal Holiday"]["rate"] = ($regular_float * $hourly_rate) * ($legal_param['payroll_overtime_regular']);
+				$total_day_income = $total_day_income + $return->_breakdown_addition["Legal Holiday"]["rate"];
+				$breakdown_addition += ($regular_float * $hourly_rate) * ($legal_param['payroll_overtime_regular']);
 				if ($overtime_float!=0) 
 				{
 					//Legal Holiday Over Time
-					$return->_breakdown_addition["Over Time ".($legal_param['payroll_overtime_overtime'] * 100)."%"]["time"] = $_time["overtime"]; 
-					$return->_breakdown_addition["Over Time ".($legal_param['payroll_overtime_overtime'] * 100)."%"]["rate"] = ($hourly_rate * $overtime_float) * ($legal_param['payroll_overtime_overtime']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Over Time ".($legal_param['payroll_overtime_overtime'] * 100)."%"]["rate"]; 
+					$return->_breakdown_addition["Over Time"]["time"] = $_time["overtime"]; 
+					$return->_breakdown_addition["Over Time"]["rate"] = ($hourly_rate * $overtime_float) * ($legal_param['payroll_overtime_overtime']);
+					$total_day_income = $total_day_income + $return->_breakdown_addition["Over Time"]["rate"]; 
 					$overtime = ($hourly_rate * $overtime_float) * ($legal_param['payroll_overtime_overtime']);
+					$breakdown_addition += $overtime;
 				}
 				if ($night_diff_float!=0) 
 				{
 					//Legal Holiday Night Differential
-					$return->_breakdown_addition["Night Differential ".($legal_param['payroll_overtime_nigth_diff'] * 100)."%"]["time"] = $_time["night_differential"]; 
-					$return->_breakdown_addition["Night Differential ".($legal_param['payroll_overtime_nigth_diff'] * 100)."%"]["rate"] = ($hourly_rate * $night_diff_float) * ($legal_param['payroll_overtime_nigth_diff']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Night Differential ".($legal_param['payroll_overtime_nigth_diff'] * 100)."%"]["rate"]; 
+					$return->_breakdown_addition["Night Differential"]["time"] = $_time["night_differential"]; 
+					$return->_breakdown_addition["Night Differential"]["rate"] = ($hourly_rate * $night_diff_float) * ($legal_param['payroll_overtime_nigth_diff']);
+					$total_day_income = $total_day_income + $return->_breakdown_addition["Night Differential"]["rate"]; 
 					$nightdiff = ($hourly_rate * $night_diff_float) * ($legal_param['payroll_overtime_nigth_diff']);
-					
+					$breakdown_addition += $nightdiff;
 				}
 			}
 		}
@@ -1184,50 +1189,53 @@ class Payroll2
 			if($rest_float > 0)
 			{
 				//special Holiday with rest day
-				$return->_breakdown_addition["Special Holiday Rest Day ".($special_param['payroll_overtime_rest_day'] * 100)."%"]["time"] = $_time["special_holiday_hours"]; 
-				$return->_breakdown_addition["Special Holiday Rest Day ".($special_param['payroll_overtime_rest_day'] * 100)."%"]["rate"] = ($hourly_rate * $special_float) * ($special_param['payroll_overtime_rest_day']);
-				$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday Rest Day ".($special_param['payroll_overtime_rest_day'] * 100)."%"]["rate"]; 
+				$return->_breakdown_addition["Special Holiday Rest Day"]["time"] = $_time["special_holiday_hours"]; 
+				$return->_breakdown_addition["Special Holiday Rest Day"]["rate"] = ($hourly_rate * $special_float) * ($special_param['payroll_overtime_rest_day']);
+				$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday Rest Day"]["rate"]; 
+				$breakdown_addition += ($hourly_rate * $special_float) * ($special_param['payroll_overtime_rest_day']);
 				if ($overtime_float!=0) 
 				{
 					//Special Holiday Rest Day Over Time
-					$return->_breakdown_addition["Over Time ".($special_param['payroll_overtime_rest_overtime'] * 100)."%"]["time"] = $_time["overtime"]; 
-					$return->_breakdown_addition["Over Time ".($special_param['payroll_overtime_rest_overtime'] * 100)."%"]["rate"] = ($hourly_rate * $overtime_float) * ($special_param['payroll_overtime_rest_overtime']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Over Time ".($special_param['payroll_overtime_rest_overtime'] * 100)."%"]["rate"]; 
+					$return->_breakdown_addition["Over Time"]["time"] = $_time["overtime"]; 
+					$return->_breakdown_addition["Over Time"]["rate"] = ($hourly_rate * $overtime_float) * ($special_param['payroll_overtime_rest_overtime']);
+					$total_day_income = $total_day_income + $return->_breakdown_addition["Over Time"]["rate"]; 
 					$overtime = ($hourly_rate * $overtime_float) * ($special_param['payroll_overtime_rest_overtime']);
-					
+					$breakdown_addition += $overtime;
 				}
 				if ($night_diff_float!=0) 
 				{
 					//Special Holiday Rest Day Night Differential
-					$return->_breakdown_addition["Night Differential ".($special_param['payroll_overtime_rest_night'] * 100)."%"]["time"] = $_time["night_differential"]; 
-					$return->_breakdown_addition["Night Differential ".($special_param['payroll_overtime_rest_night'] * 100)."%"]["rate"] = ($hourly_rate * $night_diff_float) * ($special_param['payroll_overtime_rest_night']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Night Differential ".($special_param['payroll_overtime_rest_night'] * 100)."%"]["rate"]; 
+					$return->_breakdown_addition["Night Differential"]["time"] = $_time["night_differential"]; 
+					$return->_breakdown_addition["Night Differential"]["rate"] = ($hourly_rate * $night_diff_float) * ($special_param['payroll_overtime_rest_night']);
+					$total_day_income = $total_day_income + $return->_breakdown_addition["Night Differential"]["rate"]; 
 					$nightdiff = ($hourly_rate * $night_diff_float) * ($special_param['payroll_overtime_rest_night']);
+					$breakdown_addition += $nightdiff;
 				}
 			}
 			else
 			{
 				//Special Holiday
-				$return->_breakdown_addition["Special Holiday ".($special_param['payroll_overtime_regular'] * 100)."%"]["time"] = $_time["special_holiday_hours"]; 
-				$return->_breakdown_addition["Special Holiday ".($special_param['payroll_overtime_regular'] * 100)."%"]["rate"] = ($hourly_rate * $special_float) * ($special_param['payroll_overtime_regular']);
-				$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday ".($special_param['payroll_overtime_regular'] * 100)."%"]["rate"];
+				$return->_breakdown_addition["Special Holiday"]["time"] = $_time["special_holiday_hours"]; 
+				$return->_breakdown_addition["Special Holiday"]["rate"] = ($hourly_rate * $special_float) * ($special_param['payroll_overtime_regular']);
+				$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday"]["rate"];
+				$breakdown_addition += ($hourly_rate * $special_float) * ($special_param['payroll_overtime_regular']);
 				if ($overtime_float!=0) 
 				{
 					//Special Holiday Over Time
-					$return->_breakdown_addition["Over Time ".($special_param['payroll_overtime_overtime'] * 100)."%"]["time"] = $_time["overtime"]; 
-					$return->_breakdown_addition["Over Time ".($special_param['payroll_overtime_overtime'] * 100)."%"]["rate"] = ($hourly_rate * $overtime_float) * ($special_param['payroll_overtime_overtime']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Over Time ".($special_param['payroll_overtime_overtime'] * 100)."%"]["rate"]; 
+					$return->_breakdown_addition["Over Time"]["time"] = $_time["overtime"]; 
+					$return->_breakdown_addition["Over Time"]["rate"] = ($hourly_rate * $overtime_float) * ($special_param['payroll_overtime_overtime']);
+					$total_day_income = $total_day_income + $return->_breakdown_addition["Over Time"]["rate"]; 
 					$overtime =  ($hourly_rate * $overtime_float) * ($special_param['payroll_overtime_overtime']);
-					
+					$breakdown_addition += $overtime;
 				}
 				if ($night_diff_float!=0) 
 				{
 					//Special Holiday Night Differential
-					$return->_breakdown_addition["Night Differential ".($special_param['payroll_overtime_nigth_diff'] * 100)."%"]["time"] = $_time["night_differential"]; 
-					$return->_breakdown_addition["Night Differential ".($special_param['payroll_overtime_nigth_diff'] * 100)."%"]["rate"] = ($hourly_rate * $night_diff_float) * ($special_param['payroll_overtime_nigth_diff']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Night Differential ".($special_param['payroll_overtime_nigth_diff'] * 100)."%"]["rate"]; 
+					$return->_breakdown_addition["Night Differential"]["time"] = $_time["night_differential"]; 
+					$return->_breakdown_addition["Night Differential"]["rate"] = ($hourly_rate * $night_diff_float) * ($special_param['payroll_overtime_nigth_diff']);
+					$total_day_income = $total_day_income + $return->_breakdown_addition["Night Differential"]["rate"]; 
 					$nightdiff = ($hourly_rate * $night_diff_float) * ($special_param['payroll_overtime_nigth_diff']);
-					
+					$breakdown_addition += $nightdiff; 
 				}
 			}
 		}
@@ -1236,12 +1244,16 @@ class Payroll2
 		/* BREAKDOWN DEDUCTIONS */
 		$late_float			= Self::time_float($_time['late']);
 		$undertime_float	= Self::time_float($_time['undertime']);
+		$absent_float		= 0;
+		$absent = 0;
 
 		if($_time["is_absent"] == true)
 		{
 			$return->_breakdown_deduction["absent"]["time"] = ""; 
 			$return->_breakdown_deduction["absent"]["rate"] = $daily_rate; 
 			$total_day_income = $total_day_income - $return->_breakdown_deduction["absent"]["rate"];
+			$absent_float=1;
+			$absent = $total_day_income;
 		}
 
 		if($late_float != 0)
@@ -1260,16 +1272,20 @@ class Payroll2
 			$undertime = $undertime_float * $hourly_rate; 
 		}
 	
-		$cola_percentile = $cola/$daily_rate;
-		$total_day_income_plus_cola = $total_day_income;
+		$cola_percentile = $cola/($daily_rate+$cola);
+		$total_day_income_plus_cola = $total_day_income+$cola;
 	
-		$return->subtotal_after_addition = $subtotal_after_addition;
-		$return->rendered_hours = 	$time_spent/$target_float;
-		$return->cola = $cola;
+		$return->subtotal_after_addition	= $subtotal_after_addition;
+		$return->rendered_days 				= $time_spent/$target_float;
+		$return->cola						= $cola;
 		$return->total_day_income_plus_cola = $total_day_income_plus_cola;
-		$return->total_day_income = $total_day_income_plus_cola * (1-$cola_percentile);
-		$return->total_day_cola = $total_day_income_plus_cola * $cola_percentile;
-		$return->total_day_basic = $total_day_income-(($nightdiff+$overtime)*(1-$cola_percentile));
+		$return->total_day_income			= $total_day_income_plus_cola * (1-$cola_percentile);
+		$return->total_day_cola 			= $total_day_income_plus_cola * $cola_percentile;
+		$return->cola_percentile			= $cola_percentile;
+		$return->total_day_basic			= $total_day_income-(($nightdiff+$overtime)*(1-$cola_percentile));
+		$return->breakdown_addition 		= $breakdown_addition;
+		$return->breakdown_deduction		= $late + $undertime + $absent; 
+		$return->rendered_tardiness			= divide(($late_float+$undertime_float),$target_float)+$absent_float;
 		return $return;
 	}
 	
@@ -1277,27 +1293,73 @@ class Payroll2
 	
 	public static function cutoff_compute_gross_pay($compute_type,$cutoff_rate,$cutoff_cola,$cutoff_target_days=0,$_date_compute)
 	{
+		$return = new stdClass();
+		
 		if($compute_type=="daily")
 		{
-			
 			$cutoff_income_plus_cola = 0;
-			$cutoff_income = 0;
-			$cutoff_cola = 0;
-			$cutoff_basic = 0;
-			$render_days = 0;
+			$cutoff_income			 = 0;
+			$cutoff_cola			 = 0;
+			$cutoff_basic			 = 0;
+			$render_days			 = 0;
 			
 			foreach($_date_compute as $date => $date_compute)
 			{
 				$cutoff_income_plus_cola += $date_compute->compute->total_day_income_plus_cola;
-				// $cutoff_income = 
+				$cutoff_income			 += $date_compute->compute->total_day_income;
+				$cutoff_cola			 += $date_compute->compute->total_day_cola;
+				$cutoff_basic			 += $date_compute->compute->total_day_basic;
+				$render_days			 += $date_compute->compute->rendered_days;
 			}
 			
-			$return["_breakdown"][$date] = new stdClass();
-			$return["_breakdown"][$date]->cutoff_income_plus_cola = $cutoff_income_plus_cola;
+			//$return["_breakdown"][$date] = new stdClass();
+			// $return["_breakdown"][$date]->sample;
+		
+			$return->cutoff_income_plus_cola  = $cutoff_income_plus_cola;
+			$return->cutoff_income 			  = $cutoff_income;
+			$return->cutoff_cola			  = $cutoff_cola;
+			$return->cutoff_basic			  = $cutoff_basic;
+			$return->render_days			  = $render_days;
 		}
 		else if ($compute_type=="monthly") 
 		{
+			$breakdown_deduction = 0;
+			$breakdown_addition  = 0;
+			$breakdown_subtotal  = 0;
+			$rendered_tardiness  = 0;
+			foreach($_date_compute as $date => $date_compute)
+			{
+				$breakdown_deduction += $date_compute->compute->breakdown_deduction;
+				$breakdown_addition  += $date_compute->compute->breakdown_addition;
+				$rendered_tardiness  += $date_compute->compute->rendered_tardiness;
+				$breakdown_subtotal  += ($date_compute->compute->breakdown_addition - $date_compute->compute->breakdown_deduction);
+			}
 			
+			$return->total_deduction = $breakdown_deduction;
+			$return->total_addition = $breakdown_addition;
+			$return->total_subtotal = $breakdown_subtotal;
+			$return->cutoff_rate = $cutoff_rate;
+			$cutoff_income_plus_cola = $cutoff_rate + $cutoff_cola + $breakdown_addition;
+			$cutoff_income_plus_cola = $cutoff_income_plus_cola - $breakdown_deduction;
+			
+			$cola_percentile	= $cutoff_cola / ($cutoff_rate + $cutoff_cola);
+			$cutoff_income		= $cutoff_income_plus_cola * (1 - $cola_percentile);
+			$cutoff_cola		= $cutoff_income_plus_cola * $cola_percentile;
+			
+			
+			
+			$deduction	  = $breakdown_deduction * (1 - $cola_percentile);
+			$cutoff_basic = $cutoff_rate - $deduction;
+			
+			$return->deduction_cola = $breakdown_deduction * $cola_percentile;
+			
+			$cutoff_target_days -= $rendered_tardiness;
+			
+			$return->cutoff_income_plus_cola  = $cutoff_income_plus_cola;
+			$return->cutoff_income 			  = $cutoff_income;
+			$return->cutoff_cola			  = $cutoff_cola;
+			$return->cutoff_basic			  = $cutoff_basic;
+			$return->render_days			  = $cutoff_target_days;
 		}
 		else if ($compute_type=="fix") 
 		{
@@ -1476,32 +1538,6 @@ class Payroll2
 	}
 
 	/*  get net salary */
-	// function cutoff_compute_net_pay()
-	// - government_employee_contribution (array)
-	// - name (string)
-	// - amount (double)
-	// - type (string - "add", "minus")
-	// - category (string)
-	// - government_employer_contribution (array)
-	// - name (string)
-	// - amount (double)
-	// - type (string - "add", "minus")
-	// - category (string)
-	// - allowances (array)
-	// - name (string)
-	// - amount (double)
-	// - type (string - "add", "minus")
-	// - deductions (array)
-	// - name (string)
-	// - amount (double)
-	// - type (string - "add", "minus")
-	// - adjustments (array)
-	// - name (string)
-	// - amount (double)
-	// - type (string - "add", "minus")
-	// - net_pay (double)
-	// - 13th_month_pay (double)
-
 	// tbl_payroll_gross
 	// - payroll_gross_id
 	// - payroll_period_company_id
@@ -1511,7 +1547,8 @@ class Payroll2
 
 	public static function cutoff_compute_net_pay($payroll_period_company_id, $employee_id, $basic_pay = 0, $gross_pay = 0, $rendered_days = 0)
 	{
-		$return = array();
+		$return 		= array();
+		$return['obj']	= array();
 		$total_deminimis = 0;
 		$total_deduction = 0;
 
@@ -1554,48 +1591,52 @@ class Payroll2
 		/* ALLOWANCES */
 		$allowances 		= Payroll2::get_allowance($employee_id, $rendered_days);
 		$total_deminimis	+= $allowances['total'];
+		$temp['name'] 		= 'allowances';
+		$temp['obj']  		= $allowances['obj'];
+		array_push($return['obj'], $temp);
+		
 		/* allowances */
 		$adjustment_allowance 		= Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Allowance')->get();
 		$total_deminimis 			+= Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Allowance')->sum('payroll_adjustment_amount');
 		
 		$temp['name'] 				= 'adjustment_allowance';
 		$temp['obj']  				= Payroll2::adjustment_breakdown($adjustment_allowance, 'add');
-		array_push($return, $temp);
+		array_push($return['obj'], $temp);
 	
 		/* bonus */
 		$adjustment_bonus 			= Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Bonus')->get();
 		$total_deminimis 			+= Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Bonus')->sum('payroll_adjustment_amount');
 		$temp['name'] 				= 'adjustment_bonus';
 		$temp['obj']  				= Payroll2::adjustment_breakdown($adjustment_bonus, 'add');
-		array_push($return, $temp);
+		array_push($return['obj'], $temp);
 		
 		/* commission */
 		$adjustment_commission 			= Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Commissions')->get();
 		$total_deminimis 				+= Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Commissions')->sum('payroll_adjustment_amount');
 		$temp['name'] 					= 'adjustment_commission';
 		$temp['obj']  					= Payroll2::adjustment_breakdown($adjustment_commission, 'add');
-		array_push($return, $temp);
+		array_push($return['obj'], $temp);
 		
 		/* incentives */
 		$adjustment_incentives 			= Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Incentives')->get();
 		$total_deminimis 				+= Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Incentives')->sum('payroll_adjustment_amount');
 		$temp['name'] 					= 'adjustment_incentives';
 		$temp['obj']  					= Payroll2::adjustment_breakdown($adjustment_incentives, 'add');
-		array_push($return, $temp);
+		array_push($return['obj'], $temp);
 		
 		/* 13 month pay */
 		$adjustment_13_month 			= Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, '13 month pay')->get();
 		$total_deminimis 				+= Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , '13 month pay')->sum('payroll_adjustment_amount');
 		$temp['name'] 					= 'adjustment_13_month';
 		$temp['obj']  					= Payroll2::adjustment_breakdown($adjustment_13_month, 'add');
-		array_push($return, $temp);
+		array_push($return['obj'], $temp);
 		
 		/* deductions */
 		$adjustment_deductions 			= Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Deductions')->get();
 		$total_deduction 				+= Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Deductions')->sum('payroll_adjustment_amount');
 		$temp['name'] 					= 'adjustment_deductions';
 		$temp['obj']  					= Payroll2::adjustment_breakdown($adjustment_deductions, 'minus');
-		array_push($return, $temp);
+		array_push($return['obj'], $temp);
 		
 		/* GET 13 MONTH PAY */
 		$n13_month = 0;
@@ -1607,6 +1648,10 @@ class Payroll2
 		$total_deminimis += $n13_month;
 		
 		/* GET PREVIOUS RECORD OF GOVERNMENT CONTRIBUTION */
+		$date_period[0] = date('Y-m-01', strtotime($end_date));
+		$date_period[1] = date('Y-m-t', strtotime($end_date));
+		
+		
 		$pevious_record = Tbl_payroll_record::getdate($shop_id, $date_period)
 											->where('tbl_payroll_period.payroll_period_category', $period_category)
 											->where('payroll_employee_id',$employee_id)
@@ -1626,6 +1671,18 @@ class Payroll2
 		$sss_ec					= $sss_contribution['sss_ec'];
 
 		$total_deduction 		+= $sss_ee;
+		
+		$temp['name']	= 'sss_ee';
+		$temp['obj']	= Payroll2::computation_array('SSS EE', $sss_ee, 'minus');
+		array_push($return['obj'], $temp);
+
+		$temp['name']	= 'sss_er';
+		$temp['obj']	= Payroll2::computation_array('SSS ER', $sss_er, 'employer');
+		array_push($return['obj'], $temp);
+
+		$temp['name']	= 'sss_ec';
+		$temp['obj']	= Payroll2::computation_array('SSS EC', $sss_ec, 'employer');
+		array_push($return['obj'], $temp);
 
 		/* GET PHILHEALTH CONTRIBUTION */
 		$philhealth_contribution  	= Payroll2:: get_philhealth($shop_id, $group->payroll_group_philhealth ,$salary->payroll_employee_salary_philhealth, $period_category, $period_category_arr, $salary->is_deduct_philhealth_default, $salary->deduct_philhealth_custom, $previous_philhealth);
@@ -1633,17 +1690,36 @@ class Payroll2
 		$philhealth_er 				= $philhealth_contribution['philhealth_er'];
 
 		$total_deduction			+= $philhealth_ee;
+		
+		$temp['name']	= 'philhealth_ee';
+		$temp['obj']	= Payroll2::computation_array('PhilHealth EE', $philhealth_ee, 'minus');
+		array_push($return['obj'], $temp);
+
+		$temp['name']	= 'philhealth_er';
+		$temp['obj']	= Payroll2::computation_array('PhilHealth ER', $philhealth_ee, 'employer');
+		array_push($return['obj'], $temp);
 
 		// GET PAGIBIG CONTRIBUTION
 		$pagibig_contribution 		= Payroll2::get_pagibig($shop_id, $salary->payroll_employee_salary_pagibig, $group->payroll_group_pagibig, $period_category_arr, $salary->is_deduct_pagibig_default, $period_category, $salary->deduct_pagibig_custom);
 		$pagibig_ee = $pagibig_contribution['pagibig_ee'];
 		$pagibig_er = $pagibig_contribution['pagibig_er'];
 		$total_deduction			+= $pagibig_ee;
+		
+		$temp['name']	= 'pagibig_ee';
+		$temp['obj']	= Payroll2::computation_array('PAIBIG EE', $pagibig_ee, 'minus');
+		array_push($return['obj'], $temp);
+
+		$temp['name']	= 'pagibig_er';
+		$temp['obj']	= Payroll2::computation_array('PAIBIG ER', $pagibig_er, 'employer');
+		array_push($return['obj'], $temp);
 
 		/* GET TAX CONTRIBUTION */
 		$tax_contribution = Payroll2::get_tax($shop_id, $salary->payroll_employee_salary_minimum_wage, $group->payroll_group_tax, $period_category, $group->payroll_group_before_tax, $salary->payroll_employee_salary_taxable, $sss_ee, $philhealth_ee, $pagibig_ee, $employee->payroll_employee_tax_status, $period_category_arr);
-		
 		$total_deduction			+= $tax_contribution;
+		$temp['name']	= 'tax';
+		$temp['obj']	= Payroll2::computation_array('TAX', $tax_contribution, 'minus');
+		array_push($return['obj'], $temp);
+		
 		/* AGENCY DEDUCTION */
 		$agency_deduction = 0;
 		if($group->payroll_group_agency == Payroll::return_ave($period_category))
@@ -1655,22 +1731,19 @@ class Payroll2
 
 		$temp['name']	= 'agency_deduction';
 		$temp['obj']	= Payroll2::computation_array('AGENCY DEDUCTION', $agency_deduction, 'minus');
-		array_push($return, $temp);
-
+		array_push($return['obj'], $temp);
 
 		$deduction = Payroll::getdeduction($employee_id, $start_date, $period_category_arr['period_category'], $period_category, $shop_id);
-
 		$total_deduction += $deduction['total_deduction'];
 
 		$temp['name'] = 'deduction';
 		$temp['obj'] = Payroll2::deducton_breakdown($deduction['deduction']);
-
-		$net = ($gross_pay + $total_deminimis) + $total_deduction;
-
-		$temp['name']	= 'net_pay';
-		$temp['obj']	= Payroll2::computation_array('NET PAY', $net, 'minus');
-		array_push($return, $temp);
-
+		array_push($return['obj'], $temp);
+		
+		$net = ($gross_pay + $total_deminimis) - $total_deduction;
+		// dd($total_deduction);
+		$return['net_pay']	=	$net;
+		
 		return 	$return;
 
 	}
@@ -1707,10 +1780,10 @@ class Payroll2
 		{
 			
 			$data['sss_ee'] = divide($sss_contribution_ee_def, $period_category_arr['count_per_period']);
-			$data['sss_er'] = divide($sss_contribution_ee_def, $period_category_arr['count_per_period']);
-			$data['sss_ec'] = divide($sss_contribution_ee_def, $period_category_arr['count_per_period']);
+			$data['sss_er'] = divide($sss_contribution['er'], $period_category_arr['count_per_period']);
+			$data['sss_ec'] = divide($sss_contribution['ec'], $period_category_arr['count_per_period']);
 			
-			if($data['is_deduct_sss_default'] == 0)
+			if($is_deduct_sss_default == 0)
 			{	
 				$data['sss_ee'] = $deduct_sss_custom;
 
@@ -1764,7 +1837,7 @@ class Payroll2
 			$data['philhealth_ee'] = divide($philhealth_contribution_ee_def, $period_category_arr['count_per_period']);
 			$data['philhealth_er'] = divide($philhealth_contribution['er'] , $period_category_arr['count_per_period']);
 
-			if($data['is_deduct_philhealth_default'] == 0)
+			if($is_deduct_philhealth_default == 0)
 			{
 				$data['philhealth_ee'] = $deduct_philhealth_custom;
 				if($period_category == 'Last Period')
@@ -1804,11 +1877,11 @@ class Payroll2
 		$pagibig_contribution_def = Payroll::pagibig_contribution($shop_id, $salary_pagibig);
 		$data['pagibig_ee'] = 0;
 		$data['pagibig_er']	= 0;
-		if($group->payroll_group_pagibig == 'Every Period')
+		if($payroll_group_pagibig == 'Every Period')
 		{
 			$pagibig_contribution = divide($pagibig_contribution_def, $period_category_arr['count_per_period']);
 
-			if($data['is_deduct_pagibig_default'] == 0)
+			if($is_deduct_pagibig_default == 0)
 			{
 				$data['pagibig_ee'] = $data['deduct_pagibig_custom'];
 
@@ -1845,11 +1918,13 @@ class Payroll2
 	public static function get_tax($shop_id, $minimum_wage = 0, $payroll_group_tax, $period_category, $payroll_group_before_tax = 0, $salary_taxable = 0, $sss_ee = 0, $philhealth_ee = 0, $pagibig_ee = 0, $tax_status, $period_category_arr)
 	{
 		$tax_contribution = 0;
-		if($data['minimum_wage'] == 0)
+		if($minimum_wage == 0)
 		{
-			if($group->payroll_group_tax == 'Every Period' || $group->payroll_group_tax == $period_category)
+			// dd($payroll_group_tax);
+			// if($payroll_group_tax == 'Every Period' || $payroll_group_tax == $period_category_arr['period_category'])
+			if($payroll_group_tax == 'Every Period' )
 			{
-				if($group->payroll_group_before_tax == 0)
+				if($payroll_group_before_tax == 0)
 				{
 					$salary_taxable = $salary_taxable - ($sss_ee + $philhealth_ee + $pagibig_ee);
 				}
@@ -1858,19 +1933,18 @@ class Payroll2
 				{
 					$salary_taxable = 0;
 				}
+				
 
 				$tax_contribution = divide(Payroll::tax_contribution($shop_id, $salary_taxable, $tax_status, $period_category), $period_category_arr['count_per_period']);
 
-				if($group->payroll_group_tax == 'Last Period')
+				if($payroll_group_tax == 'Last Period')
 				{
 					$tax_contribution = $tax_contribution * $period_category_arr['count_per_period'];
 				}	
 			}
 			
 		}
-
-
-		return $$tax_contribution;
+		return $tax_contribution;
 	}
 
 	public static function get_allowance($employee_id, $rendered_days = 0)
@@ -1886,6 +1960,7 @@ class Payroll2
 		{
 			$temp['name'] = $daily->payroll_allowance_name;
 			$temp['amount'] = $daily->payroll_allowance_amount * $rendered_days;
+			$temp['type']	= 'add';
 
 			if($temp['amount'] > 0)
 			{
@@ -1904,6 +1979,7 @@ class Payroll2
 		{
 			$temp['name'] = $fixed->payroll_allowance_name;
 			$temp['amount'] = $fixed->payroll_allowance_amount;
+			$temp['type']	= 'add';
 			array_push($data['obj'], $temp);
 			$data['total'] += $temp['amount'];
 		}
@@ -1949,5 +2025,25 @@ class Payroll2
 		}
 
 		return $data;
+	}
+	
+	
+	public static function convert_period_cat($cat = '')
+	{
+		$return = 'daily';
+		if($cat == 'Daily Rate')
+		{
+			$return = 'daily';
+		}
+		if($cat == 'Monthly Rate')
+		{
+			$return = 'monthly';
+		}
+		if($cat == 'Flat Rate')
+		{
+			$return = 'fix';
+		}
+		
+		return $return;
 	}
 }

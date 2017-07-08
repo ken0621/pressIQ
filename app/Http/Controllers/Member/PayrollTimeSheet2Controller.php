@@ -90,7 +90,7 @@ class PayrollTimeSheet2Controller extends Member
 		
 		/* RETURN DATA TO SERVER */
 		$data["daily_info"] = $this->timesheet_process_daily_info($employee_id, Request::input("date"), $timesheet_db);
-		$daily_income = $data["daily_info"]->compute->total_day_income;
+		$daily_income = $data["daily_info"]->compute->total_day_income_plus_cola;
 		
 		$return["income"] = $daily_income;
 		$return["string_income"] = $this->timesheet_daily_income_to_string($timesheet_db->payroll_time_sheet_id, $return["income"], $data["daily_info"]->shift_approved, $period_id);
@@ -366,25 +366,42 @@ class PayrollTimeSheet2Controller extends Member
 		/* COMPUTATION FOR CUTOFF */
 		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($data["period_company_id"])->first();
 		
-		$compute_type = "daily";
-		$cutoff_rate = 9000;
-		$cutoff_cola = 1000;
-		$cutoff_target_days = 10;
+
+
+
+		return view('member.payroll2.employee_day_summary', $data);
+	}
+	public function compute_whole_cutoff($period_company_id, $employee_id)
+	{
+		/* COMPUTATION FOR CUTOFF */
+		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
+		
+		/* EMPLOYEE SALARY */		
+		$salary = $this->get_salary($employee_id, $company_period->payroll_period_start);
+		/* EMPLOYEE GROUP */
+		$group = $this->db_get_current_employee_contract($employee_id, $company_period->payroll_period_start);
+
+		$compute_type = Payroll2::convert_period_cat($group->payroll_group_salary_computation);
+		$cutoff_rate = $this->identify_period_salary($salary->payroll_employee_salary_monthly, $company_period->payroll_period_category);
+		$cutoff_cola = $this->identify_period_salary($salary->monthly_cola, $company_period->payroll_period_category);
+		$cutoff_target_days = $this->identify_period_salary($salary->payroll_group_working_day_month, $group->payroll_period_category);
+		
 		$from = $data["start_date"] = $company_period->payroll_period_start;
 		$to = $data["end_date"] = $company_period->payroll_period_end;
-
+		
 		while($from <= $to)
 		{
 			$timesheet_db = $this->timesheet_info_db($employee_id, $from);
 			$_timesheet[$from] = $this->timesheet_process_daily_info($employee_id, $from, $timesheet_db);;
 			$from = Carbon::parse($from)->addDay()->format("Y-m-d");
 		}
-		$data["cutoff_inpute"] = $_timesheet;
-		$data["cutoff_compute"] = Payroll2::cutoff_compute_gross_pay($compute_type, $cutoff_rate, $cutoff_cola, $cutoff_target_days, $_timesheet);
-		dd($data);
-		return view('member.payroll2.employee_day_summary', $data);
+		$data["cutoff_input"] = $_timesheet;
+		
+		
+		$data["cutoff_compute"] = $cutoff_compute = Payroll2::cutoff_compute_gross_pay($compute_type, $cutoff_rate, $cutoff_cola, $cutoff_target_days, $_timesheet);
+		$data["netpay_compute"] = Payroll2::cutoff_compute_net_pay($period_company_id, $employee_id, $cutoff_compute->cutoff_basic, $cutoff_compute->cutoff_income_plus_cola, $cutoff_compute->render_days);
+		return $data;
 	}
-	
 	public function day_summary_info($timesheet_id)
 	{
 		$data["timesheet_db"] = $timesheet_db = $this->timesheet_info_db_by_id($timesheet_id);
@@ -419,6 +436,49 @@ class PayrollTimeSheet2Controller extends Member
 		}
 		
 		echo json_encode("success");
+	}
+	public function income_summary($period_company_id, $employee_id)
+	{
+		/* computation type param
+		*  Daily Rate
+		*  Flat Rate
+		*  Monthly Rate
+		*/
+		$date = Tbl_payroll_period_company::sel($period_company_id)->pluck('payroll_period_start');
+		$group = $this->db_get_current_employee_contract($employee_id, $date);
+		$data = $this->compute_whole_cutoff($period_company_id, $employee_id);
+		$computation_type = $group->payroll_group_salary_computation;
+		
+		switch ($computation_type)
+		{
+			case "Daily Rate":
+				return $this->income_summary_daily_computation($data);
+			break;
+			case "Monthly Rate":
+				return $this->income_summary_monthly_computation($data);
+			break;
+			case "Flat Rate":
+				return $this->income_summary_flat_rate_computation($data);
+			break;
+			
+		}
+	}
+	
+	public function income_summary_daily_computation($data)
+	{
+		$data['total'] = $this->gettotal_break($data);
+		$data['adjustment'] = $this->generate_adjustment($data);
+		// dd($data);
+		return view("member.payroll2.employee_income_summary_daily", $data);
+	}
+	public function income_summary_monthly_computation($data)
+	{
+		//dd($data);
+		return view("member.payroll2.employee_income_summary_monthly", $data);
+	}
+	public function income_summary_flat_rate_computation()
+	{
+		dd($data);
 	}
 	/* GLOBAL FUNCTION FOR THIS CONTROLLER */
 	public function c_24_hour_format($time)
@@ -593,4 +653,101 @@ class PayrollTimeSheet2Controller extends Member
 	{
 		return Tbl_payroll_time_sheet::where("payroll_time_sheet_id", $timesheet_id)->first();
 	}
+	
+	public function get_salary($employee_id, $date)
+	{
+		return Tbl_payroll_employee_salary::selemployee($employee_id, $date)->first();
+	}
+	
+	public function identify_period_salary($salary = 0, $period = '')
+	{
+		$salary_period = 0;
+		if($period == 'Monthly')
+		{
+			$salary_period = $salary;
+		}
+		else if($period == 'Semi-monthly')
+		{
+			$salary_period = $salary / 2;
+		}
+		else if($period == 'Weekly')
+		{
+			$salary_period = $salary / 4;
+		}
+		else if($period == 'Daily')
+		{
+			$salary_period = ($salary * 12) / 365;
+		}
+		
+		return $salary_period;
+	}
+	
+	public function gettotal_break($data)
+	{
+		$return = array();
+		$return['basic_total']		= 0;
+		$return['basic_gross']		= 0;
+		$return['basic_cola']		= 0;
+		$return['basic_gross_cola'] = 0;
+		
+		foreach($data['cutoff_input'] as $key => $cutoff)
+		{
+			$return['basic_total']		+= $cutoff->compute->total_day_basic;
+			$return['basic_gross']		+= $cutoff->compute->total_day_income;
+			$return['basic_cola']		+= $cutoff->compute->total_day_cola;
+			$return['basic_gross_cola'] += $cutoff->compute->total_day_income_plus_cola;
+		}
+		
+		return $return;
+	}
+	
+	public function generate_adjustment($data)
+	{
+		// dd($data);
+		$_obj = $data['netpay_compute']['obj'];
+		$return = array();
+
+		$additional = array();
+		$deduction = array();
+		
+		foreach($_obj as $obj)
+		{
+			foreach($obj['obj'] as $adj)
+			{
+				if(isset($adj['name']))
+				{
+					$temp['name'] = $adj['name'];
+					$temp['amount'] = $adj['amount'];
+					if($adj['type'] == 'add')
+					{
+						array_push($additional, $temp);
+					}
+					else if($adj['type'] == 'minus')
+					{
+						array_push($deduction, $temp);
+					}
+				}
+				
+			}
+			
+			if(isset($obj['obj']['name']))
+			{
+				$temp['name'] = $obj['obj']['name'];
+				$temp['amount'] = $obj['obj']['amount'];
+				if($obj['obj']['type'] == 'add')
+				{
+					array_push($additional, $temp);
+				}
+				else if($obj['obj']['type'] == 'minus')
+				{
+					array_push($deduction, $temp);
+				}
+			}
+		}
+		
+		$return['add'] = $additional;
+		$return['minus'] = $deduction;
+		return $return;
+	}
+	
 }

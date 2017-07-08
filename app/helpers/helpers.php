@@ -19,6 +19,10 @@ function c_time_to_int($time)
     $return = strtotime("01/01/70 " . $time . " UTC");
     return $return;
 }
+function payroll_currency($amount)
+{
+    return "PHP " . number_format($amount, 2);
+}
 function convert_seconds_to_hours_minutes($format = "H:i", $d)
 {
     date_default_timezone_set('UTC');

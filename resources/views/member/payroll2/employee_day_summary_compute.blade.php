@@ -5,6 +5,11 @@
         <td width="100px"></td>
         <td>PHP {{ number_format($timesheet_info->compute->daily_rate, 2) }}</td>
     </tr>
+    <tr>
+        <td>Cola</td>
+        <td width="100px"></td>
+        <td>PHP {{ number_format($timesheet_info->compute->cola, 2) }}</td>
+    </tr>
     @if(isset($timesheet_info->compute->_breakdown_addition))
         @foreach($timesheet_info->compute->_breakdown_addition as $key => $breakdown)
         <tr>
@@ -31,7 +36,7 @@
     <tr style="color: #1682ba; font-size: 18px;">
         <td class="text-bold">Total</td>
         <td class="text-center" style="color: #bbb" width="120px"></td>
-        <td class="text-bold" width="120px">PHP {{ number_format($timesheet_info->compute->total_day_income, 2) }}</td>
+        <td class="text-bold" width="120px">PHP {{ number_format($timesheet_info->compute->total_day_income_plus_cola, 2) }}</td>
     </tr>
     </tbody>
 </table>

@@ -2080,6 +2080,7 @@ class Payroll2
 			$temp['type']	= 'minus';
 			array_push($data, $temp);
 		}
+		
 
 		return $data;
 	}

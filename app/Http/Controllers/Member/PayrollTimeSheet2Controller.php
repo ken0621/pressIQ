@@ -93,18 +93,18 @@ class PayrollTimeSheet2Controller extends Member
 		$daily_income = $data["daily_info"]->compute->total_day_income;
 		
 		$return["income"] = $daily_income;
-		$return["string_income"] = $this->timesheet_daily_income_to_string($timesheet_db->payroll_time_sheet_id, $return["income"], $data["daily_info"]->shift_approved);
+		$return["string_income"] = $this->timesheet_daily_income_to_string($timesheet_db->payroll_time_sheet_id, $return["income"], $data["daily_info"]->shift_approved, $period_id);
 		echo json_encode($return);
 	}
-	public function timesheet_daily_income_to_string($timesheet_id, $income, $approved)
+	public function timesheet_daily_income_to_string($timesheet_id, $income, $approved, $period_company_id)
 	{
 		if($approved == true)
 		{
-			$string = '<a onclick="action_load_link_to_modal(\'/member/payroll/company_timesheet_day_summary/' . $timesheet_id . '\', \'lg\')" href="javascript:" class="daily-salary" amount="' . $income . '">PHP ' . number_format($income, 2) . '</a>';	
+			$string = '<a onclick="action_load_link_to_modal(\'/member/payroll/company_timesheet_day_summary/' . $timesheet_id . '?period_company_id=' . $period_company_id . '\', \'lg\')" href="javascript:" class="daily-salary" amount="' . $income . '">PHP ' . number_format($income, 2) . '</a>';	
 		}
 		else
 		{
-			$string = '<a style="color: red;" onclick="action_load_link_to_modal(\'/member/payroll/company_timesheet_day_summary/' . $timesheet_id . '\', \'lg\')" href="javascript:" class="daily-salary" amount="' . $income . '">PHP ' . number_format($income, 2) . '</a>';
+			$string = '<a style="color: red;" onclick="action_load_link_to_modal(\'/member/payroll/company_timesheet_day_summary/' . $timesheet_id . '?period_company_id=' . $period_company_id . '\', \'lg\')" href="javascript:" class="daily-salary" amount="' . $income . '">PHP ' . number_format($income, 2) . '</a>';
 		}
 		
 		return $string;
@@ -354,12 +354,34 @@ class PayrollTimeSheet2Controller extends Member
 
 	public function day_summary($timesheet_id)
 	{
+		$data["period_company_id"] = Request::input("period_company_id");
 		$data["timesheet_db"] = $timesheet_db = $this->timesheet_info_db_by_id($timesheet_id);
 		$data["payroll_time_sheet_id"] = $timesheet_db->payroll_time_sheet_id;
-		$data["employee_id"] = $timesheet_db->payroll_employee_id;
-		$data["employee_info"] = $this->db_get_employee_information($timesheet_db->payroll_employee_id); 
+		$data["employee_id"] = $employee_id = $timesheet_db->payroll_employee_id;
+		$data["employee_info"] =  $this->db_get_employee_information($timesheet_db->payroll_employee_id); 
 		$data["timesheet_info"] = $timesheet_info =$this->timesheet_process_daily_info($timesheet_db->payroll_employee_id, $timesheet_db->payroll_time_date, $timesheet_db);
 		$data["compute_html"] = view('member.payroll2.employee_day_summary_compute', $data);
+		
+		
+		/* COMPUTATION FOR CUTOFF */
+		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($data["period_company_id"])->first();
+		
+		$compute_type = "daily";
+		$cutoff_rate = 9000;
+		$cutoff_cola = 1000;
+		$cutoff_target_days = 10;
+		$from = $data["start_date"] = $company_period->payroll_period_start;
+		$to = $data["end_date"] = $company_period->payroll_period_end;
+
+		while($from <= $to)
+		{
+			$timesheet_db = $this->timesheet_info_db($employee_id, $from);
+			$_timesheet[$from] = $this->timesheet_process_daily_info($employee_id, $from, $timesheet_db);;
+			$from = Carbon::parse($from)->addDay()->format("Y-m-d");
+		}
+		$data["cutoff_inpute"] = $_timesheet;
+		$data["cutoff_compute"] = Payroll2::cutoff_compute_gross_pay($compute_type, $cutoff_rate, $cutoff_cola, $cutoff_target_days, $_timesheet);
+		dd($data);
 		return view('member.payroll2.employee_day_summary', $data);
 	}
 	

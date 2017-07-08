@@ -16,9 +16,19 @@ $data['icon'] = 'fa fa-money';
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading" style="padding-left: 0; padding-right: 0;">
         <div class="clearfix">
-            <form class="global-submit" method="post" action="/mlm/wallet/vmoney/transfer">
+            <form method="post" action="/mlm/wallet/vmoney/transfer">
                 {!! csrf_field() !!}
-                <h3 style="margin-top: 0; margin-bottom: 20px; width: 100%; background-color: #367fa9; color: #fff; margin-top: -10px; padding: 7.5px 15px;" class="text-left">Transfer Wallet to Airline Wallet</h3>
+                <h3 style="margin-top: 0; margin-bottom: 20px; width: 100%; background-color: #00c0ef; color: #fff; margin-top: -10px; padding: 7.5px 15px;" class="text-left">Transfer Wallet to Airline Wallet</h3>
+                @if (session('success'))
+                    <div style="margin-top: -20px; border-radius: 0;" class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                @if (session('error'))
+                    <div style="margin-top: -20px; border-radius: 0;" class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
                 <div style="padding: 0 15px;">
                     <div class="form-group">
                       <label>V-Money Email Address</label>

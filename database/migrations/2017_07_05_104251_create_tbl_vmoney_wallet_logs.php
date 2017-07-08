@@ -18,10 +18,15 @@ class CreateTblVmoneyWalletLogs extends Migration
             $table->dateTime('vmoney_wallet_logs_date');
             $table->string('vmoney_wallet_logs_email');
             $table->double('vmoney_wallet_logs_amount');
-            $table->integer('shop_id')->unsigned();
+            // $table->integer('shop_id')->unsigned();
+            $table->integer('customer_id')->unsigned();
             
-            $table->foreign('shop_id')
-                  ->references('shop_id')->on('tbl_shop')
+            // $table->foreign('shop_id')
+            //       ->references('shop_id')->on('tbl_shop')
+            //       ->onDelete('cascade');
+            
+            $table->foreign('customer_id')
+                  ->references('customer_id')->on('tbl_customer')
                   ->onDelete('cascade');
         });
     }

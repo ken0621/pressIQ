@@ -10,6 +10,9 @@ use App\Models\Tbl_payroll_period_company;
 use App\Models\Tbl_payroll_employee_contract;
 use App\Models\Tbl_payroll_13_month_virtual;
 use App\Models\Tbl_payroll_record;
+use App\Models\Tbl_payroll_employee_salary;
+use App\Models\Tbl_payroll_employee_basic;
+use App\Models\Tbl_payroll_employee_allowance;
 
 class Payroll2
 {
@@ -1618,8 +1621,11 @@ class Payroll2
 	// - basic_pay
 	// - gross_pay
 
-	public static function cutoff_compute_net_pay($payroll_period_company_id, $employee_id, $basic_pay = 0, $gross_pay = 0)
+	public static function cutoff_compute_net_pay($payroll_period_company_id, $employee_id, $basic_pay = 0, $gross_pay = 0, $rendered_days = 0)
 	{
+		$return = array();
+		$total_deminimis = 0;
+		$total_deduction = 0;
 
 		/* get period details */
 		$date_query 		= Tbl_payroll_period_company::sel($payroll_period_company_id)->first();
@@ -1631,228 +1637,368 @@ class Payroll2
 		$group 	= Tbl_payroll_employee_contract::selemployee($employee_id, $start_date)
 												->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
 		                                        ->first();
+		$shop_id = $group->shop_id;                                       
+		/* GET EMPLOYEE SALARY */
+		$salary 			= Tbl_payroll_employee_salary::selemployee($employee_id, $start_date)->first();
+		if($salary == null)
+		{
+			$salary = new stdClass();
+			$salary->payroll_employee_salary_minimum_wage 	= 0;
+			$salary->payroll_employee_salary_monthly 		= 0;
+			$salary->payroll_employee_salary_daily 			= 0;
+			$salary->payroll_employee_salary_taxable 		= 0;
+			$salary->payroll_employee_salary_sss 			= 0;
+			$salary->payroll_employee_salary_pagibig 		= 0;
+			$salary->payroll_employee_salary_philhealth 	= 0;
+			$salary->is_deduct_tax_default 					= 0;
+			$salary->deduct_tax_custom 						= 0;
+			$salary->is_deduct_sss_default 					= 0;
+			$salary->deduct_sss_custom 						= 0;
+			$salary->is_deduct_philhealth_default 			= 0;
+			$salary->deduct_philhealth_custom 				= 0;
+			$salary->is_deduct_pagibig_default 				= 0;
+			$salary->deduct_pagibig_custom 					= 0;
+		}
+
+		/* GET EMPLOYEE DATA */
+		$employee 			= Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->first();
 		
-		$return = array();
+		/* ALLOWANCES */
+		$allowances 		= Payroll2::get_allowance($employee_id, $rendered_days);
+		$total_deminimis	+= $allowances['total'];
 		/* allowances */
-		$adjustment_allowance = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Allowance')->get();
-		$adjustment_allowance_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Allowance')->sum('payroll_adjustment_amount');
-		$temp['name'] = 'adjustment_allowance';
-		$temp['obj']  = Payroll2::adjustment_breakdown($adjustment_allowance, 'add');
+		$adjustment_allowance 		= Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Allowance')->get();
+		$total_deminimis 			+= Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Allowance')->sum('payroll_adjustment_amount');
+		
+		$temp['name'] 				= 'adjustment_allowance';
+		$temp['obj']  				= Payroll2::adjustment_breakdown($adjustment_allowance, 'add');
 		array_push($return, $temp);
 	
 		/* bonus */
-		$adjustment_bonus = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Bonus')->get();
-		$adjustment_bonus_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Bonus')->sum('payroll_adjustment_amount');
-		$temp['name'] = 'adjustment_bonus';
-		$temp['obj']  = Payroll2::adjustment_breakdown($adjustment_bonus, 'add');
+		$adjustment_bonus 			= Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Bonus')->get();
+		$total_deminimis 			+= Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Bonus')->sum('payroll_adjustment_amount');
+		$temp['name'] 				= 'adjustment_bonus';
+		$temp['obj']  				= Payroll2::adjustment_breakdown($adjustment_bonus, 'add');
 		array_push($return, $temp);
 		
 		/* commission */
-		$adjustment_commission = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Commissions')->get();
-		$adjustment_commission_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Commissions')->sum('payroll_adjustment_amount');
-		$temp['name'] = 'adjustment_commission';
-		$temp['obj']  = Payroll2::adjustment_breakdown($adjustment_commission, 'add');
+		$adjustment_commission 			= Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Commissions')->get();
+		$total_deminimis 				+= Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Commissions')->sum('payroll_adjustment_amount');
+		$temp['name'] 					= 'adjustment_commission';
+		$temp['obj']  					= Payroll2::adjustment_breakdown($adjustment_commission, 'add');
 		array_push($return, $temp);
 		
-		
 		/* incentives */
-		$adjustment_incentives = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Incentives')->get();
-		$adjustment_incentives_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Incentives')->sum('payroll_adjustment_amount');
-		$temp['name'] = 'adjustment_incentives';
-		$temp['obj']  = Payroll2::adjustment_breakdown($adjustment_incentives, 'add');
+		$adjustment_incentives 			= Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Incentives')->get();
+		$total_deminimis 				+= Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Incentives')->sum('payroll_adjustment_amount');
+		$temp['name'] 					= 'adjustment_incentives';
+		$temp['obj']  					= Payroll2::adjustment_breakdown($adjustment_incentives, 'add');
 		array_push($return, $temp);
 		
 		/* 13 month pay */
-		$adjustment_13_month = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, '13 month pay')->get();
-		$adjustment_13_month_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , '13 month pay')->sum('payroll_adjustment_amount');
-		$temp['name'] = 'adjustment_13_month';
-		$temp['obj']  = Payroll2::adjustment_breakdown($adjustment_13_month, 'add');
+		$adjustment_13_month 			= Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, '13 month pay')->get();
+		$total_deminimis 				+= Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , '13 month pay')->sum('payroll_adjustment_amount');
+		$temp['name'] 					= 'adjustment_13_month';
+		$temp['obj']  					= Payroll2::adjustment_breakdown($adjustment_13_month, 'add');
 		array_push($return, $temp);
 		
 		/* deductions */
-		$adjustment_deductions = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Deductions')->get();
-		$adjustment_deductions_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Deductions')->sum('payroll_adjustment_amount');
-		$temp['name'] = 'adjustment_deductions';
-		$temp['obj']  = Payroll2::adjustment_breakdown($adjustment_deductions, 'minus');
+		$adjustment_deductions 			= Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Deductions')->get();
+		$total_deduction 				+= Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Deductions')->sum('payroll_adjustment_amount');
+		$temp['name'] 					= 'adjustment_deductions';
+		$temp['obj']  					= Payroll2::adjustment_breakdown($adjustment_deductions, 'minus');
 		array_push($return, $temp);
 		
+		/* GET 13 MONTH PAY */
 		$n13_month = 0;
-		
 		if(isset($group->payroll_group_13month_basis))
 		{
-			if($group->payroll_group_13month_basis == 'Periodically')
-			{
-				$n13_month = round(($data['regular_salary'] / 12), 2);
-			}
-
-			if($group->payroll_group_13month_basis == 'Custom Period')
-			{
-				$m13 = Payroll::compute_13_month($employee_id, $payroll_period_company_id);
-				$n13_month += $m13['data_13m'];
-				$count_v = Tbl_payroll_13_month_virtual::getperiod($employee_id, $payroll_period_company_id)->count();
-				if($count_v == 1)
-				{
-					$n13_month += round(($basic_pay / 12), 2);
-				}
-			}
+			$n13_month = Payroll2::get_13_month($group->payroll_group_13month_basis, $basic_pay, $employee_id, $payroll_period_company_id);
 		}
+
+		$total_deminimis += $n13_month;
 		
-		
-		$pevious_record = Tbl_payroll_record::getdate($group->shop_id, $date_period)
+		/* GET PREVIOUS RECORD OF GOVERNMENT CONTRIBUTION */
+		$pevious_record = Tbl_payroll_record::getdate($shop_id, $date_period)
 											->where('tbl_payroll_period.payroll_period_category', $period_category)
 											->where('payroll_employee_id',$employee_id)
 											->get()
 											->toArray();
 
-		// dd($pevious_record);
-
-		
 		$previous_tax 			= collect($pevious_record)->sum('tax_contribution');
 		$previous_sss 			= collect($pevious_record)->sum('sss_contribution_ee');
 		$previous_pagibig 		= collect($pevious_record)->sum('pagibig_contribution');
 		$previous_philhealth	= collect($pevious_record)->sum('philhealth_contribution_ee');
+		$period_category_arr	 	= Payroll::getperiodcount($shop_id, $end_date, $period_category, $start_date);
 
-		// dd($previous_sss);
+		/* GET SSS CONTRIBUTION */
+		$sss_contribution 		= Payroll2::get_sss($shop_id, $salary->payroll_employee_salary_sss, $period_category_arr, $group->payroll_group_sss, $salary->is_deduct_sss_default, $salary->deduct_sss_custom, $previous_sss);
+		$sss_ee					= $sss_contribution['sss_ee'];
+		$sss_er					= $sss_contribution['sss_er'];
+		$sss_ec					= $sss_contribution['sss_ec'];
 
-		$sss_contribution		= Payroll::sss_contribution($shop_id, $data['salary_sss']);
-		$sss_contribution_ee 	= $sss_contribution['ee'];
+		$total_deduction 		+= $sss_ee;
+
+		/* GET PHILHEALTH CONTRIBUTION */
+		$philhealth_contribution  	= Payroll2:: get_philhealth($shop_id, $group->payroll_group_philhealth ,$salary->payroll_employee_salary_philhealth, $period_category, $period_category_arr, $salary->is_deduct_philhealth_default, $salary->deduct_philhealth_custom, $previous_philhealth);
+		$philhealth_ee 				= $philhealth_contribution['philhealth_ee'];
+		$philhealth_er 				= $philhealth_contribution['philhealth_er'];
+
+		$total_deduction			+= $philhealth_ee;
+
+		// GET PAGIBIG CONTRIBUTION
+		$pagibig_contribution 		= Payroll2::get_pagibig($shop_id, $salary->payroll_employee_salary_pagibig, $group->payroll_group_pagibig, $period_category_arr, $salary->is_deduct_pagibig_default, $period_category, $salary->deduct_pagibig_custom);
+		$pagibig_ee = $pagibig_contribution['pagibig_ee'];
+		$pagibig_er = $pagibig_contribution['pagibig_er'];
+		$total_deduction			+= $pagibig_ee;
+
+		/* GET TAX CONTRIBUTION */
+		$tax_contribution = Payroll2::get_tax($shop_id, $salary->payroll_employee_salary_minimum_wage, $group->payroll_group_tax, $period_category, $group->payroll_group_before_tax, $salary->payroll_employee_salary_taxable, $sss_ee, $philhealth_ee, $pagibig_ee, $employee->payroll_employee_tax_status, $period_category_arr);
 		
-		$period_category_arr = Payroll::getperiodcount($group->shop_id, $end_date, $period_category, $start_date);
+		$total_deduction			+= $tax_contribution;
+		/* AGENCY DEDUCTION */
+		$agency_deduction = 0;
+		if($group->payroll_group_agency == Payroll::return_ave($period_category))
+		{
+			$agency_deduction = $group->payroll_group_agency_fee;
+		}
+		$total_deduction			+= $agency_deduction;
 
-		$period_category = $period_category_arr['period_category'];
+		$net = ($gross_pay + $total_deminimis) + $total_deduction;
+	}
 
-		if($group->payroll_group_sss == 'Every Period')
+	public static function get_13_month($payroll_group_13month_basis, $basic_pay, $employee_id, $payroll_period_company_id)
+	{
+		$n13_month = 0;
+		if($payroll_group_13month_basis == 'Periodically')
+		{
+			$n13_month = round(($basic_pay / 12), 2);
+		}
+
+		if($payroll_group_13month_basis == 'Custom Period')
+		{
+			$m13 = Payroll::compute_13_month($employee_id, $payroll_period_company_id);
+			$n13_month += $m13['data_13m'];
+			$count_v = Tbl_payroll_13_month_virtual::getperiod($employee_id, $payroll_period_company_id)->count();
+			if($count_v == 1)
+			{
+				$n13_month += round(($basic_pay / 12), 2);
+			}
+		}
+		return $n13_month;
+	}
+
+	public static function get_sss($shop_id, $salary_sss = 0, $period_category_arr, $payroll_group_sss, $is_deduct_sss_default = 0, $deduct_sss_custom = 0, $previous_sss = 0)
+	{
+		$sss_contribution			= Payroll::sss_contribution($shop_id, $salary_sss);
+		$sss_contribution_ee_def 	= $sss_contribution['ee'];
+		$period_category 			= $period_category_arr['period_category'];
+
+		if($payroll_group_sss == 'Every Period')
 		{
 			
-			$data['sss_contribution_ee'] = divide($sss_contribution_ee, $period_category_arr['count_per_period']);
-			$data['sss_contribution_er'] = divide($sss_contribution_ee, $period_category_arr['count_per_period']);
-			$data['sss_contribution_ec'] = divide($sss_contribution_ee, $period_category_arr['count_per_period']);
-			// dd($data['sss_contribution_ee']);
-
+			$data['sss_ee'] = divide($sss_contribution_ee_def, $period_category_arr['count_per_period']);
+			$data['sss_er'] = divide($sss_contribution_ee_def, $period_category_arr['count_per_period']);
+			$data['sss_ec'] = divide($sss_contribution_ee_def, $period_category_arr['count_per_period']);
+			
 			if($data['is_deduct_sss_default'] == 0)
 			{	
-				$data['sss_contribution_ee'] = $data['deduct_sss_custom'];
+				$data['sss_ee'] = $deduct_sss_custom;
 
 				if($period_category == 'Last Period')
 				{
-					$data['sss_contribution_ee'] = $sss_contribution_ee - $previous_sss;
+					$data['sss_ee'] = $sss_contribution_ee_def - $previous_sss;
 				}
 			}	
-
 		}
 
-		else if($group->payroll_group_sss == $period_category)
+		else if($payroll_group_sss == $period_category)
 		{
 
 			if(Payroll::return_ave($period_category) == '1st Period')
 			{
-				$data['sss_contribution_ee'] = $sss_contribution['ee'];
-				$data['sss_contribution_er'] = $sss_contribution['er'];
-				$data['sss_contribution_ec'] = $sss_contribution['ec'];
+				$data['sss_ee'] = $sss_contribution['ee'];
+				$data['sss_er'] = $sss_contribution['er'];
+				$data['sss_ec'] = $sss_contribution['ec'];
 				// dd('1st Period');
 			}
 			else if(Payroll::return_ave($period_category) == '2nd Period')
 			{
-				$data['sss_contribution_ee'] = divide($sss_contribution['ee'], $period_category_arr['count_per_period']) * 2;
-				$data['sss_contribution_er'] = divide($sss_contribution['er'], $period_category_arr['count_per_period']) * 2;
-				$data['sss_contribution_ec'] = divide($sss_contribution['ec'], $period_category_arr['count_per_period']) * 2;
-				// dd('2nd Period');
+				$data['sss_ee'] = divide($sss_contribution['ee'], $period_category_arr['count_per_period']) * 2;
+				$data['sss_er'] = divide($sss_contribution['er'], $period_category_arr['count_per_period']) * 2;
+				$data['sss_ec'] = divide($sss_contribution['ec'], $period_category_arr['count_per_period']) * 2;
 			}
 
 			else if(Payroll::return_ave($period_category) == 'Last Period')
 			{
-				$data['sss_contribution_ee'] = $sss_contribution['ee'];
-				$data['sss_contribution_er'] = $sss_contribution['er'];
-				$data['sss_contribution_ec'] = $sss_contribution['ec'];
-				// dd('Last Period');
+				$data['sss_ee'] = $sss_contribution['ee'];
+				$data['sss_er'] = $sss_contribution['er'];
+				$data['sss_ec'] = $sss_contribution['ec'];
 			}	
 		}
 
 
-		// dd($data['sss_contribution_ee']);
-		/* GET PHILHEALTH CONTRIBUTION */
-		$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $data['salary_philhealth']);
+		return $data;
+	}
+	
 
-		// dd($group->payroll_group_philhealth);
+	public static function get_philhealth($shop_id, $payroll_group_philhealth,$salary_philhealth, $period_category, $period_category_arr,$is_deduct_philhealth_default = 0, $deduct_philhealth_custom = 0,$previous_philhealth = 0)
+	{
+		$philhealth_contribution 	= Payroll::philhealth_contribution($shop_id, $salary_philhealth);
+		$data['philhealth_ee']		= 0;
+		$data['philhealth_er']		= 0;
 
-		if($group->payroll_group_philhealth == 'Every Period')
+		if($payroll_group_philhealth == 'Every Period')
 		{
 			// philhealth_contribution
-			$philhealth_contribution_ee = $philhealth_contribution['ee'];
+			$philhealth_contribution_ee_def = $philhealth_contribution['ee'];
 
-			$data['philhealth_contribution_ee'] = divide($philhealth_contribution_ee, $period_category_arr['count_per_period']);
-			$data['philhealth_contribution_er'] = divide($philhealth_contribution['er'] , $period_category_arr['count_per_period']);
+			$data['philhealth_ee'] = divide($philhealth_contribution_ee_def, $period_category_arr['count_per_period']);
+			$data['philhealth_er'] = divide($philhealth_contribution['er'] , $period_category_arr['count_per_period']);
 
 			if($data['is_deduct_philhealth_default'] == 0)
 			{
-				$data['philhealth_contribution_ee'] = $data['deduct_philhealth_custom'];
+				$data['philhealth_ee'] = $deduct_philhealth_custom;
 				if($period_category == 'Last Period')
 				{
-					$data['philhealth_contribution_ee'] = $philhealth_contribution_ee - $previous_philhealth;
+					$data['philhealth_ee'] = $philhealth_contribution_ee_def - $previous_philhealth;
 				}
 			}
 		}
 
-		else if($group->payroll_group_philhealth == $period_category)
+		else if($payroll_group_philhealth == $period_category)
 		{
 			if(Payroll::return_ave($period_category) == '1st Period')
 			{
-				$data['philhealth_contribution_ee'] = $philhealth_contribution['ee'];
-				$data['philhealth_contribution_er'] = $philhealth_contribution['er'];
+				$data['philhealth_ee'] = $philhealth_contribution['ee'];
+				$data['philhealth_er'] = $philhealth_contribution['er'];
 			}
 			else if(Payroll::return_ave($period_category) == '2nd Period')
 			{
-				$data['philhealth_contribution_ee'] = divide($philhealth_contribution['ee'], $period_category_arr['count_per_period']) * 2;
-				$data['philhealth_contribution_er'] = divide($philhealth_contribution['er'], $period_category_arr['count_per_period']) * 2;
+				$data['philhealth_ee'] = divide($philhealth_contribution['ee'], $period_category_arr['count_per_period']) * 2;
+				$data['philhealth_er'] = divide($philhealth_contribution['er'], $period_category_arr['count_per_period']) * 2;
 			}
 
 			else if(Payroll::return_ave($period_category) == 'Last Period')
 			{
-				$data['philhealth_contribution_ee'] = $philhealth_contribution['ee'];
-				$data['philhealth_contribution_er'] = $philhealth_contribution['er'];
+				$data['philhealth_ee'] = $philhealth_contribution['ee'];
+				$data['philhealth_er'] = $philhealth_contribution['er'];
 			}
 		}
 
+		return $data;
+	}
 
-		// GET PAGIBIG CONTRIBUTION
-		$pagibig_contribution = Payroll::pagibig_contribution($shop_id, $data['salary_pagibig']);
+	public static function get_pagibig($shop_id, $salary_pagibig, $payroll_group_pagibig, $period_category_arr, $is_deduct_pagibig_default = 0, $period_category, $deduct_pagibig_custom = 0)
+	{
+
+		$pagibig_contribution_def = Payroll::pagibig_contribution($shop_id, $salary_pagibig);
+		$data['pagibig_ee'] = 0;
+		$data['pagibig_er']	= 0;
 		if($group->payroll_group_pagibig == 'Every Period')
 		{
-			// philhealth_contribution
-			$data['pagibig_contribution'] = divide($pagibig_contribution, $period_category_arr['count_per_period']);
+			$pagibig_contribution = divide($pagibig_contribution_def, $period_category_arr['count_per_period']);
 
 			if($data['is_deduct_pagibig_default'] == 0)
 			{
-				$data['pagibig_contribution'] = $data['deduct_pagibig_custom'];
+				$data['pagibig_ee'] = $data['deduct_pagibig_custom'];
 
 				if($period_category == 'Last Period')
 				{
-					$data['pagibig_contribution'] = $pagibig_contribution - $previous_pagibig;
+					$data['pagibig_ee'] = $pagibig_contribution_def - $previous_pagibig;
 				}
 			}
 
 		}
 
-		else if($group->payroll_group_pagibig == $period_category)
+		else if($payroll_group_pagibig == $period_category)
 		{
 
 			if(Payroll::return_ave($period_category) == '1st Period')
 			{
-				$data['pagibig_contribution'] = $pagibig_contribution;
+				$data['pagibig_ee'] = $pagibig_contribution;
 				
 			}
 			else if(Payroll::return_ave($period_category) == '2nd Period')
 			{
-				$data['pagibig_contribution'] = divide($pagibig_contribution, $period_category_arr['count_per_period']) * 2;
+				$data['pagibig_ee'] = divide($pagibig_contribution, $period_category_arr['count_per_period']) * 2;
 			}
 
 			else if(Payroll::return_ave($period_category) == 'Last Period')
 			{
-				$data['pagibig_contribution'] = $pagibig_contribution;
+				$data['pagibig_ee'] = $pagibig_contribution;
 			}
 		}
+		return $data;
 	}
-	
+
+	public static function get_tax($shop_id, $minimum_wage = 0, $payroll_group_tax, $period_category, $payroll_group_before_tax = 0, $salary_taxable = 0, $sss_ee = 0, $philhealth_ee = 0, $pagibig_ee = 0, $tax_status, $period_category_arr)
+	{
+		$tax_contribution = 0;
+		if($data['minimum_wage'] == 0)
+		{
+			if($group->payroll_group_tax == 'Every Period' || $group->payroll_group_tax == $period_category)
+			{
+				if($group->payroll_group_before_tax == 0)
+				{
+					$salary_taxable = $salary_taxable - ($sss_ee + $philhealth_ee + $pagibig_ee);
+				}
+				
+				if($salary_taxable <= 0)
+				{
+					$salary_taxable = 0;
+				}
+
+				$tax_contribution = divide(Payroll::tax_contribution($shop_id, $salary_taxable, $tax_status, $period_category), $period_category_arr['count_per_period']);
+
+				if($group->payroll_group_tax == 'Last Period')
+				{
+					$tax_contribution = $tax_contribution * $period_category_arr['count_per_period'];
+				}	
+			}
+			
+		}
+
+		return $$tax_contribution;
+	}
+
+	public static function get_allowance($employee_id, $rendered_days = 0)
+	{
+		$data['obj'] 		= array();
+		$data['total'] 		= 0;
+		/* DAILY ALLOWANCES */
+		$_allowance_daily = Tbl_payroll_employee_allowance::employee_allowance($employee_id,'daily')
+													->orderBy('tbl_payroll_allowance.payroll_allowance_name')
+													->select('tbl_payroll_allowance.*')
+													->get();
+		foreach($_allowance_daily as $daily)
+		{
+			$temp['name'] = $daily->payroll_allowance_name;
+			$temp['amount'] = $daily->payroll_allowance_amount * $rendered_days;
+
+			if($temp['amount'] > 0)
+			{
+				array_push($data['obj'], $temp);
+			}
+
+			$data['total'] += $temp['amount'];
+		}
+
+		/* PER PERIOD ALLOWANCES */
+		$_allowance_fixed = Tbl_payroll_employee_allowance::employee_allowance($employee_id,'fixed')
+														->orderBy('tbl_payroll_allowance.payroll_allowance_name')
+														->select('tbl_payroll_allowance.*')
+														->get();
+		foreach($_allowance_fixed as $fixed)
+		{
+			$temp['name'] = $fixed->payroll_allowance_name;
+			$temp['amount'] = $fixed->payroll_allowance_amount;
+			array_push($data['obj'], $temp);
+			$data['total'] += $temp['amount'];
+		}
+
+		return $data;
+	}
 	
 	public static function adjustment_breakdown($_adjustment, $type = 'add')
 	{

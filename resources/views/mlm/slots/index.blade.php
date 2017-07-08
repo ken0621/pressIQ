@@ -24,7 +24,7 @@ $data['icon'] = 'icon-sitemap';
         <tr>
           <th class="align_tr_center" data-toggle="tooltip" title="This will be id of each slot you have." >
             Slot <br> 
-            <span style=""><small>Hover to view details</small></span>
+            <span class="small_gray"><small>Hover to view details</small></span>
           </th>
           <th class="align_tr_center" data-toggle="tooltip" title="Date of creation of the slot"  >
             Date Created <br> 
@@ -37,10 +37,10 @@ $data['icon'] = 'icon-sitemap';
             TREE MATRIX <br> 
             <span class="small_gray"><small>Hover to view details</small>
           </th>
-          <th class="align_tr_center" data-toggle="tooltip" title="EON account no" >
-            EON <br> 
-            <span class="small_gray"><small>Hover to view details</small>
-          </th>
+          <!--<th class="align_tr_center" data-toggle="tooltip" title="EON account no" >-->
+          <!--  EON <br> -->
+          <!--  <span class="small_gray"><small>Hover to view details</small>-->
+          <!--</th>-->
           <!--<th class="align_tr_center" data-toggle="tooltip" title="EON account no" >-->
           <!--  Middle Name <br> -->
           <!--  <span class="small_gray"><small>Hover to view details</small>-->
@@ -71,28 +71,28 @@ $data['icon'] = 'icon-sitemap';
               <td class="width_tr_a" percentage="@if(isset($tree_count[$key])){{($tree_count[$key]/$count_per_level_sum) * 100}}@else{{0}}@endif">
                 @if(isset($tree_count[$key])){{$tree_count[$key]}} / {{$count_per_level_sum}} ({{($tree_count[$key]/$count_per_level_sum) * 100}}%)@else{{0}}@endif
               </td>
-              <td>
-                  <form class="global-submit" method="post" action="/mlm/set_eon">
-                  {!! csrf_field() !!}
-                  <input type="hidden" name="slot_id" value="{{$value->slot_id}}">
-                    <div class="col-md-12">
-                      <div class="col-md-9">
-                        <input type="number" class="form-control" name="slot_eon" value="{{$value->slot_eon}}">
-                      </div>
-                      <div class="col-md-3">
-                        @if($value->slot_eon)
-                        <button class="btn btn-primary">
-                         <i class="fa fa-check" aria-hidden="true"></i>
-                        </button>
-                        @else
-                        <button class="btn btn-success">
-                         <i class="fa fa-check" aria-hidden="true"></i>
-                        </button>
-                        @endif
-                      </div>
-                    </div>
-                  </form>
-              </td>
+              <!--<td>-->
+              <!--    <form class="global-submit" method="post" action="/mlm/set_eon">-->
+              <!--    {!! csrf_field() !!}-->
+              <!--    <input type="hidden" name="slot_id" value="{{$value->slot_id}}">-->
+              <!--      <div class="col-md-12">-->
+              <!--        <div class="col-md-9">-->
+              <!--          <input type="number" class="form-control" name="slot_eon" value="{{$value->slot_eon}}">-->
+              <!--        </div>-->
+              <!--        <div class="col-md-3">-->
+              <!--          @if($value->slot_eon)-->
+              <!--          <button class="btn btn-primary">-->
+              <!--           <i class="fa fa-check" aria-hidden="true"></i>-->
+              <!--          </button>-->
+              <!--          @else-->
+              <!--          <button class="btn btn-success">-->
+              <!--           <i class="fa fa-check" aria-hidden="true"></i>-->
+              <!--          </button>-->
+              <!--          @endif-->
+              <!--        </div>-->
+              <!--      </div>-->
+              <!--    </form>-->
+              <!--</td>-->
               
               <td>
                   <form class="global_submit" action="/mlm/changeslot" method="post">

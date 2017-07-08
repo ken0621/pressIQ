@@ -225,24 +225,25 @@
                            <li class="hide"><a> Vouchers <span class="fa fa-chevron-down"></span></a></li>
                            <li>
                             <a> Wallet <span class="fa fa-chevron-down"></span></a>
-                            <ul style="display: none;">
-                              <li>
-                                <a href="/mlm/wallet" class="subnav-text">
-                                    Wallet Logs
-                                </a> 
-                                <a href="/mlm/refill" class="subnav-text hide">
-                                    Wallet Refill
-                                </a> 
-                                <a href="/mlm/transfer" class="subnav-text hide">
-                                    Wallet Transfer
-                                </a> 
-                                <a href="/mlm/encashment" class="subnav-text">
-                                    Wallet Encashment
-                                </a> 
-                            </li>
-                            </ul>
+                                <ul style="display: none;">
+                                    <li>
+                                        <a href="/mlm/wallet" class="subnav-text">
+                                            Wallet Logs
+                                        </a> 
+                                        <a href="/mlm/refill" class="subnav-text hide">
+                                            Wallet Refill
+                                        </a> 
+                                        <a href="/mlm/transfer" class="subnav-text hide">
+                                            Wallet Transfer
+                                        </a> 
+                                        <a href="/mlm/encashment" class="subnav-text">
+                                            Wallet Encashment
+                                        </a> 
+                                    </li>
+                                </ul>
                             </li>
                             <li><a href="/mlm/slots">My Slots <span class="fa fa-chevron-down"></span></a></li>
+                            <li><a href="/mlm/slots/eon">Eon Card<span class="fa fa-chevron-down"></span></a></li>
                             <li><a href="/mlm/process_order_queue">Orders<span class="fa fa-chevron-down"></span></a></li>
                               <!-- <li><a href="/mlm/lead"> Lead <span class="fa fa-address-card"></span></a></li> -->
                         </ul>

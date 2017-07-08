@@ -582,7 +582,9 @@ class ProductOrderController extends Member
         $data['headers']['tin_number'] = 'TIN';
         $data['headers']['email'] = 'Email';
         $data['headers']['slot_no'] = 'Slot #';
-        $data['headers']['slot_eon'] = 'Eon Account Number';
+        $data['headers']['slot_eon'] = 'Eon Account Name';
+        $data['headers']['slot_eon_account_no'] = 'Eon Account Number';
+        $data['headers']['slot_eon_card_no'] = 'Eon Card Number';
         $data['headers']['wall_sum_binary'] = 'Wallet - Binary';
         $data['headers']['wall_sum_direct'] = 'Wallet - Direct';
         $data['headers']['wall_sum'] = 'Total';

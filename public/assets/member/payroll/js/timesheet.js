@@ -11,7 +11,9 @@ function loading_done(url)
 	{
 		$min = $(this).attr("time_min");
 		$max = $(this).attr("time_max");
-		$(this).timeEntry({ampmPrefix: ' ',minTime: $min, maxTime: $max});
+		// $(this).timeEntry({ampmPrefix: ' ',minTime: $min, maxTime: $max});
+		$(this).timeEntry({ampmPrefix: ' ',defaultTime: new Date(0, 0, 0, 0, 0, 0)});
+		
 		timesheet.external_compute_overtime_form();
 		
 	});

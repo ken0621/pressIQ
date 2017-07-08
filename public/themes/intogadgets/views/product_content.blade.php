@@ -27,7 +27,7 @@
       <input type="hidden" class="variation_id" name="variation_id" value=''>
       <div class="single-product-holder" style="padding: 0;">
          @foreach($product_variant['image'] as $key => $image)
-         <img class="single-product-img 1-1-ratio {{ $key == 0 ? '' : 'hide' }}" key="{{ $key }}" style="width: 100%;" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}" alt = "" id="picturecontainer"/>
+         <img class="single-product-img {{ $key == 0 ? '' : 'hide' }}" key="{{ $key }}" style="width: 100%;" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}" alt = "" id="picturecontainer"/>
          @endforeach
          <div class="thumb">
              @foreach($product_variant['image'] as $key => $image)

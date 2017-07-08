@@ -125,12 +125,14 @@ class MlmSlotsController extends Mlm
                                                                 ->whereIn("membership_id",$higher_membership)
                                                                 ->where("used",0)->where("blocked",0)
                                                                 ->where("archived",0)
+                                                                ->where("customer_id",Self::$customer_id)
                                                                 ->get();
 
             $data["membership_code_count"] = Tbl_membership_code::package()
                                                                 ->whereIn("membership_id",$higher_membership)
                                                                 ->where("used",0)->where("blocked",0)
                                                                 ->where("archived",0)
+                                                                ->where("customer_id",Self::$customer_id)
                                                                 ->count();
 
             return view('mlm.slots.upgrade_slot',$data);

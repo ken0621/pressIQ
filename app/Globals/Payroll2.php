@@ -1653,6 +1653,13 @@ class Payroll2
 		$total_deduction			+= $agency_deduction;
 
 		$net = ($gross_pay + $total_deminimis) + $total_deduction;
+
+		$temp['name']	= 'net_pay';
+		$temp['obj']	= Payroll2::computation_array('NET PAY', $net, 'minus');
+		array_push($return, $temp);
+
+		return 	$return;
+
 	}
 
 	public static function get_13_month($payroll_group_13month_basis, $basic_pay, $employee_id, $payroll_period_company_id)
@@ -1673,6 +1680,7 @@ class Payroll2
 				$n13_month += round(($basic_pay / 12), 2);
 			}
 		}
+
 		return $n13_month;
 	}
 
@@ -1725,7 +1733,6 @@ class Payroll2
 			}	
 		}
 
-
 		return $data;
 	}
 	
@@ -1774,6 +1781,7 @@ class Payroll2
 			}
 		}
 
+
 		return $data;
 	}
 
@@ -1817,6 +1825,7 @@ class Payroll2
 				$data['pagibig_ee'] = $pagibig_contribution;
 			}
 		}
+
 		return $data;
 	}
 
@@ -1846,6 +1855,7 @@ class Payroll2
 			}
 			
 		}
+
 
 		return $$tax_contribution;
 	}
@@ -1885,6 +1895,7 @@ class Payroll2
 			$data['total'] += $temp['amount'];
 		}
 
+
 		return $data;
 	}
 	
@@ -1899,6 +1910,7 @@ class Payroll2
 			
 			array_push($return, $temp);
 		}
+
 		return $return;
 	}
 
@@ -1908,6 +1920,7 @@ class Payroll2
 		$data['name'] 	= $name;
 		$data['amount'] = $amount;
 		$data['type'] 	= $type;
+
 		return $data;
 	}
 
@@ -1922,7 +1935,6 @@ class Payroll2
 			array_push($data, $temp);
 		}
 		
-
 		return $data;
 	}
 }

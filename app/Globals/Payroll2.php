@@ -1797,6 +1797,7 @@ class Payroll2
 		$temp['obj']	= Payroll2::computation_array('AGENCY DEDUCTION', $agency_deduction, 'minus');
 		array_push($return, $temp);
 
+
 		$deduction = Payroll::getdeduction($employee_id, $start_date, $period_category_arr['period_category'], $period_category, $shop_id);
 
 		$total_deduction += $deduction['total_deduction'];
@@ -2087,7 +2088,7 @@ class Payroll2
 			$temp['type']	= 'minus';
 			array_push($data, $temp);
 		}
-		
+
 		return $data;
 	}
 }

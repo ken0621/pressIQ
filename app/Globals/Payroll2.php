@@ -370,6 +370,19 @@ class Payroll2
 		}
 		else
 		{
+			
+			if($day_type == "rest")
+			{
+				$count = 0;
+				// foreach ($_time as $time) 
+				// {
+				// 	if(isset($_time[$count]))
+				// 	{
+				// 		$_time[$count]->auto_approved = 0; 
+				// 	}
+				// 	$count++;
+				// }
+			}
 
 			/*START check if there is multimple time in and time out in a single shift*/
 			foreach ($_shift as $shift) 
@@ -1181,8 +1194,8 @@ class Payroll2
 		$return->daily_rate = $daily_rate;
 		$total_day_income 	= $daily_rate;
 		$target_float 		= Self::time_float($_time['target_hours']);
-		$hourly_rate 		= $return->hourly_rate = divide($daily_rate, $target_float);
-		
+		$daily_rate_plus_cola = $daily_rate + $cola;
+		$hourly_rate 		= $return->hourly_rate = divide($daily_rate_plus_cola, $target_float);
 
 		/* GET INITIAL DATA */
 		$param_rate 		= Tbl_payroll_overtime_rate::where('payroll_group_id', $group_id)->get()->toArray();
@@ -1202,9 +1215,7 @@ class Payroll2
 		$overtime_float 	= Self::time_float($_time['overtime']);
 		$night_diff_float 	= Self::time_float($_time['night_differential']);
 		$extra_float 		= Self::time_float($_time['extra_day_hours']);
-
-
-	
+		
 		$overtime=0;
 		$nightdiff=0;
 		$late=0;
@@ -1396,16 +1407,16 @@ class Payroll2
 			$total_day_income = $total_day_income - $return->_breakdown_deduction["undertime"]["rate"];
 			$undertime = $undertime_float * $hourly_rate; 
 		}
-		$cola = 50;
+	
 		$cola_percentile = $cola/$daily_rate;
-		$total_day_income = $total_day_income_plus_cola * (1-$cola_percentile);
-		$total_day_income_plus_cola = (($total_day_income + $cola)+$overtime) - ($late+$undertime);
+		$total_day_income_plus_cola = $total_day_income;
+	
 		$return->subtotal_after_addition = $subtotal_after_addition;
 		$return->cola = $cola;
 		$return->total_day_income_plus_cola = $total_day_income_plus_cola;
 		$return->total_day_income = $total_day_income_plus_cola * (1-$cola_percentile);
 		$return->total_day_cola = $total_day_income_plus_cola * $cola_percentile;
-		$return->total_day_basic = $total_day_income-();
+		$return->total_day_basic = $total_day_income-(($nightdiff+$overtime)*(1-$cola_percentile));
 		return $return;
 	}
 

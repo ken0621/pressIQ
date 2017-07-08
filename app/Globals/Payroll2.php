@@ -1253,7 +1253,7 @@ class Payroll2
 			$return->_breakdown_deduction["absent"]["rate"] = $daily_rate; 
 			$total_day_income = $total_day_income - $return->_breakdown_deduction["absent"]["rate"];
 			$absent_float=1;
-			$absent = $total_day_income;
+			$absent = $daily_rate;
 		}
 
 		if($late_float != 0)

@@ -332,8 +332,9 @@ class PayrollTimeSheet2Controller extends Member
 	public function getdaily_rate($employee_id, $date, $target_days)
 	{
 		$salary = Tbl_payroll_employee_salary::selemployee($employee_id, $date)->first();
-		$return['daily']	=  $salary->payroll_employee_salary_monthly / $target_days;
+		$return['daily']	=  $salary->payroll_employee_salary_daily;
 		$return['cola'] 	=  $salary->payroll_employee_salary_cola;
+		
 		return $return;
 	}
 	
@@ -468,12 +469,13 @@ class PayrollTimeSheet2Controller extends Member
 	{
 		$data['total'] = $this->gettotal_break($data);
 		$data['adjustment'] = $this->generate_adjustment($data);
-		// dd($data);
 		return view("member.payroll2.employee_income_summary_daily", $data);
 	}
 	public function income_summary_monthly_computation($data)
 	{
 		//dd($data);
+		$data['total'] = $this->gettotal_break($data);
+		$data['adjustment'] = $this->generate_adjustment($data);
 		return view("member.payroll2.employee_income_summary_monthly", $data);
 	}
 	public function income_summary_flat_rate_computation()

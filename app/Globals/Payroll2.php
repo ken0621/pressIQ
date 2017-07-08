@@ -1652,6 +1652,19 @@ class Payroll2
 		}
 		$total_deduction			+= $agency_deduction;
 
+
+		$temp['name']	= 'agency_deduction';
+		$temp['obj']	= Payroll2::computation_array('AGENCY DEDUCTION', $agency_deduction, 'minus');
+		array_push($return, $temp);
+
+
+		$deduction = Payroll::getdeduction($employee_id, $start_date, $period_category_arr['period_category'], $period_category, $shop_id);
+
+		$total_deduction += $deduction['total_deduction'];
+
+		$temp['name'] = 'deduction';
+		$temp['obj'] = Payroll2::deducton_breakdown($deduction['deduction']);
+
 		$net = ($gross_pay + $total_deminimis) + $total_deduction;
 
 		$temp['name']	= 'net_pay';
@@ -1934,7 +1947,7 @@ class Payroll2
 			$temp['type']	= 'minus';
 			array_push($data, $temp);
 		}
-		
+
 		return $data;
 	}
 }

@@ -47,6 +47,24 @@ use App\Globals\PayMaya\Model\Checkout\ItemAmount;
 
 class GuillermoController extends Controller
 {
+    function __construct()
+    {
+        $order = DB::table("tbl_ec_order")->where("payment_status", 1)->where("archived", 0)->where("invoice_number", NULL)->get();
+        foreach ($order as $key => $value) 
+        {
+            $last = DB::table("tbl_ec_order")->where("payment_status", 1)->where("archived", 0)->max("invoice_number");
+            if ($last) 
+            {
+                $update["invoice_number"] = $last + 1;
+                DB::table('tbl_ec_order')->where("ec_order_id", $value->ec_order_id)->update($update);            
+            }
+            else
+            {
+                $update["invoice_number"] = 11000000;
+                DB::table('tbl_ec_order')->where("ec_order_id", $value->ec_order_id)->update($update);
+            }
+        }
+    }
 	public function index($id)
 	{
 	    echo Crypt::decrypt($id);

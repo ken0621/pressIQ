@@ -299,7 +299,6 @@ class ProductOrderController extends Member
             return json_encode($return);
         }
     }
-
     public function submit_payment_upload()
     {
         $shop_id    = $this->user_info->shop_id;
@@ -344,7 +343,6 @@ class ProductOrderController extends Member
         }
 
     }
-
     public function invoice_view($invoice_id)
     {
         $data["invoice_id"] = $invoice_id;

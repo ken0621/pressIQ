@@ -57,14 +57,14 @@ $data['icon'] = 'icon-credit-card';
     
     var slot_eon_account_no_hidden_l = $('.slot_eon_account_no_hidden').val();
     var slot_eon_card_no_hidden_l = $('.slot_eon_card_no_hidden').val();
-    if( slot_eon_account_no_hidden_l.length == 16 && slot_eon_card_no_hidden_l.length == 16)
-    {
+    // if( slot_eon_account_no_hidden_l.length == 16 && slot_eon_card_no_hidden_l.length == 16)
+    // {
         $('.form_update_eon').submit();
-    }
-    else
-    {
-        toastr.warning('Card #/ Account # must be 16 digits');
-    }
+    // }
+    // else
+    // {
+    //     toastr.warning('Card #/ Account # must be 16 digits');
+    // }
     
  }
  function submit_done(messagee){

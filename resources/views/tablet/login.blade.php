@@ -47,19 +47,13 @@
 					<div class="form-group">
 						<div class="col-md-4"></div>
 						<div class="col-md-4">
-							<button type="button" class="btn-login btn btn-primary form-control">LOGIN</button>
+							<button type="submit" class="btn-login btn btn-primary form-control">LOGIN</button>
 						</div>
 						<div class="col-md-4"></div>
 					</div>
 				</div>
 			</div>
 		</form>
-
-		<div class="form-group text-center">
-			<button type="button" class="btn btn-primary web-to-browser-sync-data">WEB TO BROWSER SYNC</button>
-			<button type="button" class="btn btn-primary sync-data">SYNC</button>
-			<button type="button" class="btn btn-primary update-sync-data">UPDATE DATA</button>
-		</div>
 	</div>
 </div>
 @endsection
@@ -79,6 +73,4 @@
 	}
 	}
 </script>
-<script type="text/javascript" src="/assets/tablet/create_table.js"></script>
-<script type="text/javascript" src="/assets/tablet/sync_data.js"></script>
 @endsection

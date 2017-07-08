@@ -2361,7 +2361,6 @@ class Payroll
 			}
 		}
 
-		// $data['total_gross'] += $data['13_month'];
 
 		if($total_hours_render > 0 || ($total_hours_render <= 0 && $payroll_group_salary_computation == 'Flat Rate'))
 		{	

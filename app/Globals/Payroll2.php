@@ -1706,8 +1706,15 @@ class Payroll2
 		}
 
 		$total_deminimis += $n13_month;
-		
+
+		$temp['name']	= 'n_13_month';
+		$temp['obj']	= Payroll2::computation_array('13 month', $n13_month, 'add');
+		array_push($return, $temp);
 		/* GET PREVIOUS RECORD OF GOVERNMENT CONTRIBUTION */
+
+		$date_period[0] = date('Y-m-01', strtotime($end_date));
+		$date_period[1] = date('Y-m-t', strtotime($end_date));
+
 		$pevious_record = Tbl_payroll_record::getdate($shop_id, $date_period)
 											->where('tbl_payroll_period.payroll_period_category', $period_category)
 											->where('payroll_employee_id',$employee_id)
@@ -1718,7 +1725,7 @@ class Payroll2
 		$previous_sss 			= collect($pevious_record)->sum('sss_contribution_ee');
 		$previous_pagibig 		= collect($pevious_record)->sum('pagibig_contribution');
 		$previous_philhealth	= collect($pevious_record)->sum('philhealth_contribution_ee');
-		$period_category_arr	 	= Payroll::getperiodcount($shop_id, $end_date, $period_category, $start_date);
+		$period_category_arr	= Payroll::getperiodcount($shop_id, $end_date, $period_category, $start_date);
 
 		/* GET SSS CONTRIBUTION */
 		$sss_contribution 		= Payroll2::get_sss($shop_id, $salary->payroll_employee_salary_sss, $period_category_arr, $group->payroll_group_sss, $salary->is_deduct_sss_default, $salary->deduct_sss_custom, $previous_sss);
@@ -1728,23 +1735,56 @@ class Payroll2
 
 		$total_deduction 		+= $sss_ee;
 
+		$temp['name']	= 'sss_ee';
+		$temp['obj']	= Payroll2::computation_array('SSS EE', $sss_ee, 'minus');
+		array_push($return, $temp);
+
+		$temp['name']	= 'sss_er';
+		$temp['obj']	= Payroll2::computation_array('SSS ER', $sss_er, 'employer');
+		array_push($return, $temp);
+
+		$temp['name']	= 'sss_ec';
+		$temp['obj']	= Payroll2::computation_array('SSS EC', $sss_ec, 'employer');
+		array_push($return, $temp);
+
 		/* GET PHILHEALTH CONTRIBUTION */
-		$philhealth_contribution  	= Payroll2:: get_philhealth($shop_id, $group->payroll_group_philhealth ,$salary->payroll_employee_salary_philhealth, $period_category, $period_category_arr, $salary->is_deduct_philhealth_default, $salary->deduct_philhealth_custom, $previous_philhealth);
+		$philhealth_contribution  	= Payroll2:: get_philhealth($shop_id, $group->payroll_group_philhealth ,$salary->payroll_employee_salary_philhealth, $period_category_arr, $salary->is_deduct_philhealth_default, $salary->deduct_philhealth_custom, $previous_philhealth);
 		$philhealth_ee 				= $philhealth_contribution['philhealth_ee'];
 		$philhealth_er 				= $philhealth_contribution['philhealth_er'];
 
 		$total_deduction			+= $philhealth_ee;
 
+		$temp['name']	= 'philhealth_ee';
+		$temp['obj']	= Payroll2::computation_array('PhilHealth EE', $philhealth_ee, 'minus');
+		array_push($return, $temp);
+
+		$temp['name']	= 'philhealth_er';
+		$temp['obj']	= Payroll2::computation_array('PhilHealth ER', $philhealth_ee, 'employer');
+		array_push($return, $temp);
+
 		// GET PAGIBIG CONTRIBUTION
-		$pagibig_contribution 		= Payroll2::get_pagibig($shop_id, $salary->payroll_employee_salary_pagibig, $group->payroll_group_pagibig, $period_category_arr, $salary->is_deduct_pagibig_default, $period_category, $salary->deduct_pagibig_custom);
+		$pagibig_contribution 		= Payroll2::get_pagibig($shop_id, $salary->payroll_employee_salary_pagibig, $group->payroll_group_pagibig, $period_category_arr, $salary->is_deduct_pagibig_default, $salary->deduct_pagibig_custom);
 		$pagibig_ee = $pagibig_contribution['pagibig_ee'];
 		$pagibig_er = $pagibig_contribution['pagibig_er'];
 		$total_deduction			+= $pagibig_ee;
+
+		$temp['name']	= 'pagibig_ee';
+		$temp['obj']	= Payroll2::computation_array('PAIBIG EE', $pagibig_ee, 'minus');
+		array_push($return, $temp);
+
+		$temp['name']	= 'pagibig_er';
+		$temp['obj']	= Payroll2::computation_array('PAIBIG ER', $pagibig_er, 'employer');
+		array_push($return, $temp);
 
 		/* GET TAX CONTRIBUTION */
 		$tax_contribution = Payroll2::get_tax($shop_id, $salary->payroll_employee_salary_minimum_wage, $group->payroll_group_tax, $period_category, $group->payroll_group_before_tax, $salary->payroll_employee_salary_taxable, $sss_ee, $philhealth_ee, $pagibig_ee, $employee->payroll_employee_tax_status, $period_category_arr);
 		
 		$total_deduction			+= $tax_contribution;
+
+		$temp['name']	= 'total_deduction';
+		$temp['obj']	= Payroll2::computation_array('TAX', $tax_contribution, 'minus');
+		array_push($return, $temp);
+
 		/* AGENCY DEDUCTION */
 		$agency_deduction = 0;
 		if($group->payroll_group_agency == Payroll::return_ave($period_category))
@@ -1753,7 +1793,24 @@ class Payroll2
 		}
 		$total_deduction			+= $agency_deduction;
 
+		$temp['name']	= 'agency_deduction';
+		$temp['obj']	= Payroll2::computation_array('AGENCY DEDUCTION', $agency_deduction, 'minus');
+		array_push($return, $temp);
+
+		$deduction = Payroll::getdeduction($employee_id, $start_date, $period_category_arr['period_category'], $period_category, $shop_id);
+
+		$total_deduction += $deduction['total_deduction'];
+
+		$temp['name'] = 'deduction';
+		$temp['obj'] = Payroll2::deducton_breakdown($deduction['deduction']);
+
 		$net = ($gross_pay + $total_deminimis) + $total_deduction;
+
+		$temp['name']	= 'net_pay';
+		$temp['obj']	= Payroll2::computation_array('NET PAY', $net, 'minus');
+		array_push($return, $temp);
+
+		return 	$return;
 	}
 
 	public static function get_13_month($payroll_group_13month_basis, $basic_pay, $employee_id, $payroll_period_company_id)
@@ -1831,7 +1888,7 @@ class Payroll2
 	}
 	
 
-	public static function get_philhealth($shop_id, $payroll_group_philhealth,$salary_philhealth, $period_category, $period_category_arr,$is_deduct_philhealth_default = 0, $deduct_philhealth_custom = 0,$previous_philhealth = 0)
+	public static function get_philhealth($shop_id, $payroll_group_philhealth,$salary_philhealth, $period_category_arr,$is_deduct_philhealth_default = 0, $deduct_philhealth_custom = 0,$previous_philhealth = 0)
 	{
 		$philhealth_contribution 	= Payroll::philhealth_contribution($shop_id, $salary_philhealth);
 		$data['philhealth_ee']		= 0;
@@ -1848,27 +1905,27 @@ class Payroll2
 			if($data['is_deduct_philhealth_default'] == 0)
 			{
 				$data['philhealth_ee'] = $deduct_philhealth_custom;
-				if($period_category == 'Last Period')
+				if($period_category_arr['period_category'] == 'Last Period')
 				{
 					$data['philhealth_ee'] = $philhealth_contribution_ee_def - $previous_philhealth;
 				}
 			}
 		}
 
-		else if($payroll_group_philhealth == $period_category)
+		else if($payroll_group_philhealth == $period_category_arr['period_category'])
 		{
-			if(Payroll::return_ave($period_category) == '1st Period')
+			if(Payroll::return_ave($period_category_arr['period_category']) == '1st Period')
 			{
 				$data['philhealth_ee'] = $philhealth_contribution['ee'];
 				$data['philhealth_er'] = $philhealth_contribution['er'];
 			}
-			else if(Payroll::return_ave($period_category) == '2nd Period')
+			else if(Payroll::return_ave($period_category_arr['period_category']) == '2nd Period')
 			{
 				$data['philhealth_ee'] = divide($philhealth_contribution['ee'], $period_category_arr['count_per_period']) * 2;
 				$data['philhealth_er'] = divide($philhealth_contribution['er'], $period_category_arr['count_per_period']) * 2;
 			}
 
-			else if(Payroll::return_ave($period_category) == 'Last Period')
+			else if(Payroll::return_ave($period_category_arr['period_category']) == 'Last Period')
 			{
 				$data['philhealth_ee'] = $philhealth_contribution['ee'];
 				$data['philhealth_er'] = $philhealth_contribution['er'];
@@ -1878,9 +1935,10 @@ class Payroll2
 		return $data;
 	}
 
-	public static function get_pagibig($shop_id, $salary_pagibig, $payroll_group_pagibig, $period_category_arr, $is_deduct_pagibig_default = 0, $period_category, $deduct_pagibig_custom = 0)
+	public static function get_pagibig($shop_id, $salary_pagibig, $payroll_group_pagibig, $period_category_arr, $is_deduct_pagibig_default = 0, $deduct_pagibig_custom = 0)
 	{
 
+		$period_category 	= $period_category_arr['period_category'];
 		$pagibig_contribution_def = Payroll::pagibig_contribution($shop_id, $salary_pagibig);
 		$data['pagibig_ee'] = 0;
 		$data['pagibig_er']	= 0;
@@ -1926,7 +1984,7 @@ class Payroll2
 		$tax_contribution = 0;
 		if($data['minimum_wage'] == 0)
 		{
-			if($group->payroll_group_tax == 'Every Period' || $group->payroll_group_tax == $period_category)
+			if($group->payroll_group_tax == 'Every Period' || $group->payroll_group_tax == $period_category_arr['period_category'])
 			{
 				if($group->payroll_group_before_tax == 0)
 				{
@@ -2001,5 +2059,28 @@ class Payroll2
 			array_push($return, $temp);
 		}
 		return $return;
+	}
+
+	public static function computation_array($name, $amount, $type)
+	{
+		$data 			= array();
+		$data['name'] 	= $name;
+		$data['amount'] = $amount;
+		$data['type'] 	= $type;
+		return $data;
+	}
+
+	public static function deducton_breakdown($_deduction = array())
+	{
+		$data = array();
+		foreach($_deduction as $deduction)
+		{
+			$temp['name'] 	= $deduction['deduction_name'];
+			$temp['amount'] = $deduction['payroll_periodal_deduction'];
+			$temp['type']	= 'minus';
+			array_push($data, $temp);
+		}
+
+		return $data;
 	}
 }

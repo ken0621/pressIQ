@@ -1901,4 +1901,28 @@ class Payroll2
 		}
 		return $return;
 	}
+
+	public static function computation_array($name, $amount, $type)
+	{
+		$data 			= array();
+		$data['name'] 	= $name;
+		$data['amount'] = $amount;
+		$data['type'] 	= $type;
+		return $data;
+	}
+
+	public static function deducton_breakdown($_deduction = array())
+	{
+		$data = array();
+		foreach($_deduction as $deduction)
+		{
+			$temp['name'] 	= $deduction['deduction_name'];
+			$temp['amount'] = $deduction['payroll_periodal_deduction'];
+			$temp['type']	= 'minus';
+			array_push($data, $temp);
+		}
+		
+
+		return $data;
+	}
 }

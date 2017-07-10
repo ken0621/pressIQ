@@ -852,6 +852,16 @@ class Item_code
         $order_id = $ec_order_id;
         if($order)
         {
+            if($order->ec_order_slot_id == null)
+            {
+                $slot_id = Tbl_mlm_slot::where('slot_owner', $order->customer_id)->first();
+                if($slot_id)
+                {
+                    $order->ec_order_slot_id = $slot_id->slot_id;
+                    $update_ec_order['ec_order_slot_id'] = $slot_id->slot_id;
+                    Tbl_ec_order::where("ec_order_id",$ec_order_id)->update($update_ec_order);
+                }
+            }
             if($order->ec_order_slot_id != null)
             {
                 $slot_info = Mlm_compute::get_slot_info($order->ec_order_slot_id);

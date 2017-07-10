@@ -763,9 +763,9 @@ class Ec_order
                 $middle_name = '';
                 $order_info["tbl_customer"]['middle_name'] = $middle_name;
             }
-            // unset($order_info["tbl_customer"]["customer_full_address"]);
-            // unset($order_info["tbl_customer"]["b_day"]);
-            // unset($order_info["tbl_customer"]["customer_gender"]);
+            unset($order_info["tbl_customer"]["customer_full_address"]);
+            unset($order_info["tbl_customer"]["b_day"]);
+            unset($order_info["tbl_customer"]["customer_gender"]);
             
             $order_info["tbl_customer"]["password"] = Crypt::encrypt($order_info["tbl_customer"]["password"]);
             $customer_id = $customer_query->insertGetId($order_info["tbl_customer"]);

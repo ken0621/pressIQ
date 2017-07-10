@@ -456,7 +456,7 @@ class Ec_order
                 : ''
             : '';   
 
-        if($order->order_status == "Pending" || $order->order_status == "Failed" || $order->order_status == "Cancelled")
+        if($order->order_status != "Pending" || $order->order_status != "Failed" || $order->order_status != "Cancelled")
         {
             if($order_status == "Processing")
             {              
@@ -757,12 +757,16 @@ class Ec_order
             $customer_mobile = $order_info["tbl_customer"]["customer_contact"];
             unset($order_info["tbl_customer"]["customer_contact"]);
             $middle_name = $order_info["tbl_customer"]['middle_name'];
+            $order_info["tbl_customer"]["middle_name"] = "";
             if($middle_name == null)
             {
                 $middle_name = '';
                 $order_info["tbl_customer"]['middle_name'] = $middle_name;
             }
-            $order_info["tbl_customer"]["middle_name"] = "";
+            // unset($order_info["tbl_customer"]["customer_full_address"]);
+            // unset($order_info["tbl_customer"]["b_day"]);
+            // unset($order_info["tbl_customer"]["customer_gender"]);
+            
             $order_info["tbl_customer"]["password"] = Crypt::encrypt($order_info["tbl_customer"]["password"]);
             $customer_id = $customer_query->insertGetId($order_info["tbl_customer"]);
             
@@ -800,6 +804,12 @@ class Ec_order
         $order_info["tbl_ec_order"]["discount_coupon_amount"] = $order_info["tbl_ec_order"]["discount_coupon_amount"] ? $order_info["tbl_ec_order"]["discount_coupon_amount"] : 0;
         $order_info["tbl_ec_order"]["discount_coupon_type"] = $order_info["tbl_ec_order"]["discount_coupon_type"] ? $order_info["tbl_ec_order"]["discount_coupon_type"] : "fixed";
         
+        $session = Session::get('mlm_member');
+        if(isset($session['slot_now']->slot_id))
+        {
+            $order_info['tbl_ec_order']['ec_order_slot_id'] = $session['slot_now']->slot_id;
+        }
+
         $order_info['tbl_ec_order']['ec_order_load'] = isset($order_info['tbl_ec_order']['ec_order_load']) ?  $order_info['tbl_ec_order']['ec_order_load'] : 0;
         $order_info['tbl_ec_order']['ec_order_load_number'] = isset($order_info['tbl_ec_order']['ec_order_load_number']) ? $order_info['tbl_ec_order']['ec_order_load_number'] : 0;
         $order_info["tbl_ec_order"]["ec_order_id"] = DB::table("tbl_ec_order")->insertGetId($order_info["tbl_ec_order"]);

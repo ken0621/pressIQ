@@ -75,7 +75,7 @@ class CustomerController extends Member
                                     ->where('tbl_customer.shop_id',$shop_id)
                                     ->where('tbl_customer.archived',$archived)
                                     ->where('tbl_customer.IsWalkin',$IsWalkin)
-    	                            ->where(DB::raw("CONCAT(tbl_customer.first_name, ' ', tbl_customer.middle_name, ' ', tbl_customer.last_name, ' ', tbl_customer.email)"), 'LIKE', "%".$str."%")
+    	                            ->where(DB::raw("CONCAT(tbl_customer.first_name, ' ', tbl_customer.middle_name, ' ', tbl_customer.last_name, ' ', tbl_customer.email, ' ', tbl_customer.mlm_username, ' ', tbl_customer.tin_number)"), 'LIKE', "%".$str."%")
     	                            ->orderBy('tbl_customer.first_name');
     	        
     	    }

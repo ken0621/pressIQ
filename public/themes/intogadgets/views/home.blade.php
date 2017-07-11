@@ -95,7 +95,7 @@
                  </div>
                  <div class="name">{{ get_collection_first_name($collection) }}</div>
                  <div class="price-left">P {{ get_collection_first_price($collection) }}</div>
-                 <div class="price-right">₱ 13,990.00</div>
+                 <div class="price-right">{{ get_collection_first_price($collection) }}</div>
               </a>
              <div class="hover">
                   <a product-id="{{ $collection['product']['eprod_id'] }}" style="display: block; margin-bottom: 50px;" href="javascript:" class="text quick-add-cart">ADD TO CART</a>

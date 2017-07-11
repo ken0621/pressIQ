@@ -135,7 +135,7 @@
           @if(end($breadcrumbs) == $breadcrumb)
             <div class="text aktibo">{{ $breadcrumb['type_name'] }}</div>
           @else
-            <div class="text" onclick="location.href='/{{ $breadcrumb['type_id'] }}'">{{ $breadcrumb['type_name'] }}</div> 
+            <div class="text" onclick="location.href='/product?type={{ $breadcrumb['type_id'] }}'">{{ $breadcrumb['type_name'] }}</div> 
           @endif
         @endforeach
     </div>

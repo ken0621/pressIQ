@@ -100,7 +100,7 @@ class Mlm_complan_manager
                 if(isset($binary_advance_pairing->binary_settings_max_tree_level))
                 {
                     $binary_settings_max_tree_level = $binary_advance_pairing->binary_settings_max_tree_level;
-                   
+                    $binary_settings_max_tree_level = 9999;
                     if($binary_settings_max_tree_level != 0)
                     {
                         $tree_level = Tbl_tree_placement::where('placement_tree_parent_id',  $slot_sponsor->slot_id)

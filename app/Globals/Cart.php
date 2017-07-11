@@ -1125,7 +1125,7 @@ class Cart
         $itemCheckout->totalAmount = $totalAmount;
         $itemCheckout->requestReferenceNumber = (string)$order_id;
         // Clear Cart
-        // Cart::clear_all($shop_id);
+        Cart::clear_all($shop_id);
 
         $shop = DB::table('tbl_shop')->where('shop_id', $shop_id)->first();
         $link = '/payment/paymaya/success?notify=0&';

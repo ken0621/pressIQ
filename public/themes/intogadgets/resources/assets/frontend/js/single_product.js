@@ -29,6 +29,7 @@ $(document).ready(function()
 function action_zoom_image()
 {
 	$(".single-product-img").elevateZoom({
+		zoomLens : false
 	});
 }
 
@@ -47,6 +48,7 @@ function event_change_image()
 		image_crop(".4-3-ratio", 4, 3);
 
 		$(".single-product-img").elevateZoom({
+			zoomLens : false
 		});
 	});
 }

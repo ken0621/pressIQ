@@ -180,6 +180,7 @@ class MemberController extends Controller
             return $this->register_logged_in();
         }
         
+        Session::forget('mlm_member');
         $data['country'] = Tbl_country::get();
         $data['current'] = Cart::get_info(Self::$shop_id);
         $data['sponsor_r'] = $this->check_if_required_sponsor(Self::$shop_id);
@@ -194,19 +195,15 @@ class MemberController extends Controller
         $data['sponsor_r'] = $this->check_if_required_sponsor(Self::$shop_id);
 
         $customer_session = Session::get('mlm_member');
-
+        $data['sponsor'] = null;
         if(isset($customer_session['customer_info']->mlm_username))
         {
-            $data['sponsor'] =  $customer_session['customer_info']->mlm_username;
-        }
-        else
-        {
-            $data['sponsor'] =  $customer_session['customer_info']->mlm_username;
-        }
-
-        if(Request::input('slot') == 0)
-        {
-            $data['sponsor'] = null;
+            $slot_sponsor = Tbl_mlm_slot::where('slot_nick_name', $customer_session['customer_info']->mlm_username)->where('slot_defaul', 1)->first();
+            if($slot_sponsor)
+            {
+                $data['sponsor'] = $slot_sponsor->slot_nick_name;
+            }
+            
         }
 
         return view('mlm.register.logged_in', $data);

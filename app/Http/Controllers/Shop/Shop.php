@@ -54,7 +54,7 @@ class Shop extends Controller
             {
                 $check_domain = Tbl_customer::where('mlm_username', $subdomain)->first();
                 $lead_e = $check_domain;
-                if($lead_e)
+                if($lead_e && $domain == "c9users.io")
                 {
                     $shop_id = $lead_e->shop_id;    
                     $this->shop_info = $shop_info = Tbl_shop::where("shop_id", $shop_id)->first();

@@ -117,7 +117,7 @@
         <div class="holder col-md-3 col-sm-6">
            <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
            </a>
-           <div class="border">
+           <div class="border ">
               <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
                  <div class="img">
                   @if($collection["product"]["eprod_detail_image"])

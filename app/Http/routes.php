@@ -82,6 +82,10 @@ Route::any('/member/developer/documentation', 'Member\Developer_DocumentationCon
 Route::any('/member/developer/auto_entry', 'Member\Developer_AutoentryController@index'); //EVERYONE
 Route::post('/member/developer/auto_entry/instant_add_slot', 'Member\Developer_AutoentryController@instant_add_slot'); //EVERYONE
 
+Route::any('/member/developer/auto_balance_tree', 'Member\Developer_AutoBalanceTree@index'); //EVERYONE
+Route::any('/member/developer/auto_balance_tree/initialize', 'Member\Developer_AutoBalanceTree@initialize'); //EVERYONE
+Route::post('/member/developer/auto_balance_tree/retree', 'Member\Developer_AutoBalanceTree@retree'); //EVERYONE
+
 Route::any('/member/developer/simulate', 'Member\Developer_RematrixController@simulate'); //EVERYONE
 Route::any('/member/developer/simulate/submit', 'Member\Developer_RematrixController@simulate_submit'); //EVERYONE
 

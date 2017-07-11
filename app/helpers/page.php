@@ -1271,6 +1271,15 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Developing";
     $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+
+     /* -- DEVELOPERS => DOCUMENTATION */
+    $code = "developer-auto-balance-tree";
+    $nav[$page]['submenu'][$code]['label'] = "Balance Tree";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/auto_balance_tree";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
     
     $code = "developer-simulate";
     $nav[$page]['submenu'][$code]['label'] = "Simulate";

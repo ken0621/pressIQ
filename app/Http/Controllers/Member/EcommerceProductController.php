@@ -620,6 +620,10 @@ class EcommerceProductController extends Member
 
 			Tbl_ec_variant::where("evariant_id", $variant_id)->update($update_variant);
 
+			$update_product["eprod_detail_image"]   = Request::input('eprod_detail_image');
+
+			Tbl_ec_product::where("eprod_id", $product_id)->update($update_product);
+
 			/* UPDATE IMAGE */
 			$_image = Request::input("image_id");
 			Tbl_ec_variant_image::where("eimg_variant_id", $variant_id)->delete();

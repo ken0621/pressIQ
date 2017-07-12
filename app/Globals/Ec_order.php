@@ -738,9 +738,11 @@ class Ec_order
         
         $customer_query = DB::table("tbl_customer")->where("customer_id", $customer_id);
         $customer = $customer_query->first();
-
-        if ($customer) 
+        
+        $customer_new = Session::get('mlm_member');
+        if ($customer_new) 
         {
+            
             if (!DB::table("tbl_customer_other_info")->where("customer_id", $customer_id)->first()) 
             {
                 $customer_mobile = $order_info["tbl_customer"]["customer_contact"];

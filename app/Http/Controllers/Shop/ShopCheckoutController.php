@@ -20,6 +20,7 @@ use App\Globals\Cart;
 use App\Globals\Customer;
 use App\Globals\Ec_order;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Models\Tbl_item_code;
 use App\Models\Tbl_country;
@@ -335,6 +336,14 @@ class ShopCheckoutController extends Shop
         $data_customer             = DB::table("tbl_customer")->where("customer_id", $data_order->customer_id)->first();
         if ($data_order) 
         {
+            $data['repurchase'] = 0;
+            
+            $check_if_already_emailed = Tbl_mlm_slot::where('slot_owner', $data_order->customer_id)->count();
+            if($check_if_already_emailed >= 1)
+            {
+                $data['repurchase'] = 1;
+            }
+            
             $data["template"]         = Tbl_email_template::where("shop_id", $this->shop_info->shop_id)->first();
             $data['mail_to']          = $data_order->customer_email;
             $data['mail_subject']     = "Account Verification";

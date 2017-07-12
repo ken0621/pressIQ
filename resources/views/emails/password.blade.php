@@ -15,6 +15,13 @@
                     <table border="0" cellpadding="20" cellspacing="0" width="600" id="emailContainer">
                         <tr>
                             <td align="left" valign="top">
+                                    <?php 
+                                    if(!isset($repurchase))
+                                    {
+                                      $repurchase = 0;   
+                                    }
+                                    ?>
+                                    @if($repurchase == 0)
                                     <div style="background-color: #557DA1; color: #ffffff; font-family: 'Helvetica Neue',Helvetica,Roboto,Arial,sans-serif;font-size: 30px;font-weight: 300;line-height: 150%;margin: 0;text-align: left;padding: 36px 48px;display: block;">
                                             Thank you for purchasing your brown product and joining the movement.
                                     </div>
@@ -28,6 +35,11 @@
                                             <p>Email : {{ $mlm_email }} </p>
                                             @endif
                                     </div>
+                                    @else
+                                    <div style="background-color: #557DA1; color: #ffffff; font-family: 'Helvetica Neue',Helvetica,Roboto,Arial,sans-serif;font-size: 30px;font-weight: 300;line-height: 150%;margin: 0;text-align: left;padding: 36px 48px;display: block;">
+                                            Thank you for purchasing your brown product and joining the movement.
+                                    </div>
+                                    @endif
                             </td>
                         </tr>
                     </table>

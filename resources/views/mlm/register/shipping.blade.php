@@ -39,8 +39,8 @@
                </div>
             </div>
             <div class="form-group">
-              <label>Complete Shipping Address</label>
-              <textarea class="form-control input-lg" name="customer_street"></textarea>
+              <label>Street</label>
+              <textarea class="form-control input-lg" name="customer_street" required="required"></textarea>
             </div>
           </div>
         </div>

@@ -1007,7 +1007,7 @@ class Cart
         
         if (get_domain() == "c9users.io") 
         {
-            PayMayaSDK::getInstance()->initCheckout($api->api_client_id, $api->api_secret_id, "SANDBOX");
+            PayMayaSDK::getInstance()->initCheckout('pk-PUQUwFiIyco5xTRpUldYGyEv0aM6YNd2CHvbPVZiang', 'sk-eLb6ixXV5l4KqV4tOnrm4qiz3Nvpv4InKj6OAEaAIpY', "SANDBOX");
         }
         else
         {
@@ -1125,7 +1125,7 @@ class Cart
         $itemCheckout->totalAmount = $totalAmount;
         $itemCheckout->requestReferenceNumber = (string)$order_id;
         // Clear Cart
-        // Cart::clear_all($shop_id);
+        Cart::clear_all($shop_id);
 
         $shop = DB::table('tbl_shop')->where('shop_id', $shop_id)->first();
         $link = '/payment/paymaya/success?notify=0&';

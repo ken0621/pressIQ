@@ -29,6 +29,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/email_payment', 'Shop\ShopAboutController@email_payment'); //EDWARD GUEVARRA
 	Route::get('/contactus', 'Shop\ShopAboutController@contactus'); //EDWARD GUEVARRA
 	Route::get('/jobs', 'Shop\ShopAboutController@jobs'); //EDWARD GUEVARRA
+	Route::get('/job', 'Shop\ShopAboutController@job'); //EDWARD GUEVARRA
 
 	Route::get('/blog', 'Shop\ShopBlogController@index');
 	Route::get('/blog/content', 'Shop\ShopBlogContentController@index');

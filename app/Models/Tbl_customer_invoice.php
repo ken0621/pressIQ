@@ -8,7 +8,7 @@ class Tbl_customer_invoice extends Model
 {
 	protected $table = 'tbl_customer_invoice';
 	protected $primaryKey = "inv_id";
-    public $timestamps = false;
+    public $timestamps = true;
 
 	public static function scopeCustomer($query)
     {

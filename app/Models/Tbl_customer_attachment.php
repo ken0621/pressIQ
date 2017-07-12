@@ -8,5 +8,5 @@ class Tbl_customer_attachment extends Model
 {
     protected $table = 'tbl_customer_attachment';
 	protected $primaryKey = "customer_attachment_id";
-    public $timestamps = false;
+    public $timestamps = true;
 }

@@ -7,7 +7,7 @@ class Tbl_sir_item extends Model
 {
 	protected $table = 'tbl_sir_item';
 	protected $primaryKey = "sir_item_id";
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function scopeSelect_sir_item($query)
     {

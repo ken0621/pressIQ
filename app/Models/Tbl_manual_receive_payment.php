@@ -8,7 +8,7 @@ class Tbl_manual_receive_payment extends Model
 {
     protected $table = 'tbl_manual_receive_payment';
 	protected $primaryKey = "manual_receive_payment_id";
-    public $timestamps = false;
+    public $timestamps = true;
 
     public static function scopeSir($query)
     {

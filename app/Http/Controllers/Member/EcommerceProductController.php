@@ -838,9 +838,9 @@ class EcommerceProductController extends Member
 
 	public function postBulkEditPrice()
 	{
-		$evariant_new_price = Request::input('evariant_new_price');
+		$evariant_new_price = str_replace(",","",Request::input('evariant_new_price'));
 		$evariant_id 		= Request::input('evariant_id');
-		$promo_price 		= Request::input('item_promo_price');
+		$promo_price 		= str_replace(",","",Request::input('item_promo_price'));
 		$start_date 		= Request::input('item_start_date');
 		$end_date 			= Request::input('item_end_date');
 

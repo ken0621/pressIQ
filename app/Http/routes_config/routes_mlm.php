@@ -87,9 +87,14 @@ Route::post('/mlm/slots/before_transfer_slot', 'Mlm\MlmSlotsController@before_tr
 Route::get('/mlm/slots/transfer_slot', 'Mlm\MlmSlotsController@transfer_slot'); 
 Route::post('/mlm/slots/transfer_slot_post', 'Mlm\MlmSlotsController@transfer_slot_post'); 
 /* ---- PRODUCT CODE */
-Route::post('/mlm/slots/check_item_code', 'Mlm\MlmSlotsController@check_item_code'); 
 Route::get('/mlm/slots/item_code', 'Mlm\MlmSlotsController@item_code'); 
-Route::post('/mlm/slots/item_code_post', 'Mlm\MlmSlotsController@item_code_post'); 
+Route::post('/mlm/slots/item_code_post', 'Mlm\MlmSlotsController@item_code_post');
+
+Route::get('/mlm/slots/transfer_item_code', 'Mlm\MlmSlotsController@transfer_item_code'); 
+Route::post('/mlm/slots/transfer_item_code_post', 'Mlm\MlmSlotsController@transfer_item_code_post'); 
+
+Route::get('/mlm/slots/transfer_mem_code', 'Mlm\MlmSlotsController@transfer_mem_code'); 
+Route::post('/mlm/slots/transfer_mem_code_post', 'Mlm\MlmSlotsController@transfer_mem_code_post'); 
 
 /* MLM SLOTs REPORTS */
 

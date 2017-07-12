@@ -8,8 +8,12 @@ function events()
 		$(document).ready(function()
 		{
 			document_ready();
-			window_load();
 		});	
+		
+		$(window).load(function()
+		{
+			window_load();	
+		});
 	}
 	function document_ready()
 	{		
@@ -18,7 +22,7 @@ function events()
 	}
 	function window_load()
 	{
-
+		event_isotope();
 	}
 	function event_slider()
 	{
@@ -32,19 +36,23 @@ function events()
 	{
 		image_crop(".slider-holder img", "16", "9");
 	}
+	function event_isotope()
+	{
+		$('.grid').isotope({
+		  // options
+		  itemSelector: '.grid-item',
+		  percentPosition: true,
+		  masonry: {
+		    // use outer width of grid-sizer for columnWidth
+		    columnWidth: '.grid-sizer',
+		    gutter: '.gutter-sizer',
+		    gutter: 10
+		  }
+		});
+	}
 }
 
-function action_after_load()
-{
-	$('.grid').isotope({
-	  // options
-	  itemSelector: '.grid-item',
-	  percentPosition: true,
-	  masonry: {
-	    // use outer width of grid-sizer for columnWidth
-	    columnWidth: '.grid-sizer',
-	    gutter: '.gutter-sizer',
-	    gutter: 10
-	  }
-	});
-}
+// function action_after_load()
+// {
+	
+// }

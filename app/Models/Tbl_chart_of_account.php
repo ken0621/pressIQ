@@ -9,7 +9,7 @@ class Tbl_chart_of_account extends Model
 	protected $table = 'tbl_chart_of_account';
 	protected $primaryKey = "account_id";
 
-    public $timestamps = false;
+    public $timestamps = true;
     
     public function scopeAccountInfo($query, $shop)
     {
@@ -29,8 +29,9 @@ class Tbl_chart_of_account extends Model
 
     public function scopegetbytype($query, $shop_id, $account_type_id = array())
     {
-        $query->where('account_shop_id', $shop_id)
-              ->whereIn('account_type_id', $account_type_id);
+        // $query->where('account_shop_id', $shop_id)
+        //       ->whereIn('account_type_id', $account_type_id);
+        $query->where('account_shop_id', $shop_id);
         return $query;
     }
 

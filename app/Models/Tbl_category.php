@@ -7,7 +7,7 @@ class Tbl_category extends Model
 {
 	protected $table = 'tbl_category';
 	protected $primaryKey = "type_id";
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function scopesel($query, $shop_id = 0, $archived = 0)
     {

@@ -7,7 +7,7 @@ class Tbl_inventory_serial_number extends Model
 {
 	protected $table = 'tbl_inventory_serial_number';
 	protected $primaryKey = "serial_id";
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function scopeItem($query)
     {

@@ -150,7 +150,7 @@ class MLM_ReportController extends Member
         $data['report_list_d']['product_sales_report_consolidated']['count'] = $count;
         // -----------------------------------------------------------------
 
-        $data['report_list']['warehouse_consiladated'] = 'Warehouse Sales Report';
+        $data['report_list']['warehouse_consiladated'] = 'Consolidated Report';
         $data['report_list_d']['warehouse_consiladated']['from'] = Carbon::now();
         $data['report_list_d']['warehouse_consiladated']['to'] = Carbon::now();
         $data['report_list_d']['warehouse_consiladated']['count'] = 0;
@@ -174,7 +174,10 @@ class MLM_ReportController extends Member
             return $this->get_report();
         }
 
-        $data['users'] = Tbl_user::where('user_shop', $shop_id)->where('archived', 0)->get();
+        $data['users'] = Tbl_user::where('user_shop', $shop_id)
+        ->where('user_email', '!=', 'PhiltechDeveloper@gmail.com')
+        ->where('user_level', '>=', 2)
+        ->where('archived', 0)->get();
         $data['warehouse'] = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->where('archived', 0)->get();
         return view('member.mlm_report.index', $data);
     }
@@ -190,7 +193,6 @@ class MLM_ReportController extends Member
         $filter['skip'] = Request::input('skip');
         $filter['take'] = Request::input('take');
 
-        // return $filter;
         $report = Request::input('report_choose');
         $pdf= Request::input('pdf');
         $shop_id = $this->user_info->shop_id;

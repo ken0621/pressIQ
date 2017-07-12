@@ -14,6 +14,7 @@ use App\Models\Tbl_mlm_lead;
 use App\Globals\Mlm_member;
 use App\Globals\Sms;
 use App\Models\Tbl_email_template;
+use App\Models\Tbl_shop;
 use App\Globals\EmailContent;
 use App\Globals\Settings;
 use Mail;
@@ -26,7 +27,6 @@ class MlmRegisterController extends MlmLoginController
 {
     public function index()
     {
-        // return $this->mail_customer_success_register(1, 310);
         $data["page"] = "register";
         $data['lead'] = Self::$lead;
         if($data['lead'] != null)
@@ -38,6 +38,17 @@ class MlmRegisterController extends MlmLoginController
         	->get();
         	$data['customer_info'] = Mlm_member::get_customer_info($data['lead']->customer_id);
         } 
+        else
+        {
+            $check_shop = Tbl_shop::where("shop_id",Self::$shop_id)->first();
+            if($check_shop)
+            {
+                if($check_shop->shop_key == "alphaglobal")
+                {
+                    return Redirect::to("/");
+                }
+            }
+        }
         
         $data['country'] = Tbl_country::get();
         return view("mlm.register", $data);
@@ -246,6 +257,7 @@ class MlmRegisterController extends MlmLoginController
     {
                 $data["template"] = Tbl_email_template::where("shop_id",$shop_id)->first();
                 $data['customer'] = Tbl_customer::where('customer_id', $customer_id)->first();
+
                 $change_content[0]["txt_to_be_replace"] = "[name_of_registrant]";
                 $change_content[0]["txt_to_replace"] = name_format_from_customer_info($data['customer']);
 
@@ -256,6 +268,9 @@ class MlmRegisterController extends MlmLoginController
                 $change_content[2]["txt_to_be_replace"] = "[user_name]";
                 $change_content[2]["txt_to_replace"] = $data['customer']->mlm_username;
 
+                $change_content[3]["txt_to_be_replace"] = "[pass_word]";
+                $change_content[3]["txt_to_replace"] = Crypt::decrypt($data['customer']->password);
+
                 $content_key = 'success_register';
                 $data['body'] = EmailContent::email_txt_replace($content_key, $change_content, $shop_id);
 
@@ -265,7 +280,6 @@ class MlmRegisterController extends MlmLoginController
                 $data['mail_to'] = $data['customer']->email;
                 $data['mail_username'] = Config::get('mail.username');
                 $data['mail_subject'] = 'SUCCESS REGISTRATION';
-
                 Mail_global::mail($data, $shop_id);
     }
     public static function view_customer_info_via_mem_code($membership_activation_code)

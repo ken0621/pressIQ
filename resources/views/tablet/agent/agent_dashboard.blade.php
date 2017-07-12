@@ -40,13 +40,13 @@
                 <a link="/tablet/submit_all_transaction" size="md" class="popup"> Close this S.I.R</a>
               </div>
             </div>
-            <div class="form-group text-center">
+            <div class="form-group clearfix text-center">
                 <div class="col-md-6 col-xs-6">
                   <h3>SIR No: <strong>{{sprintf("%'.05d\n", $open_sir->sir_id)}}</strong></h3>
                 </div>
                 <div class="col-md-3 col-xs-3">
                     <h3>
-                   <a link="/tablet/sir_inventory/{{Session::get('sir_id')}}" size="lg" class="form-control btn btn-primary popup">View Inventory</a>
+                   <a link="/tablet/sir_inventory/{{Session::get('sir_id')}}" size="lg" class="form-control btn btn-primary popup">Inventory</a>
                    </h3>
                 </div>
                 <div class="col-md-3 col-xs-3">
@@ -55,7 +55,7 @@
                    </h3>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group clearfix">
                 <div class="col-md-6 col-xs-6">
                   <a class="btn btn-primary form-control" href="/tablet/invoice"><i class="fa fa-list-alt"></i> Credit Sales ({{$total_invoice_amount}})</a>
                 </div>
@@ -63,7 +63,7 @@
                   <a class="btn btn-primary form-control" href="/tablet/sales_receipt/list"><i class="fa fa-line-chart"></i> Cash Sales ({{$total_sales_receipt}})</a>
                 </div>      
             </div>
-            <div class="form-group">
+            <div class="form-group clearfix">
                 <div class="col-md-6 col-xs-6">
                     <a class="btn btn-primary form-control" href="/tablet/receive_payment"><i class="fa fa-money"></i> Collection ({{$total_receive_payment}})</a>
                 </div>
@@ -71,7 +71,7 @@
                     <a class="btn btn-primary form-control" href="/tablet/credit_memo"><i class="fa fa-credit-card"></i> Credit Memo ({{$total_cm}})</a>          
                 </div>        
             </div>
-            <div class="form-group">
+            <div class="form-group clearfix">
                 <div class="col-md-6 col-xs-6">
                     <a class="btn btn-primary form-control" href="/tablet/customer"><i class="fa fa-users"></i> Customer ({{$total_customer}})</a>          
                 </div>  

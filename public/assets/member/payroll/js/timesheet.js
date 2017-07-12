@@ -645,8 +645,18 @@ function timesheet()
 		$(".time-record[date='" + val.date + "']").find(".under-time").text(val.approved_timesheet.under_time);
 		$(".time-record[date='" + val.date + "']").each(function(key)
 		{
-			$(this).find(".time-entry.time-in").timeEntry("enable");
-			$(this).find(".time-entry.time-out").timeEntry("enable");
+
+			var attr = $(this).find(".time-entry.time-in").attr('disabled');
+			
+			if (typeof attr !== typeof undefined && attr !== false) {
+			  // Element has this attribute
+			}
+			else
+			{
+				$(this).find(".time-entry.time-in").timeEntry("enable");
+				$(this).find(".time-entry.time-out").timeEntry("enable");
+			}
+			
 			$(this).find(".create-sub-time").show();
 
 			if(val.pending_timesheet.time_record)

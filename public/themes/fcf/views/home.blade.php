@@ -164,23 +164,6 @@
 			</div>
 		</div>
 	</div>
-	<!-- BOTTOM CONTAINER -->
-	<div class="bottom-container">
-		<div class="container-fluid">
-			<div class="row clearfix">
-				<div class="col-md-9">
-					<div class="bottom-container-txt">
-						<div class="bottom-container-title">{{ get_content($shop_theme_info, "home", "home_slogan_first") }} <span class="highlight">{{ get_content($shop_theme_info, "home", "home_slogan_highlight") }}</span> {{ get_content($shop_theme_info, "home", "home_slogan_last") }}</div>
-						<div class="bottom-container-details">{{ get_content($shop_theme_info, "home", "home_slogan_subtitle") }}</div>
-					</div>
-				</div>
-				<div class="col-md-3">
-					<div class="btn-container"><a href="/about"><button class="learn-more-btn">LEARN MORE</button></a></div>
-				</div>
-			</div>
-			
-		</div>
-	</div>
 	<!-- GALLERY -->
 	<div class="gallery-container">
 		<div class="container-fluid">
@@ -483,22 +466,6 @@
 
 
 		</div>
-	</div>
-	<!-- WHO WE ARE -->
-	<div class="mid-container">
-		<div class="container-fluid">
-			<div class="row clearfix">
-				<div class="col-md-9">
-					<div class="bottom-container-txt">
-						<div class="bottom-container-title">{{ get_content($shop_theme_info, "home", "home_division1_title") }}</div>
-						<div class="bottom-container-details">{{ get_content($shop_theme_info, "home", "home_division1_context") }}</div>
-					</div>
-				</div>
-				<div class="col-md-3">
-					<div class="btn-container"><a href="/about"><button class="learn-more-btn">LEARN MORE</button></a></div>
-				</div>
-			</div>
-		</div>		
 	</div>
 	<!-- KEY COMPONENTS -->
 	<div class="key-components-container">

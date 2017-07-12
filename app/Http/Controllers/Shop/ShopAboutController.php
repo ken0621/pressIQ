@@ -38,9 +38,16 @@ class ShopAboutController extends Shop
         return view("contactus", $data);
     }
 
+
     public function email_payment()
     {
         $data["page"] = "Email Payment";
         return view("email_payment", $data);
+    }
+    
+    public function jobs()
+    {
+        $data["page"] = "jobs";
+        return view("jobs", $data);
     }
 }

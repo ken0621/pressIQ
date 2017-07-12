@@ -103,6 +103,24 @@ class MlmLoginController extends Controller
     {
     	Session::forget('mlm_member');
         $data["page"] = "Login";
+
+        $check_shop = Tbl_shop::where("shop_id",Self::$shop_id)->first();
+        if($check_shop)
+        {
+            if($check_shop->shop_key == "alphaglobal")
+            {
+                $data["register_button"] = 0;
+            }
+            else
+            {
+                $data["register_button"] = 1;
+            }
+        }
+        else
+        {
+            $data["register_button"] = 1;
+        }
+
         return view("mlm.login", $data);
     }   
     public function forgot_password()

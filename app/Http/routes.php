@@ -1,5 +1,4 @@
 <?php
-
 Route::get('/member/mail_setting', 'Member\MailSettingController@index');
 Route::post('/member/mail_setting', 'Member\MailSettingController@submit');
 
@@ -38,6 +37,7 @@ Route::get('/support', 'Frontend\HomeController@support');
 /* END FRONTEND - SHIGUMA RIKA */
 
 /* SHOP FRONTENT */
+
 if(get_domain() == "c9users.io")
 {
 	$domain = "my168shop-primia.c9users.io"; //USE FOR TESTING
@@ -86,7 +86,7 @@ Route::any('/member/developer/reset_slot/submit/re_tree', 'Member\Developer_Stat
 Route::any('/member/developer/reset_slot/submit/re_com_phil_lost', 'Member\Developer_StatusController@re_com_phil_lost'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/re_com_phil_uni', 'Member\Developer_StatusController@re_com_phil_uni'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/recompute', 'Member\Developer_StatusController@recompute'); //GUILLERMO TABLIGAN
-
+Route::any('/member/developer/reset_slot/submit/recompute/membership_matching', 'Member\Developer_StatusController@recompute_membership_matching'); //GUILLERMO TABLIGAN
 /* END MEMBER - VENDOR - GUILLERMO TABLIGAN */
 
 /* MEMBER - ACCOUNTING - CHART OF ACCOUNTS */
@@ -503,6 +503,9 @@ Route::any('/tablet/sales_receipt/update_submit','Member\TabletPISController@upd
 
 Route::any('/tablet/submit_all_transaction','Member\TabletPISController@confirm_submission');
 Route::any('/tablet/submit_all_transaction/submit','Member\TabletPISController@submit_transactions');
+
+Route::any('/tablet/sync_data/{table}/{date}','Member\TabletSyncController@sync');
+Route::any('/tablet/update_sync_data','Member\TabletSyncController@sync_update');
 /* END PIS TABLET*/
 
  //form

@@ -44,7 +44,7 @@ class MlmWalletVMoneyController extends Mlm
         
         if (isset($slot) && $slot) 
         {
-            if ($minimum_encashment < Request::input("wallet_amount")) 
+            if ($minimum_encashment <= Request::input("wallet_amount")) 
             {
                 if ($wallet > Request::input('wallet_amount')) 
                 {

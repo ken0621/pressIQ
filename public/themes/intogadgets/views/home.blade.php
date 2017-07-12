@@ -224,6 +224,6 @@
     </div>
  @endif
 
-    <script type="text/javascript" src="resources/assets/flexslider/js/jquery.flexslider-min.js"></script>
+    <script type="text/javascript" src="/resources/assets/flexslider/js/jquery.flexslider-min.js"></script>
 @endsection
 

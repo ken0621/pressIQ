@@ -2,7 +2,7 @@
 @section('content')
 @section('content')
 <?php 
-$data['title'] = 'V-Money Wallet';
+$data['title'] = 'E-Money Wallet';
 $data['sub'] = '';
 $data['icon'] = 'fa fa-money';
 ?>
@@ -18,7 +18,7 @@ $data['icon'] = 'fa fa-money';
         <div class="clearfix">
             <form method="post" action="/mlm/wallet/vmoney/transfer">
                 {!! csrf_field() !!}
-                <h3 style="margin-top: 0; margin-bottom: 20px; width: 100%; background-color: #00c0ef; color: #fff; margin-top: -10px; padding: 7.5px 15px;" class="text-left">Transfer Wallet to V-Money Wallet</h3>
+                <h3 style="margin-top: 0; margin-bottom: 20px; width: 100%; background-color: #00c0ef; color: #fff; margin-top: -10px; padding: 7.5px 15px;" class="text-left">Transfer Wallet to E-Money Wallet</h3>
                 @if (session('success'))
                     <div style="margin-top: -20px; border-radius: 0;" class="alert alert-success">
                         {{ session('success') }}
@@ -31,12 +31,12 @@ $data['icon'] = 'fa fa-money';
                 @endif
                 <div style="padding: 0 15px;">
                     <div class="form-group">
-                      <label>V-Money Email Address</label>
+                      <label>E-Money Email Address</label>
                       <input type="email" class="form-control" name="vmoney_email" value="{{ $customer_info->email }}" required>
                     </div>
                     <div class="form-group">
-                      <label>Amount to convert</label>
-                      <input type="number" class="form-control" value="1" name="wallet_amount" min="1">
+                      <label>Amount to convert ( Current Wallet: PHP. {{ number_format($wallet, 2) }} )</label>
+                      <input step="any" type="number" class="form-control" value="{{ $minimum }}" name="wallet_amount" min="{{ $minimum }}" max="{{ $wallet }}">
                     </div>
                     <button class="btn btn-primary pull-right" type="submit">Proceed</button>
                 </div>
@@ -64,7 +64,7 @@ $data['icon'] = 'fa fa-money';
                           <td>{{ $logs->merchantRef }}</td>
                           <td>PHP. {{ number_format($logs->vmoney_wallet_logs_amount, 2) }}</td>
                           <td>{{ $logs->vmoney_wallet_logs_email }}</td>
-                          <td>{{ $logs->status == 1 ? "Success" : "Failed" }}</td>
+                          <td>{{ $logs->message }}</td>
                           <td>{{ date("F d, Y", strtotime($logs->vmoney_wallet_logs_date)) }}</td>
                       </tr>
                     @endforeach

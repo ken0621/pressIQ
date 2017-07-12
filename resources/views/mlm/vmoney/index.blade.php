@@ -18,7 +18,7 @@ $data['icon'] = 'fa fa-money';
         <div class="clearfix">
             <form method="post" action="/mlm/wallet/vmoney/transfer">
                 {!! csrf_field() !!}
-                <h3 style="margin-top: 0; margin-bottom: 20px; width: 100%; background-color: #00c0ef; color: #fff; margin-top: -10px; padding: 7.5px 15px;" class="text-left">Transfer Wallet to Airline Wallet</h3>
+                <h3 style="margin-top: 0; margin-bottom: 20px; width: 100%; background-color: #00c0ef; color: #fff; margin-top: -10px; padding: 7.5px 15px;" class="text-left">Transfer Wallet to V-Money Wallet</h3>
                 @if (session('success'))
                     <div style="margin-top: -20px; border-radius: 0;" class="alert alert-success">
                         {{ session('success') }}
@@ -32,11 +32,11 @@ $data['icon'] = 'fa fa-money';
                 <div style="padding: 0 15px;">
                     <div class="form-group">
                       <label>V-Money Email Address</label>
-                      <input type="email" class="form-control" name="vmoney_email">
+                      <input type="email" class="form-control" name="vmoney_email" value="{{ $customer_info->email }}" required>
                     </div>
                     <div class="form-group">
                       <label>Amount to convert</label>
-                      <input type="number" class="form-control" value="0" name="wallet_amount">
+                      <input type="number" class="form-control" value="1" name="wallet_amount" min="1">
                     </div>
                     <button class="btn btn-primary pull-right" type="submit">Proceed</button>
                 </div>
@@ -49,17 +49,31 @@ $data['icon'] = 'fa fa-money';
         <div class="clearfix">
             <table style="margin: 0;" class="table table-bordered table-condensed">
                 <thead>
+                    <th>Transaction ID</th>
+                    <th>Merchant Reference</th>
                     <th>Amount</th>
-                    <th>Account ID</th>
+                    <th>Recipient</th>
                     <th>Status</th>
                     <th>Date</th>
                 </thead>
-                  <tr>
-                      <td>PHP 500</td>
-                      <td>1</td>
-                      <td>Paid</td>
-                      <td>Today</td>
-                  </tr>
+                <tbody>
+                  @if(isset($_logs) && count($_logs) > 0)
+                    @foreach($_logs as $logs)
+                      <tr>
+                          <td>{{ $logs->txnId }}</td>
+                          <td>{{ $logs->merchantRef }}</td>
+                          <td>PHP. {{ number_format($logs->vmoney_wallet_logs_amount, 2) }}</td>
+                          <td>{{ $logs->vmoney_wallet_logs_email }}</td>
+                          <td>{{ $logs->status == 1 ? "Success" : "Failed" }}</td>
+                          <td>{{ date("F d, Y", strtotime($logs->vmoney_wallet_logs_date)) }}</td>
+                      </tr>
+                    @endforeach
+                  @else
+                    <tr>
+                      <td class="text-center" colspan="6">No Transaction</td>
+                    </tr>
+                  @endif
+                </tbody>
             </table>
         </div>
     </div>

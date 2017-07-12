@@ -26,7 +26,7 @@ class MlmWalletVMoneyController extends Mlm
         {
             $data["_logs"] = DB::table("tbl_vmoney_wallet_logs")->where("customer_id", Self::$customer_id)->get();
             $data["wallet"] = Mlm_slot_log::get_sum_wallet(Self::$slot_id);
-            $data["minimum"] = DB::table("tbl_settings")->where("shop_id", Self::$shop_id)->where("settings_key", "vmoney_minimum_encashment")->first()->settings_value;
+            $data["minimum"] = isset(DB::table("tbl_settings")->where("shop_id", Self::$shop_id)->where("settings_key", "vmoney_minimum_encashment")->first()->settings_value) ? DB::table("tbl_settings")->where("shop_id", Self::$shop_id)->where("settings_key", "vmoney_minimum_encashment")->first()->settings_value : 0;
 
             return view('mlm.vmoney.index', $data);
         }

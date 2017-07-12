@@ -789,6 +789,22 @@ top: 8px;
   text-align: center;
   z-index: 150;
 
+  @media screen and (max-width: 900px){
+  	width: 35%;
+  }
+  @media screen and (max-width: 768px){
+  	width: 40%;
+  }
+  @media screen and (max-width: 600px){
+  	width: 48%;
+  }
+  @media screen and (max-width: 414px){
+  	width: 75%;
+  }
+  @media screen and (max-width: 320px){
+  	width: 88%;
+  }
+
   p {
   	font-size: 12px;
   	letter-spacing: 0.3px;
@@ -830,6 +846,15 @@ top: 8px;
   		margin-top: 15px;
   		margin-left: 32%;
 
+  		@media screen and (max-width: 900px){
+  			width: 83%;
+  			margin-left: 9%;
+  		}
+  		@media screen and (max-width: 600px){
+  			width: 91%;
+  			margin-left: 5%;
+  		}
+
   		&:hover{
   			cursor: pointer;
   			background-color: #ebaf00;
@@ -851,6 +876,12 @@ top: 8px;
 
   @media screen and (max-width: 900px){
   	width: 50%;
+  }
+  @media screen and (max-width: 375px){
+  	width: 80% !important;
+  }
+  @media screen and (max-width: 320px){
+  	width: 90% !important;
   }
 
   h1{
@@ -892,6 +923,16 @@ top: 8px;
 		padding: 10px 10px 0px 42px;
 		text-align: center;
 
+		@media screen and (max-width: 414px){
+			padding: 10px 10px 0px 20px;
+		}
+		@media screen and (max-width: 375px){
+			padding: 10px 10px 0px 25px;
+		}
+		@media screen and (max-width: 360px){
+			padding: 10px 10px 0px 20px;
+		}
+
 		.mobile{
 			@media screen and (max-width: 900px){
 				min-width: 325px !important;
@@ -904,6 +945,14 @@ top: 8px;
 			@media screen and (max-width: 600px){
 				min-width: 290px !important;
 				max-width: 290px !important;
+			}
+			@media screen and (max-width: 414px){
+				min-width: 210px !important;
+				max-width: 210px !important;
+			}
+			@media screen and (max-width: 375px){
+				min-width: 207px !important;
+				max-width: 207px !important;
 			}
 		}
 	}
@@ -921,7 +970,11 @@ top: 8px;
 
   		@media screen and (max-width: 900px){
   			width: 80%;
-  			margin-left: 10%;;
+  			margin-left: 10%;
+  		}
+  		@media screen and (max-width: 360px){
+  			width: 84%;
+  			margin-left: 8%;
   		}
 
   		&:hover{
@@ -930,6 +983,9 @@ top: 8px;
   		}
 	}
 }
+.mobile-content {
+	padding-top: 0px !important;
+}
 .popup h2 {
   margin-top: 0;
   color: #333;
@@ -937,6 +993,12 @@ top: 8px;
   font-size: 24px;
   text-align: center;
   padding-top: 30px;
+
+  @media screen and (max-width: 375px){
+  	font-size: 18px;
+  }
+
+
 }
 .popup .close {
   position: absolute;

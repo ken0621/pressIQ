@@ -171,7 +171,7 @@
         <div class="popup">
             <h2>Attach Your Resume Here</h2>
             <a class="close" href="#">&times;</a>
-            <div class="content">
+            <div class="content mobile-content">
                 <input type="file" class="on-change-file" id="tohide"/>
                 <input type="button" value="" class="round-button-container" onclick="document.getElementById('tohide').click()"/>
                 <div class="file-detail">(.docx, .pdf, .jpg)</div>
@@ -180,8 +180,7 @@
                     Say something about your self!
                 </h1>
                 <div class="txt-area-container">
-                    <textarea class="form-control mobile" style="max-width: 300px; min-width: 300px; max-height: 70px; font-size: 12px;" placeholder="Type the qualities that you think you can 
-                    stand out among others..."></textarea>
+                    <textarea class="form-control mobile" style="max-width: 300px; min-width: 300px; max-height: 70px; font-size: 12px;" placeholder="Type the qualities that you think you can stand out among others..."></textarea>
                 </div>
                 <a href="#popup2"><div class="submit-btn">SUBMIT</div></a>
             </div>

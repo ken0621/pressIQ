@@ -650,9 +650,6 @@ class Payroll
 		$return = new stdClass();
 	
 
-
-		Payroll::adjust_payroll_approved_in_and_out($employee_information->payroll_employee_id, $date);
-
 		$data["compute_approved"] = 0;
 		$return->pending_timesheet = Payroll::process_time_regulartime($data, $date, $data["time_rule"]);
 
@@ -1474,9 +1471,11 @@ class Payroll
 
 		$data['daily_rate']					= 0;
 
+
 		$data['payroll_employee_id']		= $employee_id;
 		$data['payroll_period_company_id']	= $payroll_period_company_id;
 		$data['tax_status']					= $basic_employee->payroll_employee_tax_status;
+		$data['branch_location_id']			= $basic_employee->branch_location_id;
 		$data['salary_taxable'] 			= 0;
 		$data['salary_sss'] 				= 0;
 		$data['salary_pagibig'] 			= 0;
@@ -2647,7 +2646,7 @@ class Payroll
 		$data['deduction'] 			= $deduction['deduction'];
 		$data['total_deduction'] 	+= $deduction['total_deduction'] + $adjustment_deductions_total;
 
-		$data['total_net'] 					= ($data['total_gross'] - $data['total_deduction']) + $total_deminimis + $data['13_month'];
+		$data['total_net'] 					= ($data['total_gross'] - $data['total_deduction']) + $total_deminimis + $data['13_month'] + $adjustment_13_month_total;
 
 
 
@@ -3276,7 +3275,7 @@ class Payroll
 		// $data['absent_deduction'] = 0;
 		// $total_deminimis	=  $data['_total_unused_leave'] + $data['payroll_cola'] + $data['13_month'] + $total_allowance + $adjustment_bonus_total + $adjustment_commission_total + $adjustment_incentives_total + $data['leave_amount'];
 
-		$total_deminimis	=  $data['_total_unused_leave'] + $data['payroll_cola'] + $data['13_month'] + $total_allowance + $adjustment_bonus_total + $adjustment_commission_total + $adjustment_incentives_total + $data['leave_amount'];
+		$total_deminimis	=  $data['_total_unused_leave'] + $data['payroll_cola'] + $data['13_month'] + $total_allowance + $adjustment_bonus_total + $adjustment_commission_total + $adjustment_incentives_total + $data['leave_amount'] + $adjustment_13_month_total;
 
 
 		/* COMPUTE UNUSED LEAVE END */

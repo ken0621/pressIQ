@@ -43,7 +43,7 @@ class MlmTransferController extends Mlm
     }
     public function refill($message = null)
     {
-        if(Self::$slot_id != null)
+        if(Self::$slot_id != null && Self::$shop_info->shop_key == "PhilTECH")
         {
             $data = [];
             if($message != null)
@@ -60,7 +60,7 @@ class MlmTransferController extends Mlm
     }
     public function request_refill()
     {
-        if(Self::$slot_id != null)
+        if(Self::$slot_id != null && Self::$shop_info->shop_key == "PhilTECH")
         {
             $data = [];
             Mlm_pre::pre_req(Self::$shop_id);
@@ -155,7 +155,7 @@ class MlmTransferController extends Mlm
     }
     public function transfer()
     {
-        if(Self::$slot_id != null)
+        if(Self::$slot_id != null && Self::$shop_info->shop_key == "PhilTECH")
         {
             $data = [];
             Mlm_pre::pre_req(Self::$shop_id);

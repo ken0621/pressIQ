@@ -286,9 +286,18 @@ class PayrollTimeSheetController extends Member
 												->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
 												->select('tbl_payroll_group.*')
 												->first();
-
-		$param_target 	= $group->payroll_group_target_hour_parameter;
-		$param_hour 	= $group->payroll_group_target_hour;
+		
+		$param_target = 'Daily';
+		$param_hour	  = 0;
+		if(isset($group->payroll_group_target_hour_parameter))
+		{
+			$param_target 	= $group->payroll_group_target_hour_parameter;
+		}
+		
+		if(isset($group->payroll_group_target_hour))
+		{
+			$param_hour 	= $group->payroll_group_target_hour;
+		}
 
 		$from = $period->payroll_period_start;
 		$to   = $period->payroll_period_end;

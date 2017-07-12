@@ -2,7 +2,7 @@
     <div class="tab-content">
         <div id="all-orders" class="tab-pane fade in active">
            <div class="table-responsive">
-           <table class="table table-condensed">
+           <table class="table table-striped table-hover table-condensed">
                 <tr><th colspan="6"><center>Binary Promotions</center></th></tr>
                
                @foreach($binary_promotions as $key => $value)
@@ -32,26 +32,35 @@
                           <label>Required Right</label>
                           <input type="number" class="form-control" value="{{$value->binary_promotions_required_right}}" name="binary_promotions_required_right">
                       </div>
+                      <!-- Direct and PPV -->
+                        <div class="col-md-2">
+                            <label>PPV</label>
+                            <input type="number" class="form-control" value="{{$value->binary_promotions_repurchase_points}}" name="binary_promotions_repurchase_points">
+                        </div>
+                        <div class="col-md-2">
+                            <label>Direct Referral</label>
+                            <input type="number" class="form-control" value="{{$value->binary_promotions_direct}}" name="binary_promotions_direct">
+                        </div>
+                      <!-- End  -->
                       <div class="col-md-2">
                           <label>No. Of Units</label>
                           <input type="number" class="form-control" value="{{$value->binary_promotions_no_of_units}}" name="binary_promotions_no_of_units">
                       </div>
-                      <div class="col-md-2">
-                        <label>Submit</label><br>
-                        <input type="hidden" class="submit_type" name="submit_type" value="0">
-                        <button class="btn btn-primary" name="archive" value="0" onClick="$('.submit_type').val(0)">Edit</button>
-                        <button class="btn btn-primary" name="archive" value="1" onClick="$('.submit_type').val(1)">Archive</button>
-                      </div>
-                      <div class="col-md-12">
-                      </div>
-                          <div class="col-md-2">
-                            <label>Promotion Start Date</label>
-                            <input type="date" class="form-control" name="binary_promotions_start_date" value="{{Carbon\Carbon::parse($value->binary_promotions_start_date)->format('Y-m-d')}}">
-                          </div>
-                          <div class="col-md-2">
-                            <label>Promotion End Date</label>
-                            <input type="date" class="form-control" name="binary_promotions_end_date" value="{{Carbon\Carbon::parse($value->binary_promotions_end_date)->format('Y-m-d')}}">
-                          </div>
+                      
+                        <div class="col-md-2">
+                          <label>Promotion Start Date</label>
+                          <input type="date" class="form-control" name="binary_promotions_start_date" value="{{Carbon\Carbon::parse($value->binary_promotions_start_date)->format('Y-m-d')}}">
+                        </div>
+                        <div class="col-md-2">
+                          <label>Promotion End Date</label>
+                          <input type="date" class="form-control" name="binary_promotions_end_date" value="{{Carbon\Carbon::parse($value->binary_promotions_end_date)->format('Y-m-d')}}">
+                        </div>
+                        <div class="col-md-2">
+                          <label>Submit</label><br>
+                          <input type="hidden" class="submit_type" name="submit_type" value="0">
+                          <button class="btn btn-primary" name="archive" value="0" onClick="$('.submit_type').val(0)">Edit</button>
+                          <button class="btn btn-primary" name="archive" value="1" onClick="$('.submit_type').val(1)">Archive</button>
+                        </div>
                       </form>
                   </td> 
                </tr>
@@ -86,12 +95,19 @@
                           <label>No. Of Units</label>
                           <input type="number" class="form-control" value="0" name="binary_promotions_no_of_units">
                       </div>
-                      <div class="col-md-2">
-                        <label>Submit</label><br>
-                        <button class="btn btn-primary" onclick="">Save</button>
-                      </div>
-                      <div class="col-md-12">
-                      </div>
+
+                      <!-- Direct and PPV -->
+                        <div class="col-md-2">
+                            <label>PPV</label>
+                            <input type="number" class="form-control" value="0" name="binary_promotions_repurchase_points">
+                        </div>
+                        <div class="col-md-2">
+                            <label>Direct Referral</label>
+                            <input type="number" class="form-control" value="0" name="binary_promotions_direct">
+                        </div>
+                      <!-- End  -->
+
+                      
                           <div class="col-md-2">
                             <label>Promotion Start Date</label>
                             <input type="date" class="form-control" name="binary_promotions_start_date" value="{{$carbon_now}}">
@@ -100,6 +116,10 @@
                             <label>Promotion End Date</label>
                             <input type="date" class="form-control" name="binary_promotions_end_date" value="{{$carbon_now}}">
                           </div>
+                      <div class="col-md-2">
+                        <label>Submit</label><br>
+                        <button class="btn btn-primary" onclick="">Save</button>
+                      </div>
                       </form>
                   </td> 
                </tr>

@@ -82,36 +82,55 @@
                                             </div>
                                             <div class="col-md-6">{{$value->binary_promotions_end_date}}</div>
                                         </div>
+                                        <div class="col-md-6">
+                                            <div class="col-md-6">
+                                                Required Direct Referral:
+                                            </div>
+                                            <div class="col-md-6">{{$value->binary_promotions_direct}}</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="col-md-6">
+                                                Current Direct Referral:
+                                            </div>
+                                            <div class="col-md-6">{{$direct_count_a[$key]}}</div>
+                                        </div>
                                         <div class="col-md-12">
                                             <span class="pull-right">
                                             @if($now >= $value->binary_promotions_start_date)
-                                            @if($value->binary_promotions_end_date >=  $now)
-                                                @if($value->binary_promotions_no_of_units > $value->binary_promotions_no_of_units_used)
-                                                    @if($current_l[$key] >= $value->binary_promotions_required_left)
-                                                        @if($current_r[$key] >= $value->binary_promotions_required_right)
-                                                        @if($claim_count_account[$key] === 0)
-                                                            @if($req_count[$key] == 0)
-                                                            <button class="btn btn-primary" form="form_{{$value->binary_promotions_id}}" onClick="$(this).addClass('hide')">Request</button>
+                                                @if($value->binary_promotions_end_date >=  $now)
+                                                    @if($value->binary_promotions_no_of_units > $value->binary_promotions_no_of_units_used)
+                                                        @if($current_l[$key] >= $value->binary_promotions_required_left)
+                                                            @if($current_r[$key] >= $value->binary_promotions_required_right)
+                                                                @if($direct_count_a[$key] >= $value->binary_promotions_direct)
+                                                                    @if($claim_count_account[$key] === 0)
+                                                                        @if($req_count[$key] == 0)
+                                                                            <button class="btn btn-primary" form="form_{{$value->binary_promotions_id}}" onClick="$(this).addClass('hide')">Request</button>
+                                                                        @else
+                                                                            Already Claimed this promotion.
+                                                                        @endif
+                                                                    @else
+                                                                        Already Claimed this promotion, in this account.
+                                                                    @endif
+                                                                @else
+                                                                    Insufficient, direct referral.
+                                                                @endif    
                                                             @else
-                                                            Already Claimed this promotion.
+                                                                Insufficient Points.
                                                             @endif
                                                         @else
-                                                            Already Claimed this promotion, in this account.
-                                                        @endif
-                                                        @else
-                                                            Insufficient Points.
+                                                            Insufficient Points
                                                         @endif
                                                     @else
-                                                        Insufficient Points
+                                                        All Stock Taken
                                                     @endif
                                                 @else
-                                                    All Stock Taken
-                                                @endif
-                                            @else
                                                     Promotion Already Expired
-                                            @endif            
+                                                @endif            
                                             @else
-                                                    Date Not Reached
+                                                Date Not Reached
                                             @endif
                                             </span>
                                         </div>

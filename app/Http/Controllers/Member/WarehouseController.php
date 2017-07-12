@@ -151,7 +151,18 @@ class WarehouseController extends Member
     }
     public function inventory_log($warehouse_id)
     {
-        $data["_inventory_log"] = Tbl_warehouse_inventory::item()->warehouse()->inventoryslip()->serialnumber()->orderBy("inventory_id","DESC")->groupBy("tbl_warehouse_inventory.inventory_id")->where("inventory_count",">",0)->where("inventory_reason","refill")->where("tbl_item.shop_id",$this->user_info->shop_id)->where("tbl_warehouse.warehouse_id",$warehouse_id)->get();
+        $data["_inventory_log"] = Tbl_warehouse_inventory::item()
+                                    ->warehouse()
+                                    ->inventoryslip()
+                                    ->serialnumber()
+                                    ->orderBy("inventory_id","DESC")
+                                    ->groupBy("tbl_warehouse_inventory.inventory_id")
+                                    ->where("inventory_count",">",0)
+                                    ->where("inventory_reason","refill")
+                                    ->where("tbl_item.shop_id",$this->user_info->shop_id)
+                                    ->where("tbl_warehouse.warehouse_id",$warehouse_id)
+                                    ->get();
+
         return view("member.warehouse.inventory_log",$data);
     }
     public function item()

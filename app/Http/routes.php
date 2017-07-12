@@ -1,5 +1,4 @@
 <?php
-
 Route::get('/member/mail_setting', 'Member\MailSettingController@index');
 Route::post('/member/mail_setting', 'Member\MailSettingController@submit');
 
@@ -38,6 +37,7 @@ Route::get('/support', 'Frontend\HomeController@support');
 /* END FRONTEND - SHIGUMA RIKA */
 
 /* SHOP FRONTENT */
+
 if(get_domain() == "c9users.io")
 {
 	$domain = "my168shop-primia.c9users.io"; //USE FOR TESTING
@@ -897,6 +897,7 @@ Route::get('/member/item/manufacturer/load_manufacturer','Member\ManufacturerCon
 Route::get('/member/maintenance/load_payment_method','Member\MaintenancePaymentMethodController@load_payment_method');
 Route::get('/member/maintenance/load_payment_gateway/{id}','Member\OnlinePaymentMethodController@load_payment_gateway');
 
+Route::any('/member/ecommerce/product/ecom_load_product_table', 'Member\EcommerceProductController@ecom_load_product_table');
 /* SettingsController */
 Route::get('/member/settings', 'Member\SettingsController@all');
 Route::get('/member/settings/{key}', 'Member\SettingsController@index');

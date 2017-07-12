@@ -214,7 +214,7 @@ class Page_ContentController extends Member
     {
         $field = unserialize(Request::input("field"));
         $key   = Request::input("key");
-
+        
         if (isset($field) && isset($key)) 
         {
             $data["field"] = $field;

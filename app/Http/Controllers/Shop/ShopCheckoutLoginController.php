@@ -53,7 +53,7 @@ class ShopCheckoutLoginController extends Shop
             }
             else
             {
-                return Redirect::to("/checkout");
+                return Redirect::to("/checkout")->send();
             }
         }
         else

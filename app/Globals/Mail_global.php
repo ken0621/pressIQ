@@ -26,23 +26,23 @@ class Mail_global
     {
         if ($from == "contact") 
         {
-            $this->contact_mail($data, $shop_id);
+            Mail_global::contact_mail($data, $shop_id);
         }
         elseif($from == "payment")
         {
-            $this->payment_mail($data, $shop_id);
+            Mail_global::payment_mail($data, $shop_id);
         }
         elseif($from == "password")
         { 
-            $this->password_mail($data, $shop_id);
+            Mail_global::password_mail($data, $shop_id);
         }
         elseif($from == "cod")
         {
-            $this->cod_mail($data, $shop_id);
+            Mail_global::cod_mail($data, $shop_id);
         }
         elseif($from == "discount_card")
         {
-            $this->mail_discount_card($data, $shop_id);
+            Mail_global::mail_discount_card($data, $shop_id);
         }
         else
         {
@@ -163,7 +163,29 @@ class Mail_global
     }
     public static function cod_mail($data, $shop_id)
     {
-        dd($data);
+        Settings::set_mail_setting($shop_id);
+        $data['mail_username'] = Config::get('mail.username');
+        try 
+        {
+            Mail::send('emails.cod', $data, function ($m) use ($data) 
+            {
+                $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
+                $m->to($data['mail_to'], $data['mail_username'])->subject($data['mail_subject']);
+            });
+            Mail::send('emails.cod', $data, function ($m) use ($data) 
+            {
+                $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
+                $m->to("edwardguevarra2003@gmail.com", $data['mail_username'])->subject($data['mail_subject']);
+            });
+            $result = 1;
+        } 
+        catch (\Exception $e) 
+        {
+            $this->fail_email($e->getMessage);
+            $result = 0; 
+        }
+
+        return $result;
     }
     public static function mail_discount_card($discount_card_log_id)
     {
@@ -179,7 +201,6 @@ class Mail_global
     }
     public static function fail_email($x)
     {
-        echo $x;
-        die();
+        dd($x);
     }
 }

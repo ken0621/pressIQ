@@ -43,6 +43,7 @@ class MlmReportController extends Mlm
             return Self::show_no_access();
         }
     }
+    
     public static function direct()
     {
         $data['report']     = Mlm_member_report::get_wallet('DIRECT', Self::$slot_id); 

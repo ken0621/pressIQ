@@ -23,6 +23,7 @@ Route::get('/barcode', 'MemberController@barcodes');
 
 Route::get('member/register/session', 'MemberController@session');
 Route::get('member/register', 'MemberController@register');
+Route::get('member/register/sponsor/{username}', 'MemberController@register_get_sponsor');
 Route::post('member/register/logged_in', 'MemberController@register_logged_in_post');
 Route::post('member/register/submit', 'MemberController@register_post');
 

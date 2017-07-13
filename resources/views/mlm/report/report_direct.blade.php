@@ -1,5 +1,8 @@
 @extends('mlm.layout')
 @section('content')
-{!! $header !!}
-@include('mlm.report.global')
+    <!--Header -->
+    {!! $header !!}
+    <!--Report -->
+    @include('mlm.report.global')
+    <!-- End   -->
 @endsection

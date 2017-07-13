@@ -514,7 +514,14 @@
             $('[data-toggle="tooltip"]').tooltip(); 
         });
       </script>
-
+        <script type="text/javascript">
+          function search_notification(ito)
+          {
+            var link = '/mlm/report/{{Request::segment(3)}}?page=1&search_slot='+$(ito).val();
+            $('.table_body_get').html('<center>Loading...</center>');
+            $('.table_body_get').load( link + ' .table_body_get');
+          }
+        </script>
       @yield('js')   
    </body>
 </html>

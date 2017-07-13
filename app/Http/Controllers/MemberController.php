@@ -187,6 +187,11 @@ class MemberController extends Controller
         $data['terms_and_agreement'] = Tbl_settings::where('shop_id', Self::$shop_id)->where('settings_key', 'terms_and_agreement')->first();
         return view("mlm.register.register", $data);
     }
+    public function register_get_sponsor($username)
+    {
+        $data['slot_sponsor'] = Tbl_mlm_slot::where('slot_nick_name', $username)->customer()->first();
+        return view('mlm.register.sponsor', $data);
+    }
     public function register_logged_in()
     {
 

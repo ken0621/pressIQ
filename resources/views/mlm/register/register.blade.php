@@ -109,14 +109,20 @@
 					</div>
 					
 					
-					<div class="col-md-12">
+					<div class="col-md-6">
 						<div class="form-group">
 
 							<label> Referror/Upline</label>
 
 							<input type="text" class="form-control input-lg" name="sponsor" value="{{ Request::old('slot_sponsor') ? Request::old('slot_sponsor') : ( isset($current['tbl_mlm_slot']['slot_sponsor']) ? $current['tbl_mlm_slot']['slot_sponsor'] : '' ) }}" 
 							{{$sponsor_r == 1 ? 'required' : ''}}
+							onChange="get_sponsor(this)"
 							>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group reforrer_get">
+							
 						</div>
 					</div>
 				</div>
@@ -309,6 +315,12 @@ function checkDigit (e, ito)
                 $('#load').addClass('hide');
             }
         })
+    }
+    
+    function get_sponsor(ito) {
+    	// body...
+    	var link = '/member/register/sponsor/' + $(ito).val();
+    	$('.reforrer_get').load(link)	
     }
 </script>
 @endsection

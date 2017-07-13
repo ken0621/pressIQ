@@ -3879,7 +3879,7 @@ class PayrollController extends Member
           // $update['payroll_group_break']                      = Request::input('payroll_group_break');
           $update['payroll_group_agency_fee']               = Request::input('payroll_group_agency_fee');
 
-          $update['shift_code_id']                          = Request::input('shift_code_id');
+          // $update['shift_code_id']                          = Request::input('shift_code_id');
           
           $payroll_group_deduct_before_absences             = 0;
           if( Request::has('payroll_group_deduct_before_absences'))

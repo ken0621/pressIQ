@@ -1,7 +1,9 @@
 <style type="text/css">
 
 	@page { margin: 0px; }
-	body { margin: 0px; }
+	body { 
+		margin: 0px; 
+	}
 
 	.border
 	{
@@ -32,8 +34,8 @@
 		font-size: 12px;
 	}
 </style>
-<div class="main-container">
-	<table cellpadding="5" cellspacing="0" class="border" width="100%" >
+<div class="main-container" style="font-size: 10px">
+	<table cellpadding="5" cellspacing="0" class="" width="100%" >
 		<tr>
 		<?php 
 			$counter=0; 
@@ -53,7 +55,7 @@
 				@if($col>2)
 					
 					</table>
-					<table cellpadding="5" cellspacing="0" class="border" width="100%">
+					<table cellpadding="5" cellspacing="0" class="" width="100%">
 						<tr>
 							<td valign="top" width="25%"><div style="page-break-after: always;">&nbsp;</div></td>
 						</tr>

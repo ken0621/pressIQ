@@ -1585,7 +1585,7 @@ class PayrollController extends Member
 		$update_basic['payroll_employee_display_name'] 	= Request::input('payroll_employee_display_name');
 
           $update_basic['branch_location_id']               = Request::input('branch_location_id') != null ? Request::input('branch_location_id') : 0;
-          $update_basic['shift_code_id']                    = Request::input('shift_code_id') != null ? Request::input('shift_code_id') : 0;
+          // $update_basic['shift_code_id']                    = Request::input('shift_code_id') != null ? Request::input('shift_code_id') : 0;
 		$update_basic['payroll_employee_gender'] 		= Request::input('payroll_employee_gender');
 		$update_basic['payroll_employee_street'] 		= Request::input('payroll_employee_street');
 		$update_basic['payroll_employee_city'] 			= Request::input('payroll_employee_city');

@@ -301,7 +301,6 @@ class ShopCheckoutController extends Shop
         {
             echo "<option value='" . $locale->locale_id . "'>" . $locale->locale_name . "</option>";
         }
-
     }
     public function session()
     {

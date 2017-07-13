@@ -31,10 +31,10 @@
 	}
 	td
 	{
-		font-size: 12px;
+		font-size: 11px;
 	}
 </style>
-<div class="main-container" style="font-size: 10px">
+<div class="main-container">
 	<table cellpadding="5" cellspacing="0" class="" width="100%" >
 		<tr>
 		<?php 

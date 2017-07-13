@@ -22,7 +22,7 @@
                         <div class="img">
                            <img class="4-3-ratio" src="{{ $related->post_image }}">
                         </div>
-                        <div class="side-content">{{ $post->post_title }}</div>
+                        <div class="side-content">{{ $related->post_title }}</div>
                      </div>
                      @else
                      <table class="holder" onClick="location.href='/events/view/{{ $related->main_id }}'" style="cursor: pointer;">
@@ -31,7 +31,7 @@
                               <td class="img">
                                  <img class="4-3-ratio" src="{{ $related->post_image }}">
                               </td>
-                              <td class="side-content">{{ $post->post_title }}</td>
+                              <td class="side-content">{{ $related->post_title }}</td>
                            </tr>
                         </tbody>
                      </table>

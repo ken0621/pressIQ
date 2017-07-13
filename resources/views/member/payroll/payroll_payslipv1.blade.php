@@ -31,7 +31,7 @@
 	}
 	td
 	{
-		font-size: 11px;
+		font-size: 10px;
 	}
 </style>
 <div class="main-container">

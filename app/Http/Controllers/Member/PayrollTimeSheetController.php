@@ -239,7 +239,8 @@ class PayrollTimeSheetController extends Member
 
 					if($timesheet_record->payroll_time_sheet_origin != '' && $timesheet_record->payroll_time_sheet_origin != 'Payroll Time Sheet')
 					{
-						$disable = 'disabled="disabled"';
+						$disable = '';
+						// $disable = 'disabled="disabled"';
 					}
 
 					if($timesheet_record->payroll_time_sheet_origin == '' || $timesheet_record->payroll_time_sheet_origin == 'Payroll Time Sheet')

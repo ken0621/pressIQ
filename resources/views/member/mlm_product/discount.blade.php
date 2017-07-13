@@ -94,7 +94,11 @@
                                 </tbody>
                             </table>
                             <div class="col-md-12 text-center">
-                                {!!$items->render()!!}
+                                @if($item_search)
+                                    {!!$items->appends(['item' => $item_search])->render()!!}
+                                @else
+                                    {!!$items->render()!!}
+                                @endif
                             </div>
                         </div>
                     </div>    
@@ -134,7 +138,6 @@
         var item_id = $(ito).attr('item_id');
         var membership_id = $(ito).attr('membership_id');
         var price = $(ito).attr('price');
-        // var discount_value = $(ito).val();
         var discount_value = $('.item_' + item_id + '_membership_' + membership_id + '_discount_value').val();
         var discount_type = $('.item_' + item_id + '_membership_' + membership_id + '_discount_type').val();
         var discounted_value = get_discount_price(price, discount_type, discount_value);

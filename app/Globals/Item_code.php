@@ -433,28 +433,7 @@ class Item_code
                                 return $send;
                             }
                         }
-                        foreach ($count_on_hand as $key => $value) 
-                        {
-                            $warehouse_consume_reason = 'Customer ' . $data["customer_id"] . ' bought a product';
-                            $iteme = Tbl_item::where('item_id', $key)->first();
-                            $item = [];
-                            if($iteme->item_type_id == 1)
-                            {
-                                $s = $key;
-                                $d['product_id'] = $iteme->item_id;
-                                $item[0]['product_id'] = $iteme->item_id;
-                                $item[0]['quantity'] = $value;
-                                // dd($item);
-                                // dd($data["warehouse_id"]);
-                               $a = Warehouse::inventory_consume($data['warehouse_id'], 'Used for consuming of inventory in product code', $item,$data["customer_id"], $warehouse_consume_reason, 'array');
-                                if($a['status'] == 'error')
-                                {
-                                     $send['response_status']      = "warning";
-                                     $send['warning_validator'][0] = $a['status_message'];
-                                     return $send;
-                                }
-                            }
-                        }
+                        
 
                         $insert["item_discount_percentage"] = (1 - ($insert["item_total"]  / $insert["item_subtotal"])) * 100;
 
@@ -578,6 +557,28 @@ class Item_code
                             else
                             {
 
+                            }
+                        }
+                        foreach ($count_on_hand as $key => $value) 
+                        {
+                            $warehouse_consume_reason = 'Customer ' . $data["customer_id"] . ' bought a product';
+                            $iteme = Tbl_item::where('item_id', $key)->first();
+                            $item = [];
+                            if($iteme->item_type_id == 1)
+                            {
+                                $s = $key;
+                                $d['product_id'] = $iteme->item_id;
+                                $item[0]['product_id'] = $iteme->item_id;
+                                $item[0]['quantity'] = $value;
+                                // dd($item);
+                                // dd($data["warehouse_id"]);
+                               $a = Warehouse::inventory_consume($data['warehouse_id'], 'Used for consuming of inventory in product code', $item,$data["customer_id"], $warehouse_consume_reason, 'array');
+                                if($a['status'] == 'error')
+                                {
+                                     $send['response_status']      = "warning";
+                                     $send['warning_validator'][0] = $a['status_message'];
+                                     return $send;
+                                }
                             }
                         }
                         // Item_code::use_item_code_all_invoice($invoice_id);
@@ -852,6 +853,16 @@ class Item_code
         $order_id = $ec_order_id;
         if($order)
         {
+            if($order->ec_order_slot_id == null)
+            {
+                $slot_id = Tbl_mlm_slot::where('slot_owner', $order->customer_id)->first();
+                if($slot_id)
+                {
+                    $order->ec_order_slot_id = $slot_id->slot_id;
+                    $update_ec_order['ec_order_slot_id'] = $slot_id->slot_id;
+                    Tbl_ec_order::where("ec_order_id",$ec_order_id)->update($update_ec_order);
+                }
+            }
             if($order->ec_order_slot_id != null)
             {
                 $slot_info = Mlm_compute::get_slot_info($order->ec_order_slot_id);

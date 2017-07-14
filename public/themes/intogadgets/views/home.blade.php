@@ -95,7 +95,7 @@
                  </div>
                  <div class="name">{{ get_collection_first_name($collection) }}</div>
                  <div class="price-left">P {{ get_collection_first_price($collection) }}</div>
-                 <div class="price-right">₱ 13,990.00</div>
+                 <div class="price-right">{{ get_collection_first_price($collection) }}</div>
               </a>
              <div class="hover">
                   <a product-id="{{ $collection['product']['eprod_id'] }}" style="display: block; margin-bottom: 50px;" href="javascript:" class="text quick-add-cart">ADD TO CART</a>
@@ -117,7 +117,7 @@
         <div class="holder col-md-3 col-sm-6">
            <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
            </a>
-           <div class="border">
+           <div class="border ">
               <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
                  <div class="img">
                   @if($collection["product"]["eprod_detail_image"])
@@ -127,7 +127,7 @@
                  </div>
                  <div class="name">{{ get_collection_first_name($collection) }}</div>
                  <div class="price-left">P {{ get_collection_first_price($collection) }}</div>
-                 <div class="price-right">₱ 13,990.00</div>
+                 <div class="price-right">{{ get_collection_first_price($collection) }}</div>
               </a>
              <div class="hover">
                   <a product-id="{{ $collection['product']['eprod_id'] }}" style="display: block; margin-bottom: 50px;" href="javascript:" class="text quick-add-cart">ADD TO CART</a>
@@ -159,7 +159,7 @@
                  </div>
                  <div class="name">{{ get_collection_first_name($collection) }}</div>
                  <div class="price-left">P {{ get_collection_first_price($collection) }}</div>
-                 <div class="price-right">₱ 13,990.00</div>
+                 <div class="price-right">{{ get_collection_first_price($collection) }}</div>
               </a>
              <div class="hover">
                   <a product-id="{{ $collection['product']['eprod_id'] }}" style="display: block; margin-bottom: 50px;" href="javascript:" class="text quick-add-cart">ADD TO CART</a>
@@ -224,6 +224,6 @@
     </div>
  @endif
 
-    <script type="text/javascript" src="resources/assets/flexslider/js/jquery.flexslider-min.js"></script>
+    <script type="text/javascript" src="/resources/assets/flexslider/js/jquery.flexslider-min.js"></script>
 @endsection
 

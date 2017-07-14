@@ -9,14 +9,14 @@
       @if(end($breadcrumbs) == $breadcrumb)
         <div class="text aktibo">{{ $breadcrumb['type_name'] }}</div>
       @else
-        <div class="text" onclick="location.href='/{{ $breadcrumb['type_id'] }}'">{{ $breadcrumb['type_name'] }}</div> 
+        <div class="text" onclick="location.href='/product?type={{ $breadcrumb['type_id'] }}'">{{ $breadcrumb['type_name'] }}</div> 
       @endif
     @endforeach
 </div>
 
 <div class="remodal" data-remodal-id="full">
 
-<img class="single-product-img" src="" data-zoom-image="" alt = "" id="picturecontainer"/>
+<!-- <img class="single-product-img" src="" data-zoom-image="" alt = "" id="picturecontainer"/> -->
 
 </div>
 <?php $ctr = 0; ?>
@@ -27,7 +27,7 @@
       <input type="hidden" class="variation_id" name="variation_id" value=''>
       <div class="single-product-holder" style="padding: 0;">
          @foreach($product_variant['image'] as $key => $image)
-         <img class="single-product-img {{ $key == 0 ? '' : 'hide' }}" key="{{ $key }}" style="width: 100%;" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}" alt = "" id="picturecontainer"/>
+         <img class="single-product-img key-{{$key}} {{ $key == 0 ? '' : 'hide' }} {{$ctr != 0 ? '' : 'first-img'}}" variant-id="{{ $product_variant['evariant_id'] }}" key="{{ $key }}" style="width: 100%;" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}" alt = "" id="picturecontainer"/>
          @endforeach
          <div class="thumb">
              @foreach($product_variant['image'] as $key => $image)

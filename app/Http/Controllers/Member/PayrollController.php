@@ -4965,6 +4965,7 @@ class PayrollController extends Member
                Tbl_payroll_shift_template::insert($insert_shift);
           }
 
+
           $return['function_name'] = 'payrollconfiguration.reload_shift_template';
           $return['status']        = 'success';
           return collect($return)->toJson();

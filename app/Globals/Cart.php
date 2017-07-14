@@ -45,7 +45,7 @@ class Cart
 {
     public static function get_unique_id($shop_id)
     {
-        return "cart:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+        return "cart:".get_ip_address()."_".$shop_id;
     }
     public static function get_shop_info()
     {

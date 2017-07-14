@@ -1,7 +1,9 @@
 <style type="text/css">
 
 	@page { margin: 0px; }
-	body { margin: 0px; }
+	body { 
+		margin: 0px; 
+	}
 
 	.border
 	{

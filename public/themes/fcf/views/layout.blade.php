@@ -182,7 +182,7 @@
                 <div class="txt-area-container">
                     <textarea class="form-control mobile" style="max-width: 300px; min-width: 300px; max-height: 70px; font-size: 12px;" placeholder="Type the qualities that you think you can stand out among others..."></textarea>
                 </div>
-                <a href="#popup2"><div class="submit-btn">SUBMIT</div></a>
+                <a href="#popup3"><div class="submit-btn">SUBMIT</div></a>
             </div>
         </div>
     </div>
@@ -196,7 +196,22 @@
                 <a href="#"><div class="submit-btn">CLOSE</div></a>
             </div>
         </div>
-    </div>   
+    </div>
+    <!-- POPUP 3 -->
+     <div id="popup3" class="overlay2">
+        <div class="popup3">
+            <h2>PAGE UNDER CONSTRUCTION!</h2>
+            <h3>Sorry for the inconvinience</h3>
+            <a class="close" href="#">&times;</a>
+            <div class="content">
+                <div class="miniature-container">
+                    <img src="/themes/{{ $shop_theme }}/img/miniature1.png">
+                </div>
+                <p>Please contact the company number or send an email<br>for the Job Inquiries. Thank you and good day!</p>
+                <a href="#"><div class="submit-btn">CLOSE</div></a>
+            </div>
+        </div>
+    </div>  
     <!-- CONTENT -->
     <div id="scroll-to" class="clearfix">
 	   @yield("content")

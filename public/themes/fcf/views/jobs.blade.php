@@ -40,26 +40,13 @@
 							</div>
 							@endforeach
 						@else
-							<div class="per-list">
-								<div class="per-list-title"><a href="/job">Mining Engineer</a></div>
-								<div class="per-list-description">
-									Male or Female, Minimum of five (5) year) related experience. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+							<div class="default-notif-container">
+								<img src="/themes/{{ $shop_theme }}/img/miniature2.png">
+								<div class="span-container">
+									<span style="font-size: 18px; font-weight: bold;">There are</span><br>
+									<span style="font-size: 32px; font-weight: bold;">No Vacancies</span><br>
+									<span style="font-size: 18px; font-weight: bold;">at this time.</span>
 								</div>
-								<div class="per-list-details">Date Posted: August 7, 2017</div>
-							</div>
-							<div class="per-list2">
-								<div class="per-list-title"><a href="/job">Geoscience Coordinator</a></div>
-								<div class="per-list-description">
-									Male or Female, Minimum of five (5) year) related experience. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-								</div>
-								<div class="per-list-details">Date Posted: August 7, 2017</div>
-							</div>
-							<div class="per-list">
-								<div class="per-list-title"><a href="/job">Maintenance Mechanical Filter</a></div>
-								<div class="per-list-description">
-									Male or Female, Minimum of five (5) year) related experience. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-								</div>
-								<div class="per-list-details">Date Posted: August 7, 2017</div>
 							</div>
 						@endif
 						

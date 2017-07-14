@@ -121,10 +121,28 @@ body{
 }
 .list-container-holder{
 	padding-top: 5px;
+	width: 100%;
 
 	.list-container{
 		background-color: #efefef;
 		padding: 10px;
+		width: 100%;
+		min-height: 718px;
+
+		.default-notif-container {
+			width: 32%;
+			text-align: center;
+			margin-left: 33%;
+			margin-top: 12%;
+
+			img {
+				width: 100%;
+			}
+
+			.span-container {
+				margin-top: -58%;
+			}
+		}
 
 		.per-list{
 			background-color: #fff;

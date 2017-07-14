@@ -1199,8 +1199,8 @@ class Cart
         $data["userContact"] = $data["tbl_customer"]["customer_contact"];
         $data["remark"] = "Checkout from " . trim(ucwords($shop->shop_key));
         $data["lang"] = "UTF-8";
-        $data["responseUrl"] = URL::to('/payment/ipay88/response');
-        $data["backendUrl"] = URL::to('/payment/ipay88/backend');
+        $data["responseUrl"] = URL::to('/ipay88_response');
+        $data["backendUrl"] = URL::to('/ipay88_response');
         $data["merchantKey"] = $api->api_secret_id;
         $data["merchantCode"] = $api->api_client_id;
         $requestpayment = new RequestPayment($data["merchantKey"]);

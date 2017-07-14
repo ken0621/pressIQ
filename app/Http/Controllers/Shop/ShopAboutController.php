@@ -46,7 +46,34 @@ class ShopAboutController extends Shop
 
     public function job()
     {
-        $data["page"] = "job";
-        return view("job", $data);
+        if (Request::input("id") !== null) 
+        {
+            $data["page"] = "job";
+            $content = DB::table("tbl_content")->where("key", "job_maintenance")->where("type", "maintenance")->where("shop_id", $this->shop_info->shop_id)->first();
+            if ($content) 
+            {
+                if (is_serialized($content->value)) 
+                {
+                    if (isset(unserialize($content->value)[Request::input("id")])) 
+                    {
+                        $data["job"] = unserialize($content->value)[Request::input("id")];
+                    }
+                    else
+                    {
+                        return Redirect::to("/jobs");
+                    }
+                }
+                else
+                {
+                    return Redirect::to("/jobs");
+                }
+            }
+
+            return view("job", $data);
+        }
+        else
+        {
+            return Redirect::to("/jobs");
+        }
     }
 }

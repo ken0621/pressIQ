@@ -19,7 +19,7 @@
 			<div class="form-group {{ $fields->type == "hidden" ? "hide" : "" }}">
 				<label>{{ ucwords(str_replace('_', ' ', $fields->name)) }}</label>
 				@if($fields->type == "textarea")
-					<textarea class="form-control tinymce" name="{{ $fields->name }}"></textarea>
+					<textarea class="form-control mce" name="{{ $fields->name }}"></textarea>
 				@elseif($fields->type == "textbox")
 					<textarea class="form-control" name="{{ $fields->name }}"></textarea>
 				@elseif($fields->type == "image")

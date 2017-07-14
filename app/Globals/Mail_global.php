@@ -22,7 +22,7 @@ use Config;
 use File;
 class Mail_global
 {
-	public static function mail($data, $shop_id, $from = null)
+	public static function mail($data, $shop_id, $from = null, $theme = null)
     {
         if ($from == "contact") 
         {

@@ -1319,7 +1319,7 @@ class Cart
         $data['customer_full_name'] = $tbl_order->first_name . " " . $tbl_order->middle_name . " " . $tbl_order->last_name;
         $data['order_id'] = Crypt::encrypt($tbl_order->ec_order_id);
 
-        $result = Mail_global::mail($data, $shop_id, "cod");
+        $result = Mail_global::mail($data, $shop_id, "cod", $this->shop_theme);
 
         return Redirect::to("/")->send();
     }

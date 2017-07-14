@@ -135,12 +135,29 @@ body{
 			margin-left: 33%;
 			margin-top: 12%;
 
+			@media screen and (max-width: 600px) {
+				width: 50%;
+				margin-left: 25%;
+			}
+			@media screen and (max-width: 414px) {
+				width: 75%;
+				margin-left: 13%;
+			}
+			@media screen and (max-width: 360px) {
+				width: 80%;
+				margin-left: 10%;
+			}
+
 			img {
 				width: 100%;
 			}
 
 			.span-container {
 				margin-top: -58%;
+
+				@media screen and (max-width: 320px) {
+					margin-top: -70%;
+				}
 			}
 		}
 

@@ -363,6 +363,8 @@ class Payroll2
 		$is_half_day			= false;
 		$is_absent				= true;
 		
+		// dd($_time);
+		
 		//target time is the same from shift hours
 		if($target_hours == 0)
 		{
@@ -2078,10 +2080,16 @@ class Payroll2
 											->get()
 											->toArray();
 
-		$previous_tax 			= collect($pevious_record)->sum('tax_contribution');
-		$previous_sss 			= collect($pevious_record)->sum('sss_contribution_ee');
-		$previous_pagibig 		= collect($pevious_record)->sum('pagibig_contribution');
-		$previous_philhealth	= collect($pevious_record)->sum('philhealth_contribution_ee');
+		// $previous_tax 			= collect($pevious_record)->sum('tax_contribution');
+		// $previous_sss 			= collect($pevious_record)->sum('sss_contribution_ee');
+		// $previous_pagibig 		= collect($pevious_record)->sum('pagibig_contribution');
+		// $previous_philhealth		= collect($pevious_record)->sum('philhealth_contribution_ee');
+		
+		$previous_tax 			= 0;
+		$previous_sss 			= 0;
+		$previous_pagibig 		= 0;
+		$previous_philhealth	= 0;
+		
 		$period_category_arr	= Payroll::getperiodcount($shop_id, $end_date, $period_category, $start_date);
 
 		/* GET SSS CONTRIBUTION */
@@ -2100,7 +2108,7 @@ class Payroll2
 			$sss_reference	= '(REF. GROSS PAY)';
 		}
 		
-		$sss_contribution 		= Payroll2::get_sss($shop_id, $sss_salary, $period_category_arr, $group->payroll_group_sss, $salary->is_deduct_sss_default, $salary->deduct_sss_custom, $previous_sss);
+		$sss_contribution 		= Payroll2::get_sss($shop_id, $sss_salary, $period_category_arr, $group->payroll_group_sss, $salary->is_deduct_sss_default, $salary->deduct_sss_custom, $previous_sss, $date_query->period_count);
 		$sss_ee					= $sss_contribution['sss_ee'];
 		$sss_er					= $sss_contribution['sss_er'];
 		$sss_ec					= $sss_contribution['sss_ec'];
@@ -2123,7 +2131,7 @@ class Payroll2
 			$philhealth_reference	= '(REF. GROSS PAY)';
 		}
 		
-		$philhealth_contribution  		= Payroll2::get_philhealth($shop_id, $group->payroll_group_philhealth ,$philhealth_salary, $period_category_arr, $salary->is_deduct_philhealth_default, $salary->deduct_philhealth_custom, $previous_philhealth);
+		$philhealth_contribution  		= Payroll2::get_philhealth($shop_id, $group->payroll_group_philhealth ,$philhealth_salary, $period_category_arr, $salary->is_deduct_philhealth_default, $salary->deduct_philhealth_custom, $previous_philhealth, $date_query->period_count);
 		$philhealth_ee 					= $philhealth_contribution['philhealth_ee'];
 		$philhealth_er 					= $philhealth_contribution['philhealth_er'];
 		$philhealth_data['amount']		= $philhealth_ee;
@@ -2141,11 +2149,11 @@ class Payroll2
 		
 		if($group->pagibig_reference == 'gross_basic')
 		{
-			$pagibig_salary 	= $employee_compute['get_gross_pay']['total_gross_pay']  + $previous_record->gross_pay;
+			$pagibig_salary 	= $employee_compute['get_gross_pay']['total_gross_pay'] + $previous_record->gross_pay;
 			$pagibig_reference	= '(REF. GROSS PAY)';
 		}
 		
-		$pagibig_contribution 		= Payroll2::get_pagibig($shop_id, $pagibig_salary, $group->payroll_group_pagibig, $period_category_arr, $salary->is_deduct_pagibig_default, $period_category, $salary->deduct_pagibig_custom);
+		$pagibig_contribution 		= Payroll2::get_pagibig($shop_id, $pagibig_salary, $group->payroll_group_pagibig, $period_category_arr, $salary->is_deduct_pagibig_default, $period_category, $salary->deduct_pagibig_custom, $date_query->period_count);
 		$pagibig_ee 				= $pagibig_contribution['pagibig_ee'];
 		$pagibig_er 				= $pagibig_contribution['pagibig_er'];
 		$total_deduction			+= $pagibig_ee;
@@ -2175,7 +2183,7 @@ class Payroll2
 		}
 
 		/* GET TAX CONTRIBUTION */
-		$tax_contribution = Payroll2::get_standard_tax($shop_id, $group->payroll_group_tax, $period_category, $employee_compute['get_taxable_salary']['total_taxable'], $employee->payroll_employee_tax_status, $period_category_arr);
+		$tax_contribution = Payroll2::get_standard_tax($shop_id, $group->payroll_group_tax, $period_category, $employee_compute['get_taxable_salary']['total_taxable'], $employee->payroll_employee_tax_status, $period_category_arr, $date_query->period_count);
 		
 		/* AGENCY DEDUCTION */
 		$agency_deduction = 0;
@@ -2224,7 +2232,7 @@ class Payroll2
 		return $n13_month;
 	}
 
-	public static function get_sss($shop_id, $salary_sss = 0, $period_category_arr, $payroll_group_sss, $is_deduct_sss_default = 0, $deduct_sss_custom = 0, $previous_sss = 0)
+	public static function get_sss($shop_id, $salary_sss = 0, $period_category_arr, $payroll_group_sss, $is_deduct_sss_default = 0, $deduct_sss_custom = 0, $previous_sss = 0, $period_count = 'first_period')
 	{
 		$sss_contribution			= Payroll::sss_contribution($shop_id, $salary_sss);
 		$sss_contribution_ee_def 	= $sss_contribution['ee'];
@@ -2277,7 +2285,7 @@ class Payroll2
 		return $data;
 	}
 	
-	public static function get_philhealth($shop_id, $payroll_group_philhealth,$salary_philhealth, $period_category_arr,$is_deduct_philhealth_default = 0, $deduct_philhealth_custom = 0,$previous_philhealth = 0)
+	public static function get_philhealth($shop_id, $payroll_group_philhealth,$salary_philhealth, $period_category_arr,$is_deduct_philhealth_default = 0, $deduct_philhealth_custom = 0,$previous_philhealth = 0, $period_count = 'first_period')
 	{
 		$philhealth_contribution 	= Payroll::philhealth_contribution($shop_id, $salary_philhealth);
 		$data['philhealth_ee']		= 0;
@@ -2304,29 +2312,36 @@ class Payroll2
 
 		else if($payroll_group_philhealth == $period_category)
 		{
-			if(Payroll::return_ave($period_category) == '1st Period')
+		
+			if($period_count == 'last_period' || $period_count == 'first_period')
 			{
 				$data['philhealth_ee'] = $philhealth_contribution['ee'];
 				$data['philhealth_er'] = $philhealth_contribution['er'];
 			}
-			else if(Payroll::return_ave($period_category) == '2nd Period')
-			{
-				$data['philhealth_ee'] = divide($philhealth_contribution['ee'], $period_category_arr['count_per_period']) * 2;
-				$data['philhealth_er'] = divide($philhealth_contribution['er'], $period_category_arr['count_per_period']) * 2;
-			}
+			
+			// if(Payroll::return_ave($period_category) == '1st Period')
+			// {
+			// 	$data['philhealth_ee'] = $philhealth_contribution['ee'];
+			// 	$data['philhealth_er'] = $philhealth_contribution['er'];
+			// }
+			// else if(Payroll::return_ave($period_category) == '2nd Period')
+			// {
+			// 	$data['philhealth_ee'] = divide($philhealth_contribution['ee'], $period_category_arr['count_per_period']) * 2;
+			// 	$data['philhealth_er'] = divide($philhealth_contribution['er'], $period_category_arr['count_per_period']) * 2;
+			// }
 
-			else if(Payroll::return_ave($period_category) == 'Last Period')
-			{
-				$data['philhealth_ee'] = $philhealth_contribution['ee'];
-				$data['philhealth_er'] = $philhealth_contribution['er'];
-			}
+			// else if(Payroll::return_ave($period_category) == 'Last Period')
+			// {
+			// 	$data['philhealth_ee'] = $philhealth_contribution['ee'];
+			// 	$data['philhealth_er'] = $philhealth_contribution['er'];
+			// }
 		}
 
 
 		return $data;
 	}
 
-	public static function get_pagibig($shop_id, $salary_pagibig, $payroll_group_pagibig, $period_category_arr, $is_deduct_pagibig_default = 0, $period_category, $deduct_pagibig_custom = 0)
+	public static function get_pagibig($shop_id, $salary_pagibig, $payroll_group_pagibig, $period_category_arr, $is_deduct_pagibig_default = 0, $period_category, $deduct_pagibig_custom = 0, $period_count = 'first_period')
 	{
 
 		$pagibig_contribution_def = Payroll::pagibig_contribution($shop_id, $salary_pagibig);
@@ -2353,20 +2368,24 @@ class Payroll2
 		else if($payroll_group_pagibig == $period_category)
 		{
 
-			if(Payroll::return_ave($period_category) == '1st Period')
+			if($period_count == 'first_period' || $period_count == 'last_period')
 			{
 				$data['pagibig_ee'] = $pagibig_contribution;
+			}
+			// if(Payroll::return_ave($period_category) == '1st Period')
+			// {
+			// 	$data['pagibig_ee'] = $pagibig_contribution;
 				
-			}
-			else if(Payroll::return_ave($period_category) == '2nd Period')
-			{
-				$data['pagibig_ee'] = divide($pagibig_contribution, $period_category_arr['count_per_period']) * 2;
-			}
+			// }
+			// else if(Payroll::return_ave($period_category) == '2nd Period')
+			// {
+			// 	$data['pagibig_ee'] = divide($pagibig_contribution, $period_category_arr['count_per_period']) * 2;
+			// }
 
-			else if(Payroll::return_ave($period_category) == 'Last Period')
-			{
-				$data['pagibig_ee'] = $pagibig_contribution;
-			}
+			// else if(Payroll::return_ave($period_category) == 'Last Period')
+			// {
+			// 	$data['pagibig_ee'] = $pagibig_contribution;
+			// }
 		}
 
 		return $data;
@@ -2391,7 +2410,6 @@ class Payroll2
 					$salary_taxable = 0;
 				}
 				
-
 				$tax_contribution = divide(Payroll::tax_contribution($shop_id, $salary_taxable, $tax_status, $period_category), $period_category_arr['count_per_period']);
 
 				if($payroll_group_tax == 'Last Period')
@@ -2404,7 +2422,7 @@ class Payroll2
 		return $tax_contribution;
 	}
 	
-	public static function get_standard_tax($shop_id, $payroll_group_tax, $period_category, $salary_taxable = 0, $tax_status, $period_category_arr)
+	public static function get_standard_tax($shop_id, $payroll_group_tax, $period_category, $salary_taxable = 0, $tax_status, $period_category_arr, $period_count = 'first_period')
 	{
 		$tax_contribution = 0;
 	

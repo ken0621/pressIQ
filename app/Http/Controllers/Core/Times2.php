@@ -46,20 +46,18 @@ class Times2 extends Controller
 	{
 		/*error input output*/
 		$_time[0] = new stdClass();
-		$_time[0]->time_in = "13:00:00"; 
-		$_time[0]->time_out = "14:00:00";
-
-		$_time[1] = new stdClass();
-		$_time[1]->time_in = "14:30:00"; 
-		$_time[1]->time_out = "15:00:00";
-
-		$_time[2] = new stdClass();
-		$_time[2]->time_in = "15:30:00"; 
-		$_time[2]->time_out = "18:00:00";
+		$_time[0]->time_in = "09:00:00"; 
+		$_time[0]->time_out = "18:00:00";
 
 		$_shift[0] = new stdClass();
-		$_shift[0]->shift_in = "13:00:00"; 
-		$_shift[0]->shift_out = "18:00:00";
+		$_shift[0]->shift_in = "09:00:00"; 
+		$_shift[0]->shift_out = "11:00:00";
+		$_shift[1] = new stdClass();
+		$_shift[1]->shift_in = "12:00:00"; 
+		$_shift[1]->shift_out = "15:00:00";
+		$_shift[2] = new stdClass();
+		$_shift[2]->shift_in = "16:00:00"; 
+		$_shift[2]->shift_out = "19:00:00";
 		
            
 		$late_grace_time = "00:15:00";

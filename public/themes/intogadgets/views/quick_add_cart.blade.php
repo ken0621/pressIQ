@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="resources/assets/frontend/css/single-product.css">
-
+   
 <div class="modal-body">
 	<?php $ctr = 0; ?>
 	@foreach($product["variant"] as $product_variant)

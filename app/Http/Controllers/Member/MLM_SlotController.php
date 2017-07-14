@@ -1058,7 +1058,33 @@ class MLM_SlotController extends Member
             }
 
             $update["slot_owner"] = $slot_owner;
+            $customer_new = Tbl_customer::where('customer_id', $slot_owner)->first();
+            $count_slot = Tbl_mlm_slot::where('slot_owner', $slot_owner)->count();
+            if($count_slot == 0)
+            {
+                $update['slot_nick_name'] = $customer_new->mlm_username;
+                $update['slot_defaul'] =  1;
+            }
+            else
+            {
+                $update['slot_nick_name'] = null;
+                $update['slot_defaul'] =  0;
+            }
             Tbl_mlm_slot::where("slot_id",$slot_id)->update($update);
+            $count_slot_old = Tbl_mlm_slot::where('slot_id', $slot->slot_owner)->where('slot_defaul', 1)->count();
+            $customer_old = Tbl_customer::where('customer_id', $slot->slot_owner)->first();
+            if($count_slot_old == 0)
+            {
+                $new_default = Tbl_mlm_slot::where('slot_id', $slot->slot_owner)->first();
+                if($new_default)
+                {
+                    $update_new['slot_nick_name'] = $customer_old->mlm_username;
+                    $update_new['slot_defaul'] =  1;
+                    
+                    Tbl_mlm_slot::where("slot_id",$new_default->slot_id)->update($update_new);
+                }
+            }
+            
             $old_data = $slot->toArray();
             $new_data = Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",$shop_id)->first()->toArray();
 

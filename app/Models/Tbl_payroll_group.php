@@ -53,7 +53,10 @@ class Tbl_payroll_group extends Model
 	// [VARCHAR]		grace_time_rule_overtime
 	// [TIME]			late_grace_time
 	// [VARCHAR]		grace_time_rule_late
-	
+	// [VARCHAR]		tax_reference (param[declared, gross_basic, net_basic])
+	// [VARCHAR]		sss_reference (param[declared, gross_basic, net_basic])
+	// [VARCHAR]		philhealth_reference (param[declared, gross_basic, net_basic])
+	// [VARCHAR]		pagibig_reference (param[declared, gross_basic, net_basic])
 	
 	
     public function scopeShift($query)

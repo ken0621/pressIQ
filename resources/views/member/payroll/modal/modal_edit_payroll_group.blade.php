@@ -213,6 +213,67 @@
 								<div class="panel panel-default">
 									<div class="panel-body form-horizontal">
 										<div class="form-group">
+											<label class="col-md-12">Contribution References</label>
+										</div>
+										<div class="form-group">
+											<div class="col-md-12">
+												<table class="table table-condensed table-bordered">
+													<tr>
+														<td>
+															Tax Contibution
+														</td>
+														<td width="50%">
+															<select class="form-control" name="tax_reference">
+																<option value="declared" {{$group->tax_reference == 'declared' ? 'selected="selected"':''}}>Declared Tax Salary</option>
+																<option value="gross_basic" {{$group->tax_reference == 'gross_basic' ? 'selected="selected"':''}}>Computed Taxable Salary</option>
+																<option value="net_basic" {{$group->tax_reference == 'net_basic' ? 'selected="selected"':''}}>Net Basic</option>
+															</select>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															SSS Contibution
+														</td>
+														<td width="50%">
+															<select class="form-control" name="sss_reference">
+																<option value="declared" {{$group->sss_reference == 'declared' ? 'selected="selected"':''}}>Declared SSS Salary</option>
+																<option value="gross_basic" {{$group->sss_reference == 'gross_basic' ? 'selected="selected"':''}}>Gross Pay</option>
+																<option value="net_basic" {{$group->sss_reference == 'net_basic' ? 'selected="selected"':''}}>Net Basic</option>
+															</select>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															PhilHealth Contibution
+														</td>
+														<td width="50%">
+															<select class="form-control" name="philhealth_reference">
+																<option value="declared" {{$group->philhealth_reference == 'declared' ? 'selected="selected"':''}}>Declared PhilHealth Salary</option>
+																<option value="gross_basic" {{$group->philhealth_reference == 'gross_basic' ? 'selected="selected"':''}}>Gross Pay</option>
+																<option value="net_basic" {{$group->philhealth_reference == 'net_basic' ? 'selected="selected"':''}}>Net Basic</option>
+															</select>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															PAGIBIG Contibution
+														</td>
+														<td width="50%">
+															<select class="form-control" name="pagibig_reference">
+																<option value="declared" {{$group->pagibig_reference == 'declared' ? 'selected="selected"':''}}>Declared PAGIBIG Salary</option>
+																<option value="gross_basic" {{$group->pagibig_reference == 'gross_basic' ? 'selected="selected"':''}}>Gross Pay</option>
+																<option value="net_basic" {{$group->pagibig_reference == 'net_basic' ? 'selected="selected"':''}}>Net Basic</option>
+															</select>
+														</td>
+													</tr>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-body form-horizontal">
+										<div class="form-group">
 											<label class="col-md-12">Late Deduction</label>
 										</div>
 										<div class="form-group">
@@ -406,9 +467,57 @@
 									<small>Working Days(per month)</small>
 									<input type="number" name="payroll_group_working_day_month" class="form-control text-center" required value="{{$group->payroll_group_working_day_month}}" step="any">
 								</div>
+								<!--<div class="col-md-6">-->
+								<!--	<small>Grace Time Period</small>-->
+									
+								<!--</div>-->
+								<input type="hidden" name="payroll_group_grace_time" class="form-control text-center" value="{{$group->payroll_group_grace_time}}">
+							</div>
+							<div class="form-group">
 								<div class="col-md-6">
-									<small>Grace Time Period</small>
-									<input type="number" name="payroll_group_grace_time" class="form-control text-center" required value="{{$group->payroll_group_grace_time}}" step="any">
+									<small>Grace Time (LATE)</small>
+									<div class="panel panel-default">
+										<div class="panel-body">
+											<div class="form-group">
+												<div class="col-md-6">
+													<small>Grace Time</small>
+													<input type="text" class="form-control text-center time-entry" value="{{$group->late_grace_time == '00:00:00' ? '' : date('H:i a', strtotime($group->late_grace_time))}}" placeholder="00:00" name="late_grace_time">
+												</div>
+												<div class="col-md-6">
+													<small>Grace Time Rule</small>
+													<select class="form-control" name="grace_time_rule_late">
+														<option value="per_shift" {{$group->grace_time_rule_late == 'per_shift' ? 'selected="selected"':''}}>Per Shift</option>
+														<option value="accumulative" {{$group->grace_time_rule_late == 'accumulative' ? 'selected="selected"':''}}>Accumulative</option>
+														<option value="first" {{$group->grace_time_rule_late == 'first' ? 'selected="selected"':''}}>First Shift Only</option>
+														<option value="last" {{$group->grace_time_rule_late == 'last' ? 'selected="selected"':''}}>Last Shift Only</option>
+														<option value="first-deducted" {{$group->grace_time_rule_late == 'first-deducted' ? 'selected="selected"':''}}>First Shift then Deduct Time</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									
+								</div>
+								<div class="col-md-6">
+									<small>Grace Time (OVERTIME)</small>
+									<div class="panel panel-default">
+										<div class="panel-body">
+											<div class="form-group">
+												<div class="col-md-6">
+													<small>Grace Time</small>
+													<input type="text" class="form-control  text-center time-entry" placeholder="00:00" name="overtime_grace_time" value="{{$group->overtime_grace_time == '00:00:00' ? '' : date('H:i', strtotime($group->overtime_grace_time))}}">
+												</div>
+												<div class="col-md-6">
+													<small>Grace Time Rule</small>
+													<select class="form-control" name="grace_time_rule_overtime">
+														<option value="per_shift" {{$group->grace_time_rule_late == 'per_shift' ? 'selected="selected"':''}}>Per Shift</option>
+														<option value="accumulative" {{$group->grace_time_rule_late == 'accumulative' ? 'selected="selected"':''}}>Accumulative</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 							<div class="form-group">
@@ -473,7 +582,7 @@
 		}
 	});
 	$(".time-entry").timeEntry('destroy');
-	$(".time-entry").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 0, 0, 0)});
+	$(".time-entry").timeEntry({show24Hours: true, defaultTime: new Date(0, 0, 0, 0, 0, 0)});
 	late_categoy_change_event();
 	late_param_change();
 	under_time_category_change_event();

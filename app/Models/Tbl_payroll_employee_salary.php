@@ -30,6 +30,7 @@ class Tbl_payroll_employee_salary extends Model
 	// [DOUBLE 18,2]	deduct_philhealth_custom
 	// [TINY INTEGER]	is_deduct_pagibig_default
 	// [DOUBLE 18,2]	deduct_pagibig_custom
+	// [TINY INTEGER]	tbl_payroll_employee_custom_compute
 
 
 	public function scopeselemployee($query, $payroll_employee_id = 0, $date = '0000-00-00')

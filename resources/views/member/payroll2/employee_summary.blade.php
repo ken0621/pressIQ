@@ -1,5 +1,6 @@
 @extends('member.layout')
 @section('content')
+<input type="hidden" class="payroll-period-id" value="{{ $payroll_period_id }}"/>
 <div class="panel panel-default panel-block panel-title-block">
     <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}"/>
     <div class="panel-heading">
@@ -28,8 +29,8 @@
 
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <ul class="nav nav-tabs">
-        <li class="active cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#all"><i class="fa fa-check"></i> Pending</a></li>
-        <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#all"><i class="fa fa-star"></i> Approved</a></li>
+        <li class="active change-tab pending-tab cursor-pointer" mode="pending"><a class="cursor-pointer"><i class="fa fa-check"></i> Pending</a></li>
+        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="fa fa-star"></i> Approved</a></li>
     </ul>
     <div class="search-filter-box">
         <div class="col-md-4" style="padding: 10px">
@@ -43,7 +44,7 @@
         <div class="col-md-4 col-md-offset-4" style="padding: 10px">
             <div class="input-group">
                 <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control search_name" placeholder="Search by employee name / number" aria-describedby="basic-addon1">
+                <input type="text" class="form-control search-employee-name" placeholder="Search by employee name / number" aria-describedby="basic-addon1">
             </div>
         </div>  
     </div>
@@ -52,41 +53,17 @@
             <div class="form-group order-tags"></div>
                 <div class="clearfix">
                     <div class="col-md-12">
+                        <div class="table-responsive load-table-employee-list">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="approved" class="tab-pane fade in">
+            <div class="form-group order-tags"></div>
+                <div class="clearfix">
+                    <div class="col-md-12">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-condensed">
-                                <thead style="text-transform: uppercase">
-                                    <tr>
-                                        <th class="text-center"><input type="checkbox" name=""></th>
-                                        <th class="text-center">NO.</th>
-                                        <th>Employee Name</th>
-                                        <th class="text-center" width="80px">Work</th>
-                                        <th class="text-center" width="80px">Late</th>
-                                        <th class="text-center" width="80px">Undertime</th>
-                                        <th class="text-center" width="80px">Overtime</th>
-                                        <th class="text-center" width="80px">Absent</th>
-                                        <th class="text-center" width="80px">Leave</th>
-                                        <th class="text-center" width="100px"></th>
-                                        <th class="text-center" width="100px"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($_employee as $employee)
-                                    <tr>
-                                        <th class="text-center"><input type="checkbox" name=""></th>
-                                        <td class="text-center">{!! $employee->payroll_employee_number == "" ? "<span style='color: red;'>00</span>" : $employee->payroll_employee_number !!}</td>
-                                        <td>{{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_last_name }}</td>
-                                        <td class="text-center">00:00</td>
-                                        <td class="text-center">00:00</td>
-                                        <td class="text-center">00:00</td>
-                                        <td class="text-center">00:00</td>
-                                        <td class="text-center">0 DAY</td>
-                                        <td class="text-center">0 DAY</td>
-                                        <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/company_timesheet2/{{ $company->payroll_period_company_id }}/{{ $employee->payroll_employee_id }}', 'lg')" >TIMESHEET</a></td>
-                                        <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/company_timesheet2/income_summary/{{ $company->payroll_period_company_id }}/{{ $employee->payroll_employee_id }}', 'lg')"">SUMMARY</a></td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
                         </div>
                     </div>
                 </div>

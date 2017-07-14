@@ -963,8 +963,10 @@ class PayrollController extends Member
 		$insert_salary['payroll_employee_salary_pagibig'] 		= Request::input('payroll_employee_salary_pagibig');
 		$insert_salary['payroll_employee_salary_philhealth'] 		= Request::input('payroll_employee_salary_philhealth');
 		$insert_salary['payroll_employee_salary_cola']			= Request::input('payroll_employee_salary_cola');
-
-
+          $insert_salary['monthly_cola']                              = Request::has('monthly_cola') ? Request::input('monthly_cola') : 0;
+          $insert_salary['tbl_payroll_employee_custom_compute']       = Request::has('tbl_payroll_employee_custom_compute') ? Request::input('tbl_payroll_employee_custom_compute') : 0;
+          
+          
           $is_deduct_tax_default        = 0;
           $deduct_tax_custom            = 0;
           $is_deduct_sss_default        = 0;
@@ -1408,6 +1410,8 @@ class PayrollController extends Member
           $update['payroll_employee_salary_philhealth']     = Request::input('payroll_employee_salary_philhealth');
           $update['payroll_employee_salary_pagibig']        = Request::input('payroll_employee_salary_pagibig');
           $update['payroll_employee_salary_cola']           = Request::input('payroll_employee_salary_cola');
+          $update['monthly_cola']                           = Request::has('monthly_cola') ? Request::input('monthly_cola') : 0;
+          $update['tbl_payroll_employee_custom_compute']    = Request::has('tbl_payroll_employee_custom_compute') ? Request::input('tbl_payroll_employee_custom_compute') : 0;
           
           $payroll_employee_salary_effective_date           = '';
           if(Request::input('payroll_employee_salary_effective_date') != '')
@@ -1518,8 +1522,10 @@ class PayrollController extends Member
           $insert['payroll_employee_salary_minimum_wage'] = $payroll_employee_salary_minimum_wage;
           $insert['payroll_employee_salary_effective_date'] = date('Y-m-d',strtotime(Request::input('payroll_employee_salary_effective_date')));
           $insert['payroll_employee_salary_cola']           = Request::input('payroll_employee_salary_cola');
-
-
+          $insert['monthly_cola']                           = Request::has('monthly_cola') ? Request::input('monthly_cola') : 0;
+          $insert['tbl_payroll_employee_custom_compute']    = Request::has('tbl_payroll_employee_custom_compute') ? Request::input('tbl_payroll_employee_custom_compute') : 0;
+          
+          
           $is_deduct_tax_default        = 0;
           $deduct_tax_custom            = 0;
           $is_deduct_sss_default        = 0;
@@ -3725,7 +3731,16 @@ class PayrollController extends Member
           $insert['payroll_under_time_parameter'] = Request::input("payroll_under_time_parameter");
           $insert['payroll_under_time_deduction'] = Request::input("payroll_under_time_deduction");
           $insert['payroll_break_category']       = Request::input("payroll_break_category");
-
+          $insert['overtime_grace_time']          = Request::has('overtime_grace_time') ? date('H:i:s', strtotime(Request::input('overtime_grace_time'))) : '00:00:00';
+          $insert['grace_time_rule_overtime']     = Request::has('grace_time_rule_overtime') ? Request::input('grace_time_rule_overtime') : 'accumulative';
+          $insert['late_grace_time']              = Request::has('late_grace_time') ? date('H:i:s', strtotime(Request::input('late_grace_time'))) : '00:00:00';
+          $insert['grace_time_rule_late']         = Request::has('grace_time_rule_late') ? Request::input("grace_time_rule_late") : 'first';
+          $insert['tax_reference']                = Request::input('tax_reference');
+          $insert['sss_reference']                = Request::input('sss_reference');
+          $insert['philhealth_reference']         = Request::input('philhealth_reference');
+          $insert['pagibig_reference']            = Request::input('pagibig_reference');
+          
+          
           $group_id = Tbl_payroll_group::insertGetId($insert);
 
           $insert_rate = array();
@@ -3917,6 +3932,11 @@ class PayrollController extends Member
           $update['payroll_group_pagibig']                  = Request::input('payroll_group_pagibig');
           $update['payroll_group_agency']                   = Request::input('payroll_group_agency');
           $update['payroll_group_agency_fee']               = Request::input('payroll_group_agency_fee');
+          
+          $update['tax_reference']                          = Request::input('tax_reference');
+          $update['sss_reference']                          = Request::input('sss_reference');
+          $update['philhealth_reference']                   = Request::input('philhealth_reference');
+          $update['pagibig_reference']                      = Request::input('pagibig_reference');
 
           // $payroll_group_is_flexi_break                       = 0;
           // if(Request::has('payroll_group_is_flexi_break'))
@@ -3965,6 +3985,12 @@ class PayrollController extends Member
           $update['payroll_under_time_parameter'] = Request::input("payroll_under_time_parameter");
           $update['payroll_under_time_deduction'] = Request::input("payroll_under_time_deduction");
           $update['payroll_break_category']       = Request::input("payroll_break_category");
+          
+          $update['overtime_grace_time']          = Request::has('overtime_grace_time') ? date('H:i:s', strtotime(Request::input('overtime_grace_time'))) : '00:00:00';
+          $update['grace_time_rule_overtime']     = Request::has('grace_time_rule_overtime') ? Request::input('grace_time_rule_overtime') : 'accumulative';
+          $update['late_grace_time']              = Request::has('late_grace_time') ? date('H:i:s', strtotime(Request::input('late_grace_time'))) : '00:00:00';
+          $update['grace_time_rule_late']         = Request::has('grace_time_rule_late') ? Request::input("grace_time_rule_late") : 'first';
+
 
           /* UPDATE PAYROLL GROUP*/ 
           Tbl_payroll_group::where('payroll_group_id',$payroll_group_id)->update($update);
@@ -4834,7 +4860,6 @@ class PayrollController extends Member
 
      public function modal_save_shift_template()
      {
-          //dd(Request::input());
 
           /* INSERT SHIFT CODE */
           $insert_code['shift_code_name']    = Request::input('shift_code_name');
@@ -4931,6 +4956,7 @@ class PayrollController extends Member
                     $insert_day["shift_target_hours"] = Request::input("target_hours")[$day];
                     $insert_day["shift_rest_day"] = Request::input("rest_day_" . $day) == 1 ? 1 : 0;
                     $insert_day["shift_extra_day"] = Request::input("extra_day_" . $day) == 1 ? 1 : 0;
+                    $insert_day["shift_flexi_time"] = Request::input("flexitime_day_" . $day) == 1 ? 1 : 0;
                     $key++;
 
                     $shift_day_id = Tbl_payroll_shift_day::insertGetId($insert_day);
@@ -4953,8 +4979,9 @@ class PayrollController extends Member
                          $insert_time = null;
                     }   
                }
+           
           }
-
+          
           $return['function_name'] = 'payrollconfiguration.reload_shift_template';
           $return['status']        = 'success';
           return collect($return)->toJson();
@@ -5193,7 +5220,14 @@ class PayrollController extends Member
      /* PAYROLL TIME KEEPING START */
      public function time_keeping()
      {
-          $data['_period'] = Tbl_payroll_period::sel(Self::shop_id())->where('payroll_period_status','!=','pending')->orderBy('payroll_period_category')->orderBy('payroll_period_start','desc')->get();
+          $data['_period'] = Tbl_payroll_period::sel(Self::shop_id())
+                                                  ->where('tbl_payroll_period.payroll_period_status','!=','pending')
+                                                  ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
+                                                  ->orderBy('tbl_payroll_period.payroll_period_category')
+                                                  ->orderBy('tbl_payroll_period.payroll_period_start','desc')
+                                                  ->distinct('tbl_payroll_period_company.payroll_period_id')
+                                                  ->get();
+          // dd($data);
           return view('member.payroll.payroll_timekeeping', $data);
      }
 

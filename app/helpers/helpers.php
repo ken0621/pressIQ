@@ -1,6 +1,9 @@
 <?php
     
-
+function ctopercent($flt)
+{
+    return number_format($flt * 100, 0) . "%";
+}
 function randomPassword()
 {
     $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';

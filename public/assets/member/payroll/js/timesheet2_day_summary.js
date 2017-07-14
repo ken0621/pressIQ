@@ -16,12 +16,17 @@ function timesheet_day_summary()
 	{
 		event_time_entry();
 		event_change_approve_check();
+		event_mark_as_checked();
 		action_check_each_approve_check();
 	}
-	
-
-	
-
+	function event_mark_as_checked()
+	{
+		$(".mark-as-checked").click(function()
+		{
+			$(".mark-as-checked").html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
+			action_re_compute_on_change(true);
+		});
+	}
 	/* EVENTS */
 	function event_time_entry()
 	{
@@ -62,11 +67,13 @@ function timesheet_day_summary()
 			$target.closest("tr").find(".overtime-checkbox").hide();
 		}
 	}
-	function action_re_compute_on_change()
+	function action_re_compute_on_change($approve = false)
 	{
 		$input = $(".day-summary-table :input").serialize();
-		$url = "/member/payroll/company_timesheet_day_summary/change"
+		$url = "/member/payroll/company_timesheet_day_summary/change?approve=" + $approve;
 		$payroll_time_sheet_id = $(".payroll-time-sheet-id").val();
+		$period_company_id = $(".period-company-id").val();
+		$day =  $(".day-summary-date").val();
 		
 		$(".load-detail-table").css("opacity", 0.3);
 
@@ -78,9 +85,17 @@ function timesheet_day_summary()
 			type:"post",
 			success: function(data)
 			{
-				$(".load-detail-table").load("/member/payroll/company_timesheet_day_summary/info/" + $payroll_time_sheet_id, function()
+
+				$(".load-detail-table").load("/member/payroll/company_timesheet_day_summary/info/" + $payroll_time_sheet_id + "?period_company_id=" + $period_company_id, function()
 				{
 					$(".load-detail-table").css("opacity", 1);
+					$rate_output = $(".hidden-compute-for-timesheet").html();
+					$(".table-timesheet").find(".tr-parent[date='" + $day + "']").find(".rate-output").html($rate_output);
+					
+					if($approve == true)
+					{
+						$(".multiple_global_modal").modal("hide");
+					}
 				});
 			}
 		});

@@ -17,6 +17,8 @@ function modal_create_employee()
 		check_deduction_contribution_action();
 		check_deduction_contribution();
 		select_shift_template();
+		check_custom_compute_event();
+		check_custom_compute_action();
 	}
 
 	function autoname()
@@ -337,7 +339,27 @@ function modal_create_employee()
 			}
 		});
 	}
-
+	
+	function check_custom_compute_event()
+	{
+		$(".custom-compute-chck").unbind('change');
+		$(".custom-compute-chck").bind("change", function()
+		{
+			check_custom_compute_action();
+		});
+	}
+	
+	function check_custom_compute_action()
+	{
+		if($(".custom-compute-chck").is(':checked'))
+		{
+			$(".custom-compute-obj").fadeIn();
+		}
+		else
+		{
+			$(".custom-compute-obj").fadeOut();
+		}
+	}
 
 	this.reload_option = function(html = '', target ='')
 	{

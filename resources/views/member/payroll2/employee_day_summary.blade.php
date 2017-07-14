@@ -1,3 +1,5 @@
+<input type="hidden" class="day-summary-date" name="day-summary-date" value="{{ $timesheet_db->payroll_time_date }}"/>
+<input type="hidden" class="period-company-id" name="period_company_id" value="{{ $period_company_id }}"/>
 <form class="global-submit form-horizontal" role="form" action="{link_submit_here}" method="post">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">×</button>
@@ -19,7 +21,7 @@
                                 <th class="text-center" width="100px">Time Out</th>
                                 <th class="text-center">Remark</th>
                                 <th class="text-center" width="100px">Approve</th>
-                                <th class="text-center" width="100px">Overtime</th>
+                                <th class="text-center hidden" width="100px">Overtime</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -32,10 +34,10 @@
                                         <td><input value="" type="text" class="text-table time-entry is-timeEntry" name=""></td>
                                         @if( $record->status_time_sched == 'OVERTIME' || $timesheet_info->day_type == "rest_day" || $timesheet_info->day_type == "extra_day")
                                         <td class="text-center"><input {{ $record->auto_approved == 1 ? 'checked' : '' }} type="checkbox" class="approve-checkbox" name="approve-checkbox[{{ $key }}]"></td>
-                                        <td class="text-center"><input checked type="checkbox" class="overtime-checkbox" name="overtime-checkbox[{{ $key }}]"></td>
+                                        <td class="text-center hidden"><input checked type="checkbox" class="overtime-checkbox" name="overtime-checkbox[{{ $key }}]"></td>
                                         @else
                                         <td><input type="hidden" class="approve-checkbox" value="on" name="approve-checkbox[{{ $key }}]"></td>
-                                        <td><input type="hidden" class="overtime-checkbox" value="on" name="overtime-checkbox[{{ $key }}]"></td>
+                                        <td class="hidden"><input type="hidden" class="overtime-checkbox" value="on" name="overtime-checkbox[{{ $key }}]"></td>
                                         @endif
                                     @endif
                                 @endforeach
@@ -49,11 +51,17 @@
         <div class="clearfix">
             <div class="col-md-6">
                 <div style="padding: 10px; color: #bbb">
+                    <div class="text-bold">WORKING TIME</div>
+                    <div>{{ $timesheet_info->time_output["target_hours"] }}</div>
+                    <div class="text-bold">HOURLY RATE</div>
+                    <div>{{ payroll_currency($timesheet_info->compute->hourly_rate) }}</div>
+                </div>
+                <div style="padding: 10px; color: #bbb">
                     <div class="text-bold">SHIFT FOR THE DAY</div>
                     @if($timesheet_info->_shift)
                         @foreach($timesheet_info->_shift as $record)
                         <div>{{ date("h:i A", strtotime($record->shift_in)) }} to {{ date("h:i A", strtotime($record->shift_out)) }}</div>
-                        @endforeach
+                    @endforeach
                     @else
                         NO SHIFT FOR THE DAY
                     @endif
@@ -73,7 +81,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-        <button class="btn btn-primary btn-custom-primary" type="button"">Submit</button>
+        <button class="btn btn-primary btn-custom-primary mark-as-checked" type="button"><i class="fa fa-check"></i> Mark as CHECKED</button>
     </div>
 </form>
 <script type="text/javascript" src="/assets/member/payroll/js/timesheet2_day_summary.js"></script>

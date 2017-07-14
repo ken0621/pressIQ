@@ -24,9 +24,31 @@ function timesheet()
 		event_time_entry();
 		event_create_new_time();
 		event_time_focus_out_recompute();
-		action_sum_total_gross_salary();
+		action_click_approve_timesheet();
 	}
+	function action_click_approve_timesheet()
+	{
+		$(".approve-timesheet-btn").unbind("click");
+		$(".approve-timesheet-btn").bind("click", function()
+		{
+			$(".approve-timesheet-btn").html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
 
+			var period_id = $(".period-id").val();
+			var employee_id = $(".employee-id").val();
+			
+			$.ajax({
+				url : "/member/payroll/company_timesheet_approve/approve_timesheet",
+				type : "get",
+				dataType:"json",
+				data : {period_id : period_id, employee_id : employee_id},
+				success : function(data)
+				{
+					$("#global_modal").modal("hide");
+					timesheet_employee_list.action_load_table();
+				}
+			})
+		});
+	}
 	/* EVENTS */
 	function event_create_new_time()
 	{
@@ -111,17 +133,7 @@ function timesheet()
 			}
 		})
 	}
-	function action_sum_total_gross_salary()
-	{
-		var total_gross_salary = 0;
 
-		$(".daily-salary").each(function(key, val)
-		{
-			total_gross_salary += parseFloat($(this).attr("amount"));
-		});
-
-		$(".total-gross-salary").html(j_number_format(total_gross_salary));
-	}
 
 	function action_create_new_line($target_tr)
 	{

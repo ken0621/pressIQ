@@ -56,18 +56,10 @@
                                 @endif
                             </td>
                             <td class="text-center rate-output">
-                                @if($timesheet->daily_info->shift_approved == true)
-                                    <a onclick="action_load_link_to_modal('/member/payroll/company_timesheet_day_summary/{{ $timesheet->payroll_time_sheet_id }}?period_company_id={{ $period_id }}', 'lg')" href="javascript:" class="daily-salary" amount="{{ $timesheet->daily_info->daily_salary }}">PHP {{ number_format($timesheet->daily_info->compute->total_day_income_plus_cola, 2) }}</a>
-                                @else
-                                    <a onclick="action_load_link_to_modal('/member/payroll/company_timesheet_day_summary/{{ $timesheet->payroll_time_sheet_id }}?period_company_id={{ $period_id }}', 'lg')" style="color: red;" href="javascript:" class="daily-salary" amount="{{ $timesheet->daily_info->daily_salary }}">PHP {{ number_format($timesheet->daily_info->compute->total_day_income_plus_cola, 2) }}</a>
-                                @endif
+                                {!! $timesheet->daily_info->value_html !!}
                             </td>
                         </tr>
                         @endforeach
-                        <tr style="font-weight: bold;">
-                            <td class="text-right" colspan="5">GROSS SALARY</td>
-                            <td class="text-center"><a href="javascript:">PHP <span class="total-gross-salary">0.00</span></a></td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -76,6 +68,7 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Cancel</button>
-    <button class="btn btn-primary btn-custom-primary" type="button">Approve Timesheet</button>
+    
+    <button class="btn btn-primary btn-custom-primary approve-timesheet-btn" type="button">{{ $time_keeping_approved == true ? "RETURN TO PENDING" : "APPROVE" }}</button>
 </div>
 <script type="text/javascript" src="/assets/member/payroll/js/timesheet2.js"></script>

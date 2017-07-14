@@ -20,7 +20,6 @@ class Tbl_payroll_shift_code extends Model
 	public function scopegetshift($query, $shop_id = 0, $shift_archived = 0)
 	{
 		$query->where('shop_id', $shop_id)->where('shift_archived', $shift_archived);
-
 		return $query;
 	}
 

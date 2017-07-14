@@ -213,6 +213,67 @@
 								<div class="panel panel-default">
 									<div class="panel-body form-horizontal">
 										<div class="form-group">
+											<label class="col-md-12">Contribution References</label>
+										</div>
+										<div class="form-group">
+											<div class="col-md-12">
+												<table class="table table-condensed table-bordered">
+													<tr>
+														<td>
+															Tax Contibution
+														</td>
+														<td width="50%">
+															<select class="form-control" name="tax_reference">
+																<option value="declared">Declared Tax Salary</option>
+																<option value="gross_basic">Computed Taxable Salary</option>
+																<option value="net_basic">Net Basic</option>
+															</select>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															SSS Contibution
+														</td>
+														<td width="50%">
+															<select class="form-control" name="sss_reference">
+																<option value="declared">Declared SSS Salary</option>
+																<option value="gross_basic">Gross Pay</option>
+																<option value="net_basic">Net Basic</option>
+															</select>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															PhilHealth Contibution
+														</td>
+														<td width="50%">
+															<select class="form-control" name="philhealth_reference">
+																<option value="declared">Declared PhilHealth Salary</option>
+																<option value="gross_basic">Gross Pay</option>
+																<option value="net_basic">Net Basic</option>
+															</select>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															PAGIBIG Contibution
+														</td>
+														<td width="50%">
+															<select class="form-control" name="pagibig_reference">
+																<option value="declared">Declared PAGIBIG Salary</option>
+																<option value="gross_basic">Gross Pay</option>
+																<option value="net_basic">Net Basic</option>
+															</select>
+														</td>
+													</tr>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-body form-horizontal">
+										<div class="form-group">
 											<label class="col-md-12">Late Deduction</label>
 										</div>
 										<div class="form-group">
@@ -406,10 +467,59 @@
 									<small>Working Days (per month)</small>
 									<input type="number" name="payroll_group_working_day_month" class="form-control text-center" step="any" required>
 								</div>
+								<!--<div class="col-md-6">-->
+								<!--	<small>Late Grace Time Period</small>-->
+									
+								<!--</div>-->
+								<input type="hidden" name="payroll_group_grace_time" class="form-control text-center" step="any">
+							</div>
+							<div class="form-group">
 								<div class="col-md-6">
-									<small>Late Grace Time Period</small>
-									<input type="number" name="payroll_group_grace_time" class="form-control text-center" step="any" required>
+									<small>Grace Time (LATE)</small>
+									<div class="panel panel-default">
+										<div class="panel-body">
+											<div class="form-group">
+												<div class="col-md-6">
+													<small>Grace Time</small>
+													<input type="text" class="form-control text-center time-entry" placeholder="00:00" name="late_grace_time">
+												</div>
+												<div class="col-md-6">
+													<small>Grace Time Rule</small>
+													<select class="form-control" name="grace_time_rule_late">
+														<option value="per_shift">Per Shift</option>
+														<option value="accumulative">Accumulative</option>
+														<option value="first">First Shift Only</option>
+														<option value="last">Last Shift Only</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									
 								</div>
+								<div class="col-md-6">
+									<small>Grace Time (OVERTIME)</small>
+									<div class="panel panel-default">
+										<div class="panel-body">
+											<div class="form-group">
+												<div class="col-md-6">
+													<small>Grace Time</small>
+													<input type="text" class="form-control  text-center time-entry" placeholder="00:00" name="overtime_grace_time">
+												</div>
+												<div class="col-md-6">
+													<small>Grace Time Rule</small>
+													<select class="form-control" name="grace_time_rule_overtime">
+														<option value="per_shift">Per Shift</option>
+														<option value="accumulative">Accumulative</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
 								<div class="col-md-12">
 									<small>Default Shift Template</small>
 									<select class="form-control shift_code_id" name="shift_code_id">
@@ -468,7 +578,7 @@
 		}
 	});
 	$(".time-entry").timeEntry('destroy');
-	$(".time-entry").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 0, 0, 0)});
+	$(".time-entry").timeEntry({show24Hours: true, defaultTime: new Date(0, 0, 0, 0, 0, 0)});
 	late_categoy_change_event();
 	late_param_change();
 	under_time_category_change_event();

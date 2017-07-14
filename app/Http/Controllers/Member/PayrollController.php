@@ -6457,11 +6457,12 @@ class PayrollController extends Member
                                         ->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
                                         ->get();
           //dd($_record);
-
+          // dd($period);
           foreach($_record as $record)
           {
 
                $compute = Payroll::getrecord_breakdown($record);
+               $temp['period'] = date('M d, Y', strtotime($period->payroll_period_start)).' to '.date('M d, Y', strtotime($period->payroll_period_end));
                $temp['break'] = Self::breakdown_uncompute($compute,'approved');
                $temp['display_name'] = $record->payroll_employee_display_name;
                $temp['company_name'] = $record->payroll_company_name;

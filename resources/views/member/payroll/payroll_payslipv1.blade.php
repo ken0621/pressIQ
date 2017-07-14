@@ -42,7 +42,6 @@
 		?>
 	
 		@foreach($_record as $brk)
-				
 
 				@if($counter==$payslip_num)
 					</tr><tr>
@@ -107,6 +106,10 @@
 											</td>
 										</tr>
 										@endif
+										<tr>
+											<td>Payroll Period</td>
+											<td>{{$brk['period']}}</td>
+										</tr>
 									</table>
 								</td>
 								

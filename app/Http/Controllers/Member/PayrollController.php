@@ -4480,6 +4480,7 @@ class PayrollController extends Member
      public function modal_create_payroll_period()
      {
           $data['_tax'] = Tbl_payroll_tax_period::check(Self::shop_id())->get();
+          $data['_month'] = Payroll::get_month();
           return view('member.payroll.modal.modal_create_payroll_period', $data);
      }
      public function modal_save_payroll_period()
@@ -4488,7 +4489,10 @@ class PayrollController extends Member
           $insert['payroll_period_start']         = date('Y-m-d',strtotime(Request::input('payroll_period_start')));
           $insert['payroll_period_end']           = date('Y-m-d',strtotime(Request::input('payroll_period_end')));
           $insert['payroll_period_category']      = Request::input('payroll_period_category');
-
+          $insert['period_count']                 = Request::input('period_count');
+          $insert['month_contribution']           = Request::input('month_contribution');
+          $insert['year_contribution']            = Request::input('year_contribution');
+          
           $count = Tbl_payroll_period::check($insert)->count();
 
           $id = 0;
@@ -4704,8 +4708,9 @@ class PayrollController extends Member
 
      public function modal_edit_period($payroll_period_id)
      {
-          $data['period'] = Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->first();
-          $data['_tax'] = Tbl_payroll_tax_period::check(Self::shop_id())->get();
+          $data['period']     = Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->first();
+          $data['_tax']       = Tbl_payroll_tax_period::check(Self::shop_id())->get();
+          $data['_month']     = Payroll::get_month();
           return view('member.payroll.modal.modal_edit_period', $data);
      }
 
@@ -4713,8 +4718,12 @@ class PayrollController extends Member
      {
           $payroll_period_id                      = Request::input("payroll_period_id");
           $update['payroll_period_category']      = Request::input("payroll_period_category");
-          $update['payroll_period_start']    = date('Y-m-d',strtotime(Request::input("payroll_period_start")));
+          $update['payroll_period_start']         = date('Y-m-d',strtotime(Request::input("payroll_period_start")));
           $update['payroll_period_end']           = date('Y-m-d',strtotime(Request::input("payroll_period_end")));
+          $update['period_count']                 = Request::input('period_count');
+          $update['month_contribution']           = Request::input('month_contribution');
+          $update['year_contribution']            = Request::input('year_contribution');
+          
           Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->update($update);
 
           $insert_company = array();

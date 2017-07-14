@@ -13,4 +13,17 @@ class Tbl_payroll_time_keeping_approved extends Model
     /* REFERECE COLUMN NAME */
 	// [PRIMARY KEY] 	payroll_tax_status_id
 	// [VARCHAR] 		payroll_tax_status_name
+	
+	public function scopemonthrecord($query, $employee_id = 0, $payroll_period_category, $month_contribution, $year_contribution)
+	{
+	    $query->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_company_id','=','tbl_payroll_time_keeping_approved.payroll_period_company_id')
+	          ->join('tbl_payroll_period','tbl_payroll_period.payroll_period_id','=','tbl_payroll_period_company.payroll_period_id')
+	          ->where('tbl_payroll_time_keeping_approved.employee_id', $employee_id)
+	          ->where('tbl_payroll_period.payroll_period_category',$payroll_period_category)
+	          ->where('tbl_payroll_period.month_contribution', $month_contribution)
+	          ->where('tbl_payroll_period.year_contribution', $year_contribution);
+	   
+	   return $query;
+	}
+	
 }

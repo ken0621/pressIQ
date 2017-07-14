@@ -147,9 +147,9 @@
 												<div class="radio">
 													<label><input type="radio" name="payroll_group_sss" value="1st Period">1st Period</label>
 												</div>
-												<div class="radio">
-													<label><input type="radio" name="payroll_group_sss" value="2nd Period">2nd Period</label>
-												</div>
+												<!--<div class="radio">-->
+												<!--	<label><input type="radio" name="payroll_group_sss" value="2nd Period">2nd Period</label>-->
+												<!--</div>-->
 												
 												<div class="radio">
 													<label><input type="radio" name="payroll_group_sss" value="Last Period" checked>Last Period</label>
@@ -170,9 +170,9 @@
 												<div class="radio">
 													<label><input type="radio" name="payroll_group_philhealth" value="1st Period">1st Period</label>
 												</div>
-												<div class="radio">
-													<label><input type="radio" name="payroll_group_philhealth" value="2nd Period">2nd Period</label>
-												</div>
+												<!--<div class="radio">-->
+												<!--	<label><input type="radio" name="payroll_group_philhealth" value="2nd Period">2nd Period</label>-->
+												<!--</div>-->
 												
 												<div class="radio">
 													<label><input type="radio" name="payroll_group_philhealth" value="Last Period" checked>Last Period</label>
@@ -193,9 +193,9 @@
 												<div class="radio">
 													<label><input type="radio" name="payroll_group_pagibig" value="1st Period">1st Period</label>
 												</div>
-												<div class="radio">
-													<label><input type="radio" name="payroll_group_pagibig" value="2nd Period">2nd Period</label>
-												</div>
+												<!--<div class="radio">-->
+												<!--	<label><input type="radio" name="payroll_group_pagibig" value="2nd Period">2nd Period</label>-->
+												<!--</div>-->
 												
 												<div class="radio">
 													<label><input type="radio" name="payroll_group_pagibig" value="Last Period" checked>Last Period</label>

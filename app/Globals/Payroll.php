@@ -1371,8 +1371,14 @@ class Payroll
 	public static function time_float($time = '00:00')
 	{
 		$extime = explode(':', $time);
+		
+		$min = 0;
+		if(count($extime) > 1)
+		{
+			$min = $extime[1] / 60;
+		}
 		$hour = $extime[0];
-		$min = $extime[1] / 60;
+		
 		return $hour + $min;
 	}
 
@@ -3429,5 +3435,15 @@ class Payroll
 			Tbl_payroll_remarks::insert($insert);
 		}
 	}
-
+	
+	public static function get_month()
+	{
+		$data = array();
+		for($i = 1; $i <= 12; $i++)
+		{
+			$month = date('F', strtotime(date('Y').'-'.$i.'-01'));
+			array_push($data, $month);
+		}
+		return $data;
+	}
 }

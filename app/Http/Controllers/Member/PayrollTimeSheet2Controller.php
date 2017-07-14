@@ -79,6 +79,8 @@ class PayrollTimeSheet2Controller extends Member
 		$period_id = Request::input("period_id");
 		$employee_id = Request::input("employee_id");
 		
+		$compute_cutoff = $this->compute_whole_cutoff($period_id, $employee_id);
+	//	dd($compute_cutoff);
 		$check_approved = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->first();
 		
 		if($check_approved)
@@ -89,6 +91,11 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			$insert["employee_id"] = $employee_id;
 			$insert["payroll_period_company_id"] = $period_id;
+			//dd($compute_cutoff["break_down"]["employee"]);
+			$insert["net_basic_pay"] = $compute_cutoff["break_down"]["employee"]["get_net_basic_pay"]["total_net_basic"];
+			$insert["gross_pay"] = $compute_cutoff["break_down"]["employee"]["get_gross_pay"]["total_gross_pay"];
+			$insert["net_pay"] = $compute_cutoff["break_down"]["employee"]["get_net_pay"]["total_net_pay"];
+			$insert["taxable_salary"] = $compute_cutoff["break_down"]["employee"]["get_taxable_salary"]["total_taxable"];
 			Tbl_payroll_time_keeping_approved::insert($insert);
 		}
 
@@ -333,9 +340,17 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			$return->shift_target_hours = 0;
 		}
-	
+		$return->time_compute_mode = "regular";
 		$return->time_output = Payroll2::compute_time_mode_regular($return->compute_shift, $_shift_raw, $late_grace_time, $grace_time_rule_late, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday , $leave, $leave_fill_late, $leave_fill_undertime, $return->shift_target_hours,  false);
 		
+		if(count($_shift) > 0)
+		{
+			if($_shift[0]->shift_flexi_time == 1)
+			{
+				$return->time_output =  Payroll2::compute_time_mode_flexi($return->compute_shift, $return->shift_target_hours, "00:00:00", $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday, $leave, $leave_fill_undertime, $testing = false);
+				$return->time_compute_mode = "flexi";
+			}
+		}	
 		
 		//dd($employee_contract);
 		//$daily_rate, $employee_contract->payroll_group_id
@@ -543,6 +558,7 @@ class PayrollTimeSheet2Controller extends Member
 			/* GET INITIAL INFORMATION NEEDED */
 			$payroll_time_sheet_record_id = Request::input("payroll_time_sheet_record_id")[$key];
 			$record = Tbl_payroll_time_sheet_record_approved::where("payroll_time_sheet_id", Request::input("payroll_time_sheet_id"))->where("payroll_time_sheet_record_id", Request::input("payroll_time_sheet_record_id")[$key])->first();
+		
 			$payroll_time_serialize = unserialize($record->payroll_time_serialize);
 			$time_out = Request::input("time-out")[$key];
 			$approve_checkbox = isset($request["approve-checkbox"][$key]) ? 1 : 0;

@@ -2,6 +2,7 @@
 namespace App\Globals;
 use stdClass;
 use App\Globals\Payroll;
+use DB;
 
 use App\Models\Tbl_payroll_overtime_rate;
 use App\Models\Tbl_payroll_group;
@@ -13,6 +14,7 @@ use App\Models\Tbl_payroll_record;
 use App\Models\Tbl_payroll_employee_salary;
 use App\Models\Tbl_payroll_employee_basic;
 use App\Models\Tbl_payroll_employee_allowance;
+use App\Models\Tbl_payroll_time_keeping_approved;
 
 class Payroll2
 {
@@ -775,7 +777,7 @@ class Payroll2
 		$late_hours = "00:00:00";
 		$under_time = "00:00:00";
 		$over_time = "00:00:00";
-		$night_differential= Payroll2::night_differential_computation($_time,false);
+		$night_differential = Payroll2::night_differential_computation($_time,false);
 		$target_hours = Payroll::sum_time($target_hours,$break_hours);
 		$regular_hours = "00:00:00";
 		$rest_day_hours = "00:00:00";
@@ -911,8 +913,6 @@ class Payroll2
 		}
 		/*END day type and holiday type*/
 
-
-
 		$return["time_spent"] = Payroll2::convert_to_24_hour($time_spent);
 		$return["is_absent"] = $is_absent;
 		$return["late"] = Payroll2::convert_to_24_hour($late_hours);
@@ -930,6 +930,9 @@ class Payroll2
 		$return["night_differential"] = Payroll2::convert_to_24_hour($night_differential);
 		$return["is_half_day"] = $is_half_day;
 		$return["is_holiday"] = $is_holiday;
+		$return["day_type"] = $day_type;
+		
+	
 	
 		return $return;
 	}
@@ -1541,44 +1544,52 @@ class Payroll2
 	public static function night_differential_computation($_time,$testing=false)
 	{
 		$night_differential = "00:00";
-		foreach ($_time as $time) 
+		
+		if(!$_time)
 		{
-
-
-			echo $testing == true ? "<hr><br><br> TIME IN - ".$time->time_in." vs TIME OUT - ".$time->time_out."<br><br>":"";
-			$time_in_integer = explode(":", $time->time_in);
-			$time_out_integer = explode(":", $time->time_out);
-			$time_in_integer = (int)$time_in_integer[0]."".$time_in_integer[1];
-			$time_out_integer = (int)$time_out_integer[0]."".$time_out_integer[1];
-			if ($time->auto_approved==2) 
+		
+		}
+		else
+		{
+			foreach ($_time as $time) 
 			{
-				continue;
-			}
-			/*START night differential computation*/
-			if((2200<=$time_in_integer)&&(2400>=$time_out_integer))
-			{
-				echo $testing == true ? "<b>NIGTH DIFFERENTIAL</b> answer: <b>".Payroll2::time_difference($time->time_out,$time->time_in)."</b> hour night differential reason time in and out is in between 10:00pm to 12:00nn":"";
-				$night_differential = Payroll::sum_time($night_differential,Payroll2::time_difference($time->time_out,$time->time_in));
-			}
-			//if time out was after 10:00pm
-			else if (2200<$time_out_integer) 
-			{
-
-				echo $testing == true ? "<b>NIGTH DIFFERENTIAL</b> answer: <b>".Payroll2::time_difference($time->time_out,"22:00")."</b> hour night differential reason time out was after 10:00pm":"";
-				$night_differential = Payroll::sum_time($night_differential,Payroll2::time_difference($time->time_out,"22:00"));
-			}
-
-			//if time in and timeout is in between 12:00nn to 6:00am
-			if(((600>$time_in_integer)&&(0000<$time_out_integer))&&(!(600<$time_out_integer)))
-			{
-				echo $testing == true ? "<b>NIGTH DIFFERENTIAL</b> answer: <b>".Payroll2::time_difference($time->time_out,$time->time_in)."</b> hour night differential reason time in and out is in between 12:00nn to 6:00am":"";
-				$night_differential = Payroll::sum_time($night_differential,Payroll2::time_difference($time->time_out,$time->time_in));
-			}
-			//time in start before 6:00am and time out is after 6am
-			else if ((600>$time_in_integer)&&(600<=$time_out_integer)) 
-			{
-				echo $testing == true ? "<b>NIGTH DIFFERENTIAL</b> answer: <b>".Payroll2::time_difference("06:00",$time->time_in)."</b> hour night differential reason time in start before 06:00 am":"";
-				$night_differential = Payroll::sum_time($night_differential,Payroll2::time_difference("06:00",$time->time_in));
+				echo $testing == true ? "<hr><br><br> TIME IN - ".$time->time_in." vs TIME OUT - ".$time->time_out."<br><br>":"";
+				$time_in_integer = explode(":", $time->time_in);
+				$time_out_integer = explode(":", $time->time_out);
+				
+				$time_in_integer = (int)$time_in_integer[0]."".$time_in_integer[1];
+				$time_out_integer = (int)$time_out_integer[0]."".$time_out_integer[1];
+				
+				if ($time->auto_approved==2) 
+				{
+					continue;
+				}
+				/*START night differential computation*/
+				if((2200<=$time_in_integer)&&(2400>=$time_out_integer))
+				{
+					echo $testing == true ? "<b>NIGTH DIFFERENTIAL</b> answer: <b>".Payroll2::time_difference($time->time_out,$time->time_in)."</b> hour night differential reason time in and out is in between 10:00pm to 12:00nn":"";
+					$night_differential = Payroll::sum_time($night_differential,Payroll2::time_difference($time->time_out,$time->time_in));
+				}
+				//if time out was after 10:00pm
+				else if (2200<$time_out_integer) 
+				{
+		
+					echo $testing == true ? "<b>NIGTH DIFFERENTIAL</b> answer: <b>".Payroll2::time_difference($time->time_out,"22:00")."</b> hour night differential reason time out was after 10:00pm":"";
+					$night_differential = Payroll::sum_time($night_differential,Payroll2::time_difference($time->time_out,"22:00"));
+				}
+		
+				//if time in and timeout is in between 12:00nn to 6:00am
+				if(((600>$time_in_integer)&&(0000<$time_out_integer))&&(!(600<$time_out_integer)))
+				{
+					echo $testing == true ? "<b>NIGTH DIFFERENTIAL</b> answer: <b>".Payroll2::time_difference($time->time_out,$time->time_in)."</b> hour night differential reason time in and out is in between 12:00nn to 6:00am":"";
+					$night_differential = Payroll::sum_time($night_differential,Payroll2::time_difference($time->time_out,$time->time_in));
+				}
+				//time in start before 6:00am and time out is after 6am
+				else if ((600>$time_in_integer)&&(600<=$time_out_integer)) 
+				{
+					echo $testing == true ? "<b>NIGTH DIFFERENTIAL</b> answer: <b>".Payroll2::time_difference("06:00",$time->time_in)."</b> hour night differential reason time in start before 06:00 am":"";
+					$night_differential = Payroll::sum_time($night_differential,Payroll2::time_difference("06:00",$time->time_in));
+				}
 			}
 		}
 		return Payroll2::convert_to_24_hour($night_differential);
@@ -1612,7 +1623,7 @@ class Payroll2
 		return $_output;
 	}
 
-	public static function flexi_time_shift_output($_output, $index, $time_in, $time_out, $auto_approved, $reason = "",$over_time="00:00:00")
+	public static function flexi_time_shift_output($_output, $index, $time_in, $time_out, $auto_approved, $reason = "", $over_time="00:00:00", $undertime = "00:00:00")
 	{
 		$_output[$index] = new stdClass();
 		$_output[$index]->time_in = $time_in;
@@ -1963,6 +1974,10 @@ class Payroll2
 		$start_date 		= $date_query->payroll_period_start;
 		$end_date 			= $date_query->payroll_period_end;
 		$period_category 	= $date_query->payroll_period_category;
+		
+		
+		/* GET PREVIOUS RECORD */
+		$previous_record = Payroll2::getcontribution_record($employee_id, $payroll_period_company_id);
 
 		/* get employee contract */
 		$group 	= Tbl_payroll_employee_contract::selemployee($employee_id, $start_date)
@@ -2075,13 +2090,13 @@ class Payroll2
 		$sss_reference			= '(REF. DECLARED)';
 		if($group->sss_reference == 'net_basic')
 		{
-			$sss_salary 	= $employee_compute['get_net_basic_pay']['total_net_basic'];
+			$sss_salary 	= $employee_compute['get_net_basic_pay']['total_net_basic'] + $previous_record->net_basic_pay;
 			$sss_reference	= '(REF. NET BASIC)';
 		}
 		
 		if($group->sss_reference == 'gross_basic')
 		{
-			$sss_salary 	= $employee_compute['get_gross_pay']['total_gross_pay'];
+			$sss_salary 	= $employee_compute['get_gross_pay']['total_gross_pay'] + $previous_record->gross_pay;
 			$sss_reference	= '(REF. GROSS PAY)';
 		}
 		
@@ -2091,40 +2106,42 @@ class Payroll2
 		$sss_ec					= $sss_contribution['sss_ec'];
 		$sss_data['amount']		= $sss_ee;
 		$sss_data['ref']		= $sss_reference;
+		$sss_data['ref_amount']	= $sss_salary;
 
 		/* GET PHILHEALTH CONTRIBUTION */
 		$philhealth_salary			= $salary->payroll_employee_salary_philhealth;
 		$philhealth_reference		= '(REF. DECLARED)';
 		if($group->philhealth_reference == 'net_basic')
 		{
-			$philhealth_salary		= $employee_compute['get_net_basic_pay']['total_net_basic'];
+			$philhealth_salary		= $employee_compute['get_net_basic_pay']['total_net_basic'] + $previous_record->net_basic_pay;
 			$philhealth_reference	= '(REF. NET BASIC)';
 		}
 		
 		if($group->philhealth_reference == 'gross_basic')
 		{
-			$philhealth_salary 	= $employee_compute['get_gross_pay']['total_gross_pay'];
+			$philhealth_salary 	= $employee_compute['get_gross_pay']['total_gross_pay']  + $previous_record->gross_pay;
 			$philhealth_reference	= '(REF. GROSS PAY)';
 		}
 		
-		$philhealth_contribution  	= Payroll2::get_philhealth($shop_id, $group->payroll_group_philhealth ,$philhealth_salary, $period_category_arr, $salary->is_deduct_philhealth_default, $salary->deduct_philhealth_custom, $previous_philhealth);
-		$philhealth_ee 				= $philhealth_contribution['philhealth_ee'];
-		$philhealth_er 				= $philhealth_contribution['philhealth_er'];
-		$philhealth_data['amount']	= $philhealth_ee;
-		$philhealth_data['ref']		= $philhealth_reference;
+		$philhealth_contribution  		= Payroll2::get_philhealth($shop_id, $group->payroll_group_philhealth ,$philhealth_salary, $period_category_arr, $salary->is_deduct_philhealth_default, $salary->deduct_philhealth_custom, $previous_philhealth);
+		$philhealth_ee 					= $philhealth_contribution['philhealth_ee'];
+		$philhealth_er 					= $philhealth_contribution['philhealth_er'];
+		$philhealth_data['amount']		= $philhealth_ee;
+		$philhealth_data['ref']			= $philhealth_reference;
+		$philhealth_data['ref_amount']	= $philhealth_salary;
 
 		// GET PAGIBIG CONTRIBUTION
 		$pagibig_salary				= $salary->payroll_employee_salary_pagibig;
 		$pagibig_reference			= '(REF. DECLARED)';
 		if($group->pagibig_reference == 'net_basic')
 		{
-			$pagibig_salary 		= $employee_compute['get_net_basic_pay']['total_net_basic'];
+			$pagibig_salary 		= $employee_compute['get_net_basic_pay']['total_net_basic'] + $previous_record->net_basic_pay;
 			$pagibig_reference		= '(REF. NET BASIC)';
 		}
 		
 		if($group->pagibig_reference == 'gross_basic')
 		{
-			$pagibig_salary 	= $employee_compute['get_gross_pay']['total_gross_pay'];
+			$pagibig_salary 	= $employee_compute['get_gross_pay']['total_gross_pay']  + $previous_record->gross_pay;
 			$pagibig_reference	= '(REF. GROSS PAY)';
 		}
 		
@@ -2134,6 +2151,7 @@ class Payroll2
 		$total_deduction			+= $pagibig_ee;
 		$pagibig_data['amount']		= $pagibig_ee;
 		$pagibig_data['ref']		= $pagibig_reference;
+		$pagibig_data['ref_amount']	= $pagibig_salary;
 		
 		$employee_compute['get_taxable_salary']	= Payroll2::get_taxable_salary($cutoff_compute, $allowances, $adj_allowance, $adj_bonus, $adj_commission, $adj_incentives, $adj_13m, $n13_month, $employee_compute['get_gross_pay']['total_gross_pay'], $sss_data, $philhealth_data, $pagibig_data);
 
@@ -2398,7 +2416,6 @@ class Payroll2
 				$salary_taxable = 0;
 			}
 			
-
 			$tax_contribution = divide(Payroll::tax_contribution($shop_id, $salary_taxable, $tax_status, $period_category), $period_category_arr['count_per_period']);
 			// dd($salary_taxable);
 			if($payroll_group_tax == 'Last Period')
@@ -2885,5 +2902,17 @@ class Payroll2
 		array_push($data, $temp);
 		
 		return $data;
+	}
+	
+	public static function getcontribution_record($employee_id, $payroll_period_company_id)
+	{
+		$period = Tbl_payroll_period_company::getcompanyperiod($payroll_period_company_id)->first();
+		
+		$_record = Tbl_payroll_time_keeping_approved::monthrecord($employee_id, $period->payroll_period_category, $period->month_contribution, $period->year_contribution)
+													->select(DB::raw('IFNULL(sum(tbl_payroll_time_keeping_approved.net_basic_pay), 0) as net_basic_pay, IFNULL(sum(tbl_payroll_time_keeping_approved.gross_pay), 0) as gross_pay, IFNULL(sum(tbl_payroll_time_keeping_approved.taxable_salary), 0) as taxable_salary, IFNULL(sum(tbl_payroll_time_keeping_approved.net_pay), 0) as net_pay'))
+													->first();
+		
+		
+		return $_record;
 	}
 }

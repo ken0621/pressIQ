@@ -4952,6 +4952,7 @@ class PayrollController extends Member
                }
           }
 
+
           $return['function_name'] = 'payrollconfiguration.reload_shift_template';
           $return['status']        = 'success';
           return collect($return)->toJson();

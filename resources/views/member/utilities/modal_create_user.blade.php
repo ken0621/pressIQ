@@ -7,7 +7,7 @@
 	<div class="modal-body clearfix">
 		<div class="col-md-12">
 			<div class="form-group">
-			  	<label for="position_name">UserName</label>
+			  	<label for="position_name">Email</label>
 			  	<input type="text" class="form-control" name="user_email">
 			</div>
 			<div class="form-group">

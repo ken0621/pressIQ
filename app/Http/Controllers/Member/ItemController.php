@@ -1943,7 +1943,7 @@ class ItemController extends Member
 		{
 			dd(2);
 		}
-		return view('member.item.list',$data);
+		return view('member.item.item_approve',$data);
 	}
 
 	public function merchant_approve_request_post($id)

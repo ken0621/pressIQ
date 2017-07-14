@@ -73,7 +73,7 @@
 						</div>
 						<div class="col-md-10">
 							<div class="icon-caption">
-								<span style="color: #004b6e; font-weight: bold;">Salary:&nbsp;</span><span><span>PHP&nbsp;</span>{{ $job["job_salary_range_from"] }}</span>&nbsp;-&nbsp;<span>PHP&nbsp;</span><span>{{ $job["job_salary_range_to"] }}</span>
+								<span style="color: #004b6e; font-weight: bold;">Salary Range:&nbsp;</span><span><span>PHP&nbsp;</span>{{ $job["job_salary_range_from"] }}</span>&nbsp;-&nbsp;<span>PHP&nbsp;</span><span>{{ $job["job_salary_range_to"] }}</span>
 							</div>
 						</div>
 					</div>

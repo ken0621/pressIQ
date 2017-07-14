@@ -70,7 +70,7 @@ class MlmWalletVMoneyController extends Mlm
                                 $pass["apiKey"] = 'z9Gy1dBbnyj9cxMqXSKF'; // Vendor API Key issued by VMoney
                                 $pass["merchantId"] = 'M132582139240'; // Merchant ID registered within VMoney
                                 /* Set URL Sandbox or Live */
-                                $url = "http://philtechglobalinc.vmoney.com/gtcvbankmerchant/";
+                                $url = "https://philtechglobalinc.vmoney.com/gtcvbankmerchant/";
                             }
 
                             $pass["recipient"] = Request::input("vmoney_email"); // Recipient's email address

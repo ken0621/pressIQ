@@ -51,7 +51,7 @@ class PayrollTimeSheet2Controller extends Member
 		$data["page"] = "Employee List Summary";
 		$this->index_redirect_if_time_keeping_does_not_exist($period_id);
 		$data["company"] = $this->db_get_company_period_information($period_id);
-		$data["_employee"] = $this->db_get_list_of_employees_by_company_with_search($data["company"]->payroll_company_id, $search_value, $mode, $period_id);
+		$data["_employee"] = $this->db_get_list_of_employees_by_company_with_search($data["company"]->payroll_company_id, $search_value, $mode, $period_id, $data["company"]->payroll_period_start);
 		return view('member.payroll2.employee_summary_table', $data);
 	}
 	public function timesheet($period_id, $employee_id)
@@ -354,6 +354,7 @@ class PayrollTimeSheet2Controller extends Member
 			$return->shift_target_hours = 0;
 		}
 		$return->time_compute_mode = "regular";
+		// dd($return->compute_shift);
 		$return->time_output = Payroll2::compute_time_mode_regular($return->compute_shift, $_shift_raw, $late_grace_time, $grace_time_rule_late, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday , $leave, $leave_fill_late, $leave_fill_undertime, $return->shift_target_hours,  false);
 		
 		if(count($_shift) > 0)
@@ -791,7 +792,7 @@ class PayrollTimeSheet2Controller extends Member
 	{
 		return Tbl_payroll_employee_basic::where("shop_id", $this->user_info->shop_id)->where("payroll_employee_company_id", $company_id)->orderBy("payroll_employee_number")->get();
 	}
-	public function db_get_list_of_employees_by_company_with_search($company_id, $search = "", $time_keeping_approved = 0, $period_company_id)
+	public function db_get_list_of_employees_by_company_with_search($company_id, $search = "", $time_keeping_approved = 0, $period_company_id, $period_start)
 	{
 		$query = Tbl_payroll_employee_basic::select("*");
 		
@@ -805,6 +806,8 @@ class PayrollTimeSheet2Controller extends Member
 			$query->join("tbl_payroll_time_keeping_approved", "tbl_payroll_time_keeping_approved.employee_id","=", "tbl_payroll_employee_basic.payroll_employee_id")->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", $period_company_id);
 		}
 		
+		
+		
 		$query->where("shop_id", $this->user_info->shop_id);
 		$query->where("payroll_employee_company_id", $company_id);
 		$query->orderBy("payroll_employee_number");
@@ -814,9 +817,32 @@ class PayrollTimeSheet2Controller extends Member
 			$query->where("tbl_payroll_employee_basic.payroll_employee_display_name", "LIKE", "%" . $search . "%");
 		}
 		
-		$return = $query->get();
 		
-		return $return;
+		
+		$_table = $query->get();
+		
+		$_return = null;
+		
+		foreach($_table as $key => $row)
+		{
+			$_return[$key] = $row;
+			$payroll_group = $this->db_get_current_employee_contract($row->payroll_employee_id, $period_start);
+		
+			if($payroll_group)
+			{
+				$_return[$key]->payroll_group_id = $payroll_group->payroll_group_id;
+				$_return[$key]->payroll_group_code = $payroll_group->payroll_group_code;
+			}
+			else
+			{
+				$_return[$key]->payroll_group_id = null;
+				$_return[$key]->payroll_group_code = null;
+			}
+			
+			
+		}
+
+		return $_return;
 	}
 	public function db_get_company_period_information($period_id)
 	{

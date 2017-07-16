@@ -49,6 +49,7 @@ class Payroll2
 
 	public static function clean_shift($_time, $_shift, $testing = false)
 	{
+	
 		$output_ctr = 0;
 		$_output = null;
 		
@@ -267,6 +268,7 @@ class Payroll2
 
 	public static function clean_shift_flexi($_time, $break_hours="00:00:00" ,$target_hours="00:00:00", $testing = false)
 	{
+	
 		$index		      = 0;
 		$_output	      = null;
 		$target_hours     = Payroll2::convert_time_in_minutes($target_hours) + Payroll2::convert_time_in_minutes($break_hours);
@@ -348,6 +350,8 @@ class Payroll2
      */
 	public static function compute_time_mode_regular($_time, $_shift, $late_grace_time = "00:00:00", $grace_time_rule_late="per_shift",$overtime_grace_time = "00:00:00",$grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00",$leave_fill_late=0,$leave_fill_undertime=0,$target_hours=0,$testing = false)
 	{
+		
+	
 		$time_spent				= "00:00:00";
 		$late_hours 			= "00:00:00";
 		$under_time 			= "00:00:00";
@@ -385,56 +389,56 @@ class Payroll2
 		}
 		else
 		{
-
-			/*START check if there is multimple time in and time out in a single shift*/
-			foreach ($_shift as $shift) 
+			if($_shift != null)
 			{
-				$shift_in_minutes  = explode(":", $shift->shift_in);
-				$shift_out_minutes = explode(":", $shift->shift_out);
-				$shift_in_minutes  = ($shift_in_minutes[0]*60) + ($shift_in_minutes[1]);
-				$shift_out_minutes = ($shift_out_minutes[0]*60) + ($shift_out_minutes[1]);
-				$count_output=0;
-				if ($_time != null ) 
+				/*START check if there is multimple time in and time out in a single shift*/
+				foreach ($_shift as $shift) 
 				{
-					foreach ($_time as $output) 
+					$shift_in_minutes  = explode(":", $shift->shift_in);
+					$shift_out_minutes = explode(":", $shift->shift_out);
+					$shift_in_minutes  = ($shift_in_minutes[0]*60) + ($shift_in_minutes[1]);
+					$shift_out_minutes = ($shift_out_minutes[0]*60) + ($shift_out_minutes[1]);
+					$count_output=0;
+					if ($_time != null ) 
 					{
-						//check if there is approved time in and out if not is_absent is equal to true
-						if($output->auto_approved == 1)
+						foreach ($_time as $output) 
 						{
-							$is_absent = false;
-						}
-					
-						if (isset($_time[$count_output])) 
-						{
-								
-							$output_in_minutes  = explode(":", $_time[$count_output]->time_in);
-							$output_out_minutes = explode(":", $_time[$count_output]->time_out);
-							$output_in_minutes  = ($output_in_minutes[0]*60) + ($output_in_minutes[1]);
-							$output_out_minutes = ($output_out_minutes[0]*60) + ($output_out_minutes[1]);
-							if (isset($_time[$count_output+1])) 
+							//check if there is approved time in and out if not is_absent is equal to true
+							if($output->auto_approved == 1)
 							{
-								$next_output_in_minutes  = explode(":", $_time[$count_output+1]->time_in);
-								$next_output_out_minutes = explode(":", $_time[$count_output+1]->time_out);
-								$next_output_in_minutes  = ($next_output_in_minutes[0]*60) + ($next_output_in_minutes[1]);
-								$next_output_out_minutes = ($next_output_out_minutes[0]*60) + ($next_output_out_minutes[1]);
-								if ((($output_in_minutes>=$shift_in_minutes)&&($output_out_minutes<$shift_out_minutes))&&
-									($next_output_in_minutes>$shift_in_minutes))
+								$is_absent = false;
+							}
+						
+							if (isset($_time[$count_output])) 
+							{
+									
+								$output_in_minutes  = explode(":", $_time[$count_output]->time_in);
+								$output_out_minutes = explode(":", $_time[$count_output]->time_out);
+								$output_in_minutes  = ($output_in_minutes[0]*60) + ($output_in_minutes[1]);
+								$output_out_minutes = ($output_out_minutes[0]*60) + ($output_out_minutes[1]);
+								if (isset($_time[$count_output+1])) 
 								{
-									if(	$_time[$count_output]->auto_approved==1 && $_time[$count_output+1]->auto_approved==1)
+									$next_output_in_minutes  = explode(":", $_time[$count_output+1]->time_in);
+									$next_output_out_minutes = explode(":", $_time[$count_output+1]->time_out);
+									$next_output_in_minutes  = ($next_output_in_minutes[0]*60) + ($next_output_in_minutes[1]);
+									$next_output_out_minutes = ($next_output_out_minutes[0]*60) + ($next_output_out_minutes[1]);
+									if ((($output_in_minutes>=$shift_in_minutes)&&($output_out_minutes<$shift_out_minutes))&&
+										($next_output_in_minutes>$shift_in_minutes))
 									{
-										$_time[$count_output]->undertime  = Payroll::time_diff($_time[$count_output]->time_out,$_time[$count_output+1]->time_in);
-										$_time[$count_output+1]->late 	= "00:00";
+										if(	$_time[$count_output]->auto_approved==1 && $_time[$count_output+1]->auto_approved==1)
+										{
+											$_time[$count_output]->undertime  = Payroll::time_diff($_time[$count_output]->time_out,$_time[$count_output+1]->time_in);
+											$_time[$count_output+1]->late 	= "00:00";
+										}
 									}
 								}
 							}
+							$count_output++;
 						}
-						$count_output++;
 					}
 				}
+				/*END check if there is multimple time in and time out in a single shift*/
 			}
-			/*END check if there is multimple time in and time out in a single shift*/
-			
-			
 
 
 			$count=0;
@@ -705,7 +709,7 @@ class Payroll2
 			}
 			/*END day type and holiday type*/ 
 
-
+		//	dd($_time);
 		$return["time_spent"] = Payroll2::convert_to_24_hour($time_spent);
 		$return["is_absent"] = $is_absent;
 		$return["late"] = Payroll2::convert_to_24_hour($late_hours);
@@ -772,15 +776,15 @@ class Payroll2
      * @author (Kim Briel Oraya)
      *
      */
-	public static function compute_time_mode_flexi($_time, $target_hours="00:00:00", $break_hours="00:00:00", $overtime_grace_time = "00:00:00", $grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00", $leave_fill_undertime=0, $testing = false)
+	public static function compute_time_mode_flexi($_time, $target_hours="08:00:00", $break_hours="00:00:00", $overtime_grace_time = "00:00:00", $grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00", $leave_fill_undertime=0, $testing = false)
 	{
-
+		
 		$time_spent="00:00:00";
 		$late_hours = "00:00:00";
 		$under_time = "00:00:00";
 		$over_time = "00:00:00";
 		$night_differential = Payroll2::night_differential_computation($_time,false);
-		$target_hours = Payroll::sum_time($target_hours,$break_hours);
+		$target_hours = Payroll::sum_time(Payroll::float_time($target_hours),$break_hours);
 		$regular_hours = "00:00:00";
 		$rest_day_hours = "00:00:00";
 		$extra_day_hours = "00:00:00";
@@ -790,6 +794,7 @@ class Payroll2
 		$excess_leave_hours = $leave;
 		$is_half_day = false;
 		$is_absent =false;
+		
 
 		if (!(isset($_time[0]))) 
 		{
@@ -862,7 +867,6 @@ class Payroll2
 		{
 			$excess_leave_minutes = $leave;
 		}
-
 		
 		//grace time for overtime - accumulative.
 		$over_time_minutes = Payroll2::convert_time_in_minutes($over_time);
@@ -915,6 +919,8 @@ class Payroll2
 		}
 		/*END day type and holiday type*/
 
+
+	
 		$return["time_spent"] = Payroll2::convert_to_24_hour($time_spent);
 		$return["is_absent"] = $is_absent;
 		$return["late"] = Payroll2::convert_to_24_hour($late_hours);
@@ -1016,6 +1022,8 @@ class Payroll2
 
 	public static function compute_income_day_pay($_time = array(), $daily_rate = 0, $group_id = 0, $cola = 0, $compute_type="")
 	{
+		
+	
 		$return = new stdClass();
 		
 		$time_spent = Self::time_float($_time['time_spent']);
@@ -1732,7 +1740,13 @@ class Payroll2
 	public static function convert_time_in_minutes($time)
 	{
 		$time = explode(":", $time);
-		$time = ($time[0] * 60.0 + $time[1] * 1.0);
+		if(!isset($time[1]))
+		{
+			$time[1] = 0;
+		}
+		$time = ($time[0] * 60.0) + ($time[1] * 1.0);
+		
+	
 		return $time;
 	}
 	
@@ -1985,6 +1999,8 @@ class Payroll2
 		$group 	= Tbl_payroll_employee_contract::selemployee($employee_id, $start_date)
 												->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
 		                                        ->first();
+		                                        
+		// dd($date_query);
 		$shop_id = $group->shop_id;      
 		
 		/* GET EMPLOYEE SALARY */
@@ -2093,6 +2109,16 @@ class Payroll2
 		}
 		
 		$sss_contribution 		= Payroll2::get_sss_contribution($shop_id, $sss_salary, $pevious_record);
+		
+		// dd(Payroll2::period_count($group));
+		if(Payroll2::period_count($date_query->period_count) != $group->payroll_group_sss && $group->payroll_group_sss != 'Every Period')
+		{
+			$sss_contribution['ee'] = 0;
+			$sss_contribution['er'] = 0;
+			$sss_contribution['ec'] = 0;
+		}
+	
+		
 		$sss_ee					= $sss_contribution['ee'];
 		$sss_er					= $sss_contribution['er'];
 		$sss_ec					= $sss_contribution['ec'];
@@ -2116,7 +2142,13 @@ class Payroll2
 		}
 	
 		$philhealth_contribution 		= Payroll2::get_philhealth_contribution($shop_id, $philhealth_salary, $pevious_record);
-
+		
+		if(Payroll2::period_count($date_query->period_count) != $group->payroll_group_philhealth && $group->payroll_group_philhealth != 'Every Period')
+		{
+			$philhealth_contribution['ee'] = 0;
+			$philhealth_contribution['er'] = 0;
+		}
+		
 		$philhealth_ee 					= $philhealth_contribution['ee'];
 		$philhealth_er 					= $philhealth_contribution['er'];
 		$philhealth_data['amount']		= $philhealth_ee;
@@ -2138,9 +2170,15 @@ class Payroll2
 			$pagibig_reference	= '(REF. GROSS PAY)';
 		}
 		
-		$pagibig_contribution 		= Payroll2::get_pagibig($shop_id, $pagibig_salary, $group->payroll_group_pagibig, $period_category_arr, $salary->is_deduct_pagibig_default, $period_category, $salary->deduct_pagibig_custom, $date_query->period_count);
 
 		$pagibig_contribution 		= Payroll2::get_pagibig_contribution($shop_id, $pagibig_salary, $pevious_record);
+		
+		if(Payroll2::period_count($date_query->period_count) != $group->payroll_group_pagibig && $group->payroll_group_pagibig != 'Every Period')
+		{
+			$pagibig_contribution['ee'] = 0;
+			$pagibig_contribution['er'] = 0;
+		}
+		
 		$pagibig_ee 				= $pagibig_contribution['ee'];
 		$pagibig_er 				= $pagibig_contribution['er'];
 		$total_deduction			+= $pagibig_ee;
@@ -2168,7 +2206,16 @@ class Payroll2
 		{
 			$employee_compute['get_taxable_salary']['total_taxable'] = 0;
 		}
+		
+		$pevious_record = Tbl_payroll_record::getdate($shop_id, $date_period)
+											->where('tbl_payroll_period.payroll_period_category', $period_category)
+											->where('payroll_employee_id',$employee_id)
+											->get()
+											->toArray();
 
+		$previous_tax 			= 0;
+		$period_category_arr	 	= Payroll::getperiodcount($shop_id, $end_date, $period_category, $start_date);
+		
 		/* GET TAX CONTRIBUTION */
 		$tax_contribution = Payroll2::get_standard_tax($shop_id, $group->payroll_group_tax, $period_category, $employee_compute['get_taxable_salary']['total_taxable'], $employee->payroll_employee_tax_status, $period_category_arr, $date_query->period_count);
 		
@@ -2891,19 +2938,19 @@ class Payroll2
 		$data = array();
 		
 		$temp['name'] = 'SSS ER';
-		$temp['amount'] = $sss_contribution['sss_er'];
+		$temp['amount'] = $sss_contribution['er'];
 		array_push($data, $temp);
 		
 		$temp['name'] = 'SSS EC';
-		$temp['amount'] = $sss_contribution['sss_ec'];
+		$temp['amount'] = $sss_contribution['ec'];
 		array_push($data, $temp);
 		
 		$temp['name'] = 'PHILHEALTH ER';
-		$temp['amount'] = $philhealth_contribution['philhealth_er'];
+		$temp['amount'] = $philhealth_contribution['er'];
 		array_push($data, $temp);
 		
 		$temp['name'] = 'PAGIBG ER';
-		$temp['amount'] = $pagibig_contribution['pagibig_er'];
+		$temp['amount'] = $pagibig_contribution['er'];
 		array_push($data, $temp);
 		
 		return $data;
@@ -2914,7 +2961,7 @@ class Payroll2
 		$period = Tbl_payroll_period_company::getcompanyperiod($payroll_period_company_id)->first();
 		
 		$_record = Tbl_payroll_time_keeping_approved::monthrecord($employee_id, $period->payroll_period_category, $period->month_contribution, $period->year_contribution)
-													->select(DB::raw('IFNULL(sum(tbl_payroll_time_keeping_approved.net_basic_pay), 0) as net_basic_pay, IFNULL(sum(tbl_payroll_time_keeping_approved.gross_pay), 0) as gross_pay, IFNULL(sum(tbl_payroll_time_keeping_approved.taxable_salary), 0) as taxable_salary, IFNULL(sum(tbl_payroll_time_keeping_approved.net_pay), 0) as net_pay, IFNULL(sum(tbl_payroll_time_keeping_approved.sss_salary)) as sss_salary, IFNULL(sum(tbl_payroll_time_keeping_approved.sss_ee)) as sss_ee, IFNULL(sum(tbl_payroll_time_keeping_approved.sss_er)) as sss_er, IFNULL(sum(tbl_payroll_time_keeping_approved.sss_ec)) as sss_ec, IFNULL(sum(tbl_payroll_time_keeping_approved.phihealth_salary)) as phihealth_salary, IFNULL(sum(tbl_payroll_time_keeping_approved.philhealth_ee)) as philhealth_ee, IFNULL(sum(tbl_payroll_time_keeping_approved.philhealth_er)) as philhealth_er, IFNULL(sum(tbl_payroll_time_keeping_approved.pagibig_salary)) as pagibig_salary, IFNULL(sum(tbl_payroll_time_keeping_approved.pagibig_ee)) as pagibig_ee, IFNULL(sum(tbl_payroll_time_keeping_approved.pagibig_er)) as pagibig_er'))
+													->select(DB::raw('IFNULL(sum(tbl_payroll_time_keeping_approved.net_basic_pay), 0) as net_basic_pay, IFNULL(sum(tbl_payroll_time_keeping_approved.gross_pay), 0) as gross_pay, IFNULL(sum(tbl_payroll_time_keeping_approved.taxable_salary), 0) as taxable_salary, IFNULL(sum(tbl_payroll_time_keeping_approved.net_pay), 0) as net_pay, IFNULL(sum(tbl_payroll_time_keeping_approved.sss_salary), 0) as sss_salary, IFNULL(sum(tbl_payroll_time_keeping_approved.sss_ee), 0) as sss_ee, IFNULL(sum(tbl_payroll_time_keeping_approved.sss_er), 0) as sss_er, IFNULL(sum(tbl_payroll_time_keeping_approved.sss_ec), 0) as sss_ec, IFNULL(sum(tbl_payroll_time_keeping_approved.phihealth_salary), 0) as phihealth_salary, IFNULL(sum(tbl_payroll_time_keeping_approved.philhealth_ee), 0) as philhealth_ee, IFNULL(sum(tbl_payroll_time_keeping_approved.philhealth_er), 0) as philhealth_er, IFNULL(sum(tbl_payroll_time_keeping_approved.pagibig_salary), 0) as pagibig_salary, IFNULL(sum(tbl_payroll_time_keeping_approved.pagibig_ee), 0) as pagibig_ee, IFNULL(sum(tbl_payroll_time_keeping_approved.pagibig_er), 0) as pagibig_er'))
 													->first();
 		
 		
@@ -2931,6 +2978,7 @@ class Payroll2
 			$sss_contribution['er'] -= $record->sss_er;
 			$sss_contribution['ec'] -= $record->sss_ec;
 		}
+		// dd($sss_contribution);
 		return $sss_contribution;
 	}
 
@@ -2965,5 +3013,21 @@ class Payroll2
 			$data['er'] -= $record->pagibig_er;
 		}
 		return $data;
+	}
+	
+	public static function period_count($period_count)
+	{
+		$period = '';
+		switch($period_count)
+		{
+			case 'last_period' : 
+				$period = 'Last Period';
+				break;
+			case 'first_period' : 
+				$period = '1st Period';
+				break;
+		}
+		
+		return $period;
 	}
 }

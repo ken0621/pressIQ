@@ -34,11 +34,10 @@
     </ul>
     <div class="search-filter-box">
         <div class="col-md-4" style="padding: 10px">
-            <select class="form-control item_type">
-                <option>All Company / Branch</option>
-                <option value="1">Digima Web Solutions, Inc.</option>
-                <option value="2">DMPSH, Inc.</option>
-                <option value="2">Robinsons Galleria</option>
+            <select class="form-control item_type company-change-event">
+                @foreach($_company as $company_info)
+                <option {{ $company_info->payroll_period_company_id == $company->payroll_period_company_id ? 'selected' : '' }} value="{{ $company_info->payroll_period_company_id }}">{{ $company_info->payroll_company_name }}</option>
+                @endforeach
             </select>
         </div>
         <div class="col-md-4 col-md-offset-4" style="padding: 10px">

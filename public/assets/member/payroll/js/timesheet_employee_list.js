@@ -8,6 +8,10 @@ function timesheet_employee_list()
 	{
 		action_load_table();
 	}
+	this.action_set_to_unapprove = function(period_company_id, employee_id)
+	{
+		action_set_to_unapprove(period_company_id, employee_id);
+	}
 
 
 	function init()
@@ -23,6 +27,19 @@ function timesheet_employee_list()
 		event_search_employee_name();
 		event_focus_edit();
 		action_load_table();
+		event_change_company();
+	}
+	function event_change_company()
+	{
+		$(".company-change-event").change(function(e)
+		{
+			$payroll_period_company_id = $(e.currentTarget).val();
+			action_reload_different_company($payroll_period_company_id);
+		});
+	}
+	function action_reload_different_company($payroll_period_company_id)
+	{
+		window.location.href = '/member/payroll/company_timesheet2/' + $payroll_period_company_id;
 	}
 	function event_change_tab()
 	{
@@ -57,6 +74,22 @@ function timesheet_employee_list()
 		{
 			$(e.currentTarget).closest("tr").find(".time-in").focus();
 		});
+	}
+	function action_set_to_unapprove(period_company_id, employee_id)
+	{
+		if(confirm("Are you sure you want to set this employee to unapprove?"))
+		{
+			$.ajax(
+			{
+				url:"/member/payroll/company_timesheet2/unapprove/" + period_company_id + "/" + employee_id,
+				dataType:"json",
+				type:"get",
+				success: function(data)
+				{
+					action_load_table();
+				}
+			});
+		}
 	}
 	function action_load_table()
 	{

@@ -31,6 +31,7 @@ class PayrollTimeSheet2Controller extends Member
 		$data["page"] = "Employee List Summary";
 		$this->index_redirect_if_time_keeping_does_not_exist($period_id);
 		$data["company"] = $this->db_get_company_period_information($period_id);
+		$data["_company"] = $this->db_get_list_of_company_for_period($data["company"]->payroll_period_id);
 		return view('member.payroll2.employee_summary', $data);
 	}
 	public function index_redirect_if_time_keeping_does_not_exist($period_id)
@@ -101,6 +102,18 @@ class PayrollTimeSheet2Controller extends Member
 
 		return json_encode(Request::input());
 		
+	}
+	public function unapprove($period_id, $employee_id)
+	{
+		$compute_cutoff = $this->compute_whole_cutoff($period_id, $employee_id);
+		$check_approved = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->first();
+		
+		if($check_approved)
+		{
+			Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->delete();
+		}
+		
+		echo json_encode("success");
 	}
 	public function time_change($period_id, $employee_id)
 	{
@@ -765,6 +778,11 @@ class PayrollTimeSheet2Controller extends Member
 			Tbl_payroll_time_sheet_record_approved::insert($insert);
 		}
 	}
+	public function db_get_list_of_company_for_period($id)
+	{
+		$_data = Tbl_payroll_period_company::selperiod($id)->orderBy('tbl_payroll_company.payroll_company_name')->select('tbl_payroll_period_company.*','tbl_payroll_company.payroll_company_name')->get();
+		return $_data;
+	}
 	public function db_get_employee_information($employee_id)
 	{
 		return Tbl_payroll_employee_basic::where("shop_id", $this->user_info->shop_id)->where("payroll_employee_id", $employee_id)->first();
@@ -775,7 +793,7 @@ class PayrollTimeSheet2Controller extends Member
 	}
 	public function db_get_list_of_employees_by_company_with_search($company_id, $search = "", $time_keeping_approved = 0, $period_company_id)
 	{
-		$query = Tbl_payroll_employee_basic::select("tbl_payroll_employee_basic.*");
+		$query = Tbl_payroll_employee_basic::select("*");
 		
 		//DB::raw("(SELECT time_keeping_approve_id FROM tbl_payroll_time_keeping_approved WHERE employee_id = tbl_payroll_employee_basic.payroll_employee_id AND tbl_payroll_time_keeping_approved.payroll_period_company_id = '" . $period_company_id . "')
 		if($time_keeping_approved == 0)
@@ -784,7 +802,7 @@ class PayrollTimeSheet2Controller extends Member
 		}
 		else
 		{
-			$query->whereNotNull(DB::raw("(SELECT time_keeping_approve_id FROM tbl_payroll_time_keeping_approved WHERE employee_id = tbl_payroll_employee_basic.payroll_employee_id AND tbl_payroll_time_keeping_approved.payroll_period_company_id = '" . $period_company_id . "')"));
+			$query->join("tbl_payroll_time_keeping_approved", "tbl_payroll_time_keeping_approved.employee_id","=", "tbl_payroll_employee_basic.payroll_employee_id")->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", $period_company_id);
 		}
 		
 		$query->where("shop_id", $this->user_info->shop_id);

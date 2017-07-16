@@ -352,6 +352,27 @@ function page_list()
     $nav[$page]['icon'] = "calculator";
     $nav[$page]['type']     = "menu";
 
+    /* -- EMPLOYEE POSITION=> LIST  */
+    $code = "employee-list";
+    $nav[$page]['submenu'][$code]['label'] = "Employee List";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/employee_list";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+
+
+
+    /* PAYROLL TIME KEEPING */
+    $code = "payroll-timekeeping";
+    $nav[$page]['submenu'][$code]['label'] = "Time Keeping";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/time_keeping";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+    
+
 
     // /* PAYROLL SUMMARY */
     // $code = "payroll-summary";
@@ -373,21 +394,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
 
 
-    /* -- EMPLOYEE POSITION=> LIST  */
-    $code = "employee-list";
-    $nav[$page]['submenu'][$code]['label'] = "Employee List";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/employee_list";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
 
-        /* PAYROLL */
-    $page = "payroll";  
-    $nav[$page]['name'] = "Payroll";
-    $nav[$page]['segment'] = $page;
-    $nav[$page]['icon'] = "calculator";
-    $nav[$page]['type']     = "menu";
 
     // /* PAYROLL SUMMARY */
     // $code = "payroll-summary";
@@ -461,14 +468,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
 
-    /* PAYROLL TIME KEEPING */
-    $code = "payroll-timekeeping";
-    $nav[$page]['submenu'][$code]['label'] = "Time Keeping";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/time_keeping";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+
 
 
     /* PAYROLL PROCESS */

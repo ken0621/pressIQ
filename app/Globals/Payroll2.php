@@ -2953,7 +2953,7 @@ class Payroll2
 		$philhealth_contribution 	= Payroll::philhealth_contribution($shop_id, $philhealth_salary);
 		if($record->philhealth_ee > 0)
 		{
-			$philhealth_contribution['ee'] -= $record->philhealth_ee
+			$philhealth_contribution['ee'] -= $record->philhealth_ee;
 			$philhealth_contribution['er'] -= $record->philhealth_er;
 		}
 		

@@ -2074,44 +2074,28 @@ class Payroll2
 		$date_period[0] = date('Y-m-01', strtotime($end_date));
 		$date_period[1] = date('Y-m-t', strtotime($end_date));
 		
-		$pevious_record = Tbl_payroll_record::getdate($shop_id, $date_period)
-											->where('tbl_payroll_period.payroll_period_category', $period_category)
-											->where('payroll_employee_id',$employee_id)
-											->get()
-											->toArray();
-
-		// $previous_tax 			= collect($pevious_record)->sum('tax_contribution');
-		// $previous_sss 			= collect($pevious_record)->sum('sss_contribution_ee');
-		// $previous_pagibig 		= collect($pevious_record)->sum('pagibig_contribution');
-		// $previous_philhealth		= collect($pevious_record)->sum('philhealth_contribution_ee');
-		
-		$previous_tax 			= 0;
-		$previous_sss 			= 0;
-		$previous_pagibig 		= 0;
-		$previous_philhealth	= 0;
-		
-		$period_category_arr	= Payroll::getperiodcount($shop_id, $end_date, $period_category, $start_date);
+		/* GET ALL PREVIOUS RECORD */
+		$pevious_record = Payroll2::getcontribution_record($employee_id, $payroll_period_company_id);
 
 		/* GET SSS CONTRIBUTION */
-		
 		$sss_salary				= $salary->payroll_employee_salary_sss;
 		$sss_reference			= '(REF. DECLARED)';
 		if($group->sss_reference == 'net_basic')
 		{
-			$sss_salary 	= $employee_compute['get_net_basic_pay']['total_net_basic'] + $previous_record->net_basic_pay;
+			$sss_salary 	= $employee_compute['get_net_basic_pay']['total_net_basic'];
 			$sss_reference	= '(REF. NET BASIC)';
 		}
 		
 		if($group->sss_reference == 'gross_basic')
 		{
-			$sss_salary 	= $employee_compute['get_gross_pay']['total_gross_pay'] + $previous_record->gross_pay;
+			$sss_salary 	= $employee_compute['get_gross_pay']['total_gross_pay'];
 			$sss_reference	= '(REF. GROSS PAY)';
 		}
 		
-		$sss_contribution 		= Payroll2::get_sss($shop_id, $sss_salary, $period_category_arr, $group->payroll_group_sss, $salary->is_deduct_sss_default, $salary->deduct_sss_custom, $previous_sss, $date_query->period_count);
-		$sss_ee					= $sss_contribution['sss_ee'];
-		$sss_er					= $sss_contribution['sss_er'];
-		$sss_ec					= $sss_contribution['sss_ec'];
+		$sss_contribution 		= Payroll2::get_sss_contribution($shop_id, $sss_salary, $pevious_record);
+		$sss_ee					= $sss_contribution['ee'];
+		$sss_er					= $sss_contribution['er'];
+		$sss_ec					= $sss_contribution['ec'];
 		$sss_data['amount']		= $sss_ee;
 		$sss_data['ref']		= $sss_reference;
 		$sss_data['ref_amount']	= $sss_salary;
@@ -2121,19 +2105,20 @@ class Payroll2
 		$philhealth_reference		= '(REF. DECLARED)';
 		if($group->philhealth_reference == 'net_basic')
 		{
-			$philhealth_salary		= $employee_compute['get_net_basic_pay']['total_net_basic'] + $previous_record->net_basic_pay;
+			$philhealth_salary		= $employee_compute['get_net_basic_pay']['total_net_basic'];
 			$philhealth_reference	= '(REF. NET BASIC)';
 		}
 		
 		if($group->philhealth_reference == 'gross_basic')
 		{
-			$philhealth_salary 	= $employee_compute['get_gross_pay']['total_gross_pay']  + $previous_record->gross_pay;
+			$philhealth_salary 	= $employee_compute['get_gross_pay']['total_gross_pay'];
 			$philhealth_reference	= '(REF. GROSS PAY)';
 		}
-		
-		$philhealth_contribution  		= Payroll2::get_philhealth($shop_id, $group->payroll_group_philhealth ,$philhealth_salary, $period_category_arr, $salary->is_deduct_philhealth_default, $salary->deduct_philhealth_custom, $previous_philhealth, $date_query->period_count);
-		$philhealth_ee 					= $philhealth_contribution['philhealth_ee'];
-		$philhealth_er 					= $philhealth_contribution['philhealth_er'];
+	
+		$philhealth_contribution 		= Payroll2::get_philhealth_contribution($shop_id, $philhealth_salary, $pevious_record);
+
+		$philhealth_ee 					= $philhealth_contribution['ee'];
+		$philhealth_er 					= $philhealth_contribution['er'];
 		$philhealth_data['amount']		= $philhealth_ee;
 		$philhealth_data['ref']			= $philhealth_reference;
 		$philhealth_data['ref_amount']	= $philhealth_salary;
@@ -2143,19 +2128,21 @@ class Payroll2
 		$pagibig_reference			= '(REF. DECLARED)';
 		if($group->pagibig_reference == 'net_basic')
 		{
-			$pagibig_salary 		= $employee_compute['get_net_basic_pay']['total_net_basic'] + $previous_record->net_basic_pay;
+			$pagibig_salary 		= $employee_compute['get_net_basic_pay']['total_net_basic'] ;
 			$pagibig_reference		= '(REF. NET BASIC)';
 		}
 		
 		if($group->pagibig_reference == 'gross_basic')
 		{
-			$pagibig_salary 	= $employee_compute['get_gross_pay']['total_gross_pay'] + $previous_record->gross_pay;
+			$pagibig_salary 	= $employee_compute['get_gross_pay']['total_gross_pay'];
 			$pagibig_reference	= '(REF. GROSS PAY)';
 		}
 		
 		$pagibig_contribution 		= Payroll2::get_pagibig($shop_id, $pagibig_salary, $group->payroll_group_pagibig, $period_category_arr, $salary->is_deduct_pagibig_default, $period_category, $salary->deduct_pagibig_custom, $date_query->period_count);
-		$pagibig_ee 				= $pagibig_contribution['pagibig_ee'];
-		$pagibig_er 				= $pagibig_contribution['pagibig_er'];
+
+		$pagibig_contribution 		= Payroll2::get_pagibig_contribution($shop_id, $pagibig_salary, $pevious_record);
+		$pagibig_ee 				= $pagibig_contribution['ee'];
+		$pagibig_er 				= $pagibig_contribution['er'];
 		$total_deduction			+= $pagibig_ee;
 		$pagibig_data['amount']		= $pagibig_ee;
 		$pagibig_data['ref']		= $pagibig_reference;
@@ -2953,7 +2940,7 @@ class Payroll2
 		$philhealth_contribution 	= Payroll::philhealth_contribution($shop_id, $philhealth_salary);
 		if($record->philhealth_ee > 0)
 		{
-			$philhealth_contribution['ee'] -= $record->philhealth_ee
+			$philhealth_contribution['ee'] -= $record->philhealth_ee;
 			$philhealth_contribution['er'] -= $record->philhealth_er;
 		}
 		

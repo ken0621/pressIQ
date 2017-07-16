@@ -268,10 +268,21 @@ class Payroll2
 
 	public static function clean_shift_flexi($_time, $break_hours="00:00:00" ,$target_hours=0, $testing = false)
 	{
-		dd($target_hours);
+	//	dd($target_hours);
 		$index		      = 0;
 		$_output	      = null;
-		$target_hours	  = Payroll::float_time($target_hours);
+
+		
+		if($target_hours!=0)
+		{
+			$target_hours = Payroll2::float_time($target_hours);
+			
+		}
+		else
+		{
+			$target_hours = "00:00:00";
+		}
+		
 		$target_hours     = Payroll2::convert_time_in_minutes($target_hours) + Payroll2::convert_time_in_minutes($break_hours);
 		$sum_target_hours = 0;
 
@@ -1359,7 +1370,7 @@ class Payroll2
 	public static function cutoff_compute_gross_pay($compute_type, $cutoff_rate, $cutoff_cola, $cutoff_target_days=0,  $_date_compute)
 	{
 		$return = new stdClass();
-		
+		$return->cutoff_income_plus_cola = 0;
 		if($compute_type=="daily")
 		{
 			$cutoff_income_plus_cola = 0;
@@ -1749,7 +1760,6 @@ class Payroll2
 			$time[1] = 0;
 		}
 		$time = ($time[0] * 60.0) + ($time[1] * 1.0);
-		
 	
 		return $time;
 	}
@@ -2096,7 +2106,7 @@ class Payroll2
 		
 		/* GET ALL PREVIOUS RECORD */
 		$pevious_record = Payroll2::getcontribution_record($employee_id, $payroll_period_company_id);
-
+		// dd($pevious_record);
 		/* GET SSS CONTRIBUTION */
 		$sss_salary				= $salary->payroll_employee_salary_sss;
 		$sss_reference			= '(REF. DECLARED)';
@@ -2112,7 +2122,23 @@ class Payroll2
 			$sss_reference	= '(REF. GROSS PAY)';
 		}
 		
-		$sss_contribution 		= Payroll2::get_sss_contribution($shop_id, $sss_salary, $pevious_record);
+		$sss_record = $previous_record;
+		
+		if($group->payroll_group_sss == '1st Period')
+		{
+			$sss_record = Payroll2::getcontribution_record($employee_id, $payroll_period_company_id, true);
+			// dd($sss_record);
+		}
+		if($group->payroll_group_sss == 'Last Period')
+		{
+			$sss_record = Payroll2::getcontribution_record($employee_id, $payroll_period_company_id, false, true);
+		}
+		$sss_every = false;
+		if($group->payroll_group_sss == 'Every Period')
+		{
+			$sss_every = true;
+		}
+		$sss_contribution 		= Payroll2::get_sss_contribution($shop_id, $sss_salary, $sss_record, $sss_every);
 		
 		// dd(Payroll2::period_count($group));
 		if(Payroll2::period_count($date_query->period_count) != $group->payroll_group_sss && $group->payroll_group_sss != 'Every Period')
@@ -2145,7 +2171,23 @@ class Payroll2
 			$philhealth_reference	= '(REF. GROSS PAY)';
 		}
 	
-		$philhealth_contribution 		= Payroll2::get_philhealth_contribution($shop_id, $philhealth_salary, $pevious_record);
+		$phil_record = $previous_record;
+		if($group->payroll_group_philhealth == '1st Period')
+		{
+			$phil_record = Payroll2::getcontribution_record($employee_id, $payroll_period_company_id, true);
+		}
+		if($group->payroll_group_philhealth == 'Last Period')
+		{
+			$phil_record = Payroll2::getcontribution_record($employee_id, $payroll_period_company_id, false, true);
+		}
+		
+		$phil_every = false;
+		if($group->payroll_group_sss == 'Every Period')
+		{
+			$phil_every = true;
+		}
+	
+		$philhealth_contribution 		= Payroll2::get_philhealth_contribution($shop_id, $philhealth_salary, $phil_record, $phil_every);
 		
 		if(Payroll2::period_count($date_query->period_count) != $group->payroll_group_philhealth && $group->payroll_group_philhealth != 'Every Period')
 		{
@@ -2174,8 +2216,23 @@ class Payroll2
 			$pagibig_reference	= '(REF. GROSS PAY)';
 		}
 		
-
-		$pagibig_contribution 		= Payroll2::get_pagibig_contribution($shop_id, $pagibig_salary, $pevious_record);
+		$pagibig_record = $previous_record;
+		if($group->payroll_group_pagibig == '1st Period')
+		{
+			$pagibig_record = Payroll2::getcontribution_record($employee_id, $payroll_period_company_id, true);
+		}
+		if($group->payroll_group_pagibig == 'Last Period')
+		{
+			$pagibig_record = Payroll2::getcontribution_record($employee_id, $payroll_period_company_id, false, true);
+		}
+		
+		$pagibig_every = false;
+		if($group->payroll_group_sss == 'Every Period')
+		{
+			$pagibig_every = true;
+		}
+		
+		$pagibig_contribution 		= Payroll2::get_pagibig_contribution($shop_id, $pagibig_salary, $pagibig_record, $pagibig_every);
 		
 		if(Payroll2::period_count($date_query->period_count) != $group->payroll_group_pagibig && $group->payroll_group_pagibig != 'Every Period')
 		{
@@ -2194,6 +2251,15 @@ class Payroll2
 
 		$total_taxable_dynamic = $employee_compute['get_taxable_salary']['total_taxable'];
 		
+		$pevious_record = Tbl_payroll_record::getdate($shop_id, $date_period)
+											->where('tbl_payroll_period.payroll_period_category', $period_category)
+											->where('payroll_employee_id',$employee_id)
+											->get()
+											->toArray();
+
+		$previous_tax 			= 0;
+		$period_category_arr	 	= Payroll::getperiodcount($shop_id, $end_date, $period_category, $start_date);
+		
 		if($group->tax_reference == 'declared')
 		{
 			$employee_compute['get_taxable_salary']['taxable_status'] = ' (REF. DECLARED)';
@@ -2211,14 +2277,7 @@ class Payroll2
 			$employee_compute['get_taxable_salary']['total_taxable'] = 0;
 		}
 		
-		$pevious_record = Tbl_payroll_record::getdate($shop_id, $date_period)
-											->where('tbl_payroll_period.payroll_period_category', $period_category)
-											->where('payroll_employee_id',$employee_id)
-											->get()
-											->toArray();
-
-		$previous_tax 			= 0;
-		$period_category_arr	 	= Payroll::getperiodcount($shop_id, $end_date, $period_category, $start_date);
+		
 		
 		/* GET TAX CONTRIBUTION */
 		$tax_contribution = Payroll2::get_standard_tax($shop_id, $group->payroll_group_tax, $period_category, $employee_compute['get_taxable_salary']['total_taxable'], $employee->payroll_employee_tax_status, $period_category_arr, $date_query->period_count);
@@ -2696,36 +2755,44 @@ class Payroll2
 		$data['taxable_status']	= '(REF. COMPUTED TAXABLE SALARY)';
 		$data['obj']				= array();
 		// dd($total_gross_pay);
+		
+		$temp = array();
 		if($sss_ee > 0)
 		{
 			$temp['name']	= 'SSS';
 			$temp['amount']	= $sss_ee['amount'];
 			$temp['type']	= 'less';
 			$temp['ref']	= $sss_ee['ref'];
+			$temp['ref_amount'] = $sss_ee['ref_amount'];
 			$data['total_taxable'] -= $sss_ee['amount'];
 			array_push($data['obj'], $temp);
 		}
 		
+		$temp = array();
 		if($philhealth_ee > 0)
 		{
 			$temp['name']	= 'PHILHEALTH';
 			$temp['amount']	= $philhealth_ee['amount'];
 			$temp['type']	= 'minus';
 			$temp['ref']	= $philhealth_ee['ref'];
+			$temp['ref_amount'] = $philhealth_ee['ref_amount'];
 			$data['total_taxable'] -= $philhealth_ee['amount'];
 			array_push($data['obj'], $temp);
 		}
 		
+		$temp = array();
 		if($pagibig_ee > 0)
 		{
 			$temp['name']	= 'PAGIBIG';
 			$temp['amount']	= $pagibig_ee['amount'];
 			$temp['type']	= 'minus';
 			$temp['ref']	= $pagibig_ee['ref'];
+			$temp['ref_amount'] = $pagibig_ee['ref_amount'];
 			$data['total_taxable'] -= $pagibig_ee['amount'];
 			array_push($data['obj'], $temp);
 		}
 		
+		$temp = array();
 		foreach($allowances['obj'] as $key => $obj)
 		{
 			$temp['name']	= $obj['name'];
@@ -2736,74 +2803,86 @@ class Payroll2
 			array_push($data['obj'], $temp);
 		}
 		
+		$temp = array();
 		foreach($adj_allowance['obj'] as $key => $obj)
 		{
 			$temp['name']	= $obj['name'];
 			$temp['amount']	= $obj['amount'];
 			$temp['type']	= 'minus';
 			$temp['ref']	= '';
+			$temp['ref_amount'] = null;
 			$data['total_taxable'] -= $obj['amount'];
 			array_push($data['obj'], $temp);
 		}
 		
-		
+		$temp = array();
 		foreach($adj_bonus['obj'] as $key => $obj)
 		{
 			$temp['name']	= $obj['name'];
 			$temp['amount']	= $obj['amount'];
 			$temp['type']	= 'minus';
 			$temp['ref']	= '';
+			$temp['ref_amount'] = null;
 			$data['total_taxable'] -= $obj['amount'];
 			array_push($data['obj'], $temp);
 		}
 		
-		
+		$temp = array();
 		foreach($adj_commission['obj'] as $key => $obj)
 		{
 			$temp['name']	= $obj['name'];
 			$temp['amount']	= $obj['amount'];
 			$temp['type']	= 'minus';
 			$temp['ref']	= '';
+			$temp['ref_amount'] = null;
 			$data['total_taxable'] -= $obj['amount'];
 			array_push($data['obj'], $temp);
 		}
 		
+		$temp = array();
 		foreach($adj_incentives['obj'] as $key => $obj)
 		{
 			$temp['name']	= $obj['name'];
 			$temp['amount']	= $obj['amount'];
 			$temp['type']	= 'minus';
 			$temp['ref']	= '';
+			$temp['ref_amount'] = null;
 			$data['total_taxable'] -= $obj['amount'];
 			array_push($data['obj'], $temp);
 		}
 		
+		$temp = array();
 		foreach($adj_13m['obj'] as $key => $obj)
 		{
 			$temp['name']	= $obj['name'];
 			$temp['amount']	= $obj['amount'];
 			$temp['type']	= 'minus';
 			$temp['ref']	= '';
+			$temp['ref_amount'] = null;
 			$data['total_taxable'] -= $obj['amount'];
 			array_push($data['obj'], $temp);
 		}
 		
+		$temp = array();
 		if($n13_month > 0)
 		{
 			$temp['name']	= '13 MONTH PAY';
 			$temp['amount']	= $n13_month;
 			$temp['type']	= 'minus';
 			$temp['ref']	= '';
+			$temp['ref_amount'] = null;
 			$data['total_taxable'] -= $n13_month;
 			array_push($data['obj'], $temp);
 		}
 		
+		$temp = array();
 		if($cutoff_compute->cutoff_cola > 0)
 		{
 			$temp['name']	= 'COLA';
 			$temp['amount']	= $cutoff_compute->cutoff_cola;
 			$temp['type']	= 'minus';
 			$temp['ref']	= '';
+			$temp['ref_amount'] = null;
 			$data['total_taxable'] -= $cutoff_compute->cutoff_cola;
 			array_push($data['obj'], $temp);
 		}
@@ -2960,23 +3039,52 @@ class Payroll2
 		return $data;
 	}
 	
-	public static function getcontribution_record($employee_id, $payroll_period_company_id)
+	public static function getcontribution_record($employee_id, $payroll_period_company_id, $isfirst = false, $islast = false)
 	{
 		$period = Tbl_payroll_period_company::getcompanyperiod($payroll_period_company_id)->first();
+		// dd($isfirst);
+		$month_number = date('m', strtotime($period->month_contribution.' 01, 2000'));
 		
-		$_record = Tbl_payroll_time_keeping_approved::monthrecord($employee_id, $period->payroll_period_category, $period->month_contribution, $period->year_contribution)
+		if($isfirst)
+		{
+			
+			$month_number -= 1;
+			
+			if($month_number < 1)
+			{
+				$month_number = 12;
+				$period->year_contribution --;
+			}
+			if($month_number <= 9)
+			{
+				$month_number = '0'.$month_number;
+			}
+			
+			$period->month_contribution = date('F', strtotime('2000-'.$month_number.'-01'));
+
+		}
+		
+		$_record = Tbl_payroll_time_keeping_approved::monthrecord($employee_id, $period->payroll_period_category, $period->month_contribution, $period->year_contribution, $isfirst, $islast)
 													->select(DB::raw('IFNULL(sum(tbl_payroll_time_keeping_approved.net_basic_pay), 0) as net_basic_pay, IFNULL(sum(tbl_payroll_time_keeping_approved.gross_pay), 0) as gross_pay, IFNULL(sum(tbl_payroll_time_keeping_approved.taxable_salary), 0) as taxable_salary, IFNULL(sum(tbl_payroll_time_keeping_approved.net_pay), 0) as net_pay, IFNULL(sum(tbl_payroll_time_keeping_approved.sss_salary), 0) as sss_salary, IFNULL(sum(tbl_payroll_time_keeping_approved.sss_ee), 0) as sss_ee, IFNULL(sum(tbl_payroll_time_keeping_approved.sss_er), 0) as sss_er, IFNULL(sum(tbl_payroll_time_keeping_approved.sss_ec), 0) as sss_ec, IFNULL(sum(tbl_payroll_time_keeping_approved.phihealth_salary), 0) as phihealth_salary, IFNULL(sum(tbl_payroll_time_keeping_approved.philhealth_ee), 0) as philhealth_ee, IFNULL(sum(tbl_payroll_time_keeping_approved.philhealth_er), 0) as philhealth_er, IFNULL(sum(tbl_payroll_time_keeping_approved.pagibig_salary), 0) as pagibig_salary, IFNULL(sum(tbl_payroll_time_keeping_approved.pagibig_ee), 0) as pagibig_ee, IFNULL(sum(tbl_payroll_time_keeping_approved.pagibig_er), 0) as pagibig_er'))
 													->first();
 		
-		
+		// dd($_record);
 		return $_record;
 	}
+	
 
-	public static function get_sss_contribution($shop_id, $sss_salary = 0, $record)
+
+	public static function get_sss_contribution($shop_id, $sss_salary = 0, $record, $isevery_period = false)
 	{
-		$sss_salary += $record->sss_salary;
+		// dd($record);
+		if(!$isevery_period)
+		{
+			$sss_salary += $record->sss_salary;
+		}
+		// dd($sss_salary);
 		$sss_contribution	= Payroll::sss_contribution($shop_id, $sss_salary);
-		if($record->sss_ee > 0)
+		// dd($sss_contribution);
+		if($record->sss_ee > 0 && !$isevery_period)
 		{
 			$sss_contribution['ee'] -= $record->sss_ee;
 			$sss_contribution['er'] -= $record->sss_er;
@@ -2986,11 +3094,15 @@ class Payroll2
 		return $sss_contribution;
 	}
 
-	public static function get_philhealth_contribution($shop_id, $philhealth_salary = 0, $record)
+	public static function get_philhealth_contribution($shop_id, $philhealth_salary = 0, $record, $isevery_period = false)
 	{
-		$philhealth_salary += $record->phihealth_salary;
+		if(!$isevery_period)
+		{
+			$philhealth_salary += $record->phihealth_salary;
+		}
+		
 		$philhealth_contribution 	= Payroll::philhealth_contribution($shop_id, $philhealth_salary);
-		if($record->philhealth_ee > 0)
+		if($record->philhealth_ee > 0 && !$isevery_period)
 		{
 			$philhealth_contribution['ee'] -= $record->philhealth_ee;
 			$philhealth_contribution['er'] -= $record->philhealth_er;
@@ -3000,9 +3112,13 @@ class Payroll2
 		
 	}
 
-	public static function get_pagibig_contribution($shop_id, $pagibig_salary = 0, $record)
+	public static function get_pagibig_contribution($shop_id, $pagibig_salary = 0, $record, $isevery_period = false)
 	{
-		$pagibig_salary += $record->phihealth_salary;
+	
+		if(!$isevery_period)
+		{
+			$pagibig_salary += $record->pagibig_salary;
+		}
 		$pagibig_contribution_def = Payroll::pagibig_contribution($shop_id, $pagibig_salary);
 		// dd($is_deduct_pagibig_default);
 		$data['ee'] = $pagibig_contribution_def;
@@ -3011,7 +3127,7 @@ class Payroll2
 		{
 			$data['er'] = 100;
 		}
-		if($record->pagibig_ee > 0)
+		if($record->pagibig_ee > 0 && !$isevery_period)
 		{
 			$data['ee'] -= $record->pagibig_ee;
 			$data['er'] -= $record->pagibig_er;

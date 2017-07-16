@@ -79,9 +79,8 @@ class PayrollTimeSheet2Controller extends Member
 	{
 		$period_id = Request::input("period_id");
 		$employee_id = Request::input("employee_id");
-		
+
 		$compute_cutoff = $this->compute_whole_cutoff($period_id, $employee_id);
-	//	dd($compute_cutoff);
 		$check_approved = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->first();
 		
 		if($check_approved)
@@ -97,6 +96,34 @@ class PayrollTimeSheet2Controller extends Member
 			$insert["gross_pay"] = $compute_cutoff["break_down"]["employee"]["get_gross_pay"]["total_gross_pay"];
 			$insert["net_pay"] = $compute_cutoff["break_down"]["employee"]["get_net_pay"]["total_net_pay"];
 			$insert["taxable_salary"] = $compute_cutoff["break_down"]["employee"]["get_taxable_salary"]["total_taxable"];
+			
+		
+			
+			foreach($compute_cutoff["break_down"]["employee"]["get_taxable_salary"]["obj"] as $obj)
+			{
+				if($obj["name"] == "SSS")
+				{
+					$insert["sss_salary"] = $obj["ref_amount"];
+					$insert["sss_ee"] = $obj["amount"];
+					$insert["sss_er"] = 0;
+					$insert["sss_ec"] = 0;
+				}
+				
+				if($obj["name"] == "PHILHEALTH")
+				{
+					$insert["phihealth_salary"] = $obj["ref_amount"];
+					$insert["philhealth_ee"] = $obj["amount"];
+					$insert["philhealth_er"] = 0;
+				}
+				
+				if($obj["name"] == "PAGIBIG")
+				{
+					$insert["pagibig_salary"] = $obj["ref_amount"];
+					$insert["pagibig_ee"] = $obj["amount"];
+					$insert["pagibig_er"] = 0;
+				}
+			}
+			
 			Tbl_payroll_time_keeping_approved::insert($insert);
 		}
 
@@ -317,9 +344,9 @@ class PayrollTimeSheet2Controller extends Member
 		if($return->for_approval == 1) //PENDING
 		{
 			$return->status = "PENDING";
-			if($return->time_compute_mode = "flexi")
+			if($return->time_compute_mode == "flexi")
 			{
-				$return->clean_shift = Payroll2::clean_shift_flexi($_time_raw, $_shift_raw);
+				$return->clean_shift = Payroll2::clean_shift($_time_raw, $_shift_raw);
 			}
 			else
 			{
@@ -375,7 +402,7 @@ class PayrollTimeSheet2Controller extends Member
 		
 	
 		// dd($return->compute_shift);
-		if($return->time_compute_mode = "flexi")
+		if($return->time_compute_mode == "flexi")
 		{
 			$return->time_output =  Payroll2::compute_time_mode_flexi($return->compute_shift, $return->shift_target_hours, "00:00:00", $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday, $leave, $leave_fill_undertime, $testing = false);
 		}
@@ -540,6 +567,8 @@ class PayrollTimeSheet2Controller extends Member
 			$this->error_page("This employee doesn't have contract at this point of time.");
 		}
 		
+		
+		
 		$compute_type = Payroll2::convert_period_cat($group->payroll_group_salary_computation);
 		$cutoff_rate = $this->identify_period_salary($salary->payroll_employee_salary_monthly, $company_period->payroll_period_category);
 		$cutoff_cola = $this->identify_period_salary($salary->monthly_cola, $company_period->payroll_period_category);
@@ -555,8 +584,11 @@ class PayrollTimeSheet2Controller extends Member
 			$from = Carbon::parse($from)->addDay()->format("Y-m-d");
 		}
 		$data["cutoff_input"] = $_timesheet;
-		// dd($_timesheet);
+	
+	
+	
 		$data["cutoff_compute"] = $cutoff_compute = Payroll2::cutoff_compute_gross_pay($compute_type, $cutoff_rate, $cutoff_cola, $cutoff_target_days, $_timesheet);
+	
 		$data["netpay_compute"] = Payroll2::cutoff_compute_net_pay($period_company_id, $employee_id, $cutoff_compute->cutoff_income_plus_cola, $cutoff_compute->cutoff_income_plus_cola, $cutoff_compute->render_days);
 		$data["break_down"]		= Payroll2::cutoff_compute_break($period_company_id, $employee_id, $cutoff_compute);
 		// dd($data["break_down"]);
@@ -622,8 +654,8 @@ class PayrollTimeSheet2Controller extends Member
 		$group = $this->db_get_current_employee_contract($employee_id, $date);
 		$data = $this->compute_whole_cutoff($period_company_id, $employee_id);
 		$computation_type = $group->payroll_group_salary_computation;
-		
-		// dd($data);
+	
+
 		
 		switch ($computation_type)
 		{

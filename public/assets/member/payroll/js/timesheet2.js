@@ -34,7 +34,7 @@ function timesheet()
 			$(".approve-timesheet-btn").html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
 
 			var period_id = $(".period-id").val();
-			var employee_id = $(".employee-id").val();
+			var employee_id = $(".x-employee-id").val();
 			
 			$.ajax({
 				url : "/member/payroll/company_timesheet_approve/approve_timesheet",
@@ -116,7 +116,7 @@ function timesheet()
 		$input = $(".tr-parent[date='" + tr_date + "'] :input").serialize();
 		
 		$period_id = $(".period-id").val();
-		$employee_id = $(".employee-id").val();
+		$employee_id = $(".x-employee-id").val();
 		
 		$url = "/member/payroll/company_timesheet2/change/" + $period_id + "/" + $employee_id;
 		

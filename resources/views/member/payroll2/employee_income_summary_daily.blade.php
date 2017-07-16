@@ -1,6 +1,6 @@
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">×</button>
-    <h4 class="modal-title"><b>DAILY COMPUTATION</b> </h4>
+    <h4 class="modal-title"><b>DAILY COMPUTATION ({{ $period_info->month_contribution }} - {{ $period_info->period_count }})</b> </h4>
 </div>
 <div class="modal-body clearfix">
     <div class="col-md-12" style="text-align: left; font-weight: normal; margin-bottom: 10px; font-size: 16px;"></div>
@@ -92,10 +92,12 @@
                         <!-- DEDUCTIONS -->
                        
                         @foreach($break_down['employee']['get_taxable_salary']['obj'] as $obj)
+                       
                         <tr>
                             <td colspan="5" class="text-right" style="opacity: 0.5">
                                 LESS: {{ strtoupper($obj['name']) }}
                                 {!!isset($obj['ref']) ? '<br>'.$obj['ref'] : ''!!}
+                                {!!isset($obj['ref_amount']) ? '<br>'. $obj['ref_amount'] : ''!!}
                             </td>
                             <td class="text-right color-red" style="opacity: 0.7">
                                 {{payroll_currency($obj['amount'])}}

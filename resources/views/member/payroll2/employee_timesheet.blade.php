@@ -1,5 +1,5 @@
 <input type="hidden" class="period-id" value="{{ $period_id }}" />
-<input type="hidden" class="employee-id" value="{{ $employee_id }}" />
+<input type="hidden" class="x-employee-id" value="{{ $employee_id }}" />
 
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">×</button>

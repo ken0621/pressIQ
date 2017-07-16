@@ -3035,10 +3035,11 @@ class Payroll
 		{
 			$max_sss = Tbl_payroll_sss::where('shop_id', $shop_id)->orderBy('payroll_sss_min','desc')->first();
 			$sss = Tbl_payroll_sss::where('shop_id', $shop_id)->where('payroll_sss_min','<=',$rate)->where('payroll_sss_max','>=',$rate)->first();
-
+			// dd($max_sss);
+			// dd($sss);
 			if($sss == null)
 			{	
-				if($max_sss->payroll_sss_min <= $rate)
+				if($rate >= $max_sss->payroll_sss_min)
 				{
 					$data['ee'] = $max_sss->payroll_sss_ee;
 					$data['er'] = $max_sss->payroll_sss_er;

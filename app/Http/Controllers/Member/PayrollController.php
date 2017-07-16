@@ -4463,7 +4463,7 @@ class PayrollController extends Member
      {    
           $data['_active'] = Tbl_payroll_period::sel(Self::shop_id())->orderBy('payroll_period_start','desc')->paginate($this->paginate_count);
           $data['_archived'] = Tbl_payroll_period::sel(Self::shop_id(), 1)->orderBy('payroll_period_start','desc')->paginate($this->paginate_count);
-          return view('member.payroll.payroll_period_list', $data);
+     return view('member.payroll.payroll_period_list', $data);
      }
 
 

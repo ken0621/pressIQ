@@ -56,6 +56,8 @@
                     <div class="text-bold">HOURLY RATE</div>
                     <div>{{ payroll_currency($timesheet_info->compute->hourly_rate) }}</div>
                 </div>
+                
+                @if($timesheet_info->time_compute_mode == "regular")
                 <div style="padding: 10px; color: #bbb">
                     <div class="text-bold">SHIFT FOR THE DAY</div>
                     @if($timesheet_info->_shift)
@@ -66,6 +68,8 @@
                         NO SHIFT FOR THE DAY
                     @endif
                 </div>
+                @endif
+                
                 @if($timesheet_info->default_remarks != "")
                 <div style="padding: 10px; color: #bbb; padding-top: 0px;">
                     <div class="text-bold">TODAY IS</div>

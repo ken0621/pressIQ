@@ -81,17 +81,17 @@ class Times2 extends Controller
 	public function compute_flexi_time()
 	{
 		$_time[0] = new stdClass();
-		$_time[0]->time_in = "00:15:00"; 
-		$_time[0]->time_out = "09:00:00";
-		$_time[1] = new stdClass();
-		$_time[1]->time_in = "09:00:00"; 
-		$_time[1]->time_out = "12:00:00";
-		$_time[2] = new stdClass();
-		$_time[2]->time_in = "13:00:00"; 
-		$_time[2]->time_out = "18:00:00";
+		$_time[0]->time_in = "09:00:00"; 
+		$_time[0]->time_out = "18:00:00";
+		// $_time[1] = new stdClass();
+		// $_time[1]->time_in = "09:00:00"; 
+		// $_time[1]->time_out = "12:00:00";
+		// $_time[2] = new stdClass();
+		// $_time[2]->time_in = "13:00:00"; 
+		// $_time[2]->time_out = "18:00:00";
 
 
-		$target_hours="17:00:00";
+		$target_hours="08:00:00";
 		$break_hours = "00:00:00";
 		$overtime_grace_time = "00:15:00";
 		$grace_time_rule_overtime="per_shift";
@@ -101,8 +101,8 @@ class Times2 extends Controller
 		$leave_fill_undertime=0;
 		$_output = Payroll2::clean_shift_flexi($_time,$break_hours,$target_hours,false);
 		$flexi_time = Payroll2::compute_time_mode_flexi($_output, $target_hours, $break_hours, $overtime_grace_time , $grace_time_rule_overtime, $day_type, $is_holiday, $leave, $leave_fill_undertime, true);
-		//dd($_output);
-		dd($flexi_time);
+		dd($_output);
+		//dd($flexi_time);
 	}
 
 }

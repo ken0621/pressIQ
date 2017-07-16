@@ -520,16 +520,16 @@
 									</div>
 								</div>
 							</div>
-							<div class="form-group">
-								<div class="col-md-12">
-									<small>Default Shift Template</small>
-									<select class="form-control shift_code_id" name="shift_code_id">
-										@foreach($_shift_code as $key => $value)
-											<option value="{{ $value->shift_code_id }}" {{ ($group->shift_code_id == $value->shift_code_id) ? 'selected' : '' }}>{{ $value->shift_code_name }}</option>
-										@endforeach
-									</select>
-								</div>
-							</div>
+							<!--<div class="form-group">-->
+							<!--	<div class="col-md-12">-->
+							<!--		<small>Default Shift Template</small>-->
+							<!--		<select class="form-control shift_code_id" name="shift_code_id">-->
+							<!--			@foreach($_shift_code as $key => $value)-->
+							<!--				<option value="{{ $value->shift_code_id }}" {{ ($group->shift_code_id == $value->shift_code_id) ? 'selected' : '' }}>{{ $value->shift_code_name }}</option>-->
+							<!--			@endforeach-->
+							<!--		</select>-->
+							<!--	</div>-->
+							<!--</div>-->
 						</div>
 					</div>
 				</div>

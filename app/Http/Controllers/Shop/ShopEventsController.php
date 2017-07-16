@@ -25,7 +25,7 @@ class ShopEventsController extends Shop
     	$data["page"] = "Events View";
     	$data["post"] = Post::get_post($id, $this->shop_info->shop_id);
     	$data["_related"] = Post::get_related_posts($data["post"]->post_category_id, $this->shop_info->shop_id);
-
+        // dd($data["_related"]);
     	return view("events_view", $data);
     }
 }

@@ -44,6 +44,53 @@ class ShopCheckoutController extends Shop
     {
         $request = Request::all();
         $shop_id = $this->shop_info->shop_id;
+        
+        // LOGS
+        $ipay88_logs["log_merchant_code"] = $request['MerchantCode'];
+        $ipay88_logs["log_payment_id"] = $request['PaymentId'];
+        $ipay88_logs["log_reference_number"] = $request['RefNo'];
+        $ipay88_logs["log_amount"] = $request['Amount'];
+        $ipay88_logs["log_currency"] = $request['Currency'];
+        $ipay88_logs["log_remarks"] = $request['Remark'];
+        $ipay88_logs["log_trans_id"] = $request['TransId'];
+        $ipay88_logs["log_auth_code"] = $request['AuthCode'];
+        $ipay88_logs["log_status"] = $request['Status'];
+        $ipay88_logs["log_error_desc"] = $request['ErrDesc'];
+        $ipay88_logs["log_signature"] = $request['Signature'];
+        $ipay88_logs["shop_id"] = $this->shop_info->shop_id;
+
+        if ($request) 
+        {
+            if($request['Status'] == 0)
+            {
+                DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
+                return redirect('/checkout')->withErrors($request['ErrDesc'])->send();    
+            } 
+            else 
+            {
+                $shop_id        = $this->shop_info->shop_id;
+                $payment_status = 1;
+                $order_status   = "Processing";
+
+                $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, Self::$customer_info ? Self::$customer_info->customer_id : null);
+                Cart::clear_all($this->shop_info->shop_id);
+                
+                $ipay88_logs["order_id"] = $order_id;
+                DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
+
+                // Redirect
+                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)))->send();
+            }
+        }
+        else
+        {
+            return Redirect::to("/checkout")->with('fail', 'Session has been expired. Please try again.')->send();
+        }
+    }
+    public function ipay88_backend()
+    {
+        $request = Request::all();
+        $shop_id = $this->shop_info->shop_id;
 
         if ($request) 
         {

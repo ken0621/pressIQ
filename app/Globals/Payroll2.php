@@ -266,11 +266,12 @@ class Payroll2
      *
      */
 
-	public static function clean_shift_flexi($_time, $break_hours="00:00:00" ,$target_hours="00:00:00", $testing = false)
+	public static function clean_shift_flexi($_time, $break_hours="00:00:00" ,$target_hours=0, $testing = false)
 	{
-	
+		dd($target_hours);
 		$index		      = 0;
 		$_output	      = null;
+		$target_hours	  = Payroll::float_time($target_hours);
 		$target_hours     = Payroll2::convert_time_in_minutes($target_hours) + Payroll2::convert_time_in_minutes($break_hours);
 		$sum_target_hours = 0;
 
@@ -778,6 +779,7 @@ class Payroll2
      */
 	public static function compute_time_mode_flexi($_time, $target_hours="08:00:00", $break_hours="00:00:00", $overtime_grace_time = "00:00:00", $grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00", $leave_fill_undertime=0, $testing = false)
 	{
+	
 		
 		$time_spent="00:00:00";
 		$late_hours = "00:00:00";
@@ -794,8 +796,7 @@ class Payroll2
 		$excess_leave_hours = $leave;
 		$is_half_day = false;
 		$is_absent =false;
-		
-
+	
 		if (!(isset($_time[0]))) 
 		{
 			if (!(($day_type == "rest")||($day_type == "extra")||($is_holiday == "regular")||($is_holiday == "special")||($leave_hours!="00:00:00")))
@@ -830,13 +831,16 @@ class Payroll2
 
 			}
 		}
+		//dd("target hours = ".$target_hours.", time spent = ".$time_spent.", overtime = ".$over_time);
 
 		//record if undertime
 		$target_minutes = Payroll2::convert_time_in_minutes($target_hours);
 		$time_spent_in_minutes = Payroll2::convert_time_in_minutes($time_spent);
+	
 		if ($time_spent_in_minutes<$target_minutes) 
 		{
-			$under_time = Payroll::sum_time($under_time,Payroll::time_diff($time_spent,$target_hours));
+			$under_time = Payroll::sum_time($under_time,Payroll::time_diff($target_hours,$time_spent));
+			
 		}
 
 		//fill undertime with leave hours

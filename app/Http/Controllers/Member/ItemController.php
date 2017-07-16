@@ -55,8 +55,8 @@ class ItemController extends Member
 
 	        if($item_type != null && $item_type != "All")
 	        {
-	    		$item		   = $item->where("item_type_id",$item_type);
-	    		$item_archived = $item_archived->where("item_type_id",$item_type);
+	    		$item		   = $item->where("tbl_item.item_type_id",$item_type);
+	    		$item_archived = $item_archived->where("tbl_item.item_type_id",$item_type);
 	        } 
 	        
 	        if($search_name != "")
@@ -65,7 +65,7 @@ class ItemController extends Member
 	    		$item_archived = $item_archived->where("item_name","LIKE","%".$search_name."%");
 	        }
 	        
-			$data["_item"]			   = $item->get();
+			$data["_item"]			   = $item->paginate(30);
 
 			foreach ($data["_item"] as $key => $value) 
 			{
@@ -103,7 +103,7 @@ class ItemController extends Member
 					$data["_item"][$key]->item_price = Item::get_item_bundle_price($value->item_id);
 				}
 			}
-			$data["_item_archived"]	   = $item_archived->get();
+			$data["_item_archived"]	   = $item_archived->paginate(30);
 
 		    return view('member.item.list',$data);
         }

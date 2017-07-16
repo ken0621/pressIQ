@@ -2652,7 +2652,7 @@ class Payroll
 		$data['deduction'] 			= $deduction['deduction'];
 		$data['total_deduction'] 	+= $deduction['total_deduction'] + $adjustment_deductions_total;
 
-		$data['total_net'] 					= ($data['total_gross'] - $data['total_deduction']) + $total_deminimis + $data['13_month'];
+		$data['total_net'] 					= ($data['total_gross'] - $data['total_deduction']) + $total_deminimis + $data['13_month'] + $adjustment_13_month_total;
 
 
 
@@ -3281,7 +3281,7 @@ class Payroll
 		// $data['absent_deduction'] = 0;
 		// $total_deminimis	=  $data['_total_unused_leave'] + $data['payroll_cola'] + $data['13_month'] + $total_allowance + $adjustment_bonus_total + $adjustment_commission_total + $adjustment_incentives_total + $data['leave_amount'];
 
-		$total_deminimis	=  $data['_total_unused_leave'] + $data['payroll_cola'] + $data['13_month'] + $total_allowance + $adjustment_bonus_total + $adjustment_commission_total + $adjustment_incentives_total + $data['leave_amount'];
+		$total_deminimis	=  $data['_total_unused_leave'] + $data['payroll_cola'] + $data['13_month'] + $total_allowance + $adjustment_bonus_total + $adjustment_commission_total + $adjustment_incentives_total + $data['leave_amount'] + $adjustment_13_month_total;
 
 
 		/* COMPUTE UNUSED LEAVE END */

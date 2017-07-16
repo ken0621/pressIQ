@@ -1,7 +1,9 @@
 <style type="text/css">
 
 	@page { margin: 0px; }
-	body { margin: 0px; }
+	body { 
+		margin: 0px; 
+	}
 
 	.border
 	{
@@ -29,11 +31,11 @@
 	}
 	td
 	{
-		font-size: 12px;
+		font-size: 9px;
 	}
 </style>
 <div class="main-container">
-	<table cellpadding="5" cellspacing="0" class="border" width="100%" >
+	<table cellpadding="5" cellspacing="0" class="" width="100%" >
 		<tr>
 		<?php 
 			$counter=0; 
@@ -42,7 +44,6 @@
 		?>
 	
 		@foreach($_record as $brk)
-				
 
 				@if($counter==$payslip_num)
 					</tr><tr>
@@ -53,7 +54,7 @@
 				@if($col>2)
 					
 					</table>
-					<table cellpadding="5" cellspacing="0" class="border" width="100%">
+					<table cellpadding="5" cellspacing="0" class="" width="100%">
 						<tr>
 							<td valign="top" width="25%"><div style="page-break-after: always;">&nbsp;</div></td>
 						</tr>
@@ -107,6 +108,10 @@
 											</td>
 										</tr>
 										@endif
+										<tr>
+											<td>Payroll Period</td>
+											<td>{{$brk['period']}}</td>
+										</tr>
 									</table>
 								</td>
 								

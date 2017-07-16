@@ -302,11 +302,30 @@ class PayrollTimeSheet2Controller extends Member
 
 		$return->_time	= $_time_raw;
 		$return->_shift = $_shift_raw;
+		$return->time_compute_mode = "regular";
+		
+		if(count($_shift) > 0)
+		{
+			if($_shift[0]->shift_flexi_time == 1)
+			{
+				$return->time_compute_mode = "flexi";
+			}
+		}
+		
+		
 		$return->time_keeping_approved = $time_keeping_approved;
 		if($return->for_approval == 1) //PENDING
 		{
 			$return->status = "PENDING";
-			$return->clean_shift = Payroll2::clean_shift($_time_raw, $_shift_raw);
+			if($return->time_compute_mode = "flexi")
+			{
+				$return->clean_shift = Payroll2::clean_shift_flexi($_time_raw, $_shift_raw);
+			}
+			else
+			{
+				$return->clean_shift = Payroll2::clean_shift($_time_raw, $_shift_raw);
+			}
+		
 			$this->save_clean_shift_to_approved_table($payroll_time_sheet_id, $return->clean_shift, $_shift_raw);
 			$return->compute_shift = $return->clean_shift;
 		}
@@ -353,19 +372,19 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			$return->shift_target_hours = 0;
 		}
-		$return->time_compute_mode = "regular";
+		
+	
 		// dd($return->compute_shift);
-		$return->time_output = Payroll2::compute_time_mode_regular($return->compute_shift, $_shift_raw, $late_grace_time, $grace_time_rule_late, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday , $leave, $leave_fill_late, $leave_fill_undertime, $return->shift_target_hours,  false);
-		
-		if(count($_shift) > 0)
+		if($return->time_compute_mode = "flexi")
 		{
-			if($_shift[0]->shift_flexi_time == 1)
-			{
-				$return->time_output =  Payroll2::compute_time_mode_flexi($return->compute_shift, $return->shift_target_hours, "00:00:00", $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday, $leave, $leave_fill_undertime, $testing = false);
-				$return->time_compute_mode = "flexi";
-			}
-		}	
-		
+			$return->time_output =  Payroll2::compute_time_mode_flexi($return->compute_shift, $return->shift_target_hours, "00:00:00", $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday, $leave, $leave_fill_undertime, $testing = false);
+		}
+		else
+		{
+			$return->time_output = Payroll2::compute_time_mode_regular($return->compute_shift, $_shift_raw, $late_grace_time, $grace_time_rule_late, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday , $leave, $leave_fill_late, $leave_fill_undertime, $return->shift_target_hours,  false);
+		}
+
+
 		//dd($employee_contract);
 		//$daily_rate, $employee_contract->payroll_group_id
 		
@@ -840,7 +859,7 @@ class PayrollTimeSheet2Controller extends Member
 			}
 			
 			
-		}
+		} 
 
 		return $_return;
 	}

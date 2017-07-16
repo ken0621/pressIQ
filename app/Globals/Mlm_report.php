@@ -1183,14 +1183,12 @@ class Mlm_report
         {
             if($warehouse_id != 0)
             {
-                $warehouse = Tbl_warehouse::where('warehouse_id', $warehouse_id)->where('archived', 0)->take(1)->get();
+                $warehouse = Tbl_warehouse::where('warehouse_id', $warehouse_id)->where('archived', 0)->take(1)->get()->keyBy('warehouse_id');
             }
         }
 
         $data['filteru'] = $filters;
         $invoice = Tbl_item_code_invoice::where('tbl_item_code_invoice.shop_id', $shop_id)
-        // ->skip($filters['skip'])
-        // ->take($filters['take'])
         ->where('item_code_date_created', '>=', $filters['from'])
         ->where('item_code_date_created', '<=', $filters['to'])
         ->customer()
@@ -1213,8 +1211,11 @@ class Mlm_report
         $items_unfiltered = [];
         foreach ($invoice as $key => $value)
         {
-            $warehouse_per_invoice[$value->warehouse_id][$key] = $value;
-            $where_in[$key] = $key;
+            if(isset($warehouse[$value->warehouse_id]))
+            {
+                $warehouse_per_invoice[$value->warehouse_id][$key] = $value;
+                $where_in[$key] = $key;
+            }
         }
         $items = Tbl_item_code_item::whereIn('item_code_invoice_id', $where_in)->get();
         foreach($items as $key => $value)

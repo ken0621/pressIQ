@@ -159,7 +159,7 @@ class ManufacturerController extends Member
             $update["date_updated"] = Carbon::now();
             $update["manufacturer_image"] = $manufacturer_image;
             
-            $rules["manufacturer_name"] = "required|unique:tbl_manufacturer,manufacturer_name,".Request::input("manufacturer_id").",manufacturer_id";
+            $rules["manufacturer_name"] = "required";
             $rules["phone_number"] = "numeric";
             $rules["email_address"] = "email";
 

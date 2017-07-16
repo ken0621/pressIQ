@@ -1381,6 +1381,7 @@ class PayrollController extends Member
      }
 
 
+
      public function modal_salary_list($id)
      {    
           $data['_active'] = Tbl_payroll_employee_salary::salaylist($id)->get();
@@ -1412,6 +1413,7 @@ class PayrollController extends Member
           $update['payroll_employee_salary_cola']           = Request::input('payroll_employee_salary_cola');
           $update['monthly_cola']                           = Request::has('monthly_cola') ? Request::input('monthly_cola') : 0;
           $update['tbl_payroll_employee_custom_compute']    = Request::has('tbl_payroll_employee_custom_compute') ? Request::input('tbl_payroll_employee_custom_compute') : 0;
+
           
           $payroll_employee_salary_effective_date           = '';
           if(Request::input('payroll_employee_salary_effective_date') != '')
@@ -1592,6 +1594,7 @@ class PayrollController extends Member
 
           $update_basic['branch_location_id']               = Request::input('branch_location_id') != null ? Request::input('branch_location_id') : 0;
           $update_basic['shift_code_id']                    = Request::input('shift_code_id') != null ? Request::input('shift_code_id') : 0;
+
 		$update_basic['payroll_employee_gender'] 		= Request::input('payroll_employee_gender');
 		$update_basic['payroll_employee_street'] 		= Request::input('payroll_employee_street');
 		$update_basic['payroll_employee_city'] 			= Request::input('payroll_employee_city');
@@ -2273,7 +2276,6 @@ class PayrollController extends Member
           $return['function_name']      = 'payrollconfiguration.relaod_tbl_department';
           return json_encode($return);
      }
-
      public function department_reload()
      {
           $archived = Request::input('archived');
@@ -2356,6 +2358,7 @@ class PayrollController extends Member
           $data['_archived'] = Tbl_payroll_jobtitle::sel(Self::shop_id(), 1)->orderBy('payroll_jobtitle_name')->paginate($this->paginate_count);
           return view('member.payroll.side_container.jobtitlelist', $data);
      }
+
 
      public function modal_create_jobtitle()
      {
@@ -2474,7 +2477,6 @@ class PayrollController extends Member
           $payroll_department_id = Request::input('payroll_department_id');
           // dd($payroll_department_id);
           $job_title = Tbl_payroll_jobtitle::where('payroll_jobtitle_department_id',$payroll_department_id)->where('payroll_jobtitle_archived',0)->where('shop_id', Self::shop_id())->get();
-
           return json_encode($job_title);
      }
 
@@ -2980,6 +2982,7 @@ class PayrollController extends Member
           return view('member.payroll.modal.modal_edit_deduction', $data);
      }
 
+
      public function archive_deduction($archived, $id)
      {
           
@@ -3008,6 +3011,7 @@ class PayrollController extends Member
           $return['function_name']      = 'payrollconfiguration.reload_deduction';
           return json_encode($return);
      }
+
 
 
      public function modal_update_deduction()
@@ -3053,6 +3057,7 @@ class PayrollController extends Member
      {
           $id = Request::input('id');
           $update['payroll_deduction_employee_archived'] = Request::input('archived');
+
 
           Tbl_payroll_deduction_employee::where('payroll_deduction_employee_id', $id)->update($update);
 
@@ -3283,7 +3288,6 @@ class PayrollController extends Member
           return json_encode($data);
      }
 
-
      public function remove_allowance_tabe_employee()
      {
           $content = Request::input('content');
@@ -3293,8 +3297,7 @@ class PayrollController extends Member
           }
           Session::put('allowance_employee_tag',$array);
      }
-
-
+     
      public function modal_save_allowances()
      {
           $insert['payroll_allowance_name']       = Request::input('payroll_allowance_name');
@@ -3480,24 +3483,11 @@ class PayrollController extends Member
           }
           Session::put('leave_tag_employee',$array);
 
+         
           $return['status']             = 'success';
           $return['function_name']      = 'modal_create_leave_temp.load_employee_tag';
           return json_encode($return);
      }
-
-     public function get_leave_tag_employee()
-     {
-          $employee = [0 => 0];
-          if(Session::has('leave_tag_employee'))
-          {
-               $employee = Session::get('leave_tag_employee');
-          }
-          $emp = Tbl_payroll_employee_basic::whereIn('payroll_employee_id',$employee)->get();
-
-          $data['new_record'] = $emp;
-          return json_encode($data);
-     }
-
 
      public function remove_leave_tag_employee()
      {
@@ -3615,7 +3605,7 @@ class PayrollController extends Member
           $id = Request::input('id');
           $update['payroll_leave_employee_is_archived'] = Request::input('archived');
           Tbl_payroll_leave_employee::where('payroll_leave_employee_id', $id)->update($update);
-
+          
           $return['status']             = 'success';
           $return['function_name']      = 'modal_create_leave_temp.load_employee_tag';
           return json_encode($return);
@@ -3630,7 +3620,6 @@ class PayrollController extends Member
      }
 
      /* LEAVE END */
-
 
      /* PAYROLL GROUP START */
      public function payroll_group()
@@ -3754,7 +3743,6 @@ class PayrollController extends Member
                $temp['payroll_overtime_rest_day']           = Request::input("payroll_overtime_rest_day")[$key];
                $temp['payroll_overtime_rest_overtime']      = Request::input("payroll_overtime_rest_overtime")[$key];
                $temp['payroll_overtime_rest_night']         = Request::input("payroll_overtime_rest_night")[$key];
-
                array_push($insert_rate, $temp);
           }
           
@@ -3897,7 +3885,7 @@ class PayrollController extends Member
           // $update['payroll_group_break']                      = Request::input('payroll_group_break');
           $update['payroll_group_agency_fee']               = Request::input('payroll_group_agency_fee');
 
-          $update['shift_code_id']                          = Request::input('shift_code_id');
+          // $update['shift_code_id']                          = Request::input('shift_code_id');
           
           $payroll_group_deduct_before_absences             = 0;
           if( Request::has('payroll_group_deduct_before_absences'))
@@ -3932,11 +3920,13 @@ class PayrollController extends Member
           $update['payroll_group_pagibig']                  = Request::input('payroll_group_pagibig');
           $update['payroll_group_agency']                   = Request::input('payroll_group_agency');
           $update['payroll_group_agency_fee']               = Request::input('payroll_group_agency_fee');
+
           
           $update['tax_reference']                          = Request::input('tax_reference');
           $update['sss_reference']                          = Request::input('sss_reference');
           $update['philhealth_reference']                   = Request::input('philhealth_reference');
           $update['pagibig_reference']                      = Request::input('pagibig_reference');
+
 
           // $payroll_group_is_flexi_break                       = 0;
           // if(Request::has('payroll_group_is_flexi_break'))
@@ -3990,7 +3980,6 @@ class PayrollController extends Member
           $update['grace_time_rule_overtime']     = Request::has('grace_time_rule_overtime') ? Request::input('grace_time_rule_overtime') : 'accumulative';
           $update['late_grace_time']              = Request::has('late_grace_time') ? date('H:i:s', strtotime(Request::input('late_grace_time'))) : '00:00:00';
           $update['grace_time_rule_late']         = Request::has('grace_time_rule_late') ? Request::input("grace_time_rule_late") : 'first';
-
 
           /* UPDATE PAYROLL GROUP*/ 
           Tbl_payroll_group::where('payroll_group_id',$payroll_group_id)->update($update);
@@ -4094,7 +4083,7 @@ class PayrollController extends Member
           $payroll_group_id = Request::input('id');
           $update['payroll_group_archived'] = Request::input('archived');
           Tbl_payroll_group::where('payroll_group_id',$payroll_group_id)->update($update);
-
+          
           $return['status'] = 'success';
           $return['function_name'] = 'payrollconfiguration.reload_payroll_group';
           return json_encode($return);
@@ -4477,6 +4466,7 @@ class PayrollController extends Member
           return view('member.payroll.payroll_period_list', $data);
      }
 
+
      public function modal_create_payroll_period()
      {
           $data['_tax'] = Tbl_payroll_tax_period::check(Self::shop_id())->get();
@@ -4711,6 +4701,7 @@ class PayrollController extends Member
           $data['period']     = Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->first();
           $data['_tax']       = Tbl_payroll_tax_period::check(Self::shop_id())->get();
           $data['_month']     = Payroll::get_month();
+
           return view('member.payroll.modal.modal_edit_period', $data);
      }
 
@@ -4724,6 +4715,7 @@ class PayrollController extends Member
           $update['month_contribution']           = Request::input('month_contribution');
           $update['year_contribution']            = Request::input('year_contribution');
           
+
           Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->update($update);
 
           $insert_company = array();
@@ -4870,6 +4862,7 @@ class PayrollController extends Member
      public function modal_save_shift_template()
      {
 
+
           /* INSERT SHIFT CODE */
           $insert_code['shift_code_name']    = Request::input('shift_code_name');
           $insert_code['shop_id']            = Self::shop_id();
@@ -4966,6 +4959,7 @@ class PayrollController extends Member
                     $insert_day["shift_rest_day"] = Request::input("rest_day_" . $day) == 1 ? 1 : 0;
                     $insert_day["shift_extra_day"] = Request::input("extra_day_" . $day) == 1 ? 1 : 0;
                     $insert_day["shift_flexi_time"] = Request::input("flexitime_day_" . $day) == 1 ? 1 : 0;
+
                     $key++;
 
                     $shift_day_id = Tbl_payroll_shift_day::insertGetId($insert_day);
@@ -4988,9 +4982,9 @@ class PayrollController extends Member
                          $insert_time = null;
                     }   
                }
-           
+
           }
-          
+
           $return['function_name'] = 'payrollconfiguration.reload_shift_template';
           $return['status']        = 'success';
           return collect($return)->toJson();
@@ -6489,11 +6483,12 @@ class PayrollController extends Member
                                         ->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
                                         ->get();
           //dd($_record);
-
+          // dd($period);
           foreach($_record as $record)
           {
 
                $compute = Payroll::getrecord_breakdown($record);
+               $temp['period'] = date('M d, Y', strtotime($period->payroll_period_start)).' to '.date('M d, Y', strtotime($period->payroll_period_end));
                $temp['break'] = Self::breakdown_uncompute($compute,'approved');
                $temp['display_name'] = $record->payroll_employee_display_name;
                $temp['company_name'] = $record->payroll_company_name;

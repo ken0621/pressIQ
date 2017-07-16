@@ -2927,10 +2927,56 @@ class Payroll2
 		$period = Tbl_payroll_period_company::getcompanyperiod($payroll_period_company_id)->first();
 		
 		$_record = Tbl_payroll_time_keeping_approved::monthrecord($employee_id, $period->payroll_period_category, $period->month_contribution, $period->year_contribution)
-													->select(DB::raw('IFNULL(sum(tbl_payroll_time_keeping_approved.net_basic_pay), 0) as net_basic_pay, IFNULL(sum(tbl_payroll_time_keeping_approved.gross_pay), 0) as gross_pay, IFNULL(sum(tbl_payroll_time_keeping_approved.taxable_salary), 0) as taxable_salary, IFNULL(sum(tbl_payroll_time_keeping_approved.net_pay), 0) as net_pay'))
+													->select(DB::raw('IFNULL(sum(tbl_payroll_time_keeping_approved.net_basic_pay), 0) as net_basic_pay, IFNULL(sum(tbl_payroll_time_keeping_approved.gross_pay), 0) as gross_pay, IFNULL(sum(tbl_payroll_time_keeping_approved.taxable_salary), 0) as taxable_salary, IFNULL(sum(tbl_payroll_time_keeping_approved.net_pay), 0) as net_pay, IFNULL(sum(tbl_payroll_time_keeping_approved.sss_salary)) as sss_salary, IFNULL(sum(tbl_payroll_time_keeping_approved.sss_ee)) as sss_ee, IFNULL(sum(tbl_payroll_time_keeping_approved.sss_er)) as sss_er, IFNULL(sum(tbl_payroll_time_keeping_approved.sss_ec)) as sss_ec, IFNULL(sum(tbl_payroll_time_keeping_approved.phihealth_salary)) as phihealth_salary, IFNULL(sum(tbl_payroll_time_keeping_approved.philhealth_ee)) as philhealth_ee, IFNULL(sum(tbl_payroll_time_keeping_approved.philhealth_er)) as philhealth_er, IFNULL(sum(tbl_payroll_time_keeping_approved.pagibig_salary)) as pagibig_salary, IFNULL(sum(tbl_payroll_time_keeping_approved.pagibig_ee)) as pagibig_ee, IFNULL(sum(tbl_payroll_time_keeping_approved.pagibig_er)) as pagibig_er'))
 													->first();
 		
 		
 		return $_record;
+	}
+
+	public static function get_sss_contribution($shop_id, $sss_salary = 0, $record)
+	{
+		$sss_salary += $record->sss_salary;
+		$sss_contribution	= Payroll::sss_contribution($shop_id, $sss_salary);
+		if($record->sss_ee > 0)
+		{
+			$sss_contribution['ee'] -= $record->sss_ee;
+			$sss_contribution['er'] -= $record->sss_er;
+			$sss_contribution['ec'] -= $record->sss_ec;
+		}
+		return $sss_contribution;
+	}
+
+	public static function get_philhealth_contribution($shop_id, $philhealth_salary = 0, $record)
+	{
+		$philhealth_salary += $record->phihealth_salary;
+		$philhealth_contribution 	= Payroll::philhealth_contribution($shop_id, $philhealth_salary);
+		if($record->philhealth_ee > 0)
+		{
+			$philhealth_contribution['ee'] -= $record->philhealth_ee
+			$philhealth_contribution['er'] -= $record->philhealth_er;
+		}
+		
+		return $philhealth_contribution;
+		
+	}
+
+	public static function get_pagibig_contribution($shop_id, $pagibig_salary = 0, $record)
+	{
+		$pagibig_salary += $record->phihealth_salary;
+		$pagibig_contribution_def = Payroll::pagibig_contribution($shop_id, $pagibig_salary);
+		// dd($is_deduct_pagibig_default);
+		$data['ee'] = $pagibig_contribution_def;
+		$data['er']	= $pagibig_contribution_def;
+		if($data['er'] > 100)
+		{
+			$data['er'] = 100;
+		}
+		if($record->pagibig_ee > 0)
+		{
+			$data['ee'] -= $record->pagibig_ee;
+			$data['er'] -= $record->pagibig_er;
+		}
+		return $data;
 	}
 }

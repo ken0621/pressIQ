@@ -176,6 +176,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="box box-primary">
         <div class="box-header" style="background-color: #D0EBF2">
           <h3><i class="fa fa-check-circle" aria-hidden="true"></i> Order #{{$first_order->ec_order_id}}</h3>
+          @if($first_order->payment_status == 1)
+          <div class="pull-right"><a href="/member/ecommerce/product_order/custom_invoice?order={{$first_order->ec_order_id}}">View Invoice</a></div>
+          @endif
         </div>
         <div class="box-body">
           <table class="table table-bordered">

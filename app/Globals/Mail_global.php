@@ -283,7 +283,7 @@ class Mail_global
             }
             /* END DELIVERED */
 
-            /* SUCCESS REGISTER */
+            /* SUCCESS REGISTER */  
             if($content_key == "success_register")
             {            
                 $data['mail_to'] = $data["customer_info"]->email;    

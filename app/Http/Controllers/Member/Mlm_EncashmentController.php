@@ -131,7 +131,7 @@ class Mlm_EncashmentController extends Member
         
         $data['from'] = $this->get_last_wallet($shop_id);
 
-        $data["vmoney_enable"] = DB::table("tbl_shop")->where("shop_id", $this->user_info->shop_id)->first()->shop_wallet_vmoney;
+        $data["vmoney_enable"] = isset(DB::table("tbl_shop")->where("shop_id", $this->user_info->shop_id)->first()->shop_wallet_vmoney) ? DB::table("tbl_shop")->where("shop_id", $this->user_info->shop_id)->first()->shop_wallet_vmoney : 0;
         $data["vmoney_environment"] = isset(DB::table("tbl_settings")->where("settings_key", "vmoney_environment")->where("shop_id", $this->user_info->shop_id)->first()->settings_value) ? DB::table("tbl_settings")->where("settings_key", "vmoney_environment")->where("shop_id", $this->user_info->shop_id)->first()->settings_value : 0;
         $data["vmoney_minimum_encashment"] = isset(DB::table("tbl_settings")->where("settings_key", "vmoney_minimum_encashment")->where("shop_id", $this->user_info->shop_id)->first()->settings_value) ? DB::table("tbl_settings")->where("settings_key", "vmoney_minimum_encashment")->where("shop_id", $this->user_info->shop_id)->first()->settings_value : 0;
         

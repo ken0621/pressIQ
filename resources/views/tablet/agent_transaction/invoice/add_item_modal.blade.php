@@ -66,7 +66,7 @@
                 <h4> Description </h4>
             </div>        
             <div class="col-xs-12">
-                <textarea class="form-control input-sm tablet-item-desc">{{$item_details->item_description}}</textarea>
+                <textarea class="form-control input-sm tablet-item-desc">{{$item_details->item_sales_information}}</textarea>
             </div>
         </div>
         <div class="form-group clearfix row">

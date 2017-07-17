@@ -361,6 +361,16 @@ body
                     max-width: 100%;
                     max-height: 100%;
                 }
+                .detail
+                {
+                    position: absolute;
+                    top: 5px;
+                    right: 10px;
+                    width: 60px;
+                    height: 60px;
+                    object-fit: contain;
+                    object-position: top right;
+                }
             }
             .name
             {
@@ -533,10 +543,10 @@ body
                 .detail
                 {
                     position: absolute;
-                    top: -10px;
-                    right: -10px;
-                    width: 75px;
-                    height: 75px;
+                    top: 5px;
+                    right: 10px;
+                    width: 60px;
+                    height: 60px;
                     object-fit: contain;
                     object-position: top right;
                 }
@@ -726,10 +736,10 @@ body
                 .detail
                 {
                     position: absolute;
-                    top: -10px;
-                    right: -10px;
-                    width: 75px;
-                    height: 75px;
+                    top: 5px;
+                    right: 10px;
+                    width: 60px;
+                    height: 60px;
                     object-fit: contain;
                     object-position: top right;
                 }

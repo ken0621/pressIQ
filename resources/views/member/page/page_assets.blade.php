@@ -1,9 +1,12 @@
-<script type="text/javascript" src="/assets/member/js/tinymce.min.js"></script>
+<!-- <script type="text/javascript" src="/assets/member/js/tinymce.min.js"></script> -->
 <script type="text/javascript">
 tinymce.init({ 
 	selector:'.mce',
 	plugins: 'lists advlist',
 	toolbar: 'bold italic underline | bullist numlist outdent indent',
+	menubar:false,
+	height:200, 
+	content_css : "/assets/member/css/tinymce.css"
  });
 
 function submit_selected_image_done(data) 

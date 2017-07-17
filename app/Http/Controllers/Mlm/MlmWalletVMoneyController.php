@@ -40,7 +40,7 @@ class MlmWalletVMoneyController extends Mlm
     {
         $slot = DB::table("tbl_mlm_slot")->where("slot_id", Self::$slot_id)->first();
         $wallet = Mlm_slot_log::get_sum_wallet($slot->slot_id);
-        $minimum_encashment = DB::table("tbl_settings")->where("shop_id", Self::$shop_id)->where("settings_key", "vmoney_minimum_encashment")->first()->settings_value;
+        $minimum_encashment = isset(DB::table("tbl_settings")->where("shop_id", Self::$shop_id)->where("settings_key", "vmoney_minimum_encashment")->first()->settings_value) ? DB::table("tbl_settings")->where("shop_id", Self::$shop_id)->where("settings_key", "vmoney_minimum_encashment")->first()->settings_value : 0;
         
         if (isset($slot) && $slot) 
         {
@@ -51,25 +51,26 @@ class MlmWalletVMoneyController extends Mlm
                     if (Request::input('vmoney_email')) 
                     {
                         if(Request::input('wallet_amount'))
-                        {
-                            /* Set URL Sandbox or Live */
-                            $url = "http://test.vmoney.com/gtcvbankmerchant/";
-                            
+                        {   
                             /* API */
                             $post = 'mxtransfer.svc';
-                            $environment = DB::table("tbl_settings")->where("shop_id", Self::$shop_id)->where("settings_key", "vmoney_environment")->first()->settings_value;
+                            $environment = isset(DB::table("tbl_settings")->where("shop_id", Self::$shop_id)->where("settings_key", "vmoney_environment")->first()->settings_value) ? DB::table("tbl_settings")->where("shop_id", Self::$shop_id)->where("settings_key", "vmoney_environment")->first()->settings_value : 0;
 
                             /* Sandbox */
                             if ($environment == 0) 
                             {
                                 $pass["apiKey"] = 'Vqzs90pKLb6iwsGQhnRS'; // Vendor API Key issued by VMoney
                                 $pass["merchantId"] = 'M239658948226'; // Merchant ID registered within VMoney
+                                /* Set URL Sandbox or Live */
+                                $url = "http://test.vmoney.com/gtcvbankmerchant/";
                             }
                             /* Production */
                             else
                             {
                                 $pass["apiKey"] = 'z9Gy1dBbnyj9cxMqXSKF'; // Vendor API Key issued by VMoney
                                 $pass["merchantId"] = 'M132582139240'; // Merchant ID registered within VMoney
+                                /* Set URL Sandbox or Live */
+                                $url = "https://philtechglobalinc.vmoney.com/gtcvbankmerchant/";
                             }
 
                             $pass["recipient"] = Request::input("vmoney_email"); // Recipient's email address

@@ -9,7 +9,7 @@
  			{{ get_content($shop_theme_info, "career", "career_description") }}
 		</div>
  	</div>
- 	<div class="career-job">
+ 	<div class="career-job" style="background-image: url('resources/assets/frontend/img/career-header.jpg')">
  		<div class="title">JOB LISTING</div>
  		<div class="container">
 	 		<div class="containers">
@@ -41,7 +41,7 @@
  	</div>
 	 <form id="career-form" method="POST" enctype="multipart/form-data">
 	          <input type="hidden" name="_token" value="{{{ csrf_token() }}}" /> 
-		 	<div class="career-apply">
+		 	<div class="career-apply" style="background-image: url('resources/assets/frontend/img/blue.jpg')">
 		 		<div class="title">Apply Now</div>
 		 		<div class="container">
 		 			<div class="field">

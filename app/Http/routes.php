@@ -900,6 +900,7 @@ Route::get('/member/item/manufacturer/load_manufacturer','Member\ManufacturerCon
 Route::get('/member/maintenance/load_payment_method','Member\MaintenancePaymentMethodController@load_payment_method');
 Route::get('/member/maintenance/load_payment_gateway/{id}','Member\OnlinePaymentMethodController@load_payment_gateway');
 
+Route::any('/member/ecommerce/product/ecom_load_product_table', 'Member\EcommerceProductController@ecom_load_product_table');
 /* SettingsController */
 Route::get('/member/settings', 'Member\SettingsController@all');
 Route::get('/member/settings/{key}', 'Member\SettingsController@index');

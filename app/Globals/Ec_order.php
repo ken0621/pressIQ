@@ -517,7 +517,7 @@ class Ec_order
             }
             else
             {
-                 //new codes
+                //new codes
                 if($order->order_status == "Failed" || $order->order_status == "Cancelled")
                 {
                     if($order_status == "Processing")
@@ -583,6 +583,11 @@ class Ec_order
 
                     if($order_status == "Completed")
                     {
+                        $pass_data["order_details"] = $order;
+                        $pass_data["order_item"] = Tbl_ec_order_item::item()->where("ec_order_id",$ec_order_id)->get();
+                        $pass_data["order_status"] = $order_status;
+                        Mail_global::create_email_content($pass_data, $shop_id, "delivered");
+
                         $_order = Tbl_ec_order::where("ec_order_id", $ec_order_id)->first();
                         /* TRANSACTION JOURNAL */  
                         $entry["reference_module"]  = "product-order";
@@ -612,6 +617,11 @@ class Ec_order
             {
                 if($order_status == "Completed")
                 {
+                    $pass_data["order_details"] = $order;
+                    $pass_data["order_item"] = Tbl_ec_order_item::item()->where("ec_order_id",$ec_order_id)->get();
+                    $pass_data["order_status"] = $order_status;
+                    Mail_global::create_email_content($pass_data, $shop_id, "delivered");
+                        
                     $_order = Tbl_ec_order::where("ec_order_id", $ec_order_id)->first();
                     /* TRANSACTION JOURNAL */  
                     $entry["reference_module"]  = "product-order";
@@ -632,6 +642,7 @@ class Ec_order
                     }
 
                     $product_order_journal = Accounting::postJournalEntry($entry, $entry_data);
+
                 }
 
                 Tbl_ec_order::where("ec_order_id",$ec_order_id)->update($update);

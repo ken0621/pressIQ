@@ -1318,10 +1318,13 @@ class Cart
         $data['payment_detail'] = $method_information->other_description;
         $data['customer_full_name'] = $tbl_order->first_name . " " . $tbl_order->middle_name . " " . $tbl_order->last_name;
         $data['order_id'] = Crypt::encrypt($tbl_order->ec_order_id);
-
+        $data['password'] = Crypt::decrypt($tbl_order->password);
         //email for COD
-        Mail_global::create_email_content($data, $shop_id, "cash_on_delivery", $this->shop_theme);
-        $result = Mail_global::mail($data, $shop_id, "cod", $this->shop_theme);
+        $result = Mail_global::create_email_content($data, $shop_id, "cash_on_delivery");
+        if($result == 0)
+        {    
+            $result = Mail_global::mail($data, $shop_id, "cod", $this->shop_theme);
+        }
 
         return Redirect::to("/")->send();
     }

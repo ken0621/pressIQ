@@ -441,7 +441,7 @@ class Ec_order
         $update['payment_status'] = $data["payment_status"];
         $update["payment_upload"] = isset($data['payment_upload']) ? $data['payment_upload'] : '';
         $order_status            = $data["order_status"];
-        $order                   = Tbl_ec_order::where("ec_order_id",$ec_order_id)->first();
+        $order                   = Tbl_ec_order::customer()->customer_otherinfo()->payment_method()->where("ec_order_id",$ec_order_id)->first();
         $shop_id                 = isset($data["shop_id"]) ? $data["shop_id"] : $order->shop_id ;
         $response                = "nothing";
 
@@ -476,10 +476,14 @@ class Ec_order
             {            
                 //original codes
                 if($order->order_status == "Pending" || $order->order_status == "Failed" || $order->order_status == "Cancelled")
-
                 {
                     if($order_status == "Processing")
                     {
+                        /* EMAIL SUCCESSFUL ORDER */
+                        $pass_data["order_details"] = $order;
+                        $pass_data["order_item"] = Tbl_ec_order_item::item()->where("ec_order_id",$ec_order_id)->get();
+                        $pass_data["order_status"] = $order_status;
+                        Mail_global::create_email_content($pass_data, $shop_id, "successful_order");
                         $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);
                     }
                     else if($order_status == "Completed")

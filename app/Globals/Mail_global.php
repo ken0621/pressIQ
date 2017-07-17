@@ -7,6 +7,7 @@ use App\Models\Tbl_item_code_invoice;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_email_template;
 
 use App\Globals\Mlm_voucher;
 use App\Globals\Item;
@@ -199,25 +200,115 @@ class Mail_global
             $m->to($data['customer']->email, env('MAIL_USERNAME'))->subject('Discount Card');
         });
     }
-    public static function fail_email($x)
+    public static function create_email_content($data,$shop_id,$content_key = null)
     {
-        dd($x);
-    }
-    public static function create_email_content($data,$shop_id,$content_key = null, $shop_theme = null)
-    {
+        $data["template"] = Tbl_email_template::where("shop_id", $shop_id)->first();
+        if(isset($data['template']->header_image))
+        {
+            if (!File::exists(public_path() . $data['template']->header_image))
+            {
+                $data['template']->header_image = null;
+            }
+        }   
+
         $return["subject"] = EmailContent::getSubject($content_key);
         $return["shop_key"] = EmailContent::getShopkey_front($shop_id);
 
-        $txt[0]["txt_to_be_replace"] = "[link]";
-        $txt[0]["txt_to_replace"] = $_SERVER["SERVER_NAME"];
+        /* CASH ON DELIVERY */
+        if($content_key == "cash_on_delivery")
+        {                
+            $txt["0"."cod"]["txt_to_be_replace"] = "[link]";
+            $txt["0"."cod"]["txt_to_replace"] = "<a href='".$_SERVER["SERVER_NAME"]."' target='_blank'>link</a>";
 
-        $txt[1]["txt_to_be_replace"] = "[password]";
-        $txt[1]["txt_to_replace"] = $data["order_id"];
+            $txt["1"."cod"]["txt_to_be_replace"] = "[password]";
+            $txt["1"."cod"]["txt_to_replace"] = $data["password"];
+        }
+        /* END CASH ON DELIVERY */
+
+        /* SUCCESSFULLY ORDER */
+        if($content_key == "successful_order")
+        {       
+            $data['mail_to'] = $data["order_details"]->customer_email;
+
+            $txt["0"."s_o"]["txt_to_be_replace"] = "[order_number]";
+            $txt["0"."s_o"]["txt_to_replace"] = sprintf("%04d",$data["order_details"]->ec_order_id);
+
+            $txt["1"."s_o"]["txt_to_be_replace"] = "[order_date]";
+            $txt["1"."s_o"]["txt_to_replace"] = $data["order_details"]->created_date;
+            
+            $txt["2"."s_o"]["txt_to_be_replace"] = "[order_status]";
+            $txt["2"."s_o"]["txt_to_replace"] = $data["order_status"];
+            
+            $txt["3"."s_o"]["txt_to_be_replace"] = "[customer_name]";
+            $txt["3"."s_o"]["txt_to_replace"] = $data["order_details"]->title_name." ".$data["order_details"]->first_name." ".$data["order_details"]->middle_name." ".$data["order_details"]->last_name;
+            
+            $txt["4"."s_o"]["txt_to_be_replace"] = "[email_address]";
+            $txt["4"."s_o"]["txt_to_replace"] = $data["order_details"]->customer_email;
+            
+            $txt["5"."s_o"]["txt_to_be_replace"] = "[mobile_number]";
+            $txt["5"."s_o"]["txt_to_replace"] = $data["order_details"]->customer_mobile;
+            
+            $txt["6"."s_o"]["txt_to_be_replace"] = "[payment_method]";
+            $txt["6"."s_o"]["txt_to_replace"] =  $data["order_details"]->method_name;
+            
+            $txt["7"."s_o"]["txt_to_be_replace"] = "[shipping_address]";
+            $txt["7"."s_o"]["txt_to_replace"] = $data["order_details"]->billing_address;
+
+            $txt["8"."s_o"]["txt_to_be_replace"] = "[product_order_details]";
+            $txt["8"."s_o"]["txt_to_replace"] = "<div style='width:100%'><table style='width:100%'><tr><th>Description</th><th>Item Price</th></tr>";
+
+            foreach ($data["order_item"] as $key => $value) 
+            {
+                $txt["8"."s_o"]["txt_to_replace"] .= "<tr><td style='text-align:left;width:50%;padding:20px'>".$value->evariant_item_label."</td><td  style='text-align:center;width:50%;padding:20px'>".currency("PHP",$value->evariant_price)."</td></tr>";
+            }
+            $txt["8"."s_o"]["txt_to_replace"] .= "<tr><td style='text-align:center;width:50%;padding:20px'><strong>TOTAL</strong></td><td style='text-align:center;width:50%;padding:20px'><strong>".currency("PHP",$data["order_details"]->total)."</strong></td></tr>";
+            $txt["8"."s_o"]["txt_to_replace"] .= "</table></div>";
+        }
+        /* END SUCCESSFULLY ORDER */
 
         $change_content = $txt;
 
-        $return["content"] = EmailContent::email_txt_replace($content_key, $change_content);
+        $return["content"] = EmailContent::email_txt_replace($content_key, $change_content, $shop_id);
 
-        dd($return);
+        $result = Mail_global::send_email($data['template'], $return, $shop_id, $data['mail_to']);
+
+        return $result;
+    }
+    public static function send_email($email_template, $email_content, $shop_id, $email_address)
+    {
+        Settings::set_mail_setting($shop_id);
+
+        $data["mail_to"] = $email_address;
+        $data["template"] = $email_template;
+        $data["subject"] = $email_content["subject"];
+        $data["body"] = $email_content["content"];
+        $data['mail_username'] = Config::get('mail.username');
+        $result = 0;
+        try 
+        {
+            Mail::send('emails.full_body', $data, function ($m) use ($data) 
+            {
+                $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
+                $m->to($data["mail_to"], $data['mail_username'])->subject($data["subject"]);
+            });
+            Mail::send('emails.full_body', $data, function ($m) use ($data) 
+            {
+                $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
+                $m->to("arcylen103095@gmail.com", $data['mail_username'])->subject($data["subject"]);
+            });
+            $result = 1;
+        } 
+        catch (\Exception $e) 
+        {
+            Mail_global::fail_email($e->getMessage);
+            $result = 0; 
+        }
+
+        return $result;
+
+    }
+    public static function fail_email($x)
+    {
+        dd($x);
     }
 }

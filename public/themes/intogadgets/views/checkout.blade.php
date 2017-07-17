@@ -19,7 +19,7 @@
 					@endif
 
 					@if (count($errors) > 0)
-					    <div class="alert alert-danger">
+					    <div class="alert alert-danger" style="margin-top: 25px;">
 					        <ul>
 					            @foreach ($errors->all() as $error)
 					            	@if($error == "Fail(Bank Declined Transaction)")

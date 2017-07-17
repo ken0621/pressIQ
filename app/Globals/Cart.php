@@ -770,9 +770,9 @@ class Cart
         /* SET SHIPPINGING INFROMATION */
         $data["tbl_customer_address"]["shipping"]["country_id"] = 420;
         $data["tbl_customer_address"]["shipping"]["customer_state"] = (isset($customer_information["shipping_state"]) ? $customer_information["shipping_state"] : (isset($data["tbl_customer_address"]["shipping"]["customer_state"]) ? $data["tbl_customer_address"]["shipping"]["customer_state"] : null));
-        $data["tbl_customer_address"]["shipping"]["customer_city"] = (isset($customer_information["shipping_city"]) ? $customer_information["shipping_city"] : (isset($data["tbl_customer_address"]["shipping"]["customer_city"]) ? $data["tbl_customer_address"]["shipping"]["customer_city"] : null));;
-        $data["tbl_customer_address"]["shipping"]["customer_zip_code"] = (isset($customer_information["shipping_zip"]) ? $customer_information["shipping_zip"] : (isset($data["tbl_customer_address"]["shipping"]["customer_zip_code"]) ? $data["tbl_customer_address"]["shipping"]["customer_zip_code"] : null));;
-        $data["tbl_customer_address"]["shipping"]["customer_street"] = (isset($customer_information["shipping_street"]) ? $customer_information["shipping_street"] : (isset($data["tbl_customer_address"]["shipping"]["customer_street"]) ? $data["tbl_customer_address"]["shipping"]["customer_street"] : null));;
+        $data["tbl_customer_address"]["shipping"]["customer_city"] = (isset($customer_information["shipping_city"]) ? $customer_information["shipping_city"] : (isset($data["tbl_customer_address"]["shipping"]["customer_city"]) ? $data["tbl_customer_address"]["shipping"]["customer_city"] : null));
+        $data["tbl_customer_address"]["shipping"]["customer_zip_code"] = (isset($customer_information["shipping_zip"]) ? $customer_information["shipping_zip"] : (isset($data["tbl_customer_address"]["shipping"]["customer_zip_code"]) ? $data["tbl_customer_address"]["shipping"]["customer_zip_code"] : null));
+        $data["tbl_customer_address"]["shipping"]["customer_street"] = (isset($customer_information["shipping_street"]) ? $customer_information["shipping_street"] : (isset($data["tbl_customer_address"]["shipping"]["customer_street"]) ? $data["tbl_customer_address"]["shipping"]["customer_street"] : null));
         $data["tbl_customer_address"]["shipping"]["purpose"] = "shipping";
         
         /* SET  BILLING INFORMATION */
@@ -783,6 +783,15 @@ class Cart
             $data["tbl_customer_address"]["billing"]["customer_city"] = $data["tbl_customer_address"]["shipping"]["customer_city"];
             $data["tbl_customer_address"]["billing"]["customer_zip_code"] = $data["tbl_customer_address"]["shipping"]["customer_zip_code"];
             $data["tbl_customer_address"]["billing"]["customer_street"] = $data["tbl_customer_address"]["shipping"]["customer_street"];
+            $data["tbl_customer_address"]["billing"]["purpose"] = "billing"; 
+        }
+        else
+        {
+            $data["tbl_customer_address"]["billing"]["country_id"] = 420;
+            $data["tbl_customer_address"]["billing"]["customer_state"] = (isset($customer_information["billing_state"]) ? $customer_information["billing_state"] : (isset($data["tbl_customer_address"]["billing"]["customer_state"]) ? $data["tbl_customer_address"]["billing"]["customer_state"] : null));
+            $data["tbl_customer_address"]["billing"]["customer_city"] = (isset($customer_information["billing_city"]) ? $customer_information["billing_city"] : (isset($data["tbl_customer_address"]["billing"]["customer_city"]) ? $data["tbl_customer_address"]["billing"]["customer_city"] : null));
+            $data["tbl_customer_address"]["billing"]["customer_zip_code"] = (isset($customer_information["billing_zip"]) ? $customer_information["billing_zip"] : (isset($data["tbl_customer_address"]["billing"]["customer_zip_code"]) ? $data["tbl_customer_address"]["billing"]["customer_zip_code"] : null));
+            $data["tbl_customer_address"]["billing"]["customer_street"] = (isset($customer_information["billing_street"]) ? $customer_information["billing_street"] : (isset($data["tbl_customer_address"]["billing"]["customer_street"]) ? $data["tbl_customer_address"]["billing"]["customer_street"] : null));
             $data["tbl_customer_address"]["billing"]["purpose"] = "billing"; 
         }
         if (isset(Self::get_cart($shop_id)["cart"])) 
@@ -1311,7 +1320,7 @@ class Cart
 
         $tbl_order = DB::table("tbl_ec_order")->where("tbl_ec_order.ec_order_id", $order_id)->leftJoin("tbl_customer", "tbl_customer.customer_id", "=", "tbl_ec_order.customer_id")->first();
         
-        return Redirect::to("/")->send();
+        return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)) . '&popup=1')->send();
     }
     public static function get_customer()
     {

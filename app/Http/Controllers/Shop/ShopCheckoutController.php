@@ -332,6 +332,14 @@ class ShopCheckoutController extends Shop
                     $data['ec_order_load'] = 1;
                 }      
             }
+
+            if ($data["get_cart"]["new_account"] == false) 
+            {
+                $data["shipping_address"] = DB::table("tbl_customer_address")->where("purpose", "shipping")
+                                                                             ->where("customer_id", $data["get_cart"]["tbl_customer"]["customer_id"])
+                                                                             ->get();
+            }
+
             return view("checkout", $data);
         }
         else
@@ -348,7 +356,6 @@ class ShopCheckoutController extends Shop
         {
             echo "<option value='" . $locale->locale_id . "'>" . $locale->locale_name . "</option>";
         }
-
     }
     public function session()
     {
@@ -376,8 +383,15 @@ class ShopCheckoutController extends Shop
         $customer_info["shipping_zip"] = Self::locale_id_to_name(Request::input("customer_zip"));
         $customer_info["shipping_street"] = Request::input("customer_street");
 
+        $customer_info["billing_state"] = Self::locale_id_to_name(Request::input("billing_customer_state"));
+        $customer_info["billing_city"] = Self::locale_id_to_name(Request::input("billing_customer_city"));
+        $customer_info["billing_zip"] = Self::locale_id_to_name(Request::input("billing_customer_zip"));
+        $customer_info["billing_street"] = Request::input("billing_customer_street");
+
         $customer_info['load_wallet']['ec_order_load'] = Request::input('ec_order_load');
         $customer_info['load_wallet']['ec_order_load_number'] = Request::input('ec_order_load_number');
+
+        $customer_info['billing_equals_shipping'] = Request::input('billing_equals_shipping') !== null ? false : true;
         // dd($customer_info);
         $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_shipping", "check_name"));
 

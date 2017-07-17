@@ -99,6 +99,7 @@
                             </div>
                         </div>
                     </div>
+                    @if($shop_id == 1)
                     <div class="col-md-12">
                         <hr>
                         <div class="row clearfix">
@@ -128,6 +129,29 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="clearfix" style="margin-bottom: 15px;">
+                                <div class="col-md-6">
+                                    <label>V-Money Percentage Fee</label>
+                                    <div class="input-group">
+                                      <input type="number" step="any" class="form-control" name="vmoney_percent_fee" min="0" max="100" value="{{ $vmoney_percent_fee }}">
+                                      <span class="input-group-addon" style="color: #333; background-color: #fff;">%</span>
+                                    </div>
+                                    <div>
+                                        <span style="color:gray;">
+                                            <small>Convenience Percentage Fee</small>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>V-Money Fixed Fee</label>
+                                    <input class="form-control" step="any" type="number" name="vmoney_fixed_fee" min="0" value="{{ $vmoney_fixed_fee }}">
+                                    <div>
+                                        <span style="color:gray;">
+                                            <small>Convenience Fixed Fee</small>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="clearfix">
                                 <div class="col-md-12">
                                     <label>V-Money Minimum Encashment</label>
@@ -141,6 +165,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                     <div class="col-md-12">
                         <hr>
                         <button class="btn btn-primary pull-right">Update Settings</button>

@@ -203,7 +203,7 @@ class Mail_global
     {
         dd($x);
     }
-    public static function create_email_content($data,$shop_id,$content_key = null)
+    public static function create_email_content($data,$shop_id,$content_key = null, $shop_theme = null)
     {
         $return["subject"] = EmailContent::getSubject($content_key);
         $return["shop_key"] = EmailContent::getShopkey_front($shop_id);

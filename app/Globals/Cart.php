@@ -1320,7 +1320,7 @@ class Cart
         $data['order_id'] = Crypt::encrypt($tbl_order->ec_order_id);
 
         //email for COD
-        Mail_global::create_email($data,$shop_id,"cash_on_delivery",$this->shop_theme);
+        Mail_global::create_email_content($data, $shop_id, "cash_on_delivery", $this->shop_theme);
         $result = Mail_global::mail($data, $shop_id, "cod", $this->shop_theme);
 
         return Redirect::to("/")->send();

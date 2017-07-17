@@ -8,7 +8,7 @@ class Tbl_customer extends Model
 {
 	protected $table = 'tbl_customer';
 	protected $primaryKey = "customer_id";
-    public $timestamps = false;
+    public $timestamps = true;
     
     public function scopeTransaction($query, $shop_id, $customer_id = null)
     {

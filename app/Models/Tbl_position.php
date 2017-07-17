@@ -7,5 +7,5 @@ class Tbl_position extends Model
 {
 	protected $table = 'tbl_position';
 	protected $primaryKey = "position_id";
-    public $timestamps = false;
+    public $timestamps = true;
 }

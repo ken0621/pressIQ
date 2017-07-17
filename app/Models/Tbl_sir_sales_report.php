@@ -8,5 +8,5 @@ class Tbl_sir_sales_report extends Model
 {
 	protected $table = 'tbl_sir_sales_report';
 	protected $primaryKey = "sir_sales_report_id";
-    public $timestamps = false;
+    public $timestamps = true;
 }

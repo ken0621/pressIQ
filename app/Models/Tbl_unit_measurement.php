@@ -7,7 +7,7 @@ class Tbl_unit_measurement extends Model
 {
 	protected $table = 'tbl_unit_measurement';
 	protected $primaryKey = "um_id";
-    public $timestamps = false;
+    public $timestamps = true;
     
     public function scopeType($query, $shop)
     {

@@ -8,7 +8,7 @@ class Tbl_item extends Model
 {
     protected $table = 'tbl_item';
 	protected $primaryKey = "item_id";
-    public $timestamps = false;
+    public $timestamps = true;
     
     public function scopeType($query)
     {

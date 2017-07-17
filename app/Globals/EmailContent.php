@@ -17,6 +17,10 @@ class EmailContent
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('shop_key');
     }
+    public static function getShopkey_front($shop_id)
+    {
+        return Tbl_user::shop()->where("tbl_shop.shop_id", $shop_id)->pluck('shop_key');
+    }
     public static function getAllEmailContent()
     {
     	return Tbl_email_content::where("archived",0)->where("shop_id",EmailContent::getShopId())->get();

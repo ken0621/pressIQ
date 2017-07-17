@@ -203,4 +203,21 @@ class Mail_global
     {
         dd($x);
     }
+    public static function create_email_content($data,$shop_id,$content_key = null)
+    {
+        $return["subject"] = EmailContent::getSubject($content_key);
+        $return["shop_key"] = EmailContent::getShopkey_front($shop_id);
+
+        $txt[0]["txt_to_be_replace"] = "[link]";
+        $txt[0]["txt_to_replace"] = $_SERVER["SERVER_NAME"];
+
+        $txt[1]["txt_to_be_replace"] = "[password]";
+        $txt[1]["txt_to_replace"] = $data["order_id"];
+
+        $change_content = $txt;
+
+        $return["content"] = EmailContent::email_txt_replace($content_key, $change_content);
+
+        dd($return);
+    }
 }

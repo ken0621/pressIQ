@@ -8,12 +8,13 @@
             <i class="fa fa-calendar"></i>
             <h1>
             <span class="page-title">Timesheet / {{$company->payroll_company_name}} ({{$company->payroll_period_category}})</span>
-            <small>
-                You can now see list of employees
+            <small style="font-size: 14px; color: gray;">
+                 {{ payroll_date_format($company->payroll_period_start) }} to  {{ payroll_date_format($company->payroll_period_end) }} ({{ $company->month_contribution }} - {{ code_to_word($company->period_count) }})
             </small>
             </h1>
 
             <div class="dropdown pull-right">
+                <button onclick="location.href='/member/payroll/time_keeping'" class="btn btn-default">&laquo; Back</button>
                 <button class="btn btn-custom-danger dropdown-toggle " type="button" data-toggle="dropdown"><i class="fa fa-file-pdf-o"></i>&nbsp;Summary
                 <span class="caret"></span></button>
                 <ul class="dropdown-menu dropdown-menu-custom">

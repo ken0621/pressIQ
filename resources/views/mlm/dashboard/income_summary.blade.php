@@ -1,5 +1,3 @@
-
-
 <div class="col-md-12">
     <!-- Widget: user widget style 1 -->
     <div class="box box-widget widget-user">

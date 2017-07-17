@@ -254,7 +254,7 @@
 															</select>
 														</td>
 													</tr>
-													<tr>
+													<tr class="hidden">
 														<td>
 															PAGIBIG Contibution
 														</td>

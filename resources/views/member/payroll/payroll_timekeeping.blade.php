@@ -7,10 +7,8 @@
 		<div>
 			<i class="fa fa-calendar"></i>
 			<h1>
-			<span class="page-title">Time Keeping</span>
-			<small>
-			Manage your Time Keeping
-			</small>
+			<span class="page-title">Select a Payroll Period</span>
+			<small>You can view timesheet inside a specific payroll period.</small>
 			</h1>
 			<div class="dropdown pull-right">
 				<button class="btn btn-custom-primary dropdown-toggle " type="button" data-toggle="dropdown"><i class="fa fa-gears"></i>&nbsp;Operation
@@ -23,22 +21,87 @@
 		</div>
 	</div>
 </div>
-<div class="panel-timekeeping-list">
-	<div class="panel panel-default panel-block">
-		<div class="panel-body">
-			<ul class="list-group">
-			@foreach($_period as $period)
-				<li class="list-group-item padding-tb-10">
-					<label><b>{{date('M d, Y',strtotime($period->payroll_period_start)).' - '.date('M d, Y',strtotime($period->payroll_period_end))}}</b></label><br>
-					<small>{{$period->payroll_period_category}}</small>
-					<!--<a href="/member/payroll/time_keeping/company_period/{{$period->payroll_period_id}}" class="btn btn-custom-primary pull-right margin-nt-18">View</a>-->
-					<a href="/member/payroll/company_timesheet2/{{$period->payroll_period_company_id}}" class="btn btn-custom-primary pull-right margin-nt-18">View</a>
-				</li>
-			@endforeach
-			</ul>
-		</div>
-	</div>
+
+
+<div class="panel panel-default panel-block panel-title-block panel-gray ">
+    <ul class="nav nav-tabs">
+        <li class="active change-tab pending-tab cursor-pointer" mode="pending"><a class="cursor-pointer"><i class="text-bold">1st</i> &nbsp; Pending</a></li>
+        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="text-bold">2nd</i> &nbsp; Processed</a></li>
+        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="text-bold">3rd</i> &nbsp; Registered</a></li>
+        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="text-bold">4th</i> &nbsp; Posted</a></li>
+        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="text-bold">Last</i> &nbsp; Approved</a></li>
+    </ul>
+    <!--
+    <div class="search-filter-box">
+        <div class="col-md-4" style="padding: 10px">
+            <select class="form-control item_type company-change-event">
+            	<option>SAMPLE</option>
+            </select>
+        </div>
+        <div class="col-md-4 col-md-offset-4" style="padding: 10px">
+            <div class="input-group">
+                <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+                <input type="text" class="form-control search-employee-name" placeholder="Search by employee name / number" aria-describedby="basic-addon1">
+            </div>
+        </div>  
+    </div>
+    -->
+    <div class="tab-content codes_container">
+        <div id="all" class="tab-pane fade in active">
+            <div class="form-group order-tags"></div>
+                <div class="clearfix">
+                    <div class="col-md-12">
+                        <div class="table-responsive load-table-employee-list">
+						    <table class="table table-bordered table-striped table-condensed">
+						        <thead style="text-transform: uppercase">
+						            <tr>
+						                <th class="text-center">Date Covered</th>
+						                <!--<th class="text-center">Company</th>-->
+						                <th class="text-center">Period Type</th>
+						                <th class="text-center">Covered Month</th>
+						                <th class="text-center">Period Order</th>
+						                <th class="text-center"></th>
+						                <th class="text-center"></th>
+						            </tr>
+						        </thead>
+						        <tbody>
+						        
+						        	@foreach($_period as $period)
+									<tr>
+										<td class="text-center">{{ date('M d, Y',strtotime($period->payroll_period_start)).' - '.date('M d, Y',strtotime($period->payroll_period_end)) }}</td>
+										<!--<td class="text-center">{{ $period->payroll_company_name }}</td>-->
+										<td class="text-center">{{ $period->payroll_period_category }}</td>
+										<td class="text-center">{{ $period->month_contribution }}</td>
+										<td class="text-center">{{ code_to_word($period->period_count) }}</td>
+										<td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/payroll_period_list/modal_edit_period/{{$period->payroll_period_id }}', 'md')">Edit Period</a></td>
+										<td class="text-center"><a href="/member/payroll/company_timesheet2/{{$period->payroll_period_company_id}}">View Employee</a></td>
+									</tr>
+									@endforeach
+						        </tbody>
+						    </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+<!--<div class="panel-timekeeping-list">-->
+<!--	<div class="panel panel-default panel-block">-->
+<!--		<div class="panel-body">-->
+<!--			<ul class="list-group">-->
+<!--			@foreach($_period as $period)-->
+<!--				<li class="list-group-item padding-tb-10">-->
+<!--					<label><b>{{date('M d, Y',strtotime($period->payroll_period_start)).' - '.date('M d, Y',strtotime($period->payroll_period_end))}}</b></label><br>-->
+<!--					<small>{{$period->payroll_period_category}}</small>-->
+					<!--<a href="/member/payroll/time_keeping/company_period/{{$period->payroll_period_id}}" class="btn btn-custom-primary pull-right margin-nt-18">View</a>-->
+<!--					<a href="/member/payroll/company_timesheet2/{{$period->payroll_period_company_id}}" class="btn btn-custom-primary pull-right margin-nt-18">View</a>-->
+<!--				</li>-->
+<!--			@endforeach-->
+<!--			</ul>-->
+<!--		</div>-->
+<!--	</div>-->
+<!--</div>-->
 
 @endsection
 @section('script')

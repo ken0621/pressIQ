@@ -690,8 +690,17 @@ function submit_done(data)
 	}
 	else
 	{
-		$(data.target).html(data.view);
-		$("#global_modal").modal("hide");
+		if(data.function_name == "timesheet_employee_list.action_load_table")
+		{
+			timesheet_employee_list.action_load_table();
+			$("#global_modal").modal("hide");
+		}
+		else
+		{
+			$(data.target).html(data.view);
+			$("#global_modal").modal("hide");
+		}
+
 	}
 }
 function  misc(str) {

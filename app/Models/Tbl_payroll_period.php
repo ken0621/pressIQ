@@ -22,7 +22,7 @@ class Tbl_payroll_period extends Model
 
 	public function scopesel($query, $shop_id = 0, $payroll_period_archived = 0)
 	{
-		return $query->where('shop_id', $shop_id)->where('payroll_period_archived', $payroll_period_archived);
+		return $query->where('tbl_payroll_period.shop_id', $shop_id)->where('payroll_period_archived', $payroll_period_archived);
 	}
 
 	public function scopecheck($query, $_param = array())

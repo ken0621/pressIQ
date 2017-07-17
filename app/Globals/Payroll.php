@@ -2955,14 +2955,12 @@ class Payroll
 	/* GET TAX VALUE */
 	public static function tax_contribution($shop_id = 0, $rate = 0, $tax_category = '', $payroll_tax_period = '')
 	{
-		$tax 		= Tbl_payroll_tax_reference::sel($shop_id, $tax_category, $payroll_tax_period)->first();
 		
+		$tax 		= Tbl_payroll_tax_reference::sel($shop_id, $tax_category, $payroll_tax_period)->first();
 		$exemption 	= Tbl_payroll_tax_reference::sel($shop_id, 'Excemption', $payroll_tax_period)->first();
-
 		$status 	= Tbl_payroll_tax_reference::sel($shop_id, 'Status', $payroll_tax_period)->first();
-	
 		$tax_index 	= '';
-
+		
 		$tax_contribution = 0;
 
 		// if($rate >= $tax->tax_first_range && $rate < $tax->tax_second_range)
@@ -3006,7 +3004,7 @@ class Payroll
 			}
 
 
-			if($rate >= $tax->tax_seventh_range && $rate < $tax->taxt_sixth_range)
+			if($rate >= $tax->tax_seventh_range && $rate)
 			{
 				$tax_index = 'tax_seventh_range';
 			}
@@ -3017,6 +3015,7 @@ class Payroll
 				$exemption_num = $exemption->$tax_index;
 				$status_num = $status->$tax_index;
 				// dd($status_num);
+				//dd("((" . $rate . " - " . $tax->$tax_index . ") * (" . $status_num . " / 100" . ")) " . " + " . $exemption_num . ")");
 				$tax_contribution = (($rate - $tax->$tax_index) * ($status_num / 100)) + $exemption_num;
 			}
 		}
@@ -3083,6 +3082,11 @@ class Payroll
 			}
 			else if($_philhealth_max->payroll_philhealth_min >= $rate)
 			{	
+				$data['ee'] = $_philhealth_max->payroll_philhealth_ee_share;
+				$data['er'] = $_philhealth_max->payroll_philhealth_er_share;
+			}
+			else
+			{
 				$data['ee'] = $_philhealth_max->payroll_philhealth_ee_share;
 				$data['er'] = $_philhealth_max->payroll_philhealth_er_share;
 			}

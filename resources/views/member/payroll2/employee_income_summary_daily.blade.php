@@ -97,7 +97,7 @@
                             <td colspan="5" class="text-right" style="opacity: 0.5">
                                 LESS: {{ strtoupper($obj['name']) }}
                                 {!!isset($obj['ref']) ? '<br>'.$obj['ref'] : ''!!}
-                                {!!isset($obj['ref_amount']) ? '<br>'. $obj['ref_amount'] : ''!!}
+                              
                             </td>
                             <td class="text-right color-red" style="opacity: 0.7">
                                 {{payroll_currency($obj['amount'])}}

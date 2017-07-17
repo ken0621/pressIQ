@@ -19,7 +19,7 @@ use App\Models\Tbl_payroll_employee_salary;
 use App\Models\Tbl_payroll_shift_day;
 use App\Models\Tbl_payroll_holiday_company;
 use App\Models\Tbl_payroll_time_keeping_approved;
-
+use App\Models\Tbl_payroll_shift_code;
 use App\Globals\Payroll2;
 use DB;
 
@@ -339,6 +339,16 @@ class PayrollTimeSheet2Controller extends Member
 			}
 		}
 		
+		//dd($_shift);
+		
+		if(count($_shift) > 0)
+		{
+			$return->shift_target_hours = $_shift[0]->shift_target_hours;
+		}
+		else
+		{
+			$return->shift_target_hours = 0;
+		}
 		
 		$return->time_keeping_approved = $time_keeping_approved;
 		if($return->for_approval == 1) //PENDING
@@ -346,7 +356,7 @@ class PayrollTimeSheet2Controller extends Member
 			$return->status = "PENDING";
 			if($return->time_compute_mode == "flexi")
 			{
-				$return->clean_shift = Payroll2::clean_shift($_time_raw, $_shift_raw);
+				$return->clean_shift = Payroll2::clean_shift_flexi($_time_raw, "00:00:00",	$return->shift_target_hours);
 			}
 			else
 			{
@@ -390,18 +400,11 @@ class PayrollTimeSheet2Controller extends Member
 		$return->leave_fill_date = $leave_fill_late = 0;
 		$return->leave_fill_undertime = $leave_fill_undertime = 0;
 		$return->default_remarks = $this->timesheet_default_remarks($return);
-		
-		if(count($_shift) > 0)
-		{
-			$return->shift_target_hours = $_shift[0]->shift_target_hours;
-		}
-		else
-		{
-			$return->shift_target_hours = 0;
-		}
+
 		
 	
 		// dd($return->compute_shift);
+		
 		if($return->time_compute_mode == "flexi")
 		{
 			$return->time_output =  Payroll2::compute_time_mode_flexi($return->compute_shift, $return->shift_target_hours, "00:00:00", $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday, $leave, $leave_fill_undertime, $testing = false);
@@ -417,7 +420,9 @@ class PayrollTimeSheet2Controller extends Member
 		
 
 		$return->compute_type = $compute_type = Payroll2::convert_period_cat($employee_contract->payroll_group_salary_computation);
-		$return->compute = Payroll2::compute_income_day_pay($return->time_output, $daily_rate, $employee_contract->payroll_group_id, $cola, $compute_type);
+
+
+		$return->compute = Payroll2::compute_income_day_pay($return->time_output, $daily_rate, $employee_contract->payroll_group_id, $cola, $compute_type, $return->time_compute_mode);
 		
 		$return->value_html = $this->timesheet_daily_income_to_string($return->compute_type, $payroll_time_sheet_id, $return->compute, $return->shift_approved, $payroll_period_company_id, $time_keeping_approved);
 		return $return;
@@ -510,6 +515,12 @@ class PayrollTimeSheet2Controller extends Member
 	public function getdaily_rate($employee_id, $date, $target_days)
 	{
 		$salary = Tbl_payroll_employee_salary::selemployee($employee_id, $date)->first();
+	
+		if(!$salary)
+		{
+			dd("This employee doesn't have salary as of this date (" .  payroll_date_format($date) . "). Please check effectivity date of salary.");
+		}
+	
 		$return['daily']	=  $salary->payroll_employee_salary_daily;
 		$return['cola'] 	=  $salary->payroll_employee_salary_cola;
 		
@@ -559,6 +570,7 @@ class PayrollTimeSheet2Controller extends Member
 		/* EMPLOYEE SALARY */		
 		$salary = $this->get_salary($employee_id, $company_period->payroll_period_start);
 		
+
 		/* EMPLOYEE GROUP */
 		$group = $this->db_get_current_employee_contract($employee_id, $company_period->payroll_period_start);
 		
@@ -570,6 +582,11 @@ class PayrollTimeSheet2Controller extends Member
 		
 		
 		$compute_type = Payroll2::convert_period_cat($group->payroll_group_salary_computation);
+		
+		if(!$salary)
+		{
+			dd("This employee doesn't have salary as of this date (" .  payroll_date_format($company_period->payroll_period_start) . "). Please check effectivity date of salary.");
+		}
 		$cutoff_rate = $this->identify_period_salary($salary->payroll_employee_salary_monthly, $company_period->payroll_period_category);
 		$cutoff_cola = $this->identify_period_salary($salary->monthly_cola, $company_period->payroll_period_category);
 		$cutoff_target_days = $this->identify_period_salary($salary->payroll_group_working_day_month, $group->payroll_period_category);
@@ -888,6 +905,19 @@ class PayrollTimeSheet2Controller extends Member
 			{
 				$_return[$key]->payroll_group_id = null;
 				$_return[$key]->payroll_group_code = null;
+			}
+			
+			$shift = Tbl_payroll_shift_code::where("shift_code_id", $row->shift_code_id)->first();
+			
+			if($shift)
+			{
+				$_return[$key]->shift_code_name = $shift->shift_code_name;
+				$_return[$key]->shift_code_link = "action_load_link_to_modal('/member/payroll/shift_template/modal_view_shift_template/" . $shift->shift_code_id . "', 'lg')";
+			}
+			else
+			{
+				$_return[$key]->shift_code_name = "";
+				$_return[$key]->shift_code_link = "";
 			}
 			
 			

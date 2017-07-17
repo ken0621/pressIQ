@@ -266,6 +266,22 @@
               
               <div class="form-horizontal">
                 <div class="form-group">
+                  <div class="col-md-12">
+                    <div class="checkbox">
+                      <label><input type="checkbox" name="payroll_employee_salary_minimum_wage" value="1">Minimum wage earner</label>
+                    </div>
+                    <div class="checkbox">
+                      <label><input type="checkbox" name="tbl_payroll_employee_custom_compute" class="custom-compute-chck" value="1">Declare Salary for SSS, Philhealth and Tax?</label>
+                    </div>
+                    <!--
+                    <div class="checkbox hidden">
+                      <label><input type="checkbox" name="tbl_payroll_employee_custom_compute" class="custom-compute-chck" value="1">Custom Computation</label>
+                    </div>
+                    -->
+                  </div>
+                </div>
+                        
+                <div class="form-group">
                   <div class="col-md-6">
                     
                     <div class="form-group">
@@ -280,7 +296,7 @@
                         <input type="number" step="any" name="payroll_employee_salary_daily" class="form-control text-right">
                       </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group hidden">
                       <div class="col-md-12">
                         <small>COLA (Monthly)</small>
                         <input type="number" step="any" name="monthly_cola" class="form-control text-right">
@@ -294,51 +310,43 @@
                     </div>
                     <div class="form-group">
                       <div class="col-md-12">
-                        <div class="checkbox">
-                          <label><input type="checkbox" name="payroll_employee_salary_minimum_wage" value="1">Minimum wage earner</label>
-                        </div>
-                        <div class="checkbox">
-                          <label><input type="checkbox" name="tbl_payroll_employee_custom_compute" class="custom-compute-chck" value="1">Custom Computation</label>
-                        </div>
+                        <small>PAGIBIG/HDMF Contribution</small>
+                        <input type="number" step="any" name="payroll_employee_salary_pagibig" class="form-control text-right">
                       </div>
                     </div>
+
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-6 declared-salaries hidden">
                     <div class="form-group">
                       <div class="col-md-12">
-                        <small>Taxable Salary (for fixed value)</small>
+                        <small>Taxable Salary (optional)</small>
                         <input type="number" step="any" name="payroll_employee_salary_taxable" class="form-control text-right">
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-12">
-                        <small>SSS Salary (for fixed value)</small>
+                        <small>SSS Salary (optional)</small>
                         <input type="number" step="any" name="payroll_employee_salary_sss" class="form-control text-right">
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-12">
-                        <small>PAGIBIG/HDMF Salary (for fixed value)</small>
-                        <input type="number" step="any" name="payroll_employee_salary_pagibig" class="form-control text-right">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <div class="col-md-12">
-                        <small>PHILHEALTH Salary (for fixed value)</small>
+                        <small>PHILHEALTH Salary (optional)</small>
                         <input type="number" step="any" name="payroll_employee_salary_philhealth" class="form-control text-right">
                       </div>
                     </div>
-                    
+
                   </div>
                 </div>
                 <div class="custom-compute-obj">
                 <hr>
-                <div class="form-group">
+
+                <div class="form-group hidden">
                   <div class="col-md-12">
                     <label>Mode of Deduction (for fixed value)</label>
                   </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group hidden">
                   <div class="col-md-6">
                     <div class="checkbox">
                       <label><input type="checkbox" name="is_deduct_sss_default" class="deduction-check-period" data-target="#sss-deduction-period" checked="true" value="1">Compute SSS base on default</label>
@@ -349,7 +357,7 @@
                     <input type="number" name="deduct_sss_custom" class="form-control text-right" placeholder="0.00" step="any" id="sss-deduction-period">
                   </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group hidden">
                   <div class="col-md-6">
                     <div class="checkbox">
                       <label><input type="checkbox" name="is_deduct_philhealth_default" class="deduction-check-period" data-target="#philhealth-deduction-period" checked="true" value="1">Compute PHILHEALTH base on default</label>
@@ -360,7 +368,7 @@
                     <input type="number" name="deduct_philhealth_custom" class="form-control text-right" placeholder="0.00" step="any" id="philhealth-deduction-period">
                   </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group hidden">
                   <div class="col-md-6">
                     <div class="checkbox">
                       <label><input type="checkbox" name="is_deduct_pagibig_default" class="deduction-check-period" data-target="#pagibig-deduction-period" checked="true" value="1">Compute PAGIBIG base on default</label>
@@ -379,7 +387,9 @@
                     </div>
                   </div>
                 </div>
+                
               </div>
+            </div>
             </div>
             <div id="requirements" class="tab-pane fade">
               <div class="form-horizontal">

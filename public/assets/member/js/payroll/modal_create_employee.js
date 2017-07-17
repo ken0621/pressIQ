@@ -353,11 +353,11 @@ function modal_create_employee()
 	{
 		if($(".custom-compute-chck").is(':checked'))
 		{
-			$(".custom-compute-obj").fadeIn();
+			$(".declared-salaries").removeClass("hidden");
 		}
 		else
 		{
-			$(".custom-compute-obj").fadeOut();
+			$(".declared-salaries").addClass("hidden");
 		}
 	}
 

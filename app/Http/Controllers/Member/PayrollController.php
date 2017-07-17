@@ -1185,7 +1185,7 @@ class PayrollController extends Member
 
      public function modal_employee_view($id)
      {
-
+          $data["source"] = Request::input("source_page");
           // $data['_company']               = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
 
           $data['_company']  = Payroll::company_heirarchy(Self::shop_id());
@@ -1753,7 +1753,17 @@ class PayrollController extends Member
           }
 
           // Self::update_tbl_search();
-          $return['function_name'] = 'employeelist.reload_employee_list';
+          
+          if(Request::input("source") == "time_keeping")
+          {
+               $return['function_name'] = 'timesheet_employee_list.action_load_table';
+          }
+          else
+          {
+               $return['function_name'] = 'employeelist.reload_employee_list';
+          }
+          
+          
           $return['status'] = 'success';
           return json_encode($return);
      }
@@ -5226,11 +5236,13 @@ class PayrollController extends Member
           $data['_period'] = Tbl_payroll_period::sel(Self::shop_id())
                                                   ->where('tbl_payroll_period.payroll_period_status','!=','pending')
                                                   ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
+                                                  ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
                                                   ->orderBy('tbl_payroll_period.payroll_period_category')
-                                                  ->orderBy('tbl_payroll_period.payroll_period_start','desc')
-                                                  ->distinct('tbl_payroll_period_company.payroll_period_id')
+                                                  ->orderBy('tbl_payroll_period.payroll_period_start','asc')
+                                                  ->groupBy('tbl_payroll_period_company.payroll_period_id')
                                                   ->get();
-          // dd($data);
+          
+
           return view('member.payroll.payroll_timekeeping', $data);
      }
 

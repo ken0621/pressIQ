@@ -22,9 +22,19 @@ function c_time_to_int($time)
     $return = strtotime("01/01/70 " . $time . " UTC");
     return $return;
 }
+function code_to_word($code)
+{
+    $code = str_replace("_", " ", $code);
+    $code = ucwords($code);
+    return $code;
+}
 function payroll_currency($amount)
 {
     return "PHP " . number_format($amount, 2);
+}
+function payroll_date_format($date)
+{
+    return date("F d, Y", strtotime($date));
 }
 function convert_seconds_to_hours_minutes($format = "H:i", $d)
 {

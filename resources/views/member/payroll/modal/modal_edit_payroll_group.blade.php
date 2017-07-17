@@ -254,13 +254,13 @@
 															</select>
 														</td>
 													</tr>
-													<tr>
+													<tr class="hidden">
 														<td>
 															PAGIBIG Contibution
 														</td>
 														<td width="50%">
 															<select class="form-control" name="pagibig_reference">
-																<option value="declared" {{$group->pagibig_reference == 'declared' ? 'selected="selected"':''}}>Declared PAGIBIG Salary</option>
+																<option value="declared" {{$group->pagibig_reference == 'declared' ? 'selected="selected"':''}}>Declared PAGIBIG Contribution</option>
 																<option value="gross_basic" {{$group->pagibig_reference == 'gross_basic' ? 'selected="selected"':''}}>Gross Pay</option>
 																<option value="net_basic" {{$group->pagibig_reference == 'net_basic' ? 'selected="selected"':''}}>Net Basic</option>
 															</select>

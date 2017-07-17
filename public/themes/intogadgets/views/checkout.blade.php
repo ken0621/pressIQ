@@ -11,7 +11,7 @@
 					<input type="hidden" name="_token" value="{{{ csrf_token() }}}" />
 
 					@if(session("error"))
-					    <div class="alert alert-danger">
+					    <div class="alert alert-danger" style="margin-top: 25px;">
 					        <ul>
 					        	<li>{{ session("error") }}</li>
 					        </ul>
@@ -22,7 +22,11 @@
 					    <div class="alert alert-danger">
 					        <ul>
 					            @foreach ($errors->all() as $error)
-					                <li>{{ $error }}</li>
+					            	@if($error == "Fail(Bank Declined Transaction)")
+					                	<li>Your card was declined. In order to resolve the issue, you will need to contact your back</li>
+					                @else
+					                	<li>{{ $error }}</li>
+					                @endif
 					            @endforeach
 					        </ul>
 					    </div>

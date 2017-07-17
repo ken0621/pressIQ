@@ -134,6 +134,9 @@ class Mlm_EncashmentController extends Member
         $data["vmoney_enable"] = isset(DB::table("tbl_shop")->where("shop_id", $this->user_info->shop_id)->first()->shop_wallet_vmoney) ? DB::table("tbl_shop")->where("shop_id", $this->user_info->shop_id)->first()->shop_wallet_vmoney : 0;
         $data["vmoney_environment"] = isset(DB::table("tbl_settings")->where("settings_key", "vmoney_environment")->where("shop_id", $this->user_info->shop_id)->first()->settings_value) ? DB::table("tbl_settings")->where("settings_key", "vmoney_environment")->where("shop_id", $this->user_info->shop_id)->first()->settings_value : 0;
         $data["vmoney_minimum_encashment"] = isset(DB::table("tbl_settings")->where("settings_key", "vmoney_minimum_encashment")->where("shop_id", $this->user_info->shop_id)->first()->settings_value) ? DB::table("tbl_settings")->where("settings_key", "vmoney_minimum_encashment")->where("shop_id", $this->user_info->shop_id)->first()->settings_value : 0;
+        $data["vmoney_percent_fee"] = isset(DB::table("tbl_settings")->where("settings_key", "vmoney_percent_fee")->where("shop_id", $this->user_info->shop_id)->first()->settings_value) ? DB::table("tbl_settings")->where("settings_key", "vmoney_percent_fee")->where("shop_id", $this->user_info->shop_id)->first()->settings_value : 0;
+        $data["vmoney_fixed_fee"] = isset(DB::table("tbl_settings")->where("settings_key", "vmoney_fixed_fee")->where("shop_id", $this->user_info->shop_id)->first()->settings_value) ? DB::table("tbl_settings")->where("settings_key", "vmoney_fixed_fee")->where("shop_id", $this->user_info->shop_id)->first()->settings_value : 0;
+        $data["shop_id"] = $this->user_info->shop_id;
         
         return view('member.mlm_encashment.index', $data);
     }
@@ -188,6 +191,8 @@ class Mlm_EncashmentController extends Member
         /* V Money Settings */
         $update_setting["vmoney_environment"] = Request::input("vmoney_environment");
         $update_setting["vmoney_minimum_encashment"] = Request::input("vmoney_minimum_encashment"); 
+        $update_setting["vmoney_percent_fee"] = Request::input("vmoney_percent_fee");
+        $update_setting["vmoney_fixed_fee"] = Request::input("vmoney_fixed_fee");
         $vmoney_environment = Request::input("vmoney_enable");
         $this->vmoney_update($update_setting, $vmoney_environment);
         

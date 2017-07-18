@@ -45,11 +45,13 @@
                             @else
                                 <td>None</td>
                             @endif 
-                            <td><a href="/account/invoice/{{ $order->ec_order_id }}" target="_blank">Invoice</a></td>
                             <td>
-                                @if($order->order_status == "Cancelled")
-                                    
-                                @else
+                                @if($order->payment_status == 1)
+                                    <a href="/account/invoice/{{ $order->ec_order_id }}" target="_blank">Invoice</a>
+                                @endif
+                            </td>
+                            <td>
+                                @if($order->order_status != "Cancelled")
                                     <a class="cancel-button" href="/account/order?cancel_id={{ $order->ec_order_id }}">Cancel</a>
                                 @endif
                             </td>                           

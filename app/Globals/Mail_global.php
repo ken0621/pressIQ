@@ -105,7 +105,7 @@ class Mail_global
         catch (\Exception $e) 
         {
             $result = 0;
-            $this->fail_email($e->getMessage);
+            Mail_gobal::fail_email($e->getMessage);
         }
 
         return $result;
@@ -131,7 +131,7 @@ class Mail_global
         catch (\Exception $e) 
         {
             $result = 0;
-            $this->fail_email($e->getMessage);
+            Mail_gobal::fail_email($e->getMessage);
         }
 
         return $result;
@@ -156,7 +156,7 @@ class Mail_global
         } 
         catch (\Exception $e) 
         {
-            $this->fail_email($e->getMessage);
+            Mail_gobal::fail_email($e->getMessage);
             $result = 0; 
         }
 
@@ -182,7 +182,7 @@ class Mail_global
         } 
         catch (\Exception $e) 
         {
-            $this->fail_email($e->getMessage);
+            Mail_gobal::fail_email($e->getMessage);
             $result = 0; 
         }
 

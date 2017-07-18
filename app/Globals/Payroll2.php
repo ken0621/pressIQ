@@ -797,7 +797,7 @@ class Payroll2
      */
 	public static function compute_time_mode_flexi($_time, $target_hours="08:00:00", $break_hours="00:00:00", $overtime_grace_time = "00:00:00", $grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00", $leave_fill_undertime=0, $testing = false)
 	{
-		dd("testing update");
+		
 		$time_spent="00:00:00";
 		$late_hours = "00:00:00";
 		$under_time = "00:00:00";

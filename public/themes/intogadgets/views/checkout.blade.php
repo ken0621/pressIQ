@@ -81,25 +81,25 @@
 						<div class="fieldset">
 							<label class="col-md-4">First and Last Name</label>
 							<div class="field col-md-8">
-								<input  class="form-control" type="text" name="full_name" value="{{ old('full_name') }}">
+								<input required class="form-control" type="text" name="full_name" value="{{ old('full_name') }}">
 							</div>
 						</div>
 						<div class="fieldset">
 							<label class="col-md-4">Contact Number</label>
 							<div class="field col-md-8">
-								<input  maxlength="11" class="form-control" type="text" name="contact_number" value="{{ Request::input('customer_mobile') }}">
+								<input required maxlength="11" class="form-control" type="text" name="contact_number" value="{{ Request::input('customer_mobile') }}">
 							</div>
 						</div>
 						<div class="fieldset">
 							<label class="col-md-4">Province</label>
 							<div class="field col-md-8">
-								<select firstload="true" default="{{ old('customer_state') }}" class="form-control load-location" name="customer_state" level="1"></select>
+								<select required firstload="true" default="{{ old('customer_state') }}" class="form-control load-location" name="customer_state" level="1"></select>
 							</div>
 						</div>
 						<div class="fieldset">
 							<label class="col-md-4">City / Municipality</label>
 							<div class="field col-md-8">
-								<select firstload="true" default="{{ old('customer_city') }}" class="form-control load-location" name="customer_city" level="2">
+								<select required firstload="true" default="{{ old('customer_city') }}" class="form-control load-location" name="customer_city" level="2">
 									<option></option>
 								</select>
 							</div>
@@ -107,7 +107,7 @@
 						<div class="fieldset">
 							<label class="col-md-4">Barangay</label>
 							<div class="field col-md-8">
-								<select firstload="true" default="{{ old('customer_zip') }}" class="form-control load-location" name="customer_zip" level="3">
+								<select required firstload="true" default="{{ old('customer_zip') }}" class="form-control load-location" name="customer_zip" level="3">
 									<option></option>
 								</select>
 							</div>
@@ -115,7 +115,7 @@
 						<div class="fieldset">
 							<label class="col-md-4">Street</label>
 							<div class="field col-md-8">
-								<textarea spellcheck="false" class="form-control" name="customer_street">{{ Request::old('customer_street') }}</textarea>
+								<textarea required spellcheck="false" class="form-control" name="customer_street">{{ Request::old('customer_street') }}</textarea>
 							</div>
 						</div>
 					@endif

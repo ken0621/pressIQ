@@ -221,7 +221,7 @@ class Mail_global
             if($content_key == "cash_on_delivery")
             {                
                 $txt["0"."cod"]["txt_to_be_replace"] = "[link]";
-                $txt["0"."cod"]["txt_to_replace"] = "<a href='".$_SERVER["SERVER_NAME"]."' target='_blank'>link</a>";
+                $txt["0"."cod"]["txt_to_replace"] = "<a href='".$_SERVER["SERVER_NAME"]."' target='_blank'>LINK</a>";
 
                 $txt["1"."cod"]["txt_to_be_replace"] = "[password]";
                 $txt["1"."cod"]["txt_to_replace"] = $data["password"];
@@ -258,19 +258,19 @@ class Mail_global
                 $txt["7"."s_o"]["txt_to_replace"] = $data["order_details"]->billing_address;
 
                 $txt["8"."s_o"]["txt_to_be_replace"] = "[product_order_details]";
-                $txt["8"."s_o"]["txt_to_replace"] = "<div style='width:100%'><table style='width:100%'><tr><th>Description</th><th>Item Price</th></tr>";
+                $txt["8"."s_o"]["txt_to_replace"] = "<div style='width:100%'><table style='border-collapse: collapse; width:100%'><tr><th colspan='2' style='border-bottom:1px dashed #45f235'>Description</th><th style='border-bottom:1px dashed #45f235'>Item Price</th></tr>";
 
                 foreach ($data["order_item"] as $key => $value) 
                 {
-                    $image_path = '  <img src="<?php echo $message->embed(url().'.$value->image_path.'); ?>">';
-                    $txt["8"."s_o"]["txt_to_replace"] .= "<tr><td style='text-align:left;width:20%;padding:5px'>".$image_path."</td><td style='text-align:left;width:50%;padding:20px'>".$value->evariant_item_label."</td><td  style='text-align:center;width:30%;padding:20px'>".currency("PHP",$value->evariant_price)."</td></tr>";
+                    $image_path = '<img style="height:100px;width:100px;object-fit:contain" src="<?php echo $m->embed('. url().$value->image_path.') ?>">';
+                    $txt["8"."s_o"]["txt_to_replace"] .= "<tr><td style='text-align:left;width:20%;padding:5px'>".$image_path."</td><td style='text-align:left;width:50%;padding:20px'>".$value->evariant_item_label."</td><td style='text-align:center;width:30%;padding:20px'>".currency("PHP",$value->evariant_price)."</td></tr>";
                 }
-                $txt["8"."s_o"]["txt_to_replace"] .= "<tr><td style='text-align:center;width:50%;padding:20px'><strong>TOTAL</strong></td><td style='text-align:center;width:50%;padding:20px'><strong>".currency("PHP",$data["order_details"]->total)."</strong></td></tr>";
+                $txt["8"."s_o"]["txt_to_replace"] .= "<tr><td colspan='2' style='text-align:center;width:50%;padding:20px;border-top:1px dashed #45f235'><strong>TOTAL</strong></td><td style='text-align:center;width:50%;padding:20px;border-top:1px dashed #45f235'><strong>".currency("PHP",$data["order_details"]->total)."</strong></td></tr>";
                 $txt["8"."s_o"]["txt_to_replace"] .= "</table></div>";
 
 
                 $txt["9"."s_o"]["txt_to_be_replace"] = "[link]";
-                $txt["9"."s_o"]["txt_to_replace"] = "<a style='background-color:blue;padding:10px;color:#fff' target='_blank' href=".$_SERVER["SERVER_NAME"].">LOGIN TO CHECK YOUR TRACKING UPDATES</a>";
+                $txt["9"."s_o"]["txt_to_replace"] = "<a style='background-color:#35acf1;padding:10px;color:#fff' target='_blank' href=".$_SERVER["SERVER_NAME"].">LOGIN TO CHECK YOUR TRACKING UPDATES</a>";
             }
             /* END SUCCESSFULLY ORDER */
 
@@ -291,7 +291,7 @@ class Mail_global
                 $txt["0"."s_r"]["txt_to_replace"] = $data["customer_info"]->title_name." ".$data["customer_info"]->first_name." ".$data["customer_info"]->middle_name." ".$data["customer_info"]->last_name;
 
                 $txt["1"."s_r"]["txt_to_be_replace"] = "[link]";
-                $txt["1"."s_r"]["txt_to_replace"] = "<a style='background-color:blue;padding:10px;color:#fff' target='_blank' href=".$_SERVER["SERVER_NAME"].">SHOP NOW</a>";
+                $txt["1"."s_r"]["txt_to_replace"] = "<a style='text-decoration:none;background-color:#35acf1;padding:10px;color:#fff' target='_blank' href=".$_SERVER["SERVER_NAME"].">SHOP NOW</a>";
 
             }
             /* END SUCCESS REGISTER */

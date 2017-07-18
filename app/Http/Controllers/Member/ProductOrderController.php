@@ -72,6 +72,7 @@ class ProductOrderController extends Member
                 $data["ec_order_id"] = $sir->ec_order_id;
             }
 
+            /* Payment Method Reference */
             foreach ($data["_payment_method"] as $key => $value) 
             {
                 if ($data["inv"]->payment_method_id == $value->method_id) 
@@ -102,8 +103,6 @@ class ProductOrderController extends Member
                     }
                 }
             }
-
-            
         }
       
         return view('member.product_order.product_create_order', $data);

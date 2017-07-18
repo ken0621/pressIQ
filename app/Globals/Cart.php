@@ -757,7 +757,7 @@ class Cart
             $data["tbl_customer"]['email']            = $current->email;
             $data["tbl_customer"]['password']         = Crypt::decrypt($current->password);
             $data["tbl_customer"]['shop_id']          = $shop_id;
-            // $data["tbl_customer"]['customer_contact'] = $other_info->customer_mobile;
+            $data["tbl_customer"]['customer_contact'] = $data["tbl_customer"]['customer_contact'] ? $data["tbl_customer"]['customer_contact'] : $other_info->customer_mobile;
             $data["tbl_customer"]['country_id']       = 420;
             $data["tbl_customer"]['tin_number']       = $current->tin_number;
             $data["tbl_customer"]['mlm_username']     = $current->mlm_username;
@@ -1005,26 +1005,33 @@ class Cart
         ini_set('xdebug.max_nesting_level', 200);
         
         $data = Cart::get_info($shop_id);
-        $method_id = $data["tbl_ec_order"]["payment_method_id"];
-        $method_information = Self::get_method_information($shop_id, $method_id);
-        if ( isset($method_id) && isset($method_information) )
+        if (isset($data["tbl_ec_order"]["payment_method_id"])) 
         {
-            switch ($method_information->link_reference_name)
+            $method_id = $data["tbl_ec_order"]["payment_method_id"];
+            $method_information = Self::get_method_information($shop_id, $method_id);
+            if ( isset($method_id) && isset($method_information) )
             {
-                case 'paypal2': dd("UNDER DEVELOPMENT"); break;
-                case 'paymaya': Cart::submit_using_paymaya($data, $shop_id, $method_information, $from); break;
-                case 'paynamics': dd("UNDER DEVELOPMENT"); break;
-                case 'dragonpay': return Cart::submit_using_dragonpay($data, $shop_id, $method_information, $from); break;
-                case 'ipay88': return Cart::submit_using_ipay88($data, $shop_id, $method_information); break;
-                case 'other': return Cart::submit_using_proof_of_payment($shop_id, $method_information);  break;
-                case 'e_wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
-                case 'cashondelivery': return Cart::submit_using_cash_on_delivery($shop_id, $method_information); break;
-                default: dd("UNDER DEVELOPMENT"); break;
+                switch ($method_information->link_reference_name)
+                {
+                    case 'paypal2': dd("UNDER DEVELOPMENT"); break;
+                    case 'paymaya': Cart::submit_using_paymaya($data, $shop_id, $method_information, $from); break;
+                    case 'paynamics': dd("UNDER DEVELOPMENT"); break;
+                    case 'dragonpay': return Cart::submit_using_dragonpay($data, $shop_id, $method_information, $from); break;
+                    case 'ipay88': return Cart::submit_using_ipay88($data, $shop_id, $method_information); break;
+                    case 'other': return Cart::submit_using_proof_of_payment($shop_id, $method_information);  break;
+                    case 'e_wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
+                    case 'cashondelivery': return Cart::submit_using_cash_on_delivery($shop_id, $method_information); break;
+                    default: dd("UNDER DEVELOPMENT"); break;
+                }
+            }
+            else
+            {
+                return Redirect::back()->with("error", "Please choose payment method.")->send();
             }
         }
         else
         {
-            return Redirect::back()->with("error", "Please choose payment method.")->send();
+            dd('An error occurred. Please try again later.');
         }
     }
     public static function submit_using_paymaya($data, $shop_id, $method_information, $from)

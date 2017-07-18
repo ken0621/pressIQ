@@ -35,23 +35,29 @@ $data['icon'] = 'fa fa-money';
                       <input type="email" class="form-control" name="vmoney_email" value="{{ $customer_info->email }}" required>
                     </div>
                     <div class="row clearfix">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                               <label>Amount to convert ( Current Wallet: PHP. {{ number_format($wallet, 2) }} )</label>
                               <input step="any" type="number" class="form-control current-wallet" value="{{ $minimum }}" name="wallet_amount" min="{{ $minimum }}" max="{{ $wallet }}">
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label>Convenience Fee</label>
                                 <input class="form-control convenience-fee" type="number" disabled readonly value="0" percent="{{ $percent }}" fixed="{{ $fixed }}">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Tax</label>
+                                <input class="form-control tax-fee" type="number" disabled readonly value="0">
                             </div>
                         </div>
                     </div>
                     <div class="row clearfix">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Total</label>
+                                <label>Total Amount</label>
                                 <input class="form-control total-fee" type="number" disabled readonly value="0">
                             </div>
                         </div>
@@ -70,7 +76,9 @@ $data['icon'] = 'fa fa-money';
                     <th>Transaction ID</th>
                     <th>Merchant Reference</th>
                     <th>Amount</th>
-                    <th>Fee</th>
+                    <th>Tax</th>
+                    <th>Convenience Fee</th>
+                    <th>Total Amount</th>
                     <th>Recipient</th>
                     <th>Status</th>
                     <th>Date</th>
@@ -82,7 +90,9 @@ $data['icon'] = 'fa fa-money';
                           <td>{{ $logs->txnId }}</td>
                           <td>{{ $logs->merchantRef }}</td>
                           <td>PHP. {{ number_format($logs->vmoney_wallet_logs_amount, 2) }}</td>
+                          <td>PHP. {{ number_format($logs->tax, 2) }}</td>
                           <td>PHP. {{ number_format($logs->fee, 2) }}</td>
+                          <td>PHP. {{ number_format($logs->vmoney_wallet_logs_amount + $logs->tax + $logs->fee, 2) }}</td>
                           <td>{{ $logs->vmoney_wallet_logs_email }}</td>
                           <td>{{ $logs->message }}</td>
                           <td>{{ date("F d, Y", strtotime($logs->vmoney_wallet_logs_date)) }}</td>

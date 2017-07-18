@@ -203,7 +203,7 @@ class Mail_global
     public static function create_email_content($data,$shop_id,$content_key = null)
     {
         $result = 0;
-        if(EmailContent::checkIfexisting($content_key) > 0) 
+        if(EmailContent::checkIfexisting_shop_id($content_key,$shop_id) > 0) 
         {            
             $data["template"] = Tbl_email_template::where("shop_id", $shop_id)->first();
             if(isset($data['template']->header_image))

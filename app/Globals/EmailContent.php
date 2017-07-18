@@ -33,6 +33,10 @@ class EmailContent
     {
         return Tbl_email_content::where("email_content_key",$content_key)->count();
     }
+    public static function checkIfexisting_shop_id($content_key, $shop_id =1)
+    {
+        return Tbl_email_content::where("email_content_key",$content_key)->where("shop_id",$shop_id)->count();
+    }
     public static function email_txt_replace($content_key, $change_content = array(), $shop_id = 1)
     {    	
         $content = Tbl_email_content::where("email_content_key",$content_key)

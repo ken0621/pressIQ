@@ -481,7 +481,7 @@ class Ec_order
                     {
                         /* EMAIL SUCCESSFUL ORDER */
                         $pass_data["order_details"] = $order;
-                        $pass_data["order_item"] = Tbl_ec_order_item::item()->where("ec_order_id",$ec_order_id)->get();
+                        $pass_data["order_item"] = Tbl_ec_order_item::item()->where("ec_order_id",$ec_order_id)->groupBy("ec_order_id")->get();
                         $pass_data["order_status"] = $order_status;
                         Mail_global::create_email_content($pass_data, $shop_id, "successful_order");
                         $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);

@@ -20,6 +20,7 @@ use App\Globals\Cart;
 use App\Globals\Customer;
 use App\Globals\Ec_order;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_ec_order;
 use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Models\Tbl_item_code;
 use App\Models\Tbl_country;

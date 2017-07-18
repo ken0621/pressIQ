@@ -712,7 +712,12 @@ class Cart
         $data["billing_equals_shipping"] = (isset($customer_information["billing_equals_shipping"]) ? $customer_information["billing_equals_shipping"] : (isset($data["billing_equals_shipping"]) ? $data["billing_equals_shipping"] : true));;
 
         /* SET BASIC INFORMATION */
-        $data["tbl_customer"]['customer_id']      = Tbl_customer::max("customer_id") + 1;
+        if (isset($customer_information["email"]) && isset($customer_information["password"])) 
+        {
+            $customer_exist = DB::table("tbl_customer")->where("email", $customer_information["email"])->first();
+        }
+        
+        $data["tbl_customer"]['customer_id']      = isset($customer_exist->customer_id) ? $customer_exist->customer_id : Tbl_customer::max("customer_id") + 1;
         $data["tbl_customer"]['first_name']       = (isset($customer_information["first_name"]) ? $customer_information["first_name"] : (isset($data["tbl_customer"]['first_name']) ? $data["tbl_customer"]['first_name'] : null));
         $data["tbl_customer"]['last_name']        = (isset($customer_information["last_name"]) ? $customer_information["last_name"] : (isset($data["tbl_customer"]['last_name']) ? $data["tbl_customer"]['last_name'] : null));
         $data["tbl_customer"]['middle_name']      = (isset($customer_information["middle_name"]) ? $customer_information["middle_name"] : (isset($data["tbl_customer"]['middle_name']) ? $data["tbl_customer"]['middle_name'] : null));
@@ -752,7 +757,7 @@ class Cart
             $data["tbl_customer"]['email']            = $current->email;
             $data["tbl_customer"]['password']         = Crypt::decrypt($current->password);
             $data["tbl_customer"]['shop_id']          = $shop_id;
-            $data["tbl_customer"]['customer_contact'] = $other_info->customer_mobile;
+            // $data["tbl_customer"]['customer_contact'] = $other_info->customer_mobile;
             $data["tbl_customer"]['country_id']       = 420;
             $data["tbl_customer"]['tin_number']       = $current->tin_number;
             $data["tbl_customer"]['mlm_username']     = $current->mlm_username;
@@ -1332,7 +1337,7 @@ class Cart
         $result = Mail_global::create_email_content($data, $shop_id, "cash_on_delivery");
         if($result == 0)
         {    
-            $result = Mail_global::mail($data, $shop_id, "cod", $this->shop_theme);
+            // $result = Mail_global::mail($data, $shop_id, "cod");
         }
 
         return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)) . '&popup=1')->send();

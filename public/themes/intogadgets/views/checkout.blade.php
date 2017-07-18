@@ -46,7 +46,7 @@
 						<div class="fieldset">
 							<label class="col-md-4">Contact Number</label>
 							<div class="field col-md-8">
-								<input readonly maxlength="11" class="form-control" type="text" name="contact_number" value="{{ $customer->customer_mobile }}">
+								<input maxlength="11" class="form-control" type="text" name="contact_number" value="{{ $customer->customer_mobile }}">
 							</div>
 						</div>
 						<div class="fieldset">

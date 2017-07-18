@@ -736,10 +736,6 @@ class Cart
         $data["tbl_customer"]['b_day']     = (isset($customer_information["b_day"]) ? $customer_information["b_day"] : (isset($data["tbl_customer"]['b_day']) ? $data["tbl_customer"]['b_day'] : null));
         $data["tbl_customer"]['customer_gender']     = (isset($customer_information["customer_gender"]) ? $customer_information["customer_gender"] : (isset($data["tbl_customer"]['customer_gender']) ? $data["tbl_customer"]['customer_gender'] : 'Male'));
         
-        
-        
-        
-        // 
         $data['load_wallet']['ec_order_load']        = isset($customer_information['load_wallet']['ec_order_load']) == true ? $customer_information['load_wallet']['ec_order_load'] : 0 ;
         $data['load_wallet']['ec_order_load_number'] = isset($customer_information['load_wallet']['ec_order_load_number']) == true ? $customer_information['load_wallet']['ec_order_load_number'] : 0;
         
@@ -1193,7 +1189,7 @@ class Cart
             /* Bancnet */
             case 5: $data["paymentId"] = 5; break;
             /* Default (Credit Card) */
-            default: $data["paymentId"] = 1; break;
+            default: $data["paymentId"] = $method_information->link_delimeter; break;
         }
 
         $data["refNo"] = $shop_id . time();

@@ -1332,7 +1332,7 @@ class Cart
         $result = Mail_global::create_email_content($data, $shop_id, "cash_on_delivery");
         if($result == 0)
         {    
-            $result = Mail_global::mail($data, $shop_id, "cod", $this->shop_theme);
+            // $result = Mail_global::mail($data, $shop_id, "cod");
         }
 
         return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)) . '&popup=1')->send();

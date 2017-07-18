@@ -1189,7 +1189,7 @@ class Cart
             /* Bancnet */
             case 5: $data["paymentId"] = 5; break;
             /* Default (Credit Card) */
-            default: $data["paymentId"] = 1; break;
+            default: $data["paymentId"] = $method_information->link_delimeter; break;
         }
 
         $data["refNo"] = $shop_id . time();

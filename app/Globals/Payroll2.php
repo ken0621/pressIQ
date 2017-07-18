@@ -843,6 +843,7 @@ class Payroll2
 				}
 			}
 		}
+
 		
 
 		//record if undertime
@@ -851,9 +852,10 @@ class Payroll2
 	
 		if ($time_spent_in_minutes<$target_minutes) 
 		{
-			$under_time = Payroll::sum_time($under_time,Payroll::time_diff($target_hours,$time_spent));
+			$under_time = Payroll::sum_time($under_time,Payroll::time_diff($time_spent,$target_hours));
 			
 		}
+		
 
 		//fill undertime with leave hours
 		if ($leave_fill_undertime==1) 
@@ -883,6 +885,8 @@ class Payroll2
 		{
 			$excess_leave_minutes = $leave;
 		}
+
+
 		
 		//grace time for overtime - accumulative.
 		$over_time_minutes = Payroll2::convert_time_in_minutes($over_time);
@@ -936,7 +940,7 @@ class Payroll2
 
 		/*END day type and holiday type*/
 
-			
+	
 	
 		$return["time_spent"] = Payroll2::convert_to_24_hour($time_spent);
 		$return["is_absent"] = $is_absent;

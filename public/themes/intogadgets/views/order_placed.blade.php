@@ -53,8 +53,8 @@
 		inst.open();
 	</script>
 	@endsection
-@else
-	@section("content")
+@endif
+@section("content")
 	<div class="clearfix">
 		<div class="container" style="background-color: #fff; margin-bottom: 50px; margin-top: 50px;">
 			<div class="text-center">
@@ -98,8 +98,5 @@
 			<div style="margin-bottom: 100px;"></div>
 		</div>
 	</div>
-	@endsection
-@endif
-
-
+@endsection
 

@@ -52,7 +52,7 @@
                             </td>
                             <td>
                                 @if($order->order_status != "Cancelled")
-                                    <a class="cancel-button" href="/account/order?cancel_id={{ $order->ec_order_id }}">Cancel</a>
+                                    <a class="cancel-button" href="javascript:" linkerino="/account/order?cancel_id={{ $order->ec_order_id }}">Cancel</a>
                                 @endif
                             </td>                           
                         </tr>
@@ -180,7 +180,7 @@ function account_order()
 
     function action_click_cancel(e)
     {
-        var link = $(e.currentTarget).attr("href");
+        var link = $(e.currentTarget).attr("linkerino");
 
         if (confirm("Are you sure you want to cancel this order?")) 
         {

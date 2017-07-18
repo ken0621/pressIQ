@@ -20,6 +20,7 @@ use App\Globals\Cart;
 use App\Globals\Customer;
 use App\Globals\Ec_order;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_ec_order;
 use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Models\Tbl_item_code;
 use App\Models\Tbl_country;
@@ -77,6 +78,14 @@ class ShopCheckoutController extends Shop
                 
                 $ipay88_logs["order_id"] = $order_id;
                 DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
+               
+                //ipay88 confirmed payment
+                $order = Tbl_ec_order::customer()->customer_otherinfo()->payment_method()->where("ec_order_id",$order_id)->first();
+                /* EMAIL SUCCESSFUL ORDER */
+                $pass_data["order_details"] = $order;
+                $pass_data["order_item"] = Tbl_ec_order_item::item()->where("ec_order_id",$order_id)->get();
+                $pass_data["order_status"] = $order_status; 
+                Mail_global::create_email_content($pass_data, $shop_id, "successful_order");
 
                 // Redirect
                 return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)))->send();

@@ -27,7 +27,6 @@
                 </ul>
             </div>
             <div class="col-md-4 pull-right">
-            <a link="/member/maintenance/email_content/add" class="popup pull-right btn btn-primary" size="md">Add</a>
             </div>
         </div>
 

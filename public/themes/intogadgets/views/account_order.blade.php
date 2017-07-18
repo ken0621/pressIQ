@@ -51,7 +51,7 @@
                                 @endif
                             </td>
                             <td>
-                                @if($order->order_status != "Cancelled")
+                                @if($order->order_status != "Cancelled" || $order->order_status != "Shipped")
                                     <a class="cancel-button" href="javascript:" linkerino="/account/order?cancel_id={{ $order->ec_order_id }}">Cancel</a>
                                 @endif
                             </td>                           

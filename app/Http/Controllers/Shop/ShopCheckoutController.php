@@ -124,6 +124,14 @@ class ShopCheckoutController extends Shop
                 $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, Self::$customer_info ? Self::$customer_info->customer_id : null);
                 Cart::clear_all($this->shop_info->shop_id);
 
+                //ipay88 confirmed payment
+                $order = Tbl_ec_order::customer()->customer_otherinfo()->payment_method()->where("ec_order_id",$order_id)->first();
+                /* EMAIL SUCCESSFUL ORDER */
+                $pass_data["order_details"] = $order;
+                $pass_data["order_item"] = Tbl_ec_order_item::item()->where("ec_order_id",$order_id)->get();
+                $pass_data["order_status"] = $order_status; 
+                Mail_global::create_email_content($pass_data, $shop_id, "successful_order");
+
                 // Redirect
                 return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)))->send();
             }

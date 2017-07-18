@@ -13,7 +13,6 @@ use Carbon\Carbon;
 use URL;
 use Session;
 use DB;
-
 use App\Globals\Cart;
 
 class ShopCheckoutLoginController extends Shop
@@ -53,7 +52,7 @@ class ShopCheckoutLoginController extends Shop
             }
             else
             {
-                return Redirect::to("/checkout");
+                return Redirect::to("/checkout")->send();
             }
         }
         else
@@ -63,9 +62,6 @@ class ShopCheckoutLoginController extends Shop
             $this->cart_exist($data);
             $this->if_loggedin();
             return view("checkout_login", $data);
-        }
-
-        
+        }       
     }
-
 }

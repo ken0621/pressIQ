@@ -1074,7 +1074,7 @@ class Payroll2
 				$daily_rate = 0;
 			}
 		}
-		
+
 		if ($_time['day_type'] == 'extra_day' && $time_spent!=0) 
 		{
 			$return->daily_rate = $daily_true_rate;
@@ -1385,9 +1385,12 @@ class Payroll2
 		$late_float			= Self::time_float($_time['late']);
 		$undertime_float	= Self::time_float($_time['undertime']);
 		$absent_float		= 0;
-		$absent = 0;
-		$late=0;
-		$undertime=0;
+		$absent				= 0;
+		$late 				= 0;
+		$undertime 			= 0;
+
+		//compute cola
+		$cola = Payroll2::compute_income_day_pay_cola($_time , $daily_rate, $group_id , $cola , $compute_type);
 		
 		//no time in monthly
 		if($time_spent!=0 && $compute_type=="monthly")
@@ -1440,8 +1443,7 @@ class Payroll2
 
 		
 	
-		//compute cola
-		$cola = Payroll2::compute_income_day_pay_cola($_time , $daily_rate, $group_id , $cola , $compute_type);
+		
 		
 		$return->subtotal_after_addition	= $subtotal_after_addition;
 		$return->rendered_days 				= @($time_spent/$target_float);
@@ -1600,6 +1602,7 @@ class Payroll2
 		$total_day_income 		= $daily_rate ;
 		$target_float 			= Self::time_float($_time['target_hours']);
 		$daily_rate_plus_cola	= $daily_rate + $cola;
+		$cola_rate_per_hour 	= $cola/$target_float;
 		
 		/* GET INITIAL DATA */
 		$param_rate 			= Tbl_payroll_overtime_rate::where('payroll_group_id', $group_id)->get()->toArray();
@@ -1622,6 +1625,20 @@ class Payroll2
 		else if($time_spent==0)
 		{
 			$cola = $cola - $cola;
+		}
+
+		/*breakdown deduction*/
+		$late_float			= Self::time_float($_time['late']);
+		$undertime_float	= Self::time_float($_time['undertime']);
+
+		if ($late_float != 0) 
+		{
+			$cola = $cola - ($late_float * $cola_rate_per_hour);
+		}
+
+		if ($undertime_float!=0) 
+		{
+			$cola = $cola - ($undertime_float * $cola_rate_per_hour);
 		}
 	
 		$return->cola_day_pay = $cola;

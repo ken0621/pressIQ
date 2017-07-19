@@ -9,6 +9,7 @@ use App\Globals\UnitMeasurement;
 use App\Globals\Warehouse;
 use App\Globals\Ecom_Product;
 use App\Globals\Pdf_global;
+use App\Globals\Cart;
 
 use App\Models\Tbl_customer;
 use App\Models\Tbl_warehousea;
@@ -31,6 +32,7 @@ use Carbon\Carbon;
 use Session;
 use Redirect;
 use PDF;
+use DB;
 class ProductOrderController extends Member
 {
     public function index()
@@ -38,7 +40,7 @@ class ProductOrderController extends Member
         $data["page"]               = "Customer Invoice";
         $data["_customer"]          = Tbl_customer::where("archived", 0)->get();
         $data["_payment_method"]    = Tbl_online_pymnt_method::get();
-        $data['_product']           = Ecom_Product::getProductList(null, [1,0]);
+        $data['_product']           = Ecom_Product::getProductList(null, [1,0], 1);
         // dd($data);
         $data['_um']                = UnitMeasurement::load_um_multi();
         $data["action"]             = "/member/ecommerce/product_order/create_order/create_invoice";
@@ -52,7 +54,6 @@ class ProductOrderController extends Member
 
             $sir                    = Tbl_ec_order::where("ec_order_id",$id)->first();
 
-            //dd(Request::all());
             if($sir)
             {
                 if($sir->coupon_id != null)
@@ -70,8 +71,40 @@ class ProductOrderController extends Member
  
                 $data["ec_order_id"] = $sir->ec_order_id;
             }
+
+            /* Payment Method Reference */
+            foreach ($data["_payment_method"] as $key => $value) 
+            {
+                if ($data["inv"]->payment_method_id == $value->method_id) 
+                {
+                    $method_id = $value->method_id;
+                    $shop_id = $this->user_info->shop_id;
+                    $method_information = Cart::get_method_information($shop_id, $method_id);
+
+                    if ( isset($method_id) && isset($method_information) )
+                    {
+                        switch ($method_information->link_reference_name)
+                        {
+                            // case 'paypal2': dd("UNDER DEVELOPMENT"); break;
+                            // case 'paymaya': Cart::submit_using_paymaya($data, $shop_id, $method_information, $from); break;
+                            // case 'paynamics': dd("UNDER DEVELOPMENT"); break;
+                            // case 'dragonpay': return Cart::submit_using_dragonpay($data, $shop_id, $method_information, $from); break;
+                            case 'ipay88': 
+                                $ipay88 = DB::table("tbl_ipay88_logs")->where("order_id", $id)->first();
+
+                                $data["log_name"] = "Ipay88 Reference Number";
+                                $data["log_reference"] = isset($ipay88->log_trans_id) ? $ipay88->log_trans_id : 'Not found';
+                            break;
+                            // case 'other': return Cart::submit_using_proof_of_payment($shop_id, $method_information);  break;
+                            // case 'e_wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
+                            // case 'cashondelivery': return Cart::submit_using_cash_on_delivery($shop_id, $method_information); break;
+                            // default: dd("UNDER DEVELOPMENT"); break;
+                        }
+                    }
+                }
+            }
         }
-            // dd($data["_product"]);
+      
         return view('member.product_order.product_create_order', $data);
     }
     public function invoice_list()

@@ -9,62 +9,162 @@
 			<div class="checkout-form">
 				<form id="check-out" method="post">
 					<input type="hidden" name="_token" value="{{{ csrf_token() }}}" />
-					<div class="fieldset">
-						<div class="title col-md-12">Shipping Details</div>
-					</div>
 
 					@if(session("error"))
-					    <div class="alert alert-danger">
+					    <div class="alert alert-danger" style="margin-top: 25px;">
 					        <ul>
 					        	<li>{{ session("error") }}</li>
 					        </ul>
 					    </div>
 					@endif
 
-					@if(!$customer_info_a)
-					<div class="fieldset">
-						<label class="col-md-4">First and Last Name</label>
-						<div class="field col-md-8">
-							<input  class="form-control" type="text" name="full_name" value="{{ old('full_name') }}">
-						</div>
-					</div>
+					@if (count($errors) > 0)
+					    <div class="alert alert-danger" style="margin-top: 25px;">
+					        <ul>
+					            @foreach ($errors->all() as $error)
+					            	@if($error == "Fail(Bank Declined Transaction)")
+					                	<li>Your card was declined. In order to resolve the issue, you will need to contact your back</li>
+					                @else
+					                	<li>{{ $error }}</li>
+					                @endif
+					            @endforeach
+					        </ul>
+					    </div>
 					@endif
 
 					<div class="fieldset">
-						<label class="col-md-4">Province</label>
-						<div class="field col-md-8">
-							<select firstload="true" default="{{ old('customer_state') }}" class="form-control load-location" name="customer_state" level="1"></select>
-						</div>
-					</div>
-					<div class="fieldset">
-						<label class="col-md-4">City / Municipality</label>
-						<div class="field col-md-8">
-							<select firstload="true" default="{{ old('customer_city') }}" class="form-control load-location" name="customer_city" level="2">
-								<option></option>
-							</select>
-						</div>
-					</div>
-					<div class="fieldset">
-						<label class="col-md-4">Barangay</label>
-						<div class="field col-md-8">
-							<select firstload="true" default="{{ old('customer_zip') }}" class="form-control load-location" name="customer_zip" level="3">
-								<option></option>
-							</select>
-						</div>
-					</div>
-					<div class="fieldset">
-						<label class="col-md-4">Street</label>
-						<div class="field col-md-8">
-							<textarea spellcheck="false" class="form-control" name="customer_street">{{ Request::old('customer_street') }}</textarea>
-						</div>
+						<div class="title col-md-12">Shipping Details</div>
 					</div>
 
-					<div class="fieldset">
-						<label class="col-md-4">Contact Number</label>
-						<div class="field col-md-8">
-							<input  maxlength="11" class="form-control" type="text" name="contact_number" value="{{ Request::input('customer_mobile') }}">
+					@if($get_cart["new_account"] == false)
+						<div class="fieldset">
+							<label class="col-md-4">First and Last Name</label>
+							<div class="field col-md-8">
+								<div disabled class="form-control">{{ $customer->first_name . ' ' . $customer->middle_name . ' ' . $customer->last_name }}</div>
+							</div>
 						</div>
-					</div>
+						<div class="fieldset">
+							<label class="col-md-4">Contact Number</label>
+							<div class="field col-md-8">
+								<input maxlength="11" class="form-control" type="text" name="contact_number" value="{{ $customer->customer_mobile }}">
+							</div>
+						</div>
+						<div class="fieldset">
+							<label class="col-md-4">Province</label>
+							<div class="field col-md-8">
+								<select firstload="true" default="{{ $shipping_address->state_id }}" class="form-control load-location" name="customer_state" level="1"></select>
+							</div>
+						</div>
+						<div class="fieldset">
+							<label class="col-md-4">City / Municipality</label>
+							<div class="field col-md-8">
+								<select firstload="true" default="{{ $shipping_address->city_id }}" class="form-control load-location" name="customer_city" level="2">
+									<option></option>
+								</select>
+							</div>
+						</div>
+						<div class="fieldset">
+							<label class="col-md-4">Barangay</label>
+							<div class="field col-md-8">
+								<select firstload="true" default="{{ $shipping_address->zipcode_id }}" class="form-control load-location" name="customer_zip" level="3">
+									<option></option>
+								</select>
+							</div>
+						</div>
+						<div class="fieldset">
+							<label class="col-md-4">Street</label>
+							<div class="field col-md-8">
+								<textarea spellcheck="false" class="form-control" name="customer_street">{{ $shipping_address->customer_street }}</textarea>
+							</div>
+						</div>
+					@else
+						<div class="fieldset">
+							<label class="col-md-4">First and Last Name</label>
+							<div class="field col-md-8">
+								<input required class="form-control" type="text" name="full_name" value="{{ old('full_name') }}">
+							</div>
+						</div>
+						<div class="fieldset">
+							<label class="col-md-4">Contact Number</label>
+							<div class="field col-md-8">
+								<input required maxlength="11" class="form-control" type="text" name="contact_number" value="{{ Request::input('customer_mobile') }}">
+							</div>
+						</div>
+						<div class="fieldset">
+							<label class="col-md-4">Province</label>
+							<div class="field col-md-8">
+								<select required firstload="true" default="{{ old('customer_state') }}" class="form-control load-location" name="customer_state" level="1"></select>
+							</div>
+						</div>
+						<div class="fieldset">
+							<label class="col-md-4">City / Municipality</label>
+							<div class="field col-md-8">
+								<select required firstload="true" default="{{ old('customer_city') }}" class="form-control load-location" name="customer_city" level="2">
+									<option></option>
+								</select>
+							</div>
+						</div>
+						<div class="fieldset">
+							<label class="col-md-4">Barangay</label>
+							<div class="field col-md-8">
+								<select required firstload="true" default="{{ old('customer_zip') }}" class="form-control load-location" name="customer_zip" level="3">
+									<option></option>
+								</select>
+							</div>
+						</div>
+						<div class="fieldset">
+							<label class="col-md-4">Street</label>
+							<div class="field col-md-8">
+								<textarea required spellcheck="false" class="form-control" name="customer_street">{{ Request::old('customer_street') }}</textarea>
+							</div>
+						</div>
+					@endif
+
+					@if($get_cart["new_account"] == false)
+						<div class="fieldset">
+							<div class="field col-md-12">
+								<div class="checkbox">
+								    <label>
+								      <input type="checkbox" class="checkbox-bill" name="billing_equals_shipping"> Bill to different address
+								    </label>
+								  </div>
+							</div>
+						</div>
+
+						<div class="different-container hide">
+							<div class="fieldset">
+								<div class="title col-md-12">Billing Details</div>
+							</div>
+							<div class="fieldset">
+								<label class="col-md-4">Province</label>
+								<div class="field col-md-8">
+									<select firstload="true" default="{{ old('billing_customer_state') }}" class="form-control bill-load-location" name="billing_customer_state" level="1"></select>
+								</div>
+							</div>
+							<div class="fieldset">
+								<label class="col-md-4">City / Municipality</label>
+								<div class="field col-md-8">
+									<select firstload="true" default="{{ old('billing_customer_city') }}" class="form-control bill-load-location" name="billing_customer_city" level="2">
+										<option></option>
+									</select>
+								</div>
+							</div>
+							<div class="fieldset">
+								<label class="col-md-4">Barangay</label>
+								<div class="field col-md-8">
+									<select firstload="true" default="{{ old('billing_customer_zip') }}" class="form-control bill-load-location" name="billing_customer_zip" level="3">
+										<option></option>
+									</select>
+								</div>
+							</div>
+							<div class="fieldset">
+								<label class="col-md-4">Street</label>
+								<div class="field col-md-8">
+									<textarea spellcheck="false" class="form-control" name="billing_customer_street">{{ Request::old('billing_customer_street') }}</textarea>
+								</div>
+							</div>
+						</div>
+					@endif
 
 					<div class="fieldset text-right btn-container">
 						<div class="col-md-12">
@@ -84,98 +184,7 @@
 @endsection
 
 @section('script')
-<script type="text/javascript">
-
-var checkout_form = new checkout_form();
-var ajax_load_location = null;
-function checkout_form()
-{
-	init();
-
-	
-
-	function init()
-	{
-		$(document).ready(function()
-		{
-			document_ready();
-		});
-	}
-	function document_ready()
-	{
-		action_load_location(1, 0);
-		action_load_sidecart();
-		action_load_location();
-		event_load_location_change();
-	}
-
-	function action_load_sidecart()
-	{
-		$(".order-summary-container").load("/checkout/side");
-	}
-	function action_load_location(level, parent)
-	{
-		if(level < 4)
-		{
-			$(".load-location[level=" + level + "]").html("<option>LOADING LOCATION</option>");
-
-			var deflt;
-			var firstload = false;
-
-			/* GET DEFAULT ON FIRST LOAD */
-			if($(".load-location[level=" + level + "]").attr("firstload") == "true")
-			{
-				$(".load-location[level=" + level + "]").attr("firstload", "false");
-				firstload = true;
-				deflt = $(".load-location[level=" + level + "]").attr("default");
-			}
-
-			if(ajax_load_location)
-			{
-				ajax_load_location.abort();
-			}
-
-			ajax_load_location = 	$.ajax(
-									{
-						            	url: '/checkout/locale?parent=' + parent,
-						            	success: function(data)
-						            	{
-						            		$(".load-location[level=" + level + "]").html(data);
-
-						            		if(deflt != "" && firstload == true)
-						            		{
-						            			$(".load-location[level=" + level + "]").val(deflt);
-						            		}
-
-
-						            		
-						              		action_load_location(level+1, $(".load-location[level=" + (level) + "]").val());
-						            	}
-						          	});
-		}
-	}
-	function event_load_location_change()
-	{
-		$(".load-location").change(function(e)
-		{
-			parent = $(e.currentTarget).val();
-			level = parseInt($(e.currentTarget).attr("level")) + 1;
-			action_load_location(level, parent);
-
-			if($(e.currentTarget).attr("level") == 3)
-			{
-				$(".checkout-summary .loader-here").removeClass("hidden");
-				action_load_sidecart();
-			}
-
-		});
-	}
-}
-
-
-
-
-</script>
+<script type="text/javascript" src="/assets/front/js/global_checkout.js"></script>
 @endsection
 
 @section('css')

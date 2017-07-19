@@ -12,6 +12,7 @@ use Redirect;
 use App\Models\Tbl_post;
 use App\Models\Tbl_collection;
 use App\Globals\Category;
+use DB;
 
 class Page_ContentController extends Member
 {
@@ -52,6 +53,12 @@ class Page_ContentController extends Member
             {
                 unset($data["_brand"][$key]);
             }
+        }
+
+        /* FCF Exclusive */
+        if ($data["shop_theme"] == "fcf") 
+        {
+            $data["job_resume"] = DB::table("tbl_cms_job_resume")->where("archived", 0)->orderBy("date_created", "DESC")->get();
         }
 
         return view('member.page.page_content', $data);

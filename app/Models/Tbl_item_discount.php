@@ -7,5 +7,5 @@ class Tbl_item_discount extends Model
 {
 	protected $table = 'tbl_item_discount';
 	protected $primaryKey = "item_discount_id";
-    public $timestamps = false;
+    public $timestamps = true;
 }

@@ -8,5 +8,5 @@ class Tbl_um extends Model
 {
 	protected $table = 'tbl_um';
 	protected $primaryKey = "id";
-    public $timestamps = false;
+    public $timestamps = true;
 }

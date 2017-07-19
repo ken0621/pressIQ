@@ -500,6 +500,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     Airline Wallet
                                 </a> 
                             @endif
+                            @if($shop_info->shop_wallet_vmoney == 1)
+                                <a href="/mlm/wallet/vmoney" class="subnav-text">
+                                    E-Money Wallet
+                                </a> 
+                            @endif
                         </li>
                     </ul> 
                 </li>

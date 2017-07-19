@@ -28,11 +28,7 @@
 					</div>
 					<div class="details clearfix">
 						<div class="detail-holder">
-							{{-- <div class="details-title">Upload Proof of Payment</div>
-							<button class="btn btn-primary" id="upload-button" type="button" onClick="$('.payment-upload-file').trigger('click');">UPLOAD</button>
-							<input onChange="$('.upload-name').text($(this).val().split('\\').pop());" class="hide payment-upload-file" type="file" name="payment_upload">
-							<div class="upload-name"></div> --}}
-							<div class="details-text" style="white-space: pre-wrap;">Kindly choose a peyment method which you are most comfortable with paying.</div>
+							<div class="details-text" style="white-space: pre-wrap;">Kindly choose a payment method which you are most comfortable with paying.</div>
 							<div class="details-order">
 								<button class="btn btn-primary">PLACE YOUR ORDER</button>
 							</div>
@@ -73,6 +69,7 @@ function checkout_form_payment()
 	}
 	function event_choose_payment_method()
 	{
+		$(".radio").prop("checked", false);
 		$(".choose-payment-method").unbind("click");
 		$(".choose-payment-method").bind("click", function(e)
 		{

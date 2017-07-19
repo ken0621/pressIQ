@@ -503,6 +503,9 @@ Route::any('/tablet/sales_receipt/update_submit','Member\TabletPISController@upd
 
 Route::any('/tablet/submit_all_transaction','Member\TabletPISController@confirm_submission');
 Route::any('/tablet/submit_all_transaction/submit','Member\TabletPISController@submit_transactions');
+
+Route::any('/tablet/sync_data/{table}/{date}','Member\TabletSyncController@sync');
+Route::any('/tablet/update_sync_data','Member\TabletSyncController@sync_update');
 /* END PIS TABLET*/
 
  //form

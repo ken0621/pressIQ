@@ -5,7 +5,7 @@
 	<div class="container-fluid">
 		<!-- TOP BANNER -->
 		<div class="top-bg-container">
-			<img src="/themes/{{ $shop_theme }}/img/jobs-bg.png">
+			<img src="{{ get_content($shop_theme_info, "jobs", "jobs_banner_img") }}">
 			<div class="top-bg-detail-container">
 				<img src="/themes/{{ $shop_theme }}/img/jobs-logo.png">
 			</div>
@@ -15,10 +15,11 @@
 			<!-- LEFT COLUMN -->
 			<div class="col-md-8">
 				<div class="content-title">
-					JOB VACANCIES
+					{{ get_content($shop_theme_info, "jobs", "jobs_head_text") }}
 				</div>
 				<div class="title-caption">
-					<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+					<p>
+						{{ get_content($shop_theme_info, "jobs", "jobs_head_context") }}
 					</p>
 				</div>
 				<div class="list-title-container">
@@ -28,30 +29,27 @@
 				<!-- LIST CONTAINER -->
 				<div class="list-container-holder">
 					<div class="list-container">
-						<div class="per-list">
-							<div class="per-list-title"><a href="/job">Mining Engineer</a></div>
-							<div class="per-list-description">
-								Male or Female, Minimum of five (5) year) related experience. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+						@if( loop_content_condition( $shop_theme_info, "job", "job_maintenance" ) )
+							@foreach( unserialize( get_content($shop_theme_info, "job", "job_maintenance") ) as $key => $jobs )
+							<div class="per-list">
+								<div class="per-list-title"><a href="/job?id={{ $key }}">{{ $jobs["job_title"] }}</a></div>
+								<div class="per-list-description">
+									{{ $jobs["job_caption_post"] }}
+								</div>
+								<div class="per-list-details">Date Posted: {{ date("F d, Y", strtotime($jobs["job_date_posted"])) }}</div>
 							</div>
-							<div class="per-list-details">Date Posted: August 7, 2017</div>
-							
-						</div>
-						<div class="per-list2">
-							<div class="per-list-title"><a href="/job">Geoscience Coordinator</a></div>
-							<div class="per-list-description">
-								Male or Female, Minimum of five (5) year) related experience. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+							@endforeach
+						@else
+							<div class="default-notif-container">
+								<img src="/themes/{{ $shop_theme }}/img/miniature2.png">
+								<div class="span-container">
+									<span style="font-size: 18px; font-weight: bold;">There are</span><br>
+									<span style="font-size: 32px; font-weight: bold;">No Vacancies</span><br>
+									<span style="font-size: 18px; font-weight: bold;">at this time.</span>
+								</div>
 							</div>
-							<div class="per-list-details">Date Posted: August 7, 2017</div>
-							
-						</div>
-						<div class="per-list">
-							<div class="per-list-title"><a href="/job">Maintenance Mechanical Filter</a></div>
-							<div class="per-list-description">
-								Male or Female, Minimum of five (5) year) related experience. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-							</div>
-							<div class="per-list-details">Date Posted: August 7, 2017</div>
-							
-						</div>
+						@endif
+						
 					</div>
 				</div>
 			</div>
@@ -60,25 +58,23 @@
 				<!-- ATTACHED RESUME -->
 				<div class="right-per-container">
 					<div class="title-container">
-						<div class="title">Let us find a job for you</div>
-						<div class="details">Attached your resume directly to us</div>
+						<div class="title">{{ get_content($shop_theme_info, "jobs", "jobs_right_tab_1_head_text") }}</div>
+						<div class="details">{{ get_content($shop_theme_info, "jobs", "jobs_right_tab_1_subhead_text") }}</div>
 					</div>
 					<div class="img-container">
-						<img src="/themes/{{ $shop_theme }}/img/find-job.png">
+						<img src="{{ get_content($shop_theme_info, "jobs", "jobs_right_tab_1_image") }}">
 						<a href="#popup1"><div class="submit-button">SUBMIT RESUME</div></a>
 					</div>
 				</div>
 				<!-- COMPANY PROFILE -->
 				<div class="right-per-container">
 					<div class="right-tab">
-						<div class="title">Company Profile</div>
-						<div class="details">Learn more about our company</div>
+						<div class="title">{{ get_content($shop_theme_info, "jobs", "jobs_right_tab_2_head_text") }}</div>
+						<div class="details">{{ get_content($shop_theme_info, "jobs", "jobs_right_tab_2_subhead_text") }}</div>
 					</div>
 					<div class="right-tab-content">
 						<p>
-						FCF Minerals Corporation (FCF) was incorporated in the 
-						Philippines and was duly registered with the Philippine SEC 
-						on December 3, 2001 to engage in continuing exploration, development and commercial operation of mineral claims with full power and authority to do any and all acts, things, business and activities which are related, incidental or conducive directly or indirectly to the attainment of the foregoing objectives as a mining company.
+							{{ get_content($shop_theme_info, "jobs", "jobs_right_tab_2_subhead_context") }}
 						</p>
 					</div>
 				</div>

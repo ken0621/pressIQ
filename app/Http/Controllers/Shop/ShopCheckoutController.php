@@ -20,6 +20,7 @@ use App\Globals\Cart;
 use App\Globals\Customer;
 use App\Globals\Ec_order;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_ec_order;
 use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Models\Tbl_item_code;
 use App\Models\Tbl_country;
@@ -44,29 +45,27 @@ class ShopCheckoutController extends Shop
     {
         $request = Request::all();
         $shop_id = $this->shop_info->shop_id;
+        
+        // LOGS
+        $ipay88_logs["log_merchant_code"] = $request['MerchantCode'];
+        $ipay88_logs["log_payment_id"] = $request['PaymentId'];
+        $ipay88_logs["log_reference_number"] = $request['RefNo'];
+        $ipay88_logs["log_amount"] = $request['Amount'];
+        $ipay88_logs["log_currency"] = $request['Currency'];
+        $ipay88_logs["log_remarks"] = $request['Remark'];
+        $ipay88_logs["log_trans_id"] = $request['TransId'];
+        $ipay88_logs["log_auth_code"] = $request['AuthCode'];
+        $ipay88_logs["log_status"] = $request['Status'];
+        $ipay88_logs["log_error_desc"] = $request['ErrDesc'];
+        $ipay88_logs["log_signature"] = $request['Signature'];
+        $ipay88_logs["shop_id"] = $this->shop_info->shop_id;
 
         if ($request) 
         {
-            // LOGS
-            $ipay88_logs["log_merchant_code"] = $request['MerchantCode'];
-            $ipay88_logs["log_payment_id"] = $request['PaymentId'];
-            $ipay88_logs["log_reference_number"] = $request['RefNo'];
-            $ipay88_logs["log_amount"] = $request['Amount'];
-            $ipay88_logs["log_currency"] = $request['Currency'];
-            $ipay88_logs["log_remarks"] = $request['Remark'];
-            $ipay88_logs["log_trans_id"] = $request['TransId'];
-            $ipay88_logs["log_auth_code"] = $request['AuthCode'];
-            $ipay88_logs["log_status"] = $request['Status'];
-            $ipay88_logs["log_error_desc"] = $request['ErrDesc'];
-            $ipay88_logs["log_signature"] = $request['Signature'];
-            $ipay88_logs["shop_id"] = $this->shop_info->shop_id;
-
-            DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
-
             if($request['Status'] == 0)
             {
-                dd($request['ErrDesc'].'. '.'Please refer to ipay88 Appendix I - 3.0 Error Description.');
-                // return redirect('/checkout')->withErrors($request['ErrDesc'].'. '.'Please refer to ipay88 Appendix I - 3.0 Error Description.')->send();    
+                DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
+                return redirect('/checkout')->withErrors($request['ErrDesc'])->send();    
             } 
             else 
             {
@@ -76,6 +75,17 @@ class ShopCheckoutController extends Shop
 
                 $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, Self::$customer_info ? Self::$customer_info->customer_id : null);
                 Cart::clear_all($this->shop_info->shop_id);
+                
+                $ipay88_logs["order_id"] = $order_id;
+                DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
+               
+                //ipay88 confirmed payment
+                $order = Tbl_ec_order::customer()->customer_otherinfo()->payment_method()->where("ec_order_id",$order_id)->first();
+                /* EMAIL SUCCESSFUL ORDER */
+                $pass_data["order_details"] = $order;
+                $pass_data["order_item"] = Tbl_ec_order_item::item()->where("ec_order_id",$order_id)->groupBy("ec_order_id")->get();
+                $pass_data["order_status"] = $order_status; 
+                Mail_global::create_email_content($pass_data, $shop_id, "successful_order");
 
                 // Redirect
                 return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)))->send();
@@ -285,6 +295,22 @@ class ShopCheckoutController extends Shop
                     $data['ec_order_load'] = 1;
                 }      
             }
+
+            if ($data["get_cart"]["new_account"] == false) 
+            {
+                $data["shipping_address"] = DB::table("tbl_customer_address")->where("purpose", "shipping")
+                                                                             ->where("customer_id", $data["get_cart"]["tbl_customer"]["customer_id"])
+                                                                             ->first();
+
+                $data["shipping_address"]->state_id = isset(DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_state)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_state)->first()->locale_id : null;
+                $data["shipping_address"]->city_id = isset(DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_city)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_city)->first()->locale_id : null;
+                $data["shipping_address"]->zipcode_id = isset(DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_zipcode)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_zipcode)->first()->locale_id : null;
+            }
+            
+            $data["customer"] = DB::table("tbl_customer")->leftJoin("tbl_customer_other_info", "tbl_customer.customer_id", "=", "tbl_customer_other_info.customer_id")
+                                                         ->where("tbl_customer.customer_id", $data["get_cart"]["tbl_customer"]["customer_id"])
+                                                         ->first();
+            
             return view("checkout", $data);
         }
         else
@@ -301,7 +327,6 @@ class ShopCheckoutController extends Shop
         {
             echo "<option value='" . $locale->locale_id . "'>" . $locale->locale_name . "</option>";
         }
-
     }
     public function session()
     {
@@ -314,6 +339,35 @@ class ShopCheckoutController extends Shop
     }
     public function submit()
     {
+        /* Validation */
+        $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
+
+        if ($data["get_cart"]["new_account"] == true) 
+        {
+            $validate["full_name"] = Request::input("full_name");
+            $validate["contact_number"] = Request::input("contact_number");
+            $validate["customer_state"] = Request::input("customer_state");
+            $validate["customer_city"] = Request::input("customer_city");
+            $validate["customer_zip"] = Request::input("customer_zip");
+            $validate["customer_street"] = Request::input("customer_street");
+
+            $rules["full_name"] = 'required';
+            $rules["contact_number"] = 'required';
+            $rules["customer_state"] = 'required';
+            $rules["customer_city"] = 'required';
+            $rules["customer_zip"] = 'required';
+            $rules["customer_street"] = 'required';
+
+            $validator = Validator::make($validate, $rules);
+
+            if ($validator->fails()) 
+            {
+                return Redirect::back()
+                            ->withErrors($validator)
+                            ->withInput();
+            }
+        } 
+
         /* SPLIT NAME TO FIRST NAME AND LAST NAME */
         $full_name = Request::input("full_name");
         $_name = $this->split_name($full_name);
@@ -329,11 +383,18 @@ class ShopCheckoutController extends Shop
         $customer_info["shipping_zip"] = Self::locale_id_to_name(Request::input("customer_zip"));
         $customer_info["shipping_street"] = Request::input("customer_street");
 
+        $customer_info["billing_state"] = Self::locale_id_to_name(Request::input("billing_customer_state"));
+        $customer_info["billing_city"] = Self::locale_id_to_name(Request::input("billing_customer_city"));
+        $customer_info["billing_zip"] = Self::locale_id_to_name(Request::input("billing_customer_zip"));
+        $customer_info["billing_street"] = Request::input("billing_customer_street");
+
         $customer_info['load_wallet']['ec_order_load'] = Request::input('ec_order_load');
         $customer_info['load_wallet']['ec_order_load_number'] = Request::input('ec_order_load_number');
+
+        $customer_info['billing_equals_shipping'] = Request::input('billing_equals_shipping') !== null ? false : true;
         // dd($customer_info);
         $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_shipping", "check_name"));
-
+        
 
         if($customer_set_info_response["status"] == "error")
         { 

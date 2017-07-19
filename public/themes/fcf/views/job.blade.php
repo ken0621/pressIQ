@@ -15,55 +15,37 @@
 			<!-- LEFT COLUMN -->
 			<div class="col-md-8">
 				<div class="left-top-container">
-					<div class="top-title">MINING ENGINEER</div>
+					<div class="top-title">{{ $job["job_title"] }}</div>
 					<div class="row clearfix">
 						<div class="col-md-6">
 							<div class="job-details-container">
 								<p>
-									Male or Female, Bachelor degree in Mining Engineering, Proficient in Mine Software such as SURPAC, Auto CAD and other related Mine Software, Minimum of five (5) year) related experience.
+									{{ $job["job_caption_post"] }}
 								</p>
 								<div class="min-title">
 									Job Description
 								</div>
 								<p>
-									Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.<br><br> 
-									Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu.
+									{!! $job["job_description"] !!}
 								</p>
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="job-image-container">
-								<img src="/themes/{{ $shop_theme }}/img/job-image.png">
+								<img src="{{ $job["job_image_(433x327)"] }}">
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="row-no-padding clearfix">
+				<div class="row-no-padding clearfix" style="background-color: #fff;">
 					<div class="col-md-6">
 						<div class="left-top-container container-min">
 							<div class="min-title">
 								Application Details
 							</div>
-							<ul>
-								<li>
-									Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-								</li>
-								<li>
-									Lorem ipsum dolor
-								</li>
-								<li>
-									Aenean imperdiet. Etiam ultricies nisi vel augue.
-								</li>
-								<li>
-									Maecenas nec odio et ante tincidunt tempus.
-								</li>
-								<li>
-									Donec sodales sagittis magna. 
-								</li>
-								<li>
-									Sed consequat, leo eget bibendum sodales
-								</li>
-							</ul>
+							<p>
+								{!! $job["application_details"] !!}
+							</p>
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -71,26 +53,9 @@
 							<div class="min-title">
 								Company Compensation
 							</div>
-							<ul>
-								<li>
-									Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-								</li>
-								<li>
-									Lorem ipsum dolor
-								</li>
-								<li>
-									Aenean imperdiet. Etiam ultricies nisi vel augue.
-								</li>
-								<li>
-									Maecenas nec odio et ante tincidunt tempus.
-								</li>
-								<li>
-									Donec sodales sagittis magna. 
-								</li>
-								<li>
-									Sed consequat, leo eget bibendum sodales
-								</li>
-							</ul>
+							<p>
+								{!! $job["company_compensation"] !!}
+							</p>
 						</div>
 					</div>
 				</div>
@@ -108,7 +73,7 @@
 						</div>
 						<div class="col-md-10">
 							<div class="icon-caption">
-								<span style="color: #004b6e; font-weight: bold;">Salary:&nbsp;</span><span>PHP 20,000 - PHP 25,000</span>
+								<span style="color: #004b6e; font-weight: bold;">Salary Range:&nbsp;</span><span><span>PHP&nbsp;</span>{{ number_format($job["job_salary_range_from"], 2) }}</span>&nbsp;-&nbsp;<span>PHP&nbsp;</span><span>{{ number_format($job["job_salary_range_to"], 2) }}</span>
 							</div>
 						</div>
 					</div>
@@ -121,7 +86,7 @@
 						</div>
 						<div class="col-md-10">
 							<div class="icon-caption">
-								<span style="color: #004b6e; font-weight: bold;">Work Experience:&nbsp;</span><span>3-5 yrs Experience</span>
+								<span style="color: #004b6e; font-weight: bold;">Work Experience:&nbsp;</span><span>{{ $job["job_experience_from"] }}</span><span>&nbsp;to&nbsp;</span><span>{{ $job["job_experience_to"] }}</span>&nbsp;<span>years of experience</span>
 							</div>
 						</div>
 					</div>
@@ -134,7 +99,7 @@
 						</div>
 						<div class="col-md-10">
 							<div class="icon-caption">
-								<span style="color: #004b6e; font-weight: bold;">Work Location:&nbsp;</span><span>Lorem Ipsum</span>
+								<span style="color: #004b6e; font-weight: bold;">Work Location:&nbsp;</span><span>{{ $job["job_location"] }}</span>
 							</div>
 						</div>
 					</div>	

@@ -171,19 +171,25 @@
         <div class="popup">
             <h2>Attach Your Resume Here</h2>
             <a class="close" href="#">&times;</a>
-            <div class="content mobile-content">
-                <input type="file" class="on-change-file" id="tohide"/>
-                <input type="button" value="" class="round-button-container" onclick="document.getElementById('tohide').click()"/>
-                <div class="file-detail">(.docx, .pdf, .jpg)</div>
-                <div class="doc-container"><i class="fa fa-file-o" aria-hidden="true">&nbsp;&nbsp;</i><span class="file-name">No File Selected</span></div>
-                <h1>
-                    Say something about your self!
-                </h1>
-                <div class="txt-area-container">
-                    <textarea class="form-control mobile" style="max-width: 300px; min-width: 300px; max-height: 70px; font-size: 12px;" placeholder="Type the qualities that you think you can stand out among others..."></textarea>
+            <form method="post" action="/job/submit" enctype="multipart/form-data">
+                <div class="content mobile-content">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <input type="file" name="job_resume" class="on-change-file" id="tohide"/>
+                    <input type="hidden" name="job_apply" value="{{ isset($job['job_title']) ? $job['job_title'] : 'Uncategorized' }}">
+
+                    <input type="button" class="round-button-container" onclick="document.getElementById('tohide').click()"/>
+                    <div class="file-detail">(.docx, .pdf, .jpg)</div>
+                    <div class="doc-container"><i class="fa fa-file-o" aria-hidden="true">&nbsp;&nbsp;</i><span class="file-name">No File Selected</span></div>
+                    <h1>
+                        Say something about your self!
+                    </h1>
+                    <div class="txt-area-container">
+                        <textarea name="job_introduction" class="form-control mobile" style="max-width: 300px; min-width: 300px; max-height: 70px; font-size: 12px;" placeholder="Type the qualities that you think you can stand out among others..."></textarea>
+                    </div>
+                    {{-- <a href="#popup3"><div class="submit-btn">SUBMIT</div></a> --}}
+                    <button type="submit" class="submit-btn">SUBMIT</button>
                 </div>
-                <a href="#popup3"><div class="submit-btn">SUBMIT</div></a>
-            </div>
+            </form>
         </div>
     </div>
     <!-- POPUP 2 -->
@@ -212,6 +218,17 @@
             </div>
         </div>
     </div>  
+    <!-- POPUP 4 -->
+    <div id="popup4" class="overlay2">
+        <div class="popup4">
+            <h2>Application Failed!</h2>
+            <a class="close" href="#">&times;</a>
+            <div class="content">
+                <p>Please try again later.<br> If error insist please contact us.</p>
+                <a href="#"><div class="submit-btn">CLOSE</div></a>
+            </div>
+        </div>
+    </div>
     <!-- CONTENT -->
     <div id="scroll-to" class="clearfix">
 	   @yield("content")

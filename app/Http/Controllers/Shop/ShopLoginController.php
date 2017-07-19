@@ -36,8 +36,7 @@ class ShopLoginController extends Shop
 			if($count >= 1)
 			{
 				$enc_pass = Crypt::encrypt($password);
-				$user = Tbl_customer::where('email', $email)
-				->first();
+				$user = Tbl_customer::where('email', $email)->first();
 				$user_pass = Crypt::decrypt($user->password);
                 if($user->archived == 0)
                 {

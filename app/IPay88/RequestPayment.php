@@ -7,7 +7,8 @@ use App\IPay88\RequestForm;*/
 
 class RequestPayment
 {
-    public static $paymentUrl = 'https://sandbox.ipay88.com.ph/epayment/entry.asp';
+    // public static $paymentUrl = 'https://sandbox.ipay88.com.ph/epayment/entry.asp';
+    public static $paymentUrl = 'https://ipay88.com.ph/epayment/entry.asp';
 
 	private $merchantKey;
 

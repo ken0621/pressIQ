@@ -206,6 +206,7 @@ Route::any('/member/mlm/product_code/sell/add_line', 'Member\MLM_ProductCodeCont
 Route::any('/member/mlm/product_code/sell/add_line/product_barcode/submit', 'Member\MLM_ProductCodeController@add_line_barcode_product'); //ewen
 Route::any('/member/mlm/product_code/sell/add_line/submit', 'Member\MLM_ProductCodeController@add_line_submit'); //ewen
 Route::any('/member/mlm/product_code/sell/add_line/view', 'Member\MLM_ProductCodeController@view_all_lines'); //ewen
+Route::any('/member/mlm/product_code/sell/get_customer_slot', 'Member\MLM_ProductCodeController@get_customer_slot'); //ewen
 Route::any('/member/mlm/product_code/sell/compute', 'Member\MLM_ProductCodeController@compute'); //ewen
 Route::any('/member/mlm/product_code/sell/clear_line/{id}', 'Member\MLM_ProductCodeController@remove_one_line'); //ewen
 Route::any('/member/mlm/product_code/sell/clear_line_all', 'Member\MLM_ProductCodeController@clear_line_all'); //ewen

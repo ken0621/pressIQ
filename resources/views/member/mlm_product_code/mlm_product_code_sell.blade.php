@@ -39,10 +39,22 @@
 						<div class="col-md-12 customer_data">
 							
 						</div>
-							<div class="col-md-3">
+							<!--<div class="col-md-3">
 								<label>Slot </label>
 								<input type="text" class="form-control membership_code" name="membership_code" onChange="bar_code_membership_code(this)">
 								<small style="color:gray;">Barcode or press Enter to search.</small>
+							</div>-->
+							<div class="col-md-3 customer_slot_container">
+							</div> 
+							<div class="col-md-3">
+								<label>Customer</label>
+									<select name="customer_chosen" class="form-control chosen-select customer_chosen">
+									  	<option value="All">All</option>	
+										@foreach($_customer as $customer)
+											<option value="{{$customer->customer_id}}">{{$customer->first_name}} {{$customer->middle_name}} {{$customer->last_name}}</option>
+										@endforeach
+									</select>
+								<small style="color:gray;">List of customers with slot.</small>
 							</div>
 							<div class="col-md-3">
 									<label>Products</label>
@@ -427,13 +439,19 @@ function get_slot(ito)
 }
 function bar_code_membership_code(ito)
 {
-	var membership_code = ito.value;
-	console.log(membership_code);
 	$('.customer_data').html('<center><div class="loader-16-gray"></div></center>');
-	$('.customer_data').load('/member/customer/product_repurchase/get_slot_v_membership_code/' + membership_code, function(){
+	$('.customer_data').load('/member/customer/product_repurchase/get_slot_v_membership_code/' + ito, function(){
 		change_slot_class();
 	});
-	$(ito).val('');
+	// $(ito).val('');	
+
+	// var membership_code = ito.value;
+	// console.log(membership_code);
+	// $('.customer_data').html('<center><div class="loader-16-gray"></div></center>');
+	// $('.customer_data').load('/member/customer/product_repurchase/get_slot_v_membership_code/' + membership_code, function(){
+	// 	change_slot_class();
+	// });
+	// $(ito).val('');
 	
 }
 $(".membership_code").on("paste",function(e){
@@ -540,5 +558,29 @@ function bar_code_product(ito)
 	$(ito).val('');
 	
 }
+
+function load_slot_by_customer()
+{
+	var account_id = $(".customer_chosen").val();
+
+	$('.customer_slot_container').load('/member/mlm/product_code/sell/get_customer_slot?customer_id='+account_id, function(data)
+	{
+		$(".slot_id_container").chosen().change(function() 
+		{
+			bar_code_membership_code($(this).val());
+		});
+
+		var $slot_id = $(".slot_id_container").val();
+		bar_code_membership_code($slot_id);
+	});
+}
+
+load_slot_by_customer();
+
+$(".customer_chosen").chosen().change(function() 
+{
+	load_slot_by_customer();
+});
+
 </script>
 @endsection

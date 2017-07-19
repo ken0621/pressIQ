@@ -36,10 +36,11 @@
     </ul>
     <div class="search-filter-box">
         <div class="col-md-4" style="padding: 10px">
+            <!-- BRANCH LIST -->
             <select class="form-control item_type company-change-event">
                 <option value="0">All Branches / Sub-Company</option>
                 @foreach($_company as $company_info)
-                <option {{ $company_info->payroll_period_company_id == $company->payroll_period_company_id ? 'selected' : '' }} value="{{ $company_info->payroll_period_company_id }}">{{ $company_info->payroll_company_name }}</option>
+                <option {{ $company_info->payroll_company_id == $company->payroll_company_id ? 'selected' : '' }} value="{{ $company_info->payroll_company_id }}">{{ $company_info->payroll_company_name }}</option>
                 @endforeach
             </select>
         </div>

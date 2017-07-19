@@ -26,6 +26,7 @@ function timesheet()
 		event_time_focus_out_recompute();
 		action_click_approve_timesheet();
 	}
+
 	function action_click_approve_timesheet()
 	{
 		$(".approve-timesheet-btn").unbind("click");

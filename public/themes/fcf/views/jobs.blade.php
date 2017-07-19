@@ -30,13 +30,13 @@
 				<div class="list-container-holder">
 					<div class="list-container">
 						@if( loop_content_condition( $shop_theme_info, "job", "job_maintenance" ) )
-							@foreach( unserialize( get_content($shop_theme_info, "job", "job_maintenance") ) as $key => $job )
+							@foreach( unserialize( get_content($shop_theme_info, "job", "job_maintenance") ) as $key => $jobs )
 							<div class="per-list">
-								<div class="per-list-title"><a href="/job?id={{ $key }}">{{ $job["job_title"] }}</a></div>
+								<div class="per-list-title"><a href="/job?id={{ $key }}">{{ $jobs["job_title"] }}</a></div>
 								<div class="per-list-description">
-									{{ $job["job_caption_post"] }}
+									{{ $jobs["job_caption_post"] }}
 								</div>
-								<div class="per-list-details">Date Posted: {{ date("F d, Y", strtotime($job["job_date_posted"])) }}</div>
+								<div class="per-list-details">Date Posted: {{ date("F d, Y", strtotime($jobs["job_date_posted"])) }}</div>
 							</div>
 							@endforeach
 						@else

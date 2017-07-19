@@ -21,9 +21,12 @@
             @foreach($page_info as $key => $_info)
             <li class="{{ $key == 'home' ? 'active' : '' }}"><a href="#{{ $key }}">{{ underscore2Camelcase($key) }}</a></li>
             @endforeach
+            @if(isset($job_resume))
+            <li><a href="#job_resume">Resume</a></li>
+            @endif
             <li><a href="#others">Others</a></li>
         </ul>
-        <div class="panel panel-default panel-block panel-title-block panel-gray">
+        <div class="panel panel-default panel-block panel-title-block panel-gray" style="margin-bottom: 0;">
             <div class="tab-content">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 @foreach($page_info as $key => $_info)
@@ -159,6 +162,34 @@
                         </div>
                     </div>
                 @endforeach
+                @if(isset($job_resume))
+                <div id="job_resume" class="tab-pane fade">
+                    <div class="job-resume">
+                        <div class="clearfix" style="padding: 30px;">
+                            <table class="table table-bordered table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Job Apply</th>
+                                        <th>Job Introduction</th>
+                                        <th>Job Resume</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if(isset($job_resume) && $job_resume && count($job_resume) > 0)
+                                        @foreach($job_resume as $resume)
+                                        <tr>
+                                            <td>{{ $resume->job_apply }}</td>
+                                            <td>{{ $resume->job_introduction }}</td>
+                                            <td><a href="{{ URL::to($resume->job_resume) }}" target="_blank">View</a></td>
+                                        </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                @endif
                 <div id="others" class="tab-pane fade">
                     <div class="clearfix" style="padding: 30px">
                         <div class="col-md-6" style="margin-bottom: 5px;">
@@ -271,7 +302,7 @@
     transform: translate3d(0px, 0px, 0px) !important;
 }
 
-.slick-no-slide .slick-slide {
+.slick-no-slide .slick-slide {  
     float: none;
     display: inline-block;
 }
@@ -285,6 +316,13 @@
     display: none;
 }
 </style>
+
+@if(isset($job_resume))
+<style type="text/css">
+
+</style>
+@endif
+
 @endsection
 
 @section('script')

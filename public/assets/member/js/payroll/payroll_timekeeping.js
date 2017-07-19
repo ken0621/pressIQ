@@ -51,11 +51,7 @@ function submit_done(data)
 	data.element.modal("toggle");
 	if(data.function_name == "payroll_period_list.reload_list")
 	{
-		payroll_timekeeping.reload_period();
-	}
-	else
-	{
-		executeFunctionByName(data.function_name, window);
+		window.location.reload();
 	}
 	
 }

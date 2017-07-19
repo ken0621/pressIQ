@@ -58,7 +58,7 @@ class Page_ContentController extends Member
         /* FCF Exclusive */
         if ($data["shop_theme"] == "fcf") 
         {
-            $data["job_resume"] = DB::table("tbl_cms_job_resume")->where("archived", 0)->get();
+            $data["job_resume"] = DB::table("tbl_cms_job_resume")->where("archived", 0)->orderBy("date_created", "DESC")->get();
         }
 
         return view('member.page.page_content', $data);

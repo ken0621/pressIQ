@@ -176,11 +176,13 @@
                                 </thead>
                                 <tbody>
                                     @if(isset($job_resume) && $job_resume && count($job_resume) > 0)
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td><a href="javascript:">View</a></td>
-                                    </tr>
+                                        @foreach($job_resume as $resume)
+                                        <tr>
+                                            <td>{{ $resume->job_apply }}</td>
+                                            <td>{{ $resume->job_introduction }}</td>
+                                            <td><a href="{{ URL::to($resume->job_resume) }}" target="_blank">View</a></td>
+                                        </tr>
+                                        @endforeach
                                     @endif
                                 </tbody>
                             </table>
@@ -300,7 +302,7 @@
     transform: translate3d(0px, 0px, 0px) !important;
 }
 
-.slick-no-slide .slick-slide {
+.slick-no-slide .slick-slide {  
     float: none;
     display: inline-block;
 }

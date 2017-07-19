@@ -14,6 +14,7 @@
                             <th class="text-center" width="100px"></th>
                             <th width="150px" class="text-right" width="100px">ADDITIONS</th>
                             <th width="150px" class="text-right" width="100px">DEDUCTIONS</th>
+                            <th class="text-right" width="50px">COLA</th>
                             <th class="text-right"></th>
                             <th width="150px" class="text-right">BASIC</th>
                         </tr>
@@ -25,6 +26,7 @@
                                 <td></td>
                                 <td class="text-right" style="opacity: 0.9">{{ payroll_currency($compute->compute->breakdown_addition, 2) }}</td>
                                 <td class="text-right" style="opacity: 0.9">{{ payroll_currency($compute->compute->breakdown_deduction, 2) }}</td>
+                                <td>{{ payroll_currency($compute->compute->cola, 2) }}</td>
                                 <td></td>
                                 <td class="text-right" style="opacity: 0.9">{{ payroll_currency($compute->compute->total_day_basic, 2) }}</td>
                             </tr>

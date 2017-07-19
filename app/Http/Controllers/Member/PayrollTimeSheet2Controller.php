@@ -874,11 +874,14 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			$query->join("tbl_payroll_time_keeping_approved", "tbl_payroll_time_keeping_approved.employee_id","=", "tbl_payroll_employee_basic.payroll_employee_id")->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", $period_company_id);
 		}
-		
-		
-		
+
 		$query->where("shop_id", $this->user_info->shop_id);
+
+
 		$query->where("payroll_employee_company_id", $company_id);
+
+
+
 		$query->orderBy("payroll_employee_number");
 												
 		if($search != "")

@@ -7,7 +7,7 @@ class Tbl_employee extends Model
 {
 	protected $table = 'tbl_employee';
 	protected $primaryKey = "employee_id";
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function scopePosition($query)
     {

@@ -261,164 +261,160 @@
       </div>
    </div>
 </div>
-<div id="page-wrapper" class="insights-content" style=" margin-top: 25px">
-   <div class="row">
-      <div class="col-md-12">
-         <div class="col-md-4">
-            <div class="panel panel-default" id="panel-height">
-               <div class="panel-heading">
-                  <div class="pull-left" id="font1">Expenses</div>
-                  <div class="pull-right">
-                     
-                     <div class="dropdown">
-                        <div class="dropdown-toggle" type="button" data-toggle="dropdown">Last Month
-                           <span class="caret"></span>
-                        </div>
-                        <ul class="dropdown-menu">
-                           <li><a href="#">Last 30 days</a></li>
-                           <li><a href="#">This Month</a></li>
-                           <li><a href="#">This Quarter</a></li>
-                           <li><a href="#">This Year</a></li>
-                           <li><a href="#">Last Month</a></li>
-                           <li><a href="#">Last Quarter</a></li>
-                           <li><a href="#">Last Year</a></li>
-                        </ul>
+<div id="page-wrapper" class="insights-content" style="overflow: hidden; margin-top: 25px;">
+   <div class="row clearfix">
+      <div class="col-md-4">
+         <div class="panel panel-default" id="panel-height">
+            <div class="panel-heading">
+               <div class="pull-left" id="font1">Expenses</div>
+               <div class="pull-right">
+                  
+                  <div class="dropdown">
+                     <div class="dropdown-toggle" type="button" data-toggle="dropdown">Last Month
+                        <span class="caret"></span>
                      </div>
+                     <ul class="dropdown-menu">
+                        <li><a href="#">Last 30 days</a></li>
+                        <li><a href="#">This Month</a></li>
+                        <li><a href="#">This Quarter</a></li>
+                        <li><a href="#">This Year</a></li>
+                        <li><a href="#">Last Month</a></li>
+                        <li><a href="#">Last Quarter</a></li>
+                        <li><a href="#">Last Year</a></li>
+                     </ul>
                   </div>
-                  <br>
                </div>
-               <div class="panel-body">
-                  <div class="row">
-                     <div class="col-md-12">
-                        <!--PIE GRAPH-->
-                        <div class="pg-title">
-                           Last Month
-                        </div>
-                        <div id="pie-chart-content">
-                           <div class="table">
-                              <div class="cell">
-                                 <canvas id="pie-chart" class="pie"></canvas>
-                              </div>
-                              <div class="cell chart-legend"></div>
-                           </div>
-                        </div>
-                        <!--END OF PG-->
+               <br>
+            </div>
+            <div class="panel-body">
+               <div class="row clearfix">
+                  <div class="col-md-12">
+                     <!--PIE GRAPH-->
+                     <div class="pg-title">
+                        Last Month
                      </div>
+                     <div id="pie-chart-content">
+                        <div class="table">
+                           <div class="cell">
+                              <canvas id="pie-chart" class="pie"></canvas>
+                           </div>
+                           <div class="cell chart-legend"></div>
+                        </div>
+                     </div>
+                     <!--END OF PG-->
                   </div>
                </div>
             </div>
          </div>
-         <div class="col-md-4">
-            <div class="panel panel-default" id="panel-height">
-               <div class="panel-heading">
-                  <div class="pull-left" id="font1">Income</div>
-                  <div class="pull-right">
-                     Last 365 days
-                  </div>
-                  <br>
+      </div>
+      <div class="col-md-4">
+         <div class="panel panel-default" id="panel-height">
+            <div class="panel-heading">
+               <div class="pull-left" id="font1">Income</div>
+               <div class="pull-right">
+                  Last 365 days
                </div>
-               <div class="panel-body">
-                  <div class="row">
-                     <div class="col-md-12">
-                        <!--Bar - Stacked-->
-                        <div id="bar-chart-content">
-                           <div class="table">
-                              <div class="cell">
-                                 <canvas id="bar-chart" class="bar"></canvas>
-                              </div>
-                              <div class="cell chart-legend"></div>
+               <br>
+            </div>
+            <div class="panel-body">
+               <div class="row clearfix">
+                  <div class="col-md-12">
+                     <!--Bar - Stacked-->
+                     <div id="bar-chart-content">
+                        <div class="table">
+                           <div class="cell">
+                              <canvas id="bar-chart" class="bar"></canvas>
                            </div>
+                           <div class="cell chart-legend"></div>
                         </div>
-                        <!--END-->
                      </div>
-                     <!-- <div class="col-md-5" id="right-pane-inc">
-                        <div>
-                           <text class="open-invoices"><b>{{count($open_invoice)}}</b></text></br>
-                           <text>OPEN INVOICES</text></br></br>
-                        </div>
-                        <div>
-                           <text class="overdue-invoices"><b>{{count($overdue_invoice)}}</b></text></br>
-                           <text>OVERDUE</text></br></br>
-                        </div>
-                        <div>
-                           <text class="paid-invoices"><b>{{count($paid_invoice)}}</b></text></br>
-                           <text>PAID LAST 30 DAYS</text></br></br>
-                        </div>
-                     </div> -->
+                     <!--END-->
                   </div>
+                  <!-- <div class="col-md-5" id="right-pane-inc">
+                     <div>
+                        <text class="open-invoices"><b>{{count($open_invoice)}}</b></text></br>
+                        <text>OPEN INVOICES</text></br></br>
+                     </div>
+                     <div>
+                        <text class="overdue-invoices"><b>{{count($overdue_invoice)}}</b></text></br>
+                        <text>OVERDUE</text></br></br>
+                     </div>
+                     <div>
+                        <text class="paid-invoices"><b>{{count($paid_invoice)}}</b></text></br>
+                        <text>PAID LAST 30 DAYS</text></br></br>
+                     </div>
+                  </div> -->
                </div>
             </div>
          </div>
-         <div class="col-md-4">
-            <div class="panel panel-default" id="panel-height">
-               <div class="panel-heading">
-                  <div class="pull-left" id="font1">Sales</div>
-                  <div class="pull-right">
-                     <div class="dropdown">
-                        <div class="dropdown-toggle" type="button" data-toggle="dropdown">Last Month
-                           <span class="caret"></span>
-                        </div>
-                        <ul class="dropdown-menu">
-                           <li><a href="#">Last Year</a></li>
-                           <li><a href="#">This Month</a></li>
-                           <li><a href="#">This Year</a></li>
-                        </ul>
+      </div>
+      <div class="col-md-4">
+         <div class="panel panel-default" id="panel-height">
+            <div class="panel-heading">
+               <div class="pull-left" id="font1">Sales</div>
+               <div class="pull-right">
+                  <div class="dropdown">
+                     <div class="dropdown-toggle" type="button" data-toggle="dropdown">Last Month
+                        <span class="caret"></span>
                      </div>
+                     <ul class="dropdown-menu">
+                        <li><a href="#">Last Year</a></li>
+                        <li><a href="#">This Month</a></li>
+                        <li><a href="#">This Year</a></li>
+                     </ul>
                   </div>
-                  <br>
                </div>
-               <div class="panel-body">
-                  <div class="row">
-                     <div class="col-md-12">
-                        <canvas id="line-graph" ></canvas>
-                     </div>
+               <br>
+            </div>
+            <div class="panel-body">
+               <div class="row clearfix">
+                  <div class="col-md-12">
+                     <canvas id="line-graph" ></canvas>
                   </div>
                </div>
             </div>
          </div>
       </div>
    </div>
-   <div class="row">
-      <div class="col-md-12">
-         <div class="col-md-4">
-            <div class="panel panel-default" id="panel-height">
-               <div class="panel-heading">
-                  <div class="pull-left" id="font1">Back Accounts</div>
-                  <div class="pull-right">
-                     <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                  </div>
-                  <br>
+   <div class="row clearfix">
+      <div class="col-md-4">
+         <div class="panel panel-default" style="position: relative; padding-bottom: 50px;" id="panel-height">
+            <div class="panel-heading">
+               <div class="pull-left" id="font1">Bank Accounts</div>
+               <div class="pull-right">
+                  <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                </div>
-               
-               <div class="panel-body">
-                  <div class="form-group">
-                     @foreach($_bank as $key=>$bank)
-                     {!! $key==0 ? '' : '<hr>' !!}
-                     <text class="bank-title">{{$bank->account_name}}</text><br>
-                     <div class="panel"></div>
-                     @endforeach
-                  </div>
-                  <div class="row" id="bank-bot-pane">
-                     <div class="col-md-7">
-                        <div class="pull-left">
-                           <a href="#" id="textlign"> Connect account </a>
-                        </div>
+               <br>
+            </div>
+            
+            <div class="panel-body">
+               <div class="form-group">
+                  @foreach($_bank as $key=>$bank)
+                  {!! $key==0 ? '' : '<hr>' !!}
+                  <text class="bank-title">{{$bank->account_name}}</text><br>
+                  <div class="panel"></div>
+                  @endforeach
+               </div>
+               <div class="clearfix" style="position: absolute; bottom: 15px; left: 0; right: 0; width: 100%;">
+                  <div class="col-md-7">
+                     <div class="pull-left">
+                        <a href="#" id="textlign"> Connect Account</a>
                      </div>
-                     <div class="col-md-5">
-                        <div class="pull-right">
-                           <a href="#" id="textlign"> Go to Regiters </a>
-                        </div>
+                  </div>
+                  <div class="col-md-5">
+                     <div class="pull-right">
+                        <a href="#" id="textlign"> Go to Register</a>
                      </div>
                   </div>
                </div>
             </div>
          </div>
-         <div class="col-md-4">
-            <div class="panel panel-default" id="panel-height">
-               <div class="panel-heading">
-                  <div class="pull-left" id="font1">Other</div>
-                  <br>
-               </div>
+      </div>
+      <div class="col-md-4">
+         <div class="panel panel-default" id="panel-height">
+            <div class="panel-heading">
+               <div class="pull-left" id="font1">Other</div>
+               <br>
             </div>
          </div>
       </div>

@@ -23,75 +23,153 @@
             <div class="panel-heading">
                 <center>Settings</center>
                 <hr>
-                <div class="col-md-12">
-                    <label>Encashment</label>
-                    <select class="form-control" name="enchasment_settings_auto">
-                        <option value="0" @if($encashment_settings->enchasment_settings_auto == 0) selected @endif>Auto</option>
-                        <option value="1" @if($encashment_settings->enchasment_settings_auto == 1) selected @endif>Manual</option>
-                    </select>
-                    <span style="color:gray;">
-                        <small>By choosing auto, the users, cannot request encashment. Only the admin can process all encashment</small>
-                    </span>
-                </div>
-                <div class="col-md-12">
-                    <div class="col-md-6">
-                        <label>Tax</label>
-                        <input type="number" class="form-control" name="enchasment_settings_tax" value="{{$encashment_settings->enchasment_settings_tax}}">
-                    </div>
-                    <div class="col-md-6">
-                        <label>Type</label>
-                        <select class="form-control" name="enchasment_settings_tax_type">
-                            <option value="0" @if($encashment_settings->enchasment_settings_tax_type == 0) selected @endif>Fixed Amount</option>
-                            <option value="1" @if($encashment_settings->enchasment_settings_tax_type == 1) selected @endif >Percentage</option>
+                <div class="row clearfix">
+                    <div class="col-md-12" style="margin-bottom: 15px;">
+                        <label>Encashment</label>
+                        <select class="form-control" name="enchasment_settings_auto">
+                            <option value="0" @if($encashment_settings->enchasment_settings_auto == 0) selected @endif>Auto</option>
+                            <option value="1" @if($encashment_settings->enchasment_settings_auto == 1) selected @endif>Manual</option>
                         </select>
-                    </div>
-                    <div class="col-md-12">
                         <span style="color:gray;">
-                            <small>Just put 0 in tax if you don't want tax in encashment</small>
+                            <small>By choosing auto, the users, cannot request encashment. Only the admin can process all encashment</small>
                         </span>
                     </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="col-md-6">
-                        <label>Processing Fee</label>
-                        <input type="number" class="form-control" name="enchasment_settings_p_fee" value="{{$encashment_settings->enchasment_settings_p_fee}}">
+                    <div class="col-md-12" style="margin-bottom: 15px;">
+                        <div class="row clearfix">
+                            <div class="col-md-6">
+                                <label>Tax</label>
+                                <input type="number" class="form-control" name="enchasment_settings_tax" value="{{$encashment_settings->enchasment_settings_tax}}">
+                            </div>
+                            <div class="col-md-6">
+                                <label>Type</label>
+                                <select class="form-control" name="enchasment_settings_tax_type">
+                                    <option value="0" @if($encashment_settings->enchasment_settings_tax_type == 0) selected @endif>Fixed Amount</option>
+                                    <option value="1" @if($encashment_settings->enchasment_settings_tax_type == 1) selected @endif >Percentage</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12">
+                                <span style="color:gray;">
+                                    <small>Just put 0 in tax if you don't want tax in encashment</small>
+                                </span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <label>Type</label>
-                        <select class="form-control" name="enchasment_settings_p_fee_type">
-                            <option value="0" @if($encashment_settings->enchasment_settings_p_fee_type == 0) selected @endif>Fixed Amount</option>
-                            <option value="1" @if($encashment_settings->enchasment_settings_p_fee_type == 1) selected @endif>Percentage</option>
-                        </select>
+                    <div class="col-md-12" style="margin-bottom: 15px;">
+                        <div class="row clearfix">
+                            <div class="col-md-6">
+                                <label>Processing Fee</label>
+                                <input type="number" class="form-control" name="enchasment_settings_p_fee" value="{{$encashment_settings->enchasment_settings_p_fee}}">
+                            </div>
+                            <div class="col-md-6">
+                                <label>Type</label>
+                                <select class="form-control" name="enchasment_settings_p_fee_type">
+                                    <option value="0" @if($encashment_settings->enchasment_settings_p_fee_type == 0) selected @endif>Fixed Amount</option>
+                                    <option value="1" @if($encashment_settings->enchasment_settings_p_fee_type == 1) selected @endif>Percentage</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12">
+                                <span style="color:gray;">
+                                    <small>Just put 0 in processing fee if you don't want processing fees in encashment</small>
+                                </span>
+                            </div>
+                        </div>
                     </div>
+                    <div class="col-md-12" style="margin-bottom: 15px;">
+                        <div class="row clearfix">
+                            <div class="col-md-12">
+                                <label>Minimum</label>
+                                <input type="number" class="form-control" value="{{$encashment_settings->enchasment_settings_minimum}}" name="enchasment_settings_minimum">
+                            </div>
+                            <div class="col-md-12">
+                                <span style="color:gray;">
+                                    <small>If the amount did not make it to the minimum requirements, the amount will be added to the next cutoff</small>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12" style="margin-bottom: 15px;">
+                        <div class="row clearfix">
+                            <div class="col-md-12">
+                                <label>Gateway</label>
+                                <select class="form-control enchasment_settings_type" name="enchasment_settings_type">
+                                    @foreach($payout_gateway as $key => $value)
+                                    <option value="{{$key}}" {{$encashment_settings->enchasment_settings_type == $key ? 'selected' : '' }}>{{$value}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    @if($shop_id == 1)
                     <div class="col-md-12">
-                        <span style="color:gray;">
-                            <small>Just put 0 in processing fee if you don't want processing fees in encashment</small>
-                        </span>
+                        <hr>
+                        <div class="row clearfix">
+                            <div class="clearfix" style="margin-bottom: 15px;">
+                                <div class="col-md-6">
+                                    <label>V-Money Enable</label>
+                                    <select class="form-control" name="vmoney_enable">
+                                        <option value="1" {{ $vmoney_enable == 1 ? "selected" : "" }}>On</option>
+                                        <option value="0" {{ $vmoney_enable == 0 ? "selected" : "" }}>Off</option>
+                                    </select>
+                                    <div>
+                                        <span style="color:gray;">
+                                            <small>Enabling of V-Money encashment</small>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>V-Money Environment</label>
+                                    <select class="form-control" name="vmoney_environment">
+                                        <option value="1" {{ $vmoney_environment == 1 ? "selected" : "" }}>Production</option>
+                                        <option value="0" {{ $vmoney_environment == 0 ? "selected" : "" }}>Sandbox</option>
+                                    </select>
+                                    <div>
+                                        <span style="color:gray;">
+                                            <small>V-Money merchant account credentials</small>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix" style="margin-bottom: 15px;">
+                                <div class="col-md-6">
+                                    <label>V-Money Percentage Fee</label>
+                                    <div class="input-group">
+                                      <input type="number" step="any" class="form-control" name="vmoney_percent_fee" min="0" max="100" value="{{ $vmoney_percent_fee }}">
+                                      <span class="input-group-addon" style="color: #333; background-color: #fff;">%</span>
+                                    </div>
+                                    <div>
+                                        <span style="color:gray;">
+                                            <small>Convenience Percentage Fee</small>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>V-Money Fixed Fee</label>
+                                    <input class="form-control" step="any" type="number" name="vmoney_fixed_fee" min="0" value="{{ $vmoney_fixed_fee }}">
+                                    <div>
+                                        <span style="color:gray;">
+                                            <small>Convenience Fixed Fee</small>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix">
+                                <div class="col-md-12">
+                                    <label>V-Money Minimum Encashment</label>
+                                    <input type="number" step="any" class="form-control" name="vmoney_minimum_encashment" min="0" value="{{ $vmoney_minimum_encashment }}">
+                                    <div>
+                                        <span style="color:gray;">
+                                            <small>Change the V-Money minimum encashment</small>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-12">
+                    @endif
                     <div class="col-md-12">
-                        <label>Minimum</label>
-                        <input type="number" class="form-control" value="{{$encashment_settings->enchasment_settings_minimum}}" name="enchasment_settings_minimum">
-
+                        <hr>
+                        <button class="btn btn-primary pull-right">Update Settings</button>
                     </div>
-                    <div class="col-md-12">
-                        <span style="color:gray;">
-                            <small>If the amount did not make it to the minimum requirements, the amount will be added to the next cutoff</small>
-                        </span>
-                    </div>
-                    <div class="col-md-12">
-                        <label>Gateway</label>
-                        <select class="form-control enchasment_settings_type" name="enchasment_settings_type">
-                            @foreach($payout_gateway as $key => $value)
-                            <option value="{{$key}}" {{$encashment_settings->enchasment_settings_type == $key ? 'selected' : '' }}>{{$value}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <hr>
-                    <button class="btn btn-primary pull-right">Update Settings</button>
                 </div>
             </div>
         </div>

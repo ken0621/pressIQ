@@ -441,7 +441,7 @@ class Ec_order
         $update['payment_status'] = $data["payment_status"];
         $update["payment_upload"] = isset($data['payment_upload']) ? $data['payment_upload'] : '';
         $order_status            = $data["order_status"];
-        $order                   = Tbl_ec_order::where("ec_order_id",$ec_order_id)->first();
+        $order                   = Tbl_ec_order::customer()->customer_otherinfo()->payment_method()->where("ec_order_id",$ec_order_id)->first();
         $shop_id                 = isset($data["shop_id"]) ? $data["shop_id"] : $order->shop_id ;
         $response                = "nothing";
 
@@ -456,7 +456,7 @@ class Ec_order
                 : ''
             : '';   
 
-        if($order->order_status == "Pending" || $order->order_status == "Failed" || $order->order_status == "Cancelled")
+        if($order->order_status != "Pending" || $order->order_status != "Failed" || $order->order_status != "Cancelled")
         {
             if($order_status == "Processing")
             {              
@@ -476,10 +476,14 @@ class Ec_order
             {            
                 //original codes
                 if($order->order_status == "Pending" || $order->order_status == "Failed" || $order->order_status == "Cancelled")
-
                 {
                     if($order_status == "Processing")
                     {
+                        /* EMAIL SUCCESSFUL ORDER */
+                        $pass_data["order_details"] = $order;
+                        $pass_data["order_item"] = Tbl_ec_order_item::item()->where("ec_order_id",$ec_order_id)->groupBy("ec_order_id")->get();
+                        $pass_data["order_status"] = $order_status;
+                        Mail_global::create_email_content($pass_data, $shop_id, "successful_order");
                         $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);
                     }
                     else if($order_status == "Completed")
@@ -513,7 +517,7 @@ class Ec_order
             }
             else
             {
-                 //new codes
+                //new codes
                 if($order->order_status == "Failed" || $order->order_status == "Cancelled")
                 {
                     if($order_status == "Processing")
@@ -579,6 +583,11 @@ class Ec_order
 
                     if($order_status == "Completed")
                     {
+                        $pass_data["order_details"] = $order;
+                        $pass_data["order_item"] = Tbl_ec_order_item::item()->where("ec_order_id",$ec_order_id)->get();
+                        $pass_data["order_status"] = $order_status;
+                        Mail_global::create_email_content($pass_data, $shop_id, "delivered");
+
                         $_order = Tbl_ec_order::where("ec_order_id", $ec_order_id)->first();
                         /* TRANSACTION JOURNAL */  
                         $entry["reference_module"]  = "product-order";
@@ -608,6 +617,11 @@ class Ec_order
             {
                 if($order_status == "Completed")
                 {
+                    $pass_data["order_details"] = $order;
+                    $pass_data["order_item"] = Tbl_ec_order_item::item()->where("ec_order_id",$ec_order_id)->get();
+                    $pass_data["order_status"] = $order_status;
+                    Mail_global::create_email_content($pass_data, $shop_id, "delivered");
+                        
                     $_order = Tbl_ec_order::where("ec_order_id", $ec_order_id)->first();
                     /* TRANSACTION JOURNAL */  
                     $entry["reference_module"]  = "product-order";
@@ -628,6 +642,7 @@ class Ec_order
                     }
 
                     $product_order_journal = Accounting::postJournalEntry($entry, $entry_data);
+
                 }
 
                 Tbl_ec_order::where("ec_order_id",$ec_order_id)->update($update);
@@ -731,13 +746,19 @@ class Ec_order
 
         if ($customer) 
         {
-            if (!DB::table("tbl_customer_other_info")->where("customer_id", $customer_id)->first()) 
+            $other_info = DB::table("tbl_customer_other_info")->where("customer_id", $customer_id)->first();
+            $customer_mobile = $order_info["tbl_customer"]["customer_contact"];
+            $other_insert["customer_mobile"] = $customer_mobile;
+
+            if (!$other_info) 
             {
-                $customer_mobile = $order_info["tbl_customer"]["customer_contact"];
-                $other_insert["customer_mobile"] = $customer_mobile;
                 $other_insert["customer_id"]     = $customer_id;
        
                 DB::table("tbl_customer_other_info")->insert($other_insert);
+            }
+            else
+            {
+                DB::table("tbl_customer_other_info")->where("customer_other_info_id", $other_info->customer_other_info_id)->update($other_insert);
             }
 
             $customer_other_info = DB::table("tbl_customer_other_info")->where("customer_id", $customer_id)->first();
@@ -757,12 +778,16 @@ class Ec_order
             $customer_mobile = $order_info["tbl_customer"]["customer_contact"];
             unset($order_info["tbl_customer"]["customer_contact"]);
             $middle_name = $order_info["tbl_customer"]['middle_name'];
+            $order_info["tbl_customer"]["middle_name"] = "";
             if($middle_name == null)
             {
                 $middle_name = '';
                 $order_info["tbl_customer"]['middle_name'] = $middle_name;
             }
-            $order_info["tbl_customer"]["middle_name"] = "";
+            unset($order_info["tbl_customer"]["customer_full_address"]);
+            unset($order_info["tbl_customer"]["b_day"]);
+            unset($order_info["tbl_customer"]["customer_gender"]);
+            
             $order_info["tbl_customer"]["password"] = Crypt::encrypt($order_info["tbl_customer"]["password"]);
             $customer_id = $customer_query->insertGetId($order_info["tbl_customer"]);
             
@@ -800,6 +825,12 @@ class Ec_order
         $order_info["tbl_ec_order"]["discount_coupon_amount"] = $order_info["tbl_ec_order"]["discount_coupon_amount"] ? $order_info["tbl_ec_order"]["discount_coupon_amount"] : 0;
         $order_info["tbl_ec_order"]["discount_coupon_type"] = $order_info["tbl_ec_order"]["discount_coupon_type"] ? $order_info["tbl_ec_order"]["discount_coupon_type"] : "fixed";
         
+        $session = Session::get('mlm_member');
+        if(isset($session['slot_now']->slot_id))
+        {
+            $order_info['tbl_ec_order']['ec_order_slot_id'] = $session['slot_now']->slot_id;
+        }
+
         $order_info['tbl_ec_order']['ec_order_load'] = isset($order_info['tbl_ec_order']['ec_order_load']) ?  $order_info['tbl_ec_order']['ec_order_load'] : 0;
         $order_info['tbl_ec_order']['ec_order_load_number'] = isset($order_info['tbl_ec_order']['ec_order_load_number']) ? $order_info['tbl_ec_order']['ec_order_load_number'] : 0;
         $order_info["tbl_ec_order"]["ec_order_id"] = DB::table("tbl_ec_order")->insertGetId($order_info["tbl_ec_order"]);

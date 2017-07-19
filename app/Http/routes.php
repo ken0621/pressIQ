@@ -503,6 +503,9 @@ Route::any('/tablet/sales_receipt/update_submit','Member\TabletPISController@upd
 
 Route::any('/tablet/submit_all_transaction','Member\TabletPISController@confirm_submission');
 Route::any('/tablet/submit_all_transaction/submit','Member\TabletPISController@submit_transactions');
+
+Route::any('/tablet/sync_data/{table}/{date}','Member\TabletSyncController@sync');
+Route::any('/tablet/update_sync_data','Member\TabletSyncController@sync_update');
 /* END PIS TABLET*/
 
  //form
@@ -897,6 +900,7 @@ Route::get('/member/item/manufacturer/load_manufacturer','Member\ManufacturerCon
 Route::get('/member/maintenance/load_payment_method','Member\MaintenancePaymentMethodController@load_payment_method');
 Route::get('/member/maintenance/load_payment_gateway/{id}','Member\OnlinePaymentMethodController@load_payment_gateway');
 
+Route::any('/member/ecommerce/product/ecom_load_product_table', 'Member\EcommerceProductController@ecom_load_product_table');
 /* SettingsController */
 Route::get('/member/settings', 'Member\SettingsController@all');
 Route::get('/member/settings/{key}', 'Member\SettingsController@index');

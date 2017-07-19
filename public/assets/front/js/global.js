@@ -176,7 +176,7 @@ function add_search_events()
                                                 '</div>'+
                                                 '<div class="search-popup-description">'+
                                                     '<div class="price">'+
-                                                       '&#8369 ' + parseFloat(price).toFixed(2) +
+                                                       '&#8369 ' + parseFloat(price).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") +
                                                     '</div>' +
                                                     '<div class="search-popup-rate">' +
                                                         '' +

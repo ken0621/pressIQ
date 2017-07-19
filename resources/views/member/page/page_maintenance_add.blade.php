@@ -26,6 +26,8 @@
 					<input type="hidden" name="{{ $fields->name }}" class="maintenance-image-input" key="{{ $key }}-{{ $fields->type }}-{{ $fields->name }}">
 					<div class="maintenance-image-holder" key="{{ $key }}-{{ $fields->type }}-{{ $fields->name }}"></div>
 					<div><button class="image-gallery image-gallery-single btn btn-primary" key="{{ $key }}-{{ $fields->type }}-{{ $fields->name }}"> Upload Image</button></div>
+				@elseif($fields->type == "timestamp")
+					<input type="hidden" name="{{ $fields->name }}" value="{{ date('Y-m-d H:i:s') }}">
 				@elseif($fields->type == "map")
 					<div class="map-info"></div>
 					<div id="map" style="height: 300px;"></div>
@@ -107,7 +109,7 @@
 				    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDntbTzqtnwMA7hdMBAeX37YwTjRJi6cDY&callback=initialize">
 				    </script>
 				@else
-					<input class="form-control" type="{{ $fields->type }}" name="{{ $fields->name }}">
+					<input step="any" class="form-control" type="{{ $fields->type }}" name="{{ $fields->name }}">
 				@endif
 			</div>
 			@endforeach

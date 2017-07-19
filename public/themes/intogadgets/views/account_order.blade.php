@@ -45,8 +45,16 @@
                             @else
                                 <td>None</td>
                             @endif 
-                            <td><a href="/account/invoice/{{ $order->ec_order_id }}" target="_blank">Invoice</a></td>
-                            <td><a href="/account/order?cancel_id={{ $order->ec_order_id }}">Cancel</a></td>                           
+                            <td>
+                                @if($order->payment_status == 1)
+                                    <a href="/account/invoice/{{ $order->ec_order_id }}" target="_blank">Invoice</a>
+                                @endif
+                            </td>
+                            <td>
+                                @if($order->order_status == "Pending")
+                                    <a class="cancel-button" href="javascript:" linkerino="/account/order?cancel_id={{ $order->ec_order_id }}">Cancel</a>
+                                @endif
+                            </td>                           
                         </tr>
                         @endforeach
                     @else
@@ -141,13 +149,49 @@
 @section('script')
 
 <script>
-	$('tr:odd').css('background-color', '#f2f4f6');
-	$('tr:even').css('background-color', 'white');
+var account_order = new account_order();
 
+function account_order()
+{
+    init(); 
+
+    function init()
+    {
+        document_ready();
+    }
+
+    function document_ready()
+    {
+        action_odd_even_color();
+        event_click_cancel();
+    }
+
+    function action_odd_even_color()
+    {
+        $('tr:odd').css('background-color', '#f2f4f6');
+        $('tr:even').css('background-color', 'white');
+    }
+
+    function event_click_cancel()
+    {
+        $(".cancel-button").unbind("click");
+        $(".cancel-button").bind("click", action_click_cancel);
+    }
+
+    function action_click_cancel(e)
+    {
+        var link = $(e.currentTarget).attr("linkerino");
+
+        if (confirm("Are you sure you want to cancel this order?")) 
+        {
+            location.href = link;
+        }
+    }
+}
 
 (function(e,t,n){var r,i=e.getElementsByTagName(t)[0];if(e.getElementById(n))return;
 r=e.createElement(t);r.id=n;r.src="//button.aftership.com/all.js";i.parentNode.insertBefore(r,i)})(document,"script","aftership-jssdk")
-
+    
 </script>
 <script type="text/javascript" src="resources/assets/rutsen/js/account_order.js"></script>
 @endsection

@@ -1,6 +1,7 @@
 .events
 {
 	margin-bottom: 50px;
+	margin-left: 20px;
 	> table
 	{
 
@@ -100,6 +101,7 @@
 						width: 100%;
 						display: block;
 						padding: 0;
+						margin-left: 0px;	
 					}
 					.side-event
 					{
@@ -109,6 +111,11 @@
 				}
 			}
 		}
+	}
+
+	@media screen and (max-width: 768px)
+	{
+		margin-left: 0px;
 	}	
 	.btn.back
 	{

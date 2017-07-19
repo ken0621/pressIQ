@@ -7,7 +7,7 @@ class Tbl_receive_payment extends Model
 {
 	protected $table = 'tbl_receive_payment';
 	protected $primaryKey = "rp_id";
-    public $timestamps = false;
+    public $timestamps = true;
     
     public static function scopeCustomer($query)
     {

@@ -1,9 +1,11 @@
 <div class="table-responsive">
     <table class="table table-hover table-bordered table-striped table-condensed">
-        <thead>
+        <thead id="thead_table_sort" link="/member/ecommerce/product/ecom_load_product_table">
             <tr>
                 <!-- <td class="col-md-2"></td> -->
-                <th class="text-center">ID</th>
+                <th class="text-center">ID
+                 <i class="fa fa-fw fa-sort hidden" onclick="sort_table('eprod_id','asc')"></i><i class="fa fa-fw fa-sort-asc hidden" onclick="sort_table('eprod_id','asc')"></i><i class="fa fa-fw fa-sort-desc hidden" onclick="sort_table('eprod_id','desc')"></i>
+                 </th>
                 <th class="text-center">Product</th>
                 <th class="text-center">Inventory</th>
                 <th class="text-center">Type</th>

@@ -181,6 +181,7 @@ function global()
             $load_content =  $(".tab-pane.active").find(".load-data").attr("target");
 
             $(".tab-pane.active .load-data").load(url+"?search="+value+" #"+$load_content);
+            $(".tab-pane.active .load-data").attr("search",value);
         })
     }
 

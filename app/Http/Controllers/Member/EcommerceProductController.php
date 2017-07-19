@@ -62,9 +62,17 @@ class EcommerceProductController extends Member
 	{
 		if($this->hasAccess("product-list","access_page"))
         {	
+
         	$warehouse_id = Ecom_Product::getWarehouseId();
         	
-        	$active_product 	= Tbl_ec_product::itemVariant()->inventory($warehouse_id)->where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 0);
+        	$active_product 	= Tbl_ec_product::itemVariant()->inventory($warehouse_id)->where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 0)->orderBy("inventory_count","DESC");
+        	// $sort_as = Request::input("sort_as");
+        	// $column_name = Request::input("column_name");
+        	// if($column_name && $sort_as)
+        	// {
+	        // 	$active_product 	= Tbl_ec_product::itemVariant()->inventory($warehouse_id)->where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 0)->orderBy($column_name,$sort_as);
+        	// }
+
 			$inactive_product	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 1);
 
 			$search = Request::input('search');
@@ -87,7 +95,37 @@ class EcommerceProductController extends Member
             return $this->show_no_access();
         }
 	}
+	public function ecom_load_product_table()
+	{	
+		$data["filter"] = 'active';
 
+        $warehouse_id = Ecom_Product::getWarehouseId();
+    	$active_product 	= Tbl_ec_product::itemVariant()->inventory($warehouse_id)->where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 0)->orderBy("inventory_count","DESC");
+    	$sort_as = Request::input("sort_as");
+    	$column_name = Request::input("column_name");
+    	if($column_name && $sort_as)
+    	{
+        	$active_product 	= Tbl_ec_product::itemVariant()->inventory($warehouse_id)->where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 0)->orderBy($column_name,$sort_as);
+    	}
+
+		$inactive_product	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 1);
+
+		$search = Request::input('search');
+		if($search)
+		{
+			$active_product 	= $active_product->where("eprod_name","like","%$search%");
+			$inactive_product 	= $inactive_product->where("eprod_name","like","%$search%");
+		}
+
+		$active_product 	= $active_product->paginate(10);
+		$inactive_product 	= $inactive_product->paginate(10);
+
+        $data["_product"]			= $active_product;
+        $data["_product_archived"]	= $inactive_product;
+
+
+		return view('member.ecommerce_product.ecom_load_product_tbl', $data);
+	}
 	public function getAdd()
 	{
         if($this->hasAccess("product-list","add"))
@@ -439,7 +477,7 @@ class EcommerceProductController extends Member
 		$button_action = Request::input('button_action');
 
 		$update_product["eprod_name"] 			= Request::input('eprod_name');
-		$update_product["eprod_detail_image"]   = Request::input('eprod_detail_image');
+		// $update_product["eprod_detail_image"]   = Request::input('eprod_detail_image');
 		$update_product["eprod_category_id"] 	= Request::input('eprod_category_id');
 
 		Tbl_ec_product::where("eprod_id", $product_id)->update($update_product);
@@ -581,6 +619,10 @@ class EcommerceProductController extends Member
 			$update_variant["evariant_price"] 		= convertToNumber(Request::input("evariant_price"));
 
 			Tbl_ec_variant::where("evariant_id", $variant_id)->update($update_variant);
+
+			$update_product["eprod_detail_image"]   = Request::input('eprod_detail_image');
+
+			Tbl_ec_product::where("eprod_id", $product_id)->update($update_product);
 
 			/* UPDATE IMAGE */
 			$_image = Request::input("image_id");

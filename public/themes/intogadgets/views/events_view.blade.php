@@ -15,29 +15,35 @@
                   <div class="desc">{!! $post->post_content !!}</div>
                </td>
                <td class="side-event">
+                  @if(count($_related) > 1)
                   <?php $i = 0; ?>
                   @foreach($_related as $related)
-                     @if($i == 0)
-                     <div class="holder first" onClick="location.href='/events/view/{{ $related->main_id }}'" style="cursor: pointer;">
-                        <div class="img">
-                           <img class="4-3-ratio" src="{{ $related->post_image }}">
+                     @if($post->post_id != $related->post_id)
+                        @if($i == 0)
+                        <div class="holder first" onClick="location.href='/events/view/{{ $related->main_id }}'" style="cursor: pointer;">
+                           <div class="img">
+                              <img class="4-3-ratio" src="{{ $related->post_image }}">
+                           </div>
+                           <div class="side-content">{{ $related->post_title }}</div>
                         </div>
-                        <div class="side-content">{{ $post->post_title }}</div>
-                     </div>
-                     @else
-                     <table class="holder" onClick="location.href='/events/view/{{ $related->main_id }}'" style="cursor: pointer;">
-                        <tbody>
-                           <tr>
-                              <td class="img">
-                                 <img class="4-3-ratio" src="{{ $related->post_image }}">
-                              </td>
-                              <td class="side-content">{{ $post->post_title }}</td>
-                           </tr>
-                        </tbody>
-                     </table>
+                        @else
+                        <table class="holder" onClick="location.href='/events/view/{{ $related->main_id }}'" style="cursor: pointer;">
+                           <tbody>
+                              <tr>
+                                 <td class="img">
+                                    <img class="4-3-ratio" src="{{ $related->post_image }}">
+                                 </td>
+                                 <td class="side-content">{{ $related->post_title }}</td>
+                              </tr>
+                           </tbody>
+                        </table>
+                        @endif
+                        <?php $i++; ?>
                      @endif
-                     <?php $i++; ?>
                   @endforeach
+                  @else
+                  <div class="holder text-center">No related Events</div>
+                  @endif
                </td>
             </tr>
             <tr>

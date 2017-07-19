@@ -81,6 +81,7 @@
 @endsection
 @section('script')
 <script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
+<script type="text/javascript" src="/assets/member/js/table_sort.js"></script>
 <script type="text/javascript" src="/assets/member/js/global_view.js"></script>
 <script type="text/javascript">
     @if(Session::has('success'))

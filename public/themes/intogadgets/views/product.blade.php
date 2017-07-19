@@ -77,7 +77,7 @@
         <div class="holder sshide">
             <div class="title text-left">Top Rated Products</div>
             @foreach(get_collection(get_content($shop_theme_info, "product", "top_rated_products"), $shop_id) as $collection)
-                <a href="/product/view/{{ $collection['eprod_id'] }}" class="text">
+                <a href="/product/view/{{ $collection['ec_product_id'] }}" class="text">
                     <div class="product-top">
                         <div class="text">
                             <div class="name">{{ get_collection_first_name($collection) }}</div>
@@ -91,7 +91,7 @@
         <div class="holder sshide">
             <div class="title text-left">Most Viewed</div>
             @foreach(get_collection(get_content($shop_theme_info, "product", "most_viewed"), $shop_id) as $collection)
-                <a href="/product/view/{{ $collection['eprod_id'] }}" class="text">
+                <a href="/product/view/{{ $collection['ec_product_id'] }}" class="text">
                     <div class="product-top">
                         <div class="text">
                             <div class="name">{{ get_collection_first_name($collection) }}</div>
@@ -135,7 +135,7 @@
           @if(end($breadcrumbs) == $breadcrumb)
             <div class="text aktibo">{{ $breadcrumb['type_name'] }}</div>
           @else
-            <div class="text" onclick="location.href='/{{ $breadcrumb['type_id'] }}'">{{ $breadcrumb['type_name'] }}</div> 
+            <div class="text" onclick="location.href='/product?type={{ $breadcrumb['type_id'] }}'">{{ $breadcrumb['type_name'] }}</div> 
           @endif
         @endforeach
     </div>
@@ -177,7 +177,10 @@
                             @if(count($product['variant']) > 0)
                                 <div class="holder">
                                     <div class="img">
-                                        <img class="1-1-ratio" src="{{ get_product_first_image($product) }}">
+                                        @if($product["eprod_detail_image"])
+                                            <img class="detail" src="{{ $product["eprod_detail_image"] }}">
+                                        @endif
+                                        <img class="1-1-ratio baka-img" src="{{ get_product_first_image($product) }}">
                                     </div>
                                     <div class="text">
                                         <div class="name">{{ get_product_first_name($product) }}</div>

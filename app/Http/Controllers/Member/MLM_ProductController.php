@@ -230,6 +230,7 @@ class MLM_ProductController extends Member
     	}
     	$data['item_discount'] = $item_discount;
     	$data['item_discount_percentage'] = $item_percentage;
+        $data['item_search'] = $item_search;
     	// dd($data);
     	return view('member.mlm_product.discount', $data);
     }

@@ -7,5 +7,5 @@ class Tbl_truck extends Model
 {
 	protected $table = 'tbl_truck';
 	protected $primaryKey = "truck_id";
-    public $timestamps = false;
+    public $timestamps = true;
 }

@@ -7,7 +7,7 @@ class Tbl_journal_entry extends Model
 {
 	protected $table = 'tbl_journal_entry';
 	protected $primaryKey = "je_id";
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function scopeLine($query)
     {

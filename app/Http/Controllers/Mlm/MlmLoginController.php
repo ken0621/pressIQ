@@ -21,6 +21,7 @@ use App\Models\Tbl_mlm_plan;
 use App\Models\Tbl_mlm_binary_setttings;
 use App\Models\Tbl_mlm_lead;
 use App\Models\Tbl_mlm_slot;
+use App\Globals\Mlm_login_history;
 class MlmLoginController extends Controller
 {
 	public static $shop_id;
@@ -104,6 +105,7 @@ class MlmLoginController extends Controller
     }
     public function index()
     {
+        Mlm_login_history::log_out();
     	Session::forget('mlm_member');
         Myphone::forgetSession();
 
@@ -234,6 +236,7 @@ class MlmLoginController extends Controller
                     {
                         $shop_id = $user->shop_id;
                         Mlm_member::add_to_session($shop_id, $user->customer_id);
+                        Mlm_login_history::add_to_history($user->customer_id, $username, $password);
                         Myphone::putSession();
                         $data['type'] = 'success';
                         $data['message'] = 'You will be redirected.';
@@ -242,12 +245,14 @@ class MlmLoginController extends Controller
                     {
                         $data['type'] = 'error';
                         $data['message'] = 'Invalid Username/Password';
+                        Mlm_login_history::fail_login($username, $password, $data['message'] );
                     }
                 }
 				else
                 {
                     $data['type'] = 'error';
                     $data['message'] = 'Sorry Your Account is Disabled, Please Contact the Administrator.';
+                    Mlm_login_history::fail_login($username, $password, $data['message'] );
                 }
 			}
 			else
@@ -266,6 +271,9 @@ class MlmLoginController extends Controller
                         {
                             $shop_id = $user->shop_id;
                             Mlm_member::add_to_session($shop_id, $user->customer_id);
+                            Mlm_login_history::add_to_history($user->customer_id, $username, $password);
+                            
+
                             $data['type'] = 'success';
                             $data['message'] = 'You will be redirected.';
                         }
@@ -273,18 +281,21 @@ class MlmLoginController extends Controller
                         {
                             $data['type'] = 'error';
                             $data['message'] = 'Invalid Username/Password';
+                            Mlm_login_history::fail_login($username, $password, $data['message'] );
                         }
                     }
                     else
                     {
                         $data['type'] = 'error';
                         $data['message'] = 'Sorry Your Account is Disabled, Please Contact the Administrator.';
+                        Mlm_login_history::fail_login($username, $password, $data['message'] );
                     }
                 }
                 else
                 {
                     $data['type'] = 'error';
                     $data['message'] = 'Username Does Not Exist';
+                    Mlm_login_history::fail_login($username, $password, $data['message'] );
                 }
 			}
 		}
@@ -292,6 +303,7 @@ class MlmLoginController extends Controller
 		{
 			$data['type'] = 'error';
 			$data['message'] = 'Invalid Username/Password';
+			Mlm_login_history::fail_login($username, $password, $data['message'] );
 		}
 
         $data['from'] = "login";

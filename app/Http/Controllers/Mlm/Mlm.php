@@ -17,6 +17,7 @@ use App\Models\Tbl_mlm_encashment_settings;
 
 use App\Globals\Mlm_member;
 use App\Globals\Settings;
+use App\Globals\Mlm_login_history;
 class Mlm extends Controller
 {
     public static $customer_id;
@@ -90,6 +91,9 @@ class Mlm extends Controller
                 Self::$discount_card_log = null;
             }
 
+
+            Mlm_login_history::update_last_activity();
+            
             $all_slot = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)
             // ->membershipcode()
             ->membership()

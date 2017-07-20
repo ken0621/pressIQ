@@ -1602,7 +1602,7 @@ class Payroll2
 		$total_day_income 		= $daily_rate ;
 		$target_float 			= Self::time_float($_time['target_hours']);
 		$daily_rate_plus_cola	= $daily_rate + $cola;
-		$cola_rate_per_hour 	= $cola/$target_float;
+		$cola_rate_per_hour 	= @($cola/$target_float);
 		
 		/* GET INITIAL DATA */
 		$param_rate 			= Tbl_payroll_overtime_rate::where('payroll_group_id', $group_id)->get()->toArray();

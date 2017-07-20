@@ -1180,7 +1180,8 @@ class Cart
         echo "Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.";
         $api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)->join("tbl_online_pymnt_gateway", "tbl_online_pymnt_gateway.gateway_id", "=", "tbl_online_pymnt_api.api_gateway_id")->where("gateway_code_name", "ipay88")->first();
         $shop = DB::table("tbl_shop")->where("shop_id", $shop_id)->first();
-        
+        $customer = Cart::get_customer();
+
         /* DELIMETER */
         switch ($method_information->link_delimeter) 
         {  
@@ -1192,7 +1193,15 @@ class Cart
             default: $data["paymentId"] = $method_information->link_delimeter; break;
         }
 
-        $data["refNo"] = $shop_id . time();
+        if (isset($data["tbl_customer"]["customer_id"]) && $data["tbl_customer"]["customer_id"]) 
+        {
+            $data["refNo"] = $shop_id . time() . $data["tbl_customer"]["customer_id"];
+        }
+        else
+        {
+            $data["refNo"] = $shop_id . time();
+        }
+        
         $data["amount"] = $data["tbl_ec_order"]["total"];
 
         /* REASTRUCTURE */
@@ -1216,8 +1225,8 @@ class Cart
         $data["userContact"] = $data["tbl_customer"]["customer_contact"];
         $data["remark"] = "Checkout from " . trim(ucwords($shop->shop_key));
         $data["lang"] = "UTF-8";
-        $data["responseUrl"] = URL::to('/ipay88_response');
-        $data["backendUrl"] = URL::to('/ipay88_response');
+        $data["responseUrl"] = URL::to('/payment/ipay88/response');
+        $data["backendUrl"] = URL::to('/payment/ipay88/backend');
         $data["merchantKey"] = $api->api_secret_id;
         $data["merchantCode"] = $api->api_client_id;
         $requestpayment = new RequestPayment($data["merchantKey"]);
@@ -1238,6 +1247,14 @@ class Cart
             'responseUrl'   => $requestpayment->setResponseUrl($data["responseUrl"]),
             'backendUrl'    => $requestpayment->setBackendUrl($data["backendUrl"])
         );
+
+        $insert["reference_number"] = $data["refNo"];
+        $insert["shop_id"] = $shop_id;
+        $insert["customer_id"] = isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null;
+        $insert["date_created"] = Carbon::now();
+        DB::table("tbl_ipay88_temp")->insert($insert);
+
+        Cart::clear_all($this->shop_info->shop_id);
         
         RequestPayment::make($data["merchantKey"], $ipay88request);  
     }

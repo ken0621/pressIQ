@@ -44,78 +44,161 @@ class ShopCheckoutController extends Shop
     public function ipay88_response()
     {
         $request = Request::all();
-        $shop_id = $this->shop_info->shop_id;
-        $customer_id = Self::$customer_info ? Self::$customer_info->customer_id : null;
-        
-        // LOGS
-        $ipay88_logs["log_merchant_code"] = $request['MerchantCode'];
-        $ipay88_logs["log_payment_id"] = $request['PaymentId'];
-        $ipay88_logs["log_reference_number"] = $request['RefNo'];
-        $ipay88_logs["log_amount"] = $request['Amount'];
-        $ipay88_logs["log_currency"] = $request['Currency'];
-        $ipay88_logs["log_remarks"] = $request['Remark'];
-        $ipay88_logs["log_trans_id"] = $request['TransId'];
-        $ipay88_logs["log_auth_code"] = $request['AuthCode'];
-        $ipay88_logs["log_status"] = $request['Status'];
-        $ipay88_logs["log_error_desc"] = $request['ErrDesc'];
-        $ipay88_logs["log_signature"] = $request['Signature'];
-        $ipay88_logs["shop_id"] = $this->shop_info->shop_id;
-        $ipay88_logs["response"] = serialize($request);
-
-        if ($request) 
+        $temp = DB::table("tbl_ipay88_temp")->where("reference_number", $request['RefNo'])->first();
+        if ($temp) 
         {
-            try 
+            $shop_id = $temp->shop_id;
+            $customer_id = $temp->customer_id;
+            
+            /* Logs */
+            $ipay88_logs["log_merchant_code"] = $request['MerchantCode'];
+            $ipay88_logs["log_payment_id"] = $request['PaymentId'];
+            $ipay88_logs["log_reference_number"] = $request['RefNo'];
+            $ipay88_logs["log_amount"] = $request['Amount'];
+            $ipay88_logs["log_currency"] = $request['Currency'];
+            $ipay88_logs["log_remarks"] = $request['Remark'];
+            $ipay88_logs["log_trans_id"] = $request['TransId'];
+            $ipay88_logs["log_auth_code"] = $request['AuthCode'];
+            $ipay88_logs["log_status"] = $request['Status'];
+            $ipay88_logs["log_error_desc"] = $request['ErrDesc'];
+            $ipay88_logs["log_signature"] = $request['Signature'];
+            $ipay88_logs["shop_id"] = $shop_id;
+            $ipay88_logs["response"] = serialize($request);
+            $ipay88_logs["from"] = "response";
+
+            if ($request) 
             {
-                /* Success */
-                if($request['Status'] == 1)
+                try 
                 {
-                    $shop_id        = $this->shop_info->shop_id;
-                    $payment_status = 1;
-                    $order_status   = "Processing";
+                    /* Success */
+                    if($request['Status'] == 1)
+                    {
+                        $payment_status = 1;
+                        $order_status   = "Processing";
+                        $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, $customer_id);
+                        
+                        $ipay88_logs["order_id"] = $order_id;
+                        DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
+                       
+                        /* Confirmed Payment */
+                        $order = Tbl_ec_order::customer()->customer_otherinfo()->payment_method()->where("ec_order_id",$order_id)->first();
 
-                    // $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, Self::$customer_info ? Self::$customer_info->customer_id : null);
-                    $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, $customer_id);
-                    Cart::clear_all($this->shop_info->shop_id);
-                    
-                    $ipay88_logs["order_id"] = $order_id;
-                    DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
-                   
-                    //ipay88 confirmed payment
-                    $order = Tbl_ec_order::customer()->customer_otherinfo()->payment_method()->where("ec_order_id",$order_id)->first();
-                    /* EMAIL SUCCESSFUL ORDER */
-                    $pass_data["order_details"] = $order;
-                    $pass_data["order_item"] = Tbl_ec_order_item::item()->where("ec_order_id",$order_id)->groupBy("ec_order_id")->get();
-                    $pass_data["order_status"] = $order_status; 
-                    Mail_global::create_email_content($pass_data, $shop_id, "successful_order");
+                        /* EMAIL SUCCESSFUL ORDER */
+                        $pass_data["order_details"] = $order;
+                        $pass_data["order_item"] = Tbl_ec_order_item::item()->where("ec_order_id",$order_id)->groupBy("ec_order_id")->get();
+                        $pass_data["order_status"] = $order_status; 
+                        Mail_global::create_email_content($pass_data, $shop_id, "successful_order");
 
-                    // Redirect
-                    return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)))->send();
+                        /* Redirect */
+                        return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)))->send();
+                    } 
+                    elseif($request['Status'] == 6)
+                    {
+                        return Redirect::to("/product#pending_modal");
+                    }
+                    elseif ($request['Status'] == 0) 
+                    {
+                        return Redirect::to("/product#fail_modal");
+                    }
+                    else 
+                    {
+                        DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
+                        return redirect('/checkout')->withErrors($request['ErrDesc'])->send();
+                    }    
                 } 
-                elseif($request['Status'] == 6)
+                catch (\Exception $e) 
                 {
-                    return Redirect::to("/product#pending_modal");
-                }
-                elseif ($request['Status'] == 0) 
-                {
-                    return Redirect::to("/product#fail_modal");
-                }
-                else 
-                {
-                    DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
+                    $insert_error['response'] = $e->getMessage();
+                    $insert_error['shop_id'] = $shop_id;
+                    DB::table("tbl_ipay88_logs")->insert($insert_error);
                     return redirect('/checkout')->withErrors($request['ErrDesc'])->send();
-                }    
-            } 
-            catch (\Exception $e) 
+                }
+            }
+            else
             {
-                $insert_error['response'] = $e->getMessage();
-                $insert_error['shop_id'] = $shop_id;
-                DB::table("tbl_ipay88_logs")->insert($insert_error);
-                return redirect('/checkout')->withErrors($request['ErrDesc'])->send();
+                return Redirect::to("/checkout")->with('fail', 'Session has been expired. Please try again.')->send();
             }
         }
-        else
+    }
+    public function ipay88_backend()
+    {
+        $request = Request::all();
+        $temp = DB::table("tbl_ipay88_temp")->where("reference_number", $request['RefNo'])->first();
+        if ($temp) 
         {
-            return Redirect::to("/checkout")->with('fail', 'Session has been expired. Please try again.')->send();
+            $shop_id = $temp->shop_id;
+            $customer_id = $temp->customer_id;
+            
+            // LOGS
+            $ipay88_logs["log_merchant_code"] = $request['MerchantCode'];
+            $ipay88_logs["log_payment_id"] = $request['PaymentId'];
+            $ipay88_logs["log_reference_number"] = $request['RefNo'];
+            $ipay88_logs["log_amount"] = $request['Amount'];
+            $ipay88_logs["log_currency"] = $request['Currency'];
+            $ipay88_logs["log_remarks"] = $request['Remark'];
+            $ipay88_logs["log_trans_id"] = $request['TransId'];
+            $ipay88_logs["log_auth_code"] = $request['AuthCode'];
+            $ipay88_logs["log_status"] = $request['Status'];
+            $ipay88_logs["log_error_desc"] = $request['ErrDesc'];
+            $ipay88_logs["log_signature"] = $request['Signature'];
+            $ipay88_logs["shop_id"] = $shop_id;
+            $ipay88_logs["response"] = serialize($request);
+            $ipay88_logs["from"] = "backend";
+
+            if ($request) 
+            {
+                try 
+                {
+                    /* Success */
+                    if($request['Status'] == 1)
+                    {
+                        $payment_status = 1;
+                        $order_status   = "Processing";
+                        $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, $customer_id);
+                        
+                        $ipay88_logs["order_id"] = $order_id;
+                        DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
+                       
+                        /* Confirmed Payment */
+                        $order = Tbl_ec_order::customer()->customer_otherinfo()->payment_method()->where("ec_order_id",$order_id)->first();
+                        
+                        /* EMAIL SUCCESSFUL ORDER */
+                        $pass_data["order_details"] = $order;
+                        $pass_data["order_item"] = Tbl_ec_order_item::item()->where("ec_order_id",$order_id)->groupBy("ec_order_id")->get();
+                        $pass_data["order_status"] = $order_status; 
+                        Mail_global::create_email_content($pass_data, $shop_id, "successful_order");
+
+                        /* Redirect */
+                        return true;
+                    } 
+                    elseif($request['Status'] == 6)
+                    {
+                        return false;
+                    }
+                    elseif ($request['Status'] == 0) 
+                    {
+                        return false;
+                    }
+                    else 
+                    {
+                        DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
+
+                        return false;
+                    }    
+                } 
+                catch (\Exception $e) 
+                {
+                    $insert_error['response'] = $e->getMessage();
+                    $insert_error['shop_id'] = $shop_id;
+                    DB::table("tbl_ipay88_logs")->insert($insert_error);
+
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
     }
     public function dragonpay_return()

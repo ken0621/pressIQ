@@ -65,7 +65,7 @@
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-custom">
                                         <li><a size="lg" link="/member/item/warehouse/view/{{$warehouse->warehouse_id}}" href="javascript:" class="popup">View Warehouse</a></li>
-
+                                        <li><a target="_blank" href="/member/item/warehouse/xls/{{$warehouse->warehouse_id}}">Export to Excel</a></li>
                                         @if($enable_serial != null)
                                             @if($enable_serial == "enable")
                                                 <li><a href="/member/item/view_serials/{{$warehouse->warehouse_id}}">View Item Serials Number</a></li>

@@ -30,6 +30,8 @@ use Session;
 use App\Globals\Item;
 use App\Globals\AuditTrail;
 use Validator;
+use Excel;
+use DB;
 class WarehouseController extends Member
 {
     /**
@@ -66,6 +68,25 @@ class WarehouseController extends Member
     {
         $data["slip_id"] = $slip_id;
         return view("member.warehouse.stock_view",$data);
+    }
+    public function export_xls($warehouse_id)
+    {
+        $data["warehouse"] = DB::table("tbl_warehouse")->where("warehouse_id", $warehouse_id)->first();
+        $data["_item"] = Tbl_warehouse::warehouseitem()->serialnumber()->take(5)->get();
+        $data["quantity"] = 0;
+        foreach ($data["_item"] as $key => $value) 
+        {
+            $data["quantity"] += $value->item_quantity;
+        }
+
+        Excel::create($data["warehouse"]->warehouse_name, function($excel) use ($data)
+        {
+            $excel->sheet('Warehouse', function($sheet) use ($data)
+            {
+                $sheet->loadView('member.warehouse.warehouse_xls', $data);
+            });
+
+        })->download('xls');
     }
     public function index()
     {

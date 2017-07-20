@@ -62,12 +62,7 @@ class ShopCheckoutController extends Shop
 
         if ($request) 
         {
-            if($request['Status'] == 0)
-            {
-                DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
-                return redirect('/checkout')->withErrors($request['ErrDesc'])->send();    
-            } 
-            else 
+            if($request['Status'] == 1)
             {
                 $shop_id        = $this->shop_info->shop_id;
                 $payment_status = 1;
@@ -89,6 +84,11 @@ class ShopCheckoutController extends Shop
 
                 // Redirect
                 return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)))->send();
+            } 
+            else 
+            {
+                DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
+                return redirect('/checkout')->withErrors($request['ErrDesc'])->send();
             }
         }
         else

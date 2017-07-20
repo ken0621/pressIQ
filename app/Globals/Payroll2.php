@@ -1074,7 +1074,7 @@ class Payroll2
 				$daily_rate = 0;
 			}
 		}
-		
+
 		if ($_time['day_type'] == 'extra_day' && $time_spent!=0) 
 		{
 			$return->daily_rate = $daily_true_rate;
@@ -1388,6 +1388,8 @@ class Payroll2
 		$absent = 0;
 		$late=0;
 		$undertime=0;
+
+
 		
 		//no time in monthly
 		if($time_spent!=0 && $compute_type=="monthly")
@@ -1406,6 +1408,9 @@ class Payroll2
 				
 			}
 		}
+
+		//compute cola
+		$cola = Payroll2::compute_income_day_pay_cola($_time , $daily_rate, $group_id , $cola , $compute_type);
 
 		if($_time["is_absent"] == true)
 		{
@@ -1440,8 +1445,7 @@ class Payroll2
 
 		
 	
-		//compute cola
-		$cola = Payroll2::compute_income_day_pay_cola($_time , $daily_rate, $group_id , $cola , $compute_type);
+		
 		
 		$return->subtotal_after_addition	= $subtotal_after_addition;
 		$return->rendered_days 				= @($time_spent/$target_float);

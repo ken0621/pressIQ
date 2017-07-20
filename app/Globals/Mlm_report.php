@@ -138,11 +138,11 @@ class Mlm_report
         // -----------------------------------Filter
         ->where('wallet_log_date_created', '>=', $filter['from'])
         ->where('wallet_log_date_created', '<=', $filter['to'])
-        ->skip($filter['skip'])
-        ->take($filter['take'])
+        // ->skip($filter['skip'])
+        // ->take($filter['take'])
         // -----------------------------------End
     	->get();
-
+        
     	$plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
             ->where('marketing_plan_enable', 1)
             ->where('marketing_plan_trigger', 'Slot Creation')

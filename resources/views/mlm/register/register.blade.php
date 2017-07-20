@@ -21,14 +21,15 @@
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label>Date of Birth</label>
-							<input type="date" class="form-control input-lg" name="date_of_birth" value="{{ Request::old('date_of_birth') ? Request::old('date_of_birth') : ( isset($current['tbl_customer']['date_of_birth']) ? $current['tbl_customer']['date_of_birth'] : '' ) }}" required>
+							<label>Middle Name</label>
+							<input type="text" class="form-control input-lg uppercase_input_text" name="middle_name" value="{{ Request::old('middle_name') ? Request::old('middle_name') : ( isset($current['tbl_customer']['middle_name']) ? $current['tbl_customer']['middle_name'] : '' ) }}" required>
 						</div>
+						
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label>Middle Name</label>
-							<input type="text" class="form-control input-lg uppercase_input_text" name="middle_name" value="{{ Request::old('middle_name') ? Request::old('middle_name') : ( isset($current['tbl_customer']['middle_name']) ? $current['tbl_customer']['middle_name'] : '' ) }}" required>
+							<label>Last Name</label>
+							<input type="text" class="form-control input-lg uppercase_input_text" name="last_name" value="{{ Request::old('last_name') ? Request::old('last_name') : ( isset($current['tbl_customer']['last_name']) ? $current['tbl_customer']['last_name'] : '' ) }}" required>
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -38,9 +39,10 @@
 						</div>
 					</div>
 					<div class="col-md-6">
+						
 						<div class="form-group">
-							<label>Last Name</label>
-							<input type="text" class="form-control input-lg uppercase_input_text" name="last_name" value="{{ Request::old('last_name') ? Request::old('last_name') : ( isset($current['tbl_customer']['last_name']) ? $current['tbl_customer']['last_name'] : '' ) }}" required>
+							<label>Date of Birth</label>
+							<input type="date" class="form-control input-lg" name="date_of_birth" value="{{ Request::old('date_of_birth') ? Request::old('date_of_birth') : ( isset($current['tbl_customer']['date_of_birth']) ? $current['tbl_customer']['date_of_birth'] : '' ) }}" required>
 						</div>
 					</div>
 					<div class="col-md-6">

@@ -72,7 +72,7 @@ class WarehouseController extends Member
     public function export_xls($warehouse_id)
     {
         $data["warehouse"] = DB::table("tbl_warehouse")->where("warehouse_id", $warehouse_id)->first();
-        $data["_item"] = Tbl_warehouse::warehouseitem()->serialnumber()->take(5)->get();
+        $data["_item"] = Tbl_warehouse::warehouseitem()->serialnumber()->get();
         $data["quantity"] = 0;
         foreach ($data["_item"] as $key => $value) 
         {

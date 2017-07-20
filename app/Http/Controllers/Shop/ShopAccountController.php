@@ -270,9 +270,17 @@ class ShopAccountController extends Shop
     {
         $data["page"] = "Invoice";
         $data["order"] = Tbl_ec_order::where("tbl_ec_order.ec_order_id", $id)->customer()->first();
-        $data["_item"] = Tbl_ec_order_item::where("tbl_ec_order_item.ec_order_id", $id)->item()->get();
         
-        return view("account_invoice", $data);
+        if ($data["order"]->payment_status == 1) 
+        {
+            $data["_item"] = Tbl_ec_order_item::where("tbl_ec_order_item.ec_order_id", $id)->item()->get();
+            
+            return view("account_invoice", $data);
+        }
+        else
+        {
+            return Redirect::to('/account/order');
+        }
     }
     public function logout()
     {

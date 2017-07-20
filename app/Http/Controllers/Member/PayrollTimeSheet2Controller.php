@@ -21,6 +21,7 @@ use App\Models\Tbl_payroll_holiday_company;
 use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_shift_code;
 use App\Globals\Payroll2;
+use App\Models\Tbl_payroll_company;
 use DB;
 
 class PayrollTimeSheet2Controller extends Member
@@ -31,7 +32,7 @@ class PayrollTimeSheet2Controller extends Member
 		$data["page"] = "Employee List Summary";
 		$this->index_redirect_if_time_keeping_does_not_exist($period_id);
 		$data["company"] = $this->db_get_company_period_information($period_id);
-		$data["_company"] = $this->db_get_list_of_company_for_period($data["company"]->payroll_period_id);
+		$data["_company"] = $this->db_get_list_of_company_for_period($data["company"]->payroll_company_id);
 		return view('member.payroll2.employee_summary', $data);
 	}
 	public function index_redirect_if_time_keeping_does_not_exist($period_id)
@@ -849,7 +850,7 @@ class PayrollTimeSheet2Controller extends Member
 	}
 	public function db_get_list_of_company_for_period($id)
 	{
-		$_data = Tbl_payroll_period_company::selperiod($id)->orderBy('tbl_payroll_company.payroll_company_name')->select('tbl_payroll_period_company.*','tbl_payroll_company.payroll_company_name')->get();
+		$_data = Tbl_payroll_company::orderBy('tbl_payroll_company.payroll_company_name')->where("payroll_parent_company_id", $id)->get();
 		return $_data;
 	}
 	public function db_get_employee_information($employee_id)
@@ -873,11 +874,14 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			$query->join("tbl_payroll_time_keeping_approved", "tbl_payroll_time_keeping_approved.employee_id","=", "tbl_payroll_employee_basic.payroll_employee_id")->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", $period_company_id);
 		}
-		
-		
-		
+
 		$query->where("shop_id", $this->user_info->shop_id);
+
+
 		$query->where("payroll_employee_company_id", $company_id);
+
+
+
 		$query->orderBy("payroll_employee_number");
 												
 		if($search != "")

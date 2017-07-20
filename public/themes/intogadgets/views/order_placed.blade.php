@@ -1,6 +1,5 @@
 @extends("layout")
-@section("content")
-@if(Request::input('popup') == 1)
+@if(Request::input('popup') == 1)	
 	<div class="remodal" data-remodal-id="order">
 		<div style="margin: 75px 0;">
 			<div class="text-center">
@@ -43,7 +42,19 @@
 			</div>
 		</div>
 	</div>
-@else
+	
+	@section("script")
+	<script type="text/javascript">
+		var inst = $('[data-remodal-id=order]').remodal();
+
+		/**
+		 * Opens the modal window
+		 */
+		inst.open();
+	</script>
+	@endsection
+@endif
+@section("content")
 	<div class="clearfix">
 		<div class="container" style="background-color: #fff; margin-bottom: 50px; margin-top: 50px;">
 			<div class="text-center">
@@ -87,21 +98,5 @@
 			<div style="margin-bottom: 100px;"></div>
 		</div>
 	</div>
-@endif
-@endsection
-
-@section("css")
-
-@endsection
-
-@section("script")
-<script type="text/javascript">
-	var inst = $('[data-remodal-id=order]').remodal();
-
-	/**
-	 * Opens the modal window
-	 */
-	inst.open();
-</script>
 @endsection
 

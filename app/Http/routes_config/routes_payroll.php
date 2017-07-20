@@ -375,6 +375,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/time_keeping/modal_generate_period','Member\PayrollController@modal_generate_period');
 	Route::any('/time_keeping/generate_period','Member\PayrollController@generate_period');
 	Route::any('/time_keeping/company_period/{id}','Member\PayrollController@company_period');
+	Route::any('/time_keeping/company_period/delete/{id}','Member\PayrollController@company_period_delete');
 	/* PAYROLL TIME KEEPING END */
 
 

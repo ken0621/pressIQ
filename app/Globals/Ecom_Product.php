@@ -385,18 +385,25 @@ class Ecom_Product
 	 * @param  array  $archived 	product status of the item. Default is not archived
 	 * @return array  [Product name : variation (if any)] -> "Product 1 : blue • small" or "Product 1"
 	 */
-	public static function getProductList($shop_id = null, $archived = [0])
+	public static function getProductList($shop_id = null, $archived = [0], $fix = 0)
 	{
 		if(!$shop_id)
 		{
 			$shop_id = Ecom_Product::getShopId();
 		}
 
-		return Ecom_Product::getProductPerSub($shop_id, 0, $archived);
+		return Ecom_Product::getProductPerSub($shop_id, 0, $archived, $fix);
 	}
-	public static function getProductPerSub($shop_id, $category_id, $archived)
+	public static function getProductPerSub($shop_id, $category_id, $archived, $fix = 0)
 	{
-		$_category = Tbl_category::product()->where("type_shop", $shop_id)->where("type_parent_id", $category_id)->where("tbl_category.archived", 0)->get()->toArray();
+		if ($fix == 1) 
+		{
+			$_category = Tbl_category::product()->where("type_shop", $shop_id)->where("tbl_category.archived", 0)->get()->toArray();
+		}
+		else
+		{
+			$_category = Tbl_category::product()->where("type_shop", $shop_id)->where("type_parent_id", $category_id)->where("tbl_category.archived", 0)->get()->toArray();
+		}
 
 		foreach($_category as $key0=>$category)
 		{
@@ -411,7 +418,7 @@ class Ecom_Product
 			
 			$_category[$key0]["subcategory"]	= Ecom_Product::getProductPerSub($shop_id, $category["type_id"], $archived);
 		}
-
+		
 		return $_category;
 	}
 

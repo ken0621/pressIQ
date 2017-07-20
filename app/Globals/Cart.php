@@ -1237,7 +1237,7 @@ class Cart
             'signature'     => $requestpayment->getSignature(),
             'responseUrl'   => $requestpayment->setResponseUrl($data["responseUrl"]),
             'backendUrl'    => $requestpayment->setBackendUrl($data["backendUrl"]),
-            'customer_id'   => isset(Cart::get_customer()["customer_info"]->customer_id) ? Cart::get_customer()["customer_info"]->customer_id : null;
+            'customer_id'   => isset(Cart::get_customer()["customer_info"]->customer_id) ? Cart::get_customer()["customer_info"]->customer_id : null
         );
         
         RequestPayment::make($data["merchantKey"], $ipay88request);  

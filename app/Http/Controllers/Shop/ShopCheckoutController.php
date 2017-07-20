@@ -59,6 +59,7 @@ class ShopCheckoutController extends Shop
         $ipay88_logs["log_error_desc"] = $request['ErrDesc'];
         $ipay88_logs["log_signature"] = $request['Signature'];
         $ipay88_logs["shop_id"] = $this->shop_info->shop_id;
+        $ipay88_logs["response"] = serialize($request);
 
         if ($request) 
         {
@@ -68,7 +69,8 @@ class ShopCheckoutController extends Shop
                 $payment_status = 1;
                 $order_status   = "Processing";
 
-                $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, Self::$customer_info ? Self::$customer_info->customer_id : null);
+                // $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, Self::$customer_info ? Self::$customer_info->customer_id : null);
+                $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, $request['customer_id']);
                 Cart::clear_all($this->shop_info->shop_id);
                 
                 $ipay88_logs["order_id"] = $order_id;

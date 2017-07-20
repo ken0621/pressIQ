@@ -463,7 +463,7 @@ class ShopCheckoutController extends Shop
 
         // if ($data["get_cart"]["new_account"] == true) 
         // {
-            $validate["full_name"] = Request::input("full_name");
+            // $validate["full_name"] = Request::input("full_name");
             $validate["contact_number"] = Request::input("contact_number");
             $validate["customer_state"] = Request::input("customer_state");
             $validate["customer_city"] = Request::input("customer_city");

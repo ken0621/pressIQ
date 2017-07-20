@@ -45,7 +45,7 @@ class ShopCheckoutController extends Shop
     {
         $request = Request::all();
         $shop_id = $this->shop_info->shop_id;
-        $customer_id = isset($request["customer_id"]) ? $request["customer_id"] : null;
+        $customer_id = Self::$customer_info ? Self::$customer_info->customer_id : null;
         
         // LOGS
         $ipay88_logs["log_merchant_code"] = $request['MerchantCode'];

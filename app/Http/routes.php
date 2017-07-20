@@ -87,6 +87,10 @@ Route::any('/member/developer/auto_balance_tree', 'Member\Developer_AutoBalanceT
 Route::any('/member/developer/auto_balance_tree/initialize', 'Member\Developer_AutoBalanceTree@initialize'); //EVERYONE
 Route::post('/member/developer/auto_balance_tree/retree', 'Member\Developer_AutoBalanceTree@retree'); //EVERYONE
 
+
+Route::any('/member/developer/change_sponsor', 'Member\Developer_AutoBalanceTree@change_sponsor'); //EVERYONE
+Route::post('/member/developer/change_sponsor/submit', 'Member\Developer_AutoBalanceTree@change_sponsor_submit'); //EVERYONE
+
 Route::any('/member/developer/simulate', 'Member\Developer_RematrixController@simulate'); //EVERYONE
 Route::any('/member/developer/simulate/submit', 'Member\Developer_RematrixController@simulate_submit'); //EVERYONE
 

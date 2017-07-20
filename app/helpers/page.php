@@ -1281,6 +1281,14 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "Developing";
     $nav[$page]['submenu'][$code]['developer'] = "Everyone";
     
+    $code = "developer-change-sponsor";
+    $nav[$page]['submenu'][$code]['label'] = "Change Sponsor";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/change_sponsor";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+    
     $code = "developer-simulate";
     $nav[$page]['submenu'][$code]['label'] = "Simulate";
     $nav[$page]['submenu'][$code]['code'] = $code;

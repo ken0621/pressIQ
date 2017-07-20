@@ -45,6 +45,7 @@ class ShopCheckoutController extends Shop
     {
         $request = Request::all();
         $shop_id = $this->shop_info->shop_id;
+        $customer_id = $request['customer_id'];
         
         // LOGS
         $ipay88_logs["log_merchant_code"] = $request['MerchantCode'];
@@ -63,33 +64,43 @@ class ShopCheckoutController extends Shop
 
         if ($request) 
         {
-            if($request['Status'] == 1)
+            try 
             {
-                $shop_id        = $this->shop_info->shop_id;
-                $payment_status = 1;
-                $order_status   = "Processing";
+                if($request['Status'] == 1)
+                {
+                    $shop_id        = $this->shop_info->shop_id;
+                    $payment_status = 1;
+                    $order_status   = "Processing";
 
-                // $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, Self::$customer_info ? Self::$customer_info->customer_id : null);
-                $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, $request['customer_id']);
-                Cart::clear_all($this->shop_info->shop_id);
-                
-                $ipay88_logs["order_id"] = $order_id;
-                DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
-               
-                //ipay88 confirmed payment
-                $order = Tbl_ec_order::customer()->customer_otherinfo()->payment_method()->where("ec_order_id",$order_id)->first();
-                /* EMAIL SUCCESSFUL ORDER */
-                $pass_data["order_details"] = $order;
-                $pass_data["order_item"] = Tbl_ec_order_item::item()->where("ec_order_id",$order_id)->groupBy("ec_order_id")->get();
-                $pass_data["order_status"] = $order_status; 
-                Mail_global::create_email_content($pass_data, $shop_id, "successful_order");
+                    // $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, Self::$customer_info ? Self::$customer_info->customer_id : null);
+                    $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, $customer_id);
+                    Cart::clear_all($this->shop_info->shop_id);
+                    
+                    $ipay88_logs["order_id"] = $order_id;
+                    DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
+                   
+                    //ipay88 confirmed payment
+                    $order = Tbl_ec_order::customer()->customer_otherinfo()->payment_method()->where("ec_order_id",$order_id)->first();
+                    /* EMAIL SUCCESSFUL ORDER */
+                    $pass_data["order_details"] = $order;
+                    $pass_data["order_item"] = Tbl_ec_order_item::item()->where("ec_order_id",$order_id)->groupBy("ec_order_id")->get();
+                    $pass_data["order_status"] = $order_status; 
+                    Mail_global::create_email_content($pass_data, $shop_id, "successful_order");
 
-                // Redirect
-                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)))->send();
+                    // Redirect
+                    return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)))->send();
+                } 
+                else 
+                {
+                    DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
+                    return redirect('/checkout')->withErrors($request['ErrDesc'])->send();
+                }    
             } 
-            else 
+            catch (\Exception $e) 
             {
-                DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
+                $insert_error['response'] = $e->getMessage();
+                $insert_error['shop_id'] = $shop_id;
+                DB::table("tbl_ipay88_logs")->insert($insert_error);
                 return redirect('/checkout')->withErrors($request['ErrDesc'])->send();
             }
         }

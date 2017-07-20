@@ -470,7 +470,7 @@ class ShopCheckoutController extends Shop
             $validate["customer_zip"] = Request::input("customer_zip");
             $validate["customer_street"] = Request::input("customer_street");
 
-            $rules["full_name"] = 'required';
+            // $rules["full_name"] = 'required';
             $rules["contact_number"] = 'required';
             $rules["customer_state"] = 'required';
             $rules["customer_city"] = 'required';

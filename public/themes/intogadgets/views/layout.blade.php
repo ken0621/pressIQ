@@ -414,54 +414,26 @@
          </div>
       </div>
    </div>
-   <!-- PRODUCT QUICK VIEW -->
-   {{-- <div class="remodal quicky" data-remodal-id="quick">
-      <div class="quick-view-container">
-         <div class="col-md-6">
-            <div class="image-container">
-               <img src="http://image.primia-files.com/view?source=rutsen.local&filename=1429501946.jpg&size=318x318&mode=crop">
-            </div>
-         </div>
-         <div class="col-md-6">
-            <div class="product-information">
-               <div class="product-title">Sample Product Title</div>
-               <div class="product-price">PHP. 1,550.00</div>
-               <div class="product-description">This t-shirt is fully customizable and you can add additional information by requesting it.</div>
-               <div class="product-selection">
-                  <div class="s-container">
-                     <div class="s-label">Color</div>
-                     <div class="select">
-                        <select>
-                           <option>Blue</option>
-                           <option>Red</option>
-                           <option>Green</option>
-                        </select>
-                     </div>
-                  </div>
-                  <div class="s-container">
-                     <div class="s-label">Color</div>
-                     <div class="select">
-                        <select>
-                           <option>Blue</option>
-                           <option>Red</option>
-                           <option>Green</option>
-                        </select>
-                     </div>
-                  </div>
-               </div>
-               <div class="product-button">
-                  <div class="quantity">
-                     <span class="subtractbutton"><button class="up-down-button" effect="-1">-</button></span>
-                     <input id="numbersonly" class="qty" type="text" value="1" />
-                     <span class="addbutton"><button id="addbutton"class="up-down-button" effect="1">+</button></span>
-                  </div>
-                  <button class="add-cart">Add to Cart</button>
-                  <img class="loading" src="/resources/assets/img/small-loading.GIF">
-               </div>
-            </div>
-         </div>
-      </div>
-   </div> --}}
+   <!-- PENDING -->
+   <div class="remodal" data-remodal-id="pending_modal">
+     <div class="payment-modal" style="padding: 25px;">
+        <button data-remodal-action="close" class="remodal-close"></button>
+        <h3>Good day Maam/Sir,</h3>
+        <h3>Kindly check your email for the step by step procedure of the payment.</h3>
+        <h2>Thank you for choosing Intogadgets PH!</h1>
+        <br>
+        <button data-remodal-action="confirm" class="remodal-confirm">OK</button>
+     </div>
+   </div>
+   <!-- Failed -->
+   <div class="remodal" data-remodal-id="fail_modal">
+     <div class="payment-modal" style="padding: 25px;">
+        <button data-remodal-action="close" class="remodal-close"></button>
+        <h2>Transaction Failed</h2>
+        <br>
+        <button data-remodal-action="confirm" class="remodal-cancel">OK</button>
+     </div>
+   </div>
    <!-- CART MODAL -->
    <div class="remodal cart-remodal" data-remodal-id="cart">
    </div>

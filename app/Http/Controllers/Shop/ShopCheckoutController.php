@@ -66,6 +66,7 @@ class ShopCheckoutController extends Shop
         {
             try 
             {
+                /* Success */
                 if($request['Status'] == 1)
                 {
                     $shop_id        = $this->shop_info->shop_id;
@@ -90,6 +91,14 @@ class ShopCheckoutController extends Shop
                     // Redirect
                     return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)))->send();
                 } 
+                elseif($request['Status'] == 6)
+                {
+                    return Redirect::to("/product#pending_modal");
+                }
+                elseif ($request['Status'] == 0) 
+                {
+                    return Redirect::to("/product#fail_modal");
+                }
                 else 
                 {
                     DB::table("tbl_ipay88_logs")->insert($ipay88_logs);

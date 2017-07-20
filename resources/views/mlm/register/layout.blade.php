@@ -74,5 +74,11 @@
     <script type="text/javascript" src="assets/member/plugin/toaster/toastr.min.js"></script>
     <script type="text/javascript" src="assets/mlm/js/match-height.js"></script>
     @yield("script")
+    <script type="text/javascript">
+      $(document).ready(function()
+      {
+         $(window).scrollTop(0);    
+      });
+    </script>
     </body>
 </html>

@@ -95,16 +95,19 @@ class ShopCheckoutController extends Shop
                     elseif($request['Status'] == 6)
                     {
                         DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
+
                         return Redirect::to("/product#pending_modal");
                     }
                     elseif ($request['Status'] == 0) 
                     {
                         DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
+
                         return Redirect::to("/product#fail_modal");
                     }
                     else 
                     {
                         DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
+
                         return redirect('/checkout')->withErrors($request['ErrDesc'])->send();
                     }    
                 } 
@@ -113,6 +116,7 @@ class ShopCheckoutController extends Shop
                     $insert_error['response'] = $e->getMessage();
                     $insert_error['shop_id'] = $shop_id;
                     DB::table("tbl_ipay88_logs")->insert($insert_error);
+
                     return redirect('/checkout')->withErrors($request['ErrDesc'])->send();
                 }
             }
@@ -123,7 +127,7 @@ class ShopCheckoutController extends Shop
         }
         else
         {
-            dd($request);
+            dd("Some error occurred. Please try again later.");
         }
     }
     public function ipay88_backend()
@@ -179,10 +183,14 @@ class ShopCheckoutController extends Shop
                     } 
                     elseif($request['Status'] == 6)
                     {
+                        DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
+
                         return false;
                     }
                     elseif ($request['Status'] == 0) 
                     {
+                        DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
+
                         return false;
                     }
                     else 

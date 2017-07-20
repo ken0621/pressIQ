@@ -1252,6 +1252,7 @@ class Cart
         $temp["shop_id"] = $shop_id;
         $temp["customer_id"] = isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null;
         $temp["date_created"] = Carbon::now();
+        dd($temp);
         DB::table("tbl_ipay88_temp")->insert($temp);
 
         // Cart::clear_all($shop_id);

@@ -119,6 +119,10 @@ class ShopCheckoutController extends Shop
                 return Redirect::to("/checkout")->with('fail', 'Session has been expired. Please try again.')->send();
             }
         }
+        else
+        {
+            dd($request);
+        }
     }
     public function ipay88_backend()
     {

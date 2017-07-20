@@ -382,7 +382,7 @@ class ShopCheckoutController extends Shop
     }
     public function after_email_payment($order_id)
     {
-        /* Email Checkout */
+        /* Email  */
         $data_order                = DB::table("tbl_ec_order")->where("ec_order_id", $order_id)->first();
         $data_customer             = DB::table("tbl_customer")->where("customer_id", $data_order->customer_id)->first();
         if ($data_order) 
@@ -461,8 +461,8 @@ class ShopCheckoutController extends Shop
         /* Validation */
         $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
 
-        if ($data["get_cart"]["new_account"] == true) 
-        {
+        // if ($data["get_cart"]["new_account"] == true) 
+        // {
             $validate["full_name"] = Request::input("full_name");
             $validate["contact_number"] = Request::input("contact_number");
             $validate["customer_state"] = Request::input("customer_state");
@@ -485,7 +485,7 @@ class ShopCheckoutController extends Shop
                             ->withErrors($validator)
                             ->withInput();
             }
-        } 
+        // } 
 
         /* SPLIT NAME TO FIRST NAME AND LAST NAME */
         $full_name = Request::input("full_name");

@@ -111,7 +111,7 @@ class MlmWalletVMoneyController extends Mlm
                                     $arry_log['wallet_log_slot'] = $slot->slot_id;
                                     $arry_log['shop_id'] = $slot->shop_id;
                                     $arry_log['wallet_log_slot_sponsor'] = $slot->slot_id;
-                                    $arry_log['wallet_log_details'] = 'You have transfered ' . $pass["amount"] . ' To your E-Money. ' . $pass["amount"] . ' is deducted to your wallet.';
+                                    $arry_log['wallet_log_details'] = 'You have transferred ' . $current_wallet . ' To your E-Money. ' . $total_fee . ' is deducted to your wallet including tax and convenience fee.';
                                     $arry_log['wallet_log_amount'] = -($total_fee);
                                     $arry_log['wallet_log_plan'] = "E_MONEY";
                                     $arry_log['wallet_log_status'] = "released";   
@@ -134,7 +134,8 @@ class MlmWalletVMoneyController extends Mlm
                                 $logs["txnId"] = isset($data_decoded->txnId) ? $data_decoded->txnId : "None";
                                 $logs["merchantRef"] = isset($data_decoded->merchantRef) ? $data_decoded->merchantRef : "None";
                                 $logs["message"] = isset($data_decoded->resultMsg) ? $data_decoded->resultMsg : "None";
-                                $logs["fee"] = $convenience_fee;
+                                $logs["fee"] = $fixed;
+                                $logs["tax"] = $percent_value;
                                 Tbl_vmoney_wallet_logs::insert($logs);
                             } 
                             catch (\Exception $e) 

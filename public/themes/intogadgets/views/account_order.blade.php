@@ -45,12 +45,18 @@
                             @else
                                 <td>None</td>
                             @endif 
-                            <td><a href="/account/invoice/{{ $order->ec_order_id }}" target="_blank">Invoice</a></td>
                             <td>
-                                @if($order->order_status == "Cancelled")
-                                    
-                                @else
-                                    <a class="cancel-button" href="/account/order?cancel_id={{ $order->ec_order_id }}">Cancel</a>
+                                @if($order->payment_status == 1)
+                                    <a href="/account/invoice/{{ $order->ec_order_id }}" target="_blank">Invoice</a>
+                                @endif
+                            </td>
+                            <td>
+                                @if($order->order_status != "Cancelled")
+
+                                    @if($order->order_status == "Shipped")
+                                    @else
+                                        <a class="cancel-button" href="javascript:" linkerino="/account/order?cancel_id={{ $order->ec_order_id }}">Cancel</a>
+                                    @endif
                                 @endif
                             </td>                           
                         </tr>
@@ -178,7 +184,7 @@ function account_order()
 
     function action_click_cancel(e)
     {
-        var link = $(e.currentTarget).attr("href");
+        var link = $(e.currentTarget).attr("linkerino");
 
         if (confirm("Are you sure you want to cancel this order?")) 
         {

@@ -18,7 +18,6 @@
 			<div class="col-md-6">
 				<small>Period Count</small>
 				<select class="form-control" required name="period_count">
-					<option value="0">Select Period</option>
 					<option value="first_period" {{$period->period_count == 'first_period' ? 'selected="selected"' :''}}>First Period</option>
 					<option value="middle_period" {{$period->period_count == 'middle_period' ? 'selected="selected"' :''}}>Middle Period</option>
 					<option value="last_period" {{$period->period_count == 'last_period' ? 'selected="selected"' :''}}>Last Period</option>
@@ -29,7 +28,6 @@
 			<div class="col-md-6">
 				<small>Contribution Month</small>
 				<select class="form-control" required name="month_contribution">
-					<option value="">Select Contribution Month</option>
 					@foreach($_month as $month)
 					<option value="{{$month}}" {{$period->month_contribution == $month ? 'selected="selected"' : ''}}>{{$month}}</option>
 					@endforeach

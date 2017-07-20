@@ -15,6 +15,7 @@
 
             <div class="dropdown pull-right">
                 <button onclick="location.href='/member/payroll/time_keeping'" class="btn btn-default">&laquo; Back</button>
+                <button onclick="location.href='/member/payroll/time_keeping'" class="btn btn-primary"><i class="fa fa-star"></i> Payroll Process</button>
                 <button class="btn btn-custom-danger dropdown-toggle " type="button" data-toggle="dropdown"><i class="fa fa-file-pdf-o"></i>&nbsp;Summary
                 <span class="caret"></span></button>
                 <ul class="dropdown-menu dropdown-menu-custom">
@@ -31,13 +32,15 @@
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <ul class="nav nav-tabs">
         <li class="active change-tab pending-tab cursor-pointer" mode="pending"><a class="cursor-pointer"><i class="fa fa-check"></i> Pending</a></li>
-        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="fa fa-star"></i> Approved</a></li>
+        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="fa fa-star"></i> Ready</a></li>
     </ul>
     <div class="search-filter-box">
         <div class="col-md-4" style="padding: 10px">
+            <!-- BRANCH LIST -->
             <select class="form-control item_type company-change-event">
+                <option value="0">All Branches / Sub-Company</option>
                 @foreach($_company as $company_info)
-                <option {{ $company_info->payroll_period_company_id == $company->payroll_period_company_id ? 'selected' : '' }} value="{{ $company_info->payroll_period_company_id }}">{{ $company_info->payroll_company_name }}</option>
+                <option {{ $company_info->payroll_company_id == $company->payroll_company_id ? 'selected' : '' }} value="{{ $company_info->payroll_company_id }}">{{ $company_info->payroll_company_name }}</option>
                 @endforeach
             </select>
         </div>

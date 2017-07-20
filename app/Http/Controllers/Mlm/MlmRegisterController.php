@@ -334,6 +334,9 @@ class MlmRegisterController extends MlmLoginController
                         );
 
                         $cus_id = Tbl_customer::insertGetId($insert_customer);
+                    
+                        $data["customer_info"] = Tbl_customer::where("customer_id",$cus_id)->first();
+                        Mail_global::create_email_content($data,Self::$shop_id,"success_register");
 
                         if ($cus_id)
                         {

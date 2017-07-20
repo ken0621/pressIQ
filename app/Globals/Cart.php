@@ -712,7 +712,12 @@ class Cart
         $data["billing_equals_shipping"] = (isset($customer_information["billing_equals_shipping"]) ? $customer_information["billing_equals_shipping"] : (isset($data["billing_equals_shipping"]) ? $data["billing_equals_shipping"] : true));;
 
         /* SET BASIC INFORMATION */
-        $data["tbl_customer"]['customer_id']      = Tbl_customer::max("customer_id") + 1;
+        if (isset($customer_information["email"]) && isset($customer_information["password"])) 
+        {
+            $customer_exist = DB::table("tbl_customer")->where("email", $customer_information["email"])->first();
+        }
+        
+        $data["tbl_customer"]['customer_id']      = isset($customer_exist->customer_id) ? $customer_exist->customer_id : Tbl_customer::max("customer_id") + 1;
         $data["tbl_customer"]['first_name']       = (isset($customer_information["first_name"]) ? $customer_information["first_name"] : (isset($data["tbl_customer"]['first_name']) ? $data["tbl_customer"]['first_name'] : null));
         $data["tbl_customer"]['last_name']        = (isset($customer_information["last_name"]) ? $customer_information["last_name"] : (isset($data["tbl_customer"]['last_name']) ? $data["tbl_customer"]['last_name'] : null));
         $data["tbl_customer"]['middle_name']      = (isset($customer_information["middle_name"]) ? $customer_information["middle_name"] : (isset($data["tbl_customer"]['middle_name']) ? $data["tbl_customer"]['middle_name'] : null));
@@ -731,10 +736,6 @@ class Cart
         $data["tbl_customer"]['b_day']     = (isset($customer_information["b_day"]) ? $customer_information["b_day"] : (isset($data["tbl_customer"]['b_day']) ? $data["tbl_customer"]['b_day'] : null));
         $data["tbl_customer"]['customer_gender']     = (isset($customer_information["customer_gender"]) ? $customer_information["customer_gender"] : (isset($data["tbl_customer"]['customer_gender']) ? $data["tbl_customer"]['customer_gender'] : 'Male'));
         
-        
-        
-        
-        // 
         $data['load_wallet']['ec_order_load']        = isset($customer_information['load_wallet']['ec_order_load']) == true ? $customer_information['load_wallet']['ec_order_load'] : 0 ;
         $data['load_wallet']['ec_order_load_number'] = isset($customer_information['load_wallet']['ec_order_load_number']) == true ? $customer_information['load_wallet']['ec_order_load_number'] : 0;
         
@@ -752,7 +753,7 @@ class Cart
             $data["tbl_customer"]['email']            = $current->email;
             $data["tbl_customer"]['password']         = Crypt::decrypt($current->password);
             $data["tbl_customer"]['shop_id']          = $shop_id;
-            $data["tbl_customer"]['customer_contact'] = $other_info->customer_mobile;
+            $data["tbl_customer"]['customer_contact'] = $data["tbl_customer"]['customer_contact'] ? $data["tbl_customer"]['customer_contact'] : $other_info->customer_mobile;
             $data["tbl_customer"]['country_id']       = 420;
             $data["tbl_customer"]['tin_number']       = $current->tin_number;
             $data["tbl_customer"]['mlm_username']     = $current->mlm_username;
@@ -1000,26 +1001,33 @@ class Cart
         ini_set('xdebug.max_nesting_level', 200);
         
         $data = Cart::get_info($shop_id);
-        $method_id = $data["tbl_ec_order"]["payment_method_id"];
-        $method_information = Self::get_method_information($shop_id, $method_id);
-        if ( isset($method_id) && isset($method_information) )
+        if (isset($data["tbl_ec_order"]["payment_method_id"])) 
         {
-            switch ($method_information->link_reference_name)
+            $method_id = $data["tbl_ec_order"]["payment_method_id"];
+            $method_information = Self::get_method_information($shop_id, $method_id);
+            if ( isset($method_id) && isset($method_information) )
             {
-                case 'paypal2': dd("UNDER DEVELOPMENT"); break;
-                case 'paymaya': Cart::submit_using_paymaya($data, $shop_id, $method_information, $from); break;
-                case 'paynamics': dd("UNDER DEVELOPMENT"); break;
-                case 'dragonpay': return Cart::submit_using_dragonpay($data, $shop_id, $method_information, $from); break;
-                case 'ipay88': return Cart::submit_using_ipay88($data, $shop_id, $method_information); break;
-                case 'other': return Cart::submit_using_proof_of_payment($shop_id, $method_information);  break;
-                case 'e_wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
-                case 'cashondelivery': return Cart::submit_using_cash_on_delivery($shop_id, $method_information); break;
-                default: dd("UNDER DEVELOPMENT"); break;
+                switch ($method_information->link_reference_name)
+                {
+                    case 'paypal2': dd("UNDER DEVELOPMENT"); break;
+                    case 'paymaya': Cart::submit_using_paymaya($data, $shop_id, $method_information, $from); break;
+                    case 'paynamics': dd("UNDER DEVELOPMENT"); break;
+                    case 'dragonpay': return Cart::submit_using_dragonpay($data, $shop_id, $method_information, $from); break;
+                    case 'ipay88': return Cart::submit_using_ipay88($data, $shop_id, $method_information); break;
+                    case 'other': return Cart::submit_using_proof_of_payment($shop_id, $method_information);  break;
+                    case 'e_wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
+                    case 'cashondelivery': return Cart::submit_using_cash_on_delivery($shop_id, $method_information); break;
+                    default: dd("UNDER DEVELOPMENT"); break;
+                }
+            }
+            else
+            {
+                return Redirect::back()->with("error", "Please choose payment method.")->send();
             }
         }
         else
         {
-            return Redirect::back()->with("error", "Please choose payment method.")->send();
+            dd('An error occurred. Please try again later.');
         }
     }
     public static function submit_using_paymaya($data, $shop_id, $method_information, $from)
@@ -1181,7 +1189,7 @@ class Cart
             /* Bancnet */
             case 5: $data["paymentId"] = 5; break;
             /* Default (Credit Card) */
-            default: $data["paymentId"] = 1; break;
+            default: $data["paymentId"] = $method_information->link_delimeter; break;
         }
 
         $data["refNo"] = $shop_id . time();
@@ -1320,6 +1328,21 @@ class Cart
 
         $tbl_order = DB::table("tbl_ec_order")->where("tbl_ec_order.ec_order_id", $order_id)->leftJoin("tbl_customer", "tbl_customer.customer_id", "=", "tbl_ec_order.customer_id")->first();
         
+        $data["template"] = Tbl_email_template::where("shop_id", $shop_id)->first();
+        $data['mail_to'] = $tbl_order->customer_email;
+        $data['mail_username'] = Config::get('mail.username');
+        $data['mail_subject'] = "Verify Payment";
+        $data['payment_detail'] = $method_information->other_description;
+        $data['customer_full_name'] = $tbl_order->first_name . " " . $tbl_order->middle_name . " " . $tbl_order->last_name;
+        $data['order_id'] = Crypt::encrypt($tbl_order->ec_order_id);
+        $data['password'] = Crypt::decrypt($tbl_order->password);
+        //email for COD
+        $result = Mail_global::create_email_content($data, $shop_id, "cash_on_delivery");
+        if($result == 0)
+        {    
+            // $result = Mail_global::mail($data, $shop_id, "cod");
+        }
+
         return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)) . '&popup=1')->send();
     }
     public static function get_customer()

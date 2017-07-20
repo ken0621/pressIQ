@@ -31,7 +31,8 @@ function vmoney()
         var percent_value = (percent / 100) * current_wallet;
         var convenience_fee = fixed + percent_value; 
         var total_fee = current_wallet + convenience_fee;
-        $('.convenience-fee').val(convenience_fee);
+        $('.convenience-fee').val(fixed);
+        $('.tax-fee').val(percent_value);
         $('.total-fee').val(total_fee);
     }
 }

@@ -218,7 +218,7 @@
             <div class="container">
                @foreach(limit_foreach($_related, 4) as $related)
                <div class="feature-holder col-md-3 col-sm-6 col-xs-12">
-                  <a href="product/">
+                  <a href="/product/view/{{$related['eprod_id']}}">
                      <div class="feature-img">
                         <img class="lazy 4-3-ratio" data-original="{{ get_product_first_image($related) }}" height="222px" width="222px">
                         <div class="feature-hover"></div>
@@ -226,7 +226,7 @@
                   <a href="javascript:"><i class="fa fa-link"></i></a></div>
                   </div>
                   </a>
-                  <a href="product/" class="feature-name">{{ get_product_first_name($related) }}</a>
+                  <a href="/product/view/{{$related['eprod_id']}}" class="feature-name">{{ get_product_first_name($related) }}</a>
                   <div class="feature-rate"></div>
                   <div class="feature-price">{{ get_product_first_price($related) }}</div>
                   <a class="feature-button quick-view" style="display: none;">QUICK VIEW</a>

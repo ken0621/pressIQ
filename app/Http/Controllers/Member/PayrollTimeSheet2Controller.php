@@ -21,6 +21,7 @@ use App\Models\Tbl_payroll_holiday_company;
 use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_shift_code;
 use App\Globals\Payroll2;
+use App\Models\Tbl_payroll_company;
 use DB;
 
 class PayrollTimeSheet2Controller extends Member
@@ -31,7 +32,7 @@ class PayrollTimeSheet2Controller extends Member
 		$data["page"] = "Employee List Summary";
 		$this->index_redirect_if_time_keeping_does_not_exist($period_id);
 		$data["company"] = $this->db_get_company_period_information($period_id);
-		$data["_company"] = $this->db_get_list_of_company_for_period($data["company"]->payroll_period_id);
+		$data["_company"] = $this->db_get_list_of_company_for_period($data["company"]->payroll_company_id);
 		return view('member.payroll2.employee_summary', $data);
 	}
 	public function index_redirect_if_time_keeping_does_not_exist($period_id)
@@ -45,13 +46,17 @@ class PayrollTimeSheet2Controller extends Member
 	}
 	public function index_table($period_id)
 	{
-		$search_value = Request::input("search");
-		$mode = Request::input("mode") == "pending" ? 0 : 1;
-		
-		$data["page"] = "Employee List Summary";
+		$search_value 		= Request::input("search");
+		$mode 				= Request::input("mode") == "pending" ? 0 : 1;
+		$branch 			= Request::input("branch");
+		$data["page"] 		= "Employee List Summary";
+
 		$this->index_redirect_if_time_keeping_does_not_exist($period_id);
-		$data["company"] = $this->db_get_company_period_information($period_id);
-		$data["_employee"] = $this->db_get_list_of_employees_by_company_with_search($data["company"]->payroll_company_id, $search_value, $mode, $period_id, $data["company"]->payroll_period_start);
+
+		$data["company"] 	= $this->db_get_company_period_information($period_id);
+		$data["_employee"] 	= $this->db_get_list_of_employees_by_company_with_search($data["company"]->payroll_company_id, $search_value, $mode, $period_id, $data["company"]->payroll_period_start, $branch);
+		
+
 		return view('member.payroll2.employee_summary_table', $data);
 	}
 	public function timesheet($period_id, $employee_id)
@@ -227,6 +232,7 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			$timesheet_db = $this->timesheet_info_db($employee_id, $from);
 			$_shift =  $this->shift_raw($this->db_get_shift_of_employee($employee_id, $from));
+
 			
 			/* CREATE TIMESHEET DB IF EMPTY */
 			if(!$timesheet_db)
@@ -252,6 +258,7 @@ class PayrollTimeSheet2Controller extends Member
 			
 			$_timesheet[$from] = new stdClass();
 			$_timesheet[$from]->payroll_time_sheet_id = $timesheet_db->payroll_time_sheet_id;
+
 			$_timesheet[$from]->date = Carbon::parse($from)->format("Y-m-d");
 			$_timesheet[$from]->day_number = Carbon::parse($from)->format("d");
 			$_timesheet[$from]->day_word = Carbon::parse($from)->format("D");
@@ -303,6 +310,11 @@ class PayrollTimeSheet2Controller extends Member
 			}
 
 			$return = $this->timesheet_process_daily_info_record($employee_id, $date, $approved, $_record, $timesheet_db->payroll_time_sheet_id, $payroll_period_company_id, $timesheet_db->time_keeping_approved);
+		
+
+			$return->source = "";
+			$return->branch = "";
+
 		}
 		else
 		{
@@ -330,6 +342,7 @@ class PayrollTimeSheet2Controller extends Member
 		$return->_time	= $_time_raw;
 		$return->_shift = $_shift_raw;
 		$return->time_compute_mode = "regular";
+
 		
 		if(count($_shift) > 0)
 		{
@@ -537,9 +550,32 @@ class PayrollTimeSheet2Controller extends Member
 			$_timesheet_record[$key]->time_sheet_in = $this->gb_convert_time_from_db_to_timesheet($record->payroll_time_sheet_in);
 			$_timesheet_record[$key]->time_sheet_out = $this->gb_convert_time_from_db_to_timesheet($record->payroll_time_sheet_out);
 			$_timesheet_record[$key]->time_sheet_activity = $record->payroll_time_shee_activity;
+			$_timesheet_record[$key]->branch = $this->timesheet_get_branch($record->payroll_company_id)->name;
+			$_timesheet_record[$key]->source = $record->payroll_time_sheet_origin;
 		}
 
 		return $_timesheet_record;
+	}
+
+	public function timesheet_get_branch($payroll_company_id)
+	{
+		$return = new stdClass();
+
+		$company_information = Tbl_payroll_company::where("payroll_company_id", $payroll_company_id)->first();
+
+
+		if($company_information)
+		{
+			$return->name = $company_information->payroll_company_name;
+			$return->id = $company_information->pyaroll_company_id;
+		}
+		else
+		{
+			$return->name = "No Branch";
+			$return->id = 0;
+		}
+
+		return $return;
 	}
 
 	public function day_summary($timesheet_id)
@@ -849,7 +885,7 @@ class PayrollTimeSheet2Controller extends Member
 	}
 	public function db_get_list_of_company_for_period($id)
 	{
-		$_data = Tbl_payroll_period_company::selperiod($id)->orderBy('tbl_payroll_company.payroll_company_name')->select('tbl_payroll_period_company.*','tbl_payroll_company.payroll_company_name')->get();
+		$_data = Tbl_payroll_company::orderBy('tbl_payroll_company.payroll_company_name')->where("payroll_parent_company_id", $id)->get();
 		return $_data;
 	}
 	public function db_get_employee_information($employee_id)
@@ -860,7 +896,7 @@ class PayrollTimeSheet2Controller extends Member
 	{
 		return Tbl_payroll_employee_basic::where("shop_id", $this->user_info->shop_id)->where("payroll_employee_company_id", $company_id)->orderBy("payroll_employee_number")->get();
 	}
-	public function db_get_list_of_employees_by_company_with_search($company_id, $search = "", $time_keeping_approved = 0, $period_company_id, $period_start)
+	public function db_get_list_of_employees_by_company_with_search($company_id, $search = "", $time_keeping_approved = 0, $period_company_id, $period_start, $branch = 0)
 	{
 		$query = Tbl_payroll_employee_basic::select("*");
 		
@@ -873,11 +909,22 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			$query->join("tbl_payroll_time_keeping_approved", "tbl_payroll_time_keeping_approved.employee_id","=", "tbl_payroll_employee_basic.payroll_employee_id")->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", $period_company_id);
 		}
+
+		$query->where("tbl_payroll_employee_basic.shop_id", $this->user_info->shop_id);
+
+
+		$query->join("tbl_payroll_company", "tbl_payroll_employee_basic.payroll_employee_company_id", "=", "tbl_payroll_company.payroll_company_id");
 		
-		
-		
-		$query->where("shop_id", $this->user_info->shop_id);
-		$query->where("payroll_employee_company_id", $company_id);
+		if($branch == 0)
+		{
+			$query->where("payroll_company_id", $company_id)->orWhere("payroll_parent_company_id", $company_id);
+		}
+		else
+		{
+			$query->where("payroll_company_id", $branch);
+		}
+
+
 		$query->orderBy("payroll_employee_number");
 												
 		if($search != "")

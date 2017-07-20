@@ -33,8 +33,7 @@ function timesheet_employee_list()
 	{
 		$(".company-change-event").change(function(e)
 		{
-			$payroll_period_company_id = $(e.currentTarget).val();
-			action_reload_different_company($payroll_period_company_id);
+			action_load_table();
 		});
 	}
 	function action_reload_different_company($payroll_period_company_id)
@@ -98,7 +97,9 @@ function timesheet_employee_list()
 		
 		$mode = $(".change-tab.active").attr("mode");
 		$search = $(".search-employee-name").val();
-		$url = "/member/payroll/company_timesheet2/table/" + payroll_period_id + "?search=" + $search + "&mode=" + $mode;
+		$branch = $(".company-change-event").val();
+
+		$url = "/member/payroll/company_timesheet2/table/" + payroll_period_id + "?search=" + $search + "&mode=" + $mode + "&branch=" + $branch;
 		
 		$(".load-table-employee-list").load($url, function()
 		{

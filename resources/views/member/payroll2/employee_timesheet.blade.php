@@ -17,6 +17,8 @@
                             <th class="text-center" width="100px">Time In</th>
                             <th class="text-center" width="100px">Time Out</th>
                             <th class="text-center">Remark / Activity</th>
+                            <th class="text-center" width="150px;">Source</th>
+                            <th class="text-center" width="150px;">Branch</th>
                             <th width="150px" class="text-center">Rate</th>
                         </tr>
                     </thead>
@@ -28,6 +30,7 @@
                             <input type="hidden" name="date" value="{{ $timesheet->date }}"/>
                             <td class="text-center" width="50px">{{ $timesheet->day_number }}</td>
                             <td class="text-center" width="50px">{{ $timesheet->day_word }}</td>
+
                             <td class="time-in-td">
                                 @if($timesheet->record)
                                     @foreach($timesheet->record as $record)
@@ -49,10 +52,29 @@
                             <td class="time-comment-td">
                                 @if($timesheet->record)
                                     @foreach($timesheet->record as $record)
-                                    <input name="remarks[]" unq="{{ $random_integer }}" value="{{ $record->time_sheet_activity }}" type="text" class="comment new-time-event text-table">
+                                    <input name="remarks[]" unq="{{ $random_integer }}" value="{{ ($record->time_sheet_activity == '' ? $timesheet->default_remarks : $record->time_sheet_activity) }}" type="text" class="comment new-time-event text-table">
                                     @endforeach
                                 @else
                                     <input name="remarks[]" unq="{{ $random_integer }}" value="{{ $timesheet->default_remarks }}" type="text" class="comment new-time-event text-table">
+                                @endif
+                            </td>
+
+                            <td class="text-center">
+                                @if($timesheet->record)
+                                    @foreach($timesheet->record as $record)
+                                        <div>{{ $record->source }}</div>
+                                    @endforeach
+                                @else
+                                    N/A
+                                @endif
+                            </td>
+                            <td class="text-center">
+                                @if($timesheet->record)
+                                    @foreach($timesheet->record as $record)
+                                        <div>{{ $record->branch }}</div>
+                                    @endforeach
+                                @else
+                                    N/A
                                 @endif
                             </td>
                             <td class="text-center rate-output">
@@ -72,3 +94,9 @@
     <button class="btn btn-primary btn-custom-primary approve-timesheet-btn" type="button">{{ $time_keeping_approved == true ? "RETURN TO PENDING" : "APPROVE" }}</button>
 </div>
 <script type="text/javascript" src="/assets/member/payroll/js/timesheet2.js"></script>
+<style type="text/css">
+    .modal-dialog
+    {
+        width: 1100px !important;
+    }
+</style>

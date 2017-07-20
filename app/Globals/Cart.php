@@ -1201,7 +1201,7 @@ class Cart
         {
             $data["refNo"] = $shop_id . time();
         }
-        dd($data);
+        
         $data["amount"] = $data["tbl_ec_order"]["total"];
 
         /* REASTRUCTURE */
@@ -1247,7 +1247,7 @@ class Cart
             'responseUrl'   => $requestpayment->setResponseUrl($data["responseUrl"]),
             'backendUrl'    => $requestpayment->setBackendUrl($data["backendUrl"])
         );
-
+        dd($data);
         $insert["reference_number"] = $data["refNo"];
         $insert["shop_id"] = $shop_id;
         $insert["customer_id"] = isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null;

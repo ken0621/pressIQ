@@ -28,6 +28,12 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/news', 'Shop\ShopAboutController@news'); //EDWARD GUEVARRA
 	Route::get('/email_payment', 'Shop\ShopAboutController@email_payment'); //EDWARD GUEVARRA
 
+	Route::get('/products', 'Shop\ShopAboutController@products'); //ROMMEL CUNETA
+	Route::get('/company', 'Shop\ShopAboutController@company'); //ROMMEL CUNETA
+	Route::get('/contact', 'Shop\ShopAboutController@contact'); //ROMMEL CUNETA
+	/*Route::get('/joinus/login', 'Shop\ShopLoginController@index');*/ //ROMMEL CUNETA
+	/*Route::get('/joinus/register', 'Shop\ShopRegisterController@index');*/ //ROMMEL CUNETA
+
 	Route::get('/blog', 'Shop\ShopBlogController@index');
 	Route::get('/blog/content', 'Shop\ShopBlogContentController@index');
 	Route::get('/payment', 'Shop\ShopPaymentController@index');

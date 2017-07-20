@@ -43,4 +43,24 @@ class ShopAboutController extends Shop
         $data["page"] = "Email Payment";
         return view("email_payment", $data);
     }
+
+    /*ROMMEL CUNETA START*/
+    public function products()
+    {
+        $data["page"] = "Products";
+        return view("products", $data);
+    }
+
+    public function company()
+    {
+        $data["page"] = "Company";
+        return view("company", $data);
+    }
+
+    public function contact()
+    {
+        $data["page"] = "Contacts";
+        return view("contact", $data);
+    }
+    /*ROMMEL CUNETA END*/
 }

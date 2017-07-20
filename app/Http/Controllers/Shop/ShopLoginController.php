@@ -24,6 +24,7 @@ class ShopLoginController extends Shop
         $data["page"] = "Login";
         return view("login", $data);
     }
+
     public function submit()
     {
     	$email = Request::input('email');

@@ -31,7 +31,7 @@ body{
 }
 
 .content{
-	padding: 10px;
+	/* padding: 10px; */
 
 	.form-control{
 		height: 40px;
@@ -65,8 +65,13 @@ body{
 	    border:none;
 	    border-radius: 20px;
 	    padding: 10px 50px 10px 50px;
-	    color: #0f0f0f;
-	    background-color: #ffc10e;
+	    color: #ffffff;
+	    background-color: #094e95;
+
+	    &:hover
+	    {
+	    	box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+	    }
 		
 	}
 	.message {
@@ -85,7 +90,7 @@ body{
 		font-family: 'Poppins', sans-serif;
 		color: #0f0f0f;
 		font-size: 26px;
-		padding-bottom: 20px;
+		padding: 50px 0px 20px 0px;
 		
 		@media screen and (max-width: 900px)
 		{
@@ -94,52 +99,59 @@ body{
 	}
 }
 
+.contact-us-text
+{
+	padding: 100px 0px 100px 0px;
+	text-align: center;
+	font-weight: 600;
+	font-size: 24px;
+	color: #ffffff; 
+}
 
 table 
+{
+	tr 
 	{
-		tr 
+		.icon 
 		{
-			.icon 
-			{
-				vertical-align: center;
-				text-align: center;
-				font-size: 14px;
-				padding-right: 20px;
-				padding-top: 20px;
-				color: #aeaeae;
-			}
+			vertical-align: center;
+			text-align: center;
+			font-size: 14px;
+			padding-right: 20px;
+			padding-top: 20px;
+			color: #aeaeae;
+		}
 
-			.fa-map-marker 
-			{
-				font-size: 22px;
-			}
+		.fa-map-marker 
+		{
+			font-size: 22px;
+		}
 
-			.fa-phone 
-			{
-				font-size: 22px;
-			}
+		.fa-phone 
+		{
+			font-size: 22px;
+		}
 
-			.fa-fax{
-				font-size: 16px;
-			}
+		.fa-fax{
+			font-size: 16px;
+		}
 
-			.fa-clock-o 
-			{
-				font-size: 25px;
-			}
-			.fa-envelope 
-			{
-				font-size: 16px;
-			}
+		.fa-clock-o 
+		{
+			font-size: 25px;
+		}
+		.fa-envelope 
+		{
+			font-size: 16px;
+		}
 
-			.par 
-			{
-				padding-top: 20px;
-				font-size: 12.51px;
-
-			}
+		.par 
+		{
+			padding-top: 20px;
+			font-size: 12.51px;
 		}
 	}
+}
 	.business-hours 
 	{
 		font-family: 'Poppins', sans-serif;
@@ -148,21 +160,21 @@ table
 		padding-top: 20px;
 	}
 
-.map-title-container{
-	background-color: #ffc10e;
-	color: #0f0f0f;
+.map-title-container
+{
+	background-color: #094e95;
+	color: #ffffff;
 	font-family: 'Poppins', sans-serif;
 	font-size: 26px;
-	padding: 15px 0px 15px 20px;
-
+	padding: 15px 0px 15px 0px;
 }
 
 .google-map
+{
+	iframe
 	{
-		iframe
-		{
-			width: 100%;
-		    height: 650px;
-		}
+		width: 100%;
+	    height: 650px;
 	}
+}
 

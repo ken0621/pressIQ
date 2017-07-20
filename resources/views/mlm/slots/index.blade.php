@@ -95,7 +95,7 @@ $data['icon'] = 'icon-sitemap';
               <!--</td>-->
               
               <td>
-                  <form class="global_submit" action="/mlm/changeslot" method="post">
+                  <form class="global_submit" action="/mlm/changeslot" method="post" >
                     {!! csrf_field() !!}
                     <input type="hidden" name="slot_id" value="{{$value->slot_id}}">
                     @if($slot_now_active == $value->slot_id)
@@ -103,7 +103,7 @@ $data['icon'] = 'icon-sitemap';
                       <i class="fa fa-sign-in" aria-hidden="true"></i>
                     </button>
                     @else
-                    <button class="btn btn-default">
+                    <button class="btn btn-default" onClick="if(!confirm('Upon clicking OK, you will be redirected to the dashboard of the selected slot.')){return false;}">
                       <i class="fa fa-sign-in" aria-hidden="true"></i>
                     </button>
                     @endif
@@ -118,13 +118,13 @@ $data['icon'] = 'icon-sitemap';
                 </center>
                 @else
                 <center>
-                  <form class="global-submit" method="post" action="/mlm/slots/set_nickname">
+                  <form class="global-submit" method="post" action="/mlm/slots/set_nickname" >
                     {!! csrf_field() !!}
                     
                     <input type="hidden" class="form-control" name="active_slot" value="{{ isset($value->slot_no) ? $value->slot_no : ''}}">
                     <input type="hidden" class="form-control" name="slot_nickname" value="{{ isset($active->slot_nick_name) ? $active->slot_nick_name : ''}}" readonly>
 
-                    <button class="btn btn-default">
+                    <button class="btn btn-default" onClick="if(!confirm('Upon clicking OK, all referral using your username will be put on the selected slot.')){return false;}">
                       <i class="fa fa-star-o" aria-hidden="true"></i>
                     </button>
                   </form>

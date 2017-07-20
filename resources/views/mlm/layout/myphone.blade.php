@@ -55,7 +55,10 @@
         {
           border-bottom: 1px solid #f4f4f4;
         }
-
+        .toast-message
+        {
+            font-size: 24px;
+        }
         .box-header 
         {
           color: #444;
@@ -483,7 +486,24 @@
       <script type="text/javascript" src="assets/mlm/pace.min.js"></script>
       <script type="text/javascript">
       $(document).ajaxStart(function() { Pace.restart(); });
-
+      toastr.options = {
+          "closeButton": true,
+          "debug": false,
+          "newestOnTop": false,
+          "progressBar": true,
+          "positionClass": "toast-bottom-right",
+          "preventDuplicates": false,
+          "onclick": null,
+          "showDuration": "10000",
+          "hideDuration": "10000",
+          "timeOut": "10000",
+          "extendedTimeOut": "10000",
+          "showEasing": "swing",
+          "hideEasing": "linear",
+          "showMethod": "fadeIn",
+          "hideMethod": "fadeOut"
+        }
+          
       @if (Session::has('success'))
       toastr.success("{{ Session::get('success') }}");
       @endif  

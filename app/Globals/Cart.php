@@ -1254,7 +1254,7 @@ class Cart
         $insert["date_created"] = Carbon::now();
         DB::table("tbl_ipay88_temp")->insert($insert);
 
-        Cart::clear_all($this->shop_info->shop_id);
+        Cart::clear_all($shop_id);
         
         RequestPayment::make($data["merchantKey"], $ipay88request);  
     }

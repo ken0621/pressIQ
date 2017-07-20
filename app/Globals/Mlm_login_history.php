@@ -63,6 +63,22 @@ class Mlm_login_history
         $login_history = Tbl_customer_login_history::where('customer_login_history_id', $customer_login_history_id)->first();
         Session::put('login_history', $login_history);
     }
+    public static function add_to_history_admin($customer_id)
+    {
+        $insert['customer_login_history_login'] = Carbon::now();
+        $insert['customer_login_history_last_activity'] = Carbon::now();
+        $insert['customer_id'] = $customer_id;
+        // $insert['customer_username'] = $username;
+        // $insert['customer_password'] = Crypt::encrypt($password); 
+        $insert['status_message'] = 'Admin Login';
+        $insert['ip_address'] = Self::getIp();
+        $insert['ip_browser'] = Self::getBrowser();
+        $insert['ip_device'] =  $_SERVER['HTTP_USER_AGENT'];
+        $customer_login_history_id = Tbl_customer_login_history::insertGetId($insert);
+        
+        $login_history = Tbl_customer_login_history::where('customer_login_history_id', $customer_login_history_id)->first();
+        Session::put('login_history', $login_history);
+    }
     public static function update_last_activity()
     {
         $login_history = Session::get('login_history');

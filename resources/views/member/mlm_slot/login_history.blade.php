@@ -5,9 +5,10 @@
         <h4 class="modal-title layout-modallarge-title">Login History</h4>
     </div>
     <div class="modal-body max-450 modallarge-body-layout background-white">
+        <table class="table table-bordered">
         @if(isset($history_login))
             @if($history_login)
-                <table class="table table-bordered">
+                
                     
                     <thead>
                         <th>Login</th>
@@ -31,19 +32,25 @@
                     </tr>
                     
                     @endforeach
-                </table>
+                
             @else
             
+            @endif
+            
+            @if(count($history_login) == 0)
+            <tr>
+                <td colspan="20"><center>No Login Attempts</center></td>
+            </tr>
             @endif
         @else
         
         @endif
-        
-        
+        </table>
+        <table class="table table-bordered">
         @if(isset($failed_history_username))
             @if($failed_history_username)
                 <center>Failed Login Attempt</center>
-                <table class="table table-bordered">
+                
                     
                     <thead>
                         <th>Login</th>
@@ -65,6 +72,10 @@
                     </tr>
                     
                     @endforeach
+            @else
+            
+            @endif  
+            @if($failed_history_email)
                     @foreach($failed_history_email as $key => $value)
                     <tr>
                         <td>{{$value->customer_login_history_login}}</td>
@@ -76,13 +87,21 @@
                     </tr>
                     
                     @endforeach
-                </table>
+                
             @else
             
             @endif
+            
+            @if(count($failed_history_username) + count($failed_history_email) == 0)
+            <tr>
+                <td colspan="20"><center>No Failed Attempts</center></td>
+            </tr>
+            @endif
+            
         @else
         
         @endif
+        </table>
     </div>
     <div class="modal-footer">
         <div class="error-modal text-center"></div>

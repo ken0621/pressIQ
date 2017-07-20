@@ -50,6 +50,7 @@ use App\Globals\Mlm_discount;
 // use App\Globals\Mlm_compute;
 use App\Models\Tbl_email_content;
 use App\Models\Tbl_customer_login_history;
+use App\Globals\Mlm_login_history;
 use Crypt;
 class MLM_SlotController extends Member
 {
@@ -87,6 +88,7 @@ class MLM_SlotController extends Member
     }
     public function force_login()
     {
+        Mlm_login_history::log_out();
         $shop_id = $this->user_info->shop_id;
         $slot_id = Request::input('slot');
         if($slot_id != null)
@@ -98,6 +100,7 @@ class MLM_SlotController extends Member
                 {
                     $customer_id = $slot_info->slot_owner;
                     Mlm_member::add_to_session_edit($shop_id, $customer_id, $slot_id);
+                    Mlm_login_history::add_to_history_admin($customer_id);
                     return Redirect::to('/mlm');
                 }
                 else

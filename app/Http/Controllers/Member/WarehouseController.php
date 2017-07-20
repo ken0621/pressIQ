@@ -72,7 +72,14 @@ class WarehouseController extends Member
     public function export_xls($warehouse_id)
     {
         $data["warehouse"] = DB::table("tbl_warehouse")->where("warehouse_id", $warehouse_id)->first();
-        $data["_item"] = Tbl_warehouse::warehouseitem()->serialnumber()->get();
+        $data["_item"] = Tbl_warehouse::select("*", DB::raw("sum(tbl_item.item_quantity) as sum"))
+        						      ->warehouseitem()
+        							  ->serialnumber()
+        							  ->groupBy("tbl_inventory_serial_number.serial_number")
+        							  ->groupBy("tbl_item.item_name")
+        							  // ->take(50)
+        							  ->get();
+
         $data["quantity"] = 0;
         foreach ($data["_item"] as $key => $value) 
         {

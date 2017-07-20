@@ -34,7 +34,8 @@
     @foreach($_item as $item)
     <tr>
         <td>{{ $item->item_name }}</td>
-        <td>{{ $item->item_quantity }}</td>
+        {{-- <td>{{ $item->item_quantity }}</td> --}}
+        <td>{{ $item->sum }}</td>
         <td>{{ $item->item_cost }}</td>
         <td>{{ $item->item_price }}</td>
         <td>{{ $item->serial_number }}</td>

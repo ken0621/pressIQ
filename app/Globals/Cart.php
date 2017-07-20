@@ -1201,7 +1201,7 @@ class Cart
         {
             $data["refNo"] = $shop_id . time();
         }
-        
+        dd($data);
         $data["amount"] = $data["tbl_ec_order"]["total"];
 
         /* REASTRUCTURE */

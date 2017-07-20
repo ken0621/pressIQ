@@ -1196,15 +1196,15 @@ class Payroll2
 				if ($compute_type=="daily") 
 				{
 					$return->_breakdown_addition["Legal Holiday Rest Day"]["time"] = "";  //.($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) ." (".ctopercent($legal_param['payroll_overtime_rest_day']).")"; 
-					$return->_breakdown_addition["Legal Holiday Rest Day"]["rate"] = $daily_rate * ($legal_param['payroll_overtime_rest_day']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"]; 
+					$return->_breakdown_addition["Legal Holiday Rest Day"]["rate"] = $total_day_income+($daily_rate * ($legal_param['payroll_overtime_rest_day']));
+					$total_day_income = $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"]; 
 					$breakdown_addition += $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"];
 					$additional_rate = ($legal_param['payroll_overtime_rest_day']);
 				}
 				else if($compute_type=="monthly")
 				{
 					$return->_breakdown_addition["Legal Holiday Rest Day"]["time"] = "";  //.($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) ." (".ctopercent($legal_param['payroll_overtime_rest_day']).")"; 
-					$return->_breakdown_addition["Legal Holiday Rest Day"]["rate"] = $daily_rate * ($legal_param['payroll_overtime_rest_day']);
+					$return->_breakdown_addition["Legal Holiday Rest Day"]["rate"] = $daily_rate * ($legal_param['payroll_overtime_rest_day']));
 					$total_day_income = $total_day_income + $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"]; 
 					$breakdown_addition += $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"];
 					$additional_rate = ($legal_param['payroll_overtime_rest_day']);
@@ -1619,9 +1619,10 @@ class Payroll2
 		{
 			if($time_spent!=0)
 			{
-				$cola =	$cola * $legal_param['payroll_overtime_regular'];
+				$cola =	$cola * 2;
 			}
 		}
+
 		else if($time_spent==0)
 		{
 			$cola = $cola - $cola;

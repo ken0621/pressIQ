@@ -1247,14 +1247,14 @@ class Cart
             'responseUrl'   => $requestpayment->setResponseUrl($data["responseUrl"]),
             'backendUrl'    => $requestpayment->setBackendUrl($data["backendUrl"])
         );
-        dd($data);
-        $insert["reference_number"] = $data["refNo"];
-        $insert["shop_id"] = $shop_id;
-        $insert["customer_id"] = isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null;
-        $insert["date_created"] = Carbon::now();
-        DB::table("tbl_ipay88_temp")->insert($insert);
+        
+        $temp["reference_number"] = $data["refNo"];
+        $temp["shop_id"] = $shop_id;
+        $temp["customer_id"] = isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null;
+        $temp["date_created"] = Carbon::now();
+        DB::table("tbl_ipay88_temp")->insert($temp);
 
-        Cart::clear_all($shop_id);
+        // Cart::clear_all($shop_id);
         
         RequestPayment::make($data["merchantKey"], $ipay88request);  
     }

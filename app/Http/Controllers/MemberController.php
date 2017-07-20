@@ -930,9 +930,9 @@ class MemberController extends Controller
         {
             $data['info']   = Tbl_ec_order::where("tbl_ec_order.ec_order_id", $order_id)
                                             ->select("*", "tbl_ec_order.created_date as order_created_date")
-                                            ->where("tbl_customer_address.purpose", "shipping")
+                                            // ->where("tbl_customer_address.purpose", "shipping")
                                             ->join("tbl_customer", "tbl_customer.customer_id", "=", "tbl_ec_order.customer_id")
-                                            ->leftJoin("tbl_customer_address", "tbl_customer_address.customer_id", "=", "tbl_customer.customer_id")
+                                            // ->leftJoin("tbl_customer_address", "tbl_customer_address.customer_id", "=", "tbl_customer.customer_id")
                                             ->leftJoin("tbl_online_pymnt_method", "tbl_online_pymnt_method.method_id", "=", "tbl_ec_order.payment_method_id")
                                             ->first();
             

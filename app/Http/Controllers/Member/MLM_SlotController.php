@@ -49,6 +49,7 @@ use App\Globals\Mlm_member;
 use App\Globals\Mlm_discount;
 // use App\Globals\Mlm_compute;
 use App\Models\Tbl_email_content;
+use App\Models\Tbl_customer_login_history;
 use Crypt;
 class MLM_SlotController extends Member
 {
@@ -542,7 +543,7 @@ class MLM_SlotController extends Member
         
         return $tree_string;
     }
-    public function downline_format_unilevel($slot_info,$position = null,$placement = null)
+    public function downline_format_unilevel($slot_info, $position = null,$placement = null)
     {
 
         if($slot_info)
@@ -616,7 +617,7 @@ class MLM_SlotController extends Member
                         </li>';
         }
     }
-    public function downline_format($slot_info,$position = null,$placement = null)
+    public function downline_format($slot_info, $position = null,$placement = null)
     {
 
         if($slot_info)
@@ -1103,5 +1104,22 @@ class MLM_SlotController extends Member
 
             return json_encode($return);
         }
+    }
+    public function login_history()
+    {
+        $data = [];
+        $slot_id           = Request::input("slot");
+        $data["slot"]      = Tbl_mlm_slot::where("slot_id",$slot_id)->customer()->first();
+        if($data['slot'])
+        {
+            $data['history_login'] = Tbl_customer_login_history::where('customer_id', $data["slot"]->slot_owner)->get();
+            $data['failed_history_username'] = Tbl_customer_login_history::where('customer_username', $data["slot"]->mlm_username)->where('status', 0)->get();
+            $data['failed_history_email'] = Tbl_customer_login_history::where('customer_username', $data["slot"]->email)->where('status', 0)->get();
+        }
+        else
+        {
+            die('Invalid Slot');
+        }
+        return view('member.mlm_slot.login_history', $data);
     }
 }

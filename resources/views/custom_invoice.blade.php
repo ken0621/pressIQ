@@ -65,7 +65,7 @@
         <div class="title">INVOICE</div>
         <div class="holder">
           <div class="detail-row"><strong>Bill To :</strong> {{ $info->first_name }} {{ $info->middle_name }} {{ $info->last_name }}</div>
-          <div class="detail-row"><strong>Shipping Address :</strong> {{ $info->customer_street }}, {{ $info->customer_state }}, {{ $info->customer_city }}, {{ $info->customer_zipcode }}</div>
+          <div class="detail-row"><strong>Shipping Address :</strong> {{$info->billing_address  }}</div>
           <div class="detail-row"><strong>TIN :</strong> {{ $info->tin_number }}</div>
         </div>
         <div class="sub-title">INVOICE DETAILS:</div>

@@ -55,6 +55,8 @@ Route::any('/member/mlm/slot/genealogy/downline', 'Member\MLM_SlotController@dow
 Route::any('/member/mlm/slot/set/inactive/{slot_id}', 'Member\MLM_SlotController@set_inactive_slot');
 Route::get('/member/mlm/slot/transfer', 'Member\MLM_SlotController@transfer_slot');
 Route::post('/member/mlm/slot/transfer_post', 'Member\MLM_SlotController@transfer_slot_post');
+
+Route::get('/member/mlm/slot/login_history', 'Member\MLM_SlotController@login_history');
 /* end MLM Slot */
 
 /* start MLM PLAN */

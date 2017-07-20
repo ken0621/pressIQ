@@ -39,7 +39,7 @@
                </div>
             </div>
             <div class="form-group">
-              <label>Street</label>
+              <label>Complete Address</label>
               <textarea class="form-control input-lg" name="customer_street" required="required"></textarea>
             </div>
           </div>

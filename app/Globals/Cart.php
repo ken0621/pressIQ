@@ -1236,7 +1236,8 @@ class Cart
             'lang'          => $requestpayment->setLang($data["lang"]),
             'signature'     => $requestpayment->getSignature(),
             'responseUrl'   => $requestpayment->setResponseUrl($data["responseUrl"]),
-            'backendUrl'    => $requestpayment->setBackendUrl($data["backendUrl"])
+            'backendUrl'    => $requestpayment->setBackendUrl($data["backendUrl"]),
+            'customer_id'   => Cart::get_customer()->customer_id
         );
         
         RequestPayment::make($data["merchantKey"], $ipay88request);  

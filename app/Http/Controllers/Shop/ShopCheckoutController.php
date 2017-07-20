@@ -94,10 +94,12 @@ class ShopCheckoutController extends Shop
                     } 
                     elseif($request['Status'] == 6)
                     {
+                        DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
                         return Redirect::to("/product#pending_modal");
                     }
                     elseif ($request['Status'] == 0) 
                     {
+                        DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
                         return Redirect::to("/product#fail_modal");
                     }
                     else 

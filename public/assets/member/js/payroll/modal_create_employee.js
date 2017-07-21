@@ -16,6 +16,9 @@ function modal_create_employee()
 		$(".datepicker").datepicker();
 		check_deduction_contribution_action();
 		check_deduction_contribution();
+		select_shift_template();
+		check_custom_compute_event();
+		check_custom_compute_action();
 	}
 
 	function autoname()
@@ -228,7 +231,43 @@ function modal_create_employee()
 			placeholder : 'Payroll Group',
 			width 		: '100%',
 		});
+		
+		$(".shift-template-select").unbind("change");
+		$(".shift-template-select").bind("change", function()
+		{
+			select_shift_template();
+		});
 	}
+	
+	function select_shift_template()
+	{
+		var id = $(".shift-template-select").val();
+		if(id == 0)
+		{
+			$(".shift-template").html('');
+		}
+		else
+		{
+			$(".shift-template").html(misc('loader'));
+			$.ajax({
+				url 	: '/member/payroll/employee_list/shift_view',
+				data	: {
+					id:id,
+					_token:misc('_token')
+				},
+				success :	function(result)
+				{
+					$(".shift-template").html(result);
+				},
+				error	:	function(err)
+				{
+					$(".shift-template").html('');
+				}
+			});
+		
+		}
+	}
+	
 
 	function select_change_action(payroll_department_id = 0, selected = 0)
 	{
@@ -300,7 +339,27 @@ function modal_create_employee()
 			}
 		});
 	}
-
+	
+	function check_custom_compute_event()
+	{
+		$(".custom-compute-chck").unbind('change');
+		$(".custom-compute-chck").bind("change", function()
+		{
+			check_custom_compute_action();
+		});
+	}
+	
+	function check_custom_compute_action()
+	{
+		if($(".custom-compute-chck").is(':checked'))
+		{
+			$(".declared-salaries").removeClass("hidden");
+		}
+		else
+		{
+			$(".declared-salaries").addClass("hidden");
+		}
+	}
 
 	this.reload_option = function(html = '', target ='')
 	{

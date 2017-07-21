@@ -10,6 +10,7 @@ class Tbl_payroll_time_sheet_record extends Model
 	protected $primaryKey = "payroll_time_sheet_record_id";
     public $timestamps = false;
 
+
     /* COLUMN REFERENCE NAME */
 	// [PRIMARY KEY] 	payroll_time_sheet_record_id
 	// [INTEGER] 		payroll_time_sheet_id

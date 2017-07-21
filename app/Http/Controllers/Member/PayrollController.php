@@ -4843,6 +4843,7 @@ class PayrollController extends Member
                $insert_day["shift_day"] = $day;
                $insert_day["shift_code_id"] = $shift_code_id;
                $insert_day["shift_target_hours"] = Request::input("target_hours")[$day];
+               $insert_day["shift_flexi_time"] = Request::input("flexitime_" . $day) == 1 ? 1 : 0;
                $insert_day["shift_rest_day"] = Request::input("rest_day_" . $day) == 1 ? 1 : 0;
                $insert_day["shift_extra_day"] = Request::input("extra_day_" . $day) == 1 ? 1 : 0;
                
@@ -5198,6 +5199,25 @@ class PayrollController extends Member
           
 
           return view('member.payroll.payroll_timekeeping', $data);
+     }
+
+
+     public function time_keeping_load_table($payroll_company_id)
+     {
+          $query = Tbl_payroll_period::sel(Self::shop_id())
+                                                  ->where('payroll_parent_company_id', 0)
+                                                  ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
+                                                  ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
+
+                                                  ->orderBy('tbl_payroll_period.payroll_period_start','asc');
+
+          if ($payroll_company_id != 0) {
+               $query->where('tbl_payroll_company.payroll_company_id', $payroll_company_id);
+          }
+
+          $data["_period"] = $query->get();
+          
+          return view('member.payroll.payroll_timekeeping_table', $data);
      }
 
      public function modal_generate_period()

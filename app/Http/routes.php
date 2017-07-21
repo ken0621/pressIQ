@@ -349,6 +349,7 @@ Route::any('/member/item/select_um','Member\UnitOfMeasurementController@select_u
 
 /* WAREHOUSE ARCY*/
 Route::any('/member/item/warehouse', 'Member\WarehouseController@index');
+Route::any('/member/item/warehouse/xls/{id}', 'Member\WarehouseController@export_xls'); /* Edward */
 Route::any('/member/item/inventory_log/{id}','Member\WarehouseController@inventory_log');
 Route::any('/member/item/warehouse/add', 'Member\WarehouseController@add');
 Route::any('/member/item/warehouse/edit/{id}', 'Member\WarehouseController@edit');

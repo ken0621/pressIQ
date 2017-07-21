@@ -39,7 +39,7 @@
                             <td data-title="Proof Image"><a order-id="1" class="add-proof">Add</a></td>
                             @if($order->tracking_no)
                                 <td>
-                                    <div class="as-track-button" data-size="small" data-domain="bryanxkier.aftership.com"  data-tracking-number="{{ $order->tracking_no }}"  data-hide-tracking-number="true">
+                                    <div class="as-track-button" data-size="small" data-domain="intogadgetstore.aftership.com"  data-tracking-number="{{ $order->tracking_no }}"  data-hide-tracking-number="true">
                                     </div>
                                 </td>
                             @else
@@ -51,12 +51,8 @@
                                 @endif
                             </td>
                             <td>
-                                @if($order->order_status != "Cancelled")
-
-                                    @if($order->order_status == "Shipped")
-                                    @else
-                                        <a class="cancel-button" href="javascript:" linkerino="/account/order?cancel_id={{ $order->ec_order_id }}">Cancel</a>
-                                    @endif
+                                @if($order->order_status == "Pending")
+                                    <a class="cancel-button" href="javascript:" linkerino="/account/order?cancel_id={{ $order->ec_order_id }}">Cancel</a>
                                 @endif
                             </td>                           
                         </tr>

@@ -1371,8 +1371,14 @@ class Payroll
 	public static function time_float($time = '00:00')
 	{
 		$extime = explode(':', $time);
+		
+		$min = 0;
+		if(count($extime) > 1)
+		{
+			$min = $extime[1] / 60;
+		}
 		$hour = $extime[0];
-		$min = $extime[1] / 60;
+		
 		return $hour + $min;
 	}
 
@@ -2949,46 +2955,44 @@ class Payroll
 	/* GET TAX VALUE */
 	public static function tax_contribution($shop_id = 0, $rate = 0, $tax_category = '', $payroll_tax_period = '')
 	{
-		$tax 		= Tbl_payroll_tax_reference::sel($shop_id, $tax_category, $payroll_tax_period)->first();
 		
+		$tax 		= Tbl_payroll_tax_reference::sel($shop_id, $tax_category, $payroll_tax_period)->first();
 		$exemption 	= Tbl_payroll_tax_reference::sel($shop_id, 'Excemption', $payroll_tax_period)->first();
-
 		$status 	= Tbl_payroll_tax_reference::sel($shop_id, 'Status', $payroll_tax_period)->first();
-
 		$tax_index 	= '';
-
+		
 		$tax_contribution = 0;
 
 		// if($rate >= $tax->tax_first_range && $rate < $tax->tax_second_range)
 		if($tax != null)
 		{
-			if($tax->tax_first_range >= $rate && $tax->tax_second_range < $rate)
+			if($tax->tax_first_range <= $rate && $tax->tax_second_range > $rate)
 			{
 				$tax_index = 'tax_first_range';
 			}
 
-			if($tax->tax_second_range >= $rate && $tax->tax_third_range < $rate)
+			if($tax->tax_second_range <= $rate && $tax->tax_third_range > $rate)
 			{
 				$tax_index = 'tax_second_range';
 			}
 
-			if($tax->tax_second_range >= $rate && $tax->tax_third_range < $rate)
+			if($tax->tax_second_range <= $rate && $tax->tax_third_range > $rate)
 			{
 				$tax_index = 'tax_second_range';
 			}
 
-			if($tax->tax_third_range >= $rate && $tax->tax_fourth_range < $rate)
+			if($tax->tax_third_range <= $rate && $tax->tax_fourth_range > $rate)
 			{
 				$tax_index = 'tax_third_range';
 			}
 
-			if($tax->tax_fourth_range >= $rate && $tax->tax_fifth_range < $rate)
+			if($tax->tax_fourth_range <= $rate && $tax->tax_fifth_range > $rate)
 			{
 				$tax_index = 'tax_fourth_range';
 			}
 
 			
-			if($tax->tax_fifth_range >= $rate && $tax->taxt_sixth_range < $rate)
+			if($tax->tax_fifth_range <= $rate && $tax->taxt_sixth_range > $rate)
 			{
 				$tax_index = 'tax_fifth_range';
 			}
@@ -3000,17 +3004,18 @@ class Payroll
 			}
 
 
-			if($rate <= $tax->tax_seventh_range && $rate > $tax->taxt_sixth_range)
+			if($rate >= $tax->tax_seventh_range && $rate)
 			{
 				$tax_index = 'tax_seventh_range';
 			}
 
-
+			// dd($tax_index);
 			if($tax_index != '')
 			{
 				$exemption_num = $exemption->$tax_index;
 				$status_num = $status->$tax_index;
 				// dd($status_num);
+				//dd("((" . $rate . " - " . $tax->$tax_index . ") * (" . $status_num . " / 100" . ")) " . " + " . $exemption_num . ")");
 				$tax_contribution = (($rate - $tax->$tax_index) * ($status_num / 100)) + $exemption_num;
 			}
 		}
@@ -3029,10 +3034,11 @@ class Payroll
 		{
 			$max_sss = Tbl_payroll_sss::where('shop_id', $shop_id)->orderBy('payroll_sss_min','desc')->first();
 			$sss = Tbl_payroll_sss::where('shop_id', $shop_id)->where('payroll_sss_min','<=',$rate)->where('payroll_sss_max','>=',$rate)->first();
-
+			// dd($max_sss);
+			// dd($sss);
 			if($sss == null)
 			{	
-				if($max_sss->payroll_sss_min <= $rate)
+				if($rate >= $max_sss->payroll_sss_min)
 				{
 					$data['ee'] = $max_sss->payroll_sss_ee;
 					$data['er'] = $max_sss->payroll_sss_er;
@@ -3076,6 +3082,11 @@ class Payroll
 			}
 			else if($_philhealth_max->payroll_philhealth_min >= $rate)
 			{	
+				$data['ee'] = $_philhealth_max->payroll_philhealth_ee_share;
+				$data['er'] = $_philhealth_max->payroll_philhealth_er_share;
+			}
+			else
+			{
 				$data['ee'] = $_philhealth_max->payroll_philhealth_ee_share;
 				$data['er'] = $_philhealth_max->payroll_philhealth_er_share;
 			}
@@ -3429,5 +3440,15 @@ class Payroll
 			Tbl_payroll_remarks::insert($insert);
 		}
 	}
-
+	
+	public static function get_month()
+	{
+		$data = array();
+		for($i = 1; $i <= 12; $i++)
+		{
+			$month = date('F', strtotime(date('Y').'-'.$i.'-01'));
+			array_push($data, $month);
+		}
+		return $data;
+	}
 }

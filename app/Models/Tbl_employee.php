@@ -27,4 +27,8 @@ class Tbl_employee extends Model
         
         return $query = $receive_payment->union($invoice)->orderBy("date_created","desc");
     }
+    public function scopePosition($query)
+    {
+        return $query->leftjoin("tbl_position","tbl_employee.position_id","=","tbl_position.position_id");
+    }
 }

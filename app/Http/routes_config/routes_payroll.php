@@ -43,6 +43,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_list/modal_save_salary','Member\PayrollController@modal_save_salary');
 	Route::any('/employee_list/modal_employee_update','Member\PayrollController@modal_employee_update');
 	Route::any('/employee_list/reload_employee_list','Member\PayrollController@reload_employee_list');
+	Route::any('/employee_list/shift_view','Member\PayrollController@shift_view');
 	/* EMPLOYEE SEARCH */
 	Route::any('/employee_list/search_employee_ahead','Member\PayrollController@search_employee_ahead');
 	Route::any('/employee_list/search_employee','Member\PayrollController@search_employee');
@@ -54,6 +55,20 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* TIMESHEET START */
 	Route::any('/employee_timesheet','Member\PayrollTimeSheetController@index');
 	Route::any('/company_timesheet/{id}','Member\PayrollTimeSheetController@company_timesheet');
+	Route::any('/company_timesheet2/income_summary/{period_id}/{employee_id}','Member\PayrollTimeSheet2Controller@income_summary');
+	Route::any('/company_timesheet2/unapprove/{period_id}/{employee_id}','Member\PayrollTimeSheet2Controller@unapprove');
+	Route::any('/company_timesheet2/change/{period_id}/{employee_id}','Member\PayrollTimeSheet2Controller@time_change');
+	
+	Route::any('/company_timesheet_approve/approve_timesheet','Member\PayrollTimeSheet2Controller@approve_timesheets');
+	
+	Route::any('/company_timesheet2/{company_id}','Member\PayrollTimeSheet2Controller@index');
+	Route::any('/company_timesheet2/table/{company_id}','Member\PayrollTimeSheet2Controller@index_table');
+	Route::any('/company_timesheet2/{company_id}/{employee_id}','Member\PayrollTimeSheet2Controller@timesheet');
+	Route::any('/company_timesheet_day_summary/info/{time_sheet_id}','Member\PayrollTimeSheet2Controller@day_summary_info');
+	Route::post('/company_timesheet_day_summary/change','Member\PayrollTimeSheet2Controller@day_summary_change');
+	Route::any('/company_timesheet_day_summary/{time_sheet_id}','Member\PayrollTimeSheet2Controller@day_summary');
+	
+	
 
 	Route::any('/employee_timesheet/timesheet/{id}/{period_id}','Member\PayrollTimeSheetController@timesheet');
 	Route::any('/employee_timesheet/json_process_time','Member\PayrollTimeSheetController@json_process_time');
@@ -316,6 +331,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* SHIFT TEMPLATE START */
      Route::any('/shift_template',"Member\PayrollController@shift_template");
      Route::any('/shift_template/modal_create_shift_template',"Member\PayrollController@modal_create_shift_template");
+     Route::any('/shift_template/modal_update_shift_template',"Member\PayrollController@modal_update_shift_template");
      Route::any('/shift_template/modal_save_shift_template',"Member\PayrollController@modal_save_shift_template");
      Route::any('/shift_template/modal_view_shift_template/{id}',"Member\PayrollController@modal_view_shift_template");
      Route::any('/shift_template/modal_update_shift_template',"Member\PayrollController@modal_update_shift_template");
@@ -356,9 +372,11 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	/* PAYORLL TIME KEEPING START */
 	Route::any('/time_keeping','Member\PayrollController@time_keeping');
+	Route::any('/time_keeping/table/{payroll_company_id}','Member\PayrollController@time_keeping_load_table');
 	Route::any('/time_keeping/modal_generate_period','Member\PayrollController@modal_generate_period');
 	Route::any('/time_keeping/generate_period','Member\PayrollController@generate_period');
 	Route::any('/time_keeping/company_period/{id}','Member\PayrollController@company_period');
+	Route::any('/time_keeping/company_period/delete/{id}','Member\PayrollController@company_period_delete');
 	/* PAYROLL TIME KEEPING END */
 
 
@@ -368,27 +386,28 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 
 	/* PAYROLL PROCESS START */
-	Route::any('/payroll_process','Member\PayrollController@payroll_process');
-	Route::any('/payroll_process/modal_create_process','Member\PayrollController@modal_create_process');
-	Route::any('/payroll_process/ajax_load_payroll_period','Member\PayrollController@ajax_load_payroll_period');
-	Route::any('/payroll_process/ajax_payroll_company_period','Member\PayrollController@ajax_payroll_company_period');
-	Route::any('/payroll_process/process_payroll','Member\PayrollController@process_payroll');
-	Route::any('/payroll_process/payroll_compute_brk_unsaved/{employee_id}/{period_company_id}','Member\PayrollController@payroll_compute_brk_unsaved');
+	Route::any('/process_payroll/{period_company_id}','Member\PayrollProcessController@index');
+	// Route::any('/payroll_process','Member\PayrollController@payroll_process');
+	// Route::any('/payroll_process/modal_create_process','Member\PayrollController@modal_create_process');
+	// Route::any('/payroll_process/ajax_load_payroll_period','Member\PayrollController@ajax_load_payroll_period');
+	// Route::any('/payroll_process/ajax_payroll_company_period','Member\PayrollController@ajax_payroll_company_period');
+	// Route::any('/payroll_process/process_payroll','Member\PayrollController@process_payroll');
+	// Route::any('/payroll_process/payroll_compute_brk_unsaved/{employee_id}/{period_company_id}','Member\PayrollController@payroll_compute_brk_unsaved');
 
-	Route::any('/payroll_process/payroll_explain_computation/{employee_id}/{period_company_id}','Member\PayrollController@payroll_explain_computation');
+	// Route::any('/payroll_process/payroll_explain_computation/{employee_id}/{period_company_id}','Member\PayrollController@payroll_explain_computation');
 	
-	Route::any('/payroll_process/modal_create_payroll_adjustment/{payroll_employee_id}/{payroll_period_company_id}','Member\PayrollController@modal_create_payroll_adjustment');
-	Route::any('/payroll_process/create_payroll_adjustment','Member\PayrollController@create_payroll_adjustment');
-	Route::any('/payroll_process/confirm_remove_adjustment/{id}','Member\PayrollController@confirm_remove_adjustment');
-	Route::any('/payroll_process/remove_adjustment','Member\PayrollController@remove_adjustment');
-	Route::any('/payroll_process/confirm_action_payroll/{action}/{id}','Member\PayrollController@confirm_action_payroll');
-	Route::any('/payroll_process/action_payroll','Member\PayrollController@action_payroll');
-	Route::any('/payroll_process/confirm_cancel_payroll/{action}/{id}','Member\PayrollController@confirm_cancel_payroll');
+	// Route::any('/payroll_process/modal_create_payroll_adjustment/{payroll_employee_id}/{payroll_period_company_id}','Member\PayrollController@modal_create_payroll_adjustment');
+	// Route::any('/payroll_process/create_payroll_adjustment','Member\PayrollController@create_payroll_adjustment');
+	// Route::any('/payroll_process/confirm_remove_adjustment/{id}','Member\PayrollController@confirm_remove_adjustment');
+	// Route::any('/payroll_process/remove_adjustment','Member\PayrollController@remove_adjustment');
+	// Route::any('/payroll_process/confirm_action_payroll/{action}/{id}','Member\PayrollController@confirm_action_payroll');
+	// Route::any('/payroll_process/action_payroll','Member\PayrollController@action_payroll');
+	// Route::any('/payroll_process/confirm_cancel_payroll/{action}/{id}','Member\PayrollController@confirm_cancel_payroll');
 
-	Route::any('/payroll_process/modal_13_month/{id}/{period_id}','Member\PayrollController@modal_13_month');
-	Route::any('/payroll_process/modal_unused_leave/{id}/{period_id}','Member\PayrollController@modal_unused_leave');
-	Route::any('/payroll_process/modal_save_process_leave','Member\PayrollController@modal_save_process_leave');
-	Route::any('/payroll_process/modal_submit_13_month','Member\PayrollController@modal_submit_13_month');
+	// Route::any('/payroll_process/modal_13_month/{id}/{period_id}','Member\PayrollController@modal_13_month');
+	// Route::any('/payroll_process/modal_unused_leave/{id}/{period_id}','Member\PayrollController@modal_unused_leave');
+	// Route::any('/payroll_process/modal_save_process_leave','Member\PayrollController@modal_save_process_leave');
+	// Route::any('/payroll_process/modal_submit_13_month','Member\PayrollController@modal_submit_13_month');
 	/* PAYROLL PROCESS END */
 
 

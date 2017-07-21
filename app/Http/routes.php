@@ -947,6 +947,9 @@ Route::controller('/member/accounting/journal', 'Member\JournalEntryController')
 /* TERMS OF PAYMENT*/
 Route::controller('/member/maintenance/terms', 'Member\TermsOfPaymentController');
 /* End */
+/* LOCATION*/
+Route::controller('/member/maintenance/location', 'Member\LocationController');
+/* End */
 
 
 /* LOCATION*/
@@ -968,6 +971,17 @@ Route::controller('/tester','TesterController');
 
 // test lang load
 Route::any("/member/load_position","Member\EmployeePositionController@load_position");
+
+
+
+//core dev testing
+
+
+Route::any("/kim/core","Core\Times2@TimeExist");
+Route::any("/kim/timeshift","Core\Times2@time_shift");
+Route::any("/kim/compute_time","Core\Times2@compute_time");
+Route::any("/kim/compute_flexi_time","Core\Times2@compute_flexi_time");
+//end core testing
 
 /* PAYROLL START */
 // Route::group(array('prefix' => '/member/payroll'), function()

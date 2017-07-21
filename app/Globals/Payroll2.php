@@ -2580,7 +2580,7 @@ class Payroll2
 			$data['pagibig_er'] = $pagibig_contribution;
 			if($is_deduct_pagibig_default == 0)
 			{
-				$data['pagibig_ee'] = $data['deduct_pagibig_custom'];
+				//$data['pagibig_ee'] = $data['deduct_pagibig_custom'];
 
 				if($period_category == 'Last Period')
 				{

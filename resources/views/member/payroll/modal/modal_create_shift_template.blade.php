@@ -22,6 +22,7 @@
 							<th rowspan="2" valign="center" class="text-center">Working Hours</th>
 							<th colspan="2" class="text-center">Work Schedule</th>
 							<th class="text-center"></th>
+							<th rowspan="2" class="text-center">Flexitime</th>
 							<th rowspan="2" class="text-center">Rest Day</th>
 							<th rowspan="2" class="text-center">Extra Day</th>
 							
@@ -54,6 +55,9 @@
 								</td>
 								<td>
 									<button type="button" class="btn btn-default add-sub-time"><i class="fa fa-plus"></i></button>
+								</td>
+								<td class="text-center">
+									<input type="checkbox" name="flexitime_{{$day['day']}}" class="flexitime_check" value="1">
 								</td>
 								<td class="text-center">
 									<input type="checkbox" name="rest_day_{{$day['day']}}" class="restday-check" value="1">

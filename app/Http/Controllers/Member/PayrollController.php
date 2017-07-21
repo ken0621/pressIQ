@@ -1779,7 +1779,9 @@ class PayrollController extends Member
                                                         ->orderBy("tbl_payroll_employee_basic.payroll_employee_first_name")
                                                         ->groupBy('tbl_payroll_employee_basic.payroll_employee_id')
                                                         ->get();
+
           $data = array();
+          
           foreach($_return as $return)
           {
                array_push($data, $return->employee);

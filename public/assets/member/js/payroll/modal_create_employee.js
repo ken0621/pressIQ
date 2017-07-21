@@ -242,6 +242,11 @@ function modal_create_employee()
 	function select_shift_template()
 	{
 		var id = $(".shift-template-select").val();
+		if (id == -1) 
+		{
+			action_load_link_to_modal("/member/payroll/shift_template/modal_create_shift_template", "lg");
+			$(".shift-template-select").val("0").change();
+		}
 		if(id == 0)
 		{
 			$(".shift-template").html('');
@@ -264,7 +269,6 @@ function modal_create_employee()
 					$(".shift-template").html('');
 				}
 			});
-		
 		}
 	}
 	

@@ -15,7 +15,7 @@
 
             <div class="dropdown pull-right">
                 <button onclick="location.href='/member/payroll/time_keeping'" class="btn btn-default">&laquo; Back</button>
-                <button onclick="location.href='/member/payroll/time_keeping'" class="btn btn-primary"><i class="fa fa-star"></i> Payroll Process</button>
+                <button onclick="location.href='/member/payroll/process_payroll/{{$company->payroll_period_company_id}}?step=process'" class="btn btn-primary"><i class="fa fa-star"></i> Payroll Process</button>
                 <button class="btn btn-custom-danger dropdown-toggle " type="button" data-toggle="dropdown"><i class="fa fa-file-pdf-o"></i>&nbsp;Summary
                 <span class="caret"></span></button>
                 <ul class="dropdown-menu dropdown-menu-custom">

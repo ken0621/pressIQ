@@ -84,4 +84,18 @@ class Tbl_payroll_leave_schedule extends Model
 
 		return $query;
 	}
+
+	/*
+	public function scopegetScheduleInc($query)
+	{
+		return $query->join('tbl_payroll_leave_employee', 'tbl_payroll_leave_schedule.payroll_leave_employee_id', '=', 'tbl_payroll_leave_employee.payroll_leave_employee_id')
+           ->join('tbl_payroll_leave_temp', 'tbl_payroll_leave_employee.payroll_leave_temp_id', '=', 'tbl_payroll_leave_temp.payroll_leave_temp_id');
+	}*/
+
+	public function scopegetScheduleIncludeLeaveTemp($query, $payroll_leave_employee_id = 0)
+	{
+		return $query->join('tbl_payroll_leave_employee', 'tbl_payroll_leave_schedule.payroll_leave_employee_id', '=', 'tbl_payroll_leave_employee.payroll_leave_employee_id')
+                ->join('tbl_payroll_leave_temp', 'tbl_payroll_leave_employee.payroll_leave_temp_id', '=', 'tbl_payroll_leave_temp.payroll_leave_temp_id')
+                ->where('tbl_payroll_leave_schedule.payroll_leave_employee_id', '=', $payroll_leave_employee_id);
+	}
 }

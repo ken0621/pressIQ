@@ -6,7 +6,7 @@ function modal_create_leave_temp()
 
 	function init()
 	{
-
+		default_with_pay_val();
 	}
 
 	function remove_tag()
@@ -149,5 +149,13 @@ function modal_create_leave_temp()
 				return pencil
 				break;
 		}
+	}
+
+	function default_with_pay_val()
+	{
+		$("body").on("click", ".payroll_leave_temp_with_pay", function(e){
+			alert("Currently we support with pay value of 'Yes'!");
+			return false;
+		});
 	}
 }

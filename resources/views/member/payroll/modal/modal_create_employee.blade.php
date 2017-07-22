@@ -110,8 +110,7 @@
             <li><a data-toggle="tab" href="#dependents">Dependents</a></li>
             <li><a data-toggle="tab" href="#shift-schedule">Shift</a></li>
             <li><a data-toggle="tab" href="#other">Other</a></li>
-          </ul>
-          
+          </ul>   
           <div class="tab-content tab-content-custom">
             <div id="address" class="tab-pane fade in active">
              
@@ -663,7 +662,7 @@
                   </div>
                   @endforeach
                 </div>
-                 <div id="remarks" class="tab-pane fade">
+                <div id="remarks" class="tab-pane fade">
                   <br>
                   <div class="form-horizontal">
                     <div class="form-group">

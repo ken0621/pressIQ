@@ -329,4 +329,17 @@ class ItemSerial
                                         ->update($update);
         }
     }
+    public static function archived_serial()
+    {
+        $all_item_archived = Tbl_item::where("archived",1)->get();
+
+        foreach ($all_item_archived as $key => $value) 
+        {
+            Tbl_inventory_serial_number::where("item_consumed",0)
+                                       ->where("sold",0)
+                                       ->where("consume_source_id",0)
+                                       ->update(['archived' => 1]);
+        }
+        dd("success");
+    }
 }

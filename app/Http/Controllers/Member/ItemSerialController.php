@@ -33,6 +33,10 @@ class ItemSerialController extends Member
 
         return view("member.item_serial.input_serial",$data);
     }
+    public function archived_serial()
+    {
+        ItemSerial::archived_serial();
+    }
     public function save_serial()
     {
         $data["status_message"] = "";

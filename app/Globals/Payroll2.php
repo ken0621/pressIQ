@@ -385,7 +385,7 @@ class Payroll2
 		$regular_holiday_hours	= "00:00:00";
 		$special_holiday_hours	= "00:00:00";
 		$leave_hours_consumed	= "00:00:00";
-		$leave_hours			= $leave = "01:00:00"; //$leave;
+		$leave_hours			= $leave; //$leave;
 		$excess_leave_hours 	= $leave;
 		$is_half_day			= false;
 		$is_absent				= true;
@@ -803,9 +803,9 @@ class Payroll2
      * @author (Kim Briel Oraya)
      *
      */
-	public static function compute_time_mode_flexi($_time, $target_hours="08:00:00", $break_hours="00:00:00", $overtime_grace_time = "00:00:00", $grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00", $leave_fill_undertime=1, $use_leave = false, $testing = false)
+	public static function compute_time_mode_flexi($_time, $target_hours="08:00:00", $break_hours="00:00:00", $overtime_grace_time = "00:00:00", $grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00", $leave_fill_undertime=0, $use_leave = false, $testing = false)
 	{
-
+		$leave_fill_undertime=1;
 		$time_spent 			= "00:00:00";
 		$late_hours 			= "00:00:00";
 		$under_time 			= "00:00:00";
@@ -818,8 +818,8 @@ class Payroll2
 		$regular_holiday_hours 	= "00:00:00";
 		$special_holiday_hours 	= "00:00:00";
 		$leave_hours_consumed 	= "00:00:00";
-		$leave_hours 			= $leave = "08:00:00";
-		$excess_leave_hours 	= "00:00:00";
+		$leave_hours 			= $leave;
+		$excess_leave_hours 	= $leave_hours;
 		$is_half_day 			= false;
 		$is_absent 				= false;
 	
@@ -969,6 +969,7 @@ class Payroll2
 		/*END day type and holiday type*/
 
 		$return["time_spent"] = Payroll2::convert_to_24_hour($time_spent);
+		$return["target_hours"] = Payroll2::convert_to_24_hour($target_hours);
 		$return["is_absent"] = $is_absent;
 		$return["late"] = Payroll2::convert_to_24_hour($late_hours);
 		$return["undertime"] = Payroll2::convert_to_24_hour($under_time);
@@ -978,13 +979,12 @@ class Payroll2
 		$return["extra_day_hours"] = Payroll2::convert_to_24_hour($extra_day_hours);
 		$return["regular_holiday_hours"] = Payroll2::convert_to_24_hour($regular_holiday_hours);
 		$return["special_holiday_hours"] = Payroll2::convert_to_24_hour($special_holiday_hours);
-		$return["leave_hours"] = Payroll2::convert_to_24_hour($leave);
 		$return["total_hours"] = Payroll2::convert_to_24_hour($time_spent);
 		$return["night_differential"] = Payroll2::convert_to_24_hour($night_differential);
 		$return["is_half_day"] = $is_half_day;
 		$return["is_holiday"] = $is_holiday;
 		$return["day_type"] = $day_type;
-		$return["target_hours"] = Payroll2::convert_to_24_hour($target_hours);
+		$return["leave_hours"] = Payroll2::convert_to_24_hour($leave);
 		$return["excess_leave_hours"] = Payroll2::convert_to_24_hour($excess_leave_hours);
 		$return["leave_hours_consumed"] = $leave_hours_consumed;
 		

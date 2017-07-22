@@ -7,13 +7,35 @@
 	</div>
 	<div class="modal-body clearfix form-horizontal">
 		<div class="form-group">
-			<div class="col-md-12">
+			<div class="col-md-6">
 				<small>Payroll Tax Period</small>
 				<select class="form-control" name="payroll_period_category" required>
 					@foreach($_tax as $tax)
 					<option value="{{$tax->payroll_tax_period}}" {{$period->payroll_period_category == $tax->payroll_tax_period ? 'selected="selected"' :''}}>{{$tax->payroll_tax_period}}</option>
 					@endforeach
 				</select>
+			</div>
+			<div class="col-md-6">
+				<small>Period Count</small>
+				<select class="form-control" required name="period_count">
+					<option value="first_period" {{$period->period_count == 'first_period' ? 'selected="selected"' :''}}>First Period</option>
+					<option value="middle_period" {{$period->period_count == 'middle_period' ? 'selected="selected"' :''}}>Middle Period</option>
+					<option value="last_period" {{$period->period_count == 'last_period' ? 'selected="selected"' :''}}>Last Period</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-md-6">
+				<small>Contribution Month</small>
+				<select class="form-control" required name="month_contribution">
+					@foreach($_month as $month)
+					<option value="{{$month}}" {{$period->month_contribution == $month ? 'selected="selected"' : ''}}>{{$month}}</option>
+					@endforeach
+				</select>
+			</div>
+			<div class="col-md-6">
+				<small>Contribution Year</small>
+				<input type="text" class="form-control text-center" required value="{{$period->year_contribution != '' ? $period->year_contribution : date('Y')}}" name="year_contribution">
 			</div>
 		</div>
 		<div class="form-group">
@@ -29,7 +51,7 @@
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-		<button class="btn btn-primary btn-custom-primary" type="submit"">Update</button>
+		<button class="btn btn-primary btn-custom-primary" type="submit">Update</button>
 	</div>
 </form>
 <script type="text/javascript">

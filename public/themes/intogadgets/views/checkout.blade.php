@@ -40,25 +40,25 @@
 						<div class="fieldset">
 							<label class="col-md-4">First and Last Name</label>
 							<div class="field col-md-8">
-								<div disabled class="form-control">{{ $customer->first_name . ' ' . $customer->middle_name . ' ' . $customer->last_name }}</div>
+								<div readonly class="form-control">{{ $customer->first_name . ' ' . $customer->middle_name . ' ' . $customer->last_name }}</div>
 							</div>
 						</div>
 						<div class="fieldset">
 							<label class="col-md-4">Contact Number</label>
 							<div class="field col-md-8">
-								<input maxlength="11" class="form-control" type="text" name="contact_number" value="{{ $customer->customer_mobile }}">
+								<input readonly maxlength="11" class="form-control" type="text" name="contact_number" value="{{ $customer->customer_mobile }}">
 							</div>
 						</div>
 						<div class="fieldset">
 							<label class="col-md-4">Province</label>
 							<div class="field col-md-8">
-								<select firstload="true" default="{{ $shipping_address->state_id }}" class="form-control load-location" name="customer_state" level="1"></select>
+								<select readonly firstload="true" default="{{ $shipping_address->state_id }}" class="form-control load-location" name="customer_state" level="1"></select>
 							</div>
 						</div>
 						<div class="fieldset">
 							<label class="col-md-4">City / Municipality</label>
 							<div class="field col-md-8">
-								<select firstload="true" default="{{ $shipping_address->city_id }}" class="form-control load-location" name="customer_city" level="2">
+								<select readonly firstload="true" default="{{ $shipping_address->city_id }}" class="form-control load-location" name="customer_city" level="2">
 									<option></option>
 								</select>
 							</div>
@@ -66,7 +66,7 @@
 						<div class="fieldset">
 							<label class="col-md-4">Barangay</label>
 							<div class="field col-md-8">
-								<select firstload="true" default="{{ $shipping_address->zipcode_id }}" class="form-control load-location" name="customer_zip" level="3">
+								<select readonly firstload="true" default="{{ $shipping_address->zipcode_id }}" class="form-control load-location" name="customer_zip" level="3">
 									<option></option>
 								</select>
 							</div>
@@ -74,7 +74,7 @@
 						<div class="fieldset">
 							<label class="col-md-4">Street</label>
 							<div class="field col-md-8">
-								<textarea spellcheck="false" class="form-control" name="customer_street">{{ $shipping_address->customer_street }}</textarea>
+								<textarea readonly spellcheck="false" class="form-control" name="customer_street">{{ $shipping_address->customer_street }}</textarea>
 							</div>
 						</div>
 					@else
@@ -125,7 +125,7 @@
 							<div class="field col-md-12">
 								<div class="checkbox">
 								    <label>
-								      <input type="checkbox" class="checkbox-bill" name="billing_equals_shipping"> Bill to different address
+								      <input type="checkbox" class="checkbox-bill"> Bill to different address
 								    </label>
 								  </div>
 							</div>

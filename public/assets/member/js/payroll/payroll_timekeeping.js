@@ -6,7 +6,30 @@ function payroll_timekeeping()
 
 	function init()
 	{
+		document_ready();
+	}
 
+
+	function document_ready()
+	{
+		$( document ).ready(function() {
+    		event_change_company();
+    		action_load_payroll_time_keeping_table(0);
+		});
+	}
+
+	function event_change_company()
+	{
+		$('.company-change-event').on('change', function() {
+  			var payroll_company_id = this.value;
+  			action_load_payroll_time_keeping_table(payroll_company_id);
+		});
+	}
+
+
+	function action_load_payroll_time_keeping_table(payroll_company_id)
+	{
+		$( ".load-table-employee-list" ).load( "/member/payroll/time_keeping/table/" + payroll_company_id);
 	}
 
 	this.reload_timekeeping = function()
@@ -51,11 +74,7 @@ function submit_done(data)
 	data.element.modal("toggle");
 	if(data.function_name == "payroll_period_list.reload_list")
 	{
-		payroll_timekeeping.reload_period();
-	}
-	else
-	{
-		executeFunctionByName(data.function_name, window);
+		window.location.reload();
 	}
 	
 }

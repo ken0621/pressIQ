@@ -147,9 +147,9 @@
 												<div class="radio">
 													<label><input type="radio" name="payroll_group_sss" value="1st Period" {{$group->payroll_group_sss == '1st Period' ? 'checked' : ''}}>1st Period</label>
 												</div>
-												<div class="radio">
-													<label><input type="radio" name="payroll_group_sss" value="2nd Period" {{$group->payroll_group_sss == '2nd Period' ? 'checked' : ''}}>2nd Period</label>
-												</div>
+												<!--<div class="radio">-->
+												<!--	<label><input type="radio" name="payroll_group_sss" value="2nd Period" {{$group->payroll_group_sss == '2nd Period' ? 'checked' : ''}}>2nd Period</label>-->
+												<!--</div>-->
 												
 												<div class="radio">
 													<label><input type="radio" name="payroll_group_sss" value="Last Period" {{$group->payroll_group_sss == 'Last Period' ? 'checked' : ''}}>Last Period</label>
@@ -170,9 +170,9 @@
 												<div class="radio">
 													<label><input type="radio" name="payroll_group_philhealth" value="1st Period" {{$group->payroll_group_philhealth == '1st Period' ? 'checked' : ''}}>1st Period</label>
 												</div>
-												<div class="radio">
-													<label><input type="radio" name="payroll_group_philhealth" value="2nd Period" {{$group->payroll_group_philhealth == '2nd Period' ? 'checked' : ''}}>2nd Period</label>
-												</div>
+												<!--<div class="radio">-->
+												<!--	<label><input type="radio" name="payroll_group_philhealth" value="2nd Period" {{$group->payroll_group_philhealth == '2nd Period' ? 'checked' : ''}}>2nd Period</label>-->
+												<!--</div>-->
 												
 												<div class="radio">
 													<label><input type="radio" name="payroll_group_philhealth" value="Last Period" {{$group->payroll_group_philhealth == 'Last Period' ? 'checked' : ''}}>Last Period</label>
@@ -193,9 +193,9 @@
 												<div class="radio">
 													<label><input type="radio" name="payroll_group_pagibig" value="1st Period" {{$group->payroll_group_pagibig == '1st Period' ? 'checked' : ''}}>1st Period</label>
 												</div>
-												<div class="radio">
-													<label><input type="radio" name="payroll_group_pagibig" value="2nd Period" {{$group->payroll_group_pagibig == '2nd Period' ? 'checked' : ''}}>2nd Period</label>
-												</div>
+												<!--<div class="radio">-->
+												<!--	<label><input type="radio" name="payroll_group_pagibig" value="2nd Period" {{$group->payroll_group_pagibig == '2nd Period' ? 'checked' : ''}}>2nd Period</label>-->
+												<!--</div>-->
 												
 												<div class="radio">
 													<label><input type="radio" name="payroll_group_pagibig" value="Last Period" {{$group->payroll_group_pagibig == 'Last Period' ? 'checked' : ''}}>Last Period</label>
@@ -206,6 +206,67 @@
 												<div class="radio">
 													<label><input type="radio" name="payroll_group_pagibig" value="Not Deducted" {{$group->payroll_group_pagibig == 'Not Deducted' ? 'checked' : ''}}>Not Deducted</label>
 												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-body form-horizontal">
+										<div class="form-group">
+											<label class="col-md-12">Contribution References</label>
+										</div>
+										<div class="form-group">
+											<div class="col-md-12">
+												<table class="table table-condensed table-bordered">
+													<tr>
+														<td>
+															Tax Contibution
+														</td>
+														<td width="50%">
+															<select class="form-control" name="tax_reference">
+																<option value="declared" {{$group->tax_reference == 'declared' ? 'selected="selected"':''}}>Declared Tax Salary</option>
+																<option value="gross_basic" {{$group->tax_reference == 'gross_basic' ? 'selected="selected"':''}}>Computed Taxable Salary</option>
+																<option value="net_basic" {{$group->tax_reference == 'net_basic' ? 'selected="selected"':''}}>Net Basic</option>
+															</select>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															SSS Contibution
+														</td>
+														<td width="50%">
+															<select class="form-control" name="sss_reference">
+																<option value="declared" {{$group->sss_reference == 'declared' ? 'selected="selected"':''}}>Declared SSS Salary</option>
+																<option value="gross_basic" {{$group->sss_reference == 'gross_basic' ? 'selected="selected"':''}}>Gross Pay</option>
+																<option value="net_basic" {{$group->sss_reference == 'net_basic' ? 'selected="selected"':''}}>Net Basic</option>
+															</select>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															PhilHealth Contibution
+														</td>
+														<td width="50%">
+															<select class="form-control" name="philhealth_reference">
+																<option value="declared" {{$group->philhealth_reference == 'declared' ? 'selected="selected"':''}}>Declared PhilHealth Salary</option>
+																<option value="gross_basic" {{$group->philhealth_reference == 'gross_basic' ? 'selected="selected"':''}}>Gross Pay</option>
+																<option value="net_basic" {{$group->philhealth_reference == 'net_basic' ? 'selected="selected"':''}}>Net Basic</option>
+															</select>
+														</td>
+													</tr>
+													<tr class="hidden">
+														<td>
+															PAGIBIG Contibution
+														</td>
+														<td width="50%">
+															<select class="form-control" name="pagibig_reference">
+																<option value="declared" {{$group->pagibig_reference == 'declared' ? 'selected="selected"':''}}>Declared PAGIBIG Contribution</option>
+																<option value="gross_basic" {{$group->pagibig_reference == 'gross_basic' ? 'selected="selected"':''}}>Gross Pay</option>
+																<option value="net_basic" {{$group->pagibig_reference == 'net_basic' ? 'selected="selected"':''}}>Net Basic</option>
+															</select>
+														</td>
+													</tr>
+												</table>
 											</div>
 										</div>
 									</div>
@@ -406,68 +467,69 @@
 									<small>Working Days(per month)</small>
 									<input type="number" name="payroll_group_working_day_month" class="form-control text-center" required value="{{$group->payroll_group_working_day_month}}" step="any">
 								</div>
-								<div class="col-md-6">
-									<small>Grace Time Period</small>
-									<input type="number" name="payroll_group_grace_time" class="form-control text-center" required value="{{$group->payroll_group_grace_time}}" step="any">
-								</div>
+								<!--<div class="col-md-6">-->
+								<!--	<small>Grace Time Period</small>-->
+									
+								<!--</div>-->
+								<input type="hidden" name="payroll_group_grace_time" class="form-control text-center" value="{{$group->payroll_group_grace_time}}">
 							</div>
 							<div class="form-group">
-								<div class="col-md-12">
-									<table class="table table-condensed table-bordered timesheet">
-										<thead>
-											<tr>
-												<th rowspan="2" valign="center" class="text-center">Day</th>
-												<th rowspan="2" valign="center" class="text-center">Target Hours</th>
-												<th colspan="2" class="text-center">Work Schedule</th>
-												<th colspan="2" class="text-center">Break Schedule</th>
-												<th rowspan="2" class="text-center">Flexi Time</th>
-												<th rowspan="2" class="text-center">Rest Day</th>
-												<th rowspan="2" class="text-center">Extra Day</th>
-											</tr>
-											<tr>
-												<th class="text-center">Start</th>
-												<th class="text-center">End</th>
-												<th class="text-center">Start</th>
-												<th class="text-center">End</th>
-											</tr>
-										</thead>
-										<tbody>
-											@foreach($_day as $key => $day)
-											<tr class="editable">
-												<td>
-													{{$day['day']}}
-													<input type="hidden" name="day[]" value="{{$day['day']}}">
-												</td>
-												<td>
-													<input type="number" name="target_hours[]" class="form-control text-center" step="any" value="{{$day['target_hours']}}">
-												</td>
-												<td class="editable">
-													<input type="text" name="work_start[]" class="text-table time-entry" value="{{date('H:i a', strtotime($day['work_start']))}}">
-												</td>
-												<td class="editable">
-													<input type="text" name="work_end[]" class="text-table time-entry" value="{{date('H:i a', strtotime($day['work_end']))}}">
-												</td>
-												<td class="editable">
-													<input type="text" name="break_start[]" class="text-table time-entry" value="{{date('H:i a', strtotime($day['break_start']))}}">
-												</td>
-												<td class="editable">
-													<input type="text" name="break_end[]" class="text-table time-entry" value="{{date('H:i a', strtotime($day['break_end']))}}">
-												</td>
-												<td class="text-center">
-													<input type="checkbox" name="flexi_{{$key}}" value="1" {{$day['flexi'] == 1 ? 'checked="checked"':''}}>
-												</td>
-												<td class="text-center">
-													<input type="checkbox" name="rest_day_{{$key}}" class="restday-check" value="1" {{$day['rest_day'] == 1 ? 'checked="checked"':''}}>
-												</td>
-												<td class="text-center">
-													<input type="checkbox" name="extra_day_{{$key}}" class="extraday-check" value="1" {{$day['extra_day'] == 1 ? 'checked="checked"':''}}>
-												</td>
-											</tr>
-											@endforeach
-										</tbody>
-									</table>
+								<div class="col-md-6">
+									<small>Grace Time (LATE)</small>
+									<div class="panel panel-default">
+										<div class="panel-body">
+											<div class="form-group">
+												<div class="col-md-6">
+													<small>Grace Time</small>
+													<input type="text" class="form-control text-center time-entry" value="{{$group->late_grace_time == '00:00:00' ? '' : date('H:i a', strtotime($group->late_grace_time))}}" placeholder="00:00" name="late_grace_time">
+												</div>
+												<div class="col-md-6">
+													<small>Grace Time Rule</small>
+													<select class="form-control" name="grace_time_rule_late">
+														<option value="per_shift" {{$group->grace_time_rule_late == 'per_shift' ? 'selected="selected"':''}}>Per Shift</option>
+														<option value="accumulative" {{$group->grace_time_rule_late == 'accumulative' ? 'selected="selected"':''}}>Accumulative</option>
+														<option value="first" {{$group->grace_time_rule_late == 'first' ? 'selected="selected"':''}}>First Shift Only</option>
+														<option value="last" {{$group->grace_time_rule_late == 'last' ? 'selected="selected"':''}}>Last Shift Only</option>
+														<option value="first-deducted" {{$group->grace_time_rule_late == 'first-deducted' ? 'selected="selected"':''}}>First Shift then Deduct Time</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									
+								</div>
+								<div class="col-md-6">
+									<small>Grace Time (OVERTIME)</small>
+									<div class="panel panel-default">
+										<div class="panel-body">
+											<div class="form-group">
+												<div class="col-md-6">
+													<small>Grace Time</small>
+													<input type="text" class="form-control  text-center time-entry" placeholder="00:00" name="overtime_grace_time" value="{{$group->overtime_grace_time == '00:00:00' ? '' : date('H:i', strtotime($group->overtime_grace_time))}}">
+												</div>
+												<div class="col-md-6">
+													<small>Grace Time Rule</small>
+													<select class="form-control" name="grace_time_rule_overtime">
+														<option value="per_shift" {{$group->grace_time_rule_late == 'per_shift' ? 'selected="selected"':''}}>Per Shift</option>
+														<option value="accumulative" {{$group->grace_time_rule_late == 'accumulative' ? 'selected="selected"':''}}>Accumulative</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
+							<!--<div class="form-group">-->
+							<!--	<div class="col-md-12">-->
+							<!--		<small>Default Shift Template</small>-->
+							<!--		<select class="form-control shift_code_id" name="shift_code_id">-->
+							<!--			@foreach($_shift_code as $key => $value)-->
+							<!--				<option value="{{ $value->shift_code_id }}" {{ ($group->shift_code_id == $value->shift_code_id) ? 'selected' : '' }}>{{ $value->shift_code_name }}</option>-->
+							<!--			@endforeach-->
+							<!--		</select>-->
+							<!--	</div>-->
+							<!--</div>-->
 						</div>
 					</div>
 				</div>
@@ -481,6 +543,7 @@
 </form>
 <script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.plugin.min.js"></script>
 <script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.min.js"></script>
+<script type="text/javascript" src="/assets/member/js/payroll/payroll_group.js"></script>
 <script type="text/javascript">
 	$(".restday-check").unbind("change");
 	$(".restday-check").bind("change", function () {
@@ -519,7 +582,7 @@
 		}
 	});
 	$(".time-entry").timeEntry('destroy');
-	$(".time-entry").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 0, 0, 0)});
+	$(".time-entry").timeEntry({show24Hours: true, defaultTime: new Date(0, 0, 0, 0, 0, 0)});
 	late_categoy_change_event();
 	late_param_change();
 	under_time_category_change_event();

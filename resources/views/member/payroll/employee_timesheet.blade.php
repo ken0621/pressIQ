@@ -6,7 +6,7 @@
         <div>
             <i class="fa fa-calendar"></i>
             <h1>
-            <span class="page-title">Timesheet / {{$company->payroll_company_name}} ({{$company->payroll_period_category}})</span>
+            <span class="page-title">Timesheet / {{ $company->payroll_company_name }} ({{ $company->payroll_period_category }})</span>
             <small>
             Time Record for Employee (<span class="employee-name"></span>)
             </small>

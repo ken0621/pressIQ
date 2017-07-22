@@ -338,6 +338,15 @@ class ItemSerial
             Tbl_inventory_serial_number::where("item_consumed",0)
                                        ->where("sold",0)
                                        ->where("consume_source_id",0)
+                                       ->update(['archived' => 0]);
+        }
+
+        foreach ($all_item_archived as $key => $value) 
+        {
+            Tbl_inventory_serial_number::where("item_consumed",0)
+                                       ->where("sold",0)
+                                       ->where("consume_source_id",0)
+                                       ->where("item_id",$value->item_id)
                                        ->update(['archived' => 1]);
         }
         dd("success");

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTblIpay88LogsFrom extends Migration
+class AlterTblPayrollShiftDay extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,9 @@ class UpdateTblIpay88LogsFrom extends Migration
      */
     public function up()
     {
-        Schema::table('tbl_ipay88_logs', function (Blueprint $table) {
-            $table->string("from");
+        Schema::table('tbl_payroll_shift_day', function (Blueprint $table) {
+            //
+            $table->decimal('shift_target_hours', 8, 2)->change()->default(0);
         });
     }
 
@@ -24,6 +25,8 @@ class UpdateTblIpay88LogsFrom extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('tbl_payroll_shift_day', function (Blueprint $table) {
+            
+        });
     }
 }

@@ -137,7 +137,7 @@ class WarehouseController extends Member
                     $data["_warehouse"][$key]->total_cost_price = $cost_price;
 
 
-                    $data["_warehouse"][$key]->count_no_serial = count(Tbl_warehouse_inventory::item()->warehouse()->inventoryslip()->serialnumber()->groupBy("tbl_warehouse_inventory.inventory_id")->where("inventory_count",">",0)->where("inventory_reason","refill")->where("tbl_item.shop_id",$this->user_info->shop_id)->where("tbl_warehouse.warehouse_id",$value->warehouse_id)->whereNull("serial_id")->get()->toArray());
+                    $data["_warehouse"][$key]->count_no_serial = count(Tbl_warehouse_inventory::item()->warehouse()->inventoryslip()->serialnumber()->groupBy("tbl_warehouse_inventory.inventory_id")->where("inventory_count",">",0)->where("inventory_reason","refill")->where("tbl_item.shop_id",$this->user_info->shop_id)->where("tbl_item.archived",0)->where("tbl_warehouse.warehouse_id",$value->warehouse_id)->whereNull("serial_id")->get()->toArray());
                 }
             }
             $archive_item = null;
@@ -185,6 +185,7 @@ class WarehouseController extends Member
                                     ->orderBy("inventory_id","DESC")
                                     ->groupBy("tbl_warehouse_inventory.inventory_id")
                                     ->where("inventory_count",">",0)
+                                    ->where("tbl_item.archived",0)
                                     ->where("inventory_reason","refill")
                                     ->where("tbl_item.shop_id",$this->user_info->shop_id)
                                     ->where("tbl_warehouse.warehouse_id",$warehouse_id)

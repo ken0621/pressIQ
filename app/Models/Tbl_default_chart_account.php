@@ -7,5 +7,5 @@ class Tbl_default_chart_account extends Model
 {
 	protected $table = 'tbl_default_chart_account';
 	protected $primaryKey = "default_id";
-    public $timestamps = false;
+    public $timestamps = true;
 }

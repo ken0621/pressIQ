@@ -689,7 +689,7 @@ class TabletPISController extends Controller
 		}
 		else
 		{
-			return Redirect::to('/tablet');
+			return null;
 		}
 	}
 	public function inventory_sir($sir_id)

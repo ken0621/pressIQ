@@ -221,7 +221,6 @@
     <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
     <!--<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js'></script>-->
     <script type="text/javascript" src='/assets/member/js/notice.js'></script>
-    <script type="text/javascript" src='/assets/member/js/pis_counter.js'></script>
     <script type="text/javascript" src="/assets/external/chosen/chosen/chosen.jquery.js"></script>
     <script type="text/javascript" src='/assets/member/plugin/dropzone/dropzone.js'></script>
     <script type="text/javascript" src='/assets/member/js/image_gallery.js'></script>

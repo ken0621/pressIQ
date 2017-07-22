@@ -8,7 +8,7 @@ class Tbl_manual_invoice extends Model
 {
     protected $table = 'tbl_manual_invoice';
 	protected $primaryKey = "manual_invoice_id";
-    public $timestamps = false;
+    public $timestamps = true;
 
     public static function scopeSir($query)
     {

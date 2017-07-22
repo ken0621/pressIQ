@@ -10,13 +10,13 @@
 	<div class="text-right">
 		<button class="btn btn-primary popup" button="type" link="/member/page/content/add-maintenance?field={{ $field }}&key={{ $key }}">Add</button>
 	</div>
-	<div class="table-holder" style="margin-top: 15px;">
+	<div class="table-holder" style="margin-top: 15px; overflow-x: auto;">
 		@if(count($_content) > 0)
 		<table class="table table-bordered table-striped table-hover">
 			<thead>
 				<tr>
 					@foreach(reset($_content) as $keys => $header)
-					<th>{{ ucwords(str_replace('_', ' ', $keys)) }}</th>
+					<th style="min-width: 100px;">{{ ucwords(str_replace('_', ' ', $keys)) }}</th>
 					@endforeach
 					<th></th>
 				</tr>
@@ -28,7 +28,7 @@
 						@if($label == "image")
 						<td><img style="width: 75px; display: block; margin: auto;" src="{{ $value }}"></td>
 						@else
-						<td style="word-break: break-all;">{!! $value !!}</td>
+						<td style="word-break: break-all;">{!! limit_char($value, 50) !!}</td>
 						@endif
 					@endforeach
 					<td><a style="cursor: pointer;" class="popup" link="/member/page/content/edit-maintenance?key={{ $key }}&id={{ $id }}&field={{ $field }}">Edit</a> | <a class="popup" style="cursor: pointer;" link="/member/page/content/delete-maintenance?key={{ $key }}&id={{ $id }}">Delete</a></td>

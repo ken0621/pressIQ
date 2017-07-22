@@ -19,13 +19,15 @@
 			<div class="form-group {{ $fields->type == "hidden" ? "hide" : "" }}">
 				<label>{{ ucwords(str_replace('_', ' ', $fields->name)) }}</label>
 				@if($fields->type == "textarea")
-					<textarea class="form-control tinymce" name="{{ $fields->name }}"></textarea>
+					<textarea class="form-control mce" name="{{ $fields->name }}"></textarea>
 				@elseif($fields->type == "textbox")
 					<textarea class="form-control" name="{{ $fields->name }}"></textarea>
 				@elseif($fields->type == "image")
 					<input type="hidden" name="{{ $fields->name }}" class="maintenance-image-input" key="{{ $key }}-{{ $fields->type }}-{{ $fields->name }}">
 					<div class="maintenance-image-holder" key="{{ $key }}-{{ $fields->type }}-{{ $fields->name }}"></div>
 					<div><button class="image-gallery image-gallery-single btn btn-primary" key="{{ $key }}-{{ $fields->type }}-{{ $fields->name }}"> Upload Image</button></div>
+				@elseif($fields->type == "timestamp")
+					<input type="hidden" name="{{ $fields->name }}" value="{{ date('Y-m-d H:i:s') }}">
 				@elseif($fields->type == "map")
 					<div class="map-info"></div>
 					<div id="map" style="height: 300px;"></div>
@@ -107,7 +109,7 @@
 				    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDntbTzqtnwMA7hdMBAeX37YwTjRJi6cDY&callback=initialize">
 				    </script>
 				@else
-					<input class="form-control" type="{{ $fields->type }}" name="{{ $fields->name }}">
+					<input step="any" class="form-control" type="{{ $fields->type }}" name="{{ $fields->name }}">
 				@endif
 			</div>
 			@endforeach
@@ -115,42 +117,4 @@
 		@endif
 	</div>
 </form>
-<script type="text/javascript" src="/assets/external/jquery.minv1.js"></script>
-<script type="text/javascript" src="/assets/member/js/tinymce.min.js"></script>
-<script type="text/javascript">
-tinymce.init({ 
-	selector:'.tinymce',
-	// plugins: 'lists advlist',
-	// toolbar: 'bold italic underline | bullist numlist outdent indent',
-	menubar:false,
-	height:200, 
-	content_css : "/assets/member/css/tinymce.css"
- });
-
-function submit_selected_image_done(data) 
-{ 
-	$('.maintenance-image-holder[key="'+data.akey+'"]').html('<img src="'+data.image_data[0].image_path+'">');
-	$('.maintenance-image-input[key="'+data.akey+'"]').val(data.image_data[0].image_path);
-}
-</script>
-<style type="text/css">
-.maintenance-image-holder
-{
-	position: relative;
-	padding-bottom: 50%;
-	height: 0;
-	background-color: #ddd;
-	margin-bottom: 10px;
-}
-.maintenance-image-holder img
-{
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-}
-</style>
+@include("member.page.page_assets")

@@ -22,6 +22,10 @@ class Tbl_warehouse extends Model
                     ->where("tbl_item.archived",0);
 
     }
+    public function scopeSerialnumber($query)
+    {
+        return $query->leftJoin('tbl_inventory_serial_number', 'tbl_item.item_id', '=', 'tbl_inventory_serial_number.item_id');
+    }
     public function scopeWarehouseitem_vendor($query,$vendor_id = 0)
     {
          return $query->leftjoin('tbl_sub_warehouse', 'tbl_sub_warehouse.warehouse_id', '=', 'tbl_warehouse.warehouse_id')

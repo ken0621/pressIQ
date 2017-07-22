@@ -31,12 +31,12 @@ class MlmRegisterController extends MlmLoginController
         $data['lead'] = Self::$lead;
         if($data['lead'] != null)
         {
-        	$data['lead_code'] = Tbl_membership_code::where('tbl_membership_code.customer_id', $data['lead']->customer_id)
-        	->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_membership_code.slot_id')
-        	->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
-        	->whereNotNull('tbl_membership_code.slot_id')
-        	->get();
-        	$data['customer_info'] = Mlm_member::get_customer_info($data['lead']->customer_id);
+            $data['lead_code'] = Tbl_membership_code::where('tbl_membership_code.customer_id', $data['lead']->customer_id)
+            ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_membership_code.slot_id')
+            ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+            ->whereNotNull('tbl_membership_code.slot_id')
+            ->get();
+            $data['customer_info'] = Mlm_member::get_customer_info($data['lead']->customer_id);
         } 
         else
         {
@@ -56,23 +56,23 @@ class MlmRegisterController extends MlmLoginController
     public function post_register()
     {   
 
-    	$i['password'] = Request::input('pass');
-    	$i['password_2'] = Request::input('pass2');
-    	if($i['password'] == $i['password_2'])
-    	{
-    		
-    		$insert['shop_id'] = Self::$shop_id;
-	        $insert['first_name'] = Request::input('first_name');
-	        $insert['last_name'] = Request::input('last_name');
-	        $insert['email'] = Request::input('email');
-	        $insert['password'] = $i['password'];
-	        $insert['company'] = Request::input('company');
-	        $insert['created_date'] = Carbon::now();
-	        $insert['IsWalkin'] = 0; 
-	        $insert['mlm_username'] = Request::input('username');
-	        $insert['country_id'] = Request::input('country');
-	        $insert['tin_number'] = Request::input('tinnumber');
-	        $insert_address['customer_state'] = Request::input('customer_state');
+        $i['password'] = Request::input('pass');
+        $i['password_2'] = Request::input('pass2');
+        if($i['password'] == $i['password_2'])
+        {
+            
+            $insert['shop_id'] = Self::$shop_id;
+            $insert['first_name'] = Request::input('first_name');
+            $insert['last_name'] = Request::input('last_name');
+            $insert['email'] = Request::input('email');
+            $insert['password'] = $i['password'];
+            $insert['company'] = Request::input('company');
+            $insert['created_date'] = Carbon::now();
+            $insert['IsWalkin'] = 0; 
+            $insert['mlm_username'] = Request::input('username');
+            $insert['country_id'] = Request::input('country');
+            $insert['tin_number'] = Request::input('tinnumber');
+            $insert_address['customer_state'] = Request::input('customer_state');
             $insert_address['customer_city'] = Request::input('customer_city');
             $insert_address['customer_zipcode'] = Request::input('customer_zipcode');
             $insert_address['customer_street'] = Request::input('customer_street');
@@ -80,8 +80,8 @@ class MlmRegisterController extends MlmLoginController
             $insert['ismlm'] = 1;
 
 
-	        $data['type']   = "Success";
-    		$data['message'] = "Password Matched";
+            $data['type']   = "Success";
+            $data['message'] = "Password Matched";
 
             $vali['mlm_username'] = $insert['mlm_username'];
 
@@ -91,82 +91,82 @@ class MlmRegisterController extends MlmLoginController
             $validator = Validator::make($vali,$rules);
             if ($validator->passes())
             {
-        		if(strlen($insert['mlm_username']) >= 6)
+                if(strlen($insert['mlm_username']) >= 6)
                 {
-    				$count_username = Tbl_customer::where('mlm_username', $insert['mlm_username'])->count();
-    				if($count_username == 0)
-    				{
-    					if(strlen($insert['password']) >= 6)
-    	                {
-    	                	$check_email = Tbl_customer::where('shop_id',Self::$shop_id)->where('email',$insert['email'])->count();
-    	                	if($check_email == 0)
-    	                	{
+                    $count_username = Tbl_customer::where('mlm_username', $insert['mlm_username'])->count();
+                    if($count_username == 0)
+                    {
+                        if(strlen($insert['password']) >= 6)
+                        {
+                            $check_email = Tbl_customer::where('shop_id',Self::$shop_id)->where('email',$insert['email'])->count();
+                            if($check_email == 0)
+                            {
 
-    	                		// leads
-        						$lead_customer = Self::$lead;
-        						$continue = 1;
-        						$lead = 0;
-        						$membership_code = Request::input('membership_code');
-        						if($lead_customer != null)
-        						{
-        							if($membership_code == null)
-        							{
-        								$continue = 0;
-        								$data['type']   = "error";
-    	    							$data['message'] = "Membership Code Required.";
-        							}
-        							else
-        							{
-        								$sponsor_info = Tbl_membership_code::where('membership_activation_code', $membership_code)
-    							        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_membership_code.slot_id')
-    							        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
-    							        ->first();  
-        								if($sponsor_info != null)
-        								{
-        									$insert_lead['lead_join_date'] = Carbon::now();
-    		    							$insert_lead['lead_customer_id_sponsor'] = $sponsor_info->customer_id;
-    		    							$insert_lead['lead_slot_id_sponsor'] = $sponsor_info->slot_id;
-    		    							$insert_lead['lead_sponsor_membership_code'] = $membership_code;
-    		    							$lead = 1;
-        								} 
-        								else
-        								{
-        									$continue = 0;
-    	    								$data['type']   = "error";
-    		    							$data['message'] = "Member not found.";
-        								}
-        							}
-        						}
-        						else
-        						{
-        							if($membership_code != null)
-        							{
-        								$sponsor_info = Tbl_membership_code::where('membership_activation_code', $membership_code)
-    							        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_membership_code.slot_id')
-    							        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
-    							        ->first(); 
-    							        if($sponsor_info != null)
-        								{
-        									$insert_lead['lead_join_date'] = Carbon::now();
-    		    							$insert_lead['lead_customer_id_sponsor'] = $sponsor_info->customer_id;
-    		    							$insert_lead['lead_slot_id_sponsor'] = $sponsor_info->slot_id;
-    		    							$insert_lead['lead_sponsor_membership_code'] = $membership_code;
-    		    							$lead = 1;
-        								} 
-        								else
-        								{
-        									$continue = 0;
-    	    								$data['type']   = "error";
-    		    							$data['message'] = "Member not found.";
-        								} 
-        							}
-        						}
-        						if($continue == 1)
-        						{
-        							// if($insert['tin_number'] != null)
-        							// {
-        								$insert['password'] = Crypt::encrypt($i['password']);
-    			                		$cus_id = Tbl_customer::insertGetId($insert);
+                                // leads
+                                $lead_customer = Self::$lead;
+                                $continue = 1;
+                                $lead = 0;
+                                $membership_code = Request::input('membership_code');
+                                if($lead_customer != null)
+                                {
+                                    if($membership_code == null)
+                                    {
+                                        $continue = 0;
+                                        $data['type']   = "error";
+                                        $data['message'] = "Membership Code Required.";
+                                    }
+                                    else
+                                    {
+                                        $sponsor_info = Tbl_membership_code::where('membership_activation_code', $membership_code)
+                                        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_membership_code.slot_id')
+                                        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+                                        ->first();  
+                                        if($sponsor_info != null)
+                                        {
+                                            $insert_lead['lead_join_date'] = Carbon::now();
+                                            $insert_lead['lead_customer_id_sponsor'] = $sponsor_info->customer_id;
+                                            $insert_lead['lead_slot_id_sponsor'] = $sponsor_info->slot_id;
+                                            $insert_lead['lead_sponsor_membership_code'] = $membership_code;
+                                            $lead = 1;
+                                        } 
+                                        else
+                                        {
+                                            $continue = 0;
+                                            $data['type']   = "error";
+                                            $data['message'] = "Member not found.";
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if($membership_code != null)
+                                    {
+                                        $sponsor_info = Tbl_membership_code::where('membership_activation_code', $membership_code)
+                                        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_membership_code.slot_id')
+                                        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+                                        ->first(); 
+                                        if($sponsor_info != null)
+                                        {
+                                            $insert_lead['lead_join_date'] = Carbon::now();
+                                            $insert_lead['lead_customer_id_sponsor'] = $sponsor_info->customer_id;
+                                            $insert_lead['lead_slot_id_sponsor'] = $sponsor_info->slot_id;
+                                            $insert_lead['lead_sponsor_membership_code'] = $membership_code;
+                                            $lead = 1;
+                                        } 
+                                        else
+                                        {
+                                            $continue = 0;
+                                            $data['type']   = "error";
+                                            $data['message'] = "Member not found.";
+                                        } 
+                                    }
+                                }
+                                if($continue == 1)
+                                {
+                                    // if($insert['tin_number'] != null)
+                                    // {
+                                        $insert['password'] = Crypt::encrypt($i['password']);
+                                        $cus_id = Tbl_customer::insertGetId($insert);
 
                                         $insert_other['customer_mobile'] = Request::input('customer_mobile');
                                         $insert_other['customer_id'] = $cus_id;
@@ -188,12 +188,12 @@ class MlmRegisterController extends MlmLoginController
                                         $insert_address['country_id'] = Request::input('country');
                                         DB::table('tbl_customer_address')->insert($insert_address);
 
-    			                		Mlm_member::add_to_session(Self::$shop_id, $cus_id);
-    			                		if($lead == 1)
-    			                		{
-    			                			$insert_lead['lead_customer_id_lead'] = $cus_id;
-    			                			Tbl_mlm_lead::insert($insert_lead);
-    			                		}
+                                        Mlm_member::add_to_session(Self::$shop_id, $cus_id);
+                                        if($lead == 1)
+                                        {
+                                            $insert_lead['lead_customer_id_lead'] = $cus_id;
+                                            Tbl_mlm_lead::insert($insert_lead);
+                                        }
                                         // $data['type']   = "success";
                                         // $data['message'] = "Success! you will be redirected";
                                         // return $data;
@@ -203,55 +203,55 @@ class MlmRegisterController extends MlmLoginController
                                         $txt[0]["txt_to_replace"]       = $insert['first_name'];
                                         $result  = Sms::SendSms($insert_other['customer_mobile'], "success_register", $txt, Self::$shop_id);
 
-    			                		$data['type']   = "success";
-    		    						$data['message'] = "Success! you will be redirected";
-        							// }
-        							// else
-        							// {
-        							// 	$data['type']   = "error";
-    		    					// 	$data['message'] = "Tin Number Is Required";
-        							// }
-        						}
-    	                	}
-    	                	else
-    	                	{
-    	                		$data['type']   = "error";
-        						$data['message'] = "Email Already Taken";
-    	                	}
-    					}
-    					else
-    					{
-    						$data['type']   = "error";
-        					$data['message'] = "Password length is too short";
-    					}
-    				}
-    				else
-    				{
-    					$data['type']   = "error";
-        				$data['message'] = "Username Already Exist";
-    				}
-    			}
-    			else
-    			{
-    				$data['type']   = "error";
-        			$data['message'] = "Username length is too short";
-    			}
+                                        $data['type']   = "success";
+                                        $data['message'] = "Success! you will be redirected";
+                                    // }
+                                    // else
+                                    // {
+                                    //  $data['type']   = "error";
+                                    //  $data['message'] = "Tin Number Is Required";
+                                    // }
+                                }
+                            }
+                            else
+                            {
+                                $data['type']   = "error";
+                                $data['message'] = "Email Already Taken";
+                            }
+                        }
+                        else
+                        {
+                            $data['type']   = "error";
+                            $data['message'] = "Password length is too short";
+                        }
+                    }
+                    else
+                    {
+                        $data['type']   = "error";
+                        $data['message'] = "Username Already Exist";
+                    }
+                }
+                else
+                {
+                    $data['type']   = "error";
+                    $data['message'] = "Username length is too short";
+                }
             }
             else
             {
                 $data['type'] = "error";
                 $data['message'] = $validator->messages()->first();
             }    
-		}
-    	else
-    	{
-    		$data['type']   = "error";
-    		$data['message'] = "Password didn't match.";
-    	}
+        }
+        else
+        {
+            $data['type']   = "error";
+            $data['message'] = "Password didn't match.";
+        }
 
         $data['from'] = "register";
 
-    	return json_encode($data);
+        return json_encode($data);
     }
     public function mail_customer_success_register($shop_id, $customer_id)
     {
@@ -308,78 +308,90 @@ class MlmRegisterController extends MlmLoginController
     {
         $i['password'] = Request::input('pass');
         $i['password_2'] = Request::input('pass2');
+        $i['customer_mobile'] = Request::input('customer_mobile');
 
-        if($i['password'] == $i['password_2'])
+        if ($i['customer_mobile'] != null) 
         {
-            if(strlen($i['password']) >= 6)
-            {     
-                $check_email = Tbl_customer::where('shop_id',Self::$shop_id)->where('email', Request::input('email'))->count();  
-                //dd($check_email);
-                //$check_email = Tbl_customer::where('shop_id', Self::$shop_id)->where('email', Request::input('email')->count();
-            
-                if($check_email == 0)
-                {
-                    $insert_customer = array(
-                        'shop_id'       => Self::$shop_id,
-                        'first_name'    => Request::input('first_name'),
-                        'last_name'     => Request::input('last_name'),
-                        'email'         => Request::input('email'),
-                        'password'      => Crypt::encrypt($i['password']),
-
-                        'IsWalkin'      => 0,
-                        'ismlm'         => 2,
-                    );
-
-                    $cus_id = Tbl_customer::insertGetId($insert_customer);
-
-                    if ($cus_id)
+            if($i['password'] == $i['password_2'])
+            {
+                if(strlen($i['password']) >= 6)
+                {     
+                    $check_email = Tbl_customer::where('shop_id',Self::$shop_id)->where('email', Request::input('email'))->count();  
+                    //dd($check_email);
+                    //$check_email = Tbl_customer::where('shop_id', Self::$shop_id)->where('email', Request::input('email')->count();
+                
+                    if($check_email == 0)
                     {
-                        $insert_address = array(  
-                            'customer_id'       => $cus_id,
-                            'country_id'        => 420, //default ph
-                            'customer_state'    => Request::input('customer_state'),
-                            'customer_city'     => Request::input('customer_city'),
-                            'customer_street'   => Request::input('customer_street'),
-                            'purpose'           => "billing",
-                            //'customer_mobile'   => Request::input('customer_mobile'),
+                        $insert_customer = array(
+                            'shop_id'       => Self::$shop_id,
+                            'first_name'    => Request::input('first_name'),
+                            'last_name'     => Request::input('last_name'),
+                            'email'         => Request::input('email'),
+                            'password'      => Crypt::encrypt($i['password']),
+
+                            'IsWalkin'      => 0,
+                            'ismlm'         => 2,
                         );
 
-                        DB::table('tbl_customer_address')->insert($insert_address);  
+                        $cus_id = Tbl_customer::insertGetId($insert_customer);
+                    
+                        $data["customer_info"] = Tbl_customer::where("customer_id",$cus_id)->first();
+                        Mail_global::create_email_content($data,Self::$shop_id,"success_register_intogadgets");
 
-                        $insert_other = array(  
-                            'customer_id'       => $cus_id,                                
-                            'customer_mobile'   => Request::input('customer_mobile'),
-                        );   
+                        if ($cus_id)
+                        {
+                            $insert_address = array(  
+                                'customer_id'       => $cus_id,
+                                'country_id'        => 420, //default ph
+                                'customer_state'    => Request::input('customer_state'),
+                                'customer_city'     => Request::input('customer_city'),
+                                'customer_street'   => Request::input('customer_street'),
+                                'purpose'           => "billing",
+                                //'customer_mobile'   => Request::input('customer_mobile'),
+                            );
 
-                        DB::table('tbl_customer_other_info')->insert($insert_other); 
-                        
-                        Mlm_member::add_to_session(Self::$shop_id, $cus_id);     
+                            DB::table('tbl_customer_address')->insert($insert_address);  
 
-                        //echo "Registration successful! You will be redirect to your account page.";    
-                        return Redirect::to('/account');         
+                            $insert_other = array(  
+                                'customer_id'       => $cus_id,                                
+                                'customer_mobile'   => Request::input('customer_mobile'),
+                            );   
 
+                            DB::table('tbl_customer_other_info')->insert($insert_other); 
+                            
+                            Mlm_member::add_to_session(Self::$shop_id, $cus_id);     
+
+                            //echo "Registration successful! You will be redirect to your account page.";    
+                            return Redirect::to('/account');         
+
+                        }
+                        else
+                        {
+                            Session::flash('warning', 'Error! Please contact administrator(Err-Customer Model).');
+                            return Redirect::back()->withInput();   
+                        }                     
                     }
                     else
                     {
-                        Session::flash('warning', 'Error! Please contact administrator(Err-Customer Model).');
-                        return Redirect::back()->withInput();   
-                    }                     
+                        Session::flash('warning', 'Email is already exist in the record.');
+                        return Redirect::back()->withInput();  
+                    }      
                 }
                 else
                 {
-                    Session::flash('warning', 'Email is already exist in the record.');
-                    return Redirect::back()->withInput();  
-                }      
+                    Session::flash('warning', 'Password length is mainimum of 6 character.');
+                    return Redirect::back()->withInput();
+                }                
             }
             else
-            {
-                Session::flash('warning', 'Password length is mainimum of 6 character.');
+            {   
+                Session::flash('warning', 'Password do not match!');
                 return Redirect::back()->withInput();
-            }                
+            }
         }
         else
-        {   
-            Session::flash('warning', 'Password do not match!');
+        {
+            Session::flash('warning', 'Contact Number is required!');
             return Redirect::back()->withInput();
         }
     }

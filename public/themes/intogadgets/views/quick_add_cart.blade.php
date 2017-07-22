@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="resources/assets/frontend/css/single-product.css">
-
+     
 <div class="modal-body">
 	<?php $ctr = 0; ?>
 	@foreach($product["variant"] as $product_variant)
@@ -11,11 +11,11 @@
 	      <div class="col-md-6">
 		      <div class="single-product-holder" style="padding: 0; width: 100%; margin: 0;">
 		         @foreach($product_variant['image'] as $key => $image)
-		         <img class="single-product-img 4-3-ratio {{ $key == 0 ? '' : 'hide' }}" key="{{ $key }}" style="width: 100%;" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}" alt = "" id="picturecontainer"/>
+		         <img class="single-product-img 4-4-ratio {{ $key == 0 ? '' : 'hide' }}" key="{{ $key }}" style="width: 100%;" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}" alt = "" id="picturecontainer"/>
 		         @endforeach
 		         <div class="thumb">
 		             @foreach($product_variant['image'] as $key => $image)
-		             <div class="holder" variant-id="{{ $product_variant['evariant_id'] }}" key="{{ $key }}" style="cursor: pointer;"><img style="object-fit: cover;" class="4-3-ratio" src="{{ $image['image_path'] }}"></div>
+		             <div class="holder" variant-id="{{ $product_variant['evariant_id'] }}" key="{{ $key }}" style="cursor: pointer;"><img style="object-fit: cover;" class="4-4-ratio" src="{{ $image['image_path'] }}"></div>
 		             @endforeach
 		         </div>
 		      </div>

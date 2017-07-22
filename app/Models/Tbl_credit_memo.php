@@ -8,7 +8,7 @@ class Tbl_credit_memo extends Model
 {
    protected $table = 'tbl_credit_memo';
 	protected $primaryKey = "cm_id";
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function scopeCustomer($query)
     {

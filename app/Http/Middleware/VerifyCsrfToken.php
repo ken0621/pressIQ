@@ -13,7 +13,8 @@ class VerifyCsrfToken extends BaseVerifier
      */
     protected $except = [
         'api/*',
-        '/ipay88_response',
+        '/payment/ipay88/response',
+        '/payment/ipay88/backend',
         '/checkout',
         '/payment/dragonpay/postback',
         '/payment/dragonpay/post'   

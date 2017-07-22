@@ -1,6 +1,9 @@
 <?php
     
-
+function ctopercent($flt)
+{
+    return number_format($flt * 100, 0) . "%";
+}
 function randomPassword()
 {
     $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
@@ -19,6 +22,20 @@ function c_time_to_int($time)
     $return = strtotime("01/01/70 " . $time . " UTC");
     return $return;
 }
+function code_to_word($code)
+{
+    $code = str_replace("_", " ", $code);
+    $code = ucwords($code);
+    return $code;
+}
+function payroll_currency($amount)
+{
+    return "PHP " . number_format($amount, 2);
+}
+function payroll_date_format($date)
+{
+    return date("F d, Y", strtotime($date));
+}
 function convert_seconds_to_hours_minutes($format = "H:i", $d)
 {
     date_default_timezone_set('UTC');
@@ -26,6 +43,7 @@ function convert_seconds_to_hours_minutes($format = "H:i", $d)
     date_default_timezone_set(config('app.timezone'));
     return $r;
 }
+
 function createPath($path)
 {
     if (is_dir($path)) return true;
@@ -610,7 +628,24 @@ function mlm_profile_link($customer)
         return $profile;
     }
 }
-function get_address_customer()
+function get_ip_address()
 {
-    
+    $client  = @$_SERVER['HTTP_CLIENT_IP'];
+    $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
+    $remote  = $_SERVER['REMOTE_ADDR'];
+
+    if(filter_var($client, FILTER_VALIDATE_IP))
+    {
+        $ip = $client;
+    }
+    elseif(filter_var($forward, FILTER_VALIDATE_IP))
+    {
+        $ip = $forward;
+    }
+    else
+    {
+        $ip = $remote;
+    }
+
+    return $ip;
 }

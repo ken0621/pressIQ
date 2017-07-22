@@ -8,7 +8,7 @@ class Tbl_journal_entry_line extends Model
 {
 	protected $table = 'tbl_journal_entry_line';
 	protected $primaryKey = "jline_id";
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function scopeAccount($query)
     {

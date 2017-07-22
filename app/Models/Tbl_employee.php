@@ -7,7 +7,7 @@ class Tbl_employee extends Model
 {
 	protected $table = 'tbl_employee';
 	protected $primaryKey = "employee_id";
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function scopePosition($query)
     {
@@ -26,5 +26,9 @@ class Tbl_employee extends Model
         if($customer_id) $receive_payment->where("rp_customer_id", $customer_id);
         
         return $query = $receive_payment->union($invoice)->orderBy("date_created","desc");
+    }
+    public function scopePosition($query)
+    {
+        return $query->leftjoin("tbl_position","tbl_employee.position_id","=","tbl_position.position_id");
     }
 }

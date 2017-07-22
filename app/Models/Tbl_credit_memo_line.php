@@ -8,7 +8,7 @@ class Tbl_credit_memo_line extends Model
 {
    protected $table = 'tbl_credit_memo_line';
 	protected $primaryKey = "cmline_id";
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function scopeUm($query)
     {

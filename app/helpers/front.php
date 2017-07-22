@@ -161,3 +161,9 @@ function get_front_news($shop_id)
 {
     return Tbl_post::where("shop_id", $shop_id)->where("archived", 0)->orderBy("post_date", "DESC")->get();
 }
+
+function validateDate($date)
+{
+    $d = DateTime::createFromFormat('Y-m-d', $date);
+    return $d && $d->format('Y-m-d') === $date;
+}

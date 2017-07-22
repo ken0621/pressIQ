@@ -207,6 +207,8 @@ class WarehouseController extends Member
                                     ->where("tbl_warehouse.warehouse_id",$warehouse_id)
                                     ->get();
 
+        $data["warehouse_id"] = $warehouse_id;
+
         return view("member.warehouse.inventory_log",$data);
     }
     public function item()

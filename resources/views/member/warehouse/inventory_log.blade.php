@@ -18,6 +18,14 @@
     <div class="panel-body form-horizontal">
         <div class="form-group tab-content panel-body inventory-log-container">
             <div id="all" class="tab-pane fade in active">
+                <div class="form-group row clearfix">
+                    <div class="col-md-4"> 
+                        <div class="input-group">
+                            <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+                            <input type="text" class="form-control input-sm" name="" placeholder="Search">
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group order-tags"></div>
                 <div class="table-responsive">
                     <table class="table table-bordered table-condensed">

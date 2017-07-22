@@ -358,7 +358,7 @@ class WarehouseController extends Member
 
                 $update_item["has_serial_number"] = 1;
                 Tbl_item::where("item_id",$value)->update($update_item);
-                $archived = 0;
+                $archived = 1;
                 $rules[$key]["serial_number"] = 'required|alpha_num|unique:tbl_inventory_serial_number,serial_number,'.$archived.',archived';
 
                 $validator[$key] = Validator::make($insert[$key],$rules[$key]);

@@ -887,7 +887,9 @@ Route::get('/member/settings/setup/initial', 'Member\SettingsController@initial_
 /* End SettingsController */
 
 /* USER / UTILITIES*/
+Route::any('/member/utilities/admin-list/ismerchant', 'Member\UtilitiesController@ismerchant');
 Route::controller('/member/utilities', 'Member\UtilitiesController');
+
 /* End */
 /* ECOMMERCE PRODUCT */
 Route::controller('/member/ecommerce/product', 'Member\EcommerceProductController');

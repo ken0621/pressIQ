@@ -561,7 +561,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['label'] = "Item List";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','add_auto_approve'];
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','add_auto_approve', 'can_approve_item_request', 'can_edit_other_item'];
     $nav[$page]['submenu'][$code]['status'] = "Still developing";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Erwin</span>";
 
@@ -713,6 +713,20 @@ function page_list()
     $nav[$page]['submenu'][$code]['label'] = "Import";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . "customer" . "/import/customer";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
+
+    $page = "merchant";  
+    $nav[$page]['name'] = "Merchant";
+    $nav[$page]['segment'] = $page;
+    $nav[$page]['icon'] = "fa-id-card-o";
+    $nav[$page]['type']     = "menu";
+
+    $code = "merchant-markup-per-item";
+    $nav[$page]['submenu'][$code]['label'] = "Product Markup";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . "merchant" . "/markup";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";

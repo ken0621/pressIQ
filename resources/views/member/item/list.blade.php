@@ -89,10 +89,21 @@
                                 </small>
                             </td>
                             <td>
+                                @if($can_edit_other_item == 1)
                                 <div class="btn-group">
                                     <a class="btn btn-primary btn-grp-primary popup" link="/member/item/edit/{{$item->item_id}}" size="lg" href="javascript:">Edit</a>
                                     <a class="btn btn-primary btn-grp-primary popup" link="/member/item/archive/{{$item->item_id}}" size="sm" href="javascript:"> |<span class="fa fa-trash "> </span> </a>
                                 </div>
+                                @else
+                                    @if($user_id == $item->user_id)
+                                        <div class="btn-group">
+                                            <a class="btn btn-primary btn-grp-primary popup" link="/member/item/edit/{{$item->item_id}}" size="lg" href="javascript:">Edit</a>
+                                            <!-- <a class="btn btn-primary btn-grp-primary popup" link="/member/item/archive/{{$item->item_id}}" size="sm" href="javascript:"> |<span class="fa fa-trash "> </span> </a> -->
+                                        </div>
+                                    @else
+                                        <center>You have no access editing this item</center>
+                                    @endif
+                                @endif
                             </td>
                         </tr>
                         @endforeach
@@ -121,14 +132,18 @@
                             <td>{{$item->item_name}}</td>
                             <td>{{$item->warehouse_name}}</td>
                             <td>{{$item->item_price}}</td>
-                            <td>{{$item->customer_name}}</td>
+                            <td>{{$item->user_email }}</td>
                             <td>
-                                <div class="btn-group">
-                                    <a link="/member/item/approve_request/{{$item->item_id}}" href="javascript:" class="btn btn-primary btn-grp-primary popup">Approve</a>
-                                </div>
-                                <div class="btn-group">
-                                    <a link="/member/item/decline_request/{{$item->item_id}}" href="javascript:" class="btn btn-primary btn-grp-primary popup">Decline</a>
-                                </div>
+                                @if($can_approve_item_request == 1)
+                                    <div class="btn-group">
+                                        <a link="/member/item/approve_request/{{$item->item_id}}" href="javascript:" class="btn btn-primary btn-grp-primary popup" size="lg">Approve</a>
+                                    </div>
+                                    <div class="btn-group">
+                                        <a link="/member/item/decline_request/{{$item->item_id}}" href="javascript:" class="btn btn-primary btn-grp-primary popup">Decline</a>
+                                    </div>
+                                @else
+                                    <center>You have no access approving items</center>
+                                @endif
                             </td>
                         </tr>
                         @endforeach
@@ -163,9 +178,13 @@
                             <td>{{currency("PHP", $item->item_price)}}</td>
                             <td>{{date("F d, Y", strtotime($item->item_date_created))}}</td>
                             <td>
+                                @if($can_edit_other_item == 1)
                                 <div class="btn-group">
                                     <a link="/member/item/restore/{{$item->item_id}}" href="javascript:" class="btn btn-primary btn-grp-primary popup">Restore</a>
                                 </div>
+                                @else
+                                <center>You have no access editing this item</center>
+                                @endif
                             </td>
                         </tr>
                         @endforeach

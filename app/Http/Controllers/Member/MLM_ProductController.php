@@ -46,7 +46,19 @@ class MLM_ProductController extends Member
             $_inventory = $_inventory->where('item_sku', 'like', '%' . $item_search . '%')
             ->orWhere('item_name', 'like', '%' . $item_search . '%');
         }
-        $_inventory = $_inventory->where('tbl_item.archived', 0)->orderBy('tbl_item.item_id','asc')->paginate(10);
+        $merchant_item = Request::input('merchant_item');
+        if($merchant_item)
+        {
+            $_inventory = $_inventory->type()->category()
+            ->where('item_id', $merchant_item)
+            ->where("tbl_item.shop_id",$shop_id)
+            ->paginate(10);
+        }
+        else
+        {
+            $_inventory = $_inventory->where('tbl_item.archived', 0)->orderBy('tbl_item.item_id','asc')->paginate(10);
+        }
+        
 
 	    $this->setup_points_initial($_inventory);
 	    // end setup
@@ -61,9 +73,22 @@ class MLM_ProductController extends Member
 
             // filter="status"
         }
-        $_inventory = $_inventory->where('tbl_item.archived', 0)->type()->category()
-        ->where("tbl_item.shop_id",$shop_id)
-        ->paginate(10);
+
+        $merchant_item = Request::input('merchant_item');
+        if($merchant_item)
+        {
+            $_inventory = $_inventory->type()->category()
+            ->where('item_id', $merchant_item)
+            ->where("tbl_item.shop_id",$shop_id)
+            ->paginate(10);
+        }
+        else
+        {
+            $_inventory = $_inventory->where('tbl_item.archived', 0)->type()->category()
+            ->where("tbl_item.shop_id",$shop_id)
+            ->paginate(10);
+        }
+        
 
 
         foreach($_inventory as $key => $value)

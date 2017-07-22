@@ -45,17 +45,24 @@ class ItemController extends Member
 	public function index()
 	{
         $access = Utilities::checkAccess('item-list', 'access_page');
+        $data['can_approve_item_request'] = Utilities::checkAccess('item-list', 'can_approve_item_request');
+		$data['can_edit_other_item'] = Utilities::checkAccess('item-list', 'can_edit_other_item');
+		$data['user_id'] = $this->user_info->user_id;
         if($access == 1)
         {
 			$shop_id        		   = $this->user_info->shop_id;
 			$warehouse_id 			   = Tbl_warehouse::where("main_warehouse", 1)->where("warehouse_shop_id", $this->user_info->shop_id)->pluck("warehouse_id");
-	        $item 		    		   = Tbl_item::inventory()->where("tbl_item.archived",0)->where("shop_id",$shop_id)->type()->category();
+	        $item 		    		   = Tbl_item::inventory()
+	        							->leftJoin("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+	        							->leftjoin('tbl_user', 'tbl_user.user_id','=', 'tbl_item_merchant_request.item_merchant_requested_by')
+	        							->where("tbl_item.archived",0)->where("shop_id",$shop_id)->type()->category();
 	        
 	        /* CHECK IF THE ITEM IS ON MERCHANT REQUESTED ITEM THEN IT WOULDN'T BE INCLUDED ON ARCHIVED ITEM WHEN IT IS STILL ON PENDING STATUS */
 	        $item_archived  		   = Tbl_item::where("tbl_item.archived",1)
 	        								     ->where("shop_id",$shop_id)
 	        								     ->type()
 	        								     ->leftJoin("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+	        								     ->leftjoin('tbl_user', 'tbl_user.user_id','=', 'tbl_item_merchant_request.item_merchant_requested_by')
 	        								     ->category()
 											     ->where(function($query)
 											     {
@@ -69,6 +76,7 @@ class ItemController extends Member
         								         ->leftJoin("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
         								         ->leftJoin("tbl_warehouse","tbl_warehouse.warehouse_id","=","tbl_item_merchant_request.merchant_warehouse_id")
         								         ->leftJoin("tbl_customer","tbl_customer.customer_id","=","tbl_item_merchant_request.item_merchant_requested_by")
+        								         ->leftjoin('tbl_user', 'tbl_user.user_id','=', 'tbl_item_merchant_request.item_merchant_requested_by')
         								         ->category()
 										         ->where(function($query)
 										         {
@@ -976,7 +984,7 @@ class ItemController extends Member
 			$insert["item_id"] = $item_id;
 	        AuditTrail::record_logs("Added","item",$item_id,"",serialize($insert));
 		}
-		dd($return);
+		// dd($return);
     	return json_encode($return);
 	}	
 	public function edit($id)
@@ -1927,22 +1935,26 @@ class ItemController extends Member
 	public function merchant_approve_request($id)
 	{
 		$item 	 = Tbl_item::where("item_id",$id)->where("shop_id",$this->user_info->shop_id)->first();
+		$data['can_approve_item_request'] = Utilities::checkAccess('item-list', 'can_approve_item_request');
+		$data['can_edit_other_item'] = Utilities::checkAccess('item-list', 'can_edit_other_item');
+		$data['user_info'] = $this->user_info;
 		if($item)
 		{
-			$request = Tbl_item_merchant_request::where("merchant_item_id",$item->item_id)->first();
-			if($request)
+			$request = Tbl_item_merchant_request::where("merchant_item_id",$item->item_id)
+					->join('tbl_warehouse', 'tbl_warehouse.warehouse_id', '=', 'tbl_item_merchant_request.merchant_warehouse_id')
+					->join('tbl_user', 'tbl_user.user_id', '=', 'tbl_item_merchant_request.item_merchant_requested_by')
+					->first();
+			if(!$request)
 			{
-				dd($request);
-			}
-			else
-			{
-				dd(1);
+				dd("The item approve request does not exist");
 			}
 		}
 		else
 		{
-			dd(2);
+			dd("The item you requested does not exist");
 		}
+		$data['item'] = $item;
+		$data['request'] = $request;
 		return view('member.item.item_approve',$data);
 	}
 

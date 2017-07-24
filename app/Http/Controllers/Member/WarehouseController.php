@@ -205,11 +205,54 @@ class WarehouseController extends Member
                                     ->where("inventory_reason","refill")
                                     ->where("tbl_item.shop_id",$this->user_info->shop_id)
                                     ->where("tbl_warehouse.warehouse_id",$warehouse_id)
-                                    ->get();
+                                    ->paginate(20);
+                                    
+        $search = Request::input("search");
+        if($search)
+        {
+            $data["_inventory_log"] = Tbl_warehouse_inventory::item()
+                                    ->warehouse()
+                                    ->inventoryslip()
+                                    ->serialnumber()
+                                    ->orderBy("inventory_id","DESC")
+                                    ->groupBy("tbl_warehouse_inventory.inventory_id")
+                                    ->where("inventory_count",">",0)
+                                    ->where("tbl_item.archived",0)
+                                    ->where("inventory_reason","refill")
+                                    ->where("tbl_item.shop_id",$this->user_info->shop_id)
+                                    ->where("tbl_warehouse.warehouse_id",$warehouse_id)
+                                    ->where("tbl_item.item_name","LIKE","%".$search."%")
+                                    ->paginate(20);
+        }
+
+        $data["warehouse_id"] = $warehouse_id;
+        
+
+        return view("member.warehouse.inventory_log",$data);
+    }
+    public function inventory_log_table($warehouse_id)
+    {
+        $search = Request::input("search");
+        if($search)
+        {
+            $data["_inventory_log"] = Tbl_warehouse_inventory::item()
+                                    ->warehouse()
+                                    ->inventoryslip()
+                                    ->serialnumber()
+                                    ->orderBy("inventory_id","DESC")
+                                    ->groupBy("tbl_warehouse_inventory.inventory_id")
+                                    ->where("inventory_count",">",0)
+                                    ->where("tbl_item.archived",0)
+                                    ->where("inventory_reason","refill")
+                                    ->where("tbl_item.shop_id",$this->user_info->shop_id)
+                                    ->where("tbl_warehouse.warehouse_id",$warehouse_id)
+                                    ->where("tbl_item.item_name","LIKE","%".$search."%")
+                                    ->paginate(20);
+        }
 
         $data["warehouse_id"] = $warehouse_id;
 
-        return view("member.warehouse.inventory_log",$data);
+        return view("member.warehouse.inventory_log_table",$data);
     }
     public function item()
     {

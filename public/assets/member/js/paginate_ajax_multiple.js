@@ -54,6 +54,7 @@ function paginate_ajax()
 
     function getArticles(url, load_data) 
     {
+        console.log(load_data);
         target = load_data.attr("target");
         console.log(target);
         load_data.load(url+" .load-data #"+target, function()

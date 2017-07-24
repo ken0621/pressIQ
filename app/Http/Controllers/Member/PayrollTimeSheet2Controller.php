@@ -421,7 +421,7 @@ class PayrollTimeSheet2Controller extends Member
                               ->first();
 
         	$return->use_leave = $use_leave = true;             
-			$return->leave = $leave = "09:00:00";
+			$return->leave = $leave = "02:00:00";
 			$return->leave_fill_date = $leave_fill_late = 1;
 			$return->leave_fill_undertime = $leave_fill_undertime = 1;
 			$return->default_remarks = $this->timesheet_default_remarks($return);

@@ -11,10 +11,10 @@
 @endsection
 @section('content')
 
-@if(get_content($shop_theme_info, 'product', 'product_banner') && get_content($shop_theme_info, 'product', 'product_banner_link'))
+@if(get_content($shop_theme_info, 'product', 'product_banner_multiple') && is_serialized(get_content($shop_theme_info, 'product', 'product_banner_multiple')) && get_content($shop_theme_info, 'product', 'product_banner_link'))
 <div class="aadd">
-    <a href="{{ get_content($shop_theme_info, 'product', 'product_banner') }}" target="_blank">
-        <img src="{{ get_content($shop_theme_info, 'product', 'product_banner_link') }}" style="" >
+    <a href="{{ get_content($shop_theme_info, 'product', 'product_banner_link') }}" target="_blank">
+        <img src="{{ unserialize(get_content($shop_theme_info, 'product', 'product_banner_multiple'))[array_rand(unserialize(get_content($shop_theme_info, 'product', 'product_banner_multiple')))] }}" style="" >
     </a>
 </div>
 @endif

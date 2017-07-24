@@ -288,7 +288,6 @@ class Warehouse
     {
     	$data = Tbl_warehouse::Warehouseitem()
                              ->select_inventory($warehouse_id)
-				    		 ->orderBy('product_name','asc')
     						 ->paginate(10);
         foreach($data as $key => $value)
         {   //cycy

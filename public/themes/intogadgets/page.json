@@ -521,10 +521,10 @@
 	},
 	"product":
 	{
-		"product_banner" :
+		"product_banner_multiple" :
 		{
-			"label":"Product Banner",
-			"type":"image",
+			"label":"Product Banner (Multiple)",
+			"type":"gallery",
 			"default":"",
 			"size":"12"
 		},

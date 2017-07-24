@@ -20,6 +20,7 @@ use Carbon\Carbon;
 use App\Globals\Item;
 use Session;
 
+/* Author - Arcylen Gutierrez */
 class ItemSerial
 {
 	public static function getShopId()
@@ -29,7 +30,7 @@ class ItemSerial
 
     public static function getItemSerial($item_id)
     {
-    	$return = Tbl_inventory_serial_number::item()->where("tbl_item.item_id",$item_id)->get();
+    	$return = Tbl_inventory_serial_number::item()->where("tbl_item.item_id",$item_id)->where("tbl_inventory_serial_number.archived",0)->get();
     	return $return;
     }
     public static function check_setting()
@@ -88,7 +89,7 @@ class ItemSerial
     	{
     		if($value)
     		{
-    			$chk = Tbl_inventory_serial_number::item()->where("shop_id",ItemSerial::getShopId())->where("tbl_item.item_id","!=",$item_id)->where("serial_number",trim($value))->first();
+    			$chk = Tbl_inventory_serial_number::item()->where("shop_id",ItemSerial::getShopId())->where("tbl_item.item_id","!=",$item_id)->where("tbl_inventory_serial_number.archived",0)->where("serial_number",trim($value))->first();
     			if($chk)
     			{
     				$return .= "The serial number ".$value." was duplicate to the serial number of item ".Item::get_item_details($chk->serial_item_id)->item_name ."<br>";
@@ -107,7 +108,7 @@ class ItemSerial
     		$w_inventory = Tbl_warehouse_inventory::where("inventory_slip_id",$slip->inventory_slip_id)->where("inventory_item_id",$item_id)->first();
     		if($w_inventory)
     		{
-    			$serials = Tbl_inventory_serial_number::where("serial_inventory_id",$w_inventory->inventory_id)->where("item_id",$item_id)->get();
+    			$serials = Tbl_inventory_serial_number::where("serial_inventory_id",$w_inventory->inventory_id)->where("item_id",$item_id)->where("tbl_inventory_serial_number.archived",0)->get();
 
     			foreach ($serials as $key => $value) 
     			{
@@ -313,5 +314,41 @@ class ItemSerial
             }
 
         }
+    }
+
+    public static function archived_item_serial($item_id = 0)
+    {
+        if($item_id != 0)
+        {
+            $update["archived"] = 1;
+
+            Tbl_inventory_serial_number::where("item_id",$item_id)
+                                        ->where("item_consumed",0)
+                                        ->where("sold",0)
+                                        ->where("consume_source_id",0)
+                                        ->update($update);
+        }
+    }
+    public static function archived_serial()
+    {
+        $all_item_archived = Tbl_item::where("archived",1)->get();
+
+        foreach ($all_item_archived as $key => $value) 
+        {
+            Tbl_inventory_serial_number::where("item_consumed",0)
+                                       ->where("sold",0)
+                                       ->where("consume_source_id",0)
+                                       ->update(['archived' => 0]);
+        }
+
+        foreach ($all_item_archived as $key => $value) 
+        {
+            Tbl_inventory_serial_number::where("item_consumed",0)
+                                       ->where("sold",0)
+                                       ->where("consume_source_id",0)
+                                       ->where("item_id",$value->item_id)
+                                       ->update(['archived' => 1]);
+        }
+        dd("success");
     }
 }

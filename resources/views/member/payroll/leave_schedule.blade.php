@@ -38,7 +38,13 @@
 				              <div class="process-container">
 				              	<ul class="list-group">
 				              	 @foreach($upcoming as $tag)
-								  <li class="list-group-item padding-tb-10">{{$tag['payroll_employee_title_name'].' '.$tag['payroll_employee_first_name'].' '.$tag['payroll_employee_middle_name'].' '.$tag['payroll_employee_last_name'].' '.$tag['payroll_employee_suffix_name']}}<a href="#" class="pull-right popup" link="/member/payroll/leave_schedule/delete_confirm_schedule_leave/{{$tag['payroll_leave_schedule_id']}}" size="sm"><i class="fa fa-times" aria-hidden="true"></i></a></li>
+								  <li class="list-group-item padding-tb-10">{{$tag['payroll_employee_title_name'].' '.$tag['payroll_employee_first_name'].' '.$tag['payroll_employee_middle_name'].' '.$tag['payroll_employee_last_name'].' '.$tag['payroll_employee_suffix_name']}}
+
+								  	<a href="#" class="pull-right popup" link="/member/payroll/leave_schedule/delete_confirm_schedule_leave/{{$tag['payroll_leave_schedule_id']}}" size="sm"><i class="fa fa-times" aria-hidden="true"></i></a>
+
+								  	<span class="pull-right margin-right-20">{{$tag['leave_whole_day'] == 1 ? 'whole day': date('h:i', strtotime($tag['leave_hours']))}}</span>
+
+								  </li>
 								 @endforeach
 								</ul>
 				              </div>
@@ -61,7 +67,10 @@
 				              <div class="process-container">
 				              	<ul class="list-group">
 				              	 @foreach($used as $tag)
-								  <li class="list-group-item padding-tb-10">{{$tag['payroll_employee_title_name'].' '.$tag['payroll_employee_first_name'].' '.$tag['payroll_employee_middle_name'].' '.$tag['payroll_employee_last_name'].' '.$tag['payroll_employee_suffix_name']}}<a href="#" class="pull-right popup" link="/member/payroll/leave_schedule/delete_confirm_schedule_leave/{{$tag['payroll_leave_schedule_id']}}" size="sm"><i class="fa fa-times" aria-hidden="true"></i></a></li>
+								  <li class="list-group-item padding-tb-10">{{$tag['payroll_employee_title_name'].' '.$tag['payroll_employee_first_name'].' '.$tag['payroll_employee_middle_name'].' '.$tag['payroll_employee_last_name'].' '.$tag['payroll_employee_suffix_name']}}<a href="#" class="pull-right popup" link="/member/payroll/leave_schedule/delete_confirm_schedule_leave/{{$tag['payroll_leave_schedule_id']}}" size="sm"><i class="fa fa-times" aria-hidden="true"></i></a>
+								  
+								  <span class="pull-right margin-right-20">{{$tag['leave_whole_day'] == 1 ? 'whole day': date('h:i', strtotime($tag['leave_hours']))}}</span>
+								  </li>
 								 @endforeach
 								</ul>
 				              </div>

@@ -527,7 +527,7 @@ class MemberController extends Controller
             else
             {
                 $data['status'] = 'warning';
-                return Redirect::to("/member/register")->send();
+                return Redirect::to("/member/register/payment")->send();
             }
         }
     }
@@ -638,12 +638,12 @@ class MemberController extends Controller
     {
         $s['customer_state'] = $this->locale_id_to_name(Request::input('customer_state'));
         $s['customer_city'] = $this->locale_id_to_name(Request::input('customer_city'));
-        $s['customer_zip'] = $this->locale_id_to_name(Request::input('customer_zip'));
+        // $s['customer_zip'] = $this->locale_id_to_name(Request::input('customer_zip'));
         $s['customer_street'] = Request::input('customer_street');
     
         $rules['customer_state'] = 'required';
         $rules['customer_city'] = 'required';
-        $rules['customer_zip'] = 'required';
+        // $rules['customer_zip'] = 'required';
         $rules['customer_street'] = 'required';
 
         $validator = Validator::make($s, $rules);
@@ -657,7 +657,7 @@ class MemberController extends Controller
          {
             $customer_info["shipping_state"]   = $s["customer_state"];
             $customer_info["shipping_city"]    = $s["customer_city"];
-            $customer_info["shipping_zip"]     = $s["customer_zip"];
+            // $customer_info["shipping_zip"]     = $s["customer_zip"];
             $customer_info["shipping_street"]  = $s["customer_street"];
             $customer_set_info_response        = Cart::customer_set_info(Self::$shop_id, $customer_info);
             

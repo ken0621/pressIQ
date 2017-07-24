@@ -28,28 +28,48 @@
                  </select>
                </div>
             </div>
-            <div class="form-group load-data-barangay">
-               <div id="barangay">
-                 <label>Barangay</label>
-                 <select class="form-control input-lg barangay" name="customer_zip">
-                   @foreach($_barangay as $key=>$locale)
-                     <option value="{{$locale->locale_id}}">{{$locale->locale_name}}</option>
-                   @endforeach
-                 </select>
-               </div>
-            </div>
+            <!--<div class="form-group load-data-barangay">-->
+            <!--   <div id="barangay">-->
+            <!--     <label>Barangay</label>-->
+            <!--     <select class="form-control input-lg barangay" name="customer_zip">-->
+            <!--       @foreach($_barangay as $key=>$locale)-->
+            <!--         <option value="{{$locale->locale_id}}">{{$locale->locale_name}}</option>-->
+            <!--       @endforeach-->
+            <!--     </select>-->
+            <!--   </div>-->
+            <!--</div>-->
             <div class="form-group">
               <label>Complete Address</label>
-              <textarea class="form-control input-lg" name="customer_street" required="required"></textarea>
+              <textarea class="form-control input-lg input-address" name="customer_street" required="required"></textarea>
             </div>
           </div>
         </div>
       </div>
     </div>
     <div class="button-holder">
-      <button class="btn btn-green btn-lg">PROCEED</button>
+      <button type="button" class="btn btn-green btn-lg" data-toggle="modal" data-target="#shipping_details" onClick="if($('.input-address').val() == ''){if(event.stopPropagation){event.stopPropagation();}event.cancelBubble=true; alert('Please fill up all details.')}">PROCEED</button>
     </div>
   </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="shipping_details" role="dialog">
+    <div class="modal-dialog">
+    
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Shipping Details</h4>
+        </div>
+        <div class="modal-body">
+            <p class="put-address"></p>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-default">Continue</button>
+        </div>
+    </div>
+
+    </div>
 </div>
 </form>
 @endsection
@@ -108,6 +128,27 @@
       $("select.barangay").html("<option> Loading .... </option>");
       $(".load-data-barangay").load("/member/register/shipping?barangay_parent=" + $(this).val() + " #barangay");
     })
+    
+    $('.input-address').keyup(function()
+    {
+        action_address_show();
+    });
+    
+    action_address_show();
+    
+    function action_address_show()
+    {
+        var province_id = $('.province').val();
+        var municipality_id = $('.municipality').val();
+        
+        var province = $('.province option[value="'+province_id+'"]').text();
+        var municipality = $('.municipality option[value="'+municipality_id+'"]').text();
+        var street = $('.input-address').val();
+        
+        var complete_address = province + ", " + municipality + ", " + street;
+        
+        $('.put-address').text(complete_address);
+    }
 </script>
 @endsection
 @section("css")

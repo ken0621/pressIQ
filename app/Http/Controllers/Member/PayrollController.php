@@ -3458,6 +3458,19 @@ class PayrollController extends Member
           return view('member.payroll.modal.modal_deduction_tag_employee', $data);
      }
 
+     public function get_leave_tag_employee()
+     {
+          $employee = [0 => 0];
+          if(Session::has('leave_tag_employee'))
+          {
+               $employee = Session::get('leave_tag_employee');
+          }
+          $emp = Tbl_payroll_employee_basic::whereIn('payroll_employee_id',$employee)->get();
+
+          $data['new_record'] = $emp;
+          return json_encode($data);
+     }
+
      public function set_leave_tag_employee()
      {
           $leave_temp_id = Request::input('deduction_id');

@@ -83,4 +83,5 @@ class Tbl_payroll_leave_schedule extends Model
 
 		return $query;
 	}
+
 }

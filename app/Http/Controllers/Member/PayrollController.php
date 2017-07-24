@@ -5154,39 +5154,8 @@ class PayrollController extends Member
                     
                }
                if(!empty($insert))
-               {    
-                    //dd($insert);
-                    $insert_employee_schedule = array();;
-                    foreach($insert as $value)
-                    {
-                         //dd($value);
-
-                         $insert_temp['payroll_leave_employee_id']    = $value['payroll_leave_employee_id'];   
-                         $insert_temp['payroll_schedule_leave']       = $value['payroll_schedule_leave'];
-                         $insert_temp['shop_id']                      = $value['shop_id'];
-
-                         $existing = Tbl_payroll_leave_schedule::join('tbl_payroll_leave_employee', 'tbl_payroll_leave_schedule.payroll_leave_employee_id', '=', 'tbl_payroll_leave_employee.payroll_leave_employee_id')
-                              ->join('tbl_payroll_leave_temp', 'tbl_payroll_leave_employee.payroll_leave_temp_id', '=', 'tbl_payroll_leave_temp.payroll_leave_temp_id')
-                              ->where('tbl_payroll_leave_schedule.payroll_leave_employee_id', '=',$value['payroll_leave_employee_id'])
-                              ->orderBy('tbl_payroll_leave_schedule.payroll_leave_schedule_id', 'desc')
-                              ->first();
-
-                         /*$existing = Tbl_payroll_leave_schedule::getScheduleInc()->where('tbl_payroll_leave_schedule.payroll_leave_employee_id', '=',$value['payroll_leave_employee_id'])->first();;*/
-                         //dd($existing);
-                         if(count($existing) > 0)
-                         {
-                              $insert_temp['beg_hour']                  = $existing['end_hour'];
-                         } else {
-
-                              $get_data =    Tbl_payroll_leave_employee::join('tbl_payroll_leave_temp','tbl_payroll_leave_employee.payroll_leave_temp_id','=','tbl_payroll_leave_temp.payroll_leave_temp_id')->where('tbl_payroll_leave_employee.payroll_leave_employee_id', $value['payroll_leave_employee_id'])->first();
-
-                              $insert_temp['beg_hour']      = $get_data['payroll_leave_temp_days_cap'];
-                              $insert_temp['notes']         = 'first leave';
-                         }
-                         array_push($insert_employee_schedule, $insert_temp);
-                    }
-                    dd($insert_employee_schedule);
-                    Tbl_payroll_leave_schedule::insert($insert_employee_schedule);
+               {  
+                    Tbl_payroll_leave_schedule::insert($insert);
                }
           }    
 

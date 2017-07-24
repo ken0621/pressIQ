@@ -52,8 +52,12 @@
             </div>
             <div class="price-container">
               @if($product_variant['discounted'] == "true")
+              <div class="row clearfix">
+                  <div class="col-sm-6">
+                      <div  id="single-order-price" class="single-order-price" style="color:red;font-size:17px;text-decoration: line-through;"><span style="color:gray;">PHP {{ number_format($product_variant['evariant_price'], 2) }}</span></div>                    
+                  </div>
+              </div>
               <div id="single-order-price" class="single-order-price">PHP {{ number_format($product_variant['discounted_price'], 2) }}</div>
-              <div id="single-order-price" class="single-order-price" style="text-decoration: line-through;">PHP {{ number_format($product_variant['evariant_price'], 2) }}</div>
               @else
               <div id="single-order-price" class="single-order-price">PHP {{ number_format($product_variant['evariant_price'], 2) }}</div>
               @endif

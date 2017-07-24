@@ -436,7 +436,6 @@ class ShopCheckoutController extends Shop
             $data["customer"] = DB::table("tbl_customer")->leftJoin("tbl_customer_other_info", "tbl_customer.customer_id", "=", "tbl_customer_other_info.customer_id")
                                                          ->where("tbl_customer.customer_id", $data["get_cart"]["tbl_customer"]["customer_id"])
                                                          ->first();
-            
             return view("checkout", $data);
         }
         else

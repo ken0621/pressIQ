@@ -78,6 +78,12 @@ class MLM_ReportController extends Member
         $data['report_list_d']['e_wallet']['to'] = $to;
         $data['report_list_d']['e_wallet']['count'] = $count;
         // -----------------------------------------------------------------
+        $data['report_list']['e_wallet_eon'] = 'E-Wallet Report With Eon';
+        $data['report_list_d']['e_wallet_eon']['from'] = $from;
+        $data['report_list_d']['e_wallet_eon']['to'] = $to;
+        $data['report_list_d']['e_wallet_eon']['count'] = $count;
+        // -------------------------------------------------------
+        // -----------------------------------------------------------------
         $data['report_list']['e_wallet_transfer'] = 'E-Wallet Transfer Report';
         $data['report_list_d']['e_wallet_transfer']['from'] = $from;
         $data['report_list_d']['e_wallet_transfer']['to'] = $to;

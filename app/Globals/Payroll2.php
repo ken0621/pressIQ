@@ -674,7 +674,7 @@ class Payroll2
 					$leave_minutes = Payroll2::convert_time_in_minutes($leave);
 					if ($target_minutes > $leave_minutes) 
 					{
-						$under_time 			= Payroll::time_diff($leave_hours,$target_time);
+						$under_time 			= Payroll::time_diff($leave_hours,$target_hours);
 						$leave_hours_consumed   = $leave_hours;
 						$time_spent             = $leave_hours;	
 						$is_absent 				= false;
@@ -888,7 +888,7 @@ class Payroll2
 				$leave_minutes = Payroll2::convert_time_in_minutes($leave);
 				if ($target_minutes > $leave_minutes) 
 				{
-					$under_time 			= Payroll::time_diff($leave_hours,$target_time);
+					$under_time 			= Payroll::time_diff($leave_hours,$target_hours);
 					$leave_hours_consumed   = $leave_hours;
 					$time_spent             = $leave_hours;	
 					$is_absent 				= false;
@@ -953,6 +953,7 @@ class Payroll2
 		/*trigger leave*/
 		if ($use_leave == true) 
 		{
+			
 		//fill undertime with leave hours
 			if ($is_absent==true) 
 			{
@@ -960,7 +961,7 @@ class Payroll2
 				$leave_minutes = Payroll2::convert_time_in_minutes($leave);
 				if ($target_minutes > $leave_minutes) 
 				{
-					$under_time 			= Payroll::time_diff($leave_hours,$target_time);
+					$under_time 			= Payroll::time_diff($leave_hours,$target_hours);
 					$leave_hours_consumed   = $leave_hours;
 					$time_spent             = $leave_hours;	
 					$is_absent 				= false;

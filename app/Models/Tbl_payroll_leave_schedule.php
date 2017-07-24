@@ -84,4 +84,33 @@ class Tbl_payroll_leave_schedule extends Model
 		return $query;
 	}
 
+	public function scopegetemployeeleavedata($query, $payroll_employee_id = 0, $date = "0000-00-00")
+	{
+		$query->join('tbl_payroll_leave_employee', 'tbl_payroll_leave_schedule.payroll_leave_employee_id', '=', 'tbl_payroll_leave_employee.payroll_leave_employee_id')
+                              ->join('tbl_payroll_leave_temp', 'tbl_payroll_leave_employee.payroll_leave_temp_id', '=', 'tbl_payroll_leave_temp.payroll_leave_temp_id')
+                              ->where('tbl_payroll_leave_employee.payroll_employee_id', '=', $payroll_employee_id)
+                              ->where('tbl_payroll_leave_schedule.payroll_schedule_leave', $date)
+                              ->orderBy('tbl_payroll_leave_schedule.payroll_leave_schedule_id', 'desc');
+        return $query;
+	}
+
+
+	public function scopegetemployeeleavesumdata($query, $payroll_employee_id = 0)
+	{
+
+		/*select tbl_payroll_leave_employee.payroll_leave_employee_id, sum(tbl_payroll_leave_schedule.consume)from 
+		tbl_payroll_leave_schedule left join tbl_payroll_leave_employee 
+		on tbl_payroll_leave_employee.payroll_leave_employee_id = tbl_payroll_leave_schedule.payroll_leave_employee_id
+		where tbl_payroll_leave_employee.payroll_leave_employee_id = 104
+		group by tbl_payroll_leave_employee.payroll_leave_employee_id*/
+
+		$query->join('tbl_payroll_leave_employee', 'tbl_payroll_leave_schedule.payroll_leave_employee_id', '=', 'tbl_payroll_leave_employee.payroll_leave_employee_id')
+                              ->join('tbl_payroll_leave_temp', 'tbl_payroll_leave_employee.payroll_leave_temp_id', '=', 'tbl_payroll_leave_temp.payroll_leave_temp_id')
+                              ->where('tbl_payroll_leave_employee.payroll_employee_id', '=', $payroll_employee_id)
+                              ->orderBy('tbl_payroll_leave_schedule.payroll_leave_schedule_id', 'desc');
+
+                              
+        return $query;
+	}
+
 }

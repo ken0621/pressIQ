@@ -404,6 +404,8 @@ class PayrollTimeSheet2Controller extends Member
 		$cola		= $rate['cola'];
 		/* CHECK IF LATE GRACT TIME WORKING */
 
+
+
 		$return->late_grace_time = $late_grace_time = $employee_contract->late_grace_time;
 		$return->grace_time_rule_late = $grace_time_rule_late = $employee_contract->grace_time_rule_late;
 		$return->overtime_grace_time = $overtime_grace_time = $employee_contract->overtime_grace_time;
@@ -413,18 +415,56 @@ class PayrollTimeSheet2Controller extends Member
 		//$return->leave = $leave = $this->timesheet_get_leave_hours($employee_id, $date, $_shift_raw);
 
 
-		$existing = Tbl_payroll_leave_schedule::join('tbl_payroll_leave_employee', 'tbl_payroll_leave_schedule.payroll_leave_employee_id', '=', 'tbl_payroll_leave_employee.payroll_leave_employee_id')
-                              ->join('tbl_payroll_leave_temp', 'tbl_payroll_leave_employee.payroll_leave_temp_id', '=', 'tbl_payroll_leave_temp.payroll_leave_temp_id')
-                              ->where('tbl_payroll_leave_employee.payroll_employee_id', '=', $employee_id)
-                              ->where('tbl_payroll_leave_schedule.payroll_schedule_leave', $date)
-                              ->orderBy('tbl_payroll_leave_schedule.payroll_leave_schedule_id', 'desc')
-                              ->first();
 
-        	$return->use_leave = $use_leave = true;             
-			$return->leave = $leave = "02:00:00";
-			$return->leave_fill_date = $leave_fill_late = 1;
-			$return->leave_fill_undertime = $leave_fill_undertime = 1;
-			$return->default_remarks = $this->timesheet_default_remarks($return);
+
+		/*START leave function*/
+        $leave_data = Tbl_payroll_leave_schedule::getemployeeleavedata($employee_id,$date)->first();
+
+        $use_leave = false;
+        $leave = "00:00:00";
+
+        if (count($leave_data)>0) 
+        {
+        	$used_leave_data = DB::table('tbl_payroll_leave_schedule')
+                     ->select(DB::raw('tbl_payroll_leave_employee.payroll_leave_employee_id, sum(tbl_payroll_leave_schedule.consume) as total_sum'))
+                     ->leftJoin("tbl_payroll_leave_employee","tbl_payroll_leave_employee.payroll_leave_employee_id","=","tbl_payroll_leave_schedule.payroll_leave_employee_id")
+                     ->where('tbl_payroll_leave_employee.payroll_leave_employee_id', '=', $leave_data["payroll_leave_employee_id"])
+                     ->groupBy('tbl_payroll_leave_employee.payroll_leave_employee_id')
+                     ->first();
+           
+            if ($leave_data["consume"] == 0) 
+            {
+                $used_leave_sum = $used_leave_data->total_sum;
+            }
+            else
+            {
+            	$used_leave_sum = $leave_data["consume"];
+            }
+
+        	$leave_capacity  = $leave_data["payroll_leave_temp_days_cap"];
+        	if ($used_leave_sum  <  $leave_capacity)
+        	{
+        		$leave_remaining = $leave_capacity - $used_leave_sum;
+		    	$use_leave 	 	 = true;
+		    	/*not yet recorder*/
+        		// if ($leave_data["consume"] == 0) {
+        		// 	$leave = Payroll::float_time($leave_remaining);
+        		// }
+        		// else
+        		// {
+        		// 	$leave = Payroll::float_time($leave_data["consume"]);
+        		// }
+        		$leave = Payroll::float_time($leave_remaining);
+        	}
+        }
+
+    	$return->use_leave = $use_leave;             
+		$return->leave = $leave;
+		$return->leave_fill_date = $leave_fill_late = 1;
+		$return->leave_fill_undertime = $leave_fill_undertime = 1;
+		$return->default_remarks = $this->timesheet_default_remarks($return);
+
+		/*End leave function*/
 		
 		if($return->time_compute_mode == "flexi")
 		{
@@ -434,6 +474,17 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			$return->time_output = Payroll2::compute_time_mode_regular($return->compute_shift, $_shift_raw, $late_grace_time, $grace_time_rule_late, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday , $leave, $leave_fill_late, $leave_fill_undertime, $return->shift_target_hours, $use_leave, false);
 		}
+
+		/*update tbl_payroll_leave_schedule consume time*/
+		if ($use_leave == true) 
+		{
+			$update["tbl_payroll_leave_schedule.consume"] = $return->time_output["leave_hours_consumed"];
+
+			Tbl_payroll_leave_schedule::where("payroll_leave_employee_id",$leave_data["payroll_leave_employee_id"])
+			->where("payroll_leave_schedule_id",$leave_data["payroll_leave_schedule_id"])
+			->update($update);
+		}
+		
 
 		//dd($employee_contract);
 		//$daily_rate, $employee_contract->payroll_group_id
@@ -447,8 +498,6 @@ class PayrollTimeSheet2Controller extends Member
 		$data = new stdClass();
 		$data = Tbl_payroll_leave_schedule::getremaining($employee_id);
 		
- 
-
 		return $return;
 	}
 	public function timesheet_get_day_type($employee_id, $date)

@@ -138,9 +138,9 @@
                                     <div class="btn-group">
                                         <a link="/member/item/approve_request/{{$item->item_id}}" href="javascript:" class="btn btn-primary btn-grp-primary popup" size="lg">Approve</a>
                                     </div>
-                                    <div class="btn-group">
+                                    <!-- <div class="btn-group">
                                         <a link="/member/item/decline_request/{{$item->item_id}}" href="javascript:" class="btn btn-primary btn-grp-primary popup">Decline</a>
-                                    </div>
+                                    </div> -->
                                 @else
                                     <center>You have no access approving items</center>
                                 @endif

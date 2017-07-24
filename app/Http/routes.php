@@ -215,7 +215,7 @@ Route::post('/member/item/mulitple_price_modal', 'Member\ItemController@update_m
 Route::get('/member/item/get_new_price/{id}/{qty}', 'Member\ItemController@get_item_new_price'); /* B */
 
 Route::get('/member/item/approve_request/{id}', 'Member\ItemController@merchant_approve_request'); /* ERWIN */
-Route::post('/member/item/approve_request_post/{id}', 'Member\ItemController@merchant_approve_request_post'); /* ERWIN */
+Route::post('/member/item/approve_request_post/approve', 'Member\ItemController@merchant_approve_request_post'); /* ERWIN */
 
 Route::get('/member/item/decline_request/{id}', 'Member\ItemController@merchant_decline_request'); /* ERWIN */
 Route::post('/member/item/decline_request_post/{id}', 'Member\ItemController@merchant_decline_request_post'); /* ERWIN */
@@ -889,8 +889,11 @@ Route::get('/member/settings/setup/initial', 'Member\SettingsController@initial_
 /* USER / UTILITIES*/
 Route::any('/member/utilities/admin-list/ismerchant', 'Member\UtilitiesController@ismerchant');
 Route::controller('/member/utilities', 'Member\UtilitiesController');
-
 /* End */
+
+Route::any('/member/merchant/markup', 'Member\MerchantController@index');
+Route::any('/member/merchant/markup/update', 'Member\MerchantController@update');
+Route::any('/member/merchant/markup/update/piece', 'Member\MerchantController@update_per_piece');
 /* ECOMMERCE PRODUCT */
 Route::controller('/member/ecommerce/product', 'Member\EcommerceProductController');
 /* End */

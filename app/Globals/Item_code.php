@@ -31,6 +31,7 @@ use App\Models\Tbl_mlm_item_points;
 use App\Globals\Ec_order;
 use Mail;
 use App\Globals\Accounting;
+use App\Globals\Merchant;
 class Item_code
 {
 	public static function add_code($data,$shop_id, $user_id, $warehouse_id)
@@ -587,6 +588,7 @@ class Item_code
                         $send['invoice_id'] = $invoice_id;
 
                         Item_code::add_journal_entry($invoice_id);
+                        Merchant::item_code_merchant_mark_up($invoice_id);
                         //audit trail here
                         $item_code_invoice = Tbl_item_code_invoice::where("item_code_invoice_id",$invoice_id)->first()->toArray();
                         AuditTrail::record_logs("Added","mlm_item_code_invoice",$invoice_id,"",serialize($item_code_invoice));

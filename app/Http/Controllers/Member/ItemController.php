@@ -1958,9 +1958,25 @@ class ItemController extends Member
 		return view('member.item.item_approve',$data);
 	}
 
-	public function merchant_approve_request_post($id)
+	public function merchant_approve_request_post()
 	{
+		$item_merchant_request_id  = Request::input('item_merchant_request_id');
 
+		$update['item_merchant_accepted_by'] = $this->user_info->user_id;
+		$update['item_merchant_accepted_date'] = Carbon::now();
+		$update['item_merchant_request_status'] = 'Approved'; 
+		Tbl_item_merchant_request::where('item_merchant_request_id', $item_merchant_request_id)->update($update);
+
+		$item_id = Request::input('item_id');
+
+		$update_item['archived'] = 0;
+
+		Tbl_item::where('item_id', $item_id)->update($update_item);
+
+		$data['response_status'] = 'success_approve';
+		$data['message'] = 'success_approve';
+
+		return json_encode($data);
 	}
 
 	public function merchant_decline_request($id)

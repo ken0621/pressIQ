@@ -720,7 +720,7 @@ function page_list()
     $page = "merchant";  
     $nav[$page]['name'] = "Merchant";
     $nav[$page]['segment'] = $page;
-    $nav[$page]['icon'] = "fa-id-card-o";
+    $nav[$page]['icon'] = "user-secret";
     $nav[$page]['type']     = "menu";
 
     $code = "merchant-markup-per-item";

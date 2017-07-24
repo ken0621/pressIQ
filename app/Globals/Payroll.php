@@ -1395,9 +1395,15 @@ class Payroll
 		// 	return $float;
 		// }
 		$hour = intval($float);
+
 		$min = round(($float - $hour) * 60);
 		return Payroll::return_time($hour, $min);
 		
+	}
+
+	public static function float_to_time($float)
+	{
+
 	}
 
 	public static function process_compute($shop_id = 0, $status = 'processed')

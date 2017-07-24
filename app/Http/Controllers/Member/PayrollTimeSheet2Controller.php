@@ -21,6 +21,7 @@ use App\Models\Tbl_payroll_holiday_company;
 use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_shift_code;
 use App\Globals\Payroll2;
+use App\Globals\Payroll;
 use App\Models\Tbl_payroll_company;
 use DB;
 
@@ -330,6 +331,7 @@ class PayrollTimeSheet2Controller extends Member
 	}
 	public function timesheet_process_daily_info_record($employee_id, $date, $approved, $_time, $payroll_time_sheet_id, $payroll_period_company_id, $time_keeping_approved)
 	{
+
 		$return = new stdClass();
 		$return->for_approval	= ($approved == true ? 0 : 1);
 		$return->daily_salary	= 0;
@@ -409,15 +411,20 @@ class PayrollTimeSheet2Controller extends Member
 		$return->day_type = $day_type = $this->timesheet_get_day_type($employee_id, $date);
 		$return->is_holiday = $is_holiday = $this->timesheet_get_is_holiday($employee_id, $date);
 		//$return->leave = $leave = $this->timesheet_get_leave_hours($employee_id, $date, $_shift_raw);
-		$return->leave = $leave = "00:00:00";
-		$return->leave_fill_date = $leave_fill_late = 0;
-		$return->leave_fill_undertime = $leave_fill_undertime = 0;
-		$return->default_remarks = $this->timesheet_default_remarks($return);
-		$return->use_leave = $use_leave = $date == $date;
 
-		
-	
-		// dd($return->compute_shift);
+
+		$existing = Tbl_payroll_leave_schedule::join('tbl_payroll_leave_employee', 'tbl_payroll_leave_schedule.payroll_leave_employee_id', '=', 'tbl_payroll_leave_employee.payroll_leave_employee_id')
+                              ->join('tbl_payroll_leave_temp', 'tbl_payroll_leave_employee.payroll_leave_temp_id', '=', 'tbl_payroll_leave_temp.payroll_leave_temp_id')
+                              ->where('tbl_payroll_leave_employee.payroll_employee_id', '=', $employee_id)
+                              ->where('tbl_payroll_leave_schedule.payroll_schedule_leave', $date)
+                              ->orderBy('tbl_payroll_leave_schedule.payroll_leave_schedule_id', 'desc')
+                              ->first();
+
+        	$return->use_leave = $use_leave = true;             
+			$return->leave = $leave = "09:00:00";
+			$return->leave_fill_date = $leave_fill_late = 1;
+			$return->leave_fill_undertime = $leave_fill_undertime = 1;
+			$return->default_remarks = $this->timesheet_default_remarks($return);
 		
 		if($return->time_compute_mode == "flexi")
 		{
@@ -428,19 +435,20 @@ class PayrollTimeSheet2Controller extends Member
 			$return->time_output = Payroll2::compute_time_mode_regular($return->compute_shift, $_shift_raw, $late_grace_time, $grace_time_rule_late, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday , $leave, $leave_fill_late, $leave_fill_undertime, $return->shift_target_hours, $use_leave, false);
 		}
 
-
 		//dd($employee_contract);
 		//$daily_rate, $employee_contract->payroll_group_id
 		
-
 		$return->compute_type = $compute_type = Payroll2::convert_period_cat($employee_contract->payroll_group_salary_computation);
-
 
 		$return->compute = Payroll2::compute_income_day_pay($return->time_output, $daily_rate, $employee_contract->payroll_group_id, $cola, $compute_type, $return->time_compute_mode);
 		
 		$return->value_html = $this->timesheet_daily_income_to_string($return->compute_type, $payroll_time_sheet_id, $return->compute, $return->shift_approved, $payroll_period_company_id, $time_keeping_approved);
 		
-		//dd($return);
+		$data = new stdClass();
+		$data = Tbl_payroll_leave_schedule::getremaining($employee_id);
+		
+ 
+
 		return $return;
 	}
 	public function timesheet_get_day_type($employee_id, $date)
@@ -693,8 +701,6 @@ class PayrollTimeSheet2Controller extends Member
 			$update["payroll_time_serialize"] = serialize($payroll_time_serialize);
 			Tbl_payroll_time_sheet_record_approved::where("payroll_time_sheet_id", Request::input("payroll_time_sheet_id"))->where("payroll_time_sheet_record_id", Request::input("payroll_time_sheet_record_id")[$key])->update($update);
 		
-			
-			
 		}
 		
 		echo json_encode("success");

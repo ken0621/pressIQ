@@ -5185,7 +5185,7 @@ class PayrollController extends Member
                          }
                          array_push($insert_employee_schedule, $insert_temp);
                     }
-                    dd($insert_employee_schedule);
+                    // dd($insert_employee_schedule);
                     Tbl_payroll_leave_schedule::insert($insert_employee_schedule);
                }
           }    
@@ -5193,6 +5193,8 @@ class PayrollController extends Member
           $data['stataus']         = 'success';
           $data['function_name']   = '';
 
+
+               
           return collect($data)->toJson();
      }
 

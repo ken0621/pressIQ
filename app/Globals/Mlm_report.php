@@ -329,6 +329,69 @@ class Mlm_report
 
         return view('member.mlm_report.report.e_wallet_eon', $data);
     }
+    public static function e_wallet_eon_wo($shop_id, $filter)
+    {
+        $slot = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)
+        ->whereNull('slot_eon')
+        ->whereNull('slot_eon_account_no')
+        ->whereNull('slot_eon_card_no')
+        // -----------------------------------Filter
+        ->skip($filter['skip'])
+        ->take($filter['take'])
+        // -----------------------------------End
+
+        ->customer()->get()->keyBy('slot_id');
+        $wherein = [];
+        foreach($slot as $key => $value)
+        {
+            $wherein[$key] = $key;
+        }
+
+
+    	$complan_per_day =Tbl_mlm_slot_wallet_log::slot()
+    	->customer()
+    	->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)
+    	->orderBy('wallet_log_slot', 'ASC')
+        // ->where('wallet_log_amount', '!=', 0)
+        ->select(DB::raw('wallet_log_plan as wallet_log_plan'), DB::raw('sum(wallet_log_amount ) as wallet_log_amount'), DB::raw('wallet_log_slot as wallet_log_slot'))
+        ->groupBy(DB::raw('wallet_log_plan') )
+        ->groupBy('wallet_log_slot')
+        ->whereIn('wallet_log_slot', $wherein)
+    	->get();
+        // dd($complan_per_day);
+    	$plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
+        ->where('marketing_plan_enable', 1)
+        ->get()->keyBy('marketing_plan_code');
+        
+        $per_complan = [];
+        $plan = [];
+        foreach($complan_per_day as $key => $value)
+        {
+        	$plan[$value->wallet_log_plan] = $value->wallet_log_plan;
+        	if(isset($per_complan[$value->wallet_log_slot][$value->wallet_log_plan]))
+        	{
+        		$per_complan[$value->wallet_log_slot][$value->wallet_log_plan] += $value->wallet_log_amount;
+        	}
+        	else
+        	{
+        		$per_complan[$value->wallet_log_slot][$value->wallet_log_plan] = $value->wallet_log_amount;
+        	}
+        	
+        }
+        $data['complan_per_day'] = $complan_per_day;
+        $data['per_complan'] = $per_complan;
+        $data['plan'] = $plan;
+        $data['plan_settings'] = $plan_settings;
+        $data['slot'] = $slot;
+
+        $data['page'] = 'e_wallet_eon';
+        if(Request::input('pdf') == 'excel')
+        {
+            return $data;
+        }
+
+        return view('member.mlm_report.report.e_wallet_eon', $data);
+    }
     public static function e_wallet_transfer($shop_id, $filter)
     {
         $data['logs_transfer'] = Tbl_mlm_slot_wallet_log_transfer::where('tbl_mlm_slot_wallet_log_transfer.shop_id', $shop_id)

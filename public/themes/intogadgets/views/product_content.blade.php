@@ -50,7 +50,7 @@
             <div class="single-order-description">
                <div class="title">PACKAGE INCLUSION</div>
             </div>
-            <div class="price-container">
+            <div class="price-container" style="overflow-x: hidden;">
               @if($product_variant['discounted'] == "true")
               <div class="row clearfix">
                   <div class="col-sm-6">

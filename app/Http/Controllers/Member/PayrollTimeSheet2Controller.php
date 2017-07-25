@@ -218,7 +218,7 @@ class PayrollTimeSheet2Controller extends Member
 	}
 	public function timesheet_info($company_period, $employee_id) 
 	{
-		$_timesheet = null;
+		$_timesheet = array();
 		$from = $data["start_date"] = $company_period->payroll_period_start;
 		$to = $data["end_date"] = $company_period->payroll_period_end;
 		$payroll_period_company_id = $company_period->payroll_period_company_id;

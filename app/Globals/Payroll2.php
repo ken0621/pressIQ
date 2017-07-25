@@ -422,7 +422,7 @@ class Payroll2
 				else
 				{
 
-					$leave_hours_consumed   = Payroll2::float_time($target_hours);
+					$leave_hours_consumed   = $target_hours;
 					$is_absent 				= false;
 					$time_spent 			= $target_hours;
 				}
@@ -642,7 +642,6 @@ class Payroll2
 					$time_spent_temp = Payroll::sum_time($time_spent_temp,$time->late);
 					$time_spent_temp =  Payroll::sum_time($time_spent_temp,Payroll::time_diff($time->time_in,$time->time_out));					
 				}
-
 			}
 
 			//record if undertime
@@ -679,7 +678,7 @@ class Payroll2
 					else
 					{
 
-						$leave_hours_consumed   = Payroll2::float_time($target_hours);
+						$leave_hours_consumed   = $target_hours;
 						$is_absent 				= false;
 						$time_spent 			= $target_hours;
 					}
@@ -870,7 +869,18 @@ class Payroll2
 		$leave_hours 			= $leave;
 		$excess_leave_hours 	= $leave_hours;
 		$is_half_day 			= false;
+<<<<<<< HEAD
 		$is_absent 				= true;
+=======
+		$is_absent 				= false;
+
+		if ($use_leave) 
+		{
+			$is_absent = true;
+		}
+
+		
+>>>>>>> 36853330bfea879fd17c0a4b9de22638fbd8954b
 	
 		if ($_time==null) 
 		{
@@ -894,7 +904,7 @@ class Payroll2
 				else
 				{
 
-					$leave_hours_consumed   = Payroll2::float_time($target_hours);
+					$leave_hours_consumed   = $target_hours;
 					$is_absent 				= false;
 					$time_spent 			= $target_hours;
 				}
@@ -966,8 +976,7 @@ class Payroll2
 				}
 				else
 				{
-
-					$leave_hours_consumed   = Payroll2::float_time($target_hours);
+					$leave_hours_consumed   = $target_hours;
 					$is_absent 				= false;
 					$time_spent 			= $target_hours;
 				}

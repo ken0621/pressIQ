@@ -1,8 +1,68 @@
-<div class="modal-header">
+<div class="modal-header employee-income-summary">
+    <input type="hidden" class="period-id" value="{{ $period_info->payroll_period_company_id }}">
+    <input type="hidden" class="x-employee-id" value="{{ $employee_id }}">
     <button type="button" class="close" data-dismiss="modal">×</button>
-    <h4 class="modal-title"><b>DAILY COMPUTATION ({{ $period_info->month_contribution }} - {{ $period_info->period_count }})</b> </h4>
+    <h4 class="modal-title">
+        <b>DAILY COMPUTATION ({{ $period_info->month_contribution }} - {{ code_to_word($period_info->period_count) }})</b>
+    </h4>
 </div>
+
+<!-- 
 <div class="modal-body clearfix">
+    <div class="text-center text-bold" style="font-size: 20px; color: #1682ba">GOVERNMENT CONTRIBUTIONS</div>
+    <div class="col-md-12" style="text-align: left; font-weight: normal; margin-bottom: 10px; font-size: 16px;"></div>
+    <div class="clearfix">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-condensed timesheet table-timesheet">
+                    <thead style="text-transform: uppercase">
+                        <tr>
+                            <th class="text-left"></th>
+                            <th class="text-center" width="150px">MODE</th>
+                            <th class="text-center" width="120px">REFERENCE</th>
+                            <th class="text-center" width="120px">REFERENCE<br>AMOUNT</th>
+                            <th class="text-center" width="120px">EE SHARE</th>
+                            <th class="text-center" width="120px">ER SHARE</th>
+                            <th class="text-center" width="120px">EC SHARE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-left text-bold">SSS</td>
+                            <td class="text-center">EVERY PERIOD</td>
+                            <td class="text-center">GROSS PAY</td>
+                            <td class="text-center">{{ payroll_currency(100) }}</td>
+                            <td class="text-center">0.00</td>
+                            <td class="text-center">0.00</td>
+                            <td class="text-center">0.00</td>
+                        </tr>
+                        <tr>
+                            <td class="text-left text-bold">PHILHEALTH</td>
+                            <td class="text-center">EVERY PERIOD</td>
+                            <td class="text-center">GROSS PAY</td>
+                            <td class="text-center">{{ payroll_currency(100) }}</td>
+                            <td class="text-center">0.00</td>
+                            <td class="text-center">0.00</td>
+                            <td class="text-center">0.00</td>
+                        </tr>
+                        <tr>
+                            <td class="text-left text-bold">PAG-IBIG</td>
+                            <td class="text-center">EVERY PERIOD</td>
+                            <td class="text-center">GROSS PAY</td>
+                            <td class="text-center">{{ payroll_currency(100) }}</td>
+                            <td class="text-center">0.00</td>
+                            <td class="text-center">0.00</td>
+                            <td class="text-center">0.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+ -->
+<div class="modal-body clearfix">
+    <div class="text-center text-bold" style="font-size: 20px; color: #1682ba">NET SALARY COMPUTATION</div>
     <div class="col-md-12" style="text-align: left; font-weight: normal; margin-bottom: 10px; font-size: 16px;"></div>
     <div class="clearfix">
         <div class="col-md-12">
@@ -38,7 +98,7 @@
                                 @foreach($compute->compute->_breakdown_addition as $breakdown_label => $breakdown)
                                 <tr >
                                     <td></td>
-                                    <td style="border-left: 1px solid #ddd;" colspan="2" class="text-right" style="opacity: 0.5">{{ strtoupper($breakdown_label) }}</td>
+                                    <td colspan="2" class="text-right" style="opacity: 0.5">{{ strtoupper($breakdown_label) }}</td>
                                     <td class="text-right" style="opacity: 0.5">{{ payroll_currency($breakdown["rate"]) }}</td>
                                     <td class="text-right" style="opacity: 0.5"></td>
                                     <td></td>
@@ -66,20 +126,12 @@
                         <!-- NET BASIC PAY -->
                         <tr class="text-right" style="border-top: 2px solid #000" style="opacity: 0.7">
                             <td colspan="7" style="font-weight: bold;">NET BASIC PAY</td>
-                            <td style="font-weight: bold;">{{ payroll_currency($break_down['employee']['get_net_basic_pay']['total_net_basic']) }}</td>
+                            <td style="font-weight: bold;">{{ payroll_currency($cutoff_breakdown->basic_pay_total) }}</td>
                         </tr>
 
-                        <!-- ADD ADDITIONS -->
-                        @foreach($break_down['employee']['get_gross_pay']['obj'] as $obj)
-                        <tr>
-                            <td colspan="7" class="text-right" style="opacity: 0.5">
-                                ADD: {{ strtoupper($obj['name']) }}
-                            </td>
-                            <td class="text-right">
-                                {{payroll_currency($obj['amount'])}}
-                                
-                            </td>
-                        </tr>
+                        <!-- GROSS BREAKDOWN  -->
+                        @foreach($cutoff_breakdown->_gross_pay_breakdown as $breakdown)
+                            {!! $breakdown["tr"] !!}
                         @endforeach
 
                         <!-- GROSS PAY -->
@@ -88,75 +140,29 @@
                                 GROSS PAY
                             </td>
                             <td class="text-right" style="border-top: 2px solid #000">
-                                {{ payroll_currency($break_down['employee']['get_gross_pay']['total_gross_pay']) }}
+                                {{ payroll_currency($cutoff_breakdown->gross_pay_total) }}
                             </td>
                         </tr>
                         
-                        <!-- DEDUCTIONS -->
-                       
-                        @foreach($break_down['employee']['get_taxable_salary']['obj'] as $obj)
-                       
-                        <tr>
-                            <td colspan="7" class="text-right" style="opacity: 0.5">
-                                LESS: {{ strtoupper($obj['name']) }}
-                                {!!isset($obj['ref']) ? '<br>'.$obj['ref'] : ''!!}
-                              
-                            </td>
-                            <td class="text-right color-red" style="opacity: 0.7">
-                                {{payroll_currency($obj['amount'])}}
-                            </td>
-                        </tr>
+                        <!-- TAXABLE BREAKDOWN -->
+                        @foreach($cutoff_breakdown->_taxable_salary_breakdown as $breakdown)
+                            {!! $breakdown["tr"] !!}
                         @endforeach
                        
                         <!-- TAXABLE SALARY -->
                         <tr style="font-weight: bold;">
                             <td colspan="7" class="text-right" style="border-top: 2px solid #000">
-                                TAXABLE SALARY<br>{{$break_down['employee']['get_taxable_salary']['taxable_status']}}
+                                TAXABLE SALARY
                             </td>
                             <td class="text-right" style="border-top: 2px solid #000">
-                                {{ payroll_currency($break_down['employee']['get_taxable_salary']['total_taxable']) }}
+                                {{ payroll_currency($cutoff_breakdown->taxable_salary_total) }}
                             </td>
                         </tr>
-                        
-                        <!-- TAX -->
-                         @foreach($break_down['employee']['get_net_pay']['obj'] as $obj)
-                            @if($obj["name"] == "TAX")
-                            <tr>
-                                <td colspan="7" class="text-right" style="opacity: 0.5">
-                                    LESS: {{ strtoupper($obj['name']) }}
-                                </td>
-                                <td class="text-right color-red" style="opacity: 0.7">
-                                    {{payroll_currency($obj['amount'])}}
-                                </td>
-                            </tr>
-                            @endif
+
+                        <!-- NET PAY BREAKDOWN -->
+                        @foreach($cutoff_breakdown->_net_pay_breakdown as $breakdown)
+                            {!! $breakdown["tr"] !!}
                         @endforeach
-                        @foreach($break_down['employee']['get_net_pay']['obj'] as $obj)
-                            @if($obj["name"] != "TAX" && $obj['type'] != 'add')
-                            <tr>
-                                <td colspan="7" class="text-right" style="opacity: 0.5">
-                                    LESS: {{ strtoupper($obj['name']) }}
-                                    
-                                </td>
-                                <td class="text-right color-red" style="opacity: 0.7">
-                                    {{payroll_currency($obj['amount'])}}
-                                </td>
-                            </tr>
-                            @endif
-                        @endforeach
-                        @foreach($break_down['employee']['get_net_pay']['obj'] as $obj)
-                            @if($obj["name"] != "TAX" && $obj['type'] == 'add')
-                            <tr>
-                                <td colspan="7" class="text-right" style="opacity: 0.5">
-                                    ADD: {{ strtoupper($obj['name']) }}
-                                </td>
-                                <td class="text-right" style="opacity: 0.5">
-                                    {{payroll_currency($obj['amount'])}}
-                                </td>
-                            </tr>
-                            @endif
-                        @endforeach
-                        <!-- ALLOWANCES -->
                         
                         <!-- NET SALARY -->
                         <tr style="font-weight: bold;">
@@ -164,7 +170,7 @@
                                 NET PAY / TAKE HOME PAY
                             </td>
                             <td class="text-right" style="border-top: 2px solid #000; color: #1682ba">
-                                {{ payroll_currency($break_down['employee']['get_net_pay']['total_net_pay']) }}
+                                {{ payroll_currency($cutoff_breakdown->net_pay_total) }}
                             </td>
                         </tr> 
                     </tbody>
@@ -173,3 +179,17 @@
         </div>
     </div>
 </div>
+
+
+
+<div class="modal-footer text-right">
+    <button class="btn btn-def-white btn-custom-white" data-dismiss="modal">CLOSE</button>
+    @if($time_keeping_approved == false)
+        <button class="btn btn-primary approve-timesheet-btn">MARK READY</button>
+    @else
+        <button class="btn btn-primary">MAKE ADJUSTMENT</button>
+    @endif
+</div>
+
+<script type="text/javascript" src="/assets/member/payroll/js/timesheet_income_summary.js"></script>
+{!! dd($cutoff_breakdown) !!}

@@ -79,11 +79,8 @@ class Payroll2
 				$time_out_minutes = ($time_out_minutes[0]*60) + ($time_out_minutes[1]);
 				$missed_shift=true;
 
-
 				foreach($_shift as $shift)
 				{
-					
-	
 					echo $testing == true ?  "<hr><br><br>compare: Time (" . date("h:i A", strtotime($time->time_in)) . " - " . date("h:i A", strtotime($time->time_out)) . ") vs Shift (" . date("h:i A", strtotime($shift->shift_in)) . "-" . date("h:i A", strtotime($shift->shift_out)) . ")<br>" : "";
 					//explode(":", $shift->shift_in)
 					$shift_in_minutes 	= explode(":", $shift->shift_in);
@@ -2109,7 +2106,866 @@ class Payroll2
 
 	}
 	
-	
+	/* COMPUTE CUTOFF BREAKDOWN - BY GUILLERMO TABLIGAN */
+	public static function cutoff_breakdown($payroll_period_company_id, $employee_id, $cutoff_compute, $data)
+	{
+		$return = new stdClass();
+
+		$data["employee_id"] 		= $employee_id;
+		$data["employee"]			= Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->first();
+
+
+		/* GET PERIOD DETAILS */
+		$data["date_query"] 			= $date_query 			= Tbl_payroll_period_company::sel($payroll_period_company_id)->first();
+		$data["start_date"] 			= $start_date 			= $date_query->payroll_period_start;
+		$data["end_date"] 				= $end_date 			= $date_query->payroll_period_end;
+		$data["period_category"] 		= $period_category 		= $date_query->payroll_period_category;
+
+		/* GET PAYROLL GROUP INFORMATION */
+		$data["group"] 					= $group 				= Tbl_payroll_employee_contract::selemployee($employee_id, $start_date)->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')->first();
+		$data["salary"] 				= $salary 				= Tbl_payroll_employee_salary::selemployee($employee_id, $start_date)->first();
+		$data["shop_id"]				= $shop_id				= $group->shop_id;
+
+		/* GET PERIOD CATEGORY ARR */
+		$data["period_category_arr"] 	= $period_category_arr	= Payroll::getperiodcount($shop_id, $end_date, $period_category, $start_date);
+
+
+		/* BREAKDOWN MODE */
+		$return->_breakdown = array();
+
+		$return = Payroll2::cutoff_breakdown_additions($return, $data);
+		$return = Payroll2::cutoff_breakdown_deductions($return, $data); //meron bang non-taxable deduction?? lol
+		$return = Payroll2::cutoff_breakdown_taxable_allowances($return, $data);
+		$return = Payroll2::cutoff_breakdown_non_taxable_allowances($return, $data);
+		$return = Payroll2::cutoff_breakdown_hidden_allowances($return, $data);
+		$return = Payroll2::cutoff_breakdown_compute_gross_pay($return, $data);
+		$return = Payroll2::cutoff_breakdown_government_contributions($return, $data);
+		$return = Payroll2::cutoff_breakdown_compute_taxable_salary($return, $data);
+		$return = Payroll2::cutoff_breakdown_compute_tax($return, $data);
+		$return = Payroll2::cutoff_breakdown_compute_net($return, $data);
+		return $return;
+	}
+	public static function cutoff_breakdown_to_tr($breakdown)
+	{
+		if($breakdown["mode"] == "plus")
+		{
+			$return = '<tr>
+                            <td colspan="7" class="text-right" style="opacity: 0.5">
+                                ADD: <span class="text-bold">' . strtoupper($breakdown["label"]) . "</span>" . (isset($breakdown["description"]) ? "<br>" . $breakdown["description"] : "") . '
+                            </td>
+                            
+                            <td class="text-right">
+                                ' . payroll_currency($breakdown["amount"]) . ' 
+                            </td>
+                        </tr>';
+		}
+		else
+		{
+			$return = '<tr>
+                            <td colspan="7" class="text-right" style="opacity: 0.5">
+                                LESS: <span class="text-bold">' . strtoupper($breakdown["label"]) . "</span>" . (isset($breakdown["description"]) ? "<br>" . $breakdown["description"] : "") . '
+                            </td>
+                            
+                            
+                            <td class="text-right" style="opacity: 0.5; color: red;">
+                                ' . payroll_currency($breakdown["amount"]) . ' 
+                            </td>
+                        </tr>';	
+        }
+
+		return $return;
+	}
+	public static function cutoff_breakdown_compute_net($return, $data)
+	{
+		extract($data);
+
+		$return->net_pay_total = $return->taxable_salary_total;
+		$return->_net_pay_breakdown = array();
+		
+		foreach($return->_breakdown as $breakdown)
+		{
+			if($breakdown["add.net_pay"] == true)
+			{
+				$return->net_pay_total += $breakdown["amount"];
+				$breakdown["mode"] = "plus";
+				$breakdown["tr"] = Payroll2::cutoff_breakdown_to_tr($breakdown);
+				array_push($return->_net_pay_breakdown, $breakdown);	
+			}
+
+			if($breakdown["deduct.net_pay"] == true)
+			{
+				$return->net_pay_total -= $breakdown["amount"];
+				$breakdown["mode"] = "minus";
+				$breakdown["tr"] = Payroll2::cutoff_breakdown_to_tr($breakdown);
+				array_push($return->_net_pay_breakdown, $breakdown);	
+			}
+			
+		}		
+
+		return $return;
+	}
+	public static function cutoff_breakdown_compute_tax($return, $data)
+	{
+		extract($data);
+
+		/* GET INITIAL SETTINGS */
+		$payroll_period_category = $date_query->payroll_period_category; //Semi-monthly, Monthly, Weekly, Daily
+		$period_count = $date_query->period_count; //first_period, last_period, middle_period
+		$period_month = $date_query->month_contribution; //calendar month (in word - January to December)
+		$period_year = $date_query->year_contribution; //calendar year
+
+		$tax_period = $group->payroll_group_tax; //Every Period, First Period, Last Period
+		$tax_reference = $group->tax_reference;
+		$tax_declared = $salary->payroll_employee_salary_taxable;
+		$payroll_period_company_id = $date_query->payroll_period_company_id;
+		$payroll_company_id = $date_query->payroll_company_id;
+
+
+		if($tax_reference == "declared") //IF REFERENCE IS DECLARED (check tax table for monthly and just divide by two IF every period)
+		{
+			$tax = Payroll::tax_contribution($shop_id, $tax_declared, $employee->payroll_employee_tax_status, "Monthly");	
+			$tax_description = payroll_currency($tax_declared) . " declared TAX Salary (" . $employee->payroll_employee_tax_status . ")";
+
+			if($tax_period == "Every Period") //DIVIDE CONTRIBUTION IF EVERY PERIOD
+			{
+				if($payroll_period_category == "Semi-monthly")
+				{
+					$divisor = 2;
+					$tax_description .= "<br> SEMI MONTHLY (EVERY PERIOD) - TAX which is " . payroll_currency($tax) . " was divided by two.";
+				}
+				elseif($payroll_period_category == "Weekly")
+				{				
+					$divisor = 4;
+					$tax_description .= "<br> WEEKLY (EVERY PERIOD) - TAX which is " . payroll_currency($tax) . " was divided by four.";
+				}
+				else
+				{
+					$divisor = 1;
+				}
+
+				/* TAX DIVISOR */
+				$tax = $tax / $divisor;
+			}
+			else
+			{
+				$tax_description .= "<br> SSS Contribution is processed only during " . $tax_period . ".";
+
+				if($tax_period == code_to_word($period_count))
+				{
+					$tax_reference_amount = $tax_declared;
+					$tax_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
+					$tax = $tax;
+				}
+				else
+				{
+					$tax_reference_amount = 0;
+					$tax_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
+					$tax = 0;
+				}
+			}
+		}
+		else //BASED ON TAXABLE SALARY
+		{
+			if($tax_period == "Every Period") //DIVIDE CONTRIBUTION IF EVERY PERIOD
+			{
+				$tax_reference_amount = $return->taxable_salary_total;
+				$tax_description = "(Every Period Compute) Tax Table for " . $payroll_period_category . " with amount of " . payroll_currency($tax_reference_amount) . " (" . $employee->payroll_employee_tax_status . ").";
+				$tax = Payroll::tax_contribution($shop_id, $tax_reference_amount, $employee->payroll_employee_tax_status, $payroll_period_category);
+			}
+			elseif($tax_period == "Last Period")
+			{
+				$tax_reference_amount = $return->taxable_salary_total;
+
+				if(code_to_word($period_count) == "Last Period")
+				{
+					$_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();
+					
+					$tax_description = "Computation for Last Period's Taxable Salary";
+
+					if(count($_cutoff) > 0)
+					{
+						foreach($_cutoff as $cutoff)
+						{
+							$tax_reference_amount = $tax_reference_amount + $cutoff->taxable_salary;
+							$tax_description .= "<br> Add Previous Cutoff " . payroll_currency($cutoff->taxable_salary) . " and the new amount will be " . payroll_currency($tax_reference_amount);
+						}
+					}
+
+					$tax_description .= "<br>Last Period Computation - Tax Table for Monthly with amount of " . payroll_currency($tax_reference_amount) . " (" . $employee->payroll_employee_tax_status . ").";
+					$tax = Payroll::tax_contribution($shop_id, $tax_reference_amount, $employee->payroll_employee_tax_status, "Monthly");
+				}
+				else
+				{
+					$tax_reference_amount = $return->taxable_salary_total;
+					$tax_description = "Tax Computation only happens during LAST PERIOD. Currently in " . code_to_word($period_count);
+					$tax = 0;
+				}
+			}
+			else
+			{
+				dd("System Error Code 587893. Tax Period (" .  $tax_period . ") is invalid.");
+			}
+		}
+
+
+
+		$val["label"] = "Witholding Tax";
+		$val["description"] = $tax_description;
+		$val["type"] = "tax";
+		$val["amount"] = $tax;
+		$val["add.gross_pay"] = false;
+		$val["deduct.gross_pay"] = false;
+		$val["add.taxable_salary"] = false;
+		$val["deduct.taxable_salary"] = false;
+		$val["add.net_pay"] = false;
+		$val["deduct.net_pay"] = true;
+		array_push($return->_breakdown, $val);
+		$val = null;			
+
+		return $return;
+	}
+	public static function cutoff_breakdown_compute_gross_pay($return, $data)
+	{
+		extract($data);
+
+		$return->basic_pay_total = $cutoff_compute->cutoff_basic;
+		$return->gross_pay_total = $cutoff_compute->cutoff_basic;
+		$return->_gross_pay_breakdown = array();
+		
+		foreach($return->_breakdown as $breakdown)
+		{
+			if($breakdown["add.gross_pay"] == true)
+			{
+				$return->gross_pay_total += $breakdown["amount"];
+				$breakdown["mode"] = "plus";
+				$breakdown["tr"] = Payroll2::cutoff_breakdown_to_tr($breakdown);
+				array_push($return->_gross_pay_breakdown, $breakdown);	
+			}
+
+			if($breakdown["deduct.gross_pay"] == true)
+			{
+				$return->gross_pay_total -= $breakdown["amount"];
+				$breakdown["mode"] = "minus";
+				$breakdown["tr"] = Payroll2::cutoff_breakdown_to_tr($breakdown);
+				array_push($return->_gross_pay_breakdown, $breakdown);	
+			}
+			
+		}
+
+		return $return;
+	}
+	public static function cutoff_breakdown_compute_taxable_salary($return, $data)
+	{
+		extract($data);
+		$return->taxable_salary_total = $return->gross_pay_total;
+		$return->_taxable_salary_breakdown = array();
+		
+		foreach($return->_breakdown as $breakdown)
+		{
+			if($breakdown["add.taxable_salary"] == true)
+			{
+				$return->taxable_salary_total += $breakdown["amount"];
+				$breakdown["mode"] = "plus";
+				$breakdown["tr"] = Payroll2::cutoff_breakdown_to_tr($breakdown);
+				array_push($return->_taxable_salary_breakdown, $breakdown);	
+			}
+
+			if($breakdown["deduct.taxable_salary"] == true)
+			{
+				$return->taxable_salary_total -= $breakdown["amount"];
+				$breakdown["mode"] = "minus";
+				$breakdown["tr"] = Payroll2::cutoff_breakdown_to_tr($breakdown);
+				array_push($return->_taxable_salary_breakdown, $breakdown);	
+			}
+		}
+
+		return $return;
+	}
+
+	public static function cutoff_breakdown_government_contributions($return, $data)
+	{
+		extract($data);
+
+		/* GET INITIAL SETTINGS */
+		$payroll_period_category = $date_query->payroll_period_category; //Semi-monthly, Monthly, Weekly, Daily
+		$period_count = $date_query->period_count; //first_period, last_period, middle_period
+		$period_month = $date_query->month_contribution; //calendar month (in word - January to December)
+		$period_year = $date_query->year_contribution; //calendar year
+		$sss_period = $group->payroll_group_sss; //Every Period, First Period, Last Period
+		$sss_reference = $group->sss_reference;
+		$sss_declared = $salary->payroll_employee_salary_sss;
+		$philhealth_period = $group->payroll_group_philhealth; //Every Period, First Period, Last Period
+		$philhealth_reference = $group->philhealth_reference;
+		$philhealth_declared =  $salary->payroll_employee_salary_philhealth;
+		$pagibig_period = $group->payroll_group_pagibig; //Every Period, First Period, Last Period
+		$pagibig_reference = $group->pagibig_reference;
+		$pagibig_declared =  $salary->payroll_employee_salary_pagibig;
+		$payroll_period_company_id = $date_query->payroll_period_company_id;
+		$payroll_company_id = $date_query->payroll_company_id;
+
+
+		/* SSS COMPUTATION */
+		$sss_description = "";	
+		if($sss_reference == "declared") //IF REFERENCE IS DECLARED (check tax table for monthly and just divide by two IF every period)
+		{
+			$sss_contribution = Payroll::sss_contribution($shop_id, $sss_declared);
+			$sss_description = payroll_currency($sss_declared) . " declared SSS Salary";
+
+			if($sss_period == "Every Period") //DIVIDE CONTRIBUTION IF EVERY PERIOD
+			{
+				$sss_reference_amount = $sss_declared;
+
+				if($payroll_period_category == "Semi-monthly")
+				{
+					$divisor = 2;
+					$sss_description .= "<br> SEMI MONTHLY (EVERY PERIOD) - SSS Contribution which is " . payroll_currency($sss_contribution["ee"]) . " was divided by two.";
+				}
+				elseif($payroll_period_category == "Weekly")
+				{				
+					$divisor = 4;
+					$sss_description .= "<br> WEEKLY (EVERY PERIOD) - SSS Contribution which is " . payroll_currency($sss_contribution["ee"]) . " was divided by four.";
+				}
+				else
+				{
+					$divisor = 1;
+				}
+
+				/* CHECK EXCEED MONTH */
+				$_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();
+				$total_cutoff = 0;
+				foreach($_cutoff as $cutoff)
+				{
+					$total_cutoff += $cutoff->sss_ee;
+				}
+
+				if($total_cutoff >= $sss_contribution["ee"])
+				{
+					$sss_description .= "<br> EE, ER and EC converted to zero in order to not exceed monthly contribution.";
+					$sss_contribution["ee"] = 0;
+					$sss_contribution["er"] = 0;
+					$sss_contribution["ec"] = 0;
+				}
+				else
+				{
+					$sss_contribution["ee"] = $sss_contribution["ee"] / $divisor;
+					$sss_contribution["er"] = $sss_contribution["er"] / $divisor;
+					$sss_contribution["ec"] = $sss_contribution["ec"] / $divisor;
+				}
+			}
+			else
+			{
+				$sss_description .= "<br> SSS Contribution is processed only during " . $sss_period . ".";
+
+				if($sss_period == code_to_word($period_count))
+				{
+					$sss_reference_amount = $sss_declared;
+					$sss_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
+					$sss_contribution["ee"] = $sss_contribution["ee"];
+					$sss_contribution["er"] = $sss_contribution["er"];
+					$sss_contribution["ec"] = $sss_contribution["ec"];
+				}
+				else
+				{
+					$sss_reference_amount = 0;
+					$sss_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
+					$sss_contribution["ee"] = 0;
+					$sss_contribution["er"] = 0;
+					$sss_contribution["ec"] = 0;
+				}
+			}
+
+			/* TODO: IF SSS CONTRIBUTION FOR DECLARED EXCEED 4 PAYROLL PERIOD - THE SSS CONTRIBUTION SHOULD BE ZERO */
+		}
+		else //BASED ON GROSS OR NET BASIC PAY
+		{
+			$sss_reference_amount = $return->gross_pay_total;
+			$sss_description = payroll_currency($return->gross_pay_total) . " Gross Salary for this cutoff.";
+
+			if($sss_period == "Every Period") //DIVIDE CONTRIBUTION IF EVERY PERIOD
+			{
+				$sss_description .= "<br> SSS Contribution is processed every period.";
+
+				/* CHECK LAST CUTOFF OF THIS MONTH SSS CONTRIBUTION */
+				if(code_to_word($period_count) == "1st Period")
+				{
+					$sss_description .= "<br> 1st Period of the Month. No need to refer to previous cutoff.";
+					$sss_contribution = Payroll::sss_contribution($shop_id, $sss_reference_amount);
+				}
+				else
+				{
+					$last_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->first();
+					
+					if($last_cutoff)
+					{
+						$sss_description .= "<br> Using previous cutoff as reference, previous SSS Salary used is " . payroll_currency($last_cutoff->sss_salary) . " (" . payroll_currency($last_cutoff->sss_ee) . ")";
+						$sss_reference_amount = $sss_reference_amount + $last_cutoff->sss_salary;
+						$sss_description .= "<br> Adding previous cutoff reference the output is " . payroll_currency($sss_reference_amount);
+						$sss_contribution = Payroll::sss_contribution($shop_id, $sss_reference_amount);
+						$sss_description .= "<br> New SSS Bracket falls to " . payroll_currency($sss_contribution["ee"]);
+						$sss_description .= "<br> NEW BRACKET (" . payroll_currency($sss_contribution["ee"]) . ") LESS PREVIOUS CUTOFF (" . payroll_currency($last_cutoff->sss_ee) . ")";
+						$sss_contribution["ee"] = $sss_contribution["ee"] - $last_cutoff->sss_ee;
+						$sss_contribution["er"] = $sss_contribution["er"] - $last_cutoff->sss_er;
+						$last_cutoff->sss_salary;
+					}
+					else
+					{
+						dd("Warning! This is not the 1st period of the month and the system can't find reference period for the month of $period_month($period_year)");
+					}
+				}
+				
+			}
+			else
+			{
+				$sss_description .= "<br> SSS Contribution is processed only during " . $sss_period . ".";
+
+				if($sss_period == code_to_word($period_count))
+				{
+					$sss_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
+
+					if($sss_period == "1st Period")
+					{
+						dd("ERROR: 1st Period is only allowed if SALARY is DECLARRED");
+						$sss_contribution = Payroll::sss_contribution($shop_id, $sss_reference_amount);
+					}
+					else
+					{
+						$_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();
+						
+						if(count($_cutoff) > 0)
+						{
+							foreach($_cutoff as $cutoff)
+							{
+									$sss_reference_amount = $sss_reference_amount + $cutoff->sss_salary;
+									$sss_description .= "<br> Add Previous Cutoff " . payroll_currency($cutoff->sss_salary) . " and the new amount will be " . payroll_currency($sss_reference_amount);
+							}
+						}
+
+						$sss_contribution = Payroll::sss_contribution($shop_id, $sss_reference_amount);
+					}
+				}
+				else
+				{
+					$sss_reference_amount = $sss_reference_amount;
+					$sss_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
+					$sss_contribution["ee"] = 0;
+					$sss_contribution["er"] = 0;
+					$sss_contribution["ec"] = 0;
+				}
+			}
+		}
+
+		/* PHILHEALTH COMPUTATION */	
+		if($philhealth_reference == "declared") //IF REFERENCE IS DECLARED (check tax table for monthly and just divide by two IF every period)
+		{
+			
+			$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_declared);
+			$philhealth_description = payroll_currency($philhealth_declared) . " declared PHILHEALTH Salary";
+
+			if($philhealth_period == "Every Period") //DIVIDE CONTRIBUTION IF EVERY PERIOD
+			{
+				$philhealth_reference_amount = $philhealth_declared;
+
+				if($payroll_period_category == "Semi-monthly")
+				{
+					$divisor = 2;
+					$philhealth_description .= "<br> SEMI MONTHLY (EVERY PERIOD) - PHILHEALTH Contribution which is " . payroll_currency($philhealth_contribution["ee"]) . " was divided by two.";
+				}
+				elseif($payroll_period_category == "Weekly")
+				{				
+					$divisor = 4;
+					$philhealth_description .= "<br> WEEKLY (EVERY PERIOD) - PHILHEALTH Contribution which is " . payroll_currency($philhealth_contribution["ee"]) . " was divided by four.";
+				}
+				else
+				{
+					$divisor = 1;
+				}
+
+				/* CHECK EXCEED MONTH */
+				$_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();
+				$total_cutoff = 0;
+				foreach($_cutoff as $cutoff)
+				{
+					$total_cutoff += $cutoff->philhealth_ee;
+				}
+
+				if($total_cutoff >= $philhealth_contribution["ee"])
+				{
+					$philhealth_description .= "<br> EE and ER converted to zero in order to not exceed monthly contribution.";
+					$philhealth_contribution["ee"] = 0;
+					$philhealth_contribution["er"] = 0;
+				}
+				else
+				{
+					$philhealth_contribution["ee"] = $philhealth_contribution["ee"] / $divisor;
+					$philhealth_contribution["er"] = $philhealth_contribution["er"] / $divisor;
+				}
+
+
+			}
+			else
+			{
+				$philhealth_description .= "<br> PHILHEALTH Contribution is processed only during " . $philhealth_period . ".";
+
+				if($philhealth_period == code_to_word($period_count))
+				{
+					$philhealth_reference_amount = $philhealth_declared;
+					$philhealth_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
+					$philhealth_contribution["ee"] = $philhealth_contribution["ee"];
+					$philhealth_contribution["er"] = $philhealth_contribution["er"];
+				}
+				else
+				{
+					$philhealth_reference_amount = 0;
+					$philhealth_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
+					$philhealth_contribution["ee"] = 0;
+					$philhealth_contribution["er"] = 0;
+				}
+			}
+		}
+		else //BASED ON GROSS OR NET BASIC PAY
+		{
+			$philhealth_reference_amount = $return->gross_pay_total;
+			$philhealth_description = payroll_currency($return->gross_pay_total) . " Gross Salary for this cutoff.";
+
+			if($philhealth_period == "Every Period") //DIVIDE CONTRIBUTION IF EVERY PERIOD
+			{
+				$philhealth_description .= "<br> PHILHEALTH Contribution is processed every period.";
+
+				/* CHECK LAST CUTOFF OF THIS MONTH philhealth CONTRIBUTION */
+				if(code_to_word($period_count) == "1st Period")
+				{
+					$philhealth_description .= "<br> 1st Period of the Month. No need to refer to previous cutoff.";
+					$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_reference_amount);
+				}
+				else
+				{
+					$last_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->first();
+					
+					if($last_cutoff)
+					{
+						$philhealth_description .= "<br> Using previous cutoff as reference, previous PHILHEALTH Salary used is " . payroll_currency($last_cutoff->phihealth_salary) . " (" . payroll_currency($last_cutoff->philhealth_ee) . ")";
+						$philhealth_reference_amount = $philhealth_reference_amount + $last_cutoff->phihealth_salary;
+						$philhealth_description .= "<br> Adding previous cutoff reference the output is " . payroll_currency($philhealth_reference_amount);
+						$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_reference_amount);
+						$philhealth_description .= "<br> New PHILHEALTH Bracket falls to " . payroll_currency($philhealth_contribution["ee"]);
+						$philhealth_description .= "<br> NEW BRACKET (" . payroll_currency($philhealth_contribution["ee"]) . ") LESS PREVIOUS CUTOFF (" . payroll_currency($last_cutoff->philhealth_ee) . ")";
+						$philhealth_contribution["ee"] = $philhealth_contribution["ee"] - $last_cutoff->philhealth_ee;
+						$philhealth_contribution["er"] = $philhealth_contribution["er"] - $last_cutoff->philhealth_er;
+						$last_cutoff->phihealth_salary;
+					}
+					else
+					{
+						dd("Warning! This is not the 1st period of the month and the system can't find reference period for the month of $period_month($period_year).");
+					}
+				}
+				
+			}
+			else
+			{
+				$philhealth_description .= "<br> PHILHEALTH Contribution is processed only during " . $philhealth_period . ".";
+
+				if($philhealth_period == code_to_word($period_count))
+				{
+					$philhealth_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
+
+					if($philhealth_period == "1st Period")
+					{
+						dd("ERROR: 1st Period is only allowed if SALARY is DECLARRED");
+						$philhealth_contribution = Payroll::sss_contribution($shop_id, $sss_reference_amount);
+					}
+					else
+					{
+						$_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();
+						
+						if(count($_cutoff) > 0)
+						{
+							foreach($_cutoff as $cutoff)
+							{
+								$philhealth_reference_amount = $philhealth_reference_amount + $cutoff->phihealth_salary;
+								$philhealth_description .= "<br> Add Previous Cutoff " . payroll_currency($cutoff->phihealth_salary) . " and the new amount will be " . payroll_currency($philhealth_reference_amount);
+							}
+						}
+
+						$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $sss_reference_amount);
+					}
+				}
+				else
+				{
+					$philhealth_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
+					$philhealth_contribution["ee"] = 0;
+					$philhealth_contribution["er"] = 0;
+					$philhealth_contribution["ec"] = 0;
+				}
+			}
+		}
+
+
+
+
+		/* PAG-IBIG COMPUTATION */	
+		$pagibig_reference_amount = $pagibig_declared;
+		$pagibig_contribution["ee"] = $pagibig_declared;
+		$pagibig_contribution["er"] = $pagibig_declared;
+		$pagibig_description = payroll_currency($pagibig_declared) . " declared PAGIBIG Contribution";
+
+		if($pagibig_period == "Every Period") //DIVIDE CONTRIBUTION IF EVERY PERIOD
+		{
+			if($payroll_period_category == "Semi-monthly")
+			{
+				$divisor = 2;
+				$pagibig_description .= "<br> SEMI MONTHLY (EVERY PERIOD) - PAGIBIG Contribution which is " . payroll_currency($pagibig_contribution["ee"]) . " was divided by two.";
+			}
+			elseif($payroll_period_category == "Weekly")
+			{				
+				$divisor = 4;
+				$pagibig_description .= "<br> WEEKLY (EVERY PERIOD) - PAGIBIG Contribution which is " . payroll_currency($pagibig_contribution["ee"]) . " was divided by four.";
+			}
+			else
+			{
+				$divisor = 1;
+			}
+
+
+			/* CHECK EXCEED MONTH */
+			$_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();
+			$total_cutoff = 0;
+			foreach($_cutoff as $cutoff)
+			{
+				$total_cutoff += $cutoff->pagibig_ee;
+			}
+
+			if($total_cutoff >= $pagibig_contribution["ee"])
+			{
+				$pagibig_description .= "<br> EE and ER converted to zero in order to not exceed monthly contribution.";
+				$pagibig_contribution["ee"] = 0;
+				$pagibig_contribution["er"] = 0;
+			}
+			else
+			{
+				$pagibig_contribution["ee"] = $pagibig_contribution["ee"] / $divisor;
+				$pagibig_contribution["er"] = $pagibig_contribution["er"] / $divisor;
+			}
+		}
+		else
+		{
+			$pagibig_description .= "<br> PAGIBIG Contribution is processed only during " . $pagibig_period . ".";
+
+			if($pagibig_period == code_to_word($period_count))
+			{
+				$pagibig_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
+				$pagibig_contribution["ee"] = $pagibig_contribution["ee"];
+				$pagibig_contribution["er"] = $pagibig_contribution["er"];
+			}
+			else
+			{
+				$pagibig_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
+				$pagibig_contribution["ee"] = 0;
+				$pagibig_contribution["er"] = 0;
+			}
+		}
+
+		$val["label"] = "SSS EE";
+		$val["description"] = $sss_description;
+		$val["type"] = "government_contributions";
+		$val["amount"] = $sss_contribution["ee"];
+		$val["add.gross_pay"] = false;
+		$val["deduct.gross_pay"] = false;
+		$val["add.taxable_salary"] = false;
+		$val["deduct.taxable_salary"] = true;
+		$val["add.net_pay"] = false;
+		$val["deduct.net_pay"] = false;
+		array_push($return->_breakdown, $val);
+		$val = null;
+
+		$val["label"] = "SSS ER";
+		$val["type"] = "government_contributions";
+		$val["amount"] = $sss_contribution["er"];			
+		$val["add.gross_pay"] = false;
+		$val["deduct.gross_pay"] = false;
+		$val["add.taxable_salary"] = false;
+		$val["deduct.taxable_salary"] = false;
+		$val["add.net_pay"] = false;
+		$val["deduct.net_pay"] = false;
+		array_push($return->_breakdown, $val);
+		$val = null;
+
+		$val["label"] = "SSS EC";
+		$val["type"] = "government_contributions";
+		$val["amount"] = $sss_contribution["ec"];			
+		$val["add.gross_pay"] = false;
+		$val["deduct.gross_pay"] = false;
+		$val["add.taxable_salary"] = false;
+		$val["deduct.taxable_salary"] = false;
+		$val["add.net_pay"] = false;
+		$val["deduct.net_pay"] = false;
+		array_push($return->_breakdown, $val);
+		$val = null;
+
+		$val["label"] = "PHILHEALTH EE";
+		$val["type"] = "government_contributions";
+		$val["description"] = $philhealth_description;
+		$val["amount"] = $philhealth_contribution["ee"];
+		$val["add.gross_pay"] = false;
+		$val["deduct.gross_pay"] = false;
+		$val["add.taxable_salary"] = false;
+		$val["deduct.taxable_salary"] = true;
+		$val["add.net_pay"] = false;
+		$val["deduct.net_pay"] = false;
+		array_push($return->_breakdown, $val);
+		$val = null;
+
+		$val["label"] = "PHILHEALTH ER";
+		$val["type"] = "government_contributions";
+		$val["amount"] = $philhealth_contribution["er"];			
+		$val["add.gross_pay"] = false;
+		$val["deduct.gross_pay"] = false;
+		$val["add.taxable_salary"] = false;
+		$val["deduct.taxable_salary"] = false;
+		$val["add.net_pay"] = false;
+		$val["deduct.net_pay"] = false;
+		array_push($return->_breakdown, $val);
+		$val = null;
+
+		$val["label"] = "PAGIBIG EE";
+		$val["type"] = "government_contributions";
+		$val["description"] = $pagibig_description;
+		$val["amount"] = $pagibig_contribution["ee"];
+		$val["add.gross_pay"] = false;
+		$val["deduct.gross_pay"] = false;
+		$val["add.taxable_salary"] = false;
+		$val["deduct.taxable_salary"] = true;
+		$val["add.net_pay"] = false;
+		$val["deduct.net_pay"] = false;
+		array_push($return->_breakdown, $val);
+		$val = null;
+
+		$val["label"] = "PAGIBIG ER";
+		$val["type"] = "government_contributions";
+		$val["amount"] = $pagibig_contribution["er"];			
+		$val["add.gross_pay"] = false;
+		$val["deduct.gross_pay"] = false;
+		$val["add.taxable_salary"] = false;
+		$val["deduct.taxable_salary"] = false;
+		$val["add.net_pay"] = false;
+		$val["deduct.net_pay"] = false;
+		array_push($return->_breakdown, $val);
+		$val = null;
+
+		$return->sss_contribution = $sss_contribution;
+		$return->pagibig_contribution = $pagibig_contribution;
+		$return->philhealth_contribution = $philhealth_contribution;
+		$return->sss_contribution["salary"] = $sss_reference_amount;
+		$return->philhealth_contribution["salary"] = $philhealth_reference_amount;
+		$return->pagibig_contribution["salary"] = $pagibig_reference_amount;
+		return $return;
+	}
+	public static function cutoff_breakdown_non_taxable_allowances($return, $data)
+	{
+		extract($data);
+		$allowances 		= Payroll2::get_allowance($employee_id, $cutoff_compute->render_days);
+
+		if(isset($allowances["obj"]))
+		{
+			if(count($allowances["obj"]) > 0)
+			{
+				foreach($allowances["obj"] as $breakdown)
+				{
+					$val["label"] = $breakdown["name"];
+					$val["type"] = "non_taxable_allowance";
+					$val["amount"] = $breakdown["amount"];
+					$val["add.gross_pay"] = true;
+					$val["deduct.gross_pay"] = false;
+					$val["add.taxable_salary"] = false;
+					$val["deduct.taxable_salary"] = true;
+					$val["add.net_pay"] = true;
+					$val["deduct.net_pay"] = false;
+					array_push($return->_breakdown, $val);
+					$val = null;
+				}
+			}
+		}
+
+		return $return;
+	}
+	public static function cutoff_breakdown_hidden_allowances($return, $data)
+	{
+		extract($data);
+		return $return;
+	}
+	public static function cutoff_breakdown_taxable_allowances($return, $data)
+	{
+		extract($data);
+		return $return;
+	}
+	public static function cutoff_breakdown_additions($return, $data)
+	{
+		if(isset($data["cutoff_compute"]->_breakdown_addition_summary))
+		{
+			foreach($data["cutoff_compute"]->_breakdown_addition_summary as $key => $breakdown)
+			{
+				$val["label"] = $key;
+				$val["type"] = "additions";
+				$val["amount"] = $breakdown;
+				$val["add.gross_pay"] = true;
+				$val["deduct.gross_pay"] = false;
+				$val["add.taxable_salary"] = false;
+				$val["deduct.taxable_salary"] = false;
+				$val["add.net_pay"] = false;
+				$val["deduct.net_pay"] = false;
+				array_push($return->_breakdown, $val);
+				$val = null;
+			}
+		}
+
+		return $return;
+	}
+	public static function cutoff_breakdown_deductions($return, $data)
+	{
+		extract($data);
+
+		/* AGENCY DEDUCTION */
+		if($group->payroll_group_agency == Payroll::return_ave($period_category))
+		{
+			$val["label"] = "Agency Fee";
+			$val["type"] = "deductions";
+			$val["amount"] = $group->payroll_group_agency_fee;
+			$val["add.gross_pay"] = false;
+			$val["deduct.gross_pay"] = true;
+			$val["add.taxable_salary"] = false;
+			$val["deduct.taxable_salary"] = false;
+			$val["add.net_pay"] = false;
+			$val["deduct.net_pay"] = false;
+
+			array_push($return->_breakdown, $val);
+			$val = null;
+		}
+
+		$deduction = Payroll::getdeduction($employee_id, $start_date, $period_category_arr['period_category'], $period_category, $shop_id);
+
+		if(isset($deduction["deduction"]))
+		{
+			if(count($deduction["deduction"]) > 0)
+			{
+				foreach($deduction["deduction"] as $breakdown)
+				{
+					$val["label"] = $breakdown["deduction_name"];
+					$val["type"] = "deductions";
+					$val["amount"] = $breakdown["payroll_periodal_deduction"];
+					$val["add.gross_pay"] = false;
+					$val["deduct.gross_pay"] = true;
+					$val["add.taxable_salary"] = false;
+					$val["deduct.taxable_salary"] = false;
+					$val["add.net_pay"] = false;
+					$val["deduct.net_pay"] = false;
+			
+					array_push($return->_breakdown, $val);
+					$val = null;
+				}
+			}
+		}
+
+		return $return;
+	}
 	public static function cutoff_compute_break($payroll_period_company_id, $employee_id, $cutoff_compute)
 	{
 		$return 		= array();
@@ -2587,7 +3443,6 @@ class Payroll2
 					$data['pagibig_ee'] = $pagibig_contribution_def - $previous_pagibig;
 				}
 			}
-
 		}
 
 		else if($payroll_group_pagibig == $period_category)

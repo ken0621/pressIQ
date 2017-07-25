@@ -90,8 +90,7 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Cancel</button>
-    
-    <button class="btn btn-primary btn-custom-primary approve-timesheet-btn" type="button">{{ $time_keeping_approved == true ? "RETURN TO PENDING" : "APPROVE" }}</button>
+    <button class="btn btn-primary btn-custom-primary approve-timesheet-btn" type="button">{{ $time_keeping_approved == true ? "RETURN TO PENDING" : "MARK AS READY" }}</button>
 </div>
 <script type="text/javascript" src="/assets/member/payroll/js/timesheet2.js"></script>
 <style type="text/css">

@@ -1,6 +1,6 @@
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">×</button>
-    <h4 class="modal-title"><b>MONTHLY COMPUTATION ({{ $period_info->month_contribution }} - {{ $period_info->period_count }})</b> </h4>
+    <h4 class="modal-title"><b>MONTHLY COMPUTATION ({{ $period_info->month_contribution }} - {{ code_to_word($period_info->period_count) }})</b> </h4>
 </div>
 <div class="modal-body clearfix">
     <div class="col-md-12" style="text-align: left; font-weight: normal; margin-bottom: 10px; font-size: 16px;"></div>
@@ -178,3 +178,4 @@
         </div>
     </div>
 </div>
+

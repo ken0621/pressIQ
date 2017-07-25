@@ -53,7 +53,7 @@
         <button type="button" class="btn btn-custom-white" data-dismiss="modal">Cancel</button>
         <div class="col-md-4 pull-right">
             <div class="input-group">
-                <input type="text" class="form-control int-format text-center" name="generate_count" value="1">
+                <input type="hidden" class="form-control int-format text-center" name="generate_count" value="1">
                 <span class="input-group-btn">
                     <button class="btn btn-custom-primary btn-save-modallarge" type="submit" data-url="">Generate</button>
                 </span>

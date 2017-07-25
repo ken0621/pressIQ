@@ -90,6 +90,12 @@
 		</div>
 		<div class="field">
 			<div class="col-md-3">
+				<div class="labels">Contact Number</div>
+			</div>
+			<div class="col-md-9"><input type="number" step="any" name="customer_mobile" class="form-control" value="{{ $customer->customer_mobile }}"></div>
+		</div>
+		<div class="field">
+			<div class="col-md-3">
 				<div class="labels">Address</div>
 			</div>
 			<div class="col-md-9"><input type="text" name="customer_street" class="form-control" value="{{ $customer->customer_street }}"></div>

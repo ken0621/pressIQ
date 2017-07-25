@@ -236,16 +236,21 @@
          <div class="content clearfix">
             @yield('content')
          </div>
-         @if(get_content($shop_theme_info, 'info', 'footer_ads'))
+
+         @if(get_content($shop_theme_info, 'info', 'footer_ads_multiple') && is_serialized(get_content($shop_theme_info, 'info', 'footer_ads_multiple')))
+         <?php
+             $random = array_rand(unserialize(get_content($shop_theme_info, 'info', 'footer_ads_multiple')));
+         ?>
          <div class="footer-add">
             <div class="footer-add-wrapper">
-               <a href="{{ get_content($shop_theme_info, 'info', 'footer_ads_link') }}" target="_blank">
-               <img src="{{ get_content($shop_theme_info, 'info', 'footer_ads') }}">
+               <a href="{{ unserialize(get_content($shop_theme_info, 'info', 'footer_ads_multiple'))[$random]['link'] }}" target="_blank">
+               <img src="{{ unserialize(get_content($shop_theme_info, 'info', 'footer_ads_multiple'))[$random]['image'] }}">
                </a>
                <div class="exit"><i class="fa fa-times"></i></div>
             </div>
          </div>
          @endif
+
          <div class="footer clear">
             <div class="container">
                <div class="footer-holder col-md-3 col-sm-6 first-border text-left match-height">

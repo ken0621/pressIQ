@@ -42,7 +42,7 @@
                                         <input type="text" name="info[{{ $keys }}][value]" class="form-control" value="{{ $info->default }}">
                                     </div>
                                     @elseif($info->type == "gallery")
-                                    <div class="match-height">
+                                    <div>
                                         <input type="hidden" name="info[{{ $keys }}][type]" value="{{ $info->type }}">
                                         <input class="image-value" key="{{ $keys }}" type="hidden" name="info[{{ $keys }}][value]" value="{{ $info->default }}">
                                         <button type="button" class="btn btn-primary remove-image" key="{{ $keys }}">Remove Images</button>
@@ -65,6 +65,39 @@
                                                 <div>
                                                     <div class="img-holder">
                                                         <img style="object-fit: contain; object-position: center;" class="img-responsive" src="{{ $value }}">
+                                                    </div>
+                                                </div>
+                                                @endforeach
+                                            @else
+                                            @endif
+                                        </div>
+                                    </div>
+                                    @elseif($info->type == "gallery_links")
+                                    <div>
+                                        <input type="hidden" class="type-content" key="{{ $keys }}" name="info[{{ $keys }}][type]" value="{{ $info->type }}">
+                                        <button type="button" class="btn btn-primary remove-image" key="{{ $keys }}">Remove Images</button>
+                                        <div class="gallery-list image-gallery link-css" key="{{ $keys }}">
+                                            @if(is_serialized($info->default))
+                                                @foreach(unserialize($info->default) as $serialize_key => $value)
+                                                <div>
+                                                    <div class="img-holder">
+                                                        <img style="object-fit: contain; object-position: center;" class="img-responsive" src="{{ $value['image'] }}">
+                                                        <input type="hidden" name="info[{{ $keys }}][value][{{ $serialize_key }}][image]" value="{{ $value['image'] }}">
+                                                    </div>
+                                                    <label>Link: </label>
+                                                    <input onClick="event.stopImmediatePropagation()" type="text" class="form-control input-link" name="info[{{ $keys }}][value][{{ $serialize_key }}][link]" value="{{ $value['link'] }}">
+                                                </div>
+                                                @endforeach
+                                            @else
+                                            <div class="empty-notify"><i class="fa fa-image"></i> No Image Yet</div>
+                                            @endif
+                                        </div>
+                                        <div class="slider-thumb" key="{{ $keys }}">
+                                            @if(is_serialized($info->default))
+                                                @foreach(unserialize($info->default) as $value)
+                                                <div>
+                                                    <div class="img-holder">
+                                                        <img style="object-fit: contain; object-position: center;" class="img-responsive" src="{{ $value['image'] }}">
                                                     </div>
                                                 </div>
                                                 @endforeach
@@ -314,6 +347,11 @@
 .mce-notification-warning
 {
     display: none;
+}
+
+.slick-list
+{
+    height: auto !important;
 }
 </style>
 

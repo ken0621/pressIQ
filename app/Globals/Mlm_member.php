@@ -402,6 +402,7 @@ class Mlm_member
 
         $shop_id     = $customer->shop_id;
         $customer_id = $customer->customer_id;
+        $shop        = Tbl_shop::where("shop_id",$shop_id)->first();
 
         $data = [];
 
@@ -420,7 +421,21 @@ class Mlm_member
                                               ->where('tbl_mlm_lead.lead_used', 0)
                                               ->first();
 
-        $data['_slots']    = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->customer()->get();
+        $data['_slots']           = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->customer()->get();
+        $data['_slots_sponse']    = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->customer()->get();
+
+        if($shop)
+        {
+            if($shop->shop_key == "alphaglobal")
+            {
+                $data['_slots_sponse']    = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->where("tbl_customer.customer_id",$customer_id)->customer()->get();
+            }
+        }
+
+
+
+
+
         $data["_no_slot_customer"] = Tbl_customer::where("tbl_customer.shop_id",$shop_id)
                                                  ->where("slot_id",null)
                                                  ->leftJoin("tbl_mlm_slot","slot_owner","=","tbl_customer.customer_id")

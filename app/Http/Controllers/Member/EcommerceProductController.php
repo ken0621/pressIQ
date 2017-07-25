@@ -885,7 +885,7 @@ class EcommerceProductController extends Member
 		$promo_price 		= str_replace(",","",Request::input('item_promo_price'));
 		$start_date 		= Request::input('item_start_date');
 		$end_date 			= Request::input('item_end_date');
-
+		
 		foreach($evariant_new_price as $key=>$new_price)
 		{
 			if($new_price > 0)

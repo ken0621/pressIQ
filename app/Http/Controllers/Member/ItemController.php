@@ -1776,6 +1776,9 @@ class ItemController extends Member
 		            {
 		               $update["archived"] = 1;
 		               Tbl_item::where("item_id",$id)->update($update);
+
+		               ItemSerial::archived_item_serial($id);
+		               
 					   $return["error"][0]  = "Successfully archived";
 					   $return["message"]   = "Sucess-archived";   
 		            }

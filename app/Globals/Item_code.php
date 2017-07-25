@@ -52,10 +52,10 @@ class Item_code
                     {
                         foreach($data['item_serial'][$value] as $key2 => $value2)
                         {
-                            $check_serial = Tbl_inventory_serial_number::where('serial_number', $value2)->where('item_consumed', 0)->count();
+                            $check_serial = Tbl_inventory_serial_number::where('serial_number', $value2)->where('item_consumed', 0)->where("archived",0)->count();
                             if($check_serial >= 1)
                             {
-                                $check_serial_first = Tbl_inventory_serial_number::where('serial_number', $value2)->where('item_consumed', 0)->first();
+                                $check_serial_first = Tbl_inventory_serial_number::where('serial_number', $value2)->where('item_consumed', 0)->where("archived",0)->first();
                                 // return $check_serial_first;
                                 if($check_serial_first->item_id == $value)
                                 {

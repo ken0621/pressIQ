@@ -414,18 +414,17 @@ class ShopCheckoutController extends Shop
                     $data['ec_order_load'] = 1;
                 }      
             }
-
+        
             if ($data["get_cart"]["new_account"] == false) 
             {
                 $data["shipping_address"] = DB::table("tbl_customer_address")->where("purpose", "shipping")
                                                                              ->where("customer_id", $data["get_cart"]["tbl_customer"]["customer_id"])
-                                                                             ->first();
-
+                                                                             ->first();                                                    
                 if ($data["shipping_address"]) 
                 {
-                    $data["shipping_address"]->state_id = isset(DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_state)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_state)->first()->locale_id : null;
-                    $data["shipping_address"]->city_id = isset(DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_city)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_city)->first()->locale_id : null;
-                    $data["shipping_address"]->zipcode_id = isset(DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_zipcode)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_zipcode)->first()->locale_id : null;
+                    $data["shipping_address"]->state_id = isset(DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->state_id)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->state_id)->first()->locale_id : null;
+                    $data["shipping_address"]->city_id = isset(DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->city_id)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->city_id)->first()->locale_id : null;
+                    $data["shipping_address"]->zipcode_id = isset(DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->barangay_id)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->barangay_id)->first()->locale_id : null;
                 }
                 else
                 {
@@ -436,7 +435,6 @@ class ShopCheckoutController extends Shop
             $data["customer"] = DB::table("tbl_customer")->leftJoin("tbl_customer_other_info", "tbl_customer.customer_id", "=", "tbl_customer_other_info.customer_id")
                                                          ->where("tbl_customer.customer_id", $data["get_cart"]["tbl_customer"]["customer_id"])
                                                          ->first();
-            
             return view("checkout", $data);
         }
         else
@@ -471,27 +469,27 @@ class ShopCheckoutController extends Shop
         // if ($data["get_cart"]["new_account"] == true) 
         // {
             // $validate["full_name"] = Request::input("full_name");
-            $validate["contact_number"] = Request::input("contact_number");
-            $validate["customer_state"] = Request::input("customer_state");
-            $validate["customer_city"] = Request::input("customer_city");
-            $validate["customer_zip"] = Request::input("customer_zip");
-            $validate["customer_street"] = Request::input("customer_street");
+            // $validate["contact_number"] = Request::input("contact_number");
+            // $validate["customer_state"] = Request::input("customer_state");
+            // $validate["customer_city"] = Request::input("customer_city");
+            // $validate["customer_zip"] = Request::input("customer_zip");
+            // $validate["customer_street"] = Request::input("customer_street");
 
             // $rules["full_name"] = 'required';
-            $rules["contact_number"] = 'required';
-            $rules["customer_state"] = 'required';
-            $rules["customer_city"] = 'required';
-            $rules["customer_zip"] = 'required';
-            $rules["customer_street"] = 'required';
+            // $rules["contact_number"] = 'required';
+            // $rules["customer_state"] = 'required';
+            // $rules["customer_city"] = 'required';
+            // $rules["customer_zip"] = 'required';
+            // $rules["customer_street"] = 'required';
 
-            $validator = Validator::make($validate, $rules);
+            // $validator = Validator::make($validate, $rules);
 
-            if ($validator->fails()) 
-            {
-                return Redirect::back()
-                            ->withErrors($validator)
-                            ->withInput();
-            }
+            // if ($validator->fails()) 
+            // {
+            //     return Redirect::back()
+            //                 ->withErrors($validator)
+            //                 ->withInput();
+            // }
         // } 
 
         /* SPLIT NAME TO FIRST NAME AND LAST NAME */
@@ -508,17 +506,23 @@ class ShopCheckoutController extends Shop
         $customer_info["shipping_city"] = Self::locale_id_to_name(Request::input("customer_city"));
         $customer_info["shipping_zip"] = Self::locale_id_to_name(Request::input("customer_zip"));
         $customer_info["shipping_street"] = Request::input("customer_street");
+        $customer_info['state_id'] = Request::input("customer_state");
+        $customer_info['city_id'] = Request::input("customer_city");
+        $customer_info['barangay_id'] = Request::input("customer_zip");
 
         $customer_info["billing_state"] = Self::locale_id_to_name(Request::input("billing_customer_state"));
         $customer_info["billing_city"] = Self::locale_id_to_name(Request::input("billing_customer_city"));
         $customer_info["billing_zip"] = Self::locale_id_to_name(Request::input("billing_customer_zip"));
         $customer_info["billing_street"] = Request::input("billing_customer_street");
+        $customer_info['billing_state_id'] = Request::input("billing_customer_state");
+        $customer_info['billing_city_id'] = Request::input("billing_customer_city");
+        $customer_info['billing_barangay_id'] = Request::input("billing_customer_zip");
 
         $customer_info['load_wallet']['ec_order_load'] = Request::input('ec_order_load');
         $customer_info['load_wallet']['ec_order_load_number'] = Request::input('ec_order_load_number');
 
         $customer_info['billing_equals_shipping'] = Request::input('billing_equals_shipping') !== null ? false : true;
-        // dd($customer_info);
+
         $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_shipping", "check_name"));
         
 
@@ -557,7 +561,14 @@ class ShopCheckoutController extends Shop
             $data["page"]            = "Checkout Payment";
             $data["_payment_method"] = $this->get_payment_method();
             $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
-            return view("checkout_payment", $data);  
+            if($data["get_cart"]['cart'])
+            {
+                return view("checkout_payment", $data);
+            }
+            else
+            {
+                return Redirect::to("/checkout/#cart");
+            }
         }
     }
 

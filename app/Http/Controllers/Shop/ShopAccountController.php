@@ -19,6 +19,7 @@ use App\Models\Tbl_membership_code;
 use App\Models\Tbl_mlm_encashment_settings;
 use App\Models\Tbl_ec_order;
 use App\Models\Tbl_ec_order_item;
+use App\Models\Tbl_customer_other_info;
 
 use App\Globals\Mlm_member;
 use App\Globals\Settings;
@@ -182,6 +183,15 @@ class ShopAccountController extends Shop
 
         $data["page"] = "Settings";
         $data["customer"] = Tbl_customer::where('tbl_customer.customer_id', Self::$customer_id)->info()->first();
+
+         $data["shipping_address"] = DB::table("tbl_customer_address")->where("purpose", "shipping")
+                                                                             ->where("customer_id", Self::$customer_id)
+                                                                             ->first();
+
+        $data["shipping_address"]->state_id = isset(DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->state_id)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->state_id)->first()->locale_id : null;
+        $data["shipping_address"]->city_id = isset(DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->city_id)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->city_id)->first()->locale_id : null;
+        $data["shipping_address"]->zipcode_id = isset(DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->barangay_id)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->barangay_id)->first()->locale_id : null;
+        
         return view("account_settings", $data);
     }
     public function settings_submit()
@@ -211,13 +221,26 @@ class ShopAccountController extends Shop
 
         Tbl_customer::where('customer_id', Self::$customer_id)->update($update);
 
+        $customer_state = Request::input('customer_state');    
+        $customer_zip = Request::input('customer_zip');        
+        $customer_city = Request::input('customer_city');
+
+        $state = isset(DB::table("tbl_locale")->where("locale_id", $customer_state)->first()->locale_name) ? DB::table("tbl_locale")->where("locale_id", $customer_state)->first()->locale_name : null;
+        $city = isset(DB::table("tbl_locale")->where("locale_id", $customer_city)->first()->locale_name) ? DB::table("tbl_locale")->where("locale_id", $customer_city)->first()->locale_name : null;
+        $zip= isset(DB::table("tbl_locale")->where("locale_id", $customer_zip)->first()->locale_name) ? DB::table("tbl_locale")->where("locale_id", $customer_zip)->first()->locale_name : null;
+
         $update_address['customer_street'] = Request::input('customer_street');
-        $update_address['customer_state'] = Request::input('customer_state');
-        $update_address['customer_city'] = Request::input('customer_city');
+        $update_address['customer_state'] = $state;
+        $update_address['customer_city'] = $city;
+        $update_address['customer_zipcode'] = $zip;
 
         Tbl_customer_address::where('customer_id', Self::$customer_id)->update($update_address);
 
-        return Redirect::to("/account/security")->with("success", "Sucessfully updated.");
+        $update_other['customer_mobile'] = Request::input("customer_mobile");
+
+        Tbl_customer_other_info::where('customer_id', Self::$customer_id)->update($update_other);
+
+        return Redirect::to("/account/settings")->with("success", "Sucessfully updated.");
     }
     public function security()
     {
@@ -273,7 +296,7 @@ class ShopAccountController extends Shop
         
         if ($data["order"]->payment_status == 1) 
         {
-            $data["_item"] = Tbl_ec_order_item::where("tbl_ec_order_item.ec_order_id", $id)->item()->get();
+            $data["_item"] = Tbl_ec_order_item::where("tbl_ec_order_item.ec_order_id", $id)->groupBy("tbl_ec_order_item.item_id")->item()->get();
             
             return view("account_invoice", $data);
         }

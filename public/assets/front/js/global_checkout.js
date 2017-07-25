@@ -61,7 +61,14 @@ function checkout_form()
 						            			$(".load-location[level=" + level + "]").val(deflt);
 						            		}
 
+						            		if (level == 3) 
+						            		{
+						            			var append = 'NEXT <i class="fa fa-angle-double-right"></i>';
 
+						            			$('.checkout-button-submit').html(append);
+						            			$('.checkout-button-submit').removeAttr("disabled");
+						            			$('.checkout-button-submit').removeProp("disabled");
+						            		}
 						            		
 						              		action_load_location(level+1, $(".load-location[level=" + (level) + "]").val());
 						            	}
@@ -156,10 +163,14 @@ function checkout_form()
 		if ($(x).is(':checked')) 
 		{
 			$(".different-container").removeClass("hide");
+			$(".disable-bill select").prop("disabled", true);
+			$(".disable-bill input").prop("disabled", true);
 		}
 		else
 		{
 			$(".different-container").addClass("hide");
+			$(".disable-bill select").removeProp("disabled");
+			$(".disable-bill input").removeProp("disabled");
 		}
 	}
 }

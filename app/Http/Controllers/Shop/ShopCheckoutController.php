@@ -419,8 +419,7 @@ class ShopCheckoutController extends Shop
             {
                 $data["shipping_address"] = DB::table("tbl_customer_address")->where("purpose", "shipping")
                                                                              ->where("customer_id", $data["get_cart"]["tbl_customer"]["customer_id"])
-                                                                             ->first();
-
+                                                                             ->first();                                                    
                 if ($data["shipping_address"]) 
                 {
                     $data["shipping_address"]->state_id = isset(DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_state)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_state)->first()->locale_id : null;
@@ -556,7 +555,14 @@ class ShopCheckoutController extends Shop
             $data["page"]            = "Checkout Payment";
             $data["_payment_method"] = $this->get_payment_method();
             $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
-            return view("checkout_payment", $data);  
+            if($data["get_cart"]['cart'])
+            {
+                return view("checkout_payment", $data);
+            }
+            else
+            {
+                return Redirect::to("/checkout/#cart");
+            }
         }
     }
 

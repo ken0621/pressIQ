@@ -20,36 +20,69 @@ $(document).ready(function()
               dots: true,
               centerMode: true,
               focusOnSelect: true,
+              pauseOnFocus: true,
+              pauseOnHover: true,
             });
 
             $('.image-gallery[key="'+key+'"]').slick({
               infinite: true,
-              autoplay: true,
+              // autoplay: true,
               autoplaySpeed: 2000,
               adaptiveHeight: true,
               asNavFor: '.slider-thumb[key="'+key+'"]',
+              pauseOnFocus: true,
+              pauseOnHover: true,
             });
         }   
     });
 
     event_remove_slide();
     event_collection_droplist();
+
+    $('.nav-tabs a').click(function(event) 
+    {
+      $('.gallery-list').unbind("click");
+      $('.gallery-list').bind("click", function(e)
+      {
+        e.stopImmediatePropagation();
+      });
+      $('.slick-prev').trigger('click');
+      $('.gallery-list').unbind("click");
+    });
 });
 
 function submit_selected_image_done(data) 
 { 
     var key = data.akey;
     append = [];
+    var type = $('.type-content[key="'+key+'"]').val();
+    var count = -1;
 
     $.each(data.image_data, function( index, value ) 
     {
         var image_path = value.image_path;
 
-        append += '<div>'+
+        if (type == "gallery_links") 
+        {
+          count++;
+
+          append += '<div>'+
                         '<div class="img-holder">'+
                             '<img class="img-responsive" src="'+image_path+'">'+
+                            '<input type="hidden" name="info['+key+'][value]['+count+'][image]" value="'+image_path+'">'+
                         '</div>'+
+                        '<label class="hiderino">Link: </label>'+
+                        '<input onClick="event.stopImmediatePropagation()" type="text" class="form-control hiderino" name="info['+key+'][value]['+count+'][link]">'+
                      '</div>';
+        }
+        else
+        {
+          append += '<div>'+
+                          '<div class="img-holder">'+
+                              '<img class="img-responsive" src="'+image_path+'">'+
+                          '</div>'+
+                       '</div>';
+        }
     }); 
 
     if ($('.image-gallery[key="'+key+'"]').hasClass("slick-initialized")) 
@@ -84,6 +117,7 @@ function submit_selected_image_done(data)
     }
 
     $(".match-height").matchHeight();
+    $(".slider-thumb .hiderino").remove();
 }
 
 function action_image_slick(x, y)
@@ -106,10 +140,12 @@ function action_image_slick(x, y)
 
     x.slick({
       infinite: true,
-      autoplay: true,
+      // autoplay: true,
       autoplaySpeed: 2000,
       adaptiveHeight: true,
       asNavFor: '.slider-thumb[key="'+y+'"]',
+      pauseOnFocus: true,
+      pauseOnHover: true,
     });
 
     $('.slider-thumb[key="'+y+'"]').slick({
@@ -118,7 +154,9 @@ function action_image_slick(x, y)
       asNavFor: '.image-gallery[key="'+y+'"]',
       dots: true,
       centerMode: true,
-      focusOnSelect: true
+      focusOnSelect: true,
+      pauseOnFocus: true,
+      pauseOnHover: true,
     });
 }
 

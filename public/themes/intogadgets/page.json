@@ -524,14 +524,7 @@
 		"product_banner_multiple" :
 		{
 			"label":"Product Banner (Multiple)",
-			"type":"gallery",
-			"default":"",
-			"size":"12"
-		},
-		"product_banner_link" :
-		{
-			"label":"Product Banner Link",
-			"type":"textbox",
+			"type":"gallery_links",
 			"default":"",
 			"size":"12"
 		},
@@ -552,17 +545,10 @@
 	},
 	"info":
 	{
-		"footer_ads" :
+		"footer_ads_multiple" :
 		{
-			"label":"Footer Ads",
-			"type":"image",
-			"default":"",
-			"size":"12"
-		},
-		"footer_ads_link" :
-		{
-			"label":"Footer Ads Link",
-			"type":"textbox",
+			"label":"Footer Ads (Multiple)",
+			"type":"gallery_links",
 			"default":"",
 			"size":"12"
 		},

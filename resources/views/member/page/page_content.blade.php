@@ -72,6 +72,39 @@
                                             @endif
                                         </div>
                                     </div>
+                                    @elseif($info->type == "gallery_links")
+                                    <div class="match-height">
+                                        <input type="hidden" class="type-content" key="{{ $keys }}" name="info[{{ $keys }}][type]" value="{{ $info->type }}">
+                                        <button type="button" class="btn btn-primary remove-image" key="{{ $keys }}">Remove Images</button>
+                                        <div class="gallery-list image-gallery link-css" key="{{ $keys }}">
+                                            @if(is_serialized($info->default))
+                                                @foreach(unserialize($info->default) as $serialize_key => $value)
+                                                <div>
+                                                    <div class="img-holder">
+                                                        <img style="object-fit: contain; object-position: center;" class="img-responsive" src="{{ $value['image'] }}">
+                                                        <input type="hidden" name="info[{{ $keys }}][value][{{ $serialize_key }}][image]" value="{{ $value['image'] }}">
+                                                    </div>
+                                                    <label>Link: </label>
+                                                    <input onClick="event.stopImmediatePropagation()" type="text" class="form-control input-link" name="info[{{ $keys }}][value][{{ $serialize_key }}][link]" value="{{ $value['link'] }}">
+                                                </div>
+                                                @endforeach
+                                            @else
+                                            <div class="empty-notify"><i class="fa fa-image"></i> No Image Yet</div>
+                                            @endif
+                                        </div>
+                                        <div class="slider-thumb" key="{{ $keys }}">
+                                            @if(is_serialized($info->default))
+                                                @foreach(unserialize($info->default) as $value)
+                                                <div>
+                                                    <div class="img-holder">
+                                                        <img style="object-fit: contain; object-position: center;" class="img-responsive" src="{{ $value['image'] }}">
+                                                    </div>
+                                                </div>
+                                                @endforeach
+                                            @else
+                                            @endif
+                                        </div>
+                                    </div>
                                     @elseif($info->type == "image")
                                     <div class="match-height">
                                         <input type="hidden" name="info[{{ $keys }}][type]" value="{{ $info->type }}">

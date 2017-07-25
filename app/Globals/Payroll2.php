@@ -856,6 +856,7 @@ class Payroll2
      */
 	public static function compute_time_mode_flexi($_time, $target_hours="08:00:00", $break_hours="00:00:00", $overtime_grace_time = "00:00:00", $grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00", $leave_fill_undertime=0, $use_leave = false, $testing = false)
 	{
+
 		$leave_fill_undertime=1;
 		$time_spent 			= "00:00:00";
 		$late_hours 			= "00:00:00";
@@ -872,10 +873,11 @@ class Payroll2
 		$leave_hours 			= $leave;
 		$excess_leave_hours 	= $leave_hours;
 		$is_half_day 			= false;
-		$is_absent 				= false;
+		$is_absent 				= true;
 	
 		if ($_time==null) 
 		{
+			
 			if (!(($day_type == "rest")||($day_type == "extra")||($is_holiday == "regular")||($is_holiday == "special")||($leave_hours!="00:00:00")))
 			{
 				$is_absent =true;
@@ -883,7 +885,6 @@ class Payroll2
 
 			if ($is_absent==true) 
 			{
-				
 				$target_minutes = Payroll2::convert_time_in_minutes($target_hours);
 				$leave_minutes = Payroll2::convert_time_in_minutes($leave);
 				if ($target_minutes > $leave_minutes) 
@@ -1790,6 +1791,12 @@ class Payroll2
 
 		return $target_hours;
 	} 
+
+
+	public static function use_leave()
+	{
+		
+	}
 
 	//night differential 10pm to 6am militiary time
 	public static function night_differential_computation($_time,$testing=false)

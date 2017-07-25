@@ -469,27 +469,27 @@ class ShopCheckoutController extends Shop
         // if ($data["get_cart"]["new_account"] == true) 
         // {
             // $validate["full_name"] = Request::input("full_name");
-            $validate["contact_number"] = Request::input("contact_number");
-            $validate["customer_state"] = Request::input("customer_state");
-            $validate["customer_city"] = Request::input("customer_city");
-            $validate["customer_zip"] = Request::input("customer_zip");
-            $validate["customer_street"] = Request::input("customer_street");
+            // $validate["contact_number"] = Request::input("contact_number");
+            // $validate["customer_state"] = Request::input("customer_state");
+            // $validate["customer_city"] = Request::input("customer_city");
+            // $validate["customer_zip"] = Request::input("customer_zip");
+            // $validate["customer_street"] = Request::input("customer_street");
 
             // $rules["full_name"] = 'required';
-            $rules["contact_number"] = 'required';
-            $rules["customer_state"] = 'required';
-            $rules["customer_city"] = 'required';
-            $rules["customer_zip"] = 'required';
-            $rules["customer_street"] = 'required';
+            // $rules["contact_number"] = 'required';
+            // $rules["customer_state"] = 'required';
+            // $rules["customer_city"] = 'required';
+            // $rules["customer_zip"] = 'required';
+            // $rules["customer_street"] = 'required';
 
-            $validator = Validator::make($validate, $rules);
+            // $validator = Validator::make($validate, $rules);
 
-            if ($validator->fails()) 
-            {
-                return Redirect::back()
-                            ->withErrors($validator)
-                            ->withInput();
-            }
+            // if ($validator->fails()) 
+            // {
+            //     return Redirect::back()
+            //                 ->withErrors($validator)
+            //                 ->withInput();
+            // }
         // } 
 
         /* SPLIT NAME TO FIRST NAME AND LAST NAME */

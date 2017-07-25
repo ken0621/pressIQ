@@ -419,8 +419,7 @@ class ShopCheckoutController extends Shop
             {
                 $data["shipping_address"] = DB::table("tbl_customer_address")->where("purpose", "shipping")
                                                                              ->where("customer_id", $data["get_cart"]["tbl_customer"]["customer_id"])
-                                                                             ->first();
-
+                                                                             ->first();                                                    
                 if ($data["shipping_address"]) 
                 {
                     $data["shipping_address"]->state_id = isset(DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_state)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_state)->first()->locale_id : null;

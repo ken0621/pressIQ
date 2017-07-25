@@ -187,10 +187,9 @@ class ShopAccountController extends Shop
                                                                              ->where("customer_id", Self::$customer_id)
                                                                              ->first();
 
-        $data["shipping_address"]->state_id = isset(DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_state)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_state)->first()->locale_id : null;
-        $data["shipping_address"]->city_id = isset(DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_city)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_city)->first()->locale_id : null;
-        $data["shipping_address"]->zipcode_id = isset(DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_zipcode)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_zipcode)->first()->locale_id : null;
-
+        $data["shipping_address"]->state_id = isset(DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->state_id)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->state_id)->first()->locale_id : null;
+        $data["shipping_address"]->city_id = isset(DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->city_id)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->city_id)->first()->locale_id : null;
+        $data["shipping_address"]->zipcode_id = isset(DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->barangay_id)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->barangay_id)->first()->locale_id : null;
         
         return view("account_settings", $data);
     }

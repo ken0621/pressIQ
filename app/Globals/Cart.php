@@ -779,7 +779,10 @@ class Cart
         $data["tbl_customer_address"]["shipping"]["customer_zip_code"] = (isset($customer_information["shipping_zip"]) ? $customer_information["shipping_zip"] : (isset($data["tbl_customer_address"]["shipping"]["customer_zip_code"]) ? $data["tbl_customer_address"]["shipping"]["customer_zip_code"] : null));
         $data["tbl_customer_address"]["shipping"]["customer_street"] = (isset($customer_information["shipping_street"]) ? $customer_information["shipping_street"] : (isset($data["tbl_customer_address"]["shipping"]["customer_street"]) ? $data["tbl_customer_address"]["shipping"]["customer_street"] : null));
         $data["tbl_customer_address"]["shipping"]["purpose"] = "shipping";
-        
+        $data["tbl_customer_address"]["shipping"]["state_id"] = (isset($customer_information["state_id"]) ? $customer_information["state_id"] : (isset($data["tbl_customer_address"]["shipping"]["state_id"]) ? $data["tbl_customer_address"]["shipping"]["state_id"] : null));
+        $data["tbl_customer_address"]["shipping"]["city_id"] = (isset($customer_information["city_id"]) ? $customer_information["city_id"] : (isset($data["tbl_customer_address"]["shipping"]["city_id"]) ? $data["tbl_customer_address"]["shipping"]["city_id"] : null));
+        $data["tbl_customer_address"]["shipping"]["barangay_id"] = (isset($customer_information["barangay_id"]) ? $customer_information["barangay_id"] : (isset($data["tbl_customer_address"]["shipping"]["barangay_id"]) ? $data["tbl_customer_address"]["shipping"]["barangay_id"] : null));
+
         /* SET  BILLING INFORMATION */
         if($data["billing_equals_shipping"] == true)
         {
@@ -789,6 +792,9 @@ class Cart
             $data["tbl_customer_address"]["billing"]["customer_zip_code"] = $data["tbl_customer_address"]["shipping"]["customer_zip_code"];
             $data["tbl_customer_address"]["billing"]["customer_street"] = $data["tbl_customer_address"]["shipping"]["customer_street"];
             $data["tbl_customer_address"]["billing"]["purpose"] = "billing"; 
+            $data["tbl_customer_address"]["billing"]["state_id"] = $data["tbl_customer_address"]["shipping"]["state_id"];
+            $data["tbl_customer_address"]["billing"]["city_id"] = $data["tbl_customer_address"]["shipping"]["city_id"];
+            $data["tbl_customer_address"]["billing"]["barangay_id"] = $data["tbl_customer_address"]["shipping"]["barangay_id"];
         }
         else
         {
@@ -798,6 +804,9 @@ class Cart
             $data["tbl_customer_address"]["billing"]["customer_zip_code"] = (isset($customer_information["billing_zip"]) ? $customer_information["billing_zip"] : (isset($data["tbl_customer_address"]["billing"]["customer_zip_code"]) ? $data["tbl_customer_address"]["billing"]["customer_zip_code"] : null));
             $data["tbl_customer_address"]["billing"]["customer_street"] = (isset($customer_information["billing_street"]) ? $customer_information["billing_street"] : (isset($data["tbl_customer_address"]["billing"]["customer_street"]) ? $data["tbl_customer_address"]["billing"]["customer_street"] : null));
             $data["tbl_customer_address"]["billing"]["purpose"] = "billing"; 
+            $data["tbl_customer_address"]["billing"]["state_id"] = (isset($customer_information["billing_state_id"]) ? $customer_information["billing_state_id"] : (isset($data["tbl_customer_address"]["billing"]["customer_street"]) ? $data["tbl_customer_address"]["billing"]["customer_street"] : null));
+            $data["tbl_customer_address"]["billing"]["city_id"] = (isset($customer_information["billing_city_id"]) ? $customer_information["billing_city_id"] : (isset($data["tbl_customer_address"]["billing"]["customer_street"]) ? $data["tbl_customer_address"]["billing"]["customer_street"] : null));
+            $data["tbl_customer_address"]["billing"]["barangay_id"] = (isset($customer_information["billing_barangay_id"]) ? $customer_information["billing_barangay_id"] : (isset($data["tbl_customer_address"]["billing"]["customer_street"]) ? $data["tbl_customer_address"]["billing"]["customer_street"] : null));
         }
         if (isset(Self::get_cart($shop_id)["cart"])) 
         {

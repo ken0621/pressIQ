@@ -192,4 +192,3 @@
 </div>
 
 <script type="text/javascript" src="/assets/member/payroll/js/timesheet_income_summary.js"></script>
-{!!-- dd($cutoff_breakdown) --!!}

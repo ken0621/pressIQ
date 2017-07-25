@@ -19,6 +19,7 @@ use App\Models\Tbl_membership_code;
 use App\Models\Tbl_mlm_encashment_settings;
 use App\Models\Tbl_ec_order;
 use App\Models\Tbl_ec_order_item;
+use App\Models\Tbl_customer_other_info;
 
 use App\Globals\Mlm_member;
 use App\Globals\Settings;
@@ -235,7 +236,11 @@ class ShopAccountController extends Shop
 
         Tbl_customer_address::where('customer_id', Self::$customer_id)->update($update_address);
 
-        return Redirect::to("/account/security")->with("success", "Sucessfully updated.");
+        $update_other['customer_mobile'] = Request::input("customer_mobile");
+
+        Tbl_customer_other_info::where('customer_id', Self::$customer_id)->update($update_other);
+
+        return Redirect::to("/account/settings")->with("success", "Sucessfully updated.");
     }
     public function security()
     {

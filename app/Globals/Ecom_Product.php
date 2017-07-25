@@ -403,7 +403,6 @@ class Ecom_Product
 		{
 			$_category = Tbl_category::product()->where("type_shop", $shop_id)->where("type_parent_id", $category_id)->where("tbl_category.archived", 0)->get()->toArray();
 		}
-		dd($_category);
 		foreach($_category as $key0=>$category)
 		{
 			$_product = Tbl_ec_product::variant()->where("eprod_category_id", $category["type_id"])->whereIn("tbl_ec_product.archived", $archived)->get()->toArray();

@@ -65,7 +65,6 @@ class CouponVoucherController extends Member
     public function getGenerateCode()
     {
         $data['_product'] = Ecom_Product::getProductList();
-        dd($data['_product']);
         return view('member.ecommerce_coupon.generate_coupon', $data);
     }
 

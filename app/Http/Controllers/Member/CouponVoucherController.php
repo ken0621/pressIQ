@@ -65,7 +65,7 @@ class CouponVoucherController extends Member
     public function getGenerateCode()
     {
         $data['_product'] = Ecom_Product::getProductList();
-
+        dd($data['_product']);
         return view('member.ecommerce_coupon.generate_coupon', $data);
     }
 
@@ -73,7 +73,6 @@ class CouponVoucherController extends Member
     {
         $data["coupon"]     = Tbl_coupon_code::where("coupon_code_id", $coupon_id)->first();
         $data['_product']   = Ecom_Product::getProductList();
-
         return view('member.ecommerce_coupon.generate_coupon', $data);
     }
 

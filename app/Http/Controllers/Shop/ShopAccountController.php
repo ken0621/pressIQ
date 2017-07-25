@@ -283,7 +283,7 @@ class ShopAccountController extends Shop
         
         if ($data["order"]->payment_status == 1) 
         {
-            $data["_item"] = Tbl_ec_order_item::where("tbl_ec_order_item.ec_order_id", $id)->item()->get();
+            $data["_item"] = Tbl_ec_order_item::where("tbl_ec_order_item.ec_order_id", $id)->groupBy("tbl_ec_order_item.item_id")->item()->get();
             
             return view("account_invoice", $data);
         }

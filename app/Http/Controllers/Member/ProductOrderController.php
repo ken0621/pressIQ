@@ -307,6 +307,8 @@ class ProductOrderController extends Member
             else
             {
                 $return["status"]                   = "success-update-invoice";
+
+                Tbl_ec_order::where("ec_order_id",$data["ec_order_id"])->update(["manual_inv_number" => Request::input("manual_inv_number")]);
                 $return["redirect_to"]              = "/member/ecommerce/product_order/create_order?id=".$data["ec_order_id"];
                 return json_encode($return);
             }

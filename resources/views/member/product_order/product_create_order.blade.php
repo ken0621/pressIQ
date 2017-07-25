@@ -61,6 +61,12 @@
                     <!-- START CONTENT -->
                     <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
                         <div class="row clearfix">
+                            <div class="col-md-4">
+                                <label>Invoice Number</label>
+                                <input type="text" class="form-control input-sm" name="manual_inv_number" value="{{$inv->manual_inv_number != '' ? $inv->manual_inv_number : $inv->ec_order_id }}">
+                            </div>
+                        </div>
+                        <div class="row clearfix">
                             <div class="col-sm-4">
                                 <label>Customer Name</label>
                                 <select {{isset($inv) ? 'disabled' : ''}} class="form-control {{isset($inv) ? '' : 'droplist-customer'}}  input-sm pull-left" name="inv_customer_id" data-placeholder="Select a Customer" required>

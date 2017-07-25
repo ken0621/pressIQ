@@ -592,8 +592,34 @@ class Cart
         }  
 
         return $message;                              
-    }
+    }   
+    public static function update_coupon_code($coupon_id, $price,$coupon_product_id, $minimum_quantity = 0, $type="fixed")
+    {
 
+        if($type != "fixed" && $type != "percentage")
+        {
+            $message["status"]         = "error";
+            $message["status_message"] = "Invalid type.";
+        }
+        else if($price <= 0)
+        {
+            $message["status"]         = "error";
+            $message["status_message"] = "Invalid price.";
+        }   
+        else
+        {
+            $update["coupon_code_amount"] = $price;
+            $update["coupon_product_id"]  =  isset($coupon_product_id) ? $coupon_product_id : null;                   
+            $update["coupon_discounted"]       =  $type;  
+            $update["coupon_minimum_quantity"] =  $minimum_quantity; 
+            
+            Tbl_coupon_code::where("coupon_code_id",$coupon_id)->update($update);
+
+            $message["status"]         = "success";
+            $message["status_message"] = "Successfully generate a coupon code.";
+        }
+        return $message;
+    }
     public static function use_coupon_code($coupon_code)
     {   
         //get_shop_info

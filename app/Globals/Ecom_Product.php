@@ -395,7 +395,7 @@ class Ecom_Product
 	}
 	public static function getProductPerSub($shop_id, $category_id, $archived, $fix = 0)
 	{
-		if ($fix == 1) 
+		if($fix == 1) 
 		{
 			$_category = Tbl_category::product()->where("type_shop", $shop_id)->where("tbl_category.archived", 0)->get()->toArray();
 		}
@@ -405,8 +405,7 @@ class Ecom_Product
 		}
 		foreach($_category as $key0=>$category)
 		{
-			$_product = Tbl_ec_product::variant()->where("eprod_category_id", $category["type_id"])->whereIn("tbl_ec_product.archived", $archived)->get()->toArray();
-		
+			$_product = Tbl_ec_product::variant()->where("eprod_category_id", $category["type_id"])->where("tbl_ec_product.archived", $archived)->get()->toArray();
 			foreach($_product as $key1=>$product)
 			{
 				$_product[$key1]["product_new_name"] = $product["eprod_name"] . ($product["variant_name"] ? ' : '.$product["variant_name"] : '');

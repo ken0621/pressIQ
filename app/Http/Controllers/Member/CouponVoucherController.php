@@ -11,6 +11,7 @@ use App\Globals\Cart;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_user;
 use App\Models\Tbl_warehousea;
+use App\Models\Tbl_category;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_manual_invoice;
 use App\Models\Tbl_customer_invoice_line;
@@ -64,14 +65,14 @@ class CouponVoucherController extends Member
 
     public function getGenerateCode()
     {
-        $data['_product'] = Ecom_Product::getProductList();
+        $data['_product'] = Ecom_Product::getProductList($this->getShopId(),0,1);
         return view('member.ecommerce_coupon.generate_coupon', $data);
     }
 
     public function getEditGenerateCode($coupon_id)
     {
         $data["coupon"]     = Tbl_coupon_code::where("coupon_code_id", $coupon_id)->first();
-        $data['_product']   = Ecom_Product::getProductList();
+        $data['_product']   = Ecom_Product::getProductList($this->getShopId(),0,1);
         return view('member.ecommerce_coupon.generate_coupon', $data);
     }
 
@@ -92,11 +93,10 @@ class CouponVoucherController extends Member
             }
             else
             {
-                dd("No Edit Code");
+                $coupon = Cart::update_coupon_code($coupon_code_id, $coupon_amount,$coupon_product_id, $coupon_minimum_quantity, $coupon_type);
             }
             $generate_count--;
         }
-
         return json_encode($coupon);
     }
 

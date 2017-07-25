@@ -202,6 +202,10 @@ class Cart
                         $item_discounted_remark    = $check_discount->item_discount_remark;
                     }
                 }
+                if($item->item_discount_value > 0)
+                {
+                    $data["cart"][$key]["cart_product_information"]["product_price"]                  = $item->item_discount_value;
+                }
                 if(Session::get('mlm_member') != null)
                 {
 

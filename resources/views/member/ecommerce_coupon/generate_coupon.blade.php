@@ -1,6 +1,6 @@
 <form class="global-submit" role="form" action="/member/ecommerce/coupon/generate-code" method="POST" >
     <input type="hidden" name="_token" value="{{csrf_token()}}" >
-    <input type="hidden" name="coupon_id" value="{{$coupon->coupon_code_id or ''}}" >
+    <input type="text" name="coupon_id" value="{{$coupon->coupon_code_id or ''}}" >
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title layout-modallarge-title item_title">Generate Coupon Code</h4>

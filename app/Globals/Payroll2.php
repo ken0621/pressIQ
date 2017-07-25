@@ -2111,6 +2111,7 @@ class Payroll2
 	{
 		$return = new stdClass();
 
+
 		$data["employee_id"] 		= $employee_id;
 		$data["employee"]			= Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->first();
 
@@ -2133,6 +2134,28 @@ class Payroll2
 		/* BREAKDOWN MODE */
 		$return->_breakdown = array();
 
+
+		/* FLAT RATE DECLARED BASIC PAY */
+		if($group->payroll_group_salary_computation == "Flat Rate")
+		{
+			$payroll_period_category = $data["date_query"]->payroll_period_category; //Semi-monthly, Monthly, Weekly, Daily
+
+			if($payroll_period_category == "Semi-monthly")
+			{
+				$divisor = 2;
+			}
+			elseif($payroll_period_category == "Weekly")
+			{				
+				$divisor = 4;
+			}
+			else
+			{
+				$divisor = 1;
+			}
+
+			$cutoff_compute->cutoff_basic = $salary->payroll_employee_salary_monthly / $divisor;
+		}
+
 		$return = Payroll2::cutoff_breakdown_additions($return, $data);
 		$return = Payroll2::cutoff_breakdown_deductions($return, $data); //meron bang non-taxable deduction?? lol
 		$return = Payroll2::cutoff_breakdown_taxable_allowances($return, $data);
@@ -2143,8 +2166,10 @@ class Payroll2
 		$return = Payroll2::cutoff_breakdown_compute_taxable_salary($return, $data);
 		$return = Payroll2::cutoff_breakdown_compute_tax($return, $data);
 		$return = Payroll2::cutoff_breakdown_compute_net($return, $data);
+
 		return $return;
 	}
+
 	public static function cutoff_breakdown_to_tr($breakdown)
 	{
 		if($breakdown["mode"] == "plus")
@@ -2327,6 +2352,7 @@ class Payroll2
 	public static function cutoff_breakdown_compute_gross_pay($return, $data)
 	{
 		extract($data);
+
 
 		$return->basic_pay_total = $cutoff_compute->cutoff_basic;
 		$return->gross_pay_total = $cutoff_compute->cutoff_basic;
@@ -2699,9 +2725,6 @@ class Payroll2
 			}
 		}
 
-
-
-
 		/* PAG-IBIG COMPUTATION */	
 		$pagibig_reference_amount = $pagibig_declared;
 		$pagibig_contribution["ee"] = $pagibig_declared;
@@ -2862,6 +2885,11 @@ class Payroll2
 	public static function cutoff_breakdown_non_taxable_allowances($return, $data)
 	{
 		extract($data);
+		if(!isset($cutoff_compute->render_days))
+		{
+			$cutoff_compute->render_days = 30;
+		}
+
 		$allowances 		= Payroll2::get_allowance($employee_id, $cutoff_compute->render_days);
 
 		if(isset($allowances["obj"]))

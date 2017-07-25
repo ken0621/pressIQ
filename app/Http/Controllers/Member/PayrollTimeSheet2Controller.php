@@ -75,10 +75,22 @@ class PayrollTimeSheet2Controller extends Member
 		
 		
 		$employee_contract = $this->db_get_current_employee_contract($employee_id, $data["company_period"]->payroll_period_start);
+
 		$data["compute_type"] = $employee_contract->payroll_group_salary_computation;
+
+
 		$data["period_id"] = $period_id;
+
+		if($data["compute_type"] == "Flat Rate")
+		{
+			echo "<div style='padding: 100px; text-align: center;'>FLAT RATE COMPUTATION DOES'T HAVE TIMESHEET</div>";
+		}
+		else
+		{
+			return view('member.payroll2.employee_timesheet', $data);
+		}
 		
-		return view('member.payroll2.employee_timesheet', $data);
+		
 	}
 	public function approve_timesheets()
 	{
@@ -682,17 +694,15 @@ class PayrollTimeSheet2Controller extends Member
 		*  Flat Rate
 		*  Monthly Rate
 		*/
-
-		
-		$date = Tbl_payroll_period_company::sel($period_company_id)->pluck('payroll_period_start');
-		$group = $this->db_get_current_employee_contract($employee_id, $date);
+		$data["date"] = $date = Tbl_payroll_period_company::sel($period_company_id)->pluck('payroll_period_start');
+		$data["group"] = $group = $this->db_get_current_employee_contract($employee_id, $date);
+		$data["computation_type"] = $computation_type = $group->payroll_group_salary_computation;
 		$data = $this->compute_whole_cutoff($period_company_id, $employee_id);
-
-		$computation_type = $group->payroll_group_salary_computation;
 		$data["employee_id"] = $employee_id;
 		$check_approved = Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_company_id)->first();
-		$data["time_keeping_approved"] = $check_approved ? true : false;		
+		$data["time_keeping_approved"] = $check_approved ? true : false;			
 		
+
 		switch ($computation_type)
 		{
 			case "Daily Rate":
@@ -704,7 +714,6 @@ class PayrollTimeSheet2Controller extends Member
 			case "Flat Rate":
 				return $this->income_summary_flat_rate_computation($data);
 			break;
-			
 		}
 	}
 	
@@ -716,9 +725,9 @@ class PayrollTimeSheet2Controller extends Member
 	{
 		return view("member.payroll2.employee_income_summary_monthly", $data);
 	}
-	public function income_summary_flat_rate_computation()
+	public function income_summary_flat_rate_computation($data)
 	{
-		dd($data);
+		return view("member.payroll2.employee_income_summary_flat", $data);
 	}
 	/* GLOBAL FUNCTION FOR THIS CONTROLLER */
 	public function c_24_hour_format($time)

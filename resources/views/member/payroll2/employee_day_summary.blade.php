@@ -29,8 +29,8 @@
                                     @if($record->auto_approved != 2)
                                     <tr>
                                         <input type="hidden" name="payroll_time_sheet_record_id[{{ $key }}]" value="{{ $record->payroll_time_sheet_record_id }}"/>
-                                        <td><input value="{{ $record->time_in }}" type="text" placeholder="NO TIME" class="text-table text-center time-entry time-in is-timeEntry" name="time-in[{{ $key }}]"></td>
-                                        <td><input value="{{ $record->time_out }}" type="text" placeholder="NO TIME" class="text-table text-center time-entry time-in is-timeEntry" name="time-out[{{ $key }}]"></td>
+                                        <td><input value="{{ $record->time_in }}" type="text" placeholder="NO TIME" class="day-time-change text-table text-center time-entry time-in is-timeEntry" name="time-in[{{ $key }}]"></td>
+                                        <td><input value="{{ $record->time_out }}" type="text" placeholder="NO TIME" class="day-time-change text-table text-center time-entry time-in is-timeEntry" name="time-out[{{ $key }}]"></td>
                                         <td><input value="" type="text" class="text-table time-entry is-timeEntry" name=""></td>
                                       
                                         @if( $record->status_time_sched == 'OVERTIME' || $timesheet_info->day_type == "rest_day" || $timesheet_info->day_type == "extra_day")

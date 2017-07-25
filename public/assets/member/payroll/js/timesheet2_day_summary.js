@@ -1,4 +1,5 @@
 var timesheet_day_summary = new timesheet_day_summary();
+var timechangerequestday = null;
 
 function timesheet_day_summary()
 {
@@ -18,6 +19,7 @@ function timesheet_day_summary()
 		event_change_approve_check();
 		event_mark_as_checked();
 		action_check_each_approve_check();
+		event_change_time_approve();
 	}
 	function event_mark_as_checked()
 	{
@@ -27,6 +29,8 @@ function timesheet_day_summary()
 			action_re_compute_on_change(true);
 		});
 	}
+
+
 	/* EVENTS */
 	function event_time_entry()
 	{
@@ -43,6 +47,14 @@ function timesheet_day_summary()
 		{
 			$target = $(e.currentTarget);
 			action_show_hide_overtime_depending_if_checked($target);
+			action_re_compute_on_change();
+		});
+	}
+
+	function event_change_time_approve()
+	{
+		$(".day-time-change").keypup(function()
+		{
 			action_re_compute_on_change();
 		});
 	}
@@ -77,7 +89,12 @@ function timesheet_day_summary()
 		
 		$(".load-detail-table").css("opacity", 0.3);
 
-		$.ajax(
+		if(timechangerequestday)
+		{
+			timechangerequestday.abort();
+		}
+
+		timechangerequestday = $.ajax(
 		{
 			url: $url,
 			dataType: "json",

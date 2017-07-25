@@ -11,7 +11,7 @@
 @endsection
 @section('content')
 
-@if(get_content($shop_theme_info, 'product', 'product_banner_multiple') && is_serialized(get_content($shop_theme_info, 'product', 'product_banner_multiple')) && get_content($shop_theme_info, 'product', 'product_banner_link'))
+@if(get_content($shop_theme_info, 'product', 'product_banner_multiple') && is_serialized(get_content($shop_theme_info, 'product', 'product_banner_multiple')))
 <?php
     $random = array_rand(unserialize(get_content($shop_theme_info, 'product', 'product_banner_multiple')));
 ?>

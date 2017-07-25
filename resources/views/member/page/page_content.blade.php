@@ -42,7 +42,7 @@
                                         <input type="text" name="info[{{ $keys }}][value]" class="form-control" value="{{ $info->default }}">
                                     </div>
                                     @elseif($info->type == "gallery")
-                                    <div class="match-height">
+                                    <div>
                                         <input type="hidden" name="info[{{ $keys }}][type]" value="{{ $info->type }}">
                                         <input class="image-value" key="{{ $keys }}" type="hidden" name="info[{{ $keys }}][value]" value="{{ $info->default }}">
                                         <button type="button" class="btn btn-primary remove-image" key="{{ $keys }}">Remove Images</button>
@@ -73,7 +73,7 @@
                                         </div>
                                     </div>
                                     @elseif($info->type == "gallery_links")
-                                    <div class="match-height">
+                                    <div>
                                         <input type="hidden" class="type-content" key="{{ $keys }}" name="info[{{ $keys }}][type]" value="{{ $info->type }}">
                                         <button type="button" class="btn btn-primary remove-image" key="{{ $keys }}">Remove Images</button>
                                         <div class="gallery-list image-gallery link-css" key="{{ $keys }}">
@@ -347,6 +347,11 @@
 .mce-notification-warning
 {
     display: none;
+}
+
+.slick-list
+{
+    height: auto !important;
 }
 </style>
 

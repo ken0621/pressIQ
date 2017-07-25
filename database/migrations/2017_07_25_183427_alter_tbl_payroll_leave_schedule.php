@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTblEcOrderAddColumnManualInvNumber4324 extends Migration
+class AlterTblPayrollLeaveSchedule extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,9 @@ class UpdateTblEcOrderAddColumnManualInvNumber4324 extends Migration
      */
     public function up()
     {
-        Schema::table('tbl_ec_order', function (Blueprint $table) {
-            $table->string("manual_inv_number")->after("ec_order_id");
+        Schema::table('users', function(Blueprint $table){
+        $sql = "ALTER TABLE `tbl_payroll_leave_schedule` CHANGE `leave_hours` `leave_hours` time NOT NULL DEFAULT '00:00' AFTER `shop_id`";
+        DB::connection()->getPdo()->exec($sql);
         });
     }
 
@@ -24,8 +25,6 @@ class UpdateTblEcOrderAddColumnManualInvNumber4324 extends Migration
      */
     public function down()
     {
-        Schema::table('tbl_ec_order', function (Blueprint $table) {
-            //
-        });
+        //
     }
 }

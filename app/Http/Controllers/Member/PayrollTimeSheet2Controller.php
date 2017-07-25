@@ -400,8 +400,6 @@ class PayrollTimeSheet2Controller extends Member
 		$cola		= $rate['cola'];
 		/* CHECK IF LATE GRACT TIME WORKING */
 
-
-
 		$return->late_grace_time = $late_grace_time = $employee_contract->late_grace_time;
 		$return->grace_time_rule_late = $grace_time_rule_late = $employee_contract->grace_time_rule_late;
 		$return->overtime_grace_time = $overtime_grace_time = $employee_contract->overtime_grace_time;
@@ -410,20 +408,18 @@ class PayrollTimeSheet2Controller extends Member
 		$return->is_holiday = $is_holiday = $this->timesheet_get_is_holiday($employee_id, $date);
 		//$return->leave = $leave = $this->timesheet_get_leave_hours($employee_id, $date, $_shift_raw);
 
-
-
-
 		/*START leave function*/
-		$leave_data_all = PayrollLeave::employee_leave_data($employee_id);
-        $leave_cap_data = PayrollLeave::employee_leave_capacity($employee_id);
+		// $leave_data_all = PayrollLeave::employee_leave_data($employee_id);
+  		// $leave_cap_data = PayrollLeave::employee_leave_capacity($employee_id);
         $leave_date_data = PayrollLeave::employee_leave_date_data($employee_id,$date);
         $use_leave = false;
         $leave = "00:00:00";
+        $data_this = PayrollLeave::employee_leave_capacity_consume_remaining($employee_id)->get();
 
         if (count($leave_date_data)>0) 
         {
-        	$used_leave_data = PayrollLeave::employee_leave_consumed($leave_date_data["payroll_leave_employee_id"]);
-        	$remaining_leave_data = PayrollLeave::employee_leave_remaining($employee_id, $leave_data_all["payroll_leave_employee_id"]);
+        	// $used_leave_data = PayrollLeave::employee_leave_consumed($leave_date_data["payroll_leave_employee_id"]);
+        	// $remaining_leave_data = PayrollLeave::employee_leave_remaining($employee_id, $leave_data_all["payroll_leave_employee_id"]);
         	$use_leave = true;
         	$leave=$leave_date_data["leave_hours"];
         }
@@ -450,9 +446,7 @@ class PayrollTimeSheet2Controller extends Member
 		
 		$return->value_html = $this->timesheet_daily_income_to_string($return->compute_type, $payroll_time_sheet_id, $return->compute, $return->shift_approved, $payroll_period_company_id, $time_keeping_approved);
 		
-		$data = new stdClass();
-		$data = Tbl_payroll_leave_schedule::getremaining($employee_id);
-		
+
 		return $return;
 	}
 	public function timesheet_get_day_type($employee_id, $date)

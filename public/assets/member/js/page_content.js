@@ -20,6 +20,8 @@ $(document).ready(function()
               dots: true,
               centerMode: true,
               focusOnSelect: true,
+              pauseOnFocus: false,
+              pauseOnHover: false,
             });
 
             $('.image-gallery[key="'+key+'"]').slick({
@@ -40,16 +42,34 @@ function submit_selected_image_done(data)
 { 
     var key = data.akey;
     append = [];
+    var type = $('.type-content[key="'+key+'"]').val();
+    var count = -1;
 
     $.each(data.image_data, function( index, value ) 
     {
         var image_path = value.image_path;
 
-        append += '<div>'+
+        if (type == "gallery_links") 
+        {
+          count++;
+
+          append += '<div>'+
                         '<div class="img-holder">'+
                             '<img class="img-responsive" src="'+image_path+'">'+
+                            '<input type="hidden" name="info['+key+'][value]['+count+'][image]" value="'+image_path+'">'+
                         '</div>'+
+                        '<label class="hiderino">Link: </label>'+
+                        '<input onClick="event.stopImmediatePropagation()" type="text" class="form-control hiderino" name="info['+key+'][value]['+count+'][link]">'+
                      '</div>';
+        }
+        else
+        {
+          append += '<div>'+
+                          '<div class="img-holder">'+
+                              '<img class="img-responsive" src="'+image_path+'">'+
+                          '</div>'+
+                       '</div>';
+        }
     }); 
 
     if ($('.image-gallery[key="'+key+'"]').hasClass("slick-initialized")) 
@@ -84,6 +104,7 @@ function submit_selected_image_done(data)
     }
 
     $(".match-height").matchHeight();
+    $(".slider-thumb .hiderino").remove();
 }
 
 function action_image_slick(x, y)

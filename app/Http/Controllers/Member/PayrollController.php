@@ -2786,7 +2786,7 @@ class PayrollController extends Member
      public function modal_create_deduction()
      {
           $data["_expense"] = Accounting::getAllAccount('all',null,['Expense','Other Expense']);
-          $data["default_expense"] = Tbl_chart_of_account::where("account_code", "accounting-expense")
+          $data["default_expense"] = Tbl_chart_of_account::where("account_number", 66000)
                                              ->where("account_shop_id", Self::shop_id())->pluck("account_id");
           $array = array();
           Session::put('employee_deduction_tag',$array);
@@ -3247,7 +3247,8 @@ class PayrollController extends Member
      public function modal_create_allowance()
      {
           $data["_expense"] = Accounting::getAllAccount('all',null,['Expense','Other Expense']);
-          $data["default_expense"] = Tbl_chart_of_account::where("account_code", "accounting-expense")                                                ->where("account_shop_id", Self::shop_id())->pluck("account_id");
+          $data["default_expense"] = Tbl_chart_of_account::where("account_number", 66000)
+                                             ->where("account_shop_id", Self::shop_id())->pluck("account_id");
 
           Session::put('allowance_employee_tag', array());
           return view('member.payroll.modal.modal_create_allowance', $data);

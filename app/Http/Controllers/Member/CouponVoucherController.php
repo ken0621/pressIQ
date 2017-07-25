@@ -93,11 +93,10 @@ class CouponVoucherController extends Member
             }
             else
             {
-                dd("No Edit Code");
+                $coupon = Cart::update_coupon_code($coupon_code_id, $coupon_amount,$coupon_product_id, $coupon_minimum_quantity, $coupon_type);
             }
             $generate_count--;
         }
-
         return json_encode($coupon);
     }
 

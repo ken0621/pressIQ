@@ -52,6 +52,7 @@ class Payroll2
 		$output_ctr = 0;
 		$_output = null;
 		
+
 		if ($_time == null) 
 		{
 			
@@ -60,7 +61,8 @@ class Payroll2
 		{
 			foreach ($_time as $time) 
 			{
-				$_output = Payroll2::time_shift_output($_output, $output_ctr++, $time->time_in, $time->time_out, 0,"NO SCHEDULE","00:00:00","00:00:00","00:00:");
+
+				$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $time->time_in, $time->time_out, 0,"NO SCHEDULE","00:00:00","00:00:00","00:00:");
 			}
 		}
 		else
@@ -71,6 +73,10 @@ class Payroll2
 
 			foreach ($_time as $time)
 			{
+
+
+
+
 				$one_time=true;
 				$count_shift=0;
 				$time_in_minutes = explode(":", $time->time_in);
@@ -94,7 +100,7 @@ class Payroll2
 					{
 						$reason = "<b>answer: ". Payroll2::convert_to_12_hour($time->time_in)." to ".Payroll2::convert_to_12_hour($time->time_out)." (0) - <span style='color: green; text-transform: uppercase'>OVERTIME time in and time out<span><br></b>";
 						echo $testing == true ? $reason : "";
-						$_output = Payroll2::time_shift_output($_output, $output_ctr++, $time->time_in, $time->time_out, 0, $reason, "OVERTIME", "00:00:00", "00:00:00", Payroll::time_diff($time->time_in,$time->time_out));
+						$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $time->time_in, $time->time_out, 0, $reason, "OVERTIME", "00:00:00", "00:00:00", Payroll::time_diff($time->time_in,$time->time_out));
 						break;
 					}
 
@@ -107,7 +113,7 @@ class Payroll2
 						{
 							$reason = "<b>answer: ". Payroll2::convert_to_12_hour($shift->shift_in) ." to ". Payroll2::convert_to_12_hour($shift->shift_out)." (2) - <span style='color: green; text-transform: uppercase'>LATE FOR FIRST SHIFT<span><br></b>";
 							echo $testing == true ? $reason : ""; 
-							$_output = Payroll2::time_shift_output($_output, $output_ctr++, $shift->shift_in, $shift->shift_out, 2, $reason, "LATE", Payroll::time_diff($shift->shift_in, $shift->shift_out),"00:00:00","00:00:00");						
+							$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $shift->shift_in, $shift->shift_out, 2, $reason, "LATE", Payroll::time_diff($shift->shift_in, $shift->shift_out),"00:00:00","00:00:00");						
 						}
 					}
 
@@ -118,7 +124,7 @@ class Payroll2
 						{
 							$reason = "<b>answer: ". Payroll2::convert_to_12_hour($shift->shift_in)." to ". Payroll2::convert_to_12_hour($shift->shift_out)." (2) - <span style='color: green; text-transform: uppercase'>SHIFT HAS BEEN SKIPPED<span><br></b>";
 							echo $testing == true ? $reason : ""; 
-							$_output = Payroll2::time_shift_output($_output, $output_ctr++, $shift->shift_in, $shift->shift_out, 2, $reason, "UNDERTIME", "00:00:00", Payroll::time_diff($shift->shift_in, $shift->shift_out), "00:00:00");	
+							$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $shift->shift_in, $shift->shift_out, 2, $reason, "UNDERTIME", "00:00:00", Payroll::time_diff($shift->shift_in, $shift->shift_out), "00:00:00");	
 						}
 					}
 
@@ -132,7 +138,7 @@ class Payroll2
 						{
 							$reason = "<b>answer: ". Payroll2::convert_to_12_hour($time->time_in)." to ". Payroll2::convert_to_12_hour($shift->shift_in)." (0)- <span style='color: green; text-transform: uppercase'>early over time<span><br></b>";
 							echo $testing == true ? $reason : ""; 
-							$_output = Payroll2::time_shift_output($_output, $output_ctr++, $time->time_in, $shift->shift_in, 0, $reason, "OVERTIME","00:00:00","00:00:00",Payroll::time_diff($time->time_in,$shift->shift_in));					
+							$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $time->time_in, $shift->shift_in, 0, $reason, "OVERTIME","00:00:00","00:00:00",Payroll::time_diff($time->time_in,$shift->shift_in));					
 						}
 						$one_time=false;
 					}
@@ -149,7 +155,7 @@ class Payroll2
 					{
 						$reason = "<b>answer: ". Payroll2::convert_to_12_hour($shift->shift_in)." to ". Payroll2::convert_to_12_hour($shift->shift_out)." (1) - <span style='color: green; text-transform: uppercase'>sandwich between time in and time out</span><br></b>";
 						echo $testing == true ? $reason : ""; 
-						$_output = Payroll2::time_shift_output($_output, $output_ctr++, $shift->shift_in, $shift->shift_out, 1,$reason,"APPROVED","00:00:00","00:00:00","00:00:00");
+						$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $shift->shift_in, $shift->shift_out, 1,$reason,"APPROVED","00:00:00","00:00:00","00:00:00");
 					}
 					//late time in but not undertime
 					//error: solve by adding equal sign in 2nd line condition
@@ -158,7 +164,7 @@ class Payroll2
 					{
 						$reason = "<b>answer: ". Payroll2::convert_to_12_hour($time->time_in)." to ".Payroll2::convert_to_12_hour($shift->shift_out)." (1)- <span style='color: green; text-transform: uppercase'>LATE TIME IN BUT NOT UNDERTIME<span><br></b>";
 						echo $testing == true ? $reason : "";
-						$_output = Payroll2::time_shift_output($_output, $output_ctr++, $time->time_in, $shift->shift_out, 1,$reason,"LATE",Payroll::time_diff($shift->shift_in,$time->time_in),"00:00:00","00:00:00");
+						$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $time->time_in, $shift->shift_out, 1,$reason,"LATE",Payroll::time_diff($shift->shift_in,$time->time_in),"00:00:00","00:00:00");
 					}
 					//not late time in but undertime time out
 					//error: solve by adding equal sign in first condition
@@ -167,7 +173,7 @@ class Payroll2
 					{
 						$reason = "<b>answer: ". Payroll2::convert_to_12_hour($shift->shift_in)." to ".Payroll2::convert_to_12_hour($time->time_out)." (1) - <span style='color: green; text-transform: uppercase'>ONTIME BUT UNDERTIME<span><br></b>".Payroll::time_diff($time->time_out,$shift->shift_out);
 						 
-						$_output = Payroll2::time_shift_output($_output, $output_ctr++, $shift->shift_in, $time->time_out, 1,$reason,"UNDERTIME","00:00:00",Payroll::time_diff($time->time_out,$shift->shift_out),"00:00:00");
+						$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $shift->shift_in, $time->time_out, 1,$reason,"UNDERTIME","00:00:00",Payroll::time_diff($time->time_out,$shift->shift_out),"00:00:00");
 						
 						
 					}
@@ -176,7 +182,7 @@ class Payroll2
 					{
 						$reason = "<b>answer: ". Payroll2::convert_to_12_hour($time->time_in)." to ".Payroll2::convert_to_12_hour($time->time_out)." (1)- <span style='color: green; text-transform: uppercase'>LATE AND UNDERTIME<span><br></b>";
 						echo $testing == true ? $reason : "";
-						$_output = Payroll2::time_shift_output($_output, $output_ctr++, $time->time_in, $time->time_out, 1,$reason,"LATE AND UNDERTIME",Payroll::time_diff($shift->shift_in,$time->time_in),Payroll::time_diff($time->time_out,$shift->shift_out),"00:00:00");
+						$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $time->time_in, $time->time_out, 1,$reason,"LATE AND UNDERTIME",Payroll::time_diff($shift->shift_in,$time->time_in),Payroll::time_diff($time->time_out,$shift->shift_out),"00:00:00");
 						//echo $shift->shift_in."  ".$time->time_in;
 					}
 					/*END all approve shift*/
@@ -190,7 +196,7 @@ class Payroll2
 						{
 							$reason = "<b>answer: ". Payroll2::convert_to_12_hour($shift->shift_out)." to ". Payroll2::convert_to_12_hour($time->time_out)." (0)- <span style='color: green; text-transform: uppercase'>LAST OVERTIME<span><br></b>";
 							echo $testing == true ? $reason : "";
-							$_output = Payroll2::time_shift_output($_output, $output_ctr++, $shift->shift_out, $time->time_out, 0,$reason,"OVERTIME","00:00:00","00:00:00",Payroll::time_diff($shift->shift_out,$time->time_out));
+							$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $shift->shift_out, $time->time_out, 0,$reason,"OVERTIME","00:00:00","00:00:00",Payroll::time_diff($shift->shift_out,$time->time_out));
 						}
 					}
 					/*END last overtime*/
@@ -210,7 +216,7 @@ class Payroll2
 						{
 							$reason = "<b>answer: ".$shift->shift_out." to ".$time->time_out." (0) - <span style='color: green; text-transform: uppercase'>TIME OUT IS IN BETWEEN SHIFT OUT AND NEXT SHIFT IN OVERTIME<span><br></b>";
 							echo $testing == true ? $reason : "";
-							$_output = Payroll2::time_shift_output($_output, $output_ctr++, $shift->shift_out, $time->time_out, 0, $reason,"OVERTIME","00:00:00","00:00:00",Payroll::time_diff($shift->shift_out,$time->time_out));
+							$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $shift->shift_out, $time->time_out, 0, $reason,"OVERTIME","00:00:00","00:00:00",Payroll::time_diff($shift->shift_out,$time->time_out));
 						}
 
 						// sandwich overtime between shift out and next shift in
@@ -218,7 +224,7 @@ class Payroll2
 						{
 							$reason = "<b>answer: ".Payroll2::convert_to_12_hour($time->time_in)." to ".Payroll2::convert_to_12_hour($time->time_out)." (0) - <span style='color: green; text-transform: uppercase'>SANDWICH BETWEEN SHIFT OUT AND NEXT SHIFT IN<span><br></b>";
 							echo $testing == true ? $reason : "";
-							$_output = Payroll2::time_shift_output($_output, $output_ctr++, $time->time_in, $time->time_out, 0, $reason,"OVERTIME","00:00:00","00:00:00",Payroll::time_diff($time->time_in,$time->time_out));
+							$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $time->time_in, $time->time_out, 0, $reason,"OVERTIME","00:00:00","00:00:00",Payroll::time_diff($time->time_in,$time->time_out));
 						}
 						
 						//sandwich overtime, time out is between next shift in and out
@@ -228,7 +234,7 @@ class Payroll2
 						{ 
 							$reason = "<b>answer: ".Payroll2::convert_to_12_hour($shift->shift_out)." to ".Payroll2::convert_to_12_hour($_shift[$count_shift]->shift_in)." (0)- <span style='color: green; text-transform: uppercase'>sandwich overtime, time in is between next shift in and out<span><br></b>";
 							echo $testing == true ? $reason : "";
-							$_output = Payroll2::time_shift_output($_output, $output_ctr++, $shift->shift_out, $_shift[$count_shift]->shift_in, 0, $reason,"OVERTIME","00:00:00","00:00:00",Payroll::time_diff($shift->shift_out, $_shift[$count_shift]->shift_in));
+							$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $shift->shift_out, $_shift[$count_shift]->shift_in, 0, $reason,"OVERTIME","00:00:00","00:00:00",Payroll::time_diff($shift->shift_out, $_shift[$count_shift]->shift_in));
 						}
 					}
 					/*END between overtime Sandwich*/
@@ -304,20 +310,20 @@ class Payroll2
 						echo $testing == true ? "<b>answer</b>: TIME IN = ".$time->time_in." TIME OUT = ". $time->time_out." OVER TARGET TIME<br>":"";
 						$minus_minutes = ($time_in_minutes+$sum_target_hours)-$target_hours;
 						//"APPROVED 1 minutes -> ".$minus_minutes." = (".$time_in_minutes." + ".$sum_target_hours.") - ".$target_hours
-						$_output = Payroll2::flexi_time_shift_output($_output,$index++, $time->time_in, Payroll2::minus_time($minus_minutes,$time->time_out),1 , "APPROVED 1", "APPROVED");
+						$_output = Payroll2::flexi_time_shift_output($time, $_output,$index++, $time->time_in, Payroll2::minus_time($minus_minutes,$time->time_out),1 , "APPROVED 1", "APPROVED");
 						$ot = Payroll::time_diff(Payroll2::minus_time($minus_minutes,$time->time_out), $time->time_out);
-						$_output = Payroll2::flexi_time_shift_output($_output,$index++, Payroll2::minus_time($minus_minutes,$time->time_out), $time->time_out,0 , "OVERTIME 1 ".Payroll2::minus_time($minus_minutes,$time->time_out), "OVERTIME", $ot);
+						$_output = Payroll2::flexi_time_shift_output($time, $_output,$index++, Payroll2::minus_time($minus_minutes,$time->time_out), $time->time_out,0 , "OVERTIME 1 ".Payroll2::minus_time($minus_minutes,$time->time_out), "OVERTIME", $ot);
 					}
 					else
 					{
-						$_output = Payroll2::flexi_time_shift_output($_output,$index++, $time->time_in, $time->time_out, 1, "APPROVED 2 ", "APPROVED");
+						$_output = Payroll2::flexi_time_shift_output($time, $_output,$index++, $time->time_in, $time->time_out, 1, "APPROVED 2 ", "APPROVED");
 						echo $testing == true ? "<b>answer</b>: TIME IN = ".$time->time_in." TIME OUT = ". $time->time_out." LESS THAN TARGET TIME<br>":"";
 					}
 					$sum_target_hours = $sum_target_hours + $time_in_minutes;
 				}
 				else
 				{
-					$_output = Payroll2::flexi_time_shift_output($_output,$index++, $time->time_in, $time->time_out, 0, "OVERTIME 2 ", "OVERTIME",Payroll::time_diff($time->time_in, $time->time_out));
+					$_output = Payroll2::flexi_time_shift_output($time, $_output,$index++, $time->time_in, $time->time_out, 0, "OVERTIME 2 ", "OVERTIME",Payroll::time_diff($time->time_in, $time->time_out));
 					echo $testing == true ? "<b>answer</b>: TIME IN = ".$time->time_in." TIME OUT = ". $time->time_out." OVERTIME<br>":"";
 				}
 			}
@@ -1866,9 +1872,9 @@ class Payroll2
 	}
 
 
-	public static function time_shift_output($_output, $index, $time_in, $time_out, $auto_approved, $reason = "",$status_time_sched = "",$late="00:00:00",$undertime="00:00:00",$overtime="00:00:00")
+	public static function time_shift_output($time, $_output, $index, $time_in, $time_out, $auto_approved, $reason = "",$status_time_sched = "",$late="00:00:00",$undertime="00:00:00",$overtime="00:00:00")
 	{
-		
+		//dd($time);
 		$_output[$index] = new stdClass();
 		$_output[$index]->time_in = $time_in;
 		$_output[$index]->time_out = $time_out;
@@ -1878,12 +1884,25 @@ class Payroll2
 		$_output[$index]->late = $late;
 		$_output[$index]->undertime = $undertime;
 		$_output[$index]->overtime = $overtime;
+		$_output[$index]->payroll_time_sheet_record_id = 0;
 
+		if(isset($time->payroll_time_sheet_record_id))
+		{
+			$_output[$index]->payroll_time_sheet_record_id = $time->payroll_time_sheet_record_id;
+		}
+
+		if(isset($time->payroll_time_sheet_auto_approved))
+		{
+			$_output[$index]->auto_approved = $time->payroll_time_sheet_auto_approved;
+		}
+
+		
 		return $_output;
 	}
 
-	public static function flexi_time_shift_output($_output, $index, $time_in, $time_out, $auto_approved, $reason = "", $status_time_sched = "", $over_time="00:00:00", $undertime = "00:00:00")
+	public static function flexi_time_shift_output($time, $_output, $index, $time_in, $time_out, $auto_approved, $reason = "", $status_time_sched = "", $over_time="00:00:00", $undertime = "00:00:00")
 	{
+
 		$_output[$index] = new stdClass();
 		$_output[$index]->time_in = $time_in;
 		$_output[$index]->time_out = $time_out;
@@ -1893,6 +1912,21 @@ class Payroll2
 		$_output[$index]->overtime = $over_time;
 		$_output[$index]->undertime = $undertime;
 		$_output[$index]->late = "00:00:00";
+
+		$_output[$index]->payroll_time_sheet_record_id = 0;
+
+		if(isset($time->payroll_time_sheet_record_id))
+		{
+			$_output[$index]->payroll_time_sheet_record_id = $time->payroll_time_sheet_record_id;
+		}
+
+		if(isset($time->payroll_time_sheet_auto_approved))
+		{
+			$_output[$index]->auto_approved = $time->payroll_time_sheet_auto_approved;
+		}
+
+
+
 		return $_output;
 	}
 

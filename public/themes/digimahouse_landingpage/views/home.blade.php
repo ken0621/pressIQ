@@ -5,7 +5,7 @@
 
 	<!-- Parallax Background Image -->
 	<div class="slider">
-		<div class="fullscreen background parallax" style="background-image: url('/themes/{{ $shop_theme }}/img/img-slider.png');" data-img-width="1600" data-img-height="1250" data-diff="100">
+		<div class="fullscreen background parallax" style="background-image: url('/themes/{{ $shop_theme }}/img/img-slider.png');" data-img-width="1600" data-img-height="1000" data-diff="100">
 			<div class="container">
 			<div class="row clearfix">
 				<div class="caption-container">

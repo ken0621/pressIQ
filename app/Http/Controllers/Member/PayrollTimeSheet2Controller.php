@@ -714,9 +714,6 @@ class PayrollTimeSheet2Controller extends Member
 	}
 	public function income_summary_monthly_computation($data)
 	{
-		$data['total'] = $this->gettotal_break($data);
-		$data['adjustment'] = $this->generate_adjustment($data);
-		// dd($data);
 		return view("member.payroll2.employee_income_summary_monthly", $data);
 	}
 	public function income_summary_flat_rate_computation()

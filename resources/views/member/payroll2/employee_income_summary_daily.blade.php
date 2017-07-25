@@ -121,8 +121,14 @@
                                 @endforeach
                             @endif
                         @endforeach
-                        
-
+                    </tbody>
+                </table>
+                <table width="100%" class="table table-condensed">
+                    <tbody>
+                        <tr>
+                            <td colspan="7"></td>
+                            <td width="150px"></td>
+                        </tr>
                         <!-- NET BASIC PAY -->
                         <tr class="text-right" style="border-top: 2px solid #000" style="opacity: 0.7">
                             <td colspan="7" style="font-weight: bold;">NET BASIC PAY</td>

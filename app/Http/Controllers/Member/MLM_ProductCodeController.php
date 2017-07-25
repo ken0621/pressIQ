@@ -22,6 +22,7 @@ use App\Globals\Item;
 use App\Globals\Item_code;
 use App\Models\Tbl_membership_code;
 use App\Models\Tbl_warehouse;
+use App\Models\Tbl_shop;
 use App\Globals\Pdf_global;
 use App\Globals\Utilities;
 use App\Models\Tbl_inventory_serial_number;
@@ -72,7 +73,8 @@ class MLM_ProductCodeController extends Member
         }
 
         $shop_id            = $this->user_info->shop_id;
-	    $data['_item']  = Item::get_all_category_item();
+        $data["shop_data"]  = Tbl_shop::where("shop_id",$shop_id)->first();
+	    $data['_item']      = Item::get_all_category_item();
 	    $data["_customer"]  = Tbl_customer::where("archived",0)
                                           ->join("tbl_mlm_slot","tbl_mlm_slot.slot_owner","=","tbl_customer.customer_id")
                                           ->where("tbl_customer.shop_id",$shop_id)->get();

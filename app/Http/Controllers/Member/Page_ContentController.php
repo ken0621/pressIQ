@@ -93,7 +93,7 @@ class Page_ContentController extends Member
             }
             elseif ($value["type"] == "gallery_links") 
             {
-                if ($value["value"]) 
+                if (isset($value["value"]) && $value["value"]) 
                 {
                     $insert["value"] = serialize($value["value"]);
                 }

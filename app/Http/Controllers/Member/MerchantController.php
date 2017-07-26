@@ -215,4 +215,14 @@ class MerchantController extends Member
 		$data['message'] = 'Markup Updated';
 		return json_encode($data);
 	}
+
+
+	public function report()
+	{
+
+	}
+	public function commission()
+	{
+		
+	}
 }

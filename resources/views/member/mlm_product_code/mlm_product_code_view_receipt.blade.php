@@ -201,7 +201,10 @@
                                                     echo 'Wallet';
                                                     $label = 'Current Wallet';
                                                     $label_change = 'Remaining Wallet';
-                                                    break;        
+                                                    break;   
+                                                case 4: 
+                                                    echo 'Vmoney';
+                                                    break;         
                                                 default:
                                                     echo 'Cash';
                                             }

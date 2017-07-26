@@ -18,8 +18,8 @@
 <!-- NO PRODUCT YET -->
 <div class="panel panel-default panel-block panel-title-block panel-gray col-md-6 ">
     <ul class="nav nav-tabs">
-        <li class="active cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#all"><i class="fa fa-star"></i> All Items</a></li>
-        <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#archived"><i class="fa fa-trash"></i> Archived Items</a></li>
+        <li class="active cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#all"><i class="fa fa-star"></i> All Invoice</a></li>
+        <!-- <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#archived"><i class="fa fa-trash"></i> Archived Items</a></li> -->
     </ul>
     <div class="search-filter-box">
         <div class="col-md-4 col-md-offset-4" style="padding: 10px">

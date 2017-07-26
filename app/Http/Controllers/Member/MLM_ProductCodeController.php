@@ -356,13 +356,23 @@ class MLM_ProductCodeController extends Member
     public function receipt()
     {
         $access = Utilities::checkAccess('mlm-product-code', 'product_code_reciept');
+        $access_all_invoice = Utilities::checkAccess('mlm-product-code', 'see_all_invoice');
+        
         if($access == 0)
         {
             return $this->show_no_access(); 
         }
 
         $shop_id          = $this->user_info->shop_id;
-        $_invoice         = Tbl_item_code_invoice::customer()->orderBy('item_code_invoice_id', 'DESC')->where("tbl_item_code_invoice.shop_id",$shop_id);
+        if($access_all_invoice == 1)
+        {
+            $_invoice         = Tbl_item_code_invoice::customer()->orderBy('item_code_invoice_id', 'DESC')->where("tbl_item_code_invoice.shop_id",$shop_id);
+        }
+        else
+        {
+            $user_id = $this->user_info->user_id;
+            $_invoice         = Tbl_item_code_invoice::customer()->orderBy('item_code_invoice_id', 'DESC')->where("tbl_item_code_invoice.user_id",$user_id);
+        }
         
         if(Request::input('search_name'))
         {

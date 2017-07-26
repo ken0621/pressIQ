@@ -29,12 +29,13 @@ use App\Models\Tbl_email_template;
 use App\Globals\EmailContent;
 use App\Globals\Mlm_plan;
 use App\Models\Tbl_mlm_item_points;
+use App\Models\Tbl_user;
 use App\Globals\Ec_order;
 use Mail;
 use App\Globals\Accounting;
 class Merchant
 {
-    public function item_code_merchant_mark_up($invoice_id)
+    public static function item_code_merchant_mark_up($invoice_id)
     {
         $invoice = Tbl_item_code_invoice::where('item_code_invoice_id', $invoice_id)->first();
         $invoice_item = Tbl_item_code_item::where('item_code_invoice_id', $invoice_id)->get();
@@ -46,15 +47,23 @@ class Merchant
             {
                 if($user->user_is_merchant == 1)
                 {
-
+                    $total_colectibles = 0;
                     foreach($invoice_item as $key => $value)
                     {
                         $check_if_there_is_mark_up = Tbl_merchant_markup::where('user_id', $invoice->user_id)->where('item_id', $value->item_id)->first();
                         if($check_if_there_is_mark_up)
                         {
-                            
+                            $update['item_markup_percent'] = $check_if_there_is_mark_up->item_markup_percentage;
+                            $update['item_markup_value'] = $check_if_there_is_mark_up->item_markup_value;
+                            $update['item_markup_percent_less_discount'] = $check_if_there_is_mark_up->item_markup_percentage - (($value->item_membership_discount/$value->item_price) *100);
+                            $update['item_markup_value_less_discount'] = $check_if_there_is_mark_up->item_markup_value - $value->item_membership_discount;
+                            $update['item_markup_collectibles'] = $update['item_markup_value_less_discount'] * $value->item_quantity;
+                            Tbl_item_code_item::where('item_code_item_id', $value->item_code_item_id)->update($update);
+                            $total_colectibles += $update['item_markup_collectibles'];
                         }
                     }
+                    $update_invoice['merchant_markup_value'] = $total_colectibles;
+                    Tbl_item_code_invoice::where('item_code_invoice_id', $invoice_id)->update($update_invoice);
                 }
                 
             }

@@ -894,6 +894,8 @@ Route::controller('/member/utilities', 'Member\UtilitiesController');
 Route::any('/member/merchant/markup', 'Member\MerchantController@index');
 Route::any('/member/merchant/markup/update', 'Member\MerchantController@update');
 Route::any('/member/merchant/markup/update/piece', 'Member\MerchantController@update_per_piece');
+Route::any('/member/merchant/report', 'Member\MerchantController@report');
+Route::any('/member/merchant/commission', 'Member\MerchantController@commission');
 /* ECOMMERCE PRODUCT */
 Route::controller('/member/ecommerce/product', 'Member\EcommerceProductController');
 /* End */

@@ -260,6 +260,11 @@ class Item_code
                 $tendered = 1;
                 $tendered_amount = $data['payment_value'];
             }
+            else if($data['payment_type_choose'] == 4)
+            {
+                $tendered = 4;
+                $tendered_amount = $data['payment_value'];
+            }
             else
             {
                 $send['response_status']      = "warning";

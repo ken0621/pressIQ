@@ -178,3 +178,10 @@
 </div>
 
 <script type="text/javascript" src="/assets/member/payroll/js/timesheet_income_summary.js"></script>
+
+<div class="view-debug-mode modal-footer">
+    <div onclick='$(".debug-view").removeClass("hidden")' style="text-align: center; cursor: pointer; color: #005fbf">DEBUG MODE (DEVELOPER ONLY) &nbsp; <i class="fa fa-caret-down"></i></div>
+    <div class="debug-view hidden text-left" style="padding-top: 10px;">
+        {{ dd($cutoff_breakdown) }}
+    </div>
+</div>

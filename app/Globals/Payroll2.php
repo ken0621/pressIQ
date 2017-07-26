@@ -1919,7 +1919,6 @@ class Payroll2
 		if(isset($time->payroll_time_sheet_record_id))
 		{
 			$_output[$index]->payroll_time_sheet_record_id = $time->payroll_time_sheet_record_id;
-			$_output[$index]->auto_approved = $time->payroll_time_sheet_auto_approved;
 		}
 
 		if(isset($time->payroll_time_sheet_auto_approved))
@@ -1927,7 +1926,7 @@ class Payroll2
 			$_output[$index]->auto_approved = $time->payroll_time_sheet_auto_approved;
 		}
 
-		
+
 
 		return $_output;
 	}

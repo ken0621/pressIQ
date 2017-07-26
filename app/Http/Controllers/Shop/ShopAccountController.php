@@ -169,7 +169,7 @@ class ShopAccountController extends Shop
 
         foreach ($data["_order"] as $key => $value) 
         {
-            $data["_order"][$key]->total = $value->total - Cart::get_coupon_discount($value->coupon_id);
+            $data["_order"][$key]->total = $value->total - Cart::get_coupon_discount($value->coupon_id, $value->total);
         }
 
         return view("account_order", $data);

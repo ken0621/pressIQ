@@ -748,7 +748,7 @@ class ShopCheckoutController extends Shop
     
         $data['order_data'] = Tbl_ec_order::where("ec_order_id",$order_id)->first();
 
-        $data['coupon_disc'] = Cart::get_coupon_discount($data['order_data']->coupon_id);
+        $data['coupon_disc'] = Cart::get_coupon_discount($data['order_data']->coupon_id, $data['order_data']->total);
 
         $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $order_id)
                                            ->leftJoin('tbl_ec_variant', 'tbl_ec_order_item.item_id', '=', 'evariant_id')

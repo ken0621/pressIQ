@@ -92,9 +92,6 @@
 </form>
 
 <script type="text/javascript" src="/assets/member/payroll/js/timesheet2_day_summary.js"></script>
-<<<<<<< HEAD
-{{-- dd($timesheet_info) --}}
-=======
 
 <div class="view-debug-mode modal-footer">
     <div onclick='$(".debug-view").removeClass("hidden")' style="text-align: center; cursor: pointer; color: #005fbf">DEBUG MODE (DEVELOPER ONLY) &nbsp; <i class="fa fa-caret-down"></i></div>
@@ -102,4 +99,4 @@
         {{ dd($timesheet_info) }}
     </div>
 </div>
->>>>>>> 3ab10a62a3f5e42facc63d61caeff7c0fa295006
+

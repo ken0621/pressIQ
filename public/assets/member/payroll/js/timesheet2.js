@@ -2,7 +2,7 @@ var timesheet = new timesheet();
 var timesheet_request = null;
 var adjust_form_request = null;
 var new_sub_ctr = 1000;
-
+var timechangerequest = null;
 function timesheet()
 {
 	init();
@@ -78,6 +78,12 @@ function timesheet()
 			$(e.currentTarget).attr("focus_value", $focus_value);
 		});
 
+
+		$(".table-timesheet").on("keyup", ".time-entry", function(e)
+		{
+			var tr_date = $(e.currentTarget).closest(".tr-parent").attr("date");
+			action_reload_rate_for_date(tr_date);
+		});
 		/* CHECK IF INITIAL VALUE CHANGED AFTER FOCUS OUT */
 		$(".table-timesheet").on("focusout", ".time-entry", function(e)
 		{
@@ -88,22 +94,12 @@ function timesheet()
 			$time_in = $(".time-in[unq=" + $focus_unq + "]").val(); 
 			$time_out = $(".time-out[unq=" + $focus_unq + "]").val();
 
-
 			/* IF BOTH BLANK THEN JUST REMOVE */
 			if($time_in == "" && $time_out == "" && $(e.currentTarget).closest(".tr-parent").find(".time-in").length > 1)
 			{
 				$(".time-in[unq=" + $focus_unq + "]").remove(); 
 				$(".time-out[unq=" + $focus_unq + "]").remove();
 				$(".comment[unq=" + $focus_unq + "]").remove();
-			}
-			else
-			{
-				/* CHECK IF FOCUS OUT VALUE CHANGED */
-				if($focus_value != $(e.currentTarget).val())
-				{
-					var tr_date = $(e.currentTarget).closest(".tr-parent").attr("date");
-					action_reload_rate_for_date(tr_date);
-				}
 			}
 		});
 	}
@@ -121,7 +117,12 @@ function timesheet()
 		
 		$url = "/member/payroll/company_timesheet2/change/" + $period_id + "/" + $employee_id;
 		
-		$.ajax(
+		if(timechangerequest)
+		{
+			timechangerequest.abort();
+		}
+
+		timechangerequest = $.ajax(
 		{
 			url: $url,
 			dataType: "json",

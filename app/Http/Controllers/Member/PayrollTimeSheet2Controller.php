@@ -887,7 +887,7 @@ class PayrollTimeSheet2Controller extends Member
 			{
 				if($clean_shift->auto_approved == null)
 				{
-					$clean_shift->auto_approved = 0;
+					$clean_shift->auto_approved = 1;
 				}
 				$insert[$key]["payroll_time_sheet_id"] = $time_sheet_id;
 				$insert[$key]["payroll_time_sheet_in"] = $clean_shift->time_in;

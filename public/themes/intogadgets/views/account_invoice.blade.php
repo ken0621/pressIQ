@@ -32,7 +32,7 @@
       </div>
       <div class="clearfix sales-top">
         <div class="pull-left sales-title">SALES INVOICE</div>
-        <div class="pull-right sales-number">NO. 18701</div>
+        <div class="pull-right sales-number">NO. {{ $order->manual_inv_number != '' ? $order->manual_inv_number : $order->ec_order_id }}</div>
       </div> 
       <div class="row clearfix per-row">
         <div class="col-md-5 col-md-offset-7 text-right">

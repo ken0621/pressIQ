@@ -1,5 +1,16 @@
 <?php
+function floatvalser($amount)
+{
+    if(is_infinite($amount))
+    {
+        return 0;
+    }
+    else
+    {
+        return $amount;
+    }
     
+}
 function ctopercent($flt)
 {
     return number_format($flt * 100, 0) . "%";
@@ -25,6 +36,7 @@ function c_time_to_int($time)
 function code_to_word($code)
 {
     $code = str_replace("_", " ", $code);
+    $code = str_replace("first", "1st", $code);
     $code = ucwords($code);
     return $code;
 }

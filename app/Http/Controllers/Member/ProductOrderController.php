@@ -38,7 +38,7 @@ class ProductOrderController extends Member
     public function index()
     {
         $data["page"]               = "Customer Invoice";
-        $data["_customer"]          = Tbl_customer::where("archived", 0)->get();
+        $data["_customer"]          = Tbl_customer::where("tbl_customer.archived", 0)->get();
         $data["_payment_method"]    = Tbl_online_pymnt_method::get();
         $data['_product']           = Ecom_Product::getProductList(null, [1,0], 1);
         // dd($data);
@@ -51,6 +51,9 @@ class ProductOrderController extends Member
             $data["inv"]            = Tbl_ec_order::where("ec_order_id", $id)->first();
             $data["_invline"]       = Tbl_ec_order_item::where("ec_order_id", $id)->get();
             $data["action"]         = "/member/ecommerce/product_order/create_order/update_invoice";
+
+            $mobile = DB::table("tbl_customer_other_info")->where("customer_id", $data["inv"]->customer_id)->first();
+            $data["inv"]->customer_mobile = $mobile->customer_mobile or '';
 
             $sir                    = Tbl_ec_order::where("ec_order_id",$id)->first();
 
@@ -104,7 +107,7 @@ class ProductOrderController extends Member
                 }
             }
         }
-      
+       
         return view('member.product_order.product_create_order', $data);
     }
     public function invoice_list()
@@ -307,6 +310,9 @@ class ProductOrderController extends Member
             else
             {
                 $return["status"]                   = "success-update-invoice";
+
+                Tbl_ec_order::where("ec_order_id",$data["ec_order_id"])->update(["manual_inv_number" => Request::input("manual_inv_number")]);
+                
                 $return["redirect_to"]              = "/member/ecommerce/product_order/create_order?id=".$data["ec_order_id"];
                 return json_encode($return);
             }

@@ -391,14 +391,17 @@ class Payroll2
 		//target time is the same from shift hours
 		if($target_hours == 0)
 		{
-			$target_hours = Payroll2::target_hours($_shift);
+			$target_hours = Payroll2::target_hours($_shift);	
 		}
 		//target time is different from shift hours
 		else
 		{
+
 			$target_hours = Payroll2::float_time($target_hours);
 		}
 		
+
+
 		if ($_time==null) 
 		{
 			if (!(($day_type == "rest_day")||($day_type == "extra")||($is_holiday == "regular")||($is_holiday == "special")||($leave_hours!="00:00:00")))

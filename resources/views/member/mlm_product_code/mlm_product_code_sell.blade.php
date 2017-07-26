@@ -39,23 +39,27 @@
 						<div class="col-md-12 customer_data">
 							
 						</div>
-							<!--<div class="col-md-3">
-								<label>Slot </label>
-								<input type="text" class="form-control membership_code" name="membership_code" onChange="bar_code_membership_code(this)">
-								<small style="color:gray;">Barcode or press Enter to search.</small>
-							</div>-->
-							<div class="col-md-3 customer_slot_container">
-							</div> 
-							<div class="col-md-3">
-								<label>Customer</label>
-									<select name="customer_chosen" class="form-control chosen-select customer_chosen">
-									  	<option value="All">All</option>	
-										@foreach($_customer as $customer)
-											<option value="{{$customer->customer_id}}">{{$customer->first_name}} {{$customer->middle_name}} {{$customer->last_name}}</option>
-										@endforeach
-									</select>
-								<small style="color:gray;">List of customers with slot.</small>
-							</div>
+							@if($shop_data->shop_key == "PhilTECH")
+								<div class="col-md-3">
+									<label>Slot </label>
+									<input type="text" class="form-control membership_code" name="membership_code" onChange="bar_code_membership_code(this)">
+									<small style="color:gray;">Barcode or press Enter to search.</small>
+								</div>
+							@else
+								<div class="col-md-3 customer_slot_container">
+								</div> 
+								<div class="col-md-3">
+									<label>Customer</label>
+										<select name="customer_chosen" class="form-control chosen-select customer_chosen">
+										  	<option value="All">All</option>	
+											@foreach($_customer as $customer)
+												<option value="{{$customer->customer_id}}">{{$customer->first_name}} {{$customer->middle_name}} {{$customer->last_name}}</option>
+											@endforeach
+										</select>
+									<small style="color:gray;">List of customers with slot.</small>
+								</div>
+							@endif
+
 							<div class="col-md-3">
 									<label>Products</label>
 									<input type="text" class="form-control product_barcode" name="product_barcode" form="bardcode_product_form" onChange="bar_code_product(this)">
@@ -225,6 +229,8 @@ on_change_quantity();
 $(".membership_code").focus();
 var past_value = null;
 var slot_chosen = 0;
+    $shop_type = "{{$shop_data->shop_key}}";
+    $shop_condition = "PhilTECH";
 function compute()
 {
 	// /member/mlm/code/sell/compute
@@ -439,19 +445,26 @@ function get_slot(ito)
 }
 function bar_code_membership_code(ito)
 {
-	$('.customer_data').html('<center><div class="loader-16-gray"></div></center>');
-	$('.customer_data').load('/member/customer/product_repurchase/get_slot_v_membership_code/' + ito, function(){
-		change_slot_class();
-	});
-	// $(ito).val('');	
+	if($shop_type == $shop_condition)
+	{
+		var membership_code = ito.value;
+		// $(ito).val('');	
 
-	// var membership_code = ito.value;
-	// console.log(membership_code);
-	// $('.customer_data').html('<center><div class="loader-16-gray"></div></center>');
-	// $('.customer_data').load('/member/customer/product_repurchase/get_slot_v_membership_code/' + membership_code, function(){
-	// 	change_slot_class();
-	// });
-	// $(ito).val('');
+		console.log(membership_code);
+		$('.customer_data').html('<center><div class="loader-16-gray"></div></center>');
+		$('.customer_data').load('/member/customer/product_repurchase/get_slot_v_membership_code/' + membership_code, function(){
+			change_slot_class();
+		});
+		$(ito).val('');
+	}
+	else
+	{
+		$('.customer_data').html('<center><div class="loader-16-gray"></div></center>');
+		$('.customer_data').load('/member/customer/product_repurchase/get_slot_v_membership_code/' + ito, function(){
+			change_slot_class();
+		});
+	}
+
 	
 }
 $(".membership_code").on("paste",function(e){

@@ -1,5 +1,6 @@
 @extends('member.layout')
 @section('content')
+<input type="hidden" class="payroll-process-id" value="{{ $period_company_id }}">
 <div class="panel panel-default panel-block panel-title-block">
     <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}"/>
     <div class="panel-heading">
@@ -14,12 +15,22 @@
 
             <div class="dropdown pull-right">
                 <button onclick="location.href='/member/payroll/company_timesheet2/{{ $period_company_id }}'" class="btn btn-default">&laquo; Back</button>
-                <button onclick="location.href='/member/payroll/process_payroll/{{$company->payroll_period_company_id}}?step=process'" class="btn btn-primary"><i class="fa fa-star"></i> Submit Payroll Process</button>
+                
             </div>
             <input type="hidden" name="" value="{{$company->payroll_period_id}}" id="payroll_period_id">
         </div>
     </div>
 </div>
+
+<div class="panel panel-default panel-block panel-title-block">
+    <div class="panel-heading">
+        <div class="text-center" style="font-size: 20px;">
+            Please check carefully before proceeding. <br>
+            <button onclick="location.href='/member/payroll/process_payroll/{{$company->payroll_period_company_id}}?step=process'" class="btn btn-primary"><i class="fa fa-star"></i> Click <b>HERE</b> to <b>CONFIRM PAYROLL PROCESS</b>!</button>
+        </div>
+    </div>
+</div>
+
 
 
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
@@ -28,7 +39,8 @@
             <div class="form-group order-tags"></div>
                 <div class="clearfix">
                     <div class="col-md-12">
-                        <div class="table-responsive load-table-employee-list">
+                        <div class="table-responsive load-table-employee-summary">
+
                         </div>
                     </div>
                 </div>
@@ -36,6 +48,8 @@
         </div>
     </div>
 </div>
-
 @endsection
 
+@section('script')
+<script type="text/javascript" src="/assets/member/payroll/js/payroll_process.js"></script>
+@endsection

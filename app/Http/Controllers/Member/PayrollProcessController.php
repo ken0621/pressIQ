@@ -16,8 +16,13 @@ class PayrollProcessController extends Member
 	{
 		$data["period_company_id"] = $period_company_id;
 		$data["company"] = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
-		$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->get();
 		return view("member.payroll2.payroll_process", $data);
+	}
+	public function index_table($period_company_id)
+	{
+		$data["company"] = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
+		$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
+		return view("member.payroll2.payroll_process_table", $data);
 	}
 
 }

@@ -11,10 +11,13 @@
 @endsection
 @section('content')
 
-@if(get_content($shop_theme_info, 'product', 'product_banner') && get_content($shop_theme_info, 'product', 'product_banner_link'))
+@if(get_content($shop_theme_info, 'product', 'product_banner_multiple') && is_serialized(get_content($shop_theme_info, 'product', 'product_banner_multiple')))
+<?php
+    $random = array_rand(unserialize(get_content($shop_theme_info, 'product', 'product_banner_multiple')));
+?>
 <div class="aadd">
-    <a href="{{ get_content($shop_theme_info, 'product', 'product_banner_link') }}" target="_blank">
-        <img src="{{ get_content($shop_theme_info, 'product', 'product_banner') }}" style="" >
+    <a href="{{ unserialize(get_content($shop_theme_info, 'product', 'product_banner_multiple'))[$random]['link'] }}" target="_blank">
+        <img src="{{ unserialize(get_content($shop_theme_info, 'product', 'product_banner_multiple'))[$random]['image'] }}" style="" >
     </a>
 </div>
 @endif

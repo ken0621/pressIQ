@@ -23,6 +23,7 @@ use App\Models\Tbl_customer_other_info;
 
 use App\Globals\Mlm_member;
 use App\Globals\Settings;
+use App\Globals\Cart;
 use App\Globals\Ecom_Product;
 use App\Globals\Ec_wishlist;
 class ShopAccountController extends Shop
@@ -165,6 +166,11 @@ class ShopAccountController extends Shop
 
         $data["page"] = "Order";
         $data["_order"] = Tbl_ec_order::where('shop_id', $this->shop_info->shop_id)->where('customer_id', Self::$customer_id)->get();
+
+        foreach ($data["_order"] as $key => $value) 
+        {
+            $data["_order"][$key]->total = $value->total - Cart::get_coupon_discount($value->coupon_id, $value->total);
+        }
 
         return view("account_order", $data);
     }

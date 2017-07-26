@@ -427,6 +427,8 @@ class ShopCheckoutController extends Shop
                     $data["shipping_address"]->state_id = isset(DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->state_id)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->state_id)->first()->locale_id : null;
                     $data["shipping_address"]->city_id = isset(DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->city_id)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->city_id)->first()->locale_id : null;
                     $data["shipping_address"]->zipcode_id = isset(DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->barangay_id)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->barangay_id)->first()->locale_id : null;
+
+                    // dd($data["shipping_address"]);
                 }
                 else
                 {
@@ -470,7 +472,6 @@ class ShopCheckoutController extends Shop
 
         $order_product = $data["get_cart"]["tbl_ec_order_item"];
         $coupon_id = null;
-
         // if ($data["get_cart"]["new_account"] == true) 
         // {
             // $validate["full_name"] = Request::input("full_name");
@@ -748,7 +749,7 @@ class ShopCheckoutController extends Shop
         $data['order_data'] = Tbl_ec_order::where("ec_order_id",$order_id)->first();
 
         $data['coupon_disc'] = Cart::get_coupon_discount($data['order_data']->coupon_id);
-        
+
         $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $order_id)
                                            ->leftJoin('tbl_ec_variant', 'tbl_ec_order_item.item_id', '=', 'evariant_id')
                                            ->get();

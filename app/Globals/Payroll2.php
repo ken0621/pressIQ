@@ -1885,12 +1885,15 @@ class Payroll2
 		$_output[$index]->late = $late;
 		$_output[$index]->undertime = $undertime;
 		$_output[$index]->overtime = $overtime;
-
 		$_output[$index]->payroll_time_sheet_record_id = 0;
 
 		if(isset($time->payroll_time_sheet_record_id))
 		{
 			$_output[$index]->payroll_time_sheet_record_id = $time->payroll_time_sheet_record_id;
+		}
+
+		if(isset($time->payroll_time_sheet_auto_approved))
+		{
 			$_output[$index]->auto_approved = $time->payroll_time_sheet_auto_approved;
 		}
 
@@ -1916,7 +1919,15 @@ class Payroll2
 		if(isset($time->payroll_time_sheet_record_id))
 		{
 			$_output[$index]->payroll_time_sheet_record_id = $time->payroll_time_sheet_record_id;
+			$_output[$index]->auto_approved = $time->payroll_time_sheet_auto_approved;
 		}
+
+		if(isset($time->payroll_time_sheet_auto_approved))
+		{
+			$_output[$index]->auto_approved = $time->payroll_time_sheet_auto_approved;
+		}
+
+		
 
 		return $_output;
 	}

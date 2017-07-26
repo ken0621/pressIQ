@@ -227,12 +227,15 @@ class ShopAccountController extends Shop
 
         $state = isset(DB::table("tbl_locale")->where("locale_id", $customer_state)->first()->locale_name) ? DB::table("tbl_locale")->where("locale_id", $customer_state)->first()->locale_name : null;
         $city = isset(DB::table("tbl_locale")->where("locale_id", $customer_city)->first()->locale_name) ? DB::table("tbl_locale")->where("locale_id", $customer_city)->first()->locale_name : null;
-        $zip= isset(DB::table("tbl_locale")->where("locale_id", $customer_zip)->first()->locale_name) ? DB::table("tbl_locale")->where("locale_id", $customer_zip)->first()->locale_name : null;
+        $zip = isset(DB::table("tbl_locale")->where("locale_id", $customer_zip)->first()->locale_name) ? DB::table("tbl_locale")->where("locale_id", $customer_zip)->first()->locale_name : null;
 
         $update_address['customer_street'] = Request::input('customer_street');
         $update_address['customer_state'] = $state;
         $update_address['customer_city'] = $city;
         $update_address['customer_zipcode'] = $zip;
+        $update_address['state_id'] = $customer_state;
+        $update_address['city_id'] = $customer_city;
+        $update_address['barangay_id'] = $customer_zip;
 
         Tbl_customer_address::where('customer_id', Self::$customer_id)->update($update_address);
 

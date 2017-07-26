@@ -75,10 +75,22 @@ class PayrollTimeSheet2Controller extends Member
 		
 		
 		$employee_contract = $this->db_get_current_employee_contract($employee_id, $data["company_period"]->payroll_period_start);
+
 		$data["compute_type"] = $employee_contract->payroll_group_salary_computation;
+
+
 		$data["period_id"] = $period_id;
+
+		if($data["compute_type"] == "Flat Rate")
+		{
+			echo "<div style='padding: 100px; text-align: center;'>FLAT RATE COMPUTATION DOES'T HAVE TIMESHEET</div>";
+		}
+		else
+		{
+			return view('member.payroll2.employee_timesheet', $data);
+		}
 		
-		return view('member.payroll2.employee_timesheet', $data);
+		
 	}
 	public function approve_timesheets()
 	{
@@ -96,39 +108,21 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			$insert["employee_id"] = $employee_id;
 			$insert["payroll_period_company_id"] = $period_id;
-			//dd($compute_cutoff["break_down"]["employee"]);
-			$insert["net_basic_pay"] = $compute_cutoff["break_down"]["employee"]["get_net_basic_pay"]["total_net_basic"];
-			$insert["gross_pay"] = $compute_cutoff["break_down"]["employee"]["get_gross_pay"]["total_gross_pay"];
-			$insert["net_pay"] = $compute_cutoff["break_down"]["employee"]["get_net_pay"]["total_net_pay"];
-			$insert["taxable_salary"] = $compute_cutoff["break_down"]["employee"]["get_taxable_salary"]["total_taxable"];
-			
-		
-			
-			foreach($compute_cutoff["break_down"]["employee"]["get_taxable_salary"]["obj"] as $obj)
-			{
-				if($obj["name"] == "SSS")
-				{
-					$insert["sss_salary"] = $obj["ref_amount"];
-					$insert["sss_ee"] = $obj["amount"];
-					$insert["sss_er"] = 0;
-					$insert["sss_ec"] = 0;
-				}
-				
-				if($obj["name"] == "PHILHEALTH")
-				{
-					$insert["phihealth_salary"] = $obj["ref_amount"];
-					$insert["philhealth_ee"] = $obj["amount"];
-					$insert["philhealth_er"] = 0;
-				}
-				
-				if($obj["name"] == "PAGIBIG")
-				{
-					$insert["pagibig_salary"] = $obj["ref_amount"];
-					$insert["pagibig_ee"] = $obj["amount"];
-					$insert["pagibig_er"] = 0;
-				}
-			}
-			
+			$insert["net_basic_pay"] = $compute_cutoff["cutoff_breakdown"]->basic_pay_total;
+			$insert["gross_pay"] =  $compute_cutoff["cutoff_breakdown"]->gross_pay_total;
+			$insert["net_pay"] =  $compute_cutoff["cutoff_breakdown"]->net_pay_total;
+			$insert["taxable_salary"] =  $compute_cutoff["cutoff_breakdown"]->taxable_salary_total;
+			$insert["sss_salary"] = $compute_cutoff["cutoff_breakdown"]->sss_contribution["salary"];
+			$insert["sss_ee"] = $compute_cutoff["cutoff_breakdown"]->sss_contribution["ee"];
+			$insert["sss_er"] = $compute_cutoff["cutoff_breakdown"]->sss_contribution["er"];
+			$insert["sss_ec"] = $compute_cutoff["cutoff_breakdown"]->sss_contribution["ec"];
+			$insert["phihealth_salary"] = $compute_cutoff["cutoff_breakdown"]->philhealth_contribution["salary"];
+			$insert["philhealth_ee"] = $compute_cutoff["cutoff_breakdown"]->philhealth_contribution["ee"];
+			$insert["philhealth_er"] = $compute_cutoff["cutoff_breakdown"]->philhealth_contribution["er"];
+			$insert["pagibig_salary"] = $compute_cutoff["cutoff_breakdown"]->pagibig_contribution["salary"];
+			$insert["pagibig_ee"] = $compute_cutoff["cutoff_breakdown"]->pagibig_contribution["ee"];
+			$insert["pagibig_er"] = $compute_cutoff["cutoff_breakdown"]->pagibig_contribution["er"];
+
 			Tbl_payroll_time_keeping_approved::insert($insert);
 		}
 
@@ -589,8 +583,6 @@ class PayrollTimeSheet2Controller extends Member
 		$data["timesheet_info"] = $timesheet_info =$this->timesheet_process_daily_info($timesheet_db->payroll_employee_id, $timesheet_db->payroll_time_date, $timesheet_db, $data["period_company_id"]);
 		$employee_contract		= $this->db_get_current_employee_contract($timesheet_db->payroll_employee_id, $timesheet_db->payroll_time_date);
 		$data["compute_type"] = $employee_contract->payroll_group_salary_computation;
-		
-	
 		$data["compute_html"] = view('member.payroll2.employee_day_summary_compute', $data);
 		
 		/* COMPUTATION FOR CUTOFF */
@@ -615,14 +607,13 @@ class PayrollTimeSheet2Controller extends Member
 			$this->error_page("This employee doesn't have contract at this point of time.");
 		}
 		
-		
-		
 		$compute_type = Payroll2::convert_period_cat($group->payroll_group_salary_computation);
 		
 		if(!$salary)
 		{
 			dd("This employee doesn't have salary as of this date (" .  payroll_date_format($company_period->payroll_period_start) . "). Please check effectivity date of salary.");
 		}
+
 		$cutoff_rate = $this->identify_period_salary($salary->payroll_employee_salary_monthly, $company_period->payroll_period_category);
 		$cutoff_cola = $this->identify_period_salary($salary->monthly_cola, $company_period->payroll_period_category);
 		$cutoff_target_days = $this->identify_period_salary($salary->payroll_group_working_day_month, $group->payroll_period_category);
@@ -636,14 +627,14 @@ class PayrollTimeSheet2Controller extends Member
 			$_timesheet[$from] = $this->timesheet_process_daily_info($employee_id, $from, $timesheet_db, $period_company_id);;
 			$from = Carbon::parse($from)->addDay()->format("Y-m-d");
 		}
+
 		$data["cutoff_input"] = $_timesheet;
-	
-	
-	
 		$data["cutoff_compute"] = $cutoff_compute = Payroll2::cutoff_compute_gross_pay($compute_type, $cutoff_rate, $cutoff_cola, $cutoff_target_days, $_timesheet);
-	
-		$data["netpay_compute"] = Payroll2::cutoff_compute_net_pay($period_company_id, $employee_id, $cutoff_compute->cutoff_income_plus_cola, $cutoff_compute->cutoff_income_plus_cola, $cutoff_compute->render_days);
-		$data["break_down"]		= Payroll2::cutoff_compute_break($period_company_id, $employee_id, $cutoff_compute);
+		$data["cutoff_breakdown"] = $cutoff_breakdown = Payroll2::cutoff_breakdown($period_company_id, $employee_id, $cutoff_compute, $data);
+		
+		//$data["netpay_compute"] = Payroll2::cutoff_compute_net_pay($period_company_id, $employee_id, $cutoff_compute->cutoff_income_plus_cola, $cutoff_compute->cutoff_income_plus_cola, $cutoff_compute->render_days);
+		//$data["break_down"]		= Payroll2::cutoff_compute_break($period_company_id, $employee_id, $cutoff_compute);
+		//dd($data);
 		// dd($data["break_down"]);
 		return $data;
 	}
@@ -655,7 +646,7 @@ class PayrollTimeSheet2Controller extends Member
 		$data["employee_id"] = $timesheet_db->payroll_employee_id;
 		$data["employee_info"] = $this->db_get_employee_information($timesheet_db->payroll_employee_id); 
 		$data["timesheet_info"] = $timesheet_info = $this->timesheet_process_daily_info($timesheet_db->payroll_employee_id, $timesheet_db->payroll_time_date, $timesheet_db, $data["period_company_id"]);
-		$employee_contract		= $this->db_get_current_employee_contract($timesheet_db->payroll_employee_id, $timesheet_db->payroll_time_date);
+		$employee_contract = $this->db_get_current_employee_contract($timesheet_db->payroll_employee_id, $timesheet_db->payroll_time_date);
 		$data["compute_type"] = $employee_contract->payroll_group_salary_computation;
 		return view('member.payroll2.employee_day_summary_compute', $data);
 	}
@@ -703,13 +694,15 @@ class PayrollTimeSheet2Controller extends Member
 		*  Flat Rate
 		*  Monthly Rate
 		*/
-		$date = Tbl_payroll_period_company::sel($period_company_id)->pluck('payroll_period_start');
-		$group = $this->db_get_current_employee_contract($employee_id, $date);
+		$data["date"] = $date = Tbl_payroll_period_company::sel($period_company_id)->pluck('payroll_period_start');
+		$data["group"] = $group = $this->db_get_current_employee_contract($employee_id, $date);
+		$data["computation_type"] = $computation_type = $group->payroll_group_salary_computation;
 		$data = $this->compute_whole_cutoff($period_company_id, $employee_id);
-		$computation_type = $group->payroll_group_salary_computation;
-	
-
+		$data["employee_id"] = $employee_id;
+		$check_approved = Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_company_id)->first();
+		$data["time_keeping_approved"] = $check_approved ? true : false;			
 		
+
 		switch ($computation_type)
 		{
 			case "Daily Rate":
@@ -721,28 +714,20 @@ class PayrollTimeSheet2Controller extends Member
 			case "Flat Rate":
 				return $this->income_summary_flat_rate_computation($data);
 			break;
-			
 		}
 	}
 	
 	public function income_summary_daily_computation($data)
 	{
-		// dd($data);
-		$data['total'] = $this->gettotal_break($data);
-		$data['adjustment'] = $this->generate_adjustment($data);
-		//dd($data);
 		return view("member.payroll2.employee_income_summary_daily", $data);
 	}
 	public function income_summary_monthly_computation($data)
 	{
-		$data['total'] = $this->gettotal_break($data);
-		$data['adjustment'] = $this->generate_adjustment($data);
-		// dd($data);
 		return view("member.payroll2.employee_income_summary_monthly", $data);
 	}
-	public function income_summary_flat_rate_computation()
+	public function income_summary_flat_rate_computation($data)
 	{
-		dd($data);
+		return view("member.payroll2.employee_income_summary_flat", $data);
 	}
 	/* GLOBAL FUNCTION FOR THIS CONTROLLER */
 	public function c_24_hour_format($time)

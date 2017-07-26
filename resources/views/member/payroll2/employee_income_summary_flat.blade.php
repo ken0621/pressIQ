@@ -1,75 +1,14 @@
-<div class="modal-header employee-income-summary">
-    <input type="hidden" class="period-id" value="{{ $period_info->payroll_period_company_id }}">
-    <input type="hidden" class="x-employee-id" value="{{ $employee_id }}">
+<div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">×</button>
-    <h4 class="modal-title">
-        <b>DAILY COMPUTATION ({{ $period_info->month_contribution }} - {{ code_to_word($period_info->period_count) }})</b>
-    </h4>
+    <h4 class="modal-title"><b>MONTHLY COMPUTATION ({{ $period_info->month_contribution }} - {{ code_to_word($period_info->period_count) }})</b> </h4>
 </div>
-
-
 <div class="modal-body clearfix">
     <div class="text-center text-bold" style="font-size: 20px; color: #1682ba">SALARY COMPUTATION</div>
     <div class="col-md-12" style="text-align: left; font-weight: normal; margin-bottom: 10px; font-size: 16px;"></div>
     <div class="clearfix">
         <div class="col-md-12">
             <div class="table-responsive">
-                <table class="table table-condensed timesheet table-timesheet">
-                    <thead style="text-transform: uppercase">
-                        <tr>
-                            <th width="120px" class="text-center">DATE</th>
-                            <th class="text-center" width="100px">DAY RATE</th>
-                            <th class="text-center" width="100px"></th>
-                            <th width="150px" class="text-right" width="100px">ADDITIONS</th>
-                            <th width="150px" class="text-right" width="100px">DEDUCTIONS</th>
-                            <th class="text-right" width="100px">COLA</th>
-                            
-                            <th class="text-right"></th>
-                            <th width="150px" class="text-right">BASIC</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($cutoff_input as $date => $compute)
-                        <tr style="border-top: 2px solid #ddd">
-                                <td class="text-center">{{ date("F d, Y", strtotime($date)) }} </td>
-                                <td class="text-center">{{ payroll_currency($compute->compute->daily_rate, 2) }}</td>
-                                <td></td>
-                                <td class="text-right" style="opacity: 0.9">{{ payroll_currency($compute->compute->breakdown_addition, 2) }}</td>
-                                <td class="text-right" style="opacity: 0.9">{{ payroll_currency($compute->compute->breakdown_deduction, 2) }}</td>
-                                <td class="text-right">{{ payroll_currency($compute->compute->cola, 2) }}</td>
-                                
-                                <td></td>
-                                <td class="text-right" style="opacity: 0.9">{{ payroll_currency($compute->compute->total_day_basic, 2) }}</td>
-                            </tr>
-                            @if(isset($compute->compute->_breakdown_addition))
-                                @foreach($compute->compute->_breakdown_addition as $breakdown_label => $breakdown)
-                                <tr >
-                                    <td></td>
-                                    <td colspan="2" class="text-right" style="opacity: 0.5">{{ strtoupper($breakdown_label) }}</td>
-                                    <td class="text-right" style="opacity: 0.5">{{ payroll_currency($breakdown["rate"]) }}</td>
-                                    <td class="text-right" style="opacity: 0.5"></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="text-right" style="opacity: 0.5"></td>
-                                </tr>
-                                @endforeach
-                            @endif
-                            @if(isset($compute->compute->_breakdown_deduction))
-                                @foreach($compute->compute->_breakdown_deduction as $breakdown_label => $breakdown)
-                                <tr>
-                                    <td></td>
-                                    <td colspan="2" class="text-right" style="opacity: 0.5;">{{ strtoupper($breakdown_label) }}</td>
-                                    <td class="text-right" style="opacity: 0.5"></td>
-                                    <td class="text-right" style="opacity: 0.5">{{ payroll_currency($breakdown["rate"]) }}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="text-right" style="opacity: 0.5"></td>
-                                </tr>
-                                @endforeach
-                            @endif
-                        @endforeach
-                    </tbody>
-                </table>
+
                 <table width="100%" class="table table-condensed">
                     <tbody>
                         <tr>
@@ -83,9 +22,11 @@
                         </tr>
 
                         <!-- GROSS BREAKDOWN  -->
-                        @foreach($cutoff_breakdown->_gross_pay_breakdown as $breakdown)
-                            {!! $breakdown["tr"] !!}
-                        @endforeach
+                        @if($cutoff_breakdown->_gross_pay_breakdown)
+                            @foreach($cutoff_breakdown->_gross_pay_breakdown as $breakdown)
+                                {!! $breakdown["tr"] !!}
+                            @endforeach
+                        @endif
 
                         <!-- GROSS PAY -->
                         <tr style="font-weight: bold;">
@@ -133,7 +74,6 @@
     </div>
 </div>
 
-
 <div class="modal-body clearfix">
     <div class="text-center text-bold" style="font-size: 20px; color: #1682ba">GOVERNMENT CONTRIBUTIONS</div>
     <div class="col-md-12" style="text-align: left; font-weight: normal; margin-bottom: 10px; font-size: 16px;"></div>
@@ -180,6 +120,7 @@
 </div>
 
 
+
 <div class="modal-footer text-right">
     <button class="btn btn-def-white btn-custom-white" data-dismiss="modal">CLOSE</button>
     @if($time_keeping_approved == false)
@@ -190,7 +131,6 @@
 </div>
 
 <script type="text/javascript" src="/assets/member/payroll/js/timesheet_income_summary.js"></script>
-
 
 <div class="view-debug-mode modal-footer">
     <div onclick='$(".debug-view").removeClass("hidden")' style="text-align: center; cursor: pointer; color: #005fbf">DEBUG MODE (DEVELOPER ONLY) &nbsp; <i class="fa fa-caret-down"></i></div>

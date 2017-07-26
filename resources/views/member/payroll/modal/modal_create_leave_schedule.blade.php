@@ -27,7 +27,7 @@
 		<div class="form-group">
 			<div class="col-md-6">
 				<small>Leave Name</small>
-				<select class="form-control select-leave" required>
+				<select class="form-control select-leave" name="leave_reason" required>
 					<option value="">Select leave</option>
 					@foreach($_leave as $leave)
 					<option value="{{$leave->payroll_leave_temp_id}}">{{$leave->payroll_leave_temp_name}}</option>
@@ -45,7 +45,7 @@
 					<thead>
 						<tr>
 							<th class="text-center">Employee name</th>
-							<th class="text-center">Whole day</th>
+							<!-- <th class="text-center">Whole day</th> -->
 							<th class="text-center">Hours</th>
 							<th></th>
 						</tr>

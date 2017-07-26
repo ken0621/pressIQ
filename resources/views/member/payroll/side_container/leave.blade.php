@@ -19,7 +19,7 @@
 				  		<thead>
 				  			<tr>
 				  				<th>Leave Name</th>
-				  				<th>No of Days.</th>
+				  				<th>No of Hours.</th>
 				  				<th>With Pay?</th>
 				  				<th>Is Accumulated?</th>
 				  				<th class="text-center">Action</th>
@@ -71,7 +71,7 @@
 				  		<thead>
 				  			<tr>
 				  				<th>Leave Name</th>
-				  				<th>No of Days.</th>
+				  				<th>No of Hours.</th>
 				  				<th class="text-center">Action</th>
 				  			</tr>
 				  		</thead>

@@ -882,7 +882,6 @@ class Payroll2
 			$is_absent = true;
 		}
 
-		
 	
 		if ($_time==null) 
 		{

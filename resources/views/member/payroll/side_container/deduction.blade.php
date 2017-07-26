@@ -18,7 +18,6 @@
 			   		<tr>
 			   			<th>Deduction Name</th>
 			   			<th>Category</th>
-			   			<th>Type</th>
 			   			<th>Effective Date</th>
 			   			<th>Amount</th>
 			   			<th class="text-center">Action</th>
@@ -32,9 +31,6 @@
 			   			</td>
 			   			<td>
 			   				{{$active->payroll_deduction_category}}
-			   			</td>
-			   			<td>
-			   				{{$active->payroll_deduction_type_name}}
 			   			</td>
 			   			<td>
 			   				{{date('M d, Y', strtotime($active->payroll_deduction_date_start))}}
@@ -72,7 +68,6 @@
 				   		<tr>
 				   			<th>Deduction Name</th>
 				   			<th>Category</th>
-				   			<th>Typ</th>
 				   			<th>Effective Date</th>
 				   			<th>Amount</th>
 				   			<th class="text-center">Action</th>
@@ -86,9 +81,6 @@
 			   			</td>
 			   			<td>
 			   				{{$archived->payroll_deduction_category}}
-			   			</td>
-			   			<td>
-			   				{{$archived->payroll_deduction_type_name}}
 			   			</td>
 			   			<td>
 			   				{{date('M d, Y', strtotime($archived->payroll_deduction_date_start))}}

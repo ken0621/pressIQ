@@ -25,6 +25,9 @@ class AlterTblPayrollLeaveSchedule extends Migration
      */
     public function down()
     {
-   
+        Schema::table('users', function(Blueprint $table){
+        $sql = "CHANGE `leave_hours` `leave_hours` time NOT NULL DEFAULT '00:00:00' AFTER `shop_id` AFTER `shop_id`";
+        DB::connection()->getPdo()->exec($sql);
+        });
     }
 }

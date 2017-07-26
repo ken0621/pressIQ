@@ -5045,8 +5045,8 @@ class PayrollController extends Member
      {
           $data['_company']        = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
           $data['_department']     = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
-          $data['leave_id']        =    $id;
-          $data['action']          =    '/member/payroll/leave_schedule/session_tag_leave';
+          $data['leave_id']        = $id;
+          $data['action']          = '/member/payroll/leave_schedule/session_tag_leave';
 
           Session::put('employee_leave_tag', array());
 

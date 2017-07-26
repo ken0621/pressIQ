@@ -420,16 +420,17 @@ class PayrollTimeSheet2Controller extends Member
 
 
 		/*START leave function*/
-		$leave_data_all = PayrollLeave::employee_leave_data($employee_id);
-        $leave_cap_data = PayrollLeave::employee_leave_capacity($employee_id);
+		// $leave_data_all = PayrollLeave::employee_leave_data($employee_id);
+  		// $leave_cap_data = PayrollLeave::employee_leave_capacity($employee_id);
         $leave_date_data = PayrollLeave::employee_leave_date_data($employee_id,$date);
         $use_leave = false;
         $leave = "00:00:00";
+        $data_this = PayrollLeave::employee_leave_capacity_consume_remaining($employee_id)->get();
 
         if (count($leave_date_data)>0) 
         {
-        	$used_leave_data = PayrollLeave::employee_leave_consumed($leave_date_data["payroll_leave_employee_id"]);
-        	$remaining_leave_data = PayrollLeave::employee_leave_remaining($employee_id, $leave_data_all["payroll_leave_employee_id"]);
+        	// $used_leave_data = PayrollLeave::employee_leave_consumed($leave_date_data["payroll_leave_employee_id"]);
+        	// $remaining_leave_data = PayrollLeave::employee_leave_remaining($employee_id, $leave_data_all["payroll_leave_employee_id"]);
         	$use_leave = true;
         	$leave=$leave_date_data["leave_hours"];
         }

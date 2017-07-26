@@ -32,7 +32,7 @@ class PayrollLeave
 		$employee_leave_data = Tbl_payroll_leave_schedule::getemployeeleavedata($employee_id)->first();
 		return $employee_leave_data;
 	}
-	
+
 	public static function employee_leave_date_data($employee_id, $date)
 	{
 		$employee_leave_date_data = Tbl_payroll_leave_schedule::getemployeeleavedatedata($employee_id,$date)->first();
@@ -57,6 +57,14 @@ class PayrollLeave
 		$employee_leave_capacity = Tbl_payroll_leave_schedule::getemployeeleavedata($employee_id)->first();
 		return $employee_consumed_leave->total_leave_consume-$employee_leave_capacity["payroll_leave_temp_days_cap"];
 	}
+
+
+	public static function employee_leave_capacity_consume_remaining($employee_id = 0)
+	{
+		$leave_data_all = Tbl_payroll_leave_schedule::getallemployeeleavedata($employee_id);
+		return $leave_data_all;
+	}
+
 
 
 }

@@ -163,14 +163,14 @@ function checkout_form()
 		if ($(x).is(':checked')) 
 		{
 			$(".different-container").removeClass("hide");
-			$(".disable-bill select").prop("disabled", true);
-			$(".disable-bill input").prop("disabled", true);
+			$(".disable-bill select").removeProp("disabled");
+			$(".disable-bill input, .disable-bill textarea").removeProp("disabled");
 		}
 		else
 		{
 			$(".different-container").addClass("hide");
-			$(".disable-bill select").removeProp("disabled");
-			$(".disable-bill input").removeProp("disabled");
+			$(".disable-bill select").prop("disabled", true);
+			$(".disable-bill input, .disable-bill textarea").prop("disabled", true);
 		}
 	}
 }

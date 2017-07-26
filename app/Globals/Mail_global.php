@@ -265,7 +265,8 @@ class Mail_global
                     $image_path = '<img style="height:100px;width:100px;object-fit:contain" src="<?php echo $m->embed('. url().$value->image_path.') ?>">';
                     $txt["8"."s_o"]["txt_to_replace"] .= "<tr><td style='text-align:left;width:20%;padding:5px'>".$image_path."</td><td style='text-align:left;width:50%;padding:20px'>".$value->evariant_item_label."</td><td style='text-align:center;width:30%;padding:20px'>".currency("PHP",$value->evariant_price)."</td></tr>";
                 }
-                $txt["8"."s_o"]["txt_to_replace"] .= "<tr><td colspan='2' style='text-align:center;width:50%;padding:20px;border-top:1px dashed #45f235'><strong>TOTAL</strong></td><td style='text-align:center;width:50%;padding:20px;border-top:1px dashed #45f235'><strong>".currency("PHP",$data["order_details"]->total)."</strong></td></tr>";
+                $disc = Cart::get_coupon_discount($data["order_details"]->coupon_id);
+                $txt["8"."s_o"]["txt_to_replace"] .= "<tr><td colspan='2' style='text-align:center;width:50%;padding:20px;border-top:1px dashed #45f235'><strong>Coupon Discount</strong></td><td style='text-align:center;width:50%;padding:20px;border-top:1px dashed #45f235'><strong>".currency("PHP",$disc)."</strong></td></tr><tr><td colspan='2' style='text-align:center;width:50%;padding:20px;border-top:1px dashed #45f235'><strong>TOTAL</strong></td><td style='text-align:center;width:50%;padding:20px;border-top:1px dashed #45f235'><strong>".currency("PHP",$data["order_details"]->total- $disc)."</strong></td></tr>";
                 $txt["8"."s_o"]["txt_to_replace"] .= "</table></div>";
 
 

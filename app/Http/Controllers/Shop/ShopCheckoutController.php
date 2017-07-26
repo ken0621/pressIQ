@@ -21,6 +21,8 @@ use App\Globals\Customer;
 use App\Globals\Ec_order;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_ec_order;
+use App\Models\Tbl_coupon_code;
+use App\Models\Tbl_coupon_code_product;
 use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Models\Tbl_item_code;
 use App\Models\Tbl_country;
@@ -466,6 +468,9 @@ class ShopCheckoutController extends Shop
         /* Validation */
         $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
 
+        $order_product = $data["get_cart"]["tbl_ec_order_item"];
+        $coupon_id = null;
+
         // if ($data["get_cart"]["new_account"] == true) 
         // {
             // $validate["full_name"] = Request::input("full_name");
@@ -491,6 +496,41 @@ class ShopCheckoutController extends Shop
             //                 ->withInput();
             // }
         // } 
+        $return["status"] = "success";
+        $coupon_code = Request::input("coupon_code");
+        if($coupon_code)
+        {
+            $get_coupon = Tbl_coupon_code::where("coupon_code",$coupon_code)
+                            ->where("shop_id",$this->shop_info->shop_id)
+                            ->where("used",0)
+                            ->where("blocked",0)
+                            ->first();
+
+            if($get_coupon)
+            {
+                $coupon_id = $get_coupon->coupon_code_id;
+                $ctr = 0;
+                foreach ($order_product as $key => $value) 
+                {
+                    $product = Tbl_coupon_code_product::where("coupon_code_id",$coupon_id)->where("coupon_code_product_id",$value['item_id'])->first();
+                    if($product)
+                    {
+                        $ctr++;
+                    }
+                }
+
+                if($ctr <= 0)
+                {
+                    $return["status"] = "error";
+                    $return["status_message"] = "The coupon code is not usable for product you order";
+                }
+            }
+            else
+            {
+                $return["status"] = "error";
+                $return["status_message"] = "The coupon code ".$coupon_code." doesn't Exist.";
+            }
+        }
 
         /* SPLIT NAME TO FIRST NAME AND LAST NAME */
         $full_name = Request::input("full_name");
@@ -523,17 +563,28 @@ class ShopCheckoutController extends Shop
 
         $customer_info['billing_equals_shipping'] = Request::input('billing_equals_shipping') !== null ? false : true;
 
-        $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_shipping", "check_name"));
+
+        $customer_info['coupon_id'] = $coupon_id;
+
+        if($return["status"] != "error")
+        {
+            $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_shipping", "check_name"));
         
 
-        if($customer_set_info_response["status"] == "error")
-        { 
-            return Redirect::back()->with('error', $customer_set_info_response["status_message"])->withInput();
+            if($customer_set_info_response["status"] == "error")
+            { 
+                return Redirect::back()->with('error', $customer_set_info_response["status_message"])->withInput();
+            }
+            else
+            {
+                return Redirect::to("/checkout/payment");
+            }
         }
         else
         {
-            return Redirect::to("/checkout/payment");
+            return Redirect::back()->with('error', $return["status_message"])->withInput();
         }
+        
     }
     public function update_method()
     {
@@ -694,6 +745,10 @@ class ShopCheckoutController extends Shop
 
         $order_id = unserialize(Crypt::decrypt($order));
     
+        $data['order_data'] = Tbl_ec_order::where("ec_order_id",$order_id)->first();
+
+        $data['coupon_disc'] = Cart::get_coupon_discount($data['order_data']->coupon_id);
+        
         $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $order_id)
                                            ->leftJoin('tbl_ec_variant', 'tbl_ec_order_item.item_id', '=', 'evariant_id')
                                            ->get();

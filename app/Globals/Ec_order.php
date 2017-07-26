@@ -825,8 +825,36 @@ class Ec_order
         /* Insert Order */
         unset($order_info["tbl_ec_order"]["ec_order_id"]);
         $order_info["tbl_ec_order"]["customer_id"] = $customer_id;
-        $order_info["tbl_ec_order"]["discount_coupon_amount"] = $order_info["tbl_ec_order"]["discount_coupon_amount"] ? $order_info["tbl_ec_order"]["discount_coupon_amount"] : 0;
-        $order_info["tbl_ec_order"]["discount_coupon_type"] = $order_info["tbl_ec_order"]["discount_coupon_type"] ? $order_info["tbl_ec_order"]["discount_coupon_type"] : "fixed";
+
+        $order_info["tbl_ec_order"]["coupon_id"] = $order_info["tbl_ec_order"]["coupon_id"] ? $order_info["tbl_ec_order"]["coupon_id"] : null;
+
+        Tbl_coupon_code::where("coupon_code_id",$order_info["tbl_ec_order"]["coupon_id"] ? $order_info["tbl_ec_order"]["coupon_id"] : null)->update(["used" => 1]);
+
+        $coupon_data = Tbl_coupon_code::where("coupon_code_id",$order_info["tbl_ec_order"]["coupon_id"] ? $order_info["tbl_ec_order"]["coupon_id"] : null)->first();
+
+        /* APPLY COUPON DISCOUNT */
+        $total_coupon_discount = 0;
+        $coupon_type = "fixed";
+        if($coupon_data)
+        {
+            $coupon_code_id = $coupon_data->coupon_code_id;
+            $check          = Tbl_coupon_code::where("coupon_code_id",$coupon_code_id)->first();
+            if($check)
+            {
+                $coupon_type = $check->coupon_discounted;
+                if($check->coupon_discounted == "fixed")
+                {
+                    $total_coupon_discount = $check->coupon_code_amount;
+                }
+                else if($check->coupon_discounted == "percentage")
+                {
+                    $total_coupon_discount = $total_product_price - ($total_product_price * ($item->coupon_code_amount/100));
+                }             
+            }
+        }
+        /* CHECK IF TOTAL PRICE IS NEGATIVE */
+        $order_info["tbl_ec_order"]["discount_coupon_amount"] = $total_coupon_discount;
+        $order_info["tbl_ec_order"]["discount_coupon_type"] = $coupon_type;
         
         $session = Session::get('mlm_member');
         if(isset($session['slot_now']->slot_id))

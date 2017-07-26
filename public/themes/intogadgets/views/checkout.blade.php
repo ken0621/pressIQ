@@ -32,12 +32,15 @@
 					    </div>
 					@endif
 
+
+
 					<div class="fieldset">
 						<div class="title col-md-12">Shipping Details</div>
 					</div>
 
+
 					@if($get_cart["new_account"] == false)
-						<div class="disable-bill">
+
 							<div class="form-group">
 								<div style="border: 1px solid #8ec462;padding:10px">
 									<div class="row">
@@ -53,7 +56,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="fieldset hidden">
+							<!-- <div class="fieldset hidden">
 								<label class="col-md-4">First and Last Name</label>
 								<div class="field col-md-8">
 									<div readonly class="form-control">{{ $customer->first_name . ' ' . $customer->middle_name . ' ' . $customer->last_name }}</div>
@@ -92,8 +95,8 @@
 								<div class="field col-md-8">
 									<textarea readonly spellcheck="false" class="form-control" name="customer_street">{{ $shipping_address->customer_street }}</textarea>
 								</div>
-							</div>
-						</div>
+							</div> -->
+					
 					@else
 						<div class="fieldset">
 							<label class="col-md-4">First and Last Name</label>
@@ -137,6 +140,14 @@
 						</div>
 					@endif
 
+					
+					<div class="fieldset">
+						<label class="col-md-4">Coupon Code</label>
+						<div class="field col-md-8">
+							<input class="form-control" type="text" name="coupon_code" value="">
+						</div>
+					</div>
+
 					@if($get_cart["new_account"] == false)
 						<div class="fieldset">
 							<div class="field col-md-12">
@@ -148,20 +159,20 @@
 							</div>
 						</div>
 
-						<div class="different-container hide">
+						<div class="different-container disable-bill hide">
 							<div class="fieldset">
 								<div class="title col-md-12">Billing Details</div>
 							</div>
 							<div class="fieldset">
 								<label class="col-md-4">Province</label>
 								<div class="field col-md-8">
-									<select firstload="true" default="{{ old('customer_state') }}" class="form-control bill-load-location" name="customer_state" level="1"></select>
+									<select disabled firstload="true" default="{{ old('customer_state') }}" class="form-control bill-load-location" name="customer_state" level="1"></select>
 								</div>
 							</div>
 							<div class="fieldset">
 								<label class="col-md-4">City / Municipality</label>
 								<div class="field col-md-8">
-									<select firstload="true" default="{{ old('customer_city') }}" class="form-control bill-load-location" name="customer_city" level="2">
+									<select disabled firstload="true" default="{{ old('customer_city') }}" class="form-control bill-load-location" name="customer_city" level="2">
 										<option></option>
 									</select>
 								</div>
@@ -169,7 +180,7 @@
 							<div class="fieldset">
 								<label class="col-md-4">Barangay</label>
 								<div class="field col-md-8">
-									<select firstload="true" default="{{ old('customer_zip') }}" class="form-control bill-load-location" name="customer_zip" level="3">
+									<select disabled firstload="true" default="{{ old('customer_zip') }}" class="form-control bill-load-location" name="customer_zip" level="3">
 										<option></option>
 									</select>
 								</div>
@@ -177,7 +188,7 @@
 							<div class="fieldset">
 								<label class="col-md-4">Street</label>
 								<div class="field col-md-8">
-									<textarea spellcheck="false" class="form-control" name="customer_street">{{ Request::old('customer_street') }}</textarea>
+									<textarea disabled spellcheck="false" class="form-control" name="customer_street">{{ Request::old('customer_street') }}</textarea>
 								</div>
 							</div>
 						</div>

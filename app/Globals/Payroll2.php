@@ -870,7 +870,9 @@ class Payroll2
 		$leave_hours 			= $leave;
 		$excess_leave_hours 	= $leave_hours;
 		$is_half_day 			= false;
-		$is_absent 				= true;
+		$is_absent 				= false;
+
+		
 	
 		if ($_time==null) 
 		{

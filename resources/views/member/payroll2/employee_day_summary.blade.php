@@ -29,8 +29,8 @@
                                     @if($record->auto_approved != 2)
                                     <tr>
                                         <input type="hidden" name="payroll_time_sheet_record_id[{{ $key }}]" value="{{ $record->payroll_time_sheet_record_id }}"/>
-                                        <td><input value="{{ $record->time_in }}" type="text" placeholder="NO TIME" class="text-table text-center time-entry time-in is-timeEntry" name="time-in[{{ $key }}]"></td>
-                                        <td><input value="{{ $record->time_out }}" type="text" placeholder="NO TIME" class="text-table text-center time-entry time-in is-timeEntry" name="time-out[{{ $key }}]"></td>
+                                        <td><input value="{{ $record->time_in }}" type="text" placeholder="NO TIME" class="day-time-change text-table text-center time-entry time-in is-timeEntry" name="time-in[{{ $key }}]"></td>
+                                        <td><input value="{{ $record->time_out }}" type="text" placeholder="NO TIME" class="day-time-change text-table text-center time-entry time-in is-timeEntry" name="time-out[{{ $key }}]"></td>
                                         <td><input value="" type="text" class="text-table time-entry is-timeEntry" name=""></td>
                                       
                                         @if( $record->status_time_sched == 'OVERTIME' || $timesheet_info->day_type == "rest_day" || $timesheet_info->day_type == "extra_day")
@@ -84,10 +84,19 @@
         </div>
         </div>
     </div>
+
     <div class="modal-footer">
         <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
         <button class="btn btn-primary btn-custom-primary mark-as-checked" type="button"><i class="fa fa-check"></i> Mark as CHECKED</button>
     </div>
 </form>
+
 <script type="text/javascript" src="/assets/member/payroll/js/timesheet2_day_summary.js"></script>
-{{ dd($timesheet_info) }}
+
+<div class="view-debug-mode modal-footer">
+    <div onclick='$(".debug-view").removeClass("hidden")' style="text-align: center; cursor: pointer; color: #005fbf">DEBUG MODE (DEVELOPER ONLY) &nbsp; <i class="fa fa-caret-down"></i></div>
+    <div class="debug-view hidden text-left" style="padding-top: 10px;">
+        {{ dd($timesheet_info) }}
+    </div>
+</div>
+

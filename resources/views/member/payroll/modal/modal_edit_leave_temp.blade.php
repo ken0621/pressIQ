@@ -17,24 +17,24 @@
 		</div>
 		<div class="form-group">
 			<div class="col-md-6">
-				<small>No. of Days</small>
+				<small>No. of Hours</small>
 				<input type="number" name="payroll_leave_temp_days_cap" class="form-control text-right"
 				value="{{$leave_temp->payroll_leave_temp_days_cap}}" required>
 			</div>
 		</div>
 
 		<div class="form-group">
-			<div class="col-md-6">
+			<div class="col-md-6" hidden>
 				<small>With Pay?</small>
 				<div class="form-control padding-b-37">
 					<div class="col-md-6">
 						<div class="radio">
-							<label><input type="radio" name="payroll_leave_temp_with_pay" value="1" {{$leave_temp->payroll_leave_temp_with_pay == '1' ? 'checked' : ''}} >Yes</label>
+							<label><input type="radio" class="payroll_leave_temp_with_pay" name="payroll_leave_temp_with_pay" value="1" {{$leave_temp->payroll_leave_temp_with_pay == '1' ? 'checked' : ''}} >Yes</label>
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="radio">
-							<label><input type="radio" name="payroll_leave_temp_with_pay" value="0" {{$leave_temp->payroll_leave_temp_with_pay == '0' ? 'checked' : ''}} >No</label>
+							<label><input type="radio" class="payroll_leave_temp_with_pay" name="payroll_leave_temp_with_pay" value="0" {{$leave_temp->payroll_leave_temp_with_pay == '0' ? 'checked' : ''}} >No</label>
 						</div>
 					</div>					
 				</div>		

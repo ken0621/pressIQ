@@ -414,7 +414,7 @@ class ShopCheckoutController extends Shop
                     $data['ec_order_load'] = 1;
                 }      
             }
-
+        
             if ($data["get_cart"]["new_account"] == false) 
             {
                 $data["shipping_address"] = DB::table("tbl_customer_address")->where("purpose", "shipping")
@@ -422,9 +422,9 @@ class ShopCheckoutController extends Shop
                                                                              ->first();                                                    
                 if ($data["shipping_address"]) 
                 {
-                    $data["shipping_address"]->state_id = isset(DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_state)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_state)->first()->locale_id : null;
-                    $data["shipping_address"]->city_id = isset(DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_city)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_city)->first()->locale_id : null;
-                    $data["shipping_address"]->zipcode_id = isset(DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_zipcode)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_zipcode)->first()->locale_id : null;
+                    $data["shipping_address"]->state_id = isset(DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->state_id)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->state_id)->first()->locale_id : null;
+                    $data["shipping_address"]->city_id = isset(DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->city_id)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->city_id)->first()->locale_id : null;
+                    $data["shipping_address"]->zipcode_id = isset(DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->barangay_id)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->barangay_id)->first()->locale_id : null;
                 }
                 else
                 {
@@ -506,17 +506,23 @@ class ShopCheckoutController extends Shop
         $customer_info["shipping_city"] = Self::locale_id_to_name(Request::input("customer_city"));
         $customer_info["shipping_zip"] = Self::locale_id_to_name(Request::input("customer_zip"));
         $customer_info["shipping_street"] = Request::input("customer_street");
+        $customer_info['state_id'] = Request::input("customer_state");
+        $customer_info['city_id'] = Request::input("customer_city");
+        $customer_info['barangay_id'] = Request::input("customer_zip");
 
         $customer_info["billing_state"] = Self::locale_id_to_name(Request::input("billing_customer_state"));
         $customer_info["billing_city"] = Self::locale_id_to_name(Request::input("billing_customer_city"));
         $customer_info["billing_zip"] = Self::locale_id_to_name(Request::input("billing_customer_zip"));
         $customer_info["billing_street"] = Request::input("billing_customer_street");
+        $customer_info['billing_state_id'] = Request::input("billing_customer_state");
+        $customer_info['billing_city_id'] = Request::input("billing_customer_city");
+        $customer_info['billing_barangay_id'] = Request::input("billing_customer_zip");
 
         $customer_info['load_wallet']['ec_order_load'] = Request::input('ec_order_load');
         $customer_info['load_wallet']['ec_order_load_number'] = Request::input('ec_order_load_number');
 
         $customer_info['billing_equals_shipping'] = Request::input('billing_equals_shipping') !== null ? false : true;
-        // dd($customer_info);
+
         $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_shipping", "check_name"));
         
 

@@ -3,6 +3,7 @@
     <h4 class="modal-title"><b>MONTHLY COMPUTATION ({{ $period_info->month_contribution }} - {{ code_to_word($period_info->period_count) }})</b> </h4>
 </div>
 <div class="modal-body clearfix">
+    <div class="text-center text-bold" style="font-size: 20px; color: #1682ba">SALARY COMPUTATION</div>
     <div class="col-md-12" style="text-align: left; font-weight: normal; margin-bottom: 10px; font-size: 16px;"></div>
     <div class="clearfix">
         <div class="col-md-12">
@@ -72,4 +73,62 @@
         </div>
     </div>
 </div>
+
+<div class="modal-body clearfix">
+    <div class="text-center text-bold" style="font-size: 20px; color: #1682ba">GOVERNMENT CONTRIBUTIONS</div>
+    <div class="col-md-12" style="text-align: left; font-weight: normal; margin-bottom: 10px; font-size: 16px;"></div>
+    <div class="clearfix">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-condensed timesheet table-timesheet">
+                    <thead style="text-transform: uppercase">
+                        <tr>
+                            <th class="text-left"></th>
+                            <th class="text-center" width="200px">REFERENCE SALARY</th>
+                            <th class="text-center" width="150px">EE SHARE</th>
+                            <th class="text-center" width="150px">ER SHARE</th>
+                            <th class="text-center" width="150px">EC SHARE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-left text-bold">SSS</td>
+                            <td class="text-center">{{ payroll_currency($cutoff_breakdown->sss_contribution["salary"]) }}</td>
+                            <td class="text-center">{{ payroll_currency($cutoff_breakdown->sss_contribution["ee"]) }}</td>
+                            <td class="text-center">{{ payroll_currency($cutoff_breakdown->sss_contribution["er"]) }}</td>
+                            <td class="text-center">{{ payroll_currency($cutoff_breakdown->sss_contribution["ec"]) }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-left text-bold">PHILHEALTH</td>
+                            <td class="text-center">{{ payroll_currency($cutoff_breakdown->philhealth_contribution["salary"]) }}</td>
+                            <td class="text-center">{{ payroll_currency($cutoff_breakdown->philhealth_contribution["ee"]) }}</td>
+                            <td class="text-center">{{ payroll_currency($cutoff_breakdown->philhealth_contribution["er"]) }}</td>
+                            <td class="text-center">-</td>
+                        </tr>
+                        <tr>
+                            <td class="text-left text-bold">PAG-IBIG</td>
+                            <td class="text-center">-</td>
+                            <td class="text-center">{{ payroll_currency($cutoff_breakdown->pagibig_contribution["ee"]) }}</td>
+                            <td class="text-center">{{ payroll_currency($cutoff_breakdown->pagibig_contribution["er"]) }}</td>
+                            <td class="text-center">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal-footer text-right">
+    <button class="btn btn-def-white btn-custom-white" data-dismiss="modal">CLOSE</button>
+    @if($time_keeping_approved == false)
+        <button class="btn btn-primary approve-timesheet-btn">MARK READY</button>
+    @else
+        <button class="btn btn-primary">MAKE ADJUSTMENT</button>
+    @endif
+</div>
+
+<script type="text/javascript" src="/assets/member/payroll/js/timesheet_income_summary.js"></script>
 

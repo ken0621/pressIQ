@@ -7,62 +7,9 @@
     </h4>
 </div>
 
-<!-- 
+
 <div class="modal-body clearfix">
-    <div class="text-center text-bold" style="font-size: 20px; color: #1682ba">GOVERNMENT CONTRIBUTIONS</div>
-    <div class="col-md-12" style="text-align: left; font-weight: normal; margin-bottom: 10px; font-size: 16px;"></div>
-    <div class="clearfix">
-        <div class="col-md-12">
-            <div class="table-responsive">
-                <table class="table table-condensed timesheet table-timesheet">
-                    <thead style="text-transform: uppercase">
-                        <tr>
-                            <th class="text-left"></th>
-                            <th class="text-center" width="150px">MODE</th>
-                            <th class="text-center" width="120px">REFERENCE</th>
-                            <th class="text-center" width="120px">REFERENCE<br>AMOUNT</th>
-                            <th class="text-center" width="120px">EE SHARE</th>
-                            <th class="text-center" width="120px">ER SHARE</th>
-                            <th class="text-center" width="120px">EC SHARE</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="text-left text-bold">SSS</td>
-                            <td class="text-center">EVERY PERIOD</td>
-                            <td class="text-center">GROSS PAY</td>
-                            <td class="text-center">{{ payroll_currency(100) }}</td>
-                            <td class="text-center">0.00</td>
-                            <td class="text-center">0.00</td>
-                            <td class="text-center">0.00</td>
-                        </tr>
-                        <tr>
-                            <td class="text-left text-bold">PHILHEALTH</td>
-                            <td class="text-center">EVERY PERIOD</td>
-                            <td class="text-center">GROSS PAY</td>
-                            <td class="text-center">{{ payroll_currency(100) }}</td>
-                            <td class="text-center">0.00</td>
-                            <td class="text-center">0.00</td>
-                            <td class="text-center">0.00</td>
-                        </tr>
-                        <tr>
-                            <td class="text-left text-bold">PAG-IBIG</td>
-                            <td class="text-center">EVERY PERIOD</td>
-                            <td class="text-center">GROSS PAY</td>
-                            <td class="text-center">{{ payroll_currency(100) }}</td>
-                            <td class="text-center">0.00</td>
-                            <td class="text-center">0.00</td>
-                            <td class="text-center">0.00</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
- -->
-<div class="modal-body clearfix">
-    <div class="text-center text-bold" style="font-size: 20px; color: #1682ba">NET SALARY COMPUTATION</div>
+    <div class="text-center text-bold" style="font-size: 20px; color: #1682ba">SALARY COMPUTATION</div>
     <div class="col-md-12" style="text-align: left; font-weight: normal; margin-bottom: 10px; font-size: 16px;"></div>
     <div class="clearfix">
         <div class="col-md-12">
@@ -186,6 +133,51 @@
     </div>
 </div>
 
+
+<div class="modal-body clearfix">
+    <div class="text-center text-bold" style="font-size: 20px; color: #1682ba">GOVERNMENT CONTRIBUTIONS</div>
+    <div class="col-md-12" style="text-align: left; font-weight: normal; margin-bottom: 10px; font-size: 16px;"></div>
+    <div class="clearfix">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-condensed timesheet table-timesheet">
+                    <thead style="text-transform: uppercase">
+                        <tr>
+                            <th class="text-left"></th>
+                            <th class="text-center" width="200px">REFERENCE SALARY</th>
+                            <th class="text-center" width="150px">EE SHARE</th>
+                            <th class="text-center" width="150px">ER SHARE</th>
+                            <th class="text-center" width="150px">EC SHARE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-left text-bold">SSS</td>
+                            <td class="text-center">{{ payroll_currency($cutoff_breakdown->sss_contribution["salary"]) }}</td>
+                            <td class="text-center">{{ payroll_currency($cutoff_breakdown->sss_contribution["ee"]) }}</td>
+                            <td class="text-center">{{ payroll_currency($cutoff_breakdown->sss_contribution["er"]) }}</td>
+                            <td class="text-center">{{ payroll_currency($cutoff_breakdown->sss_contribution["ec"]) }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-left text-bold">PHILHEALTH</td>
+                            <td class="text-center">{{ payroll_currency($cutoff_breakdown->philhealth_contribution["salary"]) }}</td>
+                            <td class="text-center">{{ payroll_currency($cutoff_breakdown->philhealth_contribution["ee"]) }}</td>
+                            <td class="text-center">{{ payroll_currency($cutoff_breakdown->philhealth_contribution["er"]) }}</td>
+                            <td class="text-center">-</td>
+                        </tr>
+                        <tr>
+                            <td class="text-left text-bold">PAG-IBIG</td>
+                            <td class="text-center">-</td>
+                            <td class="text-center">{{ payroll_currency($cutoff_breakdown->pagibig_contribution["ee"]) }}</td>
+                            <td class="text-center">{{ payroll_currency($cutoff_breakdown->pagibig_contribution["er"]) }}</td>
+                            <td class="text-center">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <div class="modal-footer text-right">

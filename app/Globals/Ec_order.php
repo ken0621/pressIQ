@@ -842,14 +842,7 @@ class Ec_order
             if($check)
             {
                 $coupon_type = $check->coupon_discounted;
-                if($check->coupon_discounted == "fixed")
-                {
-                    $total_coupon_discount = $check->coupon_code_amount;
-                }
-                else if($check->coupon_discounted == "percentage")
-                {
-                    $total_coupon_discount = $total_product_price - ($total_product_price * ($item->coupon_code_amount/100));
-                }             
+                $total_coupon_discount = Cart::get_coupon_discount($coupon_code_id, $order_info["tbl_ec_order"]['total']);
             }
         }
         /* CHECK IF TOTAL PRICE IS NEGATIVE */

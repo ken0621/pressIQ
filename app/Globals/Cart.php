@@ -284,7 +284,7 @@ class Cart
                 }
                 else if($check->coupon_discounted == "percentage")
                 {
-                    $total_coupon_discount = $total_product_price - ($total_product_price * ($check->coupon_code_amount/100));
+                    $total_coupon_discount = $total_product_price * ($check->coupon_code_amount/100);
                 }             
             }
         }
@@ -942,7 +942,7 @@ class Cart
             }
             else if($check->coupon_discounted == "percentage")
             {
-                $total_coupon_discount = $total_amount_purchase - ($total_amount_purchase * ($check->coupon_code_amount/100));
+                $total_coupon_discount = $total_amount_purchase * ($check->coupon_code_amount/100);
             }             
         }
 
@@ -1008,7 +1008,7 @@ class Cart
                 }
                 else if($check->coupon_discounted == "percentage")
                 {
-                    $total_coupon_discount = $subtotal - ($subtotal * ($check->coupon_code_amount/100));
+                    $total_coupon_discount = $subtotal * ($check->coupon_code_amount/100);
                 }             
             }
         }

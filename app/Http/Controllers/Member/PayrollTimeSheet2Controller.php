@@ -885,7 +885,7 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			foreach($_clean_shift as $key => $clean_shift)
 			{
-	
+
 				$insert[$key]["payroll_time_sheet_id"] = $time_sheet_id;
 				$insert[$key]["payroll_time_sheet_in"] = $clean_shift->time_in;
 				$insert[$key]["payroll_time_sheet_out"] = $clean_shift->time_out;

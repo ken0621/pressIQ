@@ -135,7 +135,7 @@ class ShopProductContentController extends Shop
     public function search()
     {
         $search = Ecom_Product::searchProduct(Request::input("search"), $this->shop_info->shop_id);
-   
+
         return json_encode($search);
     }
 }

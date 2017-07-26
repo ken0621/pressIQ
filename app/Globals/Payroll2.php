@@ -367,9 +367,11 @@ class Payroll2
      * @author (Kim Briel Oraya)
      *
      */
-	public static function compute_time_mode_regular($_time, $_shift, $late_grace_time = "00:00:00", $grace_time_rule_late="per_shift",$overtime_grace_time = "00:00:00",$grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00",$leave_fill_late=0,$leave_fill_undertime=0,$target_hours=0,$testing = false)
+	public static function compute_time_mode_regular($_time, $_shift, $late_grace_time = "00:00:00", $grace_time_rule_late="per_shift",$overtime_grace_time = "00:00:00",$grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00",$leave_fill_late=0,$leave_fill_undertime=0,$target_hours=0, $use_leave = false ,$testing = false)
 	{
-		
+
+		$leave_fill_undertime	= 1;
+		$leave_fill_late		= 1;
 		$time_spent				= "00:00:00";
 		$late_hours 			= "00:00:00";
 		$under_time 			= "00:00:00";
@@ -380,7 +382,8 @@ class Payroll2
 		$extra_day_hours		= "00:00:00";
 		$regular_holiday_hours	= "00:00:00";
 		$special_holiday_hours	= "00:00:00";
-		$leave_hours			= $leave;
+		$leave_hours_consumed	= "00:00:00";
+		$leave_hours			= $leave; //$leave;
 		$excess_leave_hours 	= $leave;
 		$is_half_day			= false;
 		$is_absent				= true;
@@ -401,6 +404,28 @@ class Payroll2
 			if (!(($day_type == "rest_day")||($day_type == "extra")||($is_holiday == "regular")||($is_holiday == "special")||($leave_hours!="00:00:00")))
 			{
 				$is_absent =true;
+			}
+
+			//trigger if leave
+			if ($is_absent==true) 
+			{
+				
+				$target_minutes = Payroll2::convert_time_in_minutes($target_hours);
+				$leave_minutes = Payroll2::convert_time_in_minutes($leave);
+				if ($target_minutes > $leave_minutes) 
+				{
+					$under_time 			= Payroll::time_diff($leave_hours,$target_hours);
+					$leave_hours_consumed   = $leave_hours;
+					$time_spent             = $leave_hours;
+					$is_absent 				= false;
+				}
+				else
+				{
+
+					$leave_hours_consumed   = Payroll2::float_time($target_hours);
+					$is_absent 				= false;
+					$time_spent 			= $target_hours;
+				}
 			}
 		}
 		else
@@ -622,9 +647,9 @@ class Payroll2
 
 			//record if undertime
 			//not yet sure
-			$target_minutes = Payroll2::convert_time_in_minutes($target_hours);
-			$time_spent_in_minutes = Payroll2::convert_time_in_minutes($time_spent_temp);
-			$under_time_in_minutes = Payroll2::convert_time_in_minutes($time->undertime);
+			$target_minutes 		= Payroll2::convert_time_in_minutes($target_hours);
+			$time_spent_in_minutes 	= Payroll2::convert_time_in_minutes($time_spent_temp);
+			$under_time_in_minutes 	= Payroll2::convert_time_in_minutes($time->undertime);
 
 			if ($time_spent_in_minutes<$target_minutes) 
 			{ 
@@ -632,68 +657,102 @@ class Payroll2
 				$under_time = Payroll2::minus_time($under_time_in_minutes,$under_time);
 			}
 			/*END sum time_spent late and undertime of all auto approved sched*/
+	
 			
-
-			
-
-			
-			//fill late with leave hours
-			if ($leave_fill_late==1) 
+			//leave trigger
+			if ($use_leave == true) 
 			{
-				$late_minutes = Payroll2::convert_time_in_minutes($late_hours);
-				$excess_leave_minutes = Payroll2::convert_time_in_minutes($excess_leave_hours);
-				//has late record and have leave hours
-				if (($late_minutes>0)&&($excess_leave_minutes>0)) 
+				//if absent
+
+				if ($is_absent==true) 
 				{
-					//leave hours can fill the undertime record
-					if ($late_minutes<=$excess_leave_minutes) 
+					
+					$target_minutes = Payroll2::convert_time_in_minutes($target_hours);
+					$leave_minutes = Payroll2::convert_time_in_minutes($leave);
+					if ($target_minutes > $leave_minutes) 
 					{
-						$excess_leave_hours = Payroll2::minus_time($late_minutes,$excess_leave_hours);
-						$time_spent = Payroll::sum_time($time_spent,$late_hours);
-						$late_hours = "00:00";
+						$under_time 			= Payroll::time_diff($leave_hours,$target_hours);
+						$leave_hours_consumed   = $leave_hours;
+						$time_spent             = $leave_hours;	
+						$is_absent 				= false;
 					}
-					//leave hours can't fill the undertime record
-					else if ($late_minutes>$excess_leave_minutes) 
+					else
 					{
-						$late_hours = Payroll2::minus_time($excess_leave_minutes,$late_hours);
-						$time_spent = Payroll::sum_time($time_spent,$excess_leave_hours);
-						$excess_leave_hours="00:00";
+
+						$leave_hours_consumed   = Payroll2::float_time($target_hours);
+						$is_absent 				= false;
+						$time_spent 			= $target_hours;
 					}
 				}
-			}
 
-
-				
-			//fill undertime with leave hours
-			if ($leave_fill_undertime==1) 
-			{
-			 	$undertime_minutes = Payroll2::convert_time_in_minutes($under_time);
-				$excess_leave_minutes = Payroll2::convert_time_in_minutes($excess_leave_hours);
-				//has undertime record and have leave hours
-				if (($undertime_minutes>0)&&($excess_leave_minutes>0)) 
+				//if not absent and there was a late or undertime
+				else
 				{
-					//leave hours can fill the undertime record
-					if ($undertime_minutes<=$excess_leave_minutes) 
+					//fill undertime with leave hours
+					if ($leave_fill_undertime == 1) 
 					{
-						$excess_leave_hours = Payroll2::minus_time($undertime_minutes,$excess_leave_hours);
-						$time_spent = Payroll::sum_time($time_spent,$under_time);
-						$under_time = "00:00";
+					 	$undertime_minutes = Payroll2::convert_time_in_minutes($under_time);
+						$excess_leave_minutes = Payroll2::convert_time_in_minutes($excess_leave_hours);
+						//has undertime record and have leave hours
+						if (($undertime_minutes > 0) && ($excess_leave_minutes > 0)) 
+						{
+							//leave hours can fill the undertime record
+							if ($undertime_minutes <= $excess_leave_minutes) 
+							{
+								$leave_hours_consumed	= Payroll::sum_time($leave_hours_consumed,$under_time);
+								$excess_leave_hours 	= Payroll2::minus_time($undertime_minutes,$excess_leave_hours);
+								$time_spent 			= Payroll::sum_time($time_spent,$under_time);
+								$under_time 			= "00:00";
+								//dd(Payroll2::minus_time(60,$excess_leave_hours));
+							}
+							//leave hours can't fill the undertime record
+							else if ($undertime_minutes>$excess_leave_minutes) 
+							{
+								$leave_hours_consumed	= Payroll::sum_time($leave_hours_consumed, $leave_hours);
+								$under_time 			= Payroll2::minus_time($excess_leave_minutes, $under_time);
+								$time_spent 			= Payroll::sum_time($time_spent, $excess_leave_hours);
+								$excess_leave_hours		= "00:00";
+							}
+						}
 					}
-					//leave hours can't fill the undertime record
-					else if ($undertime_minutes>$excess_leave_minutes) 
+
+					//fill late with leave hours
+					if ($leave_fill_late==1) 
 					{
-						$under_time = Payroll2::minus_time($excess_leave_minutes,$under_time);
-						$time_spent = Payroll::sum_time($time_spent,$excess_leave_hours);
-						$excess_leave_hours="00:00";
+
+						$late_minutes = Payroll2::convert_time_in_minutes($late_hours);
+						$excess_leave_minutes = Payroll2::convert_time_in_minutes($excess_leave_hours);
+						//has late record and have leave hours
+						if (($late_minutes>0)&&($excess_leave_minutes>0)) 
+						{
+							//leave hours can fill the undertime record
+							if ($late_minutes<=$excess_leave_minutes) 
+							{
+								$leave_hours_consumed	= Payroll::sum_time($leave_hours_consumed, $late_hours);
+								$excess_leave_hours = Payroll2::minus_time($late_minutes,$excess_leave_hours);
+								$time_spent = Payroll::sum_time($time_spent,$late_hours);
+								$late_hours = "00:00";
+							}
+							//leave hours can't fill the undertime record
+							else if ($late_minutes>$excess_leave_minutes && $excess_leave_minutes!=0) 
+							{
+								$leave_hours_consumed	= Payroll::sum_time($leave_hours_consumed, $leave_hours);
+								$late_hours = Payroll2::minus_time($excess_leave_minutes,$late_hours);
+								$time_spent = Payroll::sum_time($time_spent,$excess_leave_hours);
+								$excess_leave_hours="00:00";
+							}
+						}
+
+					}
+
+					//excess leave hour if not use
+					if (($leave_fill_undertime==0)&&($leave_fill_late==0)) 
+					{
+						$excess_leave_hours=$leave;
 					}
 				}
-			}
-			//excess leave hour if not use
-			if (($leave_fill_undertime==0)&&($leave_fill_late==0)) 
-			{
-				$excess_leave_hours=$leave;
-			}
 
+			}
 			//check if time spent is only half day
 			if ((Payroll2::divide_time_in_half($target_hours.":00"))==$time_spent.":00") 
 			{
@@ -701,7 +760,6 @@ class Payroll2
 			}
 		}
 			
-
 			/*START day type and holiday type*/
 			if ($day_type=="rest_day") 
 			{
@@ -725,25 +783,26 @@ class Payroll2
 			}
 			/*END day type and holiday type*/ 
 
-		//	dd($_time);
 		$return["time_spent"] = Payroll2::convert_to_24_hour($time_spent);
 		$return["is_absent"] = $is_absent;
 		$return["late"] = Payroll2::convert_to_24_hour($late_hours);
 		$return["undertime"] = Payroll2::convert_to_24_hour($under_time);
 		$return["overtime"] = Payroll2::convert_to_24_hour($over_time);
-		$return["target_hours"] = Payroll2::convert_to_24_hour($target_hours);
-		$return["excess_leave_hours"] = Payroll2::convert_to_24_hour($excess_leave_hours);
 		$return["regular_hours"] = Payroll2::convert_to_24_hour($regular_hours);
 		$return["rest_day_hours"] = Payroll2::convert_to_24_hour($rest_day_hours);
 		$return["extra_day_hours"] = Payroll2::convert_to_24_hour($extra_day_hours);
 		$return["regular_holiday_hours"] = Payroll2::convert_to_24_hour($regular_holiday_hours);
 		$return["special_holiday_hours"] = Payroll2::convert_to_24_hour($special_holiday_hours);
-		$return["leave_hours"] = Payroll2::convert_to_24_hour($leave);
 		$return["total_hours"] = Payroll2::convert_to_24_hour($time_spent);
 		$return["night_differential"] = Payroll2::convert_to_24_hour($night_differential);
 		$return["is_half_day"] = $is_half_day;
 		$return["is_holiday"] = $is_holiday;
 		$return["day_type"] = $day_type;
+
+		$return["target_hours"] = Payroll2::convert_to_24_hour($target_hours);
+		$return["leave_hours"] = $leave;
+		$return["excess_leave_hours"] = $excess_leave_hours;
+		$return["leave_hours_consumed"] = $leave_hours_consumed;
 		
 		return $return;
 
@@ -792,35 +851,58 @@ class Payroll2
      * @author (Kim Briel Oraya)
      *
      */
-	public static function compute_time_mode_flexi($_time, $target_hours="08:00:00", $break_hours="00:00:00", $overtime_grace_time = "00:00:00", $grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00", $leave_fill_undertime=0, $testing = false)
+	public static function compute_time_mode_flexi($_time, $target_hours="08:00:00", $break_hours="00:00:00", $overtime_grace_time = "00:00:00", $grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00", $leave_fill_undertime=0, $use_leave = false, $testing = false)
 	{
 
-		$time_spent="00:00:00";
-		$late_hours = "00:00:00";
-		$under_time = "00:00:00";
-		$over_time = "00:00:00";
-		$night_differential = Payroll2::night_differential_computation($_time,false);
-		$target_hours = Payroll::sum_time(Payroll::float_time($target_hours),$break_hours);
-		$regular_hours = "00:00:00";
-		$rest_day_hours = "00:00:00";
-		$extra_day_hours = "00:00:00";
-		$regular_holiday_hours = "00:00:00";
-		$special_holiday_hours = "00:00:00";
-		$leave_hours = $leave;
-		$excess_leave_hours = $leave;
-		$is_half_day = false;
-		$is_absent =false;
+		$leave_fill_undertime=1;
+		$time_spent 			= "00:00:00";
+		$late_hours 			= "00:00:00";
+		$under_time 			= "00:00:00";
+		$over_time 				= "00:00:00";
+		$night_differential 	= Payroll2::night_differential_computation($_time,false);
+		$target_hours 			= Payroll::sum_time(Payroll::float_time($target_hours),$break_hours);
+		$regular_hours 			= "00:00:00";
+		$rest_day_hours 		= "00:00:00";
+		$extra_day_hours 		= "00:00:00";
+		$regular_holiday_hours 	= "00:00:00";
+		$special_holiday_hours 	= "00:00:00";
+		$leave_hours_consumed 	= "00:00:00";
+		$leave_hours 			= $leave;
+		$excess_leave_hours 	= $leave_hours;
+		$is_half_day 			= false;
+		$is_absent 				= false;
+
+		
 	
 		if ($_time==null) 
 		{
+			
 			if (!(($day_type == "rest")||($day_type == "extra")||($is_holiday == "regular")||($is_holiday == "special")||($leave_hours!="00:00:00")))
 			{
 				$is_absent =true;
-
-
 			}
-		
+
+			if ($is_absent==true) 
+			{
+				$target_minutes = Payroll2::convert_time_in_minutes($target_hours);
+				$leave_minutes = Payroll2::convert_time_in_minutes($leave);
+				if ($target_minutes > $leave_minutes) 
+				{
+					$under_time 			= Payroll::time_diff($leave_hours,$target_hours);
+					$leave_hours_consumed   = $leave_hours;
+					$time_spent             = $leave_hours;	
+					$is_absent 				= false;
+				}
+				else
+				{
+
+					$leave_hours_consumed   = Payroll2::float_time($target_hours);
+					$is_absent 				= false;
+					$time_spent 			= $target_hours;
+				}
+			}
 		}
+
 		else
 		{
 			foreach ($_time as $time) 
@@ -866,35 +948,64 @@ class Payroll2
 			$over_time = Payroll2::minus_time($target_minutes,$time_spent);
 		}
 		//dd($_time);
-		
 
-		//fill undertime with leave hours
-		if ($leave_fill_undertime==1) 
+
+		/*trigger leave*/
+		if ($use_leave == true) 
 		{
-		 	$undertime_minutes = Payroll2::convert_time_in_minutes($under_time);
-			$excess_leave_minutes = Payroll2::convert_time_in_minutes($excess_leave_hours);
-			//has undertime record and have leave hours
-			if (($undertime_minutes>0)&&($excess_leave_minutes>0)) 
+			
+		//fill undertime with leave hours
+			if ($is_absent==true) 
 			{
-				//leave hours can fill the undertime record
-				if ($undertime_minutes<=$excess_leave_minutes) 
+				$target_minutes = Payroll2::convert_time_in_minutes($target_hours);
+				$leave_minutes = Payroll2::convert_time_in_minutes($leave);
+				if ($target_minutes > $leave_minutes) 
 				{
-					$excess_leave_hours = Payroll2::minus_time($undertime_minutes,$excess_leave_hours);
-					$time_spent = Payroll::sum_time($time_spent,$under_time);
-					$under_time = "00:00";
+					$under_time 			= Payroll::time_diff($leave_hours,$target_hours);
+					$leave_hours_consumed   = $leave_hours;
+					$time_spent             = $leave_hours;	
+					$is_absent 				= false;
 				}
-				//leave hours can't fill the undertime record
-				else if ($undertime_minutes>$excess_leave_minutes) 
+				else
 				{
-					$under_time = Payroll2::minus_time($excess_leave_minutes,$under_time);
-					$time_spent = Payroll::sum_time($time_spent,$excess_leave_hours);
-					$excess_leave_hours="00:00";
+
+					$leave_hours_consumed   = Payroll2::float_time($target_hours);
+					$is_absent 				= false;
+					$time_spent 			= $target_hours;
 				}
 			}
-		}
-		else
-		{
-			$excess_leave_minutes = $leave;
+			else
+			{
+				if ($leave_fill_undertime==1) 
+				{
+				 	$undertime_minutes = Payroll2::convert_time_in_minutes($under_time);
+					$excess_leave_minutes = Payroll2::convert_time_in_minutes($excess_leave_hours);
+					//has undertime record and have leave hours
+					if (($undertime_minutes>0)&&($excess_leave_minutes>0)) 
+					{
+						//leave hours can fill the undertime record
+						if ($undertime_minutes<=$excess_leave_minutes) 
+						{
+							$leave_hours_consumed = $under_time;
+							$excess_leave_hours = Payroll2::minus_time($undertime_minutes,$excess_leave_hours);
+							$time_spent = Payroll::sum_time($time_spent,$under_time);
+							$under_time = "00:00";
+						}
+						//leave hours can't fill the undertime record
+						else if ($undertime_minutes>$excess_leave_minutes) 
+						{
+							$leave_hours_consumed = $excess_leave_hours;
+							$under_time = Payroll2::minus_time($excess_leave_minutes,$under_time);
+							$time_spent = Payroll::sum_time($time_spent,$excess_leave_hours);
+							$excess_leave_hours="00:00";
+						}
+					}
+				}
+				else
+				{
+					$excess_leave_minutes = $leave;
+				}
+			}
 		}
 
 
@@ -950,30 +1061,27 @@ class Payroll2
 			$special_holiday_hours = $regular_hours;
 			$is_absent=false;
 		}
-
 		/*END day type and holiday type*/
 
-
-
-	
 		$return["time_spent"] = Payroll2::convert_to_24_hour($time_spent);
+		$return["target_hours"] = Payroll2::convert_to_24_hour($target_hours);
 		$return["is_absent"] = $is_absent;
 		$return["late"] = Payroll2::convert_to_24_hour($late_hours);
 		$return["undertime"] = Payroll2::convert_to_24_hour($under_time);
 		$return["overtime"] = Payroll2::convert_to_24_hour($over_time);
-		$return["target_hours"] = Payroll2::convert_to_24_hour($target_hours);
-		$return["excess_leave_hours"] = Payroll2::convert_to_24_hour($excess_leave_hours);
 		$return["regular_hours"] = Payroll2::convert_to_24_hour($regular_hours);
 		$return["rest_day_hours"] = Payroll2::convert_to_24_hour($rest_day_hours);
 		$return["extra_day_hours"] = Payroll2::convert_to_24_hour($extra_day_hours);
 		$return["regular_holiday_hours"] = Payroll2::convert_to_24_hour($regular_holiday_hours);
 		$return["special_holiday_hours"] = Payroll2::convert_to_24_hour($special_holiday_hours);
-		$return["leave_hours"] = Payroll2::convert_to_24_hour($leave);
 		$return["total_hours"] = Payroll2::convert_to_24_hour($time_spent);
 		$return["night_differential"] = Payroll2::convert_to_24_hour($night_differential);
 		$return["is_half_day"] = $is_half_day;
 		$return["is_holiday"] = $is_holiday;
 		$return["day_type"] = $day_type;
+		$return["leave_hours"] = Payroll2::convert_to_24_hour($leave);
+		$return["excess_leave_hours"] = Payroll2::convert_to_24_hour($excess_leave_hours);
+		$return["leave_hours_consumed"] = $leave_hours_consumed;
 		
 		return $return;
 	}
@@ -1269,8 +1377,6 @@ class Payroll2
 						$additional_rate = ($legal_param['payroll_overtime_regular']);
 					}
 				}
-				
-				
 				if ($overtime_float!=0) 
 				{
 					//Legal Holiday Over Time
@@ -1355,7 +1461,6 @@ class Payroll2
 					$breakdown_addition += $return->_breakdown_addition["Special Holiday"]["rate"];
 					$additional_rate =  ($special_param['payroll_overtime_regular']);
 				}
-
 				//Special Holiday Over Time
 				if ($overtime_float!=0) 
 				{
@@ -1686,6 +1791,12 @@ class Payroll2
 		return $target_hours;
 	} 
 
+
+	public static function use_leave()
+	{
+		
+	}
+
 	//night differential 10pm to 6am militiary time
 	public static function night_differential_computation($_time,$testing=false)
 	{
@@ -1884,9 +1995,9 @@ class Payroll2
 			$time[1] = 0;
 		}
 		$time = ($time[0] * 60.0) + ($time[1] * 1.0);
-	
 		return $time;
 	}
+
 	
 	public static function float_time($float = 0)
 	{
@@ -1920,7 +2031,8 @@ class Payroll2
 		$group 	= Tbl_payroll_employee_contract::selemployee($employee_id, $start_date)
 												->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
 		                                        ->first();
-		$shop_id = $group->shop_id;                                       
+		$shop_id = $group->shop_id;
+
 		/* GET EMPLOYEE SALARY */
 		$salary 			= Tbl_payroll_employee_salary::selemployee($employee_id, $start_date)->first();
 		if($salary == null)

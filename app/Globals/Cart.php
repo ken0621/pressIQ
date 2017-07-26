@@ -1345,7 +1345,7 @@ class Cart
             $data["refNo"] = $shop_id . time();
         }
         
-        $data["amount"] = $data["tbl_ec_order"]["total"];
+        $data["amount"] = $data["tbl_ec_order"]["total"] - Cart::get_coupon_discount($data["tbl_ec_order"]["coupon_id"], $data["tbl_ec_order"]["total"]);
 
         /* REASTRUCTURE */
         $product_summary = array();

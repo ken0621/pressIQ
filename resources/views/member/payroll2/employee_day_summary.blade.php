@@ -84,10 +84,18 @@
         </div>
         </div>
     </div>
+
     <div class="modal-footer">
         <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
         <button class="btn btn-primary btn-custom-primary mark-as-checked" type="button"><i class="fa fa-check"></i> Mark as CHECKED</button>
     </div>
 </form>
+
 <script type="text/javascript" src="/assets/member/payroll/js/timesheet2_day_summary.js"></script>
-{{-- dd($timesheet_info) --}}
+
+<div class="view-debug-mode modal-footer">
+    <div onclick='$(".debug-view").removeClass("hidden")' style="text-align: center; cursor: pointer; color: #005fbf">DEBUG MODE (DEVELOPER ONLY) &nbsp; <i class="fa fa-caret-down"></i></div>
+    <div class="debug-view hidden text-left">
+        {{ dd($timesheet_info) }}
+    </div>
+</div>

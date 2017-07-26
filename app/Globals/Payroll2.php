@@ -1670,17 +1670,21 @@ class Payroll2
 		//get breakdown addition summary and break down deduction summary
 		foreach($_date_compute as $date => $date_compute)
 		{
+
 			if(isset($date_compute->compute->_breakdown_addition))
 			{
 				foreach($date_compute->compute->_breakdown_addition as $lbl => $badd)
 				{
+
 					if(isset($return->_breakdown_addition_summary[$lbl]))
 					{
 						$return->_breakdown_addition_summary[$lbl] += $badd["rate"];
+						$return->_breakdown_addition_summary_time[$lbl] .= "<br>" . $badd["time"] . " - " . payroll_currency($badd["rate"]);
 					}
 					else
 					{
 						$return->_breakdown_addition_summary[$lbl] = $badd["rate"];
+						$return->_breakdown_addition_summary_time[$lbl] = $badd["time"] . " - " . payroll_currency($badd["rate"]);
 					}
 				}
 			}
@@ -3082,6 +3086,7 @@ class Payroll2
 			{
 				$val["label"] = $key;
 				$val["type"] = "additions";
+				$val["description"] = $data["cutoff_compute"]->_breakdown_addition_summary_time[$key];
 				$val["amount"] = $breakdown;
 				$val["add.gross_pay"] = true;
 				$val["deduct.gross_pay"] = false;

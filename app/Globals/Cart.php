@@ -8,6 +8,8 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_item_discount;
 use App\Models\Tbl_cart;
 use App\Models\Tbl_coupon_code;
+use App\Models\Tbl_ec_product;
+use App\Models\Tbl_coupon_code_product;
 use App\Models\Tbl_user;
 use App\Models\Tbl_ec_variant;
 use App\Models\Tbl_ec_order;
@@ -535,7 +537,7 @@ class Cart
         return $data;
     }
 
-    public static function generate_coupon_code($word_limit, $price, $minimum_quantity = 0, $type="fixed", $coupon_product_id = null)
+    public static function generate_coupon_code($word_limit, $price, $minimum_quantity = 0, $type="fixed", $coupon_product_id = null,$all_product_id = false)
     {
         //get_shop_info
         $shop_id = Cart::get_shop_info();
@@ -578,14 +580,40 @@ class Cart
             }
 
             $insert["id_per_coupon"]           =  $id_per_coupon;                
-            $insert["coupon_code"]             =  $generated_word;  
-            $insert["coupon_product_id"]       =  isset($coupon_product_id) ? $coupon_product_id : null;              
+            $insert["coupon_code"]             =  $generated_word;           
             $insert["coupon_code_amount"]      =  $price;                     
             $insert["coupon_discounted"]       =  $type;                     
             $insert["shop_id"]                 =  $shop_id;
             $insert["coupon_minimum_quantity"] =  $minimum_quantity;         
             $insert["date_created"]            =  Carbon::now();  
-            Tbl_coupon_code::insert($insert);
+            $coupon_code_id = Tbl_coupon_code::insertGetId($insert);
+
+            if($all_product_id)
+            {
+                $get_all_product = Tbl_ec_product::variant()->where("eprod_shop_id",$shop_id)->where("tbl_ec_product.archived",0)->get();
+
+                foreach ($get_all_product as $key => $value) 
+                {
+                    $ins_product["coupon_code_id"] = $coupon_code_id;
+                    $ins_product["coupon_code_product_id"] = $value->evariant_id;
+
+                    Tbl_coupon_code_product::insert($ins_product);
+                }
+            }
+            else
+            {
+                foreach ($coupon_product_id as $key => $value) 
+                {
+                    if($value > 0)
+                    {
+                        $ins_product["coupon_code_id"] = $coupon_id;
+                        $ins_product["coupon_code_product_id"] = $value;
+
+                        Tbl_coupon_code_product::insert($ins_product);                           
+                    }                     
+                }
+
+            }
 
             $message["status"]         = "success";
             $message["status_message"] = "Successfully generate a coupon code.";
@@ -593,9 +621,10 @@ class Cart
 
         return $message;                              
     }   
-    public static function update_coupon_code($coupon_id, $price,$coupon_product_id, $minimum_quantity = 0, $type="fixed")
+    public static function update_coupon_code($coupon_id, $price,$coupon_product_id, $minimum_quantity = 0, $type="fixed",$all_product_id = false)
     {
 
+        $shop_id = Cart::get_shop_info();
         if($type != "fixed" && $type != "percentage")
         {
             $message["status"]         = "error";
@@ -608,12 +637,40 @@ class Cart
         }   
         else
         {
-            $update["coupon_code_amount"] = $price;
-            $update["coupon_product_id"]  =  isset($coupon_product_id) ? $coupon_product_id : null;                   
+            $update["coupon_code_amount"] = $price;               
             $update["coupon_discounted"]       =  $type;  
             $update["coupon_minimum_quantity"] =  $minimum_quantity; 
             
             Tbl_coupon_code::where("coupon_code_id",$coupon_id)->update($update);
+
+            Tbl_coupon_code_product::where("coupon_code_id",$coupon_id)->delete();
+
+            if($all_product_id)
+            {
+                $get_all_product = Tbl_ec_product::variant()->where("eprod_shop_id",$shop_id)->where("tbl_ec_product.archived",0)->get();
+
+                foreach ($get_all_product as $key => $value) 
+                {
+                    $ins_product["coupon_code_id"] = $coupon_id;
+                    $ins_product["coupon_code_product_id"] = $value->evariant_id;
+
+                    Tbl_coupon_code_product::insert($ins_product);
+                }
+            }
+            else
+            {
+                foreach ($coupon_product_id as $key => $value) 
+                {
+                    if($value > 0)
+                    {
+                        $ins_product["coupon_code_id"] = $coupon_id;
+                        $ins_product["coupon_code_product_id"] = $value;
+
+                        Tbl_coupon_code_product::insert($ins_product);                           
+                    }                 
+                }
+
+            }
 
             $message["status"]         = "success";
             $message["status_message"] = "Successfully generate a coupon code.";

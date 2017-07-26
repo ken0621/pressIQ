@@ -53,7 +53,7 @@ function timesheet_day_summary()
 
 	function event_change_time_approve()
 	{
-		$(".day-time-change").keypup(function()
+		$(".day-time-change").keyup(function()
 		{
 			action_re_compute_on_change();
 		});

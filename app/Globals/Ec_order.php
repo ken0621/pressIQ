@@ -124,8 +124,9 @@ class Ec_order
                     ->where('merchant_item_item_id', $item->item_id)
                     ->where('merchant_item_ec_order_id', $order_id)
                     ->count();
-                    if($count === 0)
+                    if($count == 0)
                     {
+
                         if($item)
                         {
                             $insert['merchant_school_i_amount'] = $item->item_price;
@@ -142,6 +143,8 @@ class Ec_order
                         $insert['merchant_item_date'] = Carbon::now();
                         $insert['merchant_item_status'] = 0;
                         DB::table('tbl_merchant_school_item')->insert($insert);
+
+                        Item_code::merchant_school_active_codes($order_id);
                     }
                 }
             }

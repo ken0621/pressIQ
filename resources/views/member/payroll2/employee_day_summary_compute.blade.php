@@ -12,11 +12,13 @@
     
     @if(isset($timesheet_info->compute->_breakdown_addition))
         @foreach($timesheet_info->compute->_breakdown_addition as $key => $breakdown)
+        @if(ucfirst($key) != "Leave Pay")
         <tr>
             <td>{{ ucfirst($key) }}</td>
             <td width="100px" class="text-right" style="color: #bbb" width="100px">{{ $breakdown["time"] }}</td>
             <td width="100px">PHP {{ number_format($breakdown["rate"], 2) }}</td>
         </tr>
+        @endif
         @endforeach
         <tr>
             <td class="text-bold" >Subtotal</td>

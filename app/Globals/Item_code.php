@@ -757,7 +757,7 @@ class Item_code
     {
         Item_code::give_item_code_ec_order($order_id);
         Ec_order::create_merchant_school_item($order_id);
-        Item_code::merchant_school_active_codes($order_id);
+        // Item_code::merchant_school_active_codes($order_id);
         Item_code::ec_order_slot($order_id);
     }
     public static function ec_order_slot($order_id)

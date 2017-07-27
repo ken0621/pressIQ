@@ -1513,7 +1513,7 @@ class Payroll2
 				{
 					$return->_breakdown_addition["Special Holiday OT"]["time"] = $_time["overtime"] ." (".ctopercent($special_param['payroll_overtime_overtime']).")"; 
 					$return->_breakdown_addition["Special Holiday OT"]["rate"] = ($hourly_rate * $overtime_float) * ($special_param['payroll_overtime_overtime']);
-					$return->_breakdown_addition["Special Holiday OT"]["hour"] = $_time["hour"];
+					$return->_breakdown_addition["Special Holiday OT"]["hour"] = $_time["overtime"];
 					$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday OT"]["rate"]; 
 					$overtime =  $return->_breakdown_addition["Special Holiday OT"]["rate"];
 					$breakdown_addition += $overtime;

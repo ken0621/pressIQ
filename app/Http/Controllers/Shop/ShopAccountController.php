@@ -309,7 +309,7 @@ class ShopAccountController extends Shop
 
             $data["order"]->subtotal = $data["order"]->subtotal - Cart::get_coupon_discount($data["order"]->coupon_id, $data["order"]->subtotal); 
             $data["coupon_discount"] = Cart::get_coupon_discount($data["order"]->coupon_id, $data["order"]->subtotal);
-            
+            // dd($data["order"]->subtotal);
             $data['order']->vat     = $data["order"]->subtotal / 1.12 * 0.12;
             $data['order']->vatable = $data['order']->subtotal - $data['order']->vat;
             

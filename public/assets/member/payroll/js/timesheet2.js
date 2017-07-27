@@ -68,6 +68,14 @@ function timesheet()
 		$(".time-entry.time-in").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 0, 0, 0)});
 		$(".time-entry.time-out").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 12, 0, 0)});
 		$(".time-entry-24").timeEntry({show24Hours: true, defaultTime: new Date(0, 0, 0, 0, 0, 0)});
+
+		$(".time-entry.prevent_edit").each(function(key, val)
+		{
+			$(this).timeEntry('disable');
+			console.log(key);
+		});
+
+		//alert(123);
 	}
 	function event_time_focus_out_recompute()
 	{
@@ -84,6 +92,7 @@ function timesheet()
 			var tr_date = $(e.currentTarget).closest(".tr-parent").attr("date");
 			action_reload_rate_for_date(tr_date);
 		});
+
 		/* CHECK IF INITIAL VALUE CHANGED AFTER FOCUS OUT */
 		$(".table-timesheet").on("focusout", ".time-entry", function(e)
 		{
@@ -110,7 +119,7 @@ function timesheet()
 		$target = $(".tr-parent[date='" + tr_date + "']");
 		$target.find(".rate-output").css("opacity", "0.5");
 		console.log("RELOADING RATE FOR DATE");
-		$input = $(".tr-parent[date='" + tr_date + "'] :input").serialize();
+		$input = $(".timesheet-of-employee").find(".tr-parent[date='" + tr_date + "'] :input").serialize();
 		
 		$period_id = $(".period-id").val();
 		$employee_id = $(".x-employee-id").val();
@@ -166,6 +175,8 @@ function timesheet()
 			$target_tr.find(".time-in-td").append('<input name="time-in[]" unq="' + $unq + '" value="" type="text" placeholder="NO TIME" class="new-time-event new-time-focus text-table text-center time-entry time-in is-timeEntry" >');
 			$target_tr.find(".time-out-td").append('<input name="time-out[]" unq="' + $unq + '" value="" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-out is-timeEntry">');
 			$target_tr.find(".time-comment-td").append('<input name="remarks[]" unq="' + $unq + '" value="" type="text" class="comment new-time-event text-table time-entry is-timeEntry" name="">');
+			$target_tr.find(".source-td").append('<input unq="' + $unq + '" type="text" disabled class="comment new-time-event text-table" value="Manually Encoded">');
+			
 			$target_tr.find(".new-time-focus").focus().removeClass("new-time-focus");
 			event_time_entry();
 		}

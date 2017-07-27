@@ -144,6 +144,8 @@ class PayrollTimeSheet2Controller extends Member
 	}
 	public function time_change($period_id, $employee_id)
 	{
+		ignore_user_abort(false);
+		set_time_limit(10);
 		$data["period"] = $period = $this->db_get_company_period_information($period_id);
 		$data["request"] = Request::input();
 
@@ -151,8 +153,9 @@ class PayrollTimeSheet2Controller extends Member
 		$data["timesheet_db"] = $timesheet_db = $this->timesheet_info_db($employee_id, Request::input("date"));
 		
 		/* DELETE TIME SHEET RECORD */
-		Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->delete();
+		Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->where("payroll_time_sheet_origin", "Manually Encoded")->delete();
 		Tbl_payroll_time_sheet_record_approved::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->delete();
+
 		$update_time_sheet["time_keeping_approved"] = 0;
 		Tbl_payroll_time_sheet::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->update($update_time_sheet);
 		
@@ -182,8 +185,12 @@ class PayrollTimeSheet2Controller extends Member
 			Tbl_payroll_time_sheet_record::insert($insert);
 		}
 		
+
+
 		/* RETURN DATA TO SERVER */
+		$data["timesheet_db"] = $timesheet_db = $this->timesheet_info_db($employee_id, Request::input("date"));
 		$data["daily_info"] = $this->timesheet_process_daily_info($employee_id, Request::input("date"), $timesheet_db, $period_id);
+
 		$daily_income = $data["daily_info"]->compute->total_day_income;
 		
 		$return["income"] = $daily_income;
@@ -309,6 +316,7 @@ class PayrollTimeSheet2Controller extends Member
 
 			$return->source = "";
 			$return->branch = "";
+			$return->payroll_time_sheet_id = 0;
 
 		}
 		else
@@ -569,6 +577,7 @@ class PayrollTimeSheet2Controller extends Member
 			$_timesheet_record[$key]->time_sheet_activity = $record->payroll_time_shee_activity;
 			$_timesheet_record[$key]->branch = $this->timesheet_get_branch($record->payroll_company_id)->name;
 			$_timesheet_record[$key]->source = $record->payroll_time_sheet_origin;
+			$_timesheet_record[$key]->payroll_time_sheet_id = $record->payroll_time_sheet_id;
 		}
 
 		return $_timesheet_record;
@@ -720,6 +729,12 @@ class PayrollTimeSheet2Controller extends Member
 		*/
 		$data["date"] = $date = Tbl_payroll_period_company::sel($period_company_id)->pluck('payroll_period_start');
 		$data["group"] = $group = $this->db_get_current_employee_contract($employee_id, $date);
+
+		if(!$group)
+		{
+			dd("You need to set a PAYROLL GROUP in order to show summary.");
+		}
+
 		$data["computation_type"] = $computation_type = $group->payroll_group_salary_computation;
 		$data = $this->compute_whole_cutoff($period_company_id, $employee_id);
 		$data["employee_id"] = $employee_id;

@@ -10,7 +10,7 @@
     <div class="clearfix">
         <div class="col-md-12">
             <div class="table-responsive">
-                <table class="table table-bordered table-condensed timesheet table-timesheet">
+                <table class="table table-bordered table-condensed timesheet table-timesheet timesheet-of-employee">
                     <thead style="text-transform: uppercase">
                         <tr>
                             <th class="text-center" colspan="2">Day</th>
@@ -18,69 +18,66 @@
                             <th class="text-center" width="100px">Time Out</th>
                             <th class="text-center">Remark / Activity</th>
                             <th class="text-center" width="150px;">Source</th>
-                            <th class="text-center" width="150px;">Branch</th>
                             <th width="150px" class="text-center">Rate</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($_timesheet as $timesheet)
-                        <?php $random_integer = rand (10000000, 999999999); ?>
-                        <tr class="tr-parent" date="{{ $timesheet->date }}">
-                            {{ csrf_field() }}
-                            <input type="hidden" name="date" value="{{ $timesheet->date }}"/>
-                            <td class="text-center" width="50px">{{ $timesheet->day_number }}</td>
-                            <td class="text-center" width="50px">{{ $timesheet->day_word }}</td>
+                            @if($timesheet->record)
+                                @foreach($timesheet->record as $x => $record)
+                                    <?php $random_integer[$x] = rand (10000000, 999999999); ?>
+                                @endforeach
+                            @endif
 
-                            <td class="time-in-td">
-                                @if($timesheet->record)
-                                    @foreach($timesheet->record as $record)
-                                    <input name="time-in[]" unq="{{ $random_integer }}" mintime="12:00 AM" maxtime="11:59 PM" value="{{ $record->time_sheet_in }}" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-in is-timeEntry">
-                                    @endforeach
-                                @else
-                                    <input name="time-in[]" unq="{{ $random_integer }}" mintime="12:00 AM" maxtime="11:59 PM" value="" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-in is-timeEntry">
-                                @endif
-                            </td>
-                            <td class="time-out-td">
-                                @if($timesheet->record)
-                                    @foreach($timesheet->record as $record)
-                                    <input name="time-out[]" unq="{{ $random_integer }}" mintime="12:00 AM" maxtime="11:59 PM" value="{{ $record->time_sheet_out }}" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-out is-timeEntry">
-                                    @endforeach
-                                @else
-                                    <input name="time-out[]" unq="{{ $random_integer }}" mintime="12:00 AM" maxtime="11:59 PM" value="" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-out is-timeEntry">
-                                @endif
-                            </td>
-                            <td class="time-comment-td">
-                                @if($timesheet->record)
-                                    @foreach($timesheet->record as $record)
-                                    <input name="remarks[]" unq="{{ $random_integer }}" value="{{ ($record->time_sheet_activity == '' ? $timesheet->default_remarks : $record->time_sheet_activity) }}" type="text" class="comment new-time-event text-table">
-                                    @endforeach
-                                @else
-                                    <input name="remarks[]" unq="{{ $random_integer }}" value="{{ $timesheet->default_remarks }}" type="text" class="comment new-time-event text-table">
-                                @endif
-                            </td>
+                            <?php $random_integer_for_blank = rand (10000000, 999999999); ?>
 
-                            <td class="text-center">
-                                @if($timesheet->record)
-                                    @foreach($timesheet->record as $record)
-                                        <div>{{ $record->source }}</div>
-                                    @endforeach
-                                @else
-                                    N/A
-                                @endif
-                            </td>
-                            <td class="text-center">
-                                @if($timesheet->record)
-                                    @foreach($timesheet->record as $record)
-                                        <div>{{ $record->branch }}</div>
-                                    @endforeach
-                                @else
-                                    N/A
-                                @endif
-                            </td>
-                            <td class="text-center rate-output">
-                                {!! $timesheet->daily_info->value_html !!}
-                            </td>
-                        </tr>
+                            <tr class="tr-parent" date="{{ $timesheet->date }}">
+                                {{ csrf_field() }}
+                                <input type="hidden" name="date" value="{{ $timesheet->date }}"/>
+                                <td class="text-center" width="50px">{{ $timesheet->day_number }}</td>
+                                <td class="text-center" width="50px">{{ $timesheet->day_word }}</td>
+                                <td class="time-in-td">
+                                    @if($timesheet->record)
+                                        @foreach($timesheet->record as $x => $record)
+                                         {{-- $record->payroll_time_sheet_id --}}
+                                        <input name="time-in[]" unq="{{ $random_integer[$x] }}" mintime="12:00 AM" maxtime="11:59 PM" value="{{ $record->time_sheet_in }}" type="text" placeholder="NO TIME" class="{{ $record->source != 'Manually Encoded' ? 'prevent_edit' : '' }} new-time-event text-table text-center time-entry time-in is-timeEntry">
+                                        @endforeach
+                                    @else
+                                        <input name="time-in[]" unq="{{ $random_integer_for_blank }}" mintime="12:00 AM" maxtime="11:59 PM" value="" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-in is-timeEntry">
+                                    @endif
+                                </td>
+                                <td class="time-out-td">
+                                    @if($timesheet->record)
+                                        @foreach($timesheet->record as $x => $record)
+                                        <input name="time-out[]" unq="{{ $random_integer[$x] }}" mintime="12:00 AM" maxtime="11:59 PM" value="{{ $record->time_sheet_out }}" type="text" placeholder="NO TIME" class="{{ $record->source != 'Manually Encoded' ? 'prevent_edit' : '' }} new-time-event text-table text-center time-entry time-out is-timeEntry">
+                                        @endforeach
+                                    @else
+                                        <input name="time-out[]" unq="{{ $random_integer_for_blank }}" mintime="12:00 AM" maxtime="11:59 PM" value="" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-out is-timeEntry">
+                                    @endif
+                                </td>
+                                <td class="time-comment-td">
+                                    @if($timesheet->record)
+                                        @foreach($timesheet->record as $x => $record)
+                                        <input name="remarks[]" unq="{{ $random_integer[$x] }}" value="{{ ($record->time_sheet_activity == '' ? $timesheet->default_remarks : $record->time_sheet_activity) }}" type="text" class="comment new-time-event text-table time-entry">
+                                        @endforeach
+                                    @else
+                                        <input name="remarks[]" unq="{{ $random_integer_for_blank }}" value="{{ $timesheet->default_remarks }}" type="text" class="comment new-time-event text-table">
+                                    @endif
+                                </td>
+
+                                <td class="text-center source-td">
+                                    @if($timesheet->record)
+                                        @foreach($timesheet->record as $x => $record)
+                                            <input unq="{{ $random_integer[$x] }}" type="text" disabled class="comment new-time-event text-table" value="{{ $record->source }}">
+                                        @endforeach
+                                    @else
+                                        <input unq="{{ $random_integer_for_blank }}" type="text" disabled class="comment new-time-event text-table" value="Manually Encoded">
+                                    @endif
+                                </td>
+                                <td class="text-center rate-output">
+                                    {!! $timesheet->daily_info->value_html !!}
+                                </td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
@@ -101,7 +98,7 @@
 </style>
 
 <div class="view-debug-mode modal-footer">
-    <div onclick='$(".debug-view").removeClass("hidden")' style="text-align: center; cursor: pointer; color: #005fbf">DEBUG MODE (DEVELOPER ONLY) &nbsp; <i class="fa fa-caret-down"></i></div>
+    <div onclick='$(".debug-view").removeClass("hidden")' style="text-align: center; cursor: pointer; color: #005fbf; opacity: 0.3">DEBUG MODE (DEVELOPER ONLY) &nbsp; <i class="fa fa-caret-down"></i></div>
     <div class="debug-view hidden text-left" style="padding-top: 10px;">
         {{ dd($_timesheet) }}
     </div>

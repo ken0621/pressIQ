@@ -2380,15 +2380,19 @@ class Payroll2
 	}
 	public static function cutoff_breakdown_compute_time($return, $data)
 	{
-		$show_time_breakdown = array('time_spent', 'undertime', 'overtime','late','night_differential','is_absent');
+
+		$show_time_breakdown = array('time_spent', 'undertime', 'overtime','late','night_differential');
+
+		$return->_time_breakdown['absent']["float"] = 0;
+		$return->_time_breakdown['absent']["time"] = "No Absent";
 
 		foreach($data["cutoff_input"] as $cutoff_input)
 		{
+			
 			foreach($cutoff_input->time_output as $key => $time_output)
 			{
 				if(in_array($key, $show_time_breakdown))
 				{
-
 					if(!isset($return->_time_breakdown[$key]))
 					{
 						$return->_time_breakdown[$key]["float"] = Payroll2::time_float($time_output);
@@ -2399,6 +2403,18 @@ class Payroll2
 					}
 
 					$return->_time_breakdown[$key]["time"] = Payroll2::float_time($return->_time_breakdown[$key]["float"]);
+
+
+				}
+
+				if($key == "is_absent")
+				{
+					if($time_output == true)
+					{
+
+						$return->_time_breakdown['absent']["float"] += 1;
+						$return->_time_breakdown['absent']["time"] = $return->_time_breakdown['absent']["float"] . " Absent(s)";
+					}
 				}
 			}
 		}

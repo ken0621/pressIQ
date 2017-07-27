@@ -154,7 +154,7 @@
                   <tr>
                     <td>TOTAL AMOUNT</td>
                     <!-- <td>P {{ number_format($order->total, 2) }}</td> -->
-                    <td>P </td>
+                    <td>P {{ number_format($order->vatable + $order->vat, 2) }}</td>
                   </tr>
                 </tbody>
               </table>

@@ -302,14 +302,16 @@ class ShopAccountController extends Shop
     {
         $data["page"] = "Invoice";
         $data["order"] = Tbl_ec_order::where("tbl_ec_order.ec_order_id", $id)->customer()->first();
-        $data['order']->vat     = $data["order"]->subtotal / 1.12 * 0.12;
-        $data['order']->vatable = $data['order']->subtotal - $data['order']->vat;
+        
         if ($data["order"]->payment_status == 1) 
         {
             $data["_item"] = Tbl_ec_order_item::where("tbl_ec_order_item.ec_order_id", $id)->groupBy("tbl_ec_order_item.item_id")->item()->get();
 
-            $data["order"]->total = $data["order"]->total - Cart::get_coupon_discount($data["order"]->coupon_id, $data["order"]->total); 
-            $data["coupon_discount"] = Cart::get_coupon_discount($data["order"]->coupon_id, $data["order"]->total);
+            $data["order"]->subtotal = $data["order"]->subtotal - Cart::get_coupon_discount($data["order"]->coupon_id, $data["order"]->subtotal); 
+            $data["coupon_discount"] = Cart::get_coupon_discount($data["order"]->coupon_id, $data["order"]->subtotal);
+            
+            $data['order']->vat     = $data["order"]->subtotal / 1.12 * 0.12;
+            $data['order']->vatable = $data['order']->subtotal - $data['order']->vat;
             
             return view("account_invoice", $data);
         }

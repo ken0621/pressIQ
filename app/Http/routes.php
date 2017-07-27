@@ -891,11 +891,27 @@ Route::any('/member/utilities/admin-list/ismerchant', 'Member\UtilitiesControlle
 Route::controller('/member/utilities', 'Member\UtilitiesController');
 /* End */
 
+/*  / Merchant - Commission - markup*/
 Route::any('/member/merchant/markup', 'Member\MerchantController@index');
 Route::any('/member/merchant/markup/update', 'Member\MerchantController@update');
 Route::any('/member/merchant/markup/update/piece', 'Member\MerchantController@update_per_piece');
 Route::any('/member/merchant/report', 'Member\MerchantController@report');
 Route::any('/member/merchant/commission', 'Member\MerchantController@commission');
+Route::any('/member/merchant/commission/user/{id}', 'Member\MerchantController@commission_user');
+Route::any('/member/merchant/commission/user/request_update/{id}', 'Member\MerchantController@commission_user_request_update');
+Route::any('/member/merchant/commission/user/request_submit/submit', 'Member\MerchantController@commission_user_request_update_submit');
+Route::any('/member/merchant/commission/request', 'Member\MerchantController@commission_request');
+Route::any('/member/merchant/commission/request/range/verfiy', 'Member\MerchantController@commission_range_verify');
+Route::any('/member/merchant/commission/request/submit', 'Member\MerchantController@commission_request_submit');
+/* End */
+/*  / Merchant - Ewallet*/
+Route::any('/member/merchant/ewallet', 'Member\MerchantewalletController@index');
+Route::any('/member/merchant/ewallet/list', 'Member\MerchantewalletController@payable_list');
+Route::any('/member/merchant/ewallet/request', 'Member\MerchantewalletController@request');
+Route::any('/member/merchant/ewallet/request/verfiy', 'Member\MerchantewalletController@verify');
+Route::any('/member/merchant/ewallet/request/verfiy/submit', 'Member\MerchantewalletController@verify_submit');
+/* End */
+
 /* ECOMMERCE PRODUCT */
 Route::controller('/member/ecommerce/product', 'Member\EcommerceProductController');
 /* End */

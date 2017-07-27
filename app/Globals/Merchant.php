@@ -62,10 +62,12 @@ class Merchant
                             $total_colectibles += $update['item_markup_collectibles'];
                         }
                     }
-                    $update_invoice['merchant_markup_value'] = $total_colectibles;
-                    Tbl_item_code_invoice::where('item_code_invoice_id', $invoice_id)->update($update_invoice);
+                    if($total_colectibles >= 0)
+                    {
+                        $update_invoice['merchant_markup_value'] = $total_colectibles;
+                        Tbl_item_code_invoice::where('item_code_invoice_id', $invoice_id)->update($update_invoice);
+                    }
                 }
-                
             }
 
         }

@@ -747,6 +747,14 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: blue'>Luke Glenn Jordan</span>";
 
+    $code = "merchant-ewallet";
+    $nav[$page]['submenu'][$code]['label'] = "E-Wallet";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . "merchant" . "/ewallet";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: blue'>Luke Glenn Jordan</span>";
+
 
     /* VENDORS */
     $page = "vendor";  

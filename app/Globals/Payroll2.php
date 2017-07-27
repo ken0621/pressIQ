@@ -135,7 +135,6 @@ class Payroll2
 
 
 					/*START first and between early time in*/
-
 					if (($time_in_minutes<$shift_in_minutes) && ($time_out_minutes>=$shift_in_minutes)) 
 					{
 						if ($one_time) 

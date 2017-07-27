@@ -1207,26 +1207,30 @@ class Payroll2
 
 		if($compute_type=="daily")
 		{
-			if($_time['day_type'] == 'rest_day' || $_time["is_holiday"] == "regular" || $_time["is_holiday"] == "special" || $_time['day_type'] == 'extra_day') 
+			if($_time["is_holiday"] == "special" || $_time['day_type'] == 'rest_day' || $_time["is_holiday"] == "regular" || $_time['day_type'] == 'extra_day') 
 			{
 				$daily_rate = 0;
 			}
 		}
 
-		if (($_time['day_type'] == 'extra_day' || $_time["is_holiday"] == "regular") && $time_spent!=0) 
+		if (($_time["is_holiday"] == "special" ||  $_time['day_type'] == 'extra_day'  || $_time["is_holiday"] == "regular" ) && $time_spent!=0) 
 		{
 			$return->daily_rate = $daily_true_rate;
+
 		}
 		else
 		{
+
 			$return->daily_rate = $daily_rate;
 		}
-		
+
 
 		if($time_spent!=0)
 		{
 			$daily_rate = $daily_true_rate;
 		}
+
+
 		
 		$total_day_income 		= $daily_rate ;
 		$target_float 			= Self::time_float($_time['target_hours']);
@@ -1498,9 +1502,8 @@ class Payroll2
 			{
 				if ($compute_type=="daily")
 				{
-					$total_day_income = 0;
 					$return->_breakdown_addition["Special Holiday"]["time"] = ""; 
-					$return->_breakdown_addition["Special Holiday"]["rate"] = $daily_rate * ($special_param['payroll_overtime_regular']);
+					$return->_breakdown_addition["Special Holiday"]["rate"] = $daily_true_rate * ($special_param['payroll_overtime_regular']);
 					$return->_breakdown_addition["Special Holiday"]["hour"] = "";
 					$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday"]["rate"];
 					$breakdown_addition += $return->_breakdown_addition["Special Holiday"]["rate"];

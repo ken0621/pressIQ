@@ -296,7 +296,8 @@ class ShopAccountController extends Shop
     {
         $data["page"] = "Invoice";
         $data["order"] = Tbl_ec_order::where("tbl_ec_order.ec_order_id", $id)->customer()->first();
-        
+        $data['order']->vat     = $data["order"]->subtotal / 1.12 * 0.12;
+        $data['order']->vatable = $data['order']->subtotal - $data['order']->vat;
         if ($data["order"]->payment_status == 1) 
         {
             $data["_item"] = Tbl_ec_order_item::where("tbl_ec_order_item.ec_order_id", $id)->groupBy("tbl_ec_order_item.item_id")->item()->get();

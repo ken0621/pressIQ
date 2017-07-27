@@ -137,15 +137,18 @@
                   </tr>
                   <tr>
                     <td>TOTAL SALE</td>
-                    <td>P {{ number_format($order->subtotal, 2) }}</td>
+                    <!-- <td>P {{ number_format($order->subtotal, 2) }}</td> -->
+                    <td>P {{ number_format($order->vatable, 2) }}</td>
                   </tr>
                   <tr>
                     <td>Value Added Tax</td>
-                    <td>P {{ number_format($order->tax, 2) }}</td>
+                    <!-- <td>P {{ number_format($order->tax, 2) }}</td> -->
+                    <td>P {{ number_format($order->vat, 2) }}</td>
                   </tr>
                   <tr>
                     <td>TOTAL AMOUNT</td>
-                    <td>P {{ number_format($order->total, 2) }}</td>
+                    <!-- <td>P {{ number_format($order->total, 2) }}</td> -->
+                    <td>P </td>
                   </tr>
                 </tbody>
               </table>

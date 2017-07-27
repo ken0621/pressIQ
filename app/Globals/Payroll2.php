@@ -2063,9 +2063,17 @@ class Payroll2
 	public static function time_float($time = '00:00')
 	{
 		$extime = explode(':', $time);
-		$hour = $extime[0];
-		$min = $extime[1] / 60;
-		return $hour + $min;
+
+		if(!isset($extime[1]))
+		{
+			return 0;
+		}
+		else
+		{
+			$hour = $extime[0];
+			$min = $extime[1] / 60;
+			return $hour + $min;
+		}
 	}
 
 	public static function convert_time_in_minutes($time)
@@ -2359,10 +2367,37 @@ class Payroll2
 		$return = Payroll2::cutoff_breakdown_compute_taxable_salary($return, $data);
 		$return = Payroll2::cutoff_breakdown_compute_tax($return, $data);
 		$return = Payroll2::cutoff_breakdown_compute_net($return, $data);
+		$return = Payroll2::cutoff_breakdown_compute_time($return, $data);
+		return $return;
+	}
+	public static function cutoff_breakdown_compute_time($return, $data)
+	{
+		$show_time_breakdown = array('time_spent', 'undertime', 'overtime','late','night_differential','is_absent');
+
+		foreach($data["cutoff_input"] as $cutoff_input)
+		{
+			foreach($cutoff_input->time_output as $key => $time_output)
+			{
+				if(in_array($key, $show_time_breakdown))
+				{
+
+					if(!isset($return->_time_breakdown[$key]))
+					{
+						$return->_time_breakdown[$key]["float"] = Payroll2::time_float($time_output);
+					}
+					else
+					{
+						$return->_time_breakdown[$key]["float"] += Payroll2::time_float($time_output);
+					}
+
+					$return->_time_breakdown[$key]["time"] = Payroll2::float_time($return->_time_breakdown[$key]["float"]);
+				}
+			}
+		}
+
 
 		return $return;
 	}
-
 	public static function cutoff_breakdown_to_tr($breakdown)
 	{
 		if($breakdown["mode"] == "plus")

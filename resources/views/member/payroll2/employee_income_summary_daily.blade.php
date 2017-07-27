@@ -179,6 +179,33 @@
     </div>
 </div>
 
+<div class="modal-body clearfix">
+    <div class="text-center text-bold" style="font-size: 20px; color: #1682ba">PERFORMANCE SUMMARY</div>
+    <div class="col-md-12" style="text-align: left; font-weight: normal; margin-bottom: 10px; font-size: 16px;"></div>
+    <div class="clearfix">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-condensed timesheet table-timesheet">
+                    <thead style="text-transform: uppercase">
+                        <tr>
+                            <th class="text-right"></th>
+                            <th class="text-center" width="100px">TOTAL TIME</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($cutoff_breakdown->_time_breakdown as $key => $time)
+                        <tr>
+                            <td class="text-right text-bold">{{ code_to_word($key) }}</td>
+                            <td class="text-center ">{{ $time["time"] }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="modal-footer text-right">
     <button class="btn btn-def-white btn-custom-white" data-dismiss="modal">CLOSE</button>

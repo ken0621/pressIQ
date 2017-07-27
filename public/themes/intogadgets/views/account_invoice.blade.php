@@ -124,28 +124,40 @@
               <table>
                 <tbody>
                   <tr>
-                    <td>VATable</td>
-                    <td></td>
+                    <td>SUB TOTAL</td>
+                    <td>P {{ number_format($order->subtotal + $coupon_discount, 2) }}</td>
                   </tr>
+                  @if($coupon_discount != 0)
                   <tr>
+                    <td>Coupon Disc.</td>
+                    <td>P {{ number_format($coupon_discount, 2) }}</td>
+                  </tr>
+                  @endif
+                  <tr>
+                    <td>VATable</td>
+                    <td>P {{ number_format($order->subtotal, 2) }}</td>
+                  </tr>
+                  <!-- <tr>
                     <td>VAT-Exempt Sale</td>
                     <td></td>
                   </tr>
                   <tr>
                     <td>Zero-Rated Sale</td>
                     <td></td>
+                  </tr> -->
+                  <tr>
+                    <td>Value Added Tax(12%)</td>
+                    <td>P {{ number_format($order->vat, 2) }}</td>
                   </tr>
                   <tr>
                     <td>TOTAL SALE</td>
-                    <td>P {{ number_format($order->subtotal, 2) }}</td>
+                    <td>P {{ number_format($order->vatable, 2) }}</td>
                   </tr>
+                  
                   <tr>
-                    <td>Value Added Tax</td>
-                    <td>P {{ number_format($order->tax, 2) }}</td>
-                  </tr>
-                  <tr>
-                    <td>TOTAL AMOUNT</td>
-                    <td>P {{ number_format($order->total, 2) }}</td>
+                    <td>TOTAL DUE</td>
+                    <!-- <td>P {{ number_format($order->total, 2) }}</td> -->
+                    <td>P {{ number_format($order->vatable + $order->vat, 2) }}</td>
                   </tr>
                 </tbody>
               </table>

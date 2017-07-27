@@ -147,7 +147,9 @@
 						<label>Choose Owner</label>
 						<label><input id="your_account" type="radio" class="col-md-6" name="choose_owner" value="your" checked>Your Account</label>
 						<label><input id="new_user" type="radio" class="col-md-6" name="choose_owner" value="new">New User</label>
-						<label><input id="exist" type="radio" class="col-md-6" name="choose_owner" value="exist">Existing User</label>
+						@if($shop_container->shop_key != "alphaglobal")
+							<label><input id="exist" type="radio" class="col-md-6" name="choose_owner" value="exist">Existing User</label>
+						@endif
 					</div>
 					<div class="col-md-12 new_form" style="display:none">
 					    <label>First Name</label>

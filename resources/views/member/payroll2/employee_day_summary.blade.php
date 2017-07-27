@@ -53,6 +53,7 @@
             <div class="col-md-6">
                 <div style="padding: 10px; color: #bbb">
                     <div class="text-bold">WORKING TIME</div>
+                    
                     <div>{{ $timesheet_info->time_output["target_hours"] }} {{ $timesheet_info->time_compute_mode != "regular" ? "(FLEXI TIME)" : "" }}</div>
                     <div class="text-bold">HOURLY RATE</div>
                     <div>{{ payroll_currency($timesheet_info->compute->hourly_rate) }}</div>
@@ -94,9 +95,8 @@
 <script type="text/javascript" src="/assets/member/payroll/js/timesheet2_day_summary.js"></script>
 
 <div class="view-debug-mode modal-footer">
-    <div onclick='$(".debug-view").removeClass("hidden")' style="text-align: center; cursor: pointer; color: #005fbf">DEBUG MODE (DEVELOPER ONLY) &nbsp; <i class="fa fa-caret-down"></i></div>
+    <div onclick='$(".debug-view").removeClass("hidden")' style="text-align: center; cursor: pointer; color: #005fbf; opacity: 0.3">DEBUG MODE (DEVELOPER ONLY) &nbsp; <i class="fa fa-caret-down"></i></div>
     <div class="debug-view hidden text-left" style="padding-top: 10px;">
         {{ dd($timesheet_info) }}
     </div>
 </div>
-

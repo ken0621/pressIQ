@@ -95,6 +95,16 @@ class Payroll2
 					$shift_out_minutes 	= ($shift_out_minutes[0]*60) + ($shift_out_minutes[1]);
 
 
+					/*early overtime*/
+					if ($count_shift == 0 && ($time_out_minutes < $shift_in_minutes)) 
+					{
+						$reason = "<b>answer: ". Payroll2::convert_to_12_hour($time->time_in)." to ".Payroll2::convert_to_12_hour($time->time_out)." (0) - <span style='color: green; text-transform: uppercase'>EARLY OVERTIME time in and time out<span><br></b>";
+						echo $testing == true ? $reason : "";
+						$_output = Payroll2::time_shift_output($_output, $output_ctr++, $time->time_in, $time->time_out, 0, $reason, "OVERTIME", "00:00:00", "00:00:00", Payroll::time_diff($time->time_in,$time->time_out));
+						break;
+					}
+
+
 					//check if there is next last shift that has blank time in and time out
 					if ($count_time==(sizeof($_time)-1) && ($time_in_minutes>=Payroll2::convert_time_in_minutes($_shift[sizeof($_shift)-1]->shift_out)))
 					{
@@ -131,7 +141,6 @@ class Payroll2
 
 
 					/*START first and between early time in*/
-
 					if (($time_in_minutes<$shift_in_minutes) && ($time_out_minutes>=$shift_in_minutes)) 
 					{
 						if ($one_time) 
@@ -1183,7 +1192,6 @@ class Payroll2
 		$daily_true_rate = $daily_rate;
 
 
-
 		/* leave pay computation */
 		if (Self::time_float($_time['leave_hours']) != 0) 
 		{
@@ -1203,7 +1211,7 @@ class Payroll2
 			}
 		}
 
-		if ($_time['day_type'] == 'extra_day' && $time_spent!=0) 
+		if ($_time['day_type'] == 'extra_day' || $_time["is_holiday"] == "regular" && $time_spent!=0) 
 		{
 			$return->daily_rate = $daily_true_rate;
 		}

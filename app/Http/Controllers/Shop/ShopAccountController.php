@@ -306,6 +306,9 @@ class ShopAccountController extends Shop
         if ($data["order"]->payment_status == 1) 
         {
             $data["_item"] = Tbl_ec_order_item::where("tbl_ec_order_item.ec_order_id", $id)->groupBy("tbl_ec_order_item.item_id")->item()->get();
+
+            $data["order"]->total = $data["order"]->total - Cart::get_coupon_discount($data["order"]->coupon_id, $data["order"]->total); 
+            $data["coupon_discount"] = Cart::get_coupon_discount($data["order"]->coupon_id, $data["order"]->total);
             
             return view("account_invoice", $data);
         }

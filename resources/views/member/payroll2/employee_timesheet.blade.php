@@ -90,8 +90,7 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Cancel</button>
-    
-    <button class="btn btn-primary btn-custom-primary approve-timesheet-btn" type="button">{{ $time_keeping_approved == true ? "RETURN TO PENDING" : "APPROVE" }}</button>
+    <button class="btn btn-primary btn-custom-primary approve-timesheet-btn" type="button">{{ $time_keeping_approved == true ? "RETURN TO PENDING" : "MARK AS READY" }}</button>
 </div>
 <script type="text/javascript" src="/assets/member/payroll/js/timesheet2.js"></script>
 <style type="text/css">
@@ -100,3 +99,10 @@
         width: 1100px !important;
     }
 </style>
+
+<div class="view-debug-mode modal-footer">
+    <div onclick='$(".debug-view").removeClass("hidden")' style="text-align: center; cursor: pointer; color: #005fbf">DEBUG MODE (DEVELOPER ONLY) &nbsp; <i class="fa fa-caret-down"></i></div>
+    <div class="debug-view hidden text-left" style="padding-top: 10px;">
+        {{ dd($_timesheet) }}
+    </div>
+</div>

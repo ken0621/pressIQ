@@ -37,7 +37,7 @@
                     <td class="text-center">{{ payroll_currency($employee->net_basic_pay) }}</td>
                     <td class="text-center">{{ payroll_currency($employee->gross_pay) }}</td>
                     <td class="text-center">{{ payroll_currency($employee->net_pay) }}</td>
-                    <td class="text-center"><a href="javascript: timesheet_employee_list.action_set_to_unapprove('{{ $company->payroll_period_company_id }}','{{ $employee->payroll_employee_id }}')">UNAPPROVE</a></td>
+                    <td class="text-center"><a href="javascript: timesheet_employee_list.action_set_to_unapprove('{{ $company->payroll_period_company_id }}','{{ $employee->payroll_employee_id }}')">UN-READY</a></td>
                     <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/company_timesheet2/income_summary/{{ $company->payroll_period_company_id }}/{{ $employee->payroll_employee_id }}', 'lg')">SUMMARY</a></td>
                 @else
                     <td class="text-center">-</td>

@@ -21,6 +21,8 @@ use App\Globals\Customer;
 use App\Globals\Ec_order;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_ec_order;
+use App\Models\Tbl_coupon_code;
+use App\Models\Tbl_coupon_code_product;
 use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Models\Tbl_item_code;
 use App\Models\Tbl_country;
@@ -414,7 +416,7 @@ class ShopCheckoutController extends Shop
                     $data['ec_order_load'] = 1;
                 }      
             }
-
+        
             if ($data["get_cart"]["new_account"] == false) 
             {
                 $data["shipping_address"] = DB::table("tbl_customer_address")->where("purpose", "shipping")
@@ -422,9 +424,11 @@ class ShopCheckoutController extends Shop
                                                                              ->first();                                                    
                 if ($data["shipping_address"]) 
                 {
-                    $data["shipping_address"]->state_id = isset(DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_state)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_state)->first()->locale_id : null;
-                    $data["shipping_address"]->city_id = isset(DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_city)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_city)->first()->locale_id : null;
-                    $data["shipping_address"]->zipcode_id = isset(DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_zipcode)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_name", $data["shipping_address"]->customer_zipcode)->first()->locale_id : null;
+                    $data["shipping_address"]->state_id = isset(DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->state_id)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->state_id)->first()->locale_id : null;
+                    $data["shipping_address"]->city_id = isset(DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->city_id)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->city_id)->first()->locale_id : null;
+                    $data["shipping_address"]->zipcode_id = isset(DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->barangay_id)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->barangay_id)->first()->locale_id : null;
+
+                    // dd($data["shipping_address"]);
                 }
                 else
                 {
@@ -466,31 +470,68 @@ class ShopCheckoutController extends Shop
         /* Validation */
         $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
 
+        $order_product = $data["get_cart"]["tbl_ec_order_item"];
+        $coupon_id = null;
         // if ($data["get_cart"]["new_account"] == true) 
         // {
             // $validate["full_name"] = Request::input("full_name");
-            $validate["contact_number"] = Request::input("contact_number");
-            $validate["customer_state"] = Request::input("customer_state");
-            $validate["customer_city"] = Request::input("customer_city");
-            $validate["customer_zip"] = Request::input("customer_zip");
-            $validate["customer_street"] = Request::input("customer_street");
+            // $validate["contact_number"] = Request::input("contact_number");
+            // $validate["customer_state"] = Request::input("customer_state");
+            // $validate["customer_city"] = Request::input("customer_city");
+            // $validate["customer_zip"] = Request::input("customer_zip");
+            // $validate["customer_street"] = Request::input("customer_street");
 
             // $rules["full_name"] = 'required';
-            $rules["contact_number"] = 'required';
-            $rules["customer_state"] = 'required';
-            $rules["customer_city"] = 'required';
-            $rules["customer_zip"] = 'required';
-            $rules["customer_street"] = 'required';
+            // $rules["contact_number"] = 'required';
+            // $rules["customer_state"] = 'required';
+            // $rules["customer_city"] = 'required';
+            // $rules["customer_zip"] = 'required';
+            // $rules["customer_street"] = 'required';
 
-            $validator = Validator::make($validate, $rules);
+            // $validator = Validator::make($validate, $rules);
 
-            if ($validator->fails()) 
-            {
-                return Redirect::back()
-                            ->withErrors($validator)
-                            ->withInput();
-            }
+            // if ($validator->fails()) 
+            // {
+            //     return Redirect::back()
+            //                 ->withErrors($validator)
+            //                 ->withInput();
+            // }
         // } 
+        $return["status"] = "success";
+        $coupon_code = Request::input("coupon_code");
+        if($coupon_code)
+        {
+            $get_coupon = Tbl_coupon_code::where("coupon_code",$coupon_code)
+                            ->where("shop_id",$this->shop_info->shop_id)
+                            ->where("used",0)
+                            ->where("blocked",0)
+                            ->first();
+
+            if($get_coupon)
+            {
+                $coupon_id = $get_coupon->coupon_code_id;
+                $ctr = 0;
+                foreach ($order_product as $key => $value) 
+                {
+                    $product = Tbl_coupon_code_product::where("coupon_code_id",$coupon_id)->where("coupon_code_product_id",$value['item_id'])->first();
+                    if($product)
+                    {
+                        $ctr++;
+                    }
+                }
+
+                if($ctr <= 0)
+                {
+                    $return["status"] = "error";
+                    $return["status_message"] = "The coupon code is not usable for product you order";
+                }
+            }
+            else
+            {
+                $return["status"] = "error";
+                $return["status_message"] = "The coupon code ".$coupon_code." doesn't Exist.";
+            }
+        }
 
         /* SPLIT NAME TO FIRST NAME AND LAST NAME */
         $full_name = Request::input("full_name");
@@ -506,28 +547,45 @@ class ShopCheckoutController extends Shop
         $customer_info["shipping_city"] = Self::locale_id_to_name(Request::input("customer_city"));
         $customer_info["shipping_zip"] = Self::locale_id_to_name(Request::input("customer_zip"));
         $customer_info["shipping_street"] = Request::input("customer_street");
+        $customer_info['state_id'] = Request::input("customer_state");
+        $customer_info['city_id'] = Request::input("customer_city");
+        $customer_info['barangay_id'] = Request::input("customer_zip");
 
         $customer_info["billing_state"] = Self::locale_id_to_name(Request::input("billing_customer_state"));
         $customer_info["billing_city"] = Self::locale_id_to_name(Request::input("billing_customer_city"));
         $customer_info["billing_zip"] = Self::locale_id_to_name(Request::input("billing_customer_zip"));
         $customer_info["billing_street"] = Request::input("billing_customer_street");
+        $customer_info['billing_state_id'] = Request::input("billing_customer_state");
+        $customer_info['billing_city_id'] = Request::input("billing_customer_city");
+        $customer_info['billing_barangay_id'] = Request::input("billing_customer_zip");
 
         $customer_info['load_wallet']['ec_order_load'] = Request::input('ec_order_load');
         $customer_info['load_wallet']['ec_order_load_number'] = Request::input('ec_order_load_number');
 
         $customer_info['billing_equals_shipping'] = Request::input('billing_equals_shipping') !== null ? false : true;
-        // dd($customer_info);
-        $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_shipping", "check_name"));
+
+
+        $customer_info['coupon_id'] = $coupon_id;
+
+        if($return["status"] != "error")
+        {
+            $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_shipping", "check_name"));
         
 
-        if($customer_set_info_response["status"] == "error")
-        { 
-            return Redirect::back()->with('error', $customer_set_info_response["status_message"])->withInput();
+            if($customer_set_info_response["status"] == "error")
+            { 
+                return Redirect::back()->with('error', $customer_set_info_response["status_message"])->withInput();
+            }
+            else
+            {
+                return Redirect::to("/checkout/payment");
+            }
         }
         else
         {
-            return Redirect::to("/checkout/payment");
+            return Redirect::back()->with('error', $return["status_message"])->withInput();
         }
+        
     }
     public function update_method()
     {
@@ -688,6 +746,10 @@ class ShopCheckoutController extends Shop
 
         $order_id = unserialize(Crypt::decrypt($order));
     
+        $data['order_data'] = Tbl_ec_order::where("ec_order_id",$order_id)->first();
+
+        $data['coupon_disc'] = Cart::get_coupon_discount($data['order_data']->coupon_id, $data['order_data']->total);
+
         $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $order_id)
                                            ->leftJoin('tbl_ec_variant', 'tbl_ec_order_item.item_id', '=', 'evariant_id')
                                            ->get();

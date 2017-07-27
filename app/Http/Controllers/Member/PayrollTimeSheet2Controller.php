@@ -21,6 +21,8 @@ use App\Models\Tbl_payroll_holiday_company;
 use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_shift_code;
 use App\Globals\Payroll2;
+use App\Globals\Payroll;
+use App\Globals\PayrollLeave;
 use App\Models\Tbl_payroll_company;
 use DB;
 
@@ -75,10 +77,22 @@ class PayrollTimeSheet2Controller extends Member
 		
 		
 		$employee_contract = $this->db_get_current_employee_contract($employee_id, $data["company_period"]->payroll_period_start);
+
 		$data["compute_type"] = $employee_contract->payroll_group_salary_computation;
+
+
 		$data["period_id"] = $period_id;
+
+		if($data["compute_type"] == "Flat Rate")
+		{
+			echo "<div style='padding: 100px; text-align: center;'>FLAT RATE COMPUTATION DOES'T HAVE TIMESHEET</div>";
+		}
+		else
+		{
+			return view('member.payroll2.employee_timesheet', $data);
+		}
 		
-		return view('member.payroll2.employee_timesheet', $data);
+		
 	}
 	public function approve_timesheets()
 	{
@@ -96,44 +110,25 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			$insert["employee_id"] = $employee_id;
 			$insert["payroll_period_company_id"] = $period_id;
-			//dd($compute_cutoff["break_down"]["employee"]);
-			$insert["net_basic_pay"] = $compute_cutoff["break_down"]["employee"]["get_net_basic_pay"]["total_net_basic"];
-			$insert["gross_pay"] = $compute_cutoff["break_down"]["employee"]["get_gross_pay"]["total_gross_pay"];
-			$insert["net_pay"] = $compute_cutoff["break_down"]["employee"]["get_net_pay"]["total_net_pay"];
-			$insert["taxable_salary"] = $compute_cutoff["break_down"]["employee"]["get_taxable_salary"]["total_taxable"];
-			
-		
-			
-			foreach($compute_cutoff["break_down"]["employee"]["get_taxable_salary"]["obj"] as $obj)
-			{
-				if($obj["name"] == "SSS")
-				{
-					$insert["sss_salary"] = $obj["ref_amount"];
-					$insert["sss_ee"] = $obj["amount"];
-					$insert["sss_er"] = 0;
-					$insert["sss_ec"] = 0;
-				}
-				
-				if($obj["name"] == "PHILHEALTH")
-				{
-					$insert["phihealth_salary"] = $obj["ref_amount"];
-					$insert["philhealth_ee"] = $obj["amount"];
-					$insert["philhealth_er"] = 0;
-				}
-				
-				if($obj["name"] == "PAGIBIG")
-				{
-					$insert["pagibig_salary"] = $obj["ref_amount"];
-					$insert["pagibig_ee"] = $obj["amount"];
-					$insert["pagibig_er"] = 0;
-				}
-			}
-			
+			$insert["net_basic_pay"] = $compute_cutoff["cutoff_breakdown"]->basic_pay_total;
+			$insert["gross_pay"] =  $compute_cutoff["cutoff_breakdown"]->gross_pay_total;
+			$insert["net_pay"] =  $compute_cutoff["cutoff_breakdown"]->net_pay_total;
+			$insert["taxable_salary"] =  $compute_cutoff["cutoff_breakdown"]->taxable_salary_total;
+			$insert["sss_salary"] = $compute_cutoff["cutoff_breakdown"]->sss_contribution["salary"];
+			$insert["sss_ee"] = $compute_cutoff["cutoff_breakdown"]->sss_contribution["ee"];
+			$insert["sss_er"] = $compute_cutoff["cutoff_breakdown"]->sss_contribution["er"];
+			$insert["sss_ec"] = $compute_cutoff["cutoff_breakdown"]->sss_contribution["ec"];
+			$insert["phihealth_salary"] = $compute_cutoff["cutoff_breakdown"]->philhealth_contribution["salary"];
+			$insert["philhealth_ee"] = $compute_cutoff["cutoff_breakdown"]->philhealth_contribution["ee"];
+			$insert["philhealth_er"] = $compute_cutoff["cutoff_breakdown"]->philhealth_contribution["er"];
+			$insert["pagibig_salary"] = $compute_cutoff["cutoff_breakdown"]->pagibig_contribution["salary"];
+			$insert["pagibig_ee"] = $compute_cutoff["cutoff_breakdown"]->pagibig_contribution["ee"];
+			$insert["pagibig_er"] = $compute_cutoff["cutoff_breakdown"]->pagibig_contribution["er"];
+
 			Tbl_payroll_time_keeping_approved::insert($insert);
 		}
 
-		return json_encode(Request::input());
-		
+		return json_encode(Request::input());	
 	}
 	public function unapprove($period_id, $employee_id)
 	{
@@ -289,10 +284,10 @@ class PayrollTimeSheet2Controller extends Member
 
 		return $_timesheet_record;
 	}
+
 	public function timesheet_process_daily_info($employee_id, $date, $timesheet_db, $payroll_period_company_id)
 	{
 		$return = new stdClass();
-
 
 		if($timesheet_db)
 		{
@@ -324,12 +319,14 @@ class PayrollTimeSheet2Controller extends Member
 
 		return $return;
 	}
+
 	public function error_page($message)
 	{
 		dd($message);
 	}
 	public function timesheet_process_daily_info_record($employee_id, $date, $approved, $_time, $payroll_time_sheet_id, $payroll_period_company_id, $time_keeping_approved)
 	{
+
 		$return = new stdClass();
 		$return->for_approval	= ($approved == true ? 0 : 1);
 		$return->daily_salary	= 0;
@@ -342,7 +339,6 @@ class PayrollTimeSheet2Controller extends Member
 		$return->_time	= $_time_raw;
 		$return->_shift = $_shift_raw;
 		$return->time_compute_mode = "regular";
-
 		
 		if(count($_shift) > 0)
 		{
@@ -364,6 +360,7 @@ class PayrollTimeSheet2Controller extends Member
 		}
 		
 		$return->time_keeping_approved = $time_keeping_approved;
+
 		if($return->for_approval == 1) //PENDING
 		{
 			$return->status = "PENDING";
@@ -382,7 +379,17 @@ class PayrollTimeSheet2Controller extends Member
 		else //APPROVED
 		{
 			$return->status = "APPROVED";
-			$return->clean_shift	= $this->convert_to_serialize_row_from_approved_clean_shift($_time);
+			//$return->clean_shift	= $this->convert_to_serialize_row_from_approved_clean_shift($_time);
+
+			if($return->time_compute_mode == "flexi")
+			{
+				$return->clean_shift = Payroll2::clean_shift_flexi($_time_raw, "00:00:00",	$return->shift_target_hours);
+			}
+			else
+			{
+				$return->clean_shift = Payroll2::clean_shift($_time_raw, $_shift_raw);
+			}
+
 			$return->shift_approved = true;
 			$return->compute_shift = $return->clean_shift;
 		}
@@ -409,35 +416,46 @@ class PayrollTimeSheet2Controller extends Member
 		$return->day_type = $day_type = $this->timesheet_get_day_type($employee_id, $date);
 		$return->is_holiday = $is_holiday = $this->timesheet_get_is_holiday($employee_id, $date);
 		//$return->leave = $leave = $this->timesheet_get_leave_hours($employee_id, $date, $_shift_raw);
-		$return->leave = $leave = "00:00:00";
-		$return->leave_fill_date = $leave_fill_late = 0;
-		$return->leave_fill_undertime = $leave_fill_undertime = 0;
-		$return->default_remarks = $this->timesheet_default_remarks($return);
 
-		
-	
-		// dd($return->compute_shift);
+		/*START leave function*/
+		// $leave_data_all = PayrollLeave::employee_leave_data($employee_id);
+  		// $leave_cap_data = PayrollLeave::employee_leave_capacity($employee_id);
+        $leave_date_data = PayrollLeave::employee_leave_date_data($employee_id,$date);
+        $use_leave = false;
+        $leave = "00:00:00";
+        $data_this = PayrollLeave::employee_leave_capacity_consume_remaining($employee_id)->get();
+
+        if (count($leave_date_data)>0) 
+        {
+        	// $used_leave_data = PayrollLeave::employee_leave_consumed($leave_date_data["payroll_leave_employee_id"]);
+        	// $remaining_leave_data = PayrollLeave::employee_leave_remaining($employee_id, $leave_data_all["payroll_leave_employee_id"]);
+        	$use_leave = true;
+        	$leave=$leave_date_data["leave_hours"];
+        }
+
+    	$return->use_leave = $use_leave;             
+		$return->leave = $leave;
+		$return->leave_fill_date = $leave_fill_late = 1;
+		$return->leave_fill_undertime = $leave_fill_undertime = 1;
+		$return->default_remarks = $this->timesheet_default_remarks($return);
+		/*End leave function*/
 		
 		if($return->time_compute_mode == "flexi")
 		{
-			$return->time_output =  Payroll2::compute_time_mode_flexi($return->compute_shift, $return->shift_target_hours, "00:00:00", $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday, $leave, $leave_fill_undertime, $testing = false);
+			$return->time_output =  Payroll2::compute_time_mode_flexi($return->compute_shift, $return->shift_target_hours, "00:00:00", $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday, $leave, $leave_fill_undertime, $use_leave, $testing = false);
 		}
 		else
 		{
-			$return->time_output = Payroll2::compute_time_mode_regular($return->compute_shift, $_shift_raw, $late_grace_time, $grace_time_rule_late, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday , $leave, $leave_fill_late, $leave_fill_undertime, $return->shift_target_hours,  false);
+			$return->time_output = Payroll2::compute_time_mode_regular($return->compute_shift, $_shift_raw, $late_grace_time, $grace_time_rule_late, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday , $leave, $leave_fill_late, $leave_fill_undertime, $return->shift_target_hours, $use_leave, false);
 		}
-
-
-		//dd($employee_contract);
-		//$daily_rate, $employee_contract->payroll_group_id
 		
-
 		$return->compute_type = $compute_type = Payroll2::convert_period_cat($employee_contract->payroll_group_salary_computation);
-
 
 		$return->compute = Payroll2::compute_income_day_pay($return->time_output, $daily_rate, $employee_contract->payroll_group_id, $cola, $compute_type, $return->time_compute_mode);
 		
 		$return->value_html = $this->timesheet_daily_income_to_string($return->compute_type, $payroll_time_sheet_id, $return->compute, $return->shift_approved, $payroll_period_company_id, $time_keeping_approved);
+		
+
 		return $return;
 	}
 	public function timesheet_get_day_type($employee_id, $date)
@@ -538,8 +556,7 @@ class PayrollTimeSheet2Controller extends Member
 		$return['cola'] 	=  $salary->payroll_employee_salary_cola;
 		
 		return $return;
-	}
-	
+	}	
 	public function timesheet_process_in_out_record($_timesheet_record_db)
 	{
 		$_timesheet_record = null;
@@ -589,8 +606,6 @@ class PayrollTimeSheet2Controller extends Member
 		$data["timesheet_info"] = $timesheet_info =$this->timesheet_process_daily_info($timesheet_db->payroll_employee_id, $timesheet_db->payroll_time_date, $timesheet_db, $data["period_company_id"]);
 		$employee_contract		= $this->db_get_current_employee_contract($timesheet_db->payroll_employee_id, $timesheet_db->payroll_time_date);
 		$data["compute_type"] = $employee_contract->payroll_group_salary_computation;
-		
-	
 		$data["compute_html"] = view('member.payroll2.employee_day_summary_compute', $data);
 		
 		/* COMPUTATION FOR CUTOFF */
@@ -615,14 +630,13 @@ class PayrollTimeSheet2Controller extends Member
 			$this->error_page("This employee doesn't have contract at this point of time.");
 		}
 		
-		
-		
 		$compute_type = Payroll2::convert_period_cat($group->payroll_group_salary_computation);
 		
 		if(!$salary)
 		{
 			dd("This employee doesn't have salary as of this date (" .  payroll_date_format($company_period->payroll_period_start) . "). Please check effectivity date of salary.");
 		}
+
 		$cutoff_rate = $this->identify_period_salary($salary->payroll_employee_salary_monthly, $company_period->payroll_period_category);
 		$cutoff_cola = $this->identify_period_salary($salary->monthly_cola, $company_period->payroll_period_category);
 		$cutoff_target_days = $this->identify_period_salary($salary->payroll_group_working_day_month, $group->payroll_period_category);
@@ -636,14 +650,14 @@ class PayrollTimeSheet2Controller extends Member
 			$_timesheet[$from] = $this->timesheet_process_daily_info($employee_id, $from, $timesheet_db, $period_company_id);;
 			$from = Carbon::parse($from)->addDay()->format("Y-m-d");
 		}
+
 		$data["cutoff_input"] = $_timesheet;
-	
-	
-	
 		$data["cutoff_compute"] = $cutoff_compute = Payroll2::cutoff_compute_gross_pay($compute_type, $cutoff_rate, $cutoff_cola, $cutoff_target_days, $_timesheet);
-	
-		$data["netpay_compute"] = Payroll2::cutoff_compute_net_pay($period_company_id, $employee_id, $cutoff_compute->cutoff_income_plus_cola, $cutoff_compute->cutoff_income_plus_cola, $cutoff_compute->render_days);
-		$data["break_down"]		= Payroll2::cutoff_compute_break($period_company_id, $employee_id, $cutoff_compute);
+		$data["cutoff_breakdown"] = $cutoff_breakdown = Payroll2::cutoff_breakdown($period_company_id, $employee_id, $cutoff_compute, $data);
+		
+		//$data["netpay_compute"] = Payroll2::cutoff_compute_net_pay($period_company_id, $employee_id, $cutoff_compute->cutoff_income_plus_cola, $cutoff_compute->cutoff_income_plus_cola, $cutoff_compute->render_days);
+		//$data["break_down"]		= Payroll2::cutoff_compute_break($period_company_id, $employee_id, $cutoff_compute);
+		//dd($data);
 		// dd($data["break_down"]);
 		return $data;
 	}
@@ -655,7 +669,7 @@ class PayrollTimeSheet2Controller extends Member
 		$data["employee_id"] = $timesheet_db->payroll_employee_id;
 		$data["employee_info"] = $this->db_get_employee_information($timesheet_db->payroll_employee_id); 
 		$data["timesheet_info"] = $timesheet_info = $this->timesheet_process_daily_info($timesheet_db->payroll_employee_id, $timesheet_db->payroll_time_date, $timesheet_db, $data["period_company_id"]);
-		$employee_contract		= $this->db_get_current_employee_contract($timesheet_db->payroll_employee_id, $timesheet_db->payroll_time_date);
+		$employee_contract = $this->db_get_current_employee_contract($timesheet_db->payroll_employee_id, $timesheet_db->payroll_time_date);
 		$data["compute_type"] = $employee_contract->payroll_group_salary_computation;
 		return view('member.payroll2.employee_day_summary_compute', $data);
 	}
@@ -670,6 +684,8 @@ class PayrollTimeSheet2Controller extends Member
 			$update_time_sheet["time_keeping_approved"] = 1;
 			Tbl_payroll_time_sheet::where("payroll_time_sheet_id", $time_sheet_id)->update($update_time_sheet);
 		}
+
+
 		
 		foreach(Request::input("time-in") as $key => $time_in)
 		{
@@ -677,21 +693,20 @@ class PayrollTimeSheet2Controller extends Member
 			$payroll_time_sheet_record_id = Request::input("payroll_time_sheet_record_id")[$key];
 			$record = Tbl_payroll_time_sheet_record_approved::where("payroll_time_sheet_id", Request::input("payroll_time_sheet_id"))->where("payroll_time_sheet_record_id", Request::input("payroll_time_sheet_record_id")[$key])->first();
 		
-			$payroll_time_serialize = unserialize($record->payroll_time_serialize);
+			//$payroll_time_serialize = unserialize($record->payroll_time_serialize);
 			$time_out = Request::input("time-out")[$key];
 			$approve_checkbox = isset($request["approve-checkbox"][$key]) ? 1 : 0;
 			$overtime_checkbox = isset($request["overtime-checkbox"][$key]) ? 1 : 0;
 			
 			/* UPDATE INFORMATION */
 			$update = null;
-			$update["payroll_time_sheet_in"] = $payroll_time_serialize->time_in = $this->c_24_hour_format($time_in);
-			$update["payroll_time_sheet_out"] = $payroll_time_serialize->time_out = $this->c_24_hour_format($time_out);
-			$update["payroll_time_sheet_auto_approved"] = $payroll_time_serialize->auto_approved = $approve_checkbox;
-			$update["payroll_time_serialize"] = serialize($payroll_time_serialize);
+			$update["payroll_time_sheet_in"] = $this->c_24_hour_format($time_in);
+			$update["payroll_time_sheet_out"] = $this->c_24_hour_format($time_out);
+			$update["payroll_time_sheet_auto_approved"] = $approve_checkbox;
+			$update["payroll_time_serialize"] = "";
+
 			Tbl_payroll_time_sheet_record_approved::where("payroll_time_sheet_id", Request::input("payroll_time_sheet_id"))->where("payroll_time_sheet_record_id", Request::input("payroll_time_sheet_record_id")[$key])->update($update);
 		
-			
-			
 		}
 		
 		echo json_encode("success");
@@ -703,13 +718,15 @@ class PayrollTimeSheet2Controller extends Member
 		*  Flat Rate
 		*  Monthly Rate
 		*/
-		$date = Tbl_payroll_period_company::sel($period_company_id)->pluck('payroll_period_start');
-		$group = $this->db_get_current_employee_contract($employee_id, $date);
+		$data["date"] = $date = Tbl_payroll_period_company::sel($period_company_id)->pluck('payroll_period_start');
+		$data["group"] = $group = $this->db_get_current_employee_contract($employee_id, $date);
+		$data["computation_type"] = $computation_type = $group->payroll_group_salary_computation;
 		$data = $this->compute_whole_cutoff($period_company_id, $employee_id);
-		$computation_type = $group->payroll_group_salary_computation;
-	
-
+		$data["employee_id"] = $employee_id;
+		$check_approved = Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_company_id)->first();
+		$data["time_keeping_approved"] = $check_approved ? true : false;			
 		
+
 		switch ($computation_type)
 		{
 			case "Daily Rate":
@@ -721,28 +738,20 @@ class PayrollTimeSheet2Controller extends Member
 			case "Flat Rate":
 				return $this->income_summary_flat_rate_computation($data);
 			break;
-			
 		}
 	}
 	
 	public function income_summary_daily_computation($data)
 	{
-		// dd($data);
-		$data['total'] = $this->gettotal_break($data);
-		$data['adjustment'] = $this->generate_adjustment($data);
-		//dd($data);
 		return view("member.payroll2.employee_income_summary_daily", $data);
 	}
 	public function income_summary_monthly_computation($data)
 	{
-		$data['total'] = $this->gettotal_break($data);
-		$data['adjustment'] = $this->generate_adjustment($data);
-		// dd($data);
 		return view("member.payroll2.employee_income_summary_monthly", $data);
 	}
-	public function income_summary_flat_rate_computation()
+	public function income_summary_flat_rate_computation($data)
 	{
-		dd($data);
+		return view("member.payroll2.employee_income_summary_flat", $data);
 	}
 	/* GLOBAL FUNCTION FOR THIS CONTROLLER */
 	public function c_24_hour_format($time)
@@ -820,6 +829,12 @@ class PayrollTimeSheet2Controller extends Member
 						$_time_raw[$key] = new stdClass();
 						$_time_raw[$key]->time_in = $time->payroll_time_sheet_in;
 						$_time_raw[$key]->time_out = $time->payroll_time_sheet_out;
+
+						if(isset($time->payroll_time_sheet_record_id))
+						{
+							$_time_raw[$key]->payroll_time_sheet_record_id = $time->payroll_time_sheet_record_id;
+							$_time_raw[$key]->payroll_time_sheet_auto_approved = $time->payroll_time_sheet_auto_approved;
+						}
 					}
 
 				}
@@ -870,7 +885,7 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			foreach($_clean_shift as $key => $clean_shift)
 			{
-	
+
 				$insert[$key]["payroll_time_sheet_id"] = $time_sheet_id;
 				$insert[$key]["payroll_time_sheet_in"] = $clean_shift->time_in;
 				$insert[$key]["payroll_time_sheet_out"] = $clean_shift->time_out;

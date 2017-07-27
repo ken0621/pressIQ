@@ -52,6 +52,7 @@ class Payroll2
 		$output_ctr = 0;
 		$_output = null;
 		
+
 		if ($_time == null) 
 		{
 			
@@ -60,7 +61,8 @@ class Payroll2
 		{
 			foreach ($_time as $time) 
 			{
-				$_output = Payroll2::time_shift_output($_output, $output_ctr++, $time->time_in, $time->time_out, 0,"NO SCHEDULE","00:00:00","00:00:00","00:00:");
+
+				$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $time->time_in, $time->time_out, 0,"NO SCHEDULE","00:00:00","00:00:00","00:00:");
 			}
 		}
 		else
@@ -71,6 +73,10 @@ class Payroll2
 
 			foreach ($_time as $time)
 			{
+
+
+
+
 				$one_time=true;
 				$count_shift=0;
 				$time_in_minutes = explode(":", $time->time_in);
@@ -79,11 +85,8 @@ class Payroll2
 				$time_out_minutes = ($time_out_minutes[0]*60) + ($time_out_minutes[1]);
 				$missed_shift=true;
 
-
 				foreach($_shift as $shift)
 				{
-					
-	
 					echo $testing == true ?  "<hr><br><br>compare: Time (" . date("h:i A", strtotime($time->time_in)) . " - " . date("h:i A", strtotime($time->time_out)) . ") vs Shift (" . date("h:i A", strtotime($shift->shift_in)) . "-" . date("h:i A", strtotime($shift->shift_out)) . ")<br>" : "";
 					//explode(":", $shift->shift_in)
 					$shift_in_minutes 	= explode(":", $shift->shift_in);
@@ -97,7 +100,7 @@ class Payroll2
 					{
 						$reason = "<b>answer: ". Payroll2::convert_to_12_hour($time->time_in)." to ".Payroll2::convert_to_12_hour($time->time_out)." (0) - <span style='color: green; text-transform: uppercase'>OVERTIME time in and time out<span><br></b>";
 						echo $testing == true ? $reason : "";
-						$_output = Payroll2::time_shift_output($_output, $output_ctr++, $time->time_in, $time->time_out, 0, $reason, "OVERTIME", "00:00:00", "00:00:00", Payroll::time_diff($time->time_in,$time->time_out));
+						$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $time->time_in, $time->time_out, 0, $reason, "OVERTIME", "00:00:00", "00:00:00", Payroll::time_diff($time->time_in,$time->time_out));
 						break;
 					}
 
@@ -110,7 +113,7 @@ class Payroll2
 						{
 							$reason = "<b>answer: ". Payroll2::convert_to_12_hour($shift->shift_in) ." to ". Payroll2::convert_to_12_hour($shift->shift_out)." (2) - <span style='color: green; text-transform: uppercase'>LATE FOR FIRST SHIFT<span><br></b>";
 							echo $testing == true ? $reason : ""; 
-							$_output = Payroll2::time_shift_output($_output, $output_ctr++, $shift->shift_in, $shift->shift_out, 2, $reason, "LATE", Payroll::time_diff($shift->shift_in, $shift->shift_out),"00:00:00","00:00:00");						
+							$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $shift->shift_in, $shift->shift_out, 2, $reason, "LATE", Payroll::time_diff($shift->shift_in, $shift->shift_out),"00:00:00","00:00:00");						
 						}
 					}
 
@@ -121,7 +124,7 @@ class Payroll2
 						{
 							$reason = "<b>answer: ". Payroll2::convert_to_12_hour($shift->shift_in)." to ". Payroll2::convert_to_12_hour($shift->shift_out)." (2) - <span style='color: green; text-transform: uppercase'>SHIFT HAS BEEN SKIPPED<span><br></b>";
 							echo $testing == true ? $reason : ""; 
-							$_output = Payroll2::time_shift_output($_output, $output_ctr++, $shift->shift_in, $shift->shift_out, 2, $reason, "UNDERTIME", "00:00:00", Payroll::time_diff($shift->shift_in, $shift->shift_out), "00:00:00");	
+							$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $shift->shift_in, $shift->shift_out, 2, $reason, "UNDERTIME", "00:00:00", Payroll::time_diff($shift->shift_in, $shift->shift_out), "00:00:00");	
 						}
 					}
 
@@ -135,7 +138,7 @@ class Payroll2
 						{
 							$reason = "<b>answer: ". Payroll2::convert_to_12_hour($time->time_in)." to ". Payroll2::convert_to_12_hour($shift->shift_in)." (0)- <span style='color: green; text-transform: uppercase'>early over time<span><br></b>";
 							echo $testing == true ? $reason : ""; 
-							$_output = Payroll2::time_shift_output($_output, $output_ctr++, $time->time_in, $shift->shift_in, 0, $reason, "OVERTIME","00:00:00","00:00:00",Payroll::time_diff($time->time_in,$shift->shift_in));					
+							$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $time->time_in, $shift->shift_in, 0, $reason, "OVERTIME","00:00:00","00:00:00",Payroll::time_diff($time->time_in,$shift->shift_in));					
 						}
 						$one_time=false;
 					}
@@ -152,7 +155,7 @@ class Payroll2
 					{
 						$reason = "<b>answer: ". Payroll2::convert_to_12_hour($shift->shift_in)." to ". Payroll2::convert_to_12_hour($shift->shift_out)." (1) - <span style='color: green; text-transform: uppercase'>sandwich between time in and time out</span><br></b>";
 						echo $testing == true ? $reason : ""; 
-						$_output = Payroll2::time_shift_output($_output, $output_ctr++, $shift->shift_in, $shift->shift_out, 1,$reason,"APPROVED","00:00:00","00:00:00","00:00:00");
+						$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $shift->shift_in, $shift->shift_out, 1,$reason,"APPROVED","00:00:00","00:00:00","00:00:00");
 					}
 					//late time in but not undertime
 					//error: solve by adding equal sign in 2nd line condition
@@ -161,7 +164,7 @@ class Payroll2
 					{
 						$reason = "<b>answer: ". Payroll2::convert_to_12_hour($time->time_in)." to ".Payroll2::convert_to_12_hour($shift->shift_out)." (1)- <span style='color: green; text-transform: uppercase'>LATE TIME IN BUT NOT UNDERTIME<span><br></b>";
 						echo $testing == true ? $reason : "";
-						$_output = Payroll2::time_shift_output($_output, $output_ctr++, $time->time_in, $shift->shift_out, 1,$reason,"LATE",Payroll::time_diff($shift->shift_in,$time->time_in),"00:00:00","00:00:00");
+						$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $time->time_in, $shift->shift_out, 1,$reason,"LATE",Payroll::time_diff($shift->shift_in,$time->time_in),"00:00:00","00:00:00");
 					}
 					//not late time in but undertime time out
 					//error: solve by adding equal sign in first condition
@@ -170,7 +173,7 @@ class Payroll2
 					{
 						$reason = "<b>answer: ". Payroll2::convert_to_12_hour($shift->shift_in)." to ".Payroll2::convert_to_12_hour($time->time_out)." (1) - <span style='color: green; text-transform: uppercase'>ONTIME BUT UNDERTIME<span><br></b>".Payroll::time_diff($time->time_out,$shift->shift_out);
 						 
-						$_output = Payroll2::time_shift_output($_output, $output_ctr++, $shift->shift_in, $time->time_out, 1,$reason,"UNDERTIME","00:00:00",Payroll::time_diff($time->time_out,$shift->shift_out),"00:00:00");
+						$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $shift->shift_in, $time->time_out, 1,$reason,"UNDERTIME","00:00:00",Payroll::time_diff($time->time_out,$shift->shift_out),"00:00:00");
 						
 						
 					}
@@ -179,7 +182,7 @@ class Payroll2
 					{
 						$reason = "<b>answer: ". Payroll2::convert_to_12_hour($time->time_in)." to ".Payroll2::convert_to_12_hour($time->time_out)." (1)- <span style='color: green; text-transform: uppercase'>LATE AND UNDERTIME<span><br></b>";
 						echo $testing == true ? $reason : "";
-						$_output = Payroll2::time_shift_output($_output, $output_ctr++, $time->time_in, $time->time_out, 1,$reason,"LATE AND UNDERTIME",Payroll::time_diff($shift->shift_in,$time->time_in),Payroll::time_diff($time->time_out,$shift->shift_out),"00:00:00");
+						$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $time->time_in, $time->time_out, 1,$reason,"LATE AND UNDERTIME",Payroll::time_diff($shift->shift_in,$time->time_in),Payroll::time_diff($time->time_out,$shift->shift_out),"00:00:00");
 						//echo $shift->shift_in."  ".$time->time_in;
 					}
 					/*END all approve shift*/
@@ -193,7 +196,7 @@ class Payroll2
 						{
 							$reason = "<b>answer: ". Payroll2::convert_to_12_hour($shift->shift_out)." to ". Payroll2::convert_to_12_hour($time->time_out)." (0)- <span style='color: green; text-transform: uppercase'>LAST OVERTIME<span><br></b>";
 							echo $testing == true ? $reason : "";
-							$_output = Payroll2::time_shift_output($_output, $output_ctr++, $shift->shift_out, $time->time_out, 0,$reason,"OVERTIME","00:00:00","00:00:00",Payroll::time_diff($shift->shift_out,$time->time_out));
+							$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $shift->shift_out, $time->time_out, 0,$reason,"OVERTIME","00:00:00","00:00:00",Payroll::time_diff($shift->shift_out,$time->time_out));
 						}
 					}
 					/*END last overtime*/
@@ -213,7 +216,7 @@ class Payroll2
 						{
 							$reason = "<b>answer: ".$shift->shift_out." to ".$time->time_out." (0) - <span style='color: green; text-transform: uppercase'>TIME OUT IS IN BETWEEN SHIFT OUT AND NEXT SHIFT IN OVERTIME<span><br></b>";
 							echo $testing == true ? $reason : "";
-							$_output = Payroll2::time_shift_output($_output, $output_ctr++, $shift->shift_out, $time->time_out, 0, $reason,"OVERTIME","00:00:00","00:00:00",Payroll::time_diff($shift->shift_out,$time->time_out));
+							$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $shift->shift_out, $time->time_out, 0, $reason,"OVERTIME","00:00:00","00:00:00",Payroll::time_diff($shift->shift_out,$time->time_out));
 						}
 
 						// sandwich overtime between shift out and next shift in
@@ -221,7 +224,7 @@ class Payroll2
 						{
 							$reason = "<b>answer: ".Payroll2::convert_to_12_hour($time->time_in)." to ".Payroll2::convert_to_12_hour($time->time_out)." (0) - <span style='color: green; text-transform: uppercase'>SANDWICH BETWEEN SHIFT OUT AND NEXT SHIFT IN<span><br></b>";
 							echo $testing == true ? $reason : "";
-							$_output = Payroll2::time_shift_output($_output, $output_ctr++, $time->time_in, $time->time_out, 0, $reason,"OVERTIME","00:00:00","00:00:00",Payroll::time_diff($time->time_in,$time->time_out));
+							$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $time->time_in, $time->time_out, 0, $reason,"OVERTIME","00:00:00","00:00:00",Payroll::time_diff($time->time_in,$time->time_out));
 						}
 						
 						//sandwich overtime, time out is between next shift in and out
@@ -231,7 +234,7 @@ class Payroll2
 						{ 
 							$reason = "<b>answer: ".Payroll2::convert_to_12_hour($shift->shift_out)." to ".Payroll2::convert_to_12_hour($_shift[$count_shift]->shift_in)." (0)- <span style='color: green; text-transform: uppercase'>sandwich overtime, time in is between next shift in and out<span><br></b>";
 							echo $testing == true ? $reason : "";
-							$_output = Payroll2::time_shift_output($_output, $output_ctr++, $shift->shift_out, $_shift[$count_shift]->shift_in, 0, $reason,"OVERTIME","00:00:00","00:00:00",Payroll::time_diff($shift->shift_out, $_shift[$count_shift]->shift_in));
+							$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $shift->shift_out, $_shift[$count_shift]->shift_in, 0, $reason,"OVERTIME","00:00:00","00:00:00",Payroll::time_diff($shift->shift_out, $_shift[$count_shift]->shift_in));
 						}
 					}
 					/*END between overtime Sandwich*/
@@ -307,20 +310,20 @@ class Payroll2
 						echo $testing == true ? "<b>answer</b>: TIME IN = ".$time->time_in." TIME OUT = ". $time->time_out." OVER TARGET TIME<br>":"";
 						$minus_minutes = ($time_in_minutes+$sum_target_hours)-$target_hours;
 						//"APPROVED 1 minutes -> ".$minus_minutes." = (".$time_in_minutes." + ".$sum_target_hours.") - ".$target_hours
-						$_output = Payroll2::flexi_time_shift_output($_output,$index++, $time->time_in, Payroll2::minus_time($minus_minutes,$time->time_out),1 , "APPROVED 1", "APPROVED");
+						$_output = Payroll2::flexi_time_shift_output($time, $_output,$index++, $time->time_in, Payroll2::minus_time($minus_minutes,$time->time_out),1 , "APPROVED 1", "APPROVED");
 						$ot = Payroll::time_diff(Payroll2::minus_time($minus_minutes,$time->time_out), $time->time_out);
-						$_output = Payroll2::flexi_time_shift_output($_output,$index++, Payroll2::minus_time($minus_minutes,$time->time_out), $time->time_out,0 , "OVERTIME 1 ".Payroll2::minus_time($minus_minutes,$time->time_out), "OVERTIME", $ot);
+						$_output = Payroll2::flexi_time_shift_output($time, $_output,$index++, Payroll2::minus_time($minus_minutes,$time->time_out), $time->time_out,0 , "OVERTIME 1 ".Payroll2::minus_time($minus_minutes,$time->time_out), "OVERTIME", $ot);
 					}
 					else
 					{
-						$_output = Payroll2::flexi_time_shift_output($_output,$index++, $time->time_in, $time->time_out, 1, "APPROVED 2 ", "APPROVED");
+						$_output = Payroll2::flexi_time_shift_output($time, $_output,$index++, $time->time_in, $time->time_out, 1, "APPROVED 2 ", "APPROVED");
 						echo $testing == true ? "<b>answer</b>: TIME IN = ".$time->time_in." TIME OUT = ". $time->time_out." LESS THAN TARGET TIME<br>":"";
 					}
 					$sum_target_hours = $sum_target_hours + $time_in_minutes;
 				}
 				else
 				{
-					$_output = Payroll2::flexi_time_shift_output($_output,$index++, $time->time_in, $time->time_out, 0, "OVERTIME 2 ", "OVERTIME",Payroll::time_diff($time->time_in, $time->time_out));
+					$_output = Payroll2::flexi_time_shift_output($time, $_output,$index++, $time->time_in, $time->time_out, 0, "OVERTIME 2 ", "OVERTIME",Payroll::time_diff($time->time_in, $time->time_out));
 					echo $testing == true ? "<b>answer</b>: TIME IN = ".$time->time_in." TIME OUT = ". $time->time_out." OVERTIME<br>":"";
 				}
 			}
@@ -370,9 +373,11 @@ class Payroll2
      * @author (Kim Briel Oraya)
      *
      */
-	public static function compute_time_mode_regular($_time, $_shift, $late_grace_time = "00:00:00", $grace_time_rule_late="per_shift",$overtime_grace_time = "00:00:00",$grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00",$leave_fill_late=0,$leave_fill_undertime=0,$target_hours=0,$testing = false)
+	public static function compute_time_mode_regular($_time, $_shift, $late_grace_time = "00:00:00", $grace_time_rule_late="per_shift",$overtime_grace_time = "00:00:00",$grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00",$leave_fill_late=0,$leave_fill_undertime=0,$target_hours=0, $use_leave = false ,$testing = false)
 	{
-		
+
+		$leave_fill_undertime	= 1;
+		$leave_fill_late		= 1;
 		$time_spent				= "00:00:00";
 		$late_hours 			= "00:00:00";
 		$under_time 			= "00:00:00";
@@ -383,7 +388,8 @@ class Payroll2
 		$extra_day_hours		= "00:00:00";
 		$regular_holiday_hours	= "00:00:00";
 		$special_holiday_hours	= "00:00:00";
-		$leave_hours			= $leave;
+		$leave_hours_consumed	= "00:00:00";
+		$leave_hours			= $leave; //$leave;
 		$excess_leave_hours 	= $leave;
 		$is_half_day			= false;
 		$is_absent				= true;
@@ -404,6 +410,28 @@ class Payroll2
 			if (!(($day_type == "rest_day")||($day_type == "extra")||($is_holiday == "regular")||($is_holiday == "special")||($leave_hours!="00:00:00")))
 			{
 				$is_absent =true;
+			}
+
+			//trigger if leave
+			if ($is_absent==true) 
+			{
+				
+				$target_minutes = Payroll2::convert_time_in_minutes($target_hours);
+				$leave_minutes = Payroll2::convert_time_in_minutes($leave);
+				if ($target_minutes > $leave_minutes) 
+				{
+					$under_time 			= Payroll::time_diff($leave_hours,$target_hours);
+					$leave_hours_consumed   = $leave_hours;
+					$time_spent             = $leave_hours;
+					$is_absent 				= false;
+				}
+				else
+				{
+
+					$leave_hours_consumed   = $target_hours;
+					$is_absent 				= false;
+					$time_spent 			= $target_hours;
+				}
 			}
 		}
 		else
@@ -620,14 +648,13 @@ class Payroll2
 					$time_spent_temp = Payroll::sum_time($time_spent_temp,$time->late);
 					$time_spent_temp =  Payroll::sum_time($time_spent_temp,Payroll::time_diff($time->time_in,$time->time_out));					
 				}
-
 			}
 
 			//record if undertime
 			//not yet sure
-			$target_minutes = Payroll2::convert_time_in_minutes($target_hours);
-			$time_spent_in_minutes = Payroll2::convert_time_in_minutes($time_spent_temp);
-			$under_time_in_minutes = Payroll2::convert_time_in_minutes($time->undertime);
+			$target_minutes 		= Payroll2::convert_time_in_minutes($target_hours);
+			$time_spent_in_minutes 	= Payroll2::convert_time_in_minutes($time_spent_temp);
+			$under_time_in_minutes 	= Payroll2::convert_time_in_minutes($time->undertime);
 
 			if ($time_spent_in_minutes<$target_minutes) 
 			{ 
@@ -635,68 +662,102 @@ class Payroll2
 				$under_time = Payroll2::minus_time($under_time_in_minutes,$under_time);
 			}
 			/*END sum time_spent late and undertime of all auto approved sched*/
+	
 			
-
-			
-
-			
-			//fill late with leave hours
-			if ($leave_fill_late==1) 
+			//leave trigger
+			if ($use_leave == true) 
 			{
-				$late_minutes = Payroll2::convert_time_in_minutes($late_hours);
-				$excess_leave_minutes = Payroll2::convert_time_in_minutes($excess_leave_hours);
-				//has late record and have leave hours
-				if (($late_minutes>0)&&($excess_leave_minutes>0)) 
+				//if absent
+
+				if ($is_absent==true) 
 				{
-					//leave hours can fill the undertime record
-					if ($late_minutes<=$excess_leave_minutes) 
+					
+					$target_minutes = Payroll2::convert_time_in_minutes($target_hours);
+					$leave_minutes = Payroll2::convert_time_in_minutes($leave);
+					if ($target_minutes > $leave_minutes) 
 					{
-						$excess_leave_hours = Payroll2::minus_time($late_minutes,$excess_leave_hours);
-						$time_spent = Payroll::sum_time($time_spent,$late_hours);
-						$late_hours = "00:00";
+						$under_time 			= Payroll::time_diff($leave_hours,$target_hours);
+						$leave_hours_consumed   = $leave_hours;
+						$time_spent             = $leave_hours;	
+						$is_absent 				= false;
 					}
-					//leave hours can't fill the undertime record
-					else if ($late_minutes>$excess_leave_minutes) 
+					else
 					{
-						$late_hours = Payroll2::minus_time($excess_leave_minutes,$late_hours);
-						$time_spent = Payroll::sum_time($time_spent,$excess_leave_hours);
-						$excess_leave_hours="00:00";
+
+						$leave_hours_consumed   = $target_hours;
+						$is_absent 				= false;
+						$time_spent 			= $target_hours;
 					}
 				}
-			}
 
-
-				
-			//fill undertime with leave hours
-			if ($leave_fill_undertime==1) 
-			{
-			 	$undertime_minutes = Payroll2::convert_time_in_minutes($under_time);
-				$excess_leave_minutes = Payroll2::convert_time_in_minutes($excess_leave_hours);
-				//has undertime record and have leave hours
-				if (($undertime_minutes>0)&&($excess_leave_minutes>0)) 
+				//if not absent and there was a late or undertime
+				else
 				{
-					//leave hours can fill the undertime record
-					if ($undertime_minutes<=$excess_leave_minutes) 
+					//fill undertime with leave hours
+					if ($leave_fill_undertime == 1) 
 					{
-						$excess_leave_hours = Payroll2::minus_time($undertime_minutes,$excess_leave_hours);
-						$time_spent = Payroll::sum_time($time_spent,$under_time);
-						$under_time = "00:00";
+					 	$undertime_minutes = Payroll2::convert_time_in_minutes($under_time);
+						$excess_leave_minutes = Payroll2::convert_time_in_minutes($excess_leave_hours);
+						//has undertime record and have leave hours
+						if (($undertime_minutes > 0) && ($excess_leave_minutes > 0)) 
+						{
+							//leave hours can fill the undertime record
+							if ($undertime_minutes <= $excess_leave_minutes) 
+							{
+								$leave_hours_consumed	= Payroll::sum_time($leave_hours_consumed,$under_time);
+								$excess_leave_hours 	= Payroll2::minus_time($undertime_minutes,$excess_leave_hours);
+								$time_spent 			= Payroll::sum_time($time_spent,$under_time);
+								$under_time 			= "00:00";
+								//dd(Payroll2::minus_time(60,$excess_leave_hours));
+							}
+							//leave hours can't fill the undertime record
+							else if ($undertime_minutes>$excess_leave_minutes) 
+							{
+								$leave_hours_consumed	= Payroll::sum_time($leave_hours_consumed, $leave_hours);
+								$under_time 			= Payroll2::minus_time($excess_leave_minutes, $under_time);
+								$time_spent 			= Payroll::sum_time($time_spent, $excess_leave_hours);
+								$excess_leave_hours		= "00:00";
+							}
+						}
 					}
-					//leave hours can't fill the undertime record
-					else if ($undertime_minutes>$excess_leave_minutes) 
+
+					//fill late with leave hours
+					if ($leave_fill_late==1) 
 					{
-						$under_time = Payroll2::minus_time($excess_leave_minutes,$under_time);
-						$time_spent = Payroll::sum_time($time_spent,$excess_leave_hours);
-						$excess_leave_hours="00:00";
+
+						$late_minutes = Payroll2::convert_time_in_minutes($late_hours);
+						$excess_leave_minutes = Payroll2::convert_time_in_minutes($excess_leave_hours);
+						//has late record and have leave hours
+						if (($late_minutes>0)&&($excess_leave_minutes>0)) 
+						{
+							//leave hours can fill the undertime record
+							if ($late_minutes<=$excess_leave_minutes) 
+							{
+								$leave_hours_consumed	= Payroll::sum_time($leave_hours_consumed, $late_hours);
+								$excess_leave_hours = Payroll2::minus_time($late_minutes,$excess_leave_hours);
+								$time_spent = Payroll::sum_time($time_spent,$late_hours);
+								$late_hours = "00:00";
+							}
+							//leave hours can't fill the undertime record
+							else if ($late_minutes>$excess_leave_minutes && $excess_leave_minutes!=0) 
+							{
+								$leave_hours_consumed	= Payroll::sum_time($leave_hours_consumed, $leave_hours);
+								$late_hours = Payroll2::minus_time($excess_leave_minutes,$late_hours);
+								$time_spent = Payroll::sum_time($time_spent,$excess_leave_hours);
+								$excess_leave_hours="00:00";
+							}
+						}
+
+					}
+
+					//excess leave hour if not use
+					if (($leave_fill_undertime==0)&&($leave_fill_late==0)) 
+					{
+						$excess_leave_hours=$leave;
 					}
 				}
-			}
-			//excess leave hour if not use
-			if (($leave_fill_undertime==0)&&($leave_fill_late==0)) 
-			{
-				$excess_leave_hours=$leave;
-			}
 
+			}
 			//check if time spent is only half day
 			if ((Payroll2::divide_time_in_half($target_hours.":00"))==$time_spent.":00") 
 			{
@@ -704,7 +765,6 @@ class Payroll2
 			}
 		}
 			
-
 			/*START day type and holiday type*/
 			if ($day_type=="rest_day") 
 			{
@@ -728,25 +788,26 @@ class Payroll2
 			}
 			/*END day type and holiday type*/ 
 
-		//	dd($_time);
 		$return["time_spent"] = Payroll2::convert_to_24_hour($time_spent);
 		$return["is_absent"] = $is_absent;
 		$return["late"] = Payroll2::convert_to_24_hour($late_hours);
 		$return["undertime"] = Payroll2::convert_to_24_hour($under_time);
 		$return["overtime"] = Payroll2::convert_to_24_hour($over_time);
-		$return["target_hours"] = Payroll2::convert_to_24_hour($target_hours);
-		$return["excess_leave_hours"] = Payroll2::convert_to_24_hour($excess_leave_hours);
 		$return["regular_hours"] = Payroll2::convert_to_24_hour($regular_hours);
 		$return["rest_day_hours"] = Payroll2::convert_to_24_hour($rest_day_hours);
 		$return["extra_day_hours"] = Payroll2::convert_to_24_hour($extra_day_hours);
 		$return["regular_holiday_hours"] = Payroll2::convert_to_24_hour($regular_holiday_hours);
 		$return["special_holiday_hours"] = Payroll2::convert_to_24_hour($special_holiday_hours);
-		$return["leave_hours"] = Payroll2::convert_to_24_hour($leave);
 		$return["total_hours"] = Payroll2::convert_to_24_hour($time_spent);
 		$return["night_differential"] = Payroll2::convert_to_24_hour($night_differential);
 		$return["is_half_day"] = $is_half_day;
 		$return["is_holiday"] = $is_holiday;
 		$return["day_type"] = $day_type;
+
+		$return["target_hours"] = Payroll2::convert_to_24_hour($target_hours);
+		$return["leave_hours"] = $leave;
+		$return["excess_leave_hours"] = $excess_leave_hours;
+		$return["leave_hours_consumed"] = $leave_hours_consumed;
 		
 		return $return;
 
@@ -795,35 +856,63 @@ class Payroll2
      * @author (Kim Briel Oraya)
      *
      */
-	public static function compute_time_mode_flexi($_time, $target_hours="08:00:00", $break_hours="00:00:00", $overtime_grace_time = "00:00:00", $grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00", $leave_fill_undertime=0, $testing = false)
+	public static function compute_time_mode_flexi($_time, $target_hours="08:00:00", $break_hours="00:00:00", $overtime_grace_time = "00:00:00", $grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00", $leave_fill_undertime=0, $use_leave = false, $testing = false)
 	{
 
-		$time_spent="00:00:00";
-		$late_hours = "00:00:00";
-		$under_time = "00:00:00";
-		$over_time = "00:00:00";
-		$night_differential = Payroll2::night_differential_computation($_time,false);
-		$target_hours = Payroll::sum_time(Payroll::float_time($target_hours),$break_hours);
-		$regular_hours = "00:00:00";
-		$rest_day_hours = "00:00:00";
-		$extra_day_hours = "00:00:00";
-		$regular_holiday_hours = "00:00:00";
-		$special_holiday_hours = "00:00:00";
-		$leave_hours = $leave;
-		$excess_leave_hours = $leave;
-		$is_half_day = false;
-		$is_absent =false;
+		$leave_fill_undertime=1;
+		$time_spent 			= "00:00:00";
+		$late_hours 			= "00:00:00";
+		$under_time 			= "00:00:00";
+		$over_time 				= "00:00:00";
+		$night_differential 	= Payroll2::night_differential_computation($_time,false);
+		$target_hours 			= Payroll::sum_time(Payroll::float_time($target_hours),$break_hours);
+		$regular_hours 			= "00:00:00";
+		$rest_day_hours 		= "00:00:00";
+		$extra_day_hours 		= "00:00:00";
+		$regular_holiday_hours 	= "00:00:00";
+		$special_holiday_hours 	= "00:00:00";
+		$leave_hours_consumed 	= "00:00:00";
+		$leave_hours 			= $leave;
+		$excess_leave_hours 	= $leave_hours;
+		$is_half_day 			= false;
+		$is_absent 				= false;
+
+		if ($use_leave) 
+		{
+			$is_absent = true;
+		}
+
+		
 	
 		if ($_time==null) 
 		{
+			
 			if (!(($day_type == "rest")||($day_type == "extra")||($is_holiday == "regular")||($is_holiday == "special")||($leave_hours!="00:00:00")))
 			{
 				$is_absent =true;
-
-
 			}
-		
+
+			if ($is_absent==true) 
+			{
+				$target_minutes = Payroll2::convert_time_in_minutes($target_hours);
+				$leave_minutes = Payroll2::convert_time_in_minutes($leave);
+				if ($target_minutes > $leave_minutes) 
+				{
+					$under_time 			= Payroll::time_diff($leave_hours,$target_hours);
+					$leave_hours_consumed   = $leave_hours;
+					$time_spent             = $leave_hours;	
+					$is_absent 				= false;
+				}
+				else
+				{
+
+					$leave_hours_consumed   = $target_hours;
+					$is_absent 				= false;
+					$time_spent 			= $target_hours;
+				}
+			}
 		}
+
 		else
 		{
 			foreach ($_time as $time) 
@@ -869,35 +958,63 @@ class Payroll2
 			$over_time = Payroll2::minus_time($target_minutes,$time_spent);
 		}
 		//dd($_time);
-		
 
-		//fill undertime with leave hours
-		if ($leave_fill_undertime==1) 
+
+		/*trigger leave*/
+		if ($use_leave == true) 
 		{
-		 	$undertime_minutes = Payroll2::convert_time_in_minutes($under_time);
-			$excess_leave_minutes = Payroll2::convert_time_in_minutes($excess_leave_hours);
-			//has undertime record and have leave hours
-			if (($undertime_minutes>0)&&($excess_leave_minutes>0)) 
+			
+		//fill undertime with leave hours
+			if ($is_absent==true) 
 			{
-				//leave hours can fill the undertime record
-				if ($undertime_minutes<=$excess_leave_minutes) 
+				$target_minutes = Payroll2::convert_time_in_minutes($target_hours);
+				$leave_minutes = Payroll2::convert_time_in_minutes($leave);
+				if ($target_minutes > $leave_minutes) 
 				{
-					$excess_leave_hours = Payroll2::minus_time($undertime_minutes,$excess_leave_hours);
-					$time_spent = Payroll::sum_time($time_spent,$under_time);
-					$under_time = "00:00";
+					$under_time 			= Payroll::time_diff($leave_hours,$target_hours);
+					$leave_hours_consumed   = $leave_hours;
+					$time_spent             = $leave_hours;	
+					$is_absent 				= false;
 				}
-				//leave hours can't fill the undertime record
-				else if ($undertime_minutes>$excess_leave_minutes) 
+				else
 				{
-					$under_time = Payroll2::minus_time($excess_leave_minutes,$under_time);
-					$time_spent = Payroll::sum_time($time_spent,$excess_leave_hours);
-					$excess_leave_hours="00:00";
+					$leave_hours_consumed   = $target_hours;
+					$is_absent 				= false;
+					$time_spent 			= $target_hours;
 				}
 			}
-		}
-		else
-		{
-			$excess_leave_minutes = $leave;
+			else
+			{
+				if ($leave_fill_undertime==1) 
+				{
+				 	$undertime_minutes = Payroll2::convert_time_in_minutes($under_time);
+					$excess_leave_minutes = Payroll2::convert_time_in_minutes($excess_leave_hours);
+					//has undertime record and have leave hours
+					if (($undertime_minutes>0)&&($excess_leave_minutes>0)) 
+					{
+						//leave hours can fill the undertime record
+						if ($undertime_minutes<=$excess_leave_minutes) 
+						{
+							$leave_hours_consumed = $under_time;
+							$excess_leave_hours = Payroll2::minus_time($undertime_minutes,$excess_leave_hours);
+							$time_spent = Payroll::sum_time($time_spent,$under_time);
+							$under_time = "00:00";
+						}
+						//leave hours can't fill the undertime record
+						else if ($undertime_minutes>$excess_leave_minutes) 
+						{
+							$leave_hours_consumed = $excess_leave_hours;
+							$under_time = Payroll2::minus_time($excess_leave_minutes,$under_time);
+							$time_spent = Payroll::sum_time($time_spent,$excess_leave_hours);
+							$excess_leave_hours="00:00";
+						}
+					}
+				}
+				else
+				{
+					$excess_leave_minutes = $leave;
+				}
+			}
 		}
 
 
@@ -953,30 +1070,27 @@ class Payroll2
 			$special_holiday_hours = $regular_hours;
 			$is_absent=false;
 		}
-
 		/*END day type and holiday type*/
 
-
-
-	
 		$return["time_spent"] = Payroll2::convert_to_24_hour($time_spent);
+		$return["target_hours"] = Payroll2::convert_to_24_hour($target_hours);
 		$return["is_absent"] = $is_absent;
 		$return["late"] = Payroll2::convert_to_24_hour($late_hours);
 		$return["undertime"] = Payroll2::convert_to_24_hour($under_time);
 		$return["overtime"] = Payroll2::convert_to_24_hour($over_time);
-		$return["target_hours"] = Payroll2::convert_to_24_hour($target_hours);
-		$return["excess_leave_hours"] = Payroll2::convert_to_24_hour($excess_leave_hours);
 		$return["regular_hours"] = Payroll2::convert_to_24_hour($regular_hours);
 		$return["rest_day_hours"] = Payroll2::convert_to_24_hour($rest_day_hours);
 		$return["extra_day_hours"] = Payroll2::convert_to_24_hour($extra_day_hours);
 		$return["regular_holiday_hours"] = Payroll2::convert_to_24_hour($regular_holiday_hours);
 		$return["special_holiday_hours"] = Payroll2::convert_to_24_hour($special_holiday_hours);
-		$return["leave_hours"] = Payroll2::convert_to_24_hour($leave);
 		$return["total_hours"] = Payroll2::convert_to_24_hour($time_spent);
 		$return["night_differential"] = Payroll2::convert_to_24_hour($night_differential);
 		$return["is_half_day"] = $is_half_day;
 		$return["is_holiday"] = $is_holiday;
 		$return["day_type"] = $day_type;
+		$return["leave_hours"] = Payroll2::convert_to_24_hour($leave);
+		$return["excess_leave_hours"] = Payroll2::convert_to_24_hour($excess_leave_hours);
+		$return["leave_hours_consumed"] = $leave_hours_consumed;
 		
 		return $return;
 	}
@@ -1056,411 +1170,443 @@ class Payroll2
      *
      */
  
-	public static function compute_income_day_pay($_time = array(), $daily_rate = 0, $group_id = 0, $cola = 0, $compute_type="", $time_compute_mode="regular")
-	{
-		
-		
-		$return = new stdClass();
-
-		$time_spent = Self::time_float($_time['time_spent']);
-		$daily_true_rate = $daily_rate;
-	
-		
-		//for daily rate, rest day or extra day and no time in and out daily income become zero
-		if($compute_type=="daily")
+	 public static function compute_income_day_pay($_time = array(), $daily_rate = 0, $group_id = 0, $cola = 0, $compute_type="", $time_compute_mode="regular")
 		{
-			if($_time['day_type'] == 'rest_day' || $_time["is_holiday"] == "special" || $_time['day_type'] == 'extra_day') 
+			
+			
+			$return = new stdClass();
+
+			$time_spent = Self::time_float($_time['time_spent']);
+			$daily_true_rate = $daily_rate;
+
+
+
+			/* leave pay computation */
+			if (Self::time_float($_time['leave_hours']) != 0) 
 			{
-				$daily_rate = 0;
+				$target_float 						 			  = Self::time_float($_time['target_hours']);
+				$return->_breakdown_addition['Leave Pay']['time'] = $_time['leave_hours'];
+				$return->_breakdown_addition['Leave Pay']['rate'] = Self::time_float($_time['leave_hours']) * @($daily_rate/$target_float);
 			}
-		}
+			/* leave pay computation */
 
-		if ($_time['day_type'] == 'extra_day' && $time_spent!=0) 
-		{
-			$return->daily_rate = $daily_true_rate;
-		}
-		else
-		{
-			$return->daily_rate = $daily_rate;
-		}
-		
 
-		if($time_spent!=0)
-		{
-			$daily_rate = $daily_true_rate;
-		}
-		
-		$total_day_income 		= $daily_rate ;
-		$target_float 			= Self::time_float($_time['target_hours']);
-		$daily_rate_plus_cola	= $daily_rate + $cola;
-		$hourly_rate 			= $return->hourly_rate = divide($daily_rate, $target_float);
-		
-	
-
-		/* GET INITIAL DATA */
-		$param_rate 		= Tbl_payroll_overtime_rate::where('payroll_group_id', $group_id)->get()->toArray();
-		$collection 		= collect($param_rate);
-		$regular_param 		= $collection->where('payroll_overtime_name','Regular')->first();
-		$legal_param 		= $collection->where('payroll_overtime_name','Legal Holiday')->first();
-		$special_param 		= $collection->where('payroll_overtime_name','Special Holiday')->first();
-		$group 				= Tbl_payroll_group::where('payroll_group_id', $group_id)->first();
-
-		/* BREAKDOWN ADDITIONS */
-		$time_spent 		= Self::time_float($_time['time_spent']);
-		$regular_float 		= Self::time_float($_time['regular_hours']);
-		$rest_float 		= Self::time_float($_time['rest_day_hours']);
-		$extra_float 		= Self::time_float($_time['extra_day_hours']);
-		$legal_float 		= Self::time_float($_time['regular_holiday_hours']);
-		$special_float 		= Self::time_float($_time['special_holiday_hours']);
-		$leave_float 		= Self::time_float($_time['leave_hours']);
-		$overtime_float 	= Self::time_float($_time['overtime']);
-		$night_diff_float 	= Self::time_float($_time['night_differential']);
-		$extra_float 		= Self::time_float($_time['extra_day_hours']);
-		
-		$overtime = 0;
-		$nightdiff = 0;
-		$breakdown_deduction = 0;
-		$breakdown_addition = 0;
-		$additional_rate = 1;
-		$cola_true_rate = $cola;
-
-		if ($_time['is_holiday'] == 'not_holiday') 
-		{
-			if ($rest_float != 0) 
+			
+			if($compute_type=="daily")
 			{
-				//Rest Day
-				if($compute_type=="daily")
+				if($_time['day_type'] == 'rest_day' || $_time["is_holiday"] == "special" || $_time['day_type'] == 'extra_day') 
 				{
-					$total_day_income=0;
-					$return->_breakdown_addition["Rest Day"]["time"] = ($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) ." (".ctopercent($regular_param['payroll_overtime_rest_day']).")"; 
-					$return->_breakdown_addition["Rest Day"]["rate"] = (( ( $time_spent>=$target_float ? $target_float:$time_spent ) * $hourly_rate ) * ($regular_param['payroll_overtime_rest_day']));
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Rest Day"]["rate"]; 			
-					$additional_rate = ($regular_param['payroll_overtime_rest_day']);
-					$breakdown_addition += $return->_breakdown_addition["Rest Day"]["rate"];
+					$daily_rate = 0;
 				}
-				else if($compute_type=="monthly")
-				{
-					$return->_breakdown_addition["Rest Day"]["time"] =  ($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) ." (".ctopercent($regular_param['payroll_overtime_rest_day']).")"; 
-					$return->_breakdown_addition["Rest Day"]["rate"] = ((($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) * $hourly_rate) * ($regular_param['payroll_overtime_rest_day']));
-					$total_day_income = ($return->_breakdown_addition["Rest Day"]["rate"]); 			
-					$additional_rate = ($regular_param['payroll_overtime_rest_day']);
-					$breakdown_addition += $return->_breakdown_addition["Rest Day"]["rate"];
-				}
+			}
 
-				//Rest Day Over Time
-				if ($overtime_float!=0) 
-				{
-					$return->_breakdown_addition["Rest Day OT"]["time"] = $_time["overtime"] ." (".ctopercent($regular_param['payroll_overtime_rest_overtime']).")"; 
-					$return->_breakdown_addition["Rest Day OT"]["rate"] = ($hourly_rate * $overtime_float) * ($regular_param['payroll_overtime_rest_overtime']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Rest Day OT"]["rate"]; 
-					$overtime = $return->_breakdown_addition["Rest Day OT"]["rate"];
-					$breakdown_addition += $overtime;
-				}
-				//Rest Day Night Differential
-				if ($night_diff_float!=0) 
-				{
-					$return->_breakdown_addition["Rest Day ND"]["time"] = $_time["night_differential"] ." (".ctopercent($regular_param['payroll_overtime_rest_night']).")"; 
-					$return->_breakdown_addition["Rest Day ND"]["rate"] = ($hourly_rate * $night_diff_float) * ($regular_param['payroll_overtime_rest_night']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Rest Day ND"]["rate"]; 
-					$nightdiff = $return->_breakdown_addition["Rest Day ND"]["rate"];
-					$breakdown_addition += $nightdiff;
-				}
+			if ($_time['day_type'] == 'extra_day' && $time_spent!=0) 
+			{
+				$return->daily_rate = $daily_true_rate;
 			}
 			else
 			{
-				//Regular Over Time
-				if ($overtime_float!=0) 
-				{
-					$return->_breakdown_addition["Over Time"]["time"] = $_time["overtime"] ." (".ctopercent($regular_param['payroll_overtime_overtime']).")"; 
-					$return->_breakdown_addition["Over Time"]["rate"] = ($hourly_rate * $overtime_float) * ($regular_param['payroll_overtime_overtime']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Over Time"]["rate"]; 
-					$overtime = $return->_breakdown_addition["Over Time"]["rate"];
-					$breakdown_addition += $return->_breakdown_addition["Over Time"]["rate"];
-				}
-				//Regular Night Differential
-				if ($night_diff_float!=0) 
-				{
-					$return->_breakdown_addition["Night Differential"]["time"] = $_time["night_differential"] ." (".ctopercent($regular_param['payroll_overtime_nigth_diff']).")"; 
-					$return->_breakdown_addition["Night Differential"]["rate"] = ($hourly_rate * $night_diff_float) * ($regular_param['payroll_overtime_nigth_diff']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Night Differential"]["rate"]; 
-					$nightdiff = $return->_breakdown_addition["Night Differential"]["rate"];
-					$breakdown_addition += $return->_breakdown_addition["Night Differential"]["rate"];	
-				}
+				$return->daily_rate = $daily_rate;
 			}
-		}
-		if($_time['is_holiday'] == 'regular')
-		{
-			//Legal Holiday with rest day
-			if($rest_float > 0)
-			{
-				if ($compute_type=="daily") 
-				{
-					$return->_breakdown_addition["Legal Holiday Rest Day"]["time"] = "";  //.($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) ." (".ctopercent($legal_param['payroll_overtime_rest_day']).")"; 
-					$return->_breakdown_addition["Legal Holiday Rest Day"]["rate"] = ( $daily_rate) * ($legal_param['payroll_overtime_rest_day']);
-					$total_day_income =  $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"]; 
-					$breakdown_addition += $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"];
-					$additional_rate = ($legal_param['payroll_overtime_rest_day']);
-				}
-				else if($compute_type=="monthly")
-				{
-					$return->_breakdown_addition["Legal Holiday Rest Day"]["time"] = "";  //.($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) ." (".ctopercent($legal_param['payroll_overtime_rest_day']).")"; 
-					$return->_breakdown_addition["Legal Holiday Rest Day"]["rate"] = $daily_rate * ($legal_param['payroll_overtime_rest_day']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"]; 
-					$breakdown_addition += $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"];
-					$additional_rate = ($legal_param['payroll_overtime_rest_day']);
-				}
-				
-				//Legal Holiday Rest Day Over Time
-				if ($overtime_float!=0) 
-				{
-					$return->_breakdown_addition["Legal Holiday Rest Day OT"]["time"] = $_time["overtime"] ." (".ctopercent($legal_param['payroll_overtime_rest_overtime']).")"; 
-					$return->_breakdown_addition["Legal Holiday Rest Day OT"]["rate"] = ($hourly_rate * $overtime_float) * ($legal_param['payroll_overtime_rest_overtime']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Legal Holiday Rest Day OT"]["rate"]; 
-					$overtime = $return->_breakdown_addition["Legal Holiday Rest Day OT"]["rate"];
-					$breakdown_addition += $overtime;
-				}
+			
 
-				//Legal Holiday Rest Day Night Differential
-				if ($night_diff_float!=0) 
-				{
-					$return->_breakdown_addition["Legal Holiday Rest Day ND"]["time"] = $_time["night_differential"] ." (".ctopercent($legal_param['payroll_overtime_rest_night']).")"; 
-					$return->_breakdown_addition["Legal Holiday Rest Day ND"]["rate"] = ($hourly_rate * $night_diff_float) * ($legal_param['payroll_overtime_rest_night']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Legal Holiday Rest Day ND"]["rate"]; 
-					$nightdiff = $return->_breakdown_addition["Legal Holiday Rest Day ND"]["rate"];
-					$breakdown_addition += $nightdiff;
-				}
-			}
-			else
+			if($time_spent!=0)
 			{
-				//Legal Holiday
-				if ($compute_type=="daily") 
+				$daily_rate = $daily_true_rate;
+			}
+			
+			$total_day_income 		= $daily_rate ;
+			$target_float 			= Self::time_float($_time['target_hours']);
+			$daily_rate_plus_cola	= $daily_rate + $cola;
+			$hourly_rate 			= $return->hourly_rate = divide($daily_rate, $target_float);
+			
+		
+
+			/* GET INITIAL DATA */
+			$param_rate 		= Tbl_payroll_overtime_rate::where('payroll_group_id', $group_id)->get()->toArray();
+			$collection 		= collect($param_rate);
+			$regular_param 		= $collection->where('payroll_overtime_name','Regular')->first();
+			$legal_param 		= $collection->where('payroll_overtime_name','Legal Holiday')->first();
+			$special_param 		= $collection->where('payroll_overtime_name','Special Holiday')->first();
+			$group 				= Tbl_payroll_group::where('payroll_group_id', $group_id)->first();
+
+			/* BREAKDOWN ADDITIONS */
+			$time_spent 		= Self::time_float($_time['time_spent']);
+			$regular_float 		= Self::time_float($_time['regular_hours']);
+			$rest_float 		= Self::time_float($_time['rest_day_hours']);
+			$extra_float 		= Self::time_float($_time['extra_day_hours']);
+			$legal_float 		= Self::time_float($_time['regular_holiday_hours']);
+			$special_float 		= Self::time_float($_time['special_holiday_hours']);
+			$leave_float 		= Self::time_float($_time['leave_hours']);
+			$overtime_float 	= Self::time_float($_time['overtime']);
+			$night_diff_float 	= Self::time_float($_time['night_differential']);
+			$extra_float 		= Self::time_float($_time['extra_day_hours']);
+			
+			$overtime = 0;
+			$nightdiff = 0;
+			$breakdown_deduction = 0;
+			$breakdown_addition = 0;
+			$additional_rate = 1;
+			$cola_true_rate = $cola;
+
+			if ($_time['is_holiday'] == 'not_holiday') 
+			{
+				if ($rest_float != 0) 
 				{
-					if(($legal_param['payroll_overtime_regular']) == 0)
+					//Rest Day
+					if($compute_type=="daily")
 					{
-						$return->_breakdown_addition["Legal Holiday"]["time"] = "";
-						$return->_breakdown_addition["Legal Holiday"]["rate"] = $daily_rate * ($legal_param['payroll_overtime_regular']);
-						$total_day_income = $total_day_income + $return->_breakdown_addition["Legal Holiday"]["rate"];
-						$breakdown_addition += $return->_breakdown_addition["Legal Holiday"]["rate"];
-						$additional_rate = ($legal_param['payroll_overtime_regular']);
+						$total_day_income=0;
+						$return->_breakdown_addition["Rest Day"]["time"] = ($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) ." (".ctopercent($regular_param['payroll_overtime_rest_day']).")"; 
+						$return->_breakdown_addition["Rest Day"]["rate"] = (( ( $time_spent>=$target_float ? $target_float:$time_spent ) * $hourly_rate ) * ($regular_param['payroll_overtime_rest_day']));
+						$return->_breakdown_addition["Rest Day"]["hour"] = ($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]);
+						$total_day_income = $total_day_income + $return->_breakdown_addition["Rest Day"]["rate"]; 			
+						$additional_rate = ($regular_param['payroll_overtime_rest_day']);
+						$breakdown_addition += $return->_breakdown_addition["Rest Day"]["rate"];
 					}
-					else
+					else if($compute_type=="monthly")
 					{
-						$daily_rate = $daily_true_rate;
-						$return->_breakdown_addition["Legal Holiday"]["time"] = ""; 
-						$return->_breakdown_addition["Legal Holiday"]["rate"] = $daily_rate * ($legal_param['payroll_overtime_regular']);
-						$total_day_income = $total_day_income + $return->_breakdown_addition["Legal Holiday"]["rate"];
-						$breakdown_addition += $return->_breakdown_addition["Legal Holiday"]["rate"];
-						$additional_rate = ($legal_param['payroll_overtime_regular']);
+						$return->_breakdown_addition["Rest Day"]["time"] =  ($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) ." (".ctopercent($regular_param['payroll_overtime_rest_day']).")"; 
+						$return->_breakdown_addition["Rest Day"]["rate"] = ((($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) * $hourly_rate) * ($regular_param['payroll_overtime_rest_day']));
+						$return->_breakdown_addition["Rest Day"]["hour"] =  ($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]);
+						$total_day_income = ($return->_breakdown_addition["Rest Day"]["rate"]); 			
+						$additional_rate = ($regular_param['payroll_overtime_rest_day']);
+						$breakdown_addition += $return->_breakdown_addition["Rest Day"]["rate"];
 					}
-				}
-				else if ($compute_type=="monthly") 
-				{
-					if(($legal_param['payroll_overtime_regular']) == 0)
+
+					//Rest Day Over Time
+					if ($overtime_float!=0) 
 					{
-						$return->_breakdown_addition["Legal Holiday"]["time"] = "";
-						$return->_breakdown_addition["Legal Holiday"]["rate"] = $daily_rate * ($legal_param['payroll_overtime_regular']);
-						$total_day_income = $total_day_income + $return->_breakdown_addition["Legal Holiday"]["rate"];
-						$breakdown_addition += $return->_breakdown_addition["Legal Holiday"]["rate"];
-						$additional_rate = ($legal_param['payroll_overtime_regular']);
+						$return->_breakdown_addition["Rest Day OT"]["time"] = $_time["overtime"] ." (".ctopercent($regular_param['payroll_overtime_rest_overtime']).")"; 
+						$return->_breakdown_addition["Rest Day OT"]["rate"] = ($hourly_rate * $overtime_float) * ($regular_param['payroll_overtime_rest_overtime']);
+						$return->_breakdown_addition["Rest Day OT"]["hour"] = $_time["overtime"];
+						$total_day_income = $total_day_income + $return->_breakdown_addition["Rest Day OT"]["rate"]; 
+						$overtime = $return->_breakdown_addition["Rest Day OT"]["rate"];
+						$breakdown_addition += $overtime;
 					}
-					else
+					//Rest Day Night Differential
+					if ($night_diff_float!=0) 
 					{
-						$return->_breakdown_addition["Legal Holiday"]["time"] = ""; 
-						$return->_breakdown_addition["Legal Holiday"]["rate"] = $daily_rate * ($legal_param['payroll_overtime_regular']);
-						$total_day_income = $total_day_income + $return->_breakdown_addition["Legal Holiday"]["rate"];
-						$breakdown_addition += $return->_breakdown_addition["Legal Holiday"]["rate"];
-						$additional_rate = ($legal_param['payroll_overtime_regular']);
+						$return->_breakdown_addition["Rest Day ND"]["time"] = $_time["night_differential"] ." (".ctopercent($regular_param['payroll_overtime_rest_night']).")"; 
+						$return->_breakdown_addition["Rest Day ND"]["rate"] = ($hourly_rate * $night_diff_float) * ($regular_param['payroll_overtime_rest_night']);
+						$return->_breakdown_addition["Rest Day ND"]["hour"] = $_time["night_differential"];
+						$total_day_income = $total_day_income + $return->_breakdown_addition["Rest Day ND"]["rate"]; 
+						$nightdiff = $return->_breakdown_addition["Rest Day ND"]["rate"];
+						$breakdown_addition += $nightdiff;
 					}
 				}
-				
-				
-				if ($overtime_float!=0) 
+				else
 				{
-					//Legal Holiday Over Time
-					$return->_breakdown_addition["Legal OT"]["time"] = $_time["overtime"] ." (".ctopercent($legal_param['payroll_overtime_overtime']).")"; 
-					$return->_breakdown_addition["Legal OT"]["rate"] = ($hourly_rate * $overtime_float) * ($legal_param['payroll_overtime_overtime']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Legal OT"]["rate"]; 
-					$overtime = $return->_breakdown_addition["Legal OT"]["rate"];
-					$breakdown_addition += $overtime;
-				}
-				if ($night_diff_float!=0) 
-				{
-					//Legal Holiday Night Differential
-					$return->_breakdown_addition["Legal Holiday ND"]["time"] = $_time["night_differential"] ." (".ctopercent($legal_param['payroll_overtime_nigth_diff']).")"; 
-					$return->_breakdown_addition["Legal Holiday ND"]["rate"] = ($hourly_rate * $night_diff_float) * ($legal_param['payroll_overtime_nigth_diff']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Legal Holiday ND"]["rate"]; 
-					$nightdiff = $return->_breakdown_addition["Legal Holiday ND"]["rate"];
-					$breakdown_addition += $nightdiff;
+					//Regular Over Time
+					if ($overtime_float!=0) 
+					{
+						$return->_breakdown_addition["Over Time"]["time"] = $_time["overtime"] ." (".ctopercent($regular_param['payroll_overtime_overtime']).")"; 
+						$return->_breakdown_addition["Over Time"]["rate"] = ($hourly_rate * $overtime_float) * ($regular_param['payroll_overtime_overtime']);
+						$return->_breakdown_addition["Over Time"]["hour"] = $_time["overtime"];
+						$total_day_income = $total_day_income + $return->_breakdown_addition["Over Time"]["rate"]; 
+						$overtime = $return->_breakdown_addition["Over Time"]["rate"];
+						$breakdown_addition += $return->_breakdown_addition["Over Time"]["rate"];
+					}
+					//Regular Night Differential
+					if ($night_diff_float!=0) 
+					{
+						$return->_breakdown_addition["Night Differential"]["time"] = $_time["night_differential"] ." (".ctopercent($regular_param['payroll_overtime_nigth_diff']).")"; 
+						$return->_breakdown_addition["Night Differential"]["rate"] = ($hourly_rate * $night_diff_float) * ($regular_param['payroll_overtime_nigth_diff']);
+						$return->_breakdown_addition["Night Differential"]["hour"] = $_time["night_differential"];
+						$total_day_income = $total_day_income + $return->_breakdown_addition["Night Differential"]["rate"]; 
+						$nightdiff = $return->_breakdown_addition["Night Differential"]["rate"];
+						$breakdown_addition += $return->_breakdown_addition["Night Differential"]["rate"];	
+					}
 				}
 			}
+			if($_time['is_holiday'] == 'regular')
+			{
+				//Legal Holiday with rest day
+				if($rest_float > 0)
+				{
+					if ($compute_type=="daily") 
+					{
+						$return->_breakdown_addition["Legal Holiday Rest Day"]["time"] = "";  //.($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) ." (".ctopercent($legal_param['payroll_overtime_rest_day']).")"; 
+						$return->_breakdown_addition["Legal Holiday Rest Day"]["rate"] = ( $daily_rate) * ($legal_param['payroll_overtime_rest_day']);
+						$return->_breakdown_addition["Legal Holiday Rest Day"]["hour"] = "";
+						$total_day_income =  $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"]; 
+						$breakdown_addition += $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"];
+						$additional_rate = ($legal_param['payroll_overtime_rest_day']);
+					}
+					else if($compute_type=="monthly")
+					{
+						$return->_breakdown_addition["Legal Holiday Rest Day"]["time"] = "";  //.($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) ." (".ctopercent($legal_param['payroll_overtime_rest_day']).")"; 
+						$return->_breakdown_addition["Legal Holiday Rest Day"]["rate"] = $daily_rate * ($legal_param['payroll_overtime_rest_day']);
+						$return->_breakdown_addition["Legal Holiday Rest Day"]["hour"] = "";
+						$total_day_income = $total_day_income + $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"]; 
+						$breakdown_addition += $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"];
+						$additional_rate = ($legal_param['payroll_overtime_rest_day']);
+					}
+					
+					//Legal Holiday Rest Day Over Time
+					if ($overtime_float!=0) 
+					{
+						$return->_breakdown_addition["Legal Holiday Rest Day OT"]["time"] = $_time["overtime"] ." (".ctopercent($legal_param['payroll_overtime_rest_overtime']).")"; 
+						$return->_breakdown_addition["Legal Holiday Rest Day OT"]["rate"] = ($hourly_rate * $overtime_float) * ($legal_param['payroll_overtime_rest_overtime']);
+						$return->_breakdown_addition["Legal Holiday Rest Day OT"]["hour"] = $_time["overtime"];
+						$total_day_income = $total_day_income + $return->_breakdown_addition["Legal Holiday Rest Day OT"]["rate"]; 
+						$overtime = $return->_breakdown_addition["Legal Holiday Rest Day OT"]["rate"];
+						$breakdown_addition += $overtime;
+					}
+
+					//Legal Holiday Rest Day Night Differential
+					if ($night_diff_float!=0) 
+					{
+						$return->_breakdown_addition["Legal Holiday Rest Day ND"]["time"] = $_time["night_differential"] ." (".ctopercent($legal_param['payroll_overtime_rest_night']).")"; 
+						$return->_breakdown_addition["Legal Holiday Rest Day ND"]["rate"] = ($hourly_rate * $night_diff_float) * ($legal_param['payroll_overtime_rest_night']);
+						$return->_breakdown_addition["Legal Holiday Rest Day ND"]["hour"] = $_time["night_differential"];
+						$total_day_income = $total_day_income + $return->_breakdown_addition["Legal Holiday Rest Day ND"]["rate"]; 
+						$nightdiff = $return->_breakdown_addition["Legal Holiday Rest Day ND"]["rate"];
+						$breakdown_addition += $nightdiff;
+					}
+				}
+				else
+				{
+					//Legal Holiday
+					if ($compute_type=="daily") 
+					{
+						if(($legal_param['payroll_overtime_regular']) == 0)
+						{
+							$return->_breakdown_addition["Legal Holiday"]["time"] = "";
+							$return->_breakdown_addition["Legal Holiday"]["rate"] = $daily_rate * ($legal_param['payroll_overtime_regular']);
+							$return->_breakdown_addition["Legal Holiday"]["hour"] = "";
+							$total_day_income = $total_day_income + $return->_breakdown_addition["Legal Holiday"]["rate"];
+							$breakdown_addition += $return->_breakdown_addition["Legal Holiday"]["rate"];
+							$additional_rate = ($legal_param['payroll_overtime_regular']);
+						}
+						else
+						{
+							$daily_rate = $daily_true_rate;
+							$return->_breakdown_addition["Legal Holiday"]["time"] = ""; 
+							$return->_breakdown_addition["Legal Holiday"]["rate"] = $daily_rate * ($legal_param['payroll_overtime_regular']);
+							$return->_breakdown_addition["Legal Holiday"]["hour"] = "";
+							$total_day_income = $total_day_income + $return->_breakdown_addition["Legal Holiday"]["rate"];
+							$breakdown_addition += $return->_breakdown_addition["Legal Holiday"]["rate"];
+							$additional_rate = ($legal_param['payroll_overtime_regular']);
+						}
+					}
+					else if ($compute_type=="monthly") 
+					{
+						if(($legal_param['payroll_overtime_regular']) == 0)
+						{
+							$return->_breakdown_addition["Legal Holiday"]["time"] = "";
+							$return->_breakdown_addition["Legal Holiday"]["rate"] = $daily_rate * ($legal_param['payroll_overtime_regular']);
+							$return->_breakdown_addition["Legal Holiday"]["hour"] = "";
+							$total_day_income = $total_day_income + $return->_breakdown_addition["Legal Holiday"]["rate"];
+							$breakdown_addition += $return->_breakdown_addition["Legal Holiday"]["rate"];
+							$additional_rate = ($legal_param['payroll_overtime_regular']);
+						}
+						else
+						{
+							$return->_breakdown_addition["Legal Holiday"]["time"] = ""; 
+							$return->_breakdown_addition["Legal Holiday"]["rate"] = $daily_rate * ($legal_param['payroll_overtime_regular']);
+							$return->_breakdown_addition["Legal Holiday"]["hour"] = "";
+							$total_day_income = $total_day_income + $return->_breakdown_addition["Legal Holiday"]["rate"];
+							$breakdown_addition += $return->_breakdown_addition["Legal Holiday"]["rate"];
+							$additional_rate = ($legal_param['payroll_overtime_regular']);
+						}
+					}
+					if ($overtime_float!=0) 
+					{
+						//Legal Holiday Over Time
+						$return->_breakdown_addition["Legal OT"]["time"] = $_time["overtime"] ." (".ctopercent($legal_param['payroll_overtime_overtime']).")"; 
+						$return->_breakdown_addition["Legal OT"]["rate"] = ($hourly_rate * $overtime_float) * ($legal_param['payroll_overtime_overtime']);
+						$return->_breakdown_addition["Legal OT"]["hour"] = $_time["overtime"];
+						$total_day_income = $total_day_income + $return->_breakdown_addition["Legal OT"]["rate"]; 
+						$overtime = $return->_breakdown_addition["Legal OT"]["rate"];
+						$breakdown_addition += $overtime;
+					}
+					if ($night_diff_float!=0) 
+					{
+						//Legal Holiday Night Differential
+						$return->_breakdown_addition["Legal Holiday ND"]["time"] = $_time["night_differential"] ." (".ctopercent($legal_param['payroll_overtime_nigth_diff']).")"; 
+						$return->_breakdown_addition["Legal Holiday ND"]["rate"] = ($hourly_rate * $night_diff_float) * ($legal_param['payroll_overtime_nigth_diff']);
+						$return->_breakdown_addition["Legal Holiday ND"]["hour"] = $_time["night_differential"];
+						$total_day_income = $total_day_income + $return->_breakdown_addition["Legal Holiday ND"]["rate"]; 
+						$nightdiff = $return->_breakdown_addition["Legal Holiday ND"]["rate"];
+						$breakdown_addition += $nightdiff;
+					}
+				}
+			}
+
+			if ($_time['is_holiday'] == 'special')
+			{
+				//special Holiday with rest day
+				if($rest_float > 0)
+				{
+					if ($compute_type=="daily") 
+					{
+						$total_day_income = 0;
+						$return->_breakdown_addition["Special Holiday Rest Day"]["time"] = ""; 
+						$return->_breakdown_addition["Special Holiday Rest Day"]["rate"] = $daily_rate * ($special_param['payroll_overtime_rest_day']);
+						$return->_breakdown_addition["Special Holiday Rest Day"]["hour"] = "";
+						$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday Rest Day"]["rate"]; 
+						$breakdown_addition += $return->_breakdown_addition["Special Holiday Rest Day"]["rate"];
+						$additional_rate = ($special_param['payroll_overtime_rest_day']);
+					}
+					else if ($compute_type=="monthly") 
+					{
+						$return->_breakdown_addition["Special Holiday Rest Day"]["time"] = "" ; 
+						$return->_breakdown_addition["Special Holiday Rest Day"]["rate"] = $daily_rate * ($special_param['payroll_overtime_rest_day']);
+						$return->_breakdown_addition["Special Holiday Rest Day"]["hour"] = "";
+						$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday Rest Day"]["rate"]; 
+						$breakdown_addition += $return->_breakdown_addition["Special Holiday Rest Day"]["rate"];
+						$additional_rate = ($special_param['payroll_overtime_rest_day']);
+					}
+					
+					//Special Holiday Rest Day Over Time
+					if ($overtime_float!=0) 
+					{
+						$return->_breakdown_addition["Special Holiday Rest Day OT"]["time"] = $_time["overtime"] ." (".ctopercent($special_param['payroll_overtime_rest_overtime']).")"; 
+						$return->_breakdown_addition["Special Holiday Rest Day OT"]["rate"] = ($hourly_rate * $overtime_float) * ($special_param['payroll_overtime_rest_overtime']);
+						$return->_breakdown_addition["Special Holiday Rest Day OT"]["hour"] = $_time["overtime"];
+						$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday Rest Day OT"]["rate"]; 
+						$overtime = ($hourly_rate * $overtime_float) * ($special_param['payroll_overtime_rest_overtime']);
+						$breakdown_addition += $overtime;
+					}
+					//Special Holiday Rest Day Night Differential
+					if ($night_diff_float!=0) 
+					{
+						$return->_breakdown_addition["Special Holiday Rest Day ND"]["time"] = $_time["night_differential"] ." (".ctopercent($special_param['payroll_overtime_rest_night']).")"; 
+						$return->_breakdown_addition["Special Holiday Rest Day ND"]["rate"] = ($hourly_rate * $night_diff_float) * ($special_param['payroll_overtime_rest_night']);
+						$return->_breakdown_addition["Special Holiday Rest Day ND"]["hour"] = $_time["night_differential"];
+						$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday Rest Day ND"]["rate"]; 
+						$nightdiff = ($hourly_rate * $night_diff_float) * ($special_param['payroll_overtime_rest_night']);
+						$breakdown_addition += $nightdiff;
+					}
+				}
+				//Special Holiday
+				else
+				{
+					if ($compute_type=="daily")
+					{
+						$total_day_income = 0;
+						$return->_breakdown_addition["Special Holiday"]["time"] = ""; 
+						$return->_breakdown_addition["Special Holiday"]["rate"] = $daily_rate * ($special_param['payroll_overtime_regular']);
+						$return->_breakdown_addition["Special Holiday"]["hour"] = "";
+						$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday"]["rate"];
+						$breakdown_addition += $return->_breakdown_addition["Special Holiday"]["rate"];
+						$additional_rate =  ($special_param['payroll_overtime_regular']);
+					}
+					else if ($compute_type=="monthly") 
+					{
+						$return->_breakdown_addition["Special Holiday"]["time"] = ""; 
+						$return->_breakdown_addition["Special Holiday"]["rate"] = $daily_rate * ($special_param['payroll_overtime_regular']);
+						$return->_breakdown_addition["Special Holiday"]["hour"] = "";
+						$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday"]["rate"];
+						$breakdown_addition += $return->_breakdown_addition["Special Holiday"]["rate"];
+						$additional_rate =  ($special_param['payroll_overtime_regular']);
+					}
+					//Special Holiday Over Time
+					if ($overtime_float!=0) 
+					{
+						$return->_breakdown_addition["Special Holiday OT"]["time"] = $_time["overtime"] ." (".ctopercent($special_param['payroll_overtime_overtime']).")"; 
+						$return->_breakdown_addition["Special Holiday OT"]["rate"] = ($hourly_rate * $overtime_float) * ($special_param['payroll_overtime_overtime']);
+						$return->_breakdown_addition["Special Holiday OT"]["hour"] = $_time["hour"];
+						$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday OT"]["rate"]; 
+						$overtime =  $return->_breakdown_addition["Special Holiday OT"]["rate"];
+						$breakdown_addition += $overtime;
+					}
+					//Special Holiday Night Differential
+					if ($night_diff_float!=0) 
+					{
+						$return->_breakdown_addition["Special Holiday ND"]["time"] = $_time["night_differential"] ." (".ctopercent($special_param['payroll_overtime_nigth_diff']).")"; 
+						$return->_breakdown_addition["Special Holiday ND"]["rate"] = ($hourly_rate * $night_diff_float) * ($special_param['payroll_overtime_nigth_diff']);
+						$return->_breakdown_addition["Special Holiday ND"]["hour"] = $_time["night_differential"];
+						$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday ND"]["rate"]; 
+						$nightdiff = $return->_breakdown_addition["Special Holiday ND"]["rate"];
+						$breakdown_addition += $nightdiff; 
+					}
+				}
+			} 
+			
+
+			$subtotal_after_addition = $total_day_income;
+
+			/* BREAKDOWN DEDUCTIONS */
+			$late_float			= Self::time_float($_time['late']);
+			$undertime_float	= Self::time_float($_time['undertime']);
+			$absent_float		= 0;
+			$absent				= 0;
+			$late 				= 0;
+			$undertime 			= 0;
+
+			//compute cola
+			$cola = Payroll2::compute_income_day_pay_cola($_time , $daily_rate, $group_id , $cola , $compute_type);
+			
+			//no time in monthly
+			if($time_spent!=0 && $compute_type=="monthly")
+			{
+				if($_time['is_holiday'] == 'special' || $_time['is_holiday'] == 'regular' || $_time['day_type'] == 'extra_day' || $_time['day_type'] == 'rest_day')
+				{
+					
+				}
+			}
+			
+			//no time in daily
+			if($time_spent!=0 && $compute_type=="daily")
+			{
+				if($_time['is_holiday'] == 'special' || $_time['is_holiday'] == 'regular' || $_time['day_type'] == 'extra_day' || $_time['day_type'] == 'rest_day')
+				{
+					
+				}
+			}
+
+			if($_time["is_absent"] == true)
+			{
+				$return->_breakdown_deduction["absent"]["time"] = ""; 
+				$return->_breakdown_deduction["absent"]["rate"] = $daily_rate; 
+				$return->_breakdown_deduction["absent"]["hour"] = ""; 
+				$total_day_income = $total_day_income - ($return->_breakdown_deduction["absent"]["rate"]);
+				$absent_float = 1;
+				$absent = $daily_rate;
+				$breakdown_deduction += $return->_breakdown_deduction["absent"]["rate"];
+			}
+
+
+			elseif($_time["is_absent"] == false && ($_time['day_type'] != 'rest_day'))
+			{
+				if($late_float != 0)
+				{
+					$return->_breakdown_deduction["late"]["time"] = $_time['late']; 
+					$return->_breakdown_deduction["late"]["rate"] = ($late_float * $hourly_rate)  * $additional_rate; 
+					$return->_breakdown_deduction["late"]["hour"] = $_time['late']; 
+					$total_day_income = $total_day_income - $return->_breakdown_deduction["late"]["rate"];
+					$late = $return->_breakdown_deduction["late"]["rate"];
+					$breakdown_deduction += $return->_breakdown_deduction["late"]["rate"];
+				}
+
+			
+				if($undertime_float != 0)
+				{
+					$return->_breakdown_deduction["undertime"]["time"] = $_time['undertime']; 
+					$return->_breakdown_deduction["undertime"]["rate"] = ($undertime_float * $hourly_rate) * $additional_rate; 
+					$return->_breakdown_deduction["undertime"]["hour"] = $_time['undertime'];
+					$total_day_income = $total_day_income - $return->_breakdown_deduction["undertime"]["rate"];
+					$undertime = $return->_breakdown_deduction["undertime"]["rate"];
+					$breakdown_deduction += $return->_breakdown_deduction["undertime"]["rate"];
+				}
+			}
+
+			$return->subtotal_after_addition	= $subtotal_after_addition;
+			$return->rendered_days 				= @($time_spent/$target_float);
+			$return->cola						= $cola->cola_day_pay;
+			$return->total_day_income_plus_cola = $cola->cola_plus_daily_rate;
+			$return->total_day_income			= $total_day_income;
+			$return->total_day_cola 			= 0;
+			$return->cola_percentile			= $cola->cola_percentile;
+			$return->total_day_basic			= $subtotal_after_addition - ($breakdown_deduction + $breakdown_addition);
+			$return->breakdown_addition 		= $breakdown_addition;
+			$return->breakdown_deduction		= $breakdown_deduction; 
+			$return->rendered_tardiness			= @(($late_float + $undertime_float) / $target_float) + $absent_float;
+			
+			return $return;
 		}
-
-		if ($_time['is_holiday'] == 'special')
-		{
-			//special Holiday with rest day
-			if($rest_float > 0)
-			{
-				if ($compute_type=="daily") 
-				{
-					$total_day_income = 0;
-					$return->_breakdown_addition["Special Holiday Rest Day"]["time"] = "" ; 
-					$return->_breakdown_addition["Special Holiday Rest Day"]["rate"] = $daily_rate * ($special_param['payroll_overtime_rest_day']);
-
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday Rest Day"]["rate"]; 
-					$breakdown_addition += $return->_breakdown_addition["Special Holiday Rest Day"]["rate"];
-					$additional_rate = ($special_param['payroll_overtime_rest_day']);
-				}
-				else if ($compute_type=="monthly") 
-				{
-					$return->_breakdown_addition["Special Holiday Rest Day"]["time"] = "" ; 
-					$return->_breakdown_addition["Special Holiday Rest Day"]["rate"] = $daily_rate * ($special_param['payroll_overtime_rest_day']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday Rest Day"]["rate"]; 
-					$breakdown_addition += $return->_breakdown_addition["Special Holiday Rest Day"]["rate"];
-					$additional_rate = ($special_param['payroll_overtime_rest_day']);
-				}
-				
-				//Special Holiday Rest Day Over Time
-				if ($overtime_float!=0) 
-				{
-					$return->_breakdown_addition["Special Holiday Rest Day OT"]["time"] = $_time["overtime"] ." (".ctopercent($special_param['payroll_overtime_rest_overtime']).")"; 
-					$return->_breakdown_addition["Special Holiday Rest Day OT"]["rate"] = ($hourly_rate * $overtime_float) * ($special_param['payroll_overtime_rest_overtime']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday Rest Day OT"]["rate"]; 
-					$overtime = ($hourly_rate * $overtime_float) * ($special_param['payroll_overtime_rest_overtime']);
-					$breakdown_addition += $overtime;
-				}
-				//Special Holiday Rest Day Night Differential
-				if ($night_diff_float!=0) 
-				{
-					$return->_breakdown_addition["Special Holiday Rest Day ND"]["time"] = $_time["night_differential"] ." (".ctopercent($special_param['payroll_overtime_rest_night']).")"; 
-					$return->_breakdown_addition["Special Holiday Rest Day ND"]["rate"] = ($hourly_rate * $night_diff_float) * ($special_param['payroll_overtime_rest_night']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday Rest Day ND"]["rate"]; 
-					$nightdiff = ($hourly_rate * $night_diff_float) * ($special_param['payroll_overtime_rest_night']);
-					$breakdown_addition += $nightdiff;
-				}
-			}
-			//Special Holiday
-			else
-			{
-				if ($compute_type=="daily")
-				{
-					$total_day_income = 0;
-					$return->_breakdown_addition["Special Holiday"]["time"] = ""; 
-					$return->_breakdown_addition["Special Holiday"]["rate"] = $daily_rate * ($special_param['payroll_overtime_regular']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday"]["rate"];
-					$breakdown_addition += $return->_breakdown_addition["Special Holiday"]["rate"];
-					$additional_rate =  ($special_param['payroll_overtime_regular']);
-				}
-				else if ($compute_type=="monthly") 
-				{
-					$return->_breakdown_addition["Special Holiday"]["time"] = ""; 
-					$return->_breakdown_addition["Special Holiday"]["rate"] = $daily_rate * ($special_param['payroll_overtime_regular']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday"]["rate"];
-					$breakdown_addition += $return->_breakdown_addition["Special Holiday"]["rate"];
-					$additional_rate =  ($special_param['payroll_overtime_regular']);
-				}
-
-				//Special Holiday Over Time
-				if ($overtime_float!=0) 
-				{
-					$return->_breakdown_addition["Special Holiday OT"]["time"] = $_time["overtime"] ." (".ctopercent($special_param['payroll_overtime_overtime']).")"; 
-					$return->_breakdown_addition["Special Holiday OT"]["rate"] = ($hourly_rate * $overtime_float) * ($special_param['payroll_overtime_overtime']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday OT"]["rate"]; 
-					$overtime =  $return->_breakdown_addition["Special Holiday OT"]["rate"];
-					$breakdown_addition += $overtime;
-				}
-				//Special Holiday Night Differential
-				if ($night_diff_float!=0) 
-				{
-					$return->_breakdown_addition["Special Holiday ND"]["time"] = $_time["night_differential"] ." (".ctopercent($special_param['payroll_overtime_nigth_diff']).")"; 
-					$return->_breakdown_addition["Special Holiday ND"]["rate"] = ($hourly_rate * $night_diff_float) * ($special_param['payroll_overtime_nigth_diff']);
-					$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday ND"]["rate"]; 
-					$nightdiff = $return->_breakdown_addition["Special Holiday ND"]["rate"];
-					$breakdown_addition += $nightdiff; 
-				}
-			}
-		} 
-		
-
-		$subtotal_after_addition = $total_day_income;
-
-		/* BREAKDOWN DEDUCTIONS */
-		$late_float			= Self::time_float($_time['late']);
-		$undertime_float	= Self::time_float($_time['undertime']);
-		$absent_float		= 0;
-		$absent				= 0;
-		$late 				= 0;
-		$undertime 			= 0;
-
-		//compute cola
-		$cola = Payroll2::compute_income_day_pay_cola($_time , $daily_rate, $group_id , $cola , $compute_type);
-		
-		//no time in monthly
-		if($time_spent!=0 && $compute_type=="monthly")
-		{
-			if($_time['is_holiday'] == 'special' || $_time['is_holiday'] == 'regular' || $_time['day_type'] == 'extra_day' || $_time['day_type'] == 'rest_day')
-			{
-				
-			}
-		}
-		
-		//no time in daily
-		if($time_spent!=0 && $compute_type=="daily")
-		{
-			if($_time['is_holiday'] == 'special' || $_time['is_holiday'] == 'regular' || $_time['day_type'] == 'extra_day' || $_time['day_type'] == 'rest_day')
-			{
-				
-			}
-		}
-
-		if($_time["is_absent"] == true)
-		{
-			$return->_breakdown_deduction["absent"]["time"] = ""; 
-			$return->_breakdown_deduction["absent"]["rate"] = $daily_rate; 
-			$total_day_income = $total_day_income - ($return->_breakdown_deduction["absent"]["rate"]);
-			$absent_float = 1;
-			$absent = $daily_rate;
-			$breakdown_deduction += $return->_breakdown_deduction["absent"]["rate"];
-		}
-		elseif($_time["is_absent"] == false && ($_time['day_type'] != 'rest_day'))
-		{
-			if($late_float != 0)
-			{
-				$return->_breakdown_deduction["late"]["time"] = $_time['late']; 
-				$return->_breakdown_deduction["late"]["rate"] = ($late_float * $hourly_rate)  * $additional_rate; 
-				$total_day_income = $total_day_income - $return->_breakdown_deduction["late"]["rate"];
-				$late = $return->_breakdown_deduction["late"]["rate"];
-				$breakdown_deduction += $return->_breakdown_deduction["late"]["rate"];
-			}
-
-		
-			if($undertime_float != 0)
-			{
-				$return->_breakdown_deduction["undertime"]["time"] = $_time['undertime']; 
-				$return->_breakdown_deduction["undertime"]["rate"] = ($undertime_float * $hourly_rate) * $additional_rate; 
-				$total_day_income = $total_day_income - $return->_breakdown_deduction["undertime"]["rate"];
-				$undertime = $return->_breakdown_deduction["undertime"]["rate"];
-				$breakdown_deduction += $return->_breakdown_deduction["undertime"]["rate"];
-			}
-		}
-
-		
-	
-		
-		
-		$return->subtotal_after_addition	= $subtotal_after_addition;
-		$return->rendered_days 				= @($time_spent/$target_float);
-		$return->cola						= $cola->cola_day_pay;
-		$return->total_day_income_plus_cola = $cola->cola_plus_daily_rate;
-		$return->total_day_income			= $total_day_income;
-		$return->total_day_cola 			= 0;
-		$return->cola_percentile			= $cola->cola_percentile;
-		$return->total_day_basic			= $subtotal_after_addition - ($breakdown_deduction + $breakdown_addition);
-		$return->breakdown_addition 		= $breakdown_addition;
-		$return->breakdown_deduction		= $breakdown_deduction; 
-		$return->rendered_tardiness			= @(($late_float + $undertime_float) / $target_float) + $absent_float;
-		
-		return $return;
-	}
 	
 	public static function cutoff_compute_gross_pay($compute_type, $cutoff_rate, $cutoff_cola, $cutoff_target_days=0,  $_date_compute)
 	{
@@ -1559,17 +1705,21 @@ class Payroll2
 		//get breakdown addition summary and break down deduction summary
 		foreach($_date_compute as $date => $date_compute)
 		{
+
 			if(isset($date_compute->compute->_breakdown_addition))
 			{
 				foreach($date_compute->compute->_breakdown_addition as $lbl => $badd)
 				{
+
 					if(isset($return->_breakdown_addition_summary[$lbl]))
 					{
 						$return->_breakdown_addition_summary[$lbl] += $badd["rate"];
+						$return->_breakdown_addition_summary_time[$lbl] .= "<br>" . $badd["time"] . " - " . payroll_currency($badd["rate"]);
 					}
 					else
 					{
 						$return->_breakdown_addition_summary[$lbl] = $badd["rate"];
+						$return->_breakdown_addition_summary_time[$lbl] = $badd["time"] . " - " . payroll_currency($badd["rate"]);
 					}
 				}
 			}
@@ -1689,6 +1839,12 @@ class Payroll2
 		return $target_hours;
 	} 
 
+
+	public static function use_leave()
+	{
+		
+	}
+
 	//night differential 10pm to 6am militiary time
 	public static function night_differential_computation($_time,$testing=false)
 	{
@@ -1756,9 +1912,9 @@ class Payroll2
 	}
 
 
-	public static function time_shift_output($_output, $index, $time_in, $time_out, $auto_approved, $reason = "",$status_time_sched = "",$late="00:00:00",$undertime="00:00:00",$overtime="00:00:00")
+	public static function time_shift_output($time, $_output, $index, $time_in, $time_out, $auto_approved, $reason = "",$status_time_sched = "",$late="00:00:00",$undertime="00:00:00",$overtime="00:00:00")
 	{
-		
+		//dd($time);
 		$_output[$index] = new stdClass();
 		$_output[$index]->time_in = $time_in;
 		$_output[$index]->time_out = $time_out;
@@ -1768,12 +1924,25 @@ class Payroll2
 		$_output[$index]->late = $late;
 		$_output[$index]->undertime = $undertime;
 		$_output[$index]->overtime = $overtime;
+		$_output[$index]->payroll_time_sheet_record_id = 0;
 
+		if(isset($time->payroll_time_sheet_record_id))
+		{
+			$_output[$index]->payroll_time_sheet_record_id = $time->payroll_time_sheet_record_id;
+		}
+
+		if(isset($time->payroll_time_sheet_auto_approved))
+		{
+			$_output[$index]->auto_approved = $time->payroll_time_sheet_auto_approved;
+		}
+
+		
 		return $_output;
 	}
 
-	public static function flexi_time_shift_output($_output, $index, $time_in, $time_out, $auto_approved, $reason = "", $status_time_sched = "", $over_time="00:00:00", $undertime = "00:00:00")
+	public static function flexi_time_shift_output($time, $_output, $index, $time_in, $time_out, $auto_approved, $reason = "", $status_time_sched = "", $over_time="00:00:00", $undertime = "00:00:00")
 	{
+
 		$_output[$index] = new stdClass();
 		$_output[$index]->time_in = $time_in;
 		$_output[$index]->time_out = $time_out;
@@ -1783,6 +1952,21 @@ class Payroll2
 		$_output[$index]->overtime = $over_time;
 		$_output[$index]->undertime = $undertime;
 		$_output[$index]->late = "00:00:00";
+
+		$_output[$index]->payroll_time_sheet_record_id = 0;
+
+		if(isset($time->payroll_time_sheet_record_id))
+		{
+			$_output[$index]->payroll_time_sheet_record_id = $time->payroll_time_sheet_record_id;
+		}
+
+		if(isset($time->payroll_time_sheet_auto_approved))
+		{
+			$_output[$index]->auto_approved = $time->payroll_time_sheet_auto_approved;
+		}
+
+
+
 		return $_output;
 	}
 
@@ -1887,9 +2071,9 @@ class Payroll2
 			$time[1] = 0;
 		}
 		$time = ($time[0] * 60.0) + ($time[1] * 1.0);
-	
 		return $time;
 	}
+
 	
 	public static function float_time($float = 0)
 	{
@@ -1923,7 +2107,8 @@ class Payroll2
 		$group 	= Tbl_payroll_employee_contract::selemployee($employee_id, $start_date)
 												->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
 		                                        ->first();
-		$shop_id = $group->shop_id;                                       
+		$shop_id = $group->shop_id;
+
 		/* GET EMPLOYEE SALARY */
 		$salary 			= Tbl_payroll_employee_salary::selemployee($employee_id, $start_date)->first();
 		if($salary == null)
@@ -2109,7 +2294,895 @@ class Payroll2
 
 	}
 	
-	
+	/* COMPUTE CUTOFF BREAKDOWN - BY GUILLERMO TABLIGAN */
+	public static function cutoff_breakdown($payroll_period_company_id, $employee_id, $cutoff_compute, $data)
+	{
+		$return = new stdClass();
+
+
+		$data["employee_id"] 		= $employee_id;
+		$data["employee"]			= Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->first();
+
+
+		/* GET PERIOD DETAILS */
+		$data["date_query"] 			= $date_query 			= Tbl_payroll_period_company::sel($payroll_period_company_id)->first();
+		$data["start_date"] 			= $start_date 			= $date_query->payroll_period_start;
+		$data["end_date"] 				= $end_date 			= $date_query->payroll_period_end;
+		$data["period_category"] 		= $period_category 		= $date_query->payroll_period_category;
+
+		/* GET PAYROLL GROUP INFORMATION */
+		$data["group"] 					= $group 				= Tbl_payroll_employee_contract::selemployee($employee_id, $start_date)->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')->first();
+		$data["salary"] 				= $salary 				= Tbl_payroll_employee_salary::selemployee($employee_id, $start_date)->first();
+		$data["shop_id"]				= $shop_id				= $group->shop_id;
+
+		/* GET PERIOD CATEGORY ARR */
+		$data["period_category_arr"] 	= $period_category_arr	= Payroll::getperiodcount($shop_id, $end_date, $period_category, $start_date);
+
+
+		/* BREAKDOWN MODE */
+		$return->_breakdown = array();
+
+
+		/* FLAT RATE DECLARED BASIC PAY */
+		if($group->payroll_group_salary_computation == "Flat Rate")
+		{
+			$payroll_period_category = $data["date_query"]->payroll_period_category; //Semi-monthly, Monthly, Weekly, Daily
+
+			if($payroll_period_category == "Semi-monthly")
+			{
+				$divisor = 2;
+			}
+			elseif($payroll_period_category == "Weekly")
+			{				
+				$divisor = 4;
+			}
+			else
+			{
+				$divisor = 1;
+			}
+
+			$cutoff_compute->cutoff_basic = $salary->payroll_employee_salary_monthly / $divisor;
+		}
+
+		$return = Payroll2::cutoff_breakdown_additions($return, $data);
+		$return = Payroll2::cutoff_breakdown_deductions($return, $data); //meron bang non-taxable deduction?? lol
+		$return = Payroll2::cutoff_breakdown_taxable_allowances($return, $data);
+		$return = Payroll2::cutoff_breakdown_non_taxable_allowances($return, $data);
+		$return = Payroll2::cutoff_breakdown_hidden_allowances($return, $data);
+		$return = Payroll2::cutoff_breakdown_compute_gross_pay($return, $data);
+		$return = Payroll2::cutoff_breakdown_government_contributions($return, $data);
+		$return = Payroll2::cutoff_breakdown_compute_taxable_salary($return, $data);
+		$return = Payroll2::cutoff_breakdown_compute_tax($return, $data);
+		$return = Payroll2::cutoff_breakdown_compute_net($return, $data);
+
+		return $return;
+	}
+
+	public static function cutoff_breakdown_to_tr($breakdown)
+	{
+		if($breakdown["mode"] == "plus")
+		{
+			$return = '<tr>
+                            <td colspan="7" class="text-right" style="opacity: 0.5">
+                                ADD: <span class="text-bold">' . strtoupper($breakdown["label"]) . "</span>" . (isset($breakdown["description"]) ? "<br>" . $breakdown["description"] : "") . '
+                            </td>
+                            
+                            <td class="text-right">
+                                ' . payroll_currency($breakdown["amount"]) . ' 
+                            </td>
+                        </tr>';
+		}
+		else
+		{
+			$return = '<tr>
+                            <td colspan="7" class="text-right" style="opacity: 0.5">
+                                LESS: <span class="text-bold">' . strtoupper($breakdown["label"]) . "</span>" . (isset($breakdown["description"]) ? "<br>" . $breakdown["description"] : "") . '
+                            </td>
+                            
+                            
+                            <td class="text-right" style="opacity: 0.5; color: red;">
+                                ' . payroll_currency($breakdown["amount"]) . ' 
+                            </td>
+                        </tr>';	
+        }
+
+		return $return;
+	}
+	public static function cutoff_breakdown_compute_net($return, $data)
+	{
+		extract($data);
+
+		$return->net_pay_total = $return->taxable_salary_total;
+		$return->_net_pay_breakdown = array();
+		
+		foreach($return->_breakdown as $breakdown)
+		{
+			if($breakdown["add.net_pay"] == true)
+			{
+				$return->net_pay_total += $breakdown["amount"];
+				$breakdown["mode"] = "plus";
+				$breakdown["tr"] = Payroll2::cutoff_breakdown_to_tr($breakdown);
+				array_push($return->_net_pay_breakdown, $breakdown);	
+			}
+
+			if($breakdown["deduct.net_pay"] == true)
+			{
+				$return->net_pay_total -= $breakdown["amount"];
+				$breakdown["mode"] = "minus";
+				$breakdown["tr"] = Payroll2::cutoff_breakdown_to_tr($breakdown);
+				array_push($return->_net_pay_breakdown, $breakdown);	
+			}
+			
+		}		
+
+		return $return;
+	}
+	public static function cutoff_breakdown_compute_tax($return, $data)
+	{
+		extract($data);
+
+		/* GET INITIAL SETTINGS */
+		$payroll_period_category = $date_query->payroll_period_category; //Semi-monthly, Monthly, Weekly, Daily
+		$period_count = $date_query->period_count; //first_period, last_period, middle_period
+		$period_month = $date_query->month_contribution; //calendar month (in word - January to December)
+		$period_year = $date_query->year_contribution; //calendar year
+
+		$tax_period = $group->payroll_group_tax; //Every Period, First Period, Last Period
+		$tax_reference = $group->tax_reference;
+		$tax_declared = $salary->payroll_employee_salary_taxable;
+		$payroll_period_company_id = $date_query->payroll_period_company_id;
+		$payroll_company_id = $date_query->payroll_company_id;
+
+
+		if($tax_reference == "declared") //IF REFERENCE IS DECLARED (check tax table for monthly and just divide by two IF every period)
+		{
+			$tax = Payroll::tax_contribution($shop_id, $tax_declared, $employee->payroll_employee_tax_status, "Monthly");	
+			$tax_description = payroll_currency($tax_declared) . " declared TAX Salary (" . $employee->payroll_employee_tax_status . ")";
+
+			if($tax_period == "Every Period") //DIVIDE CONTRIBUTION IF EVERY PERIOD
+			{
+				if($payroll_period_category == "Semi-monthly")
+				{
+					$divisor = 2;
+					$tax_description .= "<br> SEMI MONTHLY (EVERY PERIOD) - TAX which is " . payroll_currency($tax) . " was divided by two.";
+				}
+				elseif($payroll_period_category == "Weekly")
+				{				
+					$divisor = 4;
+					$tax_description .= "<br> WEEKLY (EVERY PERIOD) - TAX which is " . payroll_currency($tax) . " was divided by four.";
+				}
+				else
+				{
+					$divisor = 1;
+				}
+
+				/* TAX DIVISOR */
+				$tax = $tax / $divisor;
+			}
+			else
+			{
+				$tax_description .= "<br> SSS Contribution is processed only during " . $tax_period . ".";
+
+				if($tax_period == code_to_word($period_count))
+				{
+					$tax_reference_amount = $tax_declared;
+					$tax_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
+					$tax = $tax;
+				}
+				else
+				{
+					$tax_reference_amount = 0;
+					$tax_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
+					$tax = 0;
+				}
+			}
+		}
+		else //BASED ON TAXABLE SALARY
+		{
+			if($tax_period == "Every Period") //DIVIDE CONTRIBUTION IF EVERY PERIOD
+			{
+				$tax_reference_amount = $return->taxable_salary_total;
+				$tax_description = "(Every Period Compute) Tax Table for " . $payroll_period_category . " with amount of " . payroll_currency($tax_reference_amount) . " (" . $employee->payroll_employee_tax_status . ").";
+				$tax = Payroll::tax_contribution($shop_id, $tax_reference_amount, $employee->payroll_employee_tax_status, $payroll_period_category);
+			}
+			elseif($tax_period == "Last Period")
+			{
+				$tax_reference_amount = $return->taxable_salary_total;
+
+				if(code_to_word($period_count) == "Last Period")
+				{
+					$_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();
+					
+					$tax_description = "Computation for Last Period's Taxable Salary";
+
+					if(count($_cutoff) > 0)
+					{
+						foreach($_cutoff as $cutoff)
+						{
+							$tax_reference_amount = $tax_reference_amount + $cutoff->taxable_salary;
+							$tax_description .= "<br> Add Previous Cutoff " . payroll_currency($cutoff->taxable_salary) . " and the new amount will be " . payroll_currency($tax_reference_amount);
+						}
+					}
+
+					$tax_description .= "<br>Last Period Computation - Tax Table for Monthly with amount of " . payroll_currency($tax_reference_amount) . " (" . $employee->payroll_employee_tax_status . ").";
+					$tax = Payroll::tax_contribution($shop_id, $tax_reference_amount, $employee->payroll_employee_tax_status, "Monthly");
+				}
+				else
+				{
+					$tax_reference_amount = $return->taxable_salary_total;
+					$tax_description = "Tax Computation only happens during LAST PERIOD. Currently in " . code_to_word($period_count);
+					$tax = 0;
+				}
+			}
+			else
+			{
+				dd("System Error Code 587893. Tax Period (" .  $tax_period . ") is invalid.");
+			}
+		}
+
+
+
+		$val["label"] = "Witholding Tax";
+		$val["description"] = $tax_description;
+		$val["type"] = "tax";
+		$val["amount"] = $tax;
+		$val["add.gross_pay"] = false;
+		$val["deduct.gross_pay"] = false;
+		$val["add.taxable_salary"] = false;
+		$val["deduct.taxable_salary"] = false;
+		$val["add.net_pay"] = false;
+		$val["deduct.net_pay"] = true;
+		array_push($return->_breakdown, $val);
+		$val = null;			
+
+		return $return;
+	}
+	public static function cutoff_breakdown_compute_gross_pay($return, $data)
+	{
+		extract($data);
+
+
+		$return->basic_pay_total = $cutoff_compute->cutoff_basic;
+		$return->gross_pay_total = $cutoff_compute->cutoff_basic;
+		$return->_gross_pay_breakdown = array();
+		
+		foreach($return->_breakdown as $breakdown)
+		{
+			if($breakdown["add.gross_pay"] == true)
+			{
+				$return->gross_pay_total += $breakdown["amount"];
+				$breakdown["mode"] = "plus";
+				$breakdown["tr"] = Payroll2::cutoff_breakdown_to_tr($breakdown);
+				array_push($return->_gross_pay_breakdown, $breakdown);	
+			}
+
+			if($breakdown["deduct.gross_pay"] == true)
+			{
+				$return->gross_pay_total -= $breakdown["amount"];
+				$breakdown["mode"] = "minus";
+				$breakdown["tr"] = Payroll2::cutoff_breakdown_to_tr($breakdown);
+				array_push($return->_gross_pay_breakdown, $breakdown);	
+			}
+			
+		}
+
+		return $return;
+	}
+	public static function cutoff_breakdown_compute_taxable_salary($return, $data)
+	{
+		extract($data);
+		$return->taxable_salary_total = $return->gross_pay_total;
+		$return->_taxable_salary_breakdown = array();
+		
+		foreach($return->_breakdown as $breakdown)
+		{
+			if($breakdown["add.taxable_salary"] == true)
+			{
+				$return->taxable_salary_total += $breakdown["amount"];
+				$breakdown["mode"] = "plus";
+				$breakdown["tr"] = Payroll2::cutoff_breakdown_to_tr($breakdown);
+				array_push($return->_taxable_salary_breakdown, $breakdown);	
+			}
+
+			if($breakdown["deduct.taxable_salary"] == true)
+			{
+				$return->taxable_salary_total -= $breakdown["amount"];
+				$breakdown["mode"] = "minus";
+				$breakdown["tr"] = Payroll2::cutoff_breakdown_to_tr($breakdown);
+				array_push($return->_taxable_salary_breakdown, $breakdown);	
+			}
+		}
+
+		return $return;
+	}
+
+	public static function cutoff_breakdown_government_contributions($return, $data)
+	{
+		extract($data);
+
+		/* GET INITIAL SETTINGS */
+		$payroll_period_category = $date_query->payroll_period_category; //Semi-monthly, Monthly, Weekly, Daily
+		$period_count = $date_query->period_count; //first_period, last_period, middle_period
+		$period_month = $date_query->month_contribution; //calendar month (in word - January to December)
+		$period_year = $date_query->year_contribution; //calendar year
+		$sss_period = $group->payroll_group_sss; //Every Period, First Period, Last Period
+		$sss_reference = $group->sss_reference;
+		$sss_declared = $salary->payroll_employee_salary_sss;
+		$philhealth_period = $group->payroll_group_philhealth; //Every Period, First Period, Last Period
+		$philhealth_reference = $group->philhealth_reference;
+		$philhealth_declared =  $salary->payroll_employee_salary_philhealth;
+		$pagibig_period = $group->payroll_group_pagibig; //Every Period, First Period, Last Period
+		$pagibig_reference = $group->pagibig_reference;
+		$pagibig_declared =  $salary->payroll_employee_salary_pagibig;
+		$payroll_period_company_id = $date_query->payroll_period_company_id;
+		$payroll_company_id = $date_query->payroll_company_id;
+
+
+		/* SSS COMPUTATION */
+		$sss_description = "";	
+		if($sss_reference == "declared") //IF REFERENCE IS DECLARED (check tax table for monthly and just divide by two IF every period)
+		{
+			$sss_contribution = Payroll::sss_contribution($shop_id, $sss_declared);
+			$sss_description = payroll_currency($sss_declared) . " declared SSS Salary";
+
+			if($sss_period == "Every Period") //DIVIDE CONTRIBUTION IF EVERY PERIOD
+			{
+				$sss_reference_amount = $sss_declared;
+
+				if($payroll_period_category == "Semi-monthly")
+				{
+					$divisor = 2;
+					$sss_description .= "<br> SEMI MONTHLY (EVERY PERIOD) - SSS Contribution which is " . payroll_currency($sss_contribution["ee"]) . " was divided by two.";
+				}
+				elseif($payroll_period_category == "Weekly")
+				{				
+					$divisor = 4;
+					$sss_description .= "<br> WEEKLY (EVERY PERIOD) - SSS Contribution which is " . payroll_currency($sss_contribution["ee"]) . " was divided by four.";
+				}
+				else
+				{
+					$divisor = 1;
+				}
+
+				/* CHECK EXCEED MONTH */
+				$_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();
+				$total_cutoff = 0;
+				foreach($_cutoff as $cutoff)
+				{
+					$total_cutoff += $cutoff->sss_ee;
+				}
+
+				if($total_cutoff >= $sss_contribution["ee"])
+				{
+					$sss_description .= "<br> EE, ER and EC converted to zero in order to not exceed monthly contribution.";
+					$sss_contribution["ee"] = 0;
+					$sss_contribution["er"] = 0;
+					$sss_contribution["ec"] = 0;
+				}
+				else
+				{
+					$sss_contribution["ee"] = $sss_contribution["ee"] / $divisor;
+					$sss_contribution["er"] = $sss_contribution["er"] / $divisor;
+					$sss_contribution["ec"] = $sss_contribution["ec"] / $divisor;
+				}
+			}
+			else
+			{
+				$sss_description .= "<br> SSS Contribution is processed only during " . $sss_period . ".";
+
+				if($sss_period == code_to_word($period_count))
+				{
+					$sss_reference_amount = $sss_declared;
+					$sss_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
+					$sss_contribution["ee"] = $sss_contribution["ee"];
+					$sss_contribution["er"] = $sss_contribution["er"];
+					$sss_contribution["ec"] = $sss_contribution["ec"];
+				}
+				else
+				{
+					$sss_reference_amount = 0;
+					$sss_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
+					$sss_contribution["ee"] = 0;
+					$sss_contribution["er"] = 0;
+					$sss_contribution["ec"] = 0;
+				}
+			}
+
+			/* TODO: IF SSS CONTRIBUTION FOR DECLARED EXCEED 4 PAYROLL PERIOD - THE SSS CONTRIBUTION SHOULD BE ZERO */
+		}
+		else //BASED ON GROSS OR NET BASIC PAY
+		{
+			$sss_reference_amount = $return->gross_pay_total;
+			$sss_description = payroll_currency($return->gross_pay_total) . " Gross Salary for this cutoff.";
+
+			if($sss_period == "Every Period") //DIVIDE CONTRIBUTION IF EVERY PERIOD
+			{
+				$sss_description .= "<br> SSS Contribution is processed every period.";
+
+				/* CHECK LAST CUTOFF OF THIS MONTH SSS CONTRIBUTION */
+				if(code_to_word($period_count) == "1st Period")
+				{
+					$sss_description .= "<br> 1st Period of the Month. No need to refer to previous cutoff.";
+					$sss_contribution = Payroll::sss_contribution($shop_id, $sss_reference_amount);
+				}
+				else
+				{
+					$last_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->first();
+					
+					if($last_cutoff)
+					{
+						$sss_description .= "<br> Using previous cutoff as reference, previous SSS Salary used is " . payroll_currency($last_cutoff->sss_salary) . " (" . payroll_currency($last_cutoff->sss_ee) . ")";
+						$sss_reference_amount = $sss_reference_amount + $last_cutoff->sss_salary;
+						$sss_description .= "<br> Adding previous cutoff reference the output is " . payroll_currency($sss_reference_amount);
+						$sss_contribution = Payroll::sss_contribution($shop_id, $sss_reference_amount);
+						$sss_description .= "<br> New SSS Bracket falls to " . payroll_currency($sss_contribution["ee"]);
+						$sss_description .= "<br> NEW BRACKET (" . payroll_currency($sss_contribution["ee"]) . ") LESS PREVIOUS CUTOFF (" . payroll_currency($last_cutoff->sss_ee) . ")";
+						$sss_contribution["ee"] = $sss_contribution["ee"] - $last_cutoff->sss_ee;
+						$sss_contribution["er"] = $sss_contribution["er"] - $last_cutoff->sss_er;
+						$last_cutoff->sss_salary;
+					}
+					else
+					{
+						dd("Warning! This is not the 1st period of the month and the system can't find reference period for the month of $period_month($period_year)");
+					}
+				}
+				
+			}
+			else
+			{
+				$sss_description .= "<br> SSS Contribution is processed only during " . $sss_period . ".";
+
+				if($sss_period == code_to_word($period_count))
+				{
+					$sss_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
+
+					if($sss_period == "1st Period")
+					{
+						dd("ERROR: 1st Period is only allowed if SALARY is DECLARRED");
+						$sss_contribution = Payroll::sss_contribution($shop_id, $sss_reference_amount);
+					}
+					else
+					{
+						$_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();
+						
+						if(count($_cutoff) > 0)
+						{
+							foreach($_cutoff as $cutoff)
+							{
+									$sss_reference_amount = $sss_reference_amount + $cutoff->sss_salary;
+									$sss_description .= "<br> Add Previous Cutoff " . payroll_currency($cutoff->sss_salary) . " and the new amount will be " . payroll_currency($sss_reference_amount);
+							}
+						}
+
+						$sss_contribution = Payroll::sss_contribution($shop_id, $sss_reference_amount);
+					}
+				}
+				else
+				{
+					$sss_reference_amount = $sss_reference_amount;
+					$sss_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
+					$sss_contribution["ee"] = 0;
+					$sss_contribution["er"] = 0;
+					$sss_contribution["ec"] = 0;
+				}
+			}
+		}
+
+		/* PHILHEALTH COMPUTATION */	
+		if($philhealth_reference == "declared") //IF REFERENCE IS DECLARED (check tax table for monthly and just divide by two IF every period)
+		{
+			
+			$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_declared);
+			$philhealth_description = payroll_currency($philhealth_declared) . " declared PHILHEALTH Salary";
+
+			if($philhealth_period == "Every Period") //DIVIDE CONTRIBUTION IF EVERY PERIOD
+			{
+				$philhealth_reference_amount = $philhealth_declared;
+
+				if($payroll_period_category == "Semi-monthly")
+				{
+					$divisor = 2;
+					$philhealth_description .= "<br> SEMI MONTHLY (EVERY PERIOD) - PHILHEALTH Contribution which is " . payroll_currency($philhealth_contribution["ee"]) . " was divided by two.";
+				}
+				elseif($payroll_period_category == "Weekly")
+				{				
+					$divisor = 4;
+					$philhealth_description .= "<br> WEEKLY (EVERY PERIOD) - PHILHEALTH Contribution which is " . payroll_currency($philhealth_contribution["ee"]) . " was divided by four.";
+				}
+				else
+				{
+					$divisor = 1;
+				}
+
+				/* CHECK EXCEED MONTH */
+				$_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();
+				$total_cutoff = 0;
+				foreach($_cutoff as $cutoff)
+				{
+					$total_cutoff += $cutoff->philhealth_ee;
+				}
+
+				if($total_cutoff >= $philhealth_contribution["ee"])
+				{
+					$philhealth_description .= "<br> EE and ER converted to zero in order to not exceed monthly contribution.";
+					$philhealth_contribution["ee"] = 0;
+					$philhealth_contribution["er"] = 0;
+				}
+				else
+				{
+					$philhealth_contribution["ee"] = $philhealth_contribution["ee"] / $divisor;
+					$philhealth_contribution["er"] = $philhealth_contribution["er"] / $divisor;
+				}
+
+
+			}
+			else
+			{
+				$philhealth_description .= "<br> PHILHEALTH Contribution is processed only during " . $philhealth_period . ".";
+
+				if($philhealth_period == code_to_word($period_count))
+				{
+					$philhealth_reference_amount = $philhealth_declared;
+					$philhealth_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
+					$philhealth_contribution["ee"] = $philhealth_contribution["ee"];
+					$philhealth_contribution["er"] = $philhealth_contribution["er"];
+				}
+				else
+				{
+					$philhealth_reference_amount = 0;
+					$philhealth_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
+					$philhealth_contribution["ee"] = 0;
+					$philhealth_contribution["er"] = 0;
+				}
+			}
+		}
+		else //BASED ON GROSS OR NET BASIC PAY
+		{
+			$philhealth_reference_amount = $return->gross_pay_total;
+			$philhealth_description = payroll_currency($return->gross_pay_total) . " Gross Salary for this cutoff.";
+
+			if($philhealth_period == "Every Period") //DIVIDE CONTRIBUTION IF EVERY PERIOD
+			{
+				$philhealth_description .= "<br> PHILHEALTH Contribution is processed every period.";
+
+				/* CHECK LAST CUTOFF OF THIS MONTH philhealth CONTRIBUTION */
+				if(code_to_word($period_count) == "1st Period")
+				{
+					$philhealth_description .= "<br> 1st Period of the Month. No need to refer to previous cutoff.";
+					$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_reference_amount);
+				}
+				else
+				{
+					$last_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->first();
+					
+					if($last_cutoff)
+					{
+						$philhealth_description .= "<br> Using previous cutoff as reference, previous PHILHEALTH Salary used is " . payroll_currency($last_cutoff->phihealth_salary) . " (" . payroll_currency($last_cutoff->philhealth_ee) . ")";
+						$philhealth_reference_amount = $philhealth_reference_amount + $last_cutoff->phihealth_salary;
+						$philhealth_description .= "<br> Adding previous cutoff reference the output is " . payroll_currency($philhealth_reference_amount);
+						$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_reference_amount);
+						$philhealth_description .= "<br> New PHILHEALTH Bracket falls to " . payroll_currency($philhealth_contribution["ee"]);
+						$philhealth_description .= "<br> NEW BRACKET (" . payroll_currency($philhealth_contribution["ee"]) . ") LESS PREVIOUS CUTOFF (" . payroll_currency($last_cutoff->philhealth_ee) . ")";
+						$philhealth_contribution["ee"] = $philhealth_contribution["ee"] - $last_cutoff->philhealth_ee;
+						$philhealth_contribution["er"] = $philhealth_contribution["er"] - $last_cutoff->philhealth_er;
+						$last_cutoff->phihealth_salary;
+					}
+					else
+					{
+						dd("Warning! This is not the 1st period of the month and the system can't find reference period for the month of $period_month($period_year).");
+					}
+				}
+				
+			}
+			else
+			{
+				$philhealth_description .= "<br> PHILHEALTH Contribution is processed only during " . $philhealth_period . ".";
+
+				if($philhealth_period == code_to_word($period_count))
+				{
+					$philhealth_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
+
+					if($philhealth_period == "1st Period")
+					{
+						dd("ERROR: 1st Period is only allowed if SALARY is DECLARRED");
+						$philhealth_contribution = Payroll::sss_contribution($shop_id, $sss_reference_amount);
+					}
+					else
+					{
+						$_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();
+						
+						if(count($_cutoff) > 0)
+						{
+							foreach($_cutoff as $cutoff)
+							{
+								$philhealth_reference_amount = $philhealth_reference_amount + $cutoff->phihealth_salary;
+								$philhealth_description .= "<br> Add Previous Cutoff " . payroll_currency($cutoff->phihealth_salary) . " and the new amount will be " . payroll_currency($philhealth_reference_amount);
+							}
+						}
+
+						$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $sss_reference_amount);
+					}
+				}
+				else
+				{
+					$philhealth_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
+					$philhealth_contribution["ee"] = 0;
+					$philhealth_contribution["er"] = 0;
+					$philhealth_contribution["ec"] = 0;
+				}
+			}
+		}
+
+		/* PAG-IBIG COMPUTATION */	
+		$pagibig_reference_amount = $pagibig_declared;
+		$pagibig_contribution["ee"] = $pagibig_declared;
+		$pagibig_contribution["er"] = $pagibig_declared;
+		$pagibig_description = payroll_currency($pagibig_declared) . " declared PAGIBIG Contribution";
+
+		if($pagibig_period == "Every Period") //DIVIDE CONTRIBUTION IF EVERY PERIOD
+		{
+			if($payroll_period_category == "Semi-monthly")
+			{
+				$divisor = 2;
+				$pagibig_description .= "<br> SEMI MONTHLY (EVERY PERIOD) - PAGIBIG Contribution which is " . payroll_currency($pagibig_contribution["ee"]) . " was divided by two.";
+			}
+			elseif($payroll_period_category == "Weekly")
+			{				
+				$divisor = 4;
+				$pagibig_description .= "<br> WEEKLY (EVERY PERIOD) - PAGIBIG Contribution which is " . payroll_currency($pagibig_contribution["ee"]) . " was divided by four.";
+			}
+			else
+			{
+				$divisor = 1;
+			}
+
+
+			/* CHECK EXCEED MONTH */
+			$_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();
+			$total_cutoff = 0;
+			foreach($_cutoff as $cutoff)
+			{
+				$total_cutoff += $cutoff->pagibig_ee;
+			}
+
+			if($total_cutoff >= $pagibig_contribution["ee"])
+			{
+				$pagibig_description .= "<br> EE and ER converted to zero in order to not exceed monthly contribution.";
+				$pagibig_contribution["ee"] = 0;
+				$pagibig_contribution["er"] = 0;
+			}
+			else
+			{
+				$pagibig_contribution["ee"] = $pagibig_contribution["ee"] / $divisor;
+				$pagibig_contribution["er"] = $pagibig_contribution["er"] / $divisor;
+			}
+		}
+		else
+		{
+			$pagibig_description .= "<br> PAGIBIG Contribution is processed only during " . $pagibig_period . ".";
+
+			if($pagibig_period == code_to_word($period_count))
+			{
+				$pagibig_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
+				$pagibig_contribution["ee"] = $pagibig_contribution["ee"];
+				$pagibig_contribution["er"] = $pagibig_contribution["er"];
+			}
+			else
+			{
+				$pagibig_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
+				$pagibig_contribution["ee"] = 0;
+				$pagibig_contribution["er"] = 0;
+			}
+		}
+
+		$val["label"] = "SSS EE";
+		$val["description"] = $sss_description;
+		$val["type"] = "government_contributions";
+		$val["amount"] = $sss_contribution["ee"];
+		$val["add.gross_pay"] = false;
+		$val["deduct.gross_pay"] = false;
+		$val["add.taxable_salary"] = false;
+		$val["deduct.taxable_salary"] = true;
+		$val["add.net_pay"] = false;
+		$val["deduct.net_pay"] = false;
+		array_push($return->_breakdown, $val);
+		$val = null;
+
+		$val["label"] = "SSS ER";
+		$val["type"] = "government_contributions";
+		$val["amount"] = $sss_contribution["er"];			
+		$val["add.gross_pay"] = false;
+		$val["deduct.gross_pay"] = false;
+		$val["add.taxable_salary"] = false;
+		$val["deduct.taxable_salary"] = false;
+		$val["add.net_pay"] = false;
+		$val["deduct.net_pay"] = false;
+		array_push($return->_breakdown, $val);
+		$val = null;
+
+		$val["label"] = "SSS EC";
+		$val["type"] = "government_contributions";
+		$val["amount"] = $sss_contribution["ec"];			
+		$val["add.gross_pay"] = false;
+		$val["deduct.gross_pay"] = false;
+		$val["add.taxable_salary"] = false;
+		$val["deduct.taxable_salary"] = false;
+		$val["add.net_pay"] = false;
+		$val["deduct.net_pay"] = false;
+		array_push($return->_breakdown, $val);
+		$val = null;
+
+		$val["label"] = "PHILHEALTH EE";
+		$val["type"] = "government_contributions";
+		$val["description"] = $philhealth_description;
+		$val["amount"] = $philhealth_contribution["ee"];
+		$val["add.gross_pay"] = false;
+		$val["deduct.gross_pay"] = false;
+		$val["add.taxable_salary"] = false;
+		$val["deduct.taxable_salary"] = true;
+		$val["add.net_pay"] = false;
+		$val["deduct.net_pay"] = false;
+		array_push($return->_breakdown, $val);
+		$val = null;
+
+		$val["label"] = "PHILHEALTH ER";
+		$val["type"] = "government_contributions";
+		$val["amount"] = $philhealth_contribution["er"];			
+		$val["add.gross_pay"] = false;
+		$val["deduct.gross_pay"] = false;
+		$val["add.taxable_salary"] = false;
+		$val["deduct.taxable_salary"] = false;
+		$val["add.net_pay"] = false;
+		$val["deduct.net_pay"] = false;
+		array_push($return->_breakdown, $val);
+		$val = null;
+
+		$val["label"] = "PAGIBIG EE";
+		$val["type"] = "government_contributions";
+		$val["description"] = $pagibig_description;
+		$val["amount"] = $pagibig_contribution["ee"];
+		$val["add.gross_pay"] = false;
+		$val["deduct.gross_pay"] = false;
+		$val["add.taxable_salary"] = false;
+		$val["deduct.taxable_salary"] = true;
+		$val["add.net_pay"] = false;
+		$val["deduct.net_pay"] = false;
+		array_push($return->_breakdown, $val);
+		$val = null;
+
+		$val["label"] = "PAGIBIG ER";
+		$val["type"] = "government_contributions";
+		$val["amount"] = $pagibig_contribution["er"];			
+		$val["add.gross_pay"] = false;
+		$val["deduct.gross_pay"] = false;
+		$val["add.taxable_salary"] = false;
+		$val["deduct.taxable_salary"] = false;
+		$val["add.net_pay"] = false;
+		$val["deduct.net_pay"] = false;
+		array_push($return->_breakdown, $val);
+		$val = null;
+
+		$return->sss_contribution = $sss_contribution;
+		$return->pagibig_contribution = $pagibig_contribution;
+		$return->philhealth_contribution = $philhealth_contribution;
+		$return->sss_contribution["salary"] = $sss_reference_amount;
+		$return->philhealth_contribution["salary"] = $philhealth_reference_amount;
+		$return->pagibig_contribution["salary"] = $pagibig_reference_amount;
+		return $return;
+	}
+	public static function cutoff_breakdown_non_taxable_allowances($return, $data)
+	{
+		extract($data);
+		if(!isset($cutoff_compute->render_days))
+		{
+			$cutoff_compute->render_days = 30;
+		}
+
+		$allowances 		= Payroll2::get_allowance($employee_id, $cutoff_compute->render_days);
+
+		if(isset($allowances["obj"]))
+		{
+			if(count($allowances["obj"]) > 0)
+			{
+				foreach($allowances["obj"] as $breakdown)
+				{
+					$val["label"] = $breakdown["name"];
+					$val["type"] = "non_taxable_allowance";
+					$val["amount"] = $breakdown["amount"];
+					$val["add.gross_pay"] = true;
+					$val["deduct.gross_pay"] = false;
+					$val["add.taxable_salary"] = false;
+					$val["deduct.taxable_salary"] = true;
+					$val["add.net_pay"] = true;
+					$val["deduct.net_pay"] = false;
+					array_push($return->_breakdown, $val);
+					$val = null;
+				}
+			}
+		}
+
+		return $return;
+	}
+	public static function cutoff_breakdown_hidden_allowances($return, $data)
+	{
+		extract($data);
+		return $return;
+	}
+	public static function cutoff_breakdown_taxable_allowances($return, $data)
+	{
+		extract($data);
+		return $return;
+	}
+	public static function cutoff_breakdown_additions($return, $data)
+	{
+		if(isset($data["cutoff_compute"]->_breakdown_addition_summary))
+		{
+			foreach($data["cutoff_compute"]->_breakdown_addition_summary as $key => $breakdown)
+			{
+				$val["label"] = $key;
+				$val["type"] = "additions";
+				$val["description"] = $data["cutoff_compute"]->_breakdown_addition_summary_time[$key];
+				$val["amount"] = $breakdown;
+				$val["add.gross_pay"] = true;
+				$val["deduct.gross_pay"] = false;
+				$val["add.taxable_salary"] = false;
+				$val["deduct.taxable_salary"] = false;
+				$val["add.net_pay"] = false;
+				$val["deduct.net_pay"] = false;
+				array_push($return->_breakdown, $val);
+				$val = null;
+			}
+		}
+
+		return $return;
+	}
+	public static function cutoff_breakdown_deductions($return, $data)
+	{
+		extract($data);
+
+		/* AGENCY DEDUCTION */
+		if($group->payroll_group_agency == Payroll::return_ave($period_category))
+		{
+			$val["label"] = "Agency Fee";
+			$val["type"] = "deductions";
+			$val["amount"] = $group->payroll_group_agency_fee;
+			$val["add.gross_pay"] = false;
+			$val["deduct.gross_pay"] = false;
+			$val["add.taxable_salary"] = false;
+			$val["deduct.taxable_salary"] = false;
+			$val["add.net_pay"] = false;
+			$val["deduct.net_pay"] = true;
+
+			array_push($return->_breakdown, $val);
+			$val = null;
+		}
+
+		$deduction = Payroll::getdeduction($employee_id, $start_date, $period_category_arr['period_category'], $period_category, $shop_id);
+
+		if(isset($deduction["deduction"]))
+		{
+			if(count($deduction["deduction"]) > 0)
+			{
+				foreach($deduction["deduction"] as $breakdown)
+				{
+					$val["label"] = $breakdown["deduction_name"];
+					$val["type"] = "deductions";
+					$val["amount"] = $breakdown["payroll_periodal_deduction"];
+					$val["add.gross_pay"] = false;
+					$val["deduct.gross_pay"] = false;
+					$val["add.taxable_salary"] = false;
+					$val["deduct.taxable_salary"] = false;
+					$val["add.net_pay"] = false;
+					$val["deduct.net_pay"] = true;
+			
+					array_push($return->_breakdown, $val);
+					$val = null;
+				}
+			}
+		}
+
+		return $return;
+	}
 	public static function cutoff_compute_break($payroll_period_company_id, $employee_id, $cutoff_compute)
 	{
 		$return 		= array();
@@ -2587,7 +3660,6 @@ class Payroll2
 					$data['pagibig_ee'] = $pagibig_contribution_def - $previous_pagibig;
 				}
 			}
-
 		}
 
 		else if($payroll_group_pagibig == $period_category)

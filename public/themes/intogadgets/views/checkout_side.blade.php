@@ -65,9 +65,16 @@
 			<div class="total-label">Transaction Fee</div>
 		</div>
 		@endif
+		<div class="hide {{$disc = 0}}"></div>
+		@if($get_cart["tbl_ec_order"]["discount_coupon_amount"] != 0)
+		<div class="text-right total {{$disc = $get_cart['tbl_ec_order']['discount_coupon_amount']}}">
+			<div class="total-price">&#8369; {{ number_format($get_cart["tbl_ec_order"]["discount_coupon_amount"], 2) }}</div>
+			<div class="total-label">Coupon Discount</div>
+		</div>
+		@endif
 
 		<div class="text-right total ">
-			<div class="total-price supertotal">&#8369; {{ number_format($get_cart["tbl_ec_order"]["total"], 2) }}</div>
+			<div class="total-price supertotal">&#8369; {{ number_format($get_cart["tbl_ec_order"]["total"] - $disc, 2) }}</div>
 			<div class="total-label">Total</div>
 		</div>
 	</div>

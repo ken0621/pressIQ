@@ -1395,9 +1395,15 @@ class Payroll
 		// 	return $float;
 		// }
 		$hour = intval($float);
+
 		$min = round(($float - $hour) * 60);
 		return Payroll::return_time($hour, $min);
 		
+	}
+
+	public static function float_to_time($float)
+	{
+
 	}
 
 	public static function process_compute($shop_id = 0, $status = 'processed')
@@ -2955,13 +2961,13 @@ class Payroll
 	/* GET TAX VALUE */
 	public static function tax_contribution($shop_id = 0, $rate = 0, $tax_category = '', $payroll_tax_period = '')
 	{
-		
+
 		$tax 		= Tbl_payroll_tax_reference::sel($shop_id, $tax_category, $payroll_tax_period)->first();
 		$exemption 	= Tbl_payroll_tax_reference::sel($shop_id, 'Excemption', $payroll_tax_period)->first();
 		$status 	= Tbl_payroll_tax_reference::sel($shop_id, 'Status', $payroll_tax_period)->first();
 		$tax_index 	= '';
-		
 		$tax_contribution = 0;
+
 
 		// if($rate >= $tax->tax_first_range && $rate < $tax->tax_second_range)
 		if($tax != null)
@@ -3018,6 +3024,10 @@ class Payroll
 				//dd("((" . $rate . " - " . $tax->$tax_index . ") * (" . $status_num . " / 100" . ")) " . " + " . $exemption_num . ")");
 				$tax_contribution = (($rate - $tax->$tax_index) * ($status_num / 100)) + $exemption_num;
 			}
+		}
+		else
+		{
+			dd("NOT FOUND ON TAX TABLE. PLEASE CONTACT ADMINISTRATOR.");
 		}
 		
 		return round($tax_contribution, 2);
@@ -3103,7 +3113,7 @@ class Payroll
 		
 		if($pagibig != null)
 		{
-			$data = ($pagibig->payroll_pagibig_percent / 100 ) * $rate;
+			$data = $rate;
 		}
 
 		return round($data, 2);
@@ -3112,8 +3122,6 @@ class Payroll
 
 	public static function getdeduction($employee_id = 0, $date = '0000-00-00', $period = '', $payroll_period_category = '', $shop_id = 0)
 	{
-
-
 		$month[0] = date('Y-m-01', strtotime($date));
 		$month[1] = date('Y-m-t', strtotime($date));
 
@@ -3121,12 +3129,8 @@ class Payroll
 		
 		$payroll_record_id = Tbl_payroll_record::getperiod($shop_id, $payroll_period_category)->lists('payroll_record_id');
 
-		
-
 		$data['deduction'] 			= array();
 		$data['total_deduction'] 	= 0;
-
-		
 
 		foreach($_deduction as $deduction)
 		{
@@ -3150,7 +3154,6 @@ class Payroll
 
 	public static function getrecord_breakdown($record = array())
 	{
-		
 		$data = $record->toArray();
 		// dd($data);
 

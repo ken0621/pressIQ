@@ -163,12 +163,12 @@ function add_search_events()
                         {
                             var price = data[index]['min_price'] + ' - ' + data[index]['max_price'];
                         }
-
+                        console.log(data[index]);
                         $append += 
                                     '<div class="search-popup-holder">' +
                                         '<a href="/product/view/'+data[index]['eprod_id']+'">'+
                                             '<div class="search-popup-img">'+
-                                                '<img style="width: 100%; object-fit: cover; height: 80px;" src="'+data[index]['variant'][0]['item_img']+'">' +
+                                                '<img style="width: 100%; object-fit: cover; height: 80px;" src="'+data[index]['variant'][0]['image_path']+'">' +
                                             '</div>'+
                                             '<div class="search-popup-text">' +
                                                 '<div class="search-popup-name">' +

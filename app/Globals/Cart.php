@@ -604,7 +604,7 @@ class Cart
                 {
                     if($value > 0)
                     {
-                        $ins_product["coupon_code_id"] = $coupon_id;
+                        $ins_product["coupon_code_id"] = $coupon_code_id;
                         $ins_product["coupon_code_product_id"] = $value;
 
                         Tbl_coupon_code_product::insert($ins_product);                           

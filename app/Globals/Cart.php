@@ -1130,9 +1130,13 @@ class Cart
      * @author (Edward Guevarra)
      *
      */
-    public static function submit_order($shop_id, $payment_status, $order_status, $customer_id = null, $notification = 1)
+    public static function submit_order($shop_id, $payment_status, $order_status, $customer_id = null, $notification = 1, $order = null)
     {
-        $order = Cart::get_info($shop_id);
+        if (!$order) 
+        {
+            $order = Cart::get_info($shop_id);
+        }
+        
         $order["tbl_ec_order"]["payment_status"] = $payment_status;
         $order["tbl_ec_order"]["order_status"]   = $order_status;
         $order["customer_id"]                    = $customer_id;
@@ -1395,6 +1399,7 @@ class Cart
         $temp["shop_id"] = $shop_id;
         $temp["customer_id"] = isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null;
         $temp["date_created"] = Carbon::now();
+        $temp["cart"] = serialize(Cart::get_info($shop_id));
   
         DB::table("tbl_ipay88_temp")->insert($temp);
 

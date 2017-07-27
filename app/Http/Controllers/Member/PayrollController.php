@@ -5238,10 +5238,8 @@ class PayrollController extends Member
                                                   ->where('payroll_parent_company_id', 0)
                                                   ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
                                                   ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
-
                                                   ->orderBy('tbl_payroll_period.payroll_period_start','asc')
                                                   ->get();
-          
 
           return view('member.payroll.payroll_timekeeping', $data);
      }

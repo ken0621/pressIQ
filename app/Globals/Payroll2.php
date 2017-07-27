@@ -98,9 +98,9 @@ class Payroll2
 					/*early overtime*/
 					if ($count_shift == 0 && ($time_out_minutes < $shift_in_minutes)) 
 					{
-						$reason = "<b>answer: ". Payroll2::convert_to_12_hour($time->time_in)." to ".Payroll2::convert_to_12_hour($time->time_out)." (0) - <span style='color: green; text-transform: uppercase'>EARLY OVERTIME time in and time out<span><br></b>";
+						$reason = "<b>answer: ". Payroll2::convert_to_12_hour($time->time_in)." to ".Payroll2::convert_to_12_hour($time->time_out)."(0) - <span style='color: green; text-transform: uppercase'> Early OVERTIME time in and time out<span><br></b>";
 						echo $testing == true ? $reason : "";
-						$_output = Payroll2::time_shift_output($_output, $output_ctr++, $time->time_in, $time->time_out, 0, $reason, "OVERTIME", "00:00:00", "00:00:00", Payroll::time_diff($time->time_in,$time->time_out));
+						$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $time->time_in, $time->time_out, 0, $reason, "OVERTIME", "00:00:00", "00:00:00", Payroll::time_diff($time->time_in,$time->time_out));
 						break;
 					}
 
@@ -406,17 +406,14 @@ class Payroll2
 		//target time is the same from shift hours
 		if($target_hours == 0)
 		{
-			$target_hours = Payroll2::target_hours($_shift);	
+			$target_hours = Payroll2::target_hours($_shift);
 		}
 		//target time is different from shift hours
 		else
 		{
-
 			$target_hours = Payroll2::float_time($target_hours);
 		}
 		
-
-
 		if ($_time==null) 
 		{
 			if (!(($day_type == "rest_day")||($day_type == "extra")||($is_holiday == "regular")||($is_holiday == "special")||($leave_hours!="00:00:00")))
@@ -425,7 +422,7 @@ class Payroll2
 			}
 
 			//trigger if leave
-			/*if ($is_absent == true) 
+			if ($is_absent==true) 
 			{
 				
 				$target_minutes = Payroll2::convert_time_in_minutes($target_hours);
@@ -439,11 +436,12 @@ class Payroll2
 				}
 				else
 				{
+
 					$leave_hours_consumed   = $target_hours;
 					$is_absent 				= false;
 					$time_spent 			= $target_hours;
 				}
-			}*/
+			}
 		}
 		else
 		{
@@ -535,7 +533,6 @@ class Payroll2
 				else if ($grace_time_rule_late=="first") 
 				{
 					//first approve time shift if late record it
-
 					$late_minutes = Payroll2::convert_time_in_minutes($time->late);
 					//record late if late is greater than grace time
 					if (($count==0)) 
@@ -632,7 +629,7 @@ class Payroll2
 			if (($late_minutes<=Payroll2::convert_time_in_minutes($late_grace_time))&&($grace_time_rule_late=="accumulative")) 
 			{
 				$time_spent = Payroll::sum_time($time_spent,$late_hours);
-				$late_hours = "00:00";
+				$late_hours="00:00";
 			}
 
 			//grace time for overtime - accumulative.
@@ -640,14 +637,17 @@ class Payroll2
 			if (($over_time_minutes<=Payroll2::convert_time_in_minutes($overtime_grace_time))&&($grace_time_rule_overtime=="accumulative")) 
 			{
 				$time_spent = Payroll2::minus_time($over_time_minutes,$time_spent);
-				$over_time  = "00:00";
+				$over_time="00:00";
 			}
+
+
+			
 
 			/*START sum time_spent late and undertime of all auto approved sched*/
 			//purpose for checking if there is missed shift in and shift out in the middle
-			$late_hour_temp 	= "00:00";
-			$under_time_temp	= "00:00";
-			$time_spent_temp	= "00:00";
+			$late_hour_temp="00:00";
+			$under_time_temp="00:00";
+			$time_spent_temp="00:00";
 		
 			foreach ($_time as $time) 
 			{
@@ -672,11 +672,9 @@ class Payroll2
 			}
 			/*END sum time_spent late and undertime of all auto approved sched*/
 	
-
-
 			
 			//leave trigger
-			/*if ($use_leave == true) 
+			if ($use_leave == true) 
 			{
 				//if absent
 
@@ -768,9 +766,7 @@ class Payroll2
 					}
 				}
 
-			}*/
-
-
+			}
 			//check if time spent is only half day
 			if ((Payroll2::divide_time_in_half($target_hours.":00"))==$time_spent.":00") 
 			{
@@ -816,8 +812,9 @@ class Payroll2
 		$return["is_half_day"] = $is_half_day;
 		$return["is_holiday"] = $is_holiday;
 		$return["day_type"] = $day_type;
+
 		$return["target_hours"] = Payroll2::convert_to_24_hour($target_hours);
-		$return["leave_hours"] = Payroll2::convert_to_24_hour($leave);
+		$return["leave_hours"] = $leave;
 		$return["excess_leave_hours"] = $excess_leave_hours;
 		$return["leave_hours_consumed"] = $leave_hours_consumed;
 		
@@ -894,6 +891,7 @@ class Payroll2
 			$is_absent = true;
 		}
 
+		
 	
 		if ($_time==null) 
 		{
@@ -903,8 +901,7 @@ class Payroll2
 				$is_absent =true;
 			}
 
-			/*leave trigger*/
-			/*if ($is_absent==true) 
+			if ($is_absent==true) 
 			{
 				$target_minutes = Payroll2::convert_time_in_minutes($target_hours);
 				$leave_minutes = Payroll2::convert_time_in_minutes($leave);
@@ -922,7 +919,7 @@ class Payroll2
 					$is_absent 				= false;
 					$time_spent 			= $target_hours;
 				}
-			}*/
+			}
 		}
 
 		else
@@ -977,7 +974,7 @@ class Payroll2
 		{
 			
 		//fill undertime with leave hours
-			/*if ($is_absent==true) 
+			if ($is_absent==true) 
 			{
 				$target_minutes = Payroll2::convert_time_in_minutes($target_hours);
 				$leave_minutes = Payroll2::convert_time_in_minutes($leave);
@@ -1026,7 +1023,7 @@ class Payroll2
 				{
 					$excess_leave_minutes = $leave;
 				}
-			}*/
+			}
 		}
 
 
@@ -1184,8 +1181,8 @@ class Payroll2
  
 	public static function compute_income_day_pay($_time = array(), $daily_rate = 0, $group_id = 0, $cola = 0, $compute_type="", $time_compute_mode="regular")
 	{
-		
-		
+			
+			
 		$return = new stdClass();
 
 		$time_spent = Self::time_float($_time['time_spent']);
@@ -1199,10 +1196,7 @@ class Payroll2
 			$return->_breakdown_addition['Leave Pay']['time'] = $_time['leave_hours'];
 			$return->_breakdown_addition['Leave Pay']['rate'] = Self::time_float($_time['leave_hours']) * @($daily_rate/$target_float);
 		}
-		/* leave pay computation */
 
-
-		
 		if($compute_type=="daily")
 		{
 			if($_time['day_type'] == 'rest_day' || $_time["is_holiday"] == "special" || $_time['day_type'] == 'extra_day') 
@@ -1535,7 +1529,7 @@ class Payroll2
 				}
 			}
 		} 
-		
+			
 
 		$subtotal_after_addition = $total_day_income;
 
@@ -1707,7 +1701,6 @@ class Payroll2
 			$return->render_days			  = $cutoff_target_days;
 	
 		}
-
 		else if ($compute_type=="fix") 
 		{
 			
@@ -1926,7 +1919,7 @@ class Payroll2
 
 	public static function time_shift_output($time, $_output, $index, $time_in, $time_out, $auto_approved, $reason = "",$status_time_sched = "",$late="00:00:00",$undertime="00:00:00",$overtime="00:00:00")
 	{
-		//dd($time);
+		
 		$_output[$index] = new stdClass();
 		$_output[$index]->time_in = $time_in;
 		$_output[$index]->time_out = $time_out;

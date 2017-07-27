@@ -523,8 +523,7 @@ class Ecom_Product
 			$product = $product;
 			foreach ($product as $key => $value) 
 			{
-				$product[$key]['variant'] = Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId($shop_id))->where("evariant_prod_id", $value["eprod_id"])->get()->toArray();
-				
+				$product[$key]['variant'] = Tbl_ec_variant::select("*")->item()->firstImage()->inventory(Ecom_Product::getWarehouseId($shop_id))->where("evariant_prod_id", $value["eprod_id"])->get()->toArray();
 				$update["eprod_search_count"] = $value["eprod_search_count"] + 1;
 				Tbl_ec_product::where("eprod_id", $value["eprod_id"])->update($update);
 

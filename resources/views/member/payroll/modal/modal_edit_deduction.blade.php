@@ -81,13 +81,12 @@
 				<small>Category</small>
 				<select class="form-control deduction-category-change" name="payroll_deduction_category" required>
 					<option value="">Select Category</option>
-					<option value="Cash Advance" {{$deduction->payroll_deduction_category == 'Cash Advance' ? 'selected="selected"':''}}>Cash Advance</option>
-					<option value="Cash Bond" {{$deduction->payroll_deduction_category == 'Cash Bond' ? 'selected="selected"':''}}>Cash Bond</option>
-					<option value="Loans" {{$deduction->payroll_deduction_category == 'Loans' ? 'selected="selected"':''}}>Loans</option>
-					<option value="Other Deduction" {{$deduction->payroll_deduction_category == 'Other Deduction' ? 'selected="selected"':''}}>Other Deduction</option>
+					<option value="Taxable" {{ ($deduction->payroll_deduction_category == 'Taxable') ? 'selected' : '' }} >Taxable</option>
+					<option value="Non-Taxable" {{ ($deduction->payroll_deduction_category == 'Non-Taxable') ? 'selected' : '' }}>Non-Taxable</option>
+					<option value="Hidden" {{ ($deduction->payroll_deduction_category == 'Hidden') ? 'selected' : '' }}>Hidden</option>
 				</select>
 			</div>
-			<div class="col-md-6">
+			{{-- <div class="col-md-6">
 				<small>Type</small>
 				<div class="input-group">
 					<select class="form-control select-deduction-type" name="payroll_deduction_type" required>
@@ -101,7 +100,19 @@
 					</span>
 				</div>
 				
-			</div>
+			</div> --}}
+			{{-- <div class="col-md-6">
+				<small>Type</small>
+				<div class="input-group">
+					<select class="form-control select-deduction-type" name="payroll_deduction_type_id" required>
+						<option value="">Select Type</option>
+						<option value="Taxable" {{ ($deduction->payroll_deduction_type_2 == 'Taxable') ? 'selected' : '' }} >Taxable</option>
+						<option value="Non-Taxable" {{ ($deduction->payroll_deduction_type_2 == 'Non-Taxable') ? 'selected' : '' }}>Non-Taxable</option>
+						<option value="Hidden" {{ ($deduction->payroll_deduction_type_2 == 'Hidden') ? 'selected' : '' }}>Hidden</option>
+					</select>
+				</div>
+				
+			</div>  --}}
 		</div>
 		<div class="form-group">
 			<div class="col-md-12">
@@ -109,6 +120,14 @@
 				<textarea class="form-control textarea-expand" name="payroll_deduction_remarks">{{$deduction->payroll_deduction_remarks}}</textarea>
 			</div>
 		</div>
+
+		<div class="col-md-6">
+            <label>Expense Account *</label>
+            <select name="expense_account_id" class="drop-down-coa form-control expense_account_id" id="expense_account_id" required>             
+        		@include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_expense, 'account_id' => $deduction->expense_account_id ])
+            </select>
+        </div>
+
 		<hr>
 		<div class="form-group">
 			<div class="col-md-12">

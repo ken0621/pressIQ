@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTblEcOrderAddColumnManualInvNumber4324 extends Migration
+class CreateTblCouponCodeProduct34234 extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,10 @@ class UpdateTblEcOrderAddColumnManualInvNumber4324 extends Migration
      */
     public function up()
     {
-        Schema::table('tbl_ec_order', function (Blueprint $table) {
-            $table->string("manual_inv_number")->after("ec_order_id");
+        Schema::create('tbl_coupon_code_product', function (Blueprint $table) {
+            $table->increments('cc_id');
+            $table->integer("coupon_code_id");
+            $table->integer("coupon_code_product_id");
         });
     }
 
@@ -24,8 +26,6 @@ class UpdateTblEcOrderAddColumnManualInvNumber4324 extends Migration
      */
     public function down()
     {
-        Schema::table('tbl_ec_order', function (Blueprint $table) {
-            //
-        });
+        Schema::drop('tvl_coupon_code_product');
     }
 }

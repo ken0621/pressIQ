@@ -86,6 +86,8 @@ use DateTime;
 use App\Models\Tbl_payroll_shift_day;
 use App\Models\Tbl_payroll_shift_time;
 
+use App\Globals\Accounting;
+
 class PayrollController extends Member
 {
 
@@ -107,7 +109,7 @@ class PayrollController extends Member
                     # code...
                     break;
           }
-          
+
      }
 
      /* EMPLOYEE START */
@@ -2770,16 +2772,25 @@ class PayrollController extends Member
      /* DEDUCTION START */
      public function deduction()
      {
-          $data['_active'] = Tbl_payroll_deduction::seldeduction(Self::shop_id())->orderBy('tbl_payroll_deduction.payroll_deduction_category','tbl_payroll_deduction.payroll_deduction_name')->paginate($this->paginate_count);
-          $data['_archived'] = Tbl_payroll_deduction::seldeduction(Self::shop_id(), 1)->orderBy('tbl_payroll_deduction.payroll_deduction_category','tbl_payroll_deduction.payroll_deduction_name')->paginate($this->paginate_count);
+          $data['_active'] = Tbl_payroll_deduction::where('shop_id',Self::shop_id())
+                              ->where('payroll_deduction_archived', 0)
+                              ->orderBy('tbl_payroll_deduction.payroll_deduction_category','tbl_payroll_deduction.payroll_deduction_name')
+                              ->paginate($this->paginate_count);
+          $data['_archived'] = Tbl_payroll_deduction::where('shop_id',Self::shop_id())
+                              ->where('payroll_deduction_archived', 1)
+                              ->orderBy('tbl_payroll_deduction.payroll_deduction_category','tbl_payroll_deduction.payroll_deduction_name')
+                              ->paginate($this->paginate_count);
           return view('member.payroll.side_container.deduction', $data);
      }
 
      public function modal_create_deduction()
      {
+          $data["_expense"] = Accounting::getAllAccount('all',null,['Expense','Other Expense']);
+          $data["default_expense"] = Tbl_chart_of_account::where("account_number", 66000)
+                                             ->where("account_shop_id", Self::shop_id())->pluck("account_id");
           $array = array();
           Session::put('employee_deduction_tag',$array);
-          return view('member.payroll.modal.modal_create_deduction');
+          return view('member.payroll.modal.modal_create_deduction', $data);
      }
 
      public function modal_create_deduction_type($type)
@@ -2869,23 +2880,23 @@ class PayrollController extends Member
           $insert['payroll_deduction_date_start'] = date('Y-m-d',strtotime(Request::input('payroll_deduction_date_start')));
           $insert['payroll_deduction_date_end']   = date('Y-m-d', strtotime(Request::input('payroll_deduction_date_end')));
           $insert['payroll_deduction_period']     = Request::input('payroll_deduction_period');
-          $insert['payroll_deduction_category']   = Request::input('payroll_deduction_category');
-          $insert['payroll_deduction_type']       = Request::input('payroll_deduction_type');
           $insert['payroll_deduction_remarks']    = Request::input('payroll_deduction_remarks');
+          $insert['payroll_deduction_category']   = Request::input('payroll_deduction_category');
 
+          $insert['expense_account_id']           = Request::input('expense_account_id');
+
+          //$insert['payroll_deduction_type']       = Request::input('payroll_deduction_type');
+
+          //dd($insert);
           $deduction_id = Tbl_payroll_deduction::insertGetId($insert);
-
           if(Session::has('employee_deduction_tag'))
           {
                $employee_tag = Session::get('employee_deduction_tag');
-               $insert_employee = '';
-               foreach($employee_tag as $key => $tag)
+               $insert_employee = [];
+               foreach($employee_tag as $tag)
                {
-                    $insert_employee[$key]['payroll_deduction_id']    = $deduction_id;
-                    $insert_employee[$key]['payroll_employee_id']          = $tag;
-               }
-               if($insert_employee != '')
-               {
+                    $insert_employee['payroll_deduction_id']         = $deduction_id;
+                    $insert_employee['payroll_employee_id']          = $tag;
                     Tbl_payroll_deduction_employee::insert($insert_employee);
                }
           }
@@ -2987,10 +2998,11 @@ class PayrollController extends Member
 
      public function modal_edit_deduction($id)
      {
+          $data["_expense"] = Accounting::getAllAccount('all',null,['Expense','Other Expense']);
           $data['deduction'] = Tbl_payroll_deduction::where('payroll_deduction_id',$id)->first();
           $data['_type'] = Tbl_payroll_deduction_type::where('shop_id', Self::shop_id())->where('payroll_deduction_archived', 0)->orderBy('payroll_deduction_type_name')->get();
           $data['emp'] = Payroll::getbalance(Self::shop_id(), $id);
-          // dd($data['_emp']);
+          //dd($data['deduction']);
           return view('member.payroll.modal.modal_edit_deduction', $data);
      }
 
@@ -3028,7 +3040,7 @@ class PayrollController extends Member
 
      public function modal_update_deduction()
      {
-          $payroll_deduction_id                        = Request::input('payroll_deduction_id');
+          $payroll_deduction_id                   = Request::input('payroll_deduction_id');
           $update['payroll_deduction_name']       = Request::input('payroll_deduction_name');
           $update['payroll_deduction_amount']     = Request::input('payroll_deduction_amount');
           $update['payroll_monthly_amortization'] = Request::input('payroll_monthly_amortization');
@@ -3040,6 +3052,8 @@ class PayrollController extends Member
           $update['payroll_deduction_category']   = Request::input('payroll_deduction_category');
           $update['payroll_deduction_type']       = Request::input('payroll_deduction_type');
           $update['payroll_deduction_remarks']    = Request::input('payroll_deduction_remarks');
+
+          $update['expense_account_id']           = Request::input('expense_account_id');
 
           Tbl_payroll_deduction::where('payroll_deduction_id',$payroll_deduction_id)->update($update);
 
@@ -3232,8 +3246,12 @@ class PayrollController extends Member
 
      public function modal_create_allowance()
      {
+          $data["_expense"] = Accounting::getAllAccount('all',null,['Expense','Other Expense']);
+          $data["default_expense"] = Tbl_chart_of_account::where("account_number", 66000)
+                                             ->where("account_shop_id", Self::shop_id())->pluck("account_id");
+
           Session::put('allowance_employee_tag', array());
-          return view('member.payroll.modal.modal_create_allowance');
+          return view('member.payroll.modal.modal_create_allowance', $data);
      }
 
      public function modal_allowance_tag_employee($allowance_id)
@@ -3296,6 +3314,7 @@ class PayrollController extends Member
           }
           $emp = Tbl_payroll_employee_basic::whereIn('payroll_employee_id',$employee)->get();
 
+
           $data['new_record'] = $emp;
           return json_encode($data);
      }
@@ -3316,6 +3335,7 @@ class PayrollController extends Member
           $insert['payroll_allowance_amount']     = Request::input('payroll_allowance_amount');
           $insert['payroll_allowance_category']   = Request::input('payroll_allowance_category');
           $insert['payroll_allowance_add_period'] = Request::input('payroll_allowance_add_period');
+          $insert['expense_account_id']           = Request::input('expense_account_id');
           $insert['shop_id']                           = Self::shop_id();
           $allowance_id = Tbl_payroll_allowance::insertGetId($insert);
 
@@ -3369,6 +3389,7 @@ class PayrollController extends Member
 
      public function modal_edit_allowance($id)
      {
+          $data["_expense"] = Accounting::getAllAccount('all',null,['Expense','Other Expense']);
           $data['allowance'] = Tbl_payroll_allowance::where('payroll_allowance_id', $id)->first();
           $data['_active'] = Tbl_payroll_employee_allowance::getperallowance($id)->get();
           $data['_archived'] = Tbl_payroll_employee_allowance::getperallowance($id , 1)->get();
@@ -3413,6 +3434,7 @@ class PayrollController extends Member
           $update['payroll_allowance_amount']     = Request::input('payroll_allowance_amount');
           $update['payroll_allowance_category']   = Request::input('payroll_allowance_category');
           $update['payroll_allowance_add_period'] = Request::input('payroll_allowance_add_period');
+          $update['expense_account_id']           = Request::input('expense_account_id');
 
           Tbl_payroll_allowance::where('payroll_allowance_id', $payroll_allowance_id)->update($update);
 
@@ -3456,6 +3478,19 @@ class PayrollController extends Member
           $data['deduction_id']    =    $leave_temp_id;
           $data['action']               =    '/member/payroll/leave/set_leave_tag_employee';
           return view('member.payroll.modal.modal_deduction_tag_employee', $data);
+     }
+
+     public function get_leave_tag_employee()
+     {
+          $employee = [0 => 0];
+          if(Session::has('leave_tag_employee'))
+          {
+               $employee = Session::get('leave_tag_employee');
+          }
+          $emp = Tbl_payroll_employee_basic::whereIn('payroll_employee_id',$employee)->get();
+
+          $data['new_record'] = $emp;
+          return json_encode($data);
      }
 
      public function set_leave_tag_employee()
@@ -5032,8 +5067,8 @@ class PayrollController extends Member
      {
           $data['_company']        = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
           $data['_department']     = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
-          $data['leave_id']        =    $id;
-          $data['action']          =    '/member/payroll/leave_schedule/session_tag_leave';
+          $data['leave_id']        = $id;
+          $data['action']          = '/member/payroll/leave_schedule/session_tag_leave';
 
           Session::put('employee_leave_tag', array());
 
@@ -5110,19 +5145,24 @@ class PayrollController extends Member
      {
           // Tbl_payroll_leave_schedule
           $payroll_schedule_leave = datepicker_input(Request::input('payroll_schedule_leave'));
+          
           if(Request::has('employee_tag'))
           {
                $insert = array();
-
+               $leave_reason = Tbl_payroll_leave_temp::where('payroll_leave_temp_id',Request::input("leave_reason"))->where('shop_id',$this->user_info["user_shop"])->first();
+  
                foreach(Request::input('employee_tag') as $tag)
                {
-                    
+                    $leave_hours = Request::input("leave_hours_".$tag);
 
                     if(Request::has('single_date_only'))
                     {
                          $temp['payroll_leave_employee_id']    = $tag;
                          $temp['payroll_schedule_leave']       = $payroll_schedule_leave;
                          $temp['shop_id']                      = Self::shop_id();
+                         $temp['leave_hours']                  = $leave_hours;
+                         $temp['consume']                      = Payroll::time_float($leave_hours);
+                         $temp['notes']                        = "Used ".$leave_hours." hours in ".$leave_reason["payroll_leave_temp_name"];
                          array_push($insert, $temp);
                     }
 
@@ -5134,14 +5174,16 @@ class PayrollController extends Member
                               $temp['payroll_leave_employee_id']    = $tag;
                               $temp['payroll_schedule_leave']       = $payroll_schedule_leave;
                               $temp['shop_id']                      = Self::shop_id();
+                              $temp['leave_hours']                  = $leave_hours;
+                              $temp['consume']                      = Payroll::time_float($leave_hours);
+                              $temp['notes']                        = "Used ".$leave_hours." hours in ".$leave_reason["payroll_leave_temp_name"];
                               array_push($insert, $temp);
                               $payroll_schedule_leave = Carbon::parse($payroll_schedule_leave)->addDay()->format("Y-m-d");
                          }
                     }
-                    
                }
                if(!empty($insert))
-               {
+               {  
                     Tbl_payroll_leave_schedule::insert($insert);
                }
           }    
@@ -5149,6 +5191,8 @@ class PayrollController extends Member
           $data['stataus']         = 'success';
           $data['function_name']   = '';
 
+
+               
           return collect($data)->toJson();
      }
 

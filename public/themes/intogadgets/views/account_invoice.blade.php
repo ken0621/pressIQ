@@ -145,6 +145,12 @@
                     <!-- <td>P {{ number_format($order->tax, 2) }}</td> -->
                     <td>P {{ number_format($order->vat, 2) }}</td>
                   </tr>
+                  @if($coupon_discount != 0)
+                  <tr>
+                    <td>Coupon Disc.</td>
+                    <td>P {{ number_format($coupon_discount, 2) }}</td>
+                  </tr>
+                  @endif
                   <tr>
                     <td>TOTAL AMOUNT</td>
                     <!-- <td>P {{ number_format($order->total, 2) }}</td> -->

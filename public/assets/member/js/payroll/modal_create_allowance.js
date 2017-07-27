@@ -145,4 +145,11 @@ function modal_create_allowance()
 				break;
 		}
 	}
+
+	$(".expense_account_id").globalDropList(
+	{
+	    link: '/member/accounting/chart_of_account/popup/add',
+	    link_size: 'md',
+	    placeholder: 'Chart of Account'
+	});
 }

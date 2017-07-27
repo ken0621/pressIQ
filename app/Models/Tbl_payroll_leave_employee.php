@@ -44,8 +44,8 @@ class Tbl_payroll_leave_employee extends Model
 	{
 		$query->join('tbl_payroll_leave_temp','tbl_payroll_leave_temp.payroll_leave_temp_id','=','tbl_payroll_leave_employee.payroll_leave_temp_id')
 			  ->where('tbl_payroll_leave_temp.payroll_leave_temp_with_pay',1)
-			  ->where('tbl_payroll_leave_employee.payroll_employee_id', $payroll_employee_id);
-
+			  ->where('tbl_payroll_leave_employee.payroll_employee_id', $payroll_employee_id)
+			  ->orderBy('tbl_payroll_leave_schedule.payroll_leave_schedule_id', 'desc');
 		return $query;
 	}
 

@@ -424,13 +424,13 @@ function page_list()
     $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
 
     /* -- PAYROLL PERIOD => LIST  */
-    $code = "payroll-period";
-    $nav[$page]['submenu'][$code]['label'] = "Payroll Period";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_period_list";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+    // $code = "payroll-period";
+    // $nav[$page]['submenu'][$code]['label'] = "Payroll Period";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_period_list";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    // $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    // $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
 
     /* -- PAYROLL PERIOD => LIST  */
     // $code = "payroll-shift-group";

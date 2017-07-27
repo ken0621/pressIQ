@@ -1200,7 +1200,7 @@ class Payroll2
 		
 		if($compute_type=="daily")
 		{
-			if($_time['day_type'] == 'rest_day' || $_time["is_holiday"] == "special" || $_time['day_type'] == 'extra_day') 
+			if($_time['day_type'] == 'rest_day' || $_time["is_holiday"] == "regular" || $_time["is_holiday"] == "special" || $_time['day_type'] == 'extra_day') 
 			{
 				$daily_rate = 0;
 			}

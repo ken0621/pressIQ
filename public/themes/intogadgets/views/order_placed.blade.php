@@ -12,7 +12,7 @@
 				@if(isset($_order) && count($_order) > 0)
 					<div>
 						<table class="table table-bordered table-striped table-hovered">
-							<thead>
+							<thead {{$disc = 0}}>
 								<tr>
 									<th>Product</th>
 									<th>Quantity</th>
@@ -27,10 +27,17 @@
 									<td>&#8369; {{ number_format($order->total, 2) }}</td>
 								</tr>
 								@endforeach
+								@if($coupon_disc != 0)
+								<tr>
+									<td class="{{$disc = $coupon_disc}}"></td>
+									<td>Coupon Discount</td>
+									<td>&#8369; {{ number_format($coupon_disc, 2) }}</td>
+								</tr>
+								@endif
 								<tr>
 									<td></td>
 									<td>Total</td>
-									<td>&#8369; {{ number_format($summary['subtotal'], 2) }}</td>
+									<td>&#8369; {{ number_format($summary['subtotal'] - $disc, 2) }}</td>
 								</tr>
 							</tbody>
 						</table>
@@ -82,6 +89,13 @@
 									<td>&#8369; {{ number_format($order->total, 2) }}</td>
 								</tr>
 								@endforeach
+								@if($coupon_disc != 0)
+								<tr>
+									<td class="{{$disc = $coupon_disc}}"></td>
+									<td>Coupon Discount</td>
+									<td>&#8369; {{ number_format($coupon_disc, 2) }}</td>
+								</tr>
+								@endif
 								<tr>
 									<td></td>
 									<td>Total</td>

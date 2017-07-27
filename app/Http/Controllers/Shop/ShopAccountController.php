@@ -23,6 +23,7 @@ use App\Models\Tbl_customer_other_info;
 
 use App\Globals\Mlm_member;
 use App\Globals\Settings;
+use App\Globals\Cart;
 use App\Globals\Ecom_Product;
 use App\Globals\Ec_wishlist;
 class ShopAccountController extends Shop
@@ -166,6 +167,11 @@ class ShopAccountController extends Shop
         $data["page"] = "Order";
         $data["_order"] = Tbl_ec_order::where('shop_id', $this->shop_info->shop_id)->where('customer_id', Self::$customer_id)->get();
 
+        foreach ($data["_order"] as $key => $value) 
+        {
+            $data["_order"][$key]->total = $value->total - Cart::get_coupon_discount($value->coupon_id, $value->total);
+        }
+
         return view("account_order", $data);
     }
     public function wishlist()
@@ -300,6 +306,12 @@ class ShopAccountController extends Shop
         if ($data["order"]->payment_status == 1) 
         {
             $data["_item"] = Tbl_ec_order_item::where("tbl_ec_order_item.ec_order_id", $id)->groupBy("tbl_ec_order_item.item_id")->item()->get();
+
+            $data["order"]->subtotal = $data["order"]->subtotal - Cart::get_coupon_discount($data["order"]->coupon_id, $data["order"]->subtotal); 
+            $data["coupon_discount"] = Cart::get_coupon_discount($data["order"]->coupon_id, $data["order"]->subtotal);
+            // dd($data["order"]->subtotal);
+            $data['order']->vat     = $data["order"]->subtotal / 1.12 * 0.12;
+            $data['order']->vatable = $data['order']->subtotal - $data['order']->vat;
             
             return view("account_invoice", $data);
         }

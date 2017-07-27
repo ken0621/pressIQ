@@ -8,6 +8,8 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_item_discount;
 use App\Models\Tbl_cart;
 use App\Models\Tbl_coupon_code;
+use App\Models\Tbl_ec_product;
+use App\Models\Tbl_coupon_code_product;
 use App\Models\Tbl_user;
 use App\Models\Tbl_ec_variant;
 use App\Models\Tbl_ec_order;
@@ -154,7 +156,6 @@ class Cart
         $total_coupon_discount = 0;
         $total_overall_price   = 0;
         $total_quantity        = 0;
-
         /* CHECK IF COUPON ALREADY USED */
         if(isset($data["applied_coupon_id"]))
         {
@@ -283,11 +284,10 @@ class Cart
                 }
                 else if($check->coupon_discounted == "percentage")
                 {
-                    $total_coupon_discount = $total_product_price - ($total_product_price * ($item->coupon_code_amount/100));
+                    $total_coupon_discount = $total_product_price * ($check->coupon_code_amount/100);
                 }             
             }
         }
-
         /* CHECK IF TOTAL PRICE IS NEGATIVE */
         $total_overall_price                                                = $total_product_price + $total_shipping - $total_coupon_discount;
         if($total_overall_price < 0)
@@ -535,7 +535,7 @@ class Cart
         return $data;
     }
 
-    public static function generate_coupon_code($word_limit, $price, $minimum_quantity = 0, $type="fixed", $coupon_product_id = null)
+    public static function generate_coupon_code($word_limit, $price, $minimum_quantity = 0, $type="fixed", $coupon_product_id = null,$all_product_id = false)
     {
         //get_shop_info
         $shop_id = Cart::get_shop_info();
@@ -578,14 +578,40 @@ class Cart
             }
 
             $insert["id_per_coupon"]           =  $id_per_coupon;                
-            $insert["coupon_code"]             =  $generated_word;  
-            $insert["coupon_product_id"]       =  isset($coupon_product_id) ? $coupon_product_id : null;              
+            $insert["coupon_code"]             =  $generated_word;           
             $insert["coupon_code_amount"]      =  $price;                     
             $insert["coupon_discounted"]       =  $type;                     
             $insert["shop_id"]                 =  $shop_id;
             $insert["coupon_minimum_quantity"] =  $minimum_quantity;         
             $insert["date_created"]            =  Carbon::now();  
-            Tbl_coupon_code::insert($insert);
+            $coupon_code_id = Tbl_coupon_code::insertGetId($insert);
+
+            if($all_product_id)
+            {
+                $get_all_product = Tbl_ec_product::variant()->where("eprod_shop_id",$shop_id)->where("tbl_ec_product.archived",0)->get();
+
+                foreach ($get_all_product as $key => $value) 
+                {
+                    $ins_product["coupon_code_id"] = $coupon_code_id;
+                    $ins_product["coupon_code_product_id"] = $value->evariant_id;
+
+                    Tbl_coupon_code_product::insert($ins_product);
+                }
+            }
+            else
+            {
+                foreach ($coupon_product_id as $key => $value) 
+                {
+                    if($value > 0)
+                    {
+                        $ins_product["coupon_code_id"] = $coupon_code_id;
+                        $ins_product["coupon_code_product_id"] = $value;
+
+                        Tbl_coupon_code_product::insert($ins_product);                           
+                    }                     
+                }
+
+            }
 
             $message["status"]         = "success";
             $message["status_message"] = "Successfully generate a coupon code.";
@@ -593,9 +619,10 @@ class Cart
 
         return $message;                              
     }   
-    public static function update_coupon_code($coupon_id, $price,$coupon_product_id, $minimum_quantity = 0, $type="fixed")
+    public static function update_coupon_code($coupon_id, $price,$coupon_product_id, $minimum_quantity = 0, $type="fixed",$all_product_id = false)
     {
 
+        $shop_id = Cart::get_shop_info();
         if($type != "fixed" && $type != "percentage")
         {
             $message["status"]         = "error";
@@ -608,12 +635,40 @@ class Cart
         }   
         else
         {
-            $update["coupon_code_amount"] = $price;
-            $update["coupon_product_id"]  =  isset($coupon_product_id) ? $coupon_product_id : null;                   
+            $update["coupon_code_amount"] = $price;               
             $update["coupon_discounted"]       =  $type;  
             $update["coupon_minimum_quantity"] =  $minimum_quantity; 
             
             Tbl_coupon_code::where("coupon_code_id",$coupon_id)->update($update);
+
+            Tbl_coupon_code_product::where("coupon_code_id",$coupon_id)->delete();
+
+            if($all_product_id)
+            {
+                $get_all_product = Tbl_ec_product::variant()->where("eprod_shop_id",$shop_id)->where("tbl_ec_product.archived",0)->get();
+
+                foreach ($get_all_product as $key => $value) 
+                {
+                    $ins_product["coupon_code_id"] = $coupon_id;
+                    $ins_product["coupon_code_product_id"] = $value->evariant_id;
+
+                    Tbl_coupon_code_product::insert($ins_product);
+                }
+            }
+            else
+            {
+                foreach ($coupon_product_id as $key => $value) 
+                {
+                    if($value > 0)
+                    {
+                        $ins_product["coupon_code_id"] = $coupon_id;
+                        $ins_product["coupon_code_product_id"] = $value;
+
+                        Tbl_coupon_code_product::insert($ins_product);                           
+                    }                 
+                }
+
+            }
 
             $message["status"]         = "success";
             $message["status_message"] = "Successfully generate a coupon code.";
@@ -768,6 +823,8 @@ class Cart
         
         $data['load_wallet']['ec_order_load']        = isset($customer_information['load_wallet']['ec_order_load']) == true ? $customer_information['load_wallet']['ec_order_load'] : 0 ;
         $data['load_wallet']['ec_order_load_number'] = isset($customer_information['load_wallet']['ec_order_load_number']) == true ? $customer_information['load_wallet']['ec_order_load_number'] : 0;
+
+        $data['tbl_ec_order']['coupon_id'] = isset($customer_information['coupon_id']) != null ? $customer_information['coupon_id'] : null ;
         
         /* CURRENT LOGGED IN */
         if (isset($customer_information["current_user"])) 
@@ -872,6 +929,25 @@ class Cart
 
         return $message;
     }
+    public static function get_coupon_discount($coupon_code_id, $total_amount_purchase = 0)
+    {
+        $total_coupon_discount = 0;
+        $check          = Tbl_coupon_code::where("coupon_code_id",$coupon_code_id)->first();
+        if($check)
+        {
+            $coupon_type = $check->coupon_discounted;
+            if($check->coupon_discounted == "fixed")
+            {
+                $total_coupon_discount = $check->coupon_code_amount;
+            }
+            else if($check->coupon_discounted == "percentage")
+            {
+                $total_coupon_discount = $total_amount_purchase * ($check->coupon_code_amount/100);
+            }             
+        }
+
+        return $total_coupon_discount;
+    }
     public static function customer_update_method_a($shop_id, $customer_info)
     {
         if(isset($customer_info['method_id']))
@@ -884,7 +960,7 @@ class Cart
         $data["tbl_ec_order"]["ec_order_id"] = Tbl_ec_order::max("ec_order_id") + 1;
 
         /* PAYMENT METHOD ID */
-        $payment_method_id = (isset($customer_information["method_id"]) ? $customer_information["method_id"] : (isset($data["method_id"]) ? $data["method_id"] : null));;
+        $payment_method_id = (isset($customer_information["method_id"]) ? $customer_information["method_id"] : (isset($data["method_id"]) ? $data["method_id"] : null));
 
 
 
@@ -912,8 +988,34 @@ class Cart
         $data["tbl_ec_order"]["customer_id"] = $data["tbl_customer"]["customer_id"];
         $data["tbl_ec_order"]["customer_email"] = $data["tbl_customer"]["email"];
         $data["tbl_ec_order"]["billing_address"] = $data["tbl_customer_address"]["shipping"]["customer_street"] . ", " . $data["tbl_customer_address"]["shipping"]["customer_zip_code"] . ", " . $data["tbl_customer_address"]["shipping"]["customer_city"] . ", " . $data["tbl_customer_address"]["shipping"]["customer_state"];
-        $data["tbl_ec_order"]["discount_coupon_amount"] = null;
-        $data["tbl_ec_order"]["discount_coupon_type"] = null;
+
+        //arcy_coupon
+        $data["tbl_ec_order"]["coupon_id"] = (isset($customer_information["coupon_id"]) ? $customer_information["coupon_id"] : (isset($data["tbl_ec_order"]["coupon_id"]) ? $data["tbl_ec_order"]["coupon_id"] : null));
+
+        /* APPLY COUPON DISCOUNT */
+        $total_coupon_discount = null;
+        $coupon_type = null;
+        if($data["tbl_ec_order"]["coupon_id"])
+        {
+            $coupon_code_id = $data["tbl_ec_order"]["coupon_id"];
+            $check          = Tbl_coupon_code::where("coupon_code_id",$coupon_code_id)->where("used",0)->where("blocked",0)->first();
+            if($check)
+            {
+                $coupon_type = $check->coupon_discounted;
+                if($check->coupon_discounted == "fixed")
+                {
+                    $total_coupon_discount = $check->coupon_code_amount;
+                }
+                else if($check->coupon_discounted == "percentage")
+                {
+                    $total_coupon_discount = $subtotal * ($check->coupon_code_amount/100);
+                }             
+            }
+        }
+        /* CHECK IF TOTAL PRICE IS NEGATIVE */
+
+        $data["tbl_ec_order"]["discount_coupon_amount"] = $total_coupon_discount;
+        $data["tbl_ec_order"]["discount_coupon_type"] = $coupon_type;
         $data["tbl_ec_order"]["subtotal"] = $subtotal;
         $data["tbl_ec_order"]["shipping_fee"] = $shipping_fee;
 
@@ -944,13 +1046,15 @@ class Cart
         $data['tbl_ec_order']['ec_order_load_number'] = isset($data['load_wallet']['ec_order_load_number']) == true ? $data['load_wallet']['ec_order_load_number'] : 0 ;
         $data["tbl_ec_order"]["service_fee"] = $service_fee;
         $data["tbl_ec_order"]["total"] = $total;
-        $data["tbl_ec_order"]["coupon_id"] = null;
+        $data["tbl_ec_order"]["coupon_id"] = (isset($customer_information["coupon_id"]) ? $customer_information["coupon_id"] : (isset($data["tbl_ec_order"]["coupon_id"]) ? $data["tbl_ec_order"]["coupon_id"] : null));
         $data["tbl_ec_order"]["shop_id"] = $shop_id;
         $data["tbl_ec_order"]["created_date"] = Carbon::now();
         $data["tbl_ec_order"]["payment_method_id"] = $payment_method_id;
         $data["tbl_ec_order"]["shipping_group"] = null;
         $data["tbl_ec_order"]["order_status"] = "Pending";
         $data["tbl_ec_order"]["payment_status"] = 0;
+
+        $data["applied_coupon_id"] = (isset($customer_information["coupon_id"]) ? $customer_information["coupon_id"] : (isset($data["tbl_ec_order"]["coupon_id"]) ? $data["tbl_ec_order"]["coupon_id"] : null));    
         return $data;
     }
     public static function get_method_information($shop_id, $payment_method_id)
@@ -1241,7 +1345,7 @@ class Cart
             $data["refNo"] = $shop_id . time();
         }
         
-        $data["amount"] = $data["tbl_ec_order"]["total"];
+        $data["amount"] = $data["tbl_ec_order"]["total"] - Cart::get_coupon_discount($data["tbl_ec_order"]["coupon_id"], $data["tbl_ec_order"]["total"]);
 
         /* REASTRUCTURE */
         $product_summary = array();

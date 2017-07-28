@@ -43,7 +43,7 @@ class Tbl_payroll_employee_salary extends Model
 			$date = date('Y-m-d');
 		}
 
-		$query->where('payroll_employee_id', $payroll_employee_id)->where('payroll_employee_salary_effective_date','<=', $date);
+		$query->where('payroll_employee_id', $payroll_employee_id)->where('payroll_employee_salary_effective_date','<=', $date)->orderBy('payroll_employee_salary_id', 'desc');
 		return $query;
 	}
 

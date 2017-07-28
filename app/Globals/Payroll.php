@@ -51,7 +51,6 @@ use DB;
 
 class Payroll
 {
-
 	public static function tax_reference($shop_id = 0)
 	{
 		$count = Tbl_payroll_copy_log_requirements::where('shop_id',$shop_id)->where('requirements_category','tax')->count();

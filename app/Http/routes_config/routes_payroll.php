@@ -68,6 +68,9 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::post('/company_timesheet_day_summary/change','Member\PayrollTimeSheet2Controller@day_summary_change');
 	Route::any('/company_timesheet_day_summary/{time_sheet_id}','Member\PayrollTimeSheet2Controller@day_summary');
 	
+	/* CUSTOM SHIFT */
+	Route::any('/company_timesheet_custom_shift','Member\PayrollTimeSheet2Controller@custom_shift');
+	Route::post('/company_timesheet_custom_shift_update','Member\PayrollTimeSheet2Controller@custom_shift_update');
 	
 
 	Route::any('/employee_timesheet/timesheet/{id}/{period_id}','Member\PayrollTimeSheetController@timesheet');

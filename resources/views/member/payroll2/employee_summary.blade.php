@@ -83,7 +83,7 @@
 @endsection
 
 @section('script')
-<script type="text/javascript" src="/assets/member/payroll/js/timesheet_employee_list.js"></script>
+<script type="text/javascript" src="/assets/member/payroll/js/timesheet_employee_list.js?v=2.0"></script>
 <script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.plugin.min.js"></script>
 <script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.min.js"></script>
 @endsection

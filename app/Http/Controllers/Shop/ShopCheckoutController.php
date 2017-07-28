@@ -77,7 +77,7 @@ class ShopCheckoutController extends Shop
                     {
                         $payment_status = 1;
                         $order_status   = "Processing";
-                        $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, $customer_id);
+                        $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, $customer_id, 1, is_serialized($temp->cart) ? unserialize($temp->cart) : null);
                         
                         $ipay88_logs["order_id"] = $order_id;
                         DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
@@ -166,7 +166,7 @@ class ShopCheckoutController extends Shop
                     {
                         $payment_status = 1;
                         $order_status   = "Processing";
-                        $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, $customer_id);
+                        $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, $customer_id, 1, is_serialized($temp->cart) ? unserialize($temp->cart) : null);
                         
                         $ipay88_logs["order_id"] = $order_id;
                         DB::table("tbl_ipay88_logs")->insert($ipay88_logs);

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTblCouponCodeProduct34234 extends Migration
+class UpdateTblIpay88LogsCart extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +12,8 @@ class CreateTblCouponCodeProduct34234 extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_coupon_code_product', function (Blueprint $table) {
-            $table->increments('cc_id');
-            $table->integer("coupon_code_id");
-            $table->integer("coupon_code_product_id");
+        Schema::table('tbl_ipay88_temp', function (Blueprint $table) {
+            $table->binary("cart");
         });
     }
 
@@ -26,6 +24,6 @@ class CreateTblCouponCodeProduct34234 extends Migration
      */
     public function down()
     {
-        Schema::drop('tvl_coupon_code_product');
+        //
     }
 }

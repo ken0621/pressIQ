@@ -8,6 +8,14 @@
 </div>
 
 
+@if($time_keeping_approved == false)
+<div class="modal-header text-right">
+    <button class="btn btn-def-white btn-custom-white" data-dismiss="modal">CLOSE</button>
+    <button class="btn btn-def-white btn-custom-white">MAKE ADJUSTMENT</button>
+    <button class="btn btn-primary approve-timesheet-btn">MARK READY</button>
+</div>
+@endif
+
 <div class="modal-body clearfix">
     <div class="text-center text-bold" style="font-size: 20px; color: #1682ba">SALARY COMPUTATION</div>
     <div class="col-md-12" style="text-align: left; font-weight: normal; margin-bottom: 10px; font-size: 16px;"></div>
@@ -179,15 +187,41 @@
     </div>
 </div>
 
+<div class="modal-body clearfix">
+    <div class="text-center text-bold" style="font-size: 20px; color: #1682ba">PERFORMANCE SUMMARY</div>
+    <div class="col-md-12" style="text-align: left; font-weight: normal; margin-bottom: 10px; font-size: 16px;"></div>
+    <div class="clearfix">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-condensed timesheet table-timesheet">
+                    <thead style="text-transform: uppercase">
+                        <tr>
+                            <th class="text-right"></th>
+                            <th class="text-center" width="100px">TOTAL TIME</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($cutoff_breakdown->_time_breakdown as $key => $time)
+                        <tr>
+                            <td class="text-right text-bold">{{ code_to_word($key) }}</td>
+                            <td class="text-center ">{{ $time["time"] }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
+
+@if($time_keeping_approved == false)
 <div class="modal-footer text-right">
     <button class="btn btn-def-white btn-custom-white" data-dismiss="modal">CLOSE</button>
-    @if($time_keeping_approved == false)
-        <button class="btn btn-primary approve-timesheet-btn">MARK READY</button>
-    @else
-        <button class="btn btn-primary">MAKE ADJUSTMENT</button>
-    @endif
+    <button class="btn btn-def-white btn-custom-white">MAKE ADJUSTMENT</button>
+    <button class="btn btn-primary approve-timesheet-btn">MARK READY</button>
 </div>
+@endif
 
 <script type="text/javascript" src="/assets/member/payroll/js/timesheet_income_summary.js"></script>
 

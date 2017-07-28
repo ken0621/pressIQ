@@ -274,9 +274,9 @@
                      <a href="/product" class="footer-text link">
                      Products
                      </a>
-                   <!--   <a href="/term" class="footer-text link">
+                     <a href="/term" class="footer-text link">
                      Terms and Agreement
-                     </a> -->
+                     </a>
                   </div>
                </div>
                <div class="footer-holder col-md-3 col-sm-6">

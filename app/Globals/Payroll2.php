@@ -2369,6 +2369,7 @@ class Payroll2
 		}
 
 		$return = Payroll2::cutoff_breakdown_additions($return, $data);
+		$return = Payroll2::cutoff_breakdown_cola($return, $data);
 		$return = Payroll2::cutoff_breakdown_deductions($return, $data); //meron bang non-taxable deduction?? lol
 		$return = Payroll2::cutoff_breakdown_taxable_allowances($return, $data);
 		$return = Payroll2::cutoff_breakdown_non_taxable_allowances($return, $data);
@@ -3200,6 +3201,28 @@ class Payroll2
 				$val = null;
 			}
 		}
+
+		return $return;
+	}
+	public static function cutoff_breakdown_cola($return, $data)
+	{
+		$total_cola = 0;
+		foreach($data["cutoff_input"] as $cutoff_input)
+		{
+			$total_cola += $cutoff_input->compute->cola;
+		}
+
+		$val["label"] = "COLA";
+		$val["type"] = "additions";
+		$val["amount"] = $total_cola;
+		$val["add.gross_pay"] = true;
+		$val["deduct.gross_pay"] = false;
+		$val["add.taxable_salary"] = false;
+		$val["deduct.taxable_salary"] = false;
+		$val["add.net_pay"] = false;
+		$val["deduct.net_pay"] = false;
+		array_push($return->_breakdown, $val);
+		$val = null;
 
 		return $return;
 	}

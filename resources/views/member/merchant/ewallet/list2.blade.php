@@ -13,9 +13,33 @@
 				<tr>
 					<td>{{$value->merchant_ewallet_id}}</td>
 					<td>{{$value->merchant_ewallet_request_date}}</td>
-					<td>{{$value->merchant_ewallet_amount}}</td>
+					<td>{{currency('PHP', $value->merchant_ewallet_amount)}}</td>
 					<td>
 						<a onclick="view_link('/member/merchant/ewallet/list?user_id={{$user->user_id}}&find={{$headers}}&merchant_ewallet_id={{$value->merchant_ewallet_id}}')">Breakdown</a>
+						@if($value->merchant_ewallet_status == 'Requested')
+							@if($user2->user_is_merchant == 0)
+							<hr>
+							<a onclick="view_link('/member/merchant/ewallet/request/update?user_id={{$user->user_id}}&find={{$headers}}&merchant_ewallet_id={{$value->merchant_ewallet_id}}')">Mark as paid</a>
+							@endif
+						@endif
+
+						@if($value->merchant_ewallet_status == 'Paid')
+							<hr>
+							<a onclick="view_link('/member/merchant/ewallet/request/update?user_id={{$user->user_id}}&find={{$headers}}&merchant_ewallet_id={{$value->merchant_ewallet_id}}&mode=2')">View Details</a>
+							@if($user2->user_is_merchant == 1)
+							<hr>
+							<a onclick="view_link('/member/merchant/ewallet/request/update?user_id={{$user->user_id}}&find={{$headers}}&merchant_ewallet_id={{$value->merchant_ewallet_id}}&mode=2&mode_a=2')">Complete/Deny</a>
+							@endif
+						@endif
+						@if($value->merchant_ewallet_status == 'Completed')
+							<hr>
+							<a onclick="view_link('/member/merchant/ewallet/request/update?user_id={{$user->user_id}}&find={{$headers}}&merchant_ewallet_id={{$value->merchant_ewallet_id}}&mode=3')">View Details</a>
+						@endif
+						@if($value->merchant_ewallet_status == 'Denied')
+							<hr>
+							<a onclick="view_link('/member/merchant/ewallet/request/update?user_id={{$user->user_id}}&find={{$headers}}&merchant_ewallet_id={{$value->merchant_ewallet_id}}&mode=4')">View Details</a>
+						@endif
+
 					</td>
 				</tr>
 			@endforeach

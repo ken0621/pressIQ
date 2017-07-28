@@ -910,6 +910,8 @@ Route::any('/member/merchant/ewallet/list', 'Member\MerchantewalletController@pa
 Route::any('/member/merchant/ewallet/request', 'Member\MerchantewalletController@request');
 Route::any('/member/merchant/ewallet/request/verfiy', 'Member\MerchantewalletController@verify');
 Route::any('/member/merchant/ewallet/request/verfiy/submit', 'Member\MerchantewalletController@verify_submit');
+Route::any('/member/merchant/ewallet/request/update', 'Member\MerchantewalletController@request_update');
+Route::any('/member/merchant/ewallet/request/update/submit', 'Member\MerchantewalletController@request_update_submit');
 /* End */
 
 /* ECOMMERCE PRODUCT */

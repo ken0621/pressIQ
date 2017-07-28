@@ -12,7 +12,7 @@
     </div>
 </div>
 <div class="all_user_body_get">
-<div class="col-md-6">
+<div class="col-md-4">
     <div class="panel panel-default panel-block panel-title-block clearfix col-md-12" id="top">
         <div class="panel-body" style="overflow-x:auto;">
             <h3>Transaction from E-wallet Recievable</h3>
@@ -26,25 +26,30 @@
                     <td>Requested</td>
                     <td>{{currency('PHP', $Requested)}} </td>
                     <td>
-                        <a>Lists of Requested</a>
+                        <a onClick="view_link('/member/merchant/ewallet/list?user_id={{$user_id}}&find=Requested&list=2')">Lists of Requested</a>
                         <hr><a onClick="view_link('/member/merchant/ewallet/request?user_id={{$user_id}}')">Request For Collection</a>
                     </td>
                 </tr>
                 <tr>
                     <td>Paid</td>
-                    <td>PHP 0.00</td>
-                    <td><a>Lists of Paid</a></td>
+                    <td>{{currency('PHP', $Paid)}} </td>
+                    <td><a onClick="view_link('/member/merchant/ewallet/list?user_id={{$user_id}}&find=Paid&list=2')">Lists of Paid</a></td>
                 </tr>
                 <tr>
-                    <td>Collected</td>
-                    <td>PHP 0.00</td>
-                    <td><a>Lists of Collected</a></td>
+                    <td>Denied</td>
+                    <td>{{$Denied}} Transaction </td>
+                    <td><a onClick="view_link('/member/merchant/ewallet/list?user_id={{$user_id}}&find=Denied&list=2')">Lists of Denied</a></td>
+                </tr>
+                <tr>
+                    <td>Completed</td>
+                    <td>{{currency('PHP', $Completed)}} </td>
+                    <td><a onClick="view_link('/member/merchant/ewallet/list?user_id={{$user_id}}&find=Completed&list=2')">Lists of Completed</a></td>
                 </tr>
             </table>
         </div>
     </div> 
 </div>
-<div class="col-md-6 hide div_get_details">
+<div class="col-md-8 hide div_get_details">
     <div class="panel panel-default panel-block panel-title-block clearfix col-md-12" id="top">
         <div class="panel-body">
             <div class="div_get_details_body" style="overflow-x:auto;">

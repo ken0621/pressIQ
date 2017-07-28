@@ -40,6 +40,11 @@
                             <span style="color:gray"><small>E-wallet Transaction</small></span>
                         </th>
                         <th>
+                            Denied
+                            <br>
+                            <span style="color:gray"><small>E-wallet Transaction</small></span>
+                        </th>
+                        <th>
                             Completed
                             <br>
                             <span style="color:gray"><small>E-wallet Transaction</small></span>
@@ -63,8 +68,21 @@
                                     <hr>
                                     <a onclick="view_link('/member/merchant/ewallet/list?user_id={{$value->user_id}}&find=Requested&list=2')">View List</a>
                                 </td>
-                                <td></td>
-                                <td></td>
+                                <td>
+                                    {{currency('PHP', $value->Paid)}}
+                                    <hr>
+                                    <a onclick="view_link('/member/merchant/ewallet/list?user_id={{$value->user_id}}&find=Paid&list=2')">View List</a>
+                                </td>
+                                <td>
+                                    {{$value->Denied}} Transaction/s
+                                    <hr>
+                                    <a onclick="view_link('/member/merchant/ewallet/list?user_id={{$value->user_id}}&find=Denied&list=2')">View List</a>
+                                </td>
+                                <td>
+                                    {{currency('PHP', $value->Completed)}}
+                                    <hr>
+                                    <a onclick="view_link('/member/merchant/ewallet/list?user_id={{$value->user_id}}&find=Completed&list=2')">View List</a>
+                                </td>
                             </tr>
                         @endforeach
                     @else

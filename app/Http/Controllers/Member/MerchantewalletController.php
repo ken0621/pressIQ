@@ -78,6 +78,9 @@ class MerchantewalletController extends Member
 		$data['user_id'] 	= $user_id; 
 		$data['recievable'] = $this->get_all_payable($user_id,'payable','sum'); 
 		$data['Requested'] 	= $this->get_all_payable($user_id,'Requested','sum'); 
+		$data['Paid'] 	= $this->get_all_payable($user_id,'Paid','sum'); 
+		$data['Completed'] 	= $this->get_all_payable($user_id,'Completed','sum'); 
+		$data['Denied'] 	= $this->get_all_payable($user_id,'Denied','count'); 
 
 		return view('member.merchant.ewallet.merchant', $data);
 	}
@@ -90,18 +93,80 @@ class MerchantewalletController extends Member
         $data['user'] = Tbl_user::where('user_id', $user_id)->first();
         if($list == 2)
         {
+        	$data['user2'] = $this->user_info;
         	$data['headers'] = $find;
-        	$data['r_list'] = Tbl_merchant_ewallet::where('merchant_ewallet_status', $find)->get();
+        	$data['r_list'] = Tbl_merchant_ewallet::where('merchant_ewallet_status', $find)->where('merchant_ewallet_user_request', $user_id)->get();
         	return view('member.merchant.ewallet.list2', $data);
         }
         $merchant_ewallet_id = Request::input('merchant_ewallet_id');
         if($merchant_ewallet_id)
         {
-        	$data['back'] = 
+        	$data['back'] = '/member/merchant/ewallet/list?user_id='.$user_id.'&find='.$find.'&list=2';
         }
 		$data['headers'] = $this->headers($find);
 		$data['payable'] = $this->get_all_payable($user_id, $find, 'get');
 		return view('member.merchant.ewallet.list', $data);
+	}
+	public function request_update()
+	{
+
+		$data = [];
+
+		$merchant_ewallet_id = Request::input('merchant_ewallet_id');
+		$find = Request::input('find');
+		$user_id = Request::input('user_id');
+
+		// $data['back'] = null;
+		$data['user'] = $this->user_info;
+		$data['user_a'] = Tbl_user::where('user_id', $user_id)->first();
+		$data['merchant_ewallet'] = Tbl_merchant_ewallet::where('merchant_ewallet_id', $merchant_ewallet_id)->first();
+		$data['mode'] = Request::input('mode');
+		$data['mode_a'] = Request::input('mode_a');
+		return view('member.merchant.ewallet.request_paid', $data);
+	}
+	public function request_update_submit(Request2 $request)
+	{
+		$proof 	= null;
+		$update = [];
+		if($request->hasFile('merchant_ewallet_request_proof'))
+		{ 
+			$avatar 			= $request->file('merchant_ewallet_request_proof'); 
+			$shop_id 			= $this->user_info->shop_id;
+			$shop_key 			= $this->user_info->shop_key;
+			$destinationPath 	= 'uploads/'.$shop_key."-".$shop_id;
+			if(!File::exists($destinationPath)) 
+			{
+				$create_result 	= File::makeDirectory(public_path($destinationPath), 0775, true, true);
+			}
+			$filename 			= time() . '.' . $avatar->getClientOriginalExtension(); Image::make($avatar)->save( $destinationPath .'/' . $filename); 
+
+			$proof 				= '/' . $destinationPath.'/'.$filename;
+		} 
+		$merchant_ewallet_id = Request::input('merchant_ewallet_id');
+
+		$merchant_ewallet_status 			= Request::input('merchant_ewallet_status');
+		$merchant_ewallet_request_remarks 	= Request::input('merchant_ewallet_request_remarks');
+		$merchant_ewallet_remarks 			= Request::input('merchant_ewallet_remarks');
+		if($merchant_ewallet_status 			!= null)
+		{ 
+			$update['merchant_ewallet_status'] 			= $merchant_ewallet_status; 
+			if($merchant_ewallet_status == 'Completed'){ $update['merchant_ewallet_approve_date'] = Carbon::now(); }
+			if($merchant_ewallet_status == 'Denied')
+			{ 
+
+				$update['merchant_ewallet_deny_date'] = Carbon::now();
+				$update_invioce['merchant_ewallet_id'] = 0;
+				Tbl_item_code_invoice::where('merchant_ewallet_id', $merchant_ewallet_id)->update($update_invioce);
+			}
+		}
+		if($merchant_ewallet_request_remarks 	!= null){ $update['merchant_ewallet_request_remarks'] 	= $merchant_ewallet_request_remarks; }
+		if($merchant_ewallet_remarks 			!= null){ $update['merchant_ewallet_remarks'] 			= $merchant_ewallet_remarks; }
+		if($proof != null){ $update['merchant_ewallet_request_proof'] = $proof; }
+		
+
+		Tbl_merchant_ewallet::where('merchant_ewallet_id', $merchant_ewallet_id)->update($update);
+
+		return Redirect::back();
 	}
 	public function headers($find)
 	{
@@ -164,6 +229,9 @@ class MerchantewalletController extends Member
 		{
 			$merchant[$key]->payable 	= $this->get_all_payable($value->user_id, 'payable', 'sum');
 			$merchant[$key]->Requested 	= $this->get_all_payable($value->user_id, 'Requested', 'sum');
+			$merchant[$key]->Paid 	= $this->get_all_payable($value->user_id, 'Paid', 'sum');
+			$merchant[$key]->Completed 	= $this->get_all_payable($value->user_id, 'Completed', 'sum');
+			$merchant[$key]->Denied 	= $this->get_all_payable($value->user_id, 'Denied', 'count');
 		}
 
 		return $merchant;
@@ -200,8 +268,16 @@ class MerchantewalletController extends Member
 
 		if($get == 'sum')
 		{
+			$deduct = $payable->sum('merchant_markup_value');
 			$payable = $payable->sum('item_total');	
+
+			$payable = $payable - $deduct;
 			return $payable;
+		}
+		if($get =='count')
+		{
+			$count = Tbl_merchant_ewallet::where('merchant_ewallet_status', $status)->where('merchant_ewallet_user_request', $user_id)->count();
+			return $count;
 		}
 
 		$payable = $payable->get();	

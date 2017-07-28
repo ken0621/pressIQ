@@ -12,6 +12,10 @@ function timesheet()
 	{
 		event_time_entry();
 	}
+	this.external_reload_rate_for_date = function(tr_date)
+	{
+		action_reload_rate_for_date_start(tr_date);
+	}
 
 	function init()
 	{

@@ -165,19 +165,23 @@ class PayrollTimeSheet2Controller extends Member
 		/* INSERT NEW TIME SHEET RECORD */
 		$insert = null;
 		
-		foreach(Request::input("time-in") as $key => $time_in)
+
+		if(Request::input("time-in"))
 		{
-			$time_out = Request::input("time-out")[$key];
-			$remarks = Request::input("remarks")[$key];
-			
-			if($time_in != "" || $time_out != "")
+			foreach(Request::input("time-in") as $key => $time_in)
 			{
-				$insert[$key]["payroll_time_sheet_id"] = $timesheet_db->payroll_time_sheet_id;
-				$insert[$key]["payroll_company_id"] = $period->payroll_company_id;
-				$insert[$key]["payroll_time_sheet_in"] = date("H:i:s", strtotime($time_in));
-				$insert[$key]["payroll_time_sheet_out"] = date("H:i:s ", strtotime($time_out));
-				$insert[$key]["payroll_time_shee_activity"] = $remarks;
-				$insert[$key]["payroll_time_sheet_origin"] = "Manually Encoded";
+				$time_out = Request::input("time-out")[$key];
+				$remarks = Request::input("remarks")[$key];
+				
+				if($time_in != "" || $time_out != "")
+				{
+					$insert[$key]["payroll_time_sheet_id"] = $timesheet_db->payroll_time_sheet_id;
+					$insert[$key]["payroll_company_id"] = $period->payroll_company_id;
+					$insert[$key]["payroll_time_sheet_in"] = date("H:i:s", strtotime($time_in));
+					$insert[$key]["payroll_time_sheet_out"] = date("H:i:s ", strtotime($time_out));
+					$insert[$key]["payroll_time_shee_activity"] = $remarks;
+					$insert[$key]["payroll_time_sheet_origin"] = "Manually Encoded";
+				}
 			}
 		}
 		
@@ -891,8 +895,10 @@ class PayrollTimeSheet2Controller extends Member
 		Tbl_payroll_time_sheet::where("payroll_time_sheet_id", $timesheet_id)->update($update_sheet);
 
 
+		$timesheet_info = $this->timesheet_info_db_by_id($timesheet_id);
 		$return['function_name'] = 'custom_shift_success';
 		$return['payroll_time_sheet_id'] = $timesheet_id;
+		$return['sheet_date'] = $timesheet_info->payroll_time_date;
 		$return['status']        = 'success';
 		return collect($return)->toJson();
 

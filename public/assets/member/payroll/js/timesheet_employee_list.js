@@ -115,5 +115,6 @@ function submit_done(data)
 	{
 		$(".multiple_global_modal").modal("hide");
 		$(".timesheet-of-employee").find(".tr-parent[timesheet_id='" + data.payroll_time_sheet_id + "']").find(".custom-shift-checkbox").text("CUSTOM");
+		timesheet.external_reload_rate_for_date(data.sheet_date);
 	}
 }

@@ -6,6 +6,7 @@ use stdClass;
 use Redirect;
 use Carbon\Carbon;
 
+use DateTime;
 use App\Http\Controllers\Controller;
 use App\Models\Tbl_payroll_period_company;
 use App\Models\Tbl_payroll_employee_contract;
@@ -20,6 +21,8 @@ use App\Models\Tbl_payroll_shift_day;
 use App\Models\Tbl_payroll_holiday_company;
 use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_shift_code;
+use App\Models\Tbl_payroll_shift_time;
+
 use App\Globals\Payroll2;
 use App\Globals\Payroll;
 use App\Globals\PayrollLeave;
@@ -144,8 +147,6 @@ class PayrollTimeSheet2Controller extends Member
 	}
 	public function time_change($period_id, $employee_id)
 	{
-		ignore_user_abort(false);
-		set_time_limit(10);
 		$data["period"] = $period = $this->db_get_company_period_information($period_id);
 		$data["request"] = Request::input();
 
@@ -229,11 +230,21 @@ class PayrollTimeSheet2Controller extends Member
 		$from = $data["start_date"] = $company_period->payroll_period_start;
 		$to = $data["end_date"] = $company_period->payroll_period_end;
 		$payroll_period_company_id = $company_period->payroll_period_company_id;
-
+		$shift_code_id = Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->pluck("shift_code_id");
 		while($from <= $to)
 		{
 			$timesheet_db = $this->timesheet_info_db($employee_id, $from);
-			$_shift =  $this->shift_raw($this->db_get_shift_of_employee($employee_id, $from));
+
+			if($timesheet_db->custom_shift == 1)
+			{
+				$_shift =  $this->shift_raw($this->db_get_shift_of_employee_by_code($timesheet_db->custom_shift_id, $from));
+			}
+			else
+			{
+				$_shift =  $this->shift_raw($this->db_get_shift_of_employee_by_code($shift_code_id, $from));
+			}
+
+			
 
 			
 			/* CREATE TIMESHEET DB IF EMPTY */
@@ -260,7 +271,8 @@ class PayrollTimeSheet2Controller extends Member
 			
 			$_timesheet[$from] = new stdClass();
 			$_timesheet[$from]->payroll_time_sheet_id = $timesheet_db->payroll_time_sheet_id;
-
+			$_timesheet[$from]->custom_shift = $timesheet_db->custom_shift;
+			$_timesheet[$from]->custom_shift_id = $timesheet_db->custom_shift_id;
 			$_timesheet[$from]->date = Carbon::parse($from)->format("Y-m-d");
 			$_timesheet[$from]->day_number = Carbon::parse($from)->format("d");
 			$_timesheet[$from]->day_word = Carbon::parse($from)->format("D");
@@ -311,7 +323,7 @@ class PayrollTimeSheet2Controller extends Member
 				$_record = $this->db_get_time_sheet_record_of_in_and_out($timesheet_db->payroll_time_sheet_id);
 			}
 
-			$return = $this->timesheet_process_daily_info_record($employee_id, $date, $approved, $_record, $timesheet_db->payroll_time_sheet_id, $payroll_period_company_id, $timesheet_db->time_keeping_approved);
+			$return = $this->timesheet_process_daily_info_record($employee_id, $date, $approved, $_record, $timesheet_db->payroll_time_sheet_id, $payroll_period_company_id, $timesheet_db->time_keeping_approved,  $timesheet_db->custom_shift,  $timesheet_db->custom_shift_id);
 		
 
 			$return->source = "";
@@ -332,14 +344,25 @@ class PayrollTimeSheet2Controller extends Member
 	{
 		dd($message);
 	}
-	public function timesheet_process_daily_info_record($employee_id, $date, $approved, $_time, $payroll_time_sheet_id, $payroll_period_company_id, $time_keeping_approved)
+	public function timesheet_process_daily_info_record($employee_id, $date, $approved, $_time, $payroll_time_sheet_id, $payroll_period_company_id, $time_keeping_approved, $custom_shift, $custom_shift_id)
 	{
 
 		$return = new stdClass();
 		$return->for_approval	= ($approved == true ? 0 : 1);
 		$return->daily_salary	= 0;
 		$employee_contract		= $this->db_get_current_employee_contract($employee_id, $date);
-		$_shift 				= $this->db_get_shift_of_employee($employee_id, $date);
+		$shift_code_id 			= Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->pluck("shift_code_id");
+
+		if($custom_shift == 1)
+		{
+			$_shift =  $this->db_get_shift_of_employee_by_code($custom_shift_id, $date);
+		}
+		else
+		{
+			$_shift =  $this->db_get_shift_of_employee_by_code($shift_code_id, $date);
+		}
+
+
 		$_shift_raw 			= $this->shift_raw($_shift);
 		$_time_raw				= $this->time_raw($_time);
 		$mode					= "daily";
@@ -768,6 +791,115 @@ class PayrollTimeSheet2Controller extends Member
 	{
 		return view("member.payroll2.employee_income_summary_flat", $data);
 	}
+
+	public function custom_shift()
+	{
+		$data = Request::input();
+
+		
+		$employee_id = $data["employee_id"];
+		$date = $data["date"];
+		$period_company_id = $data["period_id"];
+		$timesheet_id = $data["timesheet_id"];
+
+		$data["timesheet_db"] = $timesheet_db = $this->timesheet_info_db_by_id($timesheet_id);
+		$data["employee_info"] = $employee_info = $this->db_get_employee_information($employee_id);
+		
+		$shift_code_id = $employee_info->shift_code_id;
+
+		if($timesheet_db->custom_shift == 1)
+		{
+			$shift_code_id = $timesheet_db->custom_shift_id;
+		}
+
+	    $data['shift_code'] = Tbl_payroll_shift_code::where('shift_code_id', $shift_code_id)->first();
+	    $_day = Tbl_payroll_shift_day::where('shift_code_id', $shift_code_id)->get();
+
+		foreach($_day as $key => $day)
+		{
+			if($day->shift_day == date("D", strtotime($date)))
+			{
+				$data["_day"][$key] = $day;
+				$data["_day"][$key]->time_shift = Tbl_payroll_shift_time::where("shift_day_id", $day->shift_day_id)->get();
+			}
+
+		}
+
+		return view("member.payroll2.custom_shift", $data);
+	}
+	public function custom_shift_update()
+	{
+		$timesheet_id = Request::input("timesheet_id");
+
+		/* CREATE NEW SHIFT CODE FOR CUSTOM SHIFT */
+		$insert_code["shift_code_name"] = "Custom Shift";
+		$insert_code["shift_archived"] = 2;
+		$insert_code["shop_id"] = $this->user_info->shop_id;
+		$shift_code_id = Tbl_payroll_shift_code::insertGetId($insert_code);
+
+		/* CHECK EXIST */
+		$shift_code = Tbl_payroll_shift_code::where("shop_id", $this->user_info->shop_id)->where("shift_code_id", $shift_code_id)->first();
+
+		if($shift_code)
+		{
+		   $insert_shift = array();
+
+		   /* INSERT DAY */
+		   $key = 0;
+		   $tc = 0;
+
+		   Tbl_payroll_shift_day::where("shift_code_id", $shift_code_id)->delete();
+
+		   foreach(Request::input("day") as $day)
+		   {
+		        /* INSERT SHIFT DAY */
+		        $insert_day["shift_day"] = $day;
+		        $insert_day["shift_code_id"] = $shift_code_id;
+		        $insert_day["shift_target_hours"] = Request::input("target_hours")[$day];
+		        $insert_day["shift_rest_day"] = Request::input("rest_day_" . $day) == 1 ? 1 : 0;
+		        $insert_day["shift_extra_day"] = Request::input("extra_day_" . $day) == 1 ? 1 : 0;
+		        $insert_day["shift_flexi_time"] = Request::input("flexitime_day_" . $day) == 1 ? 1 : 0;
+
+		        $key++;
+
+		        $shift_day_id = Tbl_payroll_shift_day::insertGetId($insert_day);
+
+		        /* INSERT SHIFT TIME */
+		        foreach(Request::input("work_start")[$day] as $k => $time)
+		        {
+		             if($time != "") //MAKE SURE TIME IS NOT BLANK
+		             {
+		                  $insert_time[$tc]["shift_day_id"] = $shift_day_id;
+		                  $insert_time[$tc]["shift_work_start"] = DateTime::createFromFormat( 'H:i A', $time);
+		                  $insert_time[$tc]["shift_work_end"] = DateTime::createFromFormat( 'H:i A', Request::input("work_end")[$day][$k]);
+		                  $tc++;
+		             }
+		        }
+
+		        if(isset($insert_time))
+		        {
+		             Tbl_payroll_shift_time::insert($insert_time);
+		             $insert_time = null;
+		        }   
+		   }
+
+		}
+
+		/* UPDATE TIMESHEET CUSTOM MODE */
+		$update_sheet["custom_shift"] = 1;
+		$update_sheet["custom_shift_id"] = $shift_code_id;
+		Tbl_payroll_time_sheet::where("payroll_time_sheet_id", $timesheet_id)->update($update_sheet);
+
+
+		$return['function_name'] = 'custom_shift_success';
+		$return['payroll_time_sheet_id'] = $timesheet_id;
+		$return['status']        = 'success';
+		return collect($return)->toJson();
+
+		$return["status"] = "success";
+		echo json_encode($return);
+	}
+
 	/* GLOBAL FUNCTION FOR THIS CONTROLLER */
 	public function c_24_hour_format($time)
 	{
@@ -1025,6 +1157,10 @@ class PayrollTimeSheet2Controller extends Member
 	public function db_get_shift_of_employee($employee_id, $date)
 	{
 		return Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->shift()->day()->where("shift_day", date("D", strtotime($date)))->time()->get();
+	}
+	public function db_get_shift_of_employee_by_code($shift_code_id, $date)
+	{
+		return Tbl_payroll_shift_code::where('tbl_payroll_shift_code.shift_code_id', $shift_code_id)->day()->time()->where("shift_day", date("D", strtotime($date)))->get();
 	}
 
 	public function timesheet_info_db($employee_id, $date)

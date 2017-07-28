@@ -107,3 +107,13 @@ function timesheet_employee_list()
 		})
 	}
 }	
+
+
+function submit_done(data)
+{
+	if(data.function_name == "custom_shift_success")
+	{
+		$(".multiple_global_modal").modal("hide");
+		$(".timesheet-of-employee").find(".tr-parent[timesheet_id='" + data.payroll_time_sheet_id + "']").find(".custom-shift-checkbox").text("CUSTOM");
+	}
+}

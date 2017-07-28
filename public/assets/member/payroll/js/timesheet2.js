@@ -3,6 +3,7 @@ var timesheet_request = null;
 var adjust_form_request = null;
 var new_sub_ctr = 1000;
 var timechangerequest = null;
+var timechangerequestdelay = new Array();
 function timesheet()
 {
 	init();
@@ -23,10 +24,23 @@ function timesheet()
 	{
 		event_time_entry();
 		event_create_new_time();
+		event_click_custom_shift_checkbox();
 		event_time_focus_out_recompute();
 		action_click_approve_timesheet();
 	}
 
+	function event_click_custom_shift_checkbox()
+	{
+		$(".custom-shift-checkbox").unbind("click")
+		$(".custom-shift-checkbox").bind("click", function(e)
+		{
+			var timesheet_date = $(e.currentTarget).closest(".tr-parent").attr("date");
+			var employee_id = $(".employee-timesheet-modal .x-employee-id").val();
+			var period_id = $(".employee-timesheet-modal .period-id").val();
+			var timesheet_id = $(e.currentTarget).closest(".tr-parent").attr("timesheet_id");
+			action_load_link_to_modal('/member/payroll/company_timesheet_custom_shift?date=' + timesheet_date + '&employee_id=' + employee_id + '&period_id=' + period_id + '&timesheet_id=' + timesheet_id, 'lg');
+		});
+	}
 	function action_click_approve_timesheet()
 	{
 		$(".approve-timesheet-btn").unbind("click");
@@ -34,8 +48,8 @@ function timesheet()
 		{
 			$(".approve-timesheet-btn").html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
 
-			var period_id = $(".period-id").val();
-			var employee_id = $(".x-employee-id").val();
+			var period_id = $(".employee-timesheet-modal .period-id").val();
+			var employee_id = $(".employee-timesheet-modal .x-employee-id").val();
 			
 			$.ajax({
 				url : "/member/payroll/company_timesheet_approve/approve_timesheet",
@@ -113,19 +127,31 @@ function timesheet()
 		});
 	}
 
-	/* ACTIONS */
 	function action_reload_rate_for_date(tr_date)
+	{
+		clearTimeout(timechangerequestdelay[tr_date]);
+		$target = $(".tr-parent[date='" + tr_date + "']");
+		$target.find(".rate-output").css("opacity", "0.5");
+
+	    timechangerequestdelay[tr_date] = setTimeout(function()
+	    {
+	    	action_reload_rate_for_date_start(tr_date)
+	    }, 1000);
+	}
+
+	/* ACTIONS */
+	function action_reload_rate_for_date_start(tr_date)
 	{
 		$target = $(".tr-parent[date='" + tr_date + "']");
 		$target.find(".rate-output").css("opacity", "0.5");
 		console.log("RELOADING RATE FOR DATE");
 		$input = $(".timesheet-of-employee").find(".tr-parent[date='" + tr_date + "'] :input").serialize();
 		
-		$period_id = $(".period-id").val();
-		$employee_id = $(".x-employee-id").val();
-		
+		$period_id = $(".employee-timesheet-modal .period-id").val();
+		$employee_id = $(".employee-timesheet-modal .x-employee-id").val();
+				
 		$url = "/member/payroll/company_timesheet2/change/" + $period_id + "/" + $employee_id;
-		
+
 		if(timechangerequest)
 		{
 			timechangerequest.abort();
@@ -140,6 +166,7 @@ function timesheet()
 			success: function(data)
 			{
 				console.log("TIME CHANGED SUCESS");
+				$target = $(".tr-parent[date='" + tr_date + "']");
 				$target.find(".rate-output").html(data.string_income).css("opacity", "1");
 			}
 		})

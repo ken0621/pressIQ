@@ -285,6 +285,7 @@ class PayrollTimeSheet2Controller extends Member
 			$_timesheet[$from]->record = $this->timesheet_process_in_out($timesheet_db);
 			$_timesheet[$from]->is_holiday = $this->timesheet_get_is_holiday($employee_id, $from);
 			
+
 			if(isset($_shift_real[0]))
 			{
 				$_timesheet[$from]->day_type = $day_type = $this->timesheet_get_day_type($_shift_real[0]->shift_rest_day, $_shift_real[0]->shift_extra_day);
@@ -293,7 +294,6 @@ class PayrollTimeSheet2Controller extends Member
 			{
 				$_timesheet[$from]->day_type = "regular";
 			}
-			
 			
 			$_timesheet[$from]->default_remarks = $this->timesheet_default_remarks($_timesheet[$from]);
 			$_timesheet[$from]->daily_info = $this->timesheet_process_daily_info($employee_id, $from, $timesheet_db, $payroll_period_company_id);
@@ -460,16 +460,16 @@ class PayrollTimeSheet2Controller extends Member
 		$return->grace_time_rule_late = $grace_time_rule_late = $employee_contract->grace_time_rule_late;
 		$return->overtime_grace_time = $overtime_grace_time = $employee_contract->overtime_grace_time;
 		$return->grace_time_rule_overtime = $grace_time_rule_overtime = $employee_contract->grace_time_rule_overtime;
-
-		if(isset($_shift_real[0]))
+		if(isset($_shift[0]))
 		{
+
 			$return->day_type = $day_type = $this->timesheet_get_day_type($_shift[0]->shift_rest_day, $_shift[0]->shift_extra_day);
 		}
 		else
 		{
 			$return->day_type = $day_type = "regular";
 		}
-		
+
 		$return->is_holiday = $is_holiday = $this->timesheet_get_is_holiday($employee_id, $date);
 		//$return->leave = $leave = $this->timesheet_get_leave_hours($employee_id, $date, $_shift_raw);
 

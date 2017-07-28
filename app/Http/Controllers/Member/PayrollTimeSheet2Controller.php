@@ -573,7 +573,7 @@ class PayrollTimeSheet2Controller extends Member
 		
 		if($data->is_holiday != "not_holiday")
 		{
-			$remarks[] = "HOLIDAY";head
+			$remarks[] = "HOLIDAY";
 		}
 		if($remarks)
 		{

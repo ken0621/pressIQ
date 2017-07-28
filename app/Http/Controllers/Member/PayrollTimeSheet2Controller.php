@@ -635,7 +635,6 @@ class PayrollTimeSheet2Controller extends Member
 	{
 		$data["period_company_id"] = Request::input("period_company_id");
 		$data["timesheet_db"] = $timesheet_db = $this->timesheet_info_db_by_id($timesheet_id);
-		//dd($timesheet_db);
 		$data["payroll_time_sheet_id"] = $timesheet_db->payroll_time_sheet_id;
 		$data["employee_id"] = $employee_id = $timesheet_db->payroll_employee_id;
 		$data["employee_info"] =  $this->db_get_employee_information($timesheet_db->payroll_employee_id); 

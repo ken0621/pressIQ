@@ -237,6 +237,21 @@ class PayrollTimeSheet2Controller extends Member
 		$shift_code_id = Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->pluck("shift_code_id");
 		while($from <= $to)
 		{
+
+			$timesheet_db = $this->timesheet_info_db($employee_id, $from);
+			
+			/* CREATE TIMESHEET DB IF EMPTY */
+			if(!$timesheet_db)
+			{
+				$insert = null;
+				$insert["payroll_employee_id"] = $employee_id;
+				$insert["payroll_time_date"] = $from;
+				$insert["payroll_time_shift_raw"] = serialize($_shift);
+				Tbl_payroll_time_sheet::insert($insert);
+				$timesheet_db =$this->timesheet_info_db($employee_id, $from);
+				$insert = null;
+			}
+
 			$timesheet_db = $this->timesheet_info_db($employee_id, $from);
 
 			if($timesheet_db->custom_shift == 1)
@@ -250,20 +265,7 @@ class PayrollTimeSheet2Controller extends Member
 				$_shift =  $this->shift_raw($this->db_get_shift_of_employee_by_code($shift_code_id, $from));
 			}
 
-			
 
-			
-			/* CREATE TIMESHEET DB IF EMPTY */
-			if(!$timesheet_db)
-			{
-				$insert = null;
-				$insert["payroll_employee_id"] = $employee_id;
-				$insert["payroll_time_date"] = $from;
-				$insert["payroll_time_shift_raw"] = serialize($_shift);
-				Tbl_payroll_time_sheet::insert($insert);
-				$timesheet_db =$this->timesheet_info_db($employee_id, $from);
-				$insert = null;
-			}
 			
 			/* CLEAR APPROVED RECORD IF SHIFT CHANGED */
 			if($timesheet_db->payroll_time_shift_raw != serialize($_shift))

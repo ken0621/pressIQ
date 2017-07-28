@@ -2382,6 +2382,7 @@ class Payroll2
 		$return = Payroll2::cutoff_breakdown_compute_time($return, $data);
 		return $return;
 	}
+
 	public static function cutoff_breakdown_compute_time($return, $data)
 	{
 
@@ -3204,6 +3205,7 @@ class Payroll2
 
 		return $return;
 	}
+
 	public static function cutoff_breakdown_cola($return, $data)
 	{
 		$total_cola = 0;
@@ -3228,6 +3230,26 @@ class Payroll2
 	}
 	public static function cutoff_breakdown_deductions($return, $data)
 	{
+		/* DAILY DEDUCTIONS */
+		if(isset($data["cutoff_compute"]->_breakdown_deduction_summary))
+		{
+			foreach($data["cutoff_compute"]->_breakdown_deduction_summary as $key => $breakdown)
+			{
+
+				$val["label"] = $key;
+				$val["type"] = "deductions";
+				$val["amount"] = $breakdown;
+				$val["add.gross_pay"] = false;
+				$val["deduct.gross_pay"] = false;
+				$val["add.taxable_salary"] = false;
+				$val["deduct.taxable_salary"] = false;
+				$val["add.net_pay"] = false;
+				$val["deduct.net_pay"] = false;
+				array_push($return->_breakdown, $val);
+				$val = null;
+			}
+		}
+
 		extract($data);
 
 		/* AGENCY DEDUCTION */

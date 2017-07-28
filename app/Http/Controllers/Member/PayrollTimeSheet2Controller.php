@@ -60,7 +60,6 @@ class PayrollTimeSheet2Controller extends Member
 
 		$data["company"] 	= $this->db_get_company_period_information($period_id);
 		$data["_employee"] 	= $this->db_get_list_of_employees_by_company_with_search($data["company"]->payroll_company_id, $search_value, $mode, $period_id, $data["company"]->payroll_period_start, $branch);
-		
 
 		return view('member.payroll2.employee_summary_table', $data);
 	}
@@ -675,9 +674,8 @@ class PayrollTimeSheet2Controller extends Member
 		/* COMPUTATION FOR CUTOFF */
 		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
 		
-		/* EMPLOYEE SALARY */		
-		$salary = $this->get_salary($employee_id, $company_period->payroll_period_start);
-		
+		/* EMPLOYEE SALARY */	
+		$salary = $this->get_salary($employee_id, $company_period->payroll_period_start);		
 
 		/* EMPLOYEE GROUP */
 		$group = $this->db_get_current_employee_contract($employee_id, $company_period->payroll_period_start);
@@ -1092,6 +1090,7 @@ class PayrollTimeSheet2Controller extends Member
 		//DB::raw("(SELECT time_keeping_approve_id FROM tbl_payroll_time_keeping_approved WHERE employee_id = tbl_payroll_employee_basic.payroll_employee_id AND tbl_payroll_time_keeping_approved.payroll_period_company_id = '" . $period_company_id . "')
 		if($time_keeping_approved == 0)
 		{
+			//dd("(SELECT time_keeping_approve_id FROM tbl_payroll_time_keeping_approved WHERE employee_id = tbl_payroll_employee_basic.payroll_employee_id AND tbl_payroll_time_keeping_approved.payroll_period_company_id = '" . $period_company_id . "')");
 			$query->whereNull(DB::raw("(SELECT time_keeping_approve_id FROM tbl_payroll_time_keeping_approved WHERE employee_id = tbl_payroll_employee_basic.payroll_employee_id AND tbl_payroll_time_keeping_approved.payroll_period_company_id = '" . $period_company_id . "')"));
 		}
 		else
@@ -1106,7 +1105,12 @@ class PayrollTimeSheet2Controller extends Member
 		
 		if($branch == 0)
 		{
-			$query->where("payroll_company_id", $company_id)->orWhere("payroll_parent_company_id", $company_id);
+			$query->where(function($quer) use ($company_id)
+			{
+				$quer->where("payroll_company_id", $company_id);
+				$quer->orWhere("payroll_parent_company_id", $company_id);
+			});
+			
 		}
 		else
 		{
@@ -1125,6 +1129,8 @@ class PayrollTimeSheet2Controller extends Member
 		
 		$_table = $query->get();
 		
+
+
 		$_return = null;
 		
 		foreach($_table as $key => $row)

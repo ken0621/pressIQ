@@ -225,7 +225,8 @@ Route::any("/member/ecommerce/product/collection/set_active","Member\CollectionC
 Route::any("/member/ecommerce/product/collection/archived/{id}/{action}","Member\CollectionController@archived");
 Route::any("/member/ecommerce/product/collection/archived_submit","Member\CollectionController@archived_submit");
 
-
+/* IMPORT TRACKING NUMBER ORDER */
+Route::controller("/member/ecommerce/import/tracking", "Member\ImportTrackingNumberController");
 
 Route::get("/member/ecommerce/wishlist/list","Member\WishlistController@list");
 

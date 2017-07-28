@@ -140,6 +140,15 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Luke Glenn Jordan</span>";
+    
+    /* -- PRODUCTS => IMPORT TRACKING NUMBER */
+    $code = "import-tracking-number";
+    $nav[$page]['submenu'][$code]['label'] = "Import Tracking Number";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/import/tracking";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Edward Guevarra</span>";
 
     
     /* -- E-COMMERCE => SHIPPING */

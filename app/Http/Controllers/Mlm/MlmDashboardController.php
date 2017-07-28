@@ -463,6 +463,7 @@ class MlmDashboardController extends Mlm
             ->where('ec_order_id', $value->ec_order_id)
             ->get();
         }
+        
         // if($data["slot_count"] != 0)
         // {
         //     return Redirect::to("/mlm");

@@ -93,7 +93,7 @@ function import_csv()
             var csv     = event.target.result;
             data_value  = $.csv.toObjects(csv);
             data_length = data_value.length;
-
+            
             submit_data(data_value[ctr]);
         };
         reader.onerror = function(){ alert('Unable to read ' + file.fileName); };

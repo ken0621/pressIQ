@@ -198,7 +198,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <td>Billing Adress:</td>
               <td>{{$first_order->billing_address}}</td>
             </tr>
-            
+            <tr>
+              <td>Tracking Number:</td>
+              <td>{{$first_order->tracking_no}}</td>
+            </tr>
           </table>
         </div>
         <div class="box-header" style="background-color: #D0EBF2">

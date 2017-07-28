@@ -108,29 +108,34 @@
 						<td colspan="40"><center>Encashment Details</center></td>
 					</tr>
 						@if($encashment_details->encashment_type == 0)
-						<tr>
-							<td>Payment Type: </td>
-							<td>Bank Deposit</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>Bank:</td>
-							<td>{{$encashment_details->bank_name}}</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>Branch:</td>
-							<td>{{$encashment_details->bank_account_branch}}</td>
-							<td></td>
-						</tr>
+						<!--<tr>-->
+						<!--	<td>Payment Type: </td>-->
+						<!--	<td>Bank Deposit</td>-->
+						<!--	<td></td>-->
+						<!--</tr>-->
+						<!--<tr>-->
+						<!--	<td>Bank:</td>-->
+						<!--	<td>{{$encashment_details->bank_name}}</td>-->
+						<!--	<td></td>-->
+						<!--</tr>-->
+						<!--<tr>-->
+						<!--	<td>Branch:</td>-->
+						<!--	<td>{{$encashment_details->bank_account_branch}}</td>-->
+						<!--	<td></td>-->
+						<!--</tr>-->
 						<tr>
 							<td>Name: </td>
-							<td>{{$encashment_details->bank_account_name}}</td>
+							<td>{{$log_final->wallet_slot_eon}}</td>
 							<td></td>
 						</tr>
 						<tr>
 							<td>Account Number: </td>
-							<td>{{$encashment_details->bank_account_number}}</td>
+							<td>{{$log_final->wallet_slot_eon_account_no}}</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Card Number</td>
+							<td>{{$log_final->wallet_slot_eon_card_no}}</td>
 							<td></td>
 						</tr>
 						@elseif($encashment_details->encashment_type == 1)

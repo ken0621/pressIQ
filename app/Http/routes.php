@@ -105,6 +105,7 @@ Route::any('/member/developer/reset_slot/submit/recompute', 'Member\Developer_St
 Route::any('/member/developer/reset_slot/submit/recompute_myphone', 'Member\Developer_StatusController@recompute_myphone'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/import_excel_myphone', 'Member\Developer_StatusController@import_excel'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/fix_password', 'Member\Developer_StatusController@fix_password'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/reset_slot/submit/wallet_encash', 'Member\Developer_StatusController@wallet_encash'); //GUILLERMO TABLIGAN
 
 /* END MEMBER - VENDOR - GUILLERMO TABLIGAN */
 

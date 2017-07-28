@@ -5,6 +5,7 @@ use DB;
 use Request;
 use Crypt;
 use App\Globals\Item_code;
+use App\Globals\Mlm_slot_log;
 use App\Models\Tbl_item_code_invoice;
 use App\Models\Tbl_journal_entry_line;
 use App\Models\Tbl_journal_entry;
@@ -22,6 +23,9 @@ use App\Models\Tbl_customer_address;
 use App\Models\Tbl_customer_search;
 use Carbon\Carbon;
 use Excel;
+use App\Models\Tbl_mlm_slot_wallet_log;
+use App\Models\Tbl_mlm_encashment_settings;
+use App\Models\Tbl_mlm_encashment_process;
 class Developer_StatusController extends Member
 {
 	public function index()
@@ -343,6 +347,100 @@ class Developer_StatusController extends Member
             });
 
 			
+	}
+	public function wallet_encash()
+	{
+		$shop_id = $this->user_info->shop_id;
+		
+		Excel::load(public_path().'/assets/mlm/brownpayout.xlsx', function($reader) 
+        {
+        	$shop_id = $this->user_info->shop_id;
+        	$results = $reader->get()->toArray();
+            $restructure = [];
+            $wherein = [];
+            $wherein2 = [];
+        	foreach($results as $key => $value)
+            {
+            	$restructure[$value['slot_id']] = $value;
+            	$wherein[$value['slot_id']] = $value['slot_id'];
+            	
+            	$wherein2[($value['wtx'] * 100)][$value['slot_id']] = $value['slot_id'];
+            	
+            }
+            $slots = Tbl_mlm_slot::whereIn('slot_id', $wherein)->get()->keyBy('slot_id');
+            $date_as_of = Carbon::parse('07/15/2017')->endOfDay();
+            foreach($slots as $key => $value)
+            {
+            	$slots[$key]->sum_wallet = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $key)
+            	->where('wallet_log_date_created', '<=', $date_as_of)
+            	->whereNull('encashment_process')->where('wallet_log_status', 'released')->sum('wallet_log_amount');
+            }
+            
+            $fail = [];
+            foreach($restructure as $key => $value)
+            {
+            	$grand_total = $value['grand_total'];
+            	$sum_wallet = $slots[$key]->sum_wallet;
+            	if($grand_total != $sum_wallet )
+            	{
+            		$fail[$key][1] = $grand_total;
+            		$fail[$key][2] = $sum_wallet;
+            	}
+            	
+            	$slot_eon = $slots[$key]->slot_eon;
+            	$slot_eon_card_no = $slots[$key]->slot_eon_card_no;
+            	$slot_eon_account_no = $slots[$key]->slot_eon_account_no;
+            	
+            	if(	$slot_eon != $value['slot_eon'] ||
+            		$slot_eon_card_no != $value['slot_eon_card_no'] ||
+            		$slot_eon_account_no != $value['slot_eon_account_no']
+            	)
+            	{
+            		$fail[$key][1] =	$value['slot_eon'] . ' ' . $value['slot_eon_card_no'] . ' ' . $value['slot_eon_account_no'];
+            		$fail[$key][2] =	$slot_eon . ' ' . $slot_eon_card_no . ' ' . $slot_eon_account_no;
+            	}
+            }
+            if(count($fail) >= 1)
+            {
+            	dd($fail);
+            }
+            
+            foreach($wherein2 as $key => $value)
+            {
+            	$encashment_settings = Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->first();
+				$from = Carbon::parse('2017-06-28 17:42:34');
+	            $insert['shop_id'] = $shop_id;
+	            $insert['enchasment_process_from'] = $from;
+	            $insert['enchasment_process_to'] = $date_as_of;
+	            $insert['enchasment_process_executed'] = Carbon::now();
+	            $insert['enchasment_process_tax'] = $key;
+	            $insert['enchasment_process_tax_type'] = 1;
+	            $insert['enchasment_process_p_fee'] = 0;
+	            $insert['enchasment_process_p_fee_type'] = 0;
+	            $insert['enchasment_process_minimum'] =  0;
+	            $insert['encashment_process_sum'] = 0;
+	            $id = Tbl_mlm_encashment_process::insertGetId($insert);
+	            Mlm_slot_log::encash_all_rare($id, $wherein2[$key]);
+            }
+            
+            $this->fix_slot_wallet_log_eon();
+            
+            dd($fail);
+        });
+	}
+	public function fix_slot_wallet_log_eon()
+	{
+		$logs = Tbl_mlm_slot_wallet_log::where('wallet_log_plan', 'ENCASHMENT')->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_mlm_slot_wallet_log.wallet_log_slot' )->get();
+	
+		foreach($logs as $key => $value)
+		{
+			$wallet_log_id = $value->wallet_log_id;
+			$update['wallet_slot_eon'] = $value->slot_eon;
+			$update['wallet_slot_eon_card_no'] = $value->slot_eon_card_no;
+			$update['wallet_slot_eon_account_no'] = $value->slot_eon_account_no;
+			
+			Tbl_mlm_slot_wallet_log::where('wallet_log_id', $wallet_log_id)->update($update);
+		}
 	}
 	public function import_excel_v2($restructure)
 	{

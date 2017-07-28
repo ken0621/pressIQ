@@ -243,6 +243,9 @@ class PayrollTimeSheet2Controller extends Member
 			/* CREATE TIMESHEET DB IF EMPTY */
 			if(!$timesheet_db)
 			{
+				$_shift_real =  $this->db_get_shift_of_employee_by_code($shift_code_id, $from);
+				$_shift =  $this->shift_raw($this->db_get_shift_of_employee_by_code($shift_code_id, $from));
+				
 				$insert = null;
 				$insert["payroll_employee_id"] = $employee_id;
 				$insert["payroll_time_date"] = $from;
@@ -261,7 +264,7 @@ class PayrollTimeSheet2Controller extends Member
 			}
 			else
 			{
-				$_shift_real =  $this->db_get_shift_of_employee_by_code($timesheet_db->custom_shift_id, $from);
+				$_shift_real =  $this->db_get_shift_of_employee_by_code($shift_code_id, $from);
 				$_shift =  $this->shift_raw($this->db_get_shift_of_employee_by_code($shift_code_id, $from));
 			}
 

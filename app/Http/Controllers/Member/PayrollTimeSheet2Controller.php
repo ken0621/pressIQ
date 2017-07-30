@@ -14,6 +14,9 @@ use App\Models\Tbl_payroll_employee_basic;
 use App\Models\Tbl_payroll_time_sheet;
 use App\Models\Tbl_payroll_time_sheet_record;
 use App\Models\Tbl_payroll_time_sheet_record_approved;
+use App\Models\Tbl_payroll_time_keeping_approved_daily_breakdown;
+use App\Models\Tbl_payroll_time_keeping_approved_breakdown;
+use App\Models\Tbl_payroll_time_keeping_approved_performance;
 use App\Models\Tbl_payroll_group;
 use App\Models\Tbl_payroll_leave_schedule;
 use App\Models\Tbl_payroll_employee_salary;
@@ -92,9 +95,7 @@ class PayrollTimeSheet2Controller extends Member
 		else
 		{
 			return view('member.payroll2.employee_timesheet', $data);
-		}
-		
-		
+		}	
 	}
 	public function approve_timesheets()
 	{
@@ -110,28 +111,16 @@ class PayrollTimeSheet2Controller extends Member
 		}
 		else
 		{
-			$insert["employee_id"] = $employee_id;
-			$insert["payroll_period_company_id"] = $period_id;
-			$insert["net_basic_pay"] = $compute_cutoff["cutoff_breakdown"]->basic_pay_total;
-			$insert["gross_pay"] =  $compute_cutoff["cutoff_breakdown"]->gross_pay_total;
-			$insert["net_pay"] =  $compute_cutoff["cutoff_breakdown"]->net_pay_total;
-			$insert["taxable_salary"] =  $compute_cutoff["cutoff_breakdown"]->taxable_salary_total;
-			$insert["sss_salary"] = $compute_cutoff["cutoff_breakdown"]->sss_contribution["salary"];
-			$insert["sss_ee"] = $compute_cutoff["cutoff_breakdown"]->sss_contribution["ee"];
-			$insert["sss_er"] = $compute_cutoff["cutoff_breakdown"]->sss_contribution["er"];
-			$insert["sss_ec"] = $compute_cutoff["cutoff_breakdown"]->sss_contribution["ec"];
-			$insert["phihealth_salary"] = $compute_cutoff["cutoff_breakdown"]->philhealth_contribution["salary"];
-			$insert["philhealth_ee"] = $compute_cutoff["cutoff_breakdown"]->philhealth_contribution["ee"];
-			$insert["philhealth_er"] = $compute_cutoff["cutoff_breakdown"]->philhealth_contribution["er"];
-			$insert["pagibig_salary"] = $compute_cutoff["cutoff_breakdown"]->pagibig_contribution["salary"];
-			$insert["pagibig_ee"] = $compute_cutoff["cutoff_breakdown"]->pagibig_contribution["ee"];
-			$insert["pagibig_er"] = $compute_cutoff["cutoff_breakdown"]->pagibig_contribution["er"];
-
-			Tbl_payroll_time_keeping_approved::insert($insert);
+			$time_keeping_approve_id = Tbl_payroll_time_keeping_approved::insertRecord($employee_id, $period_id, $compute_cutoff["cutoff_breakdown"], $compute_cutoff);
+			Tbl_payroll_time_sheet::updateCompute($compute_cutoff["cutoff_input"]);
+			Tbl_payroll_time_keeping_approved_breakdown::insertBreakdown($time_keeping_approve_id, $compute_cutoff["cutoff_breakdown"]->_breakdown);
+			Tbl_payroll_time_keeping_approved_daily_breakdown::insertBreakdown($time_keeping_approve_id, $compute_cutoff["cutoff_input"]);
+			Tbl_payroll_time_keeping_approved_performance::insertBreakdown($time_keeping_approve_id, $compute_cutoff["cutoff_breakdown"]->_time_breakdown);
 		}
 
 		return json_encode(Request::input());	
 	}
+
 	public function unapprove($period_id, $employee_id)
 	{
 		$compute_cutoff = $this->compute_whole_cutoff($period_id, $employee_id);
@@ -189,7 +178,6 @@ class PayrollTimeSheet2Controller extends Member
 			Tbl_payroll_time_sheet_record::insert($insert);
 		}
 		
-
 
 		/* RETURN DATA TO SERVER */
 		$data["timesheet_db"] = $timesheet_db = $this->timesheet_info_db($employee_id, Request::input("date"));
@@ -669,6 +657,21 @@ class PayrollTimeSheet2Controller extends Member
 
 		return view('member.payroll2.employee_day_summary', $data);
 	}
+	public function compute_process_cutoff($payroll_time_keeping_approved_info)
+	{
+		$employee_id = $payroll_time_keeping_approved_info->employee_id;
+		$period_company_id = $payroll_time_keeping_approved_info->payroll_period_company_id;
+		$data["payroll_time_keeping_approved_info"] = $payroll_time_keeping_approved_info;
+		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($payroll_time_keeping_approved_info->payroll_period_company_id)->first();
+		$from = $data["start_date"] = $company_period->payroll_period_start;
+		$to = $data["end_date"] = $company_period->payroll_period_end;
+		
+		$data["cutoff_input"] = unserialize($payroll_time_keeping_approved_info->cutoff_input);
+		$data["cutoff_compute"] = unserialize($payroll_time_keeping_approved_info->cutoff_compute);
+		$data["cutoff_breakdown"] = unserialize($payroll_time_keeping_approved_info->cutoff_breakdown);
+
+		return $data;
+	}
 	public function compute_whole_cutoff($period_company_id, $employee_id)
 	{
 		/* COMPUTATION FOR CUTOFF */
@@ -702,7 +705,8 @@ class PayrollTimeSheet2Controller extends Member
 		while($from <= $to)
 		{
 			$timesheet_db = $this->timesheet_info_db($employee_id, $from);
-			$_timesheet[$from] = $this->timesheet_process_daily_info($employee_id, $from, $timesheet_db, $period_company_id);;
+			$_timesheet[$from] = $this->timesheet_process_daily_info($employee_id, $from, $timesheet_db, $period_company_id);
+			$_timesheet[$from]->payroll_time_sheet_id = $timesheet_db->payroll_time_sheet_id;
 			$from = Carbon::parse($from)->addDay()->format("Y-m-d");
 		}
 
@@ -741,28 +745,31 @@ class PayrollTimeSheet2Controller extends Member
 		}
 
 
-		
-		foreach(Request::input("time-in") as $key => $time_in)
+		if(Request::input("time-in"))
 		{
-			/* GET INITIAL INFORMATION NEEDED */
-			$payroll_time_sheet_record_id = Request::input("payroll_time_sheet_record_id")[$key];
-			$record = Tbl_payroll_time_sheet_record_approved::where("payroll_time_sheet_id", Request::input("payroll_time_sheet_id"))->where("payroll_time_sheet_record_id", Request::input("payroll_time_sheet_record_id")[$key])->first();
-		
-			//$payroll_time_serialize = unserialize($record->payroll_time_serialize);
-			$time_out = Request::input("time-out")[$key];
-			$approve_checkbox = isset($request["approve-checkbox"][$key]) ? 1 : 0;
-			$overtime_checkbox = isset($request["overtime-checkbox"][$key]) ? 1 : 0;
+			foreach(Request::input("time-in") as $key => $time_in)
+			{
+				/* GET INITIAL INFORMATION NEEDED */
+				$payroll_time_sheet_record_id = Request::input("payroll_time_sheet_record_id")[$key];
+				$record = Tbl_payroll_time_sheet_record_approved::where("payroll_time_sheet_id", Request::input("payroll_time_sheet_id"))->where("payroll_time_sheet_record_id", Request::input("payroll_time_sheet_record_id")[$key])->first();
 			
-			/* UPDATE INFORMATION */
-			$update = null;
-			$update["payroll_time_sheet_in"] = $this->c_24_hour_format($time_in);
-			$update["payroll_time_sheet_out"] = $this->c_24_hour_format($time_out);
-			$update["payroll_time_sheet_auto_approved"] = $approve_checkbox;
-			$update["payroll_time_serialize"] = "";
+				//$payroll_time_serialize = unserialize($record->payroll_time_serialize);
+				$time_out = Request::input("time-out")[$key];
+				$approve_checkbox = isset($request["approve-checkbox"][$key]) ? 1 : 0;
+				$overtime_checkbox = isset($request["overtime-checkbox"][$key]) ? 1 : 0;
+				
+				/* UPDATE INFORMATION */
+				$update = null;
+				$update["payroll_time_sheet_in"] = $this->c_24_hour_format($time_in);
+				$update["payroll_time_sheet_out"] = $this->c_24_hour_format($time_out);
+				$update["payroll_time_sheet_auto_approved"] = $approve_checkbox;
+				$update["payroll_time_serialize"] = "";
 
-			Tbl_payroll_time_sheet_record_approved::where("payroll_time_sheet_id", Request::input("payroll_time_sheet_id"))->where("payroll_time_sheet_record_id", Request::input("payroll_time_sheet_record_id")[$key])->update($update);
-		
-		}
+				Tbl_payroll_time_sheet_record_approved::where("payroll_time_sheet_id", Request::input("payroll_time_sheet_id"))->where("payroll_time_sheet_record_id", Request::input("payroll_time_sheet_record_id")[$key])->update($update);
+			
+			}
+		}		
+
 		
 		echo json_encode("success");
 	}
@@ -782,12 +789,25 @@ class PayrollTimeSheet2Controller extends Member
 		}
 
 		$data["computation_type"] = $computation_type = $group->payroll_group_salary_computation;
-		$data = $this->compute_whole_cutoff($period_company_id, $employee_id);
+
+		$check_approved = Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_company_id)->first();
+		if($check_approved)
+		{
+			$data = $this->compute_process_cutoff($check_approved);
+		}		
+		else
+		{
+			$data = $this->compute_whole_cutoff($period_company_id, $employee_id);
+			
+		}
+
+		//dd($data);
+
+
 		$data["employee_id"] = $employee_id;
 		$check_approved = Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_company_id)->first();
 		$data["time_keeping_approved"] = $check_approved ? true : false;			
 		
-
 		switch ($computation_type)
 		{
 			case "Daily Rate":
@@ -801,6 +821,8 @@ class PayrollTimeSheet2Controller extends Member
 			break;
 		}
 	}
+
+
 	
 	public function income_summary_daily_computation($data)
 	{
@@ -1248,7 +1270,7 @@ class PayrollTimeSheet2Controller extends Member
 			$return['basic_cola']		+= $cutoff->compute->cola;
 			$return['basic_gross_cola'] += $cutoff->compute->total_day_income_plus_cola;
 		}
-		
+
 		return $return;
 	}
 	

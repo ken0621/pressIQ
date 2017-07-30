@@ -1726,16 +1726,17 @@ class Payroll2
 			{
 				foreach($date_compute->compute->_breakdown_addition as $lbl => $badd)
 				{
-
 					if(isset($return->_breakdown_addition_summary[$lbl]))
 					{
 						$return->_breakdown_addition_summary[$lbl] += $badd["rate"];
-						$return->_breakdown_addition_summary_time[$lbl] .= "<br>" . $badd["time"] . " - " . payroll_currency($badd["rate"]);
+						$return->_breakdown_addition_summary_time[$lbl] .= "<br>". "<b>" . payroll_date_format($date) . "</b> " . ($badd["time"] != "" ?  " ~ " .$badd["time"] : "")  . " ~ " . payroll_currency($badd["rate"]);	
+
 					}
 					else
 					{
 						$return->_breakdown_addition_summary[$lbl] = $badd["rate"];
-						$return->_breakdown_addition_summary_time[$lbl] = $badd["time"] . " - " . payroll_currency($badd["rate"]);
+						$return->_breakdown_addition_summary_time[$lbl] = "<b>" . payroll_date_format($date) . "</b> " .  ($badd["time"] != "" ?  " ~ " .$badd["time"] : "")  . " ~ " . payroll_currency($badd["rate"]);
+						
 					}
 				}
 			}
@@ -2530,7 +2531,7 @@ class Payroll2
 			}
 			else
 			{
-				$tax_description .= "<br> SSS Contribution is processed only during " . $tax_period . ".";
+				$tax_description .= "<br> TAX is processed only during " . $tax_period . ".";
 
 				if($tax_period == code_to_word($period_count))
 				{
@@ -2590,6 +2591,7 @@ class Payroll2
 		}
 
 
+		$return->tax_total = $tax;
 
 		$val["label"] = "Witholding Tax";
 		$val["description"] = $tax_description;
@@ -3190,7 +3192,14 @@ class Payroll2
 			{
 				$val["label"] = $key;
 				$val["type"] = "additions";
-				$val["description"] = $data["cutoff_compute"]->_breakdown_addition_summary_time[$key];
+
+				if(isset($data["cutoff_compute"]->_breakdown_addition_summary_time[$key]))
+				{
+					$val["description"] = $data["cutoff_compute"]->_breakdown_addition_summary_time[$key];
+				}
+				
+
+
 				$val["amount"] = $breakdown;
 				$val["add.gross_pay"] = true;
 				$val["deduct.gross_pay"] = false;

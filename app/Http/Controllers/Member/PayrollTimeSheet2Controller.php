@@ -97,10 +97,13 @@ class PayrollTimeSheet2Controller extends Member
 			return view('member.payroll2.employee_timesheet', $data);
 		}	
 	}
-	public function approve_timesheets()
+	public function approve_timesheets($period_id = 0, $employee_id = 0)
 	{
-		$period_id = Request::input("period_id");
-		$employee_id = Request::input("employee_id");
+		if(Request::input("period_id") != 0)
+		{
+			$period_id = Request::input("period_id");
+			$employee_id = Request::input("employee_id");
+		}
 
 		$compute_cutoff = $this->compute_whole_cutoff($period_id, $employee_id);
 		$check_approved = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->first();
@@ -666,6 +669,14 @@ class PayrollTimeSheet2Controller extends Member
 		$from = $data["start_date"] = $company_period->payroll_period_start;
 		$to = $data["end_date"] = $company_period->payroll_period_end;
 		
+
+		if($payroll_time_keeping_approved_info->cutoff_input == "")
+		{
+ 			$this->approve_timesheets($period_company_id, $employee_id); //DELETE TIMESHEET
+ 			$this->approve_timesheets($period_company_id, $employee_id); //RE-POPULATE TIME SHEET
+			$payroll_time_keeping_approved_info = Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_company_id)->first();
+		}
+
 		$data["cutoff_input"] = unserialize($payroll_time_keeping_approved_info->cutoff_input);
 		$data["cutoff_compute"] = unserialize($payroll_time_keeping_approved_info->cutoff_compute);
 		$data["cutoff_breakdown"] = unserialize($payroll_time_keeping_approved_info->cutoff_breakdown);

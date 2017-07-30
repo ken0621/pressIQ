@@ -60,11 +60,21 @@
                     <td class="text-center">{!! $employee->payroll_employee_number == "" ? "<span style='color: red;'>00</span>" : $employee->payroll_employee_number !!}</td>
                     <!-- EMPLOYEE NAME -->
                     <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/employee_list/modal_employee_view/{{ $employee->payroll_employee_id }}?source_page=time_keeping','lg')">{{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_last_name }}</a></td>
-                    <td class="text-center"><a href="javascript: {!! $employee->shift_code_link !!}">{{ $employee->shift_code_name }}</a></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
+                    <!-- PAYROLL GROUP -->
+                    @if($employee->payroll_group_code == "")
+                        <td class="text-center">Unset</td>
+                    @else
+                        <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/payroll_group/modal_edit_payroll_group/{{ $employee->payroll_group_id }}','lg')">{{ ($employee->payroll_group_code == "" ? "" : $employee->payroll_group_code) }}</a></td>
+                    @endif
+                    <!-- SHIFT -->
+                    @if($employee->shift_code_name == "")
+                        <td class="text-center">Unset</td>
+                    @else
+                        <td class="text-center"><a href="javascript: {!! $employee->shift_code_link !!}">{{ $employee->shift_code_name }}</a></td>
+                    @endif
+                    <td class="text-center">{{ payroll_currency(0) }}</td>
+                    <td class="text-center">{{ payroll_currency(0) }}</td>
+                    <td class="text-center">{{ payroll_currency(0) }}</td>
                     <td class="text-center"></td>
                     <td class="text-center"></td>
                 </tr>

@@ -14,7 +14,9 @@
   .events > table tbody tr .main-event {
     padding-right: 50px; }
     .events > table tbody tr .main-event .img img {
-      width: 100%; }
+      width: 1200px;
+      height: 1200px;
+      object-fit: contain; }
     .events > table tbody tr .main-event .desc {
       margin-top: 25px;
       margin-bottom: 25px; }

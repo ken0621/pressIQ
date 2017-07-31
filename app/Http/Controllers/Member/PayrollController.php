@@ -6682,6 +6682,19 @@ class PayrollController extends Member
                                              where('time_keeping_approve_id', $record->time_keeping_approve_id)                      
                                              ->get());
 
+               $temp['absent_hours']          = Tbl_payroll_time_keeping_approved_performance::
+                                             where('time_keeping_approve_id', $record->time_keeping_approve_id) 
+                                             ->where('ptka_daily_key', 'absent')                     
+                                             ->get();
+
+
+               $temp['undertime_hours'] = Tbl_payroll_time_keeping_approved_performance::
+                                             where('time_keeping_approve_id', $record->time_keeping_approve_id) 
+                                             ->where('ptka_daily_key', 'undertime')                     
+                                             ->get();
+
+
+
                array_push($data['_record'], $temp);
           }
           dd($data['_record']);

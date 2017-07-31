@@ -127,13 +127,30 @@
 											<td>Hrs.</td>
 											<td>Amount</td>
 										</tr>
-										@foreach($brk['_ptkab']['additions'] as $additions)
-											<tr>
-												<td>{{ $additions['ptkab_label'] }}</td>
-												<td></td>
-												<td>{{ $additions['ptkab_amount'] }}</td>
-											</tr>
-										@endforeach
+										<tr>											
+											<td>Basic Pay</td>
+											<td>{{ $brk['time_spent']['ptka_daily_time'] }}</td>
+											<td>{{ number_format(($brk['_record'][0]['gross_pay']), 2, '.', ',') }}</td>
+										</tr>
+										<tr>											
+											<td>(Undertime)</td>
+											<td>({{ $brk['undertime']['ptka_daily_time'] }})</td>
+											<td>({{ number_format(($brk['undertime']['ptkab_amount']), 2, '.', ',') }})</td>
+										</tr>
+
+										{{-- @foreach($brk['_ptkab']['deductions'] as $deduct)
+										<tr>
+											<td>({{ $deduct['ptkab_label'] }})</td>
+											<td>({{ $deduct['ptkab_amount'] }})</td>
+										</tr>
+										@endforeach --}}
+
+
+										<tr>											
+											<td>Cola</td>
+											<td></td>
+											<td>{{ number_format(($brk['COLA']['ptkab_amount']), 2, '.', ',') }}</td>
+										</tr>
 										
 									</table>
 								</td>
@@ -143,23 +160,72 @@
 										<tr>
 											<td colspan="2" class=""><b>DEDUCTIONS</b></td>
 										</tr>
-									
-										@foreach($brk['_ptkab']['deductions'] as $deductions)
-											<tr>
-												<td>{{ $deductions['ptkab_label'] }}</td>
-												<td>{{ $deductions['ptkab_amount'] }}</td>
-											</tr>
+										<tr>
+											<td>Description</td>
+											<td>Amount</td>
+										</tr>
+
+										
+										@foreach($brk['_ptkab']['tax'] as $tax)
+										<tr>
+											<td>{{ $tax['ptkab_label'] }}</td>
+											<td>{{ $tax['ptkab_amount'] }}</td>
+										</tr>
 										@endforeach
 
-										@foreach($brk['_ptkab']['government_contributions'] as $government)
+										@if(isset($brk['_ptkab']['adjustment']))
+											@foreach($brk['_ptkab']['adjustment'] as $tax)
 											<tr>
-												<td>{{ $government['ptkab_label'] }}</td>
-												<td>{{ $government['ptkab_amount'] }}</td>
+												<td>{{ $tax['ptkab_label'] }}</td>
+												<td>{{ $tax['ptkab_amount'] }}</td>
 											</tr>
-										@endforeach
+											@endforeach
+										@endif
+
+									
+										<tr>
+											<td>SSS</td>
+											<td>{{ number_format($brk['_record'][0]['sss_ee'], 2, '.', ',') }}</td>
+										</tr>
+
+										<tr>
+											<td>PHIC</td>
+											<td>{{ number_format($brk['_record'][0]['philhealth_ee'], 2, '.', ',') }}</td>
+										</tr>
+
+										<tr>
+											<td>HDMF</td>
+											<td>{{ number_format($brk['_record'][0]['pagibig_ee'], 2, '.', ',') }}</td>
+										</tr>
 										
 									</table>
 								</td>
+								<tr>
+									<td valign="top" {{ $payslip->include_time_summary == 0 ? 'colspan=2' : '' }} >
+										<table class="border" cellspacing="0" cellpadding="2" width="100%" >
+											<tr>
+												<td>Total Taxable Income</td>
+												<td>{{ number_format($brk['_record'][0]['taxable_salary'], 2, '.', ',') }}</td>
+												{{-- {{ dd($brk) }} --}}
+											</tr>	
+											<tr>
+												<td>Net Pay</td>
+												<td>{{ number_format($brk['_record'][0]['net_basic_pay'], 2, '.', ',') }}</td>
+												{{-- {{ dd($brk) }} --}}
+											</tr>									
+										</table>
+									</td>
+									<td valign="top" {{ $payslip->include_time_summary == 0 ? 'colspan=2' : '' }} >
+										<table class="border" cellspacing="0" cellpadding="2" width="100%" >
+											<tr>
+												<td>Total Deductions</td>
+												<td>{{ number_format($brk['_record'][0]['taxable_salary']) }}</td>
+												{{-- {{ dd($brk) }} --}}
+											</tr>									
+										</table>
+									</td>
+								</tr>
+
 								@endif
 							</tr>
 							<tr>

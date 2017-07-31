@@ -6670,6 +6670,7 @@ class PayrollController extends Member
                                                             ->leftjoin('tbl_payroll_department','tbl_payroll_department.payroll_department_id','=','tbl_payroll_employee_contract.payroll_department_id')
                                                             ->leftjoin('tbl_payroll_jobtitle','tbl_payroll_jobtitle.payroll_jobtitle_id','=','tbl_payroll_employee_contract.payroll_jobtitle_id')
                                                             ->first();
+                                                            
                $temp['_record']          = Tbl_payroll_time_keeping_approved::Basic()
                                              ->where('payroll_period_company_id', $id)
                                              ->where('employee_id', $record->employee_id)
@@ -6683,17 +6684,38 @@ class PayrollController extends Member
                                              ->get());
 
 
-               $temp['basic_pay']       = Tbl_payroll_employee_contract::
-                                                            selemployee($record->payroll_employee_id, $period->payroll_period_start)
-                                                            ->leftjoin('tbl_payroll_department','tbl_payroll_department.payroll_department_id','=','tbl_payroll_employee_contract.payroll_department_id')
-                                                            ->leftjoin('tbl_payroll_jobtitle','tbl_payroll_jobtitle.payroll_jobtitle_id','=','tbl_payroll_employee_contract.payroll_jobtitle_id')
-                                                            ->first();
+               $temp['time_spent']       = Tbl_payroll_time_keeping_approved_performance::
+                                             where('time_keeping_approve_id', $record->time_keeping_approve_id)
+                                             ->where('ptka_daily_key', 'time_spent') 
+                                             ->select(DB::raw('ptka_daily_time')) 
+                                             ->first(); 
 
+               $temp['undertime']       = Tbl_payroll_time_keeping_approved_performance::
+                                             where('tbl_payroll_time_keeping_approved_performance.time_keeping_approve_id', $record->time_keeping_approve_id)
+                                             ->select(DB::raw('tbl_payroll_time_keeping_approved_performance.ptka_daily_time, tbl_payroll_time_keeping_approved_breakdown.ptkab_amount')) 
+                                             ->join('tbl_payroll_time_keeping_approved_breakdown', 'tbl_payroll_time_keeping_approved_performance.ptka_daily_key', '=', 'tbl_payroll_time_keeping_approved_breakdown.ptkab_label')
+                                              -> where('tbl_payroll_time_keeping_approved_breakdown.time_keeping_approve_id', $record->time_keeping_approve_id)
+                                             ->where('tbl_payroll_time_keeping_approved_performance.ptka_daily_key', 'undertime') 
+                                             ->first();      
+                                   
+               $temp['absences']       = Tbl_payroll_time_keeping_approved_performance::
+                                             where('tbl_payroll_time_keeping_approved_performance.time_keeping_approve_id', $record->time_keeping_approve_id)
+                                             ->select(DB::raw('tbl_payroll_time_keeping_approved_performance.ptka_daily_time, tbl_payroll_time_keeping_approved_breakdown.ptkab_amount')) 
+                                             ->join('tbl_payroll_time_keeping_approved_breakdown', 'tbl_payroll_time_keeping_approved_performance.ptka_daily_key', '=', 'tbl_payroll_time_keeping_approved_breakdown.ptkab_label')
+                                             -> where('tbl_payroll_time_keeping_approved_breakdown.time_keeping_approve_id', $record->time_keeping_approve_id)
+                                             ->where('tbl_payroll_time_keeping_approved_performance.ptka_daily_key', 'absent') 
+                                             ->first(); 
+
+                $temp['COLA']       = Tbl_payroll_time_keeping_approved_breakdown::
+                                             where('time_keeping_approve_id', $record->time_keeping_approve_id)
+                                             ->select('ptkab_amount') 
+                                             ->where('ptkab_label', 'COLA') 
+                                             ->first(); 
 
 
                array_push($data['_record'], $temp);
           }
-          dd($data['_record']);
+          //dd($data['_record']);
           //return view('member.payroll.payroll_payslip', $data);
           //dd($data);
           return view('member.payroll.payroll_payslipv1', $data);

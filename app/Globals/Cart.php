@@ -1506,6 +1506,7 @@ class Cart
         $data['password'] = Crypt::decrypt($tbl_order->password);
         //email for COD
         $result = Mail_global::create_email_content($data, $shop_id, "cash_on_delivery");
+        
         if($result == 0)
         {    
             // $result = Mail_global::mail($data, $shop_id, "cod");

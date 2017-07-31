@@ -71,6 +71,14 @@
                                 <input type="text" disabled value="{{ $log_reference }}" class="form-control">
                             </div>
                             @endif
+                            @if(isset($view_invoice) && isset($inv))
+                                @if($view_invoice && $inv->order_status == 'Completed')
+                                <div class="col-md-4 pull-right text-right">
+                                    <label> </label>
+                                    <a class="btn btn-success" target="_blank" href="/member/ecommerce/product_order/create_order/invoice?order_id={{$ec_order_id}}">View Invoice</a>
+                                </div>
+                                @endif
+                            @endif
                         </div>
                         <div class="row clearfix">
                             <div class="col-sm-4">

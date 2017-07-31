@@ -161,6 +161,8 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 	//product order start
 	Route::get('product_order','Member\ProductOrderController@invoice_list');
 	Route::get('product_order/create_order','Member\ProductOrderController@index');
+
+	Route::any('product_order/create_order/invoice','Member\ProductOrderController@order_invoice');
 	Route::post('product_order/create_order/create_invoice','Member\ProductOrderController@create_invoice');
 	Route::post('product_order/create_order/update_invoice','Member\ProductOrderController@update_invoice');
 	Route::get('product_order/create_order/submit_coupon','Member\ProductOrderController@submit_coupon');

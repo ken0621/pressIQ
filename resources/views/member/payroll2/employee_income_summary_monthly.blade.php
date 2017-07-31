@@ -3,9 +3,11 @@
     <input type="hidden" class="x-employee-id" value="{{ $employee_id }}">
     <button type="button" class="close" data-dismiss="modal">×</button>
     <h4 class="modal-title">
-        <b>MONTHLY COMPUTATION ({{ $period_info->month_contribution }} - {{ code_to_word($period_info->period_count) }})</b>
+        <b>Summary for {{ $employee_info->payroll_employee_first_name }} {{ $employee_info->payroll_employee_last_name }}</b>
     </h4>
+    <div>MONTHLY COMPUTATION ({{ $period_info->month_contribution }} - {{ code_to_word($period_info->period_count) }})</div>
 </div>
+
 
 
 @if($time_keeping_approved == false)

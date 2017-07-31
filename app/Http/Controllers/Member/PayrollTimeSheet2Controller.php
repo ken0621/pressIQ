@@ -38,6 +38,7 @@ class PayrollTimeSheet2Controller extends Member
 	{
 		$data["payroll_period_id"] = $period_id;
 		$data["page"] = "Employee List Summary";
+
 		$this->index_redirect_if_time_keeping_does_not_exist($period_id);
 		$data["company"] = $this->db_get_company_period_information($period_id);
 		$data["_company"] = $this->db_get_list_of_company_for_period($data["company"]->payroll_company_id);
@@ -58,13 +59,22 @@ class PayrollTimeSheet2Controller extends Member
 		$mode 				= Request::input("mode") == "pending" ? 0 : 1;
 		$branch 			= Request::input("branch");
 		$data["page"] 		= "Employee List Summary";
-
+		
 		$this->index_redirect_if_time_keeping_does_not_exist($period_id);
 
 		$data["company"] 	= $this->db_get_company_period_information($period_id);
 		$data["_employee"] 	= $this->db_get_list_of_employees_by_company_with_search($data["company"]->payroll_company_id, $search_value, $mode, $period_id, $data["company"]->payroll_period_start, $branch);
+		
+		if($mode == "pending")
+		{
+			return view('member.payroll2.employee_summary_table', $data);
+		}
+		else
+		{
+			return view('member.payroll2.employee_summary_table_approved', $data);
+		}
 
-		return view('member.payroll2.employee_summary_table', $data);
+		
 	}
 	public function timesheet($period_id, $employee_id)
 	{
@@ -794,6 +804,7 @@ class PayrollTimeSheet2Controller extends Member
 		*  Flat Rate
 		*  Monthly Rate
 		*/
+
 		$data["date"] = $date = Tbl_payroll_period_company::sel($period_company_id)->pluck('payroll_period_start');
 		$data["group"] = $group = $this->db_get_current_employee_contract($employee_id, $date);
 
@@ -802,23 +813,35 @@ class PayrollTimeSheet2Controller extends Member
 			dd("You need to set a PAYROLL GROUP in order to show summary.");
 		}
 
-		$data["computation_type"] = $computation_type = $group->payroll_group_salary_computation;
+		
 
 		$check_approved = Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_company_id)->first();
 		if($check_approved)
 		{
 			$data = $this->compute_process_cutoff($check_approved);
+			$data["computation_type"] = $computation_type = $group->payroll_group_salary_computation;
+
+			if($computation_type != "Flat Rate")
+			{
+				if(isset($data["cutoff_compute"]->cutoff_rate))
+				{
+					$computation_type = "Monthly Rate";
+				}
+				else
+				{
+					$computation_type = "Daily Rate";
+				}
+			}
 		}		
 		else
 		{
 			$data = $this->compute_whole_cutoff($period_company_id, $employee_id);
+			$data["computation_type"] = $computation_type = $group->payroll_group_salary_computation;
 			
 		}
 
-		//dd($data);
-
-
 		$data["employee_id"] = $employee_id;
+		$data["employee_info"] = $this->db_get_employee_information($employee_id); 
 		$check_approved = Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_company_id)->first();
 		$data["time_keeping_approved"] = $check_approved ? true : false;			
 		

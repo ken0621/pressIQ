@@ -26,7 +26,7 @@
 
     <div class="invoice">
       <div class="header">
-        <div class="title">INTOGADGETS INC.</div>
+        <div class="title">{{ ucfirst($shop_info->shop_key) }} |  {{ isset($page) ? $page : 'Home' }}</div>
         <div class="sub-title">SM Supercenter Valenzuela, Mc. Arthur Highway, Karuhatan, Valenzuela City</div>
         <div class="sub-title">VAT Reg. TIN: 007-308-262-003</div>
       </div>

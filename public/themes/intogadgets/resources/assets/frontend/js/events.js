@@ -30,6 +30,9 @@ function events()
 			prevArrow:"<img class='a-left control-c prev slick-prev' src='resources/assets/frontend/img/arrow-left.png'>",
 			nextArrow:"<img class='a-right control-c next slick-next' src='resources/assets/frontend/img/arrow-right.png'>",
 			dots: true,
+			slidesToShow: 1,
+			autoplay: true,
+  			autoplaySpeed: 5000,
 		});
 	}
 	function event_slider_crop()

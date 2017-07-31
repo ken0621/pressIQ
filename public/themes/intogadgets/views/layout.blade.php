@@ -5,7 +5,7 @@
       <meta charset="utf-8">
       @yield('meta')
       <title>{{ ucfirst($shop_info->shop_key) }} | {{ $page or 'Page' }}</title>
-      <link rel="icon" type="image/png" href="/resources/assets/frontend/img/favicon.png">
+      <link rel="icon" type="image/png" href="resources/assets/frontend/img/favicon.png">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'> -->
       <link href='http://fonts.googleapis.com/css?family=Lato:400,700,900,300' rel='stylesheet' type='text/css'>
@@ -262,19 +262,19 @@
                      <a href="/about" class="footer-text link">
                      About
                      </a>
-                     <a href="career" class="footer-text link">
+                     <a href="/career" class="footer-text link">
                      Careers
                      </a>
-                     <a href="contact" class="footer-text link">
+                     <a href="/contact" class="footer-text link">
                      Contact
                      </a>
-                     <a href="how" class="footer-text link">
+                     <a href="/how" class="footer-text link">
                      How to Orders
                      </a>
-                     <a href="product" class="footer-text link">
+                     <a href="/product" class="footer-text link">
                      Products
                      </a>
-                     <a href="term" class="footer-text link">
+                     <a href="/term" class="footer-text link">
                      Terms and Agreement
                      </a>
                   </div>

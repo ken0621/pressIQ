@@ -99,6 +99,84 @@
             </div>
         </div>
         @endforeach
+        @foreach($_employee as $employee)
+        <div style="width: 600px; padding: 10px; border: 1px solid #ddd; margin: 10px; display: inline-block; vertical-align: top; background-color: #fff;">
+            <div class="main-content-holder">
+              <div class="row" >
+                <div class="col-md-12 text-center" style="font-weight: bold; font-size: 16px;">{{ strtoupper($company->payroll_company_name) }}</div>
+                <div style="margin-top: 30px;">
+                    <div class="col-md-6">Name: {{ $employee->payroll_employee_last_name }}, {{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }}</div>
+                    <div class="col-md-6 text-right">{{ $show_period_start }} - {{ $show_period_end }}</div>
+                </div>
+              </div>
+
+              <div class="row" style="margin-top: 20px; text-align: left;">
+                  <div class="col-md-12">
+                      <table style="width: 100%;" class="table table-bordered">
+                          <tbody>
+                              <tr style="font-weight: bold;">
+                                  <td width="40%">BASIC PAY</td>
+                                  <td width="30%" class="text-right">{{ payroll_currency($employee->net_basic_pay) }}</td>
+                                  <td width="30%"></td>
+                              </tr>
+                              <tr>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                              </tr>
+                              <!-- ADDITION TO GET GROSS -->
+                              @foreach($employee->cutoff_breakdown->_gross_pay_breakdown as $breakdown)
+                              <tr>
+                                  <td>{{ strtoupper($breakdown["label"]) }}</td>
+                                  <td class="text-right">{{ payroll_currency($breakdown["amount"]) }}</td>
+                                  <td></td>
+                              </tr>
+                              @endforeach
+
+                              <tr style="font-weight: bold;">
+                                  <td>GROSS SALARY</td>
+                                  <td></td>
+                                  <td class="text-right">{{ payroll_currency($employee->gross_pay) }}</td>
+                              </tr>
+
+                              @foreach($employee->cutoff_breakdown->_taxable_salary_breakdown as $breakdown)
+                              <tr>
+                                  <td>{{ strtoupper($breakdown["label"]) }}</td>
+                                  <td class="text-right">{{ payroll_currency($breakdown["amount"]) }}</td>
+                                  <td></td>
+                              </tr>
+                              @endforeach
+
+
+
+                              @foreach($employee->cutoff_breakdown->_net_pay_breakdown as $breakdown)
+                              <tr>
+                                  <td>{{ strtoupper($breakdown["label"]) }}</td>
+                                  <td class="text-right">{{ payroll_currency($breakdown["amount"]) }}</td>
+                                  <td></td>
+                              </tr>
+                              @endforeach
+
+
+                              <tr>
+                                  <td>TOTAL DEDUCTION</td>
+                                  <td></td>
+                                  <td class="text-right">{{ payroll_currency($employee->total_deduction) }}</td>
+                              </tr>
+
+                              <tr style="font-weight: bold;">
+                                  <td>TAKE HOME PAY</td>
+                                  <td></td>
+                                  <td class="text-right">{{ payroll_currency($employee->net_pay) }}</td>
+                              </tr>
+
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+            </div>
+        </div>
+        @endforeach
     </div>
     
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>

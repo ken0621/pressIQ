@@ -6564,10 +6564,10 @@ class PayrollController extends Member
           //dd($data['_record']);
           //return view('member.payroll.payroll_payslip', $data);
           
-          //return view('member.payroll.payroll_payslipv1', $data);
+          return view('member.payroll.payroll_payslipv1', $data);
 
 
-          $page_width    = $data['payslip']->paper_size_width * 10;
+          /*$page_width    = $data['payslip']->paper_size_width * 10;
           $page_height   = $data['payslip']->paper_size_height * 10; 
 
           $view = 'member.payroll.payroll_payslipv1';             
@@ -6579,7 +6579,7 @@ class PayrollController extends Member
                $pdf->setOption('page-width', $page_width);
                $pdf->setOption('page-height', $page_height);
           return $pdf->stream('Paycheque.pdf');
-
+*/
 
           /*$view = 'member.payroll.payroll_payslipv1';             
           $pdf = PDF::loadView($view, $data);

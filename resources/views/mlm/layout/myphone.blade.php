@@ -362,13 +362,13 @@
             <!-- /top navigation -->
             <!-- page content -->
             <div class="right_col" role="main">
-              <div class="content">
+              <div class="content clearfix">
                 @yield("content")
               </div>
             </div>
             <!-- /page content -->
             <!-- footer content -->
-            <footer>
+            <footer class="clearfix">
                <div class="pull-right">
                   Brown Members Panel
                </div>

@@ -28,8 +28,9 @@
                         Action <span class="caret"></span>
                       </button>
                       <ul class="dropdown-menu dropdown-menu-custom">
-                        <li><a href="javascript:">View Summary</a> </li>
-                        <li><a link="javascript:">View Payslip</a></li>
+                        <li><a onclick="return confirm('Are you sure you want to UNPROCESS this record ({{ $period->payroll_period_category }} - {{ code_to_word($period->period_count) }} of {{ $period->month_contribution }}  {{ $period->year_contribution }})? ')" href="/member/payroll/unprocess_payroll/{{ $period->payroll_period_company_id }}">UNPROCESS</a> </li>
+                        <li><a href="javascript:">VIEW SUMMARY</a> </li>
+                        <li><a link="javascript:">VIEW PAYSLIP</a></li>
                       </ul>
                     </div>
                 </td>

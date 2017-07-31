@@ -81,7 +81,7 @@
 <div class="feature">
     <div class="feature-header">{{ get_content($shop_theme_info, "home", "home_featured_title") }}</div>
     <div class="feature-content container">
-        @foreach(get_collection(get_content($shop_theme_info, "home", "home_featured"), $shop_id) as $collection)
+        @foreach(limit_foreach(get_collection(get_content($shop_theme_info, "home", "home_featured"), $shop_id), 4) as $collection)
         <div class="holder col-md-3 col-sm-6">
            <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
            </a>
@@ -113,7 +113,7 @@
         <div class="text">{{ get_content($shop_theme_info, 'home', 'home_new_arrival_title') }}</div>
     </div>
     <div class="arrival-content container">
-        @foreach(get_collection(get_content($shop_theme_info, "home", "home_new_arrival"), $shop_id) as $collection)
+        @foreach(limit_foreach(get_collection(get_content($shop_theme_info, "home", "home_new_arrival"), $shop_id),8) as $collection)
         <div class="holder col-md-3 col-sm-6">
            <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
            </a>
@@ -145,7 +145,7 @@
         <div class="text">{{ get_content($shop_theme_info, 'home', 'home_best_seller_title') }}</div>
     </div>
     <div class="best-content container">
-        @foreach(get_collection(get_content($shop_theme_info, "home", "home_best_seller"), $shop_id) as $collection)
+        @foreach(limit_foreach(get_collection(get_content($shop_theme_info, "home", "home_best_seller"), $shop_id), 8) as $collection)
         <div class="holder col-md-3 col-sm-6">
            <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
            </a>

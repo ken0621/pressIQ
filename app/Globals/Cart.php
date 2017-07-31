@@ -1046,6 +1046,8 @@ class Cart
         $data['tbl_ec_order']['ec_order_load_number'] = isset($data['load_wallet']['ec_order_load_number']) == true ? $data['load_wallet']['ec_order_load_number'] : 0 ;
         $data["tbl_ec_order"]["service_fee"] = $service_fee;
         $data["tbl_ec_order"]["total"] = $total;
+        $data["tbl_ec_order"]["invoice_date"] =  Carbon::now();
+        $data["tbl_ec_order"]["due_date"] =  Carbon::now();
         $data["tbl_ec_order"]["coupon_id"] = (isset($customer_information["coupon_id"]) ? $customer_information["coupon_id"] : (isset($data["tbl_ec_order"]["coupon_id"]) ? $data["tbl_ec_order"]["coupon_id"] : null));
         $data["tbl_ec_order"]["shop_id"] = $shop_id;
         $data["tbl_ec_order"]["created_date"] = Carbon::now();

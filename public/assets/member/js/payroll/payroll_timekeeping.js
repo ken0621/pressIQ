@@ -71,6 +71,7 @@ function submit_done(data)
 	{
 
 	}
+	
 	data.element.modal("toggle");
 	if(data.function_name == "payroll_period_list.reload_list")
 	{

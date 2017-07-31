@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTblCouponCodeProduct34234 extends Migration
+class UpdateTblPayrollTimeKeepingApproved062819 extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +12,9 @@ class CreateTblCouponCodeProduct34234 extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_coupon_code_product', function (Blueprint $table) {
-            $table->increments('cc_id');
-            $table->integer("coupon_code_id");
-            $table->integer("coupon_code_product_id");
+        Schema::table('tbl_payroll_time_keeping_approved', function (Blueprint $table)
+        {
+            $table->integer("status_step")->default(1);
         });
     }
 
@@ -26,6 +25,6 @@ class CreateTblCouponCodeProduct34234 extends Migration
      */
     public function down()
     {
-        Schema::drop('tvl_coupon_code_product');
+        //
     }
 }

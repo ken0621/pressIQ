@@ -5089,10 +5089,9 @@ class PayrollController extends Member
                     ->leftjoin('tbl_payroll_leave_schedule','tbl_payroll_leave_schedule.payroll_leave_employee_id','=','tbl_payroll_leave_employee.payroll_leave_employee_id')
                     ->where('tbl_payroll_leave_employee.payroll_leave_temp_id',$leave_id)
                     ->where('tbl_payroll_leave_employee.payroll_leave_employee_is_archived', 0)
-
                     ->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
-                    ->groupBy('tbl_payroll_employee_basic.payroll_employee_id')
-                    ->select(DB::raw('*, tbl_payroll_leave_employee.payroll_leave_employee_id as leave_employee_id, (tbl_payroll_leave_temp.payroll_leave_temp_days_cap - (select count(tbl_payroll_leave_schedule.payroll_leave_employee_id) from tbl_payroll_leave_schedule where (tbl_payroll_leave_schedule.payroll_schedule_leave  BETWEEN "'.date('Y').'-01-01" and "'.date('Y').'-12-31") and tbl_payroll_leave_schedule.payroll_leave_employee_id = leave_employee_id)) as available_count, tbl_payroll_leave_employee.payroll_leave_employee_id as payroll_leave_employee_id_2'))
+                    ->groupBy('tbl_payroll_employee_basic.payroll_employee_id')                                                                                           
+                    ->select(DB::raw('*, tbl_payroll_leave_employee.payroll_leave_employee_id as leave_employee_id, (tbl_payroll_leave_temp.payroll_leave_temp_days_cap - sum(tbl_payroll_leave_schedule.consume)) as remaining_leave ,(tbl_payroll_leave_temp.payroll_leave_temp_days_cap - (select count(tbl_payroll_leave_schedule.payroll_leave_employee_id) from tbl_payroll_leave_schedule where (tbl_payroll_leave_schedule.payroll_schedule_leave  BETWEEN "'.date('Y').'-01-01" and "'.date('Y').'-12-31") and tbl_payroll_leave_schedule.payroll_leave_employee_id = leave_employee_id)) as available_count, tbl_payroll_leave_employee.payroll_leave_employee_id as payroll_leave_employee_id_2'))
                     ->get();
 
           return json_encode($emp);
@@ -5239,10 +5238,8 @@ class PayrollController extends Member
                                                   ->where('payroll_parent_company_id', 0)
                                                   ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
                                                   ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
-
                                                   ->orderBy('tbl_payroll_period.payroll_period_start','asc')
                                                   ->get();
-          
 
           return view('member.payroll.payroll_timekeeping', $data);
      }

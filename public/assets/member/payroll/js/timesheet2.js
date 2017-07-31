@@ -3,6 +3,7 @@ var timesheet_request = null;
 var adjust_form_request = null;
 var new_sub_ctr = 1000;
 var timechangerequest = null;
+var timechangerequestdelay = new Array();
 function timesheet()
 {
 	init();
@@ -10,6 +11,10 @@ function timesheet()
 	this.external_event_time_entry = function()
 	{
 		event_time_entry();
+	}
+	this.external_reload_rate_for_date = function(tr_date)
+	{
+		action_reload_rate_for_date_start(tr_date);
 	}
 
 	function init()
@@ -23,10 +28,39 @@ function timesheet()
 	{
 		event_time_entry();
 		event_create_new_time();
+		event_click_custom_shift_checkbox();
 		event_time_focus_out_recompute();
+		event_load_summary();
 		action_click_approve_timesheet();
 	}
+	function event_load_summary()
+	{
+		$(".load-summary").click(function()
+		{
+			$("#global_modal").modal("hide");
+			var employee_id = $(".employee-timesheet-modal .x-employee-id").val();
+			var period_id = $(".employee-timesheet-modal .period-id").val();
 
+			setTimeout(function()
+			{
+
+				action_load_link_to_modal("/member/payroll/company_timesheet2/income_summary/" + period_id + "/" + employee_id, "lg");
+			}, 500);
+
+		});
+	}
+	function event_click_custom_shift_checkbox()
+	{
+		$(".custom-shift-checkbox").unbind("click")
+		$(".custom-shift-checkbox").bind("click", function(e)
+		{
+			var timesheet_date = $(e.currentTarget).closest(".tr-parent").attr("date");
+			var employee_id = $(".employee-timesheet-modal .x-employee-id").val();
+			var period_id = $(".employee-timesheet-modal .period-id").val();
+			var timesheet_id = $(e.currentTarget).closest(".tr-parent").attr("timesheet_id");
+			action_load_link_to_modal('/member/payroll/company_timesheet_custom_shift?date=' + timesheet_date + '&employee_id=' + employee_id + '&period_id=' + period_id + '&timesheet_id=' + timesheet_id, 'lg');
+		});
+	}
 	function action_click_approve_timesheet()
 	{
 		$(".approve-timesheet-btn").unbind("click");
@@ -34,8 +68,8 @@ function timesheet()
 		{
 			$(".approve-timesheet-btn").html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
 
-			var period_id = $(".period-id").val();
-			var employee_id = $(".x-employee-id").val();
+			var period_id = $(".employee-timesheet-modal .period-id").val();
+			var employee_id = $(".employee-timesheet-modal .x-employee-id").val();
 			
 			$.ajax({
 				url : "/member/payroll/company_timesheet_approve/approve_timesheet",
@@ -68,6 +102,14 @@ function timesheet()
 		$(".time-entry.time-in").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 0, 0, 0)});
 		$(".time-entry.time-out").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 12, 0, 0)});
 		$(".time-entry-24").timeEntry({show24Hours: true, defaultTime: new Date(0, 0, 0, 0, 0, 0)});
+
+		$(".time-entry.prevent_edit").each(function(key, val)
+		{
+			$(this).timeEntry('disable');
+			console.log(key);
+		});
+
+		//alert(123);
 	}
 	function event_time_focus_out_recompute()
 	{
@@ -84,6 +126,7 @@ function timesheet()
 			var tr_date = $(e.currentTarget).closest(".tr-parent").attr("date");
 			action_reload_rate_for_date(tr_date);
 		});
+
 		/* CHECK IF INITIAL VALUE CHANGED AFTER FOCUS OUT */
 		$(".table-timesheet").on("focusout", ".time-entry", function(e)
 		{
@@ -104,19 +147,31 @@ function timesheet()
 		});
 	}
 
-	/* ACTIONS */
 	function action_reload_rate_for_date(tr_date)
+	{
+		clearTimeout(timechangerequestdelay[tr_date]);
+		$target = $(".tr-parent[date='" + tr_date + "']");
+		$target.find(".rate-output").css("opacity", "0.5");
+
+	    timechangerequestdelay[tr_date] = setTimeout(function()
+	    {
+	    	action_reload_rate_for_date_start(tr_date)
+	    }, 1000);
+	}
+
+	/* ACTIONS */
+	function action_reload_rate_for_date_start(tr_date)
 	{
 		$target = $(".tr-parent[date='" + tr_date + "']");
 		$target.find(".rate-output").css("opacity", "0.5");
 		console.log("RELOADING RATE FOR DATE");
-		$input = $(".tr-parent[date='" + tr_date + "'] :input").serialize();
+		$input = $(".timesheet-of-employee").find(".tr-parent[date='" + tr_date + "'] :input").serialize();
 		
-		$period_id = $(".period-id").val();
-		$employee_id = $(".x-employee-id").val();
-		
+		$period_id = $(".employee-timesheet-modal .period-id").val();
+		$employee_id = $(".employee-timesheet-modal .x-employee-id").val();
+				
 		$url = "/member/payroll/company_timesheet2/change/" + $period_id + "/" + $employee_id;
-		
+
 		if(timechangerequest)
 		{
 			timechangerequest.abort();
@@ -131,6 +186,7 @@ function timesheet()
 			success: function(data)
 			{
 				console.log("TIME CHANGED SUCESS");
+				$target = $(".tr-parent[date='" + tr_date + "']");
 				$target.find(".rate-output").html(data.string_income).css("opacity", "1");
 			}
 		})
@@ -166,6 +222,8 @@ function timesheet()
 			$target_tr.find(".time-in-td").append('<input name="time-in[]" unq="' + $unq + '" value="" type="text" placeholder="NO TIME" class="new-time-event new-time-focus text-table text-center time-entry time-in is-timeEntry" >');
 			$target_tr.find(".time-out-td").append('<input name="time-out[]" unq="' + $unq + '" value="" type="text" placeholder="NO TIME" class="new-time-event text-table text-center time-entry time-out is-timeEntry">');
 			$target_tr.find(".time-comment-td").append('<input name="remarks[]" unq="' + $unq + '" value="" type="text" class="comment new-time-event text-table time-entry is-timeEntry" name="">');
+			$target_tr.find(".source-td").append('<input unq="' + $unq + '" type="text" disabled class="comment new-time-event text-table" value="Manually Encoded">');
+			
 			$target_tr.find(".new-time-focus").focus().removeClass("new-time-focus");
 			event_time_entry();
 		}

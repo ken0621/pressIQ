@@ -17,7 +17,7 @@
                 </td>
     			<td class="text-center">{{ $period->payroll_company_name }}</td>
                 <td class="text-center"><a href="javascript:">{{ payroll_currency($period->payroll_period_total_net) }}</a></td>
-    			<td class="text-center"><a href="javascript:">VIEW PAYSLIP</a></td>
+    			<td class="text-center"><a href="/member/payroll/payroll_approved_view/generate_payslip_v2/{{$period->payroll_period_company_id}} }}" target="_blank">VIEW PAYSLIP</a></td>
     		</tr>
     		@endforeach
         @else

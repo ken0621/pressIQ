@@ -2,8 +2,10 @@
     <thead style="text-transform: uppercase">
         <tr>
             <th class="text-center">Date Covered</th>
+            <th class="text-center">Period</th>
             <th class="text-center">Company</th>
             <th class="text-center">Total Net Salary</th>
+            <th class="text-center">Grand Total</th>
             <th class="text-center"></th>
         </tr>
     </thead>
@@ -13,16 +15,31 @@
     		<tr>
     			<td class="text-center">
                     {{ date('M d, Y',strtotime($period->payroll_period_start)).' - '.date('M d, Y',strtotime($period->payroll_period_end)) }}
-                    <div>{{ $period->payroll_period_category }} ({{ code_to_word($period->period_count) }} of {{ $period->month_contribution }}  {{ $period->year_contribution }})</div>
+                </td>
+                <td class="text-center">
+                    {{ $period->payroll_period_category }} ({{ code_to_word($period->period_count) }} of {{ $period->month_contribution }}  {{ $period->year_contribution }})
                 </td>
     			<td class="text-center">{{ $period->payroll_company_name }}</td>
-                <td class="text-center"><a href="javascript:">{{ payroll_currency($period->payroll_period_total_net) }}</a></td>
-    			<td class="text-center"><a href="/member/payroll/payroll_approved_view/generate_payslip_v2/{{ $period->payroll_period_company_id }}" target="_blank">VIEW PAYSLIP</a></td>
+
+                <td class="text-center">{{ payroll_currency($period->payroll_period_total_net) }}</td>
+                <td class="text-center"><a href="javascript:">{{ payroll_currency($period->payroll_period_total_grand) }}</a></td>
+                <td class="text-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Action <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-custom">
+                        <li><a href="javascript:">View Summary</a> </li>
+                        <li><a href="/member/payroll/payroll_approved_view/generate_payslip_v2/{{ $period->payroll_period_company_id }}" target="_blank">View Payslip</a></li>
+                      </ul>
+                    </div>
+                </td>
+
     		</tr>
     		@endforeach
         @else
             <tr>
-                <td colspan="4" style="padding: 80px; text-align: center;">No Data</td>
+                <td colspan="6" style="padding: 80px; text-align: center;">No Data</td>
             </tr>
         @endif
     </tbody>

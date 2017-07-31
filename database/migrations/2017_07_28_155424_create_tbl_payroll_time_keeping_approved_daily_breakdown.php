@@ -14,7 +14,7 @@ class CreateTblPayrollTimeKeepingApprovedDailyBreakdown extends Migration
     {
         Schema::create('tbl_payroll_time_keeping_approved_daily_breakdown', function (Blueprint $table)
         {
-            $table->integer("ptka_daily_breakdown_id")->increments();
+            $table->increments("ptka_daily_breakdown_id");
             $table->integer("time_keeping_approve_id")->integer()->unsigned();
             $table->integer("payroll_time_sheet_id")->integer()->unsigned();
             $table->string("ptka_daily_type")->string()->default("additions");

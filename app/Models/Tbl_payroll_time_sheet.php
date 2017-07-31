@@ -28,11 +28,24 @@ class Tbl_payroll_time_sheet extends Model
 		• REASON : DETEMINE IF THE TIME SHEET CAME FROM BIO METRICS OR IN ANY OTHER SOURCE
 	*/
 
+
+
 	public function scopecheckdata($query, $payroll_employee_id = 0, $payroll_time_date = '0000-00-00')
 	{
 		return $query->where('payroll_employee_id', $payroll_employee_id)->where('payroll_time_date',$payroll_time_date);
 	}
-
+	public function scopeUpdateCompute($query, $_cutoff_input)
+	{
+    	foreach($_cutoff_input as $key => $input)
+    	{
+			$update_compute["time_sheet_daily_rate"] = $input->compute->daily_rate;
+			$update_compute["time_sheet_daily_basic"] = $input->compute->total_day_basic;
+			$update_compute["time_sheet_daily_cola"] = $input->compute->total_day_cola;
+			$update_compute["time_sheet_daily_total_addition"] = $input->compute->breakdown_addition;
+			$update_compute["time_sheet_daily_total_deduction"] = $input->compute->breakdown_deduction;
+			$query->where("payroll_time_sheet_id", $input->payroll_time_sheet_id)->update($update_compute);
+    	}
+	}
 	public function scopegetpercompany($query, $payroll_period_company_id = 0)
 	{
 		$query->join('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_time_sheet.payroll_employee_id')

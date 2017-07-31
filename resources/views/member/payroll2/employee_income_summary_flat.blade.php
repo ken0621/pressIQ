@@ -11,7 +11,7 @@
 @if($time_keeping_approved == false)
 <div class="modal-header text-right">
     <button class="btn btn-def-white btn-custom-white" data-dismiss="modal">CLOSE</button>
-    <button class="btn btn-def-white btn-custom-white">MAKE ADJUSTMENT</button>
+    <button class="btn btn-def-white btn-custom-white make-adjustment">MAKE ADJUSTMENT</button>
     <button class="btn btn-primary approve-timesheet-btn">MARK READY</button>
 </div>
 @endif
@@ -138,7 +138,7 @@
 @if($time_keeping_approved == false)
 <div class="modal-footer text-right">
     <button class="btn btn-def-white btn-custom-white" data-dismiss="modal">CLOSE</button>
-    <button class="btn btn-def-white btn-custom-white">MAKE ADJUSTMENT</button>
+    <button class="btn btn-def-white btn-custom-white make-adjustment">MAKE ADJUSTMENT</button>
     <button class="btn btn-primary approve-timesheet-btn">MARK READY</button>
 </div>
 @endif

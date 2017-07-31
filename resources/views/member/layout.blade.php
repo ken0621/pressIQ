@@ -411,7 +411,7 @@
     }
     
     </style>
-    <script type="text/javascript" src="/assets/member/global.js"></script>
+    <script type="text/javascript" src="/assets/member/global.js?version=6.1"></script>
 
     <!-- Testing only -->
     <script type="text/javascript" src="/assets/member/settings/settings_global.js"></script>

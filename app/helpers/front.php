@@ -38,7 +38,10 @@ function get_collection($collection_id, $shop_id = null)
         {            
             unset($collection[$key]);
         }
+
     }
+
+    $collection = shuffle_assoc($collection);
     return $collection;
 }
 function array_random($array)

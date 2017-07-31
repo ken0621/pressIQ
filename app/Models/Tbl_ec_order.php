@@ -14,6 +14,10 @@ class Tbl_ec_order extends Model
     {
     	return $query->join(DB::raw("(select customer_id, title_name, first_name, middle_name, last_name from tbl_customer) customer"),"customer.customer_id","=","tbl_ec_order.customer_id");
     }
+    public static function scopeCustomer_address($query)
+    {
+        return $query->leftjoin("tbl_customer_address","tbl_customer_address.customer_id","=","tbl_ec_order.customer_id");
+    }
     public static function scopeCustomer_otherinfo($query)
     {
     	return $query->leftjoin("tbl_customer_other_info","tbl_customer_other_info.customer_id","=","tbl_ec_order.customer_id");

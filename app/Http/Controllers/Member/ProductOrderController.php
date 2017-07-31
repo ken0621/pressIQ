@@ -45,6 +45,8 @@ class ProductOrderController extends Member
         $data['_um']                = UnitMeasurement::load_um_multi();
         $data["action"]             = "/member/ecommerce/product_order/create_order/create_invoice";
 
+
+        $data['view_invoice']       = Ec_order::get_settings();
         $id = Request::input('id');
         if($id)
         {
@@ -109,6 +111,36 @@ class ProductOrderController extends Member
         }
        
         return view('member.product_order.product_create_order', $data);
+    }
+    public function order_invoice()
+    {
+        $order_id = Request::input("order_id");
+        $data["page"] = "Invoice";
+        $data["shop_info"] = $this->user_info;
+        $data["order"] = Tbl_ec_order::where("tbl_ec_order.ec_order_id", $order_id)->customer()->customer_address()->where("purpose","billing")->first();
+
+        $data["shop_theme"] = "intogadgets";
+        if ($data["order"]->payment_status == 1) 
+        {
+            $data["_item"] = Tbl_ec_order_item::where("tbl_ec_order_item.ec_order_id", $order_id)->groupBy("tbl_ec_order_item.item_id")->item()->get();
+
+            $data["order"]->subtotal = $data["order"]->subtotal - Cart::get_coupon_discount($data["order"]->coupon_id, $data["order"]->subtotal); 
+            $data["coupon_discount"] = Cart::get_coupon_discount($data["order"]->coupon_id, $data["order"]->subtotal);
+            $data['order']->vat     = $data["order"]->subtotal / 1.12 * 0.12;
+            $data['order']->vatable = $data['order']->subtotal - $data['order']->vat;
+
+            if($data["order"]->billing_address == ', , , ')
+            {
+                $data["order"]->billing_address = $data["order"]->customer_street.", ".$data["order"]->customer_zipcode.", ".$data["order"]->customer_city.", ".$data["order"]->customer_state;
+            }
+            
+            return view("member.product_order.account_invoice", $data);
+        }
+        else
+        {
+            return Redirect::back();
+        }
+
     }
     public function invoice_list()
     {

@@ -437,6 +437,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_approved_view/payroll_approved_company/{id}','Member\PayrollController@payroll_approved_company');
 	Route::any('/payroll_approved_view/payroll_record_by_id/{id}','Member\PayrollController@payroll_record_by_id');
 	Route::any('/payroll_approved_view/genereate_payslip/{id}','Member\PayrollController@genereate_payslip');
+
+	Route::any('/payroll_approved_view/generate_payslip_v2/{id}','Member\PayrollController@generate_payslip_v2');
 	/* PAYROLLL APPROVED END */
 
 	/* PAYROLL NOTES  START*/

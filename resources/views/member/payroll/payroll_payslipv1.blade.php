@@ -116,55 +116,48 @@
 								</td>
 								
 							</tr>
-							
 							<tr>
 								<td valign="top" {{ $payslip->include_time_summary == 0 ? 'colspan=2' : '' }} >
-									<table cellspacing="0" cellpadding="2" width="100%">
+									<table class="border" cellspacing="0" cellpadding="2" width="100%" >
 										<tr>
-											<td colspan="2" class="border"><b>Salary Computation</b></td>
+											<td colspan="" class=""><b>EARNINGS</b></td>
 										</tr>
-										@foreach($brk['break']['computation'] as $compute)
-											@foreach($compute as $value)
+										<tr>
+											<td>Description</td>
+											<td>Hrs.</td>
+											<td>Amount</td>
+										</tr>
+										@foreach($brk['_ptkab']['additions'] as $additions)
 											<tr>
-												<td class="border">
-													{!!$value['name']!!}
-												</td>
-												<td class="text-right border">
-													{!!$value['amount']!!}
-												</td>
+												<td>{{ $additions['ptkab_label'] }}</td>
+												<td></td>
+												<td>{{ $additions['ptkab_amount'] }}</td>
 											</tr>
-												@foreach($value['sub'] as $sub)
-												<tr>
-													<td class="indent-15 border">
-														{!!$sub['name']!!}
-													</td>
-													<td class="text-right border">
-														{!!$sub['amount']!!}
-													</td>
-												</tr>
-												@endforeach
-											@endforeach
 										@endforeach
+										
 									</table>
 								</td>
 								@if($payslip->include_time_summary == 1)
 								<td valign="top">
-									<table cellspacing="0" cellpadding="2" width="100%">
+									<table class="border" cellspacing="0" cellpadding="2" width="100%" >
 										<tr>
-											<td colspan="2" class="border">
-												<b>Time Sheet summary</b>
-											</td>
+											<td colspan="2" class=""><b>DEDUCTIONS</b></td>
 										</tr>
-										@foreach($brk['break']['time'] as $time)
-										<tr>
-											<td class="border">
-												{!!$time['name']!!}
-											</td>
-											<td class="text-right border">
-												{!!$time['time']!!}
-											</td>
-										</tr>
+									
+										@foreach($brk['_ptkab']['deductions'] as $deductions)
+											<tr>
+												<td>{{ $deductions['ptkab_label'] }}</td>
+												<td>{{ $deductions['ptkab_amount'] }}</td>
+											</tr>
 										@endforeach
+
+										@foreach($brk['_ptkab']['government_contributions'] as $government)
+											<tr>
+												<td>{{ $government['ptkab_label'] }}</td>
+												<td>{{ $government['ptkab_amount'] }}</td>
+											</tr>
+										@endforeach
+										
 									</table>
 								</td>
 								@endif

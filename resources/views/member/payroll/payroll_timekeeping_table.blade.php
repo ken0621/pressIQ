@@ -8,6 +8,7 @@
             <th class="text-center">Period Order</th>
             <th class="text-center"></th>
             <th class="text-center"></th>
+            <th class="text-center"></th>
         </tr>
     </thead>
     <tbody>
@@ -21,6 +22,7 @@
     			<td class="text-center">{{ code_to_word($period->period_count) }}</td>
     			<td class="text-center"><a onclick="return confirm('Are you sure you want to delete this payroll period? You will not be able to recover the timesheet if you delete a payroll period.')" href="/member/payroll/time_keeping/company_period/delete/{{ $period->payroll_period_company_id }}">Delete</a></td>
     			<td class="text-center"><a href="/member/payroll/company_timesheet2/{{$period->payroll_period_company_id}}">View Employee</a></td>
+                <td class="text-center"><a href="/member/payroll/payroll_approved_view/generate_payslip_v2/{{ $period->payroll_period_company_id }}" target="_blank" >Payslip</a></td>
     		</tr>
     		@endforeach
         @else

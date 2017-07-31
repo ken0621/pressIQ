@@ -154,7 +154,7 @@ class PayrollController extends Member
 
           switch ($mode)
           {
-               case 'generated':
+               case 'pending':
                     return view('member.payroll.payroll_timekeeping_table', $data);
                break;
 
@@ -163,7 +163,7 @@ class PayrollController extends Member
                break;  
 
                default:
-                    return view('member.payroll.payroll_timekeeping_table_processed', $data);
+                    return view('member.payroll.payroll_timekeeping_table', $data);
                break;
           }
           
@@ -6665,33 +6665,29 @@ class PayrollController extends Member
                $temp['company_name']    = $record->payroll_company_name;
                $temp['company_address'] = $record->payroll_company_address;
                $temp['company_logo']    = $record->payroll_company_logo;
-               $temp['emp']             = $this->array_to_object(Tbl_payroll_employee_contract::
+               $temp['emp']             = Tbl_payroll_employee_contract::
                                                             selemployee($record->payroll_employee_id, $period->payroll_period_start)
                                                             ->leftjoin('tbl_payroll_department','tbl_payroll_department.payroll_department_id','=','tbl_payroll_employee_contract.payroll_department_id')
                                                             ->leftjoin('tbl_payroll_jobtitle','tbl_payroll_jobtitle.payroll_jobtitle_id','=','tbl_payroll_employee_contract.payroll_jobtitle_id')
-                                                            ->first());
-               $temp['_record']          = $this->array_to_object(Tbl_payroll_time_keeping_approved::Basic()
+                                                            ->first();
+               $temp['_record']          = Tbl_payroll_time_keeping_approved::Basic()
                                              ->where('payroll_period_company_id', $id)
                                              ->where('employee_id', $record->employee_id)
                                              ->join('tbl_payroll_company','tbl_payroll_company.payroll_company_id','=','tbl_payroll_employee_basic.payroll_employee_company_id')
                                              ->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
-                                             ->get());
+                                             ->get();
 
                $temp['_ptkab']          = $this->payslip_template_group_ptkab($record->time_keeping_approve_id); 
                $temp['_ptkap']          = $this->array_to_object(Tbl_payroll_time_keeping_approved_performance::
                                              where('time_keeping_approve_id', $record->time_keeping_approve_id)                      
                                              ->get());
 
-               $temp['absent_hours']          = Tbl_payroll_time_keeping_approved_performance::
-                                             where('time_keeping_approve_id', $record->time_keeping_approve_id) 
-                                             ->where('ptka_daily_key', 'absent')                     
-                                             ->get();
 
-
-               $temp['undertime_hours'] = Tbl_payroll_time_keeping_approved_performance::
-                                             where('time_keeping_approve_id', $record->time_keeping_approve_id) 
-                                             ->where('ptka_daily_key', 'undertime')                     
-                                             ->get();
+               $temp['basic_pay']       = Tbl_payroll_employee_contract::
+                                                            selemployee($record->payroll_employee_id, $period->payroll_period_start)
+                                                            ->leftjoin('tbl_payroll_department','tbl_payroll_department.payroll_department_id','=','tbl_payroll_employee_contract.payroll_department_id')
+                                                            ->leftjoin('tbl_payroll_jobtitle','tbl_payroll_jobtitle.payroll_jobtitle_id','=','tbl_payroll_employee_contract.payroll_jobtitle_id')
+                                                            ->first();
 
 
 

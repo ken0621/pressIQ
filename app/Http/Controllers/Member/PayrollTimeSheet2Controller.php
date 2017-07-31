@@ -25,7 +25,7 @@ use App\Models\Tbl_payroll_holiday_company;
 use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_shift_code;
 use App\Models\Tbl_payroll_shift_time;
-
+use App\Models\Tbl_payroll_adjustment;
 use App\Globals\Payroll2;
 use App\Globals\Payroll;
 use App\Globals\PayrollLeave;
@@ -717,6 +717,12 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			$timesheet_db = $this->timesheet_info_db($employee_id, $from);
 			$_timesheet[$from] = $this->timesheet_process_daily_info($employee_id, $from, $timesheet_db, $period_company_id);
+
+			if(!isset($timesheet_db))
+			{
+				dd("Please open timesheet first.");
+			}
+
 			$_timesheet[$from]->payroll_time_sheet_id = $timesheet_db->payroll_time_sheet_id;
 			$from = Carbon::parse($from)->addDay()->format("Y-m-d");
 		}
@@ -725,10 +731,7 @@ class PayrollTimeSheet2Controller extends Member
 		$data["cutoff_compute"] = $cutoff_compute = Payroll2::cutoff_compute_gross_pay($compute_type, $cutoff_rate, $cutoff_cola, $cutoff_target_days, $_timesheet);
 		$data["cutoff_breakdown"] = $cutoff_breakdown = Payroll2::cutoff_breakdown($period_company_id, $employee_id, $cutoff_compute, $data);
 		
-		//$data["netpay_compute"] = Payroll2::cutoff_compute_net_pay($period_company_id, $employee_id, $cutoff_compute->cutoff_income_plus_cola, $cutoff_compute->cutoff_income_plus_cola, $cutoff_compute->render_days);
-		//$data["break_down"]		= Payroll2::cutoff_compute_break($period_company_id, $employee_id, $cutoff_compute);
-		//dd($data);
-		// dd($data["break_down"]);
+
 		return $data;
 	}
 	public function day_summary_info($timesheet_id)
@@ -832,8 +835,107 @@ class PayrollTimeSheet2Controller extends Member
 			break;
 		}
 	}
+	public function delete_adjustment($period_company_id, $employee_id, $adjustment_id)
+	{
+		$data["page"] 				= "Delete Adjustment";
+		$data["period_id"] 			= $period_company_id;
+		$data["employee_id"] 		= $employee_id;
+		$data["adjustment_id"]		= $adjustment_id;
 
+		if(Request::isMethod("post"))
+		{
+			Tbl_payroll_adjustment::where("payroll_employee_id", $employee_id)->where("payroll_period_company_id", $period_company_id)->where("payroll_adjustment_id", $adjustment_id)->delete();
+			$return["status"] = "success";
+			$return["call_function"] = "apply_adjustment_submit_done";
+			$return["period_id"] 		= $period_company_id;
+			$return["employee_id"] 		= $employee_id;
+			echo json_encode($return);
+		}
+		else
+		{
+			$data["company_period"] 	= $this->db_get_company_period_information($period_company_id);
+			$data["employee_info"] 		= $employee_info = $this->db_get_employee_information($employee_id);
+			$data["show_period_start"]	= date("F d, Y", strtotime($data["company_period"]->payroll_period_start));
+			$data["show_period_end"]	= date("F d, Y", strtotime($data["company_period"]->payroll_period_end));
+			$data["adjustment"]			= Tbl_payroll_adjustment::where("payroll_adjustment_id", $adjustment_id)->first();
 
+			$check_approved = Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_company_id)->first();
+			
+			if($check_approved)
+			{
+				return view("member.payroll2.delete_adjustment_warning", $data);
+			}
+			else
+			{
+
+				return view("member.payroll2.delete_adjustment", $data);
+			}
+
+		}
+
+		
+	}
+	public function make_adjustment($period_company_id, $employee_id)
+	{
+		if(Request::isMethod("post"))
+		{
+			if(Request::input("adjustment_type") == "addition")
+			{
+				switch (Request::input("adjustment_setting"))
+				{
+					case 'taxable':
+						$add_gross_pay = true;
+					break;
+					case 'non-taxable':
+						$add_gross_pay = true;
+						$deduct_taxable_salary = true;
+						$add_net_pay = true;
+					break;
+					default:
+						$add_net_pay = true;
+					break;
+				}
+			}
+			else
+			{
+				$deduct_net_pay = true;
+			}
+
+			$insert["payroll_employee_id"] 				= $employee_id;
+			$insert["payroll_period_company_id"]		= $period_company_id;
+			$insert["payroll_adjustment_name"] 			= Request::input("adjustment_name");
+			$insert["payroll_adjustment_category"] 		= Request::input("adjustment_type");
+			$insert["payroll_adjustment_amount"] 		= Request::input("adjustment_amount");
+			$insert["adjustment_setting"] 				= Request::input("adjustment_setting");
+
+			$insert["add_gross_pay"] 			= (isset($add_gross_pay) ? 1 : 0);
+			$insert["deduct_gross_pay"] 		= (isset($deduct_gross_pay) ? 1 : 0);
+			$insert["add_taxable_salary"] 		= (isset($add_taxable_salary) ? 1 : 0);
+			$insert["deduct_taxable_salary"] 	= (isset($deduct_taxable_salary) ? 1 : 0);
+			$insert["add_net_pay"] 				= (isset($add_net_pay) ? 1 : 0);
+			$insert["deduct_net_pay"] 			= (isset($deduct_net_pay) ? 1 : 0);
+
+			Tbl_payroll_adjustment::insert($insert);
+			$return["status"] = "success";
+			$return["call_function"] = "apply_adjustment_submit_done";
+			$return["period_id"] 		= $period_company_id;
+			$return["employee_id"] 		= $employee_id;
+			echo json_encode($return);
+		}
+		else
+		{
+			$data["page"] 				= "Make Adjustment";
+			$data["period_id"] 			= $period_company_id;
+			$data["employee_id"] 		= $employee_id;
+			$data["company_period"] 	= $this->db_get_company_period_information($period_company_id);
+			$data["employee_info"] 		= $employee_info = $this->db_get_employee_information($employee_id);
+			$data["show_period_start"]	= date("F d, Y", strtotime($data["company_period"]->payroll_period_start));
+			$data["show_period_end"]	= date("F d, Y", strtotime($data["company_period"]->payroll_period_end));
+
+			return view("member.payroll2.make_adjustment", $data);
+		}
+
+	}
 	
 	public function income_summary_daily_computation($data)
 	{

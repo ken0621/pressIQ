@@ -81,6 +81,11 @@ function global()
 				}
 				else
 				{
+                    if(data.call_function)
+                    {
+                        window[data.call_function](data);
+                    }
+
                     console.log("global js");
 				    $(".modal-loader").addClass("hidden");
                     

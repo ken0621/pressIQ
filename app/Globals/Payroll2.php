@@ -2372,6 +2372,7 @@ class Payroll2
 		$return = Payroll2::cutoff_breakdown_additions($return, $data);
 		$return = Payroll2::cutoff_breakdown_cola($return, $data);
 		$return = Payroll2::cutoff_breakdown_deductions($return, $data); //meron bang non-taxable deduction?? lol
+		$return = Payroll2::cutoff_breakdown_adjustments($return, $data);
 		$return = Payroll2::cutoff_breakdown_taxable_allowances($return, $data);
 		$return = Payroll2::cutoff_breakdown_non_taxable_allowances($return, $data);
 		$return = Payroll2::cutoff_breakdown_hidden_allowances($return, $data);
@@ -3234,6 +3235,28 @@ class Payroll2
 		$val["deduct.net_pay"] = false;
 		array_push($return->_breakdown, $val);
 		$val = null;
+
+		return $return;
+	}
+	public static function cutoff_breakdown_adjustments($return, $data)
+	{
+		$_adjustment = Tbl_payroll_adjustment::where("payroll_period_company_id", $data["period_info"]->payroll_period_company_id)->where("payroll_employee_id", $data["employee_id"])->get();
+		
+		foreach($_adjustment as $adjustment)
+		{
+			$val["label"] 					= $adjustment->payroll_adjustment_name;
+			$val["type"] 					= "adjustment";
+			$val["description"] 			= "This is a manual adjustment.<br>Click <a class='delete-adjustment' adjustment_id='" . $adjustment->payroll_adjustment_id . "' href='javascript:'>here</a> to delete this adjustment.";
+			$val["amount"] 					= $adjustment->payroll_adjustment_amount;
+			$val["add.gross_pay"] 			= ($adjustment->add_gross_pay == 1 ? true : false);
+			$val["deduct.gross_pay"] 		= ($adjustment->deduct_gross_pay == 1 ? true : false);
+			$val["add.taxable_salary"] 		= ($adjustment->add_taxable_salary == 1 ? true : false);
+			$val["deduct.taxable_salary"] 	= ($adjustment->deduct_taxable_salary == 1 ? true : false);
+			$val["add.net_pay"] 			= ($adjustment->add_net_pay == 1 ? true : false);
+			$val["deduct.net_pay"] 			= ($adjustment->deduct_net_pay == 1 ? true : false);
+			array_push($return->_breakdown, $val);
+			$val = null;
+		}
 
 		return $return;
 	}

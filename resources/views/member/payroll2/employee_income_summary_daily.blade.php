@@ -7,11 +7,10 @@
     </h4>
 </div>
 
-
 @if($time_keeping_approved == false)
 <div class="modal-header text-right">
     <button class="btn btn-def-white btn-custom-white" data-dismiss="modal">CLOSE</button>
-    <button class="btn btn-def-white btn-custom-white">MAKE ADJUSTMENT</button>
+    <button class="btn btn-def-white btn-custom-white make-adjustment">MAKE ADJUSTMENT</button>
     <button class="btn btn-primary approve-timesheet-btn">MARK READY</button>
 </div>
 @endif
@@ -218,13 +217,12 @@
 @if($time_keeping_approved == false)
 <div class="modal-footer text-right">
     <button class="btn btn-def-white btn-custom-white" data-dismiss="modal">CLOSE</button>
-    <button class="btn btn-def-white btn-custom-white">MAKE ADJUSTMENT</button>
+    <button class="btn btn-def-white btn-custom-white make-adjustment">MAKE ADJUSTMENT</button>
     <button class="btn btn-primary approve-timesheet-btn">MARK READY</button>
 </div>
 @endif
 
 <script type="text/javascript" src="/assets/member/payroll/js/timesheet_income_summary.js"></script>
-
 
 <div class="view-debug-mode modal-footer" style="opacity: 0.5">
     <div onclick='$(".debug-view").removeClass("hidden")' style="text-align: center; cursor: pointer; color: #005fbf">DEBUG MODE (DEVELOPER ONLY) &nbsp; <i class="fa fa-caret-down"></i></div>

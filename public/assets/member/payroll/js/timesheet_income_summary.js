@@ -13,6 +13,27 @@ function timesheet_income_summary()
 	function document_ready()
 	{
 		action_click_approve_timesheet();
+		event_make_adjustment();
+		event_delete_adjustment();
+	}
+	function event_delete_adjustment()
+	{
+		$(".delete-adjustment").click(function(e)
+		{
+			var period_id = $(".employee-income-summary .period-id").val();
+			var employee_id = $(".employee-income-summary .x-employee-id").val();
+			var adjustment_id = $(e.currentTarget).attr("adjustment_id");
+			action_load_link_to_modal("/member/payroll/company_timesheet2/delete_adjustment/" + period_id + "/" + employee_id + "/" + adjustment_id, "md");
+		});
+	}
+	function event_make_adjustment()
+	{
+		$(".make-adjustment").click(function()
+		{
+			var period_id = $(".employee-income-summary .period-id").val();
+			var employee_id = $(".employee-income-summary .x-employee-id").val();
+			action_load_link_to_modal("/member/payroll/company_timesheet2/make_adjustment/" + period_id + "/" + employee_id, "md");
+		});
 	}
 	function action_click_approve_timesheet()
 	{

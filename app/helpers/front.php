@@ -34,15 +34,38 @@ function get_collection($collection_id, $shop_id = null)
     $collection = Ecom_Product::getProductCollection($collection_id, $shop_id);
     foreach ($collection as $key => $value) 
     {
-        if (!isset($value["product"]["variant"][0])) 
-        {
+        if(!isset($value["product"]["variant"][0])) 
+        {            
             unset($collection[$key]);
         }
-    }
 
+    }
     return $collection;
 }
+function get_collection_random($collection_id, $shop_id = null)
+{
 
+    $collection = Ecom_Product::getProductCollection($collection_id, $shop_id);
+    foreach ($collection as $key => $value) 
+    {
+        if(!isset($value["product"]["variant"][0])) 
+        {            
+            unset($collection[$key]);
+        }
+
+    }
+    $collection = shuffle_assoc($collection);
+    return $collection;
+}
+function array_random($array)
+{
+    $return_array = $array;
+    foreach ($array as $key => $value) 
+    {
+        
+    }
+    return $return_array;
+}
 function get_collection_first_name($data)
 {
     return $data['product']['eprod_name'] ? $data['product']['eprod_name'] : '';

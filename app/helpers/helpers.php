@@ -661,3 +661,14 @@ function get_ip_address()
 
     return $ip;
 }
+function shuffle_assoc($list) 
+{ 
+    $shuffleKeys = array_keys($list->toArray());
+    shuffle($shuffleKeys);
+    $newArray = array();
+    foreach($shuffleKeys as $key) 
+    {
+        $newArray[$key] = $list[$key];
+    }
+    return collect($newArray);
+} 

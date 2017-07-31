@@ -24,6 +24,9 @@
             @if(isset($job_resume))
             <li><a href="#job_resume">Resume</a></li>
             @endif
+            @if(isset($popular_tags))
+            <li><a href="#popular_tags">Popular Tags</a></li>
+            @endif
             <li><a href="#others">Others</a></li>
         </ul>
         <div class="panel panel-default panel-block panel-title-block panel-gray" style="margin-bottom: 0;">
@@ -219,6 +222,38 @@
                                     @endif
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                </div>
+                @endif
+                @if(isset($popular_tags))
+                <div id="popular_tags" class="tab-pane fade">
+                    <div class="clearfix" style="padding: 30px">
+                        <div class="col-md-12" style="margin-bottom: 5px;">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Search Count</th>
+                                            <th>Keyword</th>
+                                            <th class="text-center">Approved</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($popular_tags as $tag)
+                                        <tr>
+                                            <td>{{$tag->tag_id}}</td>
+                                            <td>{{number_format($tag->count)}}</td>
+                                            <td>{{$tag->keyword}}</td>
+                                            <td class="text-center">
+                                                <input type="checkbox" name="" onclick="approved_tag({{$tag->tag_id}})" {{$tag->tag_approved == 1 ? 'checked' : ''}}>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>                                
+                            </div>
                         </div>
                     </div>
                 </div>

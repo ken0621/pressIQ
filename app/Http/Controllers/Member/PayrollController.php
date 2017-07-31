@@ -150,7 +150,7 @@ class PayrollController extends Member
 
           switch ($mode)
           {
-               case 'pending':
+               case 'generated':
                     return view('member.payroll.payroll_timekeeping_table', $data);
                break;
 
@@ -159,7 +159,7 @@ class PayrollController extends Member
                break;  
 
                default:
-                    return view('member.payroll.payroll_timekeeping_table', $data);
+                    return view('member.payroll.payroll_timekeeping_table_processed', $data);
                break;
           }
           

@@ -28,8 +28,8 @@
                         Action <span class="caret"></span>
                       </button>
                       <ul class="dropdown-menu dropdown-menu-custom">
-                        <li><a href="javascript:">View Summary</a> </li>
-                        <li><a link="javascript:">View Payslip</a></li>
+                        <li><a href="javascript:">VIEW SUMMARY</a> </li>
+                        <li><a link="javascript:">VIEW PAYSLIP</a></li>
                       </ul>
                     </div>
                 </td>

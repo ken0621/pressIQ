@@ -28,6 +28,7 @@ class PayrollPayslipController extends Member
      }
      public function index($period_company_id)
      { 
+     	$data["counter"]	= 1;
 		$data["company"] = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
 		$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
 		
@@ -60,20 +61,20 @@ class PayrollPayslipController extends Member
 		//return view('member.payroll.payroll_payslipv5', $data);
 
 		/*THIS WILL CONVERT THE INTO PDF USING PDF GLOBAL*/
-		$view = view('member.payroll.payroll_payslipv5', $data);
-		return Pdf_global::show_pdf($view);
+	/*	$view = view('member.payroll.payroll_payslipv5', $data);
+		return Pdf_global::show_pdf($view);*/
 
 
 		/*THIS WILL CONVERT THE INTO PDF USING PDF by Sir Jimar*/
-		/*$view = 'member.payroll.payroll_payslipv5';             
+		$view = 'member.payroll.payroll_payslipv5';             
           $pdf = PDF::loadView($view, $data);
                $pdf->setOption('margin-right', 5);
                $pdf->setOption('margin-left', 5); 
                $pdf->setOption('margin-top', 5);
-               $pdf->setOption('margin-bottom', 5);*/
+               $pdf->setOption('margin-bottom', 5);
                /*$pdf->setOption('page-width', $page_width);
                $pdf->setOption('page-height', $page_height);*/
-          /*return $pdf->stream('Paycheque.pdf');*/
+          return $pdf->stream('Paycheque.pdf');
 
      }
 }

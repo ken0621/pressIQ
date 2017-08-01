@@ -3,13 +3,61 @@
         <thead id="thead_table_sort" link="/member/ecommerce/product/ecom_load_product_table">
             <tr>
                 <!-- <td class="col-md-2"></td> -->
-                <th class="text-center">ID
-                 <i class="fa fa-fw fa-sort hidden" onclick="sort_table('eprod_id','asc')"></i><i class="fa fa-fw fa-sort-asc hidden" onclick="sort_table('eprod_id','asc')"></i><i class="fa fa-fw fa-sort-desc hidden" onclick="sort_table('eprod_id','desc')"></i>
+                <th class="text-center">
+                    <a href="/member/ecommerce/product/list?column_name=eprod_id&in_order={{Request::input('column_name') == 'eprod_id' && Request::input('in_order') != 'asc' ? 'asc' : 'desc' }}">ID
+                    @if(Request::input('column_name') == 'eprod_id' && Request::input('in_order') == 'asc')
+                     <i class="fa fa-fw fa-sort-desc"></i>
+                    @elseif(Request::input('column_name') == 'eprod_id' && Request::input('in_order') == 'desc')
+                     <i class="fa fa-fw fa-sort-asc"></i>
+                     @else
+                     <i class="fa fa-fw fa-sort"></i>
+                     @endif
+                     </a>
                  </th>
-                <th class="text-center">Product</th>
-                <th class="text-center">Inventory</th>
-                <th class="text-center">Type</th>
-                <th class="text-center">Date Created</th>
+                <th class="text-center">
+                    <a href="/member/ecommerce/product/list?column_name=eprod_name&in_order={{Request::input('column_name') == 'eprod_name' && Request::input('in_order') != 'asc' ? 'asc' : 'desc' }}">Product
+                    @if(Request::input('column_name') == 'eprod_name' && Request::input('in_order') == 'asc')
+                     <i class="fa fa-fw fa-sort-desc"></i>
+                    @elseif(Request::input('column_name') == 'eprod_name' && Request::input('in_order') == 'desc')
+                     <i class="fa fa-fw fa-sort-asc"></i>
+                     @else
+                     <i class="fa fa-fw fa-sort"></i>
+                     @endif
+                     </a>
+                </th>
+                <th class="text-center">
+                    <a href="/member/ecommerce/product/list?column_name=inventory_count&in_order={{Request::input('column_name') == 'inventory_count' && Request::input('in_order') != 'asc' ? 'asc' : 'desc' }}">Inventory
+                    @if(Request::input('column_name') == 'inventory_count' && Request::input('in_order') == 'asc')
+                     <i class="fa fa-fw fa-sort-desc"></i>
+                    @elseif(Request::input('column_name') == 'inventory_count' && Request::input('in_order') == 'desc')
+                     <i class="fa fa-fw fa-sort-asc"></i>
+                     @else
+                     <i class="fa fa-fw fa-sort"></i>
+                     @endif
+                     </a>
+                </th>
+                <th class="text-center">
+                    <a href="/member/ecommerce/product/list?column_name=eprod_is_single&in_order={{Request::input('column_name') == 'eprod_is_single' && Request::input('in_order') != 'asc' ? 'asc' : 'desc' }}">Type
+                    @if(Request::input('column_name') == 'eprod_is_single' && Request::input('in_order') == 'asc')
+                     <i class="fa fa-fw fa-sort-desc"></i>
+                    @elseif(Request::input('column_name') == 'eprod_is_single' && Request::input('in_order') == 'desc')
+                     <i class="fa fa-fw fa-sort-asc"></i>
+                     @else
+                     <i class="fa fa-fw fa-sort"></i>
+                     @endif
+                     </a>
+                </th>
+                <th class="text-center">
+                    <a href="/member/ecommerce/product/list?column_name=date_created&in_order={{Request::input('column_name') == 'date_created' && Request::input('in_order') != 'asc' ? 'asc' : 'desc' }}">Date Created
+                    @if(Request::input('column_name') == 'date_created' && Request::input('in_order') == 'asc')
+                     <i class="fa fa-fw fa-sort-desc"></i>
+                    @elseif(Request::input('column_name') == 'date_created' && Request::input('in_order') == 'desc')
+                     <i class="fa fa-fw fa-sort-asc"></i>
+                     @else
+                     <i class="fa fa-fw fa-sort"></i>
+                     @endif
+                     </a>
+                </th>
                 <th class="text-center">Action</th>
             </tr>
         </thead>

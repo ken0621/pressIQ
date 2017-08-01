@@ -55,14 +55,14 @@
         </div>
         <div class="tab-content">
             <div id="actives" class="tab-pane fade in active">
-                <div class="load-data" target="active_product" filter="active" filteru="anime" >
+                <div class="load-data" target="active_product" filter="active" filteru="anime" column_name="{{Request::input('column_name')}}" in_order="{{Request::input('in_order')}}">
                     <div id="active_product">
                         @include('member.ecommerce_product.ecom_load_product_tbl', ['filter' => 'active'])
                     </div>
                 </div>
             </div>
             <div id="inactives" class="tab-pane fade in">
-                <div class="load-data" filter="inactive" target="inactive_product">
+                <div class="load-data" filter="inactive" target="inactive_product" column_name="{{Request::input('column_name')}}" in_order="{{Request::input('in_order')}}">
                     <div id="inactive_product">
                         @include('member.ecommerce_product.ecom_load_product_tbl',['_product' => $_product_archived, 'filter' => 'inactive'])
                     </div>

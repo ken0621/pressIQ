@@ -11,6 +11,10 @@ function floatvalser($amount)
     }
     
 }
+function array_to_object($array) {
+         return (object) $array;
+}
+
 function ctopercent($flt)
 {
     return number_format($flt * 100, 0) . "%";

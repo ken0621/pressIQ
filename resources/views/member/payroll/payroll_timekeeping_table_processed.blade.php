@@ -27,7 +27,7 @@
     		@endforeach
         @else
             <tr>
-                <td colspan="4" style="padding: 80px; text-align: center;">No Data</td>
+                <td colspan="6" style="padding: 80px; text-align: center;">No Data</td>
             </tr>
         @endif
     </tbody>

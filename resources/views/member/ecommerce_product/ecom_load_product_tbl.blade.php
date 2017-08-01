@@ -4,7 +4,7 @@
             <tr>
                 <!-- <td class="col-md-2"></td> -->
                 <th class="text-center">
-                     @include("member.load_ajax_data.load_th_header_sort",['link' => '/member/ecommerce/product/list', 'column_name' => 'eprod_id','in_order' => Request::input('in_order'),'title_column_name' => 'ID'])
+                     @include("member.load_ajax_data.load_th_header_sort",['link' => '/member/ecommerce/product/list', 'column_name' => 'eprod_id','in_order' => Request::input('in_order'),'title_column_name' => 'ID', 'filter' => $filter])
                  </th>
                 <th class="text-center">
                      @include("member.load_ajax_data.load_th_header_sort",['link' => '/member/ecommerce/product/list', 'column_name' => 'eprod_name','in_order' => Request::input('in_order'),'title_column_name' => 'Product'])

@@ -614,3 +614,12 @@ function get_address_customer()
 {
     
 }
+function get_payment_method_mlm($id)
+{
+    $data[1] = 'Cash';
+    $data[2] = 'GC';
+    $data[3] = 'E-Wallet';
+    $data[4] = 'V-Money';
+
+    return $data[$id];
+}

@@ -58,7 +58,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/company_timesheet2/income_summary/{period_id}/{employee_id}','Member\PayrollTimeSheet2Controller@income_summary');
 	Route::any('/company_timesheet2/unapprove/{period_id}/{employee_id}','Member\PayrollTimeSheet2Controller@unapprove');
 	Route::any('/company_timesheet2/change/{period_id}/{employee_id}','Member\PayrollTimeSheet2Controller@time_change');
-	
+	Route::any('/company_timesheet2/make_adjustment/{period_id}/{employee_id}','Member\PayrollTimeSheet2Controller@make_adjustment');
+	Route::any('/company_timesheet2/delete_adjustment/{period_id}/{employee_id}/{adjustment_id}','Member\PayrollTimeSheet2Controller@delete_adjustment');	
 	Route::any('/company_timesheet_approve/approve_timesheet','Member\PayrollTimeSheet2Controller@approve_timesheets');
 	
 	Route::any('/company_timesheet2/{company_id}','Member\PayrollTimeSheet2Controller@index');
@@ -390,6 +391,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	/* PAYROLL PROCESS START */
 	Route::any('/process_payroll/{period_company_id}','Member\PayrollProcessController@index');
+	Route::any('/unprocess_payroll/{period_company_id}','Member\PayrollProcessController@unprocess');
 	Route::any('/process_payroll/table/{period_company_id}','Member\PayrollProcessController@index_table');
 	// Route::any('/payroll_process','Member\PayrollController@payroll_process');
 	// Route::any('/payroll_process/modal_create_process','Member\PayrollController@modal_create_process');

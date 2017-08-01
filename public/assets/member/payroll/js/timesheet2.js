@@ -30,9 +30,25 @@ function timesheet()
 		event_create_new_time();
 		event_click_custom_shift_checkbox();
 		event_time_focus_out_recompute();
+		event_load_summary();
 		action_click_approve_timesheet();
 	}
+	function event_load_summary()
+	{
+		$(".load-summary").click(function()
+		{
+			$("#global_modal").modal("hide");
+			var employee_id = $(".employee-timesheet-modal .x-employee-id").val();
+			var period_id = $(".employee-timesheet-modal .period-id").val();
 
+			setTimeout(function()
+			{
+
+				action_load_link_to_modal("/member/payroll/company_timesheet2/income_summary/" + period_id + "/" + employee_id, "lg");
+			}, 500);
+
+		});
+	}
 	function event_click_custom_shift_checkbox()
 	{
 		$(".custom-shift-checkbox").unbind("click")

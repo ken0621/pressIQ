@@ -107,7 +107,7 @@ class Shop extends Controller
         }
         elseif ($this->shop_theme == "intogadgets") 
         {
-            $popular_tags = DB::table("tbl_ec_popular_tags")->where("shop_id", $this->shop_info->shop_id)->orderBy("count", "DESC")->limit(10)->get();
+            $popular_tags = DB::table("tbl_ec_popular_tags")->where("shop_id", $this->shop_info->shop_id)->where("tag_approved",1)->orderBy("count", "DESC")->limit(10)->get();
             View::share("_popular_tags", $popular_tags);
         }
         

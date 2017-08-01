@@ -112,9 +112,61 @@ class PayrollController extends Member
 
      }
 
-     /* EMPLOYEE START */
 
-    public function employee_list()
+     /* PAYROLL TIME KEEPING START */
+     public function time_keeping()
+     {
+          $data["_company"] = Tbl_payroll_company::where("shop_id", Self::shop_id())->where('payroll_parent_company_id', 0)->get();
+          $data['_period'] = Tbl_payroll_period::sel(Self::shop_id())
+                                                  ->where('payroll_parent_company_id', 0)
+                                                  ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
+                                                  ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
+                                                  ->orderBy('tbl_payroll_period.payroll_period_start','asc')
+                                                  ->get();
+
+          return view('member.payroll.payroll_timekeeping', $data);
+     }
+
+
+     public function time_keeping_load_table($payroll_company_id)
+     {
+          $mode = Request::input("mode");
+          $query = Tbl_payroll_period::sel(Self::shop_id())
+                                                  ->where('payroll_parent_company_id', 0)
+                                                  ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
+                                                  ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
+                                                  ->orderBy('tbl_payroll_period.payroll_period_start','asc');
+
+         
+
+          if ($payroll_company_id != 0)
+          {
+               $query->where('tbl_payroll_company.payroll_company_id', $payroll_company_id);
+          }
+
+          $query->where("tbl_payroll_period_company.payroll_period_status", $mode);
+
+          $data["_period"] = $query->get();
+
+          switch ($mode)
+          {
+               case 'generated':
+                    return view('member.payroll.payroll_timekeeping_table', $data);
+               break;
+
+               case 'processed':
+                    return view('member.payroll.payroll_timekeeping_table_processed', $data);
+               break;  
+
+               default:
+                    return view('member.payroll.payroll_timekeeping_table_processed', $data);
+               break;
+          }
+          
+     }
+
+     /* EMPLOYEE START */
+     public function employee_list()
      {    
           $active_status[0]    = 1;
           $active_status[1]    = 2;
@@ -5230,38 +5282,6 @@ class PayrollController extends Member
      /* CALDENDAR LEAVE END */
 
 
-     /* PAYROLL TIME KEEPING START */
-     public function time_keeping()
-     {
-          $data["_company"] = Tbl_payroll_company::where("shop_id", Self::shop_id())->where('payroll_parent_company_id', 0)->get();
-          $data['_period'] = Tbl_payroll_period::sel(Self::shop_id())
-                                                  ->where('payroll_parent_company_id', 0)
-                                                  ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
-                                                  ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
-                                                  ->orderBy('tbl_payroll_period.payroll_period_start','asc')
-                                                  ->get();
-
-          return view('member.payroll.payroll_timekeeping', $data);
-     }
-
-
-     public function time_keeping_load_table($payroll_company_id)
-     {
-          $query = Tbl_payroll_period::sel(Self::shop_id())
-                                                  ->where('payroll_parent_company_id', 0)
-                                                  ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
-                                                  ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
-
-                                                  ->orderBy('tbl_payroll_period.payroll_period_start','asc');
-
-          if ($payroll_company_id != 0) {
-               $query->where('tbl_payroll_company.payroll_company_id', $payroll_company_id);
-          }
-
-          $data["_period"] = $query->get();
-          
-          return view('member.payroll.payroll_timekeeping_table', $data);
-     }
 
      public function modal_generate_period()
      {

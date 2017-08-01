@@ -85,7 +85,7 @@
           <table>
             <tbody>
               <tr>
-                <td class="labels" style="width: 50px;">Address</td>
+                <td class="labels" style="width: 50px;">Address :</td>
                 <td class="value">{{ $order->billing_address }}</td>
               </tr>
             </tbody>

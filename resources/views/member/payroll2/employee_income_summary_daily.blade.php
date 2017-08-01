@@ -3,10 +3,18 @@
     <input type="hidden" class="x-employee-id" value="{{ $employee_id }}">
     <button type="button" class="close" data-dismiss="modal">×</button>
     <h4 class="modal-title">
-        <b>DAILY COMPUTATION ({{ $period_info->month_contribution }} - {{ code_to_word($period_info->period_count) }})</b>
+        <b>Summary for {{ $employee_info->payroll_employee_first_name }} {{ $employee_info->payroll_employee_last_name }}</b>
     </h4>
+    <div>DAILY ({{ $period_info->month_contribution }} - {{ code_to_word($period_info->period_count) }})</div>
 </div>
 
+@if($time_keeping_approved == false)
+<div class="modal-header text-right">
+    <button class="btn btn-def-white btn-custom-white" data-dismiss="modal">CLOSE</button>
+    <button class="btn btn-def-white btn-custom-white make-adjustment">MAKE ADJUSTMENT</button>
+    <button class="btn btn-primary approve-timesheet-btn">MARK READY</button>
+</div>
+@endif
 
 <div class="modal-body clearfix">
     <div class="text-center text-bold" style="font-size: 20px; color: #1682ba">SALARY COMPUTATION</div>
@@ -207,17 +215,15 @@
 </div>
 
 
+@if($time_keeping_approved == false)
 <div class="modal-footer text-right">
     <button class="btn btn-def-white btn-custom-white" data-dismiss="modal">CLOSE</button>
-    @if($time_keeping_approved == false)
-        <button class="btn btn-primary approve-timesheet-btn">MARK READY</button>
-    @else
-        <button class="btn btn-primary">MAKE ADJUSTMENT</button>
-    @endif
+    <button class="btn btn-def-white btn-custom-white make-adjustment">MAKE ADJUSTMENT</button>
+    <button class="btn btn-primary approve-timesheet-btn">MARK READY</button>
 </div>
+@endif
 
 <script type="text/javascript" src="/assets/member/payroll/js/timesheet_income_summary.js"></script>
-
 
 <div class="view-debug-mode modal-footer" style="opacity: 0.5">
     <div onclick='$(".debug-view").removeClass("hidden")' style="text-align: center; cursor: pointer; color: #005fbf">DEBUG MODE (DEVELOPER ONLY) &nbsp; <i class="fa fa-caret-down"></i></div>

@@ -73,7 +73,17 @@ class EcommerceProductController extends Member
 	        	$active_product 	= Tbl_ec_product::itemVariant()->inventory($warehouse_id)->where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 0)->orderBy($column_name,$sort_as);
         	}
 
+        	$data['active_tab'] = 'active';
+        	$data['inactive_tab'] = '';
+        	
 			$inactive_product	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 1);
+        	if(Request::input('filter') == "inactive")
+        	{
+				$inactive_product	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 1)->orderBy($column_name,$sort_as);
+
+	        	$data['active_tab'] = '';
+	        	$data['inactive_tab'] = 'active';
+        	}
 
 			$search = Request::input('search');
 			if($search)

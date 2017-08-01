@@ -44,7 +44,7 @@
         <div id="all" class="tab-pane fade in active">
             <div class="form-group order-tags"></div>
             <div class="item load-data" target="item-list-data" column_name="{{Request::input('column_name')}}" in_order="{{Request::input('in_order')}}">
-                <div id="item-list-data">                  
+               <div id="item-list-data">                  
                     <div class="table-responsive">
                         <table class="table table-hover table-bordered table-striped table-condensed">
                             <thead style="text-transform: uppercase">
@@ -112,15 +112,19 @@
                                             </div>
                                         @else
                                             <center>You have no access editing this item</center>
-                                        @endif
-                                @endif
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                                        @endif                               
+                                    @endif
+                                    </td>
+                                </tr>
+                                 @endforeach
+                            </tbody>
+                        </table>
+                    </div> 
+                    <div class="text-center pull-right">
+                        {!!$_item->render()!!}
+                    </div>
+                </div>
             </div>
-        </div>
         <div id="pending" class="tab-pane fade in">
             <div class="form-group order-tags"></div>
             <div class="table-responsive">

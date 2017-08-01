@@ -66,7 +66,7 @@
                 <div class="clearfix">
                     <!-- FORM.TITLE -->
                     @if(isset($_column))
-                        @foreach($_column as $key=>$column)
+                        @foreach($_column as $key => $column)
                             <div class="">
                                 <label>{{$column}}</label>
                                 <input name="option_name[]" value="{{$column}}" type="hidden" class="option-name">
@@ -121,8 +121,8 @@
                             <span class="new-image-container">
                             @if(isset($variant->image))
                                 @if($variant->image->count() > 0)
-                                    @foreach($variant->image as $key=>$image)
-                                        <div class="image">
+                                    @foreach($variant->image as $key => $image)
+                                        <div class="image" imgid="{{$image->image_id}}">
                                             <input type="hidden" class="image-id" name="image_id[]" value="{{$image->image_id}}">
                                             <input type="hidden" class="image-value" name="product_image[]" value="{{$image->image_path}}">
                                             <div class="loader">
@@ -135,9 +135,17 @@
                                                         <i class="fa fa-trash"></i>
                                                         <div class="label">Delete</div>
                                                     </div>
-                                                    <div class="icon set-default-image"><i class="fa fa-circle-o"></i>
+                                                    @if($image->default_image == 1)
+                                                    <div class="icon set-default-image">
+                                                        <i class="fa fa-circle"></i>
+                                                        <div class="label">Your Default</div>
+                                                    </div>
+                                                    @else
+                                                    <div class="icon set-default-image">
+                                                        <i class="fa fa-circle-o"></i>
                                                         <div class="label">Set Default</div>
                                                     </div>
+                                                    @endif
                                                 </div>
                                             </div>
                                             <img src="{{$image->image_path}}">

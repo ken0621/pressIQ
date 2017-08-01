@@ -43,7 +43,7 @@
         <div id="all" class="tab-pane fade in active">
             <div class="form-group order-tags"></div>
             <div class="item load-data" target="item-list-data" column_name="{{Request::input('column_name')}}" in_order="{{Request::input('in_order')}}">
-                <div id="item-list-data">                  
+               <div id="item-list-data">                  
                     <div class="table-responsive">
                         <table class="table table-hover table-bordered table-striped table-condensed">
                             <thead style="text-transform: uppercase">
@@ -98,19 +98,30 @@
                                         </small>
                                     </td>
                                     <td>
-                                        <div class="btn-group">
-                                            <a class="btn btn-primary btn-grp-primary popup" link="/member/item/edit/{{$item->item_id}}" size="lg" href="javascript:">Edit</a>
-                                            <a class="btn btn-primary btn-grp-primary popup" link="/member/item/archive/{{$item->item_id}}" size="sm" href="javascript:"> |<span class="fa fa-trash "> </span> </a>
-                                        </div>
+                                    @if($can_edit_other_item == 1)
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary btn-grp-primary popup" link="/member/item/edit/{{$item->item_id}}" size="lg" href="javascript:">Edit</a>
+                                        <a class="btn btn-primary btn-grp-primary popup" link="/member/item/archive/{{$item->item_id}}" size="sm" href="javascript:"> |<span class="fa fa-trash "> </span> </a>
+                                    </div>
+                                    @else
+                                        @if($user_id == $item->user_id)
+                                            <div class="btn-group">
+                                                <a class="btn btn-primary btn-grp-primary popup" link="/member/item/edit/{{$item->item_id}}" size="lg" href="javascript:">Edit</a>
+                                                <!-- <a class="btn btn-primary btn-grp-primary popup" link="/member/item/archive/{{$item->item_id}}" size="sm" href="javascript:"> |<span class="fa fa-trash "> </span> </a> -->
+                                            </div>
+                                        @else
+                                            <center>You have no access editing this item</center>
+                                        @endif
+                                    @endif
                                     </td>
                                 </tr>
-                                @endforeach
+                                 @endforeach
                             </tbody>
                         </table>
                     </div> 
                     <div class="text-center pull-right">
                         {!!$_item->render()!!}
-                    </div>  
+                    </div>
                 </div>
             </div>
         </div>

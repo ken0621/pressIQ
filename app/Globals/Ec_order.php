@@ -37,6 +37,10 @@ class Ec_order
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
+    public static function get_settings()
+    {
+        return Tbl_settings::where("settings_key","enable_view_invoice")->where("settings_value",1)->where("shop_id",Ec_order::getShopId())->first();
+    }
 
     /**
      * Collecting all the details of order from the ecommerce front and pass it on create_ec_order

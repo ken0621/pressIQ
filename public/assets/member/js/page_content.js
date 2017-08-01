@@ -50,7 +50,6 @@ $(document).ready(function()
       $('.gallery-list').unbind("click");
     });
 });
-
 function submit_selected_image_done(data) 
 { 
     var key = data.akey;
@@ -197,4 +196,25 @@ function event_collection_droplist()
     onChangeValue           : function(){},
     onCreateNew             : function(){},
   })
+}
+
+function approved_tag(tag_id)
+{
+  $.ajax({
+    url : '/member/page/content/update-tag',
+    type : 'get',
+    dataType : 'json',
+    data : {tag_id : tag_id},
+    success : function(data)
+    {
+      if(data.status == 'success')
+      {
+        toastr.success("Success");
+      }
+      else if(data.status == "error")
+      {
+        toastr.warning(data.status_message);
+      }
+    }
+  });
 }

@@ -265,7 +265,7 @@ class Ecom_Product
 			{
 				$variant_option_name = Tbl_variant_name::nameOnly()->where("variant_id", $variant["evariant_id"])->get()->toArray();
 				$product["variant"]["$key2"]["mlm_discount"] = Ecom_Product::getMlmDiscount($shop_id, $variant["evariant_item_id"], $variant["evariant_price"]);
-				$product["variant"]["$key2"]["image"] = Tbl_ec_variant_image::path()->where("eimg_variant_id", $variant["evariant_id"])->get()->toArray();
+				$product["variant"]["$key2"]["image"] = Tbl_ec_variant_image::path()->where("eimg_variant_id", $variant["evariant_id"])->orderBy("default_image","DESC")->get()->toArray();
 
 				foreach($variant_option_name as $key3=>$option_name)
 				{

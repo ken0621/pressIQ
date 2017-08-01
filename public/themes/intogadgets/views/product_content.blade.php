@@ -47,9 +47,9 @@
                <div>{!! $product_variant['evariant_description'] !!}</div>
             </div>
             <div class="divider"></div>
-            <div class="single-order-description">
+            <!-- <div class="single-order-description">
                <div class="title">PACKAGE INCLUSION</div>
-            </div>
+            </div> -->
             <div class="price-container" style="overflow-x: hidden;">
               @if($product_variant['discounted'] == "true")
               <div class="row clearfix">

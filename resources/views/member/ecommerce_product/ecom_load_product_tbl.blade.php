@@ -3,13 +3,21 @@
         <thead id="thead_table_sort" link="/member/ecommerce/product/ecom_load_product_table">
             <tr>
                 <!-- <td class="col-md-2"></td> -->
-                <th class="text-center">ID
-                 <i class="fa fa-fw fa-sort hidden" onclick="sort_table('eprod_id','asc')"></i><i class="fa fa-fw fa-sort-asc hidden" onclick="sort_table('eprod_id','asc')"></i><i class="fa fa-fw fa-sort-desc hidden" onclick="sort_table('eprod_id','desc')"></i>
+                <th class="text-center">
+                     @include("member.load_ajax_data.load_th_header_sort",['link' => '/member/ecommerce/product/list', 'column_name' => 'eprod_id','in_order' => Request::input('in_order'),'title_column_name' => 'ID'])
                  </th>
-                <th class="text-center">Product</th>
-                <th class="text-center">Inventory</th>
-                <th class="text-center">Type</th>
-                <th class="text-center">Date Created</th>
+                <th class="text-center">
+                     @include("member.load_ajax_data.load_th_header_sort",['link' => '/member/ecommerce/product/list', 'column_name' => 'eprod_name','in_order' => Request::input('in_order'),'title_column_name' => 'Product'])
+                </th>
+                <th class="text-center">
+                     @include("member.load_ajax_data.load_th_header_sort",['link' => '/member/ecommerce/product/list', 'column_name' => 'inventory_count','in_order' => Request::input('in_order'),'title_column_name' => 'Inventory'])
+                </th>
+                <th class="text-center">
+                     @include("member.load_ajax_data.load_th_header_sort",['link' => '/member/ecommerce/product/list', 'column_name' => 'eprod_is_single','in_order' => Request::input('in_order'),'title_column_name' => 'Type'])
+                </th>
+                <th class="text-center">
+                     @include("member.load_ajax_data.load_th_header_sort",['link' => '/member/ecommerce/product/list', 'column_name' => 'date_created','in_order' => Request::input('in_order'),'title_column_name' => 'Date Created'])
+                </th>
                 <th class="text-center">Action</th>
             </tr>
         </thead>

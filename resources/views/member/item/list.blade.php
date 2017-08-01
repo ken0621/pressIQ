@@ -43,66 +43,76 @@
     <div class="tab-content codes_container">
         <div id="all" class="tab-pane fade in active">
             <div class="form-group order-tags"></div>
-            <div class="table-responsive">
-                <table class="table table-hover table-bordered table-striped table-condensed">
-                    <thead style="text-transform: uppercase">
-                        <tr>
-                            <th>Item ID</th>
-                            <th>Item Name</th>
-                            <th>Inventory</th>
-                            <th class="text-center">Sale Price</th>
-                            <th>Item Details</th>
-                            <th>Item Price History</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($_item as $item)
-                        <tr>
-                            <td>{{$item->item_id}}</td>
-                            <td>{{$item->item_name}}</td>
-                            <!-- <td>{{$item->item_sku}}</td> -->
-                            <td>
-                                {{$item->inventory_count_um}}<br>
-                                {{$item->inventory_count_um_view}}
-                            </td>
-                            <td>
-                                <span>Unit Price : {{currency("PHP", $item->item_price)}}/ {{$item->multi_abbrev or 'pc'}}</span> 
-                                <span>
-                                    <br>
-                                    @if($item->um_whole != "")
-                                    Whole Price : {{currency("PHP", $item->item_whole_price)}} / {{$item->um_whole or 'pc'}}
-                                    @endif
-                                </span>
-                            </td>
-                            <td>
-                                <small>
-                                @if($item->conversion)
-                                U/M : {{$item->conversion}}<br>
-                                @endif
-                                Category : {{$item->type_name}}<br>
-                                Item Type :{{$item->item_type_name}}</small>
-                            </td>
-                            <td>
-                                <small>
-                                {!! $item->item_price_history !!}
-                                </small>
-                            </td>
-                            <td>
-                                @if($can_edit_other_item == 1)
-                                <div class="btn-group">
-                                    <a class="btn btn-primary btn-grp-primary popup" link="/member/item/edit/{{$item->item_id}}" size="lg" href="javascript:">Edit</a>
-                                    <a class="btn btn-primary btn-grp-primary popup" link="/member/item/archive/{{$item->item_id}}" size="sm" href="javascript:"> |<span class="fa fa-trash "> </span> </a>
-                                </div>
-                                @else
-                                    @if($user_id == $item->user_id)
-                                        <div class="btn-group">
-                                            <a class="btn btn-primary btn-grp-primary popup" link="/member/item/edit/{{$item->item_id}}" size="lg" href="javascript:">Edit</a>
-                                            <!-- <a class="btn btn-primary btn-grp-primary popup" link="/member/item/archive/{{$item->item_id}}" size="sm" href="javascript:"> |<span class="fa fa-trash "> </span> </a> -->
-                                        </div>
+            <div class="item load-data" target="item-list-data" column_name="{{Request::input('column_name')}}" in_order="{{Request::input('in_order')}}">
+                <div id="item-list-data">                  
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered table-striped table-condensed">
+                            <thead style="text-transform: uppercase">
+                                <tr>
+                                    <th>
+                                        @include("member.load_ajax_data.load_th_header_sort",['link' => '/member/item', 'column_name' => 'item_id','in_order' => Request::input('in_order'),'title_column_name' => 'Item ID'])
+                                    </th>
+                                    <th>
+                                        @include("member.load_ajax_data.load_th_header_sort",['link' => '/member/item', 'column_name' => 'item_name','in_order' => Request::input('in_order'),'title_column_name' => 'Item Name'])
+                                    </th>
+                                    <th>
+                                        @include("member.load_ajax_data.load_th_header_sort",['link' => '/member/item', 'column_name' => 'inventory_count','in_order' => Request::input('in_order'),'title_column_name' => 'Inventory'])
+                                    </th>
+                                    <th class="text-center">
+                                        @include("member.load_ajax_data.load_th_header_sort",['link' => '/member/item', 'column_name' => 'item_price','in_order' => Request::input('in_order'),'title_column_name' => 'Sale Price'])
+                                    </th>
+                                    <th>Item Details</th>
+                                    <th>Item Price History</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($_item as $item)
+                                <tr>
+                                    <td>{{$item->item_id}}</td>
+                                    <td>{{$item->item_name}}</td>
+                                    <!-- <td>{{$item->item_sku}}</td> -->
+                                    <td>
+                                        {{$item->inventory_count_um}}<br>
+                                        {{$item->inventory_count_um_view}}
+                                    </td>
+                                    <td>
+                                        <span>Unit Price : {{currency("PHP", $item->item_price)}}/ {{$item->multi_abbrev or 'pc'}}</span> 
+                                        <span>
+                                            <br>
+                                            @if($item->um_whole != "")
+                                            Whole Price : {{currency("PHP", $item->item_whole_price)}} / {{$item->um_whole or 'pc'}}
+                                            @endif
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <small>
+                                        @if($item->conversion)
+                                        U/M : {{$item->conversion}}<br>
+                                        @endif
+                                        Category : {{$item->type_name}}<br>
+                                        Item Type :{{$item->item_type_name}}</small>
+                                    </td>
+                                    <td>
+                                        <small>
+                                        {!! $item->item_price_history !!}
+                                        </small>
+                                    </td>
+                                    <td>
+                                    @if($can_edit_other_item == 1)
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary btn-grp-primary popup" link="/member/item/edit/{{$item->item_id}}" size="lg" href="javascript:">Edit</a>
+                                        <a class="btn btn-primary btn-grp-primary popup" link="/member/item/archive/{{$item->item_id}}" size="sm" href="javascript:"> |<span class="fa fa-trash "> </span> </a>
+                                    </div>
                                     @else
-                                        <center>You have no access editing this item</center>
-                                    @endif
+                                        @if($user_id == $item->user_id)
+                                            <div class="btn-group">
+                                                <a class="btn btn-primary btn-grp-primary popup" link="/member/item/edit/{{$item->item_id}}" size="lg" href="javascript:">Edit</a>
+                                                <!-- <a class="btn btn-primary btn-grp-primary popup" link="/member/item/archive/{{$item->item_id}}" size="sm" href="javascript:"> |<span class="fa fa-trash "> </span> </a> -->
+                                            </div>
+                                        @else
+                                            <center>You have no access editing this item</center>
+                                        @endif
                                 @endif
                             </td>
                         </tr>

@@ -22,7 +22,17 @@
     			<td class="text-center">{{ $period->payroll_company_name }}</td>
                 <td class="text-center">{{ payroll_currency($period->payroll_period_total_net) }}</td>
                 <td class="text-center"><a href="javascript:">{{ payroll_currency($period->payroll_period_total_grand) }}</a></td>
-    			<td class="text-center"><a href="javascript:">VIEW PAYSLIP</a></td>
+                <td class="text-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Action <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-custom">
+                        <li><a href="javascript:">View Summary</a> </li>
+                        <li><a link="javascript:">View Payslip</a></li>
+                      </ul>
+                    </div>
+                </td>
     		</tr>
     		@endforeach
         @else

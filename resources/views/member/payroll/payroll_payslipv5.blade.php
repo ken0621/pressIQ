@@ -97,7 +97,7 @@
           <br />
           @if($counter==2)  
             </div>
-            <tr></tr></table><table cellpadding="5" cellspacing="0" class="border padding-5" width="50%" height="">
+           {{--  <tr></tr></table><table cellpadding="5" cellspacing="0" class="border padding-5" width="50%" height=""> --}}
           @endif
           <?php ($counter>=2) ? $counter=1 : $counter++ ?>
         @endforeach

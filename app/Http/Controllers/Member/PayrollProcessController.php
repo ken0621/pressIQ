@@ -12,6 +12,7 @@ use App\Models\Tbl_payroll_time_keeping_approved;
 
 class PayrollProcessController extends Member
 {
+
 	public function index($period_company_id)
 	{
 		$data["period_company_id"] = $period_company_id;
@@ -51,7 +52,13 @@ class PayrollProcessController extends Member
 		$data = $this->get_total($data);
 		return view("member.payroll2.payroll_process_table", $data);
 	}
-
+	public function unprocess($period_company_id)
+	{
+		/* TODO: SECURE UNPROCESS */
+		$update["payroll_period_status"] = "generated";
+		Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->update($update);
+		return Redirect::to("/member/payroll/time_keeping");
+	}
 	public function get_total($data)
 	{
 		$total_basic = 0;

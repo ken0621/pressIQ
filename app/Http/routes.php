@@ -220,6 +220,12 @@ Route::get('/member/item/mulitple_price_modal/{id}', 'Member\ItemController@get_
 Route::post('/member/item/mulitple_price_modal', 'Member\ItemController@update_multiple_price_modal'); /* B */
 Route::get('/member/item/get_new_price/{id}/{qty}', 'Member\ItemController@get_item_new_price'); /* B */
 
+Route::get('/member/item/approve_request/{id}', 'Member\ItemController@merchant_approve_request'); /* ERWIN */
+Route::post('/member/item/approve_request_post/approve', 'Member\ItemController@merchant_approve_request_post'); /* ERWIN */
+
+Route::get('/member/item/decline_request/{id}', 'Member\ItemController@merchant_decline_request'); /* ERWIN */
+Route::post('/member/item/decline_request_post/{id}', 'Member\ItemController@merchant_decline_request_post'); /* ERWIN */
+
 
 //*ITEM FOR PIS ARCY*/
 Route::any('/member/pis_counter','Member\PurchasingInventorySystemController@pis_counter');
@@ -915,8 +921,38 @@ Route::post('/member/settings/terms/set', 'Member\SettingsController@set_terms')
 /* End SettingsController */
 
 /* USER / UTILITIES*/
+Route::any('/member/utilities/admin-list/ismerchant', 'Member\UtilitiesController@ismerchant');
 Route::controller('/member/utilities', 'Member\UtilitiesController');
 /* End */
+
+/*  / Merchant - Commission - markup*/
+Route::any('/member/merchant/markup', 'Member\MerchantController@index');
+Route::any('/member/merchant/markup/update', 'Member\MerchantController@update');
+Route::any('/member/merchant/markup/update/piece', 'Member\MerchantController@update_per_piece');
+
+Route::any('/member/merchant/commission', 'Member\MerchantController@commission');
+Route::any('/member/merchant/commission/user/{id}', 'Member\MerchantController@commission_user');
+Route::any('/member/merchant/commission/user/request_update/{id}', 'Member\MerchantController@commission_user_request_update');
+Route::any('/member/merchant/commission/user/request_submit/submit', 'Member\MerchantController@commission_user_request_update_submit');
+Route::any('/member/merchant/commission/request', 'Member\MerchantController@commission_request');
+Route::any('/member/merchant/commission/request/range/verfiy', 'Member\MerchantController@commission_range_verify');
+Route::any('/member/merchant/commission/request/submit', 'Member\MerchantController@commission_request_submit');
+/* End */
+/*  / Merchant - Ewallet*/
+Route::any('/member/merchant/ewallet', 'Member\MerchantewalletController@index');
+Route::any('/member/merchant/ewallet/list', 'Member\MerchantewalletController@payable_list');
+Route::any('/member/merchant/ewallet/request', 'Member\MerchantewalletController@request');
+Route::any('/member/merchant/ewallet/request/verfiy', 'Member\MerchantewalletController@verify');
+Route::any('/member/merchant/ewallet/request/verfiy/submit', 'Member\MerchantewalletController@verify_submit');
+Route::any('/member/merchant/ewallet/request/update', 'Member\MerchantewalletController@request_update');
+Route::any('/member/merchant/ewallet/request/update/submit', 'Member\MerchantewalletController@request_update_submit');
+/* End */
+
+/*  / Merchant - Report*/
+Route::any('/member/merchant/report', 'Member\MerchantReportController@index');
+Route::any('/member/merchant/report/view', 'Member\MerchantReportController@view_report');
+/* End */
+
 /* ECOMMERCE PRODUCT */
 Route::controller('/member/ecommerce/product', 'Member\EcommerceProductController');
 /* End */

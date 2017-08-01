@@ -231,6 +231,10 @@ class ShopProductController extends Shop
         }
         // Pagination
         $perPage = 12;
+        if($this->shop_info->shop_theme == "intogadgets")
+        {
+            $perPage = 20;
+        }
         $data["_product"] = self::paginate($product, $perPage);
         $data["current_count"] = count($data["_product"]);
         // dd($data['breadcrumbs']);

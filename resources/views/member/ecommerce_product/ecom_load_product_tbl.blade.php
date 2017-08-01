@@ -4,59 +4,19 @@
             <tr>
                 <!-- <td class="col-md-2"></td> -->
                 <th class="text-center">
-                    <a href="/member/ecommerce/product/list?filter={{$filter}}&column_name=eprod_id&in_order={{Request::input('column_name') == 'eprod_id' && Request::input('in_order') != 'asc' ? 'asc' : 'desc' }}">ID
-                    @if(Request::input('column_name') == 'eprod_id' && Request::input('in_order') == 'asc')
-                     <i class="fa fa-fw fa-sort-desc"></i>
-                    @elseif(Request::input('column_name') == 'eprod_id' && Request::input('in_order') == 'desc')
-                     <i class="fa fa-fw fa-sort-asc"></i>
-                     @else
-                     <i class="fa fa-fw fa-sort"></i>
-                     @endif
-                     </a>
+                     @include("member.load_ajax_data.load_th_header_sort",['link' => '/member/ecommerce/product/list', 'column_name' => 'eprod_id','in_order' => Request::input('in_order'),'title_column_name' => 'ID'])
                  </th>
                 <th class="text-center">
-                    <a href="/member/ecommerce/product/list?filter={{$filter}}&column_name=eprod_name&in_order={{Request::input('column_name') == 'eprod_name' && Request::input('in_order') != 'asc' ? 'asc' : 'desc' }}">Product
-                    @if(Request::input('column_name') == 'eprod_name' && Request::input('in_order') == 'asc')
-                     <i class="fa fa-fw fa-sort-desc"></i>
-                    @elseif(Request::input('column_name') == 'eprod_name' && Request::input('in_order') == 'desc')
-                     <i class="fa fa-fw fa-sort-asc"></i>
-                     @else
-                     <i class="fa fa-fw fa-sort"></i>
-                     @endif
-                     </a>
+                     @include("member.load_ajax_data.load_th_header_sort",['link' => '/member/ecommerce/product/list', 'column_name' => 'eprod_name','in_order' => Request::input('in_order'),'title_column_name' => 'Product'])
                 </th>
                 <th class="text-center">
-                    <a href="/member/ecommerce/product/list?filter={{$filter}}&column_name=inventory_count&in_order={{Request::input('column_name') == 'inventory_count' && Request::input('in_order') != 'asc' ? 'asc' : 'desc' }}">Inventory
-                    @if(Request::input('column_name') == 'inventory_count' && Request::input('in_order') == 'asc')
-                     <i class="fa fa-fw fa-sort-desc"></i>
-                    @elseif(Request::input('column_name') == 'inventory_count' && Request::input('in_order') == 'desc')
-                     <i class="fa fa-fw fa-sort-asc"></i>
-                     @else
-                     <i class="fa fa-fw fa-sort"></i>
-                     @endif
-                     </a>
+                     @include("member.load_ajax_data.load_th_header_sort",['link' => '/member/ecommerce/product/list', 'column_name' => 'inventory_count','in_order' => Request::input('in_order'),'title_column_name' => 'Inventory'])
                 </th>
                 <th class="text-center">
-                    <a href="/member/ecommerce/product/list?filter={{$filter}}&column_name=eprod_is_single&in_order={{Request::input('column_name') == 'eprod_is_single' && Request::input('in_order') != 'asc' ? 'asc' : 'desc' }}">Type
-                    @if(Request::input('column_name') == 'eprod_is_single' && Request::input('in_order') == 'asc')
-                     <i class="fa fa-fw fa-sort-desc"></i>
-                    @elseif(Request::input('column_name') == 'eprod_is_single' && Request::input('in_order') == 'desc')
-                     <i class="fa fa-fw fa-sort-asc"></i>
-                     @else
-                     <i class="fa fa-fw fa-sort"></i>
-                     @endif
-                     </a>
+                     @include("member.load_ajax_data.load_th_header_sort",['link' => '/member/ecommerce/product/list', 'column_name' => 'eprod_is_single','in_order' => Request::input('in_order'),'title_column_name' => 'Type'])
                 </th>
                 <th class="text-center">
-                    <a href="/member/ecommerce/product/list?filter={{$filter}}&column_name=date_created&in_order={{Request::input('column_name') == 'date_created' && Request::input('in_order') != 'asc' ? 'asc' : 'desc' }}">Date Created
-                    @if(Request::input('column_name') == 'date_created' && Request::input('in_order') == 'asc')
-                     <i class="fa fa-fw fa-sort-desc"></i>
-                    @elseif(Request::input('column_name') == 'date_created' && Request::input('in_order') == 'desc')
-                     <i class="fa fa-fw fa-sort-asc"></i>
-                     @else
-                     <i class="fa fa-fw fa-sort"></i>
-                     @endif
-                     </a>
+                     @include("member.load_ajax_data.load_th_header_sort",['link' => '/member/ecommerce/product/list', 'column_name' => 'date_created','in_order' => Request::input('in_order'),'title_column_name' => 'Date Created'])
                 </th>
                 <th class="text-center">Action</th>
             </tr>

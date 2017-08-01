@@ -64,6 +64,13 @@ class ItemController extends Member
 	    		$item		   = $item->where("item_name","LIKE","%".$search_name."%");
 	    		$item_archived = $item_archived->where("item_name","LIKE","%".$search_name."%");
 	        }
+
+	        $column_name = Request::input("column_name");
+	        $in_order = Request::input("in_order");
+	        if($column_name && $in_order)
+	        {
+	        	$item 		   = $item->orderBy($column_name,$in_order);
+	        }
 	        
 			$data["_item"]			   = $item->paginate(30);
 

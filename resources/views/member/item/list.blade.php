@@ -42,16 +42,24 @@
     <div class="tab-content codes_container">
         <div id="all" class="tab-pane fade in active">
             <div class="form-group order-tags"></div>
-            <div class="item load-data" target="item-list-data">
+            <div class="item load-data" target="item-list-data" column_name="{{Request::input('column_name')}}" in_order="{{Request::input('in_order')}}">
                 <div id="item-list-data">                  
                     <div class="table-responsive">
                         <table class="table table-hover table-bordered table-striped table-condensed">
                             <thead style="text-transform: uppercase">
                                 <tr>
-                                    <th>Item ID</th>
-                                    <th>Item Name</th>
-                                    <th>Inventory</th>
-                                    <th class="text-center">Sale Price</th>
+                                    <th>
+                                        @include("member.load_ajax_data.load_th_header_sort",['link' => '/member/item', 'column_name' => 'item_id','in_order' => Request::input('in_order'),'title_column_name' => 'Item ID'])
+                                    </th>
+                                    <th>
+                                        @include("member.load_ajax_data.load_th_header_sort",['link' => '/member/item', 'column_name' => 'item_name','in_order' => Request::input('in_order'),'title_column_name' => 'Item Name'])
+                                    </th>
+                                    <th>
+                                        @include("member.load_ajax_data.load_th_header_sort",['link' => '/member/item', 'column_name' => 'inventory_count','in_order' => Request::input('in_order'),'title_column_name' => 'Inventory'])
+                                    </th>
+                                    <th class="text-center">
+                                        @include("member.load_ajax_data.load_th_header_sort",['link' => '/member/item', 'column_name' => 'item_price','in_order' => Request::input('in_order'),'title_column_name' => 'Sale Price'])
+                                    </th>
                                     <th>Item Details</th>
                                     <th>Item Price History</th>
                                     <th>Action</th>

@@ -56,7 +56,7 @@ class ItemController extends Member
 	        							->leftJoin("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
 	        							->leftjoin('tbl_user', 'tbl_user.user_id','=', 'tbl_item_merchant_request.item_merchant_requested_by')
 	        							->where("tbl_item.archived",0)->where("shop_id",$shop_id)->type()->category();
-	        
+
 	        /* CHECK IF THE ITEM IS ON MERCHANT REQUESTED ITEM THEN IT WOULDN'T BE INCLUDED ON ARCHIVED ITEM WHEN IT IS STILL ON PENDING STATUS */
 	        $item_archived  		   = Tbl_item::where("tbl_item.archived",1)
 	        								     ->where("shop_id",$shop_id)
@@ -87,6 +87,12 @@ class ItemController extends Member
 	        $item_type				   = Request::input("item_type");
 	        $search_name			   = Request::input("search_name");
 
+	        $user_is_merchant = $this->user_info->user_is_merchant;
+	       	if($user_is_merchant == 1)
+	       	{
+	       		
+	       	}
+	       	
 	        if($item_type != null && $item_type != "All")
 	        {
 	    		$item		   = $item->where("tbl_item.item_type_id",$item_type);

@@ -4938,11 +4938,11 @@ class PayrollController extends Member
                $insert_day["shift_day"] = $day;
                $insert_day["shift_code_id"] = $shift_code_id;
                $insert_day["shift_target_hours"] = Request::input("target_hours")[$day];
+               $insert_day["shift_break_hours"] = Request::input("break_hours")[$day];
                $insert_day["shift_flexi_time"] = Request::input("flexitime_" . $day) == 1 ? 1 : 0;
                $insert_day["shift_rest_day"] = Request::input("rest_day_" . $day) == 1 ? 1 : 0;
                $insert_day["shift_extra_day"] = Request::input("extra_day_" . $day) == 1 ? 1 : 0;
                
-
                $shift_day_id = Tbl_payroll_shift_day::insertGetId($insert_day);
 
                /* INSERT SHIFT TIME */
@@ -5016,6 +5016,7 @@ class PayrollController extends Member
                     $insert_day["shift_day"] = $day;
                     $insert_day["shift_code_id"] = $shift_code_id;
                     $insert_day["shift_target_hours"] = Request::input("target_hours")[$day];
+                    $insert_day["shift_break_hours"] = Request::input("break_hours")[$day];
                     $insert_day["shift_rest_day"] = Request::input("rest_day_" . $day) == 1 ? 1 : 0;
                     $insert_day["shift_extra_day"] = Request::input("extra_day_" . $day) == 1 ? 1 : 0;
                     $insert_day["shift_flexi_time"] = Request::input("flexitime_day_" . $day) == 1 ? 1 : 0;
@@ -5149,7 +5150,7 @@ class PayrollController extends Member
                     ->where('tbl_payroll_leave_employee.payroll_leave_employee_is_archived', 0)
                     ->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
                     ->groupBy('tbl_payroll_employee_basic.payroll_employee_id')                                                                                           
-                    ->select(DB::raw('*, tbl_payroll_leave_employee.payroll_leave_employee_id as leave_employee_id, (tbl_payroll_leave_temp.payroll_leave_temp_days_cap - sum(tbl_payroll_leave_schedule.consume)) as remaining_leave ,(tbl_payroll_leave_temp.payroll_leave_temp_days_cap - (select count(tbl_payroll_leave_schedule.payroll_leave_employee_id) from tbl_payroll_leave_schedule where (tbl_payroll_leave_schedule.payroll_schedule_leave  BETWEEN "'.date('Y').'-01-01" and "'.date('Y').'-12-31") and tbl_payroll_leave_schedule.payroll_leave_employee_id = leave_employee_id)) as available_count, tbl_payroll_leave_employee.payroll_leave_employee_id as payroll_leave_employee_id_2'))
+                    ->select(DB::raw('*, tbl_payroll_leave_employee.payroll_leave_employee_id as leave_employee_id, tbl_payroll_leave_temp.payroll_leave_temp_days_cap as leave_cap ,(tbl_payroll_leave_temp.payroll_leave_temp_days_cap - sum(tbl_payroll_leave_schedule.consume)) as remaining_leave ,(tbl_payroll_leave_temp.payroll_leave_temp_days_cap - (select count(tbl_payroll_leave_schedule.payroll_leave_employee_id) from tbl_payroll_leave_schedule where (tbl_payroll_leave_schedule.payroll_schedule_leave  BETWEEN "'.date('Y').'-01-01" and "'.date('Y').'-12-31") and tbl_payroll_leave_schedule.payroll_leave_employee_id = leave_employee_id)) as available_count, tbl_payroll_leave_employee.payroll_leave_employee_id as payroll_leave_employee_id_2'))
                     ->get();
 
           return json_encode($emp);

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTblEcVariantImage3432 extends Migration
+class AlterTblPayrollShiftDay1234 extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,9 @@ class UpdateTblEcVariantImage3432 extends Migration
      */
     public function up()
     {
-        Schema::table('tbl_ec_variant_image', function (Blueprint $table) {
-            $table->tinyInteger('default_image')->default(0);
+        Schema::table('tbl_payroll_shift_day', function (Blueprint $table) {
+            //
+            $table->decimal('shift_break_hours', 8, 2)->default(0);
         });
     }
 
@@ -24,8 +25,6 @@ class UpdateTblEcVariantImage3432 extends Migration
      */
     public function down()
     {
-        Schema::table('tbl_ec_variant_image', function (Blueprint $table) {
-            //
-        });
+        //
     }
 }

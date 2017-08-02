@@ -435,6 +435,7 @@
      <div class="payment-modal" style="padding: 25px;">
         <button data-remodal-action="close" class="remodal-close"></button>
         <h2>Transaction Failed</h2>
+        <p>{{ session('error') }}</p>
         <br>
         <button data-remodal-action="confirm" class="remodal-cancel">OK</button>
      </div>

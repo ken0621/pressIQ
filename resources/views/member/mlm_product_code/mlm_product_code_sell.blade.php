@@ -17,7 +17,7 @@
 	                    
 	                </small>
 	            </h1>
-	            <button type="submit" class="panel-buttons btn btn-primary pull-right save_item">Process Purchase</button>
+	            
 	            <a href="/member/mlm/product_code" class="panel-buttons btn btn-default pull-right">&laquo; Back</a>
 	        </div>
 	    </div>
@@ -150,7 +150,7 @@
 								                        <li data-value="1"><a href="#">Cash</a></li>
 								                        <li data-value="2"><a href="#">GC</a></li>
 								                        <li data-value="3"><a href="#">Wallet</a></li>
-								                        <li data-value="4"><a href="#">Vmoney</a></li>
+								                        <li data-value="4"><a href="#">E-money</a></li>
 								                    </ul>
 								                    <button type="button" class="btn btn-default dropdown-toggle as-is bs-dropdown-to-select" data-toggle="dropdown">
 								                        <span data-bind="bs-drp-sel-label" style="color: black !important">Payment</span>
@@ -162,6 +162,7 @@
 								                </div>
 								            </div>
 								        </div>
+								        <button type="submit" class="panel-buttons btn btn-primary pull-right save_item">Process Purchase</button>
 								    </div>
 								</div>
 

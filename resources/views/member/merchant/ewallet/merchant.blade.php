@@ -15,12 +15,12 @@
 <div class="col-md-4">
     <div class="panel panel-default panel-block panel-title-block clearfix col-md-12" id="top">
         <div class="panel-body" style="overflow-x:auto;">
-            <h3>Transaction from E-wallet Recievable</h3>
+            <h3>Transaction from E-wallet Receivables</h3>
             <table class="table table-bordered">
                 <tr>
-                    <td>Recievable</td>
+                    <td>Receivables</td>
                     <td>{{currency('PHP', $recievable)}}</td>
-                    <td><a onClick="view_link('/member/merchant/ewallet/list?user_id={{$user_id}}&find=payable')">Lists of recievable</a></td>
+                    <td><a onClick="view_link('/member/merchant/ewallet/list?user_id={{$user_id}}&find=payable')">Lists of Receivables</a></td>
                 </tr>
                 <tr>    
                     <td>Requested</td>

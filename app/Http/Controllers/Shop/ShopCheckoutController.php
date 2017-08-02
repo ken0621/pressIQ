@@ -104,7 +104,7 @@ class ShopCheckoutController extends Shop
                     {
                         DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
 
-                        return Redirect::to("/product#fail_modal");
+                        return Redirect::to("/product#fail_modal")->with("error", $request['ErrDesc']);
                     }
                     else 
                     {

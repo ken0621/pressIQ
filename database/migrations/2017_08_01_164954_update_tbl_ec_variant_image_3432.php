@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTblPayrollTimeKeepingApproved062819 extends Migration
+class UpdateTblEcVariantImage3432 extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +12,8 @@ class UpdateTblPayrollTimeKeepingApproved062819 extends Migration
      */
     public function up()
     {
-        Schema::table('tbl_payroll_time_keeping_approved', function (Blueprint $table)
-        {
-            $table->integer("status_step")->default(1);
+        Schema::table('tbl_ec_variant_image', function (Blueprint $table) {
+            $table->tinyInteger('default_image')->default(0);
         });
     }
 
@@ -25,6 +24,8 @@ class UpdateTblPayrollTimeKeepingApproved062819 extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('tbl_ec_variant_image', function (Blueprint $table) {
+            //
+        });
     }
 }

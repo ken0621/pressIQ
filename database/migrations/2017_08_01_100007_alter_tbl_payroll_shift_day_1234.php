@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTblPayrollTimeKeepingApproved062819 extends Migration
+class AlterTblPayrollShiftDay1234 extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +12,9 @@ class UpdateTblPayrollTimeKeepingApproved062819 extends Migration
      */
     public function up()
     {
-        Schema::table('tbl_payroll_time_keeping_approved', function (Blueprint $table)
-        {
-            $table->integer("status_step")->default(1);
+        Schema::table('tbl_payroll_shift_day', function (Blueprint $table) {
+            //
+            $table->decimal('shift_break_hours', 8, 2)->default(0);
         });
     }
 

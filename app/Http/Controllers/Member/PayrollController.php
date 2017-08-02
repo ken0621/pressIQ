@@ -88,6 +88,10 @@ use App\Models\Tbl_payroll_shift_time;
 
 use App\Globals\Accounting;
 
+use App\Models\Tbl_payroll_time_keeping_approved;
+use App\Models\Tbl_payroll_time_keeping_approved_breakdown;
+use App\Models\Tbl_payroll_time_keeping_approved_performance;
+
 class PayrollController extends Member
 {
 
@@ -150,7 +154,7 @@ class PayrollController extends Member
 
           switch ($mode)
           {
-               case 'generated':
+               case 'pending':
                     return view('member.payroll.payroll_timekeeping_table', $data);
                break;
 
@@ -159,7 +163,7 @@ class PayrollController extends Member
                break;  
 
                default:
-                    return view('member.payroll.payroll_timekeeping_table_processed', $data);
+                    return view('member.payroll.payroll_timekeeping_table', $data);
                break;
           }
           
@@ -3388,6 +3392,7 @@ class PayrollController extends Member
           $insert['payroll_allowance_category']   = Request::input('payroll_allowance_category');
           $insert['payroll_allowance_add_period'] = Request::input('payroll_allowance_add_period');
           $insert['expense_account_id']           = Request::input('expense_account_id');
+          $insert['payroll_allowance_type']   = Request::input('payroll_allowance_type');
           $insert['shop_id']                           = Self::shop_id();
           $allowance_id = Tbl_payroll_allowance::insertGetId($insert);
 
@@ -3486,6 +3491,7 @@ class PayrollController extends Member
           $update['payroll_allowance_amount']     = Request::input('payroll_allowance_amount');
           $update['payroll_allowance_category']   = Request::input('payroll_allowance_category');
           $update['payroll_allowance_add_period'] = Request::input('payroll_allowance_add_period');
+          $update['payroll_allowance_type'] = Request::input('payroll_allowance_type');
           $update['expense_account_id']           = Request::input('expense_account_id');
 
           Tbl_payroll_allowance::where('payroll_allowance_id', $payroll_allowance_id)->update($update);
@@ -4932,11 +4938,11 @@ class PayrollController extends Member
                $insert_day["shift_day"] = $day;
                $insert_day["shift_code_id"] = $shift_code_id;
                $insert_day["shift_target_hours"] = Request::input("target_hours")[$day];
+               $insert_day["shift_break_hours"] = Request::input("break_hours")[$day];
                $insert_day["shift_flexi_time"] = Request::input("flexitime_" . $day) == 1 ? 1 : 0;
                $insert_day["shift_rest_day"] = Request::input("rest_day_" . $day) == 1 ? 1 : 0;
                $insert_day["shift_extra_day"] = Request::input("extra_day_" . $day) == 1 ? 1 : 0;
                
-
                $shift_day_id = Tbl_payroll_shift_day::insertGetId($insert_day);
 
                /* INSERT SHIFT TIME */
@@ -5010,6 +5016,7 @@ class PayrollController extends Member
                     $insert_day["shift_day"] = $day;
                     $insert_day["shift_code_id"] = $shift_code_id;
                     $insert_day["shift_target_hours"] = Request::input("target_hours")[$day];
+                    $insert_day["shift_break_hours"] = Request::input("break_hours")[$day];
                     $insert_day["shift_rest_day"] = Request::input("rest_day_" . $day) == 1 ? 1 : 0;
                     $insert_day["shift_extra_day"] = Request::input("extra_day_" . $day) == 1 ? 1 : 0;
                     $insert_day["shift_flexi_time"] = Request::input("flexitime_day_" . $day) == 1 ? 1 : 0;
@@ -5143,7 +5150,7 @@ class PayrollController extends Member
                     ->where('tbl_payroll_leave_employee.payroll_leave_employee_is_archived', 0)
                     ->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
                     ->groupBy('tbl_payroll_employee_basic.payroll_employee_id')                                                                                           
-                    ->select(DB::raw('*, tbl_payroll_leave_employee.payroll_leave_employee_id as leave_employee_id, (tbl_payroll_leave_temp.payroll_leave_temp_days_cap - sum(tbl_payroll_leave_schedule.consume)) as remaining_leave ,(tbl_payroll_leave_temp.payroll_leave_temp_days_cap - (select count(tbl_payroll_leave_schedule.payroll_leave_employee_id) from tbl_payroll_leave_schedule where (tbl_payroll_leave_schedule.payroll_schedule_leave  BETWEEN "'.date('Y').'-01-01" and "'.date('Y').'-12-31") and tbl_payroll_leave_schedule.payroll_leave_employee_id = leave_employee_id)) as available_count, tbl_payroll_leave_employee.payroll_leave_employee_id as payroll_leave_employee_id_2'))
+                    ->select(DB::raw('*, tbl_payroll_leave_employee.payroll_leave_employee_id as leave_employee_id, tbl_payroll_leave_temp.payroll_leave_temp_days_cap as leave_cap ,(tbl_payroll_leave_temp.payroll_leave_temp_days_cap - sum(tbl_payroll_leave_schedule.consume)) as remaining_leave ,(tbl_payroll_leave_temp.payroll_leave_temp_days_cap - (select count(tbl_payroll_leave_schedule.payroll_leave_employee_id) from tbl_payroll_leave_schedule where (tbl_payroll_leave_schedule.payroll_schedule_leave  BETWEEN "'.date('Y').'-01-01" and "'.date('Y').'-12-31") and tbl_payroll_leave_schedule.payroll_leave_employee_id = leave_employee_id)) as available_count, tbl_payroll_leave_employee.payroll_leave_employee_id as payroll_leave_employee_id_2'))
                     ->get();
 
           return json_encode($emp);
@@ -6558,10 +6565,10 @@ class PayrollController extends Member
           //dd($data['_record']);
           //return view('member.payroll.payroll_payslip', $data);
           
-          //return view('member.payroll.payroll_payslipv1', $data);
+          return view('member.payroll.payroll_payslipv1', $data);
 
 
-          $page_width    = $data['payslip']->paper_size_width * 10;
+          /*$page_width    = $data['payslip']->paper_size_width * 10;
           $page_height   = $data['payslip']->paper_size_height * 10; 
 
           $view = 'member.payroll.payroll_payslipv1';             
@@ -6573,7 +6580,7 @@ class PayrollController extends Member
                $pdf->setOption('page-width', $page_width);
                $pdf->setOption('page-height', $page_height);
           return $pdf->stream('Paycheque.pdf');
-
+*/
 
           /*$view = 'member.payroll.payroll_payslipv1';             
           $pdf = PDF::loadView($view, $data);
@@ -6586,6 +6593,7 @@ class PayrollController extends Member
           $pdf = PDF::loadView($view,$data);
           return $pdf->stream('Paycheque.pdf');*/
      }
+
 
 
      /* payslip end */

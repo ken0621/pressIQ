@@ -20,6 +20,7 @@
                     {{ $period->payroll_period_category }} ({{ code_to_word($period->period_count) }} of {{ $period->month_contribution }}  {{ $period->year_contribution }})
                 </td>
     			<td class="text-center">{{ $period->payroll_company_name }}</td>
+
                 <td class="text-center">{{ payroll_currency($period->payroll_period_total_net) }}</td>
                 <td class="text-center"><a href="javascript:">{{ payroll_currency($period->payroll_period_total_grand) }}</a></td>
                 <td class="text-center">
@@ -28,12 +29,15 @@
                         Action <span class="caret"></span>
                       </button>
                       <ul class="dropdown-menu dropdown-menu-custom">
+
                         <li><a onclick="return confirm('Are you sure you want to UNPROCESS this record ({{ $period->payroll_period_category }} - {{ code_to_word($period->period_count) }} of {{ $period->month_contribution }}  {{ $period->year_contribution }})? ')" href="/member/payroll/unprocess_payroll/{{ $period->payroll_period_company_id }}">UNPROCESS</a> </li>
                         <li><a href="javascript:">VIEW SUMMARY</a> </li>
-                        <li><a link="javascript:">VIEW PAYSLIP</a></li>
+                        <li><a href="/member/payroll/payroll_approved_view/generate_payslip_v2/{{ $period->payroll_period_company_id }}" target="_blank">VIEW PAYSLIP</a></li>
+
                       </ul>
                     </div>
                 </td>
+
     		</tr>
     		@endforeach
         @else

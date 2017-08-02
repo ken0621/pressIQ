@@ -30,9 +30,11 @@
          <img class="single-product-img key-{{$key}} {{ $key == 0 ? '' : 'hide' }} {{$ctr != 0 ? '' : 'first-img'}}" variant-id="{{ $product_variant['evariant_id'] }}" key="{{ $key }}" style="width: 100%;" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}" alt = "" id="picturecontainer"/>
          @endforeach
          <div class="thumb">
-             @foreach($product_variant['image'] as $key => $image)
-             <div class="holder" variant-id="{{ $product_variant['evariant_id'] }}" key="{{ $key }}" style="cursor: pointer;"><img class="1-1-ratio" src="{{ $image['image_path'] }}"></div>
-             @endforeach
+            @foreach($product_variant['image'] as $key => $image)
+             <div class="holder" variant-id="{{ $product_variant['evariant_id'] }}" key="{{ $key }}" style="cursor: pointer;">
+              <img class="1-1-ratio" src="{{ $image['image_path'] }}">
+             </div>
+            @endforeach
          </div>
       </div>
       <div class="single-product-holder border">
@@ -47,9 +49,9 @@
                <div>{!! $product_variant['evariant_description'] !!}</div>
             </div>
             <div class="divider"></div>
-            <div class="single-order-description">
+            <!-- <div class="single-order-description">
                <div class="title">PACKAGE INCLUSION</div>
-            </div>
+            </div> -->
             <div class="price-container" style="overflow-x: hidden;">
               @if($product_variant['discounted'] == "true")
               <div class="row clearfix">

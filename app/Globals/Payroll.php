@@ -45,6 +45,9 @@ use App\Models\Tbl_payroll_shift;
 use App\Models\Tbl_payroll_shift_template;
 use App\Models\Tbl_payroll_employee_schedule;
 
+use App\Models\Tbl_payroll_time_keeping_approved;
+use App\Models\Tbl_payroll_time_keeping_approved_breakdown;
+
 use Carbon\Carbon;
 use stdClass;
 use DB;
@@ -3453,4 +3456,100 @@ class Payroll
 		}
 		return $data;
 	}
+
+
+	/*public static function payslip_template($id)
+	{
+		$payslip  = Tbl_payroll_payslip::payslip(Self::shop_id())->first();
+
+          if(empty($payslip))
+          {
+               $payslip  = Tbl_payroll_payslip::payslip(Self::shop_id(), 0)->first();
+          }
+          //dd($payslip);
+
+          $data['logo_position']   = '';
+          $data['logo']            = false;
+          $data['colspan']         = 1;
+
+          if($payslip->company_position == '.company-logo-center' || $payslip->company_position == '.company-center')
+          {
+               $data['logo_position'] = 'text-center';
+          }
+
+          if($payslip->company_position == '.company-logo-left' || $payslip->company_position == '.company-left')
+          {
+               $data['logo_position'] = 'text-left';
+          }
+
+          if($payslip->company_position == '.company-logo-right' || $payslip->company_position == '.company-right')
+          {
+               $data['logo_position'] = 'text-right';
+          }
+
+          if($payslip->company_position == '.company-logo-center' || $payslip->company_position == '.company-logo-left' || $payslip->company_position == '.company-logo-right')
+          {
+               $data['logo']          = true;
+          }
+
+          
+
+          if($payslip->include_time_summary == 1)
+          {
+               $data['colspan']         = 2;
+          }
+
+          
+
+          $data['payslip']  = $payslip;
+          $data['_record']  = array();
+          $period = Tbl_payroll_period_company::getcompanyperiod($id)->first();
+
+          $_record = Tbl_payroll_record::getcompanyrecord($id)
+                                        ->join('tbl_payroll_company','tbl_payroll_company.payroll_company_id','=','tbl_payroll_employee_basic.payroll_employee_company_id')
+                                        ->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
+                                        ->get();
+          
+          $_record2  = Tbl_payroll_time_keeping_approved::Basic()->where('payroll_period_company_id', $id)
+                                        ->join('tbl_payroll_company','tbl_payroll_company.payroll_company_id','=','tbl_payroll_employee_basic.payroll_employee_company_id')
+                                        ->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
+                                        ->get();
+          //dd($_record2);                                   
+
+          // dd($period);
+          foreach($_record2 as $record)
+          {
+
+               //$compute = Payroll::getrecord_breakdown($record);
+               $temp['period'] = date('M d, Y', strtotime($period->payroll_period_start)).' to '.date('M d, Y', strtotime($period->payroll_period_end));
+               //$temp['break'] = Self::breakdown_uncompute($compute,'approved');
+               $temp['display_name']    = $record->payroll_employee_display_name;
+               $temp['company_name']    = $record->payroll_company_name;
+               $temp['company_address'] = $record->payroll_company_address;
+               $temp['company_logo']    = $record->payroll_company_logo;
+               $temp['emp']             = Tbl_payroll_employee_contract::selemployee($record->payroll_employee_id, $period->payroll_period_start)
+                                                            ->leftjoin('tbl_payroll_department','tbl_payroll_department.payroll_department_id','=','tbl_payroll_employee_contract.payroll_department_id')
+                                                            ->leftjoin('tbl_payroll_jobtitle','tbl_payroll_jobtitle.payroll_jobtitle_id','=','tbl_payroll_employee_contract.payroll_jobtitle_id')
+                                                            ->first();
+               $temp['_record']          = Tbl_payroll_time_keeping_approved::Basic()
+                                             ->where('payroll_period_company_id', $id)
+                                             ->where('employee_id', $record->employee_id)
+                                             ->join('tbl_payroll_company','tbl_payroll_company.payroll_company_id','=','tbl_payroll_employee_basic.payroll_employee_company_id')
+                                             ->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
+                                             ->get();
+
+               $temp['_ptkab']          = Tbl_payroll_time_keeping_approved_breakdown::where('time_keeping_approve_id', $record->time_keeping_approve_id)
+                                             ->get();  
+
+               array_push($data['_record'], $temp);
+          }
+	}
+
+	public function group_ptkab($time_keeping_approve_id)
+	{
+		$_temp_record 	= array();
+		$_ptkab			= Tbl_payroll_time_keeping_approved_breakdown::where('time_keeping_approve_id', $time_keeping_approve_id)
+                            ->get();
+        
+	}*/
 }

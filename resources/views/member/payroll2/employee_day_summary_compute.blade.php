@@ -24,7 +24,9 @@
             <td class="text-bold" >Subtotal</td>
             <td class="text-center" style="color: #bbb" width="100px"></td>
             <td class="text-bold" width="100px">PHP {{ number_format($timesheet_info->compute->subtotal_after_addition - ($compute_type == "Monthly Rate" ? $timesheet_info->compute->daily_rate : 0), 2) }}</td>
+            
         </tr>
+
     @endif
     @if(isset($timesheet_info->compute->_breakdown_deduction))
         @foreach($timesheet_info->compute->_breakdown_deduction as $key => $breakdown)

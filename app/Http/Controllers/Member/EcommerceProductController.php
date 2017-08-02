@@ -635,6 +635,8 @@ class EcommerceProductController extends Member
 			Tbl_ec_product::where("eprod_id", $product_id)->update($update_product);
 
 			/* UPDATE IMAGE */
+			$default_image = Request::input("product_main_image");
+
 			$_image = Request::input("image_id");
 			Tbl_ec_variant_image::where("eimg_variant_id", $variant_id)->delete();
 			if($_image)
@@ -643,6 +645,11 @@ class EcommerceProductController extends Member
 				{
 					$insert_img["eimg_variant_id"] 	= $variant_id;
 					$insert_img["eimg_image_id"] 	= $image;
+					$insert_img["default_image"] 	= 0;
+					if($image == $default_image)
+					{
+						$insert_img["default_image"] 	= 1;
+					}
 					Tbl_ec_variant_image::insert($insert_img); 
 				}
 			}

@@ -82,6 +82,7 @@ function shifting()
 		$append = '<tr class="editable sub-time main-con">' +
 							'<td></td>' +
 							'<td></td>' +
+							'<td></td>' +
 							'<td class="editable">' +
 								'<input type="text" placeholder="NO TIME" name="work_start[' + $day + '][]" class="text-table time-entry in" >' +
 							'</td>' +

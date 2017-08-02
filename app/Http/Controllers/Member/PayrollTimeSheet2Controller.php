@@ -449,6 +449,7 @@ class PayrollTimeSheet2Controller extends Member
 		}
 		else //APPROVED
 		{
+
 			$return->status = "APPROVED";
 			//$return->clean_shift	= $this->convert_to_serialize_row_from_approved_clean_shift($_time);
 
@@ -462,11 +463,11 @@ class PayrollTimeSheet2Controller extends Member
 			{
 				$return->clean_shift = Payroll2::clean_shift($_time_raw, $_shift_raw);
 			}
-
+				
 			$return->shift_approved = true;
 			$return->compute_shift = $return->clean_shift;
 		}
-
+	
 		$return->shift_approved = $this->check_if_shift_approved($return->clean_shift);
 		$return->compute_shift = $this->remove_not_auto_approve($return->clean_shift);
 

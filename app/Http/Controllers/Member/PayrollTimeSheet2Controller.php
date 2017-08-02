@@ -230,15 +230,17 @@ class PayrollTimeSheet2Controller extends Member
 	}
 	public function timesheet_info($company_period, $employee_id) 
 	{
+
 		$_timesheet = null;
 		$from = $data["start_date"] = $company_period->payroll_period_start;
 		$to = $data["end_date"] = $company_period->payroll_period_end;
 		$payroll_period_company_id = $company_period->payroll_period_company_id;
 		$shift_code_id = Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->pluck("shift_code_id");
+	
 		while($from <= $to)
 		{
 			$timesheet_db = $this->timesheet_info_db($employee_id, $from);
-			
+		
 			if($timesheet_db->custom_shift == 1)
 			{
 				$_shift =  $this->shift_raw($this->db_get_shift_of_employee_by_code($timesheet_db->custom_shift_id, $from));
@@ -264,6 +266,7 @@ class PayrollTimeSheet2Controller extends Member
 				$timesheet_db =$this->timesheet_info_db($employee_id, $from);
 				$insert = null;
 			}
+
 
 			$timesheet_db = $this->timesheet_info_db($employee_id, $from);
 

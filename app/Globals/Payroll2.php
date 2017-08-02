@@ -291,7 +291,7 @@ class Payroll2
 			if($target_hours!=0)
 			{
 				//$target_hours += $break_hours;
-				$target_hours = Payroll2::float_time($target_hours);
+				$target_hours =( Payroll2::float_time($target_hours)+$break_hours);
 				$target_time  = Payroll2::time_float($target_hours);
 				$target_hours = Payroll2::convert_time_in_minutes($target_hours);
 			}
@@ -881,7 +881,6 @@ class Payroll2
 		$break_hours 			= Payroll::float_time($break_hours);
 		$working_hours 			= Payroll::float_time($target_hours);
 		$target_hours 			= Payroll::sum_time(Payroll::float_time($target_hours),Payroll::float_time($break_hours));
-
 		$regular_hours 			= "00:00:00";
 		$rest_day_hours 		= "00:00:00";
 		$extra_day_hours 		= "00:00:00";

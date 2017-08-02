@@ -433,6 +433,8 @@ class PayrollTimeSheet2Controller extends Member
 			$return->status = "APPROVED";
 			//$return->clean_shift	= $this->convert_to_serialize_row_from_approved_clean_shift($_time);
 
+			//dd($_time_raw);
+
 			if($return->time_compute_mode == "flexi")
 			{
 				$return->clean_shift = Payroll2::clean_shift_flexi($_time_raw, "00:00:00",	$return->shift_target_hours);
@@ -717,6 +719,7 @@ class PayrollTimeSheet2Controller extends Member
 		}
 
 		$cutoff_rate = $this->identify_period_salary($salary->payroll_employee_salary_monthly, $company_period->payroll_period_category);
+
 		$cutoff_cola = $this->identify_period_salary($salary->monthly_cola, $company_period->payroll_period_category);
 		$cutoff_target_days = $this->identify_period_salary($salary->payroll_group_working_day_month, $group->payroll_period_category);
 		
@@ -1155,16 +1158,29 @@ class PayrollTimeSheet2Controller extends Member
 			{
 				if($time->payroll_time_sheet_in != $time->payroll_time_sheet_out)
 				{
+					$ignore = false;
+
 					if(strtotime($time->payroll_time_sheet_in) < strtotime($time->payroll_time_sheet_out))
 					{
-						$_time_raw[$key] = new stdClass();
-						$_time_raw[$key]->time_in = $time->payroll_time_sheet_in;
-						$_time_raw[$key]->time_out = $time->payroll_time_sheet_out;
-
 						if(isset($time->payroll_time_sheet_record_id))
 						{
-							$_time_raw[$key]->payroll_time_sheet_record_id = $time->payroll_time_sheet_record_id;
-							$_time_raw[$key]->payroll_time_sheet_auto_approved = $time->payroll_time_sheet_auto_approved;
+							if($time->payroll_time_sheet_auto_approved == 2)
+							{
+								$ignore = true;
+							}
+						}
+
+						if($ignore == false)
+						{
+							$_time_raw[$key] = new stdClass();
+							$_time_raw[$key]->time_in = $time->payroll_time_sheet_in;
+							$_time_raw[$key]->time_out = $time->payroll_time_sheet_out;
+
+							if(isset($time->payroll_time_sheet_record_id))
+							{
+								$_time_raw[$key]->payroll_time_sheet_record_id = $time->payroll_time_sheet_record_id;
+								$_time_raw[$key]->payroll_time_sheet_auto_approved = $time->payroll_time_sheet_auto_approved;
+							}
 						}
 					}
 

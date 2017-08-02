@@ -65,7 +65,7 @@ class ImportTrackingNumberController extends Member
 
 		    $excel->sheet('Template', function($sheet) {
 		    	$header = [
-		    				'Order Number',
+		    				'Invoice Number',
 		    				'Tracking Number'
 		    				];
 		    	$sheet->freezeFirstRow();
@@ -91,17 +91,17 @@ class ImportTrackingNumberController extends Member
 		if($ctr != $data_length)
 		{
 			/* Variables */
-			$order_number = $value["Order Number"];
+			$order_number = $value["Invoice Number"];
 			$tracking_number = $value["Tracking Number"];
 		
 			/* Validation */
-			$order = DB::table("tbl_ec_order")->where("ec_order_id", $order_number)->first();
+			$order = DB::table("tbl_ec_order")->where("invoice_number", $order_number)->first();
 
 			if($order)
 			{
 				/* Update */
 				$update["tracking_no"] = $tracking_number;
-				DB::table("tbl_ec_order")->where("ec_order_id", $order_number)->update($update);
+				DB::table("tbl_ec_order")->where("invoice_number", $order_number)->update($update);
 				
 				$json["status"]		= "success";
 				$json["message"]	= "Success";

@@ -551,20 +551,6 @@ class Ec_order
 
             }
 
-            if($order_status == "Completed")
-            {
-                if($update['payment_status'] == 0)
-                {
-                    $response                    = null;
-                    $response['status']          = "error";
-                    $response['status_message']  = "Cannot Complete Order with unpaid status";
-                    return $response;
-                }
-                else{
-                    Item_code::completed_order_action($ec_order_id);
-                }
-            }
-
 
             if(isset($response["status"]))
             { 

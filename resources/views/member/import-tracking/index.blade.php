@@ -73,7 +73,7 @@
             <table class="table table-condensed table-stripped table-hover table-import-container table-bordered">
                 <thead>
                     <tr>
-                        <th>Order Number</th>
+                        <th>Invoice Number</th>
                         <th>Tracking Number</th>
                 </thead>
                 <tbody>

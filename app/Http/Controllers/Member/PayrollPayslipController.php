@@ -14,9 +14,8 @@ use App\Models\Tbl_payroll_time_keeping_approved_performance;
 use App\Models\Tbl_payroll_employee_contract;
 use App\Models\Tbl_payroll_payslip;
 use App\Models\Tbl_payroll_record;
-use DB;
-use PDF;
-use App\Globals\Pdf_global;
+use PDF2;
+
 
 class PayrollPayslipController extends Member
 {
@@ -57,23 +56,7 @@ class PayrollPayslipController extends Member
 		
 		}
 
-		//return view('member.payroll.payroll_payslipv5', $data);
-
-		/*THIS WILL CONVERT THE INTO PDF USING PDF GLOBAL*/
-		$view = view('member.payroll.payroll_payslipv5', $data);
-		return Pdf_global::show_pdf($view);
-
-
-		/*THIS WILL CONVERT THE INTO PDF USING PDF by Sir Jimar*/
-		/*$view = 'member.payroll.payroll_payslipv5';             
-          $pdf = PDF::loadView($view, $data);
-               $pdf->setOption('margin-right', 5);
-               $pdf->setOption('margin-left', 5); 
-               $pdf->setOption('margin-top', 5);
-               $pdf->setOption('margin-bottom', 5);*/
-               /*$pdf->setOption('page-width', $page_width);
-               $pdf->setOption('page-height', $page_height);*/
-          /*return $pdf->stream('Paycheque.pdf');*/
-
+		$pdf = PDF2::loadView('member.payroll.payroll_payslipv1', $data);
+		return $pdf->stream('document.pdf');
      }
 }

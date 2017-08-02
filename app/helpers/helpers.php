@@ -11,6 +11,10 @@ function floatvalser($amount)
     }
     
 }
+function array_to_object($array) {
+         return (object) $array;
+}
+
 function ctopercent($flt)
 {
     return number_format($flt * 100, 0) . "%";
@@ -672,3 +676,12 @@ function shuffle_assoc($list)
     }
     return collect($newArray);
 } 
+function get_payment_method_mlm($id)
+{
+    $data[1] = 'Cash';
+    $data[2] = 'GC';
+    $data[3] = 'E-Wallet';
+    $data[4] = 'V-Money';
+
+    return $data[$id];
+}

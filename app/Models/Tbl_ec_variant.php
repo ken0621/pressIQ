@@ -84,13 +84,14 @@ class Tbl_ec_variant extends Model
     public function scopeFirstImage($query)
     {
         $query->leftjoin(DB::raw("(SELECT * FROM tbl_ec_variant_image GROUP BY eimg_variant_id) AS variant_img"),"eimg_variant_id", "=", "evariant_id")
-              ->leftjoin("tbl_image","image_id","=","eimg_image_id");
+              ->leftjoin("tbl_image","image_id","=","eimg_image_id")->orderBy("default_image","DESC");
     }
 
     public function scopeImageOnly($query)
     {
-        $query->select("image_id","image_path")
+        $query->select("image_id","image_path","default_image")
               ->rightjoin("tbl_ec_variant_image","evariant_id","=","eimg_variant_id")
-              ->join("tbl_image","image_id","=","eimg_image_id");
+              ->join("tbl_image","image_id","=","eimg_image_id")
+              ->orderBy("default_image","DESC");
     }
 }

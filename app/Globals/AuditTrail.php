@@ -83,7 +83,7 @@ class AuditTrail
     }
     public static function getSearchAuditData($col, $key, $from=null, $to=null)
     {      
-        $query = Tbl_audit_trail::user()->orderBy("created_at","DESC")->where("audit_shop_id",AuditTrail::getShopId());   
+        $query = Tbl_audit_trail::user()->orderBy("tbl_audit_trail.created_at","DESC")->where("audit_shop_id",AuditTrail::getShopId());   
 
         switch ($col) {            
             case 'remarks':
@@ -988,7 +988,7 @@ class AuditTrail
 
     public static function getAudit_data()
     {        
-        $audit_trail = Tbl_audit_trail::user()->orderBy("created_at","DESC")->where("audit_shop_id",AuditTrail::getShopId())->paginate(15);
+        $audit_trail = Tbl_audit_trail::user()->orderBy("tbl_audit_trail.created_at","DESC")->where("audit_shop_id",AuditTrail::getShopId())->paginate(15);
 
         foreach ($audit_trail as $key => $value) 
         {            

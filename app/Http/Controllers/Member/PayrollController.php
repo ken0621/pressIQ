@@ -4932,11 +4932,11 @@ class PayrollController extends Member
                $insert_day["shift_day"] = $day;
                $insert_day["shift_code_id"] = $shift_code_id;
                $insert_day["shift_target_hours"] = Request::input("target_hours")[$day];
+               $insert_day["shift_break_hours"] = Request::input("break_hours")[$day];
                $insert_day["shift_flexi_time"] = Request::input("flexitime_" . $day) == 1 ? 1 : 0;
                $insert_day["shift_rest_day"] = Request::input("rest_day_" . $day) == 1 ? 1 : 0;
                $insert_day["shift_extra_day"] = Request::input("extra_day_" . $day) == 1 ? 1 : 0;
                
-
                $shift_day_id = Tbl_payroll_shift_day::insertGetId($insert_day);
 
                /* INSERT SHIFT TIME */
@@ -5010,6 +5010,7 @@ class PayrollController extends Member
                     $insert_day["shift_day"] = $day;
                     $insert_day["shift_code_id"] = $shift_code_id;
                     $insert_day["shift_target_hours"] = Request::input("target_hours")[$day];
+                    $insert_day["shift_break_hours"] = Request::input("break_hours")[$day];
                     $insert_day["shift_rest_day"] = Request::input("rest_day_" . $day) == 1 ? 1 : 0;
                     $insert_day["shift_extra_day"] = Request::input("extra_day_" . $day) == 1 ? 1 : 0;
                     $insert_day["shift_flexi_time"] = Request::input("flexitime_day_" . $day) == 1 ? 1 : 0;

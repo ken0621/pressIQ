@@ -22,6 +22,7 @@
 						<tr>
 							<th rowspan="2" valign="center" class="text-center">Day</th>
 							<th rowspan="2" valign="center" class="text-center">Working Hours</th>
+							<th rowspan="2" valign="center" class="text-center">Break Hours</th>
 							<th colspan="2" class="text-center">Work Schedule</th>
 							<th class="text-center"></th>
 							<th rowspan="2" class="text-center">Flexi Time</th>
@@ -44,6 +45,9 @@
 								</td>
 								<td>
 									<input type="number" name="target_hours[{{$day->shift_day}}]" class="form-control text-center" step="any" value="{{ $day->shift_target_hours }}">
+								</td>
+								<td>
+									<input type="number" name="break_hours[{{$day->shift_day}}]" class="form-control text-center" step="any" value="{{ $day->shift_break_hours }}">
 								</td>
 								<td class="editable">
 									<input type="text" placeholder="NO TIME" value="{{ (isset($day->time_shift[0]) == '' ? '' : $day->time_shift[0]->shift_work_start) }}" name="work_start[{{$day->shift_day}}][]" class="text-table time-entry in" >
@@ -68,6 +72,7 @@
 								@foreach($day->time_shift as $x => $timeshift)
 									@if($x != 0)
 										<tr class="editable main-con sub-time" day="{{$day->shift_day}}">
+											<td></td>
 											<td></td>
 											<td></td>
 											<td class="editable">

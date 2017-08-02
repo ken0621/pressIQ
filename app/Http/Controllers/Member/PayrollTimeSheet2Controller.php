@@ -393,7 +393,6 @@ class PayrollTimeSheet2Controller extends Member
 			$_shift =  $this->db_get_shift_of_employee_by_code($shift_code_id, $date);
 		}
 
-
 		$_shift_raw 			= $this->shift_raw($_shift);
 		$_time_raw				= $this->time_raw($_time);
 		$mode					= "daily";
@@ -410,8 +409,6 @@ class PayrollTimeSheet2Controller extends Member
 			}
 		}
 		
-		//dd($_shift);
-		
 		if(count($_shift) > 0)
 		{
 			$return->shift_target_hours = $_shift[0]->shift_target_hours;
@@ -420,7 +417,16 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			$return->shift_target_hours = 0;
 		}
+
+		if ($_shift[0]->shift_break_hours != null) {
+			$return->shift_break_hours = $_shift[0]->shift_break_hours;
+		}
+		else
+		{
+			$return->shift_break_hours = "0.00";
+		}
 		
+
 		$return->time_keeping_approved = $time_keeping_approved;
 
 		if($return->for_approval == 1) //PENDING
@@ -428,7 +434,7 @@ class PayrollTimeSheet2Controller extends Member
 			$return->status = "PENDING";
 			if($return->time_compute_mode == "flexi")
 			{
-				$return->clean_shift = Payroll2::clean_shift_flexi($_time_raw, "00:00:00",	$return->shift_target_hours);
+				$return->clean_shift = Payroll2::clean_shift_flexi($_time_raw, $return->shift_break_hours,	$return->shift_target_hours);
 			}
 			else
 			{
@@ -445,7 +451,7 @@ class PayrollTimeSheet2Controller extends Member
 
 			if($return->time_compute_mode == "flexi")
 			{
-				$return->clean_shift = Payroll2::clean_shift_flexi($_time_raw, "00:00:00",	$return->shift_target_hours);
+				$return->clean_shift = Payroll2::clean_shift_flexi($_time_raw, $return->shift_break_hours, $return->shift_target_hours);
 			}
 			else
 			{
@@ -455,7 +461,6 @@ class PayrollTimeSheet2Controller extends Member
 			$return->shift_approved = true;
 			$return->compute_shift = $return->clean_shift;
 		}
-		
 
 		$return->shift_approved = $this->check_if_shift_approved($return->clean_shift);
 		$return->compute_shift = $this->remove_not_auto_approve($return->clean_shift);
@@ -475,6 +480,8 @@ class PayrollTimeSheet2Controller extends Member
 		$return->grace_time_rule_late = $grace_time_rule_late = $employee_contract->grace_time_rule_late;
 		$return->overtime_grace_time = $overtime_grace_time = $employee_contract->overtime_grace_time;
 		$return->grace_time_rule_overtime = $grace_time_rule_overtime = $employee_contract->grace_time_rule_overtime;
+		
+
 		if(isset($_shift[0]))
 		{
 
@@ -513,7 +520,7 @@ class PayrollTimeSheet2Controller extends Member
 		
 		if($return->time_compute_mode == "flexi")
 		{
-			$return->time_output =  Payroll2::compute_time_mode_flexi($return->compute_shift, $return->shift_target_hours, "00:00:00", $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday, $leave, $leave_fill_undertime, $use_leave, $testing = false);
+			$return->time_output =  Payroll2::compute_time_mode_flexi($return->compute_shift, $return->shift_target_hours, $return->shift_break_hours, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday, $leave, $leave_fill_undertime, $use_leave, $testing = false);
 		}
 		else
 		{
@@ -1014,7 +1021,6 @@ class PayrollTimeSheet2Controller extends Member
 			}
 
 		}
-
 		return view("member.payroll2.custom_shift", $data);
 	}
 	public function custom_shift_update()
@@ -1046,6 +1052,7 @@ class PayrollTimeSheet2Controller extends Member
 		        $insert_day["shift_day"] = $day;
 		        $insert_day["shift_code_id"] = $shift_code_id;
 		        $insert_day["shift_target_hours"] = Request::input("target_hours")[$day];
+		        $insert_day["shift_break_hours"] = Request::input("break_hours")[$day];
 		        $insert_day["shift_rest_day"] = Request::input("rest_day_" . $day) == 1 ? 1 : 0;
 		        $insert_day["shift_extra_day"] = Request::input("extra_day_" . $day) == 1 ? 1 : 0;
 		        $insert_day["shift_flexi_time"] = Request::input("flexitime_day_" . $day) == 1 ? 1 : 0;

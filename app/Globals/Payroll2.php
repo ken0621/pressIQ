@@ -892,8 +892,6 @@ class Payroll2
 		$is_half_day 			= false;
 		$is_absent 				= false;
 
-
-
 		// if ($use_leave) 
 		// {
 		// 	$is_absent = true;
@@ -1220,6 +1218,7 @@ class Payroll2
 				$daily_rate = 0;
 			}
 		}
+
 
 		if ((  $_time['day_type'] == 'extra_day'  || $_time["is_holiday"] == "regular" ) && $time_spent!=0) 
 		{

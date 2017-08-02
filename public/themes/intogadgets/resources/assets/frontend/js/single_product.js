@@ -50,7 +50,7 @@ function event_change_image()
 		$('.single-product-content[variant-id="'+variant_id+'"] .single-product-img[key="'+key+'"]').removeClass("hide");
 		$(".single-product-img").removeClass("first-img");
 		$('.single-product-content[variant-id="'+variant_id+'"] .single-product-img[key="'+key+'"]').addClass("first-img");
-		image_crop(".4-3-ratio", 4, 3);
+		image_crop(".1-1-ratio", 1, 1);
 		$(".single-product-img").removeData('elevateZoom');
 		$('.zoomContainer').remove();
 		$(".first-img").elevateZoom({});
@@ -145,9 +145,9 @@ function action_select_variation(e)
 
 			$(".first-img").elevateZoom({
 			});
-			$('.4-3-ratio').keepRatio({ ratio: 4/3, calculate: 'height' });
 			event_slick();
 
+			$('.1-1-ratio').keepRatio({ ratio: 1/1, calculate: 'height' });
 			$('.attribute-variation[variant-label="'+variant_label+'"]').val($(e.currentTarget).val());
 
 			if (toload == true) 

@@ -153,7 +153,7 @@ return [
         // Dingo\Api\Provider\LaravelServiceProvider::class,
         Msurguy\Honeypot\HoneypotServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
-        niklasravnsborg\LaravelPdf\PdfServiceProvider::class
+        //niklasravnsborg\LaravelPdf\PdfServiceProvider::class
 
     ],
 

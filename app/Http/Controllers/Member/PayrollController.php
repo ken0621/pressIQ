@@ -88,6 +88,10 @@ use App\Models\Tbl_payroll_shift_time;
 
 use App\Globals\Accounting;
 
+use App\Models\Tbl_payroll_time_keeping_approved;
+use App\Models\Tbl_payroll_time_keeping_approved_breakdown;
+use App\Models\Tbl_payroll_time_keeping_approved_performance;
+
 class PayrollController extends Member
 {
 
@@ -150,7 +154,7 @@ class PayrollController extends Member
 
           switch ($mode)
           {
-               case 'generated':
+               case 'pending':
                     return view('member.payroll.payroll_timekeeping_table', $data);
                break;
 
@@ -159,7 +163,7 @@ class PayrollController extends Member
                break;  
 
                default:
-                    return view('member.payroll.payroll_timekeeping_table_processed', $data);
+                    return view('member.payroll.payroll_timekeeping_table', $data);
                break;
           }
           
@@ -3388,6 +3392,7 @@ class PayrollController extends Member
           $insert['payroll_allowance_category']   = Request::input('payroll_allowance_category');
           $insert['payroll_allowance_add_period'] = Request::input('payroll_allowance_add_period');
           $insert['expense_account_id']           = Request::input('expense_account_id');
+          $insert['payroll_allowance_type']   = Request::input('payroll_allowance_type');
           $insert['shop_id']                           = Self::shop_id();
           $allowance_id = Tbl_payroll_allowance::insertGetId($insert);
 
@@ -3486,6 +3491,7 @@ class PayrollController extends Member
           $update['payroll_allowance_amount']     = Request::input('payroll_allowance_amount');
           $update['payroll_allowance_category']   = Request::input('payroll_allowance_category');
           $update['payroll_allowance_add_period'] = Request::input('payroll_allowance_add_period');
+          $update['payroll_allowance_type'] = Request::input('payroll_allowance_type');
           $update['expense_account_id']           = Request::input('expense_account_id');
 
           Tbl_payroll_allowance::where('payroll_allowance_id', $payroll_allowance_id)->update($update);
@@ -6558,10 +6564,10 @@ class PayrollController extends Member
           //dd($data['_record']);
           //return view('member.payroll.payroll_payslip', $data);
           
-          //return view('member.payroll.payroll_payslipv1', $data);
+          return view('member.payroll.payroll_payslipv1', $data);
 
 
-          $page_width    = $data['payslip']->paper_size_width * 10;
+          /*$page_width    = $data['payslip']->paper_size_width * 10;
           $page_height   = $data['payslip']->paper_size_height * 10; 
 
           $view = 'member.payroll.payroll_payslipv1';             
@@ -6573,7 +6579,7 @@ class PayrollController extends Member
                $pdf->setOption('page-width', $page_width);
                $pdf->setOption('page-height', $page_height);
           return $pdf->stream('Paycheque.pdf');
-
+*/
 
           /*$view = 'member.payroll.payroll_payslipv1';             
           $pdf = PDF::loadView($view, $data);
@@ -6586,6 +6592,7 @@ class PayrollController extends Member
           $pdf = PDF::loadView($view,$data);
           return $pdf->stream('Paycheque.pdf');*/
      }
+
 
 
      /* payslip end */

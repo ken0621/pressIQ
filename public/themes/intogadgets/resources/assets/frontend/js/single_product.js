@@ -29,7 +29,7 @@ $(document).ready(function()
 function action_zoom_image()
 {
 	$(".single-product-img").removeClass("first-img");
-// 	$(".single-product-img.key-0").addClass("first-img");
+	$(".single-product-img.key-0").addClass("first-img");
 	$.removeData($(".single-product-img.key-0"), 'elevateZoom');
 	$(".first-img").elevateZoom({
 	});

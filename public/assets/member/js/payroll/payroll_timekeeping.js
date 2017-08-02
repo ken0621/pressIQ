@@ -6,30 +6,47 @@ function payroll_timekeeping()
 
 	function init()
 	{
-		document_ready();
-	}
-
-
-	function document_ready()
-	{
-		$( document ).ready(function() {
-    		event_change_company();
-    		action_load_payroll_time_keeping_table(0);
+		$( document ).ready(function()
+		{
+			document_ready();
 		});
 	}
+	function document_ready()
+	{	
+		event_change_company();
+		action_load_payroll_time_keeping_table(0);
+		event_change_tab();
+	}
+
+	function event_change_tab()
+	{
+		$(".change-tab").click(function(e)
+		{
+			$(".change-tab").removeClass("active");
+			$(e.currentTarget).addClass("active");
+			action_load_payroll_time_keeping_table();
+		});
+	}
+
+
 
 	function event_change_company()
 	{
-		$('.company-change-event').on('change', function() {
-  			var payroll_company_id = this.value;
-  			action_load_payroll_time_keeping_table(payroll_company_id);
+		$('.company-change-event').on('change', function()
+		{
+  			action_load_payroll_time_keeping_table();
 		});
 	}
 
 
-	function action_load_payroll_time_keeping_table(payroll_company_id)
+	function action_load_payroll_time_keeping_table()
 	{
-		$( ".load-table-employee-list" ).load( "/member/payroll/time_keeping/table/" + payroll_company_id);
+		var payroll_company_id = $('.company-change-event').val();
+		var mode = $(".change-tab.active").attr("mode");
+		$(".load-table-employee-list").html('<div style="padding: 150px 80px; padding-bottom: 500px; text-align: center; font-size: 30px; color: #1682ba"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>');
+		$(".load-table-employee-list").load( "/member/payroll/time_keeping/table/" + payroll_company_id + "?mode=" + mode, function()
+		{
+		});
 	}
 
 	this.reload_timekeeping = function()
@@ -71,6 +88,7 @@ function submit_done(data)
 	{
 
 	}
+	
 	data.element.modal("toggle");
 	if(data.function_name == "payroll_period_list.reload_list")
 	{

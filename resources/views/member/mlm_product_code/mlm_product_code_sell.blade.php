@@ -150,6 +150,7 @@
 								                        <li data-value="1"><a href="#">Cash</a></li>
 								                        <li data-value="2"><a href="#">GC</a></li>
 								                        <li data-value="3"><a href="#">Wallet</a></li>
+								                        <li data-value="4"><a href="#">Vmoney</a></li>
 								                    </ul>
 								                    <button type="button" class="btn btn-default dropdown-toggle as-is bs-dropdown-to-select" data-toggle="dropdown">
 								                        <span data-bind="bs-drp-sel-label" style="color: black !important">Payment</span>
@@ -217,6 +218,12 @@ $(document).ready(function(e){
     			$('.payment-value').val('');
     			document.getElementById('payment-value').readOnly =true;
 
+    		}
+    		else if(payment_value == 4)
+    		{
+    			$('.payment_label').text("Input Tendered Payment");
+    			$('.payment-value').val('');
+    			document.getElementById('payment-value').readOnly =false;
     		}
 		return false;
 	});

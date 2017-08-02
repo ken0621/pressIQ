@@ -301,7 +301,7 @@ class ShopAccountController extends Shop
     public function invoice($id)
     {
         $data["page"] = "Invoice";
-        $data["order"] = Tbl_ec_order::where("tbl_ec_order.ec_order_id", $id)->customer()->first();
+        $data["order"] = Tbl_ec_order::where("tbl_ec_order.ec_order_id", $id)->customer()->customer_address()->where("purpose","billing")->first();
         
         if ($data["order"]->payment_status == 1) 
         {
@@ -309,9 +309,13 @@ class ShopAccountController extends Shop
 
             $data["order"]->subtotal = $data["order"]->subtotal - Cart::get_coupon_discount($data["order"]->coupon_id, $data["order"]->subtotal); 
             $data["coupon_discount"] = Cart::get_coupon_discount($data["order"]->coupon_id, $data["order"]->subtotal);
-            // dd($data["order"]->subtotal);
             $data['order']->vat     = $data["order"]->subtotal / 1.12 * 0.12;
             $data['order']->vatable = $data['order']->subtotal - $data['order']->vat;
+
+            if($data["order"]->billing_address == ', , , ')
+            {
+                $data["order"]->billing_address = $data["order"]->customer_street.", ".$data["order"]->customer_zipcode.", ".$data["order"]->customer_city.", ".$data["order"]->customer_state;
+            }
             
             return view("account_invoice", $data);
         }

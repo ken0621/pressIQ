@@ -36,49 +36,49 @@
         </div> -->
         <div class="row clearfix draggable-container">
             <div class="">
-             <div class="col-md-12">
-                    <div class="row clearfix draggable-container ilr-container">
-                        <div class="table-responsive">
-                            <div class="col-sm-12">
-                                <table class="digima-table">
-                                    <thead >
-                                        <tr>
-                                            <th style="width: 30px;"></th>
-                                            <th style="width: 15px;" class="text-right">#</th>
-                                            <th style="width: 200px;">Product Name</th>
-                                            <th style="width: 200px;">Issued QTY</th>
-                                            <th style="width: 200px;">Sold QTY</th>
-                                            <th style="width: 200px;">Remaining QTY</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody >
-                                    @if($_sir_item)
-                                        @foreach($_sir_item as $key => $sir_item)                                
-                                        <tr class="tr-draggable tr-draggable-html">
-                                            <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
-                                            <td class="invoice-number-td text-right">{{$key+1}}</td>
-                                            <td>
-                                                <label>{{$sir_item->item_name}}</label>
-                                            </td>                                            
-                                            <td>
-                                                <label>{{$sir_item->item_qty}} {{$sir_item->um_abbrev or 'PC'}} </label>
-                                            </td>
-                                            <td>
-                                                <label>{{$sir_item->sold_qty}}</label>
-                                            </td>
-                                            <td>
-                                                <label>
-                                                    {{$sir_item->remaining_qty}}
-                                                </label>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                    @endif
-                                    </tbody>                                   
-                                </table>
+                <div class="col-md-12">
+                        <div class="row clearfix draggable-container ilr-container">
+                            <div class="table-responsive">
+                                <div class="col-sm-12">
+                                    <table class="digima-table">
+                                        <thead >
+                                            <tr>
+                                                <th style="width: 30px;"></th>
+                                                <th style="width: 15px;" class="text-right">#</th>
+                                                <th style="width: 200px;">Product Name</th>
+                                                <th style="width: 200px;">Issued QTY</th>
+                                                <th style="width: 200px;">Sold QTY</th>
+                                                <th style="width: 200px;">Remaining QTY</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody >
+                                        @if($_sir_item)
+                                            @foreach($_sir_item as $key => $sir_item)                                
+                                            <tr class="tr-draggable tr-draggable-html">
+                                                <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
+                                                <td class="invoice-number-td text-right">{{$key+1}}</td>
+                                                <td>
+                                                    <label>{{$sir_item->item_name}}</label>
+                                                </td>                                            
+                                                <td>
+                                                    <label>{{$sir_item->item_qty}} {{$sir_item->um_abbrev or 'PC'}} </label>
+                                                </td>
+                                                <td>
+                                                    <label>{{$sir_item->sold_qty}}</label>
+                                                </td>
+                                                <td>
+                                                    <label>
+                                                        {{$sir_item->remaining_qty}}
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        @endif
+                                        </tbody>                                   
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                    </div>
                 </div>   
             </div>
         </div>    

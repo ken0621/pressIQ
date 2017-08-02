@@ -292,7 +292,7 @@ class Payroll2
 			if($target_hours!=0)
 			{
 				$target_hours = Payroll2::float_time($target_hours);
-				$target_time  = Payroll2::float_time($target_hours);
+				$target_time  = Payroll2::time_float($target_hours);
 				$target_hours = Payroll2::convert_time_in_minutes($target_hours);
 			}
 			else
@@ -1207,26 +1207,30 @@ class Payroll2
 
 		if($compute_type=="daily")
 		{
-			if($_time['day_type'] == 'rest_day' || $_time["is_holiday"] == "regular" || $_time["is_holiday"] == "special" || $_time['day_type'] == 'extra_day') 
+			if($_time["is_holiday"] == "special" || $_time['day_type'] == 'rest_day' || $_time["is_holiday"] == "regular" || $_time['day_type'] == 'extra_day') 
 			{
 				$daily_rate = 0;
 			}
 		}
 
-		if (($_time['day_type'] == 'extra_day' || $_time["is_holiday"] == "regular") && $time_spent!=0) 
+		if (($_time["is_holiday"] == "special" ||  $_time['day_type'] == 'extra_day'  || $_time["is_holiday"] == "regular" ) && $time_spent!=0) 
 		{
 			$return->daily_rate = $daily_true_rate;
+
 		}
 		else
 		{
+
 			$return->daily_rate = $daily_rate;
 		}
-		
+
 
 		if($time_spent!=0)
 		{
 			$daily_rate = $daily_true_rate;
 		}
+
+
 		
 		$total_day_income 		= $daily_rate ;
 		$target_float 			= Self::time_float($_time['target_hours']);
@@ -1498,9 +1502,8 @@ class Payroll2
 			{
 				if ($compute_type=="daily")
 				{
-					$total_day_income = 0;
 					$return->_breakdown_addition["Special Holiday"]["time"] = ""; 
-					$return->_breakdown_addition["Special Holiday"]["rate"] = $daily_rate * ($special_param['payroll_overtime_regular']);
+					$return->_breakdown_addition["Special Holiday"]["rate"] = $daily_true_rate * ($special_param['payroll_overtime_regular']);
 					$return->_breakdown_addition["Special Holiday"]["hour"] = "";
 					$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday"]["rate"];
 					$breakdown_addition += $return->_breakdown_addition["Special Holiday"]["rate"];
@@ -1723,16 +1726,17 @@ class Payroll2
 			{
 				foreach($date_compute->compute->_breakdown_addition as $lbl => $badd)
 				{
-
 					if(isset($return->_breakdown_addition_summary[$lbl]))
 					{
 						$return->_breakdown_addition_summary[$lbl] += $badd["rate"];
-						$return->_breakdown_addition_summary_time[$lbl] .= "<br>" . $badd["time"] . " - " . payroll_currency($badd["rate"]);
+						$return->_breakdown_addition_summary_time[$lbl] .= "<br>". "<b>" . payroll_date_format($date) . "</b> " . ($badd["time"] != "" ?  " ~ " .$badd["time"] : "")  . " ~ " . payroll_currency($badd["rate"]);	
+
 					}
 					else
 					{
 						$return->_breakdown_addition_summary[$lbl] = $badd["rate"];
-						$return->_breakdown_addition_summary_time[$lbl] = $badd["time"] . " - " . payroll_currency($badd["rate"]);
+						$return->_breakdown_addition_summary_time[$lbl] = "<b>" . payroll_date_format($date) . "</b> " .  ($badd["time"] != "" ?  " ~ " .$badd["time"] : "")  . " ~ " . payroll_currency($badd["rate"]);
+						
 					}
 				}
 			}
@@ -2071,9 +2075,17 @@ class Payroll2
 	public static function time_float($time = '00:00')
 	{
 		$extime = explode(':', $time);
-		$hour = $extime[0];
-		$min = $extime[1] / 60;
-		return $hour + $min;
+
+		if(!isset($extime[1]))
+		{
+			return 0;
+		}
+		else
+		{
+			$hour = $extime[0];
+			$min = $extime[1] / 60;
+			return $hour + $min;
+		}
 	}
 
 	public static function convert_time_in_minutes($time)
@@ -2358,7 +2370,9 @@ class Payroll2
 		}
 
 		$return = Payroll2::cutoff_breakdown_additions($return, $data);
+		$return = Payroll2::cutoff_breakdown_cola($return, $data);
 		$return = Payroll2::cutoff_breakdown_deductions($return, $data); //meron bang non-taxable deduction?? lol
+		$return = Payroll2::cutoff_breakdown_adjustments($return, $data);
 		$return = Payroll2::cutoff_breakdown_taxable_allowances($return, $data);
 		$return = Payroll2::cutoff_breakdown_non_taxable_allowances($return, $data);
 		$return = Payroll2::cutoff_breakdown_hidden_allowances($return, $data);
@@ -2367,10 +2381,54 @@ class Payroll2
 		$return = Payroll2::cutoff_breakdown_compute_taxable_salary($return, $data);
 		$return = Payroll2::cutoff_breakdown_compute_tax($return, $data);
 		$return = Payroll2::cutoff_breakdown_compute_net($return, $data);
-
+		$return = Payroll2::cutoff_breakdown_compute_time($return, $data);
 		return $return;
 	}
 
+	public static function cutoff_breakdown_compute_time($return, $data)
+	{
+
+		$show_time_breakdown = array('time_spent', 'undertime', 'overtime','late','night_differential');
+
+		$return->_time_breakdown['absent']["float"] = 0;
+		$return->_time_breakdown['absent']["time"] = "No Absent";
+
+		foreach($data["cutoff_input"] as $cutoff_input)
+		{
+			
+			foreach($cutoff_input->time_output as $key => $time_output)
+			{
+				if(in_array($key, $show_time_breakdown))
+				{
+					if(!isset($return->_time_breakdown[$key]))
+					{
+						$return->_time_breakdown[$key]["float"] = Payroll2::time_float($time_output);
+					}
+					else
+					{
+						$return->_time_breakdown[$key]["float"] += Payroll2::time_float($time_output);
+					}
+
+					$return->_time_breakdown[$key]["time"] = Payroll2::float_time($return->_time_breakdown[$key]["float"]);
+
+
+				}
+
+				if($key == "is_absent")
+				{
+					if($time_output == true)
+					{
+
+						$return->_time_breakdown['absent']["float"] += 1;
+						$return->_time_breakdown['absent']["time"] = $return->_time_breakdown['absent']["float"] . " Absent(s)";
+					}
+				}
+			}
+		}
+
+
+		return $return;
+	}
 	public static function cutoff_breakdown_to_tr($breakdown)
 	{
 		if($breakdown["mode"] == "plus")
@@ -2474,7 +2532,7 @@ class Payroll2
 			}
 			else
 			{
-				$tax_description .= "<br> SSS Contribution is processed only during " . $tax_period . ".";
+				$tax_description .= "<br> TAX is processed only during " . $tax_period . ".";
 
 				if($tax_period == code_to_word($period_count))
 				{
@@ -2534,6 +2592,7 @@ class Payroll2
 		}
 
 
+		$return->tax_total = $tax;
 
 		$val["label"] = "Witholding Tax";
 		$val["description"] = $tax_description;
@@ -3134,7 +3193,14 @@ class Payroll2
 			{
 				$val["label"] = $key;
 				$val["type"] = "additions";
-				$val["description"] = $data["cutoff_compute"]->_breakdown_addition_summary_time[$key];
+
+				if(isset($data["cutoff_compute"]->_breakdown_addition_summary_time[$key]))
+				{
+					$val["description"] = $data["cutoff_compute"]->_breakdown_addition_summary_time[$key];
+				}
+				
+
+
 				$val["amount"] = $breakdown;
 				$val["add.gross_pay"] = true;
 				$val["deduct.gross_pay"] = false;
@@ -3149,8 +3215,73 @@ class Payroll2
 
 		return $return;
 	}
+
+	public static function cutoff_breakdown_cola($return, $data)
+	{
+		$total_cola = 0;
+		foreach($data["cutoff_input"] as $cutoff_input)
+		{
+			$total_cola += $cutoff_input->compute->cola;
+		}
+
+		$val["label"] = "COLA";
+		$val["type"] = "additions";
+		$val["amount"] = $total_cola;
+		$val["add.gross_pay"] = true;
+		$val["deduct.gross_pay"] = false;
+		$val["add.taxable_salary"] = false;
+		$val["deduct.taxable_salary"] = false;
+		$val["add.net_pay"] = false;
+		$val["deduct.net_pay"] = false;
+		array_push($return->_breakdown, $val);
+		$val = null;
+
+		return $return;
+	}
+	public static function cutoff_breakdown_adjustments($return, $data)
+	{
+		$_adjustment = Tbl_payroll_adjustment::where("payroll_period_company_id", $data["period_info"]->payroll_period_company_id)->where("payroll_employee_id", $data["employee_id"])->get();
+		
+		foreach($_adjustment as $adjustment)
+		{
+			$val["label"] 					= $adjustment->payroll_adjustment_name;
+			$val["type"] 					= "adjustment";
+			$val["description"] 			= "This is a manual adjustment.<br>Click <a class='delete-adjustment' adjustment_id='" . $adjustment->payroll_adjustment_id . "' href='javascript:'>here</a> to delete this adjustment.";
+			$val["amount"] 					= $adjustment->payroll_adjustment_amount;
+			$val["add.gross_pay"] 			= ($adjustment->add_gross_pay == 1 ? true : false);
+			$val["deduct.gross_pay"] 		= ($adjustment->deduct_gross_pay == 1 ? true : false);
+			$val["add.taxable_salary"] 		= ($adjustment->add_taxable_salary == 1 ? true : false);
+			$val["deduct.taxable_salary"] 	= ($adjustment->deduct_taxable_salary == 1 ? true : false);
+			$val["add.net_pay"] 			= ($adjustment->add_net_pay == 1 ? true : false);
+			$val["deduct.net_pay"] 			= ($adjustment->deduct_net_pay == 1 ? true : false);
+			array_push($return->_breakdown, $val);
+			$val = null;
+		}
+
+		return $return;
+	}
 	public static function cutoff_breakdown_deductions($return, $data)
 	{
+		/* DAILY DEDUCTIONS */
+		if(isset($data["cutoff_compute"]->_breakdown_deduction_summary))
+		{
+			foreach($data["cutoff_compute"]->_breakdown_deduction_summary as $key => $breakdown)
+			{
+
+				$val["label"] = $key;
+				$val["type"] = "deductions";
+				$val["amount"] = $breakdown;
+				$val["add.gross_pay"] = false;
+				$val["deduct.gross_pay"] = false;
+				$val["add.taxable_salary"] = false;
+				$val["deduct.taxable_salary"] = false;
+				$val["add.net_pay"] = false;
+				$val["deduct.net_pay"] = false;
+				array_push($return->_breakdown, $val);
+				$val = null;
+			}
+		}
+
 		extract($data);
 
 		/* AGENCY DEDUCTION */

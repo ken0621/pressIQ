@@ -11,6 +11,10 @@ function floatvalser($amount)
     }
     
 }
+function array_to_object($array) {
+         return (object) $array;
+}
+
 function ctopercent($flt)
 {
     return number_format($flt * 100, 0) . "%";
@@ -660,4 +664,24 @@ function get_ip_address()
     }
 
     return $ip;
+}
+function shuffle_assoc($list) 
+{ 
+    $shuffleKeys = array_keys($list->toArray());
+    shuffle($shuffleKeys);
+    $newArray = array();
+    foreach($shuffleKeys as $key) 
+    {
+        $newArray[$key] = $list[$key];
+    }
+    return collect($newArray);
+} 
+function get_payment_method_mlm($id)
+{
+    $data[1] = 'Cash';
+    $data[2] = 'GC';
+    $data[3] = 'E-Wallet';
+    $data[4] = 'V-Money';
+
+    return $data[$id];
 }

@@ -79,7 +79,7 @@
         </div>
         <div class="holder sshide">
             <div class="title text-left">Top Rated Products</div>
-            @foreach(get_collection(get_content($shop_theme_info, "product", "top_rated_products"), $shop_id) as $collection)
+            @foreach(get_collection_random(get_content($shop_theme_info, "product", "top_rated_products"), $shop_id) as $collection)
                 <a href="/product/view/{{ $collection['ec_product_id'] }}" class="text">
                     <div class="product-top">
                         <div class="text">
@@ -93,7 +93,7 @@
         </div>
         <div class="holder sshide">
             <div class="title text-left">Most Viewed</div>
-            @foreach(get_collection(get_content($shop_theme_info, "product", "most_viewed"), $shop_id) as $collection)
+            @foreach(get_collection_random(get_content($shop_theme_info, "product", "most_viewed"), $shop_id) as $collection)
                 <a href="/product/view/{{ $collection['ec_product_id'] }}" class="text">
                     <div class="product-top">
                         <div class="text">
@@ -216,7 +216,7 @@
     <form class="form-filter">
         <div class="holder">
             <div class="title text-left">Top Rated Products</div>
-            @foreach(get_collection(get_content($shop_theme_info, "product", "top_rated_products"), $shop_id) as $collection)
+            @foreach(get_collection_random(get_content($shop_theme_info, "product", "top_rated_products"), $shop_id) as $collection)
                 <a href="/product/view/{{ $collection['eprod_id'] }}" class="text">
                     <div class="product-top">
                         <div class="text">
@@ -230,7 +230,7 @@
         </div>
         <div class="holder">
             <div class="title text-left">Most Viewed</div>
-            @foreach(get_collection(get_content($shop_theme_info, "product", "most_viewed"), $shop_id) as $collection)
+            @foreach(get_collection_random(get_content($shop_theme_info, "product", "most_viewed"), $shop_id) as $collection)
                 <a href="/product/view/{{ $collection['eprod_id'] }}" class="text">
                     <div class="product-top">
                         <div class="text">

@@ -88,6 +88,10 @@ use App\Models\Tbl_payroll_shift_time;
 
 use App\Globals\Accounting;
 
+use App\Models\Tbl_payroll_time_keeping_approved;
+use App\Models\Tbl_payroll_time_keeping_approved_breakdown;
+use App\Models\Tbl_payroll_time_keeping_approved_performance;
+
 class PayrollController extends Member
 {
 
@@ -112,9 +116,61 @@ class PayrollController extends Member
 
      }
 
-     /* EMPLOYEE START */
 
-    public function employee_list()
+     /* PAYROLL TIME KEEPING START */
+     public function time_keeping()
+     {
+          $data["_company"] = Tbl_payroll_company::where("shop_id", Self::shop_id())->where('payroll_parent_company_id', 0)->get();
+          $data['_period'] = Tbl_payroll_period::sel(Self::shop_id())
+                                                  ->where('payroll_parent_company_id', 0)
+                                                  ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
+                                                  ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
+                                                  ->orderBy('tbl_payroll_period.payroll_period_start','asc')
+                                                  ->get();
+
+          return view('member.payroll.payroll_timekeeping', $data);
+     }
+
+
+     public function time_keeping_load_table($payroll_company_id)
+     {
+          $mode = Request::input("mode");
+          $query = Tbl_payroll_period::sel(Self::shop_id())
+                                                  ->where('payroll_parent_company_id', 0)
+                                                  ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
+                                                  ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
+                                                  ->orderBy('tbl_payroll_period.payroll_period_start','asc');
+
+         
+
+          if ($payroll_company_id != 0)
+          {
+               $query->where('tbl_payroll_company.payroll_company_id', $payroll_company_id);
+          }
+
+          $query->where("tbl_payroll_period_company.payroll_period_status", $mode);
+
+          $data["_period"] = $query->get();
+
+          switch ($mode)
+          {
+               case 'pending':
+                    return view('member.payroll.payroll_timekeeping_table', $data);
+               break;
+
+               case 'processed':
+                    return view('member.payroll.payroll_timekeeping_table_processed', $data);
+               break;  
+
+               default:
+                    return view('member.payroll.payroll_timekeeping_table', $data);
+               break;
+          }
+          
+     }
+
+     /* EMPLOYEE START */
+     public function employee_list()
      {    
           $active_status[0]    = 1;
           $active_status[1]    = 2;
@@ -3336,6 +3392,7 @@ class PayrollController extends Member
           $insert['payroll_allowance_category']   = Request::input('payroll_allowance_category');
           $insert['payroll_allowance_add_period'] = Request::input('payroll_allowance_add_period');
           $insert['expense_account_id']           = Request::input('expense_account_id');
+          $insert['payroll_allowance_type']   = Request::input('payroll_allowance_type');
           $insert['shop_id']                           = Self::shop_id();
           $allowance_id = Tbl_payroll_allowance::insertGetId($insert);
 
@@ -3434,6 +3491,7 @@ class PayrollController extends Member
           $update['payroll_allowance_amount']     = Request::input('payroll_allowance_amount');
           $update['payroll_allowance_category']   = Request::input('payroll_allowance_category');
           $update['payroll_allowance_add_period'] = Request::input('payroll_allowance_add_period');
+          $update['payroll_allowance_type'] = Request::input('payroll_allowance_type');
           $update['expense_account_id']           = Request::input('expense_account_id');
 
           Tbl_payroll_allowance::where('payroll_allowance_id', $payroll_allowance_id)->update($update);
@@ -5230,38 +5288,6 @@ class PayrollController extends Member
      /* CALDENDAR LEAVE END */
 
 
-     /* PAYROLL TIME KEEPING START */
-     public function time_keeping()
-     {
-          $data["_company"] = Tbl_payroll_company::where("shop_id", Self::shop_id())->where('payroll_parent_company_id', 0)->get();
-          $data['_period'] = Tbl_payroll_period::sel(Self::shop_id())
-                                                  ->where('payroll_parent_company_id', 0)
-                                                  ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
-                                                  ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
-                                                  ->orderBy('tbl_payroll_period.payroll_period_start','asc')
-                                                  ->get();
-
-          return view('member.payroll.payroll_timekeeping', $data);
-     }
-
-
-     public function time_keeping_load_table($payroll_company_id)
-     {
-          $query = Tbl_payroll_period::sel(Self::shop_id())
-                                                  ->where('payroll_parent_company_id', 0)
-                                                  ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
-                                                  ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
-
-                                                  ->orderBy('tbl_payroll_period.payroll_period_start','asc');
-
-          if ($payroll_company_id != 0) {
-               $query->where('tbl_payroll_company.payroll_company_id', $payroll_company_id);
-          }
-
-          $data["_period"] = $query->get();
-          
-          return view('member.payroll.payroll_timekeeping_table', $data);
-     }
 
      public function modal_generate_period()
      {
@@ -6538,10 +6564,10 @@ class PayrollController extends Member
           //dd($data['_record']);
           //return view('member.payroll.payroll_payslip', $data);
           
-          //return view('member.payroll.payroll_payslipv1', $data);
+          return view('member.payroll.payroll_payslipv1', $data);
 
 
-          $page_width    = $data['payslip']->paper_size_width * 10;
+          /*$page_width    = $data['payslip']->paper_size_width * 10;
           $page_height   = $data['payslip']->paper_size_height * 10; 
 
           $view = 'member.payroll.payroll_payslipv1';             
@@ -6553,7 +6579,7 @@ class PayrollController extends Member
                $pdf->setOption('page-width', $page_width);
                $pdf->setOption('page-height', $page_height);
           return $pdf->stream('Paycheque.pdf');
-
+*/
 
           /*$view = 'member.payroll.payroll_payslipv1';             
           $pdf = PDF::loadView($view, $data);
@@ -6566,6 +6592,7 @@ class PayrollController extends Member
           $pdf = PDF::loadView($view,$data);
           return $pdf->stream('Paycheque.pdf');*/
      }
+
 
 
      /* payslip end */

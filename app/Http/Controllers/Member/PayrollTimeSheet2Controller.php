@@ -799,6 +799,8 @@ class PayrollTimeSheet2Controller extends Member
 	}
 	public function income_summary($period_company_id, $employee_id)
 	{
+
+		
 		/* computation type param
 		*  Daily Rate
 		*  Flat Rate
@@ -813,9 +815,8 @@ class PayrollTimeSheet2Controller extends Member
 			dd("You need to set a PAYROLL GROUP in order to show summary.");
 		}
 
-		
-
 		$check_approved = Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_company_id)->first();
+		
 		if($check_approved)
 		{
 			$data = $this->compute_process_cutoff($check_approved);

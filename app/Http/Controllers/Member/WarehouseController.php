@@ -694,14 +694,6 @@ class WarehouseController extends Member
                     $_item_id[$key] = $value;
                 }
             }
-            // $item_id = Request::input("item_id");
-            // foreach ($data as $key => $value) 
-            // {
-            //     if($value == $item_id)
-            //     {
-
-            //     }    
-            // }
             return json_encode($data);
         }
         else

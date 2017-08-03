@@ -44,6 +44,24 @@ class ShopAboutController extends Shop
         return view("jobs", $data);
     }
 
+    public function promos()
+    {
+        $data["page"] = "promos";
+        return view("promos", $data);
+    }
+
+    public function promo_view()
+    {
+        $data["page"] = "promo_view";
+        return view("promo_view", $data);
+    }
+
+    public function history()
+    {
+        $data["page"] = "history";
+        return view("history", $data);
+    }    
+
     public function job()
     {
         if (Request::input("id") !== null) 

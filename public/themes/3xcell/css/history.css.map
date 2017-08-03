@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,IAAI,CACH,WAAW,CAAE,uBAAuB,CACpC,gBAAgB,CAAE,OAAO,CACzB,KAAK,CAAE,OAAO,CAEf,gBAAiB,CAChB,OAAO,CAAE,iBAAiB,CAC1B,gBAAgB,CAAE,OAAO,CAEzB,iCAAiB,CAChB,SAAS,CAAE,IAAI,CACf,WAAW,CAAE,GAAG,CAChB,KAAK,CAAE,OAAO",
+"sources": ["../sass/history.scss"],
+"names": [],
+"file": "history.css"
+}

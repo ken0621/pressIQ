@@ -30,6 +30,10 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/jobs', 'Shop\ShopAboutController@jobs'); //EDWARD GUEVARRA
 	Route::get('/job', 'Shop\ShopAboutController@job'); //EDWARD GUEVARRA
 
+	Route::get('/promos', 'Shop\ShopAboutController@promos'); //MARK FIGS
+	Route::get('/promo_view', 'Shop\ShopAboutController@promo_view'); //MARK FIGS
+	Route::get('/history', 'Shop\ShopAboutController@history'); //MARK FIGS
+
 
 	Route::get('/blog', 'Shop\ShopBlogController@index');
 	Route::get('/blog/content', 'Shop\ShopBlogContentController@index');

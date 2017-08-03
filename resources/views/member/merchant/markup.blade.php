@@ -118,7 +118,7 @@
                                 <td>{{$value->user_first_name}} {{$value->user_last_name}}</td>
                                 <td>{{$value->user_mark_up_default}}</td>
                                 <td>{{$value->user_mark_up_lowest}}</td>
-                                <td>{{$merchant_count_item[$key]}}   / {{$item_count}}</td>
+                                <td>{{$merchant_count_item[$key]}}   / {{$merchant_count_item_over[$key]}}</td>
                             </tr>
                         @endforeach
                     </tbody>

@@ -47,7 +47,7 @@ use DateTime;
 use Illuminate\Http\Request as Request2;
 use Image;
 use File;
-
+use App\Globals\Merchant;
 class MerchantController extends Member
 {
 	public function index()
@@ -64,9 +64,11 @@ class MerchantController extends Member
 		
 		if($user_id)
 		{
-			$data['selected_merchant'] 	= Tbl_user::where('user_shop', $shop_id)->where('user_id', $user_id)->where('user_is_merchant', 1)->first();
-									 	
-			$data['items'] 				= Tbl_item::whereIn('item_type_id', $item_type)->where('tbl_item.shop_id', $shop_id)->get();		
+			$data['selected_merchant'] 	= Tbl_user::where('user_shop', $shop_id)->where('user_id', $user_id)->where('user_is_merchant', 1)->first();					 	
+			$data['items'] 				= Tbl_item::whereIn('item_type_id', $item_type)
+										->join("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+	                					->where('item_merchant_requested_by', $user_id)
+										->where('tbl_item.shop_id', $shop_id)->get();		
 
 			$markup 					= Tbl_merchant_markup::where('user_id', $user_id)->get()->keyBy('item_id');
 
@@ -101,6 +103,11 @@ class MerchantController extends Member
 		foreach ($data['merchants'] as $key => $value) 
 		{
 			$data['merchant_count_item'][$key] = Tbl_merchant_markup::where('user_id', $value->user_id)->where('item_markup_percentage', '!=', 0)->count();
+			$data['merchant_count_item_over'][$key] 				= Tbl_item::whereIn('item_type_id', $item_type)
+										->join("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+	                					->where('item_merchant_requested_by', $value->user_id)
+										->where('tbl_item.shop_id', $shop_id)
+										->count();		
 		}
 
 		return view('member.merchant.markup', $data);
@@ -145,7 +152,10 @@ class MerchantController extends Member
 			$item_type[0] = 1;
 			$item_type[1] = 2;
 
-			$items 		= Tbl_item::where('shop_id', $shop_id)->whereIn('item_type_id', $item_type)	->get(); 
+			$items 		= Tbl_item::where('shop_id', $shop_id)->whereIn('item_type_id', $item_type)
+							->join("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+	                		->where('item_merchant_requested_by', $user_id)
+							->get(); 
 
 			foreach ($items as $key => $value)
 			{

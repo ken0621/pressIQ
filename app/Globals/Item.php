@@ -19,6 +19,7 @@ use App\Globals\Purchasing_inventory_system;
 use App\Globals\Tablet_global;
 use Session;
 use Carbon\carbon;
+use App\Globals\Merchant;
 
 class Item
 {
@@ -232,14 +233,9 @@ class Item
     }
 
     public static function pis_get_all_category_item_transaction($type = array(1,2,3,4))
-    {        $shop_id = Item::getShopId();
+    {        
+        $shop_id = Item::getShopId();
         $_category = Tbl_category::where("type_shop",$shop_id)->where("type_parent_id",0)->where("is_mts",0)->where("archived",0)->get()->toArray();
-
-        // if(Purchasing_inventory_system::check() != 0)
-        // {
-        //     $_category->where("is_mts",1);
-        // }
-
 
         foreach($_category as $key =>$category)
         {
@@ -289,15 +285,22 @@ class Item
 
         $_category = Tbl_category::where("type_shop",$shop_id)->where("type_parent_id",0)->where("archived",0)->get()->toArray();
 
-        // if(Purchasing_inventory_system::check() != 0)
-        // {
-        //     $_category->where("is_mts",1);
-        // }
-
 
         foreach($_category as $key =>$category)
         {
-            $_category[$key]['item_list']   = Tbl_item::where("item_category_id",$category['type_id'])->whereIn("item_type_id",$type)->where("archived",0)->get()->toArray();
+            $ismerchant = Merchant::ismerchant();
+            if($ismerchant == 1)
+            {
+                $user_id = Merchant::getuserid();
+                $_category[$key]['item_list'] = Tbl_item::where("item_category_id",$category['type_id'])
+                ->join("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+                ->where('item_merchant_requested_by', $user_id)
+                ->whereIn("item_type_id",$type)->where("archived",0)->get()->toArray(); 
+            }
+            else
+            {
+               $_category[$key]['item_list']   = Tbl_item::where("item_category_id",$category['type_id'])->whereIn("item_type_id",$type)->where("archived",0)->get()->toArray(); 
+            }
             foreach($_category[$key]['item_list'] as $key1=>$item_list)
             {
                 //  //cycy
@@ -318,7 +321,19 @@ class Item
         $_category  = Tbl_category::where("type_parent_id",$category_id)->where("archived",0)->get()->toArray();
         foreach($_category as $key =>$category)
         {
-            $_category[$key]['item_list']   = Tbl_item::where("item_category_id",$category['type_id'])->where("archived",0)->whereIn("item_type_id",$type)->get()->toArray();
+            $ismerchant = Merchant::ismerchant();
+            if($ismerchant == 1)
+            {
+                $user_id = Merchant::getuserid();
+                $_category[$key]['item_list'] = Tbl_item::where("item_category_id",$category['type_id'])
+                ->join("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+                ->where('item_merchant_requested_by', $user_id)
+                ->whereIn("item_type_id",$type)->where("archived",0)->get()->toArray(); 
+            }
+            else
+            {
+                $_category[$key]['item_list']   = Tbl_item::where("item_category_id",$category['type_id'])->where("archived",0)->whereIn("item_type_id",$type)->get()->toArray();
+            }
             foreach($_category[$key]['item_list'] as $key1=>$item_list)
             {
                 if($item_list['item_type_id'] == 4)
@@ -462,11 +477,33 @@ class Item
         }
         $data["multiple"] = $multiple;
         $data['selected'] = $sel;
-        $data['_item']    = Tbl_item::where("shop_id",$shop_id)
-        ->where('tbl_item.item_type_id', '!=', 4)
-        ->where('tbl_item.archived', 0)
-        ->orderBy('tbl_item.item_id','asc')
-        ->type()->category()->get();
+        $ismerchant = Merchant::ismerchant();
+            if($ismerchant == 1)
+            {
+                $user_id = Merchant::getuserid();
+
+                $data['_item'] = Tbl_item::where("shop_id",$shop_id)
+                ->where('tbl_item.item_type_id', '!=', 4)
+                ->where('tbl_item.archived', 0)
+                ->join("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+                ->where('item_merchant_requested_by', $user_id)
+                ->orderBy('tbl_item.item_id','asc')
+                ->type()->category()->get();
+
+                // $data['_item'] = Tbl_item::where("shop_id",$shop_id)
+                // ->join("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+                // ->where('item_merchant_requested_by', $user_id)
+                // ->whereIn("item_type_id",$type)->where("archived",0)->get()->toArray(); 
+            }
+            else
+            {
+                $data['_item']    = Tbl_item::where("shop_id",$shop_id)
+                ->where('tbl_item.item_type_id', '!=', 4)
+                ->where('tbl_item.archived', 0)
+                ->orderBy('tbl_item.item_id','asc')
+                ->type()->category()->get();
+            }
+        
 
         return view('member.mlm_product_code.dropdown.mlm_item_dropdown', $data);
     }

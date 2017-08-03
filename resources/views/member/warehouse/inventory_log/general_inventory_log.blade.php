@@ -24,7 +24,7 @@
                         <tbody>
                             <tr>
 
-                                <td>
+                                <td class="hide">
                                     <form method="get" action="/member/item/inventory_log">
                                     {!! csrf_field() !!}
                                         <div class="col-md-4">
@@ -60,19 +60,35 @@
                             </tr>
                         </thead>
                         <tbody class="table-warehouse">
+                        
                         @if($_slip != null)
                             @foreach($_slip as $slip)
                                 <tr>
                                     <td>{{$slip->inventory_slip_id}}</td>
                                     <td>{{strtoupper($slip->inventory_reason)}}</td>
                                     <td class="text-center">{{date("M d, Y h:i a",strtotime($slip->inventory_slip_date))}}</td>
-                                    <td>{{$slip->item_name}}</td>
+                                    <td>{{$slip->item_name}}
+                                    <?php 
+                                    if(isset($item_sum_inv[$slip->item_name]))
+                                    {
+                                        $item_sum_inv[$slip->item_name] +=$slip->inventory_count;
+                                    }
+                                    else
+                                    {
+                                        $item_sum_inv[$slip->item_name] = $slip->inventory_count;
+                                    }
+                                    
+                                    ?>
+                                    </td>
                                     <td>{{$slip->inventory_count}}</td>
                                     <td class="text-center">
                                         <a class="popup" size="lg" link="/member/item/warehouse/view_pdf/{{$slip->inventory_slip_id}}">View Report</a>
                                     </tr>
                             @endforeach
                         @endif
+                        
+                            
+                        
                         </tbody>
                     </table>
                 </div>

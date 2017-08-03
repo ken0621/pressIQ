@@ -76,4 +76,5 @@ class ShopAboutController extends Shop
             return Redirect::to("/jobs");
         }
     }
+
 }

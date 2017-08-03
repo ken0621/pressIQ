@@ -861,14 +861,13 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			$data = $this->compute_whole_cutoff($period_company_id, $employee_id);
 			$data["computation_type"] = $computation_type = $group->payroll_group_salary_computation;
-			
 		}
 
 		$data["employee_id"] = $employee_id;
 		$data["employee_info"] = $this->db_get_employee_information($employee_id); 
 		$check_approved = Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_company_id)->first();
 		$data["time_keeping_approved"] = $check_approved ? true : false;			
-		
+	
 		switch ($computation_type)
 		{
 			case "Daily Rate":

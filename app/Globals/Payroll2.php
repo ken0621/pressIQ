@@ -1655,8 +1655,6 @@ class Payroll2
 			$cutoff_basic			 = 0;
 			$render_days			 = 0;
 			
-
-			
 			foreach($_date_compute as $date => $date_compute)
 			{
 				if(!isset($date_compute->compute))

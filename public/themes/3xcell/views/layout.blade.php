@@ -109,7 +109,7 @@
                         <ul>
                             <li><a href="/" class="head-button link-nav {{ Request::segment(1) == '' ? 'active' : '' }}" id="home">HOME</a></li>
                             <li class="product-hover">
-                                <a href="/" class="head-button link-nav">PRODUCTS</a>
+                                <a class="head-button link-nav">PRODUCTS</a>
                                 <!-- PRODUCT DROPDOWN -->
                                 <div class="product-dropdown" style="display: none;">
                                     <div class="cat-container">
@@ -156,7 +156,7 @@
                             </li>
                             <li><a href="/" class="head-button link-nav {{ Request::segment(1) == '' ? '' : '' }}" id="">PROMOS</a></li>
                             <li class="company-hover">
-                                <a href="/" class="head-button link-nav">COMPANY</a>
+                                <a class="head-button link-nav">COMPANY</a>
                                 <!-- COMPANY DROPDOWN -->
                                 <div class="company-dropdown" style="display: none;">
                                     <div class="cat-container">

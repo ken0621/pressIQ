@@ -7,7 +7,7 @@ function modal_create_deduction()
 	function init()
 	{
 		$(".datepicker").datepicker();
-		deduction_category_change();
+		//deduction_category_change();
 	}
 
 	function deduction_category_change()
@@ -210,5 +210,12 @@ function modal_create_deduction()
 				break;
 		}
 	}
+
+	$(".expense_account_id").globalDropList(
+	{
+	    link: '/member/accounting/chart_of_account/popup/add',
+	    link_size: 'md',
+	    placeholder: 'Chart of Account'
+	});
 
 }

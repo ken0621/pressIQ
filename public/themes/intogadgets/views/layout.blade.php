@@ -5,7 +5,7 @@
       <meta charset="utf-8">
       @yield('meta')
       <title>{{ ucfirst($shop_info->shop_key) }} | {{ $page or 'Page' }}</title>
-      <link rel="icon" type="image/png" href="/resources/assets/frontend/img/favicon.png">
+      <link rel="icon" type="image/png" href="resources/assets/frontend/img/favicon.png">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'> -->
       <link href='http://fonts.googleapis.com/css?family=Lato:400,700,900,300' rel='stylesheet' type='text/css'>
@@ -236,16 +236,21 @@
          <div class="content clearfix">
             @yield('content')
          </div>
-         @if(get_content($shop_theme_info, 'info', 'footer_ads'))
+
+         @if(get_content($shop_theme_info, 'info', 'footer_ads_multiple') && is_serialized(get_content($shop_theme_info, 'info', 'footer_ads_multiple')))
+         <?php
+             $random = array_rand(unserialize(get_content($shop_theme_info, 'info', 'footer_ads_multiple')));
+         ?>
          <div class="footer-add">
             <div class="footer-add-wrapper">
-               <a href="{{ get_content($shop_theme_info, 'info', 'footer_ads_link') }}" target="_blank">
-               <img src="{{ get_content($shop_theme_info, 'info', 'footer_ads') }}">
+               <a href="{{ unserialize(get_content($shop_theme_info, 'info', 'footer_ads_multiple'))[$random]['link'] }}" target="_blank">
+               <img src="{{ unserialize(get_content($shop_theme_info, 'info', 'footer_ads_multiple'))[$random]['image'] }}">
                </a>
                <div class="exit"><i class="fa fa-times"></i></div>
             </div>
          </div>
          @endif
+
          <div class="footer clear">
             <div class="container">
                <div class="footer-holder col-md-3 col-sm-6 first-border text-left match-height">
@@ -257,19 +262,19 @@
                      <a href="/about" class="footer-text link">
                      About
                      </a>
-                     <a href="career" class="footer-text link">
+                     <a href="/career" class="footer-text link">
                      Careers
                      </a>
-                     <a href="contact" class="footer-text link">
+                     <a href="/contact" class="footer-text link">
                      Contact
                      </a>
-                     <a href="how" class="footer-text link">
+                     <a href="/how" class="footer-text link">
                      How to Orders
                      </a>
-                     <a href="product" class="footer-text link">
+                     <a href="/product" class="footer-text link">
                      Products
                      </a>
-                     <a href="term" class="footer-text link">
+                     <a href="/term" class="footer-text link">
                      Terms and Agreement
                      </a>
                   </div>
@@ -414,54 +419,27 @@
          </div>
       </div>
    </div>
-   <!-- PRODUCT QUICK VIEW -->
-   {{-- <div class="remodal quicky" data-remodal-id="quick">
-      <div class="quick-view-container">
-         <div class="col-md-6">
-            <div class="image-container">
-               <img src="http://image.primia-files.com/view?source=rutsen.local&filename=1429501946.jpg&size=318x318&mode=crop">
-            </div>
-         </div>
-         <div class="col-md-6">
-            <div class="product-information">
-               <div class="product-title">Sample Product Title</div>
-               <div class="product-price">PHP. 1,550.00</div>
-               <div class="product-description">This t-shirt is fully customizable and you can add additional information by requesting it.</div>
-               <div class="product-selection">
-                  <div class="s-container">
-                     <div class="s-label">Color</div>
-                     <div class="select">
-                        <select>
-                           <option>Blue</option>
-                           <option>Red</option>
-                           <option>Green</option>
-                        </select>
-                     </div>
-                  </div>
-                  <div class="s-container">
-                     <div class="s-label">Color</div>
-                     <div class="select">
-                        <select>
-                           <option>Blue</option>
-                           <option>Red</option>
-                           <option>Green</option>
-                        </select>
-                     </div>
-                  </div>
-               </div>
-               <div class="product-button">
-                  <div class="quantity">
-                     <span class="subtractbutton"><button class="up-down-button" effect="-1">-</button></span>
-                     <input id="numbersonly" class="qty" type="text" value="1" />
-                     <span class="addbutton"><button id="addbutton"class="up-down-button" effect="1">+</button></span>
-                  </div>
-                  <button class="add-cart">Add to Cart</button>
-                  <img class="loading" src="/resources/assets/img/small-loading.GIF">
-               </div>
-            </div>
-         </div>
-      </div>
-   </div> --}}
+   <!-- PENDING -->
+   <div class="remodal" data-remodal-id="pending_modal">
+     <div class="payment-modal" style="padding: 25px;">
+        <button data-remodal-action="close" class="remodal-close"></button>
+        <h3>Good day Maam/Sir,</h3>
+        <h3>Kindly check your email for the step by step procedure of the payment.</h3>
+        <h2>Thank you for choosing Intogadgets PH!</h1>
+        <br>
+        <button data-remodal-action="confirm" class="remodal-confirm">OK</button>
+     </div>
+   </div>
+   <!-- Failed -->
+   <div class="remodal" data-remodal-id="fail_modal">
+     <div class="payment-modal" style="padding: 25px;">
+        <button data-remodal-action="close" class="remodal-close"></button>
+        <h2>Transaction Failed</h2>
+        <p>{{ session('error') }}</p>
+        <br>
+        <button data-remodal-action="confirm" class="remodal-cancel">OK</button>
+     </div>
+   </div>
    <!-- CART MODAL -->
    <div class="remodal cart-remodal" data-remodal-id="cart">
    </div>

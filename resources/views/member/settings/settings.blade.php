@@ -82,3 +82,16 @@
 		</select>
 	</div>
 <!-- Item Serial Settings -->
+
+
+	<hr>
+	<center>Ecommerce</center>
+<!-- View invoice in Order -->
+	<div class="settings" id="enable_view_invoice">
+		View Invoice in Product Orders
+		<input type="hidden" name="settings_key" value="enable_view_invoice">
+		<select name="settings_value" class="form-control">
+			<option value="0">Disable</option>
+			<option value="1">Enable</option>
+		</select>
+	</div>

@@ -265,7 +265,7 @@ class Ecom_Product
 			{
 				$variant_option_name = Tbl_variant_name::nameOnly()->where("variant_id", $variant["evariant_id"])->get()->toArray();
 				$product["variant"]["$key2"]["mlm_discount"] = Ecom_Product::getMlmDiscount($shop_id, $variant["evariant_item_id"], $variant["evariant_price"]);
-				$product["variant"]["$key2"]["image"] = Tbl_ec_variant_image::path()->where("eimg_variant_id", $variant["evariant_id"])->get()->toArray();
+				$product["variant"]["$key2"]["image"] = Tbl_ec_variant_image::path()->where("eimg_variant_id", $variant["evariant_id"])->orderBy("default_image","DESC")->get()->toArray();
 
 				foreach($variant_option_name as $key3=>$option_name)
 				{
@@ -385,23 +385,27 @@ class Ecom_Product
 	 * @param  array  $archived 	product status of the item. Default is not archived
 	 * @return array  [Product name : variation (if any)] -> "Product 1 : blue • small" or "Product 1"
 	 */
-	public static function getProductList($shop_id = null, $archived = [0])
+	public static function getProductList($shop_id = null, $archived = [0], $fix = 0)
 	{
 		if(!$shop_id)
 		{
 			$shop_id = Ecom_Product::getShopId();
 		}
-
-		return Ecom_Product::getProductPerSub($shop_id, 0, $archived);
+		return Ecom_Product::getProductPerSub($shop_id, 0, $archived, $fix);
 	}
-	public static function getProductPerSub($shop_id, $category_id, $archived)
+	public static function getProductPerSub($shop_id, $category_id, $archived, $fix = 0)
 	{
-		$_category = Tbl_category::product()->where("type_shop", $shop_id)->where("type_parent_id", $category_id)->where("tbl_category.archived", 0)->get()->toArray();
-
+		if($fix == 1) 
+		{
+			$_category = Tbl_category::product()->where("type_shop", $shop_id)->where("tbl_category.archived", 0)->get()->toArray();
+		}
+		else
+		{
+			$_category = Tbl_category::product()->where("type_shop", $shop_id)->where("type_parent_id", $category_id)->where("tbl_category.archived", 0)->get()->toArray();
+		}
 		foreach($_category as $key0=>$category)
 		{
-			$_product = Tbl_ec_product::variant()->where("eprod_category_id", $category["type_id"])->whereIn("tbl_ec_product.archived", $archived)->get()->toArray();
-		
+			$_product = Tbl_ec_product::variant()->where("eprod_category_id", $category["type_id"])->where("tbl_ec_product.archived", $archived)->get()->toArray();
 			foreach($_product as $key1=>$product)
 			{
 				$_product[$key1]["product_new_name"] = $product["eprod_name"] . ($product["variant_name"] ? ' : '.$product["variant_name"] : '');
@@ -411,7 +415,7 @@ class Ecom_Product
 			
 			$_category[$key0]["subcategory"]	= Ecom_Product::getProductPerSub($shop_id, $category["type_id"], $archived);
 		}
-
+		
 		return $_category;
 	}
 
@@ -519,8 +523,7 @@ class Ecom_Product
 			$product = $product;
 			foreach ($product as $key => $value) 
 			{
-				$product[$key]['variant'] = Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId($shop_id))->where("evariant_prod_id", $value["eprod_id"])->get()->toArray();
-				
+				$product[$key]['variant'] = Tbl_ec_variant::select("*")->item()->firstImage()->inventory(Ecom_Product::getWarehouseId($shop_id))->where("evariant_prod_id", $value["eprod_id"])->get()->toArray();
 				$update["eprod_search_count"] = $value["eprod_search_count"] + 1;
 				Tbl_ec_product::where("eprod_id", $value["eprod_id"])->update($update);
 

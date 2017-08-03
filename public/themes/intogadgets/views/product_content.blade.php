@@ -30,9 +30,11 @@
          <img class="single-product-img key-{{$key}} {{ $key == 0 ? '' : 'hide' }} {{$ctr != 0 ? '' : 'first-img'}}" variant-id="{{ $product_variant['evariant_id'] }}" key="{{ $key }}" style="width: 100%;" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}" alt = "" id="picturecontainer"/>
          @endforeach
          <div class="thumb">
-             @foreach($product_variant['image'] as $key => $image)
-             <div class="holder" variant-id="{{ $product_variant['evariant_id'] }}" key="{{ $key }}" style="cursor: pointer;"><img class="1-1-ratio" src="{{ $image['image_path'] }}"></div>
-             @endforeach
+            @foreach($product_variant['image'] as $key => $image)
+             <div class="holder" variant-id="{{ $product_variant['evariant_id'] }}" key="{{ $key }}" style="cursor: pointer;">
+              <img class="1-1-ratio" src="{{ $image['image_path'] }}">
+             </div>
+            @endforeach
          </div>
       </div>
       <div class="single-product-holder border">
@@ -47,13 +49,17 @@
                <div>{!! $product_variant['evariant_description'] !!}</div>
             </div>
             <div class="divider"></div>
-            <div class="single-order-description">
+            <!-- <div class="single-order-description">
                <div class="title">PACKAGE INCLUSION</div>
-            </div>
-            <div class="price-container">
+            </div> -->
+            <div class="price-container" style="overflow-x: hidden;">
               @if($product_variant['discounted'] == "true")
+              <div class="row clearfix">
+                  <div class="col-sm-6">
+                      <div  id="single-order-price" class="single-order-price" style="color:red;font-size:17px;text-decoration: line-through;"><span style="color:gray;">PHP {{ number_format($product_variant['evariant_price'], 2) }}</span></div>                    
+                  </div>
+              </div>
               <div id="single-order-price" class="single-order-price">PHP {{ number_format($product_variant['discounted_price'], 2) }}</div>
-              <div id="single-order-price" class="single-order-price" style="text-decoration: line-through;">PHP {{ number_format($product_variant['evariant_price'], 2) }}</div>
               @else
               <div id="single-order-price" class="single-order-price">PHP {{ number_format($product_variant['evariant_price'], 2) }}</div>
               @endif
@@ -218,7 +224,7 @@
             <div class="container">
                @foreach(limit_foreach($_related, 4) as $related)
                <div class="feature-holder col-md-3 col-sm-6 col-xs-12">
-                  <a href="product/">
+                  <a href="/product/view/{{$related['eprod_id']}}">
                      <div class="feature-img">
                         <img class="lazy 4-3-ratio" data-original="{{ get_product_first_image($related) }}" height="222px" width="222px">
                         <div class="feature-hover"></div>
@@ -226,7 +232,7 @@
                   <a href="javascript:"><i class="fa fa-link"></i></a></div>
                   </div>
                   </a>
-                  <a href="product/" class="feature-name">{{ get_product_first_name($related) }}</a>
+                  <a href="/product/view/{{$related['eprod_id']}}" class="feature-name">{{ get_product_first_name($related) }}</a>
                   <div class="feature-rate"></div>
                   <div class="feature-price">{{ get_product_first_price($related) }}</div>
                   <a class="feature-button quick-view" style="display: none;">QUICK VIEW</a>

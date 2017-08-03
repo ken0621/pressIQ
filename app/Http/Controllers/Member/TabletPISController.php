@@ -689,7 +689,7 @@ class TabletPISController extends Controller
 		}
 		else
 		{
-			return Redirect::to('/tablet');
+			return null;
 		}
 	}
 	public function inventory_sir($sir_id)
@@ -792,6 +792,7 @@ class TabletPISController extends Controller
     public function load_customer_rp($customer_id)
     {
         $data["_invoice"] = Invoice::getAllInvoiceByCustomer($customer_id,true);
+        dd($data["_invoice"]);
         return view('member.receive_payment.load_receive_payment_items', $data);
     }
 	public function add_receive_payment()
@@ -1068,7 +1069,6 @@ class TabletPISController extends Controller
 	        // {
 		   		$invoice_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info,'',true);
 
-
                 if($cm_customer_info != null && $cm_item_info != null)
                 {
                     $cm_id = CreditMemo::postCM($cm_customer_info, $cm_item_info, $invoice_id, true);
@@ -1078,7 +1078,7 @@ class TabletPISController extends Controller
                     //arcy refill sir_inventory
                     foreach ($item_returns as $key_returns => $value_returns) 
                     {
-                        $cm_data = Purchasing_inventory_system::insert_sir_inventory($sir_id, $value_returns, $ref_name, $ref_id);                        
+                        $cm_data = Purchasing_inventory_system::insert_sir_inventory($sir_id, $value_returns, $ref_name, $ref_id);                  
                     }
                 }
 

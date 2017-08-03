@@ -9,7 +9,7 @@ class Tbl_chart_of_account extends Model
 	protected $table = 'tbl_chart_of_account';
 	protected $primaryKey = "account_id";
 
-    public $timestamps = false;
+    public $timestamps = true;
     
     public function scopeAccountInfo($query, $shop)
     {

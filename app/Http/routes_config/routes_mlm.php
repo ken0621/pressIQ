@@ -95,7 +95,6 @@ Route::post('/mlm/slots/transfer_item_code_post', 'Mlm\MlmSlotsController@transf
 
 Route::get('/mlm/slots/transfer_mem_code', 'Mlm\MlmSlotsController@transfer_mem_code'); 
 Route::post('/mlm/slots/transfer_mem_code_post', 'Mlm\MlmSlotsController@transfer_mem_code_post'); 
-
 /* MLM SLOTs REPORTS */
 
 

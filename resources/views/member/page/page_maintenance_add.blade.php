@@ -109,7 +109,7 @@
 				    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDntbTzqtnwMA7hdMBAeX37YwTjRJi6cDY&callback=initialize">
 				    </script>
 				@else
-					<input class="form-control" type="{{ $fields->type }}" name="{{ $fields->name }}">
+					<input step="any" class="form-control" type="{{ $fields->type }}" name="{{ $fields->name }}">
 				@endif
 			</div>
 			@endforeach

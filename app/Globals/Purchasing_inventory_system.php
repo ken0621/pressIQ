@@ -65,7 +65,6 @@ class Purchasing_inventory_system
     {
         $data["sir"] = Tbl_sir::truck()->saleagent()->where("sir_id",$sir_id)->where("sir_status",1)->where("tbl_sir.archived",0)->first();
         $data["_sir_item"] = Tbl_sir_item::select_sir_item()->where("sir_id",$sir_id)->get();
-        // dd($data["_sir_item"]);
         if(count($data["_sir_item"]) > 0)
         {
             foreach($data["_sir_item"] as $key => $value) 

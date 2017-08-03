@@ -8,6 +8,8 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_item_discount;
 use App\Models\Tbl_cart;
 use App\Models\Tbl_coupon_code;
+use App\Models\Tbl_ec_product;
+use App\Models\Tbl_coupon_code_product;
 use App\Models\Tbl_user;
 use App\Models\Tbl_ec_variant;
 use App\Models\Tbl_ec_order;
@@ -154,7 +156,6 @@ class Cart
         $total_coupon_discount = 0;
         $total_overall_price   = 0;
         $total_quantity        = 0;
-
         /* CHECK IF COUPON ALREADY USED */
         if(isset($data["applied_coupon_id"]))
         {
@@ -201,6 +202,10 @@ class Cart
                         $current_price = $check_discount->item_discount_value;
                         $item_discounted_remark    = $check_discount->item_discount_remark;
                     }
+                }
+                if($item->item_discount_value > 0)
+                {
+                    $data["cart"][$key]["cart_product_information"]["product_price"]                  = $item->item_discount_value;
                 }
                 if(Session::get('mlm_member') != null)
                 {
@@ -279,11 +284,10 @@ class Cart
                 }
                 else if($check->coupon_discounted == "percentage")
                 {
-                    $total_coupon_discount = $total_product_price - ($total_product_price * ($item->coupon_code_amount/100));
+                    $total_coupon_discount = $total_product_price * ($check->coupon_code_amount/100);
                 }             
             }
         }
-
         /* CHECK IF TOTAL PRICE IS NEGATIVE */
         $total_overall_price                                                = $total_product_price + $total_shipping - $total_coupon_discount;
         if($total_overall_price < 0)
@@ -531,7 +535,7 @@ class Cart
         return $data;
     }
 
-    public static function generate_coupon_code($word_limit, $price, $minimum_quantity = 0, $type="fixed", $coupon_product_id = null)
+    public static function generate_coupon_code($word_limit, $price, $minimum_quantity = 0, $type="fixed", $coupon_product_id = null,$all_product_id = false)
     {
         //get_shop_info
         $shop_id = Cart::get_shop_info();
@@ -574,22 +578,103 @@ class Cart
             }
 
             $insert["id_per_coupon"]           =  $id_per_coupon;                
-            $insert["coupon_code"]             =  $generated_word;  
-            $insert["coupon_product_id"]       =  isset($coupon_product_id) ? $coupon_product_id : null;              
+            $insert["coupon_code"]             =  $generated_word;           
             $insert["coupon_code_amount"]      =  $price;                     
             $insert["coupon_discounted"]       =  $type;                     
             $insert["shop_id"]                 =  $shop_id;
             $insert["coupon_minimum_quantity"] =  $minimum_quantity;         
             $insert["date_created"]            =  Carbon::now();  
-            Tbl_coupon_code::insert($insert);
+            $coupon_code_id = Tbl_coupon_code::insertGetId($insert);
+
+            if($all_product_id)
+            {
+                $get_all_product = Tbl_ec_product::variant()->where("eprod_shop_id",$shop_id)->where("tbl_ec_product.archived",0)->get();
+
+                foreach ($get_all_product as $key => $value) 
+                {
+                    $ins_product["coupon_code_id"] = $coupon_code_id;
+                    $ins_product["coupon_code_product_id"] = $value->evariant_id;
+
+                    Tbl_coupon_code_product::insert($ins_product);
+                }
+            }
+            else
+            {
+                foreach ($coupon_product_id as $key => $value) 
+                {
+                    if($value > 0)
+                    {
+                        $ins_product["coupon_code_id"] = $coupon_code_id;
+                        $ins_product["coupon_code_product_id"] = $value;
+
+                        Tbl_coupon_code_product::insert($ins_product);                           
+                    }                     
+                }
+
+            }
 
             $message["status"]         = "success";
             $message["status_message"] = "Successfully generate a coupon code.";
         }  
 
         return $message;                              
-    }
+    }   
+    public static function update_coupon_code($coupon_id, $price,$coupon_product_id, $minimum_quantity = 0, $type="fixed",$all_product_id = false)
+    {
 
+        $shop_id = Cart::get_shop_info();
+        if($type != "fixed" && $type != "percentage")
+        {
+            $message["status"]         = "error";
+            $message["status_message"] = "Invalid type.";
+        }
+        else if($price <= 0)
+        {
+            $message["status"]         = "error";
+            $message["status_message"] = "Invalid price.";
+        }   
+        else
+        {
+            $update["coupon_code_amount"] = $price;               
+            $update["coupon_discounted"]       =  $type;  
+            $update["coupon_minimum_quantity"] =  $minimum_quantity; 
+            
+            Tbl_coupon_code::where("coupon_code_id",$coupon_id)->update($update);
+
+            Tbl_coupon_code_product::where("coupon_code_id",$coupon_id)->delete();
+
+            if($all_product_id)
+            {
+                $get_all_product = Tbl_ec_product::variant()->where("eprod_shop_id",$shop_id)->where("tbl_ec_product.archived",0)->get();
+
+                foreach ($get_all_product as $key => $value) 
+                {
+                    $ins_product["coupon_code_id"] = $coupon_id;
+                    $ins_product["coupon_code_product_id"] = $value->evariant_id;
+
+                    Tbl_coupon_code_product::insert($ins_product);
+                }
+            }
+            else
+            {
+                foreach ($coupon_product_id as $key => $value) 
+                {
+                    if($value > 0)
+                    {
+                        $ins_product["coupon_code_id"] = $coupon_id;
+                        $ins_product["coupon_code_product_id"] = $value;
+
+                        Tbl_coupon_code_product::insert($ins_product);                           
+                    }                 
+                }
+
+            }
+
+            $message["status"]         = "success";
+            $message["status_message"] = "Successfully generate a coupon code.";
+        }
+        return $message;
+    }
     public static function use_coupon_code($coupon_code)
     {   
         //get_shop_info
@@ -712,7 +797,12 @@ class Cart
         $data["billing_equals_shipping"] = (isset($customer_information["billing_equals_shipping"]) ? $customer_information["billing_equals_shipping"] : (isset($data["billing_equals_shipping"]) ? $data["billing_equals_shipping"] : true));;
 
         /* SET BASIC INFORMATION */
-        $data["tbl_customer"]['customer_id']      = Tbl_customer::max("customer_id") + 1;
+        if (isset($customer_information["email"]) && isset($customer_information["password"])) 
+        {
+            $customer_exist = DB::table("tbl_customer")->where("email", $customer_information["email"])->first();
+        }
+        
+        $data["tbl_customer"]['customer_id']      = isset($customer_exist->customer_id) ? $customer_exist->customer_id : Tbl_customer::max("customer_id") + 1;
         $data["tbl_customer"]['first_name']       = (isset($customer_information["first_name"]) ? $customer_information["first_name"] : (isset($data["tbl_customer"]['first_name']) ? $data["tbl_customer"]['first_name'] : null));
         $data["tbl_customer"]['last_name']        = (isset($customer_information["last_name"]) ? $customer_information["last_name"] : (isset($data["tbl_customer"]['last_name']) ? $data["tbl_customer"]['last_name'] : null));
         $data["tbl_customer"]['middle_name']      = (isset($customer_information["middle_name"]) ? $customer_information["middle_name"] : (isset($data["tbl_customer"]['middle_name']) ? $data["tbl_customer"]['middle_name'] : null));
@@ -731,12 +821,10 @@ class Cart
         $data["tbl_customer"]['b_day']     = (isset($customer_information["b_day"]) ? $customer_information["b_day"] : (isset($data["tbl_customer"]['b_day']) ? $data["tbl_customer"]['b_day'] : null));
         $data["tbl_customer"]['customer_gender']     = (isset($customer_information["customer_gender"]) ? $customer_information["customer_gender"] : (isset($data["tbl_customer"]['customer_gender']) ? $data["tbl_customer"]['customer_gender'] : 'Male'));
         
-        
-        
-        
-        // 
         $data['load_wallet']['ec_order_load']        = isset($customer_information['load_wallet']['ec_order_load']) == true ? $customer_information['load_wallet']['ec_order_load'] : 0 ;
         $data['load_wallet']['ec_order_load_number'] = isset($customer_information['load_wallet']['ec_order_load_number']) == true ? $customer_information['load_wallet']['ec_order_load_number'] : 0;
+
+        $data['tbl_ec_order']['coupon_id'] = isset($customer_information['coupon_id']) != null ? $customer_information['coupon_id'] : null ;
         
         /* CURRENT LOGGED IN */
         if (isset($customer_information["current_user"])) 
@@ -752,7 +840,7 @@ class Cart
             $data["tbl_customer"]['email']            = $current->email;
             $data["tbl_customer"]['password']         = Crypt::decrypt($current->password);
             $data["tbl_customer"]['shop_id']          = $shop_id;
-            $data["tbl_customer"]['customer_contact'] = $other_info->customer_mobile;
+            $data["tbl_customer"]['customer_contact'] = $data["tbl_customer"]['customer_contact'] ? $data["tbl_customer"]['customer_contact'] : $other_info->customer_mobile;
             $data["tbl_customer"]['country_id']       = 420;
             $data["tbl_customer"]['tin_number']       = $current->tin_number;
             $data["tbl_customer"]['mlm_username']     = $current->mlm_username;
@@ -770,11 +858,14 @@ class Cart
         /* SET SHIPPINGING INFROMATION */
         $data["tbl_customer_address"]["shipping"]["country_id"] = 420;
         $data["tbl_customer_address"]["shipping"]["customer_state"] = (isset($customer_information["shipping_state"]) ? $customer_information["shipping_state"] : (isset($data["tbl_customer_address"]["shipping"]["customer_state"]) ? $data["tbl_customer_address"]["shipping"]["customer_state"] : null));
-        $data["tbl_customer_address"]["shipping"]["customer_city"] = (isset($customer_information["shipping_city"]) ? $customer_information["shipping_city"] : (isset($data["tbl_customer_address"]["shipping"]["customer_city"]) ? $data["tbl_customer_address"]["shipping"]["customer_city"] : null));;
-        $data["tbl_customer_address"]["shipping"]["customer_zip_code"] = (isset($customer_information["shipping_zip"]) ? $customer_information["shipping_zip"] : (isset($data["tbl_customer_address"]["shipping"]["customer_zip_code"]) ? $data["tbl_customer_address"]["shipping"]["customer_zip_code"] : null));;
-        $data["tbl_customer_address"]["shipping"]["customer_street"] = (isset($customer_information["shipping_street"]) ? $customer_information["shipping_street"] : (isset($data["tbl_customer_address"]["shipping"]["customer_street"]) ? $data["tbl_customer_address"]["shipping"]["customer_street"] : null));;
+        $data["tbl_customer_address"]["shipping"]["customer_city"] = (isset($customer_information["shipping_city"]) ? $customer_information["shipping_city"] : (isset($data["tbl_customer_address"]["shipping"]["customer_city"]) ? $data["tbl_customer_address"]["shipping"]["customer_city"] : null));
+        $data["tbl_customer_address"]["shipping"]["customer_zip_code"] = (isset($customer_information["shipping_zip"]) ? $customer_information["shipping_zip"] : (isset($data["tbl_customer_address"]["shipping"]["customer_zip_code"]) ? $data["tbl_customer_address"]["shipping"]["customer_zip_code"] : null));
+        $data["tbl_customer_address"]["shipping"]["customer_street"] = (isset($customer_information["shipping_street"]) ? $customer_information["shipping_street"] : (isset($data["tbl_customer_address"]["shipping"]["customer_street"]) ? $data["tbl_customer_address"]["shipping"]["customer_street"] : null));
         $data["tbl_customer_address"]["shipping"]["purpose"] = "shipping";
-        
+        $data["tbl_customer_address"]["shipping"]["state_id"] = (isset($customer_information["state_id"]) ? $customer_information["state_id"] : (isset($data["tbl_customer_address"]["shipping"]["state_id"]) ? $data["tbl_customer_address"]["shipping"]["state_id"] : null));
+        $data["tbl_customer_address"]["shipping"]["city_id"] = (isset($customer_information["city_id"]) ? $customer_information["city_id"] : (isset($data["tbl_customer_address"]["shipping"]["city_id"]) ? $data["tbl_customer_address"]["shipping"]["city_id"] : null));
+        $data["tbl_customer_address"]["shipping"]["barangay_id"] = (isset($customer_information["barangay_id"]) ? $customer_information["barangay_id"] : (isset($data["tbl_customer_address"]["shipping"]["barangay_id"]) ? $data["tbl_customer_address"]["shipping"]["barangay_id"] : null));
+
         /* SET  BILLING INFORMATION */
         if($data["billing_equals_shipping"] == true)
         {
@@ -784,6 +875,21 @@ class Cart
             $data["tbl_customer_address"]["billing"]["customer_zip_code"] = $data["tbl_customer_address"]["shipping"]["customer_zip_code"];
             $data["tbl_customer_address"]["billing"]["customer_street"] = $data["tbl_customer_address"]["shipping"]["customer_street"];
             $data["tbl_customer_address"]["billing"]["purpose"] = "billing"; 
+            $data["tbl_customer_address"]["billing"]["state_id"] = $data["tbl_customer_address"]["shipping"]["state_id"];
+            $data["tbl_customer_address"]["billing"]["city_id"] = $data["tbl_customer_address"]["shipping"]["city_id"];
+            $data["tbl_customer_address"]["billing"]["barangay_id"] = $data["tbl_customer_address"]["shipping"]["barangay_id"];
+        }
+        else
+        {
+            $data["tbl_customer_address"]["billing"]["country_id"] = 420;
+            $data["tbl_customer_address"]["billing"]["customer_state"] = (isset($customer_information["billing_state"]) ? $customer_information["billing_state"] : (isset($data["tbl_customer_address"]["billing"]["customer_state"]) ? $data["tbl_customer_address"]["billing"]["customer_state"] : null));
+            $data["tbl_customer_address"]["billing"]["customer_city"] = (isset($customer_information["billing_city"]) ? $customer_information["billing_city"] : (isset($data["tbl_customer_address"]["billing"]["customer_city"]) ? $data["tbl_customer_address"]["billing"]["customer_city"] : null));
+            $data["tbl_customer_address"]["billing"]["customer_zip_code"] = (isset($customer_information["billing_zip"]) ? $customer_information["billing_zip"] : (isset($data["tbl_customer_address"]["billing"]["customer_zip_code"]) ? $data["tbl_customer_address"]["billing"]["customer_zip_code"] : null));
+            $data["tbl_customer_address"]["billing"]["customer_street"] = (isset($customer_information["billing_street"]) ? $customer_information["billing_street"] : (isset($data["tbl_customer_address"]["billing"]["customer_street"]) ? $data["tbl_customer_address"]["billing"]["customer_street"] : null));
+            $data["tbl_customer_address"]["billing"]["purpose"] = "billing"; 
+            $data["tbl_customer_address"]["billing"]["state_id"] = (isset($customer_information["billing_state_id"]) ? $customer_information["billing_state_id"] : (isset($data["tbl_customer_address"]["billing"]["customer_street"]) ? $data["tbl_customer_address"]["billing"]["customer_street"] : null));
+            $data["tbl_customer_address"]["billing"]["city_id"] = (isset($customer_information["billing_city_id"]) ? $customer_information["billing_city_id"] : (isset($data["tbl_customer_address"]["billing"]["customer_street"]) ? $data["tbl_customer_address"]["billing"]["customer_street"] : null));
+            $data["tbl_customer_address"]["billing"]["barangay_id"] = (isset($customer_information["billing_barangay_id"]) ? $customer_information["billing_barangay_id"] : (isset($data["tbl_customer_address"]["billing"]["customer_street"]) ? $data["tbl_customer_address"]["billing"]["customer_street"] : null));
         }
         if (isset(Self::get_cart($shop_id)["cart"])) 
         {
@@ -823,6 +929,25 @@ class Cart
 
         return $message;
     }
+    public static function get_coupon_discount($coupon_code_id, $total_amount_purchase = 0)
+    {
+        $total_coupon_discount = 0;
+        $check          = Tbl_coupon_code::where("coupon_code_id",$coupon_code_id)->first();
+        if($check)
+        {
+            $coupon_type = $check->coupon_discounted;
+            if($check->coupon_discounted == "fixed")
+            {
+                $total_coupon_discount = $check->coupon_code_amount;
+            }
+            else if($check->coupon_discounted == "percentage")
+            {
+                $total_coupon_discount = $total_amount_purchase * ($check->coupon_code_amount/100);
+            }             
+        }
+
+        return $total_coupon_discount;
+    }
     public static function customer_update_method_a($shop_id, $customer_info)
     {
         if(isset($customer_info['method_id']))
@@ -835,7 +960,7 @@ class Cart
         $data["tbl_ec_order"]["ec_order_id"] = Tbl_ec_order::max("ec_order_id") + 1;
 
         /* PAYMENT METHOD ID */
-        $payment_method_id = (isset($customer_information["method_id"]) ? $customer_information["method_id"] : (isset($data["method_id"]) ? $data["method_id"] : null));;
+        $payment_method_id = (isset($customer_information["method_id"]) ? $customer_information["method_id"] : (isset($data["method_id"]) ? $data["method_id"] : null));
 
 
 
@@ -863,8 +988,34 @@ class Cart
         $data["tbl_ec_order"]["customer_id"] = $data["tbl_customer"]["customer_id"];
         $data["tbl_ec_order"]["customer_email"] = $data["tbl_customer"]["email"];
         $data["tbl_ec_order"]["billing_address"] = $data["tbl_customer_address"]["shipping"]["customer_street"] . ", " . $data["tbl_customer_address"]["shipping"]["customer_zip_code"] . ", " . $data["tbl_customer_address"]["shipping"]["customer_city"] . ", " . $data["tbl_customer_address"]["shipping"]["customer_state"];
-        $data["tbl_ec_order"]["discount_coupon_amount"] = null;
-        $data["tbl_ec_order"]["discount_coupon_type"] = null;
+
+        //arcy_coupon
+        $data["tbl_ec_order"]["coupon_id"] = (isset($customer_information["coupon_id"]) ? $customer_information["coupon_id"] : (isset($data["tbl_ec_order"]["coupon_id"]) ? $data["tbl_ec_order"]["coupon_id"] : null));
+
+        /* APPLY COUPON DISCOUNT */
+        $total_coupon_discount = null;
+        $coupon_type = null;
+        if($data["tbl_ec_order"]["coupon_id"])
+        {
+            $coupon_code_id = $data["tbl_ec_order"]["coupon_id"];
+            $check          = Tbl_coupon_code::where("coupon_code_id",$coupon_code_id)->where("used",0)->where("blocked",0)->first();
+            if($check)
+            {
+                $coupon_type = $check->coupon_discounted;
+                if($check->coupon_discounted == "fixed")
+                {
+                    $total_coupon_discount = $check->coupon_code_amount;
+                }
+                else if($check->coupon_discounted == "percentage")
+                {
+                    $total_coupon_discount = $subtotal * ($check->coupon_code_amount/100);
+                }             
+            }
+        }
+        /* CHECK IF TOTAL PRICE IS NEGATIVE */
+
+        $data["tbl_ec_order"]["discount_coupon_amount"] = $total_coupon_discount;
+        $data["tbl_ec_order"]["discount_coupon_type"] = $coupon_type;
         $data["tbl_ec_order"]["subtotal"] = $subtotal;
         $data["tbl_ec_order"]["shipping_fee"] = $shipping_fee;
 
@@ -895,13 +1046,17 @@ class Cart
         $data['tbl_ec_order']['ec_order_load_number'] = isset($data['load_wallet']['ec_order_load_number']) == true ? $data['load_wallet']['ec_order_load_number'] : 0 ;
         $data["tbl_ec_order"]["service_fee"] = $service_fee;
         $data["tbl_ec_order"]["total"] = $total;
-        $data["tbl_ec_order"]["coupon_id"] = null;
+        $data["tbl_ec_order"]["invoice_date"] =  Carbon::now();
+        $data["tbl_ec_order"]["due_date"] =  Carbon::now();
+        $data["tbl_ec_order"]["coupon_id"] = (isset($customer_information["coupon_id"]) ? $customer_information["coupon_id"] : (isset($data["tbl_ec_order"]["coupon_id"]) ? $data["tbl_ec_order"]["coupon_id"] : null));
         $data["tbl_ec_order"]["shop_id"] = $shop_id;
         $data["tbl_ec_order"]["created_date"] = Carbon::now();
         $data["tbl_ec_order"]["payment_method_id"] = $payment_method_id;
         $data["tbl_ec_order"]["shipping_group"] = null;
         $data["tbl_ec_order"]["order_status"] = "Pending";
         $data["tbl_ec_order"]["payment_status"] = 0;
+
+        $data["applied_coupon_id"] = (isset($customer_information["coupon_id"]) ? $customer_information["coupon_id"] : (isset($data["tbl_ec_order"]["coupon_id"]) ? $data["tbl_ec_order"]["coupon_id"] : null));    
         return $data;
     }
     public static function get_method_information($shop_id, $payment_method_id)
@@ -977,9 +1132,13 @@ class Cart
      * @author (Edward Guevarra)
      *
      */
-    public static function submit_order($shop_id, $payment_status, $order_status, $customer_id = null, $notification = 1)
+    public static function submit_order($shop_id, $payment_status, $order_status, $customer_id = null, $notification = 1, $order = null)
     {
-        $order = Cart::get_info($shop_id);
+        if (!$order) 
+        {
+            $order = Cart::get_info($shop_id);
+        }
+        
         $order["tbl_ec_order"]["payment_status"] = $payment_status;
         $order["tbl_ec_order"]["order_status"]   = $order_status;
         $order["customer_id"]                    = $customer_id;
@@ -991,26 +1150,33 @@ class Cart
         ini_set('xdebug.max_nesting_level', 200);
         
         $data = Cart::get_info($shop_id);
-        $method_id = $data["tbl_ec_order"]["payment_method_id"];
-        $method_information = Self::get_method_information($shop_id, $method_id);
-        if ( isset($method_id) && isset($method_information) )
+        if (isset($data["tbl_ec_order"]["payment_method_id"])) 
         {
-            switch ($method_information->link_reference_name)
+            $method_id = $data["tbl_ec_order"]["payment_method_id"];
+            $method_information = Self::get_method_information($shop_id, $method_id);
+            if ( isset($method_id) && isset($method_information) )
             {
-                case 'paypal2': dd("UNDER DEVELOPMENT"); break;
-                case 'paymaya': Cart::submit_using_paymaya($data, $shop_id, $method_information, $from); break;
-                case 'paynamics': dd("UNDER DEVELOPMENT"); break;
-                case 'dragonpay': return Cart::submit_using_dragonpay($data, $shop_id, $method_information, $from); break;
-                case 'ipay88': return Cart::submit_using_ipay88($data, $shop_id, $method_information); break;
-                case 'other': return Cart::submit_using_proof_of_payment($shop_id, $method_information);  break;
-                case 'e_wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
-                case 'cashondelivery': return Cart::submit_using_cash_on_delivery($shop_id, $method_information); break;
-                default: dd("UNDER DEVELOPMENT"); break;
+                switch ($method_information->link_reference_name)
+                {
+                    case 'paypal2': dd("UNDER DEVELOPMENT"); break;
+                    case 'paymaya': Cart::submit_using_paymaya($data, $shop_id, $method_information, $from); break;
+                    case 'paynamics': dd("UNDER DEVELOPMENT"); break;
+                    case 'dragonpay': return Cart::submit_using_dragonpay($data, $shop_id, $method_information, $from); break;
+                    case 'ipay88': return Cart::submit_using_ipay88($data, $shop_id, $method_information); break;
+                    case 'other': return Cart::submit_using_proof_of_payment($shop_id, $method_information);  break;
+                    case 'e_wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
+                    case 'cashondelivery': return Cart::submit_using_cash_on_delivery($shop_id, $method_information); break;
+                    default: dd("UNDER DEVELOPMENT"); break;
+                }
+            }
+            else
+            {
+                return Redirect::back()->with("error", "Please choose payment method.")->send();
             }
         }
         else
         {
-            return Redirect::back()->with("error", "Please choose payment method.")->send();
+            dd('An error occurred. Please try again later.');
         }
     }
     public static function submit_using_paymaya($data, $shop_id, $method_information, $from)
@@ -1163,7 +1329,8 @@ class Cart
         echo "Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.";
         $api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)->join("tbl_online_pymnt_gateway", "tbl_online_pymnt_gateway.gateway_id", "=", "tbl_online_pymnt_api.api_gateway_id")->where("gateway_code_name", "ipay88")->first();
         $shop = DB::table("tbl_shop")->where("shop_id", $shop_id)->first();
-        
+        $customer = Cart::get_customer();
+
         /* DELIMETER */
         switch ($method_information->link_delimeter) 
         {  
@@ -1172,11 +1339,19 @@ class Cart
             /* Bancnet */
             case 5: $data["paymentId"] = 5; break;
             /* Default (Credit Card) */
-            default: $data["paymentId"] = 1; break;
+            default: $data["paymentId"] = $method_information->link_delimeter; break;
         }
 
-        $data["refNo"] = $shop_id . time();
-        $data["amount"] = $data["tbl_ec_order"]["total"];
+        if (isset($data["tbl_customer"]["customer_id"]) && $data["tbl_customer"]["customer_id"]) 
+        {
+            $data["refNo"] = $shop_id . time() . $data["tbl_customer"]["customer_id"];
+        }
+        else
+        {
+            $data["refNo"] = $shop_id . time();
+        }
+        
+        $data["amount"] = $data["tbl_ec_order"]["total"] - Cart::get_coupon_discount($data["tbl_ec_order"]["coupon_id"], $data["tbl_ec_order"]["total"]);
 
         /* REASTRUCTURE */
         $product_summary = array();
@@ -1221,7 +1396,17 @@ class Cart
             'responseUrl'   => $requestpayment->setResponseUrl($data["responseUrl"]),
             'backendUrl'    => $requestpayment->setBackendUrl($data["backendUrl"])
         );
+        
+        $temp["reference_number"] = $data["refNo"];
+        $temp["shop_id"] = $shop_id;
+        $temp["customer_id"] = isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null;
+        $temp["date_created"] = Carbon::now();
+        $temp["cart"] = serialize(Cart::get_info($shop_id));
+  
+        DB::table("tbl_ipay88_temp")->insert($temp);
 
+        // Cart::clear_all($shop_id);
+        
         RequestPayment::make($data["merchantKey"], $ipay88request);  
     }
     public static function submit_using_proof_of_payment($shop_id, $method_information)
@@ -1311,7 +1496,23 @@ class Cart
 
         $tbl_order = DB::table("tbl_ec_order")->where("tbl_ec_order.ec_order_id", $order_id)->leftJoin("tbl_customer", "tbl_customer.customer_id", "=", "tbl_ec_order.customer_id")->first();
         
-        return Redirect::to("/")->send();
+        $data["template"] = Tbl_email_template::where("shop_id", $shop_id)->first();
+        $data['mail_to'] = $tbl_order->customer_email;
+        $data['mail_username'] = Config::get('mail.username');
+        $data['mail_subject'] = "Verify Payment";
+        $data['payment_detail'] = $method_information->other_description;
+        $data['customer_full_name'] = $tbl_order->first_name . " " . $tbl_order->middle_name . " " . $tbl_order->last_name;
+        $data['order_id'] = Crypt::encrypt($tbl_order->ec_order_id);
+        $data['password'] = Crypt::decrypt($tbl_order->password);
+        //email for COD
+        $result = Mail_global::create_email_content($data, $shop_id, "cash_on_delivery");
+        
+        if($result == 0)
+        {    
+            // $result = Mail_global::mail($data, $shop_id, "cod");
+        }
+
+        return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)) . '&popup=1')->send();
     }
     public static function get_customer()
     {

@@ -5,13 +5,14 @@
 		<button type="button" class="close" data-dismiss="modal">×</button>
 		<h4 class="modal-title">Create Shift Template</h4>
 		<input type="hidden" name="_token" value="{{csrf_token()}}">
-		<input type="hidden" name="shift_code_id" value="{{$code->shift_code_id}}"> 
 	</div>
 	<div class="modal-body form-horizontal">
 		<div class="form-group">
 			<div class="col-md-12">
 				<small>Shift Code</small>
-				<input type="text" name="shift_code_name" value="{{$code->shift_code_name}}" class="form-control" placeholder="Shift Code" required>
+				<input type="text" name="shift_code_name" value="{{ $shift_code->shift_code_name }}" class="form-control" placeholder="Shift Code" required>
+				<input type="hidden" name="shift_code_id" value="{{ $shift_code->shift_code_id }}" class="form-control" placeholder="Shift Code" required>
+			</div>
 			</div>
 		</div>
 		<div class="form-group">
@@ -20,52 +21,75 @@
 					<thead>
 						<tr>
 							<th rowspan="2" valign="center" class="text-center">Day</th>
-							<th rowspan="2" valign="center" class="text-center">Target Hours</th>
+							<th rowspan="2" valign="center" class="text-center">Working Hours</th>
+							<th rowspan="2" valign="center" class="text-center">Break Hours</th>
 							<th colspan="2" class="text-center">Work Schedule</th>
-							<th colspan="2" class="text-center">Break Schedule</th>
+							<th class="text-center"></th>
 							<th rowspan="2" class="text-center">Flexi Time</th>
 							<th rowspan="2" class="text-center">Rest Day</th>
 							<th rowspan="2" class="text-center">Extra Day</th>
+					
 						</tr>
 						<tr>
 							<th class="text-center">Start</th>
 							<th class="text-center">End</th>
-							<th class="text-center">Start</th>
-							<th class="text-center">End</th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
 						@foreach($_day as $key => $day)
-						<tr class="editable">
-							<td>
-								{{$day['day']}}
-								<input type="hidden" name="day[]" value="{{$day['day']}}">
-							</td>
-							<td>
-								<input type="number" name="target_hours[]" class="form-control text-center" step="any" value="{{$day['target_hours']}}">
-							</td>
-							<td class="editable">
-								<input type="text" name="work_start[]" class="text-table time-entry" value="{{date('H:i a', strtotime($day['work_start']))}}">
-							</td>
-							<td class="editable">
-								<input type="text" name="work_end[]" class="text-table time-entry" value="{{date('H:i a', strtotime($day['work_end']))}}">
-							</td>
-							<td class="editable">
-								<input type="text" name="break_start[]" class="text-table time-entry" value="{{date('H:i a', strtotime($day['break_start']))}}">
-							</td>
-							<td class="editable">
-								<input type="text" name="break_end[]" class="text-table time-entry" value="{{date('H:i a', strtotime($day['break_end']))}}">
-							</td>
-							<td class="text-center">
-								<input type="checkbox" name="flexi_{{$key}}" value="1" {{$day['flexi'] == 1 ? 'checked="checked"' : ''}}>
-							</td>
-							<td class="text-center">
-								<input type="checkbox" name="rest_day_{{$key}}" class="restday-check" value="1" {{$day['rest_day'] == 1 ? 'checked="checked"' : ''}}>
-							</td>
-							<td class="text-center">
-								<input type="checkbox" name="extra_day_{{$key}}" class="extraday-check" value="1" {{$day['extra_day'] == 1 ? 'checked="checked"' : ''}}>
-							</td>
-						</tr>
+							<tr class="editable main-con main-time" day="{{$day->shift_day}}">
+								<td>
+									{{ $day->shift_day }}
+									<input type="hidden" name="day[{{$day->shift_day}}]" value="{{$day->shift_day}}">
+								</td>
+								<td>
+									<input type="number" name="target_hours[{{$day->shift_day}}]" class="form-control text-center" step="any" value="{{ $day->shift_target_hours }}">
+								</td>
+								<td>
+									<input type="number" name="break_hours[{{$day->shift_day}}]" class="form-control text-center" step="any" value="{{ $day->shift_break_hours }}">
+								</td>
+								<td class="editable">
+									<input type="text" placeholder="NO TIME" value="{{ (isset($day->time_shift[0]) == '' ? '' : $day->time_shift[0]->shift_work_start) }}" name="work_start[{{$day->shift_day}}][]" class="text-table time-entry in" >
+								</td>
+								<td class="editable">
+									<input type="text" placeholder="NO TIME" value="{{ (isset($day->time_shift[0]) == '' ? '' : $day->time_shift[0]->shift_work_end) }}" name="work_end[{{$day->shift_day}}][]" class="text-table time-entry out" >
+								</td>
+								<td>
+									<button type="button" class="btn btn-default add-sub-time"><i class="fa fa-plus"></i></button>
+								</td>
+								<td class="text-center">
+									<input type="checkbox" name="flexitime_day_{{$day->shift_day}}" class="flexitime-check" value="1" {{ $day->shift_flexi_time != 0 ? "checked" :  ""}}>
+								</td>
+								<td class="text-center">
+									<input type="checkbox" name="rest_day_{{$day->shift_day}}" class="restday-check" value="1" {{ $day->shift_rest_day != 0 ? "checked" :  ""}}>
+								</td>
+								<td class="text-center">
+									<input type="checkbox" name="extra_day_{{$day->shift_day}}" class="extraday-check" value="1" {{ $day->shift_extra_day != 0 ? "checked" :  ""}}>
+								</td>
+							</tr>
+							@if($day->time_shift)
+								@foreach($day->time_shift as $x => $timeshift)
+									@if($x != 0)
+										<tr class="editable main-con sub-time" day="{{$day->shift_day}}">
+											<td></td>
+											<td></td>
+											<td></td>
+											<td class="editable">
+												<input type="text" placeholder="NO TIME" value="{{ $timeshift->shift_work_start }}" name="work_start[{{$day->shift_day}}][]" class="text-table time-entry in" >
+											</td>
+											<td class="editable">
+												<input type="text" placeholder="NO TIME" value="{{ $timeshift->shift_work_end }}" name="work_end[{{$day->shift_day}}][]" class="text-table time-entry out" >
+											</td>
+											<td>
+												<button type="button" class="btn btn-default remove-time-entry"><i class="fa fa-close"></i></button>
+											</td>
+											<td class="text-center"></td>
+											<td class="text-center"></td>
+										</tr>
+									@endif
+								@endforeach
+							@endif
 						@endforeach
 					</tbody>
 				</table>
@@ -74,35 +98,7 @@
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-		<button class="btn btn-primary btn-custom-primary" type="submit"">Submit</button>
+		<button class="btn btn-primary btn-custom-primary" type="submit">Submit</button>
 	</div>
 </form>
-
-<script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.plugin.min.js"></script>
-<script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.min.js"></script>
-
-<script type="text/javascript">
-
-	$(".restday-check").unbind("change");
-	$(".restday-check").bind("change", function () {
-		var parent = $(this).parents('tr').find('.extraday-check');
-		if($(this).is(":checked"))
-		{
-			parent.prop("checked", false);
-		}
-
-	});
-
-	$(".extraday-check").unbind("change");
-	$(".extraday-check").bind("change", function () {
-		var parent = $(this).parents('tr').find('.restday-check');
-		if($(this).is(":checked"))
-		{
-			parent.prop("checked", false);
-		}
-
-	});
-
-	$(".time-entry").timeEntry('destroy');
-	$(".time-entry").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 0, 0, 0)});
-</script>
+<script type="text/javascript" src="/assets/member/payroll/js/shift-template.js"></script>

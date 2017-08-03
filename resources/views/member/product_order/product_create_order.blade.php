@@ -61,14 +61,40 @@
                     <!-- START CONTENT -->
                     <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
                         <div class="row clearfix">
+                            <div class="col-md-4">
+                                <label>Invoice Number</label>
+                                <input type="text" class="form-control input-sm" name="manual_inv_number" value="{{$inv->manual_inv_number != '' ? $inv->manual_inv_number : $inv->ec_order_id }}">
+                            </div>
+                            @if(isset($log_name) && isset($log_reference))
                             <div class="col-sm-4">
+                                <label>{{ $log_name }}</label>
+                                <input type="text" disabled value="{{ $log_reference }}" class="form-control">
+                            </div>
+                            @endif
+                            @if(isset($view_invoice) && isset($inv))
+                                @if($view_invoice && $inv->order_status == 'Completed')
+                                <div class="col-md-4 pull-right text-right">
+                                    <label> </label>
+                                    <a class="btn btn-success" target="_blank" href="/member/ecommerce/product_order/create_order/invoice?order_id={{$ec_order_id}}">View Invoice</a>
+                                </div>
+                                @endif
+                            @endif
+                        </div>
+                        <div class="row clearfix">
+                            <div class="col-sm-4">
+                                <label>Customer Name</label>
                                 <select {{isset($inv) ? 'disabled' : ''}} class="form-control {{isset($inv) ? '' : 'droplist-customer'}}  input-sm pull-left" name="inv_customer_id" data-placeholder="Select a Customer" required>
                                     @include('member.load_ajax_data.load_customer', ['customer_id' => isset($inv->customer_id) ? $inv->customer_id : '']);
                                 </select>
                             </div>
                             <div class="col-sm-4">
+                                <label>Customer Email</label>
                                 <input {{isset($inv) ? 'disabled' : ''}} type="text" class="form-control input-sm customer-email" name="inv_customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$inv->customer_email or ''}}"/>
-                            </div>
+                            </div> 
+                            <div class="col-sm-4">
+                                <label>Customer Mobile</label>
+                                <input {{isset($inv) ? 'disabled' : ''}} type="text" class="form-control input-sm customer-mobile" name="inv_customer_mobile" placeholder="Mobile Number" value="{{$inv->customer_mobile or ''}}"/>
+                            </div> 
                         </div>
                     </div>
                     

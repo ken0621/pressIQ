@@ -102,7 +102,7 @@ function variant_info()
 			$(e.currentTarget).closest('.image').addClass('glow');
 			$(e.currentTarget).find('i').attr('class','fa fa-circle');
 			$(e.currentTarget).find('.label').text('Your Default');
-			
+
 			$("#product-main-image").val($(this).closest('.image').attr("imgid"));
 		});
 	}

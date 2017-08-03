@@ -30,6 +30,8 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/contactus', 'Shop\ShopAboutController@contactus'); //EDWARD GUEVARRA
 	Route::get('/jobs', 'Shop\ShopAboutController@jobs'); //EDWARD GUEVARRA
 	Route::get('/job', 'Shop\ShopAboutController@job'); //EDWARD GUEVARRA
+	Route::post('/job/submit', 'Shop\ShopAboutController@job_submit');
+	Route::get('/term','Shop\ShopTermsController@index');
 
 
 	Route::get('/blog', 'Shop\ShopBlogController@index');
@@ -65,6 +67,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/account/order', 'Shop\ShopAccountController@order');
 	Route::get('/account/wishlist', 'Shop\ShopAccountController@wishlist');
 	Route::get('/account/settings', 'Shop\ShopAccountController@settings');
+	Route::post('/account/settings', 'Shop\ShopAccountController@settings_submit');
 	Route::get('/account/security', 'Shop\ShopAccountController@security');
 	Route::post('/account/security', 'Shop\ShopAccountController@security_submit');
 	Route::get('/account/invoice/{id}', 'Shop\ShopAccountController@invoice');

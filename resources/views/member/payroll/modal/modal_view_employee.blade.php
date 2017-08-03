@@ -1,4 +1,5 @@
 <form class="global-submit" role="form" action="/member/payroll/employee_list/modal_employee_update" method="POST">
+  <input type="hidden" name="source" value="{{ $source }}"/>
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">&times;</button>
     <h4 class="modal-title layout-modallarge-title">Employee details</h4>
@@ -111,7 +112,7 @@
               <li><a data-toggle="tab" href="#salary-details">Salary Details</a></li>
               <li><a data-toggle="tab" href="#requirements">Requirements</a></li>
               <li><a data-toggle="tab" href="#dependents">Dependents</a></li>
-              <li><a data-toggle="tab" href="#remarks">Remarks</a></li>
+              <li><a data-toggle="tab" href="#shift-schedule">Shift</a></li>
               <li><a data-toggle="tab" href="#other">Other</a></li>
             </ul>
             
@@ -277,10 +278,21 @@
                   </div>
                 </div>
               </div>
-              
               <div id="salary-details" class="tab-pane fade">
                 
                 <div class="form-horizontal">
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <div class="checkbox">
+                        <label><input type="checkbox" name="payroll_employee_salary_minimum_wage" value="1" disabled {{isset($salary->payroll_employee_salary_minimum_wage) ? ($salary->payroll_employee_salary_minimum_wage == 1 ? 'checked="checked"' : '') : ''}}>Minimum wage earner</label>
+                      </div>
+                      <div class="checkbox">
+                        <label><input type="checkbox" name="tbl_payroll_employee_custom_compute" value="1" class="custom-compute-chck" disabled {{isset($salary->tbl_payroll_employee_custom_compute) ? ($salary->tbl_payroll_employee_custom_compute == 1 ? 'checked="checked"' : '') : ''}}>Declare Salary for SSS, Philhealth and Tax?</label>
+                      </div>
+                    </div>
+                  </div>
+              
+                  
                   <div class="form-group">
                     <div class="col-md-6">
                       
@@ -296,91 +308,98 @@
                           <input type="number" step="any" name="payroll_employee_salary_daily" class="form-control text-right" value="{{isset($salary->payroll_employee_salary_daily) ? $salary->payroll_employee_salary_daily : ''}}" readonly>
                         </div>
                       </div>
+                      <!--
                       <div class="form-group">
+                        <div class="col-md-12">
+                          <small>COLA (Monthly)</small>
+                          <input type="number" step="any" name="monthly_cola" class="form-control text-right" value="{{isset($salary->monthly_cola) ? $salary->monthly_cola : ''}}" readonly>
+                        </div>
+                      </div>
+                      -->
+                       <div class="form-group">
                         <div class="col-md-12">
                           <small>COLA (Daily)</small>
                           <input type="number" step="any" name="payroll_employee_salary_cola" class="form-control text-right" value="{{isset($salary->payroll_employee_salary_cola) ? $salary->payroll_employee_salary_cola : ''}}" readonly>
                         </div>
                       </div>
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <div class="checkbox">
-                            <label><input type="checkbox" name="payroll_employee_salary_minimum_wage" value="1" disabled {{isset($salary->payroll_employee_salary_minimum_wage) ? ($salary->payroll_employee_salary_minimum_wage == 1 ? 'checked="checked"' : '') : ''}}>Minimum wage earner</label>
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <small>PAGIBIG/HDMF Contribution</small>
+                            <input type="number" name="payroll_employee_salary_pagibig" class="form-control text-right" value="{{isset($salary->payroll_employee_salary_pagibig) ? $salary->payroll_employee_salary_pagibig : ''}}" readonly>
+                          </div>
+                        </div>
+
+                      
+                    </div>
+                    <div class="col-md-6 declared-salaries {{isset($salary->tbl_payroll_employee_custom_compute) ? ($salary->tbl_payroll_employee_custom_compute == 1 ? '' : 'hidden') : ''}}">
+                      <div class="custom-compute-obj">
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <small>Taxable Salary</small>
+                            <input type="number" name="payroll_employee_salary_taxable" class="form-control text-right" value="{{isset($salary->payroll_employee_salary_taxable) ? $salary->payroll_employee_salary_taxable : ''}}" readonly>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <small>SSS Salary</small>
+                            <input type="number" name="payroll_employee_salary_sss" class="form-control text-right" value="{{isset($salary->payroll_employee_salary_sss) ? $salary->payroll_employee_salary_sss : ''}}" readonly>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <small>PHILHEALTH Salary</small>
+                            <input type="number" name="payroll_employee_salary_philhealth" class="form-control text-right" value="{{isset($salary->payroll_employee_salary_philhealth) ? $salary->payroll_employee_salary_philhealth : ''}}" readonly>
                           </div>
                         </div>
                       </div>
-                      
                     </div>
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <small>Taxable Salary</small>
-                          <input type="number" name="payroll_employee_salary_taxable" class="form-control text-right" value="{{isset($salary->payroll_employee_salary_taxable) ? $salary->payroll_employee_salary_taxable : ''}}" readonly>
+                  </div>
+                  <div class="custom-compute-obj">
+                    <hr>
+                    <div class="form-group hidden">
+                      <div class="col-md-12">
+                        <label>Mode of Deduction</label>
+                      </div>
+                    </div>
+                    
+                    <div class="form-group hidden">
+                      <div class="col-md-6">
+                        <div class="checkbox">
+                          <label><input type="checkbox" name="is_deduct_sss_default" disabled {{isset($salary->is_deduct_sss_default) ? ($salary->is_deduct_sss_default == 1 ? 'checked="checked"':'') : ''}}>Compute SSS base on default</label>
                         </div>
                       </div>
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <small>SSS Salary</small>
-                          <input type="number" name="payroll_employee_salary_sss" class="form-control text-right" value="{{isset($salary->payroll_employee_salary_sss) ? $salary->payroll_employee_salary_sss : ''}}" readonly>
+                      <div class="col-md-6">
+                        <small>SSS contribution period</small>
+                        <input type="number" name="deduct_sss_custom" class="form-control text-right" placeholder="0.00" step="any" id="sss-deduction-period" value="{{isset($salary->deduct_sss_custom) ? $salary->deduct_sss_custom : ''}}" disabled>
+                      </div>
+                    </div>
+  
+                    <div class="form-group hidden">
+                      <div class="col-md-6">
+                        <div class="checkbox">
+                          <label><input type="checkbox" name="is_deduct_philhealth_default"   disabled {{isset($salary->is_deduct_philhealth_default) ? ($salary->is_deduct_philhealth_default == 1 ? 'checked="checked"':'') : ''}}>Compute PHILHEALTH base on default</label>
                         </div>
                       </div>
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <small>PAGIBIG/HDMF Salary</small>
-                          <input type="number" name="payroll_employee_salary_pagibig" class="form-control text-right" value="{{isset($salary->payroll_employee_salary_pagibig) ? $salary->payroll_employee_salary_pagibig : ''}}" readonly>
+                      <div class="col-md-6">
+                        <small>PHILHEALTH contribution per period</small>
+                        <input type="number" name="deduct_philhealth_custom" class="form-control text-right" placeholder="0.00" step="any" id="philhealth-deduction-period" value="{{isset($salary->deduct_philhealth_custom) ? $salary->deduct_philhealth_custom : ''}}" disabled>
+                      </div>
+                    </div>
+  
+                    <div class="form-group hidden">
+                      <div class="col-md-6">
+                        <div class="checkbox">
+                          <label><input type="checkbox" name="is_deduct_pagibig_default" disabled {{isset($salary->is_deduct_pagibig_default)  ? ($salary->is_deduct_pagibig_default == 1 ? 'checked="checked"':'') : ''}}>Compute PAGIBIG base on default</label>
                         </div>
                       </div>
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <small>PHILHEALTH Salary</small>
-                          <input type="number" name="payroll_employee_salary_philhealth" class="form-control text-right" value="{{isset($salary->payroll_employee_salary_philhealth) ? $salary->payroll_employee_salary_philhealth : ''}}" readonly>
-                        </div>
+                      <div class="col-md-6">
+                        <small>PAGIBIG contribution per period</small>
+                        <input type="number" name="deduct_pagibig_custom" class="form-control text-right" placeholder="0.00" step="any" id="pagibig-deduction-period" value="{{isset($salary->deduct_pagibig_custom) ? $salary->deduct_pagibig_custom : ''}}" disabled>
                       </div>
                     </div>
                   </div>
-                  <hr>
-                  <div class="form-group">
-                    <div class="col-md-12">
-                      <label>Mode of Deduction</label>
-                    </div>
-                  </div>
-                  
-
-                  <div class="form-group">
-                    <div class="col-md-6">
-                      <div class="checkbox">
-                        <label><input type="checkbox" name="is_deduct_sss_default" disabled {{isset($salary->is_deduct_sss_default) ? ($salary->is_deduct_sss_default == 1 ? 'checked="checked"':'') : ''}}>Compute SSS base on default</label>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <small>SSS contribution period</small>
-                      <input type="number" name="deduct_sss_custom" class="form-control text-right" placeholder="0.00" step="any" id="sss-deduction-period" value="{{isset($salary->deduct_sss_custom) ? $salary->deduct_sss_custom : ''}}" disabled>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <div class="col-md-6">
-                      <div class="checkbox">
-                        <label><input type="checkbox" name="is_deduct_philhealth_default"   disabled {{isset($salary->is_deduct_philhealth_default) ? ($salary->is_deduct_philhealth_default == 1 ? 'checked="checked"':'') : ''}}>Compute PHILHEALTH base on default</label>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <small>PHILHEALTH contribution per period</small>
-                      <input type="number" name="deduct_philhealth_custom" class="form-control text-right" placeholder="0.00" step="any" id="philhealth-deduction-period" value="{{isset($salary->deduct_philhealth_custom) ? $salary->deduct_philhealth_custom : ''}}" disabled>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <div class="col-md-6">
-                      <div class="checkbox">
-                        <label><input type="checkbox" name="is_deduct_pagibig_default" disabled {{isset($salary->is_deduct_pagibig_default)  ? ($salary->is_deduct_pagibig_default == 1 ? 'checked="checked"':'') : ''}}>Compute PAGIBIG base on default</label>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <small>PAGIBIG contribution per period</small>
-                      <input type="number" name="deduct_pagibig_custom" class="form-control text-right" placeholder="0.00" step="any" id="pagibig-deduction-period" value="{{isset($salary->deduct_pagibig_custom) ? $salary->deduct_pagibig_custom : ''}}" disabled>
-                    </div>
-                  </div>
+                  <div class="form-group"></div>
                   <div class="form-group">
                     <div class="col-md-12">
                       <button class="btn pull-right margin-lr-5 btn-primary popup" link="/member/payroll/employee_list/modal_salary_list/{{$employee->payroll_employee_id}}" size="lg" type="button">Salary List</button>
@@ -601,19 +620,28 @@
                       </div>
                     </div>
                   </div>
-                </div>
-               
+                </div>        
               </div>
-              <div id="remarks" class="tab-pane fade">
-                <br>
-                <div class="form-horizontal">
-                  <div class="form-group">
-                    <div class="col-md-12">
-                      <label for=""><b>Remarks</b></label>
-                      <textarea class="form-control textarea-expand"  name="payroll_employee_remarks">{{$employee->payroll_employee_remarks}}</textarea>
+              <div id="shift-schedule" class="tab-pane fade">
+                    <div class="form-horizontal">
+                      <div class="form-group">
+                        <div class="col-md-6">
+                          <small>Choose Shift Template</small>
+                          <select class="form-control shift-template-select" name="shift_code_id">
+                            <option value="0">Select Template</option>
+                            <option value="-1">Create Template</option>
+                            @foreach($_shift as $shift)
+                            <option value="{{$shift->shift_code_id}}" {{$employee->shift_code_id == $shift->shift_code_id ? 'selected="selected"':''}}>{{$shift->shift_code_name}}</option> 
+                            @endforeach
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-12 shift-template table-responsive">
+                          
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
               </div>
               <div id="other" class="tab-pane fade">
                 <ul class="nav nav-tabs nav-tabs-custom">
@@ -621,6 +649,7 @@
                   <li><a data-toggle="tab" href="#leave">Leave</a></li>
                   <li><a data-toggle="tab" href="#deduction">Deduction</a></li>
                   <li><a data-toggle="tab" href="#jouarnal">Journal</a></li>
+                  <li><a data-toggle="tab" href="#remarks">Remarks</a></li>
                 </ul>
                 <div class="tab-content tab-content-custom">
                   <div id="allowance" class="tab-pane fade in active">
@@ -651,6 +680,17 @@
                     </div>
                     @endforeach
                   </div>
+                  <div id="remarks" class="tab-pane fade">
+                    <br>
+                    <div class="form-horizontal">
+                      <div class="form-group">
+                        <div class="col-md-12">
+                          <label for=""><b>Remarks</b></label>
+                          <textarea class="form-control textarea-expand"  name="payroll_employee_remarks">{{$employee->payroll_employee_remarks}}</textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -669,6 +709,7 @@
     <button class="btn btn-custom-primary btn-save-modallarge" type="submit" data-url="">Update</button>
   </div>
 </form>
+
 <script type="text/javascript" src="/assets/member/js/customer.js"></script>
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
 <script type="text/javascript" src="/assets/member/js/payroll/modal_create_employee.js"></script>

@@ -45,13 +45,15 @@ use App\Models\Tbl_payroll_shift;
 use App\Models\Tbl_payroll_shift_template;
 use App\Models\Tbl_payroll_employee_schedule;
 
+use App\Models\Tbl_payroll_time_keeping_approved;
+use App\Models\Tbl_payroll_time_keeping_approved_breakdown;
+
 use Carbon\Carbon;
 use stdClass;
 use DB;
 
 class Payroll
 {
-
 	public static function tax_reference($shop_id = 0)
 	{
 		$count = Tbl_payroll_copy_log_requirements::where('shop_id',$shop_id)->where('requirements_category','tax')->count();
@@ -1371,8 +1373,14 @@ class Payroll
 	public static function time_float($time = '00:00')
 	{
 		$extime = explode(':', $time);
+		
+		$min = 0;
+		if(count($extime) > 1)
+		{
+			$min = $extime[1] / 60;
+		}
 		$hour = $extime[0];
-		$min = $extime[1] / 60;
+		
 		return $hour + $min;
 	}
 
@@ -1389,9 +1397,15 @@ class Payroll
 		// 	return $float;
 		// }
 		$hour = intval($float);
+
 		$min = round(($float - $hour) * 60);
 		return Payroll::return_time($hour, $min);
 		
+	}
+
+	public static function float_to_time($float)
+	{
+
 	}
 
 	public static function process_compute($shop_id = 0, $status = 'processed')
@@ -2949,46 +2963,44 @@ class Payroll
 	/* GET TAX VALUE */
 	public static function tax_contribution($shop_id = 0, $rate = 0, $tax_category = '', $payroll_tax_period = '')
 	{
+
 		$tax 		= Tbl_payroll_tax_reference::sel($shop_id, $tax_category, $payroll_tax_period)->first();
-		
 		$exemption 	= Tbl_payroll_tax_reference::sel($shop_id, 'Excemption', $payroll_tax_period)->first();
-
 		$status 	= Tbl_payroll_tax_reference::sel($shop_id, 'Status', $payroll_tax_period)->first();
-
 		$tax_index 	= '';
-
 		$tax_contribution = 0;
+
 
 		// if($rate >= $tax->tax_first_range && $rate < $tax->tax_second_range)
 		if($tax != null)
 		{
-			if($tax->tax_first_range >= $rate && $tax->tax_second_range < $rate)
+			if($tax->tax_first_range <= $rate && $tax->tax_second_range > $rate)
 			{
 				$tax_index = 'tax_first_range';
 			}
 
-			if($tax->tax_second_range >= $rate && $tax->tax_third_range < $rate)
+			if($tax->tax_second_range <= $rate && $tax->tax_third_range > $rate)
 			{
 				$tax_index = 'tax_second_range';
 			}
 
-			if($tax->tax_second_range >= $rate && $tax->tax_third_range < $rate)
+			if($tax->tax_second_range <= $rate && $tax->tax_third_range > $rate)
 			{
 				$tax_index = 'tax_second_range';
 			}
 
-			if($tax->tax_third_range >= $rate && $tax->tax_fourth_range < $rate)
+			if($tax->tax_third_range <= $rate && $tax->tax_fourth_range > $rate)
 			{
 				$tax_index = 'tax_third_range';
 			}
 
-			if($tax->tax_fourth_range >= $rate && $tax->tax_fifth_range < $rate)
+			if($tax->tax_fourth_range <= $rate && $tax->tax_fifth_range > $rate)
 			{
 				$tax_index = 'tax_fourth_range';
 			}
 
 			
-			if($tax->tax_fifth_range >= $rate && $tax->taxt_sixth_range < $rate)
+			if($tax->tax_fifth_range <= $rate && $tax->taxt_sixth_range > $rate)
 			{
 				$tax_index = 'tax_fifth_range';
 			}
@@ -3000,19 +3012,24 @@ class Payroll
 			}
 
 
-			if($rate <= $tax->tax_seventh_range && $rate > $tax->taxt_sixth_range)
+			if($rate >= $tax->tax_seventh_range && $rate)
 			{
 				$tax_index = 'tax_seventh_range';
 			}
 
-
+			// dd($tax_index);
 			if($tax_index != '')
 			{
 				$exemption_num = $exemption->$tax_index;
 				$status_num = $status->$tax_index;
 				// dd($status_num);
+				//dd("((" . $rate . " - " . $tax->$tax_index . ") * (" . $status_num . " / 100" . ")) " . " + " . $exemption_num . ")");
 				$tax_contribution = (($rate - $tax->$tax_index) * ($status_num / 100)) + $exemption_num;
 			}
+		}
+		else
+		{
+			dd("NOT FOUND ON TAX TABLE. PLEASE CONTACT ADMINISTRATOR.");
 		}
 		
 		return round($tax_contribution, 2);
@@ -3029,10 +3046,11 @@ class Payroll
 		{
 			$max_sss = Tbl_payroll_sss::where('shop_id', $shop_id)->orderBy('payroll_sss_min','desc')->first();
 			$sss = Tbl_payroll_sss::where('shop_id', $shop_id)->where('payroll_sss_min','<=',$rate)->where('payroll_sss_max','>=',$rate)->first();
-
+			// dd($max_sss);
+			// dd($sss);
 			if($sss == null)
 			{	
-				if($max_sss->payroll_sss_min <= $rate)
+				if($rate >= $max_sss->payroll_sss_min)
 				{
 					$data['ee'] = $max_sss->payroll_sss_ee;
 					$data['er'] = $max_sss->payroll_sss_er;
@@ -3079,6 +3097,11 @@ class Payroll
 				$data['ee'] = $_philhealth_max->payroll_philhealth_ee_share;
 				$data['er'] = $_philhealth_max->payroll_philhealth_er_share;
 			}
+			else
+			{
+				$data['ee'] = $_philhealth_max->payroll_philhealth_ee_share;
+				$data['er'] = $_philhealth_max->payroll_philhealth_er_share;
+			}
 		}
 		
 
@@ -3092,7 +3115,7 @@ class Payroll
 		
 		if($pagibig != null)
 		{
-			$data = ($pagibig->payroll_pagibig_percent / 100 ) * $rate;
+			$data = $rate;
 		}
 
 		return round($data, 2);
@@ -3101,8 +3124,6 @@ class Payroll
 
 	public static function getdeduction($employee_id = 0, $date = '0000-00-00', $period = '', $payroll_period_category = '', $shop_id = 0)
 	{
-
-
 		$month[0] = date('Y-m-01', strtotime($date));
 		$month[1] = date('Y-m-t', strtotime($date));
 
@@ -3110,12 +3131,8 @@ class Payroll
 		
 		$payroll_record_id = Tbl_payroll_record::getperiod($shop_id, $payroll_period_category)->lists('payroll_record_id');
 
-		
-
 		$data['deduction'] 			= array();
 		$data['total_deduction'] 	= 0;
-
-		
 
 		foreach($_deduction as $deduction)
 		{
@@ -3139,7 +3156,6 @@ class Payroll
 
 	public static function getrecord_breakdown($record = array())
 	{
-		
 		$data = $record->toArray();
 		// dd($data);
 
@@ -3429,5 +3445,111 @@ class Payroll
 			Tbl_payroll_remarks::insert($insert);
 		}
 	}
+	
+	public static function get_month()
+	{
+		$data = array();
+		for($i = 1; $i <= 12; $i++)
+		{
+			$month = date('F', strtotime(date('Y').'-'.$i.'-01'));
+			array_push($data, $month);
+		}
+		return $data;
+	}
 
+
+	/*public static function payslip_template($id)
+	{
+		$payslip  = Tbl_payroll_payslip::payslip(Self::shop_id())->first();
+
+          if(empty($payslip))
+          {
+               $payslip  = Tbl_payroll_payslip::payslip(Self::shop_id(), 0)->first();
+          }
+          //dd($payslip);
+
+          $data['logo_position']   = '';
+          $data['logo']            = false;
+          $data['colspan']         = 1;
+
+          if($payslip->company_position == '.company-logo-center' || $payslip->company_position == '.company-center')
+          {
+               $data['logo_position'] = 'text-center';
+          }
+
+          if($payslip->company_position == '.company-logo-left' || $payslip->company_position == '.company-left')
+          {
+               $data['logo_position'] = 'text-left';
+          }
+
+          if($payslip->company_position == '.company-logo-right' || $payslip->company_position == '.company-right')
+          {
+               $data['logo_position'] = 'text-right';
+          }
+
+          if($payslip->company_position == '.company-logo-center' || $payslip->company_position == '.company-logo-left' || $payslip->company_position == '.company-logo-right')
+          {
+               $data['logo']          = true;
+          }
+
+          
+
+          if($payslip->include_time_summary == 1)
+          {
+               $data['colspan']         = 2;
+          }
+
+          
+
+          $data['payslip']  = $payslip;
+          $data['_record']  = array();
+          $period = Tbl_payroll_period_company::getcompanyperiod($id)->first();
+
+          $_record = Tbl_payroll_record::getcompanyrecord($id)
+                                        ->join('tbl_payroll_company','tbl_payroll_company.payroll_company_id','=','tbl_payroll_employee_basic.payroll_employee_company_id')
+                                        ->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
+                                        ->get();
+          
+          $_record2  = Tbl_payroll_time_keeping_approved::Basic()->where('payroll_period_company_id', $id)
+                                        ->join('tbl_payroll_company','tbl_payroll_company.payroll_company_id','=','tbl_payroll_employee_basic.payroll_employee_company_id')
+                                        ->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
+                                        ->get();
+          //dd($_record2);                                   
+
+          // dd($period);
+          foreach($_record2 as $record)
+          {
+
+               //$compute = Payroll::getrecord_breakdown($record);
+               $temp['period'] = date('M d, Y', strtotime($period->payroll_period_start)).' to '.date('M d, Y', strtotime($period->payroll_period_end));
+               //$temp['break'] = Self::breakdown_uncompute($compute,'approved');
+               $temp['display_name']    = $record->payroll_employee_display_name;
+               $temp['company_name']    = $record->payroll_company_name;
+               $temp['company_address'] = $record->payroll_company_address;
+               $temp['company_logo']    = $record->payroll_company_logo;
+               $temp['emp']             = Tbl_payroll_employee_contract::selemployee($record->payroll_employee_id, $period->payroll_period_start)
+                                                            ->leftjoin('tbl_payroll_department','tbl_payroll_department.payroll_department_id','=','tbl_payroll_employee_contract.payroll_department_id')
+                                                            ->leftjoin('tbl_payroll_jobtitle','tbl_payroll_jobtitle.payroll_jobtitle_id','=','tbl_payroll_employee_contract.payroll_jobtitle_id')
+                                                            ->first();
+               $temp['_record']          = Tbl_payroll_time_keeping_approved::Basic()
+                                             ->where('payroll_period_company_id', $id)
+                                             ->where('employee_id', $record->employee_id)
+                                             ->join('tbl_payroll_company','tbl_payroll_company.payroll_company_id','=','tbl_payroll_employee_basic.payroll_employee_company_id')
+                                             ->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
+                                             ->get();
+
+               $temp['_ptkab']          = Tbl_payroll_time_keeping_approved_breakdown::where('time_keeping_approve_id', $record->time_keeping_approve_id)
+                                             ->get();  
+
+               array_push($data['_record'], $temp);
+          }
+	}
+
+	public function group_ptkab($time_keeping_approve_id)
+	{
+		$_temp_record 	= array();
+		$_ptkab			= Tbl_payroll_time_keeping_approved_breakdown::where('time_keeping_approve_id', $time_keeping_approve_id)
+                            ->get();
+        
+	}*/
 }

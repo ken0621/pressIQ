@@ -7,5 +7,5 @@ class Tbl_settings extends Model
 {
 	protected $table = 'tbl_settings';
 	protected $primaryKey = "settings_id";
-    public $timestamps = false;
+    public $timestamps = true;
 }

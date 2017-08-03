@@ -53,6 +53,7 @@
                             <th class="text-left">Password</th>
                             @endif
                             <th class="text-left">Position Rank</th>
+                            <th class="text-left">Merchant</th>
                             <th class="text-left">Action</th>
                         </tr>
                     </thead>
@@ -67,6 +68,17 @@
                             <td class="text-left">{{$list->user_passkey}}</td>
                             @endif
                             <td class="text-left">{{$list->position_rank}}</td>   
+                            <td class="text-center">
+                                <form class="global-submit" method="post" action="/member/utilities/admin-list/ismerchant">
+                                    {!! csrf_field() !!}
+                                    <input type="hidden" name="user_id" value="{{$list->user_id}}">
+                                    @if($list->user_is_merchant  == 0)
+                                    <input type="checkbox" name="ismerchant" onChange="$(this).closest('form').submit();">
+                                    @else
+                                    <input type="checkbox" name="ismerchant" onChange="$(this).closest('form').submit();" checked>
+                                    @endif
+                                </form>
+                            </td>
                             <td class="text-left text-center">
                                 <div class="btn-group">
                                     <a class="btn btn-primary btn-grp-primary popup" href="javascript:" link="/member/utilities/modal-edit-user?user_id={{$list->user_id}}" size="sm">Edit</a>

@@ -11,10 +11,13 @@
 @endsection
 @section('content')
 
-@if(get_content($shop_theme_info, 'product', 'product_banner') && get_content($shop_theme_info, 'product', 'product_banner_link'))
+@if(get_content($shop_theme_info, 'product', 'product_banner_multiple') && is_serialized(get_content($shop_theme_info, 'product', 'product_banner_multiple')))
+<?php
+    $random = array_rand(unserialize(get_content($shop_theme_info, 'product', 'product_banner_multiple')));
+?>
 <div class="aadd">
-    <a href="{{ get_content($shop_theme_info, 'product', 'product_banner') }}" target="_blank">
-        <img src="{{ get_content($shop_theme_info, 'product', 'product_banner_link') }}" style="" >
+    <a href="{{ unserialize(get_content($shop_theme_info, 'product', 'product_banner_multiple'))[$random]['link'] }}" target="_blank">
+        <img src="{{ unserialize(get_content($shop_theme_info, 'product', 'product_banner_multiple'))[$random]['image'] }}" style="" >
     </a>
 </div>
 @endif
@@ -76,7 +79,7 @@
         </div>
         <div class="holder sshide">
             <div class="title text-left">Top Rated Products</div>
-            @foreach(get_collection(get_content($shop_theme_info, "product", "top_rated_products"), $shop_id) as $collection)
+            @foreach(get_collection_random(get_content($shop_theme_info, "product", "top_rated_products"), $shop_id) as $collection)
                 <a href="/product/view/{{ $collection['ec_product_id'] }}" class="text">
                     <div class="product-top">
                         <div class="text">
@@ -90,7 +93,7 @@
         </div>
         <div class="holder sshide">
             <div class="title text-left">Most Viewed</div>
-            @foreach(get_collection(get_content($shop_theme_info, "product", "most_viewed"), $shop_id) as $collection)
+            @foreach(get_collection_random(get_content($shop_theme_info, "product", "most_viewed"), $shop_id) as $collection)
                 <a href="/product/view/{{ $collection['ec_product_id'] }}" class="text">
                     <div class="product-top">
                         <div class="text">
@@ -157,7 +160,7 @@
                                                 @if($product["eprod_detail_image"])
                                                     <img class="detail" src="{{ $product["eprod_detail_image"] }}">
                                                 @endif
-                                                <img class="1-1-ratio" src="{{ get_product_first_image($product) }}">
+                                                <img class="1-1-ratio product-image-crop" src="{{ get_product_first_image($product) }}">
                                             </div>
                                             <div class="name">{{ get_product_first_name($product) }}</div>
                                             <!-- <div class="price-left">P34,000</div> -->
@@ -180,7 +183,7 @@
                                         @if($product["eprod_detail_image"])
                                             <img class="detail" src="{{ $product["eprod_detail_image"] }}">
                                         @endif
-                                        <img class="1-1-ratio baka-img" src="{{ get_product_first_image($product) }}">
+                                        <img class="1-1-ratio baka-img product-image-crop" src="{{ get_product_first_image($product) }}">
                                     </div>
                                     <div class="text">
                                         <div class="name">{{ get_product_first_name($product) }}</div>
@@ -213,7 +216,7 @@
     <form class="form-filter">
         <div class="holder">
             <div class="title text-left">Top Rated Products</div>
-            @foreach(get_collection(get_content($shop_theme_info, "product", "top_rated_products"), $shop_id) as $collection)
+            @foreach(get_collection_random(get_content($shop_theme_info, "product", "top_rated_products"), $shop_id) as $collection)
                 <a href="/product/view/{{ $collection['eprod_id'] }}" class="text">
                     <div class="product-top">
                         <div class="text">
@@ -227,7 +230,7 @@
         </div>
         <div class="holder">
             <div class="title text-left">Most Viewed</div>
-            @foreach(get_collection(get_content($shop_theme_info, "product", "most_viewed"), $shop_id) as $collection)
+            @foreach(get_collection_random(get_content($shop_theme_info, "product", "most_viewed"), $shop_id) as $collection)
                 <a href="/product/view/{{ $collection['eprod_id'] }}" class="text">
                     <div class="product-top">
                         <div class="text">

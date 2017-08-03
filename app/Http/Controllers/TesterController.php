@@ -54,7 +54,7 @@ class TesterController extends Controller
         dd(Sms::SendSingleText($recipient,"Test","success_register"));
     }
 
-	public function getIndex()
+    public function getIndex()
     {  
         $curl = curl_init();
         curl_setopt_array($curl, array(

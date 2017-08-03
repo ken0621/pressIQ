@@ -288,7 +288,6 @@ class Warehouse
     {
     	$data = Tbl_warehouse::Warehouseitem()
                              ->select_inventory($warehouse_id)
-				    		 ->orderBy('product_name','asc')
     						 ->paginate(10);
         foreach($data as $key => $value)
         {   //cycy
@@ -742,7 +741,7 @@ class Warehouse
 
                 $inventory_id = Tbl_warehouse_inventory::insertGetId($insert_refill);
 
-                if(count($item_serial) > 0 && $is_return == null) 
+                if(count($item_serial) >= 1 && $is_return == null) 
                 {
                     if($item_serial[$key]["item_id"] == $refill_product['product_id'])
                     {

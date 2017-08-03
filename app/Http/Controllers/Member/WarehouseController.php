@@ -30,6 +30,8 @@ use Session;
 use App\Globals\Item;
 use App\Globals\AuditTrail;
 use Validator;
+use Excel;
+use DB;
 class WarehouseController extends Member
 {
     /**
@@ -67,6 +69,43 @@ class WarehouseController extends Member
         $data["slip_id"] = $slip_id;
         return view("member.warehouse.stock_view",$data);
     }
+   public function export_xls($warehouse_id)
+    {
+        $data["warehouse"] = DB::table("tbl_warehouse")->where("warehouse_id", $warehouse_id)->first();
+
+
+
+        // $data["_item"] = Tbl_warehouse::inventory()
+        //                               ->select("*", DB::raw("sum(tbl_warehouse_inventory.inventory_count) as sum"))
+        //                            ->warehouseitem()
+        //                            ->serialnumber()
+        //                               ->where("tbl_warehouse.warehouse_id",$warehouse_id)
+        //                               ->groupBy("tbl_inventory_serial_number.serial_number")
+                                      // ->take(50)
+        //                            ->get();
+        $data["_item"] = Tbl_sub_warehouse::select_item($warehouse_id)
+                                      ->leftjoin('tbl_inventory_serial_number', 'tbl_item.item_id', '=', 'tbl_inventory_serial_number.item_id')
+                                      ->selectRaw("*, tbl_item.item_id as inventory_item_id")
+                                      // ->take(50)
+                                      ->get();
+                  
+        $data["quantity"] = 0;
+        foreach ($data["_item"] as $key2 => $value2) 
+        {
+            $qty = 0;
+            $qty = Tbl_warehouse_inventory::where("warehouse_id",$warehouse_id)->leftjoin("tbl_item","inventory_item_id","=","item_id")->where("tbl_warehouse_inventory.inventory_item_id",$value2->inventory_item_id)->where("tbl_item.archived",0)->sum("inventory_count");
+            $data["_item"][$key2]->sum = $qty;
+            $data["quantity"] += $qty;
+        }
+        Excel::create($data["warehouse"]->warehouse_name, function($excel) use ($data)
+        {
+            $excel->sheet('Warehouse', function($sheet) use ($data)
+            {
+                $sheet->loadView('member.warehouse.warehouse_xls', $data);
+            });
+
+        })->download('xls');
+    }
     public function index()
     {
         $this->item();
@@ -93,26 +132,28 @@ class WarehouseController extends Member
                 {          
                     $selling_price = 0;
                     $cost_price = 0;
+                    $total_qty = 0;
                     
                     $all_item = Tbl_sub_warehouse::select_item($value->warehouse_id)
                                                  ->get();
-                    $qty = 0;
+                    
                     foreach ($all_item as $key2 => $value2) 
                     {
-                        $qty = Tbl_warehouse_inventory::where("warehouse_id",$value2->warehouse_id)->leftjoin("tbl_item","inventory_item_id","=","item_id")->where("tbl_item.archived",0)->sum("inventory_count");
+                        $qty = 0;
+                        $qty = Tbl_warehouse_inventory::where("warehouse_id",$value2->warehouse_id)->leftjoin("tbl_item","inventory_item_id","=","item_id")->where("item_id",$value2->item_id)->where("tbl_item.archived",0)->sum("inventory_count");
 
                         $selling_price += $value2->item_price * $qty;
                         $cost_price += $value2->item_cost * $qty;
+                        $total_qty += $qty;
                     }
                     $data["_warehouse"][$key]->total_selling_price = $selling_price;
                     $data["_warehouse"][$key]->total_cost_price = $cost_price;
-                    $data["_warehouse"][$key]->total_qty = $qty;
+                    $data["_warehouse"][$key]->total_qty = $total_qty;
 
 
-                    $data["_warehouse"][$key]->count_no_serial = count(Tbl_warehouse_inventory::item()->warehouse()->inventoryslip()->serialnumber()->groupBy("tbl_warehouse_inventory.inventory_id")->where("inventory_count",">",0)->where("inventory_reason","refill")->where("tbl_item.shop_id",$this->user_info->shop_id)->where("tbl_warehouse.warehouse_id",$value->warehouse_id)->whereNull("serial_id")->get()->toArray());
+                    $data["_warehouse"][$key]->count_no_serial = count(Tbl_warehouse_inventory::item()->warehouse()->inventoryslip()->serialnumber()->groupBy("tbl_warehouse_inventory.inventory_id")->where("inventory_count",">",0)->where("inventory_reason","refill")->where("tbl_item.shop_id",$this->user_info->shop_id)->where("tbl_item.archived",0)->where("tbl_warehouse.warehouse_id",$value->warehouse_id)->whereNull("serial_id")->get()->toArray());
                 }
             }
-
             $archive_item = null;
             foreach($data["_warehouse_archived"] as $key3 => $value3)
             {
@@ -125,19 +166,21 @@ class WarehouseController extends Member
                 {
                     $selling_price_a = 0;
                     $cost_price_a = 0;
+                    $total_qty = 0;
                     $archive_item = Tbl_sub_warehouse::select_item($value3->warehouse_id)
                                                  ->get();
                     $qty = 0;
                     foreach ($archive_item as $key4 => $value4) 
                     {
-                        $qty = Tbl_warehouse_inventory::where("warehouse_id",$value4->warehouse_id)->leftjoin("tbl_item","inventory_item_id","=","item_id")->where("tbl_item.archived",0)->sum("inventory_count");
+                        $qty = Tbl_warehouse_inventory::where("warehouse_id",$value4->warehouse_id)->leftjoin("tbl_item","inventory_item_id","=","item_id")->where("item_id",$value4->item_id)->where("tbl_item.archived",0)->sum("inventory_count");
 
                         $selling_price_a += $value4->item_price * $qty;
                         $cost_price_a += $value4->item_cost * $qty;
+                        $total_qty += $qty;
                     }
                     $data["_warehouse_archived"][$key3]->total_selling_price = $selling_price_a;
                     $data["_warehouse_archived"][$key3]->total_cost_price = $cost_price_a;
-                    $data["_warehouse_archived"][$key3]->total_qty = $qty;
+                    $data["_warehouse_archived"][$key3]->total_qty = $total_qty;
                 }
             }
             $data["enable_serial"] = Tbl_settings::where("shop_id",$this->user_info->shop_id)->where("settings_key","item_serial")->pluck("settings_value");
@@ -158,6 +201,7 @@ class WarehouseController extends Member
                                     ->orderBy("inventory_id","DESC")
                                     ->groupBy("tbl_warehouse_inventory.inventory_id")
                                     ->where("inventory_count",">",0)
+                                    ->where("tbl_item.archived",0)
                                     ->where("inventory_reason","refill")
                                     ->where("tbl_item.shop_id",$this->user_info->shop_id)
                                     ->where("tbl_warehouse.warehouse_id",$warehouse_id)
@@ -314,8 +358,8 @@ class WarehouseController extends Member
 
                 $update_item["has_serial_number"] = 1;
                 Tbl_item::where("item_id",$value)->update($update_item);
-
-                $rules[$key]["serial_number"] = 'required|alpha_num|unique:tbl_inventory_serial_number,serial_number';
+                $archived = 1;
+                $rules[$key]["serial_number"] = 'required|alpha_num|unique:tbl_inventory_serial_number,serial_number,'.$archived.',archived';
 
                 $validator[$key] = Validator::make($insert[$key],$rules[$key]);
 
@@ -625,6 +669,7 @@ class WarehouseController extends Member
         $access = Utilities::checkAccess('item-warehouse', 'add');
         if($access == 1)
         { 
+           $data["merchantwarehouse"] = Utilities::checkAccess('item-warehouse', 'merchantwarehouse');
            $data["_item"] = Tbl_item::where("archived",0)->where("item_type_id",1)->where("shop_id",$this->user_info->shop_id)->get();
            // $data["_cat"] = Tbl_category::where("type_category","inventory")->where("type_parent_id",0)->where("type_shop",$this->user_info->shop_id)->get();
            return view("member.warehouse.warehouse_add",$data);
@@ -649,14 +694,6 @@ class WarehouseController extends Member
                     $_item_id[$key] = $value;
                 }
             }
-            // $item_id = Request::input("item_id");
-            // foreach ($data as $key => $value) 
-            // {
-            //     if($value == $item_id)
-            //     {
-
-            //     }    
-            // }
             return json_encode($data);
         }
         else
@@ -908,9 +945,42 @@ class WarehouseController extends Member
     }
     public function add_submit()
     {
-            $for_serial_item = null;
+            $merchantwarehouse  = Utilities::checkAccess('item-warehouse', 'merchantwarehouse');
+            $for_serial_item    = null;
+            $merchant_warehouse = Request::input("merchant_warehouse") ? "1" : "0";
+            /*INSERT TO WAREHOUSE (MERCHANT) */
+            $ins_warehouse["merchant_warehouse"]   = $merchant_warehouse;
+            if($merchant_warehouse == 1)
+            {
+                $ins_warehouse["merchant_logo"]                        = Request::input("merchant_logo_input");
+                $ins_warehouse['default_repurchase_points_mulitplier'] = Request::input("default_repurchase_points_mulitplier"); 
+                $ins_warehouse['default_margin_per_product']           = Request::input("default_margin_per_product");
+
+                if($ins_warehouse['default_repurchase_points_mulitplier'] == null || $ins_warehouse['default_repurchase_points_mulitplier'] == "")
+                {
+                    $data['status']         = 'error';
+                    $data['status_message'] = 'Default Repurchase Points Multiplier is required';
+
+                    return json_encode($data);
+                }
+
+                if($ins_warehouse['default_margin_per_product'] == null || $ins_warehouse['default_margin_per_product'] == "")
+                {
+                    $data['status']         = 'error';
+                    $data['status_message'] = 'Default Margin Per Product is required';
+
+                    return json_encode($data);
+                }
+            }
+            else
+            {
+                $ins_warehouse["merchant_logo"]                        = "";
+                $ins_warehouse['default_repurchase_points_mulitplier'] = 0;
+                $ins_warehouse['default_margin_per_product']           = 0;
+            }
+
             //INSERT TO tbl_warehouse
-            $ins_warehouse["warehouse_name"] = Request::input("warehouse_name");
+            $ins_warehouse["warehouse_name"]    = Request::input("warehouse_name");
             $ins_warehouse["warehouse_address"] = Request::input("warehouse_address");
             $ins_warehouse["warehouse_shop_id"] = $this->user_info->shop_id;
             $ins_warehouse["warehouse_created"] = Carbon::now();
@@ -990,6 +1060,7 @@ class WarehouseController extends Member
             }
             $data["_item"] = Tbl_item::where("archived",0)->where("item_type_id",1)->where("shop_id",$this->user_info->shop_id)->get();
             $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$id)->first();
+            $data["merchantwarehouse"] = Utilities::checkAccess('item-warehouse', 'merchantwarehouse');
 
             $data["warehouse_item"] = Tbl_warehouse::warehouseitem()
                                                     ->selectRaw('*, tbl_sub_warehouse.item_reorder_point as sub_reorder_point')
@@ -1022,6 +1093,46 @@ class WarehouseController extends Member
         $up_warehouse["warehouse_address"] = Request::input("warehouse_address");
         $up_warehouse["warehouse_shop_id"] = $this->user_info->shop_id;
         // $up_warehouse["warehouse_created"] = Carbon::now();
+
+
+
+        $merchant_warehouse = Request::input("merchant_warehouse") ? "1" : "0";
+        /*INSERT TO WAREHOUSE (MERCHANT) */
+        $up_warehouse["merchant_warehouse"]   = $merchant_warehouse;
+        if($merchant_warehouse == 1)
+        {
+            $up_warehouse["merchant_logo"]                        = Request::input("merchant_logo_input");
+            $up_warehouse['default_repurchase_points_mulitplier'] = Request::input("default_repurchase_points_mulitplier"); 
+            $up_warehouse['default_margin_per_product']           = Request::input("default_margin_per_product");
+
+            if($up_warehouse['default_repurchase_points_mulitplier'] == null || $up_warehouse['default_repurchase_points_mulitplier'] == "")
+            {
+                $data['status']         = 'error';
+                $data['status_message'] = 'Default Repurchase Points Multiplier is required';
+
+                return json_encode($data);
+            }
+
+            if($up_warehouse['default_margin_per_product'] == null || $up_warehouse['default_margin_per_product'] == "")
+            {
+                $data['status']         = 'error';
+                $data['status_message'] = 'Default Margin Per Product is required';
+
+                return json_encode($data);
+            }
+        }
+        else
+        {
+            $up_warehouse["merchant_logo"]                        = "";
+            $up_warehouse['default_repurchase_points_mulitplier'] = 0;
+            $up_warehouse['default_margin_per_product']           = 0;
+        }
+
+
+
+
+
+
 
         Tbl_warehouse::where("warehouse_id",Request::input("warehouse_id"))->update($up_warehouse);
 

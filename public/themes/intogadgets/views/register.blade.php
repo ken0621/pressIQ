@@ -62,7 +62,7 @@
 								</div>
 								<div class="form-group">
 									<label for="customer_mobile">Contact Number</label>
-									<input value="{{ Request::old("customer_mobile") }}" type="text" class="the-customer_mobile form-control" placeholder="" name="customer_mobile">
+									<input value="{{ Request::old("customer_mobile") }}" type="text" class="the-customer_mobile form-control" placeholder="" name="customer_mobile" required>
 								</div>
 							</fieldset>
 							{{-- End Billing Information --}}

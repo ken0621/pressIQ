@@ -53,8 +53,8 @@
 						<label for="">Sponsor</label>
 							{{-- @if($sponsor_a == null) --}}
 	                            <select class="form-control chosen-slot_sponsor input-sm pull-left" name="slot_sponsor" data-placeholder="Select Slot Sponsor" >
-	                            	@if(count($_slots) != 0)
-	                            		@foreach($_slots as $slot)
+	                            	@if(count($_slots_sponse) != 0)
+	                            		@foreach($_slots_sponse as $slot)
 	                            			<option value="{{$slot->slot_id}}" @if($sponsor_a == $slot->slot_id) selected @endif >
 	                            			{{$slot->first_name}} {{$slot->middle_name}} {{$slot->last_name}} 
 	                            			({{$slot->slot_no}})
@@ -65,8 +65,8 @@
 	                       {{--  @else  --}}
 
 	                        <input type="hidden" name="slot_sponsor" class="new_slot_id" value="{{$sponsor_a}}">
-		                        @if(count($_slots) != 0) 
-		                        	@foreach($_slots as $slot) 
+		                        @if(count($_slots_sponse) != 0) 
+		                        	@foreach($_slots_sponse as $slot) 
 		                        		@if($sponsor_a == $slot->slot_id)
 		                        			<?php $name = $slot->first_name . ' ' . $slot->middle_name . ' ' . $slot->last_name . ' ' . $slot->slot_no; ?>
 		                        			<input type="hidden" class="form-control input-v2" disabled="disabled"
@@ -147,7 +147,9 @@
 						<label>Choose Owner</label>
 						<label><input id="your_account" type="radio" class="col-md-6" name="choose_owner" value="your" checked>Your Account</label>
 						<label><input id="new_user" type="radio" class="col-md-6" name="choose_owner" value="new">New User</label>
-						<label><input id="exist" type="radio" class="col-md-6" name="choose_owner" value="exist">Existing User</label>
+						@if($shop_container->shop_key != "alphaglobal")
+							<label><input id="exist" type="radio" class="col-md-6" name="choose_owner" value="exist">Existing User</label>
+						@endif
 					</div>
 					<div class="col-md-12 new_form" style="display:none">
 					    <label>First Name</label>

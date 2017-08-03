@@ -23,8 +23,8 @@
 		  @foreach($_company as $company)
 		  	<li class="list-group-item">
 		  		{{$company['payroll_company_name']}}
-		  		
-		  		<a href="/member/payroll/company_timesheet/{{$company['payroll_period_company_id']}}" class="btn btn-custom-primary pull-right margin-nt-4">View</a>
+		  		<a href="/member/payroll/company_timesheet2/{{$company['payroll_period_company_id']}}" class="btn btn-custom-primary pull-right margin-nt-4">Timesheet V2</a> 
+		  		<a style="margin-right: 5px;" href="/member/payroll/company_timesheet/{{$company['payroll_period_company_id']}}" class="btn btn-custom-primary pull-right margin-nt-4">View</a>
 		  		<span class="custom-badge {{$company['badge']}} pull-right margin-right-80 margin-top-6px">{{$company['payroll_period_status']}}</span>
 		  	</li>
 		  @endforeach

@@ -90,6 +90,12 @@
 		</div>
 		<div class="field">
 			<div class="col-md-3">
+				<div class="labels">Contact Number</div>
+			</div>
+			<div class="col-md-9"><input type="number" step="any" name="customer_mobile" class="form-control" value="{{ $customer->customer_mobile }}"></div>
+		</div>
+		<div class="field">
+			<div class="col-md-3">
 				<div class="labels">Address</div>
 			</div>
 			<div class="col-md-9"><input type="text" name="customer_street" class="form-control" value="{{ $customer->customer_street }}"></div>
@@ -98,13 +104,25 @@
 			<div class="col-md-3">
 				<div class="labels">Province</div>
 			</div>
-			<div class="col-md-9"><input type="text" name="customer_state" class="form-control" value="{{ $customer->customer_state }}"></div>
+			<div class="col-md-9"><select firstload="true" default="{{ $shipping_address->state_id }}" class="form-control load-location" name="customer_state" level="1"></select></div>
 		</div>
 		<div class="field">
 			<div class="col-md-3">
 				<div class="labels">City/Municipality</div>
 			</div>
-			<div class="col-md-9"><input type="text" name="customer_city" class="form-control" value="{{ $customer->customer_city }}"></div>
+			<div class="col-md-9">
+				<select firstload="true" default="{{ $shipping_address->city_id }}" class="form-control load-location" name="customer_city" level="2">
+					<option></option>
+				</select></div>
+		</div>
+		<div class="field">
+			<div class="col-md-3">
+				<div class="labels">Baranggay</div>
+			</div>
+			<div class="col-md-9">
+				<select firstload="true" default="{{ $shipping_address->zipcode_id }}" class="form-control load-location" name="customer_zip" level="3">
+				<option></option>
+				</select></div>
 		</div>
 		<button class="setting-button">Update Data</button>
 	</div>
@@ -115,7 +133,9 @@
 @endsection
 
 @section('script')
+<script type="text/javascript" src="/assets/front/js/global_checkout.js"></script>
 <script type = "text/javascript" src="resources/assets/rutsen/js/birthday.js"></script>
 <script type="text/javascript" src="resources/assets/rutsen/js/checkout.js"></script>
+
 <script type="text/javascript" src="/resources/assets/primia/primia-admin.js"></script>
 @endsection	

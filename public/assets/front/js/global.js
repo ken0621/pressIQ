@@ -41,6 +41,7 @@ function global()
         }
         
         image_crop(".1-1-ratio", 1, 1);
+        image_crop(".product-image-crop", 1, 1);
         image_crop(".4-3-ratio", 4, 3);
         image_crop(".ratio-fix img", 396, 241);
         image_crop(".category-ratio .1", 100, 51.5);
@@ -163,12 +164,12 @@ function add_search_events()
                         {
                             var price = data[index]['min_price'] + ' - ' + data[index]['max_price'];
                         }
-
+                        console.log(data[index]);
                         $append += 
                                     '<div class="search-popup-holder">' +
                                         '<a href="/product/view/'+data[index]['eprod_id']+'">'+
                                             '<div class="search-popup-img">'+
-                                                '<img style="width: 100%; object-fit: cover; height: 80px;" src="'+data[index]['variant'][0]['item_img']+'">' +
+                                                '<img style="width: 100%; object-fit: cover; height: 80px;" src="'+data[index]['variant'][0]['image_path']+'">' +
                                             '</div>'+
                                             '<div class="search-popup-text">' +
                                                 '<div class="search-popup-name">' +
@@ -176,7 +177,7 @@ function add_search_events()
                                                 '</div>'+
                                                 '<div class="search-popup-description">'+
                                                     '<div class="price">'+
-                                                       '&#8369 ' + parseFloat(price).toFixed(2) +
+                                                       '&#8369 ' + parseFloat(price).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") +
                                                     '</div>' +
                                                     '<div class="search-popup-rate">' +
                                                         '' +

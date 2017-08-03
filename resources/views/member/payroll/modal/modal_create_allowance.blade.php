@@ -17,11 +17,23 @@
 				<small>Amount</small>
 				<input type="number" name="payroll_allowance_amount" class="form-control text-right" required step="any">
 			</div>
+		</div>
+		<div class="form-group">
 			<div class="col-md-6">
-				<small>Category</small>
-				<select class="form-control" name="payroll_allowance_category">
+				<small>Type</small>
+				<select class="form-control" name="payroll_allowance_type" required="">
+					<option value="">Select Type</option>
 					<option value="fixed">fixed</option>
 					<option value="daily">daily</option>
+				</select>
+			</div>
+			<div class="col-md-6">
+				<small>Category</small>
+				<select class="form-control" name="payroll_allowance_category" required="">
+					<option value="">Select Category</option>
+					<option value="Taxable">Taxable</option>
+					<option value="Non-Taxable">Non Taxable</option>
+					<option value="Hidden">Hidden</option>
 				</select>
 			</div>
 		</div>
@@ -56,6 +68,16 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="form-group">
+			<div class="col-md-6">
+	            <label>Expense Account *</label>
+	            <select name="expense_account_id" class="drop-down-coa form-control expense_account_id" id="expense_account_id" required>                
+	            	@include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_expense, 'account_id' => $default_expense])
+	            </select>
+	        </div>
+		</div>
+		
 		<div class="form-group">
 			<div class="col-md-12">
 				<span><b>Affected Employee<a href="#" class="btn btn-custom-primary pull-right popup" link="/member/payroll/allowance/modal_allowance_tag_employee/0'">Tag Employee</a></b></span>

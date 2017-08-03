@@ -22,6 +22,7 @@ use App\Globals\Item;
 use App\Globals\Item_code;
 use App\Models\Tbl_membership_code;
 use App\Models\Tbl_warehouse;
+use App\Models\Tbl_shop;
 use App\Globals\Pdf_global;
 use App\Globals\Utilities;
 use App\Models\Tbl_inventory_serial_number;
@@ -72,9 +73,12 @@ class MLM_ProductCodeController extends Member
         }
 
         $shop_id            = $this->user_info->shop_id;
-	    $data['_item']  = Item::get_all_category_item();
-	    $data["_customer"]  = Tbl_customer::where("archived",0)->where("shop_id",$shop_id)->get();
-	    // $data['table_body'] = $this->view_all_lines();
+        $data["shop_data"]  = Tbl_shop::where("shop_id",$shop_id)->first();
+	    $data['_item']      = Item::get_all_category_item();
+	    $data["_customer"]  = Tbl_customer::where("archived",0)
+                                          ->join("tbl_mlm_slot","tbl_mlm_slot.slot_owner","=","tbl_customer.customer_id")
+                                          ->where("tbl_customer.shop_id",$shop_id)->get();
+                                          
         $data['table_body'] = $this->view_all_lines();
         if($this->current_warehouse == null)
         {
@@ -356,15 +360,24 @@ class MLM_ProductCodeController extends Member
     public function receipt()
     {
         $access = Utilities::checkAccess('mlm-product-code', 'product_code_reciept');
+        $access_all_invoice = Utilities::checkAccess('mlm-product-code', 'see_all_invoice');
+        
         if($access == 0)
         {
             return $this->show_no_access(); 
         }
 
         $shop_id          = $this->user_info->shop_id;
-        $_invoice         = Tbl_item_code_invoice::customer()->where("tbl_item_code_invoice.shop_id",$shop_id);
-       
-        // $_invoice         = Tbl_item_code_invoice::customer()->orderBy('item_code_invoice_id', 'DESC')->where("tbl_item_code_invoice.shop_id",$shop_id);
+
+        if($access_all_invoice == 1)
+        {
+            $_invoice         = Tbl_item_code_invoice::customer()->orderBy('item_code_invoice_id', 'DESC')->where("tbl_item_code_invoice.shop_id",$shop_id);
+        }
+        else
+        {
+            $user_id = $this->user_info->user_id;
+            $_invoice         = Tbl_item_code_invoice::customer()->orderBy('item_code_invoice_id', 'DESC')->where("tbl_item_code_invoice.user_id",$user_id);
+        }
         
         if(Request::input('search_name'))
         {
@@ -454,5 +467,20 @@ class MLM_ProductCodeController extends Member
         }
 
         return view('member.mlm_product_code.mlm_product_code_view_receipt',$data);   
+    }
+    public function get_customer_slot()
+    {
+        $customer_id   = Request::input("customer_id");
+        $shop_id       = $this->user_info->shop_id;
+        if($customer_id == "All")
+        {
+            $data["_slot"] = Tbl_mlm_slot::where("shop_id",$shop_id)->get();
+        }
+        else
+        {
+            $data["_slot"] = Tbl_mlm_slot::where("slot_owner",$customer_id)->where("shop_id",$shop_id)->get();
+        }
+
+        return view('member.mlm_product_code.mlm_product_code_customer_slot',$data); 
     }
 }

@@ -18,11 +18,23 @@
 				<small>Amount</small>
 				<input type="number" name="payroll_allowance_amount" class="form-control text-right" required value="{{$allowance->payroll_allowance_amount}}" step="any">
 			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-md-6">
+				<small>Type</small>
+				<select class="form-control" name="payroll_allowance_type" required="">
+					<option value="">Select Type</option>
+					<option value="fixed" {{ ($allowance->payroll_allowance_type=='fixed') ? 'selected' : '' }}>fixed</option>
+					<option value="daily" {{ ($allowance->payroll_allowance_type=='daily') ? 'selected' : '' }}>daily</option>
+				</select>
+			</div>
 			<div class="col-md-6">
 				<small>Category</small>
-				<select class="form-control" name="payroll_allowance_category">
-					<option value="fixed" {{$allowance->payroll_allowance_category == 'fixed' ? 'selected' : ''}}>fixed</option>
-					<option value="daily" {{$allowance->payroll_allowance_category == 'daily' ? 'selected' : ''}}>daily</option>
+				<select class="form-control" name="payroll_allowance_category" required="">
+					<option value="">Select Category</option>
+					<option value="Taxable" {{ ($allowance->payroll_allowance_category=='Taxable') ? 'selected' : '' }} >Taxable</option>
+					<option value="Non-Taxable" {{ ($allowance->payroll_allowance_category=='Non-Taxable') ? 'selected' : '' }} >Non Taxable</option>
+					<option value="Hidden" {{ ($allowance->payroll_allowance_category=='Hidden') ? 'selected' : '' }} >Hidden</option>
 				</select>
 			</div>
 		</div>
@@ -57,6 +69,14 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="col-md-6">
+            <label>Expense Account *</label>
+            <select name="expense_account_id" class="drop-down-coa form-control expense_account_id" id="expense_account_id" required>             
+        		@include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_expense, 'account_id' => $allowance->expense_account_id ])
+            </select>
+        </div>
+		
 		<div class="form-group">
 			<div class="col-md-12">
 				<span><b>Affected Employee<a href="#" class="btn btn-custom-primary pull-right popup" link="/member/payroll/allowance/modal_allowance_tag_employee/{{$allowance->payroll_allowance_id}}'">Tag Employee</a></b></span>

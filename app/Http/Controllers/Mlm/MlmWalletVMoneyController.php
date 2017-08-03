@@ -26,8 +26,10 @@ class MlmWalletVMoneyController extends Mlm
         {
             $data["_logs"] = DB::table("tbl_vmoney_wallet_logs")->where("customer_id", Self::$customer_id)->get();
             $data["wallet"] = Mlm_slot_log::get_sum_wallet(Self::$slot_id);
-            $data["minimum"] = DB::table("tbl_settings")->where("shop_id", Self::$shop_id)->where("settings_key", "vmoney_minimum_encashment")->first()->settings_value;
-
+            $data["minimum"] = isset(DB::table("tbl_settings")->where("shop_id", Self::$shop_id)->where("settings_key", "vmoney_minimum_encashment")->first()->settings_value) ? DB::table("tbl_settings")->where("shop_id", Self::$shop_id)->where("settings_key", "vmoney_minimum_encashment")->first()->settings_value : 0;
+            $data["percent"] = isset(DB::table("tbl_settings")->where("shop_id", Self::$shop_id)->where("settings_key", "vmoney_percent_fee")->first()->settings_value) ? DB::table("tbl_settings")->where("shop_id", Self::$shop_id)->where("settings_key", "vmoney_percent_fee")->first()->settings_value : 0;
+            $data["fixed"] = isset(DB::table("tbl_settings")->where("shop_id", Self::$shop_id)->where("settings_key", "vmoney_fixed_fee")->first()->settings_value) ? DB::table("tbl_settings")->where("shop_id", Self::$shop_id)->where("settings_key", "vmoney_fixed_fee")->first()->settings_value : 0;
+            
             return view('mlm.vmoney.index', $data);
         }
         else
@@ -38,6 +40,14 @@ class MlmWalletVMoneyController extends Mlm
     
     public function transfer()
     {
+        /* Fee */
+        $current_wallet = Request::input("wallet_amount");
+        $fixed = isset(DB::table("tbl_settings")->where("shop_id", Self::$shop_id)->where("settings_key", "vmoney_fixed_fee")->first()->settings_value) ? DB::table("tbl_settings")->where("shop_id", Self::$shop_id)->where("settings_key", "vmoney_fixed_fee")->first()->settings_value : 0;
+        $percent = isset(DB::table("tbl_settings")->where("shop_id", Self::$shop_id)->where("settings_key", "vmoney_percent_fee")->first()->settings_value) ? DB::table("tbl_settings")->where("shop_id", Self::$shop_id)->where("settings_key", "vmoney_percent_fee")->first()->settings_value : 0;
+        $percent_value = ($percent / 100) * $current_wallet;
+        $convenience_fee = $fixed + $percent_value; 
+        $total_fee = $current_wallet + $convenience_fee;
+        
         $slot = DB::table("tbl_mlm_slot")->where("slot_id", Self::$slot_id)->first();
         $wallet = Mlm_slot_log::get_sum_wallet($slot->slot_id);
         $minimum_encashment = isset(DB::table("tbl_settings")->where("shop_id", Self::$shop_id)->where("settings_key", "vmoney_minimum_encashment")->first()->settings_value) ? DB::table("tbl_settings")->where("shop_id", Self::$shop_id)->where("settings_key", "vmoney_minimum_encashment")->first()->settings_value : 0;
@@ -101,8 +111,8 @@ class MlmWalletVMoneyController extends Mlm
                                     $arry_log['wallet_log_slot'] = $slot->slot_id;
                                     $arry_log['shop_id'] = $slot->shop_id;
                                     $arry_log['wallet_log_slot_sponsor'] = $slot->slot_id;
-                                    $arry_log['wallet_log_details'] = 'You have transfered ' . $pass["amount"] . ' To your E-Money. ' . $pass["amount"] . ' is deducted to your wallet.';
-                                    $arry_log['wallet_log_amount'] = -($pass["amount"]);
+                                    $arry_log['wallet_log_details'] = 'You have transferred ' . $current_wallet . ' To your E-Money. ' . $total_fee . ' is deducted to your wallet including tax and convenience fee.';
+                                    $arry_log['wallet_log_amount'] = -($total_fee);
                                     $arry_log['wallet_log_plan'] = "E_MONEY";
                                     $arry_log['wallet_log_status'] = "released";   
                                     $arry_log['wallet_log_claimbale_on'] = Carbon::now();
@@ -119,11 +129,13 @@ class MlmWalletVMoneyController extends Mlm
 
                                 $logs["vmoney_wallet_logs_date"] = Carbon::now();
                                 $logs["vmoney_wallet_logs_email"] = Request::input("vmoney_email");
-                                $logs["vmoney_wallet_logs_amount"] = Request::input("wallet_amount");
+                                $logs["vmoney_wallet_logs_amount"] = $current_wallet;
                                 $logs["customer_id"] = Self::$customer_id;
                                 $logs["txnId"] = isset($data_decoded->txnId) ? $data_decoded->txnId : "None";
                                 $logs["merchantRef"] = isset($data_decoded->merchantRef) ? $data_decoded->merchantRef : "None";
                                 $logs["message"] = isset($data_decoded->resultMsg) ? $data_decoded->resultMsg : "None";
+                                $logs["fee"] = $fixed;
+                                $logs["tax"] = $percent_value;
                                 Tbl_vmoney_wallet_logs::insert($logs);
                             } 
                             catch (\Exception $e) 

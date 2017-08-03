@@ -7,5 +7,5 @@ class Tbl_image extends Model
 {
 	protected $table = 'tbl_image';
 	protected $primaryKey = "image_id";
-    public $timestamps = false;
+    public $timestamps = true;
 }

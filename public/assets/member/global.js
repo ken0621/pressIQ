@@ -81,6 +81,11 @@ function global()
 				}
 				else
 				{
+                    if(data.call_function)
+                    {
+                        window[data.call_function](data);
+                    }
+
                     console.log("global js");
 				    $(".modal-loader").addClass("hidden");
                     
@@ -265,7 +270,8 @@ function action_load_main_modal(url, size)
             setTimeout(function()
             {
                // action_load_link_to_modal(url, size);
-               action_load_main_modal(url, size);
+               //action_load_main_modal(url, size);
+               $("#global_modal").find(".modal-content").html(response);
             }, 2000)
         }
         else

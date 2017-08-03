@@ -4,6 +4,7 @@ use App\Http\Controllers\Controller;
 use DB;
 use Request;
 use Crypt;
+use Redirect;
 use App\Globals\Item_code;
 use App\Globals\Mlm_slot_log;
 use App\Models\Tbl_item_code_invoice;
@@ -26,6 +27,8 @@ use Excel;
 use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Models\Tbl_mlm_encashment_settings;
 use App\Models\Tbl_mlm_encashment_process;
+use Illuminate\Http\Request as Request2;
+use File;
 class Developer_StatusController extends Member
 {
 	public function index()
@@ -391,10 +394,7 @@ class Developer_StatusController extends Member
             	$slot_eon_card_no = $slots[$key]->slot_eon_card_no;
             	$slot_eon_account_no = $slots[$key]->slot_eon_account_no;
             	
-            	if(	$slot_eon != $value['slot_eon'] ||
-            		$slot_eon_card_no != $value['slot_eon_card_no'] ||
-            		$slot_eon_account_no != $value['slot_eon_account_no']
-            	)
+            	if(	$slot_eon != $value['slot_eon'] || $slot_eon_card_no != $value['slot_eon_card_no'] || $slot_eon_account_no != $value['slot_eon_account_no'])
             	{
             		$fail[$key][1] =	$value['slot_eon'] . ' ' . $value['slot_eon_card_no'] . ' ' . $value['slot_eon_account_no'];
             		$fail[$key][2] =	$slot_eon . ' ' . $slot_eon_card_no . ' ' . $slot_eon_account_no;
@@ -490,5 +490,127 @@ class Developer_StatusController extends Member
     	$update['password'] = $password;
     	Tbl_customer::where('password', 'myphone')->update($update);
     	dd(1);
+    }
+    public static $slot_import = null;
+    public function payout($file = null)
+    {
+    	$data =[];
+    	
+    	if($file != null)
+    	{
+    		Excel::load(public_path().$file, function($reader) 
+	        {
+	        	$shop_id = $this->user_info->shop_id;
+	        	$results = $reader->get()->toArray();
+	            $restructure = [];
+	            $wherein = [];
+	            $wherein2 = [];
+	            
+	            
+	            $data['slots'] = [];
+	        	foreach($results as $key => $value)
+	            {
+	            	$data['slots'][$value['slot_no']] = $value; 
+	            	
+	            }
+	            Self::$slot_import = $data;
+	            // return view('member.developer.mlm.payout', $data);
+	        });
+    	}
+    	if(Self::$slot_import != null)
+    	{
+    		$data = Self::$slot_import;
+    	
+    		foreach($data['slots'] as $key => $value)
+    		{
+    			$from = Carbon::parse($value['from']);
+    			$to = Carbon::parse($value['to'])->endOfDay();
+    			$slot = Tbl_mlm_slot::where('slot_no', $key)->first();
+    			$data['slots'][$key]['from'] = $from;
+    			$data['slots'][$key]['to'] = $to;
+    			$data['slots'][$key]['subtotal'] = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $slot->slot_id)
+    												->where('wallet_log_date_created', '>=', $from)
+    												->where('wallet_log_date_created', '<=', $to)
+    												->sum('wallet_log_amount');
+    			$data['slots'][$key]['tax_value'] = ($value['tax'] / 100) * $data['slots'][$key]['subtotal'];	
+    			$data['slots'][$key]['total'] = $data['slots'][$key]['subtotal'] - $data['slots'][$key]['tax_value'] ;
+    		}
+    		$data['file'] = $file;
+    	}
+		return view('member.developer.mlm.payout', $data);
+    }
+    public function payout_submit(Request2 $request )
+    {
+    	if($request->hasFile('payout_file'))
+		{ 
+			$avatar 			= $request->file('payout_file'); 
+			$shop_id 			= $this->user_info->shop_id;
+			$shop_key 			= $this->user_info->shop_key;
+			$destinationPath 	= 'assets/mlm';
+			if(!File::exists($destinationPath)) 
+			{
+				$create_result 	= File::makeDirectory(public_path($destinationPath), 0775, true, true);
+			}
+			$filename 			= time() . '.' . $avatar->getClientOriginalExtension(); 
+			
+			$request->file('payout_file')->move($destinationPath, $filename);
+
+			$proof 				= '/' . $destinationPath.'/'.$filename;
+		} 
+		return $this->payout($proof);
+    }
+    public function payout_submit_verify()
+    {
+    	$file = Request::input('file');
+    	Excel::load(public_path().$file, function($reader) 
+        {
+        	$shop_id = $this->user_info->shop_id;
+        	$results = $reader->get()->toArray();
+            $restructure = [];
+            $wherein = [];
+            $wherein2 = [];
+            
+            // slot_no
+			// from
+			// to
+			// tax
+			$data['tax'] = [];
+			$tax = [];
+        	foreach($results as $key => $value)
+            {
+            	$slot = Tbl_mlm_slot::where('slot_no', $value['slot_no'])->first();
+    			$from = Carbon::parse($value['from']);
+    			$to = Carbon::parse($value['to'])->endOfDay();
+    			$subtotal = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $slot->slot_id)
+    												->where('wallet_log_date_created', '>=', $from)
+    												->where('wallet_log_date_created', '<=', $to)
+    												->get();
+    			foreach($subtotal as $key2 => $value2)
+    			{
+    				$tax[$value['tax']][$value2->wallet_log_id] =  $value2->wallet_log_id;
+    			}
+    			
+            }
+            foreach($tax as $key => $value)
+            {
+	            $insert['shop_id'] = $shop_id;
+	            $insert['enchasment_process_from'] = $from;
+	            $insert['enchasment_process_to'] = $to;
+	            $insert['enchasment_process_executed'] = Carbon::now();
+	            $insert['enchasment_process_tax'] = $key;
+	            $insert['enchasment_process_tax_type'] = 1;
+	            $insert['enchasment_process_p_fee'] = 0;
+	            $insert['enchasment_process_p_fee_type'] = 0;
+	            $insert['enchasment_process_minimum'] =  0;
+	            $insert['encashment_process_sum'] = 0;
+	            $id = Tbl_mlm_encashment_process::insertGetId($insert);
+	            Mlm_slot_log::encash_all_rare2($id, $value);
+            }
+            
+            $this->fix_slot_wallet_log_eon();
+            
+        });
+        
+        return Redirect::to('/member/mlm/encashment');
     }
 }

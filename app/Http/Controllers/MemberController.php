@@ -177,7 +177,12 @@ class MemberController extends Controller
         $customer_session = Session::get('mlm_member');
         if($customer_session)
         {
-            return $this->register_logged_in();
+            $account = Request::input('account');
+            if(!$account)
+            {
+                return $this->register_logged_in();
+            }
+            
         }
         
         Session::forget('mlm_member');

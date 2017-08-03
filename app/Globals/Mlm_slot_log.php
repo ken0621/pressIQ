@@ -376,6 +376,108 @@ class Mlm_slot_log
 		$data['status'] = 'success';	$data['message'] = 'Encashment Process';
 		return json_encode($data);
 	}
+	public static function encash_all_rare2($encashment_process, $wherein)
+	{
+		# code...
+		$encashment = Tbl_mlm_encashment_process::where('encashment_process', $encashment_process)->first();
+
+		if($encashment != null)
+		{
+			$all_log = Tbl_mlm_slot_wallet_log::where('wallet_log_status', 'released')
+			->whereIn('wallet_log_id', $wherein)
+			->where('wallet_log_plan','!=', 'ENCASHMENT')
+			->whereNull('encashment_process');
+			// $data['all'] = $all_log->get()->toArray();
+			$all_log_get = $all_log->get()->toArray();
+			$all_log_structured = [];
+			$all_log_per_slot = [];
+			$sum = 0;
+			// dd($all_log_get);
+			foreach($all_log_get as $key => $value)
+			{
+				if(isset($all_log_structured[$value['wallet_log_id']]))
+				{
+					$all_log_structured[$value['wallet_log_id']] += $value['wallet_log_amount'];
+				}
+				else
+				{
+					$all_log_structured[$value['wallet_log_id']] = $value['wallet_log_amount'];
+				}
+
+				if(isset($all_log_per_slot[$value['wallet_log_slot']]))
+				{
+					$all_log_per_slot[$value['wallet_log_slot']] += $value['wallet_log_amount'];
+				}
+				else
+				{
+					$all_log_per_slot[$value['wallet_log_slot']] = $value['wallet_log_amount'];
+				}
+			}
+			foreach ($all_log_per_slot as $key => $value) {
+				// Mlm_slot_log
+				// 0 = fixed
+				// 1 = percentage
+				$value2 = $value;
+				$tax = $encashment->enchasment_process_tax;
+				$tax_p = $encashment->enchasment_process_tax_type;
+				$p_fee = $encashment->enchasment_process_p_fee;
+				$p_fee_type = $encashment->enchasment_process_p_fee_type;
+
+				if($p_fee_type == 0)
+				{
+					$value2 = $value2 - $p_fee;
+				}
+				else
+				{
+					$p_fee = ($value2 * $p_fee)/100;
+					$value2 = $value2 - $p_fee;
+				}
+
+				if($tax_p == 0)
+				{
+					$value2 = $value2 - $tax;
+				}
+				else
+				{
+					$tax = ($value2 * $tax)/100;
+					$value2 = $value2-$tax;
+				}
+				
+				$sum += $value;
+				if($value >= $encashment->enchasment_process_minimum)
+				{
+					$up['encashment_process'] = $encashment_process;
+					Tbl_mlm_slot_wallet_log::where('wallet_log_status', 'released')
+					->where('wallet_log_claimbale_on', '>=',  $encashment->enchasment_process_from)
+					->where('wallet_log_claimbale_on', '<=',  $encashment->enchasment_process_to)
+					->where('wallet_log_plan','!=', 'ENCASHMENT')
+					->where('wallet_log_slot', $key)
+					->whereNull('encashment_process')
+					->update($up);
+
+					$arr['shop_id'] = $encashment->shop_id;
+					$arr['wallet_log_slot'] = $key;
+					$arr['wallet_log_slot_sponsor'] = null;
+					$arr['wallet_log_details'] = 'Your ' . $value . ' income is ready for encashment';
+					$arr['wallet_log_amount'] = $value * (-1); 
+					$arr['wallet_log_plan'] = 'ENCASHMENT';
+					$arr['wallet_log_status'] = 'released';
+					$arr['wallet_log_claimbale_on'] = Carbon::now();
+					$arr['encashment_process_taxed'] = $value2;
+					$arr['encashment_process'] = $encashment_process; 
+					Mlm_slot_log::slot_array($arr);
+				}
+			}
+			$data['per_slot'] = $all_log_per_slot;
+			$data['structured'] = $all_log_structured;
+			$update_sum['encashment_process_sum'] = $sum;
+
+			
+			Tbl_mlm_encashment_process::where('encashment_process', $encashment_process)->update($update_sum);
+		}
+		$data['status'] = 'success';	$data['message'] = 'Encashment Process';
+		return json_encode($data);
+	}
 	public static function encash_single($encashment_process, $all_log)
 	{
 		# code...

@@ -107,6 +107,10 @@ Route::any('/member/developer/reset_slot/submit/import_excel_myphone', 'Member\D
 Route::any('/member/developer/reset_slot/submit/fix_password', 'Member\Developer_StatusController@fix_password'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/wallet_encash', 'Member\Developer_StatusController@wallet_encash'); //GUILLERMO TABLIGAN
 
+Route::any('/member/developer/payout', 'Member\Developer_StatusController@payout'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/payout/submit', 'Member\Developer_StatusController@payout_submit'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/payout/submit/verify', 'Member\Developer_StatusController@payout_submit_verify'); //GUILLERMO TABLIGAN
+
 /* END MEMBER - VENDOR - GUILLERMO TABLIGAN */
 
 /* MEMBER - ACCOUNTING - CHART OF ACCOUNTS */

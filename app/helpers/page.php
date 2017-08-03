@@ -1323,6 +1323,14 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "Developing";
     $nav[$page]['submenu'][$code]['developer'] = "Luke Glenn Jordan";
     
+    $code = "developer-payout-slot";
+    $nav[$page]['submenu'][$code]['label'] = "MLM Payout Import";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payout";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Luke Glenn Jordan";
+    
     return $nav;
 }
 //dd(page_list());

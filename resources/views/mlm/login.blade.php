@@ -110,7 +110,7 @@
                                     <span>Don't have an account yet?</span>
                                 </div>
                                 <p class="register button"> 
-                                    <input style="color: #5C3424; border-color: #5C3424;" type="button" value="Create an Account" onClick="location.href='/member/register'" /> 
+                                    <input style="color: #5C3424; border-color: #5C3424;" type="button" value="Create an Account" onClick="location.href='/member/register?account=new'" /> 
                                 </p>
                                 <p style="text-align: center;">
                                     <a style="color: #5C3424; text-decoration: none;" href="/mlm/login/forgot_password" style="text-decoration: none">Forgot Password ?</a>

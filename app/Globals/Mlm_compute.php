@@ -101,36 +101,36 @@ class Mlm_compute
         }
 
         // Mlm Computation Plan
-            $plan_settings = Tbl_mlm_plan::where('shop_id', $slot_info->shop_id)
-            ->where('marketing_plan_enable', 1)
-            ->where('marketing_plan_trigger', 'Slot Creation')
-            ->get();
-            if($slot_info->slot_status == 'PS')
+        $plan_settings = Tbl_mlm_plan::where('shop_id', $slot_info->shop_id)
+        ->where('marketing_plan_enable', 1)
+        ->where('marketing_plan_trigger', 'Slot Creation')
+        ->get();
+        if($slot_info->slot_status == 'PS')
+        {
+            foreach($plan_settings as $key => $value)
             {
-                foreach($plan_settings as $key => $value)
-                {
-                    $plan = strtolower($value->marketing_plan_code);
-                    $a = Mlm_complan_manager::$plan($slot_info);
-                }
+                $plan = strtolower($value->marketing_plan_code);
+                $a = Mlm_complan_manager::$plan($slot_info);
             }
-            else if($slot_info->slot_status == 'CD')
-            {
-                $a = Mlm_complan_manager_cd::enter_cd($slot_info);
+        }
+        else if($slot_info->slot_status == 'CD')
+        {
+            $a = Mlm_complan_manager_cd::enter_cd($slot_info);
 
-            }
-            else if($slot_info->slot_status == 'FS')
-            {
-                // no income for fs.
-            }
+        }
+        else if($slot_info->slot_status == 'FS')
+        {
+            // no income for fs.
+        }
 
 
 
-            // check if there are cd graduate
-            $b = Mlm_complan_manager_cd::graduate_check($slot_info);
-            // $c = Mlm_gc::slot_gc($slot_id);
+        // check if there are cd graduate
+        $b = Mlm_complan_manager_cd::graduate_check($slot_info);
+        // $c = Mlm_gc::slot_gc($slot_id);
 
-            Mlm_compute::set_slot_nick_name_2($slot_info);
-            // End Computation Plan
+        Mlm_compute::set_slot_nick_name_2($slot_info);
+        // End Computation Plan
 	}
     public static function get_slot_info($slot_id)
     {
@@ -403,8 +403,8 @@ class Mlm_compute
 
         if($plan)
         {
-                $label = $plan->marketing_plan_label;
-                return $label;
+            $label = $plan->marketing_plan_label;
+            return $label;
         }
         else
         {

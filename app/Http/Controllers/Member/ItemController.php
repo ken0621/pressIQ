@@ -46,6 +46,7 @@ class ItemController extends Member
 {
 	public function index()
 	{
+		
         $access = Utilities::checkAccess('item-list', 'access_page');
         $data['can_approve_item_request'] = Utilities::checkAccess('item-list', 'can_approve_item_request');
 		$data['can_edit_other_item'] = Utilities::checkAccess('item-list', 'can_edit_other_item');

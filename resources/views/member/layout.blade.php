@@ -74,6 +74,15 @@
         $(".datepicker").datepicker();
     });
     </script>
+    <!-- Ask luke pag may error -->
+    <script src="/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+    <!-- polyfiller file to detect and load polyfills -->
+    <script src="//cdn.jsdelivr.net/webshim/1.12.4/polyfiller.js"></script>
+    <script>
+      webshims.setOptions('waitReady', false);
+      webshims.setOptions('forms-ext', {types: 'date'});
+      webshims.polyfill('forms forms-ext');
+    </script>
 </head>
 <body id="body">
     <script>
@@ -436,7 +445,13 @@
     <script type="text/javascript" src="/assets/mlm/pace.min.js"></script>
 
     <script type="text/javascript">
-	  $(document).ajaxStart(function() { Pace.restart(); }); 
+	  $(document).ajaxStart(function() { Pace.restart(); });
+      $(document).ajaxComplete( function (){
+        // webshims.setOptions('waitReady', false);
+        // webshims.setOptions('forms-ext', {types: 'date'});
+        // webshims.polyfill('forms forms-ext');
+        // $(function() { $( ".datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' }); });
+      }); 
       $('.select_current_warehouse').click(function(event) 
       {
         event.stopPropagation();

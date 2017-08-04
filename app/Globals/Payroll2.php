@@ -1713,7 +1713,7 @@ class Payroll2
 			$cutoff_income_plus_cola = $cutoff_income_plus_cola - $breakdown_deduction;
 			
 			//COMPUTE CUTOFF INCOME AND CUTOFF COLA
-			$cola_percentile	= $cutoff_cola / ($cutoff_rate + $cutoff_cola);
+			$cola_percentile	= @($cutoff_cola / ($cutoff_rate + $cutoff_cola));
 			$cutoff_income		= $cutoff_rate + $breakdown_addition; //$cutoff_income_plus_cola * (1 - $cola_percentile);
 			$cutoff_cola		= $cutoff_income_plus_cola * $cola_percentile;
 			

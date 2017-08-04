@@ -25,7 +25,7 @@
                             <span style="color:gray"><small>Info</small></span>
                         </th>
                         <th>
-                            Collectable
+                            Collectibles
                             <br>
                             <span style="color:gray"><small>Commission</small></span>
                         </th>
@@ -55,7 +55,7 @@
                                     {{currency('PHP', $value->collectable)}}<hr>
                                     <span style="color:gray">
                                         <small>
-                                            <div class="col-md-12"><a class="view_link" link="/member/merchant/commission/user/{{$value->user_id}}?commission=collectable">View List of Collectables</a></div>
+                                            <div class="col-md-12"><a class="view_link" link="/member/merchant/commission/user/{{$value->user_id}}?commission=collectable">View List of Collectibles</a></div>
                                         </small>
                                     </span>
                                 </td>

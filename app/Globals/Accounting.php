@@ -521,6 +521,7 @@ class Accounting
 		$journal_line['jline_name_reference']	= $line["jline_name_reference"];
 		$journal_line['jline_item_id'] 			= $line["item_id"];
 		$journal_line['jline_account_id'] 		= $line["account_id"];
+		if($line["entry_type"] == null){ $line["entry_type"] = ''; }
 		$journal_line['jline_type'] 			= $line["entry_type"];
 		$journal_line['jline_amount'] 			= $line["entry_amount"];
 		$journal_line['jline_description'] 		= isset($line["entry_description"]) ? $line["entry_description"] : '';

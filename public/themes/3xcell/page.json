@@ -1,0 +1,17 @@
+{
+	"home":
+	{
+		"home_slider" :
+		{
+			"label":"Slider Maintenance",
+			"type":"maintenance",
+			"default":"",
+			"field":[
+				{"name":"image", "type":"image"},
+				{"name":"title", "type":"text"},
+				{"name":"subtitle", "type":"text"}
+			],
+			"size":"6"
+		}
+	}
+}

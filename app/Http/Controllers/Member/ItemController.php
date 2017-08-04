@@ -18,6 +18,7 @@ use App\Models\Tbl_item_multiple_price;
 use App\Models\Tbl_inventory_slip;
 use App\Models\Tbl_um;
 use App\Models\Tbl_item_merchant_request;
+use App\Models\Tbl_user;
 
 use App\Globals\Category;
 use App\Globals\AuditTrail;
@@ -39,11 +40,13 @@ use DB;
 use Input;
 use Validator;
 use Carbon\Carbon;
+use App\Globals\Merchant;
 
 class ItemController extends Member
 {
 	public function index()
 	{
+		
         $access = Utilities::checkAccess('item-list', 'access_page');
         $data['can_approve_item_request'] = Utilities::checkAccess('item-list', 'can_approve_item_request');
 		$data['can_edit_other_item'] = Utilities::checkAccess('item-list', 'can_edit_other_item');
@@ -2035,6 +2038,10 @@ class ItemController extends Member
 
 		Tbl_item::where('item_id', $item_id)->update($update_item);
 
+		$user_id = Tbl_item_merchant_request::where('item_merchant_request_id', $item_merchant_request_id)->pluck('item_merchant_requested_by');
+		$item = Tbl_item::where('item_id', $item_id)->first();
+		$user = Tbl_user::where('user_id', $user_id)->first();
+		Merchant::set_per_piece_mark_up($item, $user);
 		$data['response_status'] = 'success_approve';
 		$data['message'] = 'success_approve';
 

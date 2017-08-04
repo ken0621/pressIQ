@@ -1194,6 +1194,12 @@ top: 8px;
   }
 }
 
+/* TEXT OVERFLOW */
+.text-overflow {
+	white-space: nowrap;
+  	overflow: hidden;
+  	text-overflow: ellipsis;
+}
 
 /* FONT ICONS */
 .fa-user{

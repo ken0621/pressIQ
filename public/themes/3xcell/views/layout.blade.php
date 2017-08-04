@@ -154,17 +154,19 @@
                                     </div>
                                 </div>
                             </li>
-                            <li><a href="/" class="head-button link-nav {{ Request::segment(1) == '' ? '' : '' }}" id="">PROMOS</a></li>
+                            <li><a href="/promos" class="head-button link-nav">PROMOS</a></li>
                             <li class="company-hover">
                                 <a class="head-button link-nav">COMPANY</a>
                                 <!-- COMPANY DROPDOWN -->
                                 <div class="company-dropdown" style="display: none;">
-                                    <div class="cat-container">
-                                        <div class="per-cat">
-                                            <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/history-thumb.png"></div>
-                                            <div class="cat-name">OUR HISTORY</div>
+                                    <a href="/history">
+                                        <div class="cat-container">
+                                            <div class="per-cat">
+                                                <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/history-thumb.png"></div>
+                                                <div class="cat-name">OUR HISTORY</div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                     <div class="cat-container">
                                         <div class="per-cat">
                                             <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/how-to-join-thumb.png"></div>

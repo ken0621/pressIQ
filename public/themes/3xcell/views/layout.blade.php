@@ -79,13 +79,15 @@
                 </div> 
                <div class="login-container">
                    <div class="login-button">
-                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;<i class="fa fa-user" aria-hidden="true"></i></span><span>&nbsp;<a href="/">LOGIN</a></span>
+                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;<i class="fa fa-user" aria-hidden="true"></i></span><span>&nbsp;<a>LOGIN</a></span>
                    </div>
                </div>
                <div class="join-us-container">
-                   <a href="/"><div class="join-us-button">
-                       <img src="/themes/{{ $shop_theme }}/img/button-icon1.png"><span>&nbsp;&nbsp;JOIN US TODAY</span>
-                   </div></a>
+                   <a>
+                       <div class="join-us-button">
+                           <img src="/themes/{{ $shop_theme }}/img/button-icon1.png"><span>&nbsp;&nbsp;JOIN US TODAY</span>
+                       </div>
+                   </a>
                </div>
            </div> 
         </div>
@@ -181,8 +183,8 @@
                                     </div>
                                 </div>
                             </li>
-                            <li><a href="/" class="head-button link-nav {{ Request::segment(1) == '' ? '' : '' }}" id="">GALLERY</a></li>
-                            <li><a href="/contact" class="head-button link-nav {{ Request::segment(1) == 'contact' ? 'active' : '' }}" id="contact-us">CONTACT US</a></li>
+                            <li><a class="head-button link-nav">GALLERY</a></li>
+                            <li><a class="head-button link-nav">CONTACT US</a></li>
                             <li class="cart-hover">
                                 <a href="/" class="link-nav"><span><img class="cart-header" src="/themes/{{ $shop_theme }}/img/cart-header.png"></span></a>
                                 <!-- CART DROPDOWN -->

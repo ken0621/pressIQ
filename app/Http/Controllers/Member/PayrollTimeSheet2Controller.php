@@ -449,6 +449,7 @@ class PayrollTimeSheet2Controller extends Member
 		}
 		else //APPROVED
 		{
+
 			$return->status = "APPROVED";
 			//$return->clean_shift	= $this->convert_to_serialize_row_from_approved_clean_shift($_time);
 
@@ -462,11 +463,11 @@ class PayrollTimeSheet2Controller extends Member
 			{
 				$return->clean_shift = Payroll2::clean_shift($_time_raw, $_shift_raw);
 			}
-
+				
 			$return->shift_approved = true;
 			$return->compute_shift = $return->clean_shift;
 		}
-
+	
 		$return->shift_approved = $this->check_if_shift_approved($return->clean_shift);
 		$return->compute_shift = $this->remove_not_auto_approve($return->clean_shift);
 
@@ -860,14 +861,13 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			$data = $this->compute_whole_cutoff($period_company_id, $employee_id);
 			$data["computation_type"] = $computation_type = $group->payroll_group_salary_computation;
-			
 		}
 
 		$data["employee_id"] = $employee_id;
 		$data["employee_info"] = $this->db_get_employee_information($employee_id); 
 		$check_approved = Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_company_id)->first();
 		$data["time_keeping_approved"] = $check_approved ? true : false;			
-		
+	
 		switch ($computation_type)
 		{
 			case "Daily Rate":

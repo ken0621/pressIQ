@@ -385,7 +385,6 @@ class Payroll2
      */
 	public static function compute_time_mode_regular($_time, $_shift, $late_grace_time = "00:00:00", $grace_time_rule_late="per_shift",$overtime_grace_time = "00:00:00",$grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00",$leave_fill_late=0,$leave_fill_undertime=0,$target_hours=0, $use_leave = false ,$testing = false)
 	{
-
 		$leave_fill_undertime	= 1;
 		$leave_fill_late		= 1;
 		$time_spent				= "00:00:00";
@@ -1655,8 +1654,6 @@ class Payroll2
 			$cutoff_basic			 = 0;
 			$render_days			 = 0;
 			
-
-			
 			foreach($_date_compute as $date => $date_compute)
 			{
 				if(!isset($date_compute->compute))
@@ -1969,7 +1966,10 @@ class Payroll2
 
 		if(isset($time->payroll_time_sheet_auto_approved))
 		{
-			$_output[$index]->auto_approved = $time->payroll_time_sheet_auto_approved;
+			if ($auto_approved != 2) 
+			{
+				$_output[$index]->auto_approved = $time->payroll_time_sheet_auto_approved;
+			}
 		}
 
 		

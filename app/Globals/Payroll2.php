@@ -41,23 +41,12 @@ class Payroll2
 		while($from <= $to)
 		{
 			$timesheet_db = Payroll2::timesheet_info_db($employee_id, $from);
-		
-			if($timesheet_db->custom_shift == 1)
-			{
-				$_shift =  Payroll2::shift_raw(Payroll2::db_get_shift_of_employee_by_code($timesheet_db->custom_shift_id, $from));
-			}
-			else
-			{
-				$_shift =  Payroll2::shift_raw(Payroll2::db_get_shift_of_employee_by_code($shift_code_id, $from));
-			}
-
-			$timesheet_db = Payroll2::timesheet_info_db($employee_id, $from);
 			
 			/* CREATE TIMESHEET DB IF EMPTY */
 			if(!$timesheet_db)
 			{
 				$_shift_real =  Payroll2::db_get_shift_of_employee_by_code($shift_code_id, $from);
-				$_shift =  Payroll2::shift_raw(Payrol2::db_get_shift_of_employee_by_code($shift_code_id, $from));
+				$_shift =  Payroll2::shift_raw(Payroll2::db_get_shift_of_employee_by_code($shift_code_id, $from));
 				
 				$insert = null;
 				$insert["payroll_employee_id"] = $employee_id;
@@ -68,6 +57,14 @@ class Payroll2
 				$insert = null;
 			}
 
+			if($timesheet_db->custom_shift == 1)
+			{
+				$_shift =  Payroll2::shift_raw(Payroll2::db_get_shift_of_employee_by_code($timesheet_db->custom_shift_id, $from));
+			}
+			else
+			{
+				$_shift =  Payroll2::shift_raw(Payroll2::db_get_shift_of_employee_by_code($shift_code_id, $from));
+			}
 
 			$timesheet_db = Payroll2::timesheet_info_db($employee_id, $from);
 
@@ -1012,7 +1009,6 @@ class Payroll2
      */
 	public static function compute_time_mode_regular($_time, $_shift, $late_grace_time = "00:00:00", $grace_time_rule_late="per_shift",$overtime_grace_time = "00:00:00",$grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00",$leave_fill_late=0,$leave_fill_undertime=0,$target_hours=0, $use_leave = false ,$testing = false)
 	{
-
 		$leave_fill_undertime	= 1;
 		$leave_fill_late		= 1;
 		$time_spent				= "00:00:00";
@@ -1519,8 +1515,6 @@ class Payroll2
 		$is_half_day 			= false;
 		$is_absent 				= false;
 
-
-
 		// if ($use_leave) 
 		// {
 		// 	$is_absent = true;
@@ -1847,6 +1841,7 @@ class Payroll2
 				$daily_rate = 0;
 			}
 		}
+
 
 		if ((  $_time['day_type'] == 'extra_day'  || $_time["is_holiday"] == "regular" ) && $time_spent!=0) 
 		{
@@ -2283,8 +2278,6 @@ class Payroll2
 			$cutoff_basic			 = 0;
 			$render_days			 = 0;
 			
-
-			
 			foreach($_date_compute as $date => $date_compute)
 			{
 				if(!isset($date_compute->compute))
@@ -2597,7 +2590,10 @@ class Payroll2
 
 		if(isset($time->payroll_time_sheet_auto_approved))
 		{
-			$_output[$index]->auto_approved = $time->payroll_time_sheet_auto_approved;
+			if ($auto_approved != 2) 
+			{
+				$_output[$index]->auto_approved = $time->payroll_time_sheet_auto_approved;
+			}
 		}
 
 		

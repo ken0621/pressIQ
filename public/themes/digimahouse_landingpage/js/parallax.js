@@ -12,7 +12,7 @@ call fullscreenFix() if .fullscreen content changes */
 function fullscreenFix(){
     var h = $('body').height();
     // set .fullscreen height
-    $(".content-b").each(function(i){
+    $(".caption-container").each(function(i){
         if($(this).innerHeight() > h){ $(this).closest(".fullscreen").addClass("overflow");
         }
     });

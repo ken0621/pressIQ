@@ -6,6 +6,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Parallax backgrounds with centered content">
         <title>{{ ucfirst($shop_info->shop_key) }} | {{ $page }}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -71,7 +72,8 @@
                             <span></span>
                             <span></span>
                             <span></span>
-                        </div>                   
+                        </div>
+
                     </div>
                 </div>
                 <div class="col-md-10">
@@ -79,14 +81,12 @@
                     <nav class="navirino">
                         <a href="/" class="head-button {{ Request::segment(1) == '' ? '' : '' }}" id="business-plan">Business Plan</a>
                         <a href="/#" class="head-button {{ Request::segment(1) == 'support' ? 'active' : '' }}" id="support">Support</a>
-                        <a href="#" role="button" class="btn-signin" id="login">Sign In</a>
+                        <a href="#" role="button" class="head-button btn-signin" id="signin">Sign In</a>
                     </nav>
                 </div>
             </div>
         </div>
     </div>
-
-
 
     <!-- CONTENT -->
     <div id="scroll-to" class="clearfix">
@@ -118,6 +118,7 @@
                     <div class="text-header">Contact Us</div>
                     <div><a href="#">Phone: 215-0757</a></div>
                     <div><a href="#">Mobile: 0917-813-0244<br><span style="padding-left: 45px;">0929-198-1948</span></a></div>
+
                     <div><a href="#">Email: sales@digimaweb.solutions</a></div>
                 </div>
 
@@ -147,8 +148,8 @@
 
                 <div class="col-md-6 right">
                     
-                    <div class="row clearfix">
                     <div>Powered by:</div>
+                    <div class="row clearfix">
                         <div class="col-md-2"><img src="/themes/{{ $shop_theme }}/img/adobe-logo.png"></div>
                         <div class="col-md-2"><img src="/themes/{{ $shop_theme }}/img/bootstrap-logo.png"></div>
                         <div class="col-md-2"><img src="/themes/{{ $shop_theme }}/img/jquery-logo.png"></div>
@@ -160,31 +161,6 @@
             </div>
         </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -200,44 +176,52 @@
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/figuesslider.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/parallax.js"></script>
 
+    <script type="text/javascript">
 
-<!--     <script type="text/javascript">
-    $window = $(window);
-    $window.scroll(function() {
-      $scroll_position = $window.scrollTop();
-        if ($scroll_position > 100) { 
-            $('.header-container').addClass('header-fixed');
+        var dropdown = new dropdown();
 
+        function dropdown()
+        {
+            init();
 
-            header_height = $('.your-header').innerHeight();
-            $('body').css('padding-top' , header_height);
-        } else {
-            $('body').css('padding-top' , '0');
-            $('.header-container').removeClass('header-fixed');
+            function init()
+            {
+                event_toggle_nav();
+            }
+
+            function event_toggle_nav()
+            {
+                $(".menu-nav").bind("click", function()
+                {
+                    action_toggle_nav();
+                });
+            }
+
+            function action_toggle_nav()
+            {
+                $(".menu-nav").unbind("click");
+                $(".navirino").slideToggle(400, function()
+                {
+                    event_toggle_nav();
+                });
+            }
         }
-     });
-
-</script> -->
+    </script>
 
     <script type="text/javascript">
-            
-            $('.slider3').diyslider({
-                width: "463px", // width of the slider
-                height: "115px", // height of the slider
-                display: 4, // number of slides you want it to display at once
-                loop: false // disable looping on slides
-                }); // this is all you need!
+        $window = $(window);
+        $window.scroll(function() {
+          $scroll_position = $window.scrollTop();
+            if ($scroll_position > 100) { 
+                $('.header-container').addClass('header-fixed');
 
-        // use buttons to change slide
-        $('#gotoleft').bind("click", function(){
-            // Go to the previous slide
-            $('.slider3').diyslider("move", "back");
-        });
-        $('#gotoright').unbind("click")
-        $('#gotoright').bind("click", function(){
-            // Go to the previous slide
-            $('.slider3').diyslider("move", "forth");
-        });
+                header_height = $('.your-header').innerHeight();
+                $('body').css('padding-top' , header_height);
+            } else {
+                $('.header-container').removeClass('header-fixed');
+                $('body').css('padding-top' , '0');
+            }
+         });
 
     </script>
 

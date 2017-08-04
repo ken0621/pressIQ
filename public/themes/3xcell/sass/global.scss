@@ -110,6 +110,10 @@ button:hover{
 				
 				padding: 5px 12px 5px 12px;
 
+				&:hover {
+					cursor: pointer;
+				}
+
 				span {
 					color: white;
 					font-size: 10px;

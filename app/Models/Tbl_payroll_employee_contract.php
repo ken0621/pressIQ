@@ -20,6 +20,11 @@ class Tbl_payroll_employee_contract extends Model
 	// [INTEGER] 		payroll_employee_contract_status
 	// [INTEGER] 		payroll_group_id
 	// [TINY INTEGER] 	payroll_employee_contract_archived
+	
+	public function scopeGroup($query)
+	{
+		$query->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id');
+	}
 
 	public function scopeselemployee($query, $payroll_employee_id = 0, $date = '0000-00-00')
 	{

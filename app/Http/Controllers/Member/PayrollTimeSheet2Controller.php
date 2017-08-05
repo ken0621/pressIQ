@@ -85,7 +85,7 @@ class PayrollTimeSheet2Controller extends Member
 		$data["company_period"] 	= $this->db_get_company_period_information($period_id);
 		$data["show_period_start"]	= date("F d, Y", strtotime($data["company_period"]->payroll_period_start));
 		$data["show_period_end"]	= date("F d, Y", strtotime($data["company_period"]->payroll_period_end));
-		$data["_timesheet"] 		= $this->timesheet_info($data["company_period"], $employee_id);
+		$data["_timesheet"] 		= Payroll2::timesheet_info($data["company_period"], $employee_id);
 		
 		$check_approved = Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_id)->first();
 		$data["time_keeping_approved"] = $check_approved ? true : false;
@@ -194,7 +194,7 @@ class PayrollTimeSheet2Controller extends Member
 
 		/* RETURN DATA TO SERVER */
 		$data["timesheet_db"] = $timesheet_db = $this->timesheet_info_db($employee_id, Request::input("date"));
-		$data["daily_info"] = $this->timesheet_process_daily_info($employee_id, Request::input("date"), $timesheet_db, $period_id);
+		$data["daily_info"] = Payroll2::timesheet_process_daily_info($employee_id, Request::input("date"), $timesheet_db, $period_id);
 
 		$daily_income = $data["daily_info"]->compute->total_day_income;
 		
@@ -202,6 +202,7 @@ class PayrollTimeSheet2Controller extends Member
 		$return["string_income"] = $data["daily_info"]->value_html;
 		echo json_encode($return);
 	}
+
 	public function timesheet_daily_income_to_string($compute_type, $timesheet_id, $compute, $approved, $period_company_id, $time_keeping_approved = 0)
 	{
 		if($compute_type == "daily")
@@ -681,7 +682,7 @@ class PayrollTimeSheet2Controller extends Member
 		$data["payroll_time_sheet_id"] = $timesheet_db->payroll_time_sheet_id;
 		$data["employee_id"] = $employee_id = $timesheet_db->payroll_employee_id;
 		$data["employee_info"] =  $this->db_get_employee_information($timesheet_db->payroll_employee_id); 
-		$data["timesheet_info"] = $timesheet_info =$this->timesheet_process_daily_info($timesheet_db->payroll_employee_id, $timesheet_db->payroll_time_date, $timesheet_db, $data["period_company_id"]);
+		$data["timesheet_info"] = $timesheet_info = Payroll2::timesheet_process_daily_info($timesheet_db->payroll_employee_id, $timesheet_db->payroll_time_date, $timesheet_db, $data["period_company_id"]);
 		$employee_contract		= $this->db_get_current_employee_contract($timesheet_db->payroll_employee_id, $timesheet_db->payroll_time_date);
 		$data["compute_type"] = $employee_contract->payroll_group_salary_computation;
 		$data["compute_html"] = view('member.payroll2.employee_day_summary_compute', $data);
@@ -749,7 +750,7 @@ class PayrollTimeSheet2Controller extends Member
 		while($from <= $to)
 		{
 			$timesheet_db = $this->timesheet_info_db($employee_id, $from);
-			$_timesheet[$from] = $this->timesheet_process_daily_info($employee_id, $from, $timesheet_db, $period_company_id);
+			$_timesheet[$from] = Payroll2::timesheet_process_daily_info($employee_id, $from, $timesheet_db, $period_company_id);
 
 			if(!isset($timesheet_db))
 			{
@@ -774,7 +775,7 @@ class PayrollTimeSheet2Controller extends Member
 		$data["payroll_time_sheet_id"] = $timesheet_db->payroll_time_sheet_id;
 		$data["employee_id"] = $timesheet_db->payroll_employee_id;
 		$data["employee_info"] = $this->db_get_employee_information($timesheet_db->payroll_employee_id); 
-		$data["timesheet_info"] = $timesheet_info = $this->timesheet_process_daily_info($timesheet_db->payroll_employee_id, $timesheet_db->payroll_time_date, $timesheet_db, $data["period_company_id"]);
+		$data["timesheet_info"] = $timesheet_info = Payroll2::timesheet_process_daily_info($timesheet_db->payroll_employee_id, $timesheet_db->payroll_time_date, $timesheet_db, $data["period_company_id"]);
 		$employee_contract = $this->db_get_current_employee_contract($timesheet_db->payroll_employee_id, $timesheet_db->payroll_time_date);
 		$data["compute_type"] = $employee_contract->payroll_group_salary_computation;
 		return view('member.payroll2.employee_day_summary_compute', $data);
@@ -822,13 +823,6 @@ class PayrollTimeSheet2Controller extends Member
 	}
 	public function income_summary($period_company_id, $employee_id)
 	{
-
-		
-		/* computation type param
-		*  Daily Rate
-		*  Flat Rate
-		*  Monthly Rate
-		*/
 
 		$data["date"] = $date = Tbl_payroll_period_company::sel($period_company_id)->pluck('payroll_period_start');
 		$data["group"] = $group = $this->db_get_current_employee_contract($employee_id, $date);
@@ -921,9 +915,7 @@ class PayrollTimeSheet2Controller extends Member
 				return view("member.payroll2.delete_adjustment", $data);
 			}
 
-		}
-
-		
+		}	
 	}
 	public function make_adjustment($period_company_id, $employee_id)
 	{

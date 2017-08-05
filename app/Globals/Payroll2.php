@@ -3906,7 +3906,6 @@ class Payroll2
 
 
 		$total_cola = 0;
-		dd($data);
 		if ($data["cutoff_input"][$data["start_date"]]->compute_type=="daily") 
 		{
 			foreach($data["cutoff_input"] as $cutoff_input)

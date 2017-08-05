@@ -11,6 +11,20 @@ function floatvalser($amount)
     }
     
 }
+
+function gb_convert_time_from_db_to_timesheet($db_time)
+{
+    if($db_time == "00:00:00")
+    {
+        $return = "";
+    }
+    else
+    {
+        $return = $db_time;
+    }
+
+    return $return;
+}
 function array_to_object($array) {
          return (object) $array;
 }

@@ -20,6 +20,7 @@ use App\Models\Tbl_payroll_period;
 use App\Models\Tbl_payroll_holiday_company;
 use App\Models\Tbl_payroll_shift;
 use App\Models\Tbl_payroll_employee_schedule;
+use App\Models\Tbl_payroll_time_keeping_approved;
 
 
 use App\Globals\Payroll;
@@ -709,7 +710,7 @@ class PayrollTimeSheetController extends Member
 		$data['header'] = Self::ru($summary).'Summary';
 
 		$period = Tbl_payroll_period_company::sel($period_id)->first();	
-
+	
 		$_employee = Tbl_payroll_employee_contract::employeefilter($period->payroll_company_id, 0, 0, $period->payroll_period_end, $this->user_info->shop_id)
 							->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
 							->where('tbl_payroll_group.payroll_group_period', $period->payroll_period_category)
@@ -718,9 +719,10 @@ class PayrollTimeSheetController extends Member
 		$start = $period->payroll_period_start;
 
 		$end = $period->payroll_period_end;
+
 		$data['period'] = date('F d, Y', strtotime($start)).' to '.date('F d, Y', strtotime($end));
 		$data['_employee'] = array();
-
+		
 		foreach($_employee as $employee)
 		{
 			$temp_employee['employee'] = $employee;
@@ -733,28 +735,34 @@ class PayrollTimeSheetController extends Member
 			{
 				$date = Carbon::parse($start)->format("Y-m-d"); 
 
-				$time_arr = Payroll::process_time($employee->payroll_employee_id, $date);
-
+			
+				$check_approved = Tbl_payroll_time_keeping_approved::where("employee_id", $employee->payroll_employee_id)->where("payroll_period_company_id", $period_id)->first();
 				$time = '00:00';
 
-				if($summary == 'late'){
-					$time = $time_arr->approved_timesheet->late_hours;
+				if ($check_approved!=null)
+				{
+					$whole_data = unserialize($check_approved->cutoff_input);
+					$time_arr = $whole_data[$date];
+
+					if($summary == 'late'){
+						$time = $time_arr->time_output['late'];
+					}
+
+					if($summary == 'under_time'){
+						$time = $time_arr->time_output['undertime'];
+					}
+
+					if($summary == 'over_time'){
+						$time = $time_arr->time_output['overtime'];
+					}
 				}
 
-				if($summary == 'under_time'){
-					$time = $time_arr->approved_timesheet->under_time;
-				}
-
-				if($summary == 'over_time'){
-					$time = $time_arr->approved_timesheet->late_overtime;
-				}
 				$total_time = Payroll::sum_time($total_time, $time);
 				array_push($temp_employee['time'], $time);
 				$start = Carbon::parse($start)->addDay()->format("Y-m-d");
 			}
 
 			$temp_employee['total_time'] = $total_time;
-
 			array_push($data['_employee'], $temp_employee);
 		}
 
@@ -767,8 +775,6 @@ class PayrollTimeSheetController extends Member
 			array_push($data['_date'], $start);
 			$start = Carbon::parse($start)->addDay()->format("Y-m-d");
 		}
-
-		// dd($data);
 
 		return view('member.payroll.modal.modal_time_summary', $data);
 	}

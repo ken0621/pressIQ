@@ -1571,6 +1571,8 @@ class Payroll2
 		//compute cola
 		$cola = Payroll2::compute_income_day_pay_cola($_time , $daily_rate, $group_id , $cola , $compute_type);
 		
+		
+
 		//no time in monthly
 		if($time_spent!=0 && $compute_type=="monthly")
 		{
@@ -1709,10 +1711,11 @@ class Payroll2
 			$cutoff_income_plus_cola = $cutoff_rate + $cutoff_cola + $breakdown_addition;
 			$cutoff_income_plus_cola = $cutoff_income_plus_cola - $breakdown_deduction;
 			
+
 			//COMPUTE CUTOFF INCOME AND CUTOFF COLA
 			$cola_percentile	= @($cutoff_cola / ($cutoff_rate + $cutoff_cola));
 			$cutoff_income		= $cutoff_rate + $breakdown_addition; //$cutoff_income_plus_cola * (1 - $cola_percentile);
-			$cutoff_cola		= $cutoff_income_plus_cola * $cola_percentile;
+			/*$cutoff_cola		= $cutoff_income_plus_cola * $cola_percentile;*/
 			
 			//COMPUTE CUTOFF BASIC
 			$deduction	  = $breakdown_deduction * (1 - $cola_percentile);
@@ -1720,7 +1723,7 @@ class Payroll2
 			
 			$cutoff_target_days -= $rendered_tardiness;
 			
-			$return->deduction_cola 		  = $breakdown_deduction * $cola_percentile;
+			$return->deduction_cola 		  = 0;
 			$return->cutoff_income_plus_cola  = $cutoff_income_plus_cola;
 			$return->cutoff_income 			  = $cutoff_income;
 			$return->cutoff_cola			  = $cutoff_cola;
@@ -1826,6 +1829,34 @@ class Payroll2
 		{
 			$cola = $cola - ($undertime_float * $cola_rate_per_hour);
 		}
+	
+		$return->cola_day_pay = $cola;
+		$return->cola_plus_daily_rate = $daily_rate+$cola;
+		$return->cola_percentile = @($cola/ ($daily_rate+$cola));
+		
+		return $return;
+		
+	}
+
+
+	public static function compute_income_day_pay_monthly_fixed_cola ($_time = array(), $daily_rate = 0, $group_id = 0, $cola = 0, $compute_type="")
+	{
+		$return = new stdClass();
+		$total_day_income 		= $daily_rate ;
+		$target_float 			= Self::time_float($_time['target_hours']);
+		$daily_rate_plus_cola	= $daily_rate + $cola;
+		$cola_rate_per_hour 	= @($cola/$target_float);
+		
+		/* GET INITIAL DATA */
+		$param_rate 			= Tbl_payroll_overtime_rate::where('payroll_group_id', $group_id)->get()->toArray();
+		$collection 			= collect($param_rate);
+		$regular_param 			= $collection->where('payroll_overtime_name','Regular')->first();
+		$legal_param 			= $collection->where('payroll_overtime_name','Legal Holiday')->first();
+		$special_param 			= $collection->where('payroll_overtime_name','Special Holiday')->first();
+		$group 					= Tbl_payroll_group::where('payroll_group_id', $group_id)->first();
+		
+		/* BREAKDOWN ADDITIONS */
+		$time_spent		 		= Self::time_float($_time['time_spent']);
 	
 		$return->cola_day_pay = $cola;
 		$return->cola_plus_daily_rate = $daily_rate+$cola;
@@ -2389,7 +2420,18 @@ class Payroll2
 		}
 
 		$return = Payroll2::cutoff_breakdown_additions($return, $data);
-		$return = Payroll2::cutoff_breakdown_cola($return, $data);
+
+		if ($group->payroll_group_salary_computation == "Daily Rate") 
+		{
+			$return = Payroll2::cutoff_breakdown_cola($return, $data);
+		}
+		else if($group->payroll_group_salary_computation == "Monthly Rate")
+		{
+			$return = Payroll2::cutoff_fixed_montly_cola($return, $data);
+		}
+		
+				
+		
 		$return = Payroll2::cutoff_breakdown_deductions($return, $data); //meron bang non-taxable deduction?? lol
 		$return = Payroll2::cutoff_breakdown_adjustments($return, $data);
 		$return = Payroll2::cutoff_breakdown_taxable_allowances($return, $data);
@@ -3237,10 +3279,53 @@ class Payroll2
 
 	public static function cutoff_breakdown_cola($return, $data)
 	{
+
+
 		$total_cola = 0;
-		foreach($data["cutoff_input"] as $cutoff_input)
+		dd($data);
+		if ($data["cutoff_input"][$data["start_date"]]->compute_type=="daily") 
 		{
-			$total_cola += $cutoff_input->compute->cola;
+			foreach($data["cutoff_input"] as $cutoff_input)
+			{
+				$total_cola += $cutoff_input->compute->cola;
+			}
+		}
+
+		$val["label"] = "COLA";
+		$val["type"] = "additions";
+		$val["amount"] = $total_cola;
+		$val["add.gross_pay"] = true;
+		$val["deduct.gross_pay"] = false;
+		$val["add.taxable_salary"] = false;
+		$val["deduct.taxable_salary"] = false;
+		$val["add.net_pay"] = false;
+		$val["deduct.net_pay"] = false;
+		array_push($return->_breakdown, $val);
+		$val = null;
+
+		return $return;
+	}
+
+
+	public static function cutoff_fixed_montly_cola($return, $data)
+	{
+		$total_cola = 0;
+
+		if ($data["cutoff_input"][$data["start_date"]]->compute_type=="monthly") 
+		{
+
+			if ($data["period_category"]=="Semi-monthly") 
+			{
+				$total_cola = @($data["salary"]->monthly_cola/2);
+			}
+			else if($data["period_category"]=="Weekly")
+			{
+				$total_cola = @($data["salary"]->monthly_cola/4);
+			}
+			else if($data["period_category"]=="Monthly")
+			{
+				$total_cola = $data["salary"]->monthly_cola;
+			}
 		}
 
 		$val["label"] = "COLA";

@@ -62,13 +62,6 @@
                     </table>
                 </div>
             </div>
-            <div id="archived" class="tab-pane fade in">
-                <div class="form-group order-tags"></div>
-                <div class="table-responsive">                    
-                    <table class="table table-bordered table-condensed">
-                    </table>
-                </div>
-            </div>
         </div> 
     </div>
 </div>

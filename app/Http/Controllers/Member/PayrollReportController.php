@@ -66,10 +66,13 @@ class PayrollReportController extends Member
 	public function government_forms_hdmf_iframe($month)
 	{ 
 		$data["page"] = "Monthly Government Forms";
-
 		$year = 2017;
 		$shop_id = $this->shop_id();
-		$data["_contribution"] = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
+		$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
+		$data["contri_info"] = $contri_info; 
+		$data["month"] = $month;
+		$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
+		$data["year"] = $year;
 
 		$format["title"] = "A4";
 		$format["format"] = "A4";
@@ -79,7 +82,7 @@ class PayrollReportController extends Member
 		// $format["margin_left"] = "0";
 		// $format["margin_right"] = "0";
 
-		$pdf = PDF2::loadView('member.payrollreport.government_forms_hdmf_iframe', $data, [], $format);
+		$pdf = PDF2::loadView('member.payrollreport.government_forms_hdmf_pdf', $data, [], $format);
 		return $pdf->stream('document.pdf');
 	}
 }

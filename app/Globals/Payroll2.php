@@ -22,9 +22,154 @@ use App\Models\Tbl_payroll_company;
 use App\Models\Tbl_payroll_holiday_company;
 use App\Models\Tbl_payroll_time_sheet_record_approved;
 use App\Models\Tbl_payroll_shift_code;
+use App\Models\Tbl_payroll_period;
+use DateTime;
 
 class Payroll2
 {
+	public static function get_contribution_information_for_a_month($shop_id, $month, $year)
+	{
+		$month_number = $month;
+		$month = DateTime::createFromFormat('!m', $month)->format('F');
+		$data["_employee"] = Tbl_payroll_period::getContributions($shop_id, $month, $year)->get();
+
+		$_contribution = null;
+		$count = 0;
+
+		$grand_total_pagibig_ee = 0;
+		$grand_total_pagibig_er = 0;
+		$grand_total_pagibig_ee_er = 0;
+
+		$grand_total_sss_ee = 0;
+		$grand_total_sss_er = 0;
+		$grand_total_sss_ec = 0;
+		$grand_total_sss_ee_er = 0;
+
+		$grand_total_philhealth_ee = 0;
+		$grand_total_philhealth_er = 0;
+		$grand_total_philhealth_ee_er = 0;
+
+		foreach($data["_employee"] as $key => $employee)
+		{
+			if($employee->pagibig_ee != 0)
+			{
+				
+				if(!isset($_contribution[$employee->employee_id]))
+				{
+					$count++;
+					$period_count_contribution = 1;
+
+					$total_pagibig_ee = $employee->pagibig_ee;
+					$total_pagibig_er = $employee->pagibig_er;
+
+					$total_sss_ee = $employee->sss_ee;
+					$total_sss_er = $employee->sss_er;
+					$total_sss_ec = $employee->sss_ec;
+
+					$total_philhealth_ee = $employee->philhealth_ee;
+					$total_philhealth_er = $employee->philhealth_er;
+				}
+				else
+				{
+					$period_count_contribution = $_contribution[$employee->employee_id]->period_count_contribution + 1;
+					$total_pagibig_ee += $employee->pagibig_ee;
+					$total_pagibig_er += $employee->pagibig_er;
+
+					$total_sss_ee += $employee->sss_ee;
+					$total_sss_er += $employee->sss_er;
+					$total_sss_ec += $employee->sss_ec;
+
+					$total_philhealth_ee += $employee->philhealth_ee;
+					$total_philhealth_er += $employee->philhealth_er;
+				}
+
+				$total_pagibig_ee_er = $total_pagibig_ee + $total_pagibig_er;
+				$total_sss_ee_er = $total_sss_ee + $total_sss_er + $total_sss_ec;
+				$total_philhealth_ee_er = $total_philhealth_ee + $total_philhealth_er;
+
+				/* INFORMATION EMPLOYEE CONTRIBUTION */
+				$_contribution[$employee->employee_id] = new stdClass();
+				$_contribution[$employee->employee_id]->count = $count;
+				$_contribution[$employee->employee_id]->period_count_contribution = $period_count_contribution;
+				$_contribution[$employee->employee_id]->employee_id = $employee->employee_id;
+
+				$_contribution[$employee->employee_id]->payroll_employee_pagibig = ($employee->payroll_employee_pagibig == "" ? "N/A" : $employee->payroll_employee_pagibig);
+				$_contribution[$employee->employee_id]->payroll_employee_sss = ($employee->payroll_employee_sss == "" ? "N/A" : $employee->payroll_employee_sss);
+				$_contribution[$employee->employee_id]->payroll_employee_philhealth = ($employee->payroll_employee_philhealth == "" ? "N/A" : $employee->payroll_employee_philhealth);
+
+
+				$_contribution[$employee->employee_id]->account_number = $employee->employee_id;
+				$_contribution[$employee->employee_id]->membership_program = $employee->employee_id;
+				$_contribution[$employee->employee_id]->payroll_employee_last_name = strtoupper($employee->payroll_employee_last_name);
+				$_contribution[$employee->employee_id]->payroll_employee_first_name = strtoupper($employee->payroll_employee_first_name);
+				$_contribution[$employee->employee_id]->payroll_employee_suffix_name = $employee->payroll_employee_suffix_name == "" ? "N/A" : strtoupper($employee->payroll_employee_suffix_name);
+				$_contribution[$employee->employee_id]->payroll_employee_middle_name = ($employee->payroll_employee_middle_name == "" ? "N/A" : strtoupper($employee->payroll_employee_middle_name));
+				$_contribution[$employee->employee_id]->period_covered = $month_number . "/" . $year;
+				$_contribution[$employee->employee_id]->monthly_compensation = 0;
+
+				$_contribution[$employee->employee_id]->total_pagibig_ee = $total_pagibig_ee;
+				$_contribution[$employee->employee_id]->total_pagibig_er = $total_pagibig_er;
+				$_contribution[$employee->employee_id]->total_pagibig_ee_er = $total_pagibig_ee_er;
+
+				$_contribution[$employee->employee_id]->total_sss_ee = $total_sss_ee;
+				$_contribution[$employee->employee_id]->total_sss_er = $total_sss_er;
+				$_contribution[$employee->employee_id]->total_sss_ec = $total_sss_ec;
+				$_contribution[$employee->employee_id]->total_sss_ee_er = $total_sss_ee_er;
+
+				$_contribution[$employee->employee_id]->total_philhealth_ee = $total_philhealth_ee;
+				$_contribution[$employee->employee_id]->total_philhealth_er = $total_philhealth_er;
+				$_contribution[$employee->employee_id]->total_philhealth_ee_er = $total_philhealth_ee_er;
+
+				$grand_total_pagibig_ee += $total_pagibig_ee;
+				$grand_total_pagibig_er += $total_pagibig_er;
+				$grand_total_pagibig_ee_er += $total_pagibig_ee_er;
+
+				$grand_total_sss_ee += $total_sss_ee;
+				$grand_total_sss_er += $total_sss_er;
+				$grand_total_sss_ec += $total_sss_ec;
+				$grand_total_sss_ee_er += $total_sss_ee_er;
+
+				$grand_total_philhealth_ee += $total_philhealth_ee;
+				$grand_total_philhealth_er += $total_philhealth_er;
+				$grand_total_philhealth_ee_er += $total_philhealth_ee_er;
+			}
+		}
+
+		$return["_employee_contribution"] = $_contribution;
+		$return["grand_total_pagibig_ee"] = $grand_total_pagibig_ee;
+		$return["grand_total_pagibig_er"] = $grand_total_pagibig_er;
+		$return["grand_total_pagibig_ee_er"] = $grand_total_pagibig_ee_er;
+
+		$return["grand_total_sss_ee"] = $grand_total_sss_ee;
+		$return["grand_total_sss_er"] = $grand_total_sss_er;
+		$return["grand_total_sss_ec"] = $grand_total_sss_ec;
+		$return["grand_total_sss_ee_er"] = $grand_total_sss_ee_er;
+
+		$return["grand_total_philhealth_ee"] = $grand_total_philhealth_ee;
+		$return["grand_total_philhealth_er"] = $grand_total_philhealth_er;
+		$return["grand_total_philhealth_ee_er"] = $grand_total_philhealth_ee_er;
+
+		return $return;
+	}
+	public static function get_number_of_period_per_month($shop_id, $year, $company = 0)
+	{
+		$_month = array();
+
+		for($ctr = 1; $ctr < 12; $ctr++)
+		{
+			$_month[$ctr]["month_name"] = DateTime::createFromFormat('!m', $ctr)->format('F');
+
+			$payroll_period = Tbl_payroll_period::where("shop_id", $shop_id);
+			$payroll_period->joinCompany();
+			$payroll_period->where("month_contribution", $_month[$ctr]["month_name"]);
+			$payroll_period->where("tbl_payroll_period_company.payroll_period_status", "!=", "generated");
+			$payroll_period->where("year_contribution", $year);
+
+			$_month[$ctr]["period_count"] = $payroll_period->count();
+		}
+
+		return $_month;
+	}
 	public static function timesheet_info_db($employee_id, $date)
 	{
 		return Tbl_payroll_time_sheet::where("payroll_time_date", Carbon::parse($date)->format("Y-m-d"))->where("payroll_employee_id", $employee_id)->first();
@@ -79,8 +224,6 @@ class Payroll2
 				$_shift =  Payroll2::shift_raw(Payroll2::db_get_shift_of_employee_by_code($shift_code_id, $from));
 			}
 
-
-			
 			/* CLEAR APPROVED RECORD IF SHIFT CHANGED */
 			if($timesheet_db->payroll_time_shift_raw != serialize($_shift))
 			{

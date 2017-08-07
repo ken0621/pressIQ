@@ -5,7 +5,7 @@
 	<div class="slider-wrapper single-item">
 		<img src="/themes/{{ $shop_theme }}/img/slide-img-2.jpg">
 		<img src="/themes/{{ $shop_theme }}/img/slide-img-1.png">
-		<img src="/themes/{{ $shop_theme }}/img/slide-img-3.jpg">
+		<img src="/themes/{{ $shop_theme }}/img/slide-img-3.jpg">		
 	</div>
 	<!-- INFORMATIVE -->
 	<div class="top-1-container">
@@ -23,7 +23,7 @@
 								3xcell-E Sales & Marketing Inc. is composed of five dynamic individuals who share the same motivation and common values strengthened and lead by their principal incorporator.
 							</p>
 						</div>
-						<div class="small-button">Read More</div>
+						<a href="/history"><div class="small-button">Read More</div></a>
 					</div>
 				</div>
 				<div class="col-md-4 col-padding">
@@ -37,7 +37,7 @@
 							<div><span><img src="/themes/{{ $shop_theme }}/img/check-icon.png"></span><span>&nbsp;BE A FULL PLEDGE DISTRIBUTOR</span></div>
 							<div><span><img src="/themes/{{ $shop_theme }}/img/check-icon.png"></span><span>&nbsp;AVAIL OF THE LAY-AWAY PROGRAM</span></div>
 						</div>
-						<div class="small-button">Know More</div>
+						<a href="/how_to_join"><div class="small-button">Know More</div></a>
 					</div>
 				</div>
 				<div class="col-md-4 col-padding">
@@ -73,7 +73,7 @@
 								<div class="medium-button blue-button">SHOP NOW</div>								
 							</div>
 							<div class="hover-bg"></div>
-							<img src="/themes/{{ $shop_theme }}/img/supplement-cat.png">
+							<img src="/themes/{{ $shop_theme }}/img/supplement-cat-2.png">
 							<div class="bg-overlay">
 								<img src="/themes/{{ $shop_theme }}/img/black-overlay.png">
 							</div>
@@ -89,7 +89,7 @@
 								<div class="medium-button red-button">SHOP NOW</div>								
 							</div>
 							<div class="hover-bg"></div>
-							<img src="/themes/{{ $shop_theme }}/img/beauty-cat.png">
+							<img src="/themes/{{ $shop_theme }}/img/beauty-cat-2.png">
 							<div class="bg-overlay">
 								<img src="/themes/{{ $shop_theme }}/img/black-overlay.png">
 							</div>
@@ -107,7 +107,7 @@
 								<div class="medium-button green-button">SHOP NOW</div>								
 							</div>
 							<div class="hover-bg"></div>
-							<img src="/themes/{{ $shop_theme }}/img/healthy-drink-cat.png">
+							<img src="/themes/{{ $shop_theme }}/img/healthy-drink-cat-2.png">
 							<div class="bg-overlay">
 								<img src="/themes/{{ $shop_theme }}/img/black-overlay.png">
 							</div>
@@ -125,7 +125,7 @@
 										<div class="medium-button blue-button gray-button-short">SHOP NOW</div>								
 									</div>
 									<div class="hover-bg"></div>
-									<img src="/themes/{{ $shop_theme }}/img/package-cat.png">
+									<img src="/themes/{{ $shop_theme }}/img/package-cat-2.png">
 									<div class="bg-overlay">
 										<img src="/themes/{{ $shop_theme }}/img/black-overlay.png">
 									</div>

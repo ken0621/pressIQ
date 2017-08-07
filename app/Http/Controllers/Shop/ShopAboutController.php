@@ -60,6 +60,17 @@ class ShopAboutController extends Shop
     {
         $data["page"] = "history";
         return view("history", $data);
+    }
+
+    public function how_to_join()
+    {
+        $data["page"] = "how_to_join";
+        return view("how_to_join", $data);
+    }
+    public function xcell_login()
+    {
+        $data["page"] = "3xcell_login";
+        return view("3xcell_login", $data);
     }    
 
     public function job()

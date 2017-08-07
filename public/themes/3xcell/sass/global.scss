@@ -17,6 +17,7 @@ body
 }
 /* GLOBAL ELEMENTS */
 
+
 .highlight{
 	color: #fff;
 	text-decoration: underline;
@@ -45,19 +46,6 @@ button:hover{
 	background-color: transparent;
 	padding-top: 5px;
 }
-
-.container{
-	// width: 1366px;
-	// margin-left: auto;
-	// margin-right: auto;
-	// padding-left: 10px;
-	// padding-right:10px;
-	// @media screen and (max-width: 1385px)
-	// {
-	// 	width: 1000px;
-	// }
-}
-
 
 /* HEADER */
 .subheader-container{
@@ -480,87 +468,6 @@ nav{
 	box-shadow: 0px 1px 10px rgba(0,0,0,0.1);
 }
 
-/* ----------------------------------- */
-/* .slider3-wrapper{
-	position: absolute;
-	right: 15%;
-	top: 15%;
-	z-index: 90;
-	padding: 10px 18px 18px 18px;
-	background-color: #fff;
-	width: 620px;
-
-	-moz-box-shadow:1px 1px 12px rgba(0,0,0,0.2);
-	-webkit-box-shadow:1px 1px 12px rgba(0,0,0,0.2);
-	box-shadow:1px 1px 12px rgba(0,0,0,0.2);
-
-	@media screen and (max-width: 991px){
-		
-		overflow: hidden;
-		width: 254px;
-
-
-	}
-
-	.slider3-button-container{
-		float: right;
-		padding-bottom: 8px;
-		button{
-			background-color: #fff;
-			border: 1px solid #d6d6d6;
-		}
-	}
-	.slider3-title{
-		padding-bottom: 5px;
-		font-size: 12px;
-	}
-
-	.slider3{
-		position: relative;
-		overflow: hidden;
-		width: 580px; change value of script too
-		height: 120px;
-		background-color: #fff;
-
-		.slider3-per-container{
-			float: left;
-			img{
-				width: 100%;
-			}
-
-			&:hover{
-				img{
-					opacity: 0.5;
-					text-decoration: underline;
-					cursor: pointer;
-					transition: 0.3s all ease;
-
-				}
-				.slider3-title-container{
-					text-decoration: underline;
-					cursor: pointer;
-
-					
-				}
-			}
-
-			a{
-				color: #797979;
-			}
-
-			.per-container-wrapper{
-				padding: 2px 4px 2px 4px;
-			}
-			.slider3-title-container{
-				padding-top: 5px;
-				font-size: 11px;
-				max-width: 108px;
-				line-height: 13px;
-			}
-		}
-	}
-} */
-
 /* LIGHTBOX */
 
 /*Eliminates padding, centers the thumbnail */
@@ -594,7 +501,7 @@ opacity: 0;
 -o-transition: opacity .5s ease-in-out;
 transition: opacity .5s ease-in-out;
 overflow: hidden;
-z-index: 100;
+z-index: 150;
 }
 
 /* Styles the lightbox image, centers it vertically and horizontally, adds the zoom-in transition and makes it responsive using a combination of margin and absolute positioning */

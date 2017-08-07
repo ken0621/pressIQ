@@ -33,6 +33,11 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/promos', 'Shop\ShopAboutController@promos'); //MARK FIGS
 	Route::get('/promo_view', 'Shop\ShopAboutController@promo_view'); //MARK FIGS
 	Route::get('/history', 'Shop\ShopAboutController@history'); //MARK FIGS
+	Route::get('/how_to_join', 'Shop\ShopAboutController@how_to_join'); //MARK FIGS
+	Route::get('/3xcell_login', 'Shop\ShopAboutController@xcell_login'); //MARK FIGS
+
+	Route::get('/gallery', 'Shop\ShopGalleryController@gallery'); //MARK FIGS
+	Route::get('/gallery_content', 'Shop\ShopGalleryController@gallery_content'); //MARK FIGS
 
 
 	Route::get('/blog', 'Shop\ShopBlogController@index');

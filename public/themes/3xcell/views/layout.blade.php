@@ -61,7 +61,7 @@
 
     <!-- HEADER -->
     <div class="subheader-container">
-        <div class="container">
+        <div class="container" style="position: relative;">
            <div class="button-container">
                 <div class="social-media-container">
                     <span>
@@ -79,7 +79,7 @@
                 </div> 
                <div class="login-container">
                    <div class="login-button">
-                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;<i class="fa fa-user" aria-hidden="true"></i></span><span>&nbsp;<a>LOGIN</a></span>
+                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;<i class="fa fa-user" aria-hidden="true"></i></span><span>&nbsp;<a href="/3xcell_login">LOGIN</a></span>
                    </div>
                </div>
                <div class="join-us-container">
@@ -89,7 +89,7 @@
                        </div>
                    </a>
                </div>
-           </div> 
+           </div>
         </div>
     </div>
     <div class="header-container">
@@ -169,22 +169,24 @@
                                             </div>
                                         </div>
                                     </a>
-                                    <div class="cat-container">
-                                        <div class="per-cat">
-                                            <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/how-to-join-thumb.png"></div>
-                                            <div class="cat-name">HOW TO JOIN</div>
+                                    <a href="/how_to_join">
+                                        <div class="cat-container">
+                                            <div class="per-cat">
+                                                <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/how-to-join-thumb.png"></div>
+                                                <div class="cat-name">HOW TO JOIN</div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                     <div class="cat-container">
                                         <div class="per-cat">
                                             <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/events-calendar-thumb.png"></div>
-                                            <div class="cat-name">EVENTS CALENDAR</div>
+                                            <div class="cat-name">COMPANY EVENTS</div>
                                         </div>
                                     </div>
                                 </div>
                             </li>
-                            <li><a class="head-button link-nav">GALLERY</a></li>
-                            <li><a class="head-button link-nav">CONTACT US</a></li>
+                            <li><a href="/gallery" class="head-button link-nav">GALLERY</a></li>
+                            <li><a href="/contact" class="head-button link-nav">CONTACT US</a></li>
                             <li class="cart-hover">
                                 <a href="/" class="link-nav"><span><img class="cart-header" src="/themes/{{ $shop_theme }}/img/cart-header.png"></span></a>
                                 <!-- CART DROPDOWN -->
@@ -198,8 +200,12 @@
                 
             </div>
         </div>
-    </div>
- 
+        <!-- LIGHTBOX -->
+        <div class="lightbox-target" id="goofy">
+           <img src="/themes/{{ $shop_theme }}/img/gallery-sample2.png">
+           <a class="lightbox-close" href="#work"></a>
+        </div>
+    </div> 
     <!-- CONTENT -->
     <div id="scroll-to" class="clearfix">
 	   @yield("content")

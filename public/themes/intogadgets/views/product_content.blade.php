@@ -226,7 +226,7 @@
                <div class="feature-holder col-md-3 col-sm-6 col-xs-12">
                   <a href="/product/view/{{$related['eprod_id']}}">
                      <div class="feature-img">
-                        <img class="lazy 4-3-ratio" data-original="{{ get_product_first_image($related) }}" height="222px" width="222px">
+                        <img class="lazy 1-1-ratio" data-original="{{ get_product_first_image($related) }}" height="222px" width="222px">
                         <div class="feature-hover"></div>
                         <div class="feature-hoverimg">
                   <a href="javascript:"><i class="fa fa-link"></i></a></div>

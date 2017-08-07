@@ -29,7 +29,7 @@ class Tbl_membership_code extends Model
     
     public function scopeCustomer($query)
     {
-        $query->leftjoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_membership_code.customer_id');
+        $query->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_membership_code.customer_id');
 	  
 	  
 	    return $query;

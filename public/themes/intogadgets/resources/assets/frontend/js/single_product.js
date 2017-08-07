@@ -158,6 +158,7 @@ function action_select_variation(e)
 				}
 				else
 				{
+					$('.single-order-availability').html('In Stock');
 					$('.add-to-cart').prop("disabled", false);
 					$('.add-to-cart').removeClass("disabled");
 				}
@@ -168,11 +169,21 @@ function action_select_variation(e)
 		}
 		else if (data.result == 'fail')
 		{
-			$('.add-to-cart').prop("disabled", true);
-			$('.single-order-availability').html('Out of Stock')
-			$('.add-to-cart').addClass("disabled");
-			
-			$(".loader").fadeOut();	
+			if (toload == true) 
+			{
+				if (data.no_stock  == 'nostock') 
+				{
+					$('.single-order-availability').html('Out of Stock');
+					$('.add-to-cart').addClass("disabled");
+					$('.add-to-cart').prop("disabled", true);
+				}
+				else
+				{
+					$('.single-order-availability').html('In Stock')
+				}
+				
+				$(".loader").fadeOut();	
+			}
 		}
 		else
 		{

@@ -213,7 +213,7 @@
                </div>
             </div>
             <div class="single-detail-description min-300">
-               <p>  </p>
+               {!! $product["eprod_details"] !!}
             </div>
          </div>
       </div>

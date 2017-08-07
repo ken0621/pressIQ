@@ -302,6 +302,7 @@
                           <input type="number" step="any" name="payroll_employee_salary_monthly" class="form-control text-right" value="{{isset($salary->payroll_employee_salary_monthly) ? $salary->payroll_employee_salary_monthly : ''}}" readonly>
                         </div>
                       </div>
+
                       <div class="form-group">
                         <div class="col-md-12">
                           <small>Daily Rate</small>
@@ -322,12 +323,13 @@
                           <input type="number" step="any" name="payroll_employee_salary_cola" class="form-control text-right" value="{{isset($salary->payroll_employee_salary_cola) ? $salary->payroll_employee_salary_cola : ''}}" readonly>
                         </div>
                       </div>
-                        <div class="form-group">
-                          <div class="col-md-12">
-                            <small>PAGIBIG/HDMF Contribution</small>
-                            <input type="number" name="payroll_employee_salary_pagibig" class="form-control text-right" value="{{isset($salary->payroll_employee_salary_pagibig) ? $salary->payroll_employee_salary_pagibig : ''}}" readonly>
-                          </div>
+
+                      <div class="form-group">
+                        <div class="col-md-12">
+                          <small>PAGIBIG/HDMF Contribution</small>
+                          <input type="number" name="payroll_employee_salary_pagibig" class="form-control text-right" value="{{isset($salary->payroll_employee_salary_pagibig) ? $salary->payroll_employee_salary_pagibig : ''}}" readonly>
                         </div>
+                      </div>
 
                       
                     </div>
@@ -343,6 +345,13 @@
                           <div class="col-md-12">
                             <small>SSS Salary</small>
                             <input type="number" name="payroll_employee_salary_sss" class="form-control text-right" value="{{isset($salary->payroll_employee_salary_sss) ? $salary->payroll_employee_salary_sss : ''}}" readonly>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <small>COLA (Monthly)</small>
+                            <input type="number" name="payroll_employee_salary_sss" class="form-control text-right" value="{{isset($salary->monthly_cola) ? $salary->monthly_cola : ''}}" readonly>
                           </div>
                         </div>
 

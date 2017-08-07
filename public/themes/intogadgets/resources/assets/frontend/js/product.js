@@ -98,6 +98,8 @@ function product()
 		{
 			$('.loader').hide();
 			$("#quick-add-cart").modal();
+
+	        image_crop(".product-image-crop", 1, 1);
 		});
 	}
 }

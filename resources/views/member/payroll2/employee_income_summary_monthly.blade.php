@@ -45,7 +45,7 @@
                                 <td></td>
                                 <td class="text-right" style="opacity: 0.9"></td>
                             </tr>
-                           
+                          
                             @if(isset($compute->compute->_breakdown_addition))
                                 @foreach($compute->compute->_breakdown_addition as $breakdown_label => $breakdown)
                                 <tr>
@@ -71,6 +71,8 @@
                         @endforeach
                     </tbody>
                 </table>
+
+
                 <table width="100%" class="table table-condensed">
                     <tbody>
 

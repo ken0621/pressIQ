@@ -41,6 +41,8 @@ function global()
         }
         
         image_crop(".1-1-ratio", 1, 1);
+        image_crop(".1-1-ratio .baka-img", 1, 1);
+        image_crop(".product-image-crop", 1, 1);
         image_crop(".4-3-ratio", 4, 3);
         image_crop(".ratio-fix img", 396, 241);
         image_crop(".category-ratio .1", 100, 51.5);

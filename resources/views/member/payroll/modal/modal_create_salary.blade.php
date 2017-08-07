@@ -41,6 +41,12 @@
 				<input type="number" step="any" name="payroll_employee_salary_cola" class="form-control text-right" placeholder="0.00">
 			</div>
 			<div class="col-md-6">
+				<small>COLA (Monthly)</small>
+				<input type="number" step="any" name="payroll_employee_salary_monthly_cola" class="form-control text-right" placeholder="0.00">
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-md-6">
 				<small>Pagibig Contribution</small>
 				<input type="number" name="payroll_employee_salary_pagibig" class="form-control text-right" step="any" placeholder="0.00">
 			</div>

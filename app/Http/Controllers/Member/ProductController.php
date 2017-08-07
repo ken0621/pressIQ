@@ -16,6 +16,7 @@ use App\Models\Tbl_product_search;
 use App\Models\Tbl_chart_of_account;
 use App\Models\Tbl_unit_measurement;
 use App\Models\Tbl_item;
+use App\Models\Tbl_ec_variant;
 
 use App\Globals\Variant;
 
@@ -613,13 +614,11 @@ class ProductController extends Member
 	{
 		/* REMOVE THE QUERY STRING IN THE URL */
 		$getUrl = Redirect::back()->getTargetUrl();
-		
-		$link	= reset((explode('?', $getUrl)));
-		
-		Tbl_variant::where("variant_id", $variant_id)->delete();
+		// $link	= reset((explode('?', $getUrl)));
+		Tbl_ec_variant::where("evariant_id", $variant_id)->delete();
 		
 		Request::session()->flash('success', 'Variant successfully deleted');
-		return Redirect::to($link);
+		return Redirect::back();
 	}
 
 	public function save_image_variant()

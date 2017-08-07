@@ -17,6 +17,8 @@ class VerifyCsrfToken extends BaseVerifier
         '/payment/ipay88/backend',
         '/checkout',
         '/payment/dragonpay/postback',
-        '/payment/dragonpay/post'   
+        '/payment/dragonpay/post',
+        '/member/payroll/get_cutoff_data',
+        '/member/payroll/api_login'   
     ];
 }

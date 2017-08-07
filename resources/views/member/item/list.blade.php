@@ -125,6 +125,9 @@
                     </div>
                 </div>
             </div>
+        </div><!-- 
+        </div>
+    </div>     -->
         <div id="pending" class="tab-pane fade in">
             <div class="form-group order-tags"></div>
             <div class="table-responsive">

@@ -72,4 +72,50 @@ class Merchant
 
         }
     }
+    public static function ismerchant()
+    {
+        $ismerchant = Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_is_merchant');
+        if(!$ismerchant){
+            $ismerchant = 0;
+        }
+
+        return $ismerchant;
+    }
+    public static function getuserid()
+    {
+        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_id');
+    }
+    public static function set_per_piece_mark_up($item, $user, $mark_up_percentage = null)
+    {
+        if($item && $user)
+        {
+            if($mark_up_percentage != null)
+            {
+                $user->user_mark_up_default = $mark_up_percentage;
+            }
+
+            $check_mark_up = Tbl_merchant_markup::where('item_id', $item->item_id)->where('user_id', $user->user_id)->count();
+            if($check_mark_up >= 1)
+            {
+                $update['item_price']               = $item->item_price;
+                $update['item_markup_percentage']   = $user->user_mark_up_default;
+                $update['item_markup_value']        = ($user->user_mark_up_default/100) * $item->item_price;
+                $update['item_after_markup']        = $item->item_price - $update['item_markup_value'];
+                Tbl_merchant_markup::where('item_id', $item->item_id)->where('user_id', $user->user_id)->update($update);
+            }
+            else
+            {
+                $insert['user_id']                  = $user->user_id;
+                $insert['shop_id']                  = $user->user_shop;
+                $insert['item_id']                  = $item->item_id;
+                $insert['item_price']               = $item->item_price;
+                $insert['item_markup_percentage']   = $user->user_mark_up_default;
+                $insert['item_markup_value']        = ($user->user_mark_up_default/100) * $item->item_price;
+                $insert['item_after_markup']        = $item->item_price - $insert['item_markup_value'];
+                $insert['merchant_markup_date_created'] = Carbon::now();
+                
+                Tbl_merchant_markup::insert($insert);
+            }
+        }
+    }
 }

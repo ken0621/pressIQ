@@ -52,6 +52,17 @@ class PayrollProcessController extends Member
 		$data = $this->get_total($data);
 		return view("member.payroll2.payroll_process_table", $data);
 	}
+
+
+	public function modal_view_summary($period_company_id)
+	{
+		$data["company"] = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
+		$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
+		$data = $this->get_total($data);
+		return view("member.payroll2.payroll_process_modal_view_summary", $data);
+	}
+
+	
 	public function unprocess($period_company_id)
 	{
 		/* TODO: SECURE UNPROCESS */

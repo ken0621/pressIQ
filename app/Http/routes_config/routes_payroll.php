@@ -1,6 +1,25 @@
 <?php
 Route::group(array('prefix' => '/member/payroll'), function()
 {
+	
+
+
+	/* PAYROLL API */
+	Route::any('/payroll_api','Member\PayrollApiController@index');
+	
+	/* PAYROLL API CONNECTIONS */
+	Route::any('/api_login','Api\PayrollConnectController@index');
+	Route::any('/get_cutoff_data','Api\PayrollConnectController@get_cutoff_data');
+
+	/* PAYROLL REPORTS - GOVERNMENT FORMS */
+	Route::any('/reports/government_forms','Member\PayrollReportController@government_forms');
+	Route::any('/reports/government_forms_hdmf/{month}','Member\PayrollReportController@government_forms_hdmf');
+	Route::any('/reports/government_forms_hdmf_iframe/{month}','Member\PayrollReportController@government_forms_hdmf_iframe');
+	Route::any('/reports/government_forms_philhealth/{month}','Member\PayrollReportController@government_forms_philhealth');
+	Route::any('/reports/government_forms_philhealth_iframe/{month}','Member\PayrollReportController@government_forms_philhealth_iframe');
+	Route::any('/reports/government_forms_sss/{month}','Member\PayrollReportController@government_forms_sss');
+	Route::any('/reports/government_forms_sss_iframe/{month}','Member\PayrollReportController@government_forms_sss_iframe');
+	
 	/* COMPANY START */
 	Route::any('/company_list','Member\PayrollController@company_list');
 	Route::any('/company_list/modal_create_company','Member\PayrollController@modal_create_company');
@@ -393,6 +412,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/process_payroll/{period_company_id}','Member\PayrollProcessController@index');
 	Route::any('/unprocess_payroll/{period_company_id}','Member\PayrollProcessController@unprocess');
 	Route::any('/process_payroll/table/{period_company_id}','Member\PayrollProcessController@index_table');
+	Route::any('/process_payroll/modal_view_summary/{period_company_id}','Member\PayrollProcessController@modal_view_summary');
+	//Route::any('/process_payroll/table/{period_company_id}','Member\PayrollProcessController@view_');
 	// Route::any('/payroll_process','Member\PayrollController@payroll_process');
 	// Route::any('/payroll_process/modal_create_process','Member\PayrollController@modal_create_process');
 	// Route::any('/payroll_process/ajax_load_payroll_period','Member\PayrollController@ajax_load_payroll_period');

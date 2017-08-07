@@ -12,7 +12,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- GOOGLE FONT -->
-        <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700" rel="stylesheet">
         <!-- BOOTSTRAP -->
         <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap.min.css">
@@ -80,7 +79,7 @@
                 <!-- NAVIGATION -->
                     <nav class="navirino">
                         <a href="/" class="head-button {{ Request::segment(1) == '' ? '' : '' }}" id="business-plan">Business Plan</a>
-                        <a href="/#" class="head-button {{ Request::segment(1) == 'support' ? 'active' : '' }}" id="support">Support</a>
+                        <a href="#" class="head-button {{ Request::segment(1) == 'support' ? 'active' : '' }}" id="support">Support</a>
                         <a href="#" role="button" class="head-button btn-signin" id="signin">Sign In</a>
                     </nav>
                 </div>

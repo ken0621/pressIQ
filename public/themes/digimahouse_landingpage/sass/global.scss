@@ -128,7 +128,7 @@ button:hover
 		-webkit-box-shadow:5px 5px 5px rgba(0,0,0,0.1);
 		box-shadow:5px 5px 5px rgba(0,0,0,0.1);
 		
-		.slider3-wrapper
+		/* .slider3-wrapper
 		{
 			top: 40px;
 
@@ -145,7 +145,7 @@ button:hover
 					}
 				}
 			}
-		}
+		} */
 
 		.image-logo-holder
 		{
@@ -218,6 +218,9 @@ nav
 
 		.btn-signin
 		{
+			//position: relative;
+			//left: 500px;
+			//top: 2.5px;
 			font-family: $open-sans;
 			text-decoration: none;
 			color: #8d8d8d;

@@ -78,8 +78,7 @@ class Mlm_complan_manager
                 {
                     $direct_points_given = $slot_info->membership_points_direct;
                 }
-
-
+                
                 $log_array['earning'] = $direct_points_given;
                 $log_array['level'] = 1;
                 $log_array['level_tree'] = 'Sponsor Tree';

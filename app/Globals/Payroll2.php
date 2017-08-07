@@ -319,6 +319,7 @@ class Payroll2
 	}
 	public static function timesheet_process_daily_info_record($employee_id, $date, $approved, $_time, $payroll_time_sheet_id, $payroll_period_company_id, $time_keeping_approved, $custom_shift, $custom_shift_id)
 	{
+
 		$return 					= new stdClass();
 		$return->for_approval		= ($approved == true ? 0 : 1);
 		$return->daily_salary		= 0;
@@ -343,6 +344,9 @@ class Payroll2
 		$return->_shift 			= $_shift_raw;
 		$return->time_compute_mode	= "regular";
 		
+
+		
+
 		if(count($_shift) > 0)
 		{
 			if($_shift[0]->shift_flexi_time == 1)
@@ -360,13 +364,20 @@ class Payroll2
 			$return->shift_target_hours = 0;
 		}
 
-		if ($_shift[0]->shift_break_hours != null) {
-			$return->shift_break_hours = $_shift[0]->shift_break_hours;
-		}
-		else
+		if(isset($_shift_raw))
 		{
-			$return->shift_break_hours = "0.00";
+			if ($_shift[0]->shift_break_hours != null) 
+			{
+				$return->shift_break_hours = $_shift[0]->shift_break_hours;
+			}
+			else
+			{
+				$return->shift_break_hours = "0.00";
+			}
 		}
+		
+		
+
 		
 		$return->time_keeping_approved = $time_keeping_approved;
 
@@ -477,6 +488,7 @@ class Payroll2
 		$return->value_html = Payroll2::timesheet_daily_income_to_string($return->compute_type, $payroll_time_sheet_id, $return->compute, $return->shift_approved, $payroll_period_company_id, $time_keeping_approved);
 		
 		return $return;
+
 	}
 	public static function timesheet_daily_income_to_string($compute_type, $timesheet_id, $compute, $approved, $period_company_id, $time_keeping_approved = 0)
 	{
@@ -1949,7 +1961,7 @@ class Payroll2
 	 *		=> income (double)
 	 *		=> formula ('plus')
      *
-     * @author (Jimar Zape)
+     * @author Kim Briel Oraya
      *
      */
  
@@ -1972,7 +1984,7 @@ class Payroll2
 
 		if($compute_type=="daily")
 		{
-			if( $_time['day_type'] == 'rest_day' || $_time["is_holiday"] == "regular" || $_time['day_type'] == 'extra_day') 
+			if( $_time['day_type'] == 'rest_day' || $_time["is_holiday"] == "regular" || $_time['day_type'] == 'extra_day' || $_time["is_holiday"] == "special") 
 			{
 				$daily_rate = 0;
 			}
@@ -2254,7 +2266,6 @@ class Payroll2
 					}
 				}
 
-				
 				//Special Holiday Rest Day Over Time
 				if ($overtime_float!=0) 
 				{
@@ -2283,8 +2294,9 @@ class Payroll2
 				{
 					if ($compute_type=="daily")
 					{
+						$total_day_income = 0;
 						$return->_breakdown_addition["Special Holiday"]["time"] = ""; 
-						$return->_breakdown_addition["Special Holiday"]["rate"] = $daily_true_rate * ($special_param['payroll_overtime_regular']);
+						$return->_breakdown_addition["Special Holiday"]["rate"] = $daily_rate * ($special_param['payroll_overtime_regular']);
 						$return->_breakdown_addition["Special Holiday"]["hour"] = "";
 						$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday"]["rate"];
 						$breakdown_addition += $return->_breakdown_addition["Special Holiday"]["rate"];

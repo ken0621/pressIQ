@@ -11,6 +11,7 @@ use Excel;
 use DB;
 use Response;
 use PDF;
+use stdClass;
 
 use App\Models\Tbl_payroll_company;
 use App\Models\Tbl_payroll_rdo;
@@ -91,6 +92,9 @@ use App\Globals\Accounting;
 use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_time_keeping_approved_breakdown;
 use App\Models\Tbl_payroll_time_keeping_approved_performance;
+
+
+
 
 class PayrollController extends Member
 {
@@ -5320,9 +5324,27 @@ class PayrollController extends Member
      }
      public function company_period_delete($id)
      {
+
           $select = Tbl_payroll_period_company::where("payroll_period_company_id", $id)->first();
-          Tbl_payroll_period::where("payroll_period_id", $select->payroll_period_id)->first();
+          $payroll_period = Tbl_payroll_period::where("payroll_period_id", $select->payroll_period_id)->first();
+
+          $_payroll_timesheet_ids = Tbl_payroll_period::
+          select(DB::raw("tbl_payroll_time_sheet.payroll_time_sheet_id, tbl_payroll_employee_basic.payroll_employee_first_name"))
+          ->where('tbl_payroll_period.shop_id',Self::shop_id())
+          ->whereBetween('tbl_payroll_time_sheet.payroll_time_date', array($payroll_period["payroll_period_start"], $payroll_period["payroll_period_end"]))
+          ->join('tbl_payroll_employee_basic','tbl_payroll_period.shop_id','=','tbl_payroll_employee_basic.shop_id')
+          ->join('tbl_payroll_time_sheet','tbl_payroll_time_sheet.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')
+          ->join('tbl_payroll_time_sheet_record_approved','tbl_payroll_time_sheet_record_approved.payroll_time_sheet_id','=','tbl_payroll_time_sheet.payroll_time_sheet_id')
+          ->groupBy("tbl_payroll_time_sheet.payroll_time_sheet_id")
+          ->get();
+
+          foreach ($_payroll_timesheet_ids as $payroll_timesheets_ids) 
+          {
+               Tbl_payroll_time_sheet::where("payroll_time_sheet_id",$payroll_timesheets_ids["payroll_time_sheet_id"])->delete();
+          }
+
           Tbl_payroll_period_company::where("payroll_period_company_id", $id)->delete();
+         
           return Redirect::to("/member/payroll/time_keeping");
      }
      public function company_period($id)

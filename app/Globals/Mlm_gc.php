@@ -25,7 +25,7 @@ use App\Globals\Mlm_slot_log;
 
 class Mlm_gc
 {   
-	public static function insert_gc($insert)
+	public static function insert_gc($data)
 	{
 		// $insert['mlm_gc_tag'] = 
 		// $insert['mlm_gc_code'] = 

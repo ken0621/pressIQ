@@ -36,6 +36,20 @@ use DB;
 
 class TesterController extends Controller
 {
+    public function connection_test()
+    {
+        $_test = DB::table("tbl_connection_test")->orderBy("connection_test_id", "desc")->limit(5)->get();
+        foreach($_test as $test)
+        {
+            echo "<hr>";
+            echo "From (" . $test->connection_test_id . ") " . $test->ip_address . "<br>";
+            
+            echo "<pre>";
+            print_r(unserialize($test->test_data_serialize));
+            echo "</pre>";
+        }
+    }
+    
     public function getShopId()
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');

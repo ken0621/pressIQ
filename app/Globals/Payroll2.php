@@ -156,7 +156,7 @@ class Payroll2
 	{
 		$_month = array();
 
-		for($ctr = 1; $ctr < 12; $ctr++)
+		for($ctr = 1; $ctr <= 12; $ctr++)
 		{
 			$_month[$ctr]["month_name"] = DateTime::createFromFormat('!m', $ctr)->format('F');
 

@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class Tbl_mlm_slot extends Model
 {
@@ -28,6 +29,10 @@ class Tbl_mlm_slot extends Model
     {
         $query->leftjoin('tbl_membership_code', 'tbl_membership_code.slot_id', '=', 'tbl_mlm_slot.slot_id');
         return $query;
+    }
+    public function scopeCurrentWallet($query)
+    {
+        $query->select("*", DB::raw("(select sum(wallet_log_amount) from tbl_mlm_slot_wallet_log where tbl_mlm_slot_wallet_log.wallet_log_slot = tbl_mlm_slot.slot_id) AS current_wallet"));
     }
     public function scopeCustomer($query)
     {

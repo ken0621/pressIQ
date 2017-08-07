@@ -262,3 +262,8 @@ Route::any('member/mlm/complan_setup/unilevel/distribute', 'Member\Mlm_ComplanSe
 Route::any('member/mlm/complan_setup/unilevel/distribute/set/settings', 'Member\Mlm_ComplanSetupController@unilevel_distribute_set_settings'); 
 Route::any('member/mlm/complan_setup/unilevel/distribute/simulate', 'Member\Mlm_ComplanSetupController@unilevel_distribute_simulate'); 
 
+
+/* DEVELOPER MENU */
+Route::get('member/mlm/developer', 'Member\MlmDeveloperController@index');
+Route::get('member/mlm/developer/create_slot', 'Member\MlmDeveloperController@create_slot');
+Route::post('member/mlm/developer/create_slot', 'Member\MlmDeveloperController@create_slot_submit');

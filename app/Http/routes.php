@@ -69,6 +69,9 @@ include_once('routes_config/routes_member_mlm.php');
 Route::any("/member/page/store_information","Member\ManageStoreInformationController@index"); 
 Route::any("/member/page/store_information/update_submit","Member\ManageStoreInformationController@update_submit");
 
+/* MEMBER - PAGE - CONTACT */
+Route::controller("/member/page/contact","Member\Page_ContactController");
+
 /* MEMBER - DEVELOPER  */
 Route::any('/member/developer/status', 'Member\Developer_StatusController@index'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/rematrix', 'Member\Developer_RematrixController@index'); //ERWIN GUEVARRA

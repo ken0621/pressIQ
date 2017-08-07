@@ -19,12 +19,158 @@ use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_time_sheet;
 use App\Models\Tbl_payroll_time_sheet_record;
 use App\Models\Tbl_payroll_company;
+use App\Models\Tbl_payroll_pagibig;
 use App\Models\Tbl_payroll_holiday_company;
 use App\Models\Tbl_payroll_time_sheet_record_approved;
 use App\Models\Tbl_payroll_shift_code;
+use App\Models\Tbl_payroll_period;
+use DateTime;
 
 class Payroll2
 {
+	public static function get_contribution_information_for_a_month($shop_id, $month, $year)
+	{
+		$month_number = $month;
+		$month = DateTime::createFromFormat('!m', $month)->format('F');
+		$data["_employee"] = Tbl_payroll_period::getContributions($shop_id, $month, $year)->get();
+
+		$_contribution = null;
+		$count = 0;
+
+		$grand_total_pagibig_ee = 0;
+		$grand_total_pagibig_er = 0;
+		$grand_total_pagibig_ee_er = 0;
+
+		$grand_total_sss_ee = 0;
+		$grand_total_sss_er = 0;
+		$grand_total_sss_ec = 0;
+		$grand_total_sss_ee_er = 0;
+
+		$grand_total_philhealth_ee = 0;
+		$grand_total_philhealth_er = 0;
+		$grand_total_philhealth_ee_er = 0;
+
+		foreach($data["_employee"] as $key => $employee)
+		{
+			if($employee->pagibig_ee != 0)
+			{
+				
+				if(!isset($_contribution[$employee->employee_id]))
+				{
+					$count++;
+					$period_count_contribution = 1;
+
+					$total_pagibig_ee = $employee->pagibig_ee;
+					$total_pagibig_er = $employee->pagibig_er;
+
+					$total_sss_ee = $employee->sss_ee;
+					$total_sss_er = $employee->sss_er;
+					$total_sss_ec = $employee->sss_ec;
+
+					$total_philhealth_ee = $employee->philhealth_ee;
+					$total_philhealth_er = $employee->philhealth_er;
+				}
+				else
+				{
+					$period_count_contribution = $_contribution[$employee->employee_id]->period_count_contribution + 1;
+					$total_pagibig_ee += $employee->pagibig_ee;
+					$total_pagibig_er += $employee->pagibig_er;
+
+					$total_sss_ee += $employee->sss_ee;
+					$total_sss_er += $employee->sss_er;
+					$total_sss_ec += $employee->sss_ec;
+
+					$total_philhealth_ee += $employee->philhealth_ee;
+					$total_philhealth_er += $employee->philhealth_er;
+				}
+
+				$total_pagibig_ee_er = $total_pagibig_ee + $total_pagibig_er;
+				$total_sss_ee_er = $total_sss_ee + $total_sss_er + $total_sss_ec;
+				$total_philhealth_ee_er = $total_philhealth_ee + $total_philhealth_er;
+
+				/* INFORMATION EMPLOYEE CONTRIBUTION */
+				$_contribution[$employee->employee_id] = new stdClass();
+				$_contribution[$employee->employee_id]->count = $count;
+				$_contribution[$employee->employee_id]->period_count_contribution = $period_count_contribution;
+				$_contribution[$employee->employee_id]->employee_id = $employee->employee_id;
+
+				$_contribution[$employee->employee_id]->payroll_employee_pagibig = ($employee->payroll_employee_pagibig == "" ? "N/A" : $employee->payroll_employee_pagibig);
+				$_contribution[$employee->employee_id]->payroll_employee_sss = ($employee->payroll_employee_sss == "" ? "N/A" : $employee->payroll_employee_sss);
+				$_contribution[$employee->employee_id]->payroll_employee_philhealth = ($employee->payroll_employee_philhealth == "" ? "N/A" : $employee->payroll_employee_philhealth);
+
+
+				$_contribution[$employee->employee_id]->account_number = $employee->employee_id;
+				$_contribution[$employee->employee_id]->membership_program = $employee->employee_id;
+				$_contribution[$employee->employee_id]->payroll_employee_last_name = strtoupper($employee->payroll_employee_last_name);
+				$_contribution[$employee->employee_id]->payroll_employee_first_name = strtoupper($employee->payroll_employee_first_name);
+				$_contribution[$employee->employee_id]->payroll_employee_suffix_name = $employee->payroll_employee_suffix_name == "" ? "N/A" : strtoupper($employee->payroll_employee_suffix_name);
+				$_contribution[$employee->employee_id]->payroll_employee_middle_name = ($employee->payroll_employee_middle_name == "" ? "N/A" : strtoupper($employee->payroll_employee_middle_name));
+				$_contribution[$employee->employee_id]->period_covered = $month_number . "/" . $year;
+				$_contribution[$employee->employee_id]->monthly_compensation = 0;
+
+				$_contribution[$employee->employee_id]->total_pagibig_ee = $total_pagibig_ee;
+				$_contribution[$employee->employee_id]->total_pagibig_er = $total_pagibig_er;
+				$_contribution[$employee->employee_id]->total_pagibig_ee_er = $total_pagibig_ee_er;
+
+				$_contribution[$employee->employee_id]->total_sss_ee = $total_sss_ee;
+				$_contribution[$employee->employee_id]->total_sss_er = $total_sss_er;
+				$_contribution[$employee->employee_id]->total_sss_ec = $total_sss_ec;
+				$_contribution[$employee->employee_id]->total_sss_ee_er = $total_sss_ee_er;
+
+				$_contribution[$employee->employee_id]->total_philhealth_ee = $total_philhealth_ee;
+				$_contribution[$employee->employee_id]->total_philhealth_er = $total_philhealth_er;
+				$_contribution[$employee->employee_id]->total_philhealth_ee_er = $total_philhealth_ee_er;
+
+				$grand_total_pagibig_ee += $total_pagibig_ee;
+				$grand_total_pagibig_er += $total_pagibig_er;
+				$grand_total_pagibig_ee_er += $total_pagibig_ee_er;
+
+				$grand_total_sss_ee += $total_sss_ee;
+				$grand_total_sss_er += $total_sss_er;
+				$grand_total_sss_ec += $total_sss_ec;
+				$grand_total_sss_ee_er += $total_sss_ee_er;
+
+				$grand_total_philhealth_ee += $total_philhealth_ee;
+				$grand_total_philhealth_er += $total_philhealth_er;
+				$grand_total_philhealth_ee_er += $total_philhealth_ee_er;
+			}
+		}
+
+		$return["_employee_contribution"] = $_contribution;
+		$return["grand_total_pagibig_ee"] = $grand_total_pagibig_ee;
+		$return["grand_total_pagibig_er"] = $grand_total_pagibig_er;
+		$return["grand_total_pagibig_ee_er"] = $grand_total_pagibig_ee_er;
+
+		$return["grand_total_sss_ee"] = $grand_total_sss_ee;
+		$return["grand_total_sss_er"] = $grand_total_sss_er;
+		$return["grand_total_sss_ec"] = $grand_total_sss_ec;
+		$return["grand_total_sss_ee_er"] = $grand_total_sss_ee_er;
+
+		$return["grand_total_philhealth_ee"] = $grand_total_philhealth_ee;
+		$return["grand_total_philhealth_er"] = $grand_total_philhealth_er;
+		$return["grand_total_philhealth_ee_er"] = $grand_total_philhealth_ee_er;
+
+		return $return;
+	}
+	public static function get_number_of_period_per_month($shop_id, $year, $company = 0)
+	{
+		$_month = array();
+
+		for($ctr = 1; $ctr < 12; $ctr++)
+		{
+			$_month[$ctr]["month_name"] = DateTime::createFromFormat('!m', $ctr)->format('F');
+
+			$payroll_period = Tbl_payroll_period::where("shop_id", $shop_id);
+			$payroll_period->joinCompany();
+			$payroll_period->where("month_contribution", $_month[$ctr]["month_name"]);
+			$payroll_period->where("tbl_payroll_period_company.payroll_period_status", "!=", "generated");
+			$payroll_period->where("year_contribution", $year);
+
+			$_month[$ctr]["period_count"] = $payroll_period->count();
+		}
+
+		return $_month;
+	}
 	public static function timesheet_info_db($employee_id, $date)
 	{
 		return Tbl_payroll_time_sheet::where("payroll_time_date", Carbon::parse($date)->format("Y-m-d"))->where("payroll_employee_id", $employee_id)->first();
@@ -79,8 +225,6 @@ class Payroll2
 				$_shift =  Payroll2::shift_raw(Payroll2::db_get_shift_of_employee_by_code($shift_code_id, $from));
 			}
 
-
-			
 			/* CLEAR APPROVED RECORD IF SHIFT CHANGED */
 			if($timesheet_db->payroll_time_shift_raw != serialize($_shift))
 			{
@@ -2195,6 +2339,8 @@ class Payroll2
 		//compute cola
 		$cola = Payroll2::compute_income_day_pay_cola($_time , $daily_rate, $group_id , $cola , $compute_type);
 		
+		
+
 		//no time in monthly
 		if($time_spent!=0 && $compute_type=="monthly")
 		{
@@ -2333,10 +2479,11 @@ class Payroll2
 			$cutoff_income_plus_cola = $cutoff_rate + $cutoff_cola + $breakdown_addition;
 			$cutoff_income_plus_cola = $cutoff_income_plus_cola - $breakdown_deduction;
 			
+
 			//COMPUTE CUTOFF INCOME AND CUTOFF COLA
 			$cola_percentile	= @($cutoff_cola / ($cutoff_rate + $cutoff_cola));
 			$cutoff_income		= $cutoff_rate + $breakdown_addition; //$cutoff_income_plus_cola * (1 - $cola_percentile);
-			$cutoff_cola		= $cutoff_income_plus_cola * $cola_percentile;
+			/*$cutoff_cola		= $cutoff_income_plus_cola * $cola_percentile;*/
 			
 			//COMPUTE CUTOFF BASIC
 			$deduction	  = $breakdown_deduction * (1 - $cola_percentile);
@@ -2344,7 +2491,7 @@ class Payroll2
 			
 			$cutoff_target_days -= $rendered_tardiness;
 			
-			$return->deduction_cola 		  = $breakdown_deduction * $cola_percentile;
+			$return->deduction_cola 		  = 0;
 			$return->cutoff_income_plus_cola  = $cutoff_income_plus_cola;
 			$return->cutoff_income 			  = $cutoff_income;
 			$return->cutoff_cola			  = $cutoff_cola;
@@ -2450,6 +2597,34 @@ class Payroll2
 		{
 			$cola = $cola - ($undertime_float * $cola_rate_per_hour);
 		}
+	
+		$return->cola_day_pay = $cola;
+		$return->cola_plus_daily_rate = $daily_rate+$cola;
+		$return->cola_percentile = @($cola/ ($daily_rate+$cola));
+		
+		return $return;
+		
+	}
+
+
+	public static function compute_income_day_pay_monthly_fixed_cola ($_time = array(), $daily_rate = 0, $group_id = 0, $cola = 0, $compute_type="")
+	{
+		$return = new stdClass();
+		$total_day_income 		= $daily_rate ;
+		$target_float 			= Self::time_float($_time['target_hours']);
+		$daily_rate_plus_cola	= $daily_rate + $cola;
+		$cola_rate_per_hour 	= @($cola/$target_float);
+		
+		/* GET INITIAL DATA */
+		$param_rate 			= Tbl_payroll_overtime_rate::where('payroll_group_id', $group_id)->get()->toArray();
+		$collection 			= collect($param_rate);
+		$regular_param 			= $collection->where('payroll_overtime_name','Regular')->first();
+		$legal_param 			= $collection->where('payroll_overtime_name','Legal Holiday')->first();
+		$special_param 			= $collection->where('payroll_overtime_name','Special Holiday')->first();
+		$group 					= Tbl_payroll_group::where('payroll_group_id', $group_id)->first();
+		
+		/* BREAKDOWN ADDITIONS */
+		$time_spent		 		= Self::time_float($_time['time_spent']);
 	
 		$return->cola_day_pay = $cola;
 		$return->cola_plus_daily_rate = $daily_rate+$cola;
@@ -3013,7 +3188,18 @@ class Payroll2
 		}
 
 		$return = Payroll2::cutoff_breakdown_additions($return, $data);
-		$return = Payroll2::cutoff_breakdown_cola($return, $data);
+
+		if ($group->payroll_group_salary_computation == "Daily Rate") 
+		{
+			$return = Payroll2::cutoff_breakdown_cola($return, $data);
+		}
+		else if($group->payroll_group_salary_computation == "Monthly Rate")
+		{
+			$return = Payroll2::cutoff_fixed_montly_cola($return, $data);
+		}
+		
+				
+		
 		$return = Payroll2::cutoff_breakdown_deductions($return, $data); //meron bang non-taxable deduction?? lol
 		$return = Payroll2::cutoff_breakdown_adjustments($return, $data);
 		$return = Payroll2::cutoff_breakdown_taxable_allowances($return, $data);
@@ -3288,7 +3474,6 @@ class Payroll2
 		extract($data);
 		$return->taxable_salary_total = $return->gross_pay_total;
 		$return->_taxable_salary_breakdown = array();
-		
 		foreach($return->_breakdown as $breakdown)
 		{
 			if($breakdown["add.taxable_salary"] == true)
@@ -3298,7 +3483,6 @@ class Payroll2
 				$breakdown["tr"] = Payroll2::cutoff_breakdown_to_tr($breakdown);
 				array_push($return->_taxable_salary_breakdown, $breakdown);	
 			}
-
 			if($breakdown["deduct.taxable_salary"] == true)
 			{
 				$return->taxable_salary_total -= $breakdown["amount"];
@@ -3331,7 +3515,6 @@ class Payroll2
 		$pagibig_declared =  $salary->payroll_employee_salary_pagibig;
 		$payroll_period_company_id = $date_query->payroll_period_company_id;
 		$payroll_company_id = $date_query->payroll_company_id;
-
 
 		/* SSS COMPUTATION */
 		$sss_description = "";	
@@ -3402,7 +3585,6 @@ class Payroll2
 					$sss_contribution["ec"] = 0;
 				}
 			}
-
 			/* TODO: IF SSS CONTRIBUTION FOR DECLARED EXCEED 4 PAYROLL PERIOD - THE SSS CONTRIBUTION SHOULD BE ZERO */
 		}
 		else //BASED ON GROSS OR NET BASIC PAY
@@ -3528,8 +3710,6 @@ class Payroll2
 					$philhealth_contribution["ee"] = $philhealth_contribution["ee"] / $divisor;
 					$philhealth_contribution["er"] = $philhealth_contribution["er"] / $divisor;
 				}
-
-
 			}
 			else
 			{
@@ -3633,6 +3813,7 @@ class Payroll2
 		$pagibig_contribution["ee"] = $pagibig_declared;
 		$pagibig_contribution["er"] = $pagibig_declared;
 		$pagibig_description = payroll_currency($pagibig_declared) . " declared PAGIBIG Contribution";
+		$pagibig_tbl = tbl_payroll_pagibig::where("shop_id",$data["shop_id"])->first();
 
 		if($pagibig_period == "Every Period") //DIVIDE CONTRIBUTION IF EVERY PERIOD
 		{
@@ -3650,8 +3831,7 @@ class Payroll2
 			{
 				$divisor = 1;
 			}
-
-
+			
 			/* CHECK EXCEED MONTH */
 			$_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();
 			$total_cutoff = 0;
@@ -3659,7 +3839,6 @@ class Payroll2
 			{
 				$total_cutoff += $cutoff->pagibig_ee;
 			}
-
 			if($total_cutoff >= $pagibig_contribution["ee"])
 			{
 				$pagibig_description .= "<br> EE and ER converted to zero in order to not exceed monthly contribution.";
@@ -3669,7 +3848,7 @@ class Payroll2
 			else
 			{
 				$pagibig_contribution["ee"] = $pagibig_contribution["ee"] / $divisor;
-				$pagibig_contribution["er"] = $pagibig_contribution["er"] / $divisor;
+				$pagibig_contribution["er"] = @($pagibig_tbl["payroll_pagibig_er_share"] / $divisor);
 			}
 		}
 		else
@@ -3680,7 +3859,7 @@ class Payroll2
 			{
 				$pagibig_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
 				$pagibig_contribution["ee"] = $pagibig_contribution["ee"];
-				$pagibig_contribution["er"] = $pagibig_contribution["er"];
+				$pagibig_contribution["er"] = $pagibig_tbl["payroll_pagibig_er_share"];
 			}
 			else
 			{
@@ -3862,9 +4041,50 @@ class Payroll2
 	public static function cutoff_breakdown_cola($return, $data)
 	{
 		$total_cola = 0;
-		foreach($data["cutoff_input"] as $cutoff_input)
+
+		if ($data["cutoff_input"][$data["start_date"]]->compute_type=="daily") 
 		{
-			$total_cola += $cutoff_input->compute->cola;
+			foreach($data["cutoff_input"] as $cutoff_input)
+			{
+				$total_cola += $cutoff_input->compute->cola;
+			}
+		}
+
+		$val["label"] = "COLA";
+		$val["type"] = "additions";
+		$val["amount"] = $total_cola;
+		$val["add.gross_pay"] = true;
+		$val["deduct.gross_pay"] = false;
+		$val["add.taxable_salary"] = false;
+		$val["deduct.taxable_salary"] = false;
+		$val["add.net_pay"] = false;
+		$val["deduct.net_pay"] = false;
+		array_push($return->_breakdown, $val);
+		$val = null;
+
+		return $return;
+	}
+
+
+	public static function cutoff_fixed_montly_cola($return, $data)
+	{
+
+		$total_cola = 0;
+
+		if ($data["cutoff_input"][$data["start_date"]]->compute_type=="monthly") 
+		{
+			if ($data["period_category"]=="Semi-monthly") 
+			{
+				$total_cola = @($data["salary"]->monthly_cola/2);
+			}
+			else if($data["period_category"]=="Weekly")
+			{
+				$total_cola = @($data["salary"]->monthly_cola/4);
+			}
+			else if($data["period_category"]=="Monthly")
+			{
+				$total_cola = $data["salary"]->monthly_cola;
+			}
 		}
 
 		$val["label"] = "COLA";
@@ -4222,12 +4442,13 @@ class Payroll2
 		
 		$pagibig_contribution 		= Payroll2::get_pagibig_contribution($shop_id, $pagibig_salary, $pagibig_record, $pagibig_every);
 		
+
 		if(Payroll2::period_count($date_query->period_count) != $group->payroll_group_pagibig && $group->payroll_group_pagibig != 'Every Period')
 		{
 			$pagibig_contribution['ee'] = 0;
 			$pagibig_contribution['er'] = 0;
 		}
-		
+
 		$pagibig_ee 				= $pagibig_contribution['ee'];
 		$pagibig_er 				= $pagibig_contribution['er'];
 		$total_deduction			+= $pagibig_ee;

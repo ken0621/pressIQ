@@ -241,7 +241,7 @@ class PayrollTimeSheet2Controller extends Member
 		while($from <= $to)
 		{
 			$timesheet_db = $this->timesheet_info_db($employee_id, $from);
-		
+
 			if($timesheet_db->custom_shift == 1)
 			{
 				$_shift =  $this->shift_raw($this->db_get_shift_of_employee_by_code($timesheet_db->custom_shift_id, $from));
@@ -319,7 +319,6 @@ class PayrollTimeSheet2Controller extends Member
 			$from = Carbon::parse($from)->addDay()->format("Y-m-d");
 		}
 		
-		//dd($_timesheet);
 		return $_timesheet;
 	}
 
@@ -742,6 +741,7 @@ class PayrollTimeSheet2Controller extends Member
 		$cutoff_rate = $this->identify_period_salary($salary->payroll_employee_salary_monthly, $company_period->payroll_period_category);
 
 		$cutoff_cola = $this->identify_period_salary($salary->monthly_cola, $company_period->payroll_period_category);
+		
 		$cutoff_target_days = $this->identify_period_salary($salary->payroll_group_working_day_month, $group->payroll_period_category);
 		
 		$from = $data["start_date"] = $company_period->payroll_period_start;
@@ -856,12 +856,15 @@ class PayrollTimeSheet2Controller extends Member
 			$data = $this->compute_whole_cutoff($period_company_id, $employee_id);
 			$data["computation_type"] = $computation_type = $group->payroll_group_salary_computation;
 		}
-
+		
+		$data["employee_salary"] = tbl_payroll_employee_salary::where("payroll_employee_id", $employee_id);
 		$data["employee_id"] = $employee_id;
 		$data["employee_info"] = $this->db_get_employee_information($employee_id); 
 		$check_approved = Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_company_id)->first();
-		$data["time_keeping_approved"] = $check_approved ? true : false;			
-	
+		$data["time_keeping_approved"] = $check_approved ? true : false;
+		$data["employee_salary"]=$this->get_salary($employee_id,$data["start_date"]);
+
+
 		switch ($computation_type)
 		{
 			case "Daily Rate":
@@ -974,7 +977,7 @@ class PayrollTimeSheet2Controller extends Member
 		}
 
 	}
-	
+
 	public function income_summary_daily_computation($data)
 	{
 		return view("member.payroll2.employee_income_summary_daily", $data);
@@ -1417,6 +1420,26 @@ class PayrollTimeSheet2Controller extends Member
 		}
 		
 		return $salary_period;
+	}
+
+
+	public function identify_monthly_cola_salary($monthly_cola = 0, $period = '')
+	{
+		$monthly_cola = 0;
+		if($period == 'Monthly')
+		{
+			$monthly_cola = $monthly_cola;
+		}
+		else if($period == 'Semi-monthly')
+		{
+			$monthly_cola = $monthly_cola / 2;
+		}
+		else if($period == 'Weekly')
+		{
+			$monthly_cola = $monthly_cola / 4;
+		}
+
+		return $monthly_cola;
 	}
 	
 	public function gettotal_break($data)

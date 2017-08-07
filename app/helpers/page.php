@@ -509,14 +509,29 @@ function page_list()
     // $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
 
     /* PAYROLL REPORTS */
-    $code = "payroll-reports";
-    $nav[$page]['submenu'][$code]['label'] = "Payroll Reports";
+    $segment = "submenu-payroll-reports";
+    $nav[$page]['submenu'][$segment]['name']   = "Payroll Reports";
+    $nav[$page]['submenu'][$segment]['segment']= $segment;
+    $nav[$page]['submenu'][$segment]['type']   = "submenu";
+
+        /* -- REPORT => PRODUCTS  */
+        $code = "payroll-report-goverment-contributions";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Government Forms";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/reports/government_forms";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "Everyone";
+
+
+    /* PAYROLL API */
+    $code = "payroll-api";
+    $nav[$page]['submenu'][$code]['label'] = "Payroll API";
     $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_reports";
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_api";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
-
+    $nav[$page]['submenu'][$code]['developer'] = "Gullermo Tabligan";
 
     /* PRODUCT */
     // $page = "product";  

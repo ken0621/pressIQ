@@ -19,8 +19,6 @@ use PDF2;
 
 class PayrollPayslipController extends Member
 {
-     /*Payslip version 2
-     by: Mark Brain M. Oliver date: 7/31/2017*/
      public function shop_id()
      {
      	return $this->user_info->shop_id;

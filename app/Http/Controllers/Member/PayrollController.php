@@ -1243,10 +1243,10 @@ class PayrollController extends Member
 
      public function modal_employee_view($id)
      {
-          $data["source"] = Request::input("source_page");
+          $data["source"]               = Request::input("source_page");
           // $data['_company']               = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
 
-          $data['_company']  = Payroll::company_heirarchy(Self::shop_id());
+          $data['_company']             = Payroll::company_heirarchy(Self::shop_id());
 
           $data['employement_status']   = Tbl_payroll_employment_status::get();
           $data['tax_status']           = Tbl_payroll_tax_status::get();
@@ -1286,7 +1286,7 @@ class PayrollController extends Member
                array_push($data['_journal_tag'], $tag);
           }
 
-          // dd($data);
+         // dd($data);
           return view("member.payroll.modal.modal_view_employee", $data);
      }
 
@@ -1461,7 +1461,7 @@ class PayrollController extends Member
 
      public function modal_update_salary()
      {
-          $payroll_employee_salary_id                            = Request::input('payroll_employee_salary_id');
+          $payroll_employee_salary_id                       = Request::input('payroll_employee_salary_id');
           $update['payroll_employee_salary_monthly']        = Request::input('payroll_employee_salary_monthly');
           $update['payroll_employee_salary_daily']          = Request::input('payroll_employee_salary_daily');
           $update['payroll_employee_salary_taxable']        = Request::input('payroll_employee_salary_taxable');
@@ -1469,7 +1469,7 @@ class PayrollController extends Member
           $update['payroll_employee_salary_philhealth']     = Request::input('payroll_employee_salary_philhealth');
           $update['payroll_employee_salary_pagibig']        = Request::input('payroll_employee_salary_pagibig');
           $update['payroll_employee_salary_cola']           = Request::input('payroll_employee_salary_cola');
-          $update['monthly_cola']                           = Request::has('monthly_cola') ? Request::input('monthly_cola') : 0;
+          $update['monthly_cola']                           = Request::input('payroll_employee_salary_monthly_cola');
           $update['tbl_payroll_employee_custom_compute']    = Request::has('tbl_payroll_employee_custom_compute') ? Request::input('tbl_payroll_employee_custom_compute') : 0;
 
           
@@ -1565,13 +1565,14 @@ class PayrollController extends Member
 
      public function modal_save_salary()
      {
-          $insert['payroll_employee_id']                         = Request::input('payroll_employee_id');
+          $insert['payroll_employee_id']                    = Request::input('payroll_employee_id');
           $insert['payroll_employee_salary_monthly']        = Request::input('payroll_employee_salary_monthly');
           $insert['payroll_employee_salary_daily']          = Request::input('payroll_employee_salary_daily');
           $insert['payroll_employee_salary_taxable']        = Request::input('payroll_employee_salary_taxable');
           $insert['payroll_employee_salary_sss']            = Request::input('payroll_employee_salary_sss');
           $insert['payroll_employee_salary_philhealth']     = Request::input('payroll_employee_salary_philhealth');
           $insert['payroll_employee_salary_pagibig']        = Request::input('payroll_employee_salary_pagibig');
+          $insert['monthly_cola']                           = Request::input('payroll_employee_salary_monthly_cola');
 
           $payroll_employee_salary_minimum_wage = 0;
           if(Request::has('payroll_employee_salary_minimum_wage'))
@@ -1630,6 +1631,7 @@ class PayrollController extends Member
           $insert['deduct_pagibig_custom']        = $deduct_pagibig_custom;
 
 		Tbl_payroll_employee_salary::insert($insert);
+
 		$return['status'] = 'success';
 		
 		return json_encode($return);
@@ -1637,11 +1639,11 @@ class PayrollController extends Member
 
 	public function modal_employee_update()
 	{
-		$payroll_employee_id 							= Request::input('payroll_employee_id');
+		$payroll_employee_id 						= Request::input('payroll_employee_id');
 		$update_basic['payroll_employee_title_name'] 	= Request::input('payroll_employee_title_name');
 		$update_basic['payroll_employee_first_name'] 	= Request::input('payroll_employee_first_name');
 		$update_basic['payroll_employee_middle_name'] 	= Request::input('payroll_employee_middle_name');
-		$update_basic['payroll_employee_last_name'] 	= Request::input('payroll_employee_last_name');
+		$update_basic['payroll_employee_last_name'] 	     = Request::input('payroll_employee_last_name');
 		$update_basic['payroll_employee_suffix_name'] 	= Request::input('payroll_employee_suffix_name');
 		$update_basic['payroll_employee_number'] 		= Request::input('payroll_employee_number');
 		$update_basic['payroll_employee_atm_number'] 	= Request::input('payroll_employee_atm_number');
@@ -2764,7 +2766,7 @@ class PayrollController extends Member
      {
           $payroll_philhealth_min       = Request::input('payroll_philhealth_min');
           $payroll_philhealth_max       = Request::input('payroll_philhealth_max');
-          $payroll_philhealth_base           = Request::input('payroll_philhealth_base');
+          $payroll_philhealth_base      = Request::input('payroll_philhealth_base');
           $payroll_philhealth_premium   = Request::input('payroll_philhealth_premium');
           $payroll_philhealth_ee_share  = Request::input('payroll_philhealth_ee_share');
           $payroll_philhealth_er_share  = Request::input('payroll_philhealth_er_share');
@@ -2795,6 +2797,7 @@ class PayrollController extends Member
      public function pagibig_formula()
      {
           $data['pagibig'] = Tbl_payroll_pagibig::where('shop_id', Self::shop_id())->first();
+
           return view('member.payroll.side_container.pagibig', $data);
      }
 
@@ -2803,7 +2806,9 @@ class PayrollController extends Member
           Tbl_payroll_pagibig::where('shop_id', Self::shop_id())->delete();
 
           $insert['payroll_pagibig_percent']  = Request::input('payroll_pagibig_percent');
-          $insert['shop_id']                      = Self::shop_id();
+          $insert['payroll_pagibig_er_share']  = Request::input('payroll_pagibig_er_share');
+          $insert['shop_id']                  = Self::shop_id();
+
           Tbl_payroll_pagibig::insert($insert);
 
           $return['status'] = 'success';
@@ -2817,6 +2822,7 @@ class PayrollController extends Member
      {
           Tbl_payroll_pagibig_default::truncate();
           $insert['payroll_pagibig_percent'] = Request::input('payroll_pagibig_percent');
+          $insert['payroll_pagibig_er_share']  = Request::input('payroll_pagibig_er_share');
           Tbl_payroll_pagibig_default::insert($insert);
 
           $return['status'] = 'success';

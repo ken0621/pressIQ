@@ -6,13 +6,17 @@ use App\Globals\Dragonpay2\RequestForm;
 
 class Dragon_RequestPayment
 {
-    public static $paymentUrl = 'http://test.dragonpay.ph/Pay.aspx';
-
+    public static $paymentUrl = 'https://gw.dragonpay.ph/Pay.aspx';
 	private $merchantkey;
 
 	public function __construct($merchantkey)
     {
     	$this->merchantkey = $merchantkey;
+    	
+    	if (get_domain() == "c9users.io") 
+        {
+            Self::$paymentUrl = 'http://test.dragonpay.ph/Pay.aspx';
+        }
     }
 
 	private $merchantid;

@@ -6,6 +6,7 @@ use App\Globals\Pdf_global;
 use App\Globals\Ecom_Product;
 use PDF;
 use App;
+use DB;
 use Carbon\Carbon;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_country;
@@ -14,23 +15,29 @@ use App\Models\Tbl_customer;
 use App\Models\Tbl_membership;
 use App\Models\Tbl_membership_package;
 use App\Models\Tbl_membership_code;
+use App\Models\Tbl_email_template;
 use App\Models\Tbl_membership_package_has;
 use App\Models\Tbl_locale;
 use App\Models\Tbl_online_pymnt_method;
 use App\Models\Tbl_ec_product;
 use App\Models\Tbl_ec_variant;
 use App\Models\Tbl_settings;
+use App\Models\Tbl_ec_order;
+use App\Models\Tbl_ec_order_item;
 
 use Validator;
 use Session;
 use Redirect;
+use Crypt;
 use App\Globals\Mlm_member;
+use App\Globals\Mail_global;
 use App\Globals\Item;
 use App\Globals\Mlm_plan;
 use App\Globals\Mlm_compute;
 use App\Globals\Mlm_gc;
 use App\Globals\Dragonpay2\Dragon_RequestPayment;
 use App\Globals\Cart;
+use App\Globals\UnitMeasurement;
 class MemberController extends Controller
 {
     public static $shop_id;
@@ -127,18 +134,19 @@ class MemberController extends Controller
         $last_name = strtolower(substr($last_name, 0, 3));
         $first_name = strtolower(substr($first_name, 0, 6));
         $nickname = $first_name . '.' . $last_name;
+        
         $count_username = Tbl_customer::where('first_name', $f_name)
         ->where('last_name', $l_name)
         ->count();
-        if($count_username == 0)
-        {
-            return $nickname;
+        
+        $nickname = $first_name . '.' . $last_name;
+        $count_mlm_user_name = Tbl_customer::where('mlm_username', 'LIKE', "%".$nickname."%")->count();
+        if($count_mlm_user_name >= 1){
+            $nickname = $nickname . ($count_mlm_user_name + 1);
         }
-        else
-        {
-            $nickname = $nickname . ($count_username + 1);
-            return $nickname;
-        }
+        
+        return $nickname;
+        
     }
 
     public function locale_id_to_name($locale_id)
@@ -148,17 +156,46 @@ class MemberController extends Controller
 
     public function register()
     {
+
+        $settings_disable = DB::table('tbl_settings')->where('shop_id', Self::$shop_id)->where('settings_key', 'regirter_page_disable')->pluck('settings_value');
+        $settings_disable_message = DB::table('tbl_settings')->where('shop_id', Self::$shop_id)->where('settings_key', 'regirter_page_disable_text')->pluck('settings_value');
+        if(!Request::input('special_register_v2')){
+            if($settings_disable)
+            {
+                if($settings_disable == 0)
+                {
+                    return $settings_disable_message;
+                }
+            }
+            else
+            {
+                return $settings_disable_message ;
+            }
+        }
+        
+
         $customer_session = Session::get('mlm_member');
         if($customer_session)
         {
-            return $this->register_logged_in();
+            $account = Request::input('account');
+            if(!$account)
+            {
+                return $this->register_logged_in();
+            }
+            
         }
         
+        Session::forget('mlm_member');
         $data['country'] = Tbl_country::get();
         $data['current'] = Cart::get_info(Self::$shop_id);
         $data['sponsor_r'] = $this->check_if_required_sponsor(Self::$shop_id);
         $data['terms_and_agreement'] = Tbl_settings::where('shop_id', Self::$shop_id)->where('settings_key', 'terms_and_agreement')->first();
         return view("mlm.register.register", $data);
+    }
+    public function register_get_sponsor($username)
+    {
+        $data['slot_sponsor'] = Tbl_mlm_slot::where('slot_nick_name', $username)->customer()->first();
+        return view('mlm.register.sponsor', $data);
     }
     public function register_logged_in()
     {
@@ -168,21 +205,21 @@ class MemberController extends Controller
         $data['sponsor_r'] = $this->check_if_required_sponsor(Self::$shop_id);
 
         $customer_session = Session::get('mlm_member');
-
+        $data['sponsor'] = null;
         if(isset($customer_session['customer_info']->mlm_username))
         {
-            $data['sponsor'] =  $customer_session['customer_info']->mlm_username;
-        }
-        else
-        {
-            $data['sponsor'] =  $customer_session['customer_info']->mlm_username;
+            $slot_sponsor = Tbl_mlm_slot::where('slot_nick_name', $customer_session['customer_info']->mlm_username)->where('slot_defaul', 1)->first();
+            if($slot_sponsor)
+            {
+                $data['sponsor'] = $slot_sponsor->slot_nick_name;
+            }
+            
         }
 
         return view('mlm.register.logged_in', $data);
     }
     public function register_logged_in_post()
     {
-
         // Check if is sponsor is required and existing
         $info['sponsor'] = Request::input('sponsor');
         $info['account_use'] = Request::input('account_use');
@@ -346,43 +383,52 @@ class MemberController extends Controller
                     }
                     if($info['password'] == $info['password_confirm'])
                     {
-
-                        /* Set Product Temporarily */
-                        $product = Tbl_ec_product::variant()->where("eprod_shop_id", Self::$shop_id)->where("tbl_ec_product.archived", 0)->first();
-                        Cart::add_to_cart($product->evariant_id, 1, Self::$shop_id, true);
-
-                        /* Set Customer Info */
-                        $customer_info["new_account"]      = true;
-                        $customer_info["first_name"]       = $info["first_name"];
-                        $customer_info["last_name"]        = $info["last_name"];
-                        $customer_info["email"]            = $info["email"];
-                        $customer_info["password"]         = $info["password"];
-                        $customer_info["tin_number"]       = $info["tin_number"];
-                        $customer_info["mlm_username"]     = $info["mlm_username"];
-                        $customer_info["slot_sponsor"]     = $info["sponsor"];
-                        $customer_info["customer_contact"] = $info["customer_mobile"];
-                        $customer_info["is_corporate"]     = $info["is_corporate"];
-                        $customer_info["company"]          = $info["company"];
-                        // 
-                        $customer_info['middle_name']                = Request::input('middle_name');
-                        $customer_info['customer_full_address']      = Request::input('permanent_address');
-                        $customer_info['b_day']                      = Request::input('date_of_birth');
-                        $customer_info['customer_gender']            = Request::input('gender');
-                        // 
-                        $customer_set_info_response        = Cart::customer_set_info(Self::$shop_id, $customer_info);
-
-                        if($customer_set_info_response["status"] == "error")
-                        { 
-                            $data['status'] = 'warning';
-                            $data['message'][0] = $customer_set_info_response["status_message"];
+                        $check_tin = Tbl_customer::where('tin_number', $info['tin_number'])->count();
+                        if ($check_tin == 0) 
+                        {
+                            /* Set Product Temporarily */
+                            $product = Tbl_ec_product::variant()->where("eprod_shop_id", Self::$shop_id)->where("tbl_ec_product.archived", 0)->first();
+                            Cart::add_to_cart($product->evariant_id, 1, Self::$shop_id, true);
+    
+                            /* Set Customer Info */
+                            $customer_info["new_account"]      = true;
+                            $customer_info["first_name"]       = $info["first_name"];
+                            $customer_info["last_name"]        = $info["last_name"];
+                            $customer_info["email"]            = $info["email"];
+                            $customer_info["password"]         = $info["password"];
+                            $customer_info["tin_number"]       = $info["tin_number"];
+                            $customer_info["mlm_username"]     = $info["mlm_username"];
+                            $customer_info["slot_sponsor"]     = $info["sponsor"];
+                            $customer_info["customer_contact"] = $info["customer_mobile"];
+                            $customer_info["is_corporate"]     = $info["is_corporate"];
+                            $customer_info["company"]          = $info["company"];
+                            // 
+                            $customer_info['middle_name']                = Request::input('middle_name');
+                            $customer_info['customer_full_address']      = Request::input('permanent_address');
+                            $customer_info['b_day']                      = Request::input('date_of_birth');
+                            $customer_info['customer_gender']            = Request::input('gender');
+          
+                            // 
+                            $customer_set_info_response        = Cart::customer_set_info(Self::$shop_id, $customer_info);
+    
+                            if($customer_set_info_response["status"] == "error")
+                            { 
+                                $data['status'] = 'warning';
+                                $data['message'][0] = $customer_set_info_response["status_message"];
+                            }
+                            else
+                            {
+                                /* Redirect */
+                                Session::put('mlm_register_step_1', $info);
+                                $data['status'] = 'success';
+                                $data['message'][0] = 'Sucess!';
+                                $data['link'] = '/member/register/package';
+                            }
                         }
                         else
                         {
-                            /* Redirect */
-                            Session::put('mlm_register_step_1', $info);
-                            $data['status'] = 'success';
-                            $data['message'][0] = 'Sucess!';
-                            $data['link'] = '/member/register/package';
+                            $data['status'] = 'popup-warning';
+                            $data['message'][0] = "Sorry, the tin number is already used. Please contact the customer service.";
                         }
                     }
                     else
@@ -399,8 +445,10 @@ class MemberController extends Controller
             }
             else
             {
-                $data['status'] = 'warning';
-                $data['message'][0] = 'Email already used.';
+                $customer = Tbl_customer::where('email', $info['email'])->first();
+                $ec_order = Tbl_ec_order::where("customer_id",$customer->customer_id)->first();
+                $data['status'] = 'error-email';
+                $data['action'] = "/member/email/resend/".$ec_order->ec_order_id;
             }
          }
          else
@@ -410,7 +458,23 @@ class MemberController extends Controller
          }
          return json_encode($data);
     }
-
+    
+    public function resend_email($order_id)
+    {
+        $data_order                = DB::table("tbl_ec_order")->where("ec_order_id", $order_id)->first();
+        $data_customer             = DB::table("tbl_customer")->where("customer_id", $data_order->customer_id)->first();
+        if ($data_order) 
+        {
+            $data["template"]         = Tbl_email_template::where("shop_id", Self::$shop_id)->first();
+            $data['mail_to']          = $data_order->customer_email;
+            $data['mail_subject']     = "Account Verification";
+            $data['account_password'] = Crypt::decrypt($data_customer->password);
+            $data['mlm_username']     = $data_customer->mlm_username;
+            $data['mlm_email']        = $data_customer->email; 
+            $result = Mail_global::password_mailv2($data, $data_order->shop_id);
+        }
+        return Redirect::to("/mlm/login")->with("success","Email Successfully Sent!");
+    }   
     public function payment()
     {
         $customer_information["new_account"] = true;
@@ -468,7 +532,7 @@ class MemberController extends Controller
             else
             {
                 $data['status'] = 'warning';
-                return Redirect::to("/member/register")->send();
+                return Redirect::to("/member/register/payment")->send();
             }
         }
     }
@@ -493,30 +557,54 @@ class MemberController extends Controller
     {
         $info['variant_id'] = Request::input('variant_id');
         $product_stocks = Request::input('product_stocks');
-        if($product_stocks[$info['variant_id']] > 0)
+        $accept_with_out_stocks = Request::input('accept_with_out_stocks');
+        if($product_stocks[$info['variant_id']] < 0)
         {
-            if(isset($info['variant_id']))
+            if($accept_with_out_stocks != 1)
             {
+
+                $data['status'] = 'warning';
+                $data['message'][0] = 'Out of stocks.';
+                return json_encode($data);
+
                 /* Add Package */
-                Cart::add_to_cart($info["variant_id"], 1, Self::$shop_id, true);
+                //Cart::add_to_cart($info["variant_id"], 1, Self::$shop_id, true);
 
                 /* Redirect */
-                $d['variant_id'] = $info['variant_id'];
+                /*$d['variant_id'] = $info['variant_id'];
                 Session::put('mlm_register_step_2', $d);
                 $data['status'] = 'success';
                 $data['message'][0] = 'Success!';
-                $data['link'] = '/member/register/shipping';
+                $data['link'] = '/member/register/shipping';*/
+
             }
-            else
+        }
+        if(isset($info['variant_id']))
+        {
+            /* Add Package */
+            Cart::add_to_cart($info["variant_id"], 1, Self::$shop_id, true);
+            $tbl_ec_product = Tbl_ec_variant::where('evariant_id', $info["variant_id"])->product()->first();
+            if($tbl_ec_product)
             {
-                $data['status'] = 'warning';
-                $data['message'][0] = 'Invalid Package.';
+                $select_free = Tbl_ec_product::where('ec_product_membership_eon', $tbl_ec_product->ec_product_membership)->variant()->get();
+                if($select_free)
+                {
+                    foreach ($select_free as $key => $value) {
+                        Cart::add_to_cart($value->evariant_id, 1, Self::$shop_id, false);
+                    }
+                }
             }
+            /* Redirect */
+            $d['variant_id'] = $info['variant_id'];
+            Session::put('mlm_register_step_2', $d);
+            $data['status'] = 'success';
+            $data['message'][0] = 'Success!';
+            $data['link'] = '/member/register/shipping';
         }
         else
         {
             $data['status'] = 'warning';
-            $data['message'][0] = 'Out of Stock';
+            $data['message'][0] = 'Invalid Package.';
         }
 
 
@@ -555,12 +643,12 @@ class MemberController extends Controller
     {
         $s['customer_state'] = $this->locale_id_to_name(Request::input('customer_state'));
         $s['customer_city'] = $this->locale_id_to_name(Request::input('customer_city'));
-        $s['customer_zip'] = $this->locale_id_to_name(Request::input('customer_zip'));
+        // $s['customer_zip'] = $this->locale_id_to_name(Request::input('customer_zip'));
         $s['customer_street'] = Request::input('customer_street');
     
         $rules['customer_state'] = 'required';
         $rules['customer_city'] = 'required';
-        $rules['customer_zip'] = 'required';
+        // $rules['customer_zip'] = 'required';
         $rules['customer_street'] = 'required';
 
         $validator = Validator::make($s, $rules);
@@ -574,7 +662,7 @@ class MemberController extends Controller
          {
             $customer_info["shipping_state"]   = $s["customer_state"];
             $customer_info["shipping_city"]    = $s["customer_city"];
-            $customer_info["shipping_zip"]     = $s["customer_zip"];
+            // $customer_info["shipping_zip"]     = $s["customer_zip"];
             $customer_info["shipping_street"]  = $s["customer_street"];
             $customer_set_info_response        = Cart::customer_set_info(Self::$shop_id, $customer_info);
             
@@ -818,5 +906,122 @@ class MemberController extends Controller
         $data['membership_code'] = Request::input("membership_code");
 
         return view("card", $data);
+    }
+
+    public function set_invoice_number()
+    {
+        $order = DB::table("tbl_ec_order")->where("payment_status", 1)->where("archived", 0)->where("invoice_number", NULL)->get();
+        foreach ($order as $key => $value) 
+        {
+            $last = DB::table("tbl_ec_order")->where("payment_status", 1)->where("archived", 0)->max("invoice_number");
+            if ($last) 
+            {
+                $update["invoice_number"] = $last + 1;
+                DB::table('tbl_ec_order')->where("ec_order_id", $value->ec_order_id)->update($update);            
+            }
+            else
+            {
+                $update["invoice_number"] = 11000000;
+                DB::table('tbl_ec_order')->where("ec_order_id", $value->ec_order_id)->update($update);
+            }
+        }
+    }
+
+    public function custom_view_invoice()
+    {
+        $this->set_invoice_number();
+        $order_id = Request::input("order");
+        if ($order_id) 
+        {
+            $data['info']   = Tbl_ec_order::where("tbl_ec_order.ec_order_id", $order_id)
+                                            ->select("*", "tbl_ec_order.created_date as order_created_date")
+                                            // ->where("tbl_customer_address.purpose", "shipping")
+                                            ->join("tbl_customer", "tbl_customer.customer_id", "=", "tbl_ec_order.customer_id")
+                                            // ->leftJoin("tbl_customer_address", "tbl_customer_address.customer_id", "=", "tbl_customer.customer_id")
+                                            ->leftJoin("tbl_online_pymnt_method", "tbl_online_pymnt_method.method_id", "=", "tbl_ec_order.payment_method_id")
+                                            ->first();
+            
+            if ($data['info']) 
+            {
+                $payment_method = DB::table("tbl_online_pymnt_link")->where("link_method_id", $data['info']->payment_method_id)->first();
+                if($payment_method->link_reference_name == "paymaya") 
+                {
+                    $paymaya = DB::table("tbl_paymaya_logs")->where("order_id", $order_id)->first();
+                    $data['info']->checkout_id = $paymaya->checkout_id;
+                }
+                elseif($payment_method->link_reference_name == "dragonpay")
+                {
+                    $dragonpay = DB::table("tbl_dragonpay_logs")->where("order_id", $order_id)->first();
+                    if (is_serialized($dragonpay->response)) 
+                    {
+                        $unserialize_dragonpay = unserialize($dragonpay->response);
+                        if (isset($unserialize_dragonpay['txnid']) && $unserialize_dragonpay['txnid']) 
+                        {
+                            $data['info']->checkout_id = $unserialize_dragonpay['txnid'];
+                        }
+                        else
+                        {
+                            $data['info']->checkout_id = "None";
+                        }
+                    }
+                    else
+                    {
+                        $data['info']->checkout_id = "None";
+                    }
+                }
+                else
+                {
+                    $data['info']->checkout_id = "None";
+                }
+                
+                $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $order_id)
+                                                   ->leftJoin('tbl_ec_variant', 'tbl_ec_order_item.item_id', '=', 'evariant_id')
+                                                   ->leftJoin('tbl_item', 'tbl_ec_variant.evariant_item_id', '=', 'tbl_item.item_id')
+                                                   ->get();
+                
+                if ($data['_order']) 
+                {
+                    $data['summary'] = [];
+                    $subtotal = 0;
+                    $shipping = 0;
+                    $total = 0;
+
+                    foreach ($data['_order'] as $key => $value) 
+                    {
+                        $subtotal += $value->total;
+                    }
+                    
+                    $data['summary']['subtotal']       = $subtotal;
+                    $data['summary']['vat']            = $subtotal / 1.12 * 0.12;
+                    $data['summary']['vatable']        = $data['summary']['subtotal'] - $data['summary']['vat'];
+                    $data['order_id']                  = $order_id;
+
+                    $html = view("custom_invoice", $data);
+                    $pdf = Pdf_global::show_pdf($html);
+                    return $pdf;
+                }
+            }
+        }
+    }
+
+    public function paymaya_maintenance()
+    {
+        $data["_paymaya"] = DB::table("tbl_paymaya_logs")->get();
+        return view("paymaya.paymaya_maintenance", $data);
+    }
+
+    public function paymaya_maintenance_edit($id)
+    {
+        $data["paymaya"] = DB::table("tbl_paymaya_logs")->where("id", $id)->first();
+        $data["_order"] = DB::table("tbl_ec_order")->get();
+        return view("paymaya.edit", $data);
+    }
+
+    public function paymaya_maintenance_edit_post($id)
+    {
+        $update["order_id"] = Request::input("order_id");
+        DB::table("tbl_paymaya_logs")->where("id", $id)->update($update);
+
+        return Redirect::to("/payment/paymaya/maintenance");
     }
 }

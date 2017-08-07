@@ -27,7 +27,13 @@ function global()
         action_int_format();
         action_float_format();
 
-        $('[data-toggle="tooltip"]').tooltip({container: 'body'}); 
+        // 
+        try {
+            $('[data-toggle="tooltip"]').tooltip({container: 'body'});
+        }
+        catch(err) {
+            console.log(err);
+        } 
     }
     function add_event_global_popup()
     {
@@ -60,6 +66,12 @@ function global()
     }
     function action_global_submit(link, data, modal)
     {
+        console.log(link);
+        console.log(link.charAt(0));
+        if(link.charAt(0) != '/')
+        {
+            link = '/' + link;
+        }
         $(".modal-loader").removeClass("hidden");
         $.ajax({
             url:link,

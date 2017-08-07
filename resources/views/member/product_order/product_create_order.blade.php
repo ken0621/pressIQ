@@ -16,6 +16,9 @@
                     </small>
                 </h1>
                 <button type="submit" class="panel-buttons btn btn-custom-primary pull-right">Save</button>
+                @if($inv->payment_status == 1)
+                    <a href="/member/ecommerce/product_order/custom_invoice?order={{ $ec_order_id }}" target="_blank" class="panel-buttons btn btn-custom-primary pull-right">View Invoice</a>
+                @endif
                 <a href="/member/ecommerce/product_order" class="panel-buttons btn btn-default pull-right btn-custom-white">&laquo; Back</a>
             </div>
         </div>
@@ -467,13 +470,13 @@
 </style>
 @endsection
 @section('script')
-<script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
+<script type="text/javascript" src="assets/member/js/textExpand.js"></script>
 @if(!isset($inv))
-<script type="text/javascript" src="/assets/member/js/draggable_row.js"></script>
+<script type="text/javascript" src="assets/member/js/draggable_row.js"></script>
 @endif
 <script type="text/javascript">
     var order_id    = "{{$ec_order_id or null}}";
     var file_path   = "{{$inv->payment_upload or ''}}";
 </script>
-<script type="text/javascript" src="/assets/member/js/product_create_order.js"></script>
+<script type="text/javascript" src="assets/member/js/product_create_order.js"></script>
 @endsection

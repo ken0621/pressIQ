@@ -67,24 +67,11 @@ class Mlm_tree
     }
     public static function update_auto_balance_position($new_slot,$level)
     {
-        $top_slot                        = Tbl_mlm_slot::where("shop_id",$new_slot->shop_id)->orderBy("slot_id","ASC")->first();
-        $get_top_level                   = Tbl_tree_placement::where("placement_tree_parent_id",$top_slot->slot_id)->where("placement_tree_child_id",$new_slot->slot_placement)->first();
-        $placement                       = Tbl_mlm_slot::where("slot_id",$new_slot->slot_placement)->first();
-        if($get_top_level)
-        {     
-            if($new_slot->slot_position == "left")
-            {
-                $auto_balance_position  = $placement->auto_balance_position + pow(2,$get_top_level->placement_tree_level);
-            }
-            else
-            {
-                $auto_balance_position  = $placement->auto_balance_position + (pow(2,$get_top_level->placement_tree_level) * 2);
-            }
-        }
-        else
-        {
-            $top_slot                  = Tbl_mlm_slot::where("shop_id",$new_slot->shop_id)->orderBy("slot_id","ASC")->first();
-            if($new_slot->slot_sponsor == $top_slot->slot_id)
+        $top_slot                            = Tbl_tree_placement::where("placement_tree_child_id",$new_slot->slot_id)->orderBy("placement_tree_level","DESC")->first();
+        
+        if($top_slot)
+        {  
+            if($top_slot->placement_tree_level == 1)
             {
                 if($new_slot->slot_position == "left")
                 {
@@ -95,7 +82,41 @@ class Mlm_tree
                     $auto_balance_position = 3;
                 }
             }
+            else
+            {
+                // $get_level_one                   =
+                // $get_top_level                   = Tbl_tree_placement::where("placement_tree_parent_id",$top_slot->placement_tree_parent_id)->where("placement_tree_child_id",$new_slot->slot_placement)->first();
+                // $placement                       = Tbl_mlm_slot::where("slot_id",$new_slot->slot_placement)->first();
+                // if($get_top_level)
+                // {     
+                //     if($new_slot->slot_position == "left")
+                //     {
+                //         $auto_balance_position  = $placement->auto_balance_position + pow(2,$get_top_level->placement_tree_level);
+                //     }
+                //     else
+                //     {
+                //         $auto_balance_position  = $placement->auto_balance_position + (pow(2,$get_top_level->placement_tree_level) * 2);
+                //     }
+                // }
+
+                $placement                       = Tbl_mlm_slot::where("slot_id",$new_slot->slot_placement)->first();
+                $top_slot                        = Tbl_tree_placement::where("placement_tree_child_id",$new_slot->slot_placement)->orderBy("placement_tree_level","DESC")->first();
+                $get_top_level                   = Tbl_tree_placement::where("placement_tree_parent_id",$top_slot->placement_tree_parent_id)->where("placement_tree_child_id",$new_slot->slot_placement)->first();
+                if($get_top_level)
+                {     
+                    $new_level = $get_top_level->placement_tree_level;
+                    if($new_slot->slot_position == "left")
+                    {
+                        $auto_balance_position  = $placement->auto_balance_position + pow(2,$new_level);
+                    }
+                    else
+                    {
+                        $auto_balance_position  = $placement->auto_balance_position + (pow(2,$new_level) * 2);
+                    }
+                }
+            }
         }
+
         if(isset($auto_balance_position))
         {
             $update["auto_balance_position"] = $auto_balance_position;
@@ -137,6 +158,7 @@ class Mlm_tree
                 }
             }
         }
+
     }
     public static function auto_place_slot_binary_left_to_right_v2($slot_info)
     {

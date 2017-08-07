@@ -10,42 +10,42 @@
     <title>Digima House</title>
     <meta name="description" content="Page Description">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
+    <base href="{{ URL::to('/') }}">
+
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker-standalone.min.css">
-    <link rel="stylesheet" href="/assets/member/styles/92bc1fe4.bootstrap.css">
-    <link rel="stylesheet" href="/assets/member/styles/vendor/jquery.pnotify.default.css">
-    <link rel="stylesheet" href="/assets/member/styles/vendor/select2/select2.css">
-    <link rel="stylesheet" href="/assets/member/styles/vendor/datatables.css" media="screen"/> 
-    <link rel="stylesheet" href="/assets/member/styles/aaf5c053.proton.css">
-    <link rel="stylesheet" href="/assets/member/styles/vendor/animate.css">
-    <link rel="stylesheet" href="/assets/member/css/customBTN.css" type="text/css" />
-    <link rel="stylesheet" href="/assets/external/chosen/chosen/chosen.css" media="screen"/>
+    <link rel="stylesheet" href="assets/member/styles/92bc1fe4.bootstrap.css">
+    <link rel="stylesheet" href="assets/member/styles/vendor/jquery.pnotify.default.css">
+    <link rel="stylesheet" href="assets/member/styles/vendor/select2/select2.css">
+    <link rel="stylesheet" href="assets/member/styles/vendor/datatables.css" media="screen"/> 
+    <link rel="stylesheet" href="assets/member/styles/aaf5c053.proton.css">
+    <link rel="stylesheet" href="assets/member/styles/vendor/animate.css">
+    <link rel="stylesheet" href="assets/member/css/customBTN.css" type="text/css" />
+    <link rel="stylesheet" href="assets/external/chosen/chosen/chosen.css" media="screen"/>
    
     <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
-    <script src="/assets/member/scripts/vendor/respond.min.js"></script>
+    <script src="assets/member/scripts/vendor/respond.min.js"></script>
     <![endif]-->
     
-    <link rel="stylesheet" type="text/css" href="/assets/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/assets/member/styles/6227bbe5.font-awesome.css" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="assets/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/member/styles/6227bbe5.font-awesome.css" type="text/css"/>
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" type="text/css"/> -->
-    <link rel="stylesheet" href="/assets/member/styles/40ff7bd7.font-titillium.css" type="text/css"/>
-    <link rel="stylesheet" href="/assets/member/css/member.css" type="text/css"/>
-    <link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
-    <link rel="stylesheet" type="text/css" href="/assets/member/css/notice.css">
-    <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
-    <link rel="stylesheet" type="text/css" href="/assets/member/css/windows8.css">
-    <link rel="stylesheet" type="text/css" href="/assets/member/css/pis_ctr.css">
-    <link rel="stylesheet" type="text/css" href="/assets/member/css/image_gallery.css">
-    
-    <link rel="stylesheet" type="text/css" href="/assets/member/plugin/dropzone/basic.css">
-    <link rel="stylesheet" type="text/css" href="/assets/custom_plugin/myDropList/css/myDropList.css">
+    <link rel="stylesheet" href="assets/member/styles/40ff7bd7.font-titillium.css" type="text/css"/>
+    <link rel="stylesheet" href="assets/member/css/member.css" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="assets/member/plugin/toaster/toastr.css">
+    <link rel="stylesheet" type="text/css" href="assets/member/css/notice.css">
+    <link rel="stylesheet" type="text/css" href="assets/member/css/loader.css">
+    <link rel="stylesheet" type="text/css" href="assets/member/css/windows8.css">
+    <link rel="stylesheet" type="text/css" href="assets/member/css/pis_ctr.css">
+    <link rel="stylesheet" type="text/css" href="assets/member/css/image_gallery.css">
+    <link rel="stylesheet" type="text/css" href="assets/member/plugin/dropzone/basic.css">
+    <link rel="stylesheet" type="text/css" href="assets/custom_plugin/myDropList/css/myDropList.css">
 
-    <!-- <link rel="stylesheet" type="text/css" href="/assets/chartist/chartist.css"> -->
-    <!-- <link rel="stylesheet" type="text/css" href="/assets/member/plugin/dropzone/dropzone.min.css"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="assets/chartist/chartist.css"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="assets/member/plugin/dropzone/dropzone.min.css"> -->
 
-    <link rel="stylesheet" href="/assets/external/jquery_css/jquery-ui.css">
-    <link rel="stylesheet" type="text/css" href="/assets/mlm/pace.css">
+    <link rel="stylesheet" href="assets/external/jquery_css/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="assets/mlm/pace.css">
 
     <style type="text/css">
     a
@@ -53,21 +53,22 @@
         cursor: pointer;
     }
     </style>
-    <link rel="stylesheet" type="text/css" href="/assets/member/css/global.css">
+    <link rel="stylesheet" type="text/css" href="assets/member/css/global.css">
     @yield('css')
-    <script>
-    (function () {
-    var js;
-    if (typeof JSON !== 'undefined' && 'querySelector' in document && 'addEventListener' in window) {
-    js = '/assets/external/jquery.minv2.js';
-    } else {
-    js = '/assets/external/jquery.minv1.js';
-    }
-    document.write('<script src="' + js + '"><\/script>');
-    }());
-    </script>
-    <script src="/assets/member/scripts/vendor/modernizr.js"></script>
-    <script src="/assets/member/scripts/vendor/jquery.cookie.js"></script>
+        <script>
+        (function () {
+        var js;
+        if (typeof JSON !== 'undefined' && 'querySelector' in document && 'addEventListener' in window) {
+        js = 'assets/member/external/jquery.minv2.js';
+        } else {
+        js = 'assets/member/external/jquery.minv1.js';
+        }
+        document.write('<script src="' + js + '"><\/script>');
+        }());
+        </script>
+        <!--<script src="assets/member/scripts/jquery.minv1.js"></script>-->
+    <script src="assets/member/scripts/vendor/modernizr.js"></script>
+    <script src="assets/member/scripts/vendor/jquery.cookie.js"></script>
     <script>
     $(function()
     {
@@ -423,26 +424,26 @@
     <script type="text/javascript" src="/assets/member/global.js?version=6.1"></script>
 
     <!-- Testing only -->
-    <script type="text/javascript" src="/assets/member/settings/settings_global.js"></script>
-    <script type="text/javascript" src="/assets/member/mlm/global_slot.js"></script>
+    <script type="text/javascript" src="assets/member/settings/settings_global.js"></script>
+    <script type="text/javascript" src="assets/member/mlm/global_slot.js"></script>
     <!-- End -->
 
-    <script src="/assets/external/jquery_ui/jquery_ui.js"></script>
-    <script src="/assets/member/scripts/e1d08589.bootstrap.min.js"></script>
-    <script src="/assets/member/scripts/9f7a46ed.proton.js"></script>
-    <script type="text/javascript" src="/assets/member/scripts/vendor/jquery.pnotify.min.js"></script>
-    <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
+    <script src="assets/external/jquery_ui/jquery_ui.js"></script>
+    <script src="assets/member/scripts/e1d08589.bootstrap.min.js"></script>
+    <script src="assets/member/scripts/9f7a46ed.proton.js"></script>
+    <script type="text/javascript" src="assets/member/scripts/vendor/jquery.pnotify.min.js"></script>
+    <script type="text/javascript" src="assets/member/plugin/toaster/toastr.min.js"></script>
     <!--<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js'></script>-->
-    <script type="text/javascript" src='/assets/member/js/notice.js'></script>
-    <script type="text/javascript" src='/assets/member/js/pis_counter.js'></script>
-    <script type="text/javascript" src="/assets/external/chosen/chosen/chosen.jquery.js"></script>
-    <script type="text/javascript" src='/assets/member/plugin/dropzone/dropzone.js'></script>
-    <script type="text/javascript" src='/assets/member/js/image_gallery.js'></script>
-    <script type="text/javascript" src='/assets/custom_plugin/myDropList/js/myDropList.js'></script>
-    <script type="text/javascript" src="/assets/member/js/prompt_serial_number.js"></script>
-    <script type="text/javascript" src='/assets/member/js/match-height.js'></script>
-    <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
-    <script type="text/javascript" src="/assets/mlm/pace.min.js"></script>
+    <script type="text/javascript" src='assets/member/js/notice.js'></script>
+    <script type="text/javascript" src='assets/member/js/pis_counter.js'></script>
+    <script type="text/javascript" src="assets/external/chosen/chosen/chosen.jquery.js"></script>
+    <script type="text/javascript" src='assets/member/plugin/dropzone/dropzone.js'></script>
+    <script type="text/javascript" src='assets/member/js/image_gallery.js'></script>
+    <script type="text/javascript" src='assets/custom_plugin/myDropList/js/myDropList.js'></script>
+    <script type="text/javascript" src="assets/member/js/prompt_serial_number.js"></script>
+    <script type="text/javascript" src='assets/member/js/match-height.js'></script>
+    <script type="text/javascript" src='assets/chartjs/Chart.bundle.min.js'></script>
+    <script type="text/javascript" src="assets/mlm/pace.min.js"></script>
 
     <script type="text/javascript">
 	  $(document).ajaxStart(function() { Pace.restart(); });
@@ -452,6 +453,62 @@
         // webshims.polyfill('forms forms-ext');
         // $(function() { $( ".datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' }); });
       }); 
+      $.ajaxSetup({
+        beforeSend: function(jqXHR, settings) {
+                // var base = $("base").attr("href");
+                // var new_url = window.location.protocol + "//" + window.location.host + "/";
+                // var new_base = settings.url.replace(new_url,base);
+                // var old_base = settings.url.replace(new_url,"");
+                // var split = old_base.split("/");
+                // var old_new_base = ''; 
+                // if(split[0] == 'digima')
+                // {
+                //     var i;
+                //     for (i = 0; i < split.length; ++i) {
+                //         if(i != 0)
+                //         {
+                //             old_new_base = old_new_base + '/' + split[i];
+                //         }
+                //     }
+                //     settings.url = base + old_new_base;
+
+                // }
+                // else
+                // {
+                //     split = jQuery.grep(split, function(value) 
+                //     {
+                //       return value != "httpss:";
+                //     });
+                    
+                //     split = jQuery.grep(split, function(value) 
+                //     {
+                //       return value != "";
+                //     });
+                    
+                //     split = jQuery.grep(split, function(value) 
+                //     {
+                //       return value != "brown.com.ph";
+                //     });
+                    
+                //     var i;
+                //     for (i = 0; i < split.length; ++i) 
+                //     {
+                //         old_new_base = old_new_base + '/' + split[i];
+                //     }
+
+                //     settings.url = '{{url()}}' + old_new_base;
+                // }
+                // console.log("settings.url: " + settings.url);
+            },
+        afterSend: function(jqXHR, settings) {
+            // load_assets();
+            console.log(1);
+            },
+        ajaxSuccess : function (){
+            // load_assets();  
+            console.log('ajaxSuccess');
+        }    
+        });
       $('.select_current_warehouse').click(function(event) 
       {
         event.stopPropagation();
@@ -472,6 +529,37 @@
             return  num=="-" ? acc : num + (i && !(i % 3) ? "," : "") + acc;
         }, "") + "." + p[1];
     }
+
+    $(document).ready(function()
+    {
+
+    });
+    load_assets();
+    function load_assets(){
+        $("script").each(function(index, el) 
+        {
+            var current = $(el).attr("src");
+            if (current && current.indexOf("/assets") != -1) 
+            {
+                var replace = current.replace('/assets', 'assets');
+                $(el).remove();
+                $('<script type="text/javascript">').attr('src', replace).prependTo('body');
+            } 
+        });
+
+        $("link").each(function(index, el) 
+        {
+            var current = $(el).attr("href");
+            if (current && current.indexOf("/assets") != -1) 
+            {
+                var replace = current.replace('/assets', 'assets');
+                $(el).remove();
+                $('<link rel="stylesheet" type="text/css">').attr('href', replace).appendTo('head');
+            } 
+        });
+    }
+
+    
 	</script>
     @yield('script')
 </body>

@@ -27,7 +27,7 @@
         <div class="tab-content col-md-4">
             <div class="input-group">
                 <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control global-search-custom" var-name="search_province" url="" data-value="1" placeholder="Press Enter to Search" aria-describedby="basic-addon1">
+                <input type="text" class="form-control global-search-custom" var-name="search_province" url="{{ URL::to('') }}/member/maintenance/location/list" data-value="1" placeholder="Press Enter to Search" aria-describedby="basic-addon1">
             </div>
             <div id="active" class="tab-pane fade in active">
                 <div class="load-data" target="province_location">
@@ -40,7 +40,7 @@
         <div class="tab-content col-md-4">
             <div class="input-group">
                 <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control global-search-custom" var-name="search_city" url="" data-value="1" placeholder="Press Enter to Search" aria-describedby="basic-addon1">
+                <input type="text" class="form-control global-search-custom" var-name="search_city" url="{{ URL::to('') }}/member/maintenance/location/list" data-value="1" placeholder="Press Enter to Search" aria-describedby="basic-addon1">
             </div>
             <div id="active" class="tab-pane fade in active">
                 <div class="load-data" target="city_location">
@@ -53,7 +53,7 @@
         <div class="tab-content col-md-4">
             <div class="input-group">
                 <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control global-search-custom" var-name="search_barangay" url="" data-value="1" placeholder="Press Enter to Search" aria-describedby="basic-addon1">
+                <input type="text" class="form-control global-search-custom" var-name="search_barangay" url="{{ URL::to('') }}/member/maintenance/location/list" data-value="1" placeholder="Press Enter to Search" aria-describedby="basic-addon1">
             </div>
             <div id="active" class="tab-pane fade in active">
                 <div class="load-data" target="barangay_location">
@@ -68,7 +68,7 @@
 </div>
 @endsection
 @section('script')
-<script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
+<script type="text/javascript" src="assets/member/js/paginate_ajax_multiple.js"></script>
 <script>
 var coupon_code = new coupon_code();
 
@@ -162,7 +162,7 @@ function reload_content(element)
 
     $load_content =  $(element).closest(".tab-content").find(".load-data");
 
-    $($load_content).load("?"+parent_var_name+"="+parent_id+" #"+$load_content.attr("target"));
+    $($load_content).load("/member/maintenance/location/list?"+parent_var_name+"="+parent_id+" #"+$load_content.attr("target"));
 }
 
 

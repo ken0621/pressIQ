@@ -12,6 +12,7 @@
           <?php 
             $package_count = count($_product);
             $md = 4;
+            $offset =0;
             switch ($package_count) {
               case 2:
                 $md = 6;
@@ -20,7 +21,8 @@
                 $md = 4;
                 break;
               case 1:
-                $md = 12;
+                $offset = 4;
+                $md = 4;
                 break;  
               default:
                 # code...
@@ -28,14 +30,14 @@
             }
           ?>
           @foreach($_product as $key => $value)
-            <div class="col-md-{{$md}}  product_choice" membership_id="{{$value->ec_product_membership}}">
+            <div class="col-md-offset-{{$offset}} col-md-{{$md}}  product_choice" membership_id="{{$value->ec_product_membership}}">
               <div class="holder">
                 <br>
                 <div class="img">
                   @if($value->eprod_detail_image != null)
-                  <img style="object-fit: contain; height: 250px; width: 100%;" class="" src="{{$value->eprod_detail_image}}">
+                  <img style="object-fit: contain; height: 250px; width: 100%;" class="" src="{{ ltrim($value->eprod_detail_image, '/') }}">
                   @else 
-                  <img style="object-fit: contain; height: 250px; width: 100%; " class="" src="/assets/mlm/img/placeholder.jpg">
+                  <img style="object-fit: contain; height: 250px; width: 100%; " class="" src="assets/mlm/img/placeholder.jpg">
                   @endif
                 </div>
                 <div class="text-holder">
@@ -43,7 +45,7 @@
                     <div class="radio">
                     <!--  -->
                       <input type="hidden" name="product_stocks[{{$value->evariant_id}}]" value="{{$value->inventory_count}}">
-                      <label style="font-size: 20px;"><input type="radio" class="membership_id_{{$value->ec_product_membership}} other_membership hide" membership_id="{{$value->ec_product_membership}}" name="variant_id" value="{{$value->evariant_id}}"> {{$value->eprod_name}}</label>
+                      <label style="font-size: 20px;"><input stock="{{$value->inventory_count}}" type="radio" class="membership_id_{{$value->ec_product_membership}} other_membership hide" membership_id="{{$value->ec_product_membership}}" name="variant_id" value="{{$value->evariant_id}}"> {{$value->eprod_name}}</label>
                     </div>
                   </div>
                   <div class="membership-price" style="font-size: 15px;">{{currency('PHP', $value->min_price)}}</div>   
@@ -76,9 +78,9 @@
                           <div class="img clearfix">
                             <div class="col-md-4 hide">
                               @if($value->eprod_detail_image != null)
-                              <img style="object-fit: contain; height: 250px; width: 100%;" class="" src="{{$value->eprod_detail_image}}">
+                              <img style="object-fit: contain; height: 250px; width: 100%;" class="" src="{{ ltrim($value->eprod_detail_image, '/') }}">
                               @else 
-                              <img style="object-fit: contain; height: 250px; width: 100%; " class="" src="/assets/mlm/img/placeholder.jpg">
+                              <img style="object-fit: contain; height: 250px; width: 100%; " class="" src="assets/mlm/img/placeholder.jpg">
                               @endif
                             </div>
                             <div class="col-md-12">
@@ -108,6 +110,25 @@
     </div>
     <div class="button-holder">
       <br>
+        <div class="modal fade" id="modal_show_no_stocks" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header clearfix">
+              </div>
+              <div class="modal-body">
+              <h3>
+              <p>Hello! Due to the phenomenal success of the movement, we currently ran out of stock for the package that you have chosen,  you can still continue your membership by proceeding with the ordering, payment and  check out process. </p>
+              
+              <p>The item you have chosen will be on reserve and will be delivered once it’s available. From today, expect delivery within 45 days. </p>
+              </h3>
+              </div>
+              <div class="modal-footer">
+                <a href="javascript:" class="modal-button btn btn-green btn-lg" onClick="$('.accept_with_out_stocks').val(1);$('#modal_show_no_stocks').modal('toggle'); $('.register-submit').submit();">Accept</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      <input type="hidden" class="accept_with_out_stocks" name="accept_with_out_stocks" value="0">
       <button class="modal-button btn btn-green btn-lg">PROCEED TO PAYMENT</button>
     </div>
   </div>
@@ -159,11 +180,40 @@ $('.product_choice').on('click', function(){
 });
   $(document).on("submit", ".register-submit", function(e)
   {
+      e.preventDefault();
       var data = $(e.currentTarget).serialize();
       var link = $(e.currentTarget).attr("action");
-      $('#load').removeClass('hide');
-      submit_form_register(link, data);
-      e.preventDefault();
+      $('.other_membership').each(function(){
+        if($(this).is(':checked'))
+        {
+          var checked_stocks = $('.accept_with_out_stocks').val();
+          if(checked_stocks == 0)
+          {
+            var stock = $(this).attr('stock');
+            if(stock <= 0)
+            {
+              $('#modal_show_no_stocks').modal('toggle');
+            }
+            else
+            {
+              console.log(2);
+              $('#load').removeClass('hide');
+              submit_form_register(link, data);
+              e.preventDefault();
+            }
+          }
+          else
+          {
+            console.log(1);
+            $('#load').removeClass('hide');
+            submit_form_register(link, data);
+            e.preventDefault();
+          }
+          
+        }
+      });
+      
+      
       
   })
   function submit_form_register(link, data)

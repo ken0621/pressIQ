@@ -1,153 +1,150 @@
 @extends('mlm.layout')
 @section('content')
-<div class="row">
-   <div class="col-md-12 col-sm-12 col-xs-12">
-      <div class="dashboard_graph">
-         <div class="row x_title">
-            <div class="col-md-6">
-               <h3>Income Summary <small>Pairing and Direct Referral</small></h3>
-            </div>
-            <div class="col-md-6">
-               <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
-                  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-                  <span>April 1, 2017 - May 1, 2015</span> <b class="caret"></b>
-               </div>
-            </div>
-         </div>
-         <div class="col-md-9 col-sm-9 col-xs-12">
-            <div id="chart_plot_01" class="demo-placeholder"></div>
-         </div>
-         <div class="col-md-3 col-sm-3 col-xs-12 bg-white">
-            <div class="x_title">
-               <h2>Performance Summary</h2>
-               <div class="clearfix"></div>
-            </div>
-            <div class="col-md-12 col-sm-12 col-xs-6">
-               <div>
-                  <p>Direct Referral - {{currency('PHP', $direct)}}</p>
-                  <div class="">
-                     <div class="progress progress_sm" style="width: 100%;">
-                        <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{$direct_percent}}"></div>
-                     </div>
-                  </div>
-               </div>
-               <div>
-                  <p>Pairing - {{currency('PHP', $binary)}}</p>
-                  <div class="">
-                     <div class="progress progress_sm" style="width: 100%;">
-                        <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{$binary_percent}}"></div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
-         <div class="clearfix"></div>
+   @if($slot_start_status)
+      {!! $slot_start_status !!}
+   @else
+   <div class="col-md-4">
+      <div class="box box-primary">
+        <div class="box-header">
+          <center>Matrix Per Level</center>
+        </div>
+        <div class="box-body">
+          
+          <table class="table">
+            <th>Level</th>
+            <th>Count</th>
+            <th>Percentage</th>
+
+            @foreach($count_per_level as $key => $value)
+              <tr class="width_tr_a" percentage="@if(isset($tree_count[$key])){{($tree_count[$key]->count_slot/$value) * 100}}@else{{0}}@endif">
+                <td>{{$key + 1}}</td>
+                <td>@if(isset($tree_count[$key])) {{$tree_count[$key]->count_slot}}/{{$value}} @else 0/{{$value}} @endif</td>
+                <td>@if(isset($tree_count[$key])){{($tree_count[$key]->count_slot/$value) * 100}}@else{{0}}@endif %</td>
+              </tr>
+            @endforeach
+
+          </table>
+        </div>
       </div>
-   </div>
-</div>
-<div class="row">
-   <div class="col-md-4 col-sm-4 col-xs-12">
-      <div class="x_panel">
-         <div class="x_title">
-            <h2>Recent Activities <small>Sessions</small></h2>
-            <ul class="nav navbar-right panel_toolbox">
-               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-               </li>
-               <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                  <ul class="dropdown-menu" role="menu">
-                     <li><a href="#">Settings 1</a>
-                     </li>
-                     <li><a href="#">Settings 2</a>
-                     </li>
-                  </ul>
-               </li>
-               <li><a class="close-link"><i class="fa fa-close"></i></a>
-               </li>
-            </ul>
-            <div class="clearfix"></div>
-         </div>
-         <div class="x_content">
-            <div class="dashboard-widget-content">
-               <ul class="list-unstyled timeline widget">
-                  <li>
-                     <div class="block">
-                        <div class="block_content">
-                           @foreach($recent_activity as $key => $value)
-                           <h2 class="title">
-                              <a>{{$value->wallet_log_details}}</a>
-                           </h2>
-                           <div class="byline">
-                              <span>{{$value->ago}}</span>
-                           </div>
-                           <p class="excerpt"> Wallet Amount: {{$value->wallet_log_amount}}<a class="hide">Details</a>
-                           </p>
-                           @endforeach
-                        </div>
-                     </div>
+    </div>
+     <div class="col-md-4">
+        <div class="box box-primary">
+          <div class="box-body">
+            <canvas id="doughnut-chart" width="800" height="450"></canvas>
+          </div>
+        </div>
+      </div>
+    
+      @if(isset($new_member))
+      <div class="col-md-4">
+        <div class="box box-success">
+          <div class="box-header with-border">
+            <h3 class="box-title">New Referral</h3>
+
+            <div class="box-tools pull-right">
+              <span class="label label-success">{{count($new_member)}} New Members</span>
+            </div>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body no-padding">
+
+            <ul class="users-list ">
+                @if(count($new_member) >= 1)
+                    @foreach($new_member as $key => $value)
+                        <li class="clearfix"
+                        style="width: 50% !important">
+                            {{name_format_from_customer_info($value)}}
+                          <span class="users-list-date">{{$value->slot_created_date}}</span>
+                        </li>
+                    @endforeach
+                @else
+                  <li class="clearfix" style="width: 100% !important">
+                    <center>---No referral---</center>
                   </li>
-               </ul>
-            </div>
-         </div>
+                @endif
+            </ul>
+            <!-- /.users-list -->
+          </div>
+          <!-- /.box-body -->
+        </div>
       </div>
-   </div>
-   <div class="col-md-8 col-sm-8 col-xs-12">
-      <div class="row">
-         <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="x_panel">
-               <div class="x_title">
-                  <h2>Member's location <small>geo-presentation</small></h2>
-                  <ul class="nav navbar-right panel_toolbox">
-                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                     </li>
-                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                        <ul class="dropdown-menu" role="menu">
-                           <li><a href="#">Settings 1</a>
-                           </li>
-                           <li><a href="#">Settings 2</a>
-                           </li>
-                        </ul>
-                     </li>
-                     <li><a class="close-link"><i class="fa fa-close"></i></a>
-                     </li>
-                  </ul>
-                  <div class="clearfix"></div>
-               </div>
-               <div class="x_content">
-                  <div class="dashboard-widget-content">
-                     <div class="col-md-4 hidden-small">
-                        <h2 class="line_30">{{$count_downline}} members/downlines from different countries</h2>
-                        <table class="countries_list">
-                           <tbody>
-                              @foreach($country_name as $key => $value)
-                              <tr>
-                                 <td>{{$key}}</td>
-                                 <td class="fs15 fw700 text-right">{{number_format($value, 2)}}%</td>
-                              </tr>
-                              @endforeach
-                              <tr class="hide">
-                                 <td>Hongkong</td>
-                                 <td class="fs15 fw700 text-right">27%</td>
-                              </tr>
-                              <tr class="hide">
-                                 <td>China</td>
-                                 <td class="fs15 fw700 text-right">16%</td>
-                              </tr>
-                           </tbody>
-                        </table>
-                     </div>
-                     <div id="world-map-gdp" class="col-md-8 col-sm-12 col-xs-12" style="height:230px;"></div>
-                  </div>
-               </div>
+      @endif
+
+      <div class="col-md-8 ">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">Recent Activities</h3>
             </div>
-         </div>
+            <div class="box-body clearfix">
+                <div class="dashboard-widget-content">
+                   <ul class="list-unstyled timeline widget">
+                      <li>
+                         <div class="block">
+                            <div class="block_content">
+                              @if(count($recent_activity) >= 1)
+                                 @foreach($recent_activity as $key => $value)
+                                 <h2 class="title">
+                                    <a>{{$value->wallet_log_details}}</a>
+                                 </h2>
+                                 <div class="byline">
+                                    <span>{{$value->ago}}</span>
+                                 </div>
+                                 <p class="excerpt"> Wallet Amount: {{$value->wallet_log_amount}}<a class="hide">Details</a>
+                                 </p>
+                                 @endforeach
+                              @else
+                                <h2 class="title">
+                                    No Recent Activity
+                                </h2>
+                                <div class="byline">
+                                    <span>Now</span>
+                                </div>
+                              @endif 
+                            </div>
+                         </div>
+                      </li>
+                   </ul>
+                </div>
+            </div>
+        </div>
       </div>
-   </div>
-</div>
+   @endif
 @endsection
 @section('js')
+<script type="text/javascript">
+new Chart(document.getElementById("doughnut-chart"), {
+    type: 'doughnut',
+    data: {
+      labels: [ @if(count($income_per_complan) == 0) 'No Income Summary Available' @endif @foreach($income_per_complan as $key => $value) @if($value->wallet_log_amount >= 1 )"{{$complan[$value->wallet_log_plan]->marketing_plan_label}} {{currency('PHP', $value->wallet_log_amount)}}",@endif  @endforeach ],
+      datasets: [
+        {
+          label: "Income",
+          backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+          data: [ @if(count($income_per_complan) == 0) 0 @endif @foreach($income_per_complan as $key => $value) @if($value->wallet_log_amount>=1)"{{$value->wallet_log_amount}}",@endif @endforeach ],
+        }
+      ]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Income Summary'
+      }
+    }
+});
 
+$('.width_tr_a').each(function () {
+    var percentage = $(this).attr('percentage');
+    var col1="#B8CDD3";
+    var col2="#EDEDED";
+    var t = $(this);
+    $(this).css('background', "-webkit-gradient(linear, left top,right top, color-stop("+percentage+"%,"+col1+"), color-stop("+percentage+"%,"+col2+"))");
+    $(this).css('background',  "-moz-linear-gradient(left center,"+col1+" "+percentage+"%, "+col2+" "+percentage+"%)");
+    $(this).css('background',  "-o-linear-gradient(left,"+col1+" "+percentage+"%, "+col2+" "+percentage+"%)");
+    $(this).css('background',  "linear-gradient(to right,"+col1+" "+percentage+"%, "+col2+" "+percentage+"%)");
+});
+
+
+</script>
 @endsection
 @section('css')
 

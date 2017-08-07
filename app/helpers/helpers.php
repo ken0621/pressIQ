@@ -645,7 +645,7 @@ function mlm_profile($customer)
 {
     if($customer)
     {
-        $customer->profile != null ? $profile = $customer->profile :  $profile = '/assets/mlm/default-pic.png';
+        $customer->profile != null ? $profile = ltrim($customer->profile, '/') :  $profile = 'assets/mlm/default-pic.png';
         return '<img src="'.$profile.'" class="img-responsive" >';
         // style="height: 200px; width: 100%; object-fit: contain;"
     }
@@ -654,11 +654,30 @@ function mlm_profile_link($customer)
 {
     if($customer)
     {
-        $customer->profile != null ? $profile = $customer->profile :  $profile = '/assets/mlm/default-pic.png';
+        $customer->profile != null ? $profile = ltrim($customer->profile, '/') :  $profile = 'assets/mlm/default-pic.png';
         return $profile;
     }
 }
 function get_ip_address()
+{
+    
+}
+function ec_order_payment_status($status)
+{
+    switch ($status) {
+        case 1:
+            return 'Paid';
+            break;
+        case 0:
+            return 'Unpaid';
+            break;
+        default:
+            return 'Unpaid';
+            break;
+    }
+}
+
+function getUserIP()
 {
     $client  = @$_SERVER['HTTP_CLIENT_IP'];
     $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
@@ -698,4 +717,25 @@ function get_payment_method_mlm($id)
     $data[4] = 'V-Money';
 
     return $data[$id];
+}
+function get_current_ip()
+{
+    $client  = @$_SERVER['HTTP_CLIENT_IP'];
+    $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
+    $remote  = $_SERVER['REMOTE_ADDR'];
+
+    if(filter_var($client, FILTER_VALIDATE_IP))
+    {
+        $ip = $client;
+    }
+    elseif(filter_var($forward, FILTER_VALIDATE_IP))
+    {
+        $ip = $forward;
+    }
+    else
+    {
+        $ip = $remote;
+    }
+
+    return $ip;
 }

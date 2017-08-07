@@ -9,7 +9,9 @@
         <title>BROWN</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <base href="{{ URL::to('/') }}">
+
+        <base href="{{ URL::to('digima/public') }}">
+
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <link href="https://fonts.googleapis.com/css?family=Roboto:700" rel="stylesheet">
         <link rel="stylesheet" href="assets/initializr/css/bootstrap.min.css">
@@ -28,7 +30,7 @@
         </style>
         <script src="assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
         <!-- polyfiller file to detect and load polyfills -->
-        <script src="http://cdn.jsdelivr.net/webshim/1.12.4/polyfiller.js"></script>
+        <script src="//cdn.jsdelivr.net/webshim/1.12.4/polyfiller.js"></script>
         <script>
           webshims.setOptions('waitReady', false);
           webshims.setOptions('forms-ext', {types: 'date'});
@@ -45,11 +47,43 @@
       @yield("content")
     </div>
     
+    <!-- Modal -->
+    <div class="modal fade" id="popup-warning" role="dialog">
+      <div class="modal-dialog">
+      
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Warning</h4>
+          </div>
+          <div class="modal-body alert alert-danger" style="margin: 0;">
+            <div class="warning-text" style="margin: 0;">Some text in the modal.</div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="assets/initializr/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
     <script src="assets/initializr/js/vendor/bootstrap.min.js"></script>
     <script type="text/javascript" src="assets/member/plugin/toaster/toastr.min.js"></script>
     <script type="text/javascript" src="assets/mlm/js/match-height.js"></script>
     @yield("script")
+    <script type="text/javascript">
+      $(document).ready(function()
+      {
+         $(window).scrollTop(0);    
+      });
+    </script>
+    <!-- BEGIN JIVOSITE CODE -->
+    <script type='text/javascript'>
+    // (function(){ var widget_id = 'OcvyPjoHBr';var d=document;var w=window;function l(){ var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);}if(d.readyState=='complete'){l();}else{if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
+    </script>
+    <!-- END JIVOSITE CODE -->
     </body>
 </html>

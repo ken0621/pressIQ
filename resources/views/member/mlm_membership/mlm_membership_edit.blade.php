@@ -73,11 +73,20 @@
 								<input type="hidden" name="eprod_id[{{$key}}]" value="{{$value->eprod_id}}">
 							</td>
 							<td>
+								<label>Membership</label>
 								<select class="form-control" name="membership_id[{{$key}}]">
 									<option value="0">None</option>
 								@foreach($membership_product as $mem_key => $mem_value)
 									<option value="{{$mem_value->membership_id}}" @if(isset($value->ec_product_membership)){{$value->ec_product_membership == $mem_value->membership_id ? 'selected' : ''}} @endif>{{$mem_value->membership_name}}</option>
 								@endforeach
+								</select>
+
+								<label>Free</label>
+								<select class="form-control" name="membership_id_eon[{{$key}}]">
+									<option value="0">None</option>
+									@foreach($membership_product as $mem_key => $mem_value)
+										<option value="{{$mem_value->membership_id}}" @if(isset($value->ec_product_membership_eon)){{$value->ec_product_membership_eon == $mem_value->membership_id ? 'selected' : ''}} @endif>{{$mem_value->membership_name}}</option>
+									@endforeach
 								</select>
 							</td>
 						</tr>

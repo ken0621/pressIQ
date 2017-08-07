@@ -49,6 +49,8 @@ use App\Globals\Mlm_member;
 use App\Globals\Mlm_discount;
 // use App\Globals\Mlm_compute;
 use App\Models\Tbl_email_content;
+use App\Models\Tbl_customer_login_history;
+use App\Globals\Mlm_login_history;
 use Crypt;
 class MLM_SlotController extends Member
 {
@@ -86,6 +88,7 @@ class MLM_SlotController extends Member
     }
     public function force_login()
     {
+        Mlm_login_history::log_out();
         $shop_id = $this->user_info->shop_id;
         $slot_id = Request::input('slot');
         if($slot_id != null)
@@ -97,6 +100,7 @@ class MLM_SlotController extends Member
                 {
                     $customer_id = $slot_info->slot_owner;
                     Mlm_member::add_to_session_edit($shop_id, $customer_id, $slot_id);
+                    Mlm_login_history::add_to_history_admin($customer_id);
                     return Redirect::to('/mlm');
                 }
                 else
@@ -179,6 +183,7 @@ class MLM_SlotController extends Member
         }
         if($search_slot != null || $search_slot != 0)
         {
+            // $code->leftJoin("tbl_customer", "tbl_customer.customer_id", "=", "tbl_mlm_slot.slot_owner");
             $code->where(function ($query) use($search_slot)
             {$query ->where("slot_owner","LIKE","%".$search_slot."%")
                     ->orWhere("slot_no","LIKE","%".$search_slot."%")
@@ -541,7 +546,7 @@ class MLM_SlotController extends Member
         
         return $tree_string;
     }
-    public function downline_format_unilevel($slot_info,$position = null,$placement = null)
+    public function downline_format_unilevel($slot_info, $position = null,$placement = null)
     {
 
         if($slot_info)
@@ -615,7 +620,7 @@ class MLM_SlotController extends Member
                         </li>';
         }
     }
-    public function downline_format($slot_info,$position = null,$placement = null)
+    public function downline_format($slot_info, $position = null,$placement = null)
     {
 
         if($slot_info)
@@ -1057,7 +1062,33 @@ class MLM_SlotController extends Member
             }
 
             $update["slot_owner"] = $slot_owner;
+            $customer_new = Tbl_customer::where('customer_id', $slot_owner)->first();
+            $count_slot = Tbl_mlm_slot::where('slot_owner', $slot_owner)->count();
+            if($count_slot == 0)
+            {
+                $update['slot_nick_name'] = $customer_new->mlm_username;
+                $update['slot_defaul'] =  1;
+            }
+            else
+            {
+                $update['slot_nick_name'] = null;
+                $update['slot_defaul'] =  0;
+            }
             Tbl_mlm_slot::where("slot_id",$slot_id)->update($update);
+            $count_slot_old = Tbl_mlm_slot::where('slot_id', $slot->slot_owner)->where('slot_defaul', 1)->count();
+            $customer_old = Tbl_customer::where('customer_id', $slot->slot_owner)->first();
+            if($count_slot_old == 0)
+            {
+                $new_default = Tbl_mlm_slot::where('slot_id', $slot->slot_owner)->first();
+                if($new_default)
+                {
+                    $update_new['slot_nick_name'] = $customer_old->mlm_username;
+                    $update_new['slot_defaul'] =  1;
+                    
+                    Tbl_mlm_slot::where("slot_id",$new_default->slot_id)->update($update_new);
+                }
+            }
+            
             $old_data = $slot->toArray();
             $new_data = Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",$shop_id)->first()->toArray();
 
@@ -1076,5 +1107,22 @@ class MLM_SlotController extends Member
 
             return json_encode($return);
         }
+    }
+    public function login_history()
+    {
+        $data = [];
+        $slot_id           = Request::input("slot");
+        $data["slot"]      = Tbl_mlm_slot::where("slot_id",$slot_id)->customer()->first();
+        if($data['slot'])
+        {
+            $data['history_login'] = Tbl_customer_login_history::where('customer_id', $data["slot"]->slot_owner)->get();
+            $data['failed_history_username'] = Tbl_customer_login_history::where('customer_username', $data["slot"]->mlm_username)->where('status', 0)->get();
+            $data['failed_history_email'] = Tbl_customer_login_history::where('customer_username', $data["slot"]->email)->where('status', 0)->get();
+        }
+        else
+        {
+            die('Invalid Slot');
+        }
+        return view('member.mlm_slot.login_history', $data);
     }
 }

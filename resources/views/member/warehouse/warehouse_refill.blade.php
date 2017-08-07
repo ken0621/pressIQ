@@ -157,3 +157,4 @@ $('#search_txt').keyup(function()
     }
 </script>
 <script type="text/javascript" src="/assets/member/js/warehouse.js"></script>
+<script type="text/javascript">load_assets();</script>

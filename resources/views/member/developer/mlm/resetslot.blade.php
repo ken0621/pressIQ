@@ -13,108 +13,162 @@
         </div>
     </div>
 </div>
-<div class="panel panel-default panel-block panel-title-block" id="top">
-    <div class="panel-heading">
-        <div>
-            <form method="post" action="/member/developer/reset_slot/submit">
-            <div class="col-md-4">
-                <input type="password" class="form-control" name="password" placeholder="password">
-            </div>
-            {!! csrf_field() !!}
-            <button class="btn btn-primary">Reset All Slot</button>
-            </form>
-        </div>
-    </div>
-</div>
+<!--<div class="panel panel-default panel-block panel-title-block" id="top">-->
+<!--    <div class="panel-heading">-->
+<!--        <div>-->
+<!--            <form method="post" action="/member/developer/reset_slot/submit">-->
+<!--            <div class="col-md-4">-->
+<!--                <input type="password" class="form-control" name="password" placeholder="password">-->
+<!--            </div>-->
+<!--            {!! csrf_field() !!}-->
+<!--            <button class="btn btn-primary">Reset All Slot</button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
-<div class="panel panel-default panel-block panel-title-block" id="top">
-    <div class="panel-heading">
-        <div>
-            <form method="post" action="/member/developer/reset_slot/submit/give">
-            <div class="col-md-4">
-                <input type="password" class="form-control" name="password" placeholder="password">
-            </div>
-            <div class="col-md-4">
-                <input type="text" class="form-control" name="id" placeholder="Ec order id">
-            </div>
-            {!! csrf_field() !!}
-            <button class="btn btn-primary">Give Product Points Ec order</button>
-            </form>
-        </div>
-    </div>
-</div>
+<!--<div class="panel panel-default panel-block panel-title-block" id="top">-->
+<!--    <div class="panel-heading">-->
+<!--        <div>-->
+<!--            <form method="post" action="/member/developer/reset_slot/submit/give">-->
+<!--            <div class="col-md-4">-->
+<!--                <input type="password" class="form-control" name="password" placeholder="password">-->
+<!--            </div>-->
+<!--            <div class="col-md-4">-->
+<!--                <input type="text" class="form-control" name="id" placeholder="Ec order id">-->
+<!--            </div>-->
+<!--            {!! csrf_field() !!}-->
+<!--            <button class="btn btn-primary">Give Product Points Ec order</button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
-<div class="panel panel-default panel-block panel-title-block" id="top">
-    <div class="panel-heading">
-        <div>
-            <form method="post" action="/member/developer/reset_slot/submit/retro_product_sales">
-            <div class="col-md-4">
-                <input type="password" class="form-control" name="password" placeholder="password">
-            </div>
-            {!! csrf_field() !!}
-            <button class="btn btn-primary">Retro Product Code Sales Chart of Accounts</button>
-            </form>
-        </div>
-    </div>
-</div>
+<!--<div class="panel panel-default panel-block panel-title-block" id="top">-->
+<!--    <div class="panel-heading">-->
+<!--        <div>-->
+<!--            <form method="post" action="/member/developer/reset_slot/submit/retro_product_sales">-->
+<!--            <div class="col-md-4">-->
+<!--                <input type="password" class="form-control" name="password" placeholder="password">-->
+<!--            </div>-->
+<!--            {!! csrf_field() !!}-->
+<!--            <button class="btn btn-primary">Retro Product Code Sales Chart of Accounts</button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
-<div class="panel panel-default panel-block panel-title-block" id="top">
-    <div class="panel-heading">
-        <div>
-            <form method="post" action="/member/developer/reset_slot/submit/re_tree">
-            <div class="col-md-4">
-                <input type="password" class="form-control" name="password" placeholder="password">
-            </div>
-            <div class="col-md-4">
-                <input type="text" class="form-control" name="id" placeholder="Slot ID">
-            </div>
-            {!! csrf_field() !!}
-            <button class="btn btn-primary">Re compute tree</button>
-            </form>
-        </div>
-    </div>
-</div>
+<!--<div class="panel panel-default panel-block panel-title-block" id="top">-->
+<!--    <div class="panel-heading">-->
+<!--        <div>-->
+<!--            <form method="post" action="/member/developer/reset_slot/submit/re_tree">-->
+<!--            <div class="col-md-4">-->
+<!--                <input type="password" class="form-control" name="password" placeholder="password">-->
+<!--            </div>-->
+<!--            <div class="col-md-4">-->
+<!--                <input type="text" class="form-control" name="id" placeholder="Slot ID">-->
+<!--            </div>-->
+<!--            {!! csrf_field() !!}-->
+<!--            <button class="btn btn-primary">Re compute tree</button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
-<div class="panel panel-default panel-block panel-title-block" id="top">
-    <div class="panel-heading">
-        <div>
-            <form method="post" action="/member/developer/reset_slot/submit/re_com_phil_lost">
-            <div class="col-md-4">
-                <input type="password" class="form-control" name="password" placeholder="password">
-            </div>
-            <div class="col-md-4">
-                <input type="text" class="form-control" name="id" placeholder="Slot ID">
-            </div>
-            {!! csrf_field() !!}
-            <button class="btn btn-primary">Re compute 5/9/2017 - lost indirect </button>
-            </form>
-        </div>
-    </div>
-</div>
+<!--<div class="panel panel-default panel-block panel-title-block" id="top">-->
+<!--    <div class="panel-heading">-->
+<!--        <div>-->
+<!--            <form method="post" action="/member/developer/reset_slot/submit/re_com_phil_lost">-->
+<!--            <div class="col-md-4">-->
+<!--                <input type="password" class="form-control" name="password" placeholder="password">-->
+<!--            </div>-->
+<!--            <div class="col-md-4">-->
+<!--                <input type="text" class="form-control" name="id" placeholder="Slot ID">-->
+<!--            </div>-->
+<!--            {!! csrf_field() !!}-->
+<!--            <button class="btn btn-primary">Re compute 5/9/2017 - lost indirect </button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
-<div class="panel panel-default panel-block panel-title-block" id="top">
-    <div class="panel-heading">
-        <div>
-            <form method="post" action="/member/developer/reset_slot/submit/re_com_phil_uni">
-            <div class="col-md-4">
-                <input type="password" class="form-control" name="password" placeholder="password">
-            </div>
-            {!! csrf_field() !!}
-            <button class="btn btn-primary">Re compute 5/13/2017 - Silver Unilevel </button>
-            </form>
-        </div>
-    </div>
-</div>
+<!--<div class="panel panel-default panel-block panel-title-block" id="top">-->
+<!--    <div class="panel-heading">-->
+<!--        <div>-->
+<!--            <form method="post" action="/member/developer/reset_slot/submit/re_com_phil_uni">-->
+<!--            <div class="col-md-4">-->
+<!--                <input type="password" class="form-control" name="password" placeholder="password">-->
+<!--            </div>-->
+<!--            {!! csrf_field() !!}-->
+<!--            <button class="btn btn-primary">Re compute 5/13/2017 - Silver Unilevel </button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
+<!--<div class="panel panel-default panel-block panel-title-block" id="top">-->
+<!--    <div class="panel-heading">-->
+<!--        <div>-->
+<!--            <form method="post" action="/member/developer/reset_slot/submit/recompute">-->
+<!--            <div class="col-md-4">-->
+<!--                <input type="password" class="form-control" name="password" placeholder="password">-->
+<!--            </div>-->
+<!--            {!! csrf_field() !!}-->
+<!--            <button class="btn btn-primary">Re compute 5/26/2017 - Sovereign </button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<div class="panel panel-default panel-block panel-title-block" id="top">-->
+<!--    <div class="panel-heading">-->
+<!--        <div>-->
+<!--            <form method="post" action="/member/developer/reset_slot/submit/recompute_myphone">-->
+<!--            <div class="col-md-4">-->
+<!--                <input type="password" class="form-control" name="password" placeholder="password">-->
+<!--            </div>-->
+<!--            {!! csrf_field() !!}-->
+<!--            <button class="btn btn-primary">Recompute</button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<div class="panel panel-default panel-block panel-title-block" id="top">-->
+<!--    <div class="panel-heading">-->
+<!--        <div>-->
+<!--            <form method="post" action="/member/developer/reset_slot/submit/import_excel_myphone">-->
+<!--            <div class="col-md-4">-->
+<!--                <input type="password" class="form-control" name="password" placeholder="password">-->
+<!--            </div>-->
+<!--            {!! csrf_field() !!}-->
+<!--            <button class="btn btn-primary">Myphone</button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<div class="panel panel-default panel-block panel-title-block" id="top">-->
+<!--    <div class="panel-heading">-->
+<!--        <div>-->
+<!--            <form method="post" action="/member/developer/reset_slot/submit/fix_password">-->
+<!--            <div class="col-md-4">-->
+<!--                <input type="password" class="form-control" name="password" placeholder="password">-->
+<!--            </div>-->
+<!--            {!! csrf_field() !!}-->
+<!--            <button class="btn btn-primary">Password</button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
-            <form method="post" action="/member/developer/reset_slot/submit/recompute">
+            <form method="post" action="/member/developer/reset_slot/submit/wallet_encash">
             <div class="col-md-4">
                 <input type="password" class="form-control" name="password" placeholder="password">
             </div>
             {!! csrf_field() !!}
-            <button class="btn btn-primary">Re compute 5/26/2017 - Sovereign </button>
+            <button class="btn btn-primary">Wallet Encashment Fix</button>
             </form>
         </div>
     </div>

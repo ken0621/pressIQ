@@ -23,7 +23,6 @@
                     <table class="table table-bordered table-condensed">
                         <tbody>
                             <tr>
-
                                 <td class="hide">
                                     <form method="get" action="/member/item/inventory_log">
                                     {!! csrf_field() !!}
@@ -60,7 +59,8 @@
                             </tr>
                         </thead>
                         <tbody class="table-warehouse">
-                        
+
+                            <?php $item_sum_inv = []; ?>
                         @if($_slip != null)
                             @foreach($_slip as $slip)
                                 <tr>
@@ -84,11 +84,19 @@
                                     <td class="text-center">
                                         <a class="popup" size="lg" link="/member/item/warehouse/view_pdf/{{$slip->inventory_slip_id}}">View Report</a>
                                     </tr>
+                                    <?php 
+                                    if(isset($item_sum_inv[$slip->item_name]))
+                                    {
+                                        $item_sum_inv[$slip->item_name] +=$slip->inventory_count;
+                                    }
+                                    else
+                                    {
+                                        $item_sum_inv[$slip->item_name] = $slip->inventory_count;
+                                    }
+                                    
+                                    ?>
                             @endforeach
                         @endif
-                        
-                            
-                        
                         </tbody>
                     </table>
                 </div>

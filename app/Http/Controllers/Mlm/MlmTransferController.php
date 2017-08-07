@@ -34,6 +34,7 @@ class MlmTransferController extends Mlm
     	{
     		$data["page"] = "Transfer";
     		$data['break_down'] = Mlm_member::breakdown_wallet(Self::$slot_id);
+
         	return view("mlm.wallet.index", $data);
     	}
         else

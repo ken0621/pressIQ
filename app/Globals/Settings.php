@@ -157,34 +157,34 @@ class Settings
 	}
 	public static function set_mail_setting($shop_id)
 	{
-		$setting = collect(DB::table("tbl_settings")->where("shop_id", $shop_id)->get())->keyBy('settings_key');
-		foreach ($setting as $key => $value) 
-		{
-			switch ($key) 
-			{
-				case 'mail_driver':
-					Config::set('mail.driver', $value->settings_value);
-				break;
-				case 'mail_host':
-					Config::set('mail.host', $value->settings_value);
-				break;
-				case 'mail_port':
-					Config::set('mail.port', $value->settings_value);
-				break;
-				case 'mail_username':
-					Config::set('mail.username', $value->settings_value);
-				break;
-				case 'mail_password':
-					Config::set('mail.password', $value->settings_value);
-				break;
-				case 'mail_encryption':
-					Config::set('mail.encryption', $value->settings_value);
-				break;
-				default:
-					# code...
-				break;
-			}
-		}
+		// $setting = collect(DB::table("tbl_settings")->where("shop_id", $shop_id)->get())->keyBy('settings_key');
+		// foreach ($setting as $key => $value) 
+		// {
+		// 	switch ($key) 
+		// 	{
+		// 		case 'mail_driver':
+		// 			Config::set('mail.driver', $value->settings_value);
+		// 		break;
+		// 		case 'mail_host':
+		// 			Config::set('mail.host', $value->settings_value);
+		// 		break;
+		// 		case 'mail_port':
+		// 			Config::set('mail.port', $value->settings_value);
+		// 		break;
+		// 		case 'mail_username':
+		// 			Config::set('mail.username', $value->settings_value);
+		// 		break;
+		// 		case 'mail_password':
+		// 			Config::set('mail.password', $value->settings_value);
+		// 		break;
+		// 		case 'mail_encryption':
+		// 			Config::set('mail.encryption', $value->settings_value);
+		// 		break;
+		// 		default:
+		// 			# code...
+		// 		break;
+		// 	}
+		// }
 	}
 	public static function set_currency_default($shop_id)
     {

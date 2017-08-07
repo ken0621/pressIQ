@@ -68,10 +68,25 @@ class MLM_ReportController extends Member
         $data['report_list_d']['cashflow']['to'] = $to;
         $data['report_list_d']['cashflow']['count'] = $count;
         // -----------------------------------------------------------------
+        $data['report_list']['order_count'] = 'Order Count';
+        $data['report_list_d']['order_count']['from'] = $from;
+        $data['report_list_d']['order_count']['to'] = $to;
+        $data['report_list_d']['order_count']['count'] = $count;
+        // -----------------------------------------------------------------
         $data['report_list']['e_wallet'] = 'E-Wallet Report';
         $data['report_list_d']['e_wallet']['from'] = $from;
         $data['report_list_d']['e_wallet']['to'] = $to;
         $data['report_list_d']['e_wallet']['count'] = $count;
+        // -----------------------------------------------------------------
+        $data['report_list']['e_wallet_eon'] = 'E-Wallet Report With Eon';
+        $data['report_list_d']['e_wallet_eon']['from'] = $from;
+        $data['report_list_d']['e_wallet_eon']['to'] = $to;
+        $data['report_list_d']['e_wallet_eon']['count'] = $count;
+        // -----------------------------------------------------------------
+        $data['report_list']['e_wallet_eon_wo'] = 'E-Wallet Report Without Eon';
+        $data['report_list_d']['e_wallet_eon_wo']['from'] = $from;
+        $data['report_list_d']['e_wallet_eon_wo']['to'] = $to;
+        $data['report_list_d']['e_wallet_eon_wo']['count'] = $count;
         // -----------------------------------------------------------------
         $data['report_list']['e_wallet_transfer'] = 'E-Wallet Transfer Report';
         $data['report_list_d']['e_wallet_transfer']['from'] = $from;
@@ -160,6 +175,14 @@ class MLM_ReportController extends Member
         $data['report_list_d']['warehouse_consiladated']['to'] = Carbon::now();
         $data['report_list_d']['warehouse_consiladated']['count'] = 0;
 
+         // -----------------------------------------------------------------
+        $data['report_list']['e_commerce_sales_report'] = 'E-Commerce Sales Report';
+        $data['report_list_d']['e_commerce_sales_report']['from'] = $from;
+        $data['report_list_d']['e_commerce_sales_report']['to'] = $to;
+        $data['report_list_d']['e_commerce_sales_report']['count'] = $count;
+        // -----------------------------------------------------------------
+
+
         foreach($data['report_list_d'] as $key => $value)
         {
             $data['report_list_d'][$key]['from'] = Carbon::parse($value['from'])->format('Y-m-d');
@@ -191,6 +214,7 @@ class MLM_ReportController extends Member
 
         $filter['from'] = Request::input('from');
         $filter['to'] = Request::input('to');
+
         $from = Carbon::parse($filter['from']);
         $to = Carbon::parse($filter['to'])->addDay(1);
         $filter['to'] = $to;
@@ -198,15 +222,17 @@ class MLM_ReportController extends Member
         $filter['skip'] = Request::input('skip');
         $filter['take'] = Request::input('take');
 
+
+        $filter['inv_status'] = Request::input('inv_status');
+
         $report = Request::input('report_choose');
+
+
         $pdf= Request::input('pdf');
         $shop_id = $this->user_info->shop_id;
+        // dd($filter);
         $view =  Mlm_report::$report($shop_id, $filter);
         $data['status'] = 'success';
-        
-
-
-        
 
         // return $view;
         $from = Request::input('from');
@@ -216,13 +242,12 @@ class MLM_ReportController extends Member
             return $data['view'];
         }
         if($pdf == 'true')
-        {
-
+        {           
             $data['view'] = $view->render();
             return Pdf_global::show_pdf($data['view'], 'landscape');
         }
         else if($pdf == 'excel')
-        {
+        {            
             Excel::create('New file', function($excel) use($view) {
 
                 $excel->sheet('New sheet', function($sheet) use($view) {

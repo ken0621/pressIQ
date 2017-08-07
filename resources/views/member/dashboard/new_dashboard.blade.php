@@ -34,28 +34,28 @@
                <div class="per-row">
                   <a href="/member/vendor/purchase_order">
                      <div class="holder">
-                        <div class="icon"><img src="/assets/member/img/sample-icon.png"></div>
+                        <div class="icon"><img src="assets/member/img/sample-icon.png"></div>
                         <div class="name">Purchase Order</div>
                      </div>
                   </a>
                   <div class="horizontal-line right" style="width: 15%;"></div>
                   <a href="/member/vendor/receive_inventory">
                      <div class="holder">
-                        <div class="icon"><img src="/assets/member/img/sample-icon.png"></div>
+                        <div class="icon"><img src="assets/member/img/sample-icon.png"></div>
                         <div class="name">Receive Inventory</div>
                      </div>
                   </a>
                   <div class="horizontal-line right" style="width: 15%;"></div>
                   <a href="/member/vendor/create_bill">
                      <div class="holder">
-                        <div class="icon"><img src="/assets/member/img/sample-icon.png"></div>
+                        <div class="icon"><img src="assets/member/img/sample-icon.png"></div>
                         <div class="name">Enter Bills Against Inventory</div>
                      </div>
                   </a>
                   <div class="space-line" style="width: 15%;"></div>
                   <a href="/member/vendor/debit_memo">
                      <div class="holder">
-                        <div class="icon"><img src="/assets/member/img/sample-icon.png"></div>
+                        <div class="icon"><img src="assets/member/img/sample-icon.png"></div>
                         <div class="name">Debit Memo</div>
                      </div>
                   </a>
@@ -63,7 +63,7 @@
                <div class="per-row">
                   <a href="/member/vendor/create_bill">
                      <div class="holder">
-                        <div class="icon"><img src="/assets/member/img/sample-icon.png"></div>
+                        <div class="icon"><img src="assets/member/img/sample-icon.png"></div>
                         <div class="name">Enter Bills</div>
                      </div>
                   </a>
@@ -72,7 +72,7 @@
                   <div class="horizontal-line right" style="width: 20%;"></div>
                   <a href="/member/vendor/paybill">
                      <div class="holder">
-                        <div class="icon"><img src="/assets/member/img/sample-icon.png"></div>
+                        <div class="icon"><img src="assets/member/img/sample-icon.png"></div>
                         <div class="name">Pay Bills</div>
                      </div>
                   </a>
@@ -87,7 +87,7 @@
                <div class="per-row">
                   <a href="/member/customer/sales_order">
                      <div class="holder">
-                        <div class="icon"><img src="/assets/member/img/sample-icon.png"></div>
+                        <div class="icon"><img src="assets/member/img/sample-icon.png"></div>
                         <div class="name">Sales Orders</div>
                         <div class="vertical-line up" style="height: 20px; vertical-align: middle; margin-top: 15px;"></div>
                      </div>
@@ -97,14 +97,14 @@
                   <div class="space-line" style="width: 35%;"></div>
                   <a href="/member/customer/sales_receipt">
                      <div class="holder">
-                        <div class="icon"><img src="/assets/member/img/sample-icon.png"></div>
+                        <div class="icon"><img src="assets/member/img/sample-icon.png"></div>
                         <div class="name">Create Sales Receipts</div>
                      </div>
                   </a>
                   <div class="space-line" style="width: 5%;"></div>
                   <a href="/member/customer/credit_memo">
                      <div class="holder">
-                        <div class="icon"><img src="/assets/member/img/sample-icon.png"></div>
+                        <div class="icon"><img src="assets/member/img/sample-icon.png"></div>
                         <div class="name">Refund & Credits</div>
                      </div>
                   </a>
@@ -112,21 +112,21 @@
                <div class="per-row">
                   <a href="/member/customer/estimate">
                      <div class="holder">
-                        <div class="icon"><img src="/assets/member/img/sample-icon.png"></div>
+                        <div class="icon"><img src="assets/member/img/sample-icon.png"></div>
                         <div class="name">Estimates</div>
                      </div>
                   </a>
                   <div class="horizontal-line" style="width: 7.5%;"></div>
                   <a href="/member/customer/invoice">
                      <div class="holder">
-                        <div class="icon"><img src="/assets/member/img/sample-icon.png"></div>
+                        <div class="icon"><img src="assets/member/img/sample-icon.png"></div>
                         <div class="name">Invoices</div>
                      </div>
                   </a>
                   <div class="horizontal-line right" style="width: 30%;"></div>
                   <a href="/member/customer/receive_payment">
                      <div class="holder">
-                        <div class="icon"><img src="/assets/member/img/sample-icon.png"></div>
+                        <div class="icon"><img src="assets/member/img/sample-icon.png"></div>
                         <div class="name">Receive Payments</div>
                      </div>
                   </a>
@@ -141,35 +141,35 @@
                <div class="per-row">
                   <a href="javascript:">
                      <div class="holder">
-                        <div class="icon"><img src="/assets/member/img/sample-icon.png"></div>
+                        <div class="icon"><img src="assets/member/img/sample-icon.png"></div>
                         <div class="name">Payroll Center</div>
                      </div>
                   </a>
                   <div class="space-line" style="width: 10%;"></div>
                   <a href="javascript:">
                      <div class="holder">
-                        <div class="icon"><img src="/assets/member/img/sample-icon.png"></div>
+                        <div class="icon"><img src="assets/member/img/sample-icon.png"></div>
                         <div class="name">Pay Employees</div>
                      </div>
                   </a>
                   <div class="horizontal-line" style="width: 7.5%;"></div>
                   <a href="javascript:">
                      <div class="holder">
-                        <div class="icon"><img src="/assets/member/img/sample-icon.png"></div>
+                        <div class="icon"><img src="assets/member/img/sample-icon.png"></div>
                         <div class="name">Pay Liabilities</div>
                      </div>
                   </a>
                   <div class="horizontal-line right" style="width: 7.5%;"></div>
                   <a href="javascript:">
                      <div class="holder">
-                        <div class="icon"><img src="/assets/member/img/sample-icon.png"></div>
+                        <div class="icon"><img src="assets/member/img/sample-icon.png"></div>
                         <div class="name">Process Payroll Forms</div>
                      </div>
                   </a>
                   <div class="space-line" style="width: 7.5%;"></div>
                   <a href="javascript:">
                      <div class="holder">
-                        <div class="icon"><img src="/assets/member/img/sample-icon.png"></div>
+                        <div class="icon"><img src="assets/member/img/sample-icon.png"></div>
                         <div class="name">HR Essentials and Insurance</div>
                      </div>
                   </a>
@@ -188,14 +188,14 @@
                   <div class="per-row">
                      <a href="/member/mlm/code">
                         <div class="holder">
-                           <div class="icon"><img src="/assets/member/img/sample-icon.png"></div>
+                           <div class="icon"><img src="assets/member/img/sample-icon.png"></div>
                            <div class="name">Membership Codes</div>
                         </div>
                      </a>
                      <div class="space-line" style="width: 30px;"></div>
                      <a href="/member/mlm/slot/head">
                         <div class="holder">
-                           <div class="icon"><img src="/assets/member/img/sample-icon.png"></div>
+                           <div class="icon"><img src="assets/member/img/sample-icon.png"></div>
                            <div class="name">Customer Slots</div>
                         </div>
                      </a>
@@ -203,14 +203,14 @@
                   <div class="per-row">
                      <a href="/member/mlm/product">
                         <div class="holder">
-                           <div class="icon"><img src="/assets/member/img/sample-icon.png"></div>
+                           <div class="icon"><img src="assets/member/img/sample-icon.png"></div>
                            <div class="name">Product Points</div>
                         </div>
                      </a>
                      <div class="space-line" style="width: 30px;"></div>
                      <a href="/member/mlm/product/discount">
                         <div class="holder">
-                           <div class="icon"><img src="/assets/member/img/sample-icon.png"></div>
+                           <div class="icon"><img src="assets/member/img/sample-icon.png"></div>
                            <div class="name">Product Discount</div>
                         </div>
                      </a>
@@ -218,7 +218,7 @@
                   <div class="per-row">
                      <a href="/member/mlm/product_code">
                         <div class="holder">
-                           <div class="icon"><img src="/assets/member/img/sample-icon.png"></div>
+                           <div class="icon"><img src="assets/member/img/sample-icon.png"></div>
                            <div class="name">Product Code</div>
                         </div>
                      </a>
@@ -235,14 +235,14 @@
                   <div class="per-row">
                      <a href="javascript:">
                         <div class="holder">
-                           <div class="icon"><img src="/assets/member/img/sample-icon.png"></div>
+                           <div class="icon"><img src="assets/member/img/sample-icon.png"></div>
                            <div class="name">Record Deposits</div>
                         </div>
                      </a>
                      <div class="space-line" style="width: 30px;"></div>
                      <a href="javascript:">
                         <div class="holder">
-                           <div class="icon"><img src="/assets/member/img/sample-icon.png"></div>
+                           <div class="icon"><img src="assets/member/img/sample-icon.png"></div>
                            <div class="name">Reconcile</div>
                         </div>
                      </a>
@@ -250,7 +250,7 @@
                   <div class="per-row">
                      <a href="/member/vendor/write_check">
                         <div class="holder">
-                           <div class="icon"><img src="/assets/member/img/sample-icon.png"></div>
+                           <div class="icon"><img src="assets/member/img/sample-icon.png"></div>
                            <div class="name">Write Checks</div>
                         </div>
                      </a>
@@ -423,8 +423,8 @@
 @endsection
 @section('css')
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jointjs/1.1.0/joint.min.css">
-<link rel="stylesheet" type="text/css" href="/assets/member/css/new_dashboard.css">
-<link rel="stylesheet" type="text/css" href="/assets/member/css/dashboard.css">
+<link rel="stylesheet" type="text/css" href="assets/member/css/new_dashboard.css">
+<link rel="stylesheet" type="text/css" href="assets/member/css/dashboard.css">
 <style type="text/css">
 .dashboard-arrow{
    display: inline;
@@ -477,6 +477,6 @@ var expense_color    = {!!$expense_color !!};
 var income_date     = {!! $income_date !!}
 var income_value    = {!! $income_value !!}
 </script>
-<script type="text/javascript" src='/assets/member/js/dashboard_chart.js'></script>
-<script type="text/javascript" src="/assets/member/js/new_dashboard.js"></script>
+<script type="text/javascript" src='assets/member/js/dashboard_chart.js'></script>
+<script type="text/javascript" src="assets/member/js/new_dashboard.js"></script>
 @endsection

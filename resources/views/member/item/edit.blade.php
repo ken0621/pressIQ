@@ -24,6 +24,8 @@
                             <label>Name *</label>
                             <!-- <input type="text" class="form-control" id="item_name" value="{{isset($data['item_name']) ? $data['item_name'] : ''}}" name="item_name" required> -->
                             <textarea required class="form-control item-name" name="item_name" id="item_name">{{isset($data['item_name']) ? $data['item_name'] : ''}}</textarea>
+                            <label style="margin-top: 15px;">Item Code</label>
+                            <input type="text" class="form-control input-sm" id="item_code" name="item_code" placeholder="Insert Item Code" value="{{isset($data['item_code']) ? $data['item_code'] : ''}}">
                         </div>
                         <div class="col-md-4 text-center">
                             <input type="hidden" name="item_img" class="image-value" key="1" value="{{$data['item_img'] ? $data['item_img'] : '/assets/front/img/default.jpg' }}">
@@ -183,6 +185,8 @@
                         <label>Name *</label>
                         <!-- <input type="text" class="form-control" id="item_name" value="{{isset($data['item_name']) ? $data['item_name'] : ''}}" name="item_name" required> -->
                         <textarea required class="form-control item-name" name="item_name" id="item_name">{{isset($data['item_name']) ? $data['item_name'] : ''}}</textarea>
+                        <label style="margin-top: 15px;">Item Code</label>
+                        <input type="text" class="form-control input-sm" id="item_code" name="item_code" placeholder="Insert Item Code" value="{{isset($data['item_code']) ? $data['item_code'] : ''}}">
                     </div>
                     <div class="col-md-4 text-center">
                         <input type="hidden" name="item_img" class="image-value" key="2" required value="{{$data['item_img'] ? $data['item_img'] : '/assets/front/img/default.jpg' }}">
@@ -309,6 +313,8 @@
                         <label>Name *</label>
                         <!-- <input type="text" class="form-control" id="item_name" value="{{isset($data['item_name']) ? $data['item_name'] : ''}}" name="item_name" required> -->
                         <textarea required class="form-control item-name" name="item_name" id="item_name">{{isset($data['item_name']) ? $data['item_name'] : ''}}</textarea>
+                        <label style="margin-top: 15px;">Item Code</label>
+                        <input type="text" class="form-control input-sm" id="item_code" name="item_code" placeholder="Insert Item Code" value="{{isset($data['item_code']) ? $data['item_code'] : ''}}">
                     </div>
                     <div class="col-md-4 text-center">
                         <input type="hidden" name="item_img" class="image-value" key="3" required value="{{$data['item_img'] ? $data['item_img'] : '/assets/front/img/default.jpg' }}">
@@ -437,6 +443,8 @@
                             <label>Name *</label>
                             <!-- <input type="text" class="form-control" id="item_name" value="{{isset($data['item_name']) ? $data['item_name'] : ''}}" name="item_name" required> -->
                             <textarea required class="form-control item-name" name="item_name" id="item_name">{{$data['item_name'] or ''}}</textarea>
+                            <label style="margin-top: 15px;">Item Code</label>
+                            <input type="text" class="form-control input-sm" id="item_code" name="item_code" placeholder="Insert Item Code" value="{{isset($data['item_code']) ? $data['item_code'] : ''}}">
                         </div>
                     </div>
                     <div class="form-group">

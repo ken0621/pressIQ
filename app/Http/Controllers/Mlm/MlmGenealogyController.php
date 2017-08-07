@@ -410,7 +410,7 @@ class MlmGenealogyController extends Mlm
 
             $str_slot = '<span class="downline parent parent-reference PS SILVER" x="' . $slot_info->slot_id . '">';    
 
-
+            // $level = Tbl_tree_placement::where('placement_tree_parent_id', Self::$slot_id)
 
             if($slot_info->image == "")
             {
@@ -425,7 +425,6 @@ class MlmGenealogyController extends Mlm
                                         </div>
                                         <div>' . $slot_info->slot_status . '</div>
                                         <div>' . "Count - L:".$l." R:".$r.'</div>
-                                        <div>' . "Points - L:".$slot_info->slot_binary_left." R:".$slot_info->slot_binary_right.'</div>
                                         <div>
                                         </div>
                                     </div>
@@ -460,10 +459,10 @@ class MlmGenealogyController extends Mlm
         else if($position) 
         {
             $slot_info = Tbl_mlm_slot::where('slot_id',$placement)->customer()->first();
-
+            
             return  '   <li class="width-reference">
-                            <a id="add_slot_modal_open_'.$position.'" href="#animatedModal" color="#EFEFEF" onClick="return false;" style="text-decoration:none"  position="'.$position.'" placement="'.$placement.'" >
-                                <span class="positioning parent parent-reference VC add_slot_membership_code" position="'.$position.'" placement="'.$placement.'" y="'.$slot_info->first_name.'">
+                            <a href="#animatedModal" color="#EFEFEF" onClick="return false;" style="text-decoration:none"  position="'.$position.'" placement="'.$placement.'" >
+                                <span class="positioning parent parent-reference VC " position="'.$position.'" placement="'.$placement.'" y="'.$slot_info->first_name.'">
                                     <div class="id">+</div>
                                 </span>
                             </a>

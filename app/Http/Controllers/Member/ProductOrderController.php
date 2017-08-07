@@ -10,6 +10,7 @@ use App\Globals\Warehouse;
 use App\Globals\Ecom_Product;
 use App\Globals\Pdf_global;
 use App\Globals\Cart;
+use App\Globals\Item_code;
 
 use App\Models\Tbl_customer;
 use App\Models\Tbl_warehousea;
@@ -23,7 +24,11 @@ use App\Models\Tbl_ec_order_item;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_coupon_code;
 use App\Models\Tbl_online_pymnt_method;
+use App\Models\Tbl_mlm_slot;
+use App\Models\Tbl_mlm_slot_wallet_log;
 
+use Excel;
+use DB;
 use Request;
 use Input;
 use File;
@@ -144,6 +149,8 @@ class ProductOrderController extends Member
     }
     public function invoice_list()
     {
+        
+
         $data["ec_order_pending"]    = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Pending")
                                         ->orderBy("ec_order_id", "DESC");
         $data["ec_order_failed"]     = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Failed")
@@ -172,7 +179,14 @@ class ProductOrderController extends Member
         /* PUT THE DATA HERE IF IT IS NOT FROM EC_ORDER TABLE */
         $data["_filter"]             = Tbl_online_pymnt_method::where("method_shop_id",$this->user_info->shop_id)->get();
 
-
+        $data['filtera']['All'] = 'All';
+        $data['filtera']['Pending'] = 'Pending';
+        $data['filtera']['Failed'] = 'Failed';
+        $data['filtera']['Processing'] = 'Processing';
+        $data['filtera']['Shipped'] = 'Shipped';
+        $data['filtera']['Completed'] = 'Completed';
+        $data['filtera']['On-hold'] = 'On-hold';
+        $data['filtera']['Cancelled'] = 'Cancelled';
 
         return view("member.product_order.product_order",$data);
     }
@@ -356,7 +370,6 @@ class ProductOrderController extends Member
             return json_encode($return);
         }
     }
-
     public function submit_payment_upload()
     {
         $shop_id    = $this->user_info->shop_id;
@@ -401,7 +414,6 @@ class ProductOrderController extends Member
         }
 
     }
-
     public function invoice_view($invoice_id)
     {
         $data["invoice_id"] = $invoice_id;
@@ -421,5 +433,258 @@ class ProductOrderController extends Member
 
           $pdf = view('member.customer_invoice.invoice_pdf', $data);
           return Pdf_global::show_pdf($pdf);
+    }
+    public function update_manual($order_id)
+    {
+        $update["manual"] = 1;
+        DB::table("tbl_ec_order")->where("ec_order_id", $order_id)->update($update);
+    }
+    public function paymaya_verify()
+    {
+        $data = [];
+
+        return view('member.product_order.verfiy.paymaya', $data);
+    }
+    public function paymaya_verify_id($page, $search ='')
+    {
+        $data = [];
+        if(is_numeric($search))
+        {
+            $data['order'] = Tbl_ec_order::where('ec_order_id', $search)->customer()->get();
+        }
+        else
+        {
+             $data['order'] = Tbl_ec_order::join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_ec_order.customer_id')->where(DB::raw("CONCAT(tbl_customer.first_name, ' ', tbl_customer.middle_name, ' ', tbl_customer.last_name)"), 'LIKE', "%".$search."%")->get();
+        }
+
+        return view('member.product_order.verfiy.search', $data);
+    }
+    public function paymaya_verify_id_order($page, $oder_id ='')
+    {
+        $data = [];
+        $data['order'] = Tbl_ec_order::where('ec_order_id', $oder_id)
+        ->leftjoin('tbl_paymaya_logs', 'tbl_paymaya_logs.order_id','=',  'tbl_ec_order.ec_order_id')
+        ->leftjoin('tbl_online_pymnt_method', 'tbl_online_pymnt_method.method_id', '=', 'tbl_ec_order.payment_method_id')
+        ->leftjoin('tbl_ec_order_slot', 'tbl_ec_order_slot.order_slot_ec_order_id', '=', 'tbl_ec_order.ec_order_id')
+        ->leftjoin('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_ec_order_slot.order_slot_id_c')
+        ->customer()->first();
+
+        $data['slots'] = Tbl_mlm_slot::get()->keyBy('slot_id');
+        return view('member.product_order.verfiy.order', $data);
+    }
+    public function paymaya_verify_id_order_update_slot()
+    {
+        $order_slot_id = Request::input('order_slot_id');
+        $referrer = Request::input('referrer');
+        $ec_order_id = Request::input('ec_order_id');
+        $order = Tbl_ec_order::where('ec_order_id', $ec_order_id)->first();
+        if($order)
+        {
+            if($order_slot_id)
+            {
+                $tbl_ec_order_slot = DB::table('tbl_ec_order_slot')->where('order_slot_id', $order_slot_id)->first();
+                if($tbl_ec_order_slot)
+                {
+                    Item_code::ec_order_slot($order->ec_order_id);
+                    $data['status'] = 'success';
+                    $data['message'] = 'Slot Created';
+                    
+                    /* Insert Logs by Edward */
+                    $this->update_manual($order->ec_order_id);
+                    
+                    return json_encode($data);
+                }
+                else
+                {
+                    $data['status'] = 'error';
+                    $data['message'] = 'Invalid, please reload the page';
+                    return json_encode($data);
+                }
+            }
+            else
+            {
+                $count = DB::table('tbl_ec_order_slot')->where('order_slot_ec_order_id', $ec_order_id)->count();
+                if($count == 0)
+                {
+                    $insert['order_slot_ec_order_id'] = $order->ec_order_id;
+                    $insert['order_slot_customer_id'] = $order->customer_id;
+                    // $insert['order_slot_sponsor'] = 
+                    if($referrer)
+                    {
+                        $check_sponsor = Tbl_mlm_slot::where('slot_nick_name', $referrer)->where('slot_defaul', 1)->first();
+                        if($check_sponsor)
+                        {
+                            $insert['order_slot_sponsor'] = $check_sponsor->slot_id;
+                        }
+                        else
+                        {
+                            $check_sponsor = Tbl_mlm_slot::where('slot_no', $referrer)->first();
+                            if($check_sponsor)
+                            {
+                                $insert['order_slot_sponsor'] = $check_sponsor->slot_id;
+                            }
+                            else{ $data['status'] = 'error'; $data['message'] = 'Invalid Referrer'; return json_encode($data); }
+                        }
+                    }
+                    DB::table('tbl_ec_order_slot')->insert($insert);
+                    Item_code::ec_order_slot($order->ec_order_id);
+                    
+                    /* Insert Logs by Edward */
+                    $this->update_manual($order->ec_order_id);
+                    
+                    $data['status'] = 'success'; $data['message'] = 'Slot Created'; return json_encode($data);
+                }
+                else
+                {
+                    $data['status'] = 'error'; $data['message'] = 'Already have a slot'; return json_encode($data);
+                }
+            }
+        }
+        else
+        {
+            $data['status'] ='error';
+            $data['message'] = 'Invalid order please refresh the page';
+            return json_encode($data);
+        }
+    }
+    public  function paymaya_verify_id_order_update_slot_payment()
+    {
+        $update['payment_status'] = 1;
+        $update['order_status'] = 'Processing';
+
+        $ec_order_id = Request::input('ec_order_id');
+        $order = Tbl_ec_order::where('ec_order_id', $ec_order_id)->first();
+        if($order)
+        {
+            $order = Tbl_ec_order::where('ec_order_id', $ec_order_id)->update($update);
+            return $this->paymaya_verify_id_order_update_slot();  
+        }
+        else
+        {
+            $data['status'] ='error';
+            $data['message'] = 'Invalid order please refresh the page';
+            return json_encode($data);
+        }
+    }
+    public function report_e_commerce()
+    {
+        $this->set_invoice_number();
+        $to = Request::input('to');
+        $from = Request::input('from');
+        $filter = Request::input('filter');
+
+        $c_to = Carbon::parse($to);
+        $c_from = Carbon::parse($from)->endOfDay();
+
+        $data['order'] = Tbl_ec_order::where('tbl_ec_order.created_date', '>=', $c_from)
+                    ->where('tbl_ec_order.created_date', '<=', $c_to);
+        if($filter != 'All')
+        {
+            $data['order'] = $data['order']->where('order_status', $filter);
+        }            
+                    // customer
+        $data['order'] = $data['order']->leftjoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_ec_order.customer_id')
+                    ->leftjoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_customer.customer_id')
+                    ->where('purpose', 'shipping')
+                    ->orWhereNull('purpose', null)
+                    // slot
+                    ->leftjoin('tbl_ec_order_slot', 'tbl_ec_order_slot.order_slot_ec_order_id', '=', 'tbl_ec_order.ec_order_id')
+                    ->leftjoin('tbl_mlm_slot as slot', 'slot.slot_id', '=', 'tbl_ec_order_slot.order_slot_id_c')
+                    ->leftjoin('tbl_mlm_slot as sponsor', 'sponsor.slot_id', '=', 'slot.slot_sponsor')
+                    ->leftjoin('tbl_paymaya_logs', 'tbl_paymaya_logs.order_id','=', 'tbl_ec_order.ec_order_id' )
+                    // item
+                    ->join('tbl_ec_order_item', 'tbl_ec_order_item.ec_order_id', '=', 'tbl_ec_order.ec_order_id')
+                    ->join('tbl_ec_variant', 'tbl_ec_variant.evariant_id', '=', 'tbl_ec_order_item.item_id')
+                    ->join('tbl_item', 'tbl_item.item_id', '=', 'tbl_ec_variant.evariant_item_id')
+                    ->join('tbl_category', 'tbl_category.type_id', '=', 'item_category_id')
+                    ->where('price','>', 0)
+                    ->orWhereNull('price', null)
+                    // payment metho
+                    ->leftjoin('tbl_online_pymnt_method', 'tbl_online_pymnt_method.method_id', '=', 'tbl_ec_order.payment_method_id')
+
+                    // get
+                    ->select(
+                            'tbl_customer_address.*',
+                            'tbl_ec_order.*',
+                            'tbl_ec_order_slot.*',
+                            'slot.*', 
+                            'sponsor.slot_no as sponsor_slot_no', 
+                            'tbl_paymaya_logs.*',
+                            'tbl_online_pymnt_method.*',
+                            'tbl_ec_order_item.*',
+                            'tbl_ec_variant.*',
+                            'tbl_item.*',
+                            'tbl_category.*',
+                            DB::raw("CONCAT(tbl_customer_address.customer_state, ' ', tbl_customer_address.customer_city, ' ', tbl_customer_address.customer_zipcode, ' ', tbl_customer_address.customer_street) as address"),
+                            DB::raw("CONCAT(tbl_customer.first_name, ' ', tbl_customer.middle_name, ' ', tbl_customer.last_name) as name"),
+                            'tbl_customer.*'
+                            )
+                    
+                    ->get();
+        foreach($data['order'] as $key => $value)
+        {
+            $data['order'][$key]->wall_sum_binary = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $value->order_slot_id_c)->where('wallet_log_plan', 'BINARY')->sum('wallet_log_amount'); 
+            $data['order'][$key]->wall_sum_direct = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $value->order_slot_id_c)->where('wallet_log_plan', 'DIRECT')->sum('wallet_log_amount');
+            $data['order'][$key]->wall_sum = $data['order'][$key]->wall_sum_binary + $data['order'][$key]->wall_sum_direct;
+            
+        }            
+        $data['headers']['ec_order_id'] = 'Order ID'; 
+        $data['headers']['order_status'] = 'Order Status';
+        $data['headers']['invoice_number'] = 'Invoice Number';
+        $data['headers']['created_date'] = 'Document Date';
+        $data['headers']['created_date'] = 'Due Date';
+        $data['headers']['address'] = 'Ship To';
+        $data['headers']['customer_state'] = 'Region';
+        $data['headers']['type_name'] = 'Category';
+        $data['headers']['item_sku'] = 'Item Code/Sku';
+        $data['headers']['item_name'] = 'Model';
+        $data['headers']['price'] = 'Price';
+        $data['headers']['quantity'] = 'Quantity';
+        $data['headers']['checkout_id'] = 'Checkout Id';
+        $data['headers']['method_name'] = 'Payment Method';
+        $data['headers']['name'] = 'Customer Name';
+        $data['headers']['mlm_username'] = 'Username';
+        $data['headers']['first_name'] = 'First Name';
+        $data['headers']['middle_name'] = 'Middle Name';
+        $data['headers']['last_name'] = 'Last Name';
+        $data['headers']['b_day'] = 'Date of Birth';
+        $data['headers']['tin_number'] = 'TIN';
+        $data['headers']['email'] = 'Email';
+        $data['headers']['slot_no'] = 'Slot #';
+        $data['headers']['slot_eon'] = 'Eon Account Name';
+        $data['headers']['slot_eon_account_no'] = 'Eon Account Number';
+        $data['headers']['slot_eon_card_no'] = 'Eon Card Number';
+        $data['headers']['wall_sum_binary'] = 'Wallet - Binary';
+        $data['headers']['wall_sum_direct'] = 'Wallet - Direct';
+        $data['headers']['wall_sum'] = 'Total';
+        
+        Excel::create('New file', function($excel) use($data) {
+
+            $excel->sheet('New sheet', function($sheet) use($data) {
+
+                $sheet->loadView('member.product_order.report.all', $data);
+
+            });
+
+        })->export('xls');            
+                  
+    }
+    public function set_invoice_number()
+    {
+        $order = DB::table("tbl_ec_order")->where("payment_status", 1)->where("archived", 0)->where("invoice_number", NULL)->get();
+        foreach ($order as $key => $value) 
+        {
+            $last = DB::table("tbl_ec_order")->where("payment_status", 1)->where("archived", 0)->max("invoice_number");
+            if ($last) 
+            {
+                $update["invoice_number"] = $last + 1;
+                DB::table('tbl_ec_order')->where("ec_order_id", $value->ec_order_id)->update($update);            
+            }
+            else
+            {
+                $update["invoice_number"] = 11000000;
+                DB::table('tbl_ec_order')->where("ec_order_id", $value->ec_order_id)->update($update);
+            }
+        }
     }
 }

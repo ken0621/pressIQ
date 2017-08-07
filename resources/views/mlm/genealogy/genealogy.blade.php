@@ -2,14 +2,14 @@
 @if($slot)
 <html>
     <head>
-        <base href="{{URL::to('/')}}">
+        <base href="{{URL::to('/digima/public')}}">
         <!-- <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script> -->
-        <script type="text/javascript" src="/assets/external/jquery.minv1.js"></script>
-        <script type="text/javascript" src="/assets/slot_genealogy/genealogy/drag.js"></script>
-        <link rel="stylesheet" href="/assets/mlm/animate/css/animate.min.css">
+        <script type="text/javascript" src="assets/external/jquery.minv1.js"></script>
+        <script type="text/javascript" src="assets/slot_genealogy/genealogy/drag.js"></script>
+        <link rel="stylesheet" href="assets/mlm/animate/css/animate.min.css">
         <!-- <link rel="stylesheet" href="/assets/mlm/animate/css/normalize.min.css"> -->
-        <link rel="stylesheet" type="text/css" href="/assets/slot_genealogy/member/css/genealogy.css" />
-        <link rel="stylesheet" type="text/css" href="/assets/mlm/css/genealogy.css">
+        <link rel="stylesheet" type="text/css" href="assets/slot_genealogy/member/css/genealogy.css" />
+        <link rel="stylesheet" type="text/css" href="assets/mlm/css/genealogy.css">
         <!-- <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css"> -->
         <!-- <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css"> -->
         <!-- <link rel="stylesheet" href="/assets/member/css/member.css" type="text/css"/> -->
@@ -46,7 +46,6 @@
                                     
                                     @else
                                         <div>Count L:{{$l}} R:{{$r}}</div>
-                                        <div>Points - L: {{$slot->slot_binary_left}} R: {{$slot->slot_binary_right}}</div>
                                     @endif
                                 </div>
                                 <div class="id" >{{ $slot->slot_no }}</div>
@@ -72,7 +71,7 @@
         </div>  
     </body>
     <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
-    <script type="text/javascript" src="/assets/mlm/animate/js/animatedModal.min.js"></script>
+    <script type="text/javascript" src="assets/mlm/animate/js/animatedModal.min.js"></script>
     <script type="text/javascript">
         var mode = "{{ Request::input('mode') }}";
         var g_width = 0;

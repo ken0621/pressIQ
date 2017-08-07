@@ -1,6 +1,14 @@
 @extends("mlm.register.layout")
 
 @section("content")
+<style type="text/css">
+  .active_payment
+  {
+    /*#5C3424*/
+    /*border: 1px solid #5C3424;*/
+    background-color: #d0ebf2;
+  }
+</style>
 <form method="post" action="/member/register/payment/submit" >
     {!! csrf_field() !!}
 <div class="payment">
@@ -30,10 +38,10 @@
               <div class="holder-holder">
                 @if(count($_payment_method) != 0)
                   @foreach($_payment_method as $payment_method)
-                    <div class="choose-payment-method holder" method_id="{{ $payment_method->method_id }}" description="{{ $payment_method->link_description }}">
+                    <div class="choose-payment-method holder" method_id="{{ $payment_method->method_id }}" description="{{ $payment_method->link_description }}" onClick="change_active(this)">
                       <div class="match-height" style="line-height: 12.5px;">{{ $payment_method->method_name }}</div>
                       <div class="image" style="margin-top: 7.5px;">
-                        <img src="{{ $payment_method->image_path ? $payment_method->image_path : '/assets/front/img/default.jpg' }}">
+                        <img src="{{ $payment_method->image_path ? ltrim($payment_method->image_path, '/') : 'assets/front/img/default.jpg' }}">
                       </div>
                       <div class="radio" style="margin-bottom: 0;">
                         <label >
@@ -74,7 +82,7 @@
                            <tr>
                               <td>{{$product["variant_name"] or ''}}</td>
                               <td>{{$product['quantity']}}</td>
-                              <td style="padding-left: 0; padding-right: 0;">{{currency("P", $product['total'])}}</td>
+                              <td style="padding-left: 0; padding-right: 0;">@if($product['total'] == 0) Free @else {{currency("P", $product['total'])}} @endif </td>
                               <td style="padding-left: 0px; padding-right: 0px; width: 10px;"><a style="color: red;" href="/cart/remove?redirect=1&amp;variation_id=45"><i class="fa fa-close"></i></a></td>
                            </tr>
                         @endforeach
@@ -139,7 +147,7 @@
       </div>
     </div> -->
     <div class="button-holder">
-      <button class="btn btn-green btn-lg">PROCEED</button>
+      <button class="btn btn-green btn-lg" onclick="$(this).addClass('hide');">PROCEED</button>
     </div>
   </div>
 </div>
@@ -147,6 +155,14 @@
 @endsection
 @section('script')
 <script type="text/javascript">
+function change_active(ito)
+{
+  $('.choose-payment-method').each( function(){
+    $(this).removeClass('active_payment');
+  });
+  console.log('clicku');
+  $(ito).addClass('active_payment');
+}
 event_choose_payment_method();
   $(document).on("submit", ".register-submit", function(e)
         {

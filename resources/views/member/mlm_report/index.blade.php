@@ -55,6 +55,21 @@
                     <label><small>To:</small></label>
                     <input type="date" class="form-control to_in" name="to">
                 </div>  
+
+                <div class="col-md-3 status_c hide">
+                    <label><small>Status:</small></label>
+                    <select class="form-control inv_status" name="inv_status">
+                      <option value="0" selected>All</option>
+                      <option value="Pending"   >Pending</option>
+                      <option value="Failed"    >Failed</option>
+                      <option value="Processing">Processing</option>
+                      <option value="Shipped"   >Shipped</option>
+                      <option value="Completed" >Completed</option>
+                      <option value="On-Hold"   >On-Hold</option>
+                      <option value="Cancelled" >Cancelled</option>
+                  </select>
+                </div> 
+
                 <div class="col-md-3 cashiers_c hide">
                   <label><small>Cashiers</small></label>
                   <select class="form-control user_id" name="user_id">
@@ -117,6 +132,7 @@
     var count = $(ito).find('option:selected').attr('count');
     var cashier = $(ito).find('option:selected').attr('cashier');
     var warehouse = $(ito).find('option:selected').attr('warehouse');
+    var value = $(ito).find('option:selected').attr('value');
 
     $('.from_in').val(from);
     $('.to_in').val(to);
@@ -133,6 +149,13 @@
       $('.cashiers_c').addClass('hide');
       $('.warehouse_c').addClass('hide');
     }
+
+    $('.status_c').addClass('hide');
+
+    if(value=='e_commerce_sales_report')
+    {
+      $('.status_c').removeClass('hide');
+    }
     
   }
   function print_excel()
@@ -144,7 +167,10 @@
     var take = $('.take_in').val();
     var user_id = $('.user_id').val();
     var warehouse_id = $('.warehouse_id').val();
-    window.open('/member/mlm/report/get?report_choose=' + choose + '&pdf=excel&from=' + from +'&to=' + to + '&skip=' +skip +'&take=' + take + '&user_id=' + user_id + '&warehouse_id=' + warehouse_id , '_blank');
+
+    var inv_status = $('.inv_status').val(); 
+
+    window.open('/member/mlm/report/get?report_choose=' + choose + '&pdf=excel&from=' + from +'&to=' + to + '&skip=' +skip +'&take=' + take + '&user_id=' + user_id + '&warehouse_id=' + warehouse_id + '&inv_status=' + inv_status, '_blank');
   }
   function print_pdf()
   {
@@ -157,7 +183,9 @@
     var user_id = $('.user_id').val();
     var warehouse_id = $('.warehouse_id').val();
 
-    window.open('/member/mlm/report/get?report_choose=' + choose + '&pdf=true&from=' + from +'&to=' + to + '&skip=' +skip +'&take=' + take + '&user_id=' + user_id + '&warehouse_id=' + warehouse_id , '_blank');
+    var inv_status = $('.inv_status').val();  
+
+    window.open('/member/mlm/report/get?report_choose=' + choose + '&pdf=true&from=' + from +'&to=' + to + '&skip=' +skip +'&take=' + take + '&user_id=' + user_id + '&warehouse_id=' + warehouse_id + '&inv_status=' + inv_status, '_blank');
   }
 </script>
 <script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>

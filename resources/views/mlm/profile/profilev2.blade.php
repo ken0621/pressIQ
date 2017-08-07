@@ -63,7 +63,6 @@
           $com = $com_a[0];
           $url_a = 'http://' . $username . '.' . $domain . '.' .$com . '/mlm/register';
         ?>
-          <a href="{{$url_a}}" target="_blank" class="btn btn-primary btn-block"><b>Leads Link</b></a>
         </div>
         <!-- /.box-body -->
       </div>
@@ -78,44 +77,22 @@
           <strong><i class="fa fa-book margin-r-5"></i>Date Joined</strong>
 
           <p class="text-muted">
-            {{$customer_info->created_date}}
+            @if(isset($slot_now->slot_created_date))
+            {{$slot_now->slot_created_date}}
+            @endif
           </p>
 
           <hr>
 
           <strong><i class="fa fa-map-marker margin-r-5"></i> Location</strong>
 
-          <p class="text-muted">{{address_customer_info($customer_info)}}</p>
-
+          <p class="text-muted">{{$customer_info->customer_full_address}}</p>
+          <!-- address_customer_infos -->
         </div>
         <!-- /.box-body -->
       </div>
       @endif
-      @if($slot_info)
-      <div class="box box-success">
-        <div class="box-header with-border">
-          <h3 class="box-title">New Referral</h3>
-
-          <div class="box-tools pull-right">
-            <span class="label label-success">{{count($new_member)}} New Members</span>
-          </div>
-        </div>
-        <!-- /.box-header -->
-        <div class="box-body no-padding">
-          <ul class="users-list clearfix">
-            @foreach($new_member as $key => $value)
-                <li class="clearfix"
-                style="width: 50% !important">
-                    {{name_format_from_customer_info($value)}}
-                  <span class="users-list-date">{{$value->slot_created_date}}</span>
-                </li>
-            @endforeach
-          </ul>
-          <!-- /.users-list -->
-        </div>
-        <!-- /.box-body -->
-      </div>
-      @endif
+      
       <!-- /.box -->
     </div>
     <!-- /.col -->
@@ -148,6 +125,12 @@
                     </tr>
                     <tr>
                         <td>
+                            <label>Middle Name</label>
+                            <input id="first-name" name="middle_name" class="form-control" value="{{$customer_info->middle_name}}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
                             <label>Birth Date</label>
                             <input type="date" id="datepicker" name="b_day" class="form-control" style="font-family: 'Titillium Web',sans-serif !important;" value="{{$customer_info->b_day}}" placeholder="mm/dd/yyyy">     
                         </td>
@@ -176,13 +159,13 @@
                     </tr>
                     <tr>
                         <td>
-                            <label>Street</label>
+                            <label>Barangay</label>
                             <input id="first-name" name="customer_zipcode" class="form-control"  value="{{isset($customer_address->customer_zipcode) ? $customer_address->customer_zipcode : ''}}">
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label>Zip Code</label>
+                            <label>Full Address</label>
                             <input id="first-name" name="customer_street" class="form-control"  value="{{isset($customer_address->customer_street) ? $customer_address->customer_street : ''}}">
                         </td>
                     </tr>

@@ -723,6 +723,10 @@ class ItemController extends Member
 		{
 			$item_measurement_id = Session::get("um_id");
 		}
+		
+		/* Insert Item Code */
+		$insert["item_code"] = Request::input("item_code");
+		
 		if(Request::input("item_type") == "inventory")
 		{
 			$insert["item_type_id"]				      = 1; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service, 4 = Bundle)
@@ -1560,7 +1564,10 @@ class ItemController extends Member
 
 		$item_name = Request::input("item_name");
 		$item_sku = Request::input("item_sku");
-
+		
+		/* Insert Item Code */
+		$insert["item_code"] = Request::input("item_code");
+		
 		if(Request::input("item_type") == "inventory")			
 		{
 			$insert["item_name"]				      = $item_name;

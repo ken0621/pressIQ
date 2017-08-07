@@ -40,6 +40,6 @@
 </div>
 </form>
 
-<script type="text/javascript" src="/assets/member/js/tinymce.min.js"></script>
-<script>tinymce.init({ selector:'.tinymce',menubar:false,height:200, content_css : "/assets/member/css/tinymce.css"});</script>
+<script type="text/javascript" src="assets/member/js/tinymce.min.js"></script>
+<script>tinymce.init({ selector:'.tinymce',menubar:false,height:200, content_css : "assets/member/css/tinymce.css"});</script>
 <!-- <script type="text/javascript" src="/assets/member/js/warehouse.js"></script> -->

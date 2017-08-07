@@ -23,6 +23,7 @@ use App\Models\Tbl_customer;
 use App\Models\Tbl_ec_order;
 use App\Models\Tbl_coupon_code;
 use App\Models\Tbl_coupon_code_product;
+use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Models\Tbl_item_code;
 use App\Models\Tbl_country;
@@ -228,12 +229,7 @@ class ShopCheckoutController extends Shop
                 $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
 
                 if($order)
-                {  
-                    $update['ec_order_id'] = $order_id;
-                    $update['order_status'] = "Processing";
-                    $update['payment_status'] = 1;
-                    $order = Ec_order::update_ec_order($update);
-
+                {
                     return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)));
                 }
             }
@@ -242,104 +238,67 @@ class ShopCheckoutController extends Shop
                 return Redirect::to('/mlm/login?notify=1&success=1');
             }
         }
+        elseif(Request::input("status") == "P")
+        {
+            return Redirect::to('/mlm/login?notify=5&success=1');
+        }
         else
         {
-            return Redirect::to('/mlm/login?notify=2&success=1');
+            return Redirect::to('/mlm/login?notify=3');
         }
     }
     public function dragonpay_postback()
     {
-        $request = Request::all();
-
-        $insert["log_date"] = Carbon::now();
-        $insert["content"]  = serialize($request);
-        DB::table("tbl_dragonpay_logs")->insert($insert);
-
-        if (Request::input("status") == "S") 
+        $order_id = Request::input("param2");
+        
+        try 
         {
-            $from = Request::input('param1');
-            if ($from == "checkout") 
+            $request = Request::all();
+            
+            // Insert Dragonpay Logs
+            $insert["log_date"] = Carbon::now();
+            $insert["response"] = serialize($request);
+            $insert["order_id"] = $order_id;
+            $insert["ip_address"] = get_current_ip();
+            
+            DB::table("tbl_dragonpay_logs_other")->insert($insert);
+    
+            if (Request::input("status") == "S") 
             {
-                $order_id = Request::input("param2");
+                $from = Request::input('param1');
                 $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
-
-                if($order)
-                {  
-                    try 
-                    {
-                        $update['ec_order_id'] = $order_id;
-                        $update['order_status'] = "Processing";
-                        $update['payment_status'] = 1;
-                        $order = Ec_order::update_ec_order($update);
-
-                        $this->after_email_payment($order_id);
-                    } 
-                    catch (\Exception $e) 
-                    {
-                        $last["log_date"] = Carbon::now();
-                        $last["content"]  = $e->getMessage();
-                        DB::table("tbl_dragonpay_logs")->insert($last);  
-                    }   
-                }
-            }
-            elseif ($from == "register")
-            {
-                $order_id = Request::input("param2");
-                $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
-
+    
                 if($order)
                 {
-                    try 
+                    if ($from == "register")
                     {
+                        $this->put_temporary($order_id);
                         Item_code::ec_order_slot($order_id);
-                        
-                        $update['ec_order_id'] = $order_id;
-                        $update['order_status'] = "Processing";
-                        $update['payment_status'] = 1;
-                        $order = Ec_order::update_ec_order($update);
-
-                        $this->after_email_payment($order_id);
-                    } 
-                    catch (\Exception $e) 
-                    {
-                        $last["log_date"] = Carbon::now();
-                        $last["content"]  = $e->getMessage();
-                        DB::table("tbl_dragonpay_logs")->insert($last);  
-                    }  
+                    }
+                    
+                    $update['ec_order_id'] = $order_id;
+                    $update['order_status'] = "Processing";
+                    $update['payment_status'] = 1;
+                    $order = Ec_order::update_ec_order($update);
+    
+                    $this->after_email_payment($order_id);
                 }
             }
-        }
-    }
-    public function dragonpay_logs()
-    {
-        $dragonpay = DB::table("tbl_dragonpay_logs")->orderBy("id", "DESC")->first();
-
-        if (is_serialized($dragonpay->content)) 
+        } 
+        catch (\Exception $e) 
         {
-            dd(unserialize($dragonpay->content));
-        }
-        else
-        {
-            dd($dragonpay->content);
-        }
+            $insert["log_date"] = Carbon::now();
+            $insert["response"] = serialize($e->getMessage());
+            $insert["order_id"] = $order_id;
+        } 
     }
     public function paymaya_success()
     {
         $order_id = Crypt::decrypt(Request::input("order_id"));
         $from = Request::input("from");
-
         $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
         if($order)
         {
-            Item_code::ec_order_slot($order_id);
-
-            $update['ec_order_id']    = $order_id;
-            $update['order_status']   = "Processing";
-            $update['payment_status'] = 1;
-            $order = Ec_order::update_ec_order($update);
-
-            $this->after_email_payment($order_id);
-
             if ($from == "checkout") 
             {
                 return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)));
@@ -352,35 +311,154 @@ class ShopCheckoutController extends Shop
     }
     public function paymaya_failure()
     {
-        $order_id = Crypt::decrypt(Request::input("order"));
-        $this->failmaya($order_id);
         return Redirect::to('/mlm/login?notify=3');
     }
     public function paymaya_cancel()
     {
-        $order_id = Crypt::decrypt(Request::input("order"));
-        $this->failmaya($order_id);
         return Redirect::to('/mlm/login?notify=4');
+    }
+    public function paymaya_webhook_success()
+    {
+        try 
+        {
+            $order_id = (int)Request::input("requestReferenceNumber");
+            $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
+            if($order)
+            {
+                $insert["order_id"] = $order_id;
+                $insert["log_date"] = Carbon::now();
+                $insert["ip_address"] = get_current_ip();
+                $insert["response"] = serialize(Request::input());
+                DB::table("tbl_paymaya_logs_other")->insert($insert);
+                  
+                $this->put_temporary($order_id);
+                Item_code::ec_order_slot($order_id);
+    
+                $update['ec_order_id']    = $order_id;
+                $update['order_status']   = "Processing";
+                $update['payment_status'] = 1;
+                $order = Ec_order::update_ec_order($update);
+                
+                $this->after_email_payment($order_id);
+            }
+            else
+            {
+                $order_id = (int)Request::input("requestReferenceNumber");
+                $insert["order_id"] = $order_id;
+                $insert["log_date"] = Carbon::now();
+                $insert["ip_address"] = get_current_ip();
+                $insert["response"] = 'invalid order';
+                DB::table("tbl_paymaya_logs_other")->insert($insert);
+            }
+        } 
+        catch (\Exception $e) 
+        {
+            $order_id = (int)Request::input("requestReferenceNumber");
+            $insert["order_id"] = $order_id;
+            $insert["log_date"] = Carbon::now();
+            $insert["ip_address"] = get_current_ip();
+            $insert["response"] = serialize($e->getMessage());
+            DB::table("tbl_paymaya_logs")->insert($insert);
+        } 
+        dd(Request::input());
+    }
+    public function paymaya_webhook_failure()
+    {
+        try{
+            $order_id = Request::input("requestReferenceNumber");
+            $this->failmaya($order_id);
+        } 
+        catch (\Exception $e) 
+        {
+            $order_id = Request::input("requestReferenceNumber");
+            $insert["order_id"] = $order_id;
+            $insert["log_date"] = Carbon::now();
+            $insert["ip_address"] = get_current_ip();
+            $insert["response"] = serialize($e->getMessage());
+            DB::table("tbl_paymaya_logs")->insert($insert);
+        } 
+        dd(Request::input());
+    }
+    public function paymaya_webhook_cancel()
+    {
+        try{
+            $order_id = Request::input("requestReferenceNumber");
+            $this->failmaya($order_id);
+        }
+        catch (\Exception $e) 
+        {
+            $order_id = Request::input("requestReferenceNumber");
+            $insert["order_id"] = $order_id;
+            $insert["log_date"] = Carbon::now();
+            $insert["ip_address"] = get_current_ip();
+            $insert["response"] = serialize($e->getMessage());
+            DB::table("tbl_paymaya_logs")->insert($insert);
+        }
+        dd(Request::input());
+    }
+    public function paymaya_logs()
+    {
+        $data["_dragonpay"] = DB::table("tbl_paymaya_logs")->orderBy("id", "DESC")->get();
+        foreach ($data["_dragonpay"] as $key => $value) 
+        {
+            $data["_dragonpay"][$key]->extracted = is_serialized($value->response) ? unserialize($value->response) : $value->response;
+        }
+        
+        return view("paymaya.logs", $data);
+    }
+    public function paymaya_logs_view($id)
+    {
+        $data["_dragonpay"] = DB::table("tbl_paymaya_logs_other")->where("order_id", $id)->get();
+        foreach ($data["_dragonpay"] as $key => $value) 
+        {
+            $data["_dragonpay"][$key]->extracted = is_serialized($value->response) ? unserialize($value->response) : $value->response;
+        }
+        
+        return view("paymaya.logs_view", $data);
+    }
+    public function dragonpay_logs()
+    {
+        $data["_dragonpay"] = DB::table("tbl_dragonpay_logs")->orderBy("id", "DESC")->get();
+        foreach ($data["_dragonpay"] as $key => $value) 
+        {
+            $data["_dragonpay"][$key]->extracted = is_serialized($value->response) ? unserialize($value->response) : $value->response;
+            $data["_dragonpay"][$key]->count = DB::table("tbl_dragonpay_logs_other")->where("order_id", $value->order_id)->count();
+        }
+        
+        return view("dragonpay.logs", $data);
+    }
+    public function dragonpay_logs_view($id)
+    {
+        $data["_dragonpay"] = DB::table("tbl_dragonpay_logs_other")->where("order_id", $id)->get();
+        foreach ($data["_dragonpay"] as $key => $value) 
+        {
+            $data["_dragonpay"][$key]->extracted = is_serialized($value->response) ? unserialize($value->response) : $value->response;
+        }
+        
+        return view("dragonpay.logs_view", $data);
     }
     public function failmaya($order_id)
     {
+        $insert["order_id"] = $order_id;
+        $insert["log_date"] = Carbon::now();
+        $insert["ip_address"] = get_current_ip();
+        try
+        {
+            $insert["response"] = serialize(Request::input());
+            DB::table("tbl_paymaya_logs_other")->insert($insert);
+        } 
+        catch (\Exception $e) 
+        {
+            $insert["response"] = serialize($e->getMessage());
+            DB::table("tbl_paymaya_logs")->insert($insert);
+        }
+        
         $update['ec_order_id']    = $order_id;
         $update['order_status']   = "Failed";
         $update['payment_status'] = 0;
         $order = Ec_order::update_ec_order($update);
 
-        // $customer = DB::table("tbl_ec_order")->select("tbl_ec_order.ec_order_id", "tbl_ec_order.customer_id as order_customer_id", "tbl_customer.*")
-        //                                      ->join("tbl_customer", "tbl_customer.customer_id", "=", "tbl_ec_order.customer_id")
-        //                                      ->where("tbl_ec_order.ec_order_id", $order_id)
-        //                                      ->first();
-    
-        // $update_customer["email"] = "f_" . $customer->email;
-        // $update_customer["first_name"] = "f_" . $customer->first_name;
-        // $update_customer["last_name"] = "f_" . $customer->last_name;
-        // $update_customer["middle_name"] = "f_" . $customer->middle_name;
-        // $update_customer["mlm_username"] = "f_" . $customer->mlm_username;
-
-        // DB::table("tbl_customer")->where("customer_id", $customer->customer_id)->update($update_customer);
+        $this->after_email_payment($order_id);
     }
     public function after_email_payment($order_id)
     {
@@ -389,6 +467,14 @@ class ShopCheckoutController extends Shop
         $data_customer             = DB::table("tbl_customer")->where("customer_id", $data_order->customer_id)->first();
         if ($data_order) 
         {
+            $data['repurchase'] = 0;
+            
+            $check_if_already_emailed = Tbl_mlm_slot::where('slot_owner', $data_order->customer_id)->count();
+            if($check_if_already_emailed >= 1)
+            {
+                $data['repurchase'] = 1;
+            }
+            
             $data["template"]         = Tbl_email_template::where("shop_id", $this->shop_info->shop_id)->first();
             $data['mail_to']          = $data_order->customer_email;
             $data['mail_subject']     = "Account Verification";
@@ -398,6 +484,16 @@ class ShopCheckoutController extends Shop
             $result = Mail_global::password_mail($data, $data_order->shop_id);
         }
         /* End Email Checkout */
+    }
+    public function put_temporary($order_id)
+    {
+        $order = DB::table("tbl_ec_order")->where("ec_order_id", $order_id)->first();
+        $customer = DB::table("tbl_customer")->where("customer_id", $order->customer_id)->first();
+        $temporary = is_serialized($customer->temporary) ? unserialize($customer->temporary) : [];
+        if (isset($temporary) && $temporary && count($temporary) > 0) 
+        {
+            DB::table("tbl_customer")->where("customer_id", $customer->customer_id)->update($temporary);
+        }
     }
     /* End Payment Facilities */
 
@@ -596,12 +692,10 @@ class ShopCheckoutController extends Shop
         Session::put($unique_id, $customer_set_info_response);
         echo json_encode("Success!"); 
     }
-
     public function locale_id_to_name($locale_id)
     {
         return Tbl_locale::where("locale_id", $locale_id)->pluck("locale_name");
     }
-
     public function payment()
     {
         if(Request::isMethod("post"))
@@ -623,7 +717,6 @@ class ShopCheckoutController extends Shop
             }
         }
     }
-
     public function payment_upload()
     {
         $id = Crypt::decrypt(Request::input("id"));
@@ -707,7 +800,6 @@ class ShopCheckoutController extends Shop
             return view("checkout_payment_upload", $data);
         }
     }
-    
     public function get_payment_method()
     {
         $payment_method = Tbl_online_pymnt_method::leftJoin('tbl_online_pymnt_link', 'tbl_online_pymnt_link.link_method_id', '=', 'tbl_online_pymnt_method.method_id')
@@ -719,14 +811,11 @@ class ShopCheckoutController extends Shop
 
         return $payment_method;
     }
-    
-
     public function addtocart()
     {
         $data["page"] = "Checkout - Add to Cart";
         return view("addto_cart", $data);
     }
-
     function split_name($name)
     {
         $name = trim($name);
@@ -734,7 +823,6 @@ class ShopCheckoutController extends Shop
         $first_name = trim( preg_replace('#'.$last_name.'#', '', $name ) );
         return array($first_name, $last_name);
     }
-
     public function order_placed()
     {
         $data["page"] = "Checkout - Order Placed";

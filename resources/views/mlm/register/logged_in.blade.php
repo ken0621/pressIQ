@@ -14,7 +14,9 @@
 						
 						<div class="col-md-12">	
 							<div class="form-group">
-								<label> Refferal Code {{$sponsor_r == 1 ? '' : '(Optional)'}}</label>
+
+								<label> Referrer/Upline</label>
+
 								<input type="text" class="form-control input-lg" name="sponsor" value="{{$sponsor}}" 
 								{{$sponsor_r == 1 ? 'required' : ''}} 
 								>
@@ -22,17 +24,17 @@
 						</div>	
 
 					
-						<div class="col-md-12">
+						<div class="col-md-12 hide">
 							<div class="col-md-6">
 								<div class="form-group">
 									<label><input type="radio" name="account_use"  value="0" checked> Use Old Account</label>
 								</div>
 							</div>
-							<div class="col-md-6">
-								<div class="form-group">
-									<label><input type="radio" name="account_use"  value="1"> Create New Account</label>
-								</div>
-							</div>
+							<!--<div class="col-md-6">-->
+							<!--	<div class="form-group">-->
+							<!--		<label><input type="radio" name="account_use"  value="1"> Create New Account</label>-->
+							<!--	</div>-->
+							<!--</div>-->
 						</div>
 						<div class="col-md-12 text-center">
 							<div class="button-holder">

@@ -43,6 +43,7 @@ class MlmReportController extends Mlm
             return Self::show_no_access();
         }
     }
+    
     public static function direct()
     {
         $data['report']     = Mlm_member_report::get_wallet('DIRECT', Self::$slot_id); 
@@ -68,6 +69,7 @@ class MlmReportController extends Mlm
         $data['report']     = Mlm_member_report::get_wallet('BINARY', Self::$slot_id); 
         $data['plan']       = Mlm_member_report::get_plan('BINARY', Self::$shop_id); 
         $data['header'] = Mlm_member_report::header($data['plan']);
+        $data['header']["plan"]->marketing_plan_name = "Matching";
         foreach($data['report'] as $key => $value)
         {
             $data['level'][$key] = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)

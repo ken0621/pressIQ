@@ -150,8 +150,8 @@
 
 @endsection
 @section('css')
-<link rel="stylesheet" type="text/css" href="/assets/member/css/btn_dashboard.css">
-<link rel="stylesheet" type="text/css" href="/assets/member/css/dashboard.css">
+<link rel="stylesheet" type="text/css" href="assets/member/css/btn_dashboard.css">
+<link rel="stylesheet" type="text/css" href="assets/member/css/dashboard.css">
 @endsection
 @section('script')
 

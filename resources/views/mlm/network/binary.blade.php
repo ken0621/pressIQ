@@ -1,7 +1,7 @@
 @extends('mlm.layout')
 @section('content')
 <?php 
-$data['title'] = 'Network List binary';
+$data['title'] = 'Network List';
 $data['sub'] = '';
 $data['icon'] = 'fa fa-retweet';
 ?>  
@@ -16,7 +16,7 @@ $data['icon'] = 'fa fa-retweet';
 
     <li class="time-label">
               <span class="bg-aqua">
-                LEVEL {{$key}}
+                LEVEL {{$key + 1}}
               </span>
         </li>
         @foreach($value as $key => $value)
@@ -48,7 +48,7 @@ $data['icon'] = 'fa fa-retweet';
   @foreach($tree_right as $key => $value)
     <li class="time-label">
               <span class="bg-aqua">
-                LEVEL {{$key}}
+                LEVEL {{$key + 1}}
               </span>
         </li>
         @foreach($value as $key => $value)

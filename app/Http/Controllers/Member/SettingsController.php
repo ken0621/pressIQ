@@ -28,6 +28,7 @@ class SettingsController extends Member
             $data['settings_active'][$settings->settings_key]['settings_setup_done'] = $settings->settings_setup_done;
         }
         $data['terms_and_agreement'] = Tbl_settings::where('shop_id', $shop_id)->where('settings_key', 'terms_and_agreement')->first();
+        $data['regirter_page_disable_text'] = Tbl_settings::where('shop_id', $shop_id)->where('settings_key', 'regirter_page_disable_text')->first();
         return view('member.settings.settings_all', $data);
     }
     public function index($key)
@@ -64,6 +65,30 @@ class SettingsController extends Member
             $update['settings_value'] = $terms_and_agreement;
             Tbl_settings::where('shop_id', $shop_id)->where('settings_key', 'terms_and_agreement')->update($update);
             $settings = Tbl_settings::where('shop_id', $shop_id)->where('settings_key', 'terms_and_agreement')->first();
+        }
+        $data['status'] = 'success';
+        $data['message'] = 'success';
+
+        return json_encode($data);
+    }
+    public function disbable_text_a()
+    {
+        $shop_id                = $this->user_info->shop_id;
+        $regirter_page_disable_text    = Request::input('regirter_page_disable_text');   
+        $count_terms            = Tbl_settings::where('shop_id', $shop_id)->where('settings_key', 'regirter_page_disable_text')->count();
+        if($count_terms == 0)
+        {
+            
+            $insert['settings_key'] = 'regirter_page_disable_text';
+            $insert['shop_id'] = $shop_id;
+            $insert['settings_value'] = $regirter_page_disable_text;
+            Tbl_settings::where('shop_id', $shop_id)->insert($insert);
+        }
+        else
+        {
+            $update['settings_value'] = $regirter_page_disable_text;
+            Tbl_settings::where('shop_id', $shop_id)->where('settings_key', 'regirter_page_disable_text')->update($update);
+            $settings = Tbl_settings::where('shop_id', $shop_id)->where('settings_key', 'regirter_page_disable_text')->first();
         }
         $data['status'] = 'success';
         $data['message'] = 'success';

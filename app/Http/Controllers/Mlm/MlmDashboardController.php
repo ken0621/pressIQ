@@ -6,7 +6,7 @@ use Redirect;
 use Request;
 use View;
 use Validator;
-
+use DB;
 use App\Globals\Mlm_member;
 use App\Models\Tbl_mlm_plan;
 use App\Models\Tbl_mlm;
@@ -20,6 +20,8 @@ use App\Models\Tbl_mlm_slot_points_log;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_tree_sponsor;
 use App\Models\Tbl_country;
+use App\Models\Tbl_ec_product;
+use App\Models\Tbl_ec_variant;
 use App\Models\Tbl_tree_placement;
 use App\Models\Tbl_ec_order;
 use Carbon\Carbon;
@@ -46,27 +48,61 @@ class MlmDashboardController extends Mlm
         }
         if(Self::$shop_info->member_layout == 'myphone')
         {
+            $data['slot_start_status'] = $this->slot_start_status();
             $data['direct']      = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)->where('wallet_log_plan', 'DIRECT')->sum('wallet_log_amount');
             $data['binary']      = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)->where('wallet_log_plan', 'BINARY')->sum('wallet_log_amount');
+            $data['income_per_complan'] = Tbl_mlm_slot_wallet_log::slot()
+            ->leftjoin('tbl_mlm_plan', 'tbl_mlm_plan.marketing_plan_code', '=','tbl_mlm_slot_wallet_log.wallet_log_plan')
+            ->customer()
+            ->where('tbl_mlm_slot.slot_id', Self::$slot_id)
+            ->select(DB::raw('wallet_log_plan as wallet_log_plan'), DB::raw('sum(wallet_log_amount ) as wallet_log_amount'), DB::raw('wallet_log_slot as wallet_log_slot'))
+            ->groupBy(DB::raw('wallet_log_plan') )
+            ->get();
 
-            $sum = $data['direct'] + $data['binary'];
-            
-            if($data['direct'] == 0)
+            foreach ($data['income_per_complan'] as $key => $value) 
             {
-                $data['direct'] = 0;
+                # code...
+                if($value->wallet_log_plan == 'DIRECT')
+                {
+                    // $data['income_per_complan'][$key]->wallet_log_plan = 'Referral';
+                    $data['income_per_complan'][$key]->wallet_log_amount = $data['direct'];
+                }
+                if($value->wallet_log_plan == 'BINARY')
+                {
+                    // $data['income_per_complan'][$key]->wallet_log_plan = 'Matrix Bonus';
+                    $data['income_per_complan'][$key]->wallet_log_amount = $data['binary'];
+                }
             }
-            if($data['binary'] == 0)
-            {
-                $data['binary'] = 0;
-            }
-            if($sum == 0)
-            {
-                $sum = 1;
-            }
-            $data['direct_percent'] = ($data['direct']/$sum) * 100;
-            $data['binary_percent'] = ($data['binary']/$sum) * 100;
+            $data['complan'] = Tbl_mlm_plan::where('shop_id', Self::$shop_id)->where('marketing_plan_enable', 1)->get()->keyBy('marketing_plan_code');
+
+            $data['count_per_level'][1] = 2;
+            $data['count_per_level'][2] = 4;
+            $data['count_per_level'][3] = 8;
+            $data['count_per_level'][4] = 16;
+            $data['count_per_level'][5] = 32;
+            $data['count_per_level'][6] = 64;
+            $data['count_per_level'][7] = 128;
+            $data['count_per_level'][8] = 256;
+            $data['count_per_level'][9] = 512;
+            $data['count_per_level'][10] = 1024;
+            $data['count_per_level'][11] = 2048;
+
+            $data['new_member'] = Tbl_mlm_slot::where('slot_sponsor', Self::$slot_id)
+            ->customer()
+            ->orderBy('slot_id', 'DESC')
+            ->take(6)
+            ->get();
+
+        
+            $data['tree_count'] = Tbl_tree_placement::where('placement_tree_parent_id', Self::$slot_id)
+            // ->where('placement_tree_position', 'left')
+            ->select(DB::raw('count(placement_tree_level ) as count_slot'), DB::raw('tbl_tree_placement.*'))
+            ->groupBy(DB::raw('placement_tree_level') )
+            ->groupBy('placement_tree_parent_id')
+            ->orderBy('placement_tree_level', 'ASC')->get()->keyBy('placement_tree_level');
 
             $data['count_downline'] = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)->count();
+            
             $data['count_downline_per_countr_data'] = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)
             ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_tree_sponsor.sponsor_tree_child_id')
             ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
@@ -87,6 +123,7 @@ class MlmDashboardController extends Mlm
                 }
                 
             }
+
             foreach($data['country_name'] as $key => $value)
             {
                 $data['country_name'][$key] = ($value/$data['count_downline']) * 100;
@@ -103,6 +140,23 @@ class MlmDashboardController extends Mlm
 
         return view("mlm.dashboard", $data);
     }
+    public function slot_start_status()
+    {
+        $return = null;
+        if(isset(Self::$slot_now->slot_start_status))
+        {
+            $slot = Tbl_mlm_slot::where('slot_id', Self::$slot_id)->first();
+            if(isset($slot)){
+                if($slot->slot_start_status == 0)
+                {
+                    $update['slot_start_status'] = 1;
+                    Tbl_mlm_slot::where('slot_id', Self::$slot_id)->update($update);
+                    $data = [];
+                    return view('mlm.dashboard.myphone_start');
+                }
+            }
+        }
+    }
     public function lead()
     {
         $data['page'] = 'Lead';
@@ -114,6 +168,10 @@ class MlmDashboardController extends Mlm
             ->get();
         
         return view("mlm.dashboard.lead", $data);
+    }
+    public function charts()
+    {
+        
     }
     public function tree_view()
     {
@@ -394,13 +452,21 @@ class MlmDashboardController extends Mlm
     public static function process_order_queue()
     {
         $data["slot_count"]  = Tbl_mlm_slot::where("slot_owner",Self::$customer_id)->count();
-        $data['first_order'] = Tbl_ec_order::where("customer_id",Self::$customer_id)->orderBy("ec_order_id","ASC")->first();
+        $data['first_orders'] = Tbl_ec_order::where("customer_id",Self::$customer_id)->orderBy("ec_order_id","ASC")->get();
 
-        if($data["slot_count"] != 0)
-        {
-            return Redirect::to("mlm");
+        $orders = [];
+        $data['first_orders_item'] = [];
+        foreach ($data['first_orders'] as $key => $value) {
+            $data['first_orders_item'][$key] = Tbl_ec_variant::product()
+            ->join('tbl_ec_order_item', 'tbl_ec_order_item.item_id', '=', 'tbl_ec_variant.evariant_id')
+            ->where('ec_order_id', $value->ec_order_id)
+            ->get();
         }
-
+        
+        // if($data["slot_count"] != 0)
+        // {
+        //     return Redirect::to("/mlm");
+        // }
         return view("mlm.processing_order", $data);
     }
 }

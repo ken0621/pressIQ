@@ -144,6 +144,10 @@
                         </div>
 
                     </form>
+                    <form method="post" action="https://brown.com.ph/payment/paymaya/webhook/failure?order_id=eyJpdiI6ImRYc2RqSE1LNHZMcm5ENUZTdlBMc1E9PSIsInZhbHVlIjoiclJaNXFhTWJPWlV4QlZtZUNCT2RGdz09IiwibWFjIjoiYzJiNTBiMTk4YjBmNTc2MDA3NmNjYWIyM2QzNjUzZGIwNDg3NzZhZWU5ZjcxOTQxMTQ0ZDMzYzljMjU4OWYzZCJ9&from=register">
+                        <input type="text" name="id" value="7888d2a8-7982-46ad-90e2-c83361dde8a6"/>
+                        <input type="submit" value="Submit"/>
+                    </form>
                 </div>
             </div>
         </div>

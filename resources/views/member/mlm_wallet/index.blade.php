@@ -11,9 +11,9 @@
                 </small>
             </h1>
         </div>
-        <a class="pull-right btn btn-warning" href="/member/mlm/wallet/transfer">Wallet Transfer</a>
-        <a class="pull-right btn btn-success" href="/member/mlm/wallet/adjust">Adjust Wallet</a>
-        <a class="pull-right btn btn-primary" href="/member/mlm/wallet/refill">Wallet Refill Request</a>
+        <!--<a class="pull-right btn btn-warning" href="/member/mlm/wallet/transfer">Wallet Transfer</a>-->
+        <!--<a class="pull-right btn btn-success" href="/member/mlm/wallet/adjust">Adjust Wallet</a>-->
+        <!--<a class="pull-right btn btn-primary" href="/member/mlm/wallet/refill">Wallet Refill Request</a>-->
     </div>
 </div>
 <div class="panel panel-default panel-block panel-title-block panel-gray col-md-7">

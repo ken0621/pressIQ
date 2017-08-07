@@ -43,6 +43,7 @@ Route::post('/mlm/repurchase/checkout/submit', 'Mlm\MlmRepurchaseController@chec
 Route::get('/mlm/vouchers', 'Mlm\MlmVouchersController@index'); 
 Route::get('/mlm/cheque', 'Mlm\MlmChequeController@index'); 
 Route::any('/mlm/changeslot', 'Mlm\Mlm@changeslot');
+Route::any('/mlm/set_eon', 'Mlm\Mlm@set_eon');
 
 Route::get('/mlm/cheque', 'Mlm\MlmChequeController@index'); 
 Route::get('/mlm/wallet', 'Mlm\MlmTransferController@index'); 
@@ -77,6 +78,8 @@ Route::get('/mlm/report/merchant_school/get', 'Mlm\MlmReportController@merchant_
 
 /* MLM SLOTs */
 Route::get('/mlm/slots', 'Mlm\MlmSlotsController@index'); 
+Route::get('/mlm/slots/eon', 'Mlm\MlmSlotsEonController@index');
+Route::post('/mlm/slots/eon/update', 'Mlm\MlmSlotsEonController@update_eon'); 
 Route::post('/mlm/slots/set_nickname', 'Mlm\MlmSlotsController@set_nickname'); 
 Route::get('/mlm/slots/upgrade_slot/{id}', 'Mlm\MlmSlotsController@upgrade_slot'); 
 Route::post('/mlm/slots/upgrade_slot_post/{id}', 'Mlm\MlmSlotsController@upgrade_slot_post'); 

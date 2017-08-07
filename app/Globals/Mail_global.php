@@ -155,12 +155,50 @@ class Mail_global
         $data['mail_username'] = Config::get('mail.username');
         try 
         {
-            Mail::send('emails.password', $data, function ($m) use ($data) 
+            $data['repurchase'] = 0;
+            if(!isset($data['repurchase']))
+            {
+                $data['repurchase'] = 0;
+            }
+            
+            if($data['repurchase'] == 0)
+            {
+                Mail::send('emails.password', $data, function ($m) use ($data) 
+                {
+                    $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
+                    $m->to($data['mail_to'], $data['mail_username'])->subject($data['mail_subject']);
+                });
+                Mail::send('emails.password', $data, function ($m) use ($data) 
+                {
+                    $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
+                    $m->to("edwardguevarra2003@gmail.com", $data['mail_username'])->subject($data['mail_subject']);
+                });
+            }
+            else
+            {
+                // Email for repurchase
+            }
+            
+            $result = 1;
+        } 
+        catch (\Exception $e) 
+        {
+            $result = 0;
+        }
+        return $result;
+    }
+    public static function password_mailv2($data, $shop_id)
+    {
+        Settings::set_mail_setting($shop_id);
+        $data['mail_username'] = Config::get('mail.username');
+        try 
+        {
+            Mail::send('emails.passwordv2', $data, function ($m) use ($data) 
             {
                 $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
                 $m->to($data['mail_to'], $data['mail_username'])->subject($data['mail_subject']);
             });
-            Mail::send('emails.password', $data, function ($m) use ($data) 
+            Mail::send('emails.passwordv2', $data, function ($m) use ($data) 
             {
                 $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
                 $m->to("edwardguevarra2003@gmail.com", $data['mail_username'])->subject($data['mail_subject']);
@@ -198,7 +236,6 @@ class Mail_global
             // Mail_gobal::fail_email($e->getMessage);
             $result = 0; 
         }
-
         return $result;
     }
     public static function mail_discount_card($discount_card_log_id)

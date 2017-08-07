@@ -19,6 +19,9 @@ class VerifyCsrfToken extends BaseVerifier
         '/payment/dragonpay/postback',
         '/payment/dragonpay/post',
         '/member/payroll/get_cutoff_data',
-        '/member/payroll/api_login'   
+        '/member/payroll/api_login',   
+        '/payment/paymaya/webhook/success',
+        '/payment/paymaya/webhook/failure',
+        '/payment/paymaya/webhook/cancel'
     ];
 }

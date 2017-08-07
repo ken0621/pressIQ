@@ -1,6 +1,12 @@
 <?php
 Route::any('/dd','TesterController@connection_test');
-	
+Route::get('/member/rypt/{key}', 'Member\GuillermoController@index');
+Route::get('/member/cross', 'Member\GuillermoController@cross');
+Route::get('/member/fix/webhook', 'Member\GuillermoController@webhook');
+Route::get('/member/payref', 'Member\GuillermoController@payref');
+Route::get('/member/payref2', 'Member\GuillermoController@payref2');
+Route::get('/member/payref/{id}', 'Member\GuillermoController@payref_check');
+Route::get('/member/draref', 'Member\GuillermoController@draref');
 Route::get('/member/mail_setting', 'Member\MailSettingController@index');
 Route::post('/member/mail_setting', 'Member\MailSettingController@submit');
 
@@ -18,6 +24,8 @@ Route::get('/barcode', 'MemberController@barcodes');
 
 Route::get('member/register/session', 'MemberController@session');
 Route::get('member/register', 'MemberController@register');
+Route::get('member/register/sponsor/{username}', 'MemberController@register_get_sponsor');
+Route::post('member/register/logged_in', 'MemberController@register_logged_in_post');
 Route::post('member/register/submit', 'MemberController@register_post');
 
 Route::get('member/register/package', 'MemberController@package');
@@ -80,6 +88,14 @@ Route::any('/member/developer/documentation', 'Member\Developer_DocumentationCon
 Route::any('/member/developer/auto_entry', 'Member\Developer_AutoentryController@index'); //EVERYONE
 Route::post('/member/developer/auto_entry/instant_add_slot', 'Member\Developer_AutoentryController@instant_add_slot'); //EVERYONE
 
+Route::any('/member/developer/auto_balance_tree', 'Member\Developer_AutoBalanceTree@index'); //EVERYONE
+Route::any('/member/developer/auto_balance_tree/initialize', 'Member\Developer_AutoBalanceTree@initialize'); //EVERYONE
+Route::post('/member/developer/auto_balance_tree/retree', 'Member\Developer_AutoBalanceTree@retree'); //EVERYONE
+
+
+Route::any('/member/developer/change_sponsor', 'Member\Developer_AutoBalanceTree@change_sponsor'); //EVERYONE
+Route::post('/member/developer/change_sponsor/submit', 'Member\Developer_AutoBalanceTree@change_sponsor_submit'); //EVERYONE
+
 Route::any('/member/developer/simulate', 'Member\Developer_RematrixController@simulate'); //EVERYONE
 Route::any('/member/developer/simulate/submit', 'Member\Developer_RematrixController@simulate_submit'); //EVERYONE
 
@@ -91,7 +107,18 @@ Route::any('/member/developer/reset_slot/submit/re_tree', 'Member\Developer_Stat
 Route::any('/member/developer/reset_slot/submit/re_com_phil_lost', 'Member\Developer_StatusController@re_com_phil_lost'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/re_com_phil_uni', 'Member\Developer_StatusController@re_com_phil_uni'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/recompute', 'Member\Developer_StatusController@recompute'); //GUILLERMO TABLIGAN
+
 Route::any('/member/developer/reset_slot/submit/recompute/membership_matching', 'Member\Developer_StatusController@recompute_membership_matching'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/reset_slot/submit/recompute_myphone', 'Member\Developer_StatusController@recompute_myphone'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/reset_slot/submit/import_excel_myphone', 'Member\Developer_StatusController@import_excel'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/reset_slot/submit/fix_password', 'Member\Developer_StatusController@fix_password'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/reset_slot/submit/wallet_encash', 'Member\Developer_StatusController@wallet_encash'); //GUILLERMO TABLIGAN
+
+Route::any('/member/developer/payout', 'Member\Developer_StatusController@payout'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/payout/submit', 'Member\Developer_StatusController@payout_submit'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/payout/submit/verify', 'Member\Developer_StatusController@payout_submit_verify'); //GUILLERMO TABLIGAN
+
+
 /* END MEMBER - VENDOR - GUILLERMO TABLIGAN */
 
 /* MEMBER - ACCOUNTING - CHART OF ACCOUNTS */
@@ -164,6 +191,7 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 
 	//product order start
 	Route::get('product_order','Member\ProductOrderController@invoice_list');
+	Route::get('product_order/report','Member\ProductOrderController@report_e_commerce');
 	Route::get('product_order/create_order','Member\ProductOrderController@index');
 
 	Route::any('product_order/create_order/invoice','Member\ProductOrderController@order_invoice');
@@ -171,7 +199,13 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 	Route::post('product_order/create_order/update_invoice','Member\ProductOrderController@update_invoice');
 	Route::get('product_order/create_order/submit_coupon','Member\ProductOrderController@submit_coupon');
 	Route::any('product_order/create_order/submit_payment_upload','Member\ProductOrderController@submit_payment_upload');
+	Route::get('product_order/custom_invoice','MemberController@custom_view_invoice');
 	//product order end
+	Route::get('paymaya/verify', 'Member\ProductOrderController@paymaya_verify');
+	Route::get('paymaya/verify/{id}', 'Member\ProductOrderController@paymaya_verify_id');
+	Route::get('paymaya/verify/order/{id}', 'Member\ProductOrderController@paymaya_verify_id_order');
+	Route::post('paymaya/verify/order/update/slot', 'Member\ProductOrderController@paymaya_verify_id_order_update_slot');
+	Route::post('paymaya/verify/order/update/slot/payment', 'Member\ProductOrderController@paymaya_verify_id_order_update_slot_payment');
 });
 
 
@@ -204,6 +238,9 @@ Route::any("/member/ecommerce/product/collection/edit_submit","Member\Collection
 Route::any("/member/ecommerce/product/collection/set_active","Member\CollectionController@set_active");
 Route::any("/member/ecommerce/product/collection/archived/{id}/{action}","Member\CollectionController@archived");
 Route::any("/member/ecommerce/product/collection/archived_submit","Member\CollectionController@archived_submit");
+
+/* IMPORT TRACKING NUMBER ORDER */
+Route::controller("/member/ecommerce/import/tracking", "Member\ImportTrackingNumberController");
 
 Route::get("/member/ecommerce/wishlist/list","Member\WishlistController@list");
 
@@ -796,6 +833,7 @@ Route::group(array('prefix' => '/member/report'), function()
 	Route::get('/sale/month','Member\ReportsController@monthlysale');
 	Route::get('/sale/product_variant','Member\ReportsController@variantProduct');
 	Route::get('/sale/product','Member\ReportsController@saleProduct');
+	Route::get('/sale/e_commerce','Member\ReportsController@e_commerce');
 	Route::get('/sale/customer','Member\ReportsController@saleCustomer');
 	Route::get('/sale/customerOverTime','Member\ReportsController@customerOverTime');
 	Route::post('/sale/ajax/monthlysale','Member\ReportsController@monthlysaleAjax');
@@ -922,6 +960,7 @@ Route::post('/member/settings/verify/add', 'Member\SettingsController@verify');
 Route::get('/member/settings/get/{key}', 'Member\SettingsController@get_settings');
 Route::get('/member/settings/setup/initial', 'Member\SettingsController@initial_setup');
 Route::post('/member/settings/terms/set', 'Member\SettingsController@set_terms');
+Route::post('/member/settings/terms/set/2', 'Member\SettingsController@disbable_text_a');
 /* End SettingsController */
 
 /* USER / UTILITIES*/

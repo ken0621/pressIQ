@@ -43,7 +43,9 @@ class Mlm_member
 		$data['shop_info'] = Tbl_shop::where('shop_id', $shop_id)->first();
 		$data['customer_info'] = Tbl_customer::where('customer_id', $customer_id)->first();
 		$data['slot_now'] = Tbl_mlm_slot::where('tbl_mlm_slot.slot_owner', $customer_id)->membershipcode()
-		->membership()->first();
+		->select("*","tbl_mlm_slot.slot_id")->membership()->first();
+		// $data['discount_card'] = Tbl_mlm_discount_card_log::where('discount_card_customer_holder', $customer_id)->first();
+
 		Session::put('mlm_member', $data);
 	}
 	public static function add_to_session_edit($shop_id, $customer_id, $slot_id)
@@ -108,7 +110,7 @@ class Mlm_member
 	public static function breakdown_wallet($slot_id)
 	{
 		$data['slot'] = Tbl_mlm_slot::where('slot_id', $slot_id)->customer()->first();
-        
+        $data['complan'] = Tbl_mlm_plan::where('shop_id', $data['slot']->shop_id)->get()->keyBy('marketing_plan_code');
         $data['wallet_log'] = Tbl_mlm_slot_wallet_log::where('tbl_mlm_slot_wallet_log.shop_id', $data['slot']->shop_id)
         ->orderBy('wallet_log_date_created', 'ASC')
         ->where('wallet_log_slot', $slot_id)
@@ -455,6 +457,7 @@ class Mlm_member
         // dd($data);
         return view('member.mlm_slot.mlm_slot_get_code', $data);
     }
+
     public static function get_session_slot()
     {
         if(Session::get('mlm_member') != null)
@@ -463,6 +466,7 @@ class Mlm_member
             return $session['slot_now'];
         }
     }    
+
     public static function add_new_customer($send,$shop_id)
     {
             $i['password']   = $send["password"];
@@ -557,7 +561,6 @@ class Mlm_member
 
             return $data;
     }
-
 
     public static function manual_add_slot_form($customer_id,$membership_id,$shop_id)
     {

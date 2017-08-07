@@ -50,7 +50,7 @@
         <div class="col-md-4 col-md-offset-4" style="padding: 10px">
             <div class="input-group">
                 <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control search_filter" placeholder="Search by Customer ID or Slot ID" aria-describedby="basic-addon1" onkeyup="search_slot_f(this)">
+                <input type="text" class="form-control search_filter" placeholder="Search by Customer Name or Slot ID" aria-describedby="basic-addon1" onkeyup="search_slot_f(this)">
             </div>
         </div>  
     </div>
@@ -98,7 +98,7 @@ function submit_done(data)
 function ajax_load_membership()
 {
     $('.data_filtered_mlm_code').html('<center><div class="loader-16-gray"></div></center>');
-    var request = "?";
+    var request = "member/mlm/slot?";
     if(membership != 0)
     {
         request  = request + "membership=" + membership;

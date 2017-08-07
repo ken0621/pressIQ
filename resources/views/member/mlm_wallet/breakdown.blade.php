@@ -30,7 +30,7 @@
 				
 				<tr>
 					<td>{{currency('PHP', $last_amount)}}</td>
-					<td>{{$value2->wallet_log_plan}}</td>
+					<td>@if(isset($complan[$value2->wallet_log_plan])) {{$complan[$value2->wallet_log_plan]->marketing_plan_label}} @else {{$value2->wallet_log_plan}} @endif </td>
 					<td>{{currency('PHP', $value2->wallet_log_amount)}}</td>
 					<?php $last_amount += $value2->wallet_log_amount; ?>
 					<td>{{currency('PHP', $last_amount)}}</td>

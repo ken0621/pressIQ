@@ -1,0 +1,174 @@
+*
+{
+	font-family: "Arial", sans-serif;
+}
+.header
+{
+	margin-top: 15px;
+	table
+	{
+		width: 100%;
+		table-layout: fixed;
+		.left
+		{
+			border-right: 2px solid #000;
+			border-bottom: 2px solid #000;
+			.img
+			{
+				// width: 115px;
+				width: 75px;
+				vertical-align: middle;
+				padding: 10px 0;
+				img
+				{
+					width: 100%;
+				}
+			}
+			.text
+			{
+				vertical-align: middle;
+				// font-size: 18px;
+				font-size: 14px;
+				text-align: center;
+				.title
+				{
+					font-weight: 700;
+				}
+				.sub-title
+				{
+					// font-size: 16px;
+					font-size: 12px;
+				}
+			}
+		}
+		.right
+		{
+			width: 200px;
+			border-bottom: 2px solid #000;
+			padding: 15px;
+			font-size: 12px;
+			.do-label
+			{
+				font-weight: 700;
+			}
+			.do-value
+			{
+
+			}
+		}
+	}
+}
+
+.invoice
+{
+	.title
+	{
+		text-align: center;
+		margin: 10px 0;
+		// font-size: 18px;
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.sub-title
+	{
+		margin-top: 15px;
+		// font-size: 16px;
+		font-size: 12px;
+		font-weight: 700; 
+		margin-bottom: 5px;
+	}
+	.holder
+	{
+		border: 2px solid #000;
+		padding: 10px 25px;
+		border-radius: 10px;
+		.detail-row
+		{
+			margin: 25px 0;
+			// font-size: 16px;
+			font-size: 12px;
+			&:first-child
+			{
+				margin-top: 0;
+			}
+			&:last-child
+			{
+				margin-bottom: 0;
+			}
+		}
+		&.invoice-details
+		{
+			padding: 0;
+			border: 0;
+			table
+			{
+				margin: 0;
+				text-align: center;
+				thead
+				{
+					border: 2px solid #000;
+					th
+					{
+						border: 0;
+						// font-size: 16px;
+						font-size: 12px;
+						font-weight: 400;
+						text-align: center;
+					}
+				}
+				tbody
+				{
+					border: 2px solid #000;
+					margin-top: 10px;
+					border-bottom: 0;
+					td
+					{
+						border: 0;
+					}
+				}
+			}
+			.total-border
+			{
+				border: 2px solid #000;
+				border-top: 0;
+				.total-summary
+				{
+					margin-top: 25px;
+				}
+			}
+		}
+	}
+	.total-summary
+	{
+		max-width: 300px;
+		margin-left: auto;
+		.rows
+		{
+			margin: 0px 15px;
+			font-weight: 700;
+			// font-size: 18px;
+			font-size: 14px;
+			// &:first-child
+			// {
+			// 	margin-top: 5px;
+			// }
+			// &:last-child
+			// {
+			// 	margin-bottom: 5px;
+			// }
+		}
+	}
+	.payment-detail
+	{
+		margin-right: auto;
+		text-align: left;
+		max-width: 50%;
+	}
+}
+
+footer
+{
+	white-space: pre-wrap;
+	font-size: 12px;
+	margin-top: 25px;
+}

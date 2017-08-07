@@ -14,6 +14,27 @@
 <!--             <a class="panel-buttons btn btn-default pull-right" href="product_order/create_order" >Sales by product (Report)</a>
             <a class="panel-buttons btn btn-default pull-right" href="product_order/create_order" >Sales by month (Report)</a>
             <a class="panel-buttons btn btn-default pull-right" href="product_order/create_order" >Sales by variant (Report)</a> -->
+            
+            <span class="pull-right">
+                 <label><small style="color: gray">Export to Excel</small></label><br>    
+                 <a href="javascript:" class="btn btn-custom-green-white margin-right-10 pull-right btn-pdf r_export"><i class="fa fa-file-excel-o"></i>&nbsp;Export Report</a>
+            </span>
+            <div class="pull-right">
+                <label><small style="color: gray">To</small></label>
+                <input type="date" class="form-control r_to" name="to">
+            </div>
+            <div class="pull-right">
+                <label><small style="color: gray">from</small></label>
+                <input type="date" class="form-control r_from" name="from">
+            </div>
+            <div class="pull-right">
+                <label><small style="color: gray">Filter Order</small></label>
+                <select class="form-control r_filter" name="filter">
+                    @foreach($filtera as $key => $value)
+                        <option value="{{$key}}">{{$value}}</option>
+                    @endforeach
+                </select>
+            </div>
         </div>
     </div>
 </div>
@@ -112,7 +133,7 @@
 
 @endsection
 @section('script')
-<script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
+<script type="text/javascript" src="assets/member/js/paginate_ajax_multiple.js"></script>
 <script type="text/javascript">
 @if (Session::has('success'))
    toastr.success("{{ Session::get('success') }}");
@@ -132,5 +153,18 @@
             $(".modal-loader").addClass("hidden");
         });
     }
+    $('.r_export').on('click', function (){
+        var link = '/member/ecommerce/product_order/report';
+        var r_to = $('.r_to').val();
+        link = link + '?to=' + r_to;
+        var r_from = $('.r_from').val();
+        link = link + '&from=' + r_from;
+        var r_filter = $('.r_filter').val();
+        link = link + '&filter=' + r_filter;
+        window.open(link);
+    });
+
+
+
 </script>
 @endsection

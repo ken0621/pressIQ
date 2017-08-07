@@ -10,19 +10,18 @@
 	<title>Digima House - Login</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	
-	<link rel="stylesheet" href="/assets/member/styles/92bc1fe4.bootstrap.css">
-	
-	<link rel="stylesheet" href="/assets/member/styles/aaf5c053.proton.css">
-	<link rel="stylesheet" href="/assets/member/styles/vendor/animate.css">
+	<base href="{{ URL::to('/') }}">
+	<link rel="stylesheet" href="assets/member/styles/92bc1fe4.bootstrap.css">
+	<link rel="stylesheet" href="assets/member/styles/aaf5c053.proton.css">
+	<link rel="stylesheet" href="assets/member/styles/vendor/animate.css">
 	
 	<!--[if lt IE 9]>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
 	<script src="scripts/vendor/respond.min.js"></script>
 	<![endif]-->
 	
-	<link rel="stylesheet" href="/assets/member/styles/6227bbe5.font-awesome.css" type="text/css"/>
-	<link rel="stylesheet" href="/assets/member/styles/40ff7bd7.font-titillium.css" type="text/css"/>
+	<link rel="stylesheet" href="assets/member/styles/6227bbe5.font-awesome.css" type="text/css"/>
+	<link rel="stylesheet" href="assets/member/styles/40ff7bd7.font-titillium.css" type="text/css"/>
 	
 	<script>
 	(function () {
@@ -35,17 +34,17 @@
 	document.write('<script src="' + js + '"><\/script>');
 	}());
 	</script>
-	<script src="scripts/vendor/modernizr.js"></script>
-	<script src="scripts/vendor/jquery.cookie.js"></script>
+	{{-- <script src="scripts/vendor/modernizr.js"></script>
+	<script src="scripts/vendor/jquery.cookie.js"></script> --}}
 </head>
 <body class="login-page">
-	<script>
+	{{-- <script>
 		var theme = $.cookie('protonTheme') || 'default';
 		$('body').removeClass (function (index, css) {
 		return (css.match (/\btheme-\S+/g) || []).join(' ');
 		});
 		if (theme !== 'default') $('body').addClass(theme);
-	</script>
+	</script> --}}
 	<!--[if lt IE 8]>
 	<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 	<![endif]-->
@@ -55,7 +54,7 @@
 			<section class="panel panel-default">
 				<div class="panel-heading">
 					<div>
-						<img src="/assets/member/images/proton-logo.png" alt="proton-logo">
+						<img src="assets/member/images/proton-logo.png" alt="proton-logo">
 						<h1>
 						<span class="title">
 							Digima House

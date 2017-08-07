@@ -132,6 +132,23 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
 
+    /* -- PRODUCTS => PRODUCT SHIPMENT STATUS */
+    $code = "paymaya-verify";
+    $nav[$page]['submenu'][$code]['label'] = "Verify Payment Paymaya";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/paymaya/verify";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Luke Glenn Jordan</span>";
+    
+    /* -- PRODUCTS => IMPORT TRACKING NUMBER */
+    $code = "import-tracking-number";
+    $nav[$page]['submenu'][$code]['label'] = "Import Tracking Number";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/import/tracking";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Edward Guevarra</span>";
 
     
     /* -- E-COMMERCE => SHIPPING */
@@ -1324,6 +1341,23 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Developing";
     $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+
+     /* -- DEVELOPERS => DOCUMENTATION */
+    $code = "developer-auto-balance-tree";
+    $nav[$page]['submenu'][$code]['label'] = "Balance Tree";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/auto_balance_tree";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+    
+    $code = "developer-change-sponsor";
+    $nav[$page]['submenu'][$code]['label'] = "Change Sponsor";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/change_sponsor";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
     
     $code = "developer-simulate";
     $nav[$page]['submenu'][$code]['label'] = "Simulate";
@@ -1346,6 +1380,14 @@ function page_list()
     $nav[$page]['submenu'][$code]['label'] = "Reset Slot";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/reset_slot";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Luke Glenn Jordan";
+    
+    $code = "developer-payout-slot";
+    $nav[$page]['submenu'][$code]['label'] = "MLM Payout Import";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payout";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Developing";
     $nav[$page]['submenu'][$code]['developer'] = "Luke Glenn Jordan";

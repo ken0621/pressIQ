@@ -36,9 +36,49 @@ use App\Models\Tbl_warehouse;
 use App\Models\Tbl_mlm_slot_wallet_log_transfer;
 use App\Models\Tbl_mlm_slot_wallet_log_refill;
 use App\Models\Tbl_ec_order;
+use App\Models\Tbl_item;
+use App\Models\Tbl_ec_order_item;
+use App\Models\Tbl_ec_product;
+use App\Models\Tbl_ec_variant;
+
 use App\Models\Tbl_inventory_slip;
 class Mlm_report
 {   
+    public static function order_count($shop_id, $filter)
+    {
+        $data['customer_id'] = Tbl_customer::where('shop_id', $shop_id)->get()->keyBy('customer_id');
+        $order = Tbl_ec_order::where('shop_id', $shop_id)->where('payment_status', 1)->get();
+
+        $order_by_customer = [];
+        foreach ($order as $key => $value) {
+            # code...
+            if(isset($order_by_customer[$value->customer_id][$value->order_status]))
+            {
+                $order_by_customer[$value->customer_id][$value->order_status] += 1;
+            }
+            else
+            {
+                $order_by_customer[$value->customer_id][$value->order_status] = 1;
+            }
+        }
+
+        $count_per_customer = [];
+        foreach ($data['customer_id'] as $key => $value) {
+            $count_per_customer[$value->customer_id] = Tbl_mlm_slot::where('slot_owner', $value->customer_id)->count();
+        }
+
+        $data['order'] = $order;
+        $data['order_by_customer'] = $order_by_customer;
+        $data['count_per_customer'] = $count_per_customer;
+
+        $data['page'] = 'count_order';
+        if(Request::input('pdf') == 'excel')
+        {
+            return $data;
+        }
+        // return $data;
+        return view('member.mlm_report.report.count_order', $data);
+    }
     public static function general($shop_id, $filter)
     {
         $data['membership'] = Tbl_membership::archive(0)->where('shop_id', $shop_id)->get();
@@ -98,12 +138,14 @@ class Mlm_report
         // -----------------------------------Filter
         ->where('wallet_log_date_created', '>=', $filter['from'])
         ->where('wallet_log_date_created', '<=', $filter['to'])
-        ->skip($filter['skip'])
-        ->take($filter['take'])
+        // ->skip($filter['skip'])
+        // ->take($filter['take'])
         // -----------------------------------End
+
         ->get();
 
         $plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
+
             ->where('marketing_plan_enable', 1)
             ->where('marketing_plan_trigger', 'Slot Creation')
             ->get()->keyBy('marketing_plan_code');
@@ -225,6 +267,132 @@ class Mlm_report
         }
 
         return view('member.mlm_report.report.e_wallet', $data);
+    }
+    public static function e_wallet_eon($shop_id, $filter)
+    {
+        $slot = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)
+        ->whereNotNull('slot_eon')
+        ->whereNotNull('slot_eon_account_no')
+        ->whereNotNull('slot_eon_card_no')
+        // -----------------------------------Filter
+        ->skip($filter['skip'])
+        ->take($filter['take'])
+        // -----------------------------------End
+
+        ->customer()->get()->keyBy('slot_id');
+        $wherein = [];
+        foreach($slot as $key => $value)
+        {
+            $wherein[$key] = $key;
+        }
+
+
+    	$complan_per_day =Tbl_mlm_slot_wallet_log::slot()
+    	->customer()
+    	->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)
+    	->orderBy('wallet_log_slot', 'ASC')
+        // ->where('wallet_log_amount', '!=', 0)
+        ->select(DB::raw('wallet_log_plan as wallet_log_plan'), DB::raw('sum(wallet_log_amount ) as wallet_log_amount'), DB::raw('wallet_log_slot as wallet_log_slot'))
+        ->groupBy(DB::raw('wallet_log_plan') )
+        ->groupBy('wallet_log_slot')
+        ->whereIn('wallet_log_slot', $wherein)
+    	->get();
+        // dd($complan_per_day);
+    	$plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
+        ->where('marketing_plan_enable', 1)
+        ->get()->keyBy('marketing_plan_code');
+        
+        $per_complan = [];
+        $plan = [];
+        foreach($complan_per_day as $key => $value)
+        {
+        	$plan[$value->wallet_log_plan] = $value->wallet_log_plan;
+        	if(isset($per_complan[$value->wallet_log_slot][$value->wallet_log_plan]))
+        	{
+        		$per_complan[$value->wallet_log_slot][$value->wallet_log_plan] += $value->wallet_log_amount;
+        	}
+        	else
+        	{
+        		$per_complan[$value->wallet_log_slot][$value->wallet_log_plan] = $value->wallet_log_amount;
+        	}
+        	
+        }
+        $data['complan_per_day'] = $complan_per_day;
+        $data['per_complan'] = $per_complan;
+        $data['plan'] = $plan;
+        $data['plan_settings'] = $plan_settings;
+        $data['slot'] = $slot;
+
+        $data['page'] = 'e_wallet_eon';
+        if(Request::input('pdf') == 'excel')
+        {
+            return $data;
+        }
+
+        return view('member.mlm_report.report.e_wallet_eon', $data);
+    }
+    public static function e_wallet_eon_wo($shop_id, $filter)
+    {
+        $slot = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)
+        ->whereNull('slot_eon')
+        ->whereNull('slot_eon_account_no')
+        ->whereNull('slot_eon_card_no')
+        // -----------------------------------Filter
+        ->skip($filter['skip'])
+        ->take($filter['take'])
+        // -----------------------------------End
+
+        ->customer()->get()->keyBy('slot_id');
+        $wherein = [];
+        foreach($slot as $key => $value)
+        {
+            $wherein[$key] = $key;
+        }
+
+
+    	$complan_per_day =Tbl_mlm_slot_wallet_log::slot()
+    	->customer()
+    	->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)
+    	->orderBy('wallet_log_slot', 'ASC')
+        // ->where('wallet_log_amount', '!=', 0)
+        ->select(DB::raw('wallet_log_plan as wallet_log_plan'), DB::raw('sum(wallet_log_amount ) as wallet_log_amount'), DB::raw('wallet_log_slot as wallet_log_slot'))
+        ->groupBy(DB::raw('wallet_log_plan') )
+        ->groupBy('wallet_log_slot')
+        ->whereIn('wallet_log_slot', $wherein)
+    	->get();
+        // dd($complan_per_day);
+    	$plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
+        ->where('marketing_plan_enable', 1)
+        ->get()->keyBy('marketing_plan_code');
+        
+        $per_complan = [];
+        $plan = [];
+        foreach($complan_per_day as $key => $value)
+        {
+        	$plan[$value->wallet_log_plan] = $value->wallet_log_plan;
+        	if(isset($per_complan[$value->wallet_log_slot][$value->wallet_log_plan]))
+        	{
+        		$per_complan[$value->wallet_log_slot][$value->wallet_log_plan] += $value->wallet_log_amount;
+        	}
+        	else
+        	{
+        		$per_complan[$value->wallet_log_slot][$value->wallet_log_plan] = $value->wallet_log_amount;
+        	}
+        	
+        }
+        $data['complan_per_day'] = $complan_per_day;
+        $data['per_complan'] = $per_complan;
+        $data['plan'] = $plan;
+        $data['plan_settings'] = $plan_settings;
+        $data['slot'] = $slot;
+
+        $data['page'] = 'e_wallet_eon';
+        if(Request::input('pdf') == 'excel')
+        {
+            return $data;
+        }
+
+        return view('member.mlm_report.report.e_wallet_eon', $data);
     }
     public static function e_wallet_transfer($shop_id, $filter)
     {
@@ -1344,4 +1512,98 @@ class Mlm_report
         return view('member.mlm_report.report.inventory_consilidated', $data);
 
     }
+
+    public static function e_commerce_sales_report($shop_id, $filters)
+    {
+        // dd($filters);
+        $from   = date('Y-m-d H:i:s', strtotime($filters['from']));
+        $to     = date('Y-m-d H:i:s', strtotime($filters['to']));
+       /* $from   = date('Y-m-d H:i:s', strtotime('2017-06-16 13:24:07'));
+        $to     = date('Y-m-d H:i:s', strtotime('2017-06-16 13:24:07'));*/
+        
+        $_arr_record    = array();
+
+        $query_invoice =  Tbl_ec_order::customer()->where("shop_id",$shop_id)
+                            ->where('created_date', '>=', $from)
+                            ->where('created_date', '<=', $to);                          
+                      
+        if($filters['inv_status'] != '0')
+        {
+
+            $query_invoice->where("order_status", $filters['inv_status']);
+        }
+
+
+
+        $_invoice = $query_invoice->orderBy("ec_order_id", "DESC")->get();
+
+        foreach ($_invoice as $key_inv => $value_inv) 
+        {
+            $_invline       = Tbl_ec_order_item::where("ec_order_id", $value_inv->ec_order_id)->get();   
+            
+
+            foreach ($_invline as $key => $value) 
+            {
+
+                $variant     = Tbl_ec_variant::where("evariant_id", $value->item_id)
+                                ->where("archived", 0)
+                                ->first();
+
+                $product     = Tbl_ec_product::where("eprod_id", $variant->evariant_prod_id)
+                                ->where("archived", 0)
+                                ->first();
+
+                if ($key == 0) 
+                {
+                    $record[$key] = array(
+                        'ec_order_id'       => $value_inv['ec_order_id'],
+                        'eprod_name'        =>$product['eprod_name'], 
+                        'created_date'      =>$value_inv['created_date'], 
+                        'full_name'         =>$value_inv['first_name'].' '.$value_inv['last_name'], 
+                        'payment_status'    => $value_inv['payment_status'] == 1 ? 'Paid' : 'Unpaid',
+                        'billing_address'   =>$value_inv['billing_address'],
+                        'subtotal'          =>$value_inv['subtotal'],  
+                        );
+                } 
+                    else
+                {
+                    $record[$key] = array(
+                        'ec_order_id'       => '',
+                        'eprod_name'        =>$product['eprod_name'], 
+                        'created_date'      =>'', 
+                        'full_name'         =>'', 
+                        'payment_status'    =>'',
+                        'billing_address'   =>'',
+                        'subtotal'          =>$value_inv['subtotal'],  
+                        );
+                }                
+
+                array_push($_arr_record, $record);
+
+                if(count($_invline)-1 >= $key)
+                {
+                    $record[$key] = array(
+                        'ec_order_id'       => '',
+                        'eprod_name'        => '', 
+                        'created_date'      => '', 
+                        'full_name'         => '', 
+                        'payment_status'    => '',
+                        'billing_address'   => 'Sub Total',
+                        'subtotal'          => $value_inv['total'],  
+                        );
+                        array_push($_arr_record, $record);
+                }
+            }            
+        }
+
+        //dd($_arr_record);
+        $data['_arr_record'] = $_arr_record;
+        $data['page'] = 'e_commerce_sales_report';
+        if(Request::input('pdf') == 'excel')
+        {
+            return $data;
+        }
+        return view('member.mlm_report.report.e_commerce_sales_report', $data);
+    }
+
 }

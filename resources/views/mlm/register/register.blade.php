@@ -1,6 +1,11 @@
 @extends("mlm.register.layout")
 @section("content")
-
+<style type="text/css">
+	.uppercase_input_text
+	{
+		text-transform:uppercase;
+	}
+</style>
 <div class="container-fluid">
 	<div class="register">
 		<div class="title"><b><h1>CHANGE</h1><h3>HAPPENS HERE</h3></b><h5>Join & be part of the biggest movement</h5></div>
@@ -11,19 +16,20 @@
 					<div class="col-md-6">
 						<div class="form-group">
 							<label>First Name</label>
-							<input type="text" class="form-control input-lg" name="first_name" value="{{ Request::old('first_name') ? Request::old('first_name') : ( isset($current['tbl_customer']['first_name']) ? $current['tbl_customer']['first_name'] : '' ) }}" required>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="form-group">
-							<label>Date of Birth</label>
-							<input type="date" class="form-control input-lg" name="date_of_birth" value="{{ Request::old('date_of_birth') ? Request::old('date_of_birth') : ( isset($current['tbl_customer']['date_of_birth']) ? $current['tbl_customer']['date_of_birth'] : '' ) }}" required>
+							<input type="text" class="form-control input-lg uppercase_input_text" name="first_name" value="{{ Request::old('first_name') ? Request::old('first_name') : ( isset($current['tbl_customer']['first_name']) ? $current['tbl_customer']['first_name'] : '' ) }}" required>
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
 							<label>Middle Name</label>
-							<input type="text" class="form-control input-lg" name="middle_name" value="{{ Request::old('middle_name') ? Request::old('middle_name') : ( isset($current['tbl_customer']['middle_name']) ? $current['tbl_customer']['middle_name'] : '' ) }}" required>
+							<input type="text" class="form-control input-lg uppercase_input_text" name="middle_name" value="{{ Request::old('middle_name') ? Request::old('middle_name') : ( isset($current['tbl_customer']['middle_name']) ? $current['tbl_customer']['middle_name'] : '' ) }}" required>
+						</div>
+						
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Last Name</label>
+							<input type="text" class="form-control input-lg uppercase_input_text" name="last_name" value="{{ Request::old('last_name') ? Request::old('last_name') : ( isset($current['tbl_customer']['last_name']) ? $current['tbl_customer']['last_name'] : '' ) }}" required>
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -33,9 +39,10 @@
 						</div>
 					</div>
 					<div class="col-md-6">
+						
 						<div class="form-group">
-							<label>Last Name</label>
-							<input type="text" class="form-control input-lg" name="last_name" value="{{ Request::old('last_name') ? Request::old('last_name') : ( isset($current['tbl_customer']['last_name']) ? $current['tbl_customer']['last_name'] : '' ) }}" required>
+							<label>Date of Birth</label>
+							<input type="date" class="form-control input-lg" name="date_of_birth" value="{{ Request::old('date_of_birth') ? Request::old('date_of_birth') : ( isset($current['tbl_customer']['date_of_birth']) ? $current['tbl_customer']['date_of_birth'] : '' ) }}" required>
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -93,23 +100,31 @@
 					<div class="col-md-6">
 						<div class="form-group">
 							<label>Tin</label>
-							<input type="text" class="form-control input-lg" name="tin_number" value="{{ Request::old('tin_number') ? Request::old('tin_number') : ( isset($current['tbl_customer']['tin_number']) ? $current['tbl_customer']['tin_number'] : '' ) }}" required>
+							<input type="text" pattern="[0-9.]+" onkeypress="return checkDigit(event, $(this))" class="form-control input-lg tin_number_confirm" name="tin_number" value="{{ Request::old('tin_number') ? Request::old('tin_number') : ( isset($current['tbl_customer']['tin_number']) ? $current['tbl_customer']['tin_number'] : '' ) }}" required>
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
 							<label>Confirm Tin</label>
-							<input type="text" class="form-control input-lg" name="confirm_tin_number" value="{{ Request::old('confirm_tin_number') ? Request::old('confirm_tin_number') : ( isset($current['tbl_customer']['confirm_tin_number']) ? $current['tbl_customer']['confirm_tin_number'] : '' ) }}" required>
+							<input type="text" pattern="[0-9.]+" onkeypress="return checkDigit(event, $(this))" class="form-control input-lg tin_number_confirm_2" name="confirm_tin_number" value="{{ Request::old('confirm_tin_number') ? Request::old('confirm_tin_number') : ( isset($current['tbl_customer']['confirm_tin_number']) ? $current['tbl_customer']['confirm_tin_number'] : '' ) }}" required>
 						</div>
 					</div>
 					
 					
-					<div class="col-md-12">
+					<div class="col-md-6">
 						<div class="form-group">
-							<label> Refferal Code {{$sponsor_r == 1 ? '' : '(Optional)'}}</label>
+
+							<label> Referror/Upline</label>
+
 							<input type="text" class="form-control input-lg" name="sponsor" value="{{ Request::old('slot_sponsor') ? Request::old('slot_sponsor') : ( isset($current['tbl_mlm_slot']['slot_sponsor']) ? $current['tbl_mlm_slot']['slot_sponsor'] : '' ) }}" 
 							{{$sponsor_r == 1 ? 'required' : ''}}
+							onChange="get_sponsor(this)"
 							>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group reforrer_get">
+							
 						</div>
 					</div>
 				</div>
@@ -166,6 +181,33 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="modal_resend_email" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+  	
+    <form class="form-horizontal put-action-here">
+    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+	    <div class="modal-content">
+		    <div class="modal-header" >
+		        <button type="button" class="close" data-dismiss="modal">&times;</button>
+		        <h4 class="modal-title layout-modallarge-title item_title">Email Verification</h4>
+		    </div>
+		    <div class="modal-body">
+		      	<h4>
+		      	Your email is already used (You already have an account). 
+		      	In order to use your account click the resend button below. <br><br>
+		      	Your username and password will be sent to your email. 
+		      	Once you recieve the email, a login link will be provided. <br><br>
+		      	After you are logged in you can click New Purchase to purchase using your account.
+		      	</h4>
+		    </div>
+	        <div class="modal-footer" >
+	            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+	            <button class="btn btn-success" type="submit" data-url="">Resend Verification Email</button>
+	        </div>
+	    </div>
+    </form>
+  </div>
+</div>
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="assets/mlm/css/register.css">
@@ -192,6 +234,21 @@ $('.btn_i_agree_modal').on('click', function(){
 	$('.check_box_terms').prop('checked', true); 
 	$('#modal_terms_and_agreement').modal('toggle');
 });
+
+function checkDigit (e, ito) 
+{
+    if ((e.which < 48 || e.which > 57) && (e.which !== 8) && (e.which !== 0)) {
+        return false;
+    }
+
+    var current = $(ito).val();
+    if(current.length >= 9)
+    {
+        return false;
+    }
+    return true;
+}
+
 	function toggle(className,type, obj) 
 	{
 		if(type == 'personal')
@@ -205,16 +262,25 @@ $('.btn_i_agree_modal').on('click', function(){
     }
 	$(document).on("submit", ".register-submit", function(e)
         {
-            var data = $(e.currentTarget).serialize();
-            var link = $(e.currentTarget).attr("action");
-            $('#load').removeClass('hide');
-            submit_form_register(link, data);
-            e.preventDefault();
-            
+        	var tin_number_confirm = $('.tin_number_confirm').val();
+        	var tin_number_confirm_2 = $('.tin_number_confirm_2').val();
+        	var data = $(e.currentTarget).serialize();
+	        var link = $(e.currentTarget).attr("action");
+	        
+        	if( tin_number_confirm.length == 9 && tin_number_confirm_2.length == 9)
+        	{
+	            $('#load').removeClass('hide');
+	            submit_form_register(link, data);
+	            e.preventDefault();
+        	}
+        	else
+        	{
+        		toastr.warning('Tin Number must be 9 digits');
+        		e.preventDefault();
+        	}
         })
 	function submit_form_register(link, data)
     {
-        
         $.ajax({
             url:link,
             dataType:"json",
@@ -232,14 +298,31 @@ $('.btn_i_agree_modal').on('click', function(){
             	}
             	else if(data.status == 'success')
             	{
-						window.location = data.link;            		
+					window.location = data.link;            		
             	}
+            	else if(data.status == 'popup-warning')
+	            {
+					var message = data.message;
+					$('.warning-text').text(message[0]);
+					$("#popup-warning").modal();             
+	            }
+	            else if(data.status == 'error-email')
+	            {
+	            	$(".put-action-here").attr("action",data.action);
+	            	$("#modal_resend_email").modal();
+	            }
             },
             error: function()
             {
                 $('#load').addClass('hide');
             }
         })
+    }
+    
+    function get_sponsor(ito) {
+    	// body...
+    	var link = '/member/register/sponsor/' + $(ito).val();
+    	$('.reforrer_get').load(link)	
     }
 </script>
 @endsection

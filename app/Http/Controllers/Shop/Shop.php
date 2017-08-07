@@ -46,12 +46,16 @@ class Shop extends Controller
 			$subdomains = array_slice($host, 0, count($host) - 2 );
 			$subdomain = $subdomains[0];
         	$this->shop_info = $shop_info = Tbl_shop::where("shop_key", $subdomain)->first();
-
             if(!$this->shop_info)
             {
-                $check_subdomain = Tbl_customer::where('mlm_username', $subdomain)->first();
-                $lead_e = $check_subdomain;
-                if($lead_e)
+                $this->shop_info = $shop_info = Tbl_shop::where("shop_domain", $subdomain)->first();
+            }
+            if(!$this->shop_info)
+            {
+
+                $check_domain = Tbl_customer::where('mlm_username', $subdomain)->first();
+                $lead_e = $check_domain;
+                if($lead_e && $domain == "c9users.io")
                 {
                     $shop_id = $lead_e->shop_id;    
                     $this->shop_info = $shop_info = Tbl_shop::where("shop_id", $shop_id)->first();
@@ -75,17 +79,30 @@ class Shop extends Controller
                 }
                 else
                 {
-                    die("Page not found.");
+                    $check_domain = Tbl_shop::where("shop_domain", $domain)->first();
+                    if($check_domain)
+                    {
+                        $this->shop_info = $check_domain;
+                    }
+                    else
+                    {
+                        die("Page not found. 1");
+                    }
                 }
             }
         }
-        elseif($check_domain)
-        {
-        	$this->shop_info = $check_domain;
-        }
         else
         {
-        	die("Page not found.");
+
+            if($check_domain)
+            {
+                $this->shop_info = $check_domain;
+            }
+            else
+            {
+                die("Page not found. 2");
+            }
+        	
         }
 
         $shop_theme_info        = $this->get_shop_theme_info();

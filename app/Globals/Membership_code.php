@@ -194,10 +194,10 @@ class Membership_code
                             $iteme = Tbl_item::where('item_id', $key)->first();
                             if($iteme->item_type_id == 1)
                             {
-                                $item[0]['product_id'] = $key;
-                                $item[0]['quantity'] = $value;
+                                $item_sss[0]['product_id'] = $key;
+                                $item_sss[0]['quantity'] = $value;
                                 // dd($item);
-                               $a = Warehouse::inventory_consume($data['warehouse_id'], 'Used for consuming of inventory in membership code', $item,$data["customer_id"], $warehouse_consume_reason, 'array');
+                               $a = Warehouse::inventory_consume($data['warehouse_id'], 'Used for consuming of inventory in membership code', $item_sss,$data["customer_id"], $warehouse_consume_reason, 'array');
                                 if($a['status'] == 'error')
                                 {
                                      $send['response_status']      = "warning";

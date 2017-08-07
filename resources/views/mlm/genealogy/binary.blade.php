@@ -1,7 +1,7 @@
 @extends('mlm.layout')
 @section('content')
 <?php 
-$data['title'] = 'Binary Genealogy';
+$data['title'] = 'Genealogy';
 $data['sub'] = '<div class="col-md-12">
 	<div class="col-md-1"><span style="color: gray" class="pull-right">Legend:</span></div>
 	<button class="btn btn-primary col-md-3" style="backgroung-color: #519FCD !important" readonly>Occupied Slot</button>

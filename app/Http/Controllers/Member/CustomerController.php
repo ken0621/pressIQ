@@ -10,6 +10,7 @@ use Redirect;
 use File;
 use Crypt;
 use URL;
+use DB;
 
 use App\Models\Tbl_country;
 use App\Models\Tbl_customer;
@@ -65,13 +66,30 @@ class CustomerController extends Member
             $filter_by_slot = Request::input('filter_slot');
 
     	    $shop_id = $this->checkuser('user_shop');
-    	    $paginate = Tbl_customer::leftjoin('tbl_customer_other_info','tbl_customer_other_info.customer_id','=','tbl_customer.customer_id')
+    	    $str = Request::input('str');
+    	    if($str)
+    	    {
+    	        $paginate = Tbl_customer::leftjoin('tbl_customer_other_info','tbl_customer_other_info.customer_id','=','tbl_customer.customer_id')
+                                    ->balanceJournal()
+                                    ->selectRaw('tbl_customer.customer_id as customer_id1, tbl_customer.*, tbl_customer_other_info.*, tbl_customer_other_info.customer_id as cus_id')
+                                    ->where('tbl_customer.shop_id',$shop_id)
+                                    ->where('tbl_customer.archived',$archived)
+                                    ->where('tbl_customer.IsWalkin',$IsWalkin)
+    	                            ->where(DB::raw("CONCAT(tbl_customer.first_name, ' ', tbl_customer.middle_name, ' ', tbl_customer.last_name, ' ', tbl_customer.email, ' ', tbl_customer.mlm_username, ' ', tbl_customer.tin_number)"), 'LIKE', "%".$str."%")
+    	                            ->orderBy('tbl_customer.first_name');
+    	        
+    	    }
+    	    else
+    	    {
+    	        $paginate = Tbl_customer::leftjoin('tbl_customer_other_info','tbl_customer_other_info.customer_id','=','tbl_customer.customer_id')
                                     ->balanceJournal()
                                     ->selectRaw('tbl_customer.customer_id as customer_id1, tbl_customer.*, tbl_customer_other_info.*, tbl_customer_other_info.customer_id as cus_id')
                                     ->where('tbl_customer.shop_id',$shop_id)
                                     ->where('tbl_customer.archived',$archived)
                                     ->where('tbl_customer.IsWalkin',$IsWalkin)
     								->orderBy('tbl_customer.first_name');
+    	    }
+    	    
 
     		if($filter_by_slot == 'w_slot')
             {
@@ -106,7 +124,8 @@ class CustomerController extends Member
         $shop = $this->user_info;
 
         if(Request::has('str') || $str != ""){
-            $data['_customer'] = Tbl_customer_search::search($str, $shop->shop_id, $arch)->paginate(20);
+            $data['_customer'] = $this->customerlist($arch);
+            // $data['_customer'] = Tbl_customer_search::search($str, $shop->shop_id, $arch)->paginate(20);
         }
         else{
             $data['_customer'] = $this->customerlist($arch);

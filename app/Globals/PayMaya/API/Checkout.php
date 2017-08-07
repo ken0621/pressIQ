@@ -37,8 +37,15 @@ class Checkout
 		{
 			dd($responseArr);
 		}
-		$this->id = $responseArr["checkoutId"];
-		$this->url = $responseArr["redirectUrl"];
+		if (isset($responseArr["checkoutId"]) && isset($responseArr["redirectUrl"])) 
+		{
+			$this->id = $responseArr["checkoutId"];
+			$this->url = $responseArr["redirectUrl"];
+		}
+		else
+		{
+			dd("Some error occurred. Please contact the administrator.");
+		}
 		
 		return $response;
 	}

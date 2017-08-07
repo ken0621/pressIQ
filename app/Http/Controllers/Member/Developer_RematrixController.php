@@ -310,4 +310,10 @@ class Developer_RematrixController extends Member
 
 		return $data;
 	}
+	
+	public function tree_fixer()
+	{
+		$data = [];
+		return view('member.developer.rematrix',$data);
+	}
 }

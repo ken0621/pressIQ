@@ -456,12 +456,21 @@ class Ec_order
         /*For tracking no.*/
         $update['tracking_no']  = isset($data["tracking_no"]) ? $data["tracking_no"] : "";
 
-        //isset($data["tracking_no"]) ? Tbl_ec_order::where("ec_order_id",$ec_order_id)->update(array('tracking_no' => $update['tracking_no'])): '';
+        $settings = null;
 
+<<<<<<< HEAD
         ($order->order_status == 'Processing') ? 
             isset($data["tracking_no"]) ? Tbl_ec_order::where("ec_order_id",$ec_order_id)->update(array('tracking_no' => $update['tracking_no']))
                 : ''
             : '';   
+=======
+        $settings = Ec_order::check_settings($shop_id);
+        
+        
+        
+         
+        //original codes
+>>>>>>> origin/myphone
         if( $order->order_status == "Failed" || $order->order_status == "Cancelled")
         {
             if($order_status != "Failed" && $order_status != "Cancelled")
@@ -471,12 +480,16 @@ class Ec_order
         }
         else if($order->order_status == "Pending" || $order->order_status == "Processing" || $order->order_status == "Completed" || $order->order_status == "On-hold" || $order->order_status == "Shipped")
         {
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/myphone
             if($order_status != "Processing" && $order_status != "Pending" && $order_status != "Completed" && $order_status != "On-hold" && $order_status != "Shipped")
             {
                 $response = Ec_order::update_inventory("add",$ec_order_id,$shop_id);
             } 
         }
+<<<<<<< HEAD
         Tbl_ec_order::where("ec_order_id",$ec_order_id)->update($update);   
          
         if($order_status == "Completed")
@@ -498,6 +511,15 @@ class Ec_order
         { 
             if($response["status"] == "error")
             {
+=======
+
+        Tbl_ec_order::where("ec_order_id",$ec_order_id)->update($update);
+
+        if(isset($response["status"]))
+        { 
+            if($response["status"] == "error")
+            {
+>>>>>>> origin/myphone
                 return $response;
             }
             else
@@ -540,11 +562,14 @@ class Ec_order
         {
             if($order_status == "Completed")
             {
+<<<<<<< HEAD
                 $pass_data["order_details"] = $order;
                 $pass_data["order_item"] = Tbl_ec_order_item::item()->where("ec_order_id",$ec_order_id)->get();
                 $pass_data["order_status"] = $order_status;
                 Mail_global::create_email_content($pass_data, $shop_id, "delivered");
                     
+=======
+>>>>>>> origin/myphone
                 $_order = Tbl_ec_order::where("ec_order_id", $ec_order_id)->first();
                 /* TRANSACTION JOURNAL */  
                 $entry["reference_module"]  = "product-order";
@@ -563,9 +588,14 @@ class Ec_order
                     $entry_data[$key]['entry_amount']       = $item->total;
                     $entry_data[$key]['entry_description']  = $item->description;
                 }
+<<<<<<< HEAD
 
                 $product_order_journal = Accounting::postJournalEntry($entry, $entry_data);
 
+=======
+
+                $product_order_journal = Accounting::postJournalEntry($entry, $entry_data);
+>>>>>>> origin/myphone
             }
 
             Tbl_ec_order::where("ec_order_id",$ec_order_id)->update($update);
@@ -598,8 +628,8 @@ class Ec_order
 
 
             if($ctr != 0)
-            {
-                $warehouse_consume_remarks  = "";                                                            
+            { 
+                $warehouse_consume_remarks   = "Consuming of inventory order #" . $ec_order_id;   
                 $warehouse_consumer_id      = $ec_order->customer_id;                          
                 $warehouse_consume_reason   = "Consuming of inventory order #" . $ec_order_id;                              
                 $return_type                = "array";              
@@ -626,9 +656,13 @@ class Ec_order
             }
             if($ctr != 0)
             {
-                $warehouse_reason_refill  = "";  
+                $warehouse_reason_refill        = "Returning of inventory order #" . $ec_order_id;
                 $warehouse_refill_source  = $ec_order_id;  
+<<<<<<< HEAD
                 $warehouse_remarks        = "Returning of inventory order #" . $ec_order_id;      
+=======
+                $warehouse_remarks        = "Returning of inventory order #" . $ec_order_id;    
+>>>>>>> origin/myphone
                 $return_type              = "array";             
                 $data                     = Warehouse::inventory_refill($warehouse_id, $warehouse_reason_refill, $warehouse_refill_source, $warehouse_remarks, $warehouse_refill_product, $return_type);
                 
@@ -661,12 +695,29 @@ class Ec_order
         {
             $customer_id = $order_info["tbl_customer"]["customer_id"]; 
         }
-
+   
         /* Check if Customer Account Exist */
+        $temporary["email"] = $order_info["tbl_customer"]["email"];
+        $temporary["password"] = Crypt::encrypt($order_info["tbl_customer"]["password"]);
+        $temporary["mlm_username"] = $order_info["tbl_customer"]["mlm_username"];
+        $temporary["tin_number"] = $order_info["tbl_customer"]["tin_number"];
+        
+        $order_info["tbl_customer"]["email"] = "";
+        $order_info["tbl_customer"]["password"] = "";
+        $order_info["tbl_customer"]["mlm_username"] = "";
+        $order_info["tbl_customer"]["tin_number"] = "";
+        $order_info["tbl_customer"]["temporary"] = serialize($temporary);
+        
         $customer_query = DB::table("tbl_customer")->where("customer_id", $customer_id);
         $customer = $customer_query->first();
-
-        if ($customer) 
+        
+        if(!isset($order_info['new_account']))
+        {
+            $order_info['new_account'] = null;
+        }
+        
+        $customer_new = Session::get('mlm_member');
+        if ($customer_new &&  $order_info['new_account'] == null) 
         {
             $other_info = DB::table("tbl_customer_other_info")->where("customer_id", $customer_id)->first();
             $customer_mobile = $order_info["tbl_customer"]["customer_contact"];
@@ -706,10 +757,13 @@ class Ec_order
                 $middle_name = '';
                 $order_info["tbl_customer"]['middle_name'] = $middle_name;
             }
+<<<<<<< HEAD
             unset($order_info["tbl_customer"]["customer_full_address"]);
             unset($order_info["tbl_customer"]["b_day"]);
             unset($order_info["tbl_customer"]["customer_gender"]);
             
+=======
+>>>>>>> origin/myphone
             $order_info["tbl_customer"]["password"] = Crypt::encrypt($order_info["tbl_customer"]["password"]);
             $customer_id = $customer_query->insertGetId($order_info["tbl_customer"]);
             
@@ -837,7 +891,6 @@ class Ec_order
                     $insert_slot_ref['order_slot_customer_id']  = $customer_id;
                     $insert_slot_ref['order_slot_used']         = 0;
                     $insert_slot_ref['order_slot_sponsor']      = $slot_sponsor->slot_id;
-
                     DB::table('tbl_ec_order_slot')->insert($insert_slot_ref);
                 }
                 else
@@ -848,6 +901,14 @@ class Ec_order
                     $insert_slot_ref['order_slot_sponsor']      = 0;
                     DB::table('tbl_ec_order_slot')->insert($insert_slot_ref);
                 }
+            }
+            else
+            {
+                $insert_slot_ref['order_slot_ec_order_id']  = $order_info["tbl_ec_order"]["ec_order_id"];
+                $insert_slot_ref['order_slot_customer_id']  = $customer_id;
+                $insert_slot_ref['order_slot_used']         = 0;
+                $insert_slot_ref['order_slot_sponsor']      = 0;
+                DB::table('tbl_ec_order_slot')->insert($insert_slot_ref);
             }
         }
         /* Email Password */

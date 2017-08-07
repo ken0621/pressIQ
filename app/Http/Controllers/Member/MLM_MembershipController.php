@@ -141,9 +141,10 @@ class MLM_MembershipController extends Member
 
         $eprod_id = Request::input('eprod_id');
         $membership_id = Request::input('membership_id');
-
+        $membership_id_eon = Request::input('membership_id_eon');
         foreach ($eprod_id as $key => $value) {
             $update['ec_product_membership'] = $membership_id[$key];
+            $update['ec_product_membership_eon'] = $membership_id_eon[$key];
             DB::table('tbl_ec_product')->where('eprod_id', $eprod_id[$key])->update($update);
         }
 

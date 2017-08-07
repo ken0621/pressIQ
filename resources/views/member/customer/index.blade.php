@@ -132,10 +132,7 @@
     {
         var filter = $(sel).val();
         var link = '/member/customer/list?filter_slot=' + filter;
-        // location.redirect(link);
         window.location = link;
-        // $('.load-data').html('<div style="margin: 100px auto;" class="loader-16-gray"></div>');
-        // $('.load-data').load(link);
     }
     function submit_done(data)
     {
@@ -147,5 +144,8 @@
 </script>
 <script type="text/javascript" src="/assets/member/js/customer.js"></script>
 <script type="text/javascript" src="/assets/member/js/customerlist.js"></script>
-<script type="text/javascript" src="/assets/member/js/paginate_ajax.js"></script>
+<!--<script type="text/javascript" src="/assets/member/js/paginate_ajax.js"></script>-->
+<script type="text/javascript" >
+    load_assets();
+</script>
 @endsection

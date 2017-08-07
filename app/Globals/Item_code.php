@@ -801,17 +801,15 @@ class Item_code
                                     $insert['slot_status'] = 'PS';
                                     if($tbl_ec_order_slot->order_slot_sponsor != 0)
                                     {
-                                         // $insert['slot_placement'] = $tbl_ec_order_slot->order_slot_sponsor;
-                                    }
-                                    if($tbl_ec_order_slot->order_slot_sponsor != 0)
-                                    {
                                          $insert['slot_sponsor'] = $tbl_ec_order_slot->order_slot_sponsor;
                                     }
                                     $id = Tbl_mlm_slot::insertGetId($insert);
-                                    $a = Mlm_compute::entry($id);
-
                                     $update_s['order_slot_used'] = 1;
+                                    $update_s['order_slot_id_c'] = $id;
                                     DB::table('tbl_ec_order_slot')->where('order_slot_ec_order_id', $order_id)->update($update_s);
+
+                                    
+                                    $a = Mlm_compute::entry($id, 0);
 
                                     Mlm_member::add_to_session_edit($shop_id, $tbl_ec_order_slot->order_slot_customer_id, $id);
                                 }
@@ -831,6 +829,7 @@ class Item_code
         $update['merchant_item_status'] = 1;
 
         $merchant_school_item = DB::table('tbl_merchant_school_item')->where('merchant_item_ec_order_id', $order_id)->get();
+
         foreach($merchant_school_item as $key => $value)
         {
             $all_wallet = DB::table('tbl_merchant_school_wallet')->where('merchant_school_custmer_id', $value->merchant_item_customer_id)->sum('merchant_school_amount');

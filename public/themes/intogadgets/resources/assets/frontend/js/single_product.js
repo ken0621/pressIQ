@@ -165,6 +165,15 @@ function action_select_variation(e)
 			}
 
 			$(".loader").fadeOut();
+		
+		}
+		else if (data.result == 'fail')
+		{
+			$('.add-to-cart').prop("disabled", true);
+			$('.single-order-availability').html('Out of Stock')
+			$('.add-to-cart').addClass("disabled");
+			
+			$(".loader").fadeOut();	
 		}
 		else
 		{
@@ -431,8 +440,6 @@ function disable_alphabet()
 
 function prod_variation()
 {
-
-
 	$('div.product-selection select').on('change', function()
 	{	
 		var $div = $('div.single-order-content');

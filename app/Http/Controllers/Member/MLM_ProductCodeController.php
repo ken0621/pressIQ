@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Session;
 use Validator;
 use DB;
+use App\Globals\Merchant;
 use App\Models\Tbl_user;
 use App\Models\Tbl_category;
 use App\Models\Tbl_item;
@@ -56,6 +57,7 @@ class MLM_ProductCodeController extends Member
 
         $data['user_a'] = $this->user_info->user_id;
         $data['warehouse_a'] = $this->current_warehouse->warehouse_id;
+        $data['ismerchant'] = Merchant::ismerchant();
         // dd($data);
         // dd($data["_code_used"]);
         return view('member.mlm_product_code.mlm_product_code', $data);

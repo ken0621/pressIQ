@@ -40,8 +40,13 @@ class Reward
                 
                 $random = array_rand($membership);
                 $membership_id = $membership[$random]['membership_package_id'];  
+                $membership = Tbl_membership_package::where('membership_package_id', $membership_id)->membership()->first();
             }
-            $membership = Tbl_membership_package::where('membership_package_id', $membership_id)->membership()->first();
+            else
+            {
+                $membership = Tbl_membership_package::where('membership_id', $membership_id)->membership()->first();
+            }
+            
             $membership_package_id = $membership->membership_package_id;
 
             $insert['membership_activation_code'] = Self::random_code_generator(8);

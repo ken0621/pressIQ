@@ -50,6 +50,7 @@ use App\Globals\Mlm_discount;
 // use App\Globals\Mlm_compute;
 use App\Models\Tbl_email_content;
 use Crypt;
+use App\Globals\Reward;
 class MLM_SlotController extends Member
 {
     public function instant_add_slot()
@@ -117,6 +118,7 @@ class MLM_SlotController extends Member
     }
     public function index()
     {      
+        // return Reward::generate_membership_code(313, null);
         $access = Utilities::checkAccess('mlm-slots', 'access_page');
         if($access == 0)
         {

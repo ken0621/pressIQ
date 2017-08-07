@@ -32,7 +32,12 @@ class Tbl_mlm_slot extends Model
     }
     public function scopeCurrentWallet($query)
     {
-        $query->select("*", DB::raw("(select sum(wallet_log_amount) from tbl_mlm_slot_wallet_log where tbl_mlm_slot_wallet_log.wallet_log_slot = tbl_mlm_slot.slot_id) AS current_wallet"));
+        $query->select("*",
+            DB::raw("(select sum(wallet_log_amount) from tbl_mlm_slot_wallet_log where tbl_mlm_slot_wallet_log.wallet_log_slot = tbl_mlm_slot.slot_id) AS current_wallet"),
+            DB::raw("(select sum(wallet_log_amount) from tbl_mlm_slot_wallet_log where tbl_mlm_slot_wallet_log.wallet_log_slot = tbl_mlm_slot.slot_id AND wallet_log_amount > 0) AS total_earnings"),
+            DB::raw("(select sum(wallet_log_amount) from tbl_mlm_slot_wallet_log where tbl_mlm_slot_wallet_log.wallet_log_slot = tbl_mlm_slot.slot_id AND wallet_log_amount < 0) AS total_payout")
+        );
+
     }
     public function scopeCustomer($query)
     {

@@ -278,7 +278,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: blue'>Luke Glenn Jordan</span>";
 
     $code = "mlm-developer";
-    $nav[$page]['submenu'][$code]['label'] = "Developer Menu";
+    $nav[$page]['submenu'][$code]['label'] = "Testing Menu";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/developer";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];

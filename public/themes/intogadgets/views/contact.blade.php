@@ -106,27 +106,28 @@
 	<div class="contact-content container">
 		<div class="row clearfix">
 			<div class="col-md-8">
-				<form id="email-form" action="" method="">
+				<form id="email-form" method="post">
 					{!!Honeypot::generate('my_name','my_time')!!}
 					<div id="email-form-result">
-
+						
 					</div>
 					<input type="hidden" name="_token" value="{{{ csrf_token() }}}" />
-
 					<div class="col-md-6 left right nopadding" style="width: 100%;">
-
 						<div class="field">
-							<input type="text" name="sender_name" placeholder="FULL NAME">
+							<input type="text" name="subject" placeholder="SUBJECT">
 						</div>
 						<div class="field">
-							<input type="text" name="sender_contact_num" placeholder="PHONE NUMBER">
+							<input type="text" name="first_name" placeholder="FULL NAME">
 						</div>
 						<div class="field">
-							<input type="text" name="sender_email" placeholder="YOUR EMAIL">
+							<input type="text" name="phone_number" placeholder="PHONE NUMBER">
 						</div>
 						<div class="field">
-							<textarea name="sender_message" placeholder="Your Message Here...."></textarea>
-							<button id="send-email">Send <i class="fa fa-paper-plane-o"></i></button>
+							<input type="text" name="email_address" placeholder="YOUR EMAIL">
+						</div>
+						<div class="field">
+							<textarea name="message" placeholder="Your Message Here...."></textarea>
+							<button type="submit">Send <i class="fa fa-paper-plane-o"></i></button>
 							<img id="sending-message-loading" style="display: none;" src="../../resources/assets/img/small-loading.GIF" alt="">
 						</div>
 					</div>

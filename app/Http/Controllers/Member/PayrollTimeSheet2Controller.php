@@ -858,14 +858,13 @@ class PayrollTimeSheet2Controller extends Member
 		}
 		
 		$data["employee_salary"] = tbl_payroll_employee_salary::where("payroll_employee_id", $employee_id);
-
 		$data["employee_id"] = $employee_id;
 		$data["employee_info"] = $this->db_get_employee_information($employee_id); 
 		$check_approved = Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_company_id)->first();
-		$data["time_keeping_approved"] = $check_approved ? true : false;			
-		//salary of employee
+		$data["time_keeping_approved"] = $check_approved ? true : false;
 		$data["employee_salary"]=$this->get_salary($employee_id,$data["start_date"]);
-			
+
+
 		switch ($computation_type)
 		{
 			case "Daily Rate":
@@ -1440,7 +1439,7 @@ class PayrollTimeSheet2Controller extends Member
 			$monthly_cola = $monthly_cola / 4;
 		}
 
-		return $salary_period;
+		return $monthly_cola;
 	}
 	
 	public function gettotal_break($data)

@@ -2766,7 +2766,7 @@ class PayrollController extends Member
      {
           $payroll_philhealth_min       = Request::input('payroll_philhealth_min');
           $payroll_philhealth_max       = Request::input('payroll_philhealth_max');
-          $payroll_philhealth_base           = Request::input('payroll_philhealth_base');
+          $payroll_philhealth_base      = Request::input('payroll_philhealth_base');
           $payroll_philhealth_premium   = Request::input('payroll_philhealth_premium');
           $payroll_philhealth_ee_share  = Request::input('payroll_philhealth_ee_share');
           $payroll_philhealth_er_share  = Request::input('payroll_philhealth_er_share');
@@ -2797,6 +2797,7 @@ class PayrollController extends Member
      public function pagibig_formula()
      {
           $data['pagibig'] = Tbl_payroll_pagibig::where('shop_id', Self::shop_id())->first();
+
           return view('member.payroll.side_container.pagibig', $data);
      }
 
@@ -2805,7 +2806,9 @@ class PayrollController extends Member
           Tbl_payroll_pagibig::where('shop_id', Self::shop_id())->delete();
 
           $insert['payroll_pagibig_percent']  = Request::input('payroll_pagibig_percent');
-          $insert['shop_id']                      = Self::shop_id();
+          $insert['payroll_pagibig_er_share']  = Request::input('payroll_pagibig_er_share');
+          $insert['shop_id']                  = Self::shop_id();
+
           Tbl_payroll_pagibig::insert($insert);
 
           $return['status'] = 'success';
@@ -2819,6 +2822,7 @@ class PayrollController extends Member
      {
           Tbl_payroll_pagibig_default::truncate();
           $insert['payroll_pagibig_percent'] = Request::input('payroll_pagibig_percent');
+          $insert['payroll_pagibig_er_share']  = Request::input('payroll_pagibig_er_share');
           Tbl_payroll_pagibig_default::insert($insert);
 
           $return['status'] = 'success';

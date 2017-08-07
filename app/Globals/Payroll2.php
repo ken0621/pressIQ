@@ -19,6 +19,7 @@ use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_time_sheet;
 use App\Models\Tbl_payroll_time_sheet_record;
 use App\Models\Tbl_payroll_company;
+use App\Models\Tbl_payroll_pagibig;
 use App\Models\Tbl_payroll_holiday_company;
 use App\Models\Tbl_payroll_time_sheet_record_approved;
 use App\Models\Tbl_payroll_shift_code;
@@ -3330,7 +3331,6 @@ class Payroll2
 		extract($data);
 		$return->taxable_salary_total = $return->gross_pay_total;
 		$return->_taxable_salary_breakdown = array();
-		
 		foreach($return->_breakdown as $breakdown)
 		{
 			if($breakdown["add.taxable_salary"] == true)
@@ -3340,7 +3340,6 @@ class Payroll2
 				$breakdown["tr"] = Payroll2::cutoff_breakdown_to_tr($breakdown);
 				array_push($return->_taxable_salary_breakdown, $breakdown);	
 			}
-
 			if($breakdown["deduct.taxable_salary"] == true)
 			{
 				$return->taxable_salary_total -= $breakdown["amount"];
@@ -3373,7 +3372,6 @@ class Payroll2
 		$pagibig_declared =  $salary->payroll_employee_salary_pagibig;
 		$payroll_period_company_id = $date_query->payroll_period_company_id;
 		$payroll_company_id = $date_query->payroll_company_id;
-
 
 		/* SSS COMPUTATION */
 		$sss_description = "";	
@@ -3444,7 +3442,6 @@ class Payroll2
 					$sss_contribution["ec"] = 0;
 				}
 			}
-
 			/* TODO: IF SSS CONTRIBUTION FOR DECLARED EXCEED 4 PAYROLL PERIOD - THE SSS CONTRIBUTION SHOULD BE ZERO */
 		}
 		else //BASED ON GROSS OR NET BASIC PAY
@@ -3570,8 +3567,6 @@ class Payroll2
 					$philhealth_contribution["ee"] = $philhealth_contribution["ee"] / $divisor;
 					$philhealth_contribution["er"] = $philhealth_contribution["er"] / $divisor;
 				}
-
-
 			}
 			else
 			{
@@ -3675,6 +3670,7 @@ class Payroll2
 		$pagibig_contribution["ee"] = $pagibig_declared;
 		$pagibig_contribution["er"] = $pagibig_declared;
 		$pagibig_description = payroll_currency($pagibig_declared) . " declared PAGIBIG Contribution";
+		$pagibig_tbl = tbl_payroll_pagibig::where("shop_id",$data["shop_id"])->first();
 
 		if($pagibig_period == "Every Period") //DIVIDE CONTRIBUTION IF EVERY PERIOD
 		{
@@ -3692,8 +3688,7 @@ class Payroll2
 			{
 				$divisor = 1;
 			}
-
-
+			
 			/* CHECK EXCEED MONTH */
 			$_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();
 			$total_cutoff = 0;
@@ -3701,7 +3696,6 @@ class Payroll2
 			{
 				$total_cutoff += $cutoff->pagibig_ee;
 			}
-
 			if($total_cutoff >= $pagibig_contribution["ee"])
 			{
 				$pagibig_description .= "<br> EE and ER converted to zero in order to not exceed monthly contribution.";
@@ -3711,7 +3705,7 @@ class Payroll2
 			else
 			{
 				$pagibig_contribution["ee"] = $pagibig_contribution["ee"] / $divisor;
-				$pagibig_contribution["er"] = $pagibig_contribution["er"] / $divisor;
+				$pagibig_contribution["er"] = @($pagibig_tbl["payroll_pagibig_er_share"] / $divisor);
 			}
 		}
 		else
@@ -3722,7 +3716,7 @@ class Payroll2
 			{
 				$pagibig_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
 				$pagibig_contribution["ee"] = $pagibig_contribution["ee"];
-				$pagibig_contribution["er"] = $pagibig_contribution["er"];
+				$pagibig_contribution["er"] = $pagibig_tbl["payroll_pagibig_er_share"];
 			}
 			else
 			{
@@ -3903,9 +3897,8 @@ class Payroll2
 
 	public static function cutoff_breakdown_cola($return, $data)
 	{
-
-
 		$total_cola = 0;
+
 		if ($data["cutoff_input"][$data["start_date"]]->compute_type=="daily") 
 		{
 			foreach($data["cutoff_input"] as $cutoff_input)
@@ -3932,11 +3925,11 @@ class Payroll2
 
 	public static function cutoff_fixed_montly_cola($return, $data)
 	{
+
 		$total_cola = 0;
 
 		if ($data["cutoff_input"][$data["start_date"]]->compute_type=="monthly") 
 		{
-
 			if ($data["period_category"]=="Semi-monthly") 
 			{
 				$total_cola = @($data["salary"]->monthly_cola/2);
@@ -4306,12 +4299,13 @@ class Payroll2
 		
 		$pagibig_contribution 		= Payroll2::get_pagibig_contribution($shop_id, $pagibig_salary, $pagibig_record, $pagibig_every);
 		
+
 		if(Payroll2::period_count($date_query->period_count) != $group->payroll_group_pagibig && $group->payroll_group_pagibig != 'Every Period')
 		{
 			$pagibig_contribution['ee'] = 0;
 			$pagibig_contribution['er'] = 0;
 		}
-		
+
 		$pagibig_ee 				= $pagibig_contribution['ee'];
 		$pagibig_er 				= $pagibig_contribution['er'];
 		$total_deduction			+= $pagibig_ee;

@@ -7,6 +7,7 @@ use Request;
 use View;
 use DOMDocument;
 use Config;
+use DB;
 use App\Globals\Mail_global;
 use App\Models\Tbl_user;
 use App\Models\Tbl_email_template;
@@ -21,7 +22,12 @@ class ShopContactController extends Shop
 
     public function contact_submit()
     {
-    	$owner_email = Tbl_user::where("user_shop", $this->shop_info->shop_id)->where("archived", 0)->first();
+        $owner_email = DB::table("tbl_settings")->where("shop_id", $this->shop_info->shop_id)->where("settings_key", "email_address")->first();
+    	
+        if (!$owner_email) 
+        {
+            $owner_email = Tbl_user::where("user_shop", $this->shop_info->shop_id)->where("archived", 0)->first();
+        }
 
     	$data["template"] = Tbl_email_template::where("shop_id", $this->shop_info->shop_id)->first();
     	$data['mail_to'] = $owner_email->user_email;
@@ -37,11 +43,26 @@ class ShopContactController extends Shop
 
     	if ($result == 1) 
     	{
-    		return Redirect::to('/contact?success=Successfully sent!');
+            if ($this->shop_theme == "intogadgets") 
+            {
+                return Redirect::to('/contact#contact_success'); 
+            }
+            else
+            {
+                return Redirect::to('/contact?success=Successfully sent!');    
+            }
     	}
     	else
     	{
-    		return Redirect::to('/contact?fail=Some error occurred. Please try again later.');
+            if ($this->shop_theme == "intogadgets") 
+            {
+                return Redirect::to('/contact#contact_fail');
+            }
+            else
+            {
+                return Redirect::to('/contact?fail=Some error occurred. Please try again later.'); 
+            }
+    		
     	}
     }
 

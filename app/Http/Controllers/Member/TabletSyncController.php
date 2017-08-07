@@ -48,6 +48,7 @@ use App\Models\Tbl_manual_invoice;
 use App\Models\Tbl_manual_receive_payment;
 use App\Models\Tbl_manufacturer;
 use App\Models\Tbl_position;
+use App\Models\Tbl_payment_method;
 use App\Models\Tbl_receive_payment;
 use App\Models\Tbl_receive_payment_line;
 use App\Models\Tbl_settings;
@@ -479,6 +480,17 @@ class TabletSyncController extends Controller
                 $return[$key] = "INSERT INTO tbl_user (user_id, user_email, user_level, user_first_name,user_last_name, user_contact_number,user_password, user_date_created, user_last_active_date, user_shop,IsWalkin,archived,created_at,updated_at) VALUES " . "(".$value->user_id.",'".$value->user_email."','".$value->user_level."','".$value->user_first_name."','".$value->user_last_name."','".$value->user_contact_number."','".Crypt::decrypt($value->user_password)."','".$value->user_date_created."','".$value->user_last_active_date."','".$value->user_shop."','".$value->IsWalkin."','".$value->archived."','".$value->created_at."','".$value->updated_at."')";
             }
         }
+
+
+        if($table == "tbl_payment_method")
+        {
+            $data = Tbl_payment_method::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_payment_method (payment_method_id, shop_id, payment_name, isDefault, archived) VALUES " . "(".$value->payment_method_id.",'".$value->shop_id."','".$value->payment_name."','".$value->isDefault."','".$value->archived."')";
+            }
+        }
+
         return json_encode($return);
     }
     public function sync_update()

@@ -42,6 +42,7 @@ class PayrollTimeSheet2Controller extends Member
 		$this->index_redirect_if_time_keeping_does_not_exist($period_id);
 		$data["company"] = $this->db_get_company_period_information($period_id);
 		$data["_company"] = $this->db_get_list_of_company_for_period($data["company"]->payroll_company_id);
+
 		return view('member.payroll2.employee_summary', $data);
 	}
 	public function index_redirect_if_time_keeping_does_not_exist($period_id)
@@ -65,6 +66,7 @@ class PayrollTimeSheet2Controller extends Member
 		$data["company"] 	= $this->db_get_company_period_information($period_id);
 		$data["_employee"] 	= $this->db_get_list_of_employees_by_company_with_search($data["company"]->payroll_company_id, $search_value, $mode, $period_id, $data["company"]->payroll_period_start, $branch);
 		
+
 		if($mode == "pending")
 		{
 			return view('member.payroll2.employee_summary_table', $data);
@@ -73,7 +75,6 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			return view('member.payroll2.employee_summary_table_approved', $data);
 		}
-
 		
 	}
 	public function timesheet($period_id, $employee_id)
@@ -1313,47 +1314,49 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			$query->where("tbl_payroll_employee_basic.payroll_employee_display_name", "LIKE", "%" . $search . "%");
 		}
-		
-		
+
+		$query->where('tbl_payroll_employee_contract.payroll_employee_contract_status','<=','7')
+				->join('tbl_payroll_employee_contract','tbl_payroll_employee_contract.payroll_employee_id', '=', 'tbl_payroll_employee_basic.payroll_employee_id');
 		
 		$_table = $query->get();
-		
-
-
+	
 		$_return = null;
 		
 		foreach($_table as $key => $row)
 		{
+			$payroll_employee_contract = Tbl_payroll_employee_contract::where('payroll_employee_id',$row->payroll_employee_id)->first(); 
+
+		
 			$_return[$key] = $row;
 			$payroll_group = $this->db_get_current_employee_contract($row->payroll_employee_id, $period_start);
-		
-			if($payroll_group)
-			{
-				$_return[$key]->payroll_group_id = $payroll_group->payroll_group_id;
-				$_return[$key]->payroll_group_code = $payroll_group->payroll_group_code;
-			}
-			else
-			{
-				$_return[$key]->payroll_group_id = null;
-				$_return[$key]->payroll_group_code = null;
-			}
-			
-			$shift = Tbl_payroll_shift_code::where("shift_code_id", $row->shift_code_id)->first();
-			
-			if($shift)
-			{
-				$_return[$key]->shift_code_name = $shift->shift_code_name;
-				$_return[$key]->shift_code_link = "action_load_link_to_modal('/member/payroll/shift_template/modal_view_shift_template/" . $shift->shift_code_id . "', 'lg')";
-			}
-			else
-			{
-				$_return[$key]->shift_code_name = "";
-				$_return[$key]->shift_code_link = "";
-			}
 			
 			
-		} 
 
+				if($payroll_group)
+				{
+					$_return[$key]->payroll_group_id = $payroll_group->payroll_group_id;
+					$_return[$key]->payroll_group_code = $payroll_group->payroll_group_code;
+				}
+				else
+				{
+					$_return[$key]->payroll_group_id = null;
+					$_return[$key]->payroll_group_code = null;
+				}
+				
+				$shift = Tbl_payroll_shift_code::where("shift_code_id", $row->shift_code_id)->first();
+				
+				if($shift)
+				{
+					$_return[$key]->shift_code_name = $shift->shift_code_name;
+					$_return[$key]->shift_code_link = "action_load_link_to_modal('/member/payroll/shift_template/modal_view_shift_template/" . $shift->shift_code_id . "', 'lg')";
+				}
+				else
+				{
+					$_return[$key]->shift_code_name = "";
+					$_return[$key]->shift_code_link = "";
+				}
+
+		} 
 		return $_return;
 	}
 	public function db_get_company_period_information($period_id)

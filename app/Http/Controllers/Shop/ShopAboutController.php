@@ -87,6 +87,7 @@ class ShopAboutController extends Shop
                     {
                         $data["job"] = unserialize($content->value)[Request::input("id")];
                     }
+                    
                     else
                     {
                         return Redirect::to("/jobs");

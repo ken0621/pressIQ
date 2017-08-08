@@ -2286,12 +2286,37 @@ class PayrollController extends Member
      {
           $archived      = Request::input('archived');
           $id            = Request::input('id');
-          $update['payroll_company_archived'] = $archived;
-          Tbl_payroll_company::where('payroll_company_id', $id)->update($update);
-          $return['function_name'] = 'companylist.save_company';
-          $return['status'] = 'success';
-          $return['data'] = '';
+          $company = Tbl_payroll_company::where('payroll_company_id', $id)->first();
 
+          $status = 0;
+          if($company)
+          {
+               $company_parent = Tbl_payroll_company::where('payroll_company_id', $company->payroll_parent_company_id)->first();
+               if($company_parent)
+               {
+                    if($company_parent->payroll_company_archived == 1)
+                    {
+                         $status = 1;
+                    }
+               }
+          }
+          if($status == 0)
+          {
+               $update['payroll_company_archived'] = $archived;
+
+               Tbl_payroll_company::where('payroll_company_id', $id)->update($update);
+               Tbl_payroll_company::where('payroll_parent_company_id', $id)->update($update);    
+
+               $return['function_name'] = 'companylist.save_company';
+               $return['status'] = 'success';
+               $return['data'] = '';
+          }
+          else
+          {
+               $return['message'] = 'error';
+               $return['status_message'] = "Can't re-use sub company.";
+
+          }
           return json_encode($return);
      }
 

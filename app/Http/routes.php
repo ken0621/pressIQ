@@ -1080,4 +1080,6 @@ include_once('routes_config/routes_payroll.php');
 
 /* PAYMENT FACILITIES */
 include_once('routes_config/routes_payment.php');
+include_once('routes_config/routes_reward.php');
+
 

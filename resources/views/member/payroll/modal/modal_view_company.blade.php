@@ -1,19 +1,32 @@
 <form class="global-submit" role="form" action="/member/payroll/company_list/update_company" method="POST">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">&times;</button>
-		<h4 class="modal-title">Create Company</h4>
+		<h4 class="modal-title">{{ucfirst($action)}} Company</h4>
 		<input type="hidden" value="{{$company->payroll_company_id}}" name="payroll_company_id">
 		<input type="hidden" name="_token" value="{{csrf_token()}}">
+		<input type="hidden" name="" class="blade-action" value="{{$action}}">
 	</div>
 	<div class="modal-body form-horizontal">
+		@if(isset($company->payroll_parent_company_id))
+			@if($company->payroll_parent_company_id != 0)
+				<div class="form-group">
+					<div class="col-md-12">
+						<small>Is Sub-Company of:</small>
+						<select class="form-control sub-company-drop-down" name="payroll_parent_company_id">
+							@foreach($_company as $company_list)
+								<option {{$company->payroll_parent_company_id == $company_list->payroll_company_id ? 'selected' : ''}} value="{{$company_list->payroll_company_id}}">{{$company_list->payroll_company_name}}</option>
+							@endforeach
+						</select>
+					</div>
+				</div>
+			@endif
+		@endif
 		<div class="form-group">
 			<div class="col-md-12">
 				<small>Company Name</small>
 				<input type="text" name="payroll_company_name" placeholder="Company Name" class="form-control view-form" required value="{{$company->payroll_company_name}}" {{$action == 'view' ? 'disabled':''}}>
 			</div>
-		</div>
-		<input type="hidden" name="payroll_parent_company_id" value="0">
-		
+		</div>		
 		<div class="form-group">
 			<div class="col-md-6">
 				<small>Company Code</small>

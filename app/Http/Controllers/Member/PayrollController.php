@@ -2142,6 +2142,9 @@ class PayrollController extends Member
 
      public function modal_create_company()
      {
+          $is_sub = Request::input('is_sub') == "true" ? true : false ;
+          $data['is_sub'] = $is_sub;
+
           $company_logo = '';
           if(Session::has('company_logo'))
           {
@@ -2181,6 +2184,8 @@ class PayrollController extends Member
 
      public function modal_save_company()
      {
+          $parent = Request::input('payroll_parent_company_id') != 0 || Request::input('payroll_parent_company_id') != null ? Request::input('payroll_parent_company_id') : 0;
+
           $insert['payroll_company_name']                   = Request::input('payroll_company_name');
           $insert['payroll_company_code']                   = Request::input('payroll_company_code');
           $insert['payroll_company_rdo']                    = Request::input('payroll_company_rdo');
@@ -2194,7 +2199,7 @@ class PayrollController extends Member
           $insert['payroll_company_philhealth']             = Request::input('payroll_company_philhealth');
           $insert['payroll_company_pagibig']                = Request::input('payroll_company_pagibig');
           $insert['shop_id']                                = Self::shop_id();
-          $insert['payroll_parent_company_id']              = Request::input('payroll_parent_company_id');
+          $insert['payroll_parent_company_id']              = $parent;
           $insert['payroll_company_bank']                   = Request::input('payroll_company_bank');
 
           $logo = '/assets/images/no-logo.png';

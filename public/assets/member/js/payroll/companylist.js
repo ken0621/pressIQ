@@ -146,6 +146,14 @@ function executeFunctionByName(functionName, context /*, args */) {
 
 function submit_done(data)
 {
-	executeFunctionByName(data.function_name, window);
-	$("#global_modal").modal("hide");
+	if(data.message == 'error')
+	{
+		toastr.warning(data.status_message);
+		$("#global_modal").modal("hide");
+	}
+	else
+	{
+		executeFunctionByName(data.function_name, window);
+		$("#global_modal").modal("hide");
+	}
 }

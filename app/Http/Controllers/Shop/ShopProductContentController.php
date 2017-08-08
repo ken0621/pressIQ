@@ -137,6 +137,7 @@ class ShopProductContentController extends Shop
         else
         {
             $response["result"] = "fail";
+            $response["no_stock"] = "nostock";
         }
 
         echo json_encode($response);

@@ -443,6 +443,21 @@
    <!-- CART MODAL -->
    <div class="remodal cart-remodal" data-remodal-id="cart">
    </div>
+   <!-- CONTACT MODAL -->
+   <div class="remodal" data-remodal-id="contact_success">
+      <div class="payment-modal" style="padding: 25px;">
+         <button data-remodal-action="close" class="remodal-close"></button>
+         <h3 style="margin-bottom: 25px;">Successfully sent!</h3>
+         <button data-remodal-action="confirm" class="remodal-confirm">OK</button>
+      </div>
+   </div>
+   <div class="remodal" data-remodal-id="contact_fail">
+      <div class="payment-modal" style="padding: 25px;">
+         <button data-remodal-action="close" class="remodal-close"></button>
+         <h3 style="margin-bottom: 25px;">Some error occurred. Please try again later.</h3>
+         <button data-remodal-action="confirm" class="remodal-cancel">OK</button>
+      </div>
+   </div>
    <!-- LOADING -->
    <div class="remodal loading" data-remodal-id="loading">
       <img src="resources/assets/rutsen/img/preloader.GIF">

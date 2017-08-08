@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tbl_membership_code extends Model
 {
-    //
     protected $table = 'tbl_membership_code';
 	protected $primaryKey = "membership_code_id";
     public $timestamps = false;
@@ -18,20 +17,23 @@ class Tbl_membership_code extends Model
 	   
 	    return $query;
     } 
-    
+    public function scopeActive($query)
+    {
+        $query->where("tbl_membership_code.archived", 0);
+    }
+    public function scopeShop($query, $shop_id)
+    {
+        $query->where("tbl_membership_code.shop_id", $shop_id);
+    }
     public function scopeMembership($query)
     {
         $query->join('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_membership_package.membership_id');
-      
-      
         return $query;
     }
     
     public function scopeCustomer($query)
     {
-        $query->leftjoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_membership_code.customer_id');
-	  
-	  
+        $query->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_membership_code.customer_id');
 	    return $query;
     }
     public function scopePackage_item($query)

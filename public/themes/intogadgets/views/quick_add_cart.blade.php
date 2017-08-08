@@ -21,7 +21,7 @@
 		      </div>
 	      </div>
 	      <div class="col-md-6">
-		      <div class="single-product-holder border" style="width: 100%; margin: 0;">
+		      <div class="single-product-holder border" style="width: 100%; margin: 0; position: relative;">
 		         <div class="single-order-header">{{ $product["eprod_name"] }}</div>
 		         <div class="single-order-sub">
 		            Categories: <a href="/product?type={{ $product['eprod_category_id'] }}">{{ $category['type_name'] }}</a>
@@ -81,6 +81,7 @@
 		            @if($wishlist)
 		              <button type="button" class="single-order-button" onClick="location.href='/wishlist/add/{{ $product["eprod_id"] }}'">ADD TO WISHLIST</button>
 		            @endif
+		            <div class="loader-variation" style="display: none; vertical-align: middle; position: absolute; top: 5px; right: 5px; bottom: 0;"><img style="width: 25px; height: 25px;" src="/resources/assets/frontend/img/loader.gif"></div>
 		            <div class="divider" style="margin: 35px 0; opacity: 0;"></div>
 		         </div>
 		      </div>

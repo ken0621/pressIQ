@@ -1383,11 +1383,11 @@ class PayrollController extends Member
           $update['payroll_employee_contract_date_end']     = $payroll_employee_contract_date_end;
           $update['payroll_group_id']                       = Request::input('payroll_group_id');
           $update['payroll_employee_contract_status']  = Request::input('payroll_employee_contract_status');
-
           Tbl_payroll_employee_contract::where('payroll_employee_contract_id', $payroll_employee_contract_id)->update($update);
 
           $return['status']             = 'success';
           $return['function_name']      = 'employeelist.reload_contract_list';
+
           return json_encode($return);
      }
 

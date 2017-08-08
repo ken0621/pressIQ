@@ -2241,6 +2241,9 @@ class PayrollController extends Member
 
      public function update_company()
      {
+
+          $parent = Request::input('payroll_parent_company_id') != 0 || Request::input('payroll_parent_company_id') != null ? Request::input('payroll_parent_company_id') : 0;
+
           $payroll_company_id                               = Request::input('payroll_company_id');
           $update['payroll_company_name']                   = Request::input('payroll_company_name');
           $update['payroll_company_code']                   = Request::input('payroll_company_code');
@@ -2254,7 +2257,7 @@ class PayrollController extends Member
           $update['payroll_company_sss']                    = Request::input('payroll_company_sss');
           $update['payroll_company_philhealth']             = Request::input('payroll_company_philhealth');
           $update['payroll_company_pagibig']                = Request::input('payroll_company_pagibig');
-          $update['payroll_parent_company_id']              = Request::input('payroll_parent_company_id');
+          $update['payroll_parent_company_id']              = $parent;
           $update['payroll_company_bank']                   = Request::input('payroll_company_bank');
           $logo = '/assets/images/no-logo.png';
           if(Session::has('company_logo_update'))

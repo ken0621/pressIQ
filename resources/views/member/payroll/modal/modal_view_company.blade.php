@@ -12,7 +12,7 @@
 				<div class="form-group">
 					<div class="col-md-12">
 						<small>Is Sub-Company of:</small>
-						<select class="form-control sub-company-drop-down" name="payroll_parent_company_id">
+						<select class="form-control sub-company-drop-down" required name="payroll_parent_company_id">
 							@foreach($_company as $company_list)
 								<option {{$company->payroll_parent_company_id == $company_list->payroll_company_id ? 'selected' : ''}} value="{{$company_list->payroll_company_id}}">{{$company_list->payroll_company_name}}</option>
 							@endforeach

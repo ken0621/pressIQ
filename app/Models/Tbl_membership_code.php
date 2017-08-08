@@ -13,8 +13,6 @@ class Tbl_membership_code extends Model
     public function scopePackage($query)
     {
         $query->join('tbl_membership_package', 'tbl_membership_package.membership_package_id', '=', 'tbl_membership_code.membership_package_id');
-	   
-	   
 	    return $query;
     } 
     public function scopeActive($query)

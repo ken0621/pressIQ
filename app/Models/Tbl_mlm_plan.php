@@ -17,5 +17,21 @@ class Tbl_mlm_plan extends Model
     // 1 = instant
     // 2 = daily
     // 3 = weekly
-    // 4= monthly
+    // 4 = monthly
+
+    public function scopeCode($query, $code)
+    {
+        $query->where("tbl_mlm_plan.marketing_plan_code", $code);
+    }
+    public function scopeEnable($query, $enable)
+    {
+        $query->where("tbl_mlm_plan.marketing_plan_enable", $enable);
+    }
+    public function scopeTrigger($query, $trigger)
+    {
+        $query->where("tbl_mlm_plan.marketing_plan_trigger", $trigger);
+    }
+    
+
+    
 }

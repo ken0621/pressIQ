@@ -11,20 +11,27 @@
                 <input name="sponsor" type="text" class="form-control" placeholder="RANDOM (IF EMPTY)">
             </div>
         </div>
+        @if($enable_binary == 1)
         <div class="form-group">
-            <div class="col-md-6">            
-                <label>PLACEMENT</label>
-                <input name="placement" type="text" class="form-control" placeholder="RANDOM (IF EMPTY)">
-            </div>
-            <div class="col-md-6">            
-                <label>POSITION</label>
-                <select name="position" class="form-control">
-                    <option>RANDOM</option>
-                	<option>LEFT</option>
-                	<option>RIGHT</option>
-                </select>
-            </div>
+            @if($enable_auto_place == 0)
+                <div class="col-md-6">            
+                    <label>PLACEMENT</label>
+                    <input name="placement" type="text" class="form-control" placeholder="RANDOM (IF EMPTY)">
+                </div>
+                <div class="col-md-6">            
+                    <label>POSITION</label>
+                    <select name="position" class="form-control">
+                        <option>RANDOM</option>
+                    	<option>LEFT</option>
+                    	<option>RIGHT</option>
+                    </select>
+                </div>
+            @else
+                    <!-- Auto place  -->
+            @endif
+
         </div>
+        @endif
         <div class="form-group">
             <div class="col-md-12">            
                 <label>MEMBERSHIP</label>

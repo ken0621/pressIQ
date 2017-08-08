@@ -7,9 +7,14 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_customer;
 use App\Globals\Currency;
 use App\Globals\Mlm_compute;
+use App\Globals\Reward;
+use App\Models\Tbl_mlm_plan;
+use App\Models\Tbl_mlm_binary_setttings;
+use App\Models\Tbl_membership_code;
+
 use Request;
 use Crypt;
-
+use DB;
 class MlmDeveloperController extends Member
 {
     public $session = "MLM Developer";
@@ -51,6 +56,20 @@ class MlmDeveloperController extends Member
         /* INITIAL DATA */
     	$data["page"]                   = "CREATE SLOT";
         $data["_membership"]            = Tbl_membership::shop($this->user_info->shop_id)->reverseOrder()->active()->joinPackage()->get();
+
+        // Binary Settings
+        $data['binary_settings'] = Tbl_mlm_plan::where('shop_id', $this->user_info->shop_id)->code('BINARY')->enable(1)->trigger('Slot Creation')->first();
+        $data['binary_advance'] = Tbl_mlm_binary_setttings::shop($this->user_info->shop_id)->first();
+        $data['enable_binary'] = 0;
+        $data['enable_auto_place'] = 0;
+        if(isset($data['binary_settings']->marketing_plan_enable))
+        {
+            $data['enable_binary'] = $data['binary_settings']->marketing_plan_enable;
+        }
+        if(isset($data['binary_advance']->binary_settings_placement))
+        {
+            $data['enable_auto_place'] = $data['binary_advance']->binary_settings_placement;
+        }
         
         /* CHECK IF MEMBERSHIP AVAILABLE */
         if(count($data["_membership"]) > 0)
@@ -67,20 +86,65 @@ class MlmDeveloperController extends Member
     }
     public function create_slot_submit()
     {
-    	$customer_id                = Self::create_slot_submit_random_customer();
+        $shop_id = $this->user_info->shop_id;
+    	$customer_id                = Self::create_slot_submit_random_customer($shop_id);
         $membership_package_id      = Request::input("membership");
-        $membership_code_id         = Self::create_slot_submit_create_code($customer_id, $membership_package_id);
-        $slot_id                    = Self::create_slot_submit_create_slot($membership_code_id);
         
+
+        // Generate Membership Code
+        // $customer_id             Required
+        // $membership_package_id   Not Required / Random if null
+        $return         = Reward::generate_membership_code($customer_id, $membership_package_id);
+        // Check if status is success
+        if($return['status'] == 'success') 
+        { 
+            $membership_code_id = $return['membership_code_id']; 
+        }
+        else 
+        { 
+            return json_encode($return); 
+        }
+
+        // $membership_code_id         = Self::create_slot_submit_create_code($customer_id, $membership_package_id, "PS", $this->user_info->shop_id);
+        
+
+        $request = [];
+        // Sample data
+        // $request['slot_owner']           Required
+        // $request['membership_code_id']   Required
+        // $request['slot_sponsor']         Required
+        // $request['slot_placement']       Required/Defending on settings
+        // $request['slot_position']        Required/Defending on settings
+        // $request['shop_id']              Required
+
+        $request['slot_owner'] = $customer_id;
+        $request['slot_sponsor'] = Tbl_mlm_slot::orderBy(DB::raw("rand()"))->pluck("slot_id");
+        $request['membership_code_id'] = $membership_code_id;
+        $request['shop_id'] = $this->user_info->shop_id;
+        $return = Reward::create_slot_submit_create_slot($request);
+        // Check if status is success
+        if($return['status'] == 'success')
+        { 
+            $slot_id = $return['slot_id']; 
+        }
+        else 
+        { 
+            return json_encode($return); 
+        }
+
+
+        Mlm_compute::entry($slot_id);
+
     	$return["status"]        = "success";
     	$return["call_function"] = "create_test_slot_done";
+
     	echo json_encode($return);
     }
-    public static function create_slot_submit_random_customer()
+    public static function create_slot_submit_random_customer($shop_id)
     {
     	$random_user = json_decode(file_get_contents('https://randomuser.me/api/?nat=us'))->results[0];
 
-    	$insert_customer["shop_id"]        = $this->user_info->shop_id;
+    	$insert_customer["shop_id"]        = $shop_id;
     	$insert_customer["first_name"]     = ucfirst($random_user->name->first);
     	$insert_customer["last_name"]      = ucfirst($random_user->name->last);
     	$insert_customer["email"]          = $random_user->email;
@@ -90,14 +154,14 @@ class MlmDeveloperController extends Member
 
     	return Tbl_customer::insertGetId($insert_customer);
     }
-    public static function create_slot_submit_create_code($customer_id, $membership_package_id, $type = "PS")
+    public static function create_slot_submit_create_code($customer_id, $membership_package_id, $type = "PS", $shop_id)
     {
         $insert_code["membership_activation_code"]  = "00000000";
         $insert_code["customer_id"]                 = $customer_id;
         $insert_code["membership_package_id"]       = $membership_package_id;
         $insert_code["membership_code_invoice_id"]  = 0;
         $insert_code["used"]                        = 0;
-        $insert_code["shop_id"]                     = $this->user_info->shop_id;
+        $insert_code["shop_id"]                     = $shop_id;
         $insert_code["membership_code_pin"]         = 0;
         $insert_code["membership_code_price"]       = 0;
         $insert_code["membership_type"]             = $type;

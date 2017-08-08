@@ -207,31 +207,67 @@
 				<div class="title-container">Company Images</div>
 				<div class="image-container row-no-padding clearfix">
 					<div class="col-md-4 col-padding-2">
-						<div class="per-image-container"><img src="/themes/{{ $shop_theme }}/img/gallery-sample1.png" alt=""></div>
+						<div class="per-image-container">
+							<a href="/themes/{{ $shop_theme }}/img/gallery-sample1.png" data-lightbox="company-gallery">
+								<img src="/themes/{{ $shop_theme }}/img/gallery-sample1.png" alt="">
+							</a>
+						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
-						<div class="per-image-container"><img src="/themes/{{ $shop_theme }}/img/gallery-sample2.png" alt=""></div>
+						<div class="per-image-container">
+							<a href="/themes/{{ $shop_theme }}/img/gallery-sample2.png" data-lightbox="company-gallery">
+								<img src="/themes/{{ $shop_theme }}/img/gallery-sample2.png" alt="">
+							</a>
+						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
-						<div class="per-image-container"><img src="/themes/{{ $shop_theme }}/img/gallery-sample3.png" alt=""></div>
+						<div class="per-image-container">
+							<a href="/themes/{{ $shop_theme }}/img/gallery-sample3.png" data-lightbox="company-gallery">
+								<img src="/themes/{{ $shop_theme }}/img/gallery-sample3.png" alt="">
+							</a>
+						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
-						<div class="per-image-container"><img src="/themes/{{ $shop_theme }}/img/gallery-sample4.png" alt=""></div>
+						<div class="per-image-container">
+							<a href="/themes/{{ $shop_theme }}/img/gallery-sample4.png" data-lightbox="company-gallery">
+								<img src="/themes/{{ $shop_theme }}/img/gallery-sample4.png" alt="">
+							</a>
+						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
-						<div class="per-image-container"><img src="/themes/{{ $shop_theme }}/img/gallery-sample5.png" alt=""></div>
+						<div class="per-image-container">
+							<a href="/themes/{{ $shop_theme }}/img/gallery-sample5.png" data-lightbox="company-gallery">
+								<img src="/themes/{{ $shop_theme }}/img/gallery-sample5.png" alt="">
+							</a>
+						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
-						<div class="per-image-container"><img src="/themes/{{ $shop_theme }}/img/gallery-sample6.png" alt=""></div>
+						<div class="per-image-container">
+							<a href="/themes/{{ $shop_theme }}/img/gallery-sample6.png" data-lightbox="company-gallery">
+								<img src="/themes/{{ $shop_theme }}/img/gallery-sample6.png" alt="">
+							</a>
+						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
-						<div class="per-image-container"><img src="/themes/{{ $shop_theme }}/img/gallery-sample7.png" alt=""></div>
+						<div class="per-image-container">
+							<a href="/themes/{{ $shop_theme }}/img/gallery-sample7.png" data-lightbox="company-gallery">
+								<img src="/themes/{{ $shop_theme }}/img/gallery-sample7.png" alt="">
+							</a>
+						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
-						<div class="per-image-container"><img src="/themes/{{ $shop_theme }}/img/gallery-sample8.png" alt=""></div>
+						<div class="per-image-container">
+							<a href="/themes/{{ $shop_theme }}/img/gallery-sample8.png" data-lightbox="company-gallery">
+								<img src="/themes/{{ $shop_theme }}/img/gallery-sample8.png" alt="">
+							</a>
+						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
-						<div class="per-image-container"><img src="/themes/{{ $shop_theme }}/img/gallery-sample9.png" alt=""></div>
+						<div class="per-image-container">
+							<a href="/themes/{{ $shop_theme }}/img/gallery-sample9.png" data-lightbox="company-gallery">
+								<img src="/themes/{{ $shop_theme }}/img/gallery-sample9.png" alt="">
+							</a>
+						</div>
 					</div>
 				</div>
 				<div class="link-container"><span>View All From The Gallery</span></div>
@@ -357,12 +393,17 @@
 
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css">
+
 @endsection
 
 @section("js")
+
+
 <script type="text/javascript">
+
 $(document).ready(function()
 {
+
 	$('.single-item').slick({
 		prevArrow:"<img class='a-left control-c prev slick-prev' src='/themes/{{ $shop_theme }}/img/arrow-left.png'>",
       	nextArrow:"<img class='a-right control-c next slick-next' src='/themes/{{ $shop_theme }}/img/arrow-right.png'>",
@@ -371,19 +412,24 @@ $(document).ready(function()
   		autoplaySpeed: 3000,
 	});
 
-	$('#myCarousel').carousel({
-	interval: 5000
-	})
-    
-    $('#myCarousel').on('slid.bs.carousel', function() {
-    	//alert("slid");
-	});
+    lightbox.option({
+      'disableScrolling': true,
+      'wrapAround': true
+    })
 
-	$(".gallery-img-holder").click(function()
-	{
-		var source = $(this).find(".full-image").attr("path");
-		$(".lightbox-target").find("img").attr("src", source);
-	})
+	// $('#myCarousel').carousel({
+	// interval: 5000
+	// })
+    
+ //   $('#myCarousel').on('slid.bs.carousel', function() {
+ //    	//alert("slid");
+	// });
+
+	// $(".gallery-img-holder").click(function()
+	// {
+	// 	var source = $(this).find(".full-image").attr("path");
+	// 	$(".lightbox-target").find("img").attr("src", source);
+	// })
 
 	/*scroll up*/
 	$(window).scroll(function () {
@@ -400,6 +446,7 @@ $(document).ready(function()
         }, 700);
         return false;
     });
+
 });
 </script>
 @endsection

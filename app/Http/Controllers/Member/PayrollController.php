@@ -2856,6 +2856,7 @@ class PayrollController extends Member
                                              ->where("account_shop_id", Self::shop_id())->pluck("account_id");
           $array = array();
           Session::put('employee_deduction_tag',$array);
+
           return view('member.payroll.modal.modal_create_deduction', $data);
      }
 

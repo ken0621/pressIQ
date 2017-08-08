@@ -1,25 +1,6 @@
 <?php
 Route::group(array('prefix' => '/member/payroll'), function()
 {
-	
-
-
-	/* PAYROLL API */
-	Route::any('/payroll_api','Member\PayrollApiController@index');
-	
-	/* PAYROLL API CONNECTIONS */
-	Route::any('/api_login','Api\PayrollConnectController@index');
-	Route::any('/get_cutoff_data','Api\PayrollConnectController@get_cutoff_data');
-
-	/* PAYROLL REPORTS - GOVERNMENT FORMS */
-	Route::any('/reports/government_forms','Member\PayrollReportController@government_forms');
-	Route::any('/reports/government_forms_hdmf/{month}','Member\PayrollReportController@government_forms_hdmf');
-	Route::any('/reports/government_forms_hdmf_iframe/{month}','Member\PayrollReportController@government_forms_hdmf_iframe');
-	Route::any('/reports/government_forms_philhealth/{month}','Member\PayrollReportController@government_forms_philhealth');
-	Route::any('/reports/government_forms_philhealth_iframe/{month}','Member\PayrollReportController@government_forms_philhealth_iframe');
-	Route::any('/reports/government_forms_sss/{month}','Member\PayrollReportController@government_forms_sss');
-	Route::any('/reports/government_forms_sss_iframe/{month}','Member\PayrollReportController@government_forms_sss_iframe');
-	
 	/* COMPANY START */
 	Route::any('/company_list','Member\PayrollController@company_list');
 	Route::any('/company_list/modal_create_company','Member\PayrollController@modal_create_company');

@@ -85,7 +85,7 @@
 		<div class="allowance-employee">
 			<ul class="nav nav-tabs">
 				<li class="active"><a data-toggle="tab" href="#active-emp"><i class="fa fa-star"></i>&nbsp;Active</a></li>
-				<li><a data-toggle="tab" href="#archived-emp"><i class="fa fa-trash-o"></i>Archived</a></li>
+				<!-- <li><a data-toggle="tab" href="#archived-emp"><i class="fa fa-trash-o"></i>Archived</a></li> -->
 			</ul>
 			<div class="tab-content padding-top-10">
 				<div id="active-emp" class="tab-pane fade in active">

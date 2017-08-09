@@ -295,7 +295,7 @@ class PayrollAllowanceController extends Member
          $data['allowance'] = Tbl_payroll_allowance_v2::where('payroll_allowance_id', $id)->first();
          $data['_active'] = Tbl_payroll_employee_allowance_v2::getperallowance($id)->get();
          $data['_archived'] = Tbl_payroll_employee_allowance_v2::getperallowance($id , 1)->get();
-         // dd($data);
+         // dd($data['_archived']);
          return view('member.payroll.payroll_allowance.update_allowance', $data);
     }
 
@@ -325,7 +325,7 @@ class PayrollAllowanceController extends Member
          Tbl_payroll_employee_allowance_v2::where('payroll_employee_allowance_id', $id)->update($update);
 
          $return['status']             = 'success';
-         $return['function_name']      = 'create_allowance.load_emoloyee_tag';
+         $return['function_name']      = 'create_allowance.load_employee_tag';
          return json_encode($return);
     }
 

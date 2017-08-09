@@ -416,21 +416,7 @@ $(document).ready(function()
       'disableScrolling': true,
       'wrapAround': true
     });
-
-	// $('#myCarousel').carousel({
-	// interval: 5000
-	// })
     
- //   $('#myCarousel').on('slid.bs.carousel', function() {
- //    	//alert("slid");
-	// });
-
-	// $(".gallery-img-holder").click(function()
-	// {
-	// 	var source = $(this).find(".full-image").attr("path");
-	// 	$(".lightbox-target").find("img").attr("src", source);
-	// })
-
 	/*scroll up*/
 	$(window).scroll(function () {
         if ($(this).scrollTop() > 700) {

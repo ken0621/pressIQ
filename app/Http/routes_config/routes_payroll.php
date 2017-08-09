@@ -1,6 +1,12 @@
 <?php
 Route::group(array('prefix' => '/member/payroll'), function()
 {
+	Route::any('/reports/government_forms','Member\PayrollReportController@government_forms');
+	Route::any('/reports/government_forms_sss/{id}','Member\PayrollReportController@government_forms_sss');
+	Route::any('/reports/government_forms_philhealth/{id}','Member\PayrollReportController@government_forms_philhealth');
+	Route::any('/reports/government_forms_hdmf/{id}','Member\PayrollReportController@government_forms_hdmf');
+	Route::any('/reports/government_forms_hdmf_iframe/{id}','Member\PayrollReportController@government_forms_hdmf_iframe');
+	
 	/* COMPANY START */
 	Route::any('/company_list','Member\PayrollController@company_list');
 	Route::any('/company_list/modal_create_company','Member\PayrollController@modal_create_company');

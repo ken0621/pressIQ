@@ -26,7 +26,6 @@ class PayrollProcessController extends Member
 
 			$record = Tbl_payroll_period_company::where('payroll_period_company_id', $period_company_id)->first();
           	
-
 			$update["payroll_period_status"] = "processed";
 			$update["payroll_period_total_basic"] = $total_basic;
 			$update["payroll_period_total_gross"] = $total_gross;

@@ -36,7 +36,6 @@
                       </ul>
                     </div>
                 </td>
-
     		</tr>
     		@endforeach
         @else

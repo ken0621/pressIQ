@@ -1,4 +1,4 @@
-<form class="global-submit" role="form" action="/member/payroll/allowance/modal_save_allowances" method="POST">
+<form class="global-submit" role="form" action="/member/payroll/allowance/v2/modal_save_allowances" method="POST">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">&times;</button>
 		<h4 class="modal-title">Create Allowance</h4>
@@ -12,12 +12,12 @@
 			</div>
 			
 		</div>
-		<div class="form-group">
+		<!-- <div class="form-group">
 			<div class="col-md-6">
 				<small>Amount</small>
 				<input type="number" name="payroll_allowance_amount" class="form-control text-right" required step="any">
 			</div>
-		</div>
+		</div> -->
 		<div class="form-group">
 			<div class="col-md-6">
 				<small>Type</small>
@@ -80,7 +80,7 @@
 		
 		<div class="form-group">
 			<div class="col-md-12">
-				<span><b>Affected Employee<a href="#" class="btn btn-custom-primary pull-right popup" link="/member/payroll/allowance/modal_allowance_tag_employee/0'">Tag Employee</a></b></span>
+				<span><b>Affected Employee<a href="#" class="btn btn-custom-primary pull-right popup" link="/member/payroll/allowance/v2/modal_allowance_tag_employee/0'">Tag Employee</a></b></span>
 			</div>
 		</div>
 		<div class="form-group">
@@ -89,6 +89,7 @@
 					<thead>
 						<tr>
 							<th>Employee Name</th>
+							<th>Amount</th>
 							<th width="5%"></th>
 						</tr>
 					</thead>
@@ -105,4 +106,4 @@
 		<button class="btn btn-custom-primary btn-submit" type="submit">Save</button>
 	</div>
 </form>
-<script type="text/javascript" src="/assets/member/js/payroll/modal_create_allowance.js"></script>
+<script type="text/javascript" src="/assets/member/js/payroll/create_allowance.js"></script>

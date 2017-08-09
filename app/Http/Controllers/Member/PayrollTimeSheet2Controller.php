@@ -31,6 +31,7 @@ use App\Globals\Payroll;
 use App\Globals\PayrollLeave;
 use App\Globals\Utilities;
 use App\Models\Tbl_payroll_company;
+use App\Globals\Utilities;
 use DB;
 
 class PayrollTimeSheet2Controller extends Member

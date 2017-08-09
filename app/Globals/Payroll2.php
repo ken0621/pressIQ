@@ -16,6 +16,7 @@ use App\Models\Tbl_payroll_record;
 use App\Models\Tbl_payroll_employee_salary;
 use App\Models\Tbl_payroll_employee_basic;
 use App\Models\Tbl_payroll_employee_allowance;
+use App\Models\Tbl_payroll_employee_allowance_v2;
 use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_time_sheet;
 use App\Models\Tbl_payroll_time_sheet_record;
@@ -3256,6 +3257,7 @@ class Payroll2
 		
 		$return = Payroll2::cutoff_breakdown_deductions($return, $data); //meron bang non-taxable deduction?? lol
 		$return = Payroll2::cutoff_breakdown_adjustments($return, $data);
+		$return = Payroll2::cutoff_breakdown_allowance_v2($return, $data);
 		$return = Payroll2::cutoff_breakdown_taxable_allowances($return, $data);
 		$return = Payroll2::cutoff_breakdown_non_taxable_allowances($return, $data);
 		$return = Payroll2::cutoff_breakdown_hidden_allowances($return, $data);
@@ -4155,6 +4157,50 @@ class Payroll2
 
 		return $return;
 	}
+	public static function cutoff_breakdown_allowance_v2($return, $data)
+	{
+		$_allowance = Tbl_payroll_employee_allowance_v2::where("payroll_employee_id", $data["employee_id"])->joinAllowance()->get();
+
+		foreach($_allowance as $allowance)
+		{
+			$allowance_amount = $allowance->payroll_employee_allowance_amount;
+			$allowance_name = $allowance->payroll_allowance_name;
+
+			if($allowance->payroll_allowance_type == "fixed")
+			{
+				$val["label"] = $allowance_name;
+				$val["type"] = "additions";
+				$val["amount"] = $allowance_amount;
+
+				if($allowance->payroll_allowance_category == "Taxable")
+				{
+					$val["add.gross_pay"] = true;
+					$val["deduct.gross_pay"] = false;
+					$val["add.taxable_salary"] = false;
+					$val["deduct.taxable_salary"] = false;
+					$val["add.net_pay"] = false;
+					$val["deduct.net_pay"] = false;
+				}
+				else
+				{
+					$val["add.gross_pay"] = true;
+					$val["deduct.gross_pay"] = false;
+					$val["add.taxable_salary"] = false;
+					$val["deduct.taxable_salary"] = true;
+					$val["add.net_pay"] = true;
+					$val["deduct.net_pay"] = false;
+				}
+
+				array_push($return->_breakdown, $val);
+				$val = null;
+			}
+
+		}
+
+		return $return;
+	}
+
+
 	public static function cutoff_breakdown_adjustments($return, $data)
 	{
 		$_adjustment = Tbl_payroll_adjustment::where("payroll_period_company_id", $data["period_info"]->payroll_period_company_id)->where("payroll_employee_id", $data["employee_id"])->get();

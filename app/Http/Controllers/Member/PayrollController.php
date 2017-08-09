@@ -164,7 +164,20 @@ class PayrollController extends Member
 
                case 'processed':
                     return view('member.payroll.payroll_timekeeping_table_processed', $data);
+               break; 
+
+               case 'registered':
+                    return view('member.payroll.payroll_timekeeping_table_registered', $data);
                break;  
+
+               case 'posted':
+                    return view('member.payroll.payroll_timekeeping_table_posted', $data);
+               break;  
+
+               case 'approved':
+                    return view('member.payroll.payroll_timekeeping_table_approved', $data);
+               break;  
+
 
                default:
                     return view('member.payroll.payroll_timekeeping_table', $data);
@@ -1969,6 +1982,9 @@ class PayrollController extends Member
 
           $data[5]['access_name'] = 'Allowances';
           $data[5]['link']        = '/member/payroll/allowance';
+
+          $data[51]['access_name'] = 'Allowances V2';
+          $data[51]['link']        = '/member/payroll/allowance/v2';
 
           $data[6]['access_name'] = 'Deductions';
           $data[6]['link']        = '/member/payroll/deduction';

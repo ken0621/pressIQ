@@ -60,8 +60,14 @@ class PayrollBankingController extends Member
      	$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $data["payroll_period_company_id"])->orderBy("net_pay", "desc")->basic()->get();
      	$data = Self::clean($data);
 
-     	$filename = 'S3N07281701.txt';
+     	$company_code = $data["payroll_period"]->payroll_company_code;
+     	$upload_month = date("m");
+     	$upload_day = date("d");
+     	$upload_year = date("y");
+     	$batch = "01";
 
+     	//S3N
+     	$filename = strtoupper($company_code) . $upload_month . $upload_day . $upload_year . $batch . '.txt';
 		$content = "";
 
 		foreach($data["_employee"] as $employee)

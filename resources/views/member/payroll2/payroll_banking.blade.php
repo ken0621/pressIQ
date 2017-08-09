@@ -10,6 +10,7 @@
 				<th>ACCOUNT #</th>
 				<th>AMOUNT</th>
 				<th>NAME</th>
+				<th>REMARKS</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -18,6 +19,7 @@
 				<td>{{ $employee->payroll_employee_atm_number }}</td>
 				<td>{{ number_format($employee->net_pay, 2) }}</td>
 				<td>{{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }} {{ $employee->payroll_employee_last_name }}</td>
+				<td>OK</td>
 			</tr>
 			@endforeach
 	    </tbody>

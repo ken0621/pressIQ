@@ -61,8 +61,11 @@
                     <div>{{ $timesheet_info->time_output["break_hours"] }}</div>
                     @endif
                     
+                    @if($access_salary_rate == 1)
                     <div class="text-bold">HOURLY RATE</div>
                     <div>{{ payroll_currency($timesheet_info->compute->hourly_rate) }}</div>
+                    @endif
+                    
                 </div>
                 
                 @if($timesheet_info->time_compute_mode == "regular")

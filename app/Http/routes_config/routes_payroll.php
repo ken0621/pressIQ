@@ -493,6 +493,9 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/modal_generate_bank/{id}','Member\PayrollController@modal_generate_bank');
 	/* GENERATE BANK UPLOAD END */
 
+	Route::any('/banking/{period_company_id}','Member\PayrollBankingController@index');
+	Route::any('/banking/{period_company_id}/download','Member\PayrollBankingController@download');
+
 
 	/* SHIFT START */
 	Route::any('/shift_group','Member\PayrollController@shift_group');

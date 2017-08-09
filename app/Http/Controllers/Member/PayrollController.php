@@ -86,7 +86,7 @@ use App\Globals\Utilities;
 use DateTime;
 use App\Models\Tbl_payroll_shift_day;
 use App\Models\Tbl_payroll_shift_time;
-
+use App\Globals\AuditTrail;
 use App\Globals\Accounting;
 
 use App\Models\Tbl_payroll_time_keeping_approved;
@@ -1249,7 +1249,9 @@ class PayrollController extends Member
                     Tbl_payroll_journal_tag_employee::insert($insert_journal);
                }
           }
-
+          
+          $record = Tbl_payroll_employee_basic::where('payroll_employee_id', $payroll_employee_id)->first();
+          AuditTrail::record_logs("Create Employee","Payroll Create Employee",$payroll_employee_id,$record,$record);
 
           $return['data'] = '';
           $return['status'] = 'success';
@@ -5387,11 +5389,14 @@ class PayrollController extends Member
           ->join('tbl_payroll_time_sheet_record_approved','tbl_payroll_time_sheet_record_approved.payroll_time_sheet_id','=','tbl_payroll_time_sheet.payroll_time_sheet_id')
           ->groupBy("tbl_payroll_time_sheet.payroll_time_sheet_id")
           ->get();
+          
 
           foreach ($_payroll_timesheet_ids as $payroll_timesheets_ids) 
           {
                Tbl_payroll_time_sheet::where("payroll_time_sheet_id",$payroll_timesheets_ids["payroll_time_sheet_id"])->delete();
           }
+          
+          AuditTrail::record_logs("Delete Payroll Period","Payroll Delete Payroll Period id #" . $id,$id,$payroll_period,"");
 
           Tbl_payroll_period_company::where("payroll_period_company_id", $id)->delete();
          

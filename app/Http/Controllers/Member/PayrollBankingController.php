@@ -87,7 +87,7 @@ class PayrollBankingController extends Member
 	    header("Content-Transfer-Encoding: binary");
 
 	    readfile($filename);
-	   
+	    unlink($filename);
      }
      public static function download_metrobank($data)
      {

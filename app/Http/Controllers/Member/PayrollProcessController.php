@@ -17,6 +17,7 @@ class PayrollProcessController extends Member
 	public function index($period_company_id)
 	{
 		$data["period_company_id"] = $period_company_id;
+		$data["step"] = Request::input("step");
 
 		if(Request::isMethod("post"))
 		{
@@ -26,12 +27,28 @@ class PayrollProcessController extends Member
 
 
 			$record = Tbl_payroll_period_company::where('payroll_period_company_id', $period_company_id)->first();
-<<<<<<< HEAD
-          	
-=======
 
->>>>>>> f01ff841cb78c67988bd60ffab961c63a4e27943
-			$update["payroll_period_status"] = "processed";
+			switch ($data["step"])
+			{
+				case 'process':
+					$step = "processed";
+				break;
+				case 'register':
+					$step = "registered";
+				break;
+				case 'post':
+					$step = "posted";
+				break;
+
+				case 'approve':
+					$step = "approved";
+				break;
+				default:
+					$step = "generated";
+				break;
+			}
+
+			$update["payroll_period_status"] = $step;
 			$update["payroll_period_total_basic"] = $total_basic;
 			$update["payroll_period_total_gross"] = $total_gross;
 			$update["payroll_period_total_net"] = $total_net;

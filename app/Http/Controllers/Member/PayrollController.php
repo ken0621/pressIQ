@@ -164,7 +164,20 @@ class PayrollController extends Member
 
                case 'processed':
                     return view('member.payroll.payroll_timekeeping_table_processed', $data);
+               break; 
+
+               case 'registered':
+                    return view('member.payroll.payroll_timekeeping_table_registered', $data);
                break;  
+
+               case 'posted':
+                    return view('member.payroll.payroll_timekeeping_table_posted', $data);
+               break;  
+
+               case 'approved':
+                    return view('member.payroll.payroll_timekeeping_table_approved', $data);
+               break;  
+
 
                default:
                     return view('member.payroll.payroll_timekeeping_table', $data);

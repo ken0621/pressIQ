@@ -6,6 +6,7 @@ use stdClass;
 use Redirect;
 use Carbon\Carbon;
 
+use App\Globals\AuditTrail;
 use App\Http\Controllers\Controller;
 use App\Models\Tbl_payroll_period_company;
 use App\Models\Tbl_payroll_time_keeping_approved;
@@ -16,6 +17,7 @@ class PayrollProcessController extends Member
 	public function index($period_company_id)
 	{
 		$data["period_company_id"] = $period_company_id;
+		$data["step"] = Request::input("step");
 
 		if(Request::isMethod("post"))
 		{
@@ -24,7 +26,29 @@ class PayrollProcessController extends Member
 			extract($data);
 
 
-			$update["payroll_period_status"] = "processed";
+			$record = Tbl_payroll_period_company::where('payroll_period_company_id', $period_company_id)->first();
+
+			switch ($data["step"])
+			{
+				case 'process':
+					$step = "processed";
+				break;
+				case 'register':
+					$step = "registered";
+				break;
+				case 'post':
+					$step = "posted";
+				break;
+
+				case 'approve':
+					$step = "approved";
+				break;
+				default:
+					$step = "generated";
+				break;
+			}
+
+			$update["payroll_period_status"] = $step;
 			$update["payroll_period_total_basic"] = $total_basic;
 			$update["payroll_period_total_gross"] = $total_gross;
 			$update["payroll_period_total_net"] = $total_net;
@@ -36,7 +60,11 @@ class PayrollProcessController extends Member
 			$update["payroll_period_total_pagibig_ee"] = $total_pagibig_ee;
 			$update["payroll_period_total_pagibig_er"] = $total_pagibig_er;
 			$update["payroll_period_total_grand"] = $total_grand;
+
 			Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->update($update);
+
+			$new_record = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->first();
+			AuditTrail::record_logs("Process Payroll Period","Payroll Process Period id # " . $period_company_id, $period_company_id,$record,$new_record);
 			return Redirect::to("/member/payroll/time_keeping");
 		}
 		else
@@ -65,9 +93,15 @@ class PayrollProcessController extends Member
 	
 	public function unprocess($period_company_id)
 	{
+		$old_record = Tbl_payroll_period_company::where('payroll_period_company_id', $period_company_id)->first();
+        
 		/* TODO: SECURE UNPROCESS */
 		$update["payroll_period_status"] = "generated";
 		Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->update($update);
+
+		$new_record = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->first();
+		AuditTrail::record_logs("Unprocess Payroll Period","Unprocess Payroll Period id # ". $period_company_id,$period_company_id,$old_record,$new_record);
+
 		return Redirect::to("/member/payroll/time_keeping");
 	}
 	public function get_total($data)

@@ -119,7 +119,7 @@ class PayrollTimeSheet2Controller extends Member
 
 		$compute_cutoff = $this->compute_whole_cutoff($period_id, $employee_id);
 		$check_approved = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->first();
-		
+		//dd($compute_cutoff);
 		if($check_approved)
 		{
 			Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->delete();
@@ -865,7 +865,6 @@ class PayrollTimeSheet2Controller extends Member
 		$check_approved = Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_company_id)->first();
 		$data["time_keeping_approved"] = $check_approved ? true : false;
 		$data["employee_salary"]=$this->get_salary($employee_id,$data["start_date"]);
-
 
 		switch ($computation_type)
 		{

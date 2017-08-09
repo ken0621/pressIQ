@@ -86,7 +86,7 @@ use App\Globals\Utilities;
 use DateTime;
 use App\Models\Tbl_payroll_shift_day;
 use App\Models\Tbl_payroll_shift_time;
-
+use App\Globals\AuditTrail;
 use App\Globals\Accounting;
 
 use App\Models\Tbl_payroll_time_keeping_approved;
@@ -164,7 +164,20 @@ class PayrollController extends Member
 
                case 'processed':
                     return view('member.payroll.payroll_timekeeping_table_processed', $data);
+               break; 
+
+               case 'registered':
+                    return view('member.payroll.payroll_timekeeping_table_registered', $data);
                break;  
+
+               case 'posted':
+                    return view('member.payroll.payroll_timekeeping_table_posted', $data);
+               break;  
+
+               case 'approved':
+                    return view('member.payroll.payroll_timekeeping_table_approved', $data);
+               break;  
+
 
                default:
                     return view('member.payroll.payroll_timekeeping_table', $data);
@@ -187,9 +200,10 @@ class PayrollController extends Member
           $separated_status[0] = 8;
           $separated_status[1] = 9;
 
-		$data['_active']					= Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $active_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->paginate($this->paginate_count);
+		$data['_active']	 = Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $active_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->paginate($this->paginate_count);
 
 		// $data['_separated']					= Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $separated_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->paginate($this->paginate_count);
+
 
           $data['_separated'] = DB::select('select * from `tbl_payroll_employee_contract` inner join `tbl_payroll_employee_basic` 
           on `tbl_payroll_employee_basic`.`payroll_employee_id` = `tbl_payroll_employee_contract`.`payroll_employee_id` 
@@ -201,6 +215,19 @@ class PayrollController extends Member
           and `payroll_employee_contract_status` in (8, 9) and `tbl_payroll_employee_basic`.`shop_id` = '.Self::shop_id().' 
           and `tbl_payroll_employee_contract`.`payroll_employee_contract_archived` = 0 
           order by `tbl_payroll_employee_basic`.`payroll_employee_first_name` asc');
+
+
+          /*ORIGINAL QUERY*/
+          /*$data['_separated'] = DB::select('select * from `tbl_payroll_employee_contract` inner join `tbl_payroll_employee_basic` 
+          on `tbl_payroll_employee_basic`.`payroll_employee_id` = `tbl_payroll_employee_contract`.`payroll_employee_id` 
+          left join `tbl_payroll_department` on `tbl_payroll_department`.`payroll_department_id` = `tbl_payroll_employee_contract`.`payroll_department_id` 
+          left join `tbl_payroll_jobtitle` on `tbl_payroll_jobtitle`.`payroll_jobtitle_id` = `tbl_payroll_employee_contract`.`payroll_jobtitle_id` 
+          left join `tbl_payroll_company` on `tbl_payroll_company`.`payroll_company_id` = `tbl_payroll_employee_basic`.`payroll_employee_company_id` 
+          where (`tbl_payroll_employee_contract`.`payroll_employee_contract_date_end` >= '.date('Y-m-d').' 
+          or `tbl_payroll_employee_contract`.`payroll_employee_contract_date_end` = 0000-00-00) 
+          and `payroll_employee_contract_status` in (8, 9) and `tbl_payroll_employee_basic`.`shop_id` = '.Self::shop_id().' 
+          and `tbl_payroll_employee_contract`.`payroll_employee_contract_archived` = 0 
+          order by `tbl_payroll_employee_basic`.`payroll_employee_first_name` asc');*/
 
           // dd($data['_separated']);
 		
@@ -1235,7 +1262,9 @@ class PayrollController extends Member
                     Tbl_payroll_journal_tag_employee::insert($insert_journal);
                }
           }
-
+          
+          $record = Tbl_payroll_employee_basic::where('payroll_employee_id', $payroll_employee_id)->first();
+          AuditTrail::record_logs("Create Employee","Payroll Create Employee",$payroll_employee_id,$record,$record);
 
           $return['data'] = '';
           $return['status'] = 'success';
@@ -4636,6 +4665,7 @@ class PayrollController extends Member
           $insert['period_count']                 = Request::input('period_count');
           $insert['month_contribution']           = Request::input('month_contribution');
           $insert['year_contribution']            = Request::input('year_contribution');
+          $insert['payroll_release_date']         = date('Y-m-d',strtotime(Request::input('payroll_release_date')));
           
           $payroll_period_id = Tbl_payroll_period::insertGetId($insert);
 
@@ -4843,6 +4873,7 @@ class PayrollController extends Member
           $update['period_count']                 = Request::input('period_count');
           $update['month_contribution']           = Request::input('month_contribution');
           $update['year_contribution']            = Request::input('year_contribution');
+          $update['payroll_release_date']         = date('Y-m-d',strtotime(Request::input("payroll_release_date")));
 
           Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->update($update);
 
@@ -5374,11 +5405,14 @@ class PayrollController extends Member
           ->join('tbl_payroll_time_sheet_record_approved','tbl_payroll_time_sheet_record_approved.payroll_time_sheet_id','=','tbl_payroll_time_sheet.payroll_time_sheet_id')
           ->groupBy("tbl_payroll_time_sheet.payroll_time_sheet_id")
           ->get();
+          
 
           foreach ($_payroll_timesheet_ids as $payroll_timesheets_ids) 
           {
                Tbl_payroll_time_sheet::where("payroll_time_sheet_id",$payroll_timesheets_ids["payroll_time_sheet_id"])->delete();
           }
+          
+          AuditTrail::record_logs("Delete Payroll Period","Payroll Delete Payroll Period id #" . $id,$id,$payroll_period,"");
 
           Tbl_payroll_period_company::where("payroll_period_company_id", $id)->delete();
          

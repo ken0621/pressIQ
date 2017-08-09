@@ -106,7 +106,7 @@ class Reward
         
         $rules['slot_owner'] = "required";
         $rules['membership_code_id'] = "required";
-        $rules['slot_sponsor'] = "required";
+        //$rules['slot_sponsor'] = "required";
         
         $binary_settings = Tbl_mlm_plan::where('shop_id', $shop_id)->code('BINARY')->enable(1)->trigger('Slot Creation')->first();
         $binary_advance = Tbl_mlm_binary_setttings::where('shop_id', $shop_id)->first(); 
@@ -124,15 +124,15 @@ class Reward
                         $validate['slot_placement'] = $request['slot_placement'];
                         $validate['slot_position'] = $request['slot_position'];
 
-                        $rules['slot_placement'] = "required";
-                        $rules['slot_position'] = "required";
+                        //$rules['slot_placement'] = "required";
+                        //$rules['slot_position'] = "required";
 
                         $insert['slot_placement'] = $validate['slot_placement'];
                         $insert['slot_position'] = $validate['slot_position'];
 
                         $count_tree_if_exist = Tbl_tree_placement::where('placement_tree_position', $validate['slot_position'])
                         ->where('placement_tree_parent_id', $validate['slot_placement'])
-                        ->where('shop_id', $this->user_info->shop_id)
+                        ->where('shop_id', $shop_id)
                         ->count();
                     } 
                 }

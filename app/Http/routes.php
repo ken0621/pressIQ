@@ -1,6 +1,6 @@
 <?php
 Route::any('/dd','TesterController@connection_test');
-	
+Route::any('/member/popup/message','MemberController@message');	
 Route::get('/member/mail_setting', 'Member\MailSettingController@index');
 Route::post('/member/mail_setting', 'Member\MailSettingController@submit');
 

@@ -24,8 +24,13 @@ class PayrollProcessController extends Member
 			$data = $this->get_total($data);
 			extract($data);
 
+
 			$record = Tbl_payroll_period_company::where('payroll_period_company_id', $period_company_id)->first();
+<<<<<<< HEAD
           	
+=======
+
+>>>>>>> f01ff841cb78c67988bd60ffab961c63a4e27943
 			$update["payroll_period_status"] = "processed";
 			$update["payroll_period_total_basic"] = $total_basic;
 			$update["payroll_period_total_gross"] = $total_gross;
@@ -38,6 +43,7 @@ class PayrollProcessController extends Member
 			$update["payroll_period_total_pagibig_ee"] = $total_pagibig_ee;
 			$update["payroll_period_total_pagibig_er"] = $total_pagibig_er;
 			$update["payroll_period_total_grand"] = $total_grand;
+
 			Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->update($update);
 
 			$new_record = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->first();

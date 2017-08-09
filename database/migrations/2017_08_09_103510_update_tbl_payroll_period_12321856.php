@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTblEcProductEprodDetails extends Migration
+class UpdateTblPayrollPeriod12321856 extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +12,9 @@ class UpdateTblEcProductEprodDetails extends Migration
      */
     public function up()
     {
-        Schema::table('tbl_ec_product', function (Blueprint $table) 
+        Schema::table('tbl_payroll_period', function (Blueprint $table) 
         {
-            $table->text('eprod_details');
+            $table->date('payroll_release_date');
         });
     }
 

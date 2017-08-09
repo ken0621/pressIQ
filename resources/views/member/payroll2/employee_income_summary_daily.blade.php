@@ -119,7 +119,7 @@
                                 {{ payroll_currency($cutoff_breakdown->taxable_salary_total) }}
                             </td>
                         </tr>
-
+                      
                         <!-- NET PAY BREAKDOWN -->
                         @foreach($cutoff_breakdown->_net_pay_breakdown as $breakdown)
                             {!! $breakdown["tr"] !!}

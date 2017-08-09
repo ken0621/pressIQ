@@ -22,17 +22,24 @@ class ShopCareerController extends Shop
     		$data["position"] = Request::input("position");
     		$data["messages"] = Request::input("message");
     		
-			Mail::send('career_mail', $data, function ($message)
-			{
-				$input = Input::all();
+            if ($input['resume']->getRealPath() && $input['resume']->getClientOriginalExtension() && $input['resume']->getMimeType()) 
+            {
+                Mail::send('career_mail', $data, function ($message)
+                {
+                    $input = Input::all();
 
-				$message->subject("NEW APPLICANT FOR INTOGADGETS");
-			    $message->from('no-reply@philtechglobalinc.com', Request::input("name"));
-			    $message->to('info@intogadgets.com.ph')->cc('gtplus.net@gmail.com');
-			    $message->attach($input['resume']->getRealPath(), array(
-			        'as' => 'resume.' . $input['resume']->getClientOriginalExtension(), 
-			        'mime' => $input['resume']->getMimeType()));
-			});
+                    $message->subject("NEW APPLICANT FOR INTOGADGETS");
+                    $message->from('no-reply@philtechglobalinc.com', Request::input("name"));
+                    $message->to('info@intogadgets.com.ph')->cc('gtplus.net@gmail.com');
+                    $message->attach($input['resume']->getRealPath(), array(
+                        'as' => 'resume.' . $input['resume']->getClientOriginalExtension(), 
+                        'mime' => $input['resume']->getMimeType()));
+                });
+            }
+			else
+            {
+                dd("Some error occurred. Please try again later.");
+            }
 
     		return Redirect::to("/career/success");
     	}

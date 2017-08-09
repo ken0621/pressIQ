@@ -1949,6 +1949,9 @@ class PayrollController extends Member
           $data[5]['access_name'] = 'Allowances';
           $data[5]['link']        = '/member/payroll/allowance';
 
+          $data[51]['access_name'] = 'Allowances V2';
+          $data[51]['link']        = '/member/payroll/allowance/v2';
+
           $data[6]['access_name'] = 'Deductions';
           $data[6]['link']        = '/member/payroll/deduction';
 

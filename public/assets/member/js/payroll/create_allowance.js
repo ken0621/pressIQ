@@ -1,14 +1,66 @@
-var modal_create_allowance = new modal_create_allowance();
+var create_allowance = new create_allowance();
 
-function modal_create_allowance()
+function create_allowance()
 {
 	init();
 
 	function init()
 	{
+		event_accept_number_only();
 
 	}
-	
+	function event_accept_number_only()
+	{
+		$(document).on("keypress",".number-input", function(event){
+			if(event.which < 46 || event.which > 59) {
+		        event.preventDefault();
+		    } // prevent if not number/dot
+
+		    if(event.which == 46 && $(this).val().indexOf('.') != -1) {
+		        event.preventDefault();
+		    } // prevent if already dot
+
+		});
+
+		$(document).on("change",".number-input", function(){
+			$(this).val(function(index, value) {		 
+			    var ret = '';
+			    value = action_return_to_number(value);
+			    if(!$(this).hasClass("txt-qty")){
+			    	value = parseFloat(value);
+			    	value = value.toFixed(2);
+			    }
+			    if(value != '' && !isNaN(value)){
+			    	value = parseFloat(value);
+			    	ret = action_add_comma(value).toLocaleString();
+			    }
+
+				return ret;
+			  });
+		});
+	}
+	function action_add_comma(number)
+	{
+		number += '';
+		if(number == ''){
+			return '';
+		}
+
+		else{
+			return number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		}
+	}
+
+	function action_return_to_number(number = '')
+	{
+		number += '';
+		number = number.replace(/,/g, "");
+		if(number == "" || number == null || isNaN(number)){
+			number = 0;
+		}
+		
+		return parseFloat(number);
+	}
 
 	function remove_tag()
 	{
@@ -25,7 +77,7 @@ function modal_create_allowance()
 			{	
 				element.html(misc('spinner'));
 				$.ajax({
-					url 	: 	"/member/payroll/allowance/remove_allowance_tabe_employee",
+					url 	: 	"/member/payroll/allowance/v2/remove_allowance_tabe_employee",
 					type 	: 	"POST",
 					data 	: 	{
 						_token:misc('_token'),
@@ -49,9 +101,9 @@ function modal_create_allowance()
 	this.load_employee_tag = function()
 	{
 		reload_allowance_employee();
-		$(".tbl-tag").html('<tr><td colspan="2" class="text-center">'+misc('loader') + '</td></tr>');
+		$(".tbl-tag").html('<tr><td colspan="3" class="text-center">'+misc('loader') + '</td></tr>');
 		$.ajax({
-			url 	: 	"/member/payroll/allowance/get_employee_allowance_tag",
+			url 	: 	"/member/payroll/allowance/v2/get_employee_allowance_tag",
 			type 	: 	"POST",
 			data 	: 	{
 				_token:misc('_token')
@@ -77,7 +129,7 @@ function modal_create_allowance()
 
 	function reload_allowance_employee()
 	{
-		var action = "/member/payroll/allowance/reload_allowance_employee";
+		var action = "/member/payroll/allowance/v2/reload_allowance_employee";
 		var method = "POST";
 		var formdata = {
 			_token:misc('_token'),
@@ -109,6 +161,7 @@ function modal_create_allowance()
 	{
 		var html = '<tr>';
 		html += '<td>' + data.payroll_emloyee_title_name + ' ' + data.payroll_employee_first_name + ' ' + data.payroll_employee_middle_name  + ' ' + data.payroll_employee_last_name  + ' ' + data.payroll_employee_suffix_name  + ' <input type="hidden" name="employee_tag[]" value="'+data.payroll_employee_id+'"></td>';
+		html += '<td><input name="allowance_amount['+data.payroll_employee_id+']" class="number-input form-control input-sm" type="text"></td>'
 		html += '<td><a href="#" class="btn-remove-tag" data-content="'+data.payroll_employee_id+'"><i class="fa fa-times"></i></a></td>';
 		html += '</tr>';
 		return html;

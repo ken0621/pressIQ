@@ -208,63 +208,63 @@
 				<div class="image-container row-no-padding clearfix">
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
-							<a href="/themes/{{ $shop_theme }}/img/gallery-sample1.png" data-lightbox="company-gallery">
+							<a href="/themes/{{ $shop_theme }}/img/gallery-sample1.png" data-title="" data-lightbox="company-gallery">
 								<img src="/themes/{{ $shop_theme }}/img/gallery-sample1.png" alt="">
 							</a>
 						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
-							<a href="/themes/{{ $shop_theme }}/img/gallery-sample2.png" data-lightbox="company-gallery">
+							<a href="/themes/{{ $shop_theme }}/img/gallery-sample2.png" data-title="" data-lightbox="company-gallery">
 								<img src="/themes/{{ $shop_theme }}/img/gallery-sample2.png" alt="">
 							</a>
 						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
-							<a href="/themes/{{ $shop_theme }}/img/gallery-sample3.png" data-lightbox="company-gallery">
+							<a href="/themes/{{ $shop_theme }}/img/gallery-sample3.png" data-title="" data-lightbox="company-gallery">
 								<img src="/themes/{{ $shop_theme }}/img/gallery-sample3.png" alt="">
 							</a>
 						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
-							<a href="/themes/{{ $shop_theme }}/img/gallery-sample4.png" data-lightbox="company-gallery">
+							<a href="/themes/{{ $shop_theme }}/img/gallery-sample4.png" data-title="" data-lightbox="company-gallery">
 								<img src="/themes/{{ $shop_theme }}/img/gallery-sample4.png" alt="">
 							</a>
 						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
-							<a href="/themes/{{ $shop_theme }}/img/gallery-sample5.png" data-lightbox="company-gallery">
+							<a href="/themes/{{ $shop_theme }}/img/gallery-sample5.png" data-title="" data-lightbox="company-gallery">
 								<img src="/themes/{{ $shop_theme }}/img/gallery-sample5.png" alt="">
 							</a>
 						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
-							<a href="/themes/{{ $shop_theme }}/img/gallery-sample6.png" data-lightbox="company-gallery">
+							<a href="/themes/{{ $shop_theme }}/img/gallery-sample6.png" data-title="" data-lightbox="company-gallery">
 								<img src="/themes/{{ $shop_theme }}/img/gallery-sample6.png" alt="">
 							</a>
 						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
-							<a href="/themes/{{ $shop_theme }}/img/gallery-sample7.png" data-lightbox="company-gallery">
+							<a href="/themes/{{ $shop_theme }}/img/gallery-sample7.png" data-title="" data-lightbox="company-gallery">
 								<img src="/themes/{{ $shop_theme }}/img/gallery-sample7.png" alt="">
 							</a>
 						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
-							<a href="/themes/{{ $shop_theme }}/img/gallery-sample8.png" data-lightbox="company-gallery">
+							<a href="/themes/{{ $shop_theme }}/img/gallery-sample8.png" data-title="" data-lightbox="company-gallery">
 								<img src="/themes/{{ $shop_theme }}/img/gallery-sample8.png" alt="">
 							</a>
 						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
-							<a href="/themes/{{ $shop_theme }}/img/gallery-sample9.png" data-lightbox="company-gallery">
+							<a href="/themes/{{ $shop_theme }}/img/gallery-sample9.png" data-title="" data-lightbox="company-gallery">
 								<img src="/themes/{{ $shop_theme }}/img/gallery-sample9.png" alt="">
 							</a>
 						</div>
@@ -415,7 +415,7 @@ $(document).ready(function()
     lightbox.option({
       'disableScrolling': true,
       'wrapAround': true
-    })
+    });
 
 	// $('#myCarousel').carousel({
 	// interval: 5000

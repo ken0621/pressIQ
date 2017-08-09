@@ -35,8 +35,11 @@
               <div class="row" >
                 <div class="col-md-12 text-center" style="font-weight: bold; font-size: 16px;">{{ strtoupper($company->payroll_company_name) }}</div>
                 <div style="margin-top: 10px;">
-                    <div class="col-md-6">{{ $employee->payroll_employee_last_name }}, {{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }}</div>
-                    <div class="col-md-6">{{ $show_period_start }} - {{ $show_period_end }}</div>
+                    <div class="col-md-4">{{ $employee->payroll_employee_last_name }}, {{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }}</div>
+                    <div class="col-md-4">{{ $show_period_start }} - {{ $show_period_end }}</div>
+                    @if($show_release_date != 'not specified')
+                    <div class="col-md-4">Release Date: {{ $show_release_date }}</div>
+                    @endif
                 </div>
               </div>
 

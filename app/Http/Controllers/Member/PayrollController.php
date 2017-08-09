@@ -4647,6 +4647,7 @@ class PayrollController extends Member
           $insert['period_count']                 = Request::input('period_count');
           $insert['month_contribution']           = Request::input('month_contribution');
           $insert['year_contribution']            = Request::input('year_contribution');
+          $insert['payroll_release_date']         = date('Y-m-d',strtotime(Request::input('payroll_release_date')));
           
           $payroll_period_id = Tbl_payroll_period::insertGetId($insert);
 
@@ -4854,6 +4855,7 @@ class PayrollController extends Member
           $update['period_count']                 = Request::input('period_count');
           $update['month_contribution']           = Request::input('month_contribution');
           $update['year_contribution']            = Request::input('year_contribution');
+          $update['payroll_release_date']         = date('Y-m-d',strtotime(Request::input("payroll_release_date")));
 
           Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->update($update);
 

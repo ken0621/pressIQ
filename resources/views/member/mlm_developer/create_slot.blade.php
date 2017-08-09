@@ -11,7 +11,9 @@
                 <input name="sponsor" type="text" class="form-control" placeholder="RANDOM (IF EMPTY)">
             </div>
         </div>
+        @if($binary_enabled != 0)
         <div class="form-group">
+            @if($binary_auto != 0)
             <div class="col-md-6">            
                 <label>PLACEMENT</label>
                 <input name="placement" type="text" class="form-control" placeholder="RANDOM (IF EMPTY)">
@@ -24,7 +26,11 @@
                 	<option>RIGHT</option>
                 </select>
             </div>
+            @else
+                <!-- Auto Placement Here -->
+            @endif
         </div>
+        @endif
         <div class="form-group">
             <div class="col-md-12">            
                 <label>MEMBERSHIP</label>

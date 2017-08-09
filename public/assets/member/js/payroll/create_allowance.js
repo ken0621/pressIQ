@@ -160,7 +160,7 @@ function create_allowance()
 	function tbl_tag(data)
 	{
 		var html = '<tr>';
-		html += '<td>' + data.payroll_emloyee_title_name + ' ' + data.payroll_employee_first_name + ' ' + data.payroll_employee_middle_name  + ' ' + data.payroll_employee_last_name  + ' ' + data.payroll_employee_suffix_name  + ' <input type="hidden" name="employee_tag[]" value="'+data.payroll_employee_id+'"></td>';
+		html += '<td> <input type="hidden" name="employee_id[]" value="'+data.payroll_employee_id+'"> ' + data.payroll_emloyee_title_name + ' ' + data.payroll_employee_first_name + ' ' + data.payroll_employee_middle_name  + ' ' + data.payroll_employee_last_name  + ' ' + data.payroll_employee_suffix_name  + ' <input type="hidden" name="employee_tag[]" value="'+data.payroll_employee_id+'"></td>';
 		html += '<td><input name="allowance_amount['+data.payroll_employee_id+']" class="number-input form-control input-sm" type="text"></td>'
 		html += '<td><a href="#" class="btn-remove-tag" data-content="'+data.payroll_employee_id+'"><i class="fa fa-times"></i></a></td>';
 		html += '</tr>';

@@ -42,7 +42,7 @@
 											<a href="#" class="popup" link="/member/payroll/allowance/v2/modal_edit_allowance/{{$active->payroll_allowance_id}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
 										</li>
 										<li>
-											<a href="#" class="popup" link="/member/payroll/allowance/v2/modal_archived_allwance/1/{{$active->payroll_allowance_id}}" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Archived</a>
+											<a href="#" class="popup" link="/member/payroll/allowance/v2/modal_archived_allwance/1/{{$active->payroll_allowance_id}}" size="md"><i class="fa fa-trash-o"></i>&nbsp;Archived</a>
 										</li>
 									</ul>
 								</div>
@@ -63,7 +63,7 @@
 			  			<tr>
 			  				<th>Allowance Name</th>
 			  				<th>Category</th>
-			  				<th>Amount</th>
+			  				<th>Total Amount</th>
 			  				<th class="text-center">Action</th>
 			  			</tr>
 			  		</thead>
@@ -88,7 +88,7 @@
 											<a href="#" class="popup" link="/member/payroll/allowance/v2/modal_edit_allowance/{{$archived->payroll_allowance_id}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
 										</li>
 										<li>
-											<a href="#" class="popup" link="/member/payroll/allowance/v2/modal_archived_allwance/0/{{$archived->payroll_allowance_id}}" size="sm"><i class="fa fa-refresh"></i>&nbsp;Restore</a>
+											<a href="#" class="popup" link="/member/payroll/allowance/v2/modal_archived_allwance/0/{{$archived->payroll_allowance_id}}" size="md"><i class="fa fa-refresh"></i>&nbsp;Restore</a>
 										</li>
 									</ul>
 								</div>

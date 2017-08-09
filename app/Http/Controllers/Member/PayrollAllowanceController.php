@@ -164,7 +164,6 @@ class PayrollAllowanceController extends Member
     {
          $allowance_id = Request::input('deduction_id');
          $employee_tag = Request::input('employee_tag');
-         $allowance_amount = Request::input('allowance_amount');
 
          $array = array();
          if(Session::has('allowance_employee_tag'))
@@ -184,7 +183,6 @@ class PayrollAllowanceController extends Member
                    {
                         $insert['payroll_allowance_id'] = $allowance_id;
                         $insert['payroll_employee_id']     = $tag;
-                        $insert['payroll_allowance_amount'] = $allowance_amount[$tag];
                         array_push($insert_tag, $insert);
                    }
               }
@@ -214,6 +212,7 @@ class PayrollAllowanceController extends Member
          $data['new_record'] = $emp;
          return json_encode($data);
     }
+
     public function remove_allowance_tabe_employee()
     {
          $content = Request::input('content');
@@ -258,7 +257,7 @@ class PayrollAllowanceController extends Member
          Tbl_payroll_allowance_v2::where('payroll_allowance_id',$allowance_id)->update($update);
 
          $return['status']             = 'success';
-         $return['function_name']      = 'payrollconfiguration.reload_allowance';
+         $return['function_name']      = 'payrollconfiguration.reload_allowancev2';
          return json_encode($return);
     }
 
@@ -270,13 +269,13 @@ class PayrollAllowanceController extends Member
               $statement = 'restore';
          }
          $file_name               = Tbl_payroll_allowance_v2::where('payroll_allowance_id', $allowance_id)->pluck('payroll_allowance_name');
-         $data['title']           = 'Do you really want to '.$statement.' '.$file_name.'?';
-         $data['html']       = '';
+         $data['title']           = ucfirst($statement);
+         $data['html']       =  'Do you really want to '.$statement.' '.$file_name.'?';
          $data['action']     = '/member/payroll/allowance/v2/archived_allowance';
          $data['id']         = $allowance_id;
          $data['archived']   = $archived;
 
-         return view('member.modal.modal_confirm_archived', $data);
+         return view('member.payroll.payroll_allowance.allowance_confirm_archived', $data);
     }
 
     public function archived_allowance()
@@ -286,7 +285,7 @@ class PayrollAllowanceController extends Member
          Tbl_payroll_allowance_v2::where('payroll_allowance_id', $id)->update($update);
 
          $return['status']             = 'success';
-         $return['function_name']      = 'payrollconfiguration.reload_allowance';
+         $return['function_name']      = 'payrollconfiguration.reload_allowancev2';
          return json_encode($return);
     }
 
@@ -341,9 +340,32 @@ class PayrollAllowanceController extends Member
          $update['expense_account_id']           = Request::input('expense_account_id');
 
          Tbl_payroll_allowance_v2::where('payroll_allowance_id', $payroll_allowance_id)->update($update);
+         Tbl_payroll_employee_allowance_v2::where('payroll_allowance_id',$payroll_allowance_id)->delete();
+
+         $per_employee_amount = Request::input('allowance_amount');
+         $employee_tag = Request::input('employee_id');
+         $insert_employee = array();
+         $total_amount = 0;
+         if(count($employee_tag) > 0)
+         {
+              foreach($employee_tag as $tag)
+              {    
+                   $temp['payroll_allowance_id']      = $payroll_allowance_id;
+                   $temp['payroll_employee_id']  = $tag;
+                   $temp['payroll_employee_allowance_amount']  = str_replace(',', '', $per_employee_amount[$tag]);
+                   $total_amount += str_replace(',', '', $per_employee_amount[$tag]);
+                   array_push($insert_employee, $temp);
+              }
+              if(!empty($insert_employee))
+              {
+                   Tbl_payroll_employee_allowance_v2::insert($insert_employee);
+              }
+         }
+         $update['payroll_allowance_amount'] = $total_amount;
+         Tbl_payroll_allowance_v2::where('payroll_allowance_id',$payroll_allowance_id)->update($update);
 
          $return['status']             = 'success';
-         $return['function_name']      = 'payrollconfiguration.reload_allowance';
+         $return['function_name']      = 'payrollconfiguration.reload_allowancev2';
          return json_encode($return);
     }
 

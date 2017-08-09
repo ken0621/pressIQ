@@ -100,7 +100,7 @@
 						<tbody>
 							@foreach($_active as $active)
 							<tr>
-								<td>
+								<td><input type="hidden" name="employee_id[]" value="{{$active->payroll_employee_allowance_id}}"> 
 									{{$active->payroll_employee_title_name.' '.$active->payroll_employee_first_name.' '.$active->payroll_employee_middle_name.' '.$active->payroll_employee_last_name.' '.$active->payroll_employee_suffix_name}}
 								</td>
 								<td>

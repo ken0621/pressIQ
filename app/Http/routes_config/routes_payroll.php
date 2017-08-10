@@ -478,4 +478,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* PAYROLL 13TH MONTH PAY REPORT */
 	Route::get('/report_13th_month_pay','Member\PayrollController@report_13th_month_pay');
 	Route::get('/report_13th_month_pay/excel_export','Member\PayrollController@report_13th_month_pay_excel_export');
+
+	/* GOVERNMENT FORMS */
+	Route::controller('report/government_forms_sample', 'Member\PayrollGovernmentFormsController');
 });	 

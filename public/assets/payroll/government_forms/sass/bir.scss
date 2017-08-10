@@ -1,0 +1,214 @@
+.bir
+{
+	padding: 15px;
+	.mini-top
+	{
+		margin-top: -7.5px;
+		i
+		{
+			display: inline-block;
+			vertical-align: middle;
+			margin-right: 10px;
+			font-size: 16px;
+		}
+		span
+		{
+			display: inline-block;
+			vertical-align: middle;
+			font-size: 14px;
+			font-weight: 700;
+		}
+	}
+	.main-box
+	{
+		border: 2.5px solid #000;
+		.header
+		{
+			padding: 5px;
+			.logo-text
+			{
+				display: inline-block;
+				vertical-align: top;
+				.logo
+				{
+					display: inline-block;
+					vertical-align: top;
+					img
+					{
+						width: 45px;
+						height: 45px;
+					}
+				}
+				.text
+				{
+					display: inline-block;
+					vertical-align: top;
+					font-size: 13px;
+					margin-left: 15px;
+					line-height: 14px;
+					span
+					{
+						font-size: 15px;
+					}
+				}
+				.sub-text
+				{
+					font-size: 13px;
+				}
+			}
+			.title
+			{
+				font-size: 20px;
+				display: inline-block;
+				vertical-align: top;
+				line-height: 20px;
+				text-align: center;
+				margin-left: 40px;
+			}
+			.number
+			{
+				display: inline-block;
+				vertical-align: top;
+				margin-left: 50px;
+				.label
+				{
+					font-size: 14px;
+					line-height: 14px;
+				}
+				.value
+				{
+					font-size: 25px;
+					font-weight: 700;
+					margin: 5px 0;
+					line-height: 25px;
+				}
+				.date
+				{
+					font-size: 14px;
+					line-height: 14px;
+				}
+			}
+		}
+		.header-divider
+		{
+			font-size: 14px;
+			border-top: 2.5px #000 solid;
+			margin-left: -1px;
+			margin-right: -1px;
+			padding-left: 2.5px;
+			padding-right: 2.5px;
+		}
+		.content
+		{
+			margin-left: -0.5px;
+			margin-right: -0.5px;
+			margin-bottom: -0.5px;
+			table
+			{
+				table-layout: fixed;
+				border-collapse: collapse;
+				width: 100%;
+				td
+				{
+					width: 50%;
+					border-top: 2.5px solid #000;
+					border-right: 2.5px solid #000;
+					&:last-child
+					{
+						border-right: 0;
+					}
+				}
+				.input-container
+				{
+					display: inline-block;
+					vertical-align: top;
+				}
+				.input
+				{
+					background-color: #c0c0c0;
+					.number
+					{
+						font-size: 10px;
+						font-weight: 700;
+						display: inline-block;
+						vertical-align: top;
+						line-height: 12px;
+					}
+					.label
+					{
+						margin-left: 7.5px;
+						display: inline-block;
+						vertical-align: top;
+						font-size: 11px;
+						line-height: 11px;
+						text-align: center;
+					}
+					.arrow
+					{
+						display: inline-block;
+						vertical-align: top;
+						margin-top: 13px;
+						margin-left: 10px;
+						font-size: 14px;
+						line-height: 14px;
+					}
+					.input-value
+					{
+						display: inline-block;
+						vertical-align: top;
+						background-color: #fff;
+						height: 25px;
+						// min-width: 50px;
+						margin: 1.5px 0;
+						position: relative;
+						border: 1px solid #000;
+						.text
+						{
+							display: inline-block;
+							vertical-align: top;
+							font-size: 12px;
+							margin-top: 3px;
+							line-height: 16px;
+							margin-left: 5px;
+							margin-right: 5px;
+						}
+						.divide
+						{
+							display: inline-block;
+							vertical-align: top;
+							height: 5px;
+							width: 1px;
+							background-color: #000;
+							margin-top: 19px;
+						}
+						.divider
+						{
+							display: inline-block;
+							vertical-align: top;
+							height: 24px;
+							width: 1px;
+							background-color: #000;
+						}
+					}
+				}
+				.head-divide
+				{
+					font-size: 10px;
+					position: relative;
+					text-align: center;
+					.head-label
+					{
+						position: absolute;
+						left: 0;
+						font-weight: 700;
+						margin-left: 2.5px;
+					}
+					.head-value
+					{
+
+					}
+				}
+			}
+		}
+	}
+}

@@ -62,6 +62,12 @@ class ShopAboutController extends Shop
         return view("history", $data);
     }
 
+    public function about_red_fruit()
+    {
+        $data["page"] = "about_red_fruit";
+        return view("about_red_fruit", $data);
+    }
+
     public function how_to_join()
     {
         $data["page"] = "how_to_join";

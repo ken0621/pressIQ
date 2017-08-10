@@ -51,7 +51,7 @@
 								Until now, red fruit still used by Papua's people. Most of the population that consume red fruit, wether in pasta for daily food and also the oil. 
 							</p>
 						</div>
-						<div class="small-button">Learn More</div>
+						<a href="/about_red_fruit"><div class="small-button">Learn More</div></a>
 					</div>
 				</div>				
 			</div>
@@ -416,20 +416,6 @@ $(document).ready(function()
       'disableScrolling': true,
       'wrapAround': true
     });
-
-	// $('#myCarousel').carousel({
-	// interval: 5000
-	// })
-    
- //   $('#myCarousel').on('slid.bs.carousel', function() {
- //    	//alert("slid");
-	// });
-
-	// $(".gallery-img-holder").click(function()
-	// {
-	// 	var source = $(this).find(".full-image").attr("path");
-	// 	$(".lightbox-target").find("img").attr("src", source);
-	// })
 
 	/*scroll up*/
 	$(window).scroll(function () {

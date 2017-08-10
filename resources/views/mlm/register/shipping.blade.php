@@ -18,16 +18,16 @@
                 @endforeach
               </select>
             </div>
-            <div class="form-group load-data-municipality">
-               <div id="municipality">
-                 <label>City / Municipality</label>
-                 <select class="form-control input-lg municipality" name="customer_city"z>
-                   @foreach($_city as $key=>$locale)
-                     <option value="{{$locale->locale_id}}">{{$locale->locale_name}}</option>
-                   @endforeach
-                 </select>
-               </div>
-            </div>
+            <!--<div class="form-group load-data-municipality">-->
+            <!--   <div id="municipality">-->
+            <!--     <label>City / Municipality</label>-->
+            <!--     <select class="form-control input-lg municipality" name="customer_city"z>-->
+            <!--       @foreach($_city as $key=>$locale)-->
+            <!--         <option value="{{$locale->locale_id}}">{{$locale->locale_name}}</option>-->
+            <!--       @endforeach-->
+            <!--     </select>-->
+            <!--   </div>-->
+            <!--</div>-->
             <!--<div class="form-group load-data-barangay">-->
             <!--   <div id="barangay">-->
             <!--     <label>Barangay</label>-->
@@ -39,7 +39,7 @@
             <!--   </div>-->
             <!--</div>-->
             <div class="form-group">
-              <label>Complete Address</label>
+              <label>Complete Shipping Address</label>
               <textarea class="form-control input-lg input-address" name="customer_street" required="required"></textarea>
             </div>
           </div>
@@ -145,7 +145,7 @@
         var municipality = $('.municipality option[value="'+municipality_id+'"]').text();
         var street = $('.input-address').val();
         
-        var complete_address = province + ", " + municipality + ", " + street;
+        var complete_address = province + ", " + street;
         
         $('.put-address').text(complete_address);
     }

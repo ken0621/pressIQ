@@ -18,6 +18,7 @@
 </div>
 @endif
 
+@if($access_salary_rate == 1)
 <div class="modal-body clearfix">
     <div class="text-center text-bold" style="font-size: 20px; color: #1682ba">SALARY COMPUTATION</div>
     <div class="col-md-12" style="text-align: left; font-weight: normal; margin-bottom: 10px; font-size: 16px;"></div>
@@ -184,6 +185,7 @@
         </div>
     </div>
 </div>
+@endif
 
 <div class="modal-body clearfix">
     <div class="text-center text-bold" style="font-size: 20px; color: #1682ba">PERFORMANCE SUMMARY</div>

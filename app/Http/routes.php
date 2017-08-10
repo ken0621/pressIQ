@@ -1,5 +1,8 @@
 <?php
 Route::any('/dd','TesterController@connection_test');
+Route::any('/member/payroll/api_login','Api\PayrollConnectController@index');
+Route::any('/member/payroll/get_cutoff_data','Api\PayrollConnectController@get_cutoff_data');
+
 Route::any('/member/popup/message','MemberController@message');	
 Route::get('/member/mail_setting', 'Member\MailSettingController@index');
 Route::post('/member/mail_setting', 'Member\MailSettingController@submit');

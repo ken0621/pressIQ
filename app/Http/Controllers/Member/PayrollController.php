@@ -1951,7 +1951,6 @@ class PayrollController extends Member
 
           foreach($_access as $access)
           {
-
                if(Utilities::checkAccess('payroll-configuration',str_replace(' ', '_', $access['access_name'])) == 1)
                {
                     array_push($link, $access);

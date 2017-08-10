@@ -2,6 +2,7 @@
 namespace App\Globals;
 use stdClass;
 use App\Globals\Payroll;
+use App\Globals\Utilities;
 use DB;
 use Carbon\Carbon;
 
@@ -15,6 +16,7 @@ use App\Models\Tbl_payroll_record;
 use App\Models\Tbl_payroll_employee_salary;
 use App\Models\Tbl_payroll_employee_basic;
 use App\Models\Tbl_payroll_employee_allowance;
+use App\Models\Tbl_payroll_employee_allowance_v2;
 use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_time_sheet;
 use App\Models\Tbl_payroll_time_sheet_record;
@@ -24,6 +26,7 @@ use App\Models\Tbl_payroll_holiday_company;
 use App\Models\Tbl_payroll_time_sheet_record_approved;
 use App\Models\Tbl_payroll_shift_code;
 use App\Models\Tbl_payroll_period;
+
 use DateTime;
 
 class Payroll2
@@ -156,7 +159,7 @@ class Payroll2
 	{
 		$_month = array();
 
-		for($ctr = 1; $ctr < 12; $ctr++)
+		for($ctr = 1; $ctr <= 12; $ctr++)
 		{
 			$_month[$ctr]["month_name"] = DateTime::createFromFormat('!m', $ctr)->format('F');
 
@@ -319,6 +322,7 @@ class Payroll2
 	}
 	public static function timesheet_process_daily_info_record($employee_id, $date, $approved, $_time, $payroll_time_sheet_id, $payroll_period_company_id, $time_keeping_approved, $custom_shift, $custom_shift_id)
 	{
+
 		$return 					= new stdClass();
 		$return->for_approval		= ($approved == true ? 0 : 1);
 		$return->daily_salary		= 0;
@@ -343,6 +347,10 @@ class Payroll2
 		$return->_shift 			= $_shift_raw;
 		$return->time_compute_mode	= "regular";
 		
+
+		$access = Utilities::checkAccess('payroll-timekeeping','salary_rates');
+		
+
 		if(count($_shift) > 0)
 		{
 			if($_shift[0]->shift_flexi_time == 1)
@@ -360,13 +368,20 @@ class Payroll2
 			$return->shift_target_hours = 0;
 		}
 
-		if ($_shift[0]->shift_break_hours != null) {
-			$return->shift_break_hours = $_shift[0]->shift_break_hours;
-		}
-		else
+		if(isset($_shift_raw))
 		{
-			$return->shift_break_hours = "0.00";
+			if ($_shift[0]->shift_break_hours != null) 
+			{
+				$return->shift_break_hours = $_shift[0]->shift_break_hours;
+			}
+			else
+			{
+				$return->shift_break_hours = "0.00";
+			}
 		}
+		
+		
+
 		
 		$return->time_keeping_approved = $time_keeping_approved;
 
@@ -473,10 +488,17 @@ class Payroll2
 		$return->compute_type = $compute_type = Payroll2::convert_period_cat($employee_contract->payroll_group_salary_computation);
 
 		$return->compute = Payroll2::compute_income_day_pay($return->time_output, $daily_rate, $employee_contract->payroll_group_id, $cola, $compute_type, $return->time_compute_mode);
-		
-		$return->value_html = Payroll2::timesheet_daily_income_to_string($return->compute_type, $payroll_time_sheet_id, $return->compute, $return->shift_approved, $payroll_period_company_id, $time_keeping_approved);
-		
+
+		if($access == 1) 
+		{
+			$return->value_html = Payroll2::timesheet_daily_income_to_string($return->compute_type, $payroll_time_sheet_id, $return->compute, $return->shift_approved, $payroll_period_company_id, $time_keeping_approved);
+		}
+		else
+		{
+			$return->value_html = Payroll2::timesheet_daily_target_hours_to_string($return->compute_type, $payroll_time_sheet_id, $return->compute, $return->time_output, $return->shift_approved, $payroll_period_company_id, $time_keeping_approved);
+		}
 		return $return;
+
 	}
 	public static function timesheet_daily_income_to_string($compute_type, $timesheet_id, $compute, $approved, $period_company_id, $time_keeping_approved = 0)
 	{
@@ -500,6 +522,38 @@ class Payroll2
 		else
 		{
 			$string = '<a style="color: red;" onclick="action_load_link_to_modal(\'/member/payroll/company_timesheet_day_summary/' . $timesheet_id . '?period_company_id=' . $period_company_id . '\', \'lg\')" href="javascript:" class="daily-salary" amount="' . $income . '">PHP ' . number_format($income, 2) . '</a>';
+		}
+		
+		return $string;
+	}
+
+
+	public static function timesheet_daily_target_hours_to_string($compute_type, $timesheet_id, $compute, $time_output, $approved, $period_company_id, $time_keeping_approved = 0)
+	{
+
+		if($compute_type == "daily")
+		{
+			$income = $compute->total_day_income;
+		}
+		else
+		{
+			$income = $compute->total_day_income - $compute->daily_rate;
+		}
+		
+		$target_hours = $time_output['time_spent'];
+		
+		
+		if($time_keeping_approved == 1)
+		{
+			$string = '<a style="color: green;" onclick="action_load_link_to_modal(\'/member/payroll/company_timesheet_day_summary/' . $timesheet_id . '?period_company_id=' . $period_company_id . '\', \'lg\')" href="javascript:" class="daily-salary" amount="' . $income . '"> ' . $target_hours . '</a>';	
+		}
+		elseif($approved == true)
+		{
+			$string = '<a onclick="action_load_link_to_modal(\'/member/payroll/company_timesheet_day_summary/' . $timesheet_id . '?period_company_id=' . $period_company_id . '\', \'lg\')" href="javascript:" class="daily-salary" amount="' . $income . '"> ' . $target_hours . '</a>';	
+		}
+		else
+		{
+			$string = '<a style="color: red;" onclick="action_load_link_to_modal(\'/member/payroll/company_timesheet_day_summary/' . $timesheet_id . '?period_company_id=' . $period_company_id . '\', \'lg\')" href="javascript:" class="daily-salary" amount="' . $income . '"> ' . $target_hours . '</a>';
 		}
 		
 		return $string;
@@ -1949,7 +2003,7 @@ class Payroll2
 	 *		=> income (double)
 	 *		=> formula ('plus')
      *
-     * @author (Jimar Zape)
+     * @author Kim Briel Oraya
      *
      */
  
@@ -1968,11 +2022,12 @@ class Payroll2
 			$target_float 						 			  = Self::time_float($_time['target_hours']);
 			$return->_breakdown_addition['Leave Pay']['time'] = $_time['leave_hours'];
 			$return->_breakdown_addition['Leave Pay']['rate'] = Self::time_float($_time['leave_hours']) * @($daily_rate/$target_float);
+			$return->_breakdown_addition['Leave Pay']['hour'] = $_time['leave_hours'];
 		}
 
 		if($compute_type=="daily")
 		{
-			if( $_time['day_type'] == 'rest_day' || $_time["is_holiday"] == "regular" || $_time['day_type'] == 'extra_day') 
+			if( $_time['day_type'] == 'rest_day' || $_time["is_holiday"] == "regular" || $_time['day_type'] == 'extra_day' || $_time["is_holiday"] == "special") 
 			{
 				$daily_rate = 0;
 			}
@@ -2254,7 +2309,6 @@ class Payroll2
 					}
 				}
 
-				
 				//Special Holiday Rest Day Over Time
 				if ($overtime_float!=0) 
 				{
@@ -2283,8 +2337,9 @@ class Payroll2
 				{
 					if ($compute_type=="daily")
 					{
+						$total_day_income = 0;
 						$return->_breakdown_addition["Special Holiday"]["time"] = ""; 
-						$return->_breakdown_addition["Special Holiday"]["rate"] = $daily_true_rate * ($special_param['payroll_overtime_regular']);
+						$return->_breakdown_addition["Special Holiday"]["rate"] = $daily_rate * ($special_param['payroll_overtime_regular']);
 						$return->_breakdown_addition["Special Holiday"]["hour"] = "";
 						$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday"]["rate"];
 						$breakdown_addition += $return->_breakdown_addition["Special Holiday"]["rate"];
@@ -3202,6 +3257,7 @@ class Payroll2
 		
 		$return = Payroll2::cutoff_breakdown_deductions($return, $data); //meron bang non-taxable deduction?? lol
 		$return = Payroll2::cutoff_breakdown_adjustments($return, $data);
+		$return = Payroll2::cutoff_breakdown_allowance_v2($return, $data);
 		$return = Payroll2::cutoff_breakdown_taxable_allowances($return, $data);
 		$return = Payroll2::cutoff_breakdown_non_taxable_allowances($return, $data);
 		$return = Payroll2::cutoff_breakdown_hidden_allowances($return, $data);
@@ -4101,6 +4157,50 @@ class Payroll2
 
 		return $return;
 	}
+	public static function cutoff_breakdown_allowance_v2($return, $data)
+	{
+		$_allowance = Tbl_payroll_employee_allowance_v2::where("payroll_employee_id", $data["employee_id"])->joinAllowance()->get();
+
+		foreach($_allowance as $allowance)
+		{
+			$allowance_amount = $allowance->payroll_employee_allowance_amount;
+			$allowance_name = $allowance->payroll_allowance_name;
+
+			if($allowance->payroll_allowance_type == "fixed")
+			{
+				$val["label"] = $allowance_name;
+				$val["type"] = "additions";
+				$val["amount"] = $allowance_amount;
+
+				if($allowance->payroll_allowance_category == "Taxable")
+				{
+					$val["add.gross_pay"] = true;
+					$val["deduct.gross_pay"] = false;
+					$val["add.taxable_salary"] = false;
+					$val["deduct.taxable_salary"] = false;
+					$val["add.net_pay"] = false;
+					$val["deduct.net_pay"] = false;
+				}
+				else
+				{
+					$val["add.gross_pay"] = true;
+					$val["deduct.gross_pay"] = false;
+					$val["add.taxable_salary"] = false;
+					$val["deduct.taxable_salary"] = true;
+					$val["add.net_pay"] = true;
+					$val["deduct.net_pay"] = false;
+				}
+
+				array_push($return->_breakdown, $val);
+				$val = null;
+			}
+
+		}
+
+		return $return;
+	}
+
+
 	public static function cutoff_breakdown_adjustments($return, $data)
 	{
 		$_adjustment = Tbl_payroll_adjustment::where("payroll_period_company_id", $data["period_info"]->payroll_period_company_id)->where("payroll_employee_id", $data["employee_id"])->get();

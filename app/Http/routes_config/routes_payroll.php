@@ -1,24 +1,13 @@
 <?php
 Route::group(array('prefix' => '/member/payroll'), function()
 {
-	
-
-
-	/* PAYROLL API */
 	Route::any('/payroll_api','Member\PayrollApiController@index');
-	
-	/* PAYROLL API CONNECTIONS */
-	Route::any('/api_login','Api\PayrollConnectController@index');
-	Route::any('/get_cutoff_data','Api\PayrollConnectController@get_cutoff_data');
 
-	/* PAYROLL REPORTS - GOVERNMENT FORMS */
 	Route::any('/reports/government_forms','Member\PayrollReportController@government_forms');
-	Route::any('/reports/government_forms_hdmf/{month}','Member\PayrollReportController@government_forms_hdmf');
-	Route::any('/reports/government_forms_hdmf_iframe/{month}','Member\PayrollReportController@government_forms_hdmf_iframe');
-	Route::any('/reports/government_forms_philhealth/{month}','Member\PayrollReportController@government_forms_philhealth');
-	Route::any('/reports/government_forms_philhealth_iframe/{month}','Member\PayrollReportController@government_forms_philhealth_iframe');
-	Route::any('/reports/government_forms_sss/{month}','Member\PayrollReportController@government_forms_sss');
-	Route::any('/reports/government_forms_sss_iframe/{month}','Member\PayrollReportController@government_forms_sss_iframe');
+	Route::any('/reports/government_forms_sss/{id}','Member\PayrollReportController@government_forms_sss');
+	Route::any('/reports/government_forms_philhealth/{id}','Member\PayrollReportController@government_forms_philhealth');
+	Route::any('/reports/government_forms_hdmf/{id}','Member\PayrollReportController@government_forms_hdmf');
+	Route::any('/reports/government_forms_hdmf_iframe/{id}','Member\PayrollReportController@government_forms_hdmf_iframe');
 	
 	/* COMPANY START */
 	Route::any('/company_list','Member\PayrollController@company_list');
@@ -258,6 +247,23 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/allowance/update_allowance',"Member\PayrollController@update_allowance");
 	/* ALLOWANCE END */
 
+	/* ALLOWANCE START V2*/
+	Route::any('/allowance/v2',"Member\PayrollAllowanceController@allowance");
+	Route::any('/allowance/v2/modal_create_allowance',"Member\PayrollAllowanceController@modal_create_allowance");
+	Route::any('/allowance/v2/modal_allowance_tag_employee/{allowance_id}',"Member\PayrollAllowanceController@modal_allowance_tag_employee");
+	Route::any('/allowance/v2/set_employee_allowance_tag',"Member\PayrollAllowanceController@set_employee_allowance_tag");
+	Route::any('/allowance/v2/get_employee_allowance_tag',"Member\PayrollAllowanceController@get_employee_allowance_tag");
+	Route::any('/allowance/v2/remove_allowance_tabe_employee',"Member\PayrollAllowanceController@remove_allowance_tabe_employee");
+	Route::any('/allowance/v2/modal_save_allowances',"Member\PayrollAllowanceController@modal_save_allowances");
+	Route::any('/allowance/v2/modal_archived_allwance/{archived}/{allowance_id}',"Member\PayrollAllowanceController@modal_archived_allwance");
+	Route::any('/allowance/v2/archived_allowance',"Member\PayrollAllowanceController@archived_allowance");
+	Route::any('/allowance/v2/modal_edit_allowance/{id}',"Member\PayrollAllowanceController@modal_edit_allowance");
+	Route::any('/allowance/v2/modal_archived_llowance_employee/{archived}/{id}',"Member\PayrollAllowanceController@modal_archived_llowance_employee");
+	Route::any('/allowance/v2/reload_allowance_employee',"Member\PayrollAllowanceController@reload_allowance_employee");
+	Route::any('/allowance/v2/archived_allowance_employee',"Member\PayrollAllowanceController@archived_allowance_employee");
+	Route::any('/allowance/v2/update_allowance',"Member\PayrollAllowanceController@update_allowance");
+	/* ALLOWANCE V2 END */
+
 	/* LEAVE START */
 	Route::any('/leave',"Member\PayrollController@leave");
 	/*Link to Modal Create leave_temp*/
@@ -488,6 +494,9 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/generate_bank','Member\PayrollController@generate_bank');
 	Route::any('/modal_generate_bank/{id}','Member\PayrollController@modal_generate_bank');
 	/* GENERATE BANK UPLOAD END */
+
+	Route::any('/banking/{period_company_id}','Member\PayrollBankingController@index');
+	Route::any('/banking/{period_company_id}/download','Member\PayrollBankingController@download');
 
 
 	/* SHIFT START */

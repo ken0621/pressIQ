@@ -22,15 +22,15 @@ class ShopContactController extends Shop
 
     public function contact_submit()
     {
-        $owner_email = DB::table("tbl_settings")->where("shop_id", $this->shop_info->shop_id)->where("settings_key", "email_address")->first();
-    	
+        $owner_email = DB::table("tbl_settings")->where("shop_id", $this->shop_info->shop_id)->where("settings_key", "contact_email_address")->first()->settings_value;
+
         if (!$owner_email) 
         {
-            $owner_email = Tbl_user::where("user_shop", $this->shop_info->shop_id)->where("archived", 0)->first();
+            $owner_email = Tbl_user::where("user_shop", $this->shop_info->shop_id)->where("archived", 0)->first()->user_email;
         }
 
     	$data["template"] = Tbl_email_template::where("shop_id", $this->shop_info->shop_id)->first();
-    	$data['mail_to'] = $owner_email->user_email;
+    	$data['mail_to'] = $owner_email;
     	$data['mail_username'] = Config::get('mail.username');
     	$data['mail_first_name'] = Request::input("first_name");
         $data['mail_last_name'] = Request::input("last_name");

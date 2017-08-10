@@ -203,6 +203,11 @@ function submit_done(data)
 				        }
 				    });
 				}
+				
+				tinymce.init({ 
+				    selector:'.mce',
+				    plugins: "autoresize",
+				 });
 
 				toastr.success("Successfully updated the product");
 			});

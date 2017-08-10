@@ -436,7 +436,9 @@ class MLM_ProductCodeController extends Member
     public function view_receipt($id)
     {
         $shop_id          = $this->user_info->shop_id;
-        $invoice          = Tbl_item_code_invoice::customer()->where("item_code_invoice_id",$id)->where("tbl_item_code_invoice.shop_id",$shop_id)->first();
+        $invoice          = Tbl_item_code_invoice::customer()->where("item_code_invoice_id",$id)->where("tbl_item_code_invoice.shop_id",$shop_id)
+                            ->leftjoin('tbl_user', 'tbl_user.user_id', '=', 'tbl_item_code_invoice.user_id')
+                            ->first();
         if(!$invoice)
         {
             return Redirect::to("/member/mlm/code");
@@ -452,6 +454,25 @@ class MLM_ProductCodeController extends Member
         $data['company_name']    = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_name')->pluck('value');
         $data['company_email']   = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_email')->pluck('value');
         $data['company_logo']    = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'receipt_logo')->pluck('value');
+        if($invoice->user_is_merchant == 1)
+        {
+            $warehouse = DB::table('tbl_user_warehouse_access')->where('user_id', $invoice->user_id)
+                            ->join('tbl_warehouse', 'tbl_warehouse.warehouse_id', '=', 'tbl_user_warehouse_access.warehouse_id')
+                            ->first();
+            if($warehouse)
+            {
+                $data['company_name'] = $warehouse->warehouse_name;
+                $data["shop_address"] = $warehouse->warehouse_address;
+                $data['company_logo'] = $warehouse->merchant_logo;
+                $data["shop_contact"] = '';
+                $data['company_email']= '';
+                if($warehouse->merchant_logo == '')
+                {
+                    $data['company_logo'] = '/assets/images/noimage.png';
+                }
+            }    
+        }
+        // dd($data);
         $data['item_list']       = Tbl_item_code_item::where('tbl_item_code_item.item_code_invoice_id', $id)->join("tbl_item_code","tbl_item_code.item_code_id","=","tbl_item_code_item.item_code_id")->get();    
         $subtotal                = Tbl_item_code::where("item_code_invoice_id",$invoice->item_code_invoice_id)->item()->sum("item_code_price");
         $discount_amount         = $invoice->item_discount;

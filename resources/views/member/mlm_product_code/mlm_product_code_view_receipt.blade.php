@@ -3,76 +3,82 @@
     <div class="clearfix">
         <div>
             <div class="row clearfix">
+
                 <table class="table">
                     <tr>
-                        <td style="border-right: 2.5px solid #1E5649; padding-bottom: 20px;">
+                        <td style="border-right: 2.5px solid #1E5649; padding: 0;">
                             <div class="row clearfix">
-                                <div class="col-md-12" >
-                                <!-- style="background-color: #24267A;" -->
-                                @if($company_logo != null)
-                                     <div class="item">
-                                         <center><img src="@if(Request::input('pdf') == 'true'){{public_path().$company_logo}} @else {{$company_logo}}@endif" alt="" style="object-fit: cover; width: 100% "></center>
-                                     </div>
-                                @else 
-                                    <div class="item">
-                                         <center><img src="@if(Request::input('pdf') == 'true'){{public_path().'/assets/philtech-official-logo.png'}} @else {{'/assets/philtech-official-logo.png'}}@endif" alt="" style="object-fit: cover; width: 100% " ></center>
-                                     </div>
-                                @endif    
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="col-md-12" style="font-weight: bold;">{{$company_name}}</div>
-                                    <div class="col-md-12">Address: {{$shop_address}}</div>
-                                    <div class="col-md-12">Phone: {{$shop_contact}}</div>
-                                    <div class="col-md-12">Email: {{$company_email}}</div>
+                                 <div class="col-md-8">
+                                    <div class="col-md-6">
+                                    <!-- style="background-color: #24267A;" -->
+                                    @if($company_logo != null)
+                                         <div class="item" style="background-image: url('{{public_path().$company_logo}}'); background-size: contain; width: 100%;height: 75px; background-repeat: no-repeat; background-position: center;   ">
+                                             <!-- <center><img src="@if(Request::input('pdf') == 'true'){{public_path().$company_logo}} @else {{$company_logo}}@endif" alt="" style="object-fit: cover; width: 100%;height: 50px  "></center> -->
+                                         </div>
+                                    @else 
+                                        <div class="item" style="background-image: url('{{public_path().'/assets/philtech-official-logo.png'}}'); background-size: contain; width: 100%;height: 75px; background-repeat: no-repeat; background-position: center;    ">
+                                             <!-- <center><img src="@if(Request::input('pdf') == 'true'){{public_path().'/assets/philtech-official-logo.png'}} @else {{'/assets/philtech-official-logo.png'}}@endif" alt="" style="object-fit: cover; width: 100%; height: 50px; " ></center> -->
+                                         </div>
+                                    @endif    
+                                    </div>
+                                    <div class="col-md-6" style="font-size: 8px;">
+                                        <div class="col-md-12" style="font-weight: bold;">{{$company_name}}</div>
+                                        <div class="col-md-12">Address: {{$shop_address}}</div>
+                                        <div class="col-md-12">Phone: {{$shop_contact}}</div>
+                                        <div class="col-md-12">Email: {{$company_email}}</div>
+                                    </div>
+                                 </div>   
+
+                                <div class="col-md-4" style="border-left: 1px dashed;">
+                                    <div class="col-md-12" >
+                                        <span style="font-size: 16px; color:#f1c40f; font-weight: bold;">RECEIPT</span>
+                                    </div>
+                                    <div class="col-md-12" style=" font-size: 8px;" >
+                                        Date:
+                                        <span class="underlined_text" style="width: 100%">
+                                            <center>{{$invoice->item_code_date_created}}</center>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-12" style="font-size: 8px;" >
+                                        Invoice #:
+                                        <span class="underlined_text_2" style="width: 100%">
+                                        @if($invoice->item_code_invoice_number == null)
+                                            
+                                            <center>{{$invoice->item_code_invoice_id}}</center>
+                                        @else
+                                            
+                                            <center>{{$invoice->item_code_invoice_number}}</center>
+                                        @endif    
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                        </td>
-                        <td>
-                            <div class="col-md-12" style="margin-left:21px;">
-                                <span style="font-size: 40px; color:#f1c40f; font-weight: bold;">RECEIPT</span></div>
-                                <div class="col-md-12" style="margin-left:24px;">
-                                    Date:
-                                    <span class="underlined_text">
-                                        {{$invoice->item_code_date_created}}
-                                    </span>
-                                </div>
-                                <div class="col-md-12" style="margin-left:24px;">
-                                    Invoice #:
-                                    <span class="underlined_text_2">
-                                    @if($invoice->item_code_invoice_number == null)
-                                        
-                                        <center>{{$invoice->item_code_invoice_id}}</center>
-                                    @else
-                                        
-                                        <center>{{$invoice->item_code_invoice_number}}</center>
-                                    @endif    
-                                    </span>
-                                </div>
                         </td>
                     </tr>
                 </table>
             </div>
         </div>
         <div class="row clearfix">
-            <div class="col-md-12" style="border-top: 5px solid #1E5649;">
+            <div class="col-md-12">
                 <div class="tab-content codes_container">
                     <div id="all" class="tab-pane fade in active">
-                        <div class="form-group order-tags"></div>
+                        <!-- <div class="form-group order-tags"></div> -->
                         <div class="table-responsive">
+                            
                             <table class="table table-condensed">                        
-                                    <tr>
-                                        <td rowspan="4" class="bill-title col-md-2">V.I.P. Member</td>
+                                    <tr style="background-color: #82e0cb" >
+                                        <td rowspan="4" class=" col-md-4" style="font-size: 16px; vertical-align: middle; color: #1E5649"><b><center>V.I.P. Member</center></b></td>
                                     </tr>                        
                                     <tr>                                
-                                        <td>Name: {{name_format_from_customer_info($invoice)}}</td>
+                                        <td style="font-size: 10px;">Name: {{name_format_from_customer_info($invoice)}}</td>
                                     </tr>
                                     @if(isset($slot->slot_no))
                                     <tr>
-                                        <td>Slot: {{$slot->slot_no}}</td>
+                                        <td style="font-size: 10px;">Slot: {{$slot->slot_no}}</td>
                                     </tr>   
                                     @endif
                                     <tr>                                
-                                        <td>Email:{{$invoice->email}}</td>
+                                        <td style="font-size: 10px;">Email:{{$invoice->email}}</td>
                                     </tr>    
                                                      
                             </table>
@@ -81,20 +87,20 @@
                 </div>
             </div>
         </div>
-        <div class="row clearfix">
-            <div class="col-md-12" style="margin-top:25px;">
+        <div class="row clearfix" >
+            <div class="col-md-12" >
                 <table class="table table-condensed tadble">     
                     <thead>                   
-                            <tr>
-                                <th>Item Name</th>
-                                <th>Code</th>
-                                <th>Unit Price</th>
-                                <th>Quantity</th>
-                                <th>Original <br>Price</th>
-                                <th>V.I.P. <br>Price</th>
+                            <tr style="font-size: 10px;">
+                                <th>ITEM NAME</th>
+                                <th>CODE</th>
+                                <th>UNIT PRICE</th>
+                                <th>QUANTITY</th>
+                                <th>ORIGINAL PRICE</th>
+                                <th>VIP PRICE</th>
                             </tr>   
                     </thead>    
-                    <tbody>
+                    <tbody style="font-size: 10px;">
                     @if(isset($item_list))
                         @foreach($item_list as $key => $value)
                         <tr>
@@ -122,8 +128,8 @@
             </div>
         </div>
         <div class="row clearfix">
-            <div class="col-md-12" style="margin-top:25px;">
-                <table class="table table-condensed tadble">     
+            <div class="col-md-12" >
+                <table class="table table-condensed tadble" style="font-size: 10px;">     
                     <thead>                   
                             <tr class="hide">
                                 <th>Code ID</th>
@@ -157,12 +163,7 @@
                                     <tr>
                                         <td>Total Points (Repurchase): </td>
                                         <td>{{$sum_points}}</td>
-                                    </tr>    
-                                    <tr>
-                                        <td colspan="2">
-                                            <hr>
-                                        </td>
-                                    </tr>             
+                                    </tr>                
                                     @endif 
                                     <tr>
                                         <td>Subtotal</td>
@@ -179,7 +180,7 @@
 
                                     <tr>
                                         <td colspan="2">
-                                            <hr>
+                                        <br>
                                         </td>
                                     </tr>     
                                     <tr>
@@ -223,7 +224,6 @@
                                         <td colspan="2">
                                         <center>
                                             <br>
-                                            <br>
                                             ______________________________________<br>
                                             Authorized Signature over printed name
                                         </center>
@@ -234,11 +234,6 @@
                         </tr>                    
                     </tbody>                  
                 </table>
-            </div>
-        </div>
-        <div class="row clearfix">
-            <div class="col-md-12 text-center">
-                <p>-End-</p>
             </div>
         </div>
     </div>       

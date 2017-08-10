@@ -482,7 +482,7 @@ class MLM_ProductCodeController extends Member
         $data["subtotal"]        = $subtotal;
         $data["discount_amount"] = $discount_amount;
         $data["total"]           = $total;
-
+        $data['pdf'] = Request::input('pdf');
         if(Request::input('pdf') == 'true')
         {
             $ht = view('member.mlm_product_code.mlm_product_code_view_receipt',$data);   

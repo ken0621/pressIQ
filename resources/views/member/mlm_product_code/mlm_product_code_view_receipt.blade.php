@@ -11,15 +11,27 @@
                                  <div class="col-md-8">
                                     <div class="col-md-6">
                                     <!-- style="background-color: #24267A;" -->
-                                    @if($company_logo != null)
-                                         <div class="item" style="background-image: url('{{public_path().$company_logo}}'); background-size: contain; width: 100%;height: 75px; background-repeat: no-repeat; background-position: center;   ">
-                                             <!-- <center><img src="@if(Request::input('pdf') == 'true'){{public_path().$company_logo}} @else {{$company_logo}}@endif" alt="" style="object-fit: cover; width: 100%;height: 50px  "></center> -->
-                                         </div>
-                                    @else 
-                                        <div class="item" style="background-image: url('{{public_path().'/assets/philtech-official-logo.png'}}'); background-size: contain; width: 100%;height: 75px; background-repeat: no-repeat; background-position: center;    ">
-                                             <!-- <center><img src="@if(Request::input('pdf') == 'true'){{public_path().'/assets/philtech-official-logo.png'}} @else {{'/assets/philtech-official-logo.png'}}@endif" alt="" style="object-fit: cover; width: 100%; height: 50px; " ></center> -->
-                                         </div>
-                                    @endif    
+                                    @if($pdf == 'true')
+                                        @if($company_logo != null)
+                                             <div class="item" style="background-image: url('{{public_path().$company_logo}}'); background-size: contain; width: 100%;height: 75px; background-repeat: no-repeat; background-position: center;   ">
+                                                 <!-- <center><img src="@if(Request::input('pdf') == 'true'){{public_path().$company_logo}} @else {{$company_logo}}@endif" alt="" style="object-fit: cover; width: 100%;height: 50px  "></center> -->
+                                             </div>
+                                        @else 
+                                            <div class="item" style="background-image: url('{{public_path().'/assets/philtech-official-logo.png'}}'); background-size: contain; width: 100%;height: 75px; background-repeat: no-repeat; background-position: center;    ">
+                                                 <!-- <center><img src="@if(Request::input('pdf') == 'true'){{public_path().'/assets/philtech-official-logo.png'}} @else {{'/assets/philtech-official-logo.png'}}@endif" alt="" style="object-fit: cover; width: 100%; height: 50px; " ></center> -->
+                                             </div>
+                                        @endif 
+                                    @else
+                                        @if($company_logo != null)
+                                             <div class="item" style="background-image: url('{{$company_logo}}'); background-size: contain; width: 100%;height: 75px; background-repeat: no-repeat; background-position: center;   ">
+                                                 <!-- <center><img src="@if(Request::input('pdf') == 'true'){{public_path().$company_logo}} @else {{$company_logo}}@endif" alt="" style="object-fit: cover; width: 100%;height: 50px  "></center> -->
+                                             </div>
+                                        @else 
+                                            <div class="item" style="background-image: url('{{'/assets/philtech-official-logo.png'}}'); background-size: contain; width: 100%;height: 75px; background-repeat: no-repeat; background-position: center;    ">
+                                                 <!-- <center><img src="@if(Request::input('pdf') == 'true'){{public_path().'/assets/philtech-official-logo.png'}} @else {{'/assets/philtech-official-logo.png'}}@endif" alt="" style="object-fit: cover; width: 100%; height: 50px; " ></center> -->
+                                             </div>
+                                        @endif 
+                                    @endif   
                                     </div>
                                     <div class="col-md-6" style="font-size: 8px;">
                                         <div class="col-md-12" style="font-weight: bold;">{{$company_name}}</div>
@@ -66,7 +78,7 @@
                         <div class="table-responsive">
                             
                             <table class="table table-condensed">                        
-                                    <tr style="background-color: #82e0cb" >
+                                    <tr style="background-color: #ddece9" >
                                         <td rowspan="4" class=" col-md-4" style="font-size: 16px; vertical-align: middle; color: #1E5649"><b><center>V.I.P. Member</center></b></td>
                                     </tr>                        
                                     <tr>                                
@@ -152,8 +164,8 @@
                             }  ?>
                         @endforeach
                         <tr>
-                            <td style="vertical-align: top !important; padding: 0;" colspan="2">
-                                <textarea class="form-control" style="height:auto; resize: none;" disabled>
+                            <td style="vertical-align: top !important; padding: 0; background-color: #ddece9" colspan="2">
+                                <textarea class="form-control" style="height: 100%; resize: none;" disabled>
                                     {{$invoice->item_code_statement_memo}}
                                 </textarea>
                             </td>

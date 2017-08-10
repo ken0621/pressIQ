@@ -359,13 +359,7 @@
                         </ul>
                     </nav>
                 </div>
-                
             </div>
-        </div>
-        <!-- LIGHTBOX -->
-        <div class="lightbox-target" id="goofy">
-           <img src="/themes/{{ $shop_theme }}/img/gallery-sample2.png">
-           <a class="lightbox-close" href="#work"></a>
         </div>
     </div> 
     <!-- CONTENT -->
@@ -471,8 +465,6 @@
          });
 
     </script>
-
-
 
     <script type="text/javascript">
             

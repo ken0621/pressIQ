@@ -249,7 +249,15 @@
 
     // Disable scrolling of the page while open
     if (this.options.disableScrolling) {
-      $('body').addClass('lb-disable-scrolling');
+      /*$('body').addClass('lb-disable-scrolling');*/
+      /*$('body').on('mousewheel touchmove', function(e) {
+        e.preventDefault();
+      });*/
+      $('body').on('scroll mousewheel touchmove', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          return false;
+      });
     }
 
     this.changeImage(imageNumber);
@@ -500,7 +508,8 @@
       visibility: 'visible'
     });
     if (this.options.disableScrolling) {
-      $('body').removeClass('lb-disable-scrolling');
+      /*$('body').removeClass('lb-disable-scrolling');*/
+      $('body').off('scroll mousewheel touchmove');
     }
   };
 

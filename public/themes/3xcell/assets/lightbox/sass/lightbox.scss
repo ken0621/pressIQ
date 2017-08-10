@@ -4,9 +4,9 @@ body:after {
   display: none;
 }
 
-body.lb-disable-scrolling {
+/* body.lb-disable-scrolling {
   overflow: hidden;
-}
+} */
 
 .lightboxOverlay {
   position: absolute;
@@ -194,6 +194,8 @@ body.lb-disable-scrolling {
   position: absolute;
   top: -39px;
   right: 5px;
+  top: -30px;
+  right: 30px;
   display: block;
   /* float: right; */
   width: 30px;

@@ -105,7 +105,7 @@
               <div class="form-box-divider">
                  <div class="form-group">
                     <label>Product Details</label>
-                    <textarea class="mce form-control" name="eprod_details">{{ $product->eprod_details }}</textarea>
+                    <textarea class="{{$product->eprod_is_single == 1 ? 'tinymce' : 'mce'}} form-control" name="eprod_details">{{ $product->eprod_details }}</textarea>
                  </div>
               </div>
            </div>

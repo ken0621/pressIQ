@@ -199,4 +199,7 @@
     </div>
 </div>
 
+@section('script')
+<script src="/assets/external/tinymce/tinymce.min.js"></script>
 <script type="text/javascript" src="/assets/member/js/evariant_info.js"></script>
+@endsection

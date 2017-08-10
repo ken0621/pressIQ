@@ -228,7 +228,7 @@
 </script>
 <script type="text/javascript" src="/assets/member/js/eproduct.js"></script>
 <script type="text/javascript" src="/assets/external/selectize.js/dist/js/standalone/selectize.js"></script>
-<script type="text/javascript" src="/assets/member/js/tinymce.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.6.5/tinymce.min.js"></script>
 <script type="text/javascript">
 tinymce.init({ 
     selector:'.mce',

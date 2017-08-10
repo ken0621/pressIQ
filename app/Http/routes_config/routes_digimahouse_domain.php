@@ -38,6 +38,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/promo_view', 'Shop\ShopAboutController@promo_view'); //MARK FIGS
 	Route::get('/history', 'Shop\ShopAboutController@history'); //MARK FIGS
 
+	Route::get('/signin', 'Shop\ShopLoginController@signin'); //ROMMEL C.
 
 	Route::get('/blog', 'Shop\ShopBlogController@index');
 	Route::get('/blog/content', 'Shop\ShopBlogContentController@index');

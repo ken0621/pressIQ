@@ -1,0 +1,36 @@
+$open-sans: 'Open Sans', sans-serif;
+$light: 300;
+$regular: 400;
+$semi-bold: 600;
+$bold: 700;
+
+
+.signin-form-container {
+
+	font-family: $open-sans;
+	padding: 50px 0px 50px 0px;
+
+	.signin-form {
+		background-color: rgb(255, 255, 255);
+		box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
+		width: 100%;
+		height: 60%;
+		z-index: 4;
+
+		.signin-text-header {
+			
+			font-weight: $light;
+			font-size: 14px;
+		}
+
+		.signin-subtext-header {
+
+			font-weight: $light;
+			font-size: 12px;
+			border-bottom: 1px solid #
+		}
+	}
+}
+
+
+

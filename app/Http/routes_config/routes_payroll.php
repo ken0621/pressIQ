@@ -1,6 +1,8 @@
 <?php
 Route::group(array('prefix' => '/member/payroll'), function()
 {
+	Route::any('/payroll_api','Member\PayrollApiController@index');
+
 	Route::any('/reports/government_forms','Member\PayrollReportController@government_forms');
 	Route::any('/reports/government_forms_sss/{id}','Member\PayrollReportController@government_forms_sss');
 	Route::any('/reports/government_forms_philhealth/{id}','Member\PayrollReportController@government_forms_philhealth');
@@ -492,6 +494,9 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/generate_bank','Member\PayrollController@generate_bank');
 	Route::any('/modal_generate_bank/{id}','Member\PayrollController@modal_generate_bank');
 	/* GENERATE BANK UPLOAD END */
+
+	Route::any('/banking/{period_company_id}','Member\PayrollBankingController@index');
+	Route::any('/banking/{period_company_id}/download','Member\PayrollBankingController@download');
 
 
 	/* SHIFT START */

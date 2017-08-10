@@ -19,7 +19,7 @@
     <div class="form-group col-md-12" style="margin-top: 15px;">
         <button class="btn btn-primary pull-right" onclick="action_load_link_to_modal('/member/mlm/developer/create_slot')"><i class="fa fa-plus"></i> CREATE TEST SLOT</button>
         <button class="btn btn-def-white btn-custom-white pull-right" style="margin-right: 10px;"><i class="fa fa-arrow-circle-up"></i> IMPORT SLOTS</button>
-        <button class="btn btn-def-white btn-custom-white pull-right" style="margin-right: 10px;"><i class="fa fa-recycle"></i> RESET MLM DATA</button>
+        <a href="/member/mlm/developer/reset" onclick="return (prompt('WARNING! All MLM SLOT and CUSTOMER related to MLM will be deleted. Please write RESET if you are sure.') == 'RESET' ? true : false)"><button class="btn btn-def-white btn-custom-white pull-right" style="margin-right: 10px;"><i class="fa fa-recycle"></i> RESET MLM DATA</button></a>
     </div>
     <div class="form-group panel-body employee-container">
         <div id="all" class="tab-pane fade in active">

@@ -1276,6 +1276,8 @@ class PayrollController extends Member
 
      public function modal_employee_view($id)
      {
+
+
           $data["source"]               = Request::input("source_page");
           // $data['_company']               = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
 
@@ -1300,12 +1302,15 @@ class PayrollController extends Member
           $data['_deduction']           = Self::check_if_deduction_selected($id);
           $data['_leave']               = Self::check_if_leave_selected($id);
 
-          $data['_branch']    = Tbl_payroll_branch_location::getdata(Self::shop_id())->orderBy('branch_location_name')->get();
+          $data['_branch']              = Tbl_payroll_branch_location::getdata(Self::shop_id())->orderBy('branch_location_name')->get();
 
           $_journal_tag                 = Tbl_payroll_journal_tag::gettag(Self::shop_id())->orderBy('tbl_chart_of_account.account_name')->get()->toArray();
           $data['_shift']               = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->get();
           
           $data['_journal_tag']         = array();
+
+          $data['access_salary_detail'] = $access = Utilities::checkAccess('payroll-timekeeping','salary_detail');
+
           
           foreach($_journal_tag as $tag)
           {
@@ -1946,7 +1951,6 @@ class PayrollController extends Member
 
           foreach($_access as $access)
           {
-
                if(Utilities::checkAccess('payroll-configuration',str_replace(' ', '_', $access['access_name'])) == 1)
                {
                     array_push($link, $access);

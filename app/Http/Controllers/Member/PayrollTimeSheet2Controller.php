@@ -29,8 +29,9 @@ use App\Models\Tbl_payroll_adjustment;
 use App\Globals\Payroll2;
 use App\Globals\Payroll;
 use App\Globals\PayrollLeave;
-use App\Models\Tbl_payroll_company;
 use App\Globals\Utilities;
+use App\Models\Tbl_payroll_company;
+
 use DB;
 
 class PayrollTimeSheet2Controller extends Member
@@ -57,6 +58,7 @@ class PayrollTimeSheet2Controller extends Member
 	}
 	public function index_table($period_id)
 	{
+
 		$search_value 		= Request::input("search");
 		$mode 				= Request::input("mode") == "pending" ? 0 : 1;
 		$branch 			= Request::input("branch");
@@ -80,15 +82,15 @@ class PayrollTimeSheet2Controller extends Member
 	}
 	public function timesheet($period_id, $employee_id)
 	{
-		
-		$data["page"]				= "Employee Timesheet";
-		$data["employee_id"]		= $this->$employee_id = $employee_id;
-		$data["employee_info"]		= $this->db_get_employee_information($employee_id); 
-		$data["company_period"] 	= $this->db_get_company_period_information($period_id);
-		$data["show_period_start"]	= date("F d, Y", strtotime($data["company_period"]->payroll_period_start));
-		$data["show_period_end"]	= date("F d, Y", strtotime($data["company_period"]->payroll_period_end));
-		$data["_timesheet"] 		= Payroll2::timesheet_info($data["company_period"], $employee_id);
-		
+		$data["page"]					= "Employee Timesheet";
+		$data["employee_id"]			= $this->$employee_id = $employee_id;
+		$data["employee_info"]			= $this->db_get_employee_information($employee_id); 
+		$data["company_period"] 		= $this->db_get_company_period_information($period_id);
+		$data["show_period_start"]		= date("F d, Y", strtotime($data["company_period"]->payroll_period_start));
+		$data["show_period_end"]		= date("F d, Y", strtotime($data["company_period"]->payroll_period_end));
+		$data["_timesheet"] 			= Payroll2::timesheet_info($data["company_period"], $employee_id);
+		$data["access_salary_rates"]	= $access = Utilities::checkAccess('payroll-timekeeping','salary_rates');
+
 		$check_approved = Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_id)->first();
 		$data["time_keeping_approved"] = $check_approved ? true : false;
 		
@@ -96,7 +98,6 @@ class PayrollTimeSheet2Controller extends Member
 		$employee_contract = $this->db_get_current_employee_contract($employee_id, $data["company_period"]->payroll_period_start);
 
 		$data["compute_type"] = $employee_contract->payroll_group_salary_computation;
-
 
 		$data["period_id"] = $period_id;
 
@@ -687,7 +688,12 @@ class PayrollTimeSheet2Controller extends Member
 		$data["timesheet_info"] = $timesheet_info = Payroll2::timesheet_process_daily_info($timesheet_db->payroll_employee_id, $timesheet_db->payroll_time_date, $timesheet_db, $data["period_company_id"]);
 		$employee_contract		= $this->db_get_current_employee_contract($timesheet_db->payroll_employee_id, $timesheet_db->payroll_time_date);
 		$data["compute_type"] = $employee_contract->payroll_group_salary_computation;
+
+		$data["access_salary_rate"] = Utilities::checkAccess('payroll-timekeeping','salary_rates');
+
+
 		$data["compute_html"] = view('member.payroll2.employee_day_summary_compute', $data);
+	
 		
 		/* COMPUTATION FOR CUTOFF */
 		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($data["period_company_id"])->first();
@@ -780,6 +786,9 @@ class PayrollTimeSheet2Controller extends Member
 		$data["timesheet_info"] = $timesheet_info = Payroll2::timesheet_process_daily_info($timesheet_db->payroll_employee_id, $timesheet_db->payroll_time_date, $timesheet_db, $data["period_company_id"]);
 		$employee_contract = $this->db_get_current_employee_contract($timesheet_db->payroll_employee_id, $timesheet_db->payroll_time_date);
 		$data["compute_type"] = $employee_contract->payroll_group_salary_computation;
+
+		$data["access_salary_rate"] = Utilities::checkAccess('payroll-timekeeping','salary_rates');
+
 		return view('member.payroll2.employee_day_summary_compute', $data);
 	}
 	public function day_summary_change()
@@ -864,8 +873,8 @@ class PayrollTimeSheet2Controller extends Member
 		$data["employee_info"] = $this->db_get_employee_information($employee_id); 
 		$check_approved = Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_company_id)->first();
 		$data["time_keeping_approved"] = $check_approved ? true : false;
-		$data["employee_salary"]=$this->get_salary($employee_id,$data["start_date"]);
-
+		$data["employee_salary"]    =  $this->get_salary($employee_id,$data["start_date"]);
+		$data['access_salary_rate'] =  Utilities::checkAccess('payroll-timekeeping','salary_rates');
 		switch ($computation_type)
 		{
 			case "Daily Rate":

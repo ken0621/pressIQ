@@ -20,7 +20,7 @@
                             <th class="text-center">Remark / Activity</th>
                             <th class="text-center" width="80px;">Shift</i></th>
                             <th class="text-center" width="150px;">Source</th>
-                            <th width="150px" class="text-center">Rate</th>
+                            <th width="150px" class="text-center">{{ $access_salary_rates == 1 ? 'Rates':'Time Spent'}}</th>
                         </tr>
                     </thead>
                     <tbody>

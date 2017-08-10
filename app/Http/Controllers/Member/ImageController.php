@@ -65,7 +65,16 @@ class ImageController extends Member
 	public function load_media_library()
 	{
 		$data['_image'] = Tbl_image::where("image_shop", $this->user_info->shop_id)->get();
-
+		$get_only_exist = [];
+		foreach ($data['_image'] as $key => $value) 
+		{
+			if(File::exists(public_path().$value->image_path))
+			{
+				$get_only_exist[$key] = $value;
+			}
+			
+		}
+		$data['_image'] = $get_only_exist;
 		return view('member.modal.load_media_library', $data);
 	}
 }

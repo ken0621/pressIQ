@@ -799,7 +799,7 @@ class MemberController extends Controller
         else
         {
             return $card;
-        }   
+        }
     }
 
     public function card_all($color, $name,  $membership_code)
@@ -818,5 +818,10 @@ class MemberController extends Controller
         $data['membership_code'] = Request::input("membership_code");
 
         return view("card", $data);
+    }
+    public function message()
+    {
+        $data["message"] = Request::input("message");
+        return view("member.message", $data);
     }
 }

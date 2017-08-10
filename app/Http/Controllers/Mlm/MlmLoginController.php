@@ -20,6 +20,8 @@ use App\Models\Tbl_mlm_plan;
 use App\Models\Tbl_mlm_binary_setttings;
 use App\Models\Tbl_mlm_lead;
 use App\Models\Tbl_mlm_slot;
+
+
 class MlmLoginController extends Controller
 {
 	public static $shop_id;

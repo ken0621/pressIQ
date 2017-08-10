@@ -15,11 +15,11 @@
 			<tbody>
 				@foreach($_active as $active)
 				<tr>
-					<td><input type="hidden" name="employee_id[]" value="{{$active->payroll_employee_allowance_id}}"> 
+					<td><input type="hidden" name="employee_id[]" value="{{$active->payroll_employee_id}}"> 
 						{{$active->payroll_employee_title_name.' '.$active->payroll_employee_first_name.' '.$active->payroll_employee_middle_name.' '.$active->payroll_employee_last_name.' '.$active->payroll_employee_suffix_name}}
 					</td>
 					<td>	
-						<input class="form-control input-sm number-input" type="text" name="allowance_amount[{{$active->payroll_employee_allowance_id}}]" value="{{number_format($active->payroll_employee_allowance_amount,2)}}">
+						<input class="form-control input-sm number-input" type="text" name="allowance_amount[{{$active->payroll_employee_id}}]" value="{{number_format($active->payroll_employee_allowance_amount,2)}}">
 							
 					</td>
 					<td class="text-center">

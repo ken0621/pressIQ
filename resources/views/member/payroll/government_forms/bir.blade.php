@@ -280,7 +280,7 @@
 																			<div class="label" style="text-align: left;">Telephone Number</div>
 																		</div>
 																		<div class="input-value" style="margin-left: 15px;">
-																			<div class="text" style="width: 150px;"></div>
+																			<div class="text" style="width: 150px;">09971276494</div>
 																		</div>
 																	</div>
 																</td>
@@ -294,8 +294,274 @@
 													<div class="input-container" style="border-top: 2px solid #000; padding-left: 1px; padding-right: 1px; width: 100%; display: block;">
 														<div style="height: 13px;">
 															<div class="number">9</div>
-															<div class="label" style="text-align: left;">Foreign Address</div>
-															<div class="number" style="margin-left: 181px;">6E</div>
+															<div class="label" style="text-align: left;">Exemption Status</div>
+														</div>
+														<div style="text-align: center;">
+															<div class="input-value" style="height: 20px; vertical-align: middle;">
+																<div class="text" style="width: 25px; text-align: center; margin-top: 1px;">X</div>
+															</div>
+															<span style="font-size: 10px; vertical-align: middle; padding-left: 7.5px;">Single</span>
+															<div class="input-value" style="height: 20px; vertical-align: middle; margin-left: 50px;">
+																<div class="text" style="width: 25px; text-align: center; margin-top: 1px;"></div>
+															</div>
+															<span style="font-size: 10px; vertical-align: middle; padding-left: 7.5px;">Married</span>
+														</div>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td style="border-top: 0;">
+													<div class="input-container" style="padding-left: 1px; padding-right: 1px; width: 100%; display: block;">
+														<div style="height: 13px;">
+															<div class="number">9A</div>
+															<div class="label" style="text-align: left;">Is the wife claiming the additional exemption for qualified dependent children?</div>
+														</div>
+														<div style="text-align: center;">
+															<div class="input-value" style="height: 20px; vertical-align: middle;">
+																<div class="text" style="width: 25px; text-align: center; margin-top: 1px;">X</div>
+															</div>
+															<span style="font-size: 10px; vertical-align: middle; padding-left: 7.5px;">Yes</span>
+															<div class="input-value" style="height: 20px; vertical-align: middle; margin-left: 50px;">
+																<div class="text" style="width: 25px; text-align: center; margin-top: 1px;"></div>
+															</div>
+															<span style="font-size: 10px; vertical-align: middle; padding-left: 7.5px;">No</span>
+														</div>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td style="border-top: 0;">
+													<table>
+														<tbody>
+															<tr>
+																<td style="border-right: 0;">
+																	<div class="input-container">
+																		<div style="height: 13px;">
+																			<div class="number">10</div>
+																			<div class="label" style="text-align: left;">Name of Qualified Dependent Children</div>
+																		</div>
+																		<div>
+																			<div class="input-value" style="margin-left: 15px; margin-bottom: -1px;">
+																				<div class="text" style="width: 150px;">Luke Glenn Jordan</div>
+																			</div>
+																		</div>
+																		<div>
+																			<div class="input-value" style="margin: 0; margin-left: 15px; margin-bottom: -1px;">
+																				<div class="text" style="width: 150px;">Luke Glenn Jordan</div>
+																			</div>
+																		</div>
+																		<div>
+																			<div class="input-value" style="margin: 0; margin-left: 15px; margin-bottom: -1px;">
+																				<div class="text" style="width: 150px;">Luke Glenn Jordan</div>
+																			</div>
+																		</div>
+																		<div>
+																			<div class="input-value" style="margin: 0; margin-left: 15px;">
+																				<div class="text" style="width: 150px;">Luke Glenn Jordan</div>
+																			</div>
+																		</div>
+																	</div>
+																</td>
+																<td>
+																	<div class="input-container">
+																		<div style="height: 13px;">
+																			<div class="number">11</div>
+																			<div class="label" style="text-align: left;">Date of Birth (MM/DD/YYYY)</div>
+																		</div>
+																		<div class="input-value" style="margin-left: 15px; font-size: 10px; ">
+																			<div class="text">0</div>
+																			<div class="divide"></div>
+																			<div class="text">8</div>
+																			<div class="divider"></div>
+																			<div class="text">2</div>
+																			<div class="divide"></div>
+																			<div class="text">5</div>
+																			<div class="divider"></div>
+																			<div class="text">0</div>
+																			<div class="divide"></div>
+																			<div class="text">8</div>
+																			<div class="divide"></div>
+																			<div class="text">0</div>
+																			<div class="divide"></div>
+																			<div class="text">8</div>
+																		</div>
+																		<div class="input-value" style="margin: 0; margin-left: 15px; font-size: 10px; margin-bottom: -1px;">
+																			<div class="text">0</div>
+																			<div class="divide"></div>
+																			<div class="text">8</div>
+																			<div class="divider"></div>
+																			<div class="text">2</div>
+																			<div class="divide"></div>
+																			<div class="text">5</div>
+																			<div class="divider"></div>
+																			<div class="text">0</div>
+																			<div class="divide"></div>
+																			<div class="text">8</div>
+																			<div class="divide"></div>
+																			<div class="text">0</div>
+																			<div class="divide"></div>
+																			<div class="text">8</div>
+																		</div>
+																		<div class="input-value" style="margin-left: 15px; font-size: 10px;">
+																			<div class="text">0</div>
+																			<div class="divide"></div>
+																			<div class="text">8</div>
+																			<div class="divider"></div>
+																			<div class="text">2</div>
+																			<div class="divide"></div>
+																			<div class="text">5</div>
+																			<div class="divider"></div>
+																			<div class="text">0</div>
+																			<div class="divide"></div>
+																			<div class="text">8</div>
+																			<div class="divide"></div>
+																			<div class="text">0</div>
+																			<div class="divide"></div>
+																			<div class="text">8</div>
+																		</div>
+																		<div class="input-value" style="margin-left: 15px; font-size: 10px;">
+																			<div class="text">0</div>
+																			<div class="divide"></div>
+																			<div class="text">8</div>
+																			<div class="divider"></div>
+																			<div class="text">2</div>
+																			<div class="divide"></div>
+																			<div class="text">5</div>
+																			<div class="divider"></div>
+																			<div class="text">0</div>
+																			<div class="divide"></div>
+																			<div class="text">8</div>
+																			<div class="divide"></div>
+																			<div class="text">0</div>
+																			<div class="divide"></div>
+																			<div class="text">8</div>
+																		</div>
+																	</div>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<table>
+														<tbody>
+															<td style="border: 0; width: 55%;">
+																<div class="number">12</div>
+																<div class="label" style="text-align: left;">Statutory Minimum Wage rate per day</div>
+															</td>
+															<td style="border: 0; width: 45%;">
+																<div class="number">12</div>
+																<div class="input-value" style="margin-left: 5px;">
+																	<div class="text" style="width: 135px;"></div>
+																</div>
+															</td>
+														</tbody>
+													</table>
+												</td>
+											</tr>
+											<tr>
+												<td style="border: 0;">
+													<table>
+														<tbody>
+															<td style="border: 0; width: 55%;">
+																<div class="number">13</div>
+																<div class="label" style="text-align: left;">Statutory Minimum Wage rate per month</div>
+															</td>
+															<td style="border: 0; width: 45%;">
+																<div class="number">13</div>
+																<div class="input-value" style="margin-left: 5px;">
+																	<div class="text" style="width: 135px;"></div>
+																</div>
+															</td>
+														</tbody>
+													</table>
+												</td>
+											</tr>
+											<tr>
+												<td style="border: 0;">
+													<div>
+														<div class="number">14</div>
+														<div class="input-value" style="height: 20px; vertical-align: top; margin-left: 7.5px;">
+															<div class="text" style="width: 25px; text-align: center; margin-top: 1px;">X</div>
+														</div>
+														<span style="font-size: 10px; vertical-align: top; padding-left: 7.5px; display: inline-block;">Minimum Wage Earner whose compensation is exempt from</br>withholding tax and not subject to income tax</span>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td class="head-divide" style="background-color: #fff; border-bottom: 2.5px solid #000;">
+													<div class="head-label">Part II</div>
+													<div class="head-value">Employer Information (Present)</div>
+												</td>
+											</tr>
+											<tr>
+												<td style="border-top: 0;">
+													<div class="input-container">
+														<div class="number">15</div>
+														<div class="label" style="text-align: left;">Tax Payer</br> Identification No.</div>
+														<div class="arrow">
+															<i class="fa fa-caret-right" aria-hidden="true"></i>
+														</div>
+														<div style="display: inline-block; vertical-align: top; font-size: 10px;">
+															<div class="input-value">
+																<div class="text">1</div>
+																<div class="divide"></div>
+																<div class="text">2</div>
+																<div class="divide"></div>
+																<div class="text">3</div>
+															</div>
+															<div class="input-value">
+																<div class="text">4</div>
+																<div class="divide"></div>
+																<div class="text">5</div>
+																<div class="divide"></div>
+																<div class="text">6</div>
+															</div>
+															<div class="input-value">
+																<div class="text">7</div>
+																<div class="divide"></div>
+																<div class="text">8</div>
+																<div class="divide"></div>
+																<div class="text">9</div>
+															</div>
+															<div class="input-value">
+																<div class="text">1</div>
+																<div class="divide"></div>
+																<div class="text">2</div>
+																<div class="divide"></div>
+																<div class="text">3</div>
+																<div class="divide"></div>
+																<div class="text">4</div>
+															</div>
+														</div>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td style="border-top: 0;">
+													<div class="input-container" style="border-top: 2px solid #000; padding-left: 1px; padding-right: 1px; width: 100%; display: block;">
+														<div style="height: 13px;">
+															<div class="number">16</div>
+															<div class="label" style="text-align: left;">Employer's Name</div>
+														</div>
+														<div class="arrow">
+															<i class="fa fa-caret-right" aria-hidden="true"></i>
+														</div>
+														<div class="input-value">
+															<div class="text" style="width: 325px;">Ichika Takatsuki</div>
+														</div>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td style="border-top: 0;">
+													<div class="input-container" style="border-top: 2px solid #000; padding-left: 1px; padding-right: 1px; width: 100%; display: block;">
+														<div style="height: 13px;">
+															<div class="number">17</div>
+															<div class="label" style="text-align: left;">Registered Address</div>
+															<div class="number" style="margin-left: 175px;">17A</div>
 															<div class="label" style="text-align: left;">Zip Code</div>
 														</div>
 														<div class="arrow">
@@ -314,6 +580,134 @@
 															<div class="text">4</div>
 														</div>
 													</div>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<div class="input-value" style="height: 15px; vertical-align: top; margin-left: 50px;">
+														<div class="text" style="width: 10px; text-align: center; margin-top: 2px; font-size: 10px; line-height: 10px;">X</div>
+													</div>
+													<span style="display: inline-block; vertical-align: top; font-size: 12px; margin-top: 1px;">Main Employer</span>
+													<div class="input-value" style="height: 15px; vertical-align: top; margin-left: 30px;">
+														<div class="text" style="width: 10px; text-align: center; margin-top: 2px; font-size: 10px; line-height: 10px;">X</div>
+													</div>
+													<span style="display: inline-block; vertical-align: top; font-size: 12px; margin-top: 1px;">Secondary Employer</span>
+												</td>
+											</tr>
+											<tr>
+												<td class="head-divide" style="background-color: #fff; border-bottom: 2.5px solid #000;">
+													<div class="head-label">Part III</div>
+													<div class="head-value">Employer Information (Previous)</div>
+												</td>
+											</tr>
+											<tr>
+												<td style="border-top: 0;">
+													<div class="input-container">
+														<div class="number">18</div>
+														<div class="label" style="text-align: left;">Tax Payer</br> Identification No.</div>
+														<div class="arrow">
+															<i class="fa fa-caret-right" aria-hidden="true"></i>
+														</div>
+														<div style="display: inline-block; vertical-align: top; font-size: 10px;">
+															<div class="input-value">
+																<div class="text">1</div>
+																<div class="divide"></div>
+																<div class="text">2</div>
+																<div class="divide"></div>
+																<div class="text">3</div>
+															</div>
+															<div class="input-value">
+																<div class="text">4</div>
+																<div class="divide"></div>
+																<div class="text">5</div>
+																<div class="divide"></div>
+																<div class="text">6</div>
+															</div>
+															<div class="input-value">
+																<div class="text">7</div>
+																<div class="divide"></div>
+																<div class="text">8</div>
+																<div class="divide"></div>
+																<div class="text">9</div>
+															</div>
+															<div class="input-value">
+																<div class="text">1</div>
+																<div class="divide"></div>
+																<div class="text">2</div>
+																<div class="divide"></div>
+																<div class="text">3</div>
+																<div class="divide"></div>
+																<div class="text">4</div>
+															</div>
+														</div>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td style="border-top: 0;">
+													<div class="input-container" style="border-top: 2px solid #000; padding-left: 1px; padding-right: 1px; width: 100%; display: block;">
+														<div style="height: 13px;">
+															<div class="number">19</div>
+															<div class="label" style="text-align: left;">Employer's Name</div>
+														</div>
+														<div class="arrow">
+															<i class="fa fa-caret-right" aria-hidden="true"></i>
+														</div>
+														<div class="input-value">
+															<div class="text" style="width: 325px;">Ichika Takatsuki</div>
+														</div>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td style="border-top: 0;">
+													<div class="input-container" style="border-top: 2px solid #000; padding-left: 1px; padding-right: 1px; width: 100%; display: block;">
+														<div style="height: 13px;">
+															<div class="number">20</div>
+															<div class="label" style="text-align: left;">Registered Address</div>
+															<div class="number" style="margin-left: 175px;">20A</div>
+															<div class="label" style="text-align: left;">Zip Code</div>
+														</div>
+														<div class="arrow">
+															<i class="fa fa-caret-right" aria-hidden="true"></i>
+														</div>
+														<div class="input-value">
+															<div class="text" style="width: 240px;">Japan dun sa bandang Akihabara</div>
+														</div>
+														<div class="input-value">
+															<div class="text">1</div>
+															<div class="divide"></div>
+															<div class="text">2</div>
+															<div class="divide"></div>
+															<div class="text">3</div>
+															<div class="divide"></div>
+															<div class="text">4</div>
+														</div>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td class="head-divide" style="background-color: #fff; border-bottom: 2.5px solid #000;">
+													<div class="head-label">Part IV-A</div>
+													<div class="head-value">Summary</div>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<table>
+														<tr>
+															<td style="border: 0;">
+																<div class="number">21</div>
+																<div class="label" style="text-align: left;">Gross Compensation Income from</br>Present Employer (Item 41 plus Item 55)</div>
+															</td>
+															<td style="border: 0;">
+																<div class="number">21</div>
+																<div class="input-value" style="margin-left: 5px;">
+																	<div class="text" style="width: 150px;"></div>
+																</div>
+															</td>
+														</tr>
+													</table>
 												</td>
 											</tr>
 										</tbody>

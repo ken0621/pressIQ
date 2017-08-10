@@ -348,8 +348,7 @@ class Payroll2
 		$return->time_compute_mode	= "regular";
 		
 
-		$access = Utilities::checkAccess('payroll-timekeeping','salary_rates');
-		
+
 
 		if(count($_shift) > 0)
 		{
@@ -489,14 +488,20 @@ class Payroll2
 
 		$return->compute = Payroll2::compute_income_day_pay($return->time_output, $daily_rate, $employee_contract->payroll_group_id, $cola, $compute_type, $return->time_compute_mode);
 
-		if($access == 1) 
+		if($payroll_period_company_id != 0)
 		{
-			$return->value_html = Payroll2::timesheet_daily_income_to_string($return->compute_type, $payroll_time_sheet_id, $return->compute, $return->shift_approved, $payroll_period_company_id, $time_keeping_approved);
+			$access = Utilities::checkAccess('payroll-timekeeping','salary_rates');
+			
+			if($access == 1) 
+			{
+				$return->value_html = Payroll2::timesheet_daily_income_to_string($return->compute_type, $payroll_time_sheet_id, $return->compute, $return->shift_approved, $payroll_period_company_id, $time_keeping_approved);
+			}
+			else
+			{
+				$return->value_html = Payroll2::timesheet_daily_target_hours_to_string($return->compute_type, $payroll_time_sheet_id, $return->compute, $return->time_output, $return->shift_approved, $payroll_period_company_id, $time_keeping_approved);
+			}
 		}
-		else
-		{
-			$return->value_html = Payroll2::timesheet_daily_target_hours_to_string($return->compute_type, $payroll_time_sheet_id, $return->compute, $return->time_output, $return->shift_approved, $payroll_period_company_id, $time_keeping_approved);
-		}
+
 		return $return;
 
 	}

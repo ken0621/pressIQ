@@ -456,8 +456,8 @@ class MerchantController extends Member
 	}
 	public function commission_collectables($user_id, $status ='collectable', $get ='get')
 	{
-		$item_code_payment_type[1] = 1;
-		$item_code_payment_type[2] = 2;
+		$item_code_payment_type[1] = 1; // cash
+		$item_code_payment_type[2] = 2; // GC
 		if($status == 'collectable')
 		{
 			$collectable = Tbl_item_code_invoice::where('user_id', $user_id)->where('merchant_markup_value', '!=', 0)->where('merchant_commission_id', 0)->whereIn('item_code_payment_type', $item_code_payment_type);

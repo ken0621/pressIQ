@@ -118,7 +118,6 @@ class MLM_SlotController extends Member
     }
     public function index()
     {      
-        // return Reward::generate_membership_code(313, null);
         $access = Utilities::checkAccess('mlm-slots', 'access_page');
         if($access == 0)
         {
@@ -200,6 +199,7 @@ class MLM_SlotController extends Member
             ->where('marketing_plan_enable', 1)
             ->where('marketing_plan_trigger', 'Slot Creation')
             ->first();
+            
         $data["code_selected"]  = $code->paginate(10);
         // dd($data);
         return view('member.mlm_slot.mlm_slot_ajax', $data);

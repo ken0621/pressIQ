@@ -238,7 +238,10 @@ class MerchantewalletController extends Member
 	}
 	public function get_all_payable($user_id, $status ='payable', $get ='get')
 	{
-		$payable = Tbl_item_code_invoice::where('item_code_payment_type', 3)->where('user_id', $user_id);
+		$item_code_payment_type[3] = 3; // E-wallet
+		$item_code_payment_type[4] = 4; // E-money
+
+		$payable = Tbl_item_code_invoice::whereIn('item_code_payment_type', $item_code_payment_type)->where('user_id', $user_id);
 
 		if($status == 'payable')
 		{

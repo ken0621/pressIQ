@@ -33,7 +33,16 @@
 		               <div>{!! $product_variant['evariant_description'] !!}</div>
 		            </div>
 		            <div class="price-container">
-		               <div id="single-order-price" class="single-order-price">&#8369;&nbsp;{{ number_format($product_variant['evariant_price'], 2) }}</div>
+		               @if($product_variant['discounted'] == "true")
+		              <div class="row clearfix">
+		                  <div class="col-sm-6">
+		                      <div  id="single-order-price" class="single-order-price" style="color:red;font-size:17px;text-decoration: line-through;"><span style="color:gray;">PHP {{ number_format($product_variant['evariant_price'], 2) }}</span></div>                    
+		                  </div>
+		              </div>
+		              <div id="single-order-price" class="single-order-price">PHP {{ number_format($product_variant['discounted_price'], 2) }}</div>
+		              @else
+		              <div id="single-order-price" class="single-order-price">PHP {{ number_format($product_variant['evariant_price'], 2) }}</div>
+		              @endif
 		               @if($product_variant['item_type_id'] != 2)
 		                <div class="single-order-availability" style="text-transform: capitalize;">{{ $product_variant['inventory_status'] }}</div>
 		               @endif

@@ -10,9 +10,13 @@ use Validator;
 use Carbon\Carbon;
 use Crypt;
 use Session;
+use DB;
 use App\Globals\AuditTrail;
+
+use App\Globals\Settings;
 class MemberLoginController extends Controller
 {
+
 	public function logout()
 	{
 		Session::forget('user_email');
@@ -22,6 +26,14 @@ class MemberLoginController extends Controller
 	}
 	public function login()
 	{
+
+		$shop_id = Settings::get_shop_id_url();
+		$data['shop_id'] = $shop_id;
+		if($shop_id != null)
+		{
+			$data['shop_info'] = Tbl_shop::where('shop_id', $shop_id)->first();
+			$data['company_logo']    = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'receipt_logo')->pluck('value');
+		}
 		Session::forget('product_info');
 		// return Crypt::decrypt('eyJpdiI6InJJUjR1NFlvVURmWURPajBMdnpldXc9PSIsInZhbHVlIjoidGJPRTRmRHZkTkNKZENSU2lWZ3p2UT09IiwibWFjIjoiY2VhNTU2OTMzNTE0OTE0YzMzOGIyMzE5Y2VjY2NhZDgzMDcwNmI5ZTgyZjNmYTUwOWEwZTQ0MDA4M2ZkMGMxOCJ9');
 		if(Request::isMethod("post"))
@@ -57,7 +69,8 @@ class MemberLoginController extends Controller
 		}
 		else
 		{
-			return view('login.member.member_login');
+
+			return view('login.member.member_login', $data);
 		}
 		
 	}

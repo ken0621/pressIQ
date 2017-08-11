@@ -579,7 +579,7 @@ class EcommerceProductController extends Member
 		$data["_variant"]	= $product_data["_variant"];
 		$data["_item"]  	= Item::get_all_item();
 		$data["_column"]	= $product_data["_column"];
-
+		
 		return view('member.ecommerce_product.ecom_product_edit_variant', $data);
 	}
 

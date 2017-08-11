@@ -867,7 +867,7 @@ class PayrollTimeSheet2Controller extends Member
 			$data = $this->compute_whole_cutoff($period_company_id, $employee_id);
 			$data["computation_type"] = $computation_type = $group->payroll_group_salary_computation;
 		}
-		
+		//dd($this->compute_whole_cutoff($period_company_id, $employee_id));
 		$data["employee_salary"] = tbl_payroll_employee_salary::where("payroll_employee_id", $employee_id);
 		$data["employee_id"] = $employee_id;
 		$data["employee_info"] = $this->db_get_employee_information($employee_id); 

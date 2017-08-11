@@ -1,0 +1,329 @@
+.sss-padding-format
+{
+    margin-left: 24px;
+    margin-right: 24px;
+    padding-top: 24px;
+    padding-bottom: 24px;
+    .form-mainborder
+    {
+    	line-height: 1;
+    	border: 3px solid #333;
+    	margin: 3px;
+        font-family: 'Source Sans',sans-serif;
+        height: 1068px;
+    	.sss-first-layer
+    	{
+    		border-bottom: 1px solid #333;
+    		.sss-header-section
+    		{
+    			display: inline-block;
+    		    width: 48%;
+    		    height: auto;
+    		    border-right: 1px solid #333;
+    		    .sss-logo-container
+    		    {
+    		    	width: 30%;
+        			display: inline-block;
+        			.sss-logo-holder
+        			{
+        				display: table;
+        				margin-top: 5px;
+        				margin-left: 2px;
+        				margin-bottom: 5px;
+                        width: 67%;
+                        .img-responsive
+                        {
+                            display: block;
+                            max-width: 100%;
+                            height: auto;
+                        }
+        			}
+        			.sss-serialnumber-container
+        			{
+        				display: -webkit-inline-box;
+        				margin-left: 3px;
+        				.sss-serialnumber
+        				{
+        					font-size: 11px;
+                            margin: 0px;
+        				}
+        				.sss-number
+        				{
+        					font-size: 9px;
+        					margin-left: 5px;
+        					margin-top: 2px;
+        				}
+        			}
+    		    }
+    		    .sss-title-container
+    		    {
+    		    	width: 61%;
+        			display: inline-block;
+        			height: auto;
+        			margin-top: 5px;
+                    margin-right: 30px;
+        			.sss-rph-title
+        			{
+        			    text-align: center;
+        				margin: 0px;
+        				font-size: 12px;
+        			}
+        			.sss-title
+        			{
+        				text-align: center;
+       					margin: 0px;
+       				    font-size: 13px;
+                        letter-spacing: 1px;
+        				font-weight: 700;
+        			}
+        			.sss-form-title
+        			{
+        				text-align: center;
+       					margin: 0px;
+       					font-size: 19px;
+        				font-weight: 700;
+        			}
+        			.sss-note
+        			{
+        				text-align: center;
+       					margin: 0px;
+       				    margin-top: 7px;
+        			    font-size: 6px;
+                        letter-spacing: 1px;
+        			}
+    		    }
+    		    .sss-direction-container
+    		    {
+    		    	display: inline-block;
+                    margin-bottom: 10px;
+    		    	.sss-directions
+    		    	{
+    		    		text-align: justify;
+                        font-size: 8px;
+                        letter-spacing: 1px;
+                        margin-right: 2px;
+                        margin-left: 2px;
+    		    		.sss-bold-text
+    		    		{
+    		    			color: #333;
+        					font-weight: 700;
+    		    		}
+    		    		.sss-bold-text:hover
+    		    		{
+    		    			text-decoration: none;
+    		    		}
+    		    	}
+    		    }
+    		}
+    		.sss-payorscopy-section
+    		{
+    			display: inline-block;
+    		    width: 52%;
+    		    height: auto;
+                .sss-payorscopy-title
+                {
+                    margin: 0px;
+                    font-weight: 700;
+                    font-size: 13px;
+                    letter-spacing: 1px;
+                    text-align: right;
+                    margin-top: 5px;
+                    margin-right: 55px;
+                }
+    		}
+    	}
+        .sss-second-layer
+        {
+            .sss-employer-title-container
+            {
+                width: 48%;
+                display: inline-block;
+                border-right: 1px solid #333;
+                border-bottom: 1px solid #333;
+                .sss-employer-title
+                {
+                    margin: 0px;
+                    text-align: center;
+                    font-size: 8px;
+                    letter-spacing: 1px;
+                    font-weight: 700;
+                    padding-top: 2px;
+                }
+            }
+            .sss-individualpayor-title-container
+            {
+                width: 52%;
+                display: inline-block;
+                border-bottom: 1px solid #333;
+                background-color: #FEFE9C;
+                .sss-individualpayor-title
+                {
+                    margin: 0px;
+                    font-size: 8px;
+                    letter-spacing: 1px;
+                    font-weight: 700;
+                    text-align: center;
+                    padding-top: 2px;
+                }
+            }
+            .sss-checkbox-container
+            {
+                display: inline-block;
+                width: 48%;
+                border-right: 1px solid #333;
+                border-bottom: 1px solid #333;
+                text-align: left;
+                padding-top: 17px;
+                padding-bottom: 17px;
+                .sss-checkbox
+                {
+                    border: 1px solid #333;
+                    width: 10px;
+                    height: 10px;
+                    display: inline-block;
+                    margin-left: 65px;
+                }
+                .sss-checkbox-label
+                {
+                    font-size: 8px;
+                    letter-spacing: 1px;
+                    vertical-align: middle;
+                }
+            }
+            .sss-checkbox-payor-container
+            {
+                display: inline-block;
+                width: 52%;
+                border-bottom: 1px solid #333;
+                padding-bottom: 2px;
+                background-color: #FEFE9C;
+                .sss-payor-leftpart
+                {
+                    display: inline-block;
+                    width: 49%;
+                    .sss-checkbox-payor
+                    {
+                        border: 1px solid #333;
+                        width: 10px;
+                        height: 10px;
+                        display: inline-block;
+                        background-color: #fff;
+                        margin-left: 5px;
+                    }
+                    .sss-checkbox-label-payor
+                    {
+                        font-size: 8px;
+                        letter-spacing: 1px;
+                        vertical-align: middle;
+                        margin-left: 1px;
+                    }
+                }
+                .sss-payor-rightpart
+                {
+                    display: inline-block;
+                    width: 50%;
+                    .sss-checkbox-payor
+                    {
+                        border: 1px solid #333;
+                        width: 10px;
+                        height: 10px;
+                        display: inline-block;
+                        margin-left: 5px;
+                        background-color: #fff;
+                    }
+                    .sss-checkbox-label-payor
+                    {
+                        font-size: 8px;
+                        letter-spacing: 1px;
+                        vertical-align: middle;
+                        margin-left: 1px;
+                    }
+                }
+                .sss-payor-monopart
+                {
+                    display: inline-block;
+                    width: 100%;
+                    .sss-checkbox-payor
+                    {
+                        border: 1px solid #333;
+                        width: 10px;
+                        height: 10px;
+                        display: inline-block;
+                        margin-left: 5px;
+                        background-color: #fff;
+                    }
+                    .sss-checkbox-label-payor
+                    {
+                        font-size: 8px;
+                        letter-spacing: 1px;
+                        vertical-align: middle;
+                        margin-left: 1px;
+                    }
+                    .sss-checkbox-textfield-payor
+                    {
+                        border: 0px;
+                        border-bottom: 1px solid #333;
+                        font-size: 8px;
+                        padding: 0px;
+                        background-color: #FEFE9C;
+                        width: 38%;
+                    }
+                }
+            }
+            .sss-employernumber-container
+            {
+                display: inline-block;
+                width: 48%;
+                border-right: 1px solid #333;
+                border-bottom: 1px solid #333;
+                .sss-employernumber
+                {
+                    margin: 0px;
+                    margin-left: 2px;
+                    margin-top: 2px;
+                    font-size: 11.5px;
+                    padding-bottom: 30px;
+                }
+            }
+            .ss-number-container
+            {
+                display: inline-block;
+                width: 23%;
+                border-right: 1px solid #333;
+                border-bottom: 1px solid #333;
+                .ss-number
+                {
+                    font-size: 11.5px;
+                    margin: 0px;
+                    margin-left: 2px;
+                    margin-top: 2px;
+                    padding-bottom: 30px;
+                    .notes
+                    {
+                        font-size: 7px;
+                        margin-left: 2px;
+                    }
+                }
+            }
+            .sss-commonreference-number-container
+            {
+                display: inline-block;
+                width: 29%;
+                border-bottom: 1px solid #333;
+                .sss-commonreference-number
+                {
+                    font-size: 11.5px;
+                    margin: 0px;
+                    margin-top: 2px;
+                    margin-left: 2px;
+                    padding-bottom: 19px;
+                    .notes
+                    {
+                        font-size: 7px;
+                        margin-left: 2px;
+                    }
+                }
+            }
+        }
+    }
+}

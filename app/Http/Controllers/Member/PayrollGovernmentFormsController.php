@@ -17,4 +17,9 @@ class PayrollGovernmentFormsController extends Member
     {
         return view("member.payroll.government_forms.bir");
     }
+
+    public function getSss()
+    {
+    	return view("member.payroll.government_forms.sss");
+    }
 }

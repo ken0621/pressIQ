@@ -199,4 +199,5 @@
     </div>
 </div>
 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.6.5/tinymce.min.js"></script>
 <script type="text/javascript" src="/assets/member/js/evariant_info.js"></script>

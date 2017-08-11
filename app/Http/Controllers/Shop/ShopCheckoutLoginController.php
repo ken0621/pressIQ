@@ -57,6 +57,11 @@ class ShopCheckoutLoginController extends Shop
         }
         else
         {
+            $customer_info["email"] = null;
+            $customer_info["new_account"] = null;
+            $customer_info["password"]= null;
+            $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_account"));
+            
             $data["page"]     = "Checkout - Login";
             $data["get_cart"] = Cart::get_cart($this->shop_info->shop_id);
             $this->cart_exist($data);

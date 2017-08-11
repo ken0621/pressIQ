@@ -107,6 +107,7 @@ class PayrollConnectController extends Controller
 	}
 	public function get_cutoff_data()
 	{
+
 		$appkey = Request::input("appkey");
 		$appsecret = Request::input("appsecret");
 		$email = Request::input("email");
@@ -140,7 +141,7 @@ class PayrollConnectController extends Controller
 		else
 		{
 	    	$return["status"] = "success";
-	    	
+	    		
 	    	/* NO TIME SHEET RECORD - CREATE NEW RECORD */
 	    	if($time_sheet_record_id == 0)
 	    	{
@@ -155,12 +156,11 @@ class PayrollConnectController extends Controller
 	    			$payroll_time_sheet = Tbl_payroll_time_sheet::where("payroll_employee_id", $employee_info->employee_id)->where("payroll_time_date", date("Y-m-d"))->first();
 	    		}
 	 
-				
 	    		/* CREATE RECORD */
 	    		$insert_record["payroll_time_sheet_id"] = $payroll_time_sheet->payroll_time_sheet_id;
 	    		$insert_record["payroll_company_id"] = $employee_info->payroll_employee_company_id;
 	    		$insert_record["payroll_time_sheet_in"] = date("H:i:s");
-	    		$insert_record["payroll_time_sheet_out"] = date("H:i:s", time() + 60);
+	    		$insert_record["payroll_time_sheet_out"] = date("H:i:s");
 	    		$insert_record["payroll_time_sheet_origin"] = "DG TIMER";
 	    		$time_sheet_record_id = Tbl_payroll_time_sheet_record::insertGetId($insert_record);
 	    		

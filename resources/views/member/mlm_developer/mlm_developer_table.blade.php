@@ -17,7 +17,7 @@
     <tbody class="table-warehouse">
         @if(!isset($_slot))
             <tr>
-                <td class="text-center" colspan="7">NO SLOT YET</td>
+                <td class="text-center" colspan="9">NO SLOT YET</td>
             </tr>
         @else
             @foreach($_slot as $key => $slot)

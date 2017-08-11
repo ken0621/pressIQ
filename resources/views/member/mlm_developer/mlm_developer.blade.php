@@ -6,7 +6,7 @@
         <div>
             <i class="fa fa-calendar"></i>
             <h1>
-            <span class="page-title">Testing Menu for MLM</span>
+            <span class="page-title">Testing Menu for MLM Slot Creation</span>
             <small style="font-size: 14px; color: gray;">
                 You can use this page to perform actions that can't be performaned even by <b>SUPER ADMINS</b>
             </small>

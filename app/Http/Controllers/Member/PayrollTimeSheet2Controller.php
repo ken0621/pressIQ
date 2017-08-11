@@ -38,6 +38,7 @@ class PayrollTimeSheet2Controller extends Member
 {
 	public function index($period_id)
 	{
+
 		$data["payroll_period_id"] = $period_id;
 		$data["page"] = "Employee List Summary";
 
@@ -58,7 +59,6 @@ class PayrollTimeSheet2Controller extends Member
 	}
 	public function index_table($period_id)
 	{
-
 		$search_value 		= Request::input("search");
 		$mode 				= Request::input("mode") == "pending" ? 0 : 1;
 		$branch 			= Request::input("branch");
@@ -867,7 +867,7 @@ class PayrollTimeSheet2Controller extends Member
 			$data = $this->compute_whole_cutoff($period_company_id, $employee_id);
 			$data["computation_type"] = $computation_type = $group->payroll_group_salary_computation;
 		}
-		
+		//dd($this->compute_whole_cutoff($period_company_id, $employee_id));
 		$data["employee_salary"] = tbl_payroll_employee_salary::where("payroll_employee_id", $employee_id);
 		$data["employee_id"] = $employee_id;
 		$data["employee_info"] = $this->db_get_employee_information($employee_id); 
@@ -1297,6 +1297,8 @@ class PayrollTimeSheet2Controller extends Member
 			$query->join("tbl_payroll_time_keeping_approved", "tbl_payroll_time_keeping_approved.employee_id","=", "tbl_payroll_employee_basic.payroll_employee_id")->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", $period_company_id);
 		}
 
+
+
 		$query->where("tbl_payroll_employee_basic.shop_id", $this->user_info->shop_id);
 
 
@@ -1318,7 +1320,8 @@ class PayrollTimeSheet2Controller extends Member
 
 
 		$query->orderBy("payroll_employee_number");
-												
+		$query->groupBy("tbl_payroll_employee_basic.payroll_employee_id");
+
 		if($search != "")
 		{
 			$query->where("tbl_payroll_employee_basic.payroll_employee_display_name", "LIKE", "%" . $search . "%");

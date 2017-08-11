@@ -80,7 +80,7 @@ class MLM_ProductCodeController extends Member
 	    $data["_customer"]  = Tbl_customer::where("archived",0)
                                           ->join("tbl_mlm_slot","tbl_mlm_slot.slot_owner","=","tbl_customer.customer_id")
                                           ->where("tbl_customer.shop_id",$shop_id)->get();
-                                          
+        $data['ismerchant'] = Merchant::ismerchant();                                  
         $data['table_body'] = $this->view_all_lines();
         if($this->current_warehouse == null)
         {

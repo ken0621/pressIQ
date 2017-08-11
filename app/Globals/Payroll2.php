@@ -348,8 +348,7 @@ class Payroll2
 		$return->time_compute_mode	= "regular";
 		
 
-		$access = Utilities::checkAccess('payroll-timekeeping','salary_rates');
-		
+
 
 		if(count($_shift) > 0)
 		{
@@ -489,14 +488,20 @@ class Payroll2
 
 		$return->compute = Payroll2::compute_income_day_pay($return->time_output, $daily_rate, $employee_contract->payroll_group_id, $cola, $compute_type, $return->time_compute_mode);
 
-		if($access == 1) 
+		if($payroll_period_company_id != 0)
 		{
-			$return->value_html = Payroll2::timesheet_daily_income_to_string($return->compute_type, $payroll_time_sheet_id, $return->compute, $return->shift_approved, $payroll_period_company_id, $time_keeping_approved);
+			$access = Utilities::checkAccess('payroll-timekeeping','salary_rates');
+			
+			if($access == 1) 
+			{
+				$return->value_html = Payroll2::timesheet_daily_income_to_string($return->compute_type, $payroll_time_sheet_id, $return->compute, $return->shift_approved, $payroll_period_company_id, $time_keeping_approved);
+			}
+			else
+			{
+				$return->value_html = Payroll2::timesheet_daily_target_hours_to_string($return->compute_type, $payroll_time_sheet_id, $return->compute, $return->time_output, $return->shift_approved, $payroll_period_company_id, $time_keeping_approved);
+			}
 		}
-		else
-		{
-			$return->value_html = Payroll2::timesheet_daily_target_hours_to_string($return->compute_type, $payroll_time_sheet_id, $return->compute, $return->time_output, $return->shift_approved, $payroll_period_company_id, $time_keeping_approved);
-		}
+
 		return $return;
 
 	}
@@ -1623,6 +1628,7 @@ class Payroll2
 			}
 			/*END day type and holiday type*/ 
 
+		$return["target_hours"] 		 = Payroll2::convert_to_24_hour($target_hours);
 		$return["time_spent"] 			 = Payroll2::convert_to_24_hour($time_spent);
 		$return["is_absent"] 			 = $is_absent;
 		$return["late"]  				 = Payroll2::convert_to_24_hour($late_hours);
@@ -1636,11 +1642,10 @@ class Payroll2
 		$return["total_hours"] 		     = Payroll2::convert_to_24_hour($time_spent);
 		$return["break_hours"] 			 = Payroll2::convert_to_24_hour("00:00:00");
 		$return["night_differential"] 	 = Payroll2::convert_to_24_hour($night_differential);
+		$return["leave_hours"] 			 = $leave;
 		$return["is_half_day"] 			 = $is_half_day;
 		$return["is_holiday"] 			 = $is_holiday;
 		$return["day_type"] 			 = $day_type;
-		$return["target_hours"] 		 = Payroll2::convert_to_24_hour($target_hours);
-		$return["leave_hours"] 			 = $leave;
 		$return["excess_leave_hours"] 	 = $excess_leave_hours;
 		$return["leave_hours_consumed"]  = $leave_hours_consumed;
 		
@@ -1922,10 +1927,10 @@ class Payroll2
 		$return["special_holiday_hours"] = Payroll2::convert_to_24_hour($special_holiday_hours);
 		$return["total_hours"] 			 = Payroll2::convert_to_24_hour($time_spent);
 		$return["night_differential"] 	 = Payroll2::convert_to_24_hour($night_differential);
+		$return["leave_hours"] 			 = Payroll2::convert_to_24_hour($leave);
 		$return["is_half_day"] 			 = $is_half_day;
 		$return["is_holiday"] 			 = $is_holiday;
 		$return["day_type"] 			 = $day_type;
-		$return["leave_hours"] 			 = Payroll2::convert_to_24_hour($leave);
 		$return["excess_leave_hours"] 	 = Payroll2::convert_to_24_hour($excess_leave_hours);
 		$return["leave_hours_consumed"]  = $leave_hours_consumed;
 		
@@ -3252,6 +3257,10 @@ class Payroll2
 		{
 			$return = Payroll2::cutoff_fixed_montly_cola($return, $data);
 		}
+		else if($group->payroll_group_salary_computation == "Flat Rate")
+		{
+			$return = Payroll2::cutoff_fixed_montly_cola($return, $data);
+		}
 		
 				
 		
@@ -3273,11 +3282,16 @@ class Payroll2
 	public static function cutoff_breakdown_compute_time($return, $data)
 	{
 
-		$show_time_breakdown = array('time_spent', 'undertime', 'overtime','late','night_differential');
+		$show_time_breakdown = array('target_hours','time_spent', 'undertime', 'overtime','late','night_differential','leave_hours');
+
+		// $return->_time_breakdown['day_spent']["float"] = 0;
+		// $return->_time_breakdown['day_spent']["time"] = "No Day Spent";
 
 		$return->_time_breakdown['absent']["float"] = 0;
 		$return->_time_breakdown['absent']["time"] = "No Absent";
 
+
+		//dd($data["cutoff_input"]);
 		foreach($data["cutoff_input"] as $cutoff_input)
 		{
 			
@@ -3295,22 +3309,71 @@ class Payroll2
 					}
 
 					$return->_time_breakdown[$key]["time"] = Payroll2::float_time($return->_time_breakdown[$key]["float"]);
-
-
 				}
 
 				if($key == "is_absent")
 				{
 					if($time_output == true)
 					{
-
 						$return->_time_breakdown['absent']["float"] += 1;
 						$return->_time_breakdown['absent']["time"] = $return->_time_breakdown['absent']["float"] . " Absent(s)";
 					}
 				}
+
+				// if ($key == 'time_spent' && $time_output != '00:00:00') 
+				// {
+				// 	$return->_time_breakdown['day_spent']["float"] += 1;
+				// 	$return->_time_breakdown['day_spent']["time"]  = $return->_time_breakdown['day_spent']["float"] . " Day(s) Spent";
+				// }
+
+				if ($key == 'is_holiday') 
+				{
+					if ($time_output == 'regular') 
+					{
+						if (!isset($return->_time_breakdown['regular_holiday']["float"])) 
+						{
+							$return->_time_breakdown['regular_holiday']["float"] = 1;
+							$return->_time_breakdown['regular_holiday']["time"] = $return->_time_breakdown['regular_holiday']["float"] . " Regular Holiday(s)";
+						}
+						else
+						{
+							$return->_time_breakdown['regular_holiday']["float"] += 1;
+							$return->_time_breakdown['regular_holiday']["time"] = $return->_time_breakdown['regular_holiday']["float"] . " Regular Holiday(s)";
+						}
+					}
+
+					if ($time_output == 'special') 
+					{
+						if (!isset($return->_time_breakdown['sepcial_holiday']["float"])) 
+						{
+							$return->_time_breakdown['special_holiday']["float"] = 1;
+							$return->_time_breakdown['special_holiday']["time"] = $return->_time_breakdown['special_holiday']["float"] . " Special Holiday(s)";
+						}
+						else
+						{
+							$return->_time_breakdown['special_holiday']["float"] += 1;
+							$return->_time_breakdown['special_holiday']["time"] = $return->_time_breakdown['special_holiday']["float"] . " Special Holiday(s)";
+						}
+					}
+				}
+				if ($key == 'is_holiday') 
+				{
+					
+				}
 			}
 		}
 
+		if (!isset($return->_time_breakdown['regular_holiday']["float"])) 
+		{
+			$return->_time_breakdown['regular_holiday']["float"] = 0;
+			$return->_time_breakdown['regular_holiday']["time"] = $return->_time_breakdown['regular_holiday']["float"] . " No Regular Holiday";
+		}
+
+		if (!isset($return->_time_breakdown['special_holiday']["float"])) 
+		{
+			$return->_time_breakdown['special_holiday']["float"] = 0;
+			$return->_time_breakdown['special_holiday']["time"] = $return->_time_breakdown['special_holiday']["float"] . " No Special Holiday";
+		}
 
 		return $return;
 	}
@@ -4127,7 +4190,7 @@ class Payroll2
 
 		$total_cola = 0;
 
-		if ($data["cutoff_input"][$data["start_date"]]->compute_type=="monthly") 
+		if ($data["cutoff_input"][$data["start_date"]]->compute_type=="monthly" || $data["cutoff_input"][$data["start_date"]]->compute_type=="fix" ) 
 		{
 			if ($data["period_category"]=="Semi-monthly") 
 			{

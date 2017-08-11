@@ -105,7 +105,7 @@
               <div class="form-box-divider">
                  <div class="form-group">
                     <label>Product Details</label>
-                    <textarea class="mce form-control" name="eprod_details">{{ $product->eprod_details }}</textarea>
+                    <textarea class="tinymce form-control" name="eprod_details">{{ $product->eprod_details }}</textarea>
                  </div>
               </div>
            </div>
@@ -192,7 +192,7 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.6.5/tinymce.min.js"></script>
 <script type="text/javascript">
 tinymce.init({ 
-    selector:'.mce',
+    selector:'.tinymce',
     plugins: "autoresize",
  });
  </script>

@@ -8,6 +8,7 @@
 			<div class="row clearfix">
 
 				<div class="col-md-4">
+
 					<div class="signin-form">
 						
 						<div class="text signin-text-header">Welcome to Digima House!</div>
@@ -20,13 +21,11 @@
                         	<input type="Password" class="form-control password-input" placeholder="Password">
 						</div>
 
-						
-
 					</div>
 				</div>
 
 				<div class="col-md-8">
-					<img src="/themes/{{ $shop_theme }}/img/mlm-adv.png">
+					<img width="510" height="300" src="/themes/{{ $shop_theme }}/img/mlm-adv.png">
 				</div>
 
 			</div>

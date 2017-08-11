@@ -102,7 +102,7 @@ button:hover
 	{
 		a.active
 		{
-			color: #ffc10e;
+			color: #0051ff;
 		}
 	}
 }
@@ -115,6 +115,7 @@ button:hover
 		padding-top: 25px;
 	}
 }
+
 .header-fixed
 {
 	@media screen and (min-width: 991px)
@@ -174,6 +175,7 @@ button:hover
 
 			.btn-signin
 			{
+				margin-top: -36px;
 				color: #8d8d8d;
 				font-size: 12px;
 				background-color: inherit;
@@ -199,13 +201,18 @@ a
 
 nav
 {
-
-	float: left;
+	//width: 100%;
+	//float: left;
 	padding: 10px 15px 10px 100px;
 	margin-top: 25px;
 	font-family: $open-sans;
 	font-size: 14px;
 	color: #8d8d8d;
+
+	ul li
+	{
+		display: inline-block;
+	}
 
 		.head-button
 		{
@@ -218,9 +225,9 @@ nav
 
 		.btn-signin
 		{
-			//position: relative;
-			//left: 500px;
-			//top: 2.5px;
+			float: right;
+			margin-top: -40px;
+			display: inline-block;
 			font-family: $open-sans;
 			text-decoration: none;
 			color: #8d8d8d;

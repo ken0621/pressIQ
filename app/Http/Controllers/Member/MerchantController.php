@@ -456,9 +456,11 @@ class MerchantController extends Member
 	}
 	public function commission_collectables($user_id, $status ='collectable', $get ='get')
 	{
+		$item_code_payment_type[1] = 1;
+		$item_code_payment_type[2] = 2;
 		if($status == 'collectable')
 		{
-			$collectable = Tbl_item_code_invoice::where('user_id', $user_id)->where('merchant_markup_value', '!=', 0)->where('merchant_commission_id', 0)->where('item_code_payment_type', '!=', 3);
+			$collectable = Tbl_item_code_invoice::where('user_id', $user_id)->where('merchant_markup_value', '!=', 0)->where('merchant_commission_id', 0)->whereIn('item_code_payment_type', $item_code_payment_type);
 
 		}
 		else if($status == 'requested')
@@ -467,7 +469,7 @@ class MerchantController extends Member
 					->where('merchant_markup_value', '!=', 0)
 					->where('tbl_item_code_invoice.merchant_commission_id', '!=',0)
 					->join('tbl_merchant_commission', 'tbl_merchant_commission.merchant_commission_id', '=', 'tbl_item_code_invoice.merchant_commission_id')
-					->where('merchant_commission_status', 'Requested')->where('item_code_payment_type', '!=', 3);
+					->where('merchant_commission_status', 'Requested')->whereIn('item_code_payment_type', $item_code_payment_type);
 		}
 		else if($status == 'collected')
 		{
@@ -475,7 +477,7 @@ class MerchantController extends Member
 					->where('tbl_item_code_invoice.merchant_commission_id', '!=',0)
 					->where('merchant_markup_value', '!=', 0)
 					->join('tbl_merchant_commission', 'tbl_merchant_commission.merchant_commission_id', '=', 'tbl_item_code_invoice.merchant_commission_id')
-					->where('merchant_commission_status', 'Approved')->where('item_code_payment_type', '!=', 3);
+					->where('merchant_commission_status', 'Approved')->whereIn('item_code_payment_type', $item_code_payment_type);
 		}
 		else if($status == 'paid')
 		{
@@ -483,14 +485,14 @@ class MerchantController extends Member
 					->where('tbl_item_code_invoice.merchant_commission_id', '!=',0)
 					->where('merchant_markup_value', '!=', 0)
 					->join('tbl_merchant_commission', 'tbl_merchant_commission.merchant_commission_id', '=', 'tbl_item_code_invoice.merchant_commission_id')
-					->where('merchant_commission_status', 'Paid')->where('item_code_payment_type', '!=', 3);
+					->where('merchant_commission_status', 'Paid')->whereIn('item_code_payment_type', $item_code_payment_type);
 		}
 		else if($status == 'all')
 		{
 			$collectable = Tbl_item_code_invoice::where('user_id', $user_id)
 					->where('tbl_item_code_invoice.merchant_commission_id', '!=',0)
 					->where('merchant_markup_value', '!=', 0)
-					->where('item_code_payment_type', '!=', 3)
+					->whereIn('item_code_payment_type', $item_code_payment_type)
 					->join('tbl_merchant_commission', 'tbl_merchant_commission.merchant_commission_id', '=', 'tbl_item_code_invoice.merchant_commission_id');
 		}
 

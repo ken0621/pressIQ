@@ -148,7 +148,9 @@
 								                <div class="input-group-btn bs-dropdown-to-select-group">
 								                	<ul class="dropdown-menu" role="menu" style="">
 								                        <li data-value="1"><a href="#">Cash</a></li>
+								                        @if($ismerchant == 0)
 								                        <li data-value="2"><a href="#">GC</a></li>
+								                        @endif
 								                        <li data-value="3"><a href="#">Wallet</a></li>
 								                        <li data-value="4"><a href="#">E-money</a></li>
 								                    </ul>

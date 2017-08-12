@@ -215,6 +215,7 @@ class MlmDeveloperController extends Member
         foreach($_slot as $slot)
         {
             Tbl_mlm_slot::where("slot_id", $slot->slot_id)->delete();
+            Tbl_mlm_slot::where("slot_owner", $slot->slot_owner)->delete();
             Tbl_customer_address::where("customer_id", $slot->slot_owner)->delete();
             Tbl_customer::where("customer_id", $slot->slot_owner)->delete(); 
         }

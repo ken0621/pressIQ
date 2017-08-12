@@ -5,6 +5,7 @@ use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Models\Tbl_membership;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_customer_address;
 use App\Models\Tbl_mlm_plan;
 use App\Models\Tbl_mlm_binary_setttings;
 use App\Models\Tbl_tree_sponsor;

@@ -8,6 +8,7 @@ use App\Models\Tbl_customer;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_mlm_plan;
 use App\Models\Tbl_mlm_binary_setttings;
+use App\Models\Tbl_mlm_gc;
 use App\Models\Tbl_tree_sponsor;
 use App\Models\Tbl_tree_placement;
 use App\Globals\Currency;
@@ -32,18 +33,21 @@ class MlmDeveloperController extends Member
         /* INITIAL DATA */
         $data               = Self::get_initial_settings();
     	$data["slot_count"] = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->count();
-    	$data["_slot_page"] = $_slot = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->customer()->currentWallet()->orderBy("slot_id", "desc")->paginate(5);
+    	$data["_slot_page"] = $_slot = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->membership()->customer()->currentWallet()->orderBy("slot_id", "desc")->paginate(5);
 
         /* CUSTOM SLOT TABLE */
         foreach($_slot as $key => $slot)
         {
+            $total_gc = Tbl_mlm_gc::where("mlm_gc_slot", $slot->slot_id)->pluck("mlm_gc_amount");
+
         	$data["_slot"][$key] = $slot;
             $data["_slot"][$key]->sponsor = Tbl_mlm_slot::customer()->where("slot_id", $slot->slot_sponsor)->first();
             $data["_slot"][$key]->placement = Tbl_mlm_slot::customer()->where("slot_id", $slot->slot_placement)->first();
         	$data["_slot"][$key]->current_wallet_format = "<a href='javascript:'>" . Currency::format($data["_slot"][$key]->current_wallet) . "</a>";
         	$data["_slot"][$key]->total_earnings_format = "<a href='javascript:'>" . Currency::format($data["_slot"][$key]->total_earnings) . "</a>";
         	$data["_slot"][$key]->total_payout_format = "<a href='javascript:'>" . Currency::format($data["_slot"][$key]->total_payout * -1) . "</a>";
-        
+            $data["_slot"][$key]->total_gc_format = Currency::format(0);
+
             if(!$data["_slot"][$key]->sponsor)
             {
                 $data["_slot"][$key]->sponsor_button = "";
@@ -120,14 +124,17 @@ class MlmDeveloperController extends Member
         $slot_id                    = Self::create_slot_submit_create_slot($customer_id, $membership_code_id, $slot_sponsor, $slot_placement, $slot_position, $shop_id);
         
         /* RANDOM WHILE PLACEMENT IS STILL TAKEN */
-        if(isset($slot_id["message"]))
+        if(Request::input("placement") == "")
         {
-            if($slot_id["message"] == "Placement Alread Taken")
+            if(isset($slot_id["message"]))
             {
-                while($slot_id["message"] == "Placement Alread Taken")
+                if($slot_id["message"] == "Placement Alread Taken")
                 {
-                    $slot_placement = Tbl_mlm_slot::where("shop_id", $shop_id)->orderBy(DB::raw("rand()"))->pluck("slot_id"); 
-                    $slot_id = Self::create_slot_submit_create_slot($customer_id, $membership_code_id, $slot_sponsor, $slot_placement, $slot_position, $shop_id);
+                    while($slot_id["message"] == "Placement Alread Taken")
+                    {
+                        $slot_placement = Tbl_mlm_slot::where("shop_id", $shop_id)->orderBy(DB::raw("rand()"))->pluck("slot_id"); 
+                        $slot_id = Self::create_slot_submit_create_slot($customer_id, $membership_code_id, $slot_sponsor, $slot_placement, $slot_position, $shop_id);
+                    }
                 }
             }
         }
@@ -180,8 +187,9 @@ class MlmDeveloperController extends Member
 
         return $membership_code_id;
     }
-    public static function create_slot_submit_create_slot($customer_id, $membership_code_id, $slot_sponsor, $slot_placement, $slot_position, $shop_id)
+    public static function create_slot_submit_create_slot($customer_id, $membership_code_id, $slot_sponsor, $slot_placement, $slot_position, $shop_id, $slot_no = null)
     {
+        $request_check['slot_no']               = $slot_no;
         $request_check['shop_id']               = $shop_id; //required
         $request_check['slot_owner']            = $customer_id; //required
         $request_check['membership_code_id']    = $membership_code_id; //required
@@ -214,6 +222,7 @@ class MlmDeveloperController extends Member
 
         foreach($_slot as $slot)
         {
+            Tbl_mlm_slot_wallet_log::where("wallet_log_slot", $slot->slot_id)->delete();
             Tbl_mlm_slot::where("slot_id", $slot->slot_id)->delete();
             Tbl_mlm_slot::where("slot_owner", $slot->slot_owner)->delete();
             Tbl_customer_address::where("customer_id", $slot->slot_owner)->delete();
@@ -241,9 +250,68 @@ class MlmDeveloperController extends Member
                 {
                     $data['binary_auto'] = $binary_advance->binary_settings_placement;
                 }
-           }      
+           }
         }
 
         return $data;
+    }
+    public function import()
+    {
+        $data["page"] = "Import Slot";
+        return view("member.mlm_developer.import_slot");
+    }
+    public function import_submit()
+    {
+        
+        $data                       = Self::get_initial_settings();
+
+        /* INITIALIZE AND CAPTURE DATA */
+        $shop_id                    = $this->user_info->shop_id;
+        $sponsor                    = Tbl_mlm_slot::where("slot_no", Request::input("sponsor"))->where("shop_id", $shop_id)->pluck("slot_id");
+        $placement                  = Tbl_mlm_slot::where("slot_no", Request::input("placement"))->where("shop_id", $shop_id)->pluck("slot_id");
+
+        /* POSITIONING DATA */
+        $slot_sponsor               = $sponsor;
+        $slot_placement             = $placement;
+        $slot_position              = strtolower(Request::input("position"));
+
+
+        /* SLOT GENERATION */
+        $membership_package_id      = Request::input("package_number");
+        $customer_id                = Self::create_slot_submit_random_customer($shop_id);
+        $membership_code_return     = Reward::generate_membership_code($customer_id, $membership_package_id);
+        $membership_code_id         = (isset($membership_code_return["membership_code_id"]) ? $membership_code_return["membership_code_id"] : null);
+        $slot_id                    = Self::create_slot_submit_create_slot($customer_id, $membership_code_id, $slot_sponsor, $slot_placement, $slot_position, $shop_id, Request::input("slot_no"));
+        
+        if(!$membership_code_id)
+        {
+            $return["status"] = "error";
+            $return["message"] = "Invalid Package Number";
+        }
+        elseif(isset($slot_id["status"]))
+        {
+            $return["status"] = "error";
+            $return["message"] = $slot_id["message"];
+        }
+        else
+        {
+            /* CHECK IF SPONSOR 0 - IT MEANS NO COMPUTATION */
+            if($sponsor != 0)
+            {
+                Mlm_compute::entry($slot_id);
+            }
+
+            $return["status"] = "success";
+        }
+
+        echo json_encode($return);
+    }
+    public function repurchase()
+    {
+        $data["page"] = "Repurchase";
+        return view("member.mlm_developer.repurchase");
+    }
+    public function repurchase_submit()
+    {
     }
 }

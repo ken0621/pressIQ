@@ -41,8 +41,8 @@ function column()
 				}
 			});
 
-			console.log("SAVE COLUMN INFORMATION");
-			console.log(table_data);
+			//console.log("SAVE COLUMN INFORMATION");
+			//console.log(table_data);
 
 			table_data_json = JSON.stringify(table_data);
 			$.cookie(table_key, table_data_json);
@@ -63,6 +63,7 @@ function column()
 		$("#custom-modal").find(".modal-title").text("Customize Columns");
 		$("#custom-modal").find(".custom-button-submit").text("Save Column");
 		$("#custom-modal").find(".custom-button-submit").addClass("save-column-settings");
+		$("#custom-modal").find(".modal-body").addClass("clearfix");
 		$("#custom-modal").find(".modal-body").html("");
 
 		$table_data = $.cookie(table_key);
@@ -95,10 +96,10 @@ function column()
 					$checked = "checked";
 				}
 
-				console.log($table_data_unserialize);
+				//console.log($table_data_unserialize);
 			}
 
-			$label = '<div class="column-check-list" colkey="' + $(this).attr("colkey")  + '"><label><span style="display: inline-block; vertical-align: top;"><input type="checkbox" ' + $checked + '></span> <span style="display: inline-block; padding: 0 10px;">' + $(this).text() + '</span></label></div>';
+			$label = '<div class="column-check-list col-md-6" colkey="' + $(this).attr("colkey")  + '"><label><span style="display: inline-block; vertical-align: top;"><input type="checkbox" ' + $checked + '></span> <span style="display: inline-block; padding: 0 10px;">' + $(this).text() + '</span></label></div>';
 			$("#custom-modal").find(".modal-body").append($label);
 		});
 
@@ -128,7 +129,7 @@ function column()
 			$table_data_unserialize = JSON.parse($table_data);
 			$.each($table_data_unserialize, function(key, val)
 			{
-				console.log(key + " = " + val);
+				//console.log(key + " = " + val);
 
 				if(val == "hide")
 				{

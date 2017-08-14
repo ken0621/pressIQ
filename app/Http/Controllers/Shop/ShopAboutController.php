@@ -77,6 +77,11 @@ class ShopAboutController extends Shop
     {
         $data["page"] = "3xcell_login";
         return view("3xcell_login", $data);
+    }
+    public function xcell_signup()
+    {
+        $data["page"] = "3xcell_signup";
+        return view("3xcell_signup", $data);
     }    
 
     public function job()

@@ -36,7 +36,7 @@
 					<div class="order-summary-container">
 						<div class="title-container">
 							Order Summary
-							<div class="edit-cart">Edit Cart</div>
+							<a href="/MyCart"><div class="edit-cart">Edit Cart</div></a>
 						</div>
 						<div class="per-order-container">
 							<!-- PER ITEM -->

@@ -20,27 +20,47 @@
 				<!-- PER PICTURES -->
 				<div class="col-md-3">
 					<div class="per-album-container">
-						<div class="img-container"><img src="/themes/{{ $shop_theme }}/img/gallery-sample2.png"></div>
+						<div class="img-container">
+							<a href="/themes/{{ $shop_theme }}/img/gallery-sample2.png" data-title="" data-lightbox="company-gallery">
+								<img src="/themes/{{ $shop_theme }}/img/gallery-sample2.png">
+							</a>
+						</div>
 					</div>
 				</div>
 				<div class="col-md-3">
 					<div class="per-album-container">
-						<div class="img-container"><img src="/themes/{{ $shop_theme }}/img/gallery-sample2.png"></div>
+						<div class="img-container">
+							<a href="/themes/{{ $shop_theme }}/img/gallery-sample2.png" data-title="" data-lightbox="company-gallery">
+								<img src="/themes/{{ $shop_theme }}/img/gallery-sample2.png">
+							</a>
+						</div>
 					</div>
 				</div>
 				<div class="col-md-3">
 					<div class="per-album-container">
-						<div class="img-container"><img src="/themes/{{ $shop_theme }}/img/gallery-sample2.png"></div>
+						<div class="img-container">
+							<a href="/themes/{{ $shop_theme }}/img/gallery-sample2.png" data-title="" data-lightbox="company-gallery">
+								<img src="/themes/{{ $shop_theme }}/img/gallery-sample2.png">
+							</a>
+						</div>
 					</div>
 				</div>
 				<div class="col-md-3">
 					<div class="per-album-container">
-						<div class="img-container"><img src="/themes/{{ $shop_theme }}/img/gallery-sample2.png"></div>
+						<div class="img-container">
+							<a href="/themes/{{ $shop_theme }}/img/gallery-sample2.png" data-title="" data-lightbox="company-gallery">
+								<img src="/themes/{{ $shop_theme }}/img/gallery-sample2.png">
+							</a>
+						</div>
 					</div>
 				</div>
 				<div class="col-md-3">
 					<div class="per-album-container">
-						<div class="img-container"><img src="/themes/{{ $shop_theme }}/img/gallery-sample2.png"></div>
+						<div class="img-container">
+							<a href="/themes/{{ $shop_theme }}/img/gallery-sample2.png" data-title="" data-lightbox="company-gallery">
+								<img src="/themes/{{ $shop_theme }}/img/gallery-sample2.png">
+							</a>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -73,6 +93,12 @@ $(document).ready(function()
             scrollTop: 0
         }, 700);
         return false;
+    });
+
+    /*LIGHTBOX*/
+    lightbox.option({
+      'disableScrolling': true,
+      'wrapAround': true
     });
 
 

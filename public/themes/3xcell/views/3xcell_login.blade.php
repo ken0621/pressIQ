@@ -15,7 +15,7 @@
 				<input class="text-field" type="password" name="" placeholder="Password">
 				<div class="login-button">LOGIN</div>
 				<h2>Don't have an account yet?</h2>
-				<h3>SIGN UP HERE</h3>
+				<a href="/3xcell_signup"><h3>SIGN UP HERE</h3></a>
 			</div>
 		</div>
 	</div>

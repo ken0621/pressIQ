@@ -181,12 +181,14 @@
                                             </div>
                                         </div>
                                     </a>
-                                    <div class="cat-container">
-                                        <div class="per-cat">
-                                            <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/events-calendar-thumb.png"></div>
-                                            <div class="cat-name">COMPANY EVENTS</div>
+                                    <a href="/company_events">
+                                        <div class="cat-container">
+                                            <div class="per-cat">
+                                                <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/events-calendar-thumb.png"></div>
+                                                <div class="cat-name">COMPANY EVENTS</div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
                             </li>
                             <li><a href="/gallery" class="head-button link-nav">GALLERY</a></li>
@@ -352,7 +354,7 @@
                                             <div class="subtotal">PHP 2,800.00</div>
                                         </div>
                                         <a href="/item_checkout" style="text-decoration: none;"><div class="button-checkout">CHECKOUT</div></a>
-                                        <div class="view-cart"><span><i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;View Cart</span></div>
+                                        <div class="view-cart"><a href="/MyCart"><span><i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;View Cart</span></a></div>
                                     </div>
                                 </div>
                             </li>

@@ -217,28 +217,27 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* DEDUCTION V2 START */
 
 	Route::any('/deduction/v2',"Member\PayrollDeductionController@index");
+	Route::any('/deduction/v2/modal_create_deduction',"Member\PayrollDeductionController@modal_create_deduction");
+	Route::any('/deduction/v2/modal_create_deduction_type/{type}',"Member\PayrollDeductionController@modal_create_deduction_type");
+	Route::any('/deduction/v2/modal_save_deduction_type',"Member\PayrollDeductionController@modal_save_deduction_type");
+	Route::any('/deduction/v2/update_deduction_type',"Member\PayrollDeductionController@update_deduction_type");
+	Route::any('/deduction/v2/reload_deduction_type',"Member\PayrollDeductionController@reload_deduction_type");
+	Route::any('/deduction/v2/archive_deduction_type',"Member\PayrollDeductionController@archive_deduction_type");
+	Route::any('/deduction/v2/ajax_deduction_type',"Member\PayrollDeductionController@ajax_deduction_type");
+	Route::any('/deduction/v2/modal_deduction_tag_employee/{id}',"Member\PayrollDeductionController@modal_deduction_tag_employee");
+	Route::any('/deduction/v2/ajax_deduction_tag_employee',"Member\PayrollDeductionController@ajax_deduction_tag_employee");
+	Route::any('/deduction/v2/set_employee_deduction_tag',"Member\PayrollDeductionController@set_employee_deduction_tag");
+	Route::any('/deduction/v2/get_employee_deduction_tag',"Member\PayrollDeductionController@get_employee_deduction_tag");
+	Route::any('/deduction/v2/remove_from_tag_session',"Member\PayrollDeductionController@remove_from_tag_session");
+	Route::any('/deduction/v2/modal_save_deduction',"Member\PayrollDeductionController@modal_save_deduction");
+	Route::any('/deduction/v2/modal_edit_deduction/{id}',"Member\PayrollDeductionController@modal_edit_deduction");
+	Route::any('/deduction/v2/archive_deduction/{archived}/{id}',"Member\PayrollDeductionController@archive_deduction");
+	Route::any('/deduction/v2/archived_deduction_action',"Member\PayrollDeductionController@archived_deduction_action");
+	Route::any('/deduction/v2/modal_update_deduction',"Member\PayrollDeductionController@modal_update_deduction");
+	Route::any('/deduction/v2/reload_deduction_employee_tag',"Member\PayrollDeductionController@reload_deduction_employee_tag");
+	Route::any('/deduction/v2/deduction_employee_tag/{archived}/{payroll_deduction_employee_id}',"Member\PayrollDeductionController@deduction_employee_tag");
+	Route::any('/deduction/v2/deduction_employee_tag_archive',"Member\PayrollDeductionController@deduction_employee_tag_archive");
 
-	// Route::any('/deduction',"Member\PayrollController@deduction");
-	// Route::any('/deduction/modal_create_deduction',"Member\PayrollController@modal_create_deduction");
-	// Route::any('/deduction/modal_create_deduction_type/{type}',"Member\PayrollController@modal_create_deduction_type");
-	// Route::any('/deduction/modal_save_deduction_type',"Member\PayrollController@modal_save_deduction_type");
-	// Route::any('/deduction/update_deduction_type',"Member\PayrollController@update_deduction_type");
-	// Route::any('/deduction/reload_deduction_type',"Member\PayrollController@reload_deduction_type");
-	// Route::any('/deduction/archive_deduction_type',"Member\PayrollController@archive_deduction_type");
-	// Route::any('/deduction/ajax_deduction_type',"Member\PayrollController@ajax_deduction_type");
-	// Route::any('/deduction/modal_deduction_tag_employee/{id}',"Member\PayrollController@modal_deduction_tag_employee");
-	// Route::any('/deduction/ajax_deduction_tag_employee',"Member\PayrollController@ajax_deduction_tag_employee");
-	// Route::any('/deduction/set_employee_deduction_tag',"Member\PayrollController@set_employee_deduction_tag");
-	// Route::any('/deduction/get_employee_deduction_tag',"Member\PayrollController@get_employee_deduction_tag");
-	// Route::any('/deduction/remove_from_tag_session',"Member\PayrollController@remove_from_tag_session");
-	// Route::any('/deduction/modal_save_deduction',"Member\PayrollController@modal_save_deduction");
-	// Route::any('/deduction/modal_edit_deduction/{id}',"Member\PayrollController@modal_edit_deduction");
-	// Route::any('/deduction/archive_deduction/{archived}/{id}',"Member\PayrollController@archive_deduction");
-	// Route::any('/deduction/archived_deduction_action',"Member\PayrollController@archived_deduction_action");
-	// Route::any('/deduction/modal_update_deduction',"Member\PayrollController@modal_update_deduction");
-	// Route::any('/deduction/reload_deduction_employee_tag',"Member\PayrollController@reload_deduction_employee_tag");
-	// Route::any('/deduction/deduction_employee_tag/{archived}/{payroll_deduction_employee_id}',"Member\PayrollController@deduction_employee_tag");
-	// Route::any('/deduction/deduction_employee_tag_archive',"Member\PayrollController@deduction_employee_tag_archive");
 	/* DEDUCTION V2 END */
 
 

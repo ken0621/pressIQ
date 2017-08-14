@@ -113,14 +113,16 @@ function column()
 			$(".custom-column-table").find("th").each(function(key)
 			{
 				$column_key = $(this).attr("colkey");
-
-				$(".custom-column-table th").show();
-				$(".custom-column-table td").show();
-
+				
 				if($(this).attr("default") == "hide")
 				{
 					$("th[colkey=" + $column_key + "]").hide();
 					$("td[colkey=" + $column_key + "]").hide();
+				}
+				else
+				{
+					$("th[colkey=" + $column_key + "]").show();
+					$("td[colkey=" + $column_key + "]").show();
 				}
 			});
 		}

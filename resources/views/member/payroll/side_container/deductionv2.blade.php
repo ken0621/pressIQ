@@ -1,7 +1,7 @@
 <div class="form-horizontal">
 	<div class="form-group">
 		<div class="col-md-12">
-			<h4>Deduction<button class="btn btn-custom-primary pull-right popup" link="/member/payroll/deduction/modal_create_deduction">Create Deduction</button></h4>
+			<h4>Deduction<button class="btn btn-custom-primary pull-right popup" link="/member/payroll/deduction/v2/modal_create_deduction">Create Deduction</button></h4>
 		</div>
 	</div>
 	<ul class="nav nav-tabs">

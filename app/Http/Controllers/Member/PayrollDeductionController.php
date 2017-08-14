@@ -142,7 +142,7 @@ class PayrollDeductionController extends Member
           $array = array();
           Session::put('employee_deduction_tag',$array);
 
-          return view('member.payroll.modal.modal_create_deduction', $data);
+          return view('member.payroll.modal.modal_create_deduction_v2', $data);
      }
 
      public function modal_create_deduction_type($type)

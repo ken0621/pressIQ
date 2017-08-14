@@ -215,7 +215,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 
 	/* DEDUCTION V2 START */
-
 	Route::any('/deduction/v2',"Member\PayrollDeductionController@index");
 	Route::any('/deduction/v2/modal_create_deduction',"Member\PayrollDeductionController@modal_create_deduction");
 	Route::any('/deduction/v2/modal_create_deduction_type/{type}',"Member\PayrollDeductionController@modal_create_deduction_type");
@@ -237,7 +236,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/deduction/v2/reload_deduction_employee_tag',"Member\PayrollDeductionController@reload_deduction_employee_tag");
 	Route::any('/deduction/v2/deduction_employee_tag/{archived}/{payroll_deduction_employee_id}',"Member\PayrollDeductionController@deduction_employee_tag");
 	Route::any('/deduction/v2/deduction_employee_tag_archive',"Member\PayrollDeductionController@deduction_employee_tag_archive");
-
 	/* DEDUCTION V2 END */
 
 

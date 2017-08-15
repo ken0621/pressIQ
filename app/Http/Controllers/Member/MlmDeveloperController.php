@@ -231,30 +231,6 @@ class MlmDeveloperController extends Member
 
         return Redirect::to("/member/mlm/developer");
     }
-    public function get_initial_settings()
-    {
-        $shop_id = $this->user_info->shop_id;
-        $binary_settings = Tbl_mlm_plan::where('shop_id', $shop_id)->code('BINARY')->enable(1)->trigger('Slot Creation')->first();
-        $binary_advance = Tbl_mlm_binary_setttings::where('shop_id', $shop_id)->first(); 
-
-        $count_tree_if_exist = 0;
-        $data['binary_enabled']  = 0;
-        $data['binary_auto'] = 0;
-
-        if(isset($binary_settings->marketing_plan_enable))
-        {
-           if($binary_settings->marketing_plan_enable == 1)
-           {
-                $data['binary_enabled'] = $binary_settings->marketing_plan_enable;
-                if(isset($binary_advance->binary_settings_placement))
-                {
-                    $data['binary_auto'] = $binary_advance->binary_settings_placement;
-                }
-           }
-        }
-
-        return $data;
-    }
     public function import()
     {
         $data["page"] = "Import Slot";
@@ -308,10 +284,48 @@ class MlmDeveloperController extends Member
     }
     public function repurchase()
     {
-        $data["page"] = "Repurchase";
-        return view("member.mlm_developer.repurchase");
+        $data["page"]       = "Repurchase";
+        $data               = Self::get_initial_settings();
+        return view("member.mlm_developer.repurchase", $data);
     }
     public function repurchase_submit()
     {
     }
-}
+    public function get_initial_settings()
+    {
+        $shop_id                = $this->user_info->shop_id;
+        $_complan               = Tbl_mlm_plan::where('shop_id', $shop_id)->enable(1)->get();
+        
+        $data['binary_enabled'] = 0;
+        $data['binary_auto']    = 0;
+        $data['binary_repurchase'] = 0;
+        $data['unilevel'] = 0;
+
+        foreach($_complan as $complan)
+        {
+            if($complan->marketing_plan_code == "BINARY" && $complan->marketing_plan_enable == 1)
+            {
+                $data["binary_enabled"] = 1;
+                $data["binary_auto"] = 0;
+
+                $binary_advance = Tbl_mlm_binary_setttings::where('shop_id', $shop_id)->first(); 
+                if(isset($binary_advance->binary_settings_placement))
+                {
+                    $data['binary_auto'] = $binary_advance->binary_settings_placement;
+                }
+            }
+
+            if($complan->marketing_plan_code == "BINARY_REPURCHASE" && $complan->marketing_plan_enable == 1)
+            {
+                $data["binary_repurchase"] = 1;
+            }
+
+            if($complan->marketing_plan_code == "UNILEVEL" && $complan->marketing_plan_enable == 1)
+            {
+                $data["unilevel"] = 1;
+            }
+        }
+
+        return $data;
+    }
+} 

@@ -30,7 +30,7 @@
 		<td>{{ $payroll_period->bank_name }}</td>
 	</tr>
 	<tr>
-		<td>{{ $payroll_period->payroll_company_address }} Branch</td>
+		<td>{{ $payroll_period->payroll_company_address }}</td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
@@ -47,7 +47,7 @@
 		<td>Dear Sir/Madam:</td>
 	</tr>
 	<tr>
-		<td colspan="4">Please debit my savings account no. 134-063791-2 the following personnels.</td>
+		<td colspan="4">Please debit my savings account no. {{ $payroll_period->payroll_company_account_no }} the following personnels.</td>
 	</tr>
 	<tr style="text-align: center; font-weight: 700; text-align: center; font-size: 12px;">
 		<td style="border: 1px solid #000;">Name</td>

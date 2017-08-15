@@ -74,6 +74,10 @@
 					@endforeach
 				</select>
 			</div>
+			<div class="col-md-6">
+				<small>Bank Account Number</small>
+				<input type="text" name="payroll_company_account_no" placeholder="Bank Account Number" class="form-control">
+			</div>
 		</div>
 		<div class="form-group">
 			<div class="col-md-6">

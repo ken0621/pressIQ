@@ -11,9 +11,11 @@ use App\Models\Tbl_mlm_binary_setttings;
 use App\Models\Tbl_mlm_gc;
 use App\Models\Tbl_tree_sponsor;
 use App\Models\Tbl_tree_placement;
+use App\Models\Tbl_item;
 use App\Globals\Currency;
 use App\Globals\Mlm_compute;
 use App\Globals\Reward;
+use App\Models\Tbl_mlm_item_points;
 use DB;
 use Redirect;
 use Request;
@@ -285,17 +287,25 @@ class MlmDeveloperController extends Member
     public function repurchase()
     {
         $data["page"]       = "Repurchase";
+        $shop_id            = $this->user_info->shop_id;
         $data               = Self::get_initial_settings();
+        $data["_item"]      = Tbl_mlm_item_points::where("tbl_item.shop_id", $shop_id)->joinItem()->joinMembership()->groupBy("tbl_item.item_id")->get();
+        $_item              = $data["_item"];
+
         return view("member.mlm_developer.repurchase", $data);
     }
     public function repurchase_submit()
     {
+        $return["status"]           = "success";
+        $return["call_function"]    = "repurchase_submit_done";
+
+        return json_encode($return);
     }
     public function get_initial_settings()
     {
         $shop_id                = $this->user_info->shop_id;
         $_complan               = Tbl_mlm_plan::where('shop_id', $shop_id)->enable(1)->get();
-        
+
         $data['binary_enabled'] = 0;
         $data['binary_auto']    = 0;
         $data['binary_repurchase'] = 0;

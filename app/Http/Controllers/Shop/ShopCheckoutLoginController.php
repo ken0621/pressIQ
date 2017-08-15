@@ -70,6 +70,13 @@ class ShopCheckoutLoginController extends Shop
             
             $data["page"]     = "Checkout - Login";
             $data["get_cart"] = Cart::get_cart($this->shop_info->shop_id);
+            $total = 0;
+            foreach ($data["get_cart"]["cart"] as $key => $value) 
+            {
+                $total += $value["cart_product_information"]["product_price"] * $value["quantity"];
+            }
+            $data["get_cart"]["sale_information"]["total_overall_price"] = $total;
+
             $this->cart_exist($data);
             $this->if_loggedin();
             return view("checkout_login", $data);

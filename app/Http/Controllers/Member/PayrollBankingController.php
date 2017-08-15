@@ -99,6 +99,7 @@ class PayrollBankingController extends Member
      }
      public static function download_bdo($data)
      {
+        dd($data["payroll_period"]);
         $data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $data["payroll_period_company_id"])->orderBy("net_pay", "desc")->basic()->get();
         $data = Self::clean($data);
         // dd($data["_employee"]);
@@ -121,8 +122,10 @@ class PayrollBankingController extends Member
      }
      public static function download_metrobank($data)
      {
+        dd("Under Construction");
      }
      public static function download_equicom($data)
      {
+        dd("Under Construction");
      }
 }

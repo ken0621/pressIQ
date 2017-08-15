@@ -33,48 +33,53 @@ class Reward
     {
         // Note Membership id = membership code package id
         $customer = Tbl_customer::where('customer_id', $customer_id)->first();
+
         if($customer)
         {
             $shop_id = $customer->shop_id;
+
             if($membership_id == null)
             {
                 $membership = Tbl_membership_package::where('shop_id', $shop_id)->membership()->where('membership_archive', 0)->get()->toArray();
-                
                 $random = array_rand($membership);
                 $membership_id = $membership[$random]['membership_package_id'];  
                 $membership = Tbl_membership_package::where('membership_package_id', $membership_id)->membership()->first();
             }
-
-            $membership = Tbl_membership_package::where('membership_package_id', $membership_id)->membership()->first();
-            // else
-            // {
-            //     $membership = Tbl_membership_package::where('membership_id', $membership_id)->membership()->first();
-            // }
+            else
+            {
+                $membership = Tbl_membership_package::where('shop_id', $shop_id)->where('membership_package_id', $membership_id)->membership()->first();
+            }
             
-            $membership_package_id = $membership->membership_package_id;
 
+            if(!$membership)
+            {
+                $return['status'] = 'error';
+                $return['message'] = 'The Package ID you used is invalid.';
+            }
+            else
+            {
+                $membership_package_id = $membership->membership_package_id;
 
-            $insert['membership_activation_code'] = Self::random_code_generator(8);
-            $insert['customer_id'] = $customer->customer_id;
-            $insert['membership_package_id'] = $membership_package_id;
-            $insert['membership_code_invoice_id'] = 0;
-            $insert['shop_id'] = $shop_id;
-            $insert['membership_code_pin'] = Tbl_membership_code::where('shop_id', $shop_id)->count() + 1; 
-            $insert['membership_type'] = 'PS';
+                $insert['membership_activation_code'] = Self::random_code_generator(8);
+                $insert['customer_id'] = $customer->customer_id;
+                $insert['membership_package_id'] = $membership_package_id;
+                $insert['membership_code_invoice_id'] = 0;
+                $insert['shop_id'] = $shop_id;
+                $insert['membership_code_pin'] = Tbl_membership_code::where('shop_id', $shop_id)->count() + 1; 
+                $insert['membership_type'] = 'PS';
 
-            $id = Tbl_membership_code::insertGetId($insert);
+                $id = Tbl_membership_code::insertGetId($insert);
 
-            $return['status'] = 'success';
-            $return['message'] = 'Invalid Customer';
-            $return['membership_code_id'] = $id;
-            $return['membership_code'] = $insert;
-            
+                $return['status'] = 'success';
+                $return['message'] = 'Invalid Customer';
+                $return['membership_code_id'] = $id;
+                $return['membership_code'] = $insert;
+            }
         }
         else
         {
             $return['status'] = 'error';
             $return['message'] = 'Invalid Customer';
-
         }
 
         if($return == 'json'){ return json_encode($return); }
@@ -152,22 +157,59 @@ class Reward
 
         if(!$validator->passes())
         {
-            $return['status'] = "error"; $return['message'] = $validator->messages(); return $return;
+            $return['status'] = "error";
+            $return['message'] = $validator->messages();
+            return $return;
         }
+
         if(!$membership)
         {
-            $return['status'] = "error"; $return['message'] = 'Invalid Membership Code'; return $return;
+            $return['status'] = "error";
+            $return['message'] = 'Invalid Membership Code';
+            return $return;
         }
+
         if($membership->used != 0)
         {
-            $return['status'] = "error"; $return['message'] = 'Membership Code Already Used'; return $return;
-        }    
+            $return['status'] = "error";
+            $return['message'] = 'Membership Code Already Used';
+            return $return;
+        } 
+
         if($count_tree_if_exist != 0)
         {
-            $return['status'] = "error"; $return['message'] = 'Placement Alread Taken'; return $return;
-        }  
+            $return['status'] = "error";
+            $return['message'] = 'Placement Alread Taken';
+            return $return;
+        }
 
-        $insert['slot_no'] = Mlm_plan::set_slot_no($request['shop_id'], $validate['membership_code_id']);
+        /* CREATE SLOT NO IF NOT SET */
+        if(!isset($request["slot_no"]))
+        {
+            $request["slot_no"] = null;
+        }
+
+        /* CHECK IF SLOT NO. ALREADY EXIST */
+        $check_slot_no = Tbl_mlm_slot::where("shop_id", $shop_id)->where("slot_no", $request["slot_no"])->first();
+        if($check_slot_no)
+        {
+            $return['status'] = "error";
+            $return['message'] = 'The slot number you are trying to use already exist.';
+            return $return;
+        }
+        else
+        {
+            /* IF SLOT NO. IS NULL - CREATE SLOT NUMBERS */
+            if($request["slot_no"] == null)
+            {
+                $insert['slot_no'] = Mlm_plan::set_slot_no($request['shop_id'], $validate['membership_code_id']);
+            }
+            else
+            {
+                $insert['slot_no'] = $request["slot_no"];
+            }
+        }
+
         $insert['shop_id'] = $request['shop_id'];
         $insert['slot_owner'] = $validate['slot_owner'];
         $insert['slot_created_date'] = Carbon::now();

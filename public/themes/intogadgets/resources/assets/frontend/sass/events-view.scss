@@ -30,8 +30,9 @@
 					{
 						img
 						{
-							width: 1100px;
-							height: 1100px;
+							// width: 1100px;
+							// height: 1100px;
+							max-width: 100%;
 							object-fit: contain;
 						}
 					}
@@ -39,6 +40,10 @@
 					{
 						margin-top: 25px;
 						margin-bottom: 25px;
+						img
+						{
+							max-width: 100%;
+						}
 					}
 				}
 				.side-event

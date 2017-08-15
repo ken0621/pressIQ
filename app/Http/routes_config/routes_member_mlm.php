@@ -268,4 +268,8 @@ Route::get('member/mlm/developer', 'Member\MlmDeveloperController@index');
 Route::get('member/mlm/developer/table', 'Member\MlmDeveloperController@index_table');
 Route::get('member/mlm/developer/create_slot', 'Member\MlmDeveloperController@create_slot');
 Route::post('member/mlm/developer/create_slot', 'Member\MlmDeveloperController@create_slot_submit');
+Route::get('member/mlm/developer/import', 'Member\MlmDeveloperController@import');
+Route::post('member/mlm/developer/import', 'Member\MlmDeveloperController@import_submit');
+Route::get('member/mlm/developer/repurchase', 'Member\MlmDeveloperController@repurchase');
+Route::post('member/mlm/developer/repurchase', 'Member\MlmDeveloperController@repurchase');
 Route::get('member/mlm/developer/reset', 'Member\MlmDeveloperController@reset');

@@ -35,7 +35,7 @@ class Mlm_gc
 		// $insert['mlm_gc_date'] = Carbon::now();
 		// $insert['mlm_gc_used'] = 
 		// $insert['mlm_gc_used_date'] = 
-		$id = Tbl_mlm_gc::insertGetId($insert);
+		//$id = Tbl_mlm_gc::insertGetId($insert);
 	}
 	public static function slot_gc($slot_id)
 	{

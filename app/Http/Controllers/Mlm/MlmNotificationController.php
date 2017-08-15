@@ -15,10 +15,13 @@ class MlmNotificationController extends Mlm
 
     	$data = [];
     	$data['report'] = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)
+        // ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_mlm_slot_wallet_log.wallet_log_slot_sponsor')
+        // ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
         ->orderBy('wallet_log_notified', 'ASC')
         ->orderBy('wallet_log_id', 'DESC')
         
         ->sponsorslot()
+        ->leftjoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
         ->paginate(10);
         foreach($data['report'] as $value)
         {

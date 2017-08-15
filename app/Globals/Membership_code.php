@@ -334,7 +334,7 @@ class Membership_code
                 } 
                 // dd($change_content);
                 $content_key = 'membership_code_purchase';
-                $data['body'] = EmailContent::email_txt_replace($content_key, $change_content);
+                $data['body'] = EmailContent::email_txt_replace($content_key, $change_content, $shop_id);
                 $data['company']['email'] = DB::table('tbl_content')->where('shop_id', $shop_id)->pluck('value');
 
                 // ---------------------------------------------

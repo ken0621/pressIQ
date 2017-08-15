@@ -1,4 +1,4 @@
-\@extends('member.layout')
+@extends('member.layout')
 @section('content')
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
@@ -48,57 +48,65 @@
 		            	<div class="row col-md-2">
 			                <ul class="nav nav-tabs nav-stacked box-light">
 			                	@foreach($_method as $key=>$method)
-				                <li class="{{$key== 0 ? 'active' : ''}} cursor-pointer"><a class="border-right cursor-pointer" data-toggle="tab" href="#{{$method->method_code_name}}">{{$method->method_name}}</a></li>
+				                <li class="{{$key== 0 ? 'active' : ''}} cursor-pointer method-link"><a class="border-right cursor-pointer" data-toggle="tab" href="#{{$method->method_code_name}}">{{$method->method_name}}</a></li>
 				                @endforeach   
 				            </ul>
 			            </div>
 			            <div class="col-md-10">
 				            <div class="tab-content">
 				            	@foreach($_method as $key=>$method)
-						            <div class="tab-pane fade in {{$key== 0 ? 'active' : ''}}" id="{{$method->method_code_name}}">
-						            	<form class="global-submit" action="/member/maintenance/online_payment/save-payment-setting" method="post">
-						            		<input type="hidden" name="_token" value="{{ csrf_token() }}">
-						            		<input type="hidden" name="link_method_id" value="{{ $method->method_id }}">
-						            		<div class="pull-right">
-								            	<label class="switch">
-													<input type="checkbox" name="link_is_enabled" {{$method->link_is_enabled == 1 ? 'checked' : ''}}>
-													<div class="slider round"></div>
-												</label>
-											</div>
-											<div class="row col-md-12">
-												<div class="col-md-4 text-center">	
-						                            <input type="hidden" name="link_img_id" class="image-value" key="{{$key}}" value="{{$method->link_img_id or ''}}" required>
-						                            <img class="img-responsive img-src" key="{{$key}}" style="width: 100%; height: 167px; object-fit: cover" src="{{$method->image_path or '/assets/front/img/default.jpg'}}">
-						                            <button type="button" class="btn btn-primary image-gallery image-gallery-single" key="{{$key}}" style="margin-top: 15px;">Upload Image</button>
-						                        </div>
-						                        <div class="col-md-8 text-center select-container ">
-						                        	<input type="hidden" class="link-reference-name" name="link_reference_name" value="{{$method->link_reference_name or ''}}" required/>
-						                        	<div class="row form-group text-left">
-						                        		<label>Gateway</label>
-							                        	<select name="link_reference_id" class="form-control select-gateway" required>					
-							                        		@include('member.load_ajax_data.load_payment_gateway', ['_gateway' => $method->gateway, 'reference_id' => $method->link_reference_id, 'reference_name' => $method->link_reference_name])
-							                        	</select>
+						            <div class="tab-pane fade in {{$key== 0 ? 'active' : ''}} method-link-load" id="{{$method->method_code_name}}">
+						            	<div class="method-link-data ">
+							            	<form class="global-submit" action="/member/maintenance/online_payment/save-payment-setting" method="post">
+							            		<input type="hidden" name="_token" value="{{ csrf_token() }}">
+							            		<input type="hidden" name="link_method_id" value="{{ $method->method_id }}">
+							            		<div class="pull-right">
+									            	<label class="switch">
+														<input type="checkbox" name="link_is_enabled" {{$method->link_is_enabled == 1 ? 'checked' : ''}}>
+														<div class="slider round"></div>
+													</label>
+												</div>
+												<div class="row col-md-12">
+													<div class="col-md-4 text-center">	
+							                            <input type="hidden" name="link_img_id" class="image-value" key="{{$key}}" value="{{$method->link_img_id or ''}}" required>
+							                            <img class="img-responsive img-src" key="{{$key}}" style="width: 100%; height: 167px; object-fit: cover" src="{{$method->image_path or '/assets/front/img/default.jpg'}}">
+							                            <button type="button" class="btn btn-primary image-gallery image-gallery-single" key="{{$key}}" style="margin-top: 15px;">Upload Image</button>
 							                        </div>
-							                        <div class="row form-group text-left">
-							                        	<div class="col-md-6">
-							                        		<label>Dicount Value</label>
-							                        		<input type="text" class="form-control float-format" name="link_discount_fixed" value="{{$method->link_discount_fixed or 0}}">
-							                        	</div>
-							                        	<div class="col-md-6">
-							                        		<label>Dicount Percentage</label>
-							                        		<input type="text" class="form-control int-format" name="link_discount_percentage" value="{{$method->link_discount_percentage or 0}}">
-							                        	</div>
+							                        <div class="col-md-8 text-center select-container ">
+							                        	<input type="hidden" class="link-reference-name" name="link_reference_name" value="{{$method->link_reference_name or ''}}" required/>
+							                        	<div class="row form-group text-left">
+							                        		<label>Gateway</label>
+								                        	<select name="link_reference_id" class="form-control select-gateway" required>					
+								                        		@include('member.load_ajax_data.load_payment_gateway', ['_gateway' => $method->gateway, 'reference_id' => $method->link_reference_id, 'reference_name' => $method->link_reference_name])
+								                        	</select>
+								                        </div>
+								                        <div class="row form-group text-left">
+								                        	<div class="row clearfix">
+								                        		<div class="col-md-6">
+									                        		<label>Charge Value</label>
+									                        		<input type="text" class="form-control float-format" name="link_discount_fixed" value="{{$method->link_discount_fixed or 0}}">
+									                        	</div>
+									                        	<div class="col-md-6">
+									                        		<label>Charge Percentage</label>
+									                        		<input type="text" class="form-control int-format" name="link_discount_percentage" value="{{$method->link_discount_percentage or 0}}">
+									                        	</div>
+								                        	</div>
+								                        </div>
+								                        <div class="row form-group text-left">
+								                        	<label>Description</label>
+								                        	<textarea class="form-control" rows="2" name="link_description">{{$method->link_description or ''}}</textarea>
+								                        </div>
+								                        <div class="row form-group text-left">
+								                        	<label>Delimeter</label>
+								                        	<input type="text" name="link_delimeter" class="form-control" value="{{$method->link_delimeter or ''}}">
+								                        </div>
+								                        <div class="form-group">
+								                        	<button class="panel-buttons btn btn-custom-primary pull-right" type="btn">Save</button>
+								                        </div>
 							                        </div>
-							                        <div class="row form-group text-left">
-							                        	<label>Description</label>
-							                        	<textarea class="form-control" rows="2" name="link_description">{{$method->link_description or ''}}</textarea>
-							                        </div>
-							                        <div class="form-group">
-							                        	<button class="panel-buttons btn btn-custom-primary pull-right" type="btn">Save</button>
-							                        </div>
-						                        </div>
-						                    </div>
-										</form>
+							                    </div>
+											</form>
+										</div>
 						            </div>
 				            	@endforeach
 					        </div>
@@ -119,24 +127,35 @@
 			            </div>
 			            <div class="col-md-10">
 				            <div class="tab-content">
-
 				            	@foreach($_gateway as $key=>$gateway)
 					            	<div class="tab-pane fade in {{$key == 0 ? 'active' : ''}}" id="{{$gateway->gateway_code_name}}">
 					            		<form class="global-submit" action="/member/maintenance/online_payment/save-gateway" method="post">
 					            			<input type="hidden" name="_token" value="{{ csrf_token() }}">
 						            		<input type="hidden" name="gateway_code_name" class="form-control input-sm" value="{{$gateway->gateway_code_name}}">
 						            		<input type="hidden" name="api_gateway_id" class="form-control input-sm" value="{{$gateway->gateway_id}}">
-						            		@if($gateway->gateway_code_name != 'other')
+						            		@if($gateway->gateway_code_name == 'cashondelivery')
 								                <div class="form-group col-md-12">
-								                    <label>{{ $gateway->gateway_code_name == "ipay88" ? 'Merchant Code' : 'Client ID'}}</label>
+								                    <label>{{ $gateway->gateway_first_label }}</label>
+								                    <input type="text" name="api_client_id" class="form-control input-sm" value="Cash on delivery" disabled>
+								                </div>
+								                <div class="form-group col-md-12">
+								                    <label>{{ $gateway->gateway_second_label }}</label>
+								                    <input type="text" name="api_secret_id" class="form-control input-sm" value="Cash on delivery" disabled>
+								                </div>
+								                <div class="col-md-12">
+								            		<button type="submit" class="panel-buttons btn btn-custom-primary pull-right">Save</button>
+								            	</div>
+						            		@elseif($gateway->gateway_code_name != 'other')
+								                <div class="form-group col-md-12">
+								                    <label>{{ $gateway->gateway_first_label }}</label>
 								                    <input type="text" name="api_client_id" class="form-control input-sm" value="{{$gateway->api_client_id or ''}}">
 								                </div>
 								                <div class="form-group col-md-12">
-								                    <label>{{ $gateway->gateway_code_name == "ipay88" ? 'Merchant Key' : 'Secret ID'}}</label>
+								                    <label>{{ $gateway->gateway_second_label }}</label>
 								                    <input type="text" name="api_secret_id" class="form-control input-sm" value="{{$gateway->api_secret_id or ''}}">
 								                </div>
 								                <div class="col-md-12">
-								            		<button type="submit" class="panel-buttons btn btn-custom-primary pull-right">save</button>
+								            		<button type="submit" class="panel-buttons btn btn-custom-primary pull-right">Save</button>
 								            	</div>
 							                @else
 							                	<div class="other-load-data">
@@ -152,7 +171,6 @@
 									                </div>
 								                </div>
 						                    @endif
-						                    
 						                </form>
 					            	</div>
 					            @endforeach

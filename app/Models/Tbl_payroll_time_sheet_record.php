@@ -10,6 +10,7 @@ class Tbl_payroll_time_sheet_record extends Model
 	protected $primaryKey = "payroll_time_sheet_record_id";
     public $timestamps = false;
 
+
     /* COLUMN REFERENCE NAME */
 	// [PRIMARY KEY] 	payroll_time_sheet_record_id
 	// [INTEGER] 		payroll_time_sheet_id
@@ -22,6 +23,7 @@ class Tbl_payroll_time_sheet_record extends Model
 	// [VARCHAR] 		payroll_time_sheet_origin
 	// [VARCHAR] 		payroll_time_sheet_status
 	// [TIME]			payroll_time_sheet_break
+	// [TEXT]			time_sheet_record_remarks
 
 
 	/* payroll_time_sheet_status [EXPLANATION] */
@@ -37,6 +39,14 @@ class Tbl_payroll_time_sheet_record extends Model
 		{
 			$query->where($key, $value);
 		}
+		return $query;
+	}
+
+	public function scopegetrecord($query, $payroll_time_sheet_id = 0)
+	{
+		$query->leftjoin('tbl_payroll_company','tbl_payroll_company.payroll_company_id','=','tbl_payroll_time_sheet_record.payroll_company_id')
+				->where('tbl_payroll_time_sheet_record.payroll_time_sheet_id', $payroll_time_sheet_id);
+
 		return $query;
 	}
 }

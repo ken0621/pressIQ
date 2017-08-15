@@ -14,11 +14,14 @@ Route::post('/mlm/register', 'Mlm\MlmRegisterController@post_register');
 
 Route::get('/mlm/register/get/membership_code/{membership_code}', 'Mlm\MlmRegisterController@view_customer_info_via_mem_code');
 
+Route::get('/mlm/process_order_queue', 'Mlm\MlmDashboardController@process_order_queue'); 
+
 Route::get('/mlm', 'Mlm\MlmDashboardController@index'); 
 Route::get('/mlm/news/{id}', 'Mlm\MlmDashboardController@news_content'); 
 Route::get('/mlm/profile', 'Mlm\MlmProfileController@index'); 
 Route::get('/mlm/notification', 'Mlm\MlmNotificationController@index'); 
 Route::any('/mlm/claim/slot', 'Mlm\MlmDashboardController@claim_slot'); 
+Route::get('/mlm/lead', 'Mlm\MlmDashboardController@lead'); 
 
 Route::any('/mlm/network/binary', 'Mlm\MlmNetworkController@binary'); 
 Route::any('/mlm/network/unilevel', 'Mlm\MlmNetworkController@unilevel'); 
@@ -79,13 +82,30 @@ Route::get('/mlm/slots/upgrade_slot/{id}', 'Mlm\MlmSlotsController@upgrade_slot'
 Route::post('/mlm/slots/upgrade_slot_post/{id}', 'Mlm\MlmSlotsController@upgrade_slot_post'); 
 Route::get('/mlm/slots/manual_add_slot', 'Mlm\MlmSlotsController@manual_add_slot'); 
 Route::post('/mlm/slots/manual_add_slot_post', 'Mlm\MlmSlotsController@manual_add_slot_post'); 
+/* ---- TRANSFER SLOT*/
+Route::post('/mlm/slots/before_transfer_slot', 'Mlm\MlmSlotsController@before_transfer_slot'); 
+Route::get('/mlm/slots/transfer_slot', 'Mlm\MlmSlotsController@transfer_slot'); 
+Route::post('/mlm/slots/transfer_slot_post', 'Mlm\MlmSlotsController@transfer_slot_post'); 
+/* ---- PRODUCT CODE */
+Route::get('/mlm/slots/item_code', 'Mlm\MlmSlotsController@item_code'); 
+Route::post('/mlm/slots/item_code_post', 'Mlm\MlmSlotsController@item_code_post');
 
+Route::get('/mlm/slots/transfer_item_code', 'Mlm\MlmSlotsController@transfer_item_code'); 
+Route::post('/mlm/slots/transfer_item_code_post', 'Mlm\MlmSlotsController@transfer_item_code_post'); 
+
+Route::get('/mlm/slots/transfer_mem_code', 'Mlm\MlmSlotsController@transfer_mem_code'); 
+Route::post('/mlm/slots/transfer_mem_code_post', 'Mlm\MlmSlotsController@transfer_mem_code_post'); 
 /* MLM SLOTs REPORTS */
 
 
 /* MLM WALLET ABS */
 Route::get('/mlm/wallet/tours', 'Mlm\MlmWalletAbsController@index');
 Route::post('/mlm/wallet/tours/update', 'Mlm\MlmWalletAbsController@update_info');  
+Route::post('/mlm/wallet/tours/transfer', 'Mlm\MlmWalletAbsController@transfer_wallet'); 
+
+/* MLM V-MONEY WALLET */
+Route::get('/mlm/wallet/vmoney', 'Mlm\MlmWalletVMoneyController@index');
+Route::post('/mlm/wallet/vmoney/transfer', 'Mlm\MlmWalletVMoneyController@transfer');
 
 /* Modal Add Slot */
 Route::get('/mlm/slot/add', 'Mlm\MlmSlotsController@add_slot_modal');

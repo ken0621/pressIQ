@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="resources/assets/frontend/css/single-product.css">
-
+     
 <div class="modal-body">
 	<?php $ctr = 0; ?>
 	@foreach($product["variant"] as $product_variant)
@@ -11,17 +11,17 @@
 	      <div class="col-md-6">
 		      <div class="single-product-holder" style="padding: 0; width: 100%; margin: 0;">
 		         @foreach($product_variant['image'] as $key => $image)
-		         <img class="single-product-img 4-3-ratio {{ $key == 0 ? '' : 'hide' }}" key="{{ $key }}" style="width: 100%;" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}" alt = "" id="picturecontainer"/>
+		         <img class="single-product-img 4-4-ratio {{ $key == 0 ? '' : 'hide' }}" key="{{ $key }}" style="width: 100%;" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}" alt = "" id="picturecontainer"/>
 		         @endforeach
 		         <div class="thumb">
 		             @foreach($product_variant['image'] as $key => $image)
-		             <div class="holder" variant-id="{{ $product_variant['evariant_id'] }}" key="{{ $key }}" style="cursor: pointer;"><img style="object-fit: cover;" class="4-3-ratio" src="{{ $image['image_path'] }}"></div>
+		             <div class="holder" variant-id="{{ $product_variant['evariant_id'] }}" key="{{ $key }}" style="cursor: pointer;"><img style="object-fit: cover;" class="4-4-ratio" src="{{ $image['image_path'] }}"></div>
 		             @endforeach
 		         </div>
 		      </div>
 	      </div>
 	      <div class="col-md-6">
-		      <div class="single-product-holder border" style="width: 100%; margin: 0;">
+		      <div class="single-product-holder border" style="width: 100%; margin: 0; position: relative;">
 		         <div class="single-order-header">{{ $product["eprod_name"] }}</div>
 		         <div class="single-order-sub">
 		            Categories: <a href="/product?type={{ $product['eprod_category_id'] }}">{{ $category['type_name'] }}</a>
@@ -33,7 +33,16 @@
 		               <div>{!! $product_variant['evariant_description'] !!}</div>
 		            </div>
 		            <div class="price-container">
-		               <div id="single-order-price" class="single-order-price">&#8369;&nbsp;{{ number_format($product_variant['evariant_price'], 2) }}</div>
+		               @if($product_variant['discounted'] == "true")
+		              <div class="row clearfix">
+		                  <div class="col-sm-6">
+		                      <div  id="single-order-price" class="single-order-price" style="color:red;font-size:17px;text-decoration: line-through;"><span style="color:gray;">PHP {{ number_format($product_variant['evariant_price'], 2) }}</span></div>                    
+		                  </div>
+		              </div>
+		              <div id="single-order-price" class="single-order-price">PHP {{ number_format($product_variant['discounted_price'], 2) }}</div>
+		              @else
+		              <div id="single-order-price" class="single-order-price">PHP {{ number_format($product_variant['evariant_price'], 2) }}</div>
+		              @endif
 		               @if($product_variant['item_type_id'] != 2)
 		                <div class="single-order-availability" style="text-transform: capitalize;">{{ $product_variant['inventory_status'] }}</div>
 		               @endif
@@ -81,6 +90,7 @@
 		            @if($wishlist)
 		              <button type="button" class="single-order-button" onClick="location.href='/wishlist/add/{{ $product["eprod_id"] }}'">ADD TO WISHLIST</button>
 		            @endif
+		            <div class="loader-variation" style="display: none; vertical-align: middle; position: absolute; top: 5px; right: 5px; bottom: 0;"><img style="width: 25px; height: 25px;" src="/resources/assets/frontend/img/loader.gif"></div>
 		            <div class="divider" style="margin: 35px 0; opacity: 0;"></div>
 		         </div>
 		      </div>

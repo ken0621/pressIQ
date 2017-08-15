@@ -12,7 +12,7 @@
                 </small>
             </h1>
             <div class="text-right">
-            <a class="btn btn-primary panel-buttons popup" link="/member/maintenance/email_content/add" size="md" data-toggle="modal" data-target="#global_modal">Add Email Content</a>
+            <a class="hide btn btn-primary panel-buttons popup" link="/member/maintenance/email_content/add" size="md" data-toggle="modal" data-target="#global_modal">Add Email Content</a>
             </div>
         </div>
     </div>

@@ -200,6 +200,12 @@ function payrollconfiguration()
 		// jobtitle_archived(1);
 		reload_configuration("/member/payroll/jobtitlelist");
 	} 
+
+	this.reload_branch = function()
+	{
+		reload_configuration("/member/payroll/branch_name");
+	} 
+
 	
 
 	this.btn_modal_button_event = function()
@@ -223,6 +229,12 @@ function payrollconfiguration()
 		reload_configuration("/member/payroll/allowance");
 	}
 
+
+	this.reload_allowancev2 = function()
+	{
+		reload_configuration("/member/payroll/allowance/v2");
+	}
+
 	this.reload_leave_temp = function()
 	{
 		reload_configuration("/member/payroll/leave");
@@ -231,6 +243,11 @@ function payrollconfiguration()
 	this.reload_holiday = function()
 	{
 		reload_configuration("/member/payroll/holiday");
+	}
+
+	this.reload_holiday_default = function()
+	{
+		reload_configuration("/member/payroll/holiday_default");
 	}
 
 	this.reload_payroll_group = function()
@@ -294,11 +311,6 @@ function payrollconfiguration()
 		reload_configuration("/member/payroll/shift_template");
 	}
 
-	/*this.reload_holiday_default = function()
-	{
-		reload_configuration("/member/payroll/holiday_default");
-	}*/
-	
 }
 
 /* CALL A FUNCTION BY NAME */

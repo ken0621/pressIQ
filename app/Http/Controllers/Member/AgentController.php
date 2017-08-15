@@ -55,6 +55,7 @@ class AgentController extends Member
             $data["_position"] = Tbl_position::where("position_code","sales_agent")->where("position_shop_id",$this->user_info->shop_id)->get();
 
             $data["edit"] = Tbl_employee::where("employee_id",$id)->first();
+            $data["action"] = "/member/pis/agent/edit_submit";
 
             return view('member.employee.employee_edit',$data);
         }

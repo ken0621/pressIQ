@@ -12,16 +12,17 @@ use Redirect;
 use App\Models\Tbl_post;
 use App\Models\Tbl_collection;
 use App\Globals\Category;
+use DB;
 
 class Page_ContentController extends Member
 {
     public function getIndex()
     {
         $data["page"] = "Vendor List";
-		$dirs = scandir("../public/themes");
-		$data["theme_color"] = $this->user_info->shop_theme_color;
+        $dirs = scandir("../public/themes");
+        $data["theme_color"] = $this->user_info->shop_theme_color;
         $data["shop_theme"] = $this->user_info->shop_theme;
-		$data["page_info"] = $string = file_get_contents("../public/themes/" . $this->user_info->shop_theme . "/page.json");
+        $data["page_info"] = $string = file_get_contents("../public/themes/" . $this->user_info->shop_theme . "/page.json");
         $data["page_info"] = json_decode($string);
         if ($data["page_info"]) 
         {
@@ -54,18 +55,29 @@ class Page_ContentController extends Member
             }
         }
 
+        /* FCF Exclusive */
+        if ($data["shop_theme"] == "fcf") 
+        {
+            $data["job_resume"] = DB::table("tbl_cms_job_resume")->where("archived", 0)->orderBy("date_created", "DESC")->get();
+        }
+
+        /* INTOGADGETS */
+        if($data["shop_theme"] == "intogadgets") 
+        {
+            $data['popular_tags'] = DB::table("tbl_ec_popular_tags")->where("shop_id", $this->user_info->shop_id)->orderBy("count", "DESC")->get();
+        }
+
         return view('member.page.page_content', $data);
     }
 
     public function postIndex()
     {
-    	$info  = Request::input("info");
-      
-    	foreach ($info as $key => $value) 
-    	{
-    		$exist = Tbl_content::where("key", $key)->where("type", $value["type"])->where("shop_id", $this->user_info->shop_id)->first();
+        $info  = Request::input("info");
+        foreach ($info as $key => $value) 
+        {
+            $exist = Tbl_content::where("key", $key)->where("type", $value["type"])->where("shop_id", $this->user_info->shop_id)->first();
 
-    		$insert["key"]       = $key;
+            $insert["key"]       = $key;
 
             if ($value["type"] == "gallery") 
             {
@@ -85,6 +97,17 @@ class Page_ContentController extends Member
                     }
                 }   
             }
+            elseif ($value["type"] == "gallery_links") 
+            {
+                if (isset($value["value"]) && $value["value"]) 
+                {
+                    $insert["value"] = serialize($value["value"]);
+                }
+                else
+                {
+                    $insert["value"] = "";
+                }
+            }
             elseif ($value["type"] == "brand") 
             {
                 $insert["value"] = serialize($value["value"]);
@@ -101,22 +124,38 @@ class Page_ContentController extends Member
                 }
             }
 
-			$insert["type"]      = $value["type"];
-			$insert["shop_id"]   = $this->user_info->shop_id;
+            $insert["type"]      = $value["type"];
+            $insert["shop_id"]   = $this->user_info->shop_id;
 
-    		if ($exist) 
-    		{
-				Tbl_content::where("content_id", $exist->content_id)->where("shop_id", $this->user_info->shop_id)->update($insert);
-    		}
-    		else
-    		{	
-				Tbl_content::insert($insert);
-    		}
-    	}
+            if ($exist) 
+            {
+                Tbl_content::where("content_id", $exist->content_id)->where("shop_id", $this->user_info->shop_id)->update($insert);
+            }
+            else
+            {   
+                Tbl_content::insert($insert);
+            }
+        }
 
-    	return Redirect::back();
+        return Redirect::back();
     }
+    public function getUpdateTag()
+    {
+        $tag_id = Request::input("tag_id");
+        $data_tag = DB::table('tbl_ec_popular_tags')->where("tag_id",$tag_id)->first();
 
+        $update["tag_approved"] = 1;
+        if($data_tag->tag_approved == 1)
+        {
+            $update["tag_approved"] = 0;
+        }
+
+        DB::table('tbl_ec_popular_tags')->where("tag_id",$tag_id)->update($update);
+
+        $data["status"] = "success";
+
+        return json_encode($data);
+    }
     public function getPost($limit)
     {
         if ($limit) {
@@ -214,7 +253,7 @@ class Page_ContentController extends Member
     {
         $field = unserialize(Request::input("field"));
         $key   = Request::input("key");
-
+        
         if (isset($field) && isset($key)) 
         {
             $data["field"] = $field;

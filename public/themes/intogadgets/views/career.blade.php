@@ -9,7 +9,7 @@
  			{{ get_content($shop_theme_info, "career", "career_description") }}
 		</div>
  	</div>
- 	<div class="career-job">
+ 	<div class="career-job" style="background-image: url('resources/assets/frontend/img/career-header.jpg')">
  		<div class="title">JOB LISTING</div>
  		<div class="container">
 	 		<div class="containers">
@@ -41,31 +41,31 @@
  	</div>
 	 <form id="career-form" method="POST" enctype="multipart/form-data">
 	          <input type="hidden" name="_token" value="{{{ csrf_token() }}}" /> 
-		 	<div class="career-apply">
+		 	<div class="career-apply" style="background-image: url('resources/assets/frontend/img/blue.jpg')">
 		 		<div class="title">Apply Now</div>
 		 		<div class="container">
 		 			<div class="field">
 		 				<div class="col-md-6">
-		 					<input type="text" class="form-control" placeholder="Your Email" name='mail' value="{{Request::old('mail')}}"> 
+		 					<input type="text" required class="form-control" placeholder="Your Email" name='mail' value="{{Request::old('mail')}}"> 
 		 				</div>
 		 				<div class="col-md-6">
-		 					<input type="text" class="form-control" placeholder="Contact Number" name='number' value="{{Request::old('number')}}"> 
-		 				</div>
-		 			</div>
-		 			<div class="field">
-		 				<div class="col-md-6">
-		 					<input type="text" class="form-control" placeholder="Your Name" name="name" value="{{Request::old('name')}}"> 
-		 				</div>
-		 				<div class="col-md-6">
-		 					<input type="text" class="form-control" placeholder="Desire Position" name='position' value="{{Request::old('position')}}"> 
+		 					<input type="text" required class="form-control" placeholder="Contact Number" name='number' value="{{Request::old('number')}}"> 
 		 				</div>
 		 			</div>
 		 			<div class="field">
 		 				<div class="col-md-6">
-		 					<textarea class="form-control" placeholder="Your Message" name='message'></textarea>
+		 					<input type="text" required class="form-control" placeholder="Your Name" name="name" value="{{Request::old('name')}}"> 
 		 				</div>
 		 				<div class="col-md-6">
-		 					<div class="upload"><span>Attach Your File Here</span><input type="file" class="form-control" name='file' value=""></div> 
+		 					<input type="text" required class="form-control" placeholder="Desire Position" name='position' value="{{Request::old('position')}}"> 
+		 				</div>
+		 			</div>
+		 			<div class="field">
+		 				<div class="col-md-6">
+		 					<textarea required class="form-control" placeholder="Your Message" name='message'></textarea>
+		 				</div>
+		 				<div class="col-md-6">
+		 					<div class="upload"><span>Attach Your File Here</span><input required type="file" required class="form-control" name='resume' value=""></div> 
 		 				</div>
 		 				<div class="col-md-6">
 		 					<button type="submit" name="submit">Submit</button>

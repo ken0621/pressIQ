@@ -1,17 +1,7 @@
 @extends('layout')
 @section('content')
-<form method="post" action="/checkout" enctype="multipart/form-data">
-	<div class="hide">
-		@foreach($_input as $key => $input)
-			@if(is_array($input))
-				@foreach($input as $key0 => $value0)
-					<input type="hidden" name="{{ $key }}[]" value="{{ $value0 }}">
-				@endforeach
-			@else
-				<input type="hidden" name="{{ $key }}" value="{{ $input }}">
-			@endif
-		@endforeach
-	</div>
+<form method="post">
+	 {{ csrf_field() }}
 	<div class="container">
 		<h2>Choose Payment Method</h2>
 		<div class="payment-container">
@@ -20,13 +10,15 @@
 					<div class="holder-holder">
 						@if(count($_payment_method) != 0)
 							@foreach($_payment_method as $payment_method)
-								<div class="holder">
+								<div class="choose-payment-method holder" method_id="{{ $payment_method->method_id }}" description="{{ $payment_method->link_description }}">
 									<div class="match-height" style="line-height: 12.5px;">{{ $payment_method->method_name }}</div>
 									<div class="image" style="margin-top: 7.5px;">
 										<img src="{{ $payment_method->image_path ? $payment_method->image_path : '/assets/front/img/default.jpg' }}">
 									</div>
 									<div class="radio" style="margin-bottom: 0;">
-									  <label><input type="radio" name="payment_method_id" value="{{ $payment_method->method_id }}"></label>
+										<label >
+									  		<input class="radio" type="radio" name="payment_method_id" value="{{ $payment_method->method_id }}">
+										</label>
 									</div>
 								</div>
 							@endforeach	
@@ -36,75 +28,14 @@
 					</div>
 					<div class="details clearfix">
 						<div class="detail-holder">
-							{{-- <div class="details-title">Upload Proof of Payment</div>
-							<button class="btn btn-primary" id="upload-button" type="button" onClick="$('.payment-upload-file').trigger('click');">UPLOAD</button>
-							<input onChange="$('.upload-name').text($(this).val().split('\\').pop());" class="hide payment-upload-file" type="file" name="payment_upload">
-							<div class="upload-name"></div> --}}
-							<div class="details-text">You can pay in cash to our courier when you receive the goods at your doorstep.</div>
+							<div class="details-text" style="white-space: pre-wrap;">Kindly choose a payment method which you are most comfortable with paying.</div>
 							<div class="details-order">
 								<button class="btn btn-primary">PLACE YOUR ORDER</button>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="col-md-4">
-					<div class="checkout-summary">
-						<div class="title">Order Summary</div>
-						<div class="order-summary">
-							@if (session('fail'))
-							    <div class="alert alert-danger">
-							    	@if(is_array(session('fail')))
-							    		<ul>
-								        @foreach(session('fail') as $fail)
-							        		<li style="display: block;">{{ $fail }}</li>
-								        @endforeach
-								        </ul>
-								    @else
-								    	<ul style="padding: 0; margin: 0;">
-								    		<li style="display: block;">{{ session('fail') }}</li>
-								    	</ul>
-							        @endif
-							    </div>
-							@endif
-							<div class="number-in-cart">You have {{ count($get_cart["cart"]) }} in your cart.</div>
-							<table>
-								<thead>
-									<tr>
-										<th>Product</th>
-										<th class="text-center">Qty.</th>
-										<th class="text-right">Price</th>
-										<th></th>
-									</tr>
-								</thead>
-								<tbody>
-									@foreach($get_cart["cart"] as $cart)
-									<tr>
-										<td>{{ $cart["cart_product_information"]["product_name"] }}</td>
-										<td class="text-center">{{ $cart["quantity"] }}</td>
-										<td class="text-right">&#8369; {{ number_format($cart['quantity'] * $cart["cart_product_information"]["product_price"], 2) }}</td>
-										<td style="padding-left: 10px;"><a style="color: red;" href="/cart/remove?redirect=1&variation_id={{ $cart["product_id"] }}"><i class="fa fa-close"></i></a></td>
-									</tr>
-									@endforeach
-								</tbody>
-							</table>
-							<div class="text-right total">
-								<div class="total-price">&#8369; {{ number_format($get_cart["sale_information"]["total_product_price"], 2) }}</div>
-								<div class="total-label">Subtotal</div>
-							</div>	
-							<!-- <div class="text-right total">
-								<div class="total-price"></div>
-								<div class="total-label">tax()</div>
-							</div> -->
-							<div class="text-right total">
-								<div class="total-price">&#8369; {{ number_format($get_cart["sale_information"]["total_shipping"], 2) }}</div>
-								<div class="total-label">Shipping Fee</div>
-							</div>
-							<div class="text-right total ">
-								<div class="total-price supertotal">&#8369; {{ number_format($get_cart["sale_information"]["total_overall_price"], 2) }}</div>
-								<div class="total-label">Total</div>
-							</div>
-						</div>
-					</div>
+				<div class="col-md-4 order-summary-container">
 				</div>
 			</div>
 		</div>
@@ -115,10 +46,65 @@
 @section('script')
 <script type="text/javascript" src="js/match-height.js"></script>
 <script type="text/javascript">
-$(document).ready(function()
+
+
+var checkout_form_payment = new checkout_form_payment();
+
+function checkout_form_payment()
 {
-	$('.match-height').matchHeight();
-});
+	init();
+
+	function init()
+	{
+		$(document).ready(function()
+		{
+			document_ready();
+		});
+	}
+	function document_ready()
+	{
+		event_choose_payment_method();
+		action_load_sidecart();
+		action_match_height();
+	}
+	function event_choose_payment_method()
+	{
+		$(".radio").prop("checked", false);
+		$(".choose-payment-method").unbind("click");
+		$(".choose-payment-method").bind("click", function(e)
+		{
+			$(".checkout-summary .loader-here").removeClass("hidden");
+			$(e.currentTarget).find(".radio").prop("checked", true);
+
+			var description = $(e.currentTarget).attr("description");
+			$(".details-text").html(description);
+
+			var method_id = $(e.currentTarget).attr("method_id");
+			$.ajax(
+			{
+				url:"/checkout/method",
+				datatype:"json",
+				type:"get",
+				data:{method_id:method_id},
+				success: function(data)
+				{
+					action_load_sidecart();
+				}
+			});
+
+		});
+	}
+	function action_match_height()
+	{
+		$('.match-height').matchHeight();
+	}
+	function action_load_sidecart()
+	{
+		$(".order-summary-container").load("/checkout/side");
+	}
+}
+
+
 </script>
 @endsection
 

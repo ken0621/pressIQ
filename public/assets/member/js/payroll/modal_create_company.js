@@ -6,7 +6,35 @@ function modal_create_company()
 
 	function init()
 	{
-		event_function()
+		event_function();
+		initialize_select();
+		check_action();
+	}
+	function check_action()
+	{
+		if($('.blade-action').val() == 'view')
+		{
+			$('.sub-company-drop-down').globalDropList('disabled');		
+		}
+	}
+	function initialize_select()
+	{
+		$('.sub-company-drop-down').globalDropList(
+		{ 
+			hasPopup : 'false',
+            width : "100%",
+    		placeholder : "Select Parent Company..."
+    	});
+    	$('.rdo-drop-down').globalDropList({
+			hasPopup : 'false',
+            width : "100%",
+    		placeholder : "Select"
+    	});
+    	$('.bank-drop-down').globalDropList({
+			hasPopup : 'false',
+            width : "100%",
+    		placeholder : "Select Bank"
+    	});
 	}
 
 	function event_function()

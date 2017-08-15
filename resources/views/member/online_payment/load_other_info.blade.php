@@ -10,8 +10,8 @@
 	</div>
 	<div class="col-md-12 form-group">
 		<div class="">
-		    <label>Details</label>
-		    <textarea type="text" name="other_description" class="form-control input-sm" value="{{$other->other_account_name or ''}}" required> </textarea>
+		    <label>Landing Page Message</label>
+		    <textarea type="text" name="other_description" class="form-control input-sm" required>{{$other->other_description or ''}}</textarea>
 		</div>
 	</div>
 	<div class="col-md-12 form-group">

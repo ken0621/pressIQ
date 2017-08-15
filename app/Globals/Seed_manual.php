@@ -202,7 +202,7 @@ class Seed_manual
         $insert[15]['has_open_balance']         = "0"; 
         $insert[15]['chart_type_category']      = "";
         $insert[15]['normal_balance']           = "debit";
-        
+
         DB::table("tbl_chart_account_type")->insert($insert);
     }
     
@@ -346,7 +346,7 @@ class Seed_manual
        $insert[10]['default_open_balance_date']  = "";
        $insert[10]['is_tax_account']             = "";
        $insert[10]['account_tax_code_id']        = "";
-       $insert[10]['default_for_code']           = "";
+       $insert[10]['default_for_code']           = "accounting-open-balance-equity";
        
        $insert[11]['default_id']                 = 11; 
        $insert[11]['default_type_id']            = "11";    

@@ -16,6 +16,7 @@ use App\Models\Tbl_mlm_encashment_settings;
 
 use App\Globals\Mlm_member;
 use App\Globals\Settings;
+use App\Globals\Cart;
 class ShopLoginController extends Shop
 {
     public function index()
@@ -35,8 +36,7 @@ class ShopLoginController extends Shop
 			if($count >= 1)
 			{
 				$enc_pass = Crypt::encrypt($password);
-				$user = Tbl_customer::where('email', $email)
-				->first();
+				$user = Tbl_customer::where('email', $email)->first();
 				$user_pass = Crypt::decrypt($user->password);
                 if($user->archived == 0)
                 {
@@ -44,6 +44,12 @@ class ShopLoginController extends Shop
                     {
                         $shop_id = $user->shop_id;
                         Mlm_member::add_to_session($shop_id, $user->customer_id);
+
+                        $customer_info["email"] = trim(Request::input("email"));
+			            $customer_info["new_account"] = false;
+			            $customer_info["password"]= Request::input("password");
+			            $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_account"));
+
                         $data['type'] = 'success';
                         $data['message'] = 'You will be redirected.';
                     }

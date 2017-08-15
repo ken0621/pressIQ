@@ -76,5 +76,22 @@ class Tbl_payroll_period_company extends Model
 
 		return $query;
 	}
+	public function scopeCompany($query)
+	{
+		$query->join('tbl_payroll_company','tbl_payroll_company.payroll_company_id','=','tbl_payroll_period_company.payroll_company_id');
+	}
+	public function scopeCompanyPeriod($query)
+	{
+		$query->join('tbl_payroll_period','tbl_payroll_period.payroll_period_id','=','tbl_payroll_period_company.payroll_period_id');
+	}
+	public function scopegetcompanydetails($query, $payroll_period_company_id = 0)
+	{
+		$query->join('tbl_payroll_company','tbl_payroll_company.payroll_company_id','=','tbl_payroll_period_company.payroll_company_id')
+			  ->leftjoin('tbl_payroll_bank_convertion','tbl_payroll_bank_convertion.payroll_bank_convertion_id','=','tbl_payroll_company.payroll_company_bank')
+			  ->join('tbl_payroll_period','tbl_payroll_period.payroll_period_id','=','tbl_payroll_period_company.payroll_period_id')
+			  ->where('tbl_payroll_period_company.payroll_period_company_id',$payroll_period_company_id);
+
+		return $query;
+	}
 
 }

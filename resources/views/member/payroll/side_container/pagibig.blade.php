@@ -4,13 +4,24 @@
 	<div class="form-group">
 		<div class="col-md-4">
 			<small>Percentage</small>
-			<input type="number" name="payroll_pagibig_percent" class="form-control text-right" value="{{$pagibig->payroll_pagibig_percent}}">
+			@if( $pagibig == null )
+				<input type="number" name="payroll_pagibig_percent" class="form-control text-right" value="0">
+			@else
+				<input type="number" name="payroll_pagibig_percent" class="form-control text-right" value="{{$pagibig->payroll_pagibig_percent}}">
+			@endif
+		</div>
+		<div class="col-md-4">
+			<small>ER SHARE</small>
+			@if( $pagibig == null )
+				<input type="number" name="payroll_pagibig_er_share" class="form-control text-right" value="0">
+			@else
+				<input type="number" name="payroll_pagibig_er_share" class="form-control text-right" value="{{$pagibig->payroll_pagibig_er_share}}">
+			@endif
 		</div>
 	</div>
 	<div class="form-group">
-		<div class="col-md-4">
+		<div class="col-md-8">
 			<button class="btn btn-primary pull-right">Save</button>
 		</div>
 	</div>
-	
 </form>

@@ -17,7 +17,8 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/contact', 'Shop\ShopContactController@index');
 	Route::post('/contact', 'Shop\ShopContactController@contact_submit');
 	Route::get('/contact/find_store', 'Shop\ShopContactController@find_store'); //EDWARD GUEVARRA
-	Route::get('/career', 'Shop\ShopCareerController@index'); //EDWARD GUEVARRA
+	Route::any('/career', 'Shop\ShopCareerController@index'); //EDWARD GUEVARRA
+	Route::get('/career/success', 'Shop\ShopCareerController@success'); //EDWARD GUEVARRA
 	Route::get('/how', 'Shop\ShopHowController@index'); //EDWARD GUEVARRA
 	Route::get('/youwin', 'Shop\ShopYouWinController@index'); //EDWARD GUEVARRA
 	Route::get('/events', 'Shop\ShopEventsController@index'); //EDWARD GUEVARRA
@@ -26,9 +27,12 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/testimony', 'Shop\ShopTestimonyController@index'); //EDWARD GUEVARRA
 	Route::get('/runruno', 'Shop\ShopAboutController@runruno'); //EDWARD GUEVARRA
 	Route::get('/news', 'Shop\ShopAboutController@news'); //EDWARD GUEVARRA
+	Route::get('/email_payment', 'Shop\ShopAboutController@email_payment'); //EDWARD GUEVARRA
 	Route::get('/contactus', 'Shop\ShopAboutController@contactus'); //EDWARD GUEVARRA
 	Route::get('/jobs', 'Shop\ShopAboutController@jobs'); //EDWARD GUEVARRA
 	Route::get('/job', 'Shop\ShopAboutController@job'); //EDWARD GUEVARRA
+	Route::post('/job/submit', 'Shop\ShopAboutController@job_submit');
+	Route::get('/term','Shop\ShopTermsController@index');
 
 	Route::get('/promos', 'Shop\ShopAboutController@promos'); //MARK FIGS
 	Route::get('/promo_view', 'Shop\ShopAboutController@promo_view'); //MARK FIGS
@@ -58,20 +62,20 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/admin', 'Shop\Shop@admin');
 	Route::get('/file/{theme}/{type}/{filename}', 'Shop\Shop@file');
 
-	/*Payment Integration with iPay88*/
-	Route::any("/postPaymentWithIPay88","Shop\ShopCheckoutController@postPaymentWithIPay88"); //Brain
-	Route::any("/ipay88_response","Shop\ShopCheckoutController@ipay88_response"); //Brain
-	/*End ipay88*/
-
 	/*Product search*/
 	Route::get('/product_search', 'Shop\ShopSearchController@index');
 	/*End Product search*/
 
 	/* Checkout */
-	Route::get('/checkout/login', 'Shop\ShopCheckoutLoginController@index');
+	Route::any('/checkout/login', 'Shop\ShopCheckoutLoginController@index');
 	Route::get('/checkout', 'Shop\ShopCheckoutController@index');
-	Route::get('/checkout/payment', 'Shop\ShopCheckoutController@payment');
+	Route::get('/checkout/side', 'Shop\ShopCheckoutController@checkout_side');
+	Route::get('/checkout/locale', 'Shop\ShopCheckoutController@locale');
+	Route::get('/checkout/session', 'Shop\ShopCheckoutController@session');
 	Route::post('/checkout', 'Shop\ShopCheckoutController@submit');
+	Route::any('/checkout/payment', 'Shop\ShopCheckoutController@payment');
+	Route::any('/checkout/payment/upload', 'Shop\ShopCheckoutController@payment_upload');
+	Route::get('/checkout/method', 'Shop\ShopCheckoutController@update_method');
 	/* End Checkout */
 
 	/* Wishlist */
@@ -83,6 +87,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/account/order', 'Shop\ShopAccountController@order');
 	Route::get('/account/wishlist', 'Shop\ShopAccountController@wishlist');
 	Route::get('/account/settings', 'Shop\ShopAccountController@settings');
+	Route::post('/account/settings', 'Shop\ShopAccountController@settings_submit');
 	Route::get('/account/security', 'Shop\ShopAccountController@security');
 	Route::post('/account/security', 'Shop\ShopAccountController@security_submit');
 	Route::get('/account/invoice/{id}', 'Shop\ShopAccountController@invoice');

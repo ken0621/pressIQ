@@ -48,6 +48,34 @@
 //     }
 // }
 
+.storename
+{
+    position: relative;
+    @media screen and (max-width: 480px)
+    {
+        padding-left: 35px !important;
+    }
+    &:before
+    {
+        content: "\f078";
+        font-family: FontAwesome;
+        font-style: normal;
+        font-weight: normal;
+        text-decoration: inherit;
+        /*--adjust as necessary--*/
+        color: #acacac;
+        font-size: 18px;
+        padding-right: 0.5em;
+        position: absolute;
+        top: 10px;
+        left: 7.5px;
+        @media screen and (min-width: 480px)
+        {
+            display: none;
+        }
+    }
+}
+
 .contact
 {
     

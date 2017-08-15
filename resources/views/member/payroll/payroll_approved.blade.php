@@ -32,7 +32,7 @@
               <li class="list-group-item">
                   {{$company->payroll_company_name}}
                   <a href="/member/payroll/payroll_approved_view/payroll_approved_company/{{$company->payroll_period_company_id}}" class="btn btn-custom-primary btn-sm pull-right"><i class="fa fa-search"></i>&nbsp;View</a>
-                  <a href="#" class="btn btn-custom-green-white btn-sm pull-right margin-right-10 popup" link="/member/payroll/modal_generate_bank/{{$company->payroll_period_company_id}}"><i class="fa fa-university""></i>&nbsp;Banking</a>
+                  <a href="/member/payroll/modal_generate_bank/{{$company->payroll_period_company_id}}" class="btn btn-custom-green-white btn-sm pull-right margin-right-10" link=""><i class="fa fa-university""></i>&nbsp;Banking</a>
                   <a class="btn btn-custom-red-white btn-sm pull-right margin-right-10" href="/member/payroll/payroll_approved_view/genereate_payslip/{{$company->payroll_period_company_id}}"><i class="fa fa-file-pdf-o""></i>&nbsp;Payslip</a>
               </li>
               @endforeach

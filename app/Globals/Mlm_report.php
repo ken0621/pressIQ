@@ -33,11 +33,15 @@ use App\Models\Tbl_membership_package;
 use App\Models\Tbl_membership_code_invoice;
 use App\Models\Tbl_voucher_item;
 use App\Models\Tbl_warehouse;
+use App\Models\Tbl_mlm_slot_wallet_log_transfer;
+use App\Models\Tbl_mlm_slot_wallet_log_refill;
+use App\Models\Tbl_ec_order;
+use App\Models\Tbl_inventory_slip;
 class Mlm_report
 {   
     public static function general($shop_id, $filter)
     {
-    	$data['membership'] = Tbl_membership::archive(0)->where('shop_id', $shop_id)->get();
+        $data['membership'] = Tbl_membership::archive(0)->where('shop_id', $shop_id)->get();
         $data['count_all_slot_active'] = Tbl_mlm_slot::where('shop_id', $shop_id)->where('slot_active', 0)->count();
         $data['count_all_slot_inactive'] =  Tbl_mlm_slot::where('shop_id', $shop_id)->where('slot_active', 1)->count();
 
@@ -82,11 +86,11 @@ class Mlm_report
     public static function cashflow($shop_id, $filter)
     {
 
-    	$complan_per_day =Tbl_mlm_slot_wallet_log::slot()
-    	// ->leftjoin('tbl_mlm_plan', 'tbl_mlm_plan.marketing_plan_code', '=','tbl_mlm_slot_wallet_log.wallet_log_plan')
-    	->customer()
-    	->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)
-    	->orderBy('wallet_log_date_created', 'DESC')
+        $complan_per_day =Tbl_mlm_slot_wallet_log::slot()
+        // ->leftjoin('tbl_mlm_plan', 'tbl_mlm_plan.marketing_plan_code', '=','tbl_mlm_slot_wallet_log.wallet_log_plan')
+        ->customer()
+        ->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)
+        ->orderBy('wallet_log_date_created', 'DESC')
 
         ->select(DB::raw('wallet_log_date_created as wallet_log_date_created'), DB::raw('wallet_log_plan as wallet_log_plan'), DB::raw('sum(wallet_log_amount ) as wallet_log_amount'), DB::raw('wallet_log_slot as wallet_log_slot'))
         ->groupBy(DB::raw('wallet_log_plan') )
@@ -97,53 +101,53 @@ class Mlm_report
         ->skip($filter['skip'])
         ->take($filter['take'])
         // -----------------------------------End
-    	->get();
+        ->get();
 
-    	$plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
+        $plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
             ->where('marketing_plan_enable', 1)
             ->where('marketing_plan_trigger', 'Slot Creation')
             ->get()->keyBy('marketing_plan_code');
-       	$per_day = [];  
-       	$per_month = []; 
-       	$per_year = [];
+        $per_day = [];  
+        $per_month = []; 
+        $per_year = [];
 
         $filter = [];
-       	// dd($complan_per_day);
+        // dd($complan_per_day);
         foreach($complan_per_day as $key => $value)
         {
-        	// $date = Carbon::parse($value->)
-        	// $date = Carbon::createFromFormat('d/m/Y', $value->wallet_log_date_created);
+            // $date = Carbon::parse($value->)
+            // $date = Carbon::createFromFormat('d/m/Y', $value->wallet_log_date_created);
             $filter[$value->wallet_log_plan] = $value->wallet_log_plan;
-        	$date = Carbon::parse($value->wallet_log_date_created)->format('d/m/Y');
-        	$date_m = Carbon::parse($value->wallet_log_date_created)->format('M/Y');
-        	$date_y = Carbon::parse($value->wallet_log_date_created)->format('Y');
-        	// $per_day[$date][$value->wallet_log_plan] += $value->wallet_log_amount;
-        	if(isset($per_day[$date][$value->wallet_log_plan])) 
-        	{
-        		$per_day[$date][$value->wallet_log_plan] += $value->wallet_log_amount;
-        	}
-        	else
-        	{
-        		$per_day[$date][$value->wallet_log_plan] = $value->wallet_log_amount;
-        	}
+            $date = Carbon::parse($value->wallet_log_date_created)->format('d/m/Y');
+            $date_m = Carbon::parse($value->wallet_log_date_created)->format('M/Y');
+            $date_y = Carbon::parse($value->wallet_log_date_created)->format('Y');
+            // $per_day[$date][$value->wallet_log_plan] += $value->wallet_log_amount;
+            if(isset($per_day[$date][$value->wallet_log_plan])) 
+            {
+                $per_day[$date][$value->wallet_log_plan] += $value->wallet_log_amount;
+            }
+            else
+            {
+                $per_day[$date][$value->wallet_log_plan] = $value->wallet_log_amount;
+            }
 
-        	if(isset($per_month[$date_m][$value->wallet_log_plan])) 
-        	{
-        		$per_month[$date_m][$value->wallet_log_plan] += $value->wallet_log_amount;
-        	}
-        	else
-        	{
-        		$per_month[$date_m][$value->wallet_log_plan] = $value->wallet_log_amount;
-        	}
+            if(isset($per_month[$date_m][$value->wallet_log_plan])) 
+            {
+                $per_month[$date_m][$value->wallet_log_plan] += $value->wallet_log_amount;
+            }
+            else
+            {
+                $per_month[$date_m][$value->wallet_log_plan] = $value->wallet_log_amount;
+            }
 
-        	if(isset($per_year[$date_y][$value->wallet_log_plan])) 
-        	{
-        		$per_year[$date_y][$value->wallet_log_plan] += $value->wallet_log_amount;
-        	}
-        	else
-        	{
-        		$per_year[$date_y][$value->wallet_log_plan] = $value->wallet_log_amount;
-        	}
+            if(isset($per_year[$date_y][$value->wallet_log_plan])) 
+            {
+                $per_year[$date_y][$value->wallet_log_plan] += $value->wallet_log_amount;
+            }
+            else
+            {
+                $per_year[$date_y][$value->wallet_log_plan] = $value->wallet_log_amount;
+            }
 
         }
         $data['filter'] = $filter;
@@ -160,7 +164,6 @@ class Mlm_report
         {
             return view('member.mlm_report.report.cashflow', $data);
         }
-    	
     }
     public static function e_wallet($shop_id, $filter)
     {
@@ -179,18 +182,18 @@ class Mlm_report
         }
 
 
-    	$complan_per_day =Tbl_mlm_slot_wallet_log::slot()
-    	->customer()
-    	->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)
-    	->orderBy('wallet_log_slot', 'ASC')
+        $complan_per_day =Tbl_mlm_slot_wallet_log::slot()
+        ->customer()
+        ->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)
+        ->orderBy('wallet_log_slot', 'ASC')
         // ->where('wallet_log_amount', '!=', 0)
         ->select(DB::raw('wallet_log_plan as wallet_log_plan'), DB::raw('sum(wallet_log_amount ) as wallet_log_amount'), DB::raw('wallet_log_slot as wallet_log_slot'))
         ->groupBy(DB::raw('wallet_log_plan') )
         ->groupBy('wallet_log_slot')
         ->whereIn('wallet_log_slot', $wherein)
-    	->get();
+        ->get();
         // dd($complan_per_day);
-    	$plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
+        $plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
         ->where('marketing_plan_enable', 1)
         ->get()->keyBy('marketing_plan_code');
         
@@ -198,16 +201,16 @@ class Mlm_report
         $plan = [];
         foreach($complan_per_day as $key => $value)
         {
-        	$plan[$value->wallet_log_plan] = $value->wallet_log_plan;
-        	if(isset($per_complan[$value->wallet_log_slot][$value->wallet_log_plan]))
-        	{
-        		$per_complan[$value->wallet_log_slot][$value->wallet_log_plan] += $value->wallet_log_amount;
-        	}
-        	else
-        	{
-        		$per_complan[$value->wallet_log_slot][$value->wallet_log_plan] = $value->wallet_log_amount;
-        	}
-        	
+            $plan[$value->wallet_log_plan] = $value->wallet_log_plan;
+            if(isset($per_complan[$value->wallet_log_slot][$value->wallet_log_plan]))
+            {
+                $per_complan[$value->wallet_log_slot][$value->wallet_log_plan] += $value->wallet_log_amount;
+            }
+            else
+            {
+                $per_complan[$value->wallet_log_slot][$value->wallet_log_plan] = $value->wallet_log_amount;
+            }
+            
         }
         $data['complan_per_day'] = $complan_per_day;
         $data['per_complan'] = $per_complan;
@@ -223,9 +226,72 @@ class Mlm_report
 
         return view('member.mlm_report.report.e_wallet', $data);
     }
+    public static function e_wallet_transfer($shop_id, $filter)
+    {
+        $data['logs_transfer'] = Tbl_mlm_slot_wallet_log_transfer::where('tbl_mlm_slot_wallet_log_transfer.shop_id', $shop_id)
+        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id','=', 'tbl_mlm_slot_wallet_log_transfer.wallet_log_transfer_slot_recieve')
+        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+        ->where('wallet_log_transfer_date', '>=', $filter['from'])
+        ->where('wallet_log_transfer_date', '<=', $filter['to'])
+        ->skip($filter['skip'])
+        ->take($filter['take'])
+        ->get();
+
+        $data['logs_recieve'] = Tbl_mlm_slot_wallet_log_transfer::where('tbl_mlm_slot_wallet_log_transfer.shop_id', $shop_id)
+        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id','=', 'tbl_mlm_slot_wallet_log_transfer.wallet_log_transfer_slot_trans')
+        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+        ->where('wallet_log_transfer_date', '>=', $filter['from'])
+        ->where('wallet_log_transfer_date', '<=', $filter['to'])
+        ->skip($filter['skip'])
+        ->take($filter['take'])
+        ->get();
+        $data['page'] = 'e_wallet_transfer';
+
+        if(Request::input('pdf') == 'excel')
+        {
+            return $data;
+        }
+        return view('member.mlm_report.report.e_wallet_transfer', $data);
+    }
+    public static function e_wallet_refill($shop_id, $filter)
+    {
+        $all_refill = Tbl_mlm_slot_wallet_log_refill::where('tbl_mlm_slot_wallet_log_refill.shop_id', $shop_id)
+        ->where('wallet_log_refill_date', '>=', $filter['from'])
+        ->where('wallet_log_refill_date', '<=', $filter['to'])
+        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_mlm_slot_wallet_log_refill.slot_id')
+        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+        ->get();
+
+        $data['all_refill'] = $all_refill;
+
+        $data['page'] = 'e_wallet_refill';
+        if(Request::input('pdf') == 'excel')
+        {
+            return $data;
+        }
+        return view('member.mlm_report.report.e_wallet_refill', $data);
+    }
+    public static function e_wallet_tour($shop_id, $filter)
+    {
+        $data['logs'] = DB::table('tbl_tour_wallet_logs')
+        ->where('tbl_customer.shop_id', $shop_id)
+        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_tour_wallet_logs.tour_wallet_logs_customer_id')
+        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_owner', '=', 'tbl_customer.customer_id')
+        ->groupBy('tour_wallet_logs_id')
+        ->where('tour_wallet_logs_date', '>=', $filter['from'])
+        ->where('tour_wallet_logs_date', '<=', $filter['to'])
+        ->get();
+
+        $data['page'] = 'e_wallet_tour';
+        if(Request::input('pdf') == 'excel')
+        {
+            return $data;
+        }
+        return view('member.mlm_report.report.e_wallet_tour', $data);
+    }
     public static function slot_count($shop_id, $filter)
     {
-    	$slot = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)
+        $slot = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)
         // -----------------------------------Filter
         ->skip($filter['skip'])
         ->take($filter['take'])
@@ -239,7 +305,7 @@ class Mlm_report
         }
 
 
-    	$tree = Tbl_tree_sponsor::where('shop_id', $shop_id)->orderBy('sponsor_tree_level', 'ASC')
+        $tree = Tbl_tree_sponsor::where('shop_id', $shop_id)->orderBy('sponsor_tree_level', 'ASC')
 
         ->select(DB::raw('count(sponsor_tree_level) as count_slot'), DB::raw('tbl_tree_sponsor.*'))
         ->groupBy(DB::raw('sponsor_tree_level') )
@@ -248,30 +314,30 @@ class Mlm_report
         ->whereIn('sponsor_tree_parent_id', $wherein)
         ->get();
 
-    	$tree_count = [];
-    	$tree_level = [];
-    	foreach($tree as $key => $value)
-    	{
-    		$tree_level[$value->sponsor_tree_level] = $value->sponsor_tree_level;
-    		if(isset($tree_count[$value->sponsor_tree_parent_id][$value->sponsor_tree_level]))
-    		{
-    			$tree_count[$value->sponsor_tree_parent_id][$value->sponsor_tree_level] += $value->count_slot;
-    		}
-    		else
-    		{
-    			$tree_count[$value->sponsor_tree_parent_id][$value->sponsor_tree_level] = $value->count_slot;
-    		}
-    	}
-    	$data['slot'] = $slot;
-    	$data['tree'] = $tree_count;
-    	$data['tree_level'] = $tree_level;
+        $tree_count = [];
+        $tree_level = [];
+        foreach($tree as $key => $value)
+        {
+            $tree_level[$value->sponsor_tree_level] = $value->sponsor_tree_level;
+            if(isset($tree_count[$value->sponsor_tree_parent_id][$value->sponsor_tree_level]))
+            {
+                $tree_count[$value->sponsor_tree_parent_id][$value->sponsor_tree_level] += $value->count_slot;
+            }
+            else
+            {
+                $tree_count[$value->sponsor_tree_parent_id][$value->sponsor_tree_level] = $value->count_slot;
+            }
+        }
+        $data['slot'] = $slot;
+        $data['tree'] = $tree_count;
+        $data['tree_level'] = $tree_level;
 
         $data['page'] = 'slot_count';
         if(Request::input('pdf') == 'excel')
         {
             return $data;
         }
-    	return view('member.mlm_report.report.slot_count', $data);
+        return view('member.mlm_report.report.slot_count', $data);
     }
     public static function binary_slot_count($shop_id, $filter)
     {
@@ -359,13 +425,13 @@ class Mlm_report
     }
     public static function top_earners($shop_id, $filters)
     {
-    	$income =Tbl_mlm_slot_wallet_log::slot()
-    	->customer()
-    	->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)
+        $income =Tbl_mlm_slot_wallet_log::slot()
+        ->customer()
+        ->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)
         ->select(DB::raw('wallet_log_plan as wallet_log_plan'), DB::raw('sum(wallet_log_amount ) as wallet_log_amount'), DB::raw('wallet_log_slot as wallet_log_slot'))
         ->groupBy('wallet_log_slot')
         ->orderBy('wallet_log_amount', 'DESC');
-    	$plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
+        $plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
         ->where('marketing_plan_enable', 1)
         ->get();
         $filter = [];
@@ -374,7 +440,7 @@ class Mlm_report
         // ->keyBy('marketing_plan_code')
         foreach($plan_settings as $key => $value)
         {
-        	$filter[$key] = $value->marketing_plan_code;
+            $filter[$key] = $value->marketing_plan_code;
         }
         $income = $income->whereIn('wallet_log_plan', $filter)
         // -------------filter
@@ -385,14 +451,14 @@ class Mlm_report
         $income_top = [];
         foreach($income as $key => $value)
         {
-        	if(isset($income_top[$value->wallet_log_slot]))
-        	{
-        		$income_top[$value->wallet_log_slot] += $value->wallet_log_amount;
-        	}
-        	else
-        	{
-        		$income_top[$value->wallet_log_slot] = $value->wallet_log_amount;
-        	}
+            if(isset($income_top[$value->wallet_log_slot]))
+            {
+                $income_top[$value->wallet_log_slot] += $value->wallet_log_amount;
+            }
+            else
+            {
+                $income_top[$value->wallet_log_slot] = $value->wallet_log_amount;
+            }
         }
         arsort($income_top);
         $data['income_top'] = $income_top;
@@ -411,7 +477,7 @@ class Mlm_report
     }
     public static function new_register($shop_id, $filters)
     {
-    	$customer = Tbl_customer::where('tbl_customer.shop_id', $shop_id)->whereNotNull('mlm_username')
+        $customer = Tbl_customer::where('tbl_customer.shop_id', $shop_id)->whereNotNull('mlm_username')
         ->leftjoin('tbl_mlm_slot', 'tbl_mlm_slot.slot_owner', '=', 'tbl_customer.customer_id')
         ->select(DB::raw('count(slot_owner ) as count_slot'), 'tbl_customer.*')
         ->groupBy(DB::raw('tbl_customer.customer_id') )
@@ -423,23 +489,23 @@ class Mlm_report
         ->take($filters['take'])
         // -----------------------------------End
         ->orderBy('created_date', 'ASC')
-    	->get()->keyBy('customer_id');
-    	$customer_per_day = [];
+        ->get()->keyBy('customer_id');
+        $customer_per_day = [];
 
-    	foreach($customer as $key => $value)
-    	{
-    		if(isset($customer_per_day[$value->created_date][$value->customer_id]))
-    		{
-    			$customer_per_day[$value->created_date][$value->customer_id] += 1;
-    		}
-    		else
-    		{
-    			$customer_per_day[$value->created_date][$value->customer_id] = 1;
-    		}
-    		
-    	}
-    	$data['customer'] = $customer;
-    	$data['customer_per_day'] = $customer_per_day;
+        foreach($customer as $key => $value)
+        {
+            if(isset($customer_per_day[$value->created_date][$value->customer_id]))
+            {
+                $customer_per_day[$value->created_date][$value->customer_id] += 1;
+            }
+            else
+            {
+                $customer_per_day[$value->created_date][$value->customer_id] = 1;
+            }
+            
+        }
+        $data['customer'] = $customer;
+        $data['customer_per_day'] = $customer_per_day;
 
         $data['page'] = 'new_accounts';
         if(Request::input('pdf') == 'excel')
@@ -447,12 +513,12 @@ class Mlm_report
             return $data;
         }
 
-    	return view('member.mlm_report.report.new_accounts', $data);
+        return view('member.mlm_report.report.new_accounts', $data);
 
     }
     public static function encashment_rep($shop_id, $filters)
     {
-    	$slot = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->customer()
+        $slot = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->customer()
         // -----------------------------------Filter
         ->skip($filters['skip'])
         ->take($filters['take'])
@@ -465,9 +531,9 @@ class Mlm_report
             $wherein[$key] = $key;
         }
 
-    	$complan_per_day =Tbl_mlm_slot_wallet_log::slot()
-    	->customer()
-    	->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)
+        $complan_per_day =Tbl_mlm_slot_wallet_log::slot()
+        ->customer()
+        ->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)
         ->select(DB::raw('encashment_process_type as encashment_process_type'), DB::raw('wallet_log_plan as wallet_log_plan'), DB::raw('sum(wallet_log_amount ) as wallet_log_amount'), DB::raw('wallet_log_slot as wallet_log_slot'))
         ->groupBy('encashment_process_type')
         ->groupBy(DB::raw('wallet_log_plan') )
@@ -477,56 +543,56 @@ class Mlm_report
         ->whereIn('wallet_log_slot', $wherein)
 
         ->orderBy('wallet_log_amount', 'DESC')
-    	->get();
-    	$request_a = [];
-    	$encashment = [];
-    	foreach($complan_per_day as $key => $value)
-    	{
-    		if($value->wallet_log_plan == 'ENCASHMENT')
-    		{
-    			$request = 'Wallet';
-	    		if($value->encashment_process_type  == 1)
-	    		{
-	    			$request = 'Processed';
-	    		}
-	    		else
-	    		{
-	    			$request = 'Requested';
-	    		}
-    		}
-    		else
-    		{
-    			if($value->encashment_process == null)
-    			{
-    				$request = 'Wallet';
-    			}
-    			else
-    			{
-    				$request = 'Requested';
-    			}
-    		}
-    		$request_a[$request] = $request;
-    	
-    		if(isset($encashment[$value->wallet_log_slot][$request]))
-    		{
-    			$encashment[$value->wallet_log_slot][$request] += $value->wallet_log_amount;
-    		}
-    		else
-    		{
-    			$encashment[$value->wallet_log_slot][$request] = $value->wallet_log_amount;
-    		}
-    	}
+        ->get();
+        $request_a = [];
+        $encashment = [];
+        foreach($complan_per_day as $key => $value)
+        {
+            if($value->wallet_log_plan == 'ENCASHMENT')
+            {
+                $request = 'Wallet';
+                if($value->encashment_process_type  == 1)
+                {
+                    $request = 'Processed';
+                }
+                else
+                {
+                    $request = 'Requested';
+                }
+            }
+            else
+            {
+                if($value->encashment_process == null)
+                {
+                    $request = 'Wallet';
+                }
+                else
+                {
+                    $request = 'Requested';
+                }
+            }
+            $request_a[$request] = $request;
+        
+            if(isset($encashment[$value->wallet_log_slot][$request]))
+            {
+                $encashment[$value->wallet_log_slot][$request] += $value->wallet_log_amount;
+            }
+            else
+            {
+                $encashment[$value->wallet_log_slot][$request] = $value->wallet_log_amount;
+            }
+        }
 
-    	$data['slot'] = $slot;
-    	$data['encashment'] = $encashment;
-    	$data['request'] = $request_a;
+        $data['slot'] = $slot;
+        $data['encashment'] = $encashment;
+        $data['request'] = $request_a;
 
         $data['page'] = 'encashment';
         if(Request::input('pdf') == 'excel')
         {
             return $data;
         }
-    	return view('member.mlm_report.report.encashment', $data);
+        return view('member.mlm_report.report.encashment', $data);
     }
     public static function encashment_rep_req($shop_id, $filters, $select= null)
     {
@@ -638,7 +704,158 @@ class Mlm_report
 
         return view('member.mlm_report.report.encashment_processed', $data);
     }
+    public static function warehouse_consiladated($shop_id, $filters)
+    {
+            $all_warehouse = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->where('archived', 0)->get();
+            $g_total = 0;
+            foreach($all_warehouse as $key => $value)
+            {
+                $membership = 0;
+                $product = 0;
+                $e_wallet_refill = 0;
+                $e_wallet_transfer = 0;
+                $e_wallet_tours = 0;
+                $e_wallet_school = 0;
 
+                if($value->main_warehouse == 2)
+                {
+                    $product = Tbl_ec_order::where('shop_id', $shop_id)
+                    ->where('created_date', '>=', $filters['from'])
+                    ->where('created_date', '<=', $filters['to'])
+                    ->where('payment_status', 1)
+                    ->sum('total');
+
+                    $g_total += Tbl_ec_order::where('shop_id', $shop_id)
+                    ->where('created_date', '<=', $filters['to'])
+                    ->where('payment_status', 1)
+                    ->sum('total');
+
+                    $e_wallet_refill = Tbl_mlm_slot_wallet_log_refill::where('tbl_mlm_slot_wallet_log_refill.shop_id', $shop_id)
+                    ->where('wallet_log_refill_date', '>=', $filters['from'])
+                    ->where('wallet_log_refill_date', '<=', $filters['to'])
+                    ->where('wallet_log_refill_attachment_warehouse', $value->warehouse_id)
+                    ->sum('wallet_log_refill_amount_paid');
+
+                    $g_total += Tbl_mlm_slot_wallet_log_refill::where('tbl_mlm_slot_wallet_log_refill.shop_id', $shop_id)
+                    ->where('wallet_log_refill_date', '<=', $filters['to'])
+                    ->where('wallet_log_refill_attachment_warehouse', $value->warehouse_id)
+                    ->sum('wallet_log_refill_amount_paid');
+
+                    $e_wallet_school = DB::table('tbl_merchant_school_item')->where('merchant_school_item_shop', $shop_id)
+                    ->where('merchant_item_date', '>=', $filters['from'])
+                    ->where('merchant_item_date', '<=', $filters['to'])
+                    ->sum('merchant_school_i_amount');
+
+                    $g_total += DB::table('tbl_merchant_school_item')->where('merchant_school_item_shop', $shop_id)
+                    ->where('merchant_item_date', '<=', $filters['to'])
+                    ->sum('merchant_school_i_amount');
+                }
+                else
+                {
+                    $e_wallet_refill = Tbl_mlm_slot_wallet_log_refill::where('tbl_mlm_slot_wallet_log_refill.shop_id', $shop_id)
+                    ->where('wallet_log_refill_date', '>=', $filters['from'])
+                    ->where('wallet_log_refill_date', '<=', $filters['to'])
+                    ->where('wallet_log_refill_attachment_warehouse', $value->warehouse_id)
+                    ->sum('wallet_log_refill_amount_paid');
+
+                    $g_total += Tbl_mlm_slot_wallet_log_refill::where('tbl_mlm_slot_wallet_log_refill.shop_id', $shop_id)
+                    ->where('wallet_log_refill_date', '<=', $filters['to'])
+                    ->where('wallet_log_refill_attachment_warehouse', $value->warehouse_id)
+                    ->sum('wallet_log_refill_amount_paid');
+
+                    if($value->main_warehouse == 1)
+                    {
+                        $membership = Tbl_membership_code_invoice::where('shop_id', $shop_id)
+                        ->where('membership_code_date_created', '>=', $filters['from'])
+                        ->where('membership_code_date_created', '<=', $filters['to'])
+                        ->sum('membership_total');
+
+                        $g_total += Tbl_membership_code_invoice::where('shop_id', $shop_id)
+                        ->where('membership_code_date_created', '<=', $filters['to'])
+                        ->sum('membership_total');
+
+                        $e_wallet_refill = $e_wallet_refill +  Tbl_mlm_slot_wallet_log_refill::where('tbl_mlm_slot_wallet_log_refill.shop_id', $shop_id)
+                        ->where('wallet_log_refill_date', '>=', $filters['from'])
+                        ->where('wallet_log_refill_date', '<=', $filters['to'])
+                        ->where('wallet_log_refill_attachment_warehouse', 0)
+                        ->sum('wallet_log_refill_amount_paid');
+
+                        $g_total += Tbl_mlm_slot_wallet_log_refill::where('tbl_mlm_slot_wallet_log_refill.shop_id', $shop_id)
+                        ->where('wallet_log_refill_date', '<=', $filters['to'])
+                        ->where('wallet_log_refill_attachment_warehouse', 0)
+                        ->sum('wallet_log_refill_amount_paid');
+
+                        $e_wallet_transfer = Tbl_mlm_slot_wallet_log_transfer::where('tbl_mlm_slot_wallet_log_transfer.shop_id', $shop_id)
+                        ->where('wallet_log_transfer_date', '>=', $filters['from'])
+                        ->where('wallet_log_transfer_date', '<=', $filters['to'])
+                        ->sum('wallet_log_transfer_slot_trans');
+
+                        $g_total += Tbl_mlm_slot_wallet_log_transfer::where('tbl_mlm_slot_wallet_log_transfer.shop_id', $shop_id)
+                        ->where('wallet_log_transfer_date', '<=', $filters['to'])
+                        ->sum('wallet_log_transfer_slot_trans');
+
+                        $e_wallet_tours = DB::table('tbl_tour_wallet_logs')
+                        ->where('tbl_customer.shop_id', $shop_id)
+                        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_tour_wallet_logs.tour_wallet_logs_customer_id')
+                        ->groupBy('tour_wallet_logs_id')
+                        ->where('tour_wallet_logs_date', '>=', $filters['from'])
+                        ->where('tour_wallet_logs_date', '<=', $filters['to'])
+                        ->sum('tour_wallet_logs_wallet_amount');
+
+                        $g_total += DB::table('tbl_tour_wallet_logs')
+                        ->where('tbl_customer.shop_id', $shop_id)
+                        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_tour_wallet_logs.tour_wallet_logs_customer_id')
+                        ->groupBy('tour_wallet_logs_id')
+                        ->where('tour_wallet_logs_date', '<=', $filters['to'])
+                        ->sum('tour_wallet_logs_wallet_amount');
+                        
+
+                    }
+
+                    $product = Tbl_item_code_invoice::where('tbl_item_code_invoice.shop_id', $shop_id)
+                    ->where('item_code_date_created', '>=', $filters['from'])
+                    ->where('item_code_date_created', '<=', $filters['to'])
+                    ->where('warehouse_id', $value->warehouse_id)
+                    ->sum('item_total');
+
+                    $g_total += Tbl_item_code_invoice::where('tbl_item_code_invoice.shop_id', $shop_id)
+                    ->where('item_code_date_created', '<=', $filters['to'])
+                    ->where('warehouse_id', $value->warehouse_id)
+                    ->sum('item_total');
+                    
+                }
+                if($product == null)
+                {
+                    $product = 0;
+                }      
+
+                $all_warehouse[$key]->product_sales =   $product; 
+                $all_warehouse[$key]->membership_sales =   $membership;
+                $all_warehouse[$key]->e_wallet_refill =   $e_wallet_refill;
+                $all_warehouse[$key]->e_wallet_transfer =   $e_wallet_transfer;
+                $all_warehouse[$key]->e_wallet_tours =   $e_wallet_tours;
+                $all_warehouse[$key]->e_wallet_school =   $e_wallet_school;
+
+            }
+
+            
+
+            $data['sales']['product_sales'] = 'Product Sales';
+            $data['sales']['membership_sales'] = 'Membership Sales';
+            $data['sales']['e_wallet_refill'] = 'E-Wallet Refill';
+            $data['sales']['e_wallet_transfer'] = 'E-Wallet Transfer';
+            $data['sales']['e_wallet_tours'] = 'Travel and Tours E-Wallet Sales Report';
+            $data['sales']['e_wallet_school'] = 'School Wallet Sales Report';
+            $data['g_over_total'] = $g_total;
+            $data['page'] = 'warehouse_consolidated';
+            $data['warehouse'] = $all_warehouse;
+            if(Request::input('pdf') == 'excel')
+            {
+                return $data;
+            }
+
+        return view('member.mlm_report.report.warehouse_consolidated', $data);
+    }
     public static function product_sales_report($shop_id, $filters)
     {
         $data['filteru'] = $filters;
@@ -793,7 +1010,8 @@ class Mlm_report
 
         $membership_code = Tbl_membership_code::where('tbl_membership_code.shop_id', $shop_id)
         ->join('tbl_membership_code_invoice', 'tbl_membership_code_invoice.membership_code_invoice_id', '=', 'tbl_membership_code.membership_code_invoice_id')
-        
+        ->join('tbl_membership_package', 'tbl_membership_package.membership_package_id', '=', 'tbl_membership_code.membership_package_id')
+        ->join('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_membership_package.membership_id')
         ->skip($filters['skip'])
         ->take($filters['take'])
         ->where('membership_code_date_created', '>=', $filters['from'])
@@ -802,8 +1020,14 @@ class Mlm_report
 
         $package = Tbl_membership_package::get()->keyBy('membership_package_id');
         $by_membership = [];
+
+        $data['mem_code_inv'] = [];
+        $data['by_mem_qty'] = [];
+        $data['by_mem_sum_qty'] = 0;
+        $data['by_mem_sum_amount'] = 0;
         foreach($membership_code as $key => $value)
         {
+            $data['mem_code_inv'][$value->membership_code_invoice_id][$value->membership_code_id] = $value;
             if(isset($by_membership[$value->membership_package_id]))
             {
                 $by_membership[$value->membership_package_id] += $value->membership_code_price;
@@ -812,7 +1036,18 @@ class Mlm_report
             {
                 $by_membership[$value->membership_package_id] = $value->membership_code_price;
             }
+
+            if(isset($data['by_mem_qty'][$value->membership_package_id]))
+            {
+                $data['by_mem_qty'][$value->membership_package_id] += 1;
+            }
+            else
+            {
+                 $data['by_mem_qty'][$value->membership_package_id] = 1;
+            }
             
+            $data['by_mem_sum_qty'] += 1;
+            $data['by_mem_sum_amount'] += $value->membership_code_price;
         }
         $per_package_item = Tbl_voucher_item::join('tbl_voucher', 'tbl_voucher.voucher_id', '=', 'tbl_voucher_item.voucher_id')
         ->join('tbl_membership_code_invoice', 'tbl_membership_code_invoice.membership_code_invoice_id', '=','tbl_voucher.voucher_invoice_membership_id')
@@ -948,14 +1183,12 @@ class Mlm_report
         {
             if($warehouse_id != 0)
             {
-                $warehouse = Tbl_warehouse::where('warehouse_id', $warehouse_id)->where('archived', 0)->take(1)->get();
+                $warehouse = Tbl_warehouse::where('warehouse_id', $warehouse_id)->where('archived', 0)->take(1)->get()->keyBy('warehouse_id');
             }
         }
 
         $data['filteru'] = $filters;
         $invoice = Tbl_item_code_invoice::where('tbl_item_code_invoice.shop_id', $shop_id)
-        // ->skip($filters['skip'])
-        // ->take($filters['take'])
         ->where('item_code_date_created', '>=', $filters['from'])
         ->where('item_code_date_created', '<=', $filters['to'])
         ->customer()
@@ -978,8 +1211,11 @@ class Mlm_report
         $items_unfiltered = [];
         foreach ($invoice as $key => $value)
         {
-            $warehouse_per_invoice[$value->warehouse_id][$key] = $value;
-            $where_in[$key] = $key;
+            if(isset($warehouse[$value->warehouse_id]))
+            {
+                $warehouse_per_invoice[$value->warehouse_id][$key] = $value;
+                $where_in[$key] = $key;
+            }
         }
         $items = Tbl_item_code_item::whereIn('item_code_invoice_id', $where_in)->get();
         foreach($items as $key => $value)

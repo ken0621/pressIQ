@@ -25,7 +25,6 @@ function customer_invoice()
 		action_convert_number();
 		action_date_picker();
 		action_reassign_number();
-
 	}
 	function event_remove_tr()
 	{
@@ -102,10 +101,17 @@ function customer_invoice()
 	{
 		iniatilize_select();
 	}
-
+	this.action_compute_tablet = function()
+	{
+		action_compute_tablet();
+	}
 	this.action_compute = function()
 	{
 		action_compute();
+	}
+	this.event_tablet_compute_class_change = function()
+	{
+		event_tablet_compute_class_change();
 	}
 	function action_lastclick_row()
 	{
@@ -217,6 +223,49 @@ function customer_invoice()
 		{
 			action_compute();
 		});
+	}
+	function event_tablet_compute_class_change()
+	{
+		$(document).on("change",".tablet-compute", function()
+		{
+			action_compute_tablet();
+		});
+	}
+	function action_compute_tablet()
+	{
+      	var tablet_unit_qty = $(".tablet-droplist-um").find("option:selected").attr("qty");
+      	var tablet_item_qty = $(".tablet-item-qty").val();
+      	var tablet_item_rate = $(".tablet-item-rate").val();
+      	var tablet_item_disc = $(".tablet-item-disc").val();
+
+ 		var total = 0.00;
+
+        var qty = tablet_item_qty * tablet_unit_qty;
+        /* CHECK THE DISCOUNT */
+        if(tablet_item_disc.indexOf('%') >= 0)
+        {
+            $(".tablet-item-disc").val(tablet_item_disc.substring(0, tablet_item_disc.indexOf("%") + 1));
+            tablet_item_disc = (parseFloat(tablet_item_disc.substring(0, tablet_item_disc.indexOf('%'))) / 100) * (action_return_to_number(tablet_item_rate) * action_return_to_number(qty));
+        }
+        else if(tablet_item_disc == "" || tablet_item_disc == null)
+        {
+            tablet_item_disc = 0;
+        }
+        else
+        {
+            tablet_item_disc = parseFloat(tablet_item_disc);
+        }
+
+        /* RETURN TO NUMBER IF THERE IS COMMA */
+        var rate        = action_return_to_number(tablet_item_rate);
+        var discount    = action_return_to_number(tablet_item_disc);
+
+        // console.log(qty+" * "+ rate + " - " + discount)
+        total = ((qty * rate) - discount).toFixed(2);
+
+
+        $(".tablet-item-amount").html(total);
+
 	}
 
 	function action_compute()
@@ -507,6 +556,8 @@ function customer_invoice()
 	{
 		$('.droplist-customer').globalDropList(
 		{ 
+            width : "100%",
+    		placeholder : "Select Customer...",
 			link : "/member/customer/modalcreatecustomer",
 			onChangeValue: function()
 			{
@@ -529,6 +580,18 @@ function customer_invoice()
             	action_load_item_info($(this));
             }
         });
+
+        $('.tablet-droplist-um').globalDropList(
+	    {
+	        hasPopup: "false",
+	        width : "100%",
+	        placeholder : "U/M..",
+	        onChangeValue: function()
+	        {
+	            action_compute_tablet();
+	        }
+
+	    });
 	    $('.droplist-item-cm').globalDropList(
         {
             link : "/member/item/add",
@@ -543,12 +606,33 @@ function customer_invoice()
             link : "/member/maintenance/terms/terms",
             link_size : "sm",
             width : "100%",
+    		placeholder : "Terms...",
             onChangeValue: function()
             {
             	var start_date 		= $(".datepicker[name='inv_date']").val();
             	var days 			= $(this).find("option:selected").attr("days");
             	var new_due_date 	= AddDaysToDate(start_date, days, "/");
             	$(".datepicker[name='inv_due_date']").val(new_due_date);
+            }
+        });
+        $('.tablet-droplist-item').globalDropList({
+
+            hasPopup : 'false',
+            width : "100%",
+            maxHeight: "309px",
+    		placeholder : "Select Item...",
+            onCreateNew : function()
+            {
+            	item_selected = $(this);
+            	console.log($(this));
+            },
+            onChangeValue : function()
+            {
+            	if($(this).val() != '')
+            	{
+	           	    action_load_link_to_modal('/tablet/invoice/add_item/'+$(this).val(),'md');
+            	}
+            	// action_load_item_info();
             }
         });
         $('.droplist-um').globalDropList(
@@ -587,8 +671,6 @@ function customer_invoice()
 	    sValue = sValue.toString();
 	    return sValue.length < iPadBy ? LPad("0" + sValue, iPadBy) : sValue;
 	}
-
-
 	function action_load_item_info($this)
 	{
 		$parent = $this.closest(".tr-draggable");
@@ -596,11 +678,11 @@ function customer_invoice()
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("price")).change();
 		$parent.find(".txt-qty").val(1).change();
 
-		$parent.find(".txt-rate").attr("disabled",false);
+		$parent.find(".txt-rate").attr("readonly",false);
 		$parent.find(".txt-discount").attr("disabled",false);
 		if($this.find("option:selected").attr("item-type") == 4)
 		{
-			$parent.find(".txt-rate").attr("disabled","disabled");
+			$parent.find(".txt-rate").attr("readonly",true);
 			$parent.find(".txt-discount").attr("disabled","disabled");
 		}
 		if($this.find("option:selected").attr("has-um") != '')

@@ -21,8 +21,8 @@
                 <tbody>
                     @foreach($_time_record as $key => $time_record)
                     <tr>
-                        <td><input name="time_in[{{ $time_record->payroll_time_sheet_record_id }}]" placeholder="NO TIME" class="over-time-entry form-control" time_max="{{ $time_record->time_in_max }}" time_min="{{ $time_record->time_in_min }}" {{ $time_record->time_in_enabled==true ? ''  : 'readonly' }}  type="text" value="{{ $time_record->time_in }}"></td>
-                        <td><input name="time_out[{{ $time_record->payroll_time_sheet_record_id }}]" placeholder="NO TIME" class="over-time-entry form-control" time_max="{{ $time_record->time_out_max }}" time_min="{{ $time_record->time_out_min }}" {{ $time_record->time_out_enabled==true ? ''  : 'readonly' }}  type="text"  value="{{ $time_record->time_out }}"></td>
+                        <td><input name="time_in[{{ $time_record->payroll_time_sheet_record_id }}]" placeholder="NO TIME" class="over-time-entry form-control" time_max="11:59 PM" time_min="12:01:00 AM" {{ $time_record->time_in_enabled==true ? ''  : '' }}  type="text" value="{{ $time_record->time_in }}"></td>
+                        <td><input name="time_out[{{ $time_record->payroll_time_sheet_record_id }}]" placeholder="NO TIME" class="over-time-entry form-control" time_max="11:59 PM" time_min="12:01:00 AM" {{ $time_record->time_out_enabled==true ? ''  : '' }}  type="text"  value="{{ $time_record->time_out }}"></td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -74,10 +74,13 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-def-white btn-custom-white">Set to Default</button>
+        <button type="button" class="btn btn-def-white btn-custom-white cancel-approve">
+            <span class="cancel-approve-span"><i class="fa fa-times color-red" aria-hidden="true"></i></span>
+            <span>Cancel Approve</span>
+        </button>
         <button class="btn btn-primary btn-custom-primary submit-overtime-form" type="submit">
-            <i class="adjust-form-loader fa fa-spinner fa-spin fa-fw hidden"></i>
-            <i class="adjust-form-icon fa fa-check"></i>
+            
+            <span class="approve-span"><i class="adjust-form-icon fa fa-check"></i></span>
             &nbsp; Confirm Approve Time
         </button>
     </div>

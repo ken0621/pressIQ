@@ -6,6 +6,9 @@ use Redirect;
 use Request;
 use View;
 use DB;
+use Input;
+use File;
+use Carbon\Carbon;
 class ShopAboutController extends Shop
 {
     public function index()
@@ -34,10 +37,17 @@ class ShopAboutController extends Shop
 
     public function contactus()
     {
-        $data["page"] = "contactus";
+        $data["page"] = "Contact Us";
         return view("contactus", $data);
     }
 
+
+    public function email_payment()
+    {
+        $data["page"] = "Email Payment";
+        return view("email_payment", $data);
+    }
+    
     public function jobs()
     {
         $data["page"] = "jobs";
@@ -118,4 +128,41 @@ class ShopAboutController extends Shop
         }
     }
 
+    public function job_submit()
+    {
+        $shop_id    = $this->shop_info->shop_id;
+        $shop_key   = $this->shop_info->shop_key;
+
+        /* SAVE THE IMAGE IN THE FOLDER */
+        $file               = Input::file('job_resume');
+        $extension          = $file->getClientOriginalExtension();
+        $filename           = str_random(15).".".$extension;
+        $destinationPath    = 'uploads/'.$shop_key."-".$shop_id.'/job-upload';
+
+        if(!File::exists($destinationPath)) 
+        {
+            $create_result = File::makeDirectory(public_path($destinationPath), 0775, true, true);
+        }
+
+        $upload_success    = Input::file('job_resume')->move($destinationPath, $filename);
+
+        /* SAVE THE IMAGE PATH IN THE DATABASE */
+        $image_path = $destinationPath."/".$filename;
+
+        $insert['job_apply'] = Request::input('job_apply');
+        $insert['job_resume'] = $image_path;
+        $insert['job_introduction'] = Request::input('job_introduction');
+        $insert['date_created'] = Carbon::now();
+
+        DB::table('tbl_cms_job_resume')->insert($insert);
+
+        if( $upload_success ) 
+        {
+           return Redirect::to('/jobs#popup2');
+        } 
+        else 
+        {
+           return Redirect::to('/jobs#popup4');
+        }
+    }
 }

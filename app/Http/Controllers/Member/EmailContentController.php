@@ -52,7 +52,6 @@ class EmailContentController extends Member
 
         $rules["email_content_key"] = "required|alpha_dash|unique:tbl_email_content,email_content_key,".$this->user_info->shop_id.",shop_id";
         $rules["email_content"] = "required";
-
         $validator = Validator::make($insert, $rules);
 
         if($validator->fails())
@@ -84,8 +83,8 @@ class EmailContentController extends Member
         $update["email_content_subject"] = Request::input("email_content_subject");
         $update["email_content"] = Request::input("email_content");
         $update["date_updated"] = Carbon::now();
-        
-        $rules["email_content_key"] = "required|alpha_dash|unique:tbl_email_content,email_content_key,".$this->user_info->shop_id.",shop_id";
+
+        $rules["email_content_key"] = "required|alpha_dash|unique:tbl_email_content,shop_id,".$this->user_info->shop_id.",email_content_key";
         $rules["email_content"] = "required";
 
         $validator = Validator::make($update, $rules);

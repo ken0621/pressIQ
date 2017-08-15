@@ -53,9 +53,7 @@ class Mlm_compute
     }
 	public static function entry($slot_id, $type = 0)
 	{
-
         $slot_info = Mlm_compute::get_slot_info($slot_id);
-        
         // slot_info must have membership info and membership_points;
         // <-- error if not -->
 
@@ -66,7 +64,6 @@ class Mlm_compute
         if($type == 0)
         {
             Mlm_tree::insert_tree_sponsor($slot_info, $slot_info, 1); /* TREE RECORD FOR SPONSORSHIP GENEALOGY TREE */    
-
             // check if binart is active 
                 $plan_settings_count = Tbl_mlm_plan::where('shop_id', $slot_info->shop_id)
                 ->where('marketing_plan_code', 'BINARY')
@@ -387,10 +384,10 @@ class Mlm_compute
         {
             $update['slot_defaul'] = 1;
 
-            $last_name = strtolower(substr($slot_info->last_name, 0, 6));
-            $first_name = strtolower(substr($slot_info->first_name, 0, 3));
-
-            $nickname = $last_name . '.' . $first_name;
+            // $last_name = strtolower(substr($slot_info->last_name, 0, 6));
+            // $first_name = strtolower(substr($slot_info->first_name, 0, 3));
+            // $nickname = $last_name . '.' . $first_name;
+            $nickname = $slot_info->mlm_username;
             $update['slot_nick_name'] = $nickname;
 
             Tbl_mlm_slot::where('slot_id', $slot_info->slot_id)->update($update);

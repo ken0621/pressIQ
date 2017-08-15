@@ -17,7 +17,10 @@ use Carbon\Carbon;
 use View;
 use App\Models\Tbl_mlm_plan;
 use DB;
-
+use App\Globals\abs\AbsMain;
+use App\Models\Tbl_tour_wallet;
+use App\Models\Tbl_settings;
+use App\Globals\Settings;
 class Mlm_ComplanSetupController extends Member
 {
 	public function index()
@@ -29,7 +32,6 @@ class Mlm_ComplanSetupController extends Member
 		$count = Tbl_mlm_plan::where('shop_id', $shop_id)->where('marketing_plan_code', 'BINARY_PROMOTIONS')
 		->where('marketing_plan_enable', 1)
 		->count();
-
 		if($count >= 1)
 		{
 			$data['links'][0]['label'] = 'Binary Promotions Setup';
@@ -46,7 +48,7 @@ class Mlm_ComplanSetupController extends Member
 		$tours_wallet = $this->user_info->shop_wallet_tours;
 		if($tours_wallet == 1)
 		{
-			$data['links'][2]['label'] = 'Tours Wallet';
+			$data['links'][2]['label'] = 'Airline Ticketing';
 			$data['links'][2]['link'] = '/member/mlm/tours_wallet';
 		}
 
@@ -60,14 +62,52 @@ class Mlm_ComplanSetupController extends Member
 		{
 			if(!isset($restrict[ $this->user_info->shop_key] ))
 			{
-				$data['links'][0]['label'] = 'Unilevel Distribute';
-				$data['links'][0]['link'] = '/member/mlm/complan_setup/unilevel/distribute';
+				$data['links'][3]['label'] = 'Unilevel Distribute';
+				$data['links'][3]['link'] = '/member/mlm/complan_setup/unilevel/distribute';
 			}
 			
 		}		
 
+		if($this->user_info->shop_key == 'myphone')
+		{
+			$data['other_settings_myphone'] = $this->myphone_other_settings();
+		}
 
 		return view('member.mlm_complan_setup.index', $data);
+	}
+	public function myphone_other_settings()
+	{
+		$shop_id = $this->user_info->shop_id;
+		$settings = Tbl_settings::where('shop_id', $shop_id)->get()->keyBy('settings_key');
+
+		if(isset($settings['myphone_require_sponsor']))
+		{
+			$data['settings_myphone_require_sponsor'] = 	Tbl_settings::where('settings_key', 'myphone_require_sponsor')->where('shop_id', $shop_id)->first();
+		}
+		else
+		{
+			$insert['settings_key'] = 'myphone_require_sponsor';
+			$insert['settings_value'] = 1;
+			$insert['settings_setup_done'] = 1;
+			$insert['shop_id'] = $shop_id;
+
+			Tbl_settings::insert($insert);
+
+			$data['settings_myphone_require_sponsor'] = 	Tbl_settings::where('settings_key', $insert['settings_key'])->where('shop_id', $shop_id)->first();
+		}
+		return view('member.mlm_complan_setup.myphone.index', $data);
+	}
+	public function myphone_other_settings_update()
+	{
+		$settings_key = Request::input('settings_key');
+		$settings_value = Request::input('settings_value');
+		Settings::update_settings($settings_key, $settings_value);
+
+		$data['status'] = 'success';
+		$data['message'] = 'settings_changed';
+
+		return json_encode($data);
+
 	}
 	public function binary_promotions()
 	{
@@ -89,6 +129,14 @@ class Mlm_ComplanSetupController extends Member
 	public function tours_wallet()
 	{
 		$data = [];
+		$data['shop_information'] = $this->user_info;
+		$data['account_tours'] = Tbl_tour_wallet::where('tour_wallet_shop', $this->user_info->shop_id)
+			->where('tour_wallet_main', 1)
+			->first();
+		$data['logs'] = DB::table('tbl_tour_wallet_logs')
+			->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_tour_wallet_logs.tour_wallet_logs_customer_id')
+			->where('shop_id', $this->user_info->shop_id)
+			->paginate(20);
 		return view('member.mlm_tours_wallet.index', $data);
 	}
 	public function unilevel_distribute()
@@ -234,5 +282,58 @@ class Mlm_ComplanSetupController extends Member
 	        return json_encode($data);
 	        exit;
 		}
+	}
+
+	public function set_tours_wallet_settings()
+	{
+		$tour_Wallet_a_account_id = Request::input('tour_Wallet_a_account_id');
+		$tour_wallet_a_username = Request::input('tour_wallet_a_username');
+		$tour_wallet_a_base_password = Request::input('tour_wallet_a_base_password');
+		$tour_wallet_convertion = Request::input('tour_wallet_convertion');
+		$base_uri = $this->user_info->shop_wallet_tours_uri;
+
+		$status = AbsMain::get_balance($base_uri, $tour_Wallet_a_account_id, $tour_wallet_a_username, $tour_wallet_a_base_password);
+
+		if($status['status'] == 1)
+		{
+			$count = Tbl_tour_wallet::where('tour_wallet_shop', $this->user_info->shop_id)
+			->where('tour_wallet_main', 1)
+			->count();
+
+			$insert['tour_wallet_shop'] = $this->user_info->shop_id; 
+			$insert['tour_wallet_customer_id'] = 0;
+			$insert['tour_wallet_user_id'] = $this->user_info->user_id;
+			$insert['tour_Wallet_a_account_id'] = $tour_Wallet_a_account_id;
+			$insert['tour_wallet_a_username'] = $tour_wallet_a_username;
+			$insert['tour_wallet_a_base_password'] = $tour_wallet_a_base_password;
+			$insert['tour_wallet_a_current_balance'] = $status['result'];
+			$insert['tour_wallet_convertion'] = floatval($tour_wallet_convertion);
+			$insert['tour_wallet_main'] = 1;
+			$insert['tour_wallet_block'] = 0; 
+			if($count == 0)
+			{
+				
+				Tbl_tour_wallet::insert($insert);
+			}
+			else
+			{
+				Tbl_tour_wallet::where('tour_wallet_shop', $this->user_info->shop_id)
+				->where('tour_wallet_main', 1)
+				->update($insert);
+			}
+			
+		}
+		return json_encode($status);
+
+	}
+
+	public function get_log()
+	{
+		$data['logs'] = DB::table('tbl_tour_wallet_logs')
+		->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_tour_wallet_logs.tour_wallet_logs_customer_id')
+		->where('shop_id', $this->user_info->shop_id)
+		->paginate(20);
+
+		return view('member.mlm_tours_wallet.logs', $data);
 	}
 }

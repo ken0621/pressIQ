@@ -8,7 +8,7 @@ class Tbl_item extends Model
 {
     protected $table = 'tbl_item';
 	protected $primaryKey = "item_id";
-    public $timestamps = false;
+    public $timestamps = true;
     
     public function scopeType($query)
     {
@@ -28,7 +28,7 @@ class Tbl_item extends Model
     }
     public function scopeUm_item($query)
     {
-        return $query->leftjoin('tbl_unit_measurement_multi','multi_um_id','=','item_measurement_id')->where("is_base",1);
+        return $query->leftjoin('tbl_unit_measurement_multi','multi_um_id','=','item_measurement_id');
          
     }
     public function scopeselitem($query, $item_id)
@@ -109,7 +109,7 @@ class Tbl_item extends Model
 
     public function scopeWarehouseInventory($query, $shop_id = null)
     {
-        return $query->selectRaw("warehouse_name, IFNULL(sum(inventory_count), 0) as qty_on_hand")
+        return $query->selectRaw("warehouse_name, IFNULL(IF(sum(inventory_count) > 0, sum(inventory_count), 0), 0) as qty_on_hand")
                      ->leftJoin("tbl_warehouse_inventory","inventory_item_id","=","item_id")
                      ->join("tbl_warehouse as w","w.warehouse_id","=","tbl_warehouse_inventory.warehouse_id")
                      ->groupBy("w.warehouse_id");

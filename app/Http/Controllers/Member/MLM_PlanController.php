@@ -705,6 +705,7 @@ class MLM_PlanController extends Member
         $validate['binary_settings_auto_placement'] = Request::input('binary_settings_auto_placement');
         $validate['binary_settings_type'] = Request::input('binary_settings_type');
         $validate['binary_settings_matrix_income'] = Request::input('binary_settings_matrix_income');
+        $validate['binary_settings_gc_amount_type'] = Request::input('binary_settings_gc_amount_type');
         $validate['hours'] = Request::input('hours');
 
         $rules['binary_settings_gc_enable'] = 'required';
@@ -717,6 +718,7 @@ class MLM_PlanController extends Member
         $rules['binary_settings_placement'] = 'required';
         $rules['binary_settings_auto_placement'] = 'required';
         $rules['binary_settings_type'] = 'required';
+        $rules['binary_settings_gc_amount_type'] = 'required';
         $rules['hours'] = 'required';
 
         $validator = Validator::make($validate,$rules);
@@ -735,6 +737,7 @@ class MLM_PlanController extends Member
             $insert['binary_settings_auto_placement'] = $validate['binary_settings_auto_placement'];
             $insert['binary_settings_type'] = $validate['binary_settings_type'];
             $insert['binary_settings_matrix_income'] = $validate['binary_settings_matrix_income'];
+            $insert['binary_settings_gc_amount_type'] = $validate['binary_settings_gc_amount_type'];
             Tbl_mlm_binary_setttings::where('shop_id', $this->user_info->shop_id)->update($insert);
         }
         else
@@ -2275,9 +2278,15 @@ class MLM_PlanController extends Member
         $insert['binary_promotions_item_id'] = Request::input('item_id');
         $insert['binary_promotions_start_date'] = Request::input('binary_promotions_start_date');
         $insert['binary_promotions_end_date'] = Request::input('binary_promotions_end_date');
+
+        $insert['binary_promotions_repurchase_points'] = Request::input('binary_promotions_repurchase_points');
+        $insert['binary_promotions_direct'] = Request::input('binary_promotions_direct');
+
+
         $count_rewards = Tbl_mlm_plan_binary_promotions::where('binary_promotions_membership_id', $insert['binary_promotions_membership_id'])
         ->where('binary_promotions_item_id', $insert['binary_promotions_item_id'])
         ->count();
+        
         if($count_rewards == 0)
         {
             
@@ -2314,7 +2323,10 @@ class MLM_PlanController extends Member
         $insert['binary_promotions_archive'] = Request::input('submit_type');
         $insert['binary_promotions_start_date'] = Request::input('binary_promotions_start_date');
         $insert['binary_promotions_end_date'] = Request::input('binary_promotions_end_date');
-        
+
+        $insert['binary_promotions_repurchase_points'] = Request::input('binary_promotions_repurchase_points');
+        $insert['binary_promotions_direct'] = Request::input('binary_promotions_direct');
+
         $count = Tbl_mlm_plan_binary_promotions::where('binary_promotions_membership_id', $insert['binary_promotions_membership_id'])
         ->where('binary_promotions_item_id', $insert['binary_promotions_item_id'])
         ->count();

@@ -152,7 +152,9 @@ return [
         // Dingo Laravel sevice
         // Dingo\Api\Provider\LaravelServiceProvider::class,
         Msurguy\Honeypot\HoneypotServiceProvider::class,
-        Barryvdh\Debugbar\ServiceProvider::class
+        Barryvdh\Debugbar\ServiceProvider::class,
+        niklasravnsborg\LaravelPdf\PdfServiceProvider::class
+
     ],
 
     /*
@@ -206,10 +208,11 @@ return [
         
         // 'PDF' => Barryvdh\DomPDF\Facade::class,
         'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
+        'PDF2' => niklasravnsborg\LaravelPdf\Facades\Pdf::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
         'Honeypot' => Msurguy\Honeypot\HoneypotFacade::class,
-        'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'Debugbar' => Barryvdh\Debugbar\Facade::class
     ],
 
 ];

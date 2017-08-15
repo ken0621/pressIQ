@@ -602,116 +602,7 @@
          </div>
 
          <!-- TUTORIAL GROUP -->
-         <div class="panel panel-default panel-block">
-            <div class="list-group">
-               <div class="list-group-item" id="getting-started">
-
-                  <h3 class="section-title"><b>10. MLM Functions</b></h3>
-                  <!-- TUTORIAL GROUP - SUBJECT -->
-                  <p>
-                     <h4 class="subtitle">SLOT CREATION POPUP</h4>
-                     <div class="gray-author">by Luke Glenn Jordan (HTML)</div>
-                  </p>
-
-                  <pre>{{ '<button  class="panel-buttons btn btn-default pull-right popup" link="/member/mlm/slot/add" size="lg">Add New Slot</button>' }}</pre>
-                  
-                  <p>
-                     <div>To use the <i>create Slot form</i> for new slot. You need to use the <span class="text-success text-bold">.popup</span> class and use a specific link which is <span class="text-success text-bold">/member/mlm/slot/add</span>.</div>
-                  </p>
-                  <p>Callback:
-                  </p>
-                  <p>
-                     <pre>slot_created(slot_data);</pre>
-                     This triggers after saving the slot information in the database. The parameter <c>slot_data</c> will return the slot information.
-                  </p>
-                  <!-- TUTORIAL GROUP - SUBJECT -->
-                  <hr>
-                  <p>
-                     <h4 class="subtitle">VIEWING SLOT INFORMATION</h4>
-                     <div class="gray-author">by Luke Glenn (HTML)</div>
-                  </p>
-                 
-                  <pre>{{ '<a href="javascript:" class="popup" link="/member/mlm/slot/view/{slot_id}" size="lg">{$slot_id}</a>' }}</pre>
-                  <p>
-                     <div>To use the <i>view slot popup</i>. You need to use the <span class="text-success text-bold">.popup</span> class and use a specific link which is <span class="text-success text-bold">/member/mlm/slot/view/{slot_id}</span>. Do not forget to replace <span class="text-success text-bold">{slot_id}</span> with the slot's real id.</div>
-                  </p>
-
-                  <hr />
-
-                  <!-- TUTORIAL GROUP - SUBJECT -->
-                  <p>
-                     <h4 class="subtitle">SLOT CREATION COMPUTE</h4>
-                     <div class="gray-author">by Luke Glenn Jordan (PHP/Laravel)</div>
-                  </p>
-                  <p>
-                     <div>
-                        Dependencies:
-                        <div><pre>{{ 'use App\Globals\Mlm_compute;' }}</pre></div>
-                     </div>
-                  </p>
-                  <p>
-                     <div>After insertion of new slot. Get the slot id and call this function:</div> 
-                     <pre>Mlm_compute::entry($slot_id);</pre>
-                     <div>This function will compute all the active Slot creation computation plan in: <c>member/mlm/plan</c></div>
-                  </p>
-                  <!-- ISSUES -->
-                 
-                  <!-- TUTORIAL GROUP - SUBJECT -->
-                  <hr/>
-                  <p>
-                     <h4>TYPICAL COMPUTATION PLAN</h4>
-                     <div class="gray-author">by Luke Glenn Jordan (PHP/LARAVEL)</div>
-                  </p>
-                  <p>
-                     <div>To compute the newly created <i>Slot</i> </div>
-                     <div>DEPENDENCIES:</div>
-                     <ul>
-                        <li>
-                           <pre>{{ 'use App\Globals\Mlm_complan_manager;'}}<br />{{ 'use App\Models\Tbl_mlm_slot;' }}<br />Mlm_compute::get_slot_info(6);
-                           </pre>
-                        </li>
-                     </ul>
-                     Functions:
-                     <ul>
-                        <li>
-                           Binary
-                           <ul>
-                              <li>This function will distribute binary points to its uplines. Defending on its slot placement</li>
-                              <li><pre>Mlm_complan_manager::binary($slot_info)</pre></li>
-                              <li>
-                                 Binary Pairing
-                                 <ul>
-                                    <li>This function will pair the left and right points of the slot, defending on the settings in <span class="text-success text-bold">/member/mlm/plan</span></li>
-                                    <li><pre>Mlm_complan_manager::binary_pairing($slot_info)($slot_info)</pre></li>
-                                 </ul>
-                              </li>
-                           </ul>
-                        </li>
-                        <li>
-                           Direct
-                           <ul>
-                              <li>This function will give sponsorship bonus to its sponsor.</li>
-                              <li><pre>Mlm_complan_manager::direct($slot_info)</pre></li>
-                           </ul>
-                        </li>
-                        <li>
-                           Indirect
-                           <ul>
-                              <li>This function will distribute indirect income. Defending on the level of indirect set in MLM Plan</li>
-                              <li><pre>Mlm_complan_manager::indirect($slot_info)</pre></li>
-                           </ul>
-                        </li>
-                        <li>
-                           Note:
-                           <ul>
-                              <li>If a new computation plan under <b>slot creation</b> is created in MLM Plan. You must create a new function in <span class="text-success text-bold">App/Globals/Mlm_complan_manager.php</span> named after the computation plan name(lowercase)</li>
-                           </ul>
-                        </li>
-                     </ul>
-                  </p>
-               </div>
-            </div>
-         </div>
+         @include('member.developer.mlm.index')
          <!-- TUTORIAL GROUP -->
          <div class="panel panel-default panel-block">
             <div class="list-group">
@@ -1312,7 +1203,7 @@
                   </p>
 
                   <pre>{{ 'Accounting::getAllAccount()' }}</pre>
-                  <pre>{{ 'Accounting::getAllAccount("all","1","bank","false")' }}</pre>
+                  <pre>{{ 'Accounting::getAllAccount("all","1","bank","null")' }}</pre>
                   <p>
                   <!-- <p><div>Allows the developer to compute the shipping fee.</div></p> -->
                   <p>
@@ -1321,32 +1212,50 @@
                         <li>filter (string) <i>(Default: all) can be "all", "active" or "inactive"</i></li>
                         <li>account_id (string) <i>(Default: null) Using this will allow the developer to get 'Sub Account' from specific Sub Title.</i></li>
                         <li>type (string) <i>(Default: null)</i></li>
-                        <li>return_balance (boolean) <i>(Default: false) "true" or "false". Set to 'false' if you don't want (false is the default).</i></li>
+                        <li>search (string) <i>(Default: null) If there is specific account name / number.</i></li>
                      </ul>
                      <div><c>Returned information</c> are as follows:</div>
                      <ul>
                         <li>0</li>
                         <ul>
                            <li>account_id (int)</li>
+                           <li>account_number (string)</li>
                            <li>account_name (string)</li>
                            <li>account_type (string)</li>
                            <li>account_description (text)</li>
+                           <li>account_parent_id (int) <i>NULL if there is no parent</i></li>
+                           <li>account_sublevel (int)</li>
+                           <li>account_balance (float)</li>
+                           <li>is_sub_account (1 or 0)</li>
+                           <li>account_new_balance</li>
                            <li>sub_account (array) <i>NULL if there is no sub-account</i></li>
                            <ul>
                               <li>0</li>
                               <ul>
                                  <li>account_id (int)</li>
+                                 <li>account_number (string)</li>
                                  <li>account_name (string)</li>
                                  <li>account_type (string)</li>
                                  <li>account_description (text)</li>
-                                 <li>sub_account (array)</li>
+                                 <li>account_parent_id (int) <i>NULL if there is no parent</i></li>
+                                 <li>account_sublevel (int)</li>
+                                 <li>account_balance (float)</li>
+                                 <li>is_sub_account (1 or 0)</li>
+                                 <li>account_new_balance</li>
+                                 <li>sub_account (array) <i>NULL if there is no sub-account</i></li>
                               </ul>
                               <li>1</li>
                               <ul>
                                  <li>account_id (int)</li>
+                                 <li>account_number (string)</li>
                                  <li>account_name (string)</li>
                                  <li>account_type (string)</li>
                                  <li>account_description (text)</li>
+                                 <li>account_parent_id (int) <i>NULL if there is no parent</i></li>
+                                 <li>account_sublevel (int)</li>
+                                 <li>account_balance (float)</li>
+                                 <li>is_sub_account (1 or 0)</li>
+                                 <li>account_new_balance</li>
                                  <li>sub_account (array) <i>NULL if there is no sub-account</i></li>
                               </ul>
                            </ul>
@@ -1354,37 +1263,49 @@
                         <li>1</li>
                         <ul>
                            <li>account_id (int)</li>
+                           <li>account_number (string)</li>
                            <li>account_name (string)</li>
                            <li>account_type (string)</li>
                            <li>account_description (text)</li>
+                           <li>account_parent_id (int) <i>NULL if there is no parent</i></li>
+                           <li>account_sublevel (int)</li>
+                           <li>account_balance (float)</li>
+                           <li>is_sub_account (1 or 0)</li>
+                           <li>account_new_balance</li>
                            <li>sub_account (array) <i>NULL if there is no sub-account</i></li>
                            <ul>
                               <li>0</li>
                               <ul>
                                  <li>account_id (int)</li>
+                                 <li>account_number (string)</li>
                                  <li>account_name (string)</li>
                                  <li>account_type (string)</li>
                                  <li>account_description (text)</li>
-                                 <li>sub_account (array)</li>
+                                 <li>account_parent_id (int) <i>NULL if there is no parent</i></li>
+                                 <li>account_sublevel (int)</li>
+                                 <li>account_balance (float)</li>
+                                 <li>is_sub_account (1 or 0)</li>
+                                 <li>account_new_balance</li>
+                                 <li>sub_account (array) <i>NULL if there is no sub-account</i></li>
                               </ul>
                               <li>1</li>
                               <ul>
                                  <li>account_id (int)</li>
+                                 <li>account_number (string)</li>
                                  <li>account_name (string)</li>
                                  <li>account_type (string)</li>
                                  <li>account_description (text)</li>
+                                 <li>account_parent_id (int) <i>NULL if there is no parent</i></li>
+                                 <li>account_sublevel (int)</li>
+                                 <li>account_balance (float)</li>
+                                 <li>is_sub_account (1 or 0)</li>
+                                 <li>account_new_balance</li>
                                  <li>sub_account (array) <i>NULL if there is no sub-account</i></li>
                               </ul>
                            </ul>
                         </ul>
                      </ul>
                   </p>
-                  <div>
-                     <span style="color: red;">ISSUES AND BUGS:</span>
-                     <ul>
-                        <li>(BA) Balance is still under development.</li>
-                     </ul>
-                  </div>
                   <!-- TUTORIAL GROUP - SUBJECT -->
                   <hr>
                   <p>
@@ -1416,14 +1337,13 @@
                      <div class="gray-author">by Bryan Kier Aradanas (PHP/Laravel)</div>
                   </p>
                   
-                  <pre>{{ 'Accounting::getItemAccount(1, false)' }}</pre>
+                  <pre>{{ 'Accounting::getItemAccount(1)' }}</pre>
                   <p>
                   <p><div>Allows the developer to compute the shipping fee.</div></p>
                   <p>
                      <div><c>Parameters</c> are as follows:</div>
                      <ul>
                         <li>item_id (int) <span class="blue"> 'required' </span><i>ID of Item</i></li>
-                        <li>return_balance (boolean) <i>(Default: false) "true" or "false". Set to 'false' if you don't want (false is the default).</i></li>
                      </ul>
                      <div><c>Returned information</c> are as follows:</div>
                      <ul>
@@ -1464,14 +1384,6 @@
                         </ul> -->
                      </ul>
                   </p>
-                  <div>
-                     <span style="color: red;">ISSUES AND BUGS:</span>
-                     <ul>
-                        <li>(BA) Balance is still under development.</li>
-                     </ul>
-                  </div>
-
-
                   <!-- TUTORIAL GROUP - SUBJECT -->
                   <hr>
                   <p>
@@ -1480,139 +1392,89 @@
                   </p>
                   <pre>@include('member.developer.documentation_journal_entry_data')</pre>
                   <p>
-                  <p><div>Allows the developer to compute the shipping fee.</div></p>
+                  <p><div>Sample Data.</div></p>
                   <p>
                      <div><c>Parameters</c> are as follows:</div>
                      <ul>
-                        <li>reference_modules (string) <span class="blue"> 'required' </span><i>Module related to journal entry</i></li>
-                        <li>reference_id (int) <span class="blue"> 'required' </span><i>ID of specific module.</i></li>
-                        <li>entry_date (datetime) <span class="blue"> 'required' </span><i>Date of Journal Entry</i></li>
-                        <li>remarks (text) <span class="blue"> 'required | nullable' </span> <i>E.G: Creation of Invoice #50</i></li>
+                        <li>entry (array) <span class="blue"> 'required' </span></li>
+                        <ul>
+                           <li>reference_module (string) <span class="blue"> 'required' </span> <i>type of module of the transaction</i></li>
+                           <ul>  
+                              <li>mlm-product-repurchase</li>
+                              <li>product-order</li>
+                              <li>sales-receipt</li>
+                              <li>invoice</li>
+                              <li>receive-payment</li>
+                              <li>bill-payment</li>
+                              <li>write-check</li>
+                              <li>bill</li>
+                              <li>debit-memo</li>
+                              <li>credit-memo</li>
+                              <li>deposit</li>
+                           </ul>
+                           <li>reference_id (int) <span class="blue"> 'required' </span> <i>reference id of the transaction</i></li>
+                           <li>name_id (int) <i>Customer or Vendor ID (use only if the transaction can either use for customer or vendor)</i></li>
+                           <li>name_reference (string) <i>"customer" or "vendor" (use only if the transaction can either use for customer or vendor)</i></li>
+                           <li>vatable (double) <i>If the transaction has vat</i></li>
+                           <li>discount (double) <i>If the transaction has a discount as whole</i></li>
+                           <li>ewt (double) <i>If the transaction has ewt</i></li>
+                           <li>account_id (int) <i>If there is a specified account id for the main account (account that is selected in the transaction | overwrite the default value of accounts receivable or payable </i></li>
+                           <li>total (double) <span class="blue"> 'required' </span> <i>Entry amount</i></li>
+                        </ul>
                         <li>entry_data (array) <span class="blue"> 'required' </span></li>
                         <ul>
                            <li>0</li>
                            <ul>
-                              <li>name_id (int) <i>ID of Customer / Vendor E.g. BIR</i></li>
-                              <li>item_id (int) <i>ID of Item / Products (NULL if there is no item)</i></li>
-                              <li>account_id (int) <i>ID of Account Title</i></li>
-                              <li>entry_type (string) <i>"debit" or "credit"</i></li>
-                              <li>entry_amount (double) <i>Entry amount</i></li>
-                              <li>entry_description (text) <i>Enter description of transaction.</i></li>
-                           </ul>
-                           <li>1</li>
-                           <ul>
-                              <li>name_id (int) <i>ID of Customer / Vendor E.g. BIR</i></li>
-                              <li>item_id (int) <i>ID of Item / Products (NULL if there is no item)</i></li>
-                              <li>account_id (int) <i>ID of Account Title</i></li>
-                              <li>entry_type (string) <i>"debit" or "credit"</i></li>
-                              <li>entry_amount (double) <i>Entry amount</i></li>
-                              <li>entry_description (text) <i>Enter description of transaction.</i></li>
+                              <li>item_id (int) or account_id (int) <span class="blue"> 'required' </span> <i>Id of the item or Id of the account</i></li>
+                              <li>vatable (double) <i>If the transaction has vat</i></li>
+                              <li>discount (double) <i>If the transaction has a discount per item</i></li>
+                              <li>entry_amount (double) <span class="blue"> 'required' </span> <i>Amount per item</i></li>
+                              <li>entry_description (string) <i>Description</i></li>
                            </ul>
                         </ul>
+                        <li>remarks (string) <!-- <span class="blue"> 'required' </span> --><i>Remarks for whole journal entry</i></li>
                      </ul>
                      <div><c>Returned information</c> are as follows:</div>
                      <ul>
-                        <li>status (string) <i>"success" or "error"</i></li>
-                        <li>status_message (string) <i>"contains information if status is error"</i></li>
-                     </ul>
-                  </p>
-
-
-                  <!-- TUTORIAL GROUP - SUBJECT -->
-                  <hr>
-                  <p>
-                     <h4 class="subtitle">5. RETRIEVING JOURNAL ENTRIES BY MODULE AND ID</h4>
-                     <div class="gray-author">by Bryan Kier Aradanas (PHP/Laravel)</div>
-                  </p>
-                  
-                  <pre>{{ 'Accounting::getJournalById("invoice",2)' }}</pre>
-                  <p>
-                  <!-- <p><div>Allows the developer to compute the shipping fee.</div></p> -->
-                  <p>
-                     <div><c>Parameters</c> are as follows:</div>
-                     <ul>
-                        <li>reference_module (string) <span class="blue"> 'required' </span> <i>Module related to journal entry</i></li>
-                        <li>reference_id (int) <span class="blue"> 'required' </span> <i>ID of specific update.</i></li>
-
-                     </ul>
-                     <div><c>Returned information</c> are as follows:</div>
-                     <ul>
-                        <li>status (string) <i>"success" or "error"</i></li>
-                        <li>status_message (string) <i>"contains information if status is error"</i></li>
-                        <li>je_id (int) <i>"id of the journal entry"</i></li>
-                        <li>entry_date (date) <i>"date of journal entry established"</i></li>
-                        <li>remarks (string) <i>"journal entry remarks"</i></li>
-                        <li>entry_data</li>
-                        <ul>
-                           <li>0</li>
-                           <ul>
-                              <li>item_id (int) <i>ID of Item / Products</i></li>
-                              <li>account_id (int) <i>ID of Account Title</i></li>
-                              <li>entry_type (string) <i>"debit" or "credit"</i></li>
-                              <li>entry_amount (double) <i>Entry amount</i></li>
-                              <li>entry_description (text) <i>Enter description of transaction.</i></li>
-                           </ul>
-                           <li>1</li>
-                           <ul>
-                              <li>item_id (int) <i>ID of Item / Products</i></li>
-                              <li>account_id (int) <i>ID of Account Title</i></li>
-                              <li>entry_type (string) <i>"debit" or "credit"</i></li>
-                              <li>entry_amount (double) <i>Entry amount</i></li>
-                              <li>entry_description (text) <i>Enter description of transaction.</i></li>
-                           </ul>
-                        </ul>
+                        <li>void</i></li>
                      </ul>
                   </p>
 
                   <!-- TUTORIAL GROUP - SUBJECT -->
                   <hr>
                   <p>
-                     <h4 class="subtitle">6. RETRIEVING JOURNAL ENTRIES BY MODULE AND DATE</h4>
+                     <h4 class="subtitle">5. ADDING MANUAL JOURNAL ENTRIES</h4>
                      <div class="gray-author">by Bryan Kier Aradanas (PHP/Laravel)</div>
                   </p>
-                  
-                  <pre>{{ 'Accounting::getJournalByDate("invoice", "2000-01-01", "2000-12-30");' }}</pre>
+                  <pre>@include('member.developer.documentation_manual_journal_entry_data')</pre>
                   <p>
-                  <!-- <p><div>Allows the developer to compute the shipping fee.</div></p> -->
+                  <p><div>Sample Data.</div></p>
                   <p>
                      <div><c>Parameters</c> are as follows:</div>
                      <ul>
-                        <li>reference_module (string) <span class="blue"> 'required' </span><i>Module related to journal entry</i></li>
-                        <li>reference_date_start (int) <span class="blue"> 'required' </span><i>Transaction Start Date Filter</i></li>
-                        <li>reference_date_end (int) <span class="blue"> 'required' </span><i>Transaction End Date Filter</i></li>
-                     </ul>
-                     <div><c>Returned information</c> are as follows:</div>
-                     <ul>
-                        <li>status (string) <i>"success" or "error"</i></li>
-                        <li>status_message (string) <i>"contains information if status is error"</i></li>
-                        <li>je_id (int) <i>"id of the journal entry"</i></li>
-                        <li>reference_module (string) <i>Module related to journal entry</i></li>
-                        <li>reference_id (int) <i>ID of specific module.</i></li>
-                        <li>entry_date (date) <i>"date of journal entry established"</i></li>
-                        <li>remarks (string) <i>"journal entry remarks"</i></li>
-                        <li>entry_data</li>
+                        <li>entry (array) <span class="blue"> 'required' </span></li>
+                        <ul>
+                           <li>entry_date (string) <span class="blue"> 'required' </span> <i>date of the transaction journal</i></li>
+                           <li>je_id (int) <span class="blue"> 'required' </span> <i>reference id of the transaction if exist (nullable)</i></li>
+                        </ul>
+                        <li>entry_data (array) <span class="blue"> 'required' </span></li>
                         <ul>
                            <li>0</li>
                            <ul>
-                              <li>item_id (int) <i>ID of Item / Products</i></li>
-                              <li>account_id (int) <i>ID of Account Title</i></li>
-                              <li>entry_type (string) <i>"debit" or "credit"</i></li>
-                              <li>entry_amount (double) <i>Entry amount</i></li>
-                              <li>entry_description (text) <i>Enter description of transaction.</i></li>
-                           </ul>
-                           <li>1</li>
-                           <ul>
-                              <li>item_id (int) <i>ID of Item / Products</i></li>
-                              <li>account_id (int) <i>ID of Account Title</i></li>
-                              <li>entry_type (string) <i>"debit" or "credit"</i></li>
-                              <li>entry_amount (double) <i>Entry amount</i></li>
-                              <li>entry_description (text) <i>Enter description of transaction.</i></li>
+                              <li>account_id (int)  <span class="blue"> 'required' </span> <i>Id of the account</i></li>
+                              <li>type (double) <span class="blue"> 'required' </span> <i>"Credit" or "Debit"</i></li>
+                              <li>entry_amount (double) <span class="blue"> 'required' </span> <i>Amount per item</i></li>
+                              <li>name_id (string) <i>Id of the Customer or Vendor if available</i></li>
+                              <li>name_reference (string) <i>"vendor" or "customer"</i></li>
                            </ul>
                         </ul>
+                        <li>remarks (string) <!-- <span class="blue"> 'required' </span> --><i>Remarks for whole journal entry</i></li>
+                     </ul>
+                     <div><c>Returned information</c> are as follows:</div>
+                     <ul>
+                        <li>void</i></li>
                      </ul>
                   </p>
-
-
                </div>
             </div>
          </div>

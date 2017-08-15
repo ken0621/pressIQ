@@ -35,11 +35,11 @@ $data['icon'] = 'icon-sitemap';
     <form class="global-submit" method="post" action="/mlm/slot/check_add">
     {!! csrf_field() !!}
     <div class="box-body">
-    	<label>Create Slot</label>
-    	<select name="membership_code_id" class="form-control">
+      <label>Create Slot</label>
+      <select name="membership_code_id" class="form-control membership_code_id">
         @if(count($_code) != 0)
           @foreach($_code as $code)
-            <option value="{{$code->membership_code_id}}">{{$code->membership_activation_code}} {{$code->membership_type}}</option>
+            <option value="{{$code->membership_code_id}}">{{$code->membership_activation_code}} {{$code->membership_type}} ({{$code->membership_name}})</option>
           @endforeach
         @else
             <option>NO MEMBERSHIP CODE</option>
@@ -47,11 +47,59 @@ $data['icon'] = 'icon-sitemap';
       </select>
       <hr>
       @if(count($_code) != 0)
-        <button class="btn btn-primary pull-right use_code_mem">Use Code</button>
+        <button class="btn btn-primary pull-right use_code_mem" style="margin-left:20px;">Use Code</button>
+        <button class="btn btn-primary pull-right trans_mem_code" type="button">Transfer code</button>
       @endif
     </div>
     </form>
   </div>
+
+
+
+  {{--
+  <div class="box clearfix" style="overflow: hidden !important;">
+    <div class="box-header with-border">
+      <h3 class="box-title">Slot Transfer</h3>
+    </div>
+    <!-- /.box-header -->
+    <form class="global-submit" method="POST" action="/mlm/slots/before_transfer_slot">
+    {!! csrf_field() !!}
+    <div class="box-body">
+        <label>Slot</label>
+        <select name="slot_id" class="form-control">
+            @foreach($all_slots_show as $slot_show)
+                <option value="{{$slot_show->slot_id}}">{{$slot_show->slot_no}} ({{$slot_show->membership_name}})</option>
+            @endforeach
+        </select>
+      <hr>
+      <button class="btn btn-primary pull-right">Transfer</button>
+    </div>
+    </form>
+  </div>
+  --}}
+
+
+
+
+  @if(count($_item_code) >= 1)
+    <div class="box clearfix" style="overflow: hidden !important;">
+      <div class="box-header with-border">
+        <h3 class="box-title">Product Codes</h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body">
+          <label>Code</label>
+          <select name="item_code_id" class="form-control item_code_id">
+              @foreach($_item_code as $item_code)
+                  <option value="{{$item_code->item_code_id}}">{{$item_code->item_activation_code}}</option>
+              @endforeach
+          </select>
+        <hr>
+        <button class="btn btn-primary pull-right use_prod_code" style="margin-left:20px;">Use code</button>
+        <button class="btn btn-primary pull-right trans_prod_code">Transfer code</button>
+      </div>
+    </div>
+  @endif
 </div>  
 <div class="col-md-6">
   <div class="box">
@@ -116,11 +164,7 @@ $data['icon'] = 'icon-sitemap';
 @endsection
 @section('js')
 <script type="text/javascript">
-
-$(".use_code_mem").click(function()
-{
-  $(this).disabled();
-});
+on_click();
 
 function submit_done(data)
 {
@@ -163,10 +207,60 @@ function submit_done(data)
     toastr.success('Congratulations, Your slot is created.');
     window.location = "/mlm";
   }
+  else if(data.status == 'success_before_transfer_slot')
+  {
+    var link = "/mlm/slots/transfer_slot?slot_id="+data.encrypted;
+    action_load_main_modal(link,"");
+  }
+  else if(data.status == 'success_transfer_slot')
+  {
+    toastr.success('Transfer done.');
+    window.location = "/mlm";
+  }
+  else if(data.status == 'success-check-prod-code')
+  {
+    var link = "/mlm/slots/item_code?item_code_id="+data.item_code_id;
+    action_load_main_modal(link,"");
+  }
+  else if(data.status == 'success-prod-code')
+  {
+    toastr.success('Done.');
+    window.location = "/mlm/slots";
+  }
+  else if(data.status == 'success-transfer-prod-code')
+  {
+    toastr.success('Done.');
+    window.location = "/mlm/slots";
+  }
+  else if(data.status == 'success-transfer-mem-code')
+  {
+    toastr.success('Done.');
+    window.location = "/mlm/slots";
+  }
   else
   {
     toastr.warning(data.message);
   }
+}
+
+function on_click()
+{
+  $(".use_prod_code").click(function()
+  {
+    var link = "/mlm/slots/item_code?item_code_id="+$(".item_code_id").val();
+    action_load_main_modal(link,"");
+  });
+  $(".trans_prod_code").click(function()
+  {
+    var link = "/mlm/slots/transfer_item_code?item_code_id="+$(".item_code_id").val();
+    action_load_main_modal(link,"");
+  });
+  $(".trans_mem_code").click(function()
+  {
+    // alert($(".membership_code_id").val());
+    var link = "/mlm/slots/transfer_mem_code?mem_code_id="+$(".membership_code_id").val();
+    action_load_main_modal(link,"");
+  });
 }
 
 </script>

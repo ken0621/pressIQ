@@ -11,10 +11,12 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_inventory_slip;
 use App\Models\Tbl_settings;
 use App\Models\Tbl_user;
+use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_user_warehouse_access ;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 
+use App\Globals\ItemSerial;
 use App\Globals\AuditTrail;
 use App\Models\Tbl_unit_measurement_multi;
 use DB;
@@ -22,6 +24,87 @@ use Carbon\Carbon;
 use Session;
 class Warehouse
 {   
+    public static function select_item_warehouse_per_bundle($warehouse_id)
+    {
+        $bundle = Tbl_item::where("item_type_id",4)->where("shop_id",Warehouse::getShopId())->get();
+
+        $item = [];
+        $bundle_qty_warehouse = [];
+        $bundle_qty_ = [];
+        $bundle_data = [];
+        foreach($bundle as $key => $value) 
+        {
+            $bundle_data[$key]["bundle_id"] = $value->item_id;
+            $bundle_data[$key]["bundle_item_name"] = $value->item_name;
+            $bundle_data[$key]["bundle_item_bardcode"] = $value->item_barcode;
+            $bundle_data[$key]["bundle_item_um"] = $value->item_measurement_id;
+            $bundle_data[$key]["bundle_current_stocks"] = null;
+            $bundle_data[$key]["bundle_current_stocks_um"] = null;
+
+            $bundle_item = Tbl_item_bundle::where("bundle_bundle_id",$value->item_id)->get();
+
+            $warehouse_bundle_qty = [];
+            foreach ($bundle_item as $key_bundle => $value_bundle) 
+            {
+               $warehouse_qty = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value_bundle->bundle_item_id)->pluck('inventory_count');      
+
+               $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty;
+
+               $bundle_qty_warehouse[$value_bundle->bundle_item_id] = $warehouse_qty / $bundle_qty;
+               $bundle_qty_[$value_bundle->bundle_item_id] = $bundle_qty;
+            }
+
+            $bundle_data[$key]["item"] = $bundle_qty_warehouse;
+            $bundle_data[$key]["bundle_qty"] = $bundle_qty_;
+        }
+
+        $um = null;
+        $rem_item = [];
+        foreach($bundle_data as $key_bundle_data => $value_bundle_data) 
+        {
+            $bundle_stocks = 0;
+            $qty = 0;
+            if(count($value_bundle_data["item"]) > 0)
+            {
+                $bundle_stocks = floor(min($value_bundle_data["item"]));
+            }
+
+            foreach($value_bundle_data["item"] as $item_id_key => $value_item) 
+            {   
+                $rem_item[$value_bundle_data["bundle_id"].".".$item_id_key]["item_id"] = $item_id_key;
+                $rem_item[$value_bundle_data["bundle_id"].".".$item_id_key]["item_quantity"] = ($value_item - $bundle_stocks) * $value_bundle_data["bundle_qty"][$item_id_key];
+            }
+
+            $bundle_data[$key_bundle_data]["bundle_current_stocks_um"] = UnitMeasurement::um_view($bundle_stocks,$value_bundle_data["bundle_item_um"]);
+            $bundle_data[$key_bundle_data]["bundle_current_stocks"] = $bundle_stocks;
+
+            $qty = Purchasing_inventory_system::get_sir_stocks($warehouse_id, $value_bundle_data["bundle_id"]);
+            $bundle_data[$key_bundle_data]['total_stock_sir'] = UnitMeasurement::um_view($qty,$value_bundle_data["bundle_item_um"]);
+        }
+
+        // dd($rem_item);
+
+        // foreach($rem_item as $key_rem => $value_rem)
+        // {
+        //     $item_details = Item::get_item_details($value_rem["item_id"]);
+
+        //     $bundle_data["b".$key_rem]["bundle_id"] = $value_rem["item_id"];
+        //     $bundle_data["b".$key_rem]["bundle_item_name"] = $item_details->item_name;
+        //     $bundle_data["b".$key_rem]["bundle_item_bardcode"] = $item_details->item_barcode;
+        //     $bundle_data["b".$key_rem]["bundle_item_um"] = $item_details->item_measurement_id;
+        //     $um_info = UnitMeasurement::um_other($item_details->item_measurement_id);
+        //     $um = "";
+        //     if($um_info)
+        //     {   
+        //         $um = $um_info->multi_id;
+        //     }
+        //     $bundle_data["b".$key_rem]["bundle_current_stocks"] = UnitMeasurement::um_view($value_rem["item_quantity"],$item_details->item_measurement_id,$um);
+        // }
+        // dd($bundle_data);
+
+        return $bundle_data;
+
+    }
     public static function insert_item_to_all_warehouse($item_id, $reorder_point = 0)
     {
         if($item_id)
@@ -205,7 +288,6 @@ class Warehouse
     {
     	$data = Tbl_warehouse::Warehouseitem()
                              ->select_inventory($warehouse_id)
-				    		 ->orderBy('product_name','asc')
     						 ->paginate(10);
         foreach($data as $key => $value)
         {   //cycy
@@ -435,13 +517,16 @@ class Warehouse
     * vendor
     * other
     */
-    public static function inventory_update($transaction_id = 0, $transaction_type = '', $transaction_item_inventory = array(), $return = 'array', $allow_out_of_stock = false)
+    public static function inventory_update($transaction_id = 0, $transaction_type = '', $transaction_item_inventory = array(), $return = 'array', $allow_out_of_stock = false , $item_serial = array())
     {
         //inventory source reason = $transaction_type
         //inventory source id = $transaction_id
         $inventory_slip = Tbl_inventory_slip::where("inventory_source_id",$transaction_id)->where("inventroy_source_reason",$transaction_type)->first();
         
         Tbl_warehouse_inventory::where("inventory_slip_id",$inventory_slip->inventory_slip_id)->delete();
+
+        /*RETURN All TO ORIGINAL*/
+        ItemSerial::return_original_serial($transaction_type,$transaction_id);
 
         foreach($transaction_item_inventory as $key2 => $value2)
         {            
@@ -480,6 +565,15 @@ class Warehouse
                     $data["status_message"] = "The quantity is not enough";
                 }
             }
+
+        }
+
+        if(count($item_serial) > 0)
+        {
+            foreach ($item_serial as $key_item_serial => $value_item_serial) 
+            {
+                ItemSerial::consume_item_serial($item_serial[$key_item_serial], $transaction_type, $transaction_id);
+            }
         }
 
         if($data["status"] != "error" && $inventory_slip != null)
@@ -495,7 +589,7 @@ class Warehouse
         return $data;
 
     }
-    public static function inventory_update_returns($transaction_id = 0, $transaction_type = '', $transaction_item_inventory = array(), $return = 'array' )
+    public static function inventory_update_returns($transaction_id = 0, $transaction_type = '', $transaction_item_inventory = array(), $return = 'array', $item_serial  = array())
     {
         //inventory source reason = $transaction_type
         //inventory source id = $transaction_id
@@ -511,7 +605,14 @@ class Warehouse
                 $insert["warehouse_id"] = $inventory_slip->warehouse_id;
                 $insert["inventory_slip_id"] = $inventory_slip->inventory_slip_id;
 
-                Tbl_warehouse_inventory::insert($insert);
+                $inventory_id = Tbl_warehouse_inventory::insertGetId($insert);
+                if(count($item_serial) > 0)
+                {
+                    if($item_serial[$key2]["item_id"] == $value2["product_id"])
+                    {
+                        ItemSerial::insert_item_serial($item_serial[$key2], $inventory_id);
+                    }
+                }
                 $data["status"] = "success";
         }
 
@@ -598,7 +699,7 @@ class Warehouse
         }
         return $data;
     }
-    public static function inventory_refill($warehouse_id = 0, $reason_refill = '', $refill_source = 0, $remarks = '', $warehouse_refill_product = array(), $return = 'array', $is_return = null)
+    public static function inventory_refill($warehouse_id = 0, $reason_refill = '', $refill_source = 0, $remarks = '', $warehouse_refill_product = array(), $return = 'array', $is_return = null, $item_serial = array())
     {
         $shop_id = Warehouse::get_shop_id($warehouse_id);
 
@@ -639,6 +740,14 @@ class Warehouse
                 $success++;
 
                 $inventory_id = Tbl_warehouse_inventory::insertGetId($insert_refill);
+
+                if(count($item_serial) >= 1 && $is_return == null) 
+                {
+                    if($item_serial[$key]["item_id"] == $refill_product['product_id'])
+                    {
+                        ItemSerial::insert_item_serial($item_serial[$key], $inventory_id);
+                    }
+                }
 
                 $for_serial_item[$key]["quantity"] = $refill_product['quantity'];
                 $for_serial_item[$key]["product_id"] = $refill_product['product_id'];
@@ -683,7 +792,7 @@ class Warehouse
         }
         return $data;
     }
-    public static function inventory_consume($warehouse_id = 0, $remarks = '', $consume_product ,$consumer_id = 0, $consume_cause = '', $return = 'array', $transaction_type = '', $transaction_id = 0,$allow_out_of_stock = false)
+    public static function inventory_consume($warehouse_id = 0, $remarks = '', $consume_product ,$consumer_id = 0, $consume_cause = '', $return = 'array', $transaction_type = '', $transaction_id = 0,$allow_out_of_stock = false, $item_serial = array())
     {
         $shop_id = Warehouse::get_shop_id($warehouse_id);
         $insert_slip['inventory_slip_id_sibling']     = 0;
@@ -698,7 +807,7 @@ class Warehouse
         $insert_slip['inventory_slip_consume_refill'] = 'consume';
         $insert_slip['inventory_slip_consumer_id']    =  $consumer_id;
         $insert_slip['inventory_slip_consume_cause']  =  $consume_cause;
-        $insert_slip['slip_user_id']= Warehouse::getUserid() or 0;
+        $insert_slip['slip_user_id'] = Warehouse::getUserid() or 0;
 
         $inventory_slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
 
@@ -755,6 +864,13 @@ class Warehouse
                     }
 
                 }                
+            }
+        }
+        if(count($item_serial) > 0)
+        {
+            foreach ($item_serial as $key_item_serial => $value_item_serial) 
+            {
+                ItemSerial::consume_item_serial($item_serial[$key_item_serial], $transaction_type, $transaction_id);
             }
         }
 

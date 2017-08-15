@@ -25,7 +25,7 @@
 									@if(isset($item_info[$c_v_key]))
 										<tr data-id="a_1_{{$c_v_key}}" data-parent="a_{{$c_key}}" @if($report_type != 'excel') style="background-color: #F5F5F5;" @endif >
 											<td colspan="{{count($report_field)}}" ><span style="margin-left: 20px">{{$item_info[$c_v_key]}}</span></td>
-											<td>{{currency('PHP', collect($sales_by_item[$c_v_key])->sum('amount'))}}</td>
+											<td><text class="total-report">{{currency('PHP', collect($sales_by_item[$c_v_key])->sum('amount'))}}</text></td>
 						            	</tr>
 						            	<?php $total = 0; ?>
 						            	@if(isset($sales_by_item[$c_v_key]))

@@ -1,27 +1,22 @@
 
 @foreach($_account as $key=>$account)
-	<tr>
+	<tr data-id="account-{{$account['account_id']}}" data-parent="{{$account['account_parent_id'] == '' ? '' : 'account-'.$account['account_parent_id']}}" >
 		
-	    <td style="font-weight: bold;">
-	    	<span indent="{{$account['account_sublevel']}}" style="margin-left: {{$account['account_sublevel']*20}}px" class="coa-{{$account['account_parent_id']}} collapse in accordion-body">
+	    <td style="font-weight: bold; {{$account['account_sublevel'] > 0  ? 'padding-left: ' .$account['account_sublevel']*20 .'px' : '' }}">
+	    	<span >
 	    	@if($account['is_sub_count'] == 1)
-	    		<i class="fa cursor-pointer fa-caret-down toggle-caret accordion-toggle" data-target=".coa-{{$account['account_id']}}" data-toggle="collapse"></i> 
-	    	@else
-	    		&nbsp;&nbsp;&nbsp;
 	    	@endif
 	    		{{$account['account_number']}} • {{$account['account_name']}}
 	    	</span>
 	    </td>
-	    <td><span class="coa-{{$account['account_parent_id']}} collapse in accordion-body">{{$account['account_type']}}</span></td>
-	    <td><span class="coa-{{$account['account_parent_id']}} collapse in accordion-body">{{currency('PHP', $account['account_balance'])}}</span></td>
+	    <td>{{$account['account_type']}}</td>
+	    <td>{{currency('PHP', $account['account_new_balance'])}}</td>
 	    <td class="text-center">
-	    	<span class="coa-{{$account['account_parent_id']}} collapse in accordion-body">
-		    	<!-- ACTION BUTTON -->
-		    	<div class="btn-group">
-	                <a class="btn btn-primary btn-grp-primary popup btn-edit-account" href="javascript:" link="/member/accounting/chart_of_account/popup/update/{{$account['account_id']}}">Edit</a>
-	                <a class="btn btn-primary btn-grp-primary" href="/member/accounting/journal/all-entry-by-account/{{$account['account_id']}}">Quick Report</a>
-	            </div>
-            </span>
+	    	<!-- ACTION BUTTON -->
+	    	<div class="btn-group">
+                <a class="btn btn-primary btn-grp-primary popup btn-edit-account" href="javascript:" link="/member/accounting/chart_of_account/popup/update/{{$account['account_id']}}">Edit</a>
+                <a class="btn btn-primary btn-grp-primary" href="/member/accounting/journal/all-entry-by-account/{{$account['account_id']}}">Quick Report</a>
+            </div>
 	    </td>
 	</tr>
 	@if($account['sub_account'] != null)

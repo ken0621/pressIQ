@@ -1,184 +1,83 @@
 <div class="report-container">
-       <div class="panel panel-default panel-block panel-title-block panel-report">
-           <div class="panel-heading">
-              @include('member.reports.report_header');
-              <div class="table-reponsive">
-              		<table class="table table-bordered table-condensed">
-              		<?php 
-              		$sum_income = 0;
-       			$sum_cogs = 0;
-       			$sum_expense = 0;
-       			$sum_other_ex = 0;
-       			$sum_other_in = 0;
-       			$sum_gross = 0;
-       			$sum_net_operating = 0;
-                            $amount = 0;
-       			?>
-                                   <tr style="background-color: gray;">
-                                          <td colspan="20"></td>
-                                   </tr>
-              			@if(isset($account_income[11]))
-              			<tr>
-              				<td colspan="20">{{$account_income[11]->chart_type_name}}</td>
-              			</tr>
-              				<?php $sum_income = 0; ?>
+    <div class="panel panel-default panel-block panel-title-block panel-report load-data">
+        <div class="panel-heading load-content">
+        @include('member.reports.report_header')
+        <div class="table-reponsive">
+            <table class="table table-condensed  collaptable">
+                <thead>
+                    <tr>
+                        <th colspan="5"></th>
+                        <th class="text-center">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                        $income         = 0;
+                        $cog            = 0;
+                        $expense        = 0;
+                        $other_income   = 0;
+                        $other_expense  = 0;
+                    ?>
+                    @foreach($_account as $key=>$account)
+                        <tr data-id="type-{{$account->chart_type_id}}" data-parent="">
+                            <td colspan="2" >{{strtoupper($account->chart_type_name)}}</td>
+                            <td colspan="3"></td>
+                            <td class="text-right"><text class="total-report">{{currency('PHP', collect($account->account_details)->sum('amount'))}}</text></td>
+                        </tr>
+                        @foreach($account->account_details as $key1=>$acc_details)
+                            <tr data-id="account-{{$key1}}" data-parent="type-{{$account->chart_type_id}}">
+                                <td></td>
+                                <td>{{$acc_details->account_name}}</td>
+                                <td colspan="3"></td>
+                                <td class="text-right">{{currency('PHP', $acc_details->amount)}}</td>
+                            </tr>
+                        @endforeach
+                        
+                        @if(count($account->account_details) > 0)
+                            <tr data-id="account-{{$account->chart_type_id}}" data-parent="type-{{$account->chart_type_id}}">
+                                <td></td>
+                                <td>Total</td>
+                                <td colspan="3"></td>
+                                <td class="text-right">{{currency('PHP', collect($account->account_details)->sum('amount'))}}</td>
+                            </tr>
+                        @endif
 
-              				@foreach($sum[11] as $key => $value)
-                                          <?php $amount = debit_credit($value->jline_type, $value->sum); ?>
-              				<tr>
-       						<td></td>
-              					<td>{{$value->account_name}}</td>
-              					<td>{{currency('PHP', $amount)}}</td>
-              				</tr>
-              				<?php $sum_income += $amount; ?>
-              				@endforeach
-              				
-              				<tr>
-              					<td><b>Total {{$account_income[11]->chart_type_name}}</b></td>
-              					<td></td>
-              					<td>{{currency('PHP', $sum_income)}}</td>
-              				</tr>
-              			@endif
-                                   <tr style="background-color: gray;">
-                                          <td colspan="20"></td>
-                                   </tr>
-              			@if(isset($account_income[12]))
-              			<tr>
-              				<td colspan="20">{{$account_income[12]->chart_type_name}}</td>
-
-              			</tr>
-              				<?php $sum_cogs = 0; ?>
-              				@foreach($sum[12] as $key => $value)
-                                          <?php $amount = debit_credit($value->jline_type, $value->sum); ?>
-              				<tr>
-       						<td></td>
-              					<td>{{$value->account_name}}</td>
-              					<td>{{currency('PHP', $amount)}}</td>
-              				</tr>
-              				<?php $sum_cogs += $amount; ?>
-              				@endforeach
-              				
-              				<tr>
-              					<td><b>Total {{$account_income[12]->chart_type_name}}</b></td>
-              					<td></td>
-              					<td>{{currency('PHP', $sum_cogs)}}</td>
-              				</tr>
-              			@endif
-                                   <tr style="background-color: gray;">
-                                          <td colspan="20"></td>
-                                   </tr>
-              			<!-- Gross Profit -->
-       				<tr>
-       					<td>Gross Profit</td>
-       					<td></td>
-       					<td>{{ currency('PHP', $sum_gross = $sum_income + $sum_cogs) }}</td>
-       				</tr>
-       				<!-- End Gross Profit -->
-                                   <tr style="background-color: gray;">
-                                          <td colspan="20"></td>
-                                   </tr>
-              			@if(isset($account_income[13]))
-              			<tr>
-              				<td colspan="20">{{$account_income[13]->chart_type_name}}</td>
-
-              			</tr>
-              				<?php $sum_expense = 0; ?>
-              				@foreach($sum[13] as $key => $value)
-                                          <?php $amount = debit_credit($value->jline_type, $value->sum); ?>
-              				<tr>
-       						<td></td>
-              					<td>{{$value->account_name}}</td>
-              					<td>{{currency('PHP', $amount)}}</td>
-              				</tr>
-              				<?php $sum_expense += $amount; ?>
-              				@endforeach
-              				
-              				<tr>
-              					<td><b>Total {{$account_income[13]->chart_type_name}}</b></td>
-              					<td></td>
-              					<td>{{currency('PHP', $sum_expense)}}</td>
-              				</tr>
-              			@endif
-                                   <tr style="background-color: gray;">
-                                          <td colspan="20"></td>
-                                   </tr>
-       				<!-- Net Operating Income -->
-       				<tr>
-       					<td><b>Net Operating Income</b></td>
-       					<td></td>
-       					<td>{{ currency('PHP', $sum_net_operating = $sum_gross - $sum_expense)}}</td>
-       				</tr>
-       				<!-- End Net Operation Income -->
-                                   <tr style="background-color: gray;">
-                                          <td colspan="20"></td>
-                                   </tr>
-       			
-              			@if(isset($account_income[14]))
-              			<tr>
-              				<td colspan="20" >{{$account_income[14]->chart_type_name}}</td>
-
-              			</tr>
-              				<?php $sum_other_ex = 0; ?>
-              				@foreach($sum[14] as $key => $value)
-                                          <?php $amount = debit_credit($value->jline_type, $value->sum); ?>
-              				<tr>
-       						<td></td>
-              					<td>{{$value->account_name}}</td>
-              					<td>{{currency('PHP', $amount)}}</td>
-              				</tr>
-              				<?php $sum_other_ex += $amount; ?>
-              				@endforeach
-              				
-              				<tr>
-              					<td><b>Total {{$account_income[14]->chart_type_name}}</b></td>
-              					<td></td>
-              					<td>{{currency('PHP', $sum_other_ex)}}</td>
-              				</tr>
-              			@endif
-                                   <tr style="background-color: gray;">
-                                          <td colspan="20"></td>
-                                   </tr>
-              			@if(isset($account_income[15]))
-              			<tr>
-              				<td colspan="20" >{{$account_income[15]->chart_type_name}}</td>
-
-              			</tr>
-              				<?php $sum_other_in = 0; ?>
-              				@foreach($sum[15] as $key => $value)
-                                          <?php $amount = debit_credit($value->jline_type, $value->sum); ?>
-              				<tr>
-       						<td></td>
-              					<td>{{$value->account_name}}</td>
-              					<td>{{currency('PHP', $amount)}}</td>
-              				</tr>
-              				<?php $sum_other_in += $amount; ?>
-              				@endforeach
-              				
-              				<tr>
-              					<td><b>Total {{$account_income[15]->chart_type_name}}</b></td>
-              					<td></td>
-              					<td>{{currency('PHP', $sum_other_in)}}</td>
-              				</tr>
-              			@endif
-                                   <tr style="background-color: gray;">
-                                          <td colspan="20"></td>
-                                   </tr>
-       				<!-- Net Operating Income -->
-       				<tr>
-       					<td><b>Net Income</b></td>
-       					<td></td>
-       					<td>{{ currency('PHP', $sum_net_operating = $sum_net_operating + $sum_other_ex + $sum_other_in) }}</td>
-       				</tr>
-       				<!-- End Net Operation Income -->
-                                   <tr style="background-color: gray;">
-                                          <td colspan="20"></td>
-                                   </tr>
+                        @if($account->chart_type_name == "Income")
+                            <?php $income = collect($account->account_details)->sum('amount'); ?>
+                        @elseif($account->chart_type_name == "Other Income")
+                            <?php $other_income = collect($account->account_details)->sum('amount'); ?>
+                        @endif
 
 
+                        @if($account->chart_type_name == "Cost of Goods Sold")
+                            <?php $cog = collect($account->account_details)->sum('amount'); ?>
+                            <tr>
+                                <td colspan="5" >GROSS PROFIT</td>
+                                <td class="text-right">{{currency('PHP', $income - $cog)}}</td>
+                            </tr>
+                        @elseif($account->chart_type_name == "Expense")
+                            <?php $expense = collect($account->account_details)->sum('amount'); ?>
+                            <tr>
+                                <td colspan="5" >NET OPERATING INCOME</td>
+                                <td class="text-right">{{currency('PHP', ($income - $cog) - $expense)}}</td>
+                            </tr>
+                        @elseif($account->chart_type_name == "Other Expense")
+                            <?php $other_expense = collect($account->account_details)->sum('amount'); ?>
+                            <tr>
+                                <td colspan="5" >NET OTHER INCOME</td>
+                                <td class="text-right">{{currency('PHP', $other_income - $other_expense)}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" >NET INCOME</td>
+                                <td class="text-right"><b>{{currency('PHP', (($income - $cog) - $expense) - ($other_income - $other_expense))}}<b></td>
+                            </tr>
+                        @endif
 
-              		</table>
-              </div>
-              <h5 class="text-center">---- {{$now or ''}} ----</h5>
-           </div>
-       </div>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        <h5 class="text-center">---- {{$now or ''}} ----</h5>
+        </div>
+    </div>
 </div>

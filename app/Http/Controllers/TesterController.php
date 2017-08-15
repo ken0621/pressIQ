@@ -12,7 +12,7 @@ use App\Models\Tbl_vendor;
 use App\Models\Tbl_user;
 use App\Models\Tbl_item;
 use App\Models\Tbl_ec_product;
-
+    
 use App\Globals\Accounting;
 use App\Globals\Account;
 use App\Globals\Invoice;
@@ -24,6 +24,7 @@ use App\Globals\Sms;
 use App\Globals\PayrollJournalEntries;
 use App\Globals\Payroll;
 use App\Globals\Report;
+use App\Globals\Utilities;
 
 use Request;
 use Carbon\Carbon;
@@ -35,7 +36,20 @@ use DB;
 
 class TesterController extends Controller
 {
-
+    public function connection_test()
+    {
+        $_test = DB::table("tbl_connection_test")->orderBy("connection_test_id", "desc")->limit(5)->get();
+        foreach($_test as $test)
+        {
+            echo "<hr>";
+            echo "From (" . $test->connection_test_id . ") " . $test->ip_address . "<br>";
+            
+            echo "<pre>";
+            print_r(unserialize($test->test_data_serialize));
+            echo "</pre>";
+        }
+    }
+    
     public function getShopId()
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
@@ -54,15 +68,66 @@ class TesterController extends Controller
         dd(Sms::SendSingleText($recipient,"Test","success_register"));
     }
 
-	public function getIndex()
+    public function getIndex()
+    {  
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.aftership.com/v4/couriers/all",
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_HTTPHEADER => 0,
+            CURLOPT_SSL_VERIFYPEER => 0,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_POSTFIELDS => [],
+            CURLOPT_HTTPHEADER => array(
+                "aftership-api-key: 118485a6-ed28-4200-a924-ee42e5019b47",
+                "Content-Type: application/json"
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err      = curl_error($curl);
+
+        curl_close($curl);
+
+        dd(json_decode($response));
+    }
+
+    public function getPostTracking()
     {
+        dd(Accounting::getAllAccount());
+    }
+
+    public function getTracking()
+    {
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.aftership.com/v4/trackings",
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_HTTPHEADER => 0,
+            CURLOPT_SSL_VERIFYPEER => 0,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_POSTFIELDS => [],
+            CURLOPT_HTTPHEADER => array(
+                "aftership-api-key: 118485a6-ed28-4200-a924-ee42e5019b47",
+                "Content-Type: application/json"
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err      = curl_error($curl);
+
+        curl_close($curl);
+
+        dd(json_decode($response));
 
     }
 
     public function getJournal()
     {
         $data['tbl_journal_entry'] = Accounting::getJounalAll();
-
+    
         return view('member.tester_journal', $data);
     }
 

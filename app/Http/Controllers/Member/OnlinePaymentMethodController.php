@@ -26,6 +26,7 @@ class OnlinePaymentMethodController extends Member
 	public function getIndex()
 	{
 		$data["_method"] 	= Tbl_online_pymnt_method::where("method_shop_id", $this->getShopId())->link($this->getShopId())->get();
+
 		foreach($data["_method"] as $key=>$method)
 		{
 			$data["_method"][$key] 			= $method;
@@ -33,7 +34,27 @@ class OnlinePaymentMethodController extends Member
 		}
 
 		$data["_gateway"] 	= $this->gatewayInfo();
-		// dd($data["_gateway"]);
+		foreach ($data["_gateway"] as $key => $value) 
+		{
+			switch ($value->gateway_code_name) 
+			{
+				case 'ipay88':
+					$data["_gateway"][$key]->gateway_first_label = "Merchant Code";
+					$data["_gateway"][$key]->gateway_second_label = "Merchant Key";
+				break;
+
+				case 'dragonpay':
+					$data["_gateway"][$key]->gateway_first_label = "Merchant ID";
+					$data["_gateway"][$key]->gateway_second_label = "Merchant Key";
+				break;
+				
+				default:
+					$data["_gateway"][$key]->gateway_first_label = "Client ID";
+					$data["_gateway"][$key]->gateway_second_label = "Secret ID";
+				break;
+			}
+		}
+
 		return view('member.online_payment.payment', $data);
 	}
 
@@ -81,8 +102,15 @@ class OnlinePaymentMethodController extends Member
 		$data["api_client_id"] 	= Request::input('api_client_id');
 		$data["api_secret_id"] 	= Request::input('api_secret_id');
 
-		$api_id = Tbl_online_pymnt_api::where("api_shop_id", $data["api_shop_id"])->where("api_gateway_id", $data["api_gateway_id"])->pluck("api_id");
+		if($gateway_code == "cashondelivery")
+		{
+			$data["api_client_id"] = "Cash on delivery";
+			$data["api_secret_id"] = "Cash on delivery";
+		}
 
+
+		$api_id = Tbl_online_pymnt_api::where("api_shop_id", $data["api_shop_id"])->where("api_gateway_id", $data["api_gateway_id"])->pluck("api_id");
+		
 		if($api_id)
 		{
 			Tbl_online_pymnt_api::where("api_id", $api_id)->update($data);
@@ -148,8 +176,9 @@ class OnlinePaymentMethodController extends Member
 		$data["link_reference_id"] 		= str_replace("-","",strstr(Request::input('link_reference_id'), "-"));
 		$data["link_description"]		= Request::input('link_description');
 		$data["link_discount_fixed"]	= Request::input('link_discount_fixed');
-		$data["link_discount_percentage"] = Request::input('link_description');
+		$data["link_discount_percentage"] = Request::input('link_discount_percentage');
 		$data["link_img_id"] 			= Request::input('link_img_id');
+		$data["link_delimeter"] 		= Request::input('link_delimeter');
 		$data["link_is_enabled"] 		= Request::input('link_is_enabled') == 'on' ? 1 : 0;
 
 		if($link_id != null)

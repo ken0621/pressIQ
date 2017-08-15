@@ -54,7 +54,17 @@
                                     <input type="text" name="binary_settings_gc_title" class="form-control" value="{{$advance_binary->binary_settings_gc_title}}">
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="binary_settings_gc_amount"><small><span stype="color: gray">GC Amount</span></small></label>
+                                    <label for="binary_settings_gc_amount_type"><small><span stype="color: gray">GC Income Type</span></small></label>
+                                    <select name="binary_settings_gc_amount_type" class="form-control">
+                                        <option value="fixed" {{$advance_binary->binary_settings_gc_amount_type == 'fixed' ? 'selected' : ''}}>Fixed</option>
+                                        <option value="membership_based" {{$advance_binary->binary_settings_gc_amount_type == 'membership_based' ? 'selected' : ''}}>Membership Based</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="binary_settings_gc_amount"><small><span stype="color: gray">GC Amount (For fixed type only)</span></small></label>
                                     <input type="number" name="binary_settings_gc_amount" class="form-control" value="{{$advance_binary->binary_settings_gc_amount}}">
                                 </div>
                                 <div class="col-md-12">

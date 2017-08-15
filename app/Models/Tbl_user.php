@@ -7,7 +7,7 @@ class Tbl_user extends Model
 {
 	protected $table = 'tbl_user';
 	protected $primaryKey = "user_id";
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function scopeShop($query)
     {

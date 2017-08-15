@@ -424,7 +424,8 @@ class MlmGenealogyController extends Mlm
                                             <b>' . $slot_info->membership_name . ' </b>
                                         </div>
                                         <div>' . $slot_info->slot_status . '</div>
-                                        <div>' . "L:".$l." R:".$r.'</div>
+                                        <div>' . "Count - L:".$l." R:".$r.'</div>
+                                        <div>' . "Points - L:".$slot_info->slot_binary_left." R:".$slot_info->slot_binary_right.'</div>
                                         <div>
                                         </div>
                                     </div>

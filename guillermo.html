@@ -1,0 +1,29 @@
+<!-- MYPHONE'S LATEST QUERY -->
+SELECT tbl_ec_order.ec_order_id AS order_id,
+        CONCAT(tbl_customer.first_name, " ", tbl_customer.last_name) as full_name,
+        tbl_customer.email as email_of_customer,
+        tbl_mlm_slot.slot_id AS generated_slot_id,
+        tbl_mlm_slot.slot_no AS generated_slot_number,
+        tbl_ec_order.order_status AS order_status,
+        tbl_ec_order.invoice_number AS invoice_number,
+        replace(tbl_paymaya_logs.checkout_id, "-", "") as checkout_id_real,
+        tbl_mlm_slot.slot_sponsor AS sponsor,
+        (SELECT concat(tbl_customer.first_name, " ", tbl_customer.last_name) from tbl_mlm_slot tbl_mlm_slot2, tbl_customer where tbl_mlm_slot2.slot_id = tbl_mlm_slot.slot_sponsor AND tbl_customer.customer_id = tbl_mlm_slot2.slot_owner) AS sponsor_name,
+        tbl_ec_order.*,
+        tbl_customer.*,
+        tbl_ec_order_slot.*,
+        tbl_mlm_slot.*,
+        tbl_paymaya_logs.*,
+        tbl_customer_other_info.*,
+        tbl_customer_address.*
+
+FROM tbl_ec_order
+LEFT JOIN tbl_customer ON tbl_customer.customer_id = tbl_ec_order.customer_id
+LEFT JOIN tbl_ec_order_slot ON tbl_ec_order_slot.order_slot_ec_order_id = tbl_ec_order.ec_order_id
+LEFT JOIN tbl_mlm_slot ON tbl_mlm_slot.slot_id = tbl_ec_order_slot.order_slot_id_c
+LEFT JOIN tbl_paymaya_logs ON tbl_paymaya_logs.order_id = tbl_ec_order.ec_order_id
+LEFT JOIN tbl_customer_other_info ON tbl_customer.customer_id = tbl_customer_other_info.customer_id
+LEFT JOIN tbl_customer_address ON tbl_customer.customer_id = tbl_customer_address.customer_id
+
+WHERE tbl_customer_address.purpose = "shipping"
+ORDER by ec_order_id

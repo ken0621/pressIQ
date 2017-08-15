@@ -28,6 +28,7 @@
 					<option value="Bonus">Bonus</option>
 					<option value="Commissions">Commissions</option>
 					<option value="Incentives">Incentives</option>
+					<option value="13 month pay">13 month pay</option>
 					<option value="Deductions">Deductions</option>
 				</select>
 			</div>

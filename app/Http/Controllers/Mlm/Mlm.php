@@ -48,6 +48,25 @@ class Mlm extends Controller
             {
                 Self::$slot_id = $session['slot_now']->slot_id;
                 Self::$slot_now = $session['slot_now'];
+
+                $check_slot = Tbl_mlm_slot::where("slot_id",Self::$slot_id)->first();
+                if($check_slot)
+                {
+                    if($check_slot->slot_owner != Self::$customer_id)
+                    {
+                        $count_all_slot = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)
+                        ->membershipcode()->count();
+                        if($count_all_slot >= 1)
+                        {
+                            $count_all_slot = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)
+                            ->membershipcode()->first();
+                            $new_slot_id = $count_all_slot->slot_id;
+                            Mlm_member::add_to_session_edit(Self::$shop_id, Self::$customer_id, $new_slot_id);
+                        }
+                        Self::$slot_id = null;
+                        Self::$slot_now = null;
+                    }
+                }
             }
             else
             {
@@ -93,6 +112,7 @@ class Mlm extends Controller
             ->orderBy('wallet_log_notified', 'ASC')
             ->orderBy('wallet_log_id', 'DESC')
             ->sponsorslot()
+            ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
             ->where('wallet_log_notified', 0)
             ->take(10)
             ->get();
@@ -109,7 +129,14 @@ class Mlm extends Controller
             $customer = Tbl_customer::where('customer_id', Self::$customer_id)->first();
             $customer->profile != null ? $profile = $customer->profile :  $profile = '/assets/mlm/default-pic.png';
 
+            $check_owned_slot = Tbl_mlm_slot::where("slot_owner",Self::$customer_id)->count();
+            if($check_owned_slot == 0 && Request::segment(2) != "login" && Request::segment(2) != "process_order_queue" && Self::$shop_info->member_layout == "myphone")
+            {
+                return Redirect::to("mlm/process_order_queue")->send();
+            }
+
             $this->seed();
+            
             View::share("profile", $profile);
             View::share("content", $content_a);
             View::share("complan", $plan_settings);

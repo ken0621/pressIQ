@@ -8,14 +8,14 @@
 		<div>
 			<i class="fa fa-bar-chart" aria-hidden="true"></i>
 			<h1>
-			<span class="page-title">{{$report->payroll_reports_name}}</span>
+			<span class="page-title">{{$data['report']->payroll_reports_name}}</span>
 			<small>
 			Manage Payroll Reports
 			</small>
 			</h1>
 			<button class="btn btm-custom-green pull-right" type="submit"><i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;Download as Excel</button>
 			<input type="hidden" name="_token" class="_token" value="{{csrf_token()}}">
-			<input type="hidden" name="payroll_reports_id" class="payroll_reports_id" value="{{$report->payroll_reports_id}}">
+			<input type="hidden" name="payroll_reports_id" class="payroll_reports_id" value="{{$data['report']->payroll_reports_id}}">
 		</div>
 	</div>
 </div>
@@ -25,11 +25,11 @@
 			<div class="col-md-4 pull-right">
 				<div class="col-md-6">
 					<small>From</small>
-					<input type="text" name="start" value="{{$start}}" class="form-control date-start date-change datepicker">
+					<input type="text" name="start" value="{{$data['start']}}" class="form-control date-start date-change datepicker">
 				</div>
 				<div class="col-md-6">
 					<small>To</small>
-					<input type="text" name="end" value="{{$end}}" class="form-control date-end date-change datepicker">
+					<input type="text" name="end" value="{{$data['end']}}" class="form-control date-end date-change datepicker">
 				</div>
 			</div>
 		</div>
@@ -38,14 +38,19 @@
 				<table class="table table-condensed table-bordered column-fit">
 					<thead>
 						<tr>
+							@foreach($header as $head)
+							<th class="text-center" colspan="{{$head['count']}}"><b>{{$head['name']}}</b></th>
+							@endforeach
+						</tr>
+						<tr>
 							<th></th>
-							@foreach($_columns as $column)
+							@foreach($data['_columns'] as $column)
 							<th class="block">{{$column}}</th>
 							@endforeach
 						</tr>
 					</thead>
 					<tbody>
-						@foreach($_emp as $emp)
+						@foreach($data['_emp'] as $emp)
 						<tr>
 							<td>{!!$emp['name']!!}</td>
 							@foreach($emp['_record'] as $record)
@@ -58,7 +63,7 @@
 						@endforeach
 						<tr>
 							<td><b>Total</b></td>
-							@foreach($_total as $total)
+							@foreach($data['_total'] as $total)
 							<td class="text-right">
 								<b>{{number_format($total, 2)}}</b>
 							</td>

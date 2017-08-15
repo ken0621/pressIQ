@@ -22,7 +22,7 @@ class Tbl_payroll_period extends Model
 
 	public function scopesel($query, $shop_id = 0, $payroll_period_archived = 0)
 	{
-		return $query->where('shop_id', $shop_id)->where('payroll_period_archived', $payroll_period_archived);
+		return $query->where('tbl_payroll_period.shop_id', $shop_id)->where('payroll_period_archived', $payroll_period_archived);
 	}
 
 	public function scopecheck($query, $_param = array())
@@ -33,5 +33,19 @@ class Tbl_payroll_period extends Model
 		}
 		return $query;
 	}
-
+	public function scopeJoinCompany($query)
+	{
+		$query->join("tbl_payroll_period_company", "tbl_payroll_period_company.payroll_period_id", "=", "tbl_payroll_period.payroll_period_id");
+		return $query;
+	}
+	public function scopeGetContributions($query, $shop_id, $month, $year)
+	{
+		$query->where('month_contribution', $month);
+		$query->where('year_contribution', $year);
+		$query->where('tbl_payroll_period.shop_id', $shop_id);
+		$query->join("tbl_payroll_period_company", "tbl_payroll_period_company.payroll_period_id", "=", "tbl_payroll_period.payroll_period_id");
+		$query->join("tbl_payroll_time_keeping_approved", "tbl_payroll_time_keeping_approved.payroll_period_company_id", "=", "tbl_payroll_period_company.payroll_period_company_id");
+		$query->join("tbl_payroll_employee_basic", "tbl_payroll_employee_basic.payroll_employee_id", "=", "tbl_payroll_time_keeping_approved.employee_id");
+		return $query;
+	}
 }

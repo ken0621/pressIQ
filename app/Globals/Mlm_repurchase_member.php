@@ -47,6 +47,7 @@ class Mlm_repurchase_member
 		{
 			$slot = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
 			$item = Tbl_item::where("shop_id", $shop_id)->where("archived", 0)
+			->where('item_type_id', 1)
 			->get()->keyBy('item_id');
 
 			foreach($item  as $key => $value)

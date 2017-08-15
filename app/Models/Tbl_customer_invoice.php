@@ -8,7 +8,7 @@ class Tbl_customer_invoice extends Model
 {
 	protected $table = 'tbl_customer_invoice';
 	protected $primaryKey = "inv_id";
-    public $timestamps = false;
+    public $timestamps = true;
 
 	public static function scopeCustomer($query)
     {
@@ -20,7 +20,7 @@ class Tbl_customer_invoice extends Model
     }
     public static function scopeReturns_item($query)
     {
-        return $query->join("tbl_credit_memo_line","tbl_credit_memo_line.cmline_cm_id","=","tbl_customer_invoice.credit_memo_id");
+        return $query->leftjoin("tbl_credit_memo_line","tbl_credit_memo_line.cmline_cm_id","=","tbl_customer_invoice.credit_memo_id")->leftjoin("tbl_item","cmline_item_id","=","item_id");;
     }
     public static function scopeManual_invoice($query)
     {

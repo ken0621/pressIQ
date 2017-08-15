@@ -20,6 +20,8 @@ use App\Models\Tbl_mlm_plan;
 use App\Models\Tbl_mlm_binary_setttings;
 use App\Models\Tbl_mlm_lead;
 use App\Models\Tbl_mlm_slot;
+
+
 class MlmLoginController extends Controller
 {
 	public static $shop_id;
@@ -103,6 +105,24 @@ class MlmLoginController extends Controller
     {
     	Session::forget('mlm_member');
         $data["page"] = "Login";
+
+        $check_shop = Tbl_shop::where("shop_id",Self::$shop_id)->first();
+        if($check_shop)
+        {
+            if($check_shop->shop_key == "alphaglobal")
+            {
+                $data["register_button"] = 0;
+            }
+            else
+            {
+                $data["register_button"] = 1;
+            }
+        }
+        else
+        {
+            $data["register_button"] = 1;
+        }
+
         return view("mlm.login", $data);
     }   
     public function forgot_password()
@@ -173,7 +193,7 @@ class MlmLoginController extends Controller
                 {
                     $data["type"] = "error";
 
-                    $data["message"] = "Something wen't wrong!";
+                    $data["message"] = "Something went wrong!";
 
                 }
                 

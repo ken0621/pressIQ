@@ -30,7 +30,6 @@ use App\Globals\Mlm_voucher;
 use App\Globals\Pdf_global;
 use Carbon\Carbon;
 use Session;
-
 class MlmReportController extends Mlm
 {
     public function index($complan)
@@ -75,9 +74,40 @@ class MlmReportController extends Mlm
             ->where('sponsor_tree_child_id', $value->wallet_log_slot_sponsor)->pluck('sponsor_tree_level');
         }
         $data["page"] = "Report - Binary";
+
+        $data['points_report'] = Tbl_mlm_binary_report::where('binary_report_slot', Self::$slot_id)
+        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_mlm_binary_report.binary_report_slot_g')
+        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+        ->get();
         return view("mlm.report.report_binary", $data);
     }
     public static function membership_matching()
+    {
+        $data['report']     = Mlm_member_report::get_wallet('MEMBERSHIP_MATCHING', Self::$slot_id); 
+        $data['plan']       = Mlm_member_report::get_plan('MEMBERSHIP_MATCHING', Self::$shop_id); 
+        $data['header'] = Mlm_member_report::header($data['plan']);
+
+        $data['matching_l'] = Tbl_mlm_matching_log::where('matching_log_earner', Self::$slot_id)
+        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_mlm_matching_log.matching_log_slot_1')
+        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+        ->where('matching_log_earning', '>=', 1)
+        ->join('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_mlm_slot.slot_membership')
+        ->paginate(10);
+
+        $whereIn = [];
+
+        foreach ($data['matching_l']  as $key => $value) 
+        {
+            $whereIn[$value->matching_log_slot_2] = $value->matching_log_slot_2;
+        }
+
+        $data['matching_r'] = Tbl_mlm_slot::whereIn('slot_id', $whereIn)
+        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+        ->get()->keyBy('slot_id');
+
+        return view("mlm.report.report_membership_matching", $data);
+    }
+    public static function membership_matching_v1()
     {
         $data['report']     = Mlm_member_report::get_wallet('MEMBERSHIP_MATCHING', Self::$slot_id); 
         $data['plan']       = Mlm_member_report::get_plan('MEMBERSHIP_MATCHING', Self::$shop_id); 
@@ -343,9 +373,11 @@ class MlmReportController extends Mlm
         foreach($data['promotions'] as $key => $value)
         {
             $date = Carbon::parse($value->binary_promotions_start_date)->format('Y-m-d');
+
             $data['current_l'][$key] = Tbl_mlm_binary_report::where('binary_report_slot', Self::$slot_id)
             ->where('binary_report_date', '>=',  $date)
             ->sum('binary_report_s_points_l'); 
+
             $data['current_r'][$key] = Tbl_mlm_binary_report::where('binary_report_slot', Self::$slot_id)
             ->where('binary_report_date', '>=',  $date)
             ->sum('binary_report_s_points_r');
@@ -354,14 +386,15 @@ class MlmReportController extends Mlm
                     ->where('promotions_request_binary_promotions_id', $value->binary_promotions_id)
                     ->count();
 
+            $data['direct_count_a'][$key] = Tbl_mlm_slot::where('slot_sponsor', Self::$slot_id)
+                                            ->where('slot_created_date', '>=', $date)
+                                            ->count(); 
 
             $data['claim_count_account'][$key] =  Tbl_mlm_plan_binary_promotions_log::join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_mlm_plan_binary_promotions_log.promotions_request_slot')
             ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
             ->where('customer_id', Self::$customer_id)
             ->count(); 
         }
-
-        // dd($data);
         $status = Session::get('status');
         if($status != null)
         {
@@ -469,8 +502,6 @@ class MlmReportController extends Mlm
                 $data['status'] = 'error';
                 $data['message'] = 'Invalid warehouse, please contact the administrator';
             }
-            // end transaction
-
         }
         else
         {

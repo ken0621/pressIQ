@@ -68,7 +68,7 @@
       <div style="margin-top: 10px;">
          <span class="cart-loader hide"><img style="height: 37px; margin-right: 7.5px;" src="/assets/front/img/loader.gif"></span>
          <button type="button" class="btn btn-primary" data-dismiss="modal">CONTINUE SHOPPING</button>
-         <button type="button" class="checkout-modal-button btn btn-primary" onClick="location.href='/checkout'">CHECK OUT</button>
+         <button type="button" class="checkout-modal-button btn btn-primary" onClick="location.href='/checkout/login'">CHECK OUT</button>
       </div>
    </div>
    @else

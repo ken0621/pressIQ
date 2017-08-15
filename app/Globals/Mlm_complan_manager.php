@@ -34,12 +34,14 @@ use App\Http\Controllers\Member\MLM_ProductController;
 use Schema;
 use Session;
 use DB;
+use stdClass;
 
 use Carbon\Carbon;
 
 use App\Globals\Mlm_compute;
 use App\Globals\Mlm_slot_log;
 use App\Globals\Membership_code;
+use App\Globals\Binary_pairing;
 class Mlm_complan_manager
 {   
 
@@ -285,6 +287,13 @@ class Mlm_complan_manager
                 if($slot_a)
                 {
                     $points_a = Tbl_membership_points::where('membership_id', $slot_a->slot_membership)->first();
+
+                    if(!$points_a)
+                    {
+                        $points_a = new stdClass();
+                        $points_a->membership_points_binary_limit = 999999;
+                    }
+
                     if($points_a)
                     {
                         $limit = $points_a->membership_points_binary_limit;
@@ -314,6 +323,19 @@ class Mlm_complan_manager
                     $binary_report['binary_report_slot_g'] = $slot_info->slot_id;
                     $binary_report['binary_report_date'] = Carbon::now();
                     $binary_report['binary_report_s_points'] = $binary['points'];
+                    $binary_report['binary_report_point_limit'] = $points_a->membership_points_binary_limit;
+                    $points = $slot_info->membership_points_binary;
+                    $binary_report['binary_report_point_membership'] = $points;
+                    
+                    if($points >= $points_a->membership_points_binary_limit)
+                    {
+                        $deduction = $points - $points_a->membership_points_binary_limit;
+                    }
+                    else
+                    {
+                        $deduction = 0;
+                    }
+                    $binary_report['binary_report_point_deduction'] = $deduction;
                     Tbl_mlm_binary_report::insert($binary_report);
                 }
             }
@@ -429,10 +451,11 @@ class Mlm_complan_manager
     public static function binary_single_line_richard($slot_info, $settings, $earnings)
     {
         // dd($settings);
-        $slot_tree = Tbl_tree_sponsor::child($slot_info->slot_id)->orderby("sponsor_tree_level", "desc")
+        $slot_tree = Tbl_tree_sponsor::child($slot_info->slot_id)
         ->distinct_level()
         ->parentslot()->membership()
         ->take($settings->pairing_point_single_line_bonus_level)
+        ->orderby('sponsor_tree_level', 'ASC')
         ->get();
         if($earnings != 0)
         {
@@ -581,229 +604,27 @@ class Mlm_complan_manager
                                     $check_date_is_today = Mlm_complan_manager::compare_date($current_pairs_per_date, Carbon::now(), 'day');
 
                                     // check if gc this pair
-                                    if($binary_advance_pairing->binary_settings_gc_enable == 'enable')
-                                    {
-                                        if($binary_advance_pairing->binary_settings_gc_every_pair != 0)
-                                        {
-                                            $modulus = ($current_pair%$binary_advance_pairing->binary_settings_gc_every_pair);
-                                        } 
-                                        else
-                                        {
-                                            $modulus = 1;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        $modulus = 1;
-                                    }
+                                    $modulus = Binary_pairing::binary_gc($binary_advance_pairing,$current_pair);
 
                                     // fir pairing cycle of binary
                                     if($setting_cycle_no == 1)
                                     {
 
-                                        // check if now and pairs per day are equal
-                                        if($check_date_is_today == 1)
-                                        {
-
-                                            // check pairing
-                                            if($slot->membership_points_binary_max_pair < $current_pair)
-                                            {
-                                                // add to flushout
-                                                $flush += $value2->pairing_bonus;
-                                            }
-                                            else
-                                            {
-                                                // check if gc pair
-                                                if($modulus == 0)
-                                                {
-                                                    // add gc 
-                                                    $gc_count = $gc_count + 1;
-                                                    $current_gc             = $current_gc   + 1;
-                                                }
-                                                else
-                                                {
-                                                    // add income
-                                                    $earning += $value2->pairing_bonus;
-                                                    $current_gc             = $current_gc   + 1;
-                                                }
-                                            }
-
-                                        }
-                                        // else pairs today not equal / reset pairing
-                                        else
-                                        {
-                                            // reset pairing to 1
-                                            $current_pair   = 1;
-                                            $gc_count = 0;
-                                            $current_pairs_per_date = Carbon::now();
-
-                                            if($modulus == 0)
-                                            {
-                                                // add gc 
-                                                $gc_count = $gc_count + 1;
-                                                $current_gc             = $current_gc   + 1;
-                                            }
-                                            else
-                                            {
-                                                // add income
-                                                $earning += $value2->pairing_bonus;
-                                                $current_gc             = $current_gc   + 1;
-                                            }
-                                            
-                                        }
+                                        $settings_1 = Binary_pairing::setting_cycle_no_1($check_date_is_today, $slot, $value2, $gc_count, $current_gc, $current_pair, $earning, $flush, $modulus);
+                                        $flush = $settings_1['flush'];
+                                        $gc_count = $settings_1['gc_count'];
+                                        $current_gc = $settings_1['current_gc'];
+                                        $current_pair = $settings_1['current_pair'];
+                                        $earning = $settings_1['earning'];
                                     }
                                     if($setting_cycle_no == 2)
                                     {
-
-                                        if($check_date_is_today == 1)
-                                        {
-                                            if($current_hour < 12)
-                                            {
-                                                // cycle 1
-                                                $current_pairs_per_date_hour           = Carbon::parse($current_pairs_per_date)->format('G');
-                                                if($current_pairs_per_date_hour < 12)
-                                                {
-                                                    // continue pairing
-                                                    // check pairing
-                                                    if($slot->membership_points_binary_max_pair < $current_pair)
-                                                    {
-
-                                                        // flush
-                                                        $flush += $value2->pairing_bonus;
-
-                                                    }
-                                                    else
-                                                    {
-                                                        if($modulus == 0)
-                                                        {
-                                                            // add gc 
-                                                            $current_gc             = $current_gc   + 1;
-                                                            $gc_count = $gc_count + 1;
-                                                        }
-                                                        else
-                                                        {
-                                                            // add income
-                                                            $earning += $value2->pairing_bonus;
-                                                            $current_gc             = $current_gc   + 1;
-                                                        }
-                                                    }
-                                                }
-                                                else
-                                                {   
-                                                    // reset
-                                                    $current_pair = 1;
-                                                    $current_pairs_per_date =  Carbon::now();
-
-                                                    // check pairing
-                                                    if($slot->membership_points_binary_max_pair < $current_pair)
-                                                    {
-                                                        // flush
-                                                        $flush += $value2->pairing_bonus;
-                                                    }
-                                                    else
-                                                    {
-                                                        if($modulus == 0)
-                                                        {
-                                                            // add gc 
-                                                            $gc_count               = $gc_count + 1;
-                                                            $current_gc             = $current_gc   + 1;
-                                                        }
-                                                        else
-                                                        {
-                                                            // add income
-                                                            $earning += $value2->pairing_bonus;
-                                                            $current_gc             = $current_gc   + 1;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            else if($current_hour >= 12)
-                                            {
-                                                // cycle 2
-                                                $current_pairs_per_date_hour           = Carbon::parse($current_pairs_per_date)->format('G');
-                                                if($current_pairs_per_date_hour >= 12)
-                                                {
-                                                    // continue pairing
-                                                    // check pairing
-                                                    if($slot->membership_points_binary_max_pair < $current_pair)
-                                                    {
-                                                        // flush
-                                                        $flush += $value2->pairing_bonus;
-                                                    }
-                                                    else
-                                                    {
-                                                        if($modulus == 0)
-                                                        {
-                                                            // add gc 
-                                                            $gc_count               = $gc_count + 1;
-                                                            $current_gc             = $current_gc   + 1;
-                                                        }
-                                                        else
-                                                        {
-                                                            // add income
-                                                            $earning               += $value2->pairing_bonus;
-                                                            $current_gc             = $current_gc   + 1;
-                                                        }
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    // reset
-                                                    $current_pair = 1;
-                                                    $current_pairs_per_date         = Carbon::now();
-
-                                                    // check pairing
-                                                    if($slot->membership_points_binary_max_pair < $current_pair)
-                                                    {
-                                                        // flush
-                                                        $flush                     += $value2->pairing_bonus;
-                                                    }
-                                                    else
-                                                    {
-                                                        if($modulus == 0)
-                                                        {
-                                                            // add gc 
-                                                            $gc_count               = $gc_count + 1;
-                                                            $current_gc             = $current_gc   + 1;
-                                                        }
-                                                        else
-                                                        {
-                                                            // add income
-                                                            $earning += $value2->pairing_bonus;
-                                                            $current_gc             = $current_gc   + 1;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            // reset
-                                            $current_pair = 1;
-                                            $current_pairs_per_date =  Carbon::now();
-
-                                            // check pairing
-                                            if($slot->membership_points_binary_max_pair < $current_pair)
-                                            {
-                                                // flush
-                                                $flush += $value2->pairing_bonus;
-                                            }
-                                            else
-                                            {
-                                                if($modulus == 0)
-                                                {
-                                                    // add gc 
-                                                    $gc_count               = $gc_count + 1;
-                                                    $current_gc             = $current_gc   + 1;
-                                                }
-                                                else
-                                                {
-                                                    // add income
-                                                    $earning               += $value2->pairing_bonus;
-                                                    $current_gc             = $current_gc   + 1;
-                                                }
-                                            }
-                                        }
+                                        $settings_2 = Binary_pairing::setting_cycle_no_2($check_date_is_today, $slot, $value2, $gc_count, $current_gc, $current_pair, $earning, $flush, $modulus);
+                                        $flush = $settings_2['flush'];
+                                        $gc_count = $settings_2['gc_count'];
+                                        $current_gc = $settings_2['current_gc'];
+                                        $current_pair = $settings_2['current_pair'];
+                                        $earning = $settings_2['earning'];
                                     }
                                 }
                                 $update_slot['slot_binary_left']            = $binary["left"];
@@ -951,8 +772,6 @@ class Mlm_complan_manager
                                             $binary_pairing_log['pairing_slot_entry'] = $slot_info->slot_id;
                                             $binary_pairing_log['pairing_date'] = Carbon::now();
                                             Tbl_mlm_binary_pairing_log::insert($binary_pairing_log);
-
-
                                         }
                                         
                                     }
@@ -992,24 +811,41 @@ class Mlm_complan_manager
                                 {
                                     for($i = 0; $i < $gc_count; $i++)
                                     {
-                                        // binary_advance_pairing
-                                        $log = "You have Earned " . $binary_advance_pairing->binary_settings_gc_title . ". With an amount of " .$binary_advance_pairing->binary_settings_gc_amount ;
+                                        if($binary_advance_pairing->binary_settings_gc_amount_type == "membership_based")
+                                        {
+                                            $gc_income = $value2->pairing_bonus;
+                                        }
+                                        else
+                                        {
+                                            $gc_income = $binary_advance_pairing->binary_settings_gc_amount;
+                                        }
+
+                                        $log = "You have Earned " . $binary_advance_pairing->binary_settings_gc_title . ". With an amount of " .$gc_income;
                                         $arry_log['wallet_log_slot']            = $slot->slot_id;
                                         $arry_log['shop_id']                    = $slot->shop_id;
                                         $arry_log['wallet_log_slot_sponsor']    = $slot->slot_id;
                                         $arry_log['wallet_log_details']         = $log;
-                                        $arry_log['wallet_log_amount']          = $binary_advance_pairing->binary_settings_gc_amount;
+                                        $arry_log['wallet_log_amount']          = 0;
                                         $arry_log['wallet_log_plan']            = "BINARY_GC";
                                         $arry_log['wallet_log_status']          = "n_ready";   
                                         $arry_log['wallet_log_claimbale_on']    = Mlm_complan_manager::cutoff_date_claimable('BINARY', $slot->shop_id); 
                                         Mlm_slot_log::slot_array($arry_log);  
 
-                                        $binary_pairing_log['pairing_income'] = $binary_advance_pairing->binary_settings_gc_amount;
+                                        $binary_pairing_log['pairing_income'] = $gc_income;
                                         $binary_pairing_log['pairing_slot'] = $slot->slot_id;
                                         $binary_pairing_log['pairing_slot_entry'] = $slot_info->slot_id;
                                         $binary_pairing_log['pairing_date'] = Carbon::now();
                                         $binary_pairing_log['pairing_type'] = 'GC';
                                         Tbl_mlm_binary_pairing_log::insert($binary_pairing_log);
+
+                                        $insert_gc_vou['mlm_gc_tag']       = "5THPAIR";
+                                        $insert_gc_vou['mlm_gc_code']      = Mlm_gc::random_code_generator(8, $slot->slot_id, $insert_gc_vou['mlm_gc_tag']);
+                                        $insert_gc_vou['mlm_gc_amount']    = $gc_income;
+                                        $insert_gc_vou['mlm_gc_member']    = $slot->slot_owner;
+                                        $insert_gc_vou['mlm_gc_slot']      = $slot->slot_id;
+                                        $insert_gc_vou['mlm_gc_date']      = Carbon::now();
+                                        $insert_gc_vou['mlm_gc_used']      = 0;
+                                        Mlm_gc::insert_gc($insert_gc_vou);
                                     }
                                 }
                                 // update slot
@@ -1372,7 +1208,6 @@ class Mlm_complan_manager
 	                        Mlm_slot_log::slot_array($arry_log);
                         }
                         Tbl_mlm_matching_log::insert($insert);
-                        
                     }                  
                 }
             }

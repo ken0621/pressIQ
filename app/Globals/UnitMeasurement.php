@@ -13,6 +13,7 @@ use App\Models\Tbl_settings;
 use App\Models\Tbl_unit_measurement;
 use App\Models\Tbl_unit_measurement_multi;
 use App\Models\Tbl_um;
+use App\Globals\Tablet_global;
 use DB;
 use Carbon\Carbon;
 use Session;
@@ -119,9 +120,14 @@ class UnitMeasurement
         return $um_id;
 
     }
-    public static function load_um_multi()
+    public static function load_um_multi($for_tablet = false)
     {
-        return Tbl_unit_measurement::multi()->where("um_shop", UnitMeasurement::getShopId())
+        $shop_id = UnitMeasurement::getShopId();
+        if($for_tablet == true)
+        {
+            $shop_id = Tablet_global::getShopId();
+        }
+        return Tbl_unit_measurement::multi()->where("um_shop", $shop_id)
                                     ->where("um_archived",0)
                                     ->get();
     }
@@ -263,6 +269,12 @@ class UnitMeasurement
     public static function um_info($multi_id)
     {
         $unit_m = Tbl_unit_measurement_multi::where("multi_id",$multi_id)->first();
+        
+        return $unit_m;
+    }
+    public static function um_other($multi_id)
+    {
+        $unit_m = Tbl_unit_measurement_multi::where("multi_um_id",$multi_id)->where("is_base",0)->first();
         
         return $unit_m;
     }

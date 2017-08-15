@@ -11,6 +11,7 @@
 			<th rowspan="2" class="text-center">Flexi Time</th>
 			<th rowspan="2" class="text-center">Rest Day</th>
 			<th rowspan="2" class="text-center">Extra Day</th>
+			
 		</tr>
 		<tr>
 			<th class="text-center">Start</th>
@@ -53,6 +54,7 @@
 			<td class="text-center">
 				<input type="checkbox" name="extra_day_{{$key}}" class="extraday-check" value="1" {{$day['extra_day'] == 1 ? 'checked="checked"' : ''}}>
 			</td>
+			
 		</tr>
 		@endforeach
 	</tbody>

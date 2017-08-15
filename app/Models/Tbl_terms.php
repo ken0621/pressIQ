@@ -7,5 +7,5 @@ class Tbl_terms extends Model
 {
 	protected $table = 'tbl_terms';
 	protected $primaryKey = "terms_id";
-    public $timestamps = false;
+    public $timestamps = true;
 }

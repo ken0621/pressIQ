@@ -28,7 +28,10 @@ class MLM_ClaimVoucher extends Member
         }
 
     	$data["page"] 		= "Vouchers";
-        $data["_voucher"]	= Tbl_voucher::where("voucher_claim_status","!=",2)->get();
+        $data["_voucher"]	= Tbl_voucher::where("voucher_claim_status","!=",2)
+        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_voucher.voucher_customer')
+        ->where('shop_id', $this->user_info->shop_id)
+        ->get();
 
         return view('member.mlm_claim_voucher.mlm_voucher_list',$data);
     }

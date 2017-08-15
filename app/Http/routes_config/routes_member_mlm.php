@@ -4,6 +4,7 @@ Route::any('/member/mlm/membership', 'Member\MLM_MembershipController@index'); /
 Route::any('/member/mlm/membership/add', 'Member\MLM_MembershipController@add'); //GUILLERMO TABLIGAN
 Route::post('/member/mlm/membership/add/save', 'Member\MLM_MembershipController@save'); // LUKE GLENN JORDAN
 Route::any('/member/mlm/membership/edit/{membership_id}', 'Member\MLM_MembershipController@edit'); //GUILLERMO TABLIGAN
+Route::any('/member/mlm/membership/edit/add/member/product', 'Member\MLM_MembershipController@edit_add_membership_product'); //GUILLERMO TABLIGAN
 Route::any('/member/mlm/membership/edit/{membership_id}/add_package', 'Member\MLM_MembershipController@add_package'); //GUILLERMO TABLIGAN
 Route::any('/member/mlm/membership/popup', 'Member\MLM_MembershipController@popup'); //GUILLERMO TABLIGAN
 Route::any('/member/mlm/membership/popups', 'Member\MLM_MembershipController@popup'); //GUILLERMO TABLIGAN
@@ -52,6 +53,8 @@ Route::any('/member/mlm/slot/get/code/form/submit', 'Member\MLM_SlotController@g
 Route::any('/member/mlm/slot/genealogy', 'Member\MLM_SlotController@tree');
 Route::any('/member/mlm/slot/genealogy/downline', 'Member\MLM_SlotController@downline');
 Route::any('/member/mlm/slot/set/inactive/{slot_id}', 'Member\MLM_SlotController@set_inactive_slot');
+Route::get('/member/mlm/slot/transfer', 'Member\MLM_SlotController@transfer_slot');
+Route::post('/member/mlm/slot/transfer_post', 'Member\MLM_SlotController@transfer_slot_post');
 /* end MLM Slot */
 
 /* start MLM PLAN */
@@ -174,6 +177,8 @@ Route::any('/member/mlm/encashment/view/type/cheque/edit', 'Member\Mlm_Encashmen
 Route::any('/member/mlm/encashment/view/type/bank/add', 'Member\Mlm_EncashmentController@bank_add');//luke
 Route::any('/member/mlm/encashment/view/type/bank/archive', 'Member\Mlm_EncashmentController@bank_archive');//luke
 Route::any('/member/mlm/encashment/view/type/bank/edit/name', 'Member\Mlm_EncashmentController@bank_edit_name');//luke
+Route::any('/member/mlm/encashment/currency', 'Member\Mlm_EncashmentController@set_currency');
+Route::any('/member/mlm/encashment/currency/update', 'Member\Mlm_EncashmentController@set_currency_update');
 
 Route::any('/member/mlm/encashment/add/to/list', 'Member\Mlm_EncashmentController@add_to_list');//luke
 Route::any('/member/mlm/encashment/add/to/list/date', 'Member\Mlm_EncashmentController@add_to_list_date');//luke
@@ -201,6 +206,7 @@ Route::any('/member/mlm/product_code/sell/add_line', 'Member\MLM_ProductCodeCont
 Route::any('/member/mlm/product_code/sell/add_line/product_barcode/submit', 'Member\MLM_ProductCodeController@add_line_barcode_product'); //ewen
 Route::any('/member/mlm/product_code/sell/add_line/submit', 'Member\MLM_ProductCodeController@add_line_submit'); //ewen
 Route::any('/member/mlm/product_code/sell/add_line/view', 'Member\MLM_ProductCodeController@view_all_lines'); //ewen
+Route::any('/member/mlm/product_code/sell/get_customer_slot', 'Member\MLM_ProductCodeController@get_customer_slot'); //ewen
 Route::any('/member/mlm/product_code/sell/compute', 'Member\MLM_ProductCodeController@compute'); //ewen
 Route::any('/member/mlm/product_code/sell/clear_line/{id}', 'Member\MLM_ProductCodeController@remove_one_line'); //ewen
 Route::any('/member/mlm/product_code/sell/clear_line_all', 'Member\MLM_ProductCodeController@clear_line_all'); //ewen
@@ -234,10 +240,12 @@ Route::any('member/mlm/stairstep_compute/start/compute', 'Member\MLM_StairstepCo
 
 Route::any('member/mlm/complan_setup', 'Member\Mlm_ComplanSetupController@index'); 
 Route::any('member/mlm/complan_setup/binary_pro', 'Member\Mlm_ComplanSetupController@binary_promotions'); 
-
+Route::any('member/mlm/complan_setup/settings/update/myphone', 'Member\Mlm_ComplanSetupController@myphone_other_settings_update'); 
 Route::any('member/mlm/merchant_school', 'Member\BeneficiaryController@index'); 
 
 Route::any('member/mlm/tours_wallet', 'Member\Mlm_ComplanSetupController@tours_wallet'); 
+Route::any('member/mlm/tours_wallet/update/settings', 'Member\Mlm_ComplanSetupController@set_tours_wallet_settings');
+Route::any('member/mlm/tours_wallet/get/log', 'Member\Mlm_ComplanSetupController@get_log'); 
 
 Route::any('member/mlm/merchant_school/create', 'Member\BeneficiaryController@create'); 
 Route::any('member/mlm/merchant_school/get/receipt', 'Member\BeneficiaryController@receipt'); 
@@ -253,3 +261,15 @@ Route::any('member/mlm/merchant_school/consume', 'Member\BeneficiaryController@c
 Route::any('member/mlm/complan_setup/unilevel/distribute', 'Member\Mlm_ComplanSetupController@unilevel_distribute'); 
 Route::any('member/mlm/complan_setup/unilevel/distribute/set/settings', 'Member\Mlm_ComplanSetupController@unilevel_distribute_set_settings'); 
 Route::any('member/mlm/complan_setup/unilevel/distribute/simulate', 'Member\Mlm_ComplanSetupController@unilevel_distribute_simulate'); 
+
+
+/* DEVELOPER MENU */
+Route::get('member/mlm/developer', 'Member\MlmDeveloperController@index');
+Route::get('member/mlm/developer/table', 'Member\MlmDeveloperController@index_table');
+Route::get('member/mlm/developer/create_slot', 'Member\MlmDeveloperController@create_slot');
+Route::post('member/mlm/developer/create_slot', 'Member\MlmDeveloperController@create_slot_submit');
+Route::get('member/mlm/developer/import', 'Member\MlmDeveloperController@import');
+Route::post('member/mlm/developer/import', 'Member\MlmDeveloperController@import_submit');
+Route::get('member/mlm/developer/repurchase', 'Member\MlmDeveloperController@repurchase');
+Route::post('member/mlm/developer/repurchase', 'Member\MlmDeveloperController@repurchase');
+Route::get('member/mlm/developer/reset', 'Member\MlmDeveloperController@reset');

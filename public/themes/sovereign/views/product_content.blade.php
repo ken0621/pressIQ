@@ -17,13 +17,13 @@
         <div class="row clearfix">
             <div class="col-md-6">
                 <div class="img-holder">
-                    <img src="/themes/{{ $shop_theme }}/img/sampol.jpg">
+                    <img class="img-responsive" style="margin: auto;" src="{{ get_product_first_image($product) }}">
                 </div> 
             </div>
             <div class="col-md-6">
                 <div class="text-holder">
                     <div class="name">{{ get_product_first_name($product) }}</div>
-                    <div class="desc">{{ get_product_first_description($product) }}</div>
+                    <div class="desc">{!! get_product_first_description($product) !!}</div>
                 </div>
                 <div class="text-holder">
                     <div class="name">Price</div>

@@ -113,11 +113,12 @@ function import_csv()
                     value       : value,
                     ctr         : ctr,
                     data_length : data_length,
-                    error_data  : error_data,
-                    input: objectifyForm($(".import-validation").serializeArray())
+                    error_data  : ctr == data_length ? error_data : '',
+                    input       : objectifyForm($(".import-validation").serializeArray())
                 },
                 success: function(data)
                 {
+                    console.log(ctr > data_length ? error_data : '');
                     if(data.status != 'end')
                     {
                         // counter and percentage loading

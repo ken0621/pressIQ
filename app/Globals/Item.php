@@ -11,10 +11,15 @@ use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_sir_item;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_item_discount;
+use App\Models\Tbl_audit_trail;
 use DB;
 use App\Globals\Item;
+use App\Globals\UnitMeasurement;
+use App\Globals\Purchasing_inventory_system;
+use App\Globals\Tablet_global;
 use Session;
 use Carbon\carbon;
+use App\Globals\Merchant;
 
 class Item
 {
@@ -34,9 +39,54 @@ class Item
 
         return $return;
     }
+    public static function get_item_price_history($item_id, $show_all = false)
+    {
+        $item_data = Item::get_item_details($item_id);
+        $return = "";
+        $text = "";
+        $trail = Tbl_audit_trail::where("source","item")->where("source_id",$item_id)->orderBy("created_at","DESC")->get();
+        // dd($trail);
+        foreach ($trail as $key => $value) 
+        {
+            $item_qty = 1;
+            if(Purchasing_inventory_system::check())
+            {
+                $item_qty = UnitMeasurement::um_qty($item_data->item_measurement_id);
+            }
+            $old[$key] = unserialize($value->old_data);
+            $amount = 0;
+            if($old)
+            {
+                if($item_data->item_price != $old[$key]["item_price"] || $old[$key]["item_price"] != 0)
+                {
+                    $len = strlen($return);
+                    
+                    $amount = $old[$key]["item_price"] * $item_qty;
+                    $return .= date('m/d/Y',strtotime($value->created_at))." - ".currency("PHP ",$amount)."<br>";
+
+                    $text = $return;
+                    if($show_all == false)
+                    {
+                        if($len > 25)
+                        {
+                            $text = (substr($text, 0, 30)."...<a class='popup' size='sm' link='/member/item/view_item_history/".$item_id."'>View</a>");
+                        }
+                    }
+                }
+            }
+        }   
+        return $text;
+    }
     public static function get_item_details($item_id = 0)
     {
-        return Tbl_item::um_item()->category()->where("item_id",$item_id)->first();
+        $data = Tbl_item::um_item()->category()->where("item_id",$item_id)->first();
+
+        if($data->item_type_id == 4)
+        {
+            $data->item_price = Item::get_item_bundle_price($item_id);
+        }
+
+        return $data;
     }
 
     public static function get_item_in_bundle($item_id = 0)
@@ -158,9 +208,14 @@ class Item
         }
     }
 
-    public static function get_returnable_item()
-    {
-        $data = Tbl_item::category()->where("shop_id",Item::getShopId())
+    public static function get_returnable_item($for_tablet = false)
+    {        
+        $shop_id = Item::getShopId();
+        if($for_tablet == true)
+        {
+            $shop_id = Tablet_global::getShopId();
+        }
+        $data = Tbl_item::category()->where("shop_id",$shop_id)
                                     ->where("tbl_item.archived",0)
                                     ->where("is_mts",1)
                                     ->groupBy("tbl_item.item_id")
@@ -178,14 +233,9 @@ class Item
     }
 
     public static function pis_get_all_category_item_transaction($type = array(1,2,3,4))
-    {        $shop_id = Item::getShopId();
+    {        
+        $shop_id = Item::getShopId();
         $_category = Tbl_category::where("type_shop",$shop_id)->where("type_parent_id",0)->where("is_mts",0)->where("archived",0)->get()->toArray();
-
-        // if(Purchasing_inventory_system::check() != 0)
-        // {
-        //     $_category->where("is_mts",1);
-        // }
-
 
         foreach($_category as $key =>$category)
         {
@@ -225,20 +275,32 @@ class Item
 
         return $_category;
     } 
-    public static function get_all_category_item($type = array(1,2,3,4))
+    public static function get_all_category_item($type = array(1,2,3,4) , $for_tablet = false)
     {
-        $shop_id = Item::getShopId();
-        $_category = Tbl_category::where("type_shop",$shop_id)->where("type_parent_id",0)->where("archived",0)->get()->toArray();
+        $shop_id = Item::getShopId(); 
+        if($for_tablet == true)
+        {
+            $shop_id = Tablet_global::getShopId();
+        }
 
-        // if(Purchasing_inventory_system::check() != 0)
-        // {
-        //     $_category->where("is_mts",1);
-        // }
+        $_category = Tbl_category::where("type_shop",$shop_id)->where("type_parent_id",0)->where("archived",0)->get()->toArray();
 
 
         foreach($_category as $key =>$category)
         {
-            $_category[$key]['item_list']   = Tbl_item::where("item_category_id",$category['type_id'])->whereIn("item_type_id",$type)->where("archived",0)->get()->toArray();
+            $ismerchant = Merchant::ismerchant();
+            if($ismerchant == 1)
+            {
+                $user_id = Merchant::getuserid();
+                $_category[$key]['item_list'] = Tbl_item::where("item_category_id",$category['type_id'])
+                ->join("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+                ->where('item_merchant_requested_by', $user_id)
+                ->whereIn("item_type_id",$type)->where("archived",0)->get()->toArray(); 
+            }
+            else
+            {
+               $_category[$key]['item_list']   = Tbl_item::where("item_category_id",$category['type_id'])->whereIn("item_type_id",$type)->where("archived",0)->get()->toArray(); 
+            }
             foreach($_category[$key]['item_list'] as $key1=>$item_list)
             {
                 //  //cycy
@@ -259,7 +321,19 @@ class Item
         $_category  = Tbl_category::where("type_parent_id",$category_id)->where("archived",0)->get()->toArray();
         foreach($_category as $key =>$category)
         {
-            $_category[$key]['item_list']   = Tbl_item::where("item_category_id",$category['type_id'])->where("archived",0)->whereIn("item_type_id",$type)->get()->toArray();
+            $ismerchant = Merchant::ismerchant();
+            if($ismerchant == 1)
+            {
+                $user_id = Merchant::getuserid();
+                $_category[$key]['item_list'] = Tbl_item::where("item_category_id",$category['type_id'])
+                ->join("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+                ->where('item_merchant_requested_by', $user_id)
+                ->whereIn("item_type_id",$type)->where("archived",0)->get()->toArray(); 
+            }
+            else
+            {
+                $_category[$key]['item_list']   = Tbl_item::where("item_category_id",$category['type_id'])->where("archived",0)->whereIn("item_type_id",$type)->get()->toArray();
+            }
             foreach($_category[$key]['item_list'] as $key1=>$item_list)
             {
                 if($item_list['item_type_id'] == 4)
@@ -275,15 +349,19 @@ class Item
         return $_category;
     } 
    
-    public static function get_all_item_sir($sir_id)
+    public static function get_all_item_sir($sir_id, $for_tablet = false)
     {
         $shop_id = Item::getShopId();
-
+        if($for_tablet == true)
+        {
+            $shop_id = Tablet_global::getShopId();
+        }
         $item = Tbl_sir_item::select_sir_item()->where("tbl_sir_item.sir_id",$sir_id)->groupBy("tbl_item.item_category_id")->get();
         foreach ($item as $key1 => $value) 
         {         
             $_category[$key1] = collect(Tbl_category::where("type_shop",$shop_id)->where("archived",0)->where("type_id",$value->item_category_id)->first())->toArray();  
         }
+
         foreach($_category as $key => $category)
         {
             $_category[$key]['item_list']   = Tbl_sir_item::select_sir_item()->where("tbl_sir_item.sir_id",$sir_id)->where("item_category_id",$category['type_id'])->groupBy("tbl_sir_item.item_id")->get()->toArray();
@@ -369,17 +447,17 @@ class Item
     }    
     public static function get_item_bundle($item_id = null)
     {
-        $data = Tbl_item::where("item_type_id", 4);
         $items = [];
 
         if($item_id)
         {
-            $items           = $data->where("item_id", $item_id)->first()->toArray();
+            $items           = Tbl_item::where("item_id", $item_id)->first()->toArray();
+
             $items["bundle"] = Tbl_item_bundle::item()->where("bundle_bundle_id", $item_id)->get()->toArray();
         }
         else
         {
-            $_item = $data->get()->toArray();
+            $_item = Tbl_item::get()->toArray();
 
             foreach($_item as $key=>$item)
             {
@@ -399,11 +477,33 @@ class Item
         }
         $data["multiple"] = $multiple;
         $data['selected'] = $sel;
-        $data['_item']    = Tbl_item::where("shop_id",$shop_id)
-        ->where('tbl_item.item_type_id', '!=', 4)
-        ->where('tbl_item.archived', 0)
-        ->orderBy('tbl_item.item_id','asc')
-        ->type()->category()->get();
+        $ismerchant = Merchant::ismerchant();
+            if($ismerchant == 1)
+            {
+                $user_id = Merchant::getuserid();
+
+                $data['_item'] = Tbl_item::where("shop_id",$shop_id)
+                ->where('tbl_item.item_type_id', '!=', 4)
+                ->where('tbl_item.archived', 0)
+                ->join("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+                ->where('item_merchant_requested_by', $user_id)
+                ->orderBy('tbl_item.item_id','asc')
+                ->type()->category()->get();
+
+                // $data['_item'] = Tbl_item::where("shop_id",$shop_id)
+                // ->join("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+                // ->where('item_merchant_requested_by', $user_id)
+                // ->whereIn("item_type_id",$type)->where("archived",0)->get()->toArray(); 
+            }
+            else
+            {
+                $data['_item']    = Tbl_item::where("shop_id",$shop_id)
+                ->where('tbl_item.item_type_id', '!=', 4)
+                ->where('tbl_item.archived', 0)
+                ->orderBy('tbl_item.item_id','asc')
+                ->type()->category()->get();
+            }
+        
 
         return view('member.mlm_product_code.dropdown.mlm_item_dropdown', $data);
     }

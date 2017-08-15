@@ -14,6 +14,22 @@ use App\Models\Tbl_settings;
 use App\Globals\Settings;
 class SettingsController extends Member
 {   
+    public function all()
+    {
+        $shop_id = $this->user_info->shop_id;
+        $data['settings_setup'] = $this->setup();
+        $data['selected_settings'] = 'all';
+        $settings_active = Tbl_settings::where('shop_id', $shop_id)->get();
+        $settings_active = Tbl_settings::where('shop_id', $shop_id)->get();
+        $data['settings_active'] = [];
+        foreach($settings_active as $settings)
+        {
+            $data['settings_active'][$settings->settings_key]['settings_value'] = $settings->settings_value;
+            $data['settings_active'][$settings->settings_key]['settings_setup_done'] = $settings->settings_setup_done;
+        }
+        $data['terms_and_agreement'] = Tbl_settings::where('shop_id', $shop_id)->where('settings_key', 'terms_and_agreement')->first();
+        return view('member.settings.settings_all', $data);
+    }
     public function index($key)
     {
         $shop_id = $this->user_info->shop_id;
@@ -26,10 +42,33 @@ class SettingsController extends Member
             $data['settings_active'][$settings->settings_key]['settings_value'] = $settings->settings_value;
             $data['settings_active'][$settings->settings_key]['settings_setup_done'] = $settings->settings_setup_done;
         }
-
+        
         $data['settings_setup'] = $this->setup();
-
         return view('member.settings.settings_modal', $data);
+    }
+    public function set_terms()
+    {
+        $shop_id                = $this->user_info->shop_id;
+        $terms_and_agreement    = Request::input('terms_and_agreement');   
+        $count_terms            = Tbl_settings::where('shop_id', $shop_id)->where('settings_key', 'terms_and_agreement')->count();
+        if($count_terms == 0)
+        {
+            
+            $insert['settings_key'] = 'terms_and_agreement';
+            $insert['shop_id'] = $shop_id;
+            $insert['settings_value'] = $terms_and_agreement;
+            Tbl_settings::where('shop_id', $shop_id)->insert($insert);
+        }
+        else
+        {
+            $update['settings_value'] = $terms_and_agreement;
+            Tbl_settings::where('shop_id', $shop_id)->where('settings_key', 'terms_and_agreement')->update($update);
+            $settings = Tbl_settings::where('shop_id', $shop_id)->where('settings_key', 'terms_and_agreement')->first();
+        }
+        $data['status'] = 'success';
+        $data['message'] = 'success';
+
+        return json_encode($data);
     }
     public function setup()
     {

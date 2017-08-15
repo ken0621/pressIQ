@@ -8,7 +8,7 @@ class Tbl_journal_entry_line extends Model
 {
 	protected $table = 'tbl_journal_entry_line';
 	protected $primaryKey = "jline_id";
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function scopeAccount($query)
     {
@@ -32,6 +32,13 @@ class Tbl_journal_entry_line extends Model
     public function scopeAmount($query)
     {
         return $query->selectRaw("(CASE normal_balance WHEN jline_type THEN jline_amount ELSE -jline_amount END) as 'amount'");
+    }
+
+    /* Add a column - Amount of the total jounal accounting according to their normal balance */
+    public function scopeTotalAmount($query)
+    {
+        return $query->selectRaw("*, sum(CASE normal_balance WHEN jline_type THEN jline_amount ELSE -jline_amount END) as 'amount'")
+                     ->groupBy('jline_account_id');
     }
 
     public function scopeItem($query)

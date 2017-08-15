@@ -51,32 +51,35 @@
 					<div class="col-md-12">
 						@if($lead == null)
 						<label for="">Sponsor</label>
-							@if($sponsor_a == null)
+							{{-- @if($sponsor_a == null) --}}
 	                            <select class="form-control chosen-slot_sponsor input-sm pull-left" name="slot_sponsor" data-placeholder="Select Slot Sponsor" >
-	                            	@if(count($_slots) != 0)
-	                            		@foreach($_slots as $slot)
-	                            			<option value="{{$slot->slot_id}}" @if($sponsor_a == $slot->slot_id) selected @endif >{{$slot->first_name}} {{$slot->middle_name}} {{$slot->last_name}} ({{$slot->slot_no}})</option>
+	                            	@if(count($_slots_sponse) != 0)
+	                            		@foreach($_slots_sponse as $slot)
+	                            			<option value="{{$slot->slot_id}}" @if($sponsor_a == $slot->slot_id) selected @endif >
+	                            			{{$slot->first_name}} {{$slot->middle_name}} {{$slot->last_name}} 
+	                            			({{$slot->slot_no}})
+	                            			</option>
 	                            		@endforeach
 	                            	@endif
 	                            </select>
-	                        @else 
+	                       {{--  @else  --}}
 
-	                        <input type="hidden" name="slot_sponsor" value="{{$sponsor_a}}">
-		                        @if(count($_slots) != 0) 
-		                        	@foreach($_slots as $slot) 
+	                        <input type="hidden" name="slot_sponsor" class="new_slot_id" value="{{$sponsor_a}}">
+		                        @if(count($_slots_sponse) != 0) 
+		                        	@foreach($_slots_sponse as $slot) 
 		                        		@if($sponsor_a == $slot->slot_id)
 		                        			<?php $name = $slot->first_name . ' ' . $slot->middle_name . ' ' . $slot->last_name . ' ' . $slot->slot_no; ?>
-		                        			<input type="text" class="form-control input-v2" disabled="disabled"
+		                        			<input type="hidden" class="form-control input-v2" disabled="disabled"
 	                       					value="{{$name}}">  
 		                        		@endif 
 		                        	@endforeach 
 		                        @endif 
 
-	                        @endif
+	                        {{-- @endif --}}
 	                        
 						@else
 						<input type="hidden" name="lead_id" value="{{$lead->lead_id}}">
-						<input type="hidden" name="slot_sponsor" value="{{$lead->lead_slot_id_sponsor}}">
+						<input type="hidden" name="slot_sponsor" class="new_slot_id" value="{{$lead->lead_slot_id_sponsor}}">
 						<input type="text" class="form-control" name="sponsor" value="{{$lead->mlm_username}} (Slot - {{$lead->slot_no}}) {{$lead->membership_activation_code}}" readonly>
 						@endif
 					</div>
@@ -144,6 +147,9 @@
 						<label>Choose Owner</label>
 						<label><input id="your_account" type="radio" class="col-md-6" name="choose_owner" value="your" checked>Your Account</label>
 						<label><input id="new_user" type="radio" class="col-md-6" name="choose_owner" value="new">New User</label>
+						@if($shop_container->shop_key != "alphaglobal")
+							<label><input id="exist" type="radio" class="col-md-6" name="choose_owner" value="exist">Existing User</label>
+						@endif
 					</div>
 					<div class="col-md-12 new_form" style="display:none">
 					    <label>First Name</label>
@@ -162,6 +168,14 @@
 						<select name="country_id" class="form-control new_input" disabled>
 							@foreach($country as $ctry)
 								<option value="{{$ctry->country_id}}">{{$ctry->country_name}}</option>
+							@endforeach
+						</select>
+					</div>
+					<div class="col-md-12 exist_form" style="display:none">
+						<label>Choose an owner (Customer with no slot only)</label>
+						<select name="customer_id" class="form-control exist_input" disabled>
+							@foreach($_no_slot_customer as $no_slot_customer)
+								<option value="{{$no_slot_customer->customer_id}}">{{$no_slot_customer->first_name}} {{$no_slot_customer->middle_name}} {{$no_slot_customer->last_name}}</option>
 							@endforeach
 						</select>
 					</div>
@@ -220,6 +234,12 @@
 	         	$(".new_input").attr('disabled', false);
 	         	$(".append_error").empty();
 	        }
+	        else if (this.value == 'exist') 
+	        {
+	         	$(".exist_form").show();
+	         	$(".exist_input").attr('disabled', false);
+	         	$(".append_error").empty();
+	        }
 	    });
 	});
 
@@ -228,4 +248,15 @@
 
 	$(".chosen-slot_sponsor").chosen({no_results_text: "The slot doesn't exist.", width: '100%'});
 	$(".chosen-slot_position").chosen({no_results_text: "Invalid Position", width: '100%'});
+	
+</script>
+<script>
+$(document).ready(function()
+{
+	$(".chosen-slot_sponsor").chosen().change(function()
+	{
+		$(".new_slot_id").val($(this).val());
+	});
+});
+	
 </script>

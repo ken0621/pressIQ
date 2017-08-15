@@ -60,7 +60,7 @@ function eproduct()
 	{
 		$(".select-category").globalDropList(
 		{
-			link: '/member/item/category/modal_create_category',
+			link: '/member/item/category/modal_create_category/inventory',
 		    link_size: 'md',
 		    width: '100%',
 		    placeholder: 'Category'
@@ -323,7 +323,7 @@ function submit_done(data)
 {
 	if(data.status == "success-category")
 	{
-		$(".select-category").load("/member/item/load_category", function()
+		$(".select-category").load("/member/item/load_category/inventory", function()
 		{
 			$(this).globalDropList("reload");
 			$(this).val(data.id).change();

@@ -48,7 +48,25 @@ class UtilitiesController extends Member
             return $this->show_no_access();
         }
     }
+    public function ismerchant()
+    {
+        $user_id = Request::input('user_id');
+        $ismerchant = Request::input('ismerchant');
 
+        if($ismerchant)
+        {
+            $update['user_is_merchant'] = 1;
+        }
+        else
+        {
+            $update['user_is_merchant'] = 0;
+        }
+        Tbl_user::where('user_id', $user_id)->update($update);
+        $json['message']          = "Succesfully updated merchant status";
+        $json['response_status']  = "success_update_merchant";
+
+        return json_encode($json);
+    }
     public function getModalAddUser()
     {
         if($this->hasAccess("utilities-admin-accounts","add"))
@@ -462,6 +480,7 @@ class UtilitiesController extends Member
         if($this->hasAccess("utilities-admin-positions","add/edit"))
         {
             $data["_page"] = Utilities::filterPageList(Request::input('id'));
+            // dd($data["_page"]);
             return view('member/utilities/admin_access', $data);
         }
         else

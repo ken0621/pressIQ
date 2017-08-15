@@ -30,6 +30,7 @@ function modal_create_payslip()
 		    width : '100%',
 		    placeholder: 'Paper Sizes'
 		});
+
 	}
 
 	function check_position()

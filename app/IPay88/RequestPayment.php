@@ -2,12 +2,13 @@
 
 namespace App\IPay88;
 
-use App\IPay88\Signature;
-use App\IPay88\RequestForm;
+/*use App\IPay88\Signature;
+use App\IPay88\RequestForm;*/
 
 class RequestPayment
 {
-    public static $paymentUrl = 'https://sandbox.ipay88.com.ph/epayment/entry.asp';
+    // public static $paymentUrl = 'https://sandbox.ipay88.com.ph/epayment/entry.asp';
+    public static $paymentUrl = 'https://payment.ipay88.com.ph/epayment/entry.asp';
 
 	private $merchantKey;
 
@@ -141,7 +142,7 @@ class RequestPayment
 		//simple caching
 		if((!$this->signature) || $refresh)
 		{
-			$this->signature = Signature::generateSignature(
+			$this->signature = $this->generateSignature(
 				$this->merchantKey,
 				$this->getMerchantCode(),
 				$this->getRefNo(),
@@ -193,7 +194,7 @@ class RequestPayment
 	public static function make($merchantKey, $fieldValues)
 	{
 		$request = new RequestPayment($merchantKey);
-		RequestForm::render($fieldValues, self::$paymentUrl);
+		$request->render($fieldValues, self::$paymentUrl);
 	}
 
     /**
@@ -214,7 +215,7 @@ class RequestPayment
         	22=> array('Web Cash','MYR'),
         	48=> array('PayPal','MYR'),
         	100 => array('Celcom AirCash','MYR'),
-        	102 => array('Bank Rakyat Internet Banking','MYR'),
+        	102 => arrayx('Bank Rakyat Internet Banking','MYR'),
         	103 => array('AffinOnline','MYR')
         );
 
@@ -233,5 +234,47 @@ class RequestPayment
         return $multiCurrency ? $nonMyr : $myrOnly;
     }
 
-    
+    public static function generateSignature()
+    {
+        $stringToHash = implode('',func_get_args());
+        return base64_encode(self::_hex2bin(sha1($stringToHash)));
+    }
+
+    /**
+    *
+    * equivalent of php 5.4 hex2bin
+    *
+    * @access private
+    * @param string $source The string to be converted
+    */
+    private static function _hex2bin($source)
+    {
+    	$bin = null;
+    	for ($i=0; $i < strlen($source); $i=$i+2) { 
+    		$bin .= chr(hexdec(substr($source, $i, 2)));
+    	}
+    	return $bin;
+    }
+
+    public static function render($fieldValues, $paymentUrl)
+	{
+		echo "<form id='autosubmit' action='".$paymentUrl."' method='post'>";
+		if (is_array($fieldValues) || is_object($fieldValues))
+		{
+			foreach ($fieldValues as $key => $val) {
+			    echo "<input type='hidden' name='".ucfirst($key)."' value='".htmlspecialchars($val)."'>";
+			}
+		}
+		echo "</form>";
+		echo "
+		<script type='text/javascript'>
+		    function submitForm() {
+		        document.getElementById('autosubmit').submit();
+		    }
+		    window.onload = submitForm;
+		</script>
+
+		";		
+
+	}
 }

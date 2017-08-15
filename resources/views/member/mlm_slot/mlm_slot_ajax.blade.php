@@ -30,6 +30,7 @@
                                 <li><a href="/member/mlm/slot/genealogy?id={{$slot->slot_id}}&mode=binary" target="_blank">View Binary Genealogy</a></li>
                                 @endif 
                                 <li><a href="/member/mlm/slot/login?slot={{$slot->slot_id}}" target="_blank">LOGIN</a></li>                             
+                                <li><a href="javascript:" link="/member/mlm/slot/transfer?slot={{$slot->slot_id}}" class="popup">TRANSFER</a></li>                             
                               </ul>
                             </div>
                         </td>

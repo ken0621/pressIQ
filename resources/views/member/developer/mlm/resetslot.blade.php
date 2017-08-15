@@ -105,4 +105,32 @@
         </div>
     </div>
 </div>
+
+<div class="panel panel-default panel-block panel-title-block" id="top">
+    <div class="panel-heading">
+        <div>
+            <form method="post" action="/member/developer/reset_slot/submit/recompute">
+            <div class="col-md-4">
+                <input type="password" class="form-control" name="password" placeholder="password">
+            </div>
+            {!! csrf_field() !!}
+            <button class="btn btn-primary">Re compute 5/26/2017 - Sovereign </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default panel-block panel-title-block" id="top">
+    <div class="panel-heading">
+        <div>
+            <form method="post" action="/member/developer/reset_slot/submit/recompute/membership_matching">
+            <div class="col-md-4">
+                <input type="password" class="form-control" name="password" placeholder="password">
+            </div>
+            {!! csrf_field() !!}
+            <button class="btn btn-primary">VIP Platinum Membership Matching 6/27/2017 - Philtech </button>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection

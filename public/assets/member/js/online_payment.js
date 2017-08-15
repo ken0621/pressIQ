@@ -19,6 +19,7 @@ function online_payment()
 		event_add_other_click();
 		event_other_container_hide();
 		event_view_other_click();
+		event_method_link_change()
 	}
 
 	this.initialize_select_plugin = function()
@@ -40,7 +41,7 @@ function online_payment()
 			}
 		})
 	}
-
+	
 	function event_add_other_click()
 	{
 		$(document).on("click", ".add-other", function()
@@ -76,6 +77,15 @@ function online_payment()
 	{
 		$(".other-container").slideUp();
 	}
+
+	function event_method_link_change()
+	{
+		$(document).on("click", ".method-link", function()
+		{
+			var href = $(".method-link.active").find("a").attr("href");
+			console.log(href);
+		})
+	}
 	
 }
 
@@ -100,11 +110,19 @@ function submit_done(data)
 			$(".method-list-load-data").load("/member/maintenance/online_payment .method-list-data");
 		}
 
-		$(".method-load-data").load("/member/maintenance/online_payment .method-data", function()
+		// console.log(data.type);
+		if(data.type == 'link')
 		{
-			online_payment.initialize_select_plugin();
-			toastr.success('Success');
-		});
+			toastr.success('Changes Saved');
+		}
+		else
+		{
+			$(".method-load-data").load("/member/maintenance/online_payment .method-data", function()
+			{
+				online_payment.initialize_select_plugin();
+				toastr.success('Success');
+			});
+		}
 		
 	}
 }

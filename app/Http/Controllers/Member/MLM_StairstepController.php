@@ -176,7 +176,7 @@ class MLM_StairstepController extends Member
 
 	                if($computed_points > 0)
 	                {         
-	               	    $reduced_percent = $slot_stairstep->stairstep_bonus;    
+	               	    $reduced_percent 						= $slot_stairstep->stairstep_bonus;    
 	                    $log                                    = "You earned ".$reduced_percent."% of ".$converted_pv."(".$computed_points.") from slot #".$slot_info->slot_id."(Current Rank:".$slot_stairstep->stairstep_name.").";
 	                    $arry_log['wallet_log_slot']            = $slot_id;
 	                    $arry_log['shop_id']                    = $slot_info->shop_id;
@@ -193,30 +193,33 @@ class MLM_StairstepController extends Member
 	            $check_if_change = 0;
 	        	foreach($slot_stairstep_get as $slot_stairstep_new)
 	        	{
-	            	if($slot_stairstep_new->stairstep_leg_id != 0)
-	            	{
-	                	$leg_count = Tbl_tree_sponsor::where("sponsor_tree_parent_id",$slot_id)->child_info()->where("stairstep_rank",$slot_stairstep_new->stairstep_leg_id)->count();
-	                	if($leg_count >= $slot_stairstep_new->stairstep_leg_count)
-	                	{
+	        		if($slot_stairstep_new->stairstep_level > $slot_stairstep->stairstep_level)
+	        		{
+		            	if($slot_stairstep_new->stairstep_leg_id != 0)
+		            	{
+		                	$leg_count = Tbl_tree_sponsor::where("sponsor_tree_parent_id",$slot_id)->child_info()->where("stairstep_rank",$slot_stairstep_new->stairstep_leg_id)->count();
+		                	if($leg_count >= $slot_stairstep_new->stairstep_leg_count)
+		                	{
+			                	$update_slot["stairstep_rank"] = $slot_stairstep_new->stairstep_id;
+			                	Tbl_mlm_slot::where("slot_id",$slot_id)->update($update_slot);
+			                	$check_if_change = 1;
+			                	break;
+		                	}
+		            	}
+		            	else
+		            	{
 		                	$update_slot["stairstep_rank"] = $slot_stairstep_new->stairstep_id;
-		                	Tbl_mlm_slot::where("slot_id",$slot_id)->update($update_slot);
-		                	$check_if_change = 1;
-		                	break;
-	                	}
-	            	}
-	            	else
-	            	{
-	                	$update_slot["stairstep_rank"] = $slot_stairstep_new->stairstep_id;
-	            		Tbl_mlm_slot::where("slot_id",$slot_id)->update($update_slot);
-	            		$check_if_change = 1;
-	            		break;
-	            	}
+		            		Tbl_mlm_slot::where("slot_id",$slot_id)->update($update_slot);
+		            		$check_if_change = 1;
+		            		break;
+		            	}
+	        		}
 	        	}
 
 	        	if($check_if_change == 0)
 	        	{
-                	$update_slot["stairstep_rank"] = 0;
-            		Tbl_mlm_slot::where("slot_id",$slot_id)->update($update_slot);
+              //   	$update_slot["stairstep_rank"] = 0;
+            		// Tbl_mlm_slot::where("slot_id",$slot_id)->update($update_slot);
 	        	}
 
 

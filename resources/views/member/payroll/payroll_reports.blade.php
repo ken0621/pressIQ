@@ -31,6 +31,10 @@
 							<span>Payroll Journal Entry</span>
 							<a href="/member/payroll/journal_entry" class="btn btn-xs btn-custom-white pull-right">View Journal</a>
 						</li>
+						<li class="list-group-item">
+							<span>13th Month Pay Report</span>
+							<a href="/member/payroll/report_13th_month_pay" class="btn btn-xs btn-custom-white pull-right">View 13th Month Pay</a>
+						</li>
 						@foreach($_active as $active)
 						<li class="list-group-item">
 							{{$active->payroll_reports_name}}

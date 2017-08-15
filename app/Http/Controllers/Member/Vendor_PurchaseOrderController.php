@@ -22,6 +22,7 @@ use App\Models\Tbl_vendor;
 use App\Globals\Vendor;
 use App\Globals\AuditTrail;
 use App\Globals\Purchase_Order;
+use App\Globals\ItemSerial;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_purchase_order_line;
 use App\Models\Tbl_terms;
@@ -45,6 +46,7 @@ class Vendor_PurchaseOrderController extends Member
 
         $data['_item']      = Item::get_all_category_item();
         $data['_um']        = UnitMeasurement::load_um_multi();
+        $data["serial"] = ItemSerial::check_setting();
 
         return view('member.load_ajax_data.load_po_session_item',$data);
 
@@ -103,6 +105,10 @@ class Vendor_PurchaseOrderController extends Member
         if($access == 1)
         { 
             $data["_po"] = Tbl_purchase_order::vendor()->orderBy("po_id","DESC")->where("po_shop_id",Purchase_Order::getShopId())->get();
+
+            $data["_po_open"] = Tbl_purchase_order::vendor()->orderBy("po_id","DESC")->where("po_shop_id",Purchase_Order::getShopId()) ->where("po_is_billed",0) ->get();
+
+            $data["_po_close"] = Tbl_purchase_order::vendor()->orderBy("po_id","DESC")->where("po_shop_id",Purchase_Order::getShopId()) ->where("po_is_billed","!=",0) ->get();
 
             return view("member.purchase_order.purchase_order_list",$data);
         }
@@ -182,7 +188,7 @@ class Vendor_PurchaseOrderController extends Member
                 $item_info[$key]['um']                 = Request::input('poline_um')[$key];
                 $item_info[$key]['quantity']           = str_replace(',', "",Request::input('poline_qty')[$key]);
                 $item_info[$key]['rate']               = str_replace(',', "", Request::input('poline_rate')[$key]);
-                $item_info[$key]['discount']           = str_replace(",","",Request::input('poline_discount')[$key]);
+                $item_info[$key]['discount']           = 0 /*str_replace(",","",Request::input('poline_discount')[$key])*/;
                 $item_info[$key]['discount_remark']    = str_replace(",","",Request::input('poline_discount_remark')[$key]);
                 $item_info[$key]['taxable']            = str_replace(",","",Request::input('poline_taxable')[$key]);
                 $item_info[$key]['amount']             = str_replace(',', "", Request::input('poline_amount')[$key]);

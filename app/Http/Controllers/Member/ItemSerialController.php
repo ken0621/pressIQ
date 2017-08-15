@@ -25,6 +25,18 @@ class ItemSerialController extends Member
         }
         return view("member.item_serial.item_serial",$data);
     }
+
+    public function input_serial()
+    {
+        $data[] = null;
+
+
+        return view("member.item_serial.input_serial",$data);
+    }
+    public function archived_serial()
+    {
+        ItemSerial::archived_serial();
+    }
     public function save_serial()
     {
         $data["status_message"] = "";
@@ -38,22 +50,31 @@ class ItemSerialController extends Member
             {
                 $up["serial_number"] = $serial;
 
-                $rule["serial_number"] = "required|unique:tbl_inventory_serial_number,serial_number,".$id.",serial_id";
-
-                $validator = Validator::make($up, $rule);
-
-                if($validator->fails())
+                $check_serial = Tbl_inventory_serial_number::where("serial_id","!=",$id)->where("archived",0)->where("serial_number",$serial)->count();
+                if($check_serial > 0)
                 {
                     $data["status"] = "error";
-                    foreach ($validator->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
-                    {
-                        $data["status_message"] .= $message;
-                    }
+                    $data["status_message"] .= "The serial number must be unique.";
                 }
                 else
                 {
-                    Tbl_inventory_serial_number::where("serial_id",$id)->update($up);
-                    $data["status"] = "success";                    
+                    $rule["serial_number"] = "required";
+
+                    $validator = Validator::make($up, $rule);
+
+                    if($validator->fails())
+                    {
+                        $data["status"] = "error";
+                        foreach ($validator->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
+                        {
+                            $data["status_message"] .= $message;
+                        }
+                    }
+                    else
+                    {
+                        Tbl_inventory_serial_number::where("serial_id",$id)->update($up);
+                        $data["status"] = "success";                    
+                    }                    
                 }
             }
             else

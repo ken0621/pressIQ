@@ -32,13 +32,14 @@ class WriteCheck
     {
     	return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
-	 public static function postWriteCheck($vendor_info, $wc_info, $wc_other_info, $item_info, $total_info)
+	 public static function postWriteCheck($customer_vendor_info, $wc_info, $wc_other_info, $item_info, $total_info)
     {
     	$insert['wc_shop_id']             = WriteCheck::getShopId();    
     	$insert['wc_cash_account']		  = 0;    
-        $insert['wc_vendor_id']           = $vendor_info['wc_vendor_id'];
-        $insert['wc_vendor_email']        = $vendor_info['wc_vendor_email'];        
-        $insert['wc_mailing_address']     = $vendor_info['wc_mailing_address'];
+        $insert['wc_reference_id']        = $customer_vendor_info['wc_reference_id'];
+        $insert['wc_reference_name']      = $customer_vendor_info['wc_reference_name'];
+        $insert['wc_customer_vendor_email']        = $customer_vendor_info['wc_customer_vendor_email'];    
+        $insert['wc_mailing_address']     = $customer_vendor_info['wc_mailing_address'];
 
         $insert['wc_payment_date']        = $wc_info['wc_payment_date'];
 
@@ -53,7 +54,8 @@ class WriteCheck
         /* Transaction Journal */
         $entry["reference_module"]  = "write-check";
         $entry["reference_id"]      = $wc_id;
-        $entry["name_id"]           = $vendor_info['wc_vendor_id'];
+        $entry["name_id"]           = $customer_vendor_info['wc_reference_id'];
+        $entry["name_reference"]    = $customer_vendor_info['wc_reference_name'];
         $entry["total"]             = collect($item_info)->sum('itemline_amount');
         $entry["vatable"]           = '';
         $entry["discount"]          = '';
@@ -95,8 +97,8 @@ class WriteCheck
             if($wc_data)
             {
                 $update['wc_cash_account']        = 0;    
-                $update['wc_vendor_id']           = $pb_data->paybill_vendor_id;
-                $update['wc_vendor_email']        = Tbl_vendor::where("vendor_id",$pb_data->paybill_vendor_id)->pluck("vendor_email");        
+                $update['wc_reference_id']        = $pb_data->paybill_vendor_id;
+                $update['wc_customer_vendor_email']        = Tbl_vendor::where("vendor_id",$pb_data->paybill_vendor_id)->pluck("vendor_email");        
                 $update['wc_mailing_address']     = "";
 
                 $update['wc_payment_date']        =  $pb_data->paybill_date;
@@ -149,8 +151,9 @@ class WriteCheck
         {
             $insert['wc_shop_id']             = WriteCheck::getShopId();    
             $insert['wc_cash_account']        = 0;    
-            $insert['wc_vendor_id']           = $pb_data->paybill_vendor_id;
-            $insert['wc_vendor_email']        = Tbl_vendor::where("vendor_id",$pb_data->paybill_vendor_id)->pluck("vendor_email");        
+            $insert['wc_reference_id']        = $pb_data->paybill_vendor_id;
+            $insert['wc_reference_name']      = "vendor";
+            $insert['wc_customer_vendor_email']        = Tbl_vendor::where("vendor_id",$pb_data->paybill_vendor_id)->pluck("vendor_email");        
             $insert['wc_mailing_address']     = "";
 
             $insert['wc_payment_date']        =  $pb_data->paybill_date;
@@ -190,24 +193,26 @@ class WriteCheck
 
         }
     }
-    public static function updateWriteCheck($wc_id, $vendor_info, $wc_info, $wc_other_info, $item_info, $total_info)
+    public static function updateWriteCheck($wc_id, $customer_vendor_info, $wc_info, $wc_other_info, $item_info, $total_info)
     {
         $old = AuditTrail::get_table_data("tbl_write_check","wc_id",$wc_id);
 
-        $update['wc_cash_account']			= 0;    
-        $update['wc_vendor_id']           = $vendor_info['wc_vendor_id'];
-        $update['wc_vendor_email']        = $vendor_info['wc_vendor_email'];        
-        $update['wc_mailing_address']     = $vendor_info['wc_mailing_address'];
-        $update['wc_payment_date']        = $wc_info['wc_payment_date'];
-        $update['wc_memo']                = $wc_other_info['wc_memo'];
-        $update['wc_total_amount']        = collect($item_info)->sum('itemline_amount');
+        $update['wc_cash_account']	          = 0;    
+        $update['wc_reference_id']            = $customer_vendor_info['wc_reference_id'];
+        $update['wc_reference_name']          = $customer_vendor_info['wc_reference_name'];
+        $update['wc_customer_vendor_email']   = $customer_vendor_info['wc_customer_vendor_email'];        
+        $update['wc_mailing_address']         = $customer_vendor_info['wc_mailing_address'];
+        $update['wc_payment_date']            = $wc_info['wc_payment_date'];
+        $update['wc_memo']                    = $wc_other_info['wc_memo'];
+        $update['wc_total_amount']            = collect($item_info)->sum('itemline_amount');
 
         Tbl_write_check::where("wc_id", $wc_id)->update($update);
 
         /* Transaction Journal */
         $entry["reference_module"]  = "write-check";
         $entry["reference_id"]      = $wc_id;
-        $entry["name_id"]           = $vendor_info['wc_vendor_id'];
+        $entry["name_id"]           = $customer_vendor_info['wc_reference_id'];
+        $entry["name_reference"]    = $customer_vendor_info['wc_reference_name'];
         $entry["total"]             = collect($item_info)->sum('itemline_amount');
         $entry["vatable"]           = '';
         $entry["discount"]          = '';
@@ -262,12 +267,12 @@ class WriteCheck
                 /* TRANSACTION JOURNAL */  
                 if($item_type != 4)
                 {
-                    $entry_data[$key]['item_id']            = $item_line['item_id'];
+                    $entry_data[$key]['item_id']            = $item_line['itemline_item_id'];
                     $entry_data[$key]['entry_qty']          = $item_line['itemline_qty'];
                     $entry_data[$key]['vatable']            = 0;
-                    $entry_data[$key]['discount']           = $discount;
+                    $entry_data[$key]['discount']           = 0;
                     $entry_data[$key]['entry_amount']       = $item_line['itemline_amount'];
-                    $entry_data[$key]['entry_description']  = $item_line['item_description'];  
+                    $entry_data[$key]['entry_description']  = $item_line['itemline_description'];  
                 }
                 else
                 {

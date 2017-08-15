@@ -5,7 +5,7 @@
     <base href="{{ URL::to('/themes/'.$shop_theme.'') }}/">
     <!-- Title -->
     <title>Alpha Global Prestige - {{ $page }}</title>
-    <link rel="icon"  type="image/png" href="assets/front/img/logo.png">
+    <link rel="icon"  type="image/png" href="http://alpha-globalprestige.com/assets/front/img/agp.png">
     <!-- Responsive Meta -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <!-- Pingback URL -->
@@ -73,7 +73,6 @@
     <script type='text/javascript' src='resources/assets/ausart/assets/js/jquery.carouFredSel-6.1.0-packed.js'></script>
     <script type='text/javascript' src='resources/assets/ausart/assets/js/tooltip.js'></script>
     <!--[if IE 8]><link rel="stylesheet" type="text/css" href="http://newthemes.themeple.co/ausart/resources/assets/ausart/assets/plugins/js_composer/resources/assets/ausart/assets/css/vc-ie8.css" media="screen"><![endif]-->
-    <link rel="shortcut icon" href="/assets/front/img/agp.png" type="image/x-icon">
 </head>
 <!-- End of Header -->
 
@@ -97,8 +96,8 @@
                                 <div class="span12 account-button">
                                     <ul class="text-center" style="margin-top: 0;">
                                         <li><a href="/mlm/login">LOG IN</a></li>
-                                        <li><div class="divider">|</div></li>
-                                        <li><a href="/mlm/register">SIGN UP</a></li>
+                                        <!-- <li><div class="divider">|</div></li> -->
+                                        <!-- <li><a href="/mlm/register">SIGN UP</a></li> -->
                                     </ul>
                                 </div>
                             </div>

@@ -15,7 +15,7 @@
 				<span class="caret"></span></button>
 				<ul class="dropdown-menu dropdown-menu-custom">
 					<li><a href="#" class="popup" link="/member/payroll/payroll_period_list/modal_create_payroll_period"><i class="fa fa-plus"></i>&nbsp;Generate Period</a></li>
-					<li><a href="#" class="popup" link="/member/payroll/import_bio/modal_biometrics"><i class="fa fa-upload"></i>&nbsp;Import Time Sheet</a></li>
+					<li><a href="#" class="popup" size="lg" link="/member/payroll/import_bio/modal_biometrics"><i class="fa fa-upload"></i>&nbsp;Import Time Sheet</a></li>
 				</ul>
 			</div>
 		</div>

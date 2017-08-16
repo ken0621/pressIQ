@@ -72,6 +72,7 @@ class PayrollPayslipController extends Member
 			$data["_employee"][$key]->total_deduction = $employee->philhealth_ee + $employee->sss_ee + $employee->pagibig_ee + $employee->tax_ee + $other_deductions;
 		}
 
+
 		$pdf = PDF2::loadView('member.payroll.payroll_payslipv1', $data);
 		return $pdf->stream('document.pdf');
      }

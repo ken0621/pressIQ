@@ -26,11 +26,18 @@ use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_shift_code;
 use App\Models\Tbl_payroll_shift_time;
 use App\Models\Tbl_payroll_adjustment;
+use App\Models\Tbl_payroll_period;
 use App\Globals\Payroll2;
 use App\Globals\Payroll;
 use App\Globals\PayrollLeave;
 use App\Globals\Utilities;
 use App\Models\Tbl_payroll_company;
+
+
+use App\Models\Tbl_payroll_deduction_v2;
+use App\Models\Tbl_payroll_deduction_employee_v2;
+use App\Models\Tbl_payroll_deduction_payment_v2;
+
 
 use DB;
 
@@ -116,7 +123,11 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			$period_id = Request::input("period_id");
 			$employee_id = Request::input("employee_id");
+			$payroll_period_id = Request::input("payroll_period_id");
 		}
+		
+		
+		$this->approve_deduction_payment($period_id,$employee_id,$payroll_period_id);
 
 		$compute_cutoff = $this->compute_whole_cutoff($period_id, $employee_id);
 		$check_approved = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->first();
@@ -136,6 +147,68 @@ class PayrollTimeSheet2Controller extends Member
 
 		return json_encode(Request::input());	
 	}
+	
+	public function approve_deduction_payment($payroll_company_period_id=0,$employee_id=0,$payroll_period_id=0)
+	{
+		$period_info = Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->first();
+
+		// dd($period_info);
+		$_deduction = Payroll::getdeductionv2($employee_id, $period_info['payroll_period_start'], $period_info['period_category'], $period_info['period_category'], $period_info['shop_id']);
+
+		foreach ($_deduction['deduction'] as $deduction) 
+		{
+			$deduction_payment = Tbl_payroll_deduction_payment_v2::where('payroll_period_company_id',$payroll_company_period_id)
+			->where('deduction_name',$deduction['deduction_name'])
+			->first();
+
+
+			$deduction_employee = Tbl_payroll_deduction_employee_v2::where('tbl_payroll_deduction_employee_v2.payroll_employee_id',$employee_id)
+			->where('tbl_payroll_deduction_v2.payroll_deduction_name',$deduction['deduction_name'])
+			->join('tbl_payroll_deduction_v2','tbl_payroll_deduction_v2.payroll_deduction_id','=','tbl_payroll_deduction_employee_v2.payroll_deduction_id')
+			->first();
+
+			// dd($deduction_employee);
+			if ($deduction_payment==null) 
+			{
+				$insert['payroll_deduction_id'] = $deduction_employee['payroll_deduction_id'];
+				$insert['payroll_employee_id'] = $employee_id;
+				$insert['payroll_record_id'] = 0;
+				$insert['payroll_period_company_id'] = $payroll_company_period_id;
+				$insert['deduction_name'] = $deduction_employee['payroll_deduction_name'];
+				$insert['deduction_category'] = $deduction_employee['payroll_deduction_category'];
+				$insert['payroll_payment_period'] = $period_info['payroll_period_end'];
+				$insert['payroll_beginning_balance'] =  $deduction_employee['payroll_deduction_amount']; 
+				$insert['payroll_payment_amount'] =		$deduction_employee['payroll_periodal_deduction'];  
+				$insert['payroll_total_payment_amount']= $deduction_employee['payroll_periodal_deduction']; 
+				$insert['payroll_remaining_balance'] = $deduction_employee['payroll_deduction_amount'] - $deduction_employee['payroll_periodal_deduction']; 
+				Tbl_payroll_deduction_payment_v2::insert($insert);
+			}
+			else
+			{
+				$deduction_payment = Tbl_payroll_deduction_payment_v2::where('payroll_period_company_id',$payroll_company_period_id)
+				->where('deduction_name',$deduction['deduction_name'])
+				->orderBy('payroll_deduction_payment_id','desc')->first();
+
+				$payroll_total_payment_amount = Tbl_payroll_deduction_payment_v2::where('payroll_period_company_id',$payroll_company_period_id)
+				->where('deduction_name',$deduction['deduction_name'])
+				->select(DB::raw('sum(payroll_payment_amount) as total_payment'))
+				->first();
+				
+				$insert['payroll_deduction_id'] = $deduction_employee['payroll_deduction_id'];
+				$insert['payroll_employee_id'] = $employee_id;
+				$insert['payroll_record_id'] = 0;
+				$insert['payroll_period_company_id'] = $payroll_company_period_id;
+				$insert['deduction_name'] = $deduction_employee['payroll_deduction_name'];
+				$insert['deduction_category'] = $deduction_employee['payroll_deduction_category'];
+				$insert['payroll_payment_period'] = $period_info['payroll_period_end'];
+				$insert['payroll_beginning_balance'] = $deduction_payment['payroll_remaining_balance']; 
+				$insert['payroll_payment_amount'] =		$deduction_employee['payroll_periodal_deduction'];  
+				$insert['payroll_total_payment_amount']= $payroll_total_payment_amount["total_payment"] + $deduction_employee['payroll_periodal_deduction']; 
+				$insert['payroll_remaining_balance'] = $deduction_payment['payroll_remaining_balance'] - $deduction_employee['payroll_periodal_deduction']; 
+				Tbl_payroll_deduction_payment_v2::insert($insert);
+			}
+		}
+	}
 
 	public function unapprove($period_id, $employee_id)
 	{
@@ -146,7 +219,9 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->delete();
 		}
-		
+
+		Tbl_payroll_deduction_payment_v2::where('payroll_period_company_id',$period_id)->where("payroll_employee_id", $employee_id)->delete();
+
 		echo json_encode("success");
 	}
 	public function time_change($period_id, $employee_id)
@@ -875,6 +950,7 @@ class PayrollTimeSheet2Controller extends Member
 		$data["time_keeping_approved"] = $check_approved ? true : false;
 		$data["employee_salary"]    =  $this->get_salary($employee_id,$data["start_date"]);
 		$data['access_salary_rate'] =  Utilities::checkAccess('payroll-timekeeping','salary_rates');
+
 		switch ($computation_type)
 		{
 			case "Daily Rate":

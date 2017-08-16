@@ -1,4 +1,4 @@
-<form class="global-submit" role="form" action="/member/payroll/deduction/modal_save_deduction" method="POST">
+<form class="global-submit" role="form" action="/member/payroll/deduction/v2/modal_save_deduction" method="POST">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">&times;</button>
 		<h4 class="modal-title">Create Deduction</h4>
@@ -10,6 +10,7 @@
 			<div class="col-md-12">
 				<small>Deduction Type</small>
 				<select class="form-control deduction-category-change" name="payroll_deduction_type" required>
+					<option value="">Select Category</option>
 					<option value="SSS Loan">SSS Loan</option>
 					<option value="HDMF Loan">HDMF Loan</option>
 					<option value="Cash Bond">Cash Bond</option>
@@ -88,6 +89,7 @@
 				</div>
 			</div>
 		</div>
+		
 		<div class="form-group">
 			<div class="col-md-6">
 				<small>Terms</small>
@@ -99,11 +101,22 @@
 			</div>
 		</div>
 
+		<div class="form-group">
+			<div class="col-md-6">
+				<small>Category</small>
+				<select class="form-control deduction-category-change" name="payroll_deduction_category" required>					
+					<option value="">Select Category</option>
+					<option value="Taxable">Taxable</option>
+					<option value="Non-Taxable">Non-Taxable</option>
+					<option value="Hidden">Hidden</option>
+				</select>
+			</div>
+		</div>
 
 		<hr>
 		<div class="form-group">
 			<div class="col-md-12">
-				<span><b>Affected Employee</b><button class="btn btn-custom-primary pull-right popup" type="button" link="/member/payroll/deduction/modal_deduction_tag_employee/0">Tag Employee</button></span>
+				<span><b>Affected Employee</b><button class="btn btn-custom-primary pull-right popup" type="button" link="/member/payroll/deduction/v2/modal_deduction_tag_employee/0">Tag Employee</button></span>
 			</div>
 		</div>
 		<div class="form-group">

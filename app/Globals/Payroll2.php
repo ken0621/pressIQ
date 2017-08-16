@@ -3256,9 +3256,7 @@ class Payroll2
 		{
 			$return = Payroll2::cutoff_fixed_montly_cola($return, $data);
 		}
-		
-				
-		
+
 		$return = Payroll2::cutoff_breakdown_deductions($return, $data); //meron bang non-taxable deduction?? lol
 		$return = Payroll2::cutoff_breakdown_adjustments($return, $data);
 		$return = Payroll2::cutoff_breakdown_allowance_v2($return, $data);
@@ -3269,7 +3267,9 @@ class Payroll2
 		$return = Payroll2::cutoff_breakdown_government_contributions($return, $data);
 		$return = Payroll2::cutoff_breakdown_compute_taxable_salary($return, $data);
 		$return = Payroll2::cutoff_breakdown_compute_tax($return, $data);
+
 		$return = Payroll2::cutoff_breakdown_compute_net($return, $data);
+		//dd($return);
 		$return = Payroll2::cutoff_breakdown_compute_time($return, $data);
 		return $return;
 	}
@@ -4284,6 +4284,7 @@ class Payroll2
 	public static function cutoff_breakdown_deductions($return, $data)
 	{
 		/* DAILY DEDUCTIONS */
+		
 		if(isset($data["cutoff_compute"]->_breakdown_deduction_summary))
 		{
 			foreach($data["cutoff_compute"]->_breakdown_deduction_summary as $key => $breakdown)
@@ -4322,7 +4323,32 @@ class Payroll2
 			$val = null;
 		}
 
-		$deduction = Payroll::getdeduction($employee_id, $start_date, $period_category_arr['period_category'], $period_category, $shop_id);
+		// $deduction = Payroll::getdeduction($employee_id, $start_date, $period_category_arr['period_category'], $period_category, $shop_id);
+		
+		// if(isset($deduction["deduction"]))
+		// {
+		// 	if(count($deduction["deduction"]) > 0)
+		// 	{
+		// 		foreach($deduction["deduction"] as $breakdown)
+		// 		{
+		// 			$val["label"] = $breakdown["deduction_name"];
+		// 			$val["type"] = "deductions";
+		// 			$val["amount"] = $breakdown["payroll_periodal_deduction"];
+		// 			$val["add.gross_pay"] = false;
+		// 			$val["deduct.gross_pay"] = false;
+		// 			$val["add.taxable_salary"] = false;
+		// 			$val["deduct.taxable_salary"] = false;
+		// 			$val["add.net_pay"] = false;
+		// 			$val["deduct.net_pay"] = true;
+			
+		// 			array_push($return->_breakdown, $val);
+		// 			$val = null;
+		// 		}
+		// 	}
+		// }
+
+
+		$deduction = Payroll::getdeductionv2($employee_id, $start_date, $period_category_arr['period_category'], $period_category, $shop_id);
 
 		if(isset($deduction["deduction"]))
 		{
@@ -4345,6 +4371,7 @@ class Payroll2
 				}
 			}
 		}
+
 
 		return $return;
 	}

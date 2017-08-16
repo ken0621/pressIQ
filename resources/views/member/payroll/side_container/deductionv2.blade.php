@@ -44,10 +44,10 @@
 								<span class="caret"></span></button>
 								<ul class="dropdown-menu dropdown-menu-custom">
 									<li>
-										<a href="#" class="popup" link="/member/payroll/deduction/modal_edit_deduction/{{$active->payroll_deduction_id}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+										<a href="#" class="popup" link="/member/payroll/deduction/v2/modal_edit_deduction/{{$active->payroll_deduction_id}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
 									</li>
 									<li>
-										<a href="#" class="popup" link="/member/payroll/deduction/archive_deduction/1/{{$active->payroll_deduction_id}}" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Archived</a>
+										<a href="#" class="popup" link="/member/payroll/deduction/v2/archive_deduction/1/{{$active->payroll_deduction_id}}" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Archived</a>
 									</li>
 								</ul>
 							</div>
@@ -94,10 +94,10 @@
 								<span class="caret"></span></button>
 								<ul class="dropdown-menu dropdown-menu-custom">
 									<li>
-										<a href="#" class="popup" link="/member/payroll/deduction/modal_edit_deduction/{{$archived->payroll_deduction_id}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+										<a href="#" class="popup" link="/member/payroll/deduction/v2/modal_edit_deduction/{{$archived->payroll_deduction_id}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
 									</li>
 									<li>
-										<a href="#" class="popup" link="/member/payroll/deduction/archive_deduction/0/{{$archived->payroll_deduction_id}}" size="sm"><i class="fa fa-refresh"></i>&nbsp;Restore</a>
+										<a href="#" class="popup" link="/member/payroll/deduction/v2/archive_deduction/0/{{$archived->payroll_deduction_id}}" size="sm"><i class="fa fa-refresh"></i>&nbsp;Restore</a>
 									</li>
 								</ul>
 							</div>

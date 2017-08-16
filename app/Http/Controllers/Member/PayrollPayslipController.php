@@ -15,6 +15,7 @@ use App\Models\Tbl_payroll_employee_contract;
 use App\Models\Tbl_payroll_payslip;
 use App\Models\Tbl_payroll_record;
 use PDF2;
+use App\Globals\Pdf_global;
 
 
 class PayrollPayslipController extends Member
@@ -72,7 +73,12 @@ class PayrollPayslipController extends Member
 			$data["_employee"][$key]->total_deduction = $employee->philhealth_ee + $employee->sss_ee + $employee->pagibig_ee + $employee->tax_ee + $other_deductions;
 		}
 
-		$pdf = PDF2::loadView('member.payroll.payroll_payslipv1', $data);
-		return $pdf->stream('document.pdf');
+		// $pdf = PDF2::loadView('member.payroll.payroll_payslipv1', $data);
+		// return $pdf->stream('document.pdf');
+		
+		// return view('member.payroll.payroll_payslipv1', $data);
+
+		$pdf = view('member.payroll.payroll_payslipv1', $data);
+        return Pdf_global::show_pdf($pdf);
      }
 }

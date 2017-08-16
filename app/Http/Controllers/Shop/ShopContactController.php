@@ -22,11 +22,11 @@ class ShopContactController extends Shop
 
     public function contact_submit()
     {
-        $owner_email = DB::table("tbl_settings")->where("shop_id", $this->shop_info->shop_id)->where("settings_key", "contact_email_address")->first()->settings_value;
+        $owner_email = DB::table("tbl_settings")->where("shop_id", $this->shop_info->shop_id)->where("settings_key", "contact_email_address")->first();
 
         if (!$owner_email) 
         {
-            $owner_email = Tbl_user::where("user_shop", $this->shop_info->shop_id)->where("archived", 0)->first()->user_email;
+            $owner_email = Tbl_user::where("user_shop", $this->shop_info->shop_id)->where("archived", 0)->first();
         }
 
     	$data["template"] = Tbl_email_template::where("shop_id", $this->shop_info->shop_id)->first();
@@ -40,6 +40,8 @@ class ShopContactController extends Shop
         $data['mail_message'] = Request::input("message");
 
     	$result = Mail_global::contact_mail($data, $this->shop_info->shop_id);
+
+        dd($result);
 
     	if ($result == 1) 
     	{

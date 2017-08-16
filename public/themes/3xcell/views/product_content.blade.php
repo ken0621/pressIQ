@@ -1,6 +1,8 @@
 @extends("layout")
 @section("content")
-<div class="content">
+<?php $ctr = 0; ?>
+@foreach($product["variant"] as $product_variant)
+<div class="single-product-content content {{ $ctr != 0 ? 'hide' : '' }}" variant-id="{{ $product_variant['evariant_id'] }}">
 	<div class="top-1-container">
 		<div class="container">
 			<div class="prod-content-container row clearfix">
@@ -183,6 +185,8 @@
 		</div>
 	</div>
 </div>
+<?php $ctr++; ?>
+@endforeach
 @endsection
 
 @section("css")

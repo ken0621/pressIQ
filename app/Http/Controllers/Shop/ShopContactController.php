@@ -41,8 +41,6 @@ class ShopContactController extends Shop
 
     	$result = Mail_global::contact_mail($data, $this->shop_info->shop_id);
 
-        dd($result);
-
     	if ($result == 1) 
     	{
             if ($this->shop_theme == "intogadgets") 

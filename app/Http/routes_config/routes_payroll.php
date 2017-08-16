@@ -7,6 +7,11 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/reports/government_forms_hdmf/{id}','Member\PayrollReportController@government_forms_hdmf');
 	Route::any('/reports/government_forms_hdmf_iframe/{id}','Member\PayrollReportController@government_forms_hdmf_iframe');
 	
+
+	Route::any('/reports/loan_summary','Member\PayrollReportController@loan_summary');
+	Route::any('/reports/modal_loan_summary_report/{employee_id}/{payroll_deduction_id}','Member\PayrollReportController@modal_loan_summary');
+	
+
 	/* COMPANY START */
 	Route::any('/company_list','Member\PayrollController@company_list');
 	Route::any('/company_list/modal_create_company','Member\PayrollController@modal_create_company');

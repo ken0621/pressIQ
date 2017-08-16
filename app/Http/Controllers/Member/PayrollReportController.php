@@ -11,6 +11,10 @@ use PDF2;
 use App\Globals\Payroll2;
 use DateTime;
 
+use App\Models\Tbl_payroll_employee_basic;
+
+use App\Http\Controllers\Member\PayrollDeductionController;
+
 
 class PayrollReportController extends Member
 {
@@ -84,5 +88,23 @@ class PayrollReportController extends Member
 
 		$pdf = PDF2::loadView('member.payrollreport.government_forms_hdmf_pdf', $data, [], $format);
 		return $pdf->stream('document.pdf');
+	}
+
+
+
+	public function loan_summary()
+	{
+		$data["page"] = "Loan Summary";
+		$data["_loan_data"] = PayrollDeductionController::get_deduction($this->shop_id());
+
+		return view("member.payrollreport.loan_summary", $data);
+	}
+
+	public function modal_loan_summary($employee_id,$payroll_deduction_id)
+	{
+		$data["employee_id"] = $employee_id;
+		$data["_loan_data"]=PayrollDeductionController::get_deduction_payment(0,$employee_id,$payroll_deduction_id);
+		$data["employee_info"] = Tbl_payroll_employee_basic::where("payroll_employee_id",$employee_id)->first();
+		return view("member.payroll.modal.modal_loan_summary", $data);
 	}
 }

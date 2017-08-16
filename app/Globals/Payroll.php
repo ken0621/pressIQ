@@ -3223,6 +3223,7 @@ class Payroll
 			->where('deduction_name',$temp['deduction_name'])
 			->where('payroll_deduction_id', $temp['payroll_deduction_id'])
 			->select(DB::raw('IFNULL(sum(payroll_payment_amount),0) as total_payment'))
+			->orderBy('payroll_deduction_payment_id','desc')
 			->first();
 			
 			$total_payment = Tbl_payroll_deduction_payment_v2::getpayment($employee_id, $payroll_record_id, $deduction->payroll_deduction_id)->select(DB::raw('IFNULL(sum(payroll_payment_amount), 0) as total_payment'))->pluck('total_payment');

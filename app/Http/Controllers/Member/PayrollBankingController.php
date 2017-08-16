@@ -44,9 +44,9 @@ class PayrollBankingController extends Member
      	$data["payroll_period_company_id"] = $payroll_period_company_id;
      	$data["payroll_period"] = Tbl_payroll_period_company::getcompanydetails($payroll_period_company_id)->first();
 
-        if (Request::input("txt")) 
+        if (Request::input("xls")) 
         {
-            Self::download_txt($data);
+            Self::download_xls($data);
         }
         else
         {
@@ -64,10 +64,39 @@ class PayrollBankingController extends Member
                 case 4: //CHINABANK
                     Self::download_chinabank($data);
                 break;
+                default:
+                    dd("Please set company Bank.");
+                break;
             }
         }
      }
-     public static function download_txt($data)
+     public static function download_xls($data)
+     {
+        $data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $data["payroll_period_company_id"])->orderBy("net_pay", "desc")->basic()->get();
+        $data = Self::clean($data);
+
+        $company_code = $data["payroll_period"]->payroll_company_code;
+        $upload_month = date("m");
+        $upload_day = date("d");
+        $upload_year = date("y");
+        $batch = "01";
+        $data["payroll_period"]->payroll_company_account_no = DB::table("tbl_payroll_company")->where("payroll_company_id", $data["payroll_period"]->payroll_company_id)->first()->payroll_company_account_no;
+        
+        // S3N
+        $filename = strtoupper($company_code) . $upload_month . $upload_day . $upload_year . $batch;
+
+        Excel::create($filename, function($excel) use ($data)
+        {
+            $excel->sheet('Data', function($sheet) use ($data)
+            {
+                $sheet->loadView('member.payroll2.bank_template.default', $data);
+            });
+        })->download('xls');
+
+        $data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $data["payroll_period_company_id"])->orderBy("net_pay", "desc")->basic()->get();
+        $data = Self::clean($data);
+     }
+     public static function download_bdo($data)
      {
         $data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $data["payroll_period_company_id"])->orderBy("net_pay", "desc")->basic()->get();
         $data = Self::clean($data);
@@ -101,29 +130,6 @@ class PayrollBankingController extends Member
         readfile($filename);
         unlink($filename);
      }
-     public static function download_bdo($data)
-     {
-        $data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $data["payroll_period_company_id"])->orderBy("net_pay", "desc")->basic()->get();
-        $data = Self::clean($data);
-
-        $company_code = $data["payroll_period"]->payroll_company_code;
-        $upload_month = date("m");
-        $upload_day = date("d");
-        $upload_year = date("y");
-        $batch = "01";
-        $data["payroll_period"]->payroll_company_account_no = DB::table("tbl_payroll_company")->where("payroll_company_id", $data["payroll_period"]->payroll_company_id)->first()->payroll_company_account_no;
-        
-        // S3N
-        $filename = strtoupper($company_code) . $upload_month . $upload_day . $upload_year . $batch;
-
-        Excel::create($filename, function($excel) use ($data)
-        {
-            $excel->sheet('Data', function($sheet) use ($data)
-            {
-                $sheet->loadView('member.payroll2.bank_template.default', $data);
-            });
-        })->download('xls');
-     }
      public static function download_metrobank($data)
      {
         dd("Under Construction");
@@ -134,25 +140,6 @@ class PayrollBankingController extends Member
      }
      public static function download_chinabank($data)
      {
-        $data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $data["payroll_period_company_id"])->orderBy("net_pay", "desc")->basic()->get();
-        $data = Self::clean($data);
-
-        $company_code = $data["payroll_period"]->payroll_company_code;
-        $upload_month = date("m");
-        $upload_day = date("d");
-        $upload_year = date("y");
-        $batch = "01";
-        $data["payroll_period"]->payroll_company_account_no = DB::table("tbl_payroll_company")->where("payroll_company_id", $data["payroll_period"]->payroll_company_id)->first()->payroll_company_account_no;
-        
-        // S3N
-        $filename = strtoupper($company_code) . $upload_month . $upload_day . $upload_year . $batch;
-
-        Excel::create($filename, function($excel) use ($data)
-        {
-            $excel->sheet('Data', function($sheet) use ($data)
-            {
-                $sheet->loadView('member.payroll2.bank_template.default', $data);
-            });
-        })->download('xls');
+        dd("Under Construction");
      }
 }

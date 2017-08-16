@@ -23,16 +23,28 @@
             font-size: 11px;
             line-height: 11px;
           }
+          .payslip-wrapper
+          {
+            page-break-inside: avoid; 
+            width: 48.5%; 
+            padding: 10px; 
+            border: 1px solid #bbb; 
+            display: inline-block; 
+            vertical-align: top; 
+            top: 0; 
+            background-color: #fff; 
+            margin: 5px;
+            float: left;
+          }
 
-
-          div.breakNow { page-break-inside:avoid; page-break-after:always; }
+          /*div.breakNow { page-break-inside:avoid; page-break-after:always; }*/
         </style>
     </head>
     <body>
 
     <div style="vertical-align: top; text-align: center;">
         @foreach($_employee as $key => $employee)
-        <div class="payslip-wrapper page" style="page-break-inside: avoid; width: 48.5%; padding: 10px; border: 1px solid #bbb; display: inline-block; vertical-align: top; top: 0; background-color: #fff; float: left; margin: 5px;">
+        <div class="payslip-wrapper page">
             <div class="main-content-holder">
               <div class="row" >
                 <div class="col-md-12 text-center" style="font-weight: bold; font-size: 16px;">{{ strtoupper($company->payroll_company_name) }}</div>
@@ -107,9 +119,9 @@
               </div>
             </div>
         </div>
-          @if(($key+1)%4 == 0)
-            <div class="breakNow"></div>
-          @endif
+        @if(($key+1)%2 == 0)
+
+        @endif
         @endforeach
 
 

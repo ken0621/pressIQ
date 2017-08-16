@@ -36,14 +36,17 @@
             margin: 5px;
             /*float: left;*/
           }
-
+          .col-md-6
+          {
+            padding: 0;
+          }
           /*div.breakNow { page-break-inside:avoid; page-break-after:always; }*/
         </style>
     </head>
     <body>
 
     <div style="vertical-align: top; text-align: center;">
-      <div class="row clearfix">
+      <div class="clearfix">
         
         
           @foreach($new_employee as $key => $new)

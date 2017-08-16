@@ -23,7 +23,7 @@
           }
 
 
-          div.breakNow { page-break-inside:avoid; page-break-after:always; }
+          /*div.breakNow { page-break-inside:avoid; page-break-after:always; }*/
         </style>
     </head>
     <body>
@@ -106,7 +106,7 @@
             </div>
         </div>
           @if(($key+1)%4 == 0)
-            <div class="breakNow"></div>
+            <!-- <div class="breakNow"></div> -->
           @endif
         @endforeach
 

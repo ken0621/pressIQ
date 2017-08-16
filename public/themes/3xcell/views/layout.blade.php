@@ -118,46 +118,59 @@
                                 <a class="head-button link-nav">PRODUCTS</a>
                                 <!-- PRODUCT DROPDOWN -->
                                 <div class="product-dropdown" style="display: none;">
-                                    <div class="cat-container">
-                                        <a href="/product">
-                                            <div class="per-cat">
-                                                <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/beauty-prod.png"></div>
-                                                <div class="cat-name">BEAUTY SKIN CARE</div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="cat-container">
-                                        <a href="/product">
-                                            <div class="per-cat">
-                                                <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/supplement.png"></div>
-                                                <div class="cat-name">FOOD SUPPLEMENT</div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="cat-container">
-                                        <a href="/product">
-                                            <div class="per-cat">
-                                                <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/healthy-drinks.png"></div>
-                                                <div class="cat-name">HEALTHY DRINKS</div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="cat-container">
-                                        <a href="/product">
-                                            <div class="per-cat">
-                                                <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/p-a.png"></div>
-                                                <div class="cat-name">HEALTHY PACKAGES</div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="cat-container">
-                                        <a href="/product">
-                                            <div class="per-cat">
-                                                <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/p-b.png"></div>
-                                                <div class="cat-name">RETAIL PACKAGES</div>
-                                            </div>
-                                        </a>
-                                    </div>
+                                    @if(count($_categories) > 0)
+                                        @foreach($_categories as $categories)
+                                        <div class="cat-container">
+                                            <a href="/product">
+                                                <div class="per-cat">
+                                                    <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/beauty-prod.png"></div>
+                                                    <div class="cat-name">{{ $categories["type_name"] }}</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        @endforeach
+                                    @else
+                                        <div class="cat-container">
+                                            <a href="/product">
+                                                <div class="per-cat">
+                                                    <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/beauty-prod.png"></div>
+                                                    <div class="cat-name">BEAUTY SKIN CARE</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="cat-container">
+                                            <a href="/product">
+                                                <div class="per-cat">
+                                                    <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/supplement.png"></div>
+                                                    <div class="cat-name">FOOD SUPPLEMENT</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="cat-container">
+                                            <a href="/product">
+                                                <div class="per-cat">
+                                                    <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/healthy-drinks.png"></div>
+                                                    <div class="cat-name">HEALTHY DRINKS</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="cat-container">
+                                            <a href="/product">
+                                                <div class="per-cat">
+                                                    <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/p-a.png"></div>
+                                                    <div class="cat-name">HEALTHY PACKAGES</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="cat-container">
+                                            <a href="/product">
+                                                <div class="per-cat">
+                                                    <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/p-b.png"></div>
+                                                    <div class="cat-name">RETAIL PACKAGES</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    @endif
                                 </div>
                             </li>
                             <li><a href="/promos" class="head-button link-nav">PROMOS</a></li>

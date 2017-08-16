@@ -117,6 +117,11 @@ class Shop extends Controller
             $product_category       = Ecom_Product::getAllCategory($this->shop_info->shop_id);
             View::share("_categories", $product_category);
         }
+        elseif ($this->shop_theme == "3xcell") 
+        {
+            $product_category       = Ecom_Product::getAllCategory($this->shop_info->shop_id);
+            View::share("_categories", $product_category);
+        }
         
         View::share("slot_now", Self::$slot_now);
         View::share("customer_info_a", Self::$customer_info);

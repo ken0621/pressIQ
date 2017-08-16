@@ -17,7 +17,7 @@
 				<option value="ZKTeco TX628">ZKTeco TX628</option>
 				<option value="ZKTime 5.0">ZKTime 5.0</option>
 				<option value="ZKTeco- YH 803A (UPS)">ZKTeco- YH 803A (UPS)</option>
-				<option value="Touchlink V1">Touchlink RDS</option>
+				<option value="Touchlink V1">Touchlink BT3TFT</option>
 				<!-- <option value="C7">C7</option> -->
 			</select>
 		</div>

@@ -27,8 +27,7 @@ class PayrollProcessController extends Member
 			$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
 			$data = $this->get_total($data);
 			extract($data);
-
-
+			
 			$record = Tbl_payroll_period_company::where('payroll_period_company_id', $period_company_id)->first();
 
 			switch ($data["step"])

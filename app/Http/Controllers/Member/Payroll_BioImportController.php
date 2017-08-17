@@ -68,9 +68,7 @@ class Payroll_BioImportController extends Member
 			return Self::import_touchlink_v1($file, $company);
 		}
 	}
-
-    /* BIO METRICS START */
-    public function import_touchlink_v1($file, $company)
+    public function import_touchlink_v1($file, $company) /* BIO METRICS START */
     {
     	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('employee_no','employee_name','date','day','in','out','next_day'));
 
@@ -113,8 +111,6 @@ class Payroll_BioImportController extends Member
     	{
     		echo "<div class='text-center'>INVALID FILE FORMAT</div>";
     	}
-
-
     }
     public static function save_record($_record, $company, $shop_id, $biometerics_name)
     {
@@ -214,10 +210,6 @@ class Payroll_BioImportController extends Member
     	$data["_record"] = $_record;
     	return $data;
     }
-
-
-
-
 
 	/* SHOP ID */
 	public function shop_id()

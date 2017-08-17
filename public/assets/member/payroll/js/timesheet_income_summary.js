@@ -43,13 +43,15 @@ function timesheet_income_summary()
 			$(".approve-timesheet-btn").html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
 
 			var period_id = $(".employee-income-summary .period-id").val();
+			var payroll_period_id = $(".employee-income-summary .payroll-period-id").val();
 			var employee_id = $(".employee-income-summary .x-employee-id").val();
-			
+
+		
 			$.ajax({
 				url : "/member/payroll/company_timesheet_approve/approve_timesheet",
 				type : "get",
 				dataType:"json",
-				data : {period_id : period_id, employee_id : employee_id},
+				data : {period_id : period_id, employee_id : employee_id, payroll_period_id : payroll_period_id,},
 				success : function(data)
 				{
 					$("#global_modal").modal("hide");

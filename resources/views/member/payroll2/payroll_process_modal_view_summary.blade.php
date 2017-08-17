@@ -35,7 +35,13 @@
                 <td class="text-center">{{ payroll_currency($employee->total_ec) }}</td>
                 <td class="text-center">{{ payroll_currency($employee->tax_ee) }}</td>
                 <td class="text-center">{{ payroll_currency($employee->net_pay) }}</td>
-                <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/company_timesheet2/income_summary/{{ $company->payroll_period_company_id }}/{{ $employee->payroll_employee_id }}', 'lg')">SUMMARY</a></td>
+                <td class="text-center">
+                    <a href="javascript: action_load_link_to_modal('/member/payroll/process_payroll/income_summary/timesheet/{{ $company->payroll_period_company_id }}/{{ $employee->payroll_employee_id }}', 'lg')">TIMESHEET</a>
+                    <br>
+                    -------------
+                    <br>
+                    <a href="javascript: action_load_link_to_modal('/member/payroll/company_timesheet2/income_summary/{{ $company->payroll_period_company_id }}/{{ $employee->payroll_employee_id }}', 'lg')">SUMMARY</a>
+                </td>
             </tr>
             @endforeach
             <tr style="font-weight: bold; border-top: 2px solid #000">

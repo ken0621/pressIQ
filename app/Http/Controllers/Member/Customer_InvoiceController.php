@@ -724,7 +724,7 @@ class Customer_InvoiceController extends Member
                 $data["_cmline"][$keys]->cm_qty = UnitMeasurement::um_view($total_qtys,$values->item_measurement_id,$values->cmline_um);
             }
         }
-          $pdf = view('member.customer_invoice.invoice_pdf', $data);
-          return Pdf_global::show_pdf($pdf);
+        $pdf = view('member.customer_invoice.invoice_pdf', $data);
+        return Pdf_global::show_pdf($pdf);
     }
 }

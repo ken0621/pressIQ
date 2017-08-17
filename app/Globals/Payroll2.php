@@ -2545,9 +2545,11 @@ class Payroll2
 			/*$cutoff_cola		= $cutoff_income_plus_cola * $cola_percentile;*/
 			
 			//COMPUTE CUTOFF BASIC
+
 			$deduction	  = $breakdown_deduction; //error(commented) * (1 - $cola_percentile);
+
 			$cutoff_basic = $cutoff_rate - $deduction;
-			dd($breakdown_deduction."   ".$deduction);
+			
 			$cutoff_target_days -= $rendered_tardiness;
 			
 			$return->deduction_cola 		  = 0;

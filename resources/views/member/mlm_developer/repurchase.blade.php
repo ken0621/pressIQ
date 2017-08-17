@@ -17,11 +17,11 @@
         <div class="form-group">
             <div class="col-md-6">            
                 <label>PERSONAL PV</label>
-                <input name="sponsor" type="text" class="form-control" placeholder="100 (IF EMPTY)">
+                <input name="personal_pv" type="text" class="form-control" placeholder="100 (IF EMPTY)">
             </div>
             <div class="col-md-6">            
                 <label>GROUP PV</label>
-                <input name="sponsor" type="text" class="form-control" placeholder="100 (IF EMPTY)">
+                <input name="group_pv" type="text" class="form-control" placeholder="100 (IF EMPTY)">
             </div>
         </div>
         @endif
@@ -30,7 +30,7 @@
         <div class="form-group">
             <div class="col-md-12">            
                 <label>BINARY PV</label>
-                <input name="sponsor" type="text" class="form-control" placeholder="1.00 (IF EMPTY)">
+                <input name="binary_pv" type="text" class="form-control" placeholder="1.00 (IF EMPTY)">
             </div>
         </div>
         @endif
@@ -40,3 +40,11 @@
         <button class="btn btn-primary btn-custom-primary" type="submit">Create Re-Purchase</button>
     </div>
 </form>
+
+<script type="text/javascript">
+    function repurchase_submit_done(data)
+    {
+        $("#global_modal").modal("hide");
+        mlm_developer.action_load_data();
+    }
+</script>

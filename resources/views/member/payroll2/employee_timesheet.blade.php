@@ -20,6 +20,7 @@
                             <th class="text-center">Remark / Activity</th>
                             <th class="text-center" width="80px;">Shift</i></th>
                             <th class="text-center" width="150px;">Source</th>
+                            <th class="text-center" width="150px;">Branch</th>
                             <th width="150px" class="text-center">{{ $access_salary_rates == 1 ? 'Rates':'Time Spent'}}</th>
                         </tr>
                     </thead>
@@ -82,6 +83,15 @@
                                         @endforeach
                                     @else
                                         <input unq="{{ $random_integer_for_blank }}" type="text" disabled class="comment new-time-event text-table" value="Manually Encoded">
+                                    @endif
+                                </td>
+                                <td class="text-center source-td">
+                                    @if($timesheet->record)
+                                        @foreach($timesheet->record as $x => $record)
+                                            <input unq="{{ $random_integer[$x] }}" type="text" disabled class="comment new-time-event text-table" value="{{ $record->branch }}">
+                                        @endforeach
+                                    @else
+                                        <input unq="{{ $random_integer_for_blank }}" type="text" disabled class="comment new-time-event text-table" value="NEW">
                                     @endif
                                 </td>
                                 <td class="text-center rate-output">

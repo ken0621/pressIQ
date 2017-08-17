@@ -17,7 +17,6 @@ use App\Models\Tbl_payroll_time_keeping_approved_performance;
 
 class PayrollProcessController extends Member
 {
-
 	public function index($period_company_id)
 	{
 		$data["period_company_id"] = $period_company_id;
@@ -84,17 +83,51 @@ class PayrollProcessController extends Member
 		$data = $this->get_total($data);
 		return view("member.payroll2.payroll_process_table", $data);
 	}
-
-
 	public function modal_view_summary($period_company_id)
 	{
 		$data["company"] = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
 		$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
+		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
+		$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
+		$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
+
 		$data = $this->get_total($data);
 		return view("member.payroll2.payroll_process_modal_view_summary", $data);
 	}
 
-	
+	public function modal_approved_summary($period_company_id)
+	{
+		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
+		$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
+		$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
+		
+		$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
+
+		foreach($data["_employee"] as $key => $employee)
+		{
+			$data["_employee"][$key] = $employee;
+			$data["_employee"][$key]->cutoff_compute = unserialize($employee->cutoff_compute);
+			$data["_employee"][$key]->cutoff_input =  unserialize($employee->cutoff_input);
+			$data["_employee"][$key]->cutoff_breakdown =  unserialize($employee->cutoff_breakdown);
+
+			$other_deductions = 0;
+
+			foreach($data["_employee"][$key]->cutoff_breakdown->_breakdown as $breakdown)
+			{
+				if($breakdown["deduct.net_pay"] == true)
+				{
+					$other_deductions += $breakdown["amount"];
+				}
+			}
+
+			$data["_employee"][$key]->other_deduction = $other_deductions;
+			$data["_employee"][$key]->total_deduction = $employee->philhealth_ee + $employee->sss_ee + $employee->pagibig_ee + $employee->tax_ee + $other_deductions;
+		}
+
+		$data = $this->get_total($data);
+
+		return view("member.payroll2.payroll_process_modal_approved_summary", $data);
+	}
 	public function unprocess($period_company_id)
 	{
 		$old_record = Tbl_payroll_period_company::where('payroll_period_company_id', $period_company_id)->first();
@@ -127,6 +160,11 @@ class PayrollProcessController extends Member
 		$total_philhealth_er = 0;
 		$total_pagibig_ee = 0;
 		$total_pagibig_er = 0;
+		$total_deduction = 0;
+
+		$_other_deduction = null;
+		$_addition = null;
+		$_deduction = null;
 
 
 		foreach($data["_employee"] as $key => $employee)
@@ -156,6 +194,62 @@ class PayrollProcessController extends Member
 			$g_total_ec += $total_ec;
 			$g_total_er += $total_er;
 			$g_total_ee += $total_ee;
+
+
+			$total_deduction += ($total_ee); 
+
+			if(isset($employee["cutoff_breakdown"]->_breakdown))
+			{
+				foreach($employee["cutoff_breakdown"]->_breakdown as $breakdown)
+				{
+					if($breakdown["deduct.net_pay"] == true)
+					{
+						if(isset($_other_deduction[$breakdown["label"]]))
+						{
+							$_other_deduction[$breakdown["label"]] += $breakdown["amount"];
+							$total_deduction += $breakdown["amount"];
+						}
+						else
+						{
+							$_other_deduction[$breakdown["label"]] = $breakdown["amount"];
+							$total_deduction += $breakdown["amount"];
+						}
+						
+					}
+				}
+
+				foreach($employee["cutoff_breakdown"]->_breakdown as $breakdown)
+				{
+					if($breakdown["add.gross_pay"] == true)
+					{
+						if(isset($_addition[$breakdown["label"]]))
+						{
+							$_addition[$breakdown["label"]] += $breakdown["amount"];
+						}
+						else
+						{
+							$_addition[$breakdown["label"]] = $breakdown["amount"];
+						}
+						
+					}
+				}
+
+				foreach($employee["cutoff_breakdown"]->_breakdown as $breakdown)
+				{
+					if($breakdown["type"] == "deductions")
+					{
+						if(isset($_deduction[$breakdown["label"]]))
+						{
+							$_deduction[$breakdown["label"]] += $breakdown["amount"];
+						}
+						else
+						{
+							$_deduction[$breakdown["label"]] = $breakdown["amount"];
+						}
+						
+					}
+				}
+			}
 		}
 
 		$data["total_basic"] = $total_basic;
@@ -173,6 +267,10 @@ class PayrollProcessController extends Member
 		$data["total_philhealth_er"] = $total_philhealth_er;
 		$data["total_pagibig_ee"] = $total_pagibig_ee;
 		$data["total_pagibig_er"] = $total_pagibig_er;
+		$data["_other_deduction"] = $_other_deduction;
+		$data["_addition"] = $_addition;
+		$data["_deduction"] = $_deduction;
+		$data["total_deduction"] = $total_deduction;
 		return $data;
 	}
 
@@ -186,18 +284,9 @@ class PayrollProcessController extends Member
 		$data["_timesheet"]     = null;
 		$ctr                    = 0;
 		$days_worked            = 0;
-		// $data["_timesheet"] 	= $timesheet      = Tbl_payroll_time_sheet_record::join("tbl_payroll_time_sheet","tbl_payroll_time_sheet_record.payroll_time_sheet_id","=","tbl_payroll_time_sheet.payroll_time_sheet_id")
-		// 													   ->where("payroll_employee_id",$employee_id)
-		// 													   ->where("payroll_time_date",">=",$period->payroll_period_start)
-		// 													   ->where("payroll_time_date","<=",$period->payroll_period_end)
-		// 													   ->get();
-
-
-
-		$breakdown       				    	  = unserialize($approved->cutoff_breakdown)->_time_breakdown;   
-		$input	       				    	      = unserialize($approved->cutoff_input);   
-		$compute        				    	  = unserialize($approved->cutoff_compute);   
-		// dd($input);
+		$breakdown       		= unserialize($approved->cutoff_breakdown)->_time_breakdown;   
+		$input	       			= unserialize($approved->cutoff_input);   
+		$compute        		= unserialize($approved->cutoff_compute);   
 		
 		$data["total_absent"]	= $total_absent	  = $breakdown["absent"]["time"]; 
 		$data["total_late"]		= $total_late	  = $breakdown["late"]["time"]; 
@@ -209,13 +298,12 @@ class PayrollProcessController extends Member
 			if($timesheet->_time != null)
 			{
 				$count_time  = count($timesheet->_time);
-				$data["_timesheet"][$ctr]["converted_time_in"]  = date('h:i:s a', strtotime($timesheet->_time[0]->time_in));
-				$data["_timesheet"][$ctr]["converted_time_out"] = date('h:i:s a', strtotime($timesheet->_time[$count_time - 1]->time_out));
+				$data["_timesheet"][$ctr]["converted_time_in"]  = date('h:i:s A', strtotime($timesheet->_time[0]->time_in));
+				$data["_timesheet"][$ctr]["converted_time_out"] = date('h:i:s A', strtotime($timesheet->_time[$count_time - 1]->time_out));
 				$data["_timesheet"][$ctr]["remarks"] 			= $timesheet->default_remarks;
 				$ctr++;
 				$days_worked = $days_worked + 1;
 			}
-			
 		}	
 
 		$data["days_worked"]	= $days_worked;

@@ -271,5 +271,5 @@ Route::post('member/mlm/developer/create_slot', 'Member\MlmDeveloperController@c
 Route::get('member/mlm/developer/import', 'Member\MlmDeveloperController@import');
 Route::post('member/mlm/developer/import', 'Member\MlmDeveloperController@import_submit');
 Route::get('member/mlm/developer/repurchase', 'Member\MlmDeveloperController@repurchase');
-Route::post('member/mlm/developer/repurchase', 'Member\MlmDeveloperController@repurchase');
+Route::post('member/mlm/developer/repurchase', 'Member\MlmDeveloperController@repurchase_submit');
 Route::get('member/mlm/developer/reset', 'Member\MlmDeveloperController@reset');

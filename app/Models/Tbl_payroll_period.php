@@ -8,7 +8,7 @@ class Tbl_payroll_period extends Model
 {
     protected $table = 'tbl_payroll_period';
 	protected $primaryKey = "payroll_period_id";
-    public $timestamps = false;
+    // public $timestamps = false;
 
     /* COLUMN NAME REFERENCE */ 
 

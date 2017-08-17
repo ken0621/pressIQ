@@ -34,6 +34,7 @@ use App\Http\Controllers\Member\MLM_ProductController;
 use Schema;
 use Session;
 use DB;
+use stdClass;
 
 use Carbon\Carbon;
 
@@ -286,6 +287,13 @@ class Mlm_complan_manager
                 if($slot_a)
                 {
                     $points_a = Tbl_membership_points::where('membership_id', $slot_a->slot_membership)->first();
+
+                    if(!$points_a)
+                    {
+                        $points_a = new stdClass();
+                        $points_a->membership_points_binary_limit = 999999;
+                    }
+
                     if($points_a)
                     {
                         $limit = $points_a->membership_points_binary_limit;

@@ -32,8 +32,14 @@ class ShopCheckoutLoginController extends Shop
             $customer_info["new_account"] = false;
             $customer_info["password"] = Crypt::decrypt(Self::$customer_info->password);
             $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_account"));
-
-            return Redirect::to('/checkout')->send();
+            if ($customer_set_info_response["status"] == "error") 
+            {
+                return Redirect::to("/checkout/login")->with("warning", $customer_set_info_response["status_message"]);
+            }
+            else
+            {
+                return Redirect::to('/checkout')->send();
+            }
         }
     }
     public function index()
@@ -57,8 +63,20 @@ class ShopCheckoutLoginController extends Shop
         }
         else
         {
+            $customer_info["email"] = null;
+            $customer_info["new_account"] = null;
+            $customer_info["password"]= null;
+            $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_account"));
+            
             $data["page"]     = "Checkout - Login";
             $data["get_cart"] = Cart::get_cart($this->shop_info->shop_id);
+            $total = 0;
+            foreach ($data["get_cart"]["cart"] as $key => $value) 
+            {
+                $total += $value["cart_product_information"]["product_price"] * $value["quantity"];
+            }
+            $data["get_cart"]["sale_information"]["total_overall_price"] = $total;
+
             $this->cart_exist($data);
             $this->if_loggedin();
             return view("checkout_login", $data);

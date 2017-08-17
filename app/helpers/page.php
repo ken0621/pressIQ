@@ -1294,7 +1294,7 @@ function page_list()
     $code = "pis-agent-position";
     $nav[$page]['submenu'][$code]['label'] = "Agent Position";
     $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . "/utilities/agent_position";
+    $nav[$page]['submenu'][$code]['url'] = $path . "utilities/agent_position";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','edit','archived'];
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
@@ -1303,7 +1303,7 @@ function page_list()
     $code = "pis-truck";
     $nav[$page]['submenu'][$code]['label'] = "Truck List";
     $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . "/utilities/truck_list";
+    $nav[$page]['submenu'][$code]['url'] = $path . "utilities/truck_list";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','edit','archived'];
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";

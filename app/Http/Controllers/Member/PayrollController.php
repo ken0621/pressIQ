@@ -2236,7 +2236,7 @@ class PayrollController extends Member
           $insert['payroll_company_contact']                = Request::input('payroll_company_contact');
           $insert['payroll_company_email']                  = Request::input('payroll_company_email');
           $insert['payroll_company_nature_of_business']     = Request::input('payroll_company_nature_of_business');
-          $insert['payroll_company_date_started']           = Request::input('payroll_company_date_started');
+          $insert['payroll_company_date_started']           = date('Y-m-d', strtotime(Request::input('payroll_company_date_started')));
           $insert['payroll_company_tin']                    = Request::input('payroll_company_tin');
           $insert['payroll_company_sss']                    = Request::input('payroll_company_sss');
           $insert['payroll_company_philhealth']             = Request::input('payroll_company_philhealth');
@@ -2244,6 +2244,7 @@ class PayrollController extends Member
           $insert['shop_id']                                = Self::shop_id();
           $insert['payroll_parent_company_id']              = $parent;
           $insert['payroll_company_bank']                   = Request::input('payroll_company_bank');
+          $insert['payroll_company_account_no']             = Request::input('payroll_company_account_no');
 
           $logo = '/assets/images/no-logo.png';
           if(Session::has('company_logo'))
@@ -2284,7 +2285,6 @@ class PayrollController extends Member
 
      public function update_company()
      {
-
           $parent = Request::input('payroll_parent_company_id') != 0 || Request::input('payroll_parent_company_id') != null ? Request::input('payroll_parent_company_id') : 0;
 
           $payroll_company_id                               = Request::input('payroll_company_id');
@@ -2295,13 +2295,14 @@ class PayrollController extends Member
           $update['payroll_company_contact']                = Request::input('payroll_company_contact');
           $update['payroll_company_email']                  = Request::input('payroll_company_email');
           $update['payroll_company_nature_of_business']     = Request::input('payroll_company_nature_of_business');
-          $update['payroll_company_date_started']           = Request::input('payroll_company_date_started');
+          $update['payroll_company_date_started']           = date('Y-m-d', strtotime(Request::input('payroll_company_date_started')));
           $update['payroll_company_tin']                    = Request::input('payroll_company_tin');
           $update['payroll_company_sss']                    = Request::input('payroll_company_sss');
           $update['payroll_company_philhealth']             = Request::input('payroll_company_philhealth');
           $update['payroll_company_pagibig']                = Request::input('payroll_company_pagibig');
           $update['payroll_parent_company_id']              = $parent;
           $update['payroll_company_bank']                   = Request::input('payroll_company_bank');
+          $update['payroll_company_account_no']             = Request::input('payroll_company_account_no');
           $logo = '/assets/images/no-logo.png';
           if(Session::has('company_logo_update'))
           {

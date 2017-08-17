@@ -32,7 +32,7 @@
                 <label>MEMBERSHIP</label>
                 <select name="membership" class="form-control">
                     @foreach($_membership as $membership)
-                	<option value="{{ $membership->membership_package_id }}">{{ $membership->membership_package_name }}</option>
+                	<option value="{{ $membership->membership_package_id }}">PACKAGE NO. {{ $membership->membership_package_id }} - {{ $membership->membership_package_name }}</option>
                     @endforeach
                 </select>
             </div>

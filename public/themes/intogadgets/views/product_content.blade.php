@@ -354,6 +354,15 @@
 
 <link rel="stylesheet" type="text/css" href="resources/assets/flexslider/css/flexslider.css">
 
+<style type="text/css">
+.single-detail-description img
+{
+  height: auto !important;
+  max-width: 100% !important;
+  width: auto !important;
+}
+</style>
+
 @endsection
 
 @section('meta')

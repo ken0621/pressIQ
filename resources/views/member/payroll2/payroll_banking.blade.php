@@ -27,6 +27,7 @@
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
+		<button class="btn btn-default btn-custom-default" onclick="location.href='/member/payroll/banking/{{ $payroll_period_company_id }}/download?xls=1'" type="button">Export Excel</button>
 		<button class="btn btn-primary btn-custom-primary" onclick="location.href='/member/payroll/banking/{{ $payroll_period_company_id }}/download'" type="button">Export Bank Template</button>
 	</div>
 </form>

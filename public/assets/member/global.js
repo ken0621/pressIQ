@@ -81,7 +81,16 @@ function global()
 				}
                 else if(data.status == "error")
                 {
-                    action_load_link_to_modal("/member/popup/message?message=" + encodeURI(data.message));
+                    if(!data.message)
+                    {
+                        message = data.status_message;
+                    }
+                    else
+                    {
+                        message = data.message;
+                    }
+
+                    action_load_link_to_modal("/member/popup/message?message=" + encodeURI(message));
                     $(".modal-loader").addClass("hidden");
                 }
 				else

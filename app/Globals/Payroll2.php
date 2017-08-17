@@ -4323,29 +4323,29 @@ class Payroll2
 			$val = null;
 		}
 
-		// $deduction = Payroll::getdeduction($employee_id, $start_date, $period_category_arr['period_category'], $period_category, $shop_id);
+		$deduction = Payroll::getdeduction($employee_id, $start_date, $period_category_arr['period_category'], $period_category, $shop_id);
 		
-		// if(isset($deduction["deduction"]))
-		// {
-		// 	if(count($deduction["deduction"]) > 0)
-		// 	{
-		// 		foreach($deduction["deduction"] as $breakdown)
-		// 		{
-		// 			$val["label"] = $breakdown["deduction_name"];
-		// 			$val["type"] = "deductions";
-		// 			$val["amount"] = $breakdown["payroll_periodal_deduction"];
-		// 			$val["add.gross_pay"] = false;
-		// 			$val["deduct.gross_pay"] = false;
-		// 			$val["add.taxable_salary"] = false;
-		// 			$val["deduct.taxable_salary"] = false;
-		// 			$val["add.net_pay"] = false;
-		// 			$val["deduct.net_pay"] = true;
+		if(isset($deduction["deduction"]))
+		{
+			if(count($deduction["deduction"]) > 0)
+			{
+				foreach($deduction["deduction"] as $breakdown)
+				{
+					$val["label"] = $breakdown["deduction_name"];
+					$val["type"] = "deductions";
+					$val["amount"] = $breakdown["payroll_periodal_deduction"];
+					$val["add.gross_pay"] = false;
+					$val["deduct.gross_pay"] = false;
+					$val["add.taxable_salary"] = false;
+					$val["deduct.taxable_salary"] = false;
+					$val["add.net_pay"] = false;
+					$val["deduct.net_pay"] = true;
 			
-		// 			array_push($return->_breakdown, $val);
-		// 			$val = null;
-		// 		}
-		// 	}
-		// }
+					array_push($return->_breakdown, $val);
+					$val = null;
+				}
+			}
+		}
 
 
 		$deduction = Payroll::getdeductionv2($employee_id, $start_date, $period_category_arr['period_category'], $period_category, $shop_id);

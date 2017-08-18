@@ -204,63 +204,63 @@
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
 							<a href="/themes/{{ $shop_theme }}/img/gallery-sample1.png" data-title="" data-lightbox="company-gallery">
-								<img src="{{ get_content($shop_theme_info, "home", "home_division_6_img1") }}" alt="">
+								<img src="/themes/{{ $shop_theme }}/img/gallery-sample1.png" alt="">
 							</a>
 						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
 							<a href="/themes/{{ $shop_theme }}/img/gallery-sample2.png" data-title="" data-lightbox="company-gallery">
-								<img src="{{ get_content($shop_theme_info, "home", "home_division_6_img2") }}" alt="">
+								<img src="/themes/{{ $shop_theme }}/img/gallery-sample2.png" alt="">
 							</a>
 						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
 							<a href="/themes/{{ $shop_theme }}/img/gallery-sample3.png" data-title="" data-lightbox="company-gallery">
-								<img src="{{ get_content($shop_theme_info, "home", "home_division_6_img3") }}" alt="">
+								<img src="/themes/{{ $shop_theme }}/img/gallery-sample3.png" alt="">
 							</a>
 						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
 							<a href="/themes/{{ $shop_theme }}/img/gallery-sample4.png" data-title="" data-lightbox="company-gallery">
-								<img src="{{ get_content($shop_theme_info, "home", "home_division_6_img4") }}" alt="">
+								<img src="/themes/{{ $shop_theme }}/img/gallery-sample4.png" alt="">
 							</a>
 						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
 							<a href="/themes/{{ $shop_theme }}/img/gallery-sample5.png" data-title="" data-lightbox="company-gallery">
-								<img src="{{ get_content($shop_theme_info, "home", "home_division_6_img5") }}" alt="">
+								<img src="/themes/{{ $shop_theme }}/img/gallery-sample5.png" alt="">
 							</a>
 						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
 							<a href="/themes/{{ $shop_theme }}/img/gallery-sample6.png" data-title="" data-lightbox="company-gallery">
-								<img src="{{ get_content($shop_theme_info, "home", "home_division_6_img6") }}" alt="">
+								<img src="/themes/{{ $shop_theme }}/img/gallery-sample6.png" alt="">
 							</a>
 						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
 							<a href="/themes/{{ $shop_theme }}/img/gallery-sample7.png" data-title="" data-lightbox="company-gallery">
-								<img src="{{ get_content($shop_theme_info, "home", "home_division_6_img7") }}" alt="">
+								<img src="/themes/{{ $shop_theme }}/img/gallery-sample7.png" alt="">
 							</a>
 						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
 							<a href="/themes/{{ $shop_theme }}/img/gallery-sample8.png" data-title="" data-lightbox="company-gallery">
-								<img src="{{ get_content($shop_theme_info, "home", "home_division_6_img8") }}" alt="">
+								<img src="/themes/{{ $shop_theme }}/img/gallery-sample8.png" alt="">
 							</a>
 						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
 							<a href="/themes/{{ $shop_theme }}/img/gallery-sample9.png" data-title="" data-lightbox="company-gallery">
-								<img src="{{ get_content($shop_theme_info, "home", "home_division_6_img9") }}" alt="">
+								<img src="/themes/{{ $shop_theme }}/img/gallery-sample9.png" alt="">
 							</a>
 						</div>
 					</div>
@@ -349,7 +349,7 @@
 	<div class="fullscreen background parallax" style="background-image: url('/themes/{{ $shop_theme }}/img/subscribe-bg3.png');" data-img-width="1366" data-img-height="400" data-diff="100">
 		<div class="container">
 			<div class="bot-container-1">
-				<h1>Subscribe For Promos and Update</h1>
+				<h1>{{ get_content($shop_theme_info, "home", "home_division_7_banner") }}</h1>
 				<div class="input-container">
 					<input class="subscribe-input" type="text" name="" placeholder="Email">
 					<div class="subscribe-button">Subscribe</div>

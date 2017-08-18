@@ -59,19 +59,19 @@
 		{
 			"label":"Division 3 Title",
 			"type":"textbox",
-			"default":"KEY COMPONENTS",
+			"default":"Featured Products",
 			"size":"12"
 		},
 		"home_division4_img1" :
 		{
-			"label":"Division 4 Image 1",
+			"label":"Division 4 Image 1 (Minimum Dimension 823x419)",
 			"type":"image",
 			"default":"/themes/3xcell/img/supplement-cat-2.png",
 			"size":"6"
 		},
 		"home_division4_img2" :
 		{
-			"label":"Division 4 Image 2",
+			"label":"Division 4 Image 2 (Minimum Dimension 823x419)",
 			"type":"image",
 			"default":"/themes/3xcell/img/healthy-drink-cat-2.png",
 			"size":"6"
@@ -92,21 +92,21 @@
 		},
 		"home_division_4_img3" :
 		{
-			"label":"Division 4 Image 3",
+			"label":"Division 4 Image 3 (Minimum Dimension 823x419)",
 			"type":"image",
 			"default":"/themes/3xcell/img/beauty-cat-2.png",
 			"size":"6"
 		},
 		"home_division_4_img4" :
 		{
-			"label":"Division 4 Image 4",
+			"label":"Division 4 Image 4 (Minimum Dimension 412x419)",
 			"type":"image",
 			"default":"/themes/3xcell/img/package-cat-2.png",
 			"size":"3"
 		},
 		"home_division_4_img5" :
 		{
-			"label":"Division 4 Image 5",
+			"label":"Division 4 Image 5 (Minimum Dimension 823x419)",
 			"type":"image",
 			"default":"/themes/3xcell/img/retail-cat.png",
 			"size":"3"
@@ -181,83 +181,242 @@
 			"default":"Company Images",
 			"size":"12"
 		},
-		"home_division_6_img1" :
+		"home_division_7_banner" :
 		{
-			"label":"Image 1",
-			"type":"image",
-			"default":"/themes/3xcell/img/gallery-sample1.png",
-			"size":"4"
+			"label":"Division 7 Banner",
+			"type":"textbox",
+			"default":"Subscribe for Promos and Update",
+			"size":"12"
 		},
-		"home_division_6_img2" :
+
+		"home_division_7_img" :
 		{
-			"label":"Image 2",
+			"label":"Division 7 Image",
 			"type":"image",
-			"default":"/themes/3xcell/img/gallery-sample2.png",
-			"size":"4"
-		},
-		"home_division_6_img3" :
-		{
-			"label":"Image 3",
-			"type":"image",
-			"default":"/themes/3xcell/img/gallery-sample3.png",
-			"size":"4"
-		},
-		"home_division_6_img4" :
-		{
-			"label":"Image 4",
-			"type":"image",
-			"default":"/themes/3xcell/img/gallery-sample4.png",
-			"size":"4"
-		},
-		"home_division_6_img5" :
-		{
-			"label":"Image 5",
-			"type":"image",
-			"default":"/themes/3xcell/img/gallery-sample5.png",
-			"size":"4"
-		},
-		"home_division_6_img6" :
-		{
-			"label":"Image 6",
-			"type":"image",
-			"default":"/themes/3xcell/img/gallery-sample6.png",
-			"size":"4"
-		},
-		"home_division_6_img7" :
-		{
-			"label":"Image 7",
-			"type":"image",
-			"default":"/themes/3xcell/img/gallery-sample7.png",
-			"size":"4"
-		},
-		"home_division_6_img8" :
-		{
-			"label":"Image 8",
-			"type":"image",
-			"default":"/themes/3xcell/img/gallery-sample8.png",
-			"size":"4"
-		},
-		"home_division_6_img9" :
-		{
-			"label":"Image 9",
-			"type":"image",
-			"default":"/themes/3xcell/img/gallery-sample9.png",
-			"size":"4"
+			"default":"/themes/3xcell/img/healthy-people.png",
+			"size":"6"
 		},
 		"home_division_7_title" :
 		{
 			"label":"Division 7 Title",
 			"type":"textbox",
 			"default":"Live Healthy, Be Wealthy!",
-			"size":"12"
+			"size":"6"
 		},
 		"home_division_7_description" :
 		{
 			"label":"Division 7 Description",
 			"type":"textarea",
 			"default":"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. ",
-			"size":"12"
+			"size":"6"
 		}
+	},
+		"history":
+	{
+		"history_banner_img" :
+		{
+			"label":"Banner Image",
+			"type":"image",
+			"default":"",
+			"size":"12"
+		},
+		"history_banner_title" :
+		{
+			"label":"Banner Title",
+			"type":"textbox",
+			"default":"Our History",
+			"size":"6"
+		},
+		"history_content_title" :
+		{
+			"label":"Main Title",
+			"type":"textbox",
+			"default":"About 3XCELL",
+			"size":"12"
+		},
+		"history_content_description" :
+		{
+			"label":"Main Decription",
+			"type":"tinymce",
+			"default":"It was in 2004 when the principal incorporator of the company, who is then and now into logistics and trading business started joining network marketing companies. He has seen the beauty of how a network of people worked together to attain a company’s goal with the freedom of time and financial entitlement.",
+			"size":"8"
+		},
+		"history_content_img" :
+		{
+			"label":"content Image",
+			"type":"image",
+			"default":"/themes/3xcell/img/founder-img.png",
+			"size":"4"
+		},
+		"history_vision_description" :
+		{
+			"label":"Vision Description",
+			"type":"textarea",
+			"default":"To be an instrument of inspiration to others through the knowledge of leveraging time, money and effort. ",
+			"size":"6"
+		},
+		"history_mission_description" :
+		{
+			"label":"Mission Description",
+			"type":"textarea",
+			"default":"To influence and empower others in achieving goal to be healthy and wealthy with the freedom of time especially in today’s very crowded populace.",
+			"size":"6"
+		}
+	},
+	"How-To-Join":
+	{
+		"howtojoin_banner_img" :
+		{
+			"label":"Banner Image (Minimum Dimension 1600x659)",
+			"type":"image",
+			"default":"/themes/3xcell/img/how-to-join-bg.png",	
+			"size":"12"
+		},
+		"howtojoin_banner_title" :
+		{
+			"label":"Banner Title",
+			"type":"textbox",
+			"default":"How To Join",
+			"size":"12"
+		},
+		"howtojoin_banner_description" :
+		{
+			"label":"Banner Description",
+			"type":"textbox",
+			"default":"There are three ways to be a 3xcell-E distributor",
+			"size":"12"
+		},
+		"howtojoin_division1_title" :
+		{
+			"label":" Division 1 Title",
+			"type":"textbox",
+			"default":"Be a Retailer ",
+			"size":"12"
+		},
+		"howtojoin_division1_description" :
+		{
+			"label":" Division 1 Description",
+			"type":"tinymce",
+			"default":"Insert Text Here",
+			"size":"6"
+		},
+		"howtojoin_division1_img" :
+		{
+			"label":" Division 1 Image",
+			"type":"image",
+			"default":"/themes/3xcell/img/retail-img.png",
+			"size":"6"
+		},
+		"howtojoin_division2_title" :
+		{
+			"label":" Division 2 Title",
+			"type":"textbox",
+			"default":"Be a FULL PLEDGED DISTRIBUTOR",
+			"size":"12"
+		},
+		"howtojoin_division2_description" :
+		{
+			"label":" Division 2 Description",
+			"type":"tinymce",
+			"default":"Insert Text Here",
+			"size":"6"
+		},
+		"howtojoin_division2_img" :
+		{
+			"label":" Division 2 Image",
+			"type":"image",
+			"default":"/themes/3xcell/img/full-pledge.png",
+			"size":"6"
+		},
+		"howtojoin_division3_title" :
+		{
+			"label":" Division 3 Title",
+			"type":"textbox",
+			"default":"Insert Text Here",
+			"size":"12"
+		},
+		"howtojoin_division3_description" :
+		{
+			"label":" Division 3 Description",
+			"type":"tinymce",
+			"default":"Insert Text Here",
+			"size":"6"
+		}
+	},
+		"contact":
+	{
+		
+		"contactus_banner_title" :
+		{
+			"label":"Banner Title",
+			"type":"textbox",
+			"default":"Contact Us",
+			"size":"12"
+		},
+		"contactus_office1" :
+		{
+			"label":"Head Quarters 1",
+			"type":"textbox",
+			"default":"PRINCIPAL OFFICE",
+			"size":"6"
+		},
+		"contactus_office1_address" :
+		{
+			"label":"Head Quarters 1 Address",
+			"type":"textarea",
+			"default":"Vicar's Bldg. #31 Visayas Avenue Corner Road 1 Vasra, Quezon City ",
+			"size":"6"
+		},
+		"contactus_office2" :
+		{
+			"label":"Head Quarters 2",
+			"type":"textbox",
+			"default":"GENSAN BRANCH OFFICE",
+			"size":"6"
+		},
+		"contactus_office2_address" :
+		{
+			"label":"Head Quarters 2 Address",
+			"type":"textarea",
+			"default":"Door #2 Perla Compania de Seguros Bldg. Jp. Laurel East, Corner Sampaguita Street, General Santos City",
+			"size":"6"
+		},
+		"contactus_phone_number" :
+		{
+			"label":"Phone Number",
+			"type":"textbox",
+			"default":"+63 2 518 8637",
+			"size":"12"
+		},
+		"contactus_email" :
+		{
+			"label":"Email Address",
+			"type":"textbox",
+			"default":"sales@3xcell.com",
+			"size":"12"
+		},
+		
+		"contactus_business_hours" :
+		{
+			"label":"Business Hours Title",
+			"type":"textbox",
+			"default":"BUSINESS HOURS",
+			"size":"12"
+		},
+		"contactus_google_map1" :
+		{
+			"label":"Google Map Office 1",
+			"type":"textbox",
+			"default":"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15439.672607472603!2d121.03694842734843!3d14.660586160660534!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b719dcc15bd1%3A0xfd4fe4f1c0982e9a!2sVicars+Building!5e0!3m2!1sen!2sph!4v1501901215371",
+			"size":"6"
+		},
+		"contactus_google_map2" :
+		{
+			"label":"Google Map Office 2",
+			"type":"textbox",
+			"default":"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3967.108523067281!2d125.17183721482861!3d6.116090629461948!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x32f79fa64c22dedb%3A0xd952833de2ffdf90!2sPerla+Insurance!5e0!3m2!1sen!2sph!4v1501901631315",
+			"size":"6"
+		}
+		
 	}
-
 }

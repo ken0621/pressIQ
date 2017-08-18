@@ -3,7 +3,7 @@
 <div class="content">
 	<div class="top-1-container">
 		<div class="container">
-			<div class="title-container">Contact Us</div>
+			<div class="title-container">{{ get_content($shop_theme_info, "contact", "contactus_banner_title") }}</div>
 		</div>
 	</div>
 	<div class="top-2-container">
@@ -45,26 +45,23 @@
 				<div class="col-md-6">
 					<div class="title-container">Location</div>
 					<div class="location-content-container">
-						<div class="title-2-container">PRINCIPAL OFFICE</div>
+						<div class="title-2-container">{{ get_content($shop_theme_info, "contact", "contactus_office1") }}</div>
 						<div class="detail-container">
-							Vicar's Bldg. #31 Visayas Avenue Corner Road 1 Vasra, Quezon City
+							{{ get_content($shop_theme_info, "contact", "contactus_office1_address") }}
 						</div>
-						<div class="title-2-container">GENSAN BRANCH OFFICE</div>
+						<div class="title-2-container">{{ get_content($shop_theme_info, "contact", "contactus_office2") }}</div>
 						<div class="detail-container">
-							Door #2 Perla Compania de Seguros Bldg.
-							Jp. Laurel East, Corner Sampaguita Street,
-							General Santos City 
+							{{ get_content($shop_theme_info, "contact", "contactus_office2_address") }}
 						</div>
 						<div class="detail-container">
-							<span><i class="fa fa-mobile" aria-hidden="true" style="font-size: 25px; color: #1c1c1c;"></i>&nbsp;&nbsp;</span><span>+63 2 518 8637</span>
+							<span><i class="fa fa-mobile" aria-hidden="true" style="font-size: 25px; color: #1c1c1c;"></i>&nbsp;&nbsp;</span><span>{{ get_content($shop_theme_info, "contact", "contactus_phone_number") }}</span>
 						</div>
 						<div class="detail-container">
-							<span><i class="fa fa-envelope" aria-hidden="true" style="font-size: 13px; color: #1c1c1c;"></i>&nbsp;&nbsp;</span><span>sales@3xcell.com</span>
+							<span><i class="fa fa-envelope" aria-hidden="true" style="font-size: 13px; color: #1c1c1c;"></i>&nbsp;&nbsp;</span><span>{{ get_content($shop_theme_info, "contact", "contactus_email") }}</span>
 						</div>
 						<div class="title-2-container">BUSINESS HOURS</div>
 						<div class="detail-container">
-							<span><i class="fa fa-clock-o" aria-hidden="true" style="font-size: 15px; color: #1c1c1c;"></i>&nbsp;&nbsp;</span><span>Mon-Fri - 8am-6pm
-							, Sat - 9am-6pm</span>
+							<span><i class="fa fa-clock-o" aria-hidden="true" style="font-size: 15px; color: #1c1c1c;"></i>&nbsp;&nbsp;</span><span>{{ get_content($shop_theme_info, "contact", "contactus_business_hours") }}</span>
 						</div>
 					</div>
 				</div>

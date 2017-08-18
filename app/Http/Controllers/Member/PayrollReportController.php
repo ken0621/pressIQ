@@ -106,4 +106,6 @@ class PayrollReportController extends Member
 		$data["employee_info"] = Tbl_payroll_employee_basic::where("payroll_employee_id",$employee_id)->first();
 		return view("member.payroll.modal.modal_loan_summary", $data);
 	}
+
+	
 }

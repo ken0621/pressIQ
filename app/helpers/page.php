@@ -63,6 +63,23 @@ function page_list()
     // $nav[$page]['submenu'][$code]['developer'] = "Erwin Guevara";
 
     /* E-COMMERCE */
+    $page = "cashier";  
+    $nav[$page]['name'] = "Cashier";
+    $nav[$page]['segment'] = $page;
+    $nav[$page]['icon'] = "calculator";
+    $nav[$page]['type']     = "menu";
+
+    /* -- E-COMMERCE => PRODUCT ORDERS */
+    $code = "cashier-pos";
+    $nav[$page]['submenu'][$code]['label'] = "Point of Sale";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/pos";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "90% Working";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Erwin Guevara</span>";  
+
+
+    /* E-COMMERCE */
     $page = "ecommerce";  
     $nav[$page]['name'] = "E-Commerce";
     $nav[$page]['segment'] = $page;

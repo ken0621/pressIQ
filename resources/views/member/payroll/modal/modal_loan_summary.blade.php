@@ -1,11 +1,19 @@
 
 <input type="number" name="count" value="{{ $count=0 }}" class="hidden">
+
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">×</button>
     <h4 class="modal-title"><b>LOAN SUMMARY</b> &raquo; {{ $employee_info->payroll_employee_first_name }} {{ $employee_info->payroll_employee_last_name }} (Employee No. {{ $employee_info->payroll_employee_number == "" ? "00" : $employee_info->payroll_employee_number }}) </h4>
 </div>
 
+
+       
+ 
+
 <div class="modal-body clearfix employee-timesheet-modal">
+<div>
+     <button type="button" class="btn btn-success pull-right create-excel">EXPORT</button>
+</div>
     <div class="col-md-12" style="text-align: left; font-weight: normal; margin-bottom: 10px; font-size: 16px;"></div>
     <div class="clearfix">
         <div class="col-md-12">

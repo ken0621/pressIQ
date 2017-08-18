@@ -101,11 +101,12 @@ class PayrollReportController extends Member
 
 	public function modal_loan_summary($employee_id,$payroll_deduction_id)
 	{
-		$data["employee_id"] = $employee_id;
-		$data["_loan_data"]=PayrollDeductionController::get_deduction_payment(0,$employee_id,$payroll_deduction_id);
-		$data["employee_info"] = Tbl_payroll_employee_basic::where("payroll_employee_id",$employee_id)->first();
+		$data["employee_id"]   			= $employee_id;
+		$data["payroll_deduction_id"]   = $payroll_deduction_id;
+		$data["_loan_data"]    			= PayrollDeductionController::get_deduction_payment(0,$employee_id,$payroll_deduction_id);
+		$data["employee_info"] 			= Tbl_payroll_employee_basic::where("payroll_employee_id",$employee_id)->first();
 		return view("member.payroll.modal.modal_loan_summary", $data);
 	}
 
-	
+
 }

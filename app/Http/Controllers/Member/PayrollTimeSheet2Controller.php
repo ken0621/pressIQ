@@ -212,7 +212,8 @@ class PayrollTimeSheet2Controller extends Member
 
 	public function unapprove($period_id, $employee_id)
 	{
-		$compute_cutoff = $this->compute_whole_cutoff($period_id, $employee_id);
+		$unapproved = true;
+		$compute_cutoff = $this->compute_whole_cutoff($period_id, $employee_id, $unapproved);
 		$check_approved = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->first();
 		
 		if($check_approved)
@@ -799,7 +800,7 @@ class PayrollTimeSheet2Controller extends Member
 
 		return $data;
 	}
-	public function compute_whole_cutoff($period_company_id, $employee_id)
+	public function compute_whole_cutoff($period_company_id, $employee_id,$unapproved = false)
 	{
 		/* COMPUTATION FOR CUTOFF */
 		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
@@ -835,6 +836,8 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			$timesheet_db = $this->timesheet_info_db($employee_id, $from);
 			$_timesheet[$from] = Payroll2::timesheet_process_daily_info($employee_id, $from, $timesheet_db, $period_company_id);
+			
+			//check if approved
 
 			if(!isset($timesheet_db))
 			{

@@ -448,7 +448,6 @@ class PayrollDeductionController extends Member
           return json_encode($return);
      }
 
-
      public static function get_deduction($shop_id = 0, $employee_id = 0, $deduction_id = 0)
      {
           $data = Tbl_payroll_deduction_payment_v2::getallinfo($shop_id,0,0)->get();

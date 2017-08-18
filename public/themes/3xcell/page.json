@@ -11,7 +11,253 @@
 				{"name":"title", "type":"text"},
 				{"name":"subtitle", "type":"text"}
 			],
+			"size":"12"
+		},
+		"home_top_left_title" :
+		{
+			"label":"Blue Box",
+			"type":"textbox",
+			"default":"Who We Are",
+			"size":"4"
+		},
+		"home_top_middle_title" :
+		{
+			"label":"Green Box",
+			"type":"textbox",
+			"default":"Opportunity",
+			"size":"4"
+		},
+		"home_top_right_title" :
+		{
+			"label":"Red Box",
+			"type":"textbox",
+			"default":"Buah Merah",
+			"size":"4"
+		},
+		"home_top_left_description" :
+		{
+			"label":"Blue Box Description",
+			"type":"textarea",
+			"default":"3xcell-E Sales & Marketing Inc. is composed of five dynamic individuals who share the same motivation and common values strengthened and lead by their principal incorporator. .",
+			"size":"4"
+		},
+		"home_top_middle_description" :
+		{
+			"label":"Green Box Description",
+			"type":"tinymce",
+			"default":"insert text here",
+			"size":"4"
+		},
+		"home_top_right_description" :
+		{
+			"label":"Red Box Description",
+			"type":"textarea",
+			"default":"Until now, red fruit still used by Papua's people. Most of the population that consume red fruit, wether in pasta for daily food and also the oil. ",
+			"size":"4"
+		},
+		"home_division_3_title" :
+		{
+			"label":"Division 3 Title",
+			"type":"textbox",
+			"default":"KEY COMPONENTS",
+			"size":"12"
+		},
+		"home_division4_img1" :
+		{
+			"label":"Division 4 Image 1",
+			"type":"image",
+			"default":"/themes/3xcell/img/supplement-cat-2.png",
 			"size":"6"
+		},
+		"home_division4_img2" :
+		{
+			"label":"Division 4 Image 2",
+			"type":"image",
+			"default":"/themes/3xcell/img/healthy-drink-cat-2.png",
+			"size":"6"
+		},
+		"home_division_4_img1_Description" :
+		{
+			"label":"Image 1 Description",
+			"type":"textbox",
+			"default":"Food Supplement",
+			"size":"6"
+		},
+		"home_division_4_img2_Description" :
+		{
+			"label":"Image 2 Description",
+			"type":"textbox",
+			"default":"Healthy Drinks",
+			"size":"6"
+		},
+		"home_division_4_img3" :
+		{
+			"label":"Division 4 Image 3",
+			"type":"image",
+			"default":"/themes/3xcell/img/beauty-cat-2.png",
+			"size":"6"
+		},
+		"home_division_4_img4" :
+		{
+			"label":"Division 4 Image 4",
+			"type":"image",
+			"default":"/themes/3xcell/img/package-cat-2.png",
+			"size":"3"
+		},
+		"home_division_4_img5" :
+		{
+			"label":"Division 4 Image 5",
+			"type":"image",
+			"default":"/themes/3xcell/img/retail-cat.png",
+			"size":"3"
+		},
+		"home_division_4_img3_Description" :
+		{
+			"label":"Image 3 Description",
+			"type":"textbox",
+			"default":"Beauty Skin Care",
+			"size":"6"
+		},
+		"home_division_4_img4_Description" :
+		{
+			"label":"Image 4 Description",
+			"type":"textbox",
+			"default":"Business Package",
+			"size":"3"
+		},
+		"home_division_4_img5_Description" :
+		{
+			"label":"Image 5 Description",
+			"type":"textbox",
+			"default":"Retail Package",
+			"size":"3"
+		},
+		"home_division_5_left_title" :
+		{
+			"label":"Division 5 Left Title",
+			"type":"textbox",
+			"default":"TRUSTED",
+			"size":"4"
+		},
+		"home_division_5_middle_title" :
+		{
+			"label":"Division 5 Middle Title",
+			"type":"textbox",
+			"default":"QUALITY PRODUCTS",
+			"size":"4"
+		},
+		"home_division_5_right_title" :
+		{
+			"label":"Division 5 Right Title",
+			"type":"textbox",
+			"default":"FAST SHIPPING",
+			"size":"4"
+		},
+		"home_division_5_left_description" :
+		{
+			"label":"Division 5 Left Description",
+			"type":"textarea",
+			"default":"Secured transactions Satisfaction Guaranteed ",
+			"size":"4"
+		},
+		"home_division_5_middle_description" :
+		{
+			"label":"Division 5 Middle Description",
+			"type":"textarea",
+			"default":"We assure that we provide the best protection and wuality at amazing prices. This is the ultimate protection. ",
+			"size":"4"
+		},
+		"home_division_5_right_description" :
+		{
+			"label":"Division 5 Right Description",
+			"type":"textarea",
+			"default":"Fast Delivery on all places locally ",
+			"size":"4"
+		},
+		"home_division_6_title" :
+		{
+			"label":"Division 6 Title",
+			"type":"textbox",
+			"default":"Company Images",
+			"size":"12"
+		},
+		"home_division_6_img1" :
+		{
+			"label":"Image 1",
+			"type":"image",
+			"default":"/themes/3xcell/img/gallery-sample1.png",
+			"size":"4"
+		},
+		"home_division_6_img2" :
+		{
+			"label":"Image 2",
+			"type":"image",
+			"default":"/themes/3xcell/img/gallery-sample2.png",
+			"size":"4"
+		},
+		"home_division_6_img3" :
+		{
+			"label":"Image 3",
+			"type":"image",
+			"default":"/themes/3xcell/img/gallery-sample3.png",
+			"size":"4"
+		},
+		"home_division_6_img4" :
+		{
+			"label":"Image 4",
+			"type":"image",
+			"default":"/themes/3xcell/img/gallery-sample4.png",
+			"size":"4"
+		},
+		"home_division_6_img5" :
+		{
+			"label":"Image 5",
+			"type":"image",
+			"default":"/themes/3xcell/img/gallery-sample5.png",
+			"size":"4"
+		},
+		"home_division_6_img6" :
+		{
+			"label":"Image 6",
+			"type":"image",
+			"default":"/themes/3xcell/img/gallery-sample6.png",
+			"size":"4"
+		},
+		"home_division_6_img7" :
+		{
+			"label":"Image 7",
+			"type":"image",
+			"default":"/themes/3xcell/img/gallery-sample7.png",
+			"size":"4"
+		},
+		"home_division_6_img8" :
+		{
+			"label":"Image 8",
+			"type":"image",
+			"default":"/themes/3xcell/img/gallery-sample8.png",
+			"size":"4"
+		},
+		"home_division_6_img9" :
+		{
+			"label":"Image 9",
+			"type":"image",
+			"default":"/themes/3xcell/img/gallery-sample9.png",
+			"size":"4"
+		},
+		"home_division_7_title" :
+		{
+			"label":"Division 7 Title",
+			"type":"textbox",
+			"default":"Live Healthy, Be Wealthy!",
+			"size":"12"
+		},
+		"home_division_7_description" :
+		{
+			"label":"Division 7 Description",
+			"type":"textarea",
+			"default":"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. ",
+			"size":"12"
 		}
 	}
+
 }

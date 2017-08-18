@@ -16,11 +16,11 @@
 					<div class="box1-container">
 						<div class="title-container">
 							<span class="info-icon"><img src="/themes/{{ $shop_theme }}/img/people-icon.png"></span>
-							<span class="info-title">Who We Are</span>	
+							<span class="info-title">{{ get_content($shop_theme_info, "home", "home_top_left_title") }}</span>	
 						</div>
 						<div class="context-container">
 							<p>
-								3xcell-E Sales & Marketing Inc. is composed of five dynamic individuals who share the same motivation and common values strengthened and lead by their principal incorporator.
+								{{ get_content($shop_theme_info, "home", "home_top_left_description") }}
 							</p>
 						</div>
 						<a href="/history"><div class="small-button">Read More</div></a>
@@ -32,10 +32,8 @@
 							<span class="info-icon"><img src="/themes/{{ $shop_theme }}/img/handshake-icon.png"></span>
 							<span class="info-title">Opportunity</span>	
 						</div>
-						<div class="context-container">
-							<div><span><img src="/themes/{{ $shop_theme }}/img/check-icon.png"></span><span>&nbsp;BE A RETAILER</span></div>
-							<div><span><img src="/themes/{{ $shop_theme }}/img/check-icon.png"></span><span>&nbsp;BE A FULL PLEDGE DISTRIBUTOR</span></div>
-							<div><span><img src="/themes/{{ $shop_theme }}/img/check-icon.png"></span><span>&nbsp;AVAIL OF THE LAY-AWAY PROGRAM</span></div>
+						<div class="context-container">							
+								<div>{!! get_content($shop_theme_info, "home", "home_top_middle_description") !!}</div>
 						</div>
 						<a href="/how_to_join"><div class="small-button">Know More</div></a>
 					</div>
@@ -48,7 +46,8 @@
 						</div>
 						<div class="context-container">
 							<p>
-								Until now, red fruit still used by Papua's people. Most of the population that consume red fruit, wether in pasta for daily food and also the oil. 
+								{{ get_content($shop_theme_info, "home", "home_top_right_description") }}
+
 							</p>
 						</div>
 						<a href="/about_red_fruit"><div class="small-button">Learn More</div></a>
@@ -62,7 +61,7 @@
 		<div class="container">
 			<div class="featured-prod-container">
 				<div class="title-container">
-					Featured Products
+					{{ get_content($shop_theme_info, "home", "home_division_3_title") }}
 				</div>
 				<div class="prod-container row clearfix">
 					<div class="col-md-6">
@@ -73,12 +72,12 @@
 								<div class="medium-button blue-button">SHOP NOW</div>								
 							</div>
 							<div class="hover-bg"></div>
-							<img src="/themes/{{ $shop_theme }}/img/supplement-cat-2.png">
+							<img src="{{ get_content($shop_theme_info, "home", "home_division4_img1") }}">
 							<div class="bg-overlay">
 								<img src="/themes/{{ $shop_theme }}/img/black-overlay.png">
 							</div>
 							<div class="detail-container">
-								<span>Food Supplement</span>
+								<span>{{ get_content($shop_theme_info, "home", "home_division_4_img1_Description") }}</span>
 							</div>
 							<!-- <div class="medium-button">Shop Now</div> -->
 						</div>
@@ -89,12 +88,12 @@
 								<div class="medium-button red-button">SHOP NOW</div>								
 							</div>
 							<div class="hover-bg"></div>
-							<img src="/themes/{{ $shop_theme }}/img/beauty-cat-2.png">
+							<img src="{{ get_content($shop_theme_info, "home", "home_division_4_img3") }}">
 							<div class="bg-overlay">
 								<img src="/themes/{{ $shop_theme }}/img/black-overlay.png">
 							</div>
 							<div class="detail-container">
-								<span>Beauty Skin Care</span>
+								<span>{{ get_content($shop_theme_info, "home", "home_division_4_img3_Description") }}</span>
 							</div>
 							<!-- <div class="medium-button">Shop Now</div> -->
 						</div>
@@ -107,12 +106,12 @@
 								<div class="medium-button green-button">SHOP NOW</div>								
 							</div>
 							<div class="hover-bg"></div>
-							<img src="/themes/{{ $shop_theme }}/img/healthy-drink-cat-2.png">
+							<img src="{{ get_content($shop_theme_info, "home", "home_division4_img2") }}">
 							<div class="bg-overlay">
 								<img src="/themes/{{ $shop_theme }}/img/black-overlay.png">
 							</div>
 							<div class="detail-container">
-								<span>Healthy Drinks</span>
+								<span>{{ get_content($shop_theme_info, "home", "home_division_4_img2_Description") }} </span>
 							</div>
 							<!-- <div class="medium-button">Shop Now</div> -->
 						</div>
@@ -125,12 +124,12 @@
 										<div class="medium-button blue-button gray-button-short">SHOP NOW</div>								
 									</div>
 									<div class="hover-bg"></div>
-									<img src="/themes/{{ $shop_theme }}/img/package-cat-2.png">
+									<img src="{{ get_content($shop_theme_info, "home", "home_division_4_img4") }}">
 									<div class="bg-overlay">
 										<img src="/themes/{{ $shop_theme }}/img/black-overlay.png">
 									</div>
 									<div class="detail-container">
-										<span>Business Package</span>
+										<span>{{ get_content($shop_theme_info, "home", "home_division_4_img4_Description") }}</span>
 									</div>
 									<!-- <div class="medium-button button-short">Shop Now</div> -->
 								</div>
@@ -143,12 +142,12 @@
 										<div class="medium-button green-button gray-button-short">SHOP NOW</div>								
 									</div>
 									<div class="hover-bg"></div>
-									<img src="/themes/{{ $shop_theme }}/img/retail-cat.png">
+									<img src="{{ get_content($shop_theme_info, "home", "home_division_4_img5") }}">
 									<div class="bg-overlay">
 										<img src="/themes/{{ $shop_theme }}/img/black-overlay.png">
 									</div>
 									<div class="detail-container">
-										<span>Retail Package</span>
+										<span>{{ get_content($shop_theme_info, "home", "home_division_4_img5_Description") }}</span>
 									</div>
 									<!-- <div class="medium-button button-short">Shop Now</div> -->
 								</div>
@@ -168,31 +167,27 @@
 					<div class="col-md-4">
 						<div class="per-brand">
 							<img src="/themes/{{ $shop_theme }}/img/shield-icon.png">
-							<h1>TRUSTED</h1>
+							<h1>{{ get_content($shop_theme_info, "home", "home_division_5_left_title") }}</h1>
 							<h2>
-								Secured transactions
-								Satisfaction Guaranteed
+								{{ get_content($shop_theme_info, "home", "home_division_5_left_description") }}
 							</h2>
 						</div>
 					</div>
 					<div class="col-md-4">
 						<div class="per-brand">
 							<img src="/themes/{{ $shop_theme }}/img/quality-icon.png">
-							<h1>QUALITY PRODUCTS</h1>
+							<h1>{{ get_content($shop_theme_info, "home", "home_division_5_middle_title") }} </h1>
 							<h2>
-								We assure that we provide the best
-								protection and wuality at amazing prices. 
-								This is the ultimate protection.
+								{{ get_content($shop_theme_info, "home", "home_division_5_middle_description") }}
 							</h2>
 						</div>
 					</div>
 					<div class="col-md-4">
 						<div class="per-brand">
 							<img src="/themes/{{ $shop_theme }}/img/cart-icon.png">
-							<h1>FAST SHIPPING</h1>
+							<h1>{{ get_content($shop_theme_info, "home", "home_division_5_right_title") }}</h1>
 							<h2>
-								Fast Delivery on all
-								places locally
+								{{ get_content($shop_theme_info, "home", "home_division_5_right_description") }}
 							</h2>
 						</div>
 					</div>
@@ -204,68 +199,68 @@
 	<div class="mid-container">
 		<div class="container">
 			<div class="gallery-container">
-				<div class="title-container">Company Images</div>
+				<div class="title-container">{{ get_content($shop_theme_info, "home", "home_division_6_title") }}</div>
 				<div class="image-container row-no-padding clearfix">
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
 							<a href="/themes/{{ $shop_theme }}/img/gallery-sample1.png" data-title="" data-lightbox="company-gallery">
-								<img src="/themes/{{ $shop_theme }}/img/gallery-sample1.png" alt="">
+								<img src="{{ get_content($shop_theme_info, "home", "home_division_6_img1") }}" alt="">
 							</a>
 						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
 							<a href="/themes/{{ $shop_theme }}/img/gallery-sample2.png" data-title="" data-lightbox="company-gallery">
-								<img src="/themes/{{ $shop_theme }}/img/gallery-sample2.png" alt="">
+								<img src="{{ get_content($shop_theme_info, "home", "home_division_6_img2") }}" alt="">
 							</a>
 						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
 							<a href="/themes/{{ $shop_theme }}/img/gallery-sample3.png" data-title="" data-lightbox="company-gallery">
-								<img src="/themes/{{ $shop_theme }}/img/gallery-sample3.png" alt="">
+								<img src="{{ get_content($shop_theme_info, "home", "home_division_6_img3") }}" alt="">
 							</a>
 						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
 							<a href="/themes/{{ $shop_theme }}/img/gallery-sample4.png" data-title="" data-lightbox="company-gallery">
-								<img src="/themes/{{ $shop_theme }}/img/gallery-sample4.png" alt="">
+								<img src="{{ get_content($shop_theme_info, "home", "home_division_6_img4") }}" alt="">
 							</a>
 						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
 							<a href="/themes/{{ $shop_theme }}/img/gallery-sample5.png" data-title="" data-lightbox="company-gallery">
-								<img src="/themes/{{ $shop_theme }}/img/gallery-sample5.png" alt="">
+								<img src="{{ get_content($shop_theme_info, "home", "home_division_6_img5") }}" alt="">
 							</a>
 						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
 							<a href="/themes/{{ $shop_theme }}/img/gallery-sample6.png" data-title="" data-lightbox="company-gallery">
-								<img src="/themes/{{ $shop_theme }}/img/gallery-sample6.png" alt="">
+								<img src="{{ get_content($shop_theme_info, "home", "home_division_6_img6") }}" alt="">
 							</a>
 						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
 							<a href="/themes/{{ $shop_theme }}/img/gallery-sample7.png" data-title="" data-lightbox="company-gallery">
-								<img src="/themes/{{ $shop_theme }}/img/gallery-sample7.png" alt="">
+								<img src="{{ get_content($shop_theme_info, "home", "home_division_6_img7") }}" alt="">
 							</a>
 						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
 							<a href="/themes/{{ $shop_theme }}/img/gallery-sample8.png" data-title="" data-lightbox="company-gallery">
-								<img src="/themes/{{ $shop_theme }}/img/gallery-sample8.png" alt="">
+								<img src="{{ get_content($shop_theme_info, "home", "home_division_6_img8") }}" alt="">
 							</a>
 						</div>
 					</div>
 					<div class="col-md-4 col-padding-2">
 						<div class="per-image-container">
 							<a href="/themes/{{ $shop_theme }}/img/gallery-sample9.png" data-title="" data-lightbox="company-gallery">
-								<img src="/themes/{{ $shop_theme }}/img/gallery-sample9.png" alt="">
+								<img src="{{ get_content($shop_theme_info, "home", "home_division_6_img9") }}" alt="">
 							</a>
 						</div>
 					</div>
@@ -373,9 +368,9 @@
 				</div>
 				<div class="col-md-6">
 					<div class="caption-container">
-						<h1>Live Healthy, Be Wealthy!</h1>
+						<h1>{{ get_content($shop_theme_info, "home", "home_division_7_title") }}</h1>
 						<p>
-							Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.
+							{{ get_content($shop_theme_info, "home", "home_division_7_description") }}
 						</p>
 					</div>
 					<div class="join-button">

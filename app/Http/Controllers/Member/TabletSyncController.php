@@ -406,7 +406,7 @@ class TabletSyncController extends Controller
             $data = Tbl_sir_inventory::get();
             foreach ($data as $key => $value) 
             {
-                $return[$key] = "INSERT INTO tbl_sir_inventory (sir_inventory_id, sir_item_id, inventory_sir_id, sir_inventory_count,sir_inventory_ref_name, sir_inventory_ref_id,created_at,updated_at) VALUES " . "(".$value->sir_inventory_id.",'".$value->sir_item_id."','".$value->inventory_sir_id."','".$value->sir_inventory_count."','".$value->sir_inventory_ref_name."','".$value->sir_inventory_ref_id."','".$value->created_at."','".$value->updated_at."')";
+                $return[$key] = "INSERT INTO tbl_sir_inventory (sir_inventory_id, sir_item_id, inventory_sir_id, sir_inventory_count,sir_inventory_ref_name, sir_inventory_ref_id,created_at,updated_at, is_bundled_item) VALUES " . "(".$value->sir_inventory_id.",'".$value->sir_item_id."','".$value->inventory_sir_id."','".$value->sir_inventory_count."','".$value->sir_inventory_ref_name."','".$value->sir_inventory_ref_id."','".$value->created_at."','".$value->updated_at."',".$value->is_bundled_item.")";
             }
         }
 

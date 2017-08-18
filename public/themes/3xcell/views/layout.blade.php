@@ -36,13 +36,6 @@
         <!-- OTHER CSS -->
         @yield("css")
         <style type="text/css">
-        body
-        {
-            background-image: url('/themes/{{ $shop_theme  }}/img/final.jpg'); 
-            background-size: cover; 
-            background-position: center; 
-            background-attachment: fixed;
-        }
         .content
         {
             background-color: transparent;
@@ -81,11 +74,19 @@
                         <i class="fa fa-google-plus-square" aria-hidden="true"></i>
                     </span>
                 </div> 
+                @if($customer_info_a)
                <div class="login-container">
                    <div class="login-button">
-                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;<i class="fa fa-user" aria-hidden="true"></i></span><span>&nbsp;<a href="/3xcell_login">LOGIN</a></span>
+                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;<i class="fa fa-user" aria-hidden="true"></i></span><span>&nbsp;<a href="/mlm">MY ACCOUNT</a></span>
                    </div>
                </div>
+               @else
+                <div class="login-container">
+                   <div class="login-button">
+                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;<i class="fa fa-user" aria-hidden="true"></i></span><span>&nbsp;<a href="/mlm/login">LOGIN</a></span>
+                   </div>
+               </div>
+               @endif
                <div class="join-us-container">
                    <a>
                        <div class="join-us-button">
@@ -210,165 +211,7 @@
                                 <a class="link-nav"><span><img class="cart-header" src="/themes/{{ $shop_theme }}/img/cart-header.png"></span></a>
                                 <!-- CART DROPDOWN -->
                                 <div class="cart-dropdown" style="display: none;">
-                                    <div class="title-container">
-                                        Cart Summary
-                                    </div>
-                                    <div class="scroll-container">
-                                        <div class="per-order-container">
-                                            <!-- PER ITEM -->
-                                            <div class="per-item-container row-no-padding clearfix">
-                                                <div class="col-md-3">
-                                                    <!-- ITEM IMAGE -->
-                                                    <div class="image-container">
-                                                        <img src="/themes/{{ $shop_theme }}/img/item-sample.png">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-9">
-                                                    <!-- ITEM DETAILS -->
-                                                    <div class="item-detail-container">
-                                                        <div class="item-name text-overflow">Item Name Testing</div>
-                                                        <div class="bottom-detail row clearfix">
-                                                            <div class="col-md-4">
-                                                                <div class="price-container">
-                                                                    <div class="title-price">Price:</div>
-                                                                    <div class="price">PHP 200.00</div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <div class="quantity-container">
-                                                                    <input class="input-quantity" type="number" name="quantity" min="1" step="1" value="1">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <div class="total-container">
-                                                                    <div class="title-price">Total:</div>
-                                                                    <div class="price">PHP 200.00</div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- REMOVE BUTTON -->
-                                                <div class="remove-container"><i class="fa fa-times" aria-hidden="true"></i></div>
-                                            </div>
-                                            <!-- PER ITEM -->
-                                            <div class="per-item-container row-no-padding clearfix">
-                                                <div class="col-md-3">
-                                                    <!-- ITEM IMAGE -->
-                                                    <div class="image-container">
-                                                        <img src="/themes/{{ $shop_theme }}/img/item-sample.png">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-9">
-                                                    <!-- ITEM DETAILS -->
-                                                    <div class="item-detail-container">
-                                                        <div class="item-name text-overflow">Item Name Testing</div>
-                                                        <div class="bottom-detail row clearfix">
-                                                            <div class="col-md-4">
-                                                                <div class="price-container">
-                                                                    <div class="title-price">Price:</div>
-                                                                    <div class="price">PHP 200.00</div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <div class="quantity-container">
-                                                                    <input class="input-quantity" type="number" name="quantity" min="1" step="1" value="1">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <div class="total-container">
-                                                                    <div class="title-price">Total:</div>
-                                                                    <div class="price">PHP 200.00</div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- REMOVE BUTTON -->
-                                                <div class="remove-container"><i class="fa fa-times" aria-hidden="true"></i></div>
-                                            </div>
-                                            <!-- PER ITEM -->
-                                            <div class="per-item-container row-no-padding clearfix">
-                                                <div class="col-md-3">
-                                                    <!-- ITEM IMAGE -->
-                                                    <div class="image-container">
-                                                        <img src="/themes/{{ $shop_theme }}/img/item-sample.png">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-9">
-                                                    <!-- ITEM DETAILS -->
-                                                    <div class="item-detail-container">
-                                                        <div class="item-name text-overflow">Item Name Testing</div>
-                                                        <div class="bottom-detail row clearfix">
-                                                            <div class="col-md-4">
-                                                                <div class="price-container">
-                                                                    <div class="title-price">Price:</div>
-                                                                    <div class="price">PHP 200.00</div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <div class="quantity-container">
-                                                                    <input class="input-quantity" type="number" name="quantity" min="1" step="1" value="1">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <div class="total-container">
-                                                                    <div class="title-price">Total:</div>
-                                                                    <div class="price">PHP 200.00</div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- REMOVE BUTTON -->
-                                                <div class="remove-container"><i class="fa fa-times" aria-hidden="true"></i></div>
-                                            </div>
-                                            <!-- PER ITEM -->
-                                            <div class="per-item-container row-no-padding clearfix">
-                                                <div class="col-md-3">
-                                                    <!-- ITEM IMAGE -->
-                                                    <div class="image-container">
-                                                        <img src="/themes/{{ $shop_theme }}/img/item-sample.png">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-9">
-                                                    <!-- ITEM DETAILS -->
-                                                    <div class="item-detail-container">
-                                                        <div class="item-name text-overflow">Item Name Testing</div>
-                                                        <div class="bottom-detail row clearfix">
-                                                            <div class="col-md-4">
-                                                                <div class="price-container">
-                                                                    <div class="title-price">Price:</div>
-                                                                    <div class="price">PHP 200.00</div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <div class="quantity-container">
-                                                                    <input class="input-quantity" type="number" name="quantity" min="1" step="1" value="1">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <div class="total-container">
-                                                                    <div class="title-price">Total:</div>
-                                                                    <div class="price">PHP 200.00</div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- REMOVE BUTTON -->
-                                                <div class="remove-container"><i class="fa fa-times" aria-hidden="true"></i></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="subtotal-container">
-                                        <div class="title-container">
-                                            TOTAL
-                                            <div class="subtotal">PHP 2,800.00</div>
-                                        </div>
-                                        <a href="/item_checkout" style="text-decoration: none;"><div class="button-checkout">CHECKOUT</div></a>
-                                        <div class="view-cart"><a href="/MyCart"><span><i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;View Cart</span></a></div>
-                                    </div>
+                                    
                                 </div>
                             </li>
                         </ul>
@@ -443,7 +286,7 @@
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/fit-text.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/slick/slick.min.js"></script>
     <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
-    <script type="text/javascript" src="/assets/front/js/global.js"></script>
+    <script type="text/javascript" src="/assets/front/js/globalv2.js"></script>
     <script src="/themes/{{ $shop_theme }}/js/global.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/figuesslider.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/parallax.js"></script>

@@ -15,15 +15,19 @@
 				</div>
 			</div>
 			<div class="albums-content row clearfix">
-				<div class="col-md-4">
-					<a href="/gallery_content" style="text-decoration: none;">
-						<div class="per-album-container">
-							<div class="img-container"><img src="/themes/{{ $shop_theme }}/img/gallery-sample2.png"></div>
-							<div class="album-title-container">Quezon City Main Office Opening and Blessing</div>
-							<div class="album-date-container">Aug. 14 2017</div>
-						</div>
-					</a>
-				</div>
+				@if(is_serialized(get_content($shop_theme_info, "gallery", "gallery_maintenance")))
+					@foreach(unserialize(get_content($shop_theme_info, "gallery", "gallery_maintenance")) as $key => $gallery)
+					<div class="col-md-4">
+						<a href="/gallery_content/{{ $key }}" style="text-decoration: none;">
+							<div class="per-album-container">
+								<div class="img-container"><img src="{{ isJson($gallery["image"]) ? json_decode($gallery["image"])[0]->image_path : '/assets/mlm/img/placeholder.jpg' }}"></div>
+								<div class="album-title-container">{{ $gallery["title"] }}</div>
+								<div class="album-date-container">{{ date("F d, Y", strtotime($gallery["posted"])) }}</div>
+							</div>
+						</a>
+					</div>
+					@endforeach
+				@endif
 			</div>
 		</div>
 	</div>

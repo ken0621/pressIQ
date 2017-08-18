@@ -43,7 +43,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/about_red_fruit', 'Shop\ShopAboutController@about_red_fruit'); //MARK FIGS
 
 	Route::get('/gallery', 'Shop\ShopGalleryController@gallery'); //MARK FIGS
-	Route::get('/gallery_content', 'Shop\ShopGalleryController@gallery_content'); //MARK FIGS
+	Route::get('/gallery_content/{id}', 'Shop\ShopGalleryController@gallery_content'); //MARK FIGS
 	
 	Route::get('/MyCart', 'Shop\ShopMyCartController@MyCart'); //MARK FIGS
 	Route::get('/item_checkout', 'Shop\ShopItemCheckoutController@item_checkout'); //MARK FIGS

@@ -11,14 +11,27 @@
 	<div class="content-container">
 		<div class="container">
 			<div class="title-container">
-				<div class="album-title-container">Quezon City Main Office Opening and Blessing</div>
-				<div class="album-date">Aug. 14 2017</div>
+				<div class="album-title-container">{{ unserialize(get_content($shop_theme_info, "gallery", "gallery_maintenance"))[$id]["title"] }}</div>
+				<div class="album-date">{{ date("F d, Y", strtotime(unserialize(get_content($shop_theme_info, "gallery", "gallery_maintenance"))[$id]["posted"])) }}</div>
 				<div class="line-bot">
 				</div>
 			</div>
 			<div class="albums-content row clearfix">
 				<!-- PER PICTURES -->
-				<div class="col-md-3">
+				@if(isJson(unserialize(get_content($shop_theme_info, "gallery", "gallery_maintenance"))[$id]["image"]))
+					@foreach(json_decode(unserialize(get_content($shop_theme_info, "gallery", "gallery_maintenance"))[$id]["image"]) as $key => $gallery)
+					<div class="col-md-3">
+						<div class="per-album-container">
+							<div class="img-container">
+								<a href="{{ $gallery->image_path }}" data-title="" data-lightbox="company-gallery">
+									<img src="{{ $gallery->image_path }}">
+								</a>
+							</div>
+						</div>
+					</div>
+					@endforeach
+				@endif
+				{{-- <div class="col-md-3">
 					<div class="per-album-container">
 						<div class="img-container">
 							<a href="/themes/{{ $shop_theme }}/img/gallery-sample2.png" data-title="" data-lightbox="company-gallery">
@@ -62,7 +75,7 @@
 							</a>
 						</div>
 					</div>
-				</div>
+				</div> --}}
 			</div>
 		</div>
 	</div>

@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use DB;
+
 use Illuminate\Database\Eloquent\Model;
+
 
 class Tbl_payroll_deduction_payment_v2 extends Model
 {

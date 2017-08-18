@@ -152,7 +152,7 @@ class PayrollTimeSheet2Controller extends Member
 	{
 		$period_info = Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->first();
 
-		// dd($period_info);
+		//dd($period_info);
 		$_deduction = Payroll::getdeductionv2($employee_id, $period_info['payroll_period_start'], $period_info['period_category'], $period_info['period_category'], $period_info['shop_id']);
 
 		foreach ($_deduction['deduction'] as $deduction) 
@@ -212,11 +212,13 @@ class PayrollTimeSheet2Controller extends Member
 
 	public function unapprove($period_id, $employee_id)
 	{
-		$compute_cutoff = $this->compute_whole_cutoff($period_id, $employee_id);
+		$unapproved = true;
+		$compute_cutoff = $this->compute_whole_cutoff($period_id, $employee_id, $unapproved);
 		$check_approved = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->first();
 		
 		if($check_approved)
 		{
+
 			Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->delete();
 		}
 
@@ -798,7 +800,7 @@ class PayrollTimeSheet2Controller extends Member
 
 		return $data;
 	}
-	public function compute_whole_cutoff($period_company_id, $employee_id)
+	public function compute_whole_cutoff($period_company_id, $employee_id,$unapproved = false)
 	{
 		/* COMPUTATION FOR CUTOFF */
 		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
@@ -834,6 +836,8 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			$timesheet_db = $this->timesheet_info_db($employee_id, $from);
 			$_timesheet[$from] = Payroll2::timesheet_process_daily_info($employee_id, $from, $timesheet_db, $period_company_id);
+			
+			//check if approved
 
 			if(!isset($timesheet_db))
 			{
@@ -950,7 +954,7 @@ class PayrollTimeSheet2Controller extends Member
 		$data["time_keeping_approved"] = $check_approved ? true : false;
 		$data["employee_salary"]    =  $this->get_salary($employee_id,$data["start_date"]);
 		$data['access_salary_rate'] =  Utilities::checkAccess('payroll-timekeeping','salary_rates');
-
+		// dd($data);
 		switch ($computation_type)
 		{
 			case "Daily Rate":

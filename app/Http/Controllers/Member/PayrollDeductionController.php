@@ -448,18 +448,9 @@ class PayrollDeductionController extends Member
           return json_encode($return);
      }
 
-
      public static function get_deduction($shop_id = 0, $employee_id = 0, $deduction_id = 0)
      {
-          $data = Tbl_payroll_deduction_payment_v2::where('tbl_payroll_deduction_v2.shop_id',$shop_id)
-          ->join('tbl_payroll_deduction_v2','tbl_payroll_deduction_v2.payroll_deduction_id','=','tbl_payroll_deduction_payment_v2.payroll_deduction_id')
-          ->join('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_deduction_payment_v2.payroll_employee_id')
-          ->select(DB::raw('IFNULL(sum(tbl_payroll_deduction_payment_v2.payroll_payment_amount),0) as total_payment, IFNULL(count(tbl_payroll_deduction_payment_v2.deduction_name),0) as number_of_payment , tbl_payroll_deduction_v2.* , tbl_payroll_employee_basic.*'))
-          ->groupBy('tbl_payroll_deduction_payment_v2.deduction_name','tbl_payroll_deduction_v2.payroll_deduction_id')
-          ->orderBy('tbl_payroll_employee_basic.payroll_employee_id','asc')
-          ->get();
-
-
+          $data = Tbl_payroll_deduction_payment_v2::getallinfo($shop_id,0,0)->get();
           return $data;
      }
 

@@ -4882,7 +4882,7 @@ class PayrollController extends Member
           $update['month_contribution']           = Request::input('month_contribution');
           $update['year_contribution']            = Request::input('year_contribution');
           $update['payroll_release_date']         = date('Y-m-d',strtotime(Request::input("payroll_release_date")));
-
+          //dd($update);
           Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->update($update);
 
           $return['status'] = 'success';

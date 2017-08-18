@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTblPayrollCompanyAddPayrollAccountNo extends Migration
+class UpdateTblPayrollPeriod12345678 extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +12,9 @@ class UpdateTblPayrollCompanyAddPayrollAccountNo extends Migration
      */
     public function up()
     {
-        Schema::table('tbl_payroll_company', function (Blueprint $table) 
+        Schema::table('tbl_payroll_period', function (Blueprint $table) 
         {
-            $table->string("payroll_company_account_no")->nullable();
+           $table->dateTime('updated_at');
         });
     }
 

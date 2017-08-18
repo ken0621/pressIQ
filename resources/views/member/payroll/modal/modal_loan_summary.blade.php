@@ -23,11 +23,14 @@
                     <tbody>
                    		 	
                         	@foreach($_loan_data as $key => $loan_data)
-                        	<td>{{ $count+=1 }}</td>
-                        	<td>{{$loan_data->payroll_payment_period}}</td>
-                        	<td>{{$loan_data->payroll_beginning_balance}}</td>
-                        	<td>{{$loan_data->payroll_total_payment_amount}}</td>
-                        	<td>{{$loan_data->payroll_remaining_balance}}</td>
+                            <tr>
+                                <td>{{ $count+=1 }}</td>
+                                <td>{{$loan_data->payroll_payment_period}}</td>
+                                <td>{{$loan_data->payroll_beginning_balance}}</td>
+                                <td>{{$loan_data->payroll_total_payment_amount}}</td>
+                                <td>{{$loan_data->payroll_remaining_balance}}</td>
+                            </tr>
+                        	
                         	@endforeach
                     </tbody>
                 </table>

@@ -2472,7 +2472,7 @@ class Payroll2
 		return $return;
 	}
 	
-	public static function cutoff_compute_gross_pay($compute_type, $cutoff_rate, $cutoff_cola, $cutoff_target_days=0,  $_date_compute)
+	public static function cutoff_compute_gross_pay($compute_type, $cutoff_rate, $cutoff_cola, $cutoff_target_days = 0,  $_date_compute)
 	{
 		$return = new stdClass();
 		$return->cutoff_income_plus_cola = 0;
@@ -2510,7 +2510,6 @@ class Payroll2
 		else if ($compute_type=="monthly") 
 		{
 
-			
 			$breakdown_deduction		 = 0;
 			$breakdown_addition 		 = 0;
 			$breakdown_subtotal 		 = 0;
@@ -2546,7 +2545,9 @@ class Payroll2
 			/*$cutoff_cola		= $cutoff_income_plus_cola * $cola_percentile;*/
 			
 			//COMPUTE CUTOFF BASIC
-			$deduction	  = $breakdown_deduction * (1 - $cola_percentile);
+
+			$deduction	  = $breakdown_deduction; //error(commented) * (1 - $cola_percentile);
+
 			$cutoff_basic = $cutoff_rate - $deduction;
 			
 			$cutoff_target_days -= $rendered_tardiness;
@@ -4352,7 +4353,6 @@ class Payroll2
 			}
 		}
 
-
 		$deduction = Payroll::getdeductionv2($employee_id, $start_date, $period_category_arr['period_category'], $period_category, $shop_id);
 
 		if(isset($deduction["deduction"]))
@@ -4376,8 +4376,6 @@ class Payroll2
 				}
 			}
 		}
-
-
 		return $return;
 	}
 	public static function cutoff_compute_break($payroll_period_company_id, $employee_id, $cutoff_compute)

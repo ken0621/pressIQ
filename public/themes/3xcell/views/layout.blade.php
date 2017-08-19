@@ -88,7 +88,7 @@
                </div>
                @endif
                <div class="join-us-container">
-                   <a>
+                   <a href="/mlm/register">
                        <div class="join-us-button">
                            <img src="/themes/{{ $shop_theme }}/img/button-icon1.png"><span>&nbsp;&nbsp;JOIN US TODAY</span>
                        </div>

@@ -431,5 +431,21 @@
 			],
 			"size":"12"
 		}
+	},
+	"promo":
+	{
+		"promo_maintenance" :
+		{
+			"label":"Promo Maintenance",
+			"type":"maintenance",
+			"default":"",
+			"field":[
+				{"name":"image", "type":"image"},
+				{"name":"title", "type":"text"},
+				{"name":"description", "type":"textarea"},
+				{"name":"posted", "type":"timestamp"}
+			],
+			"size":"12"
+		}
 	}
 }

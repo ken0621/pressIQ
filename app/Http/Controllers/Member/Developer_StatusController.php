@@ -520,7 +520,7 @@ class Developer_StatusController extends Member
     	if(Self::$slot_import != null)
     	{
     		$data = Self::$slot_import;
-    	
+    		$data['error'] = 0;
     		foreach($data['slots'] as $key => $value)
     		{
     			$from = Carbon::parse($value['from']);
@@ -531,9 +531,17 @@ class Developer_StatusController extends Member
     			$data['slots'][$key]['subtotal'] = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $slot->slot_id)
     												->where('wallet_log_date_created', '>=', $from)
     												->where('wallet_log_date_created', '<=', $to)
+    												->whereNull('encashment_process')
     												->sum('wallet_log_amount');
     			$data['slots'][$key]['tax_value'] = ($value['tax'] / 100) * $data['slots'][$key]['subtotal'];	
     			$data['slots'][$key]['total'] = $data['slots'][$key]['subtotal'] - $data['slots'][$key]['tax_value'] ;
+    			
+    			$data['slots'][$key]['error'] = 0;
+    			if($data['slots'][$key]['subtotal'] <= 0)
+    			{
+    				$data['slots'][$key]['error'] = 1;
+    				$data['error'] += 1;
+    			}
     		}
     		$data['file'] = $file;
     	}
@@ -584,6 +592,7 @@ class Developer_StatusController extends Member
     			$subtotal = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $slot->slot_id)
     												->where('wallet_log_date_created', '>=', $from)
     												->where('wallet_log_date_created', '<=', $to)
+    												->whereNull('encashment_process')
     												->get();
     			foreach($subtotal as $key2 => $value2)
     			{

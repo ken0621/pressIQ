@@ -172,6 +172,11 @@ class Mlm_login_history
             $bname = 'Netscape'; 
             $ub = "Netscape"; 
         } 
+        else
+        {
+            $bname = 'Unknown'; 
+            $ub = "Unknown"; 
+        }
     
         // finally get the correct version number
         $known = array('Version', $ub, 'other');

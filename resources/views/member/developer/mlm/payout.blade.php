@@ -41,7 +41,7 @@
                         </tr>
                         
                         @foreach($slots as $key => $value)
-                            <tr>
+                            <tr @if($value['error'] == 1) style="background-color: red" @endif >
                                 <td>{{$key}}</td>
                                 <td>{{$value['from']}} - {{$value['to']}}</td>
                                 <td>{{currency('PHP', $value['subtotal'])}}</td>
@@ -54,7 +54,11 @@
                     <form method="post" action="/member/developer/payout/submit/verify">
                         {!! csrf_field() !!}
                         <input type="hidden" name="file" value="{{$file}}">
-                        <button class="btn btn-primary pull-right">Verify and update wallet.</button>
+                        @if($error == 0)
+                            <button class="btn btn-primary pull-right">Verify and update wallet.</button>
+                        @else
+                        <center><h2>There slots with no income withhin the timerange, please remove them on the excel and import again</h2></center>
+                        @endif
                     </form>
                     @else
                     <tr>

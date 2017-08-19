@@ -11,8 +11,9 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	
 
 	Route::any('/reports/loan_summary','Member\PayrollReportController@loan_summary');
+	Route::any('/reports/table_loan_summary/{deduction_type}','Member\PayrollReportController@table_loan_summary');
 	Route::any('/reports/modal_loan_summary_report/{employee_id}/{payroll_deduction_id}','Member\PayrollReportController@modal_loan_summary');
-	
+	Route::any('/reports/export_loan_summary_report_to_excel/{employee_id}/{payroll_deduction_id}','Member\PayrollReportController@export_loan_summary_report_to_excel');
 
 	/* COMPANY START */
 	Route::any('/company_list','Member\PayrollController@company_list');

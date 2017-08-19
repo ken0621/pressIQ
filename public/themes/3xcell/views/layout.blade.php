@@ -124,7 +124,7 @@
                                         <div class="cat-container">
                                             <a href="/product">
                                                 <div class="per-cat">
-                                                    <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/beauty-prod.png"></div>
+                                                    <div class="cat-img-container"><img style="width: 124px; height: 100px; object-fit: cover;" src="{{ $categories["type_image"] }}"></div>
                                                     <div class="cat-name">{{ $categories["type_name"] }}</div>
                                                 </div>
                                             </a>

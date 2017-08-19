@@ -6,7 +6,6 @@ function loan_summary()
 	function init()
 	{
 		document_ready();
-
 	}
 
 	function document_ready()

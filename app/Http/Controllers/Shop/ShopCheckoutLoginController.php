@@ -34,7 +34,7 @@ class ShopCheckoutLoginController extends Shop
             $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_account"));
             if ($customer_set_info_response["status"] == "error") 
             {
-                return Redirect::to("/checkout/login")->with("warning", $customer_set_info_response["status_message"]);
+                return Redirect::to("/checkout/login")->with("warning", $customer_set_info_response["status_message"])->send();
             }
             else
             {

@@ -2472,7 +2472,7 @@ class Payroll2
 		return $return;
 	}
 	
-	public static function cutoff_compute_gross_pay($compute_type, $cutoff_rate, $cutoff_cola, $cutoff_target_days=0,  $_date_compute)
+	public static function cutoff_compute_gross_pay($compute_type, $cutoff_rate, $cutoff_cola, $cutoff_target_days = 0,  $_date_compute)
 	{
 		$return = new stdClass();
 		$return->cutoff_income_plus_cola = 0;
@@ -2510,7 +2510,6 @@ class Payroll2
 		else if ($compute_type=="monthly") 
 		{
 
-			
 			$breakdown_deduction		 = 0;
 			$breakdown_addition 		 = 0;
 			$breakdown_subtotal 		 = 0;
@@ -2546,7 +2545,9 @@ class Payroll2
 			/*$cutoff_cola		= $cutoff_income_plus_cola * $cola_percentile;*/
 			
 			//COMPUTE CUTOFF BASIC
-			$deduction	  = $breakdown_deduction * (1 - $cola_percentile);
+
+			$deduction	  = $breakdown_deduction; //error(commented) * (1 - $cola_percentile);
+
 			$cutoff_basic = $cutoff_rate - $deduction;
 			
 			$cutoff_target_days -= $rendered_tardiness;
@@ -3284,8 +3285,8 @@ class Payroll2
 
 		$show_time_breakdown = array('target_hours','time_spent', 'undertime', 'overtime','late','night_differential','leave_hours');
 
-		// $return->_time_breakdown['day_spent']["float"] = 0;
-		// $return->_time_breakdown['day_spent']["time"] = "No Day Spent";
+		$return->_time_breakdown['day_spent']["float"] = 0;
+		$return->_time_breakdown['day_spent']["time"] = "No Day Spent";
 
 		$return->_time_breakdown['absent']["float"] = 0;
 		$return->_time_breakdown['absent']["time"] = "No Absent";
@@ -3320,11 +3321,11 @@ class Payroll2
 					}
 				}
 
-				// if ($key == 'time_spent' && $time_output != '00:00:00') 
-				// {
-				// 	$return->_time_breakdown['day_spent']["float"] += 1;
-				// 	$return->_time_breakdown['day_spent']["time"]  = $return->_time_breakdown['day_spent']["float"] . " Day(s) Spent";
-				// }
+				if ($key == 'time_spent' && $time_output != '00:00:00') 
+				{
+					$return->_time_breakdown['day_spent']["float"] += 1;
+					$return->_time_breakdown['day_spent']["time"]  = $return->_time_breakdown['day_spent']["float"] . " Day(s) Spent";
+				}
 
 				if ($key == 'is_holiday') 
 				{
@@ -3355,10 +3356,6 @@ class Payroll2
 							$return->_time_breakdown['special_holiday']["time"] = $return->_time_breakdown['special_holiday']["float"] . " Special Holiday(s)";
 						}
 					}
-				}
-				if ($key == 'is_holiday') 
-				{
-					
 				}
 			}
 		}
@@ -3759,8 +3756,7 @@ class Payroll2
 					}
 					else
 					{
-						$_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();
-						
+						$_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();		
 						if(count($_cutoff) > 0)
 						{
 							foreach($_cutoff as $cutoff)
@@ -3769,7 +3765,6 @@ class Payroll2
 									$sss_description .= "<br> Add Previous Cutoff " . payroll_currency($cutoff->sss_salary) . " and the new amount will be " . payroll_currency($sss_reference_amount);
 							}
 						}
-
 						$sss_contribution = Payroll::sss_contribution($shop_id, $sss_reference_amount);
 					}
 				}
@@ -4352,7 +4347,6 @@ class Payroll2
 			}
 		}
 
-
 		$deduction = Payroll::getdeductionv2($employee_id, $start_date, $period_category_arr['period_category'], $period_category, $shop_id);
 
 		if(isset($deduction["deduction"]))
@@ -4376,8 +4370,6 @@ class Payroll2
 				}
 			}
 		}
-
-
 		return $return;
 	}
 	public static function cutoff_compute_break($payroll_period_company_id, $employee_id, $cutoff_compute)

@@ -29,7 +29,7 @@
                         Action <span class="caret"></span>
                       </button>
                       <ul class="dropdown-menu dropdown-menu-custom">
-                        <li><a href="javascript:" class="popup" link="/member/payroll/process_payroll/modal_view_summary/{{ $period->payroll_period_company_id }}" size="lg">View Summary</a> </li>
+                        <li><a href="javascript:" class="popup" link="/member/payroll/process_payroll/modal_view_summary/{{ $period->payroll_period_company_id }}" size="lg">Employee Summary</a> </li>
                         <li><a href="/member/payroll/process_payroll/{{ $period->payroll_period_company_id }}?step=approve">Payroll Approve</a></li>
                       </ul>
                     </div>

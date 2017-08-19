@@ -1087,7 +1087,7 @@ class Cart
         else //ACCOUNT EXIST VALIDATION
         {
             $check_exist = Tbl_customer::where("shop_id", $shop_id)->where("email", $email)->first();
-
+            
             if(!$check_exist)
             {
                 return "The e-mail and password you entered doesn't belong to any account.";

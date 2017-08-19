@@ -699,3 +699,8 @@ function get_payment_method_mlm($id)
 
     return $data[$id];
 }
+function isJson($string) 
+{
+    json_decode($string);
+    return (json_last_error() == JSON_ERROR_NONE);
+}

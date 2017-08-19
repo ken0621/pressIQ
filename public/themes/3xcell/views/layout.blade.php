@@ -29,16 +29,13 @@
         <link href="/themes/{{ $shop_theme }}/css/{{ $shop_theme_color }}.css" rel="stylesheet" type="text/css">
         <!-- PARALLAX -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/parallax.css">
+        
+        <!-- LIGHTBOX -->
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/lightbox/css/lightbox.css">
+
         <!-- OTHER CSS -->
         @yield("css")
         <style type="text/css">
-        body
-        {
-            background-image: url('/themes/{{ $shop_theme  }}/img/final.jpg'); 
-            background-size: cover; 
-            background-position: center; 
-            background-attachment: fixed;
-        }
         .content
         {
             background-color: transparent;
@@ -61,7 +58,7 @@
 
     <!-- HEADER -->
     <div class="subheader-container">
-        <div class="container">
+        <div class="container" style="position: relative;">
            <div class="button-container">
                 <div class="social-media-container">
                     <span>
@@ -77,11 +74,19 @@
                         <i class="fa fa-google-plus-square" aria-hidden="true"></i>
                     </span>
                 </div> 
+                @if($customer_info_a)
                <div class="login-container">
                    <div class="login-button">
-                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;<i class="fa fa-user" aria-hidden="true"></i></span><span>&nbsp;<a>LOGIN</a></span>
+                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;<i class="fa fa-user" aria-hidden="true"></i></span><span>&nbsp;<a href="/mlm">MY ACCOUNT</a></span>
                    </div>
                </div>
+               @else
+                <div class="login-container">
+                   <div class="login-button">
+                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;<i class="fa fa-user" aria-hidden="true"></i></span><span>&nbsp;<a href="/mlm/login">LOGIN</a></span>
+                   </div>
+               </div>
+               @endif
                <div class="join-us-container">
                    <a>
                        <div class="join-us-button">
@@ -89,7 +94,7 @@
                        </div>
                    </a>
                </div>
-           </div> 
+           </div>
         </div>
     </div>
     <div class="header-container">
@@ -114,46 +119,59 @@
                                 <a class="head-button link-nav">PRODUCTS</a>
                                 <!-- PRODUCT DROPDOWN -->
                                 <div class="product-dropdown" style="display: none;">
-                                    <div class="cat-container">
-                                        <a href="/product">
-                                            <div class="per-cat">
-                                                <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/beauty-prod.png"></div>
-                                                <div class="cat-name">BEAUTY SKIN CARE</div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="cat-container">
-                                        <a href="/product">
-                                            <div class="per-cat">
-                                                <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/supplement.png"></div>
-                                                <div class="cat-name">FOOD SUPPLEMENT</div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="cat-container">
-                                        <a href="/product">
-                                            <div class="per-cat">
-                                                <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/healthy-drinks.png"></div>
-                                                <div class="cat-name">HEALTHY DRINKS</div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="cat-container">
-                                        <a href="/product">
-                                            <div class="per-cat">
-                                                <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/p-a.png"></div>
-                                                <div class="cat-name">HEALTHY PACKAGES</div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="cat-container">
-                                        <a href="/product">
-                                            <div class="per-cat">
-                                                <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/p-b.png"></div>
-                                                <div class="cat-name">RETAIL PACKAGES</div>
-                                            </div>
-                                        </a>
-                                    </div>
+                                    @if(count($_categories) > 0)
+                                        @foreach($_categories as $categories)
+                                        <div class="cat-container">
+                                            <a href="/product">
+                                                <div class="per-cat">
+                                                    <div class="cat-img-container"><img style="width: 124px; height: 100px; object-fit: cover;" src="{{ $categories["type_image"] }}"></div>
+                                                    <div class="cat-name">{{ $categories["type_name"] }}</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        @endforeach
+                                    @else
+                                        <div class="cat-container">
+                                            <a href="/product">
+                                                <div class="per-cat">
+                                                    <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/beauty-prod.png"></div>
+                                                    <div class="cat-name">BEAUTY SKIN CARE</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="cat-container">
+                                            <a href="/product">
+                                                <div class="per-cat">
+                                                    <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/supplement.png"></div>
+                                                    <div class="cat-name">FOOD SUPPLEMENT</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="cat-container">
+                                            <a href="/product">
+                                                <div class="per-cat">
+                                                    <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/healthy-drinks.png"></div>
+                                                    <div class="cat-name">HEALTHY DRINKS</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="cat-container">
+                                            <a href="/product">
+                                                <div class="per-cat">
+                                                    <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/p-a.png"></div>
+                                                    <div class="cat-name">HEALTHY PACKAGES</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="cat-container">
+                                            <a href="/product">
+                                                <div class="per-cat">
+                                                    <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/p-b.png"></div>
+                                                    <div class="cat-name">RETAIL PACKAGES</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    @endif
                                 </div>
                             </li>
                             <li><a href="/promos" class="head-button link-nav">PROMOS</a></li>
@@ -169,37 +187,39 @@
                                             </div>
                                         </div>
                                     </a>
-                                    <div class="cat-container">
-                                        <div class="per-cat">
-                                            <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/how-to-join-thumb.png"></div>
-                                            <div class="cat-name">HOW TO JOIN</div>
+                                    <a href="/how_to_join">
+                                        <div class="cat-container">
+                                            <div class="per-cat">
+                                                <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/how-to-join-thumb.png"></div>
+                                                <div class="cat-name">HOW TO JOIN</div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="cat-container">
-                                        <div class="per-cat">
-                                            <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/events-calendar-thumb.png"></div>
-                                            <div class="cat-name">EVENTS CALENDAR</div>
+                                    </a>
+                                    <a href="/company_events">
+                                        <div class="cat-container">
+                                            <div class="per-cat">
+                                                <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/events-calendar-thumb.png"></div>
+                                                <div class="cat-name">COMPANY EVENTS</div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
                             </li>
-                            <li><a class="head-button link-nav">GALLERY</a></li>
-                            <li><a class="head-button link-nav">CONTACT US</a></li>
+                            <li><a href="/gallery" class="head-button link-nav">GALLERY</a></li>
+                            <li><a href="/contact" class="head-button link-nav">CONTACT US</a></li>
                             <li class="cart-hover">
-                                <a href="/" class="link-nav"><span><img class="cart-header" src="/themes/{{ $shop_theme }}/img/cart-header.png"></span></a>
+                                <a class="link-nav"><span><img class="cart-header" src="/themes/{{ $shop_theme }}/img/cart-header.png"></span></a>
                                 <!-- CART DROPDOWN -->
                                 <div class="cart-dropdown" style="display: none;">
-                                    You have no item in your cart.
+                                    
                                 </div>
                             </li>
                         </ul>
                     </nav>
                 </div>
-                
             </div>
         </div>
-    </div>
- 
+    </div> 
     <!-- CONTENT -->
     <div id="scroll-to" class="clearfix">
 	   @yield("content")
@@ -266,12 +286,12 @@
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/fit-text.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/slick/slick.min.js"></script>
     <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
-    <script type="text/javascript" src="/assets/front/js/global.js"></script>
+    <script type="text/javascript" src="/assets/front/js/globalv2.js"></script>
     <script src="/themes/{{ $shop_theme }}/js/global.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/figuesslider.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/parallax.js"></script>
 
-
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/lightbox/js/lightbox.js"></script>
 
     <!-- FB WIDGET -->
     <div id="fb-root"></div>
@@ -303,8 +323,6 @@
          });
 
     </script>
-
-
 
     <script type="text/javascript">
             

@@ -80,7 +80,8 @@ class PayrollTimeSheet2Controller extends Member
 		$data["company"] 	= $this->db_get_company_period_information($period_id);
 		$data["_employee"] 	= $this->db_get_list_of_employees_by_company_with_search($data["company"]->payroll_company_id, $search_value, $mode, $period_id, $data["company"]->payroll_period_start, $branch);
 		
-
+		$data['access'] = Utilities::checkAccess('payroll-timekeeping','salary_rates');
+		
 		if($mode == "pending")
 		{
 			return view('member.payroll2.employee_summary_table', $data);

@@ -131,6 +131,7 @@ class PayrollController extends Member
                                                   ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
                                                   ->orderBy('tbl_payroll_period.payroll_period_start','asc')
                                                   ->get();
+          $data['access'] = Utilities::checkAccess('payroll-timekeeping','salary_rates');
 
           return view('member.payroll.payroll_timekeeping', $data);
      }

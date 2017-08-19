@@ -40,6 +40,7 @@
           {
             padding: 0;
           }
+
           /*div.breakNow { page-break-inside:avoid; page-break-after:always; }*/
         </style>
     </head>
@@ -127,12 +128,23 @@
                   </div>
                 </div>
               </div>
+<<<<<<< HEAD
             @endforeach
           </div>
           @endforeach
         
         
       </div>
+=======
+            </div>
+        </div>
+          @if(($key+1)%4 == 0)
+            <!-- <div class="breakNow"></div> -->
+          @endif
+        @endforeach
+
+
+>>>>>>> mod_fig_front_3xcell
     </div>
 
     </body>

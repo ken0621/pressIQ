@@ -10,14 +10,6 @@
 			<span class="page-title">Select a Payroll Period</span>
 			<small>You can view timesheet inside a specific payroll period.</small>
 			</h1>
-			<div class="dropdown pull-right">
-				<button class="btn btn-custom-primary dropdown-toggle " type="button" data-toggle="dropdown"><i class="fa fa-gears"></i>&nbsp;Operation
-				<span class="caret"></span></button>
-				<ul class="dropdown-menu dropdown-menu-custom">
-					<li><a href="#" class="popup" link="/member/payroll/payroll_period_list/modal_create_payroll_period"><i class="fa fa-plus"></i>&nbsp;Generate Period</a></li>
-					<li><a href="#" class="popup" size="lg" link="/member/payroll/import_bio/modal_biometrics"><i class="fa fa-upload"></i>&nbsp;Import Time Sheet</a></li>
-				</ul>
-			</div>
 		</div>
 	</div>
 </div>
@@ -25,7 +17,12 @@
 
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <ul class="nav nav-tabs">
-        <li class="active change-tab pending-tab cursor-pointer" mode="generated"><a class="cursor-pointer"><i class="text-bold">Payroll Periods</i></a></li>
+        @if($access==1)
+        <li class="active cursor-pointer change-tab approve-tab" mode="processed"><a class="cursor-pointer"><i class="text-bold"> Processed </i></a></li>
+        <li class="cursor-pointer change-tab approve-tab" mode="registered"><a class="cursor-pointer"><i class="text-bold"> Registered </i></a></li>
+        <li class="cursor-pointer change-tab approve-tab" mode="posted"><a class="cursor-pointer"><i class="text-bold"> Posted </i></a></li>
+        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="text-bold"> Approved </i></a></li>
+        @endif
     </ul>
     
     <div class="search-filter-box">

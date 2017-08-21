@@ -453,6 +453,10 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/process_payroll/income_summary/timesheet/{period_id}/{employee_id}','Member\PayrollProcessController@income_summary_timesheet');
 	Route::any('/process_payroll/modal_approved_summary/{period_company_id}','Member\PayrollProcessController@modal_approved_summary');
 
+
+	Route::any('/payroll_process_module','Member\PayrollController@payroll_process_module');
+
+
 	//Route::any('/process_payroll/table/{period_company_id}','Member\PayrollProcessController@view_');
 	// Route::any('/payroll_process','Member\PayrollController@payroll_process');
 	// Route::any('/payroll_process/modal_create_process','Member\PayrollController@modal_create_process');

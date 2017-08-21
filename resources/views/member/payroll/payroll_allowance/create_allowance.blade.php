@@ -25,7 +25,7 @@
 					<option value="">Select Type</option>
 					<option value="fixed">fixed</option>
 					<option value="daily">daily</option>
-					<option value="daily">pro rated</option>
+					<option value="pro_rated">pro rated</option>
 				</select>
 			</div>
 			<div class="col-md-6">

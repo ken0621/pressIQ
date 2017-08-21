@@ -7,8 +7,21 @@ function create_allowance()
 	function init()
 	{
 		event_accept_number_only();
+		document_ready();
 
 	}
+
+
+	function document_ready()
+	{
+		$(document).ready(function()
+			{
+
+			});
+	}
+
+	function event_change
+
 	function event_accept_number_only()
 	{
 		$(document).on("keypress",".number-input", function(event){

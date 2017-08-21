@@ -211,5 +211,12 @@ $(document).ready(function()
 });
 </script>
 <script type="text/javascript" src="/assets/front/js/zoom.js"></script>
+<script type="text/javascript">
+var product_image = ".single-product-img";
+var button_cart = ".add-to-cart-button";
+var product_container = ".content";
+var product_quantity = ".input-quantity";
+var cart_holder = '.cart-dropdown';
+</script>
 <script type="text/javascript" src="/assets/front/js/global_addcart.js"></script>
 @endsection

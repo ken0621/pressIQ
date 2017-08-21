@@ -291,14 +291,55 @@ class MlmDeveloperController extends Member
         $data               = Self::get_initial_settings();
         $data["_item"]      = Tbl_mlm_item_points::where("tbl_item.shop_id", $shop_id)->joinItem()->joinMembership()->groupBy("tbl_item.item_id")->get();
         $_item              = $data["_item"];
-
+        // dd($data,$shop_id);
+        // $data["_plan"]      = Tbl_mlm_plan::where("shop_id",$shop_id)
+        //                                   ->where("marketing_plan_enable",1)
+        //                                   ->where("marketing_plan_trigger","Product Repurchase")
+        //                                   ->get();
+        // dd($data);
         return view("member.mlm_developer.repurchase", $data);
     }
     public function repurchase_submit()
     {
+        $shop_id                    = $this->user_info->shop_id;
         $return["status"]           = "success";
         $return["call_function"]    = "repurchase_submit_done";
+        $slot_no                    = Request::input("slot_no");
+        $_send                      = Request::input();
 
+        unset($_send["slot_id"]);
+        unset($_send["_token"]);
+
+        if($slot_no == "")
+        {
+            $slot_info = Tbl_mlm_slot::where("shop_id",$shop_id)->orderByRaw("RAND()")->first();
+        }
+        else
+        {
+            $slot_info = Tbl_mlm_slot::where("slot_no",$slot_no)->where("shop_id",$shop_id)->first();
+        }
+
+        foreach($_send as $key => $send)
+        {
+            if($send == "")
+            {
+                $_send[$key] = 100;
+            }
+        }
+
+        if($slot_info == null)
+        {
+            $return["status"]           = "error_message";
+            $return["error_message"]    = "Slot error";
+
+            return json_encode($return);
+        }
+        else
+        {
+            $slot_id = $slot_info->slot_id;
+        }
+
+        Mlm_compute::repurchasev2($slot_id,$shop_id,$_send);
         return json_encode($return);
     }
     public function get_initial_settings()
@@ -327,13 +368,39 @@ class MlmDeveloperController extends Member
 
             if($complan->marketing_plan_code == "BINARY_REPURCHASE" && $complan->marketing_plan_enable == 1)
             {
-                $data["binary_repurchase"] = 1;
+                $data["binary_repurchase"]               = 1;
             }
 
             if($complan->marketing_plan_code == "UNILEVEL" && $complan->marketing_plan_enable == 1)
             {
-                $data["unilevel"] = 1;
+                $data["unilevel"]                        = 1;
             }
+
+            if($complan->marketing_plan_code == "REPURCHASE_POINTS" && $complan->marketing_plan_enable == 1)
+            {
+                $data["repurchase_points"]               = 1;  
+            }
+
+            if($complan->marketing_plan_code == "REPURCHASE_CASHBACK" && $complan->marketing_plan_enable == 1)
+            {
+                $data["repurchase_cashback"]             = 1;
+            }
+
+            if($complan->marketing_plan_code == "UNILEVEL_REPURCHASE_POINTS" && $complan->marketing_plan_enable == 1)
+            {
+                $data["unilevel_repurchase_points"]      = 1;       
+            }
+
+            if($complan->marketing_plan_code == "DISCOUNT_CARD_REPURCHASE" && $complan->marketing_plan_enable == 1)
+            {
+                $data["discount_card_repurchase"]        = 1; 
+            }
+
+            if($complan->marketing_plan_code == "STAIRSTEP" && $complan->marketing_plan_enable == 1)
+            {
+                $data["stairstep"]                       = 1;
+            }
+
         }
 
         return $data;

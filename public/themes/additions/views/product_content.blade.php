@@ -15,7 +15,6 @@
 							<div>
 								<div class="holder">
 									@foreach($product_variant['image'] as $key => $image)
-									{{ dd($image['image_path']) }}
 									<img class="single-product-img key-{{$key}} {{ $key == 0 ? '' : 'hide' }} {{$ctr != 0 ? '' : 'first-img'}}" variant-id="{{ $product_variant['evariant_id'] }}" key="{{ $key }}" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}">
 									@endforeach
 								</div>
@@ -38,32 +37,41 @@
 					<div class="info match-height">
 						<div class="name">
 							<div class="product-title-price">
-								<font>Product Name</font>
-								<font class="pull-right top-price variant-price">PHP. 1.00</font>
+								<font>{{ $product["eprod_name"] }}</font>
+
+								@if($product_variant['discounted'] == "true")
+								{{-- <font class="pull-right top-price variant-price" style="color:red;font-size:17px;text-decoration: line-through;">PHP. {{ number_format($product_variant['evariant_price'], 2) }}</font> --}}
+								<font class="pull-right top-price variant-price">PHP. {{ number_format($product_variant['discounted_price'], 2) }}</font>
+								@else
+								<font class="pull-right top-price variant-price">PHP. {{ number_format($product_variant['evariant_price'], 2) }}</font>
+								@endif
 								<img src="/themes/{{ $shop_theme }}/assets/front/img/loader.gif" style="width:30px" class="ajax-loading hide pull-right">
 							</div>
 						</div>
 						<div class="desc-title">Description</div>
-						<div class="desc">Description Here</div>
+						<div class="desc">{!! $product_variant['evariant_description'] !!}</div>
 						<div class="item-number-title">Item No.</div>
-						<div class="item-number">123</div>
+						<div class="item-number">{{ $product["eprod_id"] }}</div>
+						@if($product_variant['item_type_id'] != 2)
 						<div class="available-stocks-title">Available Stocks</div>
 						<img src="/themes/{{ $shop_theme }}/assets/front/img/loader.gif" style="width:18px" class="ajax-loading hide">
-						<div class="available-stocks variant-inventory-count" value="0">Please select a variant</div>
+						{{-- <div class="available-stocks variant-inventory-count" value="0">Please select a variant</div> --}}
+						<div class="available-stocks variant-inventory-count" value="0">{{ $product_variant['inventory_count'] }}</div>
+						@endif
 						<div class="row" id="option_container">
-							{{-- @foreach($product_option as $key=>$option) --}}
-								<div class="clearfix col-md-4">
-									<div class="size-title">Option Name</div>
-									 <div class="size-desc ">
-										<select name="option_value[]" class="size-desc option_value">
-											<option>--Choose One--</option>
-											{{-- @foreach($option['option_value'] as $key2=>$value)
-												<option value="{{$value}}">{{$value}}</option>
-											@endforeach --}}
-										</select>
-									</div> 
-								</div>
-							{{-- @endforeach --}}
+						@foreach($_variant as $variant)
+	                     <div class="clearfix col-md-4">
+	                        <div class="size-title">{{ $variant['option_name'] }}</div>
+	                        <div class="size-desc ">
+	                           <select class="attribute-variation size-desc option_value" variant-label="{{ $variant['option_name'] }}" product-id="{{ $product['eprod_id'] }}" variant-id="{{ $product_variant['evariant_id'] }}" name="attr[{{ $variant['option_name_id'] }}]">
+	                              <option value="0">Select {{ $variant['option_name'] }}</option>
+	                              @foreach(explode(",", $variant['variant_value']) as $option)
+	                              <option value="{{ $option }}">{{ $option }}</option>
+	                              @endforeach
+	                           </select>
+	                        </div>
+	                     </div>
+	                     @endforeach
 						</div>
 
 						<div class="row quantity">

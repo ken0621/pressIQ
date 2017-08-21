@@ -6,17 +6,13 @@
 			<div class="col-md-8">
 				<div class="promo-view-container">
 					<div class="promo-img-container">
-						<img src="/themes/{{ $shop_theme }}/img/promo-img.png">
+						<img src="{{ unserialize(get_content($shop_theme_info, "promo", "promo_maintenance"))[Request::input("id")]["image"] }}">
 					</div>
 					<div class="promo-details-container">
-						<div class="promo-title">Race Up Promo</div>
-						<div class="promo-date">June 14, 2017</div>
+						<div class="promo-title">{{ unserialize(get_content($shop_theme_info, "promo", "promo_maintenance"))[Request::input("id")]["title"] }}</div>
+						<div class="promo-date">{{ date("F d, Y", strtotime(unserialize(get_content($shop_theme_info, "promo", "promo_maintenance"))[Request::input("id")]["posted"])) }}</div>
 						<div class="promo-description">
-							<p>
-								Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi.<br><br>
-								
-								Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi.
-							</p>
+							<p>{!! unserialize(get_content($shop_theme_info, "promo", "promo_maintenance"))[Request::input("id")]["description"] !!}</p>
 						</div>
 					</div>
 				</div>
@@ -31,6 +27,13 @@
 
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/promo_view.css">
+<style type="text/css">
+.promo-description img
+{
+	max-width: 100% !important;
+	max-height: 100% !important;
+}
+</style>
 @endsection
 
 @section("js")

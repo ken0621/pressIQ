@@ -131,6 +131,7 @@ class PayrollController extends Member
                                                   ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
                                                   ->orderBy('tbl_payroll_period.payroll_period_start','asc')
                                                   ->get();
+          $data['access'] = Utilities::checkAccess('payroll-timekeeping','salary_rates');
 
           return view('member.payroll.payroll_timekeeping', $data);
      }
@@ -139,6 +140,7 @@ class PayrollController extends Member
      public function time_keeping_load_table($payroll_company_id)
      {
           $mode = Request::input("mode");
+
           $query = Tbl_payroll_period::sel(Self::shop_id())
                                                   ->where('payroll_parent_company_id', 0)
                                                   ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
@@ -184,6 +186,22 @@ class PayrollController extends Member
                break;
           }
           
+     }
+
+
+     public function payroll_process_module()
+     {
+          $data["_company"] = Tbl_payroll_company::where("shop_id", Self::shop_id())->where('payroll_parent_company_id', 0)->get();
+          $data['_period'] = Tbl_payroll_period::sel(Self::shop_id())
+                                                  ->where('payroll_parent_company_id', 0)
+                                                  ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
+                                                  ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
+                                                  ->orderBy('tbl_payroll_period.payroll_period_start','asc')
+                                                  ->get();
+          
+          $data['access'] = Utilities::checkAccess('payroll-timekeeping','salary_rates');
+
+          return view('member.payroll.payroll_process_module', $data);
      }
 
      /* EMPLOYEE START */
@@ -4882,7 +4900,7 @@ class PayrollController extends Member
           $update['month_contribution']           = Request::input('month_contribution');
           $update['year_contribution']            = Request::input('year_contribution');
           $update['payroll_release_date']         = date('Y-m-d',strtotime(Request::input("payroll_release_date")));
-          //dd($update);
+          
           Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->update($update);
 
           $return['status'] = 'success';

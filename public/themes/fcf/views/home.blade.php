@@ -526,6 +526,7 @@ $(document).ready(function()
     	//alert("slid");
 	});
 
+    /*GALLERY*/
 	$(".gallery-img-holder").click(function()
 	{
 		var source = $(this).find(".full-image").attr("path");

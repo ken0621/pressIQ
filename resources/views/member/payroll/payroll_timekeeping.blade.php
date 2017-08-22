@@ -25,11 +25,7 @@
 
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <ul class="nav nav-tabs">
-        <li class="active change-tab pending-tab cursor-pointer" mode="generated"><a class="cursor-pointer"><i class="text-bold">1st</i> &nbsp; Pending</a></li>
-        <li class="cursor-pointer change-tab approve-tab" mode="processed"><a class="cursor-pointer"><i class="text-bold">2nd</i> &nbsp; Processed</a></li>
-        <li class="cursor-pointer change-tab approve-tab" mode="registered"><a class="cursor-pointer"><i class="text-bold">3rd</i> &nbsp; Registered</a></li>
-        <li class="cursor-pointer change-tab approve-tab" mode="posted"><a class="cursor-pointer"><i class="text-bold">4th</i> &nbsp; Posted</a></li>
-        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="text-bold">Last</i> &nbsp; Approved</a></li>
+        <li class="active change-tab pending-tab cursor-pointer" mode="generated"><a class="cursor-pointer"><i class="text-bold">Payroll Periods</i></a></li>
     </ul>
     
     <div class="search-filter-box">

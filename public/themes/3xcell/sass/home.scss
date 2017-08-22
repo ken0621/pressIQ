@@ -37,6 +37,9 @@ body{
 
 	.info-container {
 		color: white;
+		a {
+			color: white;
+		}
 
 		.box1-container {
 			position: relative;
@@ -68,14 +71,14 @@ body{
 				}
 			}
 			.context-container {
+				padding-bottom: 5px;
 
-				span {
+				div {
 					font-size: 13px;
 					font-weight: 400;
+					margin-left: -24px;
 				}
-				div {
-					padding-bottom: 5px;
-				}
+
 			}
 		}
 		.box3-container {
@@ -282,7 +285,7 @@ body{
 
 				img {
 					width: 100%;
-					height: 240px;
+					height: auto; /* 240px; */
 				}
 			}
 		}
@@ -335,9 +338,10 @@ body{
 
 				.event-image-container {
 					width: 100%;
+					height: 150px;
+					overflow-y: hidden;
 					img {
 						width: 100%;
-						height: 150px;
 					}
 
 					&:hover {

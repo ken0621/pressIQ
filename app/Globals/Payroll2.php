@@ -3285,8 +3285,8 @@ class Payroll2
 
 		$show_time_breakdown = array('target_hours','time_spent', 'undertime', 'overtime','late','night_differential','leave_hours');
 
-		// $return->_time_breakdown['day_spent']["float"] = 0;
-		// $return->_time_breakdown['day_spent']["time"] = "No Day Spent";
+		$return->_time_breakdown['day_spent']["float"] = 0;
+		$return->_time_breakdown['day_spent']["time"] = "No Day Spent";
 
 		$return->_time_breakdown['absent']["float"] = 0;
 		$return->_time_breakdown['absent']["time"] = "No Absent";
@@ -3321,11 +3321,11 @@ class Payroll2
 					}
 				}
 
-				// if ($key == 'time_spent' && $time_output != '00:00:00') 
-				// {
-				// 	$return->_time_breakdown['day_spent']["float"] += 1;
-				// 	$return->_time_breakdown['day_spent']["time"]  = $return->_time_breakdown['day_spent']["float"] . " Day(s) Spent";
-				// }
+				if ($key == 'time_spent' && $time_output != '00:00:00') 
+				{
+					$return->_time_breakdown['day_spent']["float"] += 1;
+					$return->_time_breakdown['day_spent']["time"]  = $return->_time_breakdown['day_spent']["float"] . " Day(s) Spent";
+				}
 
 				if ($key == 'is_holiday') 
 				{
@@ -3356,10 +3356,6 @@ class Payroll2
 							$return->_time_breakdown['special_holiday']["time"] = $return->_time_breakdown['special_holiday']["float"] . " Special Holiday(s)";
 						}
 					}
-				}
-				if ($key == 'is_holiday') 
-				{
-					
 				}
 			}
 		}
@@ -3760,8 +3756,7 @@ class Payroll2
 					}
 					else
 					{
-						$_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();
-						
+						$_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();		
 						if(count($_cutoff) > 0)
 						{
 							foreach($_cutoff as $cutoff)
@@ -3770,7 +3765,6 @@ class Payroll2
 									$sss_description .= "<br> Add Previous Cutoff " . payroll_currency($cutoff->sss_salary) . " and the new amount will be " . payroll_currency($sss_reference_amount);
 							}
 						}
-
 						$sss_contribution = Payroll::sss_contribution($shop_id, $sss_reference_amount);
 					}
 				}

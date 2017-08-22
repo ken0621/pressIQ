@@ -96,8 +96,6 @@ class PayrollTimeSheetController extends Member
 		return view('member.payroll.employee_timesheet', $data);
 	}
 
-
-
 	public function timesheet($employee_id, $payroll_period_id)
 	{
 

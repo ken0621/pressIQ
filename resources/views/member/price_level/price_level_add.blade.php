@@ -33,7 +33,7 @@
 					<table class="table table-bordered table-condensed">
 					    <thead style="background-color: #eee">
 					        <tr>
-					        	<th class="text-center" width="50px"><input type="checkbox"></th>
+					        	<th class="text-center check-all-item" width="50px"><input type="checkbox" class="checkbox-all"></th>
 					            <th class="text-left" width="250px">ITEM NAME</th>
 					            <th class="text-center" width="180px">COST</th>
 					            <th class="text-center" width="180px">STANDARD</th>
@@ -50,8 +50,8 @@
 					            		<input class="checkboxs" type="checkbox" name="">
 					            	</td>
 					                <td width="250px" class="text-left price-level-check-event">{{ $item->item_name }}</td>
-					                <td width="180px" class="text-center">{{ $item->item_cost }}</td>
-					                <td width="180px" class="text-center">{{ $item->item_price }}</td>
+					                <td width="180px" class="text-center item-cost" item-value="{{$item->item_cost}}">{{ $item->item_cost }}</td>
+					                <td width="180px" class="text-center item-price" item-value="{{$item->item_price}}">{{ $item->item_price }}</td>
 					                <td class="text-center"><input name="_item[{{ $item->item_id }}]" type="text" class="custom-price-textbox text-right" name=""></td>
 					            </tr>
 					            @endforeach
@@ -63,25 +63,28 @@
 						<div>
 							<span>Adjust price of marked items to be</span>
 							<span>
-								<input class="text-right" width="20px" type="text" name="" value="0.00%">
+								<input class="text-right adjust-price-percent" width="20px" type="text" name="" value="0.00%">
 							</span>
 							<span>
-								<select name="fixed-percentage-mode">
+								<select name="fixed-percentage-mode"  class="adjust-price-range">
+
 									<option>lower</option>
+									<option>upper</option>
 								</select>
 							</span>
 							<span> than its </span>
 							<span>
-								<select name="fixed-percentage-source">
+								<select name="fixed-percentage-source" class="adjust-price-type">
 									<option>standard price</option>
+									<option>cost price</option>
 								</select>
 							</span>
-							<button type="button">Adjust</button>
+							<button type="button" class="adjust-marked-btn">Adjust</button>
 						</div>
 						<div style="margin-top: 5px;">
 							<span name="fixed-percentage-round-off">Round up to the nearest </span>
 							<span> 
-								<select>
+								<select class="adjust-price-roundup">
 									<option>no rounding</option>
 								</select>
 							</span>

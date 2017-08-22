@@ -24,6 +24,31 @@ use App\Globals\Merchant;
 
 class Item
 {
+    public static function insert_price_level($shop_id, $data)
+    {  
+        Tbl_price_level::insert($data);   
+    }
+    public static function insert_price_level_items($shop_id, $price_level_id, $_item)
+    {  
+        $_insert = array();
+
+        foreach($_item as $item_id => $custom_price)
+        {
+            if($custom_price != "")
+            {
+                $insert["price_level_id"]   = $price_level_id;
+                $insert["item_id"]          = $item_id;
+                $insert["custom_price"]     = $custom_price;
+                $insert["shop_id"]          = $shop_id;
+                array_push($_insert, $insert);
+            }
+        }
+
+        if($_insert)
+        {
+            Tbl_price_level_item::insert($insert);
+        }
+    }
     public static function getShopId()
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');

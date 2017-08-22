@@ -4285,7 +4285,6 @@ class Payroll2
 
 				foreach ($data['cutoff_input'] as $value) 
 				{
-					
 					if ($allowance->over_time_pay==1) 
 					{
 						if (isset($value->compute->_breakdown_addition)) 
@@ -4372,7 +4371,6 @@ class Payroll2
 
 				// dd($data);
 				// dd($a);
-				// dd($actual_gross_pay. ' + ' .$standard_gross_pay . ' * '.$allowance_amount);
 
 				$standard_gross_pay+=$actual_gross_pay;
 
@@ -4396,7 +4394,7 @@ class Payroll2
 					$val["add.net_pay"] = true;
 					$val["deduct.net_pay"] = false;
 				}
-
+			
 				array_push($return->_breakdown, $val);
 				$val = null;
 			}

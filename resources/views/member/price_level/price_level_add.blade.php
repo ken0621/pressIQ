@@ -17,7 +17,7 @@
 		        <div class="form-group">
 		            <label class="control-label col-sm-4 text-right" for="email">Price Level Type</label>
 		            <div class="col-sm-8">
-		                <select class="form-control">
+		                <select class="form-control select-type-of-price-level">
 		                	<option value="per-item">Per Item</option>
 		                	<option value="fixed-percentage">Fixed Percentage</option>
 		                </select>
@@ -44,8 +44,8 @@
 					        <tbody>
 					        	@foreach($_item as $item)
 					            <tr>
-					            	<td width="50px" class="text-center price-level-check-event"><input type="checkbox" name=""></td>
-					                <td width="250px" class="text-left">{{ $item->item_name }}</td>
+					            	<td width="50px" class="text-center price-level-check-event"><input class="checkbox" type="checkbox" name=""></td>
+					                <td width="250px" class="text-left item-name">{{ $item->item_name }}</td>
 					                <td width="180px" class="text-center">{{ $item->item_cost }}</td>
 					                <td width="180px" class="text-center">{{ $item->item_price }}</td>
 					                <td class="text-center"><input type="text" class="custom-price-textbox text-right" name=""></td>
@@ -60,6 +60,11 @@
 					</div>
 				</div>
 			</div>
+			<div class="price-level-container" leveltype="fixed-percentage">
+				<div class="col-md-12">
+					FIXED PERCENTAGE
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="modal-footer">
@@ -67,6 +72,8 @@
 		<button class="btn btn-primary btn-custom-primary" type="button">Submit</button>
 	</div>
 </form>
+
+<script type="text/javascript" src="/assets/member/js/price_level/add.js"></script>
 
 <style type="text/css">
 .table-holder

@@ -317,6 +317,8 @@ function timesheet()
 			});
 		});
 	}
+
+	
 	function event_delete_sub_time()
 	{
 		$("body").on("click", ".delete-sub-time", function(e)

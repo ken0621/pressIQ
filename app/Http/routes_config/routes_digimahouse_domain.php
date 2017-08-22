@@ -37,6 +37,21 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/promos', 'Shop\ShopAboutController@promos'); //MARK FIGS
 	Route::get('/promo_view', 'Shop\ShopAboutController@promo_view'); //MARK FIGS
 	Route::get('/history', 'Shop\ShopAboutController@history'); //MARK FIGS
+	Route::get('/how_to_join', 'Shop\ShopAboutController@how_to_join'); //MARK FIGS
+	Route::get('/3xcell_login', 'Shop\ShopAboutController@xcell_login'); //MARK FIGS
+	Route::get('/3xcell_signup', 'Shop\ShopAboutController@xcell_signup'); //MARK FIGS
+	Route::get('/about_red_fruit', 'Shop\ShopAboutController@about_red_fruit'); //MARK FIGS
+
+	Route::get('/gallery', 'Shop\ShopGalleryController@gallery'); //MARK FIGS
+	Route::get('/gallery_content/{id}', 'Shop\ShopGalleryController@gallery_content'); //MARK FIGS
+	
+	Route::get('/MyCart', 'Shop\ShopMyCartController@MyCart'); //MARK FIGS
+	Route::get('/item_checkout', 'Shop\ShopItemCheckoutController@item_checkout'); //MARK FIGS
+	Route::get('/item_payment', 'Shop\ShopItemPaymentController@item_payment'); //MARK FIGS
+	Route::get('/payment_success', 'Shop\ShopItemPaymentController@payment_success'); //MARK FIGS
+	Route::get('/company_events', 'Shop\ShopCompanyEventsController@company_events'); //MARK FIGS
+
+
 
 
 	Route::get('/blog', 'Shop\ShopBlogController@index');

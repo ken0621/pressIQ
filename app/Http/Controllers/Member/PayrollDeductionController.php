@@ -448,18 +448,86 @@ class PayrollDeductionController extends Member
           return json_encode($return);
      }
 
+     /* DEDUCTION END */
+
+
+
+     public static function approve_deduction_payment($payroll_company_period_id=0,$employee_id=0,$payroll_period_id=0)
+     {
+          $period_info = Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->first();
+
+          //dd($period_info);
+          $_deduction = Payroll::getdeductionv2($employee_id, $period_info['payroll_period_start'], $period_info['period_category'], $period_info['period_category'], $period_info['shop_id']);
+
+          foreach ($_deduction['deduction'] as $deduction) 
+          {
+
+                $deduction_employee = Tbl_payroll_deduction_employee_v2::where('tbl_payroll_deduction_employee_v2.payroll_employee_id',$employee_id)
+               ->where('tbl_payroll_deduction_v2.payroll_deduction_name',$deduction['deduction_name'])
+               ->join('tbl_payroll_deduction_v2','tbl_payroll_deduction_v2.payroll_deduction_id','=','tbl_payroll_deduction_employee_v2.payroll_deduction_id')
+               ->first();
+
+               $deduction_payment = Tbl_payroll_deduction_payment_v2::where('payroll_deduction_id',$deduction_employee['payroll_deduction_id'])
+               ->where('deduction_name',$deduction['deduction_name'])
+               ->first();
+
+               // dd($deduction_employee);
+               if ($deduction_payment==null) 
+               {
+                    $insert['payroll_deduction_id']         = $deduction_employee['payroll_deduction_id'];
+                    $insert['payroll_employee_id']          = $employee_id;
+                    $insert['payroll_record_id']            = 0;
+                    $insert['payroll_period_company_id']    = $payroll_company_period_id;
+                    $insert['deduction_name']               = $deduction_employee['payroll_deduction_name'];
+                    $insert['deduction_category']           = $deduction_employee['payroll_deduction_category'];
+                    $insert['payroll_payment_period']       = $period_info['payroll_period_end'];
+                    $insert['payroll_beginning_balance']    =  $deduction_employee['payroll_deduction_amount']; 
+                    $insert['payroll_payment_amount']       =          $deduction_employee['payroll_periodal_deduction'];  
+                    $insert['payroll_total_payment_amount'] = $deduction_employee['payroll_periodal_deduction']; 
+                    $insert['payroll_remaining_balance']    = $deduction_employee['payroll_deduction_amount'] - $deduction_employee['payroll_periodal_deduction']; 
+                    Tbl_payroll_deduction_payment_v2::insert($insert);
+                   
+               }
+               else
+               {
+                    $payroll_total_payment_amount = Tbl_payroll_deduction_payment_v2::where('payroll_deduction_id',$deduction_employee['payroll_deduction_id'])
+                    ->where('deduction_name',$deduction['deduction_name'])
+                    ->select(DB::raw('sum(payroll_payment_amount) as total_payment'))
+                    ->first();
+                    
+                    $insert['payroll_deduction_id']              = $deduction_employee['payroll_deduction_id'];
+                    $insert['payroll_employee_id']               = $employee_id;
+                    $insert['payroll_record_id']                 = 0;
+                    $insert['payroll_period_company_id']         = $payroll_company_period_id;
+                    $insert['deduction_name']                    = $deduction_employee['payroll_deduction_name'];
+                    $insert['deduction_category']                = $deduction_employee['payroll_deduction_category'];
+                    $insert['payroll_payment_period']            = $period_info['payroll_period_end'];
+                    $insert['payroll_beginning_balance']         = $balance = $deduction_employee["payroll_deduction_amount"] - $payroll_total_payment_amount["total_payment"]; 
+                    $insert['payroll_payment_amount']            =          $deduction_employee['payroll_periodal_deduction'];  
+                    $insert['payroll_total_payment_amount']      = $payroll_total_payment_amount["total_payment"] + $deduction_employee['payroll_periodal_deduction']; 
+                    $insert['payroll_remaining_balance']         = $balance - $deduction_employee['payroll_periodal_deduction']; 
+                    Tbl_payroll_deduction_payment_v2::insert($insert);
+
+               }
+          }
+     }
 
      public static function get_deduction($shop_id = 0, $employee_id = 0, $deduction_id = 0)
      {
-          $data = Tbl_payroll_deduction_payment_v2::where('tbl_payroll_deduction_v2.shop_id',$shop_id)
-          ->join('tbl_payroll_deduction_v2','tbl_payroll_deduction_v2.payroll_deduction_id','=','tbl_payroll_deduction_payment_v2.payroll_deduction_id')
-          ->join('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_deduction_payment_v2.payroll_employee_id')
-          ->select(DB::raw('IFNULL(sum(tbl_payroll_deduction_payment_v2.payroll_payment_amount),0) as total_payment, IFNULL(count(tbl_payroll_deduction_payment_v2.deduction_name),0) as number_of_payment , tbl_payroll_deduction_v2.* , tbl_payroll_employee_basic.*'))
-          ->groupBy('tbl_payroll_deduction_payment_v2.deduction_name','tbl_payroll_deduction_v2.payroll_deduction_id')
-          ->orderBy('tbl_payroll_employee_basic.payroll_employee_id','asc')
-          ->get();
+          $data = Tbl_payroll_deduction_payment_v2::getallinfo($shop_id,0,0)->get();
+          return $data;
+     }
 
+     public static function get_deduction_by_type($shop_id = 0, $deduction_type='')
+     {
 
+          $query = Tbl_payroll_deduction_payment_v2::getallinfo($shop_id,0,0);
+
+          if ($deduction_type!='0') {
+               $query->where('tbl_payroll_deduction_v2.payroll_deduction_type',$deduction_type);
+          }
+
+          $data = $query->get();
           return $data;
      }
 
@@ -470,7 +538,9 @@ class PayrollDeductionController extends Member
           return $data;
      }
 
-     /* DEDUCTION END */
+     
+
+     
    
 
 }

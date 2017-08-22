@@ -294,6 +294,13 @@ Route::any('/member/pis/um_edit_submit','Member\UnitOfMeasurementController@edit
 Route::any('/member/item/um/',"Member\UnitOfMeasurementController@check");
 Route::any('/member/item/um/add_base/{id}/{item_id}',"Member\UnitOfMeasurementController@add_base");
 Route::any('/member/item/um/add_base_submit','Member\UnitOfMeasurementController@add_base_submit');
+
+
+/* PRICE LEVEL */
+Route::any('/member/item/price_level','Member\ItemPriceLevelController@index');
+Route::get('/member/item/price_level/add','Member\ItemPriceLevelController@add');
+Route::post('/member/item/price_level/add','Member\ItemPriceLevelController@add_submit');
+
 /* START AUDIT TRAIL*/
 Route::any('/member/utilities/audit','Member\AuditTrailController@index');
 Route::any('/member/utilities/audit/get_list','Member\AuditTrailController@get_list');
@@ -1084,5 +1091,7 @@ include_once('routes_config/routes_payroll.php');
 /* PAYMENT FACILITIES */
 include_once('routes_config/routes_payment.php');
 include_once('routes_config/routes_reward.php');
+include_once('routes_config/routes_cashier.php');
+
 
 

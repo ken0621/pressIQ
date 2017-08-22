@@ -40,7 +40,7 @@ class Customer_InvoiceController extends Member
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
-
+    /* arcy 8/17/17 */
     public function index()
     {
         Session::forget('est_item');

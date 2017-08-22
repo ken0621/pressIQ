@@ -15,7 +15,7 @@
         <link rel="stylesheet" href="/assets/initializr/css/bootstrap.min.css">
         <link rel="stylesheet" href="/assets/initializr/css/bootstrap-theme.min.css">
         <!--<link rel="stylesheet" href="/assets/initializr/css/main.css">-->
-        <link rel="stylesheet" href="/assets/front/css/global.css">
+        {{-- <link rel="stylesheet" href="/assets/front/css/global.css"> --}}
         <style type="text/css">
           td
           {
@@ -40,6 +40,7 @@
           {
             padding: 0;
           }
+
           /*div.breakNow { page-break-inside:avoid; page-break-after:always; }*/
         </style>
     </head>
@@ -49,9 +50,8 @@
       <div class="clearfix">
         
         
-          @foreach($new_employee as $key => $new)
+          @foreach($_employee as $key => $employee)
           <div class="col-md-6">
-            @foreach($new as $keys => $employee)
               <div class="payslip-wrapper page">
                 <div class="main-content-holder">
                   <div class="row" >
@@ -127,7 +127,6 @@
                   </div>
                 </div>
               </div>
-            @endforeach
           </div>
           @endforeach
         

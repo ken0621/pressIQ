@@ -5,6 +5,7 @@ var keysearch = {};
 
 var success_audio = new Audio('/assets/sounds/success.mp3');
 var error_audio = new Audio('/assets/sounds/error.mp3');
+
 function pos()
 {
 	init();
@@ -22,6 +23,20 @@ function pos()
 		event_search_item();
 		event_click_search_result();
 		event_remote_item_from_cart();
+		action_convert_price_level_to_global_drop_list();
+	}
+	function action_convert_price_level_to_global_drop_list()
+	{
+		$(".price-level-select").globalDropList(
+		{  
+			hasPopup                : "true",
+			link                    : "/member/item/price_level/add",
+			link_size               : "lg",
+			width                   : "100%",
+			maxHeight				  : "129px",
+			placeholder             : "Select a Price Level",
+			no_result_message       : "No result found!"
+		});
 	}
 	function event_remote_item_from_cart()
 	{

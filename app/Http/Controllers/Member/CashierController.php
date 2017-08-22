@@ -15,7 +15,7 @@ class CashierController extends Member
     public function pos_table_item()
     {
     	$data["cart_key"]   = $cart_key = Cart2::get_cart_key();
-        $data["cart"]     = $_items = Cart2::get_cart_info();
+        $data["cart"]       = $_items = Cart2::get_cart_info();
 
     	return view("member.cashier.pos_table_item", $data);
     }
@@ -35,14 +35,14 @@ class CashierController extends Member
 
         if($data["item"])
         {
-            $return["status"] = "success";
-            $return["message"] = "Item Number " .  $item->item_id . " has been added.";
+            $return["status"]   = "success";
+            $return["message"]  = "Item Number " .  $item->item_id . " has been added.";
             Cart2::add_item_to_cart($shop_id, $item_id, 1);
         }
         else
         {
-            $return["status"] = "error";
-            $return["message"] = "The ITEM you scanned didn't match any record.";
+            $return["status"]   = "error";
+            $return["message"]  = "The ITEM you scanned didn't match any record.";
         }
 
         echo json_encode($return);

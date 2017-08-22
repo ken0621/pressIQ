@@ -4,7 +4,7 @@
             <th class="text-left" width="250px">ITEM NAME</th>
             <th class="text-center" width="180px">PRICE</th>
             <th class="text-center">QTY</th>
-            <th class="text-center">DISCNT</th>
+            <th class="text-center">DISCOUNT</th>
             <th class="text-right" width="180px">AMOUNT</th>
             <th width="50px"></th>
         </tr>

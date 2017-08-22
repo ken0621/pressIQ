@@ -232,6 +232,16 @@ class PayrollAllowanceController extends Member
          $insert['expense_account_id']           = Request::input('expense_account_id');
          $insert['payroll_allowance_type']   = Request::input('payroll_allowance_type');
          $insert['shop_id']                           = Self::shop_id();
+         $actual_gross_pay = Request::input('actual_gross_pay');
+         if ($actual_gross_pay!=null) 
+         {
+             foreach ($actual_gross_pay as $key => $value) 
+             {
+                $insert[$value] = 1;
+             }
+         }
+         
+
          $allowance_id = Tbl_payroll_allowance_v2::insertGetId($insert);
 
          $per_employee_amount = Request::input('allowance_amount');
@@ -336,9 +346,25 @@ class PayrollAllowanceController extends Member
          $update['payroll_allowance_amount']     = Request::input('payroll_allowance_amount');
          $update['payroll_allowance_category']   = Request::input('payroll_allowance_category');
          $update['payroll_allowance_add_period'] = Request::input('payroll_allowance_add_period');
-         $update['payroll_allowance_type'] = Request::input('payroll_allowance_type');
+         $update['payroll_allowance_type']       = Request::input('payroll_allowance_type');
          $update['expense_account_id']           = Request::input('expense_account_id');
+         $update['basic_pay']                    = 0;
+         $update['cola']                         = 0;
+         $update['over_time_pay']                = 0;
+         $update['regular_holiday_pay']          = 0;
+         $update['special_holiday_pay']          = 0;
+         $update['leave_pay']                    = 0;
 
+         $actual_gross_pay = Request::input('actual_gross_pay');
+
+         if ($actual_gross_pay!=null) 
+         {
+             foreach ($actual_gross_pay as $key => $value) 
+             {
+                $update[$value] = 1;
+             }
+         }
+        
          Tbl_payroll_allowance_v2::where('payroll_allowance_id', $payroll_allowance_id)->update($update);
          Tbl_payroll_employee_allowance_v2::where('payroll_allowance_id',$payroll_allowance_id)->delete();
 

@@ -8,7 +8,6 @@ function create_allowance()
 	{
 		event_accept_number_only();
 		document_ready();
-
 	}
 
 
@@ -16,11 +15,29 @@ function create_allowance()
 	{
 		$(document).ready(function()
 			{
-
+				event_on_change_type();
 			});
 	}
 
-	function event_change
+	function event_on_change_type()
+	{
+		var payroll_allowance_type = $('.payroll-allowance-type').val();
+		if(payroll_allowance_type == 'pro_rated')
+		{
+			$('.actual-gross-pay').removeClass('hidden');
+		}
+		$('.payroll-allowance-type').change(function()
+		{
+			if (this.value == 'pro_rated') 
+			{
+				$('.actual-gross-pay').removeClass('hidden');
+			}
+			else
+			{
+				$('.actual-gross-pay').addClass('hidden');
+			}
+		});
+	}
 
 	function event_accept_number_only()
 	{

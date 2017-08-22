@@ -20,6 +20,7 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_mlm_matching;
 use App\Models\Tbl_mlm_triangle_repurchase_slot;
 use App\Models\Tbl_item_code_invoice;
+use App\Models\Tbl_item_code;
 use App\Models\Tbl_mlm_plan_binary_promotions;
 use App\Models\Tbl_mlm_plan_binary_promotions_log;
 use App\Models\Tbl_mlm_binary_report;
@@ -42,6 +43,11 @@ class MlmReportController extends Mlm
         {
             return Self::show_no_access();
         }
+    }
+    public static function product_code()
+    {
+        $data['_report']     = Tbl_item_code::where("customer_id",Self::$customer_id)->where("used",1)->item()->get();
+        return view("mlm.report.product_code", $data);
     }
     public static function direct()
     {

@@ -490,7 +490,19 @@ class TabletSyncController extends Controller
                 $return[$key] = "INSERT INTO tbl_payment_method (payment_method_id, shop_id, payment_name, isDefault, archived) VALUES " . "(".$value->payment_method_id.",'".$value->shop_id."','".$value->payment_name."','".$value->isDefault."','".$value->archived."')";
             }
         }
+        if($table == "tbl_invoice_log")
+        {
+            $data = Tbl_customer::leftjoin('tbl_customer_other_info','tbl_customer_other_info.customer_id','=','tbl_customer.customer_id')
+                                    ->balanceJournal()
+                                    ->selectRaw('tbl_customer.customer_id as customer_id1, tbl_customer.*, tbl_customer_other_info.*, tbl_customer_other_info.customer_id as cus_id')
+                                    ->orderBy('tbl_customer.first_name')
+                                    ->get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = "INSERT INTO tbl_invoice_log (shop_id, transaction_customer_id ,transaction_name, transaction_id, transaction_amount, date_created) VALUES (" . $value->shop_id . ",".$value->customer_id.", 'customer_beginning_balance', 0," . $value->balance . ", '". Carbon::now() . "')";
 
+            }   
+        }
         return json_encode($return);
     }
     public function sync_update()

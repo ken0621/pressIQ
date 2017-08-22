@@ -1,7 +1,9 @@
 <form class="global-submit form-horizontal" role="form" action="/member/item/price_level/add" method="post">
+	{{ csrf_field() }}
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">×</button>
-		<h4 class="modal-title">CREATE NEW PRICE LEVEL</h4>
+		<h4 class="modal-title"><i class="fa fa-table"></i> CREATE NEW PRICE LEVEL</h4>
+		<div>This module allows you to create custom price for products.</div>
 	</div>
 	<div class="modal-body clearfix">
 		<div class="row">
@@ -9,7 +11,7 @@
 		        <div class="form-group">
 		            <label class="control-label col-sm-4 text-right" for="email">Price Level</label>
 		            <div class="col-sm-8">
-		                <input required="required" type="text" class="form-control input-sm price-level-select">
+		                <input name="price_level_name" required="required" type="text" class="form-control input-sm price-level-select">
 		            </div>
 		        </div>
 	        </div>
@@ -31,7 +33,7 @@
 					<table class="table table-bordered table-condensed">
 					    <thead style="background-color: #eee">
 					        <tr>
-					        	<th width="50px"></th>
+					        	<th class="text-center" width="50px"><input type="checkbox"></th>
 					            <th class="text-left" width="250px">ITEM NAME</th>
 					            <th class="text-center" width="180px">COST</th>
 					            <th class="text-center" width="180px">STANDARD</th>
@@ -44,32 +46,81 @@
 					        <tbody>
 					        	@foreach($_item as $item)
 					            <tr>
-					            	<td width="50px" class="text-center price-level-check-event"><input class="checkbox" type="checkbox" name=""></td>
-					                <td width="250px" class="text-left item-name">{{ $item->item_name }}</td>
+					            	<td width="50px" class="text-center price-level-check-event">
+					            		<input class="checkboxs" type="checkbox" name="">
+					            	</td>
+					                <td width="250px" class="text-left price-level-check-event">{{ $item->item_name }}</td>
 					                <td width="180px" class="text-center">{{ $item->item_cost }}</td>
 					                <td width="180px" class="text-center">{{ $item->item_price }}</td>
-					                <td class="text-center"><input type="text" class="custom-price-textbox text-right" name=""></td>
+					                <td class="text-center"><input name="_item[{{ $item->item_id }}]" type="text" class="custom-price-textbox text-right" name=""></td>
 					            </tr>
 					            @endforeach
 					        </tbody>
 						</table>
 					</div>
 
-					<div class="">
-						
+					<div class="adjust-panel">
+						<div>
+							<span>Adjust price of marked items to be</span>
+							<span>
+								<input class="text-right" width="20px" type="text" name="" value="0.00%">
+							</span>
+							<span>
+								<select>
+									<option>lower</option>
+								</select>
+							</span>
+							<span> than its </span>
+							<span>
+								<select>
+									<option>standard price</option>
+								</select>
+							</span>
+							<button type="button">Adjust</button>
+						</div>
+						<div style="margin-top: 5px;">
+							<span>Round up to the nearest </span>
+							<span> 
+								<select>
+									<option>no rounding</option>
+								</select>
+							</span>
+						</div>
 					</div>
 				</div>
 			</div>
 			<div class="price-level-container" leveltype="fixed-percentage">
-				<div class="col-md-12">
-					FIXED PERCENTAGE
+				<hr>
+				<div class="col-md-12 text-center">
+					<div class="adjust-panel">
+						<div>
+							<span>The price will</span>
+							<span>
+								<select>
+									<option>decrease</option>
+								</select>
+							</span>
+							<span> by </span>
+							<span>
+								<input class="text-right" width="20px" type="text" name="" value="0.00%">
+							</span>
+						</div>
+						<div style="margin-top: 5px;">
+							<span>Round up to the nearest </span>
+							<span> 
+								<select>
+									<option>no rounding</option>
+								</select>
+							</span>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-		<button class="btn btn-primary btn-custom-primary" type="button">Submit</button>
+		<button class="btn btn-primary btn-custom-primary" type="submit"><i class="fa fa-save"></i> &nbsp; Save Price Level</button>
 	</div>
 </form>
 
@@ -96,6 +147,25 @@
 .price-level-check-event input[type=checkbox]
 {
 	cursor: pointer;
+}
+.adjust-panel
+{
+	padding: 10px 20px;
+
+}
+.adjust-panel input[type=text], select
+{
+	border: 1px solid #ccc;
+	padding: 3px;
+	border-radius: 3px;
+	width: 150px;
+}
+.adjust-panel button
+{
+	background-color: #ddd;
+	border: 1px solid #bbb;
+	width: 60px;
+	margin-left: 5px;
 }
 </style>
 

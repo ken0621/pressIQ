@@ -41,9 +41,9 @@ function add_price_level()
 	}
 	function action_price_level_checkbox_click(e)
 	{
-		if(!$(e.target).is('.checkbox'))
+		if(!$(e.target).is('.checkboxs'))
 		{
-			$(e.currentTarget).find(".checkbox").trigger("click");
+			$(e.currentTarget).closest("tr").find(".checkboxs").trigger("click");
 		}
 	}
 }

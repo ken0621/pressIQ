@@ -18,3 +18,11 @@ class ItemPriceLevelController extends Member
         return view("member.price_level.price_level_add", $data);
     }
 }
+
+/*
+
+TODO:
+- BULK PRICE ADJUST (REFER TO QUICK BOOKS SOFTWARE FOR THE DEVELOPMENT)
+- MARK ALL CHECKBOX
+
+*/

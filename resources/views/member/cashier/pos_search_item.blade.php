@@ -3,8 +3,8 @@
         Search result for <i>"{{ $keyword }}"</i>
     </div>
     <div class="pos-item-list">
-        @foreach($_item as $item)
-        <div class="pos-item">
+        @foreach($_item as $key => $item)
+        <div class="pos-item pos-item-search-result" item_id="{{ $item->item_id }}">
             <div class="row">
                 <div class="col-md-2">
                     <div class="item-image text-center"><img src="/assets/member/images/item.png"></div>

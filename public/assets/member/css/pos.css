@@ -45,8 +45,14 @@
         .pos-search-container .pos-item-list .pos-item .item-info .item-sku {
           color: #777; }
       .pos-search-container .pos-item-list .pos-item:hover {
-        background-color: #fff;
+        background-color: #f3f3f3;
         cursor: pointer; }
+      .pos-search-container .pos-item-list .pos-item.cursor {
+        background-color: #f3f3f3; }
+
+.item-cart-pos .item-name {
+  font-weight: bold;
+  text-transform: uppercase; }
 
 .full-width {
   width: 100%;

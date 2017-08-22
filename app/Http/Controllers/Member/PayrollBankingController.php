@@ -41,9 +41,19 @@ class PayrollBankingController extends Member
      }
      public function download($payroll_period_company_id)
      {
+        if (isJson(Request::input("employee"))) 
+        {
+            $employee = json_decode(Request::input("employee"));
+        }
+        else
+        {
+            $employee = [];
+        }
+
      	$data["payroll_period_company_id"] = $payroll_period_company_id;
      	$data["payroll_period"] = Tbl_payroll_period_company::getcompanydetails($payroll_period_company_id)->first();
-
+        $data["_employee"] = Tbl_payroll_time_keeping_approved::whereIn("employee_id", $employee)->where("payroll_period_company_id", $data["payroll_period_company_id"])->orderBy("net_pay", "desc")->basic()->get();
+        
         if (Request::input("xls")) 
         {
             Self::download_xls($data);
@@ -72,7 +82,6 @@ class PayrollBankingController extends Member
      }
      public static function download_xls($data)
      {
-        $data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $data["payroll_period_company_id"])->orderBy("net_pay", "desc")->basic()->get();
         $data = Self::clean($data);
 
         $company_code = $data["payroll_period"]->payroll_company_code;
@@ -98,7 +107,6 @@ class PayrollBankingController extends Member
      }
      public static function download_bdo($data)
      {
-        $data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $data["payroll_period_company_id"])->orderBy("net_pay", "desc")->basic()->get();
         $data = Self::clean($data);
 
         $company_code = $data["payroll_period"]->payroll_company_code;

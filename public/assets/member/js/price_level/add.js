@@ -47,3 +47,7 @@ function add_price_level()
 		}
 	}
 }
+
+function new_price_level_save_done()
+{
+}

@@ -48,9 +48,6 @@ class Mlm_complan_manager_repurchasev2
 {   
     public static function unilevel($slot_info, $points)
     {
-        $slot_info     = Tbl_mlm_slot::where("slot_id", $slot_info->slot_id)->customer()->membership()->first();
-        $item_code     = Tbl_item_code::where("item_code_id",$item_code_id)->first(); 
-
         $unilevel_pts = $points;
 
         $_unilevel_setting = Tbl_mlm_unilevel_settings::get();
@@ -423,7 +420,7 @@ class Mlm_complan_manager_repurchasev2
 
     public static function repurchase_points($slot_info,$points)
     {
-        $points = 0;
+        $membership_points_repurchase = 0;
 
         if($membership_points_repurchase != 0)
         {
@@ -467,9 +464,6 @@ class Mlm_complan_manager_repurchasev2
     }
     public static function unilevel_repurchase_points($slot_info, $points)
     {
-        $slot_info     = Tbl_mlm_slot::where("slot_id", $slot_info->slot_id)->customer()->membership()->first();
-        $item_code     = Tbl_item_code::where("item_code_id",$item_code_id)->first(); 
-
         $unilevel_pts = $points;
 
 
@@ -524,22 +518,23 @@ class Mlm_complan_manager_repurchasev2
     
     public static function discount_card_repurchase($slot_info, $points)
     {
-        $item_code     = Tbl_item_code::where("item_code_id",$item_code_id)->first();  
-
         $dc_count      = $points;
 
         if($dc_count != 0)
         {
             $membership_id = $slot_info->slot_membership;
             $settings = Tbl_mlm_discount_card_settings::where('membership_id', $membership_id)->first();
-            for($i = 0; $i < $dc_count; $i++)
-            {
-                $insert['discount_card_log_date_created'] = Carbon::now();
-                $insert['discount_card_slot_sponsor'] = $slot_info->slot_id;
-                $insert['discount_card_customer_sponsor'] = $slot_info->slot_owner;
-                $insert['discount_card_membership'] = $settings->discount_card_membership;
-                $insert['discount_card_log_code'] = Membership_code::random_code_generator(8);
-                Tbl_mlm_discount_card_log::insert($insert);
+            if($settings)
+            {   
+                for($i = 0; $i < $dc_count; $i++)
+                {
+                    $insert['discount_card_log_date_created'] = Carbon::now();
+                    $insert['discount_card_slot_sponsor'] = $slot_info->slot_id;
+                    $insert['discount_card_customer_sponsor'] = $slot_info->slot_owner;
+                    $insert['discount_card_membership'] = $settings->discount_card_membership;
+                    $insert['discount_card_log_code'] = Membership_code::random_code_generator(8);
+                    Tbl_mlm_discount_card_log::insert($insert);
+                }
             }
         }
     }

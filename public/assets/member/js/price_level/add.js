@@ -17,6 +17,7 @@ function add_price_level()
 		event_price_level_checkbox_click();
 		event_change_price_level_select();
 		action_change_price_level_select();
+		event_check_all_item_click();
 	}
 	function event_change_price_level_select()
 	{
@@ -46,4 +47,40 @@ function add_price_level()
 			$(e.currentTarget).closest("tr").find(".checkboxs").trigger("click");
 		}
 	}
+	function event_check_all_item_click()
+	{
+		$(".check-all-item").click(function(e)
+		{
+			action_check_all_item_click(e);
+		});
+	}
+	function action_check_all_item_click(e)
+	{
+		if(!$(e.target).is('.checkbox-all'))
+		{
+			$(".checkbox-all").trigger("click");
+		}
+
+		if($(".checkbox-all").is(":checked"))
+		{
+			$(".checkboxs").each(function() 
+			{
+			    if(!$(this).is(":checked"))
+			    {
+			    	$(this).trigger("click");
+			    }
+			});
+		}
+		else
+		{
+			$(".checkboxs").each(function() 
+			{
+			    if($(this).is(":checked"))
+			    {
+			    	$(this).trigger("click");
+			    }
+			});
+		}
+	}
+
 }

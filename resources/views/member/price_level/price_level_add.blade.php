@@ -33,7 +33,7 @@
 					<table class="table table-bordered table-condensed">
 					    <thead style="background-color: #eee">
 					        <tr>
-					        	<th class="text-center" width="50px"><input type="checkbox"></th>
+					        	<th class="text-center check-all-item" width="50px"><input type="checkbox" class="checkbox-all"></th>
 					            <th class="text-left" width="250px">ITEM NAME</th>
 					            <th class="text-center" width="180px">COST</th>
 					            <th class="text-center" width="180px">STANDARD</th>
@@ -72,7 +72,7 @@
 							</span>
 							<span> than its </span>
 							<span>
-								<select>
+								<select class="adjust-price-options">
 									<option>standard price</option>
 								</select>
 							</span>

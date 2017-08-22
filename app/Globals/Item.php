@@ -696,12 +696,10 @@ class Item
     }
     public static function fix_discount_session($slot_id)
     {
-
-        
         $slot = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
         if($slot)
         {
-          $item_session = Session::get("sell_item_codes_session");
+            $item_session = Session::get("sell_item_codes_session");
             foreach($item_session as $key => $item)
             {
                 $item_session[$key]['membership_discount'] = Item::get_discount_only($key, $slot->slot_membership);

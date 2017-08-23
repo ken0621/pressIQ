@@ -43,7 +43,7 @@ class tablet_sync
     		{
     			$all_transaction = unserialize($tablet_data->sir_data);
     			$sir_id = $tablet_data->sir_id;
-
+    			dd($all_transaction);
     			$all_inv = $all_transaction['invoice'];
     			$all_rp = $all_transaction['receive_payment'];
     			$all_cm = $all_transaction['credit_memo'];
@@ -56,7 +56,7 @@ class tablet_sync
     			foreach ($all_inv as $key => $value) 
     			{
     				$customer_info                      = [];
-					$customer_info['customer_id']       = $value['inv']['inv_customer_id'];
+					$customer_info['customer_id']       = $value['inv']->inv_customer_id;
 					$customer_info['customer_email']    = $value['inv']['inv_customer_email'];
 
 					$invoice_info                       = [];

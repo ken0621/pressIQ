@@ -356,7 +356,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/custom_payslip/archive_payslip',"Member\PayrollController@archive_payslip");
 	Route::any('/custom_payslip/modal_update_payslip',"Member\PayrollController@modal_update_payslip");
 	Route::any('/custom_payslip/payslip_use_change',"Member\PayrollController@payslip_use_change");
-	
 	/* PAYROLL CUSTOM PAYSLIP END */
 
 	/* PAYROLL PERIOD START */

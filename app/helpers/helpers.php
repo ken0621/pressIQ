@@ -11,6 +11,20 @@ function floatvalser($amount)
     }
     
 }
+
+function gb_convert_time_from_db_to_timesheet($db_time)
+{
+    if($db_time == "00:00:00")
+    {
+        $return = "";
+    }
+    else
+    {
+        $return = $db_time;
+    }
+
+    return $return;
+}
 function array_to_object($array) {
          return (object) $array;
 }
@@ -684,4 +698,9 @@ function get_payment_method_mlm($id)
     $data[4] = 'V-Money';
 
     return $data[$id];
+}
+function isJson($string) 
+{
+    json_decode($string);
+    return (json_last_error() == JSON_ERROR_NONE);
 }

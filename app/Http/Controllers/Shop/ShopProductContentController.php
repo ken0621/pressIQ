@@ -119,7 +119,7 @@ class ShopProductContentController extends Shop
 
                 $data["product"]["variant"][$keys]["variant_image"] = Ecom_Product::getVariantImage($values["evariant_id"])->toArray();
             }
-
+            // dd($data["product"]);
             return view("product_content", $data);
         }
     }
@@ -137,6 +137,7 @@ class ShopProductContentController extends Shop
         else
         {
             $response["result"] = "fail";
+            $response["no_stock"] = "nostock";
         }
 
         echo json_encode($response);

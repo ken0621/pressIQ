@@ -646,6 +646,10 @@ class Item_code
                 $entry_data[$key]['discount'] = $value->item_membership_discount * $value->item_quantity;
                 $entry_data[$key]['entry_amount'] = $value->item_price * $value->item_quantity;
             }
+            //dd($entry_data);
+            //dd($invoice_id);
+           //dd($entry_data);
+
             Accounting::postJournalEntry($entry, $entry_data);
         }
         

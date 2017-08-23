@@ -183,7 +183,7 @@
                                         @if($product["eprod_detail_image"])
                                             <img class="detail" src="{{ $product["eprod_detail_image"] }}">
                                         @endif
-                                        <img class="1-1-ratio baka-img product-image-crop" src="{{ get_product_first_image($product) }}">
+                                        <img class="baka-img" src="{{ get_product_first_image($product) }}">
                                     </div>
                                     <div class="text">
                                         <div class="name">{{ get_product_first_name($product) }}</div>
@@ -276,8 +276,8 @@
     @endsection
     
     @section('css')
-    <link rel="stylesheet" href="resources/assets/frontend/css/product.css">
     <link rel="stylesheet" href="resources/assets/rutsen/css/jquery-ui.css">
+    <link rel="stylesheet" href="resources/assets/frontend/css/product.css">
     @endsection
 
     @section('script')

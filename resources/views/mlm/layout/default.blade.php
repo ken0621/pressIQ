@@ -455,6 +455,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </a> 
                             </li>
                         @endif
+                        @if(isset($shop_info->shop_key))
+                          @if($shop_info->shop_key == "PhilTECH")
+                            <li>
+                                <a href="/mlm/report/product_code" class="subnav-text">
+                                    Product Code
+                                </a> 
+                            </li>
+                          @endif
+                        @endif
                     </ul>
                 </li> 
                 <li  class="{{Request::segment(2) == 'vouchers' ? 'active' : '' }}">

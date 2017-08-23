@@ -136,6 +136,7 @@ class Mlm extends Controller
             }
 
             $this->seed();
+            
             View::share("profile", $profile);
             View::share("content", $content_a);
             View::share("complan", $plan_settings);

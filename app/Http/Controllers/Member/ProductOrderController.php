@@ -38,8 +38,8 @@ class ProductOrderController extends Member
     public function index()
     {
         $data["page"]               = "Customer Invoice";
-        $data["_customer"]          = Tbl_customer::where("tbl_customer.archived", 0)->get();
-        $data["_payment_method"]    = Tbl_online_pymnt_method::get();
+        $data["_customer"]          = Tbl_customer::where("tbl_customer.archived", 0)->where('shop_id',$this->user_info->shop_id)->get();
+        $data["_payment_method"]    = Tbl_online_pymnt_method::where('method_shop_id',$this->user_info->shop_id)->get();
         $data['_product']           = Ecom_Product::getProductList($this->user_info->shop_id, 0, 1);
         // dd($data);
         $data['_um']                = UnitMeasurement::load_um_multi();
@@ -54,6 +54,11 @@ class ProductOrderController extends Member
             $data["_invline"]       = Tbl_ec_order_item::where("ec_order_id", $id)->get();
             $data["action"]         = "/member/ecommerce/product_order/create_order/update_invoice";
 
+            $customer_data = Tbl_customer::where('customer_id',$data['inv']->customer_id)->first();
+            if($customer_data)
+            {
+                $data['customer_full_name'] = $customer_data->first_name. " ".$customer_data->middle_name." ".$customer_data->last_name;
+            }
             $mobile = DB::table("tbl_customer_other_info")->where("customer_id", $data["inv"]->customer_id)->first();
             $data["inv"]->customer_mobile = $mobile->customer_mobile or '';
 

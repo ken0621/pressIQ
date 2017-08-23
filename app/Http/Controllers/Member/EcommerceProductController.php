@@ -247,6 +247,7 @@ class EcommerceProductController extends Member
 			$insert_product["eprod_is_single"]		= Request::input('product_variant_type') == 'single' ? 1 : 0;
 			$insert_product["eprod_name"]			= Request::input('eprod_name');
 			$insert_product["eprod_category_id"]	= Request::input('eprod_category_id');
+			$insert_product["eprod_details"]		= Request::input('eprod_details');
 			
 			$product_id = Tbl_ec_product::insertGetId($insert_product);
 
@@ -489,6 +490,7 @@ class EcommerceProductController extends Member
 		$update_product["eprod_name"] 			= Request::input('eprod_name');
 		// $update_product["eprod_detail_image"]   = Request::input('eprod_detail_image');
 		$update_product["eprod_category_id"] 	= Request::input('eprod_category_id');
+		$update_product["eprod_details"] 		= Request::input('eprod_details');
 
 		Tbl_ec_product::where("eprod_id", $product_id)->update($update_product);
 
@@ -577,7 +579,7 @@ class EcommerceProductController extends Member
 		$data["_variant"]	= $product_data["_variant"];
 		$data["_item"]  	= Item::get_all_item();
 		$data["_column"]	= $product_data["_column"];
-
+		
 		return view('member.ecommerce_product.ecom_product_edit_variant', $data);
 	}
 

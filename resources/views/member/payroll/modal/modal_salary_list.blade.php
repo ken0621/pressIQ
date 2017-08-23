@@ -19,7 +19,8 @@
 			    		<tr>
 			    			<th>Monthly</th>
 			    			<th>Daily</th>
-			    			<th>COLA</th>
+			    			<th>COLA (Daily)</th>
+			    			<th>COLA (Monthly)</th>
 			    			<th>Mimimum Wage</th>
 			    			<th>Taxable</th>
 			    			<th>SSS</th>
@@ -39,6 +40,9 @@
 			    		</td>
 			    		<td class="text-right">
 			    			{{number_format($active->payroll_employee_salary_cola, 2)}}
+			    		</td>
+			    		<td class="text-right">
+			    			{{number_format($active->monthly_cola, 2)}}
 			    		</td>
 			    		<td class="text-center">
 			    			{{$active->payroll_employee_salary_minimum_wage == 1 ? 'Yes':'No'}}
@@ -82,7 +86,8 @@
 			    		<tr>
 			    			<th>Monthly</th>
 			    			<th>Daily</th>
-			    			<th>COLA</th>
+			    			<th>COLA (Daily)</th>
+			    			<th>COLA (Monthly)</th>
 			    			<th>Mimimum Wage</th>
 			    			<th>Taxable</th>
 			    			<th>SSS</th>
@@ -102,6 +107,9 @@
 			    		</td>
 			    		<td class="text-right">
 			    			{{number_format($archived->payroll_employee_salary_cola, 2)}}
+			    		</td>
+			    		<td class="text-right">
+			    			{{number_format($archived->monthly_cola, 2)}}
 			    		</td>
 			    		<td class="text-center">
 			    			{{$archived->payroll_employee_salary_minimum_wage == 1 ? 'Yes':'No'}}

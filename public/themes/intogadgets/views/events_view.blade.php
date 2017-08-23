@@ -57,7 +57,7 @@
 </div>
 @endsection
 @section('css')
-<link rel="stylesheet" href="resources/assets/frontend/css/events-view.css">
+<link rel="stylesheet" href="resources/assets/frontend/css/events-view.css?version=1">
 @endsection
 @section('script')
 <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>

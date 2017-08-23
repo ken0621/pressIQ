@@ -10,7 +10,14 @@
         <label>Category Name</label>
         <input type="text" name="type_name" class="form-control" placeholder="" required>
       </div>
-      
+      <div class="col-md-12">
+        <label>Category Image</label>
+        <div class="category-image" style="margin-bottom: 7.5px;">
+          <img style="height: 150px; width: auto; border: 1px solid #bcbcbc;" src="/assets/front/img/default.jpg">
+        </div>
+        <button class="btn btn-primary image-gallery image-gallery-single" key="category-image">Upload</button>
+        <input class="category-image-path" type="hidden" name="type_image" class="form-control" placeholder="" required>
+      </div>
     </div>
     <div class="form-group">
       <div class="col-md-12">
@@ -52,3 +59,12 @@
   </div>
 </form>
 <script type="text/javascript" src="/assets/member/js/category_plugin.js"></script>
+<script type="text/javascript">
+function submit_selected_image_done(data) 
+{
+  var image = data.image_data[0].image_path;
+
+  $('.category-image-path').val(image);
+  $('.category-image img').attr("src", image); 
+}
+</script>

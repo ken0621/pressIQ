@@ -9,6 +9,23 @@ class Tbl_membership extends Model
     protected $table = 'tbl_membership';
 	protected $primaryKey = "membership_id";
     public $timestamps = false;
+
+    public function scopeActive($query)
+    {
+        $query->where("tbl_membership.membership_archive", 0);
+    }
+    public function scopeShop($query, $shop_id)
+    {
+        $query->where("tbl_membership.shop_id", $shop_id);
+    }
+    public function scopeReverseOrder($query)
+    {
+        $query->orderBy("tbl_membership.membership_id", "desc");
+    }
+    public function scopeJoinPackage($query)
+    {
+        $query->join("tbl_membership_package", "tbl_membership_package.membership_id", "=", "tbl_membership.membership_id");
+    }
     public function scopeArchive($query, $archive=0)
     {
         $query->where('membership_archive', $archive);

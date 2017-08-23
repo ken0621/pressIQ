@@ -20,6 +20,7 @@ use Request;
 use Session;
 use Validator;
 use Redirect;
+use Carbon\Carbon;
 
 /**
  * Acommerce Products and Variants - all product of ecommerce related module
@@ -272,7 +273,8 @@ class Ecom_Product
 					$variant_option_value = Tbl_option_value::where("option_value_id", $option_name["option_value_id"])->first()->toArray();
 					$product["variant"][$key2]["options"][$option_name['option_name']] = $variant_option_value["option_value"];
 				}
-				if($variant["item_discount_value"] != 0)
+				$date_now = Carbon::now();
+				if($variant["item_discount_value"] != 0 && $date_now >= $variant['item_discount_date_start'] && $date_now <= $variant['item_discount_date_end'])
 				{
 					$get_min_price[$key2] = $variant["item_discount_value"];
 				}

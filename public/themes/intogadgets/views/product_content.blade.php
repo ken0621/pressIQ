@@ -37,7 +37,7 @@
             @endforeach
          </div>
       </div>
-      <div class="single-product-holder border">
+      <div class="single-product-holder border" style="position: relative;">
          <div class="single-order-header">{{ $product["eprod_name"] }}</div>
          <div class="single-order-sub">
             Categories: <a href="/product?type={{ $product['eprod_category_id'] }}">{{ $category['type_name'] }}</a>
@@ -113,6 +113,7 @@
             @if($wishlist)
               <button type="button" class="single-order-button" onClick="location.href='/wishlist/add/{{ $product["eprod_id"] }}'">ADD TO WISHLIST</button>
             @endif
+            <div class="loader-variation" style="display: none; vertical-align: middle; position: absolute; top: 5px; right: 5px; bottom: 0;"><img style="width: 25px; height: 25px;" src="/resources/assets/frontend/img/loader.gif"></div>
             <div class="divider" style="margin: 35px 0; opacity: 0;"></div>
             <!-- <div class="single-order-rate" id="single-product-rate">
                @for ($i = 1; $i <= 5; $i++)
@@ -213,7 +214,7 @@
                </div>
             </div>
             <div class="single-detail-description min-300">
-               <p>  </p>
+               {!! $product["eprod_details"] !!}
             </div>
          </div>
       </div>
@@ -226,7 +227,7 @@
                <div class="feature-holder col-md-3 col-sm-6 col-xs-12">
                   <a href="/product/view/{{$related['eprod_id']}}">
                      <div class="feature-img">
-                        <img class="lazy 4-3-ratio" data-original="{{ get_product_first_image($related) }}" height="222px" width="222px">
+                        <img class="lazy 1-1-ratio" data-original="{{ get_product_first_image($related) }}" height="222px" width="222px">
                         <div class="feature-hover"></div>
                         <div class="feature-hoverimg">
                   <a href="javascript:"><i class="fa fa-link"></i></a></div>
@@ -352,6 +353,15 @@
 <link rel="stylesheet" href="resources/assets/frontend/css/single-product.css">
 
 <link rel="stylesheet" type="text/css" href="resources/assets/flexslider/css/flexslider.css">
+
+<style type="text/css">
+.single-detail-description img
+{
+  height: auto !important;
+  max-width: 100% !important;
+  width: auto !important;
+}
+</style>
 
 @endsection
 

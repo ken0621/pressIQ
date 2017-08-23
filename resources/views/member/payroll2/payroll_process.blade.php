@@ -8,17 +8,22 @@
             <div>
                 <i class="fa fa-calendar"></i>
                 <h1>
-                <span class="page-title">Payroll Process / {{$company->payroll_company_name}} ({{$company->payroll_period_category}})</span>
+                <span class="page-title">Payroll {{ ucfirst($step) }} / {{$company->payroll_company_name}} ({{$company->payroll_period_category}})</span>
                 <small style="font-size: 14px; color: gray;">
                      {{ payroll_date_format($company->payroll_period_start) }} to  {{ payroll_date_format($company->payroll_period_end) }} ({{ $company->month_contribution }} - {{ code_to_word($company->period_count) }})
                 </small>
                 </h1>
 
                 <div class="dropdown pull-right">
-                    <button type="button" onclick="location.href='/member/payroll/company_timesheet2/{{ $period_company_id }}'" class="btn btn-default">&laquo; Back</button>
-                    
+                    @if($step == "process")
+                        <button type="button" onclick="location.href='/member/payroll/company_timesheet2/{{ $period_company_id }}'" class="btn btn-default">&laquo; Back</button>
+                    @else
+                        <button type="button" onclick="location.href='/member/payroll/time_keeping'" class="btn btn-default">&laquo; Back</button>
+                    @endif
                 </div>
+                
                 <input type="hidden" name="" value="{{$company->payroll_period_id}}" id="payroll_period_id">
+              
             </div>
         </div>
     </div>
@@ -27,7 +32,7 @@
         <div class="panel-heading">
             <div class="text-center" style="font-size: 20px;">
                 Please check carefully before proceeding. <br>
-                <button type="submit" class="btn btn-primary"><i class="fa fa-star"></i> Click <b>HERE</b> to <b>CONFIRM PAYROLL PROCESS</b>!</button>
+                <button type="submit" class="btn btn-primary"><i class="fa fa-star"></i> Click <b>HERE</b> to <b>CONFIRM PAYROLL {{ strtoupper($step) }}</b>!</button>
             </div>
         </div>
     </div>

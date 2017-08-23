@@ -30,7 +30,6 @@ class Utilities
 	{
 
 		$user_info = Tbl_user::where("user_email", session('user_email'))->shop()->position()->access()->first();
-
 		$rank 	   = $user_info->position_rank;
 
 		if($user_info)

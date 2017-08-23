@@ -13,10 +13,11 @@
                         <tr>
                             <th rowspan="2" valign="center" class="text-center">Day</th>
                             <th rowspan="2" valign="center" class="text-center">Working Hours</th>
-                            <th rowspan="2" valign="center" class="text-center">Break Hours</th>
+                            
                             <th colspan="2" class="text-center">Work Schedule</th>
                             <th class="text-center"><i class="fa fa-clock"></i></th>
                             <th rowspan="2" class="text-center">Flexi Time</th>
+                            <th rowspan="2" valign="center" class="text-center">Break Hours</th>
                             <th rowspan="2" class="text-center">Rest Day</th>
                             <th rowspan="2" class="text-center">Extra Day</th>
                         </tr>
@@ -36,9 +37,6 @@
                                 <td>
                                     <input type="number" name="target_hours[{{$day->shift_day}}]" class="form-control text-center" step="any" value="{{ $day->shift_target_hours }}">
                                 </td>
-                                <td>
-                                    <input type="number" name="break_hours[{{$day->shift_day}}]" class="form-control text-center" step="any" value="{{ $day->shift_break_hours }}">
-                                </td>
                                 <td class="editable">
                                     <input type="text" placeholder="NO TIME" value="{{ (isset($day->time_shift[0]) == '' ? '' : $day->time_shift[0]->shift_work_start) }}" name="work_start[{{$day->shift_day}}][]" class="text-table time-entry in" >
                                 </td>
@@ -50,6 +48,9 @@
                                 </td>
                                 <td class="text-center">
                                     <input type="checkbox" name="flexitime_day_{{$day->shift_day}}" class="flexitime-check" value="1" {{ $day->shift_flexi_time != 0 ? "checked" :  ""}}>
+                                </td>
+                                <td>
+                                    <input type="number" name="break_hours[{{$day->shift_day}}]" class="form-control text-center break_hours hidden" step="any" value="{{ $day->shift_break_hours }}">
                                 </td>
                                 <td class="text-center">
                                     <input type="checkbox" name="rest_day_{{$day->shift_day}}" class="restday-check" value="1" {{ $day->shift_rest_day != 0 ? "checked" :  ""}}>
@@ -64,7 +65,6 @@
                                         <tr class="editable main-con sub-time" day="{{$day->shift_day}}">
                                             <td></td>
                                             <td></td>
-                                            <td></td>
                                             <td class="editable">
                                                 <input type="text" placeholder="NO TIME" value="{{ $timeshift->shift_work_start }}" name="work_start[{{$day->shift_day}}][]" class="text-table time-entry in" >
                                             </td>
@@ -76,7 +76,7 @@
                                             </td>
                                             <td class="text-center"></td>
                                             <td class="text-center"></td>
-                                             <td class="text-center"></td>
+                                            <td class="text-center"></td>
                                         </tr>
                                     @endif
                                 @endforeach

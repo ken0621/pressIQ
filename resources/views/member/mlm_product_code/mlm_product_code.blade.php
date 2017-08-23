@@ -43,7 +43,7 @@
         </div>
     </div>
 </div>
-
+@if($ismerchant != 1)
 <!-- NO PRODUCT YET -->
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <ul class="nav nav-tabs">
@@ -172,6 +172,7 @@
         </div>
     </div> 
 </div>
+@endif
 @endsection
 @section('script')
 <script type="text/javascript">

@@ -12,17 +12,43 @@ use App\Models\Tbl_sir_item;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_item_discount;
 use App\Models\Tbl_audit_trail;
-use DB;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\Tablet_global;
+
 use Session;
+use DB;
 use Carbon\carbon;
 use App\Globals\Merchant;
 
 class Item
 {
+    public static function insert_price_level($shop_id, $data)
+    {  
+        Tbl_price_level::insert($data);   
+    }
+    public static function insert_price_level_items($shop_id, $price_level_id, $_item)
+    {  
+        $_insert = array();
+
+        foreach($_item as $item_id => $custom_price)
+        {
+            if($custom_price != "")
+            {
+                $insert["price_level_id"]   = $price_level_id;
+                $insert["item_id"]          = $item_id;
+                $insert["custom_price"]     = $custom_price;
+                $insert["shop_id"]          = $shop_id;
+                array_push($_insert, $insert);
+            }
+        }
+
+        if($_insert)
+        {
+            Tbl_price_level_item::insert($insert);
+        }
+    }
     public static function getShopId()
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
@@ -169,9 +195,13 @@ class Item
         return $data;
 	}
 
-    public static function get_all_item()
+    public static function get_all_item($shop_id = 0)
     {
-        return Tbl_item::where("shop_id", Item::getShopId())->where("archived", 0)->get();
+        if($shop_id == 0)
+        {
+            $shop_id = Item::getShopId();
+        }
+        return Tbl_item::where("shop_id", $shop_id)->where("archived", 0)->get();
     }
 
     public static function insert_item_discount($item_info)
@@ -696,12 +726,10 @@ class Item
     }
     public static function fix_discount_session($slot_id)
     {
-
-        
         $slot = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
         if($slot)
         {
-          $item_session = Session::get("sell_item_codes_session");
+            $item_session = Session::get("sell_item_codes_session");
             foreach($item_session as $key => $item)
             {
                 $item_session[$key]['membership_discount'] = Item::get_discount_only($key, $slot->slot_membership);

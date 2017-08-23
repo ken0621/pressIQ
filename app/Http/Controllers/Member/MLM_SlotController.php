@@ -50,6 +50,7 @@ use App\Globals\Mlm_discount;
 // use App\Globals\Mlm_compute;
 use App\Models\Tbl_email_content;
 use Crypt;
+use App\Globals\Reward;
 class MLM_SlotController extends Member
 {
     public function instant_add_slot()
@@ -198,6 +199,7 @@ class MLM_SlotController extends Member
             ->where('marketing_plan_enable', 1)
             ->where('marketing_plan_trigger', 'Slot Creation')
             ->first();
+            
         $data["code_selected"]  = $code->paginate(10);
         // dd($data);
         return view('member.mlm_slot.mlm_slot_ajax', $data);

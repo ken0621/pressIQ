@@ -792,7 +792,6 @@ class TabletPISController extends Controller
     public function load_customer_rp($customer_id)
     {
         $data["_invoice"] = Invoice::getAllInvoiceByCustomer($customer_id,true);
-        dd($data["_invoice"]);
         return view('member.receive_payment.load_receive_payment_items', $data);
     }
 	public function add_receive_payment()

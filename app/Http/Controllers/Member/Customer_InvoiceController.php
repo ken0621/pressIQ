@@ -40,7 +40,7 @@ class Customer_InvoiceController extends Member
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
-
+    /* arcy 8/17/17 */
     public function index()
     {
         Session::forget('est_item');
@@ -724,7 +724,7 @@ class Customer_InvoiceController extends Member
                 $data["_cmline"][$keys]->cm_qty = UnitMeasurement::um_view($total_qtys,$values->item_measurement_id,$values->cmline_um);
             }
         }
-          $pdf = view('member.customer_invoice.invoice_pdf', $data);
-          return Pdf_global::show_pdf($pdf);
+        $pdf = view('member.customer_invoice.invoice_pdf', $data);
+        return Pdf_global::show_pdf($pdf);
     }
 }

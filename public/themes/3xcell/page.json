@@ -211,7 +211,7 @@
 			"size":"6"
 		}
 	},
-		"history":
+	"history":
 	{
 		"history_banner_img" :
 		{
@@ -343,8 +343,8 @@
 			"size":"6"
 		}
 	},
-		"contact":
-	{		
+	"contact":
+	{
 		"contactus_banner_title" :
 		{
 			"label":"Banner Title",
@@ -415,7 +415,37 @@
 			"type":"textbox",
 			"default":"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3967.108523067281!2d125.17183721482861!3d6.116090629461948!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x32f79fa64c22dedb%3A0xd952833de2ffdf90!2sPerla+Insurance!5e0!3m2!1sen!2sph!4v1501901631315",
 			"size":"6"
+		}		
+	},
+	"gallery":
+	{
+		"gallery_maintenance" :
+		{
+			"label":"Gallery Maintenance",
+			"type":"maintenance",
+			"default":"",
+			"field":[
+				{"name":"image", "type":"image_gallery"},
+				{"name":"title", "type":"text"},
+				{"name":"posted", "type":"timestamp"}
+			],
+			"size":"12"
 		}
-		
+	},
+	"promo":
+	{
+		"promo_maintenance" :
+		{
+			"label":"Promo Maintenance",
+			"type":"maintenance",
+			"default":"",
+			"field":[
+				{"name":"image", "type":"image"},
+				{"name":"title", "type":"text"},
+				{"name":"description", "type":"textarea"},
+				{"name":"posted", "type":"timestamp"}
+			],
+			"size":"12"
+		}
 	}
 }

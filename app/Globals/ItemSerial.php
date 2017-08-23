@@ -173,7 +173,7 @@ class ItemSerial
 		    	$check = Tbl_inventory_serial_number::item()->where("shop_id",ItemSerial::getShopId())->where("tbl_item.item_id",$item_serial["item_id"])->where("serial_number",trim($value))->first();
 		    	if($check)
 		    	{
-		    		Tbl_inventory_serial_number::item()->where("shop_id",ItemSerial::getShopId())->where("tbl_item.item_id",$item_serial["item_id"])->where("serial_number",trim($value))->update($up);
+		    		Tbl_inventory_serial_number::where("item_id",$item_serial["item_id"])->where("serial_number",trim($value))->update($up);
 		    	}    			
     		}
 	    }
@@ -229,7 +229,7 @@ class ItemSerial
                 $check = Tbl_inventory_serial_number::item()->where("shop_id",ItemSerial::getShopId())->where("tbl_item.item_id",$value["item_id"])->where("serial_number",trim($values))->first();
                 if($check)
                 {
-                    Tbl_inventory_serial_number::item()->where("shop_id",ItemSerial::getShopId())->where("tbl_item.item_id",$value["item_id"])->where("serial_number",trim($values))->update($up);
+                    Tbl_inventory_serial_number::where("item_id",$value["item_id"])->where("serial_number",trim($values))->update($up);
                 }    
             }
         }
@@ -288,7 +288,7 @@ class ItemSerial
                 $check = Tbl_inventory_serial_number::item()->where("shop_id",ItemSerial::getShopId())->where("tbl_item.item_id",$value["item_id"])->where("serial_number",trim($values))->first();
                 if($check)
                 {
-                    Tbl_inventory_serial_number::item()->where("shop_id",ItemSerial::getShopId())->where("tbl_item.item_id",$value["item_id"])->where("serial_number",trim($values))->update($up);
+                    Tbl_inventory_serial_number::where("item_id",$value["item_id"])->where("serial_number",trim($values))->update($up);
                 }    
             }
         }

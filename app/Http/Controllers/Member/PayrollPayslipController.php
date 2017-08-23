@@ -15,12 +15,11 @@ use App\Models\Tbl_payroll_employee_contract;
 use App\Models\Tbl_payroll_payslip;
 use App\Models\Tbl_payroll_record;
 use PDF2;
+use App\Globals\Pdf_global;
 
 
 class PayrollPayslipController extends Member
 {
-     /*Payslip version 2
-     by: Mark Brain M. Oliver date: 7/31/2017*/
      public function shop_id()
      {
      	return $this->user_info->shop_id;
@@ -31,7 +30,15 @@ class PayrollPayslipController extends Member
 		$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
 		$data["show_period_start"]	= date("F d, Y", strtotime($data["company"]->payroll_period_start));
 		$data["show_period_end"]	= date("F d, Y", strtotime($data["company"]->payroll_period_end));
-
+		
+		if (($data["company"]->payroll_release_date) != "0000-00-00") 
+		{
+			$data["show_release_date"]    = date("F d, Y", strtotime($data["company"]->payroll_release_date));
+		}
+		else
+		{
+			$data["show_release_date"] = "not specified";
+		}
 		foreach($data["_employee"] as $key => $employee)
 		{
 			if($data["_employee"][$key]->cutoff_input == "")
@@ -64,11 +71,24 @@ class PayrollPayslipController extends Member
 
 			$data["_employee"][$key]->other_deduction = $other_deductions;
 			$data["_employee"][$key]->total_deduction = $employee->philhealth_ee + $employee->sss_ee + $employee->pagibig_ee + $employee->tax_ee + $other_deductions;
-		
-		
 		}
 
-		$pdf = PDF2::loadView('member.payroll.payroll_payslipv1', $data);
-		return $pdf->stream('document.pdf');
+		// $pdf = PDF2::loadView('member.payroll.payroll_payslipv1', $data);
+		// return $pdf->stream('document.pdf');
+		
+		// return view('member.payroll.payroll_payslipv1', $data);
+		// $data['new_employee'] = loop_content_divide($data["_employee"]->toArray(), 2);
+		
+		// $data["new_employee"] = array_chunk($data["_employee"]->toArray(), ceil(count($data["_employee"]->toArray()) / 2));
+		// foreach ($data['new_employee'] as $key => $value) 
+		// {
+		// 	foreach ($value as $keys => $values) 
+		// 	{
+		// 		$data['new_employee'][$key][$keys] = (object)$values;
+		// 	}
+		// }
+		
+		$pdf = view('member.payroll.payroll_payslipv1', $data);
+        return Pdf_global::show_pdf($pdf);
      }
 }

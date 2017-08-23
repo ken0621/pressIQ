@@ -29,6 +29,10 @@
         <link href="/themes/{{ $shop_theme }}/css/{{ $shop_theme_color }}.css" rel="stylesheet" type="text/css">
         <!-- PARALLAX -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/parallax.css">
+        
+        <!-- LIGHTBOX -->
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/lightbox/css/lightbox.css">
+
         <!-- OTHER CSS -->
         @yield("css")
         <style type="text/css">
@@ -61,7 +65,7 @@
 
     <!-- HEADER -->
     <div class="subheader-container">
-        <div class="container">
+        <div class="container" style="position: relative;">
            <div class="button-container">
                 <div class="social-media-container">
                     <span>
@@ -79,7 +83,7 @@
                 </div> 
                <div class="login-container">
                    <div class="login-button">
-                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;<i class="fa fa-user" aria-hidden="true"></i></span><span>&nbsp;<a>LOGIN</a></span>
+                       <span>&nbsp;&nbsp;|&nbsp;&nbsp;<i class="fa fa-user" aria-hidden="true"></i></span><span>&nbsp;<a href="/3xcell_login">LOGIN</a></span>
                    </div>
                </div>
                <div class="join-us-container">
@@ -89,7 +93,7 @@
                        </div>
                    </a>
                </div>
-           </div> 
+           </div>
         </div>
     </div>
     <div class="header-container">
@@ -169,37 +173,197 @@
                                             </div>
                                         </div>
                                     </a>
-                                    <div class="cat-container">
-                                        <div class="per-cat">
-                                            <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/how-to-join-thumb.png"></div>
-                                            <div class="cat-name">HOW TO JOIN</div>
+                                    <a href="/how_to_join">
+                                        <div class="cat-container">
+                                            <div class="per-cat">
+                                                <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/how-to-join-thumb.png"></div>
+                                                <div class="cat-name">HOW TO JOIN</div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="cat-container">
-                                        <div class="per-cat">
-                                            <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/events-calendar-thumb.png"></div>
-                                            <div class="cat-name">EVENTS CALENDAR</div>
+                                    </a>
+                                    <a href="/company_events">
+                                        <div class="cat-container">
+                                            <div class="per-cat">
+                                                <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/events-calendar-thumb.png"></div>
+                                                <div class="cat-name">COMPANY EVENTS</div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
                             </li>
-                            <li><a class="head-button link-nav">GALLERY</a></li>
-                            <li><a class="head-button link-nav">CONTACT US</a></li>
+                            <li><a href="/gallery" class="head-button link-nav">GALLERY</a></li>
+                            <li><a href="/contact" class="head-button link-nav">CONTACT US</a></li>
                             <li class="cart-hover">
-                                <a href="/" class="link-nav"><span><img class="cart-header" src="/themes/{{ $shop_theme }}/img/cart-header.png"></span></a>
+                                <a class="link-nav"><span><img class="cart-header" src="/themes/{{ $shop_theme }}/img/cart-header.png"></span></a>
                                 <!-- CART DROPDOWN -->
                                 <div class="cart-dropdown" style="display: none;">
-                                    You have no item in your cart.
+                                    <div class="title-container">
+                                        Cart Summary
+                                    </div>
+                                    <div class="scroll-container">
+                                        <div class="per-order-container">
+                                            <!-- PER ITEM -->
+                                            <div class="per-item-container row-no-padding clearfix">
+                                                <div class="col-md-3">
+                                                    <!-- ITEM IMAGE -->
+                                                    <div class="image-container">
+                                                        <img src="/themes/{{ $shop_theme }}/img/item-sample.png">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <!-- ITEM DETAILS -->
+                                                    <div class="item-detail-container">
+                                                        <div class="item-name text-overflow">Item Name Testing</div>
+                                                        <div class="bottom-detail row clearfix">
+                                                            <div class="col-md-4">
+                                                                <div class="price-container">
+                                                                    <div class="title-price">Price:</div>
+                                                                    <div class="price">PHP 200.00</div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="quantity-container">
+                                                                    <input class="input-quantity" type="number" name="quantity" min="1" step="1" value="1">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="total-container">
+                                                                    <div class="title-price">Total:</div>
+                                                                    <div class="price">PHP 200.00</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- REMOVE BUTTON -->
+                                                <div class="remove-container"><i class="fa fa-times" aria-hidden="true"></i></div>
+                                            </div>
+                                            <!-- PER ITEM -->
+                                            <div class="per-item-container row-no-padding clearfix">
+                                                <div class="col-md-3">
+                                                    <!-- ITEM IMAGE -->
+                                                    <div class="image-container">
+                                                        <img src="/themes/{{ $shop_theme }}/img/item-sample.png">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <!-- ITEM DETAILS -->
+                                                    <div class="item-detail-container">
+                                                        <div class="item-name text-overflow">Item Name Testing</div>
+                                                        <div class="bottom-detail row clearfix">
+                                                            <div class="col-md-4">
+                                                                <div class="price-container">
+                                                                    <div class="title-price">Price:</div>
+                                                                    <div class="price">PHP 200.00</div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="quantity-container">
+                                                                    <input class="input-quantity" type="number" name="quantity" min="1" step="1" value="1">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="total-container">
+                                                                    <div class="title-price">Total:</div>
+                                                                    <div class="price">PHP 200.00</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- REMOVE BUTTON -->
+                                                <div class="remove-container"><i class="fa fa-times" aria-hidden="true"></i></div>
+                                            </div>
+                                            <!-- PER ITEM -->
+                                            <div class="per-item-container row-no-padding clearfix">
+                                                <div class="col-md-3">
+                                                    <!-- ITEM IMAGE -->
+                                                    <div class="image-container">
+                                                        <img src="/themes/{{ $shop_theme }}/img/item-sample.png">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <!-- ITEM DETAILS -->
+                                                    <div class="item-detail-container">
+                                                        <div class="item-name text-overflow">Item Name Testing</div>
+                                                        <div class="bottom-detail row clearfix">
+                                                            <div class="col-md-4">
+                                                                <div class="price-container">
+                                                                    <div class="title-price">Price:</div>
+                                                                    <div class="price">PHP 200.00</div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="quantity-container">
+                                                                    <input class="input-quantity" type="number" name="quantity" min="1" step="1" value="1">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="total-container">
+                                                                    <div class="title-price">Total:</div>
+                                                                    <div class="price">PHP 200.00</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- REMOVE BUTTON -->
+                                                <div class="remove-container"><i class="fa fa-times" aria-hidden="true"></i></div>
+                                            </div>
+                                            <!-- PER ITEM -->
+                                            <div class="per-item-container row-no-padding clearfix">
+                                                <div class="col-md-3">
+                                                    <!-- ITEM IMAGE -->
+                                                    <div class="image-container">
+                                                        <img src="/themes/{{ $shop_theme }}/img/item-sample.png">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <!-- ITEM DETAILS -->
+                                                    <div class="item-detail-container">
+                                                        <div class="item-name text-overflow">Item Name Testing</div>
+                                                        <div class="bottom-detail row clearfix">
+                                                            <div class="col-md-4">
+                                                                <div class="price-container">
+                                                                    <div class="title-price">Price:</div>
+                                                                    <div class="price">PHP 200.00</div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="quantity-container">
+                                                                    <input class="input-quantity" type="number" name="quantity" min="1" step="1" value="1">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="total-container">
+                                                                    <div class="title-price">Total:</div>
+                                                                    <div class="price">PHP 200.00</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- REMOVE BUTTON -->
+                                                <div class="remove-container"><i class="fa fa-times" aria-hidden="true"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="subtotal-container">
+                                        <div class="title-container">
+                                            TOTAL
+                                            <div class="subtotal">PHP 2,800.00</div>
+                                        </div>
+                                        <a href="/item_checkout" style="text-decoration: none;"><div class="button-checkout">CHECKOUT</div></a>
+                                        <div class="view-cart"><a href="/MyCart"><span><i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;View Cart</span></a></div>
+                                    </div>
                                 </div>
                             </li>
                         </ul>
                     </nav>
                 </div>
-                
             </div>
         </div>
-    </div>
- 
+    </div> 
     <!-- CONTENT -->
     <div id="scroll-to" class="clearfix">
 	   @yield("content")
@@ -271,7 +435,7 @@
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/figuesslider.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/parallax.js"></script>
 
-
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/lightbox/js/lightbox.js"></script>
 
     <!-- FB WIDGET -->
     <div id="fb-root"></div>
@@ -303,8 +467,6 @@
          });
 
     </script>
-
-
 
     <script type="text/javascript">
             

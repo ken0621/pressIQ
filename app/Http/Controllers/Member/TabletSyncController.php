@@ -17,6 +17,8 @@ use App\Globals\Category;
 use App\Globals\CreditMemo;
 use App\Globals\ReceivePayment;
 use App\Globals\Tablet_global;
+use App\Globals\Tablet_sync;
+
 
 use App\Models\Tbl_shop;
 use App\Models\Tbl_category;
@@ -63,6 +65,7 @@ use App\Models\Tbl_um;
 use App\Models\Tbl_unit_measurement;
 use App\Models\Tbl_unit_measurement_multi;
 use App\Models\Tbl_user;
+use App\Models\Tbl_tablet_data;
 
 use Session;
 use Crypt;
@@ -151,7 +154,7 @@ class TabletSyncController extends Controller
             $data = Tbl_credit_memo::get();
             foreach ($data as $key => $value) 
             {
-                $return[$key] = "INSERT INTO tbl_credit_memo (cm_id, cm_customer_id, cm_shop_id, cm_ar_acccount, cm_customer_email, cm_date, cm_message, cm_memo, cm_amount, date_created, cm_type, cm_used_ref_name,cm_used_ref_id,created_at,updated_at) VALUES " . "(".$value->cm_id.",'".$value->cm_customer_id."','".$value->cm_shop_id."','".$value->cm_ar_acccount."','".$value->cm_customer_email."','".$value->cm_date."','".$value->cm_message."','".$value->cm_memo."','".$value->cm_amount."','".$value->date_created."','".$value->cm_type."','".$value->cm_used_ref_name."','".$value->cm_used_ref_id."','".$value->created_at."','".$value->updated_at."')";
+                $return[$key] = "INSERT INTO tbl_credit_memo (cm_id, cm_customer_id, cm_shop_id, cm_ar_acccount, cm_customer_email, cm_date, cm_message, cm_memo, cm_amount, date_created, cm_type, cm_used_ref_name,cm_used_ref_id,created_at,updated_at, get_status) VALUES " . "(".$value->cm_id.",'".$value->cm_customer_id."','".$value->cm_shop_id."','".$value->cm_ar_acccount."','".$value->cm_customer_email."','".$value->cm_date."','".$value->cm_message."','".$value->cm_memo."','".$value->cm_amount."','".$value->date_created."','".$value->cm_type."','".$value->cm_used_ref_name."','".$value->cm_used_ref_id."','".$value->created_at."','".$value->updated_at."', 'old')";
             }
         }
         if($table == "tbl_credit_memo_line")
@@ -195,7 +198,7 @@ class TabletSyncController extends Controller
             $data = Tbl_customer_invoice::get();
             foreach ($data as $key => $value) 
             {
-                $return[$key] = "INSERT INTO tbl_customer_invoice (inv_id, new_inv_id , inv_shop_id, inv_customer_id, inv_customer_email, inv_customer_billing_address, inv_terms_id, inv_date, inv_due_date,inv_message,inv_memo,inv_discount_type,inv_discount_value,ewt,taxable,inv_subtotal_price,inv_overall_price,inv_payment_applied,inv_is_paid,inv_custom_field_id,date_created,credit_memo_id,is_sales_receipt,sale_receipt_cash_account,created_at,updated_at) VALUES " . "(".$value->inv_id.",'".$value->new_inv_id."','".$value->inv_shop_id."','".$value->inv_customer_id."','".$value->inv_customer_email."','".$value->inv_customer_billing_address."','".$value->inv_terms_id."','".$value->inv_date."','".$value->inv_due_date."','".$value->inv_message."','".$value->inv_memo."','".$value->inv_discount_type."','".$value->inv_discount_value."','".$value->ewt."','".$value->taxable."','".$value->inv_subtotal_price."','".$value->inv_overall_price."','".$value->inv_payment_applied."','".$value->inv_is_paid."','".$value->inv_custom_field_id."','".$value->date_created."','".$value->credit_memo_id."','".$value->is_sales_receipt."','".$value->sale_receipt_cash_account."','".$value->created_at."','".$value->updated_at."')";
+                $return[$key] = "INSERT INTO tbl_customer_invoice (inv_id, new_inv_id , inv_shop_id, inv_customer_id, inv_customer_email, inv_customer_billing_address, inv_terms_id, inv_date, inv_due_date,inv_message,inv_memo,inv_discount_type,inv_discount_value,ewt,taxable,inv_subtotal_price,inv_overall_price,inv_payment_applied,inv_is_paid,inv_custom_field_id,date_created,credit_memo_id,is_sales_receipt,sale_receipt_cash_account,created_at,updated_at,get_status) VALUES " . "(".$value->inv_id.",'".$value->new_inv_id."','".$value->inv_shop_id."','".$value->inv_customer_id."','".$value->inv_customer_email."','".$value->inv_customer_billing_address."','".$value->inv_terms_id."','".$value->inv_date."','".$value->inv_due_date."','".$value->inv_message."','".$value->inv_memo."','".$value->inv_discount_type."','".$value->inv_discount_value."','".$value->ewt."','".$value->taxable."','".$value->inv_subtotal_price."','".$value->inv_overall_price."','".$value->inv_payment_applied."','".$value->inv_is_paid."','".$value->inv_custom_field_id."','".$value->date_created."','".$value->credit_memo_id."','".$value->is_sales_receipt."','".$value->sale_receipt_cash_account."','".$value->created_at."','".$value->updated_at."','old')";
             }
         }
 
@@ -223,7 +226,7 @@ class TabletSyncController extends Controller
             $data = Tbl_employee::get();
             foreach ($data as $key => $value) 
             {
-                $return[$key] = "INSERT INTO tbl_employee (employee_id, shop_id, warehouse_id, first_name, middle_name, last_name, gender, email, username,password,b_day,position_id,date_created,archived,created_at,updated_at) VALUES " . "(".$value->employee_id.",'".$value->shop_id."','".$value->warehouse_id."','".$value->first_name."','".$value->middle_name."','".$value->last_name."','".$value->gender."','".$value->email."','".$value->username."','".Crypt::decrypt($value->password)."','".$value->b_day."','".$value->position_id."','".$value->date_created."','".$value->archived."','".$value->created_at."','".$value->updated_at."')";
+                $return[$key] = "INSERT INTO tbl_employee (employee_id, shop_id, warehouse_id, first_name, middle_name, last_name, gender, email, username,password,b_day,position_id,date_created,archived,created_at,updated_at,get_status) VALUES " . "(".$value->employee_id.",'".$value->shop_id."','".$value->warehouse_id."','".$value->first_name."','".$value->middle_name."','".$value->last_name."','".$value->gender."','".$value->email."','".$value->username."','".Crypt::decrypt($value->password)."','".$value->b_day."','".$value->position_id."','".$value->date_created."','".$value->archived."','".$value->created_at."','".$value->updated_at."','old')";
             }
         }
 
@@ -322,7 +325,7 @@ class TabletSyncController extends Controller
             $data = Tbl_manual_credit_memo::get();
             foreach ($data as $key => $value) 
             {
-                $return[$key] = "INSERT INTO tbl_manual_credit_memo (manual_cm_id, sir_id, cm_id, manual_cm_date, is_sync,created_at,updated_at) VALUES " . "(".$value->manual_cm_id.",'".$value->sir_id."','".$value->cm_id."','".$value->manual_cm_date."','".$value->is_sync."','".$value->created_at."','".$value->updated_at."')";
+                $return[$key] = "INSERT INTO tbl_manual_credit_memo (manual_cm_id, sir_id, cm_id, manual_cm_date, is_sync,created_at,updated_at, get_status) VALUES " . "(".$value->manual_cm_id.",'".$value->sir_id."','".$value->cm_id."','".$value->manual_cm_date."','".$value->is_sync."','".$value->created_at."','".$value->updated_at."','old')";
             }
         }
         if($table == "tbl_manual_invoice")
@@ -330,7 +333,7 @@ class TabletSyncController extends Controller
             $data = Tbl_manual_invoice::get();
             foreach ($data as $key => $value) 
             {
-                $return[$key] = "INSERT INTO tbl_manual_invoice (manual_invoice_id, sir_id, inv_id, manual_invoice_date, is_sync,created_at,updated_at) VALUES " . "(".$value->manual_invoice_id.",'".$value->sir_id."','".$value->inv_id."','".$value->manual_invoice_date."','".$value->is_sync."','".$value->created_at."','".$value->updated_at."')";
+                $return[$key] = "INSERT INTO tbl_manual_invoice (manual_invoice_id, sir_id, inv_id, manual_invoice_date, is_sync,created_at,updated_at, get_status) VALUES " . "(".$value->manual_invoice_id.",'".$value->sir_id."','".$value->inv_id."','".$value->manual_invoice_date."','".$value->is_sync."','".$value->created_at."','".$value->updated_at."','old')";
             }
         }
 
@@ -339,7 +342,7 @@ class TabletSyncController extends Controller
             $data = Tbl_manual_receive_payment::get();
             foreach ($data as $key => $value) 
             {
-                $return[$key] = "INSERT INTO tbl_manual_receive_payment (manual_receive_payment_id, agent_id, rp_id, sir_id,rp_date, is_sync,created_at,updated_at) VALUES " . "(".$value->manual_receive_payment_id.",'".$value->agent_id."','".$value->rp_id."','".$value->sir_id."','".$value->rp_date."','".$value->is_sync."','".$value->created_at."','".$value->updated_at."')";
+                $return[$key] = "INSERT INTO tbl_manual_receive_payment (manual_receive_payment_id, agent_id, rp_id, sir_id,rp_date, is_sync,created_at,updated_at,get_status) VALUES " . "(".$value->manual_receive_payment_id.",'".$value->agent_id."','".$value->rp_id."','".$value->sir_id."','".$value->rp_date."','".$value->is_sync."','".$value->created_at."','".$value->updated_at."','old')";
             }
         }
         if($table == "tbl_manufacturer")
@@ -364,7 +367,7 @@ class TabletSyncController extends Controller
             $data = Tbl_receive_payment::get();
             foreach ($data as $key => $value) 
             {
-                $return[$key] = "INSERT INTO tbl_receive_payment (rp_id, rp_shop_id, rp_customer_id, rp_ar_account, rp_date, rp_total_amount, rp_payment_method,rp_memo,date_created, rp_ref_name,rp_ref_id,created_at,updated_at) VALUES " . "(".$value->rp_id.",'".$value->rp_shop_id."','".$value->rp_customer_id."','".$value->rp_ar_account."','".$value->rp_date."','".$value->rp_total_amount."','".$value->rp_payment_method."','".$value->rp_memo."','".$value->date_created."','".$value->rp_ref_name."','".$value->rp_ref_id."','".$value->created_at."','".$value->updated_at."')";
+                $return[$key] = "INSERT INTO tbl_receive_payment (rp_id, rp_shop_id, rp_customer_id, rp_ar_account, rp_date, rp_total_amount, rp_payment_method,rp_memo,date_created, rp_ref_name,rp_ref_id,created_at,updated_at, get_status) VALUES " . "(".$value->rp_id.",'".$value->rp_shop_id."','".$value->rp_customer_id."','".$value->rp_ar_account."','".$value->rp_date."','".$value->rp_total_amount."','".$value->rp_payment_method."','".$value->rp_memo."','".$value->date_created."','".$value->rp_ref_name."','".$value->rp_ref_id."','".$value->created_at."','".$value->updated_at."','old')";
             }
         }
         if($table == "tbl_receive_payment_line")
@@ -406,7 +409,7 @@ class TabletSyncController extends Controller
             $data = Tbl_sir_inventory::get();
             foreach ($data as $key => $value) 
             {
-                $return[$key] = "INSERT INTO tbl_sir_inventory (sir_inventory_id, sir_item_id, inventory_sir_id, sir_inventory_count,sir_inventory_ref_name, sir_inventory_ref_id,created_at,updated_at, is_bundled_item) VALUES " . "(".$value->sir_inventory_id.",'".$value->sir_item_id."','".$value->inventory_sir_id."','".$value->sir_inventory_count."','".$value->sir_inventory_ref_name."','".$value->sir_inventory_ref_id."','".$value->created_at."','".$value->updated_at."',".$value->is_bundled_item.")";
+                $return[$key] = "INSERT INTO tbl_sir_inventory (sir_inventory_id, sir_item_id, inventory_sir_id, sir_inventory_count,sir_inventory_ref_name, sir_inventory_ref_id,created_at,updated_at, is_bundled_item, get_status) VALUES " . "(".$value->sir_inventory_id.",'".$value->sir_item_id."','".$value->inventory_sir_id."','".$value->sir_inventory_count."','".$value->sir_inventory_ref_name."','".$value->sir_inventory_ref_id."','".$value->created_at."','".$value->updated_at."',".$value->is_bundled_item."  ,'old')";
             }
         }
 
@@ -545,7 +548,40 @@ class TabletSyncController extends Controller
         return "success";
         
     }
+    function get_updates()
+    {
+        $all_data = collect(json_decode(Request::input('getdata')))->toArray();
+        $sir_id = Request::input('sir_id');
 
+        if($sir_id && $all_data)
+        {
+            $insert['sir_id'] = $sir_id;
+            $insert['sir_data'] = serialize($all_data);
+
+            /*LOGIN FIRST*/
+            $sir_data = Tbl_sir::where("sir_id",$sir_id)->first();
+            if($sir_data)
+            {
+                $data["account"] = Tbl_employee::position()->where("employee_id",$sir_data->sales_agent_id)->first();
+                Session::put("sales_agent",$data["account"]);
+                // $data_id = Tbl_tablet_data::insertGetId($insert);
+                $return = Tablet_sync::sync(1);
+                if($return == 'success')
+                {
+                    dd('success');
+                }
+                else
+                {
+                    dd('error');
+                }                
+            }
+
+        }
+        else
+        {
+
+        }
+    }
     /**
      * Store a newly created resource in storage.
      *

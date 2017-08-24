@@ -68,7 +68,8 @@ function add_price_level()
 			{
 			    if(!$(this).is(":checked"))
 			    {
-			    	$(this).trigger("click");
+			    	// $(this).trigger("click");
+			    	$(this).prop("checked",true);
 			    }
 			});
 		}
@@ -78,7 +79,8 @@ function add_price_level()
 			{
 			    if($(this).is(":checked"))
 			    {
-			    	$(this).trigger("click");
+			    	// $(this).trigger("click");
+			    	$(this).prop("checked",false);
 			    }
 			});
 		}

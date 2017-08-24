@@ -127,6 +127,19 @@ class PayrollDeductionController extends Member
     /*Payroll Deduction Start*/
     public function index()
     {
+     
+          $data['_all_deductions_by_category'] = Tbl_payroll_deduction_v2::selalldeductionbycategory(Self::shop_id(),0)->paginate($this->paginate_count);
+          
+          // dd($data);
+
+          return view('member.payroll.side_container.deduction_menu_v2', $data);
+       
+    }
+
+
+    /*old index*/
+    /*public function index()
+    {
        $data['_active'] = Tbl_payroll_deduction_v2::where('shop_id',Self::shop_id())
                               ->where('payroll_deduction_archived', 0)
                               ->orderBy('tbl_payroll_deduction_v2.payroll_deduction_name')
@@ -137,6 +150,16 @@ class PayrollDeductionController extends Member
                               ->paginate($this->paginate_count);
 
        return view('member.payroll.side_container.deductionv2', $data);
+    }*/
+
+
+    public function modal_view_deduction_employee()
+    {
+          $payroll_deduction_type =   str_replace('_', ' ', Request::get('deduction_category'));
+          $data['_loan_data'] = $this->get_deduction_by_type($this->shop_id(),$payroll_deduction_type);;
+          return view("member.payrollreport.loan_summary_table", $data);
+          // dd($data['_active']);
+          // dd(Request::get('deduction_category'));
     }
 
     public function modal_create_deduction()
@@ -512,9 +535,9 @@ class PayrollDeductionController extends Member
           }
      }
 
-     public static function get_deduction($shop_id = 0, $employee_id = 0, $deduction_id = 0)
+     public static function get_deduction($shop_id = 0, $employee_id = 0, $deduction_id = 0 , $deduction_category = '')
      {
-          $data = Tbl_payroll_deduction_payment_v2::getallinfo($shop_id,0,0)->get();
+          $data = Tbl_payroll_deduction_payment_v2::getallinfo($shop_id,0,0,$deduction_category)->get();
           return $data;
      }
 
@@ -530,6 +553,20 @@ class PayrollDeductionController extends Member
           $data = $query->get();
           return $data;
      }
+
+
+     // public static function get_deduction_by_type($shop_id = 0, $deduction_type='')
+     // {
+
+     //      $query = Tbl_payroll_deduction_v2::getallinfo($shop_id,$deduction_type);
+
+     //      // if ($deduction_type!='0') {
+     //      //      $query->where('tbl_payroll_deduction_v2.payroll_deduction_type',$deduction_type);
+     //      // }
+
+     //      $data = $query->get();
+     //      return $data;
+     // }
 
 
      public static function get_deduction_payment($shop_id = 0, $employee_id = 0, $deduction_id = 0)

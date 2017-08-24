@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class Tbl_payroll_deduction_v2 extends Model
 {
@@ -34,4 +35,43 @@ class Tbl_payroll_deduction_v2 extends Model
 			->where('tbl_payroll_deduction_v2.payroll_deduction_archived', $payroll_deduction_archived);
 		return $query;
 	}
+
+
+
+	public function scopeselalldeductionbycategory($query, $shop_id = 0, $payroll_deduction_archived = 0 )
+	{
+
+		$query->where('tbl_payroll_deduction_v2.shop_id', $shop_id)
+		->select(DB::raw('tbl_payroll_deduction_v2.payroll_deduction_type ,sum(tbl_payroll_deduction_v2.payroll_deduction_amount) as total_amount,
+			IFNULL((select sum(tbl_payroll_deduction_payment_v2.payroll_payment_amount) from tbl_payroll_deduction_payment_v2 
+			where tbl_payroll_deduction_payment_v2.deduction_name = tbl_payroll_deduction_v2.payroll_deduction_type
+			GROUP BY tbl_payroll_deduction_payment_v2.deduction_name),0) as total_payment , 
+			(sum(tbl_payroll_deduction_v2.payroll_deduction_amount) - IFNULL((select sum(tbl_payroll_deduction_payment_v2.payroll_payment_amount) from tbl_payroll_deduction_payment_v2 
+			where tbl_payroll_deduction_payment_v2.deduction_name = tbl_payroll_deduction_v2.payroll_deduction_type
+			GROUP BY tbl_payroll_deduction_payment_v2.deduction_name),0) ) as balance
+			'))->groupBy('tbl_payroll_deduction_v2.payroll_deduction_type');
+
+		return $query;
+	}
+
+
+	public function scopegetallinfo($query, $shop_id = 0, $payroll_deduction_type = '')
+	{
+		$query->join('tbl_payroll_deduction_payment_v2','tbl_payroll_deduction_v2.payroll_deduction_id','=','tbl_payroll_deduction_payment_v2.payroll_deduction_id')
+          ->join('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_deduction_payment_v2.payroll_employee_id')
+          ->select(DB::raw('IFNULL(sum(tbl_payroll_deduction_payment_v2.payroll_payment_amount),0) as total_payment, IFNULL(count(tbl_payroll_deduction_payment_v2.deduction_name),0) as number_of_payment , tbl_payroll_deduction_v2.* , tbl_payroll_employee_basic.*'))
+          ->groupBy('tbl_payroll_deduction_payment_v2.deduction_name','tbl_payroll_deduction_v2.payroll_deduction_id')
+          ->orderBy('tbl_payroll_employee_basic.payroll_employee_id','asc');
+          if ($shop_id!=0) 
+          {
+          	$query->where('tbl_payroll_deduction_v2.shop_id',$shop_id);
+          }
+          if ($payroll_deduction_type != '') 
+          {
+          	$query->where('tbl_payroll_deduction_v2.payroll_deduction_type',$payroll_deduction_type);
+          }
+
+          return $query;
+	}
+
 }

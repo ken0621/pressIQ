@@ -69,7 +69,8 @@ function add_price_level()
 			{
 			    if(!$(this).is(":checked"))
 			    {
-			    	$(this).trigger("click");
+			    	// $(this).trigger("click");
+			    	$(this).prop("checked",true);
 			    }
 			});
 		}
@@ -79,7 +80,8 @@ function add_price_level()
 			{
 			    if($(this).is(":checked"))
 			    {
-			    	$(this).trigger("click");
+			    	// $(this).trigger("click");
+			    	$(this).prop("checked",false);
 			    }
 			});
 		}
@@ -136,8 +138,4 @@ function add_price_level()
 	
 		$target_item.find(".custom-price-textbox").val($total);
 	}
-}
-
-function new_price_level_save_done()
-{
 }

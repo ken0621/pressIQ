@@ -1,6 +1,7 @@
 var pos = new pos()
 var load_item = null;
 var item_search_delay_timer;
+var settings_delay_timer;
 var keysearch = {};
 
 var success_audio = new Audio('/assets/sounds/success.mp3');
@@ -24,6 +25,45 @@ function pos()
 		event_click_search_result();
 		event_remote_item_from_cart();
 		action_convert_price_level_to_global_drop_list();
+		event_change_global_discount();
+
+	}
+	function table_loading()
+	{
+		$(".load-item-table-pos").css("opacity", 0.3);
+	}
+	function event_change_global_discount()
+	{
+		$(".cart-global-discount").keyup(function()
+		{
+			table_loading();
+			clearTimeout(settings_delay_timer);
+
+		    settings_delay_timer = setTimeout(function()
+		    {
+		       	action_set_cart_info("global_discount", $(".cart-global-discount").val());
+		    }, 500);
+		});
+	}
+	function action_set_cart_info($key, $value)
+	{
+		table_loading();
+
+		if($value == "" || $value == null)
+		{
+			$value = 0;
+		}
+
+		$.ajax(
+		{
+			url 		: "/member/cashier/pos/set_cart_info/" + $key + "/" + $value,
+			dataType 	: "json",
+			type 		: "get",
+			success 	: function(data)
+			{
+				action_load_item_table();
+			}
+		});
 	}
 	function action_convert_price_level_to_global_drop_list()
 	{
@@ -33,9 +73,13 @@ function pos()
 			link                    : "/member/item/price_level/add",
 			link_size               : "lg",
 			width                   : "100%",
-			maxHeight				  : "129px",
+			maxHeight				: "129px",
 			placeholder             : "Select a Price Level",
-			no_result_message       : "No result found!"
+			no_result_message       : "No result found!",
+			onChangeValue			: function()
+			{
+				action_set_cart_info("price_level_id", $(".price-level-select").val());
+			}
 		});
 	}
 	function event_remote_item_from_cart()
@@ -45,7 +89,7 @@ function pos()
 			$item_id = $(e.currentTarget).closest(".item-info").attr("item_id");
 
 			$(e.currentTarget).html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
-			$(".load-item-table-pos").css("opacity", 0.3);
+			table_loading();
 
 
 			$.ajax(
@@ -160,11 +204,11 @@ function pos()
 
  		$.ajax(
 		{
-			url:"/member/cashier/pos/scan_item",
-			dataType:"json",
-			type:"post",
-			data: scandata,
-			success: function(data)
+			url			: "/member/cashier/pos/scan_item",
+			dataType	: "json",
+			type 		: "post",
+			data 		: scandata,
+			success 	: function(data)
 			{
 				$(".event_search_item").removeAttr("disabled");
 				$(".button-scan").find(".scan-load").hide();
@@ -184,7 +228,7 @@ function pos()
 
 				$(".event_search_item").focus();
 			},
-			error: function(data)
+			error : function(data)
 			{
 				$(".event_search_item").removeAttr("disabled");
 				$(".button-scan").find(".scan-load").hide();
@@ -216,7 +260,7 @@ function pos()
 	{
 		if($(".load-item-table-pos").text() != "")
 		{
-			$(".load-item-table-pos").css("opacity", 0.3);
+			table_loading();
 		}
 		else
 		{
@@ -239,4 +283,12 @@ function pos()
 	{
 		return '<div style="padding: ' + $padding + 'px; font-size: 20px;" class="text-center"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>';
 	}
+}
+
+function new_price_level_save_done(data)
+{
+	$("#global_modal").modal("hide");
+	$(".price-level-select").append('<option value="' + data.price_level_id + '">' + data.price_level_name + '</option>');
+	$(".price-level-select").globalDropList("reload");
+	$(".price-level-select").val(data.price_level_id).change();
 }

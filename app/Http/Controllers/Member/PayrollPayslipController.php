@@ -87,8 +87,8 @@ class PayrollPayslipController extends Member
 		// 		$data['new_employee'][$key][$keys] = (object)$values;
 		// 	}
 		// }
-		return view('member.payroll.payroll_payslipv1', $data);
-		//$pdf = view('member.payroll.payroll_payslipv1', $data);
+		//return view('member.payroll.payroll_payslipv1', $data);
+		$pdf = view('member.payroll.payroll_payslipv1', $data);
         return Pdf_global::show_pdf($pdf);
      }
 }

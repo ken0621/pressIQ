@@ -14,7 +14,7 @@
 							{{ $main_news->post_title }}	
 						</h1>
 						<h2>
-							{{ $main_news->post_date }}
+							{{ $main_news->post_excerpt }}
 						</h2>
 						<p>
 							{!! $main_news->post_content !!}
@@ -41,7 +41,7 @@
 											{{ $news->post_title }}	
 										</h1>
 										<h2>
-											{{ $news->post_date }}
+											{{ $news->post_excerpt }}
 										</h2>
 									</div>
 								</div>
@@ -49,59 +49,7 @@
 						</a>
 					@endforeach
 				@else
-					<div class="per-event row-no-padding clearfix">
-							<div class="col-md-4">
-								<div class="event-image-container">
-									<img src="/themes/{{ $shop_theme }}/img/event1.png">
-								</div>
-							</div>
-							<div class="col-md-8">
-								<div class="event-details-container">
-									<h1>
-										Business & Product Presentation	
-									</h1>
-									<h2>
-										July 27, 2017
-									</h2>
-								</div>
-							</div>
-					</div>
-					<div class="per-event row-no-padding clearfix">
-						<div class="col-md-4">
-							<div class="event-image-container">
-								<img src="/themes/{{ $shop_theme }}/img/event2.png">
-							</div>
-						</div>
-						<div class="col-md-8">
-							<div class="event-details-container">
-								<h1>
-									Quezon City Main Office Opening 
-									and Blessing	
-								</h1>
-								<h2>
-									July 27, 2017
-								</h2>
-							</div>
-						</div>
-					</div>
-					<div class="per-event row-no-padding clearfix">
-						<div class="col-md-4">
-							<div class="event-image-container">
-								<img src="/themes/{{ $shop_theme }}/img/event3.png">
-							</div>
-						</div>
-						<div class="col-md-8">
-							<div class="event-details-container">
-								<h1>
-									General Santos City Branch 
-									Opening and Blessing	
-								</h1>
-								<h2>
-									July 27, 2017
-								</h2>
-							</div>
-						</div>
-					</div>
+					<span>Coming Soon!</span>
 				@endif
 				</div>
 			</div>

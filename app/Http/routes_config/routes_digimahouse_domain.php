@@ -49,7 +49,6 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/item_checkout', 'Shop\ShopItemCheckoutController@item_checkout'); //MARK FIGS
 	Route::get('/item_payment', 'Shop\ShopItemPaymentController@item_payment'); //MARK FIGS
 	Route::get('/payment_success', 'Shop\ShopItemPaymentController@payment_success'); //MARK FIGS
-	Route::get('/company_events', 'Shop\ShopCompanyEventsController@company_events'); //MARK FIGS
 
 
 

@@ -11,15 +11,15 @@ function product()
 
 	function document_ready()
 	{
-		event_carousel_product();
+		// event_carousel_product();
 		// event_set_variant_options();
-		event_change_variant_options();
-		event_counter_click();
-		event_adjust_change();
-		event_click_add_cart();
+		// event_change_variant_options();
+		// event_counter_click();
+		// event_adjust_change();
+		// event_click_add_cart();
 		
-		event_thumb_carousel();
-		event_click_picture();
+		// event_thumb_carousel();
+		// event_click_picture();
 	}
 
 	function event_carousel_product()

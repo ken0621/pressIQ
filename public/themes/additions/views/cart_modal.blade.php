@@ -28,13 +28,13 @@
         </thead>
         <tbody>
         @foreach($get_cart['cart'] as $cart)
-            <tr class="stripe">
+            <tr class="stripe per-item-container">
                 <td><img class="img" src="{{ get_cart_item_image($cart) }}"></td>
                 <td class="name">{{ get_cart_item_name($cart) }}</td>
                 <td><span  vid="{{ get_cart_item_id($cart) }}" class="raw-price">{{ get_cart_item_price($cart) }}</span></td>
-                <td><input vid="{{ get_cart_item_id($cart) }}" class="input-quantity" type="number" name="quantity" min="1" step="1" value="{{ get_cart_item_quantity($cart) }}"></td>
+                <td><input vid="{{ get_cart_item_id($cart) }}" class="input-quantity form-control text-center" type="number" name="quantity" min="1" step="1" value="{{ get_cart_item_quantity($cart) }}"></td>
                 <td><span  vid="{{ get_cart_item_id($cart) }}" class="sub-total">{{ get_cart_item_subtotal($cart) }}</span></td>
-                <td><div   vid="{{ get_cart_item_id($cart) }}" class="remove-container remove-item-from-cart"><i class="fa fa-times" aria-hidden="true"></i></div></td>
+                <td><div   vid="{{ get_cart_item_id($cart) }}" class="remove-container remove-item-from-cart" style="cursor: pointer;"><i class="fa fa-times" aria-hidden="true"></i></div></td>
             </tr>
         @endforeach
         </tbody>

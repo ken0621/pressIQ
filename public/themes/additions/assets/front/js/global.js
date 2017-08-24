@@ -18,14 +18,14 @@ function global()
   }
   function window_load()
   {
-    $(window).load(function() 
-    {
-      event_loader();
-    });
-    window.onbeforeunload = function()
-    {
-      leave_page();
-    };
+    // $(window).load(function() 
+    // {
+    //   event_loader();
+    // });
+    // window.onbeforeunload = function()
+    // {
+    //   leave_page();
+    // };
   }
   function event_loader()
   {

@@ -8,7 +8,7 @@ var subtotal = ".sub-total";
 var total = ".total";
 var button_checkout = ".button-checkout";
 var remove_product = ".remove-item-from-cart";
-var product_container = ".per-item-container";
+var product_cart_container = ".per-item-container";
 
 function globalv2()
 {
@@ -70,13 +70,18 @@ function action_image_crop()
     image_crop(".4-3-ratio", 4, 3);
 }
 
-function load_cart(hide)
+function load_cart(show)
 {
     $(cart_load).load("/cart", function()
     {
         event_cart_add_qty();
         event_cart_remove_product();
         action_image_crop();
+
+        if (show == 1) 
+        {
+            $('.cart-modal').modal();
+        }
     }); 
 }
 
@@ -174,7 +179,7 @@ function action_cart_remove_product(x)
         },
     })
     .done(function() {
-        $(cart_load + " " + product_container).remove();
+        $(cart_load + " " + product_cart_container).remove();
         action_cart_total_price();
         action_enable_checkout_button();
     })

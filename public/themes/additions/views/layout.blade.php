@@ -145,7 +145,7 @@
             <li class="cart-contain">
               <div class="cart-holder">
                 {{-- @if($count > 99)  --}}
-                  99+ 
+                  1
                 {{-- @else 
                   {{$count}} 
                 @endif --}}
@@ -334,54 +334,8 @@
         <!-- Modal content-->
         <div class="modal-content">
           <div class="modal-body">
-            <div class="cart-header clearfix">
-            <div>
-                <div class="text">
-                  <div class="title-label">MY CART</div>
-                  <div class="items">You have no item in your Shopping Bag</div>
-                  <div class="price">00.00</div>
-                  <div class="btn-holder">
-                    <button class="btn" type="button" onClick="location.href='/checkout'">CHECK OUT</button>
-                  </div>
-                </div>
-              </div>
-              <div class="pull-right">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-              </div>
-            </div>
-            <div class="table-holder">
-              <table class="table">
-              {{-- @if($session_cart)
-                <thead>
-                  <tr>
-                    <th>IMAGE</th>
-                    <th>PRODUCT NAME</th>
-                    <th>UNIT PRICE</th>
-                    <th>QTY</th>
-                    <th>TOTAL</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                
-              <!-- <input type="hidden" name="" value="{{$i = 0}}"> -->
-                @foreach($session_cart as $cart)
-                  <tr class="stripe">
-                    <td><img class="img" src="{{store_path().$cart->image_path}}"></td>
-                    <td class="name">{{$cart->product_name}} </br>{{isset($cart->variant_name) != "" ? '('.$cart->variant_name.')' : '' }}</td>
-                    <td>{{curr($cart->variant_price)}}</td>
-                    <td>{{$cart->quantity}}</td>
-                    <td>{{curr($cart->variant_price * $cart->quantity)}}</td>
-                    <td><a href="/product/cart/clearcart/{{$cart->variant_id}}"><u>REMOVE<u></a></td>
-                  </tr>
-                @endforeach --}}
-                {{-- @else --}}
-                <br>
-                <h3 style="text-align: center; font-weight: 300;">NO PRODUCT IN CART YET</h3>
-                {{-- @endif --}}
-                  
-                </tbody>
-              </table>
+            <div class="cart-load">
+              
             </div>
           </div>
         </div>
@@ -399,17 +353,7 @@
     <script type="text/javascript" src='/themes/{{ $shop_theme }}/assets/front/js/add_to_cart.js'></script>
     
     <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
-    <script type="text/javascript">
-    var cart_load = ".cart-dropdown";
-    var input_qty = ".input-quantity";
-    var rawprice = ".raw-price";
-    var subtotal = ".sub-total";
-    var total = ".total";
-    var button_checkout = ".button-checkout";
-    var remove_product = ".remove-item-from-cart";
-    var product_container = ".per-item-container";
-    </script>
-    <script type="text/javascript" src="/assets/front/js/globalv2.js"></script>
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
 
     <script type="text/javascript">
       $(".date-picker").datepicker({

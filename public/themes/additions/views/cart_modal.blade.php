@@ -1,68 +1,46 @@
-@if(isset($get_cart['cart']) && $get_cart['cart'])
-    <div class="title-container">
-        Cart Summary
-    </div>
-    <div class="scroll-container">
-        <div class="per-order-container">
-            @foreach($get_cart['cart'] as $cart)
-                <!-- PER ITEM -->
-                <div class="per-item-container row-no-padding clearfix" vid="{{ $cart["cart_product_information"]["variant_id"] }}">
-                    <div class="col-md-3">
-                        <!-- ITEM IMAGE -->
-                        <div class="image-container">
-                            <img class="4-3-ratio" src="{{ $cart['cart_product_information']['image_path'] ? $cart['cart_product_information']['image_path'] : '/assets/mlm/img/placeholder.jpg' }}">
-                        </div>
-                    </div>
-                    <div class="col-md-9">
-                        <!-- ITEM DETAILS -->
-                        <div class="item-detail-container">
-                            <div class="item-name text-overflow">
-                                {{ $cart["cart_product_information"]["product_name"] }} 
-                                @if($cart["cart_product_information"]["product_name"] != $cart["cart_product_information"]["variant_name"])
-                                ({{ $cart["cart_product_information"]["variant_name"] }})
-                                @endif
-                            </div>
-                            <div class="bottom-detail row clearfix">
-                                <div class="col-md-4">
-                                    <div class="price-container">
-                                        <div class="title-price">Price:</div>
-                                        <div class="price">PHP. <span vid="{{ $cart["cart_product_information"]["variant_id"] }}" class="raw-price">{{ number_format($cart["cart_product_information"]["product_price"], 2) }}</span></div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="quantity-container">
-                                        <input class="input-quantity" vid="{{ $cart["cart_product_information"]["variant_id"] }}" type="number" name="quantity" min="1" step="1" value="{{ $cart['quantity'] }}">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="total-container">
-                                        <div class="title-price">Total:</div>
-                                        <div class="price">PHP. <span vid="{{ $cart["cart_product_information"]["variant_id"] }}" class="sub-total">{{ number_format($cart["cart_product_information"]["product_price"] * $cart["quantity"], 2) }}</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- REMOVE BUTTON -->
-                    <div class="remove-container remove-item-from-cart" vid="{{ $cart["cart_product_information"]["variant_id"] }}"><i class="fa fa-times" aria-hidden="true"></i></div>
-                </div>
-            @endforeach
+<div class="cart-header clearfix">
+  <div>
+      <div class="text">
+        <div class="title-label">MY CART</div>
+        <div class="items">You have no item in your Shopping Bag</div>
+        <div class="price"><span class="total">{{ get_cart_item_total($get_cart) }}</span></div>
+        <div class="btn-holder">
+          <button class="btn" type="button" onClick="location.href='/checkout'">CHECK OUT</button>
         </div>
-    </div>
-    <div class="subtotal-container">
-        <div class="title-container">
-            TOTAL
-            <div class="subtotal">PHP <span class="total">{{ number_format($get_cart["sale_information"]["total_product_price"], 2) }}</span></div>
-        </div>
-        <form method="get" action="{{ $customer_info_a ? '/checkout' : '/mlm/login' }}">
-            <input type="hidden" name="checkout" value="1">
-            <button style="border: 0;" type="submit" class="button-checkout">CHECKOUT</button>
-        </form>
-        <div class="view-cart"><a href="/MyCart"><span><i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;View Cart</span></a></div>
-    </div>
-@else
-    <div class="empty-cart">
-      <div class="title">There is no items in this cart</div>
-      <div class="sub">Try to search or find something from one of our categories</div>
-    </div>
-@endif
+      </div>
+  </div>
+  <div class="pull-right">
+      <button type="button" class="close" data-dismiss="modal">&times;</button>
+  </div>
+</div>
+<div class="table-holder">
+    @if(isset($get_cart['cart']) && $get_cart['cart'])
+     <table class="table">
+        <thead>
+            <tr>
+                <th>IMAGE</th>
+                <th>PRODUCT NAME</th>
+                <th>UNIT PRICE</th>
+                <th>QTY</th>
+                <th>TOTAL</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach($get_cart['cart'] as $cart)
+            <tr class="stripe">
+                <td><img class="img" src="{{ get_cart_item_image($cart) }}"></td>
+                <td class="name">{{ get_cart_item_name($cart) }}</td>
+                <td><span  vid="{{ get_cart_item_id($cart) }}" class="raw-price">{{ get_cart_item_price($cart) }}</span></td>
+                <td><input vid="{{ get_cart_item_id($cart) }}" class="input-quantity" type="number" name="quantity" min="1" step="1" value="{{ get_cart_item_quantity($cart) }}"></td>
+                <td><span  vid="{{ get_cart_item_id($cart) }}" class="sub-total">{{ get_cart_item_subtotal($cart) }}</span></td>
+                <td><div   vid="{{ get_cart_item_id($cart) }}" class="remove-container remove-item-from-cart"><i class="fa fa-times" aria-hidden="true"></i></div></td>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
+    @else
+        <br>
+        <h3 style="text-align: center; font-weight: 300;">NO PRODUCT IN CART YET</h3>
+    @endif
+</div>

@@ -11,10 +11,10 @@ function global()
   function document_ready()
   {
     event_match_height();
-    event_account_tab();
+    // event_account_tab();
     event_show_cart();
     
-    event_search();
+    // event_search();
   }
   function window_load()
   {

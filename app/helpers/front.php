@@ -190,3 +190,52 @@ function validateDate($date)
     $d = DateTime::createFromFormat('Y-m-d', $date);
     return $d && $d->format('Y-m-d') === $date;
 }
+
+function get_cart_item_id($cart)
+{
+    return isset($cart["cart_product_information"]["variant_id"]) ? $cart["cart_product_information"]["variant_id"] : null;
+}
+
+function get_cart_item_image($cart)
+{
+    return isset($cart['cart_product_information']['image_path']) ? $cart['cart_product_information']['image_path'] : '/assets/mlm/img/placeholder.jpg';
+}
+
+function get_cart_item_name($cart)
+{
+    if (isset($cart["cart_product_information"]["product_name"]) && isset($cart["cart_product_information"]["variant_name"])) 
+    {
+        $return = $cart["cart_product_information"]["product_name"]; 
+        if($cart["cart_product_information"]["product_name"] != $cart["cart_product_information"]["variant_name"])
+        {
+           $return .= " ( ". $cart["cart_product_information"]["variant_name"] ." )"; 
+        }
+    }
+    else
+    {
+        $return = "No Product Name";
+    }
+    
+    return $return;
+}
+
+function get_cart_item_price($cart)
+{
+    $price = isset($cart["cart_product_information"]["product_price"]) ? $cart["cart_product_information"]["product_price"] : 0;
+    return number_format($price, 2);
+}
+
+function get_cart_item_quantity($cart)
+{
+    return isset($cart["quantity"]) ? $cart["quantity"] : 0;
+}
+
+function get_cart_item_subtotal($cart)
+{
+    return isset($cart["cart_product_information"]["product_price"]) && isset($cart["quantity"]) ? number_format($cart["cart_product_information"]["product_price"] * $cart["quantity"], 2) : 0;
+}
+
+function get_cart_item_total($cart)
+{
+    return isset($cart["sale_information"]["total_product_price"]) ? number_format($cart["sale_information"]["total_product_price"], 2) : 0;
+}

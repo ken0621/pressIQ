@@ -1,7 +1,12 @@
 var pos = new pos()
 var load_item = null;
 var item_search_delay_timer;
+var settings_delay_timer;
 var keysearch = {};
+
+var success_audio = new Audio('/assets/sounds/success.mp3');
+var error_audio = new Audio('/assets/sounds/error.mp3');
+
 function pos()
 {
 	init();
@@ -17,16 +22,105 @@ function pos()
 	{
 		action_load_item_table();
 		event_search_item();
+		event_click_search_result();
+		event_remote_item_from_cart();
+		action_convert_price_level_to_global_drop_list();
+		event_change_global_discount();
+
+	}
+	function table_loading()
+	{
+		$(".load-item-table-pos").css("opacity", 0.3);
+	}
+	function event_change_global_discount()
+	{
+		$(".cart-global-discount").keyup(function()
+		{
+			table_loading();
+			clearTimeout(settings_delay_timer);
+
+		    settings_delay_timer = setTimeout(function()
+		    {
+		       	action_set_cart_info("global_discount", $(".cart-global-discount").val());
+		    }, 500);
+		});
+	}
+	function action_set_cart_info($key, $value)
+	{
+		table_loading();
+
+		if($value == "" || $value == null)
+		{
+			$value = 0;
+		}
+
+		$.ajax(
+		{
+			url 		: "/member/cashier/pos/set_cart_info/" + $key + "/" + $value,
+			dataType 	: "json",
+			type 		: "get",
+			success 	: function(data)
+			{
+				action_load_item_table();
+			}
+		});
+	}
+	function action_convert_price_level_to_global_drop_list()
+	{
+		$(".price-level-select").globalDropList(
+		{  
+			hasPopup                : "true",
+			link                    : "/member/item/price_level/add",
+			link_size               : "lg",
+			width                   : "100%",
+			maxHeight				: "129px",
+			placeholder             : "Select a Price Level",
+			no_result_message       : "No result found!",
+			onChangeValue			: function()
+			{
+				action_set_cart_info("price_level_id", $(".price-level-select").val());
+			}
+		});
+	}
+	function event_remote_item_from_cart()
+	{
+		$("body").on("click", ".remove-item-from-cart", function(e)
+		{
+			$item_id = $(e.currentTarget).closest(".item-info").attr("item_id");
+
+			$(e.currentTarget).html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
+			table_loading();
+
+
+			$.ajax(
+			{
+				url:"/member/cashier/pos/remove_item",
+				dataType:"json",
+				data: {"item_id":$item_id},
+				type:"get",
+				success: function(data)
+				{
+					action_load_item_table();
+				}
+			});
+		});
 	}
 	function event_search_item()
 	{
 		$(".event_search_item").keyup(function(e)
 		{
-			/* SCAN ITEM */
-			if(e.which == 13)
+			if(e.which == 13) //ENTER KEY
 			{
 				action_scan_item($(".event_search_item").val());
 				action_hide_search();
+			}
+			else if(e.which == 38) //UP KEY
+			{
+				event_search_item_cursor_next(true);
+			}
+			else if(e.which == 40) //DOWN KEY
+			{
+				event_search_item_cursor_next();
 			}
 			else /* SEARCH MODE */
 			{
@@ -54,10 +148,48 @@ function pos()
 			}
 		});
 
-		$(".event_search_item").focusout(function()
+		$("body").click(function(event)
 		{
+			if(!$(event.target).is('.pos-item-search-result'))
+			{
+			    action_hide_search();
+			}
+		});
+
+	}
+	function event_search_item_cursor_next(reverse = false)
+	{
+		var current_cursor = $(".pos-item-search-result.cursor");
+
+		if(current_cursor.length < 1)
+		{
+			$(".pos-item-search-result:first").addClass("cursor");
+		}
+		else
+		{
+			if(reverse == true)
+			{
+				$(".pos-item-search-result.cursor").prev(".pos-item-search-result").addClass("cursor");
+			}
+			else
+			{
+				$(".pos-item-search-result.cursor").next(".pos-item-search-result").addClass("cursor");
+			}
+			
+			current_cursor.removeClass("cursor");
+		}
+
+		$active_item_id = $(".pos-item-search-result.cursor").attr("item_id");
+		$(".event_search_item").val($active_item_id);
+	}
+	function event_click_search_result()
+	{
+		$("body").on("click", ".pos-item-search-result", function(e)
+		{
+			$item_id = $(e.currentTarget).attr("item_id");
+			action_scan_item($item_id);
 			action_hide_search();
-		})
+		});
 	}
 	function action_scan_item($item_id)
 	{
@@ -66,16 +198,43 @@ function pos()
 		$(".button-scan").find(".scan-load").show();
 		$(".button-scan").find(".scan-icon").hide();
 
+		scandata = {};
+		scandata.item_id = $item_id;
+		scandata._token = $(".token").val();
+
  		$.ajax(
 		{
-			url:"/member/cashier/pos/scan_item",
-			type:"post",
-			data: scandata,
-			success: function(data)
+			url			: "/member/cashier/pos/scan_item",
+			dataType	: "json",
+			type 		: "post",
+			data 		: scandata,
+			success 	: function(data)
 			{
 				$(".event_search_item").removeAttr("disabled");
 				$(".button-scan").find(".scan-load").hide();
 				$(".button-scan").find(".scan-icon").show();
+
+				if(data.status == "success")
+				{
+					toastr.success("<b>SUCCESS!</b><br>" + data.message);
+					success_audio.play();
+					action_load_item_table();
+				}
+				else if(data.status == "error")
+				{
+					toastr.error("<b>ERROR!</b><br>" + data.message);
+					error_audio.play();
+				}
+
+				$(".event_search_item").focus();
+			},
+			error : function(data)
+			{
+				$(".event_search_item").removeAttr("disabled");
+				$(".button-scan").find(".scan-load").hide();
+				$(".button-scan").find(".scan-icon").show();
+				toastr.error("An error occured during scan - please contact system administrator");
+				$(".event_search_item").focus();
 			}
 		});
 	}
@@ -97,13 +256,22 @@ function pos()
 		$(".pos-search-container").hide();
 		clearTimeout(item_search_delay_timer);
 	}
-
 	function action_load_item_table()
 	{
-		$(".load-item-table-pos").html(get_loader_html());
+		if($(".load-item-table-pos").text() != "")
+		{
+			table_loading();
+		}
+		else
+		{
+			$(".load-item-table-pos").html(get_loader_html());
+		}
+
+		
 		$(".load-item-table-pos").load("/member/cashier/pos/table_item", function()
 		{
 			action_update_big_totals();
+			$(".load-item-table-pos").css("opacity", 1);
 		});
 	}
 	function action_update_big_totals()
@@ -115,4 +283,12 @@ function pos()
 	{
 		return '<div style="padding: ' + $padding + 'px; font-size: 20px;" class="text-center"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>';
 	}
+}
+
+function new_price_level_save_done(data)
+{
+	$("#global_modal").modal("hide");
+	$(".price-level-select").append('<option value="' + data.price_level_id + '">' + data.price_level_name + '</option>');
+	$(".price-level-select").globalDropList("reload");
+	$(".price-level-select").val(data.price_level_id).change();
 }

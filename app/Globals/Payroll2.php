@@ -3590,6 +3590,8 @@ class Payroll2
 		extract($data);
 		$return->taxable_salary_total = $return->gross_pay_total;
 		$return->_taxable_salary_breakdown = array();
+
+	
 		foreach($return->_breakdown as $breakdown)
 		{
 			if($breakdown["add.taxable_salary"] == true)
@@ -4135,8 +4137,6 @@ class Payroll2
 					$val["description"] = $data["cutoff_compute"]->_breakdown_addition_summary_time[$key];
 				}
 				
-
-
 				$val["amount"] = $breakdown;
 				$val["add.gross_pay"] = true;
 				$val["deduct.gross_pay"] = false;
@@ -4217,8 +4217,9 @@ class Payroll2
 	}
 	public static function cutoff_breakdown_allowance_v2($return, $data)
 	{
+		
 		$_allowance = Tbl_payroll_employee_allowance_v2::where("payroll_employee_id", $data["employee_id"])->joinAllowance()->get();
-
+	
 		foreach($_allowance as $allowance)
 		{
 			$allowance_amount = $allowance->payroll_employee_allowance_amount;
@@ -4253,8 +4254,153 @@ class Payroll2
 				$val = null;
 			}
 
-		}
+			else if($allowance->payroll_allowance_type == 'pro_rated')
+			{
+				$actual_gross_pay = 0;
+				$standard_gross_pay = 0;
+				$val["label"] = $allowance_name;
+				$val["type"] = "additions";
+				$ot_category = array('Rest Day OT', 'Over Time', 'Legal Holiday Rest Day OT', 'Legal OT', 'Special Holiday Rest Day OT', 'Special Holiday OT');
+				
+				if ($allowance->basic_pay==1) 
+				{
+					$actual_gross_pay += $data['cutoff_compute']->cutoff_basic;
+					$d['basic'] = $data['cutoff_compute']->cutoff_basic;
+				}
 
+				if ($allowance->cola==1) 
+				{
+					$actual_gross_pay += $data['cutoff_compute']->cutoff_cola;
+					$d['cola'] = $data['cutoff_compute']->cutoff_cola;
+				}
+
+
+				$overtime = 0;
+				$special_holiday = 0;
+				$leave_pay = 0;
+				$regular_holiday = 0;
+				$deduction = 0;
+				$count = 0;
+
+
+				foreach ($data['cutoff_input'] as $value) 
+				{
+					if ($allowance->over_time_pay==1) 
+					{
+						if (isset($value->compute->_breakdown_addition)) 
+						{
+							foreach ($value->compute->_breakdown_addition as $lbl => $values) 
+							{
+								if (in_array($lbl, $ot_category)) 
+								{
+									$actual_gross_pay += $values['rate'];
+									$overtime += $values['rate'];
+								}
+							}
+						}
+					}
+
+					if($allowance->regular_holiday_pay==1)
+					{
+						if (isset($value->compute->_breakdown_addition)) 
+						{
+							foreach ($value->compute->_breakdown_addition as $lbl => $values) 
+							{
+								if ($lbl == 'Legal Holiday' || $lbl == 'Legal Holiday Rest Day') 
+								{
+									$actual_gross_pay += $values['rate'];
+									$regular_holiday += $values['rate'];
+								}
+							}
+						}
+					}
+
+
+					if ($allowance->special_holiday_pay==1) 
+					{
+						if (isset($value->compute->_breakdown_addition)) 
+						{
+							foreach ($value->compute->_breakdown_addition as $lbl => $values) 
+							{
+								if ($lbl == 'Special Holiday' || $lbl == 'Special Holiday Rest Day') 
+								{
+									$actual_gross_pay += $values['rate'];
+									$special_holiday += $values['rate'];
+								}
+							}
+						}
+					}
+
+
+					if ($allowance->leave_pay==1)
+					{
+						if (isset($value->compute->_breakdown_addition)) 
+						{
+							foreach ($value->compute->_breakdown_addition as $lbl => $values) 
+							{
+								if ($lbl == 'Leave Pay') 
+								{
+									$actual_gross_pay += $values['rate'];
+									$leave_pay += $values['rate'];
+								}
+							}
+						}
+					}
+
+
+					if (isset($value->compute->_breakdown_deduction)) 
+					{
+						foreach ($value->compute->_breakdown_deduction as $lbl => $values) 
+						{
+							if ($value->time_output["leave_hours"] == '00:00:00' || $lbl == 'late' || $lbl == 'undertime') 
+							{
+								$standard_gross_pay += $values['rate'];
+								$deduction += $values['rate'];
+							}
+						}
+					}
+
+					$d['overtime'] = $overtime;
+					$d['regular_holiday'] = $regular_holiday;
+					$d['special_holiday'] = $special_holiday;
+					$d['leave_pay'] = $leave_pay;
+					$d['deductions'] = $deduction;
+					$a[''.$count] = $d;
+					$count++;
+				}
+
+				// dd($data);
+				// dd($a);
+
+				$standard_gross_pay+=$actual_gross_pay;
+
+				$val["amount"] = @($actual_gross_pay/$standard_gross_pay) * $allowance_amount;
+
+				if($allowance->payroll_allowance_category == "Taxable")
+				{
+					$val["add.gross_pay"] = true;
+					$val["deduct.gross_pay"] = false;
+					$val["add.taxable_salary"] = false;
+					$val["deduct.taxable_salary"] = false;
+					$val["add.net_pay"] = false;
+					$val["deduct.net_pay"] = false;
+				}
+				else
+				{
+					$val["add.gross_pay"] = true;
+					$val["deduct.gross_pay"] = false;
+					$val["add.taxable_salary"] = false;
+					$val["deduct.taxable_salary"] = true;
+					$val["add.net_pay"] = true;
+					$val["deduct.net_pay"] = false;
+				}
+			
+				array_push($return->_breakdown, $val);
+				$val = null;
+			}
+
+		}
+		
 		return $return;
 	}
 
@@ -4281,6 +4427,7 @@ class Payroll2
 
 		return $return;
 	}
+
 	public static function cutoff_breakdown_deductions($return, $data)
 	{
 		/* DAILY DEDUCTIONS */

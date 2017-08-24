@@ -137,7 +137,3 @@ function add_price_level()
 		$target_item.find(".custom-price-textbox").val($total);
 	}
 }
-
-function new_price_level_save_done()
-{
-}

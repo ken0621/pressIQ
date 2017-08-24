@@ -42,7 +42,7 @@
 					    </thead>
 					</table>
 					<div class="table-holder">
-						<table class="table table-condensed price-level-table">
+						<table class="table table-condensed price-level-table table-striped">
 					        <tbody>
 					        	@foreach($_item as $item)
 					            <tr>
@@ -67,16 +67,15 @@
 							</span>
 							<span>
 								<select name="fixed-percentage-mode"  class="adjust-price-range">
-
-									<option>lower</option>
-									<option>upper</option>
+									<option value="lower">lower</option>
+									<option value="upper">higher</option>
 								</select>
 							</span>
 							<span> than its </span>
 							<span>
 								<select name="fixed-percentage-source" class="adjust-price-type">
-									<option>standard price</option>
-									<option>cost price</option>
+									<option value="standard price">standard price</option>
+									<option value="cost price">cost price</option>
 								</select>
 							</span>
 							<button type="button" class="adjust-marked-btn">Adjust</button>
@@ -101,11 +100,12 @@
 							<span>
 								<select>
 									<option name="decrease">decrease</option>
+									<option name="increase">increase</option>
 								</select>
 							</span>
 							<span> by </span>
 							<span>
-								<input class="text-right" width="20px" type="text" name="" value="0.00%">
+								<input class="text-right" width="20px" type="text" name="fixed-percentage-value" value="0.00%">
 							</span>
 						</div>
 						<div style="margin-top: 5px;">
@@ -127,7 +127,7 @@
 	</div>
 </form>
 
-<script type="text/javascript" src="/assets/member/js/price_level/add.js"></script>
+<script type="text/javascript" src="/assets/member/js/price_level/price_level_add.js"></script>
 
 <style type="text/css">
 .table-holder

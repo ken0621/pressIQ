@@ -1,22 +1,25 @@
 <?php
 namespace App\Http\Controllers\Member;
 use App\Globals\Cart2;
+use App\Globals\Item;
 use Request;
 
 class CashierController extends Member
 {
     public function pos()
     {
-    	$data["page"] = "Point of Sale";
-    	Cart2::set_cart_key("cashier-" . $this->user_info->user_id);
-
+        Cart2::set_cart_key("cashier-" . $this->user_info->user_id);
+    	$data["page"]           = "Point of Sale";
+        $data["cart"]           = $_items = Cart2::get_cart_info();
+        $data["_price_level"]   = Item::list_price_level($this->user_info->shop_id);
+        $data["current_level"]  = ($data["cart"]["info"] ? $data["cart"]["info"]->price_level_id : 0);
+        
        	return view("member.cashier.pos", $data);
     }
     public function pos_table_item()
     {
     	$data["cart_key"]   = $cart_key = Cart2::get_cart_key();
         $data["cart"]       = $_items = Cart2::get_cart_info();
-
     	return view("member.cashier.pos_table_item", $data);
     }
     public function pos_search_item()
@@ -46,6 +49,12 @@ class CashierController extends Member
         }
 
         echo json_encode($return);
+    }
+    public function set_cart_info($key, $value)
+    {
+        $cart_key           = Cart2::get_cart_key();
+        $set_info_status    = Cart2::set_info($cart_key, $key, $value);
+        echo json_encode($set_info_status);
     }
     public function pos_remove_item()
     {

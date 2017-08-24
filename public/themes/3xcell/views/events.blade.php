@@ -23,7 +23,9 @@
 									<div class="col-md-6">
 										<div class="event-details-container">
 											<h1>
-												{{ $news->post_title }}	
+												<a href="/news?id={{ $news->post_id }}">
+													{{ $news->post_title }}	
+												</a>
 											</h1>
 											<h2>
 												{{ $news->post_excerpt }}

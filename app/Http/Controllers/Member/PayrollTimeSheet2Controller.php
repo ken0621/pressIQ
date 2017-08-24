@@ -178,6 +178,10 @@ class PayrollTimeSheet2Controller extends Member
 
 		/* GET CURRENT TIMESHEET FOR THE DAY */
 		$data["timesheet_db"] = $timesheet_db = $this->timesheet_info_db($employee_id, Request::input("date"));
+
+		/* UPDATE REMARKS */
+		$update_remarks["payroll_time_shee_activity"] = isset(Request::input("remarks")[0]) ? Request::input("remarks")[0] : "";
+		Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->update($update_remarks);
 		
 		/* DELETE TIME SHEET RECORD */
 		Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->where("payroll_time_sheet_origin", "Manually Encoded")->delete();
@@ -216,7 +220,6 @@ class PayrollTimeSheet2Controller extends Member
 			Tbl_payroll_time_sheet_record::insert($insert);
 		}
 		
-
 		/* RETURN DATA TO SERVER */
 		$data["timesheet_db"] = $timesheet_db = $this->timesheet_info_db($employee_id, Request::input("date"));
 		$data["daily_info"] = Payroll2::timesheet_process_daily_info($employee_id, Request::input("date"), $timesheet_db, $period_id);

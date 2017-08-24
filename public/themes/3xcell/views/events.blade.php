@@ -26,7 +26,7 @@
 												{{ $news->post_title }}	
 											</h1>
 											<h2>
-												{{ $news->post_date }}
+												{{ $news->post_excerpt }}
 											</h2>
 										</div>
 									</div>

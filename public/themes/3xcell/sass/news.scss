@@ -6,6 +6,7 @@ body{
 
 .top-1-container{
 	.events-view-container{
+		padding-bottom: 50px;
 		width: 100%;
 		.event-image-container {
 			width: 100%;
@@ -16,6 +17,9 @@ body{
 		}
 		.event-details-container {
 			padding-left: 10px;
+			p {
+				color: #1c1c1c;
+			}
 
 			h1 {
 				font-size: 20px;
@@ -23,7 +27,7 @@ body{
 				color: #265fca;
 			}
 			h2 {
-				font-size: 17px;
+				font-size: 13px;
 				margin-top: -5px;
 			}
 		}
@@ -73,6 +77,10 @@ body{
 			h2 {
 				font-size: 13px;
 				margin-top: -5px;
+			}
+			h3 {
+				font-size: 15px;
+				color: #1c1c1c;
 			}
 		}
 	}

@@ -19,7 +19,7 @@
 		        <div class="form-group">
 		            <label class="control-label col-sm-4 text-right" for="email">Price Level Type</label>
 		            <div class="col-sm-8">
-		                <select class="form-control select-type-of-price-level">
+		                <select name="price_level_type" class="form-control select-type-of-price-level">
 		                	<option value="per-item">Per Item</option>
 		                	<option value="fixed-percentage">Fixed Percentage</option>
 		                </select>
@@ -66,14 +66,15 @@
 								<input class="text-right adjust-price-percent" width="20px" type="text" name="" value="0.00%">
 							</span>
 							<span>
-								<select class="adjust-price-range">
+								<select name="fixed-percentage-mode"  class="adjust-price-range">
+
 									<option>lower</option>
 									<option>upper</option>
 								</select>
 							</span>
 							<span> than its </span>
 							<span>
-								<select class="adjust-price-type">
+								<select name="fixed-percentage-source" class="adjust-price-type">
 									<option>standard price</option>
 									<option>cost price</option>
 								</select>
@@ -81,7 +82,7 @@
 							<button type="button" class="adjust-marked-btn">Adjust</button>
 						</div>
 						<div style="margin-top: 5px;">
-							<span>Round up to the nearest </span>
+							<span name="fixed-percentage-round-off">Round up to the nearest </span>
 							<span> 
 								<select class="adjust-price-roundup">
 									<option>no rounding</option>
@@ -99,7 +100,7 @@
 							<span>The price will</span>
 							<span>
 								<select>
-									<option>decrease</option>
+									<option name="decrease">decrease</option>
 								</select>
 							</span>
 							<span> by </span>
@@ -111,7 +112,7 @@
 							<span>Round up to the nearest </span>
 							<span> 
 								<select>
-									<option>no rounding</option>
+									<option name="no_rounding">no rounding</option>
 								</select>
 							</span>
 						</div>

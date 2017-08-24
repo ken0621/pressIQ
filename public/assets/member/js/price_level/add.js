@@ -48,6 +48,7 @@ function add_price_level()
 			$(e.currentTarget).closest("tr").find(".checkboxs").trigger("click");
 		}
 	}
+
 	function event_check_all_item_click()
 	{
 		$(".check-all-item").click(function(e)
@@ -137,5 +138,8 @@ function add_price_level()
 	
 		$target_item.find(".custom-price-textbox").val($total);
 	}
+}
 
+function new_price_level_save_done()
+{
 }

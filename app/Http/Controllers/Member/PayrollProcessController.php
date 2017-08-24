@@ -89,7 +89,6 @@ class PayrollProcessController extends Member
 		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
 		$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
 		$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
-
 		$data = $this->get_total($data);
 		return view("member.payroll2.payroll_process_modal_view_summary", $data);
 	}

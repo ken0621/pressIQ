@@ -241,11 +241,11 @@
                     <div class="upper-mid">
                         <div class="upper-mid-title">INFORMATION</div>
                         <div class="upper-mid-link-container">
-                            <div class="upper-mid-link">HOME</div>
-                            <div class="upper-mid-link">PRODUCTS</div>
-                            <div class="upper-mid-link">OPPORTUNITY</div>
-                            <div class="upper-mid-link">GALLERY</div>
-                            <div class="upper-mid-link">CONTACT US</div>
+                            <a href="/"><div class="upper-mid-link">HOME</div></a>
+                            <a href="/product"><div class="upper-mid-link">PRODUCTS</div></a>
+                            <a href="/how_to_join"><div class="upper-mid-link">OPPORTUNITY</div></a>
+                            <a href="/gallery"><div class="upper-mid-link">GALLERY</div></a>
+                            <a href="/contact"><div class="upper-mid-link">CONTACT US</div></a>
                         </div>
                     </div>
                 </div>

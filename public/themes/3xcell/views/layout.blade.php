@@ -195,7 +195,7 @@
                                             </div>
                                         </div>
                                     </a>
-                                    <a href="/company_events">
+                                    <a href="/events">
                                         <div class="cat-container">
                                             <div class="per-cat">
                                                 <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/events-calendar-thumb.png"></div>

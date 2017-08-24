@@ -265,7 +265,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="link-container"><span>View All From The Gallery</span></div>
+				<div class="link-container"><a href="/gallery"><span>View All From The Gallery</span></a></div>
 			</div>
 		</div>
 	</div>
@@ -276,64 +276,39 @@
 			<div class="events-container row-no-padding clearfix">
 				<div class="col-md-8">
 					<div class="per-event-container">
-						<div class="per-event row clearfix">
-							<div class="col-md-4">
-								<div class="event-image-container">
-									<img src="/themes/{{ $shop_theme }}/img/event1.png">
-								</div>
-							</div>
-							<div class="col-md-8">
-								<div class="event-details-container">
-									<h1>
-										Business & Product Presentation	
-									</h1>
-									<h2>
-										July 27, 2017
-									</h2>
-								</div>
-							</div>
-						</div>
-						<div class="per-event row clearfix">
-							<div class="col-md-4">
-								<div class="event-image-container">
-									<img src="/themes/{{ $shop_theme }}/img/event2.png">
-								</div>
-							</div>
-							<div class="col-md-8">
-								<div class="event-details-container">
-									<h1>
-										Quezon City Main Office Opening 
-										and Blessing	
-									</h1>
-									<h2>
-										July 27, 2017
-									</h2>
-								</div>
-							</div>
-						</div>
-						<div class="per-event row clearfix">
-							<div class="col-md-4">
-								<div class="event-image-container">
-									<img src="/themes/{{ $shop_theme }}/img/event3.png">
-								</div>
-							</div>
-							<div class="col-md-8">
-								<div class="event-details-container">
-									<h1>
-										General Santos City Branch 
-										Opening and Blessing	
-									</h1>
-									<h2>
-										July 27, 2017
-									</h2>
-								</div>
-							</div>
-						</div>
+						@if(count(get_front_news($shop_id)) > 0)
+							@foreach(limit_foreach(get_front_news($shop_id), 3) as $news)
+									<div class="per-event row clearfix">
+										<div class="col-md-4">
+											<div class="event-image-container">
+												<a href="/news?id={{ $news->post_id }}">
+													<img src="{{ $news->post_image }}">
+												</a>
+											</div>
+										</div>
+										<div class="col-md-8">
+											<div class="event-details-container">
+												<h1>
+													<a href="/news?id={{ $news->post_id }}">
+														{{ $news->post_title }}	
+													</a>
+												</h1>
+												<h2>
+													{{ $news->post_date }}
+												</h2>
+											</div>
+										</div>
+									</div>
+							@endforeach
+						@else
+							<span>Coming Soon!</span>
+						@endif
 					</div>
 					<div class="link-container">
-						<span>View All Events</span>
+						<a href="/events"><span>View All Events</span></a>
 					</div>
 				</div>
+				<!-- FACEBOOK FANPAGE -->
 				<div class="col-md-4">
 					<div class="fb-container">
 						<div class="container-title-header">Facebook Fanpage</div>
@@ -373,9 +348,11 @@
 							{{ get_content($shop_theme_info, "home", "home_division_7_description") }}
 						</p>
 					</div>
-					<div class="join-button">
-						<img src="/themes/{{ $shop_theme }}/img/join-icon.png"><span>JOIN US TODAY</span>
-					</div>
+					<a href="/mlm/register" style="text-decoration: none;">
+						<div class="join-button">
+							<img src="/themes/{{ $shop_theme }}/img/join-icon.png"><span>JOIN US TODAY</span>
+						</div>
+					</a>
 				</div>
 			</div>
 		</div>

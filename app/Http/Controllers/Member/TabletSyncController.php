@@ -552,7 +552,6 @@ class TabletSyncController extends Controller
     {
         $all_data = collect(json_decode(Request::input('getdata')))->toArray();
         $sir_id = Request::input('sir_id');
-
         if($sir_id && $all_data)
         {
             $insert['sir_id'] = $sir_id;
@@ -564,21 +563,22 @@ class TabletSyncController extends Controller
             {
                 $data["account"] = Tbl_employee::position()->where("employee_id",$sir_data->sales_agent_id)->first();
                 Session::put("sales_agent",$data["account"]);
-                // $data_id = Tbl_tablet_data::insertGetId($insert);
-                $return = Tablet_sync::sync(1);
-                if($return == 'success')
-                {
-                    dd('success');
-                }
-                else
-                {
-                    dd('error');
-                }                
+                $count = Tbl_tablet_data::where("sir_id",$sir_id)->count();
+                // dd(unserialize($count->sir_data));
+                // if($count <= 0)
+                // {
+                    // $data_id = Tbl_tablet_data::insertGetId($insert);
+                    $return = Tablet_sync::sync(1);
+                    if($return == 'success')
+                    {
+                        dd('success');
+                    }
+                    else
+                    {
+                        dd('error');
+                    }                    
+                // }             
             }
-
-        }
-        else
-        {
 
         }
     }

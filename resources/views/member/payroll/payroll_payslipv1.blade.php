@@ -91,21 +91,27 @@
                                   </tr>
 
                                   @foreach($employee->cutoff_breakdown->_taxable_salary_breakdown as $breakdown)
-                                  <tr>
-                                      <td>{{ strtoupper($breakdown["label"]) }}</td>
-                                      <td class="text-right">{{ payroll_currency($breakdown["amount"]) }}</td>
-                                      <td></td>
-                                  </tr>
+                                    @if($breakdown["add.gross_pay"] == true && $breakdown["deduct.taxable_salary"] == true && $breakdown["add.net_pay"] == true)
+                                    @else
+                                      <tr>
+                                          <td>{{ strtoupper($breakdown["label"]) }}</td>
+                                          <td class="text-right">{{ payroll_currency($breakdown["amount"]) }}</td>
+                                          <td></td>
+                                      </tr>
+                                    @endif
                                   @endforeach
 
 
 
                                   @foreach($employee->cutoff_breakdown->_net_pay_breakdown as $breakdown)
-                                  <tr>
-                                      <td>{{ strtoupper($breakdown["label"]) }}</td>
-                                      <td class="text-right">{{ payroll_currency($breakdown["amount"]) }}</td>
-                                      <td></td>
-                                  </tr>
+                                    @if($breakdown["add.gross_pay"] == true && $breakdown["deduct.taxable_salary"] == true && $breakdown["add.net_pay"] == true)
+                                    @else
+                                      <tr>
+                                          <td>{{ strtoupper($breakdown["label"]) }}</td>
+                                          <td class="text-right">{{ payroll_currency($breakdown["amount"]) }}</td>
+                                          <td></td>
+                                      </tr>
+                                    @endif
                                   @endforeach
 
 

@@ -42,5 +42,6 @@
     @else
         <br>
         <h3 style="text-align: center; font-weight: 300;">NO PRODUCT IN CART YET</h3>
+        <br>
     @endif
 </div>

@@ -142,7 +142,7 @@
                     <div class="col-md-6">
                       <select class="form-control billing-address" name="billing_country" data-target=".shipping_country">
                         @foreach($_country as $country)
-                        <option value="{{$country->country_id}}">{{$country->country_name}}</option>
+                        <option value="{{$country->country_id}}" {{$country->country_id == '420' : 'selected'}}>{{$country->country_name}}</option>
                         @endforeach
                       </select>
                       <!--<input type="text" name="billing_country" class="form-control billing-address" data-target=".shipping_country" placeholder="Country">-->
@@ -172,7 +172,7 @@
                     <div class="col-md-6">
                       <select class="form-control shipping_country same-billing" name="shipping_country">
                         @foreach($_country as $country)
-                        <option value="{{$country->country_id}}">{{$country->country_name}}</option>
+                        <option value="{{$country->country_id}}" {{$country->country_id == '420' : 'selected'}}>{{$country->country_name}}</option>
                         @endforeach
                       </select>
                       <!--<input type="text" name="shipping_country" class="form-control shipping_country same-billing" placeholder="Country">-->

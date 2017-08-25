@@ -37,8 +37,8 @@
 	<tr>
 		<th>PRODUCT NAME</th>
 		<th>DESCRIPTION</th>
-		<th width="20%">QTY</th>
-		<th width="20%">U/M</th>
+		<th width="10%">QTY</th>
+		<th width="10%">U/M</th>
 		<th width="15%">PRICE</th>
 		<th width="15%">AMOUNT</th>
 		<th width="10%">REF</th>
@@ -51,8 +51,8 @@
 				<td>{{$item->itemline_description}}</td>
 				<td style="text-align: center;">{{$item->itemline_qty}}</td>
 				<td style="text-align: center;">{{$item->multi_abbrev}}</td>
-				<td style="text-align: right;">{{currency("PHP",$item->itemline_rate)}}</td>
-				<td style="text-align: right;">{{currency("PHP",$item->itemline_amount)}}</td>
+				<td style="text-align: right;">{{$item->itemline_rate}}</td>
+				<td style="text-align: right;">{{$item->itemline_amount}}</td>
 				<td style="text-align: right;">{{($item->itemline_ref_name == 'purchase_order' ? 'PO#' : '' ) . $item->itemline_ref_id}}</td>
 			</tr>
 		@endforeach

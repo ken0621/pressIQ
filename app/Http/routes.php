@@ -695,6 +695,7 @@ Route::any('/member/vendor/paybill/list','Member\Vendor_PayBillController@paybil
 Route::get('/member/vendor/load_pb/{id}','Member\Vendor_PayBillController@load_vendor_pb');
 Route::any('/member/vendor/paybill/add','Member\Vendor_PayBillController@add_pay_bill');
 Route::any('/member/vendor/paybill/update/{id}','Member\Vendor_PayBillController@update_pay_bill');
+Route::any('/member/vendor/print_paybill','Member\Vendor_PayBillController@print_pay_bill');
 
 Route::any('/member/vendor/write_check','Member\Vendor_CheckController@write_check');
 Route::any('/member/vendor/write_check/list','Member\Vendor_CheckController@check_list');

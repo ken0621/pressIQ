@@ -157,8 +157,8 @@ class PayrollTimeSheet2Controller extends Member
 
 	public function unapprove($period_id, $employee_id)
 	{
-		$unapproved = true;
-		$compute_cutoff = $this->compute_whole_cutoff($period_id, $employee_id, $unapproved);
+		//$unapproved = true;
+		//$compute_cutoff = $this->compute_whole_cutoff($period_id, $employee_id, $unapproved);
 		$check_approved = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->first();
 		
 		if($check_approved)

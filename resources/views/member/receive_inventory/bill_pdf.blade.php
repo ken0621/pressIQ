@@ -41,6 +41,7 @@
 		<th width="20%">U/M</th>
 		<th width="15%">PRICE</th>
 		<th width="15%">AMOUNT</th>
+		<th width="10%">REF</th>
 	</tr>
 	<tbody>
 	@if($bill_item)		
@@ -52,6 +53,7 @@
 				<td style="text-align: center;">{{$item->multi_abbrev}}</td>
 				<td style="text-align: right;">{{currency("PHP",$item->itemline_rate)}}</td>
 				<td style="text-align: right;">{{currency("PHP",$item->itemline_amount)}}</td>
+				<td style="text-align: right;">{{($item->itemline_ref_name == 'purchase_order' ? 'PO#' : '' ) . $item->itemline_ref_id}}</td>
 			</tr>
 		@endforeach
 		<div class="{{$bill->bill_is_paid == 1 ? 'watermark' : 'hidden'}}"> PAID </div>

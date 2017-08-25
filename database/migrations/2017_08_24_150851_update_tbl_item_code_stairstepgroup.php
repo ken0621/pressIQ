@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTblPayrollHolidayEmployee extends Migration
+class UpdateTblItemCodeStairstepgroup extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +12,13 @@ class UpdateTblPayrollHolidayEmployee extends Migration
      */
     public function up()
     {
-        Schema::table('tbl_payroll_holiday_employee', function (Blueprint $table) {
-            $table->integer('holiday_company_id');
-        });
+        Schema::table('tbl_item_code', function (Blueprint $table) 
+        {
+            if(!schema::hasColumn('tbl_item_code','STAIRSTEP_GROUP'))
+            {
+                $table->double('STAIRSTEP_GROUP')->default(0);
+            }
+        });  
     }
 
     /**
@@ -24,8 +28,6 @@ class UpdateTblPayrollHolidayEmployee extends Migration
      */
     public function down()
     {
-        Schema::table('tbl_payroll_holiday_employee', function (Blueprint $table) {
-            //
-        });
+        //
     }
 }

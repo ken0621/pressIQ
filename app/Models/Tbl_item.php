@@ -22,7 +22,7 @@ class Tbl_item extends Model
     }
     public function scopeActive($query)
     {
-        $query->where("archived", 0);
+        $query->where("tbl_item.archived", 0);
         return $query;
     }
     public function scopeType($query)

@@ -16,6 +16,7 @@ use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\Tablet_global;
+use App\Globals\Currency;
 use App\Models\Tbl_price_level;
 use App\Models\Tbl_price_level_item;
 use Session;
@@ -28,6 +29,11 @@ class Item
     public static function item_additional_info($item_info)
     {
         $item_info->computed_price  = $item_info->item_price;
+        $item_info->markup          = $item_info->item_price - $item_info->item_cost;
+
+        $item_info->display_price   = Currency::format($item_info->computed_price);
+        $item_info->display_cost   = Currency::format($item_info->item_cost);
+        $item_info->display_markup   = Currency::format($item_info->markup);
         return $item_info;
     }
     public static function get_item_info($item_id, $price_level_id = null)
@@ -71,8 +77,6 @@ class Item
 
             $item_info->computed_price      = $new_computed_price;
         }
-
-        
 
         return $item_info;
     }
@@ -270,7 +274,7 @@ class Item
             $shop_id = Item::getShopId();
         }
 
-        $query = Tbl_item::where("shop_id", $shop_id)->where("archived", 0);
+        $query = Tbl_item::where("shop_id", $shop_id)->active()->type()->inventory()->um_multi();
 
         if($paginate)
         {

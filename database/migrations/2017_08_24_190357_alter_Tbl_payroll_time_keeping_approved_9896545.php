@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTblPriceLevelItem0822171040 extends Migration
+class AlterTblPayrollTimeKeepingApproved9896545 extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +12,10 @@ class UpdateTblPriceLevelItem0822171040 extends Migration
      */
     public function up()
     {
-        Schema::table('tbl_price_level', function (Blueprint $table)
-        {
-            $table->integer('shop_id')->unsigned();
-            $table->foreign('shop_id')->references('shop_id')->on('tbl_shop')->onDelete('cascade');
-        }); 
-    }
+       Schema::table('tbl_payroll_time_keeping_approved', function (Blueprint $table) {
+            $table->Integer('total_deduction')->default(0);
+        });      
+   }
 
     /**
      * Reverse the migrations.

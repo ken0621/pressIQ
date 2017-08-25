@@ -3272,11 +3272,14 @@ class Payroll2
 		$return = Payroll2::cutoff_breakdown_compute_gross_pay($return, $data);
 		$return = Payroll2::cutoff_breakdown_government_contributions($return, $data);
 		$return = Payroll2::cutoff_breakdown_compute_taxable_salary($return, $data);
-		$return = Payroll2::cutoff_breakdown_compute_tax($return, $data);
+
+		$return = Payroll2::cutoff_breakdown_compute_tax($return, $data);	
+		
+	
 
 		$return = Payroll2::cutoff_breakdown_compute_net($return, $data);
-		//dd($return);
 		$return = Payroll2::cutoff_breakdown_compute_time($return, $data);
+		
 		return $return;
 	}
 
@@ -3404,6 +3407,8 @@ class Payroll2
 
 		return $return;
 	}
+
+
 	public static function cutoff_breakdown_compute_net($return, $data)
 	{
 		extract($data);
@@ -3549,6 +3554,7 @@ class Payroll2
 		$val["deduct.taxable_salary"] = false;
 		$val["add.net_pay"] = false;
 		$val["deduct.net_pay"] = true;
+
 		array_push($return->_breakdown, $val);
 		$val = null;			
 

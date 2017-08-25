@@ -11,6 +11,7 @@ use App\Globals\Invoice;
 use App\Globals\WriteCheck;
 use App\Globals\BillPayment;
 use App\Globals\Utilities;
+use App\Globals\Pdf_global;
 
 use App\Models\Tbl_payment_method;
 use App\Models\Tbl_receive_payment;

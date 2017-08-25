@@ -8,7 +8,7 @@ var subtotal = ".sub-total";
 var total = ".total";
 var button_checkout = ".button-checkout";
 var remove_product = ".remove-item-from-cart";
-var product_container = ".per-item-container";
+var products_container = ".per-item-container";
 
 function globalv2()
 {
@@ -171,7 +171,7 @@ function action_cart_remove_product(x)
         },
     })
     .done(function() {
-        $(cart_load + " " + product_container).remove();
+        $(cart_load + " " + products_container + '[vid="'+variation_id+'"]').remove();
         action_cart_total_price();
         action_enable_checkout_button();
     })

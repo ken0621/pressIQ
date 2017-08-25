@@ -144,12 +144,13 @@ class Item
         $text = "";
         $trail = Tbl_audit_trail::where("source","item")->where("source_id",$item_id)->orderBy("created_at","DESC")->get();
         // dd($trail);
+        $last = null;
         foreach ($trail as $key => $value) 
         {
             $item_qty = 1;
             if(Purchasing_inventory_system::check())
             {
-                $item_qty = UnitMeasurement::um_qty($item_data->item_measurement_id);
+                $item_qty = UnitMeasurement::um_qty($item_data->item_measurement_id, 1);
             }
             $old[$key] = unserialize($value->old_data);
             $amount = 0;
@@ -160,19 +161,25 @@ class Item
                     $len = strlen($return);
                     
                     $amount = $old[$key]["item_price"] * $item_qty;
-                    $return .= date('m/d/Y',strtotime($value->created_at))." - ".currency("PHP ",$amount)."<br>";
-
-                    $text = $return;
-                    if($show_all == false)
+                    if ($last != $amount) 
                     {
-                        if($len > 25)
+                        $return .= date('m/d/Y',strtotime($value->created_at))." - ".currency("PHP ",$amount)."<br>";
+
+                        $text = $return;
+                        if($show_all == false)
                         {
-                            $text = (substr($text, 0, 30)."...<a class='popup' size='sm' link='/member/item/view_item_history/".$item_id."'>View</a>");
+                            if($len > 25)
+                            {
+                                $text = (substr($text, 0, 30)."...<a class='popup' size='sm' link='/member/item/view_item_history/".$item_id."'>View</a>");
+                            }
                         }
                     }
                 }
+
+                $last = $amount;
             }
-        }   
+        }  
+
         return $text;
     }
     public static function get_item_details($item_id = 0)

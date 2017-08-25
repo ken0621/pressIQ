@@ -321,7 +321,7 @@
 		</div>
 	</div>
 	<!-- SUBSCRIBE -->	
-	<div class="fullscreen background parallax" style="background-image: url('/themes/{{ $shop_theme }}/img/subscribe-bg3.png');" data-img-width="1366" data-img-height="400" data-diff="100">
+	<!-- <div class="fullscreen background parallax" style="background-image: url('/themes/{{ $shop_theme }}/img/subscribe-bg3.png');" data-img-width="1366" data-img-height="400" data-diff="100">
 		<div class="container">
 			<div class="bot-container-1">
 				<h1>{{ get_content($shop_theme_info, "home", "home_division_7_banner") }}</h1>
@@ -331,7 +331,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> -->
 	<!-- LIVE HEALTHY BE WEALTHY -->
 	<div class="bot-container-2">
 		<div class="container">

@@ -257,6 +257,18 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/holiday/modal_update_holiday',"Member\PayrollController@modal_update_holiday");
 	/* HOLIDAY END */
 
+	/* HOLIDAY START V2 */
+	Route::any('/holiday/v2',"Member\PayrollHolidayController@holiday");
+	Route::any('/holiday/modal_create_holiday/v2',"Member\PayrollHolidayController@modal_create_holiday");
+	Route::any('/holiday/modal_save_holiday/v2',"Member\PayrollHolidayController@modal_save_holiday");
+	Route::any('/holiday/archive_holiday/v2/{archived}/{id}',"Member\PayrollHolidayController@archive_holiday");
+	Route::any('/holiday/archive_holiday_action/v2',"Member\PayrollHolidayController@archive_holiday_action");
+	Route::any('/holiday/modal_edit_holiday/v2/{id}',"Member\PayrollHolidayController@modal_edit_holiday");
+	Route::any('/holiday/modal_update_holiday/v2',"Member\PayrollHolidayController@modal_update_holiday");
+	Route::any('/holiday/modal_tag_employee/{company_id}','Member\PayrollHolidayController@tag_employee');
+	Route::any('/holiday/tag_employee/submit','Member\PayrollHolidayController@submit_eployee');
+	/* HOLIDAY END v2 */
+
 	/* HOLIDAY DEFAULT START */
 	Route::any('/holiday_default',"Member\PayrollController@default_holiday");
 	/* HOLIDAY DEFAULT END */
@@ -356,7 +368,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/custom_payslip/archive_payslip',"Member\PayrollController@archive_payslip");
 	Route::any('/custom_payslip/modal_update_payslip',"Member\PayrollController@modal_update_payslip");
 	Route::any('/custom_payslip/payslip_use_change',"Member\PayrollController@payslip_use_change");
-	
 	/* PAYROLL CUSTOM PAYSLIP END */
 
 	/* PAYROLL PERIOD START */

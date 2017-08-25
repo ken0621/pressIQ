@@ -25,6 +25,7 @@ use App\Globals\Item;
 use App\Globals\Warehouse;
 use App\Globals\UnitMeasurement;
 use App\Globals\Utilities;
+use App\Globals\Pdf_global;
 use App\Globals\ItemSerial;
 
 use App\Models\Tbl_purchase_order;
@@ -34,6 +35,7 @@ use App\Models\Tbl_bill_account_line;
 use App\Models\Tbl_bill_item_line;
 use Carbon\Carbon;
 use Session;
+use PDF;
 
 class Vendor_CreateBillController extends Member
 {
@@ -70,7 +72,15 @@ class Vendor_CreateBillController extends Member
     {
         $id = Request::input('id');
 
-        
+        $data['bill'] = Tbl_bill::vendor()->where('bill_id',$id)->first();
+        $data['bill_item'] = Tbl_bill_item_line::item()->um()->where('itemline_bill_id',$id)->get();
+        $data['transaction_type'] = "Bill";
+
+
+        // return view('member.receive_inventory.bill_pdf',$data);
+
+        $pdf = view('member.receive_inventory.bill_pdf',$data);
+        return Pdf_global::show_pdf($pdf);
     }  
     public function create_bill()
     {

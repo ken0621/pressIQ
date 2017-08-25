@@ -71,7 +71,7 @@
                                         <li><a href="/member/vendor/create_bill?id={{$bill_list->bill_id}}">Edit Bill </a></li>
                                         <li><a href="/member/vendor/paybill?bill_id={{$bill_list->bill_id}}&vendor_id={{$bill_list->vendor_id}}">Pay Bill</a></li>
                                         @endif
-                                        <li><a href="/member/vendor/print_bill?id={{$bill_list->bill_id}}">Print Bill </a></li>
+                                        <li><a target="_blank" href="/member/vendor/print_bill?id={{$bill_list->bill_id}}">Print Bill </a></li>
                                       </ul>
                                     </div>
                                 </td>

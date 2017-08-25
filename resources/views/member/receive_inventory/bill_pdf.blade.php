@@ -90,5 +90,9 @@
 	    -webkit-transform: rotate(-40deg); /* Chrome, Safari, Opera */
 	    transform: rotate(-40deg);
 	}
+	html
+	{
+		font-size: 13px;
+	}
 </style>
 </html>

@@ -248,6 +248,11 @@ function payrollconfiguration()
 	{
 		reload_configuration("/member/payroll/holiday");
 	}
+	
+	this.reload_holiday_v2 = function()
+	{
+		reload_configuration("/member/payroll/holiday/v2");
+	}
 
 	this.reload_holiday_default = function()
 	{

@@ -107,8 +107,8 @@ class MLM_ProductController extends Member
 
             if($value->marketing_plan_code == "STAIRSTEP")
             {
-                $data['active'][count($data)]        = "STAIRSTEP_GROUP";
-                $data['active_label'][count($data)]  = "Rank Group Bonus";    
+                $data['active'][count($data['active_plan_product_repurchase'])]        = "STAIRSTEP_GROUP";
+                $data['active_label'][count($data['active_plan_product_repurchase'])]  = "Rank Group Bonus";    
             }
 	    }
 

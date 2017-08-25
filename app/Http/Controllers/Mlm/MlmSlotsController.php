@@ -21,6 +21,7 @@ use App\Models\Tbl_membership_code_transfer_log;
 use App\Globals\Mlm_compute;
 use App\Globals\Mlm_member;
 use App\Globals\Item_code;
+use App\Globals\Mlm_plan;
 class MlmSlotsController extends Mlm
 {
     public function index()
@@ -380,6 +381,8 @@ class MlmSlotsController extends Mlm
         }
         else
         {
+            $data["_plan"] = Mlm_plan::get_all_active_plan_repurchase(Self::$shop_id);
+            // dd($data);
             return view('mlm.slots.item_code',$data);
         }
     }

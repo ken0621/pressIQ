@@ -51,8 +51,8 @@
 				<td>{{$item->itemline_description}}</td>
 				<td style="text-align: center;">{{$item->itemline_qty}}</td>
 				<td style="text-align: center;">{{$item->multi_abbrev}}</td>
-				<td style="text-align: right;">{{$item->itemline_rate}}</td>
-				<td style="text-align: right;">{{$item->itemline_amount}}</td>
+				<td style="text-align: right;">{{number_format($item->itemline_rate,2)}}</td>
+				<td style="text-align: right;">{{number_format($item->itemline_amount,2)}}</td>
 				<td style="text-align: right;">{{($item->itemline_ref_name == 'purchase_order' ? 'PO#' : '' ) . $item->itemline_ref_id}}</td>
 			</tr>
 		@endforeach

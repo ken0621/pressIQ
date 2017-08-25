@@ -38,8 +38,7 @@ class Tbl_item extends Model
     }
     public function scopeUm_multi($query)
     {
-        return $query->leftjoin('tbl_unit_measurement_multi','multi_um_id','=','item_measurement_id');
-         
+        return $query->leftjoin('tbl_unit_measurement_multi','multi_um_id','=','item_measurement_id');         
     }
     public function scopeUm_item($query)
     {

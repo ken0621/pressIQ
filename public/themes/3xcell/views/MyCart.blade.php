@@ -149,7 +149,7 @@
 @endsection
 
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/MyCart.css">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/mycart.css">
 @endsection
 
 @section("js")

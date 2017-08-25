@@ -77,7 +77,7 @@ class Vendor_CreateBillController extends Member
         $data['transaction_type'] = "Bill";
 
 
-        return view('member.receive_inventory.bill_pdf',$data);
+        // return view('member.receive_inventory.bill_pdf',$data);
 
         $pdf = view('member.receive_inventory.bill_pdf',$data);
         return Pdf_global::show_pdf($pdf);

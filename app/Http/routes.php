@@ -1092,6 +1092,7 @@ include_once('routes_config/routes_payroll.php');
 include_once('routes_config/routes_payment.php');
 include_once('routes_config/routes_reward.php');
 include_once('routes_config/routes_cashier.php');
+include_once('routes_config/routes_item.php');
 
 
 

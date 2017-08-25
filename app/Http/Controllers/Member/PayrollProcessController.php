@@ -86,10 +86,12 @@ class PayrollProcessController extends Member
 	{
 		$data["company"] = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
 		$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
+		
 		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
 		$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
 		$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
 		$data = $this->get_total($data);
+		
 		return view("member.payroll2.payroll_process_modal_view_summary", $data);
 	}
 
@@ -160,13 +162,17 @@ class PayrollProcessController extends Member
 		$total_pagibig_er = 0;
 		$total_deduction = 0;
 
+		$total_deduction_employee=0;
+
 		$_other_deduction = null;
 		$_addition = null;
 		$_deduction = null;
 
-
+			
 		foreach($data["_employee"] as $key => $employee)
 		{
+			
+			$deduction = 0;
 			$total_basic += $employee->net_basic_pay;
 			$total_gross += $employee->gross_pay;
 			$total_net += $employee->net_pay;
@@ -184,6 +190,9 @@ class PayrollProcessController extends Member
 			$total_pagibig_ee += $employee->pagibig_ee;
 			$total_pagibig_er += $employee->pagibig_er;
 
+			// $total_deduction_employee += $employee["total_deduction"];
+			
+
 			$data["_employee"][$key] = $employee;
 			$data["_employee"][$key]->total_er = $total_er;
 			$data["_employee"][$key]->total_ee = $total_ee;
@@ -193,11 +202,42 @@ class PayrollProcessController extends Member
 			$g_total_er += $total_er;
 			$g_total_ee += $total_ee;
 
+			$total_deduction += ($total_ee);
 
-			$total_deduction += ($total_ee); 
-
-			if(isset($employee["cutoff_breakdown"]->_breakdown))
+			if(isset($employee->cutoff_breakdown))
 			{
+
+				$_duction_break_down = unserialize($employee->cutoff_breakdown)->_breakdown;
+
+				
+					foreach($_duction_break_down as $breakdown)
+					{
+						
+						if($breakdown["deduct.net_pay"] == true)
+						{
+							$total_deduction_employee += $breakdown["amount"];
+							$deduction += $breakdown["amount"];
+						}
+
+						if($breakdown["deduct.gross_pay"] == true)
+						{
+							$total_deduction_employee += $breakdown["amount"];
+							$deduction += $breakdown["amount"];
+						}
+
+						if ($breakdown["label"] == "SSS EE" || $breakdown["label"] == "PHILHEALTH EE" || $breakdown["label"] == "PAGIBIG EE" ) 
+						{
+							$total_deduction_employee += $breakdown["amount"];
+							$deduction += $breakdown["amount"];
+						}
+					}
+
+					$data["_employee"][$key]->total_deduction_employee = $deduction;
+					
+			}
+			if (isset($employee["cutoff_breakdown"]->_breakdown )) 
+			{
+				# code...
 				foreach($employee["cutoff_breakdown"]->_breakdown as $breakdown)
 				{
 					if($breakdown["deduct.net_pay"] == true)
@@ -218,6 +258,7 @@ class PayrollProcessController extends Member
 
 				foreach($employee["cutoff_breakdown"]->_breakdown as $breakdown)
 				{
+					
 					if($breakdown["add.gross_pay"] == true)
 					{
 						if(isset($_addition[$breakdown["label"]]))
@@ -234,6 +275,7 @@ class PayrollProcessController extends Member
 
 				foreach($employee["cutoff_breakdown"]->_breakdown as $breakdown)
 				{
+
 					if($breakdown["type"] == "deductions")
 					{
 						if(isset($_deduction[$breakdown["label"]]))
@@ -269,6 +311,9 @@ class PayrollProcessController extends Member
 		$data["_addition"] = $_addition;
 		$data["_deduction"] = $_deduction;
 		$data["total_deduction"] = $total_deduction;
+		$data["total_deduction_of_all_employee"] = $total_deduction_employee;
+		
+		// dd($data["total_deduction_of_all_employee"]);
 		return $data;
 	}
 

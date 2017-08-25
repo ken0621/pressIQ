@@ -43,6 +43,14 @@
             </tr>
             @endif
 
+            @if($cart["_total"]->global_discount != 0)
+            <tr>
+                <td class="text-right" colspan="4">{{ $cart['_total']->display_discount_label }}</td>
+                <td class="text-right" style="color: red;">{{  $cart["_total"]->display_global_discount }}</td>
+                <td class="text-center red-button"></td>
+            </tr>
+            @endif
+
             <tr>
                 <td class="text-right" colspan="4">TOTAL</td>
                 <td class="text-right text-bold">{{  $cart["_total"]->display_grand_total }}</td>

@@ -131,12 +131,12 @@ class PayrollTimeSheet2Controller extends Member
 			$payroll_period_id = Request::input("payroll_period_id");
 		}
 		
-		
+		//add payment in deduction
 		PayrollDeductionController::approve_deduction_payment($period_id,$employee_id,$payroll_period_id);
 
 		$compute_cutoff = $this->compute_whole_cutoff($period_id, $employee_id);
 		$check_approved = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->first();
-		//dd($compute_cutoff);
+		
 		if($check_approved)
 		{
 			Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->delete();
@@ -157,8 +157,8 @@ class PayrollTimeSheet2Controller extends Member
 
 	public function unapprove($period_id, $employee_id)
 	{
-		$unapproved = true;
-		$compute_cutoff = $this->compute_whole_cutoff($period_id, $employee_id, $unapproved);
+		//$unapproved = true;
+		//$compute_cutoff = $this->compute_whole_cutoff($period_id, $employee_id, $unapproved);
 		$check_approved = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->first();
 		
 		if($check_approved)
@@ -178,6 +178,10 @@ class PayrollTimeSheet2Controller extends Member
 
 		/* GET CURRENT TIMESHEET FOR THE DAY */
 		$data["timesheet_db"] = $timesheet_db = $this->timesheet_info_db($employee_id, Request::input("date"));
+
+		/* UPDATE REMARKS */
+		$update_remarks["payroll_time_shee_activity"] = isset(Request::input("remarks")[0]) ? Request::input("remarks")[0] : "";
+		Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->update($update_remarks);
 		
 		/* DELETE TIME SHEET RECORD */
 		Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->where("payroll_time_sheet_origin", "Manually Encoded")->delete();
@@ -199,7 +203,6 @@ class PayrollTimeSheet2Controller extends Member
 			{
 				$time_out = Request::input("time-out")[$key];
 				$remarks = Request::input("remarks")[$key];
-				
 				if($time_in != "" || $time_out != "")
 				{
 					$insert[$key]["payroll_time_sheet_id"] = $timesheet_db->payroll_time_sheet_id;
@@ -216,7 +219,6 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			Tbl_payroll_time_sheet_record::insert($insert);
 		}
-		
 
 		/* RETURN DATA TO SERVER */
 		$data["timesheet_db"] = $timesheet_db = $this->timesheet_info_db($employee_id, Request::input("date"));

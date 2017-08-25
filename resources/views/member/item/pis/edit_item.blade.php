@@ -90,12 +90,12 @@
                     <div class="form-group">               
                         <div class="col-md-6">
                             <label>Packing Size</label>
-                            <input type="text" name="packing_size" class="form-control input-sm">
+                            <input type="text" name="packing_size" class="form-control input-sm" value="{{isset($data['packing_size']) ? $data['packing_size'] : ''}}">
                         </div>
                         <div class="col-md-6">
                             <label>Manufacturer</label>
                             <select class="form-control input-sm drop-down-manufacturer" name="item_manufacturer_id">
-                                @include("member.load_ajax_data.load_manufacturer")
+                                @include("member.load_ajax_data.load_manufacturer", ['_manufacturer' => $_manufacturer, 'manufacturer_id' => isset($data['item_manufacturer_id']) ? $data['item_manufacturer_id'] : ''])
                             </select>
                         </div>
                     </div>
@@ -597,6 +597,18 @@
 
 <script type="text/javascript" src="/assets/member/js/prompt_serial_number.js"></script>
 <script type="text/javascript" src="/assets/member/js/item.js"></script>
+<script type="text/javascript">
+function setTwoNumberDecimal(x) 
+{
+    var value = parseFloat($(x).val()).toFixed(2);
+    $(x).val(value);
+}
+
+$('.number-input').change(function(e)
+{
+    setTwoNumberDecimal(e.currentTarget);
+});
+</script>
 <style type="text/css">
     .modal-body
     {

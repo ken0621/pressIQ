@@ -65,7 +65,13 @@ class Vendor_CreateBillController extends Member
         {   
             return $this->show_no_access();  
         }
-    }    
+    } 
+    public function print_bill()
+    {
+        $id = Request::input('id');
+
+        
+    }  
     public function create_bill()
     {
         $access = Utilities::checkAccess('vendor-bill', 'access_page');

@@ -6,20 +6,20 @@
     padding-bottom: 24px;
     .form-mainborder
     {
-    	line-height: 1;
-    	border: 3px solid #333;
+    	line-height: 1.13;
+    	border: 4px solid #333;
     	margin: 3px;
         font-family: 'Source Sans',sans-serif;
         height: 1068px;
     	.sss-first-layer
     	{
-    		border-bottom: 1px solid #333;
+    		border-bottom: 2px solid #333;
     		.sss-header-section
     		{
     			display: inline-block;
     		    width: 48%;
     		    height: auto;
-    		    border-right: 1px solid #333;
+    		    border-right: 2px solid #333;
     		    .sss-logo-container
     		    {
     		    	width: 30%;
@@ -67,14 +67,15 @@
         			    text-align: center;
         				margin: 0px;
         				font-size: 12px;
+                        letter-spacing: 0.03px;
         			}
         			.sss-title
         			{
         				text-align: center;
        					margin: 0px;
        				    font-size: 13px;
-                        letter-spacing: 1px;
-        				font-weight: 700;
+                        letter-spacing: 0.03px;
+        				font-weight: 900;
         			}
         			.sss-form-title
         			{
@@ -85,22 +86,21 @@
         			}
         			.sss-note
         			{
-        				text-align: center;
-       					margin: 0px;
-       				    margin-top: 7px;
-        			    font-size: 6px;
-                        letter-spacing: 1px;
-        			}
+        			    text-align: center;
+                        margin: 0px;
+                        margin-top: 3px;
+                        font-size: 8px;
+                        letter-spacing: 0.03px;
+                        font-weight: 700;        			}
     		    }
     		    .sss-direction-container
     		    {
     		    	display: inline-block;
-                    margin-bottom: 10px;
+                    margin-bottom: 4px;
     		    	.sss-directions
     		    	{
     		    		text-align: justify;
-                        font-size: 8px;
-                        letter-spacing: 1px;
+                        font-size:  11.5px;
                         margin-right: 2px;
                         margin-left: 2px;
     		    		.sss-bold-text
@@ -123,7 +123,7 @@
                 .sss-payorscopy-title
                 {
                     margin: 0px;
-                    font-weight: 700;
+                    font-weight: 900;
                     font-size: 13px;
                     letter-spacing: 1px;
                     text-align: right;
@@ -134,47 +134,50 @@
     	}
         .sss-second-layer
         {
+            display: flex;
             .sss-employer-title-container
             {
                 width: 48%;
                 display: inline-block;
-                border-right: 1px solid #333;
-                border-bottom: 1px solid #333;
+                border-right: 2px solid #333;
+                border-bottom: 2px solid #333;
                 .sss-employer-title
                 {
                     margin: 0px;
                     text-align: center;
-                    font-size: 8px;
-                    letter-spacing: 1px;
+                    font-size: 10px;
+                    letter-spacing: 0.03px;
                     font-weight: 700;
                     padding-top: 2px;
+                    padding-bottom: 1px;
                 }
             }
             .sss-individualpayor-title-container
             {
                 width: 52%;
                 display: inline-block;
-                border-bottom: 1px solid #333;
+                border-bottom: 2px solid #333;
                 background-color: #FEFE9C;
                 .sss-individualpayor-title
                 {
                     margin: 0px;
-                    font-size: 8px;
-                    letter-spacing: 1px;
+                    font-size: 10px;
+                    letter-spacing: 0.03px;
                     font-weight: 700;
                     text-align: center;
                     padding-top: 2px;
+                    padding-bottom: 1px;
                 }
             }
             .sss-checkbox-container
             {
                 display: inline-block;
                 width: 48%;
-                border-right: 1px solid #333;
-                border-bottom: 1px solid #333;
+                border-right: 2px solid #333;
+                border-bottom: 2px solid #333;
                 text-align: left;
-                padding-top: 17px;
-                padding-bottom: 17px;
+                padding-top: 20px;
+                padding-bottom: 20px;
                 .sss-checkbox
                 {
                     border: 1px solid #333;
@@ -182,10 +185,18 @@
                     height: 10px;
                     display: inline-block;
                     margin-left: 65px;
+                    vertical-align: middle;
+                    .sss-checkbox-xmark
+                    {
+                        margin: 0px;
+                        font-size: 9px;
+                        margin-left: 1px;
+                        font-weight: 700;
+                    }
                 }
                 .sss-checkbox-label
                 {
-                    font-size: 8px;
+                    font-size: 10px;
                     letter-spacing: 1px;
                     vertical-align: middle;
                 }
@@ -194,8 +205,9 @@
             {
                 display: inline-block;
                 width: 52%;
-                border-bottom: 1px solid #333;
+                border-bottom: 2px solid #333;
                 padding-bottom: 2px;
+                padding-top: 2px;
                 background-color: #FEFE9C;
                 .sss-payor-leftpart
                 {
@@ -209,6 +221,14 @@
                         display: inline-block;
                         background-color: #fff;
                         margin-left: 5px;
+                        vertical-align: middle;
+                        .sss-checkbox-xmark
+                        {
+                            margin: 0px;
+                            font-size: 8px;
+                            margin-left: 1px;
+                            font-weight: 700;
+                        }
                     }
                     .sss-checkbox-label-payor
                     {
@@ -230,6 +250,14 @@
                         display: inline-block;
                         margin-left: 5px;
                         background-color: #fff;
+                        vertical-align: middle;
+                        .sss-checkbox-xmark
+                        {
+                            margin: 0px;
+                            font-size: 8px;
+                            margin-left: 1px;
+                            font-weight: 700;
+                        }
                     }
                     .sss-checkbox-label-payor
                     {
@@ -251,6 +279,14 @@
                         display: inline-block;
                         margin-left: 5px;
                         background-color: #fff;
+                        vertical-align: middle;
+                        .sss-checkbox-xmark
+                        {
+                            margin: 0px;
+                            font-size: 8px;
+                            margin-left: 1px;
+                            font-weight: 700;
+                        }
                     }
                     .sss-checkbox-label-payor
                     {
@@ -258,6 +294,18 @@
                         letter-spacing: 1px;
                         vertical-align: middle;
                         margin-left: 1px;
+                        .sss-payor-input-holder
+                        {
+                            display: inline-block;
+                            border-bottom: 1px solid #333;
+                            width: 173px;
+                            .sss-payor-input
+                            {
+                                margin: 0px;
+                                letter-spacing: 0;
+                                margin-bottom: 1px;
+                            }
+                        }
                     }
                     .sss-checkbox-textfield-payor
                     {
@@ -274,34 +322,53 @@
             {
                 display: inline-block;
                 width: 48%;
-                border-right: 1px solid #333;
-                border-bottom: 1px solid #333;
+                border-right: 2px solid #333;
+                border-bottom: 2px solid #333;
                 .sss-employernumber
                 {
                     margin: 0px;
                     margin-left: 2px;
                     margin-top: 2px;
-                    font-size: 11.5px;
-                    padding-bottom: 30px;
+                    font-size: 10px;
+                }
+                .sss-employer-input-holder
+                {
+                    padding: 8px 20px 8px 35px;;
+                    .sss-employer-input
+                    {
+                        margin: 0px;
+                        text-align: center;
+                    }
                 }
             }
             .ss-number-container
             {
                 display: inline-block;
                 width: 23%;
-                border-right: 1px solid #333;
-                border-bottom: 1px solid #333;
+                border-right: 2px solid #333;
+                border-bottom: 2px solid #333;
+                background-color: #FEFE9C;
                 .ss-number
                 {
-                    font-size: 11.5px;
+                    font-size: 10px;
                     margin: 0px;
                     margin-left: 2px;
                     margin-top: 2px;
-                    padding-bottom: 30px;
                     .notes
                     {
                         font-size: 7px;
                         margin-left: 2px;
+                        letter-spacing: 0.03px;
+                    }
+                }
+                .ss-payor-input-holder
+                {
+                    padding: 8px 20px 8px 35px;
+                    .ss-input
+                    {
+                        margin: 0px;
+                        text-align: center;
+                        letter-spacing: 0.03px;
                     }
                 }
             }
@@ -309,21 +376,1788 @@
             {
                 display: inline-block;
                 width: 29%;
-                border-bottom: 1px solid #333;
+                border-bottom: 2px solid #333;
+                background-color: #FEFE9C;
                 .sss-commonreference-number
                 {
-                    font-size: 11.5px;
+                    font-size: 10px;
                     margin: 0px;
                     margin-top: 2px;
                     margin-left: 2px;
-                    padding-bottom: 19px;
                     .notes
                     {
                         font-size: 7px;
                         margin-left: 2px;
                     }
                 }
+                .ss-payor-input-holder
+                {
+                    padding: 8px 15px 8px 10px;
+                    .ss-input
+                    {
+                        margin: 0px;
+                        text-align: center;
+                    }
+                }
+            }
+            .sss-employername-container
+            {
+                display: inline-block;
+                width: 48%;
+                border-right: 2px solid #333;
+                border-bottom: 2px solid #333;
+                .sss-employername
+                {
+                    margin: 0px;
+                    margin-left: 2px;
+                    margin-top: 2px;
+                    font-size: 10px;
+                }
+                .sss-employer-input-holder
+                {
+                    padding: 8px 20px 8px 35px;
+                    .sss-employer-input
+                    {
+                        margin: 0px;
+                        text-align: center;
+                    }
+                }
+            }
+            .sss-payorname-container
+            {
+                display: inline-block;
+                width: 52%;
+                border-bottom: 2px solid #333;
+                background-color: #FEFE9C;
+                .sss-payorname
+                {
+                    margin: 0px;
+                    margin-left: 2px;
+                    margin-top: 2px;
+                    font-size: 10px;
+                }
+                .sss-payor-input-holder
+                {
+                    padding: 8px 15px 8px 15px;
+                    .sss-payor-input
+                    {
+                        margin: 0px;
+                        text-align: center;
+                    }
+                }
+            }
+        }
+        .sss-third-layer
+        {
+            .sss-employer-title-container
+            {
+                width: 100%;
+                border-bottom: 2px solid #333;
+                .sss-employer-title
+                {
+                    margin: 0px;
+                    font-size: 10px;
+                    text-align: -webkit-center;
+                    margin-bottom: 1px;
+                    margin-top: 2px;
+                    font-weight: 700;
+                    letter-spacing: 0.03px;
+                }
+            }
+            .sss-address-container
+            {
+                display: flex;
+                width: 100%;
+                border-bottom: 2px solid #333;
+                .sss-addresstitle-holder
+                {
+                    display: inline-block;
+                    width: 8%;
+                    .sss-address-title
+                    {
+                        margin: 0px;
+                        font-size: 10px;
+                        margin-top: 2px;
+                        margin-left: 2px;
+                    }
+                }
+                .sss-addressroom-holder
+                {
+                    display: inline-block;
+                    width: 19%;
+                    .sss-address-subtitle
+                    {
+                        margin: 0px;
+                        font-size: 7.5px;
+                        letter-spacing: 0.01px;
+                        margin-top: 2px;
+                    }
+                    .sss-address-input-holder
+                    {
+                        padding: 8px 10px 8px 0px;
+                        .sss-address-input
+                        {
+                            margin: 0px;
+                        }
+                    }
+                }
+                .sss-addressnumber-holder
+                {
+                    display: inline-block;
+                    width: 15%;
+                    .sss-address-subtitle
+                    {
+                        margin: 0px;
+                        font-size: 7.5px;
+                        letter-spacing: 0.01px;
+                        margin-top: 2px;
+                    }
+                    .sss-address-input-holder
+                    {
+                        padding: 8px 10px 8px 0px;
+                        .sss-address-input
+                        {
+                            margin: 0px;
+                        }
+                    }
+                }
+                .sss-addressstreet-holder
+                {
+                    display: inline-block;
+                    width: 22%;
+                    .sss-address-subtitle
+                    {
+                        margin: 0px;
+                        font-size: 7.5px;
+                        letter-spacing: 0.01px;
+                        margin-top: 2px;
+                    }
+                    .sss-address-input-holder
+                    {
+                        padding: 8px 10px 8px 0px;
+                        .sss-address-input
+                        {
+                            margin: 0px;
+                        }
+                    }
+                }
+                .sss-addresssubdivision-holder
+                {
+                    display: inline-block;
+                    width: 13%;
+                    .sss-address-subtitle
+                    {
+                        margin: 0px;
+                        font-size: 7.5px;
+                        letter-spacing: 0.01px;
+                        margin-top: 2px;
+                    }
+                    .sss-address-input-holder
+                    {
+                        padding: 8px 10px 8px 0px;
+                        .sss-address-input
+                        {
+                            margin: 0px;
+                        }
+                    }
+                }
+                .sss-addressbaranggay-holder
+                {
+                    display: inline-block;
+                    width: 23%;
+                    .sss-address-subtitle
+                    {
+                        margin: 0px;
+                        font-size: 7.5px;
+                        letter-spacing: 0.01px;
+                        margin-top: 2px;
+                    }
+                    .sss-address-input-holder
+                    {
+                        padding: 8px 10px 8px 0px;
+                        .sss-address-input
+                        {
+                            margin: 0px;
+                        }
+                    }
+                }
+            }
+            .sss-address-container
+            {
+                .sss-addresscity-holder
+                {
+                    display: inline-block;
+                    width: 26%;
+                    .sss-addresscity-title
+                    {
+                        margin: 0px;
+                        margin-top: 2px;
+                        font-size: 7.5px;
+                        text-align: center;
+                        letter-spacing: 0.03px;
+                    }
+                    .sss-address-input-holder
+                    {
+                        padding: 8px 10px 8px 10px;
+                        .sss-address-input
+                        {
+                            margin: 0px;
+                            text-align: center;
+                        }
+                    }
+                }
+                .sss-addressprovince-holder
+                {
+                    display: inline-block;
+                    width: 26%;
+                    border-right: 2px solid #333;
+                    .sss-addressprovince-title
+                    {
+                        margin: 0px;
+                        margin-top: 2px;
+                        font-size: 7.5px;
+                        text-align: center;
+                        letter-spacing: 0.03px;
+                    }
+                    .sss-address-input-holder
+                    {
+                        padding: 8px 10px 8px 10px;
+                        .sss-address-input
+                        {
+                            margin: 0px;
+                            text-align: center;
+                        }
+                    }
+                }
+                .sss-addresszip-holder
+                {
+                    display: inline-block;
+                    width: 12%;
+                    border-right: 2px solid #333;
+                    .sss-addresszip-title
+                    {
+                        margin: 0px;
+                        margin-top: 2px;
+                        font-size: 10px;
+                        margin-left: 2px;
+                    }
+                    .sss-address-input-holder
+                    {
+                        padding: 8px 3px 8px 3px;
+                        .sss-address-input
+                        {
+                            margin: 0px;
+                            text-align: center;
+                        }
+                    }
+                }
+                .sss-addresstaxnumber-holder
+                {
+                    display: inline-block;
+                    width: 36%;
+                    .sss-addresstaxnumber-title
+                    {
+                        margin: 0px;
+                        margin-top: 2px;
+                        font-size: 10px;
+                        margin-left: 2px;
+                        .notes
+                        {
+                            letter-spacing: 0.03px;
+                            font-size: 7px;
+                            margin-left: 5px;
+                        }
+                    }
+                    .sss-address-input-holder
+                    {
+                        padding: 8px 10px 8px 10px;
+                        .sss-address-input
+                        {
+                            margin: 0px;
+                            text-align: center;
+                        }
+                    }
+                }
+            }
+            .sss-address-container
+            {
+                .sss-addresstelenum-holder
+                {
+                    display: inline-block;
+                    width: 28%;
+                    border-right: 2px solid #333;
+                    .sss-addresstelenum-title
+                    {
+                        margin: 0px;
+                        margin-left: 2px;
+                        margin-top: 2px;
+                        font-size: 10px;
+                        .notes
+                        {
+                            letter-spacing: 0.03px;
+                            font-size: 7px;
+                            margin-left: 5px;
+                        }
+                    }
+                    .sss-input-holder
+                    {
+                        padding: 8px 10px 8px 10px;
+                        .sss-input
+                        {
+                            margin: 0px;
+                            text-align: center;
+                        }
+                    }
+                }
+                .sss-addresscellnum-holder
+                {
+                    display: inline-block;
+                    width: 28%;
+                    border-right: 2px solid #333;
+                    .sss-addresscellnum-title
+                    {
+                        margin: 0px;
+                        margin-left: 2px;
+                        margin-top: 2px;
+                        font-size: 10px;   
+                    }
+                    .sss-input-holder
+                    {
+                        padding: 8px 10px 8px 10px;
+                        .sss-input
+                        {
+                            margin: 0px;
+                            text-align: center;
+                        }
+                    }
+                }
+                .sss-emailaddress-holder
+                {
+                    display: inline-block;
+                    width: 22%;
+                    border-right: 2px solid #333;
+                    .sss-emailaddress-title
+                    {
+                        margin: 0px;
+                        margin-left: 2px;
+                        margin-top: 2px;
+                        font-size: 10px;
+                    }
+                    .sss-input-holder
+                    {
+                        padding: 8px 5px 8px 5px;
+                        .sss-input
+                        {
+                            margin: 0px;
+                            text-align: center;
+                        }
+                    }
+                }
+                .sss-website-holder
+                {
+                    display: inline-block;
+                    width: 22%;
+                    .sss-website-title
+                    {
+                        margin: 0px;
+                        margin-left: 2px;
+                        margin-top: 2px;
+                        font-size: 10px;
+                        .notes
+                        {
+                            letter-spacing: 0.03px;
+                            font-size: 7px;
+                            margin-left: 2px;
+                        }
+                    }
+                    .sss-input-holder
+                    {
+                        padding: 8px 5px 8px 5px;
+                        .sss-input
+                        {
+                            margin: 0px;
+                            text-align: center;
+                        }
+                    }
+                }
+            }
+        }
+        .sss-fourth-layer
+        {
+            display: block;
+            .sss-title-container
+            {
+                width: 100%;
+                border-bottom: 2px solid #333;
+                .sss-title
+                {
+                    margin: 0px;
+                    font-size: 10px;
+                    text-align: -webkit-center;
+                    margin-bottom: 1px;
+                    margin-top: 2px;
+                    font-weight: 700;
+                    letter-spacing: 0.03px;
+                }
+            }
+            .sss-tableheader-container
+            {
+                display: flex;    
+                .sss-period-holder
+                {
+                    display: inline-block;
+                    width: 25%;
+                    border-right: 2px solid #333;
+                    border-bottom: 2px solid #333;
+                    .sss-title
+                    {
+                        margin: 0px;
+                        margin-top: 2px;
+                        margin-bottom: 2px;
+                        font-size: 10px;
+                        text-align: center;
+                        font-weight: 700;
+                        letter-spacing: 0.03px;
+                    }
+                }
+                .sss-sscontribution-holder
+                {
+                    display: inline-block;
+                    width: 25%;
+                    border-right: 2px solid #333;
+                    .sss-title
+                    {
+                        margin: 0px;
+                        margin-top: 2px;
+                        margin-bottom: 2px;
+                        font-size: 10px;
+                        text-align: center;
+                        font-weight: 700;
+                        letter-spacing: 0.03px;
+                    }
+                }
+                .sss-total-holder
+                {
+                    display: inline-block;
+                    width: 25%;
+                    .sss-title
+                    {
+                        margin: 0px;
+                        margin-top: 2px;
+                        margin-bottom: 2px;
+                        font-size: 10px;
+                        text-align: center;
+                        font-weight: 700;
+                        letter-spacing: 0.03px;    
+                    }
+                }
+                .sss-eccontribution-holder
+                {
+                    display: inline-block;
+                    width: 25%;
+                    border-right: 2px solid #333;
+                    .sss-title
+                    {
+                        margin: 0px;
+                        margin-top: 2px;
+                        margin-bottom: 2px;
+                        font-size: 10px;
+                        text-align: center;
+                        font-weight: 700;
+                        letter-spacing: 0.03px;
+                    }
+                }
+            }
+            .sss-tablesubheader-container
+            {
+                display: flex;
+                .sss-month-holder
+                {
+                    display: inline-block;
+                    width: 14%;
+                    border-right: 2px solid #333;
+                    border-bottom: 2px solid #333;
+                    .sss-title
+                    {
+                        margin: 0px;
+                        margin-top: 5px;
+                        margin-bottom: 1px;
+                        font-size: 10px;
+                        text-align: center;
+                        font-weight: 700;
+                        letter-spacing: 0.03px;
+                    }
+                }
+                .sss-year-holder
+                {
+                    display: inline-block;
+                    width: 11%;
+                    border-right: 2px solid #333;
+                    border-bottom: 2px solid #333;
+                    .sss-title
+                    {
+                        margin: 0px;
+                        margin-top: 5px;
+                        margin-bottom: 1px;
+                        font-size: 10px;
+                        text-align: center;
+                        font-weight: 700;
+                        letter-spacing: 0.03px;
+                    }
+                }
+                .sss-sscontribution-holder
+                {
+                    display: inline-block;
+                    width: 25%;
+                    border-right: 2px solid #333;
+                    border-bottom: 2px solid #333;
+                    .sss-title
+                    {
+                        font-size: 7px;
+                        text-align: center;
+                        margin: 0px;
+                        letter-spacing: 0.03px;
+                        margin-top: 0.5px;
+                        margin-bottom: 2px;
+                    }
+                }
+                .sss-eccontribution-holder
+                {
+                    display: inline-block;
+                    width: 25%;
+                    border-right: 2px solid #333;
+                    border-bottom: 2px solid #333;
+                    .sss-title
+                    {
+                        font-size: 7px;
+                        text-align: center;
+                        margin: 0px;
+                        letter-spacing: 0.03px;
+                        margin-top: 0.5px;
+                        margin-bottom: 2px;
+                        width: 47%;
+                        margin-left: auto;
+                        margin-right: auto;
+                    }
+                }
+                .sss-total-holder
+                {
+                    display: inline-block;
+                    width: 25%;
+                    border-bottom: 2px solid #333;
+                    .sss-title
+                    {
+                        font-size: 7px;
+                        text-align: center;
+                        margin: 0px;
+                        letter-spacing: 0.03px;
+                        margin-top: 0.5px;
+                        margin-bottom: 2px;
+                        width: 47%;
+                        margin-left: auto;
+                        margin-right: auto;
+                    }
+                }
+            }
+            .sss-first-paymentdetials-container
+            {
+                display: flex;
+                .sss-month-holder
+                {
+                    display: inline-block;
+                    width: 14%;
+                    border-right: 2px solid #333;
+                    border-bottom: 1px solid #333;
+                    .sss-input
+                    {
+                        font-size: 10px;
+                        text-align: center;
+                        margin: 0px;
+                        margin-top: 2px;
+                        margin-bottom: 2px;
+                    }
+                }
+                .sss-year-holder
+                {
+                    display: inline-block;
+                    width: 11%;
+                    border-right: 2px solid #333;
+                    border-bottom: 1px solid #333;
+                    .sss-input
+                    {
+                        font-size: 10px;
+                        text-align: center;
+                        margin: 0px;
+                        margin-top: 2px;
+                        margin-bottom: 2px;
+                    }
+                }
+                .sss-detailsinput-holder
+                {
+                    display: inline-block;
+                    width: 25%;
+                    border-right: 2px solid #333;
+                    border-bottom: 1px solid #333;
+                    .sss-pesosign-holder
+                    {
+                        display: flex;
+                        .sss-pesosign
+                        {
+                            font-size: 10px;
+                            margin-left: 2px;
+                            margin-top: 2px;
+                            margin-bottom: 2px;
+                        }
+                    }
+                    .sss-input-holder
+                    {
+                        display: flex;
+                        .sss-input
+                        {
+                            font-size: 10px;
+                            margin: 0px;
+                            display: inline-block;
+                            letter-spacing: 1px;
+                            margin-right: 10px;
+                            margin-top: 2px;
+                            margin-bottom: 2px;
+                        }
+                    }
+                }
+                .sss-detailsinput-last-holder
+                {
+                    display: inline-block;
+                    width: 25%;
+                    border-bottom: 1px solid #333;
+                    .sss-pesosign-holder
+                    {
+                        display: flex;
+                        .sss-pesosign
+                        {
+                            font-size: 10px;
+                            margin-left: 2px;
+                            margin-top: 2px;
+                            margin-bottom: 2px;
+                        }
+                    }
+                    .sss-input-holder
+                    {
+                        display: flex;
+                        .sss-input
+                        {
+                            font-size: 10px;
+                            margin: 0px;
+                            display: inline-block;
+                            letter-spacing: 1px;
+                            margin-right: 10px;
+                            margin-top: 2px;
+                            margin-bottom: 2px;
+                        }
+                    }
+                }
+            }
+            .sss-paymentdetials-container
+            {
+                display: flex;
+                .sss-month-holder
+                {
+                    display: inline-block;
+                    width: 14%;
+                    border-right: 2px solid #333;
+                    border-bottom: 1px solid #333;
+                    .sss-input
+                    {
+                        font-size: 10px;
+                        text-align: center;
+                        margin: 0px;
+                        margin-top: 2px;
+                        margin-bottom: 2px;
+                    }
+                }
+                .sss-year-holder
+                {
+                    display: inline-block;
+                    width: 11%;
+                    border-right: 2px solid #333;
+                    border-bottom: 1px solid #333;
+                    .sss-input
+                    {
+                        font-size: 10px;
+                        text-align: center;
+                        margin: 0px;
+                        margin-top: 2px;
+                        margin-bottom: 2px;
+                    }
+                }
+                .sss-detailsinput-holder
+                {
+                    display: inline-block;
+                    width: 25%;
+                    border-right: 2px solid #333;
+                    border-bottom: 1px solid #333;
+                    .sss-input-holder
+                    {
+                        display: flex;
+                        .sss-input
+                        {
+                            font-size: 10px;
+                            margin: 0px;
+                            display: inline-block;
+                            letter-spacing: 1px;
+                            margin-right: 10px;
+                            margin-top: 2px;
+                            margin-bottom: 2px;
+                        }
+                    }
+                }
+                .sss-detailsinput-last-holder
+                {
+                    display: inline-block;
+                    width: 25%;
+                    border-bottom: 1px solid #333;
+                    .sss-pesosign-holder
+                    {
+                        display: flex;
+                        .sss-pesosign
+                        {
+                            font-size: 10px;
+                            margin-left: 2px;
+                            margin-top: 2px;
+                            margin-bottom: 2px;
+                        }
+                    }
+                    .sss-input-holder
+                    {
+                        display: flex;
+                        .sss-input
+                        {
+                            font-size: 10px;
+                            margin: 0px;
+                            display: inline-block;
+                            letter-spacing: 1px;
+                            margin-right: 10px;
+                            margin-top: 2px;
+                            margin-bottom: 2px;
+                        }
+                    }
+                }
+            }
+            .sss-paymentadditions-container
+            {
+                display: flex;
+                .sss-paymentadditions-title-holder
+                {
+                    display: inline-block;
+                    width: 3%;
+                    border-top:  1px solid #333;
+                    border-right: 2px solid #333;
+                    border-bottom: 1px solid #333;
+                    p
+                    {
+                        margin: 0px;
+                        font-size: 8px;
+                        margin-top: 2px;
+                        span
+                        {
+                            display: block;
+                            margin-top: 1px;
+                            margin-bottom: 1px;
+                            text-align: center;
+                        }
+                    }
+                }
+                .sss-paymentadditions-subtitle-holder
+                {
+                    display: inline-block;
+                    width: 22%;
+                    .sss-title-holder
+                    {
+                        display: flex;
+                        border-top:  1px solid #333;
+                        border-right: 2px solid #333;
+                        border-bottom: 1px solid #333;
+                        .sss-title
+                        {
+                            font-size: 10px;
+                            letter-spacing: 1px;
+                            margin: 0px;
+                            margin-left: 8px;
+                            margin-top: 2px;
+                            margin-bottom: 2px;
+                        }
+                    }
+                }
+                .sss-additiondetails-holder
+                {
+                    display: inline-block;
+                    width: 25%;
+                    .sss-detailsinput-holder
+                    {
+                        display: flow-root;
+                        border-top:  1px solid #333;
+                        border-right: 2px solid #333;
+                        border-bottom: 1px solid #333;
+                        .sss-pesosign-holder
+                        {
+                            display: flex;
+                            .sss-pesosign
+                            {
+                                font-size: 10px;
+                                margin-left: 2px;
+                                margin-top: 2px;
+                                margin-bottom: 2px;
+                            }
+                        }
+                        .sss-input-holder
+                        {
+                            display: flex;
+                            .sss-input
+                            {
+                                font-size: 10px;
+                                margin: 0px;
+                                display: inline-block;
+                                letter-spacing: 1px;
+                                margin-right: 10px;
+                                margin-top: 2px;
+                                margin-bottom: 2px;
+                            }
+                        }
+                    }
+                    .sss-detailsinput-last-holder
+                    {
+                        display: flow-root;
+                        border-top:  1px solid #333;
+                        border-bottom: 1px solid #333;
+                        .sss-pesosign-holder
+                        {
+                            display: flex;
+                            .sss-pesosign
+                            {
+                                font-size: 10px;
+                                margin-left: 2px;
+                                margin-top: 2px;
+                                margin-bottom: 2px;
+                            }
+                        }
+                        .sss-input-holder
+                        {
+                            display: flex;
+                            .sss-input
+                            {
+                                font-size: 10px;
+                                margin: 0px;
+                                display: inline-block;
+                                letter-spacing: 1px;
+                                margin-right: 10px;
+                                margin-top: 2px;
+                                margin-bottom: 2px;
+                            }
+                        }
+                    }
+                    .sss-detailsinput-secondlayer-holder
+                    {
+                        display: flow-root;
+                        border-top: 1px solid #333;
+                        border-right: 2px solid #333;
+                        border-bottom: 1px solid #333;
+                        .sss-input-holder
+                        {
+                            display: flex;
+                            .sss-input
+                            {
+                                font-size: 10px;
+                                margin: 0px;
+                                display: inline-block;
+                                letter-spacing: 1px;
+                                margin-right: 10px;
+                                margin-top: 2px;
+                                margin-bottom: 2px;
+                            }
+                        }
+                    }
+                    .sss-detailsinput-secondlayer-last-holder
+                    {
+                        display: flow-root;
+                        border-top: 1px solid #333;
+                        border-bottom: 1px solid #333;
+                        .sss-input-holder
+                        {
+                            display: flex;
+                            .sss-input
+                            {
+                                font-size: 10px;
+                                margin: 0px;
+                                display: inline-block;
+                                letter-spacing: 1px;
+                                margin-right: 10px;
+                                margin-top: 2px;
+                                margin-bottom: 2px;
+                            }
+                        }
+                    }
+
+                }
+            }
+            .sss-subtotal-container
+            {
+                display: flex;
+                .sss-subtotal-title-holder
+                {
+                    display: inline-block;
+                    width: 25%;
+                    border-top: 1px solid #333;
+                    border-right: 2px solid #333;
+                    border-bottom: 2px solid #333;
+                    .sss-subtotal-title
+                    {
+                        font-size: 10px;
+                        font-weight: 700;
+                        letter-spacing: 0.03px;
+                        margin: 0px;
+                        margin-top: 2px;
+                        margin-bottom: 2px;
+                        margin-left: 2px;
+                    }
+                }
+                .sss-detailsinput-holder
+                {
+                    display: inline-block;
+                    width: 25%;
+                    border-top: 1px solid #333;
+                    border-right: 2px solid #333;
+                    border-bottom: 2px solid #333;
+                    .sss-pesosign-holder
+                    {
+                        display: flex;
+                        .sss-pesosign
+                        {
+                            font-size: 10px;
+                            margin-left: 2px;
+                            margin-top: 2px;
+                            margin-bottom: 2px;
+                        }
+                    }
+                    .sss-input-holder
+                    {
+                        display: flex;
+                        .sss-input
+                        {
+                            font-size: 10px;
+                            margin: 0px;
+                            display: inline-block;
+                            letter-spacing: 1px;
+                            margin-right: 10px;
+                            margin-top: 2px;
+                            margin-bottom: 2px;
+                        }
+                    }
+                }
+                .sss-detailsinput-last-holder
+                {
+                    display: inline-block;
+                    width: 25%;
+                    border-top: 1px solid #333;
+                    border-bottom: 2px solid #333;
+                    .sss-pesosign-holder
+                    {
+                        display: flex;
+                        .sss-pesosign
+                        {
+                            font-size: 10px;
+                            margin-left: 2px;
+                            margin-top: 2px;
+                            margin-bottom: 2px;
+                        }
+                    }
+                    .sss-input-holder
+                    {
+                        display: flex;
+                        .sss-input
+                        {
+                            font-size: 10px;
+                            margin: 0px;
+                            display: inline-block;
+                            letter-spacing: 1px;
+                            margin-right: 10px;
+                            margin-top: 2px;
+                            margin-bottom: 2px;
+                        }
+                    }
+                }
+            }
+            .sss-totalpayment-container
+            {
+                display: flex;
+                .sss-toatalpayment-title-holder
+                {
+                    display: inline-block;
+                    width: 75%;
+                    border-right: 2px solid #333;
+                    border-bottom: 2px solid #333;
+                    .sss-totalpayment-title
+                    {
+                        font-size: 10px;
+                        font-weight: 700;
+                        letter-spacing: 0.5px;
+                        margin: 0px;
+                        margin-top: 2px;
+                        margin-bottom: 2px;
+                        margin-left: 2px;
+                    }
+                }
+                .sss-detailsinput-last-holder
+                {
+                    display: inline-block;
+                    width: 25%;
+                    border-bottom: 2px solid #333;
+                    .sss-pesosign-holder
+                    {
+                        display: flex;
+                        .sss-pesosign
+                        {
+                            font-size: 10px;
+                            margin-left: 2px;
+                            margin-top: 2px;
+                            margin-bottom: 2px;
+                        }
+                    }
+                    .sss-input-holder
+                    {
+                        display: flex;
+                        .sss-input
+                        {
+                            font-size: 10px;
+                            margin: 0px;
+                            display: inline-block;
+                            letter-spacing: 1px;
+                            margin-right: 10px;
+                            margin-top: 2px;
+                            margin-bottom: 2px;
+                        }
+                    }
+                }
+            }
+        }
+        .sss-fifth-layer
+        {
+            display: block;
+            .sss-paymentform-container
+            {
+                display: flex;
+                .sss-formtitle-holder
+                {
+                    display: inline-block;
+                    width: 30%;
+                    .sss-title
+                    {
+                        font-size: 10px;
+                        margin: 0px;
+                        letter-spacing: 0.03px;
+                        margin-left: 2px;
+                        margin-top: 2px;
+                        margin-bottom: 2px;
+                    }
+                }
+                .sss-infigurestitle-holder
+                {
+                    display: inline-block;
+                    width: 22%;
+                    .sss-title
+                    {
+                        font-size: 10px;
+                        margin: 0px;
+                        letter-spacing: 0.03px;
+                        margin-left: 2px;
+                        margin-top: 2px;
+                        margin-bottom: 2px;
+                    }
+                }
+                .sss-inwordstitle-holder
+                {
+                    display: inline-block;
+                    width: 48%;
+                    border-left: 2px solid #333;
+                    .sss-title
+                    {
+                        font-size: 10px;
+                        margin: 0px;
+                        letter-spacing: 0.03px;
+                        margin-left: 2px;
+                        margin-top: 2px;
+                        margin-bottom: 2px;
+                    }
+                }
+            }
+            .sss-form-firstlayer-container
+            {
+                display: flex;
+                .sss-cash-holder
+                {
+                    display: inline-block;
+                    width: 30%;
+                    .sss-checkbox-holder
+                    {
+                        border: 1px solid #333;
+                        width: 10px;
+                        height: 10px;
+                        display: inline-block;
+                        vertical-align: middle;
+                        margin-left: 5px;
+                        .sss-checkbox
+                        {
+                            margin: 0px;
+                            font-size: 9px;
+                            margin-left: 1px;
+                            font-weight: 700;
+                        }
+                    }
+                    .sss-checkbox-label
+                    {
+                        font-size: 10px;
+                        letter-spacing: 0.03px;
+                        vertical-align: middle;
+                    }
+                    .sss-postalmoney-holder
+                    {
+                        display: block;
+                        .sss-checkbox-holder
+                        {
+                            border: 1px solid #333;
+                            width: 10px;
+                            height: 10px;
+                            display: inline-block;
+                            vertical-align: middle;
+                            margin-left: 5px;
+                            .sss-checkbox
+                            {
+                                margin: 0px;
+                                font-size: 9px;
+                                margin-left: 1px;
+                                font-weight: 700;
+                            }
+                        }
+                        .sss-checkbox-label
+                        {
+                            font-size: 10px;
+                            letter-spacing: 0.03px;
+                            vertical-align: middle;
+                        }
+                    }
+                }
+                .sss-forminput-holder
+                {
+                    display: inline-block;
+                    width: 22%;
+                    .sss-pesosign-holder
+                    {
+                        display: flex;
+                        .sss-pesosign
+                        {
+                            font-size: 10px;
+                            margin-left: 2px;
+                            margin-top: 5px;
+                            margin-bottom: 2px;
+                        }
+                    }
+                    .sss-underline-holder
+                    {
+                        display: flow-root;
+                        padding: 0px 15px 0px 9px;
+                        .sss-underline
+                        {       
+                            display: flow-root;
+                            border-bottom: 1px solid #333; 
+                            .sss-input-holder
+                            {
+                                display: flex;
+                                .sss-input
+                                {
+                                    font-size: 10px;
+                                    margin: 0px;
+                                    display: inline-block;
+                                    letter-spacing: 1px;
+                                    margin-right: 10px;
+                                    margin-top: 5px;
+                                    margin-bottom: 2px;
+                                }
+                            }
+                        }
+                    }
+                    .sss-second-underline-holder
+                    {
+                        display: block;
+                        .sss-underline-holder
+                        {
+                            display: flow-root;
+                            padding: 0px 15px 0px 17px;
+                            .sss-underline
+                            {
+                                display: flow-root;
+                                border-bottom: 1px solid #333;
+                                .sss-input-holder
+                                {
+                                    display: flex;
+                                    .sss-input
+                                    {
+                                        font-size: 10px;
+                                        margin: 0px;
+                                        display: inline-block;
+                                        letter-spacing: 1px;
+                                        margin-right: 10px;
+                                        margin-top: 5px;
+                                        margin-bottom: 2px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                .sss-amount-inwords-holder
+                {
+                    display: inline-block;
+                    width: 48%;
+                    border-left: 2px solid #333;
+                    border-bottom: 2px solid #333;
+                    text-align: center;
+                    height: 54px;
+                    .sss-inwords-margin
+                    {
+                        display: inline-block;
+                        width: 94%;
+                        margin-top: 5px;
+                        .sss-input
+                        {
+                            font-size: 10px;
+                            margin: 0px;
+                            letter-spacing: 1px;
+                            text-align: justify;
+                        }
+                    }
+                }
+            }
+            .sss-form-secondlayer-container
+            {
+                display: flex;
+                .sss-checknumber-holder
+                {
+                    display: inline-block;
+                    width: 16%;
+                    .sss-title
+                    {
+                        font-size: 10px;
+                        margin: 0px;
+                        margin-top: 3px;
+                        margin-left: 21px;
+                        letter-spacing: 0.03px;
+                    }
+                }
+                .sss-checkinput-holder
+                {
+                    display: inline-block;
+                    width: 36%;
+                    .sss-underline-holder
+                    {
+                        display: flow-root;
+                        padding: 0px 159px 0px 0px;
+                        .sss-underline
+                        {
+                            display: flow-root;
+                            border-bottom: 1px solid #333;
+                            .sss-input-holder
+                            {
+                                display: flex;
+                                width: 100%;
+                                .sss-input
+                                {
+                                    font-size: 10px;
+                                    margin: 0px;
+                                    letter-spacing: 1px;
+                                    margin-top: 3px;
+                                    margin-bottom: 2px;
+                                    display: inline-block;
+                                    margin-left: auto;
+                                    margin-right: auto;
+                                }
+                            }
+                        }
+                    }
+                }
+                .sss-paidby-holder
+                {
+                    display: inline-block;
+                    width: 48%;
+                    border-left: 2px solid #333;
+                    .sss-title
+                    {
+                        font-size: 10px;
+                        letter-spacing: 0.03px;
+                        margin: 0px;
+                        margin-left: 2px;
+                        margin-top: 2px;
+                    }
+                }
+            }
+            .sss-form-container
+            {
+                display: flex;
+                .sss-checkdate-title-holder
+                {
+                    display: inline-block;
+                    width: 16%;
+                    .sss-checkdate-title
+                    {
+                        font-size: 10px;
+                        margin: 0px;
+                        margin-top: 3px;
+                        margin-left: 21px;
+                        letter-spacing: 0.03px;
+                    }
+                }
+                .sss-checkinput-holder
+                {
+                    display: inline-block;
+                    width: 36%;
+                    .sss-underline-holder
+                    {
+                        display: flow-root;
+                        padding: 0px 159px 0px 0px;
+                        .sss-underline
+                        {
+                            display: flow-root;
+                            border-bottom: 1px solid #333;
+                            .sss-input-holder
+                            {
+                                display: flex;
+                                width: 100%;
+                                .sss-input
+                                {
+                                    font-size: 9px;
+                                    margin: 0px;
+                                    letter-spacing: 1px;
+                                    margin-top: 3px;
+                                    margin-bottom: 2px;
+                                    display: inline-block;
+                                    margin-left: auto;
+                                    margin-right: auto;
+                                }
+                            }
+                        }
+                    }
+                }
+                .sss-whitespace-holder
+                {
+                    border-left: 2px solid #333;
+                }
+            }
+            .sss-bankname-container
+            {
+                display: flex;
+                .sss-checkdate-title-holder
+                {
+                    display: inline-block;
+                    width: 16%;
+                    .sss-checkdate-title
+                    {
+                        font-size: 10px;
+                        margin: 0px;
+                        margin-top: 3px;
+                        margin-left: 21px;
+                    }
+                }
+                .sss-checkinput-holder
+                {
+                    display: inline-block;
+                    width: 14%;
+                    .sss-underline-holder
+                    {
+                        display: flow-root;
+                        width: 105px;
+                        .sss-underline
+                        {
+                            display: flow-root;
+                            border-bottom: 1px solid #333;
+                            .sss-input-holder
+                            {
+                                display: flex;
+                                width: 100%;
+                                .sss-input
+                                {
+                                    font-size: 10px;
+                                    margin: 0px;
+                                    letter-spacing: 0.03px;
+                                    margin-top: 3px;
+                                    margin-bottom: 2px;
+                                    display: inline-block;
+                                    margin-left: auto;
+                                    margin-right: auto;
+                                }
+                            }
+                        }
+                    }
+                }
+                .sss-lineofpayment-container
+                {
+                    display: inline-block;
+                    width: 22%;
+                    .sss-underline-holder
+                    {
+                        display: flow-root;
+                        padding: 0px 15px 0px 14px;
+                        .sss-underline
+                        {
+                            display: flow-root;
+                            border-bottom: 1px solid #333;
+                            .sss-input-holder
+                            {
+                                display: flex;
+                                .sss-input
+                                {
+                                    font-size: 10px;
+                                    margin: 0px;
+                                    display: inline-block;
+                                    letter-spacing: 1px;
+                                    margin-right: 10px;
+                                    margin-top: 2px;
+                                    margin-bottom: 2px;
+                                }
+                            }
+                        }
+                    }
+                }
+                .sss-printedname-holder
+                {
+                    border-left: 2px solid #333;
+                    display: inline-block;
+                    width: 24%;
+                    .sss-underline-holder
+                    {
+                        display: flow-root;
+                        padding: 0px 5px 0px 20px;
+                        .sss-underline
+                        {
+                            display: flow-root;
+                            border-bottom: 1px solid #333;
+                            .sss-input-holder
+                            {
+                                display: flex;
+                                width: 100%;
+                                .sss-input
+                                {
+                                    font-size: 10px;
+                                    letter-spacing: 0.03px;
+                                    margin: 0px;
+                                    margin-top: 3px;
+                                    margin-bottom: 2px;
+                                    margin-left: auto;
+                                    margin-right: auto;
+                                }
+                            }
+                        }
+                    }
+                }
+                .sss-signature-holder
+                {
+                    display: inline-block;
+                    width: 24%;
+                    .sss-underline-holder
+                    {
+                        display: flow-root;
+                        padding: 0px 40px 0px 20px;
+                        .sss-underline
+                        {
+                            display: flow-root;
+                            border-bottom: 1px solid #333;
+                            .sss-input-holder
+                            {
+                                display: flex;
+                                width: 100%;
+                                .sss-input
+                                {
+                                    font-size: 10px;
+                                    margin: 0px;
+                                    margin-top: 3px;
+                                    margin-bottom: 2px;
+                                    margin-left: auto;
+                                    margin-right: auto;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .sss-totalamount-paid-container
+            {
+                display: flex;
+                border-bottom: 2px solid #333;
+                .sss-totalamount-paid-title
+                {
+                    display: inline-block;
+                    width: 30%;
+                    .sss-title-holder
+                    {
+                        display: flex;
+                        .sss-title
+                        {
+                            font-size: 10px;
+                            font-weight: 700;
+                            margin: 0px;
+                            margin-top: 5px;
+                            margin-bottom: 2px;
+                            margin-left: 15px;
+                        }
+                    }
+                }
+                .sss-totalamount-paid-holder
+                {
+                    display: inline-block;
+                    width: 22%;
+                    .sss-pesosign-holder
+                    {
+                        display: flex;
+                        .sss-pesosign
+                        {
+                            font-size: 10px;
+                            margin-left: 2px;
+                            margin-top: 5px;
+                            margin-bottom: 2px;
+                        }
+                    }
+                    .sss-underline-holder
+                    {
+                        display: flow-root;
+                        padding: 0px 15px 0px 5px;
+                        .sss-underline
+                        {
+                            display: flow-root;
+                            border-bottom: 1px solid #333;
+                            margin-bottom: 2px;
+                            .sss-second-underline
+                            {
+                                display: flow-root;
+                                border-bottom: 1px solid #333;
+                                margin-bottom: 2px;
+                                .sss-input-holder
+                                {
+                                    display: flex;
+                                    .sss-input
+                                    {
+                                        font-size: 10px;
+                                        margin: 0px;
+                                        display: inline-block;
+                                        letter-spacing: 1px;
+                                        margin-top: 5px;
+                                        margin-bottom: 2px;
+                                        margin-right: 10px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                .sss-printedname-section-holder
+                {
+                    display: inline-block;
+                    width: 24%;
+                    border-left: 2px solid #333;
+                    .sss-title-holder
+                    {
+                        display: flex;
+                        .sss-title
+                        {
+                            font-size: 10px;
+                            margin: 0px;
+                            margin-left: auto;
+                            margin-right: auto;
+                            margin-top: 3px;
+                            padding-left: 20px;
+                        }
+                    }
+                }
+                .sss-signature-section-holder
+                {
+                    display: inline-block;
+                    width: 24%;
+                    .sss-title-holder
+                    {
+                        display: flex;
+                        .sss-title
+                        {
+                            font-size: 10px;
+                            margin: 0px;
+                            margin-left: auto;
+                            margin-right: auto;
+                            margin-top: 3px;
+                            padding-left: 20px;
+                            padding-right: 40px;
+                        }
+                    }
+                }
+            }
+        }
+        .sss-sixth-layer
+        {
+            display: flex;
+            background-color: #FEFE9C;
+            .sss-declaration-title-container
+            {
+                .sss-title
+                {
+                    font-size: 10px;
+                    font-weight: 700;
+                    letter-spacing: 0.03px;
+                    margin: 0px;
+                    margin-top: 1px;
+                    text-align: center;
+                }
+            }
+            .sss-declaration-section
+            {
+                height: 73px;
+                padding: 10px 24.5px 10px 24.5px;
+                .sss-declaration-firstpart-container
+                {
+                    .sss-declaration-holder
+                    {
+                        .sss-declaration
+                        {
+                            font-size: 10px;
+                            letter-spacing: 0.03px;
+                            text-indent: 10px;
+                            margin: 0px;
+                            .sss-pesos-inwords
+                            {
+                                margin-left: 3px;
+                                text-decoration: underline;
+                                text-underline-position: auto;
+                            }
+                            .sss-pesos-innumber
+                            {
+                                margin-left: 3px;
+                                margin-right: 3px;
+                                text-decoration: underline;
+                                text-underline-position: under;
+                            }
+                            .sss-pesosign
+                            {
+                                display: inline;
+                            }
+                        }
+                    }
+                }
+                .sss-declaration-lastpart-container
+                {
+                    .sss-declaration-lastparagraph
+                    {
+                        font-size: 10px;
+                        letter-spacing: 0.03px;
+                        text-indent: 10px;
+                        margin: 0px;
+                        margin-top: 4px;
+                    }
+                }
+            }
+            .sss-printedname-container
+            {
+                display: inline-block;
+                width: 52%;
+                .sss-underline-holder
+                {
+                    display: flow-root;
+                    padding: 0px 44px 0px 58px;
+                    .sss-underline
+                    {
+                        display: flow-root;
+                        border-bottom: 1px solid #333;
+                        .sss-input-holder
+                        {
+                            display: flex;
+                            width: 100%;
+                            .sss-input
+                            {
+                                font-size: 10px;
+                                letter-spacing: 0.03px;
+                                margin: 0px;
+                                margin-top: 3px;
+                                margin-bottom: 2px;
+                                margin-left: auto;
+                                margin-right: auto;
+                            }
+                        }
+                    }
+                }
+            }
+            .sss-signaturename-container
+            {
+                display: inline-block;
+                width: 48%;
+                .sss-underline-holder
+                {
+                    display: flow-root;
+                    padding: 0px 63px 0px 83px;
+                    .sss-underline
+                    {
+                        display: flow-root;
+                        border-bottom: 1px solid #333;
+                        .sss-input-holder
+                        {
+                            display: flex;
+                            width: 100%;
+                            .sss-input
+                            {
+                                font-size: 10px;
+                                margin: 0px;
+                                margin-top: 3px;
+                                margin-bottom: 2px;
+                                margin-left: auto;
+                                margin-right: auto;
+                            }
+                        }
+                    }
+                }
+            }
+            .sss-printedname-title-container
+            {
+                display: inline-block;
+                width: 52%;
+                .sss-title-holder
+                {
+                    display: flex;
+                    width: 100%;
+                    .sss-title
+                    {
+                        font-size: 10px;
+                        letter-spacing: 0.03px;
+                        margin: 0px;
+                        margin-top: 2px;
+                        margin-bottom: 2px;
+                        margin-left: auto;
+                        margin-right: auto;
+                        padding: 0px 44px 0px 58px;
+                    }
+                }
+            }
+            .sss-signaturename-title-container
+            {
+                display: inline-block;
+                width: 48%;
+                .sss-title-holder
+                {
+                    display: flex;
+                    width: 100%;
+                    .sss-title
+                    {
+                        font-size: 10px;
+                        letter-spacing: 0.03px;
+                        margin: 0px;
+                        margin-top: 2px;
+                        margin-bottom: 2px;
+                        margin-left: auto;
+                        margin-right: auto;
+                        padding: 0px 63px 0px 83px;
+                    }
+                }
             }
         }
     }
 }
+

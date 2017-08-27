@@ -11,6 +11,7 @@ use App\Globals\Invoice;
 use App\Globals\WriteCheck;
 use App\Globals\BillPayment;
 use App\Globals\Utilities;
+use App\Globals\Pdf_global;
 
 use App\Models\Tbl_payment_method;
 use App\Models\Tbl_receive_payment;
@@ -80,6 +81,19 @@ class Vendor_PayBillController extends Member
             return $this->show_no_access();  
         }
         
+    }
+    public function print_pay_bill()
+    {
+        $id = Request::input('id');
+        $data['paybill'] = Tbl_pay_bill::vendor()->where('paybill_id',$id)->first();
+        $data['paybill_line'] = Tbl_pay_bill_line::where('pbline_pb_id',$id)->get();
+
+        $data['transaction_type'] = "Bill Payment";
+
+        // return view('member.pay_bill.paybill_pdf',$data);
+        
+        $pdf = view('member.pay_bill.paybill_pdf',$data);
+        return Pdf_global::show_pdf($pdf);
     }
     public function load_vendor_pb($vendor_id)
     {

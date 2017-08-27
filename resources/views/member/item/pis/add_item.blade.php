@@ -586,6 +586,18 @@
 
 <script type="text/javascript" src="/assets/member/js/prompt_serial_number.js"></script>
 <script type="text/javascript" src="/assets/member/js/item.js"></script>
+<script type="text/javascript">
+function setTwoNumberDecimal(x) 
+{
+    var value = parseFloat($(x).val()).toFixed(2);
+    $(x).val(value);
+}
+
+$('.number-input').change(function(e)
+{
+    setTwoNumberDecimal(e.currentTarget);
+});
+</script>
 <style type="text/css">
     .modal-body
     {

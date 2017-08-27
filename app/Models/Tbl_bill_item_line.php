@@ -14,4 +14,9 @@ class Tbl_bill_item_line extends Model
     {    	
         return $query->leftjoin("tbl_unit_measurement_multi", "multi_id", "=", "itemline_um");
     }
+
+    public function scopeItem($query)
+    {
+    	 return $query->join('tbl_item', 'tbl_item.item_id', '=', 'tbl_bill_item_line.itemline_item_id');
+    }
 }

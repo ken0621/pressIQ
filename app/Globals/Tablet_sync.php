@@ -453,6 +453,8 @@ class tablet_sync
 						}
 					}
 				}
+
+				Purchasing_inventory_system::close_sir($sir_id);
 				return "success";	      
     		}
     	}

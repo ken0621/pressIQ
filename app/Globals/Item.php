@@ -12,16 +12,115 @@ use App\Models\Tbl_sir_item;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_item_discount;
 use App\Models\Tbl_audit_trail;
-use DB;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\Tablet_global;
+use App\Globals\Currency;
+use App\Models\Tbl_price_level;
+use App\Models\Tbl_price_level_item;
 use Session;
+use DB;
 use Carbon\carbon;
+use App\Globals\Merchant;
 
 class Item
 {
+    public static function item_additional_info($item_info)
+    {
+        $item_info->computed_price  = $item_info->item_price;
+        $item_info->markup          = $item_info->item_price - $item_info->item_cost;
+
+        $item_info->display_price   = Currency::format($item_info->computed_price);
+        $item_info->display_cost   = Currency::format($item_info->item_cost);
+        $item_info->display_markup   = Currency::format($item_info->markup);
+        return $item_info;
+    }
+    public static function get_item_info($item_id, $price_level_id = null)
+    {
+        $item_info                  = Tbl_item::where("item_id", $item_id)->first();
+        $item_info                  = Self::item_additional_info($item_info);
+        $item_info                  = Item::apply_price_level($item_info, $price_level_id);
+
+        return $item_info;
+    }
+    public static function apply_price_level($item_info, $price_level_id)
+    {
+        $check_price_level          = Tbl_price_level::where("price_level_id", $price_level_id)->first();
+
+        if($check_price_level)
+        {
+            if($check_price_level->price_level_type == "per-item")
+            {
+                $check_item = Tbl_price_level_item::where("price_level_id", $price_level_id)->where("item_id", $item_info->item_id)->first();
+
+                if($check_item)
+                {
+
+                    $new_computed_price     = $check_item->custom_price;
+                }
+                else
+                {
+                    $new_computed_price     = $item_info->computed_price;
+                }
+            }
+            else
+            {
+                $percentage_mode        = $check_price_level->fixed_percentage_mode;
+                $percentage_value       = $check_price_level->fixed_percentage_value;
+                $percentage_source      = $check_price_level->fixed_percentage_source;
+                $applied_multiplier     = ($percentage_mode == "lower" ? ($percentage_value * -1) : $percentage_value);
+                $price_basis            = ($percentage_source == "standard price" ? $item_info->item_price : $item_info->item_cost);
+                $addend                 = $price_basis * ($applied_multiplier / 100);
+                $new_computed_price     = $price_basis + $addend; 
+            }
+
+            $item_info->computed_price      = $new_computed_price;
+        }
+
+        return $item_info;
+    }
+    public static function list_price_level($shop_id)
+    {
+        $_price_level = Tbl_price_level::where("shop_id", $shop_id)->get();
+        return $_price_level;
+    }
+    public static function insert_price_level($shop_id, $price_level_name, $price_level_type, $fixed_percentage_mode, $fixed_percentage_source, $fixed_percentage_value)
+    {  
+        $insert_price_level["price_level_name"] = $price_level_name;
+        $insert_price_level["price_level_type"] = $price_level_type;
+        $insert_price_level["shop_id"] = $shop_id;
+        
+        if($price_level_type == "fixed-percentage")
+        {
+
+            $insert_price_level["fixed_percentage_mode"] = $fixed_percentage_mode;
+            $insert_price_level["fixed_percentage_source"] = $fixed_percentage_source;
+            $insert_price_level["fixed_percentage_value"] = $fixed_percentage_value;
+        }
+
+        return Tbl_price_level::insertGetId($insert_price_level);
+    }
+    public static function insert_price_level_item($shop_id, $price_level_id, $_item)
+    {  
+        $_insert = array();
+
+        foreach($_item as $item_id => $custom_price)
+        {
+            if($custom_price != "")
+            {
+                $insert["price_level_id"]   = $price_level_id;
+                $insert["item_id"]          = $item_id;
+                $insert["custom_price"]     = $custom_price;
+                array_push($_insert, $insert);
+            }
+        }
+
+        if($_insert)
+        {
+            Tbl_price_level_item::insert($_insert);
+        }
+    }
     public static function getShopId()
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
@@ -45,12 +144,13 @@ class Item
         $text = "";
         $trail = Tbl_audit_trail::where("source","item")->where("source_id",$item_id)->orderBy("created_at","DESC")->get();
         // dd($trail);
+        $last = null;
         foreach ($trail as $key => $value) 
         {
             $item_qty = 1;
             if(Purchasing_inventory_system::check())
             {
-                $item_qty = UnitMeasurement::um_qty($item_data->item_measurement_id);
+                $item_qty = UnitMeasurement::um_qty($item_data->item_measurement_id, 1);
             }
             $old[$key] = unserialize($value->old_data);
             $amount = 0;
@@ -61,19 +161,25 @@ class Item
                     $len = strlen($return);
                     
                     $amount = $old[$key]["item_price"] * $item_qty;
-                    $return .= date('m/d/Y',strtotime($value->created_at))." - ".currency("PHP ",$amount)."<br>";
-
-                    $text = $return;
-                    if($show_all == false)
+                    if ($last != $amount) 
                     {
-                        if($len > 25)
+                        $return .= date('m/d/Y',strtotime($value->created_at))." - ".currency("PHP ",$amount)."<br>";
+
+                        $text = $return;
+                        if($show_all == false)
                         {
-                            $text = (substr($text, 0, 30)."...<a class='popup' size='sm' link='/member/item/view_item_history/".$item_id."'>View</a>");
+                            if($len > 25)
+                            {
+                                $text = (substr($text, 0, 30)."...<a class='popup' size='sm' link='/member/item/view_item_history/".$item_id."'>View</a>");
+                            }
                         }
                     }
                 }
+
+                $last = $amount;
             }
-        }   
+        }  
+
         return $text;
     }
     public static function get_item_details($item_id = 0)
@@ -168,9 +274,38 @@ class Item
         return $data;
 	}
 
-    public static function get_all_item()
+    public static function get_all_item($shop_id = 0, $paginate = false)
     {
-        return Tbl_item::where("shop_id", Item::getShopId())->where("archived", 0)->get();
+        if($shop_id == 0)
+        {
+            $shop_id = Item::getShopId();
+        }
+
+        $query = Tbl_item::where("shop_id", $shop_id)->active()->type()->inventory()->um_multi();
+
+        if($paginate)
+        {
+            $return = $query->paginate($paginate);
+        }
+        else
+        {
+            $return = $query->get();
+        }
+        
+
+        return $return;
+    }
+    public static function get_all_item_additional_info($_item)
+    {
+        $_new_item = null;
+
+        foreach($_item as $key => $item)
+        {
+            $_new_item[$key] = $item;
+            $_new_item[$key] = Self::item_additional_info($_new_item[$key]);
+        }
+
+        return $_new_item;
     }
 
     public static function insert_item_discount($item_info)
@@ -232,14 +367,9 @@ class Item
     }
 
     public static function pis_get_all_category_item_transaction($type = array(1,2,3,4))
-    {        $shop_id = Item::getShopId();
+    {        
+        $shop_id = Item::getShopId();
         $_category = Tbl_category::where("type_shop",$shop_id)->where("type_parent_id",0)->where("is_mts",0)->where("archived",0)->get()->toArray();
-
-        // if(Purchasing_inventory_system::check() != 0)
-        // {
-        //     $_category->where("is_mts",1);
-        // }
-
 
         foreach($_category as $key =>$category)
         {
@@ -289,15 +419,22 @@ class Item
 
         $_category = Tbl_category::where("type_shop",$shop_id)->where("type_parent_id",0)->where("archived",0)->get()->toArray();
 
-        // if(Purchasing_inventory_system::check() != 0)
-        // {
-        //     $_category->where("is_mts",1);
-        // }
-
 
         foreach($_category as $key =>$category)
         {
-            $_category[$key]['item_list']   = Tbl_item::where("item_category_id",$category['type_id'])->whereIn("item_type_id",$type)->where("archived",0)->get()->toArray();
+            $ismerchant = Merchant::ismerchant();
+            if($ismerchant == 1)
+            {
+                $user_id = Merchant::getuserid();
+                $_category[$key]['item_list'] = Tbl_item::where("item_category_id",$category['type_id'])
+                ->join("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+                ->where('item_merchant_requested_by', $user_id)
+                ->whereIn("item_type_id",$type)->where("archived",0)->get()->toArray(); 
+            }
+            else
+            {
+               $_category[$key]['item_list']   = Tbl_item::where("item_category_id",$category['type_id'])->whereIn("item_type_id",$type)->where("archived",0)->get()->toArray(); 
+            }
             foreach($_category[$key]['item_list'] as $key1=>$item_list)
             {
                 //  //cycy
@@ -318,7 +455,19 @@ class Item
         $_category  = Tbl_category::where("type_parent_id",$category_id)->where("archived",0)->get()->toArray();
         foreach($_category as $key =>$category)
         {
-            $_category[$key]['item_list']   = Tbl_item::where("item_category_id",$category['type_id'])->where("archived",0)->whereIn("item_type_id",$type)->get()->toArray();
+            $ismerchant = Merchant::ismerchant();
+            if($ismerchant == 1)
+            {
+                $user_id = Merchant::getuserid();
+                $_category[$key]['item_list'] = Tbl_item::where("item_category_id",$category['type_id'])
+                ->join("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+                ->where('item_merchant_requested_by', $user_id)
+                ->whereIn("item_type_id",$type)->where("archived",0)->get()->toArray(); 
+            }
+            else
+            {
+                $_category[$key]['item_list']   = Tbl_item::where("item_category_id",$category['type_id'])->where("archived",0)->whereIn("item_type_id",$type)->get()->toArray();
+            }
             foreach($_category[$key]['item_list'] as $key1=>$item_list)
             {
                 if($item_list['item_type_id'] == 4)
@@ -462,11 +611,33 @@ class Item
         }
         $data["multiple"] = $multiple;
         $data['selected'] = $sel;
-        $data['_item']    = Tbl_item::where("shop_id",$shop_id)
-        ->where('tbl_item.item_type_id', '!=', 4)
-        ->where('tbl_item.archived', 0)
-        ->orderBy('tbl_item.item_id','asc')
-        ->type()->category()->get();
+        $ismerchant = Merchant::ismerchant();
+            if($ismerchant == 1)
+            {
+                $user_id = Merchant::getuserid();
+
+                $data['_item'] = Tbl_item::where("shop_id",$shop_id)
+                ->where('tbl_item.item_type_id', '!=', 4)
+                ->where('tbl_item.archived', 0)
+                ->join("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+                ->where('item_merchant_requested_by', $user_id)
+                ->orderBy('tbl_item.item_id','asc')
+                ->type()->category()->get();
+
+                // $data['_item'] = Tbl_item::where("shop_id",$shop_id)
+                // ->join("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+                // ->where('item_merchant_requested_by', $user_id)
+                // ->whereIn("item_type_id",$type)->where("archived",0)->get()->toArray(); 
+            }
+            else
+            {
+                $data['_item']    = Tbl_item::where("shop_id",$shop_id)
+                ->where('tbl_item.item_type_id', '!=', 4)
+                ->where('tbl_item.archived', 0)
+                ->orderBy('tbl_item.item_id','asc')
+                ->type()->category()->get();
+            }
+        
 
         return view('member.mlm_product_code.dropdown.mlm_item_dropdown', $data);
     }
@@ -659,12 +830,10 @@ class Item
     }
     public static function fix_discount_session($slot_id)
     {
-
-        
         $slot = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
         if($slot)
         {
-          $item_session = Session::get("sell_item_codes_session");
+            $item_session = Session::get("sell_item_codes_session");
             foreach($item_session as $key => $item)
             {
                 $item_session[$key]['membership_discount'] = Item::get_discount_only($key, $slot->slot_membership);

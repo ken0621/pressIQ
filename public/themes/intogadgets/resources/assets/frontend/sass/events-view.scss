@@ -30,13 +30,20 @@
 					{
 						img
 						{
-							width: 100%;
+							// width: 1100px;
+							// height: 1100px;
+							max-width: 100%;
+							object-fit: contain;
 						}
 					}
 					.desc
 					{
 						margin-top: 25px;
 						margin-bottom: 25px;
+						img
+						{
+							max-width: 100%;
+						}
 					}
 				}
 				.side-event

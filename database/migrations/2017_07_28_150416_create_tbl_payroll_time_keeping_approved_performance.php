@@ -14,7 +14,7 @@ class CreateTblPayrollTimeKeepingApprovedPerformance extends Migration
     {
         Schema::create('tbl_payroll_time_keeping_approved_performance', function (Blueprint $table)
         {
-            $table->integer("ptka_performance_id")->increments();
+            $table->increments("ptka_performance_id");
             $table->integer("time_keeping_approve_id")->integer()->unsigned();
 
             $table->string("ptka_daily_key");

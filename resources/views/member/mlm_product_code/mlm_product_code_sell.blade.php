@@ -17,7 +17,7 @@
 	                    
 	                </small>
 	            </h1>
-	            <button type="submit" class="panel-buttons btn btn-primary pull-right save_item">Process Purchase</button>
+	            
 	            <a href="/member/mlm/product_code" class="panel-buttons btn btn-default pull-right">&laquo; Back</a>
 	        </div>
 	    </div>
@@ -148,8 +148,11 @@
 								                <div class="input-group-btn bs-dropdown-to-select-group">
 								                	<ul class="dropdown-menu" role="menu" style="">
 								                        <li data-value="1"><a href="#">Cash</a></li>
+								                        @if($ismerchant == 0)
 								                        <li data-value="2"><a href="#">GC</a></li>
+								                        @endif
 								                        <li data-value="3"><a href="#">Wallet</a></li>
+								                        <li data-value="4"><a href="#">E-money</a></li>
 								                    </ul>
 								                    <button type="button" class="btn btn-default dropdown-toggle as-is bs-dropdown-to-select" data-toggle="dropdown">
 								                        <span data-bind="bs-drp-sel-label" style="color: black !important">Payment</span>
@@ -161,6 +164,7 @@
 								                </div>
 								            </div>
 								        </div>
+								        <button type="submit" class="panel-buttons btn btn-primary pull-right save_item">Process Purchase</button>
 								    </div>
 								</div>
 
@@ -217,6 +221,12 @@ $(document).ready(function(e){
     			$('.payment-value').val('');
     			document.getElementById('payment-value').readOnly =true;
 
+    		}
+    		else if(payment_value == 4)
+    		{
+    			$('.payment_label').text("Input Tendered Payment");
+    			$('.payment-value').val('');
+    			document.getElementById('payment-value').readOnly =false;
     		}
 		return false;
 	});

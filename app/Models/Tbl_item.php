@@ -10,6 +10,21 @@ class Tbl_item extends Model
 	protected $primaryKey = "item_id";
     public $timestamps = true;
     
+    public function scopeSearchName($query, $keyword)
+    {
+        $query->where("tbl_item.item_name", "LIKE", "%" . $keyword . "%");
+        return $query;
+    }
+    public function scopeSearchSKU($query, $keyword)
+    {
+        $query->where("tbl_item.item_sku", "LIKE", "%" . $keyword . "%");
+        return $query;
+    }
+    public function scopeActive($query)
+    {
+        $query->where("tbl_item.archived", 0);
+        return $query;
+    }
     public function scopeType($query)
     {
         $query->join('tbl_item_type','tbl_item_type.item_type_id','=','tbl_item.item_type_id');
@@ -23,8 +38,7 @@ class Tbl_item extends Model
     }
     public function scopeUm_multi($query)
     {
-        return $query->leftjoin('tbl_unit_measurement_multi','multi_um_id','=','item_measurement_id');
-         
+        return $query->leftjoin('tbl_unit_measurement_multi','multi_um_id','=','item_measurement_id');         
     }
     public function scopeUm_item($query)
     {

@@ -31,6 +31,7 @@ use App\Models\Tbl_mlm_item_points;
 use App\Globals\Ec_order;
 use Mail;
 use App\Globals\Accounting;
+use App\Globals\Merchant;
 class Item_code
 {
 	public static function add_code($data,$shop_id, $user_id, $warehouse_id)
@@ -259,6 +260,11 @@ class Item_code
                 $tendered = 1;
                 $tendered_amount = $data['payment_value'];
             }
+            else if($data['payment_type_choose'] == 4)
+            {
+                $tendered = 4;
+                $tendered_amount = $data['payment_value'];
+            }
             else
             {
                 $send['response_status']      = "warning";
@@ -465,7 +471,15 @@ class Item_code
                                 $code = $value->marketing_plan_code;
                                 if(isset($item_points->$code))
                                 {
-                                    $rel_insert[$key][$code] = $item_points->$code;
+                                    if($code == "STAIRSTEP")
+                                    {
+                                        $rel_insert[$key][$code] = $item_points->$code;
+                                        $rel_insert[$key]["STAIRSTEP_GROUP"] = $item_points->STAIRSTEP_GROUP;
+                                    }
+                                    else
+                                    {
+                                        $rel_insert[$key][$code] = $item_points->$code;
+                                    }
                                 }
                                 
                             }
@@ -588,6 +602,7 @@ class Item_code
                         $send['invoice_id'] = $invoice_id;
 
                         Item_code::add_journal_entry($invoice_id);
+                        Merchant::item_code_merchant_mark_up($invoice_id);
                         //audit trail here
                         $item_code_invoice = Tbl_item_code_invoice::where("item_code_invoice_id",$invoice_id)->first()->toArray();
                         AuditTrail::record_logs("Added","mlm_item_code_invoice",$invoice_id,"",serialize($item_code_invoice));
@@ -639,6 +654,10 @@ class Item_code
                 $entry_data[$key]['discount'] = $value->item_membership_discount * $value->item_quantity;
                 $entry_data[$key]['entry_amount'] = $value->item_price * $value->item_quantity;
             }
+            //dd($entry_data);
+            //dd($invoice_id);
+           //dd($entry_data);
+
             Accounting::postJournalEntry($entry, $entry_data);
         }
         
@@ -893,7 +912,15 @@ class Item_code
                             $code = $value2->marketing_plan_code;
                             if(isset($item_points->$code))
                             {
-                                $rel_insert[$key][$code] = $item_points->$code;
+                                if($code == "STAIRSTEP")
+                                {
+                                    $rel_insert[$key][$code] = $item_points->$code;
+                                    $rel_insert[$key]["STAIRSTEP_GROUP"] = $item_points->STAIRSTEP_GROUP;
+                                }
+                                else
+                                {
+                                    $rel_insert[$key][$code] = $item_points->$code;
+                                }
                             }
                         }
                         $rel_insert[$key]["item_activation_code"]          = $activation_code;

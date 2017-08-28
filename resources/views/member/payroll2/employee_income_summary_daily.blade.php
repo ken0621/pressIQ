@@ -1,21 +1,23 @@
 <div class="modal-header employee-income-summary">
     <input type="hidden" class="period-id" value="{{ $period_info->payroll_period_company_id }}">
+    <input type="hidden" class="payroll-period-id" value="{{ $period_info->payroll_period_id }}">
     <input type="hidden" class="x-employee-id" value="{{ $employee_id }}">
     <button type="button" class="close" data-dismiss="modal">×</button>
     <h4 class="modal-title">
-        <b>DAILY COMPUTATION ({{ $period_info->month_contribution }} - {{ code_to_word($period_info->period_count) }})</b>
+        <b>Summary for {{ $employee_info->payroll_employee_first_name }} {{ $employee_info->payroll_employee_last_name }}</b>
     </h4>
+    <div>DAILY ({{ $period_info->month_contribution }} - {{ code_to_word($period_info->period_count) }})</div>
 </div>
-
 
 @if($time_keeping_approved == false)
 <div class="modal-header text-right">
     <button class="btn btn-def-white btn-custom-white" data-dismiss="modal">CLOSE</button>
-    <button class="btn btn-def-white btn-custom-white">MAKE ADJUSTMENT</button>
+    <button class="btn btn-def-white btn-custom-white make-adjustment">MAKE ADJUSTMENT</button>
     <button class="btn btn-primary approve-timesheet-btn">MARK READY</button>
 </div>
 @endif
 
+@if( $access_salary_rate==1 )
 <div class="modal-body clearfix">
     <div class="text-center text-bold" style="font-size: 20px; color: #1682ba">SALARY COMPUTATION</div>
     <div class="col-md-12" style="text-align: left; font-weight: normal; margin-bottom: 10px; font-size: 16px;"></div>
@@ -31,7 +33,6 @@
                             <th width="150px" class="text-right" width="100px">ADDITIONS</th>
                             <th width="150px" class="text-right" width="100px">DEDUCTIONS</th>
                             <th class="text-right" width="100px">COLA</th>
-                            
                             <th class="text-right"></th>
                             <th width="150px" class="text-right">BASIC</th>
                         </tr>
@@ -119,12 +120,12 @@
                                 {{ payroll_currency($cutoff_breakdown->taxable_salary_total) }}
                             </td>
                         </tr>
-
+                      
                         <!-- NET PAY BREAKDOWN -->
                         @foreach($cutoff_breakdown->_net_pay_breakdown as $breakdown)
                             {!! $breakdown["tr"] !!}
                         @endforeach
-                        
+
                         <!-- NET SALARY -->
                         <tr style="font-weight: bold;">
                             <td colspan="7" class="text-right" style="border-top: 2px solid #000">
@@ -186,7 +187,7 @@
         </div>
     </div>
 </div>
-
+@endif
 <div class="modal-body clearfix">
     <div class="text-center text-bold" style="font-size: 20px; color: #1682ba">PERFORMANCE SUMMARY</div>
     <div class="col-md-12" style="text-align: left; font-weight: normal; margin-bottom: 10px; font-size: 16px;"></div>
@@ -218,13 +219,12 @@
 @if($time_keeping_approved == false)
 <div class="modal-footer text-right">
     <button class="btn btn-def-white btn-custom-white" data-dismiss="modal">CLOSE</button>
-    <button class="btn btn-def-white btn-custom-white">MAKE ADJUSTMENT</button>
+    <button class="btn btn-def-white btn-custom-white make-adjustment">MAKE ADJUSTMENT</button>
     <button class="btn btn-primary approve-timesheet-btn">MARK READY</button>
 </div>
 @endif
 
 <script type="text/javascript" src="/assets/member/payroll/js/timesheet_income_summary.js"></script>
-
 
 <div class="view-debug-mode modal-footer" style="opacity: 0.5">
     <div onclick='$(".debug-view").removeClass("hidden")' style="text-align: center; cursor: pointer; color: #005fbf">DEBUG MODE (DEVELOPER ONLY) &nbsp; <i class="fa fa-caret-down"></i></div>

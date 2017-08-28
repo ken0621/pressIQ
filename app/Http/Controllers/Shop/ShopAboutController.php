@@ -54,6 +54,46 @@ class ShopAboutController extends Shop
         return view("jobs", $data);
     }
 
+    public function promos()
+    {
+        $data["page"] = "promos";
+        return view("promos", $data);
+    }
+
+    public function promo_view()
+    {
+        $data["page"] = "promo_view";
+        return view("promo_view", $data);
+    }
+
+    public function history()
+    {
+        $data["page"] = "history";
+        return view("history", $data);
+    }
+
+    public function about_red_fruit()
+    {
+        $data["page"] = "about_red_fruit";
+        return view("about_red_fruit", $data);
+    }
+
+    public function how_to_join()
+    {
+        $data["page"] = "how_to_join";
+        return view("how_to_join", $data);
+    }
+    public function xcell_login()
+    {
+        $data["page"] = "3xcell_login";
+        return view("3xcell_login", $data);
+    }
+    public function xcell_signup()
+    {
+        $data["page"] = "3xcell_signup";
+        return view("3xcell_signup", $data);
+    }    
+
     public function job()
     {
         if (Request::input("id") !== null) 
@@ -68,6 +108,7 @@ class ShopAboutController extends Shop
                     {
                         $data["job"] = unserialize($content->value)[Request::input("id")];
                     }
+                    
                     else
                     {
                         return Redirect::to("/jobs");

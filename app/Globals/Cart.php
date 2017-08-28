@@ -1046,6 +1046,8 @@ class Cart
         $data['tbl_ec_order']['ec_order_load_number'] = isset($data['load_wallet']['ec_order_load_number']) == true ? $data['load_wallet']['ec_order_load_number'] : 0 ;
         $data["tbl_ec_order"]["service_fee"] = $service_fee;
         $data["tbl_ec_order"]["total"] = $total;
+        $data["tbl_ec_order"]["invoice_date"] =  Carbon::now();
+        $data["tbl_ec_order"]["due_date"] =  Carbon::now();
         $data["tbl_ec_order"]["coupon_id"] = (isset($customer_information["coupon_id"]) ? $customer_information["coupon_id"] : (isset($data["tbl_ec_order"]["coupon_id"]) ? $data["tbl_ec_order"]["coupon_id"] : null));
         $data["tbl_ec_order"]["shop_id"] = $shop_id;
         $data["tbl_ec_order"]["created_date"] = Carbon::now();
@@ -1085,7 +1087,7 @@ class Cart
         else //ACCOUNT EXIST VALIDATION
         {
             $check_exist = Tbl_customer::where("shop_id", $shop_id)->where("email", $email)->first();
-
+            
             if(!$check_exist)
             {
                 return "The e-mail and password you entered doesn't belong to any account.";
@@ -1504,6 +1506,7 @@ class Cart
         $data['password'] = Crypt::decrypt($tbl_order->password);
         //email for COD
         $result = Mail_global::create_email_content($data, $shop_id, "cash_on_delivery");
+        
         if($result == 0)
         {    
             // $result = Mail_global::mail($data, $shop_id, "cod");

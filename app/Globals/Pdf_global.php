@@ -17,6 +17,7 @@ class Pdf_global
         {
         	$pdf->setOrientation('landscape');
         }
+        $pdf->setOption('viewport-size', '1366x1024');
         return $pdf->inline();
 	}
 	public static function show_image($html)

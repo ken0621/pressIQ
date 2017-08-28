@@ -17,7 +17,8 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/contact', 'Shop\ShopContactController@index');
 	Route::post('/contact', 'Shop\ShopContactController@contact_submit');
 	Route::get('/contact/find_store', 'Shop\ShopContactController@find_store'); //EDWARD GUEVARRA
-	Route::get('/career', 'Shop\ShopCareerController@index'); //EDWARD GUEVARRA
+	Route::any('/career', 'Shop\ShopCareerController@index'); //EDWARD GUEVARRA
+	Route::get('/career/success', 'Shop\ShopCareerController@success'); //EDWARD GUEVARRA
 	Route::get('/how', 'Shop\ShopHowController@index'); //EDWARD GUEVARRA
 	Route::get('/youwin', 'Shop\ShopYouWinController@index'); //EDWARD GUEVARRA
 	Route::get('/events', 'Shop\ShopEventsController@index'); //EDWARD GUEVARRA
@@ -32,6 +33,25 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/job', 'Shop\ShopAboutController@job'); //EDWARD GUEVARRA
 	Route::post('/job/submit', 'Shop\ShopAboutController@job_submit');
 	Route::get('/term','Shop\ShopTermsController@index');
+
+	Route::get('/promos', 'Shop\ShopAboutController@promos'); //MARK FIGS
+	Route::get('/promo_view', 'Shop\ShopAboutController@promo_view'); //MARK FIGS
+	Route::get('/history', 'Shop\ShopAboutController@history'); //MARK FIGS
+	Route::get('/how_to_join', 'Shop\ShopAboutController@how_to_join'); //MARK FIGS
+	Route::get('/3xcell_login', 'Shop\ShopAboutController@xcell_login'); //MARK FIGS
+	Route::get('/3xcell_signup', 'Shop\ShopAboutController@xcell_signup'); //MARK FIGS
+	Route::get('/about_red_fruit', 'Shop\ShopAboutController@about_red_fruit'); //MARK FIGS
+
+	Route::get('/gallery', 'Shop\ShopGalleryController@gallery'); //MARK FIGS
+	Route::get('/gallery_content/{id}', 'Shop\ShopGalleryController@gallery_content'); //MARK FIGS
+	
+	Route::get('/mycart', 'Shop\ShopMyCartController@MyCart'); //MARK FIGS
+	Route::get('/item_checkout', 'Shop\ShopItemCheckoutController@item_checkout'); //MARK FIGS
+	Route::get('/item_payment', 'Shop\ShopItemPaymentController@item_payment'); //MARK FIGS
+	Route::get('/payment_success', 'Shop\ShopItemPaymentController@payment_success'); //MARK FIGS
+
+
+
 
 	Route::get('/blog', 'Shop\ShopBlogController@index');
 	Route::get('/blog/content', 'Shop\ShopBlogContentController@index');

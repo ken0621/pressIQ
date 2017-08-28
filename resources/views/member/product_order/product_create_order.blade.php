@@ -71,13 +71,25 @@
                                 <input type="text" disabled value="{{ $log_reference }}" class="form-control">
                             </div>
                             @endif
+                            @if(isset($view_invoice) && isset($inv))
+                                @if($view_invoice && $inv->order_status == 'Completed')
+                                <div class="col-md-4 pull-right text-right">
+                                    <label> </label>
+                                    <a class="btn btn-success" target="_blank" href="/member/ecommerce/product_order/create_order/invoice?order_id={{$ec_order_id}}">View Invoice</a>
+                                </div>
+                                @endif
+                            @endif
                         </div>
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <label>Customer Name</label>
+                                @if(isset($customer_full_name))
+                                <input {{isset($inv) ? 'disabled' : ''}} type="text" class="form-control input-sm customer-name" name="inv_customer_name" value="{{$customer_full_name}}"/>
+                                @else
                                 <select {{isset($inv) ? 'disabled' : ''}} class="form-control {{isset($inv) ? '' : 'droplist-customer'}}  input-sm pull-left" name="inv_customer_id" data-placeholder="Select a Customer" required>
                                     @include('member.load_ajax_data.load_customer', ['customer_id' => isset($inv->customer_id) ? $inv->customer_id : '']);
                                 </select>
+                                @endif
                             </div>
                             <div class="col-sm-4">
                                 <label>Customer Email</label>

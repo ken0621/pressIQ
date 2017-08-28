@@ -1,6 +1,20 @@
 <?php
 Route::group(array('prefix' => '/member/payroll'), function()
 {
+	Route::any('/payroll_api','Member\PayrollApiController@index');
+
+	Route::any('/reports/government_forms','Member\PayrollReportController@government_forms');
+	Route::any('/reports/government_forms_sss/{id}','Member\PayrollReportController@government_forms_sss');
+	Route::any('/reports/government_forms_philhealth/{id}','Member\PayrollReportController@government_forms_philhealth');
+	Route::any('/reports/government_forms_hdmf/{id}','Member\PayrollReportController@government_forms_hdmf');
+	Route::any('/reports/government_forms_hdmf_iframe/{id}','Member\PayrollReportController@government_forms_hdmf_iframe');
+	
+
+	Route::any('/reports/loan_summary','Member\PayrollReportController@loan_summary');
+	Route::any('/reports/table_loan_summary/{deduction_type}','Member\PayrollReportController@table_loan_summary');
+	Route::any('/reports/modal_loan_summary_report/{employee_id}/{payroll_deduction_id}','Member\PayrollReportController@modal_loan_summary');
+	Route::any('/reports/export_loan_summary_report_to_excel/{employee_id}/{payroll_deduction_id}','Member\PayrollReportController@export_loan_summary_report_to_excel');
+
 	/* COMPANY START */
 	Route::any('/company_list','Member\PayrollController@company_list');
 	Route::any('/company_list/modal_create_company','Member\PayrollController@modal_create_company');
@@ -58,7 +72,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/company_timesheet2/income_summary/{period_id}/{employee_id}','Member\PayrollTimeSheet2Controller@income_summary');
 	Route::any('/company_timesheet2/unapprove/{period_id}/{employee_id}','Member\PayrollTimeSheet2Controller@unapprove');
 	Route::any('/company_timesheet2/change/{period_id}/{employee_id}','Member\PayrollTimeSheet2Controller@time_change');
-	
+	Route::any('/company_timesheet2/make_adjustment/{period_id}/{employee_id}','Member\PayrollTimeSheet2Controller@make_adjustment');
+	Route::any('/company_timesheet2/delete_adjustment/{period_id}/{employee_id}/{adjustment_id}','Member\PayrollTimeSheet2Controller@delete_adjustment');	
 	Route::any('/company_timesheet_approve/approve_timesheet','Member\PayrollTimeSheet2Controller@approve_timesheets');
 	
 	Route::any('/company_timesheet2/{company_id}','Member\PayrollTimeSheet2Controller@index');
@@ -207,6 +222,31 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* DEDUCTION END */
 
 
+	/* DEDUCTION V2 START */
+	Route::any('/deduction/v2',"Member\PayrollDeductionController@index");
+	Route::any('/deduction/v2/modal_create_deduction',"Member\PayrollDeductionController@modal_create_deduction");
+	Route::any('/deduction/v2/modal_create_deduction_type/{type}',"Member\PayrollDeductionController@modal_create_deduction_type");
+	Route::any('/deduction/v2/modal_save_deduction_type',"Member\PayrollDeductionController@modal_save_deduction_type");
+	Route::any('/deduction/v2/update_deduction_type',"Member\PayrollDeductionController@update_deduction_type");
+	Route::any('/deduction/v2/reload_deduction_type',"Member\PayrollDeductionController@reload_deduction_type");
+	Route::any('/deduction/v2/archive_deduction_type',"Member\PayrollDeductionController@archive_deduction_type");
+	Route::any('/deduction/v2/ajax_deduction_type',"Member\PayrollDeductionController@ajax_deduction_type");
+	Route::any('/deduction/v2/modal_deduction_tag_employee/{id}',"Member\PayrollDeductionController@modal_deduction_tag_employee");
+	Route::any('/deduction/v2/ajax_deduction_tag_employee',"Member\PayrollDeductionController@ajax_deduction_tag_employee");
+	Route::any('/deduction/v2/set_employee_deduction_tag',"Member\PayrollDeductionController@set_employee_deduction_tag");
+	Route::any('/deduction/v2/get_employee_deduction_tag',"Member\PayrollDeductionController@get_employee_deduction_tag");
+	Route::any('/deduction/v2/remove_from_tag_session',"Member\PayrollDeductionController@remove_from_tag_session");
+	Route::any('/deduction/v2/modal_save_deduction',"Member\PayrollDeductionController@modal_save_deduction");
+	Route::any('/deduction/v2/modal_edit_deduction/{id}',"Member\PayrollDeductionController@modal_edit_deduction");
+	Route::any('/deduction/v2/archive_deduction/{archived}/{id}',"Member\PayrollDeductionController@archive_deduction");
+	Route::any('/deduction/v2/archived_deduction_action',"Member\PayrollDeductionController@archived_deduction_action");
+	Route::any('/deduction/v2/modal_update_deduction',"Member\PayrollDeductionController@modal_update_deduction");
+	Route::any('/deduction/v2/reload_deduction_employee_tag',"Member\PayrollDeductionController@reload_deduction_employee_tag");
+	Route::any('/deduction/v2/deduction_employee_tag/{archived}/{payroll_deduction_employee_id}',"Member\PayrollDeductionController@deduction_employee_tag");
+	Route::any('/deduction/v2/deduction_employee_tag_archive',"Member\PayrollDeductionController@deduction_employee_tag_archive");
+	/* DEDUCTION V2 END */
+
+
 	/* HOLIDAY START */
 	Route::any('/holiday',"Member\PayrollController@holiday");
 	Route::any('/holiday/modal_create_holiday',"Member\PayrollController@modal_create_holiday");
@@ -216,6 +256,18 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/holiday/modal_edit_holiday/{id}',"Member\PayrollController@modal_edit_holiday");
 	Route::any('/holiday/modal_update_holiday',"Member\PayrollController@modal_update_holiday");
 	/* HOLIDAY END */
+
+	/* HOLIDAY START V2 */
+	Route::any('/holiday/v2',"Member\PayrollHolidayController@holiday");
+	Route::any('/holiday/modal_create_holiday/v2',"Member\PayrollHolidayController@modal_create_holiday");
+	Route::any('/holiday/modal_save_holiday/v2',"Member\PayrollHolidayController@modal_save_holiday");
+	Route::any('/holiday/archive_holiday/v2/{archived}/{id}',"Member\PayrollHolidayController@archive_holiday");
+	Route::any('/holiday/archive_holiday_action/v2',"Member\PayrollHolidayController@archive_holiday_action");
+	Route::any('/holiday/modal_edit_holiday/v2/{id}',"Member\PayrollHolidayController@modal_edit_holiday");
+	Route::any('/holiday/modal_update_holiday/v2',"Member\PayrollHolidayController@modal_update_holiday");
+	Route::any('/holiday/modal_tag_employee/{company_id}','Member\PayrollHolidayController@tag_employee');
+	Route::any('/holiday/tag_employee/submit','Member\PayrollHolidayController@submit_eployee');
+	/* HOLIDAY END v2 */
 
 	/* HOLIDAY DEFAULT START */
 	Route::any('/holiday_default',"Member\PayrollController@default_holiday");
@@ -237,6 +289,23 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/allowance/archived_allowance_employee',"Member\PayrollController@archived_allowance_employee");
 	Route::any('/allowance/update_allowance',"Member\PayrollController@update_allowance");
 	/* ALLOWANCE END */
+
+	/* ALLOWANCE START V2*/
+	Route::any('/allowance/v2',"Member\PayrollAllowanceController@allowance");
+	Route::any('/allowance/v2/modal_create_allowance',"Member\PayrollAllowanceController@modal_create_allowance");
+	Route::any('/allowance/v2/modal_allowance_tag_employee/{allowance_id}',"Member\PayrollAllowanceController@modal_allowance_tag_employee");
+	Route::any('/allowance/v2/set_employee_allowance_tag',"Member\PayrollAllowanceController@set_employee_allowance_tag");
+	Route::any('/allowance/v2/get_employee_allowance_tag',"Member\PayrollAllowanceController@get_employee_allowance_tag");
+	Route::any('/allowance/v2/remove_allowance_tabe_employee',"Member\PayrollAllowanceController@remove_allowance_tabe_employee");
+	Route::any('/allowance/v2/modal_save_allowances',"Member\PayrollAllowanceController@modal_save_allowances");
+	Route::any('/allowance/v2/modal_archived_allwance/{archived}/{allowance_id}',"Member\PayrollAllowanceController@modal_archived_allwance");
+	Route::any('/allowance/v2/archived_allowance',"Member\PayrollAllowanceController@archived_allowance");
+	Route::any('/allowance/v2/modal_edit_allowance/{id}',"Member\PayrollAllowanceController@modal_edit_allowance");
+	Route::any('/allowance/v2/modal_archived_llowance_employee/{archived}/{id}',"Member\PayrollAllowanceController@modal_archived_llowance_employee");
+	Route::any('/allowance/v2/reload_allowance_employee',"Member\PayrollAllowanceController@reload_allowance_employee");
+	Route::any('/allowance/v2/archived_allowance_employee',"Member\PayrollAllowanceController@archived_allowance_employee");
+	Route::any('/allowance/v2/update_allowance',"Member\PayrollAllowanceController@update_allowance");
+	/* ALLOWANCE V2 END */
 
 	/* LEAVE START */
 	Route::any('/leave',"Member\PayrollController@leave");
@@ -299,7 +368,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/custom_payslip/archive_payslip',"Member\PayrollController@archive_payslip");
 	Route::any('/custom_payslip/modal_update_payslip',"Member\PayrollController@modal_update_payslip");
 	Route::any('/custom_payslip/payslip_use_change',"Member\PayrollController@payslip_use_change");
-	
 	/* PAYROLL CUSTOM PAYSLIP END */
 
 	/* PAYROLL PERIOD START */
@@ -390,7 +458,17 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	/* PAYROLL PROCESS START */
 	Route::any('/process_payroll/{period_company_id}','Member\PayrollProcessController@index');
+	Route::any('/unprocess_payroll/{period_company_id}','Member\PayrollProcessController@unprocess');
 	Route::any('/process_payroll/table/{period_company_id}','Member\PayrollProcessController@index_table');
+	Route::any('/process_payroll/modal_view_summary/{period_company_id}','Member\PayrollProcessController@modal_view_summary');
+	Route::any('/process_payroll/income_summary/timesheet/{period_id}/{employee_id}','Member\PayrollProcessController@income_summary_timesheet_v2');
+	Route::any('/process_payroll/modal_approved_summary/{period_company_id}','Member\PayrollProcessController@modal_approved_summary');
+
+
+	Route::any('/payroll_process_module','Member\PayrollController@payroll_process_module');
+
+
+	//Route::any('/process_payroll/table/{period_company_id}','Member\PayrollProcessController@view_');
 	// Route::any('/payroll_process','Member\PayrollController@payroll_process');
 	// Route::any('/payroll_process/modal_create_process','Member\PayrollController@modal_create_process');
 	// Route::any('/payroll_process/ajax_load_payroll_period','Member\PayrollController@ajax_load_payroll_period');
@@ -436,6 +514,11 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_approved_view/payroll_approved_company/{id}','Member\PayrollController@payroll_approved_company');
 	Route::any('/payroll_approved_view/payroll_record_by_id/{id}','Member\PayrollController@payroll_record_by_id');
 	Route::any('/payroll_approved_view/genereate_payslip/{id}','Member\PayrollController@genereate_payslip');
+
+	Route::any('/payroll_approved_view/generate_payslip_v2/{id}','Member\PayrollPayslipController@index');
+
+
+
 	/* PAYROLLL APPROVED END */
 
 	/* PAYROLL NOTES  START*/
@@ -460,6 +543,9 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/generate_bank','Member\PayrollController@generate_bank');
 	Route::any('/modal_generate_bank/{id}','Member\PayrollController@modal_generate_bank');
 	/* GENERATE BANK UPLOAD END */
+
+	Route::any('/banking/{period_company_id}','Member\PayrollBankingController@index');
+	Route::any('/banking/{period_company_id}/download','Member\PayrollBankingController@download');
 
 
 	/* SHIFT START */

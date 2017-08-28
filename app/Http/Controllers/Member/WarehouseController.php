@@ -669,6 +669,7 @@ class WarehouseController extends Member
         $access = Utilities::checkAccess('item-warehouse', 'add');
         if($access == 1)
         { 
+           $data["merchantwarehouse"] = Utilities::checkAccess('item-warehouse', 'merchantwarehouse');
            $data["_item"] = Tbl_item::where("archived",0)->where("item_type_id",1)->where("shop_id",$this->user_info->shop_id)->get();
            // $data["_cat"] = Tbl_category::where("type_category","inventory")->where("type_parent_id",0)->where("type_shop",$this->user_info->shop_id)->get();
            return view("member.warehouse.warehouse_add",$data);
@@ -693,14 +694,6 @@ class WarehouseController extends Member
                     $_item_id[$key] = $value;
                 }
             }
-            // $item_id = Request::input("item_id");
-            // foreach ($data as $key => $value) 
-            // {
-            //     if($value == $item_id)
-            //     {
-
-            //     }    
-            // }
             return json_encode($data);
         }
         else
@@ -952,9 +945,42 @@ class WarehouseController extends Member
     }
     public function add_submit()
     {
-            $for_serial_item = null;
+            $merchantwarehouse  = Utilities::checkAccess('item-warehouse', 'merchantwarehouse');
+            $for_serial_item    = null;
+            $merchant_warehouse = Request::input("merchant_warehouse") ? "1" : "0";
+            /*INSERT TO WAREHOUSE (MERCHANT) */
+            $ins_warehouse["merchant_warehouse"]   = $merchant_warehouse;
+            if($merchant_warehouse == 1)
+            {
+                $ins_warehouse["merchant_logo"]                        = Request::input("merchant_logo_input");
+                $ins_warehouse['default_repurchase_points_mulitplier'] = Request::input("default_repurchase_points_mulitplier"); 
+                $ins_warehouse['default_margin_per_product']           = Request::input("default_margin_per_product");
+
+                if($ins_warehouse['default_repurchase_points_mulitplier'] == null || $ins_warehouse['default_repurchase_points_mulitplier'] == "")
+                {
+                    $data['status']         = 'error';
+                    $data['status_message'] = 'Default Repurchase Points Multiplier is required';
+
+                    return json_encode($data);
+                }
+
+                if($ins_warehouse['default_margin_per_product'] == null || $ins_warehouse['default_margin_per_product'] == "")
+                {
+                    $data['status']         = 'error';
+                    $data['status_message'] = 'Default Margin Per Product is required';
+
+                    return json_encode($data);
+                }
+            }
+            else
+            {
+                $ins_warehouse["merchant_logo"]                        = "";
+                $ins_warehouse['default_repurchase_points_mulitplier'] = 0;
+                $ins_warehouse['default_margin_per_product']           = 0;
+            }
+
             //INSERT TO tbl_warehouse
-            $ins_warehouse["warehouse_name"] = Request::input("warehouse_name");
+            $ins_warehouse["warehouse_name"]    = Request::input("warehouse_name");
             $ins_warehouse["warehouse_address"] = Request::input("warehouse_address");
             $ins_warehouse["warehouse_shop_id"] = $this->user_info->shop_id;
             $ins_warehouse["warehouse_created"] = Carbon::now();
@@ -1034,6 +1060,7 @@ class WarehouseController extends Member
             }
             $data["_item"] = Tbl_item::where("archived",0)->where("item_type_id",1)->where("shop_id",$this->user_info->shop_id)->get();
             $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$id)->first();
+            $data["merchantwarehouse"] = Utilities::checkAccess('item-warehouse', 'merchantwarehouse');
 
             $data["warehouse_item"] = Tbl_warehouse::warehouseitem()
                                                     ->selectRaw('*, tbl_sub_warehouse.item_reorder_point as sub_reorder_point')
@@ -1066,6 +1093,46 @@ class WarehouseController extends Member
         $up_warehouse["warehouse_address"] = Request::input("warehouse_address");
         $up_warehouse["warehouse_shop_id"] = $this->user_info->shop_id;
         // $up_warehouse["warehouse_created"] = Carbon::now();
+
+
+
+        $merchant_warehouse = Request::input("merchant_warehouse") ? "1" : "0";
+        /*INSERT TO WAREHOUSE (MERCHANT) */
+        $up_warehouse["merchant_warehouse"]   = $merchant_warehouse;
+        if($merchant_warehouse == 1)
+        {
+            $up_warehouse["merchant_logo"]                        = Request::input("merchant_logo_input");
+            $up_warehouse['default_repurchase_points_mulitplier'] = Request::input("default_repurchase_points_mulitplier"); 
+            $up_warehouse['default_margin_per_product']           = Request::input("default_margin_per_product");
+
+            if($up_warehouse['default_repurchase_points_mulitplier'] == null || $up_warehouse['default_repurchase_points_mulitplier'] == "")
+            {
+                $data['status']         = 'error';
+                $data['status_message'] = 'Default Repurchase Points Multiplier is required';
+
+                return json_encode($data);
+            }
+
+            if($up_warehouse['default_margin_per_product'] == null || $up_warehouse['default_margin_per_product'] == "")
+            {
+                $data['status']         = 'error';
+                $data['status_message'] = 'Default Margin Per Product is required';
+
+                return json_encode($data);
+            }
+        }
+        else
+        {
+            $up_warehouse["merchant_logo"]                        = "";
+            $up_warehouse['default_repurchase_points_mulitplier'] = 0;
+            $up_warehouse['default_margin_per_product']           = 0;
+        }
+
+
+
+
+
+
 
         Tbl_warehouse::where("warehouse_id",Request::input("warehouse_id"))->update($up_warehouse);
 

@@ -17,6 +17,16 @@
 				<small>Amount</small>
 				<input type="number" name="payroll_allowance_amount" class="form-control text-right" required step="any">
 			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-md-6">
+				<small>Type</small>
+				<select class="form-control" name="payroll_allowance_type" required="">
+					<option value="">Select Type</option>
+					<option value="fixed">fixed</option>
+					<option value="daily">daily</option>
+				</select>
+			</div>
 			<div class="col-md-6">
 				<small>Category</small>
 				<select class="form-control" name="payroll_allowance_category" required="">
@@ -76,12 +86,12 @@
 		<div class="form-group">
 			<div class="col-md-12">
 				<table class="table table-bordered table-condensed">
-					<th>
+					<thead>
 						<tr>
 							<th>Employee Name</th>
 							<th width="5%"></th>
 						</tr>
-					</th>
+					</thead>
 					<tbody class="tbl-tag">
 						
 					</tbody>

@@ -46,26 +46,26 @@
 		 		<div class="container">
 		 			<div class="field">
 		 				<div class="col-md-6">
-		 					<input type="text" class="form-control" placeholder="Your Email" name='mail' value="{{Request::old('mail')}}"> 
+		 					<input type="text" required class="form-control" placeholder="Your Email" name='mail' value="{{Request::old('mail')}}"> 
 		 				</div>
 		 				<div class="col-md-6">
-		 					<input type="text" class="form-control" placeholder="Contact Number" name='number' value="{{Request::old('number')}}"> 
-		 				</div>
-		 			</div>
-		 			<div class="field">
-		 				<div class="col-md-6">
-		 					<input type="text" class="form-control" placeholder="Your Name" name="name" value="{{Request::old('name')}}"> 
-		 				</div>
-		 				<div class="col-md-6">
-		 					<input type="text" class="form-control" placeholder="Desire Position" name='position' value="{{Request::old('position')}}"> 
+		 					<input type="text" required class="form-control" placeholder="Contact Number" name='number' value="{{Request::old('number')}}"> 
 		 				</div>
 		 			</div>
 		 			<div class="field">
 		 				<div class="col-md-6">
-		 					<textarea class="form-control" placeholder="Your Message" name='message'></textarea>
+		 					<input type="text" required class="form-control" placeholder="Your Name" name="name" value="{{Request::old('name')}}"> 
 		 				</div>
 		 				<div class="col-md-6">
-		 					<div class="upload"><span>Attach Your File Here</span><input type="file" class="form-control" name='file' value=""></div> 
+		 					<input type="text" required class="form-control" placeholder="Desire Position" name='position' value="{{Request::old('position')}}"> 
+		 				</div>
+		 			</div>
+		 			<div class="field">
+		 				<div class="col-md-6">
+		 					<textarea required class="form-control" placeholder="Your Message" name='message'></textarea>
+		 				</div>
+		 				<div class="col-md-6">
+		 					<div class="upload"><span>Attach Your File Here</span><input required type="file" required class="form-control" name='resume' value=""></div> 
 		 				</div>
 		 				<div class="col-md-6">
 		 					<button type="submit" name="submit">Submit</button>

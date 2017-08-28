@@ -21,6 +21,7 @@
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <ul class="nav nav-tabs">
         <li class="active cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#all"><i class="fa fa-star"></i> All Items</a></li>
+        <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#pending"><i class="fa fa-trash"></i> Pending Items</a></li>
         <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#archived"><i class="fa fa-trash"></i> Archived Items</a></li>
     </ul>
     <div class="search-filter-box">
@@ -42,16 +43,24 @@
     <div class="tab-content codes_container">
         <div id="all" class="tab-pane fade in active">
             <div class="form-group order-tags"></div>
-            <div class="item load-data" target="item-list-data">
-                <div id="item-list-data">                  
+            <div class="item load-data" target="item-list-data" column_name="{{Request::input('column_name')}}" in_order="{{Request::input('in_order')}}">
+               <div id="item-list-data">                  
                     <div class="table-responsive">
                         <table class="table table-hover table-bordered table-striped table-condensed">
                             <thead style="text-transform: uppercase">
                                 <tr>
-                                    <th>Item ID</th>
-                                    <th>Item Name</th>
-                                    <th>Inventory</th>
-                                    <th class="text-center">Sale Price</th>
+                                    <th>
+                                        @include("member.load_ajax_data.load_th_header_sort",['link' => '/member/item', 'column_name' => 'item_id','in_order' => Request::input('in_order'),'title_column_name' => 'Item ID'])
+                                    </th>
+                                    <th>
+                                        @include("member.load_ajax_data.load_th_header_sort",['link' => '/member/item', 'column_name' => 'item_name','in_order' => Request::input('in_order'),'title_column_name' => 'Item Name'])
+                                    </th>
+                                    <th>
+                                        @include("member.load_ajax_data.load_th_header_sort",['link' => '/member/item', 'column_name' => 'inventory_count','in_order' => Request::input('in_order'),'title_column_name' => 'Inventory'])
+                                    </th>
+                                    <th class="text-center">
+                                        @include("member.load_ajax_data.load_th_header_sort",['link' => '/member/item', 'column_name' => 'item_price','in_order' => Request::input('in_order'),'title_column_name' => 'Sale Price'])
+                                    </th>
                                     <th>Item Details</th>
                                     <th>Item Price History</th>
                                     <th>Action</th>
@@ -90,65 +99,114 @@
                                         </small>
                                     </td>
                                     <td>
-                                        <div class="btn-group">
-                                            <a class="btn btn-primary btn-grp-primary popup" link="/member/item/edit/{{$item->item_id}}" size="lg" href="javascript:">Edit</a>
-                                            <a class="btn btn-primary btn-grp-primary popup" link="/member/item/archive/{{$item->item_id}}" size="sm" href="javascript:"> |<span class="fa fa-trash "> </span> </a>
-                                        </div>
+                                    @if($can_edit_other_item == 1)
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary btn-grp-primary popup" link="/member/item/edit/{{$item->item_id}}" size="lg" href="javascript:">Edit</a>
+                                        <a class="btn btn-primary btn-grp-primary popup" link="/member/item/archive/{{$item->item_id}}" size="sm" href="javascript:"> |<span class="fa fa-trash "> </span> </a>
+                                    </div>
+                                    @else
+                                        @if($user_id == $item->user_id)
+                                            <div class="btn-group">
+                                                <a class="btn btn-primary btn-grp-primary popup" link="/member/item/edit/{{$item->item_id}}" size="lg" href="javascript:">Edit</a>
+                                                <!-- <a class="btn btn-primary btn-grp-primary popup" link="/member/item/archive/{{$item->item_id}}" size="sm" href="javascript:"> |<span class="fa fa-trash "> </span> </a> -->
+                                            </div>
+                                        @else
+                                            <center>You have no access editing this item</center>
+                                        @endif                               
+                                    @endif
                                     </td>
                                 </tr>
-                                @endforeach
+                                 @endforeach
                             </tbody>
                         </table>
                     </div> 
                     <div class="text-center pull-right">
                         {!!$_item->render()!!}
-                    </div>  
+                    </div>
                 </div>
+            </div>
+        </div><!-- 
+        </div>
+    </div>     -->
+        <div id="pending" class="tab-pane fade in">
+            <div class="form-group order-tags"></div>
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered table-striped table-condensed">
+                    <thead style="text-transform: uppercase">
+                        <tr>
+                            <th>Item ID</th>
+                            <th>Item Name</th>
+                            <th>Warehouse/Merchant</th>
+                            <th>Item Price</th>
+                            <th>Added By</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($_item_pending as $item)
+                        <tr>
+                            <td>{{$item->item_id}}</td>
+                            <td>{{$item->item_name}}</td>
+                            <td>{{$item->warehouse_name}}</td>
+                            <td>{{$item->item_price}}</td>
+                            <td>{{$item->user_email }}</td>
+                            <td>
+                                @if($can_approve_item_request == 1)
+                                    <div class="btn-group">
+                                        <a link="/member/item/approve_request/{{$item->item_id}}" href="javascript:" class="btn btn-primary btn-grp-primary popup" size="lg">Approve</a>
+                                    </div>
+                                    <!-- <div class="btn-group">
+                                        <a link="/member/item/decline_request/{{$item->item_id}}" href="javascript:" class="btn btn-primary btn-grp-primary popup">Decline</a>
+                                    </div> -->
+                                @else
+                                    <center>You have no access approving items</center>
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
         <div id="archived" class="tab-pane fade in">
             <div class="form-group order-tags"></div>
-
-            <div class="item-archived load-data" target="item-list-data-archived">
-                <div id="item-list-data-archived">     
-                    <div class="table-responsive">
-                        <table class="table table-hover table-bordered table-striped table-condensed">
-                            <thead style="text-transform: uppercase">
-                                <tr>
-                                    <th>Item ID</th>
-                                    <th>Item Name</th>
-                                    <th>Item SKU</th>
-                                    <th>Item Category</th>
-                                    <th>Item Type</th>
-                                    <th>Item Price</th>
-                                    <th>Item Date Created</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($_item_archived as $item)
-                                <tr>
-                                    <td>{{$item->item_id}}</td>
-                                    <td>{{$item->item_name}}</td>
-                                    <td>{{$item->item_sku}}</td>
-                                    <td>{{$item->type_name}}</td>
-                                    <td>{{$item->item_type_name}}</td>
-                                    <td>{{currency("PHP", $item->item_price)}}</td>
-                                    <td>{{date("F d, Y", strtotime($item->item_date_created))}}</td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <a link="/member/item/restore/{{$item->item_id}}" href="javascript:" class="btn btn-primary btn-grp-primary popup">Restore</a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="text-center pull-right">
-                        {!!$_item_archived->render()!!}
-                    </div>  
-                </div>
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered table-striped table-condensed">
+                    <thead style="text-transform: uppercase">
+                        <tr>
+                            <th>Item ID</th>
+                            <th>Item Name</th>
+                            <th>Item SKU</th>
+                            <th>Item Category</th>
+                            <th>Item Type</th>
+                            <th>Item Price</th>
+                            <th>Item Date Created</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($_item_archived as $item)
+                        <tr>
+                            <td>{{$item->item_id}}</td>
+                            <td>{{$item->item_name}}</td>
+                            <td>{{$item->item_sku}}</td>
+                            <td>{{$item->type_name}}</td>
+                            <td>{{$item->item_type_name}}</td>
+                            <td>{{currency("PHP", $item->item_price)}}</td>
+                            <td>{{date("F d, Y", strtotime($item->item_date_created))}}</td>
+                            <td>
+                                @if($can_edit_other_item == 1)
+                                <div class="btn-group">
+                                    <a link="/member/item/restore/{{$item->item_id}}" href="javascript:" class="btn btn-primary btn-grp-primary popup">Restore</a>
+                                </div>
+                                @else
+                                <center>You have no access editing this item</center>
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

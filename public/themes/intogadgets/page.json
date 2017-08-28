@@ -663,6 +663,13 @@
 			"type":"textbox",
 			"default":"Intogadgets Inc. © Copyright 2015. All Rights Reserved.",
 			"size":"12"
+		},
+		"terms_and_agreement":
+		{
+			"label":"Terms and Agreement",
+			"type":"tinymce",
+			"default":"",
+			"size":"12"
 		}
 	}
 }

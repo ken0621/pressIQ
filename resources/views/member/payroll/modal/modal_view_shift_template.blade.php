@@ -25,6 +25,7 @@
 							<th colspan="2" class="text-center">Work Schedule</th>
 							<th class="text-center"></th>
 							<th rowspan="2" class="text-center">Flexi Time</th>
+							<th rowspan="2" valign="center" class="text-center">Break Hours</th>
 							<th rowspan="2" class="text-center">Rest Day</th>
 							<th rowspan="2" class="text-center">Extra Day</th>
 					
@@ -56,6 +57,9 @@
 								</td>
 								<td class="text-center">
 									<input type="checkbox" name="flexitime_day_{{$day->shift_day}}" class="flexitime-check" value="1" {{ $day->shift_flexi_time != 0 ? "checked" :  ""}}>
+								</td>
+								<td>
+									<input type="number" name="break_hours[{{$day->shift_day}}]" class="form-control text-center break_hours hidden " step="any" value="{{ $day->shift_break_hours }}">
 								</td>
 								<td class="text-center">
 									<input type="checkbox" name="rest_day_{{$day->shift_day}}" class="restday-check" value="1" {{ $day->shift_rest_day != 0 ? "checked" :  ""}}>

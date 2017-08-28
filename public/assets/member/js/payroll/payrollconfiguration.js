@@ -223,10 +223,20 @@ function payrollconfiguration()
 	{
 		reload_configuration("/member/payroll/deduction");
 	}
+	this.reload_deductionv2 = function()
+	{
+		reload_configuration("/member/payroll/deduction/v2");
+	}
 
 	this.reload_allowance = function()
 	{
 		reload_configuration("/member/payroll/allowance");
+	}
+
+
+	this.reload_allowancev2 = function()
+	{
+		reload_configuration("/member/payroll/allowance/v2");
 	}
 
 	this.reload_leave_temp = function()
@@ -237,6 +247,11 @@ function payrollconfiguration()
 	this.reload_holiday = function()
 	{
 		reload_configuration("/member/payroll/holiday");
+	}
+	
+	this.reload_holiday_v2 = function()
+	{
+		reload_configuration("/member/payroll/holiday/v2");
 	}
 
 	this.reload_holiday_default = function()

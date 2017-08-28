@@ -60,7 +60,7 @@ function paginate_ajax()
         {
             if (typeof loading_done == 'function')
             {
-                loading_done_paginate();
+                
             }
         })
     }

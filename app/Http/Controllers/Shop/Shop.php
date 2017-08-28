@@ -96,7 +96,6 @@ class Shop extends Controller
 
         $company_column         = array('company_name', 'company_acronym', 'company_logo', 'receipt_logo', 'company_address', 'company_email', 'company_mobile', 'company_hour');
         $company_info           = collect(Tbl_content::where("shop_id", $this->shop_info->shop_id)->whereIn('key', $company_column)->get())->keyBy('key');
-        $product_category       = Ecom_Product::getAllCategory($this->shop_info->shop_id);
         $global_cart            = Cart::get_cart($this->shop_info->shop_id);
         $country                = Tbl_country::get();
         
@@ -107,8 +106,21 @@ class Shop extends Controller
         }
         elseif ($this->shop_theme == "intogadgets") 
         {
-            $popular_tags = DB::table("tbl_ec_popular_tags")->where("shop_id", $this->shop_info->shop_id)->orderBy("count", "DESC")->limit(10)->get();
+            $popular_tags = DB::table("tbl_ec_popular_tags")->where("shop_id", $this->shop_info->shop_id)->where("tag_approved",1)->orderBy("count", "DESC")->get();
             View::share("_popular_tags", $popular_tags);
+
+            $product_category       = Ecom_Product::getAllCategory($this->shop_info->shop_id);
+            View::share("_categories", $product_category);
+        }
+        elseif ($this->shop_theme == "ecommerce-1")
+        {
+            $product_category       = Ecom_Product::getAllCategory($this->shop_info->shop_id);
+            View::share("_categories", $product_category);
+        }
+        elseif ($this->shop_theme == "3xcell") 
+        {
+            $product_category       = Ecom_Product::getAllCategory($this->shop_info->shop_id);
+            View::share("_categories", $product_category);
         }
         
         View::share("slot_now", Self::$slot_now);
@@ -120,7 +132,6 @@ class Shop extends Controller
         View::share("shop_theme_info", $shop_theme_info);
         View::share("company_info", $company_info);
         View::share("shop_id", $this->shop_info->shop_id);
-        View::share("_categories", $product_category);
         View::share("global_cart", $global_cart);
         View::share("country", $country);
         View::share("lead", $data['lead']);

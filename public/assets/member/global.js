@@ -73,15 +73,33 @@ function global()
 
 				if(data.response_status == "error")
 				{
-					$(".modal-loader").addClass("hidden");
-				// 	$(".modal-title").text(data.title);
-				// 	$(".modal-body").html(data.message);
-				// 	$('#myModal').modal('show');
+					//$(".modal-loader").addClass("hidden");
+				 	//$(".modal-title").text(data.title);
+				 	//$(".modal-body").html(data.message);
+				 	//$('#myModal').modal('show');
 				    toastr.error(data.message);
 				}
+                else if(data.status == "error")
+                {
+                    if(!data.message)
+                    {
+                        message = data.status_message;
+                    }
+                    else
+                    {
+                        message = data.message;
+                    }
+
+                    action_load_link_to_modal("/member/popup/message?message=" + encodeURI(message));
+                    $(".modal-loader").addClass("hidden");
+                }
 				else
 				{
-                    console.log("global js");
+                    if(data.call_function)
+                    {
+                        window[data.call_function](data);
+                    }
+
 				    $(".modal-loader").addClass("hidden");
                     
                     if(data.type == 'item')

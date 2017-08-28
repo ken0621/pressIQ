@@ -10,9 +10,11 @@ use Session;
 use Validator;
 use Mail;
 use Config;
+use DB;
 use App\Globals\Settings;
 use App\Globals\Mlm_member;
 use App\Globals\EmailContent;
+use App\Globals\Cart;
 use App\Models\Tbl_shop;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_membership_code;
@@ -20,6 +22,8 @@ use App\Models\Tbl_mlm_plan;
 use App\Models\Tbl_mlm_binary_setttings;
 use App\Models\Tbl_mlm_lead;
 use App\Models\Tbl_mlm_slot;
+
+
 class MlmLoginController extends Controller
 {
 	public static $shop_id;
@@ -119,9 +123,29 @@ class MlmLoginController extends Controller
         else
         {
             $data["register_button"] = 1;
-        }
+        }   
 
-        return view("mlm.login", $data);
+        /* Check Shop Theme Login */
+        $shop = DB::table("tbl_shop")->where("shop_id", Self::$shop_id)->first();
+        if ($shop) 
+        {
+            switch ($shop->shop_theme) 
+            {
+                case '3xcell':
+                    View::addLocation(base_path() . '/public/themes/' . $shop->shop_theme . '/views/');
+                    $data["shop_theme"] = $shop->shop_theme;
+                    return view("login", $data);
+                break;
+                
+                default:
+                    return view("mlm.login", $data);
+                break;
+            }
+        }
+        else
+        {
+            return view("mlm.login", $data);
+        }
     }   
     public function forgot_password()
     {
@@ -234,6 +258,13 @@ class MlmLoginController extends Controller
                     {
                         $shop_id = $user->shop_id;
                         Mlm_member::add_to_session($shop_id, $user->customer_id);
+
+                        /* E-Commerce Login */
+                        $customer_info["email"] = $user->email;
+                        $customer_info["new_account"] = false;
+                        $customer_info["password"]= Crypt::decrypt($user->password);
+                        $customer_set_info_response = Cart::customer_set_info(Self::$shop_id, $customer_info, array("check_account"));
+                        
                         $data['type'] = 'success';
                         $data['message'] = 'You will be redirected.';
                     }

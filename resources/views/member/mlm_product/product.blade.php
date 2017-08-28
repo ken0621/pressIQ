@@ -87,7 +87,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="tbl-filter">
+                        <tbody class="tbl-filter" style="background-color: #F5F5F5">
                         @foreach($item as $variant)
                         <tr>
                             <!-- <td class="hide">

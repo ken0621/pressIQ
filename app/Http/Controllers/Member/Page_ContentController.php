@@ -60,7 +60,13 @@ class Page_ContentController extends Member
         {
             $data["job_resume"] = DB::table("tbl_cms_job_resume")->where("archived", 0)->orderBy("date_created", "DESC")->get();
         }
-        // dd($data["page_info"]);
+
+        /* INTOGADGETS */
+        if($data["shop_theme"] == "intogadgets") 
+        {
+            $data['popular_tags'] = DB::table("tbl_ec_popular_tags")->where("shop_id", $this->user_info->shop_id)->orderBy("count", "DESC")->get();
+        }
+
         return view('member.page.page_content', $data);
     }
 
@@ -133,7 +139,23 @@ class Page_ContentController extends Member
 
         return Redirect::back();
     }
+    public function getUpdateTag()
+    {
+        $tag_id = Request::input("tag_id");
+        $data_tag = DB::table('tbl_ec_popular_tags')->where("tag_id",$tag_id)->first();
 
+        $update["tag_approved"] = 1;
+        if($data_tag->tag_approved == 1)
+        {
+            $update["tag_approved"] = 0;
+        }
+
+        DB::table('tbl_ec_popular_tags')->where("tag_id",$tag_id)->update($update);
+
+        $data["status"] = "success";
+
+        return json_encode($data);
+    }
     public function getPost($limit)
     {
         if ($limit) {
@@ -222,7 +244,7 @@ class Page_ContentController extends Member
             {
                 $data["_content"] = [];
             }
-
+            
             return view("member.page.page_maintenance", $data);
         }
     }

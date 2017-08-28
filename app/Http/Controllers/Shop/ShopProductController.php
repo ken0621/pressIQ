@@ -231,9 +231,34 @@ class ShopProductController extends Shop
         }
         // Pagination
         $perPage = 12;
-        $data["current_count"] = count($product);
+
+        if($this->shop_theme == "intogadgets")
+        {
+            $perPage = 20;
+        }
+        elseif($this->shop_theme == "3xcell")
+        {
+            if ($type) 
+            {
+                $name_category = DB::table("tbl_category")->where("type_id", $type)->first();
+                if ($name_category) 
+                {
+                    $data["category_name"] = $name_category->type_name;
+                }
+                else
+                {
+                    $data["category_name"] = "All";
+                }
+            }
+            else
+            {
+                $data["category_name"] = "All";
+            }
+        }
+
         $data["_product"] = self::paginate($product, $perPage);
-        // dd($data['breadcrumbs']);
+        $data["current_count"] = count($data["_product"]);
+
         return view("product", $data);
     }
     public function paginate($items,$perPage)

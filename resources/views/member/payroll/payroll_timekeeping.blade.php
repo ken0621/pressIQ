@@ -15,7 +15,7 @@
 				<span class="caret"></span></button>
 				<ul class="dropdown-menu dropdown-menu-custom">
 					<li><a href="#" class="popup" link="/member/payroll/payroll_period_list/modal_create_payroll_period"><i class="fa fa-plus"></i>&nbsp;Generate Period</a></li>
-					<li><a href="#" class="popup" link="/member/payroll/import_bio/modal_biometrics"><i class="fa fa-upload"></i>&nbsp;Import Time Sheet</a></li>
+					<li><a href="#" class="popup" size="lg" link="/member/payroll/import_bio/modal_biometrics"><i class="fa fa-upload"></i>&nbsp;Import Time Sheet</a></li>
 				</ul>
 			</div>
 		</div>
@@ -25,11 +25,7 @@
 
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <ul class="nav nav-tabs">
-        <li class="active change-tab pending-tab cursor-pointer" mode="pending"><a class="cursor-pointer"><i class="text-bold">1st</i> &nbsp; Pending</a></li>
-        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="text-bold">2nd</i> &nbsp; Processed</a></li>
-        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="text-bold">3rd</i> &nbsp; Registered</a></li>
-        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="text-bold">4th</i> &nbsp; Posted</a></li>
-        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="text-bold">Last</i> &nbsp; Approved</a></li>
+        <li class="active change-tab pending-tab cursor-pointer" mode="generated"><a class="cursor-pointer"><i class="text-bold">Payroll Periods</i></a></li>
     </ul>
     
     <div class="search-filter-box">
@@ -60,5 +56,5 @@
 
 @endsection
 @section('script')
-<script type="text/javascript" src="/assets/member/js/payroll/payroll_timekeeping.js"></script>
+<script type="text/javascript" src="/assets/member/js/payroll/payroll_timekeeping.js?version=10"></script>
 @endsection

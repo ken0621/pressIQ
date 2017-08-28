@@ -4,12 +4,6 @@
     <h4 class="modal-title"><b>TIME SHEET</b> &raquo; {{ $employee_info->payroll_employee_first_name }} {{ $employee_info->payroll_employee_last_name }} (Employee No. {{ $employee_info->payroll_employee_number == "" ? "00" : $employee_info->payroll_employee_number }})</h4>
 </div>
 
-<div class="modal-header text-right">
-    <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">CLOSE</button>
-    <button type="button" class="btn btn-primary load-summary">VIEW SUMMARY</button>
-    <!--<button class="btn btn-primary btn-custom-primary approve-timesheet-btn" type="button">{{ $time_keeping_approved == true ? "RETURN TO PENDING" : "MARK AS READY" }}</button>-->
-</div>
-
 <div class="modal-body clearfix employee-timesheet-modal">
     <input type="hidden" class="period-id" value="{{ $period_id }}" />
     <input type="hidden" class="x-employee-id" value="{{ $employee_id }}" />
@@ -26,7 +20,8 @@
                             <th class="text-center">Remark / Activity</th>
                             <th class="text-center" width="80px;">Shift</i></th>
                             <th class="text-center" width="150px;">Source</th>
-                            <th width="150px" class="text-center">Rate</th>
+                            <th class="text-center" width="150px;">Branch</th>
+                            <th width="150px" class="text-center">{{ $access_salary_rates == 1 ? 'Rates':'Time Spent'}}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -90,6 +85,15 @@
                                         <input unq="{{ $random_integer_for_blank }}" type="text" disabled class="comment new-time-event text-table" value="Manually Encoded">
                                     @endif
                                 </td>
+                                <td class="text-center source-td">
+                                    @if($timesheet->record)
+                                        @foreach($timesheet->record as $x => $record)
+                                            <input unq="{{ $random_integer[$x] }}" type="text" disabled class="comment new-time-event text-table" value="{{ $record->branch }}">
+                                        @endforeach
+                                    @else
+                                        <input unq="{{ $random_integer_for_blank }}" type="text" disabled class="comment new-time-event text-table" value="NEW">
+                                    @endif
+                                </td>
                                 <td class="text-center rate-output">
                                     {!! $timesheet->daily_info->value_html !!}
                                 </td>
@@ -110,7 +114,7 @@
 <style type="text/css">
     #global_modal .modal-dialog
     {
-        width: 90% !important;
+        width: 85% !important;
     }
 </style>
 

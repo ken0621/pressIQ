@@ -639,7 +639,7 @@ class ImportController extends Member
 
 							$insertcustomer['shop_id'] 		= $this->getShopId();
 							$insertcustomer['mlm_username'] = $username;
-				            $insertcustomer['password'] 	= $password;
+				            $insertcustomer['password'] 	= Crypt::encrypt($password);
 				            $insertcustomer['title_name'] 	= $title_name;
 				            $insertcustomer['first_name'] 	= $first_name;
 				            $insertcustomer['middle_name'] 	= $middle_name;

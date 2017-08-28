@@ -102,11 +102,11 @@
                     <div class="form-group">
                         <div class="col-md-6">
                             <label>Sales price/rate *</label> 
-                            <input type="text" class="form-control number-input input-sm" id="item_price" value="{{isset($data['item_price']) ? $data['item_price'] : ''}}" name="item_price" required>
+                            <input type="text" class="form-control number-input input-sm" id="item_price" value="{{isset($data['item_price']) ? number_format($data['item_price'],2) : ''}}" name="item_price" required>
                         </div> 
                         <div class="col-md-6">  
                             <label>Cost *</label>  
-                            <input type="text" class="form-control number-input input-sm" id="item_cost" value="{{isset($data['item_cost']) ? $data['item_cost'] : ''}}" name="item_cost" required>
+                            <input type="text" class="form-control number-input input-sm" id="item_cost" value="{{isset($data['item_cost']) ? number_format($data['item_cost'],2) : ''}}" name="item_cost" required>
                         </div>
                     </div>
                     <!-- <div class="col-md-12" style="border-bottom: solid 1px #A CACAC; padding-top:20px;margin-bottom: 5px"></div> -->
@@ -197,7 +197,7 @@
                     <label> Sales price/rate *</label>
                     <div class="row">
                         <div class="col-md-8">
-                            <input type="text" class="form-control number-input" id="item_price" value="{{isset($data['item_price']) ? $data['item_price'] : ''}}" name="item_price" required>
+                            <input type="text" class="form-control number-input" id="item_price" value="{{isset($data['item_price']) ? number_format($data['item_price'],2)  : ''}}" name="item_price" required>
                         </div>
                     </div>
                 </div>         
@@ -218,7 +218,7 @@
                     <label>Cost *</label>
                     <div class="row">
                         <div class="col-md-8">    
-                           <input type="text" class="form-control number-input input-sm" id="item_cost" value="{{isset($data['item_cost']) ? $data['item_cost'] : ''}}" name="item_cost">
+                           <input type="text" class="form-control number-input input-sm" id="item_cost" value="{{isset($data['item_cost']) ? number_format($data['item_cost'],2) : ''}}" name="item_cost">
                         </div>
                     </div>
                 </div>   
@@ -306,7 +306,7 @@
                         <label>Sales price/rate *</label> 
                         <div class="row">
                             <div class="col-md-8">
-                                <input type="text" class="form-control number-input" id="item_price" value="{{isset($data['item_price']) ? $data['item_price'] : ''}}" name="item_price" required>
+                                <input type="text" class="form-control number-input" id="item_price" value="{{isset($data['item_price']) ? number_format($data['item_price'],2)  : ''}}" name="item_price" required>
                             </div>
                         </div>
                     </div>           
@@ -327,7 +327,7 @@
                         <div class="row">
                             <div>
                                 <div class="col-md-8">    
-                                   <input type="text" class="form-control number-input input-sm" id="item_cost" value="{{isset($data['item_cost']) ? $data['item_cost'] : ''}}" name="item_cost">
+                                   <input type="text" class="form-control number-input input-sm" id="item_cost" value="{{isset($data['item_cost']) ? number_format($data['item_cost'],2) : ''}}" name="item_cost">
                                 </div>
                             </div>
                         </div>

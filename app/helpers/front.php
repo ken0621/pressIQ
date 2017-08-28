@@ -239,3 +239,8 @@ function get_cart_item_total($cart)
 {
     return isset($cart["sale_information"]["total_product_price"]) ? number_format($cart["sale_information"]["total_product_price"], 2) : 0;
 }
+
+function get_cart_item_total_quantity($cart)
+{
+    return isset($cart["sale_information"]["total_quantity"]) ? $cart["sale_information"]["total_quantity"] : 0;
+}

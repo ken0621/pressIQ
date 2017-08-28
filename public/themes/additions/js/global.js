@@ -9,6 +9,8 @@ var total = ".total";
 var button_checkout = ".button-checkout";
 var remove_product = ".remove-item-from-cart";
 var product_cart_container = ".per-item-container";
+var cart_quantity = ".cart-quantity";
+var get_cart_quantity = ".quantity-cart-holder";
 
 function globalv2()
 {
@@ -77,12 +79,18 @@ function load_cart(show)
         event_cart_add_qty();
         event_cart_remove_product();
         action_image_crop();
+        action_update_quantity_cart();
 
         if (show == 1) 
         {
             $('.cart-modal').modal();
         }
     }); 
+}
+
+function action_update_quantity_cart()
+{
+    $(cart_quantity).html($(get_cart_quantity).val());
 }
 
 function action_disable_checkout_button()

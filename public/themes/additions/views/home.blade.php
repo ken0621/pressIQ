@@ -76,7 +76,7 @@
 					</div>
 				</div> -->
 				@if($_product)
-					@foreach($_product as $product)
+					@foreach(limit_foreach($_product, 6) as $product)
 					<div class="col-md-4 col-sm-6 col-sm-bottom col-bottom">
 						<div class="list-product" id="{{$product["eprod_id"]}}" class="prodimg">
 							<div class="triangle-topright">

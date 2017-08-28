@@ -61,7 +61,7 @@
 						<div class="row" id="option_container">
 						@foreach($_variant as $variant)
 	                     <div class="clearfix col-md-4">
-	                        <div class="size-title">{{ $variant['option_name'] }}</div>
+	                        <div class="size-title" style="text-transform: capitalize;">{{ $variant['option_name'] }}</div>
 	                        <div class="size-desc ">
 	                           <select class="attribute-variation size-desc option_value" variant-label="{{ $variant['option_name'] }}" product-id="{{ $product['eprod_id'] }}" variant-id="{{ $product_variant['evariant_id'] }}" name="attr[{{ $variant['option_name_id'] }}]">
 	                              <option value="0">Select {{ $variant['option_name'] }}</option>
@@ -128,6 +128,7 @@
 			</div> -->
 		</div>
 	</div>
+	<?php $ctr++; ?>
 	@endforeach
 </div>
 

@@ -1,11 +1,12 @@
+<input type="hidden" class="quantity-cart-holder" value="{{ get_cart_item_total_quantity($get_cart) }}">
 <div class="cart-header clearfix">
   <div>
       <div class="text">
         <div class="title-label">MY CART</div>
-        <div class="items">You have no item in your Shopping Bag</div>
+        <div class="items">You have {{ get_cart_item_total_quantity($get_cart) }} item/s in your Shopping Bag</div>
         <div class="price"><span class="total">{{ get_cart_item_total($get_cart) }}</span></div>
         <div class="btn-holder">
-          <button class="btn" type="button" onClick="location.href='/checkout'">CHECK OUT</button>
+          <button class="btn" type="button" onClick="location.href='/checkout/login'">CHECK OUT</button>
         </div>
       </div>
   </div>

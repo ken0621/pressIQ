@@ -143,13 +143,7 @@
               </div>
             </li>
             <li class="cart-contain">
-              <div class="cart-holder">
-                {{-- @if($count > 99)  --}}
-                  1
-                {{-- @else 
-                  {{$count}} 
-                @endif --}}
-              </div>
+              <div class="cart-holder cart-quantity">0</div>
             </li>
           </ul>
        </div><!--/.navbar-collapse -->

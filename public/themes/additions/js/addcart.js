@@ -6,6 +6,7 @@ var button_cart = ".add-to-cart-button";
 var product_container = ".body-content";
 var product_quantity = ".input-adjust";
 var cart_holder = '.cart-dropdown';
+var variation_select = '.attribute-variation';
 
 function global_addcart()
 {
@@ -78,7 +79,7 @@ function global_addcart()
 
 	function event_select_variation()
 	{
-		$("body").on('change', '#select-variation .attribute-variation', function(event) 
+		$("body").on('change', variation_select, function(event) 
 		{
 			event.preventDefault();
 			action_select_variation(event);
@@ -87,7 +88,7 @@ function global_addcart()
 
 	function action_select_variation(e)
 	{
-		var selected = $(e.currentTarget).closest("'+product_container+'").attr("variant-id");
+		var selected = $(e.currentTarget).closest(product_container).attr("variant-id");
 		var product_id = $(e.currentTarget).attr("product-id");
 		var variant_label = $(e.currentTarget).attr("variant-label");
 		var variation = [];

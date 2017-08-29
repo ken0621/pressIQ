@@ -37,7 +37,7 @@ class MLM_StairstepController extends Member
     	if($start && $end)
     	{
     		$start   = date("Y-m-d H:i:s", strtotime($start));
-    		$end     = date("Y-m-d H:i:s", strtotime($end));
+    		$end     = date("Y-m-d 23:59:59", strtotime($end));
     		$shop_id = $this->getShopId();
 
     		$distribute = Tbl_stairstep_distribute::where("stairstep_distribute_start_date",$start)
@@ -104,6 +104,7 @@ class MLM_StairstepController extends Member
     	$end    		= Request::input("end_date");
 		$start 			= Carbon::parse($start);
 		$end   			= Carbon::parse($end);
+		$end            = $end->format("Y-m-d 23:59:59");
 
     	$distribute_id  = Request::input("distribute_id");
     	$slot_id 		= Request::input("slot_id");
@@ -138,6 +139,11 @@ class MLM_StairstepController extends Member
 	    							   							->where("points_log_type","RPV")
 	    							   							->where("points_log_converted","0")
 	    							   							->sum("points_log_points");  
+				// if($slot_id == 680)
+				// {
+				// 	dd($rpv,$grpv,$converted_pv,$start,$end);
+				// }	
+				    							   							
 				if(!$rpv)
 				{
 					$rpv = 0;
@@ -193,7 +199,16 @@ class MLM_StairstepController extends Member
 	            $check_if_change = 0;
 	        	foreach($slot_stairstep_get as $slot_stairstep_new)
 	        	{
-	        		if($slot_stairstep_new->stairstep_level > $slot_stairstep->stairstep_level)
+	        		if(!$slot_stairstep)
+	        		{
+	        			$check_stair_level = 0;
+	        		}
+	        		else
+	        		{
+	        			$check_stair_level = $slot_stairstep->stairstep_level;
+	        		}
+
+	        		if($slot_stairstep_new->stairstep_level > $check_stair_level)
 	        		{
 		            	if($slot_stairstep_new->stairstep_leg_id != 0)
 		            	{

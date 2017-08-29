@@ -122,7 +122,7 @@
                                     @if(count($_categories) > 0)
                                         @foreach($_categories as $categories)
                                         <div class="cat-container">
-                                            <a href="/product">
+                                            <a href="/product?type={{ $categories["type_id"] }}">
                                                 <div class="per-cat">
                                                     <div class="cat-img-container"><img style="width: 124px; height: 100px; object-fit: cover;" src="{{ $categories["type_image"] }}"></div>
                                                     <div class="cat-name">{{ $categories["type_name"] }}</div>

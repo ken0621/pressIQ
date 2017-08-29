@@ -1,150 +1,115 @@
-@extends("layout")
-@section("content")
-<div class="content">
-	<div class="top-1-container">
-		<div class="container">
-			<div class="title-container">Payment</div>
-		</div>
-	</div>
-	<div class="top-2-container">
-		<div class="container">
-			<div class="content-container row clearfix">
-				<div class="col-md-8">
-					<div class="title-container">
-						<span>Login</span><span><i class="fa fa-angle-right" aria-hidden="true"></i>
-						</span><span>Shipping</span><span><i class="fa fa-angle-right" aria-hidden="true"></i>
-						</span><span style="color: #2161c8;">Payment</span></div>
-					<!-- SHIPPING DETAILS -->
-					<div class="mid-title-container">
-						Payment
+@extends('layout')
+@section('content')
+<form method="post">
+	 {{ csrf_field() }}
+	<div class="container content">
+		<h2>Choose Payment Method</h2>
+		<div class="payment-container">
+			<div class="row clearfix">
+				<div class="col-md-6">
+					<div class="holder-holder">
+						@if(count($_payment_method) != 0)
+							@foreach($_payment_method as $payment_method)
+								<div class="choose-payment-method holder" method_id="{{ $payment_method->method_id }}" description="{{ $payment_method->link_description }}">
+									<div class="match-height" style="text-transform: uppercase; font-weight: 700; line-height: 15px;">{{ $payment_method->method_name }}</div>
+									<div class="image" style="margin-top: 7.5px;">
+										<img src="{{ $payment_method->image_path ? $payment_method->image_path : '/assets/front/img/default.jpg' }}">
+									</div>
+									<div class="radio" style="margin-bottom: 0;">
+										<label >
+									  		<input class="radio" type="radio" name="payment_method_id" value="{{ $payment_method->method_id }}">
+										</label>
+									</div>
+								</div>
+							@endforeach	
+						@else
+							<div class="text-center"><h3>No Payment Method Available</h3></div>
+						@endif
 					</div>
-					<!-- BILLING ADDRESS -->
-					<div class="address-container">
-						<div class="title-container">Billing Adress:</div>
-						<div class="detail-container">{{ $get_cart["tbl_customer"]["first_name"] . " " . $get_cart["tbl_customer"]["middle_name"] . " " .  $get_cart["tbl_customer"]["last_name"] }}</div>
-						<div class="detail-container">{{ $get_cart["tbl_customer_address"]["shipping"]["customer_street"] }}</div>
-						<div class="detail-container">{{ $get_cart["tbl_customer_address"]["shipping"]["customer_state"] }}, {{ $get_cart["tbl_customer_address"]["shipping"]["customer_city"] }}</div>
-						<div class="detail-container">{{ $get_cart["tbl_customer_address"]["shipping"]["customer_zip_code"] }}</div>
-						<div class="detail-container">Philippines</div>
-					</div>
-					<!-- SHIPPING ADDRESS -->
-					<div class="address-container">
-						<div class="title-container">Shipping Adress:</div>
-						<div class="detail-container">{{ $get_cart["tbl_customer"]["first_name"] . " " . $get_cart["tbl_customer"]["middle_name"] . " " .  $get_cart["tbl_customer"]["last_name"] }}</div>
-						<div class="detail-container">{{ $get_cart["tbl_customer_address"]["shipping"]["customer_street"] }}</div>
-						<div class="detail-container">{{ $get_cart["tbl_customer_address"]["shipping"]["customer_state"] }}, {{ $get_cart["tbl_customer_address"]["shipping"]["customer_city"] }}</div>
-						<div class="detail-container">{{ $get_cart["tbl_customer_address"]["shipping"]["customer_zip_code"] }}</div>
-						<div class="detail-container">Philippines</div>
-					</div>
-					<form method="post">
-					{{ csrf_field() }}
-						<div class="select-payment-container">
-							<div class="title-container">Select A Payment Method</div>
-							<select name="payment_method_id" class="select">
-								{{-- <option value="">Paypal</option>
-								<option value="">Bank Deposit</option>
-								<option value="">FastPay</option>
-								<option value="">Palawan Express</option> --}}
-								@foreach($_payment_method as $payment_method)
-								<option value="{{ $payment_method->method_id }}">{{ $payment_method->method_name }}</option>
-								@endforeach
-							</select>
-							<div>
-								<button style="border: 0;" type="submit" class="button-checkout">SUBMIT ORDER</button>
+					<div class="details clearfix">
+						<div class="detail-holder">
+							<div class="details-text" style="white-space: pre-wrap; font-weight: 300; text-transform: uppercase;">Kindly choose a payment method which you are most comfortable with paying.</div>
+							<div class="details-order">
+								<button class="btn btn-primary">PLACE YOUR ORDER</button>
 							</div>
 						</div>
-					</form>
+					</div>
 				</div>
-				<!-- CART SUMMARY -->
-				<div class="col-md-4">
-					<div class="order-summary-container">
-						<div class="title-container">
-							Order Summary
-							<a href="/MyCart"><div class="edit-cart">Edit Cart</div></a>
-						</div>
-						<div class="per-order-container">
-							@foreach($get_cart['cart'] as $key => $value)
-							<!-- PER ITEM -->
-							<div class="per-item-container row-no-padding clearfix">
-								<div class="col-md-3">
-									<!-- ITEM IMAGE -->
-									<div class="image-container">
-										<img src="{{ $value['cart_product_information']['image_path'] ? $value['cart_product_information']['image_path'] : '/assets/mlm/img/placeholder.jpg' }}">
-									</div>
-								</div>
-								<div class="col-md-9">
-									<!-- ITEM DETAILS -->
-									<div class="item-detail-container">
-										<div class="item-name text-overflow">{{ $value['cart_product_information']['product_name'] }}</div>
-										<div class="bottom-detail row clearfix">
-											<div class="col-md-4">
-												<div class="price-container">
-													<div class="title-price">Price:</div>
-													<div class="price">PHP {{ number_format($value['cart_product_information']['product_current_price'], 2) }}</div>
-												</div>
-											</div>
-											<div class="col-md-4">
-												<div class="quantity-container">
-													<input class="input-quantity" type="number" name="quantity" min="1" step="1" value="{{ $value['quantity'] }}" disabled="">
-												</div>
-											</div>
-											<div class="col-md-4">
-												<div class="total-container">
-													<div class="title-price">Total:</div>
-													<div class="price">PHP {{ number_format($value['cart_product_information']['product_current_price'] * $value["quantity"], 2) }}</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							@endforeach
-						</div>
-					</div>
-					<div class="title-container">Cart Summary</div>
-					<div class="cart-summary-container">
-						<div class="subtotal-container">
-							<div class="title-container">Subtotal:</div>
-							<div class="subtotal">PHP {{ number_format($get_cart['sale_information']['total_product_price'], 2) }}</div>
-						</div>
-						<div class="total-container">
-							<div class="title-container">Total:</div>
-							<div class="subtotal">PHP {{ number_format($get_cart['sale_information']['total_overall_price'], 2) }}</div>
-						</div>
-					</div>
+				<div class="col-md-6 order-summary-container">
+
 				</div>
 			</div>
 		</div>
 	</div>
-
-	<!-- SCROLL TO TOP -->
-	<div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
-</div>
+</form>
 @endsection
 
-@section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/item_payment.css">
-@endsection
-
-@section("js")
+@section('script')
+<script type="text/javascript" src="js/match-height.js"></script>
 <script type="text/javascript">
-$(document).ready(function()
-{
-	/*scroll up*/
-	$(window).scroll(function () {
-        if ($(this).scrollTop() > 700) {
-            $('.scroll-up').fadeIn();
-        } else {
-            $('.scroll-up').fadeOut();
-        }
-    });
 
-    $('.scroll-up').click(function () {
-        $("html, body").animate({
-            scrollTop: 0
-        }, 700);
-        return false;
-    });
-});
+
+var checkout_form_payment = new checkout_form_payment();
+
+function checkout_form_payment()
+{
+	init();
+
+	function init()
+	{
+		$(document).ready(function()
+		{
+			document_ready();
+		});
+	}
+	function document_ready()
+	{
+		event_choose_payment_method();
+		action_load_sidecart();
+		action_match_height();
+	}
+	function event_choose_payment_method()
+	{
+		$(".radio").prop("checked", false);
+		$(".choose-payment-method").unbind("click");
+		$(".choose-payment-method").bind("click", function(e)
+		{
+			$(".checkout-summary .loader-here").removeClass("hidden");
+			$(e.currentTarget).find(".radio").prop("checked", true);
+
+			var description = $(e.currentTarget).attr("description");
+			$(".details-text").html(description);
+
+			var method_id = $(e.currentTarget).attr("method_id");
+			$.ajax(
+			{
+				url:"/checkout/method",
+				datatype:"json",
+				type:"get",
+				data:{method_id:method_id},
+				success: function(data)
+				{
+					action_load_sidecart();
+				}
+			});
+
+		});
+	}
+	function action_match_height()
+	{
+		$('.match-height').matchHeight();
+	}
+	function action_load_sidecart()
+	{
+		$(".order-summary-container").load("/checkout/side");
+	}
+}
+
+
 </script>
+@endsection
+
+@section('css')
+<link rel="stylesheet" href="/themes/{{ $shop_theme }}/css/checkout_payment.css">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/front/css/checkout.css">
 @endsection

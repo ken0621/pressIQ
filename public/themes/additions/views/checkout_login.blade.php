@@ -1,11 +1,11 @@
 @extends('layout')
 @section('content')
-<div class="container main-container">
+<div class="container content main-container">
 	<div class="row clearfix">
-		<div class="col-md-8">
+		<div class="col-md-6">
 			<div class="form-holder">
 				<div class="form-header">Login or Checkout as guest</div>
-				<div class="form-content">
+				<div class="form-content" style="padding: 0 15px;">
 					@if (session('warning'))
 					    <div class="alert alert-warning text-center">
 					    	<ul style="padding: 0; margin: 0;">
@@ -36,7 +36,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-4">
+		{{-- <div class="col-md-4">
 			<div class="checkout-summary">
 				<div class="title">Order Summary</div>
 				<div class="order-summary">
@@ -94,12 +94,74 @@
 					</div>
 				</div>
 			</div>
+		</div> --}}
+		<div class="col-md-6">
+			<div class="title">Order Summary</div>
+			<div class="summary">
+				@if (session('fail'))
+				    <div class="alert alert-danger">
+				    	@if(is_array(session('fail')))
+				    		<ul>
+					        @foreach(session('fail') as $fail)
+				        		<li style="display: block;">{{ $fail }}</li>
+					        @endforeach
+					        </ul>
+					    @else
+					    	<ul style="padding: 0; margin: 0;">
+					    		<li style="display: block;">{{ session('fail') }}</li>
+					    	</ul>
+				        @endif
+				    </div>
+				@endif
+				<div class="c-qty">You have {{ count($get_cart["cart"]) }} item/s in your cart.</div>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>PRODUCT</th>
+							<th>QTY</th>
+							<th>PRICE</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach($get_cart["cart"] as $cart)
+						<tr>
+							<td class="name">{{ $cart["cart_product_information"]["product_name"] }}</td>
+							<td class="qty">{{ $cart["quantity"] }}</td>
+							<td class="price">&#8369; {{ number_format($cart['quantity'] * $cart["cart_product_information"]["product_price"], 2) }}</td>
+							<td style="padding-left: 10px;"><a style="color: red;" href="/cart/remove?redirect=1&variation_id={{ $cart["product_id"] }}"><i class="fa fa-close"></i></a></td>
+						</tr>
+						@endforeach
+					</tbody>
+				</table>
+				<div class="total">
+					<table>
+						<tbody>
+							@if($get_cart["sale_information"]["total_shipping"])
+							<tr>
+								<td>Subtotal</td>
+								<td class="table-sub-total text-right">&#8369; {{ number_format($get_cart["sale_information"]["total_product_price"], 2) }}</td>
+							</tr>
+							<tr>
+								<td>Shipping Fee</td>
+								<td class="table-ship-fee text-right">&#8369; {{ number_format($get_cart["sale_information"]["total_shipping"], 2) }}</td>
+							</tr>
+							@endif
+							<tr>
+								<td>TOTAL</td>
+								<td class="table-total text-right">&#8369; {{ number_format($get_cart["sale_information"]["total_overall_price"], 2) }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
 @endsection
 
 @section('css')
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/front/css/checkout.css">
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/checkout_login.css">
 @endsection
 

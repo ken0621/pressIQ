@@ -4,7 +4,7 @@
 	<div class="text"><img src="/themes/{{ $shop_theme }}/assets/front/img/cart-big.png"> <span>CHECK OUT</span></div>
 </div>
 <div class="content">
-	<form method="POST" action="/payment/getCheckout" id="form_checkout" enctype="multipart/form-data">
+	<form method="post">
 	<input type="hidden" name="_token" value="{{csrf_token()}}">
 	<div class="info">
 		<div class="container">
@@ -47,100 +47,40 @@
 					</div>
 					<div>
 						<div class="form-group col-md-6">
-							<label>EMAIL</label>
-							<input class="form-control" required type="email" name="email" value="{{ isset($customer->email) ? $customer->email : '' }}"></input>
-						</div>
-						<div class="form-group col-md-6">
 							<label>CONTACT NUMBER</label>
-							<input class="form-control" required name="phone" type="text" value=""></input>
+							<input class="form-control" required name="contact_number" type="text" value="{{ isset($customer->customer_mobile) ? $customer->customer_mobile : '' }}"></input>
 						</div>
 					</div>
 					<div>
-						<div class="form-group col-md-6">
-							<label>COUNTRY</label>
-							<select class="form-control" name="country" required>
-			                  <option value="">Select Country</option>
-			                  
-			                </select>
-						</div>
-						<div class="form-group col-md-6">
+						<div class="form-group col-md-12">
 							<label>PROVINCE</label>
-							<input class="form-control" required type="text" name="province" value=""></input>
+							<select firstload="true" default="{{ isset($shipping_address->state_id) ? $shipping_address->state_id : null }}" class="form-control load-location" name="customer_state" level="1"></select>
+						</div>
+						<div class="form-group col-md-12">
+							<label>CITY / MUNICIPALITY</label>
+							<select firstload="true" default="{{ isset($shipping_address->city_id) ? $shipping_address->city_id : null }}" class="form-control load-location" name="customer_city" level="2"></select>
 						</div>
 					</div>
 					<div>
-						<div class="form-group col-md-6">
-							<label>CITY</label>
-							<input class="form-control" required type="text" name="city" value=""></input>
+						<div class="form-group col-md-12">
+							<label>BARANGAY</label>
+							<select firstload="true" default="{{ isset($shipping_address->zipcode_id) ? $shipping_address->zipcode_id : null }}" class="form-control load-location" name="customer_zip" level="3"></select>
 						</div>
-						<div class="form-group col-md-6">
+						<div class="form-group col-md-12">
 							<label>ADDRESS</label>
-							<input class="form-control" required type="text" name="_address" value=""></input>
+							<textarea style="resize: none;" class="form-control" required type="text" name="customer_street">{{ isset($shipping_address->customer_street) ? $shipping_address->customer_street : null }}</textarea>
 						</div>
-					</div>
-					<div>
-						
-						<div class="form-group col-md-6">
-							<label>ZIP CODE</label>
-							<input class="form-control" required type="text" name="zip_code" value=""></input>
-						</div>
-						<div class="form-group col-md-6">
-							<label>SHIPPING METHOD</label>
-							<select class="form-control shippingmethod" id="shippingmethod" name="shippingmethod" required>
-								<option value="" data-price="0" selected>Select Shipping Method</option>
-							</select>
-						</div>	
 					</div>
 				</div>
 				
-				<div class="col-md-6">
-					<div class="title">Order Summary</div>
-					<div class="summary">
-						<div class="c-qty">You have no item in your cart.</div>
-						<table class="table">
-							<thead>
-								<tr>
-									<th>PRODUCT</th>
-									<th>QTY</th>
-									<th>PRICE</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td class="name">loremipsum</td>
-									<td class="qty">1</td>
-									<td class="price">P 900.00</td>
-								</tr>
-							</tbody>
-						</table>
-						<div class="total">
-							<table>
-								<tbody>
-									<tr>
-										<td>Subtotal</td>
-										<td class="table-sub-total text-right"></td>
-									</tr>
-									<tr>
-										<td>Shipping Fee</td>
-										<td class="table-ship-fee text-right"></td>
-									</tr>
-									<tr>
-										<td>TOTAL</td>
-										<td class="table-total text-right"></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
+				<div class="col-md-6 order-summary-container">
+					
 				</div>
 			</div>
 		</div>
 	</div>
-	<input type="hidden" class="hidden-table-sub-total" name="subtotal" value="">
-	<input type="hidden" name="" class="hidden-table-total" value="">
-	<input type="hidden" name="shipping_fee" class="hidden-table-ship-fee" value="">
 
-	<div class="payment">
+	{{-- <div class="payment">
 		<div class="title">CHOOSE MODE OF PAYMENT</div>
 		<div class="container">
 			<div class="row clearfix text-center">
@@ -231,6 +171,10 @@
 				</div>
 			</div>
 		</div>
+	</div> --}}
+
+	<div class="form-group text-center">
+		<button class="btn btn-pink btn-submit checkout-button-submit" disabled type="submit">LOADING ...</button>
 	</div>
 
 	</form>
@@ -240,5 +184,5 @@
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/front/css/checkout.css">
 @endsection
 @section("script")
-<script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/front/js/checkout.js"></script>
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global_checkout.js"></script>
 @endsection

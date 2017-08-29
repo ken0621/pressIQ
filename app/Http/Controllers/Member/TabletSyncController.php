@@ -556,7 +556,6 @@ class TabletSyncController extends Controller
         {
             $insert['sir_id'] = $sir_id;
             $insert['sir_data'] = serialize($all_data);
-
             /*LOGIN FIRST*/
             $sir_data = Tbl_sir::where("sir_id",$sir_id)->first();
             if($sir_data)
@@ -567,7 +566,7 @@ class TabletSyncController extends Controller
                 // dd(unserialize($count->sir_data));
                 // if($count <= 0)
                 // {
-                    // $data_id = Tbl_tablet_data::insertGetId($insert);
+                    $data_id = Tbl_tablet_data::insertGetId($insert);
                     $return = Tablet_sync::sync(1);
                     if($return == 'success')
                     {

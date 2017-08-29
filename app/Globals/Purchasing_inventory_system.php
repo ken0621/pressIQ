@@ -456,8 +456,8 @@ class Purchasing_inventory_system
                 $_transaction[$inv_key]['reference_name'] = 'sales_receipt';
                 $_transaction[$inv_key]['transaction_code'] = "Paid";
 
-                $data["total_cash"] += $inv_value->inv_payment_applied - $cm_amt;
-                $data["cash_sales"] += $inv_value->inv_payment_applied - $cm_amt;
+                $data["total_cash"] += $inv_value->inv_overall_price - $cm_amt;
+                $data["cash_sales"] += $inv_value->inv_overall_price - $cm_amt;
                 $_transaction[$inv_key]['balance'] = ($inv_value->inv_overall_price - $inv_value->inv_payment_applied);
             }
             $_transaction[$inv_key]['customer_name'] = $inv_value->company != "" ? $inv_value->company : $inv_value->title_name." ".$inv_value->first_name." ".$inv_value->last_name." ".$inv_value->suffix_name;

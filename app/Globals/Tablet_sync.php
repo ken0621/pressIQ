@@ -41,6 +41,7 @@ class tablet_sync
     	if($data_id)
     	{
     		$tablet_data = Tbl_tablet_data::where("data_id",$data_id)->first();
+    		// dd(unserialize($tablet_data->sir_data));
     		if($tablet_data)
     		{
     			$all_transaction = unserialize($tablet_data->sir_data);
@@ -64,7 +65,7 @@ class tablet_sync
 
 					$invoice_info                       = [];
 					$invoice_info['invoice_terms_id']   = $value->inv->inv_terms_id;
-			        $invoice_info['new_inv_id']         = $sir_id.$value->inv->new_inv_id;
+			        $invoice_info['new_inv_id']         = $value->inv->new_inv_id;
 					$invoice_info['invoice_date']       = datepicker_input($value->inv->inv_date);
 					$invoice_info['invoice_due']        = datepicker_input($value->inv->inv_due_date);
 					$invoice_info['billing_address']    = $value->inv->inv_customer_billing_address;
@@ -202,6 +203,8 @@ class tablet_sync
 						        $insert["rp_memo"]              = $value_rp->rp->rp_memo;
 						        $insert["date_created"]         = $value_rp->rp->date_created;
 
+					            $insert["rp_ref_name"]        	= "";
+					            $insert["rp_ref_id"]          	= 0;
 						        if($value_rp->rp->rp_ref_name)
 						        {
 						            $insert["rp_ref_name"]        = $value_rp->rp->rp_ref_name;
@@ -279,7 +282,7 @@ class tablet_sync
 
 				    $_cm_items = $value_cm->cmline;
 		            foreach ($_cm_items as $keys_cmline => $cmline) 
-	                { 
+	                {
 	                    if($cmline)
 	                    {
 	                    	$cm_item_info[$keys_cmline]['item_service_date']  = $cmline->cmline_service_date;
@@ -338,6 +341,8 @@ class tablet_sync
 					        $insert["rp_memo"]              = $value_rp->rp->rp_memo;
 					        $insert["date_created"]         = $value_rp->rp->date_created;
 
+				            $insert["rp_ref_name"]        = "";
+				            $insert["rp_ref_id"]          = 0;
 					        if($value_rp->rp->rp_ref_name)
 					        {
 					            $insert["rp_ref_name"]        = $value_rp->rp->rp_ref_name;
@@ -379,9 +384,25 @@ class tablet_sync
 					        $entry_data[0]['entry_amount']  = $insert["rp_total_amount"] + $cm_amt;
 					        $inv_journal = Accounting::postJournalEntry($entry, $entry_data, '',true);
 
+		  	 	          	foreach ($all_manual_rp as $key_manual => $manual_rp) 
+							{
+								if($manual_rp->rp_id == $key_rp)
+								{
+									$ins_manual_rp['sir_id'] = $sir_id;
+									$ins_manual_rp['agent_id'] = $manual_rp->agent_id;
+									$ins_manual_rp['rp_id'] = $rcvpayment_id;
+									$ins_manual_rp['rp_date'] = $manual_rp->rp_date;
+									$ins_manual_rp['created_at'] = $manual_rp->created_at;
+
+									Tbl_manual_receive_payment::insert($ins_manual_rp);
+									unset($all_manual_rp->$key_manual);
+								}
+							}
+							
 					        unset($all_rp->$key_rp);
 						}
 					}	 
+					unset($all_cm->key_cm);
 				}  		
 
 				/*FOR RECEIVE PAYMENT*/
@@ -397,6 +418,9 @@ class tablet_sync
 			        $insert["rp_memo"]              = $value_rp->rp->rp_memo;
 			        $insert["date_created"]         = $value_rp->rp->date_created;
 
+
+		            $insert["rp_ref_name"]        = "";
+		            $insert["rp_ref_id"]          = 0;
 			        if($value_rp->rp->rp_ref_name)
 			        {
 			            $insert["rp_ref_name"]        = $value_rp->rp->rp_ref_name;

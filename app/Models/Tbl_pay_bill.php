@@ -11,6 +11,6 @@ class Tbl_pay_bill extends Model
     
     public static function scopeVendor($query)
     {
-    	return $query->join("tbl_vendor","tbl_vendor.vendor_id","=","tbl_pay_bill.paybill_vendor_id");
+    	return $query->leftjoin("tbl_vendor","tbl_vendor.vendor_id","=","tbl_pay_bill.paybill_vendor_id");
     }
 }

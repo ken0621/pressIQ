@@ -14,6 +14,7 @@
 					<option value="SSS Loan">SSS Loan</option>
 					<option value="HDMF Loan">HDMF Loan</option>
 					<option value="Cash Bond">Cash Bond</option>
+					<option value="Cash Advance">Cash Advance</option>
 					<option value="Others">Others...</option>
 				</select>
 			</div>

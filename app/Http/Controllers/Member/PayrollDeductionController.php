@@ -158,8 +158,16 @@ class PayrollDeductionController extends Member
           $payroll_deduction_type =   str_replace('_', ' ', Request::get('deduction_category'));
           $data['_loan_data'] = $this->get_deduction_by_type($this->shop_id(),$payroll_deduction_type);;
           return view("member.payrollreport.loan_summary_table", $data);
-          // dd($data['_active']);
-          // dd(Request::get('deduction_category'));
+    }
+
+
+    public function modal_view_deduction_employee_config()
+    {
+          $payroll_deduction_type =   str_replace('_', ' ', Request::get('deduction_category'));
+          $data['_loan_data'] = $this->get_deduction_by_type_config($this->shop_id(),$payroll_deduction_type,0);
+          $data['_loan_data_archive'] = $this->get_deduction_by_type_config($this->shop_id(),$payroll_deduction_type,1);
+          return view("member.payrollreport.loan_summary_table_config", $data);
+
     }
 
     public function modal_create_deduction()
@@ -551,6 +559,17 @@ class PayrollDeductionController extends Member
           }
 
           $data = $query->get();
+          return $data;
+     }
+
+
+     public static function get_deduction_by_type_config($shop_id = 0, $deduction_type='',$archive = 0)
+     {
+
+          $query = Tbl_payroll_deduction_v2::deductionbytype($shop_id,$deduction_type,$archive);
+          $data = $query->get();
+          
+          // dd($data);
           return $data;
      }
 

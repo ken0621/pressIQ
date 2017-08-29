@@ -1994,16 +1994,11 @@ class PayrollController extends Member
           $data[3]['access_name']  = 'Holiday';
           $data[3]['link']         = '/member/payroll/holiday';
 
-<<<<<<< HEAD
-          $data[4]['access_name']  = 'Holiday Default';
-          $data[4]['link']         = '/member/payroll/holiday_default';
-=======
           $data[31]['access_name'] = 'Holiday V2';
           $data[31]['link']        = '/member/payroll/holiday/v2';
 
           $data[4]['access_name'] = 'Holiday Default';
           $data[4]['link']        = '/member/payroll/holiday_default';
->>>>>>> bfc6b42d99835b958998b6a0d2ec879780f71809
 
           $data[5]['access_name']  = 'Allowances';
           $data[5]['link']         = '/member/payroll/allowance';

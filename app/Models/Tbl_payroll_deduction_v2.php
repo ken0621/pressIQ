@@ -42,6 +42,7 @@ class Tbl_payroll_deduction_v2 extends Model
 	{
 
 		$query->where('tbl_payroll_deduction_v2.shop_id', $shop_id)
+		->where('tbl_payroll_deduction_v2.payroll_deduction_archived',$payroll_deduction_archived)
 		->select(DB::raw('tbl_payroll_deduction_v2.payroll_deduction_type ,sum(tbl_payroll_deduction_v2.payroll_deduction_amount) as total_amount,
 			IFNULL((select sum(tbl_payroll_deduction_payment_v2.payroll_payment_amount) from tbl_payroll_deduction_payment_v2 
 			where tbl_payroll_deduction_payment_v2.deduction_name = tbl_payroll_deduction_v2.payroll_deduction_type
@@ -72,6 +73,38 @@ class Tbl_payroll_deduction_v2 extends Model
           }
 
           return $query;
+	}
+
+	public function scopedeductionbytype($query, $shop_id = 0, $payroll_deduction_type = '',$archive)
+	{
+		$query->join('tbl_payroll_deduction_employee_v2','tbl_payroll_deduction_employee_v2.payroll_deduction_id','=','tbl_payroll_deduction_v2.payroll_deduction_id')
+		->join('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_deduction_employee_v2.payroll_employee_id')
+		->select(DB::raw('tbl_payroll_employee_basic.*, tbl_payroll_deduction_v2.*,
+			IFNULL((select count(tbl_payroll_deduction_payment_v2.payroll_total_payment_amount) from tbl_payroll_deduction_payment_v2 where tbl_payroll_deduction_payment_v2.payroll_deduction_id = tbl_payroll_deduction_v2.payroll_deduction_id and tbl_payroll_deduction_payment_v2.payroll_employee_id = tbl_payroll_employee_basic.payroll_employee_id GROUP BY tbl_payroll_deduction_payment_v2.deduction_name)  ,0) as number_of_payment,
+			IFNULL((select sum(tbl_payroll_deduction_payment_v2.payroll_payment_amount) from tbl_payroll_deduction_payment_v2 where tbl_payroll_deduction_payment_v2.payroll_deduction_id = tbl_payroll_deduction_v2.payroll_deduction_id and tbl_payroll_deduction_payment_v2.payroll_employee_id = tbl_payroll_employee_basic.payroll_employee_id GROUP BY tbl_payroll_deduction_payment_v2.deduction_name)  ,0) as total_payment
+			'));
+		  if ($shop_id!=0) 
+	      {
+	      	$query->where('tbl_payroll_deduction_v2.shop_id',$shop_id);
+	      }
+	      if ($payroll_deduction_type != '') 
+	      {
+	      	$query->where('tbl_payroll_deduction_v2.payroll_deduction_type',$payroll_deduction_type);
+	      }
+	      
+	      $query->where('tbl_payroll_deduction_v2.payroll_deduction_archived',$archive);
+	      
+	      
+
+
+	    return $query;
+		/*select tbl_payroll_deduction_v2.payroll_deduction_type, tbl_payroll_employee_basic.payroll_employee_display_name, tbl_payroll_deduction_v2.payroll_deduction_name,  tbl_payroll_deduction_v2.payroll_deduction_amount,
+		IFNULL((select count(tbl_payroll_deduction_payment_v2.payroll_total_payment_amount) from tbl_payroll_deduction_payment_v2 where tbl_payroll_deduction_payment_v2.payroll_deduction_id = tbl_payroll_deduction_v2.payroll_deduction_id and tbl_payroll_deduction_payment_v2.payroll_employee_id = tbl_payroll_employee_basic.payroll_employee_id GROUP BY tbl_payroll_deduction_payment_v2.deduction_name)  ,0) as number_of_payment,
+		IFNULL((select sum(tbl_payroll_deduction_payment_v2.payroll_payment_amount) from tbl_payroll_deduction_payment_v2 where tbl_payroll_deduction_payment_v2.payroll_deduction_id = tbl_payroll_deduction_v2.payroll_deduction_id and tbl_payroll_deduction_payment_v2.payroll_employee_id = tbl_payroll_employee_basic.payroll_employee_id GROUP BY tbl_payroll_deduction_payment_v2.deduction_name)  ,0) as total_payment
+		from tbl_payroll_deduction_v2
+		inner join tbl_payroll_deduction_employee_v2 on tbl_payroll_deduction_employee_v2.payroll_deduction_id = tbl_payroll_deduction_v2.payroll_deduction_id
+		inner join tbl_payroll_employee_basic on tbl_payroll_employee_basic.payroll_employee_id = tbl_payroll_deduction_employee_v2.payroll_employee_id*/
+
 	}
 
 }

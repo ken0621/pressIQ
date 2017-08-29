@@ -9,11 +9,17 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/reports/government_forms_hdmf/{id}','Member\PayrollReportController@government_forms_hdmf');
 	Route::any('/reports/government_forms_hdmf_iframe/{id}','Member\PayrollReportController@government_forms_hdmf_iframe');
 	
-
+	/*START loan summary report*/
 	Route::any('/reports/loan_summary','Member\PayrollReportController@loan_summary');
 	Route::any('/reports/table_loan_summary/{deduction_type}','Member\PayrollReportController@table_loan_summary');
 	Route::any('/reports/modal_loan_summary_report/{employee_id}/{payroll_deduction_id}','Member\PayrollReportController@modal_loan_summary');
 	Route::any('/reports/export_loan_summary_report_to_excel/{employee_id}/{payroll_deduction_id}','Member\PayrollReportController@export_loan_summary_report_to_excel');
+	/*END loan summar report*/
+
+
+	/*START PAYROLL REGISTER REPORT*/
+	Route::any('/reports/payroll_register_report','Member\PayrollReportController@payroll_register_report');
+	/*END PAYROLL REGISTER REPORT*/
 
 	/* COMPANY START */
 	Route::any('/company_list','Member\PayrollController@company_list');
@@ -368,7 +374,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/custom_payslip/archive_payslip',"Member\PayrollController@archive_payslip");
 	Route::any('/custom_payslip/modal_update_payslip',"Member\PayrollController@modal_update_payslip");
 	Route::any('/custom_payslip/payslip_use_change',"Member\PayrollController@payslip_use_change");
-	
 	/* PAYROLL CUSTOM PAYSLIP END */
 
 	/* PAYROLL PERIOD START */
@@ -462,7 +467,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/unprocess_payroll/{period_company_id}','Member\PayrollProcessController@unprocess');
 	Route::any('/process_payroll/table/{period_company_id}','Member\PayrollProcessController@index_table');
 	Route::any('/process_payroll/modal_view_summary/{period_company_id}','Member\PayrollProcessController@modal_view_summary');
-	Route::any('/process_payroll/income_summary/timesheet/{period_id}/{employee_id}','Member\PayrollProcessController@income_summary_timesheet');
+	Route::any('/process_payroll/income_summary/timesheet/{period_id}/{employee_id}','Member\PayrollProcessController@income_summary_timesheet_v2');
 	Route::any('/process_payroll/modal_approved_summary/{period_company_id}','Member\PayrollProcessController@modal_approved_summary');
 
 

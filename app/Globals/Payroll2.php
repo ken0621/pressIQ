@@ -2353,11 +2353,12 @@ class Payroll2
 					else if ($compute_type=="monthly") 
 					{
 						$return->_breakdown_addition["Special Holiday"]["time"] = ""; 
-						$return->_breakdown_addition["Special Holiday"]["rate"] = $daily_rate * ($special_param['payroll_overtime_regular']);
+						$return->_breakdown_addition["Special Holiday"]["rate"] = $daily_rate * (($special_param['payroll_overtime_regular'])-1);
 						$return->_breakdown_addition["Special Holiday"]["hour"] = "";
 						$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday"]["rate"];
 						$breakdown_addition += $return->_breakdown_addition["Special Holiday"]["rate"];
-						$additional_rate =  ($special_param['payroll_overtime_regular']);
+						//-1 because if deducted by late,undertime it will be base in employee's hourly rate
+						$additional_rate =  (($special_param['payroll_overtime_regular'])-1);
 					}
 				}
 				//Special Holiday Over Time
@@ -2399,19 +2400,23 @@ class Payroll2
 		//compute cola
 		$cola = Payroll2::compute_income_day_pay_cola($_time , $daily_rate, $group_id , $cola , $compute_type);
 		
-		
 
 		//no time in monthly
-		if($time_spent!=0 && $compute_type=="monthly")
+		if($time_spent==0 && $compute_type=="monthly")
 		{
-			if($_time['is_holiday'] == 'special' || $_time['is_holiday'] == 'regular' || $_time['day_type'] == 'extra_day' || $_time['day_type'] == 'rest_day')
-			{
+			// if($_time['is_holiday'] == 'special' || $_time['is_holiday'] == 'regular' || $_time['day_type'] == 'extra_day' || $_time['day_type'] == 'rest_day')
+			// {
 				
+			// }
+			if($_time['is_holiday'] == 'special')
+			{
+				$_time["is_absent"] = false;
 			}
+			
 		}
 		
 		//no time in daily
-		if($time_spent!=0 && $compute_type=="daily")
+		if($time_spent==0 && $compute_type=="daily")
 		{
 			if($_time['is_holiday'] == 'special' || $_time['is_holiday'] == 'regular' || $_time['day_type'] == 'extra_day' || $_time['day_type'] == 'rest_day')
 			{
@@ -3272,11 +3277,14 @@ class Payroll2
 		$return = Payroll2::cutoff_breakdown_compute_gross_pay($return, $data);
 		$return = Payroll2::cutoff_breakdown_government_contributions($return, $data);
 		$return = Payroll2::cutoff_breakdown_compute_taxable_salary($return, $data);
-		$return = Payroll2::cutoff_breakdown_compute_tax($return, $data);
+
+		$return = Payroll2::cutoff_breakdown_compute_tax($return, $data);	
+		
+	
 
 		$return = Payroll2::cutoff_breakdown_compute_net($return, $data);
-		//dd($return);
 		$return = Payroll2::cutoff_breakdown_compute_time($return, $data);
+		
 		return $return;
 	}
 
@@ -3404,6 +3412,8 @@ class Payroll2
 
 		return $return;
 	}
+
+
 	public static function cutoff_breakdown_compute_net($return, $data)
 	{
 		extract($data);
@@ -3549,6 +3559,7 @@ class Payroll2
 		$val["deduct.taxable_salary"] = false;
 		$val["add.net_pay"] = false;
 		$val["deduct.net_pay"] = true;
+
 		array_push($return->_breakdown, $val);
 		$val = null;			
 

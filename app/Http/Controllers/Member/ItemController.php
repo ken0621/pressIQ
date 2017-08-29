@@ -1172,12 +1172,17 @@ class ItemController extends Member
 		$item_cost 						= str_replace(',','',Request::input("item_cost"));
 		$item_reorder_point 			= Request::input("item_reorder_point");
 		$item_quantity 					= Request::input("item_quantity");
+		
+		if ($old["item_measurement_id"]) 
+		{
+			$unit_id = UnitMeasurement::update_um_v2($unit_n_based, $unit_based, $qty, $old["item_measurement_id"]);
+		}
+		else
+		{
+			$unit_id = UnitMeasurement::create_um($unit_n_based, $unit_based, $qty);
+		}
 
-		// if($item_type != "bundle")
-		// {
-		$unit_id = UnitMeasurement::create_um($unit_n_based, $unit_based, $qty);
 		$item_measurement_id 			= $unit_id;			
-		// }
 			
 		//Accounting part //DEFAULT VALUE
 		$item_expense_account_id= Tbl_chart_of_account::where("account_code", "accounting-expense")->where("account_shop_id", $shop_id)->pluck("account_id");

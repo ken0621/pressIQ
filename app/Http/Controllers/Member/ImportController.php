@@ -534,6 +534,8 @@ class ImportController extends Member
 
 		    $excel->sheet('Template', function($sheet) {
 		    	$header = [
+		    				'Username',
+		    				'Password',
 		    				'Title Name',
 		    				'First Name',
 		    				'Middle Name',
@@ -546,7 +548,7 @@ class ImportController extends Member
 		    				'Phone Number',
 		    				'Mobile Number',
 		    				'Opening Balance',
-		    				'Balace Date',
+		    				'Balance Date',
 		    				'Billing Country',
 		    				'Billing State',
 		    				'Billing City',
@@ -587,6 +589,8 @@ class ImportController extends Member
 
 		if($ctr != $data_length)
 		{
+			$username		= isset($value["Username"])			? $value["Username"] : '' ;
+			$password		= isset($value["Password"])			? $value["Password"] : '' ;
 			$title_name		= isset($value["Title Name"])		? $value["Title Name"] : '' ;
 			$first_name		= isset($value["First Name"])		? $value["First Name"] : '' ;
 			$middle_name	= isset($value["Middle Name"])		? $value["Middle Name"] : '' ;
@@ -599,13 +603,13 @@ class ImportController extends Member
 			$phone			= isset($value["Phone Number"])		? $value["Phone Number"] : '' ;
 			$mobile			= isset($value["Mobile Number"])	? $value["Mobile Number"] : '' ;
 			$open_balance	= isset($value["Opening Balance"])	? $value["Opening Balance"] : '' ;
-			$balance_date	= isset($value["Balace Date"])		? $value["Balace Date"] : '' ;
-			$bill_country	= isset($value["Billing Country"])	? $value["Billing Country"] : '' ;
+			$balance_date	= isset($value["Balance Date"])		? $value["Balance Date"] : '' ;
+			$bill_country	= isset($value["Billing Country"]) && $value["Billing Country"] != '' ? $value["Billing Country"] : "Philippines";
 			$bill_state		= isset($value["Billing State"])	? $value["Billing State"] : '' ;
 			$bill_city		= isset($value["Billing City"])		? $value["Billing City"] : '' ;
 			$bill_zip_code	= isset($value["Billing Zipcode"])	? $value["Billing Zipcode"] : '' ;
 			$bill_address	= isset($value["Billing Address"])	? $value["Billing Address"] : '' ;
-			$ship_country	= isset($value["Shipping Country"])	? $value["Shipping Country"] : '' ;
+			$ship_country	= isset($value["Shipping Country"]) && $value["Shipping Country"] != '' ? $value["Shipping Country"] : "Philippines";
 			$ship_state		= isset($value["Shipping State"])	? $value["Shipping State"] : '' ;
 			$ship_city		= isset($value["Shipping City"])	? $value["Shipping City"] : '' ;
 			$ship_zip_code	= isset($value["Shipping Zipcode"])	? $value["Shipping Zipcode"] : '' ;
@@ -624,8 +628,8 @@ class ImportController extends Member
 			$has_bill_country 	= Tbl_country::where("country_name", $bill_country)->first();
 			$has_ship_country 	= Tbl_country::where("country_name", $bill_country)->first();
 
-			if(!$duplicate_customer)
-			{
+			// if(!$duplicate_customer)
+			// {
 				if(!$duplicate_email)
 				{
 					if($has_bill_country || $bill_country == '')
@@ -634,6 +638,8 @@ class ImportController extends Member
 						{
 
 							$insertcustomer['shop_id'] 		= $this->getShopId();
+							$insertcustomer['mlm_username'] = $username;
+				            $insertcustomer['password'] 	= Crypt::encrypt($password);
 				            $insertcustomer['title_name'] 	= $title_name;
 				            $insertcustomer['first_name'] 	= $first_name;
 				            $insertcustomer['middle_name'] 	= $middle_name;
@@ -648,17 +654,17 @@ class ImportController extends Member
 				            // BILL COUNTRY ID
 				            if($has_bill_country) $insertcustomer['country_id'] = $has_bill_country->country_id;
 				           	else $insertcustomer['country_id'] 					= $bill_country;
-	  
-				            $rules["email"] 				= 'required|email';
+	  						
+				   //          $rules["email"] 				= 'required|email';
 
-							$validator = Validator::make($insertcustomer, $rules);
-							if ($validator->fails())
-							{
-								$json["status"] 	= "error";
-								$json["message"]  	= $validator->errors()->first();
-							}
-							else
-							{
+							// $validator = Validator::make($insertcustomer, $rules);
+							// if ($validator->fails())
+							// {
+							// 	$json["status"] 	= "error";
+							// 	$json["message"]  	= $validator->errors()->first();
+							// }
+							// else
+							// {
 								$customer_id = Tbl_customer::insertGetId($insertcustomer);
 	            
 					            $insertSearch['customer_id'] = $customer_id;
@@ -705,7 +711,7 @@ class ImportController extends Member
 					            $json["status"]		= "success";
 								$json["message"]	= "Success";
 								$json["item_id"]	= $customer_id;
-				        	}
+				        	// }
 				        }
 				        else
 				        {
@@ -724,17 +730,19 @@ class ImportController extends Member
 		        	$json["status"]		= "error";
 					$json["message"]	= "Email Already Exist";
 		        }
-			}
-			else
-			{
-				$json["status"]		= "error";
-				$json["message"]	= "Duplicate Customer Name";
-			}
+			// }
+			// else
+			// {
+			// 	$json["status"]		= "error";
+			// 	$json["message"]	= "Duplicate Customer Name";
+			// }
 
 			$status_color 		= $json["status"] == 'success' ? 'green' : 'red';
 			$json["tr_data"]	= "<tr>";
 			$json["tr_data"]   .= "<td class='$status_color'>".$json["status"]."</td>";
 			$json["tr_data"]   .= "<td nowrap>".$json["message"]."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$username."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$password."</td>";
 			$json["tr_data"]   .= "<td nowrap>".$title_name."</td>";
 			$json["tr_data"]   .= "<td nowrap>".$first_name."</td>";
 			$json["tr_data"]   .= "<td nowrap>".$middle_name."</td>";
@@ -801,6 +809,8 @@ class ImportController extends Member
 
 			    $excel->sheet('Template', function($sheet) use($_value) {
 			    	$header = [
+			    				'Username',
+								'Password',
 			    				'Title Name',
 								'First Name',
 								'Middle Name',
@@ -813,7 +823,7 @@ class ImportController extends Member
 								'Phone Number',
 								'Mobile Number',
 								'Opening Balance',
-								'Balace Date',
+								'Balance Date',
 								'Billing Country',
 								'Billing State',
 								'Billing City',
@@ -884,7 +894,7 @@ class ImportController extends Member
 		    				'Phone Number',
 		    				'Mobile Number',
 		    				'Opening Balance',
-		    				'Balace Date',
+		    				'Balance Date',
 		    				'Billing Country',
 		    				'Billing State',
 		    				'Billing City',
@@ -934,7 +944,7 @@ class ImportController extends Member
 			$phone			= isset($value["Phone Number"])		? $value["Phone Number"] : '' ;
 			$mobile			= isset($value["Mobile Number"])	? $value["Mobile Number"] : '' ;
 			$open_balance	= isset($value["Opening Balance"])	? $value["Opening Balance"] : '' ;
-			$balance_date	= isset($value["Balace Date"])		? $value["Balace Date"] : '' ;
+			$balance_date	= isset($value["Balance Date"])		? $value["Balance Date"] : '' ;
 			$bill_country	= isset($value["Billing Country"])	? $value["Billing Country"] : '' ;
 			$bill_state		= isset($value["Billing State"])	? $value["Billing State"] : '' ;
 			$bill_city		= isset($value["Billing City"])		? $value["Billing City"] : '' ;
@@ -1126,7 +1136,7 @@ class ImportController extends Member
 								'Phone Number',
 								'Mobile Number',
 								'Opening Balance',
-								'Balace Date',
+								'Balance Date',
 								'Billing Country',
 								'Billing State',
 								'Billing City',

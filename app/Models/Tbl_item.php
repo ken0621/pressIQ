@@ -22,7 +22,7 @@ class Tbl_item extends Model
     }
     public function scopeActive($query)
     {
-        $query->where("archived", 0);
+        $query->where("tbl_item.archived", 0);
         return $query;
     }
     public function scopeType($query)
@@ -38,8 +38,7 @@ class Tbl_item extends Model
     }
     public function scopeUm_multi($query)
     {
-        return $query->leftjoin('tbl_unit_measurement_multi','multi_um_id','=','item_measurement_id');
-         
+        return $query->leftjoin('tbl_unit_measurement_multi','multi_um_id','=','item_measurement_id');         
     }
     public function scopeUm_item($query)
     {

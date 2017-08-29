@@ -191,6 +191,7 @@ class PayrollController extends Member
 
      public function payroll_process_module()
      {
+          
           $data["_company"] = Tbl_payroll_company::where("shop_id", Self::shop_id())->where('payroll_parent_company_id', 0)->get();
           $data['_period'] = Tbl_payroll_period::sel(Self::shop_id())
                                                   ->where('payroll_parent_company_id', 0)

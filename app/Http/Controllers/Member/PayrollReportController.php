@@ -155,15 +155,20 @@ class PayrollReportController extends Member
 	    
 	     $data['_period'] = Tbl_payroll_period::sel($this->shop_id())
 	                                              ->where('payroll_parent_company_id', 0)
-	                                         
+	                                              // ->where('tbl_payroll_period.payroll_period_status','!=','pending')
 	                                              ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
 	                                              ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
 	                                              ->orderBy('tbl_payroll_period.payroll_period_start','asc')
 	                                              ->get();
 
-	    
 		return view("member.payrollreport.payroll_register_report", $data);
-	} 
+	}
+
+
+	public function payroll_register_report_period($id)
+	{
+		//echo $id.'';
+	}
 
 	/*END PAYROLL REGISTER REPORT*/
 

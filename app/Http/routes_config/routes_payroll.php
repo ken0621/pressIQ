@@ -19,6 +19,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	/*START PAYROLL REGISTER REPORT*/
 	Route::any('/reports/payroll_register_report','Member\PayrollReportController@payroll_register_report');
+	Route::any('/reports/payroll_register_report_period/{id}','Member\PayrollReportController@payroll_register_report_period');
 	/*END PAYROLL REGISTER REPORT*/
 
 	/* COMPANY START */
@@ -71,7 +72,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* EMPLOYEE END */
 	Route::any('/payroll_configuration','Member\PayrollController@payroll_configuration');
 
-	
+
+	//company_register_report/
 	/* TIMESHEET START */
 	Route::any('/employee_timesheet','Member\PayrollTimeSheetController@index');
 	Route::any('/company_timesheet/{id}','Member\PayrollTimeSheetController@company_timesheet');

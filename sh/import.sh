@@ -9,7 +9,7 @@ command -v pv >/dev/null 2>&1 || { sudo apt-get update; sudo apt-get install pv;
 command -v sshpass >/dev/null 2>&1 || { sudo apt-get update; sudo apt-get install sshpass; }
 
 ## LOGIN SSH ##
-sshpass -p "0SlO051O" ssh -o StrictHostKeyChecking=no digima@digimahouse.com "~/export.sh"
+sshpass -p "digima2018" ssh -o StrictHostKeyChecking=no digima@digimahouse.com "~/export.sh"
 
 ## DATABASE ##
 mysql -u$username -p$password -e "DROP DATABASE $database"

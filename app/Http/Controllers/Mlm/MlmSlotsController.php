@@ -459,7 +459,7 @@ class MlmSlotsController extends Mlm
             else
             {
                 $data["item"]  = $item;
-                $data["_customer"] = Tbl_customer::where('shop_id', Self::$shop_id)->where("customer_id","!=",Self::$customer_id)->get();
+                $data["_customer"] = $this->get_downline_customer();
             }
         }
         else
@@ -484,7 +484,7 @@ class MlmSlotsController extends Mlm
         $item_activation_code = Request::input("item_activation_code");
         $customer_id          = Request::input("customer_id");
 
-        $customer             = Tbl_customer::where("shop_id",Self::$shop_id)->where("customer_id",$customer_id)->where("customer_id","!=",Self::$customer_id)->first();
+        $customer             = $this->check_downline_customer($customer_id);
         $item                 = Tbl_item_code::where("item_activation_code",$item_activation_code)->first();
         
         if($customer)
@@ -559,7 +559,9 @@ class MlmSlotsController extends Mlm
             else
             {
                 $data["mem"]       = $mem;
-                $data["_customer"] = Tbl_customer::where('shop_id', Self::$shop_id)->where("customer_id","!=",Self::$customer_id)->get();
+                // $data["_customer"] = Tbl_customer::where('shop_id', Self::$shop_id)->where("customer_id","!=",Self::$customer_id)->get();
+                
+                $data["_customer"] = $this->get_downline_customer();
             }
         }
         else
@@ -583,7 +585,7 @@ class MlmSlotsController extends Mlm
         $membership_activation_code = Request::input("membership_activation_code");
         $customer_id                = Request::input("customer_id");
 
-        $customer                   = Tbl_customer::where("shop_id",Self::$shop_id)->where("customer_id","!=",Self::$customer_id)->where("customer_id",$customer_id)->first();
+        $customer                   = $this->check_downline_customer($customer_id);
         $mem                        = Tbl_membership_code::where("membership_activation_code",$membership_activation_code)->first();
         
         if($customer)
@@ -631,5 +633,34 @@ class MlmSlotsController extends Mlm
         }
 
         return json_encode($data);
+    }
+
+    public function get_downline_customer()
+    {
+        $_customer  = Tbl_tree_placement::leftJoin("tbl_mlm_slot as parent_table",'parent_table.slot_id','=','tbl_tree_placement.placement_tree_parent_id')
+                                        ->leftJoin("tbl_mlm_slot as child_table",'child_table.slot_id','=','tbl_tree_placement.placement_tree_child_id')
+                                        ->select("parent_table.slot_owner as parent_customer_id","child_table.slot_owner as child_customer_id","first_name","last_name","middle_name")
+                                        ->leftJoin("tbl_customer","tbl_customer.customer_id","=","child_table.slot_owner")
+                                        ->where("child_table.slot_owner","!=",Self::$customer_id)
+                                        ->where("parent_table.shop_id","=",Self::$shop_id)
+                                        ->groupBy("child_table.slot_owner")
+                                        ->get();
+
+        return $_customer;
+    }
+
+    public function check_downline_customer($customer_id)
+    {
+        $customer   = Tbl_tree_placement::leftJoin("tbl_mlm_slot as parent_table",'parent_table.slot_id','=','tbl_tree_placement.placement_tree_parent_id')
+                                        ->leftJoin("tbl_mlm_slot as child_table",'child_table.slot_id','=','tbl_tree_placement.placement_tree_child_id')
+                                        ->select("parent_table.slot_owner as parent_customer_id","child_table.slot_owner as child_customer_id","first_name","last_name","middle_name")
+                                        ->leftJoin("tbl_customer","tbl_customer.customer_id","=","child_table.slot_owner")
+                                        ->where("child_table.slot_owner","!=",Self::$customer_id)
+                                        ->where("child_table.slot_owner","=",$customer_id)
+                                        ->where("parent_table.shop_id","=",Self::$shop_id)
+                                        ->groupBy("child_table.slot_owner")
+                                        ->first();
+
+        return $customer;                                      
     }
 }

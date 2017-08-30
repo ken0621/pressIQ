@@ -1,7 +1,7 @@
 @extends('member.layout')
 @section('content')
 
-<form method="post" action="/member/page/partner/submit_edit/{{ $company_info->id }}" >
+<form method="post" action="/member/page/partner/submit_edit/{{ $company_info->company_id }}" >
 	<div class="panel panel-default panel-block panel-title-block" id="top">
 		<div class="panel-heading">
 			<div>
@@ -38,7 +38,7 @@
 							<label>Company Owner Name</label>
 							<div>
 								<div class="match-height">
-									<input type="text" name="company_owner_name"  class="form-control" value="{{ $company_info->company_owner_name }}">
+									<input type="text" name="company_owner_name"  class="form-control" value="{{ $company_info->company_owner }}">
 								</div>
 							</div>
 						</div>
@@ -47,7 +47,7 @@
 							<label>Company Contact Number</label>
 							<div>
 								<div class="match-height">
-									<input type="text" name="company_contact_number" class="form-control" value="{{ $company_info->company_contact_number }}">
+									<input type="text" name="company_contact_number" class="form-control" value="{{ $company_info->company_contactnumber }}">
 								</div>
 							</div>
 						</div>

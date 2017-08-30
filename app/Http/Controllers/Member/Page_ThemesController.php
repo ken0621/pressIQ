@@ -24,7 +24,7 @@ class Page_ThemesController extends Member
 
     public function delete_company_info($id)
 	{
-		Tbl_partners::where("id", $id)->delete();
+		Tbl_partners::where("company_id", $id)->delete();
         Redirect::to("/member/page/partnerview")->send();
 	}
 
@@ -55,20 +55,20 @@ class Page_ThemesController extends Member
 
     public function partner()
     {
-    return view('member.page.partner');
+    	return view('member.page.partner');
 	}
 
-	 public function partnerviewedit($id)
+	public function partnerviewedit($id)
     {
-    $data["company_info"]  = Tbl_partners::where("id", $id)->first();
-	 return view('member.page.partnerviewedit',$data);
+	    $data["company_info"]  = Tbl_partners::where("company_id", $id)->first();
+		return view('member.page.partnerviewedit',$data);
 	}
 
 	public function partnerview()
     {
-    $data["_company_info"]  = Tbl_partners::get();
-    $data['locationList'] = Tbl_partners::select('company_location')->distinct()->get();
-	return view('member/page/partnerview', $data);
+	    $data["_company_info"]  = Tbl_partners::get();
+	    $data['locationList'] = Tbl_partners::select('company_location')->distinct()->get();
+		return view('member/page/partnerview', $data);
 	}
 
 	public function partnerFilterByLocation()

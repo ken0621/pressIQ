@@ -1,8 +1,4 @@
 <?php
-Route::any('/Company/Information','Partner_Controller@display');
-
-
-
 
 Route::any('/dd','TesterController@connection_test');
 Route::any('/member/payroll/api_login','Api\PayrollConnectController@index');

@@ -65,8 +65,8 @@
                                         <button class="btn btn-custom-white dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Action
                                         <span class="caret"></span></button>
                                         <ul class="dropdown-menu dropdown-menu-custom">
-                                            <li ><a href="/member/page/partnerview/edit/{{ $company_info->id }}" ><i class="icon-fixed-width icon-pencil"></i>&nbsp;&nbsp;&nbsp;&nbsp;Edit</a></li>
-                                            <li><a href="/member/page/partnerview/delete/{{ $company_info->id }}" ><i class="icon-fixed-width icon-trash"></i>&nbsp;&nbsp;Delete</a></li>
+                                            <li ><a href="/member/page/partnerview/edit/{{ $company_info->company_id }}" ><i class="icon-fixed-width icon-pencil"></i>&nbsp;&nbsp;&nbsp;&nbsp;Edit</a></li>
+                                            <li><a href="/member/page/partnerview/delete/{{ $company_info->company_id }}" ><i class="icon-fixed-width icon-trash"></i>&nbsp;&nbsp;Delete</a></li>
                                         </ul>
                                     </div>
                                 </td>

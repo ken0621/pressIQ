@@ -2412,11 +2412,10 @@ class Payroll2
 			{
 				$_time["is_absent"] = false;
 			}
-			
 		}
 		
 		//no time in daily
-		if($time_spent==0 && $compute_type=="daily")
+		if($time_spent == 0 && $compute_type == "daily")
 		{
 			if($_time['is_holiday'] == 'special' || $_time['is_holiday'] == 'regular' || $_time['day_type'] == 'extra_day' || $_time['day_type'] == 'rest_day')
 			{

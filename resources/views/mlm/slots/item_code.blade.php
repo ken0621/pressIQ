@@ -18,21 +18,22 @@
                     @endforeach
                 </select>
         </div>
-        <div class="form-group">
-            @if($item->UNILEVEL != 0)
-                Unilevel: {{$item->UNILEVEL}}
-            @endif
-        </div>
-        <div class="form-group">
-            @if($item->STAIRSTEP != 0)
-                Stairstep: {{$item->STAIRSTEP}}
-            @endif
-        </div>
-        <div class="form-group">
-            @if($item->REPURCHASE_POINTS != 0)
-                 Repurchase Points: {{$item->REPURCHASE_POINTS}}
-            @endif
-        </div>
+        @foreach($_plan as $plan)
+            
+                @if($plan->marketing_plan_code == "STAIRSTEP")
+                <div class="form-group">
+                    STAIRSTEP: {{$item->STAIRSTEP}}
+                </div>
+                <div class="form-group">
+                    STAIRSTEP GROUP: {{$item->STAIRSTEP_GROUP}}
+                </div>
+                @else
+                <div class="form-group">
+                    <?php $title_plan = $plan->marketing_plan_code; ?>
+                    {{$plan->marketing_plan_code}}:{{$item->$title_plan}}
+                </div>            
+                @endif
+        @endforeach
     </div>
     <div class="modal-footer">
         <div class="error-modal text-center"></div>

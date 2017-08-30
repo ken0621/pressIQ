@@ -40,7 +40,7 @@ class Customer_InvoiceController extends Member
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
-
+    /* arcy 8/17/17 */
     public function index()
     {
         Session::forget('est_item');
@@ -153,7 +153,7 @@ class Customer_InvoiceController extends Member
                 $item_info[$key]['um']                 = Request::input('invline_um')[$key];
                 $item_info[$key]['quantity']           = Request::input('invline_qty')[$key];
                 $item_info[$key]['rate']               = convertToNumber(Request::input('invline_rate')[$key]);
-                $item_info[$key]['discount']           = Request::input('invline_discount')[$key];
+                $item_info[$key]['discount']           = isset(Request::input('invline_discount')[$key]) ? Request::input('invline_discount')[$key] : 0;
                 $item_info[$key]['discount_remark']    = Request::input('invline_discount_remark')[$key];
                 $item_info[$key]['amount']             = convertToNumber(Request::input('invline_amount')[$key]);
                 $item_info[$key]['taxable']            = Request::input('invline_taxable')[$key];
@@ -430,7 +430,7 @@ class Customer_InvoiceController extends Member
                 $item_info[$key]['um']                 = Request::input('invline_um')[$key];
                 $item_info[$key]['quantity']           = Request::input('invline_qty')[$key];
                 $item_info[$key]['rate']               = convertToNumber(Request::input('invline_rate')[$key]);
-                $item_info[$key]['discount']           = Request::input('invline_discount')[$key];
+                $item_info[$key]['discount']           = isset(Request::input('invline_discount')[$key]) ? Request::input('invline_discount')[$key] : 0;
                 $item_info[$key]['discount_remark']    = Request::input('invline_discount_remark')[$key];
                 $item_info[$key]['taxable']            = Request::input('invline_taxable')[$key];
                 $item_info[$key]['amount']             = convertToNumber(Request::input('invline_amount')[$key]);
@@ -724,7 +724,7 @@ class Customer_InvoiceController extends Member
                 $data["_cmline"][$keys]->cm_qty = UnitMeasurement::um_view($total_qtys,$values->item_measurement_id,$values->cmline_um);
             }
         }
-          $pdf = view('member.customer_invoice.invoice_pdf', $data);
-          return Pdf_global::show_pdf($pdf);
+        $pdf = view('member.customer_invoice.invoice_pdf', $data);
+        return Pdf_global::show_pdf($pdf);
     }
 }

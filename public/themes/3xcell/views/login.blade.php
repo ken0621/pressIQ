@@ -58,7 +58,7 @@
 						<input class="text-field" type="password" name="pass" placeholder="Password">
 						<button style="border: 0; margin-left: 0;" type="submit" class="login-button">LOGIN</button>
 						<h2>Don't have an account yet?</h2>
-						<a href="/mlm/register"><h3>SIGN UP HERE</h3></a>
+						<a href="/mlm/register{{ Request::input("checkout") ? "?checkout"."=".Request::input("checkout") : "" }}"><h3>SIGN UP HERE</h3></a>
 					</form>
 				</div>
 			</div>

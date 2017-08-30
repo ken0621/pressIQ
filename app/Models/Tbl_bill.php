@@ -28,7 +28,7 @@ class Tbl_bill extends Model
     }
     public function scopeVendor($query)
     {
-         return $query->join('tbl_vendor', 'tbl_bill.bill_vendor_id', '=', 'tbl_vendor.vendor_id');
+         return $query->leftjoin('tbl_vendor', 'tbl_bill.bill_vendor_id', '=', 'tbl_vendor.vendor_id');
     }
     public static function scopePayBill($query, $pb_id, $bill_id)
     {

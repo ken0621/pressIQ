@@ -244,11 +244,12 @@ class MlmLoginController extends Controller
 		{
 			$data['type'] = 'error';
 			$data['message'] = 'Invalid Username/Password';
-			$count = Tbl_customer::where('mlm_username', $username)->count();
+			$count = Tbl_customer::where('mlm_username', $username)->where('shop_id', Self::$shop_id)->count();
 			if($count >= 1)
 			{
 				$enc_pass = Crypt::encrypt($password);
 				$user = Tbl_customer::where('mlm_username', $username)
+                ->where('shop_id', Self::$shop_id)
 				->first();
 				$user_pass = Crypt::decrypt($user->password);
                 // return $user->archived;

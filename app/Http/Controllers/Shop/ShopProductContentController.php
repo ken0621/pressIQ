@@ -77,7 +77,7 @@ class ShopProductContentController extends Shop
             
             if ($this->shop_theme == "3xcell") 
             {
-                $get_cat = DB::table("tbl_category")->where("type_shop", $this->shop_info->shop_id)->where("type_name", "Business Packages")->first();
+                $get_cat = DB::table("tbl_category")->where("type_shop", $this->shop_info->shop_id)->where("type_name", "Business Packages")->where("archived", 0)->first();
                 if (isset($get_cat->type_id)) 
                 {
                     $data["_package"] = Ecom_Product::getAllProductByCategory($get_cat->type_id, $this->shop_info->shop_id);

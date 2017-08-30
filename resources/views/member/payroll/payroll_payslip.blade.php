@@ -28,7 +28,7 @@
 	@foreach($_record as $brk)
 	<div class="div-payslip">
 	<table cellpadding="5" cellspacing="0" class="border padding-5" width="{{$payslip->payslip_width}}%">
-		@if($payslip->include_company_logo == 1)
+		@if($payslip->include_comany_logo == 1)
 		<tr>
 			<td colspan="2" class="{{$logo_position}} border padding-3">
 				@if($logo)

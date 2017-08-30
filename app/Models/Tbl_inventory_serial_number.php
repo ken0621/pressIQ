@@ -12,7 +12,7 @@ class Tbl_inventory_serial_number extends Model
     public function scopeItem($query)
     {
     	return $query->leftjoin("tbl_item","tbl_item.item_id","=","tbl_inventory_serial_number.item_id")
-                     ->selectRaw("*, tbl_item.item_id as serial_item_id");
+                     ->selectRaw("*,tbl_item.created_at as item_created_at, tbl_item.updated_at as item_updated_at, tbl_item.item_id as serial_item_id");
     }
     public function scopeWarehouse_inventory($query)
     {

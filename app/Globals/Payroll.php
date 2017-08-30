@@ -48,6 +48,10 @@ use App\Models\Tbl_payroll_employee_schedule;
 use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_time_keeping_approved_breakdown;
 
+use App\Models\Tbl_payroll_deduction_v2;
+use App\Models\Tbl_payroll_deduction_employee_v2;
+use App\Models\Tbl_payroll_deduction_payment_v2;
+
 use Carbon\Carbon;
 use stdClass;
 use DB;
@@ -352,6 +356,47 @@ class Payroll
 		
 		return $data;
 	}
+
+
+	public static function getbalancev2($shop_id = 0, $deduction_id = 0)
+	{
+		$data = array();
+
+		$total_amount = Tbl_payroll_deduction_v2::where('payroll_deduction_id',$deduction_id)->pluck('payroll_deduction_amount');
+
+
+		$_deduction = Tbl_payroll_deduction_employee_v2::selbyemployee($deduction_id)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->get();
+
+		$data['active'] = array();
+		$data['zero']	= array();
+		$data['cancel']	= array();
+		foreach($_deduction as $key => $deduction)
+		{
+			$payment = Tbl_payroll_deduction_payment_v2::selbyemployee($deduction_id, $deduction->payroll_employee_id)->sum('payroll_payment_amount');
+
+			$balance = $total_amount - $payment;
+			$index = 'active';
+			if($balance <= 0)
+			{
+				$index = 'zero';
+			}
+			$data[$index][$key]['deduction'] 	= $deduction;
+			$data[$index][$key]['balance'] 		= $balance;
+		}
+		
+		$_canceled = Tbl_payroll_deduction_employee_v2::selbyemployee($deduction_id,1)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->get();
+		
+		foreach($_canceled as $key => $cancel)
+		{
+			$balance = $total_amount - Tbl_payroll_deduction_payment_v2::selbyemployee($cancel->payroll_employee_id, $deduction_id)->sum('payroll_payment_amount');
+
+			$data['cancel'][$key]['deduction'] 	= $cancel;
+			$data['cancel'][$key]['balance'] 		= $balance;
+		}
+		
+		return $data;
+	}
+
 
 	/* RETURN IF INPUT IS CHECKED [FROm REST DAY AND EXTRA DAY ONLY (PAYROLL GROUPD)] */
 	public static function restday_checked($payroll_group_id = 0, $origin = 'payroll_group')
@@ -3149,6 +3194,52 @@ class Payroll
 			}
 			$data['total_deduction'] += $temp['payroll_periodal_deduction'];
 			array_push($data['deduction'], $temp);
+		}
+		// dd($data);
+		return $data;
+	}
+
+
+	public static function getdeductionv2($employee_id = 0, $date = '0000-00-00', $period = '', $payroll_period_category = '', $shop_id = 0)
+	{
+		$month[0] = date('Y-m-01', strtotime($date));
+		$month[1] = date('Y-m-t', strtotime($date));
+
+		$_deduction = Tbl_payroll_deduction_employee_v2::getdeduction($employee_id, $date, $period, $month)->get();
+
+		$payroll_record_id = Tbl_payroll_record::getperiod($shop_id, $payroll_period_category)->lists('payroll_record_id');
+
+		$data['deduction'] 			= array();
+		$data['total_deduction'] 	= 0;
+
+		foreach($_deduction as $deduction)
+		{
+			$temp['deduction_name'] 			= $deduction->payroll_deduction_name;
+			$temp['deduction_category'] 		= $deduction->payroll_deduction_category;
+			$temp['payroll_deduction_id'] 		= $deduction->payroll_deduction_id;
+			$temp['payroll_periodal_deduction'] = $deduction->payroll_periodal_deduction;
+
+			$payroll_total_payment_amount = Tbl_payroll_deduction_payment_v2::where('payroll_employee_id',$employee_id)
+			->where('deduction_name',$temp['deduction_name'])
+			->where('payroll_deduction_id', $temp['payroll_deduction_id'])
+			->select(DB::raw('IFNULL(sum(payroll_payment_amount),0) as total_payment'))
+			->orderBy('payroll_deduction_payment_id','desc')
+			->first();
+			
+			$total_payment = Tbl_payroll_deduction_payment_v2::getpayment($employee_id, $payroll_record_id, $deduction->payroll_deduction_id)->select(DB::raw('IFNULL(sum(payroll_payment_amount), 0) as total_payment'))->pluck('total_payment');
+
+			if($temp == 'Last Period')
+			{
+				$temp['payroll_periodal_deduction'] = $deduction->payroll_monthly_amortization - $total_payment;
+			}
+
+
+			if ($payroll_total_payment_amount["total_payment"] < $deduction->payroll_deduction_amount) 
+			{
+				$data['total_deduction'] += $temp['payroll_periodal_deduction'];
+				array_push($data['deduction'], $temp);
+			}
+			
 		}
 		// dd($data);
 		return $data;

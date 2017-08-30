@@ -34,13 +34,13 @@
 							<input class="input-quantity" variant-id="{{ $product['variant'][0]['evariant_id'] }}" type="number" name="quantity" min="1" step="1" value="1">
 						</div>
 						<div class="add-to-cart-button" variant-id="{{ $product['variant'][0]['evariant_id'] }}"><span><i class="fa fa-cart-plus" aria-hidden="true"></i></span>&nbsp;&nbsp;<span>ADD TO CART</span></div>
-						<div class="share-product">
+						<!-- <div class="share-product">
 							<div class="info-title">Share This Product</div>
 							<div class="share-button-container">
 								<div class="share-button"><span><i class="fa fa-facebook" aria-hidden="true"></i></span><span>&nbsp;Facebook</span></div>
 								<div class="share-button"><span><i class="fa fa-twitter" aria-hidden="true"></i></span><span>&nbsp;Twitter</span></div>
 							</div>
-						</div>
+						</div> -->
 					</div>
 				</div>
 			</div>

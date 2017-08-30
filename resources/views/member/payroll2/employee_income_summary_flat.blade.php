@@ -1,5 +1,6 @@
 <div class="modal-header employee-income-summary">
     <input type="hidden" class="period-id" value="{{ $period_info->payroll_period_company_id }}">
+    <input type="hidden" class="payroll-period-id" value="{{ $period_info->payroll_period_id }}">
     <input type="hidden" class="x-employee-id" value="{{ $employee_id }}">
     <button type="button" class="close" data-dismiss="modal">×</button>
     <h4 class="modal-title">

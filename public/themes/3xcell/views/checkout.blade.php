@@ -49,19 +49,19 @@
 							<div class="title-2">Contact Number*</div>
 							<input maxlength="11" class="textbox" type="text" name="contact_number" value="{{ $customer->customer_mobile }}">
 							<div class="title-2">Province*</div>
-							<select firstload="true" default="{{ $shipping_address->state_id }}" class="textbox load-location" name="customer_state" level="1"></select>
+							<select firstload="true" default="{{ isset($shipping_address->state_id) ? $shipping_address->state_id : null }}" class="textbox load-location" name="customer_state" level="1"></select>
 							<div class="title-2">City / Municipality*</div>
-							<select firstload="true" default="{{ $shipping_address->city_id }}" class="textbox load-location" name="customer_city" level="2">
+							<select firstload="true" default="{{ isset($shipping_address->city_id) ? $shipping_address->city_id : null }}" class="textbox load-location" name="customer_city" level="2">
 								<option></option>
 							</select>
 							<div class="title-2">Barangay*</div>
-							<select firstload="true" default="{{ $shipping_address->zipcode_id }}" class="textbox load-location" name="customer_zip" level="3">
+							<select firstload="true" default="{{ isset($shipping_address->zipcode_id) ? $shipping_address->zipcode_id : null }}" class="textbox load-location" name="customer_zip" level="3">
 								<option></option>
 							</select>
 							<!-- <div class="title-2">Email Address*</div>
 							<input class="textbox" type="text" name="{{ $customer->email }}"> -->
 							<div class="title-2">Complete Address*</div>
-							<textarea spellcheck="false" class="textbox" name="customer_street">{{ $shipping_address->customer_street }}</textarea>
+							<textarea spellcheck="false" class="textbox" name="customer_street">{{ isset($shipping_address->customer_street) ? $shipping_address->customer_street : null }}</textarea>
 							<!-- <div class="title-container">Province</div>
 							<div class="option-container"><span><input type="radio" id="r1" name="option">&nbsp;NCR</span><span><input type="radio" id="r2" name="option">&nbsp;Luzon</span><span><input type="radio" id="r3" name="option">&nbsp;Visayas</span><span><input type="radio" id="r4" name="option">&nbsp;Mindanao</span></div> -->
 							<div class="shipping-fee"><span>Note:</span><br>Shipping fee is not included in the checkout price.</div>

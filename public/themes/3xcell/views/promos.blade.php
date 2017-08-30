@@ -9,7 +9,23 @@
 			</div>
 			<div class="promo-container row clearfix">
 				<!-- PER PROMO -->
-				<a href="/promo_view">
+				@if(is_serialized(get_content($shop_theme_info, "promo", "promo_maintenance")))
+					@foreach(unserialize(get_content($shop_theme_info, "promo", "promo_maintenance")) as $key => $promo)
+					<a href="/promo_view?id={{ $key }}">
+						<div class="col-md-3">
+							<div class="per-promo-container">
+								<div class="promo-img-container">
+									<img src="{{ $promo["image"] }}">
+								</div>
+								<div class="promo-title text-overflow">{{ $promo["title"] }}</div>
+								<div class="promo-date">{{ date("F d, Y", strtotime($promo["posted"])) }}</div>
+								<div class="promo-button">Learn More</div>
+							</div>
+						</div>
+					</a>
+					@endforeach
+				@endif
+				{{-- <a href="/promo_view">
 					<div class="col-md-3">
 						<div class="per-promo-container">
 							<div class="promo-img-container">
@@ -56,7 +72,7 @@
 							<div class="promo-button">Learn More</div>
 						</div>
 					</div>
-				</a>
+				</a> --}}
 			</div>
 		</div>
 	</div>

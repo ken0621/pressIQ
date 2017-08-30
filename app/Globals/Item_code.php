@@ -471,7 +471,15 @@ class Item_code
                                 $code = $value->marketing_plan_code;
                                 if(isset($item_points->$code))
                                 {
-                                    $rel_insert[$key][$code] = $item_points->$code;
+                                    if($code == "STAIRSTEP")
+                                    {
+                                        $rel_insert[$key][$code] = $item_points->$code;
+                                        $rel_insert[$key]["STAIRSTEP_GROUP"] = $item_points->STAIRSTEP_GROUP;
+                                    }
+                                    else
+                                    {
+                                        $rel_insert[$key][$code] = $item_points->$code;
+                                    }
                                 }
                                 
                             }
@@ -646,6 +654,10 @@ class Item_code
                 $entry_data[$key]['discount'] = $value->item_membership_discount * $value->item_quantity;
                 $entry_data[$key]['entry_amount'] = $value->item_price * $value->item_quantity;
             }
+            //dd($entry_data);
+            //dd($invoice_id);
+           //dd($entry_data);
+
             Accounting::postJournalEntry($entry, $entry_data);
         }
         
@@ -900,7 +912,15 @@ class Item_code
                             $code = $value2->marketing_plan_code;
                             if(isset($item_points->$code))
                             {
-                                $rel_insert[$key][$code] = $item_points->$code;
+                                if($code == "STAIRSTEP")
+                                {
+                                    $rel_insert[$key][$code] = $item_points->$code;
+                                    $rel_insert[$key]["STAIRSTEP_GROUP"] = $item_points->STAIRSTEP_GROUP;
+                                }
+                                else
+                                {
+                                    $rel_insert[$key][$code] = $item_points->$code;
+                                }
                             }
                         }
                         $rel_insert[$key]["item_activation_code"]          = $activation_code;

@@ -19,9 +19,9 @@
 
       @foreach($_company_information as $company_information)
 
-        <div class="col-md-3" style="padding: 4px;">
+        <div class="col-md-3 col-sm-6" style="padding: 4px;">
 
-        <div class="partners-div clearfix" style="height: auto;">
+        <div class="partners-div clearfix" style="height: auto; padding-bottom: 15px;">
 
           <div class="partner-header">
             <img src="{{ $company_information->company_logo }}" width="100%">
@@ -32,13 +32,13 @@
           </div>
           
           <div id="company-address">
-            <div class="col-md-2"><i class="fa fa-map-marker" aria-hidden="true" id="element"></i></div>
-            <div class="col-md-10" ><p"> {{ $company_information ->company_address }} </p></div>
+            <div class="col-xs-2"><i class="fa fa-map-marker" aria-hidden="true" id="element"></i></div>
+            <div class="col-xs-10" ><p"> {{ $company_information ->company_address }} </p></div>
           </div>
 
           <div>
-            <div class="col-md-2"><i class="fa fa-phone" aria-hidden="true" id="element2"></i></div>
-            <div class="col-md-10"><p> {{ $company_information ->company_contactnumber }}</p></div>
+            <div class="col-xs-2"><i class="fa fa-phone" aria-hidden="true" id="element2"></i></div>
+            <div class="col-xs-10"><p> {{ $company_information ->company_contactnumber }}</p></div>
           </div>
 
         </div>

@@ -20,6 +20,8 @@ use App\Http\Controllers\Member\PayrollDeductionController;
 use App\Models\Tbl_payroll_deduction_v2;
 use App\Models\Tbl_payroll_deduction_employee_v2;
 use App\Models\Tbl_payroll_deduction_payment_v2;
+use App\Models\Tbl_payroll_company;
+use App\Models\Tbl_payroll_period;
 
 
 class PayrollReportController extends Member
@@ -97,7 +99,7 @@ class PayrollReportController extends Member
 	}
 
 
-
+	/*START LOAN SUMMARY*/
 	public function loan_summary()
 	{
 		$data["page"] = "Loan Summary";
@@ -141,6 +143,30 @@ class PayrollReportController extends Member
 			});
 		})->download('xls');
 	}
+	/*END LOAN SUMMARY*/
+
+
+	/*START PAYROLL REGISTER REPORT*/
+
+	public function payroll_register_report()
+	{
+		 // dd($this->shop_id());
+		 $data["_company"] = Tbl_payroll_company::where("shop_id", $this->shop_id())->where('payroll_parent_company_id', 0)->get();
+	    
+	     $data['_period'] = Tbl_payroll_period::sel($this->shop_id())
+	                                              ->where('payroll_parent_company_id', 0)
+	                                         
+	                                              ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
+	                                              ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
+	                                              ->orderBy('tbl_payroll_period.payroll_period_start','asc')
+	                                              ->get();
+
+	    
+		return view("member.payrollreport.payroll_register_report", $data);
+	} 
+
+	/*END PAYROLL REGISTER REPORT*/
+
 
 
 }

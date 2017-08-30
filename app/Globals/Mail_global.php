@@ -23,7 +23,7 @@ use Config;
 use File;
 class Mail_global
 {
-	public static function mail($data, $shop_id, $from = null, $theme = null)
+	public static function mail($data, $shop_id, $from = null)
     {
         if ($from == "contact") 
         {
@@ -75,7 +75,7 @@ class Mail_global
                 Mail::send('emails.full_body', $data, function ($m) use ($data) {
                     $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
 
-                    $m->to('lukeglennjordan2@gmail.com', $data['mail_username'])->subject($data['mail_subject']);
+                    $m->to('edwardguevarra2003@gmail.com', $data['mail_username'])->subject($data['mail_subject']);
                 });
             }
             catch (\Exception $e) 
@@ -127,6 +127,7 @@ class Mail_global
     {
         Settings::set_mail_setting($shop_id);
         $data['mail_username'] = Config::get('mail.username');
+
         try 
         {
             Mail::send('emails.payment', $data, function ($m) use ($data) 
@@ -143,6 +144,7 @@ class Mail_global
         } 
         catch (\Exception $e) 
         {
+            dd($e->getMessage());
             $result = 0;
             // Mail_gobal::fail_email($e->getMessage);
         }

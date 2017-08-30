@@ -70,27 +70,37 @@
 			<div class="bot-content row clearfix">
 				<div class="col-md-2">
 					<div class="img-container">
-						<img src="/themes/{{ $shop_theme }}/img/permit1.png">
+						<a href="/themes/{{ $shop_theme }}/img/permit1.png" data-title="" data-lightbox="company-gallery">
+							<img src="/themes/{{ $shop_theme }}/img/permit1.png">
+						</a>
 					</div>
 				</div>
 				<div class="col-md-2">
 					<div class="img-container">
-						<img src="/themes/{{ $shop_theme }}/img/permit2.png">
+						<a href="/themes/{{ $shop_theme }}/img/permit2.png" data-title="" data-lightbox="company-gallery">
+							<img src="/themes/{{ $shop_theme }}/img/permit2.png">
+						</a>
 					</div>
 				</div>
 				<div class="col-md-2">
 					<div class="img-container">
-						<img src="/themes/{{ $shop_theme }}/img/permit3.png">
+						<a href="/themes/{{ $shop_theme }}/img/permit3.png" data-title="" data-lightbox="company-gallery">
+							<img src="/themes/{{ $shop_theme }}/img/permit3.png">
+						</a>
 					</div>
 				</div>
 				<div class="col-md-2">
 					<div class="img-container">
-						<img src="/themes/{{ $shop_theme }}/img/permit4.png">
+						<a href="/themes/{{ $shop_theme }}/img/permit4.png" data-title="" data-lightbox="company-gallery">
+							<img src="/themes/{{ $shop_theme }}/img/permit4.png">
+						</a>
 					</div>
 				</div>
 				<div class="col-md-2">
 					<div class="img-container">
-						<img src="/themes/{{ $shop_theme }}/img/permit5.png">
+						<a href="/themes/{{ $shop_theme }}/img/permit5.png" data-title="" data-lightbox="company-gallery">
+							<img src="/themes/{{ $shop_theme }}/img/permit5.png">
+						</a>
 					</div>
 				</div>
 			</div>
@@ -124,6 +134,12 @@ $(document).ready(function()
             scrollTop: 0
         }, 700);
         return false;
+    });
+
+    /*LIGHTBOX*/
+    lightbox.option({
+      'disableScrolling': true,
+      'wrapAround': true
     });
 });
 </script>

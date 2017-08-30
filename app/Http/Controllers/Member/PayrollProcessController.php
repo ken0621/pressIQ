@@ -67,6 +67,7 @@ class PayrollProcessController extends Member
 
 			$new_record = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->first();
 			AuditTrail::record_logs("Process Payroll Period","Payroll Process Period id # " . $period_company_id, $period_company_id,$record,$new_record);
+			
 			return Redirect::to("/member/payroll/time_keeping");
 		}
 		else

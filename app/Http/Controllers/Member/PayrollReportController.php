@@ -22,6 +22,8 @@ use App\Models\Tbl_payroll_deduction_employee_v2;
 use App\Models\Tbl_payroll_deduction_payment_v2;
 use App\Models\Tbl_payroll_company;
 use App\Models\Tbl_payroll_period;
+use App\Models\Tbl_payroll_time_keeping_approved;
+use App\Models\Tbl_payroll_period_company;
 
 
 class PayrollReportController extends Member
@@ -75,6 +77,7 @@ class PayrollReportController extends Member
 
 		return view("member.payrollreport.government_forms_philhealth", $data);
 	}
+
 	public function government_forms_hdmf_iframe($month)
 	{ 
 		$data["page"] = "Monthly Government Forms";
@@ -161,13 +164,207 @@ class PayrollReportController extends Member
 	                                              ->orderBy('tbl_payroll_period.payroll_period_start','asc')
 	                                              ->get();
 
+	                                        
 		return view("member.payrollreport.payroll_register_report", $data);
 	}
 
 
-	public function payroll_register_report_period($id)
+	public function payroll_register_report_period($period_company_id)
 	{
-		//echo $id.'';
+		$data["company"] = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
+		$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
+		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
+		$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
+		$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
+
+
+		foreach ($data['_employee'] as $lbl => $breakdown) 
+		{
+			$unserialize_breakdown = unserialize($breakdown->cutoff_breakdown);
+
+			$data['_employee'][$lbl]->hello = 'asdsada';
+		}
+
+		$data = $this->get_total($data);
+		// dd($data['_employee']);
+		return view('member.payrollreport.payroll_register_report_period',$data);
+	}
+
+
+
+	public function get_total($data)
+	{
+		$total_basic = 0;
+		$total_gross = 0;
+		$total_net = 0;
+		$total_tax = 0;
+
+		$g_total_er = 0;
+		$g_total_ee = 0;
+		$g_total_ec = 0;
+
+		$total_sss_ee = 0;
+		$total_sss_er = 0;
+		$total_sss_ec = 0;
+		$total_philhealth_ee = 0;
+		$total_philhealth_er = 0;
+		$total_pagibig_ee = 0;
+		$total_pagibig_er = 0;
+		$total_deduction = 0;
+
+		$total_deduction_employee=0;
+
+		$_other_deduction = null;
+		$_addition = null;
+		$_deduction = null;
+
+			
+		foreach($data["_employee"] as $key => $employee)
+		{
+			
+			$deduction = 0;
+			$total_basic += $employee->net_basic_pay;
+			$total_gross += $employee->gross_pay;
+			$total_net += $employee->net_pay;
+			$total_tax += $employee->tax_ee;
+
+			$total_er = $employee->sss_er + $employee->philhealth_er +  $employee->pagibig_er;
+			$total_ee = $employee->sss_ee + $employee->philhealth_ee +  $employee->pagibig_ee;
+			$total_ec = $employee->sss_ec;
+
+			$total_sss_ee += $employee->sss_ee;
+			$total_sss_er += $employee->sss_er;
+			$total_sss_ec += $employee->sss_ec;
+			$total_philhealth_ee += $employee->philhealth_er;
+			$total_philhealth_er += $employee->philhealth_er;
+			$total_pagibig_ee += $employee->pagibig_ee;
+			$total_pagibig_er += $employee->pagibig_er;
+
+			// $total_deduction_employee += $employee["total_deduction"];
+			
+
+			$data["_employee"][$key] = $employee;
+			$data["_employee"][$key]->total_er = $total_er;
+			$data["_employee"][$key]->total_ee = $total_ee;
+			$data["_employee"][$key]->total_ec = $total_ec;
+
+			$g_total_ec += $total_ec;
+			$g_total_er += $total_er;
+			$g_total_ee += $total_ee;
+
+			$total_deduction += ($total_ee);
+
+			if(isset($employee->cutoff_breakdown))
+			{
+
+				$_duction_break_down = unserialize($employee->cutoff_breakdown)->_breakdown;
+
+					// dd($_duction_break_down);
+					foreach($_duction_break_down as $breakdown)
+					{
+						
+						if($breakdown["deduct.net_pay"] == true)
+						{
+							$total_deduction_employee += $breakdown["amount"];
+							$deduction += $breakdown["amount"];
+						}
+
+						if($breakdown["deduct.gross_pay"] == true)
+						{
+							$total_deduction_employee += $breakdown["amount"];
+							$deduction += $breakdown["amount"];
+						}
+
+						if ($breakdown["label"] == "SSS EE" || $breakdown["label"] == "PHILHEALTH EE" || $breakdown["label"] == "PAGIBIG EE" ) 
+						{
+							$total_deduction_employee += $breakdown["amount"];
+							$deduction += $breakdown["amount"];
+						}
+					}
+
+					$data["_employee"][$key]->total_deduction_employee = $deduction;
+					
+			}
+			if (isset($employee["cutoff_breakdown"]->_breakdown )) 
+			{
+				# code...
+				foreach($employee["cutoff_breakdown"]->_breakdown as $breakdown)
+				{
+					if($breakdown["deduct.net_pay"] == true)
+					{
+						if(isset($_other_deduction[$breakdown["label"]]))
+						{
+							$_other_deduction[$breakdown["label"]] += $breakdown["amount"];
+							$total_deduction += $breakdown["amount"];
+						}
+						else
+						{
+							$_other_deduction[$breakdown["label"]] = $breakdown["amount"];
+							$total_deduction += $breakdown["amount"];
+						}
+						
+					}
+				}
+
+				foreach($employee["cutoff_breakdown"]->_breakdown as $breakdown)
+				{
+					
+					if($breakdown["add.gross_pay"] == true)
+					{
+						if(isset($_addition[$breakdown["label"]]))
+						{
+							$_addition[$breakdown["label"]] += $breakdown["amount"];
+						}
+						else
+						{
+							$_addition[$breakdown["label"]] = $breakdown["amount"];
+						}
+						
+					}
+				}
+
+				foreach($employee["cutoff_breakdown"]->_breakdown as $breakdown)
+				{
+
+					if($breakdown["type"] == "deductions")
+					{
+						if(isset($_deduction[$breakdown["label"]]))
+						{
+							$_deduction[$breakdown["label"]] += $breakdown["amount"];
+						}
+						else
+						{
+							$_deduction[$breakdown["label"]] = $breakdown["amount"];
+						}
+						
+					}
+				}
+			}
+		}
+
+		$data["total_basic"] = $total_basic;
+		$data["total_gross"] = $total_gross;
+		$data["total_net"] = $total_net;
+		$data["total_er"] = $g_total_er;
+		$data["total_ee"] = $g_total_ee;
+		$data["total_ec"] = $g_total_ec;
+		$data["total_tax"] = $total_tax;
+		$data["total_grand"] = $total_net + $g_total_er + $g_total_ee + $g_total_ec + $total_tax;
+		$data["total_sss_ee"] = $total_sss_ee;
+		$data["total_sss_er"] = $total_sss_er;
+		$data["total_sss_ec"] = $total_sss_ec;
+		$data["total_philhealth_ee"] = $total_philhealth_ee;
+		$data["total_philhealth_er"] = $total_philhealth_er;
+		$data["total_pagibig_ee"] = $total_pagibig_ee;
+		$data["total_pagibig_er"] = $total_pagibig_er;
+		$data["_other_deduction"] = $_other_deduction;
+		$data["_addition"] = $_addition;
+		$data["_deduction"] = $_deduction;
+		$data["total_deduction"] = $total_deduction;
+		$data["total_deduction_of_all_employee"] = $total_deduction_employee;
+		
+		// dd($data["total_deduction_of_all_employee"]);
+		return $data;
 	}
 
 	/*END PAYROLL REGISTER REPORT*/

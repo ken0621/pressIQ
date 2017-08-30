@@ -43,6 +43,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_list/modal_import_employee/get_201_template','Member\PayrollController@get_201_template');
 	Route::any('/employee_list/modal_import_employee/import_201_template','Member\PayrollController@import_201_template');
 	/* import from excel end */
+
 	Route::any('/employee_list/modal_create_employee','Member\PayrollController@modal_create_employee');
 	Route::any('/employee_list/employee_updload_requirements','Member\PayrollController@employee_updload_requirements');
 	Route::any('/employee_list/remove_employee_requirement','Member\PayrollController@remove_employee_requirement');
@@ -65,11 +66,12 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_list/modal_employee_update','Member\PayrollController@modal_employee_update');
 	Route::any('/employee_list/reload_employee_list','Member\PayrollController@reload_employee_list');
 	Route::any('/employee_list/shift_view','Member\PayrollController@shift_view');
+
 	/* EMPLOYEE SEARCH */
 	Route::any('/employee_list/search_employee_ahead','Member\PayrollController@search_employee_ahead');
 	Route::any('/employee_list/search_employee','Member\PayrollController@search_employee');
-
 	/* EMPLOYEE END */
+	
 	Route::any('/payroll_configuration','Member\PayrollController@payroll_configuration');
 
 

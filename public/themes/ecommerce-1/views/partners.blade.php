@@ -21,7 +21,7 @@
 
         <div class="col-md-3" style="padding: 4px;">
 
-        <div class="partners-div">
+        <div class="partners-div clearfix" style="height: auto;">
 
           <div class="partner-header">
             <img src="{{ $company_information->company_logo }}" width="100%">

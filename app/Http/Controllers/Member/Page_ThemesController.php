@@ -2,14 +2,86 @@
 
 namespace App\Http\Controllers\Member;
 
-use Request;
 use Carbon\Carbon;
 use Session;
+use Redirect;
+use Request;
+use Response;
+use Input;
 use App\Models\Tbl_shop;
+use App\Models\Tbl_partners;
 use App\Globals\Utilities;
 
 class Page_ThemesController extends Member
 {
+    
+    public function view_filtering($id)
+    {
+	    dd($id);
+	    $data["_company_info"] = $_company_info = Tbl_partners::where("company_location",$id)->orderBy("company_name")->get();
+		return view('member/page/partnerview',$data);
+	}
+
+    public function delete_company_info($id)
+	{
+		Tbl_partners::where("company_id", $id)->delete();
+        Redirect::to("/member/page/partnerview")->send();
+	}
+
+    public function edit_submit($id)
+    {   
+
+    	$insert["company_logo"] = Request::input("company_logo");
+        $insert["company_name"] = Request::input("company_name");
+		$insert["company_owner"] = Request::input("company_owner_name");
+		$insert["company_contactnumber"] = Request::input("company_contact_number");
+		$insert["company_address"] = Request::input("company_address");
+		$insert["company_location"] = Request::input("company_location");
+		Tbl_partners::where("company_id", $id)->update($insert);
+        Redirect::to("/member/page/partnerview")->send();
+	}
+
+    public function partnerinsert()
+    {   
+        $insert["company_logo"] = Request::input("company_logo");
+        $insert["company_name"] = Request::input("company_name");
+		$insert["company_owner"] = Request::input("company_owner_name");
+		$insert["company_contactnumber"] = Request::input("company_contact_number");
+		$insert["company_address"] = Request::input("company_address");
+		$insert["company_location"] = Request::input("company_location");
+		Tbl_partners::insert($insert);
+        Redirect::to("/member/page/partnerview")->send();
+	}
+
+    public function partner()
+    {
+    	return view('member.page.partner');
+	}
+
+	public function partnerviewedit($id)
+    {
+	    $data["company_info"]  = Tbl_partners::where("company_id", $id)->first();
+		return view('member.page.partnerviewedit',$data);
+	}
+
+	public function partnerview()
+    {
+	    $data["_company_info"]  = Tbl_partners::get();
+	    $data['locationList'] = Tbl_partners::select('company_location')->distinct()->get();
+		return view('member/page/partnerview', $data);
+	}
+
+	public function partnerFilterByLocation()
+	{
+		// if($request->ajax())
+		// {
+			$partnerResult = Tbl_partners::where('company_location', '=', Request::input('locationVal'))->get();
+			$partnerResultView = view('member.page.partner-filter-result', compact('partnerResult'))->render();
+			return Response::json($partnerResultView);
+		// }
+	}
+
+        
     public function index()
     {
     	$access = Utilities::checkAccess('page-theme', 'access_page');
@@ -63,4 +135,9 @@ class Page_ThemesController extends Member
     	$response["status"] = "success";
     	echo json_encode($response);
     }
+
+
+
+
+
 }

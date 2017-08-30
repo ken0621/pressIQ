@@ -189,9 +189,9 @@ class PayrollReportController extends Member
 
 			$data['_employee'][$lbl]->hello = 'asdsada';
 		}
-
+		
 		$data = $this->get_total($data);
-		// dd($data['company']);
+		dd($data["_employee"]);
 		return view('member.payrollreport.payroll_register_report_period',$data);
 	}
 
@@ -227,7 +227,7 @@ class PayrollReportController extends Member
 		foreach($data["_employee"] as $key => $employee)
 		{
 			
-			$deduction = 0;
+			
 			$total_basic += $employee->net_basic_pay;
 			$total_gross += $employee->gross_pay;
 			$total_net += $employee->net_pay;
@@ -261,35 +261,182 @@ class PayrollReportController extends Member
 
 			if(isset($employee->cutoff_breakdown))
 			{
-
 				$_duction_break_down = unserialize($employee->cutoff_breakdown)->_breakdown;
 
-					// dd($_duction_break_down);
-					foreach($_duction_break_down as $breakdown)
+				$deduction 		= 0;
+				$cola 			= 0;
+				$sss_ee 		= 0;
+				$sss_er 		= 0;
+				$sss_ec 		= 0;
+				$hdmf_ee 		= 0;
+				$hdmf_er 		= 0;
+				$philhealth_ee 	= 0;
+				$philhealth_er 	= 0;
+				$witholding_tax = 0;
+				
+
+				// dd($_duction_break_down);
+				foreach($_duction_break_down as $breakdown)
+				{
+					if($breakdown["deduct.net_pay"] == true)
 					{
-						
-						if($breakdown["deduct.net_pay"] == true)
-						{
-							$total_deduction_employee += $breakdown["amount"];
-							$deduction += $breakdown["amount"];
-						}
-
-						if($breakdown["deduct.gross_pay"] == true)
-						{
-							$total_deduction_employee += $breakdown["amount"];
-							$deduction += $breakdown["amount"];
-						}
-
-						if ($breakdown["label"] == "SSS EE" || $breakdown["label"] == "PHILHEALTH EE" || $breakdown["label"] == "PAGIBIG EE" ) 
-						{
-							$total_deduction_employee += $breakdown["amount"];
-							$deduction += $breakdown["amount"];
-						}
+						$total_deduction_employee += $breakdown["amount"];
+						$deduction += $breakdown["amount"];
 					}
 
-					$data["_employee"][$key]->total_deduction_employee = $deduction;
-					
+					if($breakdown["deduct.gross_pay"] == true)
+					{
+						$total_deduction_employee += $breakdown["amount"];
+						$deduction += $breakdown["amount"];
+					}
+
+					if ($breakdown["label"] == "SSS EE" || $breakdown["label"] == "PHILHEALTH EE" || $breakdown["label"] == "PAGIBIG EE" ) 
+					{
+						$total_deduction_employee += $breakdown["amount"];
+						$deduction += $breakdown["amount"];
+					}
+					if ($breakdown["label"] == "COLA") 
+					{
+						$cola += $breakdown["amount"];
+					}
+					if($breakdown["label"] == "SSS EE")
+					{
+						$sss_ee += $breakdown["amount"];
+					}
+					if($breakdown["label"] == "SSS ER")
+					{
+						$sss_er += $breakdown["amount"];
+					}
+					if($breakdown["label"] == "SSS EC")
+					{
+						$sss_ec += $breakdown["amount"];
+					}
+					if($breakdown["label"] == "PAGIBIG EE")
+					{
+						$hdmf_ee += $breakdown["amount"];
+					}
+					if($breakdown["label"] == "PAGIBIG ER")
+					{
+						$hdmf_er += $breakdown["amount"];
+					}
+					if($breakdown["label"] == "PHILHEALTH EE")
+					{
+						$philhealth_ee += $breakdown["amount"];
+					}
+					if($breakdown["label"] == "PHILHEALTH ER")
+					{
+						$philhealth_er += $breakdown["amount"];
+					}
+					if ($breakdown["label"] == "Witholding Tax") 
+					{
+						$witholding_tax += $breakdown["amount"];
+					}
+				}
+
+				$data["_employee"][$key]->total_deduction_employee = $deduction;
+				$data["_employee"][$key]->cola = $cola;
+				$data["_employee"][$key]->sss_ee = $sss_ee;
+				$data["_employee"][$key]->sss_er = $sss_er;
+				$data["_employee"][$key]->sss_ec = $sss_ec;
+				$data["_employee"][$key]->hdmf_ee = $hdmf_ee;
+				$data["_employee"][$key]->hdmf_er = $hdmf_er;
+				$data["_employee"][$key]->philhealth_ee = $philhealth_ee;
+				$data["_employee"][$key]->philhealth_er = $philhealth_er;
+				$data["_employee"][$key]->witholding_tax = $witholding_tax;
+
 			}
+
+
+			if (isset($employee->cutoff_input)) 
+			{
+				$_cutoff_input_breakdown = unserialize($employee->cutoff_input);
+				
+				$overtime = 0;
+				$special_holiday = 0;
+				$regular_holiday = 0;
+				$leave_pay = 0;
+				$late = 0;
+				$undertime = 0;
+				$absent = 0;
+				$nightdiff = 0;
+				$restday = 0;
+
+				$ot_category = array('Rest Day OT', 'Over Time', 'Legal Holiday Rest Day OT', 'Legal OT', 'Special Holiday Rest Day OT', 'Special Holiday OT');
+				$nd_category = array('Legal Holiday Rest Day ND','Legal Holiday ND','Special Holiday Rest Day ND','Special Holiday ND','Rest Day ND','Night Differential');
+
+				foreach ($_cutoff_input_breakdown as $value) 
+				{
+					if (isset($value->compute->_breakdown_addition)) 
+					{
+						foreach ($value->compute->_breakdown_addition as $lbl => $values) 
+						{
+							if (in_array($lbl, $ot_category)) 
+							{
+								$overtime += $values['rate'];
+							}
+							if ($lbl == 'Legal Holiday' || $lbl == 'Legal Holiday Rest Day') 
+							{
+								$regular_holiday += $values['rate'];
+							}
+							if ($lbl == 'Special Holiday' || $lbl == 'Special Holiday Rest Day') 
+							{
+								$special_holiday += $values['rate'];
+							}
+							if ($lbl == 'Leave Pay') 
+							{
+								$leave_pay += $values['rate'];
+							}
+							if ($lbl == 'Rest Day') 
+							{
+								$restday += $values['rate'];
+							}
+							if (in_array($lbl, $nd_category)) 
+							{
+								$nightdiff += $values['rate'];
+							}
+						}
+					}
+		
+
+
+					if (isset($value->compute->_breakdown_deduction)) 
+					{
+						foreach ($value->compute->_breakdown_deduction as $lbl => $values) 
+						{
+							if ($value->time_output["leave_hours"] == '00:00:00') 
+							{
+								if ($lbl == 'late') 
+								{
+									$late += $values['rate'];
+								}
+								if ($lbl == 'absent') 
+								{
+									$absent += $values['rate'];
+								}
+								if ($lbl == 'undertime') 
+								{
+									$undertime += $values['rate'];
+								}
+								$deduction += $values['rate'];
+							}
+						}
+					}
+				}
+
+
+				$data["_employee"][$key]->overtime = $overtime;
+				$data["_employee"][$key]->regular_holiday = $regular_holiday;
+				$data["_employee"][$key]->special_holiday = $special_holiday;
+				$data["_employee"][$key]->leave_pay = $leave_pay;
+				$data["_employee"][$key]->absent = $absent;
+				$data["_employee"][$key]->late = $late;
+				$data["_employee"][$key]->undertime = $undertime;
+				$data["_employee"][$key]->nightdiff = $nightdiff;
+				$data["_employee"][$key]->restday = $restday;
+			}
+
+
+
 			if (isset($employee["cutoff_breakdown"]->_breakdown )) 
 			{
 				# code...

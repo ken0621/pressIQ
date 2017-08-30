@@ -41,7 +41,10 @@
 					            <th colspan="3" class="text-center" style="width: 300px">SSS Contribution</th>
 					            <th colspan="2" class="text-center" style="width: 200px">PAG-IBIG Contribution</th>
 					            <th colspan="2" class="text-center" style="width: 200px">PHILHEALTH Contribution</th>
-
+					            <th valign="center" rowspan="2" class="text-center" style="width: 100px">Witholding Tax</th>
+					            <th valign="center" rowspan="2" class="text-center" style="width: 100px">TOTAL DEDUCTION</th>
+					            <th valign="center" rowspan="2" class="text-center" style="width: 100px">GROSS PAY</th>
+								<th valign="center" rowspan="2" class="text-center" style="width: 100px">NET HOME PAY</th>
 													           
 					        </tr>
 					        
@@ -69,23 +72,12 @@
                         	</tr>
 					    </thead>
 					    <tbody>
-
-					    <tr>
-					    	<td>KImbriel oraya</td>
-					    	<td></td>
-					    	<td></td>
-					    	<td></td>
-					    	<td></td>
-					    	<td></td>
-					    	<td></td>
-					    	<td></td>
-					    	<td></td>
-					    	<td></td>
-					    	<td></td>
-					    	<td></td>
-
+					   @foreach($_employee as $lbl => $employee)
+					    <tr>	
+					    	<td>{{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_last_name }}</td>
+					    	<td>{{ $employee->net_basic_pay }}</td>
 					    </tr>
-					     
+					   @endforeach					     
 				      
 					       
 					    </tbody>

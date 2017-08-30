@@ -1962,7 +1962,8 @@ class Payroll2
 	     *    => $regular_hours (time 00:00:00)
 	     *    => $rest_day_hours (time 00:00:00)
 	     *    => $regular_holiday_hours (time 00:00:00)
-	     *    => $special_holiday_hours (time 00:00:00)
+	     *    => $special_holiday_hours (t
+	     ime 00:00:00)
 	     *    => $leave_hours (time 00:00:00)
 	     *    => $total_hours (time 00:00:00)
 	     *    => $night_differential (time 00:00:00)

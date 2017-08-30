@@ -33,7 +33,7 @@
           
           <div id="company-address">
             <div class="col-md-2"><i class="fa fa-map-marker" aria-hidden="true" id="element"></i></div>
-            <div class="col-md-10" ><p"> {{ $company_information ->company_address }} asdasdasdasdsadasdas</p></div>
+            <div class="col-md-10" ><p"> {{ $company_information ->company_address }} </p></div>
           </div>
 
           <div>
@@ -86,7 +86,7 @@
 
   .partners-div
   {
-    height:420px;
+    height:370px;
     background:#FFFFFF;
     margin-top: 2px;
   }

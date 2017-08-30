@@ -116,5 +116,12 @@
     padding: 50px 0px 0px 15px;
   }
 
+  @media screen and (max-width: 991px)
+  {
+    #company-address
+    {
+      min-height: auto;
+    }
+  }
 </style>
 @endsection

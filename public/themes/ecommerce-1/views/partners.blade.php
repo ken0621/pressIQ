@@ -28,7 +28,7 @@
           </div>
 
           <div class="partner-body">
-            <div style="text-align: center; padding: 30px 0px 30px 0px;">{{ $company_information->company_name }}
+            <div style="text-align: center; padding: 30px 0px 30px 0px; font-weight: 700;">{{ $company_information->company_name }}
           </div>
           
           <div id="company-address">

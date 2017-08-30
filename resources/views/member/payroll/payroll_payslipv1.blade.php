@@ -15,7 +15,7 @@
         <link rel="stylesheet" href="/assets/initializr/css/bootstrap.min.css">
         <link rel="stylesheet" href="/assets/initializr/css/bootstrap-theme.min.css">
         <!--<link rel="stylesheet" href="/assets/initializr/css/main.css">-->
-        <link rel="stylesheet" href="/assets/front/css/global.css">
+        {{-- <link rel="stylesheet" href="/assets/front/css/global.css"> --}}
         <style type="text/css">
           td
           {
@@ -50,9 +50,8 @@
       <div class="clearfix">
         
         
-          @foreach($new_employee as $key => $new)
+          @foreach($_employee as $key => $employee)
           <div class="col-md-6">
-            @foreach($new as $keys => $employee)
               <div class="payslip-wrapper page">
                 <div class="main-content-holder">
                   <div class="row" >
@@ -92,21 +91,27 @@
                                   </tr>
 
                                   @foreach($employee->cutoff_breakdown->_taxable_salary_breakdown as $breakdown)
-                                  <tr>
-                                      <td>{{ strtoupper($breakdown["label"]) }}</td>
-                                      <td class="text-right">{{ payroll_currency($breakdown["amount"]) }}</td>
-                                      <td></td>
-                                  </tr>
+                                    @if($breakdown["add.gross_pay"] == true && $breakdown["deduct.taxable_salary"] == true && $breakdown["add.net_pay"] == true)
+                                    @else
+                                      <tr>
+                                          <td>{{ strtoupper($breakdown["label"]) }}</td>
+                                          <td class="text-right">{{ payroll_currency($breakdown["amount"]) }}</td>
+                                          <td></td>
+                                      </tr>
+                                    @endif
                                   @endforeach
 
 
 
                                   @foreach($employee->cutoff_breakdown->_net_pay_breakdown as $breakdown)
-                                  <tr>
-                                      <td>{{ strtoupper($breakdown["label"]) }}</td>
-                                      <td class="text-right">{{ payroll_currency($breakdown["amount"]) }}</td>
-                                      <td></td>
-                                  </tr>
+                                    @if($breakdown["add.gross_pay"] == true && $breakdown["deduct.taxable_salary"] == true && $breakdown["add.net_pay"] == true)
+                                    @else
+                                      <tr>
+                                          <td>{{ strtoupper($breakdown["label"]) }}</td>
+                                          <td class="text-right">{{ payroll_currency($breakdown["amount"]) }}</td>
+                                          <td></td>
+                                      </tr>
+                                    @endif
                                   @endforeach
 
 
@@ -128,23 +133,11 @@
                   </div>
                 </div>
               </div>
-<<<<<<< HEAD
-            @endforeach
           </div>
           @endforeach
         
         
       </div>
-=======
-            </div>
-        </div>
-          @if(($key+1)%4 == 0)
-            <!-- <div class="breakNow"></div> -->
-          @endif
-        @endforeach
-
-
->>>>>>> mod_fig_front_3xcell
     </div>
 
     </body>

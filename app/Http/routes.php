@@ -294,6 +294,13 @@ Route::any('/member/pis/um_edit_submit','Member\UnitOfMeasurementController@edit
 Route::any('/member/item/um/',"Member\UnitOfMeasurementController@check");
 Route::any('/member/item/um/add_base/{id}/{item_id}',"Member\UnitOfMeasurementController@add_base");
 Route::any('/member/item/um/add_base_submit','Member\UnitOfMeasurementController@add_base_submit');
+
+
+/* PRICE LEVEL */
+Route::any('/member/item/price_level','Member\ItemPriceLevelController@index');
+Route::get('/member/item/price_level/add','Member\ItemPriceLevelController@add');
+Route::post('/member/item/price_level/add','Member\ItemPriceLevelController@add_submit');
+
 /* START AUDIT TRAIL*/
 Route::any('/member/utilities/audit','Member\AuditTrailController@index');
 Route::any('/member/utilities/audit/get_list','Member\AuditTrailController@get_list');
@@ -673,6 +680,8 @@ Route::any('/member/vendor/create_bill/update','Member\Vendor_CreateBillControll
 Route::any('/member/vendor/load_po_item','Member\Vendor_CreateBillController@load_po_item');
 Route::any('/member/vendor/po_remove/{id}','Member\Vendor_PurchaseOrderController@remove_items');
 
+Route::any('/member/vendor/print_bill','Member\Vendor_CreateBillController@print_bill');
+
 Route::any('/member/vendor/load_po_bill/{id}','Member\Vendor_CreateBillController@load_po_bill');
 
 Route::any('/member/vendor/receive_inventory/list','Member\Vendor_ReceiveInventoryController@index');
@@ -686,6 +695,7 @@ Route::any('/member/vendor/paybill/list','Member\Vendor_PayBillController@paybil
 Route::get('/member/vendor/load_pb/{id}','Member\Vendor_PayBillController@load_vendor_pb');
 Route::any('/member/vendor/paybill/add','Member\Vendor_PayBillController@add_pay_bill');
 Route::any('/member/vendor/paybill/update/{id}','Member\Vendor_PayBillController@update_pay_bill');
+Route::any('/member/vendor/print_paybill','Member\Vendor_PayBillController@print_pay_bill');
 
 Route::any('/member/vendor/write_check','Member\Vendor_CheckController@write_check');
 Route::any('/member/vendor/write_check/list','Member\Vendor_CheckController@check_list');
@@ -1085,6 +1095,7 @@ include_once('routes_config/routes_payroll.php');
 include_once('routes_config/routes_payment.php');
 include_once('routes_config/routes_reward.php');
 include_once('routes_config/routes_cashier.php');
+include_once('routes_config/routes_item.php');
 
 
 

@@ -37,11 +37,19 @@ class ProductOrderController extends Member
 {
     public function index()
     {
+
         $data["page"]               = "Customer Invoice";
+          
         $data["_customer"]          = Tbl_customer::where("tbl_customer.archived", 0)->where('shop_id',$this->user_info->shop_id)->get();
+      
         $data["_payment_method"]    = Tbl_online_pymnt_method::where('method_shop_id',$this->user_info->shop_id)->get();
+
+        //dd("1");
         $data['_product']           = Ecom_Product::getProductList($this->user_info->shop_id, 0, 1);
+           
+
         // dd($data);
+
         $data['_um']                = UnitMeasurement::load_um_multi();
         $data["action"]             = "/member/ecommerce/product_order/create_order/create_invoice";
 

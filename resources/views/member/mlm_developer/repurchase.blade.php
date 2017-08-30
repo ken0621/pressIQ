@@ -9,30 +9,89 @@
          <div class="form-group">
             <div class="col-md-12">            
                 <label>PURCHASE BY (SLOT NO.)</label>
-                <input name="sponsor" type="text" class="form-control" placeholder="RANDOM (IF EMPTY)">
+                <input name="slot_no" type="text" class="form-control" placeholder="RANDOM (IF EMPTY)">
             </div>
-        </div>
-
-        @if($unilevel == 1)
-        <div class="form-group">
-            <div class="col-md-6">            
-                <label>PERSONAL PV</label>
-                <input name="personal_pv" type="text" class="form-control" placeholder="100 (IF EMPTY)">
+         </div>
+    
+        @if(isset($unilevel))
+            @if($unilevel == 1)
+            <div class="form-group">
+                <div class="col-md-12">            
+                    <label>GROUP PV</label>
+                    <input name="UNILEVEL" type="text" class="form-control" placeholder="100 (IF EMPTY)">
+                </div>
             </div>
-            <div class="col-md-6">            
-                <label>GROUP PV</label>
-                <input name="group_pv" type="text" class="form-control" placeholder="100 (IF EMPTY)">
+            @endif
+        @endif
+        
+        @if(isset($repurchase_points))
+            @if($repurchase_points == 1)
+            <div class="form-group">
+                <div class="col-md-12">            
+                    <label>PV</label>
+                    <input name="REPURCHASE_POINTS" type="text" class="form-control" placeholder="100 (IF EMPTY)">
+                </div>
             </div>
-        </div>
+            @endif
+        @endif
+        
+        @if(isset($repurchase_cashback))
+            @if($repurchase_cashback == 1)
+            <div class="form-group">
+                <div class="col-md-12">            
+                    <label>REPURCHASE CASHBACK</label>
+                    <input name="REPURCHASE_CASHBACK" type="text" class="form-control" placeholder="100 (IF EMPTY)">
+                </div>
+            </div>
+            @endif
+        @endif
+        
+        @if(isset($unilevel_repurchase_points))
+            @if($unilevel_repurchase_points == 1)
+            <div class="form-group">
+                <div class="col-md-12">            
+                    <label>UNILEVEL REPURCHASE POINTS</label>
+                    <input name="UNILEVEL_REPURCHASE_POINTS" type="text" class="form-control" placeholder="100 (IF EMPTY)">
+                </div>
+            </div>
+            @endif
+        @endif
+        
+        @if(isset($discount_card_repurchase))
+            @if($discount_card_repurchase == 1)
+            <div class="form-group">
+                <div class="col-md-12">            
+                    <label>DISCOUNT CARD REPURCHASE</label>
+                    <input name="DISCOUNT_CARD_REPURCHASE" type="text" class="form-control" placeholder="100 (IF EMPTY)">
+                </div>
+            </div>
+            @endif
+        @endif
+        
+        @if(isset($stairstep))
+            @if($stairstep == 1)
+            <div class="form-group">
+                <div class="col-md-6">            
+                    <label>STAIRSTEP POINTS</label>
+                    <input name="STAIRSTEP" type="text" class="form-control" placeholder="100 (IF EMPTY)">
+                </div>
+                <div class="col-md-6">            
+                    <label>STAIRSTEP GROUP POINTS</label> 
+                    <input name="STAIRSTEP_GROUP" type="text" class="form-control" placeholder="100 (IF EMPTY)">
+                </div>
+            </div>
+            @endif
         @endif
 
-        @if($binary_repurchase == 1)
-        <div class="form-group">
-            <div class="col-md-12">            
-                <label>BINARY PV</label>
-                <input name="binary_pv" type="text" class="form-control" placeholder="1.00 (IF EMPTY)">
+        @if(isset($binary_repurchase))
+            @if($binary_repurchase == 1)
+            <div class="form-group">
+                <div class="col-md-12">            
+                    <label>BINARY REPURCHASE</label>
+                    <input name="BINARY_REPURCHASE" type="text" class="form-control" placeholder="100 (IF EMPTY)">
+                </div>
             </div>
-        </div>
+            @endif
         @endif
     </div>
     <div class="modal-footer">
@@ -44,7 +103,15 @@
 <script type="text/javascript">
     function repurchase_submit_done(data)
     {
-        $("#global_modal").modal("hide");
-        mlm_developer.action_load_data();
+        if(data.status == "error_message")
+        {
+            toastr.error(data.error_message);
+        }
+        else if(data.status == "success")
+        {
+            toastr.success('Done!');
+            $("#global_modal").modal("hide");
+            mlm_developer.action_load_data();
+        }
     }
 </script>

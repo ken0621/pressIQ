@@ -292,6 +292,9 @@ nav{
 				color: white;
 			}
 			.upper-mid-link-container {
+				a {
+					text-decoration: none;
+				}
 				padding-top: 10px;
 				.upper-mid-link {
 					padding: 2px 0px 2px 0px;

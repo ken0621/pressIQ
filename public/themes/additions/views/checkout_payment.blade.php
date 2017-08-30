@@ -10,7 +10,7 @@
 					<div class="holder-holder">
 						@if(count($_payment_method) != 0)
 							@foreach($_payment_method as $payment_method)
-								<div class="choose-payment-method holder" method_id="{{ $payment_method->method_id }}" description="{{ $payment_method->link_description }}">
+								<div class="choose-payment-method holder" method_id="{{ $payment_method->method_id }}" description="{{ $payment_method->link_description }}" style="border: 1px solid #dde2e4; width: 114px;">
 									<div class="match-height" style="text-transform: uppercase; font-weight: 700; line-height: 15px;">{{ $payment_method->method_name }}</div>
 									<div class="image" style="margin-top: 7.5px;">
 										<img src="{{ $payment_method->image_path ? $payment_method->image_path : '/assets/front/img/default.jpg' }}">

@@ -389,14 +389,20 @@ class Ecom_Product
 	 */
 	public static function getProductList($shop_id = null, $archived = [0], $fix = 0)
 	{
+
+
 		if(!$shop_id)
 		{
 			$shop_id = Ecom_Product::getShopId();
 		}
+
+
 		return Ecom_Product::getProductPerSub($shop_id, 0, $archived, $fix);
 	}
 	public static function getProductPerSub($shop_id, $category_id, $archived, $fix = 0)
 	{
+
+
 		if($fix == 1) 
 		{
 			$_category = Tbl_category::product()->where("type_shop", $shop_id)->where("tbl_category.archived", 0)->get()->toArray();
@@ -405,8 +411,14 @@ class Ecom_Product
 		{
 			$_category = Tbl_category::product()->where("type_shop", $shop_id)->where("type_parent_id", $category_id)->where("tbl_category.archived", 0)->get()->toArray();
 		}
+
+
+		
+
+
 		foreach($_category as $key0=>$category)
 		{
+
 			$_product = Tbl_ec_product::variant()->where("eprod_category_id", $category["type_id"])->where("tbl_ec_product.archived", $archived)->get()->toArray();
 			foreach($_product as $key1=>$product)
 			{
@@ -415,9 +427,13 @@ class Ecom_Product
 
 			$_category[$key0]["Product"]		= $_product;
 			
-			$_category[$key0]["subcategory"]	= Ecom_Product::getProductPerSub($shop_id, $category["type_id"], $archived);
+			//$_category[$key0]["subcategory"]	= Ecom_Product::getProductPerSub($shop_id, $category["type_id"], $archived);
+			$_category[$key0]["subcategory"] = 0;
+			/* TODO */
 		}
-		
+
+
+
 		return $_category;
 	}
 

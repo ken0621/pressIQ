@@ -165,7 +165,7 @@ function action_cart_remove_product(x)
         },
     })
     .done(function() {
-        $(cart_load + " " + product_container).remove();
+        $(cart_load + " " + products_container + '[vid="'+variation_id+'"]').remove();
         action_cart_total_price();
         action_enable_checkout_button();
     })

@@ -140,6 +140,7 @@ class PayrollController extends Member
      public function time_keeping_load_table($payroll_company_id)
      {
           $mode = Request::input("mode");
+
           $query = Tbl_payroll_period::sel(Self::shop_id())
                                                   ->where('payroll_parent_company_id', 0)
                                                   ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
@@ -185,6 +186,22 @@ class PayrollController extends Member
                break;
           }
           
+     }
+
+
+     public function payroll_process_module()
+     {
+          $data["_company"] = Tbl_payroll_company::where("shop_id", Self::shop_id())->where('payroll_parent_company_id', 0)->get();
+          $data['_period'] = Tbl_payroll_period::sel(Self::shop_id())
+                                                  ->where('payroll_parent_company_id', 0)
+                                                  ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
+                                                  ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
+                                                  ->orderBy('tbl_payroll_period.payroll_period_start','asc')
+                                                  ->get();
+          
+          $data['access'] = Utilities::checkAccess('payroll-timekeeping','salary_rates');
+
+          return view('member.payroll.payroll_process_module', $data);
      }
 
      /* EMPLOYEE START */
@@ -1976,6 +1993,9 @@ class PayrollController extends Member
 
           $data[3]['access_name'] = 'Holiday';
           $data[3]['link']        = '/member/payroll/holiday';
+
+          $data[31]['access_name'] = 'Holiday V2';
+          $data[31]['link']        = '/member/payroll/holiday/v2';
 
           $data[4]['access_name'] = 'Holiday Default';
           $data[4]['link']        = '/member/payroll/holiday_default';

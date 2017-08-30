@@ -136,7 +136,7 @@
 							<div class="subtotal">PHP {{ number_format($get_cart["sale_information"]["total_overall_price"], 2) }}</div>
 						</div>
 					</div>
-					<a href="{{ $customer_info_a ? '/checkout' : '/mlm/login' }}" style="text-decoration: none;"><div class="button-checkout">PROCEED TO CHECKOUT</div></a>
+					<a href="{{ $customer_info_a ? '/checkout' : '/mlm/login?checkout=1' }}" style="text-decoration: none;"><div class="button-checkout">PROCEED TO CHECKOUT</div></a>
 					<div class="shipping-fee"><span>Note:</span><br>Shipping fee is not included in the checkout price.</div>
 				</div>
 			</div>
@@ -149,7 +149,7 @@
 @endsection
 
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/MyCart.css">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/mycart.css">
 @endsection
 
 @section("js")

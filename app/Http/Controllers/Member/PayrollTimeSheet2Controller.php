@@ -131,12 +131,12 @@ class PayrollTimeSheet2Controller extends Member
 			$payroll_period_id = Request::input("payroll_period_id");
 		}
 		
-		
+		//add payment in deduction
 		PayrollDeductionController::approve_deduction_payment($period_id,$employee_id,$payroll_period_id);
 
 		$compute_cutoff = $this->compute_whole_cutoff($period_id, $employee_id);
 		$check_approved = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->first();
-		//dd($compute_cutoff);
+		
 		if($check_approved)
 		{
 			Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->delete();
@@ -157,8 +157,8 @@ class PayrollTimeSheet2Controller extends Member
 
 	public function unapprove($period_id, $employee_id)
 	{
-		$unapproved = true;
-		$compute_cutoff = $this->compute_whole_cutoff($period_id, $employee_id, $unapproved);
+		//$unapproved = true;
+		//$compute_cutoff = $this->compute_whole_cutoff($period_id, $employee_id, $unapproved);
 		$check_approved = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->first();
 		
 		if($check_approved)
@@ -178,6 +178,10 @@ class PayrollTimeSheet2Controller extends Member
 
 		/* GET CURRENT TIMESHEET FOR THE DAY */
 		$data["timesheet_db"] = $timesheet_db = $this->timesheet_info_db($employee_id, Request::input("date"));
+
+		/* UPDATE REMARKS */
+		$update_remarks["payroll_time_shee_activity"] = isset(Request::input("remarks")[0]) ? Request::input("remarks")[0] : "";
+		Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->update($update_remarks);
 		
 		/* DELETE TIME SHEET RECORD */
 		Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->where("payroll_time_sheet_origin", "Manually Encoded")->delete();
@@ -198,7 +202,6 @@ class PayrollTimeSheet2Controller extends Member
 			{
 				$time_out = Request::input("time-out")[$key];
 				$remarks = Request::input("remarks")[$key];
-				
 				if($time_in != "" || $time_out != "")
 				{
 					$insert[$key]["payroll_time_sheet_id"] = $timesheet_db->payroll_time_sheet_id;
@@ -215,7 +218,6 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			Tbl_payroll_time_sheet_record::insert($insert);
 		}
-		
 
 		/* RETURN DATA TO SERVER */
 		$data["timesheet_db"] = $timesheet_db = $this->timesheet_info_db($employee_id, Request::input("date"));
@@ -752,7 +754,7 @@ class PayrollTimeSheet2Controller extends Member
 		
 		/* EMPLOYEE SALARY */	
 		$salary = $this->get_salary($employee_id, $company_period->payroll_period_start);		
-
+	
 		/* EMPLOYEE GROUP */
 		$group = $this->db_get_current_employee_contract($employee_id, $company_period->payroll_period_start);
 		
@@ -890,17 +892,17 @@ class PayrollTimeSheet2Controller extends Member
 		else
 		{
 			$data = $this->compute_whole_cutoff($period_company_id, $employee_id);
-			$data["computation_type"] = $computation_type = $group->payroll_group_salary_computation;
+			$data["computation_type"] 	= $computation_type = $group->payroll_group_salary_computation;
 		}
-		//dd($this->compute_whole_cutoff($period_company_id, $employee_id));
-		$data["employee_salary"] = tbl_payroll_employee_salary::where("payroll_employee_id", $employee_id);
-		$data["employee_id"] = $employee_id;
-		$data["employee_info"] = $this->db_get_employee_information($employee_id); 
-		$check_approved = Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_company_id)->first();
-		$data["time_keeping_approved"] = $check_approved ? true : false;
-		$data["employee_salary"]    =  $this->get_salary($employee_id,$data["start_date"]);
-		$data['access_salary_rate'] =  Utilities::checkAccess('payroll-timekeeping','salary_rates');
-		//dd($data);
+		// dd($this->compute_whole_cutoff($period_company_id, $employee_id));
+		$data["employee_salary"] 		= tbl_payroll_employee_salary::where("payroll_employee_id", $employee_id);
+		$data["employee_id"] 			= $employee_id;
+		$data["employee_info"] 			= $this->db_get_employee_information($employee_id); 
+		$check_approved 				= Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_company_id)->first();
+		$data["time_keeping_approved"]  = $check_approved ? true : false;
+		$data["employee_salary"]   		=  $this->get_salary($employee_id,$data["start_date"]);
+		$data['access_salary_rate'] 	=  Utilities::checkAccess('payroll-timekeeping','salary_rates');
+		// dd($data);
 		switch ($computation_type)
 		{
 			case "Daily Rate":
@@ -1283,13 +1285,13 @@ class PayrollTimeSheet2Controller extends Member
 			foreach($_clean_shift as $key => $clean_shift)
 			{
 
-				$insert[$key]["payroll_time_sheet_id"] = $time_sheet_id;
-				$insert[$key]["payroll_time_sheet_in"] = $clean_shift->time_in;
-				$insert[$key]["payroll_time_sheet_out"] = $clean_shift->time_out;
-				$insert[$key]["payroll_time_shee_activity"] = "";
-				$insert[$key]["payroll_time_sheet_origin"] = "";
-				$insert[$key]["payroll_time_sheet_auto_approved"] = $clean_shift->auto_approved;
-				$insert[$key]["payroll_time_serialize"] = serialize($clean_shift);
+				$insert[$key]["payroll_time_sheet_id"] 				= $time_sheet_id;
+				$insert[$key]["payroll_time_sheet_in"] 				= $clean_shift->time_in;
+				$insert[$key]["payroll_time_sheet_out"] 			= $clean_shift->time_out;
+				$insert[$key]["payroll_time_shee_activity"] 		= "";
+				$insert[$key]["payroll_time_sheet_origin"] 			= "";
+				$insert[$key]["payroll_time_sheet_auto_approved"] 	= $clean_shift->auto_approved;
+				$insert[$key]["payroll_time_serialize"] 			= serialize($clean_shift);
 			}
 			
 			Tbl_payroll_time_sheet_record_approved::insert($insert);

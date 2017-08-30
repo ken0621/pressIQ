@@ -3,6 +3,8 @@
     position: relative;
     z-index: 2;
 }
+
+
 .pos-search-container
 {
     background-color: #fefefe;
@@ -67,11 +69,24 @@
             }
             &:hover
             {
-                background-color: #fff;
+                background-color: #f3f3f3;
                 cursor: pointer;
+            }
+            &.cursor
+            {
+                background-color: #f3f3f3;
             }
         }
     }
+}
+
+.item-cart-pos
+{
+    .item-name
+    {
+        font-weight: bold;
+        text-transform: uppercase;
+    }    
 }
 
 .full-width

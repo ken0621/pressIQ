@@ -58,7 +58,7 @@
             <input type="hidden" name="checkout" value="1">
             <button style="border: 0;" type="submit" class="button-checkout">CHECKOUT</button>
         </form>
-        <div class="view-cart"><a href="/MyCart"><span><i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;View Cart</span></a></div>
+        <div class="view-cart"><a href="/mycart"><span><i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;View Cart</span></a></div>
     </div>
 @else
     <div class="empty-cart">

@@ -18,8 +18,6 @@
             </div>
         </div>
     </div>
-
-
 </div>
 
 <div class="row cashier">
@@ -130,8 +128,11 @@
                         <div class="form-group">
                             <label class="control-label col-sm-4 text-right" for="email">Price Level</label>
                             <div class="col-sm-8">
-                                <select class="form-control input-sm">
-                                    <option>Normal Pricing</option>
+                                <select class="form-control input-sm price-level-select">
+                                    <option {{ $current_level == 0 ? "selected" : "" }} value="0">No Price Level</option>
+                                    @foreach($_price_level as $price_level)
+                                    <option {{ $current_level == $price_level->price_level_id ? "selected" : "" }} value="{{ $price_level->price_level_id }}">{{ $price_level->price_level_name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -146,13 +147,13 @@
                         <div class="form-group">
                             <label class="control-label col-sm-4 text-right" for="email">Discount</label>
                             <div class="col-sm-8">
-                                <input class="form-control input-sm" type="text" name="" placeholder="0.00">
+                                <input class="form-control input-sm cart-global-discount" type="text" placeholder="0.00" value="{{ isset($cart['info']->global_discount) ? $cart['info']->global_discount : '' }}">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-4 text-right" for="email">Delivery Fee</label>
+                            <label class="control-label col-sm-4 text-right" for="email">Shipping Fee</label>
                             <div class="col-sm-8">
-                                <input class="form-control input-sm" type="text" name="" placeholder="0.00">
+                                <input class="form-control input-sm cart-shipping-fee" type="text" placeholder="0.00">
                             </div>
                         </div>
                         <div class="form-group">

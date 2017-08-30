@@ -24,7 +24,8 @@ class Page_ThemesController extends Member
 
     public function delete_company_info($id)
 	{
-		Tbl_partners::where("company_id", $id)->delete();
+		$update['archived']="0";
+		Tbl_partners::where("company_id", $id)->update($update);
         Redirect::to("/member/page/partnerview")->send();
 	}
 
@@ -37,6 +38,7 @@ class Page_ThemesController extends Member
 		$insert["company_contactnumber"] = Request::input("company_contact_number");
 		$insert["company_address"] = Request::input("company_address");
 		$insert["company_location"] = Request::input("company_location");
+		$insert["shop_id"] = $this->user_info->shop_id;
 		Tbl_partners::where("company_id", $id)->update($insert);
         Redirect::to("/member/page/partnerview")->send();
 	}
@@ -49,6 +51,7 @@ class Page_ThemesController extends Member
 		$insert["company_contactnumber"] = Request::input("company_contact_number");
 		$insert["company_address"] = Request::input("company_address");
 		$insert["company_location"] = Request::input("company_location");
+		$insert["shop_id"] = $this->user_info->shop_id;
 		Tbl_partners::insert($insert);
         Redirect::to("/member/page/partnerview")->send();
 	}

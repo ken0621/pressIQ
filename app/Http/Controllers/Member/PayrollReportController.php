@@ -168,6 +168,11 @@ class PayrollReportController extends Member
 		return view("member.payrollreport.payroll_register_report", $data);
 	}
 
+	public function modal_create_register_report($period_company_id)
+	{
+
+	}
+
 
 	public function payroll_register_report_period($period_company_id)
 	{
@@ -186,7 +191,7 @@ class PayrollReportController extends Member
 		}
 
 		$data = $this->get_total($data);
-		// dd($data['_employee']);
+		// dd($data['company']);
 		return view('member.payrollreport.payroll_register_report_period',$data);
 	}
 

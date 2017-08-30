@@ -19,6 +19,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	/*START PAYROLL REGISTER REPORT*/
 	Route::any('/reports/payroll_register_report','Member\PayrollReportController@payroll_register_report');
+	Route::any('/reports/modal_create_register_report/{id}','Member\PayrollReportController@modal_create_register_report');
 	Route::any('/reports/payroll_register_report_period/{id}','Member\PayrollReportController@payroll_register_report_period');
 	/*END PAYROLL REGISTER REPORT*/
 

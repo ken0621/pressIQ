@@ -1185,6 +1185,30 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";
     
+    $code = "page-partner";
+    $nav[$page]['submenu'][$code]['label'] = "partner";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/partner";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>James Omosora</span>";
+
+    $code = "page-partnerview";
+    $nav[$page]['submenu'][$code]['label'] = "partnerview";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/partnerview";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>James Omosora</span>";
+
+    $code = "page-partnerviewedit";
+    $nav[$page]['submenu'][$code]['label'] = "partnerviewedit";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/partnerviewedit";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>James Omosora</span>";
+    
     /* -- MANAGE CONTENT => CONTACT INFORMATION */
     $code = "page-contact";
     $nav[$page]['submenu'][$code]['label'] = "Contact Information";

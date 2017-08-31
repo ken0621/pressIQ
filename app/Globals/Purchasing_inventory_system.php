@@ -1634,6 +1634,8 @@ class Purchasing_inventory_system
         }
         $cm_items = null;
         $cm = Tbl_manual_credit_memo::customer_cm()->where("sir_id",$sir_id)->where("cm_type",0)->where("cm_used_ref_name","returns")->get();
+
+        $cm = Tbl_manual_credit_memo::customer_cm()->where("sir_id",$sir_id)->get();
         foreach ($cm as $cm_key => $cm_value)
         {
             $cm_itemss = Tbl_credit_memo_line::where("cmline_cm_id",$cm_value->cm_id)->get();

@@ -47,7 +47,6 @@ class tablet_sync
     			$all_transaction = unserialize($tablet_data->sir_data);
 
     			$sir_id = $tablet_data->sir_id;
-    			// dd($all_transaction);
     			$all_inv = $all_transaction['invoice'];
     			$all_rp = $all_transaction['receive_payment'];
     			$all_cm = $all_transaction['credit_memo'];
@@ -275,10 +274,12 @@ class tablet_sync
 					$cm_customer_info["cm_customer_id"] = $value_cm->cm->cm_customer_id;
 		            $cm_customer_info["cm_customer_email"] = $value_cm->cm->cm_customer_email;
 		            $cm_customer_info["cm_date"] = datepicker_input($value_cm->cm->cm_date);
-		            $cm_customer_info["cm_message"] = "";
-		            $cm_customer_info["cm_memo"] = "";
+		            $cm_customer_info["cm_message"] = $value_cm->cm->cm_message;
+		            $cm_customer_info["cm_memo"] = $value_cm->cm->cm_memo;
 		            $cm_customer_info["cm_amount"] = $value_cm->cm->cm_amount;
-
+		            $cm_customer_info["cm_type"] = $value_cm->cm->cm_type;
+		            $cm_customer_info["cm_used_ref_name"] = $value_cm->cm->cm_used_ref_name;
+		            $cm_customer_info["cm_used_ref_id"] = $value_cm->cm->cm_used_ref_id;
 
 				    $_cm_items = $value_cm->cmline;
 		            foreach ($_cm_items as $keys_cmline => $cmline) 

@@ -3211,13 +3211,16 @@ class Payroll
 
 		$data['deduction'] 			= array();
 		$data['total_deduction'] 	= 0;
-
+		
 		foreach($_deduction as $deduction)
 		{
+
 			$temp['deduction_name'] 			= $deduction->payroll_deduction_name;
 			$temp['deduction_category'] 		= $deduction->payroll_deduction_category;
 			$temp['payroll_deduction_id'] 		= $deduction->payroll_deduction_id;
 			$temp['payroll_periodal_deduction'] = $deduction->payroll_periodal_deduction;
+			$temp['payroll_deduction_type']		= $deduction->payroll_deduction_type;
+
 
 			$payroll_total_payment_amount = Tbl_payroll_deduction_payment_v2::where('payroll_employee_id',$employee_id)
 			->where('deduction_name',$temp['deduction_name'])

@@ -156,8 +156,9 @@ class PayrollController extends Member
 
           $query->where("tbl_payroll_period_company.payroll_period_status", $mode);
 
-          $data["_period"] = $query->get();
 
+          $data["_period"] = $query->get();
+          dd($data["_period"]);
           switch ($mode)
           {
                case 'pending':

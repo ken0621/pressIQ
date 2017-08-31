@@ -158,13 +158,13 @@ class PayrollReportController extends Member
 	    
 	     $data['_period'] = Tbl_payroll_period::sel($this->shop_id())
 	                                              ->where('payroll_parent_company_id', 0)
-	                                              // ->where('tbl_payroll_period.payroll_period_status','!=','pending')
+	                                              ->where('tbl_payroll_period_company.payroll_period_status','!=','pending')
 	                                              ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
 	                                              ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
 	                                              ->orderBy('tbl_payroll_period.payroll_period_start','asc')
 	                                              ->get();
 
-	                                        
+	     
 		return view("member.payrollreport.payroll_register_report", $data);
 	}
 
@@ -177,21 +177,14 @@ class PayrollReportController extends Member
 	public function payroll_register_report_period($period_company_id)
 	{
 		$data["company"] = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
+		
 		$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
 		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
 		$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
 		$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
-
-
-		foreach ($data['_employee'] as $lbl => $breakdown) 
-		{
-			$unserialize_breakdown = unserialize($breakdown->cutoff_breakdown);
-
-			$data['_employee'][$lbl]->hello = 'asdsada';
-		}
 		
 		$data = $this->get_total($data);
-		dd($data["_employee"]);
+
 		return view('member.payrollreport.payroll_register_report_period',$data);
 	}
 
@@ -263,17 +256,24 @@ class PayrollReportController extends Member
 			{
 				$_duction_break_down = unserialize($employee->cutoff_breakdown)->_breakdown;
 
-				$deduction 		= 0;
-				$cola 			= 0;
-				$sss_ee 		= 0;
-				$sss_er 		= 0;
-				$sss_ec 		= 0;
-				$hdmf_ee 		= 0;
-				$hdmf_er 		= 0;
-				$philhealth_ee 	= 0;
-				$philhealth_er 	= 0;
-				$witholding_tax = 0;
-				
+				$deduction 				= 0;
+				$cola 					= 0;
+				$sss_ee 				= 0;
+				$sss_er 				= 0;
+				$sss_ec 				= 0;
+				$hdmf_ee 				= 0;
+				$hdmf_er 				= 0;
+				$philhealth_ee 			= 0;
+				$philhealth_er 			= 0;
+				$witholding_tax 		= 0;
+				$adjustment_deduction 	= 0;
+				$adjustment_allowance 	= 0;
+				$allowance 				= 0;
+				$cash_bond 				= 0;
+				$cash_advance			= 0;
+				$hdmf_loan				= 0;
+				$sss_loan				= 0;
+				$other_loans			= 0;
 
 				// dd($_duction_break_down);
 				foreach($_duction_break_down as $breakdown)
@@ -283,13 +283,11 @@ class PayrollReportController extends Member
 						$total_deduction_employee += $breakdown["amount"];
 						$deduction += $breakdown["amount"];
 					}
-
 					if($breakdown["deduct.gross_pay"] == true)
 					{
 						$total_deduction_employee += $breakdown["amount"];
 						$deduction += $breakdown["amount"];
 					}
-
 					if ($breakdown["label"] == "SSS EE" || $breakdown["label"] == "PHILHEALTH EE" || $breakdown["label"] == "PAGIBIG EE" ) 
 					{
 						$total_deduction_employee += $breakdown["amount"];
@@ -331,18 +329,65 @@ class PayrollReportController extends Member
 					{
 						$witholding_tax += $breakdown["amount"];
 					}
+					
+					if ($breakdown["type"] == "adjustment") 
+					{
+						if ($breakdown["deduct.net_pay"] == true) 
+						{
+							$adjustment_deduction += $breakdown["amount"];
+						}
+						else
+						{
+							$adjustment_allowance += $breakdown["amount"];
+						}
+					}
+					if (isset($breakdown["record_type"])) 
+					{
+						if ($breakdown["record_type"] == "allowance") 
+						{
+							$allowance = $breakdown["amount"];
+						}
+						if ($breakdown["record_type"] == "Cash Bond") 
+						{
+							$cash_bond = $breakdown["amount"];
+						}
+						if ($breakdown["record_type"] == "Cash Advance") 
+						{
+							$cash_advance = $breakdown["amount"];
+						}
+						if ($breakdown["record_type"] == "SSS Loan") 
+						{
+							$sss_loan = $breakdown["amount"];
+						}
+						if ($breakdown["record_type"] == "HDMF Loan") 
+						{
+							$hdmf_loan = $breakdown["amount"];
+						}
+						if ($breakdown["record_type"] == "Others") 
+						{
+							$other_loans = $breakdown["amount"];	
+						}
+					}
 				}
 
 				$data["_employee"][$key]->total_deduction_employee = $deduction;
-				$data["_employee"][$key]->cola = $cola;
-				$data["_employee"][$key]->sss_ee = $sss_ee;
-				$data["_employee"][$key]->sss_er = $sss_er;
-				$data["_employee"][$key]->sss_ec = $sss_ec;
-				$data["_employee"][$key]->hdmf_ee = $hdmf_ee;
-				$data["_employee"][$key]->hdmf_er = $hdmf_er;
-				$data["_employee"][$key]->philhealth_ee = $philhealth_ee;
-				$data["_employee"][$key]->philhealth_er = $philhealth_er;
-				$data["_employee"][$key]->witholding_tax = $witholding_tax;
+				$data["_employee"][$key]->cola 					= $cola;
+				$data["_employee"][$key]->sss_ee 				= $sss_ee;
+				$data["_employee"][$key]->sss_er 				= $sss_er;
+				$data["_employee"][$key]->sss_ec 				= $sss_ec;
+				$data["_employee"][$key]->hdmf_ee 				= $hdmf_ee;
+				$data["_employee"][$key]->hdmf_er 				= $hdmf_er;
+				$data["_employee"][$key]->philhealth_ee 		= $philhealth_ee;
+				$data["_employee"][$key]->philhealth_er 		= $philhealth_er;
+				$data["_employee"][$key]->witholding_tax 		= $witholding_tax;
+				$data["_employee"][$key]->adjustment_deduction 	= $adjustment_deduction;
+				$data["_employee"][$key]->adjustment_allowance 	= $adjustment_allowance;
+				$data["_employee"][$key]->allowance 			= $allowance;
+				$data["_employee"][$key]->cash_bond				= $cash_bond;
+				$data["_employee"][$key]->cash_advance			= $cash_advance;
+				$data["_employee"][$key]->sss_loan				= $sss_loan;
+				$data["_employee"][$key]->hdmf_loan				= $hdmf_loan;
+				$data["_employee"][$key]->other_loans			= $other_loans;
 
 			}
 
@@ -363,7 +408,7 @@ class PayrollReportController extends Member
 
 				$ot_category = array('Rest Day OT', 'Over Time', 'Legal Holiday Rest Day OT', 'Legal OT', 'Special Holiday Rest Day OT', 'Special Holiday OT');
 				$nd_category = array('Legal Holiday Rest Day ND','Legal Holiday ND','Special Holiday Rest Day ND','Special Holiday ND','Rest Day ND','Night Differential');
-
+				// $rd_category = array('Rest Day','Legal Holiday Rest Day','Special Holiday Rest Day');
 				foreach ($_cutoff_input_breakdown as $value) 
 				{
 					if (isset($value->compute->_breakdown_addition)) 
@@ -396,8 +441,6 @@ class PayrollReportController extends Member
 							}
 						}
 					}
-		
-
 
 					if (isset($value->compute->_breakdown_deduction)) 
 					{
@@ -454,13 +497,11 @@ class PayrollReportController extends Member
 							$_other_deduction[$breakdown["label"]] = $breakdown["amount"];
 							$total_deduction += $breakdown["amount"];
 						}
-						
 					}
 				}
 
 				foreach($employee["cutoff_breakdown"]->_breakdown as $breakdown)
-				{
-					
+				{	
 					if($breakdown["add.gross_pay"] == true)
 					{
 						if(isset($_addition[$breakdown["label"]]))
@@ -471,7 +512,6 @@ class PayrollReportController extends Member
 						{
 							$_addition[$breakdown["label"]] = $breakdown["amount"];
 						}
-						
 					}
 				}
 
@@ -488,7 +528,6 @@ class PayrollReportController extends Member
 						{
 							$_deduction[$breakdown["label"]] = $breakdown["amount"];
 						}
-						
 					}
 				}
 			}

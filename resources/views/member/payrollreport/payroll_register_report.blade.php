@@ -45,7 +45,6 @@
 				    			<td class="text-center"><a href="/member/payroll/reports/payroll_register_report_period/{{$period->payroll_period_company_id}}">View Employee</a></td>
 				    		</tr>
 				    		@endforeach
-					       
 					    </tbody>
 					</table>
                 </div>

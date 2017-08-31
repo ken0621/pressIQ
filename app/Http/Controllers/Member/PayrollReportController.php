@@ -177,16 +177,36 @@ class PayrollReportController extends Member
 	public function payroll_register_report_period($period_company_id)
 	{
 		$data["company"] = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
-		
 		$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
 		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
 		$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
 		$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
 		
 		$data = $this->get_total($data);
-
+		// dd($data["_employee"]);
 		return view('member.payrollreport.payroll_register_report_period',$data);
 	}
+
+	public function payroll_register_report_export_excel($period_company_id)
+	{
+		// dd($period_company_id);
+
+
+		$data["company"] = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
+		$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
+		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
+		$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
+		$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
+		/*dd($data["show_period_start"]);*/
+		$data = $this->get_total($data);
+     	Excel::create($data["company"]->payroll_company_name,function($excel) use ($data)
+		{
+			$excel->sheet('clients',function($sheet) use ($data)
+			{
+				$sheet->loadView('member.payrollreport.payroll_register_report_export_excel',$data);
+			});
+		})->download('xls');
+     }
 
 
 

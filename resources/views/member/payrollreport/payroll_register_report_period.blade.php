@@ -13,9 +13,15 @@
         </div>
     </div>
 </div>
-
-
-
+@foreach($_employee as $employee_period)
+<div class="panel panel-default panel-block panel-title-block" >
+    <div class="panel-body form-horizontal">
+        <div class="form-group tab-content panel-body employee-container">
+        <a href="/member/payroll/reports/payroll_register_report_period/export_excel/{{$employee_period->payroll_period_company_id}}"><button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" style="font-size:25px;color:white"></i> &nbsp;EXPORT TO EXCEL</button></a>
+        </div>
+    </div>
+</div>
+@endforeach
 <div class="panel panel-default panel-block panel-title-block" style="overflow-x: scroll; ">
     <div class="panel-body form-horizontal">
         <div class="form-group tab-content panel-body employee-container">

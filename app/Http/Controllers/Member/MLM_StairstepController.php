@@ -350,4 +350,16 @@ class MLM_StairstepController extends Member
 
 		return $returned_slot;
     }
+
+    public function stairstep_view()
+    {
+    	return view("member.mlm_stairstep.stairstep_distribution");
+
+    }
+
+    public function rank_stairstep_view()
+    {
+    	return view("member.mlm_stairstep.rank_update_stairstep");
+
+    }
 }

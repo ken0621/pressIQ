@@ -1,4 +1,8 @@
 <?php
+
+Route::any('/mlm/stairstep/distribution', 'Member\MLM_StairstepController@stairstep_view'); 
+Route::any('/mlm/stairstep/rank', 'Member\MLM_StairstepController@rank_stairstep_view'); 
+
 Route::get('/mlm/membership_active_code/{pin}', 'Mlm\MlmLoginController@membership_active_code'); 
 Route::post('/mlm/membership_active_code/active/code', 'Mlm\MlmLoginController@membership_active_code_post'); 
 Route::get('/mlm/login', 'Mlm\MlmLoginController@index'); 

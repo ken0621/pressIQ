@@ -34,22 +34,18 @@
 					        </tr>
 					    </thead>
 					    <tbody>
-					        @if(count($_period) > 0)
-					        	@foreach($_period as $period)
-					    		<tr>
-					    			<td class="text-center">{{ date('M d, Y',strtotime($period->payroll_period_start)).' - '.date('M d, Y',strtotime($period->payroll_period_end)) }}</td>
-					    			<td class="text-center">{{ $period->payroll_company_name }}</td>
-					    			<td class="text-center">{{ $period->payroll_period_category }}</td>
-					    			<td class="text-center">{{ $period->month_contribution }} {{ $period->year_contribution }}</td>
-					    			<td class="text-center">{{ code_to_word($period->period_count) }}</td>
-					    			<td class="text-center"><a href="/member/payroll/company_timesheet2/{{$period->payroll_period_company_id}}">View Employee</a></td>
-					    		</tr>
-					    		@endforeach
-					        @else
-					            <tr>
-					                <td colspan="8" style="padding: 80px; text-align: center;"><button onclick="action_load_link_to_modal('/member/payroll/payroll_period_list/modal_create_payroll_period')" class="btn btn-primary">Click HERE to Create your first Payroll Period</button></td>
-					            </tr>
-					        @endif
+					     
+				        	@foreach($_period as $period)
+				    		<tr>
+				    			<td class="text-center">{{ date('M d, Y',strtotime($period->payroll_period_start)).' - '.date('M d, Y',strtotime($period->payroll_period_end)) }}</td>
+				    			<td class="text-center">{{ $period->payroll_company_name }}</td>
+				    			<td class="text-center">{{ $period->payroll_period_category }}</td>
+				    			<td class="text-center">{{ $period->month_contribution }} {{ $period->year_contribution }}</td>
+				    			<td class="text-center">{{ code_to_word($period->period_count) }}</td>
+				    			<td class="text-center"><a href="/member/payroll/reports/payroll_register_report_period/{{$period->payroll_period_company_id}}">View Employee</a></td>
+				    		</tr>
+				    		@endforeach
+					       
 					    </tbody>
 					</table>
                 </div>

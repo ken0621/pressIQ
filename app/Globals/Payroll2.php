@@ -1962,7 +1962,8 @@ class Payroll2
 	     *    => $regular_hours (time 00:00:00)
 	     *    => $rest_day_hours (time 00:00:00)
 	     *    => $regular_holiday_hours (time 00:00:00)
-	     *    => $special_holiday_hours (time 00:00:00)
+	     *    => $special_holiday_hours (t
+	     ime 00:00:00)
 	     *    => $leave_hours (time 00:00:00)
 	     *    => $total_hours (time 00:00:00)
 	     *    => $night_differential (time 00:00:00)
@@ -4239,6 +4240,7 @@ class Payroll2
 			{
 				$val["label"] = $allowance_name;
 				$val["type"] = "additions";
+				$val["record_type"] = "allowance";
 				$val["amount"] = $allowance_amount;
 
 				if($allowance->payroll_allowance_category == "Taxable")
@@ -4488,6 +4490,7 @@ class Payroll2
 			{
 				foreach($deduction["deduction"] as $breakdown)
 				{
+
 					$val["label"] = $breakdown["deduction_name"];
 					$val["type"] = "deductions";
 					$val["amount"] = $breakdown["payroll_periodal_deduction"];
@@ -4514,6 +4517,7 @@ class Payroll2
 				{
 					$val["label"] = $breakdown["deduction_name"];
 					$val["type"] = "deductions";
+					$val["record_type"] = $breakdown['payroll_deduction_type'];
 					$val["amount"] = $breakdown["payroll_periodal_deduction"];
 					$val["add.gross_pay"] = false;
 					$val["deduct.gross_pay"] = false;

@@ -90,7 +90,7 @@
 	    		<div class="holder"><div class="linya"></div></div>
 	    		{{-- <div class="holder"><a href="/about">About Us</a></div>
 	    		<div class="holder"><div class="linya"></div></div> --}}
-                <div class="holder"><a href="/partners">Our Partners</a></div>
+                <div class="holder"><a href="/partners">Our Partner Merchant</a></div>
                 <div class="holder"><div class="linya"></div></div>
 	    		<div class="holder"><a href="/contact">Contact Us</a></div>
                 <div class="holder"><div class="linya"></div></div>

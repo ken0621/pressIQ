@@ -342,22 +342,22 @@
 																		</div>
 																		<div>
 																			<div class="input-value" style="margin-left: 15px; margin-bottom: -1px;">
-																				<div class="text" style="width: 150px;">Luke Glenn Jordan</div>
+																				<div class="text" style="width: 150px;">Test Name</div>
 																			</div>
 																		</div>
 																		<div>
 																			<div class="input-value" style="margin: 0; margin-left: 15px; margin-bottom: -1px;">
-																				<div class="text" style="width: 150px;">Luke Glenn Jordan</div>
+																				<div class="text" style="width: 150px;">Test Name</div>
 																			</div>
 																		</div>
 																		<div>
 																			<div class="input-value" style="margin: 0; margin-left: 15px; margin-bottom: -1px;">
-																				<div class="text" style="width: 150px;">Luke Glenn Jordan</div>
+																				<div class="text" style="width: 150px;">Test Name</div>
 																			</div>
 																		</div>
 																		<div>
 																			<div class="input-value" style="margin: 0; margin-left: 15px;">
-																				<div class="text" style="width: 150px;">Luke Glenn Jordan</div>
+																				<div class="text" style="width: 150px;">Test Name</div>
 																			</div>
 																		</div>
 																	</div>
@@ -702,6 +702,138 @@
 															</td>
 															<td style="border: 0;">
 																<div class="number">21</div>
+																<div class="input-value" style="margin-left: 5px;">
+																	<div class="text" style="width: 150px;"></div>
+																</div>
+															</td>
+														</tr>
+														<tr>
+															<td style="border: 0;">
+																<div class="number">22</div>
+																<div class="label" style="text-align: left;">Less: Total Non-Taxable/</br>Exempt (Item 41)</div>
+															</td>
+															<td style="border: 0;">
+																<div class="number">22</div>
+																<div class="input-value" style="margin-left: 5px;">
+																	<div class="text" style="width: 150px;"></div>
+																</div>
+															</td>
+														</tr>
+														<tr>
+															<td style="border: 0;">
+																<div class="number">23</div>
+																<div class="label" style="text-align: left;">Taxable Compensation Income</br>from Present Employer (Item 55)</div>
+															</td>
+															<td style="border: 0;">
+																<div class="number">23</div>
+																<div class="input-value" style="margin-left: 5px;">
+																	<div class="text" style="width: 150px;"></div>
+																</div>
+															</td>
+														</tr>
+														<tr>
+															<td style="border: 0;">
+																<div class="number">24</div>
+																<div class="label" style="text-align: left;">Add: Taxable Compensation Fees</br>Income from Previous Employer</div>
+															</td>
+															<td style="border: 0;">
+																<div class="number">24</div>
+																<div class="input-value" style="margin-left: 5px;">
+																	<div class="text" style="width: 150px;"></div>
+																</div>
+															</td>
+														</tr>
+														<tr>
+															<td style="border: 0;">
+																<div class="number">25</div>
+																<div class="label" style="text-align: left;">Gross Taxable</br>Compensation Income</div>
+															</td>
+															<td style="border: 0;">
+																<div class="number">25</div>
+																<div class="input-value" style="margin-left: 5px;">
+																	<div class="text" style="width: 150px;"></div>
+																</div>
+															</td>
+														</tr>
+														<tr>
+															<td style="border: 0;">
+																<div class="number">26</div>
+																<div class="label" style="text-align: left;">Less: Total Exemptions</div>
+															</td>
+															<td style="border: 0;">
+																<div class="number">26</div>
+																<div class="input-value" style="margin-left: 5px;">
+																	<div class="text" style="width: 150px;"></div>
+																</div>
+															</td>
+														</tr>
+														<tr>
+															<td style="border: 0;">
+																<div class="number">27</div>
+																<div class="label" style="text-align: left;">Less: Premium Paid on Health</br>and/or Hospital Insurance (If applicable)</div>
+															</td>
+															<td style="border: 0;">
+																<div class="number">27</div>
+																<div class="input-value" style="margin-left: 5px;">
+																	<div class="text" style="width: 150px;"></div>
+																</div>
+															</td>
+														</tr>
+														<tr>
+															<td style="border: 0;">
+																<div class="number">28</div>
+																<div class="label" style="text-align: left;">Next Taxable</br>Compensation Income</div>
+															</td>
+															<td style="border: 0;">
+																<div class="number">28</div>
+																<div class="input-value" style="margin-left: 5px;">
+																	<div class="text" style="width: 150px;"></div>
+																</div>
+															</td>
+														</tr>
+														<tr>
+															<td style="border: 0;">
+																<div class="number">29</div>
+																<div class="label" style="text-align: left;">Tax Due</div>
+															</td>
+															<td style="border: 0;">
+																<div class="number">29</div>
+																<div class="input-value" style="margin-left: 5px;">
+																	<div class="text" style="width: 150px;"></div>
+																</div>
+															</td>
+														</tr>
+														<tr>
+															<td style="border: 0;">
+																<div class="number">30</div>
+																<div class="label" style="text-align: left;">Amount of Taxes Withheld</br><strong>30A</strong> Present Employer</div>
+															</td>
+															<td style="border: 0;">
+																<div class="number">30A</div>
+																<div class="input-value" style="margin-left: 5px;">
+																	<div class="text" style="width: 150px;"></div>
+																</div>
+															</td>
+														</tr>
+														<tr>
+															<td style="border: 0;">
+																<div class="number">30</div>
+																<div class="label" style="text-align: left;"><strong>30B</strong> Previous Employer</div>
+															</td>
+															<td style="border: 0;">
+																<div class="number">30B</div>
+																<div class="input-value" style="margin-left: 5px;">
+																	<div class="text" style="width: 150px;"></div>
+																</div>
+															</td>
+														</tr>
+														<tr>
+															<td style="border: 0;">
+																<div class="number">31</div>
+																<div class="label" style="text-align: left;">Total Amount of Taxes Withheld</br>As adjusted</div>
+															</td>
+															<td style="border: 0;">
+																<div class="number">31</div>
 																<div class="input-value" style="margin-left: 5px;">
 																	<div class="text" style="width: 150px;"></div>
 																</div>
@@ -1068,6 +1200,47 @@
 												</td>
 											</tr>
 										</tbody>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td class="footer" colspan="2">
+									<table>
+										<tr>
+											<td colspan="2">
+												We declare, under the penalties of perjury, that this certificate has been made in good faith, verified by us, and to the best of our knowledge and belief, is true and correct</br>pursuant to the provisions of the National Internal Revenue Code, as amended, and the regulations issued under authority thereof.
+											</td>
+										</tr>
+										<tr>
+											<td style="border: 0;">
+												<div class="count">56</div>
+												<div class="signature">
+													Present Employer/ Authorized Agent Signature Over Printed Name
+												</div>
+											</td>
+											<td class="input" style="border: 0; background-color: #fff;">
+												<div class="input-container">
+													<div class="label" style="text-align: left; font-size: 10px;">Date Signed</div>
+													<div class="input-value">
+														<div class="text">0</div>
+														<div class="divide"></div>
+														<div class="text">8</div>
+														<div class="divider"></div>
+														<div class="text">2</div>
+														<div class="divide"></div>
+														<div class="text">5</div>
+														<div class="divider"></div>
+														<div class="text">0</div>
+														<div class="divide"></div>
+														<div class="text">8</div>
+														<div class="divide"></div>
+														<div class="text">0</div>
+														<div class="divide"></div>
+														<div class="text">8</div>
+													</div>
+												</div>
+											</td>
+										</tr>
 									</table>
 								</td>
 							</tr>

@@ -27,4 +27,9 @@ class PayrollGovernmentFormsController extends Member
     {
         return view("member.payroll.government_forms.ercontribution");
     }
+
+    public function getPagibig()
+    {
+        return view("member.payroll.government_forms.pagibig");
+    }
 }

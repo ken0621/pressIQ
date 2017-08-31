@@ -130,17 +130,28 @@ class Mail_global
 
         try 
         {
-            Mail::send('emails.payment', $data, function ($m) use ($data) 
+            if ($data['mail_username'] == "ca457d75dd54c1") 
             {
-                $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
-                $m->to($data['mail_to'], $data['mail_username'])->subject($data['mail_subject']);
-            });
-            Mail::send('emails.payment', $data, function ($m) use ($data) 
+                Mail::send('emails.payment', $data, function ($m) use ($data) 
+                {
+                    $m->from("3dbe60f6ea-1e5545@inbox.mailtrap.io", $_SERVER['SERVER_NAME']);
+                    $m->to("3dbe60f6ea-1e5545@inbox.mailtrap.io", $data['mail_username'])->subject($data['mail_subject']);
+                });
+            }
+            else
             {
-                $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
-                $m->to("edwardguevarra2003@gmail.com", $data['mail_username'])->subject($data['mail_subject']);
-            });
-            $result = 1;
+                Mail::send('emails.payment', $data, function ($m) use ($data) 
+                {
+                    $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
+                    $m->to($data['mail_to'], $data['mail_username'])->subject($data['mail_subject']);
+                });
+                Mail::send('emails.payment', $data, function ($m) use ($data) 
+                {
+                    $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
+                    $m->to("edwardguevarra2003@gmail.com", $data['mail_username'])->subject($data['mail_subject']);
+                });
+                $result = 1;
+            }
         } 
         catch (\Exception $e) 
         {

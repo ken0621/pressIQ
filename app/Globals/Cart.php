@@ -799,7 +799,7 @@ class Cart
         /* SET BASIC INFORMATION */
         if (isset($customer_information["email"]) && isset($customer_information["password"])) 
         {
-            $customer_exist = DB::table("tbl_customer")->where("email", $customer_information["email"])->first();
+            $customer_exist = DB::table("tbl_customer")->where("email", $customer_information["email"])->where("shop_id", $shop_id)->first();
         }
         
         $data["tbl_customer"]['customer_id']      = isset($customer_exist->customer_id) ? $customer_exist->customer_id : Tbl_customer::max("customer_id") + 1;

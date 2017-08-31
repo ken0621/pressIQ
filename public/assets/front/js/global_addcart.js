@@ -1,12 +1,6 @@
 var global_addcart = new global_addcart();
 var jqxhr = {abort: function () {}};
 
-var product_image = ".single-product-img";
-var button_cart = ".add-to-cart-button";
-var product_container = ".content";
-var product_quantity = ".input-quantity";
-var cart_holder = '.cart-dropdown';
-
 function global_addcart()
 {
 	init();

@@ -285,8 +285,10 @@
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/match-height.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/fit-text.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/slick/slick.min.js"></script>
+    {{-- GLOBALS --}}
     <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
     <script type="text/javascript" src="/assets/front/js/globalv2.js"></script>
+    {{-- GLOBALS --}}
     <script src="/themes/{{ $shop_theme }}/js/global.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/figuesslider.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/parallax.js"></script>

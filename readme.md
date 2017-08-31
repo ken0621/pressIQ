@@ -1,30 +1,8 @@
-# DIGIMA HOUSE DOCUMENTATION #
+## Welcome to the Digimahouse Developer Documentation
 
-## How to use popup data information. ##
-You can use popup modal by simply calling a JavaScript function
+Digimahouse is a system composed of _Accounting, Point of Sale, E-Commerce, Multi-level Marketing_ and _Payroll_.
+We aim to provide a single solutions for all clients that we encounter.
 
+This system was by Digima Web Solutions, Inc and is currently running on a framework which is Laravel 5.1.
 
-
-```
-#!javascript
-
-action_load_link_to_modal(url, size)
-```
- **url** is the link wherein you want to call inside the popup form.
- **size** can be *sm*, *md*, *lg* which means small medium or large.
-
-
-# DIGIMA HOUSE DOCUMENTATION #
-
-## How to use popup data information. ##
-You can use popup modal by simply calling a JavaScript function
-
-
-
-```
-#!javascript
-
-action_load_link_to_modal(url, size)
-```
- **url** is the link wherein you want to call inside the popup form.
- **size** can be *sm*, *md*, *lg* which means small medium or large.
+To view more, kindly visit our Wiki Page.

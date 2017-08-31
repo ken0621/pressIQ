@@ -12,7 +12,9 @@ use App\Models\Tbl_payroll_period_company;
 use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_period;
 use App\Models\Tbl_payroll_employee_basic;
+use App\Models\Tbl_payroll_time_sheet;
 use App\Models\Tbl_payroll_time_sheet_record;
+use App\Models\Tbl_payroll_time_sheet_record_approved;
 use App\Models\Tbl_payroll_time_keeping_approved_performance;
 
 class PayrollProcessController extends Member
@@ -67,6 +69,7 @@ class PayrollProcessController extends Member
 
 			$new_record = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->first();
 			AuditTrail::record_logs("Process Payroll Period","Payroll Process Period id # " . $period_company_id, $period_company_id,$record,$new_record);
+			
 			return Redirect::to("/member/payroll/time_keeping");
 		}
 		else
@@ -336,11 +339,13 @@ class PayrollProcessController extends Member
 		$data["overtime"]		= $overtime		  = $breakdown["overtime"]["time"]; 
 		$data["undertime"]		= $undertime	  = $breakdown["undertime"]["time"]; 
 
+		// dd($input);
 		foreach($input as $key => $timesheet)
 		{
 			if($timesheet->_time != null)
 			{
 				$count_time  = count($timesheet->_time);
+				$data["_timesheet"][$ctr]["covered_date"] = date('M d, Y', strtotime($key));
 				$data["_timesheet"][$ctr]["converted_time_in"]  = date('h:i:s A', strtotime($timesheet->_time[0]->time_in));
 				$data["_timesheet"][$ctr]["converted_time_out"] = date('h:i:s A', strtotime($timesheet->_time[$count_time - 1]->time_out));
 				$data["_timesheet"][$ctr]["remarks"] 			= $timesheet->default_remarks;
@@ -352,6 +357,76 @@ class PayrollProcessController extends Member
 		$data["days_worked"]	= $days_worked;
 
 		// dd($input);
+
+		return view("member.payroll2.payroll_process_modal_view_timesheet", $data);
+	}
+	public function income_summary_timesheet_v2($period_company_id,$employee_id)
+	{		
+		//arcy
+		$data["period_company"] = $period_company = Tbl_payroll_period_company::where("payroll_period_company_id",$period_company_id)->first();
+
+		$data["employee"]   	= Tbl_payroll_employee_basic::where("payroll_employee_id",$employee_id)->first();
+
+		$period = Tbl_payroll_period::where('payroll_period_id',$data["period_company"]->payroll_period_id)->first();
+
+		
+		$data['_timesheet'] = [];
+		$data["days_worked"]	= 0;
+		$data["days_absent"]	= 0;
+		$data['total_late'] = 0;
+		$data['total_undertime'] = 0;
+		$data['total_overtime'] = 0;
+		$days_worked = 0;
+		$days_absent = 0;
+		$total_late = 0;
+		$total_undertime = 0;
+		$total_overtime = 0;
+		if($period)
+		{
+			$date_start = $period->payroll_period_start;
+			$date_end = $period->payroll_period_end;
+
+			$get_timesheet = Tbl_payroll_time_sheet::get_timesheet()->selectRaw('*, tbl_payroll_time_sheet_record.payroll_time_sheet_in as actual_in, tbl_payroll_time_sheet_record.payroll_time_sheet_out as actual_out, tbl_payroll_time_sheet_record_approved.payroll_time_sheet_in as approved_in, tbl_payroll_time_sheet_record_approved.payroll_time_sheet_out as approved_out ')->whereBetween('payroll_time_date', array($date_start, $date_end))->where('payroll_employee_id',$employee_id)->groupBy('payroll_time_date')->get();
+
+			foreach ($get_timesheet as $key => $value) 
+			{
+
+				$data['_timesheet'][$key] = [];
+				$data['_timesheet'][$key]["covered_date"] = date('M d, Y', strtotime($value->payroll_time_date));
+				if($value->payroll_time_sheet_record_id)
+				{
+					$days_worked++;
+					$data['_timesheet'][$key]["actual_in"] = date('h:i:s A', strtotime($value->actual_in));
+					$data['_timesheet'][$key]["actual_out"] = date('h:i:s A', strtotime($value->actual_out));
+					$data['_timesheet'][$key]["approved_in"] = date('h:i:s A', strtotime($value->approved_in));
+					$data['_timesheet'][$key]["approved_out"] = date('h:i:s A', strtotime($value->approved_out));
+				}
+				else
+				{		
+					$days_absent++;
+					$data['_timesheet'][$key]["actual_in"] = 'NO TIME';
+					$data['_timesheet'][$key]["actual_out"] = 'NO TIME';
+					$data['_timesheet'][$key]["approved_in"] = 'NO TIME';
+					$data['_timesheet'][$key]["approved_out"] = 'NO TIME';
+				}
+				$time_serialize = unserialize($value->payroll_time_serialize);
+				if($time_serialize)
+				{
+					$total_late += $time_serialize->late;
+					$total_undertime += $time_serialize->undertime;
+					$total_overtime += $time_serialize->overtime;
+				}
+				$data['_timesheet'][$key]["remarks"] = $value->payroll_time_shee_activity;
+				$data['_timesheet'][$key]["branch"] = $value->payroll_company_name;
+
+			}
+		}
+
+		$data["days_worked"]	= $days_worked;
+		$data["days_absent"]	= $days_absent;
+		$data['total_late'] = date('i',strtotime($total_late));
+		$data['total_undertime'] = date('i',strtotime($total_undertime));
+		$data['total_overtime'] = date('i',strtotime($total_overtime));
 
 		return view("member.payroll2.payroll_process_modal_view_timesheet", $data);
 	}

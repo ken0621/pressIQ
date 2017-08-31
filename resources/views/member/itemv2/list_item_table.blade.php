@@ -1,3 +1,5 @@
+@if(count($_item) > 0)
+
 <table class="table table-bordered table-striped table-condensed">
     <thead style="text-transform: uppercase">
         <tr>
@@ -62,3 +64,6 @@
     </tbody>
 </table>
 <div class="pull-right">{!! $_item_raw->render() !!}</div>
+@else
+<div style="padding: 100px; text-align: center;">NO DATA YET</div>
+@endif

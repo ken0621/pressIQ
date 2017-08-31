@@ -97,4 +97,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/account/register', 'Shop\ShopAccountController@account_register'); //Brain
 	Route::post('/account/register', 'Mlm\MlmRegisterController@register_ecomm'); //Brain
 
+	/* Others */
+	Route::get('/partners', 'Shop\ShopPartnersController@index');
+	Route::get('/partner-filtering-location', 'Shop\ShopPartnersController@partnerFilterByLocation');
 }

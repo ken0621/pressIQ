@@ -60,6 +60,9 @@
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-custom">
                                           <li ><a href="/member/vendor/paybill?id={{$paybill->paybill_id}}">Edit Bill Payment</a></li>
+                                          <li >
+                                            <a href="/member/vendor/print_paybill?id={{$paybill->paybill_id}}">Print Paybill</a>
+                                          </li>
                                       </ul>
                                     </div>
                                 </td>

@@ -1962,7 +1962,8 @@ class Payroll2
 	     *    => $regular_hours (time 00:00:00)
 	     *    => $rest_day_hours (time 00:00:00)
 	     *    => $regular_holiday_hours (time 00:00:00)
-	     *    => $special_holiday_hours (time 00:00:00)
+	     *    => $special_holiday_hours (t
+	     ime 00:00:00)
 	     *    => $leave_hours (time 00:00:00)
 	     *    => $total_hours (time 00:00:00)
 	     *    => $night_differential (time 00:00:00)
@@ -2353,11 +2354,12 @@ class Payroll2
 					else if ($compute_type=="monthly") 
 					{
 						$return->_breakdown_addition["Special Holiday"]["time"] = ""; 
-						$return->_breakdown_addition["Special Holiday"]["rate"] = $daily_rate * ($special_param['payroll_overtime_regular']);
+						$return->_breakdown_addition["Special Holiday"]["rate"] = $daily_rate * (($special_param['payroll_overtime_regular'])-1);
 						$return->_breakdown_addition["Special Holiday"]["hour"] = "";
 						$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday"]["rate"];
 						$breakdown_addition += $return->_breakdown_addition["Special Holiday"]["rate"];
-						$additional_rate =  ($special_param['payroll_overtime_regular']);
+						//-1 because if deducted by late,undertime it will be base in employee's hourly rate
+						$additional_rate =  (($special_param['payroll_overtime_regular'])-1);
 					}
 				}
 				//Special Holiday Over Time
@@ -2399,19 +2401,22 @@ class Payroll2
 		//compute cola
 		$cola = Payroll2::compute_income_day_pay_cola($_time , $daily_rate, $group_id , $cola , $compute_type);
 		
-		
 
 		//no time in monthly
-		if($time_spent!=0 && $compute_type=="monthly")
+		if($time_spent==0 && $compute_type=="monthly")
 		{
-			if($_time['is_holiday'] == 'special' || $_time['is_holiday'] == 'regular' || $_time['day_type'] == 'extra_day' || $_time['day_type'] == 'rest_day')
-			{
+			// if($_time['is_holiday'] == 'special' || $_time['is_holiday'] == 'regular' || $_time['day_type'] == 'extra_day' || $_time['day_type'] == 'rest_day')
+			// {
 				
+			// }
+			if($_time['is_holiday'] == 'special')
+			{
+				$_time["is_absent"] = false;
 			}
 		}
 		
 		//no time in daily
-		if($time_spent!=0 && $compute_type=="daily")
+		if($time_spent == 0 && $compute_type == "daily")
 		{
 			if($_time['is_holiday'] == 'special' || $_time['is_holiday'] == 'regular' || $_time['day_type'] == 'extra_day' || $_time['day_type'] == 'rest_day')
 			{
@@ -4235,6 +4240,7 @@ class Payroll2
 			{
 				$val["label"] = $allowance_name;
 				$val["type"] = "additions";
+				$val["record_type"] = "allowance";
 				$val["amount"] = $allowance_amount;
 
 				if($allowance->payroll_allowance_category == "Taxable")
@@ -4484,6 +4490,7 @@ class Payroll2
 			{
 				foreach($deduction["deduction"] as $breakdown)
 				{
+
 					$val["label"] = $breakdown["deduction_name"];
 					$val["type"] = "deductions";
 					$val["amount"] = $breakdown["payroll_periodal_deduction"];
@@ -4510,6 +4517,7 @@ class Payroll2
 				{
 					$val["label"] = $breakdown["deduction_name"];
 					$val["type"] = "deductions";
+					$val["record_type"] = $breakdown['payroll_deduction_type'];
 					$val["amount"] = $breakdown["payroll_periodal_deduction"];
 					$val["add.gross_pay"] = false;
 					$val["deduct.gross_pay"] = false;

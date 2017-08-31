@@ -9,11 +9,19 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/reports/government_forms_hdmf/{id}','Member\PayrollReportController@government_forms_hdmf');
 	Route::any('/reports/government_forms_hdmf_iframe/{id}','Member\PayrollReportController@government_forms_hdmf_iframe');
 	
-
+	/*START loan summary report*/
 	Route::any('/reports/loan_summary','Member\PayrollReportController@loan_summary');
 	Route::any('/reports/table_loan_summary/{deduction_type}','Member\PayrollReportController@table_loan_summary');
 	Route::any('/reports/modal_loan_summary_report/{employee_id}/{payroll_deduction_id}','Member\PayrollReportController@modal_loan_summary');
 	Route::any('/reports/export_loan_summary_report_to_excel/{employee_id}/{payroll_deduction_id}','Member\PayrollReportController@export_loan_summary_report_to_excel');
+	/*END loan summar report*/
+
+
+	/*START PAYROLL REGISTER REPORT*/
+	Route::any('/reports/payroll_register_report','Member\PayrollReportController@payroll_register_report');
+	Route::any('/reports/modal_create_register_report/{id}','Member\PayrollReportController@modal_create_register_report');
+	Route::any('/reports/payroll_register_report_period/{id}','Member\PayrollReportController@payroll_register_report_period');
+	/*END PAYROLL REGISTER REPORT*/
 
 	/* COMPANY START */
 	Route::any('/company_list','Member\PayrollController@company_list');
@@ -36,6 +44,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_list/modal_import_employee/get_201_template','Member\PayrollController@get_201_template');
 	Route::any('/employee_list/modal_import_employee/import_201_template','Member\PayrollController@import_201_template');
 	/* import from excel end */
+
 	Route::any('/employee_list/modal_create_employee','Member\PayrollController@modal_create_employee');
 	Route::any('/employee_list/employee_updload_requirements','Member\PayrollController@employee_updload_requirements');
 	Route::any('/employee_list/remove_employee_requirement','Member\PayrollController@remove_employee_requirement');
@@ -58,14 +67,16 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_list/modal_employee_update','Member\PayrollController@modal_employee_update');
 	Route::any('/employee_list/reload_employee_list','Member\PayrollController@reload_employee_list');
 	Route::any('/employee_list/shift_view','Member\PayrollController@shift_view');
+
 	/* EMPLOYEE SEARCH */
 	Route::any('/employee_list/search_employee_ahead','Member\PayrollController@search_employee_ahead');
 	Route::any('/employee_list/search_employee','Member\PayrollController@search_employee');
-
 	/* EMPLOYEE END */
+	
 	Route::any('/payroll_configuration','Member\PayrollController@payroll_configuration');
 
-	
+
+	//company_register_report/
 	/* TIMESHEET START */
 	Route::any('/employee_timesheet','Member\PayrollTimeSheetController@index');
 	Route::any('/company_timesheet/{id}','Member\PayrollTimeSheetController@company_timesheet');
@@ -463,7 +474,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/unprocess_payroll/{period_company_id}','Member\PayrollProcessController@unprocess');
 	Route::any('/process_payroll/table/{period_company_id}','Member\PayrollProcessController@index_table');
 	Route::any('/process_payroll/modal_view_summary/{period_company_id}','Member\PayrollProcessController@modal_view_summary');
-	Route::any('/process_payroll/income_summary/timesheet/{period_id}/{employee_id}','Member\PayrollProcessController@income_summary_timesheet');
+	Route::any('/process_payroll/income_summary/timesheet/{period_id}/{employee_id}','Member\PayrollProcessController@income_summary_timesheet_v2');
 	Route::any('/process_payroll/modal_approved_summary/{period_company_id}','Member\PayrollProcessController@modal_approved_summary');
 
 

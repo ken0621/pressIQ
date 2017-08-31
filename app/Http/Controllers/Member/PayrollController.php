@@ -158,7 +158,7 @@ class PayrollController extends Member
 
 
           $data["_period"] = $query->get();
-          dd($data["_period"]);
+       
           switch ($mode)
           {
                case 'pending':

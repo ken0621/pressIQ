@@ -275,7 +275,6 @@ class PayrollReportController extends Member
 				$sss_loan				= 0;
 				$other_loans			= 0;
 
-				// dd($_duction_break_down);
 				foreach($_duction_break_down as $breakdown)
 				{
 					if($breakdown["deduct.net_pay"] == true)

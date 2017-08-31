@@ -22,4 +22,9 @@ class PayrollGovernmentFormsController extends Member
     {
     	return view("member.payroll.government_forms.sss");
     }
+
+    public function getErcontribution()
+    {
+        return view("member.payroll.government_forms.ercontribution");
+    }
 }

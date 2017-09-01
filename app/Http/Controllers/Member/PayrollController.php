@@ -2010,7 +2010,7 @@ class PayrollController extends Member
 
           $data[6]['access_name']  = 'Deductions';
           $data[6]['link']         = '/member/payroll/deduction';
-
+          
           $data[61]['access_name'] = 'Deductions V2';
           $data[61]['link']        = '/member/payroll/deduction/v2';
 

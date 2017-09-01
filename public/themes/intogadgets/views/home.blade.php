@@ -87,7 +87,7 @@
            </a>
            <div class="border">
               <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
-                 <div class="img">
+                 <div class="img" style="overflow: hidden;">
                   @if($collection["product"]["eprod_detail_image"])
                       <img style="top: -10px; right: -10px;" class="detail" src="{{ $collection["product"]["eprod_detail_image"] }}">
                   @endif
@@ -119,7 +119,7 @@
            </a>
            <div class="border ">
               <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
-                 <div class="img">
+                 <div class="img" style="overflow: hidden;">
                   @if($collection["product"]["eprod_detail_image"])
                       <img style="top: -10px; right: -10px;" class="detail" src="{{ $collection["product"]["eprod_detail_image"] }}">
                   @endif
@@ -151,7 +151,7 @@
            </a>
            <div class="border">
               <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
-                 <div class="img">
+                 <div class="img" style="overflow: hidden;">
                   @if($collection["product"]["eprod_detail_image"])
                       <img style="top: -10px; right: -10px;" class="detail" src="{{ $collection["product"]["eprod_detail_image"] }}">
                   @endif

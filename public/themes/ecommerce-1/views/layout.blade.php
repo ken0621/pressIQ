@@ -140,7 +140,7 @@
     		</div>
     	</div>
         <div class="container">
-            <marquee style="color: #fff; font-size: 18px;">Empowering consumers to experience the VIP Life... Convenience. Benefits. Rewards. Unlimited Income.</marquee>
+            <marquee style="color: #fff; font-size: 18px;">Helping every Filipinos to own an affordable, reliable, tangible and profitable BUSINESS..</marquee>
         </div>
     </div>
     <!-- NAVIGATION -->

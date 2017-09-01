@@ -20,7 +20,7 @@
 					</div>
 					<!-- BILLING ADDRESS -->
 					<div class="address-container">
-						<div class="title-container">Billing Adress:</div>
+						<div class="title-container">Billing Address:</div>
 						<div class="detail-container">{{ $get_cart["tbl_customer"]["first_name"] . " " . $get_cart["tbl_customer"]["middle_name"] . " " .  $get_cart["tbl_customer"]["last_name"] }}</div>
 						<div class="detail-container">{{ $get_cart["tbl_customer_address"]["shipping"]["customer_street"] }}</div>
 						<div class="detail-container">{{ $get_cart["tbl_customer_address"]["shipping"]["customer_state"] }}, {{ $get_cart["tbl_customer_address"]["shipping"]["customer_city"] }}</div>
@@ -29,7 +29,7 @@
 					</div>
 					<!-- SHIPPING ADDRESS -->
 					<div class="address-container">
-						<div class="title-container">Shipping Adress:</div>
+						<div class="title-container">Shipping Address:</div>
 						<div class="detail-container">{{ $get_cart["tbl_customer"]["first_name"] . " " . $get_cart["tbl_customer"]["middle_name"] . " " .  $get_cart["tbl_customer"]["last_name"] }}</div>
 						<div class="detail-container">{{ $get_cart["tbl_customer_address"]["shipping"]["customer_street"] }}</div>
 						<div class="detail-container">{{ $get_cart["tbl_customer_address"]["shipping"]["customer_state"] }}, {{ $get_cart["tbl_customer_address"]["shipping"]["customer_city"] }}</div>

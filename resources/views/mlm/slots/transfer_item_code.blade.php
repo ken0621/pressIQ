@@ -14,7 +14,7 @@
                 <label>Transfer to</label>
                 <select name="customer_id" class="form-control">
                     @foreach($_customer as $customer)
-                        <option value="{{$customer->customer_id}}">{{$customer->first_name}} {{$customer->middle_name}} {{$customer->last_name}}</option>
+                        <option value="{{$customer->child_customer_id}}">{{$customer->first_name}} {{$customer->middle_name}} {{$customer->last_name}}</option>
                     @endforeach
                 </select>
         </div>

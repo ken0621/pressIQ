@@ -13,7 +13,7 @@ class ItemControllerV2 extends Member
 	{
 		$data["page"]		= "Item List - Table";
 		$data["_item_raw"]	= Item::get_all_item($this->user_info->shop_id, 5);
-		$data["_item"]		= Item::get_all_item_additional_info($data["_item_raw"]);
+		$data["_item"]		= Item::apply_additional_info_to_array($data["_item_raw"]);
 		return view("member.itemv2.list_item_table", $data);
 	}
 	public function add_item()

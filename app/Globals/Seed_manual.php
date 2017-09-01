@@ -712,7 +712,8 @@ class Seed_manual
       $insert[2]['item_type_name']  = "Service";
       $insert[3]['item_type_id']    = 4; 
       $insert[3]['item_type_name']  = "Bundle";
-
+      $insert[4]['item_type_id']    = 5; 
+      $insert[4]['item_type_name']  = "Membership";
       DB::table('tbl_item_type')->insert($insert);
     }
 

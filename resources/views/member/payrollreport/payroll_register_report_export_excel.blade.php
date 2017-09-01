@@ -2,8 +2,10 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <style type="text/css">
-table, th, td {
+
+table, td {
     border: 6px solid #333333;
     width:30px;
     height:20px;
@@ -11,6 +13,7 @@ table, th, td {
     background-color:#fff;
     vertical-align:middle;
 }
+
 table {
     border-collapse: collapse;
 }
@@ -22,22 +25,35 @@ body{
     padding:300px 50px 100px 50px;
 }
 
+#title
+{
+    border: 2px solid #E5E5E5;
+}
+
 </style>
 </head>
 <body>
 <div class="padding">
+
+
+
+
 <table >
   
   <tr>
+      <th id="title">{{$company->payroll_company_name}}</th>
+  </tr>
+  <tr>
+      <th>Payroll Register</th>
+  </tr>
+  <tr>
+      <th>{{$show_period_start}}</th>
+      <th>{{$show_period_end}}</th>
+  </tr>
+  <tr>
+      <th>-</th>
+  </tr>
 
-  <td>{{$company->payroll_company_name}}</td>
-  </tr>
-  <tr>
-  <td>Payroll Register</td>
-  </tr>
-  <tr>
-  <td>{{$show_period_start}}</td>
-  </tr>
   <tr>
     <td rowspan="2">NAME</td>
     <td rowspan="2">BASIC PAY</td>
@@ -74,7 +90,6 @@ body{
     <td ></td>
     <td ></td>
     <td ></td>
-    <td ></td>
     <td >ALLOWANCES</td>
     <td >ADJUSTMENTS ALLOWANCES</td>
     <td >SSS LOAN</td>
@@ -95,9 +110,9 @@ body{
   @foreach($_employee as $lbl => $employee)
   <tr>  
     <td  >{{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_last_name }}</td>
-    <td >{{ number_format($employee->net_basic_pay,2) }}</td>
-    <td >{{ number_format($employee->overtime,2) }}</td>
-    <td >{{ number_format($employee->nightdiff,2) }}</td>
+    <td  >{{ number_format($employee->net_basic_pay,2) }}</td>
+    <td  >{{ number_format($employee->overtime,2) }}</td>
+    <td  >{{ number_format($employee->nightdiff,2) }}</td>
     <td  >{{ number_format($employee->regular_holiday,2) }}</td>
     <td  >{{ number_format($employee->special_holiday,2) }}</td>
     <td  >{{ number_format($employee->restday,2 )}}</td>
@@ -108,7 +123,7 @@ body{
     <td  >{{ number_format($employee->absent,2) }}</td>
     <td  >{{ number_format($employee->allowance,2) }}</td>
     <td  >{{ number_format($employee->adjustment_allowance,2) }}</td>
-    <td >{{ number_format($employee->sss_loan,2) }}</td>
+    <td  >{{ number_format($employee->sss_loan,2) }}</td>
     <td  >{{ number_format($employee->hdmf_loan,2) }}</td>
     <td  >{{ number_format($employee->cash_bond,2) }}</td>
     <td  >{{ number_format($employee->cash_advance,2) }}</td>

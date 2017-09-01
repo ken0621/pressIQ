@@ -183,7 +183,7 @@ class PayrollReportController extends Member
 		$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
 		
 		$data = $this->get_total($data);
-		// dd($data["_employee"]);
+		// dd($data);
 		return view('member.payrollreport.payroll_register_report_period',$data);
 	}
 

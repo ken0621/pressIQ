@@ -1,30 +1,34 @@
 
-<table class="table table-bordered">
-  <thead>
-    <tr >
-      <th bgcolor="#262874"><font color="white">Company Logo</font></th>
-      <th bgcolor="#262874"><font color="white">Company Name</font></th>
-      <th bgcolor="#262874"><font color="white">Company Owner</font></th>
-      <th bgcolor="#262874"><font color="white">Company Contact Number</font></th>
-      <th bgcolor="#262874"><font color="white">Company Address</font></th>
-      <th bgcolor="#262874"><font color="white">Company Location</font></th>
-      <th bgcolor="#262874"><font color="white">Action</font></th>
-    </tr>
-  </thead>
-  <tbody>
- @foreach($partnerResult as $partnerResultItem)
-  <tr>
-      <td bgcolor="#EFF5F9" style="line-height: 115px; height: 115px;">
-        <img src="{{ $partnerResultItem->company_logo }}" class="img-thumbnail" alt="Logo" width="100" height="70">
+
+
+  @foreach($partnerResult as $partnerResultItem)
+
+        <div class="col-md-3" style="padding: 4px;">
+
+        <div class="partners-div">
+
+          <div class="partner-header">
+            <img src="{{ $partnerResultItem->company_logo }}" width="100%">
+          </div>
+
+          <div class="partner-body">
+            <div style="text-align: center; padding: 30px 0px 30px 0px;">{{ $partnerResultItem->company_name }}
+          </div>
+          
+          <div id="company-address">
+            <div class="col-md-2"><i class="fa fa-map-marker" aria-hidden="true" id="element"></i></div>
+            <div class="col-md-10" ><p"> {{ $partnerResultItem ->company_address }} </p></div>
+          </div>
+
+          <div>
+            <div class="col-md-2"><i class="fa fa-phone" aria-hidden="true" id="element2"></i></div>
+            <div class="col-md-10"><p> {{ $partnerResultItem ->company_contactnumber }}</p></div>
+          </div>
+
         </div>
-      </td>
-      <td bgcolor="#EFF5F9" style="text-align:center;vertical-align:middle;">{{ $partnerResultItem->company_name }}</td>
-      <td bgcolor="#EFF5F9" style="text-align:center;vertical-align:middle;">{{ $partnerResultItem->company_owner }}</td>
-      <td bgcolor="#EFF5F9" style="text-align:center;vertical-align:middle;">{{ $partnerResultItem->company_contactnumber }}</td>
-      <td bgcolor="#EFF5F9" style="text-align:center;vertical-align:middle;">{{ $partnerResultItem->company_address }}</td>
-      <td bgcolor="#EFF5F9" style="text-align:center;vertical-align:middle;">{{ $partnerResultItem->company_location }}</td>
-      <td bgcolor="#EFF5F9" style="text-align:center;vertical-align:middle;">{{ $partnerResultItem->company_name }}</td>
-  </tr>
-@endforeach
-  </tbody>
-</table>
+
+      </div>
+
+      </div>
+
+      @endforeach

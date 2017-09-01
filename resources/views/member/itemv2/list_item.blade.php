@@ -20,7 +20,7 @@
     </div>
 </div>
 
-<div class="panel panel-default panel-block panel-title-block panel-gray ">
+<div class="panel panel-default panel-block panel-title-block panel-gray">
     <ul class="nav nav-tabs">
         <li class="active change-tab pending-tab cursor-pointer" mode="pending"><a class="cursor-pointer"><i class="fa fa-check"></i> Active</a></li>
         <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="fa fa-trash"></i> Archived</a></li>
@@ -67,6 +67,7 @@
 @endsection
 
 @section('css')
+<link rel="stylesheet" type="text/css" href="/assets/member/css/item_add_v2.css">
 <style type="text/css">
     .wrapper.extended.scrollable
     {

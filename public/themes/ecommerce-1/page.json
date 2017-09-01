@@ -229,6 +229,13 @@
 			"type":"text",
 			"default":"",
 			"size":"12"
+		},
+		"marquee_message" :
+		{
+			"label":"Marquee Message",
+			"type":"text",
+			"default":"Helping every Filipinos to own an affordable, reliable, tangible and profitable BUSINESS..",
+			"size":"12"
 		}
 	}
 }

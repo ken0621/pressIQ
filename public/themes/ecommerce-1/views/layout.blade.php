@@ -88,8 +88,10 @@
                 <div class="holder"><div class="linya"></div></div>
     			<div class="holder"><a href="/checkout"><i class="fa fa-check" aria-hidden="true"></i> Checkout</a></div>
 	    		<div class="holder"><div class="linya"></div></div>
-	    		<div class="holder"><a href="/about">About Us</a></div>
-	    		<div class="holder"><div class="linya"></div></div>
+	    		{{-- <div class="holder"><a href="/about">About Us</a></div>
+	    		<div class="holder"><div class="linya"></div></div> --}}
+                <div class="holder"><a href="/partners">Our Partner Merchant</a></div>
+                <div class="holder"><div class="linya"></div></div>
 	    		<div class="holder"><a href="/contact">Contact Us</a></div>
                 <div class="holder"><div class="linya"></div></div>
                 <div class="holder"><a href="https://loadcentral.net">eLOADING BUSINESS</a></div>
@@ -138,7 +140,7 @@
     		</div>
     	</div>
         <div class="container">
-            <marquee style="color: #fff; font-size: 18px;">Empowering consumers to experience the VIP Life... Convenience. Benefits. Rewards. Unlimited Income.</marquee>
+            <marquee style="color: #fff; font-size: 18px;">{{ get_content($shop_theme_info, "info", "marquee_message") }}</marquee>
         </div>
     </div>
     <!-- NAVIGATION -->

@@ -23,12 +23,53 @@ use Session;
 use DB;
 use Carbon\carbon;
 use App\Globals\Merchant;
+use Validator;
 
 class Item
 {
     /* ITEM CRUD START */
-    public static function create($item_type, $insert)
+    public static function create($shop_id, $item_type, $insert)
     {
+        $return['item_id'] = 0;
+        $return['status'] = null;
+        $return['message'] = null; 
+
+        $rules['item_name'] = 'required';
+        $rules['item_sku'] = 'required';
+        $rules['item_price'] = 'required';
+        $rules['item_cost'] = 'required';
+
+        $validator = Validator::make($insert, $rules);
+
+        if($insert['item_cost'] > $insert['item_price'])
+        {       
+            $return['status'] = 'error';
+            $return['message'] = 'The cost is greater than the sales price.'."<br>";
+        }
+
+        if($validator->fails())
+        {
+            $return["status"] = "error";
+            foreach ($validator->messages()->all('') as $keys => $message)
+            {
+                $return["message"] .= $message."<br>";
+            }
+        }
+        if(!$return['status'])
+        {
+            $insert['shop_id'] = $shop_id;
+            $insert['item_type_id'] = $item_type;
+            $insert['item_date_created'] = Carbon::now();
+
+            $item_id = Tbl_item::insertGetId($insert);
+
+            $return['item_id']       = $item_id;
+            $return['status']        = 'success';
+            $return['message']       = 'Item successfully created.';
+            $return['call_function'] = 'success_item';
+        }
+
+        return $return;
     }
     /* ITEM CRUD END */
 

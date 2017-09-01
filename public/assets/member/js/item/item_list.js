@@ -58,4 +58,8 @@ function item_list()
 	{
 		return '<div style="padding: ' + $padding + 'px; font-size: 20px;" class="text-center"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>';
 	}
+	this.action_load_table = function()
+	{
+		action_load_table();
+	}
 }

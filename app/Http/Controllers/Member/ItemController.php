@@ -45,8 +45,7 @@ use App\Globals\Merchant;
 class ItemController extends Member
 {
 	public function index()
-	{
-		
+	{	
         $access = Utilities::checkAccess('item-list', 'access_page');
         $data['can_approve_item_request'] = Utilities::checkAccess('item-list', 'can_approve_item_request');
 		$data['can_edit_other_item'] = Utilities::checkAccess('item-list', 'can_edit_other_item');
@@ -249,13 +248,15 @@ class ItemController extends Member
         $access = Utilities::checkAccess('item-list', 'access_page');
         if($access == 1)
         {
+
+			$shop_id          = $this->user_info->shop_id;
+			$data["data"]	  = Session::get("item_temporary_data");
+
 			$data['_service']  		    = Category::getAllCategory(['services']);
 			$data['_inventory']  		= Category::getAllCategory(['inventory']);
 			$data['_noninventory']  	= Category::getAllCategory(['non-inventory']);
 			$data['_bundle']        	= Category::getAllCategory(['bundles']);
 
-			$shop_id          = $this->user_info->shop_id;
-			$data["data"]	  = Session::get("item_temporary_data");
 			
 			$data["_income"] 		= Accounting::getAllAccount('all',null,['Income','Other Income']);
 			$data["default_income"] = Tbl_chart_of_account::where("account_code", "accounting-sales")

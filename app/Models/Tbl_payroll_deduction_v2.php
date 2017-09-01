@@ -41,16 +41,28 @@ class Tbl_payroll_deduction_v2 extends Model
 	public function scopeselalldeductionbycategory($query, $shop_id = 0, $payroll_deduction_archived = 0 )
 	{
 
+		// $query
+		// ->leftjoin('tbl_payroll_deduction_payment_v2','tbl_payroll_deduction_v2.payroll_deduction_id','=','tbl_payroll_deduction_payment_v2.payroll_deduction_id')
+		// ->where('tbl_payroll_deduction_v2.shop_id', $shop_id)
+		// ->where('tbl_payroll_deduction_v2.payroll_deduction_archived',$payroll_deduction_archived)
+		// ->select(DB::raw('tbl_payroll_deduction_v2.payroll_deduction_type, 
+		// 	sum(tbl_payroll_deduction_v2.payroll_deduction_amount) as total_amount,
+		// 	IFNULL(sum(tbl_payroll_deduction_payment_v2.payroll_payment_amount),0) as total_payment,
+		// 	(IFNULL(sum(tbl_payroll_deduction_v2.payroll_deduction_amount),0) - IFNULL(sum(tbl_payroll_deduction_payment_v2.payroll_payment_amount),0)) as balance'))
+		// ->groupBy('tbl_payroll_deduction_v2.payroll_deduction_type');
+
 		$query->where('tbl_payroll_deduction_v2.shop_id', $shop_id)
 		->where('tbl_payroll_deduction_v2.payroll_deduction_archived',$payroll_deduction_archived)
-		->select(DB::raw('tbl_payroll_deduction_v2.payroll_deduction_type ,sum(tbl_payroll_deduction_v2.payroll_deduction_amount) as total_amount,
-			IFNULL((select sum(tbl_payroll_deduction_payment_v2.payroll_payment_amount) from tbl_payroll_deduction_payment_v2 
-			where tbl_payroll_deduction_payment_v2.deduction_name = tbl_payroll_deduction_v2.payroll_deduction_type
-			GROUP BY tbl_payroll_deduction_payment_v2.deduction_name),0) as total_payment , 
-			(sum(tbl_payroll_deduction_v2.payroll_deduction_amount) - IFNULL((select sum(tbl_payroll_deduction_payment_v2.payroll_payment_amount) from tbl_payroll_deduction_payment_v2 
-			where tbl_payroll_deduction_payment_v2.deduction_name = tbl_payroll_deduction_v2.payroll_deduction_type
-			GROUP BY tbl_payroll_deduction_payment_v2.deduction_name),0) ) as balance
-			'))->groupBy('tbl_payroll_deduction_v2.payroll_deduction_type');
+		->select(DB::raw('tbl_payroll_deduction_v2.payroll_deduction_type ,sum(tbl_payroll_deduction_v2.payroll_deduction_amount) as total_amount'))
+		->groupBy('tbl_payroll_deduction_v2.payroll_deduction_type');
+
+		// ,
+		// 	IFNULL((select sum(tbl_payroll_deduction_payment_v2.payroll_payment_amount) from tbl_payroll_deduction_payment_v2 
+		// 	where tbl_payroll_deduction_payment_v2.deduction_name = tbl_payroll_deduction_v2.payroll_deduction_type
+		// 	GROUP BY tbl_payroll_deduction_payment_v2.deduction_name),0) as total_payment , 
+		// 	(sum(tbl_payroll_deduction_v2.payroll_deduction_amount) - IFNULL((select sum(tbl_payroll_deduction_payment_v2.payroll_payment_amount) from tbl_payroll_deduction_payment_v2 
+		// 	where tbl_payroll_deduction_payment_v2.deduction_name = tbl_payroll_deduction_v2.payroll_deduction_type
+		// 	GROUP BY tbl_payroll_deduction_payment_v2.deduction_name),0) ) as balance
 
 		return $query;
 	}

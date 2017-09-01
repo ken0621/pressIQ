@@ -129,13 +129,9 @@ class PayrollDeductionController extends Member
     {
      
           $data['_all_deductions_by_category'] = Tbl_payroll_deduction_v2::selalldeductionbycategory(Self::shop_id(),0)->paginate($this->paginate_count);
-          
-          // dd($data);
-
+          Self::compute_deduction_total_and_balance($data);
           return view('member.payroll.side_container.deduction_menu_v2', $data);
-       
     }
-
 
     /*old index*/
     /*public function index()
@@ -150,7 +146,8 @@ class PayrollDeductionController extends Member
                               ->paginate($this->paginate_count);
 
        return view('member.payroll.side_container.deductionv2', $data);
-    }*/
+    }
+    */
 
 
     public function modal_view_deduction_employee()
@@ -163,11 +160,10 @@ class PayrollDeductionController extends Member
 
     public function modal_view_deduction_employee_config()
     {
-          $payroll_deduction_type =   str_replace('_', ' ', Request::get('deduction_category'));
-          $data['_loan_data'] = $this->get_deduction_by_type_config($this->shop_id(),$payroll_deduction_type,0);
+          $payroll_deduction_type  =   str_replace('_', ' ', Request::get('deduction_category'));
+          $data['_loan_data']      = $this->get_deduction_by_type_config($this->shop_id(),$payroll_deduction_type,0);
           $data['_loan_data_archive'] = $this->get_deduction_by_type_config($this->shop_id(),$payroll_deduction_type,1);
           return view("member.payrollreport.loan_summary_table_config", $data);
-
     }
 
     public function modal_create_deduction()
@@ -409,6 +405,7 @@ class PayrollDeductionController extends Member
           $data['action']     = '/member/payroll/deduction/v2/archived_deduction_action';
           $data['id']         = $id;
           $data['archived']   = $archived;
+          $data['payroll_deduction_type']  = Request::input('payroll_deduction_type');
 
           return view('member.modal.modal_confirm_archived', $data);
      }
@@ -416,7 +413,7 @@ class PayrollDeductionController extends Member
      public function archived_deduction_action()
      {
           $update['payroll_deduction_archived']   = Request::input('archived');
-          $id                                          = Request::input('id');
+          $id                                     = Request::input('id');
           Tbl_payroll_deduction_v2::where('payroll_deduction_id',$id)->update($update);
           $return['status']             = 'success';
           $return['function_name']      = 'payrollconfiguration.reload_deductionv2';
@@ -462,6 +459,7 @@ class PayrollDeductionController extends Member
           $data['action']     = '/member/payroll/deduction/v2/deduction_employee_tag_archive';
           $data['id']         = $payroll_deduction_employee_id;
           $data['archived']   = $archive;
+          $data['payroll_deduction_type']  = Request::input('payroll_deduction_type');
 
           return view('member.modal.modal_confirm_archived', $data);
      }
@@ -594,9 +592,28 @@ class PayrollDeductionController extends Member
           return $data;
      }
 
-     
+     public function compute_deduction_total_and_balance($data)
+     {
+          if (isset($data['_all_deductions_by_category'])) 
+          {
+              
+               foreach ($data['_all_deductions_by_category'] as $key => $deduction) 
+               {
+                    $total_payment = 0;
 
-     
-   
+                    $_payment = Tbl_payroll_deduction_payment_v2::where('tbl_payroll_deduction_v2.shop_id',Self::shop_id())
+                    ->where('tbl_payroll_deduction_v2.payroll_deduction_type',$deduction->payroll_deduction_type)
+                    ->join('tbl_payroll_deduction_v2','tbl_payroll_deduction_v2.payroll_deduction_id','=','tbl_payroll_deduction_payment_v2.payroll_deduction_id')
+                    ->get();
 
+                    foreach ($_payment as $lbl => $payment) 
+                    {
+                        $total_payment += $payment->payroll_payment_amount;
+                    }
+
+                    $data['_all_deductions_by_category'][$key]->total_payment = $total_payment;
+                    $data['_all_deductions_by_category'][$key]->balance       = $data['_all_deductions_by_category'][$key]->total_amount - $total_payment;
+               }
+          }
+     }
 }

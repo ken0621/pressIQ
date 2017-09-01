@@ -43,24 +43,14 @@
 											<a href="#" class="popup" link="/member/payroll/reports/modal_loan_summary_report/{{ $loan_data->payroll_employee_id }}/{{ $loan_data->payroll_deduction_id }}" size="lg"><i class="fa fa-pencil"></i>&nbsp;SUMMARY</a>
 										</li>
 										<li>
-											<a href="#" class="popup" link="/member/payroll/deduction/v2/archive_deduction/1/{{$loan_data->payroll_deduction_id}}" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Archived</a>
+											<a href="#" class="popup" link="/member/payroll/deduction/v2/archive_deduction/1/{{$loan_data->payroll_deduction_id}}?payroll_deduction_type={{ str_replace(' ','_',$loan_data->payroll_deduction_type) }}" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Archived</a>
 										</li>
 									</ul>
 								</div>
 							</td>
 					    </tr>
 					    @endforeach
-					  <tr>
-					  	  	<td></td>
-						    <td></td>
-						    <td></td>
-						    <td></td>
-						    <td></td>
-						    <td></td>
-						    <td></td>
-					  </tr>
 
-					
 					</tbody>
 				</table>
 			</div>
@@ -108,7 +98,7 @@
 											<a href="#" class="popup" link="/member/payroll/reports/modal_loan_summary_report/{{ $loan_data_archive->payroll_employee_id }}/{{ $loan_data_archive->payroll_deduction_id }}" size="lg"><i class="fa fa-pencil"></i>&nbsp;SUMMARY</a>
 										</li>
 										<li>
-											<a href="#" class="popup" link="/member/payroll/deduction/v2/archive_deduction/0/{{$archived->payroll_deduction_id}}" size="sm"><i class="fa fa-refresh"></i>&nbsp;Restore</a>
+											<a href="#" class="popup" link="/member/payroll/deduction/v2/archive_deduction/0/{{$loan_data_archive->payroll_deduction_id}}?payroll_deduction_type={{str_replace(' ','_',$loan_data_archive->payroll_deduction_type)}}" size="sm"><i class="fa fa-refresh"></i>&nbsp;Restore</a>
 										</li>
 									</ul>
 								</div>

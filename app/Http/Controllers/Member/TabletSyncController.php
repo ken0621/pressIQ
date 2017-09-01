@@ -258,30 +258,30 @@ class TabletSyncController extends Controller
 
         if($table == 'tbl_customer_address')
         {
-            $data = Tbl_customer_address::get();
-            foreach ($data as $key => $value) 
-            {
-                $value = $this->clean_value($value);
-                $return[$key] = "INSERT INTO tbl_customer_address (customer_address_id, customer_id , country_id, customer_state, customer_city, customer_zipcode, customer_street, purpose, archived, created_at, updated_at) VALUES " . "(".$value->customer_address_id.",'".$value->customer_id."','".$value->country_id."','".$value->customer_state."','".$value->customer_city."','".$value->customer_zipcode."','".$value->customer_street."','".$value->purpose."','".$value->archived."','".$value->created_at."','".$value->updated_at."')";
-                if($this->add_limiter($limit, $limit_ctr++))
-                {
-                    break 1;
-                }
-            }
+            // $data = Tbl_customer_address::get();
+            // foreach ($data as $key => $value) 
+            // {
+            //     $value = $this->clean_value($value);
+            //     $return[$key] = "INSERT INTO tbl_customer_address (customer_address_id, customer_id , country_id, customer_state, customer_city, customer_zipcode, customer_street, purpose, archived, created_at, updated_at) VALUES " . "(".$value->customer_address_id.",'".$value->customer_id."','".$value->country_id."','".$value->customer_state."','".$value->customer_city."','".$value->customer_zipcode."','".$value->customer_street."','".$value->purpose."','".$value->archived."','".$value->created_at."','".$value->updated_at."')";
+            //     if($this->add_limiter($limit, $limit_ctr++))
+            //     {
+            //         break 1;
+            //     }
+            // }
         }
 
         if($table == 'tbl_customer_attachment')
         {
-            $data = Tbl_customer_attachment::get();
-            foreach ($data as $key => $value) 
-            {
-                $value = $this->clean_value($value);
-                $return[$key] = "INSERT INTO tbl_customer_attachment (customer_attachment_id, customer_id , customer_attachment_path, customer_attachment_name, customer_attachment_extension, mime_type, archived, created_at, updated_at) VALUES " . "(".$value->customer_attachment_id.",'".$value->customer_id."','".$value->customer_attachment_path."','".$value->customer_attachment_name."','".$value->customer_attachment_extension."','".$value->mime_type."','".$value->archived."','".$value->created_at."','".$value->updated_at."')";
-                if($this->add_limiter($limit, $limit_ctr++))
-                {
-                    break 1;
-                }
-            }
+            // $data = Tbl_customer_attachment::get();
+            // foreach ($data as $key => $value) 
+            // {
+            //     $value = $this->clean_value($value);
+            //     $return[$key] = "INSERT INTO tbl_customer_attachment (customer_attachment_id, customer_id , customer_attachment_path, customer_attachment_name, customer_attachment_extension, mime_type, archived, created_at, updated_at) VALUES " . "(".$value->customer_attachment_id.",'".$value->customer_id."','".$value->customer_attachment_path."','".$value->customer_attachment_name."','".$value->customer_attachment_extension."','".$value->mime_type."','".$value->archived."','".$value->created_at."','".$value->updated_at."')";
+            //     if($this->add_limiter($limit, $limit_ctr++))
+            //     {
+            //         break 1;
+            //     }
+            // }
         }
 
         if($table == 'tbl_customer_invoice')

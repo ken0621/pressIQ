@@ -140,7 +140,7 @@
     		</div>
     	</div>
         <div class="container">
-            <marquee style="color: #fff; font-size: 18px;">Helping every Filipinos to own an affordable, reliable, tangible and profitable BUSINESS..</marquee>
+            <marquee style="color: #fff; font-size: 18px;">{{ get_content($shop_theme_info, "info", "marquee_message") }}</marquee>
         </div>
     </div>
     <!-- NAVIGATION -->

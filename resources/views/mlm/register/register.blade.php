@@ -145,7 +145,7 @@
 					</div>
 				</div>
 				<div class="main">
-					<button class="btn btn-green btn-lg">SIGN UP</button>
+					<button class="btn btn-green btn-lg" onClick="location.href='/member/register/package'">SIGN UP</button>
 					</form>
 					<div class="already">Already have an account</div>
 					<button class="btn btn-black btn-lg">LOGIN AN ACCOUNT</button>

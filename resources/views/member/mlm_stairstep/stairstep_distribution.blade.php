@@ -12,20 +12,35 @@
             Distribute Stair Step
           </small>
         </h1>
-        <button type="button" class="btn btn-primary">Distribute Stair Step</button>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#classModal">Distribute History</button>
+        <button type="button" id="button1" class="btn btn-sm"><span><i class="fa fa-exchange" aria-hidden="true"></i></span>  Distribute Stair Step</button>
+        <button type="button" id="button2" class="btn btn-sm" data-toggle="modal" data-target="#classModal"><span><i class="fa fa-history" aria-hidden="true"></i></span>  Distribute History</button>
       </div>
     </div>
   </div>
 </form>
+
 <div class="panel panel-default panel-block panel-title-block" id="top">
   <div class="panel-heading">
-    <div class="row">
-     <div class="col-md-4">
-      <input type="text" class="datepicker" >
-      <span class="add-on"><i class="fa fa-calendar fa-lg" aria-hidden="true"></i></span>
-      <input type="text" class="datepicker"  style="margin-left: 20px;">
-      <span class="add-on"><i class="fa fa-calendar fa-lg" aria-hidden="true"></i></span>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="input-group stylish-input-group pull-right">
+        <input type="text" class="form-control pull-right  datepicker">
+        <span class="input-group-addon">
+          <button type="submit">
+            <i class="fa fa-calendar fa-lg datepicker" aria-hidden="true"></i>
+          </button>  
+        </span>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="input-group stylish-input-group pull-right">
+        <input type="text" class="form-control pull-right  datepicker">
+        <span class="input-group-addon">
+          <button type="submit">
+            <i class="fa fa-calendar fa-lg datepicker" aria-hidden="true"></i>
+          </button>  
+        </span>
+      </div>
     </div>
     <div class="col-md-3 pull-right">
       <div class="input-group stylish-input-group pull-right">
@@ -37,9 +52,8 @@
         </span>
       </div>
     </div>
-  </div>
-  <br>
-  <br>         
+    </div>
+  <br>        
   <table class="table table-bordered table-condensed">
     <thead>
       <tr>
@@ -65,7 +79,6 @@
 </div>
 </div>
 </div>
-
 <div id="classModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -190,6 +203,20 @@
     white-space: nowrap;
 
   }
+  .page-title{
+    color: skyblue !important;   
+  }
+
+  #button1{
+    border-color:#36a6fd;
+    background: white !important; 
+    color: skyblue !important; 
+  }
+  #button2{
+    border-color:#36a6fd;
+    background: white !important; 
+    color: skyblue !important; 
+  }
 
 </style>
 <style> 
@@ -204,6 +231,10 @@
   .stylish-input-group button{
     border:0;
     background:transparent;
+  }
+
+  .datepicker{
+    border-color:#ccc;
   }
 </style>
 

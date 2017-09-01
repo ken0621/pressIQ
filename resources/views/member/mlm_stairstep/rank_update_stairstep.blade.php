@@ -12,8 +12,8 @@
             Update Ranks of SLots of Customers
           </small>
         </h1>
-        <button type="button" class="btn btn-primary">Update Ranking</button>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#classModal">Rank Update History</button>
+        <button type="button" id="button1" class="btn btn-sm"><span><i class="fa fa-refresh" aria-hidden="true"></i></span>  Update Ranking</button>
+        <button type="button" id="button2" class="btn btn-sm" data-toggle="modal" data-target="#classModal"><span><i class="fa fa-refresh" aria-hidden="true"></i></span>  Rank Update History</button>
       </div>
     </div>
   </div>
@@ -140,6 +140,7 @@
     overflow-x: auto;
   }
 
+
   a.underline {
     text-decoration: none;
   }
@@ -158,7 +159,38 @@
     white-space: nowrap;
 
   }
+  
+  .page-title{
+    color: skyblue !important;   
+  }
+  #button1{
+    border-color:#36a6fd;
+    background: white !important; 
+    color: skyblue !important; 
+  }
+  #button2{
+    border-color:#36a6fd;
+    background: white !important; 
+    color: skyblue !important; 
+  }
 
 </style>
+<style> 
 
+  .stylish-input-group .input-group-addon{
+    background: white !important; 
+
+  }
+  .stylish-input-group .form-control{
+    border-color:#ccc;
+  }
+  .stylish-input-group button{
+    border:0;
+    background:transparent;
+  }
+
+  .datepicker{
+    border-color:#ccc;
+  }
+</style>
 

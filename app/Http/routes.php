@@ -531,6 +531,7 @@ Route::any('/tablet/submit_all_transaction/submit','Member\TabletPISController@s
 
 Route::any('/tablet/sync_data/{table}/{date}','Member\TabletSyncController@sync');
 Route::any('/tablet/update_sync_data','Member\TabletSyncController@sync_update');
+Route::any('/tablet/get_data','Member\TabletSyncController@get_updates');
 /* END PIS TABLET*/
 
  //form

@@ -17,6 +17,8 @@ use App\Globals\Category;
 use App\Globals\CreditMemo;
 use App\Globals\ReceivePayment;
 use App\Globals\Tablet_global;
+use App\Globals\Tablet_sync;
+
 
 use App\Models\Tbl_shop;
 use App\Models\Tbl_category;
@@ -48,6 +50,7 @@ use App\Models\Tbl_manual_invoice;
 use App\Models\Tbl_manual_receive_payment;
 use App\Models\Tbl_manufacturer;
 use App\Models\Tbl_position;
+use App\Models\Tbl_payment_method;
 use App\Models\Tbl_receive_payment;
 use App\Models\Tbl_receive_payment_line;
 use App\Models\Tbl_settings;
@@ -62,6 +65,7 @@ use App\Models\Tbl_um;
 use App\Models\Tbl_unit_measurement;
 use App\Models\Tbl_unit_measurement_multi;
 use App\Models\Tbl_user;
+use App\Models\Tbl_tablet_data;
 use stdClass;
 use Session;
 use Crypt;
@@ -129,7 +133,7 @@ class TabletSyncController extends Controller
         header('Access-Control-Allow-Headers: Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With');
         header('Access-Control-Allow-Methods: GET, PUT, POST');
         $return = [];
-        if($table == "tbl_shop")
+        if($table == 'tbl_shop')
         {
             $data = Tbl_shop::get();
             foreach ($data as $key => $value) 
@@ -142,7 +146,7 @@ class TabletSyncController extends Controller
                 }
             }
         }
-        if($table == "tbl_category")
+        if($table == 'tbl_category')
         {
             $data = Tbl_category::get();
             foreach ($data as $key => $value) 
@@ -156,7 +160,7 @@ class TabletSyncController extends Controller
             }
         }
 
-        if($table == "tbl_audit_trail")
+        if($table == 'tbl_audit_trail')
         {
             // $data = Tbl_audit_trail::get();
             // foreach ($data as $key => $value) 
@@ -170,7 +174,7 @@ class TabletSyncController extends Controller
             // }
         }
 
-        if($table == "tbl_chart_account_type")
+        if($table == 'tbl_chart_account_type')
         {
             $data = Tbl_chart_account_type::get();
             foreach ($data as $key => $value) 
@@ -183,7 +187,7 @@ class TabletSyncController extends Controller
                 }
             }
         }
-        if($table == "tbl_chart_of_account")
+        if($table == 'tbl_chart_of_account')
         {
             $data = Tbl_chart_of_account::get();
             foreach ($data as $key => $value) 
@@ -197,7 +201,7 @@ class TabletSyncController extends Controller
             }
         }
 
-        if($table == "tbl_country")
+        if($table == 'tbl_country')
         {
             $data = Tbl_country::get();
             foreach ($data as $key => $value) 
@@ -211,7 +215,7 @@ class TabletSyncController extends Controller
             }
         }
 
-        if($table == "tbl_credit_memo")
+        if($table == 'tbl_credit_memo')
         {
             $data = Tbl_credit_memo::get();
             foreach ($data as $key => $value) 
@@ -224,7 +228,7 @@ class TabletSyncController extends Controller
                 }
             }
         }
-        if($table == "tbl_credit_memo_line")
+        if($table == 'tbl_credit_memo_line')
         {
             $data = Tbl_credit_memo_line::get();
             foreach ($data as $key => $value) 
@@ -238,7 +242,7 @@ class TabletSyncController extends Controller
             }
         }
 
-        if($table == "tbl_customer")
+        if($table == 'tbl_customer')
         {
             $data = Tbl_customer::get();
             foreach ($data as $key => $value) 
@@ -252,35 +256,35 @@ class TabletSyncController extends Controller
             }
         }
 
-        if($table == "tbl_customer_address")
+        if($table == 'tbl_customer_address')
         {
-            $data = Tbl_customer_address::get();
-            foreach ($data as $key => $value) 
-            {
-                $value = $this->clean_value($value);
-                $return[$key] = "INSERT INTO tbl_customer_address (customer_address_id, customer_id , country_id, customer_state, customer_city, customer_zipcode, customer_street, purpose, archived, created_at, updated_at) VALUES " . "(".$value->customer_address_id.",'".$value->customer_id."','".$value->country_id."','".$value->customer_state."','".$value->customer_city."','".$value->customer_zipcode."','".$value->customer_street."','".$value->purpose."','".$value->archived."','".$value->created_at."','".$value->updated_at."')";
-                if($this->add_limiter($limit, $limit_ctr++))
-                {
-                    break 1;
-                }
-            }
+            // $data = Tbl_customer_address::get();
+            // foreach ($data as $key => $value) 
+            // {
+            //     $value = $this->clean_value($value);
+            //     $return[$key] = "INSERT INTO tbl_customer_address (customer_address_id, customer_id , country_id, customer_state, customer_city, customer_zipcode, customer_street, purpose, archived, created_at, updated_at) VALUES " . "(".$value->customer_address_id.",'".$value->customer_id."','".$value->country_id."','".$value->customer_state."','".$value->customer_city."','".$value->customer_zipcode."','".$value->customer_street."','".$value->purpose."','".$value->archived."','".$value->created_at."','".$value->updated_at."')";
+            //     if($this->add_limiter($limit, $limit_ctr++))
+            //     {
+            //         break 1;
+            //     }
+            // }
         }
 
-        if($table == "tbl_customer_attachment")
+        if($table == 'tbl_customer_attachment')
         {
-            $data = Tbl_customer_attachment::get();
-            foreach ($data as $key => $value) 
-            {
-                $value = $this->clean_value($value);
-                $return[$key] = "INSERT INTO tbl_customer_attachment (customer_attachment_id, customer_id , customer_attachment_path, customer_attachment_name, customer_attachment_extension, mime_type, archived, created_at, updated_at) VALUES " . "(".$value->customer_attachment_id.",'".$value->customer_id."','".$value->customer_attachment_path."','".$value->customer_attachment_name."','".$value->customer_attachment_extension."','".$value->mime_type."','".$value->archived."','".$value->created_at."','".$value->updated_at."')";
-                if($this->add_limiter($limit, $limit_ctr++))
-                {
-                    break 1;
-                }
-            }
+            // $data = Tbl_customer_attachment::get();
+            // foreach ($data as $key => $value) 
+            // {
+            //     $value = $this->clean_value($value);
+            //     $return[$key] = "INSERT INTO tbl_customer_attachment (customer_attachment_id, customer_id , customer_attachment_path, customer_attachment_name, customer_attachment_extension, mime_type, archived, created_at, updated_at) VALUES " . "(".$value->customer_attachment_id.",'".$value->customer_id."','".$value->customer_attachment_path."','".$value->customer_attachment_name."','".$value->customer_attachment_extension."','".$value->mime_type."','".$value->archived."','".$value->created_at."','".$value->updated_at."')";
+            //     if($this->add_limiter($limit, $limit_ctr++))
+            //     {
+            //         break 1;
+            //     }
+            // }
         }
 
-        if($table == "tbl_customer_invoice")
+        if($table == 'tbl_customer_invoice')
         {
             $data = Tbl_customer_invoice::get();
             foreach ($data as $key => $value) 
@@ -294,7 +298,7 @@ class TabletSyncController extends Controller
             }
         }
 
-        if($table == "tbl_customer_invoice_line")
+        if($table == 'tbl_customer_invoice_line')
         {
             $data = Tbl_customer_invoice_line::get();
             foreach ($data as $key => $value) 
@@ -308,7 +312,7 @@ class TabletSyncController extends Controller
             }
         }
 
-        if($table == "tbl_default_chart_account")
+        if($table == 'tbl_default_chart_account')
         {
             $data = Tbl_default_chart_account::get();
             foreach ($data as $key => $value) 
@@ -323,7 +327,7 @@ class TabletSyncController extends Controller
         }
 
 
-        if($table == "tbl_employee")
+        if($table == 'tbl_employee')
         {
             $data = Tbl_employee::get();
             foreach ($data as $key => $value) 
@@ -337,7 +341,7 @@ class TabletSyncController extends Controller
             }
         }
 
-        if($table == "tbl_image")
+        if($table == 'tbl_image')
         {
             $data = Tbl_image::get();
             foreach ($data as $key => $value) 
@@ -351,7 +355,7 @@ class TabletSyncController extends Controller
             }
         }
 
-        if($table == "tbl_inventory_serial_number")
+        if($table == 'tbl_inventory_serial_number')
         {
             $data = Tbl_inventory_serial_number::get();
             foreach ($data as $key => $value) 
@@ -365,7 +369,7 @@ class TabletSyncController extends Controller
             }
         }
 
-        if($table == "tbl_inventory_slip")
+        if($table == 'tbl_inventory_slip')
         {
             $data = Tbl_inventory_slip::get();
             foreach ($data as $key => $value) 
@@ -379,7 +383,7 @@ class TabletSyncController extends Controller
            }
         }
 
-        if($table == "tbl_item")
+        if($table == 'tbl_item')
         {
             $data = Tbl_item::get();
             foreach ($data as $key => $value) 
@@ -393,7 +397,7 @@ class TabletSyncController extends Controller
             }
         }
 
-        if($table == "tbl_item_bundle")
+        if($table == 'tbl_item_bundle')
         {
             $data = Tbl_item_bundle::get();
             foreach ($data as $key => $value) 
@@ -407,7 +411,7 @@ class TabletSyncController extends Controller
             }
         }
 
-        if($table == "tbl_item_discount")
+        if($table == 'tbl_item_discount')
         {
             $data = Tbl_item_discount::get();
             foreach ($data as $key => $value) 
@@ -421,7 +425,7 @@ class TabletSyncController extends Controller
             }
         }
 
-        if($table == "tbl_item_multiple_price")
+        if($table == 'tbl_item_multiple_price')
         {
             $data = Tbl_item_multiple_price::get();
             foreach ($data as $key => $value) 
@@ -435,7 +439,7 @@ class TabletSyncController extends Controller
             }
         }
 
-        if($table == "tbl_item_type")
+        if($table == 'tbl_item_type')
         {
             $data = Tbl_item_type::get();
             foreach ($data as $key => $value) 
@@ -448,7 +452,7 @@ class TabletSyncController extends Controller
                 }
             }
         }
-        if($table == "tbl_journal_entry")
+        if($table == 'tbl_journal_entry')
         {
             $data = Tbl_journal_entry::get();
             foreach ($data as $key => $value) 
@@ -463,7 +467,7 @@ class TabletSyncController extends Controller
         }
 
 
-        if($table == "tbl_journal_entry_line")
+        if($table == 'tbl_journal_entry_line')
         {
             $data = Tbl_journal_entry_line::get();
             foreach ($data as $key => $value) 
@@ -477,7 +481,7 @@ class TabletSyncController extends Controller
             }
         }
 
-        if($table == "tbl_manual_credit_memo")
+        if($table == 'tbl_manual_credit_memo')
         {
             $data = Tbl_manual_credit_memo::get();
             foreach ($data as $key => $value) 
@@ -490,7 +494,7 @@ class TabletSyncController extends Controller
                 }
             }
         }
-        if($table == "tbl_manual_invoice")
+        if($table == 'tbl_manual_invoice')
         {
             $data = Tbl_manual_invoice::get();
             foreach ($data as $key => $value) 
@@ -504,7 +508,7 @@ class TabletSyncController extends Controller
             }
         }
 
-        if($table == "tbl_manual_receive_payment")
+        if($table == 'tbl_manual_receive_payment')
         {
             $data = Tbl_manual_receive_payment::get();
             foreach ($data as $key => $value) 
@@ -517,7 +521,7 @@ class TabletSyncController extends Controller
                 }
             }
         }
-        if($table == "tbl_manufacturer")
+        if($table == 'tbl_manufacturer')
         {
             $data = Tbl_manufacturer::get();
             foreach ($data as $key => $value) 
@@ -530,7 +534,7 @@ class TabletSyncController extends Controller
                 }
             }
         }
-        if($table == "tbl_position")
+        if($table == 'tbl_position')
         {
             $data = Tbl_position::get();
             foreach ($data as $key => $value) 
@@ -544,7 +548,7 @@ class TabletSyncController extends Controller
             }
         }
 
-        if($table == "tbl_receive_payment")
+        if($table == 'tbl_receive_payment')
         {
             $data = Tbl_receive_payment::get();
             foreach ($data as $key => $value) 
@@ -557,7 +561,7 @@ class TabletSyncController extends Controller
                 }
             }
         }
-        if($table == "tbl_receive_payment_line")
+        if($table == 'tbl_receive_payment_line')
         {
             $data = Tbl_receive_payment_line::get();
             foreach ($data as $key => $value) 
@@ -570,7 +574,7 @@ class TabletSyncController extends Controller
                 }
             }
         }
-        if($table == "tbl_settings")
+        if($table == 'tbl_settings')
         {
             $data = Tbl_settings::get();
             foreach ($data as $key => $value) 
@@ -583,7 +587,7 @@ class TabletSyncController extends Controller
                 }
             }
         }
-        if($table == "tbl_sir")
+        if($table == 'tbl_sir')
         {
             $data = Tbl_sir::get();
             foreach ($data as $key => $value) 
@@ -597,7 +601,7 @@ class TabletSyncController extends Controller
             }
         }
 
-        if($table == "tbl_sir_cm_item")
+        if($table == 'tbl_sir_cm_item')
         {
             $data = Tbl_sir_cm_item::get();
             foreach ($data as $key => $value) 
@@ -611,7 +615,7 @@ class TabletSyncController extends Controller
             }
         }
 
-        if($table == "tbl_sir_inventory")
+        if($table == 'tbl_sir_inventory')
         {
             $data = Tbl_sir_inventory::get();
             foreach ($data as $key => $value) 
@@ -625,7 +629,7 @@ class TabletSyncController extends Controller
             }
         }
 
-        if($table == "tbl_sir_item")
+        if($table == 'tbl_sir_item')
         {
             $data = Tbl_sir_item::get();
             foreach ($data as $key => $value) 
@@ -639,7 +643,7 @@ class TabletSyncController extends Controller
             }
         }
 
-        if($table == "tbl_sir_sales_report")
+        if($table == 'tbl_sir_sales_report')
         {
             $data = Tbl_sir_sales_report::get();
             // foreach ($data as $key => $value) 
@@ -653,7 +657,7 @@ class TabletSyncController extends Controller
             // }
         }
         // 39
-        if($table == "tbl_terms")
+        if($table == 'tbl_terms')
         {
             $data = Tbl_terms::get();
             foreach ($data as $key => $value) 
@@ -667,7 +671,7 @@ class TabletSyncController extends Controller
             }
         }
 
-        if($table == "tbl_truck")
+        if($table == 'tbl_truck')
         {
             $data = Tbl_truck::get();
             foreach ($data as $key => $value) 
@@ -681,7 +685,7 @@ class TabletSyncController extends Controller
             }
         }
 
-        if($table == "tbl_um")
+        if($table == 'tbl_um')
         {
             $data = Tbl_um::get();
             foreach ($data as $key => $value) 
@@ -695,7 +699,7 @@ class TabletSyncController extends Controller
             }
         }
 
-        if($table == "tbl_unit_measurement")
+        if($table == 'tbl_unit_measurement')
         {
             $data = Tbl_unit_measurement::get();
             foreach ($data as $key => $value) 
@@ -708,7 +712,7 @@ class TabletSyncController extends Controller
                 }
             }
         }
-        if($table == "tbl_unit_measurement_multi")
+        if($table == 'tbl_unit_measurement_multi')
         {
             $data = Tbl_unit_measurement_multi::get();
             foreach ($data as $key => $value) 
@@ -722,7 +726,7 @@ class TabletSyncController extends Controller
             }
         }
 
-        if($table == "tbl_user")
+        if($table == 'tbl_user')
         {
             $data = Tbl_user::get();
             foreach ($data as $key => $value) 
@@ -735,49 +739,104 @@ class TabletSyncController extends Controller
                 }
             }
         }
+
+
+        if($table == 'tbl_payment_method')
+        {
+            $data = Tbl_payment_method::get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = 'INSERT INTO tbl_payment_method (payment_method_id, shop_id, payment_name, isDefault, archived) VALUES ' . '('.$value->payment_method_id.',"'.$value->shop_id.'","'.$value->payment_name.'","'.$value->isDefault.'","'.$value->archived.'")';
+            }
+        }
+        if($table == 'tbl_invoice_log')
+        {
+            $data = Tbl_customer::leftjoin("tbl_customer_other_info","tbl_customer_other_info.customer_id","=","tbl_customer.customer_id")
+                                    ->balanceJournal()
+                                    ->selectRaw("tbl_customer.customer_id as customer_id1, tbl_customer.*, tbl_customer_other_info.*, tbl_customer_other_info.customer_id as cus_id")
+                                    ->orderBy("tbl_customer.first_name")
+                                    ->get();
+            foreach ($data as $key => $value) 
+            {
+                $return[$key] = 'INSERT INTO tbl_invoice_log (shop_id, transaction_customer_id ,transaction_name, transaction_id, transaction_amount, date_created) VALUES (' . $value->shop_id . ','.$value->customer_id.', "customer_beginning_balance", 0,' . $value->balance . ', "'. Carbon::now() . '")';
+
+            }   
+        }
         return json_encode($return);
     }
     public function sync_update()
     {
-        $table_name = Request::input("table");
-        $dataset = Request::input("dataset");
+        $table_name = Request::input('table');
+        $dataset = Request::input('dataset');
         
         $new_data = json_decode($dataset);
         // dd($new_data);
         foreach($new_data as $key => $value)
         {
-            if($table_name == "tbl_shop")
+            if($table_name == 'tbl_shop')
             {
-                $up["shop_key"] = $value->shop_key;
-                $up["shop_date_created"] = $value->shop_date_created;
-                $up["shop_date_expiration"] = $value->shop_date_expiration;
-                $up["shop_last_active_date"] = $value->shop_last_active_date;
-                $up["shop_status"] = $value->shop_status;
-                $up["shop_country"] = $value->shop_country;
-                $up["shop_city"] = $value->shop_city;
-                $up["shop_zip"] = $value->shop_zip;
-                $up["shop_street_address"] = $value->shop_street_address;
-                $up["shop_contact"] = $value->shop_contact;
-                $up["url"] = $value->url;
-                $up["shop_domain"] = $value->shop_domain;
-                $up["shop_theme"] = $value->shop_theme;
-                $up["shop_theme_color"] = $value->shop_theme_color;
-                $up["member_layout"] = $value->member_layout;
-                $up["shop_wallet_tours"] = $value->shop_wallet_tours;
-                $up["shop_wallet_tours_uri"] = $value->shop_wallet_tours_uri;
-                $up["shop_merchant_school"] = $value->shop_merchant_school;
-                $up["shop_wallet_tours"] = $value->shop_wallet_tours;
-                $up["created_at"] = $value->created_at;
-                $up["updated_at"] = $value->updated_at;
+                $up['shop_key'] = $value->shop_key;
+                $up['shop_date_created'] = $value->shop_date_created;
+                $up['shop_date_expiration'] = $value->shop_date_expiration;
+                $up['shop_last_active_date'] = $value->shop_last_active_date;
+                $up['shop_status'] = $value->shop_status;
+                $up['shop_country'] = $value->shop_country;
+                $up['shop_city'] = $value->shop_city;
+                $up['shop_zip'] = $value->shop_zip;
+                $up['shop_street_address'] = $value->shop_street_address;
+                $up['shop_contact'] = $value->shop_contact;
+                $up['url'] = $value->url;
+                $up['shop_domain'] = $value->shop_domain;
+                $up['shop_theme'] = $value->shop_theme;
+                $up['shop_theme_color'] = $value->shop_theme_color;
+                $up['member_layout'] = $value->member_layout;
+                $up['shop_wallet_tours'] = $value->shop_wallet_tours;
+                $up['shop_wallet_tours_uri'] = $value->shop_wallet_tours_uri;
+                $up['shop_merchant_school'] = $value->shop_merchant_school;
+                $up['shop_wallet_tours'] = $value->shop_wallet_tours;
+                $up['created_at'] = $value->created_at;
+                $up['updated_at'] = $value->updated_at;
                 
-                Tbl_shop::where("shop_id",$value->shop_id)->update($up);
+                Tbl_shop::where('shop_id',$value->shop_id)->update($up);
             }
         }
         
-        return "success";
+        return 'success';
         
     }
+    function get_updates()
+    {
+        $all_data = collect(json_decode(Request::input("getdata")))->toArray();
+        $sir_id = Request::input("sir_id");
+        if($sir_id && $all_data)
+        {
+            $insert["sir_id"] = $sir_id;
+            $insert["sir_data"] = serialize($all_data);
+            /*LOGIN FIRST*/
+            $sir_data = Tbl_sir::where('sir_id',$sir_id)->first();
+            if($sir_data)
+            {
+                $data['account'] = Tbl_employee::position()->where('employee_id',$sir_data->sales_agent_id)->first();
+                Session::put('sales_agent',$data['account']);
+                $count = Tbl_tablet_data::where('sir_id',$sir_id)->count();
+                // dd(unserialize($count->sir_data));
+                // if($count <= 0)
+                // {
+                    // $data_id = Tbl_tablet_data::insertGetId($insert);
+                    $return = Tablet_sync::sync(1);
+                    if($return == "success")
+                    {
+                        dd("success");
+                    }
+                    else
+                    {
+                        dd("error");
+                    }                    
+                // }             
+            }
 
+        }
+    }
     /**
      * Store a newly created resource in storage.
      *

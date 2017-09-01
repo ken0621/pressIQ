@@ -25,8 +25,11 @@ function submit_done()
 	$('.modal-loader').removeClass("hidden");
 	$('.modal-content.modal-content-global').load("/member/payroll/deduction/v2/modal_view_deduction_employee_config?deduction_category={{$payroll_deduction_type}}", function()
 	{
-		$('.modal-loader').addClass("hidden");
-		$('.multiple_global_modal .close').trigger("click");
+		$('.configuration-div').load('/member/payroll/deduction/v2', function()
+		{
+			$('.modal-loader').addClass("hidden");
+			$('.multiple_global_modal .close').trigger("click");
+		});
 	});
 }
 </script>

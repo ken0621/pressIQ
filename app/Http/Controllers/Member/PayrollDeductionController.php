@@ -129,6 +129,7 @@ class PayrollDeductionController extends Member
     {
      
           $data['_all_deductions_by_category'] = Tbl_payroll_deduction_v2::selalldeductionbycategory(Self::shop_id(),0)->paginate($this->paginate_count);
+          $data['_all_deductions_by_category_archive'] = Tbl_payroll_deduction_v2::selalldeductionbycategory(Self::shop_id(),1)->paginate($this->paginate_count);
           Self::compute_deduction_total_and_balance($data);
           return view('member.payroll.side_container.deduction_menu_v2', $data);
     }

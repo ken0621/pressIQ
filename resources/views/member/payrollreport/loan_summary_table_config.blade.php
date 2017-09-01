@@ -75,9 +75,7 @@
 					        <th></th>
 					    </tr>
 					</thead>
-
 					<tbody class="table-warehouse">
-				
 					    @foreach($_loan_data_archive as $key => $loan_data_archive)
 					    <tr>
 					        <td class="text-center">{{ $loan_data_archive->payroll_deduction_name }}</td>
@@ -105,10 +103,8 @@
 							</td>
 					    </tr>
 					    @endforeach
-					
 					</tbody>
 				</table>
-
 			</div>
 		</div>
 	</div>

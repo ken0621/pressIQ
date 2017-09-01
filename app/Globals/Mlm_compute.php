@@ -172,6 +172,13 @@ class Mlm_compute
                     $stairstep_group_points = $data["STAIRSTEP_GROUP"];
                     $plan                   = strtolower($points_title);
                     Mlm_complan_manager_repurchasev2::$plan($slot_info,$stairstep_points,$stairstep_group_points);
+                }            
+                else if($points_title == "RANK")
+                {
+                    $rank_points       = $data["RANK"];
+                    $rank_group_points = $data["RANK_GROUP"];
+                    $plan              = strtolower($points_title);
+                    Mlm_complan_manager_repurchasev2::$plan($slot_info,$rank_points,$rank_group_points);
                 }
                 else
                 {
@@ -202,6 +209,13 @@ class Mlm_compute
 
                                 $plan   = strtolower($points_title);
                                 Mlm_complan_manager_repurchasev2::$plan($slot_info,$stairstep_points,$stairstep_group_points);
+                            }
+                            else if($points_title == "RANK")
+                            {
+                                $rank_points       = $mlm_item_points->RANK;
+                                $rank_group_points = $mlm_item_points->RANK_GROUP;
+                                $plan              = strtolower($points_title);
+                                Mlm_complan_manager_repurchasev2::$plan($slot_info,$rank_points,$rank_group_points);
                             }
                             else if($points_title == "TRIANGLE_REPURCHASE")
                             {

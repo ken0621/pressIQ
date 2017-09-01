@@ -83,6 +83,21 @@
             @endif
         @endif
 
+        @if(isset($rank))
+            @if($rank == 1)
+            <div class="form-group">
+                <div class="col-md-6">            
+                    <label>RANK POINTS</label>
+                    <input name="RANK" type="text" class="form-control" placeholder="100 (IF EMPTY)">
+                </div>
+                <div class="col-md-6">            
+                    <label>RANK GROUP POINTS</label> 
+                    <input name="RANK_GROUP" type="text" class="form-control" placeholder="100 (IF EMPTY)">
+                </div>
+            </div>
+            @endif
+        @endif
+
         @if(isset($binary_repurchase))
             @if($binary_repurchase == 1)
             <div class="form-group">

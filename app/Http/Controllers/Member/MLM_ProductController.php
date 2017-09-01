@@ -100,6 +100,7 @@ class MLM_ProductController extends Member
             $_inventory[$key]->item_points = $item_points;
         }
 	    $data['active'] = [];
+        $add_count      = count($data['active_plan_product_repurchase']);
 	    foreach($data['active_plan_product_repurchase'] as $key => $value)
 	    {
     		$data['active'][$key]  = $value->marketing_plan_code;
@@ -107,8 +108,16 @@ class MLM_ProductController extends Member
 
             if($value->marketing_plan_code == "STAIRSTEP")
             {
-                $data['active'][count($data['active_plan_product_repurchase'])]        = "STAIRSTEP_GROUP";
-                $data['active_label'][count($data['active_plan_product_repurchase'])]  = "Rank Group Bonus";    
+                $data['active'][$add_count]        = "STAIRSTEP_GROUP";
+                $data['active_label'][$add_count]  = "Stairstep Group Bonus";  
+                $data['active_label'][$key]        = "Stairstep";
+                $add_count++;  
+            }
+            else if($value->marketing_plan_code == "RANK")
+            {
+                $data['active'][$add_count]        = "RANK_GROUP";
+                $data['active_label'][$add_count]  = "Rank Group Bonus"; 
+                $add_count++;
             }
 	    }
 
@@ -205,6 +214,10 @@ class MLM_ProductController extends Member
                     if($value->marketing_plan_code == "STAIRSTEP")
                     {
                         $update["STAIRSTEP_GROUP"] = $points["STAIRSTEP_GROUP"][$value2->membership_id];
+                    }
+                    else if($value->marketing_plan_code == "RANK")
+                    {
+                        $update["RANK_GROUP"] = $points["RANK_GROUP"][$value2->membership_id]; 
                     }
 
 

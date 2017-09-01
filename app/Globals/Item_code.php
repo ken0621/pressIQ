@@ -473,8 +473,13 @@ class Item_code
                                 {
                                     if($code == "STAIRSTEP")
                                     {
-                                        $rel_insert[$key][$code] = $item_points->$code;
+                                        $rel_insert[$key][$code]             = $item_points->$code;
                                         $rel_insert[$key]["STAIRSTEP_GROUP"] = $item_points->STAIRSTEP_GROUP;
+                                    }
+                                    else if($code == "RANK")
+                                    {
+                                        $rel_insert[$key][$code]        = $item_points->$code;
+                                        $rel_insert[$key]["RANK_GROUP"] = $item_points->RANK_GROUP;
                                     }
                                     else
                                     {
@@ -917,12 +922,18 @@ class Item_code
                                     $rel_insert[$key][$code] = $item_points->$code;
                                     $rel_insert[$key]["STAIRSTEP_GROUP"] = $item_points->STAIRSTEP_GROUP;
                                 }
+                                else if($code == "RANK")
+                                {
+                                    $rel_insert[$key][$code] = $item_points->$code;
+                                    $rel_insert[$key]["RANK_GROUP"] = $item_points->RANK_GROUP;      
+                                }
                                 else
                                 {
                                     $rel_insert[$key][$code] = $item_points->$code;
                                 }
                             }
                         }
+
                         $rel_insert[$key]["item_activation_code"]          = $activation_code;
                         $rel_insert[$key]["customer_id"]                   = $slot_info->slot_owner;
                         $rel_insert[$key]["item_id"]                       = $value->evariant_item_id;
@@ -933,6 +944,7 @@ class Item_code
                         $rel_insert[$key]["ec_order_id"]                   = $ec_order_id;
                         $rel_insert[$key]["slot_id"]                       = $slot_info->slot_id;
                     }
+                    
                     Tbl_item_code::insert($rel_insert);
 
                     $items = Tbl_item_code::where('ec_order_id', $ec_order_id)->get();

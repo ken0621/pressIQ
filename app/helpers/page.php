@@ -589,13 +589,23 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "Everyone";
 
          /* -- REPORT => PRODUCTS  */
-         $code = "payroll-report-loan-summary";
+        $code = "payroll-report-loan-summary";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Loan Summary";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
         $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/reports/loan_summary";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "Everyone";
+
+         /* -- REPORT => PRODUCTS  */
+        $code = "payroll-register-report";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Payroll Register Report";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/reports/payroll_register_report";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "Everyone";
+
 
 
     /* PAYROLL API */
@@ -1221,6 +1231,14 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "Working 100%";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Edward Guevarra</span>";
     
+    $code = "page-partner";
+    $nav[$page]['submenu'][$code]['label'] = "Partners";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/partnerview";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>James Omosora</span>";
+
     $code = "page-list";
     $nav[$page]['submenu'][$code]['label'] = "Page Information";
     $nav[$page]['submenu'][$code]['code'] = $code;
@@ -1228,6 +1246,22 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";
+
+    // $code = "page-partnerview";
+    // $nav[$page]['submenu'][$code]['label'] = "partnerview";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/partnerview";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    // $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    // $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>James Omosora</span>";
+
+    // $code = "page-partnerviewedit";
+    // $nav[$page]['submenu'][$code]['label'] = "partnerviewedit";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/partnerviewedit";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    // $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    // $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>James Omosora</span>";
     
     /* -- MANAGE CONTENT => CONTACT INFORMATION */
     $code = "page-contact";

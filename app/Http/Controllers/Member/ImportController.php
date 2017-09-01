@@ -639,7 +639,7 @@ class ImportController extends Member
 
 							$insertcustomer['shop_id'] 		= $this->getShopId();
 							$insertcustomer['mlm_username'] = $username;
-				            $insertcustomer['password'] 	= $password;
+				            $insertcustomer['password'] 	= Crypt::encrypt($password);
 				            $insertcustomer['title_name'] 	= $title_name;
 				            $insertcustomer['first_name'] 	= $first_name;
 				            $insertcustomer['middle_name'] 	= $middle_name;
@@ -655,16 +655,16 @@ class ImportController extends Member
 				            if($has_bill_country) $insertcustomer['country_id'] = $has_bill_country->country_id;
 				           	else $insertcustomer['country_id'] 					= $bill_country;
 	  						
-				            $rules["email"] 				= 'required|email';
+				   //          $rules["email"] 				= 'required|email';
 
-							$validator = Validator::make($insertcustomer, $rules);
-							if ($validator->fails())
-							{
-								$json["status"] 	= "error";
-								$json["message"]  	= $validator->errors()->first();
-							}
-							else
-							{
+							// $validator = Validator::make($insertcustomer, $rules);
+							// if ($validator->fails())
+							// {
+							// 	$json["status"] 	= "error";
+							// 	$json["message"]  	= $validator->errors()->first();
+							// }
+							// else
+							// {
 								$customer_id = Tbl_customer::insertGetId($insertcustomer);
 	            
 					            $insertSearch['customer_id'] = $customer_id;
@@ -711,7 +711,7 @@ class ImportController extends Member
 					            $json["status"]		= "success";
 								$json["message"]	= "Success";
 								$json["item_id"]	= $customer_id;
-				        	}
+				        	// }
 				        }
 				        else
 				        {

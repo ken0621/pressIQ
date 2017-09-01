@@ -8,19 +8,23 @@
 
 <div class="clearfix modal-body max-450 modallarge-body-layout background-white form-horizontal menu_container">
     <div class="col-md-2 col-md-offset-1">
-        <buton type="button" class="form-control btn btn-custom-primary" id="inventory_type">Inventory</buton>
+        <buton type="button" class="form-control btn btn-custom-primary" data-toggle="tooltip" data-html="true" title="Inventory Item are the raw materials, work-in-process products and finished goods that are considered to be the portion of a business's assets that are ready or will be ready for sale.
+        " id="inventory_type">Inventory</buton>
     </div>
     <div class="col-md-2">
-        <buton type="button" class="form-control btn btn-custom-primary" id="noninventory_type">Non-Inventory</buton>
+        <buton type="button" class="form-control btn btn-custom-primary" data-toggle="tooltip" data-html="true" title="Non-Inventory Item is a type of product that is purchased or sold but whose quantity is not tracked. This type of items are purchased for company use or custom product purchased for Projects. Non-Inventory Items appear in the customer process (on Sales Quotes, Sales Orders, Sales Invoices, or customer Credit Notes).
+        " id="noninventory_type">Non-Inventory</buton>
     </div>
     <div class="col-md-2">
-        <buton type="button" class="form-control btn btn-custom-primary" id="service_type">Service</buton>
+        <buton type="button" class="form-control btn btn-custom-primary" data-toggle="tooltip" data-html="true" title=" 
+        Services you charge for or purchase. Examples include specialized labor, consulting hours, and professional fees." id="service_type">Service</buton>
     </div>
     <div class="col-md-2">
-        <buton type="button" class="form-control btn btn-custom-primary" id="bundle_type">Bundle</buton>
+        <buton type="button" class="form-control btn btn-custom-primary" data-toggle="tooltip" data-html="true" title="Bundle is a marketing strategy that joins products or services together in order to sell them as a single combined unit. Bundling allows the convenient purchase of several products and/or services from one company. Are item used in promotions." id="bundle_type">Bundle</buton>
     </div>
     <div class="col-md-2">
-        <buton type="button" class="form-control btn btn-custom-primary" id="group_type">Group</buton>
+        <buton type="button" class="form-control btn btn-custom-primary" data-toggle="tooltip" data-html="true" title="Group should be used on products with returnable example: softdrinks. This items are group forever.
+        " id="group_type">Group</buton>
     </div>
 </div>
 
@@ -604,3 +608,8 @@ $('.number-input').change(function(e)
         overflow: visible;
     }
 </style>
+<script type="text/javascript">
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>

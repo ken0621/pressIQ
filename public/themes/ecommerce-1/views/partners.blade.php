@@ -24,7 +24,7 @@
         <div class="partners-div clearfix" style="height: auto; padding-bottom: 15px;">
 
           <div class="partner-header">
-            <img src="{{ $company_information->company_logo }}" width="100%">
+            <img class="match-height" style="object-fit: contain;" src="{{ $company_information->company_logo }}" width="100%">
           </div>
 
           <div class="partner-body">

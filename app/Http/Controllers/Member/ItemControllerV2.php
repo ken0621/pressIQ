@@ -56,11 +56,13 @@ class ItemControllerV2 extends Member
 		$insert['item_cost'] 				   = Request::input('item_cost');
 		$insert['item_expense_account_id']	   = Request::input('item_expense_account_id');
 		$insert['item_purchasing_information'] = Request::input('item_purchasing_information');
+		$insert['item_asset_account_id']       = Request::input('item_asset_account_id');
+		$insert['has_serial_number']           = Request::input('item_has_serial');
+
+		/*For inventory refill*/
 		// $insert['item_initial_qty'] 		   = Request::input('item_initial_qty');
 		// $insert['item_date_track'] 			   = Request::input('item_date_track');
 		// $insert['item_reorder_point'] 		   = Request::input('item_reorder_point');
-		$insert['item_asset_account_id']       = Request::input('item_asset_account_id');
-		$insert['has_serial_number']           = Request::input('item_has_serial');
 
 		$shop_id = $this->user_info->shop_id;
 		$item_type_id = 1;

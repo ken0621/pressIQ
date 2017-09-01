@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Member;
 use Request;
 use Validator;
 use Crypt;
+use App\Globals\Pdf_global;
 
 class PayrollGovernmentFormsController extends Member
 {

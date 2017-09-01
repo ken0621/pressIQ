@@ -82,12 +82,12 @@
     <div class="feature-header">{{ get_content($shop_theme_info, "home", "home_featured_title") }}</div>
     <div class="feature-content container">
         @foreach(limit_foreach(get_collection_random(get_content($shop_theme_info, "home", "home_featured"), $shop_id), 4) as $collection)
-        <div class="holder col-md-3 col-sm-6">
+        <div class="holder col-md-3 col-sm-6" style="overflow: hidden;">
            <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
            </a>
            <div class="border">
               <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
-                 <div class="img" style="overflow: hidden;">
+                 <div class="img">
                   @if($collection["product"]["eprod_detail_image"])
                       <img style="top: -10px; right: -10px;" class="detail" src="{{ $collection["product"]["eprod_detail_image"] }}">
                   @endif
@@ -114,12 +114,12 @@
     </div>
     <div class="arrival-content container">
         @foreach(limit_foreach(get_collection_random(get_content($shop_theme_info, "home", "home_new_arrival"), $shop_id),8) as $collection)
-        <div class="holder col-md-3 col-sm-6">
+        <div class="holder col-md-3 col-sm-6" style="overflow: hidden;">
            <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
            </a>
            <div class="border ">
               <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
-                 <div class="img" style="overflow: hidden;">
+                 <div class="img">
                   @if($collection["product"]["eprod_detail_image"])
                       <img style="top: -10px; right: -10px;" class="detail" src="{{ $collection["product"]["eprod_detail_image"] }}">
                   @endif
@@ -146,12 +146,12 @@
     </div>
     <div class="best-content container">
         @foreach(limit_foreach(get_collection_random(get_content($shop_theme_info, "home", "home_best_seller"), $shop_id), 8) as $collection)
-        <div class="holder col-md-3 col-sm-6">
+        <div class="holder col-md-3 col-sm-6" style="overflow: hidden;">
            <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
            </a>
            <div class="border">
               <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
-                 <div class="img" style="overflow: hidden;">
+                 <div class="img">
                   @if($collection["product"]["eprod_detail_image"])
                       <img style="top: -10px; right: -10px;" class="detail" src="{{ $collection["product"]["eprod_detail_image"] }}">
                   @endif

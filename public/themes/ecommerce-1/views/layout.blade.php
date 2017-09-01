@@ -64,7 +64,7 @@
     </head>
     <body>
     <div class="loader" style="display: none;">
-      <span><img src="/resources/assets/frontend/img/loader.gif"></span>
+      <span onClick="location.href='/'" style="cursor: pointer;"><img src="/resources/assets/frontend/img/loader.gif"></span>
     </div>
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>

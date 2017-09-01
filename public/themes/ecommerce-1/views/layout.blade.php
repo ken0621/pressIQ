@@ -140,7 +140,7 @@
     		</div>
     	</div>
         <div class="container">
-            <marquee style="color: #fff; font-size: 18px;">Empowering consumers to experience the VIP Life... Convenience. Benefits. Rewards. Unlimited Income.</marquee>
+            <marquee style="color: #fff; font-size: 18px;">{{ get_content($shop_theme_info, "info", "marquee_message") }}</marquee>
         </div>
     </div>
     <!-- NAVIGATION -->

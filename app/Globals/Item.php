@@ -26,6 +26,13 @@ use App\Globals\Merchant;
 
 class Item
 {
+    /* ITEM CRUD START */
+    public static function create($item_type, $insert)
+    {
+    }
+    /* ITEM CRUD END */
+
+    /* RETRIEVE ITEM INFORMATION */
     public static function item_additional_info($item_info)
     {
         $item_info->computed_price  = $item_info->item_price;
@@ -295,7 +302,7 @@ class Item
 
         return $return;
     }
-    public static function get_all_item_additional_info($_item)
+    public static function apply_additional_info_to_array($_item)
     {
         $_new_item = null;
 
@@ -365,6 +372,8 @@ class Item
  
         return $data;        
     }
+
+
 
     public static function pis_get_all_category_item_transaction($type = array(1,2,3,4))
     {        

@@ -313,7 +313,7 @@
                 </div>
                 @endif
             </div>
-            <div style="page-break-after: always;">
+            <div>
                 <div class="form-group">
                     <h2>Agent Transaction</h2>
                 </div>

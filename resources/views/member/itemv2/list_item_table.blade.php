@@ -27,10 +27,10 @@
                     <td class="text-center">N/A</td>
                 @else
                     <td class="text-center"><a href="javascript:">{{ $item->multi_abbrev }}</a></td>
-                @endif
-                
+                @endif 
             @else
-                <td class="text-center" colspan="2">{{ $item->item_type_name }}</td>
+                <td class="text-center">N/A</td>
+                <td class="text-center">N/A</td>
             @endif
             <td class="text-center">
                 <div class="btn-group">

@@ -24,7 +24,7 @@ class Page_ThemesController extends Member
 
     public function delete_company_info($id)
 	{
-		$update['archived']="0";
+		$update['archived']="1";
 		Tbl_partners::where("company_id", $id)->update($update);
         Redirect::to("/member/page/partnerview")->send();
 	}
@@ -69,8 +69,8 @@ class Page_ThemesController extends Member
 
 	public function partnerview()
     {
-	    $data["_company_info"]  = Tbl_partners::get();
-	    $data['locationList'] = Tbl_partners::select('company_location')->distinct()->get();
+	    $data["_company_info"]  = Tbl_partners::where('archived','=','0')->get();
+	    $data['locationList'] = Tbl_partners::select('company_location')->where('archived','=','0')->distinct()->get();
 		return view('member/page/partnerview', $data);
 	}
 
@@ -78,7 +78,9 @@ class Page_ThemesController extends Member
 	{
 		// if($request->ajax())
 		// {
-			$partnerResult = Tbl_partners::where('company_location', '=', Request::input('locationVal'))->get();
+			$partnerResult = Tbl_partners::where('company_location', Request::input('locationVal'))
+			->where('archived','0')
+			->get();
 			$partnerResultView = view('member.page.partner-filter-result', compact('partnerResult'))->render();
 			return Response::json($partnerResultView);
 		// }

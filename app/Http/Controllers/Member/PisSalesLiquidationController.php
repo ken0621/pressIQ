@@ -82,8 +82,6 @@ class PisSalesLiquidationController extends Member
         }
         $data = unserialize($return);
 
-        // dd($data);
-
         $html = view("member.cashier.sales_liquidation.liquidation_report",$data);
         $footer = 'REF#'.$sir_id;
         return Pdf_global::show_pdf($html,'',$footer);

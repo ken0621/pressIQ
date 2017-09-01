@@ -10,10 +10,10 @@
                	{{ $company->payroll_company_name }}
                 </small>
             </h1>
+            <a href="/member/payroll/reports/payroll_register_report_period/export_excel/{{$period_info->payroll_period_company_id}}"><button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" style="font-size:25px;color:white"></i> &nbsp;EXPORT TO EXCEL</button></a>
         </div>
     </div>
 </div>
-
 
 
 <div class="panel panel-default panel-block panel-title-block" style="overflow-x: scroll; ">

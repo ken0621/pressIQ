@@ -68,6 +68,13 @@ class Accounting
 
 		return $result;
 	}
+	public static function get_default_coa($account_code)
+	{
+		$shop_id = Accounting::getShopId();
+		$return_id = Tbl_chart_of_account::where("account_code", $account_code)
+									->where("account_shop_id", $shop_id)->pluck("account_id");
+		return $return_id;
+	}
 	public static function checkAccount($shop, $parent_id, $sublevel, $filter, $type, $search)
 	{
 		$query = Tbl_chart_of_account::accountInfo($shop)->balance()->where("account_parent_id", $parent_id)->where("account_sublevel", $sublevel)->orderBy("chart_type_id");

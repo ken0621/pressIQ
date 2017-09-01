@@ -469,6 +469,7 @@
         }, "") + "." + p[1];
         }
         </script>
+        <script type="text/javascript" src="/assets/member/js/jquery-ui.js"></script>
         @yield('script')
     </body>
 </html>

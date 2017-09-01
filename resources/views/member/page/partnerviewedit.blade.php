@@ -1,6 +1,7 @@
 @extends('member.layout')
 @section('content')
 
+
 <form method="post" action="/member/page/partner/submit_edit/{{ $company_info->company_id }}" >
 	<div class="panel panel-default panel-block panel-title-block" id="top">
 		<div class="panel-heading">
@@ -58,6 +59,7 @@
 									<input type="text" name="company_address" class="form-control" value="{{ $company_info->company_address }}">
 								</div>
 							</div>
+
 						</div>
 						<div class="col-md-6" style="margin-bottom: 5px;">
 							<label>Company Location</label>
@@ -68,9 +70,20 @@
 							</div>
 						</div>
 						<div class="col-md-6" style="margin-bottom: 5px;">
-							<div>
-								<div class="match-height">
-									<input type="hidden" name="company_logo" class="form-control" value="{{ $company_info->company_logo }}">
+							<label>Company Logo</label>
+							<div class="match-height">
+								<input type="hidden" name="company_logo" value="{{ $company_info->company_logo}}">
+								<input class="image-value" key="company_logo" type="hidden" name="company_logo" value="{{ $company_info->company_logo }}">
+								<div class="gallery-list image-gallery image-gallery-single" key="company_logo">
+									@if($company_info->company_logo)
+									<div>
+										<div class="img-holder">
+											<img class="img-responsive" src="{{ $company_info->company_logo}}">
+										</div>
+									</div>
+									@else
+									<div class="empty-notify"><i class="fa fa-image"></i> No Image Yet</div>
+									@endif
 								</div>
 							</div>
 						</div>

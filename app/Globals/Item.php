@@ -112,6 +112,18 @@ class Item
 
         return $return;
     }
+    public static function archive($shop_id, $item_id)
+    {
+        $update["archived"] = 1;
+        $update["item_date_archived"] = Carbon::now();
+        Tbl_item::where("shop_id", $shop_id)->where("item_id", $item_id)->update($update);
+    }
+    public static function restore($shop_id, $item_id)
+    {
+        $update["archived"] = 0;
+        $update["item_date_archived"] = null;
+        Tbl_item::where("shop_id", $shop_id)->where("item_id", $item_id)->update($update);
+    }
     /* ITEM CRUD END */
 
     /* RETRIEVE ITEM INFORMATION */
@@ -363,14 +375,14 @@ class Item
         return $data;
 	}
 
-    public static function get_all_item($shop_id = 0, $paginate = false)
+    public static function get_all_item($shop_id = 0, $paginate = false, $archive = 0)
     {
         if($shop_id == 0)
         {
             $shop_id = Item::getShopId();
         }
 
-        $query = Tbl_item::where("shop_id", $shop_id)->active()->type()->inventory()->um_multi();
+        $query = Tbl_item::where("shop_id", $shop_id)->where("tbl_item.archived", $archive)->type()->inventory()->um_multi();
 
         if($paginate)
         {

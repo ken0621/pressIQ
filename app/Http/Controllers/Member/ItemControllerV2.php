@@ -15,40 +15,43 @@ class ItemControllerV2 extends Member
 	}
 	public function list_table()
 	{
+		$archived 			= Request::input("archived") ? 1 : 0;
 		$data["page"]		= "Item List - Table";
-		$data["_item_raw"]	= Item::get_all_item($this->user_info->shop_id, 5);
+		$data["_item_raw"]	= Item::get_all_item($this->user_info->shop_id, 5, $archived);
 		$data["_item"]		= Item::apply_additional_info_to_array($data["_item_raw"]);
+		$data["archive"]	= $archived == 1 ? "restore" : "archive";
 		return view("member.itemv2.list_item_table", $data);
 	}
 	public function get_item()
 	{
-		$data['_service']  		    = Category::getAllCategory(['services']);
-		$data['_inventory']  		= Category::getAllCategory(['inventory']);
-		$data['_noninventory']  	= Category::getAllCategory(['non-inventory']);
-		$data['_bundle']        	= Category::getAllCategory(['bundles']);
-
-
-		$data["_income"] = Accounting::getAllAccount('all',null,['Income','Other Income']);
-		$data["_asset"] = Accounting::getAllAccount('all', null, ['Other Current Asset','Fixed Asset','Other Asset']);
-		$data["_expense"] = Accounting::getAllAccount('all',null,['Expense','Other Expense','Cost of Goods Sold']);
-
-		$data['default_income'] = Accounting::get_default_coa("accounting-sales");
-		$data['default_asset'] = Accounting::get_default_coa("accounting-inventory-asset");
+		$data['_service']  		 = Category::getAllCategory(['services']);
+		$data['_inventory']  	 = Category::getAllCategory(['inventory']);
+		$data['_noninventory']   = Category::getAllCategory(['non-inventory']);
+		$data['_bundle']         = Category::getAllCategory(['bundles']);
+		$data["_income"] 		 = Accounting::getAllAccount('all',null,['Income','Other Income']);
+		$data["_asset"] 		 = Accounting::getAllAccount('all', null, ['Other Current Asset','Fixed Asset','Other Asset']);
+		$data["_expense"] 		 = Accounting::getAllAccount('all',null,['Expense','Other Expense','Cost of Goods Sold']);
+		$data['default_income']  = Accounting::get_default_coa("accounting-sales");
+		$data['default_asset']   = Accounting::get_default_coa("accounting-inventory-asset");
 		$data['default_expense'] = Accounting::get_default_coa("accounting-expense");
+		$data["_manufacturer"]   = Manufacturer::getAllManufaturer();
+		$data['item_info'] 	     = [];
 
-		$data["_manufacturer"] = Manufacturer::getAllManufaturer();
-		$data['item_info'] = [];
+		$id 					 = Request::input('item_id');
 
-		$id = Request::input('item_id');
 		if($id)
 		{
-			$data['item_info'] = Item::get_item_info($id);
+			$data['item_info'] 	      = Item::get_item_info($id);
 			$data["link_submit_here"] = "/member/item/v2/edit_submit?item_id=" . $id;
+			$data["item_main"]	      = "";
+			$data["item_picker"]	  = "hide";
 		}
 		else
 		{
-			$data["page"]		= "Item Add";
+			$data["page"]			  = "Item Add";
 			$data["link_submit_here"] = "/member/item/v2/add_submit";
+			$data["item_main"]	      = "hide";
+			$data["item_picker"]	  = "";
 		}
 
 		return $data;
@@ -110,9 +113,10 @@ class ItemControllerV2 extends Member
 	public function edit_item_submit()
 	{
 		$return = $this->submit_item("edit");
-		
+
 		return json_encode($return);
 	}
+
 	public function cost()
 	{
 		$data["page"]		= "Item Cost";
@@ -122,5 +126,27 @@ class ItemControllerV2 extends Member
 	{
 		$data["page"]		= "Item Price Level";
 		return view("member.itemv2.price_level");
+	}
+
+	public function archive()
+	{
+		$item_id = Request::input("item_id");
+		if ($item_id) 
+		{
+			Item::archive($this->user_info->shop_id, $item_id);
+		}
+
+		echo json_encode("success");
+	}
+
+	public function restore()
+	{
+		$item_id = Request::input("item_id");
+		if ($item_id) 
+		{
+			Item::restore($this->user_info->shop_id, $item_id);
+		}
+
+		echo json_encode("success");
 	}
 }

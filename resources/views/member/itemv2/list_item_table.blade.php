@@ -45,9 +45,9 @@
                             </a>
                         </li>
                         <li>
-                            <a href="javascript:">
+                            <a href="javascript:" class="item-{{ $archive }}" item-id="{{ $item->item_id }}">
                                 <div style="display: inline-block; width: 17px; text-align: center;"><i class="fa fa-trash"></i> &nbsp;</div>
-                                Archive
+                                <span style="text-transform: capitalize;">{{ $archive }}</span>
                             </a>
                         </li>
                         <li>

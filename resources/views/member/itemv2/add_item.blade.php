@@ -7,7 +7,7 @@
     </div>
     
     <!-- ITEM TYPE PICKER -->
-    <div class="item-type-picker">
+    <div class="item-type-picker {{ $item_picker }}">
         <div class="item-type-picker-container-clearfix">
             <div class="tp-picker" type_id="1">
                 <div class="row unselectable">
@@ -78,7 +78,7 @@
     </div>
 
     <!-- ITEM ADD MAIN -->
-    <div class="item-add-main" style="display: none">
+    <div class="item-add-main {{ $item_main }}">
         <div class="clearfix modal-body modallarge-body-layout"> 
             <div class="form-horizontal">
                 <!-- BASIC INFORMATION -->

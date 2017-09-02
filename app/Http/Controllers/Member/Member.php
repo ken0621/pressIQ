@@ -87,6 +87,7 @@ class Member extends Controller
 						{
 							$current_warehouse = $check_exist;
 						}
+						Session::put('warehouse_id_'.$shop_id_used, $current_warehouse->warehouse_id);
 					}
 					else if($check_warehouse)
 					{
@@ -108,6 +109,8 @@ class Member extends Controller
 						if($check_if_got_one)
 						{
 							$current_warehouse = Tbl_warehouse::where("warehouse_shop_id",$shop_id_used)->where("warehouse_id",$check_if_got_one->warehouse_id)->first();
+
+							Session::put('warehouse_id_'.$shop_id_used, $current_warehouse->warehouse_id);
 						}
 					}
 

@@ -67,9 +67,9 @@ class ItemControllerV2 extends Member
 		$insert['has_serial_number']           = Request::input('item_has_serial');
 
 		/*For inventory refill*/
-		// $insert['item_initial_qty'] 		   = Request::input('item_initial_qty');
-		// $insert['item_date_track'] 			   = Request::input('item_date_track');
-		// $insert['item_reorder_point'] 		   = Request::input('item_reorder_point');
+		$insert['item_quantity'] 		  	   = Request::input('item_initial_qty');
+		$insert['item_date_tracked'] 		   = Request::input('item_date_track');
+		$insert['item_reorder_point'] 		   = Request::input('item_reorder_point');
 
 		$shop_id = $this->user_info->shop_id;
 		$item_type_id = 1;

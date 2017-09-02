@@ -18,8 +18,9 @@ class CreateTblWarehouseInventoryItem extends Migration
             $table->integer('record_item_id')->unsigned();
             $table->integer('record_warehouse_id')->unsigned();
             $table->longtext('record_item_remarks')->nullable();
+            $table->integer('record_warehouse_slip_id')->default(0);
 
-            $table->tinyInteger('record_inventory_status')->comment("0 for not use and 1 for consume");
+            $table->tinyInteger('record_inventory_status')->default(0)->comment("0 for not use and 1 for consume");
 
             $table->string('record_source_ref_name')->nullable();
             $table->integer('record_source_ref_id')->default(0);

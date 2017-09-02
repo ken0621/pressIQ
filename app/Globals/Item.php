@@ -23,6 +23,7 @@ use Session;
 use DB;
 use Carbon\carbon;
 use App\Globals\Merchant;
+use App\Globals\Warehouse2;
 use Validator;
 
 class Item
@@ -61,12 +62,19 @@ class Item
             $insert['item_type_id'] = $item_type;
             $insert['item_date_created'] = Carbon::now();
 
-            $item_id = Tbl_item::insertGetId($insert);
+            $return = Warehouse2::refill_validation($shop_id, $warehouse_id, 0, $insert['item_quantity'], 'Initial Quantity from Item')
+            if(!$return['message'])
+            {
+                $item_id = Tbl_item::insertGetId($insert);
+                
+                $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+                $return = Warehouse2::refill($shop_id, $warehouse_id, $item_id, $insert['item_quantity'], 'Initial Quantity from Item');         
 
-            $return['item_id']       = $item_id;
-            $return['status']        = 'success';
-            $return['message']       = 'Item successfully created.';
-            $return['call_function'] = 'success_item';
+                $return['item_id']       = $item_id;
+                $return['status']        = 'success';
+                $return['message']       = 'Item successfully created.';
+                $return['call_function'] = 'success_item';       
+            }
         }
 
         return $return;

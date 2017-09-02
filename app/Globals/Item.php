@@ -73,7 +73,7 @@ class Item
     }
     public static function modify($shop_id, $item_id, $update)
     {
-        $return['item_id'] = 0;
+        $return['item_id'] = $item_id;
         $return['status'] = null;
         $return['message'] = null; 
 
@@ -100,17 +100,17 @@ class Item
         }
         if(!$return['status'])
         {
-            $update['shop_id'] = $shop_id;
-            $update['item_type_id'] = $item_type;
-            $update['item_date_created'] = Carbon::now();
+            $update['updated_at'] = Carbon::now();
 
-            $item_id = Tbl_item::insertGetId($update);
+            $item_id = Tbl_item::where("shop_id", $shop_id)->where("item_id", $item_id)->update($update);
 
             $return['item_id']       = $item_id;
             $return['status']        = 'success';
             $return['message']       = 'Item successfully created.';
             $return['call_function'] = 'success_item';
         }
+
+        return $return;
     }
     /* ITEM CRUD END */
 

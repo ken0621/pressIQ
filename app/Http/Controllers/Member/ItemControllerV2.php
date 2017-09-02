@@ -110,7 +110,7 @@ class ItemControllerV2 extends Member
 	public function edit_item_submit()
 	{
 		$return = $this->submit_item("edit");
-
+		
 		return json_encode($return);
 	}
 	public function cost()

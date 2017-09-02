@@ -127,7 +127,7 @@
                             <div class="form-group">
                                 <div class="col-md-6">
                                     <label for="basic-input">Sale Price / Rate *</label>
-                                    <input type="text" class="form-control text-right" placeholder="0.00" value="0" value="{{ get_request_old($item_info, 'item_price') }}" name="item_price">
+                                    <input type="text" class="form-control text-right" placeholder="0.00" value="{{ get_request_old($item_info, 'item_price') }}" name="item_price">
                                 </div>
                                 <div class="col-md-6">
                                     <label for="basic-input">Income Account</label>

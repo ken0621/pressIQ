@@ -41,6 +41,13 @@ class ItemControllerV2 extends Member
 
 		$data["_manufacturer"] = Manufacturer::getAllManufaturer();
 
+		$id = Request::input('item_id');
+		if($id)
+		{
+			$data['item_info'] = Item::get_item_info($id);
+			$data["link_submit_here"] = "/member/item/v2/update_submit";
+		}
+
 		return view("member.itemv2.add_item",$data);
 	}
 	public function add_item_submit()

@@ -20,11 +20,8 @@ class ItemControllerV2 extends Member
 		$data["_item"]		= Item::apply_additional_info_to_array($data["_item_raw"]);
 		return view("member.itemv2.list_item_table", $data);
 	}
-	public function add_item()
+	public function get_item()
 	{
-		$data["page"]		= "Item Add";
-		$data["link_submit_here"] = "/member/item/v2/add_submit";
-
 		$data['_service']  		    = Category::getAllCategory(['services']);
 		$data['_inventory']  		= Category::getAllCategory(['inventory']);
 		$data['_noninventory']  	= Category::getAllCategory(['non-inventory']);
@@ -40,17 +37,23 @@ class ItemControllerV2 extends Member
 		$data['default_expense'] = Accounting::get_default_coa("accounting-expense");
 
 		$data["_manufacturer"] = Manufacturer::getAllManufaturer();
+		$data['item_info'] = [];
 
 		$id = Request::input('item_id');
 		if($id)
 		{
 			$data['item_info'] = Item::get_item_info($id);
-			$data["link_submit_here"] = "/member/item/v2/update_submit";
+			$data["link_submit_here"] = "/member/item/v2/edit_submit?item_id=" . $id;
+		}
+		else
+		{
+			$data["page"]		= "Item Add";
+			$data["link_submit_here"] = "/member/item/v2/add_submit";
 		}
 
-		return view("member.itemv2.add_item",$data);
+		return $data;
 	}
-	public function add_item_submit()
+	public function submit_item($from)
 	{
 		$insert['item_name'] 				   = Request::input('item_description');
 		$insert['item_sku'] 				   = Request::input('item_sku');
@@ -72,8 +75,41 @@ class ItemControllerV2 extends Member
 		// $insert['item_reorder_point'] 		   = Request::input('item_reorder_point');
 
 		$shop_id = $this->user_info->shop_id;
-		$item_type_id = 1;
-		$return =  Item::create($shop_id, $item_type_id, $insert);
+		
+		if($from == "add")
+		{
+			$item_type_id = 1;
+			$return 	  = Item::create($shop_id, $item_type_id, $insert);
+		}
+		elseif($from == "edit")
+		{
+			$item_id 	  = Request::input("item_id");
+			$return  	  = Item::modify($shop_id, $item_id, $insert);
+		}
+
+		return $return;
+	}
+	public function add_item()
+	{
+		$data = $this->get_item();
+
+		return view("member.itemv2.add_item",$data);
+	}
+	public function add_item_submit()
+	{
+		$return = $this->submit_item("add");		
+
+		return json_encode($return);
+	}
+	public function edit_item()
+	{
+		$data = $this->get_item();
+
+		return view("member.itemv2.add_item",$data);
+	}
+	public function edit_item_submit()
+	{
+		$return = $this->submit_item("edit");
 
 		return json_encode($return);
 	}

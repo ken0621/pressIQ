@@ -71,6 +71,47 @@ class Item
 
         return $return;
     }
+    public static function modify($shop_id, $item_id, $update)
+    {
+        $return['item_id'] = 0;
+        $return['status'] = null;
+        $return['message'] = null; 
+
+        $rules['item_name'] = 'required';
+        $rules['item_sku'] = 'required';
+        $rules['item_price'] = 'required';
+        $rules['item_cost'] = 'required';
+
+        $validator = Validator::make($update, $rules);
+
+        if($update['item_cost'] > $update['item_price'])
+        {       
+            $return['status'] = 'error';
+            $return['message'] = 'The cost is greater than the sales price.'."<br>";
+        }
+
+        if($validator->fails())
+        {
+            $return["status"] = "error";
+            foreach ($validator->messages()->all('') as $keys => $message)
+            {
+                $return["message"] .= $message."<br>";
+            }
+        }
+        if(!$return['status'])
+        {
+            $update['shop_id'] = $shop_id;
+            $update['item_type_id'] = $item_type;
+            $update['item_date_created'] = Carbon::now();
+
+            $item_id = Tbl_item::insertGetId($update);
+
+            $return['item_id']       = $item_id;
+            $return['status']        = 'success';
+            $return['message']       = 'Item successfully created.';
+            $return['call_function'] = 'success_item';
+        }
+    }
     /* ITEM CRUD END */
 
     /* RETRIEVE ITEM INFORMATION */

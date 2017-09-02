@@ -39,7 +39,7 @@
                     </button>
                     <ul class="dropdown-menu dropdown-menu-custom">
                         <li>
-                            <a onclick="action_load_link_to_modal('/member/item/v2/add?item_id={{ $item->item_id }}', 'lg')">
+                            <a onclick="action_load_link_to_modal('/member/item/v2/edit?item_id={{ $item->item_id }}', 'lg')">
                                 <div style="display: inline-block; width: 17px; text-align: center;"><i class="fa fa-edit"></i> &nbsp;</div>
                                 Modify
                             </a>

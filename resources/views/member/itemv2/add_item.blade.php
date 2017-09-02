@@ -85,35 +85,35 @@
                 <h4 class="section-title first">Basic Information</h4>
                 <div class="form-group">
                     <div class="col-md-6">
-                            <label for="basic-input">Item Description</label>
-                            <input id="basic-input" class="form-control" name="item_description" placeholder="">
+                        <label for="basic-input">Item Description</label>
+                        <input id="basic-input" value="{{ get_request_old($item_info, 'item_description', 'item_name') }}" class="form-control" name="item_description" placeholder="">
                     </div>
                     <div class="col-md-3">
                         <label for="basic-input">Item Code / SKU</label>
-                        <input id="basic-input" class="form-control" name="item_sku" placeholder="">
+                        <input id="basic-input" value="{{ get_request_old($item_info, 'item_sku') }}" class="form-control" name="item_sku" placeholder="">
                     </div>
                     <div class="col-md-3">
                         <label for="basic-input">Barcode</label>
-                        <input id="basic-input" class="form-control" name="item_barcode" placeholder="">
+                        <input id="basic-input" value="{{ get_request_old($item_info, 'item_barcode') }}" class="form-control" name="item_barcode" placeholder="">
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-6">
                         <label for="basic-input">Category</label>
                         <select class="form-control select-category inventory" name="item_category">
-                            @include("member.load_ajax_data.load_category", ['add_search' => "",'_category' => $_inventory])
+                            @include("member.load_ajax_data.load_category", ['add_search' => "",'_category' => $_inventory,'type_id' => get_request_old($item_info, 'item_category', 'item_category_id')])
                         </select>
                     </div>
                     <div class="col-md-3">
                         <label for="basic-input">Manufacturer</label>
                         <select class="form-control select-manufacturer" name="item_manufacturer_id">
-                            @include("member.load_ajax_data.load_manufacturer")
+                            @include("member.load_ajax_data.load_manufacturer", ['_manufacturer' => $_manufacturer,'manufacturer_id' => get_request_old($item_info, 'item_manufacturer_id')])
                         </select>
                     </div>
                     <div class="col-md-3">
                         <label for="basic-input">Item Type</label>
                         <div class="input-group change-type">
-                          <input  type="text" class="form-control" name="item_type_id" disabled value="Inventory" aria-describedby="basic-addon1">
+                          <input  type="text" class="form-control" name="item_type_id" disabled value="{{ get_request_old($item_info, 'item_type_id') }}" aria-describedby="basic-addon1">
                           <span style="background-color: #eee; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-edit"></i></span>
                         </div>
                     </div>
@@ -127,19 +127,19 @@
                             <div class="form-group">
                                 <div class="col-md-6">
                                     <label for="basic-input">Sale Price / Rate *</label>
-                                    <input type="text" class="form-control text-right" placeholder="0.00" value="0"  name="item_price">
+                                    <input type="text" class="form-control text-right" placeholder="0.00" value="0" value="{{ get_request_old($item_info, 'item_price') }}" name="item_price">
                                 </div>
                                 <div class="col-md-6">
                                     <label for="basic-input">Income Account</label>
                                     <select class="form-control select-income-account" name="item_income_account_id">
-                                        @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_income, 'account_id' => $default_income])
+                                        @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_income, 'account_id' => get_request_old($item_info, 'item_income_account_id') != '' ? get_request_old($item_info, 'item_income_account_id') : $default_income])
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <label for="basic-input">Sales Information</label>
-                                    <textarea class="form-control" placeholder="Description on sales forms" name="item_sales_information"></textarea>
+                                    <textarea class="form-control" placeholder="Description on sales forms" name="item_sales_information">{{ get_request_old($item_info, 'item_sales_information') }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -152,21 +152,21 @@
                                 <div class="col-md-6">
                                     <label for="basic-input"> Cost *</label>
                                     <div class="input-group">
-                                      <input  type="text" class="form-control text-right" placeholder="0.00" value="0" aria-describedby="basic-addon1" name="item_cost">
+                                      <input  type="text" class="form-control text-right" placeholder="0.00" value="{{ get_request_old($item_info, 'item_cost') }}" aria-describedby="basic-addon1" name="item_cost">
                                       <span onclick="action_load_link_to_modal('/member/item/v2/cost', 'lg')" style="background-color: #eee; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-calculator"></i></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="basic-input">Expense Account</label>
                                     <select class="form-control select-expense-account" name="item_expense_account_id">
-                                        @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_expense, 'account_id' => $default_expense])
+                                        @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_expense, 'account_id' => get_request_old($item_info, 'item_expense_account_id') != '' ? get_request_old($item_info, 'item_expense_account_id') : $default_expense])
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <label for="basic-input">Purchasing Information</label>
-                                    <textarea class="form-control" placeholder="Description on purchase forms" name="item_purchasing_information"></textarea>
+                                    <textarea class="form-control" placeholder="Description on purchase forms" name="item_purchasing_information">{{ get_request_old($item_info, 'item_purchasing_information') }}</textarea>
                                 </div>
                             </div>
                         </div>

@@ -10,14 +10,19 @@ class ItemControllerV2 extends Member
 {
 	public function list()
 	{
-		$data["page"] 		= "Item List";
+		$data["page"] 		 	= "Item List";
+		$data["_item_type"]     = Item::get_item_type_list();
+		$data["_item_category"] = Item::getItemCategory($this->user_info->shop_id);
+
 		return view("member.itemv2.list_item", $data);
 	}
 	public function list_table()
 	{
 		$archived 			= Request::input("archived") ? 1 : 0;
+		$item_type_id 		= Request::input("item_type_id");
+		$item_category_id   = Request::input("item_category_id");
 		$data["page"]		= "Item List - Table";
-		$data["_item_raw"]	= Item::get_all_item($this->user_info->shop_id, 5, $archived);
+		$data["_item_raw"]	= Item::get_all_item($this->user_info->shop_id, 5, $archived, $item_type_id, $item_category_id);
 		$data["_item"]		= Item::apply_additional_info_to_array($data["_item_raw"]);
 		$data["archive"]	= $archived == 1 ? "restore" : "archive";
 		return view("member.itemv2.list_item_table", $data);
@@ -45,13 +50,15 @@ class ItemControllerV2 extends Member
 			$data["link_submit_here"] = "/member/item/v2/edit_submit?item_id=" . $id;
 			$data["item_main"]	      = "";
 			$data["item_picker"]	  = "hide";
+			$data["item_button"]	  = "";
 		}
 		else
 		{
 			$data["page"]			  = "Item Add";
 			$data["link_submit_here"] = "/member/item/v2/add_submit";
-			$data["item_main"]	      = "hide";
+			$data["item_main"]	      = 'style="display: none"';
 			$data["item_picker"]	  = "";
+			$data["item_button"]	  = "disabled";
 		}
 
 		return $data;

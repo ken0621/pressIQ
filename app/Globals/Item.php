@@ -19,6 +19,7 @@ use App\Globals\Tablet_global;
 use App\Globals\Currency;
 use App\Models\Tbl_price_level;
 use App\Models\Tbl_price_level_item;
+use App\Models\Tbl_item_type;
 use Session;
 use DB;
 use Carbon\carbon;
@@ -313,6 +314,10 @@ class Item
         }
         return $type;
     }
+    public static function get_item_type_list()
+    {
+        return Tbl_item_type::where("archived", 0)->get();
+    }
 	public static function breakdown($_item='')
 	{
 		$data = '';
@@ -375,7 +380,7 @@ class Item
         return $data;
 	}
 
-    public static function get_all_item($shop_id = 0, $paginate = false, $archive = 0)
+    public static function get_all_item($shop_id = 0, $paginate = false, $archive = 0, $item_type_id = null, $item_category_id = null)
     {
         if($shop_id == 0)
         {
@@ -383,6 +388,16 @@ class Item
         }
 
         $query = Tbl_item::where("shop_id", $shop_id)->where("tbl_item.archived", $archive)->type()->inventory()->um_multi();
+
+        if ($item_type_id) 
+        {
+            $query = $query->where("tbl_item.item_type_id", $item_type_id);
+        }
+
+        if ($item_category_id) 
+        {
+            $query = $query->where("tbl_item.item_category_id", $item_category_id);
+        }
 
         if($paginate)
         {
@@ -1027,7 +1042,6 @@ class Item
         
         return $item_session;
     }
-
     public static function getOtherChargeItem()
     {
         $exist_item = Tbl_item::where("shop_id", Item::getShopId())->where("item_code", "other-charge")->first();
@@ -1045,7 +1059,6 @@ class Item
 
         return $exist_item->item_id;
     }
-
     public static function getServiceCategory()
     {
         $exist_type = Tbl_category::where("type_shop", Item::getShopId())->where("type_name", "Service")->first();
@@ -1060,5 +1073,9 @@ class Item
         }
 
         return $exist_type->type_id;
+    }
+    public static function getItemCategory($shop_id)
+    {
+        return Tbl_category::where("type_shop", $shop_id)->where("archived", 0)->get();
     }
 }

@@ -78,7 +78,7 @@
     </div>
 
     <!-- ITEM ADD MAIN -->
-    <div class="item-add-main {{ $item_main }}">
+    <div class="item-add-main" {{ $item_main }}>
         <div class="clearfix modal-body modallarge-body-layout"> 
             <div class="form-horizontal">
                 <!-- BASIC INFORMATION -->
@@ -216,7 +216,7 @@
 
     <div class="modal-footer">
         <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-        <button  disabled class="btn btn-primary btn-custom-primary" type="submit"><i class="fa fa-save"></i> Save Item</button>
+        <button {{ $item_button }} class="btn btn-primary btn-custom-primary" type="submit"><i class="fa fa-save"></i> Save Item</button>
     </div>
 </form>
 <script type="text/javascript" src="/assets/member/js/item/item_add.js"></script>

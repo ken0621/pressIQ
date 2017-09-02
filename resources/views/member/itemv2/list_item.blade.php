@@ -27,16 +27,17 @@
     </ul>
     <div class="search-filter-box">
         <div class="col-md-3" style="padding: 10px">
-            <select class="form-control">
+            <select name="item_type_id" class="form-control filter-item-type">
                 <option value="0">All Item Type</option>
-                <option value="1">Inventory</option>
-                <option value="2">Non-Inventory</option>
-                <option value="3">Bundle</option>
+                @foreach($_item_type as $item_type)
+                <option value="{{ $item_type->item_type_id }}">{{ $item_type->item_type_name }}</option>
+                @endforeach
             </select>
         </div>
         <div class="col-md-3" style="padding: 10px">
-            <select class="form-control">
+            <select class="form-control category-select">
                 <option value="0">All Category</option>
+                @include("member.load_ajax_data.load_category", ['add_search' => "",'_category' => $_item_category,'type_id' => ''])
             </select>
         </div>
         <div class="col-md-2" style="padding: 10px">
@@ -64,67 +65,6 @@
 
 @section('script')
 <script type="text/javascript" src="/assets/member/js/item/item_list.js"></script>
-<script type="text/javascript">
-$(document).ready(function()
-{
-    $('.go-default').unbind("click");
-    $('.go-default').bind("click", function(e)
-    {
-        action_archive(0, e.currentTarget);
-    });
-
-    $('.go-archive').unbind("click");
-    $('.go-archive').bind("click", function(e)
-    {
-        action_archive(1, e.currentTarget);
-    });
-
-    $("body").on('click', '.item-archive', function(event) 
-    {
-        event.preventDefault();
-        var item_id = $(event.currentTarget).attr("item-id");
-        action_item_archive(item_id, "archive");
-    });
-
-    $("body").on('click', '.item-restore', function(event) 
-    {
-        event.preventDefault();
-        var item_id = $(event.currentTarget).attr("item-id");
-        action_item_archive(item_id, "restore");
-    });
-});
-
-function action_archive(archive, x)
-{
-    window.history.pushState( {} , '', '?archived='+archive );
-    load_table_data.archived = archive;
-    load_table_data.page = 1;
-    item_list.action_load_table(); 
-    $('.nav-tabs li').removeClass('active'); 
-    $(x).parent().addClass('active');
-}
-
-function action_item_archive(item_id, action)
-{
-    $.ajax({
-        url: '/member/item/v2/'+action,
-        type: 'GET',
-        dataType: 'json',
-        data: {
-            item_id: item_id
-        },
-    })
-    .done(function() {
-        item_list.action_load_table(); 
-    })
-    .fail(function() {
-        console.log("error");
-    })
-    .always(function() {
-        console.log("complete");
-    });
-}
-</script>
 @endsection
 
 @section('css')

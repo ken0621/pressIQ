@@ -621,7 +621,7 @@ class TabletSyncController extends Controller
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
-                $return[$key] = "INSERT INTO tbl_sir_inventory (sir_inventory_id, sir_item_id, inventory_sir_id, sir_inventory_count,sir_inventory_ref_name, sir_inventory_ref_id,created_at,updated_at) VALUES " . "(".$value->sir_inventory_id.",'".$value->sir_item_id."','".$value->inventory_sir_id."','".$value->sir_inventory_count."','".$value->sir_inventory_ref_name."','".$value->sir_inventory_ref_id."','".$value->created_at."','".$value->updated_at."')";
+                $return[$key] = "INSERT INTO tbl_sir_inventory (sir_inventory_id, sir_item_id, inventory_sir_id, sir_inventory_count,sir_inventory_ref_name, sir_inventory_ref_id,created_at,updated_at, is_bundled_item) VALUES " . "(".$value->sir_inventory_id.",'".$value->sir_item_id."','".$value->inventory_sir_id."','".$value->sir_inventory_count."','".$value->sir_inventory_ref_name."','".$value->sir_inventory_ref_id."','".$value->created_at."','".$value->updated_at."','".$value->is_bundled_item."')";
                 if($this->add_limiter($limit, $limit_ctr++))
                 {
                     break 1;
@@ -810,31 +810,26 @@ class TabletSyncController extends Controller
     {
         $all_data = collect(json_decode(Request::input("getdata")))->toArray();
         $sir_id = Request::input("sir_id");
+        $sync_type = Request::input("sync_type");
         if($sir_id && $all_data)
         {
-            $insert["sir_id"] = $sir_id;
-            $insert["sir_data"] = serialize($all_data);
             /*LOGIN FIRST*/
             $sir_data = Tbl_sir::where('sir_id',$sir_id)->first();
             if($sir_data)
             {
                 $data['account'] = Tbl_employee::position()->where('employee_id',$sir_data->sales_agent_id)->first();
                 Session::put('sales_agent',$data['account']);
-                $count = Tbl_tablet_data::where('sir_id',$sir_id)->count();
+                // $count = Tbl_tablet_data::where('sir_id',$sir_id)->count();
                 // dd(unserialize($count->sir_data));
-                // if($count <= 0)
-                // {
-                    // $data_id = Tbl_tablet_data::insertGetId($insert);
-                    $return = Tablet_sync::sync(1);
-                    if($return == "success")
-                    {
-                        dd("success");
-                    }
-                    else
-                    {
-                        dd("error");
-                    }                    
-                // }             
+                $insert["sir_id"] = $sir_id;
+                $insert["sir_data"] = serialize($all_data);
+                $data_id = Tbl_tablet_data::insertGetId($insert);
+                $return = Tablet_sync::sync($data_id, $sync_type);
+                if($return == "success")
+                {
+                    $returndata['status'] = $return;
+                    return json_encode($returndata);
+                }       
             }
 
         }

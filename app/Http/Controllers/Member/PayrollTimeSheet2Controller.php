@@ -193,6 +193,7 @@ class PayrollTimeSheet2Controller extends Member
 		$data["timesheet_db"] = $timesheet_db = $this->timesheet_info_db($employee_id, Request::input("date"));
 		
 		/* INSERT NEW TIME SHEET RECORD */
+		
 		$insert = null;
 		
 

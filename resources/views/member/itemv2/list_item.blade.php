@@ -98,6 +98,7 @@ function action_archive(archive, x)
 {
     window.history.pushState( {} , '', '?archived='+archive );
     load_table_data.archived = archive;
+    load_table_data.page = 1;
     item_list.action_load_table(); 
     $('.nav-tabs li').removeClass('active'); 
     $(x).parent().addClass('active');

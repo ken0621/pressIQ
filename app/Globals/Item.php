@@ -23,12 +23,106 @@ use Session;
 use DB;
 use Carbon\carbon;
 use App\Globals\Merchant;
+use Validator;
 
 class Item
 {
     /* ITEM CRUD START */
-    public static function create($item_type, $insert)
+    public static function create($shop_id, $item_type, $insert)
     {
+        $return['item_id'] = 0;
+        $return['status'] = null;
+        $return['message'] = null; 
+
+        $rules['item_name'] = 'required';
+        $rules['item_sku'] = 'required';
+        $rules['item_price'] = 'required';
+        $rules['item_cost'] = 'required';
+
+        $validator = Validator::make($insert, $rules);
+
+        if($insert['item_cost'] > $insert['item_price'])
+        {       
+            $return['status'] = 'error';
+            $return['message'] = 'The cost is greater than the sales price.'."<br>";
+        }
+
+        if($validator->fails())
+        {
+            $return["status"] = "error";
+            foreach ($validator->messages()->all('') as $keys => $message)
+            {
+                $return["message"] .= $message."<br>";
+            }
+        }
+        if(!$return['status'])
+        {
+            $insert['shop_id'] = $shop_id;
+            $insert['item_type_id'] = $item_type;
+            $insert['item_date_created'] = Carbon::now();
+
+            $item_id = Tbl_item::insertGetId($insert);
+
+            $return['item_id']       = $item_id;
+            $return['status']        = 'success';
+            $return['message']       = 'Item successfully created.';
+            $return['call_function'] = 'success_item';
+        }
+
+        return $return;
+    }
+    public static function modify($shop_id, $item_id, $update)
+    {
+        $return['item_id'] = $item_id;
+        $return['status'] = null;
+        $return['message'] = null; 
+
+        $rules['item_name'] = 'required';
+        $rules['item_sku'] = 'required';
+        $rules['item_price'] = 'required';
+        $rules['item_cost'] = 'required';
+
+        $validator = Validator::make($update, $rules);
+
+        if($update['item_cost'] > $update['item_price'])
+        {       
+            $return['status'] = 'error';
+            $return['message'] = 'The cost is greater than the sales price.'."<br>";
+        }
+
+        if($validator->fails())
+        {
+            $return["status"] = "error";
+            foreach ($validator->messages()->all('') as $keys => $message)
+            {
+                $return["message"] .= $message."<br>";
+            }
+        }
+        if(!$return['status'])
+        {
+            $update['updated_at'] = Carbon::now();
+
+            $item_id = Tbl_item::where("shop_id", $shop_id)->where("item_id", $item_id)->update($update);
+
+            $return['item_id']       = $item_id;
+            $return['status']        = 'success';
+            $return['message']       = 'Item successfully created.';
+            $return['call_function'] = 'success_item';
+        }
+
+        return $return;
+    }
+    public static function archive($shop_id, $item_id)
+    {
+        $update["archived"] = 1;
+        $update["item_date_archived"] = Carbon::now();
+        Tbl_item::where("shop_id", $shop_id)->where("item_id", $item_id)->update($update);
+    }
+    public static function restore($shop_id, $item_id)
+    {
+        $update["archived"] = 0;
+        $update["item_date_archived"] = null;
+        Tbl_item::where("shop_id", $shop_id)->where("item_id", $item_id)->update($update);
     }
     /* ITEM CRUD END */
 
@@ -281,14 +375,14 @@ class Item
         return $data;
 	}
 
-    public static function get_all_item($shop_id = 0, $paginate = false)
+    public static function get_all_item($shop_id = 0, $paginate = false, $archive = 0)
     {
         if($shop_id == 0)
         {
             $shop_id = Item::getShopId();
         }
 
-        $query = Tbl_item::where("shop_id", $shop_id)->active()->type()->inventory()->um_multi();
+        $query = Tbl_item::where("shop_id", $shop_id)->where("tbl_item.archived", $archive)->type()->inventory()->um_multi();
 
         if($paginate)
         {

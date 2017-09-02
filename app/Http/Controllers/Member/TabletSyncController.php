@@ -127,7 +127,7 @@ class TabletSyncController extends Controller
     {
         $limit = 0;
         $limit_ctr = 0;
-
+        $shop_id = Request::input('shop_id');
 
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Headers: Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With');
@@ -135,7 +135,7 @@ class TabletSyncController extends Controller
         $return = [];
         if($table == 'tbl_shop')
         {
-            $data = Tbl_shop::get();
+            $data = Tbl_shop::where('shop_id', $shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
@@ -148,7 +148,7 @@ class TabletSyncController extends Controller
         }
         if($table == 'tbl_category')
         {
-            $data = Tbl_category::get();
+            $data = Tbl_category::where('type_shop', $shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
@@ -162,7 +162,7 @@ class TabletSyncController extends Controller
 
         if($table == 'tbl_audit_trail')
         {
-            // $data = Tbl_audit_trail::get();
+            // $data = Tbl_audit_trail::where('audit_shop_id', $shop_id)->get();
             // foreach ($data as $key => $value) 
             // {
             //     $value = $this->clean_value($value);
@@ -189,7 +189,7 @@ class TabletSyncController extends Controller
         }
         if($table == 'tbl_chart_of_account')
         {
-            $data = Tbl_chart_of_account::get();
+            $data = Tbl_chart_of_account::where('account_shop_id', $shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
@@ -203,21 +203,21 @@ class TabletSyncController extends Controller
 
         if($table == 'tbl_country')
         {
-            $data = Tbl_country::get();
-            foreach ($data as $key => $value) 
-            {
-                $value = $this->clean_value($value);
-                $return[$key] = "INSERT INTO tbl_country (country_id, country_code, country_name, created_at, updated_at) VALUES " . "(".$value->country_id.",'".$value->country_code."','".$value->country_name."','".$value->created_at."','".$value->updated_at."')";
-                if($this->add_limiter($limit, $limit_ctr++))
-                {
-                    break 1;
-                }
-            }
+            // $data = Tbl_country::get();
+            // foreach ($data as $key => $value) 
+            // {
+            //     $value = $this->clean_value($value);
+            //     $return[$key] = "INSERT INTO tbl_country (country_id, country_code, country_name, created_at, updated_at) VALUES " . "(".$value->country_id.",'".$value->country_code."','".$value->country_name."','".$value->created_at."','".$value->updated_at."')";
+            //     if($this->add_limiter($limit, $limit_ctr++))
+            //     {
+            //         break 1;
+            //     }
+            // }
         }
 
         if($table == 'tbl_credit_memo')
         {
-            $data = Tbl_credit_memo::get();
+            $data = Tbl_credit_memo::where('cm_shop_id', $shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
@@ -230,7 +230,7 @@ class TabletSyncController extends Controller
         }
         if($table == 'tbl_credit_memo_line')
         {
-            $data = Tbl_credit_memo_line::get();
+            $data = Tbl_credit_memo_line::leftjoin('tbl_credit_memo','tbl_credit_memo.cm_id','=','tbl_credit_memo_line.cmline_cm_id')->where('cm_shop_id', $shop_id)->groupBy('tbl_credit_memo_line.cmline_id')->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
@@ -244,7 +244,7 @@ class TabletSyncController extends Controller
 
         if($table == 'tbl_customer')
         {
-            $data = Tbl_customer::get();
+            $data = Tbl_customer::where('shop_id', $shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
@@ -258,35 +258,35 @@ class TabletSyncController extends Controller
 
         if($table == 'tbl_customer_address')
         {
-            $data = Tbl_customer_address::get();
-            foreach ($data as $key => $value) 
-            {
-                $value = $this->clean_value($value);
-                $return[$key] = "INSERT INTO tbl_customer_address (customer_address_id, customer_id , country_id, customer_state, customer_city, customer_zipcode, customer_street, purpose, archived, created_at, updated_at) VALUES " . "(".$value->customer_address_id.",'".$value->customer_id."','".$value->country_id."','".$value->customer_state."','".$value->customer_city."','".$value->customer_zipcode."','".$value->customer_street."','".$value->purpose."','".$value->archived."','".$value->created_at."','".$value->updated_at."')";
-                if($this->add_limiter($limit, $limit_ctr++))
-                {
-                    break 1;
-                }
-            }
+            // $data = Tbl_customer_address::where('shop_id', $shop_id)->get();
+            // foreach ($data as $key => $value) 
+            // {
+            //     $value = $this->clean_value($value);
+            //     $return[$key] = "INSERT INTO tbl_customer_address (customer_address_id, customer_id , country_id, customer_state, customer_city, customer_zipcode, customer_street, purpose, archived, created_at, updated_at) VALUES " . "(".$value->customer_address_id.",'".$value->customer_id."','".$value->country_id."','".$value->customer_state."','".$value->customer_city."','".$value->customer_zipcode."','".$value->customer_street."','".$value->purpose."','".$value->archived."','".$value->created_at."','".$value->updated_at."')";
+            //     if($this->add_limiter($limit, $limit_ctr++))
+            //     {
+            //         break 1;
+            //     }
+            // }
         }
 
         if($table == 'tbl_customer_attachment')
         {
-            $data = Tbl_customer_attachment::get();
-            foreach ($data as $key => $value) 
-            {
-                $value = $this->clean_value($value);
-                $return[$key] = "INSERT INTO tbl_customer_attachment (customer_attachment_id, customer_id , customer_attachment_path, customer_attachment_name, customer_attachment_extension, mime_type, archived, created_at, updated_at) VALUES " . "(".$value->customer_attachment_id.",'".$value->customer_id."','".$value->customer_attachment_path."','".$value->customer_attachment_name."','".$value->customer_attachment_extension."','".$value->mime_type."','".$value->archived."','".$value->created_at."','".$value->updated_at."')";
-                if($this->add_limiter($limit, $limit_ctr++))
-                {
-                    break 1;
-                }
-            }
+            // $data = Tbl_customer_attachment::where('shop_id', $shop_id)->get();
+            // foreach ($data as $key => $value) 
+            // {
+            //     $value = $this->clean_value($value);
+            //     $return[$key] = "INSERT INTO tbl_customer_attachment (customer_attachment_id, customer_id , customer_attachment_path, customer_attachment_name, customer_attachment_extension, mime_type, archived, created_at, updated_at) VALUES " . "(".$value->customer_attachment_id.",'".$value->customer_id."','".$value->customer_attachment_path."','".$value->customer_attachment_name."','".$value->customer_attachment_extension."','".$value->mime_type."','".$value->archived."','".$value->created_at."','".$value->updated_at."')";
+            //     if($this->add_limiter($limit, $limit_ctr++))
+            //     {
+            //         break 1;
+            //     }
+            // }
         }
 
         if($table == 'tbl_customer_invoice')
         {
-            $data = Tbl_customer_invoice::get();
+            $data = Tbl_customer_invoice::where('inv_shop_id', $shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
@@ -300,7 +300,7 @@ class TabletSyncController extends Controller
 
         if($table == 'tbl_customer_invoice_line')
         {
-            $data = Tbl_customer_invoice_line::get();
+            $data = Tbl_customer_invoice_line::leftjoin('tbl_customer_invoice','tbl_customer_invoice.inv_id','=','tbl_customer_invoice_line.invline_inv_id')->groupBy('tbl_customer_invoice_line.invline_id')->where('inv_shop_id', $shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
@@ -329,7 +329,7 @@ class TabletSyncController extends Controller
 
         if($table == 'tbl_employee')
         {
-            $data = Tbl_employee::get();
+            $data = Tbl_employee::where('shop_id', $shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
@@ -343,49 +343,49 @@ class TabletSyncController extends Controller
 
         if($table == 'tbl_image')
         {
-            $data = Tbl_image::get();
-            foreach ($data as $key => $value) 
-            {
-                $value = $this->clean_value($value);
-                $return[$key] = "INSERT INTO tbl_image (image_id, image_path, image_key, image_shop, image_reason, image_reason_id, image_date_created, created_at  , updated_at) VALUES " . "(".$value->image_id.",'".$value->image_path."','".$value->image_key."','".$value->image_shop."','".$value->image_reason."','".$value->image_reason_id."','".$value->image_date_created."','".$value->created_at."','".$value->updated_at."')";
-                if($this->add_limiter($limit, $limit_ctr++))
-                {
-                    break 1;
-                }
-            }
+            // $data = Tbl_image::where('shop_id', $shop_id)->get();
+            // foreach ($data as $key => $value) 
+            // {
+            //     $value = $this->clean_value($value);
+            //     $return[$key] = "INSERT INTO tbl_image (image_id, image_path, image_key, image_shop, image_reason, image_reason_id, image_date_created, created_at  , updated_at) VALUES " . "(".$value->image_id.",'".$value->image_path."','".$value->image_key."','".$value->image_shop."','".$value->image_reason."','".$value->image_reason_id."','".$value->image_date_created."','".$value->created_at."','".$value->updated_at."')";
+            //     if($this->add_limiter($limit, $limit_ctr++))
+            //     {
+            //         break 1;
+            //     }
+            // }
         }
 
         if($table == 'tbl_inventory_serial_number')
         {
-            $data = Tbl_inventory_serial_number::get();
-            foreach ($data as $key => $value) 
-            {
-                $value = $this->clean_value($value);
-                $return[$key] = "INSERT INTO tbl_inventory_serial_number (serial_id, serial_inventory_id, item_id, serial_number, serial_created, item_count, item_consumed, sold, consume_source,consume_source_id,serial_has_been_credit,serial_has_been_debit,created_at,updated_at) VALUES " . "(".$value->serial_id.",'".$value->serial_inventory_id."','".$value->item_id."','".$value->serial_number."','".$value->serial_created."','".$value->item_count."','".$value->item_consumed."','".$value->sold."','".$value->consume_source."','".$value->consume_source_id."','".$value->serial_has_been_credit."','".$value->serial_has_been_debit."','".$value->created_at."','".$value->updated_at."')";
-                if($this->add_limiter($limit, $limit_ctr++))
-                {
-                    break 1;
-                }
-            }
+            // $data = Tbl_inventory_serial_number::where('shop_id', $shop_id)->get();
+            // foreach ($data as $key => $value) 
+            // {
+            //     $value = $this->clean_value($value);
+            //     $return[$key] = "INSERT INTO tbl_inventory_serial_number (serial_id, serial_inventory_id, item_id, serial_number, serial_created, item_count, item_consumed, sold, consume_source,consume_source_id,serial_has_been_credit,serial_has_been_debit,created_at,updated_at) VALUES " . "(".$value->serial_id.",'".$value->serial_inventory_id."','".$value->item_id."','".$value->serial_number."','".$value->serial_created."','".$value->item_count."','".$value->item_consumed."','".$value->sold."','".$value->consume_source."','".$value->consume_source_id."','".$value->serial_has_been_credit."','".$value->serial_has_been_debit."','".$value->created_at."','".$value->updated_at."')";
+            //     if($this->add_limiter($limit, $limit_ctr++))
+            //     {
+            //         break 1;
+            //     }
+            // }
         }
 
         if($table == 'tbl_inventory_slip')
         {
-            $data = Tbl_inventory_slip::get();
-            foreach ($data as $key => $value) 
-            {
-                $value = $this->clean_value($value);
-                $return[$key] = "INSERT INTO tbl_inventory_slip (inventory_slip_id, inventory_slip_id_sibling, inventory_reason, warehouse_id, inventory_remarks, inventory_slip_date, archived, inventory_slip_shop_id, slip_user_id,inventory_slip_status,inventroy_source_reason,inventory_source_id,inventory_source_name,inventory_slip_consume_refill,inventory_slip_consume_cause,inventory_slip_consumer_id,created_at,updated_at) VALUES " . "(".$value->inventory_slip_id.",'".$value->inventory_slip_id_sibling."','".$value->inventory_reason."','".$value->warehouse_id."','".$value->inventory_remarks."','".$value->inventory_slip_date."','".$value->archived."','".$value->inventory_slip_shop_id."','".$value->slip_user_id."','".$value->inventory_slip_status."','".$value->inventroy_source_reason."','".$value->inventory_source_id."','".$value->inventory_source_name."','".$value->inventory_slip_consume_refill."','".$value->inventory_slip_consume_cause."','".$value->inventory_slip_consumer_id."','".$value->created_at."','".$value->updated_at."')";
-                if($this->add_limiter($limit, $limit_ctr++))
-                {
-                    break 1;
-                }
-           }
+           //  $data = Tbl_inventory_slip::where('shop_id', $shop_id)->get();
+           //  foreach ($data as $key => $value) 
+           //  {
+           //      $value = $this->clean_value($value);
+           //      $return[$key] = "INSERT INTO tbl_inventory_slip (inventory_slip_id, inventory_slip_id_sibling, inventory_reason, warehouse_id, inventory_remarks, inventory_slip_date, archived, inventory_slip_shop_id, slip_user_id,inventory_slip_status,inventroy_source_reason,inventory_source_id,inventory_source_name,inventory_slip_consume_refill,inventory_slip_consume_cause,inventory_slip_consumer_id,created_at,updated_at) VALUES " . "(".$value->inventory_slip_id.",'".$value->inventory_slip_id_sibling."','".$value->inventory_reason."','".$value->warehouse_id."','".$value->inventory_remarks."','".$value->inventory_slip_date."','".$value->archived."','".$value->inventory_slip_shop_id."','".$value->slip_user_id."','".$value->inventory_slip_status."','".$value->inventroy_source_reason."','".$value->inventory_source_id."','".$value->inventory_source_name."','".$value->inventory_slip_consume_refill."','".$value->inventory_slip_consume_cause."','".$value->inventory_slip_consumer_id."','".$value->created_at."','".$value->updated_at."')";
+           //      if($this->add_limiter($limit, $limit_ctr++))
+           //      {
+           //          break 1;
+           //      }
+           // }
         }
 
         if($table == 'tbl_item')
         {
-            $data = Tbl_item::get();
+            $data = Tbl_item::where('shop_id', $shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
@@ -399,7 +399,7 @@ class TabletSyncController extends Controller
 
         if($table == 'tbl_item_bundle')
         {
-            $data = Tbl_item_bundle::get();
+            $data = Tbl_item_bundle::leftjoin('tbl_item','tbl_item.item_id','=','tbl_item_bundle.bundle_bundle_id')->groupBy('tbl_item_bundle.bundle_id')->where('shop_id', $shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
@@ -413,7 +413,7 @@ class TabletSyncController extends Controller
 
         if($table == 'tbl_item_discount')
         {
-            $data = Tbl_item_discount::get();
+            $data = Tbl_item_discount::leftjoin('tbl_item','tbl_item.item_id','=','tbl_item_discount.discount_item_id')->where('shop_id', $shop_id)->groupBy('tbl_item_discount.item_discount_id')->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
@@ -427,16 +427,16 @@ class TabletSyncController extends Controller
 
         if($table == 'tbl_item_multiple_price')
         {
-            $data = Tbl_item_multiple_price::get();
-            foreach ($data as $key => $value) 
-            {
-                $value = $this->clean_value($value);
-                $return[$key] = "INSERT INTO tbl_item_multiple_price (multiprice_id, multiprice_item_id, multiprice_qty, multiprice_price, date_created,created_at,updated_at) VALUES " . "(".$value->multiprice_id.",'".$value->multiprice_item_id."','".$value->multiprice_qty."','".$value->multiprice_price."','".$value->date_created."','".$value->created_at."','".$value->updated_at."')";
-                if($this->add_limiter($limit, $limit_ctr++))
-                {
-                    break 1;
-                }
-            }
+            // $data = Tbl_item_multiple_price::where('shop_id', $shop_id)->get();
+            // foreach ($data as $key => $value) 
+            // {
+            //     $value = $this->clean_value($value);
+            //     $return[$key] = "INSERT INTO tbl_item_multiple_price (multiprice_id, multiprice_item_id, multiprice_qty, multiprice_price, date_created,created_at,updated_at) VALUES " . "(".$value->multiprice_id.",'".$value->multiprice_item_id."','".$value->multiprice_qty."','".$value->multiprice_price."','".$value->date_created."','".$value->created_at."','".$value->updated_at."')";
+            //     if($this->add_limiter($limit, $limit_ctr++))
+            //     {
+            //         break 1;
+            //     }
+            // }
         }
 
         if($table == 'tbl_item_type')
@@ -454,40 +454,40 @@ class TabletSyncController extends Controller
         }
         if($table == 'tbl_journal_entry')
         {
-            $data = Tbl_journal_entry::get();
-            foreach ($data as $key => $value) 
-            {
-                $value = $this->clean_value($value);
-                $return[$key] = "INSERT INTO tbl_journal_entry (je_id, je_shop_id, je_reference_module, je_reference_id, je_entry_date,je_remarks ,created_at,updated_at) VALUES " . "(".$value->je_id.",'".$value->je_shop_id."','".$value->je_reference_module."','".$value->je_reference_id."','".$value->je_entry_date."','".$value->je_remarks."','".$value->created_at."','".$value->updated_at."')";
-                if($this->add_limiter($limit, $limit_ctr++))
-                {
-                    break 1;
-                }
-            }
+            // $data = Tbl_journal_entry::where('shop_id', $shop_id)->get();
+            // foreach ($data as $key => $value) 
+            // {
+            //     $value = $this->clean_value($value);
+            //     $return[$key] = "INSERT INTO tbl_journal_entry (je_id, je_shop_id, je_reference_module, je_reference_id, je_entry_date,je_remarks ,created_at,updated_at) VALUES " . "(".$value->je_id.",'".$value->je_shop_id."','".$value->je_reference_module."','".$value->je_reference_id."','".$value->je_entry_date."','".$value->je_remarks."','".$value->created_at."','".$value->updated_at."')";
+            //     if($this->add_limiter($limit, $limit_ctr++))
+            //     {
+            //         break 1;
+            //     }
+            // }
         }
 
 
         if($table == 'tbl_journal_entry_line')
         {
-            $data = Tbl_journal_entry_line::get();
-            foreach ($data as $key => $value) 
-            {
-                $value = $this->clean_value($value);
-                $return[$key] = "INSERT INTO tbl_journal_entry_line (jline_id, jline_je_id, jline_name_id, jline_name_reference, jline_item_id, jline_account_id, jline_type,jline_amount,jline_description, created_at,updated_at,jline_warehouse_id) VALUES " . "(".$value->jline_id.",'".$value->jline_je_id."','".$value->jline_name_id."','".$value->jline_name_reference."','".$value->jline_item_id."','".$value->jline_account_id."','".$value->jline_type."','".$value->jline_amount."','".$value->jline_description."','".$value->created_at."','".$value->updated_at."','".$value->jline_warehouse_id."')";
-                if($this->add_limiter($limit, $limit_ctr++))
-                {
-                    break 1;
-                }
-            }
+            // $data = Tbl_journal_entry_line::where('shop_id', $shop_id)->get();
+            // foreach ($data as $key => $value) 
+            // {
+            //     $value = $this->clean_value($value);
+            //     $return[$key] = "INSERT INTO tbl_journal_entry_line (jline_id, jline_je_id, jline_name_id, jline_name_reference, jline_item_id, jline_account_id, jline_type,jline_amount,jline_description, created_at,updated_at,jline_warehouse_id) VALUES " . "(".$value->jline_id.",'".$value->jline_je_id."','".$value->jline_name_id."','".$value->jline_name_reference."','".$value->jline_item_id."','".$value->jline_account_id."','".$value->jline_type."','".$value->jline_amount."','".$value->jline_description."','".$value->created_at."','".$value->updated_at."','".$value->jline_warehouse_id."')";
+            //     if($this->add_limiter($limit, $limit_ctr++))
+            //     {
+            //         break 1;
+            //     }
+            // }
         }
 
         if($table == 'tbl_manual_credit_memo')
         {
-            $data = Tbl_manual_credit_memo::get();
+            $data = Tbl_manual_credit_memo::leftjoin('tbl_sir','tbl_sir.sir_id','=','tbl_manual_credit_memo.sir_id')->selectRaw('*, tbl_manual_credit_memo.sir_id as cm_sir_id')->groupBy('tbl_manual_credit_memo.manual_cm_id')->where('shop_id',$shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
-                $return[$key] = "INSERT INTO tbl_manual_credit_memo (manual_cm_id, sir_id, cm_id, manual_cm_date, is_sync,created_at,updated_at) VALUES " . "(".$value->manual_cm_id.",'".$value->sir_id."','".$value->cm_id."','".$value->manual_cm_date."','".$value->is_sync."','".$value->created_at."','".$value->updated_at."')";
+                $return[$key] = "INSERT INTO tbl_manual_credit_memo (manual_cm_id, sir_id, cm_id, manual_cm_date, is_sync,created_at,updated_at) VALUES " . "(".$value->manual_cm_id.",'".$value->cm_sir_id."','".$value->cm_id."','".$value->manual_cm_date."','".$value->is_sync."','".$value->created_at."','".$value->updated_at."')";
                 if($this->add_limiter($limit, $limit_ctr++))
                 {
                     break 1;
@@ -496,11 +496,11 @@ class TabletSyncController extends Controller
         }
         if($table == 'tbl_manual_invoice')
         {
-            $data = Tbl_manual_invoice::get();
+            $data = Tbl_manual_invoice::leftjoin('tbl_sir','tbl_sir.sir_id','=','tbl_manual_invoice.sir_id')->selectRaw('*, tbl_manual_invoice.sir_id as inv_sir_id')->groupBy('tbl_manual_invoice.manual_invoice_id')->where('shop_id', $shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
-                $return[$key] = "INSERT INTO tbl_manual_invoice (manual_invoice_id, sir_id, inv_id, manual_invoice_date, is_sync,created_at,updated_at) VALUES " . "(".$value->manual_invoice_id.",'".$value->sir_id."','".$value->inv_id."','".$value->manual_invoice_date."','".$value->is_sync."','".$value->created_at."','".$value->updated_at."')";
+                $return[$key] = "INSERT INTO tbl_manual_invoice (manual_invoice_id, sir_id, inv_id, manual_invoice_date, is_sync,created_at,updated_at) VALUES " . "(".$value->manual_invoice_id.",'".$value->inv_sir_id."','".$value->inv_id."','".$value->manual_invoice_date."','".$value->is_sync."','".$value->created_at."','".$value->updated_at."')";
                 if($this->add_limiter($limit, $limit_ctr++))
                 {
                     break 1;
@@ -510,11 +510,11 @@ class TabletSyncController extends Controller
 
         if($table == 'tbl_manual_receive_payment')
         {
-            $data = Tbl_manual_receive_payment::get();
+            $data = Tbl_manual_receive_payment::leftjoin('tbl_sir','tbl_sir.sir_id','=','tbl_manual_receive_payment.sir_id')->selectRaw('*, tbl_manual_receive_payment.sir_id as rp_sir_id')->groupBy('tbl_manual_receive_payment.manual_receive_payment_id')->where('shop_id', $shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
-                $return[$key] = "INSERT INTO tbl_manual_receive_payment (manual_receive_payment_id, agent_id, rp_id, sir_id,rp_date, is_sync,created_at,updated_at) VALUES " . "(".$value->manual_receive_payment_id.",'".$value->agent_id."','".$value->rp_id."','".$value->sir_id."','".$value->rp_date."','".$value->is_sync."','".$value->created_at."','".$value->updated_at."')";
+                $return[$key] = "INSERT INTO tbl_manual_receive_payment (manual_receive_payment_id, agent_id, rp_id, sir_id,rp_date, is_sync,created_at,updated_at) VALUES " . "(".$value->manual_receive_payment_id.",'".$value->agent_id."','".$value->rp_id."','".$value->rp_sir_id."','".$value->rp_date."','".$value->is_sync."','".$value->created_at."','".$value->updated_at."')";
                 if($this->add_limiter($limit, $limit_ctr++))
                 {
                     break 1;
@@ -523,20 +523,20 @@ class TabletSyncController extends Controller
         }
         if($table == 'tbl_manufacturer')
         {
-            $data = Tbl_manufacturer::get();
-            foreach ($data as $key => $value) 
-            {
-                $value = $this->clean_value($value);
-                $return[$key] = "INSERT INTO tbl_manufacturer (manufacturer_id, manufacturer_name, manufacturer_address, phone_number,email_address, website,date_created,date_updated,archived, manufacturer_shop_id,manufacturer_fname,manufacturer_mname,manufacturer_lname,manufacturer_image,created_at,updated_at) VALUES " . "(".$value->manufacturer_id.",'".$value->manufacturer_name."','".$value->manufacturer_address."','".$value->phone_number."','".$value->email_address."','".$value->website."','".$value->date_created."','".$value->date_updated."','".$value->archived."','".$value->manufacturer_shop_id."','".$value->manufacturer_fname."','".$value->manufacturer_mname."','".$value->manufacturer_lname."','".$value->manufacturer_image."','".$value->created_at."','".$value->updated_at."')";
-                if($this->add_limiter($limit, $limit_ctr++))
-                {
-                    break 1;
-                }
-            }
+            // $data = Tbl_manufacturer::where('shop_id', $shop_id)->get();
+            // foreach ($data as $key => $value) 
+            // {
+            //     $value = $this->clean_value($value);
+            //     $return[$key] = "INSERT INTO tbl_manufacturer (manufacturer_id, manufacturer_name, manufacturer_address, phone_number,email_address, website,date_created,date_updated,archived, manufacturer_shop_id,manufacturer_fname,manufacturer_mname,manufacturer_lname,manufacturer_image,created_at,updated_at) VALUES " . "(".$value->manufacturer_id.",'".$value->manufacturer_name."','".$value->manufacturer_address."','".$value->phone_number."','".$value->email_address."','".$value->website."','".$value->date_created."','".$value->date_updated."','".$value->archived."','".$value->manufacturer_shop_id."','".$value->manufacturer_fname."','".$value->manufacturer_mname."','".$value->manufacturer_lname."','".$value->manufacturer_image."','".$value->created_at."','".$value->updated_at."')";
+            //     if($this->add_limiter($limit, $limit_ctr++))
+            //     {
+            //         break 1;
+            //     }
+            // }
         }
         if($table == 'tbl_position')
         {
-            $data = Tbl_position::get();
+            $data = Tbl_position::where('position_shop_id', $shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
@@ -550,7 +550,7 @@ class TabletSyncController extends Controller
 
         if($table == 'tbl_receive_payment')
         {
-            $data = Tbl_receive_payment::get();
+            $data = Tbl_receive_payment::where('rp_shop_id', $shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
@@ -563,7 +563,7 @@ class TabletSyncController extends Controller
         }
         if($table == 'tbl_receive_payment_line')
         {
-            $data = Tbl_receive_payment_line::get();
+            $data = Tbl_receive_payment_line::leftjoin('tbl_receive_payment','tbl_receive_payment.rp_id','=','tbl_receive_payment_line.rpline_rp_id')->groupBy('tbl_receive_payment_line.rpline_id')->where('rp_shop_id',$shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
@@ -576,7 +576,7 @@ class TabletSyncController extends Controller
         }
         if($table == 'tbl_settings')
         {
-            $data = Tbl_settings::get();
+            $data = Tbl_settings::where('shop_id', $shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
@@ -589,7 +589,7 @@ class TabletSyncController extends Controller
         }
         if($table == 'tbl_sir')
         {
-            $data = Tbl_sir::get();
+            $data = Tbl_sir::where('shop_id', $shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
@@ -603,7 +603,7 @@ class TabletSyncController extends Controller
 
         if($table == 'tbl_sir_cm_item')
         {
-            $data = Tbl_sir_cm_item::get();
+            $data = Tbl_sir_cm_item::leftjoin('tbl_sir','tbl_sir.sir_id','=','tbl_sir_cm_item.sc_sir_id')->groupBy('tbl_sir_cm_item.s_cm_item_id')->where('shop_id', $shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
@@ -617,7 +617,7 @@ class TabletSyncController extends Controller
 
         if($table == 'tbl_sir_inventory')
         {
-            $data = Tbl_sir_inventory::get();
+            $data = Tbl_sir_inventory::leftjoin('tbl_sir','tbl_sir.sir_id','=','tbl_sir_inventory.inventory_sir_id')->groupBy('tbl_sir_inventory.sir_inventory_id')->where('shop_id', $shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
@@ -631,7 +631,7 @@ class TabletSyncController extends Controller
 
         if($table == 'tbl_sir_item')
         {
-            $data = Tbl_sir_item::get();
+            $data = Tbl_sir_item::leftjoin('tbl_sir','tbl_sir.sir_id','=','tbl_sir_item.sir_id')->groupBy('tbl_sir_item.sir_item_id')->where('shop_id', $shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
@@ -645,7 +645,7 @@ class TabletSyncController extends Controller
 
         if($table == 'tbl_sir_sales_report')
         {
-            $data = Tbl_sir_sales_report::get();
+            // $data = Tbl_sir_sales_report::where('shop_id', $shop_id)->get();
             // foreach ($data as $key => $value) 
             // {
             //     $value = $this->clean_value($value);
@@ -659,7 +659,7 @@ class TabletSyncController extends Controller
         // 39
         if($table == 'tbl_terms')
         {
-            $data = Tbl_terms::get();
+            $data = Tbl_terms::where('terms_shop_id', $shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
@@ -673,7 +673,7 @@ class TabletSyncController extends Controller
 
         if($table == 'tbl_truck')
         {
-            $data = Tbl_truck::get();
+            $data = Tbl_truck::where('truck_shop_id', $shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
@@ -687,7 +687,7 @@ class TabletSyncController extends Controller
 
         if($table == 'tbl_um')
         {
-            $data = Tbl_um::get();
+            $data = Tbl_um::where('um_shop_id', $shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
@@ -701,7 +701,7 @@ class TabletSyncController extends Controller
 
         if($table == 'tbl_unit_measurement')
         {
-            $data = Tbl_unit_measurement::get();
+            $data = Tbl_unit_measurement::where('um_shop', $shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
@@ -714,7 +714,7 @@ class TabletSyncController extends Controller
         }
         if($table == 'tbl_unit_measurement_multi')
         {
-            $data = Tbl_unit_measurement_multi::get();
+            $data = Tbl_unit_measurement_multi::leftjoin('tbl_unit_measurement','tbl_unit_measurement_multi.multi_um_id','=','tbl_unit_measurement.um_id')->groupBy('tbl_unit_measurement_multi.multi_id')->where('um_shop', $shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $value = $this->clean_value($value);
@@ -728,22 +728,22 @@ class TabletSyncController extends Controller
 
         if($table == 'tbl_user')
         {
-            $data = Tbl_user::get();
-            foreach ($data as $key => $value) 
-            {
-                $value = $this->clean_value($value);
-                $return[$key] = "INSERT INTO tbl_user (user_id, user_email, user_level, user_first_name,user_last_name, user_contact_number,user_password, user_date_created, user_last_active_date, user_shop,IsWalkin,archived,created_at,updated_at) VALUES " . "(".$value->user_id.",'".$value->user_email."','".$value->user_level."','".$value->user_first_name."','".$value->user_last_name."','".$value->user_contact_number."','".Crypt::decrypt($value->user_password)."','".$value->user_date_created."','".$value->user_last_active_date."','".$value->user_shop."','".$value->IsWalkin."','".$value->archived."','".$value->created_at."','".$value->updated_at."')";
-                if($this->add_limiter($limit, $limit_ctr++))
-                {
-                    break 1;
-                }
-            }
+            // $data = Tbl_user::where('shop_id', $shop_id)->get();
+            // foreach ($data as $key => $value) 
+            // {
+            //     $value = $this->clean_value($value);
+            //     $return[$key] = "INSERT INTO tbl_user (user_id, user_email, user_level, user_first_name,user_last_name, user_contact_number,user_password, user_date_created, user_last_active_date, user_shop,IsWalkin,archived,created_at,updated_at) VALUES " . "(".$value->user_id.",'".$value->user_email."','".$value->user_level."','".$value->user_first_name."','".$value->user_last_name."','".$value->user_contact_number."','".Crypt::decrypt($value->user_password)."','".$value->user_date_created."','".$value->user_last_active_date."','".$value->user_shop."','".$value->IsWalkin."','".$value->archived."','".$value->created_at."','".$value->updated_at."')";
+            //     if($this->add_limiter($limit, $limit_ctr++))
+            //     {
+            //         break 1;
+            //     }
+            // }
         }
 
 
         if($table == 'tbl_payment_method')
         {
-            $data = Tbl_payment_method::get();
+            $data = Tbl_payment_method::where('shop_id', $shop_id)->get();
             foreach ($data as $key => $value) 
             {
                 $return[$key] = 'INSERT INTO tbl_payment_method (payment_method_id, shop_id, payment_name, isDefault, archived) VALUES ' . '('.$value->payment_method_id.',"'.$value->shop_id.'","'.$value->payment_name.'","'.$value->isDefault.'","'.$value->archived.'")';
@@ -754,6 +754,8 @@ class TabletSyncController extends Controller
             $data = Tbl_customer::leftjoin("tbl_customer_other_info","tbl_customer_other_info.customer_id","=","tbl_customer.customer_id")
                                     ->balanceJournal()
                                     ->selectRaw("tbl_customer.customer_id as customer_id1, tbl_customer.*, tbl_customer_other_info.*, tbl_customer_other_info.customer_id as cus_id")
+                                    ->where('tbl_customer.shop_id',$shop_id)
+                                    ->groupBy('tbl_customer.customer_id')
                                     ->orderBy("tbl_customer.first_name")
                                     ->get();
             foreach ($data as $key => $value) 

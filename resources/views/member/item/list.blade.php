@@ -221,7 +221,6 @@
     }
 </style>
 @section('script')
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
 <script type="text/javascript" src="/assets/custom_plugin/digimaTable/digimaTable.js"></script>
 <script type="text/javascript">

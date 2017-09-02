@@ -358,7 +358,21 @@ function submit_done(data)
 		console.log(data.function_name);
 		executeFunctionByName(data.function_name, window);
 	}
-	
+
+	if (data.from == 'archive-deduction') 
+	{
+		var payroll_deduction_type = ""+$('.payroll_deduction_type').val();
+		console.log(""+payroll_deduction_type);
+		$('.modal-loader').removeClass("hidden");
+		$('.configuration-div').load('/member/payroll/deduction/v2', function()
+		{
+
+				$('.modal-loader').addClass("hidden");
+				$('.modal-content-global .close').trigger("click");
+				data.element.modal("hide");
+		});
+		
+	}
 }
 
 function loading_done(url)

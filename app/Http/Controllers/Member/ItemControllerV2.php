@@ -10,40 +10,60 @@ class ItemControllerV2 extends Member
 {
 	public function list()
 	{
-		$data["page"] 		= "Item List";
+		$data["page"] 		 	= "Item List";
+		$data["_item_type"]     = Item::get_item_type_list();
+		$data["_item_category"] = Item::getItemCategory($this->user_info->shop_id);
+
 		return view("member.itemv2.list_item", $data);
 	}
 	public function list_table()
 	{
+		$archived 			= Request::input("archived") ? 1 : 0;
+		$item_type_id 		= Request::input("item_type_id");
+		$item_category_id   = Request::input("item_category_id");
 		$data["page"]		= "Item List - Table";
-		$data["_item_raw"]	= Item::get_all_item($this->user_info->shop_id, 5);
+		$data["_item_raw"]	= Item::get_all_item($this->user_info->shop_id, 5, $archived, $item_type_id, $item_category_id);
 		$data["_item"]		= Item::apply_additional_info_to_array($data["_item_raw"]);
+		$data["archive"]	= $archived == 1 ? "restore" : "archive";
 		return view("member.itemv2.list_item_table", $data);
 	}
-	public function add_item()
+	public function get_item()
 	{
-		$data["page"]		= "Item Add";
-		$data["link_submit_here"] = "/member/item/v2/add_submit";
-
-		$data['_service']  		    = Category::getAllCategory(['services']);
-		$data['_inventory']  		= Category::getAllCategory(['inventory']);
-		$data['_noninventory']  	= Category::getAllCategory(['non-inventory']);
-		$data['_bundle']        	= Category::getAllCategory(['bundles']);
-
-
-		$data["_income"] = Accounting::getAllAccount('all',null,['Income','Other Income']);
-		$data["_asset"] = Accounting::getAllAccount('all', null, ['Other Current Asset','Fixed Asset','Other Asset']);
-		$data["_expense"] = Accounting::getAllAccount('all',null,['Expense','Other Expense','Cost of Goods Sold']);
-
-		$data['default_income'] = Accounting::get_default_coa("accounting-sales");
-		$data['default_asset'] = Accounting::get_default_coa("accounting-inventory-asset");
+		$data['_service']  		 = Category::getAllCategory(['services']);
+		$data['_inventory']  	 = Category::getAllCategory(['inventory']);
+		$data['_noninventory']   = Category::getAllCategory(['non-inventory']);
+		$data['_bundle']         = Category::getAllCategory(['bundles']);
+		$data["_income"] 		 = Accounting::getAllAccount('all',null,['Income','Other Income']);
+		$data["_asset"] 		 = Accounting::getAllAccount('all', null, ['Other Current Asset','Fixed Asset','Other Asset']);
+		$data["_expense"] 		 = Accounting::getAllAccount('all',null,['Expense','Other Expense','Cost of Goods Sold']);
+		$data['default_income']  = Accounting::get_default_coa("accounting-sales");
+		$data['default_asset']   = Accounting::get_default_coa("accounting-inventory-asset");
 		$data['default_expense'] = Accounting::get_default_coa("accounting-expense");
+		$data["_manufacturer"]   = Manufacturer::getAllManufaturer();
+		$data['item_info'] 	     = [];
 
-		$data["_manufacturer"] = Manufacturer::getAllManufaturer();
+		$id 					 = Request::input('item_id');
 
-		return view("member.itemv2.add_item",$data);
+		if($id)
+		{
+			$data['item_info'] 	      = Item::get_item_info($id);
+			$data["link_submit_here"] = "/member/item/v2/edit_submit?item_id=" . $id;
+			$data["item_main"]	      = "";
+			$data["item_picker"]	  = "hide";
+			$data["item_button"]	  = "";
+		}
+		else
+		{
+			$data["page"]			  = "Item Add";
+			$data["link_submit_here"] = "/member/item/v2/add_submit";
+			$data["item_main"]	      = 'style="display: none"';
+			$data["item_picker"]	  = "";
+			$data["item_button"]	  = "disabled";
+		}
+
+		return $data;
 	}
-	public function add_item_submit()
+	public function submit_item($from)
 	{
 		$insert['item_name'] 				   = Request::input('item_description');
 		$insert['item_sku'] 				   = Request::input('item_sku');
@@ -65,11 +85,45 @@ class ItemControllerV2 extends Member
 		// $insert['item_reorder_point'] 		   = Request::input('item_reorder_point');
 
 		$shop_id = $this->user_info->shop_id;
-		$item_type_id = 1;
-		$return =  Item::create($shop_id, $item_type_id, $insert);
+		
+		if($from == "add")
+		{
+			$item_type_id = 1;
+			$return 	  = Item::create($shop_id, $item_type_id, $insert);
+		}
+		elseif($from == "edit")
+		{
+			$item_id 	  = Request::input("item_id");
+			$return  	  = Item::modify($shop_id, $item_id, $insert);
+		}
+
+		return $return;
+	}
+	public function add_item()
+	{
+		$data = $this->get_item();
+
+		return view("member.itemv2.add_item",$data);
+	}
+	public function add_item_submit()
+	{
+		$return = $this->submit_item("add");		
 
 		return json_encode($return);
 	}
+	public function edit_item()
+	{
+		$data = $this->get_item();
+
+		return view("member.itemv2.add_item",$data);
+	}
+	public function edit_item_submit()
+	{
+		$return = $this->submit_item("edit");
+
+		return json_encode($return);
+	}
+
 	public function cost()
 	{
 		$data["page"]		= "Item Cost";
@@ -79,5 +133,27 @@ class ItemControllerV2 extends Member
 	{
 		$data["page"]		= "Item Price Level";
 		return view("member.itemv2.price_level");
+	}
+
+	public function archive()
+	{
+		$item_id = Request::input("item_id");
+		if ($item_id) 
+		{
+			Item::archive($this->user_info->shop_id, $item_id);
+		}
+
+		echo json_encode("success");
+	}
+
+	public function restore()
+	{
+		$item_id = Request::input("item_id");
+		if ($item_id) 
+		{
+			Item::restore($this->user_info->shop_id, $item_id);
+		}
+
+		echo json_encode("success");
 	}
 }

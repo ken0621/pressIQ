@@ -39,15 +39,15 @@
                     </button>
                     <ul class="dropdown-menu dropdown-menu-custom">
                         <li>
-                            <a href="javascript:">
+                            <a onclick="action_load_link_to_modal('/member/item/v2/edit?item_id={{ $item->item_id }}', 'lg')">
                                 <div style="display: inline-block; width: 17px; text-align: center;"><i class="fa fa-edit"></i> &nbsp;</div>
                                 Modify
                             </a>
                         </li>
                         <li>
-                            <a href="javascript:">
+                            <a href="javascript:" class="item-{{ $archive }}" item-id="{{ $item->item_id }}">
                                 <div style="display: inline-block; width: 17px; text-align: center;"><i class="fa fa-trash"></i> &nbsp;</div>
-                                Archive
+                                <span style="text-transform: capitalize;">{{ $archive }}</span>
                             </a>
                         </li>
                         <li>

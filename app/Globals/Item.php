@@ -19,6 +19,7 @@ use App\Globals\Tablet_global;
 use App\Globals\Currency;
 use App\Models\Tbl_price_level;
 use App\Models\Tbl_price_level_item;
+use App\Models\Tbl_item_type;
 use Session;
 use DB;
 use Carbon\carbon;
@@ -70,6 +71,59 @@ class Item
         }
 
         return $return;
+    }
+    public static function modify($shop_id, $item_id, $update)
+    {
+        $return['item_id'] = $item_id;
+        $return['status'] = null;
+        $return['message'] = null; 
+
+        $rules['item_name'] = 'required';
+        $rules['item_sku'] = 'required';
+        $rules['item_price'] = 'required';
+        $rules['item_cost'] = 'required';
+
+        $validator = Validator::make($update, $rules);
+
+        if($update['item_cost'] > $update['item_price'])
+        {       
+            $return['status'] = 'error';
+            $return['message'] = 'The cost is greater than the sales price.'."<br>";
+        }
+
+        if($validator->fails())
+        {
+            $return["status"] = "error";
+            foreach ($validator->messages()->all('') as $keys => $message)
+            {
+                $return["message"] .= $message."<br>";
+            }
+        }
+        if(!$return['status'])
+        {
+            $update['updated_at'] = Carbon::now();
+
+            $item_id = Tbl_item::where("shop_id", $shop_id)->where("item_id", $item_id)->update($update);
+
+            $return['item_id']       = $item_id;
+            $return['status']        = 'success';
+            $return['message']       = 'Item successfully created.';
+            $return['call_function'] = 'success_item';
+        }
+
+        return $return;
+    }
+    public static function archive($shop_id, $item_id)
+    {
+        $update["archived"] = 1;
+        $update["item_date_archived"] = Carbon::now();
+        Tbl_item::where("shop_id", $shop_id)->where("item_id", $item_id)->update($update);
+    }
+    public static function restore($shop_id, $item_id)
+    {
+        $update["archived"] = 0;
+        $update["item_date_archived"] = null;
+        Tbl_item::where("shop_id", $shop_id)->where("item_id", $item_id)->update($update);
     }
     /* ITEM CRUD END */
 
@@ -260,6 +314,10 @@ class Item
         }
         return $type;
     }
+    public static function get_item_type_list()
+    {
+        return Tbl_item_type::where("archived", 0)->get();
+    }
 	public static function breakdown($_item='')
 	{
 		$data = '';
@@ -322,14 +380,24 @@ class Item
         return $data;
 	}
 
-    public static function get_all_item($shop_id = 0, $paginate = false)
+    public static function get_all_item($shop_id = 0, $paginate = false, $archive = 0, $item_type_id = null, $item_category_id = null)
     {
         if($shop_id == 0)
         {
             $shop_id = Item::getShopId();
         }
 
-        $query = Tbl_item::where("shop_id", $shop_id)->active()->type()->inventory()->um_multi();
+        $query = Tbl_item::where("shop_id", $shop_id)->where("tbl_item.archived", $archive)->type()->inventory()->um_multi();
+
+        if ($item_type_id) 
+        {
+            $query = $query->where("tbl_item.item_type_id", $item_type_id);
+        }
+
+        if ($item_category_id) 
+        {
+            $query = $query->where("tbl_item.item_category_id", $item_category_id);
+        }
 
         if($paginate)
         {
@@ -974,7 +1042,6 @@ class Item
         
         return $item_session;
     }
-
     public static function getOtherChargeItem()
     {
         $exist_item = Tbl_item::where("shop_id", Item::getShopId())->where("item_code", "other-charge")->first();
@@ -992,7 +1059,6 @@ class Item
 
         return $exist_item->item_id;
     }
-
     public static function getServiceCategory()
     {
         $exist_type = Tbl_category::where("type_shop", Item::getShopId())->where("type_name", "Service")->first();
@@ -1007,5 +1073,9 @@ class Item
         }
 
         return $exist_type->type_id;
+    }
+    public static function getItemCategory($shop_id)
+    {
+        return Tbl_category::where("type_shop", $shop_id)->where("archived", 0)->get();
     }
 }

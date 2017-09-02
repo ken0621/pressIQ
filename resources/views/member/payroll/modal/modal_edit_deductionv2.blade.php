@@ -123,7 +123,7 @@
 			<ul class="nav nav-tabs">
 				<li class="active"><a data-toggle="tab" href="#active-employee">Active</a></li>
 				<li><a data-toggle="tab" href="#zero-employee">Zero Balance</a></li>
-				<li><a data-toggle="tab" href="#canceled-employee">Canceled</a></li>
+				<!-- <li><a data-toggle="tab" href="#canceled-employee">Canceled</a></li> -->
 			</ul>
 			<div class="tab-content padding-top-10">
 				<div id="active-employee" class="tab-pane fade in active">
@@ -144,9 +144,9 @@
 								<td class="text-right">
 									{{number_format($active['balance'], 2)}}
 								</td>
-								<td class="text-center">
+								<!-- <td class="text-center">
 									<a href="#" class="popup" link="/member/payroll/deduction/v2/deduction_employee_tag/1/{{$active['deduction']->payroll_deduction_employee_id}}" size="sm" ><i class="fa fa-times"></i></a>
-								</td>
+								</td> -->
 							</tr>
 							@endforeach
 						</tbody>
@@ -178,7 +178,7 @@
 						</tbody>
 					</table>
 				</div>
-				<div id="canceled-employee" class="tab-pane fade">
+				<!-- <div id="canceled-employee" class="tab-pane fade">
 					<table class="table table-condensed table-bordered">
 						<thead>
 							<tr>
@@ -203,7 +203,7 @@
 							@endforeach
 						</tbody>
 					</table>
-				</div>
+				</div> -->
 			</div>
 		</div>
 		

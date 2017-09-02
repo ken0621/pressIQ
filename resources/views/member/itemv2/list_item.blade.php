@@ -22,21 +22,22 @@
 
 <div class="panel panel-default panel-block panel-title-block panel-gray">
     <ul class="nav nav-tabs">
-        <li class="active change-tab pending-tab cursor-pointer" mode="pending"><a class="cursor-pointer"><i class="fa fa-check"></i> Active</a></li>
-        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="fa fa-trash"></i> Archived</a></li>
+        <li class="active change-tab pending-tab cursor-pointer" mode="pending"><a class="cursor-pointer go-default"><i class="fa fa-check"></i> Active</a></li>
+        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer go-archive"><i class="fa fa-trash"></i> Archived</a></li>
     </ul>
     <div class="search-filter-box">
         <div class="col-md-3" style="padding: 10px">
-            <select class="form-control">
+            <select name="item_type_id" class="form-control filter-item-type">
                 <option value="0">All Item Type</option>
-                <option value="1">Inventory</option>
-                <option value="2">Non-Inventory</option>
-                <option value="3">Bundle</option>
+                @foreach($_item_type as $item_type)
+                <option value="{{ $item_type->item_type_id }}">{{ $item_type->item_type_name }}</option>
+                @endforeach
             </select>
         </div>
         <div class="col-md-3" style="padding: 10px">
-            <select class="form-control">
+            <select class="form-control category-select">
                 <option value="0">All Category</option>
+                @include("member.load_ajax_data.load_category", ['add_search' => "",'_category' => $_item_category,'type_id' => ''])
             </select>
         </div>
         <div class="col-md-2" style="padding: 10px">

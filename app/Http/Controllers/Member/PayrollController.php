@@ -1984,17 +1984,17 @@ class PayrollController extends Member
      /* payroll configuration access page */
      public function payroll_configuration_page()
      {
-          $data[0]['access_name'] = 'Branch Location';
-          $data[0]['link']        = '/member/payroll/branch_name';
+          $data[0]['access_name']  = 'Branch Location';
+          $data[0]['link']         = '/member/payroll/branch_name';
 
-          $data[1]['access_name'] = 'Department';
-          $data[1]['link']        = '/member/payroll/departmentlist';
+          $data[1]['access_name']  = 'Department';
+          $data[1]['link']         = '/member/payroll/departmentlist';
 
-          $data[2]['access_name'] = 'Job Title';
-          $data[2]['link']        = '/member/payroll/jobtitlelist';
+          $data[2]['access_name']  = 'Job Title';
+          $data[2]['link']         = '/member/payroll/jobtitlelist';
 
-          $data[3]['access_name'] = 'Holiday';
-          $data[3]['link']        = '/member/payroll/holiday';
+          $data[3]['access_name']  = 'Holiday';
+          $data[3]['link']         = '/member/payroll/holiday';
 
           $data[31]['access_name'] = 'Holiday V2';
           $data[31]['link']        = '/member/payroll/holiday/v2';
@@ -2002,26 +2002,26 @@ class PayrollController extends Member
           $data[4]['access_name'] = 'Holiday Default';
           $data[4]['link']        = '/member/payroll/holiday_default';
 
-          $data[5]['access_name'] = 'Allowances';
-          $data[5]['link']        = '/member/payroll/allowance';
+          $data[5]['access_name']  = 'Allowances';
+          $data[5]['link']         = '/member/payroll/allowance';
 
           $data[51]['access_name'] = 'Allowances V2';
           $data[51]['link']        = '/member/payroll/allowance/v2';
 
-          $data[6]['access_name'] = 'Deductions';
-          $data[6]['link']        = '/member/payroll/deduction';
-
+          $data[6]['access_name']  = 'Deductions';
+          $data[6]['link']         = '/member/payroll/deduction';
+          
           $data[61]['access_name'] = 'Deductions V2';
           $data[61]['link']        = '/member/payroll/deduction/v2';
 
-          $data[7]['access_name'] = 'Leave';
-          $data[7]['link']        = '/member/payroll/leave';
+          $data[7]['access_name']  = 'Leave';
+          $data[7]['link']         = '/member/payroll/leave';
 
-          $data[8]['access_name'] = 'Payroll Group';
-          $data[8]['link']        = '/member/payroll/payroll_group';
+          $data[8]['access_name']  = 'Payroll Group';
+          $data[8]['link']         = '/member/payroll/payroll_group';
 
-          $data[9]['access_name'] = 'Shift Template';
-          $data[9]['link']        = '/member/payroll/shift_template';
+          $data[9]['access_name']  = 'Shift Template';
+          $data[9]['link']         = '/member/payroll/shift_template';
 
           $data[10]['access_name'] = 'Journal Tags';
           $data[10]['link']        = '/member/payroll/payroll_jouarnal';

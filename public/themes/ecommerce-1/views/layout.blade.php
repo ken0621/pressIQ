@@ -107,7 +107,7 @@
     		<div class="container">
     			<div class="row clearfix">
 	    			<div class="col-md-3">
-                        <img class="img-responsive" src="{{ $company_info['company_logo']->value }}">            
+                        <img onClick="location.href='/'" style="cursor: pointer;" class="img-responsive" src="{{ $company_info['company_logo']->value }}">            
                     </div>
 	    			<div class="col-md-6">
 
@@ -160,11 +160,11 @@
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	      <ul class="nav navbar-nav">
 	        <li class="nav-border {{ Request::segment(1) == '' ? 'active' : '' }}"><a href="/">HOME <span class="sr-only">(current)</span></a></li>
-	        @if(isset($_categories))
+	        {{-- @if(isset($_categories))
                 @foreach($_categories as $category)     
                 <li class="nav-border {{ Request::input('type') == $category['type_id'] ? 'active' : '' }}"><a href="/product?type={{ $category['type_id'] }}" style="text-transform: uppercase;">{{ $category['type_name'] }}</a></li>
     	        @endforeach
-            @endif
+            @endif --}}
           </ul>
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->

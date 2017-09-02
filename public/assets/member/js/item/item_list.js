@@ -20,7 +20,7 @@ function item_list()
 		event_archive();
 		event_item_archive();
 		event_filter_item_type();
-		action_category_droplist();
+		event_filter_item_category();
 	}
 	function add_event_pagination()
 	{
@@ -126,10 +126,14 @@ function item_list()
 	}
 	function event_filter_item_type()
 	{
-		$('.filter-item-type').unbind("change");
-		$('.filter-item-type').bind("change", function(e)
+		$('.filter-item-type').globalDropList(
 		{
-			action_filter_item_type(e.currentTarget);
+			hasPopup: "false",
+			width: "100%",
+			onChangeValue: function()
+			{
+				action_filter_item_type(this);
+			}
 		});
 	}
 	function action_filter_item_type(self)
@@ -140,11 +144,12 @@ function item_list()
 	    load_table_data.page = 1;
 	    action_load_table();
 	}
-	function action_category_droplist()
+	function event_filter_item_category()
 	{
 		$('.category-select').globalDropList(
 		{
 			hasPopup: "false",
+			width: "100%",
 			onChangeValue: function()
 			{
 				action_filter_item_category(this);

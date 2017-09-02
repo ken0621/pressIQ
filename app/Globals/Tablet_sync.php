@@ -10,6 +10,7 @@ use App\Models\Tbl_manual_receive_payment;
 use App\Models\Tbl_sir_inventory;
 use App\Models\Tbl_receive_payment;
 use App\Models\Tbl_receive_payment_line;
+use App\Models\Tbl_sir;
 
 use App\Globals\Invoice;
 use App\Globals\Accounting;
@@ -36,7 +37,7 @@ class tablet_sync
 	{
 		dd('test syntax');
 	}
-	public static function sync($data_id = 0)
+	public static function sync($data_id = 0, $sync_type = '')
     {
     	if($data_id)
     	{
@@ -47,6 +48,7 @@ class tablet_sync
     			$all_transaction = unserialize($tablet_data->sir_data);
 
     			$sir_id = $tablet_data->sir_id;
+    			$sir_data = $all_transaction['sir_data'];
     			$all_inv = $all_transaction['invoice'];
     			$all_rp = $all_transaction['receive_payment'];
     			$all_cm = $all_transaction['credit_memo'];
@@ -54,7 +56,7 @@ class tablet_sync
     			$all_manual_inv = $all_transaction['manual_inv'];
     			$all_manual_rp = $all_transaction['manual_rp'];
     			$all_manual_cm = $all_transaction['manual_cm'];
-    			// dd($all_sir_inventory);
+    			// dd($sir_data);
     			/*FOR INVOICE*/
     			foreach ($all_inv as $key => $value) 
     			{
@@ -479,7 +481,15 @@ class tablet_sync
 					}
 				}
 
-				Purchasing_inventory_system::close_sir($sir_id);
+				if($sync_type == 'close')
+				{
+					Purchasing_inventory_system::close_sir($sir_id);	
+				}
+				else
+				{
+					$update['reload_sir'] = 1;
+					Tbl_sir::where('sir_id',$sir_id)->update($update);
+				}
 				return "success";	      
     		}
     	}

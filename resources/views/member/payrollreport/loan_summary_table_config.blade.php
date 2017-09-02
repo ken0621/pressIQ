@@ -1,9 +1,10 @@
-<ul class="nav nav-tabs">
+<button type="button" class="close pull-right modal-loan-summary-close" data-dismiss="modal" style="margin-right: 15px;">×</button>
+<ul class="nav nav-tabs" style="margin-top: 20px">
 	  <li class="active"><a data-toggle="tab" href="#active-deduction"><i class="fa fa-star"></i>&nbsp;Active</a></li>
 	  <li><a data-toggle="tab" href="#archived-deduction"><i class="fa fa-trash-o"></i>&nbsp;Archived</a></li>
 </ul>
 
-<div class="tab-content padding-top-10">
+<div class="tab-content modal-summary padding-top-10" style="margin-bottom: 20px">
 	  <div id="active-deduction" class="tab-pane fade in active">
 	  	<div class="load-data" target="value-id-1">
 			<div id="value-id-1">
@@ -58,8 +59,7 @@
 	</div>
 
 
-
-	 <div id="archived-deduction" class="tab-pane fade">
+	<div id="archived-deduction" class="tab-pane fade">
 	  	<div class="load-data" target="value-id-1">
 			<div id="value-id-1">
 

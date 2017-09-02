@@ -418,6 +418,7 @@ class PayrollDeductionController extends Member
           Tbl_payroll_deduction_v2::where('payroll_deduction_id',$id)->update($update);
           $return['status']             = 'success';
           $return['function_name']      = 'payrollconfiguration.reload_deductionv2';
+          $return['from']               = 'archive-deduction';
           return json_encode($return);
      }
 
@@ -597,13 +598,13 @@ class PayrollDeductionController extends Member
      {
           if (isset($data['_all_deductions_by_category'])) 
           {
-              
                foreach ($data['_all_deductions_by_category'] as $key => $deduction) 
                {
                     $total_payment = 0;
 
                     $_payment = Tbl_payroll_deduction_payment_v2::where('tbl_payroll_deduction_v2.shop_id',Self::shop_id())
                     ->where('tbl_payroll_deduction_v2.payroll_deduction_type',$deduction->payroll_deduction_type)
+                    ->where('.tbl_payroll_deduction_v2.payroll_deduction_archived',0)
                     ->join('tbl_payroll_deduction_v2','tbl_payroll_deduction_v2.payroll_deduction_id','=','tbl_payroll_deduction_payment_v2.payroll_deduction_id')
                     ->get();
 
@@ -614,6 +615,28 @@ class PayrollDeductionController extends Member
 
                     $data['_all_deductions_by_category'][$key]->total_payment = $total_payment;
                     $data['_all_deductions_by_category'][$key]->balance       = $data['_all_deductions_by_category'][$key]->total_amount - $total_payment;
+               }
+          }
+
+          if (isset($data['_all_deductions_by_category_archive'])) 
+          {
+               foreach ($data['_all_deductions_by_category_archive'] as $key => $deduction) 
+               {
+                    $total_payment = 0;
+
+                    $_payment = Tbl_payroll_deduction_payment_v2::where('tbl_payroll_deduction_v2.shop_id',Self::shop_id())
+                    ->where('tbl_payroll_deduction_v2.payroll_deduction_type',$deduction->payroll_deduction_type)
+                    ->where('.tbl_payroll_deduction_v2.payroll_deduction_archived',1)
+                    ->join('tbl_payroll_deduction_v2','tbl_payroll_deduction_v2.payroll_deduction_id','=','tbl_payroll_deduction_payment_v2.payroll_deduction_id')
+                    ->get();
+
+                    foreach ($_payment as $lbl => $payment) 
+                    {
+                        $total_payment += $payment->payroll_payment_amount;
+                    }
+
+                    $data['_all_deductions_by_category_archive'][$key]->total_payment = $total_payment;
+                    $data['_all_deductions_by_category_archive'][$key]->balance       = $data['_all_deductions_by_category_archive'][$key]->total_amount - $total_payment;
                }
           }
      }

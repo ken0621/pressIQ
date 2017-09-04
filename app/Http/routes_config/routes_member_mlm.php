@@ -267,7 +267,8 @@ Route::any('member/mlm/merchant_school/consume', 'Member\BeneficiaryController@c
 Route::any('member/mlm/complan_setup/unilevel/distribute', 'Member\Mlm_ComplanSetupController@unilevel_distribute'); 
 Route::any('member/mlm/complan_setup/unilevel/distribute/set/settings', 'Member\Mlm_ComplanSetupController@unilevel_distribute_set_settings'); 
 Route::any('member/mlm/complan_setup/unilevel/distribute/simulate', 'Member\Mlm_ComplanSetupController@unilevel_distribute_simulate'); 
-
+Route::any('member/mlm/stairstep/distribution', 'Member\MLM_StairstepController@stairstep_view'); 
+Route::any('member/mlm/stairstep/rank', 'Member\MLM_StairstepController@rank_stairstep_view'); 
 
 /* DEVELOPER MENU */
 Route::get('member/mlm/developer', 'Member\MlmDeveloperController@index');

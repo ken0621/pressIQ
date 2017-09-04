@@ -61,19 +61,23 @@
         <th><center>Slot No.</center></th>
         <th><center>Current Rank</center></th>
         <th><center>Current Personal-PV</center></th>
+        <th><center>Required Personal-PV</center></th>
         <th><center>Stair Step Points</center></th>
         <th><center>Comission</center></th>
       </tr>
     </thead>
     <tbody>
+    @foreach($_slot as $slot)
       <tr>
-        <td><center>John</center></td>
-        <td><center>Doe</center></td>
-        <td><center>john@example.com</center></td>
-        <td><center>john@example.com</center></td>
-        <td><center>john@example.com</center></td>
-        <td><center>john@example.com</center></td>
+        <td><center>{{$slot->first_name}} {{$slot->middle_name}} {{$slot->last_name}}</center></td>
+        <td><center>{{$slot->slot_id}}</center></td>
+        <td><center>{{$slot->stairstep_name ? $slot->stairstep_name : "---"}}</center></td>
+        <td><center>{{$slot->personal_stairstep}}</center></td>
+        <td><center>{{$slot->stairstep_required_pv}}</center></td>
+        <td><center>{{$slot->stairstep_points}}</center></td>
+        <td><center>{{$slot->personal_stairstep >= $slot->stairstep_required_pv ? $slot->stairstep_points : 0}}</center></td>
       </tr>
+    @endforeach
     </tbody>
   </table>
 </div>

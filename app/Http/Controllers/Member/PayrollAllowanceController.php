@@ -193,7 +193,6 @@ class PayrollAllowanceController extends Member
               Tbl_payroll_employee_allowance_v2::insert($insert_tag);
          }
          Session::put('allowance_employee_tag',$array);
-
          $return['status']             = 'success';
          $return['function_name']      = 'create_allowance.load_employee_tag';
          return json_encode($return);

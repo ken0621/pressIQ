@@ -182,7 +182,7 @@ class Member extends Controller
 			/* INSERT MAIN WAREHOUSE */
 			Warehouse::mainwarehouse_for_developer($this->user_info->user_id, $this->user_info->shop_id);
 			// dd($this->user_info);
-
+			
 			return $next($request);
 		});
 	}

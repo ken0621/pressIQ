@@ -7772,9 +7772,9 @@ class PayrollController extends Member
 
 
                     $temp_query = $query;
-                    $payroll_record_id_list = $temp_query->lists('payroll_record_id');
+                    $payroll_record_id_list = $temp_query->pluck('payroll_record_id');
                     $temp_query = $query;
-                    $payroll_period_company_id_list = $temp_query->select('tbl_payroll_record.payroll_period_company_id as company_record_id')->lists('company_record_id');
+                    $payroll_period_company_id_list = $temp_query->select('tbl_payroll_record.payroll_period_company_id as company_record_id')->pluck('company_record_id');
                     
                     // dd($payroll_period_company_id_list);
                     $positive_value = 0;

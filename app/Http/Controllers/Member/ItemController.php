@@ -24,6 +24,7 @@ use App\Globals\Category;
 use App\Globals\AuditTrail;
 use App\Globals\Accounting;
 use App\Globals\DigimaTable;
+use App\Globals\ItemSerial;
 use App\Globals\Warehouse;
 use App\Globals\Item;
 use App\Globals\Vendor;

@@ -111,7 +111,7 @@
 <script type="text/javascript" src='/assets/member/js/luke.js'></script>
 <script type="text/javascript" src='/assets/member/js/mlm/addpackage.js'></script>
 <script type="text/javascript">
-@if($errors->has())
+@if(count($errors) > 0)
    @foreach ($errors->all() as $error)
       toastr.error("{{ $error }}");
   @endforeach

@@ -6,9 +6,9 @@ Route::post('/member/page/themes/activate_submit', 'Member\Page_ThemesController
 /* MEMBER - MANAGE PAGE - THEMES - POP ACTIVATE (SUBMIT) */ 
 Route::get('/member/page/themes/{id}', 'Member\Page_ThemesController@popup_activate_form');
 /* MEMBER - MANAGE PAGE - CONTENT */ 
-//route::controller('/member/page/content', 'Member\Page_ContentController');
+AdvancedRoute::controller('/member/page/content', 'Member\Page_ContentController');
 /* MEMBER - MANAGE PAGE - POST */ 
-//route::controller('/member/page/post', 'Member\Page_PostController');
+AdvancedRoute::controller('/member/page/post', 'Member\Page_PostController');
 
 
 Route::any('/member/page/partner/insert', 'Member\Page_ThemesController@partnerinsert');

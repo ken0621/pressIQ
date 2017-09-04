@@ -4,6 +4,7 @@ use App\Globals\Item;
 use App\Globals\Category;
 use App\Globals\Manufacturer;
 use App\Globals\Accounting;
+use App\Globals\Columns;
 use Request;
 
 class ItemControllerV2 extends Member
@@ -123,7 +124,6 @@ class ItemControllerV2 extends Member
 
 		return json_encode($return);
 	}
-
 	public function cost()
 	{
 		$data["page"]		= "Item Cost";
@@ -134,7 +134,6 @@ class ItemControllerV2 extends Member
 		$data["page"]		= "Item Price Level";
 		return view("member.itemv2.price_level");
 	}
-
 	public function archive()
 	{
 		$item_id = Request::input("item_id");
@@ -145,7 +144,6 @@ class ItemControllerV2 extends Member
 
 		echo json_encode("success");
 	}
-
 	public function restore()
 	{
 		$item_id = Request::input("item_id");
@@ -155,5 +153,47 @@ class ItemControllerV2 extends Member
 		}
 
 		echo json_encode("success");
+	}
+	public function columns()
+	{
+		if (Request::isMethod('post'))
+		{
+			$shop_id = $this->user_info->shop_id;
+			$user_id = $this->user_info->user_id;
+			$from	 = "item";
+			$column  = Request::input("column");
+
+			$result = Columns::submitColumns($shop_id, $user_id, $from, $column);
+
+			if($result)
+			{
+				$response["response_status"] = "success";
+				$response["message"] = "Column has been saved.";
+				$response["call_function"] = "columns_submit_done";
+			}
+			else
+			{
+				$response["response_status"] = "error";
+				$response["message"] = "Some error occurred.";
+			}
+
+			return json_encode($response);
+		}
+		else
+		{
+			$data["page"] 	 = "Item Columns";
+			$shop_id 	  	 = $this->user_info->shop_id;
+			$user_id	  	 = $this->user_info->user_id;
+			$from    	  	 = "item";
+			$default[0]   	 = "Item ID";
+			$default[1]   	 = "SKU";
+			$default[2]	  	 = "Price";
+			$default[3]	  	 = "Cost";
+			$default[4]	  	 = "Markup";
+			$default[5]	  	 = "Inventory";
+			$data["_column"] = Columns::getColumns($shop_id, $user_id, $from, $default);
+			
+			return view("member.itemv2.columns_item", $data);
+		}
 	}
 }

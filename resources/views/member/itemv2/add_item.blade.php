@@ -78,7 +78,7 @@
     </div>
 
     <!-- ITEM ADD MAIN -->
-    <div class="item-add-main" {{ $item_main }}>
+    <div class="item-add-main" style="{{ $item_main }}">
         <div class="clearfix modal-body modallarge-body-layout"> 
             <div class="form-horizontal">
                 <!-- BASIC INFORMATION -->
@@ -177,8 +177,8 @@
 
 
                 <!-- INVENTORY -->
-                <h4 class="section-title">Inventory</h4>
-                <div class="form-group">
+                <h4 class="section-title {{ $item_picker }}">Inventory</h4>
+                <div class="form-group {{ $item_picker }}">
                     <div class="col-md-4">
                         <label for="basic-input">Initial Quantity On Hand *</label>
                         <div class="input-group">

@@ -56,7 +56,7 @@ class ItemControllerV2 extends Member
 		{
 			$data["page"]			  = "Item Add";
 			$data["link_submit_here"] = "/member/item/v2/add_submit";
-			$data["item_main"]	      = 'style="display: none"';
+			$data["item_main"]	      = 'display: none';
 			$data["item_picker"]	  = "";
 			$data["item_button"]	  = "disabled";
 		}

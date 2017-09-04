@@ -130,6 +130,7 @@ function item_list()
 		{
 			hasPopup: "false",
 			width: "100%",
+			placeholder: "All Item Type",
 			onChangeValue: function()
 			{
 				action_filter_item_type(this);
@@ -150,6 +151,7 @@ function item_list()
 		{
 			hasPopup: "false",
 			width: "100%",
+			placeholder: "All Category",
 			onChangeValue: function()
 			{
 				action_filter_item_category(this);

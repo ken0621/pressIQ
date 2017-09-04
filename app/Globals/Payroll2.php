@@ -3270,6 +3270,7 @@ class Payroll2
 
 		$return = Payroll2::cutoff_breakdown_deductions($return, $data); //meron bang non-taxable deduction?? lol
 		$return = Payroll2::cutoff_breakdown_adjustments($return, $data);
+		$return = Payroll2::cutoff_breakdown_compute_time($return, $data);
 		$return = Payroll2::cutoff_breakdown_allowance_v2($return, $data);
 		$return = Payroll2::cutoff_breakdown_taxable_allowances($return, $data);
 		$return = Payroll2::cutoff_breakdown_non_taxable_allowances($return, $data);
@@ -3283,7 +3284,7 @@ class Payroll2
 	
 
 		$return = Payroll2::cutoff_breakdown_compute_net($return, $data);
-		$return = Payroll2::cutoff_breakdown_compute_time($return, $data);
+		
 		
 		return $return;
 	}
@@ -4230,7 +4231,7 @@ class Payroll2
 	{
 		
 		$_allowance = Tbl_payroll_employee_allowance_v2::where("payroll_employee_id", $data["employee_id"])->joinAllowance()->get();
-	
+
 		foreach($_allowance as $allowance)
 		{
 			$allowance_amount = $allowance->payroll_employee_allowance_amount;
@@ -4387,6 +4388,11 @@ class Payroll2
 				$standard_gross_pay+=$actual_gross_pay;
 
 				$val["amount"] = @($actual_gross_pay/$standard_gross_pay) * $allowance_amount;
+
+				// if ($data["group"]->payroll_group_salary_computation == "Daily Rate") 
+				// {
+				// 	$val["amount"] = $val["amount"] * $return->_time_breakdown["day_spent"]["float"];
+				// }
 
 				if($allowance->payroll_allowance_category == "Taxable")
 				{

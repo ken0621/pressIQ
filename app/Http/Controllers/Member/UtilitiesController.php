@@ -93,7 +93,7 @@ class UtilitiesController extends Member
             $data["user"]            = Tbl_user::where("user_id",$user_id)->first();
             $data["user_password"]   = Crypt::decrypt($data["user"]->user_password);
             $data["_warehouse"]      = Tbl_warehouse::where("warehouse_shop_id", $user_info->user_shop)->where("archived",0)->get();
-            $data["warehouse_user"]  = Tbl_user_warehouse_access::where("user_id",$user_id)->lists("warehouse_id","warehouse_id");
+            $data["warehouse_user"]  = Tbl_user_warehouse_access::where("user_id",$user_id)->pluck("warehouse_id","warehouse_id");
             
             $edit_user               = Tbl_user::where("user_id",Request::input("user_id"))->position()->first();
 

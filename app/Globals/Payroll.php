@@ -3174,7 +3174,7 @@ class Payroll
 
 		$_deduction = Tbl_payroll_deduction_employee::getdeduction($employee_id, $date, $period, $month)->get();
 		
-		$payroll_record_id = Tbl_payroll_record::getperiod($shop_id, $payroll_period_category)->lists('payroll_record_id');
+		$payroll_record_id = Tbl_payroll_record::getperiod($shop_id, $payroll_period_category)->pluck('payroll_record_id');
 
 		$data['deduction'] 			= array();
 		$data['total_deduction'] 	= 0;
@@ -3207,7 +3207,7 @@ class Payroll
 
 		$_deduction = Tbl_payroll_deduction_employee_v2::getdeduction($employee_id, $date, $period, $month)->get();
 
-		$payroll_record_id = Tbl_payroll_record::getperiod($shop_id, $payroll_period_category)->lists('payroll_record_id');
+		$payroll_record_id = Tbl_payroll_record::getperiod($shop_id, $payroll_period_category)->pluck('payroll_record_id');
 
 		$data['deduction'] 			= array();
 		$data['total_deduction'] 	= 0;

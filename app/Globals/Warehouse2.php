@@ -64,7 +64,7 @@ class Warehouse2
 
     	return $return;
 	}
-    public static function refill($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks, $serial = array())
+    public static function refill($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $source = array(), $serial = array())
     {
     	$check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
 
@@ -98,6 +98,9 @@ class Warehouse2
 	        $insert_slip['inventory_slip_date']          = Carbon::now();
 	        $insert_slip['inventory_slip_shop_id']       = $shop_id;
 	        $insert_slip['slip_user_id']				 = Warehouse::getUserid();
+	        $insert_slip['inventroy_source_reason']      = isset($source['name']) ? $source['name'] : '';
+	        $insert_slip['inventory_source_id']			 = isset($source['id']) ? $source['id'] : 0;
+	        $insert_slip['slip_user_id']				 = Warehouse::getUserid();
             $slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
 
     		for ($ctr_qty = 0; $ctr_qty < $quantity; $ctr_qty++) 
@@ -107,6 +110,8 @@ class Warehouse2
     			$insert['record_warehouse_id'] 	  	 = $warehouse_id;
     			$insert['record_item_remarks']  	 = $remarks;
     			$insert['record_warehouse_slip_id']  = $slip_id;
+    			$insert['record_source_ref_name']	 = isset($source['name']) ? $source['name'] : '';
+    			$insert['record_source_ref_id']	     = isset($source['id']) ? $source['id'] : 0;
 
     			if($serial_qty > 0)
     			{

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Tbl_payroll_time_sheet extends Model
+class Tbl_payroll_employment_time_sheet extends Model
 {
     protected $table = 'Tbl_payroll_time_sheet';
 	protected $primaryKey = "payroll_time_sheet_id";

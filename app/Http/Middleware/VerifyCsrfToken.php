@@ -12,6 +12,15 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        //
+        'api/*',
+        '/payment/ipay88/response',
+        '/payment/ipay88/backend',
+        '/checkout',
+        '/payment/dragonpay/postback',
+        '/payment/dragonpay/post' ,
+        '/payment/dragonpay/post',
+        '/tablet/get_data' ,
+        '/member/payroll/get_cutoff_data',
+        '/member/payroll/api_login'
     ];
 }

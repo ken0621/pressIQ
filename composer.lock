@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0abffb824218867c83bc706e254604cc",
-    "content-hash": "f9d4f3775f87cf7e24494e00f3848ede",
+    "hash": "68e8646b6030acd47ea7c673332a942f",
+    "content-hash": "e83d21e81203bab1f7f6735283bce3c3",
     "packages": [
         {
             "name": "barryvdh/laravel-snappy",
@@ -1741,6 +1741,55 @@
                 "rest"
             ],
             "time": "2017-06-12 11:04:56"
+        },
+        {
+            "name": "lesichkovm/laravel-advanced-route",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lesichkovm/laravel-advanced-route.git",
+                "reference": "02e625600d9b664f1f06f6fe27126f020e7b344c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lesichkovm/laravel-advanced-route/zipball/02e625600d9b664f1f06f6fe27126f020e7b344c",
+                "reference": "02e625600d9b664f1f06f6fe27126f020e7b344c",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "5.*"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/AdvancedRoute.php"
+                ]
+            },
+            "license": [
+                "commercial"
+            ],
+            "authors": [
+                {
+                    "name": "Milan Lesichkov",
+                    "email": "lesichkovm@gmail.com",
+                    "homepage": "http://lesichkov.co.uk",
+                    "role": "Lead Developer"
+                }
+            ],
+            "description": "Advanced route class for Laravel",
+            "homepage": "http://github.com/lesichkovm/laravel-advanced-route",
+            "keywords": [
+                "advanced",
+                "laravel",
+                "lesichkov",
+                "php",
+                "route"
+            ],
+            "support": {
+                "source": "https://github.com/lesichkovm/laravel-advanced-route/tree/master",
+                "issues": "https://github.com/lesichkovm/laravel-advanced-route/issues"
+            },
+            "time": "2017-07-11 11:53:21"
         },
         {
             "name": "maatwebsite/excel",
@@ -5314,7 +5363,8 @@
     "stability-flags": {
         "msurguy/honeypot": 20,
         "netshell/paypal": 20,
-        "dingo/api": 20
+        "dingo/api": 20,
+        "lesichkovm/laravel-advanced-route": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

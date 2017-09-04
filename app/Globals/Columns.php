@@ -36,8 +36,10 @@ class Columns
        {
            foreach ($default as $key => $value) 
            {
-               $default[$key]["value"]   = $value;
-               $default[$key]["checked"] = true;
+              $temp_value               = $value;
+              $default[$key]            = [];
+              $default[$key]["value"]   = $temp_value;
+              $default[$key]["checked"] = true;
            }
 
            $columns = $default;

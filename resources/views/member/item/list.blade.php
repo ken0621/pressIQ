@@ -231,8 +231,8 @@ $( "div" ).digimaTable({
 });
 on_change();
 on_search();
-@if($errors->has())
-   @foreach ($errors->all() as $error)
+@if(count($errors) > 0)
+  @foreach ($errors->all() as $error)
       toastr.error("{{ $error }}");
   @endforeach
 @endif

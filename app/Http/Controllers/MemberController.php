@@ -143,7 +143,7 @@ class MemberController extends Controller
 
     public function locale_id_to_name($locale_id)
     {
-        return Tbl_locale::where("locale_id", $locale_id)->pluck("locale_name");
+        return Tbl_locale::where("locale_id", $locale_id)->value("locale_name");
     }
 
     public function register()
@@ -442,7 +442,7 @@ class MemberController extends Controller
         $data["_product"]        =  Cart::get_info(Self::$shop_id)["tbl_ec_order_item"];
         foreach($data["_product"] as $key=>$product)
         {
-            $data["_product"][$key]["variant_name"] = Tbl_ec_variant::where("evariant_id", $product["item_id"])->pluck("evariant_item_label");
+            $data["_product"][$key]["variant_name"] = Tbl_ec_variant::where("evariant_id", $product["item_id"])->value("evariant_item_label");
         }
         $data["order"]           =  Cart::get_info(Self::$shop_id)["tbl_ec_order"];
 

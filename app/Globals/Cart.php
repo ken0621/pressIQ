@@ -51,7 +51,7 @@ class Cart
     }
     public static function get_shop_info()
     {
-        $shop_info = Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+        $shop_info = Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
         return $shop_info;
     }
     public static function add_to_cart($product_id,$quantity,$shop_id = null,$clear = false)

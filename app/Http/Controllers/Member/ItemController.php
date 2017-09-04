@@ -54,7 +54,7 @@ class ItemController extends Member
         if($access == 1)
         {
 			$shop_id        		   = $this->user_info->shop_id;
-			$warehouse_id 			   = Tbl_warehouse::where("main_warehouse", 1)->where("warehouse_shop_id", $this->user_info->shop_id)->pluck("warehouse_id");
+			$warehouse_id 			   = Tbl_warehouse::where("main_warehouse", 1)->where("warehouse_shop_id", $this->user_info->shop_id)->value("warehouse_id");
 	        
 			if($data['is_merchant'] == 1)
 			{
@@ -260,13 +260,13 @@ class ItemController extends Member
 			
 			$data["_income"] 		= Accounting::getAllAccount('all',null,['Income','Other Income']);
 			$data["default_income"] = Tbl_chart_of_account::where("account_code", "accounting-sales")
-									->where("account_shop_id", $shop_id)->pluck("account_id");
+									->where("account_shop_id", $shop_id)->value("account_id");
 			$data["_asset"] 		= Accounting::getAllAccount('all', null, ['Other Current Asset','Fixed Asset','Other Asset']);
 			$data["default_asset"] 	= Tbl_chart_of_account::where("account_code", "accounting-inventory-asset")
-									->where("account_shop_id", $shop_id)->pluck("account_id");
+									->where("account_shop_id", $shop_id)->value("account_id");
 			$data["_expense"] 		= Accounting::getAllAccount('all',null,['Expense','Other Expense','Cost of Goods Sold']);
 			$data["default_expense"] = Tbl_chart_of_account::where("account_code", "accounting-expense")
-									->where("account_shop_id", $shop_id)->pluck("account_id");
+									->where("account_shop_id", $shop_id)->value("account_id");
 
 			$data['_item']  			= Item::get_all_category_item();
 			$data['_item_to_bundle']	= Item::get_all_category_item([1,2,3]);
@@ -337,9 +337,9 @@ class ItemController extends Member
 		// }
 			
 		//Accounting part //DEFAULT VALUE
-		$item_expense_account_id= Tbl_chart_of_account::where("account_code", "accounting-expense")->where("account_shop_id", $shop_id)->pluck("account_id");
-		$item_income_account_id = Tbl_chart_of_account::where("account_code", "accounting-sales")->where("account_shop_id", $shop_id)->pluck("account_id");
-		$item_asset_account_id 	= Tbl_chart_of_account::where("account_code", "accounting-inventory-asset")->where("account_shop_id", $shop_id)->pluck("account_id");
+		$item_expense_account_id= Tbl_chart_of_account::where("account_code", "accounting-expense")->where("account_shop_id", $shop_id)->value("account_id");
+		$item_income_account_id = Tbl_chart_of_account::where("account_code", "accounting-sales")->where("account_shop_id", $shop_id)->value("account_id");
+		$item_asset_account_id 	= Tbl_chart_of_account::where("account_code", "accounting-inventory-asset")->where("account_shop_id", $shop_id)->value("account_id");
 
 		$insert["item_date_created"]	    	  = Carbon::now();
 		$insert["shop_id"]	    				  = $shop_id;
@@ -579,7 +579,7 @@ class ItemController extends Member
 				$price = 0;
 				foreach ($bundle_price as $key => $value) 
 				{
-					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->pluck("item_price");
+					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->value("item_price");
                 	$um = Tbl_unit_measurement_multi::where("multi_id",$value->bundle_um_id)->first();
 
 					$qt = 1;
@@ -658,7 +658,7 @@ class ItemController extends Member
 				$price = 0;
 				foreach ($bundle_price as $key => $value) 
 				{
-					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->pluck("item_price");
+					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->value("item_price");
                 	$um = Tbl_unit_measurement_multi::where("multi_id",$value->bundle_um_id)->first();
 
 					$qt = 1;
@@ -980,7 +980,7 @@ class ItemController extends Member
 				$bundle_price = Tbl_item_bundle::where("bundle_bundle_id",$item_id)->get();
 				foreach ($bundle_price as $key => $value) 
 				{
-					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->pluck("item_price");
+					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->value("item_price");
                 	$um = Tbl_unit_measurement_multi::where("multi_id",$value->bundle_um_id)->first();
 
 					$qt = 1;
@@ -1186,9 +1186,9 @@ class ItemController extends Member
 		$item_measurement_id 			= $unit_id;			
 			
 		//Accounting part //DEFAULT VALUE
-		$item_expense_account_id= Tbl_chart_of_account::where("account_code", "accounting-expense")->where("account_shop_id", $shop_id)->pluck("account_id");
-		$item_income_account_id = Tbl_chart_of_account::where("account_code", "accounting-sales")->where("account_shop_id", $shop_id)->pluck("account_id");
-		$item_asset_account_id 	= Tbl_chart_of_account::where("account_code", "accounting-inventory-asset")->where("account_shop_id", $shop_id)->pluck("account_id");
+		$item_expense_account_id= Tbl_chart_of_account::where("account_code", "accounting-expense")->where("account_shop_id", $shop_id)->value("account_id");
+		$item_income_account_id = Tbl_chart_of_account::where("account_code", "accounting-sales")->where("account_shop_id", $shop_id)->value("account_id");
+		$item_asset_account_id 	= Tbl_chart_of_account::where("account_code", "accounting-inventory-asset")->where("account_shop_id", $shop_id)->value("account_id");
 
 		if($item_type == "inventory")
 		{			
@@ -1413,7 +1413,7 @@ class ItemController extends Member
 				$bundle_price = Tbl_item_bundle::where("bundle_bundle_id",$item_id)->get();
 				foreach ($bundle_price as $key => $value) 
 				{
-					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->pluck("item_price");
+					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->value("item_price");
                 	$um = Tbl_unit_measurement_multi::where("multi_id",$value->bundle_um_id)->first();
 
 					$qt = 1;
@@ -1492,7 +1492,7 @@ class ItemController extends Member
 				$bundle_price = Tbl_item_bundle::where("bundle_bundle_id",$item_id)->get();
 				foreach ($bundle_price as $key => $value) 
 				{
-					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->pluck("item_price");
+					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->value("item_price");
                 	$um = Tbl_unit_measurement_multi::where("multi_id",$value->bundle_um_id)->first();
 
 					$qt = 1;
@@ -1556,7 +1556,7 @@ class ItemController extends Member
 		{
 	        if($check != 0)
 	        {
-	        	$item_measurement_id = Tbl_unit_measurement::where("um_id",$old["item_measurement_id"])->pluck("um_id");
+	        	$item_measurement_id = Tbl_unit_measurement::where("um_id",$old["item_measurement_id"])->value("um_id");
 	        }			
 		}
 		if(Session::get("um_id") != null)
@@ -1618,7 +1618,7 @@ class ItemController extends Member
 			{
 				//update re-order point from MAIN WAREHOUSE
 				$up_item["item_reorder_point"] = $insert["item_reorder_point"];
-				$warehouse = Tbl_warehouse::where("warehouse_shop_id",$shop_id)->where("main_warehouse",1)->pluck("warehouse_id");
+				$warehouse = Tbl_warehouse::where("warehouse_shop_id",$shop_id)->where("main_warehouse",1)->value("warehouse_id");
 				Tbl_sub_warehouse::where("warehouse_id",$warehouse)->where("item_id",$id)->update($up_item);
 
 				Tbl_item::where("item_id",$id)->where("shop_id",$shop_id)->update($insert);
@@ -1790,7 +1790,7 @@ class ItemController extends Member
 				$bundle_price = Tbl_item_bundle::where("bundle_bundle_id",$id)->get();
 				foreach ($bundle_price as $key => $value) 
 				{
-					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->pluck("item_price");
+					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->value("item_price");
                 	$um = Tbl_unit_measurement_multi::where("multi_id",$value->bundle_um_id)->first();
 
 					$qt = 1;
@@ -1857,7 +1857,7 @@ class ItemController extends Member
 
 	public function get_item_new_price($item_id, $qty)
 	{
-		return Tbl_item::newPrice($qty)->where("item_id", $item_id)->pluck("new_price");
+		return Tbl_item::newPrice($qty)->where("item_id", $item_id)->value("new_price");
 	}
 
 	public function insert_session()
@@ -2044,7 +2044,7 @@ class ItemController extends Member
 
 		Tbl_item::where('item_id', $item_id)->update($update_item);
 
-		$user_id = Tbl_item_merchant_request::where('item_merchant_request_id', $item_merchant_request_id)->pluck('item_merchant_requested_by');
+		$user_id = Tbl_item_merchant_request::where('item_merchant_request_id', $item_merchant_request_id)->value('item_merchant_requested_by');
 		$item = Tbl_item::where('item_id', $item_id)->first();
 		$user = Tbl_user::where('user_id', $user_id)->first();
 		Merchant::set_per_piece_mark_up($item, $user);

@@ -35,7 +35,7 @@ class JournalEntryController extends Member
 {
 	public function getShopId()
 	{
-		return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+		return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
 	}
 
 	public function getList()
@@ -205,7 +205,7 @@ class JournalEntryController extends Member
 			{
 				if($account_id)
 				{
-					$account_type_id = Tbl_chart_of_account::accountInfo($this->getShopId())->where("account_id", $account_id)->pluck("chart_type_id");
+					$account_type_id = Tbl_chart_of_account::accountInfo($this->getShopId())->where("account_id", $account_id)->value("chart_type_id");
 					$account_type_id == 2 ? $account_type_string.='2' : ($account_type_id == 6 ? $account_type_string.='6' : '');
 
 					$entry["entry_date"] = datepicker_input(Request::input("je_entry_date"));

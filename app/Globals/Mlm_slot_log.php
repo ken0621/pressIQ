@@ -171,7 +171,7 @@ class Mlm_slot_log
 	{
 		$label = Tbl_mlm_plan::where('marketing_plan_code', $complan)
 					->where('shop_id', $shop_id)
-					->pluck('marketing_plan_label');
+					->value('marketing_plan_label');
 		return $label;			
 	}
 

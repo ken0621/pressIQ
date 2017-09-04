@@ -264,7 +264,7 @@ class PayrollTimeSheet2Controller extends Member
 		$from = $data["start_date"] = $company_period->payroll_period_start;
 		$to = $data["end_date"] = $company_period->payroll_period_end;
 		$payroll_period_company_id = $company_period->payroll_period_company_id;
-		$shift_code_id = Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->pluck("shift_code_id");
+		$shift_code_id = Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->value("shift_code_id");
 	
 		while($from <= $to)
 		{
@@ -413,7 +413,7 @@ class PayrollTimeSheet2Controller extends Member
 		$return->for_approval	= ($approved == true ? 0 : 1);
 		$return->daily_salary	= 0;
 		$employee_contract		= $this->db_get_current_employee_contract($employee_id, $date);
-		$shift_code_id 			= Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->pluck("shift_code_id");
+		$shift_code_id 			= Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->value("shift_code_id");
 
 		if($custom_shift == 1)
 		{
@@ -589,7 +589,7 @@ class PayrollTimeSheet2Controller extends Member
 	public function timesheet_get_is_holiday($employee_id, $date)
 	{
 		$day_type	= 'not_holiday';
-		$company_id	= Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->pluck('payroll_employee_company_id');
+		$company_id	= Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->value('payroll_employee_company_id');
 		$holiday	= Tbl_payroll_holiday_company::getholiday($company_id, $date)->first();
 		
 		if($holiday != null)
@@ -863,7 +863,7 @@ class PayrollTimeSheet2Controller extends Member
 	public function income_summary($period_company_id, $employee_id)
 	{
 
-		$data["date"] = $date = Tbl_payroll_period_company::sel($period_company_id)->pluck('payroll_period_start');
+		$data["date"] = $date = Tbl_payroll_period_company::sel($period_company_id)->value('payroll_period_start');
 		$data["group"] = $group = $this->db_get_current_employee_contract($employee_id, $date);
 
 		if(!$group)

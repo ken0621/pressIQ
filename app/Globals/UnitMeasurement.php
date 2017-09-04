@@ -22,7 +22,7 @@ class UnitMeasurement
 
     public static function getShopId()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
 
     public static function getQty($um_id)
@@ -239,7 +239,7 @@ class UnitMeasurement
     } 
     public static function check()
     {
-        $check = Tbl_settings::where("settings_key","pis-jamestiong")->where("settings_value","enable")->where("shop_id",UnitMeasurement::getShopId())->pluck("settings_setup_done");
+        $check = Tbl_settings::where("settings_key","pis-jamestiong")->where("settings_value","enable")->where("shop_id",UnitMeasurement::getShopId())->value("settings_setup_done");
         return $check;
     }
     public static function um_qty($um_id, $fix = 0)
@@ -385,7 +385,7 @@ class UnitMeasurement
         {
             //unit_measurement_multi
             //multi_id
-            $um_id = Tbl_unit_measurement_multi::where("multi_id",$multi_id)->pluck("multi_um_id");
+            $um_id = Tbl_unit_measurement_multi::where("multi_id",$multi_id)->value("multi_um_id");
             $data = Tbl_unit_measurement::multi()->where("um_id",$um_id)->where("um_archived",0)->get();
         }
         else

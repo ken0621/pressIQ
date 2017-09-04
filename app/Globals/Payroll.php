@@ -70,7 +70,7 @@ class Payroll
 			foreach($_tax as $key => $tax)
 			{
 
-				$payroll_tax_status_id = Tbl_payroll_tax_period::getperiod($shop_id,$tax->payroll_tax_status_id)->pluck('payroll_tax_period_id');
+				$payroll_tax_status_id = Tbl_payroll_tax_period::getperiod($shop_id,$tax->payroll_tax_status_id)->value('payroll_tax_period_id');
 
 				$insert[$key]['shop_id'] 				= $shop_id;
 				$insert[$key]['payroll_tax_status_id'] 	= $payroll_tax_status_id;
@@ -197,7 +197,7 @@ class Payroll
 		$count = Tbl_payroll_copy_log_requirements::where('shop_id',$shop_id)->where('requirements_category','pagibig')->count();
 		if($count == 0)
 		{
-			$pagibig = Tbl_payroll_pagibig_default::pluck('payroll_pagibig_percent');
+			$pagibig = Tbl_payroll_pagibig_default::value('payroll_pagibig_percent');
 			$insert['payroll_pagibig_percent']  = $pagibig;
 			$insert['shop_id']					= $shop_id;
 			Tbl_payroll_pagibig::insert($insert);
@@ -323,7 +323,7 @@ class Payroll
 	{
 		$data = array();
 
-		$total_amount = Tbl_payroll_deduction::where('payroll_deduction_id',$deduction_id)->pluck('payroll_deduction_amount');
+		$total_amount = Tbl_payroll_deduction::where('payroll_deduction_id',$deduction_id)->value('payroll_deduction_amount');
 
 
 		$_deduction = Tbl_payroll_deduction_employee::selbyemployee($deduction_id)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->get();
@@ -362,7 +362,7 @@ class Payroll
 	{
 		$data = array();
 
-		$total_amount = Tbl_payroll_deduction_v2::where('payroll_deduction_id',$deduction_id)->pluck('payroll_deduction_amount');
+		$total_amount = Tbl_payroll_deduction_v2::where('payroll_deduction_id',$deduction_id)->value('payroll_deduction_amount');
 
 
 		$_deduction = Tbl_payroll_deduction_employee_v2::selbyemployee($deduction_id)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->get();
@@ -650,7 +650,7 @@ class Payroll
 		$data["employee_information"] = $employee_information = Tbl_payroll_employee_contract::selemployee($employee_id, $date)->leftJoin("tbl_payroll_group", "tbl_payroll_group.payroll_group_id", "=","tbl_payroll_employee_contract.payroll_group_id")->first();
 
 		/* GET HOLIDAY PER COMPANY */
-		$payroll_company_id = Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->pluck('payroll_employee_company_id');
+		$payroll_company_id = Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->value('payroll_employee_company_id');
 
 		$data['holiday']	= Tbl_payroll_holiday_company::getholiday($payroll_company_id, $date)->select('tbl_payroll_holiday.*')->first();
 
@@ -1645,7 +1645,7 @@ class Payroll
 		$data['break_time']					= 0;
 
 
-		$tax_status 	= Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->pluck('payroll_employee_tax_status');
+		$tax_status 	= Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->value('payroll_employee_tax_status');
 
 		$group = array();
 
@@ -3186,7 +3186,7 @@ class Payroll
 			$temp['payroll_deduction_id'] 	= $deduction->payroll_deduction_id;
 			$temp['payroll_periodal_deduction'] = $deduction->payroll_periodal_deduction;
 			/* get total payment deduction per month */
-			$total_payment = Tbl_payroll_deduction_payment::getpayment($employee_id, $payroll_record_id, $deduction->payroll_deduction_id)->select(DB::raw('IFNULL(sum(payroll_payment_amount), 0) as total_payment'))->pluck('total_payment');
+			$total_payment = Tbl_payroll_deduction_payment::getpayment($employee_id, $payroll_record_id, $deduction->payroll_deduction_id)->select(DB::raw('IFNULL(sum(payroll_payment_amount), 0) as total_payment'))->value('total_payment');
 
 			if($temp == 'Last Period')
 			{
@@ -3229,7 +3229,7 @@ class Payroll
 			->orderBy('payroll_deduction_payment_id','desc')
 			->first();
 			
-			$total_payment = Tbl_payroll_deduction_payment_v2::getpayment($employee_id, $payroll_record_id, $deduction->payroll_deduction_id)->select(DB::raw('IFNULL(sum(payroll_payment_amount), 0) as total_payment'))->pluck('total_payment');
+			$total_payment = Tbl_payroll_deduction_payment_v2::getpayment($employee_id, $payroll_record_id, $deduction->payroll_deduction_id)->select(DB::raw('IFNULL(sum(payroll_payment_amount), 0) as total_payment'))->value('total_payment');
 
 			if($temp == 'Last Period')
 			{

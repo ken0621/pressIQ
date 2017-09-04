@@ -58,7 +58,7 @@ class Purchasing_inventory_system
             $shop_id = Tablet_global::getShopId();
         }
 
-        $check = Tbl_settings::where("settings_key","pis-jamestiong")->where("settings_value","enable")->where("shop_id",$shop_id)->pluck("settings_setup_done");
+        $check = Tbl_settings::where("settings_key","pis-jamestiong")->where("settings_value","enable")->where("shop_id",$shop_id)->value("settings_setup_done");
         return $check;
     }
     public static function get_inventory_in_sir($sir_id)
@@ -297,7 +297,7 @@ class Purchasing_inventory_system
         {
             foreach ($data["_returns"] as $key_return => $value_return)
             {
-                $item_um = Tbl_unit_measurement_multi::where("multi_um_id",$value_return->item_measurement_id)->where("is_base",0)->pluck("multi_id");
+                $item_um = Tbl_unit_measurement_multi::where("multi_um_id",$value_return->item_measurement_id)->where("is_base",0)->value("multi_id");
 
                 $data["_returns"][$key_return]->item_count = UnitMeasurement::um_view($value_return->sc_item_qty,$value_return->item_measurement_id,$item_um); 
                 $data["_returns"][$key_return]->item_physical_count = UnitMeasurement::um_view($value_return->sc_physical_count,$value_return->item_measurement_id,$item_um); 
@@ -715,7 +715,7 @@ class Purchasing_inventory_system
     public static function get_qty_item_sir($sir_id,$item_id)
     {
         $qty = 0;
-        $type = Tbl_item::where("item_id",$item_id)->pluck("item_type_id");
+        $type = Tbl_item::where("item_id",$item_id)->value("item_type_id");
         if($type != 4)
         {
             $qty = Tbl_sir_inventory::where("inventory_sir_id",$sir_id)->where("sir_item_id",$item_id)->sum("sir_inventory_count");
@@ -764,7 +764,7 @@ class Purchasing_inventory_system
             $i = null;
             foreach ($sir_item as $value_itemid) 
             {
-               $type = Tbl_item::where("item_id",$value_itemid->item_id)->pluck("item_type_id");
+               $type = Tbl_item::where("item_id",$value_itemid->item_id)->value("item_type_id");
                 if($type == 4)
                 {
                     if($value_itemid->item_id == $value_items['product_id'])
@@ -826,7 +826,7 @@ class Purchasing_inventory_system
             $i = null;
             foreach ($sir_item as $value_itemid) 
             {
-                $type = Tbl_item::where("item_id",$value_itemid->item_id)->pluck("item_type_id");
+                $type = Tbl_item::where("item_id",$value_itemid->item_id)->value("item_type_id");
                 if($type == 4)
                 {
                     if($value_itemid->item_id == $value_items['product_id'])
@@ -891,7 +891,7 @@ class Purchasing_inventory_system
                 $i = null;
                 foreach ($sir_item as $value_itemid) 
                 {
-                    $type = Tbl_item::where("item_id",$value_itemid->item_id)->pluck("item_type_id");
+                    $type = Tbl_item::where("item_id",$value_itemid->item_id)->value("item_type_id");
                     if($type == 4)
                     {
                         if($value_itemid->item_id == $value_items['product_id'])
@@ -1010,11 +1010,11 @@ class Purchasing_inventory_system
     }
     public static function getShopId()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
     public static function getUserId()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_id');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_id');
     }
     public static function get_sir_item($sir_id)
     {
@@ -1250,9 +1250,9 @@ class Purchasing_inventory_system
     }
     public static function get_item_price($item_id)
     {
-        $if_bundle = Tbl_item::where("item_id",$item_id)->pluck("item_type_id");
+        $if_bundle = Tbl_item::where("item_id",$item_id)->value("item_type_id");
 
-        $return_price = Tbl_item::where("item_id",$item_id)->pluck("item_price");
+        $return_price = Tbl_item::where("item_id",$item_id)->value("item_price");
         if($if_bundle == 4)
         {
             $return_price = Item::get_item_bundle_price($item_id);
@@ -1261,9 +1261,9 @@ class Purchasing_inventory_system
     }
     public static function get_item_cost($item_id)
     {
-        $if_bundle = Tbl_item::where("item_id",$item_id)->pluck("item_type_id");
+        $if_bundle = Tbl_item::where("item_id",$item_id)->value("item_type_id");
 
-        $return_price = Tbl_item::where("item_id",$item_id)->pluck("item_cost");
+        $return_price = Tbl_item::where("item_id",$item_id)->value("item_cost");
         if($if_bundle == 4)
         {
             $return_price = Item::get_item_bundle_cost($item_id);
@@ -1478,7 +1478,7 @@ class Purchasing_inventory_system
     public static function check_qty_sir($sir_id, $item_id, $um, $qty, $invoice_id = 0, $invoice_table = '')
     {
         $return = 0;
-        $type = Tbl_item::where("item_id",$item_id)->pluck("item_type_id");
+        $type = Tbl_item::where("item_id",$item_id)->value("item_type_id");
 
         if($type == 4)
         {
@@ -1676,7 +1676,7 @@ class Purchasing_inventory_system
             // $data["_returns"][$key1]['item_price'] = "";
             if($item_info)
             {
-                // $item_um = Tbl_unit_measurement_multi::where("multi_um_id",$item_info->item_measurement_id)->where("is_base",0)->pluck("multi_id");
+                // $item_um = Tbl_unit_measurement_multi::where("multi_um_id",$item_info->item_measurement_id)->where("is_base",0)->value("multi_id");
                 // $data["_returns"][$key1]['item_name'] = $item_info->item_name;
                 // $data["_returns"][$key1]['item_count'] = UnitMeasurement::um_view($value1["item_qty"],$item_info->item_measurement_id,$item_um);
                 // $data["_returns"][$key1]['item_base_um'] = $item_info->item_measurement_id;

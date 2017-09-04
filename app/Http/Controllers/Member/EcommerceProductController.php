@@ -47,7 +47,7 @@ class EcommerceProductController extends Member
 
 	public function getShopId()
 	{
-		return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+		return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
 	}
 
 	public function load_product_category()
@@ -545,7 +545,7 @@ class EcommerceProductController extends Member
 			foreach($_option_name as $key=>$option_name)
 			{
 
-				$option_name_id = Tbl_option_name::where("option_name", $option_name)->pluck("option_name_id");
+				$option_name_id = Tbl_option_name::where("option_name", $option_name)->value("option_name_id");
 				if($option_name_id)
 				{
 					$update["option_name_id"] 	= $option_name_id;
@@ -600,7 +600,7 @@ class EcommerceProductController extends Member
 	public function postUpdateVariant()
 	{
 		$product_id 	= Request::input("product_id");
-		$is_single 		= Tbl_ec_product::where("eprod_id", $product_id)->pluck("eprod_is_single");
+		$is_single 		= Tbl_ec_product::where("eprod_id", $product_id)->value("eprod_is_single");
 		$variant_id 	= Request::input("variant_id");
 		$_option_name 	= Request::input("option_name");
 		$_option_value 	= Request::input("option_value");
@@ -786,7 +786,7 @@ class EcommerceProductController extends Member
 			$insert_option_value['option_value']	= $option_value[$key];					
 			$option_value_id						= Tbl_option_value::insertGetId($insert_option_value);
 
-			$option_name_id = Tbl_option_name::where("option_name", $option_name)->pluck("option_name_id");
+			$option_name_id = Tbl_option_name::where("option_name", $option_name)->value("option_name_id");
 
 			$insert_variant_name['variant_name_order']	= $key;
 			$insert_variant_name['variant_id']			= $variant_id;
@@ -914,7 +914,7 @@ class EcommerceProductController extends Member
 
 			if($promo_price[$key] != ''	)
 			{
-				$item_id = Tbl_ec_variant::item()->where("evariant_id", $evariant_id[$key])->pluck("item_id");
+				$item_id = Tbl_ec_variant::item()->where("evariant_id", $evariant_id[$key])->value("item_id");
 
 				$item_info['item_id']					= $item_id;
 				$item_info['item_discount_value']		= $promo_price[$key];

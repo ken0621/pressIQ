@@ -242,9 +242,9 @@ class Payroll_BioImportController extends Member
 
 
 	/* GET EMPLOYEE ID START */
-	public function getemployeeId($payroll_employee_number = '', $pluck = 'payroll_employee_id')
+	public function getemployeeId($payroll_employee_number = '', $value = 'payroll_employee_id')
 	{
-		return Tbl_payroll_employee_basic::where('payroll_employee_number', $payroll_employee_number)->where('shop_id', Self::shop_id())->pluck($pluck);
+		return Tbl_payroll_employee_basic::where('payroll_employee_number', $payroll_employee_number)->where('shop_id', Self::shop_id())->value($value);
 	}
 
 	public function getTimeSheetId($payroll_employee_id = 0, $date = '0000-00-00')
@@ -259,7 +259,7 @@ class Payroll_BioImportController extends Member
 		}
 		else
 		{
-			$payroll_time_sheet_id = Tbl_payroll_time_sheet::checkdata($payroll_employee_id, $date)->pluck('payroll_time_sheet_id');
+			$payroll_time_sheet_id = Tbl_payroll_time_sheet::checkdata($payroll_employee_id, $date)->value('payroll_time_sheet_id');
 		}
 
 		return $payroll_time_sheet_id;
@@ -271,7 +271,7 @@ class Payroll_BioImportController extends Member
 	public function check_holiday($company_id = 0,$date = '0000-00-00')
 	{
 		$day = 'RG';
-		$holiday = Tbl_payroll_holiday_company::getholiday($company_id, $date)->pluck('payroll_holiday_category');
+		$holiday = Tbl_payroll_holiday_company::getholiday($company_id, $date)->value('payroll_holiday_category');
 	
 		if($holiday == 'Regular')
 		{
@@ -294,7 +294,7 @@ class Payroll_BioImportController extends Member
 		$_day = Tbl_payroll_employee_contract::selemployee($employee_id, $date)
 											->join('tbl_payroll_group_rest_day','tbl_payroll_group_rest_day.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
 											->where('payroll_group_rest_day', $target)
-											->pluck('tbl_payroll_group_rest_day.payroll_group_rest_day_category');
+											->value('tbl_payroll_group_rest_day.payroll_group_rest_day_category');
 		if($_day == 'rest day')
 		{
 			$day = 'RD';
@@ -750,7 +750,7 @@ class Payroll_BioImportController extends Member
 
     				if($time['company_code'] != null)
     				{
-    					$company_temp_id =  Tbl_payroll_company::selbycode(Self::shop_id(), $time['company_code'])->pluck('payroll_company_id');
+    					$company_temp_id =  Tbl_payroll_company::selbycode(Self::shop_id(), $time['company_code'])->value('payroll_company_id');
     					if($company_temp_id != null)
     					{	
     						$company_id = $company_temp_id;

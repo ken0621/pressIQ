@@ -185,7 +185,7 @@ class Payroll2
 		$from = $data["start_date"] = $company_period->payroll_period_start;
 		$to = $data["end_date"] = $company_period->payroll_period_end;
 		$payroll_period_company_id = $company_period->payroll_period_company_id;
-		$shift_code_id = Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->pluck("shift_code_id");
+		$shift_code_id = Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->value("shift_code_id");
 	
 		while($from <= $to)
 		{
@@ -327,7 +327,7 @@ class Payroll2
 		$return->for_approval		= ($approved == true ? 0 : 1);
 		$return->daily_salary		= 0;
 		$employee_contract			= Tbl_payroll_employee_contract::selemployee($employee_id, $date)->group()->first();
-		$shift_code_id 				= Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->pluck("shift_code_id");
+		$shift_code_id 				= Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->value("shift_code_id");
 
 		if($custom_shift == 1) //CUSTOM SHIFT
 		{
@@ -714,7 +714,7 @@ class Payroll2
 	public static function timesheet_get_is_holiday($employee_id, $date)
 	{
 		$day_type	= 'not_holiday';
-		$company_id	= Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->pluck('payroll_employee_company_id');
+		$company_id	= Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->value('payroll_employee_company_id');
 		$holiday	= Tbl_payroll_holiday_company::getholiday($company_id, $date)->first();
 		
 		if($holiday != null)

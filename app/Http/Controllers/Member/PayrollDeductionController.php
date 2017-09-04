@@ -171,7 +171,7 @@ class PayrollDeductionController extends Member
      {
           $data["_expense"] = Accounting::getAllAccount('all',null,['Expense','Other Expense']);
           $data["default_expense"] = Tbl_chart_of_account::where("account_number", 66000)
-                                             ->where("account_shop_id", Self::shop_id())->pluck("account_id");
+                                             ->where("account_shop_id", Self::shop_id())->value("account_id");
           $array = array();
           Session::put('employee_deduction_tag',$array);
 
@@ -400,7 +400,7 @@ class PayrollDeductionController extends Member
           {
                $statement = 'restore';
           }
-          $file_name          = Tbl_payroll_deduction_v2::where('payroll_deduction_id', $id)->pluck('payroll_deduction_name');
+          $file_name          = Tbl_payroll_deduction_v2::where('payroll_deduction_id', $id)->value('payroll_deduction_name');
           $data['title']      = 'Do you really want to '.$statement.' '.$file_name.'?';
           $data['html']       = '';
           $data['action']     = '/member/payroll/deduction/v2/archived_deduction_action';
@@ -455,7 +455,7 @@ class PayrollDeductionController extends Member
           {
                $statement = 'restore';
           }
-          $file_name          = Tbl_payroll_deduction_employee_v2::getemployee($payroll_deduction_employee_id)->pluck('payroll_employee_display_name');
+          $file_name          = Tbl_payroll_deduction_employee_v2::getemployee($payroll_deduction_employee_id)->value('payroll_employee_display_name');
           $data['title']      = 'Do you really want to '.$statement.' '.$file_name.'?';
           $data['html']       = '';
           $data['action']     = '/member/payroll/deduction/v2/deduction_employee_tag_archive';

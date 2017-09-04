@@ -839,7 +839,7 @@ class PayrollController extends Member
 
           switch ($str_param) {
                case 'country':
-                    $id = Tbl_country::where('country_name', $str_name)->pluck('country_id');
+                    $id = Tbl_country::where('country_name', $str_name)->value('country_id');
                     // return $id;
                     if($id == null)
                     {
@@ -848,23 +848,23 @@ class PayrollController extends Member
                     break;
 
                case 'company':
-                    $id = Tbl_payroll_company::where('payroll_company_name', $str_name)->where('shop_id', Self::shop_id())->pluck('payroll_company_id');
+                    $id = Tbl_payroll_company::where('payroll_company_name', $str_name)->where('shop_id', Self::shop_id())->value('payroll_company_id');
                     // return $id;/
 
                     break;
 
                case 'department':
-                    $id = Tbl_payroll_department::where('payroll_department_name', $str_name)->where('shop_id', Self::shop_id())->pluck('payroll_department_id');
+                    $id = Tbl_payroll_department::where('payroll_department_name', $str_name)->where('shop_id', Self::shop_id())->value('payroll_department_id');
                     // return $id;
                     break;
 
                case 'jobtitle':
-                    $id = Tbl_payroll_jobtitle::where('payroll_jobtitle_name', $str_name)->where('shop_id', Self::shop_id())->pluck('payroll_jobtitle_id');
+                    $id = Tbl_payroll_jobtitle::where('payroll_jobtitle_name', $str_name)->where('shop_id', Self::shop_id())->value('payroll_jobtitle_id');
                     // return $id;
                     break;
 
                case 'employment_status':
-                    $id = Tbl_payroll_employment_status::where('employment_status', $str_name)->pluck('payroll_employment_status_id');
+                    $id = Tbl_payroll_employment_status::where('employment_status', $str_name)->value('payroll_employment_status_id');
                     // return $id;
                     break;
                
@@ -1005,7 +1005,7 @@ class PayrollController extends Member
 	public function remove_employee_requirement()
 	{
 		$payroll_requirements_id = Request::input("content");
-		$path = Tbl_payroll_requirements::where('payroll_requirements_id',$payroll_requirements_id)->pluck('payroll_requirements_path');
+		$path = Tbl_payroll_requirements::where('payroll_requirements_id',$payroll_requirements_id)->value('payroll_requirements_path');
 		Tbl_payroll_requirements::where('payroll_requirements_id',$payroll_requirements_id)->delete();
 	}
 
@@ -2106,7 +2106,7 @@ class PayrollController extends Member
                $statement = 'restore';
           }
 
-          $file_name          = Tbl_payroll_branch_location::where('branch_location_id', $id)->pluck('branch_location_name');
+          $file_name          = Tbl_payroll_branch_location::where('branch_location_id', $id)->value('branch_location_name');
 
           $data['title']      = 'Do you really want to '.$statement.' '.$file_name.'?';
           $data['html']       = '';
@@ -2394,7 +2394,7 @@ class PayrollController extends Member
           {
                $statement = 'restore';
           }
-          $file_name          = Tbl_payroll_company::where('payroll_company_id', $id)->pluck('payroll_company_name');
+          $file_name          = Tbl_payroll_company::where('payroll_company_id', $id)->value('payroll_company_name');
           $data['title']      = 'Do you really want to '.$statement.' '.$file_name.'?';
           $data['html']       = '';
           $data['action']     = '/member/payroll/company_list/archived_company';
@@ -2474,7 +2474,7 @@ class PayrollController extends Member
           {
                $statement = 'restore';
           }
-          $file_name               = Tbl_payroll_department::where('payroll_department_id', $department_id)->pluck('payroll_department_name');
+          $file_name               = Tbl_payroll_department::where('payroll_department_id', $department_id)->value('payroll_department_name');
           $data['title']           = 'Do you really want to '.$statement.' '.$file_name.'?';
           $data['html']       = '';
           $data['action']     = '/member/payroll/departmentlist/archived_department';
@@ -2594,7 +2594,7 @@ class PayrollController extends Member
           {
                $statement = 'restore';
           }
-          $file_name               = Tbl_payroll_jobtitle::where('payroll_jobtitle_id', $jobtitle_id)->pluck('payroll_jobtitle_name');
+          $file_name               = Tbl_payroll_jobtitle::where('payroll_jobtitle_id', $jobtitle_id)->value('payroll_jobtitle_name');
           $data['title']           = 'Do you really want to '.$statement.' '.$file_name.'?';
           $data['html']       = '';
           $data['action']     = '/member/payroll/jobtitlelist/archived_jobtitle';
@@ -2949,7 +2949,7 @@ class PayrollController extends Member
      {
           $data["_expense"] = Accounting::getAllAccount('all',null,['Expense','Other Expense']);
           $data["default_expense"] = Tbl_chart_of_account::where("account_number", 66000)
-                                             ->where("account_shop_id", Self::shop_id())->pluck("account_id");
+                                             ->where("account_shop_id", Self::shop_id())->value("account_id");
           $array = array();
           Session::put('employee_deduction_tag',$array);
 
@@ -3178,7 +3178,7 @@ class PayrollController extends Member
           {
                $statement = 'restore';
           }
-          $file_name               = Tbl_payroll_deduction::where('payroll_deduction_id', $id)->pluck('payroll_deduction_name');
+          $file_name               = Tbl_payroll_deduction::where('payroll_deduction_id', $id)->value('payroll_deduction_name');
           $data['title']           = 'Do you really want to '.$statement.' '.$file_name.'?';
           $data['html']       = '';
           $data['action']     = '/member/payroll/deduction/archived_deduction_action';
@@ -3232,7 +3232,7 @@ class PayrollController extends Member
           {
                $statement = 'restore';
           }
-          $file_name               = Tbl_payroll_deduction_employee::getemployee($payroll_deduction_employee_id)->pluck('payroll_employee_display_name');
+          $file_name               = Tbl_payroll_deduction_employee::getemployee($payroll_deduction_employee_id)->value('payroll_employee_display_name');
           $data['title']           = 'Do you really want to '.$statement.' '.$file_name.'?';
           $data['html']       = '';
           $data['action']     = '/member/payroll/deduction/deduction_employee_tag_archive';
@@ -3321,7 +3321,7 @@ class PayrollController extends Member
           {
                $statement = 'restore';
           }
-          $file_name               = Tbl_payroll_holiday::where('payroll_holiday_id', $id)->pluck('payroll_holiday_name');
+          $file_name               = Tbl_payroll_holiday::where('payroll_holiday_id', $id)->value('payroll_holiday_name');
           $data['title']           = 'Do you really want to '.$statement.' '.$file_name.'?';
           $data['html']       = '';
           $data['action']     = '/member/payroll/holiday/archive_holiday_action';
@@ -3411,7 +3411,7 @@ class PayrollController extends Member
      {
           $data["_expense"] = Accounting::getAllAccount('all',null,['Expense','Other Expense']);
           $data["default_expense"] = Tbl_chart_of_account::where("account_number", 66000)
-                                             ->where("account_shop_id", Self::shop_id())->pluck("account_id");
+                                             ->where("account_shop_id", Self::shop_id())->value("account_id");
 
           Session::put('allowance_employee_tag', array());
           return view('member.payroll.modal.modal_create_allowance', $data);
@@ -3530,7 +3530,7 @@ class PayrollController extends Member
           {
                $statement = 'restore';
           }
-          $file_name               = Tbl_payroll_allowance::where('payroll_allowance_id', $allowance_id)->pluck('payroll_allowance_name');
+          $file_name               = Tbl_payroll_allowance::where('payroll_allowance_id', $allowance_id)->value('payroll_allowance_name');
           $data['title']           = 'Do you really want to '.$statement.' '.$file_name.'?';
           $data['html']       = '';
           $data['action']     = '/member/payroll/allowance/archived_allowance';
@@ -3747,7 +3747,7 @@ class PayrollController extends Member
           {
                $statement = 'restore';
           }
-          $file_name               = Tbl_payroll_leave_temp::where('payroll_leave_temp_id', $leave_temp_id)->pluck('payroll_leave_temp_name');
+          $file_name               = Tbl_payroll_leave_temp::where('payroll_leave_temp_id', $leave_temp_id)->value('payroll_leave_temp_name');
           $data['title']           = 'Do you really want to '.$statement.' '.$file_name.'?';
           $data['html']       = '';
           $data['action']     = '/member/payroll/leave/archived_leave_temp';
@@ -4280,7 +4280,7 @@ class PayrollController extends Member
           {
                $statement = 'restore';
           }
-          $file_name               = Tbl_payroll_group::where('payroll_group_id',$payroll_group_id)->pluck('payroll_group_code');
+          $file_name               = Tbl_payroll_group::where('payroll_group_id',$payroll_group_id)->value('payroll_group_code');
           $data['title']           = 'Do you really want to '.$statement.' Payroll Group '.$file_name.'?';
           $data['html']       = '';
           $data['action']     = '/member/payroll/payroll_group/archived_payroll_group';
@@ -4581,7 +4581,7 @@ class PayrollController extends Member
           {
                $statement = 'restore';
           }
-          $file_name          = Tbl_payroll_payslip::where('payroll_payslip_id',$id)->pluck('payslip_code');
+          $file_name          = Tbl_payroll_payslip::where('payroll_payslip_id',$id)->value('payslip_code');
           $data['title']      = 'Do you really want to '.$statement.' Payslip '.$file_name.'?';
           $data['html']       = '';
           $data['action']     = '/member/payroll/custom_payslip/archive_payslip';
@@ -5183,7 +5183,7 @@ class PayrollController extends Member
           {
                $statement = 'restore';
           }
-          $file_name          = Tbl_payroll_shift_code::where('shift_code_id', $id)->pluck('shift_code_name');
+          $file_name          = Tbl_payroll_shift_code::where('shift_code_id', $id)->value('shift_code_name');
           $data['title']      = 'Do you really want to '.$statement.' Shift Template '.$file_name.'?';
           $data['html']       = '';
           $data['action']     = '/member/payroll/shift_template/archive_shift_template';
@@ -5663,7 +5663,7 @@ class PayrollController extends Member
 
      public function modal_unused_leave($payroll_employee_id, $payroll_period_company_id)
      {
-          $date = Tbl_payroll_period_company::sel($payroll_period_company_id)->pluck('payroll_period_end');
+          $date = Tbl_payroll_period_company::sel($payroll_period_company_id)->value('payroll_period_end');
           // $_leave = Tbl_payroll_leave_schedule::getremaining($payroll_employee_id, $date)->orderBy('tbl_payroll_leave_temp.payroll_leave_temp_name')->get();
 
           $payable_leave = array();
@@ -7025,7 +7025,7 @@ class PayrollController extends Member
                $statement = 'restore';
           }
 
-          $payroll_reports_name = Tbl_payroll_reports::where('payroll_reports_id', $id)->pluck('payroll_reports_name');
+          $payroll_reports_name = Tbl_payroll_reports::where('payroll_reports_id', $id)->value('payroll_reports_name');
 
           $data['title']      = 'Do you really want to '.$statement.' '.$payroll_reports_name.'?';
           $data['html']       = '';
@@ -7257,7 +7257,7 @@ class PayrollController extends Member
           array_push($data, $total_array);
 
       
-          $title    = Tbl_payroll_reports::where('payroll_reports_id', $payroll_reports_id)->pluck('payroll_reports_name');
+          $title    = Tbl_payroll_reports::where('payroll_reports_id', $payroll_reports_id)->value('payroll_reports_name');
 
 
           $data_export['data'] = $data;

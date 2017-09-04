@@ -233,7 +233,7 @@ class Item
     }
     public static function getShopId()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
     public static function generate_barcode($barcode = 0)
     {
@@ -318,7 +318,7 @@ class Item
         $type = null;
         if($item_id != 0)
         {
-            $type = Tbl_item::where("item_id",$item_id)->pluck("item_type_id");
+            $type = Tbl_item::where("item_id",$item_id)->value("item_type_id");
         }
         return $type;
     }
@@ -660,7 +660,7 @@ class Item
     public static function get_item_bundle_price($item_id = null)
     {
         $price = 0;
-        $item_type = Tbl_item::where("item_id",$item_id)->pluck("item_type_id");
+        $item_type = Tbl_item::where("item_id",$item_id)->value("item_type_id");
         if($item_id != null && $item_type == 4)
         {
             $bundle_item = Tbl_item_bundle::where("bundle_bundle_id",$item_id)->get();
@@ -677,7 +677,7 @@ class Item
     public static function get_item_bundle_cost($item_id = null)
     {
         $cost = 0;
-        $item_type = Tbl_item::where("item_id",$item_id)->pluck("item_type_id");
+        $item_type = Tbl_item::where("item_id",$item_id)->value("item_type_id");
         if($item_id != null && $item_type == 4)
         {
             $bundle_item = Tbl_item_bundle::where("bundle_bundle_id",$item_id)->get();
@@ -694,7 +694,7 @@ class Item
     public static function get_bundle_item_qty($item_id = null)
     {
         $qty = 0;
-        $item_type = Tbl_item::where("item_id",$item_id)->pluck("item_type_id");
+        $item_type = Tbl_item::where("item_id",$item_id)->value("item_type_id");
         if($item_id != null && $item_type == 4)
         {
             $bundle_item = Tbl_item_bundle::where("bundle_bundle_id",$item_id)->get();
@@ -950,7 +950,7 @@ class Item
         }
         else
         {
-           $item_price = Tbl_item::where('item_id', $item_id)->pluck('item_price'); 
+           $item_price = Tbl_item::where('item_id', $item_id)->value('item_price'); 
         }
         return $item_price;
     }

@@ -40,7 +40,7 @@ class MlmDeveloperController extends Member
         /* CUSTOM SLOT TABLE */
         foreach($_slot as $key => $slot)
         {
-            $total_gc = Tbl_mlm_gc::where("mlm_gc_slot", $slot->slot_id)->pluck("mlm_gc_amount");
+            $total_gc = Tbl_mlm_gc::where("mlm_gc_slot", $slot->slot_id)->value("mlm_gc_amount");
 
         	$data["_slot"][$key] = $slot;
             $data["_slot"][$key]->sponsor = Tbl_mlm_slot::customer()->where("slot_id", $slot->slot_sponsor)->first();
@@ -108,10 +108,10 @@ class MlmDeveloperController extends Member
 
         /* INITIALIZE AND CAPTURE DATA */
         $shop_id                    = $this->user_info->shop_id;
-        $sponsor                    = Tbl_mlm_slot::where("slot_no", Request::input("sponsor"))->where("shop_id", $shop_id)->pluck("slot_id");
-        $placement                  = Tbl_mlm_slot::where("slot_no", Request::input("placement"))->where("shop_id", $shop_id)->pluck("slot_id");
-        $random_sponsor             = Tbl_mlm_slot::where("shop_id", $shop_id)->orderBy(DB::raw("rand()"))->pluck("slot_id");
-        $random_placement           = Tbl_mlm_slot::where("shop_id", $shop_id)->orderBy(DB::raw("rand()"))->pluck("slot_id");  
+        $sponsor                    = Tbl_mlm_slot::where("slot_no", Request::input("sponsor"))->where("shop_id", $shop_id)->value("slot_id");
+        $placement                  = Tbl_mlm_slot::where("slot_no", Request::input("placement"))->where("shop_id", $shop_id)->value("slot_id");
+        $random_sponsor             = Tbl_mlm_slot::where("shop_id", $shop_id)->orderBy(DB::raw("rand()"))->value("slot_id");
+        $random_placement           = Tbl_mlm_slot::where("shop_id", $shop_id)->orderBy(DB::raw("rand()"))->value("slot_id");  
         $random_position            = $array_position[array_rand($array_position)];
 
         /* POSITIONING DATA */
@@ -134,7 +134,7 @@ class MlmDeveloperController extends Member
                 {
                     while($slot_id["message"] == "Placement Alread Taken")
                     {
-                        $slot_placement = Tbl_mlm_slot::where("shop_id", $shop_id)->orderBy(DB::raw("rand()"))->pluck("slot_id"); 
+                        $slot_placement = Tbl_mlm_slot::where("shop_id", $shop_id)->orderBy(DB::raw("rand()"))->value("slot_id"); 
                         $slot_id = Self::create_slot_submit_create_slot($customer_id, $membership_code_id, $slot_sponsor, $slot_placement, $slot_position, $shop_id);
                     }
                 }
@@ -245,8 +245,8 @@ class MlmDeveloperController extends Member
 
         /* INITIALIZE AND CAPTURE DATA */
         $shop_id                    = $this->user_info->shop_id;
-        $sponsor                    = Tbl_mlm_slot::where("slot_no", Request::input("sponsor"))->where("shop_id", $shop_id)->pluck("slot_id");
-        $placement                  = Tbl_mlm_slot::where("slot_no", Request::input("placement"))->where("shop_id", $shop_id)->pluck("slot_id");
+        $sponsor                    = Tbl_mlm_slot::where("slot_no", Request::input("sponsor"))->where("shop_id", $shop_id)->value("slot_id");
+        $placement                  = Tbl_mlm_slot::where("slot_no", Request::input("placement"))->where("shop_id", $shop_id)->value("slot_id");
 
         /* POSITIONING DATA */
         $slot_sponsor               = $sponsor;

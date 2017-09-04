@@ -262,8 +262,8 @@ class MLM_ProductController extends Member
     	{
     		foreach($data['membership_active'] as $value)
     		{
-    			$item_discount[$item->item_id][$value->membership_id] = Tbl_mlm_item_discount::where('item_id', $item->item_id)->where('membership_id', $value->membership_id)->pluck('item_discount_price'); 
-    			$item_percentage[$item->item_id][$value->membership_id] = Tbl_mlm_item_discount::where('item_id', $item->item_id)->where('membership_id', $value->membership_id)->pluck('item_discount_percentage'); 
+    			$item_discount[$item->item_id][$value->membership_id] = Tbl_mlm_item_discount::where('item_id', $item->item_id)->where('membership_id', $value->membership_id)->value('item_discount_price'); 
+    			$item_percentage[$item->item_id][$value->membership_id] = Tbl_mlm_item_discount::where('item_id', $item->item_id)->where('membership_id', $value->membership_id)->value('item_discount_percentage'); 
     		}
     	}
     	$data['item_discount'] = $item_discount;

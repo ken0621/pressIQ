@@ -282,7 +282,7 @@ class MlmProfileController extends Mlm
     	# code...
     	if (Input::hasFile('profile_picture'))
 		{
-    	$shop_key = Tbl_shop::where('shop_id', Self::$shop_id)->pluck('shop_key');
+    	$shop_key = Tbl_shop::where('shop_id', Self::$shop_id)->value('shop_key');
     	$shop_id = Self::$shop_id;
     	$file               = Input::file('profile_picture');
 

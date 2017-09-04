@@ -57,15 +57,15 @@ function get_collection_random($collection_id, $shop_id = null)
     $collection = shuffle_assoc($collection);
     return $collection;
 }
-function array_random($array)
-{
-    $return_array = $array;
-    foreach ($array as $key => $value) 
-    {
+// function array_random($array)
+// {
+//     $return_array = $array;
+//     foreach ($array as $key => $value) 
+//     {
         
-    }
-    return $return_array;
-}
+//     }
+//     return $return_array;
+// }
 function get_collection_first_name($data)
 {
     return $data['product']['eprod_name'] ? $data['product']['eprod_name'] : '';

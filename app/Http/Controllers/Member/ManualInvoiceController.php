@@ -108,7 +108,7 @@ class ManualInvoiceController extends Member
                 $return += Purchasing_inventory_system::check_qty_sir($sir_id, Request::input('invline_item_id')[$key],Request::input('invline_um')[$key],Request::input('invline_qty')[$key]);
                 if($return != 0)
                 {
-                    $item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->pluck("item_name");
+                    $item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->value("item_name");
                 }
 
                 $um_info = UnitMeasurement::um_info(Request::input("invline_um")[$key]);
@@ -212,7 +212,7 @@ class ManualInvoiceController extends Member
                 $return += Purchasing_inventory_system::check_qty_sir($sir_id, Request::input('invline_item_id')[$key],Request::input('invline_um')[$key],Request::input('invline_qty')[$key]);
                 if($return != 0)
                 {
-                    $item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->pluck("item_name");
+                    $item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->value("item_name");
                 }
 
                 $um_info = UnitMeasurement::um_qty(Request::input("invline_um")[$key]);
@@ -230,7 +230,7 @@ class ManualInvoiceController extends Member
             {
                $invoice_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
                // $remarks = "Manual Invoice consume";
-               // $warehouse_id = Tbl_warehouse::where("warehouse_shop_id",$this->user_info->shop_id)->where("main_warehouse",1)->pluck("warehouse_id");
+               // $warehouse_id = Tbl_warehouse::where("warehouse_shop_id",$this->user_info->shop_id)->where("main_warehouse",1)->value("warehouse_id");
                // $transaction_type = "invoice";
                // $transaction_id = $invoice_id;
                // $data = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume,$consumer_id = 0, $consume_cause = '', $return = 'array', $transaction_type, $transaction_id);

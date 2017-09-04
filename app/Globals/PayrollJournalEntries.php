@@ -33,7 +33,7 @@ class PayrollJournalEntries
 {
 	public static function getShopId()
 	{
-		return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+		return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
 	}
 
 	/**
@@ -94,7 +94,7 @@ class PayrollJournalEntries
 		foreach($_entity as $key=>$entity)
 		{
 			// $data[$entity->entity_name] = Tbl_payroll_journal_tag::where("shop_id", PayrollJournalEntries::getShopId())->where("payroll_entity_id", $entity->payroll_entity_id)->tagEntity()->tagEmployee($employee_id)->account()->first();
-			$data[$entity->entity_name] = Tbl_payroll_journal_tag::where("shop_id", PayrollJournalEntries::getShopId())->where("payroll_entity_id", $entity->payroll_entity_id)->tagEntity()->tagEmployee($employee_id)->pluck("account_id");
+			$data[$entity->entity_name] = Tbl_payroll_journal_tag::where("shop_id", PayrollJournalEntries::getShopId())->where("payroll_entity_id", $entity->payroll_entity_id)->tagEntity()->tagEmployee($employee_id)->value("account_id");
 			if(!$data[$entity->entity_name])
 			{
 				$data[$entity->entity_name] = PayrollJournalEntries::get_default_entity($entity->entity_category);

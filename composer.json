@@ -20,7 +20,8 @@
         "msurguy/honeypot": "dev-master",
         "netshell/paypal": "dev-master",
         "niklasravnsborg/laravel-pdf": "^1.5",
-        "dingo/api": "1.0.x@dev"
+        "dingo/api": "1.0.x@dev",
+        "lesichkovm/laravel-advanced-route": "dev-master"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
@@ -69,5 +70,11 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "optimize-autoloader": true
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/lesichkovm/laravel-advanced-route.git"
+        }
+    ]
 }

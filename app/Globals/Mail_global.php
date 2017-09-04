@@ -128,8 +128,8 @@ class Mail_global
         Settings::set_mail_setting($shop_id);
         $data['mail_username'] = Config::get('mail.username');
 
-        try 
-        {
+        // try 
+        // {
             if ($data['mail_username'] == "ca457d75dd54c1") 
             {
                 Mail::send('emails.payment', $data, function ($m) use ($data) 
@@ -152,13 +152,13 @@ class Mail_global
                 });
                 $result = 1;
             }
-        } 
-        catch (\Exception $e) 
-        {
-            dd($e->getMessage());
-            $result = 0;
-            // Mail_gobal::fail_email($e->getMessage);
-        }
+        // } 
+        // catch (\Exception $e) 
+        // {
+        //     dd($e->getMessage());
+        //     $result = 0;
+        //     // Mail_gobal::fail_email($e->getMessage);
+        // }
 
         return $result;
     }

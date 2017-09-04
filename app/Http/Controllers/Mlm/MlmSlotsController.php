@@ -120,7 +120,7 @@ class MlmSlotsController extends Mlm
             }
 
             $current_membership = Tbl_membership::where("membership_id",$slot->slot_membership)->first();
-            $higher_membership  = Tbl_membership::where("shop_id",Self::$shop_id)->where("membership_price",">",$current_membership->membership_price)->lists("membership_id");
+            $higher_membership  = Tbl_membership::where("shop_id",Self::$shop_id)->where("membership_price",">",$current_membership->membership_price)->pluck("membership_id");
             
             $data["membership_code"]       = Tbl_membership_code::package()
                                                                 ->whereIn("membership_id",$higher_membership)
@@ -155,7 +155,7 @@ class MlmSlotsController extends Mlm
 
         $membership_code_id = Request::input("membership_code_id");
         $current_membership = Tbl_membership::where("membership_id",$slot->slot_membership)->first();
-        $higher_membership  = Tbl_membership::where("shop_id",Self::$shop_id)->where("membership_price",">",$current_membership->membership_price)->lists("membership_id");
+        $higher_membership  = Tbl_membership::where("shop_id",Self::$shop_id)->where("membership_price",">",$current_membership->membership_price)->pluck("membership_id");
         
         $membership_code    = Tbl_membership_code::package()
                                                  ->where("tbl_membership_code.used",0)

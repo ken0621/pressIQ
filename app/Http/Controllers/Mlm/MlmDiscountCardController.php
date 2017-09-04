@@ -27,8 +27,8 @@ class MlmDiscountCardController extends Mlm
     	->where('ismlm', 1)
     	->get();
 
-        // $with_discount = Tbl_mlm_discount_card_log::whereNotNull('discount_card_customer_holder')->lists('discount_card_customer_holder')->toArray();
-        $with_slot = Tbl_mlm_slot::where('shop_id', $shop_id)->lists('slot_owner')->toArray();
+        // $with_discount = Tbl_mlm_discount_card_log::whereNotNull('discount_card_customer_holder')->pluck('discount_card_customer_holder')->toArray();
+        $with_slot = Tbl_mlm_slot::where('shop_id', $shop_id)->pluck('slot_owner')->toArray();
         
         $customers = Tbl_customer::whereNotIn('customer_id', $with_slot)
         // ->whereNotIn('customer_id', $with_discount)

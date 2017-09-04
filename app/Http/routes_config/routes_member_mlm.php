@@ -79,11 +79,17 @@ Route::any('/member/mlm/plan/indirect/edit/settings/{membership_id}', 'Member\ML
 Route::any('/member/mlm/plan/indirect/edit/settings/addlevel/save', 'Member\MLM_PlanController@edit_indirect_setting_add_level');//Luke
 /* end stairstep Plan */
 
+/* start RANK PLAN */
+Route::any('/member/mlm/plan/rank/get', 'Member\MLM_PlanController@get_rank');//Erwin
+Route::any('/member/mlm/plan/rank/save', 'Member\MLM_PlanController@save_rank');//Erwin
+Route::any('/member/mlm/plan/rank/edit/save', 'Member\MLM_PlanController@edit_save_rank');//Erwin
+Route::any('/member/mlm/plan/rank/edit/save_level', 'Member\MLM_PlanController@save_rank_level');//Erwin
+
 /* start stairstep PLAN */
-Route::any('/member/mlm/plan/stairstep/get', 'Member\MLM_PlanController@get_stairstep');//Luke
-Route::any('/member/mlm/plan/stairstep/save', 'Member\MLM_PlanController@save_stairstep');//Luke
-Route::any('/member/mlm/plan/stairstep/edit/save', 'Member\MLM_PlanController@edit_save_stairstep');//Luke
-Route::any('/member/mlm/plan/stairstep/edit/save_level', 'Member\MLM_PlanController@save_stairstep_level');//Erwin
+// Route::any('/member/mlm/plan/stairstep/get', 'Member\MLM_PlanController@get_stairstep');//Luke
+// Route::any('/member/mlm/plan/stairstep/save', 'Member\MLM_PlanController@save_stairstep');//Luke
+// Route::any('/member/mlm/plan/stairstep/edit/save', 'Member\MLM_PlanController@edit_save_stairstep');//Luke
+// Route::any('/member/mlm/plan/stairstep/edit/save_level', 'Member\MLM_PlanController@save_stairstep_level');//Erwin
 /* end stairstep Plan */
 
 /* start unilevel Plan */
@@ -261,7 +267,8 @@ Route::any('member/mlm/merchant_school/consume', 'Member\BeneficiaryController@c
 Route::any('member/mlm/complan_setup/unilevel/distribute', 'Member\Mlm_ComplanSetupController@unilevel_distribute'); 
 Route::any('member/mlm/complan_setup/unilevel/distribute/set/settings', 'Member\Mlm_ComplanSetupController@unilevel_distribute_set_settings'); 
 Route::any('member/mlm/complan_setup/unilevel/distribute/simulate', 'Member\Mlm_ComplanSetupController@unilevel_distribute_simulate'); 
-
+Route::any('member/mlm/stairstep/distribution', 'Member\MLM_StairstepController@stairstep_view'); 
+Route::any('member/mlm/stairstep/rank', 'Member\MLM_StairstepController@rank_stairstep_view'); 
 
 /* DEVELOPER MENU */
 Route::get('member/mlm/developer', 'Member\MlmDeveloperController@index');

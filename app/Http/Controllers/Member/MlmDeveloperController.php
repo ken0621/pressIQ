@@ -401,6 +401,11 @@ class MlmDeveloperController extends Member
                 $data["stairstep"]                       = 1;
             }
 
+            if($complan->marketing_plan_code == "RANK" && $complan->marketing_plan_enable == 1)
+            {
+                $data["rank"]                            = 1;
+            }
+
         }
 
         return $data;

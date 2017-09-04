@@ -63,7 +63,7 @@ class Item
             $insert['item_type_id'] = $item_type;
             $insert['item_date_created'] = Carbon::now();
 
-            $return = Warehouse2::refill_validation($shop_id, $warehouse_id, 0, $insert['item_quantity'], 'Initial Quantity from Item')
+            $return = Warehouse2::refill_validation($shop_id, $warehouse_id, 0, $insert['item_quantity'], 'Initial Quantity from Item');
             if(!$return['message'])
             {
                 $item_id = Tbl_item::insertGetId($insert);

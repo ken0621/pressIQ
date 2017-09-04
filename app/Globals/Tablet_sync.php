@@ -56,7 +56,6 @@ class tablet_sync
     			$all_manual_inv = $all_transaction['manual_inv'];
     			$all_manual_rp = $all_transaction['manual_rp'];
     			$all_manual_cm = $all_transaction['manual_cm'];
-    			// dd($sir_data);
     			/*FOR INVOICE*/
     			foreach ($all_inv as $key => $value) 
     			{
@@ -485,9 +484,15 @@ class tablet_sync
 				{
 					Purchasing_inventory_system::close_sir($sir_id);	
 				}
-				else
+				else if($sync_type == 'reload')
 				{
 					$update['reload_sir'] = 1;
+					Tbl_sir::where('sir_id',$sir_id)->update($update);
+				}
+				else if($sync_type == 'reject')
+				{
+					$update['lof_status'] = 3;
+					$update['rejection_reason'] = $sir_data->rejection_reason;
 					Tbl_sir::where('sir_id',$sir_id)->update($update);
 				}
 				return "success";	      

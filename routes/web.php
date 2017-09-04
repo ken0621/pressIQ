@@ -74,7 +74,7 @@ Route::any("/member/page/store_information","Member\ManageStoreInformationContro
 Route::any("/member/page/store_information/update_submit","Member\ManageStoreInformationController@update_submit");
 
 /* MEMBER - PAGE - CONTACT */
-//route::controller("/member/page/contact","Member\Page_ContactController");
+AdvancedRoute::controller("/member/page/contact","Member\Page_ContactController");
 
 /* MEMBER - DEVELOPER  */
 Route::any('/member/developer/status', 'Member\Developer_StatusController@index'); //GUILLERMO TABLIGAN
@@ -108,7 +108,7 @@ Route::any('/member/accounting/chart_of_account/popup/update/{id}', 'Member\Char
 /* END ACCOUNTNG - CHART OF ACCOUNTS - BRYAN KIER ARADANAS */
 
 /* MEMBER - ACCOUNTING - SETTINGS */
-//route::controller('/member/accounting/settings', 'Member\AccountingSettingController');
+AdvancedRoute::controller('/member/accounting/settings', 'Member\AccountingSettingController');
 /* END */
 
 /* API - Bryan Kier Aradanas */
@@ -941,7 +941,7 @@ Route::post('/member/settings/terms/set', 'Member\SettingsController@set_terms')
 
 /* USER / UTILITIES*/
 Route::any('/member/utilities/admin-list/ismerchant', 'Member\UtilitiesController@ismerchant');
-//route::controller('/member/utilities', 'Member\UtilitiesController');
+AdvancedRoute::controller('/member/utilities', 'Member\UtilitiesController');
 /* End */
 
 /*  / Merchant - Commission - markup*/
@@ -973,59 +973,59 @@ Route::any('/member/merchant/report/view', 'Member\MerchantReportController@view
 /* End */
 
 /* ECOMMERCE PRODUCT */
-//route::controller('/member/ecommerce/product', 'Member\EcommerceProductController');
+AdvancedRoute::controller('/member/ecommerce/product', 'Member\EcommerceProductController');
 /* End */
 /* VENDOR */
-//route::controller('/member/vendor', 'Member\VendorController');
+AdvancedRoute::controller('/member/vendor', 'Member\VendorController');
 /* End */
 /* ONLINE PAYMENT METHOD */
-//route::controller('/member/maintenance/online_payment', 'Member\OnlinePaymentMethodController');
+AdvancedRoute::controller('/member/maintenance/online_payment', 'Member\OnlinePaymentMethodController');
 /* End */
 /* ONLINE PAYMENT METHOD */
-//route::controller('/member/maintenance/sms', 'Member\SmsController');
+AdvancedRoute::controller('/member/maintenance/sms', 'Member\SmsController');
 /* End */
 /* ITEM IMPORT*/
-//route::controller('/member/item/import', 'Member\ImportController');
+AdvancedRoute::controller('/member/item/import', 'Member\ImportController');
 /* End */
 /* CUSTOMER IMPORT*/
-//route::controller('/member/customer/import', 'Member\ImportController');
+AdvancedRoute::controller('/member/customer/import', 'Member\ImportController');
 /* End */
 /* VENDOR IMPORT*/
-//route::controller('/member/vendors/import', 'Member\ImportController');
+AdvancedRoute::controller('/member/vendors/import', 'Member\ImportController');
 /* End */
 /* CHART OF ACCOUNTS IMPORT*/
-//route::controller('/member/accounting/import', 'Member\ImportController');
+AdvancedRoute::controller('/member/accounting/import', 'Member\ImportController');
 /* End */
 /* ECOMMERCE COUPON CODE*/
-//route::controller('/member/ecommerce/coupon', 'Member\CouponVoucherController');
+AdvancedRoute::controller('/member/ecommerce/coupon', 'Member\CouponVoucherController');
 /* End */
 /* ACCOUNTING JOURNAL*/
-//route::controller('/member/accounting/journal', 'Member\JournalEntryController');
+AdvancedRoute::controller('/member/accounting/journal', 'Member\JournalEntryController');
 /* End */
 /* TERMS OF PAYMENT*/
-//route::controller('/member/maintenance/terms', 'Member\TermsOfPaymentController');
+AdvancedRoute::controller('/member/maintenance/terms', 'Member\TermsOfPaymentController');
 /* End */
 /* LOCATION*/
-//route::controller('/member/maintenance/location', 'Member\LocationController');
+AdvancedRoute::controller('/member/maintenance/location', 'Member\LocationController');
 /* End */
 
 
 /* LOCATION*/
-//route::controller('/member/maintenance/location', 'Member\LocationController');
+AdvancedRoute::controller('/member/maintenance/location', 'Member\LocationController');
 /* End */
 
 /* TRACKINGS */
-//route::controller('/member/ecommerce/trackings', 'Member\TrackingsController');
+AdvancedRoute::controller('/member/ecommerce/trackings', 'Member\TrackingsController');
 /* END */
 
 
 
 /* MEMBER SHIPPING*/
-//route::controller('/member/register/shipping', 'MemberController');
+AdvancedRoute::controller('/member/register/shipping', 'MemberController');
 /* End */
 
 
-//route::controller('/tester','TesterController');
+AdvancedRoute::controller('/tester','TesterController');
 
 // test lang load
 Route::any("/member/load_position","Member\EmployeePositionController@load_position");

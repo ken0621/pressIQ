@@ -679,8 +679,6 @@ class PayrollController extends Member
                     'country', $sheet, 'J2:J'.$country_number
                     )
                     );
-
-
             });
 
 
@@ -749,8 +747,8 @@ class PayrollController extends Member
                               $insert_contract['payroll_employee_id']                          = $payroll_employee_id;
                               $insert_contract['payroll_department_id']                        = Self::getid($data['department'],'department');
                               $insert_contract['payroll_jobtitle_id']                          = Self::getid($data['position'],'jobtitle');
-                              $insert_contract['payroll_employee_contract_date_hired']    = Self::nullableToString($data['start_date']);
-                              $insert_contract['payroll_employee_contract_status']        = Self::getid($data['employment_status'],'employment_status');
+                              $insert_contract['payroll_employee_contract_date_hired']         = Self::nullableToString($data['start_date']);
+                              $insert_contract['payroll_employee_contract_status']             = Self::getid($data['employment_status'],'employment_status');
 
                               Tbl_payroll_employee_contract::insert($insert_contract);
 
@@ -759,14 +757,14 @@ class PayrollController extends Member
 
                               /* EMPLOYEE SALARY START */
                               $insert_salary['payroll_employee_id']                            = $payroll_employee_id;
-                              $insert_salary['payroll_employee_salary_effective_date']    = Self::nullableToString($data['start_date']);
+                              $insert_salary['payroll_employee_salary_effective_date']         = Self::nullableToString($data['start_date']);
                               $insert_salary['payroll_employee_salary_minimum_wage']           = Self::yesNotoInt($data['minimum_wage_yn']);
                               $insert_salary['payroll_employee_salary_monthly']                = Self::nullableToString($data['monthly_salary'],'int');
-                              $insert_salary['payroll_employee_salary_daily']             = Self::nullableToString($data['daily_rate'],'int');
+                              $insert_salary['payroll_employee_salary_daily']                  = Self::nullableToString($data['daily_rate'],'int');
                               $insert_salary['payroll_employee_salary_taxable']                = Self::nullableToString($data['taxable_salary'],'int');
                               $insert_salary['payroll_employee_salary_sss']                    = Self::nullableToString($data['sss_salary'],'int');
                               $insert_salary['payroll_employee_salary_pagibig']                = Self::nullableToString($data['hdmf_salary'],'int');
-                              $insert_salary['payroll_employee_salary_philhealth']        = Self::nullableToString($data['phic_salary'],'int');
+                              $insert_salary['payroll_employee_salary_philhealth']             = Self::nullableToString($data['phic_salary'],'int');
 
                               Tbl_payroll_employee_salary::insert($insert_salary);
                               /* EMPLOYEE SALARY END */
@@ -775,8 +773,8 @@ class PayrollController extends Member
                
                               $insert_requirement['payroll_employee_id']        = $payroll_employee_id;
                               $insert_requirement['has_resume']                 = Self::yesNotoInt($data['biodataresumeyn'],'int');
-                              $insert_requirement['has_police_clearance']  = Self::yesNotoInt($data['police_clearanceyn'],'int');
-                              $insert_requirement['has_nbi']                         = Self::yesNotoInt($data['nbiyn'],'int');
+                              $insert_requirement['has_police_clearance']       = Self::yesNotoInt($data['police_clearanceyn'],'int');
+                              $insert_requirement['has_nbi']                    = Self::yesNotoInt($data['nbiyn'],'int');
                               $insert_requirement['has_health_certificate']     = Self::yesNotoInt($data['health_certificateyn'],'int');
                               $insert_requirement['has_school_credentials']     = Self::yesNotoInt($data['school_credentialsyn'],'int');
                               $insert_requirement['has_valid_id']               = Self::yesNotoInt($data['valid_idyn'],'int');

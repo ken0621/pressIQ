@@ -4347,7 +4347,7 @@ class Payroll2
 					{
 						foreach ($value->compute->_breakdown_deduction as $lbl => $values) 
 						{
-							if ($lbl == 'late' || $lbl == 'undertime' ) 
+							if ( $lbl == 'late' || $lbl == 'undertime' ) 
 							{
 								$standard_gross_pay += $values['rate'];
 								$deduction += $values['rate'];
@@ -4378,7 +4378,7 @@ class Payroll2
 				$standard_gross_pay+=$actual_gross_pay;
 				$val["amount"] = @($actual_gross_pay/$standard_gross_pay) * $allowance_amount;
 
-				// dd($actual_gross_pay ."/". $standard_gross_pay ."*".$allowance_amount." = ".$val["amount"]."*".$return->_time_breakdown["day_spent"]["float"]);
+				dd($actual_gross_pay ."/". $standard_gross_pay ."*".$allowance_amount." = ".$val["amount"]."*".$return->_time_breakdown["day_spent"]["float"]);
 
 
 				if ($data["group"]->payroll_group_salary_computation == "Daily Rate") 

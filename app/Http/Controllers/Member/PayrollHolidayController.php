@@ -140,7 +140,7 @@ class PayrollHolidayController extends Member
         $data['edit']       = '/member/payroll/holiday/modal_edit_holiday/v2/';
         $data['archived']   = '/member/payroll/holiday/archive_holiday/v2/';
 
-        Session::forget('employee_tag');
+        Session::forget('employee_holiday_tag');
 
         return view('member.payroll.payroll_holiday.holiday',$data);
      }
@@ -172,7 +172,7 @@ class PayrollHolidayController extends Member
                $temp['payroll_holiday_id'] = $holiday_id;
                array_push($insert_company, $temp);
 
-               $get_all_employee = Session::get('employee_tag');
+               $get_all_employee = Session::get('employee_holiday_tag');
                if(count($get_all_employee) > 0)
                {
                  foreach ($get_all_employee as $key => $value)
@@ -230,7 +230,7 @@ class PayrollHolidayController extends Member
         $data['_employee'] = Tbl_payroll_employee_basic::where('payroll_employee_company_id',$company_id)->get();
         $data['action']          = '/member/payroll/holiday/tag_employee/submit';
 
-        $get_all = Session::get('employee_tag');
+        $get_all = Session::get('employee_holiday_tag');
         // dd($get_all);
         foreach ($data['_employee'] as $key => $value) 
         {
@@ -250,7 +250,18 @@ class PayrollHolidayController extends Member
                             }
                         }                    
                     }
-                }                
+                }  
+                $selected_employee = Tbl_payroll_holiday_employee::where('holiday_company_id',Request::input('id'))->get();
+                if(count($selected_employee) > 0)
+                {
+                    foreach ($selected_employee as $keys => $values)
+                    {
+                        if($values->payroll_employee_id ==  $value->payroll_employee_id)
+                        {   
+                            $data['_employee'][$key]->checked = 'checked';
+                        }
+                    }                
+                }              
             }
             else if (Request::input('id'))
             { 
@@ -266,6 +277,24 @@ class PayrollHolidayController extends Member
                     }                
                 }
             }
+            else if(count($get_all) > 0)
+            {
+                foreach ($get_all as $keys => $values)
+                {
+                    if($company_id == $keys)
+                    {   
+                        $id = $values;
+                        foreach ($id as $keyid => $valueid)
+                        {
+                            if($valueid == $value->payroll_employee_id)
+                            {
+                                $data['_employee'][$key]->checked = 'checked';
+                            }
+                        }                    
+                    }
+                }
+            }
+
         }
 
         return view('member.payroll.payroll_holiday.holiday_tag_employee', $data);
@@ -285,7 +314,7 @@ class PayrollHolidayController extends Member
             {
                 $data[$company_id][$key] = $value;
             }
-            Session::put('employee_tag',$data);
+            Session::put('employee_holiday_tag',$data);
 
             $return['status'] = "success";
             $return['company_id'] = $company_id;
@@ -363,56 +392,57 @@ class PayrollHolidayController extends Member
           Tbl_payroll_holiday_company::where('payroll_holiday_id',$payroll_holiday_id)->delete();
           Tbl_payroll_holiday_employee::where('holiday_company_id',$payroll_holiday_id)->delete();
 
+          // dd(Session::get('employee_holiday_tag'));
           $insert_company = array();
           foreach($_company as $company)
           {
-               $temp['payroll_company_id'] = $company;
-               $temp['payroll_holiday_id'] = $payroll_holiday_id;
-               array_push($insert_company, $temp);
+             $temp['payroll_company_id'] = $company;
+             $temp['payroll_holiday_id'] = $payroll_holiday_id;
+             array_push($insert_company, $temp);
 
-               $get_all_employee = Session::get('employee_tag');
+             $get_all_employee = Session::get('employee_holiday_tag');
 
-               if(count($get_all_employee) > 0)
+             if(count($get_all_employee) > 0)
+             {
+               foreach ($get_all_employee as $key => $value)
                {
-                 foreach ($get_all_employee as $key => $value)
-                 {
-                      if($company == $key)
-                      {
-                          Tbl_payroll_holiday_employee::where('holiday_company_id',$payroll_holiday_id)->where('payroll_company_id',$key)->delete();
-                          $all_id = $value;
-                          foreach ($all_id as $keyid => $valueid)
-                          {
-                              $ctr = Tbl_payroll_holiday_employee::where('holiday_company_id',$payroll_holiday_id)->where('payroll_employee_id',$valueid)->count();
-                              if($ctr <= 0)
-                              {
-                                  $ins_employee['payroll_company_id'] = $company;
-                                  $ins_employee['payroll_employee_id'] = $valueid;
-                                  $ins_employee['holiday_company_id'] = $payroll_holiday_id;
-                              }
-
-                              if(!empty($ins_employee))
-                              {
-                                 Tbl_payroll_holiday_employee::insert($ins_employee);
-                              }
-                          }
-                      }  
-                 }
-               }                
-                else
-                {
-                  $employee_tag = Tbl_payroll_employee_basic::where('payroll_employee_company_id',$company)->get();
-                  foreach ($employee_tag as $key_employee => $value_employee) 
+                  if($company == $key)
                   {
-                        $ins_employee['payroll_company_id'] = $company;
-                        $ins_employee['payroll_employee_id'] = $value_employee->payroll_employee_id;
-                        $ins_employee['holiday_company_id'] = $payroll_holiday_id;
+                    Tbl_payroll_holiday_employee::where('holiday_company_id',$payroll_holiday_id)->where('payroll_company_id',$key)->delete();
+                    $all_id = $value;
+                    foreach ($all_id as $keyid => $valueid)
+                    {
+                      $ctr = Tbl_payroll_holiday_employee::where('holiday_company_id',$payroll_holiday_id)->where('payroll_employee_id',$valueid)->count();
+                      if($ctr <= 0)
+                      {
+                          $ins_employee['payroll_company_id'] = $company;
+                          $ins_employee['payroll_employee_id'] = $valueid;
+                          $ins_employee['holiday_company_id'] = $payroll_holiday_id;
+                      }
 
-                        if(!empty($ins_employee))
-                        {
-                           Tbl_payroll_holiday_employee::insert($ins_employee);
-                        }
-                  }
+                      if(!empty($ins_employee))
+                      {
+                         Tbl_payroll_holiday_employee::insert($ins_employee);
+                      }
+                    }
+                  }  
+               }
+             }                
+             else
+             {
+                $employee_tag = Tbl_payroll_employee_basic::where('payroll_employee_company_id',$company)->get();
+                foreach ($employee_tag as $key_employee => $value_employee) 
+                {
+                      $ins_employee['payroll_company_id'] = $company;
+                      $ins_employee['payroll_employee_id'] = $value_employee->payroll_employee_id;
+                      $ins_employee['holiday_company_id'] = $payroll_holiday_id;
+
+                      if(!empty($ins_employee))
+                      {
+                         Tbl_payroll_holiday_employee::insert($ins_employee);
+                      }
                 }
+             }
           }
           if(!empty($insert_company))
           {
@@ -421,7 +451,7 @@ class PayrollHolidayController extends Member
 
           $return['status']             = 'success';
           $return['function_name']      = 'payrollconfiguration.reload_holiday_v2';
-          Session::forget('employee_tag');
+          Session::forget('employee_holiday_tag');
           return json_encode($return);
 
      }

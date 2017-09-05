@@ -25,7 +25,7 @@ function modal_create_allowance()
 			{	
 				element.html(misc('spinner'));
 				$.ajax({
-					url 	: 	"/member/payroll/allowance/remove_allowance_tabe_employee",
+					url 	: 	"/member/payroll/allowance/v2/remove_allowance_tabe_employee",
 					type 	: 	"POST",
 					data 	: 	{
 						_token:misc('_token'),
@@ -51,7 +51,7 @@ function modal_create_allowance()
 		reload_allowance_employee();
 		$(".tbl-tag").html('<tr><td colspan="2" class="text-center">'+misc('loader') + '</td></tr>');
 		$.ajax({
-			url 	: 	"/member/payroll/allowance/get_employee_allowance_tag",
+			url 	: 	"/member/payroll/allowance/v2/get_employee_allowance_tag",
 			type 	: 	"POST",
 			data 	: 	{
 				_token:misc('_token')
@@ -77,7 +77,7 @@ function modal_create_allowance()
 
 	function reload_allowance_employee()
 	{
-		var action = "/member/payroll/allowance/reload_allowance_employee";
+		var action = "/member/payroll/allowance/v2/reload_allowance_employee";
 		var method = "POST";
 		var formdata = {
 			_token:misc('_token'),

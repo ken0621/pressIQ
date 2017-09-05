@@ -167,16 +167,7 @@ class Item
         /* ITEM ADDITIONAL DATA */
         foreach($_item as $key => $item)
         {
-            if(session("get_add_markup"))
-            {
-                $item = Self::add_info_markup($item);
-            }
-
-            if(session("get_add_display"))
-            {
-                $item = Self::add_info_display($item);
-            }
-
+            $item = Self::add_info($item);
             $_item_new[$key] = $item;
         }
 
@@ -185,6 +176,13 @@ class Item
         Self::get_clear_session();
 
         return $return;
+    }
+    public static function info($item_id)
+    {
+        $item = Tbl_item::where("item_id", $item_id)->first();
+        Self::add_info($item);
+        Self::get_clear_session();
+        return $item;
     }
     public static function get_pagination()
     {
@@ -208,13 +206,80 @@ class Item
     {
         session(['get_filter_category' => $id]);
     }
+    public static function get_apply_price_level($price_level_id)
+    {
+        session(['get_apply_price_level' => $price_level_id]);
+    }
+
     public static function get_clear_session()
     {
         $store["get_add_markup"] = null;
         $store["get_add_display"] = null;
         $store["get_filter_type"] = null;
         $store["get_filter_category"] = null;
+        $store["get_apply_price_level"] = null;
         session($store);
+    }
+
+    public static function add_info($item)
+    {
+        if(session("get_apply_price_level"))
+        {
+            $item = Self::add_apply_price_level($item);
+        }
+
+        if(session("get_add_markup"))
+        {
+            $item = Self::add_info_markup($item);
+        }
+
+        if(session("get_add_display"))
+        {
+            $item = Self::add_info_display($item);
+        }
+
+
+        return $item;
+    }
+    public static function add_apply_price_level($item)
+    {
+        $price_level_id         = session("get_apply_price_level");
+        $check_price_level      = Tbl_price_level::where("price_level_id", $price_level_id)->first();
+
+        if($check_price_level)
+        {
+            if($check_price_level->price_level_type == "per-item")
+            {
+                $check_item = Tbl_price_level_item::where("price_level_id", $price_level_id)->where("item_id", $item->item_id)->first();
+            
+                if($check_item)
+                {
+                    $new_computed_price     = $check_item->custom_price;
+                }
+                else
+                {
+                    $new_computed_price     = $item->item_price;
+                }
+            }
+            else
+            {
+                $percentage_mode        = $check_price_level->fixed_percentage_mode;
+                $percentage_value       = $check_price_level->fixed_percentage_value;
+                $percentage_source      = $check_price_level->fixed_percentage_source;
+                $applied_multiplier     = ($percentage_mode == "lower" ? ($percentage_value * -1) : $percentage_value);
+                $price_basis            = ($percentage_source == "standard price" ? $item->item_price : $item->item_cost);
+                $addend                 = $price_basis * ($applied_multiplier / 100);
+                $new_computed_price     = $price_basis + $addend; 
+            }
+        }
+        else
+        {
+            $new_computed_price     = $item->item_price;
+        }
+
+        $item->item_price = $new_computed_price;
+
+        return $item;
     }
     public static function add_info_markup($item)
     {

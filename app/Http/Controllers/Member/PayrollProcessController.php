@@ -386,7 +386,7 @@ class PayrollProcessController extends Member
 			$date_start = $period->payroll_period_start;
 			$date_end = $period->payroll_period_end;
 
-			$get_timesheet = Tbl_payroll_time_sheet::get_timesheet()->selectRaw('*, tbl_payroll_time_sheet_record.payroll_time_sheet_in as actual_in, tbl_payroll_time_sheet_record.payroll_time_sheet_out as actual_out, tbl_payroll_time_sheet_record_approved.payroll_time_sheet_in as approved_in, tbl_payroll_time_sheet_record_approved.payroll_time_sheet_out as approved_out ')->whereBetween('payroll_time_date', array($date_start, $date_end))->where('payroll_employee_id',$employee_id)->groupBy('payroll_time_date')->get();
+			$get_timesheet = Tbl_payroll_time_sheet::gettimesheet()->selectRaw('*, tbl_payroll_time_sheet_record.payroll_time_sheet_in as actual_in, tbl_payroll_time_sheet_record.payroll_time_sheet_out as actual_out, tbl_payroll_time_sheet_record_approved.payroll_time_sheet_in as approved_in, tbl_payroll_time_sheet_record_approved.payroll_time_sheet_out as approved_out ')->whereBetween('payroll_time_date', array($date_start, $date_end))->where('payroll_employee_id',$employee_id)->groupBy('payroll_time_date')->get();
 
 			foreach ($get_timesheet as $key => $value) 
 			{

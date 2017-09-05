@@ -5,9 +5,15 @@
         "This file is @generated automatically"
     ],
 <<<<<<< HEAD
+<<<<<<< HEAD
+    "hash": "5d73a1002469081a36e8c7b5cb3a2d1c",
+=======
+>>>>>>> c0743a20bb1cf1adeb2370dff07b6921b2a31d2e
+=======
     "hash": "68e8646b6030acd47ea7c673332a942f",
     "content-hash": "e83d21e81203bab1f7f6735283bce3c3",
 =======
+>>>>>>> 6781b688baac17327dafbcee77c0c3eadc796129
     "content-hash": "f9d4f3775f87cf7e24494e00f3848ede",
 >>>>>>> cf4636953fcf31184831d4fd40592d26f67178fb
     "packages": [
@@ -1871,7 +1877,11 @@
                 "import",
                 "laravel"
             ],
+<<<<<<< HEAD
+            "time": "2017-08-31 14:52:24"
+=======
             "time": "2017-08-31T14:52:24+00:00"
+>>>>>>> c0743a20bb1cf1adeb2370dff07b6921b2a31d2e
         },
         {
             "name": "monolog/monolog",

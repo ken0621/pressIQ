@@ -71,10 +71,12 @@
         <![endif]-->
     <!-- HEADER -->
     <div class="header-nav">
-    	<div class="header-nav-top">
-    		<div class="container">
+        <div class="header-nav-top">
+            <div class="container">
                 @if($customer_info_a == null)
                 <div class="holder"><a href="/mlm/login"><i class="fa fa-lock" aria-hidden="true"></i> Login</a></div>
+                <div class="holder"><div class="linya"></div></div>
+                <div class="holder"><a href="/mlm/register"><i class="fa fa-user" aria-hidden="true"></i> Register</a></div>
                 @else
                 <div class="holder"><a href="/mlm"><i class="fa fa-user" aria-hidden="true"></i> Member's Area
                     @if($slot_now != null)
@@ -83,16 +85,16 @@
                     </a>
                 </div>    
                 @endif
-                <!--<div class="holder"><div class="linya"></div></div>-->
+                {{-- <!--<div class="holder"><div class="linya"></div></div>-->
                 <!--<div class="holder"><a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> My Cart</a></div>-->
                 <div class="holder"><div class="linya"></div></div>
-    			<div class="holder"><a href="/checkout"><i class="fa fa-check" aria-hidden="true"></i> Checkout</a></div>
-	    		<div class="holder"><div class="linya"></div></div>
-	    		{{-- <div class="holder"><a href="/about">About Us</a></div>
-	    		<div class="holder"><div class="linya"></div></div> --}}
+                <div class="holder"><a href="/checkout"><i class="fa fa-check" aria-hidden="true"></i> Checkout</a></div>
+                <div class="holder"><div class="linya"></div></div>
+                <!-- <div class="holder"><a href="/about">About Us</a></div>
+                <div class="holder"><div class="linya"></div></div> -->
                 <div class="holder"><a href="/partners">Our Partner Merchant</a></div>
                 <div class="holder"><div class="linya"></div></div>
-	    		<div class="holder"><a href="/contact">Contact Us</a></div>
+                <div class="holder"><a href="/contact">Contact Us</a></div>
                 <div class="holder"><div class="linya"></div></div>
                 <div class="holder"><a href="https://loadcentral.net">eLOADING BUSINESS</a></div>
                 <div class="holder"><div class="linya"></div></div>
@@ -100,83 +102,99 @@
                 <div class="holder"><div class="linya"></div></div>
                 <div class="holder"><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a></div>
                 <div class="holder"><div class="linya"></div></div>
-                <div class="holder"><a href="https://philtechglobalinc.vmoney.com">E-Money</a></div>
-    		</div>
-    	</div>
-    	<div class="header-nav-middle">
-    		<div class="container">
-    			<div class="row clearfix">
-	    			<div class="col-md-3">
+                <div class="holder"><a href="https://philtechglobalinc.vmoney.com">E-Money</a></div> --}}
+            </div>
+        </div>
+        <div class="header-nav-middle">
+            <div class="container">
+                <div class="row clearfix">
+                    <div class="col-md-3">
                         <img onClick="location.href='/'" style="cursor: pointer;" class="img-responsive" src="{{ $company_info['company_logo']->value }}">            
                     </div>
-	    			<div class="col-md-6">
+                    <div class="col-md-6">
 
                         {{-- Search Bar --}}                          
-        				<div class="search-bar">
+                        <div class="search-bar">
                             <form action="/product_search" method="get" id="form-search">
-    	    					<div class="input-group input-group-lg">
-    							     <!-- <span class="input-group-addon search-category" id="sizing-addon1">Categories <span class="caret"></span></span> -->
-    							     <input type="text" class="form-control" name="keyword" id="keyword" aria-describedby="sizing-addon1">
-    							     <span class="input-group-addon search-button" id="sizing-addon1">
+                                <div class="input-group input-group-lg">
+                                     <!-- <span class="input-group-addon search-category" id="sizing-addon1">Categories <span class="caret"></span></span> -->
+                                     <input type="text" class="form-control" name="keyword" id="keyword" aria-describedby="sizing-addon1">
+                                     <span class="input-group-addon search-button" id="sizing-addon1">
                                         <a href="" onclick="onSearch();" id="submit_link">
                                             <i class="fa fa-search" aria-hidden="true" id="submit_link"></i>
                                         </a>                                 
                                      </span>
-    							</div>
+                                </div>
                             </form>
-	    				</div>
+                        </div>
                         {{-- End Search Bar --}}
 
-	    			</div>
-	    			<div class="col-md-3 woaw">
-	    				<div class="shopping-cart-container">
-	    					<div class="shopping-cart"><i class="fa fa-shopping-cart" aria-hidden="true"></i> <span class="badge mini-cart-quantity">{{ $global_cart['sale_information']['total_quantity'] }}</span> <span>CART PHP.</span> <span class="mini-cart-total-price">{{ number_format($global_cart['sale_information']['total_product_price'], 2) }}</span></div>
-	    				    <div class="container-cart mini-cart">
+                    </div>
+                    <div class="col-md-3 woaw">
+                        <div class="shopping-cart-container">
+                            <div class="shopping-cart"><i class="fa fa-shopping-cart" aria-hidden="true"></i> <span class="badge mini-cart-quantity">{{ $global_cart['sale_information']['total_quantity'] }}</span> <span>CART PHP.</span> <span class="mini-cart-total-price">{{ number_format($global_cart['sale_information']['total_product_price'], 2) }}</span></div>
+                            <div class="container-cart mini-cart">
                                 <div class="text-center"><span class="cart-loader text-center"><img style="height: 50px; margin: auto;" src="/assets/front/img/loader.gif"></span></div>
                             </div>
                         </div>
-	    			</div>
-	    		</div>
-    		</div>
-    	</div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="container">
             <marquee style="color: #fff; font-size: 18px;">{{ get_content($shop_theme_info, "info", "marquee_message") }}</marquee>
         </div>
     </div>
     <!-- NAVIGATION -->
     <nav class="navbar navbar-default">
-	  <div class="container">
-	    <!-- Brand and toggle get grouped for better mobile display -->
-	    <div class="navbar-header">
-	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-	        <span class="sr-only">Toggle navigation</span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	      </button>
-	    </div>
-
-	    <!-- Collect the nav links, forms, and other content for toggling -->
-	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-	      <ul class="nav navbar-nav">
-	        <li class="nav-border {{ Request::segment(1) == '' ? 'active' : '' }}"><a href="/">HOME <span class="sr-only">(current)</span></a></li>
-	        {{-- @if(isset($_categories))
+      <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <style type="text/css">
+        @media screen and (min-width: 991px)
+        {
+            .navbar-nav a
+            {
+                font-size: 12px !important;
+            }
+        }
+        </style>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li class="nav-border {{ Request::segment(1) == '' ? 'active' : '' }}"><a href="/">HOME <span class="sr-only">(current)</span></a></li>
+            <li class="nav-border {{ Request::segment(1) == 'checkout' ? 'active' : '' }}"><a href="/checkout">CHECKOUT</a></li>
+            <li class="nav-border {{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">OUR PARTNER MERCHANT</a></li>
+            <li class="nav-border {{ Request::segment(1) == 'contact' ? 'active' : '' }}"><a href="/contact">CONTACT US</a></li>
+            <li class="nav-border"><a href="https://loadcentral.net">ELOADING BUSINESS</a></li>
+            <li class="nav-border"><a href="http://tour.philtechglobalinc.com">AIRLINE TICKETING</a></li>
+            <li class="nav-border"><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">TRAVEL AND TOURS</a></li>
+            <li class="nav-border"><a href="https://philtechglobalinc.vmoney.com">E-MONEY</a></li>
+            <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">LEGALITIES</a></li>
+            {{-- @if(isset($_categories))
                 @foreach($_categories as $category)     
                 <li class="nav-border {{ Request::input('type') == $category['type_id'] ? 'active' : '' }}"><a href="/product?type={{ $category['type_id'] }}" style="text-transform: uppercase;">{{ $category['type_name'] }}</a></li>
-    	        @endforeach
+                @endforeach
             @endif --}}
           </ul>
-	    </div><!-- /.navbar-collapse -->
-	  </div><!-- /.container-fluid -->
-	</nav>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
 
     <div id="scroll-to" class="clearfix">
-	   @yield("content")
+       @yield("content")
     </div>
 
     <!-- FOOTER -->
-  	<footer>
-   	    <div class="container ftr">
+    <footer>
+        <div class="container ftr">
             <div class="row clearfix">
                 <div class="col-md-4 col-sm-6">
                     <div class="btm-title">SHOP</div>
@@ -225,7 +243,7 @@
                 </div>
             </div>
         </div>
- 	</footer>
+    </footer>
 
     <footer id="bottom-footer">
         <div class="container bottom">

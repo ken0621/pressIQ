@@ -75,7 +75,7 @@
             <div class="container">
                 @if($customer_info_a == null)
                 <div class="holder"><a href="/mlm/login"><i class="fa fa-lock" aria-hidden="true"></i> Login</a></div>
-                <div class="holder"><a href="/mlm/login"><i class="fa fa-user" aria-hidden="true"></i> Register</a></div>
+                <div class="holder"><a href="/mlm/register"><i class="fa fa-user" aria-hidden="true"></i> Register</a></div>
                 @else
                 <div class="holder"><a href="/mlm"><i class="fa fa-user" aria-hidden="true"></i> Member's Area
                     @if($slot_now != null)

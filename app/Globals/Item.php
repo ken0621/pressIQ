@@ -1,6 +1,5 @@
 <?php
 namespace App\Globals;
-
 use App\Models\Tbl_variant;
 use App\Models\Tbl_user;
 use App\Models\Tbl_mlm_item_discount;
@@ -26,6 +25,7 @@ use Carbon\carbon;
 use App\Globals\Merchant;
 use App\Globals\Warehouse2;
 use Validator;
+use stdClass;
 
 class Item
 {
@@ -135,61 +135,102 @@ class Item
     }
     /* ITEM CRUD END */
 
-    /* RETRIEVE ITEM INFORMATION */
-    public static function item_additional_info($item_info)
-    {
-        $item_info->computed_price  = $item_info->item_price;
-        $item_info->markup          = $item_info->item_price - $item_info->item_cost;
 
-        $item_info->display_price   = Currency::format($item_info->computed_price);
-        $item_info->display_cost   = Currency::format($item_info->item_cost);
-        $item_info->display_markup   = Currency::format($item_info->markup);
-        return $item_info;
-    }
-    public static function get_item_info($item_id, $price_level_id = null)
+    /* READ DATA */
+    public static function get($shop_id = 0, $paginate = false, $archive = 0)
     {
-        $item_info                  = Tbl_item::where("item_id", $item_id)->first();
-        $item_info                  = Self::item_additional_info($item_info);
-        $item_info                  = Item::apply_price_level($item_info, $price_level_id);
+        $query = Tbl_item::where("shop_id", $shop_id)->where("tbl_item.archived", $archive)->type()->inventory()->um_multi();
 
-        return $item_info;
-    }
-    public static function apply_price_level($item_info, $price_level_id)
-    {
-        $check_price_level          = Tbl_price_level::where("price_level_id", $price_level_id)->first();
-
-        if($check_price_level)
+        /* FILTER BY TYPE */
+        if (session("get_filter_type")) 
         {
-            if($check_price_level->price_level_type == "per-item")
-            {
-                $check_item = Tbl_price_level_item::where("price_level_id", $price_level_id)->where("item_id", $item_info->item_id)->first();
-
-                if($check_item)
-                {
-
-                    $new_computed_price     = $check_item->custom_price;
-                }
-                else
-                {
-                    $new_computed_price     = $item_info->computed_price;
-                }
-            }
-            else
-            {
-                $percentage_mode        = $check_price_level->fixed_percentage_mode;
-                $percentage_value       = $check_price_level->fixed_percentage_value;
-                $percentage_source      = $check_price_level->fixed_percentage_source;
-                $applied_multiplier     = ($percentage_mode == "lower" ? ($percentage_value * -1) : $percentage_value);
-                $price_basis            = ($percentage_source == "standard price" ? $item_info->item_price : $item_info->item_cost);
-                $addend                 = $price_basis * ($applied_multiplier / 100);
-                $new_computed_price     = $price_basis + $addend; 
-            }
-
-            $item_info->computed_price      = $new_computed_price;
+            $query = $query->where("tbl_item.item_type_id", session("get_filter_type"));
         }
 
-        return $item_info;
+        /* FILTER BY CATEGORY */
+        if (session("get_filter_category")) 
+        {
+            $query = $query->where("tbl_item.item_category_id", session("get_filter_category"));
+        }
+
+        /* CHECK IF THERE IS PAGINATION */
+        if($paginate)
+        {
+            $_item = $query->paginate($paginate);
+            session(['item_pagination' => $_item->render()]);
+        }
+        else
+        {
+            $_item = $query->get();
+        }
+
+        /* ITEM ADDITIONAL DATA */
+        foreach($_item as $key => $item)
+        {
+            if(session("get_add_markup"))
+            {
+                $item = Self::add_info_markup($item);
+            }
+
+            if(session("get_add_display"))
+            {
+                $item = Self::add_info_display($item);
+            }
+
+            $_item_new[$key] = $item;
+        }
+
+        $return = $_item_new;  
+
+        Self::get_clear_session();
+
+        return $return;
     }
+    public static function get_pagination()
+    {
+        $pagination = session("item_pagination");
+        session(['item_pagination' => null]);
+        return $pagination;
+    }
+    public static function get_add_markup()
+    {
+        session(['get_add_markup' => true]);
+    }
+    public static function get_add_display()
+    {
+        session(['get_add_display' => true]);
+    }
+    public static function get_filter_type($id)
+    {
+        session(['get_filter_type' => $id]);
+    }
+    public static function get_filter_category($id)
+    {
+        session(['get_filter_category' => $id]);
+    }
+    public static function get_clear_session()
+    {
+        $store["get_add_markup"] = null;
+        $store["get_add_display"] = null;
+        $store["get_filter_type"] = null;
+        $store["get_filter_category"] = null;
+        session($store);
+    }
+    public static function add_info_markup($item)
+    {
+        $item->computed_price   = $item->item_price;
+        $item->markup           = $item->item_price - $item->item_cost;
+        $item->display_markup   = Currency::format($item->markup);
+        return $item;
+    }
+    public static function add_info_display($item)
+    {
+        $item->display_price   = Currency::format($item->item_price);
+        $item->display_cost   = Currency::format($item->item_cost);
+        return $item;
+    }
+    /* READ DATA END */
+
     public static function list_price_level($shop_id)
     {
         $_price_level = Tbl_price_level::where("shop_id", $shop_id)->get();
@@ -388,37 +429,7 @@ class Item
         return $data;
 	}
 
-    public static function get_all_item($shop_id = 0, $paginate = false, $archive = 0, $item_type_id = null, $item_category_id = null)
-    {
-        if($shop_id == 0)
-        {
-            $shop_id = Item::getShopId();
-        }
 
-        $query = Tbl_item::where("shop_id", $shop_id)->where("tbl_item.archived", $archive)->type()->inventory()->um_multi();
-
-        if ($item_type_id) 
-        {
-            $query = $query->where("tbl_item.item_type_id", $item_type_id);
-        }
-
-        if ($item_category_id) 
-        {
-            $query = $query->where("tbl_item.item_category_id", $item_category_id);
-        }
-
-        if($paginate)
-        {
-            $return = $query->paginate($paginate);
-        }
-        else
-        {
-            $return = $query->get();
-        }
-        
-
-        return $return;
-    }
     public static function apply_additional_info_to_array($_item)
     {
         $_new_item = null;

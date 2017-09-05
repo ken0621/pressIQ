@@ -72,7 +72,7 @@
     <!-- HEADER -->
     <div class="header-nav">
         <div class="header-nav-top" style="opacity: 0;">
-            <div class="container">
+            <div class="container" style="height: 30px; overflow: hidden;">
                 @if($customer_info_a == null)
                 <div class="holder"><a href="/mlm/login"><i class="fa fa-lock" aria-hidden="true"></i> Login</a></div>
                 @else

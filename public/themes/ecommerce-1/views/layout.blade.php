@@ -160,7 +160,7 @@
         {
             .navbar-nav a
             {
-                font-size: 14px !important;
+                font-size: 12px !important;
             }
         }
         </style>
@@ -175,6 +175,7 @@
             <li class="nav-border"><a href="http://tour.philtechglobalinc.com">AIRLINE TICKETING</a></li>
             <li class="nav-border"><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">TRAVEL AND TOURS</a></li>
             <li class="nav-border"><a href="https://philtechglobalinc.vmoney.com">E-MONEY</a></li>
+            <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">LEGALITIES</a></li>
             {{-- @if(isset($_categories))
                 @foreach($_categories as $category)     
                 <li class="nav-border {{ Request::input('type') == $category['type_id'] ? 'active' : '' }}"><a href="/product?type={{ $category['type_id'] }}" style="text-transform: uppercase;">{{ $category['type_name'] }}</a></li>

@@ -26,7 +26,7 @@
                     @if($filter == "unused")
                         <div class="btn-group">
                             <a class="btn btn-primary btn-grp-primary popup" href="javascript:" link="/member/ecommerce/coupon/edit-generate-code/{{$coupon->coupon_code_id}}" size="md">Edit</a>
-                            <a class="btn btn-primary btn-grp-primary popup" href="javascript:" link="" size="md"><span class="fa fa-trash"></span></a>
+                            {{-- <a class="btn btn-primary btn-grp-primary popup" href="javascript:" link="" size="md"><span class="fa fa-trash"></span></a> --}}
                         </div>
                     @else
                     <!-- <div class="btn-group">

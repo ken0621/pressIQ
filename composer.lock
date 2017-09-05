@@ -4,7 +4,10 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
+=======
     "hash": "dfc0f52069031a1b59755da4913a8c4f",
+>>>>>>> bee4722b365d0ae80dc5cda9dfdbf9709df5d789
     "content-hash": "e83d21e81203bab1f7f6735283bce3c3",
     "packages": [
         {
@@ -1402,16 +1405,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.5.1",
+            "version": "v5.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "fad090f6e14b97df91489803644ac88b5321864e"
+                "reference": "65da63c8ad4836e2bcddcff75becd49c71c5041c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/fad090f6e14b97df91489803644ac88b5321864e",
-                "reference": "fad090f6e14b97df91489803644ac88b5321864e",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/65da63c8ad4836e2bcddcff75becd49c71c5041c",
+                "reference": "65da63c8ad4836e2bcddcff75becd49c71c5041c",
                 "shasum": ""
             },
             "require": {
@@ -1530,7 +1533,11 @@
                 "framework",
                 "laravel"
             ],
+<<<<<<< HEAD
+            "time": "2017-09-04T14:09:04+00:00"
+=======
             "time": "2017-09-01 06:33:38"
+>>>>>>> bee4722b365d0ae80dc5cda9dfdbf9709df5d789
         },
         {
             "name": "laravel/tinker",
@@ -1789,7 +1796,7 @@
                 "source": "https://github.com/lesichkovm/laravel-advanced-route/tree/master",
                 "issues": "https://github.com/lesichkovm/laravel-advanced-route/issues"
             },
-            "time": "2017-07-11 11:53:21"
+            "time": "2017-07-11T11:53:21+00:00"
         },
         {
             "name": "maatwebsite/excel",
@@ -1867,7 +1874,11 @@
                 "import",
                 "laravel"
             ],
+<<<<<<< HEAD
+            "time": "2017-08-31T14:52:24+00:00"
+=======
             "time": "2017-08-31 14:52:24"
+>>>>>>> bee4722b365d0ae80dc5cda9dfdbf9709df5d789
         },
         {
             "name": "monolog/monolog",
@@ -4304,16 +4315,16 @@
         },
         {
             "name": "phpspec/prophecy",
-            "version": "v1.7.1",
+            "version": "v1.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "15ea9ac619e37009edcda64089e3fa4cc88aa659"
+                "reference": "c9b8c6088acd19d769d4cc0ffa60a9fe34344bd6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/15ea9ac619e37009edcda64089e3fa4cc88aa659",
-                "reference": "15ea9ac619e37009edcda64089e3fa4cc88aa659",
+                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/c9b8c6088acd19d769d4cc0ffa60a9fe34344bd6",
+                "reference": "c9b8c6088acd19d769d4cc0ffa60a9fe34344bd6",
                 "shasum": ""
             },
             "require": {
@@ -4363,7 +4374,11 @@
                 "spy",
                 "stub"
             ],
+<<<<<<< HEAD
+            "time": "2017-09-04T11:05:03+00:00"
+=======
             "time": "2017-09-03 09:38:53"
+>>>>>>> bee4722b365d0ae80dc5cda9dfdbf9709df5d789
         },
         {
             "name": "phpunit/php-code-coverage",

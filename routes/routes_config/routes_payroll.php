@@ -314,7 +314,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/allowance/v2/get_employee_allowance_tag',"Member\PayrollAllowanceController@get_employee_allowance_tag");
 	Route::any('/allowance/v2/remove_allowance_tabe_employee',"Member\PayrollAllowanceController@remove_allowance_tabe_employee");
 	Route::any('/allowance/v2/modal_save_allowances',"Member\PayrollAllowanceController@modal_save_allowances");
-	Route::any('/allowance/v2/modal_archived_allwance/{archived}/{allowance_id}',"Member\PayrollAllowanceController@modal_archived_allwance");
+	Route::any('/allowance/v2/modal_archived_allwance/{archived}/{allowance_id}',"Member\PayrollAllowanceController@modal_archived_allowance");
 	Route::any('/allowance/v2/archived_allowance',"Member\PayrollAllowanceController@archived_allowance");
 	Route::any('/allowance/v2/modal_edit_allowance/{id}',"Member\PayrollAllowanceController@modal_edit_allowance");
 	Route::any('/allowance/v2/modal_archived_llowance_employee/{archived}/{id}',"Member\PayrollAllowanceController@modal_archived_llowance_employee");

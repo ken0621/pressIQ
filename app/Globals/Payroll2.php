@@ -4229,7 +4229,7 @@ class Payroll2
 	}
 	public static function cutoff_breakdown_allowance_v2($return, $data)
 	{
-		
+
 		$_allowance = Tbl_payroll_employee_allowance_v2::where("payroll_employee_id", $data["employee_id"])->joinAllowance()->get();
 
 		foreach($_allowance as $allowance)
@@ -4298,11 +4298,13 @@ class Payroll2
 
 				foreach ($data['cutoff_input'] as $value) 
 				{
-					if ($allowance->over_time_pay==1) 
+					
+					if (isset($value->compute->_breakdown_addition)) 
 					{
-						if (isset($value->compute->_breakdown_addition)) 
+						foreach ($value->compute->_breakdown_addition as $lbl => $values) 
 						{
-							foreach ($value->compute->_breakdown_addition as $lbl => $values) 
+
+							if ($allowance->over_time_pay==1) 
 							{
 								if (in_array($lbl, $ot_category)) 
 								{
@@ -4310,14 +4312,8 @@ class Payroll2
 									$overtime += $values['rate'];
 								}
 							}
-						}
-					}
 
-					if($allowance->regular_holiday_pay==1)
-					{
-						if (isset($value->compute->_breakdown_addition)) 
-						{
-							foreach ($value->compute->_breakdown_addition as $lbl => $values) 
+							if($allowance->regular_holiday_pay==1)
 							{
 								if ($lbl == 'Legal Holiday' || $lbl == 'Legal Holiday Rest Day') 
 								{
@@ -4325,15 +4321,8 @@ class Payroll2
 									$regular_holiday += $values['rate'];
 								}
 							}
-						}
-					}
 
-
-					if ($allowance->special_holiday_pay==1) 
-					{
-						if (isset($value->compute->_breakdown_addition)) 
-						{
-							foreach ($value->compute->_breakdown_addition as $lbl => $values) 
+							if ($allowance->special_holiday_pay==1) 
 							{
 								if ($lbl == 'Special Holiday' || $lbl == 'Special Holiday Rest Day') 
 								{
@@ -4341,15 +4330,8 @@ class Payroll2
 									$special_holiday += $values['rate'];
 								}
 							}
-						}
-					}
 
-
-					if ($allowance->leave_pay==1)
-					{
-						if (isset($value->compute->_breakdown_addition)) 
-						{
-							foreach ($value->compute->_breakdown_addition as $lbl => $values) 
+							if ($allowance->leave_pay==1) 
 							{
 								if ($lbl == 'Leave Pay') 
 								{
@@ -4365,10 +4347,18 @@ class Payroll2
 					{
 						foreach ($value->compute->_breakdown_deduction as $lbl => $values) 
 						{
-							if ($value->time_output["leave_hours"] == '00:00:00' || $lbl == 'late' || $lbl == 'undertime') 
+							if ($lbl == 'late' || $lbl == 'undertime' ) 
 							{
 								$standard_gross_pay += $values['rate'];
 								$deduction += $values['rate'];
+							}
+							if ($data["group"]->payroll_group_salary_computation != "Daily Rate") 
+							{
+								if ($value->time_output["leave_hours"] == '00:00:00') 
+								{
+									$standard_gross_pay += $values['rate'];
+									$deduction += $values['rate'];
+								}
 							}
 						}
 					}
@@ -4378,7 +4368,7 @@ class Payroll2
 					$d['special_holiday'] = $special_holiday;
 					$d['leave_pay'] = $leave_pay;
 					$d['deductions'] = $deduction;
-					$a[''.$count] = $d;
+					$a[$count] = $d;
 					$count++;
 				}
 
@@ -4386,13 +4376,15 @@ class Payroll2
 				// dd($a);
 
 				$standard_gross_pay+=$actual_gross_pay;
-
 				$val["amount"] = @($actual_gross_pay/$standard_gross_pay) * $allowance_amount;
 
-				// if ($data["group"]->payroll_group_salary_computation == "Daily Rate") 
-				// {
-				// 	$val["amount"] = $val["amount"] * $return->_time_breakdown["day_spent"]["float"];
-				// }
+				// dd($actual_gross_pay ."/". $standard_gross_pay ."*".$allowance_amount." = ".$val["amount"]."*".$return->_time_breakdown["day_spent"]["float"]);
+
+
+				if ($data["group"]->payroll_group_salary_computation == "Daily Rate") 
+				{
+					$val["amount"] = $val["amount"] * $return->_time_breakdown["day_spent"]["float"];
+				}
 
 				if($allowance->payroll_allowance_category == "Taxable")
 				{

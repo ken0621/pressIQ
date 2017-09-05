@@ -5370,6 +5370,7 @@ class PayrollController extends Member
           $data['action']     = '/member/payroll/leave_schedule/delete_schedule_leave';
           $data['id']         = $id;
           $data['html']       = '';
+          $data['payroll_deduction_type'] = 0;
 
           return view('member.modal.modal_confirm_archived', $data);
      }

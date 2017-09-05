@@ -277,6 +277,7 @@ class Item
             $new_computed_price     = $item->item_price;
         }
 
+        $item->original_item_price = $item->item_price;
         $item->item_price = $new_computed_price;
 
         return $item;

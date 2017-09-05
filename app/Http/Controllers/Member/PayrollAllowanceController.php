@@ -284,6 +284,7 @@ class PayrollAllowanceController extends Member
          $data['id']         = $allowance_id;
          $data['archived']   = $archived;
 
+         dd('v2');
          return view('member.payroll.payroll_allowance.allowance_confirm_archived', $data);
     }
 

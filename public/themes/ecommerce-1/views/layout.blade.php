@@ -71,7 +71,7 @@
         <![endif]-->
     <!-- HEADER -->
     <div class="header-nav">
-        <div class="header-nav-top" style="display: none;">
+        <div class="header-nav-top" style="opacity: 0;">
             <div class="container">
                 @if($customer_info_a == null)
                 <div class="holder"><a href="/mlm/login"><i class="fa fa-lock" aria-hidden="true"></i> Login</a></div>

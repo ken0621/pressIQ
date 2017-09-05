@@ -107,6 +107,7 @@
 		<div class="row clearfix">
 			<div class="col-md-8">
 				<form id="email-form" method="post">
+					{!!Honeypot::generate('my_name','my_time')!!}
 					<div id="email-form-result">
 						
 					</div>

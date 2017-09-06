@@ -4,6 +4,7 @@ use App\Globals\Item;
 use App\Globals\Category;
 use App\Globals\Manufacturer;
 use App\Globals\Accounting;
+use App\Globals\Warehouse2;
 use App\Globals\Columns;
 use Request;
 

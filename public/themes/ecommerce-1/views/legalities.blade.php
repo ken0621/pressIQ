@@ -8,7 +8,7 @@
 				@if(loop_content_condition($shop_theme_info, "legalities", "legalities_gallery"))
 					@foreach(unserialize(get_content($shop_theme_info, "legalities", "legalities_gallery")) as $gallery)
 						<div class="col-md-3 col-sm-6">
-							<div class="legalities-holder">
+							<div class="legalities-holder" style="margin-bottom: 7.5px;">
 								<div class="img">
 									<a href="{{ $gallery }}" data-title="" data-lightbox="legalities-gallery">
 										<img class="4-3-ratio" src="{{ $gallery }}">

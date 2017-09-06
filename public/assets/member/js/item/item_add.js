@@ -64,19 +64,51 @@ function item_add()
 		$(".tp-picker").click(function(e)
 		{
 			$type_id = $(e.currentTarget).attr("type_id");
+			$type_name = $(e.currentTarget).find(".tp-title").text();
+
+			$(".change-type").find("input").val($type_name);
 			$(".item-type-picker").hide();
-			
 			$(".modal-footer").find("button").removeAttr("disabled");
 
-			if($type_id == 4 || $type_id == 5)
-			{
-				$(".item-bundle").fadeIn();
-			}
-			else
-			{
-				$(".item-add-main").fadeIn();
-			}
+			action_show_depending_on_type($type_id)
 		});
+	}
+	function action_show_depending_on_type($type_id)
+	{
+		$(".item-bundle").hide();
+		$(".item-add-main").hide();
+		$(".for-membership-kit").hide();
+		$(".for-inventory").hide();
+		$(".for-non-service").hide();
+		$(".expense-account").removeClass("col-md-12");
+		$(".expense-account").addClass("col-md-6");
+
+		if($type_id == 1)
+		{
+			$(".item-add-main").fadeIn();
+			$(".for-inventory").fadeIn();
+			$(".for-non-service").fadeIn();
+		}
+		else if($type_id == 2)
+		{
+			$(".item-add-main").fadeIn();
+			$(".for-non-service").fadeIn();
+		}
+		else if($type_id == 3)
+		{
+			$(".item-add-main").fadeIn();
+			$(".expense-account").removeClass("col-md-6");
+			$(".expense-account").addClass("col-md-12");
+		}
+		else if($type_id == 4)
+		{
+			$(".item-bundle").fadeIn();
+		}
+		else if($type_id == 5)
+		{
+			$(".item-bundle").fadeIn();	
+			$(".for-membership-kit").fadeIn();
+		}	
 	}
 	function add_event_change_type()
 	{

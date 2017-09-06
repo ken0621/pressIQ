@@ -278,9 +278,7 @@ class Item
             $item = Self::add_info($item);
             $_item_new[$key] = $item;
         }
-
-
-
+        
         $return = isset($_item_new) ? $_item_new : null;  
 
         Self::get_clear_session();

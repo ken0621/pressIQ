@@ -113,7 +113,7 @@
                     <div class="col-md-3">
                         <label for="basic-input">Item Type</label>
                         <div class="input-group change-type">
-                          <input  type="text" class="form-control" name="item_type_id" disabled value="{{ get_request_old($item_info, 'item_type_id') }}" aria-describedby="basic-addon1">
+                          <input  type="text" class="form-control" name="item_type_id" readonly value="{{ get_request_old($item_info, 'item_type_id') }}" aria-describedby="basic-addon1">
                           <span style="background-color: #eee; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-edit"></i></span>
                         </div>
                     </div>
@@ -149,14 +149,14 @@
                         <div class="purchase-module">
                             <h4 class="section-title">Purchase</h4>
                             <div class="form-group">
-                                <div class="col-md-6">
+                                <div class="col-md-6 for-non-service">
                                     <label for="basic-input"> Cost *</label>
                                     <div class="input-group">
                                       <input  type="text" class="form-control text-right" placeholder="0.00" value="{{ get_request_old($item_info, 'item_cost') }}" aria-describedby="basic-addon1" name="item_cost">
                                       <span onclick="action_load_link_to_modal('/member/item/v2/cost', 'lg')" style="background-color: #eee; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-calculator"></i></span>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 expense-account">
                                     <label for="basic-input">Expense Account</label>
                                     <select class="form-control select-expense-account" name="item_expense_account_id">
                                         @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_expense, 'account_id' => get_request_old($item_info, 'item_expense_account_id') != '' ? get_request_old($item_info, 'item_expense_account_id') : $default_expense])
@@ -174,37 +174,39 @@
                 </div>
    
                 <!-- INVENTORY -->
-                <h4 class="section-title {{ $item_picker }}">Inventory</h4>
-                <div class="form-group {{ $item_picker }}">
-                    <div class="col-md-4">
-                        <label for="basic-input">Initial Quantity On Hand *</label>
-                        <div class="input-group">
-                          <input type="text" class="form-control" placeholder="0" name="item_initial_qty" aria-describedby="basic-addon1" value="0">
-                          <span style="background-color: #eee; cursor: pointer;" class="input-group-addon" id="basic-addon1">Unit Conversion</span>
+                <div class="for-inventory">
+                    <h4 class="section-title {{ $item_picker }}">Inventory</h4>
+                    <div class="form-group {{ $item_picker }}">
+                        <div class="col-md-4">
+                            <label for="basic-input">Initial Quantity On Hand *</label>
+                            <div class="input-group">
+                              <input type="text" class="form-control" placeholder="0" name="item_initial_qty" aria-describedby="basic-addon1" value="0">
+                              <span style="background-color: #eee; cursor: pointer;" class="input-group-addon" id="basic-addon1">Unit Conversion</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="basic-input">As Of Date</label>
+                           <input id="basic-input" class="form-control" name="item_date_track" value="{{ date('m/d/Y') }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="basic-input">Reorder Point</label>
+                           <input id="basic-input" class="form-control" value="0" name="item_reorder_point">
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <label for="basic-input">As Of Date</label>
-                       <input id="basic-input" class="form-control" name="item_date_track" value="{{ date('m/d/Y') }}">
-                    </div>
-                    <div class="col-md-4">
-                        <label for="basic-input">Reorder Point</label>
-                       <input id="basic-input" class="form-control" value="0" name="item_reorder_point">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-8">
-                        <label for="basic-input">Asset Account</label>
-                        <select class="form-control select-asset-account" name="item_asset_account_id">
-                            @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_asset, 'account_id' => $default_asset])
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="basic-input">Has Serial</label>
-                        <select class="form-control select-has-serial" name="item_has_serial">
-                            <option value="0">No</option>
-                            <option value="1">Yes</option>
-                        </select>
+                    <div class="form-group">
+                        <div class="col-md-8">
+                            <label for="basic-input">Asset Account</label>
+                            <select class="form-control select-asset-account" name="item_asset_account_id">
+                                @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_asset, 'account_id' => $default_asset])
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="basic-input">Has Serial</label>
+                            <select class="form-control select-has-serial" name="item_has_serial">
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -249,13 +251,13 @@
                     <div class="col-md-3">
                         <label for="basic-input">Item Type</label>
                         <div class="input-group change-type">
-                          <input  type="text" class="form-control" name="item_type_id" disabled value="{{ get_request_old($item_info, 'item_type_id') }}" aria-describedby="basic-addon1">
+                          <input  type="text" class="form-control" name="item_type_id" readonly value="{{ get_request_old($item_info, 'item_type_id') }}" aria-describedby="basic-addon1">
                           <span style="background-color: #eee; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-edit"></i></span>
                         </div>
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group for-membership-kit">
                     <div class="col-md-3">
                         <label for="basic-input">Reorder Point</label>
                         <input type="text" class="form-control " placeholder="0" value="{{ get_request_old($item_info, 'item_price') }}" name="item_price">

@@ -65,8 +65,17 @@ function item_add()
 		{
 			$type_id = $(e.currentTarget).attr("type_id");
 			$(".item-type-picker").hide();
-			$(".item-add-main").fadeIn();
+			
 			$(".modal-footer").find("button").removeAttr("disabled");
+
+			if($type_id == 4 || $type_id == 5)
+			{
+				$(".item-bundle").fadeIn();
+			}
+			else
+			{
+				$(".item-add-main").fadeIn();
+			}
 		});
 	}
 	function add_event_change_type()
@@ -75,6 +84,7 @@ function item_add()
 		{
 			$(".item-type-picker").fadeIn();
 			$(".item-add-main").hide();
+			$(".item-bundle").hide();
 			$(".modal-footer").find("button").attr("disabled", "disabled");
 		});
 	}

@@ -34,6 +34,10 @@ Route::any('/member/mlm/code/sell/process', 'Member\MLM_CodeController@process')
 Route::any('/member/mlm/code/receipt/', 'Member\MLM_CodeController@receipt'); //ERWIN
 Route::any('/member/mlm/code/receipt/view/{id}', 'Member\MLM_CodeController@view_receipt'); //ERWIN
 
+
+Route::any('/member/mlm/code2', 'Member\MLM_CodeControllerV2@index'); //GUILLERMO TABLIGAN
+Route::any('/member/mlm/product_code2', 'Member\MLM_CodeControllerV2@index'); //GUILLERMO TABLIGAN
+
 Route::any('/member/mlm/claim_voucher', 'Member\MLM_ClaimVoucher@index'); //ERWIN
 Route::any('/member/mlm/claim_voucher/claim', 'Member\MLM_ClaimVoucher@claim'); //ERWIN
 Route::post('/member/mlm/claim_voucher/check_claim', 'Member\MLM_ClaimVoucher@check_claim'); //ERWIN

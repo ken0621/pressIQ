@@ -63,7 +63,7 @@
         @endforeach
     </tbody>
 </table>
-<div class="pull-right">{!! $_item_raw->render() !!}</div>
+<div class="pull-right">{!! $pagination !!}</div>
 @else
 <div style="padding: 100px; text-align: center;">NO DATA YET</div>
 @endif

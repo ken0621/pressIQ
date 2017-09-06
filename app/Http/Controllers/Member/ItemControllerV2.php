@@ -19,12 +19,18 @@ class ItemControllerV2 extends Member
 	}
 	public function list_table()
 	{
+		$data["page"]		= "Item List - Table";
+
 		$archived 			= Request::input("archived") ? 1 : 0;
 		$item_type_id 		= Request::input("item_type_id");
 		$item_category_id   = Request::input("item_category_id");
-		$data["page"]		= "Item List - Table";
-		$data["_item_raw"]	= Item::get_all_item($this->user_info->shop_id, 5, $archived, $item_type_id, $item_category_id);
-		$data["_item"]		= Item::apply_additional_info_to_array($data["_item_raw"]);
+
+		Item::get_add_markup(); 
+		Item::get_add_display();
+		Item::get_filter_type($item_type_id);
+		Item::get_filter_category($item_category_id);
+		$data["_item"]		= Item::get($this->user_info->shop_id, 5, $archived);
+		$data["pagination"] = Item::get_pagination();
 		$data["archive"]	= $archived == 1 ? "restore" : "archive";
 		return view("member.itemv2.list_item_table", $data);
 	}
@@ -42,12 +48,11 @@ class ItemControllerV2 extends Member
 		$data['default_expense'] = Accounting::get_default_coa("accounting-expense");
 		$data["_manufacturer"]   = Manufacturer::getAllManufaturer();
 		$data['item_info'] 	     = [];
-
 		$id 					 = Request::input('item_id');
 
 		if($id)
 		{
-			$data['item_info'] 	      = Item::get_item_info($id);
+			$data['item_info'] 	      = Item::info($id);
 			$data["link_submit_here"] = "/member/item/v2/edit_submit?item_id=" . $id;
 			$data["item_main"]	      = "";
 			$data["item_picker"]	  = "hide";

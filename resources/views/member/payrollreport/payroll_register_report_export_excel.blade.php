@@ -141,7 +141,40 @@ body{
     <td  >{{ number_format($employee->gross_pay,2) }}</td>
     <td  >{{ number_format($employee->net_pay,2) }}</td>
   </tr>
- @endforeach      
+ @endforeach
+ <tr>
+    <td class="text-center" ><b>Total</b></td>
+    <td class="text-center" ><b>{{ number_format($total_basic,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($overtime_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($nightdiff_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($regular_holiday_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($special_holiday_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($restday_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($leave_pay_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($cola_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($late_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($undertime_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($absent_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($allowance_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($adjustment_allowance_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($sss_loan_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($hdmf_loan_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($cash_bond_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($cash_advance_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($other_loans_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($adjustment_deduction_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($sss_ee_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($sss_er_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($sss_ec_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($hdmf_ee_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($hdmf_er_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($philhealth_ee_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($philhealth_er_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($witholding_tax_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($deduction_total,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($total_gross,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($total_net,2) }}</b></td>
+</tr>
 </table>
 </div>
 </body>

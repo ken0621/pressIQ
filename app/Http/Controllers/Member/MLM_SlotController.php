@@ -96,6 +96,7 @@ class MLM_SlotController extends Member
             {
                 if($shop_id == $slot_info->shop_id)
                 {
+                    
                     $customer_id = $slot_info->slot_owner;
                     Mlm_member::add_to_session_edit($shop_id, $customer_id, $slot_id);
                     return Redirect::to('/mlm');

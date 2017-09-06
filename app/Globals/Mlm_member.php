@@ -55,9 +55,12 @@ class Mlm_member
 		// ->membershipcode()
 		->membership()
 		->first();
+
+
 		$data['discount_card'] = Tbl_mlm_discount_card_log::where('discount_card_customer_holder', $customer_id)->first();
-		
-		Session::put('mlm_member', $data);
+		$store['mlm_member'] = $data;
+        session($store);
+		//Session::put('mlm_member', $data);
 	}
 	public static function get_customer_info($customer_id, $discount_card_log_id = null)
 	{

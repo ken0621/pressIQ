@@ -365,7 +365,6 @@ class Item
             }
             else
             {
-                
                 $percentage_mode        = $check_price_level->fixed_percentage_mode;
                 $percentage_value       = $check_price_level->fixed_percentage_value;
                 $percentage_source      = $check_price_level->fixed_percentage_source;

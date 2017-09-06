@@ -184,7 +184,6 @@ return [
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Msurguy\Honeypot\HoneypotServiceProvider::class,
         niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
-        Laravel\Scout\ScoutServiceProvider::class,
         
     ],
 

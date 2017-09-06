@@ -170,14 +170,15 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
             <li class="nav-border {{ Request::segment(1) == '' ? 'active' : '' }}"><a href="/">HOME <span class="sr-only">(current)</span></a></li>
-            <li class="nav-border {{ Request::segment(1) == 'checkout' ? 'active' : '' }}"><a href="/checkout">CHECKOUT</a></li>
-            <li class="nav-border {{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">OUR PARTNER MERCHANT</a></li>
             <li class="nav-border {{ Request::segment(1) == 'contact' ? 'active' : '' }}"><a href="/contact">CONTACT US</a></li>
+            <li class="nav-border {{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">OUR PARTNER MERCHANT</a></li>
             <li class="nav-border"><a href="https://loadcentral.net">ELOADING BUSINESS</a></li>
             <li class="nav-border"><a href="http://tour.philtechglobalinc.com">AIRLINE TICKETING</a></li>
-            <li class="nav-border"><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">TRAVEL AND TOURS</a></li>
+            <li class="nav-border"><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">TRAVEL AND TOURS</a></li> 
             <li class="nav-border"><a href="https://philtechglobalinc.vmoney.com">E-MONEY</a></li>
-            <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">LEGALITIES</a></li>
+            <li class="nav-border"><a href="/legalities">LEGALITIES</a></li>
+            <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">CAREER</a></li>
+            <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">EVENTS</a></li>
             {{-- @if(isset($_categories))
                 @foreach($_categories as $category)     
                 <li class="nav-border {{ Request::input('type') == $category['type_id'] ? 'active' : '' }}"><a href="/product?type={{ $category['type_id'] }}" style="text-transform: uppercase;">{{ $category['type_name'] }}</a></li>

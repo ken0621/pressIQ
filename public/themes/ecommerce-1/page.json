@@ -207,6 +207,16 @@
 			"size":"12"
 		}
 	},
+	"legalities":
+	{
+		"legalities_gallery" :
+		{
+			"label":"Legalities",
+			"type":"gallery",
+			"default":"",
+			"size":"12"
+		}
+	},
 	"info":
 	{
 		"facebook_link" :

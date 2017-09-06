@@ -56,6 +56,16 @@ class Columns
             $submit[$key]["checked"] = $value["checked"] == "yes" ? true : false;
         }
 
+        $insert["columns_data"] = serialize($submit);
+        $insert["columns_from"] = $from;
+
+        $columns                  = Tbl_columns::user($user_id)->shop($shop_id)->first();
+
+        if (!count($columns) > 0) 
+        {
+            
+        }
+
         return true;
     }
 }

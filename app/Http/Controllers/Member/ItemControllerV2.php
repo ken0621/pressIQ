@@ -24,12 +24,13 @@ class ItemControllerV2 extends Member
 		$archived 			= Request::input("archived") ? 1 : 0;
 		$item_type_id 		= Request::input("item_type_id");
 		$item_category_id   = Request::input("item_category_id");
+		$search				= Request::input("search");
 
 		Item::get_add_markup(); 
 		Item::get_add_display();
 		Item::get_filter_type($item_type_id);
 		Item::get_filter_category($item_category_id);
-		$data["_item"]		= Item::get($this->user_info->shop_id, 5, $archived);
+		$data["_item"]		= Item::get($this->user_info->shop_id, 5, $archived, $search);
 		$data["pagination"] = Item::get_pagination();
 		$data["archive"]	= $archived == 1 ? "restore" : "archive";
 		$data["hide"]		= Columns::checkColumns($this->user_info->shop_id, $this->user_info->user_id, "item");

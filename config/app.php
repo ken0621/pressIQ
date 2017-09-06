@@ -177,13 +177,6 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        /* Third Party Service */
-        Intervention\Image\ImageServiceProvider::class,
-        Netshell\Paypal\PaypalServiceProvider::class,
-        Barryvdh\Snappy\ServiceProvider::class,
-        Maatwebsite\Excel\ExcelServiceProvider::class,
-        Msurguy\Honeypot\HoneypotServiceProvider::class,
-        niklasravnsborg\LaravelPdf\PdfServiceProvider::class
     ],
 
     /*
@@ -215,7 +208,6 @@ return [
         'File' => Illuminate\Support\Facades\File::class,
         'Gate' => Illuminate\Support\Facades\Gate::class,
         'Hash' => Illuminate\Support\Facades\Hash::class,
-        'Input' => Illuminate\Support\Facades\Input::class,
         'Lang' => Illuminate\Support\Facades\Lang::class,
         'Log' => Illuminate\Support\Facades\Log::class,
         'Mail' => Illuminate\Support\Facades\Mail::class,
@@ -233,15 +225,6 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        
-        /* Third Party Alias */
-        'Image' => Intervention\Image\Facades\Image::class,
-        'Paypal' => Netshell\Paypal\Facades\Paypal::class,
-        'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
-        'PDF2' => niklasravnsborg\LaravelPdf\Facades\Pdf::class,
-        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
-        'Honeypot' => Msurguy\Honeypot\HoneypotFacade::class
 
     ],
 

@@ -21,7 +21,7 @@ function modal_create_deduction()
 				{
 					$(".btn-add-type").addClass("popup");
 				}
-				var link = "/member/payroll/deduction/v2/modal_create_deduction_type/";
+				var link = "/member/payroll/deduction/modal_create_deduction_type/";
 				link += $(this).val().replace(/ /g,"_");
 
 				$(".btn-add-type").attr("link", link);
@@ -34,7 +34,7 @@ function modal_create_deduction()
 			var pre_load = "<option value=''>...loading</option>";
 			$(".select-deduction-type").html(pre_load);
 			$.ajax({
-				url 	: 	"/member/payroll/deduction/v2/ajax_deduction_type",
+				url 	: 	"/member/payroll/deduction/ajax_deduction_type",
 				type 	: 	"POST",
 				data 	: 	{
 					_token:$("#_token").val(),
@@ -94,7 +94,7 @@ function modal_create_deduction()
 
 	this.load_tagged_employee = function()
 	{
-		var action = "/member/payroll/deduction/v2/get_employee_deduction_tag";
+		var action = "/member/payroll/deduction/get_employee_deduction_tag";
 		var method = "POST";
 		var target = ".table-employee-tag";
 		var formdata = {
@@ -179,7 +179,7 @@ function modal_create_deduction()
 			_token:misc('_token'),
 			payroll_deduction_id:$("#payroll_deduction_id").val()
 		};
-		var action = "/member/payroll/deduction/v2/reload_deduction_employee_tag";
+		var action = "/member/payroll/deduction/reload_deduction_employee_tag";
 		var method = "POST";
 		$(target).html(misc('loader'));
 		$.ajax({

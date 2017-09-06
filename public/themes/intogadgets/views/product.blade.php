@@ -29,16 +29,16 @@
             <div class="title">SHOWING {{ $current_count }} OF {{ $total_product }} ITEMS</div>
         </div>
 
-        @if(Request::input("featured") != 0)
-            <input name="featured" type="hidden" value="{{ Request::input('featured') }}">
+        @if(Input::get("featured") != 0)
+            <input name="featured" type="hidden" value="{{ Input::get('featured') }}">
         @endif
 
-        @if(Request::input("type") != 0)
-            <input name="type" type="hidden" value="{{ Request::input('type') }}">
+        @if(Input::get("type") != 0)
+            <input name="type" type="hidden" value="{{ Input::get('type') }}">
         @endif
 
-        @if(Request::input("brand") != 0)
-            <input name="brand" type="hidden" value="{{ Request::input('brand') }}">
+        @if(Input::get("brand") != 0)
+            <input name="brand" type="hidden" value="{{ Input::get('brand') }}">
         @endif
 
         <input type="hidden" class="min-price" value="" name="min">

@@ -1,4 +1,4 @@
-@if(isset($item))
+@if($item)
     @foreach($item as $key => $prod)
     <tr>
         <td><a href="#">{{$prod['category_name']}}</a></td>

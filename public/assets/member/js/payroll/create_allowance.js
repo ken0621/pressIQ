@@ -3,6 +3,7 @@ var create_allowance = new create_allowance();
 function create_allowance()
 {
 	init();
+
 	function init()
 	{
 		event_accept_number_only();
@@ -134,13 +135,12 @@ function create_allowance()
 		$.ajax({
 			url 	: 	"/member/payroll/allowance/v2/get_employee_allowance_tag",
 			type 	: 	"POST",
-			dataType:   "json",
 			data 	: 	{
 				_token:misc('_token')
 			},
 			success : 	function(result)
 			{
-				// result = JSON.parse(result);
+				result = JSON.parse(result);
 
 				var html = "";
 				$(result.new_record).each(function(index, data)

@@ -177,7 +177,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        /* 3rd Party */
+        /* 3rd Party Service Providers */
         Intervention\Image\ImageServiceProvider::class,
         Netshell\Paypal\PaypalServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
@@ -234,7 +234,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
-        /* 3rd Party */
+        /* 3rd Party Aliases */
         'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
         'PDF2' => niklasravnsborg\LaravelPdf\Facades\Pdf::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,

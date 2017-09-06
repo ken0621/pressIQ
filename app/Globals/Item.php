@@ -137,9 +137,15 @@ class Item
 
 
     /* READ DATA */
-    public static function get($shop_id = 0, $paginate = false, $archive = 0)
+    public static function get($shop_id = 0, $paginate = false, $archive = 0, $search = null)
     {
         $query = Tbl_item::where("shop_id", $shop_id)->where("tbl_item.archived", $archive)->type()->inventory()->um_multi();
+
+        /* SEARCH */
+        if ($search) 
+        {
+            $query = $query->search($search);
+        }
 
         /* FILTER BY TYPE */
         if (session("get_filter_type")) 

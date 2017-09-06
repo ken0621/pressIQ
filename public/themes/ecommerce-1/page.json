@@ -214,7 +214,14 @@
 			"label":"Legalities",
 			"type":"gallery",
 			"default":"",
-			"size":"12"
+			"size":"6"
+		},
+		"business_presentation" :
+		{
+			"label":"Business Presentation",
+			"type":"text",
+			"default":"",
+			"size":"6"
 		}
 	},
 	"info":

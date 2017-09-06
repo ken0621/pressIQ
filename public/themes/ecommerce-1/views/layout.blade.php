@@ -73,6 +73,8 @@
     <div class="header-nav">
         <div class="header-nav-top">
             <div class="container">
+                <div class="holder"><a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a></div>
+                <div class="holder"><div class="linya"></div></div>
                 @if($customer_info_a == null)
                 <div class="holder"><a href="/mlm/login"><i class="fa fa-lock" aria-hidden="true"></i> Login</a></div>
                 <div class="holder"><div class="linya"></div></div>
@@ -85,6 +87,7 @@
                     </a>
                 </div>    
                 @endif
+
                 {{-- <!--<div class="holder"><div class="linya"></div></div>-->
                 <!--<div class="holder"><a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> My Cart</a></div>-->
                 <div class="holder"><div class="linya"></div></div>
@@ -205,7 +208,7 @@
                             <div class="btm-sub-title col-xs-6"><a href="/product?type={{ $category['type_id'] }}">{{ $category['type_name'] }}</a></div>
                             @endforeach
                         @endif
-                        <div class="btm-sub-title col-xs-6"><a href="javascript:" onClick="alert('Under Development')">BUSINESS PRESENTATION</a></div>
+                        <div class="btm-sub-title col-xs-6"><a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a></div>
                         <div class="btm-sub-title col-xs-6"><a href="javascript:" onClick="alert('Under Development')">NEWS</a></div>
                     </div>
                 </div> 

@@ -25,23 +25,33 @@ use Session;
 use DB;
 use Carbon\carbon;
 use App\Globals\Merchant;
+use App\Globals\Columns;
 use Validator;
 
 class Columns
 {
+    public static function setDefault($default)
+    {
+       foreach ($default as $key => $value) 
+       {
+          $temp_value               = $value[0];
+          $temp_array               = $value[1];
+          $temp_checked             = $value[2];
+          $default[$key]            = [];
+          $default[$key]["value"]   = $temp_value;
+          $default[$key]["array"]   = $temp_array;
+          $default[$key]["checked"] = $temp_checked;
+       }
+
+       return $default;
+    }
     public static function getColumns($shop_id, $user_id, $from, $default)
     {
        $columns = Tbl_columns::user($user_id)->shop($shop_id)->from($from)->first();
 
        if (!count($columns) > 0) 
        {
-           foreach ($default as $key => $value) 
-           {
-              $temp_value               = $value;
-              $default[$key]            = [];
-              $default[$key]["value"]   = $temp_value;
-              $default[$key]["checked"] = true;
-           }
+           $default = Columns::setDefault($default);
 
            $columns = $default;
        }
@@ -52,13 +62,7 @@ class Columns
                 $temp_columns = unserialize($columns->columns_data);
                 if (count($temp_columns) != count($default)) 
                 {
-                    foreach ($default as $key => $value) 
-                   {
-                      $temp_value               = $value;
-                      $default[$key]            = [];
-                      $default[$key]["value"]   = $temp_value;
-                      $default[$key]["checked"] = true;
-                   }
+                    $default = Columns::setDefault($default);
                    
                     $temp_columns = $default;
                 }

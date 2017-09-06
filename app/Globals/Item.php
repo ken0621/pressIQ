@@ -141,12 +141,6 @@ class Item
     {
         $query = Tbl_item::where("shop_id", $shop_id)->where("tbl_item.archived", $archive)->type()->inventory()->um_multi();
 
-        /* SEARCH */
-        if ($search) 
-        {
-            $query = $query->search($search);
-        }
-
         /* FILTER BY TYPE */
         if (session("get_filter_type")) 
         {
@@ -157,6 +151,22 @@ class Item
         if (session("get_filter_category")) 
         {
             $query = $query->where("tbl_item.item_category_id", session("get_filter_category"));
+        }
+
+        /* SEARCH FILTER */
+        if ($search) 
+        {
+            $sku_exist = $query->searchSKU($search)->first();
+            $name_exist = $query->searchName($search)->first();
+
+            if($sku_exist) 
+            {
+                $query = $query->searchSKU($search);
+            }
+            elseif($name_exist)
+            {
+                $query = $query->searchName($search);
+            }
         }
 
         /* CHECK IF THERE IS PAGINATION */
@@ -177,7 +187,7 @@ class Item
             $_item_new[$key] = $item;
         }
 
-        $return = $_item_new;  
+        $return = isset($_item_new) ? $_item_new : [];  
 
         Self::get_clear_session();
 

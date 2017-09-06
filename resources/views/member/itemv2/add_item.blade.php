@@ -255,6 +255,29 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <label for="basic-input">Reorder Point</label>
+                        <input type="text" class="form-control " placeholder="0" value="{{ get_request_old($item_info, 'item_price') }}" name="item_price">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="basic-input">Asset Account</label>
+                        <select class="form-control select-income-account" name="item_income_account_id">
+                            @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_income, 'account_id' => get_request_old($item_info, 'item_income_account_id') != '' ? get_request_old($item_info, 'item_income_account_id') : $default_income])
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="basic-input">Membership</label>
+                        <select class="form-control">
+                            <option>Silver</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="basic-input">GC Earnings</label>
+                        <input type="text" class="form-control" name="">
+                    </div>
+                </div>
+
                 <hr>
 
                 <div class="form-group">

@@ -32,6 +32,7 @@ class ItemControllerV2 extends Member
 		$data["_item"]		= Item::get($this->user_info->shop_id, 5, $archived);
 		$data["pagination"] = Item::get_pagination();
 		$data["archive"]	= $archived == 1 ? "restore" : "archive";
+		$data["hide"]		= Columns::checkColumns($this->user_info->shop_id, $this->user_info->user_id, "item");
 		return view("member.itemv2.list_item_table", $data);
 	}
 	public function get_item()
@@ -196,6 +197,7 @@ class ItemControllerV2 extends Member
 			$default[3]	  	 = "Cost";
 			$default[4]	  	 = "Markup";
 			$default[5]	  	 = "Inventory";
+			$default[6]	  	 = "U/M";
 			$data["_column"] = Columns::getColumns($shop_id, $user_id, $from, $default);
 			
 			return view("member.itemv2.columns_item", $data);

@@ -31,7 +31,8 @@ class Columns
 {
     public static function getColumns($shop_id, $user_id, $from, $default)
     {
-       $columns = Tbl_columns::user($user_id)->shop($shop_id)->get();
+       $columns = Tbl_columns::user($user_id)->shop($shop_id)->from($from)->first();
+
        if (!count($columns) > 0) 
        {
            foreach ($default as $key => $value) 
@@ -43,6 +44,31 @@ class Columns
            }
 
            $columns = $default;
+       }
+       else
+       {
+            if (isset($columns->columns_data) && is_serialized($columns->columns_data)) 
+            {
+                $temp_columns = unserialize($columns->columns_data);
+                if (count($temp_columns) != count($default)) 
+                {
+                    foreach ($default as $key => $value) 
+                   {
+                      $temp_value               = $value;
+                      $default[$key]            = [];
+                      $default[$key]["value"]   = $temp_value;
+                      $default[$key]["checked"] = true;
+                   }
+                   
+                    $temp_columns = $default;
+                }
+            }
+            else
+            {
+                $temp_columns = [];
+            }
+            
+            $columns = $temp_columns;
        }
 
        return $columns;
@@ -57,15 +83,47 @@ class Columns
         }
 
         $insert["columns_data"] = serialize($submit);
-        $insert["columns_from"] = $from;
+        $columns                = Tbl_columns::user($user_id)->shop($shop_id)->from($from)->first();
 
-        $columns                  = Tbl_columns::user($user_id)->shop($shop_id)->first();
-
-        if (!count($columns) > 0) 
+        if (count($columns) > 0) 
         {
-            
+            Tbl_columns::user($user_id)->shop($shop_id)->from($from)->update($insert);
+        }
+        else
+        {
+            $insert["shop_id"]      = $shop_id;
+            $insert["user_id"]      = $user_id;
+            $insert["columns_from"] = $from;
+            Tbl_columns::insert($insert);
         }
 
         return true;
+    }
+
+    public static function checkColumns($shop_id, $user_id, $from)
+    {
+        $columns = Tbl_columns::user($user_id)->shop($shop_id)->from($from)->first();
+        if (isset($columns->columns_data) && is_serialized($columns->columns_data)) 
+        {
+            $temp_columns = unserialize($columns->columns_data);
+        }
+        else
+        {
+            $temp_columns = [];
+        }
+
+        $css = '<style type="text/css">';
+
+        foreach ($temp_columns as $key => $value) 
+        {
+            if ($value["checked"] == false) 
+            {
+                $css .= '.table tr > *:nth-child('.($key+1).'){display: none;}';
+            }
+        }
+
+        $css .= '</style>';
+
+        return $css;
     }
 }

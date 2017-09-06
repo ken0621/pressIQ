@@ -63,6 +63,23 @@ function page_list()
     // $nav[$page]['submenu'][$code]['developer'] = "Erwin Guevara";
 
     /* E-COMMERCE */
+    $page = "cashier";  
+    $nav[$page]['name'] = "Cashier";
+    $nav[$page]['segment'] = $page;
+    $nav[$page]['icon'] = "calculator";
+    $nav[$page]['type']     = "menu";
+
+    /* -- E-COMMERCE => PRODUCT ORDERS */
+    $code = "cashier-pos";
+    $nav[$page]['submenu'][$code]['label'] = "Point of Sale";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/pos";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "90% Working";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Erwin Guevara</span>";  
+
+
+    /* E-COMMERCE */
     $page = "ecommerce";  
     $nav[$page]['name'] = "E-Commerce";
     $nav[$page]['segment'] = $page;
@@ -159,106 +176,17 @@ function page_list()
     $nav[$page]['icon'] = "braille";
     $nav[$page]['type']     = "menu";
     
-    /* -- MLM => MEMBERSHIP */
-    $code = "mlm-membership";
-    $nav[$page]['submenu'][$code]['label'] = "Membership";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/membership";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','create_new_membership','edit_membership', 'delete_membership'];
-    $nav[$page]['submenu'][$code]['status'] = "Working 100% - Not Tested Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Luke Glenn Jordan</span>";
 
-    /* -- MLM => MEMBERSHIP CODES */
-    $code = "mlm-membership-codes";
-    $nav[$page]['submenu'][$code]['label'] = "Membership Codes";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/code";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page', 'view_receipt', 'sell_codes'];
-    $nav[$page]['submenu'][$code]['status'] = "Layout Only";
-    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Luke Glenn Jordan</span>";
-
-    /* -- MLM => MEMBERSHIP CODES */
-    $code = "mlm-membership-claim-voucher";
-    $nav[$page]['submenu'][$code]['label'] = "Claim Voucher";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/claim_voucher";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page', 'claim'];
-    $nav[$page]['submenu'][$code]['status'] = "Layout Only";
-    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: blue'>Luke Glenn Jordan</span>";
 
     /* -- MLM => SLOTS */
     $code = "mlm-slots";
-    $nav[$page]['submenu'][$code]['label'] = "Customer Slots";
+    $nav[$page]['submenu'][$code]['label'] = "Reward Slots";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/slot";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Layout Only";
-    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Luke Glenn Jordan</span>";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Everyone</span>";
     
-    /* -- MLM => MARKETING PLAN */
-    $code = "mlm-plan";
-    $nav[$page]['submenu'][$code]['label'] = "Marketing Plan";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/plan";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page', 'configure_plan'];
-    $nav[$page]['submenu'][$code]['status'] = "Layout (50%)";
-    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Luke Glenn Jordan</span>";
-    
-    $code = "mlm-product-points";
-    $nav[$page]['submenu'][$code]['label'] = "Product Points";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/product";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "Layout (0%)";
-    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: blue'>Luke Glenn Jordan</span>"; 
-
-    $code = "mlm-product-discount";
-    $nav[$page]['submenu'][$code]['label'] = "Product Discount";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/product/discount";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "Layout (0%)";
-    $nav[$page]['submenu'][$code]['developer'] = "Luke Glenn Jordan";   
-
-    $code = "mlm-product-code";
-    $nav[$page]['submenu'][$code]['label'] = "Product Code";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/product_code";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page', 'product_code_reciept', 'product_code_sell_codes', 'see_all_invoice'];
-    $nav[$page]['submenu'][$code]['status'] = "Layout (0%)";
-    $nav[$page]['submenu'][$code]['developer'] = "Erwin Guevara";
-
-    $code = "mlm-wallet-refill";
-    $nav[$page]['submenu'][$code]['label'] = "E-Wallet";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/wallet";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page', 'wallet_refill', 'wallet_adjust', 'wallet_transfer'];
-    $nav[$page]['submenu'][$code]['status'] = "Layout (0%)";
-    $nav[$page]['submenu'][$code]['developer'] = "Luke Glenn Jordan";
-
-    $code = "mlm-wallet-encashment";
-    $nav[$page]['submenu'][$code]['label'] = "Encashment";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/encashment";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "Layout (0%)";
-    $nav[$page]['submenu'][$code]['developer'] = "Luke Glenn Jordan";
-
-    $code = "mlm-report";
-    $nav[$page]['submenu'][$code]['label'] = "Report";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/report";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "Layout (0%)";
-    $nav[$page]['submenu'][$code]['developer'] = "Luke Glenn Jordan";
-
-    $code = "mlm-slot-card";
-    $nav[$page]['submenu'][$code]['label'] = "Slot Cards";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/card";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "Layout (0%)";
-    $nav[$page]['submenu'][$code]['developer'] = "Luke Glenn Jordan";
 
     $code = "mlm-stairstep-compute";
     $nav[$page]['submenu'][$code]['label'] = "Distribute Stairstep";
@@ -269,13 +197,153 @@ function page_list()
     $nav[$page]['submenu'][$code]['developer'] = "Erwin Guevarra";
 
 
-    $code = "mlm-complan-setup";
-    $nav[$page]['submenu'][$code]['label'] = "Other Settings";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/complan_setup";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "Layout (0%)";
-    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: blue'>Luke Glenn Jordan</span>";
+    // $code = "mlm-product-repurchase-points";
+    // $nav[$page]['submenu'][$code]['label'] = "Product Repurchase";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/product/repurchase/points";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    // $nav[$page]['submenu'][$code]['status'] = "Layout (0%)";
+    // $nav[$page]['submenu'][$code]['developer'] = "Erwin Guevara";
+  
+
+    /* REWARD CONFIG */
+    $segment = "submenu-mlm-transaction";
+    $nav[$page]['submenu'][$segment]['name']   = "Transaction";
+    $nav[$page]['submenu'][$segment]['segment']= $segment;
+    $nav[$page]['submenu'][$segment]['type']   = "submenu";
+
+
+        /* -- MLM => MEMBERSHIP CODES */
+        $code = "mlm-membership-claim-voucher";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Claim Voucher";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/claim_voucher";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page', 'claim'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout Only";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "<span style='color: blue'>Everyone</span>";
+
+        $code = "mlm-report";
+        $nav[$page]['submenu'][$code]['label'] = "Reports";
+        $nav[$page]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$code]['url'] = $path . $page . "/report";
+        $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$code]['status'] = "Layout (0%)";
+        $nav[$page]['submenu'][$code]['developer'] = "Luke Glenn Jordan";
+
+        $code = "mlm-wallet-encashment";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Payout Releasing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/encashment";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
+
+        $code = "mlm-report";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Report";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/report";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
+
+        $code = "mlm-slot-card";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Loyalty Cards";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/card";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
+
+        $code = "mlm-wallet-refill";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Wallet Adjustment";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/wallet";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page', 'wallet_refill', 'wallet_adjust', 'wallet_transfer'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
+
+
+        $code = "mlm-cutoff-distribution";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Cutoff Distribution";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/cutoff_distribution";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
+
+    /* REWARD CONFIG */
+    $segment = "submenu-mlm-codes";
+    $nav[$page]['submenu'][$segment]['name']   = "Reward Codes";
+    $nav[$page]['submenu'][$segment]['segment']= $segment;
+    $nav[$page]['submenu'][$segment]['type']   = "submenu";
+
+
+        /* -- MLM => MEMBERSHIP CODES */
+        $code = "mlm-membership-codes";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Membership Codes";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/code";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page', 'view_receipt', 'sell_codes'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout Only";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "<span style='color: green'>Everyone</span>";
+
+        $code = "mlm-product-code";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Product Code";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/product_code";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page', 'product_code_reciept', 'product_code_sell_codes', 'see_all_invoice'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Erwin Guevara";
+
+
+    /* REWARD CONFIG */
+    $segment = "submenu-reward-configuration";
+    $nav[$page]['submenu'][$segment]['name']   = "Reward Configuration";
+    $nav[$page]['submenu'][$segment]['segment']= $segment;
+    $nav[$page]['submenu'][$segment]['type']   = "submenu";
+
+        /* -- MLM => MEMBERSHIP  */
+        $code = "mlm-membership";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Membership";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/membership";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','create_new_membership','edit_membership', 'delete_membership'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Working 100% - Not Tested Yet";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "Everyone";
+
+
+        /* -- MLM => MARKETING PLAN */
+        $code = "mlm-plan";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Marketing Plan";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/plan";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page', 'configure_plan'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (50%)";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "<span style='color: green'>Everyone</span>";
+
+        $code = "mlm-complan-setup";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Other Settings";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/complan_setup";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "<span style='color: blue'>Everyone</span>";
+    
+        $code = "mlm-product-points";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Product Points";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/product";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "<span style='color: blue'>Everyone</span>"; 
+
+        $code = "mlm-product-discount";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Product Discount";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/product/discount";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
 
     $code = "mlm-developer";
     $nav[$page]['submenu'][$code]['label'] = "Testing Menu";
@@ -284,14 +352,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Layout (0%)";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: blue'>Guillermo Tabligan</span>";
-    // $code = "mlm-product-repurchase-points";
-    // $nav[$page]['submenu'][$code]['label'] = "Product Repurchase";
-    // $nav[$page]['submenu'][$code]['code'] = $code;
-    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/product/repurchase/points";
-    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    // $nav[$page]['submenu'][$code]['status'] = "Layout (0%)";
-    // $nav[$page]['submenu'][$code]['developer'] = "Erwin Guevara";
-    
+
     /* ACCOUNTING*/
     $page = "accounting"; 
     $nav[$page]['name'] = "Accounting";
@@ -360,6 +421,16 @@ function page_list()
     $nav[$page]['icon'] = "calculator";
     $nav[$page]['type']     = "menu";
 
+    /* -- EMPLOYEE=> LIST  */
+    $code = "company-list";
+    $nav[$page]['submenu'][$code]['label'] = "Company List";
+
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/company_list";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+
     /* -- EMPLOYEE POSITION=> LIST  */
     $code = "employee-list";
     $nav[$page]['submenu'][$code]['label'] = "Employee List";
@@ -379,6 +450,16 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','salary_rates','summary_details','salary_detail'];
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+
+
+    /* PAYROLL PROCESS */
+    $code = "payroll-process";
+    $nav[$page]['submenu'][$code]['label'] = "Payroll Process";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_process_module";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "Kim Briel Oraya";
     
 
 
@@ -391,15 +472,7 @@ function page_list()
     // $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     // $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
 
-    /* -- EMPLOYEE=> LIST  */
-    $code = "company-list";
-    $nav[$page]['submenu'][$code]['label'] = "Company List";
-
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/company_list";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+    
 
 
 
@@ -454,7 +527,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['label'] = "Payroll Configuration";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_configuration";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','Branch_Location','Department','Job_Title','Holiday','Holiday_Default','Allowances','Allowances V2','Deductions','Leave','Payroll_Group', 'Shift_Template','Journal_Tags','Payslip','Tax_Period','Tax_Table','SSS_Table','Philhealth_Table','Pagibig/HDMF'];
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','Branch_Location','Department','Job_Title','Holiday','Holiday_Default','Holiday Employee','Allowances','Allowances V2','Deductions','Deductions V2','Leave','Payroll_Group', 'Shift_Template','Journal_Tags','Payslip','Tax_Period','Tax_Table','SSS_Table','Philhealth_Table','Pagibig/HDMF'];
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
     
@@ -476,17 +549,6 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
 
-
-
-
-    // /* PAYROLL PROCESS */
-    // $code = "payroll-process";
-    // $nav[$page]['submenu'][$code]['label'] = "Payroll Processing";
-    // $nav[$page]['submenu'][$code]['code'] = $code;
-    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_process";
-    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    // $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    // $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
 
     // /* PAYROLL REGISTER */
     // $code = "payroll-register";
@@ -530,6 +592,25 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "Everyone";
+
+         /* -- REPORT => PRODUCTS  */
+        $code = "payroll-report-loan-summary";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Loan Summary";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/reports/loan_summary";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "Everyone";
+
+         /* -- REPORT => PRODUCTS  */
+        $code = "payroll-register-report";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Payroll Register Report";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/reports/payroll_register_report";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "Everyone";
+
 
 
     /* PAYROLL API */
@@ -596,8 +677,17 @@ function page_list()
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','add_auto_approve', 'can_approve_item_request', 'can_edit_other_item'];
-    $nav[$page]['submenu'][$code]['status'] = "Still developing";
+    $nav[$page]['submenu'][$code]['status'] = "100% DONE";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Erwin</span>";
+
+    $code = "item-list-v2";
+    $nav[$page]['submenu'][$code]['label'] = "Item List V2";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/v2";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','add_auto_approve', 'can_approve_item_request', 'can_edit_other_item'];
+    $nav[$page]['submenu'][$code]['status'] = "Still developing";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";
+
 
     /* -- ITEM => ITEM CATEGORIES  */
     $code = "item-categories";
@@ -844,7 +934,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['url'] = $path . "merchant" . "/markup";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "";
-    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: blue'>Luke Glenn Jordan</span>";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: blue'>Everyone</span>";
 
     $code = "merchant-report";
     $nav[$page]['submenu'][$code]['label'] = "Report";
@@ -852,7 +942,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['url'] = $path . "merchant" . "/report";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "";
-    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: blue'>Luke Glenn Jordan</span>";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: blue'>Everyone</span>";
 
     $code = "merchant-commission";
     $nav[$page]['submenu'][$code]['label'] = "Commission";
@@ -860,7 +950,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['url'] = $path . "merchant" . "/commission";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "";
-    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: blue'>Luke Glenn Jordan</span>";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: blue'>Everyone</span>";
 
     $code = "merchant-ewallet";
     $nav[$page]['submenu'][$code]['label'] = "E-Wallet";
@@ -868,7 +958,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['url'] = $path . "merchant" . "/ewallet";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "";
-    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: blue'>Luke Glenn Jordan</span>";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: blue'>Everyone</span>";
 
 
     /* VENDORS */
@@ -1061,7 +1151,7 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/accounting/sale_by_warehouse";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Developing";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Luke Glenn Jordan";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
 
         $code = "report-profit-and-loss-account";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Profit and Loss";
@@ -1146,6 +1236,14 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "Working 100%";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Edward Guevarra</span>";
     
+    $code = "page-partner";
+    $nav[$page]['submenu'][$code]['label'] = "Partners";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/partnerview";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>James Omosora</span>";
+
     $code = "page-list";
     $nav[$page]['submenu'][$code]['label'] = "Page Information";
     $nav[$page]['submenu'][$code]['code'] = $code;
@@ -1153,6 +1251,22 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";
+
+    // $code = "page-partnerview";
+    // $nav[$page]['submenu'][$code]['label'] = "partnerview";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/partnerview";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    // $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    // $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>James Omosora</span>";
+
+    // $code = "page-partnerviewedit";
+    // $nav[$page]['submenu'][$code]['label'] = "partnerviewedit";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/partnerviewedit";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    // $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    // $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>James Omosora</span>";
     
     /* -- MANAGE CONTENT => CONTACT INFORMATION */
     $code = "page-contact";
@@ -1356,7 +1470,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/reset_slot";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Developing";
-    $nav[$page]['submenu'][$code]['developer'] = "Luke Glenn Jordan";
+    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
     
     return $nav;
 }

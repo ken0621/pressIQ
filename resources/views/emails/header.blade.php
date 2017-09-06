@@ -7,11 +7,11 @@
                         <td style="width: 180px">
                         @if(isset($message))
                             @if($template->header_image)
-                                <img src="<?php echo $message->embed(url().$template->header_image); ?>">
+                                <img src="<?php echo $message->embed(URL::to('/').$template->header_image); ?>">
                             @endif
                         @else
                             @if($template->header_image)
-                                <img src="<?php echo url().$template->header_image; ?>">
+                                <img src="<?php echo URL::to('/').$template->header_image; ?>">
                             @endif
                         @endif
                         </td>

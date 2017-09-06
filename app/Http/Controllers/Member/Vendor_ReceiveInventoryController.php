@@ -164,7 +164,7 @@ class Vendor_ReceiveInventoryController extends Member
                 $item_info[$key]['itemline_rate']         = str_replace(",","", Request::input('itemline_rate')[$key]);
                 $item_info[$key]['itemline_amount']       = str_replace(",","", Request::input('itemline_amount')[$key]);
             
-                $item_type = Tbl_item::where("item_id",Request::input('itemline_item_id')[$key])->pluck("item_type_id");
+                $item_type = Tbl_item::where("item_id",Request::input('itemline_item_id')[$key])->value("item_type_id");
                 if($item_type == 4 || $item_type == 1)
                 {
                     $um_qty = UnitMeasurement::um_qty(Request::input("itemline_um")[$key]);
@@ -206,7 +206,7 @@ class Vendor_ReceiveInventoryController extends Member
                  $i = null;
                  foreach ($_itemline as $keyitemline => $valueitemline)
                  {
-                    $type = Tbl_item::where("item_id",Request::input("itemline_item_id")[$keyitemline])->pluck("item_type_id");
+                    $type = Tbl_item::where("item_id",Request::input("itemline_item_id")[$keyitemline])->value("item_type_id");
                     if($type == 4)
                     {
                         if(Request::input("itemline_item_id")[$keyitemline] == $value_items['product_id'])
@@ -334,7 +334,7 @@ class Vendor_ReceiveInventoryController extends Member
                 $item_info[$key]['itemline_rate']         = str_replace(",","", Request::input('itemline_rate')[$key]);
                 $item_info[$key]['itemline_amount']       = str_replace(",","", Request::input('itemline_amount')[$key]);
 
-                $item_type = Tbl_item::where("item_id",Request::input('itemline_item_id')[$key])->pluck("item_type_id");
+                $item_type = Tbl_item::where("item_id",Request::input('itemline_item_id')[$key])->value("item_type_id");
                 if($item_type == 4 || $item_type == 1)
                 {
                     $um_qty = UnitMeasurement::um_qty(Request::input("itemline_um")[$key]);
@@ -376,7 +376,7 @@ class Vendor_ReceiveInventoryController extends Member
                  $i = null;
                  foreach ($_itemline as $keyitemline => $valueitemline)
                  {
-                    $type = Tbl_item::where("item_id",Request::input("itemline_item_id")[$keyitemline])->pluck("item_type_id");
+                    $type = Tbl_item::where("item_id",Request::input("itemline_item_id")[$keyitemline])->value("item_type_id");
                     if($type == 4)
                     {
                         if(Request::input("itemline_item_id")[$keyitemline] == $value_items['product_id'])

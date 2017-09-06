@@ -4,6 +4,6 @@
 		<h4 class="modal-title">AN ERROR OCCURED</h4>
 	</div>
 	<div class="modal-body clearfix">
-		{{ $message }}
+		<h3>{!! $message !!}</h3>
 	</div>
 </form>

@@ -21,10 +21,11 @@
 		<div class="form-group">
 			<div class="col-md-6">
 				<small>Type</small>
-				<select class="form-control" name="payroll_allowance_type" required="">
+				<select class="form-control payroll-allowance-type" name="payroll_allowance_type" required="">
 					<option value="">Select Type</option>
 					<option value="fixed">fixed</option>
 					<option value="daily">daily</option>
+					<option value="pro_rated">pro rated</option>
 				</select>
 			</div>
 			<div class="col-md-6">
@@ -37,6 +38,56 @@
 				</select>
 			</div>
 		</div>
+
+		<div class="form-group actual-gross-pay hidden">
+			<div class="col-md-12">
+				<small>Actual Gross Pay</small>
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="row">
+
+							<div class="col-md-4">
+								<div class="checkbox">
+									<label><input type="checkbox" name="actual_gross_pay[]" value="basic_pay">Basic Pay</label>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="checkbox">
+									<label><input type="checkbox" name="actual_gross_pay[]" value="cola">COLA</label>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="checkbox">
+									<label><input type="checkbox" name="actual_gross_pay[]" value="over_time_pay">Over Time Pay</label>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="checkbox">
+									<label><input type="checkbox" name="actual_gross_pay[]" value="regular_holiday_pay">Regular Holiday Pay</label>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="checkbox">
+									<label><input type="checkbox" name="actual_gross_pay[]" value="special_holiday_pay">Special Holiday Pay</label>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="checkbox">
+									<label><input type="checkbox" name="actual_gross_pay[]" value="leave_pay">Leave Pay</label>
+								</div>
+							</div>
+
+						</div>				
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<div class="form-group">
 			<div class="col-md-12">
 				<small>Add Every</small>

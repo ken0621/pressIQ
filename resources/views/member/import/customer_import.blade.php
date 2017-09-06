@@ -61,6 +61,8 @@
                     <tr>
                         <th>Status</th>
                         <th>Description</th>
+                        <th>Username</th>
+                        <th>Password</th>
                         <th>Title Name</th>
                         <th>First Name</th>
                         <th>Middle Name</th>

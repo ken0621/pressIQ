@@ -46,7 +46,7 @@ class Warehouse
             $warehouse_bundle_qty = [];
             foreach ($bundle_item as $key_bundle => $value_bundle) 
             {
-               $warehouse_qty = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value_bundle->bundle_item_id)->pluck('inventory_count');      
+               $warehouse_qty = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value_bundle->bundle_item_id)->value('inventory_count');      
 
                $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty;
 
@@ -238,7 +238,7 @@ class Warehouse
         $ins_access["warehouse_id"] = $warehouse_id;
         Tbl_user_warehouse_access::insert($ins_access);
 
-        $user_position = Tbl_user::position()->where("user_id",Warehouse::getUserid())->pluck("position_rank");
+        $user_position = Tbl_user::position()->where("user_id",Warehouse::getUserid())->value("position_rank");
 
         $all_user = Tbl_user::position()->where("user_shop",Warehouse::getShopId())->where("user_id","!=", Warehouse::getUserid())->where("tbl_user.archived",0)->get();
 
@@ -276,7 +276,7 @@ class Warehouse
         foreach ($data as $key => $value) 
         {
             $data[$key]->serial_number_list = Tbl_inventory_serial_number::where("serial_inventory_id",$value->inventory_id)->get();
-            $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",0)->pluck("multi_id");
+            $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",0)->value("multi_id");
             $qty = $value->inventory_count < 0 ? abs($value->inventory_count) : $value->inventory_count;
             $sign = $value->inventory_count < 0 ? '- ' : '';
             $data[$key]->qty_um = $sign . UnitMeasurement::um_view($qty,$value->item_measurement_id,$um_issued);
@@ -291,7 +291,7 @@ class Warehouse
     						 ->paginate(10);
         foreach($data as $key => $value)
         {   //cycy
-            $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$value->product_um)->where("is_base",0)->pluck("multi_id");
+            $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$value->product_um)->where("is_base",0)->value("multi_id");
             $data[$key]->product_qty_um = UnitMeasurement::um_view($value->product_current_qty,$value->product_um,$um_issued);
             $data[$key]->product_reorderqty_um = UnitMeasurement::um_view($value->product_reorder_point,$value->product_um,$um_issued);
 
@@ -318,7 +318,7 @@ class Warehouse
                              
         foreach($data as $key => $value)
         {   //cycy
-            $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$value->product_um)->where("is_base",0)->pluck("multi_id");
+            $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$value->product_um)->where("is_base",0)->value("multi_id");
             $data[$key]->product_qty_um = UnitMeasurement::um_view($value->product_current_qty,$value->product_um,$um_issued);
             $data[$key]->product_reorderqty_um = UnitMeasurement::um_view($value->product_reorder_point,$value->product_um,$um_issued);
         }           
@@ -357,7 +357,7 @@ class Warehouse
     public static function getUserid()
     {
         $user_id = 0;
-        $user_data = Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_id');
+        $user_data = Tbl_user::where("user_email", session('user_email'))->shop()->value('user_id');
         if($user_data)
         {
             $user_id = $user_data;
@@ -430,7 +430,7 @@ class Warehouse
         foreach($_info as $key => $info)
         {
             /**/ 
-            $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($source_id, $info['product_id'])->pluck('inventory_count');
+            $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($source_id, $info['product_id'])->value('inventory_count');
             
             if($info['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $info['quantity']) 
             {
@@ -530,7 +530,7 @@ class Warehouse
 
         foreach($transaction_item_inventory as $key2 => $value2)
         {            
-            $count = Tbl_warehouse_inventory::check_inventory_single($inventory_slip->warehouse_id, $value2['product_id'])->pluck('inventory_count');
+            $count = Tbl_warehouse_inventory::check_inventory_single($inventory_slip->warehouse_id, $value2['product_id'])->value('inventory_count');
             $count_on_hand = $count + $value2["quantity"];
 
             if($allow_out_of_stock == true)
@@ -821,10 +821,10 @@ class Warehouse
         $err_msg = "";
         foreach($consume_product as $key => $product)
         {
-            $item_type = Tbl_item::where("item_id",$product['product_id'])->pluck("item_type_id");
+            $item_type = Tbl_item::where("item_id",$product['product_id'])->value("item_type_id");
             if($item_type == 1) //inventory
             {
-                $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $product['product_id'])->pluck('inventory_count');
+                $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $product['product_id'])->value('inventory_count');
                 if($count_on_hand == null)
                 {
                     $count_on_hand = 0;   
@@ -904,7 +904,7 @@ class Warehouse
     public static function get_shop_id($warehouse_id = 0)
     {
 
-        $data = Tbl_warehouse::where('warehouse_id',$warehouse_id)->pluck('warehouse_shop_id');
+        $data = Tbl_warehouse::where('warehouse_id',$warehouse_id)->value('warehouse_shop_id');
         return $data;
     }
     public static function insert_item($from_warehouse_id, $to_warehouse_id)
@@ -984,16 +984,16 @@ class Warehouse
 
     public static function getMainwarehouse()
     {
-        return Tbl_warehouse::where("warehouse_shop_id",Warehouse::getShopId())->where("main_warehouse",1)->pluck("warehouse_id");
+        return Tbl_warehouse::where("warehouse_shop_id",Warehouse::getShopId())->where("main_warehouse",1)->value("warehouse_id");
     }
     public static function getShopId()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
     public static function mainwarehouse_for_developer($user_id, $shop_id)
     {
         $_warehouse     = Tbl_warehouse::where("warehouse_shop_id", $shop_id)->get();
-        $warehouse_id   = collect($_warehouse)->where("main_warehouse", 1)->first()->pluck("warehouse_id");
+        $warehouse_id   = collect($_warehouse)->where("main_warehouse", 1)->first()->value("warehouse_id");
         $user           = Tbl_user::where("user_id", $user_id)->first();
         
         if($user->user_level == 1)

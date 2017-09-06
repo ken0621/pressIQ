@@ -22,10 +22,12 @@
 		<div class="form-group">
 			<div class="col-md-6">
 				<small>Type</small>
-				<select class="form-control" name="payroll_allowance_type" required="">
+				<select class="form-control payroll-allowance-type" name="payroll_allowance_type" required="">
 					<option value="">Select Type</option>
 					<option value="fixed" {{ ($allowance->payroll_allowance_type=='fixed') ? 'selected' : '' }}>fixed</option>
 					<option value="daily" {{ ($allowance->payroll_allowance_type=='daily') ? 'selected' : '' }}>daily</option>
+					<option value="pro_rated" {{ ($allowance->payroll_allowance_type=='pro_rated') ? 'selected' : '' }}>pro rated</option>
+
 				</select>
 			</div>
 			<div class="col-md-6">
@@ -38,6 +40,57 @@
 				</select>
 			</div>
 		</div>
+
+		<div class="form-group actual-gross-pay hidden">
+			<div class="col-md-12">
+				<small>Actual Gross Pay</small>
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="row">
+
+							<div class="col-md-4">
+								<div class="checkbox">
+									<label><input type="checkbox" name="actual_gross_pay[]" value="basic_pay" {{($allowance->basic_pay==1) ? 'checked':''}}>Basic Pay</label>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="checkbox">
+									<label><input type="checkbox" name="actual_gross_pay[]" value="cola" {{($allowance->cola==1) ? 'checked':''}}>COLA</label>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="checkbox">
+									<label><input type="checkbox" name="actual_gross_pay[]" value="over_time_pay" {{($allowance->over_time_pay==1) ? 'checked':''}}>Over Time Pay</label>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="checkbox">
+									<label><input type="checkbox" name="actual_gross_pay[]" value="regular_holiday_pay" {{($allowance->regular_holiday_pay==1) ? 'checked':''}}>Regular Holiday Pay</label>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="checkbox">
+									<label><input type="checkbox" name="actual_gross_pay[]" value="special_holiday_pay" {{($allowance->special_holiday_pay==1) ? 'checked':''}}>Special Holiday Pay</label>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="checkbox">
+									<label><input type="checkbox" name="actual_gross_pay[]" value="leave_pay" {{($allowance->leave_pay==1) ? 'checked':''}}>Leave Pay</label>
+								</div>
+							</div>
+
+						</div>				
+					</div>
+				</div>
+			</div>
+		</div>
+
+
 		<div class="form-group">
 			<div class="col-md-12">
 				<small>Add Every</small>

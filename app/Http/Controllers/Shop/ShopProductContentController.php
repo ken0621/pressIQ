@@ -74,7 +74,20 @@ class ShopProductContentController extends Shop
             $data["_variant"]    = Ecom_Product::getProductOption($id, ",");
             $data["_related"]    = Ecom_Product::getAllProductByCategory($data["product"]["eprod_category_id"], $this->shop_info->shop_id);
             $data["wishlist"]    = $this->wishlist_exist($id);
-          
+            
+            if ($this->shop_theme == "3xcell") 
+            {
+                $get_cat = DB::table("tbl_category")->where("type_shop", $this->shop_info->shop_id)->where("type_name", "Business Packages")->where("archived", 0)->first();
+                if (isset($get_cat->type_id)) 
+                {
+                    $data["_package"] = Ecom_Product::getAllProductByCategory($get_cat->type_id, $this->shop_info->shop_id);
+                }
+                else
+                {
+                    $data["_package"] = [];
+                }
+            }
+
             foreach ($data["_related"] as $key => $value) 
             {
                 if ($value["eprod_id"] == $data["product"]["eprod_id"]) 
@@ -119,7 +132,7 @@ class ShopProductContentController extends Shop
 
                 $data["product"]["variant"][$keys]["variant_image"] = Ecom_Product::getVariantImage($values["evariant_id"])->toArray();
             }
-
+            // dd($data["product"]);
             return view("product_content", $data);
         }
     }

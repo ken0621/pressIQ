@@ -74,7 +74,7 @@ class Merchant
     }
     public static function ismerchant()
     {
-        $ismerchant = Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_is_merchant');
+        $ismerchant = Tbl_user::where("user_email", session('user_email'))->shop()->value('user_is_merchant');
         if(!$ismerchant){
             $ismerchant = 0;
         }
@@ -83,7 +83,7 @@ class Merchant
     }
     public static function getuserid()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_id');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_id');
     }
     public static function set_per_piece_mark_up($item, $user, $mark_up_percentage = null)
     {

@@ -145,8 +145,14 @@ class Mlm_slot_log
 		{
 			$insert['points_log_leve_end'] = $array['points_log_leve_end'];
 		}
-
-		Tbl_mlm_slot_points_log::insert($insert);
+		if($insert['points_log_type'] == "SGPV" || $insert['points_log_type'] == "SPV" || $insert['points_log_type'] == "RPV" || $insert['points_log_type'] == "RGPV")
+		{
+			return Tbl_mlm_slot_points_log::insertGetId($insert);
+		}
+		else
+		{
+			Tbl_mlm_slot_points_log::insert($insert);
+		}
 	}
 	public static function log_constructor($earner, $sponsor,  $log_array)
 	{
@@ -165,7 +171,7 @@ class Mlm_slot_log
 	{
 		$label = Tbl_mlm_plan::where('marketing_plan_code', $complan)
 					->where('shop_id', $shop_id)
-					->pluck('marketing_plan_label');
+					->value('marketing_plan_label');
 		return $label;			
 	}
 

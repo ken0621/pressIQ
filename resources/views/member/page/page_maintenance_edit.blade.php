@@ -20,6 +20,14 @@
 				<label>{{ ucwords(str_replace('_', ' ', $fields->name)) }}</label>
 				@if($fields->type == "textarea")
 					<textarea class="form-control mce" name="{{ $fields->name }}">{{ $edit[$fields->name] }}</textarea>
+				@elseif($fields->type == "image_gallery")
+					<input type="hidden" value="{{ $edit[$fields->name] }}" name="{{ $fields->name }}" class="maintenance-image-input" key="{{ $key }}-{{ $fields->type }}-{{ $fields->name }}">
+					<div class="maintenance-image-multiple-holder" key="{{ $key }}-{{ $fields->type }}-{{ $fields->name }}">
+						@foreach(json_decode($edit[$fields->name]) as $multiple)
+							<img src="{{ $multiple->image_path }}">
+						@endforeach
+					</div>
+					<div><button class="image-gallery btn btn-primary" key="{{ $key }}-{{ $fields->type }}-{{ $fields->name }}"> Upload Image</button></div>
 				@elseif($fields->type == "textbox")
 					<textarea class="form-control" name="{{ $fields->name }}">{{ $edit[$fields->name] }}</textarea>
 				@elseif($fields->type == "image")
@@ -28,6 +36,8 @@
 						<img src="{{ $edit[$fields->name] }}">
 					</div>
 					<div><button class="image-gallery image-gallery-single btn btn-primary" key="{{ $key }}-{{ $fields->type }}-{{ $fields->name }}"> Upload Image</button></div>
+				@elseif($fields->type == "timestamp")
+					<input type="hidden" name="{{ $fields->name }}" value="{{ $edit[$fields->name] }}">
 				@elseif($fields->type == "map")
 					<div class="map-info">{{ $edit["address"] }}</div>
 					<div id="map" style="height: 300px;"></div>

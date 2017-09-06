@@ -109,7 +109,7 @@ class OnlinePaymentMethodController extends Member
 		}
 
 
-		$api_id = Tbl_online_pymnt_api::where("api_shop_id", $data["api_shop_id"])->where("api_gateway_id", $data["api_gateway_id"])->pluck("api_id");
+		$api_id = Tbl_online_pymnt_api::where("api_shop_id", $data["api_shop_id"])->where("api_gateway_id", $data["api_gateway_id"])->value("api_id");
 		
 		if($api_id)
 		{
@@ -199,7 +199,7 @@ class OnlinePaymentMethodController extends Member
 
 	public function getShopId()
 	{
-		return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+		return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
 	}
 
 	public function getModalMethodList()

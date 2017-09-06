@@ -55,13 +55,13 @@ class ChartOfAccountController extends Member
         if(Request::input('is_sub_account') == "on")
         {
             $parent_id                      = Request::input('account_parent_id');
-            $sub_level                      = Tbl_chart_of_account::where("account_id", $parent_id)->pluck("account_sublevel");
+            $sub_level                      = Tbl_chart_of_account::where("account_id", $parent_id)->value("account_sublevel");
             $data['account_parent_id']      = $parent_id;
             $data['account_sublevel']       = $sub_level + 1;
         }
         
         /* IF THE ACCOUNT TYPE HAS OPEN BALANCE FIELD */
-        if(Tbl_chart_account_type::where("chart_type_id", Request::input('account_type_id'))->pluck("has_open_balance") == 1)
+        if(Tbl_chart_account_type::where("chart_type_id", Request::input('account_type_id'))->value("has_open_balance") == 1)
         {
             $data['account_open_balance']       = Request::input('account_open_balance');
             $data['account_open_balance_date']  = date_format(date_create(Request::input('account_open_balance_date')) ,"Y/m/d");
@@ -76,7 +76,7 @@ class ChartOfAccountController extends Member
         // $rules['account_open_balance_date']  = "required";
 
         /* IF DUPLICATION OF ACCOUNT NAME */
-        $account_name = Tbl_chart_of_account::where("account_shop_id", $this->user_info->shop_id)->where("account_name", $data['account_name'])->pluck("account_name"); 
+        $account_name = Tbl_chart_of_account::where("account_shop_id", $this->user_info->shop_id)->where("account_name", $data['account_name'])->value("account_name"); 
         
         $validator = Validator::make($data, $rules);
 
@@ -98,7 +98,7 @@ class ChartOfAccountController extends Member
         $account_id = Tbl_chart_of_account::insertGetId($data);
 
         /* JOURNAL ENTRY FOR OPENING BALANCE */
-        if(Tbl_chart_account_type::where("chart_type_id", Request::input('account_type_id'))->pluck("has_open_balance") == 1)
+        if(Tbl_chart_account_type::where("chart_type_id", Request::input('account_type_id'))->value("has_open_balance") == 1)
         {
             if($data['account_open_balance'] > 0)
             {
@@ -138,7 +138,7 @@ class ChartOfAccountController extends Member
         if(Request::input('is_sub_account') == "on")
         {
             $parent_id                      = Request::input('account_parent_id');
-            $sub_level                      = Tbl_chart_of_account::where("account_id", $parent_id)->pluck("account_sublevel");
+            $sub_level                      = Tbl_chart_of_account::where("account_id", $parent_id)->value("account_sublevel");
             $data['account_parent_id']      = $parent_id;
             $data['account_sublevel']       = $sub_level + 1;
         }
@@ -149,7 +149,7 @@ class ChartOfAccountController extends Member
         $rules['account_sublevel']          = "required";
         
         /* IF DUPLICATION OF ACCOUNT NAME */
-        $account_name = Tbl_chart_of_account::where("account_shop_id", $this->user_info->shop_id)->where("account_name", $data['account_name'])->where("account_id","<>",$account_id)->pluck("account_name");
+        $account_name = Tbl_chart_of_account::where("account_shop_id", $this->user_info->shop_id)->where("account_name", $data['account_name'])->where("account_id","<>",$account_id)->value("account_name");
 
         $validator = Validator::make($data, $rules);
 

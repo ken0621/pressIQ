@@ -7,7 +7,7 @@
 				<div class="col-md-6">
 					<!-- PRODUCT IMAGE -->
 					<div class="prod-image-container">
-						<img src="/themes/{{ $shop_theme }}/img/item-sample.png">
+						<img class="single-product-img" src="{{ get_product_first_image($product) }}">
 					</div>
 					<!-- PRODUCT DESCRIPTION -->
 					<div class="prod-description-container">
@@ -18,29 +18,29 @@
 						</div>
 						<div class="prod-description">
 							<p>
-								FitPro– “The Sexy Pill’’ The long wait is over! Achieve your weight the healthiest way. FitPro is developed to provide health conscious individuals to attain their desired weight naturally. Scientifically studied for their curative properties in combating and expelling the toxins from the body, combinations of herbs were selected. FitPro is found to be effective in: Helping fight obesity, Working as a natural appetite suppressant while keeping the body in active condition. Acting as an anti-oxidant that promotes healthy skin. Lose weight like a Pro with FitPro.
+								{!! get_product_first_description($product) !!}
 							</p>
 						</div>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="purchase-details-container">
-						<div class="product-name-container">3XCELL Fit Proprietary Herbal Blend Food Supplement Tablets<div class="line-bot"></div></div>
-						<div class="product-price">PHP 200.00</div>
+						<div class="product-name-container">{{ get_product_first_name($product) }}<div class="line-bot"></div></div>
+						<div class="product-price">{{ get_product_first_price($product) }}</div>
 						<div class="product-quantity">
 							<div class="info-title">
 								Quantity
 							</div>
-							<input class="input-quantity" type="number" name="quantity" min="1" step="1" value="1">
+							<input class="input-quantity" variant-id="{{ $product['variant'][0]['evariant_id'] }}" type="number" name="quantity" min="1" step="1" value="1">
 						</div>
-						<div class="add-to-cart-button"><span><i class="fa fa-cart-plus" aria-hidden="true"></i></span>&nbsp;&nbsp;<span>ADD TO CART</span></div>
-						<div class="share-product">
+						<div class="add-to-cart-button" variant-id="{{ $product['variant'][0]['evariant_id'] }}"><span><i class="fa fa-cart-plus" aria-hidden="true"></i></span>&nbsp;&nbsp;<span>ADD TO CART</span></div>
+						<!-- <div class="share-product">
 							<div class="info-title">Share This Product</div>
 							<div class="share-button-container">
 								<div class="share-button"><span><i class="fa fa-facebook" aria-hidden="true"></i></span><span>&nbsp;Facebook</span></div>
 								<div class="share-button"><span><i class="fa fa-twitter" aria-hidden="true"></i></span><span>&nbsp;Twitter</span></div>
 							</div>
-						</div>
+						</div> -->
 					</div>
 				</div>
 			</div>
@@ -56,62 +56,22 @@
 				</div>
 				<div class="per-item-container row clearfix">
 					<!-- PER ITEM -->
+					@foreach(limit_foreach($_related, 4) as $related)
 					<div class="col-md-3">
 						<div class="per-item">
 							<div class="image-container">
-								<img src="/themes/{{ $shop_theme }}/img/item-sample.png">
+								<img src="{{ get_product_first_image($related) }}">
 							</div>
 							<div class="detail-container">
 								<div class="item-name">
-									3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
+									{{ get_product_first_name($related) }}
 								</div>
-								<div class="price-container">PHP 250.00</div>
+								<div class="price-container">PHP {{ get_product_first_price($related) }}</div>
 								<div class="button-container">SHOP NOW</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-3">
-						<div class="per-item">
-							<div class="image-container">
-								<img src="/themes/{{ $shop_theme }}/img/item-sample.png">
-							</div>
-							<div class="detail-container">
-								<div class="item-name">
-									3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
-								</div>
-								<div class="price-container">PHP 250.00</div>
-								<div class="button-container">SHOP NOW</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="per-item">
-							<div class="image-container">
-								<img src="/themes/{{ $shop_theme }}/img/item-sample.png">
-							</div>
-							<div class="detail-container">
-								<div class="item-name">
-									3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
-								</div>
-								<div class="price-container">PHP 250.00</div>
-								<div class="button-container">SHOP NOW</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="per-item">
-							<div class="image-container">
-								<img src="/themes/{{ $shop_theme }}/img/item-sample.png">
-							</div>
-							<div class="detail-container">
-								<div class="item-name">
-									3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
-								</div>
-								<div class="price-container">PHP 250.00</div>
-								<div class="button-container">SHOP NOW</div>
-							</div>
-						</div>
-					</div>
+					@endforeach
 				</div>
 			</div>
 			<!-- PACKAGE -->
@@ -122,62 +82,22 @@
 				</div>
 				<div class="per-item-container row clearfix">
 					<!-- PER ITEM -->
+					@foreach(limit_foreach($_package, 4) as $package)
 					<div class="col-md-3">
 						<div class="per-item">
 							<div class="image-container">
-								<img src="/themes/{{ $shop_theme }}/img/sample-package.png">
+								<img src="{{ get_product_first_image($related) }}">
 							</div>
 							<div class="detail-container">
 								<div class="item-name">
-									3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
+									{{ get_product_first_name($related) }}
 								</div>
-								<div class="price-container">PHP 250.00</div>
+								<div class="price-container">PHP {{ get_product_first_price($related) }}</div>
 								<div class="button-container">SHOP NOW</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-3">
-						<div class="per-item">
-							<div class="image-container">
-								<img src="/themes/{{ $shop_theme }}/img/sample-package.png">
-							</div>
-							<div class="detail-container">
-								<div class="item-name">
-									3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
-								</div>
-								<div class="price-container">PHP 250.00</div>
-								<div class="button-container">SHOP NOW</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="per-item">
-							<div class="image-container">
-								<img src="/themes/{{ $shop_theme }}/img/sample-package.png">
-							</div>
-							<div class="detail-container">
-								<div class="item-name">
-									3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
-								</div>
-								<div class="price-container">PHP 250.00</div>
-								<div class="button-container">SHOP NOW</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="per-item">
-							<div class="image-container">
-								<img src="/themes/{{ $shop_theme }}/img/sample-package.png">
-							</div>
-							<div class="detail-container">
-								<div class="item-name">
-									3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
-								</div>
-								<div class="price-container">PHP 250.00</div>
-								<div class="button-container">SHOP NOW</div>
-							</div>
-						</div>
-					</div>
+					@endforeach
 				</div>
 			</div>
 		</div>
@@ -210,4 +130,13 @@ $(document).ready(function()
     });
 });
 </script>
+<script type="text/javascript" src="/assets/front/js/zoom.js"></script>
+<script type="text/javascript">
+var product_image = ".single-product-img";
+var button_cart = ".add-to-cart-button";
+var product_container = ".content";
+var product_quantity = ".input-quantity";
+var cart_holder = '.cart-dropdown';
+</script>
+<script type="text/javascript" src="/assets/front/js/global_addcart.js"></script>
 @endsection

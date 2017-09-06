@@ -109,6 +109,6 @@ class BillPayment
 	}
 	public static function getShopId()
     {
-    	return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+    	return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
 }

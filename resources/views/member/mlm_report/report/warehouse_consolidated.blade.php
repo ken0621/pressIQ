@@ -1,19 +1,26 @@
-<div class="col-md-12 col-sm-6 col-xs-12">
-  <div class="info-box">
-    <span class="info-box-icon bg-primary"><i class="fa fa-money"></i></span>
+    <table class="table table-condensed table-bordred">
+                            <tr>
+                                <td>Warehouse Sales Report</td>
+                            </tr>
+                        <tr>
+                            <td>from:</td>
+                            <td>{{$from}}</td>
+                        </tr>
+                        <tr>
+                            <td>to:</td>
+                            <td>{{$to}}</td>
+                        </tr>
+      
+      </table>
 
-    <div class="info-box-content">
-      <span class="info-box-text">Warehouse Sales Report</span>
-    </div>
+
+      <br>
+      <br>
+    
     <!-- /.info-box-content -->
   </div>
   <!-- /.info-box -->
 </div> 
-<br>
-<br>
-<br>
-<br>
-<br>
 <?php $grand_total = 0; ?>
 @foreach($sales as $key => $value)
 <?php 

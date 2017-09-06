@@ -28,7 +28,7 @@ class UnitOfMeasurementController extends Member
 
     public function getShopId()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
     public function add_um()
     {
@@ -118,7 +118,7 @@ class UnitOfMeasurementController extends Member
         $um_id = Request::input("id");
         $item_id = Request::input("item_id");
         $item_id = $item_id == null ? 0 : $item_id;
-        $check = Tbl_settings::where("settings_key","pis-jamestiong")->where("settings_value","enable")->where("shop_id",$this->user_info->shop_id)->pluck("settings_setup_done");
+        $check = Tbl_settings::where("settings_key","pis-jamestiong")->where("settings_value","enable")->where("shop_id",$this->user_info->shop_id)->value("settings_setup_done");
 
         $data["status"] = "";
         $data["um_multi"] = Tbl_unit_measurement_multi::where("multi_um_id",$um_id)->where("is_base",0)->count();
@@ -538,7 +538,7 @@ class UnitOfMeasurementController extends Member
 
             $multi_id_first = null;
 
-            $multi_id_first = Tbl_unit_measurement_multi::where("is_base",1)->where("multi_um_id",$um_id)->pluck("multi_id");
+            $multi_id_first = Tbl_unit_measurement_multi::where("is_base",1)->where("multi_um_id",$um_id)->value("multi_id");
             $ctr = Tbl_unit_measurement::where("um_name",$set_name)->where("um_id","!=",$um_id)->where("um_shop",$this->user_info->shop_id)->count();
             
             if($ctr >= 1)

@@ -142,7 +142,7 @@ class PayrollAllowanceController extends Member
     {
          $data["_expense"] = Accounting::getAllAccount('all',null,['Expense','Other Expense']);
          $data["default_expense"] = Tbl_chart_of_account::where("account_number", 66000)
-                                            ->where("account_shop_id", Self::shop_id())->pluck("account_id");
+                                            ->where("account_shop_id", Self::shop_id())->value("account_id");
 
          Session::put('allowance_employee_tag', array());
          return view('member.payroll.payroll_allowance.create_allowance', $data);
@@ -278,7 +278,7 @@ class PayrollAllowanceController extends Member
          {
               $statement = 'restore';
          }
-         $file_name               = Tbl_payroll_allowance_v2::where('payroll_allowance_id', $allowance_id)->pluck('payroll_allowance_name');
+         $file_name               = Tbl_payroll_allowance_v2::where('payroll_allowance_id', $allowance_id)->value('payroll_allowance_name');
          $data['title']           = ucfirst($statement);
          $data['html']       =  'Do you really want to '.$statement.' '.$file_name.'?';
          $data['action']     = '/member/payroll/allowance/v2/archived_allowance';

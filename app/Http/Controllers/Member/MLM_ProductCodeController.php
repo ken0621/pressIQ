@@ -348,7 +348,7 @@ class MLM_ProductCodeController extends Member
     }
     public static function discount_get($item_id, $slot_id)
     {
-        $slot_membership = Tbl_mlm_slot::where('slot_id', $slot_id)->pluck('slot_membership');
+        $slot_membership = Tbl_mlm_slot::where('slot_id', $slot_id)->value('slot_membership');
         return Item::get_discounted_price_mlm($item_id, $slot_membership);
     }
     public static function price_original_get($item_id)
@@ -451,9 +451,9 @@ class MLM_ProductCodeController extends Member
         $data["_code"]           = $_code;
         $data["shop_address"]    = $this->user_info->shop_street_address;
         $data["shop_contact"]    = $this->user_info->shop_contact;
-        $data['company_name']    = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_name')->pluck('value');
-        $data['company_email']   = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_email')->pluck('value');
-        $data['company_logo']    = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'receipt_logo')->pluck('value');
+        $data['company_name']    = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_name')->value('value');
+        $data['company_email']   = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_email')->value('value');
+        $data['company_logo']    = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'receipt_logo')->value('value');
         if($invoice->user_is_merchant == 1)
         {
             $warehouse = DB::table('tbl_user_warehouse_access')->where('user_id', $invoice->user_id)

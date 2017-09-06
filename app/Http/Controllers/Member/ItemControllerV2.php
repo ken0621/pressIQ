@@ -4,6 +4,7 @@ use App\Globals\Item;
 use App\Globals\Category;
 use App\Globals\Manufacturer;
 use App\Globals\Accounting;
+use App\Globals\Columns;
 use Request;
 
 class ItemControllerV2 extends Member
@@ -18,12 +19,18 @@ class ItemControllerV2 extends Member
 	}
 	public function list_table()
 	{
+		$data["page"]		= "Item List - Table";
+
 		$archived 			= Request::input("archived") ? 1 : 0;
 		$item_type_id 		= Request::input("item_type_id");
 		$item_category_id   = Request::input("item_category_id");
-		$data["page"]		= "Item List - Table";
-		$data["_item_raw"]	= Item::get_all_item($this->user_info->shop_id, 5, $archived, $item_type_id, $item_category_id);
-		$data["_item"]		= Item::apply_additional_info_to_array($data["_item_raw"]);
+
+		Item::get_add_markup(); 
+		Item::get_add_display();
+		Item::get_filter_type($item_type_id);
+		Item::get_filter_category($item_category_id);
+		$data["_item"]		= Item::get($this->user_info->shop_id, 5, $archived);
+		$data["pagination"] = Item::get_pagination();
 		$data["archive"]	= $archived == 1 ? "restore" : "archive";
 		return view("member.itemv2.list_item_table", $data);
 	}
@@ -41,12 +48,11 @@ class ItemControllerV2 extends Member
 		$data['default_expense'] = Accounting::get_default_coa("accounting-expense");
 		$data["_manufacturer"]   = Manufacturer::getAllManufaturer();
 		$data['item_info'] 	     = [];
-
 		$id 					 = Request::input('item_id');
 
 		if($id)
 		{
-			$data['item_info'] 	      = Item::get_item_info($id);
+			$data['item_info'] 	      = Item::info($id);
 			$data["link_submit_here"] = "/member/item/v2/edit_submit?item_id=" . $id;
 			$data["item_main"]	      = "";
 			$data["item_picker"]	  = "hide";
@@ -80,9 +86,9 @@ class ItemControllerV2 extends Member
 		$insert['has_serial_number']           = Request::input('item_has_serial');
 
 		/*For inventory refill*/
-		// $insert['item_initial_qty'] 		   = Request::input('item_initial_qty');
-		// $insert['item_date_track'] 			   = Request::input('item_date_track');
-		// $insert['item_reorder_point'] 		   = Request::input('item_reorder_point');
+		$insert['item_quantity'] 		  	   = Request::input('item_initial_qty');
+		$insert['item_date_tracked'] 		   = Request::input('item_date_track');
+		$insert['item_reorder_point'] 		   = Request::input('item_reorder_point');
 
 		$shop_id = $this->user_info->shop_id;
 		
@@ -123,7 +129,6 @@ class ItemControllerV2 extends Member
 
 		return json_encode($return);
 	}
-
 	public function cost()
 	{
 		$data["page"]		= "Item Cost";
@@ -134,7 +139,6 @@ class ItemControllerV2 extends Member
 		$data["page"]		= "Item Price Level";
 		return view("member.itemv2.price_level");
 	}
-
 	public function archive()
 	{
 		$item_id = Request::input("item_id");
@@ -145,7 +149,6 @@ class ItemControllerV2 extends Member
 
 		echo json_encode("success");
 	}
-
 	public function restore()
 	{
 		$item_id = Request::input("item_id");
@@ -155,5 +158,47 @@ class ItemControllerV2 extends Member
 		}
 
 		echo json_encode("success");
+	}
+	public function columns()
+	{
+		if (Request::isMethod('post'))
+		{
+			$shop_id = $this->user_info->shop_id;
+			$user_id = $this->user_info->user_id;
+			$from	 = "item";
+			$column  = Request::input("column");
+
+			$result = Columns::submitColumns($shop_id, $user_id, $from, $column);
+
+			if($result)
+			{
+				$response["response_status"] = "success";
+				$response["message"] = "Column has been saved.";
+				$response["call_function"] = "columns_submit_done";
+			}
+			else
+			{
+				$response["response_status"] = "error";
+				$response["message"] = "Some error occurred.";
+			}
+
+			return json_encode($response);
+		}
+		else
+		{
+			$data["page"] 	 = "Item Columns";
+			$shop_id 	  	 = $this->user_info->shop_id;
+			$user_id	  	 = $this->user_info->user_id;
+			$from    	  	 = "item";
+			$default[0]   	 = "Item ID";
+			$default[1]   	 = "SKU";
+			$default[2]	  	 = "Price";
+			$default[3]	  	 = "Cost";
+			$default[4]	  	 = "Markup";
+			$default[5]	  	 = "Inventory";
+			$data["_column"] = Columns::getColumns($shop_id, $user_id, $from, $default);
+			
+			return view("member.itemv2.columns_item", $data);
+		}
 	}
 }

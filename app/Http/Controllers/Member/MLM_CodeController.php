@@ -384,9 +384,9 @@ class MLM_CodeController extends Member
         $data["_code"]           = $_code;
         $data["shop_address"]    = $this->user_info->shop_street_address;
         $data["shop_contact"]    = $this->user_info->shop_contact;
-        $data['company_name'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_name')->pluck('value');
-        $data['company_email'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_email')->pluck('value');
-        $data['company_logo'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'receipt_logo')->pluck('value');
+        $data['company_name'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_name')->value('value');
+        $data['company_email'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_email')->value('value');
+        $data['company_logo'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'receipt_logo')->value('value');
         $subtotal                = Tbl_membership_code::where("membership_code_invoice_id",$invoice->membership_code_invoice_id)->package()->sum("membership_code_price");
         $discount_amount         = $invoice->membership_discount;
         $total                   = $subtotal - $discount_amount;

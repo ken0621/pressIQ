@@ -120,14 +120,14 @@ class Item_code
                     }
 
 
-                    $slot = Tbl_mlm_discount_card_log::where('discount_card_log_id', $data['discount_card_log_id'])->pluck('discount_card_membership');
-                    $insert['slot_id'] = Tbl_mlm_discount_card_log::where('discount_card_log_id', $data['discount_card_log_id'])->pluck('discount_card_slot_sponsor'); 
+                    $slot = Tbl_mlm_discount_card_log::where('discount_card_log_id', $data['discount_card_log_id'])->value('discount_card_membership');
+                    $insert['slot_id'] = Tbl_mlm_discount_card_log::where('discount_card_log_id', $data['discount_card_log_id'])->value('discount_card_slot_sponsor'); 
                     $insert['discount_card_log_id'] = $data['discount_card_log_id'];
                 }
             }
             else
             {
-                $slot = Tbl_mlm_slot::where('slot_id', $data["slot_id"])->pluck('slot_membership');
+                $slot = Tbl_mlm_slot::where('slot_id', $data["slot_id"])->value('slot_membership');
                 $insert['slot_id'] = $data["slot_id"];
             }
         }
@@ -166,14 +166,14 @@ class Item_code
                         }
                     }
 
-                    $slot = Tbl_mlm_discount_card_log::where('discount_card_log_id', $data['discount_card_log_id'])->pluck('discount_card_membership');
-                    $insert['slot_id'] = Tbl_mlm_discount_card_log::where('discount_card_log_id', $data['discount_card_log_id'])->pluck('discount_card_slot_sponsor'); 
+                    $slot = Tbl_mlm_discount_card_log::where('discount_card_log_id', $data['discount_card_log_id'])->value('discount_card_membership');
+                    $insert['slot_id'] = Tbl_mlm_discount_card_log::where('discount_card_log_id', $data['discount_card_log_id'])->value('discount_card_slot_sponsor'); 
                     $insert['discount_card_log_id'] = $data['discount_card_log_id'];
                 }
             }
             else
             {
-                $slot = Tbl_mlm_slot::where('slot_id', $data["slot_id"])->pluck('slot_membership');
+                $slot = Tbl_mlm_slot::where('slot_id', $data["slot_id"])->value('slot_membership');
                 $insert['slot_id'] = $data["slot_id"];
             }
         }
@@ -326,7 +326,7 @@ class Item_code
         	        $ctr_error = 0;
                     $item_discount_sum = 0;
                     $item_subtotal_sum = 0;
-        	        // $slot = Tbl_mlm_slot::where('slot_id', $insert['slot_id'])->pluck('slot_membership');
+        	        // $slot = Tbl_mlm_slot::where('slot_id', $insert['slot_id'])->value('slot_membership');
                     if($data['warehouse_id'] == null)
                     {
                         $send['warning_validator'][$ctr_error] = "Warehouse is required. For inventory";
@@ -391,7 +391,7 @@ class Item_code
                     // return $send;
         	        foreach($count_on_hand as $key => $value)
                     {
-                        $a = Tbl_warehouse_inventory::check_inventory_single($data['warehouse_id'], $key)->pluck('inventory_count');
+                        $a = Tbl_warehouse_inventory::check_inventory_single($data['warehouse_id'], $key)->value('inventory_count');
                         
                         if(intval($value) > intval($a))
                         {
@@ -473,8 +473,13 @@ class Item_code
                                 {
                                     if($code == "STAIRSTEP")
                                     {
-                                        $rel_insert[$key][$code] = $item_points->$code;
+                                        $rel_insert[$key][$code]             = $item_points->$code;
                                         $rel_insert[$key]["STAIRSTEP_GROUP"] = $item_points->STAIRSTEP_GROUP;
+                                    }
+                                    else if($code == "RANK")
+                                    {
+                                        $rel_insert[$key][$code]        = $item_points->$code;
+                                        $rel_insert[$key]["RANK_GROUP"] = $item_points->RANK_GROUP;
                                     }
                                     else
                                     {
@@ -917,12 +922,18 @@ class Item_code
                                     $rel_insert[$key][$code] = $item_points->$code;
                                     $rel_insert[$key]["STAIRSTEP_GROUP"] = $item_points->STAIRSTEP_GROUP;
                                 }
+                                else if($code == "RANK")
+                                {
+                                    $rel_insert[$key][$code] = $item_points->$code;
+                                    $rel_insert[$key]["RANK_GROUP"] = $item_points->RANK_GROUP;      
+                                }
                                 else
                                 {
                                     $rel_insert[$key][$code] = $item_points->$code;
                                 }
                             }
                         }
+
                         $rel_insert[$key]["item_activation_code"]          = $activation_code;
                         $rel_insert[$key]["customer_id"]                   = $slot_info->slot_owner;
                         $rel_insert[$key]["item_id"]                       = $value->evariant_item_id;
@@ -933,6 +944,7 @@ class Item_code
                         $rel_insert[$key]["ec_order_id"]                   = $ec_order_id;
                         $rel_insert[$key]["slot_id"]                       = $slot_info->slot_id;
                     }
+                    
                     Tbl_item_code::insert($rel_insert);
 
                     $items = Tbl_item_code::where('ec_order_id', $ec_order_id)->get();

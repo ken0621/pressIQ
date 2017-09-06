@@ -404,7 +404,7 @@ class MLM_MembershipController extends Member
             $data['products']              = Tbl_product::variant()->where('product_shop', $this->user_info->shop_id)->get();
             $data['items']                 = Tbl_item::where('shop_id', $this->user_info->shop_id)->where('archived', 0)->where('item_type_id', 4)->get();
             $data['membership_id']         = $data['membership_packages']->membership_id;
-            $data['item_count']            = Tbl_membership_package_has::where('membership_package_id', $data['membership_packages']->membership_package_id)->lists("membership_package_has_quantity","item_id");
+            $data['item_count']            = Tbl_membership_package_has::where('membership_package_id', $data['membership_packages']->membership_package_id)->pluck("membership_package_has_quantity","item_id");
         }
         return view('member.mlm_membership.mlm_membership_popup_edit_package', $data);
     }

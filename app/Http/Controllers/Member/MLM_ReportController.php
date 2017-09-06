@@ -203,8 +203,8 @@ class MLM_ReportController extends Member
         $shop_id = $this->user_info->shop_id;
         $view =  Mlm_report::$report($shop_id, $filter);
         $data['status'] = 'success';
-        
-
+        $view['from'] = date_format($from, 'd/M/Y');
+        $view['to'] = date_format($to, 'd/M/Y');
 
         
 
@@ -224,9 +224,8 @@ class MLM_ReportController extends Member
         else if($pdf == 'excel')
         {
             Excel::create('New file', function($excel) use($view) {
-
+               
                 $excel->sheet('New sheet', function($sheet) use($view) {
-
                     $sheet->loadView('member.mlm_report.report.' . $view['page'], $view);
 
                 });

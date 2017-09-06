@@ -304,7 +304,7 @@ class PayrollHolidayController extends Member
           {
                $statement = 'restore';
           }
-          $file_name               = Tbl_payroll_holiday::where('payroll_holiday_id', $id)->pluck('payroll_holiday_name');
+          $file_name               = Tbl_payroll_holiday::where('payroll_holiday_id', $id)->value('payroll_holiday_name');
           $data['title']           = 'Do you really want to '.$statement.' '.$file_name.'?';
           $data['html']       = '';
           $data['action']     = '/member/payroll/holiday/archive_holiday_action/v2';

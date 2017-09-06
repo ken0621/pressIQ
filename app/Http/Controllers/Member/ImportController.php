@@ -60,7 +60,7 @@ class ImportController extends Member
 {
 	public static function getShopId()
 	{
-		return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+		return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
 	}
 
 	/**
@@ -191,7 +191,7 @@ class ImportController extends Member
 						if($data['income_account'] == '') // DEFAULT
 						{
 							$data['income_account'] = Tbl_chart_of_account::where("account_code", "accounting-sales")
-									->where("account_shop_id", $this->getShopId())->pluck("account_id");
+									->where("account_shop_id", $this->getShopId())->value("account_id");
 						}
 						elseif(!$has_Income_Account && $auto_income_account && $data['income_account'] != '')
 						{
@@ -222,7 +222,7 @@ class ImportController extends Member
 								if($data['expense_account'] == '') // DEFAULT
 								{
 									$data['expense_account'] = Tbl_chart_of_account::where("account_code", "accounting-expense")
-									->where("account_shop_id", $this->getShopId())->pluck("account_id");
+									->where("account_shop_id", $this->getShopId())->value("account_id");
 								}
 								elseif(!$has_Expense_Account && $auto_expense_account && $data['expense_account'] != '')
 								{
@@ -237,7 +237,7 @@ class ImportController extends Member
 								if($data['asset_account'] == '') // DEFAULT
 								{
 									$data['asset_account'] = Tbl_chart_of_account::where("account_code", "accounting-inventory-asset")
-									->where("account_shop_id", $this->getShopId())->pluck("account_id");
+									->where("account_shop_id", $this->getShopId())->value("account_id");
 								}
 								elseif(!$has_Asset_Account && $auto_asset_account && $data['asset_account'] != '')
 								{
@@ -1264,7 +1264,7 @@ class ImportController extends Member
 					        }
 
 					        /* IF THE ACCOUNT TYPE HAS OPEN BALANCE FIELD */
-					        if($account_type_exist->pluck("has_open_balance") == 1)
+					        if($account_type_exist->value("has_open_balance") == 1)
 					        {
 					            $insert['account_open_balance']       = $open_balance;
 					            $insert['account_open_balance_date']  = datepicker_input($balance_date);

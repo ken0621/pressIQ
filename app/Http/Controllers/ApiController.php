@@ -140,7 +140,7 @@ class ApiController extends Controller
 
     public function create_user($auth, $store)
     {
-        $shop_id = Tbl_shop::where('shop_key',$store)->pluck('shop_id');
+        $shop_id = Tbl_shop::where('shop_key',$store)->value('shop_id');
         
         $insert['first_name']       = Request::input('first_name');
         $insert['last_name']        = Request::input('last_name');

@@ -25,7 +25,7 @@ class account
     {
         
         $is_account_has_data = Tbl_chart_of_account::accountInfo($shop)->first();
-        $shop_id             = Tbl_shop::where("shop_id", $shop)->orWhere("shop_key")->pluck("shop_id");
+        $shop_id             = Tbl_shop::where("shop_id", $shop)->orWhere("shop_key")->value("shop_id");
         
         if(!$is_account_has_data)
         {

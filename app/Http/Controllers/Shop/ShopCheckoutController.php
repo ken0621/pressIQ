@@ -625,7 +625,7 @@ class ShopCheckoutController extends Shop
 
     public function locale_id_to_name($locale_id)
     {
-        return Tbl_locale::where("locale_id", $locale_id)->pluck("locale_name");
+        return Tbl_locale::where("locale_id", $locale_id)->value("locale_name");
     }
 
     public function payment()

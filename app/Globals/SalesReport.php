@@ -14,7 +14,7 @@ class SalesReport
 {
     public function get_shop_id()
     {
-        $shop_info = Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+        $shop_info = Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
 
         return $shop_info->shop_id;
     }

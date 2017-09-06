@@ -145,7 +145,7 @@ class Manage_Category_Controller extends Member
 
         if(Request::has('is_sub_category')){
             $type_parent_id = Request::input('hidden_parent_category');
-            $type_sub_level = Tbl_category::where('type_id', $type_parent_id)->pluck('type_sub_level');
+            $type_sub_level = Tbl_category::where('type_id', $type_parent_id)->value('type_sub_level');
             $type_sub_level++;
         }   
 

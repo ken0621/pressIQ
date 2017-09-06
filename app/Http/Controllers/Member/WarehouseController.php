@@ -183,7 +183,7 @@ class WarehouseController extends Member
                     $data["_warehouse_archived"][$key3]->total_qty = $total_qty;
                 }
             }
-            $data["enable_serial"] = Tbl_settings::where("shop_id",$this->user_info->shop_id)->where("settings_key","item_serial")->pluck("settings_value");
+            $data["enable_serial"] = Tbl_settings::where("shop_id",$this->user_info->shop_id)->where("settings_key","item_serial")->value("settings_value");
 
             return view("member.warehouse.warehouse_list",$data);
         }
@@ -456,7 +456,7 @@ class WarehouseController extends Member
                 foreach ($data["_sir"] as $key => $value) 
                 {   
 
-                    $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$data["item_details"]->item_measurement_id)->where("is_base",0)->pluck("multi_id");
+                    $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$data["item_details"]->item_measurement_id)->where("is_base",0)->value("multi_id");
 
                     if($data["item_details"]->item_type_id != 4)
                     {        
@@ -1279,7 +1279,7 @@ class WarehouseController extends Member
             if($value != "")
             {
                 $value2 = $quantity_product[$key];
-                $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($from, $value)->pluck('inventory_count');
+                $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($from, $value)->value('inventory_count');
                 if($value2 != 0)
                 {
                     if($count_on_hand > 0 && $count_on_hand >= $value2) 

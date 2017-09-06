@@ -13,7 +13,7 @@
             </h1>
 
             <div class="dropdown pull-right">
-                <button onclick="location.href=''" class="btn btn-def-white btn-custom-white"><i class="fa fa-gear"></i> Columns</button>
+                <button link="/member/item/v2/columns" size="md" class="btn btn-def-white btn-custom-white popup"><i class="fa fa-gear"></i> Columns</button>
                 <button onclick="action_load_link_to_modal('/member/item/v2/add', 'lg')" class="btn btn-primary"><i class="fa fa-plus"></i> New Item</button>
             </div>
         </div>

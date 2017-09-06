@@ -270,7 +270,7 @@ class PayrollTimeSheetController extends Member
 		// dd($data);
 		$data['summary'] = Self::timesheet_summary($employee_id, $payroll_period_id);
 
-		$payroll_period_company_id = Tbl_payroll_period_company::where('payroll_period_id', $payroll_period_id)->where('payroll_company_id', $data["employee_info"]->payroll_employee_company_id)->pluck('payroll_period_company_id');
+		$payroll_period_company_id = Tbl_payroll_period_company::where('payroll_period_id', $payroll_period_id)->where('payroll_company_id', $data["employee_info"]->payroll_employee_company_id)->value('payroll_period_company_id');
 
 		$data['_remarks'] = Payroll::view_remarks($this->user_info->shop_id, $payroll_period_company_id);
 		$data['payroll_period_company_id'] = $payroll_period_company_id;
@@ -483,7 +483,7 @@ class PayrollTimeSheetController extends Member
 
 		$time 			= Tbl_payroll_time_sheet::where('payroll_time_date', $date)->where('payroll_employee_id', $employee_id)->first();
 
-		$company 		= Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->pluck('payroll_employee_company_id');
+		$company 		= Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->value('payroll_employee_company_id');
 
 		$payroll_time_sheet_id = 0;
 
@@ -504,7 +504,7 @@ class PayrollTimeSheetController extends Member
 		$insert['payroll_company_id']			= $company;
 
 		$return['id'] 		= Tbl_payroll_time_sheet_record::insertGetId($insert);
-		$return['company'] 	= Tbl_payroll_company::where('payroll_company_id',$company)->pluck('payroll_company_name');
+		$return['company'] 	= Tbl_payroll_company::where('payroll_company_id',$company)->value('payroll_company_name');
 		return collect($return)->toJson();
 	}
 
@@ -838,7 +838,7 @@ class PayrollTimeSheetController extends Member
 		$update['payroll_company_id'] = Request::input('payroll_company_id');
 		Tbl_payroll_time_sheet_record::where('payroll_time_sheet_record_id', $payroll_time_sheet_record_id)->update($update);
 
-		$company = Tbl_payroll_company::where('payroll_company_id',Request::input('payroll_company_id'))->pluck('payroll_company_name');
+		$company = Tbl_payroll_company::where('payroll_company_id',Request::input('payroll_company_id'))->value('payroll_company_name');
 
 		$return['status'] 			= 'success';
 		$return['function_name'] 	= 'get_company';

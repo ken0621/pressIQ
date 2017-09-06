@@ -1271,6 +1271,15 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Developing";
     $nav[$page]['submenu'][$code]['developer'] = "Erwin Guevarra";
+    
+     /* -- DEVELOPERS => REMATRIX */
+    $code = "developer-rematrix-single";
+    $nav[$page]['submenu'][$code]['label'] = "Rematrix Single";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/rematrix_single";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Erwin Guevarra";
 
      /* -- DEVELOPERS => DOCUMENTATION */
     $code = "developer-auto-entry";

@@ -41,6 +41,7 @@
                         </tr>
                         
                         @foreach($slots as $key => $value)
+                            @if($value && isset($value['error']) && isset($value['subtotal']) && isset($value['tax_value']) && isset($value['tax']) && isset($value['total']))
                             <tr @if($value['error'] == 1) style="background-color: red" @endif >
                                 <td>{{$key}}</td>
                                 <td>{{$value['from']}} - {{$value['to']}}</td>
@@ -48,6 +49,7 @@
                                 <td>{{currency('PHP', $value['tax_value'])}} ({{currency('PHP', $value['tax'])}}%)</td>
                                 <td>{{currency('PHP', $value['total'])}}</td>
                             </tr>
+                            @endif
                         @endforeach
                     </table>
                     @if(count($slots) >= 1)

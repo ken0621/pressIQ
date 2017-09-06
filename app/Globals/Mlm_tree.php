@@ -791,8 +791,9 @@ class Mlm_tree
                     }
                     else
                     {
-                        $placement_tree = Tbl_tree_placement::where("placement_tree_parent_id",$sponsor->slot_id)->where("placement_tree_level",$current_level)->childslot()->orderBy("tbl_mlm_slot.auto_balance_position","ASC")->get();
-                        $current_count  = Tbl_tree_placement::where("placement_tree_parent_id",$sponsor->slot_id)->where("placement_tree_level",$current_level + 1)->childslot()->orderBy("tbl_mlm_slot.auto_balance_position","ASC")->count();
+                        $placement_tree = Tbl_tree_placement::where("placement_tree_parent_id",$sponsor->slot_id)->where("placement_tree_level",$current_level)->childslot()->where("slot_placement","!=",0)->orderBy("tbl_mlm_slot.auto_balance_position","ASC")->get();
+                        $current_count  = Tbl_tree_placement::where("placement_tree_parent_id",$sponsor->slot_id)->where("placement_tree_level",$current_level + 1)->childslot()->where("slot_placement","!=",0)->orderBy("tbl_mlm_slot.auto_balance_position","ASC")->count();
+                       
                         $max_count      = pow(2, $current_level + 1);
                         if($current_count < $max_count)
                         {   

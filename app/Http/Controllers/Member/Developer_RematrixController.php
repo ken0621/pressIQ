@@ -6,8 +6,12 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_customer_search;
 use App\Models\Tbl_membership_package;
+use App\Models\Tbl_tree_sponsor;
+use App\Models\Tbl_tree_placement;
+use App\Globals\Mlm_compute;
 use Crypt;
 use Request;
+use Redirect;
 class Developer_RematrixController extends Member
 {
 	public function index()
@@ -27,7 +31,7 @@ class Developer_RematrixController extends Member
 	}
 	public function simulate_submit()
 	{
-		// return $_POST;
+		//$_POST;
 		$shop_id 			= $this->user_info->shop_id;
 		$membership_id = Request::input('membership_id');
 		$no_of_customer = Request::input('no_of_customer');
@@ -315,5 +319,39 @@ class Developer_RematrixController extends Member
 	{
 		$data = [];
 		return view('member.developer.rematrix',$data);
+	}	
+
+	public function single()
+	{
+		$data = [];
+		return view('member.developer.single',$data);
+	}
+	
+	public function single_submit()
+	{
+		$slot_id = Request::input("slot_id");
+		$password = Request::input("password");
+		if($password == "intelinside")
+		{
+			$slot    = Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",5)->first();
+			if(!$slot)
+			{
+				return Redirect::to("/member/developer/rematrix_single")->with('status_error', 'Slot does not exists.');
+			}
+			
+			Tbl_tree_sponsor::where("sponsor_tree_parent_id",$slot_id)->orWhere("sponsor_tree_child_id",$slot_id)->delete();
+			Tbl_tree_placement::where("placement_tree_parent_id",$slot_id)->orWhere("placement_tree_child_id",$slot_id)->delete();
+			$update["auto_balance_position"] = 0;
+			$update["slot_placement"]		 = 0;
+			$update["current_level"]		 = 0;
+			Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",5)->update($update);
+			MLM_compute::entry($slot_id);
+	
+			return Redirect::to("/member/developer/rematrix_single")->with('status', 'Success');
+		}
+		else
+		{
+			return Redirect::to("/member/developer/rematrix_single")->with('status_error', 'Incorrect Password.');
+		}
 	}
 }

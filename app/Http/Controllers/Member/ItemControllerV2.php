@@ -52,7 +52,7 @@ class ItemControllerV2 extends Member
 
 		if($id)
 		{
-			$data['item_info'] 	      = Item::get_item_info($id);
+			$data['item_info'] 	      = Item::info($id);
 			$data["link_submit_here"] = "/member/item/v2/edit_submit?item_id=" . $id;
 			$data["item_main"]	      = "";
 			$data["item_picker"]	  = "hide";

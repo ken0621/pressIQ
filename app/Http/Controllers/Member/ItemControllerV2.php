@@ -209,4 +209,8 @@ class ItemControllerV2 extends Member
 			return view("member.itemv2.columns_item", $data);
 		}
 	}
+	public function choose()
+	{
+		return view("member.itemv2.choose");
+	}
 }

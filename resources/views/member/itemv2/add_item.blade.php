@@ -254,8 +254,40 @@
                         </div>
                     </div>
                 </div>
+
+                <hr>
+
                 <div class="form-group">
-                    
+                    <div class="col-md-12">
+                        <div class="clearfix" style="margin-bottom: 10px;">
+                            <div class="pull-left text-bold" style="font-size: 16px; padding-top: 10px;"><i class="fa fa-shopping-cart"></i> INCLUSIVE ITEMS</div>
+                            <button type="button" onclick="action_load_link_to_modal('/member/item/choose')" class="pull-right btn btn-custom-white"><i class="fa fa-plus"></i> Add Item</button>
+                        </div>
+                        <table class="table table-bordered table-striped table-condensed">
+                            <thead style="text-transform: uppercase">
+                                <tr>
+                                    <th class="text-center">Item SKU</th>
+                                    <th class="text-center">Item Cost</th>
+                                    <th class="text-center">Item Price</th>
+                                    <th class="text-center">Quantity</th>
+                                    <th class="text-center" width="50px"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="5" class="text-center">NO ITEM YET</td>
+                                </tr>
+                                <!--
+                                <tr>
+                                    <td class="text-center">IPHONE6PLUSGOLD</td>
+                                    <td class="text-center">PHP 1,500.00</td>
+                                    <td class="text-center">PHP 1,000.00</td>
+                                    <td class="text-center">5</td>
+                                </tr>
+                                -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

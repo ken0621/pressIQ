@@ -28,6 +28,7 @@ use App\Models\Tbl_ecommercer_remittance;
 use App\Models\Tbl_ecommerce_banking;
 use App\Models\Tbl_ecommerce_setting;
 use App\Models\Tbl_ecommerce_paypal;
+use Illuminate\Http\Request as Request2;
 use App;
 use Crypt;
 use Carbon\Carbon;
@@ -577,6 +578,11 @@ class ApiController extends Controller
         return json_encode($data);
         
         
+    }
+
+    public function api(Request2 $request) 
+    {
+        return $request->user();
     }
 }
  

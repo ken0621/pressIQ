@@ -12,6 +12,7 @@ class ItemControllerV2 extends Member
 {
 	public function list()
 	{
+
 		$data["page"] 		 	= "Item List";
 		$data["_item_type"]     = Item::get_item_type_list();
 		$data["_item_category"] = Item::getItemCategory($this->user_info->shop_id);

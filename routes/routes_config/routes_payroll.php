@@ -144,8 +144,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/departmentlist/modal_view_department/{id}','Member\PayrollController@modal_view_department');
 	Route::any('/departmentlist/modal_edit_department/{id}','Member\PayrollController@modal_edit_department');
 	Route::any('/departmentlist/modal_update_department','Member\PayrollController@modal_update_department');
-
-
 	/* DEPARTMENT END */
 
 	/* JOB TITLE START */

@@ -1,4 +1,5 @@
 <?php
+Route::any('/s', 'TesterController@samptest');
 Route::any('/pmigrate', 'PasswordMigrateController@index');
 Route::any('/dd','TesterController@connection_test');
 Route::any('/member/payroll/api_login','Api\PayrollConnectController@index');

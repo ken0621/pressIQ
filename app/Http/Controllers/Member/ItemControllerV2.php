@@ -97,7 +97,12 @@ class ItemControllerV2 extends Member
 		if($from == "add")
 		{
 			$item_type_id = 1;
-			$return 	  = Item::create($shop_id, $item_type_id, $insert);
+			$return = Item::create_validation($shop_id, $item_type_id, $insert);
+
+			if(!$return['message'])
+			{
+				$return 	  = Item::create($shop_id, $item_type_id, $insert);
+			}
 		}
 		elseif($from == "edit")
 		{

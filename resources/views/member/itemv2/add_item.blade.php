@@ -86,15 +86,15 @@
                 <div class="form-group">
                     <div class="col-md-6">
                         <label for="basic-input">Item Description</label>
-                        <input id="basic-input" value="{{ get_request_old($item_info, 'item_description', 'item_name') }}" class="form-control" name="item_description" placeholder="">
+                        <input id="basic-input" value="{{ get_request_old($item_info, 'item_description', 'item_name') }}" class="form-control item-description" name="item_description" placeholder="">
                     </div>
                     <div class="col-md-3">
                         <label for="basic-input">Item Code / SKU</label>
-                        <input id="basic-input" value="{{ get_request_old($item_info, 'item_sku') }}" class="form-control" name="item_sku" placeholder="">
+                        <input id="basic-input" value="{{ get_request_old($item_info, 'item_sku') }}" class="form-control auto-generate-code" name="item_sku" placeholder="">
                     </div>
                     <div class="col-md-3">
                         <label for="basic-input">Barcode</label>
-                        <input id="basic-input" value="{{ get_request_old($item_info, 'item_barcode') }}" class="form-control" name="item_barcode" placeholder="">
+                        <input id="basic-input" value="{{ get_request_old($item_info, 'item_barcode') }}" class="form-control auto-generate-code" name="item_barcode" placeholder="">
                     </div>
                 </div>
                 <div class="form-group">
@@ -220,15 +220,15 @@
                 <div class="form-group">
                     <div class="col-md-6">
                         <label for="basic-input">Item Description</label>
-                        <input id="basic-input" value="{{ get_request_old($item_info, 'item_description', 'item_name') }}" class="form-control" name="item_description" placeholder="">
+                        <input id="basic-input" value="{{ get_request_old($item_info, 'item_description', 'item_name') }}" class="form-control item-description" name="item_description" placeholder="">
                     </div>
                     <div class="col-md-3">
                         <label for="basic-input">Item Code / SKU</label>
-                        <input id="basic-input" value="{{ get_request_old($item_info, 'item_sku') }}" class="form-control" name="item_sku" placeholder="">
+                        <input id="basic-input" value="{{ get_request_old($item_info, 'item_sku') }}" class="form-control auto-generate-code" name="item_sku" placeholder="">
                     </div>
                     <div class="col-md-3">
                         <label for="basic-input">Barcode</label>
-                        <input id="basic-input" value="{{ get_request_old($item_info, 'item_barcode') }}" class="form-control" name="item_barcode" placeholder="">
+                        <input id="basic-input" value="{{ get_request_old($item_info, 'item_barcode') }}" class="form-control auto-generate-code" name="item_barcode" placeholder="">
                     </div>
                 </div>
                 <div class="form-group">

@@ -33,8 +33,7 @@
 									<p class="sss-title">SOCIAL SECURITY SYSTEM</p>
 								</div>
 								<div>
-									<p class="sss-form-title">EMPLOYER CONTRIBUTIONS
-</p>
+									<p class="sss-form-title">EMPLOYER CONTRIBUTIONS</p>
 								</div>
 								<div>
 									<p class="sss-form-title">PAYMENT FORM</p>
@@ -383,6 +382,722 @@
 						</div>
 						<div class="er-input-holder">
 							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-eccontribution-container">
+						<div class="er-pesosign-holder">
+							<i class="fa fa-rub er-pesosign"></i>
+						</div>
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-totalcontribution-container">
+						<div class="er-pesosign-holder">
+							<i class="fa fa-rub er-pesosign"></i>
+						</div>
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-right er-formcolumn-container">
+						<div class="er-formtitle-holder">
+							<p class="er-title">FORM OF PAYMENT</p>
+						</div>
+						<div class="er-amounttitle-holder">
+							<p class="er-title">AMOUNT PAID IN FIGURES</p>
+						</div>
+					</div>
+					<div class="pull-left er-month-container">
+						<p class="er-month">FEBRUARY</p>
+					</div>
+					<div class="pull-left er-year-container">
+						<p class="er-year">9999</p>
+					</div>
+					<div class="pull-left er-sscontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-eccontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-totalcontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-form-checkbox-container">
+						<div class="er-input-holder">
+							<div class="box">
+								<p class="x-mark">X</p>
+							</div>
+							<div class="er-label-holder">
+								<p class="er-label">CASH</p>
+							</div>
+						</div>
+					</div>
+					<div class="pull-right er-form-amountinfigures-container">
+						<div class="er-pesosign-holder">
+							<i class="fa fa-rub er-pesosign"></i>
+						</div>
+						<div class="underline">
+							<div class="underline-holder">
+								<div class="er-input-holder">
+									<p class="er-input">999,999,999,999</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="pull-left er-month-container">
+						<p class="er-month">MARCH</p>
+					</div>
+					<div class="pull-left er-year-container">
+						<p class="er-year">9999</p>
+					</div>
+					<div class="pull-left er-sscontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-eccontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-totalcontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-form-checkbox-container">
+						<div class="er-input-holder">
+							<div class="box">
+								<p class="x-mark">X</p>
+							</div>
+							<div class="er-label-holder">
+								<p class="er-label">POSTAL MONEY ORDER</p>
+							</div>
+						</div>
+					</div>
+					<div class="pull-right er-form-amountinfigures-nopesosign-container">
+						<div class="underline">
+							<div class="underline-holder">
+								<div class="er-input-holder">
+									<p class="er-input">999,999,999,999</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="pull-left er-month-container">
+						<p class="er-month">APRIL</p>
+					</div>
+					<div class="pull-left er-year-container">
+						<p class="er-year">9999</p>
+					</div>
+					<div class="pull-left er-sscontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-eccontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-totalcontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-form-checkbox-container">
+						<div class="er-input-holder">
+							<div class="box">
+								<p class="x-mark">X</p>
+							</div>
+							<div class="er-label-holder">
+								<p class="er-label">CHECK</p>
+							</div>
+						</div>
+					</div>
+					<div class="pull-right er-form-amountinfigures-nopesosign-container">
+						<div class="underline">
+							<div class="underline-holder">
+								<div class="er-input-holder">
+									<p class="er-input">999,999,999,999</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="pull-left er-month-container">
+						<p class="er-month">MAY</p>
+					</div>
+					<div class="pull-left er-year-container">
+						<p class="er-year">9999</p>
+					</div>
+					<div class="pull-left er-sscontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-eccontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-totalcontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-right er-checkinformation-container">
+						<div class="er-title-holder">
+							<p class="er-title">CHECK NUMBER</p>
+						</div>
+						<div class="underline">
+							<div class="underline-holder">
+								<div class="er-input-holder">
+									<p class="er-input">9999</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="pull-left er-month-container">
+						<p class="er-month">JUNE</p>
+					</div>
+					<div class="pull-left er-year-container">
+						<p class="er-year">9999</p>
+					</div>
+					<div class="pull-left er-sscontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-eccontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-totalcontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-right er-checkinformation-container">
+						<div class="er-title-holder">
+							<p class="er-title">CHECK DATE</p>
+						</div>
+						<div class="underline">
+							<div class="underline-holder">
+								<div class="er-input-holder">
+									<p class="er-input">12/31/9999</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="pull-left er-month-container">
+						<p class="er-month">JULY</p>
+					</div>
+					<div class="pull-left er-year-container">
+						<p class="er-year">9999</p>
+					</div>
+					<div class="pull-left er-sscontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-eccontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-totalcontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-right er-checkinformation-container">
+						<div class="er-title-holder">
+							<p class="er-title">BANK/BRANCH NAME</p>
+						</div>
+						<div class="underline">
+							<div class="underline-holder">
+								<div class="er-input-holder">
+									<p class="er-input">BDO Unibank</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="pull-left er-month-container">
+						<p class="er-month">AUGUST</p>
+					</div>
+					<div class="pull-left er-year-container">
+						<p class="er-year">9999</p>
+					</div>
+					<div class="pull-left er-sscontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-eccontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-totalcontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-right white-space"></div>
+					<div class="pull-left er-month-container">
+						<p class="er-month">SEPTEMBER</p>
+					</div>
+					<div class="pull-left er-year-container">
+						<p class="er-year">9999</p>
+					</div>
+					<div class="pull-left er-sscontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-eccontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-totalcontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-right er-totalamount-paid-container">
+						<div class="er-title-holder">
+							<p class="er-title">TOTAL AMOUNT PAID</p>
+						</div>
+						<div class="er-pesosign-holder">
+							<i class="fa fa-rub er-pesosign"></i>
+						</div>
+						<div class="second-underline">
+							<div class="underline">
+								<div class="underline-holder">
+									<div class="er-input-holder">
+										<p class="er-input">999,999,999,999</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="pull-left er-month-container">
+						<p class="er-month">OCTOBER</p>
+					</div>
+					<div class="pull-left er-year-container">
+						<p class="er-year">9999</p>
+					</div>
+					<div class="pull-left er-sscontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-eccontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-totalcontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-right white-space-withborder"></div>
+					<div class="pull-left er-month-container">
+						<p class="er-month">NOVEMBER</p>
+					</div>
+					<div class="pull-left er-year-container">
+						<p class="er-year">9999</p>
+					</div>
+					<div class="pull-left er-sscontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-eccontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-totalcontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-right er-totalamount-inwords-title-container">
+						<div class="er-title-holder">
+							<p class="er-title">TOTAL AMOUNT PAID IN WORDS</p>
+						</div>
+					</div>
+					<div class="pull-left er-month-container">
+						<p class="er-month">DECEMBER</p>
+					</div>
+					<div class="pull-left er-year-container">
+						<p class="er-year">9999</p>
+					</div>
+					<div class="pull-left er-sscontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-eccontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-totalcontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-right white-space"></div>
+					<div class="pull-left er-subtotal-container">
+						<div class="er-title-holder">
+							<p class="er-title">SUB-TOTAL</p>
+						</div>
+					</div>
+					<div class="pull-left er-sscontribution-container">
+						<div class="er-pesosign-holder">
+							<i class="fa fa-rub er-pesosign"></i>
+						</div>
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-eccontribution-container">
+						<div class="er-pesosign-holder">
+							<i class="fa fa-rub er-pesosign"></i>
+						</div>
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-totalcontribution-container">
+						<div class="er-pesosign-holder">
+							<i class="fa fa-rub er-pesosign"></i>
+						</div>
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-right er-totalamount-paidinwords-container">
+						<div class="er-input-holder">
+							<p class="er-input">Nine Hundred Ninety-Nine Billion, Nine Hundred Ninety-Nine Million, Nine Hundred Ninety-Nine Thousand, Nine Hundred Ninety-Nine</p>
+						</div>
+					</div>
+					<div class="pull-left er-add-container">
+						<div class="vertical-text-holder">
+							<p class="vertical-text">ADD</p>
+						</div>
+					</div>
+					<div class="pull-left er-underpayment-container">
+						<div class="vertical-text-holder">
+							<p class="vertical-text">UNDER PAYMENT</p>
+						</div>
+					</div>
+					<div class="pull-left er-subtotal-input-container">
+						<div class="er-input-holder">
+							<p class="er-input">XXXXXXXXX</p>
+						</div>
+					</div>
+					<div class="pull-left er-sscontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-eccontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-totalcontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-subtotal-input-container">
+						<div class="er-input-holder">
+							<p class="er-input">XXXXXXXXX</p>
+						</div>
+					</div>
+					<div class="pull-left er-sscontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-eccontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-totalcontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-subtotal-lastinput-container">
+						<div class="er-input-holder">
+							<p class="er-input">XXXXXXXXX</p>
+						</div>
+					</div>
+					<div class="pull-left er-sscontribution-nopesosign-lastinput-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-eccontribution-nopesosign-lastinput-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-totalcontribution-nopesosign-lastinput-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-penalty-container">
+						<div class="vertical-text-holder">
+							<p class="vertical-text">PENALTY</p>
+						</div>
+					</div>
+					<div class="pull-left er-subtotal-input-container">
+						<div class="er-input-holder">
+							<p class="er-input">XXXXXXXXX</p>
+						</div>
+					</div>
+					<div class="pull-left er-sscontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-eccontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-totalcontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-right white-space-withborder"></div>
+					<div class="pull-left er-subtotal-input-container">
+						<div class="er-input-holder">
+							<p class="er-input">XXXXXXXXX</p>
+						</div>
+					</div>
+					<div class="pull-left er-sscontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-eccontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-totalcontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-right er-totalamount-inwords-title-container">
+						<div class="er-title-holder">
+							<p class="er-title">CERTIFIED CORRECT</p>
+						</div>
+					</div>
+					<div class="pull-left er-subtotal-lastinput-container">
+						<div class="er-input-holder">
+							<p class="er-input">XXXXXXXXX</p>
+						</div>
+					</div>
+					<div class="pull-left er-sscontribution-nopesosign-lastinput-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-eccontribution-nopesosign-lastinput-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-totalcontribution-nopesosign-lastinput-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="white-space-small"></div>
+					<div class="pull-left er-interest-container">
+						<div class="vertical-text-holder">
+							<p class="vertical-text">INTEREST</p>
+						</div>
+					</div>
+					<div class="pull-left er-subtotal-input-container">
+						<div class="er-input-holder">
+							<p class="er-input">XXXXXXXXX</p>
+						</div>
+					</div>
+					<div class="pull-left er-sscontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-eccontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-totalcontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-printedname-container">
+						<div class="underline">
+							<div class="underline-holder">
+								<div class="er-input-holder">
+									<p class="er-input">Dr. Jose Pablo De Jesus Jr.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="pull-right er-signature-container">
+						<div class="underline">
+							<div class="underline-holder">
+								<div class="er-input-holder">
+									<p class="er-input">Dr. Jose Pablo De Jesus Jr.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="pull-left er-subtotal-input-container">
+						<div class="er-input-holder">
+							<p class="er-input">XXXXXXXXX</p>
+						</div>
+					</div>
+					<div class="pull-left er-sscontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-eccontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-totalcontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-printedname-label-container">
+						<div class="er-label-holder">
+							<p class="er-label">PRINTED NAME</p>
+						</div>
+					</div>
+					<div class="pull-right er-signature-label-container">
+						<div class="er-label-holder">
+							<p class="er-label">SIGNATURE</p>
+						</div>
+					</div>
+					<div class="pull-left er-subtotal-input-container">
+						<div class="er-input-holder">
+							<p class="er-input">XXXXXXXXX</p>
+						</div>
+					</div>
+					<div class="pull-left er-sscontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-eccontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-totalcontribution-nopesosign-container">
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="white-space-incertifiedcorrect"></div>
+					<div class="pull-left er-subtotal-container">
+						<div class="er-title-holder">
+							<p class="er-title">SUB-TOTAL</p>
+						</div>
+					</div>
+					<div class="pull-left er-sscontribution-container">
+						<div class="er-pesosign-holder">
+							<i class="fa fa-rub er-pesosign"></i>
+						</div>
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-eccontribution-container">
+						<div class="er-pesosign-holder">
+							<i class="fa fa-rub er-pesosign"></i>
+						</div>
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-totalcontribution-container">
+						<div class="er-pesosign-holder">
+							<i class="fa fa-rub er-pesosign"></i>
+						</div>
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-printedname-container">
+						<div class="underline">
+							<div class="underline-holder">
+								<div class="er-input-holder">
+									<p class="er-input">Chief Executive Officer</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="pull-right er-signature-container">
+						<div class="underline">
+							<div class="underline-holder">
+								<div class="er-input-holder">
+									<p class="er-input">December 30, 9999</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="pull-left er-totalamount-payment-container">
+						<div class="er-title-holder">
+							<p class="er-title">TOTAL AMOUNT OF PAYMENT</p>
+						</div>
+					</div>
+					<div class="pull-left er-totalpayment-container">
+						<div class="er-pesosign-holder">
+							<i class="fa fa-rub er-pesosign"></i>
+						</div>
+						<div class="er-input-holder">
+							<p class="er-input">999,999,999,999</p>
+						</div>
+					</div>
+					<div class="pull-left er-printedname-label-container">
+						<div class="er-label-holder">
+							<p class="er-label">POSITION TITLE</p>
+						</div>
+					</div>
+					<div class="pull-right er-signature-label-container">
+						<div class="er-label-holder">
+							<p class="er-label">DATE</p>
 						</div>
 					</div>
 				</div>

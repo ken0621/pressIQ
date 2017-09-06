@@ -10,7 +10,7 @@
     	border: 4px solid #333;
     	margin: 3px;
         font-family: 'Source Sans',sans-serif;
-        height: 1068px;
+        height: 843px;
     	.sss-first-layer
         {
             border-bottom: 2px solid #333;
@@ -154,6 +154,7 @@
                         width: 16.3px;
                         border-right: 2px solid #333;
                         height: 15px;
+                        vertical-align: bottom;
                         .er-input
                         {
                             margin: 0px;
@@ -167,6 +168,7 @@
                         width: 16.3px;
                         border-right: 2px solid #333;
                         height: 15px;
+                        vertical-align: bottom;
                         .er-input
                         {
                             margin: 0px;
@@ -181,6 +183,7 @@
                         width: 16.3px;
                         border-right: 3px solid #333;
                         height: 20px;
+                        vertical-align: bottom;
                         .er-input
                         {
                             margin: 0px;
@@ -195,6 +198,7 @@
                         display: inline-block;
                         width: 16.3px;
                         height: 15px;
+                        vertical-align: bottom;
                         .er-input
                         {
                             margin: 0px;
@@ -224,6 +228,7 @@
                 {
                     display: block;
                     padding: 7px 0px 6px 0px;
+                    height: 25px;
                     .er-input
                     {
                         margin: 0px;
@@ -270,6 +275,7 @@
                     {
                         display: block;
                         padding: 7px 0px 6px 0px;
+                        height: 25px;
                         .er-input
                         {
                             margin: 0px;
@@ -300,6 +306,7 @@
                     {
                         display: block;
                         padding: 7px 0px 6px 0px;
+                        height: 25px;
                         .er-input
                         {
                             margin: 0px;
@@ -330,6 +337,7 @@
                     {
                         display: block;
                         padding: 7px 0px 6px 0px;
+                        height: 25px;
                         .er-input
                         {
                             margin: 0px;
@@ -361,6 +369,7 @@
                     {
                         display: block;
                         padding: 7px 0px 6px 0px;
+                        height: 25px;
                         .er-input
                         {
                             margin: 0px;
@@ -381,6 +390,7 @@
                 {
                     display: inline-block;
                     width: 34%;
+                    vertical-align: top;
                     .er-title-holder
                     {
                         display: block;
@@ -398,6 +408,7 @@
                     {
                         display: block;
                         padding: 7px 0px 6px 0px;
+                        height: 25px;
                         .er-input
                         {
                             margin: 0px;
@@ -411,6 +422,7 @@
                 {
                     display: inline-block;
                     width: 32%;
+                    vertical-align: top;
                     .er-title-holder
                     {
                         display: block;
@@ -428,6 +440,7 @@
                     {
                         display: block;
                         padding: 7px 0px 6px 0px;
+                        height: 25px;
                         .er-input
                         {
                             margin: 0px;
@@ -441,6 +454,7 @@
                 {
                     display: inline-block;
                     width: 32%;
+                    vertical-align: top;
                     .er-title-holder
                     {
                         display: block;
@@ -458,6 +472,7 @@
                     {
                         display: block;
                         padding: 7px 0px 6px 0px;
+                        height: 25px;
                         .er-input
                         {
                             margin: 0px;
@@ -490,9 +505,10 @@
             		.er-divider-shortfirst
             		{
             			display: inline-block;
-					    width: 16.8px;
+					    width: 21.1px;
 					    border-right: 2px solid #333;
 					    height: 15px;
+					    vertical-align: bottom;
             			.er-input
             			{
             				margin: 0px;
@@ -503,9 +519,10 @@
             		.er-divider-short
             		{
             			display: inline-block;
-					    width: 15.8px;
+					    width: 14.8px;
 					    border-right: 2px solid #333;
 					    height: 15px;
+					    vertical-align: bottom;
             			.er-input
             			{
             			    margin: 0px;
@@ -520,6 +537,7 @@
 					    width: 15.8px;
 					    border-right: 3px solid #333;
 					    height: 19px;
+					    vertical-align: bottom;
             			.er-input
             			{
             			    margin: 0px;
@@ -532,8 +550,9 @@
             		.er-divider-noline
             		{
             		    display: inline-block;
-					    width: 12px;
+					    width: 13px;
 					    height: 15px;
+					    vertical-align: bottom;
             			.er-input
             			{
             				margin: 0px;
@@ -562,13 +581,14 @@
                 .er-input-holder
                 {
                     display: block;
-                    padding: 5px 0px 0px 0px;
+                    padding: 6px 0px 0px 0px;
                     .er-divider-shortfirst
                     {
                         display: inline-block;
                         width: 18px;
                         border-right: 2px solid #333;
                         height: 15px;
+                        vertical-align: bottom;
                         .er-input
                         {
                             margin: 0px;
@@ -582,6 +602,7 @@
                         width: 16.7px;
                         border-right: 2px solid #333;
                         height: 15px;
+                        vertical-align: bottom;
                         .er-input
                         {
                             margin: 0px;
@@ -595,6 +616,7 @@
                         display: inline-block;
                         width: 16.7px;
                         height: 15px;
+                        vertical-align: bottom;
                         .er-input
                         {
                             margin: 0px;
@@ -640,6 +662,7 @@
 					    width: 18px;
 					    border-right: 2px solid #333;
 					    height: 15px;
+					   	vertical-align: bottom;
             			.er-input
             			{
             			    margin: 0px;
@@ -650,9 +673,10 @@
             		.er-divider-short
             		{
             		    display: inline-block;
-					    width: 15.5px;
+					    width: 15.4px;
 					    border-right: 2px solid #333;
 					    height: 15px;
+					    vertical-align: bottom;
             			.er-input
             			{
             				margin: 0px;
@@ -667,6 +691,7 @@
 					    width: 15.8px;
 					    border-right: 3px solid #333;
 					    height: 19px;
+					    vertical-align: bottom;
             			.er-input
             			{
             				margin: 0px;
@@ -681,6 +706,7 @@
             			display: inline-block;
 					    width: 14px;
 					    height: 15px;
+					    vertical-align: bottom;
             			.er-input
             			{
             				margin: 0px;
@@ -714,9 +740,10 @@
             		.er-divider-shortfirst
             		{
             		    display: inline-block;
-					    width: 18px;
+					    width: 20px;
 					    border-right: 2px solid #333;
 					    height: 15px;
+					    vertical-align: bottom;
             			.er-input
             			{
             			    margin: 0px;
@@ -727,9 +754,10 @@
             		.er-divider-short
             		{
             		    display: inline-block;
-					    width: 15.5px;
+					    width: 15.7px;
 					    border-right: 2px solid #333;
 					    height: 15px;
+					    vertical-align: bottom;
             			.er-input
             			{
             			    margin: 0px;
@@ -744,6 +772,7 @@
 					    width: 16.3px;
 					    border-right: 3px solid #333;
 					    height: 19px;
+					    vertical-align: bottom;
             			.er-input
             			{
             				margin: 0px;
@@ -756,8 +785,9 @@
             		.er-divider-noline
             		{
             			display: inline-block;
-					    width: 16.3px;
+					    width: 12.3px;
 					    height: 15px;
+					    vertical-align: bottom;
             			.er-input
             			{
             				margin: 0px;
@@ -788,6 +818,7 @@
             	{
             	    display: block;
     				padding: 6px 0px 6px 0px;
+    				height: 24px;
             		.er-input
             		{
             		    margin: 0px;
@@ -816,6 +847,7 @@
             	{
             	    display: block;
     				padding: 6px 0px 6px 0px;
+    				height: 24px;
             		.er-input
             		{
             			margin: 0px;
@@ -1027,6 +1059,7 @@
 				    letter-spacing: 0.03px;
 				    text-align: center;
 				    padding: 3px 0px 3px 0px;
+				    height: 18px;
        			}
        		}
        		.er-sscontribution-container
@@ -1052,6 +1085,746 @@
        				.er-input
        				{
        				    margin: 0px;
+					    font-size: 11px;
+					    letter-spacing: 0.03px;
+       				}
+       			}
+       		}
+       		.er-eccontribution-container
+       		{
+       		    display: inline-block;
+			    border-right: 2px solid #333;
+			    border-bottom: 2px solid #333;
+			    width: 13%;
+       			.er-pesosign-holder
+       			{
+       				display: inline-block;
+       				.er-pesosign
+       				{
+       					font-size: 14px;
+       				}
+       			}
+       			.er-input-holder
+       			{
+       				display: inline-block;
+				    text-align: right;
+				    width: 82%;
+       				.er-input
+       				{
+       					margin: 0px;
+   						font-size: 11px;
+       				}
+       			}
+       		}
+       		.er-totalcontribution-container
+       		{
+       		    display: inline-block;
+			    border-right: 2px solid #333;
+			    border-bottom: 2px solid #333;
+			    width: 16%;
+       			.er-pesosign-holder
+       			{
+       			    display: inline-block;
+    				margin-left: 3px;
+       				.er-pesosign
+       				{
+       					font-size: 14px;
+       				}
+       			}
+       			.er-input-holder
+       			{
+       			    display: inline-block;
+				    text-align: right;
+				    width: 82%;
+       				.er-input
+       				{
+       				    margin: 0px;
+					    font-size: 11px;
+					    letter-spacing: 0.03px;
+       				}
+       			}
+       		}
+       		.er-formcolumn-container
+       		{
+       		    display: inline-block;
+			    width: 37%;
+			    padding: 0px 0px 2px 0px;
+       			.er-formtitle-holder
+       			{
+       			    display: inline-block;
+    				width: 44%;
+       				.er-title
+       				{
+       					margin: 0px;
+					    font-size: 11px;
+					    font-weight: 700;
+					    margin-left: 2px;
+       				}
+       			}
+       			.er-amounttitle-holder
+       			{
+       			    display: inline-block;
+    				width: 54%;
+       				.er-title
+       				{
+       				    margin: 0px;
+					    font-size: 11px;
+					    font-weight: 700;
+					    letter-spacing: 0.03px;
+       				}
+       			}
+       		}
+       		.er-sscontribution-nopesosign-container
+       		{
+       			display: inline-block;
+			    border-right: 2px solid #333;
+			    border-bottom: 2px solid #333;
+			    width: 16%;
+			    text-align: right;
+       			.er-input-holder
+       			{
+       				display: inline-block;
+       				.er-input
+       				{
+       				    margin: 0px;
+					    font-size: 11px;
+					    letter-spacing: 0.03px;
+					    margin-right: 6px;
+       				}
+       			}
+       		}
+       		.er-eccontribution-nopesosign-container
+       		{
+       			display: inline-block;
+				border-right: 2px solid #333;
+			    border-bottom: 2px solid #333;
+			    width: 13%;
+			    text-align: right;
+       			.er-input-holder
+       			{
+       				display: inline-block;
+       				.er-input
+       				{
+       				    margin: 0px;
+					    font-size: 11px;
+					    margin-right: 6px;
+       				}
+       			}
+       		}
+       		.er-totalcontribution-nopesosign-container
+       		{
+       		    display: inline-block;
+			    border-right: 2px solid #333;
+			    border-bottom: 2px solid #333;
+			    width: 16%;
+			    text-align: right;
+       			.er-input-holder
+       			{
+       				display: inline-block;
+       				.er-input
+       				{
+       				    margin: 0px;
+					    font-size: 11px;
+					    letter-spacing: 0.03px;
+					    margin-right: 6px;
+       				}
+       			}
+       		}
+       		.er-form-checkbox-container
+       		{
+       		    display: inline-block;
+    			width: 19%;
+    			padding: 0px 0px 2px 0px;
+       			.er-input-holder
+       			{
+       			    display: inline-block;
+    				margin-left: 12px;
+       				.box
+       				{
+       				    display: inline-block;
+					    border: 1px solid #333;
+					    width: 14px;
+					    height: 14px;
+       					.x-mark
+       					{
+       						margin: 0px;
+						    font-size: 11px;
+						    text-align: center;
+						    font-weight: 700;
+						    margin-right: 1px;
+       					}
+       				}
+       				.er-label-holder
+       				{
+       					display: inline-block;
+       					.er-label
+       					{
+       					    margin: 0px;
+						    font-size: 10px;
+						    text-align: center;
+						    margin-left: -2px;
+						    font-weight: 700;
+       					}	
+       				}
+       			}
+       		}
+       		.er-form-amountinfigures-container
+       		{
+       		    display: inline-block;
+    			width: 18%;
+    			padding: 0px 0px 2px 0px;
+       			.er-pesosign-holder
+       			{
+       				display: inline-block;
+       				.er-pesosign
+       				{
+       					font-size: 14px;
+       				}
+       			}
+       			.underline
+       			{
+       				display: inline-block;
+   					border-bottom: 1px solid #333;
+       				.underline-holder
+       				{
+       				    width: 114px;
+    					text-align: right;
+       					.er-input-holder
+       					{
+       						display: inline-block;
+       						.er-input
+       						{
+       						    margin: 0px;
+							    font-size: 11px;
+							    letter-spacing: 0.03px;
+							    margin-right: 8px;
+       						}
+       					}
+       				}
+       			}
+       		}
+       		.er-form-amountinfigures-nopesosign-container
+       		{
+       		    display: inline-block;
+    			width: 18%;
+    			padding: 0px 0px 1px 12px;
+       			.underline
+       			{
+       			    display: inline-block;
+    				border-bottom: 1px solid #333;
+       				.underline-holder
+       				{
+       					width: 114px;
+    					text-align: right;
+       					.er-input-holder
+       					{
+       						display: inline-block;
+       						.er-input
+       						{
+       						    margin: 0px;
+							    font-size: 11px;
+							    letter-spacing: 0.03px;
+							    margin-right: 8px;
+       						}
+       					}
+       				}
+       			}
+       		}
+       		.er-checkinformation-container
+       		{
+       		    display: inline-block;
+    			width: 37%;
+       			.er-title-holder
+       			{
+       				display: inline-block;
+       				width: 33%;
+       				.er-title
+       				{
+       					margin: 0px;
+					    font-size: 8px;
+						margin-left: 15px;
+					    font-weight: 700;
+					    text-align: left;
+       				}
+       			}
+       			.underline
+       			{
+       			    display: inline-block;
+    				border-bottom: 1px solid #333;
+    				padding-bottom: 0.5px;
+       				.underline-holder
+       				{
+       				    width: 58px;
+    					text-align: center;
+       					.er-input-holder
+       					{
+       						display: inline-block;
+       						.er-input
+       						{
+       						    margin: 0px;
+							    font-size: 9px;
+							    letter-spacing: 0.03px;
+       						}
+       					}
+       				}
+       			}
+       		}
+       		.white-space
+       		{
+       			display: inline-block;
+			    width: 37%;
+			    height: 20px;
+       		}
+       		.er-totalamount-paid-container
+       		{
+       		    display: inline-block;
+   				width: 37%;
+       			.er-title-holder
+       			{
+       				display: inline-block;
+    				margin-left: 12px;
+       				.er-title
+       				{
+       				    margin: 0px;
+					    font-size: 10px;
+					    text-align: center;
+					    font-weight: 900;
+					    letter-spacing: 0.03px;
+       				}
+       			}
+       			.er-pesosign-holder
+       			{
+       				display: inline-block;
+    				margin-left: 5px;
+       				.er-pesosign
+       				{
+       					font-size: 14px;
+       				}
+       			}
+       			.second-underline
+       			{
+       			    display: inline-block;
+    				border-bottom: 1px solid #333;
+       				.underline
+       				{
+       				    border-bottom: 1px solid #333;
+    					margin-bottom: 1px;
+       					.underline-holder
+       					{
+       					    width: 114px;
+    						text-align: right;
+       						.er-input-holder
+       						{
+       							display: inline-block;
+       							.er-input
+       							{
+       							    margin: 0px;
+								    font-size: 11px;
+								    letter-spacing: 0.03px;
+								    margin-right: 8px;
+       							}
+       						}
+       					}
+       				}
+       			}
+       		}
+       		.white-space-withborder
+       		{
+       			display: inline-block;
+			    width: 37%;
+			    height: 19px;
+			    border-bottom: 2px solid #333;
+       		}
+       		.er-totalamount-inwords-title-container
+       		{
+       		    display: inline-block;
+    			width: 37%;
+       			.er-title-holder
+       			{
+       			    display: inline-block;
+    				padding: 4px 0px 4px 0px;
+       				.er-title
+       				{
+       				    margin: 0px;
+					    font-size: 11px;
+					    font-weight: 700;
+					    margin-left: 2px;
+       				}
+       			}
+       		}
+       		.er-subtotal-container
+       		{
+       		    display: inline-block;
+			    border-right: 2px solid #333;
+			    border-bottom: 2px solid #333;
+			    width: 18%;
+       			.er-title-holder
+       			{
+       				display: inline-block;
+       				.er-title
+       				{
+       				    margin: 0px;
+					    font-size: 11px;
+					    text-align: center;
+					    padding: 2px 0px 2px 0px;
+					    font-weight: 900;
+					    margin-left: 2px;
+       				}
+       			}
+       		}
+       		.er-totalamount-paidinwords-container
+       		{
+       			width: 37%;
+       			.er-input-holder
+       			{
+       				display: inline-block;
+       				height: 83px;
+       				.er-input
+       				{
+       					display: inline-block;
+       				    margin: 0px;
+					    font-size: 11px;
+					    letter-spacing: 0.03px;
+					    text-align: justify;
+					    padding: 0px 10px 0px 10px;
+       				}
+       			}
+       		}
+       		.er-add-container
+       		{
+       			display: inline-block;
+			    width: 3%;
+			    height: 186px;
+			    border-right: 2px solid #333;
+			    border-bottom: 2px solid #333;
+       			.vertical-text-holder
+       			{
+       			    display: inline-block;
+				    padding: 89px 0px 0px 0px;
+				    width: 102%;
+       				.vertical-text
+       				{
+       					-webkit-transform: rotate(90deg);
+					    -moz-transform: rotate(90deg);
+					    -ms-transform: rotate(90deg);
+					    -o-transform: rotate(90deg);
+					    transform: rotate(270deg);
+					    margin: 0px;
+					    font-size: 13px;
+					    letter-spacing: 1px;
+       				}
+       			}
+       		}
+       		.er-underpayment-container
+       		{
+       			display: inline-block;
+			    width: 6%;
+			    height: 63px;
+			    border-right: 2px solid #333;
+			    border-bottom: 5px solid #333;
+       			.vertical-text-holder
+       			{
+       			    display: inline-block;
+				    padding: 24px 0px 0px 0px;
+				    width: 101%;
+       				.vertical-text
+       				{
+       				    -webkit-transform: rotate(90deg);
+					    -moz-transform: rotate(90deg);
+					    -ms-transform: rotate(90deg);
+					    -o-transform: rotate(90deg);
+					    transform: rotate(270deg);
+					    margin: 0px;
+					    font-size: 10px;
+					    letter-spacing: 1px;
+					    text-align: center;
+					    text-indent: 7px;
+       				}
+       			}
+       		}
+       		.er-subtotal-input-container
+       		{
+       		    display: inline-block;
+			    border-right: 2px solid #333;
+			    border-bottom: 2px solid #333;
+			    width: 9%;
+			    text-align: center;
+       			.er-input-holder
+       			{
+       				display: inline-block;
+       				.er-input
+       				{
+       				    margin: 0px;
+					    font-size: 11px;
+       				}
+       			}
+       		}
+       		.er-subtotal-lastinput-container
+       		{
+       		    display: inline-block;
+			    border-right: 2px solid #333;
+			    border-bottom: 5px solid #333;
+			    width: 9%;
+			    text-align: center;
+       			.er-input-holder
+       			{
+       				display: inline-block;
+       				.er-input
+       				{
+       				    margin: 0px;
+					    font-size: 11px;
+       				}
+       			}
+       		}
+       		.er-sscontribution-nopesosign-lastinput-container
+       		{
+       		    display: inline-block;
+			    border-right: 2px solid #333;
+			    border-bottom: 5px solid #333;
+			    width: 16%;
+			    text-align: right;
+       			.er-input-holder
+       			{
+       				display: inline-block;
+       				.er-input
+       				{
+       					margin: 0px;
+					    font-size: 11px;
+					    letter-spacing: 0.03px;
+					    margin-right: 6px;
+       				}
+       			}
+       		}
+       		.er-eccontribution-nopesosign-lastinput-container
+       		{
+       		    display: inline-block;
+			    border-right: 2px solid #333;
+			    border-bottom: 5px solid #333;
+			    width: 13%;
+			    text-align: right;
+       			.er-input-holder
+       			{
+       				display: inline-block;
+       				.er-input
+       				{
+       					margin: 0px;
+					    font-size: 11px;
+					    margin-right: 6px;
+       				}
+       			}
+       		}
+       		.er-totalcontribution-nopesosign-lastinput-container
+       		{
+       			display: inline-block;
+			    border-right: 2px solid #333;
+			    border-bottom: 5px solid #333;
+			    width: 16%;
+			    text-align: right;
+       			.er-input-holder
+       			{
+       				display: inline-block;
+       				.er-input
+       				{
+       				    margin: 0px;
+					    font-size: 11px;
+					    letter-spacing: 0.03px;
+					    margin-right: 6px;
+       				}
+       			}
+       		}
+       		.er-penalty-container
+       		{
+       			display: inline-block;
+			    width: 6%;
+			    height: 63px;
+			    border-right: 2px solid #333;
+			    border-bottom: 5px solid #333;
+       			.vertical-text-holder
+       			{
+       				display: inline-block;
+				    padding: 35px 0px 0px 0px;
+				    width: 101%;
+       				.vertical-text
+       				{
+       				    -webkit-transform: rotate(90deg);
+					    -moz-transform: rotate(90deg);
+					    -ms-transform: rotate(90deg);
+					    -o-transform: rotate(90deg);
+					    transform: rotate(270deg);
+					    margin: 0px;
+					    font-size: 10px;
+					    letter-spacing: 1px;
+					    text-align: center;
+					    text-indent: 7px;
+       				}
+       			}
+       		}
+       		.white-space-small
+       		{
+       			display: inline-block;
+				width: 37%;
+			    height: 19px;
+       		}
+       		.er-interest-container
+       		{
+       		    display: inline-block;
+			    width: 6%;
+			    height: 60px;
+			    border-right: 2px solid #333;
+			    border-bottom: 2px solid #333;
+       			.vertical-text-holder
+       			{
+       				display: inline-block;
+				    padding: 38px 0px 0px 0px;
+				    width: 101%;
+       				.vertical-text
+       				{
+       					-webkit-transform: rotate(90deg);
+					    -moz-transform: rotate(90deg);
+					    -ms-transform: rotate(90deg);
+					    -o-transform: rotate(90deg);
+					    transform: rotate(270deg);
+					    margin: 0px;
+					    font-size: 10px;
+					    letter-spacing: 1px;
+					    text-align: center;
+					    text-indent: 7px;
+       				}
+       			}
+       		}
+       		.er-printedname-container
+       		{
+       		    display: inline-block;
+			    width: 19%;
+			    text-align: center;
+       			.underline
+       			{
+       			    display: inline-block;
+    				border-bottom: 2px solid #333;
+       				.underline-holder
+       				{
+       					width: 125px;
+    					text-align: center;
+       					.er-input-holder
+       					{
+       						display: inline-block;
+       						.er-input
+       						{
+       						    margin: 0px;
+    							font-size: 11px;
+       						}
+       					}
+       				}
+       			}
+       		}
+       		.er-signature-container
+       		{
+       		    display: inline-block;
+			    width: 18%;
+			    text-align: center;
+       			.underline
+       			{
+       			    display: inline-block;
+    				border-bottom: 2px solid #333;
+       				.underline-holder
+       				{
+       				    width: 115px;
+    					text-align: center;
+       					.er-input-holder
+       					{
+       						display: inline-block;
+       						.er-input
+       						{
+       						    margin: 0px;
+    							font-size: 11px;
+       						}
+       					}
+       				}
+       			}
+       		}
+       		.er-printedname-label-container
+       		{
+       		    display: inline-block;
+			    width: 19%;
+			    text-align: center;
+			    padding-bottom: 2px;
+       			.er-label-holder
+       			{
+       				display: inline-block;
+       				.er-label
+       				{
+       				    margin: 0px;
+					    font-size: 11px;
+					    letter-spacing: 0.03px;
+       				}
+       			}
+       		}
+       		.er-signature-label-container
+       		{
+       			display: inline-block;
+			    width: 18%;
+			    text-align: center;
+			    padding-bottom: 2px;
+       			.er-label-holder
+       			{
+       				display: inline-block;
+       				.er-label
+       				{
+       				    margin: 0px;
+					    font-size: 11px;
+					    letter-spacing: 0.03px;
+       				}
+       			}
+       		}
+       		.white-space-incertifiedcorrect
+       		{
+       		    display: inline-block;
+			    width: 37%;
+			    height: 16px;
+       		}
+       		.er-totalamount-payment-container
+       		{
+       		    display: inline-block;
+			    background-color: #FEFE9C;
+			    width: 47%;
+       			.er-title-holder
+       			{
+       				display: inline-block;
+       				.er-title
+       				{
+       				    margin: 0px;
+					    font-size: 13px;
+					    text-align: center;
+					    padding: 5px 0px 5px 0px;
+					    font-weight: 900;
+					    margin-left: 2px;
+       				}
+       			}
+       		}
+       		.er-totalpayment-container
+       		{
+       			display: inline-block;
+			    border-right: 2px solid #333;
+			    width: 16%;
+			    padding: 3px 0px 3px 0px;
+			    background-color: #FEFE9C;
+       			.er-pesosign-holder
+       			{
+       			    display: inline-block;
+    				margin-left: 3px;
+       				.er-pesosign
+       				{
+       					font-size: 14px;
+       				}
+       			}
+       			.er-input-holder
+       			{
+       				display: inline-block;
+				    text-align: right;
+				    width: 82%;
+       				.er-input
+       				{
+       					margin: 0px;
 					    font-size: 11px;
 					    letter-spacing: 0.03px;
        				}

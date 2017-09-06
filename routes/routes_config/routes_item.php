@@ -19,4 +19,5 @@ Route::group(array('prefix' => '/member/item/'), function()
 	Route::any('/v2/columns','Member\ItemControllerV2@columns');
 
 	Route::any('/v2/search','Member\ItemControllerV2@search');
+	Route::any('/choose','Member\ItemControllerV2@choose');
 });

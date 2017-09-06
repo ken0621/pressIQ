@@ -12,6 +12,7 @@
 			List of Company
 			</small>
 			</h1>
+			<button class="btn btn-custom-white panel-buttons pull-right popup" link="/member/payroll/company_list/modal_create_company?is_sub=true">Create Sub-Company/Branch</button>
 			<button class="btn btn-custom-primary panel-buttons pull-right popup" link="/member/payroll/company_list/modal_create_company">Create Company</button>
 			<input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
 		</div>

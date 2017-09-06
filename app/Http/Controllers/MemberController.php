@@ -143,7 +143,7 @@ class MemberController extends Controller
 
     public function locale_id_to_name($locale_id)
     {
-        return Tbl_locale::where("locale_id", $locale_id)->pluck("locale_name");
+        return Tbl_locale::where("locale_id", $locale_id)->value("locale_name");
     }
 
     public function register()
@@ -270,7 +270,7 @@ class MemberController extends Controller
         }
         else
         {
-            return 1;
+            return 0;
         }
     }
     public function register_post()
@@ -418,23 +418,23 @@ class MemberController extends Controller
 
         Cart::customer_set_info_ec_order(Self::$shop_id, $cart_info, $customer_information);
 
-        $register_session = Session::get('mlm_register_step_1');
-        if($register_session == null)
-        {
-            return Redirect::to('/member/register');
-        }
-        // return $register_session;
-        $register_session_2 = Session::get('mlm_register_step_2');
-        if($register_session_2 == null)
-        {
-            return Redirect::to('/member/register/package');
-        }
+        // $register_session = Session::get('mlm_register_step_1');
+        // if($register_session == null)
+        // {
+        //     return Redirect::to('/member/register');
+        // }
+        // // return $register_session;
+        // $register_session_2 = Session::get('mlm_register_step_2');
+        // if($register_session_2 == null)
+        // {
+        //     return Redirect::to('/member/register/package');
+        // }
 
-        $register_session_3 = Session::get('mlm_register_step_3');
-        if($register_session_3 == null)
-        {
-            return Redirect::to('/member/register/shipping');
-        }
+        // $register_session_3 = Session::get('mlm_register_step_3');
+        // if($register_session_3 == null)
+        // {
+        //     return Redirect::to('/member/register/shipping');
+        // }
 
         //ONLINE PAYMENT
         $data["_payment_method"] = Tbl_online_pymnt_method::link(Self::$shop_id)->where("method_shop_id", Self::$shop_id)->get();
@@ -442,7 +442,7 @@ class MemberController extends Controller
         $data["_product"]        =  Cart::get_info(Self::$shop_id)["tbl_ec_order_item"];
         foreach($data["_product"] as $key=>$product)
         {
-            $data["_product"][$key]["variant_name"] = Tbl_ec_variant::where("evariant_id", $product["item_id"])->pluck("evariant_item_label");
+            $data["_product"][$key]["variant_name"] = Tbl_ec_variant::where("evariant_id", $product["item_id"])->value("evariant_item_label");
         }
         $data["order"]           =  Cart::get_info(Self::$shop_id)["tbl_ec_order"];
 
@@ -475,11 +475,11 @@ class MemberController extends Controller
 
     public function package()
     {
-        $register_session = Session::get('mlm_register_step_1');
-        if($register_session == null)
-        {
-            return Redirect::to('/member/register');
-        }
+        // $register_session = Session::get('mlm_register_step_1');
+        // if($register_session == null)
+        // {
+        //     return Redirect::to('/member/register');
+        // }
 
         $warehouse_id = Ecom_Product::getWarehouseId(Self::$shop_id);
         $data['_product'] = Tbl_ec_product::itemVariant()->inventory($warehouse_id)
@@ -529,17 +529,17 @@ class MemberController extends Controller
     }
     public function shipping()
     {
-        $register_session = Session::get('mlm_register_step_1');
-        if($register_session == null)
-        {
-            return Redirect::to('/member/register');
-        }
-        // return $register_session;
-        $register_session_2 = Session::get('mlm_register_step_2');
-        if($register_session_2 == null)
-        {
-            return Redirect::to('/member/register/package');
-        }
+        // $register_session = Session::get('mlm_register_step_1');
+        // if($register_session == null)
+        // {
+        //     return Redirect::to('/member/register');
+        // }
+        // // return $register_session;
+        // $register_session_2 = Session::get('mlm_register_step_2');
+        // if($register_session_2 == null)
+        // {
+        //     return Redirect::to('/member/register/package');
+        // }
 
 
         $data["_province"]  = Tbl_locale::where("locale_parent", 0)->get();
@@ -799,7 +799,7 @@ class MemberController extends Controller
         else
         {
             return $card;
-        }   
+        }
     }
 
     public function card_all($color, $name,  $membership_code)
@@ -818,5 +818,10 @@ class MemberController extends Controller
         $data['membership_code'] = Request::input("membership_code");
 
         return view("card", $data);
+    }
+    public function message()
+    {
+        $data["message"] = Request::input("message");
+        return view("member.message", $data);
     }
 }

@@ -33,7 +33,7 @@ class LocationController extends Member
 
     public function getShopId()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
 
     public function getList()
@@ -59,10 +59,10 @@ class LocationController extends Member
         $data["_barangay"]  = $data["_barangay"]->orderBy("locale_name")->get();
 
         $data["parent_city"]        = $city_parent;
-        $data["parent_city_name"]   = Tbl_locale::where("locale_id", $city_parent)->pluck("locale_name");
+        $data["parent_city_name"]   = Tbl_locale::where("locale_id", $city_parent)->value("locale_name");
 
         $data["parent_barangay"]    = $barangay_parent;
-        $data["parent_barangay_name"]= Tbl_locale::where("locale_id", $barangay_parent)->pluck("locale_name");
+        $data["parent_barangay_name"]= Tbl_locale::where("locale_id", $barangay_parent)->value("locale_name");
 
         return view('member.location.location', $data);
     }

@@ -172,7 +172,7 @@ class Membership_code
         	        }
         	        foreach($count_on_hand as $key => $value)
                     {
-                        $a = Tbl_warehouse_inventory::check_inventory_single($data['warehouse_id'], $key)->pluck('inventory_count');
+                        $a = Tbl_warehouse_inventory::check_inventory_single($data['warehouse_id'], $key)->value('inventory_count');
                         
                         if(intval($value) > intval($a))
                         {
@@ -335,7 +335,7 @@ class Membership_code
                 // dd($change_content);
                 $content_key = 'membership_code_purchase';
                 $data['body'] = EmailContent::email_txt_replace($content_key, $change_content, $shop_id);
-                $data['company']['email'] = DB::table('tbl_content')->where('shop_id', $shop_id)->pluck('value');
+                $data['company']['email'] = DB::table('tbl_content')->where('shop_id', $shop_id)->value('value');
 
                 // ---------------------------------------------
                 $data['mail_to'] = $data['invoice']->membership_code_customer_email;

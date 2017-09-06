@@ -51,7 +51,28 @@ class MlmRegisterController extends MlmLoginController
         }
         
         $data['country'] = Tbl_country::get();
-        return view("mlm.register", $data);
+
+        /* Check Shop Theme Register */
+        $shop = DB::table("tbl_shop")->where("shop_id", Self::$shop_id)->first();
+        if ($shop) 
+        {
+            switch ($shop->shop_theme) 
+            {
+                case '3xcell':
+                    View::addLocation(base_path() . '/public/themes/' . $shop->shop_theme . '/views/');
+                    $data["shop_theme"] = $shop->shop_theme;
+                    return view("register", $data);
+                break;
+                
+                default:
+                    return view("mlm.register", $data);
+                break;
+            }
+        }
+        else
+        {
+            return view("mlm.register", $data);
+        }
     }
     public function post_register()
     {   
@@ -274,7 +295,7 @@ class MlmRegisterController extends MlmLoginController
                 $content_key = 'success_register';
                 $data['body'] = EmailContent::email_txt_replace($content_key, $change_content, $shop_id);
 
-                $data['company']['email'] = DB::table('tbl_content')->where('shop_id', $shop_id)->pluck('value');
+                $data['company']['email'] = DB::table('tbl_content')->where('shop_id', $shop_id)->value('value');
 
                 // ----------------------------------------------------------
                 $data['mail_to'] = $data['customer']->email;

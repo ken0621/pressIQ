@@ -58,7 +58,7 @@ class Purchasing_inventory_system
             $shop_id = Tablet_global::getShopId();
         }
 
-        $check = Tbl_settings::where("settings_key","pis-jamestiong")->where("settings_value","enable")->where("shop_id",$shop_id)->pluck("settings_setup_done");
+        $check = Tbl_settings::where("settings_key","pis-jamestiong")->where("settings_value","enable")->where("shop_id",$shop_id)->value("settings_setup_done");
         return $check;
     }
     public static function get_inventory_in_sir($sir_id)
@@ -106,7 +106,7 @@ class Purchasing_inventory_system
 
                        $issued_bundle_qty_item = (UnitMeasurement::um_qty($value->related_um_type) * $value->item_qty) * $bundle_qty;
 
-                       $total_sold_bundle_qty = Tbl_sir_inventory::where("sir_item_id",$value_bundle->bundle_item_id)->where("inventory_sir_id",$sir_id)->where("sir_inventory_count","<",0)->sum("sir_inventory_count");
+                       $total_sold_bundle_qty = Tbl_sir_inventory::where("sir_item_id",$value_bundle->bundle_item_id)->where("inventory_sir_id",$sir_id)->where("sir_inventory_count","<",0)->where('is_bundled_item',1)->sum("sir_inventory_count");
                        $rem_bundle_qty = ($issued_bundle_qty_item - abs($total_sold_bundle_qty)) / $bundle_qty;
                        $sold_bundle_qty = $value->item_qty - $rem_bundle_qty;
                     }
@@ -246,7 +246,7 @@ class Purchasing_inventory_system
 
                        $issued_bundle_qty_item = (UnitMeasurement::um_qty($value->related_um_type) * $value->item_qty) * $bundle_qty;
 
-                       $total_sold_bundle_qty = Tbl_sir_inventory::where("sir_item_id",$value_bundle->bundle_item_id)->where("inventory_sir_id",$sir_id)->where("sir_inventory_count","<",0)->sum("sir_inventory_count");
+                       $total_sold_bundle_qty = Tbl_sir_inventory::where("sir_item_id",$value_bundle->bundle_item_id)->where("inventory_sir_id",$sir_id)->where("sir_inventory_count","<",0)->where('is_bundled_item',1)->sum("sir_inventory_count");
                        $rem_bundle_qty = ($issued_bundle_qty_item - abs($total_sold_bundle_qty)) / $bundle_qty;
                        $sold_bundle_qty = $value->item_qty - $rem_bundle_qty;
                     }
@@ -297,7 +297,7 @@ class Purchasing_inventory_system
         {
             foreach ($data["_returns"] as $key_return => $value_return)
             {
-                $item_um = Tbl_unit_measurement_multi::where("multi_um_id",$value_return->item_measurement_id)->where("is_base",0)->pluck("multi_id");
+                $item_um = Tbl_unit_measurement_multi::where("multi_um_id",$value_return->item_measurement_id)->where("is_base",0)->value("multi_id");
 
                 $data["_returns"][$key_return]->item_count = UnitMeasurement::um_view($value_return->sc_item_qty,$value_return->item_measurement_id,$item_um); 
                 $data["_returns"][$key_return]->item_physical_count = UnitMeasurement::um_view($value_return->sc_physical_count,$value_return->item_measurement_id,$item_um); 
@@ -456,8 +456,8 @@ class Purchasing_inventory_system
                 $_transaction[$inv_key]['reference_name'] = 'sales_receipt';
                 $_transaction[$inv_key]['transaction_code'] = "Paid";
 
-                $data["total_cash"] += $inv_value->inv_payment_applied - $cm_amt;
-                $data["cash_sales"] += $inv_value->inv_payment_applied - $cm_amt;
+                $data["total_cash"] += $inv_value->inv_overall_price - $cm_amt;
+                $data["cash_sales"] += $inv_value->inv_overall_price - $cm_amt;
                 $_transaction[$inv_key]['balance'] = ($inv_value->inv_overall_price - $inv_value->inv_payment_applied);
             }
             $_transaction[$inv_key]['customer_name'] = $inv_value->company != "" ? $inv_value->company : $inv_value->title_name." ".$inv_value->first_name." ".$inv_value->last_name." ".$inv_value->suffix_name;
@@ -679,7 +679,7 @@ class Purchasing_inventory_system
         return round($total_amount,2);
 
     }
-    public static function insert_sir_inventory($sir_id, $item, $ref_name, $ref_id)
+    public static function insert_sir_inventory($sir_id, $item, $ref_name, $ref_id, $type = 0)
     {
         $item_info = Tbl_item::where("item_id",$item["item_id"])->first();
         if($item_info->item_type_id == 4)
@@ -689,7 +689,7 @@ class Purchasing_inventory_system
             {
                 $item_bundle["item_id"] = $value->bundle_item_id;
                 $item_bundle["qty"] = (UnitMeasurement::um_qty($value->bundle_um_id) * $value->bundle_qty) * $item["qty"];
-                Purchasing_inventory_system::insert_sir_inventory($sir_id, $item_bundle, $ref_name, $ref_id);
+                Purchasing_inventory_system::insert_sir_inventory($sir_id, $item_bundle, $ref_name, $ref_id, 1);
             }
         }
         else
@@ -699,22 +699,23 @@ class Purchasing_inventory_system
             $insert["sir_inventory_count"] = $item["qty"];
             $insert["sir_inventory_ref_name"] = $ref_name;
             $insert["sir_inventory_ref_id"] = $ref_id;
+            $insert["is_bundled_item"] = $type;
             Tbl_sir_inventory::insert($insert);
         }        
     }
 
     public static function count_rem_qty($sir_id,$item_id)
     {
-        return Tbl_sir_inventory::where("inventory_sir_id",$sir_id)->where("sir_item_id",$item_id)->where("sir_inventory_ref_name","!=","credit_memo")->sum("sir_inventory_count");
+        return Tbl_sir_inventory::where("inventory_sir_id",$sir_id)->where("sir_item_id",$item_id)->where("sir_inventory_ref_name","!=","credit_memo")->where('is_bundled_item',0)->sum("sir_inventory_count");
     }
     public static function count_sold_qty($sir_id,$item_id)
     {
-        return abs(Tbl_sir_inventory::where("inventory_sir_id",$sir_id)->where("sir_item_id",$item_id)->where("sir_inventory_count","<=",0)->where("sir_inventory_ref_name","!=","credit_memo")->sum("sir_inventory_count"));
+        return abs(Tbl_sir_inventory::where("inventory_sir_id",$sir_id)->where("sir_item_id",$item_id)->where("sir_inventory_count","<=",0)->where("sir_inventory_ref_name","!=","credit_memo")->where('is_bundled_item',0)->sum("sir_inventory_count"));
     }
     public static function get_qty_item_sir($sir_id,$item_id)
     {
         $qty = 0;
-        $type = Tbl_item::where("item_id",$item_id)->pluck("item_type_id");
+        $type = Tbl_item::where("item_id",$item_id)->value("item_type_id");
         if($type != 4)
         {
             $qty = Tbl_sir_inventory::where("inventory_sir_id",$sir_id)->where("sir_item_id",$item_id)->sum("sir_inventory_count");
@@ -763,7 +764,7 @@ class Purchasing_inventory_system
             $i = null;
             foreach ($sir_item as $value_itemid) 
             {
-               $type = Tbl_item::where("item_id",$value_itemid->item_id)->pluck("item_type_id");
+               $type = Tbl_item::where("item_id",$value_itemid->item_id)->value("item_type_id");
                 if($type == 4)
                 {
                     if($value_itemid->item_id == $value_items['product_id'])
@@ -825,7 +826,7 @@ class Purchasing_inventory_system
             $i = null;
             foreach ($sir_item as $value_itemid) 
             {
-                $type = Tbl_item::where("item_id",$value_itemid->item_id)->pluck("item_type_id");
+                $type = Tbl_item::where("item_id",$value_itemid->item_id)->value("item_type_id");
                 if($type == 4)
                 {
                     if($value_itemid->item_id == $value_items['product_id'])
@@ -890,7 +891,7 @@ class Purchasing_inventory_system
                 $i = null;
                 foreach ($sir_item as $value_itemid) 
                 {
-                    $type = Tbl_item::where("item_id",$value_itemid->item_id)->pluck("item_type_id");
+                    $type = Tbl_item::where("item_id",$value_itemid->item_id)->value("item_type_id");
                     if($type == 4)
                     {
                         if($value_itemid->item_id == $value_items['product_id'])
@@ -1009,11 +1010,11 @@ class Purchasing_inventory_system
     }
     public static function getShopId()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
     public static function getUserId()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_id');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_id');
     }
     public static function get_sir_item($sir_id)
     {
@@ -1249,9 +1250,9 @@ class Purchasing_inventory_system
     }
     public static function get_item_price($item_id)
     {
-        $if_bundle = Tbl_item::where("item_id",$item_id)->pluck("item_type_id");
+        $if_bundle = Tbl_item::where("item_id",$item_id)->value("item_type_id");
 
-        $return_price = Tbl_item::where("item_id",$item_id)->pluck("item_price");
+        $return_price = Tbl_item::where("item_id",$item_id)->value("item_price");
         if($if_bundle == 4)
         {
             $return_price = Item::get_item_bundle_price($item_id);
@@ -1260,9 +1261,9 @@ class Purchasing_inventory_system
     }
     public static function get_item_cost($item_id)
     {
-        $if_bundle = Tbl_item::where("item_id",$item_id)->pluck("item_type_id");
+        $if_bundle = Tbl_item::where("item_id",$item_id)->value("item_type_id");
 
-        $return_price = Tbl_item::where("item_id",$item_id)->pluck("item_cost");
+        $return_price = Tbl_item::where("item_id",$item_id)->value("item_cost");
         if($if_bundle == 4)
         {
             $return_price = Item::get_item_bundle_cost($item_id);
@@ -1477,7 +1478,7 @@ class Purchasing_inventory_system
     public static function check_qty_sir($sir_id, $item_id, $um, $qty, $invoice_id = 0, $invoice_table = '')
     {
         $return = 0;
-        $type = Tbl_item::where("item_id",$item_id)->pluck("item_type_id");
+        $type = Tbl_item::where("item_id",$item_id)->value("item_type_id");
 
         if($type == 4)
         {
@@ -1633,6 +1634,8 @@ class Purchasing_inventory_system
         }
         $cm_items = null;
         $cm = Tbl_manual_credit_memo::customer_cm()->where("sir_id",$sir_id)->where("cm_type",0)->where("cm_used_ref_name","returns")->get();
+
+        $cm = Tbl_manual_credit_memo::customer_cm()->where("sir_id",$sir_id)->get();
         foreach ($cm as $cm_key => $cm_value)
         {
             $cm_itemss = Tbl_credit_memo_line::where("cmline_cm_id",$cm_value->cm_id)->get();
@@ -1673,7 +1676,7 @@ class Purchasing_inventory_system
             // $data["_returns"][$key1]['item_price'] = "";
             if($item_info)
             {
-                // $item_um = Tbl_unit_measurement_multi::where("multi_um_id",$item_info->item_measurement_id)->where("is_base",0)->pluck("multi_id");
+                // $item_um = Tbl_unit_measurement_multi::where("multi_um_id",$item_info->item_measurement_id)->where("is_base",0)->value("multi_id");
                 // $data["_returns"][$key1]['item_name'] = $item_info->item_name;
                 // $data["_returns"][$key1]['item_count'] = UnitMeasurement::um_view($value1["item_qty"],$item_info->item_measurement_id,$item_um);
                 // $data["_returns"][$key1]['item_base_um'] = $item_info->item_measurement_id;

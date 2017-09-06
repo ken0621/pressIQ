@@ -27,7 +27,7 @@ class Accounting
 {
 	public static function getShopId()
 	{
-		$shop_id = Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+		$shop_id = Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
 
 		if(Tablet_global::getShopId() == $shop_id || $shop_id == null)
 		{
@@ -56,7 +56,7 @@ class Accounting
 
 		if($parent_id)
 		{
-			$sublevel 	= Tbl_chart_of_account::where("account_parent_id", $parent_id)->pluck("account_sublevel");
+			$sublevel 	= Tbl_chart_of_account::where("account_parent_id", $parent_id)->value("account_sublevel");
 		}
 		else
 		{
@@ -67,6 +67,13 @@ class Accounting
 		$result = Accounting::checkAccount($shop, $parent_id, $sublevel, $filter, $type, $search);
 
 		return $result;
+	}
+	public static function get_default_coa($account_code)
+	{
+		$shop_id = Accounting::getShopId();
+		$return_id = Tbl_chart_of_account::where("account_code", $account_code)
+									->where("account_shop_id", $shop_id)->value("account_id");
+		return $return_id;
 	}
 	public static function checkAccount($shop, $parent_id, $sublevel, $filter, $type, $search)
 	{
@@ -163,20 +170,20 @@ class Accounting
         }
 
 		/* GETTING THE DEFAULT ACCOUNTS RECEIVABLE AND ACCOUNTS PAYABLE */
-		$account_receivable	= Tbl_chart_of_account::accountInfo($shop_id)->where("account_code","accounting-receivable")->pluck("account_id");
-		$account_payable	= Tbl_chart_of_account::accountInfo($shop_id)->where("account_code","accounting-payable")->pluck("account_id");
+		$account_receivable	= Tbl_chart_of_account::accountInfo($shop_id)->where("account_code","accounting-receivable")->value("account_id");
+		$account_payable	= Tbl_chart_of_account::accountInfo($shop_id)->where("account_code","accounting-payable")->value("account_id");
 		$account_cash		= Accounting::getCashInBank();
 
 		/* FOR OLD DATABASE - CHECKING IF THERE IS ALREADY AN ACCOUNT CODE*/
 		if(!$account_receivable)
 		{
 			Tbl_chart_of_account::where("account_shop_id", $shop_id)->where("account_name", "Accounts Receivable")->update(['account_code'=>"accounting-receivable"]);
-			$account_receivable	= Tbl_chart_of_account::accountInfo($shop_id)->where("account_code","accounting-receivable")->pluck("account_id");
+			$account_receivable	= Tbl_chart_of_account::accountInfo($shop_id)->where("account_code","accounting-receivable")->value("account_id");
 		}
 		if(!$account_payable)
 		{
 			Tbl_chart_of_account::where("account_shop_id", $shop_id)->where("account_name", "Accounts Payable")->update(['account_code'=>"accounting-payable"]);
-			$account_payable	= Tbl_chart_of_account::accountInfo($shop_id)->where("account_code","accounting-payable")->pluck("account_id");
+			$account_payable	= Tbl_chart_of_account::accountInfo($shop_id)->where("account_code","accounting-payable")->value("account_id");
 		}
 		/* END */
 
@@ -322,9 +329,9 @@ class Accounting
 				$line_data["item_id"] = $entry_line["item_id"];
 
 				/* GETTING CHART OF ACCOUNTS THAT TAGGED ON THE ITEM */
-				$account_asset 		= Tbl_item::where("item_id", $entry_line["item_id"])->pluck("item_asset_account_id");   //Inventory 
-				$account_income 	= Tbl_item::where("item_id", $entry_line["item_id"])->pluck("item_income_account_id");  //Sales
-				$account_expense 	= Tbl_item::where("item_id", $entry_line["item_id"])->pluck("item_expense_account_id"); //Cost of Good Sold
+				$account_asset 		= Tbl_item::where("item_id", $entry_line["item_id"])->value("item_asset_account_id");   //Inventory 
+				$account_income 	= Tbl_item::where("item_id", $entry_line["item_id"])->value("item_income_account_id");  //Sales
+				$account_expense 	= Tbl_item::where("item_id", $entry_line["item_id"])->value("item_expense_account_id"); //Cost of Good Sold
 			}
 			elseif(isset($entry_line["account_id"]))
 			{
@@ -656,7 +663,7 @@ class Accounting
 	 */
 	public static function normalBalance($account_id)
 	{
-		$balance = Tbl_chart_of_account::type()->where("account_id", $account_id)->pluck("normal_balance");
+		$balance = Tbl_chart_of_account::type()->where("account_id", $account_id)->value("normal_balance");
 		if($balance == "credit") 	return 'Credit';
 		elseif($balance == "debit") return 'Debit';
 	}
@@ -669,7 +676,7 @@ class Accounting
 	 */
 	public static function contraAccount($account_id)
 	{
-		$balance = Tbl_chart_of_account::type()->where("account_id", $account_id)->pluck("normal_balance");
+		$balance = Tbl_chart_of_account::type()->where("account_id", $account_id)->value("normal_balance");
 		if($balance == "credit") 	return 'Debit';
 		elseif($balance == "debit") return 'Credit';
 	}

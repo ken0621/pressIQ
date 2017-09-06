@@ -21,7 +21,7 @@ class ItemSerialController extends Member
         $data["_item_serial"] = Tbl_inventory_serial_number::item()->warehouse_inventory()->where("has_serial_number",1)->groupBy("tbl_item.item_id")->where("tbl_warehouse_inventory.warehouse_id",$warehouse_id)->where("tbl_item.shop_id",$this->user_info->shop_id)->get();
         foreach ($data["_item_serial"] as $key => $value) 
         {
-            $data["_item_serial"][$key]->inventory_count = Tbl_warehouse_inventory::check_inventory_single($warehouse_id,$value->item_id)->pluck('inventory_count');
+            $data["_item_serial"][$key]->inventory_count = Tbl_warehouse_inventory::check_inventory_single($warehouse_id,$value->item_id)->value('inventory_count');
         }
         return view("member.item_serial.item_serial",$data);
     }

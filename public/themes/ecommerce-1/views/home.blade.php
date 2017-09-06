@@ -13,7 +13,7 @@
 					@if(isset($_categories))
 						@foreach($_categories as $category)
 						<div class="button-shop">
-							<div class="text">
+							<div class="text" style="cursor: pointer;" onClick="location.href='/product?type={{ $category['type_id'] }}'">
 								<!-- <img src="/themes/{{ $shop_theme }}/img/electronics.png"> -->
 								{{ $category['type_name'] }}
 							</div>

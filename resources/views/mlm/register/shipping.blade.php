@@ -47,7 +47,7 @@
       </div>
     </div>
     <div class="button-holder">
-      <button class="btn btn-green btn-lg">PROCEED</button>
+      <button class="btn btn-green btn-lg" onClick="location.href='/member/register/payment'">PROCEED</button>
     </div>
   </div>
 </div>

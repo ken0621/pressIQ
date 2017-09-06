@@ -9,6 +9,7 @@ use App\Models\Tbl_tree_placement;
 use App\Models\Tbl_tree_sponsor;
 use App\Models\Tbl_mlm_stairstep_settings;
 use App\Models\Tbl_mlm_slot;
+use App\Models\Tbl_shop;
 use App\Globals\Mlm_slot_log;
 use App\Globals\Mlm_complan_manager;
 use Crypt;
@@ -16,13 +17,13 @@ use Redirect;
 use Request;
 use Carbon\Carbon;
 use View;
-
+use DB;
 
 class MLM_StairstepController extends Member
 {
 	public function getShopId()
 	{
-		return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+		return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
 	}
 
     public function index()
@@ -37,7 +38,7 @@ class MLM_StairstepController extends Member
     	if($start && $end)
     	{
     		$start   = date("Y-m-d H:i:s", strtotime($start));
-    		$end     = date("Y-m-d H:i:s", strtotime($end));
+    		$end     = date("Y-m-d 23:59:59", strtotime($end));
     		$shop_id = $this->getShopId();
 
     		$distribute = Tbl_stairstep_distribute::where("stairstep_distribute_start_date",$start)
@@ -104,6 +105,7 @@ class MLM_StairstepController extends Member
     	$end    		= Request::input("end_date");
 		$start 			= Carbon::parse($start);
 		$end   			= Carbon::parse($end);
+		$end            = $end->format("Y-m-d 23:59:59");
 
     	$distribute_id  = Request::input("distribute_id");
     	$slot_id 		= Request::input("slot_id");
@@ -138,6 +140,11 @@ class MLM_StairstepController extends Member
 	    							   							->where("points_log_type","RPV")
 	    							   							->where("points_log_converted","0")
 	    							   							->sum("points_log_points");  
+				// if($slot_id == 680)
+				// {
+				// 	dd($rpv,$grpv,$converted_pv,$start,$end);
+				// }	
+				    							   							
 				if(!$rpv)
 				{
 					$rpv = 0;
@@ -193,7 +200,16 @@ class MLM_StairstepController extends Member
 	            $check_if_change = 0;
 	        	foreach($slot_stairstep_get as $slot_stairstep_new)
 	        	{
-	        		if($slot_stairstep_new->stairstep_level > $slot_stairstep->stairstep_level)
+	        		if(!$slot_stairstep)
+	        		{
+	        			$check_stair_level = 0;
+	        		}
+	        		else
+	        		{
+	        			$check_stair_level = $slot_stairstep->stairstep_level;
+	        		}
+
+	        		if($slot_stairstep_new->stairstep_level > $check_stair_level)
 	        		{
 		            	if($slot_stairstep_new->stairstep_leg_id != 0)
 		            	{
@@ -349,5 +365,69 @@ class MLM_StairstepController extends Member
     	}
 
 		return $returned_slot;
+    }
+
+    public function stairstep_view()
+    {
+    	$shop_id 		= $this->getShopId();
+    	$data["_slot"]  = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id",$shop_id)
+    								  ->customer()
+    								  ->leftjoin("tbl_mlm_stairstep_settings","tbl_mlm_stairstep_settings.stairstep_id","=","tbl_mlm_slot.stairstep_rank")
+    								  ->leftJoin("tbl_mlm_slot_points_log","tbl_mlm_slot_points_log.points_log_slot","=","tbl_mlm_slot.slot_id")
+    								  ->select("*",DB::raw("SUM(IF(points_log_type='RGPV',points_log_points,0)) AS stairstep_points"),DB::raw("SUM(IF(points_log_type='RPV',points_log_points,0)) AS personal_stairstep"))
+    								  ->groupBy("slot_id")
+    								  ->get();
+
+    	$start  = Request::input("start");
+    	$end    = Request::input("end");
+    		
+    	if(!$start)	
+    	{
+    		$start = $this->get_start_date();
+    	}
+    	dd($start);
+    	if(!$end)
+    	{
+
+    	}
+
+
+    	return view("member.mlm_stairstep.stairstep_distribution",$data);
+    }
+
+    public function get_start_date()
+    {
+    	$shop_id 		   = $this->getShopId();
+    	$last_distribute   = Tbl_stairstep_distribute::where("shop_id",$shop_id)->orderBy("stairstep_distribute_end_date","DESC")->first();
+    	
+    	$first_slot_points = Tbl_mlm_slot_points_log::where("shop_id",$shop_id)
+    												->join("tbl_mlm_slot","tbl_mlm_slot.slot_id","=","tbl_mlm_slot_points_log.points_log_slot")
+    												->orderBy("points_log_date_claimed","")
+    												->first();
+
+    	$shop_date_created = Tbl_shop::where("shop_id",$shop_id)->first(); 
+
+    	if($last_distribute)
+    	{
+    		return $last_distribute->stairstep_distribute_end_date;
+    	}
+    	else if($first_slot_points)
+    	{
+    		return $shop_date_created->shop_date_created;
+    	}	
+    	else
+    	{
+    		return $shop_date_created->shop_date_created;
+    	}
+    }
+
+    public function get_end_date()
+    {
+
+    }
+
+    public function rank_stairstep_view()
+    {
+    	return view("member.mlm_stairstep.rank_update_stairstep");
     }
 }

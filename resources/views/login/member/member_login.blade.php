@@ -54,6 +54,7 @@
 		<section class="wrapper scrollable animated fadeInDown">
 			<section class="panel panel-default">
 				<div class="panel-heading">
+					@if($shop_id == null)
 					<div>
 						<img src="/assets/member/images/proton-logo.png" alt="proton-logo">
 						<h1>
@@ -65,26 +66,49 @@
 						</span>
 						</h1>
 					</div>
+					@else
+						@if($shop_info)
+							<div>
+								<img src="{{$company_logo}}" style="width: 100% !important; object-fit: contain !important; ">
+								<h1>
+								<span class="title">
+									<!-- <center>{{$shop_info->shop_key}}</center> -->
+								</span>
+								</h1>
+							</div>
+						@endif
+					@endif
 				</div>
 				<ul class="list-group">
 					<li class="list-group-item">
-						<span class="welcome-text">
-							Welcome to Digima House!
-						</span>
-						@if(session()->has('message'))
-							<span class="member" style="color: red;">
-								 <strong>Error!</strong> {{ session('message') }}<br>
+						@if($shop_id == null)
+							<span class="welcome-text">
+								Welcome to Digima House!
 							</span>
+							@if(session()->has('message'))
+								<span class="member" style="color: red;">
+									 <strong>Error!</strong> {{ session('message') }}<br>
+								</span>
+							@else
+							<span class="member">
+								Not a Member?
+							</span>
+							<a href="register">Sign Up »</a>
+							@endif
 						@else
-						<span class="member">
-							Not a Member?
-						</span>
-						<a href="register">Sign Up »</a>
-						@endif
+							<span class="welcome-text">
+								Welcome to {{$shop_info->shop_key}}!
+							</span>
+							@if(session()->has('message'))
+								<span class="member" style="color: red;">
+									 <strong>Error!</strong> {{ session('message') }}<br>
+								</span>
+							@endif
+						@endif	
 					</li>
 					<li class="list-group-item">
 						<span class="login-text">
-							Sign in your Shop Now
+							Sign in Now
 						</span>
 						<div class="form-group">
 							<label for="email">Email</label>

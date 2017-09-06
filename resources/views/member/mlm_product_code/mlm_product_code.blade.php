@@ -43,7 +43,7 @@
         </div>
     </div>
 </div>
-
+@if($ismerchant != 1)
 <!-- NO PRODUCT YET -->
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <ul class="nav nav-tabs">
@@ -172,11 +172,12 @@
         </div>
     </div> 
 </div>
+@endif
 @endsection
 @section('script')
 <script type="text/javascript">
 on_search();
-@if($errors->has())
+@if(count($errors) > 0)
    @foreach ($errors->all() as $error)
       toastr.error("{{ $error }}");
   @endforeach

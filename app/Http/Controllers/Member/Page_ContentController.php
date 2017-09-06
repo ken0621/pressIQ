@@ -244,7 +244,7 @@ class Page_ContentController extends Member
             {
                 $data["_content"] = [];
             }
-
+            
             return view("member.page.page_maintenance", $data);
         }
     }

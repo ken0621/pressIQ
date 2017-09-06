@@ -44,7 +44,7 @@ class Customer_SaleReceiptController extends Member
      */
     public function getShopId()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
 
     public function index()
@@ -157,7 +157,7 @@ class Customer_SaleReceiptController extends Member
                 $item_info[$key]['ref_name']           = "";
                 $item_info[$key]['ref_id']             = 0;
     
-                $item_type = Tbl_item::where("item_id",Request::input('invline_item_id')[$key])->pluck("item_type_id");
+                $item_type = Tbl_item::where("item_id",Request::input('invline_item_id')[$key])->value("item_type_id");
                 if($item_type == 4 || $item_type == 1)
                 {
     
@@ -199,7 +199,7 @@ class Customer_SaleReceiptController extends Member
                  $i = null;
                  foreach ($_itemline as $keyitemline => $valueitemline)
                  {
-                    $type = Tbl_item::where("item_id",Request::input("invline_item_id")[$keyitemline])->pluck("item_type_id");
+                    $type = Tbl_item::where("item_id",Request::input("invline_item_id")[$keyitemline])->value("item_type_id");
                     if($type == 4)
                     {
                         if(Request::input("invline_item_id")[$keyitemline] == $value_items['product_id'])
@@ -270,7 +270,7 @@ class Customer_SaleReceiptController extends Member
                         $cm_item_info[$keys]['rate']               = str_replace(',', "", Request::input('cmline_rate')[$keys]);
                         $cm_item_info[$keys]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$keys]);
                         
-                        $item_type = Tbl_item::where("item_id",Request::input('cmline_item_id')[$keys])->pluck("item_type_id");
+                        $item_type = Tbl_item::where("item_id",Request::input('cmline_item_id')[$keys])->value("item_type_id");
                         if($item_type == 4 || $item_type == 1)
                         {
                             $um_qty = UnitMeasurement::um_qty(Request::input("cmline_um")[$keys]);
@@ -307,7 +307,7 @@ class Customer_SaleReceiptController extends Member
                          $i = null;
                          foreach ($_cm_items as $keyitemline_cm => $valueitemline)
                          {
-                            $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->pluck("item_type_id");
+                            $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->value("item_type_id");
                             if($type == 4)
                             {
                                 if(Request::input("cmline_item_id")[$keyitemline_cm] == $value_items_cm['product_id'])
@@ -458,7 +458,7 @@ class Customer_SaleReceiptController extends Member
                 $item_info[$key]['ref_name']           = "";
                 $item_info[$key]['ref_id']             = 0;
 
-                $item_type = Tbl_item::where("item_id",Request::input('invline_item_id')[$key])->pluck("item_type_id");
+                $item_type = Tbl_item::where("item_id",Request::input('invline_item_id')[$key])->value("item_type_id");
                 if($item_type == 4 || $item_type == 1)
                 {
                     $qty = UnitMeasurement::um_qty(Request::input("invline_um")[$key]);
@@ -500,7 +500,7 @@ class Customer_SaleReceiptController extends Member
                  $i = null;
                  foreach ($_itemline as $keyitemline => $valueitemline)
                  {
-                    $type = Tbl_item::where("item_id",Request::input("invline_item_id")[$keyitemline])->pluck("item_type_id");
+                    $type = Tbl_item::where("item_id",Request::input("invline_item_id")[$keyitemline])->value("item_type_id");
                     if($type == 4)
                     {
                         if(Request::input("invline_item_id")[$keyitemline] == $value_items['product_id'])
@@ -543,7 +543,7 @@ class Customer_SaleReceiptController extends Member
                     $cm_item_info[$keys]['rate']               = str_replace(',', "", Request::input('cmline_rate')[$keys]);
                     $cm_item_info[$keys]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$keys]); 
                    
-                    $item_type = Tbl_item::where("item_id",Request::input('cmline_item_id')[$keys])->pluck("item_type_id");
+                    $item_type = Tbl_item::where("item_id",Request::input('cmline_item_id')[$keys])->value("item_type_id");
                     if($item_type == 4 || $item_type == 1)
                     {
                         $um_qty = UnitMeasurement::um_qty(Request::input("cmline_um")[$keys]);
@@ -583,7 +583,7 @@ class Customer_SaleReceiptController extends Member
                      $i = null;
                      foreach ($_cm_items as $keyitemline_cm => $valueitemline)
                      {
-                        $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->pluck("item_type_id");
+                        $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->value("item_type_id");
                         if($type == 4)
                         {
                             if(Request::input("cmline_item_id")[$keyitemline_cm] == $value_items_cm['product_id'])
@@ -644,7 +644,7 @@ class Customer_SaleReceiptController extends Member
 
                     if($cm_customer_info != null && $cm_item_info != null)
                     {
-                        $credit_memo_id = Tbl_customer_invoice::where("inv_id",$inv_id)->pluck("credit_memo_id");
+                        $credit_memo_id = Tbl_customer_invoice::where("inv_id",$inv_id)->value("credit_memo_id");
                         if($credit_memo_id != null)
                         {
                             $cm_id = CreditMemo::updateCM($credit_memo_id, $cm_customer_info, $cm_item_info);

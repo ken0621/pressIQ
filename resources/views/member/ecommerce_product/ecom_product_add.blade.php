@@ -151,7 +151,14 @@
                     </div>
                 </div>
             </div>
-            </br></br></br></br></br></br></br></br></br></br>
+        </div>
+        <div class="col-md-12">
+            <div class="form-box-divider">
+                <div class="form-group">
+                    <label>Product Details</label>
+                    <textarea class="mce form-control" name="eprod_details"></textarea>
+                </div>
+            </div>
         </div>
     </div>
 </form>
@@ -221,4 +228,11 @@
 </script>
 <script type="text/javascript" src="/assets/member/js/eproduct.js"></script>
 <script type="text/javascript" src="/assets/external/selectize.js/dist/js/standalone/selectize.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.6.5/tinymce.min.js"></script>
+<script type="text/javascript">
+tinymce.init({ 
+    selector:'.mce',
+    plugins: "autoresize",
+ });
+ </script>
 @endsection

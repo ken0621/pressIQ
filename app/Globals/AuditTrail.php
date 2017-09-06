@@ -53,11 +53,11 @@ class AuditTrail
 {
     public static function getUser()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_id');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_id');
     }
     public static function getShopId()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
     public static function record_logs($action ="", $source="", $source_id = 0 , $old_data ="" , $new_data="")
     {

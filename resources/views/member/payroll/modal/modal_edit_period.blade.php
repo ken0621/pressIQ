@@ -48,6 +48,12 @@
 				<input type="text" name="payroll_period_end" class="datepicker form-control" required value="{{date('m/d/Y', strtotime($period->payroll_period_end))}}">
 			</div>
 		</div>
+		<div class="form-group">
+			<div class="col-md-6">
+				<small>Release Date</small>
+				<input type="text" name="payroll_release_date" class="datepicker form-control" required value="{{date('m/d/Y', strtotime($period->payroll_release_date))}}">
+			</div>
+		</div>
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>

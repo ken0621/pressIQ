@@ -3,31 +3,23 @@
 <div class="content">
 	<div class="top-1-container">
 		<div class="container">
-			<div class="title-container">Our History</div>
+			<div class="title-container">{{ get_content($shop_theme_info, "history", "history_banner_title") }}</div>
 		</div>
 	</div>
 	<div class="top-2-container">
 		<div class="container">
 			<div class="top-2-content-container row clearfix">
 				<div class="col-md-8">
-					<div class="title-container">About 3XCELL</div>
+					<div class="title-container">{{ get_content($shop_theme_info, "history", "history_content_title") }}</div>
 					<div class="top-2-content">
 						<p>
-							It was in 2004 when the principal incorporator of the company, who is then and now into logistics and trading business started joining network marketing companies. He has seen the beauty of how a network of people worked together to attain a company’s goal with the freedom of time and financial entitlement.<br><br>
-
-							From this experience blossomed the concept of 3xcell-E Sales & Marketing Inc. Through time, studies and research looking for health products with the most benefit and affordability to many made a part of his daily and nightly routine.<br><br>
-
-							A heart and care for the people working to attain success and sustain longevity of a company is his prime motivator as he has seen through experience how a networker would jump in and out of one company to another. Believing to change the face of network marketing from its traditional ways and practices, 3xcell-E has formulated a breakthrough of its own market introduction.<br><br>
-
-							3xcell-E Sales & Marketing Inc. is composed of five dynamic individuals who share the same motivation and common values strengthened and lead by their principal incorporator.<br><br>
-
-							Formally organized in October 2015, 3xcell-E believed that it is the best way to provide additional opportunities to its circle of peers and employees and extend further to others.
+							{!!get_content($shop_theme_info, "history", "history_content_description") !!}
 						</p>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="img-container">
-						<img src="/themes/{{ $shop_theme }}/img/founder-img.png">
+						<img src="{{ get_content($shop_theme_info, "history", "history_content_img") }}">
 					</div>
 				</div>
 			</div>
@@ -47,7 +39,7 @@
 							</div>
 						</div>
 						<div class="detail-container">
-							To be an instrument of inspiration to others through the knowledge of leveraging time, money and effort.
+							{{ get_content($shop_theme_info, "history", "history_vision_description") }}
 						</div>			
 					</div>
 				</div>
@@ -61,7 +53,7 @@
 							</div>
 						</div>
 						<div class="detail-container">
-							To influence and empower others in achieving goal to be healthy and wealthy with the freedom of time especially in today’s very crowded populace.
+							{{ get_content($shop_theme_info, "history", "history_mission_description") }}
 						</div>			
 					</div>
 				</div>
@@ -78,27 +70,37 @@
 			<div class="bot-content row clearfix">
 				<div class="col-md-2">
 					<div class="img-container">
-						<img src="/themes/{{ $shop_theme }}/img/permit1.png">
+						<a href="/themes/{{ $shop_theme }}/img/permit1.png" data-title="" data-lightbox="company-gallery">
+							<img src="/themes/{{ $shop_theme }}/img/permit1.png">
+						</a>
 					</div>
 				</div>
 				<div class="col-md-2">
 					<div class="img-container">
-						<img src="/themes/{{ $shop_theme }}/img/permit2.png">
+						<a href="/themes/{{ $shop_theme }}/img/permit2.png" data-title="" data-lightbox="company-gallery">
+							<img src="/themes/{{ $shop_theme }}/img/permit2.png">
+						</a>
 					</div>
 				</div>
 				<div class="col-md-2">
 					<div class="img-container">
-						<img src="/themes/{{ $shop_theme }}/img/permit3.png">
+						<a href="/themes/{{ $shop_theme }}/img/permit3.png" data-title="" data-lightbox="company-gallery">
+							<img src="/themes/{{ $shop_theme }}/img/permit3.png">
+						</a>
 					</div>
 				</div>
 				<div class="col-md-2">
 					<div class="img-container">
-						<img src="/themes/{{ $shop_theme }}/img/permit4.png">
+						<a href="/themes/{{ $shop_theme }}/img/permit4.png" data-title="" data-lightbox="company-gallery">
+							<img src="/themes/{{ $shop_theme }}/img/permit4.png">
+						</a>
 					</div>
 				</div>
 				<div class="col-md-2">
 					<div class="img-container">
-						<img src="/themes/{{ $shop_theme }}/img/permit5.png">
+						<a href="/themes/{{ $shop_theme }}/img/permit5.png" data-title="" data-lightbox="company-gallery">
+							<img src="/themes/{{ $shop_theme }}/img/permit5.png">
+						</a>
 					</div>
 				</div>
 			</div>
@@ -132,6 +134,12 @@ $(document).ready(function()
             scrollTop: 0
         }, 700);
         return false;
+    });
+
+    /*LIGHTBOX*/
+    lightbox.option({
+      'disableScrolling': true,
+      'wrapAround': true
     });
 });
 </script>

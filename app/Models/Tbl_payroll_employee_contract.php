@@ -77,15 +77,17 @@ class Tbl_payroll_employee_contract extends Model
 			  ->leftjoin('tbl_payroll_department','tbl_payroll_department.payroll_department_id','=','tbl_payroll_employee_contract.payroll_department_id')
 			  ->leftjoin('tbl_payroll_jobtitle','tbl_payroll_jobtitle.payroll_jobtitle_id','=','tbl_payroll_employee_contract.payroll_jobtitle_id')
 			  ->leftjoin('tbl_payroll_company','tbl_payroll_company.payroll_company_id','=','tbl_payroll_employee_basic.payroll_employee_company_id')
-			  ->where(function($query1) use ($date)
-			  {
-			  	$query1->where('tbl_payroll_employee_contract.payroll_employee_contract_date_end','>=', $date)
-			  			->orWhere('tbl_payroll_employee_contract.payroll_employee_contract_date_end','0000-00-00');
-			  })
+			 
 			  ->whereIn('payroll_employee_contract_status',$payroll_employee_contract_status)
 			  ->where('tbl_payroll_employee_basic.shop_id', $shop_id)
 			  ->where('tbl_payroll_employee_contract.payroll_employee_contract_archived',0);
 
+			  /*Removed from top where the query has blank space*/
+			  /* ->where(function($query1) use ($date)
+			  {
+			  	$query1->where('tbl_payroll_employee_contract.payroll_employee_contract_date_end','>=', $date)
+			  			->orWhere('tbl_payroll_employee_contract.payroll_employee_contract_date_end','0000-00-00');
+			  })*/
 
 			  $separated_status[0] = 8;
 			  $separated_status[1] = 9;

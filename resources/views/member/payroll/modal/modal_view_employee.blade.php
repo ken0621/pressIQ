@@ -109,7 +109,9 @@
               <li class="active"><a data-toggle="tab" href="#address">Address</a></li>
               <li><a data-toggle="tab" href="#company-details">Company Details</a></li>
               <li><a data-toggle="tab" href="#government-contribution">Government</a></li>
+              @if($access_salary_detail==1)
               <li><a data-toggle="tab" href="#salary-details">Salary Details</a></li>
+              @endif
               <li><a data-toggle="tab" href="#requirements">Requirements</a></li>
               <li><a data-toggle="tab" href="#dependents">Dependents</a></li>
               <li><a data-toggle="tab" href="#shift-schedule">Shift</a></li>

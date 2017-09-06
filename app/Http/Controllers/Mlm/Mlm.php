@@ -27,12 +27,9 @@ class Mlm extends Controller
     public static $slot_id;
     public static $discount_card_log_id;
     public static $discount_card_log;
+    
     public function __construct()
     {	
-        // dd(Self::$slot_id);  
-        // dd(Session::get('mlm_member') );
-        
-        /* Set Email Configuration */
         Settings::set_mail_setting(Self::$shop_id);
 
         if(Session::get('mlm_member') != null)
@@ -136,6 +133,7 @@ class Mlm extends Controller
             }
 
             $this->seed();
+            
             View::share("profile", $profile);
             View::share("content", $content_a);
             View::share("complan", $plan_settings);

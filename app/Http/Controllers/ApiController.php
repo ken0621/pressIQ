@@ -28,6 +28,7 @@ use App\Models\Tbl_ecommercer_remittance;
 use App\Models\Tbl_ecommerce_banking;
 use App\Models\Tbl_ecommerce_setting;
 use App\Models\Tbl_ecommerce_paypal;
+use Illuminate\Http\Request as Request2;
 use App;
 use Crypt;
 use Carbon\Carbon;
@@ -140,7 +141,7 @@ class ApiController extends Controller
 
     public function create_user($auth, $store)
     {
-        $shop_id = Tbl_shop::where('shop_key',$store)->pluck('shop_id');
+        $shop_id = Tbl_shop::where('shop_key',$store)->value('shop_id');
         
         $insert['first_name']       = Request::input('first_name');
         $insert['last_name']        = Request::input('last_name');
@@ -577,6 +578,11 @@ class ApiController extends Controller
         return json_encode($data);
         
         
+    }
+
+    public function api(Request2 $request) 
+    {
+        return $request->user();
     }
 }
  

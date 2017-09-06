@@ -226,6 +226,36 @@
 
 					}
 				}
+				.footer
+				{
+					background-color: #fff;
+					border-top: 1.5px;
+					font-size: 10px;
+					text-align: center;
+					.count
+					{
+						display: inline-block;
+						vertical-align: top;
+					}
+					.signature
+					{
+						display: inline-block;
+						vertical-align: top;
+						border-top: 1.5px solid #000;
+						margin-top: 8px;
+					}
+					.input
+					{
+						.input-value
+						{
+							.text
+							{
+								font-size: 10px;
+								margin: 0 3px;
+							}
+						}
+					}
+				}
 			}
 		}
 	}

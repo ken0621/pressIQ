@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>BIR Template</title>
+	<base href="{{ URL::to('/') }}">
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="/assets/payroll/government_forms/css/global.css">
 	<link rel="stylesheet" type="text/css" href="/assets/payroll/government_forms/css/bir.css">
@@ -191,7 +192,7 @@
 											</tr>
 											<tr>
 												<td style="border-top: 0;">
-													<div class="input-container" style="border-top: 2px solid #000; padding-left: 1px; padding-right: 1px; width: 100%; display: block;">
+													<div class="input-container" style="padding-left: 1px; padding-right: 1px; width: 100%; display: block;">
 														<div style="height: 13px;">
 															<div class="number">6B</div>
 															<div class="label" style="text-align: left;">Local Home Adddress</div>
@@ -218,7 +219,7 @@
 											</tr>
 											<tr>
 												<td style="border-top: 0;">
-													<div class="input-container" style="border-top: 2px solid #000; padding-left: 1px; padding-right: 1px; width: 100%; display: block;">
+													<div class="input-container" style="padding-left: 1px; padding-right: 1px; width: 100%; display: block;">
 														<div style="height: 13px;">
 															<div class="number">6D</div>
 															<div class="label" style="text-align: left;">Foreign Address</div>
@@ -342,22 +343,22 @@
 																		</div>
 																		<div>
 																			<div class="input-value" style="margin-left: 15px; margin-bottom: -1px;">
-																				<div class="text" style="width: 150px;">Luke Glenn Jordan</div>
+																				<div class="text" style="width: 150px;">Test Name</div>
 																			</div>
 																		</div>
 																		<div>
 																			<div class="input-value" style="margin: 0; margin-left: 15px; margin-bottom: -1px;">
-																				<div class="text" style="width: 150px;">Luke Glenn Jordan</div>
+																				<div class="text" style="width: 150px;">Test Name</div>
 																			</div>
 																		</div>
 																		<div>
 																			<div class="input-value" style="margin: 0; margin-left: 15px; margin-bottom: -1px;">
-																				<div class="text" style="width: 150px;">Luke Glenn Jordan</div>
+																				<div class="text" style="width: 150px;">Test Name</div>
 																			</div>
 																		</div>
 																		<div>
 																			<div class="input-value" style="margin: 0; margin-left: 15px;">
-																				<div class="text" style="width: 150px;">Luke Glenn Jordan</div>
+																				<div class="text" style="width: 150px;">Test Name</div>
 																			</div>
 																		</div>
 																	</div>
@@ -454,7 +455,7 @@
 															<td style="border: 0; width: 45%;">
 																<div class="number">12</div>
 																<div class="input-value" style="margin-left: 5px;">
-																	<div class="text" style="width: 135px;"></div>
+																	<div class="text" style="width: 135px;">99999999999</div>
 																</div>
 															</td>
 														</tbody>
@@ -472,7 +473,7 @@
 															<td style="border: 0; width: 45%;">
 																<div class="number">13</div>
 																<div class="input-value" style="margin-left: 5px;">
-																	<div class="text" style="width: 135px;"></div>
+																	<div class="text" style="width: 135px;">99999999999</div>
 																</div>
 															</td>
 														</tbody>
@@ -703,7 +704,139 @@
 															<td style="border: 0;">
 																<div class="number">21</div>
 																<div class="input-value" style="margin-left: 5px;">
-																	<div class="text" style="width: 150px;"></div>
+																	<div class="text" style="width: 150px;">99999999999</div>
+																</div>
+															</td>
+														</tr>
+														<tr>
+															<td style="border: 0;">
+																<div class="number">22</div>
+																<div class="label" style="text-align: left;">Less: Total Non-Taxable/</br>Exempt (Item 41)</div>
+															</td>
+															<td style="border: 0;">
+																<div class="number">22</div>
+																<div class="input-value" style="margin-left: 5px;">
+																	<div class="text" style="width: 150px;">99999999999</div>
+																</div>
+															</td>
+														</tr>
+														<tr>
+															<td style="border: 0;">
+																<div class="number">23</div>
+																<div class="label" style="text-align: left;">Taxable Compensation Income</br>from Present Employer (Item 55)</div>
+															</td>
+															<td style="border: 0;">
+																<div class="number">23</div>
+																<div class="input-value" style="margin-left: 5px;">
+																	<div class="text" style="width: 150px;">99999999999</div>
+																</div>
+															</td>
+														</tr>
+														<tr>
+															<td style="border: 0;">
+																<div class="number">24</div>
+																<div class="label" style="text-align: left;">Add: Taxable Compensation Fees</br>Income from Previous Employer</div>
+															</td>
+															<td style="border: 0;">
+																<div class="number">24</div>
+																<div class="input-value" style="margin-left: 5px;">
+																	<div class="text" style="width: 150px;">99999999999</div>
+																</div>
+															</td>
+														</tr>
+														<tr>
+															<td style="border: 0;">
+																<div class="number">25</div>
+																<div class="label" style="text-align: left;">Gross Taxable</br>Compensation Income</div>
+															</td>
+															<td style="border: 0;">
+																<div class="number">25</div>
+																<div class="input-value" style="margin-left: 5px;">
+																	<div class="text" style="width: 150px;">99999999999</div>
+																</div>
+															</td>
+														</tr>
+														<tr>
+															<td style="border: 0;">
+																<div class="number">26</div>
+																<div class="label" style="text-align: left;">Less: Total Exemptions</div>
+															</td>
+															<td style="border: 0;">
+																<div class="number">26</div>
+																<div class="input-value" style="margin-left: 5px;">
+																	<div class="text" style="width: 150px;">99999999999</div>
+																</div>
+															</td>
+														</tr>
+														<tr>
+															<td style="border: 0;">
+																<div class="number">27</div>
+																<div class="label" style="text-align: left;">Less: Premium Paid on Health</br>and/or Hospital Insurance (If applicable)</div>
+															</td>
+															<td style="border: 0;">
+																<div class="number">27</div>
+																<div class="input-value" style="margin-left: 5px;">
+																	<div class="text" style="width: 150px;">99999999999</div>
+																</div>
+															</td>
+														</tr>
+														<tr>
+															<td style="border: 0;">
+																<div class="number">28</div>
+																<div class="label" style="text-align: left;">Next Taxable</br>Compensation Income</div>
+															</td>
+															<td style="border: 0;">
+																<div class="number">28</div>
+																<div class="input-value" style="margin-left: 5px;">
+																	<div class="text" style="width: 150px;">99999999999</div>
+																</div>
+															</td>
+														</tr>
+														<tr>
+															<td style="border: 0;">
+																<div class="number">29</div>
+																<div class="label" style="text-align: left;">Tax Due</div>
+															</td>
+															<td style="border: 0;">
+																<div class="number">29</div>
+																<div class="input-value" style="margin-left: 5px;">
+																	<div class="text" style="width: 150px;">99999999999</div>
+																</div>
+															</td>
+														</tr>
+														<tr>
+															<td style="border: 0;">
+																<div class="number">30</div>
+																<div class="label" style="text-align: left;">Amount of Taxes Withheld</br><strong>30A</strong> Present Employer</div>
+															</td>
+															<td style="border: 0;">
+																<div class="number">30A</div>
+																<div class="input-value" style="margin-left: 5px;">
+																	<div class="text" style="width: 150px;">99999999999</div>
+																</div>
+															</td>
+														</tr>
+														<tr>
+															<td style="border: 0;">
+																<div class="number">30</div>
+																<div class="label" style="text-align: left;"><strong>30B</strong> Previous Employer</div>
+															</td>
+															<td style="border: 0;">
+																<div class="number">30B</div>
+																<div class="input-value" style="margin-left: 5px;">
+																	<div class="text" style="width: 150px;">99999999999</div>
+																</div>
+															</td>
+														</tr>
+														<tr>
+															<td style="border: 0;">
+																<div class="number">31</div>
+																<div class="label" style="text-align: left;">Total Amount of Taxes Withheld</br>As adjusted</div>
+															</td>
+															<td style="border: 0;">
+																<div class="number">31</div>
+																<div class="input-value" style="margin-left: 5px;">
+																	<div class="text" style="width: 150px;">99999999999</div>
 																</div>
 															</td>
 														</tr>
@@ -731,7 +864,7 @@
 												<td>
 													<div class="number">32</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
@@ -743,7 +876,7 @@
 												<td>
 													<div class="number">33</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
@@ -755,7 +888,7 @@
 												<td>
 													<div class="number">34</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
@@ -767,7 +900,7 @@
 												<td>
 													<div class="number">35</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
@@ -779,7 +912,7 @@
 												<td>
 													<div class="number">36</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
@@ -791,7 +924,7 @@
 												<td>
 													<div class="number">37</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
@@ -803,7 +936,7 @@
 												<td>
 													<div class="number">38</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
@@ -815,7 +948,7 @@
 												<td>
 													<div class="number">39</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
@@ -827,7 +960,7 @@
 												<td>
 													<div class="number">40</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
@@ -839,7 +972,7 @@
 												<td>
 													<div class="number">41</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
@@ -854,7 +987,7 @@
 												<td>
 													<div class="number">42</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
@@ -866,7 +999,7 @@
 												<td>
 													<div class="number">43</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
@@ -878,7 +1011,7 @@
 												<td>
 													<div class="number">44</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
@@ -890,7 +1023,7 @@
 												<td>
 													<div class="number">45</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
@@ -902,7 +1035,7 @@
 												<td>
 													<div class="number">46</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
@@ -919,13 +1052,13 @@
 												<td>
 													<div class="number">47A</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 												<td>
 													<div class="number">47A</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
@@ -933,13 +1066,13 @@
 												<td>
 													<div class="number">47B</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 												<td>
 													<div class="number">47B</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
@@ -954,7 +1087,7 @@
 												<td>
 													<div class="number">48</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
@@ -966,7 +1099,7 @@
 												<td>
 													<div class="number">49</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
@@ -978,7 +1111,7 @@
 												<td>
 													<div class="number">50</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
@@ -990,7 +1123,7 @@
 												<td>
 													<div class="number">51</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
@@ -1002,7 +1135,7 @@
 												<td>
 													<div class="number">52</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
@@ -1014,7 +1147,7 @@
 												<td>
 													<div class="number">53</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
@@ -1031,13 +1164,13 @@
 												<td>
 													<div class="number">54A</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 												<td>
 													<div class="number">54A</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
@@ -1045,13 +1178,13 @@
 												<td>
 													<div class="number">54B</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 												<td>
 													<div class="number">54B</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
@@ -1063,11 +1196,208 @@
 												<td>
 													<div class="number">55</div>
 													<div class="input-value" style="margin-left: 5px;">
-														<div class="text" style="width: 150px;"></div>
+														<div class="text" style="width: 150px;">99999999999</div>
 													</div>
 												</td>
 											</tr>
 										</tbody>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td class="footer" colspan="2">
+									<table>
+										<tr>
+											<td colspan="2">
+												We declare, under the penalties of perjury, that this certificate has been made in good faith, verified by us, and to the best of our knowledge and belief, is true and correct</br>pursuant to the provisions of the National Internal Revenue Code, as amended, and the regulations issued under authority thereof.
+											</td>
+										</tr>
+										<tr>
+											<td style="border: 0;">
+												<div class="count">56</div>
+												<div class="signature" style="width: 260px;">
+													Present Employer/ Authorized Agent Signature Over Printed Name
+												</div>
+											</td>
+											<td class="input" style="border: 0; background-color: #fff;">
+												<table>
+													<tr>
+														<td class="input" style="border: 0; background-color: #fff;">
+															<div class="input-container">
+																<div class="label" style="text-align: left; font-size: 10px; margin-right: 7.5px;">Date Signed</div>
+																<div class="input-value">
+																	<div class="text">0</div>
+																	<div class="divide"></div>
+																	<div class="text">8</div>
+																	<div class="divider"></div>
+																	<div class="text">2</div>
+																	<div class="divide"></div>
+																	<div class="text">5</div>
+																	<div class="divider"></div>
+																	<div class="text">0</div>
+																	<div class="divide"></div>
+																	<div class="text">8</div>
+																	<div class="divide"></div>
+																	<div class="text">0</div>
+																	<div class="divide"></div>
+																	<div class="text">8</div>
+																</div>
+															</div>
+														</td>
+														<td style="border: 0;">
+															
+														</td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+										<tr>
+											<td style="text-align: left;" colspan="2">
+												<div style="margin-left: 54px;">CONFORME</div>
+											</td>
+										</tr>
+										<tr>
+											<td style="border: 0;">
+												<div class="count">57</div>
+												<div class="signature" style="width: 260px;">
+													Employee Signature Over Printed Name
+												</div>
+											</td>
+											<td class="input" style="border: 0; background-color: #fff;">
+												<table>
+													<tr>
+														<td class="input" style="border: 0; background-color: #fff;">
+															<div class="input-container">
+																<div class="label" style="text-align: left; font-size: 10px; margin-right: 7.5px;">Date Signed</div>
+																<div class="input-value">
+																	<div class="text">0</div>
+																	<div class="divide"></div>
+																	<div class="text">8</div>
+																	<div class="divider"></div>
+																	<div class="text">2</div>
+																	<div class="divide"></div>
+																	<div class="text">5</div>
+																	<div class="divider"></div>
+																	<div class="text">0</div>
+																	<div class="divide"></div>
+																	<div class="text">8</div>
+																	<div class="divide"></div>
+																	<div class="text">0</div>
+																	<div class="divide"></div>
+																	<div class="text">8</div>
+																</div>
+															</div>
+														</td>
+														<td style="border: 0;">
+															
+														</td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+										<tr>
+											<td style="border: 0;">
+												<table>
+													<tr>
+														<td class="input" style="border: 0; background-color: #fff;">
+															<div class="label" style="text-align: left; font-size: 10px;">CTC No.</br> of Employee</div>
+															<div class="input-value" style="margin-left: 5px;">
+																<div class="text" style="width: 85px;">99999999999</div>
+															</div>
+														</td>
+														<td class="input" style="border: 0; background-color: #fff;">
+															<div class="label" style="text-align: left; font-size: 10px;">Place of Issue</div>
+															<div class="input-value" style="margin-left: 5px;">
+																<div class="text" style="width: 85px;">99999999999</div>
+															</div>
+														</td>
+													</tr>
+												</table>
+											</td>
+											<td style="border: 0;">
+												<table>
+													<tr>
+														<td class="input" style="border: 0; background-color: #fff; vertical-align: bottom;">
+															<div class="input-container">
+																<div class="label" style="text-align: left; font-size: 10px; margin-right: 7.5px;">Date Issue</div>
+																<div class="input-value">
+																	<div class="text">0</div>
+																	<div class="divide"></div>
+																	<div class="text">8</div>
+																	<div class="divider"></div>
+																	<div class="text">2</div>
+																	<div class="divide"></div>
+																	<div class="text">5</div>
+																	<div class="divider"></div>
+																	<div class="text">0</div>
+																	<div class="divide"></div>
+																	<div class="text">8</div>
+																	<div class="divide"></div>
+																	<div class="text">0</div>
+																	<div class="divide"></div>
+																	<div class="text">8</div>
+																</div>
+															</div>
+														</td>
+														<td class="input" style="border: 0; background-color: #fff; vertical-align: bottom;">
+															<div class="input-container">
+																<div class="label" style="text-align: left; font-size: 10px; margin-right: 7.5px;">Amount Paid</div>
+																</br>
+																<div class="input-value">
+																	<div class="text">0</div>
+																	<div class="divide"></div>
+																	<div class="text">8</div>
+																	<div class="divider"></div>
+																	<div class="text">2</div>
+																	<div class="divide"></div>
+																	<div class="text">5</div>
+																	<div class="divider"></div>
+																	<div class="text">0</div>
+																	<div class="divide"></div>
+																	<div class="text">8</div>
+																	<div class="divide"></div>
+																	<div class="text">0</div>
+																	<div class="divide"></div>
+																	<div class="text">8</div>
+																</div>
+															</div>
+														</td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2">
+												To be acomplished under substituted filing
+											</td>
+										</tr>
+										<tr>
+											<td>
+												I declare, under the penalties of perjury, that the information herein stated are reported</br>
+												under BIR Form No. 1604CF which has been filed with the Bureau of Internal Revenue.
+												<div class="count">58</div>
+												<div class="signature" style="width: 260px;">
+													Present Employer/ Authorized Agent Signature Over Printed Name</br>
+													(Head of Accounting/ Human Resource or Authorized Representative)
+												</div>
+											</td>
+											<td style="text-align: middle;">
+												<div style="display: inline-block; text-align: left;">
+												I declare,under the penalties of perjury that I am qualified under substituted filing of</br>
+												Income Tax Returns(BIR Form No. 1700), since I received purely compensation income</br>
+												from only one employer in the Phils. for the calendar year; that taxes have been</br>
+												correctly withheld by my employer (tax due equals tax withheld); that the BIR Form</br>
+												58 No. 1604CF filed by my employer to the BIR shall constitute as my income tax return;</br>
+												and that BIR Form No. 2316 shall serve the same purpose as if BIR Form No. 1700</br>
+												had been filed pursuant to the provisions of RR No. 3-2002, as amended.
+												</div>
+
+												<div class="count">58</div>
+												<div class="signature" style="width: 260px;">
+													Employee Signature Over Printed Name
+												</div>
+											</td>
+										</tr>
 									</table>
 								</td>
 							</tr>

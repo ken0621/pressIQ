@@ -205,6 +205,8 @@
                             <div class="btm-sub-title col-xs-6"><a href="/product?type={{ $category['type_id'] }}">{{ $category['type_name'] }}</a></div>
                             @endforeach
                         @endif
+                        <div class="btm-sub-title col-xs-6"><a href="javascript:" onClick="alert('Under Development')">BUSINESS PRESENTATION</a></div>
+                        <div class="btm-sub-title col-xs-6"><a href="javascript:" onClick="alert('Under Development')">NEWS</a></div>
                     </div>
                 </div> 
                 <div class="col-md-3 col-sm-6">

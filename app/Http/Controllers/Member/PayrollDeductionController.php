@@ -298,6 +298,7 @@ class PayrollDeductionController extends Member
           $department = Request::input('department');
           $jobtitle      = Request::input('jobtitle');
 
+
           $emp = Tbl_payroll_employee_contract::employeefilter($company, $department, $jobtitle, date('Y-m-d'), Self::shop_id())->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->groupBy('tbl_payroll_employee_basic.payroll_employee_id')->get();
           // dd($emp);
           return json_encode($emp);
@@ -307,13 +308,11 @@ class PayrollDeductionController extends Member
      {
           $employee_tag = Request::input('employee_tag');
           $deduction_id = Request::input('deduction_id');
-          
+          // dd($deduction_id);
           $array = array();
-          
           if(Session::has('employee_deduction_tag'))
           {
                $array = Session::get('employee_deduction_tag');
-
           }
           // dd($array);
 
@@ -344,8 +343,7 @@ class PayrollDeductionController extends Member
           {
                Session::put('employee_deduction_tag', $array);
           }
-
-         
+          
 
           $return['status'] = 'success';
           $return['function_name'] = 'modal_create_deduction.load_tagged_employee';

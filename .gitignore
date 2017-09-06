@@ -16,3 +16,4 @@ yarn-error.log
 /config/session.php
 /config/debugbar.php
 composer.lock
+composer.lock

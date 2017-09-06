@@ -193,6 +193,7 @@ class PayrollAllowanceController extends Member
               Tbl_payroll_employee_allowance_v2::insert($insert_tag);
          }
          Session::put('allowance_employee_tag',$array);
+
          $return['status']             = 'success';
          $return['function_name']      = 'create_allowance.load_employee_tag';
          return json_encode($return);
@@ -270,7 +271,7 @@ class PayrollAllowanceController extends Member
          return json_encode($return);
     }
 
-    public function modal_archived_allowance($archived, $allowance_id)
+    public function modal_archived_allwance($archived, $allowance_id)
     {
          $statement = 'archive';
          if($archived == 0)
@@ -318,13 +319,13 @@ class PayrollAllowanceController extends Member
          $_query             = Tbl_payroll_employee_allowance_v2::employee($id)->first();
          // dd($_query);
          $file_name               = $_query->payroll_employee_title_name.' '.$_query->payroll_employee_first_name.' '.$_query->payroll_employee_middle_name.' '.$_query->payroll_employee_last_name.' '.$_query->payroll_employee_suffix_name;
-         $data['title']      = ucfirst($statement);
-         $data['html']       = 'Do you really want to '.$statement.' '.$file_name.'?';
+         $data['title']           = 'Do you really want to '.$statement.' '.$file_name.'?';
+         $data['html']       = '';
          $data['action']     = '/member/payroll/allowance/v2/archived_allowance_employee';
          $data['id']         = $id;
          $data['archived']   = $archived;
 
-         return view('member.payroll.payroll_allowance.allowance_confirm_archived', $data);
+         return view('member.modal.modal_confirm_archived', $data);
     }
 
     public function archived_allowance_employee()

@@ -31,5 +31,6 @@ function columns_submit_done(data)
 	}
 
 	data.element.modal("hide");
+	item_list.action_load_table();
 }
 </script>

@@ -105,4 +105,4 @@
 		<button class="btn btn-custom-primary btn-submit" type="submit">Save</button>
 	</div>
 </form>
-<script type="text/javascript" src="/assets/member/js/payroll/create_allowance.js"></script>
+<script type="text/javascript" src="/assets/member/js/payroll/modal_create_allowance.js"></script>

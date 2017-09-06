@@ -51,4 +51,4 @@
 	</div>
 </form>
 
-<script type="text/javascript" src="/assets/member/js/payroll/employee_tag.js"></script>d
+<script type="text/javascript" src="/assets/member/js/payroll/employee_tag.js"></script>

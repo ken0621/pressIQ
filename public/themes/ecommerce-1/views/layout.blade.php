@@ -203,13 +203,14 @@
                 <div class="col-md-4 col-sm-6">
                     <div class="btm-title">SHOP</div>
                     <div class="row clearfix btm-link">
-                        @if(isset($_categories))
+                        {{-- @if(isset($_categories))
                             @foreach($_categories as $category)     
                             <div class="btm-sub-title col-xs-6"><a href="/product?type={{ $category['type_id'] }}">{{ $category['type_name'] }}</a></div>
                             @endforeach
-                        @endif
+                        @endif --}}
                         <div class="btm-sub-title col-xs-6"><a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a></div>
                         <div class="btm-sub-title col-xs-6"><a href="javascript:" onClick="alert('Under Development')">NEWS</a></div>
+                        <div class="btm-sub-title col-xs-6"><a href="/about">ABOUT US</a></div>
                     </div>
                 </div> 
                 <div class="col-md-3 col-sm-6">

@@ -3229,11 +3229,11 @@ class Payroll
 			->orderBy('payroll_deduction_payment_id','desc')
 			->first();
 			
-			$total_payment = Tbl_payroll_deduction_payment_v2::getpayment($employee_id, $payroll_record_id, $deduction->payroll_deduction_id)->select(DB::raw('IFNULL(sum(payroll_payment_amount), 0) as total_payment'))->value('total_payment');
+			// $total_payment = Tbl_payroll_deduction_payment_v2::getpayment($employee_id, $payroll_record_id, $deduction->payroll_deduction_id)->select(DB::raw('IFNULL(sum(payroll_payment_amount), 0) as total_payment'))->value('total_payment');
 
 			if($temp == 'Last Period')
 			{
-				$temp['payroll_periodal_deduction'] = $deduction->payroll_monthly_amortization - $total_payment;
+				$temp['payroll_periodal_deduction'] = $deduction->payroll_monthly_amortization - $payroll_total_payment_amount["total_payment"];
 			}
 
 

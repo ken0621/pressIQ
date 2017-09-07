@@ -67,3 +67,5 @@
 @else
 <div style="padding: 100px; text-align: center;">NO DATA YET</div>
 @endif
+
+{!! $hide !!}

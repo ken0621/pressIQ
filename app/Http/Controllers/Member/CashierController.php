@@ -27,7 +27,9 @@ class CashierController extends Member
         $data["page"]    = "POS Search Results";
         $data["shop_id"] = $this->user_info->shop_id;
         $data["keyword"] = Request::input("item_keyword");
-        $data["_item"]   = Cart2::search_item($data["shop_id"], $data["keyword"]);
+
+        Item::get_search($data["keyword"]);
+        $data["_item"]   = Item::get($data["shop_id"]);
         return view("member.cashier.pos_search_item", $data);
     }
     public function pos_scan_item()
@@ -53,7 +55,7 @@ class CashierController extends Member
     public function set_cart_info($key, $value)
     {
         $cart_key           = Cart2::get_cart_key();
-        $set_info_status    = Cart2::set_info($cart_key, $key, $value);
+        $set_info_status    = Cart2::set($key, $value);
         echo json_encode($set_info_status);
     }
     public function pos_remove_item()

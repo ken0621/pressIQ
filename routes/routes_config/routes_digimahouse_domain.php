@@ -52,6 +52,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 
 
 
+	Route::get('/signin', 'Shop\ShopLoginController@signin'); //ROMMEL C.
 
 	Route::get('/blog', 'Shop\ShopBlogController@index');
 	Route::get('/blog/content', 'Shop\ShopBlogContentController@index');
@@ -100,4 +101,5 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	/* Others */
 	Route::get('/partners', 'Shop\ShopPartnersController@index');
 	Route::get('/partner-filtering-location', 'Shop\ShopPartnersController@partnerFilterByLocation');
+	Route::get('/legalities', 'Shop\ShopLegalitiesController@index');
 }

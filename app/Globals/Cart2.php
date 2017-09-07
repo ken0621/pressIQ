@@ -12,17 +12,6 @@ use stdClass;
 use Schema;
 class Cart2
 {
-	public static function search_item($shop_id, $keyword)
-	{
-		$_item = Tbl_item::where("shop_id", $shop_id)->active()->searchName($keyword)->get();
-
-		if(count($_item) < 1)
-		{
-			$_item = Tbl_item::where("shop_id", $shop_id)->active()->searchSKU($keyword)->get();
-		}
-
-		return $_item;
-	}
 	public static function scan_item($shop_id, $id)
 	{
 		$_item = Tbl_item::where("shop_id", $shop_id)->active()->where("item_id", $id)->first();
@@ -36,8 +25,10 @@ class Cart2
 	{
 		return session("cart_key");
 	}
-	public static function set_info($cart_key, $key, $value)
+	public static function set($key, $value)
 	{
+		$cart_key = Self::get_cart_key();
+
 		if(Schema::hasColumn('tbl_cart_info', $key))
 		{
 			$check_exist 		= Tbl_cart_info::where("unique_id_per_pc", $cart_key)->first();
@@ -65,9 +56,7 @@ class Cart2
 
 		return $return;
 	}
-	public static function detach_customer()
-	{
-	}
+
 	public static function set_payment_method($payment_method_id)
 	{
 	}
@@ -106,6 +95,9 @@ class Cart2
 	{
 		$cart_key = Self::get_cart_key();
 		Tbl_cart::where("unique_id_per_pc", $cart_key)->where("product_id", $item_id)->where("status", "Not Processed")->delete();
+	}
+	public static function clear_item()
+	{
 	}
 	public static function get_cart_info()
 	{

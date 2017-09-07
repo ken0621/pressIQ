@@ -242,6 +242,12 @@ class Item
     {
         $query = Tbl_item::where("shop_id", $shop_id)->where("tbl_item.archived", $archive)->type()->inventory()->um_multi();
 
+        /* SEARCH */
+        if (session("get_search")) 
+        {
+            $query = $query->searchName(session("get_search"));
+        }
+
         /* FILTER BY TYPE */
         if (session("get_filter_type")) 
         {
@@ -271,8 +277,8 @@ class Item
             $item = Self::add_info($item);
             $_item_new[$key] = $item;
         }
-
-        $return = $_item_new;  
+        
+        $return = isset($_item_new) ? $_item_new : null;  
 
         Self::get_clear_session();
 
@@ -284,6 +290,10 @@ class Item
         Self::add_info($item);
         Self::get_clear_session();
         return $item;
+    }
+    public static function get_search($keyword)
+    {
+        session(['get_search' => $keyword]);
     }
     public static function get_pagination()
     {
@@ -319,6 +329,7 @@ class Item
         $store["get_filter_type"] = null;
         $store["get_filter_category"] = null;
         $store["get_apply_price_level"] = null;
+        $store["get_search"] = null;
         session($store);
     }
 

@@ -29,7 +29,7 @@
         <!-- OTHER CSS -->
         @yield("css")
         <style type="text/css">
-        body
+        /*body
         {
             background-image: url('/themes/{{ $shop_theme  }}/img/final.jpg'); 
             background-size: cover; 
@@ -39,7 +39,7 @@
         .content
         {
             background-color: transparent;
-        }
+        }*/
         .navbar.sticky
         {
             position: fixed;
@@ -73,8 +73,8 @@
     <div class="header-nav">
         <div class="header-nav-top">
             <div class="container">
-                <div class="holder"><a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a></div>
-                <div class="holder"><div class="linya"></div></div>
+                {{-- <div class="holder"><a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a></div>
+                <div class="holder"><div class="linya"></div></div> --}}
                 @if($customer_info_a == null)
                 <div class="holder"><a href="/mlm/login"><i class="fa fa-lock" aria-hidden="true"></i> Login</a></div>
                 <div class="holder"><div class="linya"></div></div>

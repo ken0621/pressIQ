@@ -305,6 +305,8 @@
       </div>
     </nav>
   </header>
+
+  @yield("content")
   <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
@@ -329,6 +331,7 @@
               </span>
         </div>
       </form>
+      @yield("content")
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">

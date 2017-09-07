@@ -5,7 +5,7 @@
 	    <div class="container">
 	        <div class="row clearfix">
 	            <div class="col-md-6">
-	                <div class="title">Get In Touch <font class="intouch-label">With Us</font></div>
+	                <div class="title">{{ get_front_divide_string($shop_theme_info, "contact", "contact_title", 2, 0) }} <font class="intouch-label">{{ get_front_divide_string($shop_theme_info, "contact", "contact_title", 2, 0) }}</font></div>
 	                <div class="form-group-container">
 	                    <div class="row clearfix">
 	                        <div class="col-md-6">
@@ -57,32 +57,32 @@
 	                </div>
 	            </div>
 	            <div class="col-md-6">
-	                <div class="title">Location</div>
+	                <div class="title">{{ get_content($shop_theme_info, "contact", "location_title") }}</div>
 	                <div class="info">
 	                    <table>
 	                        <tbody>
 	                            <tr>
 	                                <td class="icon"><i class="fa fa-map-marker" aria-hidden="true"></i></td>
-	                                <td class="text">UG3 Alfaro Place Condominium 146 L.P. Leviste St., Salcedo Village, Makati City</td>
+	                                <td class="text">{{ get_content($shop_theme_info, "contact", "location_address") }}</td>
 	                            </tr>
 	                            <tr>
 	                                <td class="icon"><i class="fa fa-mobile" aria-hidden="true"></i></td>
-	                                <td class="text">123456789</td>
+	                                <td class="text">{{ get_content($shop_theme_info, "contact", "location_phone") }}</td>
 	                            </tr>
 	                            <tr>
 	                                <td class="icon"><i class="fa fa-envelope" aria-hidden="true"></i></td>
-	                                <td class="text">123456789</td>
+	                                <td class="text">{{ get_content($shop_theme_info, "contact", "location_email") }}</td>
 	                            </tr>
 	                        </tbody>
 	                    </table>
 	                </div>
-	                <div class="title">Business <font class="business-label">Hours</font></div>
+	                <div class="title">{{ get_front_divide_string($shop_theme_info, "contact", "business_title", 2, 0) }} <font class="business-label">{{ get_front_divide_string($shop_theme_info, "contact", "business_title", 2, 1) }}</font></div>
 	                <div class="info">
 	                    <table>
 	                        <tbody>
 	                            <tr>
 	                                <td class="icon"><i class="fa fa-clock-o" aria-hidden="true"></i></td>
-	                                <td class="text">Monday - Friday at 9:00am - 6:00pm</td>
+	                                <td class="text">{{ get_content($shop_theme_info, "contact", "business_hours") }}</td>
 	                            </tr>
 	                        </tbody>
 	                    </table>

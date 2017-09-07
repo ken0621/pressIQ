@@ -1,4 +1,6 @@
 var item_add = new item_add();
+var code_generate_delay;
+var original_item_code;
 
 function item_add()
 {
@@ -8,10 +10,42 @@ function item_add()
 	{
 		$(document).ready(function()
 		{
+			add_event_auto_generate_code();
 			add_event_select_item_type();
 			add_event_change_type();
 			add_action_initialize_select();
 		});
+	}
+	function add_event_auto_generate_code()
+	{
+		$(".item-description").focus(function(e)
+		{
+			original_item_code = action_covert_to_code($(e.currentTarget).val());
+		});
+
+		$(".item-description").keyup(function(e)
+		{
+			clearTimeout(code_generate_delay);
+
+			$item_description = $(e.currentTarget).val();
+			$code_generate = action_covert_to_code($item_description);
+
+			$(".auto-generate-code").each(function(key)
+			{
+				if($(this).val() == original_item_code)
+				{
+					$(this).val($code_generate);
+				}
+			});
+
+			original_item_code = $code_generate;
+		});
+	}
+	function action_covert_to_code($string)
+	{
+		$string = $string.replace(/\s+/g, '-').toUpperCase();
+		$string = $string.replace(/\W/g, '');
+		return $string;
 	}
 	function add_action_initialize_select()
 	{
@@ -64,19 +98,51 @@ function item_add()
 		$(".tp-picker").click(function(e)
 		{
 			$type_id = $(e.currentTarget).attr("type_id");
+			$type_name = $(e.currentTarget).find(".tp-title").text();
+
+			$(".change-type").find("input").val($type_name);
 			$(".item-type-picker").hide();
-			
 			$(".modal-footer").find("button").removeAttr("disabled");
 
-			if($type_id == 4 || $type_id == 5)
-			{
-				$(".item-bundle").fadeIn();
-			}
-			else
-			{
-				$(".item-add-main").fadeIn();
-			}
+			action_show_depending_on_type($type_id)
 		});
+	}
+	function action_show_depending_on_type($type_id)
+	{
+		$(".item-bundle").hide();
+		$(".item-add-main").hide();
+		$(".for-membership-kit").hide();
+		$(".for-inventory").hide();
+		$(".for-non-service").hide();
+		$(".expense-account").removeClass("col-md-12");
+		$(".expense-account").addClass("col-md-6");
+
+		if($type_id == 1)
+		{
+			$(".item-add-main").fadeIn();
+			$(".for-inventory").fadeIn();
+			$(".for-non-service").fadeIn();
+		}
+		else if($type_id == 2)
+		{
+			$(".item-add-main").fadeIn();
+			$(".for-non-service").fadeIn();
+		}
+		else if($type_id == 3)
+		{
+			$(".item-add-main").fadeIn();
+			$(".expense-account").removeClass("col-md-6");
+			$(".expense-account").addClass("col-md-12");
+		}
+		else if($type_id == 4)
+		{
+			$(".item-bundle").fadeIn();
+		}
+		else if($type_id == 5)
+		{
+			$(".item-bundle").fadeIn();	
+			$(".for-membership-kit").fadeIn();
+		}	
 	}
 	function add_event_change_type()
 	{

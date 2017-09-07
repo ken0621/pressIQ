@@ -160,6 +160,13 @@
 			"type":"textbox",
 			"default":"Monday - Friday at 9:00am - 6:00pm",
 			"size":"6"
+		},
+		"map_title" :
+		{
+			"label":"Map Title",
+			"type":"textbox",
+			"default":"FIND US ON MAP",
+			"size":"6"
 		}
 	}
 }

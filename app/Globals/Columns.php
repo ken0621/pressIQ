@@ -150,20 +150,23 @@ class Columns
 
         $new_data = [];
 
-        foreach ($data as $key => $value) 
+        if ($data) 
         {
-            foreach ($temp_columns as $key1 => $value1) 
+            foreach ($data as $key => $value) 
             {
-                if ($value1["checked"] == true) 
+                foreach ($temp_columns as $key1 => $value1) 
                 {
-                    $array                            = $value1["array"];
-                    $new_data[$key][$key1]["label"]   = $value1["value"];
-                    $new_data[$key][$key1]["data"]    = $value->$array;
-                    $new_data[$key][$key1]["default"] = $value;
+                    if ($value1["checked"] == true) 
+                    {
+                        $array                            = $value1["array"];
+                        $new_data[$key][$key1]["label"]   = $value1["value"];
+                        $new_data[$key][$key1]["data"]    = $value->$array;
+                        $new_data[$key][$key1]["default"] = $value;
+                    }
                 }
             }
         }
-
+        
         return $new_data;
     }
 }

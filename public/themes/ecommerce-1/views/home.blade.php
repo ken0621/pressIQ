@@ -374,7 +374,7 @@ $(document).ready(function()
 	  slidesToShow: 4,
 	  slidesToScroll: 1,
 	  autoplay: true,
-  	  autoplaySpeed: 2000,
+  	  autoplaySpeed: 5000,
 	});
 
 	$('.add-slider .add-top').slick({
@@ -382,7 +382,7 @@ $(document).ready(function()
 	  prevArrow:"<img class='a-left control-c prev slick-prev' src='/themes/{{ $shop_theme }}/img/arrow-left.png'>",
       nextArrow:"<img class='a-right control-c next slick-next' src='/themes/{{ $shop_theme }}/img/arrow-right.png'>",
       autoplay: true,
-  	  autoplaySpeed: 2000,
+  	  autoplaySpeed: 5000,
 	});
 });
 </script>

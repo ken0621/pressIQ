@@ -184,5 +184,4 @@ class ShopAboutController extends Shop
            return Redirect::to('/jobs#popup4');
         }
     }
->>>>>>> refs/remotes/origin/master
 }

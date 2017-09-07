@@ -7,6 +7,7 @@ use App\Globals\Accounting;
 use App\Globals\Warehouse2;
 use App\Globals\Columns;
 use Request;
+use Session;
 
 class ItemControllerV2 extends Member
 {
@@ -63,31 +64,36 @@ class ItemControllerV2 extends Member
 		$data['default_income']  = Accounting::get_default_coa("accounting-sales");
 		$data['default_asset']   = Accounting::get_default_coa("accounting-inventory-asset");
 		$data['default_expense'] = Accounting::get_default_coa("accounting-expense");
+		$data['_membership']	 = Item::get_membership();
 		$data["_manufacturer"]   = Manufacturer::getAllManufaturer();
 		$data['item_info'] 	     = [];
 		$id 					 = Request::input('item_id');
 
 		if($id)
 		{
+			$data['page_title'] 	  = "EDIT ITEM";
 			$data['item_info'] 	      = Item::info($id);
 			$data["link_submit_here"] = "/member/item/v2/edit_submit?item_id=" . $id;
-			$data["item_main"]	      = "";
 			$data["item_picker"]	  = "hide";
 			$data["item_button"]	  = "";
+			$data['item_type']		  = Item::get_item_type_modify($data['item_info']->item_type_id);
+			$data['_choose_item']	  = Item::get_choose_item($id);
 		}
 		else
 		{
+			$data['page_title'] 	  = "CREATE NEW ITEM";
 			$data["page"]			  = "Item Add";
 			$data["link_submit_here"] = "/member/item/v2/add_submit";
-			$data["item_main"]	      = 'display: none';
 			$data["item_picker"]	  = "";
 			$data["item_button"]	  = "disabled";
+			$data['item_type']		  = Item::get_item_type_modify();	
 		}
-
 		return $data;
 	}
 	public function submit_item($from)
 	{
+		Session::forget('choose_item');
+
 		$insert['item_name'] 				   = Request::input('item_description');
 		$insert['item_sku'] 				   = Request::input('item_sku');
 		$insert['item_barcode'] 			   = Request::input('item_barcode');
@@ -101,6 +107,8 @@ class ItemControllerV2 extends Member
 		$insert['item_purchasing_information'] = Request::input('item_purchasing_information');
 		$insert['item_asset_account_id']       = Request::input('item_asset_account_id');
 		$insert['has_serial_number']           = Request::input('item_has_serial');
+		$insert['membership_id']       		   = Request::input('membership_id');
+		$insert['gc_earning']         		   = Request::input('gc_earning');
 
 		/*For inventory refill*/
 		$insert['item_quantity'] 		  	   = Request::input('item_initial_qty');
@@ -109,20 +117,52 @@ class ItemControllerV2 extends Member
 
 		$shop_id = $this->user_info->shop_id;
 		
+		$item_type_id = Item::get_item_type_id(Request::input('item_type_id'));
+
 		if($from == "add")
 		{
-			$item_type_id = 1;
-			$return = Item::create_validation($shop_id, $item_type_id, $insert);
-
-			if(!$return['message'])
+			if($item_type_id <= 3)
 			{
-				$return 	  = Item::create($shop_id, $item_type_id, $insert);
+				$return = Item::create_validation($shop_id, $item_type_id, $insert);
+
+				if(!$return['message'])
+				{
+					$return = Item::create($shop_id, $item_type_id, $insert);
+				}				
+			}
+			else
+			{
+				$_item = Session::get('choose_item');
+				$return = Item::create_bundle_validation($shop_id, $item_type_id, $insert, $_item);
+
+				if(!$return['message'])
+				{
+					$return = Item::create_bundle($shop_id, $item_type_id, $insert, $_item);
+				}	
 			}
 		}
 		elseif($from == "edit")
 		{
 			$item_id 	  = Request::input("item_id");
-			$return  	  = Item::modify($shop_id, $item_id, $insert);
+			if($item_type_id <= 3)
+			{
+				$return = Item::create_validation($shop_id, $item_type_id, $insert);
+
+				if(!$return['message'])
+				{
+					$return  	  = Item::modify($shop_id, $item_id, $insert);
+				}
+			}
+			else
+			{
+				$_item = Session::get('choose_item');
+				$return = Item::create_bundle_validation($shop_id, $item_type_id, $insert, $_item);
+
+				if(!$return['message'])
+				{
+					$return = Item::modify_bundle($shop_id, $item_id, $insert, $_item);
+				}
+			}
 		}
 
 		return $return;
@@ -219,6 +259,55 @@ class ItemControllerV2 extends Member
 	}
 	public function choose()
 	{
-		return view("member.itemv2.choose");
+		$data['_item_to_bundle']	= Item::get_all_category_item([1,2,3]);
+		$data['choose_item_submit']	 = "/member/item/choose/submit";
+		return view("member.itemv2.choose",$data);
+	}
+	public function choose_submit()
+	{
+		$id = Request::input("item_id");
+		$qty = Request::input("quantity");
+		$info = Item::info($id);
+
+		$return['status'] = null;
+		$return['message'] = null;
+
+		$data = Session::get('choose_item'); 
+		if($info)
+		{
+			$data[$id]['item_id'] = $id;
+			$data[$id]['item_sku'] = $info->item_sku;
+			$data[$id]['item_price'] = $info->item_price;
+			$data[$id]['item_cost'] = $info->item_cost;
+			$data[$id]['quantity'] = $qty;
+
+			Session::put('choose_item',$data);
+
+			$return['status'] = 'success';
+			$return['call_function'] = 'success_choose_item';
+		}
+		else
+		{
+			$return['status'] = 'error';
+			$return['message'] = "Item doesn't exist";
+		}
+
+		return json_encode($return);
+	}
+	public function load_item()
+	{
+		$data['_choose_item'] = Session::get('choose_item');
+
+		return view('member.load_ajax_data.load_choose_item',$data);
+	}
+	public function remove_item()
+	{
+		$id = Request::input('item_id');
+
+		$data = Session::get('choose_item');
+		unset($data[$id]);
+		Session::put('choose_item',$data);
+
+		return 'success';
 	}
 }

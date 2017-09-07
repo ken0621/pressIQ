@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use DB;
 class Tbl_item extends Model
 {
-    use Searchable;
+    // use Searchable;
     
     protected $table = 'tbl_item';
 	protected $primaryKey = "item_id";

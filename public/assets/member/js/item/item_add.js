@@ -14,6 +14,17 @@ function item_add()
 			add_event_select_item_type();
 			add_event_change_type();
 			add_action_initialize_select();
+			add_event_click_save();
+		});
+	}
+	function add_event_click_save()
+	{
+		alert(123);
+		$('.add-submit-button').unbind("click");
+		$('.add-submit-button').bind("click", function()
+		{
+			$('.remove-this-type').remove();
+			$('#form_submit').submit();
 		});
 	}
 	function add_event_auto_generate_code()
@@ -117,31 +128,38 @@ function item_add()
 		$(".expense-account").removeClass("col-md-12");
 		$(".expense-account").addClass("col-md-6");
 
+		$(".item-add-main").addClass('remove-this-type');
+		$(".item-bundle").addClass('remove-this-type');
 		if($type_id == 1)
 		{
 			$(".item-add-main").fadeIn();
 			$(".for-inventory").fadeIn();
 			$(".for-non-service").fadeIn();
+			$(".item-add-main").removeClass('remove-this-type');
 		}
 		else if($type_id == 2)
 		{
 			$(".item-add-main").fadeIn();
 			$(".for-non-service").fadeIn();
+			$(".item-add-main").removeClass('remove-this-type');
 		}
 		else if($type_id == 3)
 		{
 			$(".item-add-main").fadeIn();
 			$(".expense-account").removeClass("col-md-6");
 			$(".expense-account").addClass("col-md-12");
+			$(".item-add-main").removeClass('remove-this-type');
 		}
 		else if($type_id == 4)
 		{
 			$(".item-bundle").fadeIn();
+			$(".item-bundle").removeClass('remove-this-type');
 		}
 		else if($type_id == 5)
 		{
 			$(".item-bundle").fadeIn();	
 			$(".for-membership-kit").fadeIn();
+			$(".item-bundle").removeClass('remove-this-type');
 		}	
 	}
 	function add_event_change_type()

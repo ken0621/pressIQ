@@ -1423,31 +1423,40 @@ class Item
         $data['membership_kit_type'] = 'display: none';
         $data['type_main'] = 'display : none';
         $data['type_bundle_main'] = 'display : none';
+        $data['type_remove_main'] = 'remove-this-type';
+        $data['type_remove_bundle'] = 'remove-this-type';
 
         if($type_id == 1)
         {
             $data['inventory_type'] = '';
             $data['type_main'] = '';
+            $data['type_remove_main'] = '';
         }
         if($type_id == 2)
         {
             $data['non_inventory_type'] = '';
             $data['type_main'] = '';
+            $data['type_remove_main'] = '';
         }
         if($type_id == 3)
         {
             $data['service_type'] = '';
             $data['type_main'] = '';
+            $data['type_remove_main'] = '';
         }
         if($type_id == 4)
         {
             $data['bundle_type'] = '';
             $data['type_bundle_main'] = '';
+            $data['type_remove_bundle'] = '';
+
         }
         if($type_id == 5)
         {
             $data['membership_kit_type'] = '';
             $data['type_bundle_main'] = '';
+            $data['type_remove_bundle'] = '';
+
         }
 
         return $data;

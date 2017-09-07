@@ -1,4 +1,4 @@
-<form class="global-submit form-horizontal" role="form" action="{{$link_submit_here}}" method="post">
+<form class="global-submit form-horizontal" id="form_submit" role="form" action="{{$link_submit_here}}" method="post">
     <div class="modal-header">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <button type="button" class="close" data-dismiss="modal">×</button>
@@ -321,7 +321,7 @@
 
     <div class="modal-footer">
         <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-        <button {{ $item_button }} class="btn btn-primary btn-custom-primary" type="submit"><i class="fa fa-save"></i> Save Item</button>
+        <button {{ $item_button }} class="btn btn-primary btn-custom-primary add-submit-button" type="button"><i class="fa fa-save"></i> Save Item</button>
     </div>
 </form>
 <script type="text/javascript" src="/assets/member/js/item/item_add.js"></script>

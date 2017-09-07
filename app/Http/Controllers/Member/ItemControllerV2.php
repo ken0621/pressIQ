@@ -109,7 +109,7 @@ class ItemControllerV2 extends Member
 		$insert['has_serial_number']           = Request::input('item_has_serial');
 		$insert['membership_id']       		   = Request::input('membership_id');
 		$insert['gc_earning']         		   = Request::input('gc_earning');
-
+		
 		/*For inventory refill*/
 		$insert['item_quantity'] 		  	   = Request::input('item_initial_qty');
 		$insert['item_date_tracked'] 		   = Request::input('item_date_track');

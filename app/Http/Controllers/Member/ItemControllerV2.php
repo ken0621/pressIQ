@@ -32,11 +32,12 @@ class ItemControllerV2 extends Member
 		Item::get_add_display();
 		Item::get_filter_type($item_type_id);
 		Item::get_filter_category($item_category_id);
+		Item::get_search($search);
 
-		$data["_item"]		= Item::get($this->user_info->shop_id, 5, $archived, $search);
+		$data["_item"]		= Item::get($this->user_info->shop_id, 5);
 		$data["pagination"] = Item::get_pagination();
 		$data["archive"]	= $archived == 1 ? "restore" : "archive";
-
+		
 		$default[]   	 	= ["Item Name","item_name", false];
 		$default[]   	 	= ["Item ID","item_id", true];
 		$default[]   	 	= ["SKU", "item_sku", true];

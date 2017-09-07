@@ -76,7 +76,16 @@ function page_list()
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/pos";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "90% Working";
-    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Erwin Guevara</span>";  
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";  
+
+    /* -- E-COMMERCE => PRODUCT ORDERS */
+    $code = "cashier-issue-stocks";
+    $nav[$page]['submenu'][$code]['label'] = "Issue Stocks";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/issue_stocks";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "90% Working";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";  
 
 
     /* E-COMMERCE */

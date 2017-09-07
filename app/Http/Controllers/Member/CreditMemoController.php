@@ -27,7 +27,7 @@ class CreditMemoController extends Member
 {
     public function getShopId()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
 
     /**
@@ -51,7 +51,7 @@ class CreditMemoController extends Member
         $cm_type = Request::input("type");
 
         $data["cm_data"] = Tbl_credit_memo::where("cm_id",$cm_id)->first();
-        $data["c_id"] = Tbl_credit_memo::where("cm_id",$cm_id)->pluck("cm_customer_id");
+        $data["c_id"] = Tbl_credit_memo::where("cm_id",$cm_id)->value("cm_customer_id");
 
         if($cm_type == "invoice")
         {
@@ -174,7 +174,7 @@ class CreditMemoController extends Member
                 $item_info[$key]['rate']               = str_replace(',', "", Request::input('cmline_rate')[$key]);
                 $item_info[$key]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$key]);
 
-                $item_type = Tbl_item::where("item_id",Request::input('cmline_item_id')[$key])->pluck("item_type_id");
+                $item_type = Tbl_item::where("item_id",Request::input('cmline_item_id')[$key])->value("item_type_id");
                 if($item_type == 4 || $item_type == 1)
                 {
                     $um_qty = UnitMeasurement::um_qty(Request::input("cmline_um")[$key]);
@@ -218,7 +218,7 @@ class CreditMemoController extends Member
                      $i = null;
                      foreach ($_items as $keyitemline_cm => $valueitemline)
                      {
-                        $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->pluck("item_type_id");
+                        $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->value("item_type_id");
                         if($type == 4)
                         {
                             if(Request::input("cmline_item_id")[$keyitemline_cm] == $value_items_cm['product_id'])
@@ -327,7 +327,7 @@ class CreditMemoController extends Member
                 $item_info[$key]['rate']               = str_replace(',', "", Request::input('cmline_rate')[$key]);
                 $item_info[$key]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$key]);
 
-                $item_type = Tbl_item::where("item_id",Request::input('cmline_item_id')[$key])->pluck("item_type_id");
+                $item_type = Tbl_item::where("item_id",Request::input('cmline_item_id')[$key])->value("item_type_id");
                 if($item_type == 4 || $item_type == 1)
                 {
                     $um_qty = UnitMeasurement::um_qty(Request::input("cmline_um")[$key]);
@@ -370,7 +370,7 @@ class CreditMemoController extends Member
                      $i = null;
                      foreach ($_items as $keyitemline_cm => $valueitemline)
                      {
-                        $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->pluck("item_type_id");
+                        $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->value("item_type_id");
                         if($type == 4)
                         {
                             if(Request::input("cmline_item_id")[$keyitemline_cm] == $value_items_cm['product_id'])

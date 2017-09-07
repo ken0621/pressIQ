@@ -103,7 +103,10 @@ function action_select_variation(e)
 
 	if (toload == true) 
 	{
-		$('.loader').fadeIn(400, function()
+		$('.add-to-cart').addClass("disabled");
+		$('.add-to-cart').prop("disabled", true);
+
+		$('.loader-variation').fadeIn(400, function()
 		{
 			$('.add-to-cart').prop("disabled", false);
 			$('.add-to-cart').removeClass("disabled");
@@ -159,28 +162,39 @@ function action_select_variation(e)
 				}
 				else
 				{
+					$('.single-order-availability').html('In Stock');
 					$('.add-to-cart').prop("disabled", false);
 					$('.add-to-cart').removeClass("disabled");
 				}
 			}
 
-			$(".loader").fadeOut();
+			$(".loader-variation").fadeOut();
 		
 		}
 		else if (data.result == 'fail')
 		{
-			$('.add-to-cart').prop("disabled", true);
-			$('.single-order-availability').html('Out of Stock')
-			$('.add-to-cart').addClass("disabled");
-			
-			$(".loader").fadeOut();	
+			if (toload == true) 
+			{
+				if (data.no_stock  == 'nostock') 
+				{
+					$('.single-order-availability').html('Out of Stock');
+					$('.add-to-cart').addClass("disabled");
+					$('.add-to-cart').prop("disabled", true);
+				}
+				else
+				{
+					$('.single-order-availability').html('In Stock')
+				}
+				
+				$(".loader-variation").fadeOut();	
+			}
 		}
 		else
 		{
 			$('.attribute-variation[variant-label="'+variant_label+'"]').val($(e.currentTarget).val());
 			if (toload == true) 
 			{
-				$(".loader").fadeOut();
+				$(".loader-variation").fadeOut();
 			}
 		}
 	})

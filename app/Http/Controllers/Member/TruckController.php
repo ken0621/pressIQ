@@ -25,7 +25,7 @@ class TruckController extends Member
             $data["_truck"][$key]->warehouse_name = "No Warehouse";
             if($value->warehouse_id != 0)
             {              
-                $data["_truck"][$key]->warehouse_name = Tbl_warehouse::where("warehouse_id",$value->warehouse_id)->pluck("warehouse_name");
+                $data["_truck"][$key]->warehouse_name = Tbl_warehouse::where("warehouse_id",$value->warehouse_id)->value("warehouse_name");
             }
         }
 
@@ -35,7 +35,7 @@ class TruckController extends Member
             $data["_truck_archived"][$key]->warehouse_name = "No Warehouse";
             if($value->warehouse_id != 0)
             {              
-                $data["_truck_archived"][$key]->warehouse_name = Tbl_warehouse::where("warehouse_id",$value->warehouse_id)->pluck("warehouse_name");
+                $data["_truck_archived"][$key]->warehouse_name = Tbl_warehouse::where("warehouse_id",$value->warehouse_id)->value("warehouse_name");
             }
         }
 

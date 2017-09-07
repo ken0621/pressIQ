@@ -32,7 +32,7 @@ class Seed_manual
 
     public static function getShopId()
     {
-      return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+      return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
 
     public static function seed_tbl_user_position()
@@ -712,7 +712,8 @@ class Seed_manual
       $insert[2]['item_type_name']  = "Service";
       $insert[3]['item_type_id']    = 4; 
       $insert[3]['item_type_name']  = "Bundle";
-
+      $insert[4]['item_type_id']    = 5; 
+      $insert[4]['item_type_name']  = "Membership Kit";
       DB::table('tbl_item_type')->insert($insert);
     }
 

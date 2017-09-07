@@ -126,9 +126,50 @@ function modal_create_deduction()
 		reload_tag_employee();
 	}
 
+
+
+	this.load_tagged_employeev2 = function()
+	{
+		var action = "/member/payroll/deduction/v2/get_employee_deduction_tag";
+		var method = "POST";
+		var target = ".table-employee-tag";
+		var formdata = {
+			_token:misc('_token')
+		};
+		var function_name = "modal_create_deduction.remove_tag";
+		$(target).html('<tr><td colspan="2">'+misc('loader') + '</td></tr>');
+		$.ajax({
+			url 	: 	action,
+			type 	: 	method,
+			data 	: 	formdata,
+			success : 	function(result)
+			{
+				console.log(result);
+				var html = '';
+				result = JSON.parse(result);
+				$(result.new_record).each(function(index, data){
+					console.log(data);
+					html += tbl_tag(data);
+				});
+				$(target).html(html);
+				remove_tag();
+			},
+			error 	: 	function(err)
+			{
+				error_function();
+			}
+		});
+		reload_tag_employee();
+	}
+
 	this.reload_tag_employee = function()
 	{
 		reload_tag_employee();
+	}
+
+	this.reload_tag_employeev2 = function()
+	{
+		reload_tag_employeev2();
 	}
 
 	function reload_tag_employee()
@@ -139,6 +180,31 @@ function modal_create_deduction()
 			payroll_deduction_id:$("#payroll_deduction_id").val()
 		};
 		var action = "/member/payroll/deduction/reload_deduction_employee_tag";
+		var method = "POST";
+		$(target).html(misc('loader'));
+		$.ajax({
+			url 	: 	action,
+			type 	: 	method,
+			data 	: 	formdata,
+			success : 	function(result)
+			{
+				$(target).html(result);
+			},
+			error 	: 	function(err)
+			{
+				error_function();
+			}
+		});
+	}
+
+	function reload_tag_employeev2()
+	{
+		var target = ".affected-employee";
+		var formdata = {
+			_token:misc('_token'),
+			payroll_deduction_id:$("#payroll_deduction_id").val()
+		};
+		var action = "/member/payroll/deduction/v2/reload_deduction_employee_tag";
 		var method = "POST";
 		$(target).html(misc('loader'));
 		$.ajax({

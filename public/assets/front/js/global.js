@@ -165,12 +165,22 @@ function add_search_events()
                         {
                             var price = data[index]['min_price'] + ' - ' + data[index]['max_price'];
                         }
+
+                        if (data[index]['variant'][0]['image_path'] == null) 
+                        {
+                            var main_image = '/assets/front/img/placeholder.png';
+                        }
+                        else
+                        {
+                            var main_image = data[index]['variant'][0]['image_path'];
+                        }
+
                         console.log(data[index]);
                         $append += 
                                     '<div class="search-popup-holder">' +
                                         '<a href="/product/view/'+data[index]['eprod_id']+'">'+
                                             '<div class="search-popup-img">'+
-                                                '<img style="width: 100%; object-fit: cover; height: 80px;" src="'+data[index]['variant'][0]['image_path']+'">' +
+                                                '<img style="width: 100%; object-fit: cover; height: 80px;" src="'+main_image+'">' +
                                             '</div>'+
                                             '<div class="search-popup-text">' +
                                                 '<div class="search-popup-name">' +

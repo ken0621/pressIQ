@@ -35,7 +35,7 @@ class CreditMemo
 	}
     public static function getShopId()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
 	public static function postCM($customer_info, $item_info, $inv_id = 0,$for_tablet = false)
 	{
@@ -53,6 +53,9 @@ class CreditMemo
 		$insert_cm["cm_memo"] = $customer_info["cm_memo"];
 		$insert_cm["cm_amount"] = $customer_info["cm_amount"];
 		$insert_cm["cm_type"] = isset($customer_info["cm_type"]) ? $customer_info["cm_type"] : 0;
+        $insert_cm["cm_used_ref_name"] = isset($customer_info['cm_used_ref_name']) ? $customer_info['cm_used_ref_name'] : "" ;
+        $insert_cm["cm_used_ref_id"] = isset($customer_info['cm_used_ref_id']) ? $customer_info['cm_used_ref_id'] : 0 ;
+
 		$insert_cm["date_created"] = Carbon::now();
 
 		$cm_id = Tbl_credit_memo::insertGetId($insert_cm);

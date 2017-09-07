@@ -81,7 +81,7 @@
                             <li><a href="/" class="head-button {{ Request::segment(1) == '' ? '' : '' }}" id="business-plan">Business Plan</a></li>
                             <li><a href="#" class="head-button {{ Request::segment(1) == 'support' ? 'active' : '' }}" id="support">Support</a></li>
                         </ul>
-                        <a href="/signin" role="button" class="head-button btn-signin {{ Request::segment(1) == 'signin' ? 'active' : '' }}" id="signin">Sign In</a>
+                        <a href="/login" role="button" class="head-button btn-signin {{ Request::segment(1) == 'signin' ? 'active' : '' }}" id="signin">Sign In</a>
                     </nav>
                 </div>
             </div>

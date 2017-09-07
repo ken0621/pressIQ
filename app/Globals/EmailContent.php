@@ -11,15 +11,15 @@ class EmailContent
 {    
     public static function getShopId()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
     public static function getShopkey()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('shop_key');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('shop_key');
     }
     public static function getShopkey_front($shop_id)
     {
-        return Tbl_user::shop()->where("tbl_shop.shop_id", $shop_id)->pluck('shop_key');
+        return Tbl_user::shop()->where("tbl_shop.shop_id", $shop_id)->value('shop_key');
     }
     public static function getAllEmailContent()
     {
@@ -27,7 +27,7 @@ class EmailContent
     }
     public static function getSubject($content_key)
     {
-        return Tbl_email_content::where("email_content_key",$content_key)->pluck("email_content_subject");
+        return Tbl_email_content::where("email_content_key",$content_key)->value("email_content_subject");
     }
     public static function checkIfexisting($content_key)
     {
@@ -42,7 +42,7 @@ class EmailContent
         $content = Tbl_email_content::where("email_content_key",$content_key)
         ->where('shop_id', $shop_id)
         ->orderBy('email_content_id', 'DESC')
-        ->pluck("email_content");
+        ->value("email_content");
         
         foreach ($change_content as $key => $value)
         {        	

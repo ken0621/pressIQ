@@ -70,28 +70,26 @@
                         </tr>
                      </thead>
                      <tbody>
-                        @foreach($_product as $product)
-                           <tr>
-                              <td>{{$product["variant_name"] or ''}}</td>
-                              <td>{{$product['quantity']}}</td>
-                              <td style="padding-left: 0; padding-right: 0;">{{currency("P", $product['total'])}}</td>
+                        <tr>
+                              <td>Test Product Name</td>
+                              <td>1</td>
+                              <td style="padding-left: 0; padding-right: 0;">P 1.00</td>
                               <td style="padding-left: 0px; padding-right: 0px; width: 10px;"><a style="color: red;" href="/cart/remove?redirect=1&amp;variation_id=45"><i class="fa fa-close"></i></a></td>
                            </tr>
-                        @endforeach
                          <tr>
                            <td></td>
                            <td class="text-right"><b>Subtotal</b></td>
-                           <td colspan="2" class="total text-left" style="word-break: break-all;">{{currency("P", $order["subtotal"])}}</td>
+                           <td colspan="2" class="total text-left" style="word-break: break-all;">P 123.00</td>
                         </tr>
                         <tr>
                            <td></td>
                            <td class="text-right"><b>Shipping Fee</b></td>
-                           <td colspan="2" class="total text-left" style="word-break: break-all;">@if( $order["shipping_fee"] == 0) INCLUDED @else {{currency("P", $order["shipping_fee"])}} @endif </td>
+                           <td colspan="2" class="total text-left" style="word-break: break-all;">INCLUDED</td>
                         </tr>
                          <tr>
                            <td></td>
                            <td class="text-right"><b>Total</b></td>
-                           <td colspan="2" class="total text-left" style="word-break: break-all;">{{currency("P", $order["total"])}}</td>
+                           <td colspan="2" class="total text-left" style="word-break: break-all;">P 123.00</td>
                         </tr>
                      </tbody>
                   </table>

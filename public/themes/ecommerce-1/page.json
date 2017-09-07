@@ -207,6 +207,23 @@
 			"size":"12"
 		}
 	},
+	"legalities":
+	{
+		"legalities_gallery" :
+		{
+			"label":"Legalities",
+			"type":"gallery",
+			"default":"",
+			"size":"6"
+		},
+		"business_presentation" :
+		{
+			"label":"Business Presentation",
+			"type":"text",
+			"default":"",
+			"size":"6"
+		}
+	},
 	"info":
 	{
 		"facebook_link" :
@@ -228,6 +245,13 @@
 			"label":"Pinterest Link",
 			"type":"text",
 			"default":"",
+			"size":"12"
+		},
+		"marquee_message" :
+		{
+			"label":"Marquee Message",
+			"type":"text",
+			"default":"Helping every Filipinos to own an affordable, reliable, tangible and profitable BUSINESS..",
 			"size":"12"
 		}
 	}

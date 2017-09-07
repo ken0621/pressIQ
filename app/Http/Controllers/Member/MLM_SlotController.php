@@ -50,6 +50,7 @@ use App\Globals\Mlm_discount;
 // use App\Globals\Mlm_compute;
 use App\Models\Tbl_email_content;
 use Crypt;
+use App\Globals\Reward;
 class MLM_SlotController extends Member
 {
     public function instant_add_slot()
@@ -95,6 +96,7 @@ class MLM_SlotController extends Member
             {
                 if($shop_id == $slot_info->shop_id)
                 {
+                    
                     $customer_id = $slot_info->slot_owner;
                     Mlm_member::add_to_session_edit($shop_id, $customer_id, $slot_id);
                     return Redirect::to('/mlm');
@@ -198,6 +200,7 @@ class MLM_SlotController extends Member
             ->where('marketing_plan_enable', 1)
             ->where('marketing_plan_trigger', 'Slot Creation')
             ->first();
+            
         $data["code_selected"]  = $code->paginate(10);
         // dd($data);
         return view('member.mlm_slot.mlm_slot_ajax', $data);

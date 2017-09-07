@@ -86,12 +86,12 @@
 		<div class="form-group">
 			<div class="col-md-12">
 				<table class="table table-bordered table-condensed">
-					<th>
+					<thead>
 						<tr>
 							<th>Employee Name</th>
 							<th width="5%"></th>
 						</tr>
-					</th>
+					</thead>
 					<tbody class="tbl-tag">
 						
 					</tbody>

@@ -30,7 +30,6 @@ class Utilities
 	{
 
 		$user_info = Tbl_user::where("user_email", session('user_email'))->shop()->position()->access()->first();
-
 		$rank 	   = $user_info->position_rank;
 
 		if($user_info)
@@ -112,7 +111,7 @@ class Utilities
 
                     if($page_code == "mlm-stairstep-compute")
                     {
-                        $check_shop         = Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+                        $check_shop         = Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
                         if($check_shop)
                         {
                             $check_stairstep = Tbl_mlm_plan::where("marketing_plan_code","STAIRSTEP")->where("shop_id",$check_shop)->where("marketing_plan_enable","1")->first();

@@ -166,7 +166,7 @@
                     <input class="product-detail-value" type="hidden" value="{{$product->eprod_detail_image or ''}}" name="eprod_detail_image">
                     <div class="product-detail-image" style="padding-bottom: 75%; height: 0; background-color: #ddd; background-position: center; background-size: contain; background-repeat: no-repeat; {{ $product->eprod_detail_image ? 'background-image: url("' . $product->eprod_detail_image . '")' : '' }}"></div>
                     <div style="margin-top: 15px;">
-                        <button style="width: 100%;" class="image-gallery image-gallery-single btn btn-primary" key="product-detail"> Upload</div>
+                        <button style="width: 100%;" class="image-gallery image-gallery-single btn btn-primary" key="product-detail"> Upload</button>
                     </div>
                 </div>
             </div>
@@ -199,5 +199,5 @@
     </div>
 </div>
 
-<script src="/assets/external/tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.6.5/tinymce.min.js"></script>
 <script type="text/javascript" src="/assets/member/js/evariant_info.js"></script>

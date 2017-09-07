@@ -24,83 +24,91 @@
         </div>
     </div>
     <div class="row load-container">
-    <div class="data-container">
-            <div class="col-md-4">
-                <div class="form-box-divider">
-                    <div class="title">Product</div>
+        <div class="data-container">
+           <div class="col-md-4">
+              <div class="form-box-divider">
+                 <div class="title">Product</div>
+                 <div class="dividers half"></div>
+                 <div class="row clearfix">
+                    <div class="form-group col-md-12">
+                       <label>Product Name</label>
+                       <input type="text" name="eprod_name" class="form-control input-sm" value="{{$product->eprod_name}}">
+                    </div>
+                    <div class="form-group col-md-12">
+                       <label>Category</label>
+                       <select class="form-control select-category input-sm" name="eprod_category_id">
+                       @include("member.load_ajax_data.load_category", ['add_search' => "", 'type_id' => $product->eprod_category_id])
+                       </select>
+                    </div>
+                 </div>
+              </div>
+           </div>
+           <div class="col-md-8">
+              @if($product->eprod_is_single == 1)
+              <div class="form-box-divider single-container">
+                 @include('member.ecommerce_product.ecom_edit_variant',['default' => '1'])
+              </div>
+              @else
+              <div class="form-box-divider">
+                 <!-- FORM.VARIATIONS -->
+                 <div class="variation-form multiple-variation">
+                    <!-- <div class="dividers"></div> -->
+                    <div class="clearfix">
+                       <div class="title pull-left"> Variant </div>
+                       <a class="pull-right left-margin" href="/member/ecommerce/product/edit-variant/{{ $product->eprod_id }}"><i class="fa fa-plus"></i> Add Variant</a>
+                       <a class="pull-right left-margin popup" href="javascript:" link="/member/ecommerce/product/edit-option/{{ $product->eprod_id }}" size="md" ><i class="fa fa-pencil-square-o"></i> Edit Options </a>
+                       <!--<a class="pull-right modal-reorder-variant" href="javascript:"><i class="fa fa-bars"></i> Reorder Variants </a>-->
+                    </div>
                     <div class="dividers half"></div>
-                    <div class="row clearfix">
-                        <div class="form-group col-md-12">
-                            <label>Product Name</label>
-                            <input type="text" name="eprod_name" class="form-control input-sm" value="{{$product->eprod_name}}">
-                        </div>
-                        <div class="form-group col-md-12">
-                            <label>Category</label>
-                            <select class="form-control select-category input-sm" name="eprod_category_id">
-                                @include("member.load_ajax_data.load_category", ['add_search' => "", 'type_id' => $product->eprod_category_id])
-                            </select>
-                        </div>
+                    <div class="row">
+                       <table class="table table-stripped" >
+                          <thead>
+                             <tr>
+                                <th>
+                                   <image src=""></image>
+                                </th>
+                                @foreach($_column as $key=>$column_name)
+                                <th>{{ ucfirst($column_name) }}</th>
+                                @endforeach
+                                <th>Label</th>
+                                <th>Price</th>
+                                <th>Action</th>
+                             </tr>
+                          </thead>
+                          <tbody>
+                             @foreach($_variant as $key=>$variants)
+                             <tr>
+                                <td>
+                                   <image src="{{$variants->image_path}}" class="variant-image-item"></image>
+                                </td>
+                                @foreach($variants->variation as $key2=>$column)
+                                <td>{{$column}}</td>
+                                @endforeach
+                                <td>{{$variants->evariant_item_label}}</td>
+                                <td>{{currency('',$variants->evariant_price)}}</td>
+                                <td>
+                                   <div class="btn-group"> 
+                                      <a class="btn btn-primary grp-btn" href="/member/ecommerce/product/edit-variant/{{ $variants->evariant_prod_id }}?variant_id={{ $variants->evariant_id }}">Edit</a>
+                                      <a class="btn btn-primary grp-btn" href="/member/product/edit/variant/delete/{{ $variants->evariant_id  }}"><span class="fa fa-trash"></span></a>
+                                   </div>
+                                </td>
+                             </tr>
+                             @endforeach
+                          </tbody>
+                       </table>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-8">
-
-                @if($product->eprod_is_single == 1)
-                <div class="form-box-divider single-container">
-                    @include('member.ecommerce_product.ecom_edit_variant',['default' => '1'])
-                </div>
-
-                @else
-                <div class="form-box-divider">
-                    <!-- FORM.VARIATIONS -->
-                    <div class="variation-form multiple-variation">
-                        <!-- <div class="dividers"></div> -->
-                        <div class="clearfix">
-                            <div class="title pull-left"> Variant </div>
-                            <a class="pull-right left-margin" href="/member/ecommerce/product/edit-variant/{{ $product->eprod_id }}"><i class="fa fa-plus"></i> Add Variant</a>
-                            <a class="pull-right left-margin popup" href="javascript:" link="/member/ecommerce/product/edit-option/{{ $product->eprod_id }}" size="md" ><i class="fa fa-pencil-square-o"></i> Edit Options </a>
-                            <!--<a class="pull-right modal-reorder-variant" href="javascript:"><i class="fa fa-bars"></i> Reorder Variants </a>-->
-                        </div>
-                        <div class="dividers half"></div>
-                        <div class="row">
-                            <table class="table table-stripped" >
-                                <thead>
-                                    <tr>
-                                        <th><image src=""></image></th>
-                                        @foreach($_column as $key=>$column_name)
-                                            <th>{{ ucfirst($column_name) }}</th>
-                                        @endforeach
-                                        <th>Label</th>
-                                        <th>Price</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($_variant as $key=>$variants)
-                                    <tr>
-                                        <td><image src="{{$variants->image_path}}" class="variant-image-item"></image></td>
-                                        @foreach($variants->variation as $key2=>$column)
-                                            <td>{{$column}}</td>
-                                        @endforeach
-                                        <td>{{$variants->evariant_item_label}}</td>
-                                        <td>{{currency('',$variants->evariant_price)}}</td>
-                                        <td>
-                                            <div class="btn-group"> 
-                                                <a class="btn btn-primary grp-btn" href="/member/ecommerce/product/edit-variant/{{ $variants->evariant_prod_id }}?variant_id={{ $variants->evariant_id }}">Edit</a>
-                                                <a class="btn btn-primary grp-btn" href="/member/product/edit/variant/delete/{{ $variants->evariant_id  }}"><span class="fa fa-trash"></span></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbosy>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                @endif
-
-                </br></br></br></br></br></br></br></br></br></br>
-            </div>
+                 </div>
+              </div>
+              @endif
+           </div>
+           <div class="col-md-12">
+              <div class="form-box-divider">
+                 <div class="form-group">
+                    <label>Product Details</label>
+                    <textarea class="tinymce form-control" name="eprod_details">{{ $product->eprod_details }}</textarea>
+                 </div>
+              </div>
+           </div>
         </div>
     </div>
 </form>
@@ -181,6 +189,13 @@
         toastr.success('{{Session::get('success')}}');
     @endif
 </script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.6.5/tinymce.min.js"></script>
+<script type="text/javascript">
+tinymce.init({ 
+    selector:'.tinymce',
+    plugins: "autoresize",
+ });
+ </script>
 <script type="text/javascript" src="/assets/member/js/evariant.js"></script>
 <script type="text/javascript" src="/assets/external/selectize.js/dist/js/standalone/selectize.js"></script>
 @endsection

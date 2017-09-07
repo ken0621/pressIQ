@@ -223,10 +223,20 @@ function payrollconfiguration()
 	{
 		reload_configuration("/member/payroll/deduction");
 	}
+	this.reload_deductionv2 = function()
+	{
+		reload_configuration("/member/payroll/deduction/v2");
+	}
 
 	this.reload_allowance = function()
 	{
 		reload_configuration("/member/payroll/allowance");
+	}
+
+
+	this.reload_allowancev2 = function()
+	{
+		reload_configuration("/member/payroll/allowance/v2");
 	}
 
 	this.reload_leave_temp = function()
@@ -237,6 +247,11 @@ function payrollconfiguration()
 	this.reload_holiday = function()
 	{
 		reload_configuration("/member/payroll/holiday");
+	}
+	
+	this.reload_holiday_v2 = function()
+	{
+		reload_configuration("/member/payroll/holiday/v2");
 	}
 
 	this.reload_holiday_default = function()
@@ -343,7 +358,21 @@ function submit_done(data)
 		console.log(data.function_name);
 		executeFunctionByName(data.function_name, window);
 	}
-	
+
+	if (data.from == 'archive-deduction') 
+	{
+		var payroll_deduction_type = ""+$('.payroll_deduction_type').val();
+		console.log(""+payroll_deduction_type);
+		$('.modal-loader').removeClass("hidden");
+		$('.configuration-div').load('/member/payroll/deduction/v2', function()
+		{
+
+				$('.modal-loader').addClass("hidden");
+				$('.modal-content-global .close').trigger("click");
+				data.element.modal("hide");
+		});
+		
+	}
 }
 
 function loading_done(url)

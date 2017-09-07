@@ -401,8 +401,25 @@ class ShopCheckoutController extends Shop
     }
     /* End Payment Facilities */
 
+    public function if_loggedin()
+    {
+        if(isset(Self::$customer_info->customer_id))
+        {
+            $customer_info["email"] = trim(Self::$customer_info->email);
+            $customer_info["new_account"] = false;
+            $customer_info["password"] = Crypt::decrypt(Self::$customer_info->password);
+            $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_account"));
+            if ($customer_set_info_response["status"] == "error") 
+            {
+                return Redirect::to("/")->send();
+            }
+        }
+    }
+
     public function index()
     {
+        $this->if_loggedin();
+
         $data["page"]            = "Checkout";
         $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
         /* DO NOT ALLOW ON THIS PAGE IF THERE IS NOT CART */
@@ -439,6 +456,7 @@ class ShopCheckoutController extends Shop
             $data["customer"] = DB::table("tbl_customer")->leftJoin("tbl_customer_other_info", "tbl_customer.customer_id", "=", "tbl_customer_other_info.customer_id")
                                                          ->where("tbl_customer.customer_id", $data["get_cart"]["tbl_customer"]["customer_id"])
                                                          ->first();
+            // dd($data["get_cart"]);
             return view("checkout", $data);
         }
         else
@@ -587,9 +605,17 @@ class ShopCheckoutController extends Shop
         }
         
     }
-    public function update_method()
+    public function update_method($method_id = null)
     {
-        $customer_info["method_id"] = Request::input("method_id");
+        if ($method_id) 
+        {
+            $customer_info["method_id"] = $method_id;
+        }
+        else
+        {
+            $customer_info["method_id"] = Request::input("method_id");
+        }
+
         $old_session = $order = Cart::get_info($this->shop_info->shop_id);
         $customer_set_info_response = Cart::customer_set_info_ec_order($this->shop_info->shop_id, $old_session, $customer_info);
         $unique_id = Cart::get_unique_id($this->shop_info->shop_id);
@@ -599,13 +625,18 @@ class ShopCheckoutController extends Shop
 
     public function locale_id_to_name($locale_id)
     {
-        return Tbl_locale::where("locale_id", $locale_id)->pluck("locale_name");
+        return Tbl_locale::where("locale_id", $locale_id)->value("locale_name");
     }
 
     public function payment()
     {
         if(Request::isMethod("post"))
         {
+            if (Request::input("payment_method_id")) 
+            {
+                $this->update_method(Request::input("payment_method_id"));
+            }
+            
             return Cart::process_payment($this->shop_info->shop_id);
         }
         else

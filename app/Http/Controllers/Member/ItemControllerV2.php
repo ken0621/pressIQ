@@ -37,15 +37,16 @@ class ItemControllerV2 extends Member
 		$data["pagination"] = Item::get_pagination();
 		$data["archive"]	= $archived == 1 ? "restore" : "archive";
 
-		$default[0]   	 	= ["Item ID","item_id", true];
-		$default[1]   	 	= ["SKU", "item_sku", true];
-		$default[2]	  	 	= ["Price", "display_price", true];
-		$default[3]	  	 	= ["Cost", "display_cost", true];
-		$default[4]	  	 	= ["Markup", "display_markup", true];
-		$default[5]	  	 	= ["Inventory", "inventory_count", true];
-		$default[6]	  	 	= ["U/M", "multi_abbrev", true];
+		$default[]   	 	= ["Item Name","item_name", false];
+		$default[]   	 	= ["Item ID","item_id", true];
+		$default[]   	 	= ["SKU", "item_sku", true];
+		$default[]	  		= ["Price", "display_price", true];
+		$default[]	  		= ["Cost", "display_cost", true];
+		$default[]	  		= ["Markup", "display_markup", true];
+		$default[]	  		= ["Inventory", "inventory_count", true];
+		$default[]	  		= ["U/M", "multi_abbrev", true];
 
-		$data["_item"]	    = Columns::filterColumns($this->user_info->shop_id, $this->user_info->user_id, "item", $data["_item"], $default);
+		$data["_item"]	    	= Columns::filterColumns($this->user_info->shop_id, $this->user_info->user_id, "item", $data["_item"], $default);
 		
 		return view("member.itemv2.list_item_table", $data);
 	}

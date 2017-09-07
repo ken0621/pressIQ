@@ -58,6 +58,7 @@ class ItemControllerV2 extends Member
 
 		if($id)
 		{
+			$data['page_title'] 	  = "EDIT ITEM";
 			$data['item_info'] 	      = Item::info($id);
 			$data["link_submit_here"] = "/member/item/v2/edit_submit?item_id=" . $id;
 			$data["item_picker"]	  = "hide";
@@ -67,6 +68,7 @@ class ItemControllerV2 extends Member
 		}
 		else
 		{
+			$data['page_title'] 	  = "CREATE NEW ITEM";
 			$data["page"]			  = "Item Add";
 			$data["link_submit_here"] = "/member/item/v2/add_submit";
 			$data["item_picker"]	  = "";
@@ -77,6 +79,8 @@ class ItemControllerV2 extends Member
 	}
 	public function submit_item($from)
 	{
+		Session::forget('choose_item');
+
 		$insert['item_name'] 				   = Request::input('item_description');
 		$insert['item_sku'] 				   = Request::input('item_sku');
 		$insert['item_barcode'] 			   = Request::input('item_barcode');
@@ -90,6 +94,8 @@ class ItemControllerV2 extends Member
 		$insert['item_purchasing_information'] = Request::input('item_purchasing_information');
 		$insert['item_asset_account_id']       = Request::input('item_asset_account_id');
 		$insert['has_serial_number']           = Request::input('item_has_serial');
+		$insert['membership_id']       		   = Request::input('membership_id');
+		$insert['gc_earning']         		   = Request::input('gc_earning');
 
 		/*For inventory refill*/
 		$insert['item_quantity'] 		  	   = Request::input('item_initial_qty');
@@ -151,7 +157,6 @@ class ItemControllerV2 extends Member
 	public function add_item()
 	{
 		$data = $this->get_item();
-		Session::forget('choose_item');
 
 		return view("member.itemv2.add_item",$data);
 	}

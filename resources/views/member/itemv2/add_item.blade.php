@@ -2,7 +2,7 @@
     <div class="modal-header">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <button type="button" class="close" data-dismiss="modal">×</button>
-        <h4 class="modal-title"><i class="fa fa-cart-plus"></i> CREATE NEW ITEM</h4>
+        <h4 class="modal-title"><i class="fa fa-cart-plus"></i> {{$page_title or ''}}</h4>
         <div>Enter the information of your items below</div>
     </div>
     
@@ -270,13 +270,13 @@
                     </div>
                     <div class="col-md-3">
                         <label for="basic-input">Membership</label>
-                        <select class="form-control">
-                            @include("member.load_ajax_data.load_membership")
+                        <select class="form-control" name="membership_id">
+                            @include("member.load_ajax_data.load_membership", ['membership_id' => get_request_old($item_info, 'membership_id')])
                         </select>
                     </div>
                     <div class="col-md-3">
                         <label for="basic-input">GC Earnings</label>
-                        <input type="text" class="form-control" name="">
+                        <input type="text" class="form-control" name="gc_earning" value="{{ get_request_old($item_info, 'gc_earning') }}">
                     </div>
                 </div>
 

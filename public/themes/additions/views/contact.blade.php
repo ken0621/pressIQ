@@ -63,17 +63,16 @@
 	                        <tbody>
 	                            <tr>
 	                                <td class="icon"><i class="fa fa-map-marker" aria-hidden="true"></i></td>
-	                                <td class="text"></td>
-	                                <!--UG3 Alfaro Place Condominium 146 L.P. Leviste St., Salcedo Village, Makati City-->
+	                                <td class="text">UG3 Alfaro Place Condominium 146 L.P. Leviste St., Salcedo Village, Makati City</td>
 	                            </tr>
-	                           
-	                            {{-- @foreach($contactInfo->_contact as $contact)
 	                            <tr>
-	                                <td class="icon"><i class="fa fa-{{$contact->category == 'number'?'mobile':'envelope'}}" aria-hidden="true"></i></td>
-	                                <td class="text">{{$contact->contact}}</td>
+	                                <td class="icon"><i class="fa fa-mobile" aria-hidden="true"></i></td>
+	                                <td class="text">123456789</td>
 	                            </tr>
-	                            @endforeach --}}
-	                           
+	                            <tr>
+	                                <td class="icon"><i class="fa fa-envelope" aria-hidden="true"></i></td>
+	                                <td class="text">123456789</td>
+	                            </tr>
 	                        </tbody>
 	                    </table>
 	                </div>

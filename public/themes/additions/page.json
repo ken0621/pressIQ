@@ -46,6 +46,13 @@
 	},
 	"about":
 	{
+		"about_image" :
+		{
+			"label":"About Us Cover Image",
+			"type":"image",
+			"default":"/themes/additions/front/about.jpg",
+			"size":"6"
+		},
 		"about_title" :
 		{
 			"label":"About Us Title",
@@ -87,6 +94,72 @@
 			"type":"textbox",
 			"default":"The top and most sought maternity garments leader in the country.",
 			"size":"12"
+		},
+		"core_title" : 
+		{
+			"label":"Core Values Title",
+			"type":"textbox",
+			"default":"OUR VISION",
+			"size":"12"
+		},
+		"core_description" : 
+		{
+			"label":"Core Values Description",
+			"type":"tinymce",
+			"default":"<p>INTEGRITYRESPECT</p><p>PROFESSIONALISM</p><p>EMPOWERMENT</p><p>QUALITY SERVICE</p><p>CUSTOMER SATISFACTION</p><p>PASSION FOR EXCELLENCE</p>",
+			"size":"12"
+		}
+	},
+	"contact":
+	{
+		"contact_title" :
+		{
+			"label":"Contact Title",
+			"type":"textbox",
+			"default":"Get In Touch With Us",
+			"size":"6"
+		},
+		"location_title" :
+		{
+			"label":"Location Title",
+			"type":"textbox",
+			"default":"Location",
+			"size":"6"
+		},
+		"location_address" :
+		{
+			"label":"Location Address",
+			"type":"textbox",
+			"default":"Business Hours",
+			"size":"6"
+		},
+		"location_phone" :
+		{
+			"label":"Location Phone",
+			"type":"textbox",
+			"default":"123456789",
+			"size":"6"
+		},
+		"location_email" :
+		{
+			"label":"Location Email",
+			"type":"textbox",
+			"default":"test@test.com",
+			"size":"6"
+		},
+		"business_title" :
+		{
+			"label":"Business Title",
+			"type":"textbox",
+			"default":"Business Hours",
+			"size":"6"
+		},
+		"business_hours" :
+		{
+			"label":"Business Hours",
+			"type":"textbox",
+			"default":"Monday - Friday at 9:00am - 6:00pm",
+			"size":"6"
 		}
 	}
 }

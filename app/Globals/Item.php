@@ -22,6 +22,7 @@ use App\Models\Tbl_shop;
 use App\Models\Tbl_chart_of_account;
 use App\Models\Tbl_manufacturer;
 use App\Models\Tbl_item_type;
+use App\Models\Tbl_membership;
 use Session;
 use DB;
 use Carbon\carbon;
@@ -234,6 +235,116 @@ class Item
         $update["item_date_archived"] = null;
         Tbl_item::where("shop_id", $shop_id)->where("item_id", $item_id)->update($update);
     }
+    public static function create_bundle_validation($shop_id, $item_type, $insert, $_item)
+    {
+        $return['item_id'] = 0;
+        $return['status'] = null;
+        $return['message'] = null;
+
+        $rules['item_name'] = 'required';
+        $rules['item_sku'] = 'required';
+        $rules['item_price'] = 'required';
+
+        $validator = Validator::make($insert, $rules);
+
+        if($validator->fails())
+        {
+            $return["status"] = "error";
+            foreach ($validator->messages()->all('') as $keys => $message)
+            {
+                $return["message"] .= $message."<br>";
+            }
+        }
+        if($shop_id)
+        {
+            $shop_data = Tbl_shop::where('shop_id',$shop_id)->first();
+            if(!$shop_data)
+            {
+                $return['status'] = 'error';
+                $return['message'] .= 'Your account does not exist. <br>';                
+            }
+        }
+        if($item_type)
+        {
+            $type_data = Tbl_item_type::where('item_type_id',$item_type)->first();
+            if(!$type_data)
+            {
+                $return['status'] = 'error';
+                $return['message'] .= 'Item type does not exist. <br>';            
+            }
+        }
+        if($insert['item_category_id'] != 0)
+        {
+            $category_data = Tbl_category::where('type_id',$insert['item_category_id'])->where('type_shop',$shop_id)->first();
+            if(!$category_data)
+            {
+                $return['status'] = 'error';
+                $return['message'] .= 'Category does not exist. <br>';            
+            }            
+        }
+        if($insert['item_income_account_id'] != 0)
+        {
+            $income_data = Tbl_chart_of_account::where('account_id',$insert['item_income_account_id'])->where('account_shop_id',$shop_id)->first();
+            if(!$income_data)
+            {
+                $return['status'] = 'error';
+                $return['message'] .= 'Income account does not exist. <br>';            
+            }            
+        }
+        if(count($_item) <= 0)
+        {
+            $return['status'] = 'error';
+            $return['message'] .= 'Please add items to bundle. <br>';  
+        }
+
+        return $return;
+    }
+    public static function create_bundle($shop_id, $item_type, $insert, $_item)
+    {
+        $insert['shop_id'] = $shop_id;
+        $insert['item_type_id'] = $item_type;
+        $insert['item_date_created'] = Carbon::now();
+       
+        $item_id = Tbl_item::insertGetId($insert);
+        foreach ($_item as $key => $value) 
+        {
+            $ins_item['bundle_bundle_id'] = $item_id;
+            $ins_item['bundle_item_id'] = $value['item_id'];
+            $ins_item['bundle_qty'] = $value['quantity'];
+
+            Tbl_item_bundle::insert($ins_item);
+        }
+
+        $return['item_id']       = $item_id;
+        $return['status']        = 'success';
+        $return['message']       = 'Item successfully created.';
+        $return['call_function'] = 'success_item';       
+
+        return $return;
+    }
+    public static function modify_bundle($shop_id, $item_id, $insert, $_item)
+    {  
+        $insert['shop_id'] = $shop_id;
+        Tbl_item::where('item_id',$item_id)->update($insert);
+        Tbl_item_bundle::where('bundle_bundle_id',$item_id)->delete();
+
+        foreach ($_item as $key => $value) 
+        {
+            $ins_item['bundle_bundle_id'] = $item_id;
+            $ins_item['bundle_item_id'] = $value['item_id'];
+            $ins_item['bundle_qty'] = $value['quantity'];
+
+            Tbl_item_bundle::insert($ins_item);
+        }
+
+        $return['item_id']       = $item_id;
+        $return['status']        = 'success';
+        $return['message']       = 'Item successfully updated.';
+        $return['call_function'] = 'success_item';       
+
+        return $return;
+
+    }
     /* ITEM CRUD END */
 
 
@@ -286,7 +397,7 @@ class Item
     }
     public static function info($item_id)
     {
-        $item = Tbl_item::where("item_id", $item_id)->first();
+        $item = Tbl_item::type()->where("item_id", $item_id)->first();
         Self::add_info($item);
         Self::get_clear_session();
         return $item;
@@ -544,6 +655,15 @@ class Item
     public static function get_item_type_list()
     {
         return Tbl_item_type::where("archived", 0)->get();
+    }
+    public static function get_item_type_id($type_name = '') // Inventory, Non-Inventory, Service, Bundle, Membership
+    {        
+        $id = Tbl_item_type::where("item_type_name", $type_name)->value('item_type_id');        
+        if(!$id)
+        {
+            $id = 5; //For Membership (Temporary)
+        }
+        return $id;
     }
 	public static function breakdown($_item='')
 	{
@@ -1274,5 +1394,67 @@ class Item
     public static function getItemCategory($shop_id)
     {
         return Tbl_category::where("type_shop", $shop_id)->where("archived", 0)->get();
+    }
+    public static function get_choose_item($id)
+    {
+        $items = Tbl_item_bundle::where('bundle_bundle_id', $id)->get();
+        $data = [];
+        foreach ($items as $key => $value) 
+        {
+            $info = Item::info($value->bundle_item_id);
+
+            $data[$value->bundle_item_id]['item_id'] = $value->bundle_item_id;
+            $data[$value->bundle_item_id]['item_sku'] = $info->item_sku;
+            $data[$value->bundle_item_id]['item_price'] = $info->item_price;
+            $data[$value->bundle_item_id]['item_cost'] = $info->item_cost;
+            $data[$value->bundle_item_id]['quantity'] = $value->bundle_qty;
+
+            Session::put('choose_item',$data);
+        }
+
+        return $data;
+    }
+    public static function get_item_type_modify($type_id = 0)
+    {
+        $data['inventory_type'] = 'display: none';
+        $data['non_inventory_type'] = 'display: none';
+        $data['service_type'] = 'display: none';
+        $data['bundle_type'] = 'display: none';
+        $data['membership_kit_type'] = 'display: none';
+        $data['type_main'] = 'display : none';
+        $data['type_bundle_main'] = 'display : none';
+
+        if($type_id == 1)
+        {
+            $data['inventory_type'] = '';
+            $data['type_main'] = '';
+        }
+        if($type_id == 2)
+        {
+            $data['non_inventory_type'] = '';
+            $data['type_main'] = '';
+        }
+        if($type_id == 3)
+        {
+            $data['service_type'] = '';
+            $data['type_main'] = '';
+        }
+        if($type_id == 4)
+        {
+            $data['bundle_type'] = '';
+            $data['type_bundle_main'] = '';
+        }
+        if($type_id == 5)
+        {
+            $data['membership_kit_type'] = '';
+            $data['type_bundle_main'] = '';
+        }
+
+        return $data;
+    }
+    public static function get_membership()
+    {
+        $shop_id = Item::getShopId();
+        return Tbl_membership::where('shop_id',$shop_id)->where('membership_archive',0)->get();
     }
 }

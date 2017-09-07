@@ -29,7 +29,6 @@ use App\Globals\Merchant;
 use App\Globals\Warehouse2;
 use Validator;
 use stdClass;
-
 class Item
 {
     /* ITEM CRUD START */
@@ -97,27 +96,27 @@ class Item
                 $return['message'] .= 'Manufacturer does not exist. <br>';            
             }            
         }
-        if($insert['item_asset_account'] != 0)
+        if($insert['item_asset_account_id'] != 0)
         {
-            $asset_data = Tbl_chart_of_account::where('account_id',$insert['item_asset_account'])->where('account_shop_id',$shop_id)->first();
+            $asset_data = Tbl_chart_of_account::where('account_id',$insert['item_asset_account_id'])->where('account_shop_id',$shop_id)->first();
             if(!$asset_data)
             {
                 $return['status'] = 'error';
                 $return['message'] .= 'Asset account does not exist. <br>';            
             }            
         }
-        if($insert['item_income_account'] != 0)
+        if($insert['item_income_account_id'] != 0)
         {
-            $income_data = Tbl_chart_of_account::where('account_id',$insert['item_income_account'])->where('account_shop_id',$shop_id)->first();
+            $income_data = Tbl_chart_of_account::where('account_id',$insert['item_income_account_id'])->where('account_shop_id',$shop_id)->first();
             if(!$income_data)
             {
                 $return['status'] = 'error';
                 $return['message'] .= 'Income account does not exist. <br>';            
             }            
         }
-        if($insert['item_expense_account'] != 0)
+        if($insert['item_expense_account_id'] != 0)
         {
-            $expense_data = Tbl_chart_of_account::where('account_id',$insert['item_expense_account'])->where('account_shop_id',$shop_id)->first();
+            $expense_data = Tbl_chart_of_account::where('account_id',$insert['item_expense_account_id'])->where('account_shop_id',$shop_id)->first();
             if(!$expense_data)
             {
                 $return['status'] = 'error';

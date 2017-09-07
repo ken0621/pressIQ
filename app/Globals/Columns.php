@@ -45,7 +45,7 @@ class Columns
 
        return $default;
     }
-    public static function getColumns($shop_id, $user_id, $from, $default)
+    public static function getColumns($shop_id, $user_id, $from, $default = null)
     {
        $columns = Tbl_columns::user($user_id)->shop($shop_id)->from($from)->first();
 
@@ -59,12 +59,29 @@ class Columns
        {
             if (isset($columns->columns_data) && is_serialized($columns->columns_data)) 
             {
-                $temp_columns = unserialize($columns->columns_data);
-                if (count($temp_columns) != count($default)) 
+                if ($default) 
                 {
-                    $default = Columns::setDefault($default);
-                   
-                    $temp_columns = $default;
+                    $temp_columns = unserialize($columns->columns_data);
+
+                    if (count($temp_columns) != count($default)) 
+                    {
+                        $default = Columns::setDefault($default);
+                       
+                        $temp_columns = $default;
+                    }
+                }
+                else
+                {
+                    $temp_columns = Tbl_columns::user($user_id)->shop($shop_id)->from($from)->first();
+
+                    if ($temp_columns && isset($temp_columns->columns_data) && is_serialized($temp_columns->columns_data)) 
+                    {
+                        $temp_columns = unserialize($temp_columns->columns_data);
+                    }
+                    else
+                    {
+                        $temp_columns = [];
+                    }
                 }
             }
             else
@@ -77,12 +94,12 @@ class Columns
 
        return $columns;
     }
-
     public static function submitColumns($shop_id, $user_id, $from, $column)
     {   
         foreach ($column as $key => $value) 
         {
-            $submit[$key]["value"] = $value["value"];
+            $submit[$key]["value"]   = $value["value"];
+            $submit[$key]["array"]   = $value["array"];
             $submit[$key]["checked"] = $value["checked"] == "yes" ? true : false;
         }
 
@@ -103,31 +120,50 @@ class Columns
 
         return true;
     }
-
-    public static function checkColumns($shop_id, $user_id, $from)
+    public static function filterColumns($shop_id, $user_id, $from, $data, $default)
     {
         $columns = Tbl_columns::user($user_id)->shop($shop_id)->from($from)->first();
-        if (isset($columns->columns_data) && is_serialized($columns->columns_data)) 
+
+        if (!isset($columns->columns_data)) 
         {
-            $temp_columns = unserialize($columns->columns_data);
+            $get_columns = Columns::getColumns($shop_id, $user_id, $from, $default);
+            Columns::submitColumns($shop_id, $user_id, $from, $get_columns);
+            $columns = Tbl_columns::user($user_id)->shop($shop_id)->from($from)->first();
         }
-        else
+        elseif(!is_serialized($columns->columns_data))
         {
-            $temp_columns = [];
+            Tbl_columns::user($user_id)->shop($shop_id)->from($from)->delete();
+            $get_columns = Columns::getColumns($shop_id, $user_id, $from, $default);
+            Columns::submitColumns($shop_id, $user_id, $from, $get_columns);
+            $columns = Tbl_columns::user($user_id)->shop($shop_id)->from($from)->first();
         }
 
-        $css = '<style type="text/css">';
+        $temp_columns = unserialize($columns->columns_data);
 
         foreach ($temp_columns as $key => $value) 
         {
             if ($value["checked"] == false) 
             {
-                $css .= '.table tr > *:nth-child('.($key+1).'){display: none;}';
+                unset($temp_columns[$key]);
             }
         }
 
-        $css .= '</style>';
+        $new_data = [];
 
-        return $css;
+        foreach ($data as $key => $value) 
+        {
+            foreach ($temp_columns as $key1 => $value1) 
+            {
+                if ($value1["checked"] == true) 
+                {
+                    $array                            = $value1["array"];
+                    $new_data[$key][$key1]["label"]   = $value1["value"];
+                    $new_data[$key][$key1]["data"]    = $value->$array;
+                    $new_data[$key][$key1]["default"] = $value;
+                }
+            }
+        }
+
+        return $new_data;
     }
 }

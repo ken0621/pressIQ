@@ -36,7 +36,7 @@ class ItemControllerV2 extends Member
 		$data["_item"]		= Item::get($this->user_info->shop_id, 5, $archived, $search);
 		$data["pagination"] = Item::get_pagination();
 		$data["archive"]	= $archived == 1 ? "restore" : "archive";
-
+		
 		$default[]   	 	= ["Item Name","item_name", false];
 		$default[]   	 	= ["Item ID","item_id", true];
 		$default[]   	 	= ["SKU", "item_sku", true];

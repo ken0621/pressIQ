@@ -12,6 +12,8 @@ use App\Models\Tbl_category;
 use App\Models\Tbl_item;
 use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_sir_item;
+use App\Models\Tbl_inventory_history;
+use App\Models\Tbl_inventory_history_items;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_item_discount;
 use App\Models\Tbl_audit_trail;
@@ -79,7 +81,7 @@ class Warehouse2
 
     	return $return;
 	}
-    public static function refill($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $source = array(), $serial = array())
+    public static function refill($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $source = array(), $serial = array(), $inventory_history = '')
     {
     	$check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
 
@@ -112,10 +114,9 @@ class Warehouse2
 	        $insert_slip['inventory_remarks']            = $remarks;
 	        $insert_slip['inventory_slip_date']          = Carbon::now();
 	        $insert_slip['inventory_slip_shop_id']       = $shop_id;
-	        $insert_slip['slip_user_id']				 = Warehouse::getUserid();
 	        $insert_slip['inventroy_source_reason']      = isset($source['name']) ? $source['name'] : '';
 	        $insert_slip['inventory_source_id']			 = isset($source['id']) ? $source['id'] : 0;
-	        $insert_slip['slip_user_id']				 = Warehouse::getUserid();
+	        $insert_slip['slip_user_id']				 = Warehouse2::get_user_login();
             $slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
 
     		for ($ctr_qty = 0; $ctr_qty < $quantity; $ctr_qty++) 
@@ -135,12 +136,46 @@ class Warehouse2
     			}
     			Tbl_warehouse_inventory_record_log::insert($insert);
     		}
+
+
+            if(!$inventory_history)
+            {
+                $inventory_details['history_description'] = "Refill items from ". $insert_slip['inventroy_source_reason']." #".$insert_slip['inventory_source_id'];
+                $inventory_details['history_remarks'] = $remarks;
+                $inventory_details['history_type'] = "RR";
+                $inventory_details['history_reference'] = $insert_slip['inventroy_source_reason'];
+                $inventory_details['history_reference_id'] = $insert_slip['inventory_source_id'];
+                $inventory_details['history_number'] = Warehouse2::get_history_number($shop_id, $warehouse_id, $inventory_details['history_type']);
+
+                $history_item[0]['item_id'] = $item_id;
+                $history_item[0]['quantity'] = $quantity;
+                $history_item[0]['item_remarks'] = $remarks;
+
+                Warehouse2::insert_inventory_history($shop_id, $warehouse_id, $inventory_details, $history_item);
+            }
+
+
     		$return['status'] = 'success';
     	}
 
     	return $return;
     }
-    public static function refill_bulk($shop_id, $warehouse_id, $_item)
+    /**    
+        $_item[0]['item_id'] = 500;
+        $_item[0]['quantity'] = 3;
+        $_item[0]['remarks'] = 'test_refill';
+
+        $_item[1]['item_id'] = 501;
+        $_item[1]['quantity'] = 2;
+        $_item[1]['remarks'] = 'test_refill';
+
+        $ret = Warehouse2::refill_bulk($this->user_info->shop_id, 86, 'refill_bulk_test', 5 , 'test transfer', $_item);
+        
+        $ret = Warehouse2::transfer_bulk($this->user_info->shop_id, 86, 101, $_item, "test transfer 1");
+
+        dd($ret);
+    */
+    public static function refill_bulk($shop_id, $warehouse_id, $reference_name = '', $reference_id = 0 , $remarks = '', $_item = array())
     {
     	foreach ($_item as $key => $value)
     	{
@@ -150,14 +185,36 @@ class Warehouse2
 
 		if(!$validate['message'])
 		{
+            $inventory_details['history_description'] = "Refill items from ".$reference_name." #".$reference_id;
+            $inventory_details['history_remarks'] = $remarks;
+            $inventory_details['history_type'] = "RR";
+            $inventory_details['history_reference'] = $reference_name;
+            $inventory_details['history_reference_id'] = $reference_id;
+            $inventory_details['history_number'] = Warehouse2::get_history_number($shop_id, $warehouse_id, $inventory_details['history_type']);
+
 	    	foreach ($_item as $key => $value) 
 	    	{
                 $serial = isset($value['serial']) ? $value['serial'] : array();
-	    		$validate =	Warehouse2::refill($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $value['source'], $serial);
+                $source = isset($value['source']) ? $value['source'] : array();
+
+                $history_item[$key]['item_id'] = $value['item_id'];
+                $history_item[$key]['quantity'] = $value['quantity'];
+                $history_item[$key]['item_remarks'] = $value['remarks'];
+
+	    		$validate =	Warehouse2::refill($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $source, $serial, 'inventory_history_recorded');
 	    	}
+
+            Warehouse2::insert_inventory_history($shop_id, $warehouse_id, $inventory_details, $history_item);
 	    }
 
     	return $validate;
+    }
+    public static function get_history_number($shop_id, $warehouse_id, $history_type = '')
+    {
+        $history_ctr = Tbl_inventory_history::where('shop_id',$shop_id)->where('warehouse_id',$warehouse_id)->where('history_type',$history_type)->count();
+
+        return $history_type.sprintf("%'.05d\n", $history_ctr+1);
+
     }
     public static function transfer_validation($shop_id, $wh_from, $wh_to, $item_id, $quantity, $remarks, $serial = array())
     {
@@ -171,7 +228,7 @@ class Warehouse2
 
             if($item_data)
             {
-                $get_data = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id',$item_id)->first();
+                $get_data = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$wh_from)->where('record_item_id',$item_id)->first();
                 if($quantity < 0)
                 {
                     $return['status'] = 'error';
@@ -219,7 +276,7 @@ class Warehouse2
 
         return $return;
     }
-    public static function transfer($shop_id, $wh_from, $wh_to, $item_id, $quantity, $remarks, $serial = array())
+    public static function transfer($shop_id, $wh_from, $wh_to, $item_id, $quantity, $remarks, $serial = array(), $inventory_history = '')
     {
         $return['status'] = null;
         $return['message'] = null;
@@ -230,10 +287,10 @@ class Warehouse2
         {
             for ($ctr_qty = 0; $ctr_qty < $quantity ; $ctr_qty++)
             {
-                $get_data = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id',$item_id)->first();
+                $get_data = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$wh_from)->where('record_item_id',$item_id)->first();
                 if(count($serial) > 0)
                 {
-                    $get_data = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id',$item_id)->where('record_serial_number',$serial[$ctr_qty])->first();
+                    $get_data = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$wh_from)->where('record_item_id',$item_id)->where('record_serial_number',$serial[$ctr_qty])->first();
                 }
                 Warehouse2::insert_item_history($get_data->record_log_id);
 
@@ -243,11 +300,40 @@ class Warehouse2
                 Tbl_warehouse_inventory_record_log::where('record_log_id',$get_data->record_log_id)->update($update);
             }
 
+            if(!$inventory_history)
+            {
+                $wh_from_name = Warehouse2::get_info($wh_from)->value('warehouse_name');
+                $wh_to_name = Warehouse2::get_info($wh_to)->value('warehouse_name');
+                $inventory_wis['history_description'] = "Transfer items from ".$wh_from_name." to ".$wh_to_name;
+                $inventory_wis['history_remarks'] = $remarks;
+                $inventory_wis['history_type'] = "WIS";
+                $inventory_wis['history_number'] = Warehouse2::get_history_number($shop_id, $wh_from, $inventory_wis['history_type']);
+
+
+                $inventory_rr['history_description'] = "Transfer items from ".$wh_from_name." to ".$wh_to_name;
+                $inventory_rr['history_remarks'] = $remarks;
+                $inventory_rr['history_type'] = "RR";
+                $inventory_rr['history_number'] = Warehouse2::get_history_number($shop_id, $wh_to, $inventory_rr['history_type']);
+
+
+                $history_wis[0]['item_id'] = $item_id;
+                $history_wis[0]['quantity'] = $quantity;
+                $history_wis[0]['item_remarks'] = $remarks;
+
+                $history_rr[0]['item_id'] = $item_id;
+                $history_rr[0]['quantity'] = $quantity;
+                $history_rr[0]['item_remarks'] = $remarks;
+
+                Warehouse2::insert_inventory_history($shop_id, $wh_from, $inventory_wis, $history_wis);
+                Warehouse2::insert_inventory_history($shop_id, $wh_to, $inventory_rr, $history_rr);
+
+            }
+
             $return['status'] = 'success';
         }
         return $return;
     }
-    public static function transfer_bulk($shop_id, $wh_from, $wh_to, $_item)
+    public static function transfer_bulk($shop_id, $wh_from, $wh_to, $_item, $remarks = '')
     {
         foreach ($_item as $key => $value)
         {
@@ -257,11 +343,36 @@ class Warehouse2
 
         if(!$validate['message'])
         {
+            $wh_from_name = Warehouse2::get_info($wh_from)->value('warehouse_name');
+            $wh_to_name = Warehouse2::get_info($wh_to)->value('warehouse_name');
+            $inventory_wis['history_description'] = "Transfer items from ".$wh_from_name." to ".$wh_to_name;
+            $inventory_wis['history_remarks'] = $remarks;
+            $inventory_wis['history_type'] = "WIS";
+            $inventory_wis['history_number'] = Warehouse2::get_history_number($shop_id, $wh_from, $inventory_wis['history_type']);
+
+
+            $inventory_rr['history_description'] = "Transfer items from ".$wh_from_name." to ".$wh_to_name;
+            $inventory_rr['history_remarks'] = $remarks;
+            $inventory_rr['history_type'] = "RR";
+            $inventory_rr['history_number'] = Warehouse2::get_history_number($shop_id, $wh_to, $inventory_rr['history_type']);
+
             foreach ($_item as $key => $value)
             {
                 $serial = isset($value['serial']) ? $value['serial'] : array();
-                $validate = Warehouse2::transfer($shop_id, $wh_from, $wh_to, $value['item_id'], $value['quantity'], $value['remarks'], $serial);
+
+                $history_wis[$key]['item_id'] = $value['item_id'];
+                $history_wis[$key]['quantity'] = $value['quantity'];
+                $history_wis[$key]['item_remarks'] = $value['remarks'];
+
+                $history_rr[$key]['item_id'] = $value['item_id'];
+                $history_rr[$key]['quantity'] = $value['quantity'];
+                $history_rr[$key]['item_remarks'] = $value['remarks'];
+
+                $validate = Warehouse2::transfer($shop_id, $wh_from, $wh_to, $value['item_id'], $value['quantity'], $value['remarks'], $serial, 'inventory_history_recorded');
             }
+
+            Warehouse2::insert_inventory_history($shop_id, $wh_from, $inventory_wis, $history_wis);
+            Warehouse2::insert_inventory_history($shop_id, $wh_to, $inventory_rr, $history_rr);
         }
 
         return $validate;
@@ -292,6 +403,10 @@ class Warehouse2
         }
 
         return $return;        
+    }
+    public static function get_info($warehouse_id)
+    {
+        return Tbl_warehouse::where('warehouse_id',$warehouse_id)->first();
     }
     public static function create($shop_id, $insert)
     {
@@ -324,7 +439,7 @@ class Warehouse2
             $return = $warehouse_id;
         }
 
-        return $return
+        return $return;
     }
     public static function insert_item_history($record_log_id = 0)
     {
@@ -461,5 +576,86 @@ class Warehouse2
         }
 
         return $validate;
+    }
+    public static function get_user_login()
+    {
+        $user_id = 0;
+        $user_data = Tbl_user::where("user_email", session('user_email'))->shop()->value('user_id');
+        if($user_data)
+        {
+            $user_id = $user_data;
+        }
+        return $user_id;
+    }
+    /** example 
+        WIS - For Consuming
+        RR - For Reffiling    
+
+        $inventory_details['history_description'] = "Bulk Consume 5 EACH item to Main Warehouse";
+        $inventory_details['history_remarks'] = "INVOICE #14545";
+        $inventory_details['history_type'] = "WIS";
+        $inventory_details['history_reference'] = "invoice";
+        $inventory_details['history_reference_id'] = 25;
+        $inventory_details['history_number'] = 'RR00001';
+
+        $history_item[0]['item_id'] = 500;
+        $history_item[0]['quantity'] = 5;
+        $history_item[0]['item_remarks'] = 'Item 1';
+
+        $history_item[1]['item_id'] = 501;
+        $history_item[1]['quantity'] = 5;
+        $history_item[1]['item_remarks'] = 'Item 2';
+
+        $history_item[2]['item_id'] = 502;
+        $history_item[2]['quantity'] = 5;
+        $history_item[2]['item_remarks'] = 'Item 3';
+
+        $return = Warehouse2::insert_inventory_history($this->user_info->shop_id,Warehouse2::get_current_warehouse($this->user_info->shop_id),$inventory_details,$history_item);
+
+    */
+    public static function insert_inventory_history($shop_id, $warehouse_id, $history_details = array(), $history_item = array())
+    {
+        $insert_history['shop_id']              = $shop_id;
+        $insert_history['warehouse_id']         = $warehouse_id;
+        $insert_history['history_description']  = $history_details['history_description'];
+        $insert_history['history_remarks']      = $history_details['history_remarks'];
+        $insert_history['history_type']         = $history_details['history_type'];
+        $insert_history['history_reference']    = isset($history_details['history_reference']) ? $history_details['history_reference'] : '';
+        $insert_history['history_reference_id'] = isset($history_details['history_reference_id']) ? $history_details['history_reference_id'] : 0;
+        $insert_history['history_number']       = $history_details['history_number'];
+        $insert_history['history_date']         = Carbon::now();
+        $insert_history['history_user']         = Warehouse2::get_user_login();
+
+        $history_id = Tbl_inventory_history::insertGetId($insert_history);
+
+        $return = Warehouse2::inset_inventory_history_item($history_id, $history_item);
+
+        return $return;
+    }
+
+    public static function inset_inventory_history_item($history_id, $history_item)
+    {
+        $history_data = Tbl_inventory_history::where('history_id',$history_id)->first();
+        foreach ($history_item as $key => $value) 
+        {
+            $initial_qty = Tbl_inventory_history_items::history()->where('warehouse_id',$history_data->warehouse_id)->where('item_id',$value['item_id'])->orderBy('history_item_id', 'DESC')->value('running_quantity');
+
+            $qty = 1;
+            if($history_data->history_type == 'WIS')
+            {
+                $qty = -1;
+            }
+
+            $insert_item['history_id'] = $history_id;
+            $insert_item['item_id'] = $value['item_id'];
+            $insert_item['quantity'] = $value['quantity'];
+            $insert_item['item_remarks'] = $value['item_remarks'];
+            $insert_item['initial_quantity'] = $initial_qty != '' ? $initial_qty : 0 ; 
+            $insert_item['running_quantity'] = $insert_item['initial_quantity'] + ($value['quantity'] * $qty);
+
+            Tbl_inventory_history_items::insert($insert_item);
+        }
+
+        return 0;
     }
 }

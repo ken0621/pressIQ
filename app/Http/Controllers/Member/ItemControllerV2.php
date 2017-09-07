@@ -4,6 +4,7 @@ use App\Globals\Item;
 use App\Globals\Category;
 use App\Globals\Manufacturer;
 use App\Globals\Accounting;
+use App\Globals\Warehouse2;
 use App\Globals\Columns;
 use Request;
 
@@ -11,6 +12,7 @@ class ItemControllerV2 extends Member
 {
 	public function list()
 	{
+
 		$data["page"] 		 	= "Item List";
 		$data["_item_type"]     = Item::get_item_type_list();
 		$data["_item_category"] = Item::getItemCategory($this->user_info->shop_id);

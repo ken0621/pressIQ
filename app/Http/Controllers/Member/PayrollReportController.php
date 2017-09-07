@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Member;
 use Request;
 use stdClass;
 use Redirect;
+use Response;
 use Excel;
 use Carbon\Carbon;
 
@@ -48,6 +49,7 @@ class PayrollReportController extends Member
 		$data["month"] = $month;
 		$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 		$data["year"] = $year;
+		$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
 
 		return view("member.payrollreport.government_forms_hdmf", $data);
 	}
@@ -61,6 +63,7 @@ class PayrollReportController extends Member
 		$data["month"] = $month;
 		$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 		$data["year"] = $year;
+		$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
 
 		return view("member.payrollreport.government_forms_sss", $data);
 	}
@@ -74,32 +77,314 @@ class PayrollReportController extends Member
 		$data["month"] = $month;
 		$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 		$data["year"] = $year;
+		$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
 
 		return view("member.payrollreport.government_forms_philhealth", $data);
 	}
 
-	public function government_forms_hdmf_iframe($month)
+	public function government_forms_hdmf_iframe($month,$company_id)
 	{ 
-		$data["page"] = "Monthly Government Forms";
-		$year = 2017;
-		$shop_id = $this->shop_id();
-		$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
-		$data["contri_info"] = $contri_info; 
-		$data["month"] = $month;
-		$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
-		$data["year"] = $year;
+		if($company_id==0)
+		{
+			$data["page"] = "Monthly Government Forms";
+			$year = 2017;
+			$shop_id = $this->shop_id();
+			$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
+			$data["contri_info"] = $contri_info; 
+			$data["month"] = $month;
+			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
+			$data["year"] = $year;
 
-		$format["title"] = "A4";
-		$format["format"] = "A4";
-		$format["default_font"] = "sans-serif";
-		// $format["margin_top"] = "0";
-		// $format["margin_bottom"] = "0";
-		// $format["margin_left"] = "0";
-		// $format["margin_right"] = "0";
+			$format["title"] = "A4";
+			$format["format"] = "A4";
+			$format["default_font"] = "sans-serif";
+			// $format["margin_top"] = "0";
+			// $format["margin_bottom"] = "0";
+			// $format["margin_left"] = "0";
+			// $format["margin_right"] = "0";
 
-		$pdf = PDF2::loadView('member.payrollreport.government_forms_hdmf_pdf', $data, [], $format);
-		return $pdf->stream('document.pdf');
+			$pdf = PDF2::loadView('member.payrollreport.government_forms_hdmf_pdf', $data, [], $format);
+			return $pdf->stream('document.pdf');
+		}
+		else
+		{
+			$data["page"] = "Monthly Government Forms";
+			$year = 2017;
+			$shop_id = $this->shop_id();
+			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
+			$data['company_id1'] = $company_id;
+			$data["contri_info"] = $contri_info; 
+			$data["month"] = $month;
+			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
+			$data["year"] = $year;
+			$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
+			
+			$format["title"] = $data['company']->payroll_company_name;
+			$format["format"] = "A4";
+			$format["default_font"] = "sans-serif";
+			$pdf = PDF2::loadView('member.payrollreport.government_forms_hdmf_pdf', $data, [], $format);
+			return $pdf->stream('document.pdf');
+		}
 	}
+
+	public function government_forms_hdmf_filter()
+	{
+		if (Request::input("company_id") > 0) {
+			$company_id =	Request::input("company_id");
+        	$month      =	Request::input('month');
+			$data["page"] = "Monthly Government Forms";
+			$year = 2017;
+			$shop_id = $this->shop_id();
+			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
+			$data['company_id1'] = $company_id;
+			$data["contri_info"] = $contri_info; 
+			$data["month"] = $month;
+			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
+			$data["year"] = $year;
+			$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
+			
+			if($contri_info["_employee_contribution"]==null or $contri_info["_employee_contribution"]==0)
+			{
+				return "<center><font size='20'><br><br>No Employee Records<br><br><br><br></font></center>";
+			}
+			else
+			{
+				return view("member.payrollreport.government_forms_hdmf_filter", $data);
+			}
+		}
+		else
+		{
+            $month      =	Request::input('month');
+            $company_id =	Request::input("company_id");
+            $data["page"] = "Monthly Government Forms";
+			$year = 2017;
+			$shop_id = $this->shop_id();
+			$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id,$month, $year);
+			$data["contri_info"] = $contri_info; 
+			$data["month"] = $month;
+			$data['company_id1'] = $company_id;
+			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
+			$data["year"] = $year;
+			$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
+           return view("member.payrollreport.government_forms_hdmf_filter", $data);
+		}
+	}
+
+	public function government_forms_sss_filter()
+	{
+		$company_id =	Request::input("company_id");
+		$month      =	Request::input('month');
+		if (Request::input("company_id") > 0) {
+			$data["page"] = "Monthly Government Forms";
+			$year = 2017;
+			$shop_id = $this->shop_id();
+			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
+			$data["contri_info"] = $contri_info; 
+			$data['company_id1'] = $company_id;
+			$data["month"] = $month;
+			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
+			$data["year"] = $year;
+			$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
+			
+			if($contri_info["_employee_contribution"]==null or $contri_info["_employee_contribution"]==0)
+			{
+				return "<center><font size='20'><br><br>No Employee Records<br><br><br><br></font></center>";
+			}
+			else
+			{
+				return view("member.payrollreport.government_forms_sss_filter", $data);
+			}
+		}
+		else
+		{
+			$data["page"] = "Monthly Government Forms";
+			$year = 2017;
+			$shop_id = $this->shop_id();
+			$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
+			$data["contri_info"] = $contri_info; 
+			$data['company_id1'] = $company_id;
+			$data["month"] = $month;
+			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
+			$data["year"] = $year;
+			$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
+
+			return view("member.payrollreport.government_forms_sss_filter", $data);
+		}
+	}
+	public function government_forms_philhealth_filter()
+	{
+		$company_id =	Request::input("company_id");
+		$month      =	Request::input('month');
+		if ($company_id != null && $month != null) {
+			$data["page"] = "Monthly Government Forms";
+			$year = 2017;
+			$shop_id = $this->shop_id();
+			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
+			$data['company_id1'] = $company_id;
+			$data["contri_info"] = $contri_info; 
+			$data["month"] = $month;
+			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
+			$data["year"] = $year;
+			$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
+			
+			if($contri_info["_employee_contribution"]==null or $contri_info["_employee_contribution"]==0)
+			{
+				return "<center><font size='20'><br><br>No Employee Records<br><br><br><br></font></center>";
+			}
+			else
+			{
+				return view("member.payrollreport.government_forms_philhealth_filter", $data);
+			}
+		}
+		else
+		{
+			$data["page"] = "Monthly Government Forms";
+			$year = 2017;
+			$shop_id = $this->shop_id();
+			$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
+			$data["contri_info"] = $contri_info; 
+			$data['company_id1'] = $company_id;
+			$data["month"] = $month;
+			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
+			$data["year"] = $year;
+			$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
+
+			return view("member.payrollreport.government_forms_philhealth_filter", $data);
+		}
+	}
+    public function government_forms_hdmf_export_excel($month,$company_id)
+	{
+		if($company_id==0)
+		{
+			$data["page"] = "Monthly Government Forms";
+			$year = 2017;
+			$shop_id = $this->shop_id();
+			$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
+			$data["contri_info"] = $contri_info; 
+			$data["month"] = $month;
+			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
+			$data["year"] = $year;
+			$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
+			Excel::create("Government Forms HDMF",function($excel) use ($data)
+			{
+				$excel->sheet('clients',function($sheet) use ($data)
+				{
+					$sheet->loadView('member.payrollreport.government_forms_hdmf_export_excel',$data);
+				});
+			})->download('xls');
+		}
+		else
+		{
+			$data["page"] = "Monthly Government Forms";
+			$year = 2017;
+			$shop_id = $this->shop_id();
+			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
+			
+			$data["contri_info"] = $contri_info; 
+			$data["month"] = $month;
+			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
+			$data["year"] = $year;
+			$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
+
+			Excel::create("Government Forms HDMF".$data['company']->payroll_company_name,function($excel) use ($data)
+			{
+				$excel->sheet('clients',function($sheet) use ($data)
+				{
+					$sheet->loadView('member.payrollreport.government_forms_hdmf_export_excel',$data);
+				});
+			})->download('xls');
+		}
+ 			
+	}
+	public function government_forms_sss_export_excel($month,$company_id)
+	{
+		if($company_id==0)
+		{
+			$data["page"] = "Monthly Government Forms";
+			$year = 2017;
+			$shop_id = $this->shop_id();
+			$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
+			$data["contri_info"] = $contri_info; 
+			$data["month"] = $month;
+			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
+			$data["year"] = $year;
+			$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
+			Excel::create("Government Forms SSS",function($excel) use ($data)
+			{
+				$excel->sheet('clients',function($sheet) use ($data)
+				{
+					$sheet->loadView('member.payrollreport.government_forms_hdmf_export_excel',$data);
+				});
+			})->download('xls');
+		}
+		else
+		{
+			$data["page"] = "Monthly Government Forms";
+			$year = 2017;
+			$shop_id = $this->shop_id();
+			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
+			
+			$data["contri_info"] = $contri_info; 
+			$data["month"] = $month;
+			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
+			$data["year"] = $year;
+			$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
+
+			Excel::create("Government Forms SSS-".$data['company']->payroll_company_name,function($excel) use ($data)
+			{
+				$excel->sheet('clients',function($sheet) use ($data)
+				{
+					$sheet->loadView('member.payrollreport.government_forms_hdmf_export_excel',$data);
+				});
+			})->download('xls');
+		}
+ 			
+	}
+	public function government_forms_philhealth_export_excel($month,$company_id)
+	{
+		if($company_id==0)
+		{
+			$data["page"] = "Monthly Government Forms";
+			$year = 2017;
+			$shop_id = $this->shop_id();
+			$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
+			$data["contri_info"] = $contri_info; 
+			$data["month"] = $month;
+			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
+			$data["year"] = $year;
+			$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
+			Excel::create("Government Forms PHILHEALTH",function($excel) use ($data)
+			{
+				$excel->sheet('clients',function($sheet) use ($data)
+				{
+					$sheet->loadView('member.payrollreport.government_forms_hdmf_export_excel',$data);
+				});
+			})->download('xls');
+		}
+		else
+		{
+			$data["page"] = "Monthly Government Forms";
+			$year = 2017;
+			$shop_id = $this->shop_id();
+			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
+			
+			$data["contri_info"] = $contri_info; 
+			$data["month"] = $month;
+			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
+			$data["year"] = $year;
+			$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
+
+			Excel::create("Government Forms PHILHEALTH".$data['company']->payroll_company_name,function($excel) use ($data)
+			{
+				$excel->sheet('clients',function($sheet) use ($data)
+				{
+					$sheet->loadView('member.payrollreport.government_forms_hdmf_export_excel',$data);
+				});
+			})->download('xls');
+		}
+ 			
+	}
+
 
 
 	/*START LOAN SUMMARY*/
@@ -191,9 +476,7 @@ class PayrollReportController extends Member
 	public function payroll_register_report_export_excel($period_company_id)
 	{
 		// dd($period_company_id);
-
-
-		$data["company"] = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
+        $data["company"] = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
 		$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
 		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
 		$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));

@@ -25,7 +25,8 @@ class ShopPartnersController extends Shop
         return view("partners", $data);
     }
     public function partnerFilterByLocation()
-    {
+    { 
+        
         if(Request::input('locationVal')=="ALL")
         {
          $partnerResult = Tbl_partners::where("shop_id", $this->shop_info->shop_id)->where("archived","0")->get();

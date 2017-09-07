@@ -261,22 +261,6 @@ class Item
             $query = $query->where("tbl_item.item_category_id", session("get_filter_category"));
         }
 
-        /* SEARCH FILTER */
-        if ($search) 
-        {
-            $sku_exist = $query->searchSKU($search)->first();
-            $name_exist = $query->searchName($search)->first();
-
-            if($sku_exist) 
-            {
-                $query = $query->searchSKU($search);
-            }
-            elseif($name_exist)
-            {
-                $query = $query->searchName($search);
-            }
-        }
-
         /* CHECK IF THERE IS PAGINATION */
         if($paginate)
         {
@@ -294,13 +278,8 @@ class Item
             $item = Self::add_info($item);
             $_item_new[$key] = $item;
         }
-<<<<<<< HEAD
-        
-        $return = isset($_item_new) ? $_item_new : null;  
-=======
 
-        $return = isset($_item_new) ? $_item_new : [];  
->>>>>>> mod_edw_item
+        $return = isset($_item_new) ? $_item_new : null;  
 
         Self::get_clear_session();
 

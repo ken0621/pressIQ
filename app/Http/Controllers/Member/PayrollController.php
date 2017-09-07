@@ -5040,7 +5040,7 @@ class PayrollController extends Member
           /* INSERT DAY */
           $key = 0;
           $tc = 0;
-
+          // dd(Request::all());
           foreach(Request::input("day") as $day)
           {
                /* INSERT SHIFT DAY */
@@ -5072,6 +5072,28 @@ class PayrollController extends Member
                     $insert_time = null;
                }   
           }
+               /*tbl_payroll_shift_day*/
+               // Column                     Type                               Comment
+               // shift_day_id               int(10) unsigned Auto Increment     
+               // shift_day varchar(255)    
+               // shift_target_hours         decimal(8,2) [0.00]  
+               // shift_rest_day             tinyint(4)      
+               // shift_extra_day            tinyint(4)      
+               // shift_code_id              int(10) unsigned     
+               // shift_flexi_time           tinyint(4)      
+               // shift_break_hours          decimal(8,2) [0.00]
+
+               /*tbl_payroll_shift_time*/
+               // Column                Type                                    Comment
+               // shift_time_id         int(10) unsigned Auto Increment     
+               // shift_day_id          int(10) unsigned     
+               // shift_work_start      time  
+               // shift_work_end        time
+
+
+               
+
+
 
           $return['function_name'] = 'payrollconfiguration.reload_shift_template';
           $return['status']        = 'success';

@@ -16,6 +16,7 @@
             @endif
             <li class="{{$default == 3 ? 'active' : ''}} cursor-pointer tab" data-id="3"><a class="cursor-pointer" data-toggle="tab" href="#price"><i class="fa fa-info"></i> Price</a></li>
             <li class="{{$default == 4 ? 'active' : ''}} cursor-pointer tab" data-id="4"><a class="cursor-pointer" data-toggle="tab" href="#image"><i class="fa fa-picture-o"></i> Images</a></li>
+            <li class="{{$default == 5 ? 'active' : ''}} cursor-pointer tab" data-id="5"><a class="cursor-pointer" data-toggle="tab" href="#detail"><i class="fa fa-info-circle" aria-hidden="true"></i> Detail</a></li>
         </ul> 
     </div>
 
@@ -65,7 +66,7 @@
                 <div class="clearfix">
                     <!-- FORM.TITLE -->
                     @if(isset($_column))
-                        @foreach($_column as $key=>$column)
+                        @foreach($_column as $key => $column)
                             <div class="">
                                 <label>{{$column}}</label>
                                 <input name="option_name[]" value="{{$column}}" type="hidden" class="option-name">
@@ -120,8 +121,8 @@
                             <span class="new-image-container">
                             @if(isset($variant->image))
                                 @if($variant->image->count() > 0)
-                                    @foreach($variant->image as $key=>$image)
-                                        <div class="image">
+                                    @foreach($variant->image as $key => $image)
+                                        <div class="image" imgid="{{$image->image_id}}">
                                             <input type="hidden" class="image-id" name="image_id[]" value="{{$image->image_id}}">
                                             <input type="hidden" class="image-value" name="product_image[]" value="{{$image->image_path}}">
                                             <div class="loader">
@@ -134,9 +135,17 @@
                                                         <i class="fa fa-trash"></i>
                                                         <div class="label">Delete</div>
                                                     </div>
-                                                    <div class="icon set-default-image"><i class="fa fa-circle-o"></i>
+                                                    @if($image->default_image == 1)
+                                                    <div class="icon set-default-image">
+                                                        <i class="fa fa-circle"></i>
+                                                        <div class="label">Your Default</div>
+                                                    </div>
+                                                    @else
+                                                    <div class="icon set-default-image">
+                                                        <i class="fa fa-circle-o"></i>
                                                         <div class="label">Set Default</div>
                                                     </div>
+                                                    @endif
                                                 </div>
                                             </div>
                                             <img src="{{$image->image_path}}">
@@ -146,6 +155,18 @@
                             @endif
                             </span>
                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade in {{$default == 5 ? 'active' : ''}}" id="detail">
+            <div class="clearfix row">
+                <div class="form-group col-md-6 col-md-offset-3">
+                    <label>Product Detail (Image)</label>
+                    <input class="product-detail-value" type="hidden" value="{{$product->eprod_detail_image or ''}}" name="eprod_detail_image">
+                    <div class="product-detail-image" style="padding-bottom: 75%; height: 0; background-color: #ddd; background-position: center; background-size: contain; background-repeat: no-repeat; {{ $product->eprod_detail_image ? 'background-image: url("' . $product->eprod_detail_image . '")' : '' }}"></div>
+                    <div style="margin-top: 15px;">
+                        <button style="width: 100%;" class="image-gallery image-gallery-single btn btn-primary" key="product-detail"> Upload</button>
                     </div>
                 </div>
             </div>
@@ -178,5 +199,5 @@
     </div>
 </div>
 
-<script src="/assets/external/tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.6.5/tinymce.min.js"></script>
 <script type="text/javascript" src="/assets/member/js/evariant_info.js"></script>

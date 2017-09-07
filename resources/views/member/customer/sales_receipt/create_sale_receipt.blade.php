@@ -6,6 +6,19 @@
     <input type="hidden" name="sir_id" value="{{$sir_id or ''}}" >
     <input type="hidden" name="invoice_id" value="{{Request::input('id')}}" >
     <input type="hidden" id="keep_val" name="keep_val" value="" >
+
+    <button class="drawer-toggle" type="button"> <i class="fa fa-angle-double-left"></i></button>
+
+    <div class="drawer drawer-default">
+        <div class="drawer-brand">Add to Sales Receipt</div>
+        <nav class="drawer-nav">
+            <div class="clearfix estimate-container">
+                @include('member.load_ajax_data.load_estimate_so')
+            </div>   
+        </nav>
+    </div>
+
+<div class="drawer-overlay">
     <div class="panel panel-default panel-block panel-title-block" id="top">
         <div class="panel-heading">
             <div>
@@ -95,6 +108,7 @@
                                             <tr>
                                                 <th style="" ></th>
                                                 <th style="">Service Date</th>
+                                                @include("member.load_ajax_data.load_th_serial_number")
                                                 <th style="" class="text-right">#</th>
                                                 <th style="width: 200px">Product/Service</th>
                                                 <th style="">Description</th>
@@ -108,13 +122,18 @@
                                                 <th width="10"></th>
                                             </tr>
                                         </thead>
-                                        <tbody class="draggable tbody-item">     
+                                        <tbody class="tbody-item">     
                                             @if(isset($inv))
                                                 @foreach($_invline as $invline)
                                                     <tr class="tr-draggable">
                                                         <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
 
                                                         <td><input type="text" class="for-datepicker" name="invline_service_date[]" value="{{$invline->invline_service_date}}" /></td>
+                                                        @if(isset($serial)) 
+                                                        <td>
+                                                            <textarea class="txt-serial-number" name="serial_number[]">{{$invline->serial_number}}</textarea>
+                                                        </td>
+                                                        @endif
 
                                                         <td class="invoice-number-td text-right">1</td>
                                                         <td>
@@ -146,38 +165,14 @@
                                                         <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                     </tr>
                                                 @endforeach
-                                            @else                                
-                                                <tr class="tr-draggable">
-                                                    <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
-
-                                                    <td><input type="text" class="for-datepicker" name="invline_service_date[]"/></td>
-
-                                                    <td class="invoice-number-td text-right">1</td>
-                                                    <td>
-                                                        <input type="hidden" name="invline_ref_name[]" value="">
-                                                        <input type="hidden" name="invline_ref_id[]" value="">
-                                                        <select class="1111 form-control select-item droplist-item input-sm pull-left" name="invline_item_id[]" >
-                                                            @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
-                                                            <option class="hidden" value="" />
-                                                        </select>
-                                                    </td>
-                                                    <td><textarea class="textarea-expand txt-desc" name="invline_description[]"></textarea></td>
-                                                    <td><select class="2222 droplist-um select-um" name="invline_um[]"><option class="hidden" value="" /></select></td>
-                                                    <td><input class="text-center number-input txt-qty compute" type="text" name="invline_qty[]"/></td>
-                                                    <td><input class="text-right number-input txt-rate compute" type="text" name="invline_rate[]"/></td>
-                                                    <td><input class="text-right txt-discount compute" type="text" name="invline_discount[]"/></td>
-                                                    <td><textarea class="textarea-expand" type="text" name="invline_discount_remark[]" ></textarea></td>
-                                                    <td><input class="text-right number-input txt-amount" type="text" name="invline_amount[]"/></td>
-                                                    <td class="text-center">
-                                                        <input type="hidden" class="invline_taxable" name="invline_taxable[]" value="" >
-                                                        <input type="checkbox" name="" class="taxable-check compute" value="checked">
-                                                    </td>
-                                                    <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                                                </tr>
-                                                    
+                                            @else  
+                                        </tbody>
+                                        <tbody class="draggable tbody-item estimate-tbl">
+                                                @include("member.load_ajax_data.load_est_session_item")
                                                 <tr class="tr-draggable">
                                                     <td class="text-center cursor-move move" ><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
                                                     <td><input type="text" class="datepicker" name="invline_service_date[]"/></td>
+                                                    @include("member.load_ajax_data.load_td_serial_number")
                                                     <td class="invoice-number-td text-right">2</td>
                                                     <td>
                                                         <input type="hidden" name="invline_ref_name[]" value="">
@@ -469,6 +464,7 @@
             </div>
         </div>
     </div>
+</div>
 </form>
 
 <div class="div-script">
@@ -476,6 +472,7 @@
         <tr class="tr-draggable">
             <td class="text-center cursor-move move" ><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
             <td><input type="text" class="for-datepicker"  name="invline_service_date[]"/></td>
+            @include("member.load_ajax_data.load_td_serial_number")
             <td class="invoice-number-td text-right">2</td>
             <td>
                 <input type="hidden" name="invline_ref_name[]" value="">
@@ -532,5 +529,78 @@
 </script>
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
 <script type="text/javascript" src="/assets/member/js/draggable_row.js"></script>
+<script type="text/javascript" src="/assets/member/bootstrap_drawer/cooker.drawer.js"></script>
 <script type="text/javascript" src="/assets/member/js/customer_invoice.js"></script>
+<script type="text/javascript">
+$(document).ready(function() 
+{
+  $('.drawer').drawer({
+    desktopEvent:'click'
+  });
+});
+</script>
+@endsection
+
+@section("css")
+<link rel="stylesheet" type="text/css" href="/assets/member/bootstrap_drawer/cooker.drawer.css">
+<style type="text/css">
+.est-style
+{
+    padding: 10px;
+    background-color: #fff;
+}
+.drawer-toggle
+{
+    background-color: #76B6EC;
+    color: #fff;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 0;
+}
+.drawer-toggle:hover
+{
+    background-color: #76B6EC;
+    color: #fff;
+}
+
+.drawer-default
+{
+    -webkit-box-shadow: -1px 0px 10px 0px rgba(184,184,184,1);
+    -moz-box-shadow: -1px 0px 10px 0px rgba(184,184,184,1);
+    box-shadow: -1px 0px 10px 0px rgba(184,184,184,1);
+    -webkit-transition: all 0.4s ease;
+       -o-transition: all 0.4s ease;
+          transition: all 0.4s ease;
+    z-index: 2;
+}
+.drawer-toggle
+{
+    -webkit-transition: all 0.4s ease;
+       -o-transition: all 0.4s ease;
+          transition: all 0.4s ease;
+}
+.drawer-default + .drawer-overlay
+{
+    background-color: transparent !important;
+    -webkit-transition: all 0.4s ease;
+       -o-transition: all 0.4s ease;
+          transition: all 0.4s ease;
+}
+.drawer-open .drawer-overlay
+{
+    padding-right: 30px;
+}
+.drawer-close .drawer.drawer-default
+{
+    right: -280px;
+}
+.drawer-open .drawer.drawer-default
+{
+    right: 0;
+}
+nav.user-menu
+{
+    background-color: #F5F5F5;
+}
+</style>
 @endsection

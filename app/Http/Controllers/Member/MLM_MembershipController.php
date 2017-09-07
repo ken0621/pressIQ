@@ -18,6 +18,9 @@ use App\Models\Tbl_item;
 use App\Globals\Utilities;
 use App\Globals\AuditTrail;
 use App\Globals\Item;
+use App\Globals\Settings;
+use App\Globals\Ecom_Product;
+use DB;
 class MLM_MembershipController extends Member
 {
     public function index()
@@ -102,11 +105,29 @@ class MLM_MembershipController extends Member
             {
                 return $this->edit_save($_POST); 
             }
-
+            $shop_id = $this->user_info->shop_id;
             $data["page"] = "Membership Edit";
             $data['membership'] = Tbl_membership::id($membership_id)->first();
             $data['membership_packages'] = Tbl_membership_package::where('membership_id', $membership_id)->where('membership_package_archive', 0)->get();
             $data['packages_view']= $this->get_packages_with_view($membership_id);
+
+            $get_settings = Settings::get_settings_php('use_product_as_membership');
+            if($get_settings['response_status'] == 'success')
+            {
+                $data['use_product_as_membership'] = $get_settings['settings_value'];
+                if( $get_settings['settings_value'] == 1)
+                {
+                    $data['product_list'] = Ecom_Product::getProductList();
+                    $data['membership_product'] = Tbl_membership::where('shop_id', $shop_id)
+                    ->where('membership_archive', 0)->get();
+
+                    $data['ec_product'] = DB::table('tbl_ec_product')->where('eprod_shop_id', $shop_id)->where('archived', 0)->get();
+                }
+            }
+            else
+            {
+                $data['use_product_as_membership'] = 0;
+            }
 
             return view('member.mlm_membership.mlm_membership_edit', $data);
         }
@@ -114,6 +135,22 @@ class MLM_MembershipController extends Member
         {
            return $this->show_no_access(); 
         }
+    }
+    public function edit_add_membership_product()
+    {
+
+        $eprod_id = Request::input('eprod_id');
+        $membership_id = Request::input('membership_id');
+
+        foreach ($eprod_id as $key => $value) {
+            $update['ec_product_membership'] = $membership_id[$key];
+            DB::table('tbl_ec_product')->where('eprod_id', $eprod_id[$key])->update($update);
+        }
+
+        $data['response_status'] = 'success';
+        $data['message'] = 'ok';
+
+        return json_encode($data);
     }
     public function get_packages_with_view($membership_id)
     {
@@ -367,7 +404,7 @@ class MLM_MembershipController extends Member
             $data['products']              = Tbl_product::variant()->where('product_shop', $this->user_info->shop_id)->get();
             $data['items']                 = Tbl_item::where('shop_id', $this->user_info->shop_id)->where('archived', 0)->where('item_type_id', 4)->get();
             $data['membership_id']         = $data['membership_packages']->membership_id;
-            $data['item_count']            = Tbl_membership_package_has::where('membership_package_id', $data['membership_packages']->membership_package_id)->lists("membership_package_has_quantity","item_id");
+            $data['item_count']            = Tbl_membership_package_has::where('membership_package_id', $data['membership_packages']->membership_package_id)->pluck("membership_package_has_quantity","item_id");
         }
         return view('member.mlm_membership.mlm_membership_popup_edit_package', $data);
     }

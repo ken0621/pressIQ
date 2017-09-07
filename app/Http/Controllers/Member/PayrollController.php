@@ -11,6 +11,7 @@ use Excel;
 use DB;
 use Response;
 use PDF;
+use stdClass;
 
 use App\Models\Tbl_payroll_company;
 use App\Models\Tbl_payroll_rdo;
@@ -76,19 +77,33 @@ use App\Models\Tbl_payroll_shift_template;
 use App\Models\Tbl_payroll_shift_code;
 use App\Models\Tbl_payroll_employee_shift;
 use App\Models\Tbl_payroll_employee_schedule;
+use App\Models\Tbl_payroll_time_sheet;
+use App\Models\Tbl_payroll_branch_location;
 
 use App\Globals\Payroll;
 use App\Globals\PayrollJournalEntries;
 use App\Globals\Utilities;
+use DateTime;
+use App\Models\Tbl_payroll_shift_day;
+use App\Models\Tbl_payroll_shift_time;
+use App\Globals\AuditTrail;
+use App\Globals\Accounting;
+
+use App\Models\Tbl_payroll_time_keeping_approved;
+use App\Models\Tbl_payroll_time_keeping_approved_breakdown;
+use App\Models\Tbl_payroll_time_keeping_approved_performance;
+
+
+
 
 class PayrollController extends Member
 {
 
-	/*Set data per page for pagination*/
-	protected $paginate_count = 10;
+     /*Set data per page for pagination*/
+     protected $paginate_count = 10;
 
-	public function shop_id($return = 'shop_id')
-	{
+     public function shop_id($return = 'shop_id')
+     {
           switch ($return) {
                case 'shop_id':
                     return $shop_id = $this->user_info->user_shop;
@@ -102,48 +117,157 @@ class PayrollController extends Member
                     # code...
                     break;
           }
+
+     }
+
+
+     /* PAYROLL TIME KEEPING START */
+     public function time_keeping()
+     {
+          $data["_company"] = Tbl_payroll_company::where("shop_id", Self::shop_id())->where('payroll_parent_company_id', 0)->get();
+          $data['_period'] = Tbl_payroll_period::sel(Self::shop_id())
+                                                  ->where('payroll_parent_company_id', 0)
+                                                  ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
+                                                  ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
+                                                  ->orderBy('tbl_payroll_period.payroll_period_start','asc')
+                                                  ->get();
+          $data['access'] = Utilities::checkAccess('payroll-timekeeping','salary_rates');
+
+          return view('member.payroll.payroll_timekeeping', $data);
+     }
+
+
+     public function time_keeping_load_table($payroll_company_id)
+     {
+          $mode = Request::input("mode");
+
+          $query = Tbl_payroll_period::sel(Self::shop_id())
+                                                  ->where('payroll_parent_company_id', 0)
+                                                  ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
+                                                  ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
+                                                  ->orderBy('tbl_payroll_period.payroll_period_start','asc');
+
+         
+
+          if ($payroll_company_id != 0)
+          {
+               $query->where('tbl_payroll_company.payroll_company_id', $payroll_company_id);
+          }
+
+          $query->where("tbl_payroll_period_company.payroll_period_status", $mode);
+
+
+          $data["_period"] = $query->get();
+       
+          switch ($mode)
+          {
+               case 'pending':
+                    return view('member.payroll.payroll_timekeeping_table', $data);
+               break;
+
+               case 'processed':
+                    return view('member.payroll.payroll_timekeeping_table_processed', $data);
+               break; 
+
+               case 'registered':
+                    return view('member.payroll.payroll_timekeeping_table_registered', $data);
+               break;  
+
+               case 'posted':
+                    return view('member.payroll.payroll_timekeeping_table_posted', $data);
+               break;  
+
+               case 'approved':
+                    return view('member.payroll.payroll_timekeeping_table_approved', $data);
+               break;  
+
+
+               default:
+                    return view('member.payroll.payroll_timekeeping_table', $data);
+               break;
+          }
+          
+     }
+
+
+     public function payroll_process_module()
+     {
+          
+          $data["_company"] = Tbl_payroll_company::where("shop_id", Self::shop_id())->where('payroll_parent_company_id', 0)->get();
+          $data['_period'] = Tbl_payroll_period::sel(Self::shop_id())
+                                                  ->where('payroll_parent_company_id', 0)
+                                                  ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
+                                                  ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
+                                                  ->orderBy('tbl_payroll_period.payroll_period_start','asc')
+                                                  ->get();
+          
+          $data['access'] = Utilities::checkAccess('payroll-timekeeping','salary_rates');
+
+          return view('member.payroll.payroll_process_module', $data);
+     }
+
+     /* EMPLOYEE START */
+     public function employee_list()
+     {    
+          $active_status[0]    = 1;
+          $active_status[1]    = 2;
+          $active_status[2]    = 3;
+          $active_status[3]    = 4;
+          $active_status[4]    = 5;
+          $active_status[5]    = 6;
+          $active_status[7]    = 7;
+
+          $separated_status[0] = 8;
+          $separated_status[1] = 9;
+
+		$data['_active']	 = Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $active_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->paginate($this->paginate_count);
+
+		// $data['_separated']					= Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $separated_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->paginate($this->paginate_count);
+
+
+          $data['_separated'] = DB::select('select * from `tbl_payroll_employee_contract` inner join `tbl_payroll_employee_basic` 
+          on `tbl_payroll_employee_basic`.`payroll_employee_id` = `tbl_payroll_employee_contract`.`payroll_employee_id` 
+          left join `tbl_payroll_department` on `tbl_payroll_department`.`payroll_department_id` = `tbl_payroll_employee_contract`.`payroll_department_id` 
+          left join `tbl_payroll_jobtitle` on `tbl_payroll_jobtitle`.`payroll_jobtitle_id` = `tbl_payroll_employee_contract`.`payroll_jobtitle_id` 
+          left join `tbl_payroll_company` on `tbl_payroll_company`.`payroll_company_id` = `tbl_payroll_employee_basic`.`payroll_employee_company_id` 
+          where (`tbl_payroll_employee_contract`.`payroll_employee_contract_date_end` >= '.date('Y-m-d').' 
+          or `tbl_payroll_employee_contract`.`payroll_employee_contract_date_end` = 0000-00-00) 
+          and `payroll_employee_contract_status` in (8, 9) and `tbl_payroll_employee_basic`.`shop_id` = '.Self::shop_id().' 
+          and `tbl_payroll_employee_contract`.`payroll_employee_contract_archived` = 0 
+          order by `tbl_payroll_employee_basic`.`payroll_employee_first_name` asc');
+
+
+          /*ORIGINAL QUERY*/
+          /*$data['_separated'] = DB::select('select * from `tbl_payroll_employee_contract` inner join `tbl_payroll_employee_basic` 
+          on `tbl_payroll_employee_basic`.`payroll_employee_id` = `tbl_payroll_employee_contract`.`payroll_employee_id` 
+          left join `tbl_payroll_department` on `tbl_payroll_department`.`payroll_department_id` = `tbl_payroll_employee_contract`.`payroll_department_id` 
+          left join `tbl_payroll_jobtitle` on `tbl_payroll_jobtitle`.`payroll_jobtitle_id` = `tbl_payroll_employee_contract`.`payroll_jobtitle_id` 
+          left join `tbl_payroll_company` on `tbl_payroll_company`.`payroll_company_id` = `tbl_payroll_employee_basic`.`payroll_employee_company_id` 
+          where (`tbl_payroll_employee_contract`.`payroll_employee_contract_date_end` >= '.date('Y-m-d').' 
+          or `tbl_payroll_employee_contract`.`payroll_employee_contract_date_end` = 0000-00-00) 
+          and `payroll_employee_contract_status` in (8, 9) and `tbl_payroll_employee_basic`.`shop_id` = '.Self::shop_id().' 
+          and `tbl_payroll_employee_contract`.`payroll_employee_contract_archived` = 0 
+          order by `tbl_payroll_employee_basic`.`payroll_employee_first_name` asc');*/
+
+          // dd($data['_separated']);
 		
-	}
-
-	/* EMPLOYEE START */
-
-    public function employee_list()
-	{	
-		$active_status[0] 	 = 1;
-		$active_status[1] 	 = 2;
-		$active_status[2] 	 = 3;
-		$active_status[3] 	 = 4;
-		$active_status[4] 	 = 5;
-		$active_status[5] 	 = 6;
-		$active_status[7] 	 = 7;
-
-		$separated_status[0] = 8;
-		$separated_status[1] = 9;
-
-		$data['_active']					= Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id())->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->paginate($this->paginate_count);
-
-		$data['_separated']					= Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $separated_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->paginate($this->paginate_count);
-
-		// $data['_company']					= Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->paginate($this->paginate_count);
-
           $data['_company']                       = Payroll::company_heirarchy(Self::shop_id());
-		// dd($data['_company']);
+		
 		$data['_status_active']				= Tbl_payroll_employment_status::whereIn('payroll_employment_status_id', $active_status)->orderBy('employment_status')->paginate($this->paginate_count);
 
-		
-		$data['_status_separated']			= Tbl_payroll_employment_status::whereIn('payroll_employment_status_id', $separated_status)->orderBy('employment_status')->paginate($this->paginate_count);
-		return view('member.payroll.employeelist', $data);
-	}   
+          $data['_status_separated']              = Tbl_payroll_employment_status::whereIn('payroll_employment_status_id', $separated_status)->orderBy('employment_status')->paginate($this->paginate_count);
+          return view('member.payroll.employeelist', $data);
+     }   
 
 
-	/* IMPORT EMPLOYEE DATA FROM EXCEL  START*/
-	public function modal_import_employee()
-	{
-		return view('member.payroll.modal.modal_import_employee');
-	}
+     /* IMPORT EMPLOYEE DATA FROM EXCEL  START*/
+     public function modal_import_employee()
+     {
+          return view('member.payroll.modal.modal_import_employee');
+     }
 
-	public function get_201_template()
-	{
+     public function get_201_template()
+     {
           $excels['number_of_rows'] = Request::input('number_of_rows');
 
           $excels['data'] = ['Company*','Employee Number*','Title Name','First Name*','Middle Name*','Last Name*','Suffix Name*','ATM/Account Number','Gender (M/F)*','Birthdate','Civil Status*','Street*','City/Town*','State/Province','Country*','Zip Code', 'Contact','Email Address','Tax Status','Monthly Salary*','Daily Rate' ,'Taxable Salary','SSS Salary','HDMF Salary','PHIC Salary','Minimum Wage (Y/N)*','Department*','Position*','Start Date*','Employment Status*','SSS Number','Philhealth Number','Pagibig Number','TIN','BioData/Resume(Y/N)','Police Clearance(Y/N)','NBI(Y/N)','Health Certificate(Y/N)','School Credentials(Y/N)','Valid ID(Y/N)','Dependent Full Name(1)','Dependent Relationship(1)','Dependent Birthdate(1)','Dependent Full Name(2)','Dependent Relationship(2)','Dependent Birthdate(2)','Dependent Full Name(3)','Dependent Relationship(3)','Dependent Birthdate(3)','Dependent Full Name(4)','Dependent Relationship(4)','Dependent Birthdate(4)','Remarks'];
@@ -403,13 +527,13 @@ class PayrollController extends Member
             /* DATA VALIDATION (REFERENCE FOR DROPDOWN LIST) */
             $excel->sheet('reference', function($sheet) {
 
-                $_company 		= Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('payroll_company_name')->get();
+                $_company          = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('payroll_company_name')->get();
 
-                $_status 		= Tbl_payroll_employment_status::get();
-                $_department  	= Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
-                $_position 		= Tbl_payroll_jobtitle::sel(Self::shop_id())->orderBy('payroll_jobtitle_name')->get();
+                $_status           = Tbl_payroll_employment_status::get();
+                $_department       = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+                $_position         = Tbl_payroll_jobtitle::sel(Self::shop_id())->orderBy('payroll_jobtitle_name')->get();
 
-                $_country 		= Tbl_country::get();
+                $_country          = Tbl_country::get();
 
                 /* COMPANY/CLIENT REFERENCES */
                 $sheet->SetCellValue("A1", "Client");
@@ -456,8 +580,8 @@ class PayrollController extends Member
                 $country_number = 2;
                 foreach($_country as $country)
                 {
-                	$sheet->SetCellValue("J".$country_number, $country->country_name);
-                	$country_number++;
+                    $sheet->SetCellValue("J".$country_number, $country->country_name);
+                    $country_number++;
                 }
                 $country_number--;
 
@@ -550,41 +674,41 @@ class PayrollController extends Member
                     )
                 );
 
-               	$sheet->_parent->addNamedRange(
-               		new \PHPExcel_NamedRange(
+                    $sheet->_parent->addNamedRange(
+                         new \PHPExcel_NamedRange(
                     'country', $sheet, 'J2:J'.$country_number
                     )
-               	);
+                    );
 
 
             });
 
 
         })->download('xlsx');
-	}
+     }
 
-	public function import_201_template()
-	{
-		$file = Request::file('file');
-		$_data = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
-		$first = $_data[0]; 
+     public function import_201_template()
+     {
+          $file = Request::file('file');
+          $_data = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
+          $first = $_data[0]; 
          
-		/* check index exist */
-		
-		if(isset($first['company']) && isset($first['first_name']) && isset($first['department']) && isset($first['start_date']))
-		{	
-			$count = 0;
-			foreach($_data as $data)
-			{
-				$count_employee = Tbl_payroll_employee_basic::where('payroll_employee_company_id',Self::getid($data['company'], 'company'))
-												   ->where('payroll_employee_first_name',Self::nullableToString($data['first_name']))
-												   ->where('payroll_employee_middle_name', Self::nullableToString($data['middle_name']))
-												   ->where('payroll_employee_last_name',Self::nullableToString($data['last_name']))
-												   ->count();
-				// dd($count_employee);
-				if($count_employee == 0)
-				{
-					/* EMPLOYEE BASIC INSERT START */
+          /* check index exist */
+          
+          if(isset($first['company']) && isset($first['first_name']) && isset($first['department']) && isset($first['start_date']))
+          {    
+               $count = 0;
+               foreach($_data as $data)
+               {
+                    $count_employee = Tbl_payroll_employee_basic::where('payroll_employee_company_id',Self::getid($data['company'], 'company'))
+                                                               ->where('payroll_employee_first_name',Self::nullableToString($data['first_name']))
+                                                               ->where('payroll_employee_middle_name', Self::nullableToString($data['middle_name']))
+                                                               ->where('payroll_employee_last_name',Self::nullableToString($data['last_name']))
+                                                               ->count();
+                    // dd($count_employee);
+                    if($count_employee == 0)
+                    {
+                         /* EMPLOYEE BASIC INSERT START */
                          $insert['shop_id']                                = Self::shop_id();
                          $insert['payroll_employee_company_id']       = Self::getid($data['company'], 'company');
                          $insert['payroll_employee_title_name']       = Self::nullableToString($data['title_name']);
@@ -683,73 +807,73 @@ class PayrollController extends Member
                               
                               $count++;
                          }
-					
-					/* EMPLOYEE DEPENDENT END */
-				}
-				
-			}	
+                         
+                         /* EMPLOYEE DEPENDENT END */
+                    }
+                    
+               }    
 
-			$message = '<center><b><span class="color-green">'.$count.' Employee/s has been inserted.</span></b></center>';
-			$return['status'] = 'success';
-			if($count == 0)
-			{
-				$message = '<center><b><span class="color-gray">There is nothing to insert</span></b></center>';
-				$return['status'] = 'none';
-			}
-			$return['message'] = $message;
+               $message = '<center><b><span class="color-green">'.$count.' Employee/s has been inserted.</span></b></center>';
+               $return['status'] = 'success';
+               if($count == 0)
+               {
+                    $message = '<center><b><span class="color-gray">There is nothing to insert</span></b></center>';
+                    $return['status'] = 'none';
+               }
+               $return['message'] = $message;
 
 
-			return $return;
-		}
-		else
-		{
-			$return['status'] 	= 'error';
-			$return['message'] 	= '<center><b><span class="color-red">Wrong file Format</span></b></center>';
-			return $return;
-		}
-	}
+               return $return;
+          }
+          else
+          {
+               $return['status']   = 'error';
+               $return['message']  = '<center><b><span class="color-red">Wrong file Format</span></b></center>';
+               return $return;
+          }
+     }
 
-	public function getid($str_name = '', $str_param = '')
-	{
-		$id = 0;
+     public function getid($str_name = '', $str_param = '')
+     {
+          $id = 0;
 
-		switch ($str_param) {
-			case 'country':
-				$id = Tbl_country::where('country_name', $str_name)->pluck('country_id');
-				// return $id;
+          switch ($str_param) {
+               case 'country':
+                    $id = Tbl_country::where('country_name', $str_name)->value('country_id');
+                    // return $id;
                     if($id == null)
                     {
                          $id = 420;
                     }
-				break;
+                    break;
 
-			case 'company':
-				$id = Tbl_payroll_company::where('payroll_company_name', $str_name)->where('shop_id', Self::shop_id())->pluck('payroll_company_id');
-				// return $id;/
+               case 'company':
+                    $id = Tbl_payroll_company::where('payroll_company_name', $str_name)->where('shop_id', Self::shop_id())->value('payroll_company_id');
+                    // return $id;/
 
-				break;
+                    break;
 
-			case 'department':
-				$id = Tbl_payroll_department::where('payroll_department_name', $str_name)->where('shop_id', Self::shop_id())->pluck('payroll_department_id');
-				// return $id;
-				break;
+               case 'department':
+                    $id = Tbl_payroll_department::where('payroll_department_name', $str_name)->where('shop_id', Self::shop_id())->value('payroll_department_id');
+                    // return $id;
+                    break;
 
-			case 'jobtitle':
-				$id = Tbl_payroll_jobtitle::where('payroll_jobtitle_name', $str_name)->where('shop_id', Self::shop_id())->pluck('payroll_jobtitle_id');
-				// return $id;
-				break;
+               case 'jobtitle':
+                    $id = Tbl_payroll_jobtitle::where('payroll_jobtitle_name', $str_name)->where('shop_id', Self::shop_id())->value('payroll_jobtitle_id');
+                    // return $id;
+                    break;
 
-			case 'employment_status':
-				$id = Tbl_payroll_employment_status::where('employment_status', $str_name)->pluck('payroll_employment_status_id');
-				// return $id;
-				break;
-			
-			default:
-				$id = 0;
-				// return $id;
-				break;
+               case 'employment_status':
+                    $id = Tbl_payroll_employment_status::where('employment_status', $str_name)->value('payroll_employment_status_id');
+                    // return $id;
+                    break;
+               
+               default:
+                    $id = 0;
+                    // return $id;
+                    break;
 
-		}
+          }
 
           if($id == null)
           {    
@@ -757,7 +881,7 @@ class PayrollController extends Member
           }
 
           return $id;
-	}
+     }
 
      public function checkemployee_exist($data = array())
      {
@@ -772,116 +896,123 @@ class PayrollController extends Member
           return Tbl_payroll_employee_basic::checkexist($check)->count();
      }
 
-	public function nullableToString($data = null, $output = 'string')
-	{
+     public function nullableToString($data = null, $output = 'string')
+     {
 
-		if($data == null && $output == 'string')
-		{
-			$data = '';
-		}
-		else if($data == null && $output == 'int')
-		{
-			$data = 0;
-		}
+          if($data == null && $output == 'string')
+          {
+               $data = '';
+          }
+          else if($data == null && $output == 'int')
+          {
+               $data = 0;
+          }
 
-		return $data;
-	}
+          return $data;
+     }
 
-	public function yesNotoInt($stryn = 'Y')
-	{
-		$int = 0;
-		$stryn = strtoupper($stryn);
-		if($stryn == 'Y' || $stryn == 'YES' || $stryn == 'TRUE')
-		{
-			$int = 1;
-		}
-		return $int;
-	}
+     public function yesNotoInt($stryn = 'Y')
+     {
+          $int = 0;
+          $stryn = strtoupper($stryn);
+          if($stryn == 'Y' || $stryn == 'YES' || $stryn == 'TRUE')
+          {
+               $int = 1;
+          }
+          return $int;
+     }
 
-	/* IMPORT EMPLOYEE DATA FROM EXCEL END */
+     /* IMPORT EMPLOYEE DATA FROM EXCEL END */
 
-	public function modal_create_employee()
-	{
-		// $data['_company'] = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
+     public function modal_create_employee()
+     {
+          // $data['_company'] = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
 
-          $data['_company']  = Payroll::company_heirarchy(Self::shop_id());
-
-		$data['employement_status'] = Tbl_payroll_employment_status::get();
-		$data['tax_status'] = Tbl_payroll_tax_status::get();
-		$data['civil_status'] = Tbl_payroll_civil_status::get();
-		$data['_country'] = Tbl_country::orderBy('country_name')->get();
-		$data['_department'] = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
-		$data['_group'] = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
-		$data['_allowance'] = Tbl_payroll_allowance::sel(Self::shop_id())->orderBy('payroll_allowance_name')->get();
-		$data['_deduction'] = Tbl_payroll_deduction::seldeduction(Self::shop_id())->orderBy('payroll_deduction_name')->get();
-		$data['_leave'] = Tbl_payroll_leave_temp::sel(Self::shop_id())->orderBy('payroll_leave_temp_name')->get();
-          $data['_journal_tag'] = Tbl_payroll_journal_tag::gettag(Self::shop_id())->orderBy('tbl_chart_of_account.account_name')->get();
-
+          $data['_company']             = Payroll::company_heirarchy(Self::shop_id());
+          $data['employement_status']   = Tbl_payroll_employment_status::get();
+          $data['tax_status']           = Tbl_payroll_tax_status::get();
+          $data['civil_status']         = Tbl_payroll_civil_status::get();
+          $data['_country']             = Tbl_country::orderBy('country_name')->get();
+          $data['_department']          = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+          $data['_group']               = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
+          $data['_allowance']           = Tbl_payroll_allowance::sel(Self::shop_id())->orderBy('payroll_allowance_name')->get();
+          $data['_deduction']           = Tbl_payroll_deduction::seldeduction(Self::shop_id())->orderBy('payroll_deduction_name')->get();
+          $data['_leave']               = Tbl_payroll_leave_temp::sel(Self::shop_id())->orderBy('payroll_leave_temp_name')->get();
+          $data['_journal_tag']         = Tbl_payroll_journal_tag::gettag(Self::shop_id())->orderBy('tbl_chart_of_account.account_name')->get();
+          $data['_branch']              = Tbl_payroll_branch_location::getdata(Self::shop_id())->orderBy('branch_location_name')->get();
+          $data['_shift']               = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->get();
 		return view("member.payroll.modal.modal_create_employee", $data);
 	}
 
+     public function shift_view()
+     {
+          $id = Request::input('id');
+          $data = Self::shift_sorting($id);
+          return view('member.payroll.misc.shift_view_multiple', $data);
+     }
 
-	public function employee_updload_requirements()
-	{
-		$file = Request::file('file');
-		// dd($file);
+     public function employee_updload_requirements()
+     {
+          $file = Request::file('file');
+          // dd($file);
 
-		$requirement_original_name 	= $file->getClientOriginalName();
-		$requirement_extension_name   = $file->getClientOriginalExtension();
-		$requirement_mime_type		= $file->getMimeType();
+          $requirement_original_name    = $file->getClientOriginalName();
+          $requirement_extension_name   = $file->getClientOriginalExtension();
+          $requirement_mime_type        = $file->getMimeType();
 
-		$requirement_new_name 		= value(function() use ($file){
-          $filename = str_random(10). date('ymdhis') . '.' . $file->getClientOriginalExtension();
-          return strtolower($filename);
-        });
+          $requirement_new_name         = value(function() use ($file){
+               $filename = str_random(10). date('ymdhis') . '.' . $file->getClientOriginalExtension();
+               return strtolower($filename);
+             });
 
-        $path = '/assets/payroll/employee_requirements';
-        if (!file_exists($path)) {
-		    mkdir($path, 0777, true);
-		}
-        $upload_success = $file->move(public_path($path), $requirement_new_name);
+          $path = '/assets/payroll/employee_requirements';
+          if (!file_exists($path)) {
+              mkdir($path, 0777, true);
+          }
+          $upload_success = $file->move(public_path($path), $requirement_new_name);
 
-        $data = array();
-        $status = 'error';
-        if($upload_success)
-        {
+          $data = array();
+          $status = 'error';
+          if($upload_success)
+          {
 
-        	$insert['shop_id'] 								= Self::shop_id();
-        	$insert['payroll_requirements_path']	 		= $path.'/'.$requirement_new_name;
-        	$insert['payroll_requirements_original_name'] 	= $requirement_original_name;
-        	$insert['payroll_requirements_extension_name'] 	= $requirement_extension_name;
-        	$insert['payroll_requirements_mime_type'] 		= $requirement_mime_type;
-        	$insert['payroll_requirements_date_upload'] 	= Carbon::now();
+               $insert['shop_id']                                     = Self::shop_id();
+               $insert['payroll_requirements_path']              = $path.'/'.$requirement_new_name;
+               $insert['payroll_requirements_original_name']     = $requirement_original_name;
+               $insert['payroll_requirements_extension_name']    = $requirement_extension_name;
+               $insert['payroll_requirements_mime_type']         = $requirement_mime_type;
+               $insert['payroll_requirements_date_upload']  = Carbon::now();
 
-        	$payroll_requirements_id = Tbl_payroll_requirements::insertGetId($insert);
+               $payroll_requirements_id = Tbl_payroll_requirements::insertGetId($insert);
 
-        	$data['path'] 					= $path.'/'.$requirement_new_name;
-	        $data['original_name'] 			= $requirement_original_name;
-	        $data['extension'] 				= $requirement_extension_name;
-	        $data['mime_type'] 				= $requirement_mime_type;
-	        $data['payroll_requirements_id'] = $payroll_requirements_id;
-	        $status = 'success';
-        }
+               $data['path']                      = $path.'/'.$requirement_new_name;
+               $data['original_name']             = $requirement_original_name;
+               $data['extension']                 = $requirement_extension_name;
+               $data['mime_type']                 = $requirement_mime_type;
+               $data['payroll_requirements_id'] = $payroll_requirements_id;
+               $status = 'success';
+          }
         
 
-        $return['status'] = $status;
-        $return['data']	   = $data;
+          $return['status'] = $status;
+          $return['data']        = $data;
 
-        return json_encode($return);
+          return json_encode($return);
+
 	}
 
 
 	public function remove_employee_requirement()
 	{
 		$payroll_requirements_id = Request::input("content");
-		$path = Tbl_payroll_requirements::where('payroll_requirements_id',$payroll_requirements_id)->pluck('payroll_requirements_path');
+		$path = Tbl_payroll_requirements::where('payroll_requirements_id',$payroll_requirements_id)->value('payroll_requirements_path');
 		Tbl_payroll_requirements::where('payroll_requirements_id',$payroll_requirements_id)->delete();
 	}
 
 	public function modal_employee_save()
 	{
 		/* employee basic info */
-		$insert['shop_id']							= Self::shop_id();
+		$insert['shop_id']						= Self::shop_id();
 		$insert['payroll_employee_title_name'] 		= Request::input('payroll_employee_title_name');
 		$insert['payroll_employee_first_name'] 		= Request::input('payroll_employee_first_name');
 		$insert['payroll_employee_middle_name'] 	= Request::input('payroll_employee_middle_name');
@@ -906,7 +1037,8 @@ class PayrollController extends Member
 		$insert['payroll_employee_philhealth'] 		= Request::input('payroll_employee_philhealth');
 		$insert['payroll_employee_pagibig'] 		= Request::input('payroll_employee_pagibig');
 		$insert['payroll_employee_remarks'] 		= Request::input('payroll_employee_remarks');
-
+          $insert['branch_location_id']                = Request::input('branch_location_id') != null ? Request::input('branch_location_id') : 0;
+          $insert['shift_code_id']                     = Request::input('shift_code_id') != null ? Request::input('shift_code_id') : 0;
 		$payroll_employee_id = Tbl_payroll_employee_basic::insertGetId($insert);
 
 
@@ -940,7 +1072,10 @@ class PayrollController extends Member
 		$insert_salary['payroll_employee_salary_pagibig'] 		= Request::input('payroll_employee_salary_pagibig');
 		$insert_salary['payroll_employee_salary_philhealth'] 		= Request::input('payroll_employee_salary_philhealth');
 		$insert_salary['payroll_employee_salary_cola']			= Request::input('payroll_employee_salary_cola');
-
+          $insert_salary['monthly_cola']                              = Request::has('monthly_cola') ? Request::input('monthly_cola') : 0;
+          $insert_salary['tbl_payroll_employee_custom_compute']       = Request::has('tbl_payroll_employee_custom_compute') ? Request::input('tbl_payroll_employee_custom_compute') : 0;
+          
+          
           $is_deduct_tax_default        = 0;
           $deduct_tax_custom            = 0;
           $is_deduct_sss_default        = 0;
@@ -983,152 +1118,152 @@ class PayrollController extends Member
           $insert_salary['is_deduct_pagibig_default']       = $is_deduct_pagibig_default;
           $insert_salary['deduct_pagibig_custom']           = $deduct_pagibig_custom;
 
-		Tbl_payroll_employee_salary::insert($insert_salary);
+          Tbl_payroll_employee_salary::insert($insert_salary);
 
 
-		
-		$has_resume = 0;
-		if(Request::has('has_resume'))
-		{
-			$has_resume = Request::input('has_resume');
-		}
+          
+          $has_resume = 0;
+          if(Request::has('has_resume'))
+          {
+               $has_resume = Request::input('has_resume');
+          }
 
-		$has_police_clearance = 0;
-		if(Request::has('has_police_clearance'))
-		{
-			$has_police_clearance = Request::input('has_police_clearance');
-		}
+          $has_police_clearance = 0;
+          if(Request::has('has_police_clearance'))
+          {
+               $has_police_clearance = Request::input('has_police_clearance');
+          }
 
-		$has_nbi = 0;
-		if(Request::has('has_nbi'))
-		{
-			$has_nbi = Request::input('has_nbi');
-		}
+          $has_nbi = 0;
+          if(Request::has('has_nbi'))
+          {
+               $has_nbi = Request::input('has_nbi');
+          }
 
-		$has_health_certificate = 0;
-		if(Request::has('has_health_certificate'))
-		{
-			$has_health_certificate = Request::input('has_health_certificate');
-		}
+          $has_health_certificate = 0;
+          if(Request::has('has_health_certificate'))
+          {
+               $has_health_certificate = Request::input('has_health_certificate');
+          }
 
-		$has_school_credentials = 0;
-		if(Request::has('has_school_credentials'))
-		{
-			$has_school_credentials = Request::input('has_school_credentials');
-		}
+          $has_school_credentials = 0;
+          if(Request::has('has_school_credentials'))
+          {
+               $has_school_credentials = Request::input('has_school_credentials');
+          }
 
-		$has_valid_id = 0;
-		if(Request::has('has_valid_id'))
-		{
-			$has_valid_id = Request::input('has_valid_id');
-		}
+          $has_valid_id = 0;
+          if(Request::has('has_valid_id'))
+          {
+               $has_valid_id = Request::input('has_valid_id');
+          }
 
-		$insert_requirements['payroll_employee_id']					= $payroll_employee_id;
-		$insert_requirements['has_resume'] 							= $has_resume;
-		$insert_requirements['resume_requirements_id'] 				= Request::input('resume_requirements_id');
-		$insert_requirements['has_police_clearance'] 				= $has_police_clearance;
-		$insert_requirements['police_clearance_requirements_id'] 	= Request::input('police_clearance_requirements_id');
-		$insert_requirements['has_nbi'] 							= $has_nbi;
-		$insert_requirements['nbi_payroll_requirements_id'] 		= Request::input('nbi_payroll_requirements_id');
-		$insert_requirements['has_health_certificate'] 				= $has_health_certificate;
-		$insert_requirements['health_certificate_requirements_id'] 	= Request::input('health_certificate_requirements_id');
-		$insert_requirements['has_school_credentials'] 				= $has_school_credentials;
-		$insert_requirements['school_credentials_requirements_id'] 	= Request::input('school_credentials_requirements_id');
-		$insert_requirements['has_valid_id'] 						= $has_valid_id;
-		$insert_requirements['valid_id_requirements_id'] 			= Request::input('valid_id_requirements_id');
-		Tbl_payroll_employee_requirements::insert($insert_requirements);
-
-
-		$payroll_dependent_name 		= Request::input('payroll_dependent_name');
-		$payroll_dependent_birthdate 	= Request::input('payroll_dependent_birthdate');
-		$payroll_dependent_relationship = Request::input('payroll_dependent_relationship');
+          $insert_requirements['payroll_employee_id']                      = $payroll_employee_id;
+          $insert_requirements['has_resume']                                    = $has_resume;
+          $insert_requirements['resume_requirements_id']                   = Request::input('resume_requirements_id');
+          $insert_requirements['has_police_clearance']                     = $has_police_clearance;
+          $insert_requirements['police_clearance_requirements_id']    = Request::input('police_clearance_requirements_id');
+          $insert_requirements['has_nbi']                                  = $has_nbi;
+          $insert_requirements['nbi_payroll_requirements_id']         = Request::input('nbi_payroll_requirements_id');
+          $insert_requirements['has_health_certificate']                   = $has_health_certificate;
+          $insert_requirements['health_certificate_requirements_id']  = Request::input('health_certificate_requirements_id');
+          $insert_requirements['has_school_credentials']                   = $has_school_credentials;
+          $insert_requirements['school_credentials_requirements_id']  = Request::input('school_credentials_requirements_id');
+          $insert_requirements['has_valid_id']                             = $has_valid_id;
+          $insert_requirements['valid_id_requirements_id']            = Request::input('valid_id_requirements_id');
+          Tbl_payroll_employee_requirements::insert($insert_requirements);
 
 
-		$insert_dependent = array();
-
-		$temp = "";
-		foreach($payroll_dependent_name as $key => $dependent)
-		{
-			if($dependent != "")
-			{
-				$temp['payroll_employee_id']			= $payroll_employee_id;
-				$temp['payroll_dependent_name'] 		= $dependent;
-
-				$birthdate = '';
-				if($payroll_dependent_birthdate[$key] != '')
-				{	
-					$birthdate 							= date('Y-m-d',strtotime($payroll_dependent_birthdate[$key]));
-				}
-
-				$temp['payroll_dependent_birthdate'] 	= $birthdate;
-				$temp['payroll_dependent_relationship'] = $payroll_dependent_relationship[$key];
-
-				array_push($insert_dependent, $temp);
-			}
-		}
-
-		Tbl_payroll_employee_dependent::insert($insert_dependent);
+          $payroll_dependent_name       = Request::input('payroll_dependent_name');
+          $payroll_dependent_birthdate  = Request::input('payroll_dependent_birthdate');
+          $payroll_dependent_relationship = Request::input('payroll_dependent_relationship');
 
 
-		/* INSERT ALLOWANCES */
-		$_allowance = array();
-		if(Request::has('allowance'))
-		{
-			$_allowance = Request::input('allowance');
-		}
+          $insert_dependent = array();
 
-		$insert_allowance = array();
-		$temp = "";
-		foreach ($_allowance as $allowance) {
-			$temp['payroll_allowance_id']	= $allowance;
-			$temp['payroll_employee_id'] 	= $payroll_employee_id;
-			array_push($insert_allowance, $temp);
-		}
-		if(!empty($insert_allowance))
-		{
-			Tbl_payroll_employee_allowance::insert($insert_allowance);
-		}
-		
+          $temp = "";
+          foreach($payroll_dependent_name as $key => $dependent)
+          {
+               if($dependent != "")
+               {
+                    $temp['payroll_employee_id']            = $payroll_employee_id;
+                    $temp['payroll_dependent_name']         = $dependent;
 
-		/* INSERT LEAVES */
-		$_leave = array();
-		if(Request::has('leave'))
-		{
-			$_leave = Request::input('leave');
-		}
+                    $birthdate = '';
+                    if($payroll_dependent_birthdate[$key] != '')
+                    {    
+                         $birthdate                                   = date('Y-m-d',strtotime($payroll_dependent_birthdate[$key]));
+                    }
 
-		$insert_leave = array();
-		$temp = '';
-		foreach($_leave as $leave)
-		{
-			$temp['payroll_leave_temp_id'] 	= $leave;
-			$temp['payroll_employee_id'] 	= $payroll_employee_id;
-			array_push($insert_leave, $temp);
-		}
+                    $temp['payroll_dependent_birthdate']    = $birthdate;
+                    $temp['payroll_dependent_relationship'] = $payroll_dependent_relationship[$key];
 
-		if(!empty($insert_leave))
-		{
-			Tbl_payroll_leave_employee::insert($insert_leave);
-		}
+                    array_push($insert_dependent, $temp);
+               }
+          }
 
-		/* INSERT DEDUCTION */
-		$_deduction = array();
-		if(Request::has('deduction'))
-		{
-			$_deduction = Request::input('deduction');
-		}
-		$insert_deduction = array();
-		$temp = '';
-		foreach($_deduction as $deduction)
-		{
-			$temp['payroll_deduction_id']   = $deduction;
-			$temp['payroll_employee_id']    = $payroll_employee_id;
-			array_push($insert_deduction, $temp);
-		}
-		if(!empty($insert_deduction))
-		{
-			Tbl_payroll_deduction_employee::insert($insert_deduction);
-		}
+          Tbl_payroll_employee_dependent::insert($insert_dependent);
+
+
+          /* INSERT ALLOWANCES */
+          $_allowance = array();
+          if(Request::has('allowance'))
+          {
+               $_allowance = Request::input('allowance');
+          }
+
+          $insert_allowance = array();
+          $temp = "";
+          foreach ($_allowance as $allowance) {
+               $temp['payroll_allowance_id'] = $allowance;
+               $temp['payroll_employee_id']  = $payroll_employee_id;
+               array_push($insert_allowance, $temp);
+          }
+          if(!empty($insert_allowance))
+          {
+               Tbl_payroll_employee_allowance::insert($insert_allowance);
+          }
+          
+
+          /* INSERT LEAVES */
+          $_leave = array();
+          if(Request::has('leave'))
+          {
+               $_leave = Request::input('leave');
+          }
+
+          $insert_leave = array();
+          $temp = '';
+          foreach($_leave as $leave)
+          {
+               $temp['payroll_leave_temp_id']     = $leave;
+               $temp['payroll_employee_id']  = $payroll_employee_id;
+               array_push($insert_leave, $temp);
+          }
+
+          if(!empty($insert_leave))
+          {
+               Tbl_payroll_leave_employee::insert($insert_leave);
+          }
+
+          /* INSERT DEDUCTION */
+          $_deduction = array();
+          if(Request::has('deduction'))
+          {
+               $_deduction = Request::input('deduction');
+          }
+          $insert_deduction = array();
+          $temp = '';
+          foreach($_deduction as $deduction)
+          {
+               $temp['payroll_deduction_id']   = $deduction;
+               $temp['payroll_employee_id']    = $payroll_employee_id;
+               array_push($insert_deduction, $temp);
+          }
+          if(!empty($insert_deduction))
+          {
+               Tbl_payroll_deduction_employee::insert($insert_deduction);
+          }
 
 
           /* INSERT JOURNAL TAGS */
@@ -1147,45 +1282,56 @@ class PayrollController extends Member
                     Tbl_payroll_journal_tag_employee::insert($insert_journal);
                }
           }
+          
+          $record = Tbl_payroll_employee_basic::where('payroll_employee_id', $payroll_employee_id)->first();
+          AuditTrail::record_logs("Create Employee","Payroll Create Employee",$payroll_employee_id,$record,$record);
+
+          $return['data'] = '';
+          $return['status'] = 'success';
+          $return['function_name'] = 'employeelist.reload_employee_list';
+
+          return json_encode($return);
+
+     }
+
+     public function modal_employee_view($id)
+     {
 
 
-		$return['data'] = '';
-		$return['status'] = 'success';
-		$return['function_name'] = 'employeelist.reload_employee_list';
+          $data["source"]               = Request::input("source_page");
+          // $data['_company']               = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
 
-		return json_encode($return);
+          $data['_company']             = Payroll::company_heirarchy(Self::shop_id());
 
-	}
+          $data['employement_status']   = Tbl_payroll_employment_status::get();
+          $data['tax_status']           = Tbl_payroll_tax_status::get();
+          $data['civil_status']         = Tbl_payroll_civil_status::get();
+          $data['_country']             = Tbl_country::orderBy('country_name')->get();
+          $data['_department']          = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+          $data['_jobtitle']            = Tbl_payroll_jobtitle::sel(Self::shop_id())->orderBy('payroll_jobtitle_name')->get();
 
-	public function modal_employee_view($id)
-	{
+          $data['employee']             = Tbl_payroll_employee_basic::where('payroll_employee_id',$id)->first();
+          $data['contract']             = Tbl_payroll_employee_contract::selemployee($id)->first();
 
-		// $data['_company'] 			= Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
-
-          $data['_company']  = Payroll::company_heirarchy(Self::shop_id());
-
-		$data['employement_status']   = Tbl_payroll_employment_status::get();
-		$data['tax_status'] 		= Tbl_payroll_tax_status::get();
-		$data['civil_status'] 		= Tbl_payroll_civil_status::get();
-		$data['_country'] 			= Tbl_country::orderBy('country_name')->get();
-		$data['_department'] 		= Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
-		$data['_jobtitle']			= Tbl_payroll_jobtitle::sel(Self::shop_id())->orderBy('payroll_jobtitle_name')->get();
-
-		$data['employee'] 			= Tbl_payroll_employee_basic::where('payroll_employee_id',$id)->first();
-		$data['contract'] 			= Tbl_payroll_employee_contract::selemployee($id)->first();
-
-		$data['salary']			= Tbl_payroll_employee_salary::selemployee($id)->first();
-		$data['requirement']		= Tbl_payroll_employee_requirements::selrequirements($id)->first();
-		$data['_group']               = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
-		$data['dependent']			= Tbl_payroll_employee_dependent::where('payroll_employee_id', $id)->get();
+          $data['salary']               = Tbl_payroll_employee_salary::selemployee($id)->first();
+          $data['requirement']          = Tbl_payroll_employee_requirements::selrequirements($id)->first();
+          $data['_group']               = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
+          $data['dependent']            = Tbl_payroll_employee_dependent::where('payroll_employee_id', $id)->get();
 
           $data['_allowance']           = Self::check_if_allowance_selected($id);
           $data['_deduction']           = Self::check_if_deduction_selected($id);
           $data['_leave']               = Self::check_if_leave_selected($id);
 
-          $_journal_tag                 = Tbl_payroll_journal_tag::gettag(Self::shop_id())->orderBy('tbl_chart_of_account.account_name')->get()->toArray();
+          $data['_branch']              = Tbl_payroll_branch_location::getdata(Self::shop_id())->orderBy('branch_location_name')->get();
 
+          $_journal_tag                 = Tbl_payroll_journal_tag::gettag(Self::shop_id())->orderBy('tbl_chart_of_account.account_name')->get()->toArray();
+          $data['_shift']               = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->get();
+          
           $data['_journal_tag']         = array();
+
+          $data['access_salary_detail'] = $access = Utilities::checkAccess('payroll-timekeeping','salary_detail');
+
+          
           foreach($_journal_tag as $tag)
           {
                $count_tag = Tbl_payroll_journal_tag_employee::checkdata($id, $tag['payroll_journal_tag_id'])->count(); 
@@ -1198,9 +1344,9 @@ class PayrollController extends Member
                array_push($data['_journal_tag'], $tag);
           }
 
-          // dd($data);
-		return view("member.payroll.modal.modal_view_employee", $data);
-	}
+         // dd($data);
+          return view("member.payroll.modal.modal_view_employee", $data);
+     }
 
      public function check_if_allowance_selected($employee_id = 0)
      {
@@ -1255,145 +1401,149 @@ class PayrollController extends Member
           return $data;
      }
 
-	public function modal_view_contract_list($id)
-	{
-		$data['_active'] 		= Tbl_payroll_employee_contract::contractlist($id)->get();
-		$data['_archived'] 		= Tbl_payroll_employee_contract::contractlist($id, 1)->get();
-		$data['employee_id'] 	= $id;
-		return view('member.payroll.modal.modal_view_contract_list', $data);
-	}
+     public function modal_view_contract_list($id)
+     {
+          $data['_active']         = Tbl_payroll_employee_contract::contractlist($id)->get();
+          $data['_archived']       = Tbl_payroll_employee_contract::contractlist($id, 1)->get();
+          $data['employee_id']     = $id;
+          return view('member.payroll.modal.modal_view_contract_list', $data);
+     }
 
-	public function modal_edit_contract($employee_id ,$id)
-	{
-		$data['employee_id'] 		= $employee_id;
-		$data['contract'] 			= Tbl_payroll_employee_contract::where('payroll_employee_contract_id',$id)->first();
-		$data['employement_status'] = Tbl_payroll_employment_status::get();
-		$data['_department'] 		= Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
-		$data['_jobtitle']			= Tbl_payroll_jobtitle::sel(Self::shop_id())->orderBy('payroll_jobtitle_name')->get();
+     public function modal_edit_contract($employee_id ,$id)
+     {
+          $data['employee_id']          = $employee_id;
+          $data['contract']             = Tbl_payroll_employee_contract::where('payroll_employee_contract_id',$id)->first();
+          $data['employement_status'] = Tbl_payroll_employment_status::get();
+          $data['_department']          = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+          $data['_jobtitle']            = Tbl_payroll_jobtitle::sel(Self::shop_id())->orderBy('payroll_jobtitle_name')->get();
 
-		$data['_group'] 			= Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
+          $data['_group']               = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
 
-		return view('member.payroll.modal.modal_edit_contract', $data);
-	}
+          return view('member.payroll.modal.modal_edit_contract', $data);
+     }
 
-	public function modal_update_contract()
-	{
-		$payroll_employee_contract_id 					= Request::input('payroll_employee_contract_id');
-		$update['payroll_department_id'] 				= Request::input('payroll_department_id');
-		$update['payroll_jobtitle_id'] 					= Request::input('payroll_jobtitle_id');
-		$update['payroll_employee_contract_date_hired'] = date('Y-m-d',strtotime(Request::input('payroll_employee_contract_date_hired')));
-		$payroll_employee_contract_date_end				= '';
-		if(Request::input('payroll_employee_contract_date_end') != '')
-		{
-			$payroll_employee_contract_date_end 	= date('Y-m-d',strtotime(Request::input('payroll_employee_contract_date_end')));
-		}
+     public function modal_update_contract()
+     {
+          $payroll_employee_contract_id                          = Request::input('payroll_employee_contract_id');
+          $update['payroll_department_id']                  = Request::input('payroll_department_id');
+          $update['payroll_jobtitle_id']                         = Request::input('payroll_jobtitle_id');
+          $update['payroll_employee_contract_date_hired'] = date('Y-m-d',strtotime(Request::input('payroll_employee_contract_date_hired')));
+          $payroll_employee_contract_date_end                    = '';
+          if(Request::input('payroll_employee_contract_date_end') != '')
+          {
+               $payroll_employee_contract_date_end     = date('Y-m-d',strtotime(Request::input('payroll_employee_contract_date_end')));
+          }
 
-		$update['payroll_employee_contract_date_end'] 	= $payroll_employee_contract_date_end;
-		$update['payroll_group_id'] 					= Request::input('payroll_group_id');
-		$update['payroll_employee_contract_status'] 	= Request::input('payroll_employee_contract_status');
+          $update['payroll_employee_contract_date_end']     = $payroll_employee_contract_date_end;
+          $update['payroll_group_id']                       = Request::input('payroll_group_id');
+          $update['payroll_employee_contract_status']  = Request::input('payroll_employee_contract_status');
+          Tbl_payroll_employee_contract::where('payroll_employee_contract_id', $payroll_employee_contract_id)->update($update);
 
-		Tbl_payroll_employee_contract::where('payroll_employee_contract_id', $payroll_employee_contract_id)->update($update);
+          $return['status']             = 'success';
+          $return['function_name']      = 'employeelist.reload_contract_list';
 
-		$return['status'] 			= 'success';
-		$return['function_name'] 	= 'employeelist.reload_contract_list';
-		return json_encode($return);
-	}
+          return json_encode($return);
+     }
 
-	public function modal_archive_contract($archived, $payroll_employee_contract_id)
-	{
-		$statement = 'archive';
-		if($archived == 0)
-		{
-			$statement = 'restore';
-		}
-		$data['title'] 		= 'Do you really want to '.$statement.' this contract?';
-		$data['html'] 		= '';
-		$data['action'] 	= '/member/payroll/employee_list/archive_contract';
-		$data['id'] 		= $payroll_employee_contract_id;
-		$data['archived'] 	= $archived;
+     public function modal_archive_contract($archived, $payroll_employee_contract_id)
+     {
+          $statement = 'archive';
+          if($archived == 0)
+          {
+               $statement = 'restore';
+          }
+          $data['title']           = 'Do you really want to '.$statement.' this contract?';
+          $data['html']       = '';
+          $data['action']     = '/member/payroll/employee_list/archive_contract';
+          $data['id']         = $payroll_employee_contract_id;
+          $data['archived']   = $archived;
 
-		return view('member.modal.modal_confirm_archived', $data);
-	}
+          return view('member.modal.modal_confirm_archived', $data);
+     }
 
-	public function archive_contract()
-	{
-		$update['payroll_employee_contract_archived'] 	= Request::input('archived');
-		$id 									= Request::input('id');
-		Tbl_payroll_employee_contract::where('payroll_employee_contract_id',$id)->update($update);
+     public function archive_contract()
+     {
+          $update['payroll_employee_contract_archived']     = Request::input('archived');
+          $id                                          = Request::input('id');
+          Tbl_payroll_employee_contract::where('payroll_employee_contract_id',$id)->update($update);
 
-		$return['status'] 			= 'success';
-		$return['function_name'] 	= 'employeelist.reload_contract_list';
-		return json_encode($return);
-	}
+          $return['status']             = 'success';
+          $return['function_name']      = 'employeelist.reload_contract_list';
+          return json_encode($return);
+     }
 
-	public function modal_create_contract($id)
-	{
-		$data['employee_id'] 		= $id;
-		$data['employement_status'] = Tbl_payroll_employment_status::get();
-		$data['_department'] 		= Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
-		$data['_group'] 			= Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
-		return view('member.payroll.modal.modal_create_contract',$data);
-	}
+     public function modal_create_contract($id)
+     {
+          $data['employee_id']          = $id;
+          $data['employement_status'] = Tbl_payroll_employment_status::get();
+          $data['_department']          = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+          $data['_group']               = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
+          return view('member.payroll.modal.modal_create_contract',$data);
+     }
 
-	public function modal_save_contract()
-	{
-		$insert['payroll_employee_id'] 					= Request::input('payroll_employee_id');
-		$insert['payroll_department_id'] 				= Request::input('payroll_department_id');
-		$insert['payroll_jobtitle_id'] 					= Request::input('payroll_jobtitle_id');
-		$insert['payroll_employee_contract_date_hired'] = date('Y-m-d',strtotime(Request::input('payroll_employee_contract_date_hired')));
-		$insert['payroll_employee_contract_date_end'] 	= date('Y-m-d',strtotime(Request::input('payroll_employee_contract_date_end')));
-		$insert['payroll_group_id'] 					= Request::input('payroll_group_id');
-		$insert['payroll_employee_contract_status'] 	= Request::input('payroll_employee_contract_status');
-		Tbl_payroll_employee_contract::insert($insert);
+     public function modal_save_contract()
+     {
+          $insert['payroll_employee_id']                         = Request::input('payroll_employee_id');
+          $insert['payroll_department_id']                  = Request::input('payroll_department_id');
+          $insert['payroll_jobtitle_id']                         = Request::input('payroll_jobtitle_id');
+          $insert['payroll_employee_contract_date_hired'] = date('Y-m-d',strtotime(Request::input('payroll_employee_contract_date_hired')));
+          $insert['payroll_employee_contract_date_end']     = date('Y-m-d',strtotime(Request::input('payroll_employee_contract_date_end')));
+          $insert['payroll_group_id']                       = Request::input('payroll_group_id');
+          $insert['payroll_employee_contract_status']  = Request::input('payroll_employee_contract_status');
+          Tbl_payroll_employee_contract::insert($insert);
 
-		$return['status'] = 'success';
-		return json_encode($return);
-	}
+          $return['status'] = 'success';
+          return json_encode($return);
+     }
 
 
-	public function modal_salary_list($id)
-	{	
-		$data['_active'] = Tbl_payroll_employee_salary::salaylist($id)->get();
-		$data['_archived'] = Tbl_payroll_employee_salary::salaylist($id, 1)->get();
-		return view('member.payroll.modal.modal_salary_list', $data);
-	}
 
-	public function modal_create_salary_adjustment($id)
-	{
-		$data['employee_id'] = $id;
-		return view('member.payroll.modal.modal_create_salary', $data);
-	}
+     public function modal_salary_list($id)
+     {    
+          $data['_active'] = Tbl_payroll_employee_salary::salaylist($id)->get();
+          $data['_archived'] = Tbl_payroll_employee_salary::salaylist($id, 1)->get();
+          return view('member.payroll.modal.modal_salary_list', $data);
+     }
 
-	public function modal_edit_salary_adjustment($id)
-	{
-		$data['salary'] = Tbl_payroll_employee_salary::where('payroll_employee_salary_id',$id)->first();
-		return view('member.payroll.modal.modal_edit_salary', $data);
-	}
+     public function modal_create_salary_adjustment($id)
+     {
+          $data['employee_id'] = $id;
+          return view('member.payroll.modal.modal_create_salary', $data);
+     }
 
-	public function modal_update_salary()
-	{
-		$payroll_employee_salary_id						= Request::input('payroll_employee_salary_id');
-		$update['payroll_employee_salary_monthly'] 		= Request::input('payroll_employee_salary_monthly');
-		$update['payroll_employee_salary_daily'] 		= Request::input('payroll_employee_salary_daily');
-		$update['payroll_employee_salary_taxable'] 		= Request::input('payroll_employee_salary_taxable');
-		$update['payroll_employee_salary_sss'] 			= Request::input('payroll_employee_salary_sss');
-		$update['payroll_employee_salary_philhealth'] 	= Request::input('payroll_employee_salary_philhealth');
-		$update['payroll_employee_salary_pagibig'] 		= Request::input('payroll_employee_salary_pagibig');
-		$update['payroll_employee_salary_cola'] 		= Request::input('payroll_employee_salary_cola');
-		
-		$payroll_employee_salary_effective_date			= '';
-		if(Request::input('payroll_employee_salary_effective_date') != '')
-		{
-			 $payroll_employee_salary_effective_date = date('Y-m-d',strtotime(Request::input('payroll_employee_salary_effective_date')));
-		}
-		
-		$payroll_employee_salary_minimum_wage 			= 0;
-		if(Request::has('payroll_employee_salary_minimum_wage'))
-		{
-			$payroll_employee_salary_minimum_wage 		= Request::has('payroll_employee_salary_minimum_wage');
-		}
-		$update['payroll_employee_salary_minimum_wage'] = $payroll_employee_salary_minimum_wage;
-		$update['payroll_employee_salary_effective_date'] = $payroll_employee_salary_effective_date;
+     public function modal_edit_salary_adjustment($id)
+     {
+          $data['salary'] = Tbl_payroll_employee_salary::where('payroll_employee_salary_id',$id)->first();
+          return view('member.payroll.modal.modal_edit_salary', $data);
+     }
+
+     public function modal_update_salary()
+     {
+          $payroll_employee_salary_id                       = Request::input('payroll_employee_salary_id');
+          $update['payroll_employee_salary_monthly']        = Request::input('payroll_employee_salary_monthly');
+          $update['payroll_employee_salary_daily']          = Request::input('payroll_employee_salary_daily');
+          $update['payroll_employee_salary_taxable']        = Request::input('payroll_employee_salary_taxable');
+          $update['payroll_employee_salary_sss']            = Request::input('payroll_employee_salary_sss');
+          $update['payroll_employee_salary_philhealth']     = Request::input('payroll_employee_salary_philhealth');
+          $update['payroll_employee_salary_pagibig']        = Request::input('payroll_employee_salary_pagibig');
+          $update['payroll_employee_salary_cola']           = Request::input('payroll_employee_salary_cola');
+          $update['monthly_cola']                           = Request::input('payroll_employee_salary_monthly_cola');
+          $update['tbl_payroll_employee_custom_compute']    = Request::has('tbl_payroll_employee_custom_compute') ? Request::input('tbl_payroll_employee_custom_compute') : 0;
+
+          
+          $payroll_employee_salary_effective_date           = '';
+          if(Request::input('payroll_employee_salary_effective_date') != '')
+          {
+                $payroll_employee_salary_effective_date = date('Y-m-d',strtotime(Request::input('payroll_employee_salary_effective_date')));
+          }
+          
+          $payroll_employee_salary_minimum_wage             = 0;
+          if(Request::has('payroll_employee_salary_minimum_wage'))
+          {
+               $payroll_employee_salary_minimum_wage        = Request::has('payroll_employee_salary_minimum_wage');
+          }
+          $update['payroll_employee_salary_minimum_wage'] = $payroll_employee_salary_minimum_wage;
+          $update['payroll_employee_salary_effective_date'] = $payroll_employee_salary_effective_date;
 
           $is_deduct_tax_default = 0;
           $deduct_tax_custom = 0;
@@ -1437,61 +1587,64 @@ class PayrollController extends Member
           $update['is_deduct_pagibig_default']    = $is_deduct_pagibig_default;
           $update['deduct_pagibig_custom']        = $deduct_pagibig_custom;
 
-		Tbl_payroll_employee_salary::where('payroll_employee_salary_id',$payroll_employee_salary_id)->update($update);
+          Tbl_payroll_employee_salary::where('payroll_employee_salary_id',$payroll_employee_salary_id)->update($update);
 
-		$return['function_name'] = 'employeelist.reload_salary_list';
-		$return['status'] = 'success';
-		return json_encode($return);
-	}
+          $return['function_name'] = 'employeelist.reload_salary_list';
+          $return['status'] = 'success';
+          return json_encode($return);
+     }
 
-	public function modal_archived_salary($archived, $id)
-	{
-		$statement = 'archive';
-		if($archived == 0)
-		{
-			$statement = 'restore';
-		}
-		$data['title'] 	= 'Do you really want to '.$statement.' this salary?';
-		$data['html'] 		= '';
-		$data['action'] 	= '/member/payroll/employee_list/archived_salary';
-		$data['id'] 		= $id;
-		$data['archived'] 	= $archived;
+     public function modal_archived_salary($archived, $id)
+     {
+          $statement = 'archive';
+          if($archived == 0)
+          {
+               $statement = 'restore';
+          }
+          $data['title']      = 'Do you really want to '.$statement.' this salary?';
+          $data['html']       = '';
+          $data['action']     = '/member/payroll/employee_list/archived_salary';
+          $data['id']         = $id;
+          $data['archived']   = $archived;
 
-		return view('member.modal.modal_confirm_archived', $data);
-	}
+          return view('member.modal.modal_confirm_archived', $data);
+     }
 
-	public function archived_salary()
-	{
-		$update['payroll_employee_salary_archived'] = Request::input('archived');
-		$id 										= Request::input('id');
-		Tbl_payroll_employee_salary::where('payroll_employee_salary_id',$id)->update($update);
+     public function archived_salary()
+     {
+          $update['payroll_employee_salary_archived'] = Request::input('archived');
+          $id                                               = Request::input('id');
+          Tbl_payroll_employee_salary::where('payroll_employee_salary_id',$id)->update($update);
 
-		$return['status'] 			= 'success';
-		$return['function_name'] 	= 'employeelist.reload_salary_list';
-		return json_encode($return);
-	}
+          $return['status']             = 'success';
+          $return['function_name']      = 'employeelist.reload_salary_list';
+          return json_encode($return);
+     }
 
-	public function modal_save_salary()
-	{
-		$insert['payroll_employee_id'] 					= Request::input('payroll_employee_id');
-		$insert['payroll_employee_salary_monthly'] 		= Request::input('payroll_employee_salary_monthly');
-		$insert['payroll_employee_salary_daily'] 		= Request::input('payroll_employee_salary_daily');
-		$insert['payroll_employee_salary_taxable'] 		= Request::input('payroll_employee_salary_taxable');
-		$insert['payroll_employee_salary_sss'] 			= Request::input('payroll_employee_salary_sss');
-		$insert['payroll_employee_salary_philhealth'] 	= Request::input('payroll_employee_salary_philhealth');
-		$insert['payroll_employee_salary_pagibig'] 		= Request::input('payroll_employee_salary_pagibig');
+     public function modal_save_salary()
+     {
+          $insert['payroll_employee_id']                    = Request::input('payroll_employee_id');
+          $insert['payroll_employee_salary_monthly']        = Request::input('payroll_employee_salary_monthly');
+          $insert['payroll_employee_salary_daily']          = Request::input('payroll_employee_salary_daily');
+          $insert['payroll_employee_salary_taxable']        = Request::input('payroll_employee_salary_taxable');
+          $insert['payroll_employee_salary_sss']            = Request::input('payroll_employee_salary_sss');
+          $insert['payroll_employee_salary_philhealth']     = Request::input('payroll_employee_salary_philhealth');
+          $insert['payroll_employee_salary_pagibig']        = Request::input('payroll_employee_salary_pagibig');
+          $insert['monthly_cola']                           = Request::input('payroll_employee_salary_monthly_cola');
 
-		$payroll_employee_salary_minimum_wage = 0;
-		if(Request::has('payroll_employee_salary_minimum_wage'))
-		{
-			$payroll_employee_salary_minimum_wage = Request::input('payroll_employee_salary_minimum_wage');
-		}
+          $payroll_employee_salary_minimum_wage = 0;
+          if(Request::has('payroll_employee_salary_minimum_wage'))
+          {
+               $payroll_employee_salary_minimum_wage = Request::input('payroll_employee_salary_minimum_wage');
+          }
 
-		$insert['payroll_employee_salary_minimum_wage'] = $payroll_employee_salary_minimum_wage;
-		$insert['payroll_employee_salary_effective_date'] = date('Y-m-d',strtotime(Request::input('payroll_employee_salary_effective_date')));
-		$insert['payroll_employee_salary_cola']			= Request::input('payroll_employee_salary_cola');
-
-
+          $insert['payroll_employee_salary_minimum_wage'] = $payroll_employee_salary_minimum_wage;
+          $insert['payroll_employee_salary_effective_date'] = date('Y-m-d',strtotime(Request::input('payroll_employee_salary_effective_date')));
+          $insert['payroll_employee_salary_cola']           = Request::input('payroll_employee_salary_cola');
+          $insert['monthly_cola']                           = Request::has('monthly_cola') ? Request::input('monthly_cola') : 0;
+          $insert['tbl_payroll_employee_custom_compute']    = Request::has('tbl_payroll_employee_custom_compute') ? Request::input('tbl_payroll_employee_custom_compute') : 0;
+          
+          
           $is_deduct_tax_default        = 0;
           $deduct_tax_custom            = 0;
           $is_deduct_sss_default        = 0;
@@ -1536,6 +1689,7 @@ class PayrollController extends Member
           $insert['deduct_pagibig_custom']        = $deduct_pagibig_custom;
 
 		Tbl_payroll_employee_salary::insert($insert);
+
 		$return['status'] = 'success';
 		
 		return json_encode($return);
@@ -1543,11 +1697,11 @@ class PayrollController extends Member
 
 	public function modal_employee_update()
 	{
-		$payroll_employee_id 							= Request::input('payroll_employee_id');
+		$payroll_employee_id 						= Request::input('payroll_employee_id');
 		$update_basic['payroll_employee_title_name'] 	= Request::input('payroll_employee_title_name');
 		$update_basic['payroll_employee_first_name'] 	= Request::input('payroll_employee_first_name');
 		$update_basic['payroll_employee_middle_name'] 	= Request::input('payroll_employee_middle_name');
-		$update_basic['payroll_employee_last_name'] 	= Request::input('payroll_employee_last_name');
+		$update_basic['payroll_employee_last_name'] 	     = Request::input('payroll_employee_last_name');
 		$update_basic['payroll_employee_suffix_name'] 	= Request::input('payroll_employee_suffix_name');
 		$update_basic['payroll_employee_number'] 		= Request::input('payroll_employee_number');
 		$update_basic['payroll_employee_atm_number'] 	= Request::input('payroll_employee_atm_number');
@@ -1555,6 +1709,10 @@ class PayrollController extends Member
 		$update_basic['payroll_employee_contact'] 		= Request::input('payroll_employee_contact');
 		$update_basic['payroll_employee_email'] 		= Request::input('payroll_employee_email');
 		$update_basic['payroll_employee_display_name'] 	= Request::input('payroll_employee_display_name');
+
+          $update_basic['branch_location_id']               = Request::input('branch_location_id') != null ? Request::input('branch_location_id') : 0;
+          $update_basic['shift_code_id']                    = Request::input('shift_code_id') != null ? Request::input('shift_code_id') : 0;
+
 		$update_basic['payroll_employee_gender'] 		= Request::input('payroll_employee_gender');
 		$update_basic['payroll_employee_street'] 		= Request::input('payroll_employee_street');
 		$update_basic['payroll_employee_city'] 			= Request::input('payroll_employee_city');
@@ -1571,38 +1729,38 @@ class PayrollController extends Member
           
 
 
-		Tbl_payroll_employee_basic::where('payroll_employee_id',$payroll_employee_id)->update($update_basic);
+          Tbl_payroll_employee_basic::where('payroll_employee_id',$payroll_employee_id)->update($update_basic);
 
 
-		$payroll_dependent_name 		= Request::input('payroll_dependent_name');
-		$payroll_dependent_birthdate 	= Request::input('payroll_dependent_birthdate');
-		$payroll_dependent_relationship = Request::input('payroll_dependent_relationship');
+          $payroll_dependent_name       = Request::input('payroll_dependent_name');
+          $payroll_dependent_birthdate  = Request::input('payroll_dependent_birthdate');
+          $payroll_dependent_relationship = Request::input('payroll_dependent_relationship');
 
-		/* dependent insert */
-		Tbl_payroll_employee_dependent::where('payroll_employee_id', $payroll_employee_id)->delete();
+          /* dependent insert */
+          Tbl_payroll_employee_dependent::where('payroll_employee_id', $payroll_employee_id)->delete();
 
-		$insert_dependent = array();
+          $insert_dependent = array();
 
-		$temp = "";
-		foreach($payroll_dependent_name as $key => $dependent)
-		{
-			if($dependent != "")
-			{
-				$temp['payroll_employee_id']			= $payroll_employee_id;
-				$temp['payroll_dependent_name'] 		= $dependent;
+          $temp = "";
+          foreach($payroll_dependent_name as $key => $dependent)
+          {
+               if($dependent != "")
+               {
+                    $temp['payroll_employee_id']            = $payroll_employee_id;
+                    $temp['payroll_dependent_name']         = $dependent;
 
-				$birthdate = '';
-				if($payroll_dependent_birthdate[$key] != '')
-				{	
-					$birthdate 							= date('Y-m-d',strtotime($payroll_dependent_birthdate[$key]));
-				}
-				
-				$temp['payroll_dependent_birthdate'] 	= $birthdate;
-				$temp['payroll_dependent_relationship'] = $payroll_dependent_relationship[$key];
+                    $birthdate = '';
+                    if($payroll_dependent_birthdate[$key] != '')
+                    {    
+                         $birthdate                                   = date('Y-m-d',strtotime($payroll_dependent_birthdate[$key]));
+                    }
+                    
+                    $temp['payroll_dependent_birthdate']    = $birthdate;
+                    $temp['payroll_dependent_relationship'] = $payroll_dependent_relationship[$key];
 
-				array_push($insert_dependent, $temp);
-			}
-		}
+                    array_push($insert_dependent, $temp);
+               }
+          }
 
           Tbl_payroll_employee_dependent::insert($insert_dependent);
 
@@ -1658,7 +1816,7 @@ class PayrollController extends Member
                     Tbl_payroll_leave_employee::insert($leave_insert);
                }
           }
-		
+          
 
           $update_deduction['payroll_deduction_employee_archived'] = 1;
           Tbl_payroll_deduction_employee::where('payroll_employee_id',$payroll_employee_id)->update($update_deduction);
@@ -1712,89 +1870,100 @@ class PayrollController extends Member
                }
           }
 
-		// Self::update_tbl_search();
-		$return['function_name'] = 'employeelist.reload_employee_list';
-		$return['status'] = 'success';
-		return json_encode($return);
-	}
+          // Self::update_tbl_search();
+          
+          if(Request::input("source") == "time_keeping")
+          {
+               $return['function_name'] = 'timesheet_employee_list.action_load_table';
+          }
+          else
+          {
+               $return['function_name'] = 'employeelist.reload_employee_list';
+          }
+          
+          
+          $return['status'] = 'success';
+          return json_encode($return);
+     }
 
-	/* PREDICTIVE TEXT SEARCH*/
-	public function search_employee_ahead()
-	{
-		$query = Request::input('query');
-		$status = Request::input("status");
-		// dd($status);
-		$_return = Tbl_payroll_employee_search::search($query, $status, '0000-00-00', Self::shop_id())
-											 ->select('tbl_payroll_employee_basic.payroll_employee_display_name as employee')
-											 ->orderBy("tbl_payroll_employee_basic.payroll_employee_first_name")
-											 ->groupBy('tbl_payroll_employee_basic.payroll_employee_id')
-											 ->get();
-		$data = array();
-		foreach($_return as $return)
-		{
-			array_push($data, $return->employee);
-		}
+     /* PREDICTIVE TEXT SEARCH*/
+     public function search_employee_ahead()
+     {
+          $query = Request::input('query');
+          $status = Request::input("status");
+          // dd($status);
+          $_return = Tbl_payroll_employee_search::search($query, $status, '0000-00-00', Self::shop_id())
+                                                        ->select('tbl_payroll_employee_basic.payroll_employee_display_name as employee')
+                                                        ->orderBy("tbl_payroll_employee_basic.payroll_employee_first_name")
+                                                        ->groupBy('tbl_payroll_employee_basic.payroll_employee_id')
+                                                        ->get();
 
-		return json_encode($data);
-		// return $_return->toJson();
-	}
+          $data = array();
+          
+          foreach($_return as $return)
+          {
+               array_push($data, $return->employee);
+          }
 
-	public function search_employee()
-	{
-		$trigger 			= Request::input('trigger');
-		$employee_search 	= Request::input('employee_search');
-		$data['_active']    = Tbl_payroll_employee_search::search($employee_search, $trigger,'0000-00-00' ,Self::shop_id())
-											 ->orderBy("tbl_payroll_employee_basic.payroll_employee_first_name")
-											 ->groupBy('tbl_payroll_employee_basic.payroll_employee_id')
-											 ->get();
-          // dd(Self::shop_id());
+          return json_encode($data);
+          // return $_return->toJson();
+     }
 
-		return view('member.payroll.reload.employee_list_reload', $data);
-	}
+     public function search_employee()
+     {
+          $trigger            = Request::input('trigger');
+          $employee_search    = Request::input('employee_search');
+          $data['_active']    = Tbl_payroll_employee_search::search($employee_search, $trigger,'0000-00-00' ,Self::shop_id())
+                                                        ->orderBy("tbl_payroll_employee_basic.payroll_employee_first_name")
+                                                        ->groupBy('tbl_payroll_employee_basic.payroll_employee_id')
+                                                        ->get();
 
-	public function update_tbl_search()
-	{
-		Tbl_payroll_employee_search::truncate();
-		$_emp = tbl_payroll_employee_basic::get();
+          return view('member.payroll.reload.employee_list_reload', $data);
+     }
 
-		$insert = array();
-		foreach($_emp as $emp)
-		{
-			$temp['payroll_search_employee_id'] = $emp->payroll_employee_id;
-			$temp['body']	=	$emp->payroll_employee_title_name.' '.$emp->payroll_employee_first_name.' '.$emp->payroll_employee_middle_name.' '.$emp->payroll_employee_last_name.' '.$emp->payroll_employee_suffix_name.' '.$emp->payroll_employee_display_name.' '.$emp->payroll_employee_email;
-			array_push($insert, $temp);
-		}
-		if(!empty($insert))
-		{
-			Tbl_payroll_employee_search::insert($insert);
-		}
-	}
+     public function update_tbl_search()
+     {
+          Tbl_payroll_employee_search::truncate();
+          $_emp = tbl_payroll_employee_basic::get();
 
-	public function reload_employee_list()
-	{
-		$company_id = 0;
-		$employement_status = 0;
-		if(Request::has('company_id'))
-		{
-			$company_id = Request::input('company_id');
-		}
-		if(Request::has('employement_status'))
-		{
-			$employement_status = Request::input('employement_status');
-		}
-		$parameter['date'] 					= date('Y-m-d');
-		$parameter['company_id'] 			= $company_id;
-		$parameter['employement_status'] 	= $employement_status;
-		$parameter['shop_id'] 				= Self::shop_id();
-		$data['_active'] = Tbl_payroll_employee_basic::selemployee($parameter)->get();
+          $insert = array();
+          foreach($_emp as $emp)
+          {
+               $temp['payroll_search_employee_id'] = $emp->payroll_employee_id;
+               $temp['body']  =    $emp->payroll_employee_title_name.' '.$emp->payroll_employee_first_name.' '.$emp->payroll_employee_middle_name.' '.$emp->payroll_employee_last_name.' '.$emp->payroll_employee_suffix_name.' '.$emp->payroll_employee_display_name.' '.$emp->payroll_employee_email;
+               array_push($insert, $temp);
+          }
+          if(!empty($insert))
+          {
+               Tbl_payroll_employee_search::insert($insert);
+          }
+     }
 
-		return view('member.payroll.reload.employee_list_reload', $data);
-	}
+     public function reload_employee_list()
+     {
+          $company_id = 0;
+          $employement_status = 0;
+          if(Request::has('company_id'))
+          {
+               $company_id = Request::input('company_id');
+          }
+          if(Request::has('employement_status'))
+          {
+               $employement_status = Request::input('employement_status');
+          }
+          $parameter['date']                      = date('Y-m-d');
+          $parameter['company_id']                = $company_id;
+          $parameter['employement_status']   = $employement_status;
+          $parameter['shop_id']                   = Self::shop_id();
+          $data['_active'] = Tbl_payroll_employee_basic::selemployee($parameter)->get();
 
-	/* EMPLOYEE END */
+          return view('member.payroll.reload.employee_list_reload', $data);
+     }
 
-	public function payroll_configuration()
-	{
+     /* EMPLOYEE END */
+
+     public function payroll_configuration()
+     {
 
           $_access = Self::payroll_configuration_page();
 
@@ -1802,7 +1971,6 @@ class PayrollController extends Member
 
           foreach($_access as $access)
           {
-
                if(Utilities::checkAccess('payroll-configuration',str_replace(' ', '_', $access['access_name'])) == 1)
                {
                     array_push($link, $access);
@@ -1810,485 +1978,681 @@ class PayrollController extends Member
           }
 
           $data['_link'] = $link;
-		return view('member.payroll.payrollconfiguration', $data);
-	}
+          return view('member.payroll.payrollconfiguration', $data);
+     }
 
      /* payroll configuration access page */
      public function payroll_configuration_page()
      {
+          $data[0]['access_name']  = 'Branch Location';
+          $data[0]['link']         = '/member/payroll/branch_name';
 
-          $data[0]['access_name'] = 'Department';
-          $data[0]['link']        = '/member/payroll/departmentlist';
+          $data[1]['access_name']  = 'Department';
+          $data[1]['link']         = '/member/payroll/departmentlist';
 
-          $data[1]['access_name'] = 'Job Title';
-          $data[1]['link']        = '/member/payroll/jobtitlelist';
+          $data[2]['access_name']  = 'Job Title';
+          $data[2]['link']         = '/member/payroll/jobtitlelist';
 
-          $data[2]['access_name'] = 'Holiday';
-          $data[2]['link']        = '/member/payroll/holiday';
+          $data[3]['access_name']  = 'Holiday';
+          $data[3]['link']         = '/member/payroll/holiday';
 
-          $data[3]['access_name'] = 'Allowances';
-          $data[3]['link']        = '/member/payroll/allowance';
+          $data[31]['access_name'] = 'Holiday V2';
+          $data[31]['link']        = '/member/payroll/holiday/v2';
 
-          $data[4]['access_name'] = 'Deductions';
-          $data[4]['link']        = '/member/payroll/deduction';
+          $data[4]['access_name'] = 'Holiday Default';
+          $data[4]['link']        = '/member/payroll/holiday_default';
 
-          $data[5]['access_name'] = 'Leave';
-          $data[5]['link']        = '/member/payroll/leave';
+          $data[5]['access_name']  = 'Allowances';
+          $data[5]['link']         = '/member/payroll/allowance';
 
-          $data[6]['access_name'] = 'Payroll Group';
-          $data[6]['link']        = '/member/payroll/payroll_group';
+          $data[51]['access_name'] = 'Allowances V2';
+          $data[51]['link']        = '/member/payroll/allowance/v2';
 
-          $data[7]['access_name'] = 'Shift Template';
-          $data[7]['link']        = '/member/payroll/shift_template';
+          $data[6]['access_name']  = 'Deductions';
+          $data[6]['link']         = '/member/payroll/deduction';
+          
+          $data[61]['access_name'] = 'Deductions V2';
+          $data[61]['link']        = '/member/payroll/deduction/v2';
 
-          $data[8]['access_name'] = 'Journal Tags';
-          $data[8]['link']        = '/member/payroll/payroll_jouarnal';
+          $data[7]['access_name']  = 'Leave';
+          $data[7]['link']         = '/member/payroll/leave';
 
-          $data[9]['access_name'] = 'Payslip';
-          $data[9]['link']        = '/member/payroll/custom_payslip';
+          $data[8]['access_name']  = 'Payroll Group';
+          $data[8]['link']         = '/member/payroll/payroll_group';
 
-          $data[10]['access_name'] = 'Tax Period';
-          $data[10]['link']        = '/member/payroll/tax_period';
+          $data[9]['access_name']  = 'Shift Template';
+          $data[9]['link']         = '/member/payroll/shift_template';
 
-          $data[11]['access_name'] = 'Tax Table';
-          $data[11]['link']        = '/member/payroll/tax_table_list';
+          $data[10]['access_name'] = 'Journal Tags';
+          $data[10]['link']        = '/member/payroll/payroll_jouarnal';
 
-          $data[12]['access_name'] = 'SSS Table';
-          $data[12]['link']        = '/member/payroll/sss_table_list';
+          $data[11]['access_name'] = 'Payslip';
+          $data[11]['link']        = '/member/payroll/custom_payslip';
 
-          $data[13]['access_name'] = 'Philhealth Table';
-          $data[13]['link']        = '/member/payroll/philhealth_table_list';
+          $data[12]['access_name'] = 'Tax Period';
+          $data[12]['link']        = '/member/payroll/tax_period';
 
-          $data[14]['access_name'] = 'Pagibig/HDMF';
-          $data[14]['link']        = '/member/payroll/pagibig_formula';
+          $data[13]['access_name'] = 'Tax Table';
+          $data[13]['link']        = '/member/payroll/tax_table_list';
+
+          $data[14]['access_name'] = 'SSS Table';
+          $data[14]['link']        = '/member/payroll/sss_table_list';
+
+          $data[15]['access_name'] = 'Philhealth Table';
+          $data[15]['link']        = '/member/payroll/philhealth_table_list';
+
+          $data[16]['access_name'] = 'Pagibig/HDMF';
+          $data[16]['link']        = '/member/payroll/pagibig_formula';
+
+          $data[17]['access_name'] = 'Reset';
+          $data[17]['link']        = '/member/payroll/reset_payroll';
 
           return $data;
      }
 
-	/* COMPANY START */
 
-	public function company_list()
-	{
-		$data['_active'] = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->paginate($this->paginate_count);
-		$data['_archived'] = Tbl_payroll_company::selcompany(Self::shop_id(),1)->orderBy('tbl_payroll_company.payroll_company_name')->paginate($this->paginate_count);
+     /* payroll branch name */
+     public function branch_name()
+     {
+          $data['_active'] = Tbl_payroll_branch_location::getdata(Self::shop_id())->orderBy('branch_location_name')->get();
+          $data['_archive'] = Tbl_payroll_branch_location::getdata(Self::shop_id(), 1)->orderBy('branch_location_name')->get();
+          return view('member.payroll.side_container.branch_name', $data);
+     }
 
-		return view('member.payroll.companylist', $data);
-	}
+     public function modal_create_branch()
+     {
+          return view('member.payroll.modal.modal_create_branch');
+     }
 
-	public function modal_create_company()
-	{
-		$company_logo = '';
-		if(Session::has('company_logo'))
-		{
-			$company_logo = Session::get('company_logo');
-		}
-		$data['company_logo'] = $company_logo;
-		$data['_rdo'] = Tbl_payroll_rdo::orderBy('rdo_code')->get();
-		$data['_company'] = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_parent_company_id',0)->orderBy('tbl_payroll_company.payroll_company_name')->get();
-		$data['_bank'] = Tbl_payroll_bank_convertion::get();
-		return view('member.payroll.modal.modal_create_company', $data);
-	}
+     public function modal_save_branch()
+     {
+          // Tbl_payroll_branch_location::
+          $insert['branch_location_name'] = Request::input('branch_location_name');
+          $insert['shop_id']              = Self::shop_id();
+          Tbl_payroll_branch_location::insert($insert);
 
-	public function upload_company_logo()
-	{
-		$file = Request::file('file');
-        $ImagName = value(function() use ($file){
-            $filename = str_random(10). date('ymdhis') . '.' . $file->getClientOriginalExtension();
-            return strtolower($filename);
-        });
-        $path = 'assets/payroll/company_logo';
-        if (!file_exists($path)) {
+          $return['status']             = 'success';
+          $return['data']               = '';
+          $return['function_name']      = 'payrollconfiguration.reload_branch';
+          return json_encode($return);
+     }
+
+
+     public function modal_edit_branch($id)
+     {
+          $data['branch'] = Tbl_payroll_branch_location::where('branch_location_id', $id)->first();
+          return view('member.payroll.modal.modal_update_branch', $data);
+     }
+
+     public function modal_update_branch()
+     {
+          $update['branch_location_name'] = Request::input('branch_location_name');
+          $branch_location_id           = Request::input('branch_location_id');
+
+          Tbl_payroll_branch_location::where('branch_location_id', $branch_location_id)->update($update);
+
+          $return['status']             = 'success';
+          $return['data']               = '';
+          $return['function_name']      = 'payrollconfiguration.reload_branch';
+          return json_encode($return);
+     }
+
+
+     public function modal_archive_branch($archive, $id)
+     {
+          $statement = 'archive';
+          if($archive == 0)
+          {
+               $statement = 'restore';
+          }
+
+          $file_name          = Tbl_payroll_branch_location::where('branch_location_id', $id)->value('branch_location_name');
+
+          $data['title']      = 'Do you really want to '.$statement.' '.$file_name.'?';
+          $data['html']       = '';
+          $data['action']     = '/member/payroll/branch_name/archive_branch';
+          $data['id']         = $id;
+          $data['archived']   = $archive;
+
+          return view('member.modal.modal_confirm_archived', $data);
+     }
+
+     public function archive_branch()
+     {
+
+          $update['branch_location_archived'] = Request::input('archived');
+
+          $branch_location_id           = Request::input('id');
+
+          Tbl_payroll_branch_location::where('branch_location_id', $branch_location_id)->update($update);
+
+          $return['status']             = 'success';
+          $return['data']               = '';
+          $return['function_name']      = 'payrollconfiguration.reload_branch';
+          return json_encode($return);
+     }
+
+     /* payroll reset start */
+     public function reset_payroll()
+     {
+          return view('member.payroll.side_container.reset_payroll');
+     }
+
+     /* password for resetting payroll */
+
+     public function reset_payroll_password()
+     {
+          return 'water123';
+     }
+
+     public function reset_time_sheet()
+     {
+          $data['_period'] = Tbl_payroll_period::sel(Self::shop_id())->orderBy('payroll_period_start')->get();
+          return view('member.payroll.modal.reset_time_sheet', $data);
+     }
+
+     public function reset_time_sheet_select()
+     {
+          $period = Request::input('period');
+          $company = Tbl_payroll_period_company::selperiod($period)->orderBy('payroll_company_name')->get();
+          return $company->toJson();
+     }
+
+     public function reset_time_sheet_action()
+     {
+          $return['status'] = 'wrong password';
+          if(Request::input('password') == Self::reset_payroll_password())
+          {
+               $count = 0;
+               if(Request::has('period_company'))
+               {
+                    foreach(Request::input('period_company') as $key => $period)
+                    {
+                         $count += Tbl_payroll_time_sheet::getpercompany($period)->count();
+                         $period_list = Tbl_payroll_time_sheet::getpercompany($period)->delete();
+                    }
+               }
+
+               $return['status']   = 'success';
+               $return['affected'] = $count.' time sheet/s has been deleted';
+          }
+
+          return collect($return)->toJson();
+     }
+     /* payroll reset end */
+
+     /* COMPANY START */
+     public function company_list()
+     {
+          // $data['_page'] = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_parent_company_id',0)->orderBy('tbl_payroll_company.payroll_company_name')->paginate($this->paginate_count);
+          $data['_archived'] = Tbl_payroll_company::selcompany(Self::shop_id(),1)->orderBy('tbl_payroll_company.payroll_company_name')->paginate($this->paginate_count);
+
+          $_active = array();
+          $data['_parent'] = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_parent_company_id',0)->orderBy('payroll_company_name')->paginate($this->paginate_count);
+
+          foreach($data['_parent'] as $parent)
+          {
+               $temp['company'] = $parent;
+               $temp['branch'] = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_parent_company_id', $parent->payroll_company_id)->orderBy('payroll_company_name')->get();
+               array_push($_active, $temp);
+          }
+
+          // $data['_active'] = Payroll::company_heirarchy(Self::shop_id(), $this->paginate_count);
+          $data['_active'] = $_active;
+          // dd($data['_active']);
+          return view('member.payroll.companylist', $data);
+     }
+
+
+     // public function company_heirarchy
+
+     public function modal_create_company()
+     {
+          $is_sub = Request::input('is_sub') == "true" ? true : false ;
+          $data['is_sub'] = $is_sub;
+
+          $company_logo = '';
+          if(Session::has('company_logo'))
+          {
+               $company_logo = Session::get('company_logo');
+          }
+          $data['company_logo'] = $company_logo;
+          $data['_rdo'] = Tbl_payroll_rdo::orderBy('rdo_code')->get();
+          $data['_company'] = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_parent_company_id',0)->orderBy('tbl_payroll_company.payroll_company_name')->get();
+          $data['_bank'] = Tbl_payroll_bank_convertion::get();
+          return view('member.payroll.modal.modal_create_company', $data);
+     }
+
+     public function upload_company_logo()
+     {
+          $file = Request::file('file');
+          $ImagName = value(function() use ($file){
+               $filename = str_random(10). date('ymdhis') . '.' . $file->getClientOriginalExtension();
+               return strtolower($filename);
+          });
+          $path = 'assets/payroll/company_logo';
+          if (!file_exists($path)) {
                File::makeDirectory(public_path($path), 0775, true, true);
-		    // mkdir($path, 0777, true);
-		}
-        $file->move(public_path($path), $ImagName);
+              // mkdir($path, 0777, true);
+          }
+          $file->move(public_path($path), $ImagName);
 
-        $session_logo = 'company_logo';
-        if(Request::input('action') == 'update')
-        {
-        	$session_logo = 'company_logo_update';
-        }
+          $session_logo = 'company_logo';
+          if(Request::input('action') == 'update')
+          {
+               $session_logo = 'company_logo_update';
+          }
 
-        Session::put($session_logo,'/'.$path.'/'.$ImagName);
+          Session::put($session_logo,'/'.$path.'/'.$ImagName);
 
-        return '/'.$path.'/'.$ImagName;
-	}
+          return '/'.$path.'/'.$ImagName;    
+     }
 
-	public function modal_save_company()
-	{
-		$insert['payroll_company_name'] 				= Request::input('payroll_company_name');
-		$insert['payroll_company_code'] 				= Request::input('payroll_company_code');
-		$insert['payroll_company_rdo'] 					= Request::input('payroll_company_rdo');
-		$insert['payroll_company_address'] 				= Request::input('payroll_company_address');
-		$insert['payroll_company_contact'] 				= Request::input('payroll_company_contact');
-		$insert['payroll_company_email'] 				= Request::input('payroll_company_email');
-		$insert['payroll_company_nature_of_business'] 	= Request::input('payroll_company_nature_of_business');
-		$insert['payroll_company_date_started'] 		= Request::input('payroll_company_date_started');
-		$insert['payroll_company_tin'] 					= Request::input('payroll_company_tin');
-		$insert['payroll_company_sss'] 					= Request::input('payroll_company_sss');
-		$insert['payroll_company_philhealth'] 			= Request::input('payroll_company_philhealth');
-		$insert['payroll_company_pagibig'] 				= Request::input('payroll_company_pagibig');
-		$insert['shop_id']								= Self::shop_id();
-		$insert['payroll_parent_company_id']			= Request::input('payroll_parent_company_id');
-		$insert['payroll_company_bank']					= Request::input('payroll_company_bank');
+     public function modal_save_company()
+     {
+          $parent = Request::input('payroll_parent_company_id') != 0 || Request::input('payroll_parent_company_id') != null ? Request::input('payroll_parent_company_id') : 0;
 
-		$logo = '/assets/images/no-logo.png';
-		if(Session::has('company_logo'))
-		{
-			$logo = Session::get('company_logo');
-		}
-		$insert['payroll_company_logo'] = $logo;
-		Tbl_payroll_company::insert($insert);
-		Session::forget('company_logo');
+          $insert['payroll_company_name']                   = Request::input('payroll_company_name');
+          $insert['payroll_company_code']                   = Request::input('payroll_company_code');
+          $insert['payroll_company_rdo']                    = Request::input('payroll_company_rdo');
+          $insert['payroll_company_address']                = Request::input('payroll_company_address');
+          $insert['payroll_company_contact']                = Request::input('payroll_company_contact');
+          $insert['payroll_company_email']                  = Request::input('payroll_company_email');
+          $insert['payroll_company_nature_of_business']     = Request::input('payroll_company_nature_of_business');
+          $insert['payroll_company_date_started']           = date('Y-m-d', strtotime(Request::input('payroll_company_date_started')));
+          $insert['payroll_company_tin']                    = Request::input('payroll_company_tin');
+          $insert['payroll_company_sss']                    = Request::input('payroll_company_sss');
+          $insert['payroll_company_philhealth']             = Request::input('payroll_company_philhealth');
+          $insert['payroll_company_pagibig']                = Request::input('payroll_company_pagibig');
+          $insert['shop_id']                                = Self::shop_id();
+          $insert['payroll_parent_company_id']              = $parent;
+          $insert['payroll_company_bank']                   = Request::input('payroll_company_bank');
+          $insert['payroll_company_account_no']             = Request::input('payroll_company_account_no');
 
-		$return['function_name'] = 'companylist.save_company';
-		$return['status'] = 'success';
-		$return['data'] = '';
+          $logo = '/assets/images/no-logo.png';
+          if(Session::has('company_logo'))
+          {
+               $logo = Session::get('company_logo');
+          }
+          $insert['payroll_company_logo'] = $logo;
+          Tbl_payroll_company::insert($insert);
+          Session::forget('company_logo');
 
-		return json_encode($return);
-	}
+          $return['function_name'] = 'companylist.save_company';
+          $return['status'] = 'success';
+          $return['data'] = '';
 
-	public function view_company_modal($id)
-	{
-		return Self::modal_company_operation($id);
-	}
+          return json_encode($return);
+     }
 
-	public function edit_company_modal($id)
-	{
-		return Self::modal_company_operation($id, 'edit');
-	}
+     public function view_company_modal($id)
+     {
+          return Self::modal_company_operation($id);
+     }
 
-	public function modal_company_operation($company_id = 0, $action = 'view')
-	{
-		$data['company'] = Tbl_payroll_company::where('payroll_company_id', $company_id)->first();
-		$data['_rdo'] = Tbl_payroll_rdo::orderBy('rdo_code')->get();
-		$data['action'] = $action;
-		Session::put('company_logo_update', $data['company']->payroll_company_logo);
-		$data['_company'] = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_parent_company_id',0)->orderBy('tbl_payroll_company.payroll_company_name')->get();
-		$data['_bank'] = Tbl_payroll_bank_convertion::get();
-		return view('member.payroll.modal.modal_view_company', $data);
-	}
+     public function edit_company_modal($id)
+     {
+          return Self::modal_company_operation($id, 'edit');
+     }
 
-	public function update_company()
-	{
-		$payroll_company_id 							= Request::input('payroll_company_id');
-		$update['payroll_company_name'] 				= Request::input('payroll_company_name');
-		$update['payroll_company_code'] 				= Request::input('payroll_company_code');
-		$update['payroll_company_rdo'] 					= Request::input('payroll_company_rdo');
-		$update['payroll_company_address'] 				= Request::input('payroll_company_address');
-		$update['payroll_company_contact'] 				= Request::input('payroll_company_contact');
-		$update['payroll_company_email'] 				= Request::input('payroll_company_email');
-		$update['payroll_company_nature_of_business'] 	= Request::input('payroll_company_nature_of_business');
-		$update['payroll_company_date_started'] 		= Request::input('payroll_company_date_started');
-		$update['payroll_company_tin'] 					= Request::input('payroll_company_tin');
-		$update['payroll_company_sss'] 					= Request::input('payroll_company_sss');
-		$update['payroll_company_philhealth'] 			= Request::input('payroll_company_philhealth');
-		$update['payroll_company_pagibig'] 				= Request::input('payroll_company_pagibig');
-		$update['payroll_parent_company_id']			= Request::input('payroll_parent_company_id');
-		$update['payroll_company_bank']					= Request::input('payroll_company_bank');
-		$logo = '/assets/images/no-logo.png';
-		if(Session::has('company_logo_update'))
-		{
-			$logo = Session::get('company_logo_update');
-			Session::forget('company_logo_update');
-		}
-		$update['payroll_company_logo'] 				= $logo;
-		Tbl_payroll_company::where('payroll_company_id', $payroll_company_id)->update($update);
+     public function modal_company_operation($company_id = 0, $action = 'view')
+     {
+          $data['company'] = Tbl_payroll_company::where('payroll_company_id', $company_id)->first();
+          $data['_rdo'] = Tbl_payroll_rdo::orderBy('rdo_code')->get();
+          $data['action'] = $action;
+          Session::put('company_logo_update', $data['company']->payroll_company_logo);
+          $data['_company'] = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_parent_company_id',0)->orderBy('tbl_payroll_company.payroll_company_name')->get();
+          $data['_bank'] = Tbl_payroll_bank_convertion::get();
+          return view('member.payroll.modal.modal_view_company', $data);
+     }
 
-		$return['function_name'] = 'companylist.save_company';
-		$return['status'] = 'success';
-		$return['data'] = '';
+     public function update_company()
+     {
+          $parent = Request::input('payroll_parent_company_id') != 0 || Request::input('payroll_parent_company_id') != null ? Request::input('payroll_parent_company_id') : 0;
 
-		return json_encode($return);
-	}
+          $payroll_company_id                               = Request::input('payroll_company_id');
+          $update['payroll_company_name']                   = Request::input('payroll_company_name');
+          $update['payroll_company_code']                   = Request::input('payroll_company_code');
+          $update['payroll_company_rdo']                    = Request::input('payroll_company_rdo');
+          $update['payroll_company_address']                = Request::input('payroll_company_address');
+          $update['payroll_company_contact']                = Request::input('payroll_company_contact');
+          $update['payroll_company_email']                  = Request::input('payroll_company_email');
+          $update['payroll_company_nature_of_business']     = Request::input('payroll_company_nature_of_business');
+          $update['payroll_company_date_started']           = date('Y-m-d', strtotime(Request::input('payroll_company_date_started')));
+          $update['payroll_company_tin']                    = Request::input('payroll_company_tin');
+          $update['payroll_company_sss']                    = Request::input('payroll_company_sss');
+          $update['payroll_company_philhealth']             = Request::input('payroll_company_philhealth');
+          $update['payroll_company_pagibig']                = Request::input('payroll_company_pagibig');
+          $update['payroll_parent_company_id']              = $parent;
+          $update['payroll_company_bank']                   = Request::input('payroll_company_bank');
+          $update['payroll_company_account_no']             = Request::input('payroll_company_account_no');
+          $logo = '/assets/images/no-logo.png';
+          if(Session::has('company_logo_update'))
+          {
+               $logo = Session::get('company_logo_update');
+               Session::forget('company_logo_update');
+          }
+          $update['payroll_company_logo']                   = $logo;
+          Tbl_payroll_company::where('payroll_company_id', $payroll_company_id)->update($update);
 
-	public function reload_company()
-	{
-		$archived = Request::input('archived');
-		$data['_active'] = Tbl_payroll_company::selcompany(Self::shop_id(), $archived)->orderBy('tbl_payroll_company.payroll_company_name')->get();
-		return view('member.payroll.reload.companylist_reload',$data);
-	}
+          $return['function_name'] = 'companylist.save_company';
+          $return['status'] = 'success';
+          $return['data'] = '';
 
-	public function archived_company()
-	{
-		$archived 	= Request::input('archived');
-		$id			= Request::input('id');
-		$update['payroll_company_archived'] = $archived;
-		Tbl_payroll_company::where('payroll_company_id', $id)->update($update);
-		$return['function_name'] = 'companylist.save_company';
-		$return['status'] = 'success';
-		$return['data'] = '';
+          return json_encode($return);
+     }
 
-		return json_encode($return);
-	}
+     public function reload_company()
+     {
+          $archived = Request::input('archived');
+          $data['_active'] = Tbl_payroll_company::selcompany(Self::shop_id(), $archived)->orderBy('tbl_payroll_company.payroll_company_name')->get();
+          return view('member.payroll.reload.companylist_reload',$data);
+     }
 
-	public function modal_archived_company($archived, $id)
-	{
-		$statement = 'archive';
-		if($archived == 0)
-		{
-			$statement = 'restore';
-		}
-		$file_name 		= Tbl_payroll_company::where('payroll_company_id', $id)->pluck('payroll_company_name');
-		$data['title'] 	= 'Do you really want to '.$statement.' '.$file_name.'?';
-		$data['html'] 		= '';
-		$data['action'] 	= '/member/payroll/company_list/archived_company';
-		$data['id'] 		= $id;
-		$data['archived'] 	= $archived;
+     public function archived_company()
+     {
+          $archived      = Request::input('archived');
+          $id            = Request::input('id');
+          $company = Tbl_payroll_company::where('payroll_company_id', $id)->first();
 
-		return view('member.modal.modal_confirm_archived', $data);
-	}
+          $status = 0;
+          if($company)
+          {
+               $company_parent = Tbl_payroll_company::where('payroll_company_id', $company->payroll_parent_company_id)->first();
+               if($company_parent)
+               {
+                    if($company_parent->payroll_company_archived == 1)
+                    {
+                         $status = 1;
+                    }
+               }
+          }
+          if($status == 0)
+          {
+               $update['payroll_company_archived'] = $archived;
 
-	/* COMPANY END */
+               Tbl_payroll_company::where('payroll_company_id', $id)->update($update);
+               Tbl_payroll_company::where('payroll_parent_company_id', $id)->update($update);    
+
+               $return['function_name'] = 'companylist.save_company';
+               $return['status'] = 'success';
+               $return['data'] = '';
+          }
+          else
+          {
+               $return['message'] = 'error';
+               $return['status_message'] = "Can't re-use sub company.";
+
+          }
+          return json_encode($return);
+     }
+
+     public function modal_archived_company($archived, $id)
+     {
+          $statement = 'archive';
+          if($archived == 0)
+          {
+               $statement = 'restore';
+          }
+          $file_name          = Tbl_payroll_company::where('payroll_company_id', $id)->value('payroll_company_name');
+          $data['title']      = 'Do you really want to '.$statement.' '.$file_name.'?';
+          $data['html']       = '';
+          $data['action']     = '/member/payroll/company_list/archived_company';
+          $data['id']         = $id;
+          $data['archived']   = $archived;
+
+          return view('member.modal.modal_confirm_archived', $data);
+     }
+
+     /* COMPANY END */
 
 
-	/* DEPARTMENT START */
-	public function department_list()
-	{
-		$data['_active'] = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->paginate($this->paginate_count);
-		$data['_archived'] = Tbl_payroll_department::sel(Self::shop_id(), 1)->orderBy('payroll_department_name')->paginate($this->paginate_count);
-		return view('member.payroll.side_container.departmentlist', $data);
-	}
+     /* DEPARTMENT START */
+     public function department_list()
+     {
+          $data['_active'] = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->paginate($this->paginate_count);
+          $data['_archived'] = Tbl_payroll_department::sel(Self::shop_id(), 1)->orderBy('payroll_department_name')->paginate($this->paginate_count);
+          return view('member.payroll.side_container.departmentlist', $data);
+     }
 
-	public function department_modal_create()
-	{
-		return view('member.payroll.modal.modal_create_department');
-	}
+     public function department_modal_create()
+     {
+          return view('member.payroll.modal.modal_create_department');
+     }
 
 
-	public function department_save()
-	{
-		$insert['payroll_department_name'] = Request::input('payroll_department_name');
-		$insert['shop_id']				   = Self::shop_id();
-		$id = Tbl_payroll_department::insertGetId($insert);
+     public function department_save()
+     {
+          $insert['payroll_department_name'] = Request::input('payroll_department_name');
+          $insert['shop_id']                    = Self::shop_id();
+          $id = Tbl_payroll_department::insertGetId($insert);
 
-		$data['_data'] 	= array();
-		$data['selected'] 	= $id;
+          $data['_data']      = array();
+          $data['selected']   = $id;
 
-		$_department = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
-		foreach($_department as $deparmtent)
-		{
-			$temp['id']	= $deparmtent->payroll_department_id;
-			$temp['name']	= $deparmtent->payroll_department_name;
-			$temp['attr']	= '';
-			array_push($data['_data'], $temp);
-		}
+          $_department = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+          foreach($_department as $deparmtent)
+          {
+               $temp['id']    = $deparmtent->payroll_department_id;
+               $temp['name']  = $deparmtent->payroll_department_name;
+               $temp['attr']  = '';
+               array_push($data['_data'], $temp);
+          }
 
-		$view = view('member.payroll.misc.misc_option', $data)->render();
+          $view = view('member.payroll.misc.misc_option', $data)->render();
 
           $return['selected']           = $id;
-		$return['view']			= $view;
-		$return['status'] 			= 'success';
-		$return['data']	   		= '';
-		$return['function_name'] 	= 'payrollconfiguration.relaod_tbl_department';
-		return json_encode($return);
-	}
+          $return['view']               = $view;
+          $return['status']             = 'success';
+          $return['data']               = '';
+          $return['function_name']      = 'payrollconfiguration.relaod_tbl_department';
+          return json_encode($return);
+     }
+     public function department_reload()
+     {
+          $archived = Request::input('archived');
+          $data['_active'] = Tbl_payroll_department::sel(Self::shop_id(), $archived)->orderBy('payroll_department_name')->get();
+          return view('member.payroll.reload.departmentlist_reload', $data);
+     }
 
-	public function department_reload()
-	{
-		$archived = Request::input('archived');
-		$data['_active'] = Tbl_payroll_department::sel(Self::shop_id(), $archived)->orderBy('payroll_department_name')->get();
- 		return view('member.payroll.reload.departmentlist_reload', $data);
-	}
+     public function archived_department()
+     {
+          $id = Request::input('id');
+          $update['payroll_department_archived'] = Request::input('archived');
+          Tbl_payroll_department::where('payroll_department_id', $id)->update($update);
 
-	public function archived_department()
-	{
-		$id = Request::input('id');
-		$update['payroll_department_archived'] = Request::input('archived');
-		Tbl_payroll_department::where('payroll_department_id', $id)->update($update);
+          $return['status']             = 'success';
+          $return['function_name']      = 'payrollconfiguration.reload_departmentlist';
+          return json_encode($return);
 
-		$return['status'] 			= 'success';
-		$return['function_name'] 	= 'payrollconfiguration.reload_departmentlist';
-		return json_encode($return);
+     }
 
-	}
+     public function modal_archived_department($archived, $department_id)
+     {
+          $statement = 'archive';
+          if($archived == 0)
+          {
+               $statement = 'restore';
+          }
+          $file_name               = Tbl_payroll_department::where('payroll_department_id', $department_id)->value('payroll_department_name');
+          $data['title']           = 'Do you really want to '.$statement.' '.$file_name.'?';
+          $data['html']       = '';
+          $data['action']     = '/member/payroll/departmentlist/archived_department';
+          $data['id']         = $department_id;
+          $data['archived']   = $archived;
 
-	public function modal_archived_department($archived, $department_id)
-	{
-		$statement = 'archive';
-		if($archived == 0)
-		{
-			$statement = 'restore';
-		}
-		$file_name 			= Tbl_payroll_department::where('payroll_department_id', $department_id)->pluck('payroll_department_name');
-		$data['title'] 		= 'Do you really want to '.$statement.' '.$file_name.'?';
-		$data['html'] 		= '';
-		$data['action'] 	= '/member/payroll/departmentlist/archived_department';
-		$data['id'] 		= $department_id;
-		$data['archived'] 	= $archived;
-
-		return view('member.modal.modal_confirm_archived', $data);
-	}
-
-
-	public function modal_view_department($id)
-	{
-		return Self::modal_department_operation($id);
-	}
-
-	public function modal_edit_department($id)
-	{
-		$action = 'edit';
-		return Self::modal_department_operation($id, $action);
-	}
-
-	public function modal_department_operation($payroll_department_id = 0, $action = 'view')
-	{
-		$data['deparmtent'] = Tbl_payroll_department::where('payroll_department_id', $payroll_department_id)->first();
-		$data['action'] = $action;
-		return view('member.payroll.modal.modal_view_department',$data);
-	}
+          return view('member.modal.modal_confirm_archived', $data);
+     }
 
 
-	public function modal_update_department()
-	{
-		
-		$payroll_department_id = Request::input('payroll_department_id');
-		$payroll_department_name = Request::input('payroll_department_name');
+     public function modal_view_department($id)
+     {
+          return Self::modal_department_operation($id);
+     }
 
-		$update['payroll_department_name'] = $payroll_department_name;
-		Tbl_payroll_department::where('payroll_department_id', $payroll_department_id)->update($update);
-		
-		$return['status'] 			= 'success';
-		$return['data']	   			= '';
-		$return['function_name'] 	= 'payrollconfiguration.relaod_tbl_department';
-		return json_encode($return);
-	}
+     public function modal_edit_department($id)
+     {
+          $action = 'edit';
+          return Self::modal_department_operation($id, $action);
+     }
 
-	/* DEPARTMENT END */
+     public function modal_department_operation($payroll_department_id = 0, $action = 'view')
+     {
+          $data['deparmtent'] = Tbl_payroll_department::where('payroll_department_id', $payroll_department_id)->first();
+          $data['action'] = $action;
+          return view('member.payroll.modal.modal_view_department',$data);
+     }
 
 
-	/* JOB TITLE START*/
+     public function modal_update_department()
+     {
+          
+          $payroll_department_id = Request::input('payroll_department_id');
+          $payroll_department_name = Request::input('payroll_department_name');
 
-	public function jobtitle_list()
-	{
-		$data['_active'] = Tbl_payroll_jobtitle::sel(Self::shop_id())->orderBy('payroll_jobtitle_name')->paginate($this->paginate_count);
-		$data['_archived'] = Tbl_payroll_jobtitle::sel(Self::shop_id(), 1)->orderBy('payroll_jobtitle_name')->paginate($this->paginate_count);
-		return view('member.payroll.side_container.jobtitlelist', $data);
-	}
+          $update['payroll_department_name'] = $payroll_department_name;
+          Tbl_payroll_department::where('payroll_department_id', $payroll_department_id)->update($update);
+          
+          $return['status']             = 'success';
+          $return['data']                    = '';
+          $return['function_name']      = 'payrollconfiguration.relaod_tbl_department';
+          return json_encode($return);
+     }
 
-	public function modal_create_jobtitle()
-	{
-		$selected = 0;
-		if(Request::has('selected'))
-		{
-			$selected = Request::input('selected');
-		}
-		$data['_department'] = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
-		$data['selected'] = $selected;
-		return view('member.payroll.modal.modal_create_jobtitle', $data);
-	}
+     /* DEPARTMENT END */
 
-	public function modal_save_jobtitle()
-	{
+
+     /* JOB TITLE START*/
+
+     public function jobtitle_list()
+     {
+          $data['_active'] = Tbl_payroll_jobtitle::sel(Self::shop_id())->orderBy('payroll_jobtitle_name')->paginate($this->paginate_count);
+          $data['_archived'] = Tbl_payroll_jobtitle::sel(Self::shop_id(), 1)->orderBy('payroll_jobtitle_name')->paginate($this->paginate_count);
+          return view('member.payroll.side_container.jobtitlelist', $data);
+     }
+
+
+     public function modal_create_jobtitle()
+     {
+          $selected = 0;
+          if(Request::has('selected'))
+          {
+               $selected = Request::input('selected');
+          }
+          $data['_department'] = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+          $data['selected'] = $selected;
+          return view('member.payroll.modal.modal_create_jobtitle', $data);
+     }
+
+     public function modal_save_jobtitle()
+     {
           $payroll_jobtitle_department_id              = Request::input('payroll_jobtitle_department_id');
 
-		$insert['payroll_jobtitle_department_id'] 	= $payroll_jobtitle_department_id;
-		$insert['payroll_jobtitle_name'] 			= Request::input('payroll_jobtitle_name');
-		$insert['shop_id']						= Self::shop_id();
-		$id = Tbl_payroll_jobtitle::insertGetId($insert);
+          $insert['payroll_jobtitle_department_id']    = $payroll_jobtitle_department_id;
+          $insert['payroll_jobtitle_name']             = Request::input('payroll_jobtitle_name');
+          $insert['shop_id']                           = Self::shop_id();
+          $id = Tbl_payroll_jobtitle::insertGetId($insert);
 
-		$data['_data'] 	= array();
-		$data['selected'] 	= $id;
-		$_jobtitle = Tbl_payroll_jobtitle::sel(Self::shop_id())->where('payroll_jobtitle_department_id',Request::input('payroll_jobtitle_department_id'))->orderBy('payroll_jobtitle_name')->get();
-		foreach($_jobtitle as $job_title)
-		{
-			$temp['id']      = $job_title->payroll_jobtitle_id;
-			$temp['name']    = $job_title->payroll_jobtitle_name;
-			$temp['attr']    = '';
-			array_push($data['_data'], $temp);
-		}
-		$view = view('member.payroll.misc.misc_option', $data)->render();
+          $data['_data']      = array();
+          $data['selected']   = $id;
+          $_jobtitle = Tbl_payroll_jobtitle::sel(Self::shop_id())->where('payroll_jobtitle_department_id',Request::input('payroll_jobtitle_department_id'))->orderBy('payroll_jobtitle_name')->get();
+          foreach($_jobtitle as $job_title)
+          {
+               $temp['id']      = $job_title->payroll_jobtitle_id;
+               $temp['name']    = $job_title->payroll_jobtitle_name;
+               $temp['attr']    = '';
+               array_push($data['_data'], $temp);
+          }
+          $view = view('member.payroll.misc.misc_option', $data)->render();
 
-		$return['view']		= $view;
+          $return['view']          = $view;
           $return['department_id'] = $payroll_jobtitle_department_id;
-		$return['status'] 		= 'success';
-		$return['data']	   	= $id;
-		$return['function_name'] = 'payrollconfiguration.reload_jobtitlelist';
-		
+          $return['status']        = 'success';
+          $return['data']          = $id;
+          $return['function_name'] = 'payrollconfiguration.reload_jobtitlelist';
+          
           return json_encode($return);
-	}
+     }
 
 
-	public function archived_jobtitle()
-	{
-		$id = Request::input('id');
-		$update['payroll_jobtitle_archived'] = Request::input('archived');
-		Tbl_payroll_jobtitle::where('payroll_jobtitle_id', $id)->update($update);
+     public function archived_jobtitle()
+     {
+          $id = Request::input('id');
+          $update['payroll_jobtitle_archived'] = Request::input('archived');
+          Tbl_payroll_jobtitle::where('payroll_jobtitle_id', $id)->update($update);
 
-		$return['status'] 			= 'success';
-		$return['function_name'] 	= 'payrollconfiguration.reload_tbl_jobtitle';
-		return json_encode($return);
+          $return['status']             = 'success';
+          $return['function_name']      = 'payrollconfiguration.reload_tbl_jobtitle';
+          return json_encode($return);
 
-	}
+     }
 
-	public function modal_archived_jobtitle($archived, $jobtitle_id)
-	{
-		$statement = 'archive';
-		if($archived == 0)
-		{
-			$statement = 'restore';
-		}
-		$file_name 			= Tbl_payroll_jobtitle::where('payroll_jobtitle_id', $jobtitle_id)->pluck('payroll_jobtitle_name');
-		$data['title'] 		= 'Do you really want to '.$statement.' '.$file_name.'?';
-		$data['html'] 		= '';
-		$data['action'] 	= '/member/payroll/jobtitlelist/archived_jobtitle';
-		$data['id'] 		= $jobtitle_id;
-		$data['archived'] 	= $archived;
+     public function modal_archived_jobtitle($archived, $jobtitle_id)
+     {
+          $statement = 'archive';
+          if($archived == 0)
+          {
+               $statement = 'restore';
+          }
+          $file_name               = Tbl_payroll_jobtitle::where('payroll_jobtitle_id', $jobtitle_id)->value('payroll_jobtitle_name');
+          $data['title']           = 'Do you really want to '.$statement.' '.$file_name.'?';
+          $data['html']       = '';
+          $data['action']     = '/member/payroll/jobtitlelist/archived_jobtitle';
+          $data['id']         = $jobtitle_id;
+          $data['archived']   = $archived;
 
-		return view('member.modal.modal_confirm_archived', $data);
-	}
-	
-	public function reload_tbl_jobtitle()
-	{
-		$archived = Request::input('archived');
-		$data['_active'] = Tbl_payroll_jobtitle::sel(Self::shop_id(), $archived)->orderBy('payroll_jobtitle_name')->get();
-		return view('member.payroll.reload.jobtitlelist_reload',$data);
-	}
+          return view('member.modal.modal_confirm_archived', $data);
+     }
+     
+     public function reload_tbl_jobtitle()
+     {
+          $archived = Request::input('archived');
+          $data['_active'] = Tbl_payroll_jobtitle::sel(Self::shop_id(), $archived)->orderBy('payroll_jobtitle_name')->get();
+          return view('member.payroll.reload.jobtitlelist_reload',$data);
+     }
 
-	public function modal_view_jobtitle($id)
-	{
+     public function modal_view_jobtitle($id)
+     {
 
-		return Self::moda_view_jobtitle_operation($id);
-	}
+          return Self::moda_view_jobtitle_operation($id);
+     }
 
-	public function modal_edit_jobtitle($id)
-	{
-		return Self::moda_view_jobtitle_operation($id, 'edit');
-	}
+     public function modal_edit_jobtitle($id)
+     {
+          return Self::moda_view_jobtitle_operation($id, 'edit');
+     }
 
-	public function moda_view_jobtitle_operation($payroll_jobtitle_id = 0, $action = "view")
-	{
-		$data['position'] = Tbl_payroll_jobtitle::where('payroll_jobtitle_id', $payroll_jobtitle_id)->first();
-		$data['_department'] = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
-		$data['action'] = $action;
-		return view('member.payroll.modal.modal_view_jobtitlelist',$data);
-	}
+     public function moda_view_jobtitle_operation($payroll_jobtitle_id = 0, $action = "view")
+     {
+          $data['position'] = Tbl_payroll_jobtitle::where('payroll_jobtitle_id', $payroll_jobtitle_id)->first();
+          $data['_department'] = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+          $data['action'] = $action;
+          return view('member.payroll.modal.modal_view_jobtitlelist',$data);
+     }
 
-	public function modal_update_jobtitle()
-	{
-		$payroll_jobtitle_id 						= Request::input('payroll_jobtitle_id');
-		$update['payroll_jobtitle_department_id'] 	= Request::input('payroll_jobtitle_department_id');
-		$update['payroll_jobtitle_name'] 			= Request::input('payroll_jobtitle_name');
-		Tbl_payroll_jobtitle::where('payroll_jobtitle_id', $payroll_jobtitle_id)->update($update);
+     public function modal_update_jobtitle()
+     {
+          $payroll_jobtitle_id                              = Request::input('payroll_jobtitle_id');
+          $update['payroll_jobtitle_department_id']    = Request::input('payroll_jobtitle_department_id');
+          $update['payroll_jobtitle_name']             = Request::input('payroll_jobtitle_name');
+          Tbl_payroll_jobtitle::where('payroll_jobtitle_id', $payroll_jobtitle_id)->update($update);
 
-		$return['status'] 			= 'success';
-		$return['data']	   			= '';
-		$return['function_name'] 	= 'payrollconfiguration.reload_tbl_jobtitle';
-		return json_encode($return);
-	}
+          $return['status']             = 'success';
+          $return['data']                    = '';
+          $return['function_name']      = 'payrollconfiguration.reload_tbl_jobtitle';
+          return json_encode($return);
+     }
 
-	/* GET JOB TITLE BY DEPARTMENT */
-	public function get_job_title_by_department()
-	{
-		$payroll_department_id = Request::input('payroll_department_id');
-		// dd($payroll_department_id);
-		$job_title = Tbl_payroll_jobtitle::where('payroll_jobtitle_department_id',$payroll_department_id)->where('payroll_jobtitle_archived',0)->where('shop_id', Self::shop_id())->get();
+     /* GET JOB TITLE BY DEPARTMENT */
+     public function get_job_title_by_department()
+     {
+          $payroll_department_id = Request::input('payroll_department_id');
+          // dd($payroll_department_id);
+          $job_title = Tbl_payroll_jobtitle::where('payroll_jobtitle_department_id',$payroll_department_id)->where('payroll_jobtitle_archived',0)->where('shop_id', Self::shop_id())->get();
+          return json_encode($job_title);
+     }
 
-		return json_encode($job_title);
-	}
-
-	/* JOB TITLE END*/
+     /* JOB TITLE END*/
 
 
      /* TAX PERIOD START */
@@ -2306,1378 +2670,1440 @@ class PayrollController extends Member
      }
      /* TAX PERIOD END */
 
-	/* TAX TABLE START */
-	public function tax_table_list()
-	{
-		$data['_period'] = Payroll::tax_break(Self::shop_id());
-		// dd($data);
-		return view('member.payroll.side_container.tax', $data);
-	}
-
-	public function tax_table_save()
-	{
-		$payroll_tax_status_id 	= Request::input('payroll_tax_status_id');
-		$tax_category 			= Request::input('tax_category');
-		$tax_first_range 		= Request::input('tax_first_range');
-		$tax_second_range 		= Request::input('tax_second_range');
-		$tax_third_range 		= Request::input('tax_third_range');
-		$tax_fourth_range 		= Request::input('tax_fourth_range');
-		$tax_fifth_range 		= Request::input('tax_fifth_range');
-		$taxt_sixth_range 		= Request::input('taxt_sixth_range');
-		$tax_seventh_range 		= Request::input('tax_seventh_range');
-
-		Tbl_payroll_tax_reference::where('shop_id', Self::shop_id())->where('payroll_tax_status_id',$payroll_tax_status_id)->delete();
-		$insert = array();
-		foreach($tax_category as $key => $category)
-		{
-			$insert[$key]['shop_id']				= Self::shop_id();
-			$insert[$key]['payroll_tax_status_id'] 	= $payroll_tax_status_id;
-			$insert[$key]['tax_category'] 			= $category;
-			$insert[$key]['tax_first_range'] 		= $tax_first_range[$key];
-			$insert[$key]['tax_second_range'] 		= $tax_second_range[$key];
-			$insert[$key]['tax_third_range'] 		= $tax_third_range[$key];
-			$insert[$key]['tax_fourth_range'] 		= $tax_fourth_range[$key];
-			$insert[$key]['tax_fifth_range'] 		= $tax_fifth_range[$key];
-			$insert[$key]['taxt_sixth_range'] 		= $taxt_sixth_range[$key];
-			$insert[$key]['tax_seventh_range'] 		= $tax_seventh_range[$key];
-		}
-
-		Tbl_payroll_tax_reference::insert($insert);
-
-		$return['status'] = 'success';
-		$return['function_name'] = '';
-		return json_encode($return);
-
-	}
-
-
-	/* FOR DEVELOPERS USE ONLY */
-	public function tax_table_save_default()
-	{
-		$payroll_tax_status_id 	= Request::input('payroll_tax_status_id');
-		$tax_category 			= Request::input('tax_category');
-		$tax_first_range 		= Request::input('tax_first_range');
-		$tax_second_range	 	= Request::input('tax_second_range');
-		$tax_third_range 		= Request::input('tax_third_range');
-		$tax_fourth_range 		= Request::input('tax_fourth_range');
-		$tax_fifth_range 		= Request::input('tax_fifth_range');
-		$taxt_sixth_range 		= Request::input('taxt_sixth_range');
-		$tax_seventh_range 		= Request::input('tax_seventh_range');
-		Tbl_payroll_tax_default::where('payroll_tax_status_id',$payroll_tax_status_id)->delete();
-		$insert = array();
-		foreach($tax_category as $key => $category)
-		{
-			$insert[$key]['payroll_tax_status_id'] 	= $payroll_tax_status_id;
-			$insert[$key]['tax_category'] 			= $category;
-			$insert[$key]['tax_first_range'] 		= $tax_first_range[$key];
-			$insert[$key]['tax_second_range'] 		= $tax_second_range[$key];
-			$insert[$key]['tax_third_range'] 		= $tax_third_range[$key];
-			$insert[$key]['tax_fourth_range'] 		= $tax_fourth_range[$key];
-			$insert[$key]['tax_fifth_range'] 		= $tax_fifth_range[$key];
-			$insert[$key]['taxt_sixth_range'] 		= $taxt_sixth_range[$key];
-			$insert[$key]['tax_seventh_range'] 		= $tax_seventh_range[$key];
-		}
-
-		Tbl_payroll_tax_default::insert($insert);
-
-		$return['status'] = 'success';
-		$return['function_name'] = '';
-		return json_encode($return);
-	}
-	/* TAX TABLE END */
-
-
-	/* SSS TABLE START */
-	public function sss_table_list()
-	{
-		$data['_sss'] = Tbl_payroll_sss::where('shop_id', Self::shop_id())->orderBy('payroll_sss_min')->get();
-		return view('member.payroll.side_container.ssslist', $data);
-	}
-
-	public function sss_table_save()
-	{
-		$payroll_sss_min 			= Request::input('payroll_sss_min');
-		$payroll_sss_max 			= Request::input('payroll_sss_max');
-		$payroll_sss_monthly_salary = Request::input('payroll_sss_monthly_salary');
-		$payroll_sss_er 			= Request::input('payroll_sss_er');
-		$payroll_sss_ee 			= Request::input('payroll_sss_ee');
-		$payroll_sss_total 			= Request::input('payroll_sss_total');
-		$payroll_sss_eec 			= Request::input('payroll_sss_eec');
-
-		Tbl_payroll_sss::where('shop_id', Self::shop_id())->delete();
-		$insert = array();
-		foreach($payroll_sss_min as $key => $sss_min)
-		{
-			if($sss_min != '' && $sss_min != null)
-			{	
-				$insert[$key]['shop_id'] 					= Self::shop_id();
-				$insert[$key]['payroll_sss_min'] 			= $sss_min;
-				$insert[$key]['payroll_sss_max'] 			= $payroll_sss_max[$key];
-				$insert[$key]['payroll_sss_monthly_salary'] = $payroll_sss_monthly_salary[$key];
-				$insert[$key]['payroll_sss_er'] 			= $payroll_sss_er[$key];
-				$insert[$key]['payroll_sss_ee'] 			= $payroll_sss_ee[$key];
-				$insert[$key]['payroll_sss_total'] 			= $payroll_sss_total[$key];
-				$insert[$key]['payroll_sss_eec'] 			= $payroll_sss_eec[$key];
-			}
-		}
-		Tbl_payroll_sss::insert($insert);
-		$return['status'] = 'success';
-		return json_encode($return);
-	}
-
-
-
-	/* SSS DEFAULT VALUE [DEVELOPER] */
-	public function sss_table_save_default()
-	{
-		$payroll_sss_min 			= Request::input('payroll_sss_min');
-		$payroll_sss_max 			= Request::input('payroll_sss_max');
-		$payroll_sss_monthly_salary = Request::input('payroll_sss_monthly_salary');
-		$payroll_sss_er 			= Request::input('payroll_sss_er');
-		$payroll_sss_ee 			= Request::input('payroll_sss_ee');
-		$payroll_sss_total 			= Request::input('payroll_sss_total');
-		$payroll_sss_eec 			= Request::input('payroll_sss_eec');
-
-		Tbl_payroll_sss_default::truncate();
-		$insert = array();
-		foreach($payroll_sss_min as $key => $sss_min)
-		{
-			$insert[$key]['payroll_sss_min'] = $sss_min;
-			$insert[$key]['payroll_sss_max'] = $payroll_sss_max[$key];
-			$insert[$key]['payroll_sss_monthly_salary'] = $payroll_sss_monthly_salary[$key];
-			$insert[$key]['payroll_sss_er'] = $payroll_sss_er[$key];
-			$insert[$key]['payroll_sss_ee'] = $payroll_sss_ee[$key];
-			$insert[$key]['payroll_sss_total'] = $payroll_sss_total[$key];
-			$insert[$key]['payroll_sss_eec'] = $payroll_sss_eec[$key];
-		}
-		Tbl_payroll_sss_default::insert($insert);
-
-		$return['status'] = 'success';
-		return json_encode($return);
-
-	}
-	/* SSS TABLE END */
-
-
-	/* PHILHEALTH TABLE START */
-	public function philhealth_table_list()
-	{
-		$data['_philhealth'] = Tbl_payroll_philhealth::where('shop_id', Self::shop_id())->orderBy('payroll_philhealth_min')->get();
-		return view('member.payroll.side_container.philhealthlist', $data); 
-	}
-
-	public function philhealth_table_save()
-	{
-		$payroll_philhealth_min 		= Request::input('payroll_philhealth_min');
-		$payroll_philhealth_max 		= Request::input('payroll_philhealth_max');
-		$payroll_philhealth_base 		= Request::input('payroll_philhealth_base');
-		$payroll_philhealth_premium 	= Request::input('payroll_philhealth_premium');
-		$payroll_philhealth_ee_share 	= Request::input('payroll_philhealth_ee_share');
-		$payroll_philhealth_er_share 	= Request::input('payroll_philhealth_er_share');
-		Tbl_payroll_philhealth::where('shop_id', Self::shop_id())->delete();
-		$insert = array();
-		foreach($payroll_philhealth_min as $key => $min)
-		{
-			if($min != "" && $min != null)
-			{
-				$insert[$key]['shop_id']						= Self::shop_id();
-				$insert[$key]['payroll_philhealth_min'] 		= $min;
-				$insert[$key]['payroll_philhealth_max'] 		= $payroll_philhealth_max[$key];
-				$insert[$key]['payroll_philhealth_base'] 		= $payroll_philhealth_base[$key];
-				$insert[$key]['payroll_philhealth_premium'] 	= $payroll_philhealth_premium[$key];
-				$insert[$key]['payroll_philhealth_ee_share'] 	= $payroll_philhealth_ee_share[$key];
-				$insert[$key]['payroll_philhealth_er_share'] 	= $payroll_philhealth_er_share[$key];
-			}
-			
-		}
-		Tbl_payroll_philhealth::insert($insert);
-
-		$return['status'] = 'success';
-		return json_encode($return);
-	}
-
-
-	/* PHILHEALTH DEFAULT VALUE [DEVELOPER] */
-	public function philhealth_table_save_default()
-	{
-		$payroll_philhealth_min 		= Request::input('payroll_philhealth_min');
-		$payroll_philhealth_max 		= Request::input('payroll_philhealth_max');
-		$payroll_philhealth_base 		= Request::input('payroll_philhealth_base');
-		$payroll_philhealth_premium 	= Request::input('payroll_philhealth_premium');
-		$payroll_philhealth_ee_share 	= Request::input('payroll_philhealth_ee_share');
-		$payroll_philhealth_er_share 	= Request::input('payroll_philhealth_er_share');
-
-		Tbl_payroll_philhealth_default::truncate();
-		$insert = array();
-		foreach($payroll_philhealth_min as $key => $min)
-		{
-			if($min != "" && $min != null)
-			{
-				$insert[$key]['payroll_philhealth_min'] 		= $min;
-				$insert[$key]['payroll_philhealth_max'] 		= $payroll_philhealth_max[$key];
-				$insert[$key]['payroll_philhealth_base'] 		= $payroll_philhealth_base[$key];
-				$insert[$key]['payroll_philhealth_premium'] 	= $payroll_philhealth_premium[$key];
-				$insert[$key]['payroll_philhealth_ee_share'] 	= $payroll_philhealth_ee_share[$key];
-				$insert[$key]['payroll_philhealth_er_share'] 	= $payroll_philhealth_er_share[$key];
-			}
-			
-		}
-		Tbl_payroll_philhealth_default::insert($insert);
-
-		$return['status'] = 'success';
-		return json_encode($return);
-	}
-
-
-	/* PHILHEALTH TABLE END */
-	public function pagibig_formula()
-	{
-		$data['pagibig'] = Tbl_payroll_pagibig::where('shop_id', Self::shop_id())->first();
-		return view('member.payroll.side_container.pagibig', $data);
-	}
-
-	public function pagibig_formula_save()
-	{
-		Tbl_payroll_pagibig::where('shop_id', Self::shop_id())->delete();
-
-		$insert['payroll_pagibig_percent']  = Request::input('payroll_pagibig_percent');
-		$insert['shop_id']					= Self::shop_id();
-		Tbl_payroll_pagibig::insert($insert);
-
-		$return['status'] = 'success';
-		return json_encode($return);
-	}
-
-
-
-	/* PAGIBIG DEFAULT VALUE [DEVELOPER] */
-	public function pagibig_formula_save_default()
-	{
-		Tbl_payroll_pagibig_default::truncate();
-		$insert['payroll_pagibig_percent'] = Request::input('payroll_pagibig_percent');
-		Tbl_payroll_pagibig_default::insert($insert);
-
-		$return['status'] = 'success';
-		return json_encode($return);
-	}
-	/* PAGIBIG TABLE START */
-
-
-	/* DEDUCTION START */
-	public function deduction()
-	{
-		$data['_active'] = Tbl_payroll_deduction::seldeduction(Self::shop_id())->orderBy('tbl_payroll_deduction.payroll_deduction_category','tbl_payroll_deduction.payroll_deduction_name')->paginate($this->paginate_count);
-		$data['_archived'] = Tbl_payroll_deduction::seldeduction(Self::shop_id(), 1)->orderBy('tbl_payroll_deduction.payroll_deduction_category','tbl_payroll_deduction.payroll_deduction_name')->paginate($this->paginate_count);
-		return view('member.payroll.side_container.deduction', $data);
-	}
-
-	public function modal_create_deduction()
-	{
-		$array = array();
-		Session::put('employee_deduction_tag',$array);
-		return view('member.payroll.modal.modal_create_deduction');
-	}
-
-	public function modal_create_deduction_type($type)
-	{
-		$type 				= str_replace('_', ' ', $type);
-		$data['_active'] 	= Tbl_payroll_deduction_type::seltype(Self::shop_id(),$type)->get();
-		$data['_archived'] 	= Tbl_payroll_deduction_type::seltype(Self::shop_id(),$type, 1)->get();
-		$data['type'] 		= $type;
-		return view('member.payroll.modal.modal_deduction_type',$data);
-	}
-
-	public function modal_save_deduction_type()
-	{
-		$insert['payroll_deduction_category'] 	= Request::input('payroll_deduction_category');
-		$insert['payroll_deduction_type_name'] 	= Request::input('payroll_deduction_type_name');
-		$insert['shop_id'] 						= Self::shop_id();
-		$id = Tbl_payroll_deduction_type::insertGetId($insert);
-
-		$type = Request::input('payroll_deduction_category');
-
-		$_data = Tbl_payroll_deduction_type::seltype(Self::shop_id(),$type)->get();
-		$html = '<option value="">Select Type</option>';
-		foreach($_data as $data)
-		{
-			$html .= '<option value="'.$data->payroll_deduction_type_id.'" ';
-			if($data->payroll_deduction_type_id == $id)
-			{
-				$html .= 'selected="selected"';
-			}
-			$html.= '>'.$data->payroll_deduction_type_name.'</option>';
-		}
-		return $html;
-	}
-
-	public function reload_deduction_type()
-	{
-		$payroll_deduction_category = Request::input('payroll_deduction_category');
-		$archived 					= Request::input('archived');
-		$data['_active'] 			= Tbl_payroll_deduction_type::seltype(Self::shop_id(),$payroll_deduction_category, $archived)->get();
-		return view('member.payroll.reload.deduction_list_reload',$data);
-	}
-
-	public function update_deduction_type()
-	{
-		$value 		= Request::input('value');
-		$content 	= Request::input('content');
-		
-		$update['payroll_deduction_type_name'] = $value;
-		Tbl_payroll_deduction_type::where('payroll_deduction_type_id',$content)->update($update);
-
-	}
-
-	public function archive_deduction_type()
-	{
-		$content = Request::input('content');
-		$update['payroll_deduction_archived'] = Request::input('archived');
-		Tbl_payroll_deduction_type::where('payroll_deduction_type_id',$content)->update($update);
-	}
-
-	public function ajax_deduction_type()
-	{
-		$category = Request::input('category');
-		$data = Tbl_payroll_deduction_type::seltype(Self::shop_id(),$category)->get();
-		return json_encode($data);
-	}
-
-	public function modal_deduction_tag_employee($deduction_id)
-	{
-		$data['_company'] 		= Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
-
-		$data['_department'] 	= Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
-
-		$data['deduction_id']	=	$deduction_id;
-		$data['action']			= 	'/member/payroll/deduction/set_employee_deduction_tag';
-
-		return view('member.payroll.modal.modal_deduction_tag_employee', $data);
-	}
-
-	public function modal_save_deduction()
-	{
-		$insert['shop_id'] 						= Self::shop_id();
-		$insert['payroll_deduction_name'] 		= Request::input('payroll_deduction_name');
-		$insert['payroll_deduction_amount'] 	= Request::input('payroll_deduction_amount');
-		$insert['payroll_monthly_amortization'] = Request::input('payroll_monthly_amortization');
-		$insert['payroll_periodal_deduction'] 	= Request::input('payroll_periodal_deduction');
-		$insert['payroll_deduction_date_filed'] = date('Y-m-d',strtotime(Request::input('payroll_deduction_date_filed')));
-		$insert['payroll_deduction_date_start'] = date('Y-m-d',strtotime(Request::input('payroll_deduction_date_start')));
-		$insert['payroll_deduction_date_end']	= date('Y-m-d', strtotime(Request::input('payroll_deduction_date_end')));
-		$insert['payroll_deduction_period'] 	= Request::input('payroll_deduction_period');
-		$insert['payroll_deduction_category'] 	= Request::input('payroll_deduction_category');
-		$insert['payroll_deduction_type'] 		= Request::input('payroll_deduction_type');
-		$insert['payroll_deduction_remarks'] 	= Request::input('payroll_deduction_remarks');
-
-		$deduction_id = Tbl_payroll_deduction::insertGetId($insert);
-
-		if(Session::has('employee_deduction_tag'))
-		{
-			$employee_tag = Session::get('employee_deduction_tag');
-			$insert_employee = '';
-			foreach($employee_tag as $key => $tag)
-			{
-				$insert_employee[$key]['payroll_deduction_id']  	= $deduction_id;
-				$insert_employee[$key]['payroll_employee_id']		= $tag;
-			}
-			if($insert_employee != '')
-			{
-				Tbl_payroll_deduction_employee::insert($insert_employee);
-			}
-		}
-
-		$return['stataus'] = 'success';
-		$return['function_name'] = 'payrollconfiguration.reload_deduction';
-		return json_encode($return);
-
-	}
-
-	public function ajax_deduction_tag_employee()
-	{
-		$company 	= Request::input('company');
-		$department = Request::input('department');
-		$jobtitle 	= Request::input('jobtitle');
-
-
-		$emp = Tbl_payroll_employee_contract::employeefilter($company, $department, $jobtitle, date('Y-m-d'), Self::shop_id())->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->groupBy('tbl_payroll_employee_basic.payroll_employee_id')->get();
-		// dd($emp);
-		return json_encode($emp);
-	}
-
-	public function set_employee_deduction_tag()
-	{
-		$employee_tag = Request::input('employee_tag');
-		$deduction_id = Request::input('deduction_id');
-		// dd($deduction_id);
-		$array = array();
-		if(Session::has('employee_deduction_tag'))
-		{
-			$array = Session::get('employee_deduction_tag');
-		}
-		// dd($array);
-
-		$insert_tag = array();
-
-		foreach($employee_tag as $tag)
-		{
-			if(!in_array($tag, $array) && $deduction_id == 0)
-			{
-				array_push($array, $tag);
-			}
-			$count = Tbl_payroll_deduction_employee::where('payroll_deduction_id',$deduction_id)->where('payroll_employee_id', $tag)->count();
-
-			if($count == 0)
-			{
-				$insert['payroll_deduction_id'] 	= $deduction_id;
-				$insert['payroll_employee_id']		= $tag;
-				array_push($insert_tag, $insert);
-			}
-			
-		}
-		// dd($insert_tag);
-		if($deduction_id != 0 && $insert_tag != '')
-		{
-			Tbl_payroll_deduction_employee::insert($insert_tag);
-		}
-		else
-		{
-			Session::put('employee_deduction_tag', $array);
-		}
-		
-
-		$return['status'] = 'success';
-		$return['function_name'] = 'modal_create_deduction.load_tagged_employee';
-		return json_encode($return);
-	}
-
-	public function get_employee_deduction_tag()
-	{	
-		$employee = [0 => 0];
-		if(Session::has('employee_deduction_tag'))
-		{
-			$employee = Session::get('employee_deduction_tag');
-		}
-		$emp = Tbl_payroll_employee_basic::whereIn('payroll_employee_id',$employee)->get();
-
-		$data['new_record'] = $emp;
-		return json_encode($data);
-	}
-
-	public function remove_from_tag_session()
-	{
-		$content = Request::input('content');
-		$array 	 = Session::get('employee_deduction_tag');
-		if(($key = array_search($content, $array)) !== false) {
-		    unset($array[$key]);
-		}
-		Session::put('employee_deduction_tag', $array);
-	}
-
-	public function reload_deduction_employee_tag()
-	{
-		$payroll_deduction_id = Request::input('payroll_deduction_id');
-		$data['emp'] = Payroll::getbalance(Self::shop_id(), $payroll_deduction_id);
-		return view('member.payroll.reload.deduction_employee_tag_reload', $data);
-	}
-
-
-	public function modal_edit_deduction($id)
-	{
-		$data['deduction'] = Tbl_payroll_deduction::where('payroll_deduction_id',$id)->first();
-		$data['_type'] = Tbl_payroll_deduction_type::where('shop_id', Self::shop_id())->where('payroll_deduction_archived', 0)->orderBy('payroll_deduction_type_name')->get();
-		$data['emp'] = Payroll::getbalance(Self::shop_id(), $id);
-		// dd($data['_emp']);
-		return view('member.payroll.modal.modal_edit_deduction', $data);
-	}
-
-	public function archive_deduction($archived, $id)
-	{
-		
-		$statement = 'archive';
-		if($archived == 0)
-		{
-			$statement = 'restore';
-		}
-		$file_name 			= Tbl_payroll_deduction::where('payroll_deduction_id', $id)->pluck('payroll_deduction_name');
-		$data['title'] 		= 'Do you really want to '.$statement.' '.$file_name.'?';
-		$data['html'] 		= '';
-		$data['action'] 	= '/member/payroll/deduction/archived_deduction_action';
-		$data['id'] 		= $id;
-		$data['archived'] 	= $archived;
-
-		return view('member.modal.modal_confirm_archived', $data);
-	}
-
-	public function archived_deduction_action()
-	{
-		$update['payroll_deduction_archived'] 	= Request::input('archived');
-		$id 									= Request::input('id');
-		Tbl_payroll_deduction::where('payroll_deduction_id',$id)->update($update);
-
-		$return['status'] 			= 'success';
-		$return['function_name'] 	= 'payrollconfiguration.reload_deduction';
-		return json_encode($return);
-	}
-
-
-	public function modal_update_deduction()
-	{
-		$payroll_deduction_id 			 		= Request::input('payroll_deduction_id');
-		$update['payroll_deduction_name'] 		= Request::input('payroll_deduction_name');
-		$update['payroll_deduction_amount'] 	= Request::input('payroll_deduction_amount');
-		$update['payroll_monthly_amortization'] = Request::input('payroll_monthly_amortization');
-		$update['payroll_periodal_deduction'] 	= Request::input('payroll_periodal_deduction');
-		$update['payroll_deduction_date_filed'] = date('Y-m-d',strtotime(Request::input('payroll_deduction_date_filed')));
-		$update['payroll_deduction_date_start'] = date('Y-m-d',strtotime(Request::input('payroll_deduction_date_start')));
-		$update['payroll_deduction_date_end']	= date('Y-m-d', strtotime(Request::input('payroll_deduction_date_end')));
-		$update['payroll_deduction_period'] 	= Request::input('payroll_deduction_period');
-		$update['payroll_deduction_category'] 	= Request::input('payroll_deduction_category');
-		$update['payroll_deduction_type'] 		= Request::input('payroll_deduction_type');
-		$update['payroll_deduction_remarks'] 	= Request::input('payroll_deduction_remarks');
-
-		Tbl_payroll_deduction::where('payroll_deduction_id',$payroll_deduction_id)->update($update);
-
-		$return['status'] 			= 'success';
-		$return['function_name'] 	= 'payrollconfiguration.reload_deduction';
-		return json_encode($return);
-	}
-
-	public function deduction_employee_tag($archive, $payroll_deduction_employee_id)
-	{
-		$statement = 'cancel';
-		if($archive == 0)
-		{
-			$statement = 'restore';
-		}
-		$file_name 			= Tbl_payroll_deduction_employee::getemployee($payroll_deduction_employee_id)->pluck('payroll_employee_display_name');
-		$data['title'] 		= 'Do you really want to '.$statement.' '.$file_name.'?';
-		$data['html'] 		= '';
-		$data['action'] 	= '/member/payroll/deduction/deduction_employee_tag_archive';
-		$data['id'] 		= $payroll_deduction_employee_id;
-		$data['archived'] 	= $archive;
-
-		return view('member.modal.modal_confirm_archived', $data);
-	}
-
-	public function deduction_employee_tag_archive()
-	{
-		$id = Request::input('id');
-		$update['payroll_deduction_employee_archived'] = Request::input('archived');
-
-		Tbl_payroll_deduction_employee::where('payroll_deduction_employee_id', $id)->update($update);
-
-		$return['status'] 			= 'success';
-		$return['function_name'] 	= 'modal_create_deduction.reload_tag_employee';
-		return json_encode($return);
-	}
-
-	/* DEDUCTION END */
-
-
-	/* HOLIDAY START */
-	public function holiday()
-	{
-
-		$data['_active'] = Tbl_payroll_holiday::getholiday(Self::shop_id())->orderBy('payroll_holiday_date','desc')->paginate($this->paginate_count);
-		$data['_archived'] = Tbl_payroll_holiday::getholiday(Self::shop_id(), 1)->orderBy('payroll_holiday_date','desc')->paginate($this->paginate_count);
-		/*Temporary holiday default*/ 
-		$data['_default'] = Tbl_payroll_holiday_default::orderBy('payroll_holiday_date','desc')->paginate($this->paginate_count);
-		return view('member.payroll.side_container.holiday',$data);
-
-	}
-
-	public function modal_create_holiday()
-	{
-		$data['_company'] = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('payroll_company_name')->get();
-		return view('member.payroll.modal.modal_create_holiday', $data);
-	}
-
-	public function modal_save_holiday()
-	{
-		
-		$insert['shop_id']					= Self::shop_id();
-		$insert['payroll_holiday_name'] 	= Request::input('payroll_holiday_name');
-		$insert['payroll_holiday_date'] 	= date('Y-m-d',strtotime(Request::input('payroll_holiday_date')));
-		$insert['payroll_holiday_category'] = Request::input('payroll_holiday_category');
-
-		$holiday_id = Tbl_payroll_holiday::insertGetId($insert);
-
-		$_company 							= Request::input('company');
-
-		$insert_company = array();
-
-		foreach($_company as $company)
-		{
-
-			$temp['payroll_company_id'] = $company;
-			$temp['payroll_holiday_id'] = $holiday_id;
-			array_push($insert_company, $temp);
-		}
-
-		if(!empty($insert_company))
-		{
-			Tbl_payroll_holiday_company::insert($insert_company);
-		}
-
-		$return['status'] = 'success';
-		$return['function_name'] = 'payrollconfiguration.reload_holiday';
-		return json_encode($return);
-	}
-
-	public function archive_holiday($archive, $id)
-	{
-		$statement = 'archive';
-		if($archive == 0)
-		{
-			$statement = 'restore';
-		}
-		$file_name 			= Tbl_payroll_holiday::where('payroll_holiday_id', $id)->pluck('payroll_holiday_name');
-		$data['title'] 		= 'Do you really want to '.$statement.' '.$file_name.'?';
-		$data['html'] 		= '';
-		$data['action'] 	= '/member/payroll/holiday/archive_holiday_action';
-		$data['id'] 		= $id;
-		$data['archived'] 	= $archive;
-
-		return view('member.modal.modal_confirm_archived', $data);
-	}
-
-	public function archive_holiday_action()
-	{
-		$id = Request::input('id');
-		$update['payroll_holiday_archived'] = Request::input('archived');
-		Tbl_payroll_holiday::where('payroll_holiday_id', $id)->update($update);
-
-
-		$return['status'] = 'success';
-		$return['function_name'] = 'payrollconfiguration.reload_holiday';
-		return json_encode($return);
-	}
-
-	public function modal_edit_holiday($id)
-	{
-		// $data['']
-		$_company = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('payroll_company_name')->get();
-		$company_check = array();
-		foreach($_company as $company)
-		{
-			$count = Tbl_payroll_holiday_company::company($company->payroll_company_id, $id)->count();
-			$status = '';
-			if($count != 0)
-			{
-				$status = 'checked';
-			}
-			$temp['payroll_company_id'] 	= $company->payroll_company_id;
-			$temp['payroll_company_name'] 	= $company->payroll_company_name;
-			$temp['status']					= $status;
-			array_push($company_check, $temp);
-		}
-
-		$data['_company'] = $company_check;
-		$data['holiday'] = Tbl_payroll_holiday::where('payroll_holiday_id',$id)->first();
-		return view('member.payroll.modal.modal_edit_holiday', $data);
-	}
-
-	public function modal_update_holiday()
-	{
-		$payroll_holiday_id 				= Request::input('payroll_holiday_id');
-		$update['payroll_holiday_name'] 	= Request::input('payroll_holiday_name');
-		$update['payroll_holiday_date'] 	= date('Y-m-d',strtotime(Request::input('payroll_holiday_date')));
-		$update['payroll_holiday_category'] = Request::input('payroll_holiday_category');
-		$_company 							= Request::input('company');
-
-		Tbl_payroll_holiday::where('payroll_holiday_id',$payroll_holiday_id)->update($update);
-
-		Tbl_payroll_holiday_company::where('payroll_holiday_id',$payroll_holiday_id)->delete();
-
-		$insert_company = array();
-		foreach($_company as $company)
-		{
-			$temp['payroll_company_id'] = $company;
-			$temp['payroll_holiday_id'] = $payroll_holiday_id;
-			array_push($insert_company, $temp);
-		}
-		if(!empty($insert_company))
-		{
-			Tbl_payroll_holiday_company::insert($insert_company);
-		}
-
-		$return['status'] 			= 'success';
-		$return['function_name'] 	= 'payrollconfiguration.reload_holiday';
-		return json_encode($return);
-
-	}
-
-	/* HOLIDAY END */
-
-	/* ALLOWANCE START */
-	public function allowance()
-	{		
-		$data['_active'] = Tbl_payroll_allowance::sel(Self::shop_id())->orderBy('payroll_allowance_name')->paginate($this->paginate_count);
-		$data['_archived'] = Tbl_payroll_allowance::sel(Self::shop_id(), 1)->orderBy('payroll_allowance_name')->paginate($this->paginate_count);
-		return view('member.payroll.side_container.allowance', $data);
-	}
-
-	public function modal_create_allowance()
-	{
-		Session::put('allowance_employee_tag', array());
-		return view('member.payroll.modal.modal_create_allowance');
-	}
-
-	public function modal_allowance_tag_employee($allowance_id)
-	{
-		$data['_company'] 		= Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
-
-		$data['_department'] 	= Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
-
-		$data['deduction_id']	=	$allowance_id;
-		$data['action']			= 	'/member/payroll/allowance/set_employee_allowance_tag';
-
-		return view('member.payroll.modal.modal_deduction_tag_employee', $data);
-	}
-
-	public function set_employee_allowance_tag()
-	{
-		$allowance_id = Request::input('deduction_id');
-		$employee_tag = Request::input('employee_tag');
-
-		$array = array();
-		if(Session::has('allowance_employee_tag'))
-		{
-			$array = Session::get('allowance_employee_tag');
-		}
-
-		$insert_tag = array();
-
-		foreach($employee_tag as $tag)
-		{
-			array_push($array, $tag);
-			if($allowance_id != 0)
-			{
-				$count = Tbl_payroll_employee_allowance::where('payroll_allowance_id', $allowance_id)->where('payroll_employee_id',$tag)->count();
-				if($count == 0)
-				{
-					$insert['payroll_allowance_id'] = $allowance_id;
-					$insert['payroll_employee_id']	= $tag;
-					array_push($insert_tag, $insert);
-				}
-			}
-		}
-
-		if($allowance_id != 0 && !empty($insert_tag))
-		{
-			Tbl_payroll_employee_allowance::insert($insert_tag);
-		}
-		Session::put('allowance_employee_tag',$array);
-
-		$return['status'] 			= 'success';
-		$return['function_name'] 	= 'modal_create_allowance.load_employee_tag';
-		return json_encode($return);
-	}
-
-	public function get_employee_allowance_tag()
-	{
-		$employee = [0 => 0];
-		if(Session::has('allowance_employee_tag'))
-		{
-			$employee = Session::get('allowance_employee_tag');
-		}
-		$emp = Tbl_payroll_employee_basic::whereIn('payroll_employee_id',$employee)->get();
-
-		$data['new_record'] = $emp;
-		return json_encode($data);
-	}
-
-
-	public function remove_allowance_tabe_employee()
-	{
-		$content = Request::input('content');
-		$array 	 = Session::get('allowance_employee_tag');
-		if(($key = array_search($content, $array)) !== false) {
-		    unset($array[$key]);
-		}
-		Session::put('allowance_employee_tag',$array);
-	}
-
-
-	public function modal_save_allowances()
-	{
-		$insert['payroll_allowance_name'] 		= Request::input('payroll_allowance_name');
-		$insert['payroll_allowance_amount'] 	= Request::input('payroll_allowance_amount');
-		$insert['payroll_allowance_category'] 	= Request::input('payroll_allowance_category');
+     /* TAX TABLE START */
+     public function tax_table_list()
+     {
+          $data['_period'] = Payroll::tax_break(Self::shop_id());
+          // dd($data);
+          return view('member.payroll.side_container.tax', $data);
+     }
+
+     public function tax_table_save()
+     {
+          $payroll_tax_status_id   = Request::input('payroll_tax_status_id');
+          $tax_category            = Request::input('tax_category');
+          $tax_first_range         = Request::input('tax_first_range');
+          $tax_second_range        = Request::input('tax_second_range');
+          $tax_third_range         = Request::input('tax_third_range');
+          $tax_fourth_range        = Request::input('tax_fourth_range');
+          $tax_fifth_range         = Request::input('tax_fifth_range');
+          $taxt_sixth_range        = Request::input('taxt_sixth_range');
+          $tax_seventh_range       = Request::input('tax_seventh_range');
+
+          Tbl_payroll_tax_reference::where('shop_id', Self::shop_id())->where('payroll_tax_status_id',$payroll_tax_status_id)->delete();
+          $insert = array();
+          foreach($tax_category as $key => $category)
+          {
+               $insert[$key]['shop_id']                = Self::shop_id();
+               $insert[$key]['payroll_tax_status_id']  = $payroll_tax_status_id;
+               $insert[$key]['tax_category']                = $category;
+               $insert[$key]['tax_first_range']        = $tax_first_range[$key];
+               $insert[$key]['tax_second_range']       = $tax_second_range[$key];
+               $insert[$key]['tax_third_range']        = $tax_third_range[$key];
+               $insert[$key]['tax_fourth_range']       = $tax_fourth_range[$key];
+               $insert[$key]['tax_fifth_range']        = $tax_fifth_range[$key];
+               $insert[$key]['taxt_sixth_range']       = $taxt_sixth_range[$key];
+               $insert[$key]['tax_seventh_range']           = $tax_seventh_range[$key];
+          }
+
+          Tbl_payroll_tax_reference::insert($insert);
+
+          $return['status'] = 'success';
+          $return['function_name'] = '';
+          return json_encode($return);
+
+     }
+
+
+     /* FOR DEVELOPERS USE ONLY */
+     public function tax_table_save_default()
+     {
+          $payroll_tax_status_id   = Request::input('payroll_tax_status_id');
+          $tax_category            = Request::input('tax_category');
+          $tax_first_range         = Request::input('tax_first_range');
+          $tax_second_range        = Request::input('tax_second_range');
+          $tax_third_range         = Request::input('tax_third_range');
+          $tax_fourth_range        = Request::input('tax_fourth_range');
+          $tax_fifth_range         = Request::input('tax_fifth_range');
+          $taxt_sixth_range        = Request::input('taxt_sixth_range');
+          $tax_seventh_range       = Request::input('tax_seventh_range');
+          Tbl_payroll_tax_default::where('payroll_tax_status_id',$payroll_tax_status_id)->delete();
+          $insert = array();
+          foreach($tax_category as $key => $category)
+          {
+               $insert[$key]['payroll_tax_status_id']  = $payroll_tax_status_id;
+               $insert[$key]['tax_category']                = $category;
+               $insert[$key]['tax_first_range']        = $tax_first_range[$key];
+               $insert[$key]['tax_second_range']       = $tax_second_range[$key];
+               $insert[$key]['tax_third_range']        = $tax_third_range[$key];
+               $insert[$key]['tax_fourth_range']       = $tax_fourth_range[$key];
+               $insert[$key]['tax_fifth_range']        = $tax_fifth_range[$key];
+               $insert[$key]['taxt_sixth_range']       = $taxt_sixth_range[$key];
+               $insert[$key]['tax_seventh_range']           = $tax_seventh_range[$key];
+          }
+
+          Tbl_payroll_tax_default::insert($insert);
+
+          $return['status'] = 'success';
+          $return['function_name'] = '';
+          return json_encode($return);
+     }
+     /* TAX TABLE END */
+
+
+     /* SSS TABLE START */
+     public function sss_table_list()
+     {
+          $data['_sss'] = Tbl_payroll_sss::where('shop_id', Self::shop_id())->orderBy('payroll_sss_min')->get();
+          return view('member.payroll.side_container.ssslist', $data);
+     }
+
+     public function sss_table_save()
+     {
+          $payroll_sss_min              = Request::input('payroll_sss_min');
+          $payroll_sss_max              = Request::input('payroll_sss_max');
+          $payroll_sss_monthly_salary = Request::input('payroll_sss_monthly_salary');
+          $payroll_sss_er               = Request::input('payroll_sss_er');
+          $payroll_sss_ee               = Request::input('payroll_sss_ee');
+          $payroll_sss_total            = Request::input('payroll_sss_total');
+          $payroll_sss_eec              = Request::input('payroll_sss_eec');
+
+          Tbl_payroll_sss::where('shop_id', Self::shop_id())->delete();
+          $insert = array();
+          foreach($payroll_sss_min as $key => $sss_min)
+          {
+               if($sss_min != '' && $sss_min != null)
+               {    
+                    $insert[$key]['shop_id']                          = Self::shop_id();
+                    $insert[$key]['payroll_sss_min']             = $sss_min;
+                    $insert[$key]['payroll_sss_max']             = $payroll_sss_max[$key];
+                    $insert[$key]['payroll_sss_monthly_salary'] = $payroll_sss_monthly_salary[$key];
+                    $insert[$key]['payroll_sss_er']              = $payroll_sss_er[$key];
+                    $insert[$key]['payroll_sss_ee']              = $payroll_sss_ee[$key];
+                    $insert[$key]['payroll_sss_total']                = $payroll_sss_total[$key];
+                    $insert[$key]['payroll_sss_eec']             = $payroll_sss_eec[$key];
+               }
+          }
+          Tbl_payroll_sss::insert($insert);
+          $return['status'] = 'success';
+          return json_encode($return);
+     }
+
+
+
+     /* SSS DEFAULT VALUE [DEVELOPER] */
+     public function sss_table_save_default()
+     {
+          $payroll_sss_min              = Request::input('payroll_sss_min');
+          $payroll_sss_max              = Request::input('payroll_sss_max');
+          $payroll_sss_monthly_salary = Request::input('payroll_sss_monthly_salary');
+          $payroll_sss_er               = Request::input('payroll_sss_er');
+          $payroll_sss_ee               = Request::input('payroll_sss_ee');
+          $payroll_sss_total            = Request::input('payroll_sss_total');
+          $payroll_sss_eec              = Request::input('payroll_sss_eec');
+
+          Tbl_payroll_sss_default::truncate();
+          $insert = array();
+          foreach($payroll_sss_min as $key => $sss_min)
+          {
+               $insert[$key]['payroll_sss_min'] = $sss_min;
+               $insert[$key]['payroll_sss_max'] = $payroll_sss_max[$key];
+               $insert[$key]['payroll_sss_monthly_salary'] = $payroll_sss_monthly_salary[$key];
+               $insert[$key]['payroll_sss_er'] = $payroll_sss_er[$key];
+               $insert[$key]['payroll_sss_ee'] = $payroll_sss_ee[$key];
+               $insert[$key]['payroll_sss_total'] = $payroll_sss_total[$key];
+               $insert[$key]['payroll_sss_eec'] = $payroll_sss_eec[$key];
+          }
+          Tbl_payroll_sss_default::insert($insert);
+
+          $return['status'] = 'success';
+          return json_encode($return);
+
+     }
+     /* SSS TABLE END */
+
+
+     /* PHILHEALTH TABLE START */
+     public function philhealth_table_list()
+     {
+          $data['_philhealth'] = Tbl_payroll_philhealth::where('shop_id', Self::shop_id())->orderBy('payroll_philhealth_min')->get();
+          return view('member.payroll.side_container.philhealthlist', $data); 
+     }
+
+     public function philhealth_table_save()
+     {
+          $payroll_philhealth_min       = Request::input('payroll_philhealth_min');
+          $payroll_philhealth_max       = Request::input('payroll_philhealth_max');
+          $payroll_philhealth_base           = Request::input('payroll_philhealth_base');
+          $payroll_philhealth_premium   = Request::input('payroll_philhealth_premium');
+          $payroll_philhealth_ee_share  = Request::input('payroll_philhealth_ee_share');
+          $payroll_philhealth_er_share  = Request::input('payroll_philhealth_er_share');
+          Tbl_payroll_philhealth::where('shop_id', Self::shop_id())->delete();
+          $insert = array();
+          foreach($payroll_philhealth_min as $key => $min)
+          {
+               if($min != "" && $min != null)
+               {
+                    $insert[$key]['shop_id']                          = Self::shop_id();
+                    $insert[$key]['payroll_philhealth_min']           = $min;
+                    $insert[$key]['payroll_philhealth_max']           = $payroll_philhealth_max[$key];
+                    $insert[$key]['payroll_philhealth_base']          = $payroll_philhealth_base[$key];
+                    $insert[$key]['payroll_philhealth_premium']  = $payroll_philhealth_premium[$key];
+                    $insert[$key]['payroll_philhealth_ee_share']      = $payroll_philhealth_ee_share[$key];
+                    $insert[$key]['payroll_philhealth_er_share']      = $payroll_philhealth_er_share[$key];
+               }
+               
+          }
+          Tbl_payroll_philhealth::insert($insert);
+
+          $return['status'] = 'success';
+          return json_encode($return);
+     }
+
+
+     /* PHILHEALTH DEFAULT VALUE [DEVELOPER] */
+     public function philhealth_table_save_default()
+     {
+          $payroll_philhealth_min       = Request::input('payroll_philhealth_min');
+          $payroll_philhealth_max       = Request::input('payroll_philhealth_max');
+          $payroll_philhealth_base      = Request::input('payroll_philhealth_base');
+          $payroll_philhealth_premium   = Request::input('payroll_philhealth_premium');
+          $payroll_philhealth_ee_share  = Request::input('payroll_philhealth_ee_share');
+          $payroll_philhealth_er_share  = Request::input('payroll_philhealth_er_share');
+
+          Tbl_payroll_philhealth_default::truncate();
+          $insert = array();
+          foreach($payroll_philhealth_min as $key => $min)
+          {
+               if($min != "" && $min != null)
+               {
+                    $insert[$key]['payroll_philhealth_min']           = $min;
+                    $insert[$key]['payroll_philhealth_max']           = $payroll_philhealth_max[$key];
+                    $insert[$key]['payroll_philhealth_base']          = $payroll_philhealth_base[$key];
+                    $insert[$key]['payroll_philhealth_premium']  = $payroll_philhealth_premium[$key];
+                    $insert[$key]['payroll_philhealth_ee_share']      = $payroll_philhealth_ee_share[$key];
+                    $insert[$key]['payroll_philhealth_er_share']      = $payroll_philhealth_er_share[$key];
+               }
+               
+          }
+          Tbl_payroll_philhealth_default::insert($insert);
+
+          $return['status'] = 'success';
+          return json_encode($return);
+     }
+
+
+     /* PHILHEALTH TABLE END */
+     public function pagibig_formula()
+     {
+          $data['pagibig'] = Tbl_payroll_pagibig::where('shop_id', Self::shop_id())->first();
+
+          return view('member.payroll.side_container.pagibig', $data);
+     }
+
+     public function pagibig_formula_save()
+     {
+          Tbl_payroll_pagibig::where('shop_id', Self::shop_id())->delete();
+
+          $insert['payroll_pagibig_percent']  = Request::input('payroll_pagibig_percent');
+          $insert['payroll_pagibig_er_share']  = Request::input('payroll_pagibig_er_share');
+          $insert['shop_id']                  = Self::shop_id();
+
+          Tbl_payroll_pagibig::insert($insert);
+
+          $return['status'] = 'success';
+          return json_encode($return);
+     }
+
+
+
+     /* PAGIBIG DEFAULT VALUE [DEVELOPER] */
+     public function pagibig_formula_save_default()
+     {
+          Tbl_payroll_pagibig_default::truncate();
+          $insert['payroll_pagibig_percent'] = Request::input('payroll_pagibig_percent');
+          $insert['payroll_pagibig_er_share']  = Request::input('payroll_pagibig_er_share');
+          Tbl_payroll_pagibig_default::insert($insert);
+
+          $return['status'] = 'success';
+          return json_encode($return);
+     }
+     /* PAGIBIG TABLE START */
+
+
+     /* DEDUCTION START */
+     public function deduction()
+     {
+          $data['_active'] = Tbl_payroll_deduction::where('shop_id',Self::shop_id())
+                              ->where('payroll_deduction_archived', 0)
+                              ->orderBy('tbl_payroll_deduction.payroll_deduction_category','tbl_payroll_deduction.payroll_deduction_name')
+                              ->paginate($this->paginate_count);
+          $data['_archived'] = Tbl_payroll_deduction::where('shop_id',Self::shop_id())
+                              ->where('payroll_deduction_archived', 1)
+                              ->orderBy('tbl_payroll_deduction.payroll_deduction_category','tbl_payroll_deduction.payroll_deduction_name')
+                              ->paginate($this->paginate_count);
+          return view('member.payroll.side_container.deduction', $data);
+     }
+
+     public function modal_create_deduction()
+     {
+          $data["_expense"] = Accounting::getAllAccount('all',null,['Expense','Other Expense']);
+          $data["default_expense"] = Tbl_chart_of_account::where("account_number", 66000)
+                                             ->where("account_shop_id", Self::shop_id())->value("account_id");
+          $array = array();
+          Session::put('employee_deduction_tag',$array);
+
+          return view('member.payroll.modal.modal_create_deduction', $data);
+     }
+
+     public function modal_create_deduction_type($type)
+     {
+          $type                    = str_replace('_', ' ', $type);
+          $data['_active']    = Tbl_payroll_deduction_type::seltype(Self::shop_id(),$type)->get();
+          $data['_archived']  = Tbl_payroll_deduction_type::seltype(Self::shop_id(),$type, 1)->get();
+          $data['type']       = $type;
+          return view('member.payroll.modal.modal_deduction_type',$data);
+     }
+
+     public function modal_save_deduction_type()
+     {
+          $insert['payroll_deduction_category']   = Request::input('payroll_deduction_category');
+          $insert['payroll_deduction_type_name']  = Request::input('payroll_deduction_type_name');
+          $insert['shop_id']                           = Self::shop_id();
+          $id = Tbl_payroll_deduction_type::insertGetId($insert);
+
+          $type = Request::input('payroll_deduction_category');
+
+          $_data = Tbl_payroll_deduction_type::seltype(Self::shop_id(),$type)->get();
+          $html = '<option value="">Select Type</option>';
+          foreach($_data as $data)
+          {
+               $html .= '<option value="'.$data->payroll_deduction_type_id.'" ';
+               if($data->payroll_deduction_type_id == $id)
+               {
+                    $html .= 'selected="selected"';
+               }
+               $html.= '>'.$data->payroll_deduction_type_name.'</option>';
+          }
+          return $html;
+     }
+
+     public function reload_deduction_type()
+     {
+          $payroll_deduction_category = Request::input('payroll_deduction_category');
+          $archived                          = Request::input('archived');
+          $data['_active']              = Tbl_payroll_deduction_type::seltype(Self::shop_id(),$payroll_deduction_category, $archived)->get();
+          return view('member.payroll.reload.deduction_list_reload',$data);
+     }
+
+     public function update_deduction_type()
+     {
+          $value         = Request::input('value');
+          $content  = Request::input('content');
+          
+          $update['payroll_deduction_type_name'] = $value;
+          Tbl_payroll_deduction_type::where('payroll_deduction_type_id',$content)->update($update);
+
+     }
+
+     public function archive_deduction_type()
+     {
+          $content = Request::input('content');
+          $update['payroll_deduction_archived'] = Request::input('archived');
+          Tbl_payroll_deduction_type::where('payroll_deduction_type_id',$content)->update($update);
+     }
+
+     public function ajax_deduction_type()
+     {
+          $category = Request::input('category');
+          $data = Tbl_payroll_deduction_type::seltype(Self::shop_id(),$category)->get();
+          return json_encode($data);
+     }
+
+     public function modal_deduction_tag_employee($deduction_id)
+     {
+          $data['_company']        = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
+
+          $data['_department']     = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+
+          $data['deduction_id']    =    $deduction_id;
+          $data['action']               =    '/member/payroll/deduction/set_employee_deduction_tag';
+
+          return view('member.payroll.modal.modal_deduction_tag_employee', $data);
+     }
+
+     public function modal_save_deduction()
+     {
+          $insert['shop_id']                           = Self::shop_id();
+          $insert['payroll_deduction_name']       = Request::input('payroll_deduction_name');
+          $insert['payroll_deduction_amount']     = Request::input('payroll_deduction_amount');
+          $insert['payroll_monthly_amortization'] = Request::input('payroll_monthly_amortization');
+          $insert['payroll_periodal_deduction']   = Request::input('payroll_periodal_deduction');
+          $insert['payroll_deduction_date_filed'] = date('Y-m-d',strtotime(Request::input('payroll_deduction_date_filed')));
+          $insert['payroll_deduction_date_start'] = date('Y-m-d',strtotime(Request::input('payroll_deduction_date_start')));
+          $insert['payroll_deduction_date_end']   = date('Y-m-d', strtotime(Request::input('payroll_deduction_date_end')));
+          $insert['payroll_deduction_period']     = Request::input('payroll_deduction_period');
+          $insert['payroll_deduction_remarks']    = Request::input('payroll_deduction_remarks');
+          $insert['payroll_deduction_category']   = Request::input('payroll_deduction_category');
+
+          $insert['expense_account_id']           = Request::input('expense_account_id');
+
+          //$insert['payroll_deduction_type']       = Request::input('payroll_deduction_type');
+
+          //dd($insert);
+          $deduction_id = Tbl_payroll_deduction::insertGetId($insert);
+          if(Session::has('employee_deduction_tag'))
+          {
+               $employee_tag = Session::get('employee_deduction_tag');
+               $insert_employee = [];
+               foreach($employee_tag as $tag)
+               {
+                    $insert_employee['payroll_deduction_id']         = $deduction_id;
+                    $insert_employee['payroll_employee_id']          = $tag;
+                    Tbl_payroll_deduction_employee::insert($insert_employee);
+               }
+          }
+
+          $return['stataus'] = 'success';
+          $return['function_name'] = 'payrollconfiguration.reload_deduction';
+          return json_encode($return);
+
+     }
+
+     public function ajax_deduction_tag_employee()
+     {
+          $company  = Request::input('company');
+          $department = Request::input('department');
+          $jobtitle      = Request::input('jobtitle');
+
+
+          $emp = Tbl_payroll_employee_contract::employeefilter($company, $department, $jobtitle, date('Y-m-d'), Self::shop_id())->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->groupBy('tbl_payroll_employee_basic.payroll_employee_id')->get();
+          // dd($emp);
+          return json_encode($emp);
+     }
+
+     public function set_employee_deduction_tag()
+     {
+          $employee_tag = Request::input('employee_tag');
+          $deduction_id = Request::input('deduction_id');
+          // dd($deduction_id);
+          $array = array();
+          if(Session::has('employee_deduction_tag'))
+          {
+               $array = Session::get('employee_deduction_tag');
+          }
+          // dd($array);
+
+          $insert_tag = array();
+
+          foreach($employee_tag as $tag)
+          {
+               if(!in_array($tag, $array) && $deduction_id == 0)
+               {
+                    array_push($array, $tag);
+               }
+               $count = Tbl_payroll_deduction_employee::where('payroll_deduction_id',$deduction_id)->where('payroll_employee_id', $tag)->count();
+
+               if($count == 0)
+               {
+                    $insert['payroll_deduction_id']    = $deduction_id;
+                    $insert['payroll_employee_id']          = $tag;
+                    array_push($insert_tag, $insert);
+               }
+               
+          }
+          // dd($insert_tag);
+          if($deduction_id != 0 && $insert_tag != '')
+          {
+               Tbl_payroll_deduction_employee::insert($insert_tag);
+          }
+          else
+          {
+               Session::put('employee_deduction_tag', $array);
+          }
+          
+
+          $return['status'] = 'success';
+          $return['function_name'] = 'modal_create_deduction.load_tagged_employee';
+          return json_encode($return);
+     }
+
+     public function get_employee_deduction_tag()
+     {    
+          $employee = [0 => 0];
+          if(Session::has('employee_deduction_tag'))
+          {
+               $employee = Session::get('employee_deduction_tag');
+          }
+          $emp = Tbl_payroll_employee_basic::whereIn('payroll_employee_id',$employee)->get();
+
+          $data['new_record'] = $emp;
+          return json_encode($data);
+     }
+
+     public function remove_from_tag_session()
+     {
+          $content = Request::input('content');
+          $array     = Session::get('employee_deduction_tag');
+          if(($key = array_search($content, $array)) !== false) {
+              unset($array[$key]);
+          }
+          Session::put('employee_deduction_tag', $array);
+     }
+
+     public function reload_deduction_employee_tag()
+     {
+          $payroll_deduction_id = Request::input('payroll_deduction_id');
+          $data['emp'] = Payroll::getbalance(Self::shop_id(), $payroll_deduction_id);
+          return view('member.payroll.reload.deduction_employee_tag_reload', $data);
+     }
+
+
+     public function modal_edit_deduction($id)
+     {
+          $data["_expense"] = Accounting::getAllAccount('all',null,['Expense','Other Expense']);
+          $data['deduction'] = Tbl_payroll_deduction::where('payroll_deduction_id',$id)->first();
+          $data['_type'] = Tbl_payroll_deduction_type::where('shop_id', Self::shop_id())->where('payroll_deduction_archived', 0)->orderBy('payroll_deduction_type_name')->get();
+          $data['emp'] = Payroll::getbalance(Self::shop_id(), $id);
+          //dd($data['deduction']);
+          return view('member.payroll.modal.modal_edit_deduction', $data);
+     }
+
+
+     public function archive_deduction($archived, $id)
+     {
+          
+          $statement = 'archive';
+          if($archived == 0)
+          {
+               $statement = 'restore';
+          }
+          $file_name               = Tbl_payroll_deduction::where('payroll_deduction_id', $id)->value('payroll_deduction_name');
+          $data['title']           = 'Do you really want to '.$statement.' '.$file_name.'?';
+          $data['html']       = '';
+          $data['action']     = '/member/payroll/deduction/archived_deduction_action';
+          $data['id']         = $id;
+          $data['archived']   = $archived;
+
+          return view('member.modal.modal_confirm_archived', $data);
+     }
+
+     public function archived_deduction_action()
+     {
+          $update['payroll_deduction_archived']   = Request::input('archived');
+          $id                                          = Request::input('id');
+          Tbl_payroll_deduction::where('payroll_deduction_id',$id)->update($update);
+
+          $return['status']             = 'success';
+          $return['function_name']      = 'payrollconfiguration.reload_deduction';
+          return json_encode($return);
+     }
+
+
+
+     public function modal_update_deduction()
+     {
+          $payroll_deduction_id                   = Request::input('payroll_deduction_id');
+          $update['payroll_deduction_name']       = Request::input('payroll_deduction_name');
+          $update['payroll_deduction_amount']     = Request::input('payroll_deduction_amount');
+          $update['payroll_monthly_amortization'] = Request::input('payroll_monthly_amortization');
+          $update['payroll_periodal_deduction']   = Request::input('payroll_periodal_deduction');
+          $update['payroll_deduction_date_filed'] = date('Y-m-d',strtotime(Request::input('payroll_deduction_date_filed')));
+          $update['payroll_deduction_date_start'] = date('Y-m-d',strtotime(Request::input('payroll_deduction_date_start')));
+          $update['payroll_deduction_date_end']   = date('Y-m-d', strtotime(Request::input('payroll_deduction_date_end')));
+          $update['payroll_deduction_period']     = Request::input('payroll_deduction_period');
+          $update['payroll_deduction_category']   = Request::input('payroll_deduction_category');
+          $update['payroll_deduction_type']       = Request::input('payroll_deduction_type');
+          $update['payroll_deduction_remarks']    = Request::input('payroll_deduction_remarks');
+
+          $update['expense_account_id']           = Request::input('expense_account_id');
+
+          Tbl_payroll_deduction::where('payroll_deduction_id',$payroll_deduction_id)->update($update);
+
+          $return['status']             = 'success';
+          $return['function_name']      = 'payrollconfiguration.reload_deduction';
+          return json_encode($return);
+     }
+
+     public function deduction_employee_tag($archive, $payroll_deduction_employee_id)
+     {
+          $statement = 'cancel';
+          if($archive == 0)
+          {
+               $statement = 'restore';
+          }
+          $file_name               = Tbl_payroll_deduction_employee::getemployee($payroll_deduction_employee_id)->value('payroll_employee_display_name');
+          $data['title']           = 'Do you really want to '.$statement.' '.$file_name.'?';
+          $data['html']       = '';
+          $data['action']     = '/member/payroll/deduction/deduction_employee_tag_archive';
+          $data['id']         = $payroll_deduction_employee_id;
+          $data['archived']   = $archive;
+
+          return view('member.modal.modal_confirm_archived', $data);
+     }
+
+     public function deduction_employee_tag_archive()
+     {
+          $id = Request::input('id');
+          $update['payroll_deduction_employee_archived'] = Request::input('archived');
+
+
+          Tbl_payroll_deduction_employee::where('payroll_deduction_employee_id', $id)->update($update);
+
+          $return['status']             = 'success';
+          $return['function_name']      = 'modal_create_deduction.reload_tag_employee';
+          return json_encode($return);
+     }
+
+     /* DEDUCTION END */
+
+
+     /* HOLIDAY START */
+     public function holiday()
+     {
+
+          $data['_active'] = Tbl_payroll_holiday::getholiday(Self::shop_id())->orderBy('payroll_holiday_date','desc')->paginate($this->paginate_count);
+          $data['_archived'] = Tbl_payroll_holiday::getholiday(Self::shop_id(), 1)->orderBy('payroll_holiday_date','desc')->paginate($this->paginate_count);
+
+          $data['title']      = 'Holiday';
+          $data['create']     = '/member/payroll/holiday/modal_create_holiday';
+          $data['edit']       = '/member/payroll/holiday/modal_edit_holiday/';
+          $data['archived']   = '/member/payroll/holiday/archive_holiday/';
+          
+          return view('member.payroll.side_container.holiday',$data);
+
+     }
+
+     
+
+     public function modal_create_holiday()
+     {
+          $data['_company'] = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('payroll_company_name')->get();
+          return view('member.payroll.modal.modal_create_holiday', $data);
+     }
+
+     public function modal_save_holiday()
+     {
+          
+          $insert['shop_id']                      = Self::shop_id();
+          $insert['payroll_holiday_name']    = Request::input('payroll_holiday_name');
+          $insert['payroll_holiday_date']    = date('Y-m-d',strtotime(Request::input('payroll_holiday_date')));
+          $insert['payroll_holiday_category'] = Request::input('payroll_holiday_category');
+
+          $holiday_id = Tbl_payroll_holiday::insertGetId($insert);
+
+          $_company                                    = Request::input('company');
+
+          $insert_company = array();
+
+          foreach($_company as $company)
+          {
+
+               $temp['payroll_company_id'] = $company;
+               $temp['payroll_holiday_id'] = $holiday_id;
+               array_push($insert_company, $temp);
+          }
+
+          if(!empty($insert_company))
+          {
+               Tbl_payroll_holiday_company::insert($insert_company);
+          }
+
+          $return['status'] = 'success';
+          $return['function_name'] = 'payrollconfiguration.reload_holiday';
+          return json_encode($return);
+     }
+
+     public function archive_holiday($archive, $id)
+     {
+          $statement = 'archive';
+          if($archive == 0)
+          {
+               $statement = 'restore';
+          }
+          $file_name               = Tbl_payroll_holiday::where('payroll_holiday_id', $id)->value('payroll_holiday_name');
+          $data['title']           = 'Do you really want to '.$statement.' '.$file_name.'?';
+          $data['html']       = '';
+          $data['action']     = '/member/payroll/holiday/archive_holiday_action';
+          $data['id']         = $id;
+          $data['archived']   = $archive;
+
+          return view('member.modal.modal_confirm_archived', $data);
+     }
+
+     public function archive_holiday_action()
+     {
+          $id = Request::input('id');
+          $update['payroll_holiday_archived'] = Request::input('archived');
+          Tbl_payroll_holiday::where('payroll_holiday_id', $id)->update($update);
+
+
+          $return['status'] = 'success';
+          $return['function_name'] = 'payrollconfiguration.reload_holiday';
+          return json_encode($return);
+     }
+
+     public function modal_edit_holiday($id)
+     {
+          // $data['']
+          $_company = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('payroll_company_name')->get();
+          $company_check = array();
+          foreach($_company as $company)
+          {
+               $count = Tbl_payroll_holiday_company::company($company->payroll_company_id, $id)->count();
+               $status = '';
+               if($count != 0)
+               {
+                    $status = 'checked';
+               }
+               $temp['payroll_company_id']   = $company->payroll_company_id;
+               $temp['payroll_company_name']      = $company->payroll_company_name;
+               $temp['status']                         = $status;
+               array_push($company_check, $temp);
+          }
+
+          $data['_company'] = $company_check;
+          $data['holiday'] = Tbl_payroll_holiday::where('payroll_holiday_id',$id)->first();
+          return view('member.payroll.modal.modal_edit_holiday', $data);
+     }
+
+     public function modal_update_holiday()
+     {
+          $payroll_holiday_id                     = Request::input('payroll_holiday_id');
+          $update['payroll_holiday_name']    = Request::input('payroll_holiday_name');
+          $update['payroll_holiday_date']    = date('Y-m-d',strtotime(Request::input('payroll_holiday_date')));
+          $update['payroll_holiday_category'] = Request::input('payroll_holiday_category');
+          $_company                                    = Request::input('company');
+
+          Tbl_payroll_holiday::where('payroll_holiday_id',$payroll_holiday_id)->update($update);
+
+          Tbl_payroll_holiday_company::where('payroll_holiday_id',$payroll_holiday_id)->delete();
+
+          $insert_company = array();
+          foreach($_company as $company)
+          {
+               $temp['payroll_company_id'] = $company;
+               $temp['payroll_holiday_id'] = $payroll_holiday_id;
+               array_push($insert_company, $temp);
+          }
+          if(!empty($insert_company))
+          {
+               Tbl_payroll_holiday_company::insert($insert_company);
+          }
+
+          $return['status']             = 'success';
+          $return['function_name']      = 'payrollconfiguration.reload_holiday';
+          return json_encode($return);
+
+     }
+
+     /* HOLIDAY END */
+
+     /* ALLOWANCE START */
+     public function allowance()
+     {         
+          $data['_active'] = Tbl_payroll_allowance::sel(Self::shop_id())->orderBy('payroll_allowance_name')->paginate($this->paginate_count);
+          $data['_archived'] = Tbl_payroll_allowance::sel(Self::shop_id(), 1)->orderBy('payroll_allowance_name')->paginate($this->paginate_count);
+          return view('member.payroll.side_container.allowance', $data);
+     }
+
+     public function modal_create_allowance()
+     {
+          $data["_expense"] = Accounting::getAllAccount('all',null,['Expense','Other Expense']);
+          $data["default_expense"] = Tbl_chart_of_account::where("account_number", 66000)
+                                             ->where("account_shop_id", Self::shop_id())->value("account_id");
+
+          Session::put('allowance_employee_tag', array());
+          return view('member.payroll.modal.modal_create_allowance', $data);
+     }
+
+     public function modal_allowance_tag_employee($allowance_id)
+     {
+          $data['_company']        = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
+
+          $data['_department']     = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+
+          $data['deduction_id']    =    $allowance_id;
+          $data['action']               =    '/member/payroll/allowance/set_employee_allowance_tag';
+
+          return view('member.payroll.modal.modal_deduction_tag_employee', $data);
+     }
+
+     public function set_employee_allowance_tag()
+     {
+          $allowance_id = Request::input('deduction_id');
+          $employee_tag = Request::input('employee_tag');
+
+          $array = array();
+          if(Session::has('allowance_employee_tag'))
+          {
+               $array = Session::get('allowance_employee_tag');
+          }
+
+          $insert_tag = array();
+
+          foreach($employee_tag as $tag)
+          {
+               array_push($array, $tag);
+               if($allowance_id != 0)
+               {
+                    $count = Tbl_payroll_employee_allowance::where('payroll_allowance_id', $allowance_id)->where('payroll_employee_id',$tag)->count();
+                    if($count == 0)
+                    {
+                         $insert['payroll_allowance_id'] = $allowance_id;
+                         $insert['payroll_employee_id']     = $tag;
+                         array_push($insert_tag, $insert);
+                    }
+               }
+          }
+
+          if($allowance_id != 0 && !empty($insert_tag))
+          {
+               Tbl_payroll_employee_allowance::insert($insert_tag);
+          }
+          Session::put('allowance_employee_tag',$array);
+
+          $return['status']             = 'success';
+          $return['function_name']      = 'modal_create_allowance.load_employee_tag';
+          return json_encode($return);
+     }
+
+     public function get_employee_allowance_tag()
+     {
+          $employee = [0 => 0];
+          if(Session::has('allowance_employee_tag'))
+          {
+               $employee = Session::get('allowance_employee_tag');
+          }
+          $emp = Tbl_payroll_employee_basic::whereIn('payroll_employee_id',$employee)->get();
+
+
+          $data['new_record'] = $emp;
+          return json_encode($data);
+     }
+
+     public function remove_allowance_tabe_employee()
+     {
+          $content = Request::input('content');
+          $array     = Session::get('allowance_employee_tag');
+          if(($key = array_search($content, $array)) !== false) {
+              unset($array[$key]);
+          }
+          Session::put('allowance_employee_tag',$array);
+     }
+     
+     public function modal_save_allowances()
+     {
+          $insert['payroll_allowance_name']       = Request::input('payroll_allowance_name');
+          $insert['payroll_allowance_amount']     = Request::input('payroll_allowance_amount');
+          $insert['payroll_allowance_category']   = Request::input('payroll_allowance_category');
           $insert['payroll_allowance_add_period'] = Request::input('payroll_allowance_add_period');
-		$insert['shop_id']						= Self::shop_id();
-		$allowance_id = Tbl_payroll_allowance::insertGetId($insert);
+          $insert['expense_account_id']           = Request::input('expense_account_id');
+          $insert['payroll_allowance_type']   = Request::input('payroll_allowance_type');
+          $insert['shop_id']                           = Self::shop_id();
+          $allowance_id = Tbl_payroll_allowance::insertGetId($insert);
 
-		$insert_employee = array();
-		if(Session::has('allowance_employee_tag'))
-		{
-			foreach(Session::get('allowance_employee_tag') as $tag)
-			{	
-				$temp['payroll_allowance_id'] 	= $allowance_id;
-				$temp['payroll_employee_id']	= $tag;
-				array_push($insert_employee, $temp);
-			}
-			if(!empty($insert_employee))
-			{
-				Tbl_payroll_employee_allowance::insert($insert_employee);
-			}
-		}
+          $insert_employee = array();
+          if(Session::has('allowance_employee_tag'))
+          {
+               foreach(Session::get('allowance_employee_tag') as $tag)
+               {    
+                    $temp['payroll_allowance_id']      = $allowance_id;
+                    $temp['payroll_employee_id']  = $tag;
+                    array_push($insert_employee, $temp);
+               }
+               if(!empty($insert_employee))
+               {
+                    Tbl_payroll_employee_allowance::insert($insert_employee);
+               }
+          }
 
-		$return['status'] 			= 'success';
-		$return['function_name'] 	= 'payrollconfiguration.reload_allowance';
-		return json_encode($return);
-	}
+          $return['status']             = 'success';
+          $return['function_name']      = 'payrollconfiguration.reload_allowance';
+          return json_encode($return);
+     }
 
-	public function modal_archived_allwance($archived, $allowance_id)
-	{
-		$statement = 'archive';
-		if($archived == 0)
-		{
-			$statement = 'restore';
-		}
-		$file_name 			= Tbl_payroll_allowance::where('payroll_allowance_id', $allowance_id)->pluck('payroll_allowance_name');
-		$data['title'] 		= 'Do you really want to '.$statement.' '.$file_name.'?';
-		$data['html'] 		= '';
-		$data['action'] 	= '/member/payroll/allowance/archived_allowance';
-		$data['id'] 		= $allowance_id;
-		$data['archived'] 	= $archived;
+     public function modal_archived_allwance($archived, $allowance_id)
+     {
+          $statement = 'archive';
+          if($archived == 0)
+          {
+               $statement = 'restore';
+          }
+          $file_name               = Tbl_payroll_allowance::where('payroll_allowance_id', $allowance_id)->value('payroll_allowance_name');
+          $data['title']           = 'Do you really want to '.$statement.' '.$file_name.'?';
+          $data['html']       = '';
+          $data['action']     = '/member/payroll/allowance/archived_allowance';
+          $data['id']         = $allowance_id;
+          $data['archived']   = $archived;
 
-		return view('member.modal.modal_confirm_archived', $data);
-	}
+          return view('member.modal.modal_confirm_archived', $data);
+     }
 
-	public function archived_allowance()
-	{
-		$id = Request::input('id');
-		$update['payroll_allowance_archived'] = Request::input('archived');
-		Tbl_payroll_allowance::where('payroll_allowance_id', $id)->update($update);
+     public function archived_allowance()
+     {
+          $id = Request::input('id');
+          $update['payroll_allowance_archived'] = Request::input('archived');
+          Tbl_payroll_allowance::where('payroll_allowance_id', $id)->update($update);
 
-		$return['status'] 			= 'success';
-		$return['function_name'] 	= 'payrollconfiguration.reload_allowance';
-		return json_encode($return);
-	}
+          $return['status']             = 'success';
+          $return['function_name']      = 'payrollconfiguration.reload_allowance';
+          return json_encode($return);
+     }
 
-	public function modal_edit_allowance($id)
-	{
-		$data['allowance'] = Tbl_payroll_allowance::where('payroll_allowance_id', $id)->first();
-		$data['_active'] = Tbl_payroll_employee_allowance::getperallowance($id)->get();
-		$data['_archived'] = Tbl_payroll_employee_allowance::getperallowance($id , 1)->get();
-		// dd($data);
-		return view('member.payroll.modal.modal_edit_allowance', $data);
-	}
+     public function modal_edit_allowance($id)
+     {
+          $data["_expense"] = Accounting::getAllAccount('all',null,['Expense','Other Expense']);
+          $data['allowance'] = Tbl_payroll_allowance::where('payroll_allowance_id', $id)->first();
+          $data['_active'] = Tbl_payroll_employee_allowance::getperallowance($id)->get();
+          $data['_archived'] = Tbl_payroll_employee_allowance::getperallowance($id , 1)->get();
+          // dd($data);
+          return view('member.payroll.modal.modal_edit_allowance', $data);
+     }
 
-	public function modal_archived_llowance_employee($archived, $id)
-	{
-		$statement = 'archive';
-		if($archived == 0)
-		{
-			$statement = 'restore';
-		}
-		$_query 			= Tbl_payroll_employee_allowance::employee($id)->first();
-		// dd($_query);
-		$file_name 			= $_query->payroll_employee_title_name.' '.$_query->payroll_employee_first_name.' '.$_query->payroll_employee_middle_name.' '.$_query->payroll_employee_last_name.' '.$_query->payroll_employee_suffix_name;
-		$data['title'] 		= 'Do you really want to '.$statement.' '.$file_name.'?';
-		$data['html'] 		= '';
-		$data['action'] 	= '/member/payroll/allowance/archived_allowance_employee';
-		$data['id'] 		= $id;
-		$data['archived'] 	= $archived;
+     public function modal_archived_llowance_employee($archived, $id)
+     {
+          $statement = 'archive';
+          if($archived == 0)
+          {
+               $statement = 'restore';
+          }
+          $_query             = Tbl_payroll_employee_allowance::employee($id)->first();
+          // dd($_query);
+          $file_name               = $_query->payroll_employee_title_name.' '.$_query->payroll_employee_first_name.' '.$_query->payroll_employee_middle_name.' '.$_query->payroll_employee_last_name.' '.$_query->payroll_employee_suffix_name;
+          $data['title']           = 'Do you really want to '.$statement.' '.$file_name.'?';
+          $data['html']       = '';
+          $data['action']     = '/member/payroll/allowance/archived_allowance_employee';
+          $data['id']         = $id;
+          $data['archived']   = $archived;
 
-		return view('member.modal.modal_confirm_archived', $data);
-	}
+          return view('member.modal.modal_confirm_archived', $data);
+     }
 
-	public function archived_allowance_employee()
-	{
-		$id = Request::input('id');
-		$update['payroll_employee_allowance_archived'] = Request::input('archived');
-		Tbl_payroll_employee_allowance::where('payroll_employee_allowance_id', $id)->update($update);
+     public function archived_allowance_employee()
+     {
+          $id = Request::input('id');
+          $update['payroll_employee_allowance_archived'] = Request::input('archived');
+          Tbl_payroll_employee_allowance::where('payroll_employee_allowance_id', $id)->update($update);
 
-		$return['status'] 			= 'success';
-		$return['function_name'] 	= 'modal_create_allowance.load_emoloyee_tag';
-		return json_encode($return);
-	}
+          $return['status']             = 'success';
+          $return['function_name']      = 'modal_create_allowance.load_emoloyee_tag';
+          return json_encode($return);
+     }
 
-	public function update_allowance()
-	{
-		$payroll_allowance_id 				= Request::input('payroll_allowance_id');
-		$update['payroll_allowance_name'] 		= Request::input('payroll_allowance_name');
-		$update['payroll_allowance_amount'] 	= Request::input('payroll_allowance_amount');
-		$update['payroll_allowance_category'] 	= Request::input('payroll_allowance_category');
-		$update['payroll_allowance_add_period'] = Request::input('payroll_allowance_add_period');
+     public function update_allowance()
+     {
+          $payroll_allowance_id                   = Request::input('payroll_allowance_id');
+          $update['payroll_allowance_name']       = Request::input('payroll_allowance_name');
+          $update['payroll_allowance_amount']     = Request::input('payroll_allowance_amount');
+          $update['payroll_allowance_category']   = Request::input('payroll_allowance_category');
+          $update['payroll_allowance_add_period'] = Request::input('payroll_allowance_add_period');
+          $update['payroll_allowance_type'] = Request::input('payroll_allowance_type');
+          $update['expense_account_id']           = Request::input('expense_account_id');
 
-		Tbl_payroll_allowance::where('payroll_allowance_id', $payroll_allowance_id)->update($update);
+          Tbl_payroll_allowance::where('payroll_allowance_id', $payroll_allowance_id)->update($update);
 
-		$return['status'] 			= 'success';
-		$return['function_name'] 	= 'payrollconfiguration.reload_allowance';
-		return json_encode($return);
-	}
+          $return['status']             = 'success';
+          $return['function_name']      = 'payrollconfiguration.reload_allowance';
+          return json_encode($return);
+     }
 
-	public function reload_allowance_employee()
-	{
-		$payroll_allowance_id = Request::input('payroll_allowance_id');
-		$data['_active'] = Tbl_payroll_employee_allowance::getperallowance($payroll_allowance_id)->get();
-		$data['_archived'] = Tbl_payroll_employee_allowance::getperallowance($payroll_allowance_id , 1)->get();
-		return view('member.payroll.reload.allowance_employee_reload', $data);
-	}
+     public function reload_allowance_employee()
+     {
+          $payroll_allowance_id = Request::input('payroll_allowance_id');
+          $data['_active'] = Tbl_payroll_employee_allowance::getperallowance($payroll_allowance_id)->get();
+          $data['_archived'] = Tbl_payroll_employee_allowance::getperallowance($payroll_allowance_id , 1)->get();
+          return view('member.payroll.reload.allowance_employee_reload', $data);
+     }
 
-	/* ALLOWANCE END */
+     /* ALLOWANCE END */
 
-	/* LEAVE START */
-	public function leave()
-	{
-		$data['_active'] = Tbl_payroll_leave_temp::sel(Self::shop_id())->orderBy('payroll_leave_temp_name')->paginate($this->paginate_count);
-		$data['_archived'] = Tbl_payroll_leave_temp::sel(Self::shop_id(), 1)->orderBy('payroll_leave_temp_name')->paginate($this->paginate_count);
-		/*return view('member.payroll.side_container.leave', $data);*/
-		return view('member.payroll.side_container.leave', $data)->with('data', $data);
-	}
+     /* LEAVE START */
+     public function leave()
+     {
+          $data['_active'] = Tbl_payroll_leave_temp::sel(Self::shop_id())->orderBy('payroll_leave_temp_name')->paginate($this->paginate_count);
+          $data['_archived'] = Tbl_payroll_leave_temp::sel(Self::shop_id(), 1)->orderBy('payroll_leave_temp_name')->paginate($this->paginate_count);
+          /*return view('member.payroll.side_container.leave', $data);*/
+          return view('member.payroll.side_container.leave', $data)->with('data', $data);
+     }
 
-	/*Function to view modal to create leave_temp*/
-	public function modal_create_leave_temp()
-	{
-		Session::put('leave_tag_employee', array());
-		return view('member.payroll.modal.modal_create_leave_temp');
-	}
+     /*Function to view modal to create leave_temp*/
+     public function modal_create_leave_temp()
+     {
+          Session::put('leave_tag_employee', array());
+          return view('member.payroll.modal.modal_create_leave_temp');
+     }
 
-	public function modal_leave_tag_employee($leave_temp_id)
-	{
-		$data['_company'] 		= Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
+     public function modal_leave_tag_employee($leave_temp_id)
+     {
+          $data['_company']        = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
 
-		$data['_department'] 	= Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+          $data['_department']     = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
 
-		$data['deduction_id']	=	$leave_temp_id;
-		$data['action']			= 	'/member/payroll/leave/set_leave_tag_employee';
-		return view('member.payroll.modal.modal_deduction_tag_employee', $data);
-	}
+          $data['deduction_id']    =    $leave_temp_id;
+          $data['action']               =    '/member/payroll/leave/set_leave_tag_employee';
+          return view('member.payroll.modal.modal_deduction_tag_employee', $data);
+     }
 
-	public function set_leave_tag_employee()
-	{
-		$leave_temp_id = Request::input('deduction_id');
-		$employee_tag = Request::input('employee_tag');
+     public function get_leave_tag_employee()
+     {
+          $employee = [0 => 0];
+          if(Session::has('leave_tag_employee'))
+          {
+               $employee = Session::get('leave_tag_employee');
+          }
+          $emp = Tbl_payroll_employee_basic::whereIn('payroll_employee_id',$employee)->get();
 
-		$array = array();
-		if(Session::has('leave_tag_employee'))
-		{
-			$array = Session::get('leave_tag_employee');
-		}
+          $data['new_record'] = $emp;
+          return json_encode($data);
+     }
 
-		$insert_tag = array();
+     public function set_leave_tag_employee()
+     {
+          $leave_temp_id = Request::input('deduction_id');
+          $employee_tag = Request::input('employee_tag');
 
-		if(isset($employee_tag)){
-			foreach($employee_tag as $tag)
-			{
-				array_push($array, $tag);
-				if($leave_temp_id != 0)
-				{
-					$count = Tbl_payroll_leave_employee::where('payroll_leave_temp_id', $leave_temp_id)->where('payroll_employee_id',$tag)->count();
-					if($count == 0)
-					{
-						$insert['payroll_leave_temp_id'] = $leave_temp_id;
-						$insert['payroll_employee_id']	= $tag;
-						array_push($insert_tag, $insert);
-					}
-				}
-			}	
-		}
-			
+          $array = array();
+          if(Session::has('leave_tag_employee'))
+          {
+               $array = Session::get('leave_tag_employee');
+          }
 
-		if($leave_temp_id != 0 && !empty($insert_tag))
-		{
-			Tbl_payroll_leave_employee::insert($insert_tag);
-		}
-		Session::put('leave_tag_employee',$array);
+          $insert_tag = array();
 
-		$return['status'] 			= 'success';
-		$return['function_name'] 	= 'modal_create_leave_temp.load_employee_tag';
-		return json_encode($return);
-	}
+          if(isset($employee_tag)){
+               foreach($employee_tag as $tag)
+               {
+                    array_push($array, $tag);
+                    if($leave_temp_id != 0)
+                    {
+                         $count = Tbl_payroll_leave_employee::where('payroll_leave_temp_id', $leave_temp_id)->where('payroll_employee_id',$tag)->count();
+                         if($count == 0)
+                         {
+                              $insert['payroll_leave_temp_id'] = $leave_temp_id;
+                              $insert['payroll_employee_id']     = $tag;
+                              array_push($insert_tag, $insert);
+                         }
+                    }
+               }    
+          }
+               
 
-	public function get_leave_tag_employee()
-	{
-		$employee = [0 => 0];
-		if(Session::has('leave_tag_employee'))
-		{
-			$employee = Session::get('leave_tag_employee');
-		}
-		$emp = Tbl_payroll_employee_basic::whereIn('payroll_employee_id',$employee)->get();
+          if($leave_temp_id != 0 && !empty($insert_tag))
+          {
+               Tbl_payroll_leave_employee::insert($insert_tag);
+          }
+          Session::put('leave_tag_employee',$array);
 
-		$data['new_record'] = $emp;
-		return json_encode($data);
-	}
+         
+          $return['status']             = 'success';
+          $return['function_name']      = 'modal_create_leave_temp.load_employee_tag';
+          return json_encode($return);
+     }
 
+     public function remove_leave_tag_employee()
+     {
+          $content = Request::input('content');
+          $array     = Session::get('leave_tag_employee');
+          if(($key = array_search($content, $array)) !== false) {
+              unset($array[$key]);
+          }
+          Session::put('leave_tag_employee',$array);
+     }
 
-	public function remove_leave_tag_employee()
-	{
-		$content = Request::input('content');
-		$array 	 = Session::get('leave_tag_employee');
-		if(($key = array_search($content, $array)) !== false) {
-		    unset($array[$key]);
-		}
-		Session::put('leave_tag_employee',$array);
-	}
+     public function modal_save_leave_temp()
+     {
+          $insert['payroll_leave_temp_name']                     = Request::input('payroll_leave_temp_name');
+          $insert['payroll_leave_temp_days_cap']            = Request::input('payroll_leave_temp_days_cap');
+          $insert['payroll_leave_temp_with_pay']            = Request::input('payroll_leave_temp_with_pay');
+          $insert['payroll_leave_temp_is_cummulative'] = Request::input('payroll_leave_temp_is_cummulative');
+          $insert['shop_id']                                     = Self::shop_id();
+          $leave_temp_id = Tbl_payroll_leave_temp::insertGetId($insert);
 
-	public function modal_save_leave_temp()
-	{
-		$insert['payroll_leave_temp_name'] 				= Request::input('payroll_leave_temp_name');
-		$insert['payroll_leave_temp_days_cap'] 			= Request::input('payroll_leave_temp_days_cap');
-		$insert['payroll_leave_temp_with_pay'] 			= Request::input('payroll_leave_temp_with_pay');
-		$insert['payroll_leave_temp_is_cummulative']	= Request::input('payroll_leave_temp_is_cummulative');
-		$insert['shop_id']								= Self::shop_id();
-		$leave_temp_id = Tbl_payroll_leave_temp::insertGetId($insert);
+          $insert_employee = array();
+          if(Session::has('leave_tag_employee'))
+          {
+               foreach(Session::get('leave_tag_employee') as $tag)
+               {    
+                    $temp['payroll_leave_temp_id']     = $leave_temp_id;
+                    $temp['payroll_employee_id']  = $tag;
+                    array_push($insert_employee, $temp);
+               }
+               if(!empty($insert_employee))
+               {
+                    Tbl_payroll_leave_employee::insert($insert_employee);
+               }
+          }
 
-		$insert_employee = array();
-		if(Session::has('leave_tag_employee'))
-		{
-			foreach(Session::get('leave_tag_employee') as $tag)
-			{	
-				$temp['payroll_leave_temp_id'] 	= $leave_temp_id;
-				$temp['payroll_employee_id']	= $tag;
-				array_push($insert_employee, $temp);
-			}
-			if(!empty($insert_employee))
-			{
-				Tbl_payroll_leave_employee::insert($insert_employee);
-			}
-		}
+          $return['status']             = 'success';
+          $return['function_name']      = 'payrollconfiguration.reload_leave_temp';
+          return json_encode($return);
+     }
 
-		$return['status'] 			= 'success';
-		$return['function_name'] 	= 'payrollconfiguration.reload_leave_temp';
-		return json_encode($return);
-	}
+     public function modal_archived_leave_temp($archived, $leave_temp_id)
+     {
+          $statement = 'archive';
+          if($archived == 0)
+          {
+               $statement = 'restore';
+          }
+          $file_name               = Tbl_payroll_leave_temp::where('payroll_leave_temp_id', $leave_temp_id)->value('payroll_leave_temp_name');
+          $data['title']           = 'Do you really want to '.$statement.' '.$file_name.'?';
+          $data['html']       = '';
+          $data['action']     = '/member/payroll/leave/archived_leave_temp';
+          $data['id']         = $leave_temp_id;
+          $data['archived']   = $archived;
 
-	public function modal_archived_leave_temp($archived, $leave_temp_id)
-	{
-		$statement = 'archive';
-		if($archived == 0)
-		{
-			$statement = 'restore';
-		}
-		$file_name 			= Tbl_payroll_leave_temp::where('payroll_leave_temp_id', $leave_temp_id)->pluck('payroll_leave_temp_name');
-		$data['title'] 		= 'Do you really want to '.$statement.' '.$file_name.'?';
-		$data['html'] 		= '';
-		$data['action'] 	= '/member/payroll/leave/archived_leave_temp';
-		$data['id'] 		= $leave_temp_id;
-		$data['archived'] 	= $archived;
+          return view('member.modal.modal_confirm_archived', $data);
+     }
 
-		return view('member.modal.modal_confirm_archived', $data);
-	}
+     public function archived_leave_temp()
+     {
+          $id = Request::input('id');
+          $update['payroll_leave_temp_archived'] = Request::input('archived');
+          Tbl_payroll_leave_temp::where('payroll_leave_temp_id', $id)->update($update);
 
-	public function archived_leave_temp()
-	{
-		$id = Request::input('id');
-		$update['payroll_leave_temp_archived'] = Request::input('archived');
-		Tbl_payroll_leave_temp::where('payroll_leave_temp_id', $id)->update($update);
+          $return['status']             = 'success';
+          $return['function_name']      = 'payrollconfiguration.reload_leave_temp';
+          return json_encode($return);
 
-		$return['status'] 			= 'success';
-		$return['function_name'] 	= 'payrollconfiguration.reload_leave_temp';
-		return json_encode($return);
+     }
 
-	}
+     public function modal_edit_leave_temp($id)
+     {
+          $data['leave_temp'] = Tbl_payroll_leave_temp::where('payroll_leave_temp_id', $id)->first();
+          $data['_active'] = Tbl_payroll_leave_employee::getperleave($id)->get();
+          $data['_archived'] = Tbl_payroll_leave_employee::getperleave($id , 1)->get();
+          // dd($data);
+          return view('member.payroll.modal.modal_edit_leave_temp', $data);
+     }
 
-	public function modal_edit_leave_temp($id)
-	{
-		$data['leave_temp'] = Tbl_payroll_leave_temp::where('payroll_leave_temp_id', $id)->first();
-		$data['_active'] = Tbl_payroll_leave_employee::getperleave($id)->get();
-		$data['_archived'] = Tbl_payroll_leave_employee::getperleave($id , 1)->get();
-		// dd($data);
-		return view('member.payroll.modal.modal_edit_leave_temp', $data);
-	}
+     public function update_leave_temp()
+     {
+          $payroll_leave_temp_id                       = Request::input('payroll_leave_temp_id');
+          $update['payroll_leave_temp_name']           = Request::input('payroll_leave_temp_name');
+          $update['payroll_leave_temp_days_cap']  = Request::input('payroll_leave_temp_days_cap');
+          $update['payroll_leave_temp_with_pay']  = Request::input('payroll_leave_temp_with_pay');
+          $update['payroll_leave_temp_is_cummulative']      = Request::input('payroll_leave_temp_is_cummulative');
+          Tbl_payroll_leave_temp::where('payroll_leave_temp_id', $payroll_leave_temp_id)->update($update);
+          
+          $return['status']             = 'success';
+          $return['function_name']      = 'payrollconfiguration.reload_leave_temp';
+          return json_encode($return);
+     }
 
-	public function update_leave_temp()
-	{
-		$payroll_leave_temp_id 					= Request::input('payroll_leave_temp_id');
-		$update['payroll_leave_temp_name'] 		= Request::input('payroll_leave_temp_name');
-		$update['payroll_leave_temp_days_cap'] 	= Request::input('payroll_leave_temp_days_cap');
-		$update['payroll_leave_temp_with_pay'] 	= Request::input('payroll_leave_temp_with_pay');
-		$update['payroll_leave_temp_is_cummulative'] 	= Request::input('payroll_leave_temp_is_cummulative');
-		Tbl_payroll_leave_temp::where('payroll_leave_temp_id', $payroll_leave_temp_id)->update($update);
-		
-		$return['status'] 			= 'success';
-		$return['function_name'] 	= 'payrollconfiguration.reload_leave_temp';
-		return json_encode($return);
-	}
+     public function modal_archived_leave_employee($archived, $id)
+     {
+          $statement = 'archive';
+          if($archived == 0)
+          {
+               $statement = 'restore';
+          }
+          $_query             = Tbl_payroll_leave_employee::employee($id)->first();
+          // dd($_query);
+          $file_name               = $_query->payroll_employee_title_name.' '.$_query->payroll_employee_first_name.' '.$_query->payroll_employee_middle_name.' '.$_query->payroll_employee_last_name.' '.$_query->payroll_employee_suffix_name;
+          $data['title']           = 'Do you really want to '.$statement.' '.$file_name.'?';
+          $data['html']       = '';
+          $data['action']     = '/member/payroll/leave/archived_leave_employee';
+          $data['id']         = $id;
+          $data['archived']   = $archived;
 
-	public function modal_archived_leave_employee($archived, $id)
-	{
-		$statement = 'archive';
-		if($archived == 0)
-		{
-			$statement = 'restore';
-		}
-		$_query 			= Tbl_payroll_leave_employee::employee($id)->first();
-		// dd($_query);
-		$file_name 			= $_query->payroll_employee_title_name.' '.$_query->payroll_employee_first_name.' '.$_query->payroll_employee_middle_name.' '.$_query->payroll_employee_last_name.' '.$_query->payroll_employee_suffix_name;
-		$data['title'] 		= 'Do you really want to '.$statement.' '.$file_name.'?';
-		$data['html'] 		= '';
-		$data['action'] 	= '/member/payroll/leave/archived_leave_employee';
-		$data['id'] 		= $id;
-		$data['archived'] 	= $archived;
+          return view('member.modal.modal_confirm_archived', $data);
 
-		return view('member.modal.modal_confirm_archived', $data);
+     }
 
+     public function archived_leave_employee()
+     {
+          $id = Request::input('id');
+          $update['payroll_leave_employee_is_archived'] = Request::input('archived');
+          Tbl_payroll_leave_employee::where('payroll_leave_employee_id', $id)->update($update);
+          
+          $return['status']             = 'success';
+          $return['function_name']      = 'modal_create_leave_temp.load_employee_tag';
+          return json_encode($return);
+     }
 
-	}
+     public function reload_leave_employee()
+     {
+          $payroll_leave_temp_id = Request::input('payroll_leave_temp_id');
+          $data['_active'] = Tbl_payroll_leave_employee::getperleave($payroll_leave_temp_id)->get();
+          $data['_archived'] = Tbl_payroll_leave_employee::getperleave($payroll_leave_temp_id , 1)->get();
+          return view('member.payroll.reload.leave_employee_reload', $data);
+     }
 
-	public function archived_leave_employee()
-	{
-		$id = Request::input('id');
-		$update['payroll_leave_employee_is_archived'] = Request::input('archived');
-		Tbl_payroll_leave_employee::where('payroll_leave_employee_id', $id)->update($update);
+     /* LEAVE END */
 
-		$return['status'] 			= 'success';
-		$return['function_name'] 	= 'modal_create_leave_temp.load_employee_tag';
-		return json_encode($return);
-	}
+     /* PAYROLL GROUP START */
+     public function payroll_group()
+     {
+          // Tbl_payroll_overtime_rate
+          $data['_active'] = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->paginate($this->paginate_count);
+          $data['_archived'] = Tbl_payroll_group::sel(Self::shop_id(), 1)->orderBy('payroll_group_code')->paginate($this->paginate_count);
+          // dd($data);
+          return view('member.payroll.side_container.payroll_group', $data);
+     }
 
-	public function reload_leave_employee()
-	{
-		$payroll_leave_temp_id = Request::input('payroll_leave_temp_id');
-		$data['_active'] = Tbl_payroll_leave_employee::getperleave($payroll_leave_temp_id)->get();
-		$data['_archived'] = Tbl_payroll_leave_employee::getperleave($payroll_leave_temp_id , 1)->get();
-		return view('member.payroll.reload.leave_employee_reload', $data);
-	}
-
-	/* LEAVE END */
-
-
-	/* PAYROLL GROUP START */
-	public function payroll_group()
-	{
-		// Tbl_payroll_overtime_rate
-		$data['_active'] = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->paginate($this->paginate_count);
-		$data['_archived'] = Tbl_payroll_group::sel(Self::shop_id(), 1)->orderBy('payroll_group_code')->paginate($this->paginate_count);
-		return view('member.payroll.side_container.payroll_group', $data);
-	}
-
-	public function modal_create_payroll_group()
-	{
-		$data['_overtime_rate']  = Tbl_payroll_over_time_rate_default::get();
-		$data['_day'] 			= Payroll::restday_checked(); 
+     public function modal_create_payroll_group()
+     {
+          $data['_overtime_rate']  = Tbl_payroll_over_time_rate_default::get();
+          $data['_day']            = Payroll::restday_checked(); 
           $data['_period']         = Tbl_payroll_tax_period::check(Self::shop_id())->get();
-		return view('member.payroll.modal.modal_create_payroll_group', $data);
-	}
+          $data['_shift_code']     = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->get();
 
-	public function modal_save_payroll_group()
-	{
-		
-		$insert['shop_id']								= Self::shop_id();
-		$insert['payroll_group_code'] 					= Request::input('payroll_group_code');
-		$insert['payroll_group_salary_computation'] 	= Request::input('payroll_group_salary_computation');
-		$insert['payroll_group_period'] 				= Request::input('payroll_group_period');
-		$insert['payroll_group_13month_basis'] 			= Request::input('payroll_group_13month_basis');
-		
-		if( Request::has('payroll_group_deduct_before_absences'))
-		{
-			$insert['payroll_group_deduct_before_absences'] = Request::input('payroll_group_deduct_before_absences');
-		}
+          return view('member.payroll.modal.modal_create_payroll_group', $data);
+     }
+
+     public function modal_save_payroll_group()
+     {
+          
+          $insert['shop_id']                                     = Self::shop_id();
+          $insert['payroll_group_code']                          = Request::input('payroll_group_code');
+          $insert['payroll_group_salary_computation']  = Request::input('payroll_group_salary_computation');
+          $insert['payroll_group_period']                   = Request::input('payroll_group_period');
+          $insert['payroll_group_13month_basis']            = Request::input('payroll_group_13month_basis');
+          
+          if( Request::has('payroll_group_deduct_before_absences'))
+          {
+               $insert['payroll_group_deduct_before_absences'] = Request::input('payroll_group_deduct_before_absences');
+          }
 
           $payroll_group_before_tax                         = 0;
           if(Request::has("payroll_group_before_tax"))
           {
                $payroll_group_before_tax = Request::input('payroll_group_before_tax');
           }
-		
+
+          $insert['display_monthly_rate']    = 0;
+          $insert['display_daily_rate']      = 0;
+          if(Request::has("display_monthly_rate"))
+          {
+               $insert['display_monthly_rate'] = 1;
+          }
+
+          if(Request::has("display_daily_rate"))
+          {
+               $insert['display_daily_rate'] = 1;
+          }
+          
           $insert['payroll_group_before_tax']               = $payroll_group_before_tax;
-		$insert['payroll_group_tax'] 					= Request::input('payroll_group_tax');
-		$insert['payroll_group_sss'] 					= Request::input('payroll_group_sss');
-		$insert['payroll_group_philhealth'] 			= Request::input('payroll_group_philhealth');
-		$insert['payroll_group_pagibig'] 				= Request::input('payroll_group_pagibig');
-		$insert['payroll_group_agency'] 				= Request::input('payroll_group_agency');
-		// $insert['payroll_group_target_hour'] 			= Request::input('payroll_group_target_hour');
-		$insert['payroll_group_grace_time'] 			= Request::input('payroll_group_grace_time');
-		$insert['payroll_group_agency_fee'] 			= Request::input('payroll_group_agency_fee');
-		$insert['payroll_late_category'] 				= Request::input('payroll_late_category');
-		$insert['payroll_late_interval'] 				= Request::input('payroll_late_interval');
-		$insert['payroll_late_parameter'] 				= Request::input('payroll_late_parameter');
-		$insert['payroll_late_deduction'] 				= Request::input('payroll_late_deduction');
-		// if(Request::has('payroll_group_is_flexi_break'))
-		// {
-		// 	$insert['payroll_group_is_flexi_break'] 	= Request::input('payroll_group_is_flexi_break');
-		// }
-		// $insert['payroll_group_break_start'] 			= date('H:i:s',strtotime(Request::input('payroll_group_break_start')));
-		// $insert['payroll_group_break_end'] 				= date('H:i:s',strtotime(Request::input('payroll_group_break_end')));
-		// $insert['payroll_group_flexi_break'] 			= Request::input('payroll_group_flexi_break');
-		
-		// if(Request::has('payroll_group_is_flexi_time'))
-		// {
-		// 	$insert['payroll_group_is_flexi_time'] 		= Request::input('payroll_group_is_flexi_time');
-		// }
-		
-		$insert['payroll_group_working_day_month'] 		= Request::input('payroll_group_working_day_month');
+          $insert['payroll_group_tax']                      = Request::input('payroll_group_tax');
+          $insert['payroll_group_sss']                      = Request::input('payroll_group_sss');
+          $insert['payroll_group_philhealth']               = Request::input('payroll_group_philhealth');
+          $insert['payroll_group_pagibig']                  = Request::input('payroll_group_pagibig');
+          $insert['payroll_group_agency']                   = Request::input('payroll_group_agency');
+          // $insert['payroll_group_target_hour']                = Request::input('payroll_group_target_hour');
+          $insert['payroll_group_grace_time']               = Request::input('payroll_group_grace_time');
+          $insert['payroll_group_agency_fee']               = Request::input('payroll_group_agency_fee');
+          $insert['payroll_late_category']                  = Request::input('payroll_late_category');
+          $insert['payroll_late_interval']                  = Request::input('payroll_late_interval');
+          $insert['payroll_late_parameter']                 = Request::input('payroll_late_parameter');
+          $insert['payroll_late_deduction']                 = Request::input('payroll_late_deduction');
+          // if(Request::has('payroll_group_is_flexi_break'))
+          // {
+          //   $insert['payroll_group_is_flexi_break']      = Request::input('payroll_group_is_flexi_break');
+          // }
+          // $insert['payroll_group_break_start']                = date('H:i:s',strtotime(Request::input('payroll_group_break_start')));
+          // $insert['payroll_group_break_end']                  = date('H:i:s',strtotime(Request::input('payroll_group_break_end')));
+          // $insert['payroll_group_flexi_break']                = Request::input('payroll_group_flexi_break');
+          
+          // if(Request::has('payroll_group_is_flexi_time'))
+          // {
+          //   $insert['payroll_group_is_flexi_time']       = Request::input('payroll_group_is_flexi_time');
+          // }
+          
+          $insert['payroll_group_working_day_month']        = Request::input('payroll_group_working_day_month');
 
           $payroll_group_target_hour_parameter              = 'Daily';
 
-		// if(Request::has('payroll_group_target_hour_parameter'))
-		// {
-		// 	$payroll_group_target_hour_parameter 	= Request::input('payroll_group_target_hour_parameter');
-		// }
+          // if(Request::has('payroll_group_target_hour_parameter'))
+          // {
+          //   $payroll_group_target_hour_parameter    = Request::input('payroll_group_target_hour_parameter');
+          // }
           $insert['payroll_group_target_hour_parameter']    = $payroll_group_target_hour_parameter;
-		// $insert['payroll_group_target_hour'] 			= Request::input('payroll_group_target_hour');
-		// $insert['payroll_group_start'] 				= date('H:i:s',strtotime(Request::input('payroll_group_start')));
-		// $insert['payroll_group_end'] 					= date('H:i:s',strtotime(Request::input('payroll_group_end')));
+          // $insert['payroll_group_target_hour']                = Request::input('payroll_group_target_hour');
+          // $insert['payroll_group_start']                 = date('H:i:s',strtotime(Request::input('payroll_group_start')));
+          // $insert['payroll_group_end']                        = date('H:i:s',strtotime(Request::input('payroll_group_end')));
 
-		// dd($insert);
-		/* INSERT PAYROLL GROUP AND GET ID */ 
+          // dd($insert);
+          /* INSERT PAYROLL GROUP AND GET ID */ 
 
           $insert['payroll_under_time_category']  = Request::input("payroll_under_time_category");
           $insert['payroll_under_time_interval']  = Request::input("payroll_under_time_interval");
           $insert['payroll_under_time_parameter'] = Request::input("payroll_under_time_parameter");
           $insert['payroll_under_time_deduction'] = Request::input("payroll_under_time_deduction");
           $insert['payroll_break_category']       = Request::input("payroll_break_category");
+          $insert['overtime_grace_time']          = Request::has('overtime_grace_time') ? date('H:i:s', strtotime(Request::input('overtime_grace_time'))) : '00:00:00';
+          $insert['grace_time_rule_overtime']     = Request::has('grace_time_rule_overtime') ? Request::input('grace_time_rule_overtime') : 'accumulative';
+          $insert['late_grace_time']              = Request::has('late_grace_time') ? date('H:i:s', strtotime(Request::input('late_grace_time'))) : '00:00:00';
+          $insert['grace_time_rule_late']         = Request::has('grace_time_rule_late') ? Request::input("grace_time_rule_late") : 'first';
+          $insert['tax_reference']                = Request::input('tax_reference');
+          $insert['sss_reference']                = Request::input('sss_reference');
+          $insert['philhealth_reference']         = Request::input('philhealth_reference');
+          $insert['pagibig_reference']            = Request::input('pagibig_reference');
+          
+          
+          $group_id = Tbl_payroll_group::insertGetId($insert);
 
-		$group_id = Tbl_payroll_group::insertGetId($insert);
-
-		$insert_rate = array();
-		foreach(Request::input("payroll_overtime_name") as $key => $overtime)
-		{
-			$temp['payroll_group_id']				= $group_id;
-			$temp['payroll_overtime_name'] 			= Request::input("payroll_overtime_name")[$key];
-			$temp['payroll_overtime_regular'] 		     = Request::input("payroll_overtime_regular")[$key];
-			$temp['payroll_overtime_overtime'] 		= Request::input("payroll_overtime_overtime")[$key];
-			$temp['payroll_overtime_nigth_diff'] 	     = Request::input("payroll_overtime_nigth_diff")[$key];
-			$temp['payroll_overtime_rest_day'] 		= Request::input("payroll_overtime_rest_day")[$key];
-			$temp['payroll_overtime_rest_overtime'] 	= Request::input("payroll_overtime_rest_overtime")[$key];
-			$temp['payroll_overtime_rest_night'] 	     = Request::input("payroll_overtime_rest_night")[$key];
-
-			array_push($insert_rate, $temp);
-		}
-		
-		// dd($insert_rate);
-		/* INSERT PAYROLL OVERTIME NIGHT DIFFERENTIALS REST DAY HOLIDAY */
-		Tbl_payroll_overtime_rate::insert($insert_rate);
+          $insert_rate = array();
+          foreach(Request::input("payroll_overtime_name") as $key => $overtime)
+          {
+               $temp['payroll_group_id']                    = $group_id;
+               $temp['payroll_overtime_name']               = Request::input("payroll_overtime_name")[$key];
+               $temp['payroll_overtime_regular']            = Request::input("payroll_overtime_regular")[$key];
+               $temp['payroll_overtime_overtime']           = Request::input("payroll_overtime_overtime")[$key];
+               $temp['payroll_overtime_nigth_diff']         = Request::input("payroll_overtime_nigth_diff")[$key];
+               $temp['payroll_overtime_rest_day']           = Request::input("payroll_overtime_rest_day")[$key];
+               $temp['payroll_overtime_rest_overtime']      = Request::input("payroll_overtime_rest_overtime")[$key];
+               $temp['payroll_overtime_rest_night']         = Request::input("payroll_overtime_rest_night")[$key];
+               array_push($insert_rate, $temp);
+          }
+          
+          // dd($insert_rate);
+          /* INSERT PAYROLL OVERTIME NIGHT DIFFERENTIALS REST DAY HOLIDAY */
+          Tbl_payroll_overtime_rate::insert($insert_rate);
 
           $insert_shift = array();
-
-          foreach(Request::input('day') as $key => $day)
+          if(Request::has('day'))
           {
-
-               $temp_shift['payroll_group_id']    = $group_id;
-               $temp_shift['day']                 = $day;
-               $temp_shift['target_hours']        = Request::input('target_hours')[$key];
-               $temp_shift['work_start']          = date('H:i:s', strtotime(Request::input('work_start')[$key]));
-               $temp_shift['work_end']            = date('H:i:s', strtotime(Request::input('work_end')[$key]));
-               $temp_shift['break_start']         = date('H:i:s', strtotime(Request::input('break_start')[$key]));
-               $temp_shift['break_end']           = date('H:i:s', strtotime(Request::input('break_end')[$key]));
-
-               $flexi         = 0;
-               $rest_day      = 0;
-               $extra_day     = 0;
-
-               if(Request::has('flexi_'.$key))
+               foreach(Request::input('day') as $key => $day)
                {
-                    $flexi = Request::input('flexi_'.$key);
+     
+                    $temp_shift['payroll_group_id']    = $group_id;
+                    $temp_shift['day']                 = $day;
+                    $temp_shift['target_hours']        = Request::input('target_hours')[$key];
+                    $temp_shift['work_start']          = date('H:i:s', strtotime(Request::input('work_start')[$key]));
+                    $temp_shift['work_end']            = date('H:i:s', strtotime(Request::input('work_end')[$key]));
+                    $temp_shift['break_start']         = date('H:i:s', strtotime(Request::input('break_start')[$key]));
+                    $temp_shift['break_end']           = date('H:i:s', strtotime(Request::input('break_end')[$key]));
+     
+                    $flexi         = 0;
+                    $rest_day      = 0;
+                    $extra_day     = 0;
+     
+                    if(Request::has('flexi_'.$key))
+                    {
+                         $flexi = Request::input('flexi_'.$key);
+                    }
+     
+                    if(Request::has('rest_day_'.$key))
+                    {
+                         $rest_day = Request::input('rest_day_'.$key);
+                    }
+     
+                    if(Request::has('extra_day_'.$key))
+                    {
+                         $extra_day = Request::input('extra_day_'.$key);
+                    }
+     
+                    $temp_shift['flexi']               = $flexi;
+                    $temp_shift['rest_day']            = $rest_day;
+                    $temp_shift['extra_day']           = $extra_day;
+     
+                    array_push($insert_shift, $temp_shift);
                }
-
-               if(Request::has('rest_day_'.$key))
+     
+               if(!empty($insert_shift))
                {
-                    $rest_day = Request::input('rest_day_'.$key);
+                    Tbl_payroll_shift::insert($insert_shift);
                }
+          }
+          
 
-               if(Request::has('extra_day_'.$key))
-               {
-                    $extra_day = Request::input('extra_day_'.$key);
-               }
+          // $_restday                                                = array();
+          // $_extraday                                               = array();
+          // if(Request::has('restday'))
+          // {
+          //   $_restday                                              = Request::input('restday');
+          // }
 
-               $temp_shift['flexi']               = $flexi;
-               $temp_shift['rest_day']            = $rest_day;
-               $temp_shift['extra_day']           = $extra_day;
+          // if(Request::has('extraday'))
+          // {
+          //   $_extraday                                             = Request::input('extraday');
+          // } 
+          
+          
+          // $insert_rest_day = array();
+          // $temp = "";
+          // foreach($_restday as $restday)
+          // {
+          //   $temp['payroll_group_id']                         = $group_id;
+          //   $temp['payroll_group_rest_day']                   = $restday;
+          //   $temp['payroll_group_rest_day_category']     = 'rest day';
 
-               array_push($insert_shift, $temp_shift);
+          //   array_push($insert_rest_day, $temp);
+          // }
+
+          // $insert_extra_day = array();
+          // foreach($_extraday as $extra)
+          // {
+          //   $temp['payroll_group_id']                         = $group_id;
+          //   $temp['payroll_group_rest_day']                   = $extra;
+          //   $temp['payroll_group_rest_day_category']     = 'extra day';
+
+          //   array_push($insert_extra_day, $temp);
+          // }
+
+          // if(!empty($insert_rest_day))
+          // {
+          //   Tbl_payroll_group_rest_day::insert($insert_rest_day);
+          // }
+
+          // if(!empty($insert_extra_day))
+          // {
+          //   Tbl_payroll_group_rest_day::insert($insert_extra_day);
+          // }
+
+
+          $data['_data']           = array();
+          $data['selected']   = $group_id;
+          $_group = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
+          foreach($_group as $group)
+          {
+               $temp['id']         = $group->payroll_group_id;
+               $temp['name']  = $group->payroll_group_code;
+               $temp['attr']  = '';
+               array_push($data['_data'], $temp);
           }
 
-          if(!empty($insert_shift))
-          {
-               Tbl_payroll_shift::insert($insert_shift);
-          }
+          $view = view('member.payroll.misc.misc_option', $data)->render();
 
-		// $_restday 										= array();
-		// $_extraday 										= array();
-		// if(Request::has('restday'))
-		// {
-		// 	$_restday 									= Request::input('restday');
-		// }
+          $return['view']                    = $view;
+          $return['status'] = 'success';
+          $return['function_name'] = 'payrollconfiguration.reload_payroll_group';
+          return json_encode($return);
+     }
 
-		// if(Request::has('extraday'))
-		// {
-		// 	$_extraday									= Request::input('extraday');
-		// }	
-		
-		
-		// $insert_rest_day = array();
-		// $temp = "";
-		// foreach($_restday as $restday)
-		// {
-		// 	$temp['payroll_group_id']					= $group_id;
-		// 	$temp['payroll_group_rest_day']				= $restday;
-		// 	$temp['payroll_group_rest_day_category']	= 'rest day';
-
-		// 	array_push($insert_rest_day, $temp);
-		// }
-
-		// $insert_extra_day = array();
-		// foreach($_extraday as $extra)
-		// {
-		// 	$temp['payroll_group_id']					= $group_id;
-		// 	$temp['payroll_group_rest_day']				= $extra;
-		// 	$temp['payroll_group_rest_day_category']	= 'extra day';
-
-		// 	array_push($insert_extra_day, $temp);
-		// }
-
-		// if(!empty($insert_rest_day))
-		// {
-		// 	Tbl_payroll_group_rest_day::insert($insert_rest_day);
-		// }
-
-		// if(!empty($insert_extra_day))
-		// {
-		// 	Tbl_payroll_group_rest_day::insert($insert_extra_day);
-		// }
-
-
-		$data['_data'] 		= array();
-		$data['selected'] 	= $group_id;
-		$_group = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
-		foreach($_group as $group)
-		{
-			$temp['id']		= $group->payroll_group_id;
-			$temp['name']	= $group->payroll_group_code;
-			$temp['attr']	= '';
-			array_push($data['_data'], $temp);
-		}
-
-		$view = view('member.payroll.misc.misc_option', $data)->render();
-
-		$return['view']				= $view;
-		$return['status'] = 'success';
-		$return['function_name'] = 'payrollconfiguration.reload_payroll_group';
-		return json_encode($return);
-	}
-
-	public function modal_edit_payroll_group($id)
-	{
-		$data['group'] 	     = Tbl_payroll_group::where('payroll_group_id',$id)->first();
-		$data['_overtime_rate']  = Tbl_payroll_overtime_rate::where('payroll_group_id',$id)->get();
-		$data['_day'] 			= Payroll::restday_checked($id); 
+     public function modal_edit_payroll_group($id)
+     {
+          $data['group']           = Tbl_payroll_group::where('payroll_group_id',$id)->first();
+          $data['_overtime_rate']  = Tbl_payroll_overtime_rate::where('payroll_group_id',$id)->get();
+          $data['_day']            = Payroll::restday_checked($id); 
           $data['_period']         = Tbl_payroll_tax_period::check(Self::shop_id())->get();
-		return view('member.payroll.modal.modal_edit_payroll_group',$data);
-	}
+          $data['_shift_code']     = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->get();
 
-	public function modal_update_payroll_group()
-	{
-		$payroll_group_id = Request::input("payroll_group_id");
+          return view('member.payroll.modal.modal_edit_payroll_group',$data);
+     }
 
-		$update['payroll_group_code'] 					= Request::input('payroll_group_code');
-		$update['payroll_group_salary_computation'] 	   = Request::input('payroll_group_salary_computation');
-		$update['payroll_group_period'] 				= Request::input('payroll_group_period');
-		$update['payroll_group_13month_basis'] 			= Request::input('payroll_group_13month_basis');
+     public function modal_update_payroll_group()
+     {
+          $payroll_group_id = Request::input("payroll_group_id");
 
-		$update['payroll_group_grace_time'] 			= Request::input('payroll_group_grace_time');
-		// $update['payroll_group_break']					= Request::input('payroll_group_break');
-		$update['payroll_group_agency_fee'] 			= Request::input('payroll_group_agency_fee');
-		
-		$payroll_group_deduct_before_absences 			= 0;
-		if( Request::has('payroll_group_deduct_before_absences'))
-		{
-			$payroll_group_deduct_before_absences		= Request::input('payroll_group_deduct_before_absences');
-		}
+          $update['payroll_group_code']                          = Request::input('payroll_group_code');
+          $update['payroll_group_salary_computation']     = Request::input('payroll_group_salary_computation');
+          $update['payroll_group_period']                   = Request::input('payroll_group_period');
+          $update['payroll_group_13month_basis']            = Request::input('payroll_group_13month_basis');
+
+          $update['payroll_group_grace_time']               = Request::input('payroll_group_grace_time');
+          // $update['payroll_group_break']                      = Request::input('payroll_group_break');
+          $update['payroll_group_agency_fee']               = Request::input('payroll_group_agency_fee');
+
+          // $update['shift_code_id']                          = Request::input('shift_code_id');
+          
+          $payroll_group_deduct_before_absences             = 0;
+          if( Request::has('payroll_group_deduct_before_absences'))
+          {
+               $payroll_group_deduct_before_absences        = Request::input('payroll_group_deduct_before_absences');
+          }
 
           $payroll_group_before_tax                         = 0;
           if(Request::has('payroll_group_before_tax'))
@@ -3685,168 +4111,154 @@ class PayrollController extends Member
                $payroll_group_before_tax = Request::has('payroll_group_before_tax');
           }
 
+          $update['display_monthly_rate']    = 0;
+          $update['display_daily_rate']      = 0;
+
+          if(Request::has('display_monthly_rate'))
+          {
+               $update['display_monthly_rate']    = 1;
+          }
+
+          if(Request::has('display_daily_rate'))
+          {
+               $update['display_daily_rate']    = 1;
+          }
+
           $update['payroll_group_before_tax']               = $payroll_group_before_tax;
-		$update['payroll_group_deduct_before_absences']   = $payroll_group_deduct_before_absences;
-		$update['payroll_group_tax'] 					= Request::input('payroll_group_tax');
-		$update['payroll_group_sss'] 					= Request::input('payroll_group_sss');
-		$update['payroll_group_philhealth'] 			= Request::input('payroll_group_philhealth');
-		$update['payroll_group_pagibig'] 				= Request::input('payroll_group_pagibig');
-		$update['payroll_group_agency'] 				= Request::input('payroll_group_agency');
-		$update['payroll_group_agency_fee'] 			= Request::input('payroll_group_agency_fee');
+          $update['payroll_group_deduct_before_absences']   = $payroll_group_deduct_before_absences;
+          $update['payroll_group_tax']                      = Request::input('payroll_group_tax');
+          $update['payroll_group_sss']                      = Request::input('payroll_group_sss');
+          $update['payroll_group_philhealth']               = Request::input('payroll_group_philhealth');
+          $update['payroll_group_pagibig']                  = Request::input('payroll_group_pagibig');
+          $update['payroll_group_agency']                   = Request::input('payroll_group_agency');
+          $update['payroll_group_agency_fee']               = Request::input('payroll_group_agency_fee');
 
-		// $payroll_group_is_flexi_break 					= 0;
-		// if(Request::has('payroll_group_is_flexi_break'))
-		// {
-		// 	$payroll_group_is_flexi_break 				= Request::input('payroll_group_is_flexi_break');
-		// }
-		// $update['payroll_group_is_flexi_break'] 		= $payroll_group_is_flexi_break;
-		// $update['payroll_group_flexi_break'] 			= Request::input('payroll_group_flexi_break');
-		$update['payroll_late_category'] 				= Request::input('payroll_late_category');
-		$update['payroll_late_interval'] 				= Request::input('payroll_late_interval');
-		$update['payroll_late_parameter'] 				= Request::input('payroll_late_parameter');
-		$update['payroll_late_deduction'] 				= Request::input('payroll_late_deduction');
-		
-		// $payroll_group_is_flexi_time					= 0;
-		// if(Request::has('payroll_group_is_flexi_time'))
-		// {
-		// 	$payroll_group_is_flexi_time				= Request::input('payroll_group_is_flexi_time');	
-		// }
+          
+          $update['tax_reference']                          = Request::input('tax_reference');
+          $update['sss_reference']                          = Request::input('sss_reference');
+          $update['philhealth_reference']                   = Request::input('philhealth_reference');
+          $update['pagibig_reference']                      = Request::input('pagibig_reference');
 
-		// $update['payroll_group_is_flexi_time'] 			= $payroll_group_is_flexi_time;
-		$update['payroll_group_working_day_month'] 		= Request::input('payroll_group_working_day_month');
 
-		// $payroll_group_is_flexi_break = 0;
-		// if(Request::has('payroll_group_is_flexi_break'))
-		// {
-		// 	$payroll_group_is_flexi_break		= Request::input('payroll_group_is_flexi_break');
+          // $payroll_group_is_flexi_break                       = 0;
+          // if(Request::has('payroll_group_is_flexi_break'))
+          // {
+          //   $payroll_group_is_flexi_break                     = Request::input('payroll_group_is_flexi_break');
+          // }
+          // $update['payroll_group_is_flexi_break']        = $payroll_group_is_flexi_break;
+          // $update['payroll_group_flexi_break']                = Request::input('payroll_group_flexi_break');
+          $update['payroll_late_category']                  = Request::input('payroll_late_category');
+          $update['payroll_late_interval']                  = Request::input('payroll_late_interval');
+          $update['payroll_late_parameter']                 = Request::input('payroll_late_parameter');
+          $update['payroll_late_deduction']                 = Request::input('payroll_late_deduction');
+          
+          // $payroll_group_is_flexi_time                        = 0;
+          // if(Request::has('payroll_group_is_flexi_time'))
+          // {
+          //   $payroll_group_is_flexi_time                 = Request::input('payroll_group_is_flexi_time');  
+          // }
 
-		// }
-		// $update['payroll_group_break_start'] 			= date('H:i:s', strtotime(Request::input('payroll_group_break_start')));
-		// $update['payroll_group_break_end'] 				= date('H:i:s', strtotime(Request::input('payroll_group_break_end')));
-		// $update['payroll_group_flexi_break']			= Request::input('payroll_group_flexi_break');
-		// $update['payroll_group_is_flexi_break']			= $payroll_group_is_flexi_break;
+          // $update['payroll_group_is_flexi_time']              = $payroll_group_is_flexi_time;
+          $update['payroll_group_working_day_month']        = Request::input('payroll_group_working_day_month');
+
+          // $payroll_group_is_flexi_break = 0;
+          // if(Request::has('payroll_group_is_flexi_break'))
+          // {
+          //   $payroll_group_is_flexi_break      = Request::input('payroll_group_is_flexi_break');
+
+          // }
+          // $update['payroll_group_break_start']                = date('H:i:s', strtotime(Request::input('payroll_group_break_start')));
+          // $update['payroll_group_break_end']                  = date('H:i:s', strtotime(Request::input('payroll_group_break_end')));
+          // $update['payroll_group_flexi_break']           = Request::input('payroll_group_flexi_break');
+          // $update['payroll_group_is_flexi_break']             = $payroll_group_is_flexi_break;
 
           $payroll_group_target_hour_parameter              = 'Daily';
           if(Request::has('payroll_group_target_hour_parameter'))
           {    
                $payroll_group_target_hour_parameter         = Request::input('payroll_group_target_hour_parameter');
           }
-		// $update['payroll_group_target_hour_parameter'] 	= $payroll_group_target_hour_parameter;
-		// $update['payroll_group_target_hour'] 			= Request::input('payroll_group_target_hour');
-		// $update['payroll_group_start'] 					= date('H:i:s',strtotime(Request::input('payroll_group_start')));
-		// $update['payroll_group_end'] 					= date('H:i:s',strtotime(Request::input('payroll_group_end')));
+          // $update['payroll_group_target_hour_parameter']      = $payroll_group_target_hour_parameter;
+          // $update['payroll_group_target_hour']                = Request::input('payroll_group_target_hour');
+          // $update['payroll_group_start']                      = date('H:i:s',strtotime(Request::input('payroll_group_start')));
+          // $update['payroll_group_end']                        = date('H:i:s',strtotime(Request::input('payroll_group_end')));
 
           $update['payroll_under_time_category']  = Request::input("payroll_under_time_category");
           $update['payroll_under_time_interval']  = Request::input("payroll_under_time_interval");
           $update['payroll_under_time_parameter'] = Request::input("payroll_under_time_parameter");
           $update['payroll_under_time_deduction'] = Request::input("payroll_under_time_deduction");
           $update['payroll_break_category']       = Request::input("payroll_break_category");
+          
+          $update['overtime_grace_time']          = Request::has('overtime_grace_time') ? date('H:i:s', strtotime(Request::input('overtime_grace_time'))) : '00:00:00';
+          $update['grace_time_rule_overtime']     = Request::has('grace_time_rule_overtime') ? Request::input('grace_time_rule_overtime') : 'accumulative';
+          $update['late_grace_time']              = Request::has('late_grace_time') ? date('H:i:s', strtotime(Request::input('late_grace_time'))) : '00:00:00';
+          $update['grace_time_rule_late']         = Request::has('grace_time_rule_late') ? Request::input("grace_time_rule_late") : 'first';
 
-		/* UPDATE PAYROLL GROUP*/ 
-		Tbl_payroll_group::where('payroll_group_id',$payroll_group_id)->update($update);
-		Tbl_payroll_overtime_rate::where('payroll_group_id',$payroll_group_id)->delete();
-		$insert_rate = array();
-		foreach(Request::input("payroll_overtime_name") as $key => $overtime)
-		{
-			$temp['payroll_group_id']				= $payroll_group_id;
-			$temp['payroll_overtime_name'] 			= Request::input("payroll_overtime_name")[$key];
-			$temp['payroll_overtime_regular'] 		      = Request::input("payroll_overtime_regular")[$key];
-			$temp['payroll_overtime_overtime'] 		= Request::input("payroll_overtime_overtime")[$key];
-			$temp['payroll_overtime_nigth_diff'] 	         = Request::input("payroll_overtime_nigth_diff")[$key];
-			$temp['payroll_overtime_rest_day'] 		= Request::input("payroll_overtime_rest_day")[$key];
-			$temp['payroll_overtime_rest_overtime'] 	= Request::input("payroll_overtime_rest_overtime")[$key];
-			$temp['payroll_overtime_rest_night'] 	= Request::input("payroll_overtime_rest_night")[$key];
+          /* UPDATE PAYROLL GROUP*/ 
+          Tbl_payroll_group::where('payroll_group_id',$payroll_group_id)->update($update);
+          Tbl_payroll_overtime_rate::where('payroll_group_id',$payroll_group_id)->delete();
+          $insert_rate = array();
+          foreach(Request::input("payroll_overtime_name") as $key => $overtime)
+          {
+               $temp['payroll_group_id']                    = $payroll_group_id;
+               $temp['payroll_overtime_name']               = Request::input("payroll_overtime_name")[$key];
+               $temp['payroll_overtime_regular']             = Request::input("payroll_overtime_regular")[$key];
+               $temp['payroll_overtime_overtime']           = Request::input("payroll_overtime_overtime")[$key];
+               $temp['payroll_overtime_nigth_diff']             = Request::input("payroll_overtime_nigth_diff")[$key];
+               $temp['payroll_overtime_rest_day']           = Request::input("payroll_overtime_rest_day")[$key];
+               $temp['payroll_overtime_rest_overtime']      = Request::input("payroll_overtime_rest_overtime")[$key];
+               $temp['payroll_overtime_rest_night']    = Request::input("payroll_overtime_rest_night")[$key];
 
-			array_push($insert_rate, $temp);
-		}
-		
-		/* INSERT PAYROLL OVERTIME NIGHT DIFFERENTIALS REST DAY HOLIDAY */
-		Tbl_payroll_overtime_rate::insert($insert_rate);
+               array_push($insert_rate, $temp);
+          }
+          
+          /* INSERT PAYROLL OVERTIME NIGHT DIFFERENTIALS REST DAY HOLIDAY */
+          Tbl_payroll_overtime_rate::insert($insert_rate);
 
-		// $_restday 										= array();
-		// $_extraday 										= array();
-		// if(Request::has('restday'))
-		// {
-		// 	$_restday 									= Request::input('restday');
-		// }
+          // $_restday                                                = array();
+          // $_extraday                                               = array();
+          // if(Request::has('restday'))
+          // {
+          //   $_restday                                              = Request::input('restday');
+          // }
 
-		// if(Request::has('extraday'))
-		// {
-		// 	$_extraday									= Request::input('extraday');
-		// }	
-		
-		// Tbl_payroll_group_rest_day::where('payroll_group_id',$payroll_group_id)->delete();
-		// $insert_rest_day = array();
-		// $temp = "";
-		// foreach($_restday as $restday)
-		// {
-		// 	$temp['payroll_group_id']					= $payroll_group_id;
-		// 	$temp['payroll_group_rest_day']				= $restday;
-		// 	$temp['payroll_group_rest_day_category']	= 'rest day';
+          // if(Request::has('extraday'))
+          // {
+          //   $_extraday                                             = Request::input('extraday');
+          // } 
+          
+          // Tbl_payroll_group_rest_day::where('payroll_group_id',$payroll_group_id)->delete();
+          // $insert_rest_day = array();
+          // $temp = "";
+          // foreach($_restday as $restday)
+          // {
+          //   $temp['payroll_group_id']                         = $payroll_group_id;
+          //   $temp['payroll_group_rest_day']                   = $restday;
+          //   $temp['payroll_group_rest_day_category']     = 'rest day';
 
-		// 	array_push($insert_rest_day, $temp);
-		// }
+          //   array_push($insert_rest_day, $temp);
+          // }
 
-		// $insert_extra_day = array();
-		// foreach($_extraday as $extra)
-		// {
-		// 	$temp['payroll_group_id']					= $payroll_group_id;
-		// 	$temp['payroll_group_rest_day']				= $extra;
-		// 	$temp['payroll_group_rest_day_category']	= 'extra day';
+          // $insert_extra_day = array();
+          // foreach($_extraday as $extra)
+          // {
+          //   $temp['payroll_group_id']                         = $payroll_group_id;
+          //   $temp['payroll_group_rest_day']                   = $extra;
+          //   $temp['payroll_group_rest_day_category']     = 'extra day';
 
-		// 	array_push($insert_extra_day, $temp);
-		// }
+          //   array_push($insert_extra_day, $temp);
+          // }
 
-		// if(!empty($insert_rest_day))
-		// {
-		// 	Tbl_payroll_group_rest_day::insert($insert_rest_day);
-		// }
+          // if(!empty($insert_rest_day))
+          // {
+          //   Tbl_payroll_group_rest_day::insert($insert_rest_day);
+          // }
 
-		// if(!empty($insert_extra_day))
-		// {
-		// 	Tbl_payroll_group_rest_day::insert($insert_extra_day);
-		// }
+          // if(!empty($insert_extra_day))
+          // {
+          //   Tbl_payroll_group_rest_day::insert($insert_extra_day);
+          // }
 
           Tbl_payroll_shift::where('payroll_group_id', $payroll_group_id)->delete();
-
-          $insert_shift = array();
-
-          foreach(Request::input('day') as $key => $day)
-          {
-
-               $temp_shift['payroll_group_id']    = $payroll_group_id;
-               $temp_shift['day']                 = $day;
-               $temp_shift['target_hours']        = Request::input('target_hours')[$key];
-               $temp_shift['work_start']          = date('H:i:s a', strtotime(Request::input('work_start')[$key]));
-               $temp_shift['work_end']            = date('H:i:s a', strtotime(Request::input('work_end')[$key]));
-               $temp_shift['break_start']         = date('H:i:s a', strtotime(Request::input('break_start')[$key]));
-               $temp_shift['break_end']           = date('H:i:s a', strtotime(Request::input('break_end')[$key]));
-
-               $flexi         = 0;
-               $rest_day      = 0;
-               $extra_day     = 0;
-
-               if(Request::has('flexi_'.$key))
-               {
-                    $flexi = Request::input('flexi_'.$key);
-               }
-
-               if(Request::has('rest_day_'.$key))
-               {
-                    $rest_day = Request::input('rest_day_'.$key);
-               }
-
-               if(Request::has('extra_day_'.$key))
-               {
-                    $extra_day = Request::input('extra_day_'.$key);
-               }
-
-               $temp_shift['flexi']               = $flexi;
-               $temp_shift['rest_day']            = $rest_day;
-               $temp_shift['extra_day']           = $extra_day;
-
-               array_push($insert_shift, $temp_shift);
-          }
 
           if(!empty($insert_shift))
           {
@@ -3854,41 +4266,42 @@ class PayrollController extends Member
           }
 
 
-		$return['status'] = 'success';
-		$return['function_name'] = 'payrollconfiguration.reload_payroll_group';
-		return json_encode($return);
-	}
+          $return['status'] = 'success';
+          $return['function_name'] = 'payrollconfiguration.reload_payroll_group';
+          return json_encode($return);
+     }
 
 
-	public function confirm_archived_payroll_group($archived, $payroll_group_id)
-	{
-		$statement = 'archive';
-		if($archived == 0)
-		{
-			$statement = 'restore';
-		}
-		$file_name 			= Tbl_payroll_group::where('payroll_group_id',$payroll_group_id)->pluck('payroll_group_code');
-		$data['title'] 		= 'Do you really want to '.$statement.' Payroll Group '.$file_name.'?';
-		$data['html'] 		= '';
-		$data['action'] 	= '/member/payroll/payroll_group/archived_payroll_group';
-		$data['id'] 		= $payroll_group_id;
-		$data['archived'] 	= $archived;
 
-		return view('member.modal.modal_confirm_archived', $data);
-	}
+     public function confirm_archived_payroll_group($archived, $payroll_group_id)
+     {
+          $statement = 'archive';
+          if($archived == 0)
+          {
+               $statement = 'restore';
+          }
+          $file_name               = Tbl_payroll_group::where('payroll_group_id',$payroll_group_id)->value('payroll_group_code');
+          $data['title']           = 'Do you really want to '.$statement.' Payroll Group '.$file_name.'?';
+          $data['html']       = '';
+          $data['action']     = '/member/payroll/payroll_group/archived_payroll_group';
+          $data['id']         = $payroll_group_id;
+          $data['archived']   = $archived;
 
-	public function archived_payroll_group()
-	{
-		$payroll_group_id = Request::input('id');
-		$update['payroll_group_archived'] = Request::input('archived');
-		Tbl_payroll_group::where('payroll_group_id',$payroll_group_id)->update($update);
+          return view('member.modal.modal_confirm_archived', $data);
+     }
 
-		$return['status'] = 'success';
-		$return['function_name'] = 'payrollconfiguration.reload_payroll_group';
-		return json_encode($return);
-	}
+     public function archived_payroll_group()
+     {
+          $payroll_group_id = Request::input('id');
+          $update['payroll_group_archived'] = Request::input('archived');
+          Tbl_payroll_group::where('payroll_group_id',$payroll_group_id)->update($update);
+          
+          $return['status'] = 'success';
+          $return['function_name'] = 'payrollconfiguration.reload_payroll_group';
+          return json_encode($return);
+     }
 
-	/* PAYROLL GROUP END */
+     /* PAYROLL GROUP END */
 
 
      /* PAYROLL JOURNAL START */
@@ -4168,7 +4581,7 @@ class PayrollController extends Member
           {
                $statement = 'restore';
           }
-          $file_name          = Tbl_payroll_payslip::where('payroll_payslip_id',$id)->pluck('payslip_code');
+          $file_name          = Tbl_payroll_payslip::where('payroll_payslip_id',$id)->value('payslip_code');
           $data['title']      = 'Do you really want to '.$statement.' Payslip '.$file_name.'?';
           $data['html']       = '';
           $data['action']     = '/member/payroll/custom_payslip/archive_payslip';
@@ -4257,64 +4670,47 @@ class PayrollController extends Member
      /* PAYROLL CUSTOM PAYSLIP END */
 
 
-	/* PAYROLL PERIOD START*/
-	public function payroll_period_list()
-	{	
-		$data['_active'] = Tbl_payroll_period::sel(Self::shop_id())->orderBy('payroll_period_start','desc')->paginate($this->paginate_count);
-		$data['_archived'] = Tbl_payroll_period::sel(Self::shop_id(), 1)->orderBy('payroll_period_start','desc')->paginate($this->paginate_count);
-		return view('member.payroll.payroll_period_list', $data);
-	}
+     /* PAYROLL PERIOD START*/
+     public function payroll_period_list()
+     {    
+          $data['_active'] = Tbl_payroll_period::sel(Self::shop_id())->orderBy('payroll_period_start','desc')->paginate($this->paginate_count);
+          $data['_archived'] = Tbl_payroll_period::sel(Self::shop_id(), 1)->orderBy('payroll_period_start','desc')->paginate($this->paginate_count);
 
-	public function modal_create_payroll_period()
-	{
-		$data['_tax'] = Tbl_payroll_tax_period::check(Self::shop_id())->get();
-		return view('member.payroll.modal.modal_create_payroll_period', $data);
-	}
-	public function modal_save_payroll_period()
-	{
-		$insert['shop_id'] 					= Self::shop_id();
-		$insert['payroll_period_start'] 	     = date('Y-m-d',strtotime(Request::input('payroll_period_start')));
-		$insert['payroll_period_end'] 		= date('Y-m-d',strtotime(Request::input('payroll_period_end')));
-		$insert['payroll_period_category'] 	= Request::input('payroll_period_category');
+          return view('member.payroll.payroll_period_list', $data);
+     }
 
-          $count = Tbl_payroll_period::check($insert)->count();
 
-          $id = 0;
-          $payroll_period_id = 0;
+     public function modal_create_payroll_period()
+     {
+          $data['_company']= Tbl_payroll_company::selcompany(Self::shop_id())->where("payroll_parent_company_id", 0)->get();
+          $data['_tax'] = Tbl_payroll_tax_period::check(Self::shop_id())->get();
+          $data['_month'] = Payroll::get_month();
+          return view('member.payroll.modal.modal_create_payroll_period', $data);
+     }
+     public function modal_save_payroll_period()
+     {
+          $insert['shop_id']                      = Self::shop_id();
+          $insert['payroll_period_start']         = date('Y-m-d',strtotime(Request::input('payroll_period_start')));
+          $insert['payroll_period_end']           = date('Y-m-d',strtotime(Request::input('payroll_period_end')));
+          $insert['payroll_period_category']      = Request::input('payroll_period_category');
+          $insert['period_count']                 = Request::input('period_count');
+          $insert['month_contribution']           = Request::input('month_contribution');
+          $insert['year_contribution']            = Request::input('year_contribution');
+          $insert['payroll_release_date']         = date('Y-m-d',strtotime(Request::input('payroll_release_date')));
+          
+          $payroll_period_id = Tbl_payroll_period::insertGetId($insert);
 
-          if($count == 0)
-          {
+          $insert_company['payroll_period_id']        = $payroll_period_id;
+          $insert_company['payroll_company_id']       = Request::input("payroll_company_id");
+          $insert_company['payroll_period_status']    = 'generated';
 
-               $payroll_period_id = Tbl_payroll_period::insertGetId($insert);
-
-               $insert_company = array();
-
-               $_company = Tbl_payroll_company::selcompany(Self::shop_id())->get();
-
-               foreach($_company as $key => $company)
-               {
-                    $insert_company[$key]['payroll_period_id']        = $payroll_period_id;
-                    $insert_company[$key]['payroll_company_id']       = $company->payroll_company_id;
-                    $insert_company[$key]['payroll_period_status']    = 'pending';
-               }
-
-               if(!empty($insert_company))
-               {
-                    Tbl_payroll_period_company::insert($insert_company);
-               }
-
-          }
-		
-          else
-          {
-               $payroll_period_id = Tbl_payroll_period::check($insert)->pluck('payroll_period_id');
-          }
+          Tbl_payroll_period_company::insert($insert_company);
 
           $return['id']               = $payroll_period_id;
-		$return['status']           = 'success';
-		$return['function_name']    = 'payroll_period_list.reload_list';
-		return json_encode($return);
-	}
+          $return['status']           = 'success';
+          $return['function_name']    = 'payroll_period_list.reload_list';
+          return json_encode($return);
+     }
 
      public function modal_schedule_employee_shift()
      {
@@ -4379,15 +4775,32 @@ class PayrollController extends Member
                }
 
                $temp['date']                 = $date_start;
-               $temp['target_hours']         = $shift->target_hours;
-               $temp['work_start']           = $shift->work_start;
-               $temp['work_end']             = $shift->work_end;
-               $temp['break_start']          = $shift->break_start;
-               $temp['break_end']            = $shift->break_end;
-               $temp['flexi']                = $shift->flexi;
-               $temp['rest_day']             = $shift->rest_day;
-               $temp['extra_day']            = $shift->extra_day;
-               $temp['night_shift']          = $shift->night_shift;
+               if($shift != null)
+               {
+                    $temp['target_hours']         = $shift->target_hours;
+                    $temp['work_start']           = $shift->work_start;
+                    $temp['work_end']             = $shift->work_end;
+                    $temp['break_start']          = $shift->break_start;
+                    $temp['break_end']            = $shift->break_end;
+                    $temp['flexi']                = $shift->flexi;
+                    $temp['rest_day']             = $shift->rest_day;
+                    $temp['extra_day']            = $shift->extra_day;
+                    $temp['night_shift']          = $shift->night_shift;
+               }
+               else
+               {
+                    $temp['target_hours']         = 0;
+                    $temp['work_start']           = '00:00:00';
+                    $temp['work_end']             = '00:00:00';
+                    $temp['break_start']          = '00:00:00';
+                    $temp['break_end']            = '00:00:00';
+                    $temp['flexi']                = 0;
+                    $temp['rest_day']             = 0;
+                    $temp['extra_day']            = 0;
+                    $temp['night_shift']          = 0;
+               }
+               
+               
 
                array_push($data['_day'], $temp);
 
@@ -4443,128 +4856,159 @@ class PayrollController extends Member
           return collect($return)->toJson();
      }
 
-	public function modal_archive_period($archived, $payroll_period_id)
-	{
-		$statement = 'archive';
-		if($archived == 0)
-		{
-			$statement = 'restore';
-		}
-		$_query = Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->first();
-		// dd($_query);
-		$file_name 		= date('M d, Y', strtotime($_query->payroll_period_start)).' to '.date('M d, Y', strtotime($_query->payroll_period_end));
-		$data['title'] 	= 'Do you really want to '.$statement.' payroll period of '.$file_name.'?';
-		$data['html'] 		= '';
-		$data['action'] 	= '/member/payroll/payroll_period_list/archive_period';
-		$data['id'] 		= $payroll_period_id;
-		$data['archived'] 	= $archived;
+     public function modal_archive_period($archived, $payroll_period_id)
+     {
+          $statement = 'archive';
+          if($archived == 0)
+          {
+               $statement = 'restore';
+          }
+          $_query = Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->first();
+          // dd($_query);
+          $file_name          = date('M d, Y', strtotime($_query->payroll_period_start)).' to '.date('M d, Y', strtotime($_query->payroll_period_end));
+          $data['title']      = 'Do you really want to '.$statement.' payroll period of '.$file_name.'?';
+          $data['html']       = '';
+          $data['action']     = '/member/payroll/payroll_period_list/archive_period';
+          $data['id']         = $payroll_period_id;
+          $data['archived']   = $archived;
 
-		return view('member.modal.modal_confirm_archived', $data);
-	}
+          return view('member.modal.modal_confirm_archived', $data);
+     }
 
-	public function archive_period()
-	{
-		$payroll_period_id = Request::input('id');
-		$update['payroll_period_archived'] = Request::input('archived');
-		Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->update($update);
+     public function archive_period()
+     {
+          $payroll_period_id = Request::input('id');
+          $update['payroll_period_archived'] = Request::input('archived');
+          Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->update($update);
 
-		$return['status'] = 'success';
-		$return['function_name'] = 'payroll_period_list.reload_list';
-		return json_encode($return);
-	}
+          $return['status'] = 'success';
+          $return['function_name'] = 'payroll_period_list.reload_list';
+          return json_encode($return);
+     }
 
-	public function modal_edit_period($payroll_period_id)
-	{
-		$data['period'] = Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->first();
-		$data['_tax'] = Tbl_payroll_tax_period::check(Self::shop_id())->get();
-		return view('member.payroll.modal.modal_edit_period', $data);
-	}
+     public function modal_edit_period($payroll_period_id)
+     {
+          $data['period']     = Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->first();
+          $data['_tax']       = Tbl_payroll_tax_period::check(Self::shop_id())->get();
+          $data['_month']     = Payroll::get_month();
 
-	public function modal_update_period()
-	{
-		$payroll_period_id 			 		= Request::input("payroll_period_id");
-		$update['payroll_period_category'] 	= Request::input("payroll_period_category");
-		$update['payroll_period_start'] 	= date('Y-m-d',strtotime(Request::input("payroll_period_start")));
-		$update['payroll_period_end'] 		= date('Y-m-d',strtotime(Request::input("payroll_period_end")));
-		Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->update($update);
+          return view('member.payroll.modal.modal_edit_period', $data);
+     }
 
-		$insert_company = array();
+     public function modal_update_period()
+     {
+          $payroll_period_id                      = Request::input("payroll_period_id");
+          $update['payroll_period_category']      = Request::input("payroll_period_category");
+          $update['payroll_period_start']         = date('Y-m-d',strtotime(Request::input("payroll_period_start")));
+          $update['payroll_period_end']           = date('Y-m-d',strtotime(Request::input("payroll_period_end")));
+          $update['period_count']                 = Request::input('period_count');
+          $update['month_contribution']           = Request::input('month_contribution');
+          $update['year_contribution']            = Request::input('year_contribution');
+          $update['payroll_release_date']         = date('Y-m-d',strtotime(Request::input("payroll_release_date")));
+          
+          Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->update($update);
 
-		$_company = Tbl_payroll_company::selcompany(Self::shop_id())->get();
+          $return['status'] = 'success';
+          $return['function_name'] = 'payroll_period_list.reload_list';
+          return json_encode($return);
+     }
+     /* PAYROLL PERIOD END */
 
-		foreach($_company as $key => $company)
-		{
-			$count = Tbl_payroll_period_company::where('payroll_company_id',$company->payroll_company_id)->where('payroll_period_id', $payroll_period_id)->count();
-			if($count == 0)
-			{
-				$temp_insert['payroll_period_id'] 		= $payroll_period_id;
-				$temp_insert['payroll_company_id'] 		= $company->payroll_company_id;
-				$temp_insert['payroll_period_status'] 	= 'pending';
-				array_push($insert_company, $temp_insert);
-			}	
-			
-		}
-		// dd($insert_company);
-		if(!empty($insert_company))
-		{
-			Tbl_payroll_period_company::insert($insert_company);
-		}
+     /*HOLIDAY DEFAULT START*/
 
-		$return['status'] = 'success';
-		$return['function_name'] = 'payroll_period_list.reload_list';
-		return json_encode($return);
-	}
-	/* PAYROLL PERIOD END */
+     public function default_holiday()
+     {
+          $data['_active'] = Tbl_payroll_holiday_default::getholiday()->orderBy('payroll_holiday_date','desc')->select(DB::raw('*, payroll_holiday_default_id as payroll_holiday_id'))->paginate($this->paginate_count);
+          $data['_archived'] = Tbl_payroll_holiday_default::getholiday(1)->orderBy('payroll_holiday_date','desc')->select(DB::raw('*, payroll_holiday_default_id as payroll_holiday_id'))->paginate($this->paginate_count);
 
-	/*HOLIDAY DEFAULT START*/
-	public function modal_create_holiday_default()
-	{
-		/*$data = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('payroll_company_name')->get();*/
-		return view('member.payroll.modal.modal_create_holiday_default');
-	}
+          $data['title']      = 'Holiday Default';
+          $data['create']     = '/member/payroll/holiday_default/modal_create_holiday_default';
+          $data['edit']       = '/member/payroll/holiday_default/modal_edit_holiday_default/';
+          $data['archived']   = '/member/payroll/holiday_default/modal_archive_holiday_default/';
 
-	public function modal_save_holiday_default()
-	{		
-		$insert['payroll_holiday_name'] 	= Request::input('payroll_holiday_name');
-		$insert['payroll_holiday_date'] 	= date('Y-m-d',strtotime(Request::input('payroll_holiday_date')));
-		$insert['payroll_holiday_category'] = Request::input('payroll_holiday_category');
+          return view('member.payroll.side_container.holiday',$data);
+     }    
 
-		Tbl_payroll_holiday_default::insert($insert);
+     public function modal_create_holiday_default()
+     {
+          /*$data = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('payroll_company_name')->get();*/
+          return view('member.payroll.modal.modal_create_holiday_default');
+     }
 
-		$date_inserted = $insert['payroll_holiday_date'];
-		$data['_active'] = Tbl_payroll_holiday::where('payroll_holiday_date', $date_inserted)->first();
+     public function modal_save_holiday_default()
+     {         
+          $insert['payroll_holiday_name']    = Request::input('payroll_holiday_name');
+          $insert['payroll_holiday_date']    = date('Y-m-d',strtotime(Request::input('payroll_holiday_date')));
+          $insert['payroll_holiday_category'] = Request::input('payroll_holiday_category');
 
-		if (!$data['_active']) 
-		{	
-			$insert['shop_id']	= Self::shop_id();
-		 	Tbl_payroll_holiday::insert($insert);		 	
-		} 
+          Tbl_payroll_holiday_default::insert($insert);
 
-		$return['status'] = 'success';
-		$return['function_name'] = 'payrollconfiguration.reload_holiday';
-		return json_encode($return);
-	}
+          $date_inserted = $insert['payroll_holiday_date'];
+          $data['_active'] = Tbl_payroll_holiday::where('payroll_holiday_date', $date_inserted)->first();
 
-	public function modal_edit_holiday_default($id)
-	{	
-		$data['_active'] = Tbl_payroll_holiday_default::where('payroll_holiday_default_id', $id)->first();
-		return view('member.payroll.modal.modal_edit_holiday_default', $data);
-	}
+          if (!$data['_active']) 
+          {    
+               $insert['shop_id']  = Self::shop_id();
+               Tbl_payroll_holiday::insert($insert);             
+          } 
 
-	public function update_holiday_default()
-	{
-		$payroll_holiday_default_id 			= Request::input('payroll_holiday_default_id');
-		$update['payroll_holiday_name'] 		= Request::input('payroll_holiday_name');
-		$update['payroll_holiday_date'] 		= date('Y-m-d',strtotime(Request::input('payroll_holiday_date')));
-		$update['payroll_holiday_category'] 	= Request::input('payroll_holiday_category');		
-		Tbl_payroll_holiday_default::where('payroll_holiday_default_id', $payroll_holiday_default_id)->update($update);
-		
-		$return['status'] 			= 'success';
-		$return['function_name'] 	= 'payrollconfiguration.reload_holiday';
-		return json_encode($return);
-	}
-	
-	/*HOLIDAY DEFAULT END*/
+          $return['status'] = 'success';
+          $return['function_name'] = 'payrollconfiguration.reload_holiday_default';
+          return json_encode($return);
+     }
+
+
+
+     public function modal_edit_holiday_default($id)
+     {    
+          $data['_active'] = Tbl_payroll_holiday_default::where('payroll_holiday_default_id', $id)->first();
+          return view('member.payroll.modal.modal_edit_holiday_default', $data);
+     }
+
+     public function update_holiday_default()
+     {
+          $payroll_holiday_default_id             = Request::input('payroll_holiday_default_id');
+          $update['payroll_holiday_name']         = Request::input('payroll_holiday_name');
+          $update['payroll_holiday_date']         = date('Y-m-d',strtotime(Request::input('payroll_holiday_date')));
+          $update['payroll_holiday_category']     = Request::input('payroll_holiday_category');          
+          Tbl_payroll_holiday_default::where('payroll_holiday_default_id', $payroll_holiday_default_id)->update($update);
+          
+          $return['status']             = 'success';
+          $return['function_name']      = 'payrollconfiguration.reload_holiday';
+          return json_encode($return);
+     }
+
+     public function modal_archive_holiday_default($archived, $id)
+     {
+          $statement = 'archive';
+          if($archived == 0)
+          {
+               $statement = 'restore';
+          }
+          $query = Tbl_payroll_holiday_default::where('payroll_holiday_default_id',$id)->first();
+          // dd($_query);
+          $data['title']      = 'Do you really want to '.$statement.' holiday '.$query->payroll_holiday_name.'?';
+          $data['html']       = '';
+          $data['action']     = '/member/payroll/holiday_default/archive_holiday_default';
+          $data['id']         = $id;
+          $data['archived']   = $archived;
+
+          return view('member.modal.modal_confirm_archived', $data);
+     }
+     
+
+     public function archive_holiday_default()
+     {
+          $update['payroll_holiday_archived'] = Request::input('id');
+
+          $id = Request::input('id');
+          Tbl_payroll_holiday_default::where('payroll_holiday_default_id', $id)->update($update);
+
+          $return['status'] = 'success';
+          $return['function_name'] = 'reload_holiday_default';
+          return collect($return)->toJson();
+     }
+     /*HOLIDAY DEFAULT END*/
 
 
      /* SHIFT TEMPLATE START */
@@ -4572,8 +5016,8 @@ class PayrollController extends Member
      // Tbl_payroll_shift_code
      public function shift_template()
      {
-          $data['_active'] = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->paginate(20);
-          $data['_archived'] = Tbl_payroll_shift_code::getshift(Self::shop_id(), 1)->orderBy('shift_code_name')->paginate(20);
+          $data['_active'] = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->get();
+          $data['_archived'] = Tbl_payroll_shift_code::getshift(Self::shop_id(), 1)->orderBy('shift_code_name')->get();
           return view('member.payroll.side_container.shift_template', $data);
      }
 
@@ -4585,56 +5029,48 @@ class PayrollController extends Member
 
      public function modal_save_shift_template()
      {
-          // $shift_code_name = Request::input('shift_code_name');
 
+
+          /* INSERT SHIFT CODE */
           $insert_code['shift_code_name']    = Request::input('shift_code_name');
           $insert_code['shop_id']            = Self::shop_id();
-
           $shift_code_id = Tbl_payroll_shift_code::insertGetId($insert_code);
-
           $insert_shift = array();
 
-          foreach(Request::input('day') as $key => $day)
+          /* INSERT DAY */
+          $key = 0;
+          $tc = 0;
+
+          foreach(Request::input("day") as $day)
           {
+               /* INSERT SHIFT DAY */
+               $insert_day["shift_day"] = $day;
+               $insert_day["shift_code_id"] = $shift_code_id;
+               $insert_day["shift_target_hours"] = Request::input("target_hours")[$day];
+               $insert_day["shift_break_hours"] = Request::input("break_hours")[$day];
+               $insert_day["shift_flexi_time"] = Request::input("flexitime_" . $day) == 1 ? 1 : 0;
+               $insert_day["shift_rest_day"] = Request::input("rest_day_" . $day) == 1 ? 1 : 0;
+               $insert_day["shift_extra_day"] = Request::input("extra_day_" . $day) == 1 ? 1 : 0;
+               
+               $shift_day_id = Tbl_payroll_shift_day::insertGetId($insert_day);
 
-               $temp['shift_code_id']   = $shift_code_id;
-               $temp['day']             = $day;
-               $temp['target_hours']    = Request::input('target_hours')[$key];
-               $temp['work_start']      = Request::input('work_start')[$key];
-               $temp['work_end']        = Request::input('work_end')[$key];
-               $temp['break_start']     = Request::input('break_start')[$key];
-               $temp['break_end']       = Request::input('break_end')[$key];
-               $temp['flexi']           = 0;
-               $temp['rest_day']        = 0;
-               $temp['extra_day']       = 0;
-               $temp['night_shift']     = 0;
-
-               if(Request::has('flexi_'.$key))
+               /* INSERT SHIFT TIME */
+               foreach(Request::input("work_start")[$day] as $k => $time)
                {
-                    $temp['flexi']      = Request::input('flexi_'.$key);
+                    if($time != "") //MAKE SURE TIME IS NOT BLANK
+                    {
+                         $insert_time[$tc]["shift_day_id"] = $shift_day_id;
+                         $insert_time[$tc]["shift_work_start"] = DateTime::createFromFormat( 'H:i A', $time);
+                         $insert_time[$tc]["shift_work_end"] = DateTime::createFromFormat( 'H:i A', Request::input("work_end")[$day][$k]);
+                         $tc++;
+                    }
                }
 
-               if(Request::has('rest_day_'.$key))
+               if(isset($insert_time))
                {
-                    $temp['rest_day']   = Request::input('rest_day_'.$key);
-               }
-
-               if(Request::has('extra_day_'.$key))
-               {
-                    $temp['extra_day']   = Request::input('extra_day_'.$key);
-               }
-
-               // if(Request::has('night_shift_'.$key))
-               // {
-               //      $temp['night_shift']   = Request::input('night_shift_'.$key);
-               // }
-
-               array_push($insert_shift, $temp);
-          }
-
-          if(!empty($insert_shift))
-          {
-               Tbl_payroll_shift_template::insert($insert_shift);
+                    Tbl_payroll_shift_time::insert($insert_time);
+                    $insert_time = null;
+               }   
           }
 
           $return['function_name'] = 'payrollconfiguration.reload_shift_template';
@@ -4644,57 +5080,79 @@ class PayrollController extends Member
 
      public function modal_view_shift_template($id)
      {
-          $data['code'] = Tbl_payroll_shift_code::where('shift_code_id', $id)->first();
-          $data['_day'] = Payroll::restday_checked($id, 'shift_template');
+          $data = Self::shift_sorting($id);
           return view('member.payroll.modal.modal_view_shift_template', $data);
+     }
+     
+     
+     public function shift_sorting($id = 0)
+     {
+          $data['shift_code'] = Tbl_payroll_shift_code::where('shift_code_id', $id)->first();
+          $data['_day'] = Tbl_payroll_shift_day::where('shift_code_id', $id)->get();
+
+          foreach($data["_day"] as $key => $day)
+          {
+               $data["_day"][$key] = $day;
+               $data["_day"][$key]->time_shift = Tbl_payroll_shift_time::where("shift_day_id", $day->shift_day_id)->get();
+          }
+          
+          return $data;
      }
 
 
      public function modal_update_shift_template()
      {
-          $shift_code_id                = Request::input('shift_code_id');
-          $update['shift_code_name']    = Request::input('shift_code_name');
-          Tbl_payroll_shift_code::where('shift_code_id', $shift_code_id)->update($update);
+         /* CHECK EXIST */
+          $shift_code_id = Request::input("shift_code_id");
+          $shift_code = Tbl_payroll_shift_code::where("shop_id", Self::shop_id())->where("shift_code_id", $shift_code_id)->first();
 
-          Tbl_payroll_shift_template::where('shift_code_id', $shift_code_id)->delete();
-
-          $insert_shift = array();
-
-          foreach(Request::input('day') as $key => $day)
+          if($shift_code)
           {
+               /* UPDATE SHIFT CODE */
+               $update_code['shift_code_name']    = Request::input('shift_code_name');
+               Tbl_payroll_shift_code::where("shop_id", Self::shop_id())->where("shift_code_id", $shift_code_id)->update($update_code);
+               $insert_shift = array();
 
-               $temp['shift_code_id']   = $shift_code_id;
-               $temp['day']             = $day;
-               $temp['target_hours']    = Request::input('target_hours')[$key];
-               $temp['work_start']      = date('H:i:s a', strtotime(Request::input('work_start')[$key]));
-               $temp['work_end']        = date('H:i:s a', strtotime(Request::input('work_end')[$key]));
-               $temp['break_start']     = date('H:i:s a', strtotime(Request::input('break_start')[$key]));
-               $temp['break_end']       = date('H:i:s a', strtotime(Request::input('break_end')[$key]));
-               $temp['flexi']           = 0;
-               $temp['rest_day']        = 0;
-               $temp['extra_day']       = 0;
+               /* INSERT DAY */
+               $key = 0;
+               $tc = 0;
 
-               if(Request::has('flexi_'.$key))
+               Tbl_payroll_shift_day::where("shift_code_id", $shift_code_id)->delete();
+
+               foreach(Request::input("day") as $day)
                {
-                    $temp['flexi']      = Request::input('flexi_'.$key);
+                    /* INSERT SHIFT DAY */
+                    $insert_day["shift_day"] = $day;
+                    $insert_day["shift_code_id"] = $shift_code_id;
+                    $insert_day["shift_target_hours"] = Request::input("target_hours")[$day];
+                    $insert_day["shift_break_hours"] = Request::input("break_hours")[$day];
+                    $insert_day["shift_rest_day"] = Request::input("rest_day_" . $day) == 1 ? 1 : 0;
+                    $insert_day["shift_extra_day"] = Request::input("extra_day_" . $day) == 1 ? 1 : 0;
+                    $insert_day["shift_flexi_time"] = Request::input("flexitime_day_" . $day) == 1 ? 1 : 0;
+
+                    $key++;
+
+                    $shift_day_id = Tbl_payroll_shift_day::insertGetId($insert_day);
+
+                    /* INSERT SHIFT TIME */
+                    foreach(Request::input("work_start")[$day] as $k => $time)
+                    {
+                         if($time != "") //MAKE SURE TIME IS NOT BLANK
+                         {
+                              $insert_time[$tc]["shift_day_id"] = $shift_day_id;
+                              $insert_time[$tc]["shift_work_start"] = DateTime::createFromFormat( 'H:i A', $time);
+                              $insert_time[$tc]["shift_work_end"] = DateTime::createFromFormat( 'H:i A', Request::input("work_end")[$day][$k]);
+                              $tc++;
+                         }
+                    }
+
+                    if(isset($insert_time))
+                    {
+                         Tbl_payroll_shift_time::insert($insert_time);
+                         $insert_time = null;
+                    }   
                }
 
-               if(Request::has('rest_day_'.$key))
-               {
-                    $temp['rest_day']   = Request::input('rest_day_'.$key);
-               }
-
-               if(Request::has('extra_day_'.$key))
-               {
-                    $temp['extra_day']   = Request::input('extra_day_'.$key);
-               }
-
-               array_push($insert_shift, $temp);
-          }
-
-          if(!empty($insert_shift))
-          {
-               Tbl_payroll_shift_template::insert($insert_shift);
           }
 
           $return['function_name'] = 'payrollconfiguration.reload_shift_template';
@@ -4725,7 +5183,7 @@ class PayrollController extends Member
           {
                $statement = 'restore';
           }
-          $file_name          = Tbl_payroll_shift_code::where('shift_code_id', $id)->pluck('shift_code_name');
+          $file_name          = Tbl_payroll_shift_code::where('shift_code_id', $id)->value('shift_code_name');
           $data['title']      = 'Do you really want to '.$statement.' Shift Template '.$file_name.'?';
           $data['html']       = '';
           $data['action']     = '/member/payroll/shift_template/archive_shift_template';
@@ -4777,8 +5235,8 @@ class PayrollController extends Member
      {
           $data['_company']        = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
           $data['_department']     = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
-          $data['leave_id']        =    $id;
-          $data['action']          =    '/member/payroll/leave_schedule/session_tag_leave';
+          $data['leave_id']        = $id;
+          $data['action']          = '/member/payroll/leave_schedule/session_tag_leave';
 
           Session::put('employee_leave_tag', array());
 
@@ -4799,10 +5257,9 @@ class PayrollController extends Member
                     ->leftjoin('tbl_payroll_leave_schedule','tbl_payroll_leave_schedule.payroll_leave_employee_id','=','tbl_payroll_leave_employee.payroll_leave_employee_id')
                     ->where('tbl_payroll_leave_employee.payroll_leave_temp_id',$leave_id)
                     ->where('tbl_payroll_leave_employee.payroll_leave_employee_is_archived', 0)
-
                     ->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
-                    ->groupBy('tbl_payroll_employee_basic.payroll_employee_id')
-                    ->select(DB::raw('*, tbl_payroll_leave_employee.payroll_leave_employee_id as leave_employee_id, (tbl_payroll_leave_temp.payroll_leave_temp_days_cap - (select count(tbl_payroll_leave_schedule.payroll_leave_employee_id) from tbl_payroll_leave_schedule where (tbl_payroll_leave_schedule.payroll_schedule_leave  BETWEEN "'.date('Y').'-01-01" and "'.date('Y').'-12-31") and tbl_payroll_leave_schedule.payroll_leave_employee_id = leave_employee_id)) as available_count, tbl_payroll_leave_employee.payroll_leave_employee_id as payroll_leave_employee_id_2'))
+                    ->groupBy('tbl_payroll_employee_basic.payroll_employee_id')                                                                                           
+                    ->select(DB::raw('*, tbl_payroll_leave_employee.payroll_leave_employee_id as leave_employee_id, tbl_payroll_leave_temp.payroll_leave_temp_days_cap as leave_cap ,(tbl_payroll_leave_temp.payroll_leave_temp_days_cap - sum(tbl_payroll_leave_schedule.consume)) as remaining_leave ,(tbl_payroll_leave_temp.payroll_leave_temp_days_cap - (select count(tbl_payroll_leave_schedule.payroll_leave_employee_id) from tbl_payroll_leave_schedule where (tbl_payroll_leave_schedule.payroll_schedule_leave  BETWEEN "'.date('Y').'-01-01" and "'.date('Y').'-12-31") and tbl_payroll_leave_schedule.payroll_leave_employee_id = leave_employee_id)) as available_count, tbl_payroll_leave_employee.payroll_leave_employee_id as payroll_leave_employee_id_2'))
                     ->get();
 
           return json_encode($emp);
@@ -4854,21 +5311,46 @@ class PayrollController extends Member
      public function save_schedule_leave_tag()
      {
           // Tbl_payroll_leave_schedule
-          $payroll_schedule_leave = Request::input('payroll_schedule_leave');
+          $payroll_schedule_leave = datepicker_input(Request::input('payroll_schedule_leave'));
+          
           if(Request::has('employee_tag'))
           {
                $insert = array();
-
+               $leave_reason = Tbl_payroll_leave_temp::where('payroll_leave_temp_id',Request::input("leave_reason"))->where('shop_id',$this->user_info["user_shop"])->first();
+  
                foreach(Request::input('employee_tag') as $tag)
                {
-                    $temp['payroll_leave_employee_id']    = $tag;
-                    $temp['payroll_schedule_leave']       = datepicker_input($payroll_schedule_leave);
-                    $temp['shop_id']                      = Self::shop_id();
+                    $leave_hours = Request::input("leave_hours_".$tag);
 
-                    array_push($insert, $temp);
+                    if(Request::has('single_date_only'))
+                    {
+                         $temp['payroll_leave_employee_id']    = $tag;
+                         $temp['payroll_schedule_leave']       = $payroll_schedule_leave;
+                         $temp['shop_id']                      = Self::shop_id();
+                         $temp['leave_hours']                  = $leave_hours;
+                         $temp['consume']                      = Payroll::time_float($leave_hours);
+                         $temp['notes']                        = "Used ".$leave_hours." hours in ".$leave_reason["payroll_leave_temp_name"];
+                         array_push($insert, $temp);
+                    }
+
+                    else
+                    {
+                         $end = datepicker_input(Request::input('payroll_schedule_leave_end'));
+                         while($payroll_schedule_leave <= $end)
+                         {
+                              $temp['payroll_leave_employee_id']    = $tag;
+                              $temp['payroll_schedule_leave']       = $payroll_schedule_leave;
+                              $temp['shop_id']                      = Self::shop_id();
+                              $temp['leave_hours']                  = $leave_hours;
+                              $temp['consume']                      = Payroll::time_float($leave_hours);
+                              $temp['notes']                        = "Used ".$leave_hours." hours in ".$leave_reason["payroll_leave_temp_name"];
+                              array_push($insert, $temp);
+                              $payroll_schedule_leave = Carbon::parse($payroll_schedule_leave)->addDay()->format("Y-m-d");
+                         }
+                    }
                }
                if(!empty($insert))
-               {
+               {  
                     Tbl_payroll_leave_schedule::insert($insert);
                }
           }    
@@ -4876,6 +5358,8 @@ class PayrollController extends Member
           $data['stataus']         = 'success';
           $data['function_name']   = '';
 
+
+               
           return collect($data)->toJson();
      }
 
@@ -4914,18 +5398,10 @@ class PayrollController extends Member
      /* CALDENDAR LEAVE END */
 
 
-     /* PAYROLL TIME KEEPING START */
-     public function time_keeping()
-     {
-          $data['_period'] = Tbl_payroll_period::sel(Self::shop_id())->where('payroll_period_status','!=','pending')->orderBy('payroll_period_category')->orderBy('payroll_period_start','desc')->get();
-          return view('member.payroll.payroll_timekeeping', $data);
-     }
 
      public function modal_generate_period()
      {
-
           $data['_period'] = Tbl_payroll_period::sel(Self::shop_id())->where('payroll_period_status','pending')->orderBy('payroll_period_start','desc')->paginate(20);
-          // dd($data);
           return view('member.payroll.modal.modal_generate_period', $data);
      }
 
@@ -4945,19 +5421,47 @@ class PayrollController extends Member
           $return['function_name'] = 'payroll_timekeeping.reload_timekeeping';
           return json_encode($return);
      }
+     public function company_period_delete($id)
+     {
 
+          $select = Tbl_payroll_period_company::where("payroll_period_company_id", $id)->first();
+          $payroll_period = Tbl_payroll_period::where("payroll_period_id", $select->payroll_period_id)->first();
+
+          $_payroll_timesheet_ids = Tbl_payroll_period::
+          select(DB::raw("tbl_payroll_time_sheet.payroll_time_sheet_id, tbl_payroll_employee_basic.payroll_employee_first_name"))
+          ->where('tbl_payroll_period.shop_id',Self::shop_id())
+          ->whereBetween('tbl_payroll_time_sheet.payroll_time_date', array($payroll_period["payroll_period_start"], $payroll_period["payroll_period_end"]))
+          ->join('tbl_payroll_employee_basic','tbl_payroll_period.shop_id','=','tbl_payroll_employee_basic.shop_id')
+          ->join('tbl_payroll_time_sheet','tbl_payroll_time_sheet.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')
+          ->join('tbl_payroll_time_sheet_record_approved','tbl_payroll_time_sheet_record_approved.payroll_time_sheet_id','=','tbl_payroll_time_sheet.payroll_time_sheet_id')
+          ->groupBy("tbl_payroll_time_sheet.payroll_time_sheet_id")
+          ->get();
+          
+
+          foreach ($_payroll_timesheet_ids as $payroll_timesheets_ids) 
+          {
+               Tbl_payroll_time_sheet::where("payroll_time_sheet_id",$payroll_timesheets_ids["payroll_time_sheet_id"])->delete();
+          }
+          
+          AuditTrail::record_logs("Delete Payroll Period","Payroll Delete Payroll Period id #" . $id,$id,$payroll_period,"");
+
+          Tbl_payroll_period_company::where("payroll_period_company_id", $id)->delete();
+         
+          return Redirect::to("/member/payroll/time_keeping");
+     }
      public function company_period($id)
      {
           $param['payroll_period_id']   = $id;
           $param['shop_id']             = Self::shop_id();
           $count = Tbl_payroll_period::check($param)->count();
+
           if($count == 0)
           {
                return Redirect::to('/member/payroll/time_keeping')->send();
           }
+
           $data['_company']   = Self::company_badge($id);
           $data['period']     = Tbl_payroll_period::where('payroll_period_id', $id)->first();
-
           return view('member.payroll.payroll_timekeeping_company',$data);
      }
 
@@ -5159,7 +5663,7 @@ class PayrollController extends Member
 
      public function modal_unused_leave($payroll_employee_id, $payroll_period_company_id)
      {
-          $date = Tbl_payroll_period_company::sel($payroll_period_company_id)->pluck('payroll_period_end');
+          $date = Tbl_payroll_period_company::sel($payroll_period_company_id)->value('payroll_period_end');
           // $_leave = Tbl_payroll_leave_schedule::getremaining($payroll_employee_id, $date)->orderBy('tbl_payroll_leave_temp.payroll_leave_temp_name')->get();
 
           $payable_leave = array();
@@ -5309,18 +5813,24 @@ class PayrollController extends Member
           $temp['sub']        = array();
           array_push($salary, $temp);
 
-          $temp = array();
-          $temp['name']       = 'Monthly Rate';
-          $temp['amount']     = number_format($process['salary_monthly'], 2);
-          $temp['sub']        = array();
-          array_push($salary, $temp);
-
-          $temp = array();
-          $temp['name']       = 'Daily Rate';
-          $temp['amount']     = number_format($process['salary_daily'], 2);
-          $temp['sub']        = array();
-          array_push($salary, $temp);
+          if($process['display_monthly_rate'] == 1)
+          {
+               $temp = array();
+               $temp['name']       = 'Monthly Rate';
+               $temp['amount']     = number_format($process['salary_monthly'], 2);
+               $temp['sub']        = array();
+               array_push($salary, $temp);
+          }
           
+          if($process['display_daily_rate'] == 1)
+          {
+               $temp = array();
+               $temp['name']       = 'Daily Rate';
+               $temp['amount']     = number_format($process['salary_daily'], 2);
+               $temp['sub']        = array();
+               array_push($salary, $temp);
+          }
+
           /* ALL POSITIVE */
 
           $temp = array();
@@ -5430,13 +5940,35 @@ class PayrollController extends Member
           }    
 
           $temp = array();
+          // $total_13_month = $process['13_month'] + $process['adjustment']['total_13_month'];
+
           if($process['13_month'] > 0)
           {    
                $temp['name']       = '13 month Pay';
                $temp['amount']     = number_format($process['13_month'], 2);
                $temp['sub']        = array();
                array_push($salary, $temp);
-          }   
+          }  
+
+          if($process['adjustment']['total_13_month'] > 0)
+          {
+               foreach($process['adjustment']['13_month'] as $n13month)
+               {
+                    $temp['name'] = $n13month->payroll_adjustment_name.' (13 month pay)';
+
+                    if($status == 'processed')
+                    {
+                         $temp['name'].=Self::btn_adjustment($n13month->payroll_adjustment_id);
+                    }
+
+                    $temp['amount'] = number_format($n13month->payroll_adjustment_amount, 2);
+                    $temp['sub']        = array();
+                    array_push($salary, $temp);
+               }
+          }
+
+          // dd($salary);
+
 
           $temp = array();
           if($process['payroll_cola'] > 0)
@@ -6078,8 +6610,8 @@ class PayrollController extends Member
 
           foreach($_period as $period)
           {
-               $temp['period'] = $period;
-               $temp['_company'] = Tbl_payroll_period_company::selperiod($period->payroll_period_id)
+               $temp['period']     = $period;
+               $temp['_company']   = Tbl_payroll_period_company::selperiod($period->payroll_period_id)
                                                             ->where('tbl_payroll_period_company.payroll_period_status','approved')
                                                             ->orderBy('tbl_payroll_company.payroll_company_name')
                                                             ->get();
@@ -6142,11 +6674,12 @@ class PayrollController extends Member
                                         ->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
                                         ->get();
           //dd($_record);
-
+          // dd($period);
           foreach($_record as $record)
           {
 
                $compute = Payroll::getrecord_breakdown($record);
+               $temp['period'] = date('M d, Y', strtotime($period->payroll_period_start)).' to '.date('M d, Y', strtotime($period->payroll_period_end));
                $temp['break'] = Self::breakdown_uncompute($compute,'approved');
                $temp['display_name'] = $record->payroll_employee_display_name;
                $temp['company_name'] = $record->payroll_company_name;
@@ -6162,19 +6695,35 @@ class PayrollController extends Member
           //dd($data['_record']);
           //return view('member.payroll.payroll_payslip', $data);
           
-          //return view('member.payroll.payroll_payslipv1', $data);
+          return view('member.payroll.payroll_payslipv1', $data);
+
+
+          /*$page_width    = $data['payslip']->paper_size_width * 10;
+          $page_height   = $data['payslip']->paper_size_height * 10; 
 
           $view = 'member.payroll.payroll_payslipv1';             
           $pdf = PDF::loadView($view, $data);
+               $pdf->setOption('margin-right', 5);
+               $pdf->setOption('margin-left', 5); 
+               $pdf->setOption('margin-top', 5);
+               $pdf->setOption('margin-bottom', 5);
+               $pdf->setOption('page-width', $page_width);
+               $pdf->setOption('page-height', $page_height);
+          return $pdf->stream('Paycheque.pdf');
+*/
+
+          /*$view = 'member.payroll.payroll_payslipv1';             
+          $pdf = PDF::loadView($view, $data);
                $pdf->setOption('margin-right',5);
                $pdf->setOption('margin-left',5);
-          return $pdf->stream('Paycheque.pdf');
+          return $pdf->stream('Paycheque.pdf');*/
 
 
          /* $view = 'member.reports.'.$blade;             
           $pdf = PDF::loadView($view,$data);
           return $pdf->stream('Paycheque.pdf');*/
      }
+
 
 
      /* payslip end */
@@ -6311,6 +6860,7 @@ class PayrollController extends Member
           $temp['absent_count']                   = $data['absent_count'];
           $temp['break_deduction']                = $data['break_deduction'];
           $temp['break_time']                     = $data['break_time'];
+          $temp['branch_location_id']             = $data['branch_location_id'];
 
           if(!empty($data['13_month_id']))
           {
@@ -6475,7 +7025,7 @@ class PayrollController extends Member
                $statement = 'restore';
           }
 
-          $payroll_reports_name = Tbl_payroll_reports::where('payroll_reports_id', $id)->pluck('payroll_reports_name');
+          $payroll_reports_name = Tbl_payroll_reports::where('payroll_reports_id', $id)->value('payroll_reports_name');
 
           $data['title']      = 'Do you really want to '.$statement.' '.$payroll_reports_name.'?';
           $data['html']       = '';
@@ -6634,6 +7184,8 @@ class PayrollController extends Member
           $date[1] = date('Y-m-d');
 
           $data = Self::generate_custom_report($id, $date);
+
+          // dd($data);
           return view('member.payroll.payroll_view_report', $data);
      }
 
@@ -6657,8 +7209,8 @@ class PayrollController extends Member
 
           $record     = Self::generate_custom_report($payroll_reports_id, $date);
 
-          $emp = $record['_emp'];
-          $columns = $record['_columns'];
+          $emp = $record['data']['_emp'];
+          $columns = $record['data']['_columns'];
 
           // dd($record);
           $data = array();
@@ -6672,7 +7224,7 @@ class PayrollController extends Member
 
           array_push($data, $columnn_array);
 
-          foreach($record['_emp'] as $emp)
+          foreach($record['data']['_emp'] as $emp)
           {
                $temp = array();
                array_push($temp, $emp['raw_name']);
@@ -6697,32 +7249,73 @@ class PayrollController extends Member
           $total_array = array();
           array_push($total_array, 'Total');
 
-          foreach($record['_total'] as $total)
+          foreach($record['data']['_total'] as $total)
           {
                $total = round(n2z($total), 2);
-               // if($total == 0)
-               // {
-               //      $total = number_format(n2z($total), 2);
-               // }
                array_push($total_array, round(n2z($total), 2));
           }
           array_push($data, $total_array);
 
-          // dd($data);
+      
+          $title    = Tbl_payroll_reports::where('payroll_reports_id', $payroll_reports_id)->value('payroll_reports_name');
 
-          $title    = Tbl_payroll_reports::where('payroll_reports_id', $payroll_reports_id)->pluck('payroll_reports_name');
 
-          return Excel::create($title, function($excel) use ($data) {
+          $data_export['data'] = $data;
+          $data_export['header'] = $record['header'];
+
+          return Excel::create($title, function($excel) use ($data_export) {
 
                $date = 'reports';
                $excel->setTitle('Payroll');
                $excel->setCreator('Laravel')->setCompany('DIGIMA');
                $excel->setDescription('payroll file');
 
-               $excel->sheet($date, function($sheet) use ($data) {
-                    $sheet->fromArray($data, null, 'A1', true, true);
+               $excel->sheet($date, function($sheet) use ($data_export) {
+
+                    /* column in excel */
+                    $columns = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE','AF','AG','AH','AI'];
+
+                    $new_range = 0;
+                    $old_range = 1;
+
+                    $column_range = array();
+                    foreach($data_export['header'] as $header)
+                    {
+                         // name
+                         // count
+                         if($new_range > 0)
+                         {
+                              $old_range = $new_range;
+                              $old_range++;
+                         }
+                        
+
+                         $new_range += $header['count'];
+                         $name = $header['name'];
+                         $sheet->mergeCells($columns[$old_range - 1].'1:'.$columns[$new_range - 1].'1', function($cell) use($name){
+                              $cells->setValue($name);
+                         });
+                         // if($header['count'] > 1)
+                         // {
+                         //      // $sheet->mergeCells($columns[$old_range - 1].'1:'.$columns[$new_range - 1].'1');
+                         // }
+
+                         // array_push($column_range, $columns[$old_range - 1].'1:'.$columns[$new_range - 1].'1');
+                         // dd($columns[$old_range - 1]);
+                         
+                         // $sheet->cells($columns[$old_range - 1].'1:'.$columns[$new_range - 1].'1', function($cells) use ($name) {
+                         // //     // manipulate the range of cells
+                         //      $cells->setValue($name);
+
+                         // });
+                    }
+
+                    // dd($column_range);
+                    
+
+                    $sheet->fromArray($data_export['data'], null, 'A2', true, false);
                     $sheet->setColumnFormat(array(
-                         'B:BZ' => '0.00'
+                         'B4:'.$columns[count($data_export['data'][1]) - 1].(count($data_export['data']) + 1) => '#,##0.00',
                          ));
                });
 
@@ -6739,7 +7332,16 @@ class PayrollController extends Member
           $column_space       = array();
           
 
-          $_entity = collect(Tbl_payroll_entity::orderBy('entity_name')->get()->toArray())->groupBy('entity_category');
+          $_entity = collect(Tbl_payroll_entity::orderBy('entity_category')->orderBy('entity_name')->get()->toArray())->groupBy('entity_category');
+
+          $group = ['','Basic','Deductions','Deminimis','Goverment',''];
+
+          $header  = array();
+
+          $temp_header['name']     = '';
+          $temp_header['count']    = 1;
+
+          array_push($header, $temp_header);
 
           /* for column start */
           foreach($_entity as $key => $data_entity)
@@ -6754,6 +7356,29 @@ class PayrollController extends Member
                     {
                          array_push($columns, $entity['entity_name']);
                          array_push($column_space, '');
+
+                         /* check if column header exists */
+                         $count_exist = 0;
+                         $key_exist = 0;
+                         foreach($header as $key => $head)
+                         {
+                              if($head['name'] == ucfirst($entity['entity_category']))
+                              {
+                                   $count_exist++;
+                                   $key_exist = $key;
+                              }
+                         }
+                         if($count_exist > 0)
+                         {
+                              $header[$key_exist]['count']++;
+                         }
+                         else
+                         {
+                              $temp_header['name']     = ucfirst($entity['entity_category']);;
+                              $temp_header['count']    = 1;
+                              array_push($header, $temp_header);
+                         }
+
                     }
 
 
@@ -6775,6 +7400,7 @@ class PayrollController extends Member
 
                }
           }
+
 
           /* for column end */
 
@@ -7079,8 +7705,10 @@ class PayrollController extends Member
           $data['_total']     = $_total;
           $data['_columns']   = $columns;
 
+          $return['data']     = $data;
+          $return['header']   = $header;
 
-          return $data;
+          return $return;
      }
 
      public function getsubtotal_report($_item = array())
@@ -7144,19 +7772,24 @@ class PayrollController extends Member
 
 
                     $temp_query = $query;
-                    $payroll_record_id_list = $temp_query->lists('payroll_record_id');
+                    $payroll_record_id_list = $temp_query->pluck('payroll_record_id');
                     $temp_query = $query;
-                    $payroll_period_company_id_list = $temp_query->select('tbl_payroll_record.payroll_period_company_id as company_record_id')->lists('company_record_id');
+                    $payroll_period_company_id_list = $temp_query->select('tbl_payroll_record.payroll_period_company_id as company_record_id')->pluck('company_record_id');
                     
                     // dd($payroll_period_company_id_list);
+                    $positive_value = 0;
+                    $negative_value = 0;
 
                     if($count_entity == 1)
                     {
-                         
                          if($entity['entity_name'] == '13 Month Pay')
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('13_month')->sum('13_month');
+
+                              $amount += Tbl_payroll_adjustment::getrecord($employee_id, $payroll_period_company_id_list, '13 month pay')->select('payroll_adjustment_amount')->sum('payroll_adjustment_amount');
+                              
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7164,6 +7797,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('regular_salary')->sum('regular_salary');
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7176,6 +7810,7 @@ class PayrollController extends Member
                               $amount += $temp_query->select('sh_early_overtime')->sum('rest_day_sh_early_overtime');
                               $amount += $temp_query->select('rh_early_overtime')->sum('rh_early_overtime');
                               $amount += $temp_query->select('sh_early_overtime')->sum('sh_early_overtime');
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7183,6 +7818,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('extra_salary')->sum('extra_salary');
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7190,6 +7826,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('leave_amount')->sum('leave_amount');
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7203,6 +7840,7 @@ class PayrollController extends Member
                               $amount += $temp_query->select('rest_day_rh_night_diff')->sum('rest_day_rh_night_diff');
                               $amount += $temp_query->select('sh_night_diff')->sum('sh_night_diff');
                               $amount += $temp_query->select('rh_early_overtime')->sum('rh_early_overtime');
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7210,6 +7848,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('rh_salary')->sum('rh_salary');
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7223,6 +7862,7 @@ class PayrollController extends Member
                               $amount += $temp_query->select('rest_day_rh_reg_overtime')->sum('rest_day_rh_reg_overtime');
                               $amount += $temp_query->select('rh_reg_overtime')->sum('rh_reg_overtime');
                               $amount += $temp_query->select('sh_reg_overtime')->sum('sh_reg_overtime');
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7230,6 +7870,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('rest_day_salary')->sum('rest_day_salary');
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7237,13 +7878,16 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('payroll_cola')->sum('payroll_cola');
+                              $positive_value += $amount;
                               array_push($data, $amount);
+                              // array_push($data, '150');
                          }
 
                          if($entity['entity_name'] == 'Special Holiday Pay')
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('sh_salary')->sum('sh_salary');
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7252,21 +7896,21 @@ class PayrollController extends Member
                               $amount = Tbl_payroll_allowance_record::getbyrecord($payroll_record_id_list)->select('payroll_record_allowance_amount')->sum('payroll_record_allowance_amount');
 
                               $amount += Tbl_payroll_adjustment::getrecord($employee_id, $payroll_period_company_id_list, 'Allowance')->select('payroll_adjustment_amount')->sum('payroll_adjustment_amount');
-
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
                          if($entity['entity_name'] == 'Bonus Pay')
                          {
                               $amount = Tbl_payroll_adjustment::getrecord($employee_id, $payroll_period_company_id_list, 'Bonus')->select('payroll_adjustment_amount')->sum('payroll_adjustment_amount');
-
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
                          if($entity['entity_name'] == 'Commission Pay')
                          {
                               $amount = Tbl_payroll_adjustment::getrecord($employee_id, $payroll_period_company_id_list, 'Commissions')->select('payroll_adjustment_amount')->sum('payroll_adjustment_amount');
-
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7274,7 +7918,7 @@ class PayrollController extends Member
                          {
                               $amount = Tbl_payroll_adjustment::getrecord($employee_id, $payroll_period_company_id_list, 'Incentives')->select('payroll_adjustment_amount')->sum('payroll_adjustment_amount');
 
-
+                              $positive_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7282,6 +7926,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('pagibig_contribution')->sum('pagibig_contribution');
+                              $negative_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7289,6 +7934,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('philhealth_contribution_ee')->sum('philhealth_contribution_ee');
+                              $negative_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7296,6 +7942,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('philhealth_contribution_er')->sum('philhealth_contribution_er');
+                              // $negative_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7303,6 +7950,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('sss_contribution_ec')->sum('sss_contribution_ec');
+                              // $negative_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7310,6 +7958,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('sss_contribution_ee')->sum('sss_contribution_ee');
+                              $negative_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7317,6 +7966,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('sss_contribution_er')->sum('sss_contribution_er');
+
                               array_push($data, $amount);
                          }
 
@@ -7324,25 +7974,36 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('tax_contribution')->sum('tax_contribution');
+                              $negative_value += $amount;
                               array_push($data, $amount);
+                              // array_push($data, 500);
+                              // dd($amount);
                          }
 
                          if($entity['entity_name'] == 'Cash Advance')
                          {
                               $amount = Tbl_payroll_deduction_payment::getrecord($payroll_record_id_list , 'Cash Advance')->select('tbl_payroll_deduction_payment.payroll_payment_amount')->sum('tbl_payroll_deduction_payment.payroll_payment_amount');
+                              $negative_value += $amount;
+                              array_push($data, $amount);
+                         }
 
+                         if($entity['entity_name'] == 'Late')
+                         {
+                              $amount = $temp_query->select('late_deduction')->sum('late_deduction');
                               array_push($data, $amount);
                          }
 
                          if($entity['entity_name'] == 'Cash Bond')
                          {
                               $amount = Tbl_payroll_deduction_payment::getrecord($payroll_record_id_list , 'Cash Bond')->select('tbl_payroll_deduction_payment.payroll_payment_amount')->sum('tbl_payroll_deduction_payment.payroll_payment_amount');
+                              $negative_value += $amount;
                               array_push($data, $amount);
                          }
 
                          if($entity['entity_name'] == 'Loans')
                          {
                               $amount = Tbl_payroll_deduction_payment::getrecord($payroll_record_id_list , 'Loans')->select('tbl_payroll_deduction_payment.payroll_payment_amount')->sum('tbl_payroll_deduction_payment.payroll_payment_amount');
+                              $negative_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7351,7 +8012,7 @@ class PayrollController extends Member
                               $amount = Tbl_payroll_adjustment::getrecord($employee_id, $payroll_period_company_id_list, 'Deductions')->select('payroll_adjustment_amount')->sum('payroll_adjustment_amount');
 
                               $amount += Tbl_payroll_deduction_payment::getrecord($payroll_record_id_list , 'Other Deduction')->select('tbl_payroll_deduction_payment.payroll_payment_amount')->sum('tbl_payroll_deduction_payment.payroll_payment_amount');
-
+                              $negative_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7360,6 +8021,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('absent_deduction')->sum('absent_deduction');
+                              $negative_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7367,6 +8029,7 @@ class PayrollController extends Member
                          {
                               $temp_query = $query;
                               $amount = $temp_query->select('under_time')->sum('under_time');
+                              $negative_value += $amount;
                               array_push($data, $amount);
                          }
 
@@ -7386,12 +8049,13 @@ class PayrollController extends Member
 
                                    $payroll_deduction_type_id = $sub['payroll_deduction_type_id'];
                                    $amount = Tbl_payroll_deduction_payment::getpayment($employee_id, $payroll_record_id_list, $payroll_deduction_type_id)->select('payroll_payment_amount')->sum('payroll_payment_amount');
-
+                                   $negative_value += $amount;
                                    array_push($data, $amount);
                               }
                          }
                     }
 
+                    $net = $positive_value - $negative_value;
                }
           }
 
@@ -7431,10 +8095,62 @@ class PayrollController extends Member
 
      public function modal_generate_bank($id)
      {
-          $data['_bank']      = Tbl_payroll_bank_convertion::orderBy('bank_name')->get();
-          $data['id']         = $id;
-          $data['company']    = Tbl_payroll_company::getbyperiod($id)->first();
-          return view('member.payroll.modal.modal_bank', $data);
+          // $data['_bank']      = Tbl_payroll_bank_convertion::orderBy('bank_name')->get();
+          // $data['id']         = $id;
+          // $data['company']    = Tbl_payroll_company::getbyperiod($id)->first();
+
+          // return view('member.payroll.modal.modal_bank', $data);
+          $query = Tbl_payroll_period_company::getcompanydetails($id)->first();
+
+          $_record = Tbl_payroll_record::getcompanyrecord($id)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->get();
+
+          // $fileText = '';
+          // dd($query);
+
+          $bank_name  = $query->bank_name;
+
+          $data = array();
+
+          foreach($_record as $record)
+          {
+               $compute = Payroll::getrecord_breakdown($record);
+
+               $temp_array = array();
+
+               $temp_array['payroll_employee_title_name']   = $compute['payroll_employee_title_name'];
+               $temp_array['payroll_employee_first_name']   = $compute['payroll_employee_first_name'];
+               $temp_array['payroll_employee_middle_name']  = $compute['payroll_employee_middle_name'];
+               $temp_array['payroll_employee_last_name']    = $compute['payroll_employee_last_name'];
+               $temp_array['payroll_employee_suffix_name']  = $compute['payroll_employee_suffix_name'];
+               $temp_array['payroll_employee_display_name'] = $compute['payroll_employee_display_name'];
+               $temp_array['payroll_employee_atm_number']   = $compute['payroll_employee_atm_number'];
+               $temp_array['total_net']                     = $compute['total_net'];
+
+               array_push($data, $temp_array);
+         
+          }
+
+          $title = $query->payroll_company_name.' - '.$bank_name.' ('.date('M d, Y', strtotime($query->payroll_period_start)).' to '.date('M d, Y', strtotime($query->payroll_period_end)).')';
+
+
+          if($bank_name == 'BDO')
+          {
+               return Self::bdo_bank_template($data, $title);
+          }
+
+          else if($bank_name == 'Metro Bank')
+          {
+               return Self::metro_bank_template($data, $title);
+          }
+
+          else if($bank_name == 'Equicom')
+          {
+               return Self::equicom_bank_template($data, $title);
+          }
+          else
+          {
+               return Self::bdo_bank_template($data, $title);
+          }
      }
 
      public function generate_bank()
@@ -7453,20 +8169,206 @@ class PayrollController extends Member
 
           $_record = Tbl_payroll_record::getcompanyrecord($company_period_id)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->get();
 
-          $fileText = '';
+          // $fileText = '';
+
+          $data = array();
 
           foreach($_record as $record)
           {
                $compute = Payroll::getrecord_breakdown($record);
+
+               $temp_array = array();
+
+               $temp_array['payroll_employee_title_name']   = $compute['payroll_employee_title_name'];
+               $temp_array['payroll_employee_first_name']   = $compute['payroll_employee_first_name'];
+               $temp_array['payroll_employee_middle_name']  = $compute['payroll_employee_middle_name'];
+               $temp_array['payroll_employee_last_name']    = $compute['payroll_employee_last_name'];
+               $temp_array['payroll_employee_suffix_name']  = $compute['payroll_employee_suffix_name'];
+               $temp_array['payroll_employee_display_name'] = $compute['payroll_employee_display_name'];
+               $temp_array['payroll_employee_atm_number']   = $compute['payroll_employee_atm_number'];
+               $temp_array['total_net']                     = $compute['total_net'];
+
+               array_push($data, $temp_array);
                
-               $fileText .= $compute['payroll_employee_atm_number']."\t".number_format($compute['total_net'], 2,'.','')."\r\n";
+               // $fileText .= $compute['payroll_employee_atm_number']."\t".number_format($compute['total_net'], 2,'.','')."\r\n";
           }
 
-          $myName = $company_code.$upload_date.$batch_no.".txt";
 
-          $headers = ['Content-type'=>'text/plain', 'test'=>'YoYo', 'Content-Disposition'=>sprintf('attachment; filename="%s"', $myName),'X-BooYAH'=>'WorkyWorky','Content-Length'=>sizeof($fileText)];
+          if($bank_name == 'BDO')
+          {
+               return Self::bdo_bank_template($data);
+          }
 
-          return Response::make($fileText, 200, $headers);
+          else if($bank_name == 'Metro Bank')
+          {
+               return Self::metro_bank_template($data);
+          }
+
+          else if($bank_name == 'Equicom')
+          {
+               return Self::equicom_bank_template($data);
+          }
+
+          /* use bdo as default */
+          else
+          {
+               return Self::bdo_bank_template($data);
+          }
+
+          // $myName = $company_code.$upload_date.$batch_no;
+
+          // $headers = ['Content-type'=>'text/plain', 'test'=>'YoYo', 'Content-Disposition'=>sprintf('attachment; filename="%s"', $myName.".txt"),'X-BooYAH'=>'WorkyWorky','Content-Length'=>sizeof($fileText)];
+
+          // return Response::make($fileText, 200, $headers);
+     }
+
+
+     public function bdo_bank_template($data = array(), $title = '')
+     {
+          $column = array();
+
+          $temp = array();
+          $temp['account_number']  = 'ACCOUNT NUMBER';
+          $temp['amount']          = 'AMOUNT';
+          $temp['name']            = 'NAME';
+
+          array_push($column, $temp);
+          $total = 0;
+
+          $data = collect($data)->sortBy('payroll_employee_first_name');
+
+          foreach($data as $bdo)
+          {
+               $temp = array();
+               $temp['account_number'] = $bdo['payroll_employee_atm_number'];
+               $temp['amount'] = $bdo['total_net'];
+               $temp['name'] = $bdo['payroll_employee_title_name'].' '.$bdo['payroll_employee_first_name'].' '.$bdo['payroll_employee_middle_name'].' '.$bdo['payroll_employee_last_name'].' '.$bdo['payroll_employee_suffix_name'];
+
+               array_push($column, $temp);
+               $total += $bdo['total_net'];
+          }
+
+          $temp = array();
+          $temp['account_number'] = '';
+          $temp['amount'] = $total;
+          $temp['name'] = '';
+
+          array_push($column, $temp);
+
+          return Excel::create($title, function($excel) use ($column) {
+
+               $date = 'BDO';
+               $excel->setTitle('Payroll');
+               $excel->setCreator('Laravel')->setCompany('DIGIMA');
+               $excel->setDescription('payroll file');
+
+               $excel->sheet($date, function($sheet) use ($column) {
+                    $sheet->fromArray($column, null, 'A1', true, false);
+               });
+
+          })->download('xlsx');
+
+     }
+
+     public function metro_bank_template($data = array(), $title = '')
+     {
+          $column = array();
+
+          $temp = array();
+          $temp['name']            = 'Employee Name';
+          $temp['account_number']  = 'ATM No.';
+          $temp['amount']          = 'Salary';
+
+          array_push($column, $temp);
+          $total = 0;
+
+          $data = collect($data)->sortBy('payroll_employee_first_name');
+
+          foreach($data as $bdo)
+          {
+               $temp = array();
+               
+               $temp['name'] = $bdo['payroll_employee_title_name'].' '.$bdo['payroll_employee_first_name'].' '.$bdo['payroll_employee_middle_name'].' '.$bdo['payroll_employee_last_name'].' '.$bdo['payroll_employee_suffix_name'];
+               $temp['account_number'] = $bdo['payroll_employee_atm_number'];
+               $temp['amount'] = $bdo['total_net'];
+
+               array_push($column, $temp);
+               $total += $bdo['total_net'];
+          }
+
+          $temp = array();
+
+          $temp['name']            = '';
+          $temp['account_number']  = '';
+          $temp['amount']          = $total;
+          
+
+          array_push($column, $temp);
+
+          return Excel::create($title, function($excel) use ($column) {
+
+               $date = 'BDO';
+               $excel->setTitle('Payroll');
+               $excel->setCreator('Laravel')->setCompany('DIGIMA');
+               $excel->setDescription('payroll file');
+
+               $excel->sheet($date, function($sheet) use ($column) {
+                    $sheet->fromArray($column, null, 'A1', true, false);
+               });
+
+          })->download('xlsx');
+     }
+
+     public function equicom_bank_template($data = array(), $title = '')
+     {
+          $column = array();
+
+          $temp = array();
+          $temp['last_name']       = 'LAST NAME';
+          $temp['first_name']      = 'FIRST NAME';
+          $temp['account_number']  = 'ACCOUNT NUMBER';
+          $temp['amount']          = 'Salary';
+
+          array_push($column, $temp);
+          $total = 0;
+
+          $data = collect($data)->sortBy('payroll_employee_last_name');
+
+          foreach($data as $bdo)
+          {
+               $temp = array();
+          
+               $temp['last_name']       = $bdo['payroll_employee_last_name'];
+               $temp['first_name']      = $bdo['payroll_employee_first_name'];
+               $temp['account_number']  = $bdo['payroll_employee_atm_number'];
+               $temp['amount']          = $bdo['total_net'];
+
+               array_push($column, $temp);
+               $total += $bdo['total_net'];
+          }
+
+          $temp = array();
+
+          $temp['last_name']       = '';
+          $temp['first_name']      = '';
+          $temp['account_number']  = '';
+          $temp['amount']          = $total;
+          
+
+          array_push($column, $temp);
+
+          return Excel::create($title, function($excel) use ($column) {
+
+               $date = 'BDO';
+               $excel->setTitle('Payroll');
+               $excel->setCreator('Laravel')->setCompany('DIGIMA');
+               $excel->setDescription('payroll file');
+
+               $excel->sheet($date, function($sheet) use ($column) {
+                    $sheet->fromArray($column, null, 'A1', true, false);
+               });
+
+          })->download('xlsx');
      }
 
      /* BANKING END */
@@ -7479,5 +8381,189 @@ class PayrollController extends Member
           return view('member.payroll.payroll_shift_group');
      }
      /* SHIFT END */
+
+     /*13th month pay report START*/
+     public function report_13th_month_pay()
+     {
+          //dd(Self::shop_id());
+          $data['start_date']      = NULL;
+          $data['end_date']        = NULL;
+          $data['company_id']      = 0;
+          $data['department_id']   = 0;
+          $data['emp_id']          = 0;
+
+          if(Request::has('start_date') && Request::has('end_date'))
+          {
+               $data['start_date']      = date('Y-m-d', strtotime(Request::input('start_date')));
+               $data['end_date']        = date('Y-m-d', strtotime(Request::input('end_date')));
+               //dd(Request::all());
+          }  
+
+          $data['company_id']      = Request::input('company_id');
+          $data['department_id']   = Request::input('department_id');
+          $data['emp_id']          = Request::input('emp_id');       
+          
+          //dd(Request::all());
+          $data['_company']        = Payroll::company_heirarchy(Self::shop_id());
+          $data['_department']     = Tbl_payroll_department::sel(Self::shop_id(), 0)->get();
+          $data['_active']         = Self::report_13th_month_pay_table($data['start_date'], $data['end_date'], $data['company_id'], $data['department_id'], $data['emp_id']);
+          
+          return view('member.payroll.report_13th_month_pay', $data);
+     }
+
+     public function report_13th_month_pay_table($start_date = '0000-00-00', $end_date = '0000-00-00', $company_id=0 ,$department_id = 0, $emp_id = 0)
+     {
+          $arr_record    = array();
+          $count         = 0;
+          $tot           = 0;  
+
+          if($start_date==NULL)
+          {
+               $start_date = date('Y-m-d');
+          }  
+
+          $query_emp =  Tbl_payroll_employee_contract::employeefilter($company_id,$department_id,0,$start_date, Self::shop_id())->orderBy('payroll_employee_last_name');
+
+          if($emp_id != 0)
+          {
+               $query_emp->where('tbl_payroll_employee_basic.payroll_employee_id', $emp_id);
+          }
+        
+          $_emp = $query_emp->get();
+
+          $arr_record = array();
+
+          foreach ($_emp as $key_emp => $emp_value) 
+          {
+               //dd($_emp);
+               $query_pay_rec = $payroll_record = Tbl_payroll_record::get13month($emp_value->payroll_employee_id);                                        
+               if($start_date != NULL && $end_date != NULL)
+               {
+                    $query_pay_rec->where('tbl_payroll_period.payroll_period_start', '>=', $start_date)->where('tbl_payroll_period.payroll_period_end'  , '<=', $end_date);
+               } 
+               //dd($query_pay_rec);     
+               $_pay_rec = $query_pay_rec->get();                       
+               $sub_tot = 0;
+
+               if(count($_pay_rec) !=0 )
+               {
+                    foreach ($_pay_rec as $key_pay_rec => $pay_rec_value) 
+                    {
+                         //dd($_pay_rec);                   
+                         $n_13_month = $pay_rec_value->salary_monthly/12;
+                         $tot += $n_13_month;
+                         $sub_tot += $n_13_month;
+
+                         if ($key_pay_rec == 0) 
+                         {
+                              $arr_record[$key_emp][$key_pay_rec]['name']           = $emp_value->payroll_employee_first_name. ' ' .$emp_value->payroll_employee_last_name; 
+                              $arr_record[$key_emp][$key_pay_rec]['department']     = $emp_value->payroll_department_name;
+                              $arr_record[$key_emp][$key_pay_rec]['job_title']      = $emp_value->payroll_jobtitle_name;      
+                         } else {
+                              $arr_record[$key_emp][$key_pay_rec]['name']           = ''; 
+                              $arr_record[$key_emp][$key_pay_rec]['department']     = '';
+                              $arr_record[$key_emp][$key_pay_rec]['job_title']      = '';    
+                         }
+
+                         $arr_record[$key_emp][$key_pay_rec]['period']               = date('M d, Y', strtotime($pay_rec_value->payroll_period_start)). ' - ' 
+                                                                                .date('M d, Y', strtotime($pay_rec_value->payroll_period_end));
+                         $arr_record[$key_emp][$key_pay_rec]['basic_salary']         = number_format($pay_rec_value->salary_monthly, 2);
+                         
+                         $arr_record[$key_emp][$key_pay_rec]['amount_of_13']         = number_format($n_13_month, 2);                           
+                         if($key_pay_rec == count($_pay_rec)-1)
+                         {
+                              $arr_record[$key_emp][$key_pay_rec]['sub_total']       = number_format($sub_tot, 2);
+                         } else {
+                              $arr_record[$key_emp][$key_pay_rec]['sub_total']       = '';   
+
+                         } 
+
+                         $arr_record[$key_emp][$key_pay_rec]['employee_id']         = $emp_value->payroll_employee_id;
+                    }      
+               }                       
+          }
+
+          if($arr_record!=NULL)
+          {
+               $arr_record[$key_emp+1][$key_pay_rec]['name']           = ''; 
+               $arr_record[$key_emp+1][$key_pay_rec]['department']     = '';
+               $arr_record[$key_emp+1][$key_pay_rec]['job_title']      = '';    
+               $arr_record[$key_emp+1][$key_pay_rec]['period']         = '';
+               $arr_record[$key_emp+1][$key_pay_rec]['basic_salary']   = '';
+               $arr_record[$key_emp+1][$key_pay_rec]['amount_of_13']   = 'TOTAL';  
+               $arr_record[$key_emp+1][$key_pay_rec]['sub_total']      = number_format($tot, 2); 
+               $arr_record[$key_emp+1][$key_pay_rec]['employee_id']      = '';
+               return $arr_record;                   
+          } else{
+               return FALSE;
+          }
+
+     }   
+
+     public function report_13th_month_pay_excel_export()
+     {
+          //dd('pasok');
+          $start_date         = NULL;
+          $end_date           = NULL;
+          $company_id         = 0;
+          $department_id      = 0;
+          $emp_id             = 0;
+
+          $date_range = Carbon::now()->format('M d, y');
+
+          if(Request::has('start_date') && Request::has('end_date'))
+          {
+               $start_date    = date('Y-m-d', strtotime(Request::input('start_date')));
+               $end_date      = date('Y-m-d', strtotime(Request::input('end_date')));
+               $date_range    = date('M d, y', strtotime(Request::input('start_date'))). ' - ' .date('M d, y', strtotime(Request::input('end_date')));;
+          }  
+
+          $company_id      = Request::input('company_id');
+          $department_id   = Request::input('department_id');
+          $emp_id          = Request::input('emp_id');     
+
+          $_record = Self::report_13th_month_pay_table($start_date, $end_date, $company_id, $department_id, $emp_id);
+          
+          $data = array();
+          $record = array();
+          $header = ['Employee Name', 'Department', 'Job Title', 'Payroll Period', 'Basic Salary', '13 Month', 'Sub Total'];
+          /*$record = ['name', 'depart', 'job', 'period', 'alary', '13', 'sub'];*/
+          array_push($data, $header);
+         
+          foreach($_record as $active){
+               foreach($active as $a){
+                     $record = [ 
+                         $a['name'],
+                         $a['department'],
+                         $a['job_title'],
+                         $a['period'],
+                         $a['basic_salary'],
+                         $a['amount_of_13'],
+                         $a['sub_total'],
+                         ];
+                    array_push($data, $record);                                                         
+               }
+          }     
+
+          $title = '13th Month pay Report ('.$date_range.')';
+          //dd($title);
+
+          return Excel::create($title, function($excel) use ($data) {
+
+               $date = 'reports';
+               $excel->setTitle('Payroll');
+               $excel->setCreator('Laravel')->setCompany('DIGIMA');
+               $excel->setDescription('payroll file');
+
+               $excel->sheet($date, function($sheet) use ($data) {
+                    $sheet->fromArray($data, null, 'A1', true, false);
+                    $sheet->setColumnFormat(array(
+                         'B:BZ' => '0.00'
+                         ));
+               });
+
+          })->download('xlsx');  
+     }       
+     /* end 13th month pay report*/
 
 }

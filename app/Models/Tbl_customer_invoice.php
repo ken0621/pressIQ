@@ -8,7 +8,7 @@ class Tbl_customer_invoice extends Model
 {
 	protected $table = 'tbl_customer_invoice';
 	protected $primaryKey = "inv_id";
-    public $timestamps = false;
+    public $timestamps = true;
 
 	public static function scopeCustomer($query)
     {
@@ -20,7 +20,7 @@ class Tbl_customer_invoice extends Model
     }
     public static function scopeReturns_item($query)
     {
-        return $query->join("tbl_credit_memo_line","tbl_credit_memo_line.cmline_cm_id","=","tbl_customer_invoice.credit_memo_id");
+        return $query->leftjoin("tbl_credit_memo_line","tbl_credit_memo_line.cmline_cm_id","=","tbl_customer_invoice.credit_memo_id")->leftjoin("tbl_item","cmline_item_id","=","item_id");;
     }
     public static function scopeManual_invoice($query)
     {
@@ -33,7 +33,7 @@ class Tbl_customer_invoice extends Model
     				->join("tbl_item","tbl_item.item_id","=","invline_item_id");
     }
 
-    public static function scopeAppliedPayment($query, $shop_id)
+    public static function scopeAppliedPayment($query, $shop_id = 0)
     {
         return $query->leftJoin(DB::raw("(select sum(rpline_amount) as amount_applied, rpline_reference_id from tbl_receive_payment_line as rpline inner join tbl_receive_payment rp on rp_id = rpline_rp_id where rp_shop_id = ".$shop_id." and rpline_reference_name = 'invoice' group by concat(rpline_reference_name,'-',rpline_reference_id)) pymnt"), "pymnt.rpline_reference_id", "=", "inv_id");
     }

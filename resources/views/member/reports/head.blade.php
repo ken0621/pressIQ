@@ -2,6 +2,7 @@
     .table
     {
         width: inherit;
+        min-width: 650px;
         margin: auto;
     }
     
@@ -13,6 +14,9 @@
     .panel-report
     {
         display: inline-block;
+        width: 100%;
+        overflow-x: scroll;
+
     }
 </style>
 

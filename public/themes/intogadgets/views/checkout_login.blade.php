@@ -76,18 +76,16 @@
 							@endforeach
 						</tbody>
 					</table>
+					@if($get_cart["sale_information"]["total_shipping"])
 					<div class="text-right total">
 						<div class="total-price">&#8369; {{ number_format($get_cart["sale_information"]["total_product_price"], 2) }}</div>
 						<div class="total-label">Subtotal</div>
-					</div>	
-					<!-- <div class="text-right total">
-						<div class="total-price"></div>
-						<div class="total-label">tax()</div>
-					</div> -->
+					</div>
 					<div class="text-right total">
 						<div class="total-price">&#8369; {{ number_format($get_cart["sale_information"]["total_shipping"], 2) }}</div>
 						<div class="total-label">Shipping Fee</div>
 					</div>
+					@endif
 					<div class="text-right total ">
 						<div class="total-price supertotal">&#8369; {{ number_format($get_cart["sale_information"]["total_overall_price"], 2) }}</div>
 						<div class="total-label">Total</div>

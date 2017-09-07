@@ -8,7 +8,7 @@ class Tbl_inventory_slip extends Model
 {
     protected $table = 'tbl_inventory_slip';
 	protected $primaryKey = "inventory_slip_id";
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function scopeShop($query)
     {

@@ -30,8 +30,7 @@
 				<span>{{date('m/d/Y',strtotime($db->db_date))}}</span><br>
 			</div>
 		</div>
-	</div>
-	
+	</div>	
 	<div class="row clearfix draggable-container db-replace-container">
 		<div >
 			<div class="col-sm-12">
@@ -68,14 +67,25 @@
 							<td class="text-center"><input disabled type="checkbox" {{$dbline->dbline_replace_status == 1 ? 'checked' : '' }} name=""></td>
 							@endif
 						</tr>
+						<tr>
+							<td ></td>
+							<td colspan="8"> SERIAL NUMBER CONSUMED <br> {{$dbline->serial_number_consume}} </td>
+						</tr>
+							@if($db->is_bad_order == 1)
+							<tr>
+								<td ></td>
+								<td colspan="8"> SERIAL NUMBER REPLACED <br> {{$dbline->serial_number_replace}}</td>
+							</tr>
+							@endif
 						@endforeach
 					</tbody>
 				</table>
 			</div>
 		</div>
 	</div>
-	
-	<div class="row pull-right" >
+
+                    
+	<div class="row pull-right" style="margin-right: 5px" >
 		<h3><strong>TOTAL</strong> {{currency('PHP',($total))}}</h3>
 	</div>
 </body>

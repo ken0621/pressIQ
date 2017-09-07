@@ -78,6 +78,7 @@
                         <a href="/about" class="head-button link-nav {{ Request::segment(1) == 'about' ? 'active' : '' }}" id="company-profile">COMPANY PROFILE</a>
                         <a href="/runruno" class="head-button link-nav {{ Request::segment(1) == 'runruno' ? 'active' : '' }}" id="runruno">RUNRUNO</a>
                         <a href="javascript:" class="head-button link-nav {{ Request::segment(1) == 'news' ? 'active' : '' }}" id="news">NEWS</a>
+                        <a href="/jobs" class="head-button link-nav {{ Request::segment(1) == 'jobs' ? 'active' : '' }}" id="jobs">JOBS</a>
                         <a href="/contact" class="head-button link-nav {{ Request::segment(1) == 'contact' ? 'active' : '' }}" id="contact-us">CONTACT US</a>
                     </nav>
                 </div>
@@ -166,7 +167,69 @@
             </div>
         </div>
     </div>
-    
+    <!-- POPUP -->
+    <div id="popup1" class="overlay">
+        <div class="popup">
+            <h2>Attach Your Resume Here</h2>
+            <a class="close" href="#">&times;</a>
+            <form method="post" action="/job/submit" enctype="multipart/form-data">
+                <div class="content mobile-content">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <input type="file" name="job_resume" class="on-change-file" id="tohide"/>
+                    <input type="hidden" name="job_apply" value="{{ isset($job['job_title']) ? $job['job_title'] : 'Uncategorized' }}">
+
+                    <input type="button" class="round-button-container" onclick="document.getElementById('tohide').click()"/>
+                    <div class="file-detail">(.docx, .pdf, .jpg)</div>
+                    <div class="doc-container"><i class="fa fa-file-o" aria-hidden="true">&nbsp;&nbsp;</i><span class="file-name">No File Selected</span></div>
+                    <h1>
+                        Say something about your self!
+                    </h1>
+                    <div class="txt-area-container">
+                        <textarea name="job_introduction" class="form-control mobile" style="max-width: 300px; min-width: 300px; max-height: 70px; font-size: 12px;" placeholder="Type the qualities that you think you can stand out among others..."></textarea>
+                    </div>
+                    {{-- <a href="#popup3"><div class="submit-btn">SUBMIT</div></a> --}}
+                    <button type="submit" class="submit-btn">SUBMIT</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- POPUP 2 -->
+    <div id="popup2" class="overlay2">
+        <div class="popup2">
+            <h2>Application Done!</h2>
+            <a class="close" href="#">&times;</a>
+            <div class="content">
+                <p>Thank you for applying FCF Minerals.<br>Wait for our call for 5 to 7 working days</p>
+                <a href="#"><div class="submit-btn">CLOSE</div></a>
+            </div>
+        </div>
+    </div>
+    <!-- POPUP 3 -->
+     <div id="popup3" class="overlay2">
+        <div class="popup3">
+            <h2>PAGE UNDER CONSTRUCTION!</h2>
+            <h3>Sorry for the inconvinience</h3>
+            <a class="close" href="#">&times;</a>
+            <div class="content">
+                <div class="miniature-container">
+                    <img src="/themes/{{ $shop_theme }}/img/miniature1.png">
+                </div>
+                <p>Please contact the company number or send an email<br>for the Job Inquiries. Thank you and good day!</p>
+                <a href="#"><div class="submit-btn">CLOSE</div></a>
+            </div>
+        </div>
+    </div>  
+    <!-- POPUP 4 -->
+    <div id="popup4" class="overlay2">
+        <div class="popup4">
+            <h2>Application Failed!</h2>
+            <a class="close" href="#">&times;</a>
+            <div class="content">
+                <p>Please try again later.<br> If error insist please contact us.</p>
+                <a href="#"><div class="submit-btn">CLOSE</div></a>
+            </div>
+        </div>
+    </div>
     <!-- CONTENT -->
     <div id="scroll-to" class="clearfix">
 	   @yield("content")
@@ -298,6 +361,11 @@
                 });
             }
         }
+        $(".on-change-file").change(function()
+        {
+            var filename = $(this).val().split('\\').pop();
+            $(".file-name").html(filename);
+        });
     </script>
 
     <script type="text/javascript">
@@ -322,7 +390,7 @@
             
             $('.slider3').diyslider({
                 width: "463px", // width of the slider
-                height: "115px", // height of the slider
+                height: "120px", // height of the slider
                 display: 4, // number of slides you want it to display at once
                 loop: false // disable looping on slides
                 }); // this is all you need!

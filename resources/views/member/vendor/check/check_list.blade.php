@@ -7,7 +7,7 @@
         <div>
             <i class="fa fa-tags"></i>
             <h1>
-                <span class="page-title">Vendor Check &raquo; List </span>
+                <span class="page-title">Check &raquo; List </span>
                 <small>
                     List of Check
                 </small>
@@ -41,7 +41,7 @@
                     <thead style="text-transform: uppercase">
                         <tr>
                             <th>Check No</th>
-                            <th>Vendor Name</th>
+                            <th>Name</th>
                             <th>Total</th>
                             <th>Category Type</th>
                             <th>Action</th>
@@ -52,7 +52,7 @@
                         @foreach($_check as $check)
                             <tr>
                                 <td>{{$check->wc_id}}</td>
-                                <td>{{$check->vendor_company}}</td>
+                                <td>{{$check->name}}</td>
                                 <td>{{currency("PHP",$check->wc_total_amount)}}</td>
                                 <td>
                                     @if($check->wc_ref_name == "paybill")

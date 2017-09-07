@@ -29,6 +29,17 @@ $data['icon'] = 'fa fa-money';
         <tbody>
         @if(count($history) >= 1)
           @foreach($history as $key => $value)
+          <?php 
+
+          $currency = $value->encashment_process_currency;
+          $convertion = $value->encashment_process_currency_convertion;
+          $tax_converted = $value->enchasment_process_tax * $convertion;
+          $process_fee = $value->enchasment_process_p_fee * $convertion;
+          $taxed = $value->encashment_process_taxed * $convertion;
+          $total = $value->wallet_log_amount * $convertion;
+          $denied = $value->wallet_log_denied_amount * $convertion;
+
+          ?>
             <tr>
               <td>{{$value->enchasment_process_from}}</td>
               <td>{{$value->enchasment_process_to}}</td>
@@ -36,23 +47,23 @@ $data['icon'] = 'fa fa-money';
               @if($value->enchasment_process_tax_type == 1)
               <td>{{$value->enchasment_process_tax}}%</td>
               @else
-              <td>{{currency('PHP', $value->enchasment_process_tax)}}</td>
+              <td>{{currency($currency, $tax_converted)}}</td>
               @endif
               @if($value->enchasment_process_p_fee_type == 1)
               <td>{{$value->enchasment_process_p_fee}}%</td>
               @else
-              <td>{{currency('PHP',$value->enchasment_process_p_fee)}}</td>
+              <td>{{currency($currency, $process_fee)}}</td>
               @endif
 
-              <td>{{currency('PHP',$value->encashment_process_taxed)}}</td>
-              <td>{{currency('PHP',$value->wallet_log_amount * -1)}}</td>
+              <td>{{currency($currency, $taxed)}}</td>
+              <td>{{currency($currency, $total * -1)}}</td>
 
               @if($value->encashment_process_type == 0)
               <td class="alert alert-warning">Pending</td>
               @elseif($value->encashment_process_type  == 1)
               <td class="alert alert-success">Processed</td>
               @else
-              <td class="alert alert-danger">Denied ({{currency('PHP', $value->wallet_log_denied_amount)}})</td>
+              <td class="alert alert-danger">Denied ({{currency($currency, $denied)}})</td>
               @endif
 
               <td><button class="btn btn-primary" onclick="show_breakdown({{$value->encashment_process}}, {{$value->slot_id}})">Breakdown</button></td>
@@ -160,6 +171,17 @@ $data['icon'] = 'fa fa-money';
       <input type="number" class="form-control b_tax" readonly>
       <label>Total</label>
       <input type="number" class="form-control b_total" readonly>
+
+      @if(count($currency_set) >= 2)
+      <label>Select Currency</label>
+      <select class="form-control currency_set_select" name="currency_set" class="">
+        @foreach($currency_set as $key => $value)
+          <option value="{{$value->en_cu_id}}" convertion="{{$value->en_cu_convertion}}" iso="{{$value->iso}}">{{$value->iso}} - {{$value->en_cu_name}}</option>
+        @endforeach
+      </select>
+      <label class="label_converted">Converted</label>
+      <input type="text" class="form-control convertion" step="0.1" readonly="readonly">
+      @endif
     </div>
     <div class="box-footer clearfix">
       <button class="btn btn-primary pull-right bind">Request For Encashment</button>
@@ -209,6 +231,24 @@ var fee_p = 0;
 inititalize();
   // function 
   var total_amount = 0;
+  $('.currency_set_select').on('change', function (){
+    var convertion = $('option:selected', this).attr('convertion');
+    var iso = $('option:selected', this).attr('iso');
+    var total_amount_a = $('.b_total').val();
+    var converted = total_amount_a * convertion;
+    console.log(total_amount_a);
+    var amount_currency_iso = formatPHP(iso, converted);
+    $('.convertion').val(amount_currency_iso);
+  });
+  function change_currency()
+  {
+    var convertion = $('.currency_set_select option:selected').attr('convertion');
+    var iso = $('.currency_set_select option:selected').attr('iso');
+    var total_amount_a = $('.b_total').val();
+    var converted = total_amount_a * convertion;
+    var amount_currency_iso = formatPHP(iso, converted);
+    $('.convertion').val(amount_currency_iso);
+  }
   function add_amount(amount_to_add)
   {
     var amount = $('.b_amount').val();
@@ -240,6 +280,7 @@ inititalize();
   function add_tax()
   {
     var amount = $('.b_amount').val();
+
     amount = parseFloat(amount);
     var fee = $('.b_fee').val();
 
@@ -271,7 +312,7 @@ inititalize();
     var total = amount - tax - fee;
 
     $('.b_total').val(total);
-
+    change_currency();
   }
   function show_breakdown(encashment_process, slot_id)
   {
@@ -341,5 +382,22 @@ function submit_done(data)
     toastr.success(data.message);
   }
 }
+function formatPHP(iso, num) 
+{
+
+      num  = parseFloat(num);
+      var sign = "-";
+      if(num >=  parseFloat(0))
+      {
+        sign = '';
+      }
+      console.log('num:' + num);
+      console.log('sign' + sign);
+      var num2 = parseFloat(num);
+      var p = num2.toFixed(2).split(".");
+      return iso + " " + sign + p[0].split("").reverse().reduce(function(acc, num, i, orig) {
+          return  num=="-" ? acc : num + (i && !(i % 3) ? "," : "") + acc;
+      }, "") + "." + p[1];
+  }
 </script>
 @endsection

@@ -44,8 +44,6 @@ class Mlm_member
 		$data['customer_info'] = Tbl_customer::where('customer_id', $customer_id)->first();
 		$data['slot_now'] = Tbl_mlm_slot::where('tbl_mlm_slot.slot_owner', $customer_id)->membershipcode()
 		->membership()->first();
-		// $data['discount_card'] = Tbl_mlm_discount_card_log::where('discount_card_customer_holder', $customer_id)->first();
-
 		Session::put('mlm_member', $data);
 	}
 	public static function add_to_session_edit($shop_id, $customer_id, $slot_id)
@@ -57,9 +55,12 @@ class Mlm_member
 		// ->membershipcode()
 		->membership()
 		->first();
+
+
 		$data['discount_card'] = Tbl_mlm_discount_card_log::where('discount_card_customer_holder', $customer_id)->first();
-		
-		Session::put('mlm_member', $data);
+		$store['mlm_member'] = $data;
+        session($store);
+		//Session::put('mlm_member', $data);
 	}
 	public static function get_customer_info($customer_id, $discount_card_log_id = null)
 	{
@@ -134,7 +135,6 @@ class Mlm_member
             
         }
         $data['customer_view'] = Mlm_member::get_customer_info_w_slot($data['slot']->customer_id, $slot_id);
-        // dd($data['sort_by_date']);
         return view('member.mlm_wallet.breakdown', $data);
 	}
 	public static function add_slot($shop_id, $customer_id)
@@ -240,6 +240,27 @@ class Mlm_member
                                 $new                  = 1;
                             }
                         }
+                        else if(Request::input("choose_owner") == "exist")
+                        {
+                            $check_exist_account = Tbl_customer::where("tbl_customer.shop_id",$shop_id)
+                                                               ->where("slot_id",null)
+                                                               ->where("tbl_customer.customer_id",Request::input("customer_id"))
+                                                               ->leftJoin("tbl_mlm_slot","slot_owner","=","tbl_customer.customer_id")
+                                                               ->select("*","tbl_customer.shop_id as customer_shop_id")
+                                                               ->first();
+
+                            if($check_exist_account)
+                            {
+                                $insert['slot_owner'] = Request::input("customer_id");
+                            }   
+                            else
+                            {
+                                $proceed = 0;
+                                $get_data["message"] = "Chosen account does not exists.";
+                            }                               
+                        }
+
+
 
                         if($proceed == 1)
                         {
@@ -379,8 +400,9 @@ class Mlm_member
     {
         $customer = Tbl_customer::where('customer_id', $customer_id)->first();
 
-        $shop_id     = $customer->shop_id;
-        $customer_id = $customer->customer_id;
+        $shop_id      = $customer->shop_id;
+        $customer_id  = $customer->customer_id;
+        $shop         = Tbl_shop::where("shop_id",$shop_id)->first();
 
         $data = [];
 
@@ -399,11 +421,32 @@ class Mlm_member
                                               ->where('tbl_mlm_lead.lead_used', 0)
                                               ->first();
 
-        $data['_slots']    = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->customer()->get();
-        $data['country']   = Tbl_country::get();
-        $data['position']  = Request::input('position');
-        $data['placement'] = Request::input('placement');
-        $data['sponsor_a'] = Request::input('slot_sponsor');
+        $data['_slots']           = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->customer()->get();
+        $data['_slots_sponse']    = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->customer()->get();
+
+
+        $data["_no_slot_customer"] = Tbl_customer::where("tbl_customer.shop_id",$shop_id)
+                                                 ->where("slot_id",null)
+                                                 ->leftJoin("tbl_mlm_slot","slot_owner","=","tbl_customer.customer_id")
+                                                 ->select("*","tbl_customer.shop_id as customer_shop_id")
+                                                 ->get();
+
+        if($shop)
+        {
+            if($shop->shop_key == "alphaglobal")
+            {
+                $data['_slots_sponse']    = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->where("tbl_customer.customer_id",$customer_id)->customer()->get();
+            }            
+        }
+
+
+
+
+        $data["shop_container"] = Tbl_shop::where("shop_id",$shop_id)->first();
+        $data['country']        = Tbl_country::get();
+        $data['position']       = Request::input('position');
+        $data['placement']      = Request::input('placement');
+        $data['sponsor_a']      = Request::input('slot_sponsor');
         return view('mlm.slot_add.index', $data);
     }
     public static function get_codes($customer_id)

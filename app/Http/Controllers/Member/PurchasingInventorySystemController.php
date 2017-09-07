@@ -18,7 +18,11 @@ use App\Models\Tbl_warehouse;
 use App\Models\Tbl_manual_invoice;
 use App\Models\Tbl_sir_cm_item;
 use App\Models\Tbl_customer_invoice;
+use App\Models\Tbl_bill;
+use App\Models\Tbl_sir_sales_report;
 use App\Models\Tbl_customer_invoice_line;
+use App\Models\Tbl_purchase_order;
+use App\Models\Tbl_settings;
 use App\Globals\UnitMeasurement;
 use App\Globals\Warehouse;
 use App\Globals\Pdf_global;
@@ -48,11 +52,69 @@ class PurchasingInventorySystemController extends Member
      * 0 - new
      * 1 - open
      * 2 - close 
+
+     * ilr_status
+     * 1 - open
+     * 2 - close 
      */
     public function view_status($sir_id)
     {
         $data["sir"] = Purchasing_inventory_system::view_status($sir_id);
         return view("member.purchasing_inventory_system.view_status",$data);        
+    }
+    public function enable_pis($pass, $action)
+    {
+        if($pass == "water123")
+        {
+            $shop_id = Purchasing_inventory_system::getShopId();
+
+            $settings_key          =     "pis-jamestiong";
+            $settings_value        =     $action; 
+
+            $check = Purchasing_inventory_system::check();
+            if($check)
+            {
+                $update["settings_value"] = $action;
+
+                Tbl_settings::where("shop_id",$shop_id)->update($update);
+            }
+            else
+            {
+                $ins["settings_key"]        = $settings_key;
+                $ins["settings_value"]      = $settings_value;
+                $ins["settings_setup_done"] = 1;
+                $ins["shop_id"]             = $shop_id;
+
+                Tbl_settings::insert($ins);
+            }
+        }
+        return Redirect::to('/member');
+    }
+    public function pis_counter()
+    {
+        $return["lof_ctr"] = 0;
+        $return["sir_ctr"] = 0;
+        $return["ilr_ctr"] = 0;
+        $return["col_ctr"] = 0;
+        $return["inv_ctr"] = 0;
+        $return["po_ctr"] = 0;
+        $return["bill_ctr"] = 0;
+        if(Purchasing_inventory_system::check() != 0)
+        {
+            $return["lof_ctr"] = Tbl_sir::where("shop_id",Purchasing_inventory_system::getShopId())->whereIn("lof_status",[1,3])->count();
+            $return["sir_ctr"] = Tbl_sir::where("shop_id",Purchasing_inventory_system::getShopId())->where("reload_sir",1)->count();
+            $return["ilr_ctr"] = Tbl_sir::where("shop_id",Purchasing_inventory_system::getShopId())->where("ilr_status",1)->count();
+
+            $return["col_ctr"] = Tbl_sir::where("shop_id",Purchasing_inventory_system::getShopId())->where("ilr_status",1)->count();
+
+            $return["inv_ctr"] = Tbl_customer_invoice::where("inv_shop_id",Purchasing_inventory_system::getShopId())->where("inv_is_paid",0)->count();
+
+            $return["po_ctr"] = Tbl_purchase_order::where("po_shop_id",Purchasing_inventory_system::getShopId())->where("po_is_billed",0)->count();
+
+            $return["bill_ctr"] = Tbl_bill::where("bill_shop_id",Purchasing_inventory_system::getShopId())->where("bill_is_paid",0)->count();
+        }
+
+        return json_encode($return);
     }
     public function update_count($sir_id, $item_id)
     {
@@ -206,7 +268,7 @@ class PurchasingInventorySystemController extends Member
         $data["issued_um_id"] = null;
 
 
-        $item_issued_um = Tbl_unit_measurement_multi::where("multi_um_id",$data["item"]->item_measurement_id)->where("is_base",0)->pluck("multi_id");
+        $item_issued_um = Tbl_unit_measurement_multi::where("multi_um_id",$data["item"]->item_measurement_id)->where("is_base",0)->value("multi_id");
         if($data["item"]->item_measurement_id != null && $item_issued_um != null)
         {  
            $um_base_info = Tbl_unit_measurement_multi::where("multi_um_id",$data["item"]->item_measurement_id)->where("is_base",1)->first();
@@ -270,7 +332,7 @@ class PurchasingInventorySystemController extends Member
 
         $data["item"] = Tbl_sir_cm_item::item()->where("s_cm_item_id",$sc_id)->first();
         $um_base_info = Tbl_unit_measurement_multi::where("multi_um_id",$data["item"]->item_measurement_id)->where("is_base",1)->first();
-        $item_issued_um = Tbl_unit_measurement_multi::where("multi_um_id",$data["item"]->item_measurement_id)->where("is_base",0)->pluck("multi_id");
+        $item_issued_um = Tbl_unit_measurement_multi::where("multi_um_id",$data["item"]->item_measurement_id)->where("is_base",0)->value("multi_id");
         $um_issued_info = UnitMeasurement::um_info($item_issued_um);
 
 
@@ -313,7 +375,7 @@ class PurchasingInventorySystemController extends Member
         $item_data = Tbl_item::where("item_id",$item_id)->first();
 
         $sir_info = Tbl_sir_item::where("sir_id",$sir_id)->where("item_id",$item_id)->first();
-        $unit_qty = Tbl_unit_measurement_multi::where("multi_id",$sir_info->related_um_type)->pluck("unit_qty");
+        $unit_qty = Tbl_unit_measurement_multi::where("multi_id",$sir_info->related_um_type)->value("unit_qty");
 
         $qt = UnitMeasurement::um_qty($sir_info->related_um_type);
 
@@ -465,6 +527,12 @@ class PurchasingInventorySystemController extends Member
         {
             $data = Purchasing_inventory_system::return_stock($sir_id);
             Purchasing_inventory_system::return_cm_item($sir_id);
+
+            $ins["sir_id"] = $sir_id;
+            $ins["report_data"] = serialize(Purchasing_inventory_system::get_report_data($sir_id));
+            $ins["report_created"] = Carbon::now();
+
+            Tbl_sir_sales_report::insert($ins);
         }
 
         $ilr = Purchasing_inventory_system::get_ilr_data($sir_id);
@@ -569,7 +637,7 @@ class PurchasingInventorySystemController extends Member
         {
             foreach ($data["_returns"] as $key_return => $value_return)
             {
-                $item_um = Tbl_unit_measurement_multi::where("multi_um_id",$value_return->item_measurement_id)->where("is_base",0)->pluck("multi_id");
+                $item_um = Tbl_unit_measurement_multi::where("multi_um_id",$value_return->item_measurement_id)->where("is_base",0)->value("multi_id");
 
                 $data["_returns"][$key_return]->item_count = UnitMeasurement::um_view($value_return->sc_item_qty,$value_return->item_measurement_id,$item_um); 
                 $data["_returns"][$key_return]->item_physical_count = UnitMeasurement::um_view($value_return->sc_physical_count,$value_return->item_measurement_id,$item_um); 
@@ -712,7 +780,7 @@ class PurchasingInventorySystemController extends Member
                 {
                     foreach($data["_returns"] as $key_return => $value_return) 
                     {
-                        $item_um = Tbl_unit_measurement_multi::where("multi_um_id",$value_return->item_measurement_id)->where("is_base",0)->pluck("multi_id");
+                        $item_um = Tbl_unit_measurement_multi::where("multi_um_id",$value_return->item_measurement_id)->where("is_base",0)->value("multi_id");
 
                         $data["_returns"][$key_return]->item_count = UnitMeasurement::um_view($value_return->sc_item_qty,$value_return->item_measurement_id,$item_um); 
                         $data["_returns"][$key_return]->item_physical_count = UnitMeasurement::um_view($value_return->sc_physical_count,$value_return->item_measurement_id,$item_um); 
@@ -941,7 +1009,7 @@ class PurchasingInventorySystemController extends Member
         }
         foreach ($item_id as $key_item => $value_item)
         {
-            $type = Tbl_item::where("item_id",$value_item)->pluck("item_type_id");
+            $type = Tbl_item::where("item_id",$value_item)->value("item_type_id");
             if($type == 4)
             {
                 $bundle = Tbl_item_bundle::where("bundle_bundle_id",$value_item)->get();
@@ -961,7 +1029,7 @@ class PurchasingInventorySystemController extends Member
             $i = null;
             foreach ($item_id as $value_itemid) 
             {
-                $type = Tbl_item::where("item_id",$value_itemid)->pluck("item_type_id");
+                $type = Tbl_item::where("item_id",$value_itemid)->value("item_type_id");
                 if($type == 4)
                 {
                     if($value_itemid == $value_items['id'])
@@ -1050,7 +1118,7 @@ class PurchasingInventorySystemController extends Member
                    $inventory_consume_product[$key]["product_id"] = $value["id"];
                    $inventory_consume_product[$key]["quantity"] = $value["quantity"];
 
-                   $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value["id"])->pluck('inventory_count');
+                   $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value["id"])->value('inventory_count');
                     if($count_on_hand == null)
                     {
                         $count_on_hand = 0;   
@@ -1061,7 +1129,7 @@ class PurchasingInventorySystemController extends Member
                     }
                     else
                     {
-                        $item_name = Tbl_item::where("item_id",$value["id"])->pluck("item_name");
+                        $item_name = Tbl_item::where("item_id",$value["id"])->value("item_name");
 
                         $data["status"] = "error";
                         $data["status_message"] .= "<li style='list-style:none'>The quantity of item ".$item_name." is not enough to consume </li>";
@@ -1072,7 +1140,7 @@ class PurchasingInventorySystemController extends Member
             {
                 $sir_id = Tbl_sir::insertGetId($insert_sir);
                 $remarks = "SIR consume";
-                // $warehouse_id = Tbl_warehouse::where("warehouse_shop_id",$this->user_info->shop_id)->where("main_warehouse",1)->pluck("warehouse_id");
+                // $warehouse_id = Tbl_warehouse::where("warehouse_shop_id",$this->user_info->shop_id)->where("main_warehouse",1)->value("warehouse_id");
                 $warehouse_id = Purchasing_inventory_system::get_warehouse_based_sir($sir_id);
                 $transaction_type = "sir";
                 $transaction_id = $sir_id;
@@ -1177,7 +1245,7 @@ class PurchasingInventorySystemController extends Member
 
         foreach ($item_id as $key_item => $value_item)
         {
-            $type = Tbl_item::where("item_id",$value_item)->pluck("item_type_id");
+            $type = Tbl_item::where("item_id",$value_item)->value("item_type_id");
             if($type == 4)
             {
                 $bundle = Tbl_item_bundle::where("bundle_bundle_id",$value_item)->get();
@@ -1197,7 +1265,7 @@ class PurchasingInventorySystemController extends Member
             $i = null;
             foreach ($item_id as $value_itemid) 
             {
-                $type = Tbl_item::where("item_id",$value_itemid)->pluck("item_type_id");
+                $type = Tbl_item::where("item_id",$value_itemid)->value("item_type_id");
                 if($type == 4)
                 {
                     if($value_itemid == $value_items['id'])
@@ -1283,7 +1351,7 @@ class PurchasingInventorySystemController extends Member
                $inventory_update_item[$key]["product_id"] = $value["id"];
                $inventory_update_item[$key]["quantity"] = $value["quantity"];
 
-               $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value["id"])->pluck('inventory_count');
+               $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value["id"])->value('inventory_count');
                 if($count_on_hand == null)
                 {
                     $count_on_hand = 0;   
@@ -1294,7 +1362,7 @@ class PurchasingInventorySystemController extends Member
                 }
                 else
                 {
-                     $item_name = Tbl_item::where("item_id",$value["id"])->pluck("item_name");
+                     $item_name = Tbl_item::where("item_id",$value["id"])->value("item_name");
 
                     $data["status"] = "error";
                     $data["status_message"] .= "<li style='list-style:none'>The quantity of item ".$item_name." is not enough to consume </li>";
@@ -1308,7 +1376,7 @@ class PurchasingInventorySystemController extends Member
                 // $transaction_type = "sir";
                 // $data = Warehouse::inventory_update($transaction_id, $transaction_type, $inventory_update_item, $return = 'array');
                 $remarks = "SIR Edit consume";
-                // $warehouse_id = Tbl_warehouse::where("warehouse_shop_id",$this->user_info->shop_id)->where("main_warehouse",1)->pluck("warehouse_id");
+                // $warehouse_id = Tbl_warehouse::where("warehouse_shop_id",$this->user_info->shop_id)->where("main_warehouse",1)->value("warehouse_id");
                 $warehouse_id = Purchasing_inventory_system::get_warehouse_based_sir($sir_id);
                 $transaction_type = "sir";
                 $transaction_id = $sir_id;

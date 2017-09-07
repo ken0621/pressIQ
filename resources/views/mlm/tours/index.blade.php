@@ -2,7 +2,7 @@
 @section('content')
 @section('content')
 <?php 
-$data['title'] = 'Tours Wallet';
+$data['title'] = 'Airline Wallet';
 $data['sub'] = '';
 $data['icon'] = 'fa fa-plane';
 
@@ -18,11 +18,11 @@ $data['icon'] = 'fa fa-plane';
     <div class="panel-heading">
         <div class="clearfix">
         	<form class="global-submit" action="/mlm/wallet/tours/update">
-                <center>Trip Option Account</center>
+                <center></center>
                 <div class="pull-right"><span class="current_balance" style="color: green">Account Balance: {{number_format(isset($account_tours->tour_wallet_a_current_balance) ? $account_tours->tour_wallet_a_current_balance : 0 )}}</span></div>
                 <hr>
         	       {!! csrf_field() !!}
-            	<label>Trip Option Account Id:</label>
+            	<label>Airline Ticketing Account ID</label>
             	<input type="text" class="form-control" name="tour_Wallet_a_account_id" value="{{isset($account_tours->tour_Wallet_a_account_id) ? $account_tours->tour_Wallet_a_account_id : ''}}">
 
 				<hr>
@@ -35,7 +35,7 @@ $data['icon'] = 'fa fa-plane';
 <div class="panel panel-default panel-block panel-title-block col-md-12" id="top">
     <div class="panel-heading">
         <div class="clearfix">
-            <center>Transacton Logs</center>
+            <center>Transaction Logs</center>
             <table class="table table-bordered table-condensed">
                 <thead>
                     <th>Amount</th>
@@ -68,7 +68,7 @@ $data['icon'] = 'fa fa-plane';
         <div class="clearfix">
         <form class="global-submit" method="post" action="/mlm/wallet/tours/transfer">
         {!! csrf_field() !!}
-            <center>Transfer Wallet to Tours Wallet</center>
+            <center>Transfer Wallet to Airline Wallet</center>
             <label>Wallet Amount</label>
             <input type="number" class="form-control" value="0" name="wallet_amount">
             <label>Password</label>

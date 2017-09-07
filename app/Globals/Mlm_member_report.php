@@ -41,7 +41,7 @@ class Mlm_member_report
         foreach($report as $key => $value)
         {
             $report[$key]->level = Tbl_tree_sponsor::where('sponsor_tree_parent_id', $slot)
-            ->where('sponsor_tree_child_id', $value->wallet_log_slot_sponsor)->pluck('sponsor_tree_level');
+            ->where('sponsor_tree_child_id', $value->wallet_log_slot_sponsor)->value('sponsor_tree_level');
         }
         return $report;
 	}

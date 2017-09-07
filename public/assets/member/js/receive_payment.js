@@ -44,10 +44,21 @@ function receive_payment()
 		    onChangeValue: function()
 		    {
 		    	var customer_id = $(this).val();
-		    	$(".tbody-item").load("/member/customer/load_rp/"+ (customer_id != '' ? customer_id : 0), function()
+		    	var check = $(".for-tablet-only").html();
+		    	if(check == null || check == "")
 		    	{
-		    		action_compute_maximum_amount();
-		    	})
+			    	$(".tbody-item").load("/member/customer/load_rp/"+ (customer_id != '' ? customer_id : 0), function()
+			    	{
+			    		action_compute_maximum_amount();
+			    	})		    		
+		    	}
+		    	else
+	    		{
+			    	$(".tbody-item").load("/tablet/customer/load_rp/"+ (customer_id != '' ? customer_id : 0), function()
+			    	{
+			    		action_compute_maximum_amount();
+			    	})		    		
+	    		}
 		    }
 		});
 

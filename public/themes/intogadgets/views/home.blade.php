@@ -68,13 +68,11 @@
     <!-- Place somewhere in the <body> of your page -->
     <div class="flexslider">
       <ul class="slides">
-        @if(is_serialized(get_content($shop_theme_info, 'home', 'home_brand_image', '')))
-            @foreach(unserialize(get_content($shop_theme_info, 'home', 'home_brand_image', '')) as $brand)
-            <li>
-              <a href="/product?brand={{ $brand['link'] }}"><img src="{{ $brand['image'] }}"></a>
-            </li>
-            @endforeach
-        @endif
+          @foreach($_brand as $brand)
+          <li>
+            <a href="/product?brand={{ $brand->manufacturer_id }}"><img src="{{ $brand->image_path }}"></a>
+          </li>
+          @endforeach
         <!-- items mirrored twice, total of 12 -->
       </ul>
     </div>
@@ -83,21 +81,21 @@
 <div class="feature">
     <div class="feature-header">{{ get_content($shop_theme_info, "home", "home_featured_title") }}</div>
     <div class="feature-content container">
-        @foreach(get_collection(get_content($shop_theme_info, "home", "home_featured"), $shop_id) as $collection)
+        @foreach(limit_foreach(get_collection_random(get_content($shop_theme_info, "home", "home_featured"), $shop_id), 4) as $collection)
         <div class="holder col-md-3 col-sm-6">
            <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
            </a>
-           <div class="border">
+           <div class="border" style="overflow: hidden;">
               <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
                  <div class="img">
                   @if($collection["product"]["eprod_detail_image"])
-                      <img class="detail" src="{{ $collection["product"]["eprod_detail_image"] }}">
+                      <img style="top: -10px; right: -10px;" class="detail" src="{{ $collection["product"]["eprod_detail_image"] }}">
                   @endif
                   <img src="{{ get_collection_first_image($collection) }}">
                  </div>
                  <div class="name">{{ get_collection_first_name($collection) }}</div>
                  <div class="price-left">P {{ get_collection_first_price($collection) }}</div>
-                 <div class="price-right">₱ 13,990.00</div>
+                 <div class="price-right">{{ get_collection_first_price($collection) }}</div>
               </a>
              <div class="hover">
                   <a product-id="{{ $collection['product']['eprod_id'] }}" style="display: block; margin-bottom: 50px;" href="javascript:" class="text quick-add-cart">ADD TO CART</a>
@@ -115,21 +113,21 @@
         <div class="text">{{ get_content($shop_theme_info, 'home', 'home_new_arrival_title') }}</div>
     </div>
     <div class="arrival-content container">
-        @foreach(get_collection(get_content($shop_theme_info, "home", "home_new_arrival"), $shop_id) as $collection)
+        @foreach(limit_foreach(get_collection_random(get_content($shop_theme_info, "home", "home_new_arrival"), $shop_id),8) as $collection)
         <div class="holder col-md-3 col-sm-6">
            <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
            </a>
-           <div class="border">
+           <div class="border  style="overflow: hidden;"">
               <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
                  <div class="img">
                   @if($collection["product"]["eprod_detail_image"])
-                      <img class="detail" src="{{ $collection["product"]["eprod_detail_image"] }}">
+                      <img style="top: -10px; right: -10px;" class="detail" src="{{ $collection["product"]["eprod_detail_image"] }}">
                   @endif
                   <img src="{{ get_collection_first_image($collection) }}">
                  </div>
                  <div class="name">{{ get_collection_first_name($collection) }}</div>
                  <div class="price-left">P {{ get_collection_first_price($collection) }}</div>
-                 <div class="price-right">₱ 13,990.00</div>
+                 <div class="price-right">{{ get_collection_first_price($collection) }}</div>
               </a>
              <div class="hover">
                   <a product-id="{{ $collection['product']['eprod_id'] }}" style="display: block; margin-bottom: 50px;" href="javascript:" class="text quick-add-cart">ADD TO CART</a>
@@ -147,21 +145,21 @@
         <div class="text">{{ get_content($shop_theme_info, 'home', 'home_best_seller_title') }}</div>
     </div>
     <div class="best-content container">
-        @foreach(get_collection(get_content($shop_theme_info, "home", "home_best_seller"), $shop_id) as $collection)
+        @foreach(limit_foreach(get_collection_random(get_content($shop_theme_info, "home", "home_best_seller"), $shop_id), 8) as $collection)
         <div class="holder col-md-3 col-sm-6">
            <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
            </a>
-           <div class="border">
+           <div class="border" style="overflow: hidden;">
               <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
                  <div class="img">
                   @if($collection["product"]["eprod_detail_image"])
-                      <img class="detail" src="{{ $collection["product"]["eprod_detail_image"] }}">
+                      <img style="top: 0px; right: 0px;" class="detail" src="{{ $collection["product"]["eprod_detail_image"] }}">
                   @endif
                   <img src="{{ get_collection_first_image($collection) }}">
                  </div>
                  <div class="name">{{ get_collection_first_name($collection) }}</div>
                  <div class="price-left">P {{ get_collection_first_price($collection) }}</div>
-                 <div class="price-right">₱ 13,990.00</div>
+                 <div class="price-right">{{ get_collection_first_price($collection) }}</div>
               </a>
              <div class="hover">
                   <a product-id="{{ $collection['product']['eprod_id'] }}" style="display: block; margin-bottom: 50px;" href="javascript:" class="text quick-add-cart">ADD TO CART</a>
@@ -204,11 +202,13 @@
         <div class="holder">
             <form method = "POST" id="subform" action="//intogadgets.us10.list-manage.com/subscribe/post?u=cd02508127b42de13d02bb528&id=74973f9e9e">
                 <img src="{{ get_content($shop_theme_info, 'info', 'newsletter_popup_cover_image') }}">
-                <div class="mobil">Sign up for exclusive promo and sales</div>
-                <div class="input">
-                    <input type="text" placeholder="Name" name="FNAME">
-                    <input type="text" name="EMAIL" placeholder="Email">
-                    <button type="submit">Sign up Now!</button>
+                <div class="waterino clearfix">
+                  <div class="mobil">Sign up for exclusive promo and sales</div>
+                  <div class="input">
+                      <input type="text" placeholder="Name" name="FNAME">
+                      <input type="text" name="EMAIL" placeholder="Email">
+                      <button type="submit">Sign up Now!</button>
+                  </div>
                 </div>
             </form>
         </div>
@@ -224,6 +224,6 @@
     </div>
  @endif
 
-    <script type="text/javascript" src="resources/assets/flexslider/js/jquery.flexslider-min.js"></script>
+    <script type="text/javascript" src="/resources/assets/flexslider/js/jquery.flexslider-min.js"></script>
 @endsection
 

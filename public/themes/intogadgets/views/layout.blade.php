@@ -5,7 +5,7 @@
       <meta charset="utf-8">
       @yield('meta')
       <title>{{ ucfirst($shop_info->shop_key) }} | {{ $page or 'Page' }}</title>
-      <link rel="icon" type="image/png" href="/resources/assets/frontend/img/favicon.png">
+      <link rel="icon" type="image/png" href="resources/assets/frontend/img/favicon.png">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'> -->
       <link href='http://fonts.googleapis.com/css?family=Lato:400,700,900,300' rel='stylesheet' type='text/css'>
@@ -54,6 +54,21 @@
          @endif
          <div class="header">
             <a href="/" class="logo"><img src="/resources/assets/frontend/img/intogadgets-logo.png"></a>
+            <div class="mobile-searchie">
+               <form method="GET" action="/product">
+                  <div class="form-group">
+                     <input value="{{ Request::input('search') }}" type="text" name="search" autocomplete="off" id="search-pokus" class="form-control search-input" placeholder="Search...">
+                  </div>
+                  <button type="submit" class="btn search-button"><i class="fa fa-search"></i></button>
+                  <div class="search-popup" style="display:none;">
+                     <div class="live-search-loading search-popup-holder">  
+                        <img src="/resources/assets/img/small-loading.GIF" alt="laoding.png">
+                     </div>
+                     <div class="live-search-result-content">
+                     </div>
+                  </div>
+               </form>
+            </div>
             <div class="header-nav text-left">
                <a href="/about" class="nabigation">
                   <div class="nabigation-hover"></div>
@@ -94,7 +109,7 @@
                <!-- HEADER SPACE -->
             </div>
          </div>
-         <nav class="navbar navbar-default  ">
+         <nav class="navbar navbar-default">
             <div>
                <!-- Brand and toggle get grouped for better mobile display -->
                <div class="navbar-header">
@@ -115,45 +130,79 @@
                   <ul class="nav navbar-nav navbar-left">
                      @foreach($_categories as $categories)
                      <li class="notsub">
-                        <a href="/product?type={{ $categories['type_id'] }}">
+                        <a href="javascript:">
                            <div class="nav-text">
-                              <div onclick="location.href='/product?type={{ $categories['type_id'] }}'" class="nav-text-holder">{{ $categories['type_name'] }}</div>
-                              <div onclick="location.href='/product?type={{ $categories['type_id'] }}'" class="nav-text-hover">{{ $categories['type_name'] }}</div>
+                              <div onClick="location.href='/product?type={{ $categories['type_id'] }}'" class="nav-text-holder">{{ $categories['type_name'] }}</div>
+                              <div onClick="location.href='/product?type={{ $categories['type_id'] }}'" class="nav-text-hover">{{ $categories['type_name'] }}</div>
                            </div>
                            <div class="nav-text-more">
                               @foreach($categories['subcategory'] as $subcategories)
-                              <div onclick="location.href='/product?type={{ $subcategories['type_id'] }}&brand='" class="menu">{{ $subcategories['type_name'] }} ({{ $subcategories['product_count'] }})</div>
+                              <div onClick="location.href='/product?type={{ $subcategories['type_id'] }}'" class="menu">{{ $subcategories['type_name'] }} ({{ $subcategories['product_count'] }})</div>
                               @endforeach
                            </div>
                         </a>
                      </li>
                      @endforeach
+                     @foreach($_categories as $key => $categories)
                      <li class="sub-menu">
-                        <a href="#menupos1"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" class="list-group-item" data-toggle="collapse" data-parent="#mainmenu">ACCESSORIES <span class="menu-ico-collapse"><i class="glyphicon glyphicon-chevron-down"></i></span></a>
-                        <div class="collapse pos-absolute" id="menupos1">
-                           <a href="/product?type=1&brand=" data-toggle="collapse" data-target="#menupos1" class="list-group-item sub-item">Test</a>
+                        <a href="{{ count($categories['subcategory']) > 0 ? "#menupos" . $key : "/product?type=" . $categories['type_id'] }}"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" {{ count($categories['subcategory']) > 0 ? 'class=list-group-item data-toggle=collapse data-parent=#mainmenu' : "" }}>{{ $categories['type_name'] }} <span class="menu-ico-collapse {{ count($categories['subcategory']) > 0 ? "" : "hide" }}"><i class="glyphicon glyphicon-chevron-down"></i></span></a>
+                        <div class="collapse pos-absolute" id="menupos{{ $key }}">
+                           @foreach($categories['subcategory'] as $subcategories)
+                           <a href="/product?type={{ $subcategories['type_id'] }}" data-toggle="collapse" data-target="#menupos{{ $key }}" class="list-group-item sub-item">{{ $subcategories['type_name'] }} ({{ $subcategories['product_count'] }})</a>
+                           @endforeach
                         </div>
                      </li>
-                     <li class="sub-menu">
-                        <a href="#menupos2"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" class="list-group-item" data-toggle="collapse" data-parent="#mainmenu">SMART PHONE <span class="menu-ico-collapse"><i class="glyphicon glyphicon-chevron-down"></i></span></a>
-                        <div class="collapse pos-absolute" id="menupos2">
-                           <a href="/product?type=3&brand=" data-toggle="collapse" data-target="#menupos1" class="list-group-item sub-item">Test</a>
-                        </div>
-                     </li>
-                     <li class="sub-menu">
-                        <a href="#menupos3"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" class="list-group-item" data-toggle="collapse" data-parent="#mainmenu">TABLET <span class="menu-ico-collapse"><i class="glyphicon glyphicon-chevron-down"></i></span></a>
-                        <div class="collapse pos-absolute" id="menupos3">
-                           <a href="/product?type=4&brand=" data-toggle="collapse" data-target="#menupos1" class="list-group-item sub-item">Test</a>
-                        </div>
-                     </li>
-                     <li class="sub-menu">
-                        <a href="#menupos4"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" class="list-group-item" data-toggle="collapse" data-parent="#mainmenu">MOBILE PHONE <span class="menu-ico-collapse"><i class="glyphicon glyphicon-chevron-down"></i></span></a>
-                        <div class="collapse pos-absolute" id="menupos4">
-                           <a href="/product?type=5&brand=" data-toggle="collapse" data-target="#menupos1" class="list-group-item sub-item">Test</a>
-                        </div>
-                     </li>
+                     @endforeach
+                     
+                     <!--<li class="sub-menu">-->
+                     <!--   <a href="#menupos2"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" class="list-group-item" data-toggle="collapse" data-parent="#mainmenu">SMART PHONE <span class="menu-ico-collapse"><i class="glyphicon glyphicon-chevron-down"></i></span></a>-->
+                     <!--   <div class="collapse pos-absolute" id="menupos2">-->
+                     <!--      <a href="/product?type=3&brand=" data-toggle="collapse" data-target="#menupos1" class="list-group-item sub-item">Test</a>-->
+                     <!--   </div>-->
+                     <!--</li>-->
+                     <!--<li class="sub-menu">-->
+                     <!--   <a href="#menupos3"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" class="list-group-item" data-toggle="collapse" data-parent="#mainmenu">TABLET <span class="menu-ico-collapse"><i class="glyphicon glyphicon-chevron-down"></i></span></a>-->
+                     <!--   <div class="collapse pos-absolute" id="menupos3">-->
+                     <!--      <a href="/product?type=4&brand=" data-toggle="collapse" data-target="#menupos1" class="list-group-item sub-item">Test</a>-->
+                     <!--   </div>-->
+                     <!--</li>-->
+                     <!--<li class="sub-menu">-->
+                     <!--   <a href="#menupos4"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" class="list-group-item" data-toggle="collapse" data-parent="#mainmenu">MOBILE PHONE <span class="menu-ico-collapse"><i class="glyphicon glyphicon-chevron-down"></i></span></a>-->
+                     <!--   <div class="collapse pos-absolute" id="menupos4">-->
+                     <!--      <a href="/product?type=5&brand=" data-toggle="collapse" data-target="#menupos1" class="list-group-item sub-item">Test</a>-->
+                     <!--   </div>-->
+                     <!--</li>-->
                   </ul>
                   <form method="GET" action="/product" class="navbar-form search-container" role="search">
+                     <div class="mobile-nabigayshon">
+                        <a href="/about" class="nabigation">
+                           <div class="nabigation-text">ABOUT</div>
+                        </a>
+                        <a href="/contact" class="nabigation">
+                           <div class="nabigation-text">CONTACT</div>
+                        </a>
+                        <a href="/career" class="nabigation">
+                           <div class="nabigation-text">CAREERS</div>
+                        </a>
+                        <a href="/how" class="nabigation">
+                           <div class="nabigation-text">HOW TO ORDER</div>
+                        </a>
+                        <a href="/youwin" class="nabigation">
+                           <div class="nabigation-text">YOUWIN AFTERSALES</div>
+                        </a>
+                        <a href="/events" class="nabigation">
+                           <div class="nabigation-text">EVENTS</div>
+                        </a>
+                     </div>
+                     <div class="mobile-account">
+                        @if($customer_info_a)
+                           <a href="/account/order" class="text">MY ORDERS</a>
+                           <a href="/account/logout" class="text">LOGOUT</a>
+                        @else
+                           <a data-remodal-target="login" href="#" class="text">LOGIN</a>
+                           <a href="/account/register" class="text">REGISTER</a>
+                        @endif
+                     </div>
                      <div class="searchie">
                         <div class="form-group">
                            <input type="text" name="search" autocomplete="off" id="search-pokus" class="form-control search-input" placeholder="Search...">
@@ -187,19 +236,24 @@
          <div class="content clearfix">
             @yield('content')
          </div>
-         @if(get_content($shop_theme_info, 'info', 'footer_ads'))
+
+         @if(get_content($shop_theme_info, 'info', 'footer_ads_multiple') && is_serialized(get_content($shop_theme_info, 'info', 'footer_ads_multiple')))
+         <?php
+             $random = array_rand(unserialize(get_content($shop_theme_info, 'info', 'footer_ads_multiple')));
+         ?>
          <div class="footer-add">
             <div class="footer-add-wrapper">
-               <a href="{{ get_content($shop_theme_info, 'info', 'footer_ads_link') }}" target="_blank">
-               <img src="{{ get_content($shop_theme_info, 'info', 'footer_ads') }}">
+               <a href="{{ unserialize(get_content($shop_theme_info, 'info', 'footer_ads_multiple'))[$random]['link'] }}" target="_blank">
+               <img src="{{ unserialize(get_content($shop_theme_info, 'info', 'footer_ads_multiple'))[$random]['image'] }}">
                </a>
                <div class="exit"><i class="fa fa-times"></i></div>
             </div>
          </div>
          @endif
+
          <div class="footer clear">
             <div class="container">
-               <div class="footer-holder col-md-3 col-sm-6 first-border text-left">
+               <div class="footer-holder col-md-3 col-sm-6 first-border text-left match-height">
                   <div class="footer-header">INFORMATION</div>
                   <div class="footer-content">
                      <a href="/" class="footer-text link" data-hover="Home">
@@ -208,19 +262,19 @@
                      <a href="/about" class="footer-text link">
                      About
                      </a>
-                     <a href="career" class="footer-text link">
+                     <a href="/career" class="footer-text link">
                      Careers
                      </a>
-                     <a href="contact" class="footer-text link">
+                     <a href="/contact" class="footer-text link">
                      Contact
                      </a>
-                     <a href="how" class="footer-text link">
+                     <a href="/how" class="footer-text link">
                      How to Orders
                      </a>
-                     <a href="product" class="footer-text link">
+                     <a href="/product" class="footer-text link">
                      Products
                      </a>
-                     <a href="term" class="footer-text link">
+                     <a href="/term" class="footer-text link">
                      Terms and Agreement
                      </a>
                   </div>
@@ -288,9 +342,13 @@
                </div>
                <div class="col-md-12">
                   <div class="popular-tags">
-                     @foreach($_popular_tags as $popular_tags)
-                     <a href="/product?search={{ $popular_tags->keyword }}"><span>#{{ $popular_tags->keyword }}</span></a>
-                     @endforeach
+                     <div class="row clearfix">
+                        @foreach($_popular_tags as $popular_tags)
+                        <div class="col-md-2 col-sm-4 col-xs-6">
+                           <a class="fit-text" href="/product?search={{ $popular_tags->keyword }}"><span>#{{ $popular_tags->keyword }}</span></a>
+                        </div>
+                        @endforeach
+                     </div>
                   </div>
                </div>
             </div>
@@ -361,56 +419,44 @@
          </div>
       </div>
    </div>
-   <!-- PRODUCT QUICK VIEW -->
-   {{-- <div class="remodal quicky" data-remodal-id="quick">
-      <div class="quick-view-container">
-         <div class="col-md-6">
-            <div class="image-container">
-               <img src="http://image.primia-files.com/view?source=rutsen.local&filename=1429501946.jpg&size=318x318&mode=crop">
-            </div>
-         </div>
-         <div class="col-md-6">
-            <div class="product-information">
-               <div class="product-title">Sample Product Title</div>
-               <div class="product-price">PHP. 1,550.00</div>
-               <div class="product-description">This t-shirt is fully customizable and you can add additional information by requesting it.</div>
-               <div class="product-selection">
-                  <div class="s-container">
-                     <div class="s-label">Color</div>
-                     <div class="select">
-                        <select>
-                           <option>Blue</option>
-                           <option>Red</option>
-                           <option>Green</option>
-                        </select>
-                     </div>
-                  </div>
-                  <div class="s-container">
-                     <div class="s-label">Color</div>
-                     <div class="select">
-                        <select>
-                           <option>Blue</option>
-                           <option>Red</option>
-                           <option>Green</option>
-                        </select>
-                     </div>
-                  </div>
-               </div>
-               <div class="product-button">
-                  <div class="quantity">
-                     <span class="subtractbutton"><button class="up-down-button" effect="-1">-</button></span>
-                     <input id="numbersonly" class="qty" type="text" value="1" />
-                     <span class="addbutton"><button id="addbutton"class="up-down-button" effect="1">+</button></span>
-                  </div>
-                  <button class="add-cart">Add to Cart</button>
-                  <img class="loading" src="/resources/assets/img/small-loading.GIF">
-               </div>
-            </div>
-         </div>
-      </div>
-   </div> --}}
+   <!-- PENDING -->
+   <div class="remodal" data-remodal-id="pending_modal">
+     <div class="payment-modal" style="padding: 25px;">
+        <button data-remodal-action="close" class="remodal-close"></button>
+        <h3>Good day Maam/Sir,</h3>
+        <h3>Kindly check your email for the step by step procedure of the payment.</h3>
+        <h2>Thank you for choosing Intogadgets PH!</h1>
+        <br>
+        <button data-remodal-action="confirm" class="remodal-confirm">OK</button>
+     </div>
+   </div>
+   <!-- Failed -->
+   <div class="remodal" data-remodal-id="fail_modal">
+     <div class="payment-modal" style="padding: 25px;">
+        <button data-remodal-action="close" class="remodal-close"></button>
+        <h2>Transaction Failed</h2>
+        <p>{{ session('error') }}</p>
+        <br>
+        <button data-remodal-action="confirm" class="remodal-cancel">OK</button>
+     </div>
+   </div>
    <!-- CART MODAL -->
    <div class="remodal cart-remodal" data-remodal-id="cart">
+   </div>
+   <!-- CONTACT MODAL -->
+   <div class="remodal" data-remodal-id="contact_success">
+      <div class="payment-modal" style="padding: 25px;">
+         <button data-remodal-action="close" class="remodal-close"></button>
+         <h3 style="margin-bottom: 25px;">Successfully sent!</h3>
+         <button data-remodal-action="confirm" class="remodal-confirm">OK</button>
+      </div>
+   </div>
+   <div class="remodal" data-remodal-id="contact_fail">
+      <div class="payment-modal" style="padding: 25px;">
+         <button data-remodal-action="close" class="remodal-close"></button>
+         <h3 style="margin-bottom: 25px;">Some error occurred. Please try again later.</h3>
+         <button data-remodal-action="confirm" class="remodal-cancel">OK</button>
+      </div>
    </div>
    <!-- LOADING -->
    <div class="remodal loading" data-remodal-id="loading">
@@ -445,11 +491,13 @@
    <script type="text/javascript" src="http://arrow.scrolltotop.com/arrow33.js"></script>
    <script src="resources/assets/slider/dist/slippry.min.js"></script>
    <script src="resources/assets/footable/js/footable.js" type="text/javascript"></script>
+   <script type="text/javascript" src="js/match-height.js"></script>
    <script type="text/javascript" src="/resources/assets/slick/slick.min.js"></script>
    <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
    <script type="text/javascript" src="/assets/front/js/global.js"></script>
    <script type="text/javascript" src="/assets/member/global.js"></script>
     <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
+    <script type="text/javascript" src="resources/assets/frontend/js/jquery.fittext.js"></script>
     <script type="text/javascript">
     function submit_done(data)
     {
@@ -518,14 +566,18 @@
       
    </script>
    <script type="text/javascript">
-      jQuery(document).ready(function(){   
-      
-        $(".exit").click(function(){
-      
+      jQuery(document).ready(function()
+      {   
+        $(".exit").click(function()
+        {
             $(".footer-add").remove();
-      
         });
       });
+
+      jQuery(window).load(function()
+      {
+         $(".match-height").matchHeight();
+      })
       
       jQuery(document).ready( function($) {
       
@@ -548,6 +600,8 @@
         });  
           
       });
+      
+      jQuery(".fit-text").fitText(0.8, { minFontSize: '10px', maxFontSize: '16px' });
    </script>
    <!-- // <script src="/resources/assets/rutsen/js/subscribe.js"></script> -->
    <!--Start of Zopim Live Chat Script-->

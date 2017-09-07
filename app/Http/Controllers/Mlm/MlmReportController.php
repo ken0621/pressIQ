@@ -20,6 +20,7 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_mlm_matching;
 use App\Models\Tbl_mlm_triangle_repurchase_slot;
 use App\Models\Tbl_item_code_invoice;
+use App\Models\Tbl_item_code;
 use App\Models\Tbl_mlm_plan_binary_promotions;
 use App\Models\Tbl_mlm_plan_binary_promotions_log;
 use App\Models\Tbl_mlm_binary_report;
@@ -43,6 +44,11 @@ class MlmReportController extends Mlm
             return Self::show_no_access();
         }
     }
+    public static function product_code()
+    {
+        $data['_report']     = Tbl_item_code::where("customer_id",Self::$customer_id)->where("used",1)->item()->get();
+        return view("mlm.report.product_code", $data);
+    }
     public static function direct()
     {
         $data['report']     = Mlm_member_report::get_wallet('DIRECT', Self::$slot_id); 
@@ -58,7 +64,7 @@ class MlmReportController extends Mlm
         foreach($data['report'] as $key => $value)
         {
             $data['level'][$key] = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)
-            ->where('sponsor_tree_child_id', $value->wallet_log_slot_sponsor)->pluck('sponsor_tree_level');
+            ->where('sponsor_tree_child_id', $value->wallet_log_slot_sponsor)->value('sponsor_tree_level');
         }
         return view("mlm.report.report_indirect", $data);
     }
@@ -71,7 +77,7 @@ class MlmReportController extends Mlm
         foreach($data['report'] as $key => $value)
         {
             $data['level'][$key] = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)
-            ->where('sponsor_tree_child_id', $value->wallet_log_slot_sponsor)->pluck('sponsor_tree_level');
+            ->where('sponsor_tree_child_id', $value->wallet_log_slot_sponsor)->value('sponsor_tree_level');
         }
         $data["page"] = "Report - Binary";
 
@@ -223,7 +229,7 @@ class MlmReportController extends Mlm
         foreach($data['points_log'] as $key => $value)
         {
             $data['level'][$key] = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)
-            ->where('sponsor_tree_child_id', $value->points_log_Sponsor)->pluck('sponsor_tree_level');
+            ->where('sponsor_tree_child_id', $value->points_log_Sponsor)->value('sponsor_tree_level');
       
         }
         return view("mlm.report.report_indirect_points", $data);
@@ -265,7 +271,7 @@ class MlmReportController extends Mlm
         foreach($data['points_log'] as $key => $value)
         {
             $data['level'][$key] = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)
-            ->where('sponsor_tree_child_id', $value->points_log_Sponsor)->pluck('sponsor_tree_level');
+            ->where('sponsor_tree_child_id', $value->points_log_Sponsor)->value('sponsor_tree_level');
       
         }
         return view("mlm.report.report_unilevel_repurchase_points", $data);
@@ -282,7 +288,7 @@ class MlmReportController extends Mlm
         foreach($data['points_log'] as $key => $value)
         {
             $data['level'][$key] = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)
-            ->where('sponsor_tree_child_id', $value->points_log_Sponsor)->pluck('sponsor_tree_level');
+            ->where('sponsor_tree_child_id', $value->points_log_Sponsor)->value('sponsor_tree_level');
       
         }
         return view("mlm.report.report_initial_points", $data);
@@ -373,9 +379,11 @@ class MlmReportController extends Mlm
         foreach($data['promotions'] as $key => $value)
         {
             $date = Carbon::parse($value->binary_promotions_start_date)->format('Y-m-d');
+
             $data['current_l'][$key] = Tbl_mlm_binary_report::where('binary_report_slot', Self::$slot_id)
             ->where('binary_report_date', '>=',  $date)
             ->sum('binary_report_s_points_l'); 
+
             $data['current_r'][$key] = Tbl_mlm_binary_report::where('binary_report_slot', Self::$slot_id)
             ->where('binary_report_date', '>=',  $date)
             ->sum('binary_report_s_points_r');
@@ -384,14 +392,15 @@ class MlmReportController extends Mlm
                     ->where('promotions_request_binary_promotions_id', $value->binary_promotions_id)
                     ->count();
 
+            $data['direct_count_a'][$key] = Tbl_mlm_slot::where('slot_sponsor', Self::$slot_id)
+                                            ->where('slot_created_date', '>=', $date)
+                                            ->count(); 
 
             $data['claim_count_account'][$key] =  Tbl_mlm_plan_binary_promotions_log::join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_mlm_plan_binary_promotions_log.promotions_request_slot')
             ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
             ->where('customer_id', Self::$customer_id)
             ->count(); 
         }
-
-        // dd($data);
         $status = Session::get('status');
         if($status != null)
         {
@@ -413,7 +422,7 @@ class MlmReportController extends Mlm
             $warehouse = Tbl_warehouse::where('warehouse_shop_id', Self::$shop_id)->where('main_warehouse', 1)->first();
             if($warehouse)
             {
-                $count_inv = Tbl_warehouse_inventory::check_inventory_single($warehouse->warehouse_id, $request_item->item_id)->pluck('inventory_count');
+                $count_inv = Tbl_warehouse_inventory::check_inventory_single($warehouse->warehouse_id, $request_item->item_id)->value('inventory_count');
                 if($count_inv >= 1)
                 {
                     // check if already requested
@@ -499,8 +508,6 @@ class MlmReportController extends Mlm
                 $data['status'] = 'error';
                 $data['message'] = 'Invalid warehouse, please contact the administrator';
             }
-            // end transaction
-
         }
         else
         {
@@ -534,9 +541,9 @@ class MlmReportController extends Mlm
         $shop_id = Self::$shop_info->shop_id;
         $data["shop_address"]    = Self::$shop_info->shop_street_address;
         $data["shop_contact"]    = Self::$shop_info->shop_contact;
-        $data['company_name']    = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_name')->pluck('value');
-        $data['company_email']   = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_email')->pluck('value');
-        $data['company_logo']    = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'receipt_logo')->pluck('value');
+        $data['company_name']    = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_name')->value('value');
+        $data['company_email']   = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_email')->value('value');
+        $data['company_logo']    = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'receipt_logo')->value('value');
         if(Request::input('pdf') == 'true')
         {
             $view = view('member.merchant_school.reciept', $data);

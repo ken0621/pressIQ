@@ -15,17 +15,18 @@ use App\Models\Tbl_mlm_plan_setting;
 use App\Models\Tbl_tree_placement;
 use App\Models\Tbl_mlm_transfer_slot_log;
 use App\Models\Tbl_item_code;
+use App\Models\Tbl_item_code_transfer_log;
+use App\Models\Tbl_membership_code_transfer_log;
 
 use App\Globals\Mlm_compute;
 use App\Globals\Mlm_member;
 use App\Globals\Item_code;
+use App\Globals\Mlm_plan;
 class MlmSlotsController extends Mlm
 {
     public function index()
     {
-    	if(Self::$slot_id != null)
-    	{
-    		$data = [];
+            $data = [];
             $check_if_enabled = Tbl_mlm_plan_setting::where("shop_id",Self::$shop_id)->where("plan_settings_upgrade_slot",1)->first();
             if($check_if_enabled)
             {   
@@ -35,17 +36,12 @@ class MlmSlotsController extends Mlm
             {
                 $data["enabled_upgrade_slot"] = 0;
             }
-            $data['all_slots_p']    = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->membership()->paginate(20);
-            $data['active']         = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->where('slot_defaul', 1)->first();
-            $data['_code']          = Tbl_membership_code::where('customer_id', Self::$customer_id)->where('used', 0)->get();
-            $data["all_slots_show"] = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->membership()->get();
-    		$data["_item_code"]     = Tbl_item_code::where("customer_id",Self::$customer_id)->where("used",0)->where("blocked",0)->where("archived",0)->get();
-    		return view('mlm.slots.index', $data);
-    	}
-        else
-        {
-        	return Self::show_no_access();
-        }
+            $data['all_slots_p']       = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->membership()->paginate(20);
+            $data['active']            = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->where('slot_defaul', 1)->first();
+            $data['_code']             = Tbl_membership_code::where('customer_id', Self::$customer_id)->where('used', 0)->package()->membership()->get();
+            $data["all_slots_show"]    = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->membership()->get();
+            $data["_item_code"]        = Tbl_item_code::where("customer_id",Self::$customer_id)->where("used",0)->where("blocked",0)->where("archived",0)->get();
+            return view('mlm.slots.index', $data);
     }
     public function set_nickname()
     {
@@ -124,18 +120,20 @@ class MlmSlotsController extends Mlm
             }
 
             $current_membership = Tbl_membership::where("membership_id",$slot->slot_membership)->first();
-            $higher_membership  = Tbl_membership::where("shop_id",Self::$shop_id)->where("membership_price",">",$current_membership->membership_price)->lists("membership_id");
+            $higher_membership  = Tbl_membership::where("shop_id",Self::$shop_id)->where("membership_price",">",$current_membership->membership_price)->pluck("membership_id");
             
             $data["membership_code"]       = Tbl_membership_code::package()
                                                                 ->whereIn("membership_id",$higher_membership)
                                                                 ->where("used",0)->where("blocked",0)
                                                                 ->where("archived",0)
+                                                                ->where("customer_id",Self::$customer_id)
                                                                 ->get();
 
             $data["membership_code_count"] = Tbl_membership_code::package()
                                                                 ->whereIn("membership_id",$higher_membership)
                                                                 ->where("used",0)->where("blocked",0)
                                                                 ->where("archived",0)
+                                                                ->where("customer_id",Self::$customer_id)
                                                                 ->count();
 
             return view('mlm.slots.upgrade_slot',$data);
@@ -157,7 +155,7 @@ class MlmSlotsController extends Mlm
 
         $membership_code_id = Request::input("membership_code_id");
         $current_membership = Tbl_membership::where("membership_id",$slot->slot_membership)->first();
-        $higher_membership  = Tbl_membership::where("shop_id",Self::$shop_id)->where("membership_price",">",$current_membership->membership_price)->lists("membership_id");
+        $higher_membership  = Tbl_membership::where("shop_id",Self::$shop_id)->where("membership_price",">",$current_membership->membership_price)->pluck("membership_id");
         
         $membership_code    = Tbl_membership_code::package()
                                                  ->where("tbl_membership_code.used",0)
@@ -342,42 +340,6 @@ class MlmSlotsController extends Mlm
         return json_encode($data);
     }
 
-    public function check_item_code()
-    {
-        $item_code_id   = Request::input("item_code_id");
-        $item           = Tbl_item_code::where("item_code_id",$item_code_id)->first();
-        if($item)
-        {
-            if($item->used == 1)
-            {
-                $data["message"] = "Code already used";
-            }
-            else if($item->blocked == 1)
-            {
-                $data["message"] = "Code is blocked";
-            }
-            else if($item->archived == 1)
-            {
-                $data["message"] = "Code does not exists";
-            }
-            else if($item->customer_id != Self::$customer_id)
-            {
-                $data["message"] = "Code not found.";
-            }
-            else
-            {
-                $data["status"]       = "success-check-prod-code";
-                $data["item_code_id"] = $item_code_id;
-            }
-        }
-        else
-        {
-            $data["message"] = "Code does not exists";
-        }
-
-        return json_encode($data);
-    }
-
     public function item_code()
     {
         $item_code_id   = Request::input("item_code_id");
@@ -419,6 +381,8 @@ class MlmSlotsController extends Mlm
         }
         else
         {
+            $data["_plan"] = Mlm_plan::get_all_active_plan_repurchase(Self::$shop_id);
+            // dd($data);
             return view('mlm.slots.item_code',$data);
         }
     }
@@ -467,5 +431,236 @@ class MlmSlotsController extends Mlm
         }
 
         return json_encode($data);
+    }
+
+
+    public function transfer_item_code()
+    {
+        $item_code_id   = Request::input("item_code_id");
+        $item           = Tbl_item_code::where("item_code_id",$item_code_id)->first();
+        if($item)
+        {
+            if($item->used == 1)
+            {
+                $data["message"] = "Code already used";
+            }
+            else if($item->blocked == 1)
+            {
+                $data["message"] = "Code is blocked";
+            }
+            else if($item->archived == 1)
+            {
+                $data["message"] = "Code doesn't exists";
+            }
+            else if($item->customer_id != Self::$customer_id)
+            {
+                $data["message"] = "Code not found.";
+            }
+            else
+            {
+                $data["item"]  = $item;
+                $data["_customer"] = $this->get_downline_customer();
+            }
+        }
+        else
+        {
+            $data["message"] = "Code does not exists";
+        }
+
+
+
+        if(isset($data["message"]))
+        {
+            return json_encode($data["message"]);
+        }
+        else
+        {
+            return view('mlm.slots.transfer_item_code',$data);
+        }
+    }
+
+    public function transfer_item_code_post()
+    {
+        $item_activation_code = Request::input("item_activation_code");
+        $customer_id          = Request::input("customer_id");
+
+        $customer             = $this->check_downline_customer($customer_id);
+        $item                 = Tbl_item_code::where("item_activation_code",$item_activation_code)->first();
+        
+        if($customer)
+        {
+            if($item)
+            {
+                if($item->used == 1)
+                {
+                    $data["message"] = "Code already used";
+                }
+                else if($item->blocked == 1)
+                {
+                    $data["message"] = "Code is blocked";
+                }
+                else if($item->archived == 1)
+                {
+                    $data["message"] = "Code doesn't exists";
+                }
+                else if($item->customer_id != Self::$customer_id)
+                {
+                    $data["message"] = "Code not found.";
+                }
+                else
+                {
+                    $insert_log["item_code_transfer_by"]   = Self::$customer_id;
+                    $insert_log["item_code_transfer_to"]   = $customer_id;
+                    $insert_log["item_code_id"]            = $item->item_code_id; 
+                    $insert_log["item_code_transfer_date"] = Carbon::now(); 
+                    Tbl_item_code_transfer_log::insert($insert_log);
+
+                    
+                    $update["customer_id"] = $customer_id;
+                    Tbl_item_code::where("item_activation_code",$item_activation_code)->update($update);
+                    $data["status"] = "success-transfer-prod-code";
+                }
+            }
+            else
+            {
+                $data["message"] = "Code does not exists";
+            }
+        }
+        else
+        {
+            $data["message"] = "Customer does not exists";
+        }
+
+        return json_encode($data);
+    }
+
+    public function transfer_mem_code()
+    {
+        $mem_code_id    = Request::input("mem_code_id");
+        $mem            = Tbl_membership_code::where("membership_code_id",$mem_code_id)->package()->membership()->first();
+        if($mem)
+        {
+            if($mem->used == 1)
+            {
+                $data["message"] = "Code already used";
+            }
+            else if($mem->blocked == 1)
+            {
+                $data["message"] = "Code is blocked";
+            }
+            else if($mem->archived == 1)
+            {
+                $data["message"] = "Code doesn't exists";
+            }
+            else if($mem->customer_id != Self::$customer_id)
+            {
+                $data["message"] = "Code not found.";
+            }
+            else
+            {
+                $data["mem"]       = $mem;
+                // $data["_customer"] = Tbl_customer::where('shop_id', Self::$shop_id)->where("customer_id","!=",Self::$customer_id)->get();
+                
+                $data["_customer"] = $this->get_downline_customer();
+            }
+        }
+        else
+        {
+            $data["message"] = "Code does not exists";
+        }
+
+
+        if(isset($data["message"]))
+        {
+            return json_encode($data["message"]);
+        }
+        else
+        {
+            return view('mlm.slots.transfer_mem_code',$data);
+        }
+    }
+
+    public function transfer_mem_code_post()
+    {
+        $membership_activation_code = Request::input("membership_activation_code");
+        $customer_id                = Request::input("customer_id");
+
+        $customer                   = $this->check_downline_customer($customer_id);
+        $mem                        = Tbl_membership_code::where("membership_activation_code",$membership_activation_code)->first();
+        
+        if($customer)
+        {
+            if($mem)
+            {
+                if($mem->used == 1)
+                {
+                    $data["message"] = "Code already used";
+                }
+                else if($mem->blocked == 1)
+                {
+                    $data["message"] = "Code is blocked";
+                }
+                else if($mem->archived == 1)
+                {
+                    $data["message"] = "Code doesn't exists";
+                }
+                else if($mem->customer_id != Self::$customer_id)
+                {
+                    $data["message"] = "Code not found.";
+                }
+                else
+                {
+                    $insert_log["membership_code_transfer_by"]   = Self::$customer_id;
+                    $insert_log["membership_code_transfer_to"]   = $customer_id;
+                    $insert_log["membership_code_id"]            = $mem->membership_code_id; 
+                    $insert_log["membership_code_transfer_date"] = Carbon::now(); 
+                    Tbl_membership_code_transfer_log::insert($insert_log);
+
+                    
+                    $update["customer_id"] = $customer_id;
+                    Tbl_membership_code::where("membership_activation_code",$membership_activation_code)->update($update);
+                    $data["status"] = "success-transfer-mem-code";
+                }
+            }
+            else
+            {
+                $data["message"] = "Code does not exists";
+            }
+        }
+        else
+        {
+            $data["message"] = "Customer does not exists";
+        }
+
+        return json_encode($data);
+    }
+
+    public function get_downline_customer()
+    {
+        $_customer  = Tbl_tree_placement::leftJoin("tbl_mlm_slot as parent_table",'parent_table.slot_id','=','tbl_tree_placement.placement_tree_parent_id')
+                                        ->leftJoin("tbl_mlm_slot as child_table",'child_table.slot_id','=','tbl_tree_placement.placement_tree_child_id')
+                                        ->select("parent_table.slot_owner as parent_customer_id","child_table.slot_owner as child_customer_id","first_name","last_name","middle_name")
+                                        ->leftJoin("tbl_customer","tbl_customer.customer_id","=","child_table.slot_owner")
+                                        ->where("child_table.slot_owner","!=",Self::$customer_id)
+                                        ->where("parent_table.shop_id","=",Self::$shop_id)
+                                        ->groupBy("child_table.slot_owner")
+                                        ->get();
+
+        return $_customer;
+    }
+
+    public function check_downline_customer($customer_id)
+    {
+        $customer   = Tbl_tree_placement::leftJoin("tbl_mlm_slot as parent_table",'parent_table.slot_id','=','tbl_tree_placement.placement_tree_parent_id')
+                                        ->leftJoin("tbl_mlm_slot as child_table",'child_table.slot_id','=','tbl_tree_placement.placement_tree_child_id')
+                                        ->select("parent_table.slot_owner as parent_customer_id","child_table.slot_owner as child_customer_id","first_name","last_name","middle_name")
+                                        ->leftJoin("tbl_customer","tbl_customer.customer_id","=","child_table.slot_owner")
+                                        ->where("child_table.slot_owner","!=",Self::$customer_id)
+                                        ->where("child_table.slot_owner","=",$customer_id)
+                                        ->where("parent_table.shop_id","=",Self::$shop_id)
+                                        ->groupBy("child_table.slot_owner")
+                                        ->first();
+
+        return $customer;                                      
     }
 }

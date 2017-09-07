@@ -59,7 +59,7 @@ function variant()
 	{
 		$(".select-category").globalDropList(
 		{
-			link 		: '/member/item/category/modal_create_category',
+			link 		: '/member/item/category/modal_create_category/inventory',
 		    link_size	: 'md',
 		    width		: '100%',
 		    placeholder	: 'Category'
@@ -203,6 +203,11 @@ function submit_done(data)
 				        }
 				    });
 				}
+				
+				tinymce.init({ 
+				    selector:'.mce',
+				    plugins: "autoresize",
+				 });
 
 				toastr.success("Successfully updated the product");
 			});

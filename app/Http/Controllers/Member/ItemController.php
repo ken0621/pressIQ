@@ -17,11 +17,14 @@ use App\Models\Tbl_item_discount;
 use App\Models\Tbl_item_multiple_price;
 use App\Models\Tbl_inventory_slip;
 use App\Models\Tbl_um;
+use App\Models\Tbl_item_merchant_request;
+use App\Models\Tbl_user;
 
 use App\Globals\Category;
 use App\Globals\AuditTrail;
 use App\Globals\Accounting;
 use App\Globals\DigimaTable;
+use App\Globals\ItemSerial;
 use App\Globals\Warehouse;
 use App\Globals\Item;
 use App\Globals\Vendor;
@@ -38,25 +41,111 @@ use DB;
 use Input;
 use Validator;
 use Carbon\Carbon;
+use App\Globals\Merchant;
 
 class ItemController extends Member
 {
 	public function index()
-	{
+	{	
         $access = Utilities::checkAccess('item-list', 'access_page');
+        $data['can_approve_item_request'] = Utilities::checkAccess('item-list', 'can_approve_item_request');
+		$data['can_edit_other_item'] = Utilities::checkAccess('item-list', 'can_edit_other_item');
+		$data['user_id'] = $this->user_info->user_id;
+		$data['is_merchant'] = $this->user_info->user_is_merchant;
         if($access == 1)
         {
 			$shop_id        		   = $this->user_info->shop_id;
-			$warehouse_id 			   = Tbl_warehouse::where("main_warehouse", 1)->where("warehouse_shop_id", $this->user_info->shop_id)->pluck("warehouse_id");
-	        $item 		    		   = Tbl_item::inventory()->where("tbl_item.archived",0)->where("shop_id",$shop_id)->type()->category();
-	        $item_archived  		   = Tbl_item::where("tbl_item.archived",1)->where("shop_id",$shop_id)->type()->category();
+			$warehouse_id 			   = Tbl_warehouse::where("main_warehouse", 1)->where("warehouse_shop_id", $this->user_info->shop_id)->value("warehouse_id");
+	        
+			if($data['is_merchant'] == 1)
+			{
+				$item 		    		   = Tbl_item::inventory()
+		        							->leftJoin("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+		        							->leftjoin('tbl_user', 'tbl_user.user_id','=', 'tbl_item_merchant_request.item_merchant_requested_by')
+		        							// ->leftJoin("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+		        							// ->leftjoin('tbl_user', 'tbl_user.user_id','=', 'tbl_item_merchant_request.item_merchant_requested_by')  
+		        							->where("tbl_item.archived",0)->where("shop_id",$shop_id)
+		        							->where(function($query){
+										         $query->where('item_merchant_request_status',"=","Approved");
+											})
+		        							->where('item_merchant_requested_by', $data['user_id'])
+											->type()->category();
+
+		        /* CHECK IF THE ITEM IS ON MERCHANT REQUESTED ITEM THEN IT WOULDN'T BE INCLUDED ON ARCHIVED ITEM WHEN IT IS STILL ON PENDING STATUS */
+		        $item_archived  		   = Tbl_item::where("tbl_item.archived",1)
+		        								     ->where("shop_id",$shop_id)
+		        								     ->type()
+		        								     ->leftJoin("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+		        								     ->leftjoin('tbl_user', 'tbl_user.user_id','=', 'tbl_item_merchant_request.item_merchant_requested_by')
+		        								     ->category()
+		        								     ->where('item_merchant_requested_by', $data['user_id'])
+												     ->where(function($query)
+												     {
+												         $query->where('item_merchant_request_status',"!=","PENDING");
+												         $query->orWhereNull('item_merchant_request_status');
+												     });
+
+		        $item_pending  		       = Tbl_item::where("tbl_item.archived",1)
+	        								         ->where("tbl_item.shop_id",$shop_id)
+	        								         ->type()
+	        								         ->leftJoin("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+	        								         ->leftJoin("tbl_warehouse","tbl_warehouse.warehouse_id","=","tbl_item_merchant_request.merchant_warehouse_id")
+	        								         ->leftJoin("tbl_customer","tbl_customer.customer_id","=","tbl_item_merchant_request.item_merchant_requested_by")
+	        								         ->leftjoin('tbl_user', 'tbl_user.user_id','=', 'tbl_item_merchant_request.item_merchant_requested_by')
+	        								         ->category()
+	        								         ->where('item_merchant_requested_by', $data['user_id'])
+											         ->where(function($query)
+											         {
+											             $query->where('item_merchant_request_status',"PENDING");
+											         });
+			}
+			else
+			{
+		        $item 		    		   = Tbl_item::inventory()
+		        							->leftJoin("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+		        							->leftjoin('tbl_user', 'tbl_user.user_id','=', 'tbl_item_merchant_request.item_merchant_requested_by')
+		        							->where("tbl_item.archived",0)->where("shop_id",$shop_id)->type()->category();
+
+		        /* CHECK IF THE ITEM IS ON MERCHANT REQUESTED ITEM THEN IT WOULDN'T BE INCLUDED ON ARCHIVED ITEM WHEN IT IS STILL ON PENDING STATUS */
+		        $item_archived  		   = Tbl_item::where("tbl_item.archived",1)
+		        								     ->where("shop_id",$shop_id)
+		        								     ->type()
+		        								     ->leftJoin("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+		        								     ->leftjoin('tbl_user', 'tbl_user.user_id','=', 'tbl_item_merchant_request.item_merchant_requested_by')
+		        								     ->category()
+												     ->where(function($query)
+												     {
+												         $query->where('item_merchant_request_status',"!=","PENDING");
+												         $query->orWhereNull('item_merchant_request_status');
+												     });
+
+		        $item_pending  		       = Tbl_item::where("tbl_item.archived",1)
+	        								         ->where("tbl_item.shop_id",$shop_id)
+	        								         ->type()
+	        								         ->leftJoin("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
+	        								         ->leftJoin("tbl_warehouse","tbl_warehouse.warehouse_id","=","tbl_item_merchant_request.merchant_warehouse_id")
+	        								         ->leftJoin("tbl_customer","tbl_customer.customer_id","=","tbl_item_merchant_request.item_merchant_requested_by")
+	        								         ->leftjoin('tbl_user', 'tbl_user.user_id','=', 'tbl_item_merchant_request.item_merchant_requested_by')
+	        								         ->category()
+											         ->where(function($query)
+											         {
+											             $query->where('item_merchant_request_status',"PENDING");
+											         });
+
+			}							     
 	        $item_type				   = Request::input("item_type");
 	        $search_name			   = Request::input("search_name");
 
+	        $user_is_merchant = $this->user_info->user_is_merchant;
+	       	if($user_is_merchant == 1)
+	       	{
+	       		
+	       	}
+	       	
 	        if($item_type != null && $item_type != "All")
 	        {
-	    		$item		   = $item->where("item_type_id",$item_type);
-	    		$item_archived = $item_archived->where("item_type_id",$item_type);
+	    		$item		   = $item->where("tbl_item.item_type_id",$item_type);
+	    		$item_archived = $item_archived->where("tbl_item.item_type_id",$item_type);
 	        } 
 	        
 	        if($search_name != "")
@@ -64,11 +153,20 @@ class ItemController extends Member
 	    		$item		   = $item->where("item_name","LIKE","%".$search_name."%");
 	    		$item_archived = $item_archived->where("item_name","LIKE","%".$search_name."%");
 	        }
+
+	        $column_name = Request::input("column_name");
+	        $in_order = Request::input("in_order");
+	        if($column_name && $in_order)
+	        {
+	        	$item 		   = $item->orderBy($column_name,$in_order);
+	        }
 	        
-			$data["_item"]			   = $item->get();
+			$data["_item"]			   = $item->paginate(30);
 
 			foreach ($data["_item"] as $key => $value) 
 			{
+				$data["_item"][$key]->item_price_history = Item::get_item_price_history($value->item_id);
+
 				if($value->bundle_group == 1)
 				{
 					$data["_item"][$key]->item_type_name = "Group";
@@ -101,7 +199,8 @@ class ItemController extends Member
 					$data["_item"][$key]->item_price = Item::get_item_bundle_price($value->item_id);
 				}
 			}
-			$data["_item_archived"]	   = $item_archived->get();
+			$data["_item_archived"]	   = $item_archived->paginate(30);
+			$data["_item_pending"]	   = $item_pending->get();
 
 		    return view('member.item.list',$data);
         }
@@ -110,7 +209,13 @@ class ItemController extends Member
             return $this->show_no_access();
         }
 	}
+	public function view_item_history($item_id)
+	{
+		$data["text"] = Item::get_item_price_history($item_id, true);
 
+
+		return view("member.item.pis.item_price_history",$data);
+	}
 	public function load_item()
     {
         $data["_item"]  = Item::get_all_item();
@@ -139,29 +244,30 @@ class ItemController extends Member
 		return json_encode($data);
 	}
 
-
 	public function add()
 	{   
         $access = Utilities::checkAccess('item-list', 'access_page');
         if($access == 1)
         {
+
+			$shop_id          = $this->user_info->shop_id;
+			$data["data"]	  = Session::get("item_temporary_data");
+
 			$data['_service']  		    = Category::getAllCategory(['services']);
 			$data['_inventory']  		= Category::getAllCategory(['inventory']);
 			$data['_noninventory']  	= Category::getAllCategory(['non-inventory']);
 			$data['_bundle']        	= Category::getAllCategory(['bundles']);
 
-			$shop_id          = $this->user_info->shop_id;
-			$data["data"]	  = Session::get("item_temporary_data");
 			
 			$data["_income"] 		= Accounting::getAllAccount('all',null,['Income','Other Income']);
 			$data["default_income"] = Tbl_chart_of_account::where("account_code", "accounting-sales")
-									->where("account_shop_id", $shop_id)->pluck("account_id");
+									->where("account_shop_id", $shop_id)->value("account_id");
 			$data["_asset"] 		= Accounting::getAllAccount('all', null, ['Other Current Asset','Fixed Asset','Other Asset']);
 			$data["default_asset"] 	= Tbl_chart_of_account::where("account_code", "accounting-inventory-asset")
-									->where("account_shop_id", $shop_id)->pluck("account_id");
+									->where("account_shop_id", $shop_id)->value("account_id");
 			$data["_expense"] 		= Accounting::getAllAccount('all',null,['Expense','Other Expense','Cost of Goods Sold']);
 			$data["default_expense"] = Tbl_chart_of_account::where("account_code", "accounting-expense")
-									->where("account_shop_id", $shop_id)->pluck("account_id");
+									->where("account_shop_id", $shop_id)->value("account_id");
 
 			$data['_item']  			= Item::get_all_category_item();
 			$data['_item_to_bundle']	= Item::get_all_category_item([1,2,3]);
@@ -232,9 +338,9 @@ class ItemController extends Member
 		// }
 			
 		//Accounting part //DEFAULT VALUE
-		$item_expense_account_id= Tbl_chart_of_account::where("account_code", "accounting-expense")->where("account_shop_id", $shop_id)->pluck("account_id");
-		$item_income_account_id = Tbl_chart_of_account::where("account_code", "accounting-sales")->where("account_shop_id", $shop_id)->pluck("account_id");
-		$item_asset_account_id 	= Tbl_chart_of_account::where("account_code", "accounting-inventory-asset")->where("account_shop_id", $shop_id)->pluck("account_id");
+		$item_expense_account_id= Tbl_chart_of_account::where("account_code", "accounting-expense")->where("account_shop_id", $shop_id)->value("account_id");
+		$item_income_account_id = Tbl_chart_of_account::where("account_code", "accounting-sales")->where("account_shop_id", $shop_id)->value("account_id");
+		$item_asset_account_id 	= Tbl_chart_of_account::where("account_code", "accounting-inventory-asset")->where("account_shop_id", $shop_id)->value("account_id");
 
 		$insert["item_date_created"]	    	  = Carbon::now();
 		$insert["shop_id"]	    				  = $shop_id;
@@ -474,7 +580,7 @@ class ItemController extends Member
 				$price = 0;
 				foreach ($bundle_price as $key => $value) 
 				{
-					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->pluck("item_price");
+					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->value("item_price");
                 	$um = Tbl_unit_measurement_multi::where("multi_id",$value->bundle_um_id)->first();
 
 					$qt = 1;
@@ -553,7 +659,7 @@ class ItemController extends Member
 				$price = 0;
 				foreach ($bundle_price as $key => $value) 
 				{
-					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->pluck("item_price");
+					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->value("item_price");
                 	$um = Tbl_unit_measurement_multi::where("multi_id",$value->bundle_um_id)->first();
 
 					$qt = 1;
@@ -875,7 +981,7 @@ class ItemController extends Member
 				$bundle_price = Tbl_item_bundle::where("bundle_bundle_id",$item_id)->get();
 				foreach ($bundle_price as $key => $value) 
 				{
-					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->pluck("item_price");
+					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->value("item_price");
                 	$um = Tbl_unit_measurement_multi::where("multi_id",$value->bundle_um_id)->first();
 
 					$qt = 1;
@@ -901,11 +1007,48 @@ class ItemController extends Member
 		}
 		if($return["message"] == "Success" || $return['status'] = 'success-serial')
 		{
+			// $access_warehouse = Utilities::checkAccess('item-warehouse', 'merchantwarehouse');
+			// if($access_warehouse == 1)
+			// {
+				/* CHECK IF AUTO APPROVED OR NOT */
+				$auto_approved = Utilities::checkAccess('item-list', 'add_auto_approve');
+				if($auto_approved == 1)
+				{
+					/* SET THE ITEM AS APPROVED */
+					// $insert_merchant["item_merchant_request_status"]	= "Accepted";			
+					// $insert_merchant["item_merchant_requested_by"]	    = $this->user_info->user_id;			
+					// $insert_merchant["item_merchant_accepted_by"]	    = $this->user_info->user_id;			
+					// $insert_merchant["merchant_warehouse_id"]		    = $this->current_warehouse->warehouse_id;			
+					// $insert_merchant["merchant_item_id"]			    = $item_id; 			
+					// $insert_merchant["item_merchant_accepted_date"]	    = Carbon::now();			
+					// $insert_merchant["date_created"]					= Carbon::now();
+
+					// Tbl_item_merchant_request::insert($insert_merchant);
+				}
+				else
+				{
+					$insert_merchant["item_merchant_request_status"]	= "Pending";			
+					$insert_merchant["item_merchant_requested_by"]	    = $this->user_info->user_id;			
+					$insert_merchant["item_merchant_accepted_by"]	    = null;			
+					$insert_merchant["merchant_warehouse_id"]		    = $this->current_warehouse->warehouse_id;			
+					$insert_merchant["merchant_item_id"]			    = $item_id; 			
+					$insert_merchant["item_merchant_accepted_date"]	    = null;			
+					$insert_merchant["date_created"]					= Carbon::now();
+								
+					Tbl_item_merchant_request::insert($insert_merchant);
+
+
+					/* SET ITEM ARCHIVED IF NOT AUTO APPROVED WHEN APPROVED IT SHOULD BE ARCHIVED TO ZERO */
+					$update_item["archived"] = 1;
+					Tbl_item::where("item_id",$item_id)->update($update_item);
+				}
+			// }
+
 			Session::forget("item_temporary_data");
 			$insert["item_id"] = $item_id;
 	        AuditTrail::record_logs("Added","item",$item_id,"",serialize($insert));
 		}
-
+		// dd($return);
     	return json_encode($return);
 	}	
 	public function edit($id)
@@ -1031,17 +1174,22 @@ class ItemController extends Member
 		$item_cost 						= str_replace(',','',Request::input("item_cost"));
 		$item_reorder_point 			= Request::input("item_reorder_point");
 		$item_quantity 					= Request::input("item_quantity");
+		
+		if ($old["item_measurement_id"]) 
+		{
+			$unit_id = UnitMeasurement::update_um_v2($unit_n_based, $unit_based, $qty, $old["item_measurement_id"]);
+		}
+		else
+		{
+			$unit_id = UnitMeasurement::create_um($unit_n_based, $unit_based, $qty);
+		}
 
-		// if($item_type != "bundle")
-		// {
-		$unit_id = UnitMeasurement::create_um($unit_n_based, $unit_based, $qty);
 		$item_measurement_id 			= $unit_id;			
-		// }
 			
 		//Accounting part //DEFAULT VALUE
-		$item_expense_account_id= Tbl_chart_of_account::where("account_code", "accounting-expense")->where("account_shop_id", $shop_id)->pluck("account_id");
-		$item_income_account_id = Tbl_chart_of_account::where("account_code", "accounting-sales")->where("account_shop_id", $shop_id)->pluck("account_id");
-		$item_asset_account_id 	= Tbl_chart_of_account::where("account_code", "accounting-inventory-asset")->where("account_shop_id", $shop_id)->pluck("account_id");
+		$item_expense_account_id= Tbl_chart_of_account::where("account_code", "accounting-expense")->where("account_shop_id", $shop_id)->value("account_id");
+		$item_income_account_id = Tbl_chart_of_account::where("account_code", "accounting-sales")->where("account_shop_id", $shop_id)->value("account_id");
+		$item_asset_account_id 	= Tbl_chart_of_account::where("account_code", "accounting-inventory-asset")->where("account_shop_id", $shop_id)->value("account_id");
 
 		if($item_type == "inventory")
 		{			
@@ -1266,7 +1414,7 @@ class ItemController extends Member
 				$bundle_price = Tbl_item_bundle::where("bundle_bundle_id",$item_id)->get();
 				foreach ($bundle_price as $key => $value) 
 				{
-					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->pluck("item_price");
+					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->value("item_price");
                 	$um = Tbl_unit_measurement_multi::where("multi_id",$value->bundle_um_id)->first();
 
 					$qt = 1;
@@ -1345,7 +1493,7 @@ class ItemController extends Member
 				$bundle_price = Tbl_item_bundle::where("bundle_bundle_id",$item_id)->get();
 				foreach ($bundle_price as $key => $value) 
 				{
-					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->pluck("item_price");
+					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->value("item_price");
                 	$um = Tbl_unit_measurement_multi::where("multi_id",$value->bundle_um_id)->first();
 
 					$qt = 1;
@@ -1409,7 +1557,7 @@ class ItemController extends Member
 		{
 	        if($check != 0)
 	        {
-	        	$item_measurement_id = Tbl_unit_measurement::where("um_id",$old["item_measurement_id"])->pluck("um_id");
+	        	$item_measurement_id = Tbl_unit_measurement::where("um_id",$old["item_measurement_id"])->value("um_id");
 	        }			
 		}
 		if(Session::get("um_id") != null)
@@ -1471,7 +1619,7 @@ class ItemController extends Member
 			{
 				//update re-order point from MAIN WAREHOUSE
 				$up_item["item_reorder_point"] = $insert["item_reorder_point"];
-				$warehouse = Tbl_warehouse::where("warehouse_shop_id",$shop_id)->where("main_warehouse",1)->pluck("warehouse_id");
+				$warehouse = Tbl_warehouse::where("warehouse_shop_id",$shop_id)->where("main_warehouse",1)->value("warehouse_id");
 				Tbl_sub_warehouse::where("warehouse_id",$warehouse)->where("item_id",$id)->update($up_item);
 
 				Tbl_item::where("item_id",$id)->where("shop_id",$shop_id)->update($insert);
@@ -1643,7 +1791,7 @@ class ItemController extends Member
 				$bundle_price = Tbl_item_bundle::where("bundle_bundle_id",$id)->get();
 				foreach ($bundle_price as $key => $value) 
 				{
-					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->pluck("item_price");
+					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->value("item_price");
                 	$um = Tbl_unit_measurement_multi::where("multi_id",$value->bundle_um_id)->first();
 
 					$qt = 1;
@@ -1710,7 +1858,7 @@ class ItemController extends Member
 
 	public function get_item_new_price($item_id, $qty)
 	{
-		return Tbl_item::newPrice($qty)->where("item_id", $item_id)->pluck("new_price");
+		return Tbl_item::newPrice($qty)->where("item_id", $item_id)->value("new_price");
 	}
 
 	public function insert_session()
@@ -1768,6 +1916,9 @@ class ItemController extends Member
 		            {
 		               $update["archived"] = 1;
 		               Tbl_item::where("item_id",$id)->update($update);
+
+		               ItemSerial::archived_item_serial($id);
+		               
 					   $return["error"][0]  = "Successfully archived";
 					   $return["message"]   = "Sucess-archived";   
 		            }
@@ -1851,5 +2002,66 @@ class ItemController extends Member
 		$data['response_status'] = 'success';
 		$data['message'] = 'success';
 		return $data;
+	}
+
+	public function merchant_approve_request($id)
+	{
+		$item 	 = Tbl_item::where("item_id",$id)->where("shop_id",$this->user_info->shop_id)->first();
+		$data['can_approve_item_request'] = Utilities::checkAccess('item-list', 'can_approve_item_request');
+		$data['can_edit_other_item'] = Utilities::checkAccess('item-list', 'can_edit_other_item');
+		$data['user_info'] = $this->user_info;
+		if($item)
+		{
+			$request = Tbl_item_merchant_request::where("merchant_item_id",$item->item_id)
+					->join('tbl_warehouse', 'tbl_warehouse.warehouse_id', '=', 'tbl_item_merchant_request.merchant_warehouse_id')
+					->join('tbl_user', 'tbl_user.user_id', '=', 'tbl_item_merchant_request.item_merchant_requested_by')
+					->first();
+			if(!$request)
+			{
+				dd("The item approve request does not exist");
+			}
+		}
+		else
+		{
+			dd("The item you requested does not exist");
+		}
+		$data['item'] = $item;
+		$data['request'] = $request;
+		return view('member.item.item_approve',$data);
+	}
+
+	public function merchant_approve_request_post()
+	{
+		$item_merchant_request_id  = Request::input('item_merchant_request_id');
+
+		$update['item_merchant_accepted_by'] = $this->user_info->user_id;
+		$update['item_merchant_accepted_date'] = Carbon::now();
+		$update['item_merchant_request_status'] = 'Approved'; 
+		Tbl_item_merchant_request::where('item_merchant_request_id', $item_merchant_request_id)->update($update);
+
+		$item_id = Request::input('item_id');
+
+		$update_item['archived'] = 0;
+
+		Tbl_item::where('item_id', $item_id)->update($update_item);
+
+		$user_id = Tbl_item_merchant_request::where('item_merchant_request_id', $item_merchant_request_id)->value('item_merchant_requested_by');
+		$item = Tbl_item::where('item_id', $item_id)->first();
+		$user = Tbl_user::where('user_id', $user_id)->first();
+		Merchant::set_per_piece_mark_up($item, $user);
+		$data['response_status'] = 'success_approve';
+		$data['message'] = 'success_approve';
+
+		return json_encode($data);
+	}
+
+	public function merchant_decline_request($id)
+	{
+		
+	}
+
+	public function merchant_decline_request_post($id)
+	{
+
 	}
 }

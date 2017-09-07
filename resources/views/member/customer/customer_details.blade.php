@@ -66,8 +66,8 @@
 			                <td>{{ $transaction->type }}</td>
 			                <td>{{ $transaction->no }}</td>
 			                <td>{{ dateFormat($transaction->due_date) }}</td>
-			                <td>{{ currency("PHP",$transaction->balance) }}</td>
-			                <td>{{ currency("PHP", $transaction->total) }}</td>
+			                <td>{{ currency("PHP",str_replace(',','',$transaction->balance)) }}</td>
+			                <td>{{ currency("PHP",str_replace(',','',$transaction->total)) }}</td>
 			                <td>{{ $transaction->status }}</td>
 			                <td>
 			                    <!-- ACTION BUTTON -->

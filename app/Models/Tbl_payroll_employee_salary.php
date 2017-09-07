@@ -30,6 +30,10 @@ class Tbl_payroll_employee_salary extends Model
 	// [DOUBLE 18,2]	deduct_philhealth_custom
 	// [TINY INTEGER]	is_deduct_pagibig_default
 	// [DOUBLE 18,2]	deduct_pagibig_custom
+	// [TINY INTEGER] 	dynamic_tax
+	// [TINY INTEGER] 	dynamic_sss
+	// [TINY INTEGER] 	dynamic_philhealth
+	// [TINY INTEGER] 	dynamic_pagibig
 
 
 	public function scopeselemployee($query, $payroll_employee_id = 0, $date = '0000-00-00')
@@ -39,7 +43,7 @@ class Tbl_payroll_employee_salary extends Model
 			$date = date('Y-m-d');
 		}
 
-		$query->where('payroll_employee_id', $payroll_employee_id)->where('payroll_employee_salary_effective_date','<=', $date);
+		$query->where('payroll_employee_id', $payroll_employee_id)->where('payroll_employee_salary_effective_date','<=', $date)->orderBy('payroll_employee_salary_id', 'desc');
 		return $query;
 	}
 

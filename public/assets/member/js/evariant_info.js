@@ -102,7 +102,7 @@ function variant_info()
 			$(e.currentTarget).closest('.image').addClass('glow');
 			$(e.currentTarget).find('i').attr('class','fa fa-circle');
 			$(e.currentTarget).find('.label').text('Your Default');
-			
+
 			$("#product-main-image").val($(this).closest('.image').attr("imgid"));
 		});
 	}
@@ -123,33 +123,43 @@ function variant_info()
 
 function submit_selected_image_done(data) 
 { 
-    $(".upload-empty").addClass("hidden");
+	var image_url = data.image_data[0].image_path;
 
-    for($ctr = 0; $ctr < data.image_data.length; $ctr++)
+    if (data.akey == "product-detail") 
     {
-        var html_for_image = $(".script-image-container").html();
-        $(".new-image-container").append(html_for_image);
-        $(".new-image-container").find(".newly-added").attr("index", $ctr);
-        $(".new-image-container").find(".newly-added").removeClass("newly-added");
-        $(".new-image-container").find("input").prop("disabled", false);
+        $('.product-detail-value').val(image_url);
+        $('.product-detail-image').css('background-image', 'url(' + image_url + ')');
     }
-
-    $.each(data.image_data, function(index, val) 
+    else
     {
-        var this_image = val.image_path;
-        $(".new-image-container .image[index=" + index + "] img").attr("src", this_image);
-        $(".new-image-container .image[index=" + index + "] .image-id").val(val.image_id);
-        $(".new-image-container .image[index=" + index + "] .image-value").val(this_image);
-        $(".new-image-container .image[index=" + index + "]").find("img").load(function()
-        {
-            $(".new-image-container .image[index=" + index + "]").find(".progress").css("width", 100 + "%");
-            setTimeout(function()
-            {
-                $(".new-image-container .image[index=" + index + "]").removeClass("loading");
-                $(".new-image-container .image[index=" + index + "]").removeAttr("index");
-            }, 0);
-        });
-    });
+    	$(".upload-empty").addClass("hidden");
+
+		for($ctr = 0; $ctr < data.image_data.length; $ctr++)
+		{
+		    var html_for_image = $(".script-image-container").html();
+		    $(".new-image-container").append(html_for_image);
+		    $(".new-image-container").find(".newly-added").attr("index", $ctr);
+		    $(".new-image-container").find(".newly-added").removeClass("newly-added");
+		    $(".new-image-container").find("input").prop("disabled", false);
+		}
+
+		$.each(data.image_data, function(index, val) 
+		{
+		    var this_image = val.image_path;
+		    $(".new-image-container .image[index=" + index + "] img").attr("src", this_image);
+		    $(".new-image-container .image[index=" + index + "] .image-id").val(val.image_id);
+		    $(".new-image-container .image[index=" + index + "] .image-value").val(this_image);
+		    $(".new-image-container .image[index=" + index + "]").find("img").load(function()
+		    {
+		        $(".new-image-container .image[index=" + index + "]").find(".progress").css("width", 100 + "%");
+		        setTimeout(function()
+		        {
+		            $(".new-image-container .image[index=" + index + "]").removeClass("loading");
+		            $(".new-image-container .image[index=" + index + "]").removeAttr("index");
+		        }, 0);
+		    });
+		});
+    }
 }
 
 function submit_done(data)

@@ -10,7 +10,7 @@
 	    	</span>
 	    </td>
 	    <td>{{$account['account_type']}}</td>
-	    <td>{{currency('PHP', $account['account_balance'])}}</td>
+	    <td>{{currency('PHP', $account['account_new_balance'])}}</td>
 	    <td class="text-center">
 	    	<!-- ACTION BUTTON -->
 	    	<div class="btn-group">

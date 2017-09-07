@@ -25,7 +25,7 @@ class Sms
 {
 	public static function getShopId()
 	{
-		return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+		return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
 	}
 
 	/**
@@ -44,7 +44,7 @@ class Sms
 			$shop_id = Sms::getShopId();
 		}
 
-		$sms_key = Tbl_sms_key::where("sms_shop_id", $shop_id)->pluck("sms_authorization_key");
+		$sms_key = Tbl_sms_key::where("sms_shop_id", $shop_id)->value("sms_authorization_key");
 
 		if(is_array($recipient))
 		{
@@ -130,7 +130,7 @@ class Sms
 		}
 
 		$content = $content_status["message"];
-		$sms_key = Tbl_sms_key::where("sms_shop_id", $shop_id)->pluck("sms_authorization_key");
+		$sms_key = Tbl_sms_key::where("sms_shop_id", $shop_id)->value("sms_authorization_key");
 		// $sms_key = Sms::apiKey($sms_key);
 		
 		if(is_array($recipient))
@@ -269,7 +269,7 @@ class Sms
 			$shop_id = Sms::getShopId();
 		}
 
-		$sms_key = Tbl_sms_key::where("sms_shop_id", $shop_id)->pluck("sms_authorization_key");
+		$sms_key = Tbl_sms_key::where("sms_shop_id", $shop_id)->value("sms_authorization_key");
 
 		if($sms_key)
 		{
@@ -316,7 +316,7 @@ class Sms
 			$shop_id = Sms::getShopId();
 		}
 
-		$sms_key = Tbl_sms_key::where("sms_shop_id", $shop_id)->pluck("sms_authorization_key");
+		$sms_key = Tbl_sms_key::where("sms_shop_id", $shop_id)->value("sms_authorization_key");
 
 		$curl = curl_init();
 
@@ -353,7 +353,6 @@ class Sms
 
 	public static function apiKey($sms_key)
 	{
-		$curl = curl_init();
 
 		$curl = curl_init();
 		curl_setopt_array($curl, array(

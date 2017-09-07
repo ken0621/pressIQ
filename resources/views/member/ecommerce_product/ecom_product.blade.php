@@ -31,8 +31,8 @@
 <div class="panel panel-default panel-block panel-title-block">
     <div class="panel-body">
         <ul class="nav nav-tabs">
-            <li class="active cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#actives"><i class="fa fa-star"></i> Active Product</a></li>
-            <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#inactives"><i class="fa fa-trash"></i> Archived</a></li>
+            <li class="{{$active_tab}} cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#actives"><i class="fa fa-star"></i> Active Product</a></li>
+            <li class="{{$inactive_tab}} cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#inactives"><i class="fa fa-trash"></i> Archived</a></li>
         </ul>
         
         <div class="search-filter-box">
@@ -54,15 +54,15 @@
             </div>
         </div>
         <div class="tab-content">
-            <div id="actives" class="tab-pane fade in active">
-                <div class="load-data" target="active_product" filter="active" filteru="anime" >
+            <div id="actives" class="tab-pane fade in {{$active_tab}}">
+                <div class="load-data" target="active_product" filter="active" filteru="anime" column_name="{{Request::input('column_name')}}" in_order="{{Request::input('in_order')}}">
                     <div id="active_product">
                         @include('member.ecommerce_product.ecom_load_product_tbl', ['filter' => 'active'])
                     </div>
                 </div>
             </div>
-            <div id="inactives" class="tab-pane fade in">
-                <div class="load-data" filter="inactive" target="inactive_product">
+            <div id="inactives" class="tab-pane fade in {{$inactive_tab}} ">
+                <div class="load-data" filter="inactive" target="inactive_product" column_name="{{Request::input('column_name')}}" in_order="{{Request::input('in_order')}}">
                     <div id="inactive_product">
                         @include('member.ecommerce_product.ecom_load_product_tbl',['_product' => $_product_archived, 'filter' => 'inactive'])
                     </div>
@@ -81,6 +81,7 @@
 @endsection
 @section('script')
 <script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
+<script type="text/javascript" src="/assets/member/js/table_sort.js"></script>
 <script type="text/javascript" src="/assets/member/js/global_view.js"></script>
 <script type="text/javascript">
     @if(Session::has('success'))

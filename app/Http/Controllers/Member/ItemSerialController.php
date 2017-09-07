@@ -21,9 +21,21 @@ class ItemSerialController extends Member
         $data["_item_serial"] = Tbl_inventory_serial_number::item()->warehouse_inventory()->where("has_serial_number",1)->groupBy("tbl_item.item_id")->where("tbl_warehouse_inventory.warehouse_id",$warehouse_id)->where("tbl_item.shop_id",$this->user_info->shop_id)->get();
         foreach ($data["_item_serial"] as $key => $value) 
         {
-            $data["_item_serial"][$key]->inventory_count = Tbl_warehouse_inventory::check_inventory_single($warehouse_id,$value->item_id)->pluck('inventory_count');
+            $data["_item_serial"][$key]->inventory_count = Tbl_warehouse_inventory::check_inventory_single($warehouse_id,$value->item_id)->value('inventory_count');
         }
         return view("member.item_serial.item_serial",$data);
+    }
+
+    public function input_serial()
+    {
+        $data[] = null;
+
+
+        return view("member.item_serial.input_serial",$data);
+    }
+    public function archived_serial()
+    {
+        ItemSerial::archived_serial();
     }
     public function save_serial()
     {
@@ -38,22 +50,31 @@ class ItemSerialController extends Member
             {
                 $up["serial_number"] = $serial;
 
-                $rule["serial_number"] = "required|unique:tbl_inventory_serial_number,serial_number,".$id.",serial_id";
-
-                $validator = Validator::make($up, $rule);
-
-                if($validator->fails())
+                $check_serial = Tbl_inventory_serial_number::where("serial_id","!=",$id)->where("archived",0)->where("serial_number",$serial)->count();
+                if($check_serial > 0)
                 {
                     $data["status"] = "error";
-                    foreach ($validator->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
-                    {
-                        $data["status_message"] .= $message;
-                    }
+                    $data["status_message"] .= "The serial number must be unique.";
                 }
                 else
                 {
-                    Tbl_inventory_serial_number::where("serial_id",$id)->update($up);
-                    $data["status"] = "success";                    
+                    $rule["serial_number"] = "required";
+
+                    $validator = Validator::make($up, $rule);
+
+                    if($validator->fails())
+                    {
+                        $data["status"] = "error";
+                        foreach ($validator->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
+                        {
+                            $data["status_message"] .= $message;
+                        }
+                    }
+                    else
+                    {
+                        Tbl_inventory_serial_number::where("serial_id",$id)->update($up);
+                        $data["status"] = "success";                    
+                    }                    
                 }
             }
             else

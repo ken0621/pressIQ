@@ -53,11 +53,11 @@ class AuditTrail
 {
     public static function getUser()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_id');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_id');
     }
     public static function getShopId()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
     public static function record_logs($action ="", $source="", $source_id = 0 , $old_data ="" , $new_data="")
     {
@@ -69,14 +69,21 @@ class AuditTrail
     	$insert_log["new_data"] = $new_data;
         $insert_log["audit_shop_id"] = AuditTrail::getShopId();
         $insert_log["created_at"] = Carbon::now();
+        
+        if($insert_log["user_id"])
+        {
+    		$id = Tbl_audit_trail::insertGetId($insert_log);
 
-		$id = Tbl_audit_trail::insertGetId($insert_log);
-
-		return $id;
+    		return $id;
+        }
+        else
+        {
+            return null;
+        }
     }
     public static function getSearchAuditData($col, $key, $from=null, $to=null)
     {      
-        $query = Tbl_audit_trail::user()->orderBy("created_at","DESC")->where("audit_shop_id",AuditTrail::getShopId());   
+        $query = Tbl_audit_trail::user()->orderBy("tbl_audit_trail.created_at","DESC")->where("audit_shop_id",AuditTrail::getShopId());   
 
         switch ($col) {            
             case 'remarks':
@@ -981,7 +988,7 @@ class AuditTrail
 
     public static function getAudit_data()
     {        
-        $audit_trail = Tbl_audit_trail::user()->orderBy("created_at","DESC")->where("audit_shop_id",AuditTrail::getShopId())->paginate(15);
+        $audit_trail = Tbl_audit_trail::user()->orderBy("tbl_audit_trail.created_at","DESC")->where("audit_shop_id",AuditTrail::getShopId())->paginate(15);
 
         foreach ($audit_trail as $key => $value) 
         {            

@@ -102,8 +102,15 @@ class OnlinePaymentMethodController extends Member
 		$data["api_client_id"] 	= Request::input('api_client_id');
 		$data["api_secret_id"] 	= Request::input('api_secret_id');
 
-		$api_id = Tbl_online_pymnt_api::where("api_shop_id", $data["api_shop_id"])->where("api_gateway_id", $data["api_gateway_id"])->pluck("api_id");
+		if($gateway_code == "cashondelivery")
+		{
+			$data["api_client_id"] = "Cash on delivery";
+			$data["api_secret_id"] = "Cash on delivery";
+		}
 
+
+		$api_id = Tbl_online_pymnt_api::where("api_shop_id", $data["api_shop_id"])->where("api_gateway_id", $data["api_gateway_id"])->value("api_id");
+		
 		if($api_id)
 		{
 			Tbl_online_pymnt_api::where("api_id", $api_id)->update($data);
@@ -192,7 +199,7 @@ class OnlinePaymentMethodController extends Member
 
 	public function getShopId()
 	{
-		return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+		return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
 	}
 
 	public function getModalMethodList()

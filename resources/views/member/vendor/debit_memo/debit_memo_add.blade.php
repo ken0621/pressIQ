@@ -45,7 +45,7 @@
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <select class="form-control droplist-vendor input-sm pull-left" name="db_vendor_id" data-placeholder="Select a Vendor" required>
-                                    @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($db->db_vendor_id) ? $db->db_vendor_id : '']);
+                                    @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($db->db_vendor_id) ? $db->db_vendor_id : ''])
                                 </select>
                             </div>
                             <div class="col-sm-4">
@@ -77,6 +77,7 @@
                                             <!-- <th style="width: 100px;">Discount</th> -->
                                             <!-- <th style="width: 100px;">Remark</th> -->
                                             <th style="width: 100px;">Amount</th>
+                                            @include("member.load_ajax_data.load_th_serial_number");
                                             <!-- <th style="width: 10px;">Tax</th> -->
                                             <th width="10"></th>
                                         </tr>
@@ -112,6 +113,10 @@
                                                         <input type="hidden" class="dbline_taxable" name="dbline_taxable[]" value="" >
                                                         <input type="checkbox" name="" class="taxable-check" >
                                                     </td> -->
+
+                                                    <td>
+                                                        <textarea class="txt-serial-number" name="serial_number[]">{{$dbline->serial_number}}</textarea>
+                                                    </td>
                                                     <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                 </tr>
                                             @endforeach
@@ -137,6 +142,7 @@
                                                     <input type="hidden" class="dbline_taxable" name="dbline_taxable[]" value="" >
                                                     <input type="checkbox" name="" class="taxable-check" value="checked">
                                                 </td> -->
+                                                @include("member.load_ajax_data.load_td_serial_number")
                                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                             </tr>
                                                 
@@ -160,6 +166,7 @@
                                                     <input type="hidden" class="dbline_taxable" name="dbline_taxable[]" value="" >
                                                     <input type="checkbox" name="" class="taxable-check" value="checked">
                                                 </td> -->
+                                                @include("member.load_ajax_data.load_td_serial_number")
                                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                             </tr>
                                         @endif
@@ -284,6 +291,7 @@
                 <input type="hidden" class="dbline_taxable" name="dbline_taxable[]" value="" >
                 <input type="checkbox" name="" class="taxable-check" value="checked">
             </td> -->
+            @include("member.load_ajax_data.load_td_serial_number")
             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
         </tr>
     </table>

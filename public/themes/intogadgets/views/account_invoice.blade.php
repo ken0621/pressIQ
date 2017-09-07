@@ -27,12 +27,13 @@
     <div class="invoice">
       <div class="header">
         <div class="title">INTOGADGETS INC.</div>
-        <div class="sub-title">SM Supercenter Valenzuela, Mc. Arthur Highway, Karuhatan, Valenzuela City</div>
-        <div class="sub-title">VAT Reg. TIN: 007-308-262-003</div>
+        <div class="sub-title">Unit V-316 E, V-Mall Greenhills Shopping Center</div>
+        <div class="sub-title">Greenhills, San Juan City</div>
+        <div class="sub-title">VAT Reg. TIN: 007-308-262-000</div>
       </div>
       <div class="clearfix sales-top">
         <div class="pull-left sales-title">SALES INVOICE</div>
-        <div class="pull-right sales-number">NO. 18701</div>
+        <div class="pull-right sales-number">NO. {{ $order->manual_inv_number != '' ? $order->manual_inv_number : $order->ec_order_id }}</div>
       </div> 
       <div class="row clearfix per-row">
         <div class="col-md-5 col-md-offset-7 text-right">
@@ -85,7 +86,7 @@
           <table>
             <tbody>
               <tr>
-                <td class="labels" style="width: 50px;">Address</td>
+                <td class="labels" style="width: 50px;">Address :</td>
                 <td class="value">{{ $order->billing_address }}</td>
               </tr>
             </tbody>
@@ -124,37 +125,65 @@
               <table>
                 <tbody>
                   <tr>
-                    <td>VATable</td>
-                    <td></td>
+                    <td>SUB TOTAL</td>
+                    <td>P {{ number_format($order->subtotal + $coupon_discount, 2) }}</td>
                   </tr>
+                  @if($coupon_discount != 0)
                   <tr>
+                    <td>Coupon Disc.</td>
+                    <td>P {{ number_format($coupon_discount, 2) }}</td>
+                  </tr>
+                  @endif
+                  <tr>
+                    <td>VATABLE</td>
+                    <td>P {{ number_format($order->subtotal, 2) }}</td>
+                  </tr>
+                  <!-- <tr>
                     <td>VAT-Exempt Sale</td>
                     <td></td>
                   </tr>
                   <tr>
                     <td>Zero-Rated Sale</td>
                     <td></td>
+                  </tr> -->
+                  <tr>
+                    <td>Value Added Tax(12%)</td>
+                    <td>P {{ number_format($order->vat, 2) }}</td>
                   </tr>
                   <tr>
                     <td>TOTAL SALE</td>
-                    <td>P {{ number_format($order->subtotal, 2) }}</td>
+                    <td>P {{ number_format($order->vatable, 2) }}</td>
                   </tr>
+                  
                   <tr>
-                    <td>Value Added Tax</td>
-                    <td>P {{ number_format($order->tax, 2) }}</td>
-                  </tr>
-                  <tr>
-                    <td>TOTAL AMOUNT</td>
-                    <td>P {{ number_format($order->total, 2) }}</td>
+                    <td>TOTAL AMOUNT DUE</td>
+                    <!-- <td>P {{ number_format($order->total, 2) }}</td> -->
+                    <td>P {{ number_format($order->vatable + $order->vat, 2) }}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
-          <div class="col-md-5">
-            <div class="terms-note">Receive the above in good order and condition.</div>
-            <div class="terms-line"></div>
-            <div class="terms-permit">1000 bks. 50x3 02501 - 52500</br> BIR Permit No. OCN1AU0000721638 03-21-2</br> AMSTAR COMPANY, INC.</br> 272 Roosevelt Ave., SFDM, Quezon City</div>
+            <div class="col-md-5">
+              <div class="terms-note">Receive the above in good order and condition.</div>
+              <div class="terms-line"></div>
+              <div class="terms-permit">
+                300 bks. (50x3) SN 025501 - 040500</br>
+                BIR Authority to Print No. OCN3AU0000962023
+                </br>
+                Date Issued 05-29-2013: Valid Until 05-28-2018
+                </br>
+                AMSTAR COMPANY, INC. 272 Roosevelt Ave., San Antonio I, Q.C. </br>
+                TIN: 000-368-955-000 VAT </br></br>
+                Printer's Accreditation No. PROVAN002876
+                Date Issued: 02/20/2013
+                </div>
+            </div>
+          </div>
+        </div>
+         <div class="row clearfix">
+          <div class="col-md-12 text-center">
+            "THIS SALES INVOICE SHALL BE VALID FOR FIVE(5) YEARS FROM THE DATE OF ATP"
           </div>
         </div>
       </div>

@@ -9,14 +9,14 @@
       @if(end($breadcrumbs) == $breadcrumb)
         <div class="text aktibo">{{ $breadcrumb['type_name'] }}</div>
       @else
-        <div class="text" onclick="location.href='/{{ $breadcrumb['type_id'] }}'">{{ $breadcrumb['type_name'] }}</div> 
+        <div class="text" onclick="location.href='/product?type={{ $breadcrumb['type_id'] }}'">{{ $breadcrumb['type_name'] }}</div> 
       @endif
     @endforeach
 </div>
 
 <div class="remodal" data-remodal-id="full">
 
-<img class="single-product-img" src="" data-zoom-image="" alt = "" id="picturecontainer"/>
+<!-- <img class="single-product-img" src="" data-zoom-image="" alt = "" id="picturecontainer"/> -->
 
 </div>
 <?php $ctr = 0; ?>
@@ -27,15 +27,17 @@
       <input type="hidden" class="variation_id" name="variation_id" value=''>
       <div class="single-product-holder" style="padding: 0;">
          @foreach($product_variant['image'] as $key => $image)
-         <img class="single-product-img 4-3-ratio {{ $key == 0 ? '' : 'hide' }}" key="{{ $key }}" style="width: 100%;" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}" alt = "" id="picturecontainer"/>
+         <img class="single-product-img key-{{$key}} {{ $key == 0 ? '' : 'hide' }} {{$ctr != 0 ? '' : 'first-img'}}" variant-id="{{ $product_variant['evariant_id'] }}" key="{{ $key }}" style="width: 100%;" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}" alt = "" id="picturecontainer"/>
          @endforeach
          <div class="thumb">
-             @foreach($product_variant['image'] as $key => $image)
-             <div class="holder" variant-id="{{ $product_variant['evariant_id'] }}" key="{{ $key }}" style="cursor: pointer;"><img class="4-3-ratio" src="{{ $image['image_path'] }}"></div>
-             @endforeach
+            @foreach($product_variant['image'] as $key => $image)
+             <div class="holder" variant-id="{{ $product_variant['evariant_id'] }}" key="{{ $key }}" style="cursor: pointer;">
+              <img class="1-1-ratio" src="{{ $image['image_path'] }}">
+             </div>
+            @endforeach
          </div>
       </div>
-      <div class="single-product-holder border">
+      <div class="single-product-holder border" style="position: relative;">
          <div class="single-order-header">{{ $product["eprod_name"] }}</div>
          <div class="single-order-sub">
             Categories: <a href="/product?type={{ $product['eprod_category_id'] }}">{{ $category['type_name'] }}</a>
@@ -47,13 +49,17 @@
                <div>{!! $product_variant['evariant_description'] !!}</div>
             </div>
             <div class="divider"></div>
-            <div class="single-order-description">
+            <!-- <div class="single-order-description">
                <div class="title">PACKAGE INCLUSION</div>
-            </div>
-            <div class="price-container">
+            </div> -->
+            <div class="price-container" style="overflow-x: hidden;">
               @if($product_variant['discounted'] == "true")
+              <div class="row clearfix">
+                  <div class="col-sm-6">
+                      <div  id="single-order-price" class="single-order-price" style="color:red;font-size:17px;text-decoration: line-through;"><span style="color:gray;">PHP {{ number_format($product_variant['evariant_price'], 2) }}</span></div>                    
+                  </div>
+              </div>
               <div id="single-order-price" class="single-order-price">PHP {{ number_format($product_variant['discounted_price'], 2) }}</div>
-              <div id="single-order-price" class="single-order-price" style="text-decoration: line-through;">PHP {{ number_format($product_variant['evariant_price'], 2) }}</div>
               @else
               <div id="single-order-price" class="single-order-price">PHP {{ number_format($product_variant['evariant_price'], 2) }}</div>
               @endif
@@ -107,6 +113,7 @@
             @if($wishlist)
               <button type="button" class="single-order-button" onClick="location.href='/wishlist/add/{{ $product["eprod_id"] }}'">ADD TO WISHLIST</button>
             @endif
+            <div class="loader-variation" style="display: none; vertical-align: middle; position: absolute; top: 5px; right: 5px; bottom: 0;"><img style="width: 25px; height: 25px;" src="/resources/assets/frontend/img/loader.gif"></div>
             <div class="divider" style="margin: 35px 0; opacity: 0;"></div>
             <!-- <div class="single-order-rate" id="single-product-rate">
                @for ($i = 1; $i <= 5; $i++)
@@ -207,7 +214,7 @@
                </div>
             </div>
             <div class="single-detail-description min-300">
-               <p>  </p>
+               {!! $product["eprod_details"] !!}
             </div>
          </div>
       </div>
@@ -218,15 +225,15 @@
             <div class="container">
                @foreach(limit_foreach($_related, 4) as $related)
                <div class="feature-holder col-md-3 col-sm-6 col-xs-12">
-                  <a href="product/">
+                  <a href="/product/view/{{$related['eprod_id']}}">
                      <div class="feature-img">
-                        <img class="lazy 4-3-ratio" data-original="{{ get_product_first_image($related) }}" height="222px" width="222px">
+                        <img class="lazy 1-1-ratio" data-original="{{ get_product_first_image($related) }}" height="222px" width="222px">
                         <div class="feature-hover"></div>
                         <div class="feature-hoverimg">
                   <a href="javascript:"><i class="fa fa-link"></i></a></div>
                   </div>
                   </a>
-                  <a href="product/" class="feature-name">{{ get_product_first_name($related) }}</a>
+                  <a href="/product/view/{{$related['eprod_id']}}" class="feature-name">{{ get_product_first_name($related) }}</a>
                   <div class="feature-rate"></div>
                   <div class="feature-price">{{ get_product_first_price($related) }}</div>
                   <a class="feature-button quick-view" style="display: none;">QUICK VIEW</a>
@@ -347,6 +354,15 @@
 
 <link rel="stylesheet" type="text/css" href="resources/assets/flexslider/css/flexslider.css">
 
+<style type="text/css">
+.single-detail-description img
+{
+  height: auto !important;
+  max-width: 100% !important;
+  width: auto !important;
+}
+</style>
+
 @endsection
 
 @section('meta')
@@ -375,21 +391,7 @@
 
 <script type="text/javascript">
 
-//  window.fbAsyncInit = function()
 
-//  {
-
-//  FB.init({
-
-//  appId      : '{{config::get("app.fb_app_id")}}',
-
-//  xfbml      : true,
-
-//  version    : 'v2.3'
-
-//  });
-
-// };
 
       window.fbAsyncInit = function() {
 

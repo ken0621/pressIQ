@@ -82,6 +82,7 @@ class Tbl_payroll_record extends Model
 	// break_deduction
 	// break_time
 	// salary_taxable
+	// branch_location_id
 
 	public function scopegetperiod($query, $shop_id = 0, $payroll_period_category = '', $status = 'approved')
 	{

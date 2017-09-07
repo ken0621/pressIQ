@@ -1,5 +1,5 @@
 
-<form class="global-submit form-to-submit-add" action="/member/pis/agent/edit_submit" method="post">
+<form class="global-submit form-to-submit-add" action="{{$action}}" method="post">
 <style type="text/css">
     .chosen-container
     {

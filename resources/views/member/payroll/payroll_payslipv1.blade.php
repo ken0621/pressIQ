@@ -1,162 +1,144 @@
-<style type="text/css">
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang=""> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <base href="{{ URL::to('/') }}">
+        <title>Digima House</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+        <link rel="stylesheet" href="/assets/initializr/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/assets/initializr/css/bootstrap-theme.min.css">
+        <!--<link rel="stylesheet" href="/assets/initializr/css/main.css">-->
+        {{-- <link rel="stylesheet" href="/assets/front/css/global.css"> --}}
+        <style type="text/css">
+          td
+          {
+            padding: 5px !important;
+            font-size: 11px;
+            line-height: 11px;
+          }
+          .payslip-wrapper
+          {
+            page-break-inside: avoid; 
+            /*width: 48.5%; */
+            padding: 10px; 
+            border: 1px solid #bbb; 
+            /*display: inline-block; */
+            vertical-align: top; 
+            top: 0; 
+            background-color: #fff; 
+            margin: 5px;
+            /*float: left;*/
+          }
+          .col-md-6
+          {
+            padding: 0;
+          }
 
-	@page { margin: 0px; }
-	body { margin: 0px; }
+          /*div.breakNow { page-break-inside:avoid; page-break-after:always; }*/
+        </style>
+    </head>
+    <body>
 
-	.border
-	{
-		border: 1px solid #000000;
-	}
-	.padding-5
-	{
-		padding:5px;
-	}
-	.padding-3
-	{
-		padding:3px;
-	}
-	.text-center
-	{
-		text-align: center;
-	}
-	.text-left
-	{
-		text-align: left;
-	}
-	.text-right
-	{
-		text-align: right;
-	}
-</style>
-<div class="main-container">
+    <div style="vertical-align: top; text-align: center;">
+      <div class="clearfix">
+        
+        
+          @foreach($_employee as $key => $employee)
+          <div class="col-md-6">
+              <div class="payslip-wrapper page">
+                <div class="main-content-holder">
+                  <div class="row" >
+                    <div class="col-md-12 text-center" style="font-weight: bold; font-size: 16px;">{{ strtoupper($company->payroll_company_name) }}</div>
+                    <div class="col-md-12" style="margin-top: 10px;">
+                        <div>{{ $employee->payroll_employee_last_name }}, {{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }}</div>
+                        <div>{{ $show_period_start }} - {{ $show_period_end }}</div>
+                        @if($show_release_date != 'not specified')
+                        <div>Release Date: {{ $show_release_date }}</div>
+                        @endif
+                    </div>
+                  </div>
 
-	<table cellpadding="5" cellspacing="0" class="" width="100%" >
-		
-		<?php 
-			$counter=0; 
-			$payslip_num = 100/$payslip->payslip_width;
-		?>
-	
-		@foreach($_record as $brk)
-				@if($counter==$payslip_num)
-					<tr></tr>
-				@endif
-				<td valign="top">
-					<div class="div-payslip">
-					<table cellpadding="5" cellspacing="0" class="border padding-5" width="100%">
-						@if($payslip->include_company_logo == 1)
-						<tr>
-							<td colspan="2" class="{{$logo_position}} border padding-3">
-								{{-- {{ $counter }} --}}
-								@if($logo)
-								<img src="{{$brk['company_logo']}}" style="width:50px;height:50px;object-fit: contain"><br>
-								@endif
-								<b>{{$brk['company_name']}}</b><br>
-								<small>{{$brk['company_address']}}</small>
-							</td>
-						</tr>
-						@endif
-						<tr>
-							<td colspan="2"></td>
-						</tr>
-						<tr>
-							<td colspan="2" class="border">
-								<table cellpadding="2" cellspacing="0">
-									<tr>
-										<td>Employee Name</td>
-										<td>
-											{{$brk['display_name']}}
-										</td>
-									</tr>
-									@if($payslip->include_department == 1)
-									<tr>
-										<td>Department</td>
-										<td>
-											{{$brk['emp']->payroll_department_name}}
-										</td>
-									</tr>
-									@endif
-									@if($payslip->include_job_title == 1)
-									<tr>
-										<td>Job Title</td>
-										<td>
-											{{$brk['emp']->payroll_jobtitle_name}}
-										</td>
-									</tr>
-									@endif
-								</table>
-							</td>
-							
-						</tr>
-						
-						<tr>
-							<td valign="top" {{ $payslip->include_time_summary == 0 ? 'colspan=2' : '' }} >
-								<table cellspacing="0" cellpadding="2" width="100%">
-									<tr>
-										<td colspan="2" class="border"><b>Salary Computation</b></td>
-									</tr>
-									@foreach($brk['break']['computation'] as $compute)
-										@foreach($compute as $value)
-										<tr>
-											<td class="border">
-												{!!$value['name']!!}
-											</td>
-											<td class="text-right border">
-												{!!$value['amount']!!}
-											</td>
-										</tr>
-											@foreach($value['sub'] as $sub)
-											<tr>
-												<td class="indent-15 border">
-													{!!$sub['name']!!}
-												</td>
-												<td class="text-right border">
-													{!!$sub['amount']!!}
-												</td>
-											</tr>
-											@endforeach
-										@endforeach
-									@endforeach
-								</table>
-							</td>
-							@if($payslip->include_time_summary == 1)
-							<td valign="top">
-								<table cellspacing="0" cellpadding="2" width="100%">
-									<tr>
-										<td colspan="2" class="border">
-											<b>Time Sheet summary</b>
-										</td>
-									</tr>
-									@foreach($brk['break']['time'] as $time)
-									<tr>
-										<td class="border">
-											{!!$time['name']!!}
-										</td>
-										<td class="text-right border">
-											{!!$time['time']!!}
-										</td>
-									</tr>
-									@endforeach
-								</table>
-							</td>
-							@endif
-						</tr>
-						<tr>
-							<td style="text-align:center" width="50%">
-								<span>____________________</span>
-								<p>Date Received</p>
-							</td>
-							<td style="text-align:center">
-								<span>____________________</span>
-								<p>Employee Signature</p>
-							</td>
-						</tr>
-					</table>
-					</div>
-				</td>
-				
-			<?php ($counter>=$payslip_num) ? $counter=1 : $counter++ ?>
-		@endforeach
-		
-	</table>
-</div>
+                  <div class="row" style="margin-top: 20px; text-align: left;">
+                      <div class="col-md-12">
+                          <table style="width: 100%;" class="table table-bordered">
+                              <tbody>
+                                  <tr >
+                                      <td width="40%" style="font-weight: bold;">BASIC PAY</td>
+                                      <td width="30%" style="font-weight: bold;" class="text-right">{{ payroll_currency($employee->net_basic_pay) }}</td>
+                                      <td width="30%" style="font-weight: bold;"></td>
+                                  </tr>
+
+                                  <!-- ADDITION TO GET GROSS -->
+                                  @foreach($employee->cutoff_breakdown->_gross_pay_breakdown as $breakdown)
+                                  <tr>
+                                      <td>{{ strtoupper($breakdown["label"]) }}</td>
+                                      <td class="text-right">{{ payroll_currency($breakdown["amount"]) }}</td>
+                                      <td></td>
+                                  </tr>
+                                  @endforeach
+
+                                  <tr style="font-weight: bold;">
+                                      <td style="font-weight: bold;">GROSS SALARY</td>
+                                      <td style="font-weight: bold;"></td>
+                                      <td style="font-weight: bold;" class="text-right">{{ payroll_currency($employee->gross_pay) }}</td>
+                                  </tr>
+
+                                  @foreach($employee->cutoff_breakdown->_taxable_salary_breakdown as $breakdown)
+                                    @if($breakdown["add.gross_pay"] == true && $breakdown["deduct.taxable_salary"] == true && $breakdown["add.net_pay"] == true)
+                                    @else
+                                      <tr>
+                                          <td>{{ strtoupper($breakdown["label"]) }}</td>
+                                          <td class="text-right">{{ payroll_currency($breakdown["amount"]) }}</td>
+                                          <td></td>
+                                      </tr>
+                                    @endif
+                                  @endforeach
+
+
+
+                                  @foreach($employee->cutoff_breakdown->_net_pay_breakdown as $breakdown)
+                                    @if($breakdown["add.gross_pay"] == true && $breakdown["deduct.taxable_salary"] == true && $breakdown["add.net_pay"] == true)
+                                    @else
+                                      <tr>
+                                          <td>{{ strtoupper($breakdown["label"]) }}</td>
+                                          <td class="text-right">{{ payroll_currency($breakdown["amount"]) }}</td>
+                                          <td></td>
+                                      </tr>
+                                    @endif
+                                  @endforeach
+
+
+                                  <tr>
+                                      <td>TOTAL DEDUCTION</td>
+                                      <td></td>
+                                      <td class="text-right">{{ payroll_currency($employee->total_deduction) }}</td>
+                                  </tr>
+
+                                  <tr style="font-weight: bold;">
+                                      <td style="font-weight: bold;">TAKE HOME PAY</td>
+                                      <td style="font-weight: bold;"></td>
+                                      <td style="font-weight: bold;" class="text-right">{{ payroll_currency($employee->net_pay) }}</td>
+                                  </tr>
+
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          @endforeach
+        
+        
+      </div>
+    </div>
+
+    </body>
+</html>

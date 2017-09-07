@@ -65,10 +65,11 @@ class Tbl_vendor extends Model
 
         /* WRITE CHECKS */
         $write_check = DB::table("tbl_vendor")->selectRaw("wc_payment_date as date, 'Check' as type, wc_id as no, '' as due_date, 0 as balance, wc_total_amount as total, 'status' as status, date_created, 'vendor/write_check' as reference_url")
-                    ->join("tbl_write_check","wc_vendor_id","=","vendor_id")
+                    ->join("tbl_write_check","wc_reference_id","=","vendor_id")
                     ->where("wc_shop_id", $shop_id)
+                    ->where("wc_reference_name","vendor")
                     ->where("wc_ref_name","");
-        if($vendor_id) $write_check->where("wc_vendor_id", $vendor_id);
+        if($vendor_id) $write_check->where("wc_reference_id", $vendor_id);
 
         /* DEBIT MEMO */
         $debit_memo = DB::table("tbl_vendor")->selectRaw("db_date as date, 'Debit Memo' as type, db_id as no, '' as due_date, 0 as balance, db_amount as total, 'status' as status, date_created, 'vendor/debit_memo' as reference_url")

@@ -19,6 +19,8 @@ use App\Models\Tbl_mlm_plan;
 use DB;
 use App\Globals\abs\AbsMain;
 use App\Models\Tbl_tour_wallet;
+use App\Models\Tbl_settings;
+use App\Globals\Settings;
 class Mlm_ComplanSetupController extends Member
 {
 	public function index()
@@ -46,7 +48,7 @@ class Mlm_ComplanSetupController extends Member
 		$tours_wallet = $this->user_info->shop_wallet_tours;
 		if($tours_wallet == 1)
 		{
-			$data['links'][2]['label'] = 'Tours Wallet';
+			$data['links'][2]['label'] = 'Airline Ticketing';
 			$data['links'][2]['link'] = '/member/mlm/tours_wallet';
 		}
 
@@ -66,8 +68,46 @@ class Mlm_ComplanSetupController extends Member
 			
 		}		
 
+		if($this->user_info->shop_key == 'myphone')
+		{
+			$data['other_settings_myphone'] = $this->myphone_other_settings();
+		}
 
 		return view('member.mlm_complan_setup.index', $data);
+	}
+	public function myphone_other_settings()
+	{
+		$shop_id = $this->user_info->shop_id;
+		$settings = Tbl_settings::where('shop_id', $shop_id)->get()->keyBy('settings_key');
+
+		if(isset($settings['myphone_require_sponsor']))
+		{
+			$data['settings_myphone_require_sponsor'] = 	Tbl_settings::where('settings_key', 'myphone_require_sponsor')->where('shop_id', $shop_id)->first();
+		}
+		else
+		{
+			$insert['settings_key'] = 'myphone_require_sponsor';
+			$insert['settings_value'] = 1;
+			$insert['settings_setup_done'] = 1;
+			$insert['shop_id'] = $shop_id;
+
+			Tbl_settings::insert($insert);
+
+			$data['settings_myphone_require_sponsor'] = 	Tbl_settings::where('settings_key', $insert['settings_key'])->where('shop_id', $shop_id)->first();
+		}
+		return view('member.mlm_complan_setup.myphone.index', $data);
+	}
+	public function myphone_other_settings_update()
+	{
+		$settings_key = Request::input('settings_key');
+		$settings_value = Request::input('settings_value');
+		Settings::update_settings($settings_key, $settings_value);
+
+		$data['status'] = 'success';
+		$data['message'] = 'settings_changed';
+
+		return json_encode($data);
+
 	}
 	public function binary_promotions()
 	{

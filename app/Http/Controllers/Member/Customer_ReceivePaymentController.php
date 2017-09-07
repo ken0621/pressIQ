@@ -7,6 +7,7 @@ use App\Globals\Customer;
 use App\Globals\Accounting;
 use App\Globals\Invoice;
 use App\Globals\CreditMemo;
+use App\Globals\ReceivePayment;
 
 use App\Models\Tbl_payment_method;
 use App\Models\Tbl_receive_payment;
@@ -32,7 +33,7 @@ class Customer_ReceivePaymentController extends Member
 
     public function getShopId()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
 
     public function index()
@@ -65,6 +66,9 @@ class Customer_ReceivePaymentController extends Member
 
     public function add_receive_payment()
     {
+        //for credit memo
+        $cm_id = Request::input("cm_id");
+
         // dd(Request::input());
         $insert["rp_shop_id"]           = $this->getShopId();
         $insert["rp_customer_id"]       = Request::input('rp_customer_id');
@@ -74,6 +78,12 @@ class Customer_ReceivePaymentController extends Member
         $insert["rp_payment_method"]    = Request::input('rp_payment_method');
         $insert["rp_memo"]              = Request::input('rp_memo');
         $insert["date_created"]         = Carbon::now();
+
+        if($cm_id != '')
+        {
+            $insert["rp_ref_name"]        = "credit_memo";
+            $insert["rp_ref_id"]          = $cm_id;
+        }
 
         $rcvpayment_id  = Tbl_receive_payment::insertGetId($insert);
 
@@ -120,9 +130,18 @@ class Customer_ReceivePaymentController extends Member
         $json["message"]        = "Successfully received payment";
         $json["redirect"]       = "/member/customer/receive_payment";
 
-        if($button_action == "save-and-edit")
+
+        if($cm_id == "")
         {
-            $json["redirect"]    = "/member/customer/receive_payment?id=".$rcvpayment_id;
+            if($button_action == "save-and-edit")
+            {
+                $json["redirect"]    = "/member/customer/receive_payment?id=".$rcvpayment_id;
+            }            
+        }
+        else
+        {
+            ReceivePayment::updateCM($cm_id,$rcvpayment_id);
+            $json["redirect"]    = "/member/customer/credit_memo/list";
         }
 
         return json_encode($json);

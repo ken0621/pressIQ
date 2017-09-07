@@ -16,6 +16,7 @@ use App\Globals\Warehouse;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;  
 use App\Globals\AuditTrail;   
+use App\Globals\Tablet_global;
 use DB;
 use Session;
 use Carbon\Carbon;
@@ -34,11 +35,16 @@ class CreditMemo
 	}
     public static function getShopId()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
-	public static function postCM($customer_info, $item_info, $inv_id = 0)
+	public static function postCM($customer_info, $item_info, $inv_id = 0,$for_tablet = false)
 	{
-		$insert_cm["cm_shop_id"] = CreditMemo::getShopId();
+		$shop_id = CreditMemo::getShopId();
+        if($for_tablet == true)
+        {
+            $shop_id = Tablet_global::getShopId();
+        }
+		$insert_cm["cm_shop_id"] = $shop_id;
 
 		$insert_cm["cm_customer_id"] = $customer_info["cm_customer_id"];
 		$insert_cm["cm_customer_email"] = $customer_info["cm_customer_email"];
@@ -46,6 +52,10 @@ class CreditMemo
 		$insert_cm["cm_message"] = $customer_info["cm_message"];
 		$insert_cm["cm_memo"] = $customer_info["cm_memo"];
 		$insert_cm["cm_amount"] = $customer_info["cm_amount"];
+		$insert_cm["cm_type"] = isset($customer_info["cm_type"]) ? $customer_info["cm_type"] : 0;
+        $insert_cm["cm_used_ref_name"] = isset($customer_info['cm_used_ref_name']) ? $customer_info['cm_used_ref_name'] : "" ;
+        $insert_cm["cm_used_ref_id"] = isset($customer_info['cm_used_ref_id']) ? $customer_info['cm_used_ref_id'] : 0 ;
+
 		$insert_cm["date_created"] = Carbon::now();
 
 		$cm_id = Tbl_credit_memo::insertGetId($insert_cm);
@@ -77,9 +87,6 @@ class CreditMemo
 	public static function updateCM($cm_id, $customer_info, $item_info)
 	{
         $old_data = AuditTrail::get_table_data("tbl_credit_memo","cm_id",$cm_id);
-
-		$update_cm["cm_shop_id"] = CreditMemo::getShopId();
-
 
 		$update_cm["cm_customer_id"] = $customer_info["cm_customer_id"];
 		$update_cm["cm_customer_email"] = $customer_info["cm_customer_email"];

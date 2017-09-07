@@ -33,7 +33,7 @@
             <div>
                 <i class="fa fa-tags"></i>
                 <h1>
-                    <span class="page-title">Vendor &raquo; Check</span>
+                    <span class="page-title">Write Checks</span>
                     <small>
                     <!--Add a product on your website-->
                     </small>
@@ -69,12 +69,14 @@
                                 <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
                                     <div class="row clearfix">
                                         <div class="col-sm-3">
-                                            <select class="form-control droplist-vendor input-sm pull-left" name="wc_vendor_id">
-                                                 @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($wc->wc_vendor_id) ? $wc->wc_vendor_id : (isset($vendor_id) ? $vendor_id : '')]);
+                                            <select class="form-control drop-down-name input-sm pull-left" name="wc_reference_id">
+                                                @include("member.load_ajax_data.load_name", ['name_id'=> isset($wc->wc_reference_id) ? $wc->wc_reference_id : '', 'ref_name'=>isset($wc->wc_reference_name) ? $wc->wc_reference_name : ''])
+                                                <option class="hidden" value="" />
                                             </select>
+                                            <input type="hidden" name="wc_reference_name" class="wc-ref-name" value="{{$wc->wc_reference_name or ''}}">
                                         </div>
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control input-sm customer-email" name="wc_vendor_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$wc->wc_vendor_email or ''}}"/>
+                                            <input type="text" class="form-control input-sm customer-email" name="wc_customer_vendor_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$wc->wc_customer_vendor_email or ''}}"/>
                                         </div>
                                     </div>
                                 </div>

@@ -30,7 +30,7 @@
 					<!-- NEWS PER CONTAINER -->
 					@if(count(get_front_news($shop_id)) > 0)
 						@foreach(limit_foreach(get_front_news($shop_id), 6) as $news)
-							<a href="/news?id={{ $news->post_id }}">
+							<a class="{{ $news->post_id == $main_news->post_id ? 'hide' : '' }}" href="/news?id={{ $news->post_id }}">
 								<div class="latest-news-per-container row-no-padding clearfix">
 									<div class="col-md-4">
 										<div class="news-img"><img class="4-3-ratio" src="{{ $news->post_image }}"></div>

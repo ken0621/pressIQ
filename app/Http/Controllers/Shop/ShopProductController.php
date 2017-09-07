@@ -10,6 +10,8 @@ use App\Globals\Category;
 use App\Globals\Ecom_Product;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use App\Globals\Ec_brand;
+use DB;
 
 class ShopProductController extends Shop
 {
@@ -31,8 +33,9 @@ class ShopProductController extends Shop
         }
         elseif($brand)
         {
-            $data["get_product"] = Ecom_product::getProductByCategoryName($brand, $this->shop_info->shop_id);
-            $data["breadcrumbs"][0]["type_name"] = $brand;
+            $data["get_product"] = Ec_brand::getProductBrands($brand, $this->shop_info->shop_id);
+            $manufacturer = DB::table("tbl_manufacturer")->where("manufacturer_id", $brand)->first();
+            $data["breadcrumbs"][0]["type_name"] = $manufacturer->manufacturer_name;
         }
         else
         {
@@ -78,6 +81,16 @@ class ShopProductController extends Shop
         $get_product = $this->get_product($type, $brand, $search);
         $data["breadcrumbs"] = $get_product["breadcrumbs"];
         $product             = $get_product["get_product"];
+        if($brand)
+        {
+            foreach ($product as $key_brand => $value_brand) 
+            {
+                if(count($value_brand["variant"]) <= 0)
+                {
+                    unset($product[$key_brand]);
+                }
+            }
+        }
         // Count total product
         $data["total_product"] = count($product);
         // Filter Price
@@ -218,9 +231,34 @@ class ShopProductController extends Shop
         }
         // Pagination
         $perPage = 12;
-        $data["current_count"] = count($product);
+
+        if($this->shop_theme == "intogadgets")
+        {
+            $perPage = 20;
+        }
+        elseif($this->shop_theme == "3xcell" || $this->shop_theme == "additions")
+        {
+            if ($type) 
+            {
+                $name_category = DB::table("tbl_category")->where("type_id", $type)->first();
+                if ($name_category) 
+                {
+                    $data["category_name"] = $name_category->type_name;
+                }
+                else
+                {
+                    $data["category_name"] = "All";
+                }
+            }
+            else
+            {
+                $data["category_name"] = "All";
+            }
+        }
+
         $data["_product"] = self::paginate($product, $perPage);
-        
+        $data["current_count"] = count($data["_product"]);
+
         return view("product", $data);
     }
     public function paginate($items,$perPage)

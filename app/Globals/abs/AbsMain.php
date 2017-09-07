@@ -63,7 +63,6 @@ class AbsMain
         try 
         {
             $uri = $base_uri . '/api/wallet/' . $client_account_id ;
-            // dd($uri);
             $request = new Request('GET', $uri);
             $response = $client->send($request, $headers);
             $body = $response->getBody();
@@ -76,7 +75,6 @@ class AbsMain
             {
                 $data_a['result'] = $data_decoded->result;
             }
-            
         }
         catch (\Exception $e) 
         {

@@ -36,6 +36,11 @@ class Tbl_ec_product extends Model
     {
     	$query->join("tbl_item","item_id","=","evariant_item_id");
     }
+    /* DEPENDENT on scopeItem */
+    public function scopeManufacturer($query)
+    {
+        $query->join("tbl_manufacturer","manufacturer_id", "=","item_manufacturer_id");
+    }
 
     /* Returns Group By evariant_id */
     public function scopeItemVariant($query)
@@ -70,8 +75,14 @@ class Tbl_ec_product extends Model
 
     public function scopePrice($query)
     {
-        $query->selectRaw("tbl_ec_product.*, min(evariant_price) as min_price, max(evariant_price) as max_price")
-              ->join("tbl_ec_variant","evariant_prod_id","=","eprod_id")
+        $query->selectRaw("tbl_ec_product.*, evariant_description as variant_desc, min(evariant_price) as min_price, max(evariant_price) as max_price")
+              ->join("tbl_ec_variant as evar","evar.evariant_prod_id","=","eprod_id")
+              ->groupBy("eprod_id");
+    }
+
+    public function scopePricev2($query)
+    {
+        $query->selectRaw("tbl_ec_product.*, evariant_description as variant_desc, min(evariant_price) as min_price, max(evariant_price) as max_price")
               ->groupBy("eprod_id");
     }
 
@@ -79,4 +90,5 @@ class Tbl_ec_product extends Model
     {
         return $query->join("tbl_category","type_id","=","eprod_category_id")->whereIn("tbl_category.archived", $archived);
     }
+
 }

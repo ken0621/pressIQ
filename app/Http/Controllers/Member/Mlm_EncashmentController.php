@@ -13,6 +13,7 @@ use Crypt;
 use PDF;
 use App;
 use DB;
+use App\Models\Currency;
 
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_customer;
@@ -27,6 +28,7 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_mlm_encashment_settings;
 use App\Models\Tbl_mlm_encashment_process;
+use App\Models\Tbl_mlm_encashment_currency;
 
 use App\Globals\Item;
 use App\Globals\Mlm_plan;
@@ -51,8 +53,6 @@ class Mlm_EncashmentController extends Member
 {
     public function index()
     {
-        // return $this->tree_view();
-        
         $access = Utilities::checkAccess('mlm-wallet-encashment', 'access_page');
         if($access == 0)
         {
@@ -131,6 +131,13 @@ class Mlm_EncashmentController extends Member
         
         $data['from'] = $this->get_last_wallet($shop_id);
 
+        $data["vmoney_enable"] = isset(DB::table("tbl_shop")->where("shop_id", $this->user_info->shop_id)->first()->shop_wallet_vmoney) ? DB::table("tbl_shop")->where("shop_id", $this->user_info->shop_id)->first()->shop_wallet_vmoney : 0;
+        $data["vmoney_environment"] = isset(DB::table("tbl_settings")->where("settings_key", "vmoney_environment")->where("shop_id", $this->user_info->shop_id)->first()->settings_value) ? DB::table("tbl_settings")->where("settings_key", "vmoney_environment")->where("shop_id", $this->user_info->shop_id)->first()->settings_value : 0;
+        $data["vmoney_minimum_encashment"] = isset(DB::table("tbl_settings")->where("settings_key", "vmoney_minimum_encashment")->where("shop_id", $this->user_info->shop_id)->first()->settings_value) ? DB::table("tbl_settings")->where("settings_key", "vmoney_minimum_encashment")->where("shop_id", $this->user_info->shop_id)->first()->settings_value : 0;
+        $data["vmoney_percent_fee"] = isset(DB::table("tbl_settings")->where("settings_key", "vmoney_percent_fee")->where("shop_id", $this->user_info->shop_id)->first()->settings_value) ? DB::table("tbl_settings")->where("settings_key", "vmoney_percent_fee")->where("shop_id", $this->user_info->shop_id)->first()->settings_value : 0;
+        $data["vmoney_fixed_fee"] = isset(DB::table("tbl_settings")->where("settings_key", "vmoney_fixed_fee")->where("shop_id", $this->user_info->shop_id)->first()->settings_value) ? DB::table("tbl_settings")->where("settings_key", "vmoney_fixed_fee")->where("shop_id", $this->user_info->shop_id)->first()->settings_value : 0;
+        $data["shop_id"] = $this->user_info->shop_id;
+        
         return view('member.mlm_encashment.index', $data);
     }
     
@@ -180,8 +187,39 @@ class Mlm_EncashmentController extends Member
 
         $new_data = AuditTrail::get_table_data("tbl_mlm_encashment_settings","enchasment_settings_id",$enchasment_settings_id);
         AuditTrail::record_logs("Edited","mlm_encashment_settings",$enchasment_settings_id,serialize($old_data),serialize($new_data));
+
+        /* V Money Settings */
+        $update_setting["vmoney_environment"] = Request::input("vmoney_environment");
+        $update_setting["vmoney_minimum_encashment"] = Request::input("vmoney_minimum_encashment"); 
+        $update_setting["vmoney_percent_fee"] = Request::input("vmoney_percent_fee");
+        $update_setting["vmoney_fixed_fee"] = Request::input("vmoney_fixed_fee");
+        $vmoney_environment = Request::input("vmoney_enable");
+        $this->vmoney_update($update_setting, $vmoney_environment);
         
         return json_encode($data);
+    }
+    public function vmoney_update($update_setting, $vmoney_environment)
+    {
+        foreach ($update_setting as $key => $value) 
+        {
+            $exist = DB::table("tbl_settings")->where("settings_key", $key)->where("shop_id", $this->user_info->shop_id)->first();
+            if ($exist) 
+            {
+                $set_update["settings_value"] = $value;
+                DB::table("tbl_settings")->where("settings_key", $key)->where("shop_id", $this->user_info->shop_id)->update($set_update);
+            }
+            else
+            {
+                $set_insert["settings_key"] = $key;
+                $set_insert["settings_value"] = $value;
+                $set_insert["settings_setup_done"] = 1;
+                $set_insert["shop_id"] = $this->user_info->shop_id;
+                DB::table("tbl_settings")->insert($set_insert);
+            }
+        }
+
+        $update_shop["shop_wallet_vmoney"] = $vmoney_environment;
+        DB::table("tbl_shop")->where("shop_id", $this->user_info->shop_id)->update($update_shop);
     }
     public function process_all_encashment()
     {
@@ -453,10 +491,67 @@ class Mlm_EncashmentController extends Member
     {
         $data = [];
         $data['country'] = DB::table('currency')->get();
+        $shop_id = $this->user_info->shop_id;
+        $data['currency_set'] = Tbl_mlm_encashment_currency::where('en_cu_shop_id', $shop_id)->get()->keyBy('iso');
         return view('member.mlm_encashment.currency', $data);
     }
     public function set_currency_update()
     {
-        return $_POST;
+        // return $_POST;
+        $shop_id = $this->user_info->shop_id;
+        $iso = Request::input('iso');
+        $en_cu_active = Request::input('en_cu_active');
+        $en_cu_convertion = Request::input('en_cu_convertion');
+
+        $active_iso = [];
+        $inactive_iso = [];
+        foreach($iso as $key => $value)
+        {
+            if(!isset($en_cu_active[$key])){
+                $en_cu_active[$key] = 0;
+                $inactive_iso[$key] = $key;
+            }
+            else
+            {
+                $en_cu_active[$key] = 1;
+                $active_iso[$key] = $key;
+            }
+        }
+
+        $currency = Tbl_mlm_encashment_currency::where('en_cu_shop_id', $shop_id)
+        ->get()->keyBy('iso');
+
+        $currency_plain = Currency::get()->keyBy('iso');
+        foreach($active_iso as $key => $value)
+        {
+            if(!isset($currency[$key]))
+            {
+                $insert[$key]['en_cu_convertion'] = $en_cu_convertion[$key];
+                $insert[$key]['en_cu_active'] = 1;
+                $insert[$key]['iso'] = $key;
+                $insert[$key]['en_cu_shop_id'] = $shop_id;
+                $insert[$key]['en_cu_name'] = $currency_plain[$key]->name;
+            }
+        }
+        if(isset($insert))
+        {
+            Tbl_mlm_encashment_currency::insert($insert);
+        }
+
+        $update['en_cu_active'] = 1;
+        Tbl_mlm_encashment_currency::where('en_cu_shop_id', $shop_id)
+        ->whereIn('iso', $active_iso)
+        ->update($update);
+
+        $update['en_cu_active'] = 0;
+        Tbl_mlm_encashment_currency::where('en_cu_shop_id', $shop_id)
+        ->whereIn('iso', $inactive_iso)
+        ->update($update);
+
+        $status['status'] = 'success';
+        $status['message'] = 'Currency Set';
+
+        return json_encode($status);
+
     }
 }

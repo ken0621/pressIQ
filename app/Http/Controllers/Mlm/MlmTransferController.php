@@ -24,6 +24,7 @@ use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Models\Tbl_mlm_slot_wallet_log_refill_settings;
 use App\Models\Tbl_mlm_encashment_settings;
 use App\Models\Tbl_mlm_encashment_process;
+use App\Models\Tbl_mlm_encashment_currency;
 
 class MlmTransferController extends Mlm
 {
@@ -42,7 +43,7 @@ class MlmTransferController extends Mlm
     }
     public function refill($message = null)
     {
-        if(Self::$slot_id != null)
+        if(Self::$slot_id != null && Self::$shop_info->shop_key == "PhilTECH")
         {
             $data = [];
             if($message != null)
@@ -59,7 +60,7 @@ class MlmTransferController extends Mlm
     }
     public function request_refill()
     {
-        if(Self::$slot_id != null)
+        if(Self::$slot_id != null && Self::$shop_info->shop_key == "PhilTECH")
         {
             $data = [];
             Mlm_pre::pre_req(Self::$shop_id);
@@ -154,7 +155,7 @@ class MlmTransferController extends Mlm
     }
     public function transfer()
     {
-        if(Self::$slot_id != null)
+        if(Self::$slot_id != null && Self::$shop_info->shop_key == "PhilTECH")
         {
             $data = [];
             Mlm_pre::pre_req(Self::$shop_id);
@@ -330,27 +331,18 @@ class MlmTransferController extends Mlm
             $data['unprocessed'] = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)
             ->where('wallet_log_status', 'released')
             ->whereNull('encashment_process')
-            // ->where('wallet_log_amount', '>=',  1)   
             ->get()->toArray();
-            // $per_plan = [];
-            // foreach($data['unprocessed'] as $key => $value)
-            // {
-            //     if(isset($per_plan[$value['wallet_log_plan']]))
-            //     {
-            //         $per_plan[$value['wallet_log_plan']] += $value['wallet_log_amount'];
-            //     }
-            //     else
-            //     {
-            //         $per_plan[$value['wallet_log_plan']] = $value['wallet_log_amount'];
-            //     }
-                
-            // }
-            // dd($per_plan);
+
             $data['bank'] = DB::table('tbl_encashment_bank_deposit')->where('shop_id', Self::$shop_id)->where('encashment_bank_deposit_archive', 0)->get();
             $data['customer_payout'] = DB::table('tbl_customer_payout')->where('customer_id', Self::$customer_id)->first();
             $data['encashment_settings'] = Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->first();
             $data['encashment'] =  view('mlm.profile.encashment', $data);
-            // dd($data['unprocessed']);
+
+            $data['currency_set'] = Tbl_mlm_encashment_currency::where('en_cu_shop_id', $shop_id)
+            // ->join('currency', 'currency.iso', '=', 'tbl_mlm_encashment_currency.iso')
+            ->get()->keyBy('iso');
+
+
             return view('mlm.wallet.encashment', $data);
         }
         else
@@ -487,6 +479,21 @@ class MlmTransferController extends Mlm
                         return json_encode($data);
                     }
                 }
+
+                $currency_set = Request::input('currency_set');
+                $insert['encashment_process_currency'] = 'PHP';
+                $insert['encashment_process_currency_convertion'] = 1; 
+                if($currency_set)
+                {
+                    $currency = Tbl_mlm_encashment_currency::where('en_cu_id', $currency_set)
+                    ->first();
+                    if($currency)
+                    {
+                        $insert['encashment_process_currency'] = $currency->iso;
+                        $insert['encashment_process_currency_convertion'] = $currency->en_cu_convertion;
+                    }
+                }
+
                 $insert['shop_id'] = $shop_id;
                 $insert['enchasment_process_from'] = $date1;
                 $insert['enchasment_process_to'] = $date2;
@@ -574,7 +581,8 @@ class MlmTransferController extends Mlm
             $data['customer_view'] = Mlm_member::get_customer_info_w_slot($data['slot']->customer_id, $slot_id);
         }
         if($pdf == 'true'){
-            $html_a = view('mlm.wallet.breakdown.pdf', $data);
+            $html_a = view('mlm.wallet.breakdown.breakdown', $data);
+            // return $html_a;
             return Pdf_global::show_pdf($html_a);
         }
         else

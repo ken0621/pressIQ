@@ -10,6 +10,7 @@ use App\Models\Tbl_user;
 use App\Models\Tbl_item;
 use App\Models\Tbl_credit_memo;
 use App\Globals\AuditTrail;
+use App\Globals\Tablet_global;
 use App\Globals\CreditMemo;
 use DB;
 use Log;
@@ -75,7 +76,7 @@ class Invoice
     }
     public static function getShopId()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
 
 	/**
@@ -89,7 +90,7 @@ class Invoice
 	 * @param array  $total_info   	        (total_item_price => '', total_addons => [[0]label => '', [0]value => ''], 
 	 *										 total_discount_type => '', total_discount_value => '', total_overall_price => '')
 	 */
-	public static function postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info, $is_sales_receipt = '')
+	public static function postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info, $is_sales_receipt = '', $for_tablet = false)
 	{
         /* SUBTOTAL */
         $subtotal_price = collect($item_info)->sum('amount');
@@ -107,7 +108,12 @@ class Invoice
         /* OVERALL TOTAL */
         $overall_price  = convertToNumber($subtotal_price) - $ewt - $discount + $tax;
 
-        $insert['inv_shop_id']                  = Invoice::getShopId();  
+        $shop_id = Invoice::getShopId();
+        if($for_tablet == true)
+        {
+            $shop_id = Tablet_global::getShopId();
+        }
+        $insert['inv_shop_id']                  = $shop_id;  
 		$insert['inv_customer_id']              = $customer_info['customer_id'];        
         $insert['inv_customer_email']           = $customer_info['customer_email'];
         $insert['new_inv_id']                   = $invoice_info['new_inv_id'];
@@ -129,6 +135,7 @@ class Invoice
         if($is_sales_receipt != '')
         {
             $insert['inv_payment_applied']        = $overall_price;
+            $insert['inv_is_paid']                = 1;
             $insert['is_sales_receipt']           = 1;
             $transaction_type = "sales-receipt";
             $transaction = "sales_receipt";
@@ -150,7 +157,7 @@ class Invoice
         $entry["discount"]          = $discount;
         $entry["ewt"]               = $ewt;
 
-        Invoice::insert_invoice_line($invoice_id, $item_info, $entry);
+        Invoice::insert_invoice_line($invoice_id, $item_info, $entry, $for_tablet);
 
         $inv_data = AuditTrail::get_table_data("tbl_customer_invoice","inv_id",$invoice_id);
         AuditTrail::record_logs("Added",$transaction,$invoice_id,"",serialize($inv_data));
@@ -185,7 +192,7 @@ class Invoice
         return $rcvpayment_id;
     }
 
-    public static function updateInvoice($invoice_id, $customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info, $is_sales_receipt = '')
+    public static function updateInvoice($invoice_id, $customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info, $is_sales_receipt = '', $for_tablet = false)
     {        
         $old = AuditTrail::get_table_data("tbl_customer_invoice","inv_id",$invoice_id);
 
@@ -225,10 +232,9 @@ class Invoice
         if($is_sales_receipt != '')
         {
             $update["inv_payment_applied"] = $overall_price;
-
-            Invoice::update_rcv_payment("invoice",$invoice_id,$overall_price);
             $transaction_type = "sales-receipt";
             $transaction = "sales_receipt";
+            Invoice::updateIsPaid($invoice_id);
         }
         else
         {
@@ -253,7 +259,7 @@ class Invoice
         $entry["ewt"]               = $ewt;
 
         Tbl_customer_invoice_line::where("invline_inv_id", $invoice_id)->delete();
-        Invoice::insert_invoice_line($invoice_id, $item_info, $entry);
+        Invoice::insert_invoice_line($invoice_id, $item_info, $entry, $for_tablet);
 
         return $invoice_id;
     }
@@ -273,7 +279,7 @@ class Invoice
         }
 
     }
-    public static function insert_invoice_line($invoice_id, $item_info, $entry)
+    public static function insert_invoice_line($invoice_id, $item_info, $entry, $for_tablet = false)
     {    
         $total_discount = 0;
         foreach($item_info as $key => $item_line)
@@ -307,7 +313,7 @@ class Invoice
                 $insert_line['invline_ref_id']          = $item_line['ref_id'];
                 $insert_line['invline_amount']          = $amount;
                 $insert_line['date_created']            = Carbon::now();
-
+                
                 Tbl_customer_invoice_line::insert($insert_line);
 
                 $item_type = Item::get_item_type($item_line['item_id']);
@@ -344,14 +350,19 @@ class Invoice
         }
 
         // $entry['discount'] += $total_discount;
-        $inv_journal = Accounting::postJournalEntry($entry, $entry_data);
+        $inv_journal = Accounting::postJournalEntry($entry, $entry_data,'',$for_tablet);
 
         return $insert_line;
     }
 
-    public static function getAllInvoiceByCustomer($customer_id)
+    public static function getAllInvoiceByCustomer($customer_id, $for_tablet = false)
     {
-        $data = Tbl_customer_invoice::appliedPayment(Invoice::getShopId())->byCustomer(Invoice::getShopId(), $customer_id)->where("inv_is_paid", 0)->where("is_sales_receipt",0)->get()->toArray();
+        $shop_id = Invoice::getShopId();
+        if($for_tablet == true)
+        {
+            $shop_id = Tablet_global::getShopId();
+        }
+        $data = Tbl_customer_invoice::appliedPayment($shop_id)->byCustomer($shop_id, $customer_id)->where("inv_is_paid", 0)->where("is_sales_receipt",0)->get()->toArray();
         foreach ($data as $key => $value) 
         {
             if($value['credit_memo_id'] != 0)
@@ -362,12 +373,17 @@ class Invoice
         return $data;
     }
 
-    public static function getAllInvoiceByCustomerWithRcvPymnt($customer_id, $rcvpayment_id)
+    public static function getAllInvoiceByCustomerWithRcvPymnt($customer_id, $rcvpayment_id, $for_tablet = false)
     {
+        $shop_id = Invoice::getShopId();
+        if($for_tablet == true)
+        {
+            $shop_id = Tablet_global::getShopId();
+        }
         $inv_in_rcvpayment = Tbl_receive_payment_line::select("rpline_reference_id")->where("rpline_reference_name", 'invoice')
                             ->where("rpline_rp_id", $rcvpayment_id)->get()->toArray();
 
-        $data = Tbl_customer_invoice::c_m()->appliedPayment(Invoice::getShopId())->byCustomer(Invoice::getShopId(), $customer_id)
+        $data = Tbl_customer_invoice::c_m()->appliedPayment($shop_id)->byCustomer($shop_id, $customer_id)
                 ->rcvPayment($rcvpayment_id, $inv_in_rcvpayment)->orderBy("inv_id")->where("is_sales_receipt",0)->get()->toArray();
 
         foreach ($data as $key => $value) 
@@ -380,9 +396,14 @@ class Invoice
         return $data;
     }
 
-    public static function updateAmountApplied($inv_id)
+    public static function updateAmountApplied($inv_id, $for_tablet = false)
     {
-        $payment_applied = Tbl_customer_invoice::appliedPayment(Invoice::getShopId())->where("inv_id",$inv_id)->pluck("amount_applied");
+        $shop_id = Invoice::getShopId();
+        if($for_tablet == true)
+        {
+            $shop_id = Tablet_global::getShopId();
+        }
+        $payment_applied = Tbl_customer_invoice::appliedPayment($shop_id)->where("inv_id",$inv_id)->value("amount_applied");
         $data["inv_payment_applied"] = $payment_applied;
 
         Tbl_customer_invoice::where("inv_id", $inv_id)->update($data);
@@ -392,13 +413,49 @@ class Invoice
 
     public static function updateIsPaid($inv_id)
     {
-        $payment_applied   = Tbl_customer_invoice::where("inv_id", $inv_id)->pluck("inv_payment_applied"); 
-        $overall_price     = Tbl_customer_invoice::where("inv_id", $inv_id)->pluck("inv_overall_price"); 
+        $payment_applied   = Tbl_customer_invoice::where("inv_id", $inv_id)->value("inv_payment_applied"); 
+        $overall_price     = Tbl_customer_invoice::where("inv_id", $inv_id)->value("inv_overall_price"); 
 
         if($payment_applied == $overall_price)  $data["inv_is_paid"] = 1;
         else                                    $data["inv_is_paid"] = 0;
 
         Tbl_customer_invoice::where("inv_id", $inv_id)->update($data);
+    }
+
+
+    /**
+     * Check number of invoices tha is open, overdue and paid
+     *
+     * @param   string      $period     period of the report
+     * @return  array[3]    open | overdue | paid   
+     */
+    public static function invoiceStatus($from, $to)
+    {
+        $now    = datepicker_input("today");
+
+        $data["open"]       = Tbl_customer_invoice::where("inv_shop_id", Invoice::getShopId())
+                            ->where("is_sales_receipt", 0)
+                            ->whereRaw("DATE(inv_date) >= '$from'")
+                            ->whereRaw("DATE(inv_date) <= '$to'")
+                            ->whereRaw("inv_overall_price <> inv_payment_applied")
+                            ->get();
+
+        $data["overdue"]    = Tbl_customer_invoice::where("inv_shop_id", Invoice::getShopId())
+                            ->where("is_sales_receipt", 0)
+                            ->whereRaw("DATE(inv_date) >= '$from'")
+                            ->whereRaw("DATE(inv_date) <= '$to'")
+                            ->whereRaw("DATE(inv_due_date) <= '$now'")
+                            ->get();
+
+        $data["paid"]       = Tbl_customer_invoice::where("inv_shop_id", Invoice::getShopId())
+                            ->where("is_sales_receipt", 0)
+                            ->whereRaw("DATE(inv_date) >= '$from'")
+                            ->whereRaw("DATE(inv_date) <= '$to'")
+                            ->whereRaw("inv_overall_price = inv_payment_applied")
+                            ->get();
+
+
+        return $data;
     }
   
 }

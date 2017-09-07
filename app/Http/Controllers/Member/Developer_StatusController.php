@@ -76,6 +76,11 @@ class Developer_StatusController extends Member
 			DB::table('tbl_item_code')->where('shop_id', $shop_id)->delete();
 			DB::table('tbl_item_code_item')->whereIn('item_code_invoice_id', $tbl_membership_code_invoice_filtered)->delete();
 			DB::table('tbl_item_code_invoice')->where('shop_id', $shop_id)->delete();
+
+			DB::table('tbl_mlm_triangle_repurchase_slot')->whereIn('repurchase_slot_slot_id', $slots_where_in)
+			->join('tbl_mlm_triangle_repurchase_tree', 'tbl_mlm_triangle_repurchase_tree.tree_repurchase_slot_child', '=', 'tbl_mlm_triangle_repurchase_slot.repurchase_slot_id')
+			->truncate();
+			DB::statement('SET FOREIGN_KEY_CHECKS=0');
 		}
 		else
 		{
@@ -225,5 +230,19 @@ class Developer_StatusController extends Member
 			
 		}
 		dd($invoice);
+	}
+	public function recompute_membership_matching()
+	{
+		$shop_id = $this->user_info->shop_id;
+
+		$platinum = Tbl_mlm_slot::where('slot_membership', 4)->where('tbl_mlm_slot.shop_id', $shop_id)
+		->where('slot_matched_membership', 0)
+		->membership()->membership_points()->customer()->get();
+
+		foreach ($platinum as $key => $value) {
+			Mlm_complan_manager::membership_matching($value);
+		}
+
+		dd($platinum);
 	}
 }

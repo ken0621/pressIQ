@@ -399,6 +399,24 @@ function write_check()
 
 			}
 		});
+		$('.drop-down-name').globalDropList(
+		{ 
+			width : "100%",
+			hasPopup : "false",
+		    placeholder : 'Customer or Vendor',
+			onChangeValue: function()
+			{
+				$(".customer-email").val($(this).find("option:selected").attr("email"));
+				$(".wc-ref-name").val($(this).find("option:selected").attr("reference"));
+				if($(this).find("option:selected").attr("reference") == "vendor")
+				{
+					load_purchase_order_vendor($(this).find("option:selected").attr("value"));
+				}
+			}
+		});
+
+
+		
 		$(".drop-down-customer").globalDropList(
 		{
 		    link 		: '/member/customer/modalcreatecustomer',

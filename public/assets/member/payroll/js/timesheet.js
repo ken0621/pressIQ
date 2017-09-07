@@ -3,6 +3,7 @@ var timesheet_request = null;
 var adjust_form_request = null;
 var new_sub_ctr = 1000;
 
+
 function loading_done(url)
 {
 	/* ADD TIME ENTRY */
@@ -10,7 +11,9 @@ function loading_done(url)
 	{
 		$min = $(this).attr("time_min");
 		$max = $(this).attr("time_max");
-		$(this).timeEntry({ampmPrefix: ' ',minTime: $min, maxTime: $max});
+		// $(this).timeEntry({ampmPrefix: ' ',minTime: $min, maxTime: $max});
+		$(this).timeEntry({ampmPrefix: ' ',defaultTime: new Date(0, 0, 0, 0, 0, 0)});
+		
 		timesheet.external_compute_overtime_form();
 		
 	});
@@ -53,7 +56,6 @@ function timesheet()
 			action_load_link_to_modal("/member/payroll/employee_timesheet/adjustment_form?payroll_time_sheet_id=" + tid, "md");
 		});
 
-		
 	}
 
 	function event_mark_ready()
@@ -61,9 +63,10 @@ function timesheet()
 		$('.btn-mark-ready').unbind("click");
 		$('.btn-mark-ready').bind("click", function(){
 			var content = $('.btn-mark-ready').data("content");
-			var spinner = '<i class="fa fa-spinner fa-pulse fa-fw"></i><span class="sr-only">Loading...</span>';
+			
 			var ready 	= '<i class="fa fa-check"></i>&nbsp;Ready';
 			var html 	= $('.btn-mark-ready').html();
+			var spinner = '<i class="fa fa-spinner fa-pulse fa-fw"></i><span class="sr-only">Loading...</span>';
 
 			$('.btn-mark-ready').html(spinner);
 			$.ajax({
@@ -100,11 +103,21 @@ function timesheet()
 		{
 			action_approve_overtime_form();
 		});
+
+		$("body").on("click", ".cancel-approve", function()
+		{
+			action_approve_overtime_form('.cancel-approve-span',0);
+		});
 	}
-	function action_approve_overtime_form()
+	function action_approve_overtime_form(target = '.approve-span', approve = 1)
 	{
-		$(".adjust-form-icon").addClass("hidden");
-		$(".adjust-form-loader").removeClass("hidden");
+		// $(".adjust-form-icon").addClass("hidden");
+		// $(".adjust-form-loader").removeClass("hidden");
+
+		var spinner 	= '<i class="fa fa-spinner fa-pulse fa-fw"></i><span class="sr-only">Loading...</span>';
+		var html = $(target).html();
+
+		$(target).html(spinner);
 
 		date = $(".over-time-form").find(".field-hidden-date").val();
 		employee_id = $(".over-time-form").find(".field-hidden-employee-id").val();
@@ -114,7 +127,7 @@ function timesheet()
 		{
 			url:"/member/payroll/employee_timesheet/adjustment_form_approve",
 			dataType:"json",
-			data:{"date":date, "employee_id":employee_id,"_token":token},
+			data:{"date":date, "employee_id":employee_id,"_token":token, 'approve':approve},
 			type:"post",
 			success: function(data)
 			{
@@ -122,6 +135,7 @@ function timesheet()
 				$(".adjust-form-loader").addClass("hidden");
 				$("#global_modal").modal("hide");
 				action_compute_work_hours();
+				action_recompute_loading(date);
 			}
 		});
 	}
@@ -230,10 +244,81 @@ function timesheet()
 	{
 		$("body").on("click", ".create-sub-time", function(e)
 		{
-			$date = $(e.currentTarget).closest("tr").attr("date");
-			action_create_sub_time($date);
+			var date = $(e.currentTarget).closest("tr").attr("date");
+			var icon = $(e.currentTarget);
+			var html = icon.html();
+
+			var spinner = '<i class="fa fa-spinner fa-pulse fa-fw"></i><span class="sr-only">Loading...</span>';
+			
+			icon.html(spinner);
+			// action_create_sub_time($date);
+			var employee_id = $("#employee_id").val();
+			$.ajax({
+				url 	: 	'/member/payroll/employee_timesheet/new_time_tr',
+				type 	: 	'POST',
+				data 	: 	{
+					date:date,
+					employee_id:employee_id,
+					_token:$("#_token").val()
+				},
+				success	: 	function(result)
+				{
+					try
+					{
+						result = JSON.parse(result);
+					}
+					catch(err){}
+
+					icon.html(html);
+					$append = $(".sub-time-container").html();
+					$(".time-record[date='" + date + "']:last").after($append);
+			
+					$last_time_out = $(".time-record[date='" + date + "']:last").find(".time-out").val();
+
+					/* UPDATE DATA FOR NEW SUB */
+					$("tbody").find(".time-record.new-sub").attr("date", date);
+					$("tbody").find(".time-record.new-sub").attr("data-id", result.id);
+					$("tbody").find(".time-record.new-sub").attr("id", result.id);
+					// $("tbody").find(".time-record.new-sub").find(".date").val(date);
+					$("tbody").find(".time-record.new-sub").find(".date").val(result.id);
+					$("tbody").find(".time-record.new-sub").find(".time-in").val('');
+					$("tbody").find(".time-record.new-sub").find(".time-out").val('');
+					$arr_count = new_sub_ctr++;
+					$("tbody").find(".time-record.new-sub").find(".date").attr("name", "date[" + date + "][" + $arr_count + "]");
+					$("tbody").find(".time-record.new-sub").find(".time-in").attr("name", "time_in[" + date + "][" + $arr_count + "]");
+					$("tbody").find(".time-record.new-sub").find(".time-out").attr("name", "time_out[" + date + "][" + $arr_count + "]");
+					
+					$("tbody").find(".time-record.new-sub").find(".hidden-time-in").attr("name", "time_in2[" + date + "][" + $arr_count + "]");
+					$("tbody").find(".time-record.new-sub").find(".hidden-time-out").attr("name", "time_out2[" + date + "][" + $arr_count + "]");
+
+					/* for comment/remarks */
+					var remarks = $("tbody").find(".time-record.new-sub").find(".new-comment");
+					var remark_link = remarks.attr('link');
+					remarks.attr('link', remark_link + result.id);
+					remarks.removeClass('new-comment');
+
+					/* for company */
+					var company = $("tbody").find(".time-record.new-sub").find(".new-company");
+					var company_link = company.attr('link');
+					company.attr('link', company_link + result.id);
+					company.attr('title', result.company);
+					company.removeClass('new-company');
+
+					/* ADD EVENT TO NEW SUB */
+					event_time_entry();
+
+					/* REMOVE NEW SUB REFERENCE */
+					$("tbody").find(".time-record.new-sub").removeClass("new-sub");
+				},
+				error 	: 	function(err)
+				{
+					icon.html(html);
+				}
+			});
 		});
 	}
+
+	
 	function event_delete_sub_time()
 	{
 		$("body").on("click", ".delete-sub-time", function(e)
@@ -241,73 +326,170 @@ function timesheet()
 			if(confirm("Are you sure you want to delete this time-entry?"))
 			{
 				$date = $(e.currentTarget).closest("tr").attr("date");
-				$(e.currentTarget).closest("tr").remove();
-				action_recompute_loading($date);
-				action_compute_work_hours();
+
+				var spinner = '<i class="fa fa-spinner fa-pulse fa-fw"></i><span class="sr-only">Loading...</span>';
+				var html 	= $(this).html();
+
+				$(this).html(spinner);
+				var id = $(e.currentTarget).closest("tr").attr('data-id');
+
+				$.ajax({
+					url 	: 	'/member/payroll/employee_timesheet/remove_time_record',
+					type 	: 	'POST',
+					data 	: 	{
+						_token:$("#_token").val(),
+						id:id
+					},
+					success : 	function(result)
+					{
+						$(e.currentTarget).closest("tr").remove();
+						action_recompute_loading($date);
+						action_compute_work_hours();
+
+					},
+					error 	: 	function(error)
+					{
+						$(this).html(html);
+						toastr.error('Error, something went wrong.');
+					}
+ 				});
+				
 			}
 		});
 	}
+
+
+
 	function event_change_time_in_out()
 	{
-		$("body").on("change", ".time-in", function(e)
-		{
-			$(e.currentTarget).closest("tr").find(".ot-approved").val("00:00");
+		// $("body").on("change", ".time-in", function(e)
+		// {
+		// 	$(e.currentTarget).closest("tr").find(".ot-approved").val("00:00");
 
-			/* EMPTY BOTH IF ONE IS EMPTY */
-			if($(e.currentTarget).val() == "")
-			{
-				$(e.currentTarget).closest("tr").find(".time-out").val("");
-			}
-			else
-			{
-				if($(e.currentTarget).closest("tr").find(".time-out").val() == "")
-				{
-					$(e.currentTarget).closest("tr").find(".time-out").val(default_time_out);
-				}
-			}
+		// 	var id = $(e.currentTarget).closest("tr").attr('data-id');
 
+		// 	/* EMPTY BOTH IF ONE IS EMPTY */
+		// 	if($(e.currentTarget).val() == "")
+		// 	{
+		// 		$(e.currentTarget).closest("tr").find(".time-out").val("");
+		// 	}
+		// 	else
+		// 	{
+		// 		if($(e.currentTarget).closest("tr").find(".time-out").val() == "")
+		// 		{
+		// 			$(e.currentTarget).closest("tr").find(".time-out").val(default_time_out);
+		// 		}
+		// 	}
 
-
-			$date = $(e.currentTarget).closest("tr").attr("date");
-			action_recompute_loading($date);
-			action_compute_work_hours();
-		});
-
-		$("body").on("change", ".time-out", function(e)
-		{
-			$(e.currentTarget).closest("tr").find(".ot-approved").val("00:00");
-
-			/* EMPTY BOTH IF ONE IS EMPTY */
-			if($(e.currentTarget).val() == "")
-			{
-				$(e.currentTarget).closest("tr").find(".time-in").val("");
-			}
-			else
-			{
-				if($(e.currentTarget).closest("tr").find(".time-in").val() == "")
-				{
-					$(e.currentTarget).closest("tr").find(".time-in").val(default_time_in);
-				}
-			}
+		// 	var time_in = $(this).val();
+		// 	var time_out = $(e.currentTarget).closest("tr").find(".time-out").val();
 
 
-			$date = $(e.currentTarget).closest("tr").attr("date");
-			action_recompute_loading($date);
-			action_compute_work_hours();
-		});
 
-		$("body").on("change", ".break-time", function(e)
-		{
-			$date = $(e.currentTarget).closest("tr").attr("date");
-			action_recompute_loading($date);
-			action_compute_work_hours();
-		});
+		// 	$date = $(e.currentTarget).closest("tr").attr("date");
+		// 	// action_recompute_loading($date);
+		// 	// action_compute_work_hours();
+
+		// 	save_time_record();
+		// });
+
+		// $("body").on("change", ".time-out", function(e)
+		// {
+		// 	$(e.currentTarget).closest("tr").find(".ot-approved").val("00:00");
+
+		// 	var id = $(e.currentTarget).closest("tr").attr('data-id');
+
+		// 	/* EMPTY BOTH IF ONE IS EMPTY */
+		// 	if($(e.currentTarget).val() == "")
+		// 	{
+		// 		$(e.currentTarget).closest("tr").find(".time-in").val("");
+		// 	}
+		// 	else
+		// 	{
+		// 		if($(e.currentTarget).closest("tr").find(".time-in").val() == "")
+		// 		{
+		// 			$(e.currentTarget).closest("tr").find(".time-in").val(default_time_in);
+		// 		}
+		// 	}
+
+
+		// 	$date = $(e.currentTarget).closest("tr").attr("date");
+		// 	action_recompute_loading($date);
+		// 	action_compute_work_hours();
+		// });
+
+		// $("body").on("change", ".break-time", function(e)
+		// {
+		// 	$date = $(e.currentTarget).closest("tr").attr("date");
+		// 	action_recompute_loading($date);
+		// 	action_compute_work_hours();
+		// });
 
 		$("body").on("change", ".ot-approved", function(e)
 		{
 			action_compute_work_hours();
 		});
+
+		$("body").on('change', '.time-entry-record', function(e)
+		{
+			var tr 			= $(this).parents("tr");
+			var time_in 	= tr.find('.time-in').val();
+			var time_out 	= tr.find('.time-out').val();
+
+			try
+			{
+				tr.find('.hidden-time-in').val(time_in);
+				tr.find('.hidden-time-out').val(time_out);
+			}
+			catch(err){}
+			
+
+			var break_	 	= tr.find('.break-time').val();
+			var time_id 			= tr.attr('data-id');
+			var employee_id = $("#employee_id").val();
+			var date 		= tr.attr('date');
+
+			var check 		= tr.find('.table-check');
+			var loader 		= tr.find('.table-loader');
+
+			check.addClass('hidden');
+			loader.removeClass('hidden');
+
+			if(break_ == undefined)
+			{
+				break_ = null;
+			}
+
+			$.ajax({
+				url 	: 	'/member/payroll/employee_timesheet/save_time_record',
+				type 	: 	'POST',
+				data 	: 	{
+					time_in:time_in,
+					time_out:time_out,
+					break_:break_,
+					time_id:time_id,
+					date:date,
+					employee_id:employee_id,
+					_token:$('#_token').val()
+				},
+				success : 	function(result)
+				{
+					check.removeClass('hidden');
+					loader.addClass('hidden');
+					action_compute_work_hours();
+					action_recompute_loading(date);
+				},
+				error 	: 	function(error)
+				{
+					toastr.error('Error, please try again.');
+					check.removeClass('hidden');
+					loader.addClass('hidden');
+				}
+			});
+
+		});
 	}
+
 	function event_focus_edit()
 	{
 		$("body").on("focusin", ".text-table", function(e)
@@ -350,27 +532,51 @@ function timesheet()
 		$(".time-record[date='" + date + "']").find(".approved-in").text("__:__ __").css("color", "#000");
 		$(".time-record[date='" + date + "']").find(".approved-out").text("__:__ __").css("color", "#000");
 	}
+
 	function action_create_sub_time(date, $time_in = "", $time_out = "")
 	{
-		$append = $(".sub-time-container").html();
-		$(".time-record[date='" + date + "']:last").after($append);
+
+		var employee_id = $("#employee_id").val();
+		$.ajax({
+			url 	: 	'/member/payroll/employee_timesheet/save_time_record',
+			type 	: 	'POST',
+			data 	: 	{
+				date:date,
+				employee_id:employee_id,
+				_token:$("#_token").val()
+			},
+			success	: 	function(result)
+			{
+
+				$append = $(".sub-time-container").html();
+				$(".time-record[date='" + date + "']:last").after($append);
 		
-		$last_time_out = $(".time-record[date='" + date + "']:last").find(".time-out").val();
+				$last_time_out = $(".time-record[date='" + date + "']:last").find(".time-out").val();
 
-		/* UPDATE DATA FOR NEW SUB */
-		$("tbody").find(".time-record.new-sub").attr("date", date);
-		$("tbody").find(".time-record.new-sub").find(".date").val(date);
-		$("tbody").find(".time-record.new-sub").find(".time-in").val($time_in);
-		$("tbody").find(".time-record.new-sub").find(".time-out").val($time_out);
-		$arr_count = new_sub_ctr++;
-		$("tbody").find(".time-record.new-sub").find(".date").attr("name", "date[" + date + "][" + $arr_count + "]");
-		$("tbody").find(".time-record.new-sub").find(".time-in").attr("name", "time_in[" + date + "][" + $arr_count + "]");
-		$("tbody").find(".time-record.new-sub").find(".time-out").attr("name", "time_out[" + date + "][" + $arr_count + "]");
-		/* ADD EVENT TO NEW SUB */
-		event_time_entry();
+				/* UPDATE DATA FOR NEW SUB */
+				$("tbody").find(".time-record.new-sub").attr("date", date);
+				$("tbody").find(".time-record.new-sub").attr("data-id", result);
+				// $("tbody").find(".time-record.new-sub").find(".date").val(date);
+				$("tbody").find(".time-record.new-sub").find(".date").val(result);
+				$("tbody").find(".time-record.new-sub").find(".time-in").val($time_in);
+				$("tbody").find(".time-record.new-sub").find(".time-out").val($time_out);
+				$arr_count = new_sub_ctr++;
+				$("tbody").find(".time-record.new-sub").find(".date").attr("name", "date[" + date + "][" + $arr_count + "]");
+				$("tbody").find(".time-record.new-sub").find(".time-in").attr("name", "time_in[" + date + "][" + $arr_count + "]");
+				$("tbody").find(".time-record.new-sub").find(".time-out").attr("name", "time_out[" + date + "][" + $arr_count + "]");
+				/* ADD EVENT TO NEW SUB */
+				event_time_entry();
 
-		/* REMOVE NEW SUB REFERENCE */
-		$("tbody").find(".time-record.new-sub").removeClass("new-sub");
+				/* REMOVE NEW SUB REFERENCE */
+				$("tbody").find(".time-record.new-sub").removeClass("new-sub");
+			},
+			error 	: 	function(err)
+			{
+
+			}
+		});
+
+		
 	}
 
 	function action_compute_work_hours()
@@ -443,8 +649,18 @@ function timesheet()
 		$(".time-record[date='" + val.date + "']").find(".under-time").text(val.approved_timesheet.under_time);
 		$(".time-record[date='" + val.date + "']").each(function(key)
 		{
-			$(this).find(".time-entry.time-in").timeEntry("enable");
-			$(this).find(".time-entry.time-out").timeEntry("enable");
+
+			var attr = $(this).find(".time-entry.time-in").attr('disabled');
+			
+			if (typeof attr !== typeof undefined && attr !== false) {
+			  // Element has this attribute
+			}
+			else
+			{
+				$(this).find(".time-entry.time-in").timeEntry("enable");
+				$(this).find(".time-entry.time-out").timeEntry("enable");
+			}
+			
 			$(this).find(".create-sub-time").show();
 
 			if(val.pending_timesheet.time_record)
@@ -467,6 +683,7 @@ function timesheet()
 					$(this).find(".approved-out").css("color", "red").addClass("load-overtime-form");
 				}
 			}
+
 			else
 			{
 				$(this).find(".time-entry.time-in").val("");
@@ -487,13 +704,13 @@ function timesheet()
 				$(this).find(".table-check").removeClass("fa-unlock-alt").addClass("fa-lock").css("color", "black");
 				$(this).find(".create-sub-time").hide();
 			}
+
 			else
 			{
-				$(this).find(".table-check").removeClass("fa-lock").addClass("fa--unlock-alt").css("color", "gray");
+				$(this).find(".table-check").removeClass("fa-lock").addClass("fa-unlock-alt").css("color", "gray");
 			}
+
 		});
-
-
 
 	}
 	function action_convert_time_str_to_seconds(time_str)
@@ -596,6 +813,20 @@ function timesheet()
 	    return hours + ":" + minutes + ":00";
 	 }
 
+}	
 
 
+function submit_done(data)
+{
+	try
+	{
+		data = JSON.parse(data);
+	}
+	catch(err){}
+	
+	data.element.modal("toggle");
+	if(data.function_name == 'get_company')
+	{	
+		$("#"+data.id).find('.fa-university').attr('title', data.company);
+	}
 }	

@@ -60,26 +60,8 @@ function paginate_ajax()
         {
             if (typeof loading_done == 'function')
             {
-                loading_done_paginate();
+                
             }
         })
-
-        // $.ajax(
-        // {
-        //     url : url
-        // })
-        // .done( function(data)
-        // {
-        //     load_data.hide().html(data).fadeIn();
-            
-        //     if (typeof loading_done == 'function')
-        //     {
-        //         loading_done_paginate();
-        //     }
-        // })
-        // .fail( function() 
-        // {
-        //     alert('Data could not be loaded.');
-        // });
     }
 }

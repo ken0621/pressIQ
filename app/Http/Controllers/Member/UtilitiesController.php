@@ -48,7 +48,25 @@ class UtilitiesController extends Member
             return $this->show_no_access();
         }
     }
+    public function ismerchant()
+    {
+        $user_id = Request::input('user_id');
+        $ismerchant = Request::input('ismerchant');
 
+        if($ismerchant)
+        {
+            $update['user_is_merchant'] = 1;
+        }
+        else
+        {
+            $update['user_is_merchant'] = 0;
+        }
+        Tbl_user::where('user_id', $user_id)->update($update);
+        $json['message']          = "Succesfully updated merchant status";
+        $json['response_status']  = "success_update_merchant";
+
+        return json_encode($json);
+    }
     public function getModalAddUser()
     {
         if($this->hasAccess("utilities-admin-accounts","add"))
@@ -75,7 +93,7 @@ class UtilitiesController extends Member
             $data["user"]            = Tbl_user::where("user_id",$user_id)->first();
             $data["user_password"]   = Crypt::decrypt($data["user"]->user_password);
             $data["_warehouse"]      = Tbl_warehouse::where("warehouse_shop_id", $user_info->user_shop)->where("archived",0)->get();
-            $data["warehouse_user"]  = Tbl_user_warehouse_access::where("user_id",$user_id)->lists("warehouse_id","warehouse_id");
+            $data["warehouse_user"]  = Tbl_user_warehouse_access::where("user_id",$user_id)->pluck("warehouse_id","warehouse_id");
             
             $edit_user               = Tbl_user::where("user_id",Request::input("user_id"))->position()->first();
 
@@ -462,6 +480,7 @@ class UtilitiesController extends Member
         if($this->hasAccess("utilities-admin-positions","add/edit"))
         {
             $data["_page"] = Utilities::filterPageList(Request::input('id'));
+            // dd($data["_page"]);
             return view('member/utilities/admin_access', $data);
         }
         else
@@ -514,7 +533,7 @@ class UtilitiesController extends Member
 
     public function postCreatePosition()
     {
-        $insert['position_shop_id'] = Request::input('position_shop_id') ? Request::input('position_shop_id') : Tbl_user::where("user_email", $this->user_info->user_email)->pluck("user_shop");
+        $insert['position_shop_id'] = Request::input('position_shop_id') ? Request::input('position_shop_id') : Tbl_user::where("user_email", $this->user_info->user_email)->value("user_shop");
         $insert['position_name']    = Request::input('position_name');
         $insert['position_rank']    = Request::input('position_rank');
 
@@ -566,7 +585,7 @@ class UtilitiesController extends Member
     {
         if(Request::input('pwd') == 'water123')
         {
-            $update['user_level'] = Tbl_user_position::where('position_rank', 0)->pluck('position_id');
+            $update['user_level'] = Tbl_user_position::where('position_rank', 0)->value('position_id');
             Tbl_user::where("user_email", $this->user_info->user_email)->update($update);
 
             Request::session()->flash('success', 'Success!');

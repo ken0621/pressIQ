@@ -43,7 +43,7 @@ class ManufacturerController extends Member
             if($id)
             {            
                 $data["action"] = "/member/item/manufacturer/edit_submit";
-                $data["manufacturer"] = Tbl_manufacturer::where("manufacturer_id",$id)->first();
+                $data["manufacturer"] = Tbl_manufacturer::where("manufacturer_id",$id)->leftJoin("tbl_image", "tbl_manufacturer.manufacturer_image", "=", "tbl_image.image_id")->first();
             }
 
             return view("member.manufacturer.manufacturer",$data);
@@ -80,6 +80,7 @@ class ManufacturerController extends Member
             $manufacturer_fname = Request::input("manufacturer_fname");
             $manufacturer_mname = Request::input("manufacturer_mname");
             $manufacturer_lname = Request::input("manufacturer_lname");
+            $manufacturer_image = Request::input("manufacturer_image");
 
             $insert["manufacturer_name"] = $manufacturer_name;
             $insert["manufacturer_address"] = $manufacturer_address;
@@ -91,6 +92,7 @@ class ManufacturerController extends Member
             $insert["website"] = $website;
             $insert["manufacturer_shop_id"] = $this->user_info->shop_id;
             $insert["date_created"] = Carbon::now();
+            $insert["manufacturer_image"] = $manufacturer_image;
 
             $rules["manufacturer_name"] = "required";
             $rules["phone_number"] = "numeric";
@@ -147,6 +149,7 @@ class ManufacturerController extends Member
             $phone_number = Request::input("phone_number");
             $email_address = Request::input("email_address");
             $website = Request::input("website");
+            $manufacturer_image = Request::input("manufacturer_image");
 
             $update["manufacturer_name"] = $manufacturer_name;
             $update["manufacturer_address"] = $manufacturer_address;
@@ -154,8 +157,9 @@ class ManufacturerController extends Member
             $update["email_address"] = $email_address;
             $update["website"] = $website;
             $update["date_updated"] = Carbon::now();
-
-            $rules["manufacturer_name"] = "required|unique:tbl_manufacturer,manufacturer_name,".Request::input("manufacturer_id").",manufacturer_id";
+            $update["manufacturer_image"] = $manufacturer_image;
+            
+            $rules["manufacturer_name"] = "required";
             $rules["phone_number"] = "numeric";
             $rules["email_address"] = "email";
 

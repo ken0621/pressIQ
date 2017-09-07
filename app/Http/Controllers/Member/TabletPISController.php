@@ -15,6 +15,8 @@ use App\Globals\Accounting;
 use App\Globals\Pdf_global;
 use App\Globals\Category;
 use App\Globals\CreditMemo;
+use App\Globals\ReceivePayment;
+use App\Globals\Tablet_global;
 
 use App\Models\Tbl_terms;
 use App\Models\Tbl_payment_method;
@@ -33,20 +35,88 @@ use App\Models\Tbl_receive_payment;
 use App\Models\Tbl_receive_payment_line;
 use App\Models\Tbl_unit_measurement_multi;
 use App\Models\Tbl_sir_inventory;
-use Session;
-use Crypt;
-use Redirect;
+use App\Models\Tbl_position;
 use App\Models\Tbl_manual_invoice;
 use App\Models\Tbl_item;
+
+use Session;
+use Crypt;
+use Validator;
+use Redirect;
 use Carbon\Carbon;
 
-class TabletPISController extends Member
+class TabletPISController extends Controller
 {
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
+    public function edit_agent($id)
+    {
+        $data["_position"] = Tbl_position::where("position_code","sales_agent")->where("position_shop_id",Tablet_global::getShopId())->get();
+
+        $data["edit"] = Tbl_employee::where("employee_id",$id)->first();
+        $data["action"] = "/tablet/agent/edit_submit";
+
+        return view('member.employee.employee_edit',$data);
+    }
+    public function edit_customer()
+    {
+        
+    }
+    public function edit_agent_submit()
+    {
+        $data["status"] = null;
+        $data["status_message"] = null;
+
+        $id = Request::input("employee_id");
+
+        $first_name= Request::input("first_name");
+        $last_name = Request::input("last_name");
+        $middle_name = Request::input("middle_name");
+        $position = Request::input("position");
+        $email_address = Request::input("email_address");
+        $password = Request::input("password");
+        $username = Request::input("username");
+
+        $insert["shop_id"] = Tablet_global::getShopId();
+        $insert["first_name"] = $first_name;
+        $insert["last_name"] = $last_name;
+        $insert["middle_name"] = $middle_name;
+        $insert["position_id"] = $position;
+        $insert["email"] = $email_address;
+        $insert["password"] = Crypt::encrypt($password);
+        $insert["username"] = $username;
+        $insert["created_at"] = Carbon::now();
+
+        // dd($insert);
+        $rule["first_name"] = 'required';
+        $rule["last_name"] = 'required';
+        $rule["middle_name"] = 'required';
+        $rule["position_id"] = 'required';
+        $rule["email"] = 'required|email|unique:tbl_employee,email,'.$id.",employee_id";
+        $rule["password"] = 'required';
+        $rule["username"] = 'required|alpha_num|unique:tbl_employee,username,'.$id.",employee_id";
+
+        $validation = Validator::make($insert, $rule);
+
+        if($validation->fails())
+        {
+            $data["status"] = "error";
+            foreach ($validation->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
+            {
+                $data["status_message"] .= $message;
+            }
+        }
+        if($data["status"] == null)
+        {            
+            $data["status"] = "success";
+            Tbl_employee::where("employee_id",$id)->update($insert);
+        }
+
+        return json_encode($data);
+    }
 	public function confirm_submission()
 	{
 		$data["action"] = "close";
@@ -61,7 +131,6 @@ class TabletPISController extends Member
         {
             $data["status"] = Purchasing_inventory_system::close_sir($sir_id);
             Session::forget("sir_id");
-
         }	
         else
         {
@@ -78,6 +147,83 @@ class TabletPISController extends Member
 
         return view("tablet.agent.confirm_sync",$data);
     }
+    public function cm_choose_type()
+    {
+        $data["for_tablet"] = "true";
+        $data["tablet"] = "true";
+        $data["cm_id"] = Request::input("cm_id");
+
+        return view("member.customer.credit_memo.cm_type",$data);
+    }
+     public function update_action()
+    {
+        $cm_id = Request::input("cm_id");
+        $cm_type = Request::input("type");
+
+        $data["cm_data"] = Tbl_credit_memo::where("cm_id",$cm_id)->first();
+        $data["c_id"] = Tbl_credit_memo::where("cm_id",$cm_id)->value("cm_customer_id");
+
+        if($cm_type == "invoice")
+        {
+            $data["_customer"]      = Tbl_customer::where("customer_id",$data["c_id"])->first();
+            $data['_account']       = Accounting::getAllAccount('all','',['Bank']);
+            $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->getShopId())->get();
+            $data['action']         = "/member/customer/receive_payment/add";
+            $data["_invoice"]       = Invoice::getAllInvoiceByCustomer($data["c_id"], true);
+
+            $cm_amount = $data["cm_data"]->cm_amount;
+            $total_inv = 0;
+
+            if(count($data["_invoice"]) > 0)
+            {  
+                $data["_invoice"][0]["amount_applied"] = $cm_amount;
+                $data["_invoice"][0]["rpline_amount"] = $cm_amount;
+            }
+
+            return view("member.receive_payment.modal_receive_payment",$data);
+        }
+        if($cm_type == "invoice_tablet")
+        {
+            $data["_customer"]      = Tbl_customer::where("customer_id",$data["c_id"])->first();
+            $data['_account']       = Accounting::getAllAccount('all','',['Bank']);
+            $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->getShopId())->get();
+            $data['action']         = "/tablet/receive_payment/add_submit";
+            $data["_invoice"]       = Invoice::getAllInvoiceByCustomer($data["c_id"],true);
+
+            $cm_amount = $data["cm_data"]->cm_amount;
+            $total_inv = 0;
+
+            if(count($data["_invoice"]) > 0)
+            {  
+                $data["_invoice"][0]["amount_applied"] = $cm_amount;
+                $data["_invoice"][0]["rpline_amount"] = $cm_amount;
+            }
+            return view("member.receive_payment.modal_receive_payment",$data);
+        }
+        if($cm_type == "others")
+        {
+            $up["cm_type"] = 1;
+            $up["cm_used_ref_name"] = "others";
+
+            Tbl_credit_memo::where("cm_id",$cm_id)->update($up);
+
+            return Redirect::to("/member/customer/credit_memo/list");
+        }
+        if($cm_type == "others_tablet")
+        {
+            $up["cm_type"] = 1;
+            $up["cm_used_ref_name"] = "others";
+
+            Tbl_credit_memo::where("cm_id",$cm_id)->update($up);
+
+            return Redirect::to("/tablet/credit_memo");
+        }
+    }
+    public function getShopId()
+    {
+        $shop_id = collect(Session::get("sales_agent"));
+        return $shop_id['shop_id'];
+    }
 	public function index()
 	{
         if($this->get_user())
@@ -85,7 +231,7 @@ class TabletPISController extends Member
             $data["employee_name"] = $this->get_user()->first_name." ".$this->get_user()->middle_name." ".$this->get_user()->last_name;
             $data["employee_position"] = $this->get_user()->position_name;
             $data["employee_id"] = $this->get_user()->employee_id;
-            $data['_category']  = Category::getAllCategory(["inventory","all"]);
+            $data['_category']  = Category::getAllCategory(["inventory","all"], true);
 
             $sir_id = Request::input("sir_id");
             $data["_sir_item"] = array();
@@ -154,9 +300,9 @@ class TabletPISController extends Member
                         $data["total_invoice_amount"] = currency("Php", $data["total_invoice_amount"]);
                         $data["total_sales_receipt"] = currency("Php", $data["total_sales_receipt"]);
                         $data["total_cm"] = currency("Php", $data["total_cm"]);
-                        $data["total_customer"] = Customer::countAllCustomer();
+                        $data["total_customer"] = Customer::countAllCustomer(true);
 
-                        $data["_customer"] = Customer::getAllCustomer();
+                        $data["_customer"] = Customer::getAllCustomer(true);
 
 
                         return view("tablet.agent.agent_dashboard",$data);
@@ -227,9 +373,9 @@ class TabletPISController extends Member
                         $data["total_invoice_amount"] = currency("Php", $data["total_invoice_amount"]);
                         $data["total_sales_receipt"] = currency("Php", $data["total_sales_receipt"]);
                         $data["total_cm"] = currency("Php", $data["total_cm"]);
-                        $data["total_customer"] = Customer::countAllCustomer();
+                        $data["total_customer"] = Customer::countAllCustomer(true);
 
-                        $data["_customer"] = Customer::getAllCustomer();  
+                        $data["_customer"] = Customer::getAllCustomer(true);  
                         return view("tablet.agent.agent_dashboard",$data);                      
                     }
                     else
@@ -243,7 +389,7 @@ class TabletPISController extends Member
                 }
                 else
                 {
-                    $data["sir"] = Purchasing_inventory_system::tablet_lof_per_sales_agent($this->user_info->shop_id,'array',1,null,$this->get_user()->employee_id);
+                    $data["sir"] = Purchasing_inventory_system::tablet_lof_per_sales_agent($this->getShopId() ,'array',1,null,$this->get_user()->employee_id);
                     if($data['sir'])
                     {
                         Session::put("sir_id",$data["sir"]->sir_id);
@@ -251,7 +397,7 @@ class TabletPISController extends Member
                     }
                     else
                     {
-                        $data["sir"] = Purchasing_inventory_system::tablet_lof_per_sales_agent($this->user_info->shop_id,'array',2,null,$this->get_user()->employee_id);
+                        $data["sir"] = Purchasing_inventory_system::tablet_lof_per_sales_agent($this->getShopId(),'array',2,null,$this->get_user()->employee_id);
                         if($data["sir"])
                         {
                             Session::put("sir_id",$data["sir"]->sir_id);
@@ -271,7 +417,7 @@ class TabletPISController extends Member
             return redirect("/tablet");
         }
 
-	}  
+	}
 	public function selected_sir()
 	{
 		Session::forget("sir_id");
@@ -284,6 +430,8 @@ class TabletPISController extends Member
 	}
     public function credit_memo()
     {
+        $data["pis"] = Purchasing_inventory_system::check(true);
+
         $data["employee_name"] = $this->get_user()->first_name." ".$this->get_user()->middle_name." ".$this->get_user()->last_name;
         $data["employee_position"] = $this->get_user()->position_name;
         $data["employee_id"] = $this->get_user()->employee_id;
@@ -298,20 +446,20 @@ class TabletPISController extends Member
     {
         $data["sir_id"]     = Request::input("sir_id");
         $data["page"]       = "Credit Memo";
-        $data["_customer"]  = Customer::getAllCustomer();
-        $data['_item']      = Item::get_all_category_item();
-        $data['_um']        = UnitMeasurement::load_um_multi();
+        $data["_customer"]  = Customer::getAllCustomer(true);
+        $data['_item']      = Item::get_all_category_item([1,2,3,4],true);
+        $data['_um']        = UnitMeasurement::load_um_multi(true);
         $data["action"]     = "/tablet/credit_memo/add_cm_submit";
 
         $id = Request::input('id');
         if($id)
         {
             $data["cm"]            = Tbl_credit_memo::where("cm_id", $id)->first();
-            $data["_cmline"]       = Tbl_credit_memo_line::um()->where("cmline_cm_id", $id)->get();
+            $data["_cmline"]       = Tbl_credit_memo_line::cm_item()->um()->where("cmline_cm_id", $id)->get();
             $data["action"]        = "/tablet/credit_memo/edit_cm_submit";
         }
 
-        return view("member.customer.credit_memo.credit_memo_add",$data);
+        return view("tablet.agent_transaction.credit_memo.credit_memo_transaction",$data);
     }
     public function add_cm_submit()
     {
@@ -329,19 +477,22 @@ class TabletPISController extends Member
 
         $item_info[] = null;
         $_items = Request::input("cmline_item_id");
-        foreach ($_items as $key => $value) 
-        {     
-            if($value != null)
-            {  
-            $ctr ++;              
-                $item_info[$key]['item_service_date']  = datepicker_input(Request::input('cmline_service_date')[$key]);
-                $item_info[$key]['item_id']            = Request::input('cmline_item_id')[$key];
-                $item_info[$key]['item_description']   = Request::input('cmline_description')[$key];
-                $item_info[$key]['um']                 = Request::input('cmline_um')[$key];
-                $item_info[$key]['quantity']           = str_replace(',', "",Request::input('cmline_qty')[$key]);
-                $item_info[$key]['rate']               = str_replace(',', "", Request::input('cmline_rate')[$key]);
-                $item_info[$key]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$key]);
-            }      
+        if($_items)
+        {
+            foreach ($_items as $key => $value) 
+            {     
+                if($value != null)
+                {  
+                $ctr ++;              
+                    $item_info[$key]['item_service_date']  = "";
+                    $item_info[$key]['item_id']            = Request::input('cmline_item_id')[$key];
+                    $item_info[$key]['item_description']   = Request::input('cmline_description')[$key];
+                    $item_info[$key]['um']                 = Request::input('cmline_um')[$key];
+                    $item_info[$key]['quantity']           = str_replace(',', "",Request::input('cmline_qty')[$key]);
+                    $item_info[$key]['rate']               = str_replace(',', "", Request::input('cmline_rate')[$key]);
+                    $item_info[$key]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$key]);
+                }      
+            }
         }
         if($ctr == 0)
         {
@@ -350,7 +501,7 @@ class TabletPISController extends Member
         }
         if($data["status"] == null)
         {            
-            $cm_id = CreditMemo::postCM($customer_info, $item_info);
+            $cm_id = CreditMemo::postCM($customer_info, $item_info,0, true);
 
             $ins_manual_cm["sir_id"] = Request::input("sir_id");
             $ins_manual_cm["cm_id"] = $cm_id;
@@ -358,7 +509,8 @@ class TabletPISController extends Member
 
             Tbl_manual_credit_memo::insert($ins_manual_cm);
 
-            $data["status"] = "success-credit-memo";
+            $data["status"] = "success-credit-memo-tablet";
+            $data["id"] = $cm_id;
             $data["redirect_to"] = "/tablet/credit_memo/add?id=".$cm_id."&sir_id=".Request::input("sir_id");
         }
 
@@ -383,19 +535,22 @@ class TabletPISController extends Member
 
         $item_info[] = null;
         $_items = Request::input("cmline_item_id");
-        foreach ($_items as $key => $value) 
-        {     
-            if($value != null)
+        if($_items)
+        {
+            foreach ($_items as $key => $value) 
             {     
-                $ctr++;  
-                $item_info[$key]['item_service_date']  = datepicker_input(Request::input('cmline_service_date')[$key]);
-                $item_info[$key]['item_id']            = Request::input('cmline_item_id')[$key];
-                $item_info[$key]['item_description']   = Request::input('cmline_description')[$key];
-                $item_info[$key]['um']                 = Request::input('cmline_um')[$key];
-                $item_info[$key]['quantity']           = str_replace(',', "",Request::input('cmline_qty')[$key]);
-                $item_info[$key]['rate']               = str_replace(',', "", Request::input('cmline_rate')[$key]);
-                $item_info[$key]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$key]);
-            }
+                if($value != null)
+                {     
+                    $ctr++;  
+                    $item_info[$key]['item_service_date']  = "";
+                    $item_info[$key]['item_id']            = Request::input('cmline_item_id')[$key];
+                    $item_info[$key]['item_description']   = Request::input('cmline_description')[$key];
+                    $item_info[$key]['um']                 = Request::input('cmline_um')[$key];
+                    $item_info[$key]['quantity']           = str_replace(',', "",Request::input('cmline_qty')[$key]);
+                    $item_info[$key]['rate']               = str_replace(',', "", Request::input('cmline_rate')[$key]);
+                    $item_info[$key]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$key]);
+                }
+            }            
         }
         if($ctr == 0)
         {
@@ -440,7 +595,7 @@ class TabletPISController extends Member
 
         if(Session::get("sir_id") != null)
         {    
-            $data["_customer"] = Customer::getAllCustomer();
+            $data["_customer"] = Customer::getAllCustomer(true);
         }
         return view("tablet.agent.customer",$data);
     }
@@ -534,7 +689,7 @@ class TabletPISController extends Member
 		}
 		else
 		{
-			return Redirect::to('/tablet');
+			return null;
 		}
 	}
 	public function inventory_sir($sir_id)
@@ -558,22 +713,18 @@ class TabletPISController extends Member
 
 		return json_encode($data);
 	}
-	 public function getShopId()
-    {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
-    }
 	public function tablet_create_invoice()
 	{         
 		$sir_id = Request::input("sir_id");
         $data["c_id"] = Request::input("customer_id");
-        $data["pis"]       = Purchasing_inventory_system::check();
+        $data["pis"]       = Purchasing_inventory_system::check(true);
         
-		$data["_customer"]  = Customer::getAllCustomer();
-        $data['_um']        = UnitMeasurement::load_um_multi();
+		$data["_customer"]  = Customer::getAllCustomer(true);
+        $data['_um']        = UnitMeasurement::load_um_multi(true);
         $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", $this->getShopId())->get();
-		$data['_item']      = Item::get_all_item_sir($sir_id);
-        $data['_cm_item']   = Item::get_returnable_item();
-        $data["new_inv_id"] = Transaction::get_last_number("tbl_customer_invoice","new_inv_id","inv_shop_id"); 
+		$data['_item']      = Item::get_all_item_sir($sir_id, true);
+        $data['_cm_item']   = Item::get_returnable_item(true);
+        $data["new_inv_id"] = Transaction::get_last_number("tbl_customer_invoice","new_inv_id","inv_shop_id", true); 
 		$data["sir_id"] = $sir_id;
 		// dd($data["sir_id"]);
 		$data["action"] = "/tablet/create_invoice/add_submit";
@@ -585,41 +736,68 @@ class TabletPISController extends Member
         {
             $data["inv"]            = Tbl_customer_invoice::appliedPayment($this->getShopId())->where("inv_id", $id)->first();
             
-            $data["_invline"]       = Tbl_customer_invoice_line::um()->where("invline_inv_id", $id)->get();
+            $data["_invline"]       = Tbl_customer_invoice_line::invoice_item()->um()->where("invline_inv_id", $id)->get();
             $data["_cmline"]       = Tbl_customer_invoice::returns_item()->where("inv_id", $id)->get();
             // dd($data["_cmline"]);
 
             $data["sir_id"] = $sir->sir_id;
             $data["action"] = "/tablet/update_invoice/edit_submit";
-            $data['_item'] = Item::get_all_item_sir($sir->sir_id);
+            $data['_item'] = Item::get_all_item_sir($sir->sir_id, true);
         }
 
-		return view('member.customer_invoice.customer_invoice', $data);
+		return view('tablet.agent_transaction.invoice.invoice_transaction', $data);
 	}
+    public function invoice_add_item($id)
+    {
+        $data["item_details"] = Item::get_item_details($id);
+        $data["sir_id"] = Request::input("sir_id");
+        $data['_um']          = UnitMeasurement::load_um_multi(true);
+        $data['action']       = "/tablet/invoice/add_item_submit";
+
+        return view('tablet.agent_transaction.invoice.add_item_modal',$data);
+    }
+    public function credit_memo_add_item($id, $is_return = false)
+    {
+        $data["item_details"] = Item::get_item_details($id);
+        $data["sir_id"] = Request::input("sir_id");
+        $data['_um']          = UnitMeasurement::load_um_multi(true);
+        $data['action']       = "/tablet/invoice/add_item_submit";
+        $data["is_return"] = $is_return;
+
+        return view('tablet.agent_transaction.credit_memo.add_item_modal_cm',$data);        
+    }
 	public function tablet_receive_payment()
 	{
 		$data["c_id"] = Request::input("customer_id");
-	    $data["_customer"]      = Customer::getAllCustomer();
-        $data['_account']       = Accounting::getAllAccount();
+	    $data["_customer"]      = Customer::getAllCustomer(true);
+        $data['_account']       = Accounting::getAllAccount('all',null, null, null, false,true);
         $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", $this->getShopId())->get();
         $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->getShopId())->get();
         $data['action']         = "/tablet/receive_payment/add_submit";
-        $data["_invoice"] = Invoice::getAllInvoiceByCustomer($data["c_id"]);
+        $data["_invoice"] = Invoice::getAllInvoiceByCustomer($data["c_id"], true);
 
         $id = Request::input('id');
         if($id)
         {
             $data["rcvpayment"]         = Tbl_receive_payment::where("rp_id", $id)->first();
             $data["_rcvpayment_line"]   = Tbl_receive_payment_line::where("rpline_rp_id", $id)->get();
-            $data["_invoice"]           = Invoice::getAllInvoiceByCustomerWithRcvPymnt($data["rcvpayment"]->rp_customer_id, $data["rcvpayment"]->rp_id);
+            $data["_invoice"]           = Invoice::getAllInvoiceByCustomerWithRcvPymnt($data["rcvpayment"]->rp_customer_id, $data["rcvpayment"]->rp_id, true);
             // dd($data["_invoice"]);
             $data['action']             = "/tablet/receive_payment/update/".$data["rcvpayment"]->rp_id;
         }
 
-        return view("member.receive_payment.receive_payment", $data);
+        return view("tablet.agent_transaction.receive_payment.receive_payment_transaction", $data);
 	}
+
+    public function load_customer_rp($customer_id)
+    {
+        $data["_invoice"] = Invoice::getAllInvoiceByCustomer($customer_id,true);
+        return view('member.receive_payment.load_receive_payment_items', $data);
+    }
 	public function add_receive_payment()
 	{
+        //for credit memo
+        $cm_id = Request::input("cm_id");
 
 		$insert["rp_shop_id"]           = $this->getShopId();
         $insert["rp_customer_id"]       = Request::input('rp_customer_id');
@@ -629,6 +807,12 @@ class TabletPISController extends Member
         $insert["rp_payment_method"]    = Request::input('rp_payment_method');
         $insert["rp_memo"]              = Request::input('rp_memo');
         $insert["date_created"]         = Carbon::now();
+
+        if($cm_id != '')
+        {
+            $insert["rp_ref_name"]        = "credit_memo";
+            $insert["rp_ref_id"]          = $cm_id;
+        }
 
         $rcvpayment_id  = Tbl_receive_payment::insertGetId($insert);
 
@@ -651,7 +835,7 @@ class TabletPISController extends Member
                 Tbl_receive_payment_line::insert($insert_line);
                 if($insert_line["rpline_reference_name"] == 'invoice')
                 {
-                    Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
+                    Invoice::updateAmountApplied($insert_line["rpline_reference_id"],true);
                 }
             }
         }
@@ -670,9 +854,17 @@ class TabletPISController extends Member
 
         Tbl_manual_receive_payment::insert($ins_manual_rcv_pymnt);
 
-        if($button_action == "save-and-edit")
+        if($cm_id == '')
         {
-            $json["redirect"]    = "/tablet/receive_payment/add?id=".$rcvpayment_id;
+            if($button_action == "save-and-edit")
+            {
+                $json["redirect"]    = "/tablet/receive_payment/add?id=".$rcvpayment_id;
+            }            
+        }
+        else
+        {
+            ReceivePayment::updateCM($cm_id,$rcvpayment_id);
+            $json["redirect"]    = "/tablet/credit_memo";
         }
 
         return json_encode($json);
@@ -726,25 +918,25 @@ class TabletPISController extends Member
     }
 
 	public function create_invoice_submit()
-	{
+	{  
 		$sir_id = Request::input("sir_id");
 		$data["status"] = "";
 		$data["status_message"] = "";
 
 		$customer_info                      = [];
 		$customer_info['customer_id']       = Request::input('inv_customer_id');;
-		$customer_info['customer_email']    = Request::input('inv_customer_email');
+		$customer_info['customer_email']    = Request::input('inv_customer_email') or "test@gmail.com";
 
 		$invoice_info                       = [];
 		$invoice_info['invoice_terms_id']   = Request::input('inv_terms_id');
         $invoice_info['new_inv_id']         = Request::input('new_invoice_id');
 		$invoice_info['invoice_date']       = datepicker_input(Request::input('inv_date'));
 		$invoice_info['invoice_due']        = datepicker_input(Request::input('inv_due_date'));
-		$invoice_info['billing_address']    = Request::input('inv_customer_billing_address');
+		$invoice_info['billing_address']    = Request::input('inv_customer_billing_address') or "billing";
 
 		$invoice_other_info                 = [];
-		$invoice_other_info['invoice_msg']  = Request::input('inv_message');
-		$invoice_other_info['invoice_memo'] = Request::input('inv_memo');
+		$invoice_other_info['invoice_msg']  = Request::input('inv_message') or "test";
+		$invoice_other_info['invoice_memo'] = Request::input('inv_memo') or "test";
 
 		$total_info                         = [];
 		$total_info['total_subtotal_price'] = str_replace(',', "", Request::input('subtotal_price'));
@@ -758,36 +950,39 @@ class TabletPISController extends Member
 		$_itemline                          = Request::input('invline_item_id');
 
 		$return = 0;
-		foreach($_itemline as $key => $item_line)
-		{
-			if($item_line)
-			{
-				$item_info[$key]['item_service_date']  = Request::input('invline_service_date')[$key];
-				$item_info[$key]['item_id']            = Request::input('invline_item_id')[$key];
-				$item_info[$key]['item_description']   = Request::input('invline_description')[$key];
-				$item_info[$key]['um']                 = Request::input('invline_um')[$key];
-				$item_info[$key]['quantity']           = str_replace(',', "",Request::input('invline_qty')[$key]);
-				$item_info[$key]['rate']               = str_replace(',', "", Request::input('invline_rate')[$key]);
-				$item_info[$key]['discount']           = Request::input('invline_discount')[$key];
-				$item_info[$key]['discount_remark']    = Request::input('invline_discount_remark')[$key];
-				$item_info[$key]['taxable']            = Request::input('invline_taxable')[$key];
-				$item_info[$key]['amount']             = str_replace(',', "", Request::input('invline_amount')[$key]);
-                $item_info[$key]['ref_name']           = Request::input('invline_ref_name')[$key];
-                $item_info[$key]['ref_id']             = Request::input('invline_ref_id')[$key];
+        if($_itemline)
+        {
+            foreach($_itemline as $key => $item_line)
+            {
+                if($item_line)
+                {
+                    $item_info[$key]['item_service_date']  = "";
+                    $item_info[$key]['item_id']            = Request::input('invline_item_id')[$key];
+                    $item_info[$key]['item_description']   = Request::input('invline_description')[$key];
+                    $item_info[$key]['um']                 = Request::input('invline_um')[$key];
+                    $item_info[$key]['quantity']           = str_replace(',', "",Request::input('invline_qty')[$key]);
+                    $item_info[$key]['rate']               = str_replace(',', "", Request::input('invline_rate')[$key]);
+                    $item_info[$key]['discount']           = Request::input('invline_discount')[$key];
+                    $item_info[$key]['discount_remark']    = Request::input('invline_discount_remark')[$key];
+                    $item_info[$key]['taxable']            = Request::input('invline_taxable')[$key];
+                    $item_info[$key]['amount']             = str_replace(',', "", Request::input('invline_amount')[$key]);
+                    $item_info[$key]['ref_name']           = "";
+                    $item_info[$key]['ref_id']             = "";
 
-				$return += Purchasing_inventory_system::check_qty_sir($sir_id, Request::input('invline_item_id')[$key],Request::input('invline_um')[$key],Request::input('invline_qty')[$key],0,"tbl_customer_invoice_line");
-				if($return != 0)
-				{
-					$item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->pluck("item_name");
-				}
-			}
-		}
+                    $return += Purchasing_inventory_system::check_qty_sir($sir_id, Request::input('invline_item_id')[$key],Request::input('invline_um')[$key],Request::input('invline_qty')[$key],0,"tbl_customer_invoice_line");
+                    if($return != 0)
+                    {
+                        $item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->value("item_name");
+                    }
+                }
+            }
+        }
 
         //CM returns
         $cm_customer_info[] = null;
         $cm_item_info = null;
         $item_returns = null;    
-        if(Request::input("returns") != null && Purchasing_inventory_system::check() != 0)
+        if(Request::input("returns") != null && Purchasing_inventory_system::check(true) != 0)
         {
             $cm_customer_info["cm_customer_id"] = Request::input('inv_customer_id');
             $cm_customer_info["cm_customer_email"] = Request::input('inv_customer_email');
@@ -845,7 +1040,7 @@ class TabletPISController extends Member
                          $i = null;
                          foreach ($_cm_items as $keyitemline_cm => $valueitemline)
                          {
-                            $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->pluck("item_type_id");
+                            $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->value("item_type_id");
                             if($type == 4)
                             {
                                 if(Request::input("cmline_item_id")[$keyitemline_cm] == $value_items_cm['item_id'])
@@ -867,23 +1062,22 @@ class TabletPISController extends Member
         // END CM/RETURNS
 		if($return == 0)
 		{
-		    $inv = Transaction::check_number_existense("tbl_customer_invoice","new_inv_id","inv_shop_id",Request::input('new_invoice_id'));
+		    $inv = Transaction::check_number_existense("tbl_customer_invoice","new_inv_id","inv_shop_id",Request::input('new_invoice_id'), true);
 
-	        if($inv == 0 || Request::input("keep_val") == "keep")
-	        {
-		   		$invoice_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
-
+	        // if($inv == 0 || Request::input("keep_val") == "keep")
+	        // {
+		   		$invoice_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info,'',true);
 
                 if($cm_customer_info != null && $cm_item_info != null)
                 {
-                    $cm_id = CreditMemo::postCM($cm_customer_info, $cm_item_info, $invoice_id);
+                    $cm_id = CreditMemo::postCM($cm_customer_info, $cm_item_info, $invoice_id, true);
 
                     $ref_name   = "credit_memo";
                     $ref_id     = $cm_id;
                     //arcy refill sir_inventory
                     foreach ($item_returns as $key_returns => $value_returns) 
                     {
-                        $cm_data = Purchasing_inventory_system::insert_sir_inventory($sir_id, $value_returns, $ref_name, $ref_id);                        
+                        $cm_data = Purchasing_inventory_system::insert_sir_inventory($sir_id, $value_returns, $ref_name, $ref_id);                  
                     }
                 }
 
@@ -914,12 +1108,12 @@ class TabletPISController extends Member
 					$data["status"] = "error";
 					$data["status_message"] = "error";
 			   }
-			}
-			else
-			{
-				$data["inv_id"] = Request::input("new_invoice_id");            
-            	$data["status"] = "error-inv-no";
-			}
+			// }
+			// else
+			// {
+			// 	$data["inv_id"] = Request::input("new_invoice_id");            
+   //          	$data["status"] = "error-inv-no";
+			// }
 		}
 		else
 		{
@@ -966,41 +1160,44 @@ class TabletPISController extends Member
         $item_name = '';
         $return = 0;
 
-        foreach($_itemline as $key => $item_line)
-        {
-            if($item_line)
-            {               
-                $item_info[$key]['item_service_date']  = Request::input('invline_service_date')[$key];
-                $item_info[$key]['item_id']            = Request::input('invline_item_id')[$key];
-                $item_info[$key]['item_description']   = Request::input('invline_description')[$key];
-                $item_info[$key]['um']                 = Request::input('invline_um')[$key];
-                $item_info[$key]['quantity']           = str_replace(',', "",Request::input('invline_qty')[$key]);
-                $item_info[$key]['rate']               = str_replace(',', "", Request::input('invline_rate')[$key]);
-                $item_info[$key]['discount']           = Request::input('invline_discount')[$key];
-                $item_info[$key]['discount_remark']    = Request::input('invline_discount_remark')[$key];
-                $item_info[$key]['taxable']            = Request::input('invline_taxable')[$key];
-                $item_info[$key]['amount']             = str_replace(',', "", Request::input('invline_amount')[$key]);
-                $item_info[$key]['ref_name']           = Request::input('invline_ref_name')[$key];
-                $item_info[$key]['ref_id']             = Request::input('invline_ref_id')[$key];
+        if($_itemline)
+        {           
+            foreach($_itemline as $key => $item_line)
+            {
+                if($item_line)
+                {               
+                    $item_info[$key]['item_service_date']  = "";
+                    $item_info[$key]['item_id']            = Request::input('invline_item_id')[$key];
+                    $item_info[$key]['item_description']   = Request::input('invline_description')[$key];
+                    $item_info[$key]['um']                 = Request::input('invline_um')[$key];
+                    $item_info[$key]['quantity']           = str_replace(',', "",Request::input('invline_qty')[$key]);
+                    $item_info[$key]['rate']               = str_replace(',', "", Request::input('invline_rate')[$key]);
+                    $item_info[$key]['discount']           = Request::input('invline_discount')[$key];
+                    $item_info[$key]['discount_remark']    = Request::input('invline_discount_remark')[$key];
+                    $item_info[$key]['taxable']            = Request::input('invline_taxable')[$key];
+                    $item_info[$key]['amount']             = str_replace(',', "", Request::input('invline_amount')[$key]);
+                    $item_info[$key]['ref_name']           = "";
+                    $item_info[$key]['ref_id']             = "";
 
 
-                $return += Purchasing_inventory_system::check_qty_sir($sir_id, Request::input('invline_item_id')[$key],Request::input('invline_um')[$key],Request::input('invline_qty')[$key],$invoice_id,"tbl_customer_invoice_line");
-                if($return != 0)
-                {
-                    $item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->pluck("item_name");
+                    $return += Purchasing_inventory_system::check_qty_sir($sir_id, Request::input('invline_item_id')[$key],Request::input('invline_um')[$key],Request::input('invline_qty')[$key],$invoice_id,"tbl_customer_invoice_line");
+                    if($return != 0)
+                    {
+                        $item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->value("item_name");
+                    }
+
+                    // $um_info = UnitMeasurement::um_info(Request::input("invline_um")[$key]);
+                    // $product_consume[$key]["quantity"] = (isset($um_info->unit_qty) ? $um_info->unit_qty : 1) * $item_info[$key]['quantity'];
+                    // $product_consume[$key]["product_id"] = Request::input('invline_item_id')[$key];
                 }
-
-                // $um_info = UnitMeasurement::um_info(Request::input("invline_um")[$key]);
-                // $product_consume[$key]["quantity"] = (isset($um_info->unit_qty) ? $um_info->unit_qty : 1) * $item_info[$key]['quantity'];
-                // $product_consume[$key]["product_id"] = Request::input('invline_item_id')[$key];
-            }
+            } 
         }
         //CREDIT MEMO / RETURNS
         $cm_customer_info[] = null;
         $item_returns = null; 
         $_cm_items = Request::input("cmline_item_id");
         $cm_item_info = null;
-        if(Request::input("returns") != null && Purchasing_inventory_system::check() != 0)
+        if(Request::input("returns") != null && Purchasing_inventory_system::check(true) != 0)
         {
             $cm_customer_info["cm_customer_id"] = Request::input('inv_customer_id');
             $cm_customer_info["cm_customer_email"] = Request::input('inv_customer_email');
@@ -1057,7 +1254,7 @@ class TabletPISController extends Member
                      $i = null;
                      foreach ($_cm_items as $keyitemline_cm => $valueitemline)
                      {
-                        $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->pluck("item_type_id");
+                        $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->value("item_type_id");
                         if($type == 4)
                         {
                             if(Request::input("cmline_item_id")[$keyitemline_cm] == $value_items_cm['item_id'])
@@ -1078,10 +1275,10 @@ class TabletPISController extends Member
         if($return == 0)
         {
 
-            $inv = Transaction::check_number_existense("tbl_customer_invoice","new_inv_id","inv_shop_id",Request::input('new_invoice_id'));
+            $inv = Transaction::check_number_existense("tbl_customer_invoice","new_inv_id","inv_shop_id",Request::input('new_invoice_id'),true);
 
-            if($inv <= 1 || Request::input("keep_val") == "keep")
-            {
+            // if($inv <= 1 || Request::input("keep_val") == "keep")
+            // {
                 // $inv_item = Tbl_customer_invoice_line::where("invline_inv_id",$invoice_id)->get();
                 // // dd($inv_item);
                 // foreach ($inv_item as $keys => $value) 
@@ -1089,7 +1286,7 @@ class TabletPISController extends Member
                 //     Purchasing_inventory_system::return_qty($sir_id, $value->invline_item_id, $value->invline_um, $value->invline_qty); 
                 // }
 
-                $inv_id = Invoice::updateInvoice($invoice_id, $customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
+                $inv_id = Invoice::updateInvoice($invoice_id, $customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info,true);
 
                 Tbl_sir_inventory::where("sir_inventory_ref_name","invoice")->where("sir_inventory_ref_id",$invoice_id)->delete();
                 foreach($_itemline as $key => $item_line)
@@ -1105,7 +1302,7 @@ class TabletPISController extends Member
 
                 if($cm_customer_info != null && $cm_item_info != null)
                 {
-                    $credit_memo_id = Tbl_customer_invoice::where("inv_id",$invoice_id)->pluck("credit_memo_id");
+                    $credit_memo_id = Tbl_customer_invoice::where("inv_id",$invoice_id)->value("credit_memo_id");
                     if($credit_memo_id != null)
                     {
                         $cm_id = CreditMemo::updateCM($credit_memo_id, $cm_customer_info, $cm_item_info);
@@ -1120,7 +1317,7 @@ class TabletPISController extends Member
                     }
                     else
                     {
-                        $cm_id = CreditMemo::postCM($cm_customer_info, $cm_item_info, $invoice_id);
+                        $cm_id = CreditMemo::postCM($cm_customer_info, $cm_item_info, $invoice_id, true);
 
                         $ref_name   = "credit_memo";
                         $ref_id     = $cm_id;
@@ -1133,12 +1330,12 @@ class TabletPISController extends Member
                     }
                 }
                 $data["status"] = "success-tablet";
-            }
-            else
-            {
-                $data["inv_id"] = Request::input("new_invoice_id");            
-                $data["status"] = "error-inv-no";
-            }
+            // }
+            // else
+            // {
+            //     $data["inv_id"] = Request::input("new_invoice_id");            
+            //     $data["status"] = "error-inv-no";
+            // }
         }
         else
         {
@@ -1154,18 +1351,33 @@ class TabletPISController extends Member
     {
         $data["invoice"] = Tbl_customer_invoice::customer()->where("inv_id",$inv_id)->first();
 
+        $data["transaction_type"] = "INVOICE";
+        if(Tbl_customer_invoice::where("inv_id",$inv_id)->value("is_sales_receipt") != 0)
+        {
+            $data["transaction_type"] = "Sales Receipt";            
+        }
         $data["invoice_item"] = Tbl_customer_invoice_line::invoice_item()->where("invline_inv_id",$inv_id)->get();
         foreach($data["invoice_item"] as $key => $value) 
-        {           
-            $um = Tbl_unit_measurement_multi::where("multi_id",$value->invline_um)->first();
-            $qty = 1;
-            if($um != null)
-            {
-                $qty = $um->unit_qty;
-            }
+        {
+            $qty = UnitMeasurement::um_qty($value->invline_um);
 
             $total_qty = $value->invline_qty * $qty;
             $data["invoice_item"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->invline_um);
+        }
+        $data["cm"] = null;
+        $data["_cmline"] = null;
+        if($data["invoice"] != null)
+        {
+            $data["cm"] = Tbl_credit_memo::where("cm_id",$data["invoice"]->credit_memo_id)->first();
+            $data["_cmline"] = Tbl_credit_memo_line::cm_item()->where("cmline_cm_id",$data["invoice"]->credit_memo_id)->get();
+
+            foreach ($data["_cmline"] as $keys => $values)
+            {
+                $qtys = UnitMeasurement::um_qty($values->cmline_um);
+
+                $total_qtys = $values->cmline_qty * $qtys;
+                $data["_cmline"][$keys]->cm_qty = UnitMeasurement::um_view($total_qtys,$values->item_measurement_id,$values->cmline_um);
+            }
         }
           $pdf = view('member.customer_invoice.invoice_pdf', $data);
           return Pdf_global::show_pdf($pdf);
@@ -1173,6 +1385,12 @@ class TabletPISController extends Member
 	public function view_invoices_view($id)
 	{
 		$data["invoice_id"] = $id;
+        $inv_data = Tbl_customer_invoice::where("inv_id",$id)->where("is_sales_receipt",1)->first();
+        $data["transaction_type"] = "Credit Sales";
+        if($inv_data)
+        {
+            $data["transaction_type"] = "Cash Sales";
+        }
 		$data["action_load"] = "/tablet/view_invoice_pdf";
         return view("member.customer_invoice.invoice_view",$data);
 	}
@@ -1277,7 +1495,7 @@ class TabletPISController extends Member
 	                $item_info[$keys]['amount']             = $item_line->invline_amount;
 	            }
 	        }
-           $invoice_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
+           $invoice_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info,'', true);
 
            $update["inv_id"] = $invoice_id;
            $update["is_sync"] = 1;
@@ -1293,12 +1511,12 @@ class TabletPISController extends Member
         $sir_id = Request::input("sir_id");
         $data["sir_id"] = $sir_id;
         $data["page"]       = "Customer Sales Receipt";
-        $data["pis"]        = Purchasing_inventory_system::check();
-        $data["_customer"]  = Customer::getAllCustomer();
+        $data["pis"]        = Purchasing_inventory_system::check(true);
+        $data["_customer"]  = Customer::getAllCustomer(true);
         $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", $this->getShopId())->get();
-        $data['_item']      = Item::get_all_item_sir($sir_id);
-        $data['_cm_item']   = Item::get_returnable_item();
-        $data['_um']        = UnitMeasurement::load_um_multi();
+        $data['_item']      = Item::get_all_item_sir($sir_id, true);
+        $data['_cm_item']   = Item::get_returnable_item(true);
+        $data['_um']        = UnitMeasurement::load_um_multi(true);
         $data["action"]     = "/tablet/sales_receipt/create_submit";
         $data["new_inv_id"] = Transaction::get_last_number("tbl_customer_invoice","new_inv_id","inv_shop_id"); 
         $data["c_id"] = Request::input("customer_id");
@@ -1307,7 +1525,7 @@ class TabletPISController extends Member
         {
             $data["inv"]            = Tbl_customer_invoice::where("inv_id", $id)->first();
             
-            $data["_invline"]       = Tbl_customer_invoice_line::um()->where("invline_inv_id", $id)->get();
+            $data["_invline"]       = Tbl_customer_invoice_line::invoice_item()->um()->where("invline_inv_id", $id)->get();
             $data["_cmline"]       = Tbl_customer_invoice::returns_item()->where("inv_id", $id)->get();
             $data["action"]         = "/tablet/sales_receipt/update_submit";
 
@@ -1318,11 +1536,11 @@ class TabletPISController extends Member
             {
                 $data["sir_id"] = $sir->sir_id;
                 $data["action"] = "/tablet/sales_receipt/update_submit";
-                $data['_item'] = Item::get_all_item_sir($sir->sir_id);
+                $data['_item'] = Item::get_all_item_sir($sir->sir_id, true);
             }
         }
 
-        return view('member.customer.sales_receipt.create_sale_receipt', $data);
+        return view('tablet.agent_transaction.sales_receipt.sales_receipt_transaction', $data);
     }
     public function sales_receipt_list()
     {
@@ -1381,7 +1599,7 @@ class TabletPISController extends Member
         {
             if($item_line)
             {
-                $item_info[$key]['item_service_date']  = Request::input('invline_service_date')[$key];
+                $item_info[$key]['item_service_date']  = "";
                 $item_info[$key]['item_id']            = Request::input('invline_item_id')[$key];
                 $item_info[$key]['item_description']   = Request::input('invline_description')[$key];
                 $item_info[$key]['um']                 = Request::input('invline_um')[$key];
@@ -1391,13 +1609,13 @@ class TabletPISController extends Member
                 $item_info[$key]['discount_remark']    = Request::input('invline_discount_remark')[$key];
                 $item_info[$key]['taxable']            = Request::input('invline_taxable')[$key];
                 $item_info[$key]['amount']             = str_replace(',', "", Request::input('invline_amount')[$key]);
-                $item_info[$key]['ref_name']           = Request::input('invline_ref_name')[$key];
-                $item_info[$key]['ref_id']             = Request::input('invline_ref_id')[$key];
+                $item_info[$key]['ref_name']           = "";
+                $item_info[$key]['ref_id']             = "";
 
                 $return += Purchasing_inventory_system::check_qty_sir($sir_id, Request::input('invline_item_id')[$key],Request::input('invline_um')[$key],Request::input('invline_qty')[$key],0,"tbl_customer_invoice_line");
                 if($return != 0)
                 {
-                    $item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->pluck("item_name");
+                    $item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->value("item_name");
                 }
             }
         }
@@ -1406,7 +1624,7 @@ class TabletPISController extends Member
         $cm_customer_info[] = null;
         $cm_item_info = null;
         $item_returns = null;    
-        if(Request::input("returns") != null && Purchasing_inventory_system::check() != 0)
+        if(Request::input("returns") != null && Purchasing_inventory_system::check(true) != 0)
         {
             $cm_customer_info["cm_customer_id"] = Request::input('inv_customer_id');
             $cm_customer_info["cm_customer_email"] = Request::input('inv_customer_email');
@@ -1464,7 +1682,7 @@ class TabletPISController extends Member
                          $i = null;
                          foreach ($_cm_items as $keyitemline_cm => $valueitemline)
                          {
-                            $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->pluck("item_type_id");
+                            $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->value("item_type_id");
                             if($type == 4)
                             {
                                 if(Request::input("cmline_item_id")[$keyitemline_cm] == $value_items_cm['item_id'])
@@ -1486,11 +1704,11 @@ class TabletPISController extends Member
         // END CM/RETURNS
         if($return == 0)
         {
-            $inv = Transaction::check_number_existense("tbl_customer_invoice","new_inv_id","inv_shop_id",Request::input('new_invoice_id'));
+            $inv = Transaction::check_number_existense("tbl_customer_invoice","new_inv_id","inv_shop_id",Request::input('new_invoice_id'), true);
 
-            if($inv == 0 || Request::input("keep_val") == "keep")
-            {
-                $invoice_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
+            // if($inv == 0 || Request::input("keep_val") == "keep")
+            // {
+                $invoice_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info,"sales_receipt", true);
 
                 /* SUBTOTAL */
                 $subtotal_price = collect($item_info)->sum('amount');
@@ -1516,7 +1734,7 @@ class TabletPISController extends Member
 
                 if($cm_customer_info != null && $cm_item_info != null)
                 {
-                    $cm_id = CreditMemo::postCM($cm_customer_info, $cm_item_info, $invoice_id);
+                    $cm_id = CreditMemo::postCM($cm_customer_info, $cm_item_info, $invoice_id, true);
 
                     $ref_name   = "credit_memo";
                     $ref_id     = $cm_id;
@@ -1561,12 +1779,12 @@ class TabletPISController extends Member
                     $data["status"] = "error";
                     $data["status_message"] = "error";
                }
-            }
-            else
-            {
-                $data["inv_id"] = Request::input("new_invoice_id");            
-                $data["status"] = "error-inv-no";
-            }
+            // }
+            // else
+            // {
+            //     $data["inv_id"] = Request::input("new_invoice_id");            
+            //     $data["status"] = "error-inv-no";
+            // }
         }
         else
         {
@@ -1634,7 +1852,7 @@ class TabletPISController extends Member
                 $return += Purchasing_inventory_system::check_qty_sir($sir_id, Request::input('invline_item_id')[$key],Request::input('invline_um')[$key],Request::input('invline_qty')[$key],$invoice_id,"tbl_customer_invoice_line");
                 if($return != 0)
                 {
-                    $item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->pluck("item_name");
+                    $item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->value("item_name");
                 }
 
                 // $um_info = UnitMeasurement::um_info(Request::input("invline_um")[$key]);
@@ -1647,7 +1865,7 @@ class TabletPISController extends Member
         $item_returns = null; 
         $_cm_items = Request::input("cmline_item_id");
         $cm_item_info = null;
-        if(Request::input("returns") != null && Purchasing_inventory_system::check() != 0)
+        if(Request::input("returns") != null && Purchasing_inventory_system::check(true) != 0)
         {
             $cm_customer_info["cm_customer_id"] = Request::input('inv_customer_id');
             $cm_customer_info["cm_customer_email"] = Request::input('inv_customer_email');
@@ -1704,7 +1922,7 @@ class TabletPISController extends Member
                      $i = null;
                      foreach ($_cm_items as $keyitemline_cm => $valueitemline)
                      {
-                        $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->pluck("item_type_id");
+                        $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->value("item_type_id");
                         if($type == 4)
                         {
                             if(Request::input("cmline_item_id")[$keyitemline_cm] == $value_items_cm['item_id'])
@@ -1725,10 +1943,10 @@ class TabletPISController extends Member
         if($return == 0)
         {
 
-            $inv = Transaction::check_number_existense("tbl_customer_invoice","new_inv_id","inv_shop_id",Request::input('new_invoice_id'));
+            $inv = Transaction::check_number_existense("tbl_customer_invoice","new_inv_id","inv_shop_id",Request::input('new_invoice_id'),true);
 
-            if($inv <= 1 || Request::input("keep_val") == "keep")
-            {
+            // if($inv <= 1 || Request::input("keep_val") == "keep")
+            // {
                 // $inv_item = Tbl_customer_invoice_line::where("invline_inv_id",$invoice_id)->get();
                 // // dd($inv_item);
                 // foreach ($inv_item as $keys => $value) 
@@ -1736,7 +1954,7 @@ class TabletPISController extends Member
                 //     Purchasing_inventory_system::return_qty($sir_id, $value->invline_item_id, $value->invline_um, $value->invline_qty); 
                 // }
 
-                $inv_id = Invoice::updateInvoice($invoice_id, $customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
+                $inv_id = Invoice::updateInvoice($invoice_id, $customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info, "sales_receipt");
 
                  /* SUBTOTAL */
                 $subtotal_price = collect($item_info)->sum('amount');
@@ -1773,7 +1991,7 @@ class TabletPISController extends Member
 
                 if($cm_customer_info != null && $cm_item_info != null)
                 {
-                    $credit_memo_id = Tbl_customer_invoice::where("inv_id",$invoice_id)->pluck("credit_memo_id");
+                    $credit_memo_id = Tbl_customer_invoice::where("inv_id",$invoice_id)->value("credit_memo_id");
                     if($credit_memo_id != null)
                     {
                         $cm_id = CreditMemo::updateCM($credit_memo_id, $cm_customer_info, $cm_item_info);
@@ -1788,7 +2006,7 @@ class TabletPISController extends Member
                     }
                     else
                     {
-                        $cm_id = CreditMemo::postCM($cm_customer_info, $cm_item_info, $invoice_id);
+                        $cm_id = CreditMemo::postCM($cm_customer_info, $cm_item_info, $invoice_id, true);
 
                         $ref_name   = "credit_memo";
                         $ref_id     = $cm_id;
@@ -1801,12 +2019,12 @@ class TabletPISController extends Member
                     }
                 }
                 $data["status"] = "success-tablet-sr";
-            }
-            else
-            {
-                $data["inv_id"] = Request::input("new_invoice_id");            
-                $data["status"] = "error-inv-no";
-            }
+            // }
+            // else
+            // {
+            //     $data["inv_id"] = Request::input("new_invoice_id");            
+            //     $data["status"] = "error-inv-no";
+            // }
         }
         else
         {

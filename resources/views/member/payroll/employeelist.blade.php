@@ -211,7 +211,7 @@
                 </tr>
                 @endforeach
               </table>
-              <div class="pagination"> {!! $_separated->render() !!} </div>
+              
             </div>
           </div>
         </div>

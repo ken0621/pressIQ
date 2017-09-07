@@ -66,6 +66,18 @@
 <br> -->
 @foreach($warehouse as $warehouse_key => $warehouse)
 @foreach($userss as $user_key => $user_a)
+
+
+<?php $count_transaction = 0; ?>
+@foreach($invoice as $key => $value)
+    @if($value->warehouse_id == $warehouse->warehouse_id)
+        @if($value->user_id == $user_a->user_id)
+        <?php $count_transaction += 1; ?>
+        @endif
+    @endif 
+@endforeach
+
+@if($count_transaction > 1)
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
@@ -232,6 +244,8 @@
 
         </div>
     </div>
-</div>    
+</div> 
+@endif 
+
 @endforeach
 @endforeach

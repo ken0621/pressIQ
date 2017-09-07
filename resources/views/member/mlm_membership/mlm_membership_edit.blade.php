@@ -61,6 +61,39 @@
 			</div>
 		</div>
 	</div>
+
+	@if($use_product_as_membership == 1)
+		<div class="panel panel-default panel-block">
+			<form class="global-submit" method="post" action="/member/mlm/membership/edit/add/member/product">
+			{!! csrf_field() !!}
+				<table class="table table-bordered">
+					@foreach($ec_product as $key => $value)
+						<tr>
+							<td>{{$value->eprod_name}}
+								<input type="hidden" name="eprod_id[{{$key}}]" value="{{$value->eprod_id}}">
+							</td>
+							<td>
+								<select class="form-control" name="membership_id[{{$key}}]">
+									<option value="0">None</option>
+								@foreach($membership_product as $mem_key => $mem_value)
+									<option value="{{$mem_value->membership_id}}" @if(isset($value->ec_product_membership)){{$value->ec_product_membership == $mem_value->membership_id ? 'selected' : ''}} @endif>{{$mem_value->membership_name}}</option>
+								@endforeach
+								</select>
+							</td>
+						</tr>
+					@endforeach
+					<tr>
+						<td>
+							
+						</td>
+						<td>
+							<button class="btn btn-primary pull-right">Submit</button>
+						</td>	
+					</tr>
+				</table>
+			</form>
+		</div>
+	@endif
 </div>
 <input type="hidden" class="membership_id" value="{{$membership->membership_id}}">
 @else
@@ -107,7 +140,7 @@ function reload_package()
 	$('.packages_body').load('/member/mlm/membership/view/package/' + membership_id);
 }
 
-@if($errors->has())
+@if(count($errors) > 0)
    @foreach ($errors->all() as $error)
       toastr.error("{{ $error }}");
   @endforeach

@@ -25,7 +25,7 @@ class MlmProfileController extends Mlm
 	public function index()
 	{
 		$data['customer_info'] = Tbl_customer::where('tbl_customer.customer_id', Self::$customer_id)
-		->info()
+		// ->info()
 		->first();
 
 		$data['slot_info'] = Tbl_mlm_slot::where('slot_id', Self::$slot_id)
@@ -45,7 +45,10 @@ class MlmProfileController extends Mlm
 
     	if(Self::$slot_id != null)
     	{
-    		if(Self::$shop_id == 1)
+    		$access['PhilTECH'] = 'PhilTECH';
+    		$access['sovereign'] = 'sovereign';
+    		$access['alphaglobal'] = 'alphaglobal';
+    		if(isset($access[Self::$shop_info->shop_key]))
     		{
     			$shop_id = Self::$shop_id;
     			$data['cus_info'] = Mlm_member::get_customer_info_w_slot(Self::$customer_id, Self::$slot_id);
@@ -61,13 +64,12 @@ class MlmProfileController extends Mlm
 	    		}
     		}
     	}
-
-
     	$data['new_member'] = Tbl_mlm_slot::where('slot_sponsor', Self::$slot_id)
     	->customer()
     	->orderBy('slot_id', 'DESC')
     	->take(6)
     	->get();
+
 		return view('mlm.profile.profilev2', $data);
 	}
     public function index2()
@@ -280,7 +282,7 @@ class MlmProfileController extends Mlm
     	# code...
     	if (Input::hasFile('profile_picture'))
 		{
-    	$shop_key = Tbl_shop::where('shop_id', Self::$shop_id)->pluck('shop_key');
+    	$shop_key = Tbl_shop::where('shop_id', Self::$shop_id)->value('shop_key');
     	$shop_id = Self::$shop_id;
     	$file               = Input::file('profile_picture');
 

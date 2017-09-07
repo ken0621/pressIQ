@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Globals\SalesReport;
 use App\Globals\Report;
 use App\Globals\Pdf_global;
+use App\Globals\Accounting;
 
 use App\Models\Tbl_shipping;
 use App\Models\Tbl_user;
@@ -295,11 +296,14 @@ class ReportsController extends Member
                     $update['report_field_archive'] = 0;
                 }
 
-                $update['report_field_position'] = $report_field_position[$key];
-                Tbl_report_field::where('report_field_shop', $shop_id)
-                ->where('report_field_module', $key)
-                ->where('report_field_type', $report_field_type)
-                ->update($update);
+                if(isset($report_field_position[$key]))
+                {
+                    $update['report_field_position'] = $report_field_position[$key];
+                    Tbl_report_field::where('report_field_shop', $shop_id)
+                    ->where('report_field_module', $key)
+                    ->where('report_field_type', $report_field_type)
+                    ->update($update);
+                }
             }
         }
         $data['status'] = 'Success';
@@ -330,10 +334,8 @@ class ReportsController extends Member
         ->selectsales()
         ->where('je_shop_id', $shop_id)
         ->customerorvendor()
-        // ->joinreciept()
         ->whereRaw("DATE(je_entry_date) >= '".$data['from']."'")
         ->whereRaw("DATE(je_entry_date) <= '".$data['to']."'")
-        // ->whereNotNull('jline_name_reference')
         ->concatum()
         ->amount()
         ->whereIn('jline_name_reference', $where_in)
@@ -629,7 +631,7 @@ class ReportsController extends Member
                                                     ->whereRaw("DATE(inventory_created) <= '".$data['to']."'")
                                                     ->get();
         }   
-        // dd($data['_item']);
+
         /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */
         if($report_type && !$load_view)
         {
@@ -661,28 +663,9 @@ class ReportsController extends Member
         $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
 
         $account_no_balance  = array('Income', 'Expense', 'Cost of Goods Sold', 'Other Income', 'Other Expense');
-        $data['_account'] = Tbl_chart_of_account::accountType()->where("account_shop_id", $this->user_info->shop_id)->where("archived", 0)->orderBy("chart_type_id")->get();
-
-        foreach($data['_account'] as $key=>$account)
-        {
-            $data['_account'][$key]->account_journal = Tbl_journal_entry_line::journal()->account()
-                                                        ->selectRaw("*, (CASE normal_balance WHEN jline_type THEN jline_amount ELSE -jline_amount END) as 'amount'")
-                                                        ->where("jline_account_id", $account->account_id)
-                                                        ->whereRaw("DATE(je_entry_date) >= '".$data['from']."'")
-                                                        ->whereRaw("DATE(je_entry_date) <= '".$data['to']."'")
-                                                        ->get();
-                                                        
-            if(in_array($account->chart_type_name, $account_no_balance))
-            {
-                $data['_account'][$key]->balance         = "none";
-            }  
-            else
-            {
-                $data['_account'][$key]->balance         = collect($data['_account'][$key]->account_journal)->sum('amount');
-            } 
-        }   
-
-        // dd($data['_account']);
+        $data['_account'] = Accounting::getAllAccount();
+    
+        // dd($data['_account']);  
 
         /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */
         if($report_type && !$load_view)
@@ -714,5 +697,146 @@ class ReportsController extends Member
         $data['from']   = Report::checkDatePeriod($period, $date)['start_date'];
         $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
     }
+    public function sale_by_warehouse()
+    {
+        $data =[];
+        $report_code = 'accounting_sales_report_warehouse';
+        $this->fix_old_data();
+        $data['field_checker'] = $this->report_field_checker_seed($report_code);
+        $data['head_title'] = 'Sales Report - Item ';
+        $data['head_icon'] = 'fa fa-area-chart';
+        $data['head_discription'] = 'Account Sales Report';
+        $data['head'] = $this->report_header($data);
+        $data['action'] = '/member/report/accounting/sale_by_warehouse';
+        $data['report_code'] = $report_code;
+        $data['table_header'] = Report::sales_report($report_code);
 
+
+        $report_type    = Request::input('report_type');
+        if($report_type){ return $this->sale_by_warehouse_get(); }
+        else
+        {
+            $data['output'] = $this->sale_by_warehouse_get('return_view');
+        }
+
+        return view('member.reports.accounting.sales_by_warehouse', $data);
+    }
+    public function fix_old_data()
+    {
+        $all_journal_entry_line = Tbl_journal_entry_line::where('jline_item_id', '!=', 0)
+        ->item()
+        ->journal()
+        ->where('jline_warehouse_id', 0)->get();
+
+        $e_commerce_warehouse_select = [];
+        $main_warehouse_select = [];
+        foreach ($all_journal_entry_line as $key => $value) 
+        {
+            if($value->item_type_id == 1)
+            {
+                if($value->je_reference_module == 'product-order')
+                {
+                    $e_commerce_warehouse_select[$value->jline_id] = $value->jline_id;
+                }
+                else
+                {
+                    $main_warehouse_select[$value->jline_id] = $value->jline_id;
+                }
+                
+            }
+        }
+        $shop_id  = $this->user_info->shop_id;
+
+        $warehouse['main']      = Tbl_warehouse::where('main_warehouse', 1)
+        ->where('warehouse_shop_id', $shop_id)
+        ->first();
+
+        $warehouse['ecommerce'] = Tbl_warehouse::where('main_warehouse', 2)
+        ->where('warehouse_shop_id', $shop_id)
+        ->first();
+        if($warehouse['main'])
+        {
+            $update['jline_warehouse_id'] = $warehouse['main']->warehouse_id;
+
+            Tbl_journal_entry_line::whereIn('jline_id', $main_warehouse_select)
+            ->update($update);
+        }
+        if($warehouse['ecommerce'])
+        {
+            $update['jline_warehouse_id'] = $warehouse['ecommerce']->warehouse_id;
+
+            Tbl_journal_entry_line::whereIn('jline_id', $e_commerce_warehouse_select)
+            ->update($update);
+        }
+    }
+    public function sale_by_warehouse_get($report_type = null)
+    {
+        $report_code = 'accounting_sales_report_warehouse';
+        $shop_id            = $this->user_info->shop_id; 
+        if($report_type == null){ $report_type        = Request::input('report_type'); }
+        $load_view          = Request::input('load_view');
+        $period             = Request::input('report_period') ? Request::input('report_period') : 'all';
+        $date['start']      = Request::input('from');
+        $date['end']        = Request::input('to');
+        $data['from']       = Report::checkDatePeriod($period, $date)['start_date'];
+        $data['to']         = Report::checkDatePeriod($period, $date)['end_date'];
+        $data['shop_name']  = $this->user_info->shop_key; 
+        $data['now']        = Carbon::now()->format('l F j, Y h:i:s A');
+
+        $where_in[0]        = 'customer';
+
+        $data['sales']      = Tbl_journal_entry_line::account()
+        ->item()
+        ->journal()
+        ->selectsales()
+        ->where('je_shop_id', $shop_id)
+        ->customerorvendor()
+        ->whereRaw("DATE(je_entry_date) >= '".$data['from']."'")
+        ->whereRaw("DATE(je_entry_date) <= '".$data['to']."'")
+        ->concatum()
+        ->amount()
+        ->whereIn('jline_name_reference', $where_in)
+        ->get()
+        ->keyBy('jline_id');
+
+        $warehouse['main']      = Tbl_warehouse::where('main_warehouse', 1)
+        ->where('warehouse_shop_id', $shop_id)
+        ->first();
+
+        $warehouse['ecommerce'] = Tbl_warehouse::where('main_warehouse', 2)
+        ->where('warehouse_shop_id', $shop_id)
+        ->first();
+
+        $warehouse['all']     = Tbl_warehouse::where('warehouse_shop_id', $shop_id)
+        ->get()->keyBy('warehouse_id');
+
+        $filter_by_warehouse    = [];
+        foreach($data['sales'] as $key => $value)
+        {
+            switch ($value->jline_warehouse_id) {
+                case 0:
+                    if( $value->je_reference_module == 'product-order'){ $filter_by_warehouse[$warehouse['ecommerce']->warehouse_id][$value->jline_id] = 1; }
+                    else{ $filter_by_warehouse[$warehouse['main']->warehouse_id][$value->jline_id] = 1; }
+                break;
+                
+                default:
+                    $filter_by_warehouse[$value->jline_warehouse_id][$value->jline_id] = 1;
+                break;
+            }
+        }
+        $data['head_title']         = 'Sales Report - Warehouse ';
+        $data['head_icon']          = 'fa fa-area-chart';
+        $data['head_discription']   = 'Account Sales Report By Warehouse';
+        $data['report_field'] = Tbl_report_field::where('report_field_shop', '=', $shop_id)
+        ->orderBy('report_field_position', 'ASC')
+        ->where('report_field_archive', '=', 0)
+        ->where('report_field_type', '=', $report_code)
+        ->get()
+        ->keyBy('report_field_module');
+
+        $data['warehouse_all']      = $warehouse['all'] ;
+        $data['filter'] = $filter_by_warehouse;
+        $view   =  'member.reports.output.sale_by_warehouse'; 
+        return Report::check_report_type($report_type, $view, $data, 'item_list-'.Carbon::now());
+    }
 }

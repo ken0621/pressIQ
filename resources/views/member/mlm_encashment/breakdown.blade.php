@@ -16,7 +16,7 @@
 					<tr>
 						<td>{{$value->wallet_log_date_created}}</td>
 						<td>{{$value->wallet_log_plan}}</td>
-						<td>{{$value->wallet_log_amount}}</td>
+						<td>{{currency('PHP',$value->wallet_log_amount)}}</td>
 					</tr>
 					@endforeach
 
@@ -29,7 +29,7 @@
 					<tr>
 						<td>{{$log_final->wallet_log_date_created}}</td>
 						<td>{{$log_final->wallet_log_plan}}</td>
-						<td>{{$log_final->wallet_log_amount }}</td>
+						<td>{{currency('PHP', $log_final->wallet_log_amount) }}</td>
 					</tr>
 
 					<tr>
@@ -63,6 +63,12 @@
                             $value2 = $value2-$tax;
                         }
                     ?>
+                    <?php 
+
+			          $currency = $encashment_process->encashment_process_currency;
+			          $convertion = $encashment_process->encashment_process_currency_convertion;
+
+			          ?>
                     <tr>
 						<td></td>
 						<td>
@@ -70,7 +76,7 @@
 								Subtotal
 							</span>
 						</td>
-						<td>{{$log_final->wallet_log_amount * (-1)}}</td>
+						<td>{{currency($currency, ($log_final->wallet_log_amount * $convertion) * (-1))}}</td>
 					</tr>
                     <tr>
 						<td></td>
@@ -79,7 +85,7 @@
 								Processing Fee
 							</span>
 						</td>
-						<td>{{$p_fee}}</td>
+						<td>{{currency($currency, $p_fee * $convertion)}}</td>
 					</tr>
 					<tr>
 						<td></td>
@@ -88,7 +94,7 @@
 								Tax
 							</span>
 						</td>
-						<td>{{$tax}}</td>
+						<td>{{currency($currency, $tax * $convertion)}}</td>
 					</tr>
 					<tr>
 						<td></td>
@@ -97,7 +103,7 @@
 								Total
 							</span>
 						</td>
-						<td>{{$value2}}</td>
+						<td>{{currency($currency, $value2 * $convertion)}}</td>
 					</tr>
 					<tr>
 						<td colspan="40">

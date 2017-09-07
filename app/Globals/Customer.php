@@ -8,6 +8,7 @@ use App\Models\Tbl_order_item;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_user;
 use App\Models\Tbl_customer_other_info;
+use App\Globals\Tablet_global;
 use DB;
 use Carbon\Carbon;
 use Request;
@@ -17,7 +18,7 @@ class Customer
 
 	public static function getShopId()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
     
 	public static function info($id = 0, $shop_id = 0, $order_id = 0)
@@ -53,14 +54,24 @@ class Customer
     	return $data;
 	}
 
-	public static function getAllCustomer()
+	public static function getAllCustomer($for_tablet = false)
 	{
-		$customer = Tbl_customer::info()->where("tbl_customer.archived", 0)->where("shop_id", Customer::getShopId())->groupBy("tbl_customer.customer_id")->orderBy("tbl_customer.customer_id","DESC")->get();
+		$shop_id = Customer::getShopId();
+		if($for_tablet == true)
+		{
+			$shop_id = Tablet_global::getShopId();
+		}
+		$customer = Tbl_customer::info()->where("tbl_customer.archived", 0)->where("shop_id", $shop_id)->groupBy("tbl_customer.customer_id")->orderBy("tbl_customer.customer_id","DESC")->get();
 		return $customer;
 	}
-	public static function countAllCustomer()
+	public static function countAllCustomer($for_tablet = false)
 	{
-		$count = Tbl_customer::where("tbl_customer.archived", 0)->where("shop_id", Customer::getShopId())->count();
+		$shop_id = Customer::getShopId();
+		if($for_tablet == true)
+		{
+			$shop_id = Tablet_global::getShopId();
+		}
+		$count = Tbl_customer::where("tbl_customer.archived", 0)->where("shop_id", $shop_id)->count();
 		return $count;
 	}
 

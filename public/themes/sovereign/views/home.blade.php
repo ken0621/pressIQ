@@ -32,7 +32,7 @@
 						</div>
 					</div>
 					<div class="col-md-4">
-						<img class="img-reponsive" src="{{ get_content($shop_theme_info, "home", "home_company_image") }}">
+						<img class="img-responsive" src="{{ get_content($shop_theme_info, "home", "home_company_image") }}">
 					</div>
 				</div>
 			</div>
@@ -46,7 +46,7 @@
 						</div>
 					</div>
 					<div class="col-md-4">
-						<img class="img-reponsive" src="{{ get_content($shop_theme_info, "home", "home_mission_image") }}">
+						<img class="img-responsive" src="{{ get_content($shop_theme_info, "home", "home_mission_image") }}">
 					</div>
 				</div>
 			</div>
@@ -60,7 +60,7 @@
 						</div>
 					</div>
 					<div class="col-md-4">
-						<img class="img-reponsive" src="{{ get_content($shop_theme_info, "home", "home_vision_image") }}">
+						<img class="img-responsive" src="{{ get_content($shop_theme_info, "home", "home_vision_image") }}">
 					</div>
 				</div>
 			</div>

@@ -84,7 +84,9 @@ class MLM_WalletController extends Member
         $shop_id = $this->user_info->shop_id;
         Mlm_pre::pre_req($shop_id);
         $data['settings'] = Tbl_mlm_slot_wallet_log_refill_settings::where('shop_id', $shop_id)->first();
-        $request = Tbl_mlm_slot_wallet_log_refill::where('tbl_mlm_slot_wallet_log_refill.shop_id', $shop_id)->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id','=', 'tbl_mlm_slot_wallet_log_refill.slot_id');
+        $request = Tbl_mlm_slot_wallet_log_refill::where('tbl_mlm_slot_wallet_log_refill.shop_id', $shop_id)
+        ->orderBy('wallet_log_refill_id', 'DESC')
+        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id','=', 'tbl_mlm_slot_wallet_log_refill.slot_id');
         $search = Request::input('search');
         if($search != null)
         {
@@ -143,6 +145,9 @@ class MLM_WalletController extends Member
             $update['wallet_log_refill_approved'] = 1;
             $update['wallet_log_refill_remarks'] = $var['wallet_log_refill_remarks'];
             $update['wallet_log_refill_remarks_admin'] = $var['wallet_log_refill_remarks_admin'];
+            $warehouse_id = $this->current_warehouse->warehouse_id;
+            $update['wallet_log_refill_attachment_warehouse'] = $warehouse_id;
+
             Tbl_mlm_slot_wallet_log_refill::where('wallet_log_refill_id', $var['wallet_log_refill_id'])->update($update);
 
             $slot_info = Tbl_mlm_slot::where('slot_id', $var['slot_id'])->first();

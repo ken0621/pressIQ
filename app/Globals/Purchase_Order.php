@@ -91,7 +91,7 @@ class Purchase_Order
 	}
     public static function getApAccount()
     {
-        return Tbl_chart_account_type::where("chart_type_name","Accounts Payable")->pluck("chart_type_id");
+        return Tbl_chart_account_type::where("chart_type_name","Accounts Payable")->value("chart_type_id");
     }
     public static function updatePurchase($po_id, $vendor_info, $po_info, $po_other_info, $item_info, $total_info)
     {
@@ -156,6 +156,6 @@ class Purchase_Order
 
     public static function getShopId()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
 }

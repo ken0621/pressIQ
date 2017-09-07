@@ -68,7 +68,6 @@
         <!-- /.box-body -->
       </div>
       <!-- /.box -->
-    @endif
       <!-- About Me Box -->
       <div class="box box-primary">
         <div class="box-header with-border">
@@ -91,6 +90,7 @@
         </div>
         <!-- /.box-body -->
       </div>
+      @endif
       @if($slot_info)
       <div class="box box-success">
         <div class="box-header with-border">
@@ -133,6 +133,7 @@
             <li><a href="#card" data-toggle="tab">Card</a></li>
           @endif
         </ul>
+  
         <div class="tab-content">
           <!-- /.tab-pane -->
           <div class="active tab-pane" id="basic">

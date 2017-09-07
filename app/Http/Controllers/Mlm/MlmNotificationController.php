@@ -21,7 +21,7 @@ class MlmNotificationController extends Mlm
         ->orderBy('wallet_log_id', 'DESC')
         
         ->sponsorslot()
-        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+        ->leftjoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
         ->paginate(10);
         foreach($data['report'] as $value)
         {

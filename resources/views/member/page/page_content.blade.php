@@ -21,9 +21,15 @@
             @foreach($page_info as $key => $_info)
             <li class="{{ $key == 'home' ? 'active' : '' }}"><a href="#{{ $key }}">{{ underscore2Camelcase($key) }}</a></li>
             @endforeach
+            @if(isset($job_resume))
+            <li><a href="#job_resume">Resume</a></li>
+            @endif
+            @if(isset($popular_tags))
+            <li><a href="#popular_tags">Popular Tags</a></li>
+            @endif
             <li><a href="#others">Others</a></li>
         </ul>
-        <div class="panel panel-default panel-block panel-title-block panel-gray">
+        <div class="panel panel-default panel-block panel-title-block panel-gray" style="margin-bottom: 0;">
             <div class="tab-content">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 @foreach($page_info as $key => $_info)
@@ -39,7 +45,7 @@
                                         <input type="text" name="info[{{ $keys }}][value]" class="form-control" value="{{ $info->default }}">
                                     </div>
                                     @elseif($info->type == "gallery")
-                                    <div class="match-height">
+                                    <div>
                                         <input type="hidden" name="info[{{ $keys }}][type]" value="{{ $info->type }}">
                                         <input class="image-value" key="{{ $keys }}" type="hidden" name="info[{{ $keys }}][value]" value="{{ $info->default }}">
                                         <button type="button" class="btn btn-primary remove-image" key="{{ $keys }}">Remove Images</button>
@@ -62,6 +68,39 @@
                                                 <div>
                                                     <div class="img-holder">
                                                         <img style="object-fit: contain; object-position: center;" class="img-responsive" src="{{ $value }}">
+                                                    </div>
+                                                </div>
+                                                @endforeach
+                                            @else
+                                            @endif
+                                        </div>
+                                    </div>
+                                    @elseif($info->type == "gallery_links")
+                                    <div>
+                                        <input type="hidden" class="type-content" key="{{ $keys }}" name="info[{{ $keys }}][type]" value="{{ $info->type }}">
+                                        <button type="button" class="btn btn-primary remove-image" key="{{ $keys }}">Remove Images</button>
+                                        <div class="gallery-list image-gallery link-css" key="{{ $keys }}">
+                                            @if(is_serialized($info->default))
+                                                @foreach(unserialize($info->default) as $serialize_key => $value)
+                                                <div>
+                                                    <div class="img-holder">
+                                                        <img style="object-fit: contain; object-position: center;" class="img-responsive" src="{{ $value['image'] }}">
+                                                        <input type="hidden" name="info[{{ $keys }}][value][{{ $serialize_key }}][image]" value="{{ $value['image'] }}">
+                                                    </div>
+                                                    <label>Link: </label>
+                                                    <input onClick="event.stopImmediatePropagation()" type="text" class="form-control input-link" name="info[{{ $keys }}][value][{{ $serialize_key }}][link]" value="{{ $value['link'] }}">
+                                                </div>
+                                                @endforeach
+                                            @else
+                                            <div class="empty-notify"><i class="fa fa-image"></i> No Image Yet</div>
+                                            @endif
+                                        </div>
+                                        <div class="slider-thumb" key="{{ $keys }}">
+                                            @if(is_serialized($info->default))
+                                                @foreach(unserialize($info->default) as $value)
+                                                <div>
+                                                    <div class="img-holder">
+                                                        <img style="object-fit: contain; object-position: center;" class="img-responsive" src="{{ $value['image'] }}">
                                                     </div>
                                                 </div>
                                                 @endforeach
@@ -159,6 +198,66 @@
                         </div>
                     </div>
                 @endforeach
+                @if(isset($job_resume))
+                <div id="job_resume" class="tab-pane fade">
+                    <div class="job-resume">
+                        <div class="clearfix" style="padding: 30px;">
+                            <table class="table table-bordered table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Job Apply</th>
+                                        <th>Job Introduction</th>
+                                        <th>Job Resume</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if(isset($job_resume) && $job_resume && count($job_resume) > 0)
+                                        @foreach($job_resume as $resume)
+                                        <tr>
+                                            <td>{{ $resume->job_apply }}</td>
+                                            <td>{{ $resume->job_introduction }}</td>
+                                            <td><a href="{{ URL::to($resume->job_resume) }}" target="_blank">View</a></td>
+                                        </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                @endif
+                @if(isset($popular_tags))
+                <div id="popular_tags" class="tab-pane fade">
+                    <div class="clearfix" style="padding: 30px">
+                        <div class="col-md-12" style="margin-bottom: 5px;">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Search Count</th>
+                                            <th>Keyword</th>
+                                            <th class="text-center">Approved</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($popular_tags as $tag)
+                                        <tr>
+                                            <td>{{$tag->tag_id}}</td>
+                                            <td>{{number_format($tag->count)}}</td>
+                                            <td>{{$tag->keyword}}</td>
+                                            <td class="text-center">
+                                                <input type="checkbox" name="" onclick="approved_tag({{$tag->tag_id}})" {{$tag->tag_approved == 1 ? 'checked' : ''}}>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endif
                 <div id="others" class="tab-pane fade">
                     <div class="clearfix" style="padding: 30px">
                         <div class="col-md-6" style="margin-bottom: 5px;">
@@ -271,7 +370,7 @@
     transform: translate3d(0px, 0px, 0px) !important;
 }
 
-.slick-no-slide .slick-slide {
+.slick-no-slide .slick-slide {  
     float: none;
     display: inline-block;
 }
@@ -284,7 +383,19 @@
 {
     display: none;
 }
+
+.slick-list
+{
+    height: auto !important;
+}
 </style>
+
+@if(isset($job_resume))
+<style type="text/css">
+
+</style>
+@endif
+
 @endsection
 
 @section('script')

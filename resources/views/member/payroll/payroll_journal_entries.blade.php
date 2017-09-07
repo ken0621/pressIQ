@@ -7,7 +7,7 @@
 		<div>
 			<i class="fa fa-building-o"></i>
 			<h1>
-			<span class="page-title">Journal Entry</span>
+			<span class="page-title">13th Month Pay Report</span>
 			<small>
 			Payroll
 			</small>
@@ -26,11 +26,12 @@
 		<table class="table table-striped table-condensed">
 			<thead>
 				<tr>
-					<th>Account Number</th>
-					<th>Account Name</th>
-					<th>Accoutn Type</th>
-					<th>Debit</th>
-					<th>Credit</th>
+					<th>Employee Name</th>
+					<th>Department</th>
+					<th>Payroll Period</th>
+					<th>Basic Salary</th>
+					<th>13 Month</th>
+					<th>Sub Total</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -58,6 +59,7 @@
 @section('script')
 <script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
 <script>
+
 var payroll_journal_entry = new payroll_journal_entry();
 
 function payroll_journal_entry()

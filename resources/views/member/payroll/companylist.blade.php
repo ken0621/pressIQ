@@ -12,6 +12,7 @@
 			List of Company
 			</small>
 			</h1>
+			<button class="btn btn-custom-white panel-buttons pull-right popup" link="/member/payroll/company_list/modal_create_company?is_sub=true">Create Sub-Company/Branch</button>
 			<button class="btn btn-custom-primary panel-buttons pull-right popup" link="/member/payroll/company_list/modal_create_company">Create Company</button>
 			<input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
 		</div>
@@ -39,13 +40,13 @@
 							@foreach($_active as $active)
 							<tr>
 								<td>
-									{{$active->payroll_company_name}}
+									{{$active['company']->payroll_company_name}}
 								</td>
 								<td class="text-center">
-									{{$active->payroll_company_code}}
+									{{$active['company']->payroll_company_code}}
 								</td>
 								<td class="text-center">
-									{{$active->rdo_code}}
+									{{$active['company']->rdo_code}}
 								</td>
 								<td class="text-center">
 									<div class="dropdown">
@@ -53,22 +54,52 @@
 										<span class="caret"></span></button>
 										<ul class="dropdown-menu dropdown-menu-custom">
 											<li>
-												<a href="#" class="popup" link="/member/payroll/company_list/view_company_modal/{{$active->payroll_company_id}}" ><i class="fa fa-search"></i>&nbsp;View</a>
+												<a href="#" class="popup" link="/member/payroll/company_list/view_company_modal/{{$active['company']->payroll_company_id}}" ><i class="fa fa-search"></i>&nbsp;View</a>
 											</li>
 											<li>
-												<a href="#" class="popup" link="/member/payroll/company_list/edit_company_modal/{{$active->payroll_company_id}}" ><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+												<a href="#" class="popup" link="/member/payroll/company_list/edit_company_modal/{{$active['company']->payroll_company_id}}" ><i class="fa fa-pencil"></i>&nbsp;Edit</a>
 											</li>
 											<li>
-												<a href="#" class="popup" link="/member/payroll/company_list/modal_archived_company/1/{{$active->payroll_company_id}}" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Archived</a>
+												<a href="#" class="popup" link="/member/payroll/company_list/modal_archived_company/1/{{$active['company']->payroll_company_id}}" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Archived</a>
 											</li>
 										</ul>
 									</div>
 								</td>
 							</tr>
+								@foreach($active['branch'] as $branch)
+								<tr>
+									<td class="indent-18">
+										<i class="fa fa-caret-right"></i>&nbsp;{{$branch->payroll_company_name}}
+									</td>
+									<td class="text-center">
+										{{$branch->payroll_company_code}}
+									</td>
+									<td class="text-center">
+										{{$branch->rdo_code}}
+									</td>
+									<td class="text-center">
+										<div class="dropdown">
+											<button class="btn btn-custom-white dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Action
+											<span class="caret"></span></button>
+											<ul class="dropdown-menu dropdown-menu-custom">
+												<li>
+													<a href="#" class="popup" link="/member/payroll/company_list/view_company_modal/{{$branch->payroll_company_id}}" ><i class="fa fa-search"></i>&nbsp;View</a>
+												</li>
+												<li>
+													<a href="#" class="popup" link="/member/payroll/company_list/edit_company_modal/{{$branch->payroll_company_id}}" ><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+												</li>
+												<li>
+													<a href="#" class="popup" link="/member/payroll/company_list/modal_archived_company/1/{{$branch->payroll_company_id}}" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Archived</a>
+												</li>
+											</ul>
+										</div>
+									</td>
+								</tr>
+								@endforeach
 							@endforeach
 						</tbody>
 					</table>
-					<div class="pagination"> {!! $_active->render() !!} </div>
+					<div class="pagination"> {!! $_parent->render() !!} </div>
 				</div>
 			</div>
 		</div>

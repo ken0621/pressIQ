@@ -95,6 +95,14 @@
 	.tab-content
 	{
 		padding: 25px 0;
+		@media screen and (max-width: 991px)
+		{
+			.img-responsive
+			{
+				display: block;
+				margin: auto;
+			}
+		}
 		h1
 		{
 			color: #1e1f1f;
@@ -110,6 +118,11 @@
 		.read-more
 		{
 			margin-top: 25px;
+			@media screen and (max-width: 991px)
+			{
+				text-align: center;
+				margin-bottom: 25px;
+			}
 			a
 			{
 				color: #003c9c;
@@ -129,19 +142,7 @@
 	position: relative;
 	> .container
 	{
-		position: absolute;
-		top: 50%;
-		-webkit-transform: translateY(-50%);
-		-ms-transform: translateY(-50%);
-		transform: translateY(-50%);
-		left: 0;
-		right: 0;
-		margin: auto;
-	}
-	.left-holder
-	{
-		position: relative;
-		.holder
+		@media screen and (min-width: 992px)
 		{
 			position: absolute;
 			top: 50%;
@@ -151,6 +152,29 @@
 			left: 0;
 			right: 0;
 			margin: auto;
+		}
+	}
+	.left-holder
+	{
+		position: relative;
+		.holder
+		{
+			@media screen and (min-width: 992px)
+			{
+				position: absolute;
+				top: 50%;
+				-webkit-transform: translateY(-50%);
+				-ms-transform: translateY(-50%);
+				transform: translateY(-50%);
+				left: 0;
+				right: 0;
+				margin: auto;
+				margin-left: 20px;
+			}
+			@media screen and (max-width: 991px)
+			{
+				text-align: -webkit-center;
+			}
 		}
 	}
 	.values-title
@@ -167,17 +191,29 @@
 		width: 75px;
 		background-color: #fff;
 		margin: 25px 0;
+		@media screen and (max-width: 991px)
+		{
+			margin: 10px 0;
+		}
 	}
 	.values-sub
 	{
 		font-size: 17px;
 		font-weight: 400;
 		font-family: 'Source Sans Pro', sans-serif;
+		@media screen and (max-width: 991px)
+		{
+			margin-bottom: 30px;
+		}
 	}
 	.tower
 	{
 		font-size: 0;
 		text-align: center;
+		@media screen and (max-width: 991px)
+		{
+			margin-bottom: 20px;
+		}
 		.tower-row
 		{
 			.holder
@@ -211,6 +247,10 @@
 		img
 		{
 			max-width: 100%;
+			@media screen and (max-width: 991px)
+			{
+				margin: auto;
+			}
 		}
 	}
 	.name
@@ -241,6 +281,10 @@
 		max-width: 250px;
 		margin: auto;
 		text-align: center;
+		@media screen and (max-width: 991px)
+		{
+			margin-bottom: 30px;
+		}
 		.image
 		{
 			position: relative;
@@ -306,6 +350,10 @@
 	{
 		margin: auto;
 		text-align: center;
+		@media screen and (max-width: 991px)
+		{
+			margin-bottom: 60px;
+		}
 		.image
 		{
 			
@@ -347,6 +395,10 @@
 .professional
 {
 	padding: 25px 0;
+	@media screen and (max-width: 991px)
+	{
+		padding-top: 0px;
+	}
 	.slick-prev
 	{
 		z-index: 2;
@@ -438,6 +490,10 @@
 	.logo
 	{
 		text-align: center;
+		@media screen and (max-width: 991px)
+		{
+			margin-top: 20px;
+		}
 		img
 		{
 			max-width: 100%;
@@ -465,11 +521,14 @@
 		position: relative;
 		.absolute
 		{
-			position: absolute;
-			top: 50%;
-			-webkit-transform: translateY(-50%);
-			-ms-transform: translateY(-50%);
-			transform: translateY(-50%);
+			@media screen and (min-width: 992px)
+			{
+				position: absolute;
+				top: 50%;
+				-webkit-transform: translateY(-50%);
+				-ms-transform: translateY(-50%);
+				transform: translateY(-50%);
+			}
 		}
 	}
 }
@@ -495,6 +554,11 @@
 			font-size: 18px;
 			color: #fff;
 			padding: 10px 25px;
+			@media screen and (max-width: 992px)
+			{
+				margin-top: 20px;
+				margin-bottom: -15px;
+			}
 		}
 	}
 }

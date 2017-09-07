@@ -15,6 +15,6 @@ class Tbl_customer_invoice_line extends Model
     }
     public function scopeInvoice_item($query)
     {
-    	return $query->join("tbl_item","tbl_item.item_id","=","invline_item_id");
+    	return $query->leftjoin("tbl_item","tbl_item.item_id","=","invline_item_id");
     }
 }

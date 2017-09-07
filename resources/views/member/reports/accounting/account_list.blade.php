@@ -2,7 +2,7 @@
 
 @section('content')
 {!! $head !!}
-@include('member.reports.filter.filter1');
+@include('member.reports.filter.filter3');
 @include('member.reports.output.account_list');
 @endsection
 
@@ -18,7 +18,7 @@
 		function init()
 		{
 			event_run_report_click();
-			action_collaptible(true);
+			action_collaptible(false);
 		}
 
 		function event_run_report_click()
@@ -29,7 +29,7 @@
 				
 				$(".load-data").load("/member/report/accounting/account_list?"+serialize_data+"&load_view=true .load-content", function()
 					{
-						action_collaptible(true);
+						action_collaptible(false);
 					});
 			});
 		}

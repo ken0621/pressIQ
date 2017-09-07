@@ -7,39 +7,54 @@
 		<div>
 			<i class="fa fa-calendar"></i>
 			<h1>
-			<span class="page-title">Time Keeping</span>
-			<small>
-			Manage your Time Keeping
-			</small>
+			<span class="page-title">Select a Payroll Period</span>
+			<small>You can view timesheet inside a specific payroll period.</small>
 			</h1>
 			<div class="dropdown pull-right">
 				<button class="btn btn-custom-primary dropdown-toggle " type="button" data-toggle="dropdown"><i class="fa fa-gears"></i>&nbsp;Operation
 				<span class="caret"></span></button>
 				<ul class="dropdown-menu dropdown-menu-custom">
-					<li><a href="#" class="popup" link="/member/payroll/time_keeping/modal_generate_period"><i class="fa fa-plus"></i>&nbsp;Generate Period</a></li>
-					<li><a href="#" class="popup" link="/member/payroll/import_bio/modal_biometrics"><i class="fa fa-upload"></i>&nbsp;Import Time Sheet</a></li>
+					<li><a href="#" class="popup" link="/member/payroll/payroll_period_list/modal_create_payroll_period"><i class="fa fa-plus"></i>&nbsp;Generate Period</a></li>
+					<li><a href="#" class="popup" size="lg" link="/member/payroll/import_bio/modal_biometrics"><i class="fa fa-upload"></i>&nbsp;Import Time Sheet</a></li>
 				</ul>
 			</div>
 		</div>
 	</div>
 </div>
-<div class="panel-timekeeping-list">
-	<div class="panel panel-default panel-block">
-		<div class="panel-body">
-			<ul class="list-group">
-			@foreach($_period as $period)
-				<li class="list-group-item padding-tb-10">
-					<label><b>{{date('M d, Y',strtotime($period->payroll_period_start)).' - '.date('M d, Y',strtotime($period->payroll_period_end))}}</b></label><br>
-					<small>{{$period->payroll_period_category}}</small>
-					<a href="/member/payroll/time_keeping/company_period/{{$period->payroll_period_id}}" class="btn btn-custom-primary pull-right margin-nt-18">View</a>
-				</li>
-			@endforeach
-			</ul>
-		</div>
-	</div>
+
+
+<div class="panel panel-default panel-block panel-title-block panel-gray ">
+    <ul class="nav nav-tabs">
+        <li class="active change-tab pending-tab cursor-pointer" mode="generated"><a class="cursor-pointer"><i class="text-bold">Payroll Periods</i></a></li>
+    </ul>
+    
+    <div class="search-filter-box">
+        <div class="col-md-4" style="padding: 10px">
+            <select class="form-control item_type company-change-event">
+            	<option value="0">All Company</option>
+            	@foreach($_company as $company)
+            		<option value="{{ $company->payroll_company_id }}">{{ $company->payroll_company_name }}</option>
+            	@endforeach
+            </select>
+        </div>
+    </div>
+    
+    <div class="tab-content codes_container">
+        <div id="all" class="tab-pane fade in active">
+            <div class="form-group order-tags"></div>
+                <div class="clearfix">
+                    <div class="col-md-12">
+                        <div class="table-responsive load-table-employee-list">
+						    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @endsection
 @section('script')
-<script type="text/javascript" src="/assets/member/js/payroll/payroll_timekeeping.js"></script>
+<script type="text/javascript" src="/assets/member/js/payroll/payroll_timekeeping.js?version=10"></script>
 @endsection

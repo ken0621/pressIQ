@@ -4,12 +4,13 @@ namespace App\Globals;
 use DB;
 use App\Models\Tbl_category;
 use App\Models\Tbl_user;
+use App\Globals\Tablet_global;
 
 class Category
 {
 	public static function getShopId()
 	{
-		return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+		return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
 	}
 	public static function for_mts_cat()
 	{
@@ -34,9 +35,15 @@ class Category
 		return $data;
 	}
 
-	public static function getAllCategory($cat_type = array("all","services","inventory","non-inventory","bundles"))
+	public static function getAllCategory($cat_type = array("all","services","inventory","non-inventory","bundles"), $for_tablet = false)
 	{
-		$data = Category::re_select_raw(Category::getShopId(), 0, $cat_type);
+		$shop_id = Category::getShopId();
+		if($for_tablet == true)
+		{
+			$shop_id = Tablet_global::getShopId();
+		}
+
+		$data = Category::re_select_raw($shop_id, 0, $cat_type);
 		return $data;
 	}
 
@@ -213,7 +220,7 @@ class Category
 	public static function select_category_archived($margin_left = 0)
 	{
 		$html = "";
-		$_category = Tbl_category::where("archived",1)->get();
+		$_category = Tbl_category::where("archived",1)->where("type_shop",Category::getShopId())->get();
 
 		$cat_type = array("all","services","inventory","non-inventory","bundles");
 		foreach ($_category as $key => $value) 

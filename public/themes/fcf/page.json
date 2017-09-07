@@ -20,34 +20,6 @@
 			"default":"OUR LATEST NEWS",
 			"size":"6"
 		},
-		"home_slogan_first" :
-		{
-			"label":"Home Slogan First Text",
-			"type":"textbox",
-			"default":"WE ARE A",
-			"size":"4"
-		},
-		"home_slogan_highlight" :
-		{
-			"label":"Home Slogan highlighted Text",
-			"type":"textbox",
-			"default":"RESPONSIBLE",
-			"size":"4"
-		},
-		"home_slogan_last" :
-		{
-			"label":"Home Slogan last Text",
-			"type":"textbox",
-			"default":"MINING COMPANY",
-			"size":"4"
-		},
-		"home_slogan_subtitle" :
-		{
-			"label":"Home Slogan subtitle",
-			"type":"textbox",
-			"default":"This drives innovative solutions for our clients and improves our understanding of the world in which we work.",
-			"size":"12"
-		},
 		"home_gallery_title" :
 		{
 			"label":"Gallery Title",
@@ -61,20 +33,6 @@
 			"type":"gallery",
 			"default":"",
 			"size":"12"
-		},
-		"home_division1_title" :
-		{
-			"label":"Home Division 1 title",
-			"type":"textbox",
-			"default":"WHO WE ARE",
-			"size":"6"
-		},
-		"home_division1_context" :
-		{
-			"label":"Home Division 2 context",
-			"type":"textarea",
-			"default":"context here",
-			"size":"6"
 		},
 		"home_division2_title" :
 		{
@@ -198,13 +156,6 @@
 			"default":"COMPANY PROFILE",
 			"size":"4"
 		},
-		"about_company_profile_context_logo" :
-		{
-			"label":"Company Profile Context Logo",
-			"type":"image",
-			"default":"/themes/fcf/img/company-logo.png",
-			"size":"4"
-		},
 		"about_company_profile_context" :
 		{
 			"label":"Company Profile Context",
@@ -216,29 +167,8 @@
 		{
 			"label":"Company Profile Context Image 1",
 			"type":"image",
-			"default":"/themes/fcf/img/full1.jpg",
-			"size":"3"
-		},
-		"about_company_profile_context_img2" :
-		{
-			"label":"Company Profile Context Image 2",
-			"type":"image",
-			"default":"/themes/fcf/img/full1.jpg",
-			"size":"3"
-		},
-		"about_company_profile_context_img3" :
-		{
-			"label":"Company Profile Context Image 3",
-			"type":"image",
-			"default":"/themes/fcf/img/full23.jpg",
-			"size":"3"
-		},
-		"about_company_profile_context_img4" :
-		{
-			"label":"Company Profile Context Image 4",
-			"type":"image",
-			"default":"/themes/fcf/img/full12.jpg",
-			"size":"3"
+			"default":"/themes/fcf/img/full01.jpg",
+			"size":"9"
 		},
 		"about_company_responsibility_title" :
 		{
@@ -566,6 +496,108 @@
 			"size":"6"
 		}
 	},
+	"jobs":{
+		"jobs_banner_img" :
+		{
+			"label":"Top Banner Image (1366x355)",
+			"type":"image",
+			"default":"/themes/fcf/img/jobs-bg.png",
+			"size":"12"
+		},
+		"jobs_head_text" :
+		{
+			"label":"Head Text",
+			"type":"textbox",
+			"default":"JOB VACANCIES",
+			"size":"6"
+		},
+		"jobs_head_context" :
+		{
+			"label":"Head Context",
+			"type":"textbox",
+			"default":"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+			"size":"6"
+		},
+		"jobs_right_tab_1_head_text" :
+		{
+			"label":"Tab 1 Head Text",
+			"type":"textbox",
+			"default":"Let us find a job for you",
+			"size":"6"
+		},
+		"jobs_right_tab_1_subhead_text" :
+		{
+			"label":"Tab 1 Subhead Text",
+			"type":"textbox",
+			"default":"Attached your resume directly to us",
+			"size":"6"
+		},
+		"jobs_right_tab_1_image" :
+		{
+			"label":"Right Tab 1 Image (445x215)",
+			"type":"image",
+			"default":"/themes/fcf/img/find-job.png",
+			"size":"12"
+		},
+		"jobs_right_tab_2_head_text" :
+		{
+			"label":"Tab 2 Head Text",
+			"type":"textbox",
+			"default":"Company Profile",
+			"size":"6"
+		},
+		"jobs_right_tab_2_subhead_text" :
+		{
+			"label":"Tab 2 Subhead Text",
+			"type":"textbox",
+			"default":"Learn more about company",
+			"size":"6"
+		},
+		"jobs_right_tab_2_subhead_context" :
+		{
+			"label":"Tab 2 Subhead Context",
+			"type":"textbox",
+			"default":"FCF Minerals Corporation (FCF) was incorporated in the Philippines and was duly registered with the Philippine SEC on December 3, 2001 to engage in continuing exploration, development and commercial operation of mineral claims with full power and authority to do any and all acts, things, business and activities which are related, incidental or conducive directly or indirectly to the attainment of the foregoing objectives as a mining company. ",
+			"size":"12"
+		}
+	},
+	"job":{
+		"job_banner_img" :
+		{
+			"label":"Top Banner Image (1366x179)",
+			"type":"image",
+			"default":"/themes/fcf/img/job-bg.png",
+			"size":"12"
+		},
+		"job_maintenance":
+		{
+			"label":"Job Posts Maintenance",
+			"type":"maintenance",
+			"default":"",
+			"field":[
+				{"name":"job_title", "type":"text"},
+				{"name":"job_caption_post", "type":"text"},
+				{"name":"job_description", "type":"textarea"},
+				{"name":"job_image_(433x327)", "type":"image"},
+				{"name":"application_details", "type":"textarea"},
+				{"name":"company_compensation", "type":"textarea"},
+				{"name":"job_salary_range_from", "type":"number"},
+				{"name":"job_salary_range_to", "type":"number"},
+				{"name":"job_experience_from", "type":"number"},
+				{"name":"job_experience_to", "type":"number"},
+				{"name":"job_location", "type":"text"},
+				{"name":"job_date_posted", "type":"timestamp"}
+			],
+			"size":"12"
+		},
+		"job_application_done" :
+		{
+			"label":"Application Done Popup",
+			"type":"textbox",
+			"default":"Thank you for applying FCF Minerals. Wait for our call for 5 to 7 working days.",
+			"size":"6"
+		}
+	},
 	"contactus":
 	{
 		"contactus_banner_img" :
@@ -643,6 +675,20 @@
 			"label":"Business Hours",
 			"type":"textbox",
 			"default":"Monday - Friday at 9:00am - 6:00pm",
+			"size":"6"
+		},
+		"contactus_project_site_title" :
+		{
+			"label":"Project Site Title",
+			"type":"textbox",
+			"default":"Project Site Address",
+			"size":"6"
+		},
+		"contactus_project_site_content" :
+		{
+			"label":"Project Site Address",
+			"type":"textbox",
+			"default":"Brgy. Runruno, Municipality of Quezon, Nueva Vizcaya, Philippines",
 			"size":"6"
 		},
 		"contactus_location_map" :

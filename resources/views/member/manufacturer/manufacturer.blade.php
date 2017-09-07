@@ -5,6 +5,12 @@
     {
         width: 100% !important;
     }
+    .manufacturer-image
+    {
+        width: 250px; 
+        height: 250px; 
+        object-fit: cover;
+    }
 </style>
 <input type="hidden" name="_token" value="{{csrf_token()}}">
     <input type="hidden" name="manufacturer_id" value="{{$manufacturer->manufacturer_id or ''}}" >
@@ -14,6 +20,16 @@
 </div>
 <div class="modal-body modallarge-body-layout background-white form-horizontal menu_container">
     <div class="panel-body form-horizontal">
+        <div class="form-group">
+            <div class="col-md-12">
+                <label>Manufacturer Image *</label>
+                <div>
+                    <img class="manufacturer-image" src="{{$manufacturer->image_path or '/assets/front/img/placeholder.png'}}">
+                    <button style="margin-left: 25px;" class="image-gallery image-gallery-single btn btn-primary" key="manufacturer-image"> Upload Image </button>
+                    <input type="hidden" class="manufacturer-image-input" name="manufacturer_image"  value="{{$manufacturer->manufacturer_image or ''}}">
+                </div>
+            </div>
+        </div>
         <div class="form-group">
             <div class="col-md-12">            
                 <label>Manufacturer Name *</label>

@@ -2,7 +2,7 @@
 
 <table class="table table-bordered table-striped table-condensed">
     <thead style="text-transform: uppercase">
-        <tr>
+        {{-- <tr>
             <th class="text-center" width="70px;">ITEM ID</th>
             <th class="text-center">SKU</th>
             <th class="text-center" width="150px">Price</th>
@@ -11,10 +11,16 @@
             <th class="text-center" width="100px">Inventory</th>
             <th class="text-center" width="60px">U/M</th>
             <th class="text-left" width="170px"></th>
+        </tr> --}}
+        <tr>
+            @foreach($_item[0] as $column)
+            <th class="text-center">{{ $column["label"] }}</th>
+            @endforeach
+            <th class="text-left" width="170px"></th>
         </tr>
     </thead>
     <tbody>
-        @foreach($_item as $item)
+        {{-- @foreach($_item as $item)
         <tr>
             <td class="text-center">{{ $item->item_id }}</td>
             <td class="text-center">{{ $item->item_sku }}</td>
@@ -60,6 +66,40 @@
                 </div>
             </td>
         </tr>
+        @endforeach --}}
+        @foreach($_item as $item)
+        <tr>
+            @foreach($item as $column)
+            <td class="text-center">{{ $column["data"] }}</td>
+            @endforeach
+            <td class="text-center">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Action <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-custom">
+                        <li>
+                            <a onclick="action_load_link_to_modal('/member/item/v2/edit?item_id={{ $column["default"]->item_id }}', 'lg')">
+                                <div style="display: inline-block; width: 17px; text-align: center;"><i class="fa fa-edit"></i> &nbsp;</div>
+                                Modify
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:" class="item-{{ $archive }}" item-id="{{ $column["default"]->item_id }}">
+                                <div style="display: inline-block; width: 17px; text-align: center;"><i class="fa fa-trash"></i> &nbsp;</div>
+                                <span style="text-transform: capitalize;">{{ $archive }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:">
+                                <div style="display: inline-block; width: 17px; text-align: center;"><i class="fa fa-info"></i> &nbsp;</div>
+                                Item Information
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
         @endforeach
     </tbody>
 </table>
@@ -67,5 +107,3 @@
 @else
 <div style="padding: 100px; text-align: center;">NO DATA YET</div>
 @endif
-
-{!! $hide !!}

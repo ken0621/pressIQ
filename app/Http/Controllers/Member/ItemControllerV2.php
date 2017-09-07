@@ -30,10 +30,21 @@ class ItemControllerV2 extends Member
 		Item::get_add_display();
 		Item::get_filter_type($item_type_id);
 		Item::get_filter_category($item_category_id);
+
 		$data["_item"]		= Item::get($this->user_info->shop_id, 5, $archived, $search);
 		$data["pagination"] = Item::get_pagination();
 		$data["archive"]	= $archived == 1 ? "restore" : "archive";
-		$data["hide"]		= Columns::checkColumns($this->user_info->shop_id, $this->user_info->user_id, "item");
+
+		$default[0]   	 	= ["Item ID","item_id", true];
+		$default[1]   	 	= ["SKU", "item_sku", true];
+		$default[2]	  	 	= ["Price", "display_price", true];
+		$default[3]	  	 	= ["Cost", "display_cost", true];
+		$default[4]	  	 	= ["Markup", "display_markup", true];
+		$default[5]	  	 	= ["Inventory", "inventory_count", true];
+		$default[6]	  	 	= ["U/M", "multi_abbrev", true];
+
+		$data["_item"]	    = Columns::filterColumns($this->user_info->shop_id, $this->user_info->user_id, "item", $data["_item"], $default);
+		
 		return view("member.itemv2.list_item_table", $data);
 	}
 	public function get_item()
@@ -197,14 +208,7 @@ class ItemControllerV2 extends Member
 			$shop_id 	  	 = $this->user_info->shop_id;
 			$user_id	  	 = $this->user_info->user_id;
 			$from    	  	 = "item";
-			$default[0]   	 = "Item ID";
-			$default[1]   	 = "SKU";
-			$default[2]	  	 = "Price";
-			$default[3]	  	 = "Cost";
-			$default[4]	  	 = "Markup";
-			$default[5]	  	 = "Inventory";
-			$default[6]	  	 = "U/M";
-			$data["_column"] = Columns::getColumns($shop_id, $user_id, $from, $default);
+			$data["_column"] = Columns::getColumns($shop_id, $user_id, $from);
 			
 			return view("member.itemv2.columns_item", $data);
 		}

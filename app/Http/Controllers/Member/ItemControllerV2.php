@@ -54,6 +54,8 @@ class ItemControllerV2 extends Member
 	}
 	public function get_item()
 	{
+		Session::forget('choose_item');
+		
 		$data['_service']  		 = Category::getAllCategory(['services']);
 		$data['_inventory']  	 = Category::getAllCategory(['inventory']);
 		$data['_noninventory']   = Category::getAllCategory(['non-inventory']);
@@ -92,8 +94,6 @@ class ItemControllerV2 extends Member
 	}
 	public function submit_item($from)
 	{
-		Session::forget('choose_item');
-
 		$insert['item_name'] 				   = Request::input('item_description');
 		$insert['item_sku'] 				   = Request::input('item_sku');
 		$insert['item_barcode'] 			   = Request::input('item_barcode');

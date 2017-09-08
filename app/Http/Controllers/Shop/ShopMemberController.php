@@ -18,4 +18,9 @@ class ShopMemberController extends Shop
     	$data["page"] = "Register";
     	return view("member.register", $data);
     }
+    public function getLogin()
+    {
+    	$data["page"] = "Login";
+    	return view("member.login", $data);
+    }
 }

@@ -11,6 +11,10 @@ body
 	padding: 7.5px 25px;
 	border-radius: 25px;
 	font-weight: 600;
+	&:hover
+	{
+		color: #fff;
+	}
 }
 
 /* Header */

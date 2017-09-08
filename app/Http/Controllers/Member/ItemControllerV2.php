@@ -309,4 +309,34 @@ class ItemControllerV2 extends Member
 
 		return 'success';
 	}
+	public function refill_item()
+	{
+		$item_id = Request::input('item_id');
+		$data['item'] = Item::info($item_id);
+		$data['refill_submit'] = '/member/item/v2/refill_submit';
+
+		return view('member.itemv2.refill_item',$data);
+	}
+	public function refill_submit()
+	{
+		$item_id = Request::input('item_id');
+		$quantity = Request::input('quantity');
+		$remarks = Request::input('remarks');
+		$shop_id = $this->user_info->shop_id;
+		$warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+
+		$validate = Warehouse2::refill_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks);
+    	if(!$validate)
+    	{
+    		$return = Warehouse2::refill($shop_id, $warehouse_id, $item_id, $quantity, $remarks);
+    		$return['call_function'] = 'success_refill';
+    	}
+    	else
+    	{
+    		$return['status'] = 'error';
+    		$return['message'] = $validate;
+    	}
+
+    	return json_encode($return);
+	}
 }

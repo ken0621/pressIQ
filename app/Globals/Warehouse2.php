@@ -309,7 +309,11 @@ class Warehouse2
     {
         $return = null;
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
-
+        
+        if(is_numeric($quantity) == false)
+        { 
+            $return .= "The quantity must be a number. <br>";
+        }
 
         $serial_qty = count($serial);
         if($serial_qty != 0)

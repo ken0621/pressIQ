@@ -387,8 +387,8 @@ class Warehouse2
                 $insert['record_source_ref_name']    = isset($source['name']) ? $source['name'] : '';
                 $insert['record_source_ref_id']      = isset($source['id']) ? $source['id'] : 0;
                 $insert['record_log_date_updated']   = Carbon::now();
-                // $insert['record_log_date_updated']   = Carbon::now();
-                // $insert['record_log_date_updated']   = Carbon::now();
+                $insert['mlm_pin']                   = Warehouse2::get_mlm_pin($shop_id);
+                $insert['mlm_activation']            = strtoupper(str_random(6));
 
                 if($serial_qty > 0)
                 {
@@ -416,6 +416,19 @@ class Warehouse2
 
 
             $return['status'] = 'success';
+        }
+
+        return $return;
+    }
+    public static function get_mlm_pin($shop_id)
+    {       
+        $return = 0; 
+        $prefix = Tbl_settings::where("settings_key","mlm_pin_prefix")->value('settings_value');
+        if($prefix)
+        {
+            $ctr_item = Tbl_warehouse_inventory_record_log::where('record_shop_id',$shop_id)->count() + 1;
+
+            $return = $prefix.sprintf("%'.05d\n",$ctr_item);
         }
 
         return $return;

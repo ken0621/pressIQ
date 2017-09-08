@@ -311,8 +311,11 @@ html, body {
           <h4><span class="glyphicon glyphicon-lock"></span> Login</h4>
         </div>
         <div class="modal-body" style="padding:40px 50px;">
-          <form role="form">
-          {{ csrf_field() }}
+          <form class = "login" role="form" method="post" action="/admin/login">
+            {{ csrf_field() }}
+           @if(session('message'))
+            <div style="color: red;">{{ session('message') }}</div>
+          @endif
             <div class="form-group" method="post">
               <label for="usrname"><span class="glyphicon glyphicon-user"></span> Username</label>
               <input type="text" class="form-control" id="usrname" name="username" placeholder="Enter email">
@@ -321,7 +324,7 @@ html, body {
               <label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Password</label>
               <input type="password" class="form-control" id="psw" name="password" placeholder="Enter password">
             </div>
-              <button type="submit" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-off"></span> Login</button>
+              <button type="submit" id ="login" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-off"></span> Login</button>
           </form>
         </div>
       </div>
@@ -369,8 +372,33 @@ html, body {
     </div>
   </div> 
 </div>
+
+<script type="text/javascript">
+        
+        $('form.login').submit(function(e) {
+    e.preventDefault();
+    $.ajax({
+       type: "POST",
+       url: '/super/login',
+       data: $(this).serialize(),
+       success: function(data)
+       {
+          if (data === 'Login') {
+            window.location = '/super';
+          }
+          else {
+            alert('Invalid Credentials');
+          }
+       }
+   });
+ });
+          
+
+  
+</script>
  
 <!-- jQuery 3 -->
+
 <script src="/admin_assets/bower_components/jquery/dist/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="/admin_assets/bower_components/jquery-ui/jquery-ui.min.js"></script>

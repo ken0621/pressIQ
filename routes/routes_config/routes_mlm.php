@@ -1,7 +1,8 @@
 <?php
 Route::any('/super','Super\AdminControllers@getview');
-Route::any('/super/login','Super\AdminControllers@login');
+Route::any('/super/login','Super\AdminControllers@view');
 Route::any('/admin/signup', 'Super\AdminControllers@add');
+Route::any('/admin/login', 'Super\AdminControllers@login_submit');
 
 
 Route::get('/mlm/membership_active_code/{pin}', 'Mlm\MlmLoginController@membership_active_code'); 

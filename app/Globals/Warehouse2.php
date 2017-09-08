@@ -58,8 +58,7 @@ class Warehouse2
     }
     public static function transfer_validation($shop_id, $wh_from, $wh_to, $item_id, $quantity, $remarks, $serial = array())
     {
-        $return['status'] = null;
-        $return['message'] = null;
+        $return = null;
 
         $item_data = Item::get_item_details($item_id);
         if(Warehouse2::check_warehouse_existence($shop_id, $wh_from) && Warehouse2::check_warehouse_existence($shop_id, $wh_to))
@@ -71,60 +70,54 @@ class Warehouse2
                 $get_data = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$wh_from)->where('record_item_id',$item_id)->first();
                 if($quantity < 0)
                 {
-                    $return['status'] = 'error';
-                    $return['message'] .= 'The quantity of '.$item_data->item_name.' is less than one. <br>';                
+                    $return .= 'The quantity of '.$item_data->item_name.' is less than one. <br>';                
                 }
                 if(!$get_data)
                 {
-                    $return['status'] = 'error';
-                    $return['message'] .= 'The item '.$item_data->item_name.' does not exist in this warehouse. <br>';                
+                    $return .= 'The item '.$item_data->item_name.' does not exist in this warehouse. <br>';                
                 }
                 if($warehouse_qty < $quantity)
                 {
-                    $return['status'] = 'error';
-                    $return['message'] .= 'The quantity of '.$item_data->item_name.' is not enough to transfer <br>';
+                    $return .= 'The quantity of '.$item_data->item_name.' is not enough to transfer <br>';
                 }
-                if(count($serial) > 0)
+                $serial_qty = count($serial);
+                if($serial_qty > 0)
                 {
                     if($serial_qty != $quantity)
                     {
-                        $return['status'] = 'error';
-                        $return['message'] .= "The serial number are not equal from the quantity. <br> ";
+                        $return .= "The serial number are not equal from the quantity. <br> ";
                     }
                     foreach ($serial as $key => $value) 
                     {
                         $check_serial = Tbl_warehouse_inventory_record_log::where('record_serial_number',$value)->where('record_item_id',$item_id)->where('record_warehouse_id',$wh_from)->first();
                         if(!$check_serial)
                         {
-                            $return['status'] = 'error';
-                            $return['message'] .= "The serial number are doesn't belong to ".$item_data->item_name.". <br> ";
+                            $return .= "The serial number ".$value." does not belong to ".$item_data->item_name.". <br> ";
                         }
                     }
                 }
             }
             else
             {
-                $return['status'] = 'error';
-                $return['message'] .= "The item number ". $item_id." doesn't exist!";            
+                $return.= "The item number ". $item_id." doesn't exist!";            
             }
         }
         else
         {
-            $return['status'] = 'error';
-            $return['message'] .= "The warehouses does not exist!";            
+            $return .= "The warehouses does not exist!";            
         }
 
         return $return;
     }
     public static function transfer($shop_id, $wh_from, $wh_to, $item_id, $quantity, $remarks, $serial = array(), $inventory_history = '')
     {
-        $return['status'] = null;
-        $return['message'] = null;
 
         $return = Warehouse2::transfer_validation($shop_id, $wh_from, $wh_to, $item_id, $quantity, $remarks, $serial);
-
-        if(!$return['message'])
+      
+        if(!$return)
         {
+            $return['status'] = null;
+            $return['message'] = null;
             for ($ctr_qty = 0; $ctr_qty < $quantity ; $ctr_qty++)
             {
                 $get_data = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$wh_from)->where('record_item_id',$item_id)->first();
@@ -175,13 +168,14 @@ class Warehouse2
     }
     public static function transfer_bulk($shop_id, $wh_from, $wh_to, $_item, $remarks = '')
     {
+        $validate = null;
         foreach ($_item as $key => $value)
         {
             $serial = isset($value['serial']) ? $value['serial'] : array();
-            $validate = Warehouse2::transfer_validation($shop_id, $wh_from, $wh_to, $value['item_id'], $value['quantity'], $value['remarks'], $serial);
+            $validate .= Warehouse2::transfer_validation($shop_id, $wh_from, $wh_to, $value['item_id'], $value['quantity'], $value['remarks'], $serial);
         }
 
-        if(!$validate['message'])
+        if(!$validate)
         {
             $wh_from_name = Warehouse2::get_info($wh_from)->value('warehouse_name');
             $wh_to_name = Warehouse2::get_info($wh_to)->value('warehouse_name');
@@ -220,17 +214,17 @@ class Warehouse2
     public static function validate_warehouse($shop_id, $insert)
     {
         $check_warehouse = Tbl_warehouse::where('warehouse_name',$insert['warehouse_name'])->where('warehouse_shop_id',$shop_id)->first();
-        $return['message'] = null;
+        $return = null;
         if($check_warehouse)
         {
-            $return['message'] .= "The warehouse name already exist";
+            $return .= "The warehouse name already exist";
         }
-        if($insert['sale_price_level'] != 0)
+        if($insert != 0)
         {
             $check_price_level = Tbl_price_level::where('price_level_id',$insert['sale_price_level'])->first();
             if(!$check_price_level)
             {
-                $return['message'] .= "The sale_price_level does't exist";
+                $return .= "The sale_price_level does't exist";
             }
         }
         if($insert['purchase_price_level'] != 0)
@@ -238,7 +232,7 @@ class Warehouse2
             $check_price_level = Tbl_price_level::where('price_level_id',$insert['purchase_price_level'])->first();
             if(!$check_price_level)
             {
-                $return['message'] .= "The sale_price_level does't exist";
+                $return .= "The sale_price_level does't exist";
             }
         }
 
@@ -306,8 +300,7 @@ class Warehouse2
 
     public static function refill_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks, $serial = array())
     {
-        $return['status'] = null;
-        $return['message'] = null;
+        $return = null;
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
 
 
@@ -316,23 +309,25 @@ class Warehouse2
         {
             if($serial_qty != $quantity)
             {
-                $return['status'] = 'error';
-                $return['message'] .= "The serial number are not equal from the quantity. <br> ";
+                $item_info = Item::info($item_id);
+                $return .= "The serial number of ".$item_info->item_name." are not equal from the quantity. <br> ";
+            }
+            foreach ($serial as $key => $value) 
+            {
+                $check_serial = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id', $item_id)->where('record_serial_number',$value)->first();
+                if($check_serial)
+                {
+                    $return .= "The serial number ".$value." already exist. <br>";
+                }
             }
         }
         if($quantity < 0)
         {
-            $return['status'] = 'error';
-            $return['message'] .= "The quantity is less than 1. <br> ";
+            $return .= "The quantity is less than 1. <br> ";
         }
         if(!$check_warehouse)
         {
-            $return['status'] = 'error';
-            $return['message'] .= "The warehouse doesn't belong to your account <br>";
-        }
-        if($return['message'])
-        {
-            $return['status'] = 'error';
+            $return .= "The warehouse doesn't belong to your account <br>";
         }
 
         return $return;
@@ -416,18 +411,20 @@ class Warehouse2
 
         return $return;
     }
-    /**              
+    /**           
         $_item[0]['item_id'] = 15;
         $_item[0]['quantity'] = 1;
         $_item[0]['remarks'] = 'test';
+        $_item[0]['serial'] = array("1SERIAL001");;
 
         $_item[1]['item_id'] = 17;
-        $_item[1]['quantity'] = 10;
+        $_item[1]['quantity'] = 1;
         $_item[1]['remarks'] = 'test_consume';
+        $_item[1]['serial'] = array("1SERIAL004");;
 
-        $ret = Warehouse2::refill_bulk($this->user_info->shop_id, 6, 'refill_bulk_test', 20 , 'test transfer', $_item);
+        $ret = Warehouse2::refill_bulk($this->user_info->shop_id, 6, 'refill_bulk_test', 20 , 'test refill', $_item);
         
-        $ret = Warehouse2::transfer_bulk($this->user_info->shop_id, 86, 101, $_item, "test transfer 1");
+        $ret = Warehouse2::transfer_bulk($this->user_info->shop_id, 29, 6, $_item, "test transfer 1");
 
         $ret = Warehouse2::consume_bulk($this->user_info->shop_id, 6, 'consumebulk_test', 1 , 'test consume', $_item);
 
@@ -435,13 +432,14 @@ class Warehouse2
     */
     public static function refill_bulk($shop_id, $warehouse_id, $reference_name = '', $reference_id = 0 , $remarks = '', $_item = array())
     {
+        $validate = null;
         foreach ($_item as $key => $value)
         {
             $serial = isset($value['serial']) ? $value['serial'] : array();
-            $validate = Warehouse2::refill_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $serial);
+            $validate .= Warehouse2::refill_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $serial);
         }
 
-        if(!$validate['message'])
+        if(!$validate)
         {
             $inventory_details['history_description'] = "Refill items from ".$reference_name." #".$reference_id;
             $inventory_details['history_remarks'] = $remarks;
@@ -471,8 +469,7 @@ class Warehouse2
     }
     public static function consume_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks, $serial = array())
     {
-        $return['status'] = null;
-        $return['message'] = null;
+        $return = null;
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
 
 
@@ -481,8 +478,7 @@ class Warehouse2
         {
             if($serial_qty != $quantity)
             {
-                $return['status'] = 'error';
-                $return['message'] .= "The serial number are not equal from the quantity. <br> ";
+                $return .= "The serial number are not equal from the quantity. <br> ";
             }
 
             foreach ($serial as $key => $value) 
@@ -490,30 +486,22 @@ class Warehouse2
                 $check_serial = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id', $item_id)->where('record_serial_number',$value)->first();
                 if(!$check_serial)
                 {
-                    $return['message'] .= "The serial number ".$value." does not exist. <br>";
+                    $return .= "The serial number ".$value." does not exist in this warehouse. <br>";
                 }
             }
         }
         if($quantity < 0)
         {
-            $return['status'] = 'error';
-            $return['message'] .= "The quantity is less than 1. <br> ";
+            $return .= "The quantity is less than 1. <br> ";
         }
         if(!$check_warehouse)
         {
-            $return['status'] = 'error';
-            $return['message'] .= "The warehouse doesn't belong to your account <br>";
+            $return .= "The warehouse doesn't belong to your account <br>";
         }
         $inventory_qty = Warehouse2::get_item_qty($warehouse_id, $item_id);
         if($quantity > $inventory_qty)
         {
-            $return['status'] = 'error';
-            $return['message'] .= "The quantity is not enough to consume. <br>";
-        }
-
-        if($return['message'])
-        {
-            $return['status'] = 'error';
+            $return .= "The quantity is not enough to consume. <br>";
         }
 
         return $return;
@@ -522,7 +510,7 @@ class Warehouse2
     {
         $return['status'] = null;
         $return['message'] = null;
-      
+
         $insert_slip['warehouse_id']                 = $warehouse_id;
         $insert_slip['inventory_remarks']            = $remarks;
         $insert_slip['inventory_slip_date']          = Carbon::now();
@@ -546,14 +534,20 @@ class Warehouse2
             $insert['record_inventory_status']   = 1;
             $insert['record_log_date_updated']   = Carbon::now();
 
-            if($serial_qty > 0)
-            {
-                $insert['record_serial_number'] = $serial[$ctr_qty];
-            }
             $id = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)
                                                    ->where("record_item_id",$item_id)
                                                    ->where("record_inventory_status",0)
                                                    ->value('record_log_id');
+            if($serial_qty > 0)
+            {
+                $insert['record_serial_number'] = $serial[$ctr_qty];
+
+                $id = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)
+                                                   ->where("record_item_id",$item_id)
+                                                   ->where("record_inventory_status",0)
+                                                   ->where("record_serial_number",$serial[$ctr_qty])
+                                                   ->value('record_log_id');
+            }
             Warehouse2::insert_item_history($id);
             Tbl_warehouse_inventory_record_log::where('record_log_id',$id)->update($insert);
         }
@@ -580,16 +574,16 @@ class Warehouse2
     }
     public static function consume_bulk($shop_id, $warehouse_id, $reference_name = '', $reference_id = 0 , $remarks = '', $_item)
     {
+        $validate = null;
         foreach ($_item as $key => $value)
         {
             $serial = isset($value['serial']) ? $value['serial'] : null;
-            $validate = Warehouse2::consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $serial);
+            $validate .= Warehouse2::consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $serial);
         }
-
-        if(!$validate['message'])
+        if(!$validate)
         {
             foreach ($_item as $key => $value) 
-            {
+            {                
                 $serial = isset($value['serial']) ? $value['serial'] : null;
 
                 $consume['name'] = $reference_name;

@@ -124,7 +124,7 @@ class ItemControllerV2 extends Member
 			{
 				$return = Item::create_validation($shop_id, $item_type_id, $insert);
 
-				if(!$return['message'])
+				if(!$return)
 				{
 					$return = Item::create($shop_id, $item_type_id, $insert);
 				}				
@@ -134,7 +134,7 @@ class ItemControllerV2 extends Member
 				$_item = Session::get('choose_item');
 				$return = Item::create_bundle_validation($shop_id, $item_type_id, $insert, $_item);
 
-				if(!$return['message'])
+				if(!$return)
 				{
 					$return = Item::create_bundle($shop_id, $item_type_id, $insert, $_item);
 				}	
@@ -147,7 +147,7 @@ class ItemControllerV2 extends Member
 			{
 				$return = Item::create_validation($shop_id, $item_type_id, $insert);
 
-				if(!$return['message'])
+				if(!$return)
 				{
 					$return  	  = Item::modify($shop_id, $item_id, $insert);
 				}
@@ -157,7 +157,7 @@ class ItemControllerV2 extends Member
 				$_item = Session::get('choose_item');
 				$return = Item::create_bundle_validation($shop_id, $item_type_id, $insert, $_item);
 
-				if(!$return['message'])
+				if(!$return)
 				{
 					$return = Item::modify_bundle($shop_id, $item_id, $insert, $_item);
 				}

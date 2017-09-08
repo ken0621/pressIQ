@@ -165,7 +165,7 @@ class ShopAccountController extends Shop
         }
 
         $data["page"] = "Order";
-        $data["_order"] = Tbl_ec_order::where('shop_id', $this->shop_info->shop_id)->where('customer_id', Self::$customer_id)->get();
+        $data["_order"] = Tbl_ec_order::where('shop_id', $this->shop_info->shop_id)->where('archived',0)->where('customer_id', Self::$customer_id)->get();
 
         foreach ($data["_order"] as $key => $value) 
         {

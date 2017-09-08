@@ -1014,7 +1014,12 @@ class Item
             }
         }
         return $qty;
-    }    
+    }  
+    public static function get_item_from_bundle($item_id)
+    {
+        $_item = Tbl_item_bundle::where("bundle_bundle_id", $item_id)->item()->get();
+        return $_item;
+    }  
     public static function get_item_bundle($item_id = null)
     {
         $items = [];

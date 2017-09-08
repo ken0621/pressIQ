@@ -13,8 +13,7 @@ class ItemControllerV2 extends Member
 {
 	public function list()
 	{
-
-		$data["page"] 		 	= "Item List";
+ 		$data["page"] 		 	= "Item List";
 		$data["_item_type"]     = Item::get_item_type_list();
 		$data["_item_category"] = Item::getItemCategory($this->user_info->shop_id);
 
@@ -55,7 +54,7 @@ class ItemControllerV2 extends Member
 	public function get_item()
 	{
 		Session::forget('choose_item');
-		
+
 		$data['_service']  		 = Category::getAllCategory(['services']);
 		$data['_inventory']  	 = Category::getAllCategory(['inventory']);
 		$data['_noninventory']   = Category::getAllCategory(['non-inventory']);
@@ -98,22 +97,22 @@ class ItemControllerV2 extends Member
 		$insert['item_sku'] 				   = Request::input('item_sku');
 		$insert['item_barcode'] 			   = Request::input('item_barcode');
 		$insert['item_category_id']			   = Request::input('item_category');
-		$insert['item_manufacturer_id'] 	   = Request::input('item_manufacturer_id');
+		$insert['item_manufacturer_id'] 	   = Request::input('item_manufacturer_id')  == null ? '' : Request::input('item_manufacturer_id');
 		$insert['item_price'] 				   = Request::input('item_price');
 		$insert['item_income_account_id'] 	   = Request::input('item_income_account_id');
-		$insert['item_sales_information']      = Request::input('item_sales_information');
-		$insert['item_cost'] 				   = Request::input('item_cost');
+		$insert['item_sales_information']      = Request::input('item_sales_information') == null ? '' : Request::input('item_sales_information');
+		$insert['item_cost'] 				   = Request::input('item_cost') == null ? 0 : Request::input('item_cost');
 		$insert['item_expense_account_id']	   = Request::input('item_expense_account_id');
-		$insert['item_purchasing_information'] = Request::input('item_purchasing_information');
+		$insert['item_purchasing_information'] = Request::input('item_purchasing_information') == null ? '' : Request::input('item_purchasing_information');
 		$insert['item_asset_account_id']       = Request::input('item_asset_account_id');
-		$insert['has_serial_number']           = Request::input('item_has_serial');
-		$insert['membership_id']       		   = Request::input('membership_id');
-		$insert['gc_earning']         		   = Request::input('gc_earning');
+		$insert['has_serial_number']           = Request::input('item_has_serial') == null ? 0 : Request::input('item_has_serial');
+		$insert['membership_id']       		   = Request::input('membership_id') == null ? 0 : Request::input('membership_id');
+		$insert['gc_earning']         		   = Request::input('gc_earning')  == null ? 0 : Request::input('gc_earning');
 		
 		/*For inventory refill*/
-		$insert['item_quantity'] 		  	   = Request::input('item_initial_qty');
-		$insert['item_date_tracked'] 		   = Request::input('item_date_track');
-		$insert['item_reorder_point'] 		   = Request::input('item_reorder_point');
+		$insert['item_quantity'] 		  	   = Request::input('item_initial_qty') == null ? 0 :Request::input('item_initial_qty');
+		$insert['item_date_tracked'] 		   = Request::input('item_date_track') == null ? '' :Request::input('item_date_track');
+		$insert['item_reorder_point'] 		   = Request::input('item_reorder_point') == null ? 0 :Request::input('item_reorder_point');
 
 		$shop_id = $this->user_info->shop_id;
 		
@@ -125,7 +124,7 @@ class ItemControllerV2 extends Member
 			{
 				$return = Item::create_validation($shop_id, $item_type_id, $insert);
 
-				if(!$return['message'])
+				if(!$return)
 				{
 					$return = Item::create($shop_id, $item_type_id, $insert);
 				}				
@@ -135,7 +134,7 @@ class ItemControllerV2 extends Member
 				$_item = Session::get('choose_item');
 				$return = Item::create_bundle_validation($shop_id, $item_type_id, $insert, $_item);
 
-				if(!$return['message'])
+				if(!$return)
 				{
 					$return = Item::create_bundle($shop_id, $item_type_id, $insert, $_item);
 				}	
@@ -148,7 +147,7 @@ class ItemControllerV2 extends Member
 			{
 				$return = Item::create_validation($shop_id, $item_type_id, $insert);
 
-				if(!$return['message'])
+				if(!$return)
 				{
 					$return  	  = Item::modify($shop_id, $item_id, $insert);
 				}
@@ -158,7 +157,7 @@ class ItemControllerV2 extends Member
 				$_item = Session::get('choose_item');
 				$return = Item::create_bundle_validation($shop_id, $item_type_id, $insert, $_item);
 
-				if(!$return['message'])
+				if(!$return)
 				{
 					$return = Item::modify_bundle($shop_id, $item_id, $insert, $_item);
 				}
@@ -309,5 +308,35 @@ class ItemControllerV2 extends Member
 		Session::put('choose_item',$data);
 
 		return 'success';
+	}
+	public function refill_item()
+	{
+		$item_id = Request::input('item_id');
+		$data['item'] = Item::info($item_id);
+		$data['refill_submit'] = '/member/item/v2/refill_submit';
+
+		return view('member.itemv2.refill_item',$data);
+	}
+	public function refill_submit()
+	{
+		$item_id = Request::input('item_id');
+		$quantity = Request::input('quantity');
+		$remarks = Request::input('remarks');
+		$shop_id = $this->user_info->shop_id;
+		$warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+
+		$validate = Warehouse2::refill_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks);
+    	if(!$validate)
+    	{
+    		$return = Warehouse2::refill($shop_id, $warehouse_id, $item_id, $quantity, $remarks);
+    		$return['call_function'] = 'success_refill';
+    	}
+    	else
+    	{
+    		$return['status'] = 'error';
+    		$return['message'] = $validate;
+    	}
+
+    	return json_encode($return);
 	}
 }

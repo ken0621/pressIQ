@@ -43,15 +43,17 @@ class Item
         $rules['item_name'] = 'required';
         $rules['item_sku'] = 'required';
         $rules['item_price'] = 'required';
-        $rules['item_cost'] = 'required';
 
-        $validator = Validator::make($insert, $rules);
-
-        if($insert['item_cost'] > $insert['item_price'])
-        {       
-            $return['status'] = 'error';
-            $return['message'] .= 'The cost is greater than the sales price.'."<br>";
+        if($item_type <= 2)
+        {
+            $rules['item_cost'] = 'required';
+            if($insert['item_cost'] > $insert['item_price'])
+            {       
+                $return['status'] = 'error';
+                $return['message'] .= 'The cost is greater than the sales price.'."<br>";
+            }            
         }
+        $validator = Validator::make($insert, $rules);
 
         if($validator->fails())
         {
@@ -137,15 +139,17 @@ class Item
         $rules['item_name'] = 'required';
         $rules['item_sku'] = 'required';
         $rules['item_price'] = 'required';
-        $rules['item_cost'] = 'required';
 
-        $validator = Validator::make($insert, $rules);
-
-        if($insert['item_cost'] > $insert['item_price'])
-        {       
-            $return['status'] = 'error';
-            $return['message'] .= 'The cost is greater than the sales price.'."<br>";
+        if($item_type <= 2)
+        {
+            $rules['item_cost'] = 'required';
+            if($insert['item_cost'] > $insert['item_price'])
+            {       
+                $return['status'] = 'error';
+                $return['message'] .= 'The cost is greater than the sales price.'."<br>";
+            }
         }
+        $validator = Validator::make($insert, $rules);
 
         if($validator->fails())
         {
@@ -237,9 +241,7 @@ class Item
     }
     public static function create_bundle_validation($shop_id, $item_type, $insert, $_item)
     {
-        $return['item_id'] = 0;
-        $return['status'] = null;
-        $return['message'] = null;
+        $return = null;
 
         $rules['item_name'] = 'required';
         $rules['item_sku'] = 'required';
@@ -249,10 +251,9 @@ class Item
 
         if($validator->fails())
         {
-            $return["status"] = "error";
             foreach ($validator->messages()->all('') as $keys => $message)
             {
-                $return["message"] .= $message."<br>";
+                $return .= $message."<br>";
             }
         }
         if($shop_id)
@@ -260,8 +261,7 @@ class Item
             $shop_data = Tbl_shop::where('shop_id',$shop_id)->first();
             if(!$shop_data)
             {
-                $return['status'] = 'error';
-                $return['message'] .= 'Your account does not exist. <br>';                
+                $return .= 'Your account does not exist. <br>';                
             }
         }
         if($item_type)
@@ -269,8 +269,7 @@ class Item
             $type_data = Tbl_item_type::where('item_type_id',$item_type)->first();
             if(!$type_data)
             {
-                $return['status'] = 'error';
-                $return['message'] .= 'Item type does not exist. <br>';            
+                $return .= 'Item type does not exist. <br>';            
             }
         }
         if($insert['item_category_id'] != 0)
@@ -278,8 +277,7 @@ class Item
             $category_data = Tbl_category::where('type_id',$insert['item_category_id'])->where('type_shop',$shop_id)->first();
             if(!$category_data)
             {
-                $return['status'] = 'error';
-                $return['message'] .= 'Category does not exist. <br>';            
+                $return .= 'Category does not exist. <br>';            
             }            
         }
         if($insert['item_income_account_id'] != 0)
@@ -287,14 +285,12 @@ class Item
             $income_data = Tbl_chart_of_account::where('account_id',$insert['item_income_account_id'])->where('account_shop_id',$shop_id)->first();
             if(!$income_data)
             {
-                $return['status'] = 'error';
-                $return['message'] .= 'Income account does not exist. <br>';            
+                $return .= 'Income account does not exist. <br>';            
             }            
         }
         if(count($_item) <= 0)
         {
-            $return['status'] = 'error';
-            $return['message'] .= 'Please add items to bundle. <br>';  
+            $return .= 'Please add items to bundle. <br>';  
         }
 
         return $return;
@@ -394,6 +390,11 @@ class Item
         Self::get_clear_session();
 
         return $return;
+    }
+    
+    public static function get_all_item()
+    {
+        return Tbl_item::where("shop_id", Item::getShopId())->where("archived", 0)->get();
     }
     public static function info($item_id)
     {
@@ -1013,7 +1014,12 @@ class Item
             }
         }
         return $qty;
-    }    
+    }  
+    public static function get_item_from_bundle($item_id)
+    {
+        $_item = Tbl_item_bundle::where("bundle_bundle_id", $item_id)->item()->get();
+        return $_item;
+    }  
     public static function get_item_bundle($item_id = null)
     {
         $items = [];

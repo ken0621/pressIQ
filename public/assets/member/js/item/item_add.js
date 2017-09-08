@@ -19,7 +19,6 @@ function item_add()
 	}
 	function add_event_click_save()
 	{
-		alert(123);
 		$('.add-submit-button').unbind("click");
 		$('.add-submit-button').bind("click", function()
 		{

@@ -43,15 +43,17 @@ class Item
         $rules['item_name'] = 'required';
         $rules['item_sku'] = 'required';
         $rules['item_price'] = 'required';
-        $rules['item_cost'] = 'required';
 
-        $validator = Validator::make($insert, $rules);
-
-        if($insert['item_cost'] > $insert['item_price'])
-        {       
-            $return['status'] = 'error';
-            $return['message'] .= 'The cost is greater than the sales price.'."<br>";
+        if($item_type <= 2)
+        {
+            $rules['item_cost'] = 'required';
+            if($insert['item_cost'] > $insert['item_price'])
+            {       
+                $return['status'] = 'error';
+                $return['message'] .= 'The cost is greater than the sales price.'."<br>";
+            }            
         }
+        $validator = Validator::make($insert, $rules);
 
         if($validator->fails())
         {
@@ -137,15 +139,17 @@ class Item
         $rules['item_name'] = 'required';
         $rules['item_sku'] = 'required';
         $rules['item_price'] = 'required';
-        $rules['item_cost'] = 'required';
 
-        $validator = Validator::make($insert, $rules);
-
-        if($insert['item_cost'] > $insert['item_price'])
-        {       
-            $return['status'] = 'error';
-            $return['message'] .= 'The cost is greater than the sales price.'."<br>";
+        if($item_type <= 2)
+        {
+            $rules['item_cost'] = 'required';
+            if($insert['item_cost'] > $insert['item_price'])
+            {       
+                $return['status'] = 'error';
+                $return['message'] .= 'The cost is greater than the sales price.'."<br>";
+            }
         }
+        $validator = Validator::make($insert, $rules);
 
         if($validator->fails())
         {

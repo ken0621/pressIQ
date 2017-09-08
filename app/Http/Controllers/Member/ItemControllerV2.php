@@ -55,7 +55,7 @@ class ItemControllerV2 extends Member
 	public function get_item()
 	{
 		Session::forget('choose_item');
-		
+
 		$data['_service']  		 = Category::getAllCategory(['services']);
 		$data['_inventory']  	 = Category::getAllCategory(['inventory']);
 		$data['_noninventory']   = Category::getAllCategory(['non-inventory']);
@@ -101,19 +101,19 @@ class ItemControllerV2 extends Member
 		$insert['item_manufacturer_id'] 	   = Request::input('item_manufacturer_id');
 		$insert['item_price'] 				   = Request::input('item_price');
 		$insert['item_income_account_id'] 	   = Request::input('item_income_account_id');
-		$insert['item_sales_information']      = Request::input('item_sales_information');
-		$insert['item_cost'] 				   = Request::input('item_cost');
+		$insert['item_sales_information']      = Request::input('item_sales_information') == null ? '' : Request::input('item_sales_information');
+		$insert['item_cost'] 				   = Request::input('item_cost') == null ? 0 : Request::input('item_cost');
 		$insert['item_expense_account_id']	   = Request::input('item_expense_account_id');
-		$insert['item_purchasing_information'] = Request::input('item_purchasing_information');
+		$insert['item_purchasing_information'] = Request::input('item_purchasing_information') == null ? '' : Request::input('item_purchasing_information');
 		$insert['item_asset_account_id']       = Request::input('item_asset_account_id');
-		$insert['has_serial_number']           = Request::input('item_has_serial');
-		$insert['membership_id']       		   = Request::input('membership_id');
-		$insert['gc_earning']         		   = Request::input('gc_earning');
+		$insert['has_serial_number']           = Request::input('item_has_serial') == null ? 0 : Request::input('item_has_serial');
+		$insert['membership_id']       		   = Request::input('membership_id') == null ? 0 : Request::input('membership_id');
+		$insert['gc_earning']         		   = Request::input('gc_earning')  == null ? 0 : Request::input('gc_earning');
 		
 		/*For inventory refill*/
-		$insert['item_quantity'] 		  	   = Request::input('item_initial_qty');
-		$insert['item_date_tracked'] 		   = Request::input('item_date_track');
-		$insert['item_reorder_point'] 		   = Request::input('item_reorder_point');
+		$insert['item_quantity'] 		  	   = Request::input('item_initial_qty') == null ? 0 :Request::input('item_initial_qty');
+		$insert['item_date_tracked'] 		   = Request::input('item_date_track') == null ? '' :Request::input('item_date_track');
+		$insert['item_reorder_point'] 		   = Request::input('item_reorder_point') == null ? 0 :Request::input('item_reorder_point');
 
 		$shop_id = $this->user_info->shop_id;
 		

@@ -74,8 +74,10 @@ function test()
 			url:"/s",
 			data: ajaxdata,
 			type:"post",
+
 			success: function(data)
 			{
+				console.log(data);
 				$(".table-loader").html('<i class="fa fa-table"></i>');
 				$(".table-container").html(data);
 			}

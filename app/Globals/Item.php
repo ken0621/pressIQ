@@ -391,6 +391,11 @@ class Item
 
         return $return;
     }
+    
+    public static function get_all_item()
+    {
+        return Tbl_item::where("shop_id", Item::getShopId())->where("archived", 0)->get();
+    }
     public static function info($item_id)
     {
         $item = Tbl_item::type()->where("item_id", $item_id)->first();

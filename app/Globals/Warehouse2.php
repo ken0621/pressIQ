@@ -48,167 +48,7 @@ class Warehouse2
     {
         return Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
     }
-	public static function refill_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks, $serial = array())
-	{
-		$return['status'] = null;
-    	$return['message'] = null;
-        $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
-
-
-    	$serial_qty = count($serial);
-    	if($serial_qty != 0)
-    	{
-    		if($serial_qty != $quantity)
-    		{
-		    	$return['status'] = 'error';
-		    	$return['message'] .= "The serial number are not equal from the quantity. <br> ";
-    		}
-    	}
-    	if($quantity < 0)
-    	{
-	    	$return['status'] = 'error';
-	    	$return['message'] .= "The quantity is less than 1. <br> ";
-    	}
-    	if(!$check_warehouse)
-    	{
-	    	$return['status'] = 'error';
-	    	$return['message'] .= "The warehouse doesn't belong to your account <br>";
-    	}
-    	if($return['message'])
-    	{
-    		$return['status'] = 'error';
-    	}
-
-    	return $return;
-	}
-    public static function refill($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $source = array(), $serial = array(), $inventory_history = '')
-    {
-    	$check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
-
-    	$return['status'] = null;
-    	$return['message'] = null;
-
-    	$serial_qty = count($serial);
-    	if($serial_qty != 0)
-    	{
-    		if($serial_qty != $quantity)
-    		{
-		    	$return['status'] = 'error';
-		    	$return['message'] .= "The serial number are not equal from the quantity. <br> ";
-    		}
-    	}
-    	if($quantity < 0)
-    	{
-	    	$return['status'] = 'error';
-	    	$return['message'] .= "The quantity is less than 1. <br> ";
-    	}
-    	if(!$check_warehouse)
-    	{
-	    	$return['status'] = 'error';
-	    	$return['message'] .= "The warehouse doesn't belong to your account <br>";
-    	}
-
-    	if(!$return['status'])
-    	{  
-	        $insert_slip['warehouse_id']                 = $warehouse_id;
-	        $insert_slip['inventory_remarks']            = $remarks;
-	        $insert_slip['inventory_slip_date']          = Carbon::now();
-	        $insert_slip['inventory_slip_shop_id']       = $shop_id;
-	        $insert_slip['inventroy_source_reason']      = isset($source['name']) ? $source['name'] : '';
-	        $insert_slip['inventory_source_id']			 = isset($source['id']) ? $source['id'] : 0;
-	        $insert_slip['slip_user_id']				 = Warehouse2::get_user_login();
-            $slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
-
-    		for ($ctr_qty = 0; $ctr_qty < $quantity; $ctr_qty++) 
-    		{
-    			$insert['record_shop_id'] 			 = $shop_id;
-    			$insert['record_item_id'] 			 = $item_id;
-    			$insert['record_warehouse_id'] 	  	 = $warehouse_id;
-    			$insert['record_item_remarks']  	 = $remarks;
-    			$insert['record_warehouse_slip_id']  = $slip_id;
-    			$insert['record_source_ref_name']	 = isset($source['name']) ? $source['name'] : '';
-    			$insert['record_source_ref_id']	     = isset($source['id']) ? $source['id'] : 0;
-                $insert['record_log_date_updated']   = Carbon::now();
-
-    			if($serial_qty > 0)
-    			{
-    				$insert['record_serial_number'] = $serial[$ctr_qty];
-    			}
-    			Tbl_warehouse_inventory_record_log::insert($insert);
-    		}
-
-
-            if(!$inventory_history)
-            {
-                $inventory_details['history_description'] = "Refill items from ". $insert_slip['inventroy_source_reason']." #".$insert_slip['inventory_source_id'];
-                $inventory_details['history_remarks'] = $remarks;
-                $inventory_details['history_type'] = "RR";
-                $inventory_details['history_reference'] = $insert_slip['inventroy_source_reason'];
-                $inventory_details['history_reference_id'] = $insert_slip['inventory_source_id'];
-                $inventory_details['history_number'] = Warehouse2::get_history_number($shop_id, $warehouse_id, $inventory_details['history_type']);
-
-                $history_item[0]['item_id'] = $item_id;
-                $history_item[0]['quantity'] = $quantity;
-                $history_item[0]['item_remarks'] = $remarks;
-
-                Warehouse2::insert_inventory_history($shop_id, $warehouse_id, $inventory_details, $history_item);
-            }
-
-
-    		$return['status'] = 'success';
-    	}
-
-    	return $return;
-    }
-    /**    
-        $_item[0]['item_id'] = 500;
-        $_item[0]['quantity'] = 3;
-        $_item[0]['remarks'] = 'test_refill';
-
-        $_item[1]['item_id'] = 501;
-        $_item[1]['quantity'] = 2;
-        $_item[1]['remarks'] = 'test_refill';
-
-        $ret = Warehouse2::refill_bulk($this->user_info->shop_id, 86, 'refill_bulk_test', 5 , 'test transfer', $_item);
-        
-        $ret = Warehouse2::transfer_bulk($this->user_info->shop_id, 86, 101, $_item, "test transfer 1");
-
-        dd($ret);
-    */
-    public static function refill_bulk($shop_id, $warehouse_id, $reference_name = '', $reference_id = 0 , $remarks = '', $_item = array())
-    {
-    	foreach ($_item as $key => $value)
-    	{
-            $serial = isset($value['serial']) ? $value['serial'] : array();
-    		$validate = Warehouse2::refill_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $serial);
-    	}
-
-		if(!$validate['message'])
-		{
-            $inventory_details['history_description'] = "Refill items from ".$reference_name." #".$reference_id;
-            $inventory_details['history_remarks'] = $remarks;
-            $inventory_details['history_type'] = "RR";
-            $inventory_details['history_reference'] = $reference_name;
-            $inventory_details['history_reference_id'] = $reference_id;
-            $inventory_details['history_number'] = Warehouse2::get_history_number($shop_id, $warehouse_id, $inventory_details['history_type']);
-
-	    	foreach ($_item as $key => $value) 
-	    	{
-                $serial = isset($value['serial']) ? $value['serial'] : array();
-                $source = isset($value['source']) ? $value['source'] : array();
-
-                $history_item[$key]['item_id'] = $value['item_id'];
-                $history_item[$key]['quantity'] = $value['quantity'];
-                $history_item[$key]['item_remarks'] = $value['remarks'];
-
-	    		$validate =	Warehouse2::refill($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $source, $serial, 'inventory_history_recorded');
-	    	}
-
-            Warehouse2::insert_inventory_history($shop_id, $warehouse_id, $inventory_details, $history_item);
-	    }
-
-    	return $validate;
-    }
+  
     public static function get_history_number($shop_id, $warehouse_id, $history_type = '')
     {
         $history_ctr = Tbl_inventory_history::where('shop_id',$shop_id)->where('warehouse_id',$warehouse_id)->where('history_type',$history_type)->count();
@@ -450,21 +290,21 @@ class Warehouse2
             if($get_data->record_log_history)
             {
                 $serialize = unserialize($get_data->record_log_history);
-                $serialize[$datenow] = $get_data;
+                $serialize[$datenow] = collect($get_data)->toArray();
 
                 $update['record_log_history'] = serialize($serialize);
                 Tbl_warehouse_inventory_record_log::where('record_log_id',$get_data->record_log_id)->update($update);
             }
             else
             {                
-                $serialize[$datenow] = $get_data;
+                $serialize[$datenow] = collect($get_data)->toArray();
                 $update['record_log_history'] = serialize($serialize);
                 Tbl_warehouse_inventory_record_log::where('record_log_id',$get_data->record_log_id)->update($update);
             }
         }
     }
 
-    public static function consume_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks, $serial = array())
+    public static function refill_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks, $serial = array())
     {
         $return['status'] = null;
         $return['message'] = null;
@@ -497,7 +337,7 @@ class Warehouse2
 
         return $return;
     }
-    public static function consume($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $consume = array(), $serial = array())
+    public static function refill($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $source = array(), $serial = array(), $inventory_history = '')
     {
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
 
@@ -530,10 +370,9 @@ class Warehouse2
             $insert_slip['inventory_remarks']            = $remarks;
             $insert_slip['inventory_slip_date']          = Carbon::now();
             $insert_slip['inventory_slip_shop_id']       = $shop_id;
-            $insert_slip['slip_user_id']                 = Warehouse::getUserid();
             $insert_slip['inventroy_source_reason']      = isset($source['name']) ? $source['name'] : '';
             $insert_slip['inventory_source_id']          = isset($source['id']) ? $source['id'] : 0;
-            $insert_slip['slip_user_id']                 = Warehouse::getUserid();
+            $insert_slip['slip_user_id']                 = Warehouse2::get_user_login();
             $slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
 
             for ($ctr_qty = 0; $ctr_qty < $quantity; $ctr_qty++) 
@@ -553,12 +392,48 @@ class Warehouse2
                 }
                 Tbl_warehouse_inventory_record_log::insert($insert);
             }
+
+
+            if(!$inventory_history)
+            {
+                $inventory_details['history_description'] = "Refill items from ". $insert_slip['inventroy_source_reason']." #".$insert_slip['inventory_source_id'];
+                $inventory_details['history_remarks'] = $remarks;
+                $inventory_details['history_type'] = "RR";
+                $inventory_details['history_reference'] = $insert_slip['inventroy_source_reason'];
+                $inventory_details['history_reference_id'] = $insert_slip['inventory_source_id'];
+                $inventory_details['history_number'] = Warehouse2::get_history_number($shop_id, $warehouse_id, $inventory_details['history_type']);
+
+                $history_item[0]['item_id'] = $item_id;
+                $history_item[0]['quantity'] = $quantity;
+                $history_item[0]['item_remarks'] = $remarks;
+
+                Warehouse2::insert_inventory_history($shop_id, $warehouse_id, $inventory_details, $history_item);
+            }
+
+
             $return['status'] = 'success';
         }
 
         return $return;
     }
-    public static function consume_bulk($shop_id, $warehouse_id, $_item)
+    /**              
+        $_item[0]['item_id'] = 15;
+        $_item[0]['quantity'] = 1;
+        $_item[0]['remarks'] = 'test';
+
+        $_item[1]['item_id'] = 17;
+        $_item[1]['quantity'] = 10;
+        $_item[1]['remarks'] = 'test_consume';
+
+        $ret = Warehouse2::refill_bulk($this->user_info->shop_id, 6, 'refill_bulk_test', 20 , 'test transfer', $_item);
+        
+        $ret = Warehouse2::transfer_bulk($this->user_info->shop_id, 86, 101, $_item, "test transfer 1");
+
+        $ret = Warehouse2::consume_bulk($this->user_info->shop_id, 6, 'consumebulk_test', 1 , 'test consume', $_item);
+
+        dd($ret);
+    */
+    public static function refill_bulk($shop_id, $warehouse_id, $reference_name = '', $reference_id = 0 , $remarks = '', $_item = array())
     {
         foreach ($_item as $key => $value)
         {
@@ -568,10 +443,159 @@ class Warehouse2
 
         if(!$validate['message'])
         {
+            $inventory_details['history_description'] = "Refill items from ".$reference_name." #".$reference_id;
+            $inventory_details['history_remarks'] = $remarks;
+            $inventory_details['history_type'] = "RR";
+            $inventory_details['history_reference'] = $reference_name;
+            $inventory_details['history_reference_id'] = $reference_id;
+            $inventory_details['history_number'] = Warehouse2::get_history_number($shop_id, $warehouse_id, $inventory_details['history_type']);
+
             foreach ($_item as $key => $value) 
             {
                 $serial = isset($value['serial']) ? $value['serial'] : array();
-                $validate = Warehouse2::refill($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $value['source'], $serial);
+
+                $source['name'] = $reference_name;
+                $source['id'] = $reference_id;
+
+                $history_item[$key]['item_id'] = $value['item_id'];
+                $history_item[$key]['quantity'] = $value['quantity'];
+                $history_item[$key]['item_remarks'] = $value['remarks'];
+
+                $validate = Warehouse2::refill($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $source, $serial, 'inventory_history_recorded');
+            }
+
+            Warehouse2::insert_inventory_history($shop_id, $warehouse_id, $inventory_details, $history_item);
+        }
+
+        return $validate;
+    }
+    public static function consume_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks, $serial = array())
+    {
+        $return['status'] = null;
+        $return['message'] = null;
+        $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
+
+
+        $serial_qty = count($serial);
+        if($serial_qty != 0)
+        {
+            if($serial_qty != $quantity)
+            {
+                $return['status'] = 'error';
+                $return['message'] .= "The serial number are not equal from the quantity. <br> ";
+            }
+
+            foreach ($serial as $key => $value) 
+            {
+                $check_serial = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id', $item_id)->where('record_serial_number',$value)->first();
+                if(!$check_serial)
+                {
+                    $return['message'] .= "The serial number ".$value." does not exist. <br>";
+                }
+            }
+        }
+        if($quantity < 0)
+        {
+            $return['status'] = 'error';
+            $return['message'] .= "The quantity is less than 1. <br> ";
+        }
+        if(!$check_warehouse)
+        {
+            $return['status'] = 'error';
+            $return['message'] .= "The warehouse doesn't belong to your account <br>";
+        }
+        $inventory_qty = Warehouse2::get_item_qty($warehouse_id, $item_id);
+        if($quantity > $inventory_qty)
+        {
+            $return['status'] = 'error';
+            $return['message'] .= "The quantity is not enough to consume. <br>";
+        }
+
+        if($return['message'])
+        {
+            $return['status'] = 'error';
+        }
+
+        return $return;
+    }
+    public static function consume($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $consume = array(), $serial = array(), $inventory_history = '')
+    {
+        $return['status'] = null;
+        $return['message'] = null;
+      
+        $insert_slip['warehouse_id']                 = $warehouse_id;
+        $insert_slip['inventory_remarks']            = $remarks;
+        $insert_slip['inventory_slip_date']          = Carbon::now();
+        $insert_slip['inventory_slip_shop_id']       = $shop_id;
+        $insert_slip['slip_user_id']                 = Warehouse::getUserid();
+        $insert_slip['inventroy_source_reason']      = isset($consume['name']) ? $consume['name'] : '';
+        $insert_slip['inventory_source_id']          = isset($consume['id']) ? $consume['id'] : 0;
+        $insert_slip['slip_user_id']                 = Warehouse::getUserid();
+        $slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
+
+        $serial_qty = count($serial);
+        for ($ctr_qty = 0; $ctr_qty < $quantity; $ctr_qty++) 
+        {
+            $insert['record_shop_id']            = $shop_id;
+            $insert['record_item_id']            = $item_id;
+            $insert['record_warehouse_id']       = $warehouse_id;
+            $insert['record_item_remarks']       = $remarks;
+            $insert['record_warehouse_slip_id']  = $slip_id;
+            $insert['record_consume_ref_name']   = isset($consume['name']) ? $consume['name'] : '';
+            $insert['record_consume_ref_id']     = isset($consume['id']) ? $consume['id'] : 0;
+            $insert['record_inventory_status']   = 1;
+            $insert['record_log_date_updated']   = Carbon::now();
+
+            if($serial_qty > 0)
+            {
+                $insert['record_serial_number'] = $serial[$ctr_qty];
+            }
+            $id = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)
+                                                   ->where("record_item_id",$item_id)
+                                                   ->where("record_inventory_status",0)
+                                                   ->value('record_log_id');
+            Warehouse2::insert_item_history($id);
+            Tbl_warehouse_inventory_record_log::where('record_log_id',$id)->update($insert);
+        }
+
+        if(!$inventory_history)
+        {
+            $inventory_details['history_description'] = "Consume items from ". $insert_slip['inventroy_source_reason']." #".$insert_slip['inventory_source_id'];
+            $inventory_details['history_remarks'] = $remarks;
+            $inventory_details['history_type'] = "WIS";
+            $inventory_details['history_reference'] = $insert_slip['record_consume_ref_name'];
+            $inventory_details['history_reference_id'] = $insert_slip['record_consume_ref_id'];
+            $inventory_details['history_number'] = Warehouse2::get_history_number($shop_id, $warehouse_id, $inventory_details['history_type']);
+
+            $history_item[0]['item_id'] = $item_id;
+            $history_item[0]['quantity'] = $quantity;
+            $history_item[0]['item_remarks'] = $remarks;
+
+            Warehouse2::insert_inventory_history($shop_id, $warehouse_id, $inventory_details, $history_item);
+        }
+
+        $return['status'] = 'success';
+
+        return $return;
+    }
+    public static function consume_bulk($shop_id, $warehouse_id, $reference_name = '', $reference_id = 0 , $remarks = '', $_item)
+    {
+        foreach ($_item as $key => $value)
+        {
+            $serial = isset($value['serial']) ? $value['serial'] : null;
+            $validate = Warehouse2::consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $serial);
+        }
+
+        if(!$validate['message'])
+        {
+            foreach ($_item as $key => $value) 
+            {
+                $serial = isset($value['serial']) ? $value['serial'] : null;
+
+                $consume['name'] = $reference_name;
+                $consume['id'] = $reference_id;
+
+                $validate = Warehouse2::consume($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $consume, $serial, 'inventory_history_recorded');
             }
         }
 

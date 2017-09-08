@@ -75,6 +75,10 @@ class Warehouse2
             if($item_data)
             {
                 $get_data = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$wh_from)->where('record_item_id',$item_id)->first();
+                 if(is_numeric($quantity) == false)
+                { 
+                    $return .= "The quantity must be a number. <br>";
+                }
                 if($quantity < 0)
                 {
                     $return .= 'The quantity of '.$item_data->item_name.' is less than one. <br>';                
@@ -310,6 +314,10 @@ class Warehouse2
         $return = null;
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
 
+        if(is_numeric($quantity) == false)
+        { 
+            $return .= "The quantity must be a number. <br>";
+        }
 
         $serial_qty = count($serial);
         if($serial_qty != 0)
@@ -511,6 +519,10 @@ class Warehouse2
                     $return .= "The serial number ".$value." does not exist in this warehouse. <br>";
                 }
             }
+        }
+        if(is_numeric($quantity) == false)
+        { 
+            $return .= "The quantity must be a number. <br>";
         }
         if($quantity < 0)
         {

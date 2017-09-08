@@ -25,6 +25,7 @@ use App\Globals\Currency;
 use App\Models\Tbl_price_level;
 use App\Models\Tbl_price_level_item;
 use App\Models\Tbl_sub_warehouse;
+use App\Models\Tbl_settings;
 use Session;
 use DB;
 use Carbon\carbon;
@@ -51,9 +52,15 @@ class Warehouse2
   
     public static function get_history_number($shop_id, $warehouse_id, $history_type = '')
     {
-        $history_ctr = Tbl_inventory_history::where('shop_id',$shop_id)->where('warehouse_id',$warehouse_id)->where('history_type',$history_type)->count();
+        $prefix = Tbl_settings::where("settings_key","inventory_rr_prefix")->value('settings_value');
 
-        return $history_type.sprintf("%'.05d\n", $history_ctr+1);
+        $history_ctr = Tbl_inventory_history::where('shop_id',$shop_id)->where('warehouse_id',$warehouse_id)->where('history_type',$history_type)->count();
+        if($history_type == 'WIS')
+        {
+            $prefix = Tbl_settings::where("settings_key","inventory_wis_prefix")->value('settings_value');
+        }
+
+        return $prefix.sprintf("%'.05d\n", $history_ctr+1);
 
     }
     public static function transfer_validation($shop_id, $wh_from, $wh_to, $item_id, $quantity, $remarks, $serial = array())
@@ -380,6 +387,8 @@ class Warehouse2
                 $insert['record_source_ref_name']    = isset($source['name']) ? $source['name'] : '';
                 $insert['record_source_ref_id']      = isset($source['id']) ? $source['id'] : 0;
                 $insert['record_log_date_updated']   = Carbon::now();
+                // $insert['record_log_date_updated']   = Carbon::now();
+                // $insert['record_log_date_updated']   = Carbon::now();
 
                 if($serial_qty > 0)
                 {

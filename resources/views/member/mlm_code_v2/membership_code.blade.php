@@ -14,7 +14,7 @@
             <div class="dropdown pull-right">
                 <button onclick="location.href=''" class="btn btn-def-white btn-custom-white"><i class="fa fa-print"></i> Print Membership Codes</button>
                 <button onclick="location.href=''" class="btn btn-def-white btn-custom-white"><i class="fa fa-yelp"></i> Disassemble Kit</button>
-                <button onclick="action_load_link_to_modal('/member/mlm/code2/assemble')" class="btn btn-primary"><i class="fa fa-qrcode"></i> Assemble Membership Kit</button>
+                <button onclick="action_load_link_to_modal('/member/mlm/code2/assemble', 'lg')" class="btn btn-primary"><i class="fa fa-qrcode"></i> Assemble Membership Kit</button>
             </div>
         </div>
     </div>
@@ -30,11 +30,17 @@
         <div class="col-md-3" style="padding: 10px">
             <select class="form-control">
                 <option value="0">All Membership</option>
+                @foreach($_membership as $membership)
+                    <option value="{{ $membership->membership_id }}">{{ $membership->membership_name }}</option>
+                @endforeach
             </select>
         </div>
         <div class="col-md-3" style="padding: 10px">
             <select class="form-control">
-                <option value="0">All Kit</option>
+                <option value="0">All Item Kit</option>
+                @foreach($_item_kit as $kit)
+                    <option value="{{ $kit->item_id }}">{{ $kit->item_name }}</option>
+                @endforeach
             </select>
         </div>
         <div class="col-md-2" style="padding: 10px">

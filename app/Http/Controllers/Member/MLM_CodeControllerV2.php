@@ -34,4 +34,8 @@ class MLM_CodeControllerV2 extends Member
     	$data["page"] = "Membership Code Assemble";
     	return view("member.mlm_code_v2.membership_code_assemble", $data);
     }
+    public function index()
+    {
+        return view("member.mlm_code_v2.product_code");
+    }
 }

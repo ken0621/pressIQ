@@ -4,6 +4,7 @@ use App\Globals\Item;
 use App\Globals\Category;
 use App\Globals\Manufacturer;
 use App\Globals\Accounting;
+use App\Globals\Warehouse2;
 use App\Globals\Columns;
 use Request;
 
@@ -11,6 +12,7 @@ class ItemControllerV2 extends Member
 {
 	public function list()
 	{
+
 		$data["page"] 		 	= "Item List";
 		$data["_item_type"]     = Item::get_item_type_list();
 		$data["_item_category"] = Item::getItemCategory($this->user_info->shop_id);
@@ -30,10 +32,23 @@ class ItemControllerV2 extends Member
 		Item::get_add_display();
 		Item::get_filter_type($item_type_id);
 		Item::get_filter_category($item_category_id);
-		$data["_item"]		= Item::get($this->user_info->shop_id, 5, $archived, $search);
+		Item::get_search($search);
+
+		$data["_item"]		= Item::get($this->user_info->shop_id, 5);
 		$data["pagination"] = Item::get_pagination();
 		$data["archive"]	= $archived == 1 ? "restore" : "archive";
-		$data["hide"]		= Columns::checkColumns($this->user_info->shop_id, $this->user_info->user_id, "item");
+		
+		$default[]   	 	= ["Item Name","item_name", false];
+		$default[]   	 	= ["Item ID","item_id", true];
+		$default[]   	 	= ["SKU", "item_sku", true];
+		$default[]	  		= ["Price", "display_price", true];
+		$default[]	  		= ["Cost", "display_cost", true];
+		$default[]	  		= ["Markup", "display_markup", true];
+		$default[]	  		= ["Inventory", "inventory_count", true];
+		$default[]	  		= ["U/M", "multi_abbrev", true];
+
+		$data["_item"]	    	= Columns::filterColumns($this->user_info->shop_id, $this->user_info->user_id, "item", $data["_item"], $default);
+		
 		return view("member.itemv2.list_item_table", $data);
 	}
 	public function get_item()
@@ -197,16 +212,13 @@ class ItemControllerV2 extends Member
 			$shop_id 	  	 = $this->user_info->shop_id;
 			$user_id	  	 = $this->user_info->user_id;
 			$from    	  	 = "item";
-			$default[0]   	 = "Item ID";
-			$default[1]   	 = "SKU";
-			$default[2]	  	 = "Price";
-			$default[3]	  	 = "Cost";
-			$default[4]	  	 = "Markup";
-			$default[5]	  	 = "Inventory";
-			$default[6]	  	 = "U/M";
-			$data["_column"] = Columns::getColumns($shop_id, $user_id, $from, $default);
+			$data["_column"] = Columns::getColumns($shop_id, $user_id, $from);
 			
 			return view("member.itemv2.columns_item", $data);
 		}
+	}
+	public function choose()
+	{
+		return view("member.itemv2.choose");
 	}
 }

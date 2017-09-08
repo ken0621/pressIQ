@@ -4471,19 +4471,19 @@ class Payroll2
 					{
 						foreach ($value->compute->_breakdown_deduction as $lbl => $values) 
 						{
-							if ( $lbl == 'late' || $lbl == 'undertime' ) 
+							if ($value->time_output["leave_hours"] || $lbl == 'late' || $lbl == 'undertime' ) 
 							{
 								$standard_gross_pay += $values['rate'];
 								$deduction += $values['rate'];
 							}
-							if ($data["group"]->payroll_group_salary_computation != "Daily Rate") 
-							{
-								if ($value->time_output["leave_hours"] == '00:00:00') 
-								{
-									$standard_gross_pay += $values['rate'];
-									$deduction += $values['rate'];
-								}
-							}
+							// if ($data["group"]->payroll_group_salary_computation != "Daily Rate") 
+							// {
+							// 	if ($value->time_output["leave_hours"] == '00:00:00') 
+							// 	{
+							// 		$standard_gross_pay += $values['rate'];
+							// 		$deduction += $values['rate'];
+							// 	}
+							// }
 						}
 					}
 
@@ -4517,6 +4517,14 @@ class Payroll2
 					$val["add.taxable_salary"] = false;
 					$val["deduct.taxable_salary"] = false;
 					$val["add.net_pay"] = false;
+					$val["deduct.net_pay"] = false;
+				}
+				elseif ($allowance->payroll_allowance_category == "Hidden") {
+					$val["add.gross_pay"] = false;
+					$val["deduct.gross_pay"] = false;
+					$val["add.taxable_salary"] = false;
+					$val["deduct.taxable_salary"] = false;
+					$val["add.net_pay"] = true;
 					$val["deduct.net_pay"] = false;
 				}
 				else

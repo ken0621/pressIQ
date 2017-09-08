@@ -29,7 +29,6 @@ use App\Globals\Merchant;
 use App\Globals\Warehouse2;
 use Validator;
 use stdClass;
-
 class Item
 {
     /* ITEM CRUD START */
@@ -97,27 +96,27 @@ class Item
                 $return['message'] .= 'Manufacturer does not exist. <br>';            
             }            
         }
-        if($insert['item_asset_account'] != 0)
+        if($insert['item_asset_account_id'] != 0)
         {
-            $asset_data = Tbl_chart_of_account::where('account_id',$insert['item_asset_account'])->where('account_shop_id',$shop_id)->first();
+            $asset_data = Tbl_chart_of_account::where('account_id',$insert['item_asset_account_id'])->where('account_shop_id',$shop_id)->first();
             if(!$asset_data)
             {
                 $return['status'] = 'error';
                 $return['message'] .= 'Asset account does not exist. <br>';            
             }            
         }
-        if($insert['item_income_account'] != 0)
+        if($insert['item_income_account_id'] != 0)
         {
-            $income_data = Tbl_chart_of_account::where('account_id',$insert['item_income_account'])->where('account_shop_id',$shop_id)->first();
+            $income_data = Tbl_chart_of_account::where('account_id',$insert['item_income_account_id'])->where('account_shop_id',$shop_id)->first();
             if(!$income_data)
             {
                 $return['status'] = 'error';
                 $return['message'] .= 'Income account does not exist. <br>';            
             }            
         }
-        if($insert['item_expense_account'] != 0)
+        if($insert['item_expense_account_id'] != 0)
         {
-            $expense_data = Tbl_chart_of_account::where('account_id',$insert['item_expense_account'])->where('account_shop_id',$shop_id)->first();
+            $expense_data = Tbl_chart_of_account::where('account_id',$insert['item_expense_account_id'])->where('account_shop_id',$shop_id)->first();
             if(!$expense_data)
             {
                 $return['status'] = 'error';
@@ -239,14 +238,14 @@ class Item
 
 
     /* READ DATA */
-    public static function get($shop_id = 0, $paginate = false, $archive = 0, $search = null)
+    public static function get($shop_id = 0, $paginate = false, $archive = 0)
     {
         $query = Tbl_item::where("shop_id", $shop_id)->where("tbl_item.archived", $archive)->type()->inventory()->um_multi();
 
         /* SEARCH */
-        if ($search) 
+        if (session("get_search")) 
         {
-            $query = $query->search($search);
+            $query = $query->searchName(session("get_search"));
         }
 
         /* FILTER BY TYPE */
@@ -279,7 +278,7 @@ class Item
             $_item_new[$key] = $item;
         }
 
-        $return = $_item_new;  
+        $return = isset($_item_new) ? $_item_new : null;  
 
         Self::get_clear_session();
 
@@ -291,6 +290,10 @@ class Item
         Self::add_info($item);
         Self::get_clear_session();
         return $item;
+    }
+    public static function get_search($keyword)
+    {
+        session(['get_search' => $keyword]);
     }
     public static function get_pagination()
     {
@@ -326,6 +329,7 @@ class Item
         $store["get_filter_type"] = null;
         $store["get_filter_category"] = null;
         $store["get_apply_price_level"] = null;
+        $store["get_search"] = null;
         session($store);
     }
 

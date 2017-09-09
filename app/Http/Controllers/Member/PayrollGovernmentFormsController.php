@@ -33,4 +33,9 @@ class PayrollGovernmentFormsController extends Member
     {
         return view("member.payroll.government_forms.pagibig");
     }
+
+    public function getR3sssform()
+    {
+        return view("member.payroll.government_forms.r3sssform");
+    }
 }

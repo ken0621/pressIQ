@@ -1,0 +1,1142 @@
+.sss-padding-format
+{
+    margin-left: 72px;
+    margin-right: 24px;
+    padding-top: 24px;
+    padding-bottom: 24px;
+    .form-mainborder
+    {
+    	line-height: 1.13;
+    	border: 2px solid #333;
+    	margin: 3px;
+        font-family: 'Source Sans',sans-serif;
+        height: 740px;
+        .r3-first-layer
+        {
+            display: flow-root;
+            border-bottom: 2px solid #333;
+            .r3-image-container
+            {
+                display: inline-block;
+                width: 10%;
+                .r3-ssslogo
+                {
+                    display: block;
+                    max-width: 100%;
+                    height: auto;
+                    margin-left: auto;
+                    margin-right: 10px;
+                }
+            }
+            .r3-r3title-container
+            {
+                display: inline-block;
+                width: 10%;
+                .r3-title-holder
+                {
+                    display: block;
+                    margin-bottom: 5px;
+                    .r3-title
+                    {
+                        font-size: 30px;
+                        font-weight: 900;
+                        letter-spacing: 0.03px;
+                    }
+                }
+                .r3-subtitle-holder
+                {
+                    display: block;
+                    margin-top: 8px;
+                    .r3-subtitle
+                    {
+                        font-size: 8px;
+                        letter-spacing: 0.03px;
+                        font-weight: 700;
+                    }
+                }
+            }
+            .r3-formtitle-container
+            {
+                display: inline-block;
+                width: 80%;
+                padding-right: 100px;
+                .r3-repofphilippines-title-holder
+                {
+                    text-align: center;
+                    margin-bottom: 2px;
+                    .r3-title
+                    {
+                        font-size: 12.5px;
+                        letter-spacing: 1px;
+                    }
+                }
+                .r3-sss-title-holder
+                {
+                    text-align: center;
+                    .r3-title
+                    {
+                        font-size: 17.5px;
+                        letter-spacing: 1px;
+                    }
+                }
+                .r3-contributioncollection-title-holder
+                {
+                    text-align: center;
+                    margin-top: -7px;
+                    .r3-title
+                    {
+                        font-size: 25px;
+                        font-weight: 700;
+                        letter-spacing: 1px;
+                    }
+                }
+                .r3-subtitle-note-container
+                {
+                    text-align: center;
+                    margin-top: 2px;
+                    margin-bottom: 7px;
+                    .r3-title
+                    {
+                        font-size: 11px;
+                        letter-spacing: 1px;
+                    }
+                }
+            }
+        }
+        .r3-second-layer
+        {
+            display: flow-root;
+            .r3-employernumber-container
+            {
+                display: inline-block;
+                width: 20%;
+                border-right: 2px solid #333;
+                border-bottom: 2px solid #333;
+                .r3-title-holder
+                {
+                    display: block;
+                    .r3-title
+                    {
+                        margin: 0px;
+                        font-size: 11px;
+                        font-weight: 700;
+                        margin-left: 6px;
+                    }
+                }
+                .r3-input-holder
+                {
+                    display: block;
+                    padding: 1px 0px 0px 0px;
+                    .r3-divider-shortfirst
+                    {
+                        display: inline-block;
+                        width: 15px;
+                        border-right: 1px solid #333;
+                        height: 12px;
+                        vertical-align: bottom;
+                        .r3-input
+                        {
+                            margin: 0px;
+                            font-size: 12px;
+                            text-align: center;
+                            margin-right: 2px;
+                            margin-top: -3px;
+                        }
+                    }
+                    .r3-divider-short
+                    {
+                        display: inline-block;
+                        width: 12px;
+                        border-right: 1px solid #333;
+                        height: 12px;
+                        vertical-align: bottom;
+                        .r3-input
+                        {
+                            margin: 0px;
+                            font-size: 12px;
+                            text-align: center;
+                            margin-right: 4px;
+                            margin-top: -3px;
+                        }
+                    }
+                    .r3-divider-long
+                    {
+                        display: inline-block;
+                        width: 12px;
+                        border-right: 1px solid #333;
+                        height: 23px;
+                        vertical-align: bottom;
+                        .r3-input
+                        {
+                            margin: 0px;
+                            font-size: 12px;
+                            text-align: center;
+                            margin-right: 4px;
+                            margin-top: 8px;
+                        }
+                    }
+                    .r3-divider-noline
+                    {
+                        display: inline-block;
+                        width: 8px;
+                        height: 15px;
+                        vertical-align: bottom;
+                        .r3-input
+                        {
+                            margin: 0px;
+                            font-size: 12px;
+                            text-align: center;
+                        }
+                    }
+                }
+            }
+            .r3-registered-employer-name-container
+            {
+                display: inline-block;
+                width: 60%;
+                border-right: 2px solid #333;
+                border-bottom: 2px solid #333;
+                .r3-title-holder
+                {
+                    display: block;
+                    .r3-title
+                    {
+                        margin: 0px;
+                        font-size: 11px;
+                        font-weight: 700;
+                        margin-left: 2px;
+                    }
+                }
+                .r3-input-holder
+                {
+                    display: block;
+                    padding: 4px 0px 4px 0px;
+                    height: 24px;
+                    .r3-input
+                    {
+                        font-size: 15px;
+                        letter-spacing: 0.03px;
+                        text-align: center;
+                    }
+                }
+            }
+            .r3-quarterending-container
+            {
+                display: inline-block;
+                width: 20%;
+                border-bottom: 2px solid #333;
+                .r3-qe-title-holder
+                {
+                    display: inline-block;
+                    vertical-align: super;
+                    margin-right: 8px;
+                    margin-left: 7px;
+                    .r3-title
+                    {
+                        margin: 0px;
+                        font-size: 12px;
+                        margin-left: 2px;
+                    }
+                }
+                .r3-input-holder
+                {
+                    display: inline-block;
+                    .r3-monthandyear-title-holder
+                    {
+                        display: block;
+                        height: 14px;
+                        .r3-title-holder
+                        {
+                            display: inline-block;
+                            vertical-align: super;
+                            margin-left: 2px;
+                            margin-right: 2px;
+                            width: 7.8px;
+                            .r3-title
+                            {
+                                font-style: italic;
+                                font-size: 11px;
+                            }
+                        }
+                    }
+                    .r3-monthandyear-holder
+                    {
+                        display: block;
+                        .r3-input-holder
+                        {
+                            display: inline-block;
+                            border-top: 2px solid #333;
+                            border-left: 2px solid #333;
+                            width: 15px;
+                            height: 22px;
+                            margin-right: -4px;
+                            .r3-input
+                            {
+                                font-size: 12px;
+                                margin-left: 3px;
+                                margin-top: 5px;
+                            }
+                        }
+                        .r3-input-holder-last
+                        {
+                            display: inline-block;
+                            border-top: 2px solid #333;
+                            border-left: 2px solid #333;
+                            width: 16px;
+                            height: 22px;
+                            .r3-input
+                            {
+                                font-size: 12px;
+                                margin-left: 4px;
+                                margin-top: 5px;
+                            }
+                        }
+                    }
+                }
+            }
+            .r3-telephonenumber-container
+            {
+                display: inline-block;
+                width: 20%;
+                border-right: 2px solid #333;
+                border-bottom: 2px solid #333;
+                .r3-title-holder
+                {
+                    display: block;
+                    .r3-title
+                    {
+                        margin: 0px;
+                        font-size: 11px;
+                        font-weight: 700;
+                        margin-left: 6px;
+                    }
+                }
+                .r3-input-holder
+                {
+                    display: block;
+                    height: 24px;
+                    padding: 4px 0px 4px 0px;
+                    margin-top: 4px;
+                    .r3-input
+                    {
+                        font-size: 12px;
+                        text-align: center;
+                        letter-spacing: 1px;
+                    }
+                }
+            }
+            .r3-address-container
+            {
+                display: inline-block;
+                width: 60%;
+                border-right: 2px solid #333;
+                border-bottom: 2px solid #333;
+                .r3-title-holder
+                {
+                    display: block;
+                    .r3-title
+                    {
+                        margin: 0px;
+                        font-size: 11px;
+                        font-weight: 700;
+                        margin-left: 2px;
+                    }
+                }
+                .r3-input-holder
+                {
+                    display: block;
+                    height: 24px;
+                    padding: 4px 0px 4px 0px;
+                    margin-top: 4px;
+                    .r3-input
+                    {
+                        font-size: 12px;
+                        text-align: center;
+                        letter-spacing: 0.03px;
+                    }
+                }
+            }
+            .r3-employertype-container
+            {
+                display: inline-block;
+                width: 20%;
+                border-bottom: 2px solid #333;
+                .r3-title-holder
+                {
+                    display: block;
+                    .r3-title
+                    {
+                        margin: 0px;
+                        font-size: 11px;
+                        font-weight: 700;
+                        margin-left: 2px;
+                    }
+                }
+                .r3-input-holder
+                {
+                    display: block;
+                    padding: 8px 0px 2px 0px;
+                    .r3-regular
+                    {
+                        display: inline-block;
+                        margin-left: 20px;
+                        .circle
+                        {
+                            border: 2px solid #333;
+                            width: 12px;
+                            height: 12px;
+                            border-radius: 100%;
+                            display: inline-block;
+                            vertical-align: middle;
+                            background-color: #333;
+                        }
+                        .r3-label-holder
+                        {
+                            display: inline-block;
+                            .r3-label
+                            {
+                                font-size: 12px;
+                                font-weight: 700;
+                            }
+                        }
+                    }
+                    .r3-household
+                    {
+                        display: inline-block;
+                        margin-left: 30px;
+                        .circle
+                        {
+                            border: 2px solid #333;
+                            width: 12px;
+                            height: 12px;
+                            border-radius: 100%;
+                            display: inline-block;
+                            vertical-align: middle;
+                            background-color: #333;
+                        }
+                        .r3-label-holder
+                        {
+                            display: inline-block;
+                            .r3-label
+                            {
+                                font-size: 12px;
+                                font-weight: 700;
+                            }
+                        }
+                    }
+                }
+            }
+            .r3-ssnumber-container
+            {
+                display: inline-block;
+                width: 15%;
+                border-right: 2px solid #333;
+                border-bottom: 2px solid #333;
+                .r3-title-holder
+                {
+                    display: block;
+                    padding: 18.5px 0px 18.5px 0px;
+                    .r3-title
+                    {
+                        font-size: 12px;
+                        font-weight: 700;
+                        text-align: center;
+                        letter-spacing: 0.03px;
+                    }
+                }
+            }
+            .r3-membername-container
+            {
+                display: inline-block;
+                border-right: 2px solid #333;
+                border-bottom: 2px solid #333;
+                width: 31%;
+                .r3-title-holder
+                {
+                    display: block;
+                    margin-top: 5px;
+                    margin-bottom: 14px;
+                    .r3-title
+                    {
+                        font-size: 11px;
+                        font-weight: 700;
+                        text-align: center;
+                        letter-spacing: 0.03px;
+                    }
+                }
+                .r3-subtitle-holder
+                {
+                    display: block;
+                    .r3-surname
+                    {
+                        display: inline-block;
+                        margin-left: 15px;
+                        margin-right: 50px;
+                        margin-bottom: 2px;
+                        .r3-subtitle
+                        {
+                            font-size: 12px;
+                            letter-spacing: 0.03px;
+                            font-style: italic;
+                        }
+                    }
+                    .r3-givenname
+                    {
+                        display: inline-block;
+                        margin-right: 65px;
+                        margin-bottom: 2px;
+                        .r3-subtitle
+                        {
+                            font-size: 12px;
+                            letter-spacing: 0.03px;
+                            font-style: italic;
+                        }
+                    }
+                    .r3-mi
+                    {
+                        display: inline-block;
+                        margin-bottom: 2px;
+                        .r3-subtitle
+                        {
+                            font-size: 12px;
+                            letter-spacing: 0.03px;
+                            font-style: italic;
+                        }
+                    }
+                }
+            }
+            .r3-sssmonths-container
+            {
+                display: inline-block;
+                border-right: 3px solid #333;
+                border-bottom: 2px solid #333;
+                width: 30%;
+                .r3-title-holder
+                {
+                    display: block;
+                    border-bottom: 2px solid #333;
+                    padding: 3px 0px 2px 0px;
+                    .r3-title
+                    {
+                        font-size: 12px;
+                        font-weight: 700;
+                        text-align: center;
+                    }
+                }
+                .r3-1stmonth-subtitle
+                {
+                    display: inline-block;
+                    width: 101px;
+                    border-right: 3px solid #333;
+                    height: 30px;
+                    vertical-align: text-top;
+                    .r3-subtitle
+                    {
+                        font-size: 11px;
+                        letter-spacing: 0.03px;
+                        text-align: center;
+                        margin-top: 9px;
+                        margin-bottom: 9px;
+                    }
+                }
+                .r3-2ndmonth-subtitle
+                {
+                    display: inline-block;
+                    width: 103px;
+                    border-right: 3px solid #333;
+                    height: 30px;
+                    vertical-align: text-top;
+                    margin-left: -4px;
+                    .r3-subtitle
+                    {
+                        font-size: 11px;
+                        letter-spacing: 0.03px;
+                        text-align: center;
+                        margin-top: 9px;
+                        margin-bottom: 9px;
+                    }
+                }
+                .r3-3rdmonth-subtitle
+                {
+                    display: inline-block;
+                    width: 99px;
+                    height: 30px;
+                    vertical-align: text-top;
+                    margin-left: -4px;
+                    .r3-subtitle
+                    {
+                        font-size: 11px;
+                        letter-spacing: 0.03px;
+                        text-align: center;
+                        margin-top: 9px;
+                        margin-bottom: 9px;
+                    }
+                }
+            }
+            .r3-employeecompensation-container
+            {
+                display: inline-block;
+                width: 13%;
+                border-right: 3px solid #333;
+                border-bottom: 2px solid #333;
+                .r3-title-holder
+                {
+                    display: block;
+                    border-bottom: 2px solid #333;
+                    .r3-title
+                    {
+                        font-size: 8px;
+                        font-weight: 700;
+                        text-align: center;
+                        letter-spacing: 0.03px;
+                        margin-top: 4.5px;
+                        margin-bottom: 4.5px;
+                    }
+                }
+                .r3-1stmonth-subtitle
+                {
+                    display: inline-block;
+                    vertical-align: text-top;
+                    height: 30px;
+                    border-right: 3px solid #333;
+                    width: 43px;
+                    .r3-subtitle
+                    {
+                        font-size: 7px;
+                        letter-spacing: 0.03px;
+                        text-align: center;
+                        font-weight: 700;
+                        margin-top: 10.5px;
+                        margin-bottom: 10.5px;
+                    }
+                }
+                .r3-2ndmonth-subtitle
+                {
+                    display: inline-block;
+                    vertical-align: text-top;
+                    height: 30px;
+                    border-right: 3px solid #333;
+                    width: 44px;
+                    margin-left: -4px;
+                    .r3-subtitle
+                    {
+                        font-size: 7px;
+                        letter-spacing: 0.03px;
+                        text-align: center;
+                        font-weight: 700;
+                        margin-top: 10.5px;
+                        margin-bottom: 10.5px;
+                    }   
+                }
+                .r3-3rdmonth-subtitle
+                {
+                    display: inline-block;
+                    vertical-align: text-top;
+                    height: 30px;
+                    width: 43px;
+                    margin-left: -4px;
+                    .r3-subtitle
+                    {
+                        font-size: 7px;
+                        letter-spacing: 0.03px;
+                        text-align: center;
+                        font-weight: 700;
+                        margin-top: 10.5px;
+                        margin-bottom: 10.5px;
+                    }
+                }
+            }
+            .r3-seperationdate-container
+            {
+                display: inline-block;
+                width: 11%;
+                border-bottom: 2px solid #333;
+                .r3-title-holder
+                {
+                    display: block;
+                    margin-top: 13px;
+                    .r3-title
+                    {
+                        font-size: 11px;
+                        font-weight: 700;
+                        text-align: center;
+                        letter-spacing: 0.03px;
+                    }
+                }
+                .r3-subtitle-holder
+                {
+                    display: block;
+                    margin-bottom: 13px;
+                    .r3-subtitle
+                    {
+                        font-size: 11px;
+                        font-weight: 700;
+                        text-align: center;
+                        letter-spacing: 0.03px;
+                        font-style: italic;
+                    }
+                }
+            }
+            .r3-ssnumber-input-container
+            {
+                display: inline-block;
+                width: 15%;
+                .r3-input-holder
+                {
+                    display: inline-block;
+                    width: 10%;
+                    border-right: 2px solid #333;
+                    border-bottom: 2px solid #333;
+                    height: 20px;
+                    .r3-input
+                    {
+                        font-size: 15px;
+                        margin-left: 2px;
+                        margin-top: 2px;
+                    }
+                }
+            }
+            .r3-membername-input-container
+            {
+                display: inline-block;
+                width: 31%;
+                border-right: 2px solid #333;
+                border-bottom: 2px solid #333;
+                .r3-number-holder
+                {
+                    display: inline-block;
+                    margin-left: 2px;
+                    vertical-align: middle;
+                    width: 10.9px;
+                    .r3-number
+                    {
+                        font-size: 10px;
+                        font-weight: 700;
+                    }
+                }
+                .r3-input-holder
+                {
+                    display: inline-block;
+                    margin-left: 5px;
+                    .r3-input
+                    {
+                        font-size: 15px;
+                        letter-spacing: 0.03px;
+                    }
+                }
+            }
+            .r3-month-input-container
+            {
+                display: inline-block;
+                width: 10%;
+                .r3-input-holder
+                {
+                    display: inline-block;
+                    width: 20%;
+                    border-right: 2px solid #333;
+                    border-bottom: 2px solid #333;
+                    height: 20px;
+                    .r3-input
+                    {
+                        font-size: 15px;
+                        margin-top: 2px;
+                        text-align: center;
+                        margin-right: 1px;
+                    }
+                }
+                .r3-lastinput-holder
+                {
+                    display: inline-block;
+                    width: 20%;
+                    border-right: 3px solid #333;
+                    border-bottom: 2px solid #333;
+                    height: 20px;
+                    .r3-input
+                    {
+                        font-size: 15px;
+                        margin-top: 2px;
+                        text-align: center;
+                        margin-right: 1px;
+                    }
+                }
+            }
+            .r3-employeecompensation-input-container
+            {
+                display: inline-block;
+                width: 13%;
+                .r3-input-holder
+                {
+                    display: inline-block;
+                    width: 14.3px;
+                    border-right: 2px solid #333;
+                    border-bottom: 2px solid #333;
+                    .r3-input
+                    {
+                        font-size: 15px;
+                        margin-top: 2px;
+                        text-align: center;
+                    }
+                }
+                .r3-lastinput-holder
+                {
+                    display: inline-block;
+                    width: 14.3px;
+                    border-right: 3px solid #333;
+                    border-bottom: 2px solid #333;
+                    .r3-input
+                    {
+                        font-size: 15px;
+                        margin-top: 2px;
+                        text-align: center;
+                    }
+                }
+                .r3-input-3rdmonth-holder
+                {
+                    display: inline-block;
+                    width: 15.4px;
+                    border-right: 2px solid #333;
+                    border-bottom: 2px solid #333;
+                    .r3-input
+                    {
+                        font-size: 15px;
+                        margin-top: 2px;
+                        text-align: center;
+                    }
+                }
+                .r3-lastinput-3rdmonth-holder
+                {
+                    display: inline-block;
+                    width: 15.4px;
+                    border-right: 3px solid #333;
+                    border-bottom: 2px solid #333;
+                    .r3-input
+                    {
+                        font-size: 15px;
+                        margin-top: 2px;
+                        text-align: center;
+                    }
+                }
+            }
+            .r3-seperationdate-firsthalf-container
+            {
+                display: inline-block;
+                width: 6%;
+                .r3-input-holder
+                {
+                    display: inline-block;
+                    width: 25%;
+                    border-right: 2px solid #333;
+                    border-bottom: 2px solid #333;
+                    height: 20px;
+                    .r3-input
+                    {
+                        font-size: 15px;
+                        margin-top: 2px;
+                        text-align: center;
+                        margin-right: 1px;
+                    }
+                }
+            }
+            .r3-seperationdate-secondhalfhalf-container
+            {
+                display: inline-block;
+                width: 5%;
+                .r3-input-holder
+                {
+                    display: inline-block;
+                    width: 25%;
+                    border-right: 2px solid #333;
+                    border-bottom: 2px solid #333;
+                    height: 20px;
+                    .r3-input
+                    {
+                        font-size: 15px;
+                        margin-top: 2px;
+                        text-align: center;
+                    }
+                }
+                .r3-lastinput-holder
+                {
+                    display: inline-block;
+                    width: 25%;
+                    border-bottom: 2px solid #333;
+                    height: 20px;
+                    .r3-input
+                    {
+                        font-size: 15px;
+                        margin-top: 2px;
+                        text-align: center;
+                    }
+                }
+            }
+            .r3-total-container
+            {
+                display: inline-block;
+                width: 46%;
+                border-right: 2px solid #333;
+                border-bottom: 2px solid #333;
+                .r3-title-holder
+                {
+                    display: inline-block;
+                    margin-left: 10px;
+                    .r3-title
+                    {
+                        font-size: 12px;
+                        font-weight: 700;
+                        letter-spacing: 0.03px;
+                    }
+                }
+                .r3-arrowtail-holder
+                {
+                    display: inline-block;
+                    vertical-align: middle;
+                    margin-left: 15px;
+                    margin-bottom: 1px;
+                    .r3-line
+                    {
+                        border: 1px solid #333;
+                        width: 80px;
+                    }
+                }
+                .r3-arrowhead-holder
+                {
+                    display: inline-block;
+                    margin-left: -4px;
+                    .triangle
+                    {
+                        width: 0;
+                        height: 0;
+                        border-top: 5px solid transparent;
+                        border-bottom: 5px solid transparent;
+                        border-left: 10px solid #333;
+                    }
+                }
+            }
+            .r3-pagetitle-container
+            {
+                display: inline-block;
+                width: 11%;
+                .r3-title-holder
+                {
+                    display: block;
+                    height: 34px;
+                    .r3-title
+                    {
+                        font-size: 11px;
+                        font-weight: 700;
+                        letter-spacing: 0.03px;
+                        padding: 8px 0px 14px 10px;
+                    }
+                }
+            }
+            .r3-grandtotal-title-container
+            {
+                display: inline-block;
+                width: 31%;
+                border-right: 2px solid #333;
+                border-bottom: 2px solid #333;
+                .r3-title-holder
+                {
+                    display: block;
+                    .r3-title
+                    {
+                        font-size: 11px;
+                        font-weight: 700;
+                        letter-spacing: 0.03px;
+                        text-align: center;
+                    }
+                }
+            }
+            .r3-paymentdetails-title-container
+            {
+                display: inline-block;
+                width: 30%;
+                border-right: 2px solid #333;
+                border-bottom: 2px solid #333;
+                .r3-title-holder
+                {
+                    display: block;
+                    .r3-title
+                    {
+                        font-size: 11px;
+                        font-weight: 700;
+                        letter-spacing: 0.03px;
+                        text-align: center;
+                    }
+                }
+            }
+            .r3-adjustmenttype-title-container
+            {
+                display: inline-block;
+                border-right: 2px solid #333;
+                width: 13%;
+                .r3-title-holder
+                {
+                    display: block;
+                    height: 12px;
+                    .r3-title
+                    {
+                        font-size: 9px;
+                        font-weight: 700;
+                        letter-spacing: 0.03px;
+                        text-align: left;
+                        margin-left: 2px;
+                        margin-top: 2px;
+                    }
+                }
+            }
+            .r3-certified-title-container
+            {
+                display: inline-block;
+                width: 15%;
+                border-right: 3px solid #333;
+                .r3-title-holder
+                {
+                    display: block;
+                    height: 12px;
+                    .r3-title
+                    {
+                        font-size: 8px;
+                        font-weight: 700;
+                        letter-spacing: 0.03px;
+                        text-align: left;
+                        margin-left: 2px;
+                        margin-top: 2px;
+                    }
+                }
+            }
+            .r3-appl-no-title-container
+            {
+                display: inline-block;
+                border-right: 2px solid #333;
+                border-bottom: 2px solid #333;
+                width: 5%;
+                .r3-title-holder
+                {
+                    display: block;
+                    padding: 5px 0px 5px 0px;
+                    .r3-title
+                    {
+                        font-size: 9px;
+                        font-weight: 700;
+                        letter-spacing: 0.03px;
+                        text-align: center;
+                    }
+                }
+            }
+            .r3-socialsecurity-title-container
+            {
+                display: inline-block;
+                border-right: 2px solid #333;
+                border-bottom: 2px solid #333;
+                width: 9%;
+                .r3-title-holder
+                {
+                    display: block;
+                    padding: 5px 0px 5px 0px;
+                    .r3-title
+                    {
+                        font-size: 9px;
+                        font-weight: 700;
+                        letter-spacing: 0.03px;
+                        text-align: center;
+                    }
+                }
+            }
+            .r3-employeecompensation-title-container
+            {
+                display: inline-block;
+                border-right: 2px solid #333;
+                border-bottom: 2px solid #333;
+                width: 8%;
+                .r3-title-holder
+                {
+                    display: block;
+                    .r3-title
+                    {
+                        font-size: 9px;
+                        font-weight: 700;
+                        letter-spacing: 0.03px;
+                        text-align: center;
+                    }
+                }
+            }
+            .r3-grandtotal-subtitle-container
+            {
+                display: inline-block;
+                border-right: 2px solid #333;
+                border-bottom: 2px solid #333;
+                width: 9%;
+                .r3-title-holder
+                {
+                    display: block;
+                    padding: 5px 0px 5px 0px;
+                    .r3-title
+                    {
+                        font-size: 9px;
+                        font-weight: 700;
+                        letter-spacing: 0.03px;
+                        text-align: center;
+                    }
+                }
+            }
+            .r3-tr-sbrnumber-subtitle-container
+            {
+                display: inline-block;
+                border-right: 2px solid #333;
+                border-bottom: 2px solid #333;
+                width: 10%;
+                .r3-title-holder
+                {
+                    display: block;
+                    padding: 5px 0px 5px 0px;
+                    .r3-title
+                    {
+                        font-size: 9px;
+                        font-weight: 700;
+                        letter-spacing: 0.03px;
+                        text-align: center;
+                    }
+                }
+            }
+            .r3-datepaid-subtitle-container
+            {
+                display: inline-block;
+                border-right: 2px solid #333;
+                border-bottom: 2px solid #333;
+                width: 8%;
+                .r3-title-holder
+                {
+                    display: block;
+                    padding: 5px 0px 5px 0px;
+                    .r3-title
+                    {
+                        font-size: 9px;
+                        font-weight: 700;
+                        letter-spacing: 0.03px;
+                        text-align: center;
+                    }
+                }
+            }
+            .r3-amountpaid-subtitle-container
+            {
+                display: inline-block;
+                border-right: 2px solid #333;
+                border-bottom: 2px solid #333;
+                width: 12%;
+                .r3-title-holder
+                {
+                    display: block;
+                    padding: 5px 0px 5px 0px;
+                    .r3-title
+                    {
+                        font-size: 9px;
+                        font-weight: 700;
+                        letter-spacing: 0.03px;
+                        text-align: center;
+                    }
+                }
+            }
+        }
+    }
+}

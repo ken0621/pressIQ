@@ -239,6 +239,7 @@ class Item
         $update["item_date_archived"] = null;
         Tbl_item::where("shop_id", $shop_id)->where("item_id", $item_id)->update($update);
     }
+
     public static function create_bundle_validation($shop_id, $item_type, $insert, $_item)
     {
         $return = null;
@@ -347,7 +348,12 @@ class Item
     /* READ DATA */
     public static function get($shop_id = 0, $paginate = false, $archive = 0)
     {
-        $query = Tbl_item::where("shop_id", $shop_id)->where("tbl_item.archived", $archive)->type()->inventory()->um_multi();
+        $query = Tbl_item::where("shop_id", $shop_id)->where("tbl_item.archived", $archive)->type()->um_multi();
+
+        if(session("get_inventory"))
+        {
+            $query = $query->inventory(session("get_inventory"));
+        }
 
         /* SEARCH */
         if (session("get_search")) 
@@ -398,10 +404,22 @@ class Item
     }
     public static function info($item_id)
     {
-        $item = Tbl_item::type()->where("item_id", $item_id)->first();
+        $query = Tbl_item::type()->where("item_id", $item_id);
+
+        if(session("get_inventory"))
+        {
+            $query = $query->inventory(session("get_inventory"));
+        }
+
+        $item = $query->first();
+
         Self::add_info($item);
         Self::get_clear_session();
         return $item;
+    }
+    public static function get_inventory($warehouse_id)
+    {
+        session(['get_inventory' => $warehouse_id]);
     }
     public static function get_search($keyword)
     {
@@ -442,6 +460,7 @@ class Item
         $store["get_filter_category"] = null;
         $store["get_apply_price_level"] = null;
         $store["get_search"] = null;
+        $store["get_inventory"] = null;
         session($store);
     }
 
@@ -967,6 +986,19 @@ class Item
 
         return collect($_category)->toArray();
     }
+    public static function bundle_count($item_id, $warehouse_id)
+    {
+        $_item = Item::get_item_from_bundle($item_id, $warehouse_id);
+        $limit_array = array();
+
+        foreach($_item as $item)
+        {
+            $ans = $item->inventory_count / $item->bundle_qty;
+            array_push($limit_array, (int)$ans);
+        }
+
+        return min($limit_array);
+    }
     public static function get_item_bundle_price($item_id = null)
     {
         $price = 0;
@@ -1015,9 +1047,24 @@ class Item
         }
         return $qty;
     }  
-    public static function get_item_from_bundle($item_id)
+    public static function get_item_from_bundle($item_id, $warehouse_id = null)
     {
-        $_item = Tbl_item_bundle::where("bundle_bundle_id", $item_id)->item()->get();
+        $_item_bundle = Tbl_item_bundle::where("bundle_bundle_id", $item_id)->get();
+        $_item = array();
+
+        foreach($_item_bundle as $item_bundle)
+        {  
+            if($warehouse_id)
+            {
+                Item::get_inventory($warehouse_id);
+            }
+
+            $item = Item::info($item_bundle->bundle_item_id);
+            $item->bundle_qty = $item_bundle->bundle_qty;
+
+            array_push($_item, $item);
+        }
+
         return $_item;
     }  
     public static function get_item_bundle($item_id = null)

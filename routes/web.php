@@ -1100,5 +1100,5 @@ include_once('routes_config/routes_reward.php');
 include_once('routes_config/routes_cashier.php');
 include_once('routes_config/routes_item.php');
 
-
-
+/* Members Area */
+include_once('routes_config/routes_members_area.php');

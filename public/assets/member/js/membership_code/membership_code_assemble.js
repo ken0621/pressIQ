@@ -68,3 +68,9 @@ function membership_code_assemble()
 
 	}
 }
+
+function membership_code_assemble_success(data)
+{
+	data.element.modal("hide");
+	toastr.success(data.message);
+}

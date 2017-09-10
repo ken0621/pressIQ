@@ -69,6 +69,7 @@
                                     <th class="text-center"></th>
                                     <th class="text-center"></th>
                                     <th class="text-center"></th>
+                                    <th class="text-center"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -77,6 +78,7 @@
                                     <td class="text-center">AT4YM1BU</td>
                                     <td class="text-center">GOLD</td>
                                     <td class="text-center">GOLD KIT A</td>
+                                    <td class="text-center"><a href="">Reserve</a></td>
                                     <td class="text-center"><a href="">Use Code</a></td>
                                     <td class="text-center"><a href="">Disassemble</a></td>
                                     <td class="text-center"><a href="">Block Code</a></td>

@@ -323,11 +323,13 @@ class Mail_global
             }
             /* END SUCCESS REGISTER */
 
-            $change_content = $txt;
+            if (isset($txt)) 
+            {
+                $change_content = $txt;
+                $return["content"] = EmailContent::email_txt_replace($content_key, $change_content, $shop_id);
 
-            $return["content"] = EmailContent::email_txt_replace($content_key, $change_content, $shop_id);
-
-            $result = Mail_global::send_email($data['template'], $return, $shop_id, $data['mail_to']);
+                $result = Mail_global::send_email($data['template'], $return, $shop_id, $data['mail_to']);
+            }
         }
 
         return $result;

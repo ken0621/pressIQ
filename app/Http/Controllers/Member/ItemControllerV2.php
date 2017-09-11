@@ -127,7 +127,12 @@ class ItemControllerV2 extends Member
 				if(!$return)
 				{
 					$return = Item::create($shop_id, $item_type_id, $insert);
-				}				
+				}
+				else
+				{
+					$return['message'] = $return;
+					$return['status'] = 'error';
+				}
 			}
 			else
 			{
@@ -137,6 +142,11 @@ class ItemControllerV2 extends Member
 				if(!$return)
 				{
 					$return = Item::create_bundle($shop_id, $item_type_id, $insert, $_item);
+				}
+				else
+				{
+					$return['message'] = $return;
+					$return['status'] = 'error';
 				}	
 			}
 		}
@@ -151,6 +161,11 @@ class ItemControllerV2 extends Member
 				{
 					$return  	  = Item::modify($shop_id, $item_id, $insert);
 				}
+				else
+				{
+					$return['message'] = $return;
+					$return['status'] = 'error';
+				}
 			}
 			else
 			{
@@ -160,6 +175,11 @@ class ItemControllerV2 extends Member
 				if(!$return)
 				{
 					$return = Item::modify_bundle($shop_id, $item_id, $insert, $_item);
+				}
+				else
+				{
+					$return['message'] = $return;
+					$return['status'] = 'error';
 				}
 			}
 		}

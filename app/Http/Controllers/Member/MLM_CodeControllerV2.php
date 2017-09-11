@@ -11,7 +11,6 @@ class MLM_CodeControllerV2 extends Member
         Item::get_filter_type(5);
         $data["_item_kit"] = Item::get($this->user_info->shop_id);
         $data["_membership"] = MLM2::membership($this->user_info->shop_id);
-
         if(!$data["_item_kit"])
         {
             $data["title"] = "NO ITEM KIT FOUND";
@@ -36,6 +35,7 @@ class MLM_CodeControllerV2 extends Member
     }
     public function index()
     {
-        return view("member.mlm_code_v2.product_code");
+        $data['_item_product_code'] = Item::get_all_item_record_log();
+        return view("member.mlm_code_v2.product_code",$data);
     }
 }

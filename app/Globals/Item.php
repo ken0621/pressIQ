@@ -11,6 +11,7 @@ use App\Models\Tbl_sir_item;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_item_discount;
 use App\Models\Tbl_audit_trail;
+use App\Models\Tbl_warehouse_inventory_record_log;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
@@ -1467,4 +1468,13 @@ class Item
         $shop_id = Item::getShopId();
         return Tbl_membership::where('shop_id',$shop_id)->where('membership_archive',0)->get();
     }
+    public static function get_all_item_record_log()
+    {
+        $shop_id = Item::getShopId();
+        $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+        $data = Tbl_warehouse_inventory_record_log::item()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->where('record_inventory_status',0)->get();
+
+        return $data;
+    }
+
 }

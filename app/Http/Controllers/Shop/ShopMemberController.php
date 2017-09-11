@@ -2,7 +2,10 @@
 namespace App\Http\Controllers\Shop;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use Crypt;
+use Redirect;
+use View;
+use App\Globals\Payment;
 class ShopMemberController extends Shop
 {
     public function getIndex()
@@ -23,5 +26,16 @@ class ShopMemberController extends Shop
     {
     	$data["page"] = "Login";
     	return view("member.login", $data);
+    }
+    public function getTest()
+    {
+        $shop_id    = $this->shop_info->shop_id; //tbl_shop
+        $key        = "paymaya"; //link reference name
+        $success    = "/checkout/finish/success"; //redirect if payment success
+        $failed     = "/checkout/finish/error"; //redirect if payment failed
+        $debug      = false;
+
+        $error = Payment::payment_redirect($shop_id, $key, $success, $failed, $debug);
+        dd($error);
     }
 }

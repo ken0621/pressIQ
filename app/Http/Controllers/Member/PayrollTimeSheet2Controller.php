@@ -102,10 +102,8 @@ class PayrollTimeSheet2Controller extends Member
 		$data["show_period_end"]		= date("F d, Y", strtotime($data["company_period"]->payroll_period_end));
 		$data["_timesheet"] 			= Payroll2::timesheet_info($data["company_period"], $employee_id);
 		$data["access_salary_rates"]	= $access = Utilities::checkAccess('payroll-timekeeping','salary_rates');
-
-		$check_approved = Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_id)->first();
-		$data["time_keeping_approved"] = $check_approved ? true : false;
-		
+		$check_approved 				= Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_id)->first();
+		$data["time_keeping_approved"] 	= $check_approved ? true : false;
 		
 		$employee_contract = $this->db_get_current_employee_contract($employee_id, $data["company_period"]->payroll_period_start);
 
@@ -117,6 +115,7 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			echo "<div style='padding: 100px; text-align: center;'>FLAT RATE COMPUTATION DOES'T HAVE TIMESHEET</div>";
 		}
+		
 		else
 		{
 			return view('member.payroll2.employee_timesheet', $data);
@@ -1127,7 +1126,6 @@ class PayrollTimeSheet2Controller extends Member
 		$update_sheet["custom_shift"] = 1;
 		$update_sheet["custom_shift_id"] = $shift_code_id;
 		Tbl_payroll_time_sheet::where("payroll_time_sheet_id", $timesheet_id)->update($update_sheet);
-
 
 		$timesheet_info = $this->timesheet_info_db_by_id($timesheet_id);
 		$return['function_name'] = 'custom_shift_success';

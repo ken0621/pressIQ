@@ -21,6 +21,7 @@ class VerifyCsrfToken extends Middleware
         '/payment/dragonpay/post',
         '/tablet/get_data' ,
         '/member/payroll/get_cutoff_data',
-        '/member/payroll/api_login'
+        '/member/payroll/api_login',
+        '/payment/paymaya/webhook/*'
     ];
 }

@@ -22,6 +22,7 @@ use App\Models\Tbl_shop;
 use App\Models\Tbl_chart_of_account;
 use App\Models\Tbl_manufacturer;
 use App\Models\Tbl_item_type;
+use App\Models\Tbl_membership;
 use Session;
 use DB;
 use Carbon\carbon;
@@ -29,7 +30,6 @@ use App\Globals\Merchant;
 use App\Globals\Warehouse2;
 use Validator;
 use stdClass;
-
 class Item
 {
     /* ITEM CRUD START */
@@ -43,15 +43,17 @@ class Item
         $rules['item_name'] = 'required';
         $rules['item_sku'] = 'required';
         $rules['item_price'] = 'required';
-        $rules['item_cost'] = 'required';
 
-        $validator = Validator::make($insert, $rules);
-
-        if($insert['item_cost'] > $insert['item_price'])
-        {       
-            $return['status'] = 'error';
-            $return['message'] .= 'The cost is greater than the sales price.'."<br>";
+        if($item_type <= 2)
+        {
+            $rules['item_cost'] = 'required';
+            if($insert['item_cost'] > $insert['item_price'])
+            {       
+                $return['status'] = 'error';
+                $return['message'] .= 'The cost is greater than the sales price.'."<br>";
+            }            
         }
+        $validator = Validator::make($insert, $rules);
 
         if($validator->fails())
         {
@@ -97,27 +99,27 @@ class Item
                 $return['message'] .= 'Manufacturer does not exist. <br>';            
             }            
         }
-        if($insert['item_asset_account'] != 0)
+        if($insert['item_asset_account_id'] != 0)
         {
-            $asset_data = Tbl_chart_of_account::where('account_id',$insert['item_asset_account'])->where('account_shop_id',$shop_id)->first();
+            $asset_data = Tbl_chart_of_account::where('account_id',$insert['item_asset_account_id'])->where('account_shop_id',$shop_id)->first();
             if(!$asset_data)
             {
                 $return['status'] = 'error';
                 $return['message'] .= 'Asset account does not exist. <br>';            
             }            
         }
-        if($insert['item_income_account'] != 0)
+        if($insert['item_income_account_id'] != 0)
         {
-            $income_data = Tbl_chart_of_account::where('account_id',$insert['item_income_account'])->where('account_shop_id',$shop_id)->first();
+            $income_data = Tbl_chart_of_account::where('account_id',$insert['item_income_account_id'])->where('account_shop_id',$shop_id)->first();
             if(!$income_data)
             {
                 $return['status'] = 'error';
                 $return['message'] .= 'Income account does not exist. <br>';            
             }            
         }
-        if($insert['item_expense_account'] != 0)
+        if($insert['item_expense_account_id'] != 0)
         {
-            $expense_data = Tbl_chart_of_account::where('account_id',$insert['item_expense_account'])->where('account_shop_id',$shop_id)->first();
+            $expense_data = Tbl_chart_of_account::where('account_id',$insert['item_expense_account_id'])->where('account_shop_id',$shop_id)->first();
             if(!$expense_data)
             {
                 $return['status'] = 'error';
@@ -137,15 +139,17 @@ class Item
         $rules['item_name'] = 'required';
         $rules['item_sku'] = 'required';
         $rules['item_price'] = 'required';
-        $rules['item_cost'] = 'required';
 
-        $validator = Validator::make($insert, $rules);
-
-        if($insert['item_cost'] > $insert['item_price'])
-        {       
-            $return['status'] = 'error';
-            $return['message'] .= 'The cost is greater than the sales price.'."<br>";
+        if($item_type <= 2)
+        {
+            $rules['item_cost'] = 'required';
+            if($insert['item_cost'] > $insert['item_price'])
+            {       
+                $return['status'] = 'error';
+                $return['message'] .= 'The cost is greater than the sales price.'."<br>";
+            }
         }
+        $validator = Validator::make($insert, $rules);
 
         if($validator->fails())
         {
@@ -235,13 +239,121 @@ class Item
         $update["item_date_archived"] = null;
         Tbl_item::where("shop_id", $shop_id)->where("item_id", $item_id)->update($update);
     }
+
+    public static function create_bundle_validation($shop_id, $item_type, $insert, $_item)
+    {
+        $return = null;
+
+        $rules['item_name'] = 'required';
+        $rules['item_sku'] = 'required';
+        $rules['item_price'] = 'required';
+
+        $validator = Validator::make($insert, $rules);
+
+        if($validator->fails())
+        {
+            foreach ($validator->messages()->all('') as $keys => $message)
+            {
+                $return .= $message."<br>";
+            }
+        }
+        if($shop_id)
+        {
+            $shop_data = Tbl_shop::where('shop_id',$shop_id)->first();
+            if(!$shop_data)
+            {
+                $return .= 'Your account does not exist. <br>';                
+            }
+        }
+        if($item_type)
+        {
+            $type_data = Tbl_item_type::where('item_type_id',$item_type)->first();
+            if(!$type_data)
+            {
+                $return .= 'Item type does not exist. <br>';            
+            }
+        }
+        if($insert['item_category_id'] != 0)
+        {
+            $category_data = Tbl_category::where('type_id',$insert['item_category_id'])->where('type_shop',$shop_id)->first();
+            if(!$category_data)
+            {
+                $return .= 'Category does not exist. <br>';            
+            }            
+        }
+        if($insert['item_income_account_id'] != 0)
+        {
+            $income_data = Tbl_chart_of_account::where('account_id',$insert['item_income_account_id'])->where('account_shop_id',$shop_id)->first();
+            if(!$income_data)
+            {
+                $return .= 'Income account does not exist. <br>';            
+            }            
+        }
+        if(count($_item) <= 0)
+        {
+            $return .= 'Please add items to bundle. <br>';  
+        }
+
+        return $return;
+    }
+    public static function create_bundle($shop_id, $item_type, $insert, $_item)
+    {
+        $insert['shop_id'] = $shop_id;
+        $insert['item_type_id'] = $item_type;
+        $insert['item_date_created'] = Carbon::now();
+       
+        $item_id = Tbl_item::insertGetId($insert);
+        foreach ($_item as $key => $value) 
+        {
+            $ins_item['bundle_bundle_id'] = $item_id;
+            $ins_item['bundle_item_id'] = $value['item_id'];
+            $ins_item['bundle_qty'] = $value['quantity'];
+
+            Tbl_item_bundle::insert($ins_item);
+        }
+
+        $return['item_id']       = $item_id;
+        $return['status']        = 'success';
+        $return['message']       = 'Item successfully created.';
+        $return['call_function'] = 'success_item';       
+
+        return $return;
+    }
+    public static function modify_bundle($shop_id, $item_id, $insert, $_item)
+    {  
+        $insert['shop_id'] = $shop_id;
+        Tbl_item::where('item_id',$item_id)->update($insert);
+        Tbl_item_bundle::where('bundle_bundle_id',$item_id)->delete();
+
+        foreach ($_item as $key => $value) 
+        {
+            $ins_item['bundle_bundle_id'] = $item_id;
+            $ins_item['bundle_item_id'] = $value['item_id'];
+            $ins_item['bundle_qty'] = $value['quantity'];
+
+            Tbl_item_bundle::insert($ins_item);
+        }
+
+        $return['item_id']       = $item_id;
+        $return['status']        = 'success';
+        $return['message']       = 'Item successfully updated.';
+        $return['call_function'] = 'success_item';       
+
+        return $return;
+
+    }
     /* ITEM CRUD END */
 
 
     /* READ DATA */
     public static function get($shop_id = 0, $paginate = false, $archive = 0)
     {
-        $query = Tbl_item::where("shop_id", $shop_id)->where("tbl_item.archived", $archive)->type()->inventory()->um_multi();
+        $query = Tbl_item::where("shop_id", $shop_id)->where("tbl_item.archived", $archive)->type()->um_multi();
+
+        if(session("get_inventory"))
+        {
+            $query = $query->inventory(session("get_inventory"));
+        }
 
         /* SEARCH */
         if (session("get_search")) 
@@ -278,19 +390,36 @@ class Item
             $item = Self::add_info($item);
             $_item_new[$key] = $item;
         }
-        
+
         $return = isset($_item_new) ? $_item_new : null;  
 
         Self::get_clear_session();
 
         return $return;
     }
+    
+    public static function get_all_item()
+    {
+        return Tbl_item::where("shop_id", Item::getShopId())->where("archived", 0)->get();
+    }
     public static function info($item_id)
     {
-        $item = Tbl_item::where("item_id", $item_id)->first();
+        $query = Tbl_item::type()->where("item_id", $item_id);
+
+        if(session("get_inventory"))
+        {
+            $query = $query->inventory(session("get_inventory"));
+        }
+
+        $item = $query->first();
+
         Self::add_info($item);
         Self::get_clear_session();
         return $item;
+    }
+    public static function get_inventory($warehouse_id)
+    {
+        session(['get_inventory' => $warehouse_id]);
     }
     public static function get_search($keyword)
     {
@@ -331,6 +460,7 @@ class Item
         $store["get_filter_category"] = null;
         $store["get_apply_price_level"] = null;
         $store["get_search"] = null;
+        $store["get_inventory"] = null;
         session($store);
     }
 
@@ -545,6 +675,15 @@ class Item
     public static function get_item_type_list()
     {
         return Tbl_item_type::where("archived", 0)->get();
+    }
+    public static function get_item_type_id($type_name = '') // Inventory, Non-Inventory, Service, Bundle, Membership
+    {        
+        $id = Tbl_item_type::where("item_type_name", $type_name)->value('item_type_id');        
+        if(!$id)
+        {
+            $id = 5; //For Membership (Temporary)
+        }
+        return $id;
     }
 	public static function breakdown($_item='')
 	{
@@ -847,6 +986,19 @@ class Item
 
         return collect($_category)->toArray();
     }
+    public static function bundle_count($item_id, $warehouse_id)
+    {
+        $_item = Item::get_item_from_bundle($item_id, $warehouse_id);
+        $limit_array = array();
+
+        foreach($_item as $item)
+        {
+            $ans = $item->inventory_count / $item->bundle_qty;
+            array_push($limit_array, (int)$ans);
+        }
+
+        return min($limit_array);
+    }
     public static function get_item_bundle_price($item_id = null)
     {
         $price = 0;
@@ -894,7 +1046,27 @@ class Item
             }
         }
         return $qty;
-    }    
+    }  
+    public static function get_item_from_bundle($item_id, $warehouse_id = null)
+    {
+        $_item_bundle = Tbl_item_bundle::where("bundle_bundle_id", $item_id)->get();
+        $_item = array();
+
+        foreach($_item_bundle as $item_bundle)
+        {  
+            if($warehouse_id)
+            {
+                Item::get_inventory($warehouse_id);
+            }
+
+            $item = Item::info($item_bundle->bundle_item_id);
+            $item->bundle_qty = $item_bundle->bundle_qty;
+
+            array_push($_item, $item);
+        }
+
+        return $_item;
+    }  
     public static function get_item_bundle($item_id = null)
     {
         $items = [];
@@ -1275,5 +1447,76 @@ class Item
     public static function getItemCategory($shop_id)
     {
         return Tbl_category::where("type_shop", $shop_id)->where("archived", 0)->get();
+    }
+    public static function get_choose_item($id)
+    {
+        $items = Tbl_item_bundle::where('bundle_bundle_id', $id)->get();
+        $data = [];
+        foreach ($items as $key => $value) 
+        {
+            $info = Item::info($value->bundle_item_id);
+
+            $data[$value->bundle_item_id]['item_id'] = $value->bundle_item_id;
+            $data[$value->bundle_item_id]['item_sku'] = $info->item_sku;
+            $data[$value->bundle_item_id]['item_price'] = $info->item_price;
+            $data[$value->bundle_item_id]['item_cost'] = $info->item_cost;
+            $data[$value->bundle_item_id]['quantity'] = $value->bundle_qty;
+
+            Session::put('choose_item',$data);
+        }
+
+        return $data;
+    }
+    public static function get_item_type_modify($type_id = 0)
+    {
+        $data['inventory_type'] = 'display: none';
+        $data['non_inventory_type'] = 'display: none';
+        $data['service_type'] = 'display: none';
+        $data['bundle_type'] = 'display: none';
+        $data['membership_kit_type'] = 'display: none';
+        $data['type_main'] = 'display : none';
+        $data['type_bundle_main'] = 'display : none';
+        $data['type_remove_main'] = 'remove-this-type';
+        $data['type_remove_bundle'] = 'remove-this-type';
+
+        if($type_id == 1)
+        {
+            $data['inventory_type'] = '';
+            $data['type_main'] = '';
+            $data['type_remove_main'] = '';
+        }
+        if($type_id == 2)
+        {
+            $data['non_inventory_type'] = '';
+            $data['type_main'] = '';
+            $data['type_remove_main'] = '';
+        }
+        if($type_id == 3)
+        {
+            $data['service_type'] = '';
+            $data['type_main'] = '';
+            $data['type_remove_main'] = '';
+        }
+        if($type_id == 4)
+        {
+            $data['bundle_type'] = '';
+            $data['type_bundle_main'] = '';
+            $data['type_remove_bundle'] = '';
+
+        }
+        if($type_id == 5)
+        {
+            $data['membership_kit_type'] = '';
+            $data['type_bundle_main'] = '';
+            $data['type_remove_bundle'] = '';
+
+        }
+
+        return $data;
+    }
+    public static function get_membership()
+    {
+        $shop_id = Item::getShopId();
+        return Tbl_membership::where('shop_id',$shop_id)->where('membership_archive',0)->get();
     }
 }

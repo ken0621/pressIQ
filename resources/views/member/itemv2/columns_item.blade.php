@@ -8,6 +8,7 @@
 		@foreach($_column as $key => $column)
 		<div class="checkbox">
 			<input type="hidden" name="column[{{ $key }}][value]" value="{{ $column["value"] }}">
+			<input type="hidden" name="column[{{ $key }}][array]" value="{{ $column["array"] }}">
 			<input type="hidden" name="column[{{ $key }}][checked]" value="no">
 		  	<label><input name="column[{{ $key }}][checked]" type="checkbox" {{ $column["checked"] ? "checked" : "" }} value="yes">{{ $column["value"] }}</label>
 		</div>

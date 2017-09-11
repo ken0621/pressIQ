@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 class Tbl_item extends Model
 {
+    // use Searchable;
+    
     protected $table = 'tbl_item';
 	protected $primaryKey = "item_id";
     public $timestamps = true;
@@ -27,7 +30,7 @@ class Tbl_item extends Model
     }
     public function scopeType($query)
     {
-        $query->join('tbl_item_type','tbl_item_type.item_type_id','=','tbl_item.item_type_id');
+        $query->leftjoin('tbl_item_type','tbl_item_type.item_type_id','=','tbl_item.item_type_id');
         return $query;
     }
 

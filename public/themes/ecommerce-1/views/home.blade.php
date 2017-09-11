@@ -114,7 +114,7 @@
 						@endforeach
 					</div>
 				</div>
-				<div class="hot-deals-container">
+				{{-- <div class="hot-deals-container">
 					<center>
 						<ins class="bookingaff" data-aid="1292959" data-target_aid="1292802" data-prod="banner" data-width="200" data-height="200" data-banner_id="48509">
 						    <!-- Anything inside will go away once widget is loaded. -->
@@ -130,8 +130,7 @@
 					      p.parentNode.insertBefore(s,p);
 					      })(document, 'script', '//aff.bstatic.com/static/affiliate_base/js/flexiproduct.js');
 					</script>
-
-				</div>
+				</div> --}}
 				<div class="special-offers-container">
 					<div class="left-container-title">
 						<span>SPECIAL OFFERS</span>
@@ -374,7 +373,7 @@ $(document).ready(function()
 	  slidesToShow: 4,
 	  slidesToScroll: 1,
 	  autoplay: true,
-  	  autoplaySpeed: 2000,
+  	  autoplaySpeed: 5000,
 	});
 
 	$('.add-slider .add-top').slick({
@@ -382,7 +381,7 @@ $(document).ready(function()
 	  prevArrow:"<img class='a-left control-c prev slick-prev' src='/themes/{{ $shop_theme }}/img/arrow-left.png'>",
       nextArrow:"<img class='a-right control-c next slick-next' src='/themes/{{ $shop_theme }}/img/arrow-right.png'>",
       autoplay: true,
-  	  autoplaySpeed: 2000,
+  	  autoplaySpeed: 5000,
 	});
 });
 </script>

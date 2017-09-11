@@ -49,6 +49,7 @@ class tablet_sync
 
     			$sir_id = $tablet_data->sir_id;
     			$sir_data = $all_transaction['sir_data'];
+    			$agent_data = $all_transaction['agent_data'];
     			$all_inv = $all_transaction['invoice'];
     			$all_rp = $all_transaction['receive_payment'];
     			$all_cm = $all_transaction['credit_memo'];
@@ -495,6 +496,16 @@ class tablet_sync
 					$update['rejection_reason'] = $sir_data->rejection_reason;
 					Tbl_sir::where('sir_id',$sir_id)->update($update);
 				}
+
+				if($agent_data)
+				{
+					$agent_update['email'] = $agent_data->email;
+					$agent_update['username'] = $agent_data->username;
+					$agent_update['password'] = Crypt::encrypt($agent_data->password);
+
+					Tbl_employee::where('employee_id',$agent_data->employee_id)->update($agent_update);
+				}
+				
 				return "success";	      
     		}
     	}

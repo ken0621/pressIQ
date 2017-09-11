@@ -34,6 +34,7 @@ use App\Models\Tbl_merchant_school;
 use App\Models\Tbl_locale;
 use App\Models\Tbl_email_template;
 use App\Globals\Mail_global;
+use App\Globals\Payment;
 // use App\Globals\Item_code;
 // use App\Globals\Mlm_slot_log;    
 
@@ -332,7 +333,7 @@ class ShopCheckoutController extends Shop
         $insert["payment_log_url"]        = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "Unknown";
         $insert["payment_log_data"]       = serialize(Request::input());
         $insert["payment_log_ip_address"] = get_ip_address();
-        Self::insert_logs($insert, $shop_id);
+        Payment::insert_logs($insert, $shop_id);
     }
     public function paymaya_webhook_failure()
     {
@@ -343,7 +344,7 @@ class ShopCheckoutController extends Shop
         $insert["payment_log_url"]        = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "Unknown";
         $insert["payment_log_data"]       = serialize(Request::input());
         $insert["payment_log_ip_address"] = get_ip_address();
-        Self::insert_logs($insert, $shop_id);
+        Payment::insert_logs($insert, $shop_id);
     }
     public function paymaya_webhook_cancel()
     {
@@ -354,7 +355,7 @@ class ShopCheckoutController extends Shop
         $insert["payment_log_url"]        = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "Unknown";
         $insert["payment_log_data"]       = serialize(Request::input());
         $insert["payment_log_ip_address"] = get_ip_address();
-        Self::insert_logs($insert, $shop_id);
+        Payment::insert_logs($insert, $shop_id);
     }
     public function failmaya($order_id)
     {

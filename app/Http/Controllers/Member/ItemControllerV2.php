@@ -27,19 +27,22 @@ class ItemControllerV2 extends Member
 		$item_type_id 		= Request::input("item_type_id");
 		$item_category_id   = Request::input("item_category_id");
 		$search				= Request::input("search");
+		$warehouse_id 		= Warehouse2::get_current_warehouse($this->user_info->shop_id);
 
 		Item::get_add_markup(); 
 		Item::get_add_display();
 		Item::get_filter_type($item_type_id);
 		Item::get_filter_category($item_category_id);
 		Item::get_search($search);
+		Item::get_inventory($warehouse_id);
 
 		$data["_item"]		= Item::get($this->user_info->shop_id, 5);
 		$data["pagination"] = Item::get_pagination();
 		$data["archive"]	= $archived == 1 ? "restore" : "archive";
 		
-		$default[]   	 	= ["Item Name","item_name", false];
+
 		$default[]   	 	= ["Item ID","item_id", true];
+		$default[]   	 	= ["Item Name","item_name", false];
 		$default[]   	 	= ["SKU", "item_sku", true];
 		$default[]	  		= ["Price", "display_price", true];
 		$default[]	  		= ["Cost", "display_cost", true];

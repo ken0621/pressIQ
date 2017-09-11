@@ -423,10 +423,18 @@ class Warehouse2
             }
 
 
+            Warehouse2::update_inventory_count($item_id, $warehouse_id);
             $return['status'] = 'success';
         }
 
+       
+
         return $return;
+    }
+    public static function update_inventory_count($item_id, $warehouse_id)
+    {
+        $update["inventory_count"] = Tbl_warehouse_inventory_record_log::where("record_warehouse_id", $warehouse_id)->where("record_item_id", $item_id)->count();
+        Tbl_warehouse_inventory::where("warehouse_id", $warehouse_id)->where("inventory_item_id", $item_id)->update($update);
     }
     public static function get_mlm_pin($shop_id)
     {       
@@ -435,7 +443,6 @@ class Warehouse2
         if($prefix)
         {
             $ctr_item = Tbl_warehouse_inventory_record_log::where('record_shop_id',$shop_id)->count() + 1;
-
             $return = $prefix.sprintf("%'.05d\n",$ctr_item);
         }
 

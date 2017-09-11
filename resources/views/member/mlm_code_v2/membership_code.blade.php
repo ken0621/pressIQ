@@ -14,17 +14,18 @@
             <div class="dropdown pull-right">
                 <button onclick="location.href=''" class="btn btn-def-white btn-custom-white"><i class="fa fa-print"></i> Print Membership Codes</button>
                 <button onclick="location.href=''" class="btn btn-def-white btn-custom-white"><i class="fa fa-yelp"></i> Disassemble Kit</button>
-                <button onclick="action_load_link_to_modal('/member/mlm/code2/assemble', 'lg')" class="btn btn-primary"><i class="fa fa-qrcode"></i> Assemble Membership Kit</button>
+                <button onclick="action_load_link_to_modal('/member/mlm/code2/assemble', 'md')" class="btn btn-primary"><i class="fa fa-qrcode"></i> Assemble Membership Kit</button>
             </div>
         </div>
     </div>
 </div>
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <ul class="nav nav-tabs">
-        <li class="active change-tab pending-tab cursor-pointer" mode="pending"><a class="cursor-pointer"><i class="fa fa-check"></i> Unused Codes</a></li>
-        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="fa fa-money"></i> Sold Codes</a></li>
-        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="fa fa-star"></i> Used Codes</a></li>
-    	<li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="fa fa-warning"></i> Blocked Codes</a></li>
+        <li class="active change-tab pending-tab cursor-pointer" mode="pending"><a class="cursor-pointer"><i class="fa fa-check"></i> Unused</a></li>
+        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="fa fa-anchor"></i> Reserved</a></li>
+        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="fa fa-money"></i> Sold</a></li>
+        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="fa fa-star"></i> Used</a></li>
+    	<li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="fa fa-warning"></i> Blocked</a></li>
     </ul>
     <div class="search-filter-box">
         <div class="col-md-3" style="padding: 10px">
@@ -67,6 +68,8 @@
                                     <th class="text-center" width="250px">Membership Kit</th>
                                     <th class="text-center"></th>
                                     <th class="text-center"></th>
+                                    <th class="text-center"></th>
+                                    <th class="text-center"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -75,7 +78,9 @@
                                     <td class="text-center">AT4YM1BU</td>
                                     <td class="text-center">GOLD</td>
                                     <td class="text-center">GOLD KIT A</td>
+                                    <td class="text-center"><a href="">Reserve</a></td>
                                     <td class="text-center"><a href="">Use Code</a></td>
+                                    <td class="text-center"><a href="">Disassemble</a></td>
                                     <td class="text-center"><a href="">Block Code</a></td>
                                 </tr>
                             </tbody>

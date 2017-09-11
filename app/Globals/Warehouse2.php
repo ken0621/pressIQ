@@ -351,30 +351,26 @@ class Warehouse2
     {
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
 
-        $return['status'] = null;
-        $return['message'] = null;
+        $return = null;
 
         $serial_qty = count($serial);
         if($serial_qty != 0)
         {
             if($serial_qty != $quantity)
             {
-                $return['status'] = 'error';
-                $return['message'] .= "The serial number are not equal from the quantity. <br> ";
+                $return .= "The serial number are not equal from the quantity. <br> ";
             }
         }
         if($quantity < 0)
         {
-            $return['status'] = 'error';
-            $return['message'] .= "The quantity is less than 1. <br> ";
+            $return .= "The quantity is less than 1. <br> ";
         }
         if(!$check_warehouse)
         {
-            $return['status'] = 'error';
-            $return['message'] .= "The warehouse doesn't belong to your account <br>";
+            $return .= "The warehouse doesn't belong to your account <br>";
         }
 
-        if(!$return['status'])
+        if(!$return)
         {  
             $insert_slip['warehouse_id']                 = $warehouse_id;
             $insert_slip['inventory_remarks']            = $remarks;
@@ -424,10 +420,7 @@ class Warehouse2
 
 
             Warehouse2::update_inventory_count($item_id, $warehouse_id);
-            $return['status'] = 'success';
-        }
-
-       
+        }       
 
         return $return;
     }
@@ -439,7 +432,7 @@ class Warehouse2
     public static function get_mlm_pin($shop_id)
     {       
         $return = 0; 
-        $prefix = Tbl_settings::where("settings_key","mlm_pin_prefix")->value('settings_value');
+        $prefix = Tbl_settings::where("settings_key","mlm_pin_prefix")->where('shop_id',$shop_id)->value('settings_value');
         if($prefix)
         {
             $ctr_item = Tbl_warehouse_inventory_record_log::where('record_shop_id',$shop_id)->count() + 1;
@@ -547,10 +540,22 @@ class Warehouse2
 
         return $return;
     }
+    public static function consume_update($ref_name, $ref_id, $item_id, $quantity)
+    {
+        $data = Tbl_warehouse_inventory_record_log::where("record_consume_ref_name",$ref_name)->where("record_consume_ref_id",$ref_id)->get();
+        for ($ctr_qty = 0; $ctr_qty < $quantity ; $ctr_qty ++) 
+        { 
+            $update['record_consume_ref_name'] = '';
+            $update['record_consume_ref_id'] = 0;
+            $update['record_inventory_status'] = 0;
+            $update['record_item_remarks'] = 'Disassembled Item FROM Membership kit#'.$ref_id;
+
+            Tbl_warehouse_inventory_record_log::where("record_consume_ref_name",$ref_name)->where("record_item_id",$item_id)->where("record_consume_ref_id",$ref_id)->update($update);
+        }
+    }
     public static function consume($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $consume = array(), $serial = array(), $inventory_history = '')
     {
-        $return['status'] = null;
-        $return['message'] = null;
+        $return = null;
 
         $insert_slip['warehouse_id']                 = $warehouse_id;
         $insert_slip['inventory_remarks']            = $remarks;
@@ -609,7 +614,7 @@ class Warehouse2
             Warehouse2::insert_inventory_history($shop_id, $warehouse_id, $inventory_details, $history_item);
         }
 
-        $return['status'] = 'success';
+        Warehouse2::update_inventory_count($item_id, $warehouse_id);
 
         return $return;
     }

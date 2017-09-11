@@ -125,30 +125,29 @@ class ItemControllerV2 extends Member
 		{
 			if($item_type_id <= 3)
 			{
-				$return = Item::create_validation($shop_id, $item_type_id, $insert);
+				$validate = Item::create_validation($shop_id, $item_type_id, $insert);
 
-				if(!$return)
+				if(!$validate)
 				{
 					$return = Item::create($shop_id, $item_type_id, $insert);
 				}
 				else
 				{
-					$return['message'] = $return;
+					$return['message'] = $validate;
 					$return['status'] = 'error';
 				}
 			}
 			else
 			{
 				$_item = Session::get('choose_item');
-				$return = Item::create_bundle_validation($shop_id, $item_type_id, $insert, $_item);
-
-				if(!$return)
+				$validate = Item::create_bundle_validation($shop_id, $item_type_id, $insert, $_item);
+				if(!$validate)
 				{
 					$return = Item::create_bundle($shop_id, $item_type_id, $insert, $_item);
 				}
 				else
 				{
-					$return['message'] = $return;
+					$return['message'] = $validate;
 					$return['status'] = 'error';
 				}	
 			}
@@ -158,30 +157,30 @@ class ItemControllerV2 extends Member
 			$item_id 	  = Request::input("item_id");
 			if($item_type_id <= 3)
 			{
-				$return = Item::create_validation($shop_id, $item_type_id, $insert);
+				$validate = Item::create_validation($shop_id, $item_type_id, $insert);
 
-				if(!$return)
+				if(!$validate)
 				{
 					$return  	  = Item::modify($shop_id, $item_id, $insert);
 				}
 				else
 				{
-					$return['message'] = $return;
+					$return['message'] = $validate;
 					$return['status'] = 'error';
 				}
 			}
 			else
 			{
 				$_item = Session::get('choose_item');
-				$return = Item::create_bundle_validation($shop_id, $item_type_id, $insert, $_item);
+				$validate = Item::create_bundle_validation($shop_id, $item_type_id, $insert, $_item);
 
-				if(!$return)
+				if(!$validate)
 				{
 					$return = Item::modify_bundle($shop_id, $item_id, $insert, $_item);
 				}
 				else
 				{
-					$return['message'] = $return;
+					$return['message'] = $validate;
 					$return['status'] = 'error';
 				}
 			}
@@ -353,6 +352,7 @@ class ItemControllerV2 extends Member
     	{
     		$return = Warehouse2::refill($shop_id, $warehouse_id, $item_id, $quantity, $remarks);
     		$return['call_function'] = 'success_refill';
+    		$return['status'] = 'success';
     	}
     	else
     	{

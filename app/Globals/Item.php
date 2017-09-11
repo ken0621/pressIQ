@@ -349,7 +349,7 @@ class Item
     /* READ DATA */
     public static function get($shop_id = 0, $paginate = false, $archive = 0)
     {
-        $query = Tbl_item::where("shop_id", $shop_id)->where("tbl_item.archived", $archive)->type()->um_multi();
+        $query = Tbl_item::where("tbl_item.shop_id", $shop_id)->where("tbl_item.archived", $archive)->type()->um_multi()->membership();
 
         if(session("get_inventory"))
         {
@@ -540,7 +540,6 @@ class Item
         return $item;
     }
     /* READ DATA END */
-
     public static function list_price_level($shop_id)
     {
         $_price_level = Tbl_price_level::where("shop_id", $shop_id)->get();
@@ -1520,13 +1519,50 @@ class Item
         $shop_id = Item::getShopId();
         return Tbl_membership::where('shop_id',$shop_id)->where('membership_archive',0)->get();
     }
-    public static function get_all_item_record_log()
+    public static function get_assembled_kit($record_id = 0)
     {
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
-        $data = Tbl_warehouse_inventory_record_log::item()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->where('record_inventory_status',0)->get();
+
+        $data = Tbl_warehouse_inventory_record_log::where('item_type_id',5)->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->where('record_inventory_status',0)->groupBy('record_log_id')->orderBy('record_log_id')->get();
+        if($record_id)
+        {
+            $data = Tbl_warehouse_inventory_record_log::where('item_type_id',5)->where('record_log_id',$record_id)->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->where('record_inventory_status',0)->groupBy('record_log_id')->orderBy('record_log_id')->get();
+        }
 
         return $data;
     }
+    public static function assemble_membership_kit($shop_id, $warehouse_id, $item_id, $quantity)
+    {
+        $item_list = Item::get_item_in_bundle($item_id);
+        $_item = [];
+        foreach ($item_list as $key => $value) 
+        {
+            $_item[$key]['item_id'] = $value->bundle_item_id;
+            $_item[$key]['quantity'] = $value->bundle_qty * $quantity;
+            $_item[$key]['remarks'] = 'consume item upon assembling item';
+        }
+        $validate_consume = Warehouse2::consume_bulk($shop_id, $warehouse_id, 'assemble_item', $item_id, 'Consume Item upon assembling membership kit Item#'.$item_id, $_item);
 
+        $source['name'] = 'assemble_item';
+        $source['id'] = $item_id;
+        $validate_consume .= Warehouse2::refill($shop_id, $warehouse_id, $item_id, $quantity, 'Refill Item upon assembling membership kit Item#'.$item_id, $source);
+
+        return $validate_consume;
+    } 
+    public static function disassemble_membership_kit($record_log_id)
+    {
+        $record_data = Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)->first();
+
+        if($record_data)
+        {
+            $item_list = Item::get_item_in_bundle($record_data->record_item_id);
+           foreach ($item_list as $key => $value) 
+           {
+                Warehouse2::consume_update('assemble_item', $record_data->record_item_id, $value->bundle_item_id, $value->bundle_qty);
+           }
+
+           Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)->delete();
+        }
+    }
 }

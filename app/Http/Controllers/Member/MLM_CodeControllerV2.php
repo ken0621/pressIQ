@@ -13,6 +13,9 @@ class MLM_CodeControllerV2 extends Member
         Item::get_filter_type(5);
         $data["_item_kit"] = Item::get($this->user_info->shop_id);
         $data["_membership"] = MLM2::membership($this->user_info->shop_id);
+
+        $data['_assembled_item_kit'] = Item::get_assembled_kit();
+
         if(!$data["_item_kit"])
         {
             $data["title"] = "NO ITEM KIT FOUND";
@@ -36,12 +39,21 @@ class MLM_CodeControllerV2 extends Member
         {
             $item_id            = $request->item_id;
             $quantity           = ($request->quantity <= 0 ? 1 : $request->quantity);
+            
+            $return_assemble = Item::assemble_membership_kit($this->user_info->shop_id, $this->current_warehouse->warehouse_id, $item_id, $quantity);
 
-            
-            
-            $response["status"] = "success";
-            $response["call_function"] = "membership_code_assemble_success";
-            $response["message"] = "<b>3 MEMBERSHIP KIT</b> CREATED";
+            if(!$return_assemble)
+            {
+                $response["status"] = "success";
+                $response["call_function"] = "membership_code_assemble_success";
+                $response["message"] = "<b>".$quantity." MEMBERSHIP KIT</b> CREATED";
+            }
+            else
+            {
+                $response["status"] = "error";
+                $response["message"] = $return_assemble;
+            }
+
             return json_encode($response);
         }
         else
@@ -85,6 +97,30 @@ class MLM_CodeControllerV2 extends Member
         $data["_item"] = $_new_item;
 
         return view("member.mlm_code_v2.membership_code_assemble_table", $data);
+    }
+    public function membership_code_disassemble(Request $request)
+    {
+        if($request->isMethod("post"))
+        {
+            $record_log_id = $request->record_log_id;
+
+            foreach ($record_log_id as $key => $value) 
+            {
+                Item::disassemble_membership_kit($value);
+            }
+        }
+        else
+        {
+            $record_id = $request->record_id;
+
+            $data['_assembled_item_kit'] = Item::get_assembled_kit($record_id);
+            if(!$record_id)
+            {
+                $data['_assembled_item_kit'] = Item::get_assembled_kit();
+            }
+
+            return view("member.mlm_code_v2.membership_code_disassemble",$data);            
+        }
     }
     public function index()
     {

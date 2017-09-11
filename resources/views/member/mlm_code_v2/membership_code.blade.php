@@ -13,7 +13,7 @@
             </h1>
             <div class="dropdown pull-right">
                 <button onclick="location.href=''" class="btn btn-def-white btn-custom-white"><i class="fa fa-print"></i> Print Membership Codes</button>
-                <button onclick="location.href=''" class="btn btn-def-white btn-custom-white"><i class="fa fa-yelp"></i> Disassemble Kit</button>
+                <button onclick="action_load_link_to_modal('/member/mlm/code2/disassemble', 'md')"  class="btn btn-def-white btn-custom-white"><i class="fa fa-yelp"></i> Disassemble Kit</button>
                 <button onclick="action_load_link_to_modal('/member/mlm/code2/assemble', 'md')" class="btn btn-primary"><i class="fa fa-qrcode"></i> Assemble Membership Kit</button>
             </div>
         </div>
@@ -73,7 +73,25 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @if(count($_assembled_item_kit) > 0)
+                                @foreach($_assembled_item_kit as $item)
                                 <tr>
+                                    <td class="text-center">{{$item->mlm_pin}}</td>
+                                    <td class="text-center">{{$item->mlm_activation}}</td>
+                                    <td class="text-center">{{$item->membership_name}}</td>
+                                    <td class="text-center">{{$item->item_name}}</td>
+                                    <td class="text-center"><a href="">Reserve</a></td>
+                                    <td class="text-center"><a href="">Use Code</a></td>
+                                    <td class="text-center"><a size="md" class="popup" link="/member/mlm/code2/disassemble?record_id={{$item->record_log_id}}">Disassemble</a></td>
+                                    <td class="text-center"><a href="">Block Code</a></td>
+                                </tr>                                
+                                @endforeach
+                                @else
+                                <tr>
+                                    <td class="text-center" colspan="8"> NO MEMBERSHIP CODE YET</td>
+                                </tr>
+                                @endif
+                               <!--  <tr>
                                     <td class="text-center">1</td>
                                     <td class="text-center">AT4YM1BU</td>
                                     <td class="text-center">GOLD</td>
@@ -82,7 +100,7 @@
                                     <td class="text-center"><a href="">Use Code</a></td>
                                     <td class="text-center"><a href="">Disassemble</a></td>
                                     <td class="text-center"><a href="">Block Code</a></td>
-                                </tr>
+                                </tr>  -->
                             </tbody>
                         </table>
                     </div>
@@ -92,4 +110,8 @@
     </div>
 </div>
 </div>
+
+@endsection
+@section('script')
+<script type="text/javascript" src="/assets/member/js/membership_code/membership_code.js"></script>
 @endsection

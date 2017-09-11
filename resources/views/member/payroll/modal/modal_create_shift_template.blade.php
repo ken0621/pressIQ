@@ -20,10 +20,10 @@
 						<tr>
 							<th rowspan="2" valign="center" class="text-center">Day</th>
 							<th rowspan="2" valign="center" class="text-center">Working Hours</th>
-							<th rowspan="2" valign="center" class="text-center">Break Hours</th>
 							<th colspan="2" class="text-center">Work Schedule</th>
 							<th class="text-center"></th>
 							<th rowspan="2" class="text-center">Flexitime</th>
+							<th rowspan="2" valign="center" class="text-center">Break Hours</th>
 							<th rowspan="2" class="text-center">Rest Day</th>
 							<th rowspan="2" class="text-center">Extra Day</th>
 							
@@ -48,13 +48,7 @@
 										<input type="number" name="target_hours[{{$day['day']}}]" class="form-control text-center" step="any" value="8">
 									@endif
 								</td>
-								<td>
-									@if($day['day'] == "Sun" || $day['day'] == "Sat")
-										<input type="number" name="break_hours[{{$day['day']}}]" class="form-control text-center" step="any" value="0">
-									@else
-										<input type="number" name="break_hours[{{$day['day']}}]" class="form-control text-center" step="any" value="0">
-									@endif
-								</td>
+								
 								<td class="editable">
 									<input type="text" placeholder="NO TIME" name="work_start[{{$day['day']}}][]" class="text-table time-entry in" >
 								</td>
@@ -66,6 +60,13 @@
 								</td>
 								<td class="text-center">
 									<input type="checkbox" name="flexitime_{{$day['day']}}" class="flexitime_check" value="1">
+								</td>
+								<td>
+									@if($day['day'] == "Sun" || $day['day'] == "Sat")
+										<input type="number" name="break_hours[{{$day['day']}}]" class="form-control text-center" step="any" value="0">
+									@else
+										<input type="number" name="break_hours[{{$day['day']}}]" class="form-control text-center" step="any" value="0">
+									@endif
 								</td>
 								<td class="text-center">
 									<input type="checkbox" name="rest_day_{{$day['day']}}" class="restday-check" value="1">

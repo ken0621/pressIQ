@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTblWarehouseInvetoryRecordLog9517139pm extends Migration
+class TblKimkim extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,7 @@ class UpdateTblWarehouseInvetoryRecordLog9517139pm extends Migration
      */
     public function up()
     {
-        Schema::table('tbl_warehouse_inventory_record_log', function (Blueprint $table) {
-            $table->datetime('record_log_date_updated')->nullable();
-        });
+        //
     }
 
     /**
@@ -25,8 +23,6 @@ class UpdateTblWarehouseInvetoryRecordLog9517139pm extends Migration
      */
     public function down()
     {
-        Schema::table('tbl_warehouse_inventory_record_log', function (Blueprint $table) {
-            //
-        });
+        //
     }
 }

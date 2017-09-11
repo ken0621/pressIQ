@@ -12,6 +12,7 @@ use App\Globals\Category;
 use App\Globals\Ecom_Product;
 use App\Globals\Cards;
 use App\Globals\Ec_brand;
+use App\Globals\Payment;
 
 class ShopHomeController extends Shop
 {

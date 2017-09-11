@@ -5024,6 +5024,7 @@ class PayrollController extends Member
      public function modal_create_shift_template()
      {
           $data['_day'] = Payroll::restday_checked();
+
           return view('member.payroll.modal.modal_create_shift_template', $data);
      }
 
@@ -5040,7 +5041,7 @@ class PayrollController extends Member
           /* INSERT DAY */
           $key = 0;
           $tc = 0;
-
+          // dd(Request::all());
           foreach(Request::input("day") as $day)
           {
                /* INSERT SHIFT DAY */
@@ -5073,6 +5074,8 @@ class PayrollController extends Member
                }   
           }
 
+
+               
           $return['function_name'] = 'payrollconfiguration.reload_shift_template';
           $return['status']        = 'success';
           return collect($return)->toJson();
@@ -5370,6 +5373,7 @@ class PayrollController extends Member
           $data['action']     = '/member/payroll/leave_schedule/delete_schedule_leave';
           $data['id']         = $id;
           $data['html']       = '';
+          $data['payroll_deduction_type'] = 0;
 
           return view('member.modal.modal_confirm_archived', $data);
      }

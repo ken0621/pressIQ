@@ -323,44 +323,38 @@ class ShopCheckoutController extends Shop
             dd($dragonpay->content);
         }
     }
-    public function paymaya_success()
+    public function paymaya_webhook_success()
     {
-        $order_id = Crypt::decrypt(Request::input("order_id"));
-        $from = Request::input("from");
-
-        $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
-        if($order)
-        {
-            Item_code::ec_order_slot($order_id);
-
-            $update['ec_order_id']    = $order_id;
-            $update['order_status']   = "Processing";
-            $update['payment_status'] = 1;
-            $order = Ec_order::update_ec_order($update);
-
-            $this->after_email_payment($order_id);
-
-            if ($from == "checkout") 
-            {
-                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)));
-            }
-            elseif ($from == "register")
-            {
-                return Redirect::to('/mlm/login?notify=1');
-            }
-        }
+        /* Insert Logs */
+        $insert["payment_log_type"]       = "received";
+        $insert["payment_log_method"]     = "paymaya";
+        $insert["payment_log_created"]    = Carbon::now();
+        $insert["payment_log_url"]        = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "Unknown";
+        $insert["payment_log_data"]       = serialize(Request::input());
+        $insert["payment_log_ip_address"] = get_ip_address();
+        Self::insert_logs($insert, $shop_id);
     }
-    public function paymaya_failure()
+    public function paymaya_webhook_failure()
     {
-        $order_id = Crypt::decrypt(Request::input("order"));
-        $this->failmaya($order_id);
-        return Redirect::to('/mlm/login?notify=3');
+        /* Insert Logs */
+        $insert["payment_log_type"]       = "received";
+        $insert["payment_log_method"]     = "paymaya";
+        $insert["payment_log_created"]    = Carbon::now();
+        $insert["payment_log_url"]        = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "Unknown";
+        $insert["payment_log_data"]       = serialize(Request::input());
+        $insert["payment_log_ip_address"] = get_ip_address();
+        Self::insert_logs($insert, $shop_id);
     }
-    public function paymaya_cancel()
+    public function paymaya_webhook_cancel()
     {
-        $order_id = Crypt::decrypt(Request::input("order"));
-        $this->failmaya($order_id);
-        return Redirect::to('/mlm/login?notify=4');
+        /* Insert Logs */
+        $insert["payment_log_type"]       = "received";
+        $insert["payment_log_method"]     = "paymaya";
+        $insert["payment_log_created"]    = Carbon::now();
+        $insert["payment_log_url"]        = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "Unknown";
+        $insert["payment_log_data"]       = serialize(Request::input());
+        $insert["payment_log_ip_address"] = get_ip_address();
+        Self::insert_logs($insert, $shop_id);
     }
     public function failmaya($order_id)
     {

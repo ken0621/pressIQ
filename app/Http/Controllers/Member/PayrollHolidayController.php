@@ -273,18 +273,22 @@ class PayrollHolidayController extends Member
      public function submit_eployee()
      {
         $company_id = Request::input('company_id');
-
         $all_employee = Request::input('employee_tag');
 
 
         $return['company_id'] = 0;
+
         if(count($all_employee) > 0)
         {
+            //dd(Session::get("employee_tag"));
+            $data = Session::get("employee_tag");
             $data[$company_id] = [];
+
             foreach ($all_employee as $key => $value) 
             {
                 $data[$company_id][$key] = $value;
             }
+
             Session::put('employee_tag',$data);
 
             $return['status'] = "success";

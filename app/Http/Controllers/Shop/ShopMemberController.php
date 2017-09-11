@@ -1,10 +1,7 @@
 <?php
 namespace App\Http\Controllers\Shop;
 use App\Http\Controllers\Controller;
-use Crypt;
-use Redirect;
-use Request;
-use View;
+use Illuminate\Http\Request;
 
 class ShopMemberController extends Shop
 {
@@ -17,6 +14,10 @@ class ShopMemberController extends Shop
     {
     	$data["page"] = "Register";
     	return view("member.register", $data);
+    }
+    public function postRegister()
+    {
+        dd("hello world");
     }
     public function getLogin()
     {

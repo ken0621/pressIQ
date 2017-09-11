@@ -6,6 +6,8 @@ use Crypt;
 use Redirect;
 use View;
 use App\Globals\Payment;
+use App\Rules\Uniqueonshop;
+
 class ShopMemberController extends Shop
 {
     public function getIndex()
@@ -18,9 +20,31 @@ class ShopMemberController extends Shop
     	$data["page"] = "Register";
     	return view("member.register", $data);
     }
-    public function postRegister()
+    public function postRegister(Request $request)
     {
-        dd("hello world");
+        $shop_id                                = $this->shop_info->shop_id;
+        $validate["first_name"]                 = ["required", "string", "min:2"];
+        $validate["middle_name"]                = "";
+        $validate["last_name"]                  = ["required", "string", "min:2"];
+        $validate["gender"]                     = ["required"];
+        $validate["contact"]                    = ["required", "string", "min:10"];
+        $validate["email"]                      = ["required","min:5","email", new Uniqueonshop("tbl_customer", $shop_id)];
+        $validate["b_day"]                      = ["required","integer"];
+        $validate["b_month"]                    = ["required","integer"];
+        $validate["b_year"]                     = ["required","integer"];
+        $validate["password"]                   = ["required", "confirmed","min:5"];
+        $validate["password_confirmation "]     = [];
+
+        $insert                                 = $this->validate(request(), $validate);
+        $insert["birthday"]                     = $insert["b_month"] . "/" . $insert["b_day"] . "/" . $insert["b_year"];
+        $insert["password"]                     = Crypt::encrypt($insert["password"]);
+
+        unset($insert["b_month"]);
+        unset($insert["b_year"]);
+        unset($insert["b_day"]);
+
+        //Customer::register($this->shop_info->shop_id, $insert);
+
     }
     public function getLogin()
     {

@@ -28,57 +28,81 @@
 										<div class="name">Sign Up With</br> Google</div>
 									</div>
 								</div>
+
+								@if ($errors->any())
+								    <div class="alert alert-danger">
+								        <ul>
+								            @foreach ($errors->all() as $error)
+								                <li>{{ $error }}</li>
+								            @endforeach
+								        </ul>
+								    </div>
+								@endif
+
 								<div class="form-group">
 									<div class="register-label">GENDER</div>
 									<div class="form-input">
-										<label class="radio-inline"><input checked type="radio" name="optradio">MALE</label>
-										<label class="radio-inline"><input type="radio" name="optradio">FEMALE</label>
+										<label class="radio-inline"><input checked type="radio" name="gender" value="male">MALE</label>
+										<label class="radio-inline"><input type="radio" name="gender" value="female">FEMALE</label>
 									</div>
 								</div>
 								<div class="form-group">
 									<div class="register-label">EMAIL</div>
 									<div class="form-input">
-										<input class="form-control input-sm" type="email" name="" value="">
+										<input class="form-control input-sm" type="email" name="email" value="{{ old('email') }}">
 									</div>
 								</div>
 								<div class="form-group">
 									<div class="register-label">FULL NAME</div>
 									<div class="form-input">
-										<input class="form-control input-sm" type="text" name="first_name" placeholder="First Name" value="">
-										<input class="form-control input-sm" type="text" name="middle_name" placeholder="Middle Name" value="">
-										<input class="form-control input-sm" type="text" name="last_name" placeholder="Last Name" value="">
+										<input class="form-control input-sm" type="text" name="first_name" placeholder="First Name" value="{{ old('first_name') }}">
+										<input class="form-control input-sm" type="text" name="middle_name" placeholder="Middle Name" value="{{ old('middle_name') }}">
+										<input class="form-control input-sm" type="text" name="last_name" placeholder="Last Name" value="{{ old('last_name') }}">
 									</div>
 								</div>
 								<div class="form-group">
 									<div class="register-label">BIRTHDAY</div>
 									<div class="form-input">
 										<div class="date-holder">
-											<select class="form-control">
-												<option>DD</option>
+											<select name="b_month" class="form-control">
+												@for($ctr = 1; $ctr <= 12; $ctr++)
+												<option {{ old('b_month') == $ctr ? 'selected' : '' }} value="{{ $ctr }}">{{ date("F", strtotime($ctr . "/01/17")) }}</option>
+												@endfor
 											</select>
 										</div>
 										<div class="date-holder">
-											<select class="form-control">
-												<option>MM</option>
+											<select name="b_day" class="form-control">
+												@for($ctr = 1; $ctr <= 31; $ctr++)
+												<option {{ old('b_day') == $ctr ? 'selected' : '' }} value="{{ $ctr }}">{{ $ctr }}</option>
+												@endfor
 											</select>
 										</div>
 										<div class="date-holder">
-											<select class="form-control">
-												<option>YYYY</option>
+											<select name="b_year" class="form-control">
+												@for($ctr = date("Y"); $ctr >= (date("Y")-100); $ctr--)
+												<option {{ old('b_year') == $ctr ? 'selected' : '' }} value="{{ $ctr }}">{{ $ctr }}</option>
+												@endfor
 											</select>
+
 										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="register-label">CONTACT</div>
+									<div class="form-input">
+										<input class="form-control input-sm" type="text" name="contact" value="{{ old('email') }}">
 									</div>
 								</div>
 								<div class="form-group">
 									<div class="register-label">PASSWORD</div>
 									<div class="form-input">
-										<input class="form-control input-sm" type="password" name="" value="English">
+										<input class="form-control input-sm" type="password" name="password" value="">
 									</div>
 								</div>
 								<div class="form-group">
 									<div class="register-label">REPEAT PASSWORD</div>
 									<div class="form-input">
-										<input class="form-control input-sm" type="password" name="" value="English">
+										<input class="form-control input-sm" type="password" name="password_confirmation" value="">
 									</div>
 								</div>
 								<div class="form-group clearfix" style="margin-top: 15px;">

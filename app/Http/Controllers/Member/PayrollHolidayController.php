@@ -280,7 +280,6 @@ class PayrollHolidayController extends Member
 
         if(count($all_employee) > 0)
         {
-            //dd(Session::get("employee_tag"));
             $data = Session::get("employee_tag");
             $data[$company_id] = [];
 

@@ -1519,18 +1519,36 @@ class Item
         $shop_id = Item::getShopId();
         return Tbl_membership::where('shop_id',$shop_id)->where('membership_archive',0)->get();
     }
-    public static function get_assembled_kit($record_id = 0)
+    public static function get_assembled_kit($record_id = 0, $item_kit_id = 0, $item_membership_id = 0, $search_keyword = '', $status = '')
     {
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
 
-        $data = Tbl_warehouse_inventory_record_log::where('item_type_id',5)->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->where('record_inventory_status',0)->groupBy('record_log_id')->orderBy('record_log_id')->get();
+        $query = Tbl_warehouse_inventory_record_log::where('item_type_id',5)->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->where('record_inventory_status',0)->groupBy('record_log_id')->orderBy('record_log_id');
         if($record_id)
         {
-            $data = Tbl_warehouse_inventory_record_log::where('item_type_id',5)->where('record_log_id',$record_id)->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->where('record_inventory_status',0)->groupBy('record_log_id')->orderBy('record_log_id')->get();
+            $query = Tbl_warehouse_inventory_record_log::where('item_type_id',5)->where('record_log_id',$record_id)->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->where('record_inventory_status',0)->groupBy('record_log_id')->orderBy('record_log_id');
         }
 
-        return $data;
+        if($item_kit_id)
+        {
+            $query->where('record_item_id',$item_kit_id);
+        }
+        if($item_membership_id)
+        {
+            $query->where('tbl_item.membership_id',$item_membership_id);
+        }
+        if($search_keyword)
+        {
+            $query->where('mlm_pin', "LIKE", "%" . $search_keyword . "%")->orWhere('mlm_activation', "LIKE", "%" . $search_keyword . "%");
+        }
+
+        if($status)
+        {
+            
+        }
+
+        return $query->get();
     }
     public static function assemble_membership_kit($shop_id, $warehouse_id, $item_id, $quantity)
     {

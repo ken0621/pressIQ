@@ -14,8 +14,6 @@ class MLM_CodeControllerV2 extends Member
         $data["_item_kit"] = Item::get($this->user_info->shop_id);
         $data["_membership"] = MLM2::membership($this->user_info->shop_id);
 
-        $data['_assembled_item_kit'] = Item::get_assembled_kit();
-
         if(!$data["_item_kit"])
         {
             $data["title"] = "NO ITEM KIT FOUND";
@@ -32,6 +30,13 @@ class MLM_CodeControllerV2 extends Member
         {
             return view("member.mlm_code_v2.membership_code", $data);
         }
+    }
+    public function membership_code_table(Request $request)
+    {   
+        $data['_assembled_item_kit'] = Item::get_assembled_kit(0, $request->item_kit_id, $request->item_membership_id, $request->search_keyword, $request->status);
+
+        return view("member.mlm_code_v2.membership_code_table", $data);
+
     }
     public function membership_code_assemble(Request $request)
     {
@@ -120,6 +125,20 @@ class MLM_CodeControllerV2 extends Member
             }
 
             return view("member.mlm_code_v2.membership_code_disassemble",$data);            
+        }
+    }
+    public function change_status(Request $request)
+    { 
+        if($request->isMethod("post"))
+        {
+
+        }
+        else
+        {
+            $data['action'] = $request->action;
+            $data['item'] = Item::info($request->item_id);
+
+            return view("member.mlm_code_v2.membership_code_change_status",$data);              
         }
     }
     public function index()

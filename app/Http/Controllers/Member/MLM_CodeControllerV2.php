@@ -152,6 +152,7 @@ class MLM_CodeControllerV2 extends Member
         {
             $data['action'] = $request->action;
             $data['item'] = Item::info($request->item_id);
+
             $data['record_log_id'] = $request->record_id;
 
             return view("member.mlm_code_v2.membership_code_change_status",$data);              

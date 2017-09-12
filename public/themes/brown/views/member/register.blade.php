@@ -1,47 +1,39 @@
 @extends("layout")
 @section("content")
-<div class="container">
-	<div class="register">
-		<table>
-			<tbody>
-				<tr>
-					<td class="c1">
-						<div class="register-side">
-							<img src="/themes/{{ $shop_theme }}/img/register-bg.jpg">
-						</div>
-					</td>
-					<td class="c2">
-						<form method="post">
-							{{ csrf_field() }}
-							<div class="register-form">
-								<div class="text-right social-button">
-									<div class="holder">
-										<div class="img">
-											<img src="/themes/{{ $shop_theme }}/img/fb.png">
-										</div>
-										<div class="name">Sign Up With</br> Facebook</div>
+<form method="post">
+{{ csrf_field() }}
+	<div class="container">
+		<div class="register">
+			<table>
+				<tbody>
+					<tr>
+						<td colspan="2">
+							<div class="register-header clearfix">
+								<div class="left">
+									<div class="title">Create new customer account</div>
+								</div>
+								<div class="right">
+									<div class="or">
+										<img src="/themes/{{ $shop_theme }}/img/or-2.png">
 									</div>
-									<div class="holder">
-										<div class="img">
-											<img src="/themes/{{ $shop_theme }}/img/google.png">
+									<div class="text-right social-button">
+										<div class="holder fb">
+											<div class="name"><i class="fa fa-facebook" aria-hidden="true"></i> Sign in with Facebook</div>
 										</div>
-										<div class="name">Sign Up With</br> Google</div>
+										<div class="holder gp">
+											<div class="name"><i class="fa fa-google-plus" aria-hidden="true"></i> Sign in with Google+</div>
+										</div>
 									</div>
 								</div>
-
-								@if ($errors->any())
-								    <div class="alert alert-danger">
-								        <ul>
-								            @foreach ($errors->all() as $error)
-								                <li>{{ $error }}</li>
-								            @endforeach
-								        </ul>
-								    </div>
-								@endif
-
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="c1">
+							<div class="register-form">
 								<div class="form-group">
 									<div class="register-label">GENDER</div>
-									<div class="form-input">
+									<div class="form-input" style="margin-top: 10px; margin-left: 25px;">
 										<label class="radio-inline"><input checked type="radio" name="gender" value="male">MALE</label>
 										<label class="radio-inline"><input type="radio" name="gender" value="female">FEMALE</label>
 									</div>
@@ -49,14 +41,22 @@
 								<div class="form-group">
 									<div class="register-label">EMAIL</div>
 									<div class="form-input">
-										<input class="form-control input-sm" type="email" name="email" value="{{ old('email') }}">
+										<input class="form-control input-sm" type="email" name="email" placeholder="Type Your Email Here" value="{{ old('email') }}">
 									</div>
 								</div>
 								<div class="form-group">
-									<div class="register-label">FULL NAME</div>
+									<div class="register-label">CUSTOMER NAME</div>
 									<div class="form-input">
 										<input class="form-control input-sm" type="text" name="first_name" placeholder="First Name" value="{{ old('first_name') }}">
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="form-input">
 										<input class="form-control input-sm" type="text" name="middle_name" placeholder="Middle Name" value="{{ old('middle_name') }}">
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="form-input">
 										<input class="form-control input-sm" type="text" name="last_name" placeholder="Last Name" value="{{ old('last_name') }}">
 									</div>
 								</div>
@@ -83,8 +83,29 @@
 												<option {{ old('b_year') == $ctr ? 'selected' : '' }} value="{{ $ctr }}">{{ $ctr }}</option>
 												@endfor
 											</select>
-
 										</div>
+									</div>
+								</div>
+							</div>
+						</td>
+						<td class="c2">
+							
+							<div class="register-form">
+
+								@if ($errors->any())
+								    <div class="alert alert-danger">
+								        <ul>
+								            @foreach ($errors->all() as $error)
+								                <li>{{ $error }}</li>
+								            @endforeach
+								        </ul>
+								    </div>
+								@endif
+								
+								<div class="form-group">
+									<div class="register-label">LANGUAGE</div>
+									<div class="form-input">
+										<input class="form-control input-sm" type="text" name="contact" value="">
 									</div>
 								</div>
 								<div class="form-group">
@@ -113,20 +134,20 @@
 								<div class="form-group">
 									<div class="choice">
 										<div class="holder">
-											<button class="btn btn-brown">Create an Account</button>
+											<button class="btn btn-brown">Sign Up</button>
 										</div>
 										<div class="holder"><span class="or">OR</span></div>
 										<div class="holder"><a class="login-href" href="javascript:">Login an Account</a></div>
 									</div>
 								</div>
 							</div>
-						</form>
-					</td>
-				</tr>
-			</tbody>
-		</table>		
+						</td>
+					</tr>
+				</tbody>
+			</table>		
+		</div>
 	</div>
-</div>
+</form>
 @endsection
 @section("script")
 

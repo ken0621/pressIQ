@@ -164,6 +164,12 @@ Route::any('/member/mlm/plan/binary_promotions/get', 'Member\MLM_PlanController@
 Route::any('/member/mlm/plan/binary_promotions/edit', 'Member\MLM_PlanController@binary_promotions_edit');//luke
 /* end triangle repurchase  Plan */
 
+/* start triangle repurchase */
+Route::any('/member/mlm/plan/brown_rank', 'Member\MLM_PlanController@brown_rank'); 
+Route::any('/member/mlm/plan/brown_rank/add_rank', 'Member\MLM_PlanController@brown_rank_add');
+/* end triangle repurchase  Plan */
+
+
 /* end MLM Plan */
 
 /* start MLM Product */
@@ -290,3 +296,5 @@ Route::post('member/mlm/developer/import', 'Member\MlmDeveloperController@import
 Route::get('member/mlm/developer/repurchase', 'Member\MlmDeveloperController@repurchase');
 Route::post('member/mlm/developer/repurchase', 'Member\MlmDeveloperController@repurchase_submit');
 Route::get('member/mlm/developer/reset', 'Member\MlmDeveloperController@reset');
+
+Route::any('member/mlm/developer/popup_genealogy', 'Member\MlmDeveloperController@popup_genealogy');

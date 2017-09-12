@@ -169,7 +169,10 @@ Route::any('/member/mlm/plan/brown_rank/table', 'Member\MLM_PlanController@brown
 Route::any('/member/mlm/plan/brown_rank/add_rank', 'Member\MLM_PlanController@brown_rank_add');
 Route::any('/member/mlm/plan/brown_rank/add_rank_submit', 'Member\MLM_PlanController@add_rank_submit');
 Route::any('/member/mlm/plan/brown_rank/update_rank_submit', 'Member\MLM_PlanController@update_rank_submit');
+
+Route::any('/member/mlm/plan/brown_repurchase', 'Member\MLM_PlanController@brown_repurchase'); 
 /* end triangle repurchase  Plan */
+
 
 
 /* end MLM Plan */

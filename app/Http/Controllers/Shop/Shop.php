@@ -17,6 +17,7 @@ use App\Globals\Cart;
 use App\Globals\Settings;
 use App\Models\Tbl_membership_code;
 use App\Globals\Mlm_member;
+use App\Globals\Customer;
 
 class Shop extends Controller
 {
@@ -96,7 +97,6 @@ class Shop extends Controller
 
         $company_column         = array('company_name', 'company_acronym', 'company_logo', 'receipt_logo', 'company_address', 'company_email', 'company_mobile', 'company_hour');
         $company_info           = collect(Tbl_content::where("shop_id", $this->shop_info->shop_id)->whereIn('key', $company_column)->get())->keyBy('key');
-        $product_category       = Ecom_Product::getAllCategory($this->shop_info->shop_id);
         $global_cart            = Cart::get_cart($this->shop_info->shop_id);
         $country                = Tbl_country::get();
         
@@ -109,10 +109,34 @@ class Shop extends Controller
         {
             $popular_tags = DB::table("tbl_ec_popular_tags")->where("shop_id", $this->shop_info->shop_id)->where("tag_approved",1)->orderBy("count", "DESC")->get();
             View::share("_popular_tags", $popular_tags);
+
+            $product_category       = Ecom_Product::getAllCategory($this->shop_info->shop_id);
+            View::share("_categories", $product_category);
+        }
+        elseif ($this->shop_theme == "ecommerce-1")
+        {
+            $product_category       = Ecom_Product::getAllCategory($this->shop_info->shop_id);
+            View::share("_categories", $product_category);
+        }
+        elseif ($this->shop_theme == "3xcell") 
+        {
+            $product_category       = Ecom_Product::getAllCategory($this->shop_info->shop_id);
+            View::share("_categories", $product_category);
         }
         
+        $this->middleware(function ($request, $next)
+        {  
+            $account        = session("mlm_member");
+            $check_account  = Customer::check_account($this->shop_info->shop_id, $account["email"], $account["auth"]);
+            Self::$customer_info = $check_account;
+            View::share("customer", Self::$customer_info);
+            View::share("customer_info_a", Self::$customer_info);
+            
+            return $next($request);
+        });
+
         View::share("slot_now", Self::$slot_now);
-        View::share("customer_info_a", Self::$customer_info);
+        
         View::addLocation(base_path() . '/public/themes/' . $this->shop_theme . '/views/');
         View::share("shop_info", $this->shop_info);
         View::share("shop_theme", $this->shop_info->shop_theme);
@@ -120,7 +144,6 @@ class Shop extends Controller
         View::share("shop_theme_info", $shop_theme_info);
         View::share("company_info", $company_info);
         View::share("shop_id", $this->shop_info->shop_id);
-        View::share("_categories", $product_category);
         View::share("global_cart", $global_cart);
         View::share("country", $country);
         View::share("lead", $data['lead']);
@@ -130,6 +153,31 @@ class Shop extends Controller
     public function file($theme, $type, $filename)
     {
         echo require_once(base_path("resources/views/themes/" . $theme . "/" . $type . "/" . $filename));
+    }
+    public function guest_only()
+    {
+        if(session("mlm_member"))
+        {
+            return Redirect::to("/members")->send();
+        }
+    }
+    public function logged_in_member_only()
+    {
+
+        if(!session("mlm_member"))
+        {
+            return Redirect::to("/members/login")->with("error", "<b>Session Expired</b><br>Try loggin in again.");
+        }
+        else
+        {
+            $account        = session("mlm_member");
+            $check_account  = Customer::check_account($this->shop_info->shop_id, $account["email"], $account["auth"]);
+            
+            if(!$check_account)
+            {
+                return Redirect::to("/members/login")->with("error", "<b>Authentication Problem</b><br>The email/password you entered doesn't exist.");
+            }
+        }
     }
     public function get_account_logged_in()
     {

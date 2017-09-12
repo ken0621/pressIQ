@@ -9,4 +9,5 @@ class Tbl_pay_bill_line extends Model
 	protected $primaryKey = "pbline_id";
     public $timestamps = false;
 
+
 }

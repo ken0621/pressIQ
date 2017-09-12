@@ -57,15 +57,15 @@ function get_collection_random($collection_id, $shop_id = null)
     $collection = shuffle_assoc($collection);
     return $collection;
 }
-function array_random($array)
-{
-    $return_array = $array;
-    foreach ($array as $key => $value) 
-    {
+// function array_random($array)
+// {
+//     $return_array = $array;
+//     foreach ($array as $key => $value) 
+//     {
         
-    }
-    return $return_array;
-}
+//     }
+//     return $return_array;
+// }
 function get_collection_first_name($data)
 {
     return $data['product']['eprod_name'] ? $data['product']['eprod_name'] : '';
@@ -185,8 +185,77 @@ function get_front_news($shop_id)
     return Tbl_post::where("shop_id", $shop_id)->where("archived", 0)->orderBy("post_date", "DESC")->get();
 }
 
+function get_front_divide_string($data, $tab, $content, $count, $index)
+{
+    $return = explode(' ', get_content($data, $tab, $content), $count);
+    if (isset($return[$index])) 
+    {
+        $result = $return[$index];
+    }
+    else
+    {
+        $result = '';
+    }
+
+    return $result;
+}
+
 function validateDate($date)
 {
     $d = DateTime::createFromFormat('Y-m-d', $date);
     return $d && $d->format('Y-m-d') === $date;
+}
+
+function get_cart_item_id($cart)
+{
+    return isset($cart["cart_product_information"]["variant_id"]) ? $cart["cart_product_information"]["variant_id"] : null;
+}
+
+function get_cart_item_image($cart)
+{
+    return isset($cart['cart_product_information']['image_path']) ? $cart['cart_product_information']['image_path'] : '/assets/mlm/img/placeholder.jpg';
+}
+
+function get_cart_item_name($cart)
+{
+    if (isset($cart["cart_product_information"]["product_name"]) && isset($cart["cart_product_information"]["variant_name"])) 
+    {
+        $return = $cart["cart_product_information"]["product_name"]; 
+        if($cart["cart_product_information"]["product_name"] != $cart["cart_product_information"]["variant_name"])
+        {
+           $return .= " ( ". $cart["cart_product_information"]["variant_name"] ." )"; 
+        }
+    }
+    else
+    {
+        $return = "No Product Name";
+    }
+    
+    return $return;
+}
+
+function get_cart_item_price($cart)
+{
+    $price = isset($cart["cart_product_information"]["product_price"]) ? $cart["cart_product_information"]["product_price"] : 0;
+    return number_format($price, 2);
+}
+
+function get_cart_item_quantity($cart)
+{
+    return isset($cart["quantity"]) ? $cart["quantity"] : 0;
+}
+
+function get_cart_item_subtotal($cart)
+{
+    return isset($cart["cart_product_information"]["product_price"]) && isset($cart["quantity"]) ? number_format($cart["cart_product_information"]["product_price"] * $cart["quantity"], 2) : 0;
+}
+
+function get_cart_item_total($cart)
+{
+    return isset($cart["sale_information"]["total_product_price"]) ? number_format($cart["sale_information"]["total_product_price"], 2) : 0;
+}
+
+function get_cart_item_total_quantity($cart)
+{
+    return isset($cart["sale_information"]["total_quantity"]) ? $cart["sale_information"]["total_quantity"] : 0;
 }

@@ -32,7 +32,7 @@ class MemberLoginController extends Controller
 		if($shop_id != null)
 		{
 			$data['shop_info'] = Tbl_shop::where('shop_id', $shop_id)->first();
-			$data['company_logo']    = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'receipt_logo')->pluck('value');
+			$data['company_logo']    = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'receipt_logo')->value('value');
 		}
 		Session::forget('product_info');
 		// return Crypt::decrypt('eyJpdiI6InJJUjR1NFlvVURmWURPajBMdnpldXc9PSIsInZhbHVlIjoidGJPRTRmRHZkTkNKZENSU2lWZ3p2UT09IiwibWFjIjoiY2VhNTU2OTMzNTE0OTE0YzMzOGIyMzE5Y2VjY2NhZDgzMDcwNmI5ZTgyZjNmYTUwOWEwZTQ0MDA4M2ZkMGMxOCJ9');
@@ -95,7 +95,7 @@ class MemberLoginController extends Controller
 			else
 			{
 				/* GET PH COUNTRY - IN THE FUTURE GET THE COUNTRY BASED ON IP ADDRESS */
-				$country_id = Tbl_country::where("country_code", "PH")->pluck("country_id");
+				$country_id = Tbl_country::where("country_code", "PH")->value("country_id");
 
 				/* INSERT SHOP INFORMATION */
 				$insert_shop["shop_key"] = $value["store_name"];

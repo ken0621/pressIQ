@@ -29,7 +29,7 @@ class DebitMemoController extends Member
 {
     public function getShopId()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
 
     /**
@@ -160,7 +160,7 @@ class DebitMemoController extends Member
 
                 if($vendor_info["type"] == 0)
                 {
-                    $item_type = Tbl_item::where("item_id",Request::input('dbline_item_id')[$key])->pluck("item_type_id");
+                    $item_type = Tbl_item::where("item_id",Request::input('dbline_item_id')[$key])->value("item_type_id");
                     if($item_type == 4 || $item_type == 1)
                     {
                         $um_qty = UnitMeasurement::um_qty(Request::input("dbline_um")[$key]);
@@ -218,7 +218,7 @@ class DebitMemoController extends Member
                  $i = null;
                  foreach ($_items as $keyitemline => $valueitemline)
                  {
-                    $type = Tbl_item::where("item_id",Request::input("dbline_item_id")[$keyitemline])->pluck("item_type_id");
+                    $type = Tbl_item::where("item_id",Request::input("dbline_item_id")[$keyitemline])->value("item_type_id");
                     if($type == 4)
                     {
                         if(Request::input("dbline_item_id")[$keyitemline] == $value_items['product_id'])
@@ -240,7 +240,7 @@ class DebitMemoController extends Member
                    $inventory_consume_product[$key]["product_id"] = $value["product_id"];
                    $inventory_consume_product[$key]["quantity"] = $value["quantity"];
 
-                   $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value["product_id"])->pluck('inventory_count');
+                   $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value["product_id"])->value('inventory_count');
                     if($count_on_hand == null)
                     {
                         $count_on_hand = 0;   
@@ -251,7 +251,7 @@ class DebitMemoController extends Member
                     }
                     else
                     {
-                        $item_name = Tbl_item::where("item_id",$value["product_id"])->pluck("item_name");
+                        $item_name = Tbl_item::where("item_id",$value["product_id"])->value("item_name");
 
                         $data["status"] = "error";
                         $data["status_message"] .= "<li style='list-style:none'>The quantity of item ".$item_name." is not enough to consume </li>";
@@ -361,7 +361,7 @@ class DebitMemoController extends Member
 
                 if($vendor_info["type"] == 0)
                 {
-                    $item_type = Tbl_item::where("item_id",Request::input('dbline_item_id')[$key])->pluck("item_type_id");
+                    $item_type = Tbl_item::where("item_id",Request::input('dbline_item_id')[$key])->value("item_type_id");
                     if($item_type == 4 || $item_type == 1)
                     {
                         $um_qty = UnitMeasurement::um_qty(Request::input("dbline_um")[$key]);
@@ -405,7 +405,7 @@ class DebitMemoController extends Member
                  $i = null;
                  foreach ($_items as $keyitemline => $valueitemline)
                  {
-                    $type = Tbl_item::where("item_id",Request::input("dbline_item_id")[$keyitemline])->pluck("item_type_id");
+                    $type = Tbl_item::where("item_id",Request::input("dbline_item_id")[$keyitemline])->value("item_type_id");
                     if($type == 4)
                     {
                         if(Request::input("dbline_item_id")[$keyitemline] == $value_items['product_id'])
@@ -433,7 +433,7 @@ class DebitMemoController extends Member
                    $inventory_consume_product[$key]["product_id"] = $value["product_id"];
                    $inventory_consume_product[$key]["quantity"] = $value["quantity"];
 
-                   $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value["product_id"])->pluck('inventory_count');
+                   $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value["product_id"])->value('inventory_count');
                     if($count_on_hand == null)
                     {
                         $count_on_hand = 0;   
@@ -444,7 +444,7 @@ class DebitMemoController extends Member
                     }
                     else
                     {
-                        $item_name = Tbl_item::where("item_id",$value["product_id"])->pluck("item_name");
+                        $item_name = Tbl_item::where("item_id",$value["product_id"])->value("item_name");
 
                         $data["status"] = "error";
                         $data["status_message"] .= "<li style='list-style:none'>The quantity of item ".$item_name." is not enough to consume </li>";
@@ -761,7 +761,7 @@ class DebitMemoController extends Member
         $item_serial = [];
         foreach ($dbline_data as $key => $value) 
         {
-            $item_type = Tbl_item::where("item_id",$value->dbline_item_id)->pluck("item_type_id");
+            $item_type = Tbl_item::where("item_id",$value->dbline_item_id)->value("item_type_id");
             if($item_type == 4 || $item_type == 1)
             {
                 $um_qty = UnitMeasurement::um_qty($value->dbline_um);
@@ -811,7 +811,7 @@ class DebitMemoController extends Member
             $i = null;
             foreach ($dbline_data as $keyitemline => $valueitemline)
             {
-                $type = Tbl_item::where("item_id",$value_item->dbline_item_id)->pluck("item_type_id");
+                $type = Tbl_item::where("item_id",$value_item->dbline_item_id)->value("item_type_id");
                 if($type == 4)
                 {
                     if($valueitemline->dbline_item_id == $value_items['product_id'])
@@ -836,7 +836,7 @@ class DebitMemoController extends Member
                  {
                     if($valueitemline_r->dbline_replace_qty > 0)
                     {
-                        $type = Tbl_item::where("item_id",$valueitemline_r->dbline_item_id)->pluck("item_type_id");
+                        $type = Tbl_item::where("item_id",$valueitemline_r->dbline_item_id)->value("item_type_id");
                         if($type == 4)
                         {
                             if($valueitemline_r->dbline_item_id == $value_items_r['product_id'])
@@ -886,7 +886,7 @@ class DebitMemoController extends Member
                    $inventory_consume_product[$key]["product_id"] = $value["product_id"];
                    $inventory_consume_product[$key]["quantity"] = $value["quantity"];
 
-                   $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value["product_id"])->pluck('inventory_count');
+                   $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value["product_id"])->value('inventory_count');
                     if($count_on_hand == null)
                     {
                         $count_on_hand = 0;   
@@ -897,7 +897,7 @@ class DebitMemoController extends Member
                     }
                     else
                     {
-                        $item_name = Tbl_item::where("item_id",$value["product_id"])->pluck("item_name");
+                        $item_name = Tbl_item::where("item_id",$value["product_id"])->value("item_name");
 
                         $data["status"] = "error";
                         $data["status_message"] .= "<li style='list-style:none'>The quantity of item ".$item_name." is not enough to consume </li>";

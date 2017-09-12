@@ -441,7 +441,7 @@ class ProductController extends Member
 		$_option_name 	= Request::input("option_name");
 		$_option_value 	= Request::input("option_value");
 		$option_value 	= '';
-		$product_name	= Tbl_product::where("product_id",$product_id)->pluck("product_name");
+		$product_name	= Tbl_product::where("product_id",$product_id)->value("product_name");
 
 		$data_variant["variant_price"] 					= Request::input("variant_price");
 		$data_variant["variant_compare_price"] 			= Request::input("variant_compare_price");
@@ -516,7 +516,7 @@ class ProductController extends Member
 			{
 				$insert_option_value['option_value']	= $_option_value[$key];
 
-				$option_name_id 	= Tbl_option_name::where("option_name",$option_name)->pluck('option_name_id');
+				$option_name_id 	= Tbl_option_name::where("option_name",$option_name)->value('option_name_id');
 				$option_value_id	= Tbl_option_value::insertGetId($insert_option_value);
 
 				$insert_variant_name['variant_name_order']	= $key;
@@ -574,7 +574,7 @@ class ProductController extends Member
 			// $data[$option_name]		= $option_name;
 			// $rules[$option_name]	= "required|different:";
 
-			$option_name_id = Tbl_option_name::where("option_name", $option_name)->pluck("option_name_id");
+			$option_name_id = Tbl_option_name::where("option_name", $option_name)->value("option_name_id");
 			if($option_name_id)
 			{
 				$update["tbl_variant_name.option_name_id"] 	= $option_name_id;
@@ -625,7 +625,7 @@ class ProductController extends Member
 	{
 		$variant_id 					= Request::input("variant_id");
 		$update["variant_main_image"]	= Request::input("image_id");
-		$product_id 					= Tbl_variant::where("variant_id",$variant_id)->pluck("variant_product_id");
+		$product_id 					= Tbl_variant::where("variant_id",$variant_id)->value("variant_product_id");
 
 		Tbl_variant::where("variant_id", $variant_id)->update($update);
 
@@ -634,7 +634,7 @@ class ProductController extends Member
 
 	public function add_submit_main_image($product_id = 0)
 	{
-		return Tbl_image::where('image_reason_id', $product_id)->where('image_reason', 'product')->where('image_shop', $this->user_info->shop_id)->pluck('image_id');
+		return Tbl_image::where('image_reason_id', $product_id)->where('image_reason', 'product')->where('image_shop', $this->user_info->shop_id)->value('image_id');
 	}
 	
 	public function add_submit_vendor($select, $input)

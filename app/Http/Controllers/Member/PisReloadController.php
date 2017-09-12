@@ -61,7 +61,7 @@ class PisReloadController extends Member
         $related_um_type = Request::input("related_um_type");
 
         $sir_id = Request::input("sir_id");
-        $warehouse_id = Tbl_sir::where("sir_id",$sir_id)->pluck("sir_warehouse_id");
+        $warehouse_id = Tbl_sir::where("sir_id",$sir_id)->value("sir_warehouse_id");
 
         $data["status"] = "";
         $data["status_message"] = "";
@@ -78,7 +78,7 @@ class PisReloadController extends Member
         }
         foreach ($item_id as $key_item => $value_item)
         {
-            $type = Tbl_item::where("item_id",$value_item)->pluck("item_type_id");
+            $type = Tbl_item::where("item_id",$value_item)->value("item_type_id");
             if($type == 4)
             {
                 $bundle = Tbl_item_bundle::where("bundle_bundle_id",$value_item)->get();
@@ -98,7 +98,7 @@ class PisReloadController extends Member
             $i = null;
             foreach ($item_id as $value_itemid) 
             {
-                $type = Tbl_item::where("item_id",$value_itemid)->pluck("item_type_id");
+                $type = Tbl_item::where("item_id",$value_itemid)->value("item_type_id");
                 if($type == 4)
                 {
                     if($value_itemid == $value_items['id'])
@@ -132,7 +132,7 @@ class PisReloadController extends Member
                $inventory_consume_product[$key]["product_id"] = $value["id"];
                $inventory_consume_product[$key]["quantity"] = $value["quantity"];
 
-               $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value["id"])->pluck('inventory_count');
+               $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value["id"])->value('inventory_count');
                 if($count_on_hand == null)
                 {
                     $count_on_hand = 0;   
@@ -143,7 +143,7 @@ class PisReloadController extends Member
                 }
                 else
                 {
-                    $item_name = Tbl_item::where("item_id",$value["id"])->pluck("item_name");
+                    $item_name = Tbl_item::where("item_id",$value["id"])->value("item_name");
 
                     $data["status"] = "error";
                     $data["status_message"] .= "<li style='list-style:none'>The quantity of item ".$item_name." is not enough to consume </li>";

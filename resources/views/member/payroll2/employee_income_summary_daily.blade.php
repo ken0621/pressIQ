@@ -1,5 +1,6 @@
 <div class="modal-header employee-income-summary">
     <input type="hidden" class="period-id" value="{{ $period_info->payroll_period_company_id }}">
+    <input type="hidden" class="payroll-period-id" value="{{ $period_info->payroll_period_id }}">
     <input type="hidden" class="x-employee-id" value="{{ $employee_id }}">
     <button type="button" class="close" data-dismiss="modal">×</button>
     <h4 class="modal-title">
@@ -16,7 +17,7 @@
 </div>
 @endif
 
-@if($access_salary_rate==1)
+@if( $access_salary_rate==1 )
 <div class="modal-body clearfix">
     <div class="text-center text-bold" style="font-size: 20px; color: #1682ba">SALARY COMPUTATION</div>
     <div class="col-md-12" style="text-align: left; font-weight: normal; margin-bottom: 10px; font-size: 16px;"></div>

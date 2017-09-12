@@ -111,7 +111,7 @@ class Mlm_plan
 	    			}
 	    			else
 	    			{
-	    				$slot_full = Tbl_membership_code::where('membership_code_id', $membership_code_id)->pluck('membership_activation_code');
+	    				$slot_full = Tbl_membership_code::where('membership_code_id', $membership_code_id)->value('membership_activation_code');
 	    				return $slot_full;
 	    			}
 	    		}

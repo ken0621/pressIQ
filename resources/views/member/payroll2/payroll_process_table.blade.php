@@ -9,7 +9,6 @@
                 <th class="text-center" width="120px">TOTAL EE</th>
                 <th class="text-center" width="120px">TOTAL EC</th>
                 <th class="text-center" width="120px">TOTAL TAX</th>
-
                 <th class="text-center" width="120px">NET PAY<br>(TAKE HOME)</th>
                 <th class="text-center" width="150px"></th>
             </tr>

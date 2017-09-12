@@ -10,124 +10,19 @@ use Session;
 use Excel;
 use DB;
 use File;
-
+use stdClass;
 use App\Models\Tbl_payroll_employee_basic;
 use App\Models\Tbl_payroll_time_sheet;
 use App\Models\Tbl_payroll_time_sheet_record;
 use App\Models\Tbl_payroll_holiday_company;
 use App\Models\Tbl_payroll_employee_contract;
 use App\Models\Tbl_payroll_company;
-
+use DateTime;
 use App\Globals\Payroll;
 
 
 class Payroll_BioImportController extends Member
 {
-
-	/* SHOP ID */
-	public function shop_id()
-	{
-		return $shop_id = $this->user_info->user_shop;
-	}
-
-	/* MODAL IMPORT OF BIOMETRICS START*/
-	public function modal_biometrics()
-	{
-		$data['_company'] = Payroll::company_heirarchy(Self::shop_id());
-
-		return view('member.payroll.modal.modal_biometrics', $data);
-	}
-	/* MODAL IMPORT OF BIOMETRICS END */
-
-	/* CHECK EMPLOYEE NUMBER START */
-	public function check_employee_number($payroll_employee_number = '')
-	{
-		$bool = true;
-		$count = Tbl_payroll_employee_basic::where('payroll_employee_number', $payroll_employee_number)->where('shop_id', Self::shop_id())->count();
-		if($count == 0)
-		{
-			$bool = false;
-		}
-		return $bool;
-	}
-	/* CHECK EMPLOYEE NUMBER END */
-
-
-	/* GET EMPLOYEE ID START */
-	public function getemployeeId($payroll_employee_number = '', $pluck = 'payroll_employee_id')
-	{
-		return Tbl_payroll_employee_basic::where('payroll_employee_number', $payroll_employee_number)->where('shop_id', Self::shop_id())->pluck($pluck);
-	}
-
-	public function getTimeSheetId($payroll_employee_id = 0, $date = '0000-00-00')
-	{
-		$count = Tbl_payroll_time_sheet::checkdata($payroll_employee_id,$date)->count();
-		$payroll_time_sheet_id = 0;
-		if($count == 0)
-		{
-			$insert_time['payroll_employee_id'] = $payroll_employee_id;
-			$insert_time['payroll_time_date'] 	= $date;
-			$payroll_time_sheet_id = Tbl_payroll_time_sheet::insertGetId($insert_time);
-		}
-		else
-		{
-			$payroll_time_sheet_id = Tbl_payroll_time_sheet::checkdata($payroll_employee_id, $date)->pluck('payroll_time_sheet_id');
-		}
-
-		return $payroll_time_sheet_id;
-	}
-	/* GET EMPLOYEE ID END */
-
-
-	/* CHECK IF HOLIDAY OR REGULAR DAY START */
-	public function check_holiday($company_id = 0,$date = '0000-00-00')
-	{
-		$day = 'RG';
-		$holiday = Tbl_payroll_holiday_company::getholiday($company_id, $date)->pluck('payroll_holiday_category');
-	
-		if($holiday == 'Regular')
-		{
-			$day = 'RH';
-		}
-		if($holiday == 'Special')
-		{
-			$day = 'SH';
-		}
-		return $day;
-	}
-	/* CHECK IF HOLIDAY OR REGULAR DAY END */
-
-
-	/* CHECK IF REST DAY, EXTRA DAY OR REGULAR DAY START */
-	public function check_day($employee_id = 0, $date = '0000-00-00', $daystr = 'RG')
-	{	
-		$day = $daystr;
-		$target = date('l', strtotime($date));
-		$_day = Tbl_payroll_employee_contract::selemployee($employee_id, $date)
-											->join('tbl_payroll_group_rest_day','tbl_payroll_group_rest_day.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
-											->where('payroll_group_rest_day', $target)
-											->pluck('tbl_payroll_group_rest_day.payroll_group_rest_day_category');
-		if($_day == 'rest day')
-		{
-			$day = 'RD';
-			if($daystr != 'RG')
-			{
-				$day = $daystr.',RD';
-			}
-		}
-		if($_day == 'extra day')
-		{
-			$day = 'ED';
-			if($daystr != 'RG')
-			{
-				$day = $daystr.',ED';
-			}
-		}
-
-		return $day;
-	}	
-	/* CHECK IF REST DAY, EXTRA DAY OR REGULAR DAY END */
-
 	public function import_global()
 	{
 		$file 		= Request::file('file');
@@ -167,9 +62,259 @@ class Payroll_BioImportController extends Member
 		{
 			return Self::import_mustard_seed($file, $company);
 		}
+
+		if($biometric == 'Touchlink V1')
+		{
+			return Self::import_touchlink_v1($file, $company);
+		}
+	}
+    public function import_touchlink_v1($file, $company) /* BIO METRICS START */
+    {
+    	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('employee_no','employee_name','date','day','in','out','next_day'));
+
+    	if(isset($_time[0]['employee_no']) && isset($_time[0]['employee_name']) && isset($_time[0]['date']) && isset($_time[0]['day']) && isset($_time[0]['in']) && isset($_time[0]['out']))
+    	{
+	    	$key_employee = 0;
+	    	$key_date = 0;
+	    	$new_record = false;
+
+	    	foreach($_time as $excel)
+	    	{
+	    		if($excel["employee_no"] != null)
+	    		{
+	    			$new_record = true;
+	    			$key_employee++;
+	    		}
+
+	    		if($new_record == true)
+	    		{
+			    	$_record[$key_employee] = new stdClass();
+			    	$_record[$key_employee]->employee_no 							= $excel["employee_no"];
+			    	$_record[$key_employee]->employee_biometrics_name 				= $excel["employee_name"];
+			    	$new_record = false;
+			    	$key_date = 0;
+	    		}
+
+	    		$_record[$key_employee]->employee_record[$key_date]				= new stdClass();
+		    	$_record[$key_employee]->employee_record[$key_date]->date 		= $excel["date"] . "-" . date("Y");
+		    	$_record[$key_employee]->employee_record[$key_date]->time_in 	= $excel["in"];
+		    	$_record[$key_employee]->employee_record[$key_date]->time_out 	= $excel["out"];
+		    	$_record[$key_employee]->employee_record[$key_date]->branch 	= "";
+		    	$_record[$key_employee]->employee_record[$key_date]->status 	= "status";
+		    	$key_date++; 	
+	    	}
+
+	    	$data = Self::save_record($_record, $company, $this->user_info->shop_id, "TOUCHLINK RDS");
+	    	return view("member.payroll2.biometrics", $data);
+    	}
+    	else
+    	{
+    		echo "<div class='text-center'>INVALID FILE FORMAT</div>";
+    	}
+    }
+    public static function save_record($_record, $company, $shop_id, $biometerics_name)
+    {
+    	$success = 0;
+    	$failed = 0;
+    	$incomplete = 0;
+    	$overwritten = 0;
+
+    	foreach($_record as $key_employee => $employee)
+    	{
+    		/* CHECK IF EMPLOYEE EXIST */
+    		$check_employee = Tbl_payroll_employee_basic::where("payroll_employee_number", $employee->employee_no)->where("shop_id", $shop_id)->first();
+    		
+    		if($check_employee)
+    		{
+    			foreach($employee->employee_record as $key_date => $date)
+    			{
+    				/* CHECK IF DATA IS INCOMPLETE */
+    				if($date->time_in == null || $date->time_out == null)
+    				{
+    					$incomplete++;
+    					$_record[$key_employee]->employee_record[$key_date]->status = "<span style='color: blue;'>Incomplete Data</span>";
+    				}
+    				else
+    				{
+    					$record_date = date("Y-m-d", strtotime($date->date));
+
+    					$check_timesheet = Tbl_payroll_time_sheet::where("payroll_employee_id", $check_employee->payroll_employee_id)->where("payroll_time_date", $record_date)->first();	
+
+    					/* IF TIMESHEET DOESN'T EXIST */
+    					if(!$check_timesheet)
+    					{
+	    					$insert_time_sheet["payroll_employee_id"] = $check_employee->payroll_employee_id;
+	    					$insert_time_sheet["payroll_time_date"] = $record_date;
+	    					Tbl_payroll_time_sheet::insert($insert_time_sheet);
+	    					$check_timesheet = Tbl_payroll_time_sheet::where("payroll_employee_id", $check_employee->payroll_employee_id)->where("payroll_time_date", $record_date)->first();	
+    					}
+
+    					$_record_exist = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $check_timesheet->payroll_time_sheet_id)->get();
+
+    					foreach($_record_exist as $record_exist)
+    					{
+    						$exist_in = strtotime($record_exist->payroll_time_sheet_in);
+    						$exist_out = strtotime($record_exist->payroll_time_sheet_out);
+    						$new_in = strtotime($date->time_in);
+    						$new_out = strtotime($date->time_out);
+
+    						if($exist_in >= $new_in && $exist_in <= $new_out)
+    						{
+    							$overflow = 1;
+    						}
+    						elseif($exist_out >= $new_in && $exist_out <= $new_out)
+    						{
+    							$overflow = 1;
+    						}
+    						else
+    						{
+    							$overflow = 0;
+    						}
+
+    						if($overflow == 1)
+    						{
+    							Tbl_payroll_time_sheet_record::where("payroll_time_sheet_record_id", $record_exist->payroll_time_sheet_record_id)->delete();
+    							$overwritten++;
+    						}
+    					}
+
+			    		/* CREATE RECORD */
+			    		$insert_record["payroll_time_sheet_id"] = $check_timesheet->payroll_time_sheet_id;
+			    		$insert_record["payroll_company_id"] = $check_employee->payroll_employee_company_id;
+			    		$insert_record["payroll_time_sheet_in"] = date("H:i:s", strtotime($date->time_in));
+			    		$insert_record["payroll_time_sheet_out"] = date("H:i:s", strtotime($date->time_out));
+			    		$insert_record["payroll_time_sheet_origin"] = $biometerics_name;
+			    		$time_sheet_record_id = Tbl_payroll_time_sheet_record::insertGetId($insert_record);
+
+    					$success++;
+    					$_record[$key_employee]->employee_record[$key_date]->status = "<span style='color: green;'>Import Success</span>";
+    				}
+    			}
+    		}
+    		else
+    		{
+    			foreach($employee->employee_record as $key_date => $date)
+    			{
+    				$failed++;
+    				$_record[$key_employee]->employee_record[$key_date]->status = "<span style='color: red;'>Invalid Employee Number</span>";
+    			}
+    		}
+
+
+    	}
+
+    	$data["record_success"] = $success;
+    	$data["record_failed"] = $failed;
+    	$data["record_incomplete"] = $incomplete;
+    	$data["record_overwritten"] = $overwritten;
+    	$data["_record"] = $_record;
+    	return $data;
+    }
+
+	/* SHOP ID */
+	public function shop_id()
+	{
+		return $shop_id = $this->user_info->user_shop;
 	}
 
-    /* BIO METRICS START */
+	/* MODAL IMPORT OF BIOMETRICS START*/
+	public function modal_biometrics()
+	{
+		$data['_company'] = Payroll::company_heirarchy(Self::shop_id());
+
+		return view('member.payroll.modal.modal_biometrics', $data);
+	}
+
+	/* MODAL IMPORT OF BIOMETRICS END */
+
+	/* CHECK EMPLOYEE NUMBER START */
+	public function check_employee_number($payroll_employee_number = '')
+	{
+		$bool = true;
+		$count = Tbl_payroll_employee_basic::where('payroll_employee_number', $payroll_employee_number)->where('shop_id', Self::shop_id())->count();
+		if($count == 0)
+		{
+			$bool = false;
+		}
+		return $bool;
+	}
+	/* CHECK EMPLOYEE NUMBER END */
+
+
+	/* GET EMPLOYEE ID START */
+	public function getemployeeId($payroll_employee_number = '', $value = 'payroll_employee_id')
+	{
+		return Tbl_payroll_employee_basic::where('payroll_employee_number', $payroll_employee_number)->where('shop_id', Self::shop_id())->value($value);
+	}
+
+	public function getTimeSheetId($payroll_employee_id = 0, $date = '0000-00-00')
+	{
+		$count = Tbl_payroll_time_sheet::checkdata($payroll_employee_id,$date)->count();
+		$payroll_time_sheet_id = 0;
+		if($count == 0)
+		{
+			$insert_time['payroll_employee_id'] = $payroll_employee_id;
+			$insert_time['payroll_time_date'] 	= $date;
+			$payroll_time_sheet_id = Tbl_payroll_time_sheet::insertGetId($insert_time);
+		}
+		else
+		{
+			$payroll_time_sheet_id = Tbl_payroll_time_sheet::checkdata($payroll_employee_id, $date)->value('payroll_time_sheet_id');
+		}
+
+		return $payroll_time_sheet_id;
+	}
+	/* GET EMPLOYEE ID END */
+
+
+	/* CHECK IF HOLIDAY OR REGULAR DAY START */
+	public function check_holiday($company_id = 0,$date = '0000-00-00')
+	{
+		$day = 'RG';
+		$holiday = Tbl_payroll_holiday_company::getholiday($company_id, $date)->value('payroll_holiday_category');
+	
+		if($holiday == 'Regular')
+		{
+			$day = 'RH';
+		}
+		if($holiday == 'Special')
+		{
+			$day = 'SH';
+		}
+		return $day;
+	}
+	/* CHECK IF HOLIDAY OR REGULAR DAY END */
+
+
+	/* CHECK IF REST DAY, EXTRA DAY OR REGULAR DAY START */
+	public function check_day($employee_id = 0, $date = '0000-00-00', $daystr = 'RG')
+	{	
+		$day = $daystr;
+		$target = date('l', strtotime($date));
+		$_day = Tbl_payroll_employee_contract::selemployee($employee_id, $date)
+											->join('tbl_payroll_group_rest_day','tbl_payroll_group_rest_day.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
+											->where('payroll_group_rest_day', $target)
+											->value('tbl_payroll_group_rest_day.payroll_group_rest_day_category');
+		if($_day == 'rest day')
+		{
+			$day = 'RD';
+			if($daystr != 'RG')
+			{
+				$day = $daystr.',RD';
+			}
+		}
+		if($_day == 'extra day')
+		{
+			$day = 'ED';
+			if($daystr != 'RG')
+			{
+				$day = $daystr.',ED';
+			}
+		}
+
+		return $day;
+	}	
+	/* CHECK IF REST DAY, EXTRA DAY OR REGULAR DAY END */
 
     public function import_zkteco_TX628($file, $company)
     {
@@ -519,71 +664,227 @@ class Payroll_BioImportController extends Member
 
     public function import_manual($file, $company)
     {
-    	$message = '<center><i><span class="color-red"><b>Invalid File Format</b></span></i></center>';
+    	// $message = '<center><i><span class="color-red"><b>Invalid File Format</b></span></i></center>';
 
-    	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('employee_no','date','time_in','time_out'));
+    	// $_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('employee_no','date','time_in','time_out'));
     	
-    	if(isset($_time[0]['employee_no']) && isset($_time[0]['date']) && isset($_time[0]['time_in']) && isset($_time[0]['time_out']))
-    	{
+    	// if(isset($_time[0]['employee_no']) && isset($_time[0]['date']) && isset($_time[0]['time_in']) && isset($_time[0]['time_out']))
+    	// {
 
-	    	$success_count = 0;
-	    	$temp_date = '';
-	    	$insert_time_record = array();
-	    	$time_sheet = array();
-	    	foreach($_time as $key => $time)
-	    	{
+	    // 	$success_count = 0;
+	    // 	$temp_date = '';
+	    // 	$insert_time_record = array();
+	    // 	$time_sheet = array();
+	    // 	foreach($_time as $key => $time)
+	    // 	{
 
-	    		if(Self::check_employee_number($time['employee_no']))
-    			{
-    				// dd($time['date']);
-	    			$payroll_time_sheet_id = Self::getTimeSheetId(Self::getemployeeId($time['employee_no']), date('Y-m-d', strtotime($time['date'])));
+	    // 		if(Self::check_employee_number($time['employee_no']))
+    	// 		{
+    	// 			// dd($time['date']);
+	    // 			$payroll_time_sheet_id = Self::getTimeSheetId(Self::getemployeeId($time['employee_no']), date('Y-m-d', strtotime($time['date'])));
 
-	    			$temp_array['payroll_time_sheet_id'] 		= $payroll_time_sheet_id;
-	    			$temp_array['payroll_time_sheet_in'] 		= date('H:i:s', strtotime($time['time_in']));
-	    			$temp_array['payroll_time_sheet_out'] 		= date('H:i:s', strtotime($time['time_out']));
-	    			$temp_array['payroll_time_sheet_origin'] 	= 'Manual Template';
-	    			$temp_array['payroll_company_id']			= Self::getemployeeId($time['employee_no'],'payroll_employee_company_id');
+	    // 			$temp_array['payroll_time_sheet_id'] 		= $payroll_time_sheet_id;
+	    // 			$temp_array['payroll_time_sheet_in'] 		= date('H:i:s', strtotime($time['time_in']));
+	    // 			$temp_array['payroll_time_sheet_out'] 		= date('H:i:s', strtotime($time['time_out']));
+	    // 			$temp_array['payroll_time_sheet_origin'] 	= 'Manual Template';
+	    // 			$temp_array['payroll_company_id']			= Self::getemployeeId($time['employee_no'],'payroll_employee_company_id');
 
-	    			if($company != '' || $company != 0 || $company != null)
-	    			{
-	    				$temp_array['payroll_company_id'] = $company;
-	    			}
+	    // 			if($company != '' || $company != 0 || $company != null)
+	    // 			{
+	    // 				$temp_array['payroll_company_id'] = $company;
+	    // 			}
 
-	    			Tbl_payroll_time_sheet_record::where('payroll_time_sheet_record_id', $payroll_time_sheet_id)->where('payroll_time_sheet_in', '00:00:00')->where('payroll_time_sheet_out','00:00:00')->delete();
+	    // 			Tbl_payroll_time_sheet_record::where('payroll_time_sheet_record_id', $payroll_time_sheet_id)->where('payroll_time_sheet_in', '00:00:00')->where('payroll_time_sheet_out','00:00:00')->delete();
 
-	    			$count_record = Tbl_payroll_time_sheet_record::wherearray($temp_array)->count();
+	    // 			$count_record = Tbl_payroll_time_sheet_record::wherearray($temp_array)->count();
 	    			
-	    			if($count_record == 0)
-	    			{
+	    // 			if($count_record == 0)
+	    // 			{
 
-	    				array_push($insert_time_record, $temp_array);
-	    			}
+	    // 				array_push($insert_time_record, $temp_array);
+	    // 			}
 
-	    			/* delete all 0000-00-00 date value */
-		    		Self::delete_blank($payroll_time_sheet_id);
-    			}
-	    	}
+	    // 			/* delete all 0000-00-00 date value */
+		   //  		Self::delete_blank($payroll_time_sheet_id);
+    	// 		}
+	    // 	}
 
-	    	// dd($insert_time_record);
-	    	$message = '<center><span class="color-gray">Nothing to insert</span></center>';
-	    	if(!empty($insert_time_record))
-	    	{
-	    		Tbl_payroll_time_sheet_record::insert($insert_time_record);
-	    		$count_inserted = count($insert_time_record);
-	    		$message = '<center><span class="color-green">'.$count_inserted.' new record/s inserted.</span></center>';
-	    	}
+	    // 	// dd($insert_time_record);
+	    // 	$message = '<center><span class="color-gray">Nothing to insert</span></center>';
+	    // 	if(!empty($insert_time_record))
+	    // 	{
+	    // 		Tbl_payroll_time_sheet_record::insert($insert_time_record);
+	    // 		$count_inserted = count($insert_time_record);
+	    // 		$message = '<center><span class="color-green">'.$count_inserted.' new record/s inserted.</span></center>';
+	    // 	}
 	    	
-	    	// return $message;
+	    // 	// return $message;
+    	// }
+
+    	// return $message;
+
+
+
+
+
+
+    	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('employee_no','employee_name','date','time_in','time_out'));
+
+    	if(!isset($_time[0]['employee_no']))
+    	{
+    		$error["message"] = "Error in employee no";
+    		$error["data"] = $_time;
+    		dd($error);
     	}
 
-    	return $message;
+    	if(!isset($_time[0]['employee_name']))
+    	{
+    		$error["message"] = "Error in employee no";
+    		$error["data"] = $_time;
+    		dd($error);
+    	}
+
+    	if(!isset($_time[0]['time_in']))
+    	{
+    		$error["message"] = "Error in Time In";
+    		$error["data"] = $_time;
+    		dd($error);
+    	}
+
+    	if(!isset($_time[0]['time_out']))
+    	{
+    		$error["message"] = "Error in Time Out";
+    		$error["data"] = $_time;
+    		dd($error);
+    	}
+
+    	if(!isset($_time[0]['date']))
+    	{
+    		$error["message"] = "Error in Date";
+    		$error["data"] = $_time;
+    		dd($error);
+    	}
+
+
+    	if(isset($_time[0]['employee_no']) && isset($_time[0]['employee_name']) && isset($_time[0]['date']) && isset($_time[0]['time_in']) && isset($_time[0]['time_out']))
+    	{
+	    	$key_employee = 0;
+	    	$key_date = 0;
+	    	$new_record = false;
+
+	    	foreach($_time as $excel)
+	    	{
+	    		if($excel["employee_no"] != null)
+	    		{
+	    			$new_record = true;
+	    			$key_employee++;
+	    		}
+
+	    		if($new_record == true)
+	    		{
+			    	$_record[$key_employee] = new stdClass();
+			    	$_record[$key_employee]->employee_no 							= $excel["employee_no"];
+			    	$_record[$key_employee]->employee_biometrics_name 				= $excel["employee_name"];
+			    	$new_record = false;
+			    	$key_date = 0;
+	    		}
+
+    			if($company != '' || $company != 0 || $company != null)
+    			{
+    				$payroll_company_id = $company;
+    			}
+    			else
+    			{
+    				$payroll_company_id = Self::getemployeeId($excel['employee_no'], 'payroll_employee_company_id');
+    			}
+
+
+	    		$_record[$key_employee]->employee_record[$key_date]				= new stdClass();
+		    	$_record[$key_employee]->employee_record[$key_date]->date 		= date('Y-m-d', strtotime($excel['date']));
+		    	$_record[$key_employee]->employee_record[$key_date]->time_in 	= date('H:i:s', strtotime($excel['time_in']));
+		    	$_record[$key_employee]->employee_record[$key_date]->time_out 	= date('H:i:s', strtotime($excel['time_out']));
+		    	$_record[$key_employee]->employee_record[$key_date]->branch 	= "";
+		    	$_record[$key_employee]->employee_record[$key_date]->status 	= "status";
+		    	$key_date++; 	
+	    	}
+
+	    	$data = Self::save_record($_record, $company, $this->user_info->shop_id, "MANUAL TEMPLATE");
+	    	return view("member.payroll2.biometrics", $data);
+    	}
+    	else
+    	{
+    		echo "<div class='text-center'>INVALID FILE FORMAT</div>";
+    	}
     }
 
     public function import_mustard_seed($file, $company)
     {
     	$message = '<center><i><span class="color-red"><b>Invalid File Format</b></span></i></center>';
     	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('company_code','employee_no','date','in_1','out_1','in_2','out_2','in_3','out_3','in_4','out_4','in_5','out_5','in_6','out_6'));
-    	// dd($_time);
+
+    	if(!isset($_time[0]['company_code']))
+    	{
+    		$error["message"] = "Error in company code";
+    		$error["data"] = $_time;
+    		dd($error);
+    	}
+
+    	if(!isset($_time[0]['employee_no']))
+    	{
+    		$error["message"] = "Error in employee no";
+    		$error["data"] = $_time;
+    		dd($error);
+    	}
+
+    	if(!isset($_time[0]['date']))
+    	{
+    		$error["message"] = "Error in employee no";
+    		$error["data"] = $_time;
+    		dd($error);
+    	}
+
+    	if(!isset($_time[0]['in_1']))
+    	{
+    		$error["message"] = "Error in In 1";
+    		$error["data"] = $_time;
+    		dd($error);
+    	}
+
+    	if(!isset($_time[0]['out_1']))
+    	{
+    		$error["message"] = "Error in Out 1";
+    		$error["data"] = $_time;
+    		dd($error);
+    	}
+
+    	if(!isset($_time[0]['in_2']))
+    	{
+    		$error["message"] = "Error in In 2";
+    		$error["data"] = $_time;
+    		dd($error);
+    	}
+
+    	if(!isset($_time[0]['out_2']))
+    	{
+    		$error["message"] = "Error in Out 2";
+    		$error["data"] = $_time;
+    		dd($error);
+    	}
+
+    	if(!isset($_time[0]['in_3']))
+    	{
+    		$error["message"] = "Error in In 3";
+    		$error["data"] = $_time;
+    		dd($error);
+    	}
+
+    	if(!isset($_time[0]['out_3']))
+    	{
+    		$error["message"] = "Error in Out 3";
+    		$error["data"] = $_time;
+    		dd($error);
+    	}
+
     	if(isset($_time[0]['company_code']) && isset($_time[0]['employee_no']) && isset($_time[0]['date']) && isset($_time[0]['in_1']) && isset($_time[0]['out_1']) && isset($_time[0]['in_2']) && isset($_time[0]['out_2']) && isset($_time[0]['in_3']) && isset($_time[0]['out_3']))
     	{
     		
@@ -591,8 +892,6 @@ class Payroll_BioImportController extends Member
 
     		foreach($_time as $key => $time)
     		{
-    			
-    			// dd($time_param);
     			if(Self::check_employee_number($time['employee_no']))
     			{
 
@@ -605,7 +904,7 @@ class Payroll_BioImportController extends Member
 
     				if($time['company_code'] != null)
     				{
-    					$company_temp_id =  Tbl_payroll_company::selbycode(Self::shop_id(), $time['company_code'])->pluck('payroll_company_id');
+    					$company_temp_id =  Tbl_payroll_company::selbycode(Self::shop_id(), $time['company_code'])->value('payroll_company_id');
     					if($company_temp_id != null)
     					{	
     						$company_id = $company_temp_id;

@@ -145,7 +145,7 @@ class Manage_Category_Controller extends Member
 
         if(Request::has('is_sub_category')){
             $type_parent_id = Request::input('hidden_parent_category');
-            $type_sub_level = Tbl_category::where('type_id', $type_parent_id)->pluck('type_sub_level');
+            $type_sub_level = Tbl_category::where('type_id', $type_parent_id)->value('type_sub_level');
             $type_sub_level++;
         }   
 
@@ -157,6 +157,7 @@ class Manage_Category_Controller extends Member
         $insert['type_shop']            = $shop_id;
         $insert['type_sub_level']       = $type_sub_level;
         $insert['type_date_created']    = Carbon::now();
+        $insert['type_image']           = Request::input('type_image');
 
         $category_id = Tbl_category::insertGetId($insert);
 
@@ -232,6 +233,7 @@ class Manage_Category_Controller extends Member
             $update['type_name']            = $type_name;
             $update['type_category']        = $type_category;
             $update['type_parent_id']       = $type_parent_id;
+            $update['type_image']           = Request::input("type_image");
             Tbl_category::where('type_id', $type_id)->update($update);
 
             $data["status"] = "success-category";

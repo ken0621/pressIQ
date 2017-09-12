@@ -25,6 +25,8 @@ use App\Models\Tbl_mlm_triangle_repurchase_slot;
 use App\Models\Tbl_mlm_discount_card_settings;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_mlm_triangle_repurchase_tree;
+use App\Models\Tbl_rank_points_log;
+use App\Models\Tbl_stairstep_points_log;
 
 use App\Http\Controllers\Member\MLM_MembershipController;
 use App\Http\Controllers\Member\MLM_ProductController;
@@ -298,6 +300,118 @@ class Mlm_complan_manager_repurchase
         Mlm_complan_manager::cutoff_binary('BINARY', $slot_info->shop_id); 
     }
 
+    public static function rank($slot_info,$item_code_id)
+    {
+        $slot_info     = Tbl_mlm_slot::where("slot_id", $slot_info->slot_id)->customer()->membership()->first();
+        $shop_id       = $slot_info->shop_id;
+        $item_code     = Tbl_item_code::where("item_code_id",$item_code_id)->first(); 
+        if($item_code)
+        {
+            $mlm_item_points  = Tbl_mlm_item_points::where("item_id",$item_code->item_id)
+            ->where('membership_id', $slot_info->membership_id)
+            ->first();
+
+            if($mlm_item_points)
+            {
+                $rank_points       = $mlm_item_points->RANK;
+                $rank_group_points = $mlm_item_points->RANK_GROUP;
+            }
+            else
+            {
+                $rank_points       = 0;
+                $rank_group_points = 0;
+            }
+        }
+        else
+        {
+            $rank_points       = 0;
+            $rank_group_points = 0;
+        }  
+
+
+        if($rank_points != 0)
+        {
+            $array['points_log_complan']        = "RANK";
+            $array['points_log_level']          = 0;
+            $array['points_log_slot']           = $slot_info->slot_id;
+            $array['points_log_Sponsor']        = $slot_info->slot_id;
+            $array['points_log_date_claimed']   = Carbon::now();
+            $array['points_log_converted']      = 0;
+            $array['points_log_converted_date'] = Carbon::now();
+            $array['points_log_type']           = 'RPV';
+            $array['points_log_from']           = 'Product Repurchase';
+            $array['points_log_points']         = $rank_points;
+
+            $slot_logs_id                       = Mlm_slot_log::slot_log_points_array($array);
+
+            $insert_rank_log["rank_original_amount"] = $rank_points;
+            $insert_rank_log["rank_percentage_used"] = 0;
+            $insert_rank_log["slot_points_log_id"]   = $slot_logs_id;
+            Tbl_rank_points_log::insert($insert_rank_log);
+        }
+
+        $array               = null;
+        $_stairstep_settings = Tbl_mlm_stairstep_points_settings::where("shop_id",$shop_id)->get();
+        $_tree               = Tbl_tree_sponsor::child($slot_info->slot_id)->level()->distinct_level()->get();
+
+        $stairstep_level = [];
+
+        foreach($_stairstep_settings as $key => $level)
+        {
+            $stairstep_level[$level->stairstep_points_level]                     =  $level->stairstep_points_amount;
+            $stairstep_level_settings_percentage[$level->stairstep_points_level] =  $level->stairstep_points_percentage;
+        }
+
+        foreach($_tree as $key => $tree)
+        {
+            $slot_recipient = Mlm_compute::get_slot_info($tree->sponsor_tree_parent_id);
+            if(isset($stairstep_level[$tree->sponsor_tree_level]))
+            {      
+                // 0 = fixed
+                // 1 = percentage
+                // $percentage = $stairstep_level_settings_percentage[$tree->sponsor_tree_level];
+                // if($percentage === 0)
+                // {
+                //     $rank_bonus = $stairstep_level[$tree->sponsor_tree_level];
+                // }
+                // else
+                // {
+                    $rank_bonus                              = ($stairstep_level[$tree->sponsor_tree_level]/100) * $rank_group_points;
+                    $insert_rank_log["rank_percentage_used"] = $stairstep_level[$tree->sponsor_tree_level];
+                // }
+            }
+            else
+            {
+                $rank_bonus = 0;  
+            }
+
+
+            if($rank_bonus != 0)
+            {
+                    $array['points_log_complan']        = "RANK";
+                    $array['points_log_level']          = $tree->sponsor_tree_level;
+                    $array['points_log_slot']           = $slot_recipient->slot_id;
+                    $array['points_log_Sponsor']        = $slot_info->slot_id;
+                    $array['points_log_date_claimed']   = Carbon::now();
+                    $array['points_log_converted']      = 0;
+                    $array['points_log_converted_date'] = Carbon::now();
+                    $array['points_log_type']           = 'RGPV';
+                    $array['points_log_from']           = 'Product Repurchase';
+                    $array['points_log_points']         = $rank_bonus;
+
+                    $slot_logs_id                       = Mlm_slot_log::slot_log_points_array($array);
+                    
+                    if(isset($insert_rank_log["rank_percentage_used"]))
+                    {
+                        $insert_rank_log["rank_original_amount"] = $rank_group_points;
+                        $insert_rank_log["slot_points_log_id"]   = $slot_logs_id;
+                        Tbl_rank_points_log::insert($insert_rank_log);
+                    }
+            }
+        }     
+
+    }
+
     public static function stairstep($slot_info,$item_code_id)
     {
         $slot_info     = Tbl_mlm_slot::where("slot_id", $slot_info->slot_id)->customer()->membership()->first();
@@ -326,6 +440,7 @@ class Mlm_complan_manager_repurchase
             $stairstep_group_points = 0;
         }
 
+        $percentage             = null;
         if($stairstep_points != 0)
         {
             $array['points_log_complan'] = "STAIRSTEP";
@@ -335,64 +450,99 @@ class Mlm_complan_manager_repurchase
             $array['points_log_date_claimed'] = Carbon::now();
             $array['points_log_converted'] = 0;
             $array['points_log_converted_date'] = Carbon::now();
-            $array['points_log_type'] = 'RPV';
-            $array['points_log_from'] = 'Stairstep Points';
+            $array['points_log_type'] = 'SPV';
+            $array['points_log_from'] = 'Product Repurchase';
             $array['points_log_points'] = $stairstep_points;
 
-            Mlm_slot_log::slot_log_points_array($array);
+            $slot_logs_id = Mlm_slot_log::slot_log_points_array($array);
+
+            $insert_stairstep_logs["stairstep_points_amount"]       = $stairstep_points;
+            $insert_stairstep_logs["stairstep_percentage"]          = 0;
+            $insert_stairstep_logs["stairstep_reduced_percentage"]  = 0;
+            $insert_stairstep_logs["stairstep_reduced_by_id"]       = 0;
+            $insert_stairstep_logs["stairstep_reduced_rank"]        = 0;
+            $insert_stairstep_logs["stairstep_cause_id"]            = $slot_info->slot_id;
+            $insert_stairstep_logs["current_rank"]                  = $slot_info->stairstep_rank;
+            $insert_stairstep_logs["slot_points_log_id"]            = $slot_logs_id;
+            Tbl_stairstep_points_log::insert($insert_stairstep_logs);
         }
 
-        $array               = null;
-        $_stairstep_settings = Tbl_mlm_stairstep_points_settings::where("shop_id",$shop_id)->get();
-        $_tree               = Tbl_tree_sponsor::child($slot_info->slot_id)->level()->distinct_level()->get();
+        $slot_stairstep      = Tbl_mlm_stairstep_settings::where("stairstep_id",$slot_info->stairstep_rank)->first();
 
-        $stairstep_level = [];
+        if($slot_stairstep)
+        {   
+            $computed_points = 0;
 
-        foreach($_stairstep_settings as $key => $level)
-        {
-            $stairstep_level[$level->stairstep_points_level]                     =  $level->stairstep_points_amount;
-            $stairstep_level_settings_percentage[$level->stairstep_points_level] =  $level->stairstep_points_percentage;
+            if($slot_stairstep->stairstep_bonus != 0)
+            {
+                $computed_points = ($slot_stairstep->stairstep_bonus/100) * $slot_pv;
+                $percentage      = $slot_stairstep->stairstep_bonus;
+            }  
         }
-
-        foreach($_tree as $key => $tree)
+        else
         {
-            $slot_recipient = Mlm_compute::get_slot_info($tree->sponsor_tree_parent_id);
-            if(isset($stairstep_level[$tree->sponsor_tree_level]))
-            {      
-                // 0 = fixed
-                // 1 = percentage
-                $percentage = $stairstep_level_settings_percentage[$tree->sponsor_tree_level];
-                if($percentage === 0)
-                {
-                    $stairstep_bonus = $stairstep_level[$tree->sponsor_tree_level];
-                }
-                else
-                {
-                    $stairstep_bonus = ($stairstep_level[$tree->sponsor_tree_level]/100) * $stairstep_group_points;
-                }
-            }
-            else
-            {
-                $stairstep_bonus = 0;  
-            }
+            $percentage = 0;
+        }
+        
+        $reduced_by      = $slot_info;
+        $check_stairstep = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->first();
+        $sponsor_tree    = Tbl_tree_sponsor::where("sponsor_tree_child_id",$slot_info->slot_id)->orderBy("sponsor_tree_level","ASC")->get();
 
-
-            if($stairstep_bonus != 0)
+        if($check_stairstep)
+        {
+            foreach($sponsor_tree as $placement)
             {
+                $slot_recipient  = Mlm_compute::get_slot_info($placement->sponsor_tree_parent_id);
+                $reduced_percent = 0;
+                $computed_points = 0;
+                $old_percentage  = 0;
+                $slot_stairstep = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->where("stairstep_id",$slot_recipient->stairstep_rank)->first();
+                
+                if($slot_stairstep)
+                {                       
+                    if($slot_stairstep->stairstep_bonus > $percentage && $slot_stairstep->stairstep_bonus != 0)
+                    { 
+                        $reduced_percent = $slot_stairstep->stairstep_bonus - $percentage;
+                        if($reduced_percent > 0)
+                        {
+                            $computed_points = (($reduced_percent)/100) * $stairstep_group_points;
+                            $old_percentage  = $percentage;
+                            $percentage      = $slot_stairstep->stairstep_bonus;
+                        }  
+                    }
+                }
+
+                if($computed_points > 0)
+                {             
                     $array['points_log_complan']        = "STAIRSTEP";
-                    $array['points_log_level']          = $tree->sponsor_tree_level;
+                    $array['points_log_level']          = $placement->sponsor_tree_level;
                     $array['points_log_slot']           = $slot_recipient->slot_id;
                     $array['points_log_Sponsor']        = $slot_info->slot_id;
                     $array['points_log_date_claimed']   = Carbon::now();
                     $array['points_log_converted']      = 0;
                     $array['points_log_converted_date'] = Carbon::now();
-                    $array['points_log_type']           = 'RGPV';
+                    $array['points_log_type']           = 'SGPV';
                     $array['points_log_from']           = 'Product Repurchase';
-                    $array['points_log_points']         = $stairstep_bonus;
+                    $array['points_log_points']         = $computed_points;
 
-                    Mlm_slot_log::slot_log_points_array($array);
+                    
+                    $slot_logs_id = Mlm_slot_log::slot_log_points_array($array);
+
+                    $insert_stairstep_logs["stairstep_points_amount"]       = $stairstep_group_points;
+                    $insert_stairstep_logs["stairstep_percentage"]          = $percentage;
+                    $insert_stairstep_logs["stairstep_reduced_percentage"]  = $old_percentage;
+                    $insert_stairstep_logs["stairstep_reduced_by_id"]       = $reduced_by->slot_id;
+                    $insert_stairstep_logs["stairstep_reduced_rank"]        = $reduced_by->stairstep_rank;
+                    $insert_stairstep_logs["stairstep_cause_id"]            = $slot_info->slot_id;
+                    $insert_stairstep_logs["current_rank"]                  = $slot_recipient->stairstep_rank;
+                    $insert_stairstep_logs["slot_points_log_id"]            = $slot_logs_id;
+                    Tbl_stairstep_points_log::insert($insert_stairstep_logs);
+
+                    $reduced_by = $slot_recipient;
+                }
             }
         }
+
         Mlm_complan_manager_repurchase::stairstep_cutoff('STAIRSTEP', $slot_info->shop_id);  
     }
 

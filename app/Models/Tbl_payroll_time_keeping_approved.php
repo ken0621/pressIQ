@@ -35,7 +35,7 @@ class Tbl_payroll_time_keeping_approved extends Model
 		$insert["cutoff_input"] = serialize($compute_cutoff["cutoff_input"]);
 		$insert["cutoff_compute"] =	serialize($compute_cutoff["cutoff_compute"]);
 		$insert["cutoff_breakdown"] = serialize($compute_cutoff["cutoff_breakdown"]);
-
+		
 		$time_keeping_approve_id = Tbl_payroll_time_keeping_approved::insertGetId($insert);
 
 		return $time_keeping_approve_id;

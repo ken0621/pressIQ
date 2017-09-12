@@ -34,6 +34,7 @@ use App\Models\Tbl_merchant_school;
 use App\Models\Tbl_locale;
 use App\Models\Tbl_email_template;
 use App\Globals\Mail_global;
+use App\Globals\Payment;
 // use App\Globals\Item_code;
 // use App\Globals\Mlm_slot_log;    
 
@@ -323,44 +324,29 @@ class ShopCheckoutController extends Shop
             dd($dragonpay->content);
         }
     }
-    public function paymaya_success()
+    public function paymaya_webhook_success()
     {
-        $order_id = Crypt::decrypt(Request::input("order_id"));
-        $from = Request::input("from");
-
-        $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
-        if($order)
-        {
-            Item_code::ec_order_slot($order_id);
-
-            $update['ec_order_id']    = $order_id;
-            $update['order_status']   = "Processing";
-            $update['payment_status'] = 1;
-            $order = Ec_order::update_ec_order($update);
-
-            $this->after_email_payment($order_id);
-
-            if ($from == "checkout") 
-            {
-                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)));
-            }
-            elseif ($from == "register")
-            {
-                return Redirect::to('/mlm/login?notify=1');
-            }
-        }
+        $this->paymaya_logs();
     }
-    public function paymaya_failure()
+    public function paymaya_webhook_failure()
     {
-        $order_id = Crypt::decrypt(Request::input("order"));
-        $this->failmaya($order_id);
-        return Redirect::to('/mlm/login?notify=3');
+        $this->paymaya_logs();
     }
-    public function paymaya_cancel()
+    public function paymaya_webhook_cancel()
     {
-        $order_id = Crypt::decrypt(Request::input("order"));
-        $this->failmaya($order_id);
-        return Redirect::to('/mlm/login?notify=4');
+        $this->paymaya_logs();
+    }
+    public function paymaya_logs()
+    {
+        /* Insert Logs */
+        $insert["payment_log_type"]       = "received";
+        $insert["payment_log_method"]     = "paymaya";
+        $insert["payment_log_created"]    = Carbon::now();
+        $insert["payment_log_url"]        = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : "Unknown");
+        $insert["payment_log_data"]       = serialize(Request::input());
+        $insert["payment_log_ip_address"] = get_ip_address();
+        $shop_id = $this->shop_info->shop_id;
+        Payment::insert_logs($insert, $shop_id);
     }
     public function failmaya($order_id)
     {
@@ -401,8 +387,25 @@ class ShopCheckoutController extends Shop
     }
     /* End Payment Facilities */
 
+    public function if_loggedin()
+    {
+        if(isset(Self::$customer_info->customer_id))
+        {
+            $customer_info["email"] = trim(Self::$customer_info->email);
+            $customer_info["new_account"] = false;
+            $customer_info["password"] = Crypt::decrypt(Self::$customer_info->password);
+            $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_account"));
+            if ($customer_set_info_response["status"] == "error") 
+            {
+                return Redirect::to("/")->send();
+            }
+        }
+    }
+
     public function index()
     {
+        $this->if_loggedin();
+
         $data["page"]            = "Checkout";
         $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
         /* DO NOT ALLOW ON THIS PAGE IF THERE IS NOT CART */
@@ -439,6 +442,7 @@ class ShopCheckoutController extends Shop
             $data["customer"] = DB::table("tbl_customer")->leftJoin("tbl_customer_other_info", "tbl_customer.customer_id", "=", "tbl_customer_other_info.customer_id")
                                                          ->where("tbl_customer.customer_id", $data["get_cart"]["tbl_customer"]["customer_id"])
                                                          ->first();
+            // dd($data["get_cart"]);
             return view("checkout", $data);
         }
         else
@@ -587,9 +591,17 @@ class ShopCheckoutController extends Shop
         }
         
     }
-    public function update_method()
+    public function update_method($method_id = null)
     {
-        $customer_info["method_id"] = Request::input("method_id");
+        if ($method_id) 
+        {
+            $customer_info["method_id"] = $method_id;
+        }
+        else
+        {
+            $customer_info["method_id"] = Request::input("method_id");
+        }
+
         $old_session = $order = Cart::get_info($this->shop_info->shop_id);
         $customer_set_info_response = Cart::customer_set_info_ec_order($this->shop_info->shop_id, $old_session, $customer_info);
         $unique_id = Cart::get_unique_id($this->shop_info->shop_id);
@@ -599,13 +611,18 @@ class ShopCheckoutController extends Shop
 
     public function locale_id_to_name($locale_id)
     {
-        return Tbl_locale::where("locale_id", $locale_id)->pluck("locale_name");
+        return Tbl_locale::where("locale_id", $locale_id)->value("locale_name");
     }
 
     public function payment()
     {
         if(Request::isMethod("post"))
         {
+            if (Request::input("payment_method_id")) 
+            {
+                $this->update_method(Request::input("payment_method_id"));
+            }
+            
             return Cart::process_payment($this->shop_info->shop_id);
         }
         else

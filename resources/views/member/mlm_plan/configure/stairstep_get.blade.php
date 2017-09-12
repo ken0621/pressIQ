@@ -2,7 +2,7 @@
     @foreach($rank as $key => $value)
     <tr>
         <td colspan="6">
-        <form class="global-submit" method="post" id="edit_form{{$key}}" action="/member/mlm/plan/stairstep/edit/save" id="edit_stairstep{{$key}}">
+        <form class="global-submit" method="post" id="edit_form{{$key}}" action="/member/mlm/plan/rank/edit/save" id="edit_stairstep{{$key}}">
             {!! csrf_field() !!}
             <input type="hidden" name="stairstep_id" value="{{$value->stairstep_id}}" />
             <div class="col-md-2">
@@ -54,7 +54,7 @@
 
 <tr>
     <td colspan="6">
-    <form class="global-submit" method="post" action="/member/mlm/plan/stairstep/save" id="save_stairstep">
+    <form class="global-submit" method="post" action="/member/mlm/plan/rank/save" id="save_stairstep">
         {!! csrf_field() !!}
         <div class="col-md-2">
             <label for="stairstep_name">Rank Name</label>

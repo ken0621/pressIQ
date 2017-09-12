@@ -48,10 +48,6 @@
 			<div class="total-label">Subtotal</div>
 		</div>	
 		@endif
-		<!-- <div class="text-right total">
-			<div class="total-price"></div>
-			<div class="total-label">tax()</div>
-		</div> -->
 		@if($get_cart["tbl_ec_order"]["shipping_fee"] != 0)
 		<div class="text-right total">
 			<div class="total-price">&#8369; {{ number_format($get_cart["tbl_ec_order"]["shipping_fee"], 2) }}</div>

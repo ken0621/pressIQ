@@ -11,9 +11,11 @@ use App\Models\Tbl_mlm_binary_setttings;
 use App\Models\Tbl_mlm_gc;
 use App\Models\Tbl_tree_sponsor;
 use App\Models\Tbl_tree_placement;
+use App\Models\Tbl_item;
 use App\Globals\Currency;
 use App\Globals\Mlm_compute;
 use App\Globals\Reward;
+use App\Models\Tbl_mlm_item_points;
 use DB;
 use Redirect;
 use Request;
@@ -38,7 +40,7 @@ class MlmDeveloperController extends Member
         /* CUSTOM SLOT TABLE */
         foreach($_slot as $key => $slot)
         {
-            $total_gc = Tbl_mlm_gc::where("mlm_gc_slot", $slot->slot_id)->pluck("mlm_gc_amount");
+            $total_gc = Tbl_mlm_gc::where("mlm_gc_slot", $slot->slot_id)->value("mlm_gc_amount");
 
         	$data["_slot"][$key] = $slot;
             $data["_slot"][$key]->sponsor = Tbl_mlm_slot::customer()->where("slot_id", $slot->slot_sponsor)->first();
@@ -106,10 +108,10 @@ class MlmDeveloperController extends Member
 
         /* INITIALIZE AND CAPTURE DATA */
         $shop_id                    = $this->user_info->shop_id;
-        $sponsor                    = Tbl_mlm_slot::where("slot_no", Request::input("sponsor"))->where("shop_id", $shop_id)->pluck("slot_id");
-        $placement                  = Tbl_mlm_slot::where("slot_no", Request::input("placement"))->where("shop_id", $shop_id)->pluck("slot_id");
-        $random_sponsor             = Tbl_mlm_slot::where("shop_id", $shop_id)->orderBy(DB::raw("rand()"))->pluck("slot_id");
-        $random_placement           = Tbl_mlm_slot::where("shop_id", $shop_id)->orderBy(DB::raw("rand()"))->pluck("slot_id");  
+        $sponsor                    = Tbl_mlm_slot::where("slot_no", Request::input("sponsor"))->where("shop_id", $shop_id)->value("slot_id");
+        $placement                  = Tbl_mlm_slot::where("slot_no", Request::input("placement"))->where("shop_id", $shop_id)->value("slot_id");
+        $random_sponsor             = Tbl_mlm_slot::where("shop_id", $shop_id)->orderBy(DB::raw("rand()"))->value("slot_id");
+        $random_placement           = Tbl_mlm_slot::where("shop_id", $shop_id)->orderBy(DB::raw("rand()"))->value("slot_id");  
         $random_position            = $array_position[array_rand($array_position)];
 
         /* POSITIONING DATA */
@@ -132,7 +134,7 @@ class MlmDeveloperController extends Member
                 {
                     while($slot_id["message"] == "Placement Alread Taken")
                     {
-                        $slot_placement = Tbl_mlm_slot::where("shop_id", $shop_id)->orderBy(DB::raw("rand()"))->pluck("slot_id"); 
+                        $slot_placement = Tbl_mlm_slot::where("shop_id", $shop_id)->orderBy(DB::raw("rand()"))->value("slot_id"); 
                         $slot_id = Self::create_slot_submit_create_slot($customer_id, $membership_code_id, $slot_sponsor, $slot_placement, $slot_position, $shop_id);
                     }
                 }
@@ -243,8 +245,8 @@ class MlmDeveloperController extends Member
 
         /* INITIALIZE AND CAPTURE DATA */
         $shop_id                    = $this->user_info->shop_id;
-        $sponsor                    = Tbl_mlm_slot::where("slot_no", Request::input("sponsor"))->where("shop_id", $shop_id)->pluck("slot_id");
-        $placement                  = Tbl_mlm_slot::where("slot_no", Request::input("placement"))->where("shop_id", $shop_id)->pluck("slot_id");
+        $sponsor                    = Tbl_mlm_slot::where("slot_no", Request::input("sponsor"))->where("shop_id", $shop_id)->value("slot_id");
+        $placement                  = Tbl_mlm_slot::where("slot_no", Request::input("placement"))->where("shop_id", $shop_id)->value("slot_id");
 
         /* POSITIONING DATA */
         $slot_sponsor               = $sponsor;
@@ -285,17 +287,66 @@ class MlmDeveloperController extends Member
     public function repurchase()
     {
         $data["page"]       = "Repurchase";
+        $shop_id            = $this->user_info->shop_id;
         $data               = Self::get_initial_settings();
+        $data["_item"]      = Tbl_mlm_item_points::where("tbl_item.shop_id", $shop_id)->joinItem()->joinMembership()->groupBy("tbl_item.item_id")->get();
+        $_item              = $data["_item"];
+        // dd($data,$shop_id);
+        // $data["_plan"]      = Tbl_mlm_plan::where("shop_id",$shop_id)
+        //                                   ->where("marketing_plan_enable",1)
+        //                                   ->where("marketing_plan_trigger","Product Repurchase")
+        //                                   ->get();
+        // dd($data);
         return view("member.mlm_developer.repurchase", $data);
     }
     public function repurchase_submit()
     {
+        $shop_id                    = $this->user_info->shop_id;
+        $return["status"]           = "success";
+        $return["call_function"]    = "repurchase_submit_done";
+        $slot_no                    = Request::input("slot_no");
+        $_send                      = Request::input();
+
+        unset($_send["slot_id"]);
+        unset($_send["_token"]);
+
+        if($slot_no == "")
+        {
+            $slot_info = Tbl_mlm_slot::where("shop_id",$shop_id)->orderByRaw("RAND()")->first();
+        }
+        else
+        {
+            $slot_info = Tbl_mlm_slot::where("slot_no",$slot_no)->where("shop_id",$shop_id)->first();
+        }
+
+        foreach($_send as $key => $send)
+        {
+            if($send == "")
+            {
+                $_send[$key] = 100;
+            }
+        }
+
+        if($slot_info == null)
+        {
+            $return["status"]           = "error_message";
+            $return["error_message"]    = "Slot error";
+
+            return json_encode($return);
+        }
+        else
+        {
+            $slot_id = $slot_info->slot_id;
+        }
+
+        Mlm_compute::repurchasev2($slot_id,$shop_id,$_send);
+        return json_encode($return);
     }
     public function get_initial_settings()
     {
         $shop_id                = $this->user_info->shop_id;
         $_complan               = Tbl_mlm_plan::where('shop_id', $shop_id)->enable(1)->get();
-        
+
         $data['binary_enabled'] = 0;
         $data['binary_auto']    = 0;
         $data['binary_repurchase'] = 0;
@@ -317,13 +368,44 @@ class MlmDeveloperController extends Member
 
             if($complan->marketing_plan_code == "BINARY_REPURCHASE" && $complan->marketing_plan_enable == 1)
             {
-                $data["binary_repurchase"] = 1;
+                $data["binary_repurchase"]               = 1;
             }
 
             if($complan->marketing_plan_code == "UNILEVEL" && $complan->marketing_plan_enable == 1)
             {
-                $data["unilevel"] = 1;
+                $data["unilevel"]                        = 1;
             }
+
+            if($complan->marketing_plan_code == "REPURCHASE_POINTS" && $complan->marketing_plan_enable == 1)
+            {
+                $data["repurchase_points"]               = 1;  
+            }
+
+            if($complan->marketing_plan_code == "REPURCHASE_CASHBACK" && $complan->marketing_plan_enable == 1)
+            {
+                $data["repurchase_cashback"]             = 1;
+            }
+
+            if($complan->marketing_plan_code == "UNILEVEL_REPURCHASE_POINTS" && $complan->marketing_plan_enable == 1)
+            {
+                $data["unilevel_repurchase_points"]      = 1;       
+            }
+
+            if($complan->marketing_plan_code == "DISCOUNT_CARD_REPURCHASE" && $complan->marketing_plan_enable == 1)
+            {
+                $data["discount_card_repurchase"]        = 1; 
+            }
+
+            if($complan->marketing_plan_code == "STAIRSTEP" && $complan->marketing_plan_enable == 1)
+            {
+                $data["stairstep"]                       = 1;
+            }
+
+            if($complan->marketing_plan_code == "RANK" && $complan->marketing_plan_enable == 1)
+            {
+                $data["rank"]                            = 1;
+            }
+
         }
 
         return $data;

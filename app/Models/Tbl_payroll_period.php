@@ -8,7 +8,7 @@ class Tbl_payroll_period extends Model
 {
     protected $table = 'tbl_payroll_period';
 	protected $primaryKey = "payroll_period_id";
-    public $timestamps = false;
+    // public $timestamps = false;
 
     /* COLUMN NAME REFERENCE */ 
 
@@ -46,6 +46,19 @@ class Tbl_payroll_period extends Model
 		$query->join("tbl_payroll_period_company", "tbl_payroll_period_company.payroll_period_id", "=", "tbl_payroll_period.payroll_period_id");
 		$query->join("tbl_payroll_time_keeping_approved", "tbl_payroll_time_keeping_approved.payroll_period_company_id", "=", "tbl_payroll_period_company.payroll_period_company_id");
 		$query->join("tbl_payroll_employee_basic", "tbl_payroll_employee_basic.payroll_employee_id", "=", "tbl_payroll_time_keeping_approved.employee_id");
+		
+		return $query;
+	}
+	public function scopeGetContributions_filter($query, $shop_id, $month, $year,$company_id)
+	{
+		$query->where('month_contribution', $month);
+		$query->where('year_contribution', $year);
+		$query->where('tbl_payroll_period.shop_id', $shop_id);
+        $query->where("tbl_payroll_employee_basic.payroll_employee_company_id", $company_id);
+		$query->join("tbl_payroll_period_company", "tbl_payroll_period_company.payroll_period_id", "=", "tbl_payroll_period.payroll_period_id");
+		$query->join("tbl_payroll_time_keeping_approved", "tbl_payroll_time_keeping_approved.payroll_period_company_id", "=", "tbl_payroll_period_company.payroll_period_company_id");
+		$query->join("tbl_payroll_employee_basic", "tbl_payroll_employee_basic.payroll_employee_id", "=", "tbl_payroll_time_keeping_approved.employee_id");
+		
 		return $query;
 	}
 }

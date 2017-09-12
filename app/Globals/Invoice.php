@@ -76,7 +76,7 @@ class Invoice
     }
     public static function getShopId()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
 
 	/**
@@ -403,7 +403,7 @@ class Invoice
         {
             $shop_id = Tablet_global::getShopId();
         }
-        $payment_applied = Tbl_customer_invoice::appliedPayment($shop_id)->where("inv_id",$inv_id)->pluck("amount_applied");
+        $payment_applied = Tbl_customer_invoice::appliedPayment($shop_id)->where("inv_id",$inv_id)->value("amount_applied");
         $data["inv_payment_applied"] = $payment_applied;
 
         Tbl_customer_invoice::where("inv_id", $inv_id)->update($data);
@@ -413,8 +413,8 @@ class Invoice
 
     public static function updateIsPaid($inv_id)
     {
-        $payment_applied   = Tbl_customer_invoice::where("inv_id", $inv_id)->pluck("inv_payment_applied"); 
-        $overall_price     = Tbl_customer_invoice::where("inv_id", $inv_id)->pluck("inv_overall_price"); 
+        $payment_applied   = Tbl_customer_invoice::where("inv_id", $inv_id)->value("inv_payment_applied"); 
+        $overall_price     = Tbl_customer_invoice::where("inv_id", $inv_id)->value("inv_overall_price"); 
 
         if($payment_applied == $overall_price)  $data["inv_is_paid"] = 1;
         else                                    $data["inv_is_paid"] = 0;

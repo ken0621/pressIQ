@@ -30,7 +30,7 @@ class WriteCheck
 {
     public static function getShopId()
     {
-    	return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+    	return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
     }
 	 public static function postWriteCheck($customer_vendor_info, $wc_info, $wc_other_info, $item_info, $total_info)
     {
@@ -98,7 +98,7 @@ class WriteCheck
             {
                 $update['wc_cash_account']        = 0;    
                 $update['wc_reference_id']        = $pb_data->paybill_vendor_id;
-                $update['wc_customer_vendor_email']        = Tbl_vendor::where("vendor_id",$pb_data->paybill_vendor_id)->pluck("vendor_email");        
+                $update['wc_customer_vendor_email']        = Tbl_vendor::where("vendor_id",$pb_data->paybill_vendor_id)->value("vendor_email");        
                 $update['wc_mailing_address']     = "";
 
                 $update['wc_payment_date']        =  $pb_data->paybill_date;
@@ -153,7 +153,7 @@ class WriteCheck
             $insert['wc_cash_account']        = 0;    
             $insert['wc_reference_id']        = $pb_data->paybill_vendor_id;
             $insert['wc_reference_name']      = "vendor";
-            $insert['wc_customer_vendor_email']        = Tbl_vendor::where("vendor_id",$pb_data->paybill_vendor_id)->pluck("vendor_email");        
+            $insert['wc_customer_vendor_email']        = Tbl_vendor::where("vendor_id",$pb_data->paybill_vendor_id)->value("vendor_email");        
             $insert['wc_mailing_address']     = "";
 
             $insert['wc_payment_date']        =  $pb_data->paybill_date;

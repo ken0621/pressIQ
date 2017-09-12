@@ -699,3 +699,34 @@ function get_payment_method_mlm($id)
 
     return $data[$id];
 }
+function isJson($string) 
+{
+    json_decode($string);
+    return (json_last_error() == JSON_ERROR_NONE);
+}
+function get_request_old($data, $name, $array_name = null)
+{
+    if (Request::old($name)) 
+    {
+        return $name;
+    }
+    elseif (isset($data->$name))
+    {
+        return $data->$name;
+    }
+    elseif ($array_name)
+    {
+        if (isset($data->$array_name)) 
+        {
+            return $data->$array_name;
+        }
+        else
+        {
+            return '';
+        }
+    }
+    else
+    {
+        return '';
+    }
+}

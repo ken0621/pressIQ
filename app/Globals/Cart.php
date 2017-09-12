@@ -51,7 +51,7 @@ class Cart
     }
     public static function get_shop_info()
     {
-        $shop_info = Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+        $shop_info = Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
         return $shop_info;
     }
     public static function add_to_cart($product_id,$quantity,$shop_id = null,$clear = false)
@@ -108,7 +108,7 @@ class Cart
                                 ->update($_cart["cart"][$key]);
                     }
                 }
-
+                
                 if($condition == false)
                 {
                     $_cart["cart"][$product_id] = $insert["cart"][$product_id];
@@ -799,7 +799,7 @@ class Cart
         /* SET BASIC INFORMATION */
         if (isset($customer_information["email"]) && isset($customer_information["password"])) 
         {
-            $customer_exist = DB::table("tbl_customer")->where("email", $customer_information["email"])->first();
+            $customer_exist = DB::table("tbl_customer")->where("email", $customer_information["email"])->where("shop_id", $shop_id)->first();
         }
         
         $data["tbl_customer"]['customer_id']      = isset($customer_exist->customer_id) ? $customer_exist->customer_id : Tbl_customer::max("customer_id") + 1;
@@ -1087,7 +1087,7 @@ class Cart
         else //ACCOUNT EXIST VALIDATION
         {
             $check_exist = Tbl_customer::where("shop_id", $shop_id)->where("email", $email)->first();
-
+            
             if(!$check_exist)
             {
                 return "The e-mail and password you entered doesn't belong to any account.";

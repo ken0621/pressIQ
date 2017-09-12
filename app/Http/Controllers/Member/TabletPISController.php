@@ -161,7 +161,7 @@ class TabletPISController extends Controller
         $cm_type = Request::input("type");
 
         $data["cm_data"] = Tbl_credit_memo::where("cm_id",$cm_id)->first();
-        $data["c_id"] = Tbl_credit_memo::where("cm_id",$cm_id)->pluck("cm_customer_id");
+        $data["c_id"] = Tbl_credit_memo::where("cm_id",$cm_id)->value("cm_customer_id");
 
         if($cm_type == "invoice")
         {
@@ -972,7 +972,7 @@ class TabletPISController extends Controller
                     $return += Purchasing_inventory_system::check_qty_sir($sir_id, Request::input('invline_item_id')[$key],Request::input('invline_um')[$key],Request::input('invline_qty')[$key],0,"tbl_customer_invoice_line");
                     if($return != 0)
                     {
-                        $item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->pluck("item_name");
+                        $item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->value("item_name");
                     }
                 }
             }
@@ -1040,7 +1040,7 @@ class TabletPISController extends Controller
                          $i = null;
                          foreach ($_cm_items as $keyitemline_cm => $valueitemline)
                          {
-                            $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->pluck("item_type_id");
+                            $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->value("item_type_id");
                             if($type == 4)
                             {
                                 if(Request::input("cmline_item_id")[$keyitemline_cm] == $value_items_cm['item_id'])
@@ -1183,7 +1183,7 @@ class TabletPISController extends Controller
                     $return += Purchasing_inventory_system::check_qty_sir($sir_id, Request::input('invline_item_id')[$key],Request::input('invline_um')[$key],Request::input('invline_qty')[$key],$invoice_id,"tbl_customer_invoice_line");
                     if($return != 0)
                     {
-                        $item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->pluck("item_name");
+                        $item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->value("item_name");
                     }
 
                     // $um_info = UnitMeasurement::um_info(Request::input("invline_um")[$key]);
@@ -1254,7 +1254,7 @@ class TabletPISController extends Controller
                      $i = null;
                      foreach ($_cm_items as $keyitemline_cm => $valueitemline)
                      {
-                        $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->pluck("item_type_id");
+                        $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->value("item_type_id");
                         if($type == 4)
                         {
                             if(Request::input("cmline_item_id")[$keyitemline_cm] == $value_items_cm['item_id'])
@@ -1302,7 +1302,7 @@ class TabletPISController extends Controller
 
                 if($cm_customer_info != null && $cm_item_info != null)
                 {
-                    $credit_memo_id = Tbl_customer_invoice::where("inv_id",$invoice_id)->pluck("credit_memo_id");
+                    $credit_memo_id = Tbl_customer_invoice::where("inv_id",$invoice_id)->value("credit_memo_id");
                     if($credit_memo_id != null)
                     {
                         $cm_id = CreditMemo::updateCM($credit_memo_id, $cm_customer_info, $cm_item_info);
@@ -1352,7 +1352,7 @@ class TabletPISController extends Controller
         $data["invoice"] = Tbl_customer_invoice::customer()->where("inv_id",$inv_id)->first();
 
         $data["transaction_type"] = "INVOICE";
-        if(Tbl_customer_invoice::where("inv_id",$inv_id)->pluck("is_sales_receipt") != 0)
+        if(Tbl_customer_invoice::where("inv_id",$inv_id)->value("is_sales_receipt") != 0)
         {
             $data["transaction_type"] = "Sales Receipt";            
         }
@@ -1615,7 +1615,7 @@ class TabletPISController extends Controller
                 $return += Purchasing_inventory_system::check_qty_sir($sir_id, Request::input('invline_item_id')[$key],Request::input('invline_um')[$key],Request::input('invline_qty')[$key],0,"tbl_customer_invoice_line");
                 if($return != 0)
                 {
-                    $item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->pluck("item_name");
+                    $item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->value("item_name");
                 }
             }
         }
@@ -1682,7 +1682,7 @@ class TabletPISController extends Controller
                          $i = null;
                          foreach ($_cm_items as $keyitemline_cm => $valueitemline)
                          {
-                            $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->pluck("item_type_id");
+                            $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->value("item_type_id");
                             if($type == 4)
                             {
                                 if(Request::input("cmline_item_id")[$keyitemline_cm] == $value_items_cm['item_id'])
@@ -1852,7 +1852,7 @@ class TabletPISController extends Controller
                 $return += Purchasing_inventory_system::check_qty_sir($sir_id, Request::input('invline_item_id')[$key],Request::input('invline_um')[$key],Request::input('invline_qty')[$key],$invoice_id,"tbl_customer_invoice_line");
                 if($return != 0)
                 {
-                    $item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->pluck("item_name");
+                    $item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->value("item_name");
                 }
 
                 // $um_info = UnitMeasurement::um_info(Request::input("invline_um")[$key]);
@@ -1922,7 +1922,7 @@ class TabletPISController extends Controller
                      $i = null;
                      foreach ($_cm_items as $keyitemline_cm => $valueitemline)
                      {
-                        $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->pluck("item_type_id");
+                        $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->value("item_type_id");
                         if($type == 4)
                         {
                             if(Request::input("cmline_item_id")[$keyitemline_cm] == $value_items_cm['item_id'])
@@ -1991,7 +1991,7 @@ class TabletPISController extends Controller
 
                 if($cm_customer_info != null && $cm_item_info != null)
                 {
-                    $credit_memo_id = Tbl_customer_invoice::where("inv_id",$invoice_id)->pluck("credit_memo_id");
+                    $credit_memo_id = Tbl_customer_invoice::where("inv_id",$invoice_id)->value("credit_memo_id");
                     if($credit_memo_id != null)
                     {
                         $cm_id = CreditMemo::updateCM($credit_memo_id, $cm_customer_info, $cm_item_info);

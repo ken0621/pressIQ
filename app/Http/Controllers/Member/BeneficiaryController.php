@@ -239,9 +239,9 @@ class BeneficiaryController extends Member
         $shop_id = $this->user_info->shop_id;
         $data["shop_address"]    = $this->user_info->shop_street_address;
         $data["shop_contact"]    = $this->user_info->shop_contact;
-        $data['company_name']    = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_name')->pluck('value');
-        $data['company_email']   = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_email')->pluck('value');
-        $data['company_logo']    = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'receipt_logo')->pluck('value');
+        $data['company_name']    = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_name')->value('value');
+        $data['company_email']   = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_email')->value('value');
+        $data['company_logo']    = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'receipt_logo')->value('value');
         if(Request::input('pdf') == 'true')
         {
             $view = view('member.merchant_school.reciept', $data);

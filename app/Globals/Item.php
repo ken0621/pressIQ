@@ -1519,6 +1519,36 @@ class Item
         $shop_id = Item::getShopId();
         return Tbl_membership::where('shop_id',$shop_id)->where('membership_archive',0)->get();
     }
+    public static function get_all_item_record_log($search_keyword = '', $status = '')
+    {
+        $shop_id = Item::getShopId();
+        $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+
+        $query = Tbl_warehouse_inventory_record_log::where('record_inventory_status',0)->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->groupBy('record_log_id')->orderBy('record_log_id');
+        
+        if($search_keyword)
+        {
+            $query->where('mlm_pin', "LIKE", "%" . $search_keyword . "%")->orWhere('mlm_activation', "LIKE", "%" . $search_keyword . "%");
+        }
+        if($status == 'reserved' || $status == 'block')
+        {
+             $query->where('record_consume_ref_name',$status);
+        }
+        else if($status == 'used')
+        {
+            $query->where('record_inventory_status', 1);
+        }
+        else if($status == 'sold')
+        {
+            $query->where('record_consume_ref_id','!=', 0);
+        }
+        else
+        {
+            $query->where('record_inventory_status',0)->where('record_consume_ref_name',null)->orWhere('record_consume_ref_name','');
+        }  
+
+        return $query->paginate(10);
+    }
     public static function get_assembled_kit($record_id = 0, $item_kit_id = 0, $item_membership_id = 0, $search_keyword = '', $status = '')
     {
         $shop_id = Item::getShopId();
@@ -1557,7 +1587,7 @@ class Item
         }
         else
         {
-            $query->where('record_inventory_status',0);
+            $query->where('record_inventory_status',0)->where('record_consume_ref_name',null);
         }  
         return $query->paginate(10); 
     } 

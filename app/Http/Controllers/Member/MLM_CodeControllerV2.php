@@ -134,9 +134,19 @@ class MLM_CodeControllerV2 extends Member
             $status = $request->action_status;
             $record_log_id = $request->record_log_id;
 
-            $update['record_consume_ref_name'] = $status;
+            $update['record_consume_ref_name'] = NULL;
+            if($status == 'reserved' || $status == 'block')
+            {
+                $update['record_consume_ref_name'] = $status;
+            }
+            $update['record_item_remarks'] = $request->remarks;
 
             Warehouse2::update_warehouse_item($record_log_id, $update);
+
+            $return['status'] = 'success';
+            $return['call_function'] = 'success_change_status';
+
+            return json_encode($return);
         }
         else
         {
@@ -150,7 +160,12 @@ class MLM_CodeControllerV2 extends Member
     }
     public function index()
     {
-        $data['_item_product_code'] = Item::get_all_item_record_log();
+        $data['page'] = "Product Code";
         return view("member.mlm_code_v2.product_code",$data);
+    }
+    public function product_code_table(Request $request)
+    {
+        $data['_item_product_code'] = Item::get_all_item_record_log($request->search_keyword, $request->status);
+        return view("member.mlm_code_v2.product_code_table",$data);
     }
 }

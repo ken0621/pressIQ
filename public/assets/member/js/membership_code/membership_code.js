@@ -127,3 +127,12 @@ function click_status(status)
 
     membership_code.action_load_table();
 }
+function success_change_status(data)
+{
+	if(data.status)
+	{
+        toastr.success('Success');
+        data.element.modal("hide");
+        membership_code.action_load_table();		
+	}	
+}

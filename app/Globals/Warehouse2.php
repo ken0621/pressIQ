@@ -692,12 +692,12 @@ class Warehouse2
 
         $history_id = Tbl_inventory_history::insertGetId($insert_history);
 
-        $return = Warehouse2::inset_inventory_history_item($history_id, $history_item);
+        $return = Warehouse2::insert_inventory_history_item($history_id, $history_item);
 
         return $return;
     }
 
-    public static function inset_inventory_history_item($history_id, $history_item)
+    public static function insert_inventory_history_item($history_id, $history_item)
     {
         $history_data = Tbl_inventory_history::where('history_id',$history_id)->first();
         foreach ($history_item as $key => $value) 
@@ -724,6 +724,7 @@ class Warehouse2
     }
     public static function update_warehouse_item($record_log_id, $update)
     {
+        Warehouse2::insert_item_history($record_log_id);
         Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)->update($update);
     }
 }

@@ -124,7 +124,6 @@ class Mlm_complan_manager
                 $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('DIRECT', $slot_info->shop_id); 
                 Mlm_slot_log::slot_array($arry_log);
 
-                
                 if(Self::plan_check_if_enabled($slot_info->shop_id, "BROWN_RANK"))
                 {
                     /* LEADER REWARD FOR BROWN RANK */

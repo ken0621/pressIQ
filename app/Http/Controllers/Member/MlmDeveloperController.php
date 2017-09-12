@@ -152,7 +152,7 @@ class MlmDeveloperController extends Member
     {
         $data["page"] = "popup_earnings";
         $data["slot_info"] = Tbl_mlm_slot::where("slot_id", Request::input("slot_id"))->first();
-        $_wallet = Tbl_mlm_slot_wallet_log::where("wallet_log_slot", Request::input("slot_id"))->orderBy("wallet_log_id", "desc")->get();
+        $_wallet = Tbl_mlm_slot_wallet_log::where("wallet_log_slot", Request::input("slot_id"))->orderBy("wallet_log_id", "asc")->get();
         
         if(count($_wallet) > 0)
         {
@@ -179,7 +179,7 @@ class MlmDeveloperController extends Member
     }
     public function popup_points()
     {
-        $_points = Tbl_mlm_slot_points_log::where("points_log_slot", Request::input("slot_id"))->where("points_log_complan", Request::input("point"))->orderBy("points_log_id", "desc")->get();
+        $_points = Tbl_mlm_slot_points_log::where("points_log_slot", Request::input("slot_id"))->where("points_log_complan", Request::input("point"))->orderBy("points_log_id", "asc")->get();
         $data["slot_info"] = Tbl_mlm_slot::where("slot_id", Request::input("slot_id"))->first();
 
         if(count($_points) > 0)
@@ -268,7 +268,7 @@ class MlmDeveloperController extends Member
     public static function create_slot_submit_random_customer($shop_id)
     {
     	$random_user = Tbl_customer::orderBy(DB::raw("rand()"))->where("archived", 0)->first();
-        
+
     	$insert_customer["shop_id"]        = $shop_id;
     	$insert_customer["first_name"]     = ucfirst($random_user->first_name);
     	$insert_customer["last_name"]      = ucfirst($random_user->last_name);

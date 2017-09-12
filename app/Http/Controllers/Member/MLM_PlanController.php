@@ -13,7 +13,7 @@ use App\Globals\AuditTrail;
 use App\Globals\Item;
 
 use App\Models\Tbl_mlm_indirect_setting;
-use App\Models\Tbl_brown;
+use App\Models\Tbl_brown_rank;
 use App\Models\Tbl_mlm_stairstep_settings;
 use App\Models\Tbl_mlm_stairstep_points_settings;
 use App\Models\Tbl_mlm_binary_pairing;
@@ -2398,7 +2398,7 @@ class MLM_PlanController extends Member
     }
     public function brown_rank_table()
     {        
-        $data['_brown_rank'] = Tbl_brown::where('rank_shop_id',$this->user_info->shop_id)->where('archived',0)->get();
+        $data['_brown_rank'] = Tbl_brown_rank::where('rank_shop_id',$this->user_info->shop_id)->where('archived',0)->get();
 
         return view("member.mlm_plan.configure2.brown_rank_table", $data);
     }
@@ -2411,7 +2411,7 @@ class MLM_PlanController extends Member
         {
             $data["process"] = "EDIT";
             $data['action'] = '/member/mlm/plan/brown_rank/update_rank_submit';
-            $data['brown_rank'] = Tbl_brown::where('rank_id',Request::input('id'))->first();
+            $data['brown_rank'] = Tbl_brown_rank::where('rank_id',Request::input('id'))->first();
         }
         return view("member.mlm_plan.configure2.brown_rank_add", $data);
     }
@@ -2431,7 +2431,7 @@ class MLM_PlanController extends Member
 
         if($insert['rank_name'])
         {
-            Tbl_brown::insert($insert);
+            Tbl_brown_rank::insert($insert);
             $return['status'] = 'success';
             $return['call_function'] = 'success_created_rank'; 
         }
@@ -2456,7 +2456,7 @@ class MLM_PlanController extends Member
 
         if($update['rank_name'])
         {
-            Tbl_brown::where('rank_id',Request::input('rank_id'))->update($update);
+            Tbl_brown_rank::where('rank_id',Request::input('rank_id'))->update($update);
             $return['status'] = 'success';
             $return['call_function'] = 'success_created_rank';
         }

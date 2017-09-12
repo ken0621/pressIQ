@@ -164,6 +164,11 @@ Route::any('/member/mlm/plan/binary_promotions/get', 'Member\MLM_PlanController@
 Route::any('/member/mlm/plan/binary_promotions/edit', 'Member\MLM_PlanController@binary_promotions_edit');//luke
 /* end triangle repurchase  Plan */
 
+/* start triangle repurchase */
+Route::any('/member/mlm/plan/brown_rank', 'Member\MLM_PlanController@brown_rank'); //Guillermo
+/* end triangle repurchase  Plan */
+
+
 /* end MLM Plan */
 
 /* start MLM Product */

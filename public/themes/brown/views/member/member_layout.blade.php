@@ -13,7 +13,7 @@
 					<div class="name">Slot <span class="slot">#272842</span> <i class="fa fa-angle-down" aria-hidden="true"></i></div>
 				</div>
 			</div>
-			<div class="sidebar">
+			<div class="sidebar small">
 				<img class="shadow" src="/themes/{{ $shop_theme }}/img/shadow.png">
 				<div class="profile">
 					<div class="img">
@@ -27,35 +27,35 @@
 				</div>
 				<div class="side-nav">
 					<ul>
-						<li>
-							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/dashboard.png"></div> Dashboard</a>
+						<li class="{{ Request::segment(2) == "" ? "active" : "" }}">
+							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/dashboard.png"></div> <span>Dashboard</span></a>
 						</li>
-						<li>
-							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/profile.png"></div> Profile</a>
+						<li class="{{ Request::segment(2) == "profile" ? "active" : "" }}">
+							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/profile.png"></div> <span>Profile</span></a>
 						</li>
-						<li>
-							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/notif.png"></div> Notification</a>
+						<li class="{{ Request::segment(2) == "notification" ? "active" : "" }}">
+							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/notif.png"></div> <span>Notification</span></a>
 						</li>
-						<li>
-							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/repurchase.png"></div> Repurchase</a>
+						<li class="{{ Request::segment(2) == "repurchase" ? "active" : "" }}">
+							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/repurchase.png"></div> <span>Repurchase</span></a>
 						</li>
-						<li>
-							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/genealogy.png"></div> Genealogy</a>
+						<li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}">
+							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/genealogy.png"></div> <span>Genealogy</span></a>
 						</li>
-						<li>
-							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/report.png"></div> Reports</a>
+						<li class="{{ Request::segment(2) == "report" ? "active" : "" }}">
+							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/report.png"></div> <span>Reports</span></a>
 						</li>
-						<li>
-							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/wallet.png"></div> Wallet</a>
+						<li class="{{ Request::segment(2) == "wallet" ? "active" : "" }}">
+							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/wallet.png"></div> <span>Wallet</span></a>
 						</li>
-						<li>
-							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/slots.png"></div> My Slots</a>
+						<li class="{{ Request::segment(2) == "slots" ? "active" : "" }}">
+							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/slots.png"></div> <span>My Slots</span></a>
 						</li>
-						<li>
-							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/eon-card.png"></div> Eon Card</a>
+						<li class="{{ Request::segment(2) == "eoncard" ? "active" : "" }}">
+							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/eon-card.png"></div> <span>Eon Card</span></a>
 						</li>
-						<li>
-							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/order.png"></div> Orders</a>
+						<li class="{{ Request::segment(2) == "order" ? "active" : "" }}">
+							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/order.png"></div> <span>Orders</span></a>
 						</li>
 					</ul>
 				</div>
@@ -73,4 +73,5 @@
 @endsection
 @section("script")
 @yield("member_script")
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/member.js"></script>
 @endsection

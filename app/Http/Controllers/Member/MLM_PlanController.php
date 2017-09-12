@@ -531,6 +531,20 @@ class MLM_PlanController extends Member
             Tbl_mlm_plan::insert($insert);
         }
 
+        if($count == 21)
+        {
+            // start STAIRSTEP complan settings insert
+            $insert['shop_id'] = $shop_id;
+            $insert['marketing_plan_code'] = "BROWN_RANK";
+            $insert['marketing_plan_name'] = "Brown Rank";
+            $insert['marketing_plan_trigger'] = "Slot Creation";
+            $insert['marketing_plan_label'] = "Brown Rank";
+            $insert['marketing_plan_enable'] = 0;
+            $insert['marketing_plan_release_schedule'] = 1;
+            $insert['marketing_plan_release_schedule_date'] = Carbon::now();
+            Tbl_mlm_plan::insert($insert);
+        }
+
         // end basic complan
         
         
@@ -2373,5 +2387,16 @@ class MLM_PlanController extends Member
         {
             return $this->binary_promotions_save();
         }
+    }
+    public function brown_rank()
+    {
+        $data["page"] = "Brown Rank";
+        $data['basic_settings'] = MLM_PlanController::basic_settings('BROWN_RANK');
+        return view("member.mlm_plan.configure2.brown_rank", $data);
+    }
+    public function brown_rank_add()
+    {
+        $data["page"] = "Brown Rank";
+        return view("member.mlm_plan.configure2.brown_rank_add", $data);
     }
 }

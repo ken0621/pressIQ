@@ -1,0 +1,64 @@
+body{
+	font-family: 'Open Sans', sans-serif;
+	background-color: #ededed;
+	color: #344049;
+}
+
+.top-container {
+	.top-container-content {
+		padding: 45px 0px 45px 0px;
+		font-size: 20px;
+		font-weight: 600;
+	}
+}
+.bottom-container {
+	background-color: #fff;
+	.bottom-container-content {
+		padding: 20px 0px 20px 0px;
+		min-height: 500px;
+
+		.delivery-information {
+			
+			.title-container {
+				font-size: 15px;
+				font-weight: 600;
+			}
+			.form-container {
+				padding: 20px 0px 20px 0px;
+
+				.form-label {
+					font-size: 13px;
+					font-weight: 600;
+				}
+				select {
+					width: 100%;
+					border: 1px solid #d7d7d7;
+					padding: 5px;
+					color: #7d8a95;
+				}
+				textarea {
+					min-width: 100%;
+					max-width: 100%;
+					min-height: 175px;
+					max-height: 200px;
+					border: 1px solid #d7d7d7;
+					padding: 5px;
+					color: #7d8a95;
+				}
+			}
+		}
+		.cart-summary {
+			border: 1px solid #d7d7d7;
+			padding: 10px 0px 10px 0px;
+
+			.top-title {
+				.per-title {
+					padding: 15px;
+					font-size: 15px;
+					font-weight: 600;
+					text-align: center;
+				}
+			}
+		}
+	}
+}

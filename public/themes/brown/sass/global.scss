@@ -273,4 +273,19 @@ footer
 		}
 	}
 }
+.form-input
+{
+	margin-top: 5px;
+	.form-control
+	{
+		border: 0;
+		border-bottom: 1px solid #e0e0e0;
+		box-shadow: none;
+		color: #344049;
+		font-weight: 600;
+		font-size: 13px;
+		padding-left: 0;
+		padding-right: 0;
+	}
+}
 /* Footer End */

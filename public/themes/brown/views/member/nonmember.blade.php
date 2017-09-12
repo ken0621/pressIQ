@@ -3,23 +3,21 @@
 <div class="dashboard">
 	
 	<div class="col-md-8">
-		<div class="row clearfix">
 			<div class="img-container">
-				<img width="42" height="42" src="/themes/{{ $shop_theme }}/img/brown-img1.png">
+				<img src="/themes/{{ $shop_theme }}/img/brown-img1.png">
 			</div>
-		</div>
 	</div>
 	<div class="col-md-4">
 			<div class="join-container">
 				<div class="text-header">Become a Member</div>
 
-				<div class="button-container">
-					<button></button>
+				<div class="btn-container">
+            <button class="join-us-today">Join us Today</button>
+            <button class="enter-a-code">Enter a Code</button>
 				</div>
 
 			</div>
 	</div>
-
 </div>
 
 

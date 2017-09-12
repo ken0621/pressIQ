@@ -8,6 +8,17 @@ $bold: 700;
 .dashboard
 {
 
+	.col-container
+	{
+		display: table; /* Make the container element behave like a table */
+		width: 100%; /* Set full-width to expand the whole page */
+	}
+
+	.col
+	{
+		display: table-cell; /* Make elements inside the container behave like table cells */
+	}
+
 	.img-container
 	{
 		img
@@ -22,7 +33,7 @@ $bold: 700;
 		font-family: $open-sans;
 
 		border: 1px solid #dfdfdf;
-		padding: 10px;
+		padding: 15px;
 	
 		.text-header
 		{
@@ -31,11 +42,34 @@ $bold: 700;
 			color: #344049;
 		}
 
+    	.btn-container
+    	{
+
+			padding: 100px 0px 0px 0px;
+			text-align: center;
+
+			.join-us-today
+			{
+				font-family: $open-sans;
+				color: #fff;
+				font-size: 14px;
+				background-color: #693d28;
+				padding: 12px 30px 12px 30px;
+				border: none;
+				border-radius: 2px;
+			}
+
+			.enter-a-code
+			{
+				font-family: $open-sans;
+				color: #000;
+				font-size: 14px;
+				background-color: inherit;
+				padding: 12px 30px 12px 30px;
+				border: 2px solid #693d28;
+				border-radius: 2px;
+				margin-top: 50px;
+			}
+		}
 	}
-
-}
-
-.dashboard-bottom
-{
-	background-color: #000000;
 }

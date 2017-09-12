@@ -155,7 +155,7 @@
 						<div class="message">Sorry, Your Slot has already reached the max level for matrix. Slot 454926's pairing reward will not be added.</div>
 						<div class="row clearfix">
 							<div class="col-sm-6">
-								<div class="date">2017-08-15 08:51:00</div>
+								<div class="date">3 Hours Ago</div>
 							</div>
 							<div class="col-sm-6">
 								<div class="wallet">Wallet Amount: 0</div>
@@ -163,10 +163,14 @@
 						</div>
 					</div>
 					<div class="holder">
+						<div class="circle-line">
+							<div class="circle"><img src="/themes/{{ $shop_theme }}/img/circle.png"></div>
+							<div class="line"><img src="/themes/{{ $shop_theme }}/img/line.jpg"></div>
+						</div>
 						<div class="message">Sorry, Your Slot has already reached the max level for matrix. Slot 454926's pairing reward will not be added.</div>
 						<div class="row clearfix">
 							<div class="col-sm-6">
-								<div class="date">2017-08-15 08:51:00</div>
+								<div class="date">3 Hours Ago</div>
 							</div>
 							<div class="col-sm-6">
 								<div class="wallet">Wallet Amount: 0</div>
@@ -174,10 +178,14 @@
 						</div>
 					</div>
 					<div class="holder">
+						<div class="circle-line">
+							<div class="circle"><img src="/themes/{{ $shop_theme }}/img/circle.png"></div>
+							<div class="line"><img src="/themes/{{ $shop_theme }}/img/line.jpg"></div>
+						</div>
 						<div class="message">Sorry, Your Slot has already reached the max level for matrix. Slot 454926's pairing reward will not be added.</div>
 						<div class="row clearfix">
 							<div class="col-sm-6">
-								<div class="date">2017-08-15 08:51:00</div>
+								<div class="date">3 Hours Ago</div>
 							</div>
 							<div class="col-sm-6">
 								<div class="wallet">Wallet Amount: 0</div>

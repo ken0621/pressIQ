@@ -11,6 +11,14 @@ use App\Rules\Uniqueonshop;
 
 class ShopMemberController extends Shop
 {
+    public static function store_login_session($email, $password)
+    {
+        $store["email"]         = $email;
+        $store["auth"]          = $password;
+        $sess["mlm_member"]     = $store;
+
+        session($sess);
+    }
     /* LOGIN AND REGISTRATION - START */
     public function getLogin()
     {
@@ -26,11 +34,7 @@ class ShopMemberController extends Shop
         $validate["password"]   = ["required"];
         $data                   = $this->validate(request(), $validate);
 
-        $store["email"]         = $data["email"];
-        $store["auth"]          = $data["password"];
-        $sess["mlm_member"]     = $store;
-
-        session($sess);
+        Self::store_login_session($data["email"], $data["password"]);
 
         return Redirect::to("/members")->send();
     }
@@ -74,8 +78,7 @@ class ShopMemberController extends Shop
 
         if(Customer::register($this->shop_info->shop_id, $insert))
         {
-            $store["email"] = $insert["email"];
-            $store["auth"] = $insert["password"];
+            Self::store_login_session($insert["email"], $raw_password);
         }
 
         return Redirect::to("/members")->send();

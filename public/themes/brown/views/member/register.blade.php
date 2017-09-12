@@ -90,7 +90,7 @@
 								<div class="form-group">
 									<div class="register-label">CONTACT</div>
 									<div class="form-input">
-										<input class="form-control input-sm" type="text" name="contact" value="{{ old('email') }}">
+										<input class="form-control input-sm" type="text" name="contact" value="{{ old('contact') }}">
 									</div>
 								</div>
 								<div class="form-group">

@@ -3,14 +3,14 @@
 <div class="member">
 	<div class="container">
 		<div class="members">
-			<div class="header">
+			<div class="header hidden">
+				
 				<div class="notification">
 					<img src="/themes/{{ $shop_theme }}/img/bell.png">
 					<span class="badge">500</span>
 				</div>
 				<div class="profile-dropdown">
-					<div class="img"><img src="/themes/{{ $shop_theme }}/img/thumb.png"></div>
-					<div class="name">Mr. Brown <span class="slot">#272842</span> <i class="fa fa-angle-down" aria-hidden="true"></i></div>
+					<div class="name">Slot <span class="slot">#272842</span> <i class="fa fa-angle-down" aria-hidden="true"></i></div>
 				</div>
 			</div>
 			<div class="sidebar">
@@ -20,8 +20,8 @@
 						<img src="/themes/{{ $shop_theme }}/img/big-thumb.jpg">
 					</div>
 					<div class="text">
-						<div class="name">Mr. Brown</div>
-						<div class="sub">Sub head</div>
+						<div class="name">{{ $customer->first_name }} {{ $customer->last_name }}</div>
+						<div class="sub">{{ $customer->customer_id }}</div>
 						<div class="sub">Subtitle Lorem Ipsum</div>
 					</div>
 				</div>

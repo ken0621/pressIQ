@@ -163,12 +163,14 @@ class Shop extends Controller
     }
     public function logged_in_member_only()
     {
+
         if(!session("mlm_member"))
         {
             return Redirect::to("/members/login")->with("error", "<b>Session Expired</b><br>Try loggin in again.")->send();
         }
         else
         {
+            
             $account        = session("mlm_member");
             $check_account  = Customer::check_account($this->shop_info->shop_id, $account["email"], $account["auth"]);
 

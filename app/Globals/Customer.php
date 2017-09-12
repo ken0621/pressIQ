@@ -17,12 +17,14 @@ class Customer
 {
 	public static function register($shop_id, $info)
 	{
+		$info["shop_id"] = $shop_id;
+		Tbl_customer::insert($info);
 		return true;	
 	}
 	public static function check_account($shop_id, $email, $password)
 	{
 		$check_account =  Tbl_customer::where("shop_id", $shop_id)->where("email", $email)->first();
-
+		//dd(Crypt::decrypt($check_account->password));
 		if($check_account)
 		{
 	        if(Crypt::decrypt($check_account->password) != $password)

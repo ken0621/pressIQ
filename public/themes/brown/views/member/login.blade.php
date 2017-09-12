@@ -63,7 +63,7 @@
 											<button class="btn btn-brown">Login</button>
 										</div>
 										<div class="holder"><span class="or">OR</span></div>
-										<div class="holder"><a class="login-href" href="javascript:">Create an Account</a></div>
+										<div class="holder"><a class="login-href" href="/members/register">Create an Account</a></div>
 									</div>
 								</div>
 							</form>

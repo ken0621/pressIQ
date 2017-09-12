@@ -326,35 +326,26 @@ class ShopCheckoutController extends Shop
     }
     public function paymaya_webhook_success()
     {
-        /* Insert Logs */
-        $insert["payment_log_type"]       = "received";
-        $insert["payment_log_method"]     = "paymaya";
-        $insert["payment_log_created"]    = Carbon::now();
-        $insert["payment_log_url"]        = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "Unknown";
-        $insert["payment_log_data"]       = serialize(Request::input());
-        $insert["payment_log_ip_address"] = get_ip_address();
-        Payment::insert_logs($insert, $shop_id);
+        $this->paymaya_logs();
     }
     public function paymaya_webhook_failure()
     {
-        /* Insert Logs */
-        $insert["payment_log_type"]       = "received";
-        $insert["payment_log_method"]     = "paymaya";
-        $insert["payment_log_created"]    = Carbon::now();
-        $insert["payment_log_url"]        = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "Unknown";
-        $insert["payment_log_data"]       = serialize(Request::input());
-        $insert["payment_log_ip_address"] = get_ip_address();
-        Payment::insert_logs($insert, $shop_id);
+        $this->paymaya_logs();
     }
     public function paymaya_webhook_cancel()
+    {
+        $this->paymaya_logs();
+    }
+    public function paymaya_logs()
     {
         /* Insert Logs */
         $insert["payment_log_type"]       = "received";
         $insert["payment_log_method"]     = "paymaya";
         $insert["payment_log_created"]    = Carbon::now();
-        $insert["payment_log_url"]        = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "Unknown";
+        $insert["payment_log_url"]        = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : "Unknown");
         $insert["payment_log_data"]       = serialize(Request::input());
         $insert["payment_log_ip_address"] = get_ip_address();
+        $shop_id = $this->shop_info->shop_id;
         Payment::insert_logs($insert, $shop_id);
     }
     public function failmaya($order_id)

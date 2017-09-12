@@ -69,6 +69,10 @@
 		{
 			padding: 25px 0 15px;
 			border-bottom: 1px solid #dbdbdb;
+			&:last-child
+			{
+				border-bottom: 0;
+			}
 			.member-info
 			{
 				.left

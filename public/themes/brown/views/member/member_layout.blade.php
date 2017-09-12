@@ -44,6 +44,14 @@
 						</li>
 						<li class="{{ Request::segment(2) == "wallet" ? "active" : "" }}">
 							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/wallet.png"></div> <span>Wallet</span></a>
+							<ul>
+								<li>
+									<a href="javascript:">Wallet Logs</a>
+								</li>
+								<li>
+									<a href="javascript:">Wallet Encashment</a>
+								</li>
+							</ul>
 						</li>
 						<li class="{{ Request::segment(2) == "slots" ? "active" : "" }}">
 							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/slots.png"></div> <span>My Slots</span></a>

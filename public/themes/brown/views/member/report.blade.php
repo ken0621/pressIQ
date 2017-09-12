@@ -26,34 +26,18 @@
 						<img src="/themes/{{ $shop_theme }}/img/profile-nav.png">
 					</div>
 					<div class="text">
-						<div class="name">Mr. Brown Lorem Ipsum</div>
-						<div class="date">2017-09-01 03:20:47</div>
-					</div>
-				</div>
-				<div class="right">
-					<div class="read"><img src="/themes/{{ $shop_theme }}/img/read.png"></div>
-				</div>
-			</div>
-			<div class="desc">Sorry, Your Slot has already reached the max level for matrix. Slot 111133's pairing reward will not be added. </div>
-		</div>
-		<div class="holder">
-			<div class="member-info clearfix">
-				<div class="left">
-					<div class="pic">
-						<img src="/themes/{{ $shop_theme }}/img/profile-nav.png">
-					</div>
-					<div class="text">
-						<div class="name">Mr. Brown Lorem Ipsum</div>
-						<div class="date">2017-09-01 03:20:47</div>
+						<div class="sponsor">Sponsor: Mr. Brown Lorem Ipsum</div>
+						<div class="slot"><span>Slot:</span> 573887</div>
+						<div class="report-notif"><span>Notification:</span> Congratulations you earned 500 from the pairing of 272842</div>
+						<div class="level">Level 1</div>
 					</div>
 				</div>
 				<div class="right">
 					<div class="read">
-						<button class="btn btn-orange">Mark As Read</button>
+						<span class="btn-orange badge">PHP 500</span>
 					</div>
 				</div>
 			</div>
-			<div class="desc">Sorry, Your Slot has already reached the max level for matrix. Slot 111133's pairing reward will not be added. </div>
 		</div>
 	</div>
 </div>

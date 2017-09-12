@@ -178,6 +178,17 @@
 								border-color: #36b1b9;
 							}
 						}
+						> ul
+						{
+							display: none;
+						}
+						> a
+						{
+							&:hover + ul
+							{
+								display: block;
+							}
+						}
 					}
 				}
 			}

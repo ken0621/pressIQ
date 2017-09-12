@@ -69,6 +69,10 @@
 		{
 			padding: 25px 0 15px;
 			border-bottom: 1px solid #dbdbdb;
+			&:last-child
+			{
+				border-bottom: 0;
+			}
 			.member-info
 			{
 				.left
@@ -95,15 +99,40 @@
 					{
 						display: inline-block;
 						vertical-align: middle;
-						.name
+						letter-spacing: 0.5px;
+						> div
+						{
+							margin: 2.5px 0;
+						}
+						.sponsor
 						{
 							color: #344049;
 							font-size: 13px;
 							font-weight: 600;
 						}
-						.date
+						.slot
 						{
-							color: #85939e;
+							color: #344049;
+							font-size: 13px;
+							font-weight: 600;
+							span
+							{
+								color: #85939e;
+							}
+						}
+						.report-notif
+						{
+							color: #344049;
+							font-size: 13px;
+							font-weight: 600;
+							span
+							{
+								color: #85939e;
+							}
+						}
+						.level
+						{
+							color: #344049;
 							font-size: 13px;
 							font-weight: 600;
 						}
@@ -121,8 +150,11 @@
 						{
 							background-color: #ed5639;
 							border-radius: 15px;
-							font-size: 11px;
+							font-size: 13px;
 							color: #fff;
+							font-weight: 700;
+							padding: 6.5px 15px;
+							letter-spacing: 0.5px;
 						}
 					}
 				}

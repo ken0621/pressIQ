@@ -78,7 +78,7 @@ class ShopMemberController extends Shop
 
         if(Customer::register($this->shop_info->shop_id, $insert))
         {
-            Self::store_login_session($insert["email"], $insert["password"]);
+            Self::store_login_session($insert["email"], $raw_password);
         }
 
         return Redirect::to("/members")->send();

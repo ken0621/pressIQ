@@ -31,18 +31,34 @@ class MLM_CodeControllerV2 extends Member
             return view("member.mlm_code_v2.membership_code", $data);
         }
     }
+    public function membership_code_table(Request $request)
+    {   
+        $data['_assembled_item_kit'] = Item::get_assembled_kit(0, $request->item_kit_id, $request->item_membership_id, $request->search_keyword, $request->status);
+
+        return view("member.mlm_code_v2.membership_code_table", $data);
+
+    }
     public function membership_code_assemble(Request $request)
     {
         if($request->isMethod("post"))
         {
             $item_id            = $request->item_id;
             $quantity           = ($request->quantity <= 0 ? 1 : $request->quantity);
+            
+            $return_assemble = Item::assemble_membership_kit($this->user_info->shop_id, $this->current_warehouse->warehouse_id, $item_id, $quantity);
 
-            
-            
-            $response["status"] = "success";
-            $response["call_function"] = "membership_code_assemble_success";
-            $response["message"] = "<b>3 MEMBERSHIP KIT</b> CREATED";
+            if(!$return_assemble)
+            {
+                $response["status"] = "success";
+                $response["call_function"] = "membership_code_assemble_success";
+                $response["message"] = "<b>".$quantity." MEMBERSHIP KIT</b> CREATED";
+            }
+            else
+            {
+                $response["status"] = "error";
+                $response["message"] = $return_assemble;
+            }
+
             return json_encode($response);
         }
         else
@@ -86,5 +102,48 @@ class MLM_CodeControllerV2 extends Member
         $data["_item"] = $_new_item;
 
         return view("member.mlm_code_v2.membership_code_assemble_table", $data);
+    }
+    public function membership_code_disassemble(Request $request)
+    {
+        if($request->isMethod("post"))
+        {
+            $record_log_id = $request->record_log_id;
+
+            foreach ($record_log_id as $key => $value) 
+            {
+                Item::disassemble_membership_kit($value);
+            }
+        }
+        else
+        {
+            $record_id = $request->record_id;
+
+            $data['_assembled_item_kit'] = Item::get_assembled_kit($record_id);
+            if(!$record_id)
+            {
+                $data['_assembled_item_kit'] = Item::get_assembled_kit();
+            }
+
+            return view("member.mlm_code_v2.membership_code_disassemble",$data);            
+        }
+    }
+    public function change_status(Request $request)
+    { 
+        if($request->isMethod("post"))
+        {
+
+        }
+        else
+        {
+            $data['action'] = $request->action;
+            $data['item'] = Item::info($request->item_id);
+
+            return view("member.mlm_code_v2.membership_code_change_status",$data);              
+        }
+    }
+    public function index()
+    {
+        $data['_item_product_code'] = Item::get_all_item_record_log();
+        return view("member.mlm_code_v2.product_code",$data);
     }
 }

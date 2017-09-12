@@ -26,27 +26,48 @@
 									<div class="name">Sign Up With</br> Google</div>
 								</div>
 							</div>
-							<div class="form-group">
-								<div class="register-label">EMAIL</div>
-								<div class="form-input">
-									<input class="form-control input-sm" type="email" name="" value="sample_email@gmail.com">
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="register-label">PASSWORD</div>
-								<div class="form-input">
-									<input class="form-control input-sm" type="password" name="" value="123456">
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="choice">
-									<div class="holder">
-										<button class="btn btn-brown">Login</button>
+
+							@if (session("error"))
+							    <div class="alert alert-danger">
+							    	{!! session("error") !!}
+							    </div>
+							@endif
+
+							@if ($errors->any())
+							    <div class="alert alert-danger">
+							        <ul>
+							            @foreach ($errors->all() as $error)
+							                <li>{{ $error }}</li>
+							            @endforeach
+							        </ul>
+							    </div>
+							@endif
+
+							<form method="post">
+								{{ csrf_field() }}
+								<div class="form-group">
+									<div class="register-label">EMAIL</div>
+									<div class="form-input">
+										<input class="form-control input-sm" type="email" name="email" value="">
 									</div>
-									<div class="holder"><span class="or">OR</span></div>
-									<div class="holder"><a class="login-href" href="javascript:">Create an Account</a></div>
 								</div>
-							</div>
+								<div class="form-group">
+									<div class="register-label">PASSWORD</div>
+									<div class="form-input">
+										<input class="form-control input-sm" type="password" name="password" value="">
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="choice">
+										<div class="holder">
+											<button class="btn btn-brown">Login</button>
+										</div>
+										<div class="holder"><span class="or">OR</span></div>
+										<div class="holder"><a class="login-href" href="javascript:">Create an Account</a></div>
+									</div>
+								</div>
+							</form>
+
 							<div class="form-group text-center">
 								<div class="forgot" style="color: #808080; font-weight: 600; font-size: 11px;">Forgot Password? <a style="color: #4d575e;" href="javascript:">Click Here</a></div>
 							</div>

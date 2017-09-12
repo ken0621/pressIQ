@@ -290,3 +290,5 @@ Route::post('member/mlm/developer/import', 'Member\MlmDeveloperController@import
 Route::get('member/mlm/developer/repurchase', 'Member\MlmDeveloperController@repurchase');
 Route::post('member/mlm/developer/repurchase', 'Member\MlmDeveloperController@repurchase_submit');
 Route::get('member/mlm/developer/reset', 'Member\MlmDeveloperController@reset');
+
+Route::any('member/mlm/developer/popup_genealogy', 'Member\MlmDeveloperController@popup_genealogy');

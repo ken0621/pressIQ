@@ -56,7 +56,7 @@ class MlmDeveloperController extends Member
             }
             else
             {
-                $data["_slot"][$key]->sponsor_button = "<a href='javascript:'> SLOT NO. " . $slot->sponsor->slot_no . "</a>";
+                $data["_slot"][$key]->sponsor_button = "<a link='/member/mlm/developer/popup_genealogy?mode=sponsor&slot_no=".$slot->sponsor->slot_no."' class='popup' size='lg'> SLOT NO. " . $slot->sponsor->slot_no . "</a>";
             }
 
             if(!$data["_slot"][$key]->placement)
@@ -65,7 +65,7 @@ class MlmDeveloperController extends Member
             }
             else
             {
-                $data["_slot"][$key]->placement_button = "<a href='javascript:'>" . strtoupper($slot->slot_position) . " OF " . strtoupper($slot->placement->slot_no) . "</a>";
+                $data["_slot"][$key]->placement_button = "<a link='/member/mlm/developer/popup_genealogy?mode=binary&slot_no=".$slot->sponsor->slot_no."' class='popup' size='lg'>" . strtoupper($slot->slot_position) . " OF " . strtoupper($slot->placement->slot_no) . "</a>";
             }
         }
 
@@ -100,6 +100,12 @@ class MlmDeveloperController extends Member
 
             return view("error_modal", $data);
         }
+    }
+    public function popup_genealogy()
+    {
+        $data['slot_id'] = Tbl_mlm_slot::where('slot_no', Request::input('slot_no'))->value('slot_id');
+        $data['mode'] = Request::input('mode');
+        return view('member.mlm_developer.modal_genealogy',$data);
     }
     public function create_slot_submit()
     {

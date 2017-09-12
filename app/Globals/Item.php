@@ -1559,7 +1559,7 @@ class Item
         {
             $query->where('record_inventory_status',0);
         }
-        return $query->paginate(10);
+        return $query->paginate(10); 
     }
     public static function assemble_membership_kit($shop_id, $warehouse_id, $item_id, $quantity)
     {

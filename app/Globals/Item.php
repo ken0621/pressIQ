@@ -1524,10 +1524,10 @@ class Item
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
 
-        $query = Tbl_warehouse_inventory_record_log::where('item_type_id',5)->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->where('record_inventory_status',0)->groupBy('record_log_id')->orderBy('record_log_id');
+        $query = Tbl_warehouse_inventory_record_log::where('item_type_id',5)->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->groupBy('record_log_id')->orderBy('record_log_id');
         if($record_id)
         {
-            $query = Tbl_warehouse_inventory_record_log::where('item_type_id',5)->where('record_log_id',$record_id)->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->where('record_inventory_status',0)->groupBy('record_log_id')->orderBy('record_log_id');
+            $query = Tbl_warehouse_inventory_record_log::where('item_type_id',5)->where('record_log_id',$record_id)->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->groupBy('record_log_id')->orderBy('record_log_id');
         }
 
         if($item_kit_id)
@@ -1543,13 +1543,25 @@ class Item
             $query->where('mlm_pin', "LIKE", "%" . $search_keyword . "%")->orWhere('mlm_activation', "LIKE", "%" . $search_keyword . "%");
         }
 
-        if($status)
+        if($status == 'reserved' || $status == 'block')
         {
-            
+             $query->where('record_consume_ref_name',$status);
         }
+        else if($status == 'used')
+        {
+            $query->where('record_inventory_status', 1);
+        }
+        else if($status == 'sold')
+        {
+            $query->where('record_consume_ref_id','!=', 0);
+        }
+        else
+        {
+            $query->where('record_inventory_status',0);
+        }  
+        return $query->paginate(10); 
+    } 
 
-        return $query->get();
-    }
     public static function assemble_membership_kit($shop_id, $warehouse_id, $item_id, $quantity)
     {
         $item_list = Item::get_item_in_bundle($item_id);

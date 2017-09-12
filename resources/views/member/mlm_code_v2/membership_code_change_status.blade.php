@@ -8,6 +8,7 @@
     	<div class="row">
             <div class="clearfix modal-body"> 
                 <input type="hidden" name="action_status" value="{{$action}}">
+                <input type="hidden" name="record_log_id" value="{{$record_log_id}}">
                 <div class="form-horizontal">
                     <div class="form-group">
                         <div class="col-md-12">

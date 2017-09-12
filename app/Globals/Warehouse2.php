@@ -722,4 +722,8 @@ class Warehouse2
 
         return 0;
     }
+    public static function update_warehouse_item($record_log_id, $update)
+    {
+        Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)->update($update);
+    }
 }

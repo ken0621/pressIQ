@@ -131,12 +131,19 @@ class MLM_CodeControllerV2 extends Member
     { 
         if($request->isMethod("post"))
         {
+            $status = $request->action_status;
+            $record_log_id = $request->record_log_id;
 
+            $update['record_consume_ref_name'] = $status;
+
+            Warehouse2::update_warehouse_item($record_log_id, $update);
         }
         else
         {
             $data['action'] = $request->action;
             $data['item'] = Item::info($request->item_id);
+
+            $data['record_log_id'] = $request->record_id;
 
             return view("member.mlm_code_v2.membership_code_change_status",$data);              
         }

@@ -481,7 +481,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/unprocess_payroll/{period_company_id}','Member\PayrollProcessController@unprocess');
 	Route::any('/process_payroll/table/{period_company_id}','Member\PayrollProcessController@index_table');
 	Route::any('/process_payroll/modal_view_summary/{period_company_id}','Member\PayrollProcessController@modal_view_summary');
-	Route::any('/process_payroll/income_summary/timesheet/{period_id}/{employee_id}','Member\PayrollProcessController@income_summary_timesheet_v2');
+	Route::any('/process_payroll/income_summary/timesheet/{period_id}/{employee_id}','Member\PayrollProcessController@income_summary_timesheet_v3');
 	Route::any('/process_payroll/modal_approved_summary/{period_company_id}','Member\PayrollProcessController@modal_approved_summary');
 
 

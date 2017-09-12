@@ -45,11 +45,13 @@ class MlmDeveloperController extends Member
         	$data["_slot"][$key] = $slot;
             $data["_slot"][$key]->sponsor = Tbl_mlm_slot::customer()->where("slot_id", $slot->slot_sponsor)->first();
             $data["_slot"][$key]->placement = Tbl_mlm_slot::customer()->where("slot_id", $slot->slot_placement)->first();
-        	$data["_slot"][$key]->current_wallet_format = "<a href='javascript:'>" . Currency::format($data["_slot"][$key]->current_wallet) . "</a>";
-        	$data["_slot"][$key]->total_earnings_format = "<a href='javascript:'>" . Currency::format($data["_slot"][$key]->total_earnings) . "</a>";
+        	$data["_slot"][$key]->current_wallet_format = "<a href='javascript:' link='/member/mlm/developer/popup_earnings?slot_id=" . $slot->slot_id . "' class='popup' size='lg'>" . Currency::format($data["_slot"][$key]->current_wallet) . "</a>";
+        	$data["_slot"][$key]->total_earnings_format = "<a href='javascript:' link='/member/mlm/developer/popup_earnings?slot_id=" . $slot->slot_id . "' class='popup' size='lg'>" . Currency::format($data["_slot"][$key]->total_earnings) . "</a>";
         	$data["_slot"][$key]->total_payout_format = "<a href='javascript:'>" . Currency::format($data["_slot"][$key]->total_payout * -1) . "</a>";
             $data["_slot"][$key]->total_gc_format = Currency::format(0);
 
+
+            /* SPONSOR BUTTON */
             if(!$data["_slot"][$key]->sponsor)
             {
                 $data["_slot"][$key]->sponsor_button = "";
@@ -59,6 +61,7 @@ class MlmDeveloperController extends Member
                 $data["_slot"][$key]->sponsor_button = "<a link='/member/mlm/developer/popup_genealogy?mode=sponsor&slot_no=".$slot->sponsor->slot_no."' class='popup' size='lg'> SLOT NO. " . $slot->sponsor->slot_no . "</a>";
             }
 
+            /* PLACEMENT BUTTON */
             if(!$data["_slot"][$key]->placement)
             {
                 $data["_slot"][$key]->placement_button = "";
@@ -103,9 +106,41 @@ class MlmDeveloperController extends Member
     }
     public function popup_genealogy()
     {
-        $data['slot_id'] = Tbl_mlm_slot::where('slot_no', Request::input('slot_no'))->value('slot_id');
+        $data['slot_id'] = Tbl_mlm_slot::where('shop_id',$this->user_info->shop_id)->where('slot_no', Request::input('slot_no'))->value('slot_id');
         $data['mode'] = Request::input('mode');
         return view('member.mlm_developer.modal_genealogy',$data);
+    }
+    public function popup_earnings()
+    {
+        $data["page"] = "popup_earnings";
+        $_wallet = Tbl_mlm_slot_wallet_log::where("wallet_log_slot", Request::input("slot_id"))->get();
+        
+        if(count($_wallet) > 0)
+        {
+            $data["log_total"] = 0;
+            foreach($_wallet as $key => $wallet)
+            {
+                $data["_wallet"][$key] = $wallet;
+                $data["_wallet"][$key]->display_amount = Currency::format($wallet->wallet_log_amount);
+                $data["_wallet"][$key]->display_date = date("F d, Y - h:i A ", strtotime($wallet->wallet_log_date_created)); //October 24, 1991 (10:30 AM)
+                $data["log_total"] += $wallet->wallet_log_amount;
+                $data["_wallet"][$key]->running_balance = Currency::format($data["log_total"]);
+            }
+
+            $data["log_total"] = Currency::format($data["log_total"]);
+
+            return view("member.mlm_developer.popup_earnings", $data);
+        }
+        else
+        {
+            $data["title"] = "NO EARNINGS";
+            $data["message"] = "This slot doesn't have any earnings yet.";
+            return view("error_modal", $data);
+        }
+
+
+
+        
     }
     public function create_slot_submit()
     {

@@ -55,7 +55,7 @@ class MLM_PlanController extends Member
         
         // datas
         $data["page"] = "Membership";
-        $data['mlm_plan'] = Tbl_mlm_plan::where('shop_id', $this->user_info->shop_id)->orderBy('marketing_plan_trigger', 'DESC')->orderBy('marketing_plan_enable', 'ASC')->get();
+        $data['mlm_plan'] = Tbl_mlm_plan::where('shop_id', $this->user_info->shop_id)->orderBy('marketing_plan_enable', 'DESC')->orderBy('marketing_plan_code', 'ASC')->get();
         $data['plan_settings'] = Tbl_mlm_plan_setting::where('shop_id', $this->user_info->shop_id)->first();
         // end datas
         
@@ -545,6 +545,21 @@ class MLM_PlanController extends Member
             $insert['marketing_plan_release_schedule_date'] = Carbon::now();
             Tbl_mlm_plan::insert($insert);
         }
+
+        if($count == 22)
+        {
+            // start STAIRSTEP complan settings insert
+            $insert['shop_id'] = $shop_id;
+            $insert['marketing_plan_code'] = "BROWN_REPURCHASE";
+            $insert['marketing_plan_name'] = "Brown Repurchase";
+            $insert['marketing_plan_trigger'] = "Product Repurchase";
+            $insert['marketing_plan_label'] = "Brown Repurchase";
+            $insert['marketing_plan_enable'] = 0;
+            $insert['marketing_plan_release_schedule'] = 1;
+            $insert['marketing_plan_release_schedule_date'] = Carbon::now();
+            Tbl_mlm_plan::insert($insert);
+        }
+
 
         // end basic complan
         
@@ -2466,5 +2481,12 @@ class MLM_PlanController extends Member
             $return['message'] = 'Rank name is required.';
         }   
         return json_encode($return);
+    }
+    public function brown_repurchase()
+    {
+        $data["page"] = "Brown Repurchase";
+        $data['basic_settings'] = MLM_PlanController::basic_settings('BROWN_REPURCHASE');
+
+        return view("member.mlm_plan.configure2.brown_rank", $data);
     }
 }

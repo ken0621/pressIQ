@@ -52,12 +52,21 @@ class MlmDeveloperController extends Member
             $data["_slot"][$key]->total_gc_format = Currency::format(0);
             
             /* BROWN RANK DETAILS */
-            $data["_slot"][$key]->brown_current_rank = strtoupper(Tbl_brown_rank::where("rank_id", $slot->brown_rank_id)->value("rank_name"));
-            $data["_slot"][$key]->brown_next_rank = strtoupper(Tbl_brown_rank::where("rank_id",">", $slot->brown_rank_id)->orderBy("rank_id")->value("rank_name"));
-            
-            $brown_next_rank = Tbl_brown_rank::where("rank_id",">", $slot->brown_rank_id)->orderBy("rank_id")->first();
-            if($brown_next_rank)
+            $brown_current_rank = Tbl_brown_rank::where("rank_id", $slot->brown_rank_id)->value("rank_name");
+
+            if($brown_current_rank)
             {
+                $data["_slot"][$key]->brown_current_rank = strtoupper($brown_current_rank->rank_name);
+            }
+            else
+            {
+                $data["_slot"][$key]->brown_current_rank = strtoupper("NO RANK");
+            }
+            
+            if($slot->brown_rank_id)
+            {
+                $brown_next_rank = Tbl_brown_rank::where("rank_id",">", $slot->brown_rank_id)->orderBy("rank_id")->first();
+                $data["_slot"][$key]->brown_next_rank = strtoupper($brown_next_rank->rank_name);
                 $brown_rank_required_slots = $brown_next_rank->required_slot;
                 $brown_count_required = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot->slot_id)->where("sponsor_tree_level", "<=", $brown_next_rank->required_uptolevel)->count();
                 $data["_slot"][$key]->brown_next_rank_requirements = "<b><a href='javascript:'>" . $brown_count_required . " SLOT(S)</a></b> OUT OF <b>" . $brown_rank_required_slots . " (LIMIT " . strtoupper(ordinal($brown_next_rank->required_uptolevel)) .  " LEVEL)</b>";
@@ -65,6 +74,7 @@ class MlmDeveloperController extends Member
             }
             else
             {
+                $data["_slot"][$key]->brown_next_rank = strtoupper("NO NEXT RANK");
                 $brown_rank_required_slots = "NO NEXT RANK";
                 $brown_count_required = "NO NEXT RANK";
                 $data["_slot"][$key]->brown_next_rank_requirements = "NO NEXT RANK";

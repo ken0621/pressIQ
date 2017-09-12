@@ -39,6 +39,7 @@ function globalv2()
     {
         load_cart();
         action_image_crop();
+        $('.match-height').matchHeight();
     }
     function window_load()
     {

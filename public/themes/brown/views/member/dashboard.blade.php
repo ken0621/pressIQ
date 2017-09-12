@@ -8,9 +8,9 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th>Level</th>
-							<th>Count</th>
-							<th>Percentage</th>
+							<th width="33.3333333333%">Level</th>
+							<th width="33.3333333333%">Count</th>
+							<th width="33.3333333333%">Percentage</th>
 						</tr>
 					</thead>
 					<tbody class="table-body">
@@ -85,12 +85,37 @@
 					<div class="name"><span style="color: #8e5ea2;">Direct Referral Bonus</span> PHP 68,500.00</div>
 				</div>
 			</div>
-			<canvas id="income_summary" style="max-width: 300px;" width="400" height="400"></canvas>
+			<div class="chart-holder">
+				<canvas id="income_summary" style="max-width: 150px;" width="400" height="400"></canvas>
+			</div>
+			<div class="unilevel-holder">
+				<div class="title">Unilevel Ranking</div>
+				<div class="holder">
+					<div class="row clearfix">
+						<div class="col-sm-2">
+							<div class="label2">Builder</div>
+						</div>
+						<div class="col-sm-10">
+							<div class="progress2" style="background: linear-gradient(to right, rgb(184, 205, 211) 40%, rgb(237, 237, 237) 40%);">4/25 Enrollees</div>
+						</div>
+					</div>
+				</div>
+				<div class="holder">
+					<div class="row clearfix">
+						<div class="col-sm-2">
+							<div class="label2">Leader</div>
+						</div>
+						<div class="col-sm-10">
+							<div class="progress2" style="background: linear-gradient(to right, rgb(184, 205, 211) 10%, rgb(237, 237, 237) 10%);">4/50 Enrollees</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="row clearfix">
 		<div class="col-md-6">
-			<div class="border-holder">
+			<div class="border-holder match-height">
 				<div class="clearfix wow">
 					<div class="title left">New Referral</div>
 					<div class="badge right">6 New Members</div>
@@ -119,38 +144,44 @@
 			</div>
 		</div>
 		<div class="col-md-6">
-			<div class="title">Recent Activities</div>
-			<div class="activities">
-				<div class="holder">
-					<div class="message">Sorry, Your Slot has already reached the max level for matrix. Slot 454926's pairing reward will not be added.</div>
-					<div class="row clearfix">
-						<div class="col-sm-6">
-							<div class="date">2017-08-15 08:51:00</div>
+			<div class="match-height">
+				<div class="title">Recent Activities</div>
+				<div class="activities">
+					<div class="holder">
+						<div class="circle-line">
+							<div class="circle"><img src="/themes/{{ $shop_theme }}/img/circle.png"></div>
+							<div class="line"><img src="/themes/{{ $shop_theme }}/img/line.jpg"></div>
 						</div>
-						<div class="col-sm-6">
-							<div class="wallet">Wallet Amount: 0</div>
-						</div>
-					</div>
-				</div>
-				<div class="holder">
-					<div class="message">Sorry, Your Slot has already reached the max level for matrix. Slot 454926's pairing reward will not be added.</div>
-					<div class="row clearfix">
-						<div class="col-sm-6">
-							<div class="date">2017-08-15 08:51:00</div>
-						</div>
-						<div class="col-sm-6">
-							<div class="wallet">Wallet Amount: 0</div>
+						<div class="message">Sorry, Your Slot has already reached the max level for matrix. Slot 454926's pairing reward will not be added.</div>
+						<div class="row clearfix">
+							<div class="col-sm-6">
+								<div class="date">2017-08-15 08:51:00</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="wallet">Wallet Amount: 0</div>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="holder">
-					<div class="message">Sorry, Your Slot has already reached the max level for matrix. Slot 454926's pairing reward will not be added.</div>
-					<div class="row clearfix">
-						<div class="col-sm-6">
-							<div class="date">2017-08-15 08:51:00</div>
+					<div class="holder">
+						<div class="message">Sorry, Your Slot has already reached the max level for matrix. Slot 454926's pairing reward will not be added.</div>
+						<div class="row clearfix">
+							<div class="col-sm-6">
+								<div class="date">2017-08-15 08:51:00</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="wallet">Wallet Amount: 0</div>
+							</div>
 						</div>
-						<div class="col-sm-6">
-							<div class="wallet">Wallet Amount: 0</div>
+					</div>
+					<div class="holder">
+						<div class="message">Sorry, Your Slot has already reached the max level for matrix. Slot 454926's pairing reward will not be added.</div>
+						<div class="row clearfix">
+							<div class="col-sm-6">
+								<div class="date">2017-08-15 08:51:00</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="wallet">Wallet Amount: 0</div>
+							</div>
 						</div>
 					</div>
 				</div>

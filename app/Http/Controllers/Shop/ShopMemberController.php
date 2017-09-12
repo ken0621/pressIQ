@@ -29,7 +29,6 @@ class ShopMemberController extends Shop
     public function postLogin(Request $request)
     {
         Self::guest_only();
-
         $validate["email"]      = ["required","email"];
         $validate["password"]   = ["required"];
         $data                   = $this->validate(request(), $validate);
@@ -87,10 +86,15 @@ class ShopMemberController extends Shop
     /* LOGIN AND REGISTRATION - END */
     public function getIndex()
     {
-        Self::logged_in_member_only();
-
-        $data["page"] = "Dashboard";
-        return view("member.dashboard", $data);
+        if(Self::$customer_info)
+        {
+            $data["page"] = "Dashboard";
+            return view("member.dashboard", $data);
+        }
+        else
+        {
+            return Self::logged_in_member_only();
+        }
     }
 
     public function getTest()

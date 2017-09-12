@@ -419,15 +419,21 @@ class Warehouse2
             }
 
 
-            Warehouse2::update_inventory_count($item_id, $warehouse_id);
+            Warehouse2::update_inventory_count($warehouse_id, $slip_id, $item_id, $quantity);
         }       
 
         return $return;
     }
-    public static function update_inventory_count($item_id, $warehouse_id)
+    public static function update_inventory_count($warehouse_id, $slip_id, $item_id, $quantity)
     {
-        $update["inventory_count"] = Tbl_warehouse_inventory_record_log::where("record_warehouse_id", $warehouse_id)->where("record_item_id", $item_id)->count();
-        Tbl_warehouse_inventory::where("warehouse_id", $warehouse_id)->where("inventory_item_id", $item_id)->update($update);
+        // $update["inventory_count"] = Tbl_warehouse_inventory_record_log::where("record_warehouse_id", $warehouse_id)->where("record_item_id", $item_id)->count();
+        // Tbl_warehouse_inventory::where("warehouse_id", $warehouse_id)->where("inventory_item_id", $item_id)->update($update);
+        $ins['inventory_item_id'] = $item_id;
+        $ins['warehouse_id'] = $warehouse_id;
+        $ins['inventory_created'] = Carbon::now();
+        $ins['inventory_count'] = $quantity;
+        $ins['inventory_slip_id'] = $slip_id;
+        Tbl_warehouse_inventory::insert($ins);
     }
     public static function get_mlm_pin($shop_id)
     {       
@@ -614,7 +620,7 @@ class Warehouse2
             Warehouse2::insert_inventory_history($shop_id, $warehouse_id, $inventory_details, $history_item);
         }
 
-        Warehouse2::update_inventory_count($item_id, $warehouse_id);
+        Warehouse2::update_inventory_count($warehouse_id, $slip_id, $item_id, -($quantity));
 
         return $return;
     }

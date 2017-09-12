@@ -151,7 +151,53 @@
                   <div class="modal-body">
                       <input type="text" placeholder="Enter Your Sponsor">
                       <div class="btn-container">
-                        <button class="verify">Verify</button>
+                        <button id="verify" class="verify">Verify</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="popup-proceed1">
+      <div id="myModal3" class="modal fade">
+          <div class="modal-sm modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                      <h4 class="modal-title">Sponsor</h4>
+                  </div>
+                  <div class="modal-body">
+                      <input type="text" placeholder="Name">
+                      <input type="text" placeholder="Enter Code">
+                      <input type="text" placeholder="Enter Pin">
+                      <div class="btn-container">
+                        <button class="proceed">Proceed</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+    <div class="popup-proceed2">
+      <div id="myModal4" class="modal fade">
+          <div class="modal-sm modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                      <h4 class="modal-title">Sponsor</h4>
+                  </div>
+                  <div class="modal-body">
+                      <input type="text" placeholder="Name">
+                      <input type="text" placeholder="Enter Code">
+                      <input type="text" placeholder="Enter Pin">
+                      <input type="text" placeholder="Placement">
+                      <label for="position">Position: </label>
+                      <label class="radio-inline"><input type="radio" name="optradio">Left</label>
+                      <label class="radio-inline"><input type="radio" name="optradio">Right</label>
+                      <div class="btn-container">
+                        <button class="proceed">Proceed</button>
                       </div>
                   </div>
               </div>
@@ -230,6 +276,19 @@ var myDoughnutChart = new Chart(ctx, {
       $("#myModal2").modal('show');
     });
   });
+
+  $(document).ready(function(){
+    $("#verify").click(function(){
+      $("#myModal3").modal('show');
+    });
+  });
+
+  $(document).ready(function(){
+    $("#verify").click(function(){
+      $("#myModal4").modal('show');
+    });
+  });
+
 </script>
 
 @endsection

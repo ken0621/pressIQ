@@ -85,7 +85,13 @@
 					<div class="name"><span style="color: #8e5ea2;">Direct Referral Bonus</span> PHP 68,500.00</div>
 				</div>
 			</div>
-			<canvas id="income_summary" style="max-width: 300px;" width="400" height="400"></canvas>
+			<div class="chart-holder">
+				<canvas id="income_summary" style="max-width: 150px;" width="400" height="400"></canvas>
+			</div>
+			<div class="unilevel-holder">
+				<div class="title">Unilevel Ranking</div>
+				
+			</div>
 		</div>
 	</div>
 	<div class="row clearfix">

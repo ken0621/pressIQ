@@ -2394,4 +2394,9 @@ class MLM_PlanController extends Member
         $data['basic_settings'] = MLM_PlanController::basic_settings('BROWN_RANK');
         return view("member.mlm_plan.configure2.brown_rank", $data);
     }
+    public function brown_rank_add()
+    {
+        $data["page"] = "Brown Rank";
+        return view("member.mlm_plan.configure2.brown_rank_add", $data);
+    }
 }

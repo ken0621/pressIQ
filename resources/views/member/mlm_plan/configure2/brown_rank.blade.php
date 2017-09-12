@@ -25,7 +25,7 @@
         <div class="col-md-8" style="padding: 10px">
         </div>
         <div class="col-md-4" style="padding: 10px; text-align: right;">
-            <button class="btn btn-custom-white"><i class="fa fa-plus"> </i> Add Rank</button>
+            <button class="btn btn-custom-white" onclick="action_load_link_to_modal('/member/mlm/plan/brown_rank/add_rank')"><i class="fa fa-plus"> </i> Add Rank</button>
         </div>
     </div>
     <div class="tab-content codes_container" style="min-height: 300px;">

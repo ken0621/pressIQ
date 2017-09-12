@@ -64,14 +64,15 @@ class MlmDeveloperController extends Member
                 $data["_slot"][$key]->brown_current_rank = strtoupper("NO RANK");
             }
             
+
             if($slot->brown_rank_id)
             {
+
                 $brown_next_rank = Tbl_brown_rank::where("rank_id",">", $slot->brown_rank_id)->orderBy("rank_id")->first();
                 $data["_slot"][$key]->brown_next_rank = strtoupper($brown_next_rank->rank_name);
                 $brown_rank_required_slots = $brown_next_rank->required_slot;
                 $brown_count_required = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot->slot_id)->where("sponsor_tree_level", "<=", $brown_next_rank->required_uptolevel)->count();
                 $data["_slot"][$key]->brown_next_rank_requirements = "<b><a href='javascript:'>" . $brown_count_required . " SLOT(S)</a></b> OUT OF <b>" . $brown_rank_required_slots . " (LIMIT " . strtoupper(ordinal($brown_next_rank->required_uptolevel)) .  " LEVEL)</b>";
-
             }
             else
             {
@@ -81,8 +82,12 @@ class MlmDeveloperController extends Member
                 $data["_slot"][$key]->brown_next_rank_requirements = "NO NEXT RANK";
             }
   
+            /* BROWN POINTS */
             $builder_points = Tbl_mlm_slot_points_log::where("points_log_complan", "BROWN_BUILDER_POINTS")->where("points_log_slot", $slot->slot_id)->sum("points_log_points");
-            $data["_slot"][$key]->brown_builder_points = "<a href='javascript:'>" . $builder_points . " POINT(S)</a>";
+            $data["_slot"][$key]->brown_builder_points = "<a link='/member/mlm/developer/popup_points?slot_id=" . $slot->slot_id . "&point=BROWN_BUILDER_POINTS' class='popup' size='lg' href='javascript:'>" . number_format($builder_points, 2) . " POINT(S)</a>";
+
+            $leader_points = Tbl_mlm_slot_points_log::where("points_log_complan", "BROWN_LEADER_POINTS")->where("points_log_slot", $slot->slot_id)->sum("points_log_points");
+            $data["_slot"][$key]->brown_leader_points = "<a link='/member/mlm/developer/popup_points?slot_id=" . $slot->slot_id . "&point=BROWN_LEADER_POINTS' class='popup' size='lg' href='javascript:'>" . number_format($leader_points, 2) . " POINT(S)</a>";
 
             /* SPONSOR BUTTON */
             if(!$data["_slot"][$key]->sponsor)
@@ -146,7 +151,8 @@ class MlmDeveloperController extends Member
     public function popup_earnings()
     {
         $data["page"] = "popup_earnings";
-        $_wallet = Tbl_mlm_slot_wallet_log::where("wallet_log_slot", Request::input("slot_id"))->get();
+        $data["slot_info"] = Tbl_mlm_slot::where("slot_id", Request::input("slot_id"))->first();
+        $_wallet = Tbl_mlm_slot_wallet_log::where("wallet_log_slot", Request::input("slot_id"))->orderBy("wallet_log_id", "desc")->get();
         
         if(count($_wallet) > 0)
         {
@@ -169,12 +175,38 @@ class MlmDeveloperController extends Member
             $data["title"] = "NO EARNINGS";
             $data["message"] = "This slot doesn't have any earnings yet.";
             return view("error_modal", $data);
+        } 
+    }
+    public function popup_points()
+    {
+        $_points = Tbl_mlm_slot_points_log::where("points_log_slot", Request::input("slot_id"))->where("points_log_complan", Request::input("point"))->orderBy("points_log_id", "desc")->get();
+        $data["slot_info"] = Tbl_mlm_slot::where("slot_id", Request::input("slot_id"))->first();
+
+        if(count($_points) > 0)
+        {
+            $data["log_total"] = 0;
+            foreach($_points as $key => $points)
+            {
+                $data["_points"][$key] = $points;
+                $data["_points"][$key]->display_amount = number_format($points->points_log_points, 2) . " POINT(S)";
+                $data["_points"][$key]->display_date = date("F d, Y - h:i A ", strtotime($points->points_log_date_claimed)); //October 24, 1991 (10:30 AM)
+                $data["log_total"] += $points->points_log_points;
+                $data["_points"][$key]->running_balance = number_format($data["log_total"], 2);
+            }
+
+            $data["log_total"] = number_format($data["log_total"], 2) . " POINT(S)";
+
+            return view("member.mlm_developer.popup_points", $data);
+        }
+        else
+        {
+            $data["title"] = "NO POINTS";
+            $data["message"] = "This slot doesn't have any points yet.";
+            return view("error_modal", $data);
         }
 
-
-
-        
     }
+
     public function create_slot_submit()
     {
         $data                       = Self::get_initial_settings();
@@ -235,15 +267,14 @@ class MlmDeveloperController extends Member
     }
     public static function create_slot_submit_random_customer($shop_id)
     {
-    	$random_user = json_decode(file_get_contents('https://randomuser.me/api/?nat=us'))->results[0];
-
+    	$random_user = Tbl_customer::orderBy(DB::raw("rand()"))->first();
     	$insert_customer["shop_id"]        = $shop_id;
-    	$insert_customer["first_name"]     = ucfirst($random_user->name->first);
-    	$insert_customer["last_name"]      = ucfirst($random_user->name->last);
+    	$insert_customer["first_name"]     = ucfirst($random_user->first_name);
+    	$insert_customer["last_name"]      = ucfirst($random_user->last_name);
     	$insert_customer["email"]          = $random_user->email;
     	$insert_customer["ismlm"]          = 1;
-    	$insert_customer["mlm_username"]   = $random_user->login->username;
-    	$insert_customer["password"]       = Crypt::encrypt($random_user->login->password);
+    	$insert_customer["mlm_username"]   = $random_user->email;
+    	$insert_customer["password"]       = Crypt::encrypt($random_user->first_name);
 
     	return Tbl_customer::insertGetId($insert_customer);
     }

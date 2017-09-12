@@ -27,11 +27,11 @@ use App\Models\Tbl_mlm_discount_card_settings;
 use App\Models\Tbl_mlm_binary_report;
 use App\Models\Tbl_brown_rank;
 use App\Globals\Mlm_gc;
+use App\Globals\Mlm_complan_manager_repurchasev2;
 use App\Models\Tbl_mlm_gc;
 use App\Models\Tbl_mlm_binary_pairing_log;
 use App\Http\Controllers\Member\MLM_MembershipController;
 use App\Http\Controllers\Member\MLM_ProductController;
-
 use Schema;
 use Session;
 use DB;
@@ -123,10 +123,26 @@ class Mlm_complan_manager
                 $arry_log['wallet_log_status'] = "n_ready";   
                 $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('DIRECT', $slot_info->shop_id); 
                 Mlm_slot_log::slot_array($arry_log);
+
+                
+                if(Self::plan_check_if_enabled($slot_info->shop_id, "BROWN_RANK"))
+                {
+                    /* LEADER REWARD FOR BROWN RANK */
+                    $_sponsor_tree = Tbl_tree_sponsor::orderby("sponsor_tree_level", "asc")->child($slot_info->slot_id)->parent_info()->get();
+
+                    foreach($_sponsor_tree as $sponsor_tree)
+                    {
+                        Mlm_complan_manager_repurchasev2::brown_leader_reward($sponsor_tree, $slot_info , "Direct Referral", $direct_points_given);
+                    }
+                }
             }
         }   
         Mlm_complan_manager::cutoff_direct('DIRECT', $slot_info->shop_id);      
 	}
+    public static function plan_check_if_enabled($shop_id, $marketing_plan_code)
+    {
+        return Tbl_mlm_plan::where("shop_id", $shop_id)->where("marketing_plan_code", $marketing_plan_code)->first();
+    }
     public static function cutoff_direct($code, $shop_id)
     {
         // function releasing income from cutoff

@@ -304,3 +304,4 @@ Route::get('member/mlm/developer/reset', 'Member\MlmDeveloperController@reset');
 
 Route::any('member/mlm/developer/popup_genealogy', 'Member\MlmDeveloperController@popup_genealogy');
 Route::any('member/mlm/developer/popup_earnings', 'Member\MlmDeveloperController@popup_earnings');
+Route::any('member/mlm/developer/popup_points', 'Member\MlmDeveloperController@popup_points');

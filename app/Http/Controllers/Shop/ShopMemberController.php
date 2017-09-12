@@ -90,7 +90,6 @@ class ShopMemberController extends Shop
 
     public function getNonMember()
     {
-        //dd(123);
         $data["page"] = "Dashboard";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.nonmember", $data));
     }

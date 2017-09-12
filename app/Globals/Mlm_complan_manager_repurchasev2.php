@@ -128,14 +128,6 @@ class Mlm_complan_manager_repurchasev2
                 $insert_points["points_log_points"] = $compute_points;
                 $insert_points["cause_id"] = $trigger_info->slot_id;
                 Tbl_mlm_slot_points_log::insert($insert_points);
-
-                /* LEADER REWARD */
-                $_sponsor_tree = Tbl_tree_sponsor::orderby("sponsor_tree_level", "asc")->child($slot_info->slot_id)->parent_info()->get();
-
-                foreach($_sponsor_tree as $sponsor_tree)
-                {
-                    Self::brown_leader_reward($sponsor_tree, $slot_info , "BUILDER REWARD", $compute_points);
-                }
             }
         }
 

@@ -1,0 +1,41 @@
+$open-sans: 'Open Sans', sans-serif;
+$light: 300;
+$regular: 400;
+$semi-bold: 600;
+$bold: 700;
+
+
+.dashboard
+{
+
+	.img-container
+	{
+		img
+		{
+			width: 100%;
+			height: auto;
+		}
+	}
+
+	.join-container
+	{
+		font-family: $open-sans;
+
+		border: 1px solid #dfdfdf;
+		padding: 10px;
+	
+		.text-header
+		{
+			font-weight: $semi-bold;
+			font-size: 14px;
+			color: #344049;
+		}
+
+	}
+
+}
+
+.dashboard-bottom
+{
+	background-color: #000000;
+}

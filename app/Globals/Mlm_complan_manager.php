@@ -44,7 +44,10 @@ use App\Globals\Membership_code;
 use App\Globals\Binary_pairing;
 class Mlm_complan_manager
 {   
-
+    public static function brown_rank($slot_info)
+    {
+        Mlm_complan_manager::cutoff_direct('BROWN_RANK', $slot_info->shop_id);   
+    }
     // DIRECT
 	public static function direct($slot_info)
 	{
@@ -54,7 +57,6 @@ class Mlm_complan_manager
         {
             if($slot_info->membership_points_direct != null || $slot_info->membership_points_direct != 0)
             {
-
                 /* DIRECT INCOME LIMIT */
                 $check_points = Tbl_membership_points::where("membership_id",$slot_sponsor->slot_membership)->first();
                 if($check_points)

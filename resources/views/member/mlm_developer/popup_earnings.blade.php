@@ -9,7 +9,7 @@
                 <tr> 
                     <th class="text-center" width="250px">COMPLAN</th>
                     <th class="text-center" width="200px">DATE</th>
-                    <th class="text-center" width="200px">TRIGGER</th>
+                    <th class="text-center" width="200px">RUNNING BALANCE</th>
                     <th class="text-right" width="120px">AMOUNT</th>
                 </tr>
             </thead>
@@ -18,7 +18,7 @@
                 <tr>
                     <td class="text-center">{{ $wallet->wallet_log_plan }}</td>
                     <td class="text-center">{{ $wallet->display_date }}</td>
-                    <td class="text-center">N/A</td>
+                    <td class="text-center">{{ $wallet->running_balance }}</td>
                     <td class="text-right text-bold">{{ $wallet->display_amount }}</td>
                 </tr>
                 @endforeach
@@ -33,6 +33,5 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
     <button class="btn btn-primary btn-custom-primary" type="button">Submit</button>
 </div>

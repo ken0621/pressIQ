@@ -124,6 +124,7 @@ class MlmDeveloperController extends Member
                 $data["_wallet"][$key]->display_amount = Currency::format($wallet->wallet_log_amount);
                 $data["_wallet"][$key]->display_date = date("F d, Y - h:i A ", strtotime($wallet->wallet_log_date_created)); //October 24, 1991 (10:30 AM)
                 $data["log_total"] += $wallet->wallet_log_amount;
+                $data["_wallet"][$key]->running_balance = Currency::format($data["log_total"]);
             }
 
             $data["log_total"] = Currency::format($data["log_total"]);

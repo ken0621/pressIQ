@@ -17,13 +17,13 @@
 									<div class="img">
 										<img src="/themes/{{ $shop_theme }}/img/fb.png">
 									</div>
-									<div class="name">Sign Up With</br> Facebook</div>
+									<div class="name">Sign Up With Facebook</div>
 								</div>
 								<div class="holder">
 									<div class="img">
 										<img src="/themes/{{ $shop_theme }}/img/google.png">
 									</div>
-									<div class="name">Sign Up With</br> Google</div>
+									<div class="name">Sign Up With Google</div>
 								</div>
 							</div>
 

@@ -171,7 +171,7 @@ class Shop extends Controller
         {
             $account        = session("mlm_member");
             $check_account  = Customer::check_account($this->shop_info->shop_id, $account["email"], $account["auth"]);
-
+            
             if(!$check_account)
             {
                 session()->forget("mlm_member");

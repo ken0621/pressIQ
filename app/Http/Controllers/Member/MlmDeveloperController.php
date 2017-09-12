@@ -52,7 +52,7 @@ class MlmDeveloperController extends Member
             $data["_slot"][$key]->total_gc_format = Currency::format(0);
             
             /* BROWN RANK DETAILS */
-            $brown_current_rank = Tbl_brown_rank::where("rank_id", $slot->brown_rank_id)->value("rank_name");
+            $brown_current_rank = Tbl_brown_rank::where("rank_id", $slot->brown_rank_id)->first();
 
             if($brown_current_rank)
             {

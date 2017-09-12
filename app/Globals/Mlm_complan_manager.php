@@ -128,11 +128,11 @@ class Mlm_complan_manager
                 if(Self::plan_check_if_enabled($slot_info->shop_id, "BROWN_RANK"))
                 {
                     /* LEADER REWARD FOR BROWN RANK */
-                    $_sponsor_tree = Tbl_tree_sponsor::orderby("sponsor_tree_level", "asc")->child($slot_info->slot_id)->parent_info()->get();
+                    $_sponsor_tree = Tbl_tree_sponsor::orderby("sponsor_tree_level", "asc")->child($slot_sponsor->slot_id)->parent_info()->get();
 
                     foreach($_sponsor_tree as $sponsor_tree)
                     {
-                        Mlm_complan_manager_repurchasev2::brown_leader_reward($sponsor_tree, $slot_info , "Direct Referral", $direct_points_given);
+                        Mlm_complan_manager_repurchasev2::brown_leader_reward($sponsor_tree, $slot_sponsor , "Direct Referral", $direct_points_given);
                     }
                 }
             }

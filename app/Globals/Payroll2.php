@@ -1772,7 +1772,7 @@ class Payroll2
 		$return["day_type"] 			 = $day_type;
 		$return["excess_leave_hours"] 	 = $excess_leave_hours;
 		$return["leave_hours_consumed"]  = $leave_hours_consumed;
-		
+	
 		return $return;
 
 	}
@@ -2151,6 +2151,7 @@ class Payroll2
 		{
 			$target_float 						 			  = Self::time_float($_time['target_hours']);
 			$return->_breakdown_addition['Leave Pay']['time'] = $_time['leave_hours'];
+
 			$return->_breakdown_addition['Leave Pay']['rate'] = Self::time_float($_time['leave_hours']) * @($daily_rate/$target_float);
 			$return->_breakdown_addition['Leave Pay']['hour'] = $_time['leave_hours'];
 		}

@@ -46,7 +46,7 @@ class Mlm_complan_manager
 {   
     public static function brown_rank($slot_info)
     {
-        Mlm_complan_manager::cutoff_direct('BROWN_RANK', $slot_info->shop_id);   
+        
     }
     // DIRECT
 	public static function direct($slot_info)

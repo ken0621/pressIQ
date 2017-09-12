@@ -32,6 +32,3 @@
         </table>
     </div>
 </div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-custom-primary" type="button">Submit</button>
-</div>

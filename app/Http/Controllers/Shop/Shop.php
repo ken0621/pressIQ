@@ -163,6 +163,7 @@ class Shop extends Controller
     }
     public function logged_in_member_only()
     {
+
         if(!session("mlm_member"))
         {
             return Redirect::to("/members/login")->with("error", "<b>Session Expired</b><br>Try loggin in again.");
@@ -171,10 +172,9 @@ class Shop extends Controller
         {
             $account        = session("mlm_member");
             $check_account  = Customer::check_account($this->shop_info->shop_id, $account["email"], $account["auth"]);
-
+            
             if(!$check_account)
             {
-                session()->forget("mlm_member");
                 return Redirect::to("/members/login")->with("error", "<b>Authentication Problem</b><br>The email/password you entered doesn't exist.");
             }
         }

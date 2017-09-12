@@ -13,6 +13,7 @@ use App\Globals\AuditTrail;
 use App\Globals\Item;
 
 use App\Models\Tbl_mlm_indirect_setting;
+use App\Models\Tbl_brown;
 use App\Models\Tbl_mlm_stairstep_settings;
 use App\Models\Tbl_mlm_stairstep_points_settings;
 use App\Models\Tbl_mlm_binary_pairing;
@@ -2392,11 +2393,78 @@ class MLM_PlanController extends Member
     {
         $data["page"] = "Brown Rank";
         $data['basic_settings'] = MLM_PlanController::basic_settings('BROWN_RANK');
+
         return view("member.mlm_plan.configure2.brown_rank", $data);
+    }
+    public function brown_rank_table()
+    {        
+        $data['_brown_rank'] = Tbl_brown::where('rank_shop_id',$this->user_info->shop_id)->where('archived',0)->get();
+
+        return view("member.mlm_plan.configure2.brown_rank_table", $data);
     }
     public function brown_rank_add()
     {
         $data["page"] = "Brown Rank";
+        $data["process"] = "CREATE";
+        $data['action'] = '/member/mlm/plan/brown_rank/add_rank_submit';
+        if(Request::input('id'))
+        {
+            $data["process"] = "EDIT";
+            $data['action'] = '/member/mlm/plan/brown_rank/update_rank_submit';
+            $data['brown_rank'] = Tbl_brown::where('rank_id',Request::input('id'))->first();
+        }
         return view("member.mlm_plan.configure2.brown_rank_add", $data);
+    }
+    public function add_rank_submit()
+    {
+        $insert['rank_name'] = Request::input('rank_name');
+        $insert['rank_shop_id'] = $this->user_info->shop_id;
+        $insert['required_slot'] = Request::input('required_slot');
+        $insert['required_uptolevel'] = Request::input('required_uptolevel');
+        $insert['builder_reward_percentage'] = Request::input('builder_reward_percentage');
+        $insert['builder_uptolevel'] = Request::input('builder_uptolevel');
+        $insert['leader_override_build_reward'] = Request::input('leader_override_build_reward');
+        $insert['leader_override_build_uptolevel'] = Request::input('leader_override_build_uptolevel');
+        $insert['leader_override_direct_reward'] = Request::input('leader_override_direct_reward');
+        $insert['leader_override_direct_uptolevel'] = Request::input('leader_override_direct_uptolevel');
+        $insert['rank_created'] = Carbon::now();
+
+        if($insert['rank_name'])
+        {
+            Tbl_brown::insert($insert);
+            $return['status'] = 'success';
+            $return['call_function'] = 'success_created_rank'; 
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['message'] = 'Rank name is required.';
+        }   
+        return json_encode($return);
+    }
+    public function update_rank_submit()
+    {
+        $update['rank_name'] = Request::input('rank_name');
+        $update['required_slot'] = Request::input('required_slot');
+        $update['required_uptolevel'] = Request::input('required_uptolevel');
+        $update['builder_reward_percentage'] = Request::input('builder_reward_percentage');
+        $update['builder_uptolevel'] = Request::input('builder_uptolevel');
+        $update['leader_override_build_reward'] = Request::input('leader_override_build_reward');
+        $update['leader_override_build_uptolevel'] = Request::input('leader_override_build_uptolevel');
+        $update['leader_override_direct_reward'] = Request::input('leader_override_direct_reward');
+        $update['leader_override_direct_uptolevel'] = Request::input('leader_override_direct_uptolevel');
+
+        if($update['rank_name'])
+        {
+            Tbl_brown::where('rank_id',Request::input('rank_id'))->update($update);
+            $return['status'] = 'success';
+            $return['call_function'] = 'success_created_rank';
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['message'] = 'Rank name is required.';
+        }   
+        return json_encode($return);
     }
 }

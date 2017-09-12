@@ -77,7 +77,6 @@ Route::any('/member/mlm/plan/binary/settings/submit', 'Member\MLM_PlanController
 Route::any('/member/mlm/plan/wallet/type/view', 'Member\MLM_PlanController@wallet_type');//Luke
 Route::any('/member/mlm/plan/wallet/type/add', 'Member\MLM_PlanController@add_wallet_type');//Luke
 
-
 /* start binary PLAN */
 Route::any('/member/mlm/plan/binary/edit/membership/points', 'Member\MLM_PlanController@edit_binary_membership_points');//Luke
 Route::any('/member/mlm/plan/binary/get/membership/pairing/{membership_id}', 'Member\MLM_PlanController@get_binary_pairing_combination'); //Luke
@@ -166,7 +165,10 @@ Route::any('/member/mlm/plan/binary_promotions/edit', 'Member\MLM_PlanController
 
 /* start triangle repurchase */
 Route::any('/member/mlm/plan/brown_rank', 'Member\MLM_PlanController@brown_rank'); 
+Route::any('/member/mlm/plan/brown_rank/table', 'Member\MLM_PlanController@brown_rank_table'); 
 Route::any('/member/mlm/plan/brown_rank/add_rank', 'Member\MLM_PlanController@brown_rank_add');
+Route::any('/member/mlm/plan/brown_rank/add_rank_submit', 'Member\MLM_PlanController@add_rank_submit');
+Route::any('/member/mlm/plan/brown_rank/update_rank_submit', 'Member\MLM_PlanController@update_rank_submit');
 /* end triangle repurchase  Plan */
 
 

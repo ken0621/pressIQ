@@ -35,8 +35,13 @@
             <div class="container">
                 <a class="holder">GET THE APP</a>
                 <a class="holder">COMPANY</a>
-                <a class="holder" href="/members">JOIN THE MOVEMENT</a>
-                <a class="holder" href="/members">LOGIN</a>
+                @if($customer)
+                    <a class="holder" href="/members" style="text-transform: uppercase;"><b>Welcome! {{ $customer->first_name }} {{ $customer->last_name }}</b></a>
+                    <a class="holder" href="/members/logout">LOGOUT</a>
+                @else
+                    <a class="holder" href="/members/register">JOIN THE MOVEMENT</a>
+                    <a class="holder" href="/members/login">LOGIN</a>
+                @endif
             </div>
         </div>
         <div class="header-middle clearfix">

@@ -6,22 +6,50 @@ use Crypt;
 use Redirect;
 use View;
 use App\Globals\Payment;
+use App\Globals\Customer;
 use App\Rules\Uniqueonshop;
 
 class ShopMemberController extends Shop
 {
-    public function getIndex()
+    /* LOGIN AND REGISTRATION - START */
+    public function getLogin()
     {
-        $data["page"] = "Dashboard";
-        return view("member.dashboard", $data);
+        Self::guest_only();
+        $data["page"] = "Login";
+        return view("member.login", $data);
+    }
+    public function postLogin(Request $request)
+    {
+        Self::guest_only();
+
+        $validate["email"]      = ["required","email"];
+        $validate["password"]   = ["required"];
+        $data                   = $this->validate(request(), $validate);
+
+        $store["email"]         = $data["email"];
+        $store["auth"]          = $data["password"];
+        $sess["mlm_member"]     = $store;
+
+        session($sess);
+
+        return Redirect::to("/members")->send();
+    }
+    public function getLogout()
+    {
+        session()->forget("mlm_member");
+        return Redirect::to("/members/login");
     }
     public function getRegister()
     {
-    	$data["page"] = "Register";
-    	return view("member.register", $data);
+        Self::guest_only();
+
+        $data["page"] = "Register";
+        return view("member.register", $data);
     }
     public function postRegister(Request $request)
     {
+        Self::guest_only();
+
         $shop_id                                = $this->shop_info->shop_id;
         $validate["first_name"]                 = ["required", "string", "min:2"];
         $validate["middle_name"]                = "";
@@ -36,6 +64,7 @@ class ShopMemberController extends Shop
         $validate["password_confirmation "]     = [];
 
         $insert                                 = $this->validate(request(), $validate);
+        $raw_password                           = $insert["password"];
         $insert["birthday"]                     = $insert["b_month"] . "/" . $insert["b_day"] . "/" . $insert["b_year"];
         $insert["password"]                     = Crypt::encrypt($insert["password"]);
 
@@ -43,14 +72,24 @@ class ShopMemberController extends Shop
         unset($insert["b_year"]);
         unset($insert["b_day"]);
 
-        //Customer::register($this->shop_info->shop_id, $insert);
+        if(Customer::register($this->shop_info->shop_id, $insert))
+        {
+            $store["email"] = $insert["email"];
+            $store["auth"] = $insert["password"];
+        }
 
+        return Redirect::to("/members")->send();
     }
-    public function getLogin()
+
+    /* LOGIN AND REGISTRATION - END */
+    public function getIndex()
     {
-    	$data["page"] = "Login";
-    	return view("member.login", $data);
+        Self::logged_in_member_only();
+
+        $data["page"] = "Dashboard";
+        return view("member.dashboard", $data);
     }
+
     public function getTest()
     {
         $shop_id    = $this->shop_info->shop_id; //tbl_shop

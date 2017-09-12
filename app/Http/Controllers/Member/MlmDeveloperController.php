@@ -103,7 +103,7 @@ class MlmDeveloperController extends Member
     }
     public function popup_genealogy()
     {
-        $data['slot_id'] = Tbl_mlm_slot::where('slot_no', Request::input('slot_no'))->value('slot_id');
+        $data['slot_id'] = Tbl_mlm_slot::where('shop_id',$this->user_info->shop_id)->where('slot_no', Request::input('slot_no'))->value('slot_id');
         $data['mode'] = Request::input('mode');
         return view('member.mlm_developer.modal_genealogy',$data);
     }

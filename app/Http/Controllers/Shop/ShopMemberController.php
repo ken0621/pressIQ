@@ -87,6 +87,27 @@ class ShopMemberController extends Shop
         $data["page"] = "Dashboard";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.dashboard", $data));
     }
+    public function getProfile()
+    {
+        $data["page"] = "Profile";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.profile", $data));
+    }
+    public function getNotification()
+    {
+        $data["page"] = "Notification";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.notification", $data));
+    }
+    public function getGenealogy()
+    {
+        $data["page"] = "Genealogy";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.genealogy", $data));
+    }
+    public function getReport()
+    {
+        $data["page"] = "Report";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.report", $data));
+    }
+
 
     public function getNonMember()
     {

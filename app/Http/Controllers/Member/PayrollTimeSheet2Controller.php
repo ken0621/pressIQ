@@ -104,7 +104,7 @@ class PayrollTimeSheet2Controller extends Member
 		$data["access_salary_rates"]	= $access = Utilities::checkAccess('payroll-timekeeping','salary_rates');
 		$check_approved 				= Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_id)->first();
 		$data["time_keeping_approved"] 	= $check_approved ? true : false;
-		
+
 		$employee_contract = $this->db_get_current_employee_contract($employee_id, $data["company_period"]->payroll_period_start);
 
 		$data["compute_type"] = $employee_contract->payroll_group_salary_computation;
@@ -202,6 +202,7 @@ class PayrollTimeSheet2Controller extends Member
 			{
 				$time_out = Request::input("time-out")[$key];
 				$remarks = Request::input("remarks")[$key];
+				dd($remarks);
 				if($time_in != "" || $time_out != "")
 				{
 					$insert[$key]["payroll_time_sheet_id"] = $timesheet_db->payroll_time_sheet_id;
@@ -227,6 +228,7 @@ class PayrollTimeSheet2Controller extends Member
 		
 		$return["income"] = $daily_income;
 		$return["string_income"] = $data["daily_info"]->value_html;
+		
 		echo json_encode($return);
 	}
 

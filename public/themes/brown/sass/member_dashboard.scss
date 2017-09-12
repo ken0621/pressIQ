@@ -188,9 +188,9 @@
 	{
 		.holder
 		{
-			margin-bottom: 25px;
+			padding-bottom: 25px;
 			position: relative;
-			padding-left: 15px;
+			padding-left: 30px;
 			.message
 			{
 				color: #344049;
@@ -224,12 +224,24 @@
 				.line
 				{
 					position: absolute;
-					top: 0;
-					height: 100%;
+					top: 15px;
+					height: calc(100% - 10px);
 					left: 5.5px;
+					width: 4px;
 					img
 					{
 						height: 100%;
+						width: 4px;
+					}
+				}
+			}
+			&:last-child
+			{
+				.circle-line
+				{
+					.line
+					{
+						display: none;
 					}
 				}
 			}

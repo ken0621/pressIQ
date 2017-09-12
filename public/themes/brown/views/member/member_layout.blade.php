@@ -28,22 +28,19 @@
 				<div class="side-nav">
 					<ul>
 						<li class="{{ Request::segment(2) == "" ? "active" : "" }}">
-							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/dashboard.png"></div> <span>Dashboard</span></a>
+							<a href="/members"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/dashboard.png"></div> <span>Dashboard</span></a>
 						</li>
 						<li class="{{ Request::segment(2) == "profile" ? "active" : "" }}">
-							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/profile.png"></div> <span>Profile</span></a>
+							<a href="/members/profile"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/profile.png"></div> <span>Profile</span></a>
 						</li>
 						<li class="{{ Request::segment(2) == "notification" ? "active" : "" }}">
-							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/notif.png"></div> <span>Notification</span></a>
-						</li>
-						<li class="{{ Request::segment(2) == "repurchase" ? "active" : "" }}">
-							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/repurchase.png"></div> <span>Repurchase</span></a>
+							<a href="/members/notification"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/notif.png"></div> <span>Notification</span></a>
 						</li>
 						<li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}">
-							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/genealogy.png"></div> <span>Genealogy</span></a>
+							<a href="/members/genealogy"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/genealogy.png"></div> <span>Genealogy</span></a>
 						</li>
 						<li class="{{ Request::segment(2) == "report" ? "active" : "" }}">
-							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/report.png"></div> <span>Reports</span></a>
+							<a href="/members/report"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/report.png"></div> <span>Reports</span></a>
 						</li>
 						<li class="{{ Request::segment(2) == "wallet" ? "active" : "" }}">
 							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/wallet.png"></div> <span>Wallet</span></a>

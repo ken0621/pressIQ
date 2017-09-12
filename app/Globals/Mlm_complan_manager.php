@@ -25,6 +25,7 @@ use App\Models\Tbl_mlm_indirect_points_settings;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_mlm_discount_card_settings;
 use App\Models\Tbl_mlm_binary_report;
+use App\Models\Tbl_brown_rank;
 use App\Globals\Mlm_gc;
 use App\Models\Tbl_mlm_gc;
 use App\Models\Tbl_mlm_binary_pairing_log;
@@ -44,7 +45,33 @@ use App\Globals\Membership_code;
 use App\Globals\Binary_pairing;
 class Mlm_complan_manager
 {   
+    public static function brown_rank($slot_info)
+    {
+        /* SET TO LOWEST RANK */
+        $shop_id                    =  $slot_info->shop_id;
+        $lowest_rank                = Tbl_brown_rank::where("rank_shop_id", $shop_id)->min("rank_id");
+        $update["brown_rank_id"]    = $lowest_rank;
+        Tbl_mlm_slot::where("slot_id", $slot_info->slot_id)->update($update);
 
+        $_sponsor_tree = Tbl_tree_sponsor::orderby("sponsor_tree_level", "asc")->child($slot_info->slot_id)->parent_info()->get();
+
+        foreach($_sponsor_tree as $sponsor_tree)
+        {
+            $brown_next_rank = Tbl_brown_rank::where("rank_id",">", $sponsor_tree->brown_rank_id)->orderBy("rank_id")->first();
+            //TODO: LEVEL LIMIT IMPLEMENTATION
+            if($brown_next_rank)
+            {
+                $brown_rank_required_slots = $brown_next_rank->required_slot;
+                $brown_count_required = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $sponsor_tree->slot_id)->where("sponsor_tree_level", "<=", $brown_next_rank->required_uptolevel)->count();
+            
+                if($brown_count_required >= $brown_rank_required_slots)
+                {
+                    $update_brown_rank["brown_rank_id"] = $brown_next_rank->rank_id;
+                    Tbl_mlm_slot::where("slot_id", $sponsor_tree->slot_id)->update($update_brown_rank);
+                }
+            }
+        }
+    }
     // DIRECT
 	public static function direct($slot_info)
 	{
@@ -54,7 +81,6 @@ class Mlm_complan_manager
         {
             if($slot_info->membership_points_direct != null || $slot_info->membership_points_direct != 0)
             {
-
                 /* DIRECT INCOME LIMIT */
                 $check_points = Tbl_membership_points::where("membership_id",$slot_sponsor->slot_membership)->first();
                 if($check_points)

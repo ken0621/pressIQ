@@ -16,6 +16,7 @@ use App\Globals\Currency;
 use App\Globals\Mlm_compute;
 use App\Globals\Reward;
 use App\Models\Tbl_mlm_item_points;
+use App\Models\Tbl_brown_rank;
 use DB;
 use Redirect;
 use Request;
@@ -45,11 +46,44 @@ class MlmDeveloperController extends Member
         	$data["_slot"][$key] = $slot;
             $data["_slot"][$key]->sponsor = Tbl_mlm_slot::customer()->where("slot_id", $slot->slot_sponsor)->first();
             $data["_slot"][$key]->placement = Tbl_mlm_slot::customer()->where("slot_id", $slot->slot_placement)->first();
-        	$data["_slot"][$key]->current_wallet_format = "<a href='javascript:'>" . Currency::format($data["_slot"][$key]->current_wallet) . "</a>";
-        	$data["_slot"][$key]->total_earnings_format = "<a href='javascript:'>" . Currency::format($data["_slot"][$key]->total_earnings) . "</a>";
+        	$data["_slot"][$key]->current_wallet_format = "<a href='javascript:' link='/member/mlm/developer/popup_earnings?slot_id=" . $slot->slot_id . "' class='popup' size='lg'>" . Currency::format($data["_slot"][$key]->current_wallet) . "</a>";
+        	$data["_slot"][$key]->total_earnings_format = "<a href='javascript:' link='/member/mlm/developer/popup_earnings?slot_id=" . $slot->slot_id . "' class='popup' size='lg'>" . Currency::format($data["_slot"][$key]->total_earnings) . "</a>";
         	$data["_slot"][$key]->total_payout_format = "<a href='javascript:'>" . Currency::format($data["_slot"][$key]->total_payout * -1) . "</a>";
             $data["_slot"][$key]->total_gc_format = Currency::format(0);
+            
+            /* BROWN RANK DETAILS */
+            $brown_current_rank = Tbl_brown_rank::where("rank_id", $slot->brown_rank_id)->first();
 
+            if($brown_current_rank)
+            {
+                $data["_slot"][$key]->brown_current_rank = strtoupper($brown_current_rank->rank_name);
+            }
+            else
+            {
+                $data["_slot"][$key]->brown_current_rank = strtoupper("NO RANK");
+            }
+            
+            if($slot->brown_rank_id)
+            {
+                $brown_next_rank = Tbl_brown_rank::where("rank_id",">", $slot->brown_rank_id)->orderBy("rank_id")->first();
+                $data["_slot"][$key]->brown_next_rank = strtoupper($brown_next_rank->rank_name);
+                $brown_rank_required_slots = $brown_next_rank->required_slot;
+                $brown_count_required = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot->slot_id)->where("sponsor_tree_level", "<=", $brown_next_rank->required_uptolevel)->count();
+                $data["_slot"][$key]->brown_next_rank_requirements = "<b><a href='javascript:'>" . $brown_count_required . " SLOT(S)</a></b> OUT OF <b>" . $brown_rank_required_slots . " (LIMIT " . strtoupper(ordinal($brown_next_rank->required_uptolevel)) .  " LEVEL)</b>";
+
+            }
+            else
+            {
+                $data["_slot"][$key]->brown_next_rank = strtoupper("NO NEXT RANK");
+                $brown_rank_required_slots = "NO NEXT RANK";
+                $brown_count_required = "NO NEXT RANK";
+                $data["_slot"][$key]->brown_next_rank_requirements = "NO NEXT RANK";
+
+            }
+  
+
+
+            /* SPONSOR BUTTON */
             if(!$data["_slot"][$key]->sponsor)
             {
                 $data["_slot"][$key]->sponsor_button = "";
@@ -59,6 +93,7 @@ class MlmDeveloperController extends Member
                 $data["_slot"][$key]->sponsor_button = "<a link='/member/mlm/developer/popup_genealogy?mode=sponsor&slot_no=".$slot->sponsor->slot_no."' class='popup' size='lg'> SLOT NO. " . $slot->sponsor->slot_no . "</a>";
             }
 
+            /* PLACEMENT BUTTON */
             if(!$data["_slot"][$key]->placement)
             {
                 $data["_slot"][$key]->placement_button = "";
@@ -106,6 +141,38 @@ class MlmDeveloperController extends Member
         $data['slot_id'] = Tbl_mlm_slot::where('shop_id',$this->user_info->shop_id)->where('slot_no', Request::input('slot_no'))->value('slot_id');
         $data['mode'] = Request::input('mode');
         return view('member.mlm_developer.modal_genealogy',$data);
+    }
+    public function popup_earnings()
+    {
+        $data["page"] = "popup_earnings";
+        $_wallet = Tbl_mlm_slot_wallet_log::where("wallet_log_slot", Request::input("slot_id"))->get();
+        
+        if(count($_wallet) > 0)
+        {
+            $data["log_total"] = 0;
+            foreach($_wallet as $key => $wallet)
+            {
+                $data["_wallet"][$key] = $wallet;
+                $data["_wallet"][$key]->display_amount = Currency::format($wallet->wallet_log_amount);
+                $data["_wallet"][$key]->display_date = date("F d, Y - h:i A ", strtotime($wallet->wallet_log_date_created)); //October 24, 1991 (10:30 AM)
+                $data["log_total"] += $wallet->wallet_log_amount;
+                $data["_wallet"][$key]->running_balance = Currency::format($data["log_total"]);
+            }
+
+            $data["log_total"] = Currency::format($data["log_total"]);
+
+            return view("member.mlm_developer.popup_earnings", $data);
+        }
+        else
+        {
+            $data["title"] = "NO EARNINGS";
+            $data["message"] = "This slot doesn't have any earnings yet.";
+            return view("error_modal", $data);
+        }
+
+
+
+        
     }
     public function create_slot_submit()
     {
@@ -197,6 +264,7 @@ class MlmDeveloperController extends Member
     }
     public static function create_slot_submit_create_slot($customer_id, $membership_code_id, $slot_sponsor, $slot_placement, $slot_position, $shop_id, $slot_no = null)
     {
+        $lowest_rank                            = Tbl_brown_rank::where("rank_shop_id", $shop_id)->min("rank_id");
         $request_check['slot_no']               = $slot_no;
         $request_check['shop_id']               = $shop_id; //required
         $request_check['slot_owner']            = $customer_id; //required
@@ -204,6 +272,11 @@ class MlmDeveloperController extends Member
         $request_check['slot_sponsor']          = $slot_sponsor; // required
         $request_check['slot_placement']        = $slot_placement; // optional defends on settings
         $request_check['slot_position']         = $slot_position; // optional defends on settings
+
+        if($lowest_rank)
+        {
+            $request_check['brown_rank_id']         = $lowest_rank; // optional defends on settings
+        }
 
         $return = Reward::create_slot($request_check);
         $slot_id = null;

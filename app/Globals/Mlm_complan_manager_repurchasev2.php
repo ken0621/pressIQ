@@ -27,7 +27,7 @@ use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_mlm_triangle_repurchase_tree;
 use App\Models\Tbl_stairstep_points_log;
 use App\Models\Tbl_rank_points_log;
-
+use App\Models\Tbl_brown_rank;
 use App\Http\Controllers\Member\MLM_MembershipController;
 use App\Http\Controllers\Member\MLM_ProductController;
 
@@ -48,6 +48,44 @@ use App\Globals\Membership_code;
 
 class Mlm_complan_manager_repurchasev2
 {   
+    public static function brown_repurchase($slot_info, $product_price)
+    {
+        $_sponsor_tree = Tbl_tree_sponsor::orderby("sponsor_tree_level", "asc")->child($slot_info->slot_id)->parent_info()->get();
+
+        foreach($_sponsor_tree as $sponsor_tree)
+        {
+            /* BUILDER REWARD UP TO SPECIFIC LEVEL */
+            Self::builder_reward($sponsor_tree, $slot_info , $product_price);
+        }
+    }
+    public static function builder_reward($slot_info, $trigger_info, $product_price)
+    {
+        $slot_id = $slot_info->slot_id;
+        $current_sponsor_level = $slot_info->sponsor_tree_level;
+        $current_rank_id = $slot_info->brown_rank_id;
+        $brown_current_rank = Tbl_brown_rank::where("rank_id", $current_rank_id)->first();
+
+        $builder_up_to_level = $brown_current_rank->builder_uptolevel;
+        $builder_percentage = $brown_current_rank->builder_reward_percentage / 100;
+
+        if($current_sponsor_level <= $builder_up_to_level)
+        {
+            $compute_points = $product_price * $builder_percentage;
+
+            if($compute_points != 0)
+            {
+                $insert_points["points_log_complan"] = "BROWN_BUILDER_POINTS";
+                $insert_points["points_log_level"] = $current_sponsor_level;
+                $insert_points["points_log_slot"] = $slot_info->slot_id;
+                $insert_points["points_log_date_claimed"] = Carbon::now();
+                $insert_points["points_log_type"] = "BBP";
+                $insert_points["points_log_from"] = "Product Repurchase";
+                $insert_points["points_log_points"] = $compute_points;
+                $insert_points["cause_id"] = $trigger_info->slot_id;
+                Tbl_mlm_slot_points_log::insert($insert_points);
+            }
+        }
+    }
     public static function unilevel($slot_info, $points)
     {
         $unilevel_pts = $points;

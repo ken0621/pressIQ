@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Member;
 use App\Http\Controllers\Controller;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_mlm_slot_wallet_log;
+use App\Models\Tbl_mlm_slot_points_log;
 use App\Models\Tbl_membership;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_customer_address;
@@ -78,10 +79,10 @@ class MlmDeveloperController extends Member
                 $brown_rank_required_slots = "NO NEXT RANK";
                 $brown_count_required = "NO NEXT RANK";
                 $data["_slot"][$key]->brown_next_rank_requirements = "NO NEXT RANK";
-
             }
   
-
+            $builder_points = Tbl_mlm_slot_points_log::where("points_log_complan", "BROWN_BUILDER_POINTS")->where("points_log_slot", $slot->slot_id)->sum("points_log_points");
+            $data["_slot"][$key]->brown_builder_points = "<a href='javascript:'>" . $builder_points . " POINT(S)</a>";
 
             /* SPONSOR BUTTON */
             if(!$data["_slot"][$key]->sponsor)
@@ -417,7 +418,7 @@ class MlmDeveloperController extends Member
         {
             $slot_id = $slot_info->slot_id;
         }
-
+        
         Mlm_compute::repurchasev2($slot_id,$shop_id,$_send);
         return json_encode($return);
     }

@@ -63,7 +63,7 @@ class Mlm_complan_manager
             {
                 $brown_rank_required_slots = $brown_next_rank->required_slot;
                 $brown_count_required = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $sponsor_tree->slot_id)->where("sponsor_tree_level", "<=", $brown_next_rank->required_uptolevel)->count();
-            
+                
                 if($brown_count_required >= $brown_rank_required_slots)
                 {
                     $update_brown_rank["brown_rank_id"] = $brown_next_rank->rank_id;

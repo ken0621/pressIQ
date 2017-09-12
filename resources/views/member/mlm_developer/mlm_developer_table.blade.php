@@ -11,6 +11,7 @@
             <th colkey="brown_current_rank" default="hide" class="text-center">BROWN CURRENT RANK</th>
             <th colkey="brown_next_rank" default="hide" class="text-center">BROWN NEXT RANK</th>
             <th colkey="brown_next_rank_requirements" default="hide" class="text-center">BROWN NEXT RANK REQ</th>
+            <th colkey="brown_builder_points" default="hide" class="text-center">BROWN BUILDER POINTS</th>
             <th colkey="date_created" class="text-center">DATE<br>CREATED</th>
             <th colkey="time_created" class="text-center">TIME<br>CREATED</th>
             <th colkey="earnings" class="text-right">EARNINGS</th>
@@ -34,11 +35,11 @@
                 <td colkey="membership" class="text-center">{!! $slot->membership_name !!}</a></td>
                 <td colkey="binary_left" class="text-center">{!! number_format($slot->slot_binary_left, 2) !!}</a></td>
                 <td colkey="binary_right" class="text-center">{!! number_format($slot->slot_binary_right, 2) !!}</a></td>
-
                 <td colkey="brown_current_rank" class="text-center">{!! $slot->brown_current_rank !!}</a></td>
                 <td colkey="brown_next_rank" class="text-center">{!! $slot->brown_next_rank !!}</a></td>
                 <td colkey="brown_next_rank_requirements" class="text-center">{!! $slot->brown_next_rank_requirements !!}</a></td>
 
+                <td colkey="brown_builder_points" class="text-center">{!! $slot->brown_builder_points !!}</a></td>
 
                 <td colkey="date_created" class="text-center">{{ date("F d, Y", strtotime($slot->slot_created_date)) }}</td>
                 <td colkey="time_created" class="text-center">{{ date("h:i A", strtotime($slot->slot_created_date)) }}</td>
@@ -62,7 +63,7 @@
             <td colkey="brown_current_rank" class="text-center"></a></td>
             <td colkey="brown_next_rank" class="text-center"></a></td>
             <td colkey="brown_next_rank_requirements" class="text-center"></a></td>
-
+            <td colkey="brown_builder_points" class="text-center"></a></td>
             <td colkey="date_created" class="text-center"></td>
             <td colkey="time_created" class="text-center"></td>
             <td colkey="earnings" class="text-right text-bold"><a href="javascript:">{{ $total_slot_earnings }}</a></td>

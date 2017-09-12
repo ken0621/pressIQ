@@ -56,7 +56,9 @@ class Tbl_payroll_time_sheet extends Model
 	}
 	public function scopeget_timesheet($query)
 	{
-		return $query->leftjoin('tbl_payroll_time_sheet_record','tbl_payroll_time_sheet.payroll_time_sheet_id','=','tbl_payroll_time_sheet_record.payroll_time_sheet_id')->leftjoin('tbl_payroll_time_sheet_record_approved','tbl_payroll_time_sheet.payroll_time_sheet_id','=','tbl_payroll_time_sheet_record_approved.payroll_time_sheet_id')->leftjoin('tbl_payroll_company','tbl_payroll_time_sheet_record.payroll_company_id',"=","tbl_payroll_company.payroll_company_id");
+		return $query->leftjoin('tbl_payroll_time_sheet_record','tbl_payroll_time_sheet.payroll_time_sheet_id','=','tbl_payroll_time_sheet_record.payroll_time_sheet_id')
+		->leftjoin('tbl_payroll_time_sheet_record_approved','tbl_payroll_time_sheet.payroll_time_sheet_id','=','tbl_payroll_time_sheet_record_approved.payroll_time_sheet_id')
+		->leftjoin('tbl_payroll_company','tbl_payroll_time_sheet_record.payroll_company_id',"=","tbl_payroll_company.payroll_company_id");
 	}
 
 }

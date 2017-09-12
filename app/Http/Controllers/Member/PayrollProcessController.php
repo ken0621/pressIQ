@@ -342,8 +342,10 @@ class PayrollProcessController extends Member
 		// dd($input);
 		foreach($input as $key => $timesheet)
 		{
+
 			if($timesheet->_time != null)
-			{
+			{	
+
 				$count_time  = count($timesheet->_time);
 				$data["_timesheet"][$ctr]["covered_date"] = date('M d, Y', strtotime($key));
 				$data["_timesheet"][$ctr]["converted_time_in"]  = date('h:i:s A', strtotime($timesheet->_time[0]->time_in));
@@ -354,7 +356,7 @@ class PayrollProcessController extends Member
 			}
 		}	
 
-		$data["days_worked"]	= $days_worked;
+		$data["days_worked"] = $days_worked;
 
 		// dd($input);
 
@@ -367,7 +369,7 @@ class PayrollProcessController extends Member
 
 		$data["employee"]   	= Tbl_payroll_employee_basic::where("payroll_employee_id",$employee_id)->first();
 
-		$period = Tbl_payroll_period::where('payroll_period_id',$data["period_company"]->payroll_period_id)->first();
+		$period 				= Tbl_payroll_period::where('payroll_period_id',$data["period_company"]->payroll_period_id)->first();
 
 		
 		$data['_timesheet'] = [];
@@ -381,13 +383,15 @@ class PayrollProcessController extends Member
 		$total_late = 0;
 		$total_undertime = 0;
 		$total_overtime = 0;
+
+
 		if($period)
 		{
 			$date_start = $period->payroll_period_start;
 			$date_end = $period->payroll_period_end;
 
 			$get_timesheet = Tbl_payroll_time_sheet::get_timesheet()->selectRaw('*, tbl_payroll_time_sheet_record.payroll_time_sheet_in as actual_in, tbl_payroll_time_sheet_record.payroll_time_sheet_out as actual_out, tbl_payroll_time_sheet_record_approved.payroll_time_sheet_in as approved_in, tbl_payroll_time_sheet_record_approved.payroll_time_sheet_out as approved_out ')->whereBetween('payroll_time_date', array($date_start, $date_end))->where('payroll_employee_id',$employee_id)->groupBy('payroll_time_date')->get();
-
+			
 			foreach ($get_timesheet as $key => $value) 
 			{
 
@@ -401,6 +405,7 @@ class PayrollProcessController extends Member
 					$data['_timesheet'][$key]["approved_in"] = date('h:i:s A', strtotime($value->approved_in));
 					$data['_timesheet'][$key]["approved_out"] = date('h:i:s A', strtotime($value->approved_out));
 				}
+				
 				else
 				{		
 					$days_absent++;
@@ -409,13 +414,16 @@ class PayrollProcessController extends Member
 					$data['_timesheet'][$key]["approved_in"] = 'NO TIME';
 					$data['_timesheet'][$key]["approved_out"] = 'NO TIME';
 				}
+
 				$time_serialize = unserialize($value->payroll_time_serialize);
+
 				if($time_serialize)
 				{
 					$total_late += $time_serialize->late;
 					$total_undertime += $time_serialize->undertime;
 					$total_overtime += $time_serialize->overtime;
 				}
+
 				$data['_timesheet'][$key]["remarks"] = $value->payroll_time_shee_activity;
 				$data['_timesheet'][$key]["branch"] = $value->payroll_company_name;
 

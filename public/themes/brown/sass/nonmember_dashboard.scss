@@ -39,12 +39,12 @@ $bold: 700;
 
     	.btn-container
     	{
-
 			padding: 63px 0px 0px 0px;
 			text-align: center;
 			font-family: $open-sans;
 			font-weight: $semi-bold;
 			font-size: 14px;
+			display: inline-block;
 
 			.join-us-today
 			{
@@ -145,16 +145,29 @@ $bold: 700;
 	}
 }
 
-.popup-enter-a-code
+.popup-buy-a-kit
 {
-	width: 335px;
 	font-family: $open-sans;
+	
+	.modal-lg
+	{
+		//width: 587px;
+		width: 50%;
+	}
 
 	.modal-content
 	{
+
+		//width: 335px;
+
 		.modal-header
 		{
 			background-color: #693d28;
+			
+			.close
+			{
+				color: #FFF;
+			}
 
 			.modal-title
 			{
@@ -165,11 +178,127 @@ $bold: 700;
 
 		.modal-body
 		{
-			input
+
+			h4
 			{
-				border: none;
-				border-bottom: 2px solid #d3d8db;
+				font-weight: $semi-bold;
+				text-align: center;
+				margin-bottom: 20px;
+			}
+			
+			.img-container
+			{
+
+				img
+				{
+					width: 100%;
+					height: auto;
+				}
+
+				border: 1px solid #c7c7c7;
+				padding: 10px;
+			}
+
+			.details
+			{
+				.text-header
+				{
+					font-weight: $semi-bold;
+					font-style: $open-sans;
+					font-size: 14px;
+					padding-bottom: 20px;
+				}
+
+				.specs
+				{
+					padding-bottom: 20px;
+					color: #60686f;
+				}
+			}
+
+	    	.btn-container
+	    	{
+				font-family: $open-sans;
+				font-weight: $semi-bold;
+				font-size: 14px;
+				padding-bottom: 20px;
+
+				.proceed-to-payment
+				{
+					color: #fff;
+					background-color: #693d28;
+					padding: 12px 30px 12px 30px;
+					border: 2px solid #693d28;
+					border-radius: 2px;
+				}
 			}
 		}
 	}
 }
+
+.popup-enter-a-code
+{
+	font-family: $open-sans;
+	
+
+	.modal-sm
+	{  
+		//width: 335px !important;
+		width: 25%;
+	}
+
+	.modal-content
+	{
+
+		//width: 335px;
+
+		.modal-header
+		{
+			background-color: #693d28;
+			
+			.close
+			{
+				color: #FFF;
+			}
+
+			.modal-title
+			{
+				font-weight: $semi-bold;
+				color: #FFF;
+			}
+		}
+
+		.modal-body
+		{
+
+			font-weight: $semi-bold;
+
+			input
+			{
+				width: 100%;
+				border: none;
+				border-bottom: 2px solid #d3d8db;
+				margin: 30px 0px 50px 0px;
+			}
+
+	    	.btn-container
+	    	{
+				text-align: center;
+				font-family: $open-sans;
+				font-weight: $semi-bold;
+				font-size: 14px;
+				padding-bottom: 20px;
+
+				.verify
+				{
+					color: #fff;
+					background-color: #693d28;
+					padding: 12px 40px 12px 40px;
+					border: 2px solid #693d28;
+					border-radius: 2px;
+				}
+			}
+		}
+	}
+}
+

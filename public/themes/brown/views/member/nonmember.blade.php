@@ -16,9 +16,9 @@
           <div class="text-header1">Become a Member</div>
           <div class="text-header2">Enroll now and become one of us!</div>
           <div class="btn-container">
-            <a href="#" class="sample"><button class="join-us-today">Join us Today</button></a>
+            <a href="#" id="join-us-today"><button class="join-us-today">Join Us Today</button></a>
             <img src="/themes/{{ $shop_theme }}/img/or.png">
-            <button class="enter-a-code">Enter a Code</button>
+            <a href="#" id="enter-a-code"><button class="enter-a-code">Enter a Code</button></a>
           </div>
         </div>
       </div>
@@ -92,24 +92,71 @@
         </div>
   </div>
 
-  <div class="popup-enter-a-code">
-      <!-- Button HTML (to Trigger Modal) -->
+  <div class="popup-buy-a-kit">
+      <div id="myModal1" class="modal fade">
+          <div class="modal-lg modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                      <h4 class="modal-title"><img src="/themes/{{ $shop_theme }}/img/cart.png"> Cart</h4>
+                  </div>
+                  <div class="modal-body">
+                      <h4>Item has successfully added to your Cart!</h4>
 
-      <!-- Modal HTML -->
-      <div id="myModal" class="modal fade">
-          <div class="modal-dialog">
+                      <div class="row clearfix">
+                        <div class="col-md-6">
+                          <div class="img-container">
+                            <img width="261" height="264" src="/themes/{{ $shop_theme }}/img/brown-img-mobile.png">
+                          </div>
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="details">
+                              <div class="text-header">Phone Details</div>
+                              <div class="specs">
+                                MT6737 64-bit Quad-Core Processor<br>
+                                4.7" HD IPS Display<br>
+                                16GB ROM | 2 GB RAM<br>
+                                expandable up to 64gb microSD slot<br>
+                                13MP Auto-Focus Main Camera W/ 5MP Front Camera<br>
+                                4G LTE<br>
+                                Fingerprint Scanner<br>
+                                USB OTG<br>
+                                IR BLASTER<br>
+                                1800mAh Battery
+                              </div>
+                          </div>
+                          
+
+                          <div class="btn-container">
+                            <button class="proceed-to-payment">Proceed to payment</button>
+                          </div>
+                        </div>
+                      </div>
+
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="popup-enter-a-code">
+      <div id="myModal2" class="modal fade">
+          <div class="modal-sm modal-dialog">
               <div class="modal-content">
                   <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                       <h4 class="modal-title">Sponsor</h4>
                   </div>
                   <div class="modal-body">
-                      <input type="text">
+                      <input type="text" placeholder="Enter Your Sponsor">
+                      <div class="btn-container">
+                        <button class="verify">Verify</button>
+                      </div>
                   </div>
               </div>
           </div>
       </div>
-
   </div>
 
 </div>
@@ -173,8 +220,14 @@ var myDoughnutChart = new Chart(ctx, {
 
 <script type="text/javascript">
   $(document).ready(function(){
-    $(".sample").click(function(){
-      $("#myModal").modal('show');
+    $("#join-us-today").click(function(){
+      $("#myModal1").modal('show');
+    });
+  });
+
+  $(document).ready(function(){
+    $("#enter-a-code").click(function(){
+      $("#myModal2").modal('show');
     });
   });
 </script>

@@ -1,11 +1,12 @@
+
 <div class="modal-body clearfix">
         <div class="filter-result table-responsive ">
-            <table class="table table-bordered table-condensed">
+            <table class="table table-bordered table-condensed" style=" background-color:0066CC;">
                 <thead>
                     <tr>
                         <th class="text-center" colspan="10"></th>
                     </tr>
-                    <tr>
+                    <tr style=" background-color:0066CC;">
                         <th class="text-center">#</th>
                         <th class="text-center">PAG-IBIG NO.</th>
                         <th class="text-center">LAST NAME</th>

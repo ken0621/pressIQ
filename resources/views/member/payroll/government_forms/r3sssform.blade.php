@@ -2651,6 +2651,196 @@
 							<p class="r3-title">Amount Paid</p>
 						</div>
 					</div>
+					<div class="pull-left r3-additioncheckbox-partone-container">
+						<div class="r3-input-holder">
+							<div class="r3-box">
+								<p class="x-mark">X</p>
+							</div>
+							<div class="r3-label-holder">
+								<p class="r3-label">Addition to Previously</p>
+							</div>
+						</div>
+					</div>
+					<div class="pull-left r3-signature-container">
+						<div class="r3-underline">
+							<div class="r3-underline-holder">
+								<div class="er-input-holder">
+									<p class="signature">Dr. Jose Pablo De Jesus Jr.</p>
+									<p class="printed-name">Dr. Jose Pablo De Jesus Jr.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="pull-right r3-pagenumber-container">
+						<div class="r3-label-holder">
+							<p class="r3-label">OF</p>
+						</div>
+						<div class="r3-input-holder">
+							<div class="r3-firstbox">
+								<p class="r3-input">0</p>
+							</div>
+							<div class="r3-box">
+								<p class="r3-input">0</p>
+							</div>
+							<div class="r3-box">
+								<p class="r3-input">0</p>
+							</div>
+						</div>
+					</div>
+					<div class="pull-left r3-applmo-container">
+						<div class="r3-input-holder">
+							<p class="r3-input">1st</p>
+						</div>
+					</div>
+					<div class="pull-left r3-socialsecurity-input-container">
+						<div class="r3-input-holder">
+							<p class="r3-input">9999999999</p>
+						</div>
+					</div>
+					<div class="pull-left r3-compensation-input-container">
+						<div class="r3-input-holder">
+							<p class="r3-input">999,999,999.99</p>
+						</div>
+					</div>
+					<div class="pull-left r3-grandtotal-input-container">
+						<div class="r3-input-holder">
+							<p class="r3-input">999,999,999.99</p>
+						</div>
+					</div>
+					<div class="pull-left r3-tr_sbrno-input-container">
+						<div class="r3-input-holder">
+							<p class="r3-input">000000000000</p>
+						</div>
+					</div>
+					<div class="pull-left r3-datepaid-input-container">
+						<div class="r3-input-holder">
+							<p class="r3-input">December 31,2018</p>
+						</div>
+					</div>
+					<div class="pull-left r3-amountpaid-input-container">
+						<div class="r3-input-holder">
+							<p class="r3-input">999,999,999.99</p>
+						</div>
+					</div>
+					<div class="pull-left r3-additioncheckbox-parttwo-container">
+						<div class="r3-input-holder">
+							<p class="r3-input">Submitted R-3</p>
+						</div>
+					</div>
+					<div class="pull-left r3-signature-label-container">
+						<div class="r3-label-holder">
+							<p class="r3-label">Signature Over Printed Name</p>
+						</div>
+					</div>
+					<div class="pull-right r3-numberofpages-container">
+						<div class="r3-input-holder">
+							<div class="r3-firstbox">
+								<p class="r3-input">0</p>
+							</div>
+							<div class="r3-box">
+								<p class="r3-input">0</p>
+							</div>
+							<div class="r3-box">
+								<p class="r3-input">0</p>
+							</div>
+						</div>
+					</div>
+					<div class="pull-left r3-applmo-container">
+						<div class="r3-input-holder">
+							<p class="r3-input">2nd</p>
+						</div>
+					</div>
+					<div class="pull-left r3-socialsecurity-input-container">
+						<div class="r3-input-holder">
+							<p class="r3-input">9999999999</p>
+						</div>
+					</div>
+					<div class="pull-left r3-compensation-input-container">
+						<div class="r3-input-holder">
+							<p class="r3-input">999,999,999.99</p>
+						</div>
+					</div>
+					<div class="pull-left r3-grandtotal-input-container">
+						<div class="r3-input-holder">
+							<p class="r3-input">999,999,999.99</p>
+						</div>
+					</div>
+					<div class="pull-left r3-tr_sbrno-input-container">
+						<div class="r3-input-holder">
+							<p class="r3-input">000000000000</p>
+						</div>
+					</div>
+					<div class="pull-left r3-datepaid-input-container">
+						<div class="r3-input-holder">
+							<p class="r3-input">December 31,2018</p>
+						</div>
+					</div>
+					<div class="pull-left r3-amountpaid-input-container">
+						<div class="r3-input-holder">
+							<p class="r3-input">999,999,999.99</p>
+						</div>
+					</div>
+					<div class="pull-left r3-deductioncheckbox-partone-container">
+						<div class="r3-input-holder">
+							<div class="r3-box">
+								<p class="x-mark">X</p>
+							</div>
+							<div class="r3-label-holder">
+								<p class="r3-label">Deduction from Previously</p>
+							</div>
+						</div>
+					</div>
+					<div class="pull-left r3-officialdesignation-container">
+						<div class="r3-firstcontent-underline">
+							<div class="r3-underline-holder">
+								<div class="er-input-holder">
+									<p class="printed-name">XXXXXXXXXXXX</p>
+								</div>
+							</div>
+						</div>
+						<div class="r3-underline">
+							<div class="r3-underline-holder">
+								<div class="er-input-holder">
+									<p class="printed-name">12/31/2018</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="pull-left r3-applmo-container">
+						<div class="r3-input-holder">
+							<p class="r3-input">3rd</p>
+						</div>
+					</div>
+					<div class="pull-left r3-socialsecurity-input-container">
+						<div class="r3-input-holder">
+							<p class="r3-input">9999999999</p>
+						</div>
+					</div>
+					<div class="pull-left r3-compensation-input-container">
+						<div class="r3-input-holder">
+							<p class="r3-input">999,999,999.99</p>
+						</div>
+					</div>
+					<div class="pull-left r3-grandtotal-input-container">
+						<div class="r3-input-holder">
+							<p class="r3-input">999,999,999.99</p>
+						</div>
+					</div>
+					<div class="pull-left r3-tr_sbrno-input-container">
+						<div class="r3-input-holder">
+							<p class="r3-input">000000000000</p>
+						</div>
+					</div>
+					<div class="pull-left r3-datepaid-input-container">
+						<div class="r3-input-holder">
+							<p class="r3-input">December 31,2018</p>
+						</div>
+					</div>
+					<div class="pull-left r3-amountpaid-input-container">
+						<div class="r3-input-holder">
+							<p class="r3-input">999,999,999.99</p>
+						</div>
+					</div>
 				</div>		
 			</div>
 		</div>

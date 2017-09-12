@@ -267,7 +267,8 @@ class MlmDeveloperController extends Member
     }
     public static function create_slot_submit_random_customer($shop_id)
     {
-    	$random_user = Tbl_customer::orderBy(DB::raw("rand()"))->first();
+    	$random_user = Tbl_customer::orderBy(DB::raw("rand()"))->where("archived", 0)->first();
+        
     	$insert_customer["shop_id"]        = $shop_id;
     	$insert_customer["first_name"]     = ucfirst($random_user->first_name);
     	$insert_customer["last_name"]      = ucfirst($random_user->last_name);

@@ -121,5 +121,7 @@ function click_status(status)
 {
 	load_table_data.status = status;
     load_table_data.page = 1;
+    $('.change-tab').removeClass('active');
+    $('.'+status+'-tab').addClass('active');
     membership_code.action_load_table();
 }

@@ -21,11 +21,11 @@
 </div>
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <ul class="nav nav-tabs">
-        <li class="active change-tab pending-tab cursor-pointer" onClick="click_status('unused');" mode="pending"><a class="cursor-pointer"><i class="fa fa-check"></i> Unused</a></li>
-        <li class="cursor-pointer change-tab approve-tab" onClick="click_status('reserved');" mode="approved"><a class="cursor-pointer"><i class="fa fa-anchor"></i> Reserved</a></li>
-        <li class="cursor-pointer change-tab approve-tab" onClick="click_status('sold');" mode="approved"><a class="cursor-pointer"><i class="fa fa-money"></i> Sold</a></li>
-        <li class="cursor-pointer change-tab approve-tab" onClick="click_status('used');" mode="approved"><a class="cursor-pointer"><i class="fa fa-star"></i> Used</a></li>
-    	<li class="cursor-pointer change-tab approve-tab" onClick="click_status('blocked');" mode="approved"><a class="cursor-pointer"><i class="fa fa-warning"></i> Blocked</a></li>
+        <li class="active change-tab unused-tab cursor-pointer" onClick="click_status('unused');" mode="pending"><a class="cursor-pointer"><i class="fa fa-check"></i> Unused</a></li>
+        <li class="cursor-pointer change-tab reserved-tab" onClick="click_status('reserved');" mode="approved"><a class="cursor-pointer"><i class="fa fa-anchor"></i> Reserved</a></li>
+        <li class="cursor-pointer change-tab sold-tab" onClick="click_status('sold');" mode="approved"><a class="cursor-pointer"><i class="fa fa-money"></i> Sold</a></li>
+        <li class="cursor-pointer change-tab used-tab" onClick="click_status('used');" mode="approved"><a class="cursor-pointer"><i class="fa fa-star"></i> Used</a></li>
+    	<li class="cursor-pointer change-tab block-tab" onClick="click_status('block');" mode="approved"><a class="cursor-pointer"><i class="fa fa-warning"></i> Blocked</a></li>
     </ul>
     <div class="search-filter-box">
         <div class="col-md-3" style="padding: 10px">

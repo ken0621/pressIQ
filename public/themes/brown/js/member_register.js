@@ -14,6 +14,7 @@ function member_register()
 		$(document).ready(function()
 		{
 			event_click_agreement();
+			event_click_accept();
 		});
 	}
 
@@ -30,5 +31,19 @@ function member_register()
 	{
 		$(self.currentTarget).removeProp("checked").removeAttr("checked");
 		$("#modal_agreement").modal();
+	}
+
+	function event_click_accept()
+	{
+		$(".btn-pure").unbind("click");
+		$(".btn-pure").bind("click", function()
+		{
+			action_click_accept();
+		});
+	}
+
+	function action_click_accept()
+	{
+		$(".agreement-checkbox input:checkbox").prop("checked", true).attr("checked", "checked");
 	}
 }

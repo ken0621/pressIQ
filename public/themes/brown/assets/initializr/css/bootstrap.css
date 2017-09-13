@@ -4749,12 +4749,12 @@ a.thumbnail.active {
   color: #66512c;
 }
 .alert-danger {
-  color: #fff;
-  background-color: #da473e;
-  /* border-color: #ebccd1; */
+  color: #fff !important;
+  background-color: #da473e !important;
+  border-color: #ebccd1 !important;
 }
 .alert-danger hr {
-  /* border-top-color: #e4b9c0; */
+  border-top-color: #e4b9c0 !important;
 }
 .alert-danger .alert-link {
   color: #fff;

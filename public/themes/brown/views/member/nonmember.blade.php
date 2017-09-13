@@ -2,28 +2,28 @@
 @section("member_content")
 
 <div class="dashboard">
-<!-- TOP DASHBOARD-->
-<div class="dashboard-top">
-  
-    <div class="row clearfix">
-      <div class="col-md-8">
-        <div class="img-container">
-          <img src="/themes/{{ $shop_theme }}/img/brown-img1.png">
+
+  <!-- TOP DASHBOARD-->
+  <div class="dashboard-top">
+      <div class="row clearfix">
+        <div class="col-md-8">
+          <div class="img-container">
+            <img src="/themes/{{ $shop_theme }}/img/brown-img1.png">
+          </div>
         </div>
-      </div>
-      <div class="col-md-4">
-        <div class="join-container">
-          <div class="text-header1">Become a Member</div>
-          <div class="text-header2">Enroll now and become one of us!</div>
-          <div class="btn-container">
-            <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
-            <img src="/themes/{{ $shop_theme }}/img/or.png"><br>
-            <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
+        <div class="col-md-4">
+          <div class="join-container">
+            <div class="text-header1">Become a Member</div>
+            <div class="text-header2">Enroll now and become one of us!</div>
+            <div class="btn-container">
+              <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
+              <img src="/themes/{{ $shop_theme }}/img/or.png"><br>
+              <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
   <!-- BOTTOM DASHBOARD -->
   <div class="dashboard-bottom">
@@ -102,7 +102,7 @@
               <div class="modal-content">
                   <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                      <h4 class="modal-title"><img src="/themes/{{ $shop_theme }}/img/cart.png"> Cart</h4>
+                      <h4 class="modal-title"><img src="/themes/{{ $shop_theme }}/img/cart.png"> My Shopping Cart</h4>
                   </div>
                   <div class="modal-body">
                       <h4>Item has successfully added to your Cart!</h4>
@@ -209,9 +209,9 @@
                         <option value="Placement">Placement</option>
                       </select>
 
-                      <div>Position: </div>
+                      <div style="font-size: 13px;">Position: </div>
 
-                      <label class="radio-inline" style="padding-left: 72px;">
+                      <label class="radio-inline" style="padding-left: 78px;">
                         <input type="radio" name="optradio">Left
                       </label>
 
@@ -279,50 +279,42 @@
 
 @endsection
 @section("member_script")
+
 <script type="text/javascript">
 
   /*Popups*/
-
-  /*Buy a Kit*/
   $(document).ready(function(){
-    $("#btn-buy-a-kit").click(function(){
-      $("#buy-a-kit-modal").modal('show');
-    });
-  });
 
-  /*Enter a code*/
-  $(document).ready(function(){
-    $("#btn-enter-a-code").click(function(){
-      $("#enter-a-code-modal").modal('show');
-    });
-  });
+      /*Buy a Kit*/
+      $("#btn-buy-a-kit").click(function(){
+        $("#buy-a-kit-modal").modal('show');
+      });
 
-  /*Proceed 1*/
-  $(document).ready(function(){
-    $("#btn-verify").click(function(){
-      $("#proceed-modal-1").modal('show');
-    });
-  });
+      /*Enter a code*/
+      $("#btn-enter-a-code").click(function(){
+        $("#enter-a-code-modal").modal('show');
+      });
 
-  /*Proceed 2*/
-  $(document).ready(function(){
-    $("#btn-verify").click(function(){
-      $("#proceed-modal-2").modal('show');
-    });
-  });
+      /*Proceed 1*/
+      $("#btn-verify").click(function(){
+        $("#proceed-modal-1").modal('show');
+      });
 
-  /*Success*/
-  $(document).ready(function(){
-    $("#btn-proceed-2").click(function(){
-      $("#success-modal").modal('show');
-    });
-  });
+      /*Proceed 2*/
+      $("#btn-verify").click(function(){
+        $("#proceed-modal-2").modal('show');
+      });
 
-  /*Failed*/
-  $(document).ready(function(){
-    $("#btn-proceed-2").click(function(){
-      $("#failed-modal").modal('show');
-    });
+      /*Success*/
+      $("#btn-proceed-2").click(function(){
+        $("#success-modal").modal('show');
+      });
+
+      /*Failed*/
+      $("#btn-proceed-2").click(function(){
+        $("#failed-modal").modal('show');
+      });
+
   });
 
 </script>

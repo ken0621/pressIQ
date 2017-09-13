@@ -27,14 +27,14 @@ $bold: 700;
 		.text-header1
 		{
 			font-weight: $semi-bold;
-			font-size: 18px;
+			font-size: 15px;
 			color: #344049;
 		}
 
 		.text-header2
 		{
 			font-weight: $regular;
-			font-size: 14px;
+			font-size: 13px;
 			color: #344049;
 		}
 
@@ -44,9 +44,8 @@ $bold: 700;
 			padding: 63px 0px 0px 0px;
 			font-family: $open-sans;
 			font-weight: $semi-bold;
-			font-size: 14px;
-			
-			
+			font-size: 13px;
+		
 			.btn-buy-a-kit
 			{
 				color: #fff;
@@ -83,7 +82,7 @@ $bold: 700;
 	.text-header
 	{
 		font-weight: $semi-bold;
-		font-size: 18px;
+		font-size: 15px;
 		color: #344049;
 		padding-top: 10px;
 	}
@@ -106,7 +105,8 @@ $bold: 700;
 			{
 				text-align: center;
 				padding-top: 10px;
-				//font-weight: $semi-bold;
+				font-weight: $semi-bold;
+				font-size: 15px;
 			}
 		}
 
@@ -114,23 +114,24 @@ $bold: 700;
 		{
 			padding: 10px;
 			text-align: center;
-			font-size: 14px;
+			font-size: 15px;
 
 			label
 			{
-				
+				font-size: 13px;
 				color: #aaaaaa;
 			}
 
 			span
 			{
+				font-size: 13px;
 				padding-left: 10px;
 			}
 		}
 
 		p
 		{
-			font-size: 14px;
+			font-size: 13px;
 			padding: 10px;
 		}
 
@@ -162,9 +163,6 @@ $bold: 700;
 
 	.modal-content
 	{
-
-		//width: 335px;
-
 		.modal-header
 		{
 			background-color: #693d28;
@@ -189,6 +187,7 @@ $bold: 700;
 			h4
 			{
 				font-weight: $semi-bold;
+				font-size: 15px;
 				text-align: center;
 				margin-bottom: 20px;
 			}
@@ -212,12 +211,13 @@ $bold: 700;
 				{
 					font-weight: $semi-bold;
 					font-style: $open-sans;
-					font-size: 14px;
+					font-size: 15px;
 					padding-bottom: 20px;
 				}
 
 				.specs
 				{
+					font-size: 13px;
 					padding-bottom: 20px;
 					color: #60686f;
 				}
@@ -227,7 +227,7 @@ $bold: 700;
 	    	{
 				font-family: $open-sans;
 				font-weight: $semi-bold;
-				font-size: 14px;
+				font-size: 15px;
 				padding-bottom: 20px;
 
 				.btn-proceed-to-payment
@@ -270,6 +270,7 @@ $bold: 700;
 			.modal-title
 			{
 				font-weight: $semi-bold;
+				font-size: 15px;
 				color: #FFF;
 			}
 		}
@@ -294,7 +295,7 @@ $bold: 700;
 				text-align: center;
 				font-family: $open-sans;
 				font-weight: $semi-bold;
-				font-size: 14px;
+				font-size: 13px;
 				padding-bottom: 20px;
 
 				.btn-verify
@@ -337,6 +338,7 @@ $bold: 700;
 			{
 				font-weight: $semi-bold;
 				color: #FFF;
+				font-size: 15px;
 			}
 		}
 
@@ -348,6 +350,7 @@ $bold: 700;
 
 			input
 			{
+				font-size: 13px;
 				width: 100%;
 				border: none;
 				border-bottom: 2px solid #d3d8db;
@@ -359,7 +362,7 @@ $bold: 700;
 				text-align: center;
 				font-family: $open-sans;
 				font-weight: $semi-bold;
-				font-size: 14px;
+				font-size: 13px;
 				padding-bottom: 20px;
 
 				.btn-proceed-1
@@ -402,6 +405,7 @@ $bold: 700;
 			{
 				font-weight: $semi-bold;
 				color: #FFF;
+				font-size: 15px;
 			}
 		}
 
@@ -414,6 +418,7 @@ $bold: 700;
 			.input
 			{
 				width: 100%;
+				font-size: 13px;
 				border: none;
 				border-bottom: 2px solid #d3d8db;
 				margin: 15px 0px;
@@ -422,10 +427,10 @@ $bold: 700;
 			
 			label
 			{
+				font-size: 13px;
 				text-align: center !important;
 				margin: 10px 0px;
 				padding: 10px;
-
 			}
 
 			select
@@ -435,6 +440,7 @@ $bold: 700;
 				border-bottom: 2px solid #d3d8db;
 				margin: 15px 0px;
 				padding: 5px;
+				font-size: 13px;
 			}
 
 	    	.btn-container
@@ -442,7 +448,7 @@ $bold: 700;
 				text-align: center;
 				font-family: $open-sans;
 				font-weight: $semi-bold;
-				font-size: 14px;
+				font-size: 13px;
 				padding-bottom: 20px;
 
 				.btn-proceed-2
@@ -471,6 +477,7 @@ $bold: 700;
 			.modal-title
 			{
 				color: #FFF;
+				font-size: 15px;
 			}
 		}
 
@@ -486,7 +493,7 @@ $bold: 700;
 			.text-header
 			{
 				font-weight: $semi-bold;
-				font-size: 22px;
+				font-size: 25px;
 				color: #344049;
 				padding-top: 5px;
 			}
@@ -494,7 +501,7 @@ $bold: 700;
 			.text-caption
 			{
 				@extend .text-header;
-				font-size: 14px;
+				font-size: 15px;
 				padding-bottom: 30px;
 			}
 
@@ -503,7 +510,7 @@ $bold: 700;
 				text-align: center;
 				font-family: $open-sans;
 				font-weight: $semi-bold;
-				font-size: 14px;
+				font-size: 13px;
 				padding-bottom: 20px;
 
 				.btn-ok
@@ -538,6 +545,7 @@ $bold: 700;
 			.modal-title
 			{
 				color: #FFF;
+				font-size: 15px;
 			}
 
 			img
@@ -549,7 +557,6 @@ $bold: 700;
 
 		.modal-body
 		{
-
 			text-align: center;
 
 			.text-caption
@@ -557,7 +564,7 @@ $bold: 700;
 				font-weight: $semi-bold;
 				color: #344049;
 				padding-top: 5px;
-				font-size: 14px;
+				font-size: 13px;
 				padding-top: 30px;
 				padding-bottom: 30px;
 			}

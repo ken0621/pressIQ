@@ -21,6 +21,7 @@ function item_list()
 		event_item_archive();
 		event_filter_item_type();
 		event_filter_item_category();
+		event_filter_item_search();
 	}
 	function add_event_pagination()
 	{
@@ -165,5 +166,30 @@ function item_list()
 		load_table_data.item_category_id = item_category_id;
 	    load_table_data.page = 1;
 	    action_load_table();
+	}
+	function event_filter_item_search()
+	{
+		$('.search-item-list').unbind("change");
+		$('.search-item-list').bind("change", function(e)
+		{
+			action_filter_item_search(e.currentTarget);
+		});
+	}
+	function action_filter_item_search(self)
+	{
+		var search = $(self).val();
+
+		load_table_data.search = search;
+	    load_table_data.page = 1;
+	    action_load_table();
+	}
+}
+function success_refill(data)
+{
+	if(data.status == 'success')
+	{
+        toastr.success("Success refilling item");
+        data.element.modal("hide");
+        item_list.action_load_table();
 	}
 }

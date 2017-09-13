@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 class Tbl_item extends Model
 {
+    // use Searchable;
+    
     protected $table = 'tbl_item';
 	protected $primaryKey = "item_id";
     public $timestamps = true;
@@ -27,10 +30,13 @@ class Tbl_item extends Model
     }
     public function scopeType($query)
     {
-        $query->join('tbl_item_type','tbl_item_type.item_type_id','=','tbl_item.item_type_id');
+        $query->leftjoin('tbl_item_type','tbl_item_type.item_type_id','=','tbl_item.item_type_id');
         return $query;
     }
-
+    public function scopeMembership($query)
+    {
+        return $query->leftjoin("tbl_membership","tbl_membership.membership_id","=","tbl_item.membership_id");
+    }
     public function scopeCategory($query)
     {
         $query->leftjoin('tbl_category','type_id','=','item_category_id');
@@ -90,6 +96,10 @@ class Tbl_item extends Model
                         }
                      })
                      ->groupBy("item_id");
+    }
+    public function scopeInventorylog($query)
+    {
+        return $query->leftjoin('tbl_warehouse_inventory_record_log','record_item_id','=','item_id');
     }
 
     public function scopeNewPrice($query, $qty)

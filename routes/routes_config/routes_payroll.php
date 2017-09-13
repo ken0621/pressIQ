@@ -7,7 +7,13 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/reports/government_forms_sss/{id}','Member\PayrollReportController@government_forms_sss');
 	Route::any('/reports/government_forms_philhealth/{id}','Member\PayrollReportController@government_forms_philhealth');
 	Route::any('/reports/government_forms_hdmf/{id}','Member\PayrollReportController@government_forms_hdmf');
-	Route::any('/reports/government_forms_hdmf_iframe/{id}','Member\PayrollReportController@government_forms_hdmf_iframe');
+	Route::any('/reports/government_forms_hdmf_iframe/{id}/{id2}','Member\PayrollReportController@government_forms_hdmf_iframe');
+	Route::any('/reports/government_forms_hdmf_filter','Member\PayrollReportController@government_forms_hdmf_filter');
+	Route::any('/reports/government_forms_sss_filter','Member\PayrollReportController@government_forms_sss_filter');
+	Route::any('/reports/government_forms_philhealth_filter','Member\PayrollReportController@government_forms_philhealth_filter');
+	Route::any('/reports/government_forms_hdmf_export_excel/{id}/{id2}','Member\PayrollReportController@government_forms_hdmf_export_excel');
+	Route::any('/reports/government_forms_sss_export_excel/{id}/{id2}','Member\PayrollReportController@government_forms_sss_export_excel');
+	Route::any('/reports/government_forms_philhealth_export_excel/{id}/{id2}','Member\PayrollReportController@government_forms_philhealth_export_excel');
 	
 	/*START loan summary report*/
 	Route::any('/reports/loan_summary','Member\PayrollReportController@loan_summary');
@@ -144,8 +150,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/departmentlist/modal_view_department/{id}','Member\PayrollController@modal_view_department');
 	Route::any('/departmentlist/modal_edit_department/{id}','Member\PayrollController@modal_edit_department');
 	Route::any('/departmentlist/modal_update_department','Member\PayrollController@modal_update_department');
-
-
 	/* DEPARTMENT END */
 
 	/* JOB TITLE START */
@@ -477,7 +481,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/unprocess_payroll/{period_company_id}','Member\PayrollProcessController@unprocess');
 	Route::any('/process_payroll/table/{period_company_id}','Member\PayrollProcessController@index_table');
 	Route::any('/process_payroll/modal_view_summary/{period_company_id}','Member\PayrollProcessController@modal_view_summary');
-	Route::any('/process_payroll/income_summary/timesheet/{period_id}/{employee_id}','Member\PayrollProcessController@income_summary_timesheet_v2');
+	Route::any('/process_payroll/income_summary/timesheet/{period_id}/{employee_id}','Member\PayrollProcessController@income_summary_timesheet_v3');
 	Route::any('/process_payroll/modal_approved_summary/{period_company_id}','Member\PayrollProcessController@modal_approved_summary');
 
 

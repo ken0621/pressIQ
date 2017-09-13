@@ -1,0 +1,171 @@
+.report-container
+{
+	.report-header
+	{
+		.left
+		{
+			@media screen and (min-width: 991px)
+			{
+				float: left;
+			}
+			.icon
+			{
+				display: inline-block;
+				vertical-align: middle;
+				margin-right: 25px;
+				img
+				{
+
+				}
+			}
+			.text
+			{
+				display: inline-block;
+				vertical-align: middle;
+				text-align: left;
+				.name
+				{
+					color: #344049;
+					font-size: 20px;
+				}
+				.sub
+				{
+					color: #85939e;
+					font-size: 13px;
+				}
+			}
+		}
+		.right
+		{
+			@media screen and (min-width: 991px)
+			{
+				float: right;
+			}
+			.search
+			{
+				position: relative;
+				margin: 6px 0;
+				.form-control
+				{
+					color: #85939e;
+					font-size: 13px;
+					border-radius: 0;
+					box-shadow: none;
+					width: 300px;
+				}
+				img
+				{
+					position: absolute;
+					top: 7px;
+					right: 7px;
+				}
+			}
+		}
+	}
+	.report-content
+	{
+		margin-top: 25px;
+		.holder
+		{
+			padding: 25px 0 15px;
+			border-bottom: 1px solid #dbdbdb;
+			&:last-child
+			{
+				border-bottom: 0;
+			}
+			.member-info
+			{
+				.left
+				{
+					@media screen and (min-width: 991px)
+					{
+						float: left;
+					}
+					.pic
+					{
+						display: inline-block;
+						vertical-align: middle;
+						width: 50px;
+						height: 50px;
+						margin-right: 15px;
+						img
+						{
+							width: 50px;
+							height: 50px;
+							object-fit: cover;
+						}
+					}
+					.text
+					{
+						display: inline-block;
+						vertical-align: middle;
+						letter-spacing: 0.5px;
+						> div
+						{
+							margin: 2.5px 0;
+						}
+						.sponsor
+						{
+							color: #344049;
+							font-size: 13px;
+							font-weight: 600;
+						}
+						.slot
+						{
+							color: #344049;
+							font-size: 13px;
+							font-weight: 600;
+							span
+							{
+								color: #85939e;
+							}
+						}
+						.report-notif
+						{
+							color: #344049;
+							font-size: 13px;
+							font-weight: 600;
+							span
+							{
+								color: #85939e;
+							}
+						}
+						.level
+						{
+							color: #344049;
+							font-size: 13px;
+							font-weight: 600;
+						}
+					}
+				}
+				.right
+				{
+					@media screen and (min-width: 991px)
+					{
+						float: right;
+					}
+					.read
+					{
+						.btn-orange
+						{
+							background-color: #ed5639;
+							border-radius: 15px;
+							font-size: 13px;
+							color: #fff;
+							font-weight: 700;
+							padding: 6.5px 15px;
+							letter-spacing: 0.5px;
+						}
+					}
+				}
+			}
+			.desc
+			{
+				color: #344049;
+				font-size: 13px;
+				margin: 15px 0;
+				margin-bottom: 0;
+			}
+		}
+	}
+}

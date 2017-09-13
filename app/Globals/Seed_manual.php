@@ -713,7 +713,7 @@ class Seed_manual
       $insert[3]['item_type_id']    = 4; 
       $insert[3]['item_type_name']  = "Bundle";
       $insert[4]['item_type_id']    = 5; 
-      $insert[4]['item_type_name']  = "Membership";
+      $insert[4]['item_type_name']  = "Membership Kit";
       DB::table('tbl_item_type')->insert($insert);
     }
 
@@ -792,6 +792,37 @@ class Seed_manual
 
             DB::table('tbl_payment_method')->insert($insert);
         }
+    }
+    public static function put_inventory_prefix($shop_id)
+    {
+        if(!DB::table('tbl_settings')->where("settings_key","inventory_wis_prefix")->where("shop_id", $shop_id)->first())
+        {
+            $insert['settings_key'] = 'inventory_wis_prefix';
+            $insert['settings_value'] = 'WIS';
+            $insert['shop_id'] = $shop_id;
+
+            DB::table('tbl_settings')->insert($insert);
+        }
+        if(!DB::table('tbl_settings')->where("settings_key","inventory_rr_prefix")->where("shop_id", $shop_id)->first())
+        {
+            $insert['settings_key'] = 'inventory_rr_prefix';
+            $insert['settings_value'] = 'RR';
+            $insert['shop_id'] = $shop_id;
+            
+            DB::table('tbl_settings')->insert($insert);
+        }
+    }
+    public static function put_mlm_pin_prefix($shop_id, $shop_key = '')
+    {
+        if(!DB::table('tbl_settings')->where("settings_key","mlm_pin_prefix")->where("shop_id", $shop_id)->first())
+        {            
+            $insert['settings_key'] = 'mlm_pin_prefix';
+            $insert['settings_value'] = strtoupper($shop_key);
+            $insert['shop_id'] = $shop_id;
+            
+            DB::table('tbl_settings')->insert($insert);
+        }
+
     }
 }
 

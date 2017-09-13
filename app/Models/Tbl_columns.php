@@ -19,4 +19,9 @@ class Tbl_columns extends Model
     {       
         return $query->where("tbl_columns.shop_id", $shop_id);
     }
+
+    public function scopeFrom($query, $from)
+    {
+        return $query->where("tbl_columns.columns_from", $from);
+    }
 }

@@ -1,4 +1,7 @@
 <?php
+Route::any('/oliver/{id}', 'SampleTesting@index');
+Route::any('/oliver/samp2', 'SampleTesting@samp2');
+Route::any('/s', 'TesterController@samptest');
 Route::any('/pmigrate', 'PasswordMigrateController@index');
 Route::any('/dd','TesterController@connection_test');
 Route::any('/member/payroll/api_login','Api\PayrollConnectController@index');
@@ -1099,5 +1102,5 @@ include_once('routes_config/routes_reward.php');
 include_once('routes_config/routes_cashier.php');
 include_once('routes_config/routes_item.php');
 
-
-
+/* Members Area */
+include_once('routes_config/routes_members_area.php');

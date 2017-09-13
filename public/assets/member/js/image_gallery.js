@@ -204,7 +204,7 @@ function image_gallery()
 	{
 		Dropzone.options.myDropZone= 
 		{
-			maxFilesize: 2,
+			maxFilesize: 10,
             thumbnailWidth: 148,
             thumbnailHeight: 148,
             acceptedFiles: "image/*",

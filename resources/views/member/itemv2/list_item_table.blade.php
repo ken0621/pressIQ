@@ -3,35 +3,18 @@
 <table class="table table-bordered table-striped table-condensed">
     <thead style="text-transform: uppercase">
         <tr>
-            <th class="text-center" width="70px;">ITEM ID</th>
-            <th class="text-center">SKU</th>
-            <th class="text-center" width="150px">Price</th>
-            <th class="text-center" width="150px">Cost</th>
-            <th class="text-center" width="150px">Markup</th>
-            <th class="text-center" width="100px">Inventory</th>
-            <th class="text-center" width="60px">U/M</th>
+            @foreach($_item[0] as $column)
+            <th class="text-center">{{ $column["label"] }}</th>
+            @endforeach
             <th class="text-left" width="170px"></th>
         </tr>
     </thead>
     <tbody>
         @foreach($_item as $item)
         <tr>
-            <td class="text-center">{{ $item->item_id }}</td>
-            <td class="text-center">{{ $item->item_sku }}</td>
-            <td class="text-center">{{ $item->display_price }}</td>
-            <td class="text-center">{{ $item->display_cost }}</td>
-            <td class="text-center">{{ $item->display_markup }}</td>
-            @if($item->item_type_id == 1)
-                <td class="text-center">{{ $item->inventory_count }}</td>
-                @if($item->multi_abbrev == "")
-                    <td class="text-center">N/A</td>
-                @else
-                    <td class="text-center"><a href="javascript:">{{ $item->multi_abbrev }}</a></td>
-                @endif 
-            @else
-                <td class="text-center">N/A</td>
-                <td class="text-center">N/A</td>
-            @endif
+            @foreach($item as $column)
+            <td class="text-center">{{ $column["data"] }}</td>
+            @endforeach
             <td class="text-center">
                 <div class="btn-group">
                     <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -39,13 +22,13 @@
                     </button>
                     <ul class="dropdown-menu dropdown-menu-custom">
                         <li>
-                            <a onclick="action_load_link_to_modal('/member/item/v2/edit?item_id={{ $item->item_id }}', 'lg')">
+                            <a onclick="action_load_link_to_modal('/member/item/v2/edit?item_id={{ $column["default"]->item_id }}', 'lg')">
                                 <div style="display: inline-block; width: 17px; text-align: center;"><i class="fa fa-edit"></i> &nbsp;</div>
                                 Modify
                             </a>
                         </li>
                         <li>
-                            <a href="javascript:" class="item-{{ $archive }}" item-id="{{ $item->item_id }}">
+                            <a href="javascript:" class="item-{{ $archive }}" item-id="{{ $column["default"]->item_id }}">
                                 <div style="display: inline-block; width: 17px; text-align: center;"><i class="fa fa-trash"></i> &nbsp;</div>
                                 <span style="text-transform: capitalize;">{{ $archive }}</span>
                             </a>
@@ -56,6 +39,14 @@
                                 Item Information
                             </a>
                         </li>
+                        @if($column["default"]->item_type_id == 1)
+                        <li>
+                            <a onclick="action_load_link_to_modal('/member/item/v2/refill_item?item_id={{ $column["default"]->item_id}}','md')">
+                                <div style="display: inline-block; width: 17px; text-align: center;"><i class="fa fa-cubes"></i> &nbsp;</div>
+                                Refill Item
+                            </a>
+                        </li>
+                        @endif
                     </ul>
                 </div>
             </td>

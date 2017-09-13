@@ -1,8 +1,27 @@
 <form class="global-submit form-horizontal" role="form" action="{link_submit_here}" method="post">
-	<div class="modal-header">
+	<input type="hidden" class="_token" value="{{ csrf_token() }}" />
+    <div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">×</button>
 		<h4 class="modal-title">SSS CONTRIBUTION FOR THE MONTH OF {{ strtoupper($month_name) }} {{ $year }} </h4>
 	</div>
+    <div class="panel panel-default panel-block panel-title-block">
+        <div class="panel-body form-horizontal">
+            <div class="form-group">
+                <div class="col-md-3">
+                    <select class="form-control filter-by-company-sss" data-id="{{$month}}">
+                        <option value="0">ALL COMPANY</option>
+                        @foreach($_company as $company)
+                            <option value="{{$company->payroll_company_id}}">{{$company->payroll_company_name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center" id="spinningLoader" style="display:none;">
+                <img src="/assets/images/loader.gif">
+    </div>
+    <div class="load-filter-data">
 	<div class="modal-body clearfix">
                 <div class="table-responsive">
                     <table class="table table-bordered table-condensed">
@@ -50,6 +69,11 @@
                     </table>
                 </div>
 	</div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
+        &nbsp;<a href="/member/payroll/reports/government_forms_sss_export_excel/{{$month}}/0"><button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" ></i> &nbsp;EXPORT TO EXCEL</button></a>
+    </div>
+    </div>
 </form>
 
 <style type="text/css">
@@ -58,3 +82,4 @@
         width: 85% !important;
     }
 </style>
+<script type="text/javascript" src="/assets/js/government_forms.js"></script>

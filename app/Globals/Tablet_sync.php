@@ -57,6 +57,9 @@ class tablet_sync
     			$all_manual_inv = $all_transaction['manual_inv'];
     			$all_manual_rp = $all_transaction['manual_rp'];
     			$all_manual_cm = $all_transaction['manual_cm'];
+
+    			$all_customer = $all_transaction['customer'];
+    			$all_customer_address = $all_transaction['customer_address'];
     			/*FOR INVOICE*/
     			foreach ($all_inv as $key => $value) 
     			{
@@ -504,6 +507,32 @@ class tablet_sync
 					$agent_update['password'] = Crypt::encrypt($agent_data->password);
 
 					Tbl_employee::where('employee_id',$agent_data->employee_id)->update($agent_update);
+				}
+				if($all_customer)
+				{
+					foreach ($all_customer as $key_customer => $value_customer) 
+					{
+						$ins_customer['shop_id'] = $value_customer->shop_id;
+						$ins_customer['country_id'] = $value_customer->country_id;
+						$ins_customer['title_name'] = $value_customer->title_name;
+						$ins_customer['first_name'] = $value_customer->first_name;
+						$ins_customer['middle_name'] = $value_customer->shop_id;
+						$ins_customer['last_name'] = $value_customer->shop_id;
+						$ins_customer['suffix_name'] = $value_customer->shop_id;
+						$ins_customer['email'] = $value_customer->shop_id;
+						$ins_customer['company'] = $value_customer->shop_id;
+						$ins_customer['approved'] = $value_customer->approved
+
+						$new_customer_id = Tbl_customer::insertGetId($ins_customer);
+						foreach($all_customer_address as $key_address => $value_address) 
+						{
+							if($value_address->customer_id == $value_customer->customer_id)
+							{
+								$ins_add['']
+
+							}
+						}
+					}
 				}
 				
 				return "success";	      

@@ -27,6 +27,10 @@ use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_period_company;
 
 
+use App\Globals\AuditTrail;
+
+
+
 class PayrollReportController extends Member
 {
 	public function shop_id()
@@ -185,7 +189,6 @@ class PayrollReportController extends Member
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 			$data["year"] = $year;
 			$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
-			
 			if($contri_info["_employee_contribution"]==null or $contri_info["_employee_contribution"]==0)
 			{
 				return "<center><font size='20'><br><br>No Employee Records<br><br><br><br></font></center>";
@@ -265,13 +268,15 @@ class PayrollReportController extends Member
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 			$data["year"] = $year;
 			$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
-			Excel::create("Government Forms HDMF",function($excel) use ($data)
+
+			AuditTrail::record_logs("DOWNLOAD","HDMF REPORT",$this->shop_id(),"","");
+            Excel::create("Government Forms HDMF",function($excel) use ($data)
 			{
 				$excel->sheet('clients',function($sheet) use ($data)
 				{
 					$sheet->loadView('member.payrollreport.government_forms_hdmf_export_excel',$data);
 				});
-			})->download('xls');
+			})->download('xls');        
 		}
 		else
 		{
@@ -285,7 +290,7 @@ class PayrollReportController extends Member
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 			$data["year"] = $year;
 			$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
-
+			AuditTrail::record_logs("DOWNLOAD","HDMF REPORT",$this->shop_id(),"","");
 			Excel::create("Government Forms HDMF".$data['company']->payroll_company_name,function($excel) use ($data)
 			{
 				$excel->sheet('clients',function($sheet) use ($data)
@@ -309,6 +314,7 @@ class PayrollReportController extends Member
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 			$data["year"] = $year;
 			$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
+			AuditTrail::record_logs("DOWNLOAD","SSS REPORT",$this->shop_id(),"","");
 			Excel::create("Government Forms SSS",function($excel) use ($data)
 			{
 				$excel->sheet('clients',function($sheet) use ($data)
@@ -329,7 +335,7 @@ class PayrollReportController extends Member
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 			$data["year"] = $year;
 			$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
-
+			AuditTrail::record_logs("DOWNLOAD","SSS REPORT",$this->shop_id(),"","");
 			Excel::create("Government Forms SSS-".$data['company']->payroll_company_name,function($excel) use ($data)
 			{
 				$excel->sheet('clients',function($sheet) use ($data)
@@ -353,6 +359,7 @@ class PayrollReportController extends Member
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 			$data["year"] = $year;
 			$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
+			AuditTrail::record_logs("DOWNLOAD","PHILHEALTH REPORT",$this->shop_id(),"","");
 			Excel::create("Government Forms PHILHEALTH",function($excel) use ($data)
 			{
 				$excel->sheet('clients',function($sheet) use ($data)
@@ -373,7 +380,7 @@ class PayrollReportController extends Member
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 			$data["year"] = $year;
 			$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
-
+			AuditTrail::record_logs("DOWNLOAD","PHILHEALTH REPORT",$this->shop_id(),"","");
 			Excel::create("Government Forms PHILHEALTH".$data['company']->payroll_company_name,function($excel) use ($data)
 			{
 				$excel->sheet('clients',function($sheet) use ($data)
@@ -425,6 +432,7 @@ class PayrollReportController extends Member
 		$data["_loan_data"]    			= PayrollDeductionController::get_deduction_payment(0,$employee_id,$payroll_deduction_id);
 		$data["employee_info"] 			= Tbl_payroll_employee_basic::where("payroll_employee_id",$employee_id)->first();
 		// dd($data);
+		AuditTrail::record_logs("DOWNLOAD","LOAN SUMMARY REPORT",$this->shop_id(),"","");
 		Excel::create($data['employee_info']->payroll_employee_display_name,function($excel) use ($data)
 		{
 			$excel->sheet('clients',function($sheet) use ($data)
@@ -483,6 +491,7 @@ class PayrollReportController extends Member
 		$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
 		/*dd($data["show_period_start"]);*/
 		$data = $this->get_total($data);
+		AuditTrail::record_logs("DOWNLOAD","PAYROLL REGISTER REPORT",$this->shop_id(),"","");
      	Excel::create($data["company"]->payroll_company_name,function($excel) use ($data)
 		{
 			$excel->sheet('clients',function($sheet) use ($data)

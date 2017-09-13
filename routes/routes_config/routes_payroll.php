@@ -1,6 +1,8 @@
 <?php
 Route::group(array('prefix' => '/member/payroll'), function()
 {
+	Route::any('/employee_list/modal_view_all_transaction/{id}/{uid}','Member\PayrollController@modal_view_all_transaction');
+
 	Route::any('/payroll_api','Member\PayrollApiController@index');
 
 	Route::any('/reports/government_forms','Member\PayrollReportController@government_forms');

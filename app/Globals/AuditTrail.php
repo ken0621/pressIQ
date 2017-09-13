@@ -61,7 +61,8 @@ class AuditTrail
     }
     public static function record_logs($action ="", $source="", $source_id = 0 , $old_data ="" , $new_data="")
     {
-    	$insert_log["user_id"] = AuditTrail::getUser();
+    	
+        $insert_log["user_id"] = AuditTrail::getUser();
     	$insert_log["remarks"] = $action;
     	$insert_log["source"] = $source;
     	$insert_log["source_id"] = $source_id;
@@ -73,6 +74,7 @@ class AuditTrail
         if($insert_log["user_id"])
         {
     		$id = Tbl_audit_trail::insertGetId($insert_log);
+            
 
     		return $id;
         }
@@ -1427,7 +1429,7 @@ class AuditTrail
                     $transaction_amount = currency("PHP",$amount);                    
                 }
             }
-
+           
 
             $audit_trail[$key]->user = $value->user_first_name." ".$value->user_last_name;
             $audit_trail[$key]->action = $value->remarks;
@@ -1452,6 +1454,7 @@ class AuditTrail
             $audit_trail[$key]->transaction_date = $transaction_date;
             $audit_trail[$key]->transaction_client = $transaction_client;
             $audit_trail[$key]->transaction_amount = $transaction_amount;
+            
         }
         // dd($old[1]["inv_overall_price"]);
         //dd($audit_trail[$key]->user);

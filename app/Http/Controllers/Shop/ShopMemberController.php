@@ -146,4 +146,12 @@ class ShopMemberController extends Shop
         $error = Payment::payment_redirect($shop_id, $key, $success, $failed, $debug);
         dd($error);
     }
+
+    /*BROWN CHECKOUT PAGE*/
+    public function getCheckout()
+    {
+        $data["page"] = "Checkout";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.checkout", $data));
+    }
+
 }

@@ -203,6 +203,7 @@ class PayrollTimeSheet2Controller extends Member
 				$time_out = Request::input("time-out")[$key];
 				$remarks = Request::input("remarks")[$key];
 				//dd($remarks);
+
 				
 				if($time_in != "" || $time_out != "")
 				{

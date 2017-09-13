@@ -260,17 +260,17 @@ Route::any('/member/mlm/report/get', 'Member\MLM_ReportController@get_report');
 
 
 /* MLM STAIRSTEP */
-Route::any('member/mlm/stairstep_compute', 'Member\MLM_StairstepController@index'); 
-Route::any('member/mlm/stairstep_compute/start', 'Member\MLM_StairstepController@start'); 
-Route::any('member/mlm/stairstep_compute/start/compute', 'Member\MLM_StairstepController@compute'); 
+// Route::any('member/mlm/stairstep_compute', 'Member\MLM_StairstepController@index'); 
+// Route::any('member/mlm/stairstep_compute/start', 'Member\MLM_StairstepController@start'); 
+// Route::any('member/mlm/stairstep_compute/start/compute', 'Member\MLM_StairstepController@compute'); 
 
-
+/* STAIRSTEP*/
 Route::any('member/mlm/stairstep/distribution', 'Member\MLM_StairstepController@stairstep_view'); 
 Route::any('member/mlm/stairstep/distribution/submit', 'Member\MLM_StairstepController@distribution_submit'); 
 Route::any('member/mlm/stairstep/view_summary', 'Member\MLM_StairstepController@view_summary'); 
 
-
-Route::any('member/mlm/stairstep/rank', 'Member\MLM_StairstepController@rank_stairstep_view'); 
+/* RANK UPDATE */ 
+Route::any('member/mlm/rank/update', 'Member\MLM_StairstepController@rank_stairstep_view'); 
 
 Route::any('member/mlm/complan_setup', 'Member\Mlm_ComplanSetupController@index'); 
 Route::any('member/mlm/complan_setup/binary_pro', 'Member\Mlm_ComplanSetupController@binary_promotions'); 

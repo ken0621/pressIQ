@@ -137,6 +137,16 @@ class Shop extends Controller
                 return $next($request);
             });
         }
+        else
+        {
+            $this->middleware(function ($request, $next)
+            {  
+                View::share("customer", Self::$customer_info);
+                View::share("customer_info_a", Self::$customer_info);
+                
+                return $next($request);
+            });
+        }
 
         View::share("slot_now", Self::$slot_now);
         

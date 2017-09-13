@@ -17,12 +17,12 @@
 										<img src="/themes/{{ $shop_theme }}/img/or-2.png">
 									</div>
 									<div class="text-right social-button">
-										<div class="holder fb">
-											<div class="name"><i class="fa fa-facebook" aria-hidden="true"></i> Sign in with Facebook</div>
-										</div>
-										<div class="holder gp">
-											<div class="name"><i class="fa fa-google-plus" aria-hidden="true"></i> Sign in with Google+</div>
-										</div>
+										<a href="javascript:" class="holder fb">
+											<div class="name"><i class="fa fa-facebook" aria-hidden="true"></i> Sign up with Facebook</div>
+										</a>
+										<a href="javascript:" class="holder gp">
+											<div class="name"><i class="fa fa-google-plus" aria-hidden="true"></i> Sign up with Google+</div>
+										</a>
 									</div>
 								</div>
 							</div>

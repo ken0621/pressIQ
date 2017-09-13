@@ -188,4 +188,25 @@ class Cart2
 	public static function process_cart()
 	{
 	}
+	public static function store_customer_basic($first_name, $middle_name, $last_name, $gender)
+	{
+	}
+	public static function store_customer_account($email, $password)
+	{
+	}
+	public static function store_customer_country($country_id)
+	{
+	}
+	public static function store_customer_birthday($birthday)
+	{
+	}
+	public static function store_customer_others($others)
+	{
+	}
+	public static function save_customer($shop_id)
+	{
+	}
+	public static function clear_customer()
+	{
+	}
 }

@@ -145,6 +145,8 @@ class TesterController extends Controller
     }
     public function samptest()
     {
+        
+       
         if(Request::isMethod("post"))
         {
             $_customer  = Tbl_customer::where("archived", 0);

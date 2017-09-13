@@ -123,6 +123,11 @@ class Columns
     public static function filterColumns($shop_id, $user_id, $from, $data, $default)
     {
         $columns = Tbl_columns::user($user_id)->shop($shop_id)->from($from)->first();
+        if (isset($columns->columns_data) && count(unserialize($columns->columns_data)) != count($default)) 
+        {
+            Tbl_columns::user($user_id)->shop($shop_id)->from($from)->delete();
+            $columns = Tbl_columns::user($user_id)->shop($shop_id)->from($from)->first();
+        }
 
         if (!isset($columns->columns_data)) 
         {

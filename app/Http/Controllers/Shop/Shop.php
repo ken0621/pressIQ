@@ -17,6 +17,7 @@ use App\Globals\Cart;
 use App\Globals\Settings;
 use App\Models\Tbl_membership_code;
 use App\Globals\Mlm_member;
+use App\Globals\Customer;
 
 class Shop extends Controller
 {
@@ -123,8 +124,19 @@ class Shop extends Controller
             View::share("_categories", $product_category);
         }
         
+        $this->middleware(function ($request, $next)
+        {  
+            $account        = session("mlm_member");
+            $check_account  = Customer::check_account($this->shop_info->shop_id, $account["email"], $account["auth"]);
+            Self::$customer_info = $check_account;
+            View::share("customer", Self::$customer_info);
+            View::share("customer_info_a", Self::$customer_info);
+            
+            return $next($request);
+        });
+
         View::share("slot_now", Self::$slot_now);
-        View::share("customer_info_a", Self::$customer_info);
+        
         View::addLocation(base_path() . '/public/themes/' . $this->shop_theme . '/views/');
         View::share("shop_info", $this->shop_info);
         View::share("shop_theme", $this->shop_info->shop_theme);
@@ -141,6 +153,31 @@ class Shop extends Controller
     public function file($theme, $type, $filename)
     {
         echo require_once(base_path("resources/views/themes/" . $theme . "/" . $type . "/" . $filename));
+    }
+    public function guest_only()
+    {
+        if(session("mlm_member"))
+        {
+            return Redirect::to("/members")->send();
+        }
+    }
+    public function logged_in_member_only()
+    {
+
+        if(!session("mlm_member"))
+        {
+            return Redirect::to("/members/login")->with("error", "<b>Session Expired</b><br>Try loggin in again.");
+        }
+        else
+        {
+            $account        = session("mlm_member");
+            $check_account  = Customer::check_account($this->shop_info->shop_id, $account["email"], $account["auth"]);
+            
+            if(!$check_account)
+            {
+                return Redirect::to("/members/login")->with("error", "<b>Authentication Problem</b><br>The email/password you entered doesn't exist.");
+            }
+        }
     }
     public function get_account_logged_in()
     {

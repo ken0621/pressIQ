@@ -8,6 +8,7 @@ class Webhook
 {
 	const CHECKOUT_SUCCESS = "CHECKOUT_SUCCESS";
 	const CHECKOUT_FAILURE = "CHECKOUT_FAILURE";
+	const CHECKOUT_DROPOUT = "CHECKOUT_DROPOUT";
 
 	public $id;
 	public $name;

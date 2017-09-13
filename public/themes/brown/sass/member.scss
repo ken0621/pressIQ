@@ -181,19 +181,31 @@
 									color: #fff;
 									text-decoration: none;
 									border-color: #36b1b9;
+									img
+									{
+										-webkit-filter: brightness(10);
+										filter: brightness(10);
+										opacity: 1;
+									}
 								}
 							}
 						}
 						&.active
 						{
-							a
+							> a
 							{
-								.nav-holder
+								> .nav-holder
 								{
 									background-color: #36b1b9;
 									color: #fff;
 									text-decoration: none;
 									border-color: #36b1b9;
+									img
+									{
+										-webkit-filter: brightness(10);
+										filter: brightness(10);
+										opacity: 1;
+									}
 								}
 							}
 						}
@@ -284,7 +296,9 @@
 									{
 										img
 										{
-
+											-webkit-filter: brightness(10);
+											filter: brightness(10);
+											opacity: 0.5;
 										}
 									}
 								}
@@ -296,6 +310,15 @@
 									.nav-holder
 									{
 										background-color: #5e3724;
+										.icon
+										{
+											img
+											{
+												-webkit-filter: brightness(10);
+												filter: brightness(10);
+												opacity: 1;
+											}
+										}
 									}
 								}
 							}

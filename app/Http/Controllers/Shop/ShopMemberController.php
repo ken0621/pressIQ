@@ -76,12 +76,24 @@ class ShopMemberController extends Shop
 
         return Redirect::to("/members")->send();
     }
-
+    public function getForgotPassword()
+    {
+        $data["page"] = "Forgot Password";
+        return view("member.forgot_password");
+    }
     /* LOGIN AND REGISTRATION - END */
     public function getIndex()
     {
         $data["page"] = "Dashboard";
-        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.dashboard", $data));
+
+        if(Self::$customer_info->ismlm == 0)
+        {
+            return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.nonmember", $data));
+        }
+        else
+        { 
+            return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.dashboard", $data));
+        }
     }
     public function getProfile()
     {

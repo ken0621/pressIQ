@@ -11,15 +11,15 @@
             <img src="/themes/{{ $shop_theme }}/img/brown-img1.png">
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="join-container">
-            <div class="text-header1">Become a Member</div>
-            <div class="text-header2">Enroll now and become one of us!</div>
-            <div class="btn-container">
-              <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
-              <img src="/themes/{{ $shop_theme }}/img/or.png"><br>
-              <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
-            </div>
+      </div>
+      <div class="col-md-4">
+        <div class="join-container">
+          <div class="text-header1">Join the Movement!</div>
+          <div class="text-header2">Enroll now and become one of us!</div>
+          <div class="btn-container">
+            <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
+            <img src="/themes/{{ $shop_theme }}/img/or.png"><br>
+            <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
           </div>
         </div>
       </div>
@@ -155,9 +155,9 @@
                   </div>
                   <div class="modal-body">
                       <form>
-                        <input type="text" placeholder="Enter Your Sponsor">
+                        <input class="text-center" type="text" placeholder="Nickname or Slot Number">
                         <div class="btn-container">
-                          <button id="btn-verify" class="btn-verify">Verify</button>
+                          <button id="btn-verify" class="btn-verify"><i class="fa fa-check"></i> Verify</button>
                         </div>
                       </form>
                   </div>

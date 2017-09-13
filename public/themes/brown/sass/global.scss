@@ -355,6 +355,11 @@ header
 	height: 50px;
 	width: 100%;
 	z-index: 1000;
+	transition: 0.3s all ease;
+	&.hide-sticky
+	{
+		top: -100%;
+	}
 	.relative
 	{
 		position: relative;

@@ -171,7 +171,7 @@
             </nav>
         </div>
     </header>
-    <div class="sticky-nav hide">
+    <div class="sticky-nav hide-sticky">
         <div class="relative">
             <div class="clearfix container">
                 <div class="left">

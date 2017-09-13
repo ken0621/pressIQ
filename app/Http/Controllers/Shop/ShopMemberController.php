@@ -80,6 +80,10 @@ class ShopMemberController extends Shop
     /* LOGIN AND REGISTRATION - END */
     public function getIndex()
     {
+        if(Self::$customer_info->ismlm == 0)
+        {
+        }
+
         $data["page"] = "Dashboard";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.dashboard", $data));
     }

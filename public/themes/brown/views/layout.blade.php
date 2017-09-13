@@ -64,7 +64,7 @@
                                     </div>
                                 </div>
                                 <div class="profile-footer">
-                                    <button class="btn btn-grey">Sign Out</button>
+                                    <button onclick="location.href='/members/logout'" class="btn btn-grey">Sign Out</button>
                                 </div>
                             </li>
                         </ul>
@@ -282,7 +282,7 @@
                                         </div>
                                     </div>
                                     <div class="profile-footer">
-                                        <button class="btn btn-grey">Sign Out</button>
+                                        <button class="btn btn-grey" onclick="location.href='/members/logout'">Sign Out</button>
                                     </div>
                                 </li>
                             </ul>

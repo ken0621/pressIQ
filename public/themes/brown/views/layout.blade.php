@@ -36,7 +36,7 @@
                 <a class="holder">GET THE APP</a>
                 <a class="holder">COMPANY</a>
                 @if($customer)
-                    <div style="display: inline-block; vertical-align: middle;" class="dropdown">
+                    <div style="display: inline-block; vertical-align: middle;" class="dropdown hidden">
                         <a class="holder" data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false">#272842 <span class="caret"></span></a>
                         <ul class="dropdown-menu dropdown-menu-right slot-picker">
                             <li class="slot-title">Slot Number</li>
@@ -254,7 +254,7 @@
                         <img style="width: 30px; height: 20px;" src="/themes/{{ $shop_theme }}/img/cart-blur.png"> <span class="badge">500</span>
                     </a>
                     @if($customer)
-                        <div style="display: inline-block; vertical-align: middle;" class="dropdown">
+                        <div style="display: inline-block; vertical-align: middle;" class="dropdown hidden">
                             <a class="holder" data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false" style="text-transform: uppercase; color: #fff;">#272842 <span class="caret"></span></a>
                             <ul class="dropdown-menu dropdown-menu-right slot-picker">
                                 <li class="slot-title">Slot Number</li>

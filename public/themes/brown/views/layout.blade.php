@@ -58,7 +58,7 @@
                                     <div class="email">brownandproud@gmail.com</div>
                                     <div class="button-holder">
                                         <div class="clearfix">
-                                            <button class="btn btn-brown">Profile</button>
+                                            <button class="btn btn-brown" type="button" onClick="location.href='/members'">Profile</button>
                                             <button class="btn btn-green">Settings</button>
                                         </div>
                                     </div>

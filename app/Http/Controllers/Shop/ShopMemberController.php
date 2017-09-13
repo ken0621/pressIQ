@@ -5,10 +5,13 @@ use Illuminate\Http\Request;
 use Crypt;
 use Redirect;
 use View;
+use Carbon\Carbon;
 use App\Globals\Payment;
 use App\Globals\Customer;
 use App\Rules\Uniqueonshop;
 use App\Globals\MLM2;
+use App\Globals\FacebookGlobals;
+use App\Models\Tbl_customer;
 
 class ShopMemberController extends Shop
 {
@@ -24,7 +27,28 @@ class ShopMemberController extends Shop
     public function getLogin()
     {
         $data["page"] = "Login";
+        $data['fb_login_url'] = FacebookGlobals::get_link();
+
         return view("member.login", $data);
+    }
+    public function getLoginSubmit()
+    {
+        $user_profile = FacebookGlobals::user_profile();
+        if(count($user_profile) > 0)
+        {
+            $data = collect($user_profile)->toArray();
+
+            Self::store_login_session($data['email'],$data['id']);
+
+            return Redirect::to("/members")->send();
+        }
+        else
+        {
+            $data["page"] = "Register";
+            $data['fb_login_url'] = FacebookGlobals::get_link_register();
+
+            return view("member.register", $data);                
+        }
     }
     public function postLogin(Request $request)
     {
@@ -44,7 +68,37 @@ class ShopMemberController extends Shop
     public function getRegister()
     {
         $data["page"] = "Register";
+        $data['fb_login_url'] = FacebookGlobals::get_link_register();
+
         return view("member.register", $data);
+    }
+    public function getRegisterSubmit()
+    {
+        $user_profile = FacebookGlobals::user_profile();
+        if(count($user_profile) > 0)
+        {
+            $data = collect($user_profile)->toArray();
+            $ins['shop_id'] = $this->shop_info->shop_id;
+            $ins['email'] = $data['email'];
+            $ins['first_name'] = $data['first_name'];
+            $ins['last_name'] = $data['last_name'];
+            $ins['gender'] = $data['gender'] == null ? 'male' : '';
+            $ins['password'] = Crypt::encrypt($data['id']);
+            $ins['ismlm'] = 1;
+            $ins['created_at'] = Carbon::now();
+
+            Tbl_customer::insert($ins);
+            Self::store_login_session($data['email'],$data['id']);
+
+            return Redirect::to("/members")->send();
+        }
+        else
+        {
+            $data["page"] = "Register";
+            $data['fb_login_url'] = FacebookGlobals::get_link_register();
+
+            return view("member.register", $data);                
+        }
     }
     public function postRegister(Request $request)
     {

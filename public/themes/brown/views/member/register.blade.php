@@ -17,7 +17,7 @@
 										<img src="/themes/{{ $shop_theme }}/img/or-2.png">
 									</div>
 									<div class="text-right social-button">
-										<a href="javascript:" class="holder fb">
+										<a href="{{$fb_login_url or '#'}}" class="holder fb">
 											<div class="name"><i class="fa fa-facebook" aria-hidden="true"></i> Sign up with Facebook</div>
 										</a>
 										<a href="javascript:" class="holder gp">
@@ -144,34 +144,25 @@
 </form>
 
 <!-- Modal -->
-<div class="modal fade" id="modal_agreement" role="dialog">
+<div class="modal fade modal-agreement" id="modal_agreement" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 style="color:red;"><span class="glyphicon glyphicon-lock"></span> Login</h4>
-            </div>
+            <div class="modal-header">Accept Brown Contract</div>
             <div class="modal-body">
-                <form role="form">
-                    <div class="form-group">
-                        <label for="usrname"><span class="glyphicon glyphicon-user"></span> Username</label>
-                        <input type="text" class="form-control" id="usrname" placeholder="Enter email">
-                    </div>
-                    <div class="form-group">
-                        <label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Password</label>
-                        <input type="text" class="form-control" id="psw" placeholder="Enter password">
-                    </div>
-                    <div class="checkbox">
-                        <label><input type="checkbox" value="" checked>Remember me</label>
-                    </div>
-                    <button type="submit" class="btn btn-default btn-success btn-block"><span class="glyphicon glyphicon-off"></span> Login</button>
-                </form>
+                <div class="contract">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. 
+
+Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. 
+
+Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. 
+
+Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. 
+
+Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus.</div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-default btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
-                <p>Not a member? <a href="#">Sign Up</a></p>
-                <p>Forgot <a href="#">Password?</a></p>
+            	<button type="submit" class="btn btn-pure pull-right" data-dismiss="modal">Accept</button>
+                <button type="submit" class="btn btn-semi pull-right" data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>

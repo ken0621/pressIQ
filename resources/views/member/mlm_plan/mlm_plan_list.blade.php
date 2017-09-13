@@ -15,6 +15,88 @@
         </div>
     </div>
 </div>
+<!-- NO PRODUCT YET -->
+<div class="panel panel-default panel-block panel-title-block panel-gray ">
+    <div class="tab-content">
+        <div id="all-orders" class="tab-pane fade in active">
+            <div class="form-group order-tags"></div>
+            <div class="table-responsive">
+                <table class="table table-condensed">
+                    <thead style="text-transform: uppercase">
+                        <tr>
+                            <th class="text-left">Plan Code</th>
+                            <th class="text-left">Marketing Plan Name</th>
+                            <th class="text-center">Trigger</th>
+                            <th class="text-center">Label</th>
+                            <th class="text-center">Enabled</th>
+                            <th class="text-center">Release Schedule</th>
+                            <th class="text-right"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if(!empty($mlm_plan))
+                        @foreach($mlm_plan as $mlm)
+                        <tr>
+                            <td class="text-left">{{$mlm->marketing_plan_code}}</td>
+                            <td class="text-left">{{$mlm->marketing_plan_name}}</td>
+                            <td class="text-center">{{$mlm->marketing_plan_trigger}}</td>
+                            <td class="text-center">{{$mlm->marketing_plan_label}}</td>
+                            <td class="text-center">
+                                <?php 
+                                switch( $mlm->marketing_plan_enable )
+                                {
+                                    case( 1 ):
+                                        echo '<a href="" style="color: green;">Active</a>';
+                                    break;
+                                    case( 2 ):
+                                        echo '<a href="" style="color: red;">Inactive</a>';
+                                    break;
+                                    case( 0 ):
+                                        echo '<a href="" style="color: red;">Not Configured</a>';
+                                    break;
+                                    default:
+                                        echo '<a href="" style="color: red;">Not Configured</a>';
+                                    break;
+                                }
+                                ?>
+                                
+                            </td>
+                            <td class="text-center">
+                                <?php 
+                                switch( $mlm->marketing_plan_release_schedule )
+                                {
+                                    case( 1 ):
+                                        echo 'Instant';
+                                    break;
+                                    case( 2 ):
+                                        echo 'Daily';
+                                    break;
+                                    case( 0 ):
+                                        echo 'Weekly';
+                                    break;
+                                    default:
+                                        echo 'Monthly';
+                                    break;
+                                }
+                                ?>
+                            </td>
+                            <td class="text-right">
+                                <a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="/member/mlm/plan/{{$mlm->marketing_plan_code}}">CONFIGURE</a>
+                            </td>
+                        </tr>
+                        @endforeach
+                        @else
+                        <tr>
+                            <td colspan="7"><center>No available MLM Plan</center></td>
+                        </tr>
+                        @endif
+                    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <div class="tab-content">
         <div id="all-orders" class="tab-pane fade in active">
@@ -141,88 +223,7 @@
         </div>
     </div>    
 </div>    
-<!-- NO PRODUCT YET -->
-<div class="panel panel-default panel-block panel-title-block panel-gray ">
-    <div class="tab-content">
-        <div id="all-orders" class="tab-pane fade in active">
-            <div class="form-group order-tags"></div>
-            <div class="table-responsive">
-                <table class="table table-condensed">
-                    <thead style="text-transform: uppercase">
-                        <tr>
-                            <th class="text-left">Plan Code</th>
-                            <th class="text-left">Marketing Plan Name</th>
-                            <th class="text-center">Trigger</th>
-                            <th class="text-center">Label</th>
-                            <th class="text-center">Enabled</th>
-                            <th class="text-center">Release Schedule</th>
-                            <th class="text-right"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if(!empty($mlm_plan))
-                        @foreach($mlm_plan as $mlm)
-                        <tr>
-                            <td class="text-left">{{$mlm->marketing_plan_code}}</td>
-                            <td class="text-left">{{$mlm->marketing_plan_name}}</td>
-                            <td class="text-center">{{$mlm->marketing_plan_trigger}}</td>
-                            <td class="text-center">{{$mlm->marketing_plan_label}}</td>
-                            <td class="text-center">
-                                <?php 
-                                switch( $mlm->marketing_plan_enable )
-                                {
-                                    case( 1 ):
-                                        echo '<a href="" style="color: green;">Active</a>';
-                                    break;
-                                    case( 2 ):
-                                        echo '<a href="" style="color: red;">Inactive</a>';
-                                    break;
-                                    case( 0 ):
-                                        echo '<a href="" style="color: red;">Not Configured</a>';
-                                    break;
-                                    default:
-                                        echo '<a href="" style="color: red;">Not Configured</a>';
-                                    break;
-                                }
-                                ?>
-                                
-                            </td>
-                            <td class="text-center">
-                                <?php 
-                                switch( $mlm->marketing_plan_release_schedule )
-                                {
-                                    case( 1 ):
-                                        echo 'Instant';
-                                    break;
-                                    case( 2 ):
-                                        echo 'Daily';
-                                    break;
-                                    case( 0 ):
-                                        echo 'Weekly';
-                                    break;
-                                    default:
-                                        echo 'Monthly';
-                                    break;
-                                }
-                                ?>
-                            </td>
-                            <td class="text-right">
-                                <a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="/member/mlm/plan/{{$mlm->marketing_plan_code}}">CONFIGURE</a>
-                            </td>
-                        </tr>
-                        @endforeach
-                        @else
-                        <tr>
-                            <td colspan="7"><center>No available MLM Plan</center></td>
-                        </tr>
-                        @endif
-                    
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    
+
     
 </div>
 

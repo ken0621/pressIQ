@@ -18,14 +18,11 @@
 					th
 					{
 						border-bottom: 0;
-						text-align: center;
+						text-align: left;
 						color: #344049;
 						font-size: 13px;
-						font-weight: 400;
-						&:last-child
-						{
-							text-align: left;
-						}
+						font-weight: 600;
+						padding-bottom: 15px;
 					}
 				}
 			}
@@ -49,15 +46,11 @@
 					td
 					{
 						border: 0;
-						text-align: center;
+						text-align: left;
 						border-bottom: 1px solid #ededed;
 						font-size: 13px;
 						color: #344049;
 						font-weight: 600;
-						&:last-child
-						{
-							text-align: left;
-						}
 					}
 				}
 			}
@@ -84,6 +77,43 @@
 				font-size: 13px;
 				font-weight: 600;
 				letter-spacing: 0.5px;
+			}
+		}
+	}
+	.chart-holder
+	{
+		text-align: center;
+		#income_summary
+		{
+			margin: auto !important;
+		}
+	}
+	.unilevel-holder
+	{
+		margin-top: 25px;
+		.holder
+		{
+			margin-bottom: 7.5px;
+			.label2
+			{
+				color: #344049;
+				font-size: 13px;
+				font-weight: 600;
+				margin-top: 5px;
+			}
+			.progress2
+			{
+				color: #344049;
+				font-size: 13px;
+				font-weight: 600;
+				text-align: center;
+				background-color: #ededed;
+				padding: 5px 0;
+				letter-spacing: 0.5px;
+			}
+			&:last-child
+			{
+				margin-bottom: 0;
 			}
 		}
 	}
@@ -158,24 +188,62 @@
 	{
 		.holder
 		{
-			margin-bottom: 25px;
+			padding-bottom: 25px;
+			position: relative;
+			padding-left: 30px;
 			.message
 			{
 				color: #344049;
-				font-size: 11px;
+				font-size: 13px;
 				margin-bottom: 10px;
 			}
 			.date
 			{
 				color: #85939e;
-				font-size: 11px;
+				font-size: 13px;
 				font-weight: 600;
 			}
 			.wallet
 			{
 				color: #3e95cd;
 				font-size: 11px;
-				font-weight: 700;
+				font-weight: 600;
+			}
+			.circle-line
+			{
+				position: absolute;
+				left: 0;
+				top: 0;
+				text-align: center;
+				height: 100%;
+				bottom: 0;
+				.circle
+				{
+
+				}
+				.line
+				{
+					position: absolute;
+					top: 15px;
+					height: calc(100% - 10px);
+					left: 5.5px;
+					width: 4px;
+					img
+					{
+						height: 100%;
+						width: 4px;
+					}
+				}
+			}
+			&:last-child
+			{
+				.circle-line
+				{
+					.line
+					{
+						display: none;
+					}
+				}
 			}
 		}
 	}

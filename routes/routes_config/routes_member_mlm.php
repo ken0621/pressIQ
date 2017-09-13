@@ -77,7 +77,6 @@ Route::any('/member/mlm/plan/binary/settings/submit', 'Member\MLM_PlanController
 Route::any('/member/mlm/plan/wallet/type/view', 'Member\MLM_PlanController@wallet_type');//Luke
 Route::any('/member/mlm/plan/wallet/type/add', 'Member\MLM_PlanController@add_wallet_type');//Luke
 
-
 /* start binary PLAN */
 Route::any('/member/mlm/plan/binary/edit/membership/points', 'Member\MLM_PlanController@edit_binary_membership_points');//Luke
 Route::any('/member/mlm/plan/binary/get/membership/pairing/{membership_id}', 'Member\MLM_PlanController@get_binary_pairing_combination'); //Luke
@@ -163,6 +162,18 @@ Route::any('/member/mlm/plan/binary_promotions/save', 'Member\MLM_PlanController
 Route::any('/member/mlm/plan/binary_promotions/get', 'Member\MLM_PlanController@binary_promotions_get');//luke
 Route::any('/member/mlm/plan/binary_promotions/edit', 'Member\MLM_PlanController@binary_promotions_edit');//luke
 /* end triangle repurchase  Plan */
+
+/* start triangle repurchase */
+Route::any('/member/mlm/plan/brown_rank', 'Member\MLM_PlanController@brown_rank'); 
+Route::any('/member/mlm/plan/brown_rank/table', 'Member\MLM_PlanController@brown_rank_table'); 
+Route::any('/member/mlm/plan/brown_rank/add_rank', 'Member\MLM_PlanController@brown_rank_add');
+Route::any('/member/mlm/plan/brown_rank/add_rank_submit', 'Member\MLM_PlanController@add_rank_submit');
+Route::any('/member/mlm/plan/brown_rank/update_rank_submit', 'Member\MLM_PlanController@update_rank_submit');
+
+Route::any('/member/mlm/plan/brown_repurchase', 'Member\MLM_PlanController@brown_repurchase'); 
+/* end triangle repurchase  Plan */
+
+
 
 /* end MLM Plan */
 
@@ -290,3 +301,8 @@ Route::post('member/mlm/developer/import', 'Member\MlmDeveloperController@import
 Route::get('member/mlm/developer/repurchase', 'Member\MlmDeveloperController@repurchase');
 Route::post('member/mlm/developer/repurchase', 'Member\MlmDeveloperController@repurchase_submit');
 Route::get('member/mlm/developer/reset', 'Member\MlmDeveloperController@reset');
+
+Route::any('member/mlm/developer/popup_genealogy', 'Member\MlmDeveloperController@popup_genealogy');
+Route::any('member/mlm/developer/popup_slot_created', 'Member\MlmDeveloperController@popup_slot_created');
+Route::any('member/mlm/developer/popup_earnings', 'Member\MlmDeveloperController@popup_earnings');
+Route::any('member/mlm/developer/popup_points', 'Member\MlmDeveloperController@popup_points');

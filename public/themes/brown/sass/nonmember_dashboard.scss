@@ -163,11 +163,14 @@ $bold: 700;
 
 	.modal-content
 	{
+		overflow: hidden;
+
 		.modal-header
 		{
 			background-color: #693d28;
 			border-top-left-radius: 3px;
 			border-top-right-radius: 3px;
+			border-bottom: none;
 
 			.close
 			{
@@ -181,63 +184,86 @@ $bold: 700;
 			}
 		}
 
-		.modal-body
+		.table
+		{
+			thead
+			{
+				background-color: #aca6a3;
+
+				tr
+				{
+					th
+					{
+						font-weight: $semi-bold;
+						font-size: 15px;
+						text-align: center;
+						color: #fff;
+						border: none;
+
+					}					
+				}
+			}
+
+			tbody
+			{
+
+				tr
+				{
+					td
+					{
+						text-align: center;
+						vertical-align: middle;
+						
+						img
+						{
+							border: 1px solid #c7c7c7;
+							padding: 10px;
+						}
+
+
+
+						.item-qty
+						{
+							width: 30%;
+							padding: 5px;
+							border: 1px solid #cecece;
+						}
+					}
+				}
+			}
+
+		}
+
+		.modal-footer
 		{
 
-			h4
-			{
-				font-weight: $semi-bold;
-				font-size: 15px;
-				text-align: center;
-				margin-bottom: 20px;
-			}
-			
-			.img-container
+			.left-btn-container
 			{
 
-				img
+				width: 100%;
+
+				div
 				{
-					width: 100%;
-					height: auto;
+					float: left;
+					padding-top: 10px;
 				}
 
-				border: 1px solid #c7c7c7;
-				padding: 10px;
-			}
-
-			.details
-			{
-				.text-header
+				.btn-checkout
 				{
-					font-weight: $semi-bold;
-					font-style: $open-sans;
-					font-size: 15px;
-					padding-bottom: 20px;
-				}
+					@extend div;
+					margin-left: 15px;
 
-				.specs
-				{
-					font-size: 13px;
-					padding-bottom: 20px;
-					color: #60686f;
-				}
-			}
-
-	    	.btn-container
-	    	{
-				font-family: $open-sans;
-				font-weight: $semi-bold;
-				font-size: 15px;
-				padding-bottom: 20px;
-
-				.btn-proceed-to-payment
-				{
 					padding: 12px 30px;
 					color: #fff;
-					background-color: #693d28;
-					border: 2px solid #693d28;
+					background-color: #4dac2b;
 					border-radius: 2px;
-				}
+					border: none;
+				} 
+			}
+
+			.total
+			{
+				padding-top: 10px;
 			}
 		}
 	}

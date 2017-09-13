@@ -76,7 +76,11 @@ class ShopMemberController extends Shop
 
         return Redirect::to("/members")->send();
     }
-
+    public function getForgotPassword()
+    {
+        $data["page"] = "Forgot Password";
+        return view("member.forgot_password");
+    }
     /* LOGIN AND REGISTRATION - END */
     public function getIndex()
     {

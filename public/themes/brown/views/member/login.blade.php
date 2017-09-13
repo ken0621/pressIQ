@@ -63,7 +63,7 @@
 							</form>
 
 							<div class="form-group text-center">
-								<div class="forgot" style="color: #808080; font-weight: 600;">Forgot Password? <a style="color: #4d575e;" href="javascript:">Click Here</a></div>
+								<div class="forgot" style="color: #808080; font-weight: 600;">Forgot Password? <a style="color: #4d575e;" href="/members/forgot-password">Click Here</a></div>
 							</div>
 						</div>
 					</td>

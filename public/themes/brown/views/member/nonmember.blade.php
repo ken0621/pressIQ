@@ -2,7 +2,7 @@
 @section("member_content")
 
 <div class="dashboard">
-
+<!-- TOP DASHBOARD-->
 <div class="dashboard-top">
   
     <div class="row clearfix">
@@ -16,15 +16,16 @@
           <div class="text-header1">Become a Member</div>
           <div class="text-header2">Enroll now and become one of us!</div>
           <div class="btn-container">
-            <a href="#" id="join-us-today"><button class="join-us-today">Join Us Today</button></a>
-            <img src="/themes/{{ $shop_theme }}/img/or.png">
-            <a href="#" id="enter-a-code"><button class="enter-a-code">Enter a Code</button></a>
+            <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
+            <img src="/themes/{{ $shop_theme }}/img/or.png"><br>
+            <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
           </div>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- BOTTOM DASHBOARD -->
   <div class="dashboard-bottom">
 
       <div class="text-header">Profile Information</div>
@@ -92,8 +93,11 @@
         </div>
   </div>
 
+  <!--   POPUPS -->
+
+  <!-- Buy a Kit -->
   <div class="popup-buy-a-kit">
-      <div id="myModal1" class="modal fade">
+      <div id="buy-a-kit-modal" class="modal fade">
           <div class="modal-lg modal-dialog">
               <div class="modal-content">
                   <div class="modal-header">
@@ -129,7 +133,7 @@
                           
 
                           <div class="btn-container">
-                            <button class="proceed-to-payment">Proceed to payment</button>
+                            <button class="btn-proceed-to-payment">Proceed to payment</button>
                           </div>
                         </div>
                       </div>
@@ -140,8 +144,9 @@
       </div>
   </div>
 
+  <!--  Enter a code -->
   <div class="popup-enter-a-code">
-      <div id="myModal2" class="modal fade">
+      <div id="enter-a-code-modal" class="modal fade">
           <div class="modal-sm modal-dialog">
               <div class="modal-content">
                   <div class="modal-header">
@@ -149,18 +154,21 @@
                       <h4 class="modal-title">Sponsor</h4>
                   </div>
                   <div class="modal-body">
-                      <input type="text" placeholder="Enter Your Sponsor">
-                      <div class="btn-container">
-                        <button id="verify" class="verify">Verify</button>
-                      </div>
+                      <form>
+                        <input type="text" placeholder="Enter Your Sponsor">
+                        <div class="btn-container">
+                          <button id="btn-verify" class="btn-verify">Verify</button>
+                        </div>
+                      </form>
                   </div>
               </div>
           </div>
       </div>
   </div>
 
+  <!-- Proceed 1 -->
   <div class="popup-proceed1">
-      <div id="myModal3" class="modal fade">
+      <div id="proceed-modal-1" class="modal fade">
           <div class="modal-sm modal-dialog">
               <div class="modal-content">
                   <div class="modal-header">
@@ -168,124 +176,156 @@
                       <h4 class="modal-title">Sponsor</h4>
                   </div>
                   <div class="modal-body">
-                      <input type="text" placeholder="Name">
-                      <input type="text" placeholder="Enter Code">
-                      <input type="text" placeholder="Enter Pin">
-                      <div class="btn-container">
-                        <button class="proceed">Proceed</button>
-                      </div>
+                      <form>
+                          <input type="text" placeholder="Name">
+                          <input type="text" placeholder="Enter Code">
+                          <input type="text" placeholder="Enter Pin">
+                          <div class="btn-container">
+                            <button id="btn-proceed-1" class="btn-proceed-1">Proceed</button>
+                          </div>
+                      </form>
                   </div>
               </div>
           </div>
       </div>
+  </div>
+  
+  <!-- Proceed 2 -->
+  <div class="popup-proceed2">
+    <div id="proceed-modal-2" class="modal fade">
+        <div class="modal-sm modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Sponsor</h4>
+                </div>
+                <div class="modal-body">
+                  <form>
+                      <input class="input" type="text" placeholder="Julia Lim (Slot #215678)">
+                      <input class="input" type="text" placeholder="Enter Code">
+                      <input class="input" type="text" placeholder="Enter Pin">
+
+                      <select name="" id="">
+                        <option value="Placement">Placement</option>
+                      </select>
+
+                      <div>Position: </div>
+
+                      <label class="radio-inline" style="padding-left: 72px;">
+                        <input type="radio" name="optradio">Left
+                      </label>
+
+                      <label class="radio-inline" style="margin-left: 50px;">
+                        <input type="radio" name="optradio">Right
+                      </label>
+
+                      <div class="btn-container">
+                        <button id="btn-proceed-2" class="btn-proceed-2">Proceed</button>
+                      </div>
+                  </form>
+                </div>
+            </div>
+        </div>
+    </div>
   </div>
 
-    <div class="popup-proceed2">
-      <div id="myModal4" class="modal fade">
-          <div class="modal-sm modal-dialog">
-              <div class="modal-content">
-                  <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                      <h4 class="modal-title">Sponsor</h4>
-                  </div>
-                  <div class="modal-body">
-                      <input type="text" placeholder="Name">
-                      <input type="text" placeholder="Enter Code">
-                      <input type="text" placeholder="Enter Pin">
-                      <input type="text" placeholder="Placement">
-                      <label for="position">Position: </label>
-                      <label class="radio-inline"><input type="radio" name="optradio">Left</label>
-                      <label class="radio-inline"><input type="radio" name="optradio">Right</label>
-                      <div class="btn-container">
-                        <button class="proceed">Proceed</button>
-                      </div>
+  <!-- Success -->
+  <div class="popup-success">
+    <div id="success-modal" class="modal">
+        <div class="modal-md modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Verification Sucess</h4>
+                </div>
+                <div class="modal-body">
+                    
+                    <div><img src="/themes/{{ $shop_theme }}/img/brown-done-img.png"></div>
+                    <div class="text-header">Done!</div>
+                    <div class="text-caption">You are now officially enrolled to<br>Brown&Proud movement</div>
+
+                    <div class="btn-container">
+                      <button id="btn-ok" class="btn-ok">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <!-- Failed -->
+  <div class="popup-failed">
+  <div id="failed-modal" class="modal">
+      <div class="modal-sm modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title"><img width="37" height="36" src="/themes/{{ $shop_theme }}/img/brown-failed-img.png"> Verification Failed</h4>
+              </div>
+              <div class="modal-body">
+          
+                  <div class="text-caption">This sponsor does'nt exits!</div>
+
+                  <div class="btn-container">
+                    <button id="btn-back" class="btn-back">Back</button>
                   </div>
               </div>
           </div>
       </div>
   </div>
+</div>
 
 </div>
 
 @endsection
 @section("member_script")
-<script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script>
-var ctx = document.getElementById("income_summary").getContext('2d');
-
-// And for a doughnut chart
-var myDoughnutChart = new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-        labels: ["Red", "Blue"],
-        datasets: [{
-            label: '# of Votes',
-            data: [68500.00, 68500.00],
-            backgroundColor: [
-                'rgba(142, 94, 162, 1)',
-                'rgba(62, 149, 205, 1)'
-            ],
-            borderColor: [
-                'rgba(142, 94, 162, 1)',
-                'rgba(62, 149, 205, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: 
-    {
-      legend: 
-      {
-        responsive: true,
-        display: false,
-      },
-      tooltips: 
-      {
-        callbacks: 
-        {
-          label: function(tooltipItems, data) 
-          {
-            var sum = data.datasets[0].data.reduce(add, 0);
-            function add(a, b) {
-              return a + b;
-            }
-
-            return data.datasets[0].data[tooltipItems.index] + ' %';
-          },
-          // beforeLabel: function(tooltipItems, data) {
-          //   return data.datasets[0].data[tooltipItems.index] + ' hrs';
-          // }
-        }
-      }
-    }
-});
-</script>
 
 <script type="text/javascript">
+
+  /*Popups*/
+
+  /*Buy a Kit*/
   $(document).ready(function(){
-    $("#join-us-today").click(function(){
-      $("#myModal1").modal('show');
+    $("#btn-buy-a-kit").click(function(){
+      $("#buy-a-kit-modal").modal('show');
     });
   });
 
+  /*Enter a code*/
   $(document).ready(function(){
-    $("#enter-a-code").click(function(){
-      $("#myModal2").modal('show');
+    $("#btn-enter-a-code").click(function(){
+      $("#enter-a-code-modal").modal('show');
     });
   });
 
+  /*Proceed 1*/
   $(document).ready(function(){
-    $("#verify").click(function(){
-      $("#myModal3").modal('show');
+    $("#btn-verify").click(function(){
+      $("#proceed-modal-1").modal('show');
     });
   });
 
+  /*Proceed 2*/
   $(document).ready(function(){
-    $("#verify").click(function(){
-      $("#myModal4").modal('show');
+    $("#btn-verify").click(function(){
+      $("#proceed-modal-2").modal('show');
+    });
+  });
+
+  /*Success*/
+  $(document).ready(function(){
+    $("#btn-proceed-2").click(function(){
+      $("#success-modal").modal('show');
+    });
+  });
+
+  /*Failed*/
+  $(document).ready(function(){
+    $("#btn-proceed-2").click(function(){
+      $("#failed-modal").modal('show');
     });
   });
 

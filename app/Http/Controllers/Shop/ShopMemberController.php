@@ -42,15 +42,11 @@ class ShopMemberController extends Shop
     }
     public function getRegister()
     {
-        Self::guest_only();
-
         $data["page"] = "Register";
         return view("member.register", $data);
     }
     public function postRegister(Request $request)
     {
-        Self::guest_only();
-
         $shop_id                                = $this->shop_info->shop_id;
         $validate["first_name"]                 = ["required", "string", "min:2"];
         $validate["middle_name"]                = "";
@@ -107,7 +103,16 @@ class ShopMemberController extends Shop
         $data["page"] = "Report";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.report", $data));
     }
-
+    public function getWalletLogs()
+    {
+        $data["page"] = "Wallet Logs";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.wallet_logs", $data));
+    }
+    public function getWalletEncashment()
+    {
+        $data["page"] = "Wallet Encashment";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.wallet_encashment", $data));
+    }
 
     public function getNonMember()
     {
@@ -126,4 +131,12 @@ class ShopMemberController extends Shop
         $error = Payment::payment_redirect($shop_id, $key, $success, $failed, $debug);
         dd($error);
     }
+
+    /*BROWN CHECKOUT PAGE*/
+    public function getCheckout()
+    {
+        $data["page"] = "Checkout";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.checkout", $data));
+    }
+
 }

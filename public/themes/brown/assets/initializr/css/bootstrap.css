@@ -4749,15 +4749,15 @@ a.thumbnail.active {
   color: #66512c;
 }
 .alert-danger {
-  color: #a94442;
-  background-color: #f2dede;
-  border-color: #ebccd1;
+  color: #fff;
+  background-color: #da473e;
+  /* border-color: #ebccd1; */
 }
 .alert-danger hr {
-  border-top-color: #e4b9c0;
+  /* border-top-color: #e4b9c0; */
 }
 .alert-danger .alert-link {
-  color: #843534;
+  color: #fff;
 }
 @-webkit-keyframes progress-bar-stripes {
   from {

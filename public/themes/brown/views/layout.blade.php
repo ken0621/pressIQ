@@ -171,7 +171,7 @@
             </nav>
         </div>
     </header>
-    <div class="sticky-nav hide">
+    <div class="sticky-nav hide-sticky">
         <div class="relative">
             <div class="clearfix container">
                 <div class="left">
@@ -179,7 +179,7 @@
                     <div class="text">All Categories</div>
                     <div class="list-category hide">
                         <div class="container">
-                            <a href="javascript:">Brown</a>
+                            <a href="/" class="head-button link-nav {{ Request::segment(1) == '' ? 'active' : '' }}" id="home">Brown</a>
                             <a href="javascript:">Phone Accessories</a>
                             <a href="javascript:">Internet Of Things</a>
                             <a href="javascript:">Health Technology</a>

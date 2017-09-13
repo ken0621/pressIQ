@@ -37,16 +37,6 @@ class Shop extends Controller
         $data['lead_code'] = null;
         $data['customer_info'] = null;
     	$check_domain = Tbl_shop::where("shop_domain", $domain)->first();
-        
-        if ($this->shop_theme == "ecommerce-1")
-        {
-            $this->middleware(function ($request, $next)
-            {  
-                $this->get_account_logged_in();
-                
-                return $next($request);
-            });
-        }
 
         if(hasSubdomain())
         {
@@ -102,6 +92,16 @@ class Shop extends Controller
         $this->shop_theme_color = $this->shop_info->shop_theme_color;
 
         $this->shop_theme_info  = $shop_theme_info;
+
+        if ($this->shop_theme == "ecommerce-1")
+        {
+            $this->middleware(function ($request, $next)
+            {  
+                $this->get_account_logged_in();
+                
+                return $next($request);
+            });
+        }
 
         $company_column         = array('company_name', 'company_acronym', 'company_logo', 'receipt_logo', 'company_address', 'company_email', 'company_mobile', 'company_hour');
         $company_info           = collect(Tbl_content::where("shop_id", $this->shop_info->shop_id)->whereIn('key', $company_column)->get())->keyBy('key');

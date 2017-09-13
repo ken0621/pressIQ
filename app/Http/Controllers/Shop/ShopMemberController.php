@@ -103,7 +103,16 @@ class ShopMemberController extends Shop
         $data["page"] = "Report";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.report", $data));
     }
-
+    public function getWalletLogs()
+    {
+        $data["page"] = "Wallet Logs";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.wallet_logs", $data));
+    }
+    public function getWalletEncashment()
+    {
+        $data["page"] = "Wallet Encashment";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.wallet_encashment", $data));
+    }
 
     public function getNonMember()
     {

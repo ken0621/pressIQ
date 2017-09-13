@@ -42,15 +42,11 @@ class ShopMemberController extends Shop
     }
     public function getRegister()
     {
-        Self::guest_only();
-
         $data["page"] = "Register";
         return view("member.register", $data);
     }
     public function postRegister(Request $request)
     {
-        Self::guest_only();
-
         $shop_id                                = $this->shop_info->shop_id;
         $validate["first_name"]                 = ["required", "string", "min:2"];
         $validate["middle_name"]                = "";

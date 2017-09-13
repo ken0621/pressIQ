@@ -103,12 +103,6 @@
 								@endif
 								
 								<div class="form-group">
-									<div class="register-label">LANGUAGE</div>
-									<div class="form-input">
-										<input class="form-control input-sm" type="text" name="contact" value="">
-									</div>
-								</div>
-								<div class="form-group">
 									<div class="register-label">CONTACT</div>
 									<div class="form-input">
 										<input class="form-control input-sm" type="text" name="contact" value="{{ old('contact') }}">

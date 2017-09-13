@@ -11,8 +11,7 @@
             <img src="/themes/{{ $shop_theme }}/img/brown-img1.png">
           </div>
         </div>
-      </div>
-      <div class="col-md-4">
+        <div class="col-md-4">
         <div class="join-container">
           <div class="text-header1">Join the Movement!</div>
           <div class="text-header2">Enroll now and become one of us!</div>
@@ -22,6 +21,7 @@
             <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
           </div>
         </div>
+      </div>
       </div>
     </div>
 

@@ -24,6 +24,14 @@
             <div class="col-md-2">
                 <label for="stairstep_required_gv">Required Group Sales</label>
                 <input type="number" class="form-control" name="stairstep_required_gv" value="{{$value->stairstep_required_gv}}">
+            </div>            
+            <div class="col-md-2">
+                <label for="stairstep_required_gv">Required Personal Sales Maintenance</label>
+                <input type="number" class="form-control" name="stairstep_pv_maintenance" value="{{$value->stairstep_pv_maintenance}}">
+            </div>            
+            <div class="col-md-2">
+                <label for="stairstep_required_gv">Commission Multiplier</label>
+                <input type="number" class="form-control" name="commission_multiplier" value="{{$value->commission_multiplier}}">
             </div>
             <div class="col-md-1">
                 <label for="stairstep_bonus">Bonus</label>

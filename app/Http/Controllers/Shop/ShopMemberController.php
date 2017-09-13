@@ -76,10 +76,18 @@ class ShopMemberController extends Shop
 
         return Redirect::to("/members")->send();
     }
-
+    public function getForgotPassword()
+    {
+        $data["page"] = "Forgot Password";
+        return view("member.forgot_password");
+    }
     /* LOGIN AND REGISTRATION - END */
     public function getIndex()
     {
+        if(Self::$customer_info->ismlm == 0)
+        {
+        }
+
         $data["page"] = "Dashboard";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.dashboard", $data));
     }
@@ -131,7 +139,7 @@ class ShopMemberController extends Shop
 
     public function getNonMember()
     {
-        $data["page"] = "Dashboard";
+        $data["page"] = "NonMember";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.nonmember", $data));
     }
 

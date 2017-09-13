@@ -13,17 +13,11 @@
 					<td class="c2">
 						<div class="register-form">
 							<div class="text-right social-button">
-								<div class="holder">
-									<div class="img">
-										<img src="/themes/{{ $shop_theme }}/img/fb.png">
-									</div>
-									<div class="name">Sign Up With Facebook</div>
+								<div class="holder fb">
+									<div class="name"><i class="fa fa-facebook" aria-hidden="true"></i> Sign in with Facebook</div>
 								</div>
-								<div class="holder">
-									<div class="img">
-										<img src="/themes/{{ $shop_theme }}/img/google.png">
-									</div>
-									<div class="name">Sign Up With Google</div>
+								<div class="holder gp">
+									<div class="name"><i class="fa fa-google-plus" aria-hidden="true"></i> Sign in with Google+</div>
 								</div>
 							</div>
 
@@ -48,13 +42,13 @@
 								<div class="form-group">
 									<div class="register-label">EMAIL</div>
 									<div class="form-input">
-										<input class="form-control input-sm" type="email" name="email" value="">
+										<input class="form-control input-sm" type="email" name="email" placeholder="Type Your Email Here" value="">
 									</div>
 								</div>
 								<div class="form-group">
 									<div class="register-label">PASSWORD</div>
 									<div class="form-input">
-										<input class="form-control input-sm" type="password" name="password" value="">
+										<input class="form-control input-sm" type="password" name="password" placeholder="Type Your Password Here" value="">
 									</div>
 								</div>
 								<div class="form-group">
@@ -69,7 +63,7 @@
 							</form>
 
 							<div class="form-group text-center">
-								<div class="forgot" style="color: #808080; font-weight: 600; font-size: 11px;">Forgot Password? <a style="color: #4d575e;" href="javascript:">Click Here</a></div>
+								<div class="forgot" style="color: #808080; font-weight: 600;">Forgot Password? <a style="color: #4d575e;" href="javascript:">Click Here</a></div>
 							</div>
 						</div>
 					</td>

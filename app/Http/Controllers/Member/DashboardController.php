@@ -32,7 +32,6 @@ class DashboardController extends Member
 
 	public function index()
 	{
-       
 		$period 		= Request::input("period");
 		$period 		= "days_ago";
 		$date["days"] 	= "365";

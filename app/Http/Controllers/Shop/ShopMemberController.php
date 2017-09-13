@@ -103,8 +103,6 @@ class ShopMemberController extends Shop
         $data["page"] = "Report";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.report", $data));
     }
-<<<<<<< HEAD
-=======
     public function getWalletLogs()
     {
         $data["page"] = "Wallet Logs";
@@ -130,7 +128,6 @@ class ShopMemberController extends Shop
         $data["page"] = "Orders";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.order", $data));
     }
->>>>>>> origin/master
 
     public function getNonMember()
     {

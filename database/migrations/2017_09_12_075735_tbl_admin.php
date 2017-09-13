@@ -15,6 +15,7 @@ class TblAdmin extends Migration
     {
             Schema::create('tbl_admin', function (Blueprint $table) {
             $table->increments('admin_id');
+            $table->string('user_pic');
             $table->string('first_name');
             $table->string('last_name');
             $table->string('username');
@@ -31,6 +32,5 @@ class TblAdmin extends Migration
      */
     public function down()
     {
-        //
     }
 }

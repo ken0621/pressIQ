@@ -76,7 +76,16 @@ function page_list()
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/pos";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "90% Working";
-    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Erwin Guevara</span>";  
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";  
+
+    /* -- E-COMMERCE => PRODUCT ORDERS */
+    $code = "cashier-issue-stocks";
+    $nav[$page]['submenu'][$code]['label'] = "Issue Stocks";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/issue_stocks";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "90% Working";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";  
 
 
     /* E-COMMERCE */
@@ -294,6 +303,24 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page', 'product_code_reciept', 'product_code_sell_codes', 'see_all_invoice'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Erwin Guevara";
+
+        /* -- MLM => MEMBERSHIP CODES */
+        $code = "mlm-membership-codes-v2";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Membership Codes V2";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/code2";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page', 'view_receipt', 'sell_codes'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout Only";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "<span style='color: green'>Everyone</span>";
+
+        $code = "mlm-product-code-v2";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Product Code V2";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/product_code2";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page', 'product_code_reciept', 'product_code_sell_codes', 'see_all_invoice'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "<span style='color: green'>Everyone</span>";
+
 
 
     /* REWARD CONFIG */

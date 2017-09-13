@@ -4,8 +4,13 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
     "hash": "a858791e62229465209538ea88d4f9db",
     "content-hash": "8e288fc2e0a19233c1ea9411d90d1592",
+=======
+    "hash": "f17d310d9d756f6341c546ac8e141c7a",
+    "content-hash": "3afb5f02fccafbd0c7ae5745763ffac6",
+>>>>>>> 3376eb34d65d8cdfb6a4a2aec8e67ac8eb9e9758
     "packages": [
         {
             "name": "barryvdh/laravel-snappy",

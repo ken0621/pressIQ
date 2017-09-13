@@ -13,7 +13,7 @@ class ItemPriceLevelController extends Member
     public function add()
     {
         $data["page"]           = "Price Level - Add";
-        $data["_item"]          = Item::get_all_item($this->user_info->shop_id);
+        $data["_item"]          = Item::get($this->user_info->shop_id);
         return view("member.price_level.price_level_add", $data);
     }
     public function add_submit()

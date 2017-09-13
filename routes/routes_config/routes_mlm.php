@@ -2,7 +2,9 @@
 Route::any('/super','Super\AdminControllers@getview');
 Route::any('/super/login','Super\AdminControllers@view');
 Route::any('/admin/signup', 'Super\AdminControllers@add');
-Route::any('/admin/login', 'Super\AdminControllers@login_submit');
+Route::post('/admin/login', 'Super\AdminControllers@login_submit');
+Route::any('/admin/layout', 'Super\AdminControllers@layout');
+Route::any('/admin/pic', 'Super\AdminProfileController@profilepic');
 
 
 Route::get('/mlm/membership_active_code/{pin}', 'Mlm\MlmLoginController@membership_active_code'); 

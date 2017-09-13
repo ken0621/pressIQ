@@ -11,3 +11,8 @@ class Tbl_Admin extends Model
 	protected $primaryKey = "admin_id";
     public $timestamps = false;
 }
+
+	public function getId()
+{
+  	return $this->id;
+}

@@ -11,6 +11,7 @@ use App\Models\Tbl_customer;
 use App\Models\Tbl_vendor;
 use App\Models\Tbl_user;
 use App\Models\Tbl_item;
+use App\Models\Tbl_shop;
 use App\Models\Tbl_ec_product;
     
 use App\Globals\Accounting;
@@ -135,12 +136,40 @@ class TesterController extends Controller
     {
         $shop_id = 1;
         $data["customer_first_name"] = "Bryan";
-
-        dd(Customer::createCustomer($shop_id, $data))   ;
+        dd(Customer::createCustomer($shop_id, $data));
     }
 
     public function getPayroll()
     {
+        
+    }
+    public function samptest()
+    {
+        
+       
+        if(Request::isMethod("post"))
+        {
+            $_customer  = Tbl_customer::where("archived", 0);
+
+            if(Request::input("sort") != "")
+            {
+                $_customer->orderBy(Request::input("sort"));
+            }
+
+            if(Request::input("shop_id") != 0)
+            {
+                $_customer->where("shop_id", Request::input("shop_id"));
+            }
+
+            $data["_customer"] = $_customer->paginate(5);
+
+            return view("errors.test_table", $data);
+        }
+        else
+        {
+            $data["_shop"] = Tbl_shop::get();
+            return view("errors.test", $data);
+        }
         
     }
 }

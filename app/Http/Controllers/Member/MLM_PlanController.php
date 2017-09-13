@@ -1199,12 +1199,16 @@ class MLM_PlanController extends Member
         $validate['stairstep_bonus'] = Request::input('stairstep_bonus');
         $validate['stairstep_leg_id'] = Request::input('stairstep_leg_id');
         $validate['stairstep_leg_count'] = Request::input('stairstep_leg_count');
+        $validate['stairstep_pv_maintenance'] = Request::input('stairstep_pv_maintenance');
+        $validate['commission_multiplier'] = Request::input('commission_multiplier');
        
         $rules['stairstep_level'] ="required";
         $rules['stairstep_name'] = "required";
         $rules['stairstep_required_gv'] = "required";
         $rules['stairstep_required_pv'] = "required";
         $rules['stairstep_bonus'] = "required";
+        $rules['stairstep_pv_maintenance'] = "required";
+        $rules['commission_multiplier'] = "required";
         
         $validator = Validator::make($validate,$rules);
         if ($validator->passes())
@@ -1216,6 +1220,8 @@ class MLM_PlanController extends Member
             $insert['stairstep_bonus'] = Request::input('stairstep_bonus');
             $insert['stairstep_leg_id'] = Request::input('stairstep_leg_id');
             $insert['stairstep_leg_count'] = Request::input('stairstep_leg_count');
+            $insert['stairstep_pv_maintenance'] = Request::input('stairstep_pv_maintenance');
+            $insert['commission_multiplier'] = Request::input('commission_multiplier');
             $insert['shop_id'] = $this->user_info->shop_id;
             Tbl_mlm_stairstep_settings::insert($insert);
             $data['response_status'] = "success_add_stairstep";
@@ -1240,6 +1246,8 @@ class MLM_PlanController extends Member
         $validate['stairstep_bonus'] = Request::input('stairstep_bonus');
         $validate['stairstep_leg_id'] = Request::input('stairstep_leg_id');
         $validate['stairstep_leg_count'] = Request::input('stairstep_leg_count');
+        $validate['stairstep_pv_maintenance'] = Request::input('stairstep_pv_maintenance');
+        $validate['commission_multiplier'] = Request::input('commission_multiplier');
 
         $rules['stairstep_id'] ="required";
         $rules['stairstep_level'] ="required";
@@ -1247,6 +1255,8 @@ class MLM_PlanController extends Member
         $rules['stairstep_required_gv'] = "required";
         $rules['stairstep_required_pv'] = "required";
         $rules['stairstep_bonus'] = "required";
+        $rules['stairstep_pv_maintenance'] = "required";
+        $rules['commission_multiplier'] = "required";
         
         $validator = Validator::make($validate,$rules);
         if ($validator->passes())
@@ -1259,6 +1269,8 @@ class MLM_PlanController extends Member
             $update['shop_id'] = $this->user_info->shop_id;
             $update['stairstep_leg_id'] = Request::input('stairstep_leg_id');
             $update['stairstep_leg_count'] = Request::input('stairstep_leg_count');
+            $update['stairstep_pv_maintenance'] = Request::input('stairstep_pv_maintenance');
+            $update['commission_multiplier'] = Request::input('commission_multiplier');
             Tbl_mlm_stairstep_settings::where('stairstep_id', Request::input('stairstep_id'))->update($update);
             $data['response_status'] = "success_edit_stairstep";
         }

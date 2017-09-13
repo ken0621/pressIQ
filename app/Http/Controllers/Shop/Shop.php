@@ -37,8 +37,13 @@ class Shop extends Controller
         $data['lead_code'] = null;
         $data['customer_info'] = null;
     	$check_domain = Tbl_shop::where("shop_domain", $domain)->first();
-  
-        $this->get_account_logged_in();
+        
+        $this->middleware(function ($request, $next)
+        {  
+            $this->get_account_logged_in();
+            
+            return $next($request);
+        });
 
         if(hasSubdomain())
         {

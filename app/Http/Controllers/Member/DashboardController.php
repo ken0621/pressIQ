@@ -17,9 +17,9 @@ use App\Models\Tbl_User;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_unit_measurement;
 use App\Models\Tbl_journal_entry_line;
-use Facebook\Facebook as Facebook;
-use Facebook\Exceptions\FacebookResponseException as FacebookResponseException;
-use Facebook\Exceptions\FacebookSDKException as FacebookSDKException;
+// use Facebook\Facebook as Facebook;
+// use Facebook\Exceptions\FacebookResponseException as FacebookResponseException;
+// use Facebook\Exceptions\FacebookSDKException as FacebookSDKException;
 
 use Carbon\Carbon;
 use Request;
@@ -35,15 +35,15 @@ class DashboardController extends Member
 
 	public function index()
 	{
-        $fb = new Facebook([
-          'app_id' => '898167800349883', // Replace {app-id} with your app id
-          'app_secret' => '94e57cf8f55689c4ccb69dea45532e20',
-          'default_graph_version' => 'v2.2',
-          ]);
-        $helper = $fb->getRedirectLoginHelper();
-        $loginUrl = $helper->getLoginUrl('http://digimahouse.dev/member');
+        // $fb = new Facebook([
+        //   'app_id' => '898167800349883', // Replace {app-id} with your app id
+        //   'app_secret' => '94e57cf8f55689c4ccb69dea45532e20',
+        //   'default_graph_version' => 'v2.2',
+        //   ]);
+        // $helper = $fb->getRedirectLoginHelper();
+        // $loginUrl = $helper->getLoginUrl('http://digimahouse.dev/member');
 
-        $data['login_test'] =  htmlspecialchars($loginUrl);
+        // $data['login_test'] =  htmlspecialchars($loginUrl);
         // dd($loginUrl);
         // dd($fb);
 		$period 		= Request::input("period");

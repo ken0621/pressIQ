@@ -13,22 +13,22 @@
 					<td class="c2">
 						<div class="register-form">
 							<div class="text-right social-button">
-								<div class="holder fb">
+								<a href="javascript:" class="holder fb">
 									<div class="name"><i class="fa fa-facebook" aria-hidden="true"></i> Sign in with Facebook</div>
-								</div>
-								<div class="holder gp">
+								</a>
+								<a href="javascript:" class="holder gp">
 									<div class="name"><i class="fa fa-google-plus" aria-hidden="true"></i> Sign in with Google+</div>
-								</div>
+								</a>
 							</div>
 
 							@if (session("error"))
-							    <div class="alert alert-danger">
+							    <div class="alert">
 							    	{!! session("error") !!}
 							    </div>
 							@endif
 
 							@if ($errors->any())
-							    <div class="alert alert-danger">
+							    <div class="alert">
 							        <ul>
 							            @foreach ($errors->all() as $error)
 							                <li>{{ $error }}</li>
@@ -63,7 +63,7 @@
 							</form>
 
 							<div class="form-group text-center">
-								<div class="forgot" style="color: #808080; font-weight: 600;">Forgot Password? <a style="color: #4d575e;" href="javascript:">Click Here</a></div>
+								<div class="forgot" style="color: #808080; font-weight: 600;">Forgot Password? <a style="color: #4d575e;" href="/members/forgot-password">Click Here</a></div>
 							</div>
 						</div>
 					</td>

@@ -37,8 +37,6 @@ class Shop extends Controller
         $data['lead_code'] = null;
         $data['customer_info'] = null;
     	$check_domain = Tbl_shop::where("shop_domain", $domain)->first();
-  
-        $this->get_account_logged_in();
 
         if(hasSubdomain())
         {
@@ -95,6 +93,16 @@ class Shop extends Controller
 
         $this->shop_theme_info  = $shop_theme_info;
 
+        if ($this->shop_theme == "ecommerce-1")
+        {
+            $this->middleware(function ($request, $next)
+            {  
+                $this->get_account_logged_in();
+                
+                return $next($request);
+            });
+        }
+
         $company_column         = array('company_name', 'company_acronym', 'company_logo', 'receipt_logo', 'company_address', 'company_email', 'company_mobile', 'company_hour');
         $company_info           = collect(Tbl_content::where("shop_id", $this->shop_info->shop_id)->whereIn('key', $company_column)->get())->keyBy('key');
         $global_cart            = Cart::get_cart($this->shop_info->shop_id);
@@ -124,16 +132,29 @@ class Shop extends Controller
             View::share("_categories", $product_category);
         }
         
-        $this->middleware(function ($request, $next)
-        {  
-            $account        = session("mlm_member");
-            $check_account  = Customer::check_account($this->shop_info->shop_id, $account["email"], $account["auth"]);
-            Self::$customer_info = $check_account;
-            View::share("customer", Self::$customer_info);
-            View::share("customer_info_a", Self::$customer_info);
-            
-            return $next($request);
-        });
+        if ($this->shop_theme != "ecommerce-1")
+        {
+            $this->middleware(function ($request, $next)
+            {  
+                $account        = session("mlm_member");
+                $check_account  = Customer::check_account($this->shop_info->shop_id, $account["email"], $account["auth"]);
+                Self::$customer_info = $check_account;
+                View::share("customer", Self::$customer_info);
+                View::share("customer_info_a", Self::$customer_info);
+                
+                return $next($request);
+            });
+        }
+        else
+        {
+            $this->middleware(function ($request, $next)
+            {  
+                View::share("customer", Self::$customer_info);
+                View::share("customer_info_a", Self::$customer_info);
+                
+                return $next($request);
+            });
+        }
 
         View::share("slot_now", Self::$slot_now);
         

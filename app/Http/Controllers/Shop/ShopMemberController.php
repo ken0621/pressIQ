@@ -76,12 +76,24 @@ class ShopMemberController extends Shop
 
         return Redirect::to("/members")->send();
     }
-
+    public function getForgotPassword()
+    {
+        $data["page"] = "Forgot Password";
+        return view("member.forgot_password");
+    }
     /* LOGIN AND REGISTRATION - END */
     public function getIndex()
     {
         $data["page"] = "Dashboard";
-        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.dashboard", $data));
+
+        if(Self::$customer_info->ismlm == 0)
+        {
+            return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.nonmember", $data));
+        }
+        else
+        { 
+            return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.dashboard", $data));
+        }
     }
     public function getProfile()
     {
@@ -113,10 +125,25 @@ class ShopMemberController extends Shop
         $data["page"] = "Wallet Encashment";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.wallet_encashment", $data));
     }
+    public function getSlot()
+    {
+        $data["page"] = "Slot";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.slot", $data));
+    }
+    public function getEonCard()
+    {
+        $data["page"] = "Eon Card";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.eon_card", $data));
+    }
+    public function getOrder()
+    {
+        $data["page"] = "Orders";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.order", $data));
+    }
 
     public function getNonMember()
     {
-        $data["page"] = "Dashboard";
+        $data["page"] = "NonMember";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.nonmember", $data));
     }
 

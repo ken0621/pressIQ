@@ -121,8 +121,8 @@
 									</div>
 								</div>
 								<div class="form-group clearfix" style="margin-top: 15px;">
-									<div class="checkbox">
-									  <label><input type="checkbox" value=""> I agree to the Brown <span>Terms of Use and Privacy Policy</span></label>
+									<div class="checkbox agreement-checkbox">
+									  <label><input type="checkbox" value="" required> I agree to the Brown <span>Terms of Use and Privacy Policy</span></label>
 									</div>
 								</div>
 								<div class="form-group">
@@ -142,9 +142,43 @@
 		</div>
 	</div>
 </form>
+
+<!-- Modal -->
+<div class="modal fade" id="modal_agreement" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 style="color:red;"><span class="glyphicon glyphicon-lock"></span> Login</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="usrname"><span class="glyphicon glyphicon-user"></span> Username</label>
+                        <input type="text" class="form-control" id="usrname" placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Password</label>
+                        <input type="text" class="form-control" id="psw" placeholder="Enter password">
+                    </div>
+                    <div class="checkbox">
+                        <label><input type="checkbox" value="" checked>Remember me</label>
+                    </div>
+                    <button type="submit" class="btn btn-default btn-success btn-block"><span class="glyphicon glyphicon-off"></span> Login</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-default btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+                <p>Not a member? <a href="#">Sign Up</a></p>
+                <p>Forgot <a href="#">Password?</a></p>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @section("script")
-
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/member_register.js"></script>
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/member_register.css">

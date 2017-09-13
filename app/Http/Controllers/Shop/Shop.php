@@ -124,16 +124,19 @@ class Shop extends Controller
             View::share("_categories", $product_category);
         }
         
-        $this->middleware(function ($request, $next)
-        {  
-            $account        = session("mlm_member");
-            $check_account  = Customer::check_account($this->shop_info->shop_id, $account["email"], $account["auth"]);
-            Self::$customer_info = $check_account;
-            View::share("customer", Self::$customer_info);
-            View::share("customer_info_a", Self::$customer_info);
-            
-            return $next($request);
-        });
+        if ($this->shop_theme != "ecommerce-1")
+        {
+            $this->middleware(function ($request, $next)
+            {  
+                $account        = session("mlm_member");
+                $check_account  = Customer::check_account($this->shop_info->shop_id, $account["email"], $account["auth"]);
+                Self::$customer_info = $check_account;
+                View::share("customer", Self::$customer_info);
+                View::share("customer_info_a", Self::$customer_info);
+                
+                return $next($request);
+            });
+        }
 
         View::share("slot_now", Self::$slot_now);
         

@@ -157,19 +157,19 @@ class ProductOrderController extends Member
     }
     public function invoice_list()
     {
-        $data["ec_order_pending"]    = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Pending")
+        $data["ec_order_pending"]    = Tbl_ec_order::customer()->where("tbl_ec_order.archived",0)->where("shop_id",$this->user_info->shop_id)->where("order_status","Pending")
                                         ->orderBy("ec_order_id", "DESC");
-        $data["ec_order_failed"]     = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Failed")
+        $data["ec_order_failed"]     = Tbl_ec_order::customer()->where("tbl_ec_order.archived",0)->where("shop_id",$this->user_info->shop_id)->where("order_status","Failed")
                                         ->orderBy("ec_order_id", "DESC");
-        $data["ec_order_processing"] = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Processing")
+        $data["ec_order_processing"] = Tbl_ec_order::customer()->where("tbl_ec_order.archived",0)->where("shop_id",$this->user_info->shop_id)->where("order_status","Processing")
                                         ->orderBy("ec_order_id", "DESC");
-        $data["ec_order_shipped"]    = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Shipped")
+        $data["ec_order_shipped"]    = Tbl_ec_order::customer()->where("tbl_ec_order.archived",0)->where("shop_id",$this->user_info->shop_id)->where("order_status","Shipped")
                                         ->orderBy("ec_order_id", "DESC");
-        $data["ec_order_completed"]  = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Completed")
+        $data["ec_order_completed"]  = Tbl_ec_order::customer()->where("tbl_ec_order.archived",0)->where("shop_id",$this->user_info->shop_id)->where("order_status","Completed")
                                         ->orderBy("ec_order_id", "DESC");
-        $data["ec_order_on_hold"]    = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","On-hold")
+        $data["ec_order_on_hold"]    = Tbl_ec_order::customer()->where("tbl_ec_order.archived",0)->where("shop_id",$this->user_info->shop_id)->where("order_status","On-hold")
                                         ->orderBy("ec_order_id", "DESC");
-        $data["ec_order_cancelled"]  = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Cancelled")
+        $data["ec_order_cancelled"]  = Tbl_ec_order::customer()->where("tbl_ec_order.archived",0)->where("shop_id",$this->user_info->shop_id)->where("order_status","Cancelled")
                                         ->orderBy("ec_order_id", "DESC");
         $filtered_by                 = Request::input("type_chosen");                                 
         foreach($data as $key => $order)

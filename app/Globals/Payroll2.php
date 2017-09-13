@@ -1772,7 +1772,7 @@ class Payroll2
 		$return["day_type"] 			 = $day_type;
 		$return["excess_leave_hours"] 	 = $excess_leave_hours;
 		$return["leave_hours_consumed"]  = $leave_hours_consumed;
-		
+	
 		return $return;
 
 	}
@@ -2151,13 +2151,14 @@ class Payroll2
 		{
 			$target_float 						 			  = Self::time_float($_time['target_hours']);
 			$return->_breakdown_addition['Leave Pay']['time'] = $_time['leave_hours'];
+
 			$return->_breakdown_addition['Leave Pay']['rate'] = Self::time_float($_time['leave_hours']) * @($daily_rate/$target_float);
 			$return->_breakdown_addition['Leave Pay']['hour'] = $_time['leave_hours'];
 		}
 
 		if($compute_type=="daily")
 		{
-			if( $_time['day_type'] == 'rest_day' || $_time["is_holiday"] == "regular" || $_time['day_type'] == 'extra_day' || $_time["is_holiday"] == "special") 
+			if( $_time['day_type'] == 'rest_day' || $_time["is_holiday"] == "regular" || $_time['day_type'] == 'extra_day' ) //|| $_time["is_holiday"] == "special"
 			{
 				$daily_rate = 0;
 			}
@@ -2186,7 +2187,6 @@ class Payroll2
 		{
 			$daily_rate = $daily_true_rate;
 		}
-
 
 		
 		$total_day_income 		= $daily_rate ;
@@ -2224,6 +2224,7 @@ class Payroll2
 		$breakdown_addition = 0;
 		$additional_rate = 1;
 		$cola_true_rate = $cola;
+
 
 		if ($_time['is_holiday'] == 'not_holiday') 
 		{
@@ -2410,7 +2411,6 @@ class Payroll2
 				}
 			}
 		}
-
 		if ($_time['is_holiday'] == 'special')
 		{
 			//special Holiday with rest day
@@ -2420,13 +2420,14 @@ class Payroll2
 				{					
 					if ($compute_type=="daily") 
 					{
-						$total_day_income = 0;
+
+						// $total_day_income = 0;
 						$return->_breakdown_addition["Special Holiday Rest Day"]["time"] = ""; 
-						$return->_breakdown_addition["Special Holiday Rest Day"]["rate"] = $daily_rate * ($special_param['payroll_overtime_rest_day']);
+						$return->_breakdown_addition["Special Holiday Rest Day"]["rate"] = $daily_rate * (($special_param['payroll_overtime_rest_day'])-1);
 						$return->_breakdown_addition["Special Holiday Rest Day"]["hour"] = "";
 						$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday Rest Day"]["rate"]; 
 						$breakdown_addition += $return->_breakdown_addition["Special Holiday Rest Day"]["rate"];
-						$additional_rate = ($special_param['payroll_overtime_rest_day']);
+						// $additional_rate = ($special_param['payroll_overtime_rest_day']);
 					}
 					else if ($compute_type=="monthly") 
 					{
@@ -2449,6 +2450,7 @@ class Payroll2
 					$overtime = ($hourly_rate * $overtime_float) * ($special_param['payroll_overtime_rest_overtime']);
 					$breakdown_addition += $overtime;
 				}
+
 				//Special Holiday Rest Day Night Differential
 				if ($night_diff_float!=0) 
 				{
@@ -2467,13 +2469,13 @@ class Payroll2
 				{
 					if ($compute_type=="daily")
 					{
-						$total_day_income = 0;
+						// $total_day_income = 0;
 						$return->_breakdown_addition["Special Holiday"]["time"] = ""; 
-						$return->_breakdown_addition["Special Holiday"]["rate"] = $daily_rate * ($special_param['payroll_overtime_regular']);
+						$return->_breakdown_addition["Special Holiday"]["rate"] = $daily_rate * (($special_param['payroll_overtime_regular']) - 1);
 						$return->_breakdown_addition["Special Holiday"]["hour"] = "";
 						$total_day_income = $total_day_income + $return->_breakdown_addition["Special Holiday"]["rate"];
 						$breakdown_addition += $return->_breakdown_addition["Special Holiday"]["rate"];
-						$additional_rate =  ($special_param['payroll_overtime_regular']);
+						// $additional_rate =  ($special_param['payroll_overtime_regular']);
 					}
 					else if ($compute_type=="monthly") 
 					{
@@ -2891,12 +2893,14 @@ class Payroll2
 				{
 					continue;
 				}
+				
 				/*START night differential computation*/
 				if((2200<=$time_in_integer)&&(2400>=$time_out_integer))
 				{
 					echo $testing == true ? "<b>NIGTH DIFFERENTIAL</b> answer: <b>".Payroll2::time_difference($time->time_out,$time->time_in)."</b> hour night differential reason time in and out is in between 10:00pm to 12:00nn":"";
 					$night_differential = Payroll::sum_time($night_differential,Payroll2::time_difference($time->time_out,$time->time_in));
 				}
+
 				//if time out was after 10:00pm
 				else if (2200<$time_out_integer) 
 				{
@@ -2911,6 +2915,7 @@ class Payroll2
 					echo $testing == true ? "<b>NIGTH DIFFERENTIAL</b> answer: <b>".Payroll2::time_difference($time->time_out,$time->time_in)."</b> hour night differential reason time in and out is in between 12:00nn to 6:00am":"";
 					$night_differential = Payroll::sum_time($night_differential,Payroll2::time_difference($time->time_out,$time->time_in));
 				}
+
 				//time in start before 6:00am and time out is after 6am
 				else if ((600>$time_in_integer)&&(600<=$time_out_integer)) 
 				{
@@ -2989,8 +2994,6 @@ class Payroll2
 		{
 			$_output[$index]->auto_approved = $time->payroll_time_sheet_auto_approved;
 		}
-
-
 
 		return $_output;
 	}

@@ -12,7 +12,15 @@
                 <input name="slot_no" type="text" class="form-control" placeholder="RANDOM (IF EMPTY)">
             </div>
          </div>
-    
+
+        <div class="form-group">
+            <div class="col-md-12">            
+                <label>PRODUCT PRICE</label>
+                <input name="price" type="text" class="form-control" placeholder="100 (IF EMPTY)">
+            </div>
+        </div>
+        
+
         @if(isset($unilevel))
             @if($unilevel == 1)
             <div class="form-group">

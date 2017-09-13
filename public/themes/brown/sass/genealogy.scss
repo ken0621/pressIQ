@@ -1,0 +1,72 @@
+.genealogy-container
+{
+	.genealogy-header
+	{
+		.left
+		{
+			@media screen and (min-width: 991px)
+			{
+				float: left;
+			}
+			.icon
+			{
+				display: inline-block;
+				vertical-align: middle;
+				margin-right: 25px;
+				img
+				{
+
+				}
+			}
+			.text
+			{
+				display: inline-block;
+				vertical-align: middle;
+				text-align: left;
+				.name
+				{
+					color: #344049;
+					font-size: 20px;
+				}
+				.sub
+				{
+					color: #85939e;
+					font-size: 13px;
+				}
+			}
+		}
+		.right
+		{
+			@media screen and (min-width: 991px)
+			{
+				float: right;
+			}
+			.legend-label
+			{
+				color: #85939e;
+				font-size: 13px;
+				display: inline-block;
+				vertical-align: middle;
+				margin-right: 10px;
+			}
+			.legend-select
+			{
+				display: inline-block;
+				vertical-align: middle;
+				select
+				{
+					box-shadow: none;
+					color: #344049;
+					font-size: 13px;
+					font-weight: 600;
+					border: 1px solid #cecece;
+					border-radius: 2px;
+				}
+			}
+		}
+	}
+	.genealogy-content
+	{
+		margin-top: 25px;
+	}
+}

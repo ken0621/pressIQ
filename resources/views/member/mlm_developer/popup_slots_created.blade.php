@@ -17,6 +17,7 @@
 	            </tr>
 	        </thead>
 	        <tbody>
+	        	@if(count($_slot) > 0)
 	            @foreach($_slot as $key => $slot)
 	            <tr>
 	                <td class="text-center">{{$key+1}}</td>
@@ -25,6 +26,11 @@
 	                <td class="text-center">{{ ucwords($slot->first_name.' '.$slot->middle_name.' '.$slot->last_name) }}</td>
 	            </tr>
 	            @endforeach
+	            @else
+	            <tr>
+	            	<td class="text-center" colspan="4">NO DOWNLINE YET</td>
+	            </tr>
+	            @endif
 	        </tbody>
 	    </table>		
 	</div>

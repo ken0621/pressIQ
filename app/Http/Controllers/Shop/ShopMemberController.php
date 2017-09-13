@@ -8,6 +8,7 @@ use View;
 use App\Globals\Payment;
 use App\Globals\Customer;
 use App\Rules\Uniqueonshop;
+use App\Globals\MLM2;
 
 class ShopMemberController extends Shop
 {
@@ -85,15 +86,17 @@ class ShopMemberController extends Shop
     public function getIndex()
     {
         $data["page"] = "Dashboard";
+        $view = "member.dashboard";
 
-        if(Self::$customer_info->ismlm == 0)
+        if(Self::$customer_info)
         {
-            return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.nonmember", $data));
+            if(!Self::$customer_info->ismlm)
+            {
+                $view = "member.nonmember";
+            }     
         }
-        else
-        { 
-            return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.dashboard", $data));
-        }
+
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view($view, $data));
     }
     public function getProfile()
     {
@@ -165,5 +168,35 @@ class ShopMemberController extends Shop
         $data["page"] = "Checkout";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.checkout", $data));
     }
+    /* AJAX */
+    public function postVerifySponsor(Request $request)
+    {
+        $shop_id = $this->shop_info->shop_id;
+        $sponsor = MLM2::verify_sponsor($shop_id, $request->verify_sponsor);
 
+        if(!$sponsor)
+        {
+            if($request->verify_sponsor == "")
+            {
+                $return = "<div class='error-message'>The sponsor you entered is <b>BLANK</b>.</div>";
+            }
+            else
+            {
+                $return = "<div class='error-message'>We can't find sponsor \"<b>" . $request->verify_sponsor . "</b>\".<br>Please check carefully if you have the right details.</div>";
+            }
+        }
+        else
+        {
+            $data["page"] = "CARD";
+            $data["sponsor"] = $sponsor; 
+            $data["sponsor_customer"] = Customer::get_info($shop_id, $sponsor->slot_owner);
+            $data["sponsor_profile_image"] = $data["sponsor_customer"]->profile == "" ? "/themes/brown/img/user-placeholder.png" : $data["sponsor_customer"]->profile;
+            $return = (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.card", $data));
+        }
+
+
+        return $return;
+    }
+
+    /* GLOBALS */
 }

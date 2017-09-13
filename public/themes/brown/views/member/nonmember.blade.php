@@ -1,6 +1,6 @@
 @extends("member.member_layout")
 @section("member_content")
-
+<input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
 <div class="dashboard">
 <!-- TOP DASHBOARD-->
 <div class="dashboard-top">
@@ -151,13 +151,17 @@
               <div class="modal-content">
                   <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                      <h4 class="modal-title">Sponsor</h4>
+                      <h4 class="modal-title"><i class="fa fa-star"></i> SPONSOR</h4>
                   </div>
                   <div class="modal-body">
-                      <form>
-                        <input class="text-center" type="text" placeholder="Nickname or Slot Number">
+                      <form method="post" class="submit-verify-sponsor">  
+                        <div class="labels">Enter <b>Nickname of Sponsor</b> or <b>Slot Number</b></div>
+                        <input class="input-verify-sponsor text-center" name="verify_sponsor" type="text" placeholder="">
+                        <div class="output-container">
+                          
+                        </div>
                         <div class="btn-container">
-                          <button id="btn-verify" class="btn-verify"><i class="fa fa-check"></i> Verify</button>
+                          <button id="btn-verify" class="btn-verify btn-verify-sponsor"><i class="fa fa-check"></i> VERIFY SPONSOR</button>
                         </div>
                       </form>
                   </div>
@@ -279,6 +283,7 @@
 
 @endsection
 @section("member_script")
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js"></script>
 <script type="text/javascript">
 
   /*Popups*/
@@ -290,24 +295,18 @@
     });
   });
 
-  /*Enter a code*/
-  $(document).ready(function(){
-    $("#btn-enter-a-code").click(function(){
-      $("#enter-a-code-modal").modal('show');
-    });
-  });
 
   /*Proceed 1*/
   $(document).ready(function(){
     $("#btn-verify").click(function(){
-      $("#proceed-modal-1").modal('show');
+      //$("#proceed-modal-1").modal('show');
     });
   });
 
   /*Proceed 2*/
   $(document).ready(function(){
     $("#btn-verify").click(function(){
-      $("#proceed-modal-2").modal('show');
+      //$("#proceed-modal-2").modal('show');
     });
   });
 

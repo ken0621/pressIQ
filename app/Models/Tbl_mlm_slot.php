@@ -39,6 +39,10 @@ class Tbl_mlm_slot extends Model
         );
 
     }
+    public function scopeShop($query, $shop_id)
+    {
+        return $query->where("shop_id", $shop_id);
+    }
     public function scopeCustomer($query)
     {
         $query->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner');

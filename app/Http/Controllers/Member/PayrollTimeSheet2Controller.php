@@ -202,7 +202,7 @@ class PayrollTimeSheet2Controller extends Member
 			{
 				$time_out = Request::input("time-out")[$key];
 				$remarks = Request::input("remarks")[$key];
-				dd($remarks);
+				//dd($remarks);
 				if($time_in != "" || $time_out != "")
 				{
 					$insert[$key]["payroll_time_sheet_id"] = $timesheet_db->payroll_time_sheet_id;

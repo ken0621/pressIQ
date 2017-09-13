@@ -250,12 +250,13 @@ $bold: 700;
 
 	.modal-sm
 	{  
-		width: 25%;
+		width: 100%;
+		max-width: 500px;
 	}
 
 	.modal-content
 	{
-		
+		background-color: #eee;
 		.modal-header
 		{
 			background-color: #693d28;
@@ -277,18 +278,107 @@ $bold: 700;
 		.modal-body
 		{
 
+
 			font-weight: $semi-bold;
 			margin: 0px 20px 0px 20px;
 
+			.labels
+			{
+				margin-top: 10px;
+				text-align: center;
+			}
 			input
 			{
 				padding: 5px;
 				width: 100%;
-				border: none;
-				border-bottom: 2px solid #d3d8db;
-				margin: 30px 0px 40px 0px;
+				border: 1px solid #693d28;
+				margin: 10px 0px 0px 0px;
+				background-color: #fff;
+				font-size: 20px;
+				&::-webkit-input-placeholder {
+				    color: #ddd;
+				    opacity: 1 !important; /* for older chrome versions. may no longer apply. */
+				}
+
+				&:-moz-placeholder { /* Firefox 18- */
+				    color: #ddd;
+				    opacity: 1 !important;
+				}
+
+				&::-moz-placeholder {  /* Firefox 19+ */
+				    color: #ddd;
+				    opacity: 1 !important;
+				}
+
+				&:-ms-input-placeholder {  
+				   color: #ddd;
+				}
 			}
 
+			.output-container
+			{
+				padding: 10px;
+				.error-message
+				{
+					text-align: center;
+					color: red;
+					font-size: 14px;
+				}
+				.card
+				{
+					border: 1px solid #693d28;
+					background-color: #fafafa;
+					padding: 10px;
+					margin: 10px;
+					border-radius: 2px;
+					background-color: #693D28;
+					color: #fff;
+					-webkit-box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.1);  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+					-moz-box-shadow:    1px 1px 1px 1px rgba(0,0,0,0.1);  /* Firefox 3.5 - 3.6 */
+					box-shadow:         1px 1px 1px 1px rgba(0,0,0,0.1);  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+
+
+					.profile-image
+					{
+						height: 100px;
+						width: 100px;
+						border: 1px solid #ddd;
+						display: inline-block; 
+						text-align: center;
+						border-radius: 100%;
+						overflow: hidden;
+						background-color: #fff;
+
+						img
+						{
+							height: 100px;
+							width: 100px;
+
+						}
+					}
+					.info
+					{
+						margin-top: 20px;
+						text-align: left;
+
+						.name
+						{
+							font-size: 16px;
+							font-weight: bold;
+							color: #ffeeaa;
+							text-transform: uppercase;
+						}
+						.email
+						{
+							color: #eee;
+						}
+						.slotno
+						{
+							color: #eee;
+						}
+					}
+				}
+			}
 	    	.btn-container
 	    	{
 				text-align: center;
@@ -299,11 +389,22 @@ $bold: 700;
 
 				.btn-verify
 				{
-					color: #fff;
-					background-color: #693d28;
+					color: #693d28;
+					background-color: #fff;
 					padding: 12px 40px;
 					border: 2px solid #693d28;
 					border-radius: 2px;
+					opacity: 0.9;
+				  	-webkit-transition: all 0.2s ease-in-out;
+				  	-moz-transition: all 0.2s ease-in-out;
+				  	-o-transition: all 0.2s ease-in-out;
+				  	transition: all 0.2s ease-in-out;
+				}
+				.btn-verify:hover
+				{
+					color: #fff;
+					background-color: #693d28;
+					opacity: 1.0;
 				}
 			}
 		}

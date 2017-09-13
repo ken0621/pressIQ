@@ -113,6 +113,21 @@ class ShopMemberController extends Shop
         $data["page"] = "Wallet Encashment";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.wallet_encashment", $data));
     }
+    public function getSlot()
+    {
+        $data["page"] = "Slot";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.slot", $data));
+    }
+    public function getEonCard()
+    {
+        $data["page"] = "Eon Card";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.eon_card", $data));
+    }
+    public function getOrder()
+    {
+        $data["page"] = "Orders";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.order", $data));
+    }
 
     public function getNonMember()
     {

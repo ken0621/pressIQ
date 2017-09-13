@@ -8,6 +8,7 @@ use View;
 use App\Globals\Payment;
 use App\Globals\Customer;
 use App\Rules\Uniqueonshop;
+use App\Globals\FacebookGlobals;
 
 class ShopMemberController extends Shop
 {
@@ -23,6 +24,8 @@ class ShopMemberController extends Shop
     public function getLogin()
     {
         $data["page"] = "Login";
+        $data['fb_login_url'] = FacebookGlobals::get_link();
+
         return view("member.login", $data);
     }
     public function postLogin(Request $request)
@@ -43,6 +46,8 @@ class ShopMemberController extends Shop
     public function getRegister()
     {
         $data["page"] = "Register";
+        $data['fb_login_url'] = FacebookGlobals::get_link();
+
         return view("member.register", $data);
     }
     public function postRegister(Request $request)

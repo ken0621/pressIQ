@@ -14,7 +14,7 @@
 						<div class="register-form">
 							<div class="text-right social-button">
 								<div class="holder fb">
-									<div class="name"><i class="fa fa-facebook" aria-hidden="true"></i> Sign in with Facebook</div>
+									<div class="name"><a style="color:white" href="{{$fb_login_url or '#'}}"><i class="fa fa-facebook" aria-hidden="true"></i> Sign in with Facebook</a></div>
 								</div>
 								<div class="holder gp">
 									<div class="name"><i class="fa fa-google-plus" aria-hidden="true"></i> Sign in with Google+</div>

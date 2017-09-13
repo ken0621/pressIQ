@@ -74,13 +74,13 @@ function globalv2()
         if (scroll >= stickyOffset) 
         {
             sticky.addClass('hide'); 
-            $('.sticky-nav').removeClass('hide'); 
+            $('.sticky-nav').removeClass('hide-sticky'); 
             $('.main-content-scroll').css("margin-top", nav_height);
         }
         else 
         {
             sticky.removeClass('hide'); 
-            $('.sticky-nav').addClass('hide'); 
+            $('.sticky-nav').addClass('hide-sticky'); 
             $('.main-content-scroll').css("margin-top", "");
         }
     }

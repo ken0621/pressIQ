@@ -64,7 +64,7 @@
                                     </div>
                                 </div>
                                 <div class="profile-footer">
-                                    <button class="btn btn-grey">Sign Out</button>
+                                    <button onclick="location.href='/members/logout'" class="btn btn-grey">Sign Out</button>
                                 </div>
                             </li>
                         </ul>
@@ -179,7 +179,7 @@
                     <div class="text">All Categories</div>
                     <div class="list-category hide">
                         <div class="container">
-                            <a href="javascript:">Brown</a>
+                            <a href="/" class="head-button link-nav {{ Request::segment(1) == '' ? 'active' : '' }}" id="home">Brown</a>
                             <a href="javascript:">Phone Accessories</a>
                             <a href="javascript:">Internet Of Things</a>
                             <a href="javascript:">Health Technology</a>
@@ -282,7 +282,7 @@
                                         </div>
                                     </div>
                                     <div class="profile-footer">
-                                        <button class="btn btn-grey">Sign Out</button>
+                                        <button class="btn btn-grey" onclick="location.href='/members/logout'">Sign Out</button>
                                     </div>
                                 </li>
                             </ul>

@@ -44,7 +44,7 @@
 						<li class="{{ Request::segment(2) == "report" ? "active" : "" }}">
 							<a href="/members/report"><div class="nav-holder"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/report.png"></div> <span>Reports</span></div></a>
 						</li>
-						<li class="{{ Request::segment(2) == "wallet" ? "active" : "" }}">
+						<li class="{{ Request::segment(2) == "wallet-logs" || Request::segment(2) == "wallet-encashment" ? "active" : "" }}">
 							<a href="javascript:"><div class="nav-holder"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/wallet.png"></div> <span>Wallet</span></div></a>
 							<ul>
 								<li>
@@ -55,14 +55,14 @@
 								</li>
 							</ul>
 						</li>
-						<li class="{{ Request::segment(2) == "slots" ? "active" : "" }}">
-							<a href="javascript:"><div class="nav-holder"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/slots.png"></div> <span>My Slots</span></div></a>
+						<li class="{{ Request::segment(2) == "slot" ? "active" : "" }}">
+							<a href="/members/slot"><div class="nav-holder"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/slots.png"></div> <span>My Slots</span></div></a>
 						</li>
-						<li class="{{ Request::segment(2) == "eoncard" ? "active" : "" }}">
-							<a href="javascript:"><div class="nav-holder"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/eon-card.png"></div> <span>Eon Card</span></div></a>
+						<li class="{{ Request::segment(2) == "eon-card" ? "active" : "" }}">
+							<a href="/members/eon-card"><div class="nav-holder"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/eon-card.png"></div> <span>Eon Card</span></div></a>
 						</li>
 						<li class="{{ Request::segment(2) == "order" ? "active" : "" }}">
-							<a href="javascript:"><div class="nav-holder"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/order.png"></div> <span>Orders</span></div></a>
+							<a href="/members/order"><div class="nav-holder"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/order.png"></div> <span>Orders</span></div></a>
 						</li>
 					</ul>
 				</div>

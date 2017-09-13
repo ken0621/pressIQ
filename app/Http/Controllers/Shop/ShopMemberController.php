@@ -84,6 +84,10 @@ class ShopMemberController extends Shop
     /* LOGIN AND REGISTRATION - END */
     public function getIndex()
     {
+        if(Self::$customer_info->ismlm == 0)
+        {
+        }
+
         $data["page"] = "Dashboard";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.dashboard", $data));
     }
@@ -117,10 +121,25 @@ class ShopMemberController extends Shop
         $data["page"] = "Wallet Encashment";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.wallet_encashment", $data));
     }
+    public function getSlot()
+    {
+        $data["page"] = "Slot";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.slot", $data));
+    }
+    public function getEonCard()
+    {
+        $data["page"] = "Eon Card";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.eon_card", $data));
+    }
+    public function getOrder()
+    {
+        $data["page"] = "Orders";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.order", $data));
+    }
 
     public function getNonMember()
     {
-        $data["page"] = "Dashboard";
+        $data["page"] = "NonMember";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.nonmember", $data));
     }
 
@@ -135,4 +154,12 @@ class ShopMemberController extends Shop
         $error = Payment::payment_redirect($shop_id, $key, $success, $failed, $debug);
         dd($error);
     }
+
+    /*BROWN CHECKOUT PAGE*/
+    public function getCheckout()
+    {
+        $data["page"] = "Checkout";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.checkout", $data));
+    }
+
 }

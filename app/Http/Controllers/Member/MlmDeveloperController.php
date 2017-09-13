@@ -67,8 +67,15 @@ class MlmDeveloperController extends Member
 
             if($slot->brown_rank_id)
             {
-
                 $brown_next_rank = Tbl_brown_rank::where("rank_id",">", $slot->brown_rank_id)->orderBy("rank_id")->first();
+            }
+            else
+            {
+                $brown_next_rank = null;
+            }
+
+            if($brown_next_rank)
+            {
                 $data["_slot"][$key]->brown_next_rank = strtoupper($brown_next_rank->rank_name);
                 $brown_rank_required_slots = $brown_next_rank->required_slot;
                 $brown_count_required = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot->slot_id)->where("sponsor_tree_level", "<=", $brown_next_rank->required_uptolevel)->count();

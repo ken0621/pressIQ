@@ -11,6 +11,7 @@
         </div>
     </div>
 </form>
+<div><a href="{{$login_test or ''}}">TEST</a></div>
 <div class="button-wrapper clearfix" style="margin-top: 15px; min-height: 55px">
    <div class="dashboard-home cursor-pointer dashboard-arrow">
       <span class="fa fa-angle-left fa-4x"></span>

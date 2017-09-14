@@ -267,8 +267,9 @@ Route::any('member/mlm/stairstep/view_summary', 'Member\MLM_StairstepController@
 
 /* RANK UPDATE */ 
 Route::any('member/mlm/rank/update', 'Member\MLM_RankController@rank_stairstep_view'); 
-Route::any('member/mlm/rank/update/start', 'Member\MLM_StairstepController@start'); 
-Route::any('member/mlm/rank/update/start/compute', 'Member\MLM_StairstepController@compute'); 
+Route::any('member/mlm/rank/update/start', 'Member\MLM_RankController@start'); 
+Route::any('member/mlm/rank/update/start/compute', 'Member\MLM_RankController@compute'); 
+Route::any('member/mlm/rank/update/view_rank_update', 'Member\MLM_RankController@view_rank_update'); 
 
 Route::any('member/mlm/complan_setup', 'Member\Mlm_ComplanSetupController@index'); 
 Route::any('member/mlm/complan_setup/binary_pro', 'Member\Mlm_ComplanSetupController@binary_promotions'); 

@@ -529,6 +529,11 @@ class Mlm_complan_manager_repurchasev2
                     
                     $slot_logs_id = Mlm_slot_log::slot_log_points_array($array);
 
+                    if($old_percentage == null)
+                    {
+                        $old_percentage = 0;
+                    }
+                    
                     $insert_stairstep_logs["stairstep_points_amount"]       = $stairstep_group_points;
                     $insert_stairstep_logs["stairstep_percentage"]          = $percentage;
                     $insert_stairstep_logs["stairstep_reduced_percentage"]  = $old_percentage;

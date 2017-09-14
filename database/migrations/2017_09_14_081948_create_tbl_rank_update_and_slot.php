@@ -18,12 +18,14 @@ class CreateTblRankUpdateAndSlot extends Migration
             $table->increments('rank_update_id');
             $table->integer('total_slots');
             $table->integer('shop_id');
+            $table->tinyInteger('complete');
             $table->dateTime('date_created');
         });
 
         Schema::create('tbl_rank_update_slot', function (Blueprint $table)
         {
-            $table->increments('slot_id');
+            $table->integer('rank_update_id');
+            $table->integer('slot_id');
             $table->double('rank_personal_pv');
             $table->double('rank_group_pv');
             $table->integer('required_leg_rank_id');

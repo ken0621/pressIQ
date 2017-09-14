@@ -34,10 +34,14 @@
             <div class="col-md-6">
                 <label for="rematrix_status">Stairstep Status</label>
                 <input class="form-control" id="stairstep_status" value="----" disabled>
+            </div>            
+            <div class="col-md-6">
+                <label for="rematrix_status">Progress Bar</label>
+                <div id="progressbar"></div>
             </div>
             <div class="col-md-12" style="min-height: 10px;"></div>
             <div class="col-md-2 pull-right">
-                <button class="form-control btn-custom-primary distribute_stairstep">Confirm Update</button>
+                <button class="form-control btn-custom-primary distribute_stairstep">Start Update</button>
             </div>
         </div>
     </div>
@@ -67,7 +71,7 @@
           <td><center>{{$slot->stairstep_name ? $slot->stairstep_name : '---'}}</center></td>
           <td style="{{$slot->rank_personal_points >= App\Globals\Mlm_member::get_next_rank($shop_id,$slot->slot_id,'stairstep_required_pv') ? 'color:green' : 'color:red' }}"><center>{{$slot->rank_personal_points}} of {{App\Globals\Mlm_member::get_next_rank($shop_id,$slot->slot_id,'stairstep_required_pv')}}</center></td>
           <td style="{{$slot->rank_group_points >= App\Globals\Mlm_member::get_next_rank($shop_id,$slot->slot_id,'stairstep_required_gv') ? 'color:green' : 'color:red' }}"><center>{{$slot->rank_group_points}} of {{App\Globals\Mlm_member::get_next_rank($shop_id,$slot->slot_id,'stairstep_required_gv')}}</center></td>
-          <td><center><input type="checkbox" name="name1" disabled  {{$slot->rank_personal_points >= App\Globals\Mlm_member::get_next_rank($shop_id,$slot->slot_id,'stairstep_required_pv') && $slot->rank_group_points >= App\Globals\Mlm_member::get_next_rank($shop_id,$slot->slot_id,'stairstep_required_gv') && App\Globals\Mlm_member::rank_count_leg($shop_id,$slot->slot_id) > $slot->stairstep_leg_id ? 'checked' : ''}} />&nbsp;</center></td>
+          <td><center><input type="checkbox" name="name1" disabled  {{$slot->rank_personal_points >= App\Globals\Mlm_member::get_next_rank($shop_id,$slot->slot_id,'stairstep_required_pv') && $slot->rank_group_points >= App\Globals\Mlm_member::get_next_rank($shop_id,$slot->slot_id,'stairstep_required_gv') && App\Globals\Mlm_member::rank_count_leg($shop_id,$slot->slot_id) >= $slot->stairstep_leg_id ? 'checked' : ''}} />&nbsp;</center></td>
         </tr>
       @endforeach
     </tbody>
@@ -93,10 +97,12 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td><center>John</center></td>
-              <td><center><a data-toggle="modal" href="#modal1" class='underline'><span>25 SLOTS</span></a></center></td>
-            </tr>
+            @foreach($_history as $history)
+              <tr>
+                <td><center>{{Carbon\Carbon::parse($history->date_created)->format('F d, Y')}}</center></td>
+                <td><center><a data-toggle="modal" href="#modal1" rank_update_date="Rank Update for {{Carbon\Carbon::parse($history->date_created)->format('F d, Y')}}" rank_update_id="{{$history->rank_update_id}}" class='underline view_rank_update'><span>{{$history->total_slots}}</span></a></center></td>
+              </tr>
+            @endforeach
           </tbody>
         </table>
       </div>
@@ -116,33 +122,12 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
           
         </button>
-        <h4 class="modal-title" id="classModalLabel">
+        <h4 class="modal-title view_rank_title" id="classModalLabel">
          Rank Update for October 15,2016
        </h4>
      </div>
-     <div class="modal-body">
-      <table class="table table-bordered table-condensed">
-        <thead>
-          <tr>
-            <th><center>Customer Name</center></th>
-            <th><center>Slot No.</center></th>
-            <th><center>Current Rank</center></th>
-            <th><center>Personal STAIR-PV</center></th>
-            <th><center>Group STAIR-PV</center></th>
-            <th><center>New Rank</center></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><center>John</center></td>
-            <td><center><a href="#" class='underline'><span>12</span></a></center></td>
-            <td><center>john@example.com</center></td>
-            <td><center>john@example.com</center></td>
-            <td><center>john@example.com</center></td>
-            <td><center>john@example.com</center></td>
-          </tr>
-        </tbody>
-      </table>
+     <div class="modal-body view_rank_update_modal">
+
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-primary" data-dismiss="modal">
@@ -155,7 +140,7 @@
 
 @endsection
 
-<style> 
+<style>
   div button {
     float: right;
     margin-right:10px;
@@ -220,14 +205,30 @@
   .datepicker{
     border-color:#ccc;
   }
+
 </style>
 
 @section('script')
 <script type="text/javascript">
+// alert(123);
+$("#progressbar > div").css({ 'background': 'LightYellow' });
+
+var total_slots = 0;
+$(".view_rank_update").click(function()
+{
+  $(".modal-loader").removeClass("hidden");
+  $(".view_rank_title").text($(this).attr("rank_update_date"));
+  var rank_update_id = $(this).attr("rank_update_id");
+  var link                    = "/member/mlm/rank/update/view_rank_update?id="+rank_update_id;
+  $(".view_rank_update_modal").load(link,function()
+  {
+    $(".modal-loader").addClass("hidden");
+  });
+});
+
 
 $(".update_ranking").click(function()
 {
-  alert(123);
   $(".update_rank_panel").css("display","block");
 });
 
@@ -255,9 +256,10 @@ function initial()
         {
             if(data.status == "Success")
             {
-                var slot_id    = data.slot_id;
+                total_slots        = data.total_slots;
+                var slot_id        = data.slot_id;
                 var rank_update_id = data.rank_update_id;
-                compute(slot_id,start,end,distribute);
+                compute(slot_id,rank_update_id,data.slot_no);
             }
             else
             {
@@ -267,28 +269,32 @@ function initial()
     });
 }
 
-function compute($slot_id,$rank_update_id)
+function compute($slot_id,$rank_update_id,$slot_no,$current_count = 1)
 {
-    var link             = "/member/mlm/stairstep_compute/start/compute";
-    $("#stairstep_status").val("Distributing points on slot #"+$slot_id);
+    var link             = "/member/mlm/rank/update/start/compute";
+    $("#stairstep_status").val("Distributing points on slot #"+$slot_no);
 
     $.ajax(
     {
         url:link,
         dataType:"json",
-        data: {_token: $(".token").val(),slot_id:$slot_id, rank_update_id:$rank_update_id},
+        data: {_token: $(".token").val(),slot_id:$slot_id, rank_update_id:$rank_update_id, current_count:$current_count},
         type:"post",
         success: function(data)
         {
+            $( "#progressbar" ).progressbar(
+            {
+              value: (data.current_count/total_slots) * 100
+            });
             if(data.status == "Success")
             {
-                $slot_id = data.slot_id;
+                $slot_id       = data.slot_id;
                 // alert($slot_id);
-                compute($slot_id,$rank_update_id);
+                compute($slot_id,$rank_update_id,data.slot_no,data.current_count);
             }
             else if(data.status == "Complete")
             {
-                alert("Rank Update completed.");
+                alert("Rank Update completed (Please refresh to see the updates).");
                 $("#stairstep_status").val("Rank Update completed");
             }
         },

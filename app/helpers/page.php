@@ -1397,6 +1397,15 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
 
+    /* -- MAINTENACE => Social App Keys */
+    $code = "maintenance-social-app-keys";
+    $nav[$page]['submenu'][$code]['label'] = "Social Networking App Keys"; 
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/app_keys";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Arcylen Gutierrez</span>";
+
     /* -- MAINTENACE => Sms Settings */
     $code = "maintenance-sms-content";
     $nav[$page]['submenu'][$code]['label'] = "SMS"; 

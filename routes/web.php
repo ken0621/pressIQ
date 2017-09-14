@@ -1029,6 +1029,10 @@ AdvancedRoute::controller('/member/ecommerce/trackings', 'Member\TrackingsContro
 AdvancedRoute::controller('/member/register/shipping', 'MemberController');
 /* End */
 
+/* MEMBER SHIPPING*/
+AdvancedRoute::controller('/member/maintenance/app_keys', 'Member\SocialNetworkingKeysController');
+/* End */
+
 
 AdvancedRoute::controller('/tester','TesterController');
 

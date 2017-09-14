@@ -9,7 +9,7 @@ use DB;
 use Facebook\Facebook as Facebook;
 use Facebook\Exceptions\FacebookResponseException as FacebookResponseException;
 use Facebook\Exceptions\FacebookSDKException as FacebookSDKException;
-
+use App\Globals\SocialNetwork;
 /**
  * Chart of Account Module - all account related module
  *
@@ -18,6 +18,17 @@ use Facebook\Exceptions\FacebookSDKException as FacebookSDKException;
 
 class FacebookGlobals
 {
+    public static function check_app_key($shop_id)
+    {  
+      $return = false;
+
+      $get = SocialNetwork::get_keys($shop_id, 'facebook');
+      if($get)
+      {
+        $return = true;
+      } 
+      return $get;     
+    }
     public static function get_data()
     {      
        $fb = new Facebook([
@@ -203,28 +214,5 @@ class FacebookGlobals
         $user = $response->getGraphUser();
         // dd($user);
         return $user;
-    }
-    public static function get_details()
-    { 
-      session_start();
-      $fb = new Facebook([
-          'app_id' => '898167800349883', // Replace {app-id} with your app id
-          'app_secret' => '94e57cf8f55689c4ccb69dea45532e20',
-          'default_graph_version' => 'v2.2',
-          'persistent_data_handler'=>'session'
-          ]);
-      $fb->setDefaultAccessToken($_SESSION['fb_access_token']);
-
-      $response = [];
-      try 
-      {
-        $response = $fb->get('/me',$_SESSION['fb_access_token'],['fields' => 'id,name,email,address,first_name,last_name,gender']);
-      }
-      catch(Exception $e)
-      {
-        dd($e);
-      }
-
-      dd($response);
     }
 }

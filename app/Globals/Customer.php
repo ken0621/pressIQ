@@ -42,6 +42,10 @@ class Customer
 		}
 
 	}
+	public static function get_info($shop_id, $customer_id)
+	{
+		return Tbl_customer::where("customer_id", $customer_id)->where("shop_id", $shop_id)->first();
+	}
 	public static function getShopId()
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');

@@ -1,19 +1,19 @@
 @extends("member.member_layout")
 @section("member_content")
-
+<input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
 <div class="dashboard">
-<!-- TOP DASHBOARD-->
-<div class="dashboard-top">
-  
-    <div class="row clearfix">
-      <div class="col-md-8">
-        <div class="img-container">
-          <img src="/themes/{{ $shop_theme }}/img/brown-img1.png">
+
+  <!-- TOP DASHBOARD-->
+  <div class="dashboard-top">
+      <div class="row clearfix">
+        <div class="col-md-8">
+          <div class="img-container">
+            <img src="/themes/{{ $shop_theme }}/img/brown-img1.png">
+          </div>
         </div>
-      </div>
-      <div class="col-md-4">
+        <div class="col-md-4">
         <div class="join-container">
-          <div class="text-header1">Become a Member</div>
+          <div class="text-header1">Join the Movement!</div>
           <div class="text-header2">Enroll now and become one of us!</div>
           <div class="btn-container">
             <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
@@ -22,8 +22,8 @@
           </div>
         </div>
       </div>
+      </div>
     </div>
-  </div>
 
   <!-- BOTTOM DASHBOARD -->
   <div class="dashboard-bottom">
@@ -102,43 +102,57 @@
               <div class="modal-content">
                   <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                      <h4 class="modal-title"><img src="/themes/{{ $shop_theme }}/img/cart.png"> Cart</h4>
+                      <h4 class="modal-title"><img src="/themes/{{ $shop_theme }}/img/cart.png"> My Shopping Cart</h4>
                   </div>
-                  <div class="modal-body">
-                      <h4>Item has successfully added to your Cart!</h4>
 
-                      <div class="row clearfix">
-                        <div class="col-md-6">
-                          <div class="img-container">
-                            <img width="261" height="264" src="/themes/{{ $shop_theme }}/img/brown-img-mobile.png">
+                  <div>
+                  <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Image</th>
+                          <th>Product Name</th>
+                          <th>Unit Price</th>
+                          <th>Quantity</th>
+                          <th>Total</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><img src="/themes/{{ $shop_theme }}/img/brown-cart-img1.png"></td>
+                          <td>P 9,500.00</td>
+                          <td>P 9,500.00</td>
+                          <td>
+                            <input class="item-qty" name="quantity" min="1" step="1" value="1"  type="number"></td>
+                          <td>P 9,500.00</td>
+                        </tr>
+                        <tr>
+                          <td><img src="/themes/{{ $shop_theme }}/img/brown-cart-img1.png"></td>
+                          <td>P 9,500.00</td>
+                          <td>P 9,500.00</td>
+                          <td>
+                            <input class="item-qty" name="quantity" min="1" step="1" value="1"  type="number">
+                          </td>
+                          <td>P 9,500.00</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    </div>
+
+                    <div class="modal-footer row clearfix">
+                      
+                        <div class="col-md-8">
+                          <div class="left-btn-container">
+                            <div><i class="fa fa-long-arrow-left" aria-hidden="true">&nbsp;</i>&nbsp;Continue Shopping</div>
+                            <button class="btn-checkout">Checkout</button>
                           </div>
                         </div>
 
-                        <div class="col-md-6">
-                          <div class="details">
-                              <div class="text-header">Phone Details</div>
-                              <div class="specs">
-                                MT6737 64-bit Quad-Core Processor<br>
-                                4.7" HD IPS Display<br>
-                                16GB ROM | 2 GB RAM<br>
-                                expandable up to 64gb microSD slot<br>
-                                13MP Auto-Focus Main Camera W/ 5MP Front Camera<br>
-                                4G LTE<br>
-                                Fingerprint Scanner<br>
-                                USB OTG<br>
-                                IR BLASTER<br>
-                                1800mAh Battery
-                              </div>
-                          </div>
-                          
-
-                          <div class="btn-container">
-                            <button class="btn-proceed-to-payment">Proceed to payment</button>
-                          </div>
+                        <div class="col-md-4">
+                          <div class="total">Total: P 9,500.00</div>
                         </div>
+                        
                       </div>
-
-                  </div>
+                    </div>
               </div>
           </div>
       </div>
@@ -151,13 +165,17 @@
               <div class="modal-content">
                   <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                      <h4 class="modal-title">Sponsor</h4>
+                      <h4 class="modal-title"><i class="fa fa-star"></i> SPONSOR</h4>
                   </div>
                   <div class="modal-body">
-                      <form>
-                        <input type="text" placeholder="Enter Your Sponsor">
+                      <form method="post" class="submit-verify-sponsor">  
+                        <div class="labels">Enter <b>Nickname of Sponsor</b> or <b>Slot Number</b></div>
+                        <input class="input-verify-sponsor text-center" name="verify_sponsor" type="text" placeholder="">
+                        <div class="output-container">
+                          
+                        </div>
                         <div class="btn-container">
-                          <button id="btn-verify" class="btn-verify">Verify</button>
+                          <button id="btn-verify" class="btn-verify btn-verify-sponsor"><i class="fa fa-check"></i> VERIFY SPONSOR</button>
                         </div>
                       </form>
                   </div>
@@ -209,9 +227,9 @@
                         <option value="Placement">Placement</option>
                       </select>
 
-                      <div>Position: </div>
+                      <div style="font-size: 13px;">Position: </div>
 
-                      <label class="radio-inline" style="padding-left: 72px;">
+                      <label class="radio-inline" style="padding-left: 78px;">
                         <input type="radio" name="optradio">Left
                       </label>
 
@@ -279,50 +297,63 @@
 
 @endsection
 @section("member_script")
+<<<<<<< HEAD
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js"></script>
+=======
+
+>>>>>>> 4c46eed304e10d14c927ba4290e429f033463482
 <script type="text/javascript">
 
   /*Popups*/
-
-  /*Buy a Kit*/
   $(document).ready(function(){
-    $("#btn-buy-a-kit").click(function(){
-      $("#buy-a-kit-modal").modal('show');
-    });
-  });
 
-  /*Enter a code*/
-  $(document).ready(function(){
-    $("#btn-enter-a-code").click(function(){
-      $("#enter-a-code-modal").modal('show');
-    });
-  });
+<<<<<<< HEAD
 
   /*Proceed 1*/
   $(document).ready(function(){
     $("#btn-verify").click(function(){
-      $("#proceed-modal-1").modal('show');
+      //$("#proceed-modal-1").modal('show');
     });
   });
 
   /*Proceed 2*/
   $(document).ready(function(){
     $("#btn-verify").click(function(){
-      $("#proceed-modal-2").modal('show');
+      //$("#proceed-modal-2").modal('show');
     });
   });
+=======
+      /*Buy a Kit*/
+      $("#btn-buy-a-kit").click(function(){
+        $("#buy-a-kit-modal").modal('show');
+      });
 
-  /*Success*/
-  $(document).ready(function(){
-    $("#btn-proceed-2").click(function(){
-      $("#success-modal").modal('show');
-    });
-  });
+      /*Enter a code*/
+      $("#btn-enter-a-code").click(function(){
+        $("#enter-a-code-modal").modal('show');
+      });
 
-  /*Failed*/
-  $(document).ready(function(){
-    $("#btn-proceed-2").click(function(){
-      $("#failed-modal").modal('show');
-    });
+      /*Proceed 1*/
+      $("#btn-verify").click(function(){
+        $("#proceed-modal-1").modal('show');
+      });
+>>>>>>> 4c46eed304e10d14c927ba4290e429f033463482
+
+      /*Proceed 2*/
+      $("#btn-verify").click(function(){
+        $("#proceed-modal-2").modal('show');
+      });
+
+      /*Success*/
+      $("#btn-proceed-2").click(function(){
+        $("#success-modal").modal('show');
+      });
+
+      /*Failed*/
+      $("#btn-proceed-2").click(function(){
+        $("#failed-modal").modal('show');
+      });
+
   });
 
 </script>

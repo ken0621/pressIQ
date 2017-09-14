@@ -13,12 +13,12 @@
 					<td class="c2">
 						<div class="register-form">
 							<div class="text-right social-button">
-								<div class="holder fb">
+								<a href="{{$fb_login_url or '#'}}" class="holder fb">
 									<div class="name"><i class="fa fa-facebook" aria-hidden="true"></i> Sign in with Facebook</div>
-								</div>
-								<div class="holder gp">
+								</a>
+								<a href="javascript:" class="holder gp">
 									<div class="name"><i class="fa fa-google-plus" aria-hidden="true"></i> Sign in with Google+</div>
-								</div>
+								</a>
 							</div>
 
 							@if (session("error"))

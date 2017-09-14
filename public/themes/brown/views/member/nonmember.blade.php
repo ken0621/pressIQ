@@ -297,17 +297,9 @@
 
 @endsection
 @section("member_script")
-<<<<<<< HEAD
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js"></script>
-=======
 
->>>>>>> 4c46eed304e10d14c927ba4290e429f033463482
 <script type="text/javascript">
-
-  /*Popups*/
-  $(document).ready(function(){
-
-<<<<<<< HEAD
 
   /*Proceed 1*/
   $(document).ready(function(){
@@ -322,7 +314,10 @@
       //$("#proceed-modal-2").modal('show');
     });
   });
-=======
+
+  /*Popups*/
+  $(document).ready(function(){
+
       /*Buy a Kit*/
       $("#btn-buy-a-kit").click(function(){
         $("#buy-a-kit-modal").modal('show');
@@ -334,15 +329,14 @@
       });
 
       /*Proceed 1*/
-      $("#btn-verify").click(function(){
+      /*$("#btn-verify").click(function(){
         $("#proceed-modal-1").modal('show');
-      });
->>>>>>> 4c46eed304e10d14c927ba4290e429f033463482
+      });*/
 
       /*Proceed 2*/
-      $("#btn-verify").click(function(){
+      /*$("#btn-verify").click(function(){
         $("#proceed-modal-2").modal('show');
-      });
+      });*/
 
       /*Success*/
       $("#btn-proceed-2").click(function(){

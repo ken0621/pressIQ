@@ -9,49 +9,53 @@
 	}
 	.wallet-logs-content
 	{
+
+		text-align: center;
+		
 		.wallet-profile
 		{
 			.img
 			{
-				position:absolute;
-				right:40%;
+				padding-top: 20px;
 			}
+
 			.name
 			{
+				padding-top: 20px;
 				font-size: 18px;
-				margin-top: 55px;
-				margin-left:425px; 
+				//margin-top: 55px;
+				//margin-left:425px; 
 				
 			}
 			.label-name
 			{
-				margin-left:515px;
+				//margin-left:515px;
 				font-size: 13px; 
-				margin-top: 2px;
+				//margin-top: 2px;
 			}
 			.p1
 			{
 				font-size: 13px;
-				margin-left:425px;
-				margin-top: 5px;
+				//margin-left:425px;
+				//margin-top: 5px;
 			}
 			.label-name1
 			{
-				margin-left:495px;
+				//margin-left:495px;
 				font-size: 13px; 
-				margin-top: 2px;
+				//margin-top: 2px;
 			}
 			.p2
 			{
 				font-size: 13px;
-				margin-left:500px;
-				margin-top: 5px;
+				//margin-left:500px;
+				//margin-top: 5px;
 			}
 			.label-name2
 			{
-				margin-left:510px;
+				//margin-left:510px;
 				font-size: 13px; 
-				margin-top: 2px;
+				//margin-top: 2px;
 			}
 		}
 
@@ -66,6 +70,7 @@
 	.p3
 	{
 		margin-left:5px;
+
 	}
 
 }

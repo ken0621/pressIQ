@@ -290,12 +290,12 @@ class GuillermoController extends Controller
         
         $failureWebhook = new Webhook();
         $failureWebhook->name = Webhook::CHECKOUT_FAILURE;
-        $failureWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/paymaya/failure");
+        $failureWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/failure");
         $failureWebhook->register();
         
         $cancelWebhook = new Webhook();
         $cancelWebhook->name = Webhook::CHECKOUT_DROPOUT;
-        $cancelWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/paymaya/cancel");
+        $cancelWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/cancel");
         $cancelWebhook->register();
         
         dd(Webhook::retrieve());

@@ -21,8 +21,8 @@ function customerlist()
 
 	function search()
 	{
-		$(".customer-search").unbind("keyup");
-		$(".customer-search").bind("keyup", function () {
+		$(".customer-search").unbind("change");
+		$(".customer-search").bind("change", function () {
 			 var str = $(this).val();
 			 var value = $(this).attr("data-value");
 			 console.log(value);

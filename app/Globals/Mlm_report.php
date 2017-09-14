@@ -231,6 +231,7 @@ class Mlm_report
         ->groupBy(DB::raw('wallet_log_plan') )
         ->groupBy('wallet_log_slot')
         ->whereIn('wallet_log_slot', $wherein)
+        ->whereBetween("wallet_log_date_created",array($filter['from'],$filter['to']))
     	->get();
         // dd($complan_per_day);
     	$plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
@@ -294,12 +295,12 @@ class Mlm_report
         ->groupBy(DB::raw('wallet_log_plan') )
         ->groupBy('wallet_log_slot')
         ->whereIn('wallet_log_slot', $wherein)
+        ->whereBetween("wallet_log_date_created",array($filter['from'],$filter['to']))
     	->get();
         // dd($complan_per_day);
     	$plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
         ->where('marketing_plan_enable', 1)
         ->get()->keyBy('marketing_plan_code');
-        
         $per_complan = [];
         $plan = [];
         foreach($complan_per_day as $key => $value)
@@ -347,7 +348,6 @@ class Mlm_report
             $wherein[$key] = $key;
         }
 
-
     	$complan_per_day =Tbl_mlm_slot_wallet_log::slot()
     	->customer()
     	->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)
@@ -357,6 +357,7 @@ class Mlm_report
         ->groupBy(DB::raw('wallet_log_plan') )
         ->groupBy('wallet_log_slot')
         ->whereIn('wallet_log_slot', $wherein)
+        ->whereBetween("wallet_log_date_created",array($filter['from'],$filter['to']))
     	->get();
         // dd($complan_per_day);
     	$plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)

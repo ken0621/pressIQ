@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Input;
 
 class AdminControllers extends Controller
 {
+	 
 	public function getview()
 	{
 		
@@ -62,17 +63,20 @@ class AdminControllers extends Controller
 	{
 
       $check_login = Tbl_Admin::where("username", Request::input("username"))->where("password", Request::input("password"))->first();
+			
 
-		
+
 		if($check_login)
 		{
+			$check_login['sample'] = Tbl_Admin::where("username", Request::input("username"))->where("password", Request::input("password"))->first();
+					session()->put('user', 'sample');
 			return "true";
 		}
 		else
 		{
 			return "false";
 		}
-		
+			
 			return "true";	
 	}
 

@@ -12,7 +12,4 @@ class Tbl_Admin extends Model
     public $timestamps = false;
 }
 
-	public function getId()
-{
-  	return $this->id;
-}
+	

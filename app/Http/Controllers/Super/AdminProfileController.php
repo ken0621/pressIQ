@@ -11,20 +11,18 @@ use \Auth;
 use Illuminate\Contracts\Auth\Guard;
 
 class AdminProfileController extends Controller
-{
+{ 	
+
 	public function profilepic(Guard $auth)
 	{
-
-		
-		$user = Auth()->user();
-		dd($user);
-
+		session()->get('user', 'sample');
+		dd(session()->get('user', 'sample'));
 		/*$id = Auth::id();
       	$admin_id = Tbl_Admin::find('admin_id');*/
 		
-		/*$data["user_info"] = ($userId);
-		$data["user_info"]  = Tbl_Admin::where('admin_id','=',$userId)->first();
-		return view("super_admin.index_admin",$data);*/
+		$data["user_info"] = ($userId);
+		$data["user_info"]  = Tbl_Admin::where('admin_id','=','1')->first();
+		return view("super_admin.index_admin",$data);
 	}
 
 }

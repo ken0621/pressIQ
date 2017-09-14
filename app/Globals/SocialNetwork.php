@@ -18,6 +18,7 @@ class SocialNetwork
 {
 	public static function get_keys($shop_id, $app_name)
 	{
+		$return = null; 
 		$data = Tbl_social_network_keys::where('shop_id',$shop_id)->where('social_network_name',$app_name)->first();
 		if($data)
 		{

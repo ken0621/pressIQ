@@ -11,7 +11,8 @@ use App\Globals\Customer;
 use App\Rules\Uniqueonshop;
 use App\Globals\MLM2;
 use App\Globals\FacebookGlobals;
-use App\Globals\Social;
+use App\Globals\SocialNetwork;
+use App\Globals\GoogleGlobals;
 use App\Models\Tbl_customer;
 
 class ShopMemberController extends Shop
@@ -28,12 +29,48 @@ class ShopMemberController extends Shop
     public function getLogin()
     {
         $data["page"] = "Login";
-        $get = FacebookGlobals::check_app_key($this->shop_info->shop_id);
-        if($get)
+        $get_fb = FacebookGlobals::check_app_key($this->shop_info->shop_id);
+        if($get_fb)
         {
             $data['fb_login_url'] = FacebookGlobals::get_link($this->shop_info->shop_id);
         }
+        $get_google = GoogleGlobals::check_app_key($this->shop_info->shop_id);
+        if($get_google)
+        {
+            $data['google_app_id'] = SocialNetwork::get_keys($this->shop_info->shop_id, 'googleplus')['app_id'];
+        }
+
         return view("member.login", $data);
+    }
+    public function postLoginGoogleSubmit(Request $request)
+    {
+        $pass = isset($request->id) ? $request->id : null;
+        $email = isset($request->email) ? $request->email : null;
+        $check = Tbl_customer::where('email',$email)->first();
+        if($check && $pass)
+        {
+            Self::store_login_session($email,$pass);
+        }
+        else
+        {
+            $ins['email']           = $request->email;
+            $ins['first_name']      = ucfirst($request->first_name);
+            $ins['last_name']       = ucfirst($request->last_name);
+            $ins['password']        = Crypt::encrypt($request->id);
+            $ins['mlm_username']    = $request->email;
+            $ins['ismlm']           = 1;
+            $ins['created_at']      = Carbon::now();
+
+            $reg = Customer::register($this->shop_info->shop_id, $ins);  
+            if($reg)
+            {
+                $email = $request->email;
+                $pass = $request->id;
+                Self::store_login_session($email,$pass);
+            }             
+        }
+
+        echo json_encode("success");
     }
     public function getLoginSubmit()
     {

@@ -1,5 +1,6 @@
-.wallet-logs
+.wallet-logs-container
 {
+  font-family: 'Open Sans', sans-serif;
   overflow-x: hidden;
   overflow-y: hidden;
 
@@ -9,49 +10,47 @@
 	}
 	.wallet-logs-content
 	{
+		text-align: center;
 		.wallet-profile
 		{
+			
 			.img
 			{
-				position:absolute;
-				right:40%;
+				padding-top: 30px;
+				padding-bottom: 20px;
 			}
 			.name
 			{
-				font-size: 18px;
-				margin-top: 55px;
-				margin-left:425px; 
+
+				font-size: 20px;
+				font-weight: 600;
 				
 			}
 			.label-name
 			{
-				margin-left:515px;
-				font-size: 13px; 
-				margin-top: 2px;
+				font-size: 13px;
+				color:#85939e;
 			}
-			.p1
+			.email
 			{
 				font-size: 13px;
-				margin-left:425px;
-				margin-top: 5px;
+				color:#344049;
+				font-weight: 600;
+				padding-top: 5px;
 			}
-			.label-name1
+			.lbl-email
 			{
-				margin-left:495px;
-				font-size: 13px; 
-				margin-top: 2px;
+				@extend .label-name;
 			}
-			.p2
+			.birthdate
 			{
-				font-size: 13px;
-				margin-left:500px;
-				margin-top: 5px;
+				@extend .email;
+				padding-top: 5px;
 			}
-			.label-name2
+			.lbl-birthdate
 			{
-				margin-left:510px;
-				font-size: 13px; 
-				margin-top: 2px;
+				@extend .label-name;
+				
 			}
 		}
 
@@ -63,9 +62,12 @@
 		word-break: break-word;
 	}
 
-	.p3
+	.income-salary
 	{
-		margin-left:5px;
+		font-weight: 600;
+		padding-top: 50px;
+		margin-left: 5px;
+		padding-bottom: 20px;
 	}
 
 }

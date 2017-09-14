@@ -42,9 +42,80 @@
 				</div>				
 			</div>
 			<div class="mid-container">
+				<div class="browseby-title-holder">
+					<p class="title">Browse By Category</p>
+				</div>
+				<div class="browseby-tiles-holder">
+					<div class="browseby-paddingformat">
+						
+						<a class="browseby-active" href="">
+							<div class="browseby-image-holder">
+								<img class="image-responsive" src="/themes/{{ $shop_theme }}/img/browseby-brown-androidphone-icon.png">
+							</div>
+							<div class="browseby-icon-title-holder">
+								<p class="browseby-icon-title">Brown Phone</p>
+							</div>
+						</a>
+
+						<a class="browseby" href="">
+							<div class="browseby-image-holder">
+								<img class="image-responsive" src="/themes/{{ $shop_theme }}/img/browseby-phonecase-icon.png">
+							</div>
+							<div class="browseby-icon-title-holder">
+								<p class="browseby-icon-title">Phone Case</p>
+							</div>
+						</a>
+
+						<a class="browseby" href="">
+							<div class="browseby-image-holder">
+								<img class="image-responsive" src="/themes/{{ $shop_theme }}/img/browseby-headphone-icon.png">
+							</div>
+							<div class="browseby-icon-title-holder">
+								<p class="browseby-icon-title">Head Phones</p>
+							</div>
+						</a>
+
+						<a class="browseby" href="">
+							<div class="browseby-image-holder">
+								<img class="image-responsive" src="/themes/{{ $shop_theme }}/img/browseby-powerbank-icon.png">
+							</div>
+							<div class="browseby-icon-title-holder">
+								<p class="browseby-icon-title">Power Bank</p>
+							</div>
+						</a>
+
+						<a class="browseby" href="">
+							<div class="browseby-image-holder">
+								<img class="image-responsive" src="/themes/{{ $shop_theme }}/img/browseby-dongles-icon.png">
+							</div>
+							<div class="browseby-icon-title-holder">
+								<p class="browseby-icon-title">Dongles</p>
+							</div>
+						</a>
+
+						<a class="browseby" href="">
+							<div class="browseby-image-holder">
+								<img class="image-responsive" src="/themes/{{ $shop_theme }}/img/browseby-internetofthings-icon.png">
+							</div>
+							<div class="browseby-icon-title-holder">
+								<p class="browseby-icon-title">Internet Of Things</p>
+							</div>
+						</a>
+
+						<a class="browseby" href="">
+							<div class="browseby-image-holder">
+								<img class="image-responsive" src="/themes/{{ $shop_theme }}/img/browseby-healthtechnology-icon.png">
+							</div>
+							<div class="browseby-icon-title-holder">
+								<p class="browseby-icon-title">Health Technology</p>
+							</div>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="bottom-container">
 				
 			</div>
-			<div class="bottom-container"></div>
 		</div>
 	</div>
 	<!-- VIDEO ADS -->

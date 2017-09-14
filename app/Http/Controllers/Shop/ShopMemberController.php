@@ -71,7 +71,11 @@ class ShopMemberController extends Shop
     public function getRegister()
     {
         $data["page"] = "Register";
-        $data['fb_login_url'] = FacebookGlobals::get_link_register($this->shop_info->shop_id);
+        $get = FacebookGlobals::check_app_key($this->shop_info->shop_id);
+        if($get)
+        {
+            $data['fb_login_url'] = FacebookGlobals::get_link_register($this->shop_info->shop_id);
+        }
 
         return view("member.register", $data);
     }

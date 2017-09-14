@@ -39,7 +39,7 @@
                                     <!-- <td><a href="">{{$audit->transaction_txt != "" ? "View" : ""}}</a></td> -->
                                 </tr> --}}
                     			<tr>
-                    				<td>{{date('M d, g:i A',strtotime($audit->created_at))}}</td>
+                    				<td>{{date('M d, g:i A',strtotime($audit->audit_created_at))}}</td>
                     				<td>{{$audit->user}}</td>
                     				<td>{{ucfirst($audit->action)}} <a>{{$audit->transaction_txt}}</a></td>
                     				<td>{{$audit->transaction_client}}</td>

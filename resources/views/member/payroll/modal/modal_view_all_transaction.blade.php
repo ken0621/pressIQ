@@ -3,7 +3,7 @@
     <button type="button" class="close" data-dismiss="modal">×</button>
     <h4 class="modal-title">Transaction</h4>
   </div>
-  <div class="modal-body clearfix">
+  <div class="modal-body clearfix" id="overflow">
    <table class="table table-bordered">
     <thead>
       <tr>
@@ -20,7 +20,7 @@
         <td>{{$user_info->user_first_name}} {{$user_info->user_last_name}}</td>
         <td>{{$audit->source}}</td>
         <td>{{$audit->remarks}}</td>
-        <td>{{$audit->created_at}}</td>
+        <td>{{date('M d, g:i A',strtotime($audit->created_at))}}</td>
         <td>{{$audit->new_data}}</td>
         <td>{{$audit->old_data}}</td>
       </tr>
@@ -32,7 +32,7 @@
   </div>
 </form>
 <style>
-table,th,td {
-  overflow:hidden;
+#overflow {
+  overflow-x:scroll;
 }
 </style>

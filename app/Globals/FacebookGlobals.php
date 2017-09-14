@@ -136,7 +136,7 @@ class FacebookGlobals
         try 
         {
           // Returns a `Facebook\FacebookResponse` object
-          $response = $fb->get('/me?fields=id,email,first_name,last_name,gender,locale,age_range,picture', $accessToken);
+          $response = $fb->get('/me?fields=id,email,first_name,middle_name,last_name,gender,locale,age_range,picture', $accessToken);
         } catch(Facebook\Exceptions\FacebookResponseException $e) {
           echo 'Graph returned an error: ' . $e->getMessage();
           exit;

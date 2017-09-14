@@ -33,7 +33,9 @@ class ShopMemberController extends Shop
     public function getLoginSubmit()
     {
         $user_profile = FacebookGlobals::user_profile();
-        if(count($user_profile) > 0)
+        $email = isset($user_profile) ? $user_profile['email'] : null;
+        $check = Tbl_customer::where('email',$email)->first();
+        if(count($user_profile) > 0 && $check)
         {
             $data = collect($user_profile)->toArray();
 
@@ -43,10 +45,7 @@ class ShopMemberController extends Shop
         }
         else
         {
-            $data["page"] = "Register";
-            $data['fb_login_url'] = FacebookGlobals::get_link_register();
-
-            return view("member.register", $data);                
+            return Redirect::to('/members/register');                
         }
     }
     public function postLogin(Request $request)
@@ -77,17 +76,32 @@ class ShopMemberController extends Shop
         if(count($user_profile) > 0)
         {
             $data = collect($user_profile)->toArray();
-            $ins['shop_id'] = $this->shop_info->shop_id;
-            $ins['email'] = $data['email'];
-            $ins['first_name'] = $data['first_name'];
-            $ins['last_name'] = $data['last_name'];
-            $ins['gender'] = $data['gender'] == null ? 'male' : '';
-            $ins['password'] = Crypt::encrypt($data['id']);
-            $ins['ismlm'] = 1;
-            $ins['created_at'] = Carbon::now();
+            $check = Tbl_customer::where('email',$data['email'])->first();
+            $email = $data['email'];
+            $pass = $data['id'];
+            if(!$check)
+            {
+                $ins['email']           = $data['email'];
+                $ins['first_name']      = $data['first_name'];
+                $ins['last_name']       = $data['last_name'];
+                $ins['middle_name']     = $data['middle_name'] == null ? '' : $data['middle_name'] ;
+                $ins['gender']          = $data['gender'] == null ? 'male' : $data['gender'];
+                $ins['password']        = Crypt::encrypt($data['id']);
+                $ins['mlm_username']    = $data['email'];
+                $ins['ismlm']           = 1;
+                $ins['created_at']      = Carbon::now();
 
-            Tbl_customer::insert($ins);
-            Self::store_login_session($data['email'],$data['id']);
+                Customer::register($this->shop_info->shop_id, $ins);            
+            }
+            else
+            {
+                $email = $check->email;
+                $pass = Crypt::decrypt($check->password);
+            }
+            if($email && $pass)
+            {
+                Self::store_login_session($email,$pass);
+            }
 
             return Redirect::to("/members")->send();
         }

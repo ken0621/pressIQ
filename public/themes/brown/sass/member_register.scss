@@ -211,3 +211,50 @@ body
 		}
 	}	
 }
+
+.modal-agreement
+{
+	.modal-header
+	{
+		background-color: #693d28;
+		color: #fff;
+		font-size: 13px;
+		font-weight: 600;
+	}
+	.modal-body
+	{
+		.contract
+		{
+			color: #344049;
+			font-size: 13px;
+			font-weight: 600;
+			white-space: pre-wrap;
+			height: 420px;
+			overflow-y: auto;
+		}
+	}
+	.modal-footer
+	{
+		.btn
+		{
+			color: #ffffff;
+			font-weight: 600;
+			font-size: 13px;
+			border-radius: 1.5px;
+			padding: 10px 25px;
+			margin-left: 12.5px;
+			&:last-child
+			{
+				margin-left: 0;
+			}
+		}
+		.btn-semi
+		{
+			background-color: #693d28;
+		}
+		.btn-pure
+		{
+			background-color: #462211;
+		}
+	}
+}

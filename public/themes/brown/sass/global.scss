@@ -7,6 +7,11 @@ body
 	font-weight: 400;
 }
 
+button
+{
+	outline: none;
+}
+
 .btn-brown
 {
 	color: #ffffff;
@@ -36,6 +41,10 @@ body
 .nav .open>a, .nav .open>a:hover, .nav .open>a:focus
 {
 	background-color: #5e3724;
+}
+.nav>li>a:hover, .nav>li>a:focus
+{
+	background-color: #5E3724;
 }
 .dropdown-menu
 {
@@ -207,7 +216,7 @@ body
 }
 .notif-holder
 {
-	padding: 13.5px 15px;
+	padding: 13.5px 15px !important;
 	img
 	{
 		margin-right: 5px;
@@ -225,7 +234,7 @@ body
 }
 .cart-holder
 {
-	padding: 13.5px 15px;
+	padding: 13.5px 15px !important;
 	img
 	{
 		display: inline-block;
@@ -279,6 +288,7 @@ header
 		border-bottom: 1px solid #78513e;
 		.logo
 		{
+			cursor: pointer;
 			@media screen and (min-width: 991px)
 			{
 				float: left;
@@ -355,6 +365,11 @@ header
 	height: 50px;
 	width: 100%;
 	z-index: 1000;
+	transition: 0.3s all ease;
+	&.hide-sticky
+	{
+		top: -100%;
+	}
 	.relative
 	{
 		position: relative;
@@ -583,4 +598,27 @@ footer
 		}
 	}
 }
+.form-input
+{
+	margin-top: 5px;
+	.form-control
+	{
+		border: 0;
+		border-bottom: 1px solid #e0e0e0;
+		box-shadow: none;
+		color: #344049;
+		font-weight: 600;
+		font-size: 13px;
+		padding-left: 0;
+		padding-right: 0;
+	}
+}
+
+/* FONTAWESOME ICON */
+.fa-caret-right {
+	color: #693d28;
+	font-size: 13px;
+}
+
+
 /* Footer End */

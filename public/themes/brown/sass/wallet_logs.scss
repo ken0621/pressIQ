@@ -1,0 +1,74 @@
+.wallet-logs-container
+{
+  font-family: 'Open Sans', sans-serif;
+  overflow-x: hidden;
+  overflow-y: hidden;
+
+	.main-member-header
+	{
+		
+	}
+	.wallet-logs-content
+	{
+		text-align: center;
+		
+		.wallet-profile
+		{
+			
+			.img
+			{
+				padding-top: 30px;
+				padding-bottom: 20px;
+			}
+
+			.name
+			{
+				font-size: 20px;
+				font-weight: 600;
+				
+			}
+			.label-name
+			{
+				font-size: 13px;
+				color:#85939e;
+			}
+			.email
+			{
+				font-size: 13px;
+				color:#344049;
+				font-weight: 600;
+				padding-top: 5px;
+			}
+			.lbl-email
+			{
+				@extend .label-name;
+			}
+			.birthdate
+			{
+				@extend .email;
+				padding-top: 5px;
+			}
+			.lbl-birthdate
+			{
+				@extend .label-name;
+			}
+		}
+
+	}
+
+	.table_report
+	{
+		width: 87%;
+		word-break: break-word;
+	}
+
+	.income-salary
+	{
+		font-weight: 600;
+		padding-top: 50px;
+		margin-left: 5px;
+		padding-bottom: 20px;
+	}
+
+}
+

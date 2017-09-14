@@ -115,6 +115,23 @@ class Mlm_complan_manager_repurchasev2
 
         if($current_sponsor_level <= $leader_up_to_level)
         {
+            /* OVERRIDING */
+            $trigger_rank_id = $trigger_info->brown_rank_id;
+            $trigger_current_rank = Tbl_brown_rank::where("rank_id", $trigger_rank_id)->first();
+
+            if($trigger_reason == "Builder Reward")
+            {
+                $trigger_percentage = $trigger_current_rank->leader_override_build_reward / 100;
+            }
+            else
+            {
+                $trigger_percentage = $trigger_current_rank->leader_override_direct_reward / 100;
+            }
+
+            /* PERCENTAGE OVERRIDING */
+            $leader_percentage = $leader_percentage - $trigger_percentage;
+
+            /* START COMPUTE */
             $compute_points = $amount * $leader_percentage;
 
             if($compute_points != 0)

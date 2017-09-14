@@ -114,7 +114,125 @@
 				</div>
 			</div>
 			<div class="bottom-container">
-				
+  				<div class="row">
+    				<div class="col-md-12">
+      					<div class="carousel slide multi-item-carousel" id="theCarousel">
+        					<div class="carousel-inner">
+					        	<div class="item active">
+					            	<div class="col-xs-3"><a href="">
+					            		<div>
+					            			<img class="image-responsive" src="/themes/{{ $shop_theme }}/img/featured-phone-001.png">
+					            		</div>
+					            		<div class="featuredphone-details-holder">
+					            			<p class="featuredphone-name">Brown 1</p>
+					            			<p class="featuredphone-spec">4.7 HD IPS Display</p>
+					            			<p class="featuredphone-price">P 9,500.00</p>
+					            		</div>
+					            	</a></div>
+					        	</div>
+          						<div class="item">
+            						<div class="col-xs-3"><a href="">
+            							<div>
+					            			<img class="image-responsive" src="/themes/{{ $shop_theme }}/img/featured-phone-002.png">
+					            		</div>
+					            		<div class="featuredphone-details-holder">
+					            			<p class="featuredphone-name">Brown 1</p>
+					            			<p class="featuredphone-spec">4.7 HD IPS Display</p>
+					            			<p class="featuredphone-price">P 9,500.00</p>
+					            		</div>
+            						</a></div>
+          						</div>
+          						<div class="item">
+            						<div class="col-xs-3"><a href="">
+            							<div>
+					            			<img class="image-responsive" src="/themes/{{ $shop_theme }}/img/featured-phone-003.png">
+					            		</div>
+					            		<div class="featuredphone-details-holder">
+					            			<p class="featuredphone-name">Brown 1</p>
+					            			<p class="featuredphone-spec">4.7 HD IPS Display</p>
+					            			<p class="featuredphone-price">P 9,500.00</p>
+					            		</div>
+            						</a></div>
+          						</div>
+          						<div class="item">
+            						<div class="col-xs-3"><a href="">
+            							<div>
+					            			<img class="image-responsive" src="/themes/{{ $shop_theme }}/img/featured-phone-004.png">
+					            		</div>
+					            		<div class="featuredphone-details-holder">
+					            			<p class="featuredphone-name">Brown 1</p>
+					            			<p class="featuredphone-spec">4.7 HD IPS Display</p>
+					            			<p class="featuredphone-price">P 9,500.00</p>
+					            		</div>
+            						</a></div>
+          						</div>
+          						<div class="item">
+            						<div class="col-xs-3"><a href="">
+            							<div>
+					            			<img class="image-responsive" src="/themes/{{ $shop_theme }}/img/featured-phone-001.png">
+					            		</div>
+					            		<div class="featuredphone-details-holder">
+					            			<p class="featuredphone-name">Brown 1</p>
+					            			<p class="featuredphone-spec">4.7 HD IPS Display</p>
+					            			<p class="featuredphone-price">P 9,500.00</p>
+					            		</div>
+            						</a></div>
+          						</div>
+          						<div class="item">
+            						<div class="col-xs-3"><a href="">
+            							<div>
+					            			<img class="image-responsive" src="/themes/{{ $shop_theme }}/img/featured-phone-002.png">
+					            		</div>
+					            		<div class="featuredphone-details-holder">
+					            			<p class="featuredphone-name">Brown 1</p>
+					            			<p class="featuredphone-spec">4.7 HD IPS Display</p>
+					            			<p class="featuredphone-price">P 9,500.00</p>
+					            		</div>
+            						</a></div>
+          						</div>
+          						<div class="item">
+            						<div class="col-xs-3"><a href="">
+            							<div>
+					            			<img class="image-responsive" src="/themes/{{ $shop_theme }}/img/featured-phone-003.png">
+					            		</div>
+					            		<div class="featuredphone-details-holder">
+					            			<p class="featuredphone-name">Brown 1</p>
+					            			<p class="featuredphone-spec">4.7 HD IPS Display</p>
+					            			<p class="featuredphone-price">P 9,500.00</p>
+					            		</div>
+            						</a></div>
+          						</div>
+          						<div class="item">
+            						<div class="col-xs-3"><a href="">
+            							<div>
+					            			<img class="image-responsive" src="/themes/{{ $shop_theme }}/img/featured-phone-004.png">
+					            		</div>
+					            		<div class="featuredphone-details-holder">
+					            			<p class="featuredphone-name">Brown 1</p>
+					            			<p class="featuredphone-spec">4.7 HD IPS Display</p>
+					            			<p class="featuredphone-price">P 9,500.00</p>
+					            		</div>
+            						</a></div>
+          						</div>
+          					<!--  Example item end -->
+          						<div class="item">
+            						<div class="col-xs-3"><a href="">
+            							<div>
+					            			<img class="image-responsive" src="/themes/{{ $shop_theme }}/img/featured-phone-001.png">
+					            		</div>
+					            		<div class="featuredphone-details-holder">
+					            			<p class="featuredphone-name">Brown 1</p>
+					            			<p class="featuredphone-spec">4.7 HD IPS Display</p>
+					            			<p class="featuredphone-price">P 9,500.00</p>
+					            		</div>
+            						</a></div>
+          						</div>
+        					</div>
+        					<a class="left carousel-control" href="#theCarousel" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+        					<a class="right carousel-control" href="#theCarousel" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+      					</div>
+    				</div>
+  				</div>
 			</div>
 		</div>
 	</div>
@@ -127,7 +245,28 @@
 </div>
 @endsection
 @section("script")
-
+<script type="text/javascript">
+	// for every slide in carousel, copy the next slide's item in the slide.
+	// Do the same for the next, next item.
+	$('.multi-item-carousel .item').each(function()
+	{
+  		var next = $(this).next();
+  		if (!next.length) 
+  		{
+    		next = $(this).siblings(':first');
+ 		}
+  		next.children(':first-child').clone().appendTo($(this));
+  
+  		if (next.next().length>0) 
+  		{
+    		next.next().children(':first-child').clone().appendTo($(this));
+  		} 
+  		else 
+  		{
+  			$(this).siblings(':first').children(':first-child').clone().appendTo($(this));
+  		}
+	});
+</script>
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css">

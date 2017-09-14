@@ -1,2 +1,32 @@
-.wallet-logs{overflow-x:hidden;overflow-y:hidden}.wallet-logs .wallet-logs-content .wallet-profile .img{position:absolute;right:40%}.wallet-logs .wallet-logs-content .wallet-profile .name{font-size:18px;margin-top:55px;margin-left:425px}.wallet-logs .wallet-logs-content .wallet-profile .label-name{margin-left:515px;font-size:13px;margin-top:2px}.wallet-logs .wallet-logs-content .wallet-profile .p1{font-size:13px;margin-left:425px;margin-top:5px}.wallet-logs .wallet-logs-content .wallet-profile .label-name1{margin-left:495px;font-size:13px;margin-top:2px}.wallet-logs .wallet-logs-content .wallet-profile .p2{font-size:13px;margin-left:500px;margin-top:5px}.wallet-logs .wallet-logs-content .wallet-profile .label-name2{margin-left:510px;font-size:13px;margin-top:2px}.wallet-logs .table_report{width:87%;word-break:break-word}.wallet-logs .p3{margin-left:5px}
+.wallet-logs-container {
+  font-family: 'Open Sans', sans-serif;
+  overflow-x: hidden;
+  overflow-y: hidden; }
+  .wallet-logs-container .wallet-logs-content {
+    text-align: center; }
+    .wallet-logs-container .wallet-logs-content .wallet-profile .img {
+      padding-top: 30px;
+      padding-bottom: 20px; }
+    .wallet-logs-container .wallet-logs-content .wallet-profile .name {
+      font-size: 20px;
+      font-weight: 600; }
+    .wallet-logs-container .wallet-logs-content .wallet-profile .label-name, .wallet-logs-container .wallet-logs-content .wallet-profile .lbl-email, .wallet-logs-container .wallet-logs-content .wallet-profile .lbl-birthdate {
+      font-size: 13px;
+      color: #85939e; }
+    .wallet-logs-container .wallet-logs-content .wallet-profile .email, .wallet-logs-container .wallet-logs-content .wallet-profile .birthdate {
+      font-size: 13px;
+      color: #344049;
+      font-weight: 600;
+      padding-top: 5px; }
+    .wallet-logs-container .wallet-logs-content .wallet-profile .birthdate {
+      padding-top: 5px; }
+  .wallet-logs-container .table_report {
+    width: 87%;
+    word-break: break-word; }
+  .wallet-logs-container .income-salary {
+    font-weight: 600;
+    padding-top: 50px;
+    margin-left: 5px;
+    padding-bottom: 20px; }
+
 /*# sourceMappingURL=wallet_logs.css.map */

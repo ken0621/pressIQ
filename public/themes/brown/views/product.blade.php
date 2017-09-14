@@ -1,112 +1,122 @@
 @extends("layout")
 @section("content")
-<div class="container">
-	<table class="product-container">
-		<tr>
-			<td class="product-filter" style="vertical-align: top;">
-				<div class="filter-title">SHOP</div>
-				<div class="filter-category">
-					<div class="filter-main-category">
-						<a href="/product" class="category {{Request::input('type') == null ? 'active' : ''}}" style="text-transform: uppercase;">All</a>
+
+<div class="product-container">
+	<div class="container">
+		<div class="row clearfix">
+			<div class="col-md-3">
+				<div class="category-container">
+
+					<div class="text-header">Browse By Catergory</div>
+
+					<div class="links-category">
+						<a href="#" class="active">Brown Phone (4)</a>
+						<a href="#">Phone Case (20)</a>
+						<a href="#">Head Phones (30)</a>
+						<a href="#">Power Banks (10)</a>
+						<a href="#">Dongles (5)</a>
+						<a href="#">Internet Of Things (5)</a>
+						<a href="#">Health Technology (3)</a>
 					</div>
 
-					@if(count($_category) > 0)
-						@foreach($_category as $category)
-							<div class="filter-main-category">
-								<a href="/product?type={{ $category['type_id'] }}" class="category {{Request::input('type') == $category['type_id'] ? 'active' : ''}}" style="text-transform: uppercase;">{{ $category['type_name'] }}</a>
-								@if(count($category['subcategory']) > 0)
-									<div style="padding: 10px 0; padding-bottom: 7.5px;">
-										@foreach($category['subcategory'] as $subcategories)
-										<div style="color: #000000; font-size: 12.5px; font-weight: 300; padding-left: 7.5px; text-transform: uppercase;" onClick="location.href='/product?type={{ $subcategories['type_id'] }}'" class="menu">{{ $subcategories['type_name'] }}</div>
-										@endforeach
-									</div>
-								@endif
-							</div>
-						@endforeach
-					@endif
 				</div>
-			</td>
+				<div class="filter-by-price-container">
+					
+					<div class="text-header">Filter By Price</div>
+					
+					<div class="filter-control">
+						<img src="/themes/{{ $shop_theme }}/img/brown-filter-control.png">
+					</div>
 
-			<td class="body-content" style="vertical-align: top;">
-				<div class="head-data">
-					<div class="">
-						<div class="product-header">
-							<img src="/themes/{{ $shop_theme }}/front/dress-header.jpg">
-							<div class="header-container">
-								<p class="header-title category_name" style="text-transform: uppercase;">{{ $category_name }}</p>
-								<p class="header-link">CLOTHES > <font class="category_name" style="text-transform: uppercase;"> {{ $category_name }} </font></p>
+					<div class="txt-price">5900 - 34000</div>
+
+					<button class="btn-go">Go</button>
+
+				</div>
+			</div>
+			<div class="col-md-9">
+				<div class="top-item-container">
+					<div class="row clearfix">
+						<div class="col-md-3">
+							<div class="img-and-lbl-container">
+								<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/brown-device-1.png"></a>
+								<div class="lbl-item-name">Brown 1</div>
+								<div class="lbl-description">4.7 HD IPS Display</div>
+								<div class="lbl-price">P 9, 500.00</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="img-and-lbl-container">
+								<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/brown-device-2.png"></a>
+								<div class="lbl-item-name">Brown 2</div>
+								<div class="lbl-description">5.0 HD IPS Display</div>
+								<div class="lbl-price">P 9, 500.00</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="img-and-lbl-container">
+								<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/brown-device-3.png"></a>
+								<div class="lbl-item-name">Brown 1</div>
+								<div class="lbl-description">8 MP Front Camera</div>
+								<div class="lbl-price">P 9, 500.00</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="img-and-lbl-container">
+								<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/brown-device-4.png"></a>
+								<div class="lbl-item-name">Brown 1</div>
+								<div class="lbl-description">13 MP Back Camera</div>
+								<div class="lbl-price">P 9, 500.00</div>
 							</div>
 						</div>
 					</div>
 				</div>
-
-				<div class="filter-search clearfix">
-					<ul class="nav navbar-nav pull-right">
-					    <li>
-					      <div class="search-combine clearfix">
-					        <h5>SORTED BY : &nbsp;</h5>
-					      </div>
-					    </li>
-					    <li class="cart-contain">
-					    	<form class="sort-by" method="get">
-							<input type="hidden" name="type" value="{{ Request::input('type') }}">
-								<div class="sortby">
-									<select class="sorted_by form-control" name="sort" onChange="$('.sort-by').submit();">
-										<option value="" {{ Request::input('sort') == '' ? 'selected' : '' }}>Relevance</option>
-										<option value="name_asc" {{ Request::input('sort') == 'name_asc' ? 'selected' : '' }}>Brand: A - Z</option>
-										<option value="name_desc" {{ Request::input('sort') == 'name_desc' ? 'selected' : '' }}>Brand: Z - A</option>
-										<option value="price_desc" {{ Request::input('sort') == 'price_desc' ? 'selected' : '' }}>Price: Low - High</option>
-										<option value="price_asc" {{ Request::input('sort') == 'price_asc' ? 'selected' : '' }}>Price: High - Low</option>
-										<option value="newest" {{ Request::input('sort') == 'newest' ? 'selected' : '' }}>Newest</option>
-									</select>
-								</div>
-							</form>
-					    </li>
-					</ul>
-				</div>
-
-				<div class="content">
-					<div class="single-product">
-						<div class="title"></div>
-						<div class="row row-height ">
-							<div class="load-table">
-								@if($_product)
-									@foreach($_product as $product)
-									<div class="col-md-4 col-sm-6 col-sm-bottom col-bottom match-height">
-										<div class="list-product" id="{{$product["eprod_id"]}}" class="prodimg">
-											<div class="img">
-												<img src="{{get_product_first_image($product)}}">
-												<div class="show-cart-view cart-hidden{{$product["eprod_id"]}} hidden">
-													<a href="/product/view/{{ $product["eprod_id"] }}"><img class="magnify-glass" src="/themes/{{ $shop_theme }}/front/magnify-black.png"></a>
-													<img src="/themes/{{ $shop_theme }}/front/bag-black.png" class='bag add-to-cart account-modal-button' style='cursor: pointer;'>
-												</div>
-											</div>
-											<div class="prod-name name">{{ get_product_first_name($product) }}</div>
-											<div class="prod-price price">{{ get_product_first_price($product) }}</div>
-										</div>
-									</div>
-									@endforeach
-									<div class="col-md-12 col-sm-12">
-										<div class="text-right">{!! $_product->appends(Request::input())->render() !!}</div>
-									</div>
-								@else
-									<div class="no-product-container">
-										<span>-- No Product Available --</span>
-									</div>
-								@endif
+				<div class="bottom-item-container">
+					<div class="row clearfix">
+						<div class="text-header">You May Also Like This</div>
+						<div class="col-md-3">
+							<div class="img-and-lbl-container">
+								<img src="/themes/{{ $shop_theme }}/img/brown-accs-img-1.png">
+								<div class="lbl-item-name">XB-400</div>
+								<div class="lbl-description">Super Bass</div>
+								<div class="lbl-price">P 9, 500.00</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="img-and-lbl-container">
+								<img src="/themes/{{ $shop_theme }}/img/brown-accs-img-2.png">
+								<div class="lbl-item-name">Sense 4</div>
+								<div class="lbl-description">10400 mAh</div>
+								<div class="lbl-price">P 9, 500.00</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="img-and-lbl-container">
+								<img src="/themes/{{ $shop_theme }}/img/brown-accs-img-3.png">
+								<div class="lbl-item-name">T'nalak Brown</div>
+								<div class="lbl-description">Phone Case</div>
+								<div class="lbl-price">P 9, 500.00</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="img-and-lbl-container">
+								<img src="/themes/{{ $shop_theme }}/img/brown-accs-img-4.png">
+								<div class="lbl-item-name">T'nalak Brown<br>Power Cable</div>
+								<div class="lbl-description">Cable</div>
+								<div class="lbl-price">P 9, 500.00</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</td>
-		</tr>
-	</table>
+			</div>
+		</div>
+	</div>
 </div>
+
 @endsection
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/front/css/product.css">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/product.css">
 @endsection
 @section("script")
-{{-- <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/front/js/product.js"></script>
-<script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/front/js/product_filter.js"></script> --}}
+
 @endsection

@@ -106,10 +106,93 @@ body{
 			}
 		}
 	}
-	.mid-container {
-
+	.mid-container 
+	{
+		.browseby-title-holder
+		{
+		    display: block;
+    		padding: 20px 0px 15px 0px;
+			.title
+			{
+			    font-size: 15px;
+			    color: #1c1c1c;
+			    margin: 0px;
+			}
+		}
+		.browseby-tiles-holder
+		{
+		    display: block;
+    		background-color: #eaeaea;
+			.browseby-paddingformat
+			{
+			    padding: 10px 60px 10px 60px;
+    			display: block;
+				.browseby-active
+				{
+					display: inline-block;
+    				width: 113px;
+    				text-decoration: none;
+    				padding: 15px 0px 0px 0px;
+					.browseby-image-holder
+					{
+					    display: block;
+    					text-align: center;
+					}
+					.browseby-icon-title-holder
+					{
+						display: block;
+						padding: 5px 0px 5px 0px;
+						.browseby-icon-title
+						{
+						    font-size: 13px;
+						    color: #1c1c1c;
+						    margin: 0px;
+						    text-align: center;
+						}
+					}
+				}
+				.browseby-active:hover
+				{
+					text-decoration: none;
+				}
+				.browseby
+				{
+					display: inline-block;
+    				width: 113px;
+    				margin-left: 32px;
+    				text-decoration: none;
+    				padding: 15px 0px 0px 0px;
+					.browseby-image-holder
+					{
+					    display: block;
+    					text-align: center;
+					}
+					.browseby-icon-title-holder
+					{
+						display: block;
+						padding: 5px 0px 5px 0px;
+						.browseby-icon-title
+						{
+						    font-size: 13px;
+						    color: #808080;
+						    margin: 0px;
+						    text-align: center;
+						}
+					}
+				}
+				.browseby:hover
+				{
+					text-decoration: none;
+				}
+			}
+		}
+		.product-carousel
+		{
+			
+		}
 	}
-	.bottom-container {
+	.bottom-container 
+	{
 
 	}
 }

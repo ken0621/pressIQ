@@ -1,10 +1,15 @@
 .profile-container
 {
-	background-color: #ededed;
 	margin: -15px;
+	color: #344049;
+	.left
+	{
+		border-right: 1px solid #e2e2e2;
+		height: 620px;
+	}
 	.profile-main
 	{
-		padding-top: 30px;
+		padding-top: 50px;
 		background-color: #fff;
 		.img
 		{
@@ -22,7 +27,7 @@
 		.name
 		{
 			color: #344049;
-			font-size: 20px;
+			font-size: 15px;
 			font-weight: 600;
 			text-align: center;
 		}
@@ -41,6 +46,7 @@
 		table
 		{
 			width: 100%;
+			border-top: 1px solid #e2e2e2;
 			table-layout: fixed;
 			td
 			{
@@ -53,13 +59,13 @@
 		.status-number
 		{
 			color: #344049;
-			font-weight: 600;
-			font-size: 20px;
+			font-weight: 700;
+			font-size: 15px;
 		}
 		.status-label
 		{
 			color: #6d7a87;
-			font-size: 13px;
+			font-size: 11px;
 			font-weight: 600;
 			margin-top: 5px;
 		}
@@ -79,19 +85,14 @@
 	.profile-about
 	{
 		background-color: #fff;
-		margin: 5px;
 		padding: 15px 25px;
 		margin-top: 0;
-		padding-top: 30px;
-		@media screen and (min-width: 991px)
-		{
-			min-height: 268px;
-		}
 		.title
 		{
 			color: #344049;
-			font-size: 20px;
+			font-size: 15px;
 			margin-bottom: 25px;
+			font-weight: 600;
 		}
 		table
 		{
@@ -108,20 +109,29 @@
 				img
 				{
 					margin-right: 10px;
+					width: 16px;
 				}
 			}
 			td:last-child
 			{
 				color: #788795;
 				font-size: 13px;
+				.btn-orange
+				{
+					background-color: #ed5639;
+					color: #fff;
+				}
+				.btn
+				{
+					padding: 7.5px 15px;
+					font-size: 11px;
+				}
 			}
 		}
 	}
 	.profile-lead
 	{
 		background-color: #fff;
-		margin-left: 5px;
-		margin-right: 5px;
 		text-align: center;
 		@media screen and (min-width: 991px)
 		{
@@ -130,7 +140,7 @@
 		a
 		{
 			display: block;
-			padding: 15px 0;
+			padding: 25px 0;
 			color: #344049;
 			font-size: 13px;
 			font-weight: 600;
@@ -145,7 +155,6 @@
 	.profile-form
 	{
 		background-color: #fff;
-		padding-top: 50px;
 		.nav.nav-tabs
 		{
 			li
@@ -153,19 +162,23 @@
 				a
 				{
 					border: 0;
-					padding: 10px 25px;
+					padding: 12.5px 25px;
 					font-size: 13px;
 					text-align: center;
-					color: #a6a6a6;
+					color: #6d7a87;
 					font-weight: 600;
 					@media screen and (min-width: 991px)
 					{
 						min-width: 150px;
 					}
+					&:hover
+					{
+						background-color: #fff;
+					}
 				}
 				&.active
 				{
-					border-bottom: 2.5px solid #36b1b9;
+					border-bottom: 2.5px solid #78513e;
 					a
 					{
 						font-weight: 700;
@@ -193,14 +206,23 @@
 						border-radius: 0;
 						border: 1px solid #d0d0d0;
 					}
+					.date-holder
+					{
+						display: inline-block;
+						vertical-align: top;
+						&:last-child
+						{
+							margin-right: 0;
+						}
+					}
 				}
 				.btn-holder
 				{
 					text-align: right;
-					.btn-update
+					margin-top: 15px;
+					.btn-brown
 					{
-						background-color: #36b1b9;
-						border-radius: 0;
+						border-radius: 2.5px;
 						padding: 10px 25px;
 						color: #fff;
 						font-weight: 600;

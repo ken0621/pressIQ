@@ -11,6 +11,7 @@ use App\Globals\Customer;
 use App\Rules\Uniqueonshop;
 use App\Globals\MLM2;
 use App\Globals\FacebookGlobals;
+use App\Globals\Social;
 use App\Models\Tbl_customer;
 
 class ShopMemberController extends Shop
@@ -27,13 +28,16 @@ class ShopMemberController extends Shop
     public function getLogin()
     {
         $data["page"] = "Login";
-        $data['fb_login_url'] = FacebookGlobals::get_link();
-
+        $get = FacebookGlobals::check_app_key($this->shop_info->shop_id);
+        if($get)
+        {
+            $data['fb_login_url'] = FacebookGlobals::get_link($this->shop_info->shop_id);
+        }
         return view("member.login", $data);
     }
     public function getLoginSubmit()
     {
-        $user_profile = FacebookGlobals::user_profile();
+        $user_profile = FacebookGlobals::user_profile($this->shop_info->shop_id);
         $email = isset($user_profile) ? $user_profile['email'] : null;
         $check = Tbl_customer::where('email',$email)->first();
         if(count($user_profile) > 0 && $check)
@@ -67,13 +71,13 @@ class ShopMemberController extends Shop
     public function getRegister()
     {
         $data["page"] = "Register";
-        $data['fb_login_url'] = FacebookGlobals::get_link_register();
+        $data['fb_login_url'] = FacebookGlobals::get_link_register($this->shop_info->shop_id);
 
         return view("member.register", $data);
     }
     public function getRegisterSubmit()
     {
-        $user_profile = FacebookGlobals::user_profile();
+        $user_profile = FacebookGlobals::user_profile($this->shop_info->shop_id);
         if(count($user_profile) > 0)
         {
             $data = collect($user_profile)->toArray();
@@ -108,10 +112,7 @@ class ShopMemberController extends Shop
         }
         else
         {
-            $data["page"] = "Register";
-            $data['fb_login_url'] = FacebookGlobals::get_link_register();
-
-            return view("member.register", $data);                
+            return Redirect::to("/members/register")->send();               
         }
     }
     public function postRegister(Request $request)

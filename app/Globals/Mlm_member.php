@@ -20,6 +20,7 @@ use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_mlm_lead;
 use App\Models\Tbl_country;
+use App\Models\Tbl_mlm_stairstep_settings;
 
 use App\Http\Controllers\Member\MLM_MembershipController;
 use App\Http\Controllers\Member\MLM_ProductController;
@@ -737,5 +738,47 @@ class Mlm_member
         }
 
         return json_encode($data);
+    }
+
+    public static function get_next_rank($shop_id,$slot_id,$show_column = null)
+    {
+        $slot         = Tbl_mlm_slot::where("slot_id",$slot_id)->first();
+        $current_rank = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->where("stairstep_id",$slot->stairstep_rank)->first();
+        if($current_rank)
+        {
+           $next_rank    = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->where("commission_multiplier","!=",0)->where("stairstep_level",">",$current_rank->stairstep_level)->orderBy("stairstep_level","ASC")->first();
+        }
+        else
+        {
+           $next_rank    = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->where("commission_multiplier","!=",0)->orderBy("stairstep_level","ASC")->first(); 
+        }
+
+        if($next_rank && $show_column)
+        {
+            return $next_rank->$show_column;
+        }
+        else if($next_rank)
+        {
+            return $next->rank;
+        }
+        else
+        {
+            return $next_rank;
+        }
+    }    
+
+    public static function rank_count_leg($shop_id,$slot_id)
+    {
+        $slot         = Tbl_mlm_slot::where("slot_id",$slot_id)->first();
+        $current_rank = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->where("stairstep_id",$slot->stairstep_rank)->first();
+        if($current_rank)
+        {
+            $leg_count = Tbl_tree_sponsor::where("sponsor_tree_parent_id",$slot_id)->child_info()->where("stairstep_rank",$current_rank->stairstep_leg_id)->count();
+            return $leg_count;
+        }
+        else
+        {
+            return 0;
+        }
     }
 }

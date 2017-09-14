@@ -77,7 +77,7 @@
         </div>
         <div class="header-middle clearfix">
             <div class="container">
-                <div class="logo">
+                <div class="logo" onClick="location.href='/'">
                     <img src="/themes/{{ $shop_theme }}/img/logo.png">
                 </div>
                 <div class="search">
@@ -92,7 +92,7 @@
             <nav class="navbar">
               <div class="container">
                 <ul class="nav navbar-nav">
-                  <li class="active"><a href="#">Brown</a></li>
+                  <li class="active"><a href="/">Brown</a></li>
                   <li><a href="#">Phone Accessories</a></li>
                   <li><a href="#">Internet Of Things</a></li>
                   <li><a href="#">Health Technology</a></li>

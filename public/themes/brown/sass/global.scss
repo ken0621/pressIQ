@@ -212,7 +212,7 @@ button
 }
 .notif-holder
 {
-	padding: 13.5px 15px;
+	padding: 13.5px 15px !important;
 	img
 	{
 		margin-right: 5px;
@@ -230,7 +230,7 @@ button
 }
 .cart-holder
 {
-	padding: 13.5px 15px;
+	padding: 13.5px 15px !important;
 	img
 	{
 		display: inline-block;
@@ -284,6 +284,7 @@ header
 		border-bottom: 1px solid #78513e;
 		.logo
 		{
+			cursor: pointer;
 			@media screen and (min-width: 991px)
 			{
 				float: left;

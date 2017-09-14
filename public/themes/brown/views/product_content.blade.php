@@ -1,144 +1,134 @@
 @extends("layout")
 @section("content")
-<form method="POST" class="form-to-submit">
-<input type="hidden" name="_token" value="{{csrf_token()}}">
-<div class="container">
-	<?php $ctr = 0; ?>
-	@foreach($product["variant"] as $product_variant)
-	<div class="body-content container {{ $ctr != 0 ? 'hide' : '' }}" variant-id="{{ $product_variant['evariant_id'] }}">
-		<div class="intro">
-			<div class="row clearfix">
-				<div class="col-md-6">
-					<div class="image match-height">
-						<div class="slider-for">
-						{{-- @foreach($product->product_image as $key => $image) --}}
-							<div>
-								<div class="holder">
-									@foreach($product_variant['image'] as $key => $image)
-									<img class="single-product-img key-{{$key}} {{ $key == 0 ? '' : 'hide' }} {{$ctr != 0 ? '' : 'first-img'}}" variant-id="{{ $product_variant['evariant_id'] }}" key="{{ $key }}" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}">
-									@endforeach
+<div class="product-bg">
+	<div class="container">
+		<div class="product-content">
+			<table>
+				<tr>
+					<td class="left">
+						<div class="product-holder">
+							<div class="product-title">Brown and Proud 1 Smart Phone 4.7" HD IPS Display</div>
+							<div class="product-main">
+								<div class="row clearfix">
+									<div class="col-md-7">
+										<div class="product-img">
+											<table>
+												<tr>
+													<td class="thumb-holder">
+														<div class="thumb">
+															<div class="holder">
+																<img src="/themes/{{ $shop_theme }}/img/thumb-1.jpg">
+															</div>
+															<div class="holder">
+																<img src="/themes/{{ $shop_theme }}/img/thumb-2.jpg">
+															</div>
+															<div class="holder">
+																<img src="/themes/{{ $shop_theme }}/img/thumb-3.jpg">
+															</div>
+														</div>
+													</td>
+													<td class="img-holder">
+														<img class="img" src="/themes/{{ $shop_theme }}/img/1k-reso.jpg">
+													</td>
+												</tr>
+											</table>
+										</div>
+									</div>
+									<div class="col-md-5">
+										<div class="product-info">
+											<div class="desc">A phone that Filipinos can be proud of Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</div>
+											<div class="spec">
+												<div class="spec-title">Specification</div>
+												<div class="spec-list">
+													<ul>
+														<li><i class="fa fa-circle" aria-hidden="true"></i> 4.7 HD IPS Display</li>
+														<li><i class="fa fa-circle" aria-hidden="true"></i> LTE Connection</li>
+														<li><i class="fa fa-circle" aria-hidden="true"></i> Android Nougat</li>
+														<li><i class="fa fa-circle" aria-hidden="true"></i> 13 MP Back Camera</li>
+														<li><i class="fa fa-circle" aria-hidden="true"></i> 8 MP Front Camera</li>
+														<li><i class="fa fa-circle" aria-hidden="true"></i> OTG Support</li>
+														<li><i class="fa fa-circle" aria-hidden="true"></i> Finger print sensor</li>
+														<li><i class="fa fa-circle" aria-hidden="true"></i> Infared Sensor</li>
+													</ul>
+												</div>
+											</div>
+											<div class="stock">In Stock</div>
+											<div class="price">P 9,500.00</div>
+											<div class="qty-add-cart clearfix">
+												<div class="qty">
+													<div class="qty-title">Quantity</div>
+													<div class="qty-input">
+														<input class="form-control input-lg" type="number" name="">
+													</div>
+												</div>
+												<div class="add-cart">
+													<button class="btn btn-orange">Add to Cart</button>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
-						{{-- @endforeach --}}
-						</div>
-						<div class="slider-nav">
-                        {{-- @foreach($product->product_image as $key => $image) --}}
-                            {{-- <div>
-                                <div class="holder product-image"><img src="/assets/front/img/placeholder.png"></div>
-                            </div> --}}
-                        {{-- @endforeach --}}
-                    	</div>
-					</div>
-					<div class="image-gallery">
-						
-					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="info match-height">
-						<div class="name">
-							<div class="product-title-price">
-								<font>{{ $product["eprod_name"] }}</font>
-
-								@if($product_variant['discounted'] == "true")
-								{{-- <font class="pull-right top-price variant-price" style="color:red;font-size:17px;text-decoration: line-through;">PHP. {{ number_format($product_variant['evariant_price'], 2) }}</font> --}}
-								<font class="pull-right top-price variant-price">PHP. {{ number_format($product_variant['discounted_price'], 2) }}</font>
-								@else
-								<font class="pull-right top-price variant-price">PHP. {{ number_format($product_variant['evariant_price'], 2) }}</font>
-								@endif
-								<img src="/themes/{{ $shop_theme }}/assets/front/img/loader.gif" style="width:30px" class="ajax-loading hide pull-right">
+							<div class="product-feature">
+								<div class="feature-title">General Features</div>
+								<div class="feature-content">
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+									<p><img class="img-responsive" src="/themes/{{ $shop_theme }}/img/sample-vid.jpg"></p>
+									<p><img class="img-responsive" src="/themes/{{ $shop_theme }}/img/ad-wow.jpg"></p>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.</p>
+								</div>
 							</div>
 						</div>
-						<div class="desc-title">Description</div>
-						<div class="desc">{!! $product_variant['evariant_description'] !!}</div>
-						<div class="item-number-title">Item No.</div>
-						<div class="item-number">{{ $product["eprod_id"] }}</div>
-						@if($product_variant['item_type_id'] != 2)
-						<div class="available-stocks-title">Available Stocks</div>
-						<img src="/themes/{{ $shop_theme }}/assets/front/img/loader.gif" style="width:18px" class="ajax-loading hide">
-						{{-- <div class="available-stocks variant-inventory-count" value="0">Please select a variant</div> --}}
-						<div class="available-stocks variant-inventory-count" value="0">{{ $product_variant['inventory_count'] }}</div>
-						@endif
-						<div class="row" id="option_container">
-						@foreach($_variant as $variant)
-	                     <div class="clearfix col-md-4">
-	                        <div class="size-title" style="text-transform: capitalize;">{{ $variant['option_name'] }}</div>
-	                        <div class="size-desc ">
-	                           <select class="attribute-variation size-desc option_value" variant-label="{{ $variant['option_name'] }}" product-id="{{ $product['eprod_id'] }}" variant-id="{{ $product_variant['evariant_id'] }}" name="attr[{{ $variant['option_name_id'] }}]">
-	                              <option value="0">Select {{ $variant['option_name'] }}</option>
-	                              @foreach(explode(",", $variant['variant_value']) as $option)
-	                              <option value="{{ $option }}">{{ $option }}</option>
-	                              @endforeach
-	                           </select>
-	                        </div>
-	                     </div>
-	                     @endforeach
-						</div>
-
-						<div class="row quantity">
-							<div class="col-md-6">
-								<button class="btn add-cart add-to-cart-button" type="button" variant-id="{{ $product_variant['evariant_id'] }}">ADD TO CART <img src="/themes/{{ $shop_theme }}/assets/front/img/loader.gif" style="width:18px" class="ajax-loading-cart hide"><img src="/themes/{{ $shop_theme }}/front/add-to-cart-white.png"></button>
-								<!-- <span class="note variant-note">*Select a Variant</span> -->
-							</div>
-							<div class="input-count col-md-6">
-								<table>
-									<tbody>
-										<tr>
-											<td><div class="adjust btn-add">+</div></td>
-											<td><input type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57' class="input-adjust form-control" autocomplete="off" name="quantity" value="1" variant-id="{{ $product_variant['evariant_id'] }}"></td>
-											<td><div class="adjust btn-minus">-</div></td>
-										</tr>
-									</tbody>
-								</table>
+					</td>
+					<td class="right">
+						<div class="side-holder">
+							<div class="side-title">You May Also Like This</div>
+							<div class="side-content">
+								<div class="holder">
+									<div class="img">
+										<img src="/themes/{{ $shop_theme }}/img/side-1.jpg">
+									</div>
+									<div class="name">Brown 1</div>
+									<div class="sub">4.7 HD IPS Display</div>
+									<div class="price">P 9,500.00</div>
+								</div>
+								<div class="holder">
+									<div class="img">
+										<img src="/themes/{{ $shop_theme }}/img/side-2.jpg">
+									</div>
+									<div class="name">XB-400</div>
+									<div class="sub">4.7 HD IPS Display</div>
+									<div class="price">P 9,500.00</div>
+								</div>
+								<div class="holder">
+									<div class="img">
+										<img src="/themes/{{ $shop_theme }}/img/side-3.jpg">
+									</div>
+									<div class="name">Sense 4</div>
+									<div class="sub">4.7 HD IPS Display</div>
+									<div class="price">P 9,500.00</div>
+								</div>
+								<div class="holder">
+									<div class="img">
+										<img src="/themes/{{ $shop_theme }}/img/side-4.jpg">
+									</div>
+									<div class="name">Sense 4</div>
+									<div class="sub">4.7 HD IPS Display</div>
+									<div class="price">P 9,500.00</div>
+								</div>	
 							</div>
 						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		</form>
-
-		<!-- RELATED PRODUCTS -->
-		<div class="rel-product">
-			<div class="rel-product-title">RELATED <font class="product">PRODUCT</font></div>
-			@if($_related)
-				@foreach($_related as $related)
-				<div class="col-md-3 col-sm-33 col-sm-bottom col-bottom">
-					<div class="list-product"  class="prodimg">
-						<div class="img">
-							<img src="{{ get_product_first_image($related) }}">
-							<div class="show-cart-view cart-hidden hidden">
-								<a href="/product/view?id={{ $related["eprod_id"] }}"><img class="magnify-glass" src="/themes/{{ $shop_theme }}/front/magnify-black.png"></a>
-								{{-- @if($related->product_has_variations == 0) --}}
-									<img src="/themes/{{ $shop_theme }}/front/bag-black.png" class='bag add-to-cart' style='cursor: pointer;'>
-								{{-- @endif --}}
-							</div>
-						</div>
-						<div class="prod-name name">{{ get_product_first_name($related) }}</div>
-						<div class="prod-price price">{{ get_product_first_price($related) }}</div>
-					</div>
-				</div>
-				@endforeach
-			@endif
-			<!-- <div class="col-md-3">
-				<div class="list">
-					<div class="img"><img src="/assets/front/img/test-product.jpg"></div>
-					<div class="prod-name">NUTRA-CEUTICALS</div>
-					<div class="prod-price">P 200.00</div>
-				</div>
-			</div> -->
+					</td>
+				</tr>
+			</table>
 		</div>
 	</div>
-	<?php $ctr++; ?>
-	@endforeach
 </div>
-
 @endsection
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/front/css/view_product.css">
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/front/css/product.css">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/product_content.css">
 @endsection
 @section("script")
-{{-- <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/front/js/product.js"></script> --}}
 <script type="text/javascript" src="/assets/front/js/zoom.js"></script>
-<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/addcart.js"></script>
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/product_content.js"></script>
 @endsection

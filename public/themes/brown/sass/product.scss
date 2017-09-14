@@ -1,4 +1,180 @@
+$open-sans: 'Open Sans', sans-serif;
+$light: 300;
+$regular: 400;
+$semi-bold: 600;
+$bold: 700;
+
 .product-container
 {
+	font-family: $open-sans;
 	background-color: #ededed;
+
+	.bg-container-style
+	{
+		background-color: #FFF;
+		border-radius: 4px;
+		padding: 30px;
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+
+	.category-container
+	{
+		@extend .bg-container-style;
+		margin-top: 50px;
+		color: #1c1c1c;
+	
+		.text-header
+		{
+			font-weight: $semi-bold;
+			padding-bottom: 20px;
+		}
+
+		.links-category
+		{
+			.active
+			{
+				font-weight: $bold;
+			}
+
+			a
+			{
+				display: block;
+				color: #000;
+				padding-top: 5px;
+			}
+		}
+	}
+
+	.filter-by-price-container
+	{
+		@extend .bg-container-style;
+		margin-bottom: 50px;
+		
+		.text-header
+		{
+			font-weight: $semi-bold;
+			padding-bottom: 20px;
+			color: #1c1c1c;
+		}
+
+		.filter-control
+		{
+			padding-bottom: 20px;
+		}
+
+		.txt-price
+		{
+			font-size: 13px;
+			font-weight: $semi-bold;
+			color: #656565;
+		}
+
+		.btn-go
+		{
+			font-size: 13px;
+			font-weight: $semi-bold;
+			color: #FFF;
+			background-color: #581f0d;
+			border: 2px solid #581f0d;
+			padding: 14px 50px;
+			margin-top: 20px;
+			border-radius: 4px;
+			cursor: pointer;
+
+			&:hover
+			{
+				background-color: inherit;
+				color: #581f0d;
+			}
+		}
+	}
+
+	.top-item-container
+	{
+		@extend .bg-container-style;
+		margin-top: 50px;
+		text-align: center;
+
+		.img-and-lbl-container
+		{
+			img
+			{
+				width: 100%;
+				object-fit: contain;
+				cursor: pointer;
+			}
+
+			.lbl-item-name
+			{
+				font-weight: $bold;
+				font-size: 15px;
+			}
+			
+			.lbl-description
+			{
+				color: #656565;
+				font-size: 13px;
+				font-weight: $regular;
+				padding-top: 10px;
+			}
+
+			.lbl-price
+			{
+				font-weight: $semi-bold;
+				color: #ff4200;
+				font-size: 15px;
+				padding-bottom: 50px;
+			}
+		}
+	}
+
+	.bottom-item-container
+	{
+		@extend .bg-container-style;
+
+		.text-header
+		{
+			font-weight: $semi-bold;
+			padding: 0px 0px 20px 20px;
+			border-bottom: 2px solid #dbdbdb;
+			color: #1c1c1c;
+		}
+
+		.img-and-lbl-container
+		{
+			text-align: center;
+			padding-top: 20px;
+
+			img
+			{
+				width: 100%;
+				object-fit: contain;
+				cursor: pointer;
+			}
+
+			.lbl-item-name
+			{
+				font-weight: $bold;
+				font-size: 15px;
+			}
+			
+			.lbl-description
+			{
+				color: #656565;
+				font-size: 13px;
+				font-weight: $regular;
+				padding-top: 10px;
+			}
+
+			.lbl-price
+			{
+				font-weight: $semi-bold;
+				color: #ff4200;
+				font-size: 15px;
+				padding-bottom: 50px;
+			}
+		}
+	}
 }
+

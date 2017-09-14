@@ -37,7 +37,7 @@
                 <a class="holder">COMPANY</a>
                 @if($customer)
                     <div style="display: inline-block; vertical-align: middle;" class="dropdown hidden">
-                        <a class="holder" data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false">#272842 <span class="caret"></span></a>
+                        <a class="holder" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="false">#272842 <span class="caret"></span></a>
                         <ul class="dropdown-menu dropdown-menu-right slot-picker">
                             <li class="slot-title">Slot Number</li>
                             <li><a href="#">#272841</a></li>
@@ -47,8 +47,8 @@
                         </ul>
                     </div>
                     <div style="display: inline-block; vertical-align: middle;" class="dropdown">
-                        <a class="holder" data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false" style="text-transform: uppercase; color: #fff;">{{ $customer->first_name }} {{ $customer->last_name }} <span class="caret"></span></a>
-                        <ul class="dropdown-menu dropdown-menu-right profile-menu">
+                        <a class="holder" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="false" style="text-transform: uppercase; color: #fff;">{{ $customer->first_name }} {{ $customer->last_name }} <span class="caret"></span></a>
+                        <ul class="dropdown-menu dropdown-menu-right profile-menu" style="margin-top: -1px;">
                             <li>
                                 <div class="profile-pic">
                                     <img src="/themes/{{ $shop_theme }}/img/profile-nav.png">
@@ -99,7 +99,7 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
-                        <a href="#" class="notif-holder dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false">
+                        <a href="#" class="notif-holder dropdown-toggle" data-toggle="dropdown">
                             <img src="/themes/{{ $shop_theme }}/img/bell-header.png"><span class="badge">500</span>
                         </a>
                         <ul class="dropdown-menu notif">
@@ -188,7 +188,7 @@
                 </div>
                 <div class="right">
                     <div class="dropdown">
-                        <a href="#" class="notif-holders dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false">
+                        <a href="#" class="notif-holders dropdown-toggle" data-toggle="dropdown">
                             <img style="width: 17px; height: 19px;" src="/themes/{{ $shop_theme }}/img/bell-blur.png"><span class="badge">500</span>
                         </a>
                         <ul class="dropdown-menu notif">
@@ -255,7 +255,7 @@
                     </a>
                     @if($customer)
                         <div style="display: inline-block; vertical-align: middle;" class="dropdown hidden">
-                            <a class="holder" data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false" style="text-transform: uppercase; color: #fff;">#272842 <span class="caret"></span></a>
+                            <a class="holder" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="false" style="text-transform: uppercase; color: #fff;">#272842 <span class="caret"></span></a>
                             <ul class="dropdown-menu dropdown-menu-right slot-picker">
                                 <li class="slot-title">Slot Number</li>
                                 <li><a href="#">#272841</a></li>
@@ -265,7 +265,7 @@
                             </ul>
                         </div>
                         <div style="display: inline-block; vertical-align: middle;" class="dropdown">
-                            <a class="holder" data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false" style="text-transform: uppercase; color: #fff;">{{ $customer->first_name }} {{ $customer->last_name }} <span class="caret"></span></a>
+                            <a class="holder" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="false" style="text-transform: uppercase; color: #fff;">{{ $customer->first_name }} {{ $customer->last_name }} <span class="caret"></span></a>
                             <ul class="dropdown-menu dropdown-menu-right profile-menu">
                                 <li>
                                     <div class="profile-pic">

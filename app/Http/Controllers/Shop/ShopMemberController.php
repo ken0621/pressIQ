@@ -169,6 +169,8 @@ class ShopMemberController extends Shop
     public function getProfile()
     {
         $data["page"] = "Profile";
+        $data["mlm"] = isset(Self::$customer_info->ismlm) ? Self::$customer_info->ismlm : 0;
+        
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.profile", $data));
     }
     public function getNotification()

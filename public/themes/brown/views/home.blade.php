@@ -113,8 +113,32 @@
 					</div>
 				</div>
 			</div>
-			<div class="bottom-container">
-				
+			<div class="mid-container">
+				<div class="browseby-title-holder">
+					<p class="title">Featured</p>
+				</div>
+				<div class="product-carousel">
+					<div>
+						<div class="product-holder">
+							<img src="/themes/{{ $shop_theme }}/img/feature-1.jpg">
+						</div>	
+					</div>
+					<div>
+						<div class="product-holder">
+							<img src="/themes/{{ $shop_theme }}/img/feature-2.jpg">
+						</div>	
+					</div>
+					<div>
+						<div class="product-holder">
+							<img src="/themes/{{ $shop_theme }}/img/feature-3.jpg">
+						</div>	
+					</div>
+					<div>
+						<div class="product-holder">
+							<img src="/themes/{{ $shop_theme }}/img/feature-4.jpg">
+						</div>	
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -127,7 +151,7 @@
 </div>
 @endsection
 @section("script")
-
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/home.js"></script>
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css">

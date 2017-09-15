@@ -244,7 +244,8 @@ body{
 	}
 }
 
-.wrapper-2 {
+.wrapper-2 
+{
 	.intro
 	{
 		background-size: cover;
@@ -254,10 +255,47 @@ body{
 	}
 }
 
-.wrapper-3 {
-
+.wrapper-3 
+{
+	background-image: url("/themes/brown/img/bg-home.png");
+	background-size: cover;
+	background-position: center;
+	min-height: 300px;
+	.img
+	{
+		max-width: 100%;
+		margin: auto;
+		display: block;
+	}
+	.info
+	{
+		.text-1
+		{
+			color: #1c1c1c;
+			font-size: 13px;
+			font-weight: 700
+		}
+		.text-2
+		{
+			color: #1c1c1c;
+			font-size: 54px;
+			font-weight: 600;
+		}
+		.text-3
+		{
+			color: #656565;
+			font-size: 24px;
+			font-weight: 400;
+		}
+		.text-4
+		{
+			color: #1c1c1c;
+			font-size: 13px;
+		}
+	}
 }
 
-.wrapper-4 {
+.wrapper-4 
+{
 
 }

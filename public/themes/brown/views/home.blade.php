@@ -228,7 +228,28 @@
 		</div>
 	</div>
 	<!-- INTRODUCING BROWN EDITION -->
-	<div class="wrapper-3"></div>
+	<div class="wrapper-3">
+		<div class="container">
+			<div class="row clearfix">
+				<div class="col-sm-6">
+					<div class="img">
+						<img src="/themes/{{ $shop_theme }}/img/phone-brown.png">
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="info">
+						<div class="text-1">INTRODUCTION</div>
+						<div class="text-2">BROWN EDITION</div>
+						<div class="text-3">A PHONE FLIPINOS CAN BE PROUD OF</div>
+						<div class="text-4">Brown promote a future that is mindful of the needs of every Filipino.</div>
+						<div class="button-holder">
+							<button class="btn btn-transparent">Learn More <i class="fa fa-caret-right" aria-hidden="true"></i></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<!-- BROWN ARTICLES -->
 	<div class="wrapper-4"></div>
 </div>

@@ -213,6 +213,11 @@ class ShopMemberController extends Shop
         $data["page"] = "Orders";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.order", $data));
     }
+    public function getWishlist()
+    {
+        $data["page"] = "Wishlist";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.wishlist", $data));
+    }
 
     public function getNonMember()
     {

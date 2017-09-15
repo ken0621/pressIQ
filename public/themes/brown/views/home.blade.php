@@ -198,6 +198,26 @@
 							<p class="product-price">P 12,000.00</p>
 						</div>	
 					</div>
+					<div>
+						<div class="product-holder">
+							<img src="/themes/{{ $shop_theme }}/img/feature-1.jpg">
+						</div>	
+					</div>
+					<div>
+						<div class="product-holder">
+							<img src="/themes/{{ $shop_theme }}/img/feature-2.jpg">
+						</div>	
+					</div>
+					<div>
+						<div class="product-holder">
+							<img src="/themes/{{ $shop_theme }}/img/feature-3.jpg">
+						</div>	
+					</div>
+					<div>
+						<div class="product-holder">
+							<img src="/themes/{{ $shop_theme }}/img/feature-4.jpg">
+						</div>	
+					</div>
 				</div>
 			</div>
 		</div>

@@ -13,8 +13,10 @@
         </div>
         <div class="col-md-4">
         <div class="join-container">
-          <div class="text-header1">Join the Movement!</div>
-          <div class="text-header2">Enroll now and become one of us!</div>
+          <div class="btn-text">
+            <div class="text-header1">Join the Movement!</div>
+            <div class="text-header2">Enroll now and become one of us!</div>
+          </div>
           <div class="btn-container">
             <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
             <img src="/themes/{{ $shop_theme }}/img/or.png"><br>
@@ -32,7 +34,7 @@
 
       <div class="row clearfix">
 
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-6">
               <div class="profile-info-container pic1">
                 <div class="icon-container">
 
@@ -57,7 +59,7 @@
               </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-6">
               <div class="profile-info-container pic2">
                 <div class="icon-container">
 
@@ -74,7 +76,7 @@
               </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-6">
               <div class="profile-info-container pic3">
                 <div class="icon-container">
 

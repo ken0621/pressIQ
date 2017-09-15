@@ -52,7 +52,7 @@ class Payroll2
 		$grand_total_philhealth_ee = 0;
 		$grand_total_philhealth_er = 0;
 		$grand_total_philhealth_ee_er = 0;
-	
+		
 		foreach($data["_employee"] as $key => $employee)
 		{
 			

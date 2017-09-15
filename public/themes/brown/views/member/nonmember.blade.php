@@ -140,6 +140,26 @@
                           </td>
                           <td class="total-holder">P 9,500.00</td>
                         </tr>
+                        <tr>
+                          <td class="remove-holder">
+                            <a href="javascript:"><img src="/themes/{{ $shop_theme }}/img/remove.png"></a>
+                          </td>
+                          <td class="img-holder">
+                            <img src="/themes/{{ $shop_theme }}/img/wishlist-1.jpg">
+                          </td>
+                          <td class="name-holder">Brown 1 Membership Kit</td>
+                          <td class="price-holder">P 9,500.00</td>
+                          <td class="quantity-holder">
+                            <div class="another">
+                              <div class="equal small"><button class="control">-</button></div>
+                              <div class="equal">
+                                <input class="form-control" type="text" name="">
+                              </div>
+                              <div class="equal small"><button class="control">+</button></div>
+                            </div>
+                          </td>
+                          <td class="total-holder">P 9,500.00</td>
+                        </tr>
                       </tbody>
                     </table>
                   </div>
@@ -302,7 +322,7 @@
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js"></script>
 
 <script type="text/javascript">
-  
+
       // /*Buy a Kit*/
       // $("#btn-buy-a-kit").click(function(){
       //   $("#buy-a-kit-modal").modal('show');

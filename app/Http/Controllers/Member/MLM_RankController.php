@@ -95,7 +95,7 @@ class MLM_RankController extends Member
     											  ->where("rank_update_id",$rank_update_id)
     											  ->first();
     	// Tbl_mlm_slot::where("shop_id",$shop_id)->where("slot_id","<",$slot->slot_id)->orderBy("slot_id","DESC")->first();										  
-		$slot_info      = Tbl_mlm_slot::where("slot_id",$slot_id)->first();
+		$slot_info      = Tbl_mlm_slot::where("shop_id",$shop_id)->where("slot_id",$slot_id)->first();
 
 		if($slot_info)
 		{		

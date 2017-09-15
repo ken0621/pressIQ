@@ -218,12 +218,15 @@ button
 .notif-holder
 {
 	padding: 13.5px 15px !important;
-	img
+
+	.brown-icon-bell-o
 	{
 		margin-right: 5px;
 		display: inline-block;
 		vertical-align: middle;
+		font-size: 22px;
 	}
+
 	.badge
 	{
 		display: inline-block;
@@ -236,12 +239,15 @@ button
 .cart-holder
 {
 	padding: 13.5px 15px !important;
-	img
+
+	.brown-icon-shopping-cart
 	{
+		margin-right: 5px;
 		display: inline-block;
-		vertical-align: top;
-		margin-right: 7.5px;
+		vertical-align: middle;
+		font-size: 22px;
 	}
+
 	span
 	{
 		display: inline-block;
@@ -503,12 +509,16 @@ header
 		{
 			padding: 13.5px 15px;
 			display: block;
-			img
+
+			.brown-icon-bell-o
 			{
 				margin-right: 5px;
 				display: inline-block;
 				vertical-align: middle;
+				font-size: 22px;
+				color: #dac5a6;
 			}
+			
 			.badge
 			{
 				display: inline-block;

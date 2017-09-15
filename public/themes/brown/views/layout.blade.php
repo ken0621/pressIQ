@@ -116,7 +116,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
                             <a href="#" class="notif-holder dropdown-toggle" data-toggle="dropdown">
-                                <img src="/themes/{{ $shop_theme }}/img/bell-header.png"><span class="badge">500</span>
+                                <div class="brown-icon-bell-o"></div> <span class="badge">500</span>
                             </a>
                             <ul class="dropdown-menu notif">
                                 <li>
@@ -179,7 +179,7 @@
                         </li>
                         <li>
                             <a href="#" class="cart-holder">
-                                <img src="/themes/{{ $shop_theme }}/img/cart.png"> <span>Cart (0 items)</span>
+                                <div class="brown-icon-shopping-cart"></div> <span>Cart (0 items)</span>
                             </a>
                         </li>
                     </ul>
@@ -206,7 +206,7 @@
                 <div class="right">
                     <div class="dropdown">
                         <a href="#" class="notif-holders dropdown-toggle" data-toggle="dropdown">
-                            <img style="width: 17px; height: 19px;" src="/themes/{{ $shop_theme }}/img/bell-blur.png"><span class="badge">500</span>
+                            <div class="brown-icon-bell-o"></div> <span class="badge">500</span>
                         </a>
                         <ul class="dropdown-menu notif">
                             <li>

@@ -39,7 +39,7 @@
 					<div class="row clearfix">
 						<div class="col-md-3">
 							<div class="img-and-lbl-container">
-								<img src="/themes/{{ $shop_theme }}/img/brown-device-1.png">
+								<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/brown-device-1.png"></a>
 								<div class="lbl-item-name">Brown 1</div>
 								<div class="lbl-description">4.7 HD IPS Display</div>
 								<div class="lbl-price">P 9, 500.00</div>
@@ -47,7 +47,7 @@
 						</div>
 						<div class="col-md-3">
 							<div class="img-and-lbl-container">
-								<img src="/themes/{{ $shop_theme }}/img/brown-device-2.png">
+								<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/brown-device-2.png"></a>
 								<div class="lbl-item-name">Brown 2</div>
 								<div class="lbl-description">5.0 HD IPS Display</div>
 								<div class="lbl-price">P 9, 500.00</div>
@@ -55,7 +55,7 @@
 						</div>
 						<div class="col-md-3">
 							<div class="img-and-lbl-container">
-								<img src="/themes/{{ $shop_theme }}/img/brown-device-3.png">
+								<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/brown-device-3.png"></a>
 								<div class="lbl-item-name">Brown 1</div>
 								<div class="lbl-description">8 MP Front Camera</div>
 								<div class="lbl-price">P 9, 500.00</div>
@@ -63,7 +63,7 @@
 						</div>
 						<div class="col-md-3">
 							<div class="img-and-lbl-container">
-								<img src="/themes/{{ $shop_theme }}/img/brown-device-4.png">
+								<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/brown-device-4.png"></a>
 								<div class="lbl-item-name">Brown 1</div>
 								<div class="lbl-description">13 MP Back Camera</div>
 								<div class="lbl-price">P 9, 500.00</div>

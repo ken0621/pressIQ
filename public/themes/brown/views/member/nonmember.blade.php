@@ -170,7 +170,7 @@
                   <div class="modal-body">
                       <form method="post" class="submit-verify-sponsor">  
                         <div class="labels">Enter <b>Nickname of Sponsor</b> or <b>Slot Number</b></div>
-                        <input class="input-verify-sponsor text-center" name="verify_sponsor" type="text" placeholder="">
+                        <input required="required" class="input-verify-sponsor text-center" name="verify_sponsor" type="text" placeholder="">
                         <div class="output-container">
                           
                         </div>
@@ -219,7 +219,6 @@
                 </div>
                 <div class="modal-body">
                   <form>
-                      <input class="input" type="text" placeholder="Julia Lim (Slot #215678)">
                       <input class="input" type="text" placeholder="Enter Code">
                       <input class="input" type="text" placeholder="Enter Pin">
 
@@ -300,55 +299,35 @@
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js"></script>
 
 <script type="text/javascript">
+      // /*Buy a Kit*/
+      // $("#btn-buy-a-kit").click(function(){
+      //   $("#buy-a-kit-modal").modal('show');
+      // });
 
-  /*Proceed 1*/
-  $(document).ready(function(){
-    $("#btn-verify").click(function(){
-      //$("#proceed-modal-1").modal('show');
-    });
-  });
+      // /*Enter a code*/
+      // $("#btn-enter-a-code").click(function(){
+      //   $("#enter-a-code-modal").modal('show');
+      // });
 
-  /*Proceed 2*/
-  $(document).ready(function(){
-    $("#btn-verify").click(function(){
-      //$("#proceed-modal-2").modal('show');
-    });
-  });
+      // /*Proceed 1*/
+      // $("#btn-verify").click(function(){
+      //   $("#proceed-modal-1").modal('show');
+      // });
 
-  /*Popups*/
-  $(document).ready(function(){
+      // /*Proceed 2*/
+      // $("#btn-verify").click(function(){
+      //   $("#proceed-modal-2").modal('show');
+      // });
 
-      /*Buy a Kit*/
-      $("#btn-buy-a-kit").click(function(){
-        $("#buy-a-kit-modal").modal('show');
-      });
+      // /*Success*/
+      // $("#btn-proceed-2").click(function(){
+      //   $("#success-modal").modal('show');
+      // });
 
-      /*Enter a code*/
-      $("#btn-enter-a-code").click(function(){
-        $("#enter-a-code-modal").modal('show');
-      });
-
-      /*Proceed 1*/
-      /*$("#btn-verify").click(function(){
-        $("#proceed-modal-1").modal('show');
-      });*/
-
-      /*Proceed 2*/
-      /*$("#btn-verify").click(function(){
-        $("#proceed-modal-2").modal('show');
-      });*/
-
-      /*Success*/
-      $("#btn-proceed-2").click(function(){
-        $("#success-modal").modal('show');
-      });
-
-      /*Failed*/
-      $("#btn-proceed-2").click(function(){
-        $("#failed-modal").modal('show');
-      });
-
-  });
+      // /*Failed*/
+      // $("#btn-proceed-2").click(function(){
+      //   $("#failed-modal").modal('show');
+      // });
 
 </script>
 

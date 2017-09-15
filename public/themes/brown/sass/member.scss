@@ -161,16 +161,22 @@
 								width: 295px;
 								transition: 0.3s all ease;
 								height: 50px;
+
 								.icon 
 								{
 									display: inline-block;
 									vertical-align: top;
 									width: 20px;
 									margin-right: 15px;
-									img
+
+									text-align: center;
+									font-size: 18px;
+									color: #dac5a6;
+
+									/* img
 									{
 										max-width: 20px;
-									}
+									} */
 								}
 							}
 							&:hover

@@ -13,8 +13,10 @@
         </div>
         <div class="col-md-4">
         <div class="join-container">
-          <div class="text-header1">Join the Movement!</div>
-          <div class="text-header2">Enroll now and become one of us!</div>
+          <div class="btn-text">
+            <div class="text-header1">Join the Movement!</div>
+            <div class="text-header2">Enroll now and become one of us!</div>
+          </div>
           <div class="btn-container">
             <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
             <img src="/themes/{{ $shop_theme }}/img/or.png"><br>
@@ -32,7 +34,7 @@
 
       <div class="row clearfix">
 
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-6">
               <div class="profile-info-container pic1">
                 <div class="icon-container">
 
@@ -57,7 +59,7 @@
               </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-6">
               <div class="profile-info-container pic2">
                 <div class="icon-container">
 
@@ -74,7 +76,7 @@
               </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-6">
               <div class="profile-info-container pic3">
                 <div class="icon-container">
 
@@ -98,7 +100,7 @@
   <!-- Buy a Kit -->
   <div class="popup-buy-a-kit">
       <div id="buy-a-kit-modal" class="modal fade">
-          <div class="modal-lg modal-dialog">
+          <div class="modal-dialog">
               <div class="modal-content">
                   <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -106,36 +108,43 @@
                   </div>
 
                   <div>
-                  <table class="table">
-                      <thead>
-                        <tr>
-                          <th>Image</th>
-                          <th>Product Name</th>
-                          <th>Unit Price</th>
-                          <th>Quantity</th>
-                          <th>Total</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td><img src="/themes/{{ $shop_theme }}/img/brown-cart-img1.png"></td>
-                          <td>P 9,500.00</td>
-                          <td>P 9,500.00</td>
-                          <td>
-                            <input class="item-qty" name="quantity" min="1" step="1" value="1"  type="number"></td>
-                          <td>P 9,500.00</td>
-                        </tr>
-                        <tr>
-                          <td><img src="/themes/{{ $shop_theme }}/img/brown-cart-img1.png"></td>
-                          <td>P 9,500.00</td>
-                          <td>P 9,500.00</td>
-                          <td>
-                            <input class="item-qty" name="quantity" min="1" step="1" value="1"  type="number">
-                          </td>
-                          <td>P 9,500.00</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th width="10%" style="padding-left: 10px;">Remove</th>
+                            <th>Image</th>
+                            <th>Product Name</th>
+                            <th>Unit Price</th>
+                            <th>Quantity</th>
+                            <th style="padding-right: 30px;">Total</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td style="padding-left: 10px;"><a href="#" role="button" class="btn-remove"><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>
+                            <td><img src="/themes/{{ $shop_theme }}/img/brown-cart-img1.png"></td>
+                            <td>P 9,500.00</td>
+                            <td>P 9,500.00</td>
+                            <td width="10%">
+                              <div style="width: 100%;">
+                                <input class="item-qty" name="quantity" min="1" step="1" value="1"  type="number">
+                              </div>
+                            <td style="padding-right: 30px;">P 9,500.00</td>
+                          </tr>
+                          <tr>
+                            <td style="padding-left: 10px;"><a href="#" role="button" class="btn-remove"><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>
+                            <td><img src="/themes/{{ $shop_theme }}/img/brown-cart-img1.png"></td>
+                            <td>P 9,500.00</td>
+                            <td>P 9,500.00</td>
+                            <td width="10%">
+                              <div style="width: 100%;">
+                                <input class="item-qty" name="quantity" min="1" step="1" value="1"  type="number">
+                              </div>
+                            </td>
+                            <td style="padding-right: 30px;">P 9,500.00</td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
 
                     <div class="modal-footer row clearfix">

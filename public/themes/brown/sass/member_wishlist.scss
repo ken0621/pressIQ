@@ -10,15 +10,20 @@ $text-dark: #272c2f;
 	font-family: $content-text;
 	padding: 15px;
 	letter-spacing: 0.2px;
-
-
 	margin: -15px;
-	.wishlist-title
-	{
-		font-size: 21px;
-		font-weight: $bold;
-		color: $text-dark !important;
-		padding: 25px 50px;
+
+	.left {
+
+		.icon {
+
+		}
+		.wishlist-title
+		{
+			font-size: 21px;
+			font-weight: $bold;
+			color: $text-dark !important;
+			padding: 25px 50px;
+		}
 	}
 	.table-holder
 	{

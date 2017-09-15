@@ -24,9 +24,11 @@ $text-dark: #272c2f;
 				display: inline-block;
 				vertical-align: middle;
 				margin-right: 25px;
-				img
-				{
-
+				
+				.brown-icon-bell-o {
+					color: $text-light;
+					font-size: 35px;
+					margin-top: 10px;
 				}
 			}
 			.text

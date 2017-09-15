@@ -26,9 +26,10 @@ $text-dark: #272c2f;
 				display: inline-block;
 				vertical-align: middle;
 				margin-right: 25px;
-				img
-				{
 
+				.brown-icon-genealogy {
+					color: $text-light;
+					margin-top: 10px;
 				}
 			}
 			.text

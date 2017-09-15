@@ -66,12 +66,12 @@
 		}
 		.sidebar
 		{
-			background-color: #f6f6f4;
+			background-color: #301e10;
 			width: 300px;
 			position: absolute;
 			left: 0;
 			top: 0;
-			border-right: 5px solid #f6f6f4;
+			/* border-right: 5px solid #301e10; */
 			height: 100%;
 			z-index: 10;
 			transition: 0.3s all ease;
@@ -120,14 +120,14 @@
 					margin-left: 15px;
 					.name
 					{
-						color: #344049;
+						color: #fff;
 						font-size: 14px;
 						font-weight: 700;
 					}
 					.sub
 					{
 						font-size: 13px;
-						color: #7e8285;
+						color: #dac5a6;
 					}
 				}
 			}
@@ -152,11 +152,11 @@
 							.nav-holder
 							{
 								padding: 15px 15px;
-								color: #808080;
+								color: #dac5a6;
 								font-size: 13px;
-								font-weight: 600;
+								font-weight: 400;
 								letter-spacing: 0.5px;
-								border-bottom: 1px solid #e3e3e3;
+								border-bottom: 1px solid #301e10;
 								padding-left: 25px;
 								width: 295px;
 								transition: 0.3s all ease;
@@ -177,10 +177,10 @@
 							{
 								.nav-holder
 								{
-									background-color: #36b1b9;
+									background-color: #3c2716;
 									color: #fff;
 									text-decoration: none;
-									border-color: #36b1b9;
+									border-color: #3c2716;
 									img
 									{
 										-webkit-filter: brightness(2);
@@ -196,10 +196,10 @@
 							{
 								> .nav-holder
 								{
-									background-color: #36b1b9;
+									background-color: #3c2716;
 									color: #fff;
 									text-decoration: none;
-									border-color: #36b1b9;
+									border-color: #3c2716;
 									img
 									{
 										-webkit-filter: brightness(2);
@@ -245,7 +245,7 @@
 			&.small
 			{
 				width: 80px;
-				background-color: #78513e;
+				background-color: #502d19;
 				.shadow
 				{
 					display: none;
@@ -309,7 +309,7 @@
 								{
 									.nav-holder
 									{
-										background-color: #5e3724;
+										background-color: #613922;
 										.icon
 										{
 											img

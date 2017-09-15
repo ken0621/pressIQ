@@ -84,6 +84,14 @@
             <label for="stairstep_required_gv">Required Group Sales</label>
             <input type="number" class="form-control" name="stairstep_required_gv" value="0">
         </div>
+        <div class="col-md-2">
+                <label for="stairstep_required_gv">Required Personal Sales Maintenance</label>
+                <input type="number" class="form-control" name="stairstep_pv_maintenance" value="">
+        </div>            
+        <div class="col-md-2">
+                <label for="stairstep_required_gv">Commission Multiplier</label>
+                <input type="number" class="form-control" name="commission_multiplier" value="">
+        </div>
         <div class="col-md-1">
             <label for="stairstep_bonus">Bonus</label>
             <input type="number" class="form-control" name="stairstep_bonus" value="0">

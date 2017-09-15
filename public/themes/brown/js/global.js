@@ -59,9 +59,70 @@ function globalv2()
         var stickyOffset = $('.main-content-scroll').offset().top;
         var nav_height = $('header').height();
 
+        $(window).resize(function()
+        {
+            stickyOffset = $('.main-content-scroll').offset().top;
+            nav_height = $('header').height();
+        });
+
+        $('.notif-holder').unbind("click");
+        $('.notif-holder').bind("click", function()
+        {
+            stickyOffset = $('.main-content-scroll').offset().top;
+            nav_height = $('header').height();
+        });
+
+        $('.dropdown').on('show.bs.dropdown', function () 
+        {
+            $(window).unbind("scroll");
+        });
+
+        $('.dropdown').on('shown.bs.dropdown', function () 
+        {
+            stickyOffset = $('.main-content-scroll').offset().top;
+            nav_height = $('header').height();
+
+            $(window).bind("scroll", function()
+            {
+                action_sticky_nav(stickyOffset, nav_height);
+            });
+        });
+
+        $('.navbar-collapse').on('show.bs.collapse', function() 
+        {
+            $(window).unbind("scroll");
+        });
+
+        $('.navbar-collapse').on('hide.bs.collapse', function() 
+        {
+            $(window).unbind("scroll");
+        });
+
+        $('.navbar-collapse').on('shown.bs.collapse', function() 
+        {
+            stickyOffset = $('.main-content-scroll').offset().top;
+            nav_height = $('header').height();
+
+            $(window).bind("scroll", function()
+            {
+                action_sticky_nav(stickyOffset, nav_height);
+            });
+        });
+
+        $('.navbar-collapse').on('hidden.bs.collapse', function() 
+        {
+            stickyOffset = $('.main-content-scroll').offset().top;
+            nav_height = $('header').height();
+
+            $(window).bind("scroll", function()
+            {
+                action_sticky_nav(stickyOffset, nav_height);
+            });
+        });
+
         action_sticky_nav(stickyOffset, nav_height);
 
-        $(window).scroll(function()
+        $(window).bind("scroll", function()
         {
             action_sticky_nav(stickyOffset, nav_height);
         });

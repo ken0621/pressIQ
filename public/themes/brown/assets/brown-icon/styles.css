@@ -61,6 +61,8 @@
 }
 .brown-icon-reports:before {
   content: "\68";
+  font-size: 18px;
+  vertical-align: middle;
 }
 .brown-icon-repurchase:before {
   content: "\69";
@@ -85,6 +87,8 @@
 }
 .brown-icon-money:before {
   content: "\70";
+  font-size: 18px;
+  vertical-align: middle;
 }
 .brown-icon-credit-card:before {
   content: "\71";
@@ -142,4 +146,7 @@
 }
 .brown-icon-bag-1:before {
   content: "\49";
+}
+.brown-icon-cart:before {
+  content: "\4a";
 }

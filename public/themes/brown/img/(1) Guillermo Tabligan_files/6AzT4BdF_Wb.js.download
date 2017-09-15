@@ -1,0 +1,3 @@
+if (self.CavalryLogger) { CavalryLogger.start_js(["eWf9\/"]); }
+
+__d('mercurySingletonProviderRe',['bs_curry','CurrentUser'],(function a(b,c,d,e,f,g){'use strict';function h(i){var j={},k=function m(n){var o=j[n];if(o!==undefined){return o}else{var p=c('bs_curry')._1(i[0],n);j[n]=p;return p}},l=function m(){return k(c('CurrentUser').getID())};return [j,k,l]}g.Provider=h}),null);

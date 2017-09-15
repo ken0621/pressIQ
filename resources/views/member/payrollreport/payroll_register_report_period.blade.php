@@ -26,17 +26,17 @@
 					    <thead style="text-transform: uppercase">
 					        <tr>
 					            <th valign="center" rowspan="2" class="text-center" style="width: 200px">NAME</th>
-					            <th valign="center" rowspan="2" class="text-center" style="width: 100px">BASIC PAY</th>
-					            <th valign="center" rowspan="2" class="text-center" style="width: 100px">Over Time PAY</th>
-					            <th valign="center" rowspan="2" class="text-center" style="width: 100px">Night Differential Pay</th>
-					            <th valign="center" rowspan="2" class="text-center" style="width: 100px">Regular Holiday Pay</th>
-					            <th valign="center" rowspan="2" class="text-center" style="width: 100px">Special Holiday Pay</th>
-					            <th valign="center" rowspan="2" class="text-center" style="width: 100px">Restday Pay</th>
-					            <th valign="center" rowspan="2" class="text-center" style="width: 100px">Leave Pay</th>
-					            <th valign="center" rowspan="2" class="text-center" style="width: 100px">COLA</th>
-					            <th valign="center" rowspan="2" class="text-center" style="width: 100px">LATE</th>
-					            <th valign="center" rowspan="2" class="text-center" style="width: 100px">UNDERTIME</th>
-					            <th valign="center" rowspan="2" class="text-center" style="width: 100px">ABSENT</th>
+					            <th valign="center" rowspan="2" class="text-center" style="width: 120px">BASIC PAY</th>
+					            <th valign="center" rowspan="2" class="text-center" style="width: 120px">Over Time PAY</th>
+					            <th valign="center" rowspan="2" class="text-center" style="width: 120px">Night Differential Pay</th>
+					            <th valign="center" rowspan="2" class="text-center" style="width: 120px">Regular Holiday Pay</th>
+					            <th valign="center" rowspan="2" class="text-center" style="width: 120px">Special Holiday Pay</th>
+					            <th valign="center" rowspan="2" class="text-center" style="width: 120px">Restday Pay</th>
+					            <th valign="center" rowspan="2" class="text-center" style="width: 120px">Leave Pay</th>
+					            <th valign="center" rowspan="2" class="text-center" style="width: 120px">COLA</th>
+					            <th valign="center" rowspan="2" class="text-center" style="width: 120px">LATE</th>
+					            <th valign="center" rowspan="2" class="text-center" style="width: 120px">UNDERTIME</th>
+					            <th valign="center" rowspan="2" class="text-center" style="width: 120px">ABSENT</th>
 					            <th colspan="2" class="text-center" style="width: 200px">ALLOWANCES</th>
 					            <th colspan="6" class="text-center" style="width: 600px">DEDUCTIONS</th>
 					            <th colspan="3" class="text-center" style="width: 300px">SSS Contribution</th>
@@ -75,17 +75,17 @@
 					   @foreach($_employee as $lbl => $employee)
 					    <tr>	
 					    	<td class="text-center" >{{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_last_name }}</td>
-					    	<td class="text-center" >{{ number_format($employee->net_basic_pay,2) }}</td>
-					    	<td class="text-center" >{{ number_format($employee->overtime,2) }}</td>
-					    	<td class="text-center" >{{ number_format($employee->nightdiff,2) }}</td>
-					    	<td class="text-center" >{{ number_format($employee->regular_holiday,2) }}</td>
-					    	<td class="text-center" >{{ number_format($employee->special_holiday,2) }}</td>
+					    	<td class="text-center" >{{ number_format($employee->net_basic_pay,2) }} <br> ({{$employee->time_spent}} hours)</td>
+					    	<td class="text-center" >{{ number_format($employee->overtime,2) }} <br> ({{$employee->time_overtime}} hours)</td>
+					    	<td class="text-center" >{{ number_format($employee->nightdiff,2) }} <br> ({{$employee->time_night_differential}} hours)</td>
+					    	<td class="text-center" >{{ number_format($employee->special_holiday,2) }} <br> ({{$employee->time_special_holiday}} times)</td>
+					    	<td class="text-center" >{{ number_format($employee->regular_holiday,2) }} <br> ({{$employee->time_regular_holiday}} times)</td>
 					    	<td class="text-center" >{{ number_format($employee->restday,2 )}}</td>
-					    	<td class="text-center" >{{ number_format($employee->leave_pay,2) }}</td>
+					    	<td class="text-center" >{{ number_format($employee->leave_pay,2) }} <br> ({{$employee->time_spent}} hours)</td>
 					    	<td class="text-center" >{{ number_format($employee->cola,2) }}</td>
-					    	<td class="text-center" >{{ number_format($employee->late,2) }}</td>
-					    	<td class="text-center" >{{ number_format($employee->undertime,2) }}</td>
-					    	<td class="text-center" >{{ number_format($employee->absent,2) }}</td>
+					    	<td class="text-center" >{{ number_format($employee->late,2) }} <br> ({{$employee->time_late}} hours)</td>
+					    	<td class="text-center" >{{ number_format($employee->undertime,2) }} <br> ({{$employee->time_undertime}} hours)</td>
+					    	<td class="text-center" >{{ number_format($employee->absent,2) }} <br> ({{$employee->time_absent}} times)</td>
 					    	<td class="text-center" >{{ number_format($employee->allowance,2) }}</td>
 					    	<td class="text-center" >{{ number_format($employee->adjustment_allowance,2) }}</td>
 					    	<td class="text-center" >{{ number_format($employee->sss_loan,2) }}</td>

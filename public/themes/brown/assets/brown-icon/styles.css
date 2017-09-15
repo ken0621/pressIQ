@@ -1,19 +1,19 @@
 @charset "UTF-8";
 
 @font-face {
-  font-family: "brown-icon";
-  src:url("fonts/brown-icon.eot");
-  src:url("fonts/brown-icon.eot?#iefix") format("embedded-opentype"),
-    url("fonts/brown-icon.woff") format("woff"),
-    url("fonts/brown-icon.ttf") format("truetype"),
-    url("fonts/brown-icon.svg#brown-icon") format("svg");
+  font-family: "untitled-font-8";
+  src:url("fonts/untitled-font-8.eot");
+  src:url("fonts/untitled-font-8.eot?#iefix") format("embedded-opentype"),
+    url("fonts/untitled-font-8.woff") format("woff"),
+    url("fonts/untitled-font-8.ttf") format("truetype"),
+    url("fonts/untitled-font-8.svg#untitled-font-8") format("svg");
   font-weight: normal;
   font-style: normal;
 
 }
 
 [data-icon]:before {
-  font-family: "brown-icon" !important;
+  font-family: "untitled-font-8" !important;
   content: attr(data-icon);
   font-style: normal !important;
   font-weight: normal !important;
@@ -27,7 +27,7 @@
 
 [class^="icon-"]:before,
 [class*=" icon-"]:before {
-  font-family: "brown-icon" !important;
+  font-family: "untitled-font-8" !important;
   font-style: normal !important;
   font-weight: normal !important;
   font-variant: normal !important;
@@ -38,36 +38,99 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-dashboard:before {
+.icon-bell-o:before {
   content: "\61";
 }
-.icon-eoncard:before {
+.icon-cubes:before {
   content: "\62";
 }
-.icon-genealogy:before {
+.icon-list-alt:before {
   content: "\63";
 }
-.icon-myslots:before {
+.icon-map-marker:before {
   content: "\64";
 }
-.icon-notification:before {
+.icon-money:before {
   content: "\65";
 }
-.icon-orders:before {
+.icon-sitemap:before {
   content: "\66";
 }
-.icon-profile:before {
+.icon-pin-alt:before {
   content: "\67";
 }
-.icon-reports:before {
+.icon-share-outline:before {
   content: "\68";
 }
-.icon-repurchase:before {
+.icon-star:before {
   content: "\69";
 }
-.icon-wallet:before {
+.icon-heart:before {
   content: "\6a";
 }
-.icon-wishlist:before {
+.icon-credit-card:before {
   content: "\6b";
+}
+.icon-bars:before {
+  content: "\6c";
+}
+.icon-bar-chart:before {
+  content: "\6d";
+}
+.icon-check:before {
+  content: "\6e";
+}
+.icon-check-circle:before {
+  content: "\6f";
+}
+.icon-check-circle-o:before {
+  content: "\70";
+}
+.icon-cloud-upload:before {
+  content: "\71";
+}
+.icon-cloud-download:before {
+  content: "\72";
+}
+.icon-dashboard:before {
+  content: "\73";
+}
+.icon-genealogy:before {
+  content: "\74";
+}
+.icon-myslots:before {
+  content: "\75";
+}
+.icon-orders:before {
+  content: "\76";
+}
+.icon-flow-tree:before {
+  content: "\77";
+}
+.icon-vcard:before {
+  content: "\78";
+}
+.icon-user-outline:before {
+  content: "\79";
+}
+.icon-repurchase:before {
+  content: "\7a";
+}
+.icon-profile:before {
+  content: "\41";
+}
+.icon-wallet:before {
+  content: "\42";
+}
+.icon-wishlist:before {
+  content: "\43";
+}
+.icon-eoncard:before {
+  content: "\44";
+}
+.icon-notification:before {
+  content: "\45";
+}
+.icon-reports:before {
+  content: "\46";
 }

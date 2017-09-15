@@ -14,7 +14,7 @@
 				</div>
 			</div>
 			<div class="sidebar small">
-				<img class="shadow" src="/themes/{{ $shop_theme }}/img/shadow.png">
+				<!-- <img class="shadow" src="/themes/{{ $shop_theme }}/img/shadow.png"> -->
 				<div class="profile-holder">
 					<div class="profile">
 						<div class="img">

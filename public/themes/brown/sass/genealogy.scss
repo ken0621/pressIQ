@@ -1,5 +1,18 @@
+$content-text: 'Arimo', sans-serif;
+$regular: 400;
+$semi-bold: 600;
+$bold: 700;
+$text-light: #777;
+$text-dark: #272c2f;
+
+
+
 .genealogy-container
 {
+	font-family: $content-text;
+	padding: 15px;
+	letter-spacing: 0.2px;
+
 	.genealogy-header
 	{
 		.left
@@ -25,8 +38,9 @@
 				text-align: left;
 				.name
 				{
-					color: #344049;
-					font-size: 20px;
+					color: $text-dark;
+					font-size: 21px;
+					font-weight: $bold;
 				}
 				.sub
 				{
@@ -43,8 +57,8 @@
 			}
 			.legend-label
 			{
-				color: #85939e;
-				font-size: 13px;
+				color: $text-light;
+				font-size: 15px;
 				display: inline-block;
 				vertical-align: middle;
 				margin-right: 10px;
@@ -56,9 +70,9 @@
 				select
 				{
 					box-shadow: none;
-					color: #344049;
-					font-size: 13px;
-					font-weight: 600;
+					color: $text-dark;
+					font-size: 15px;
+					font-weight: $bold;
 					border: 1px solid #cecece;
 					border-radius: 2px;
 				}

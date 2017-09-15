@@ -1,11 +1,23 @@
+$content-text: 'Arimo', sans-serif;
+$regular: 400;
+$semi-bold: 600;
+$bold: 700;
+$text-light: #777;
+$text-dark: #272c2f;
+
 .member-wishlist
 {
+	font-family: $content-text;
+	padding: 15px;
+	letter-spacing: 0.2px;
+
+
 	margin: -15px;
 	.wishlist-title
 	{
-		color: #272c2f;
-		font-size: 20px;
-		font-weight: 600;
+		font-size: 21px;
+		font-weight: $bold;
+		color: $text-dark !important;
 		padding: 25px 50px;
 	}
 	.table-holder
@@ -19,8 +31,8 @@
 					th
 					{
 						background-color: #ece8e8;
-						color: #272c2f;
-						font-weight: 600;
+						color: $text-dark;
+						font-weight: $bold;
 						font-size: 15px;
 						border-bottom: 0;
 						text-align: center;
@@ -44,9 +56,9 @@
 						border-top: 0;
 						text-align: center;
 						vertical-align: middle;
-						color: #272c2f;
+						color: $text-light;
 						font-size: 15px;
-						font-weight: 400;
+						font-weight: $regular;
 						padding: 25px 17.5px;
 						border-bottom: 1px solid #ece8e8;
 						&:first-child
@@ -97,7 +109,7 @@
 								color: #71808c;
 								font-weight: 700;
 								font-size: 20px;
-								padding: 2px 12.5px;
+								padding: 1px 12px 2.5px 12px;
 								margin: 0 -2.5px;
 							}
 							.form-control
@@ -120,7 +132,7 @@
 							border-radius: 2.5px;
 							color: #fff;
 							font-size: 13px;
-							font-weight: 600;
+							font-weight: $bold;
 						}
 					}
 					&:last-child

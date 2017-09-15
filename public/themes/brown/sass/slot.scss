@@ -1,5 +1,36 @@
+$content-text: 'Arimo', sans-serif;
+$regular: 400;
+$semi-bold: 600;
+$bold: 700;
+$text-light: #777;
+$text-dark: #272c2f;
+
 .member-slot
 {
+	font-family: $content-text;
+	padding: 15px;
+	letter-spacing: 0.2px;
+
+	.main-member-header
+	{
+		.left {
+
+			.text {
+
+				.name {
+					font-size: 21px;
+					font-weight: $bold;
+					color: $text-dark !important;
+				}
+				.sub {
+					font-size: 15px !important;
+					color: $text-light !important;
+				}
+			}
+		}
+	}
+
+
 	.member-slot-content
 	{
 		margin-top: 25px;
@@ -15,18 +46,18 @@
 				padding-bottom: 25px;
 				.header-label
 				{
-					color: #344049;
-					font-size: 13px;
-					font-weight: 600;
+					color: $text-dark;
+					font-size: 15px;
+					font-weight: $bold;
 					margin-bottom: 5px;
 				}
 				.btn-hover
 				{
-					padding: 2.5px 7.5px 5px;
+					padding: 5px 10px 5px 10px;
 					color: #ffffff;
 					background-color: #c5afa4;
-					font-size: 11px;
-					font-weight: 600;
+					font-size: 13px;
+					font-weight: $regular;
 					border-radius: 15px;
 					outline: none;
 				}
@@ -38,9 +69,9 @@
 				border-left: 0;
 				text-align: center;
 				padding: 25px 10px;
-				color: #344049;
-				font-size: 13px;
-				font-weight: 600;
+				color: $text-light;
+				font-size: 15px;
+				font-weight: $regular;
 				vertical-align: middle;
 				&:first-child
 				{
@@ -53,7 +84,7 @@
 				button
 				{
 					border-radius: 100%;
-					background-color: #c8d5df;
+					background-color: #dac5a6;
 					border: 0;
 					box-sizing: content-box;
 					padding: 12.5px;
@@ -64,22 +95,23 @@
 					height: 20px;
 					&.active
 					{
-						background-color: #78513e;
+						background-color: #502d19;
 					}
 					img
 					{
 						width: 18px;
-						height: 18px;
-						object-fit: contain;
+						/* height: 18px;
+						object-fit: contain; */
+						margin-bottom: 3px;
 					}
 				}
 				.progress2
 				{
 					padding: 10px 15px;
 					background-color: #e9e9e9;
-					color: #344049;
-					font-size: 13px;
-					font-weight: 600;
+					color: $text-dark;
+					font-size: 15x;
+					font-weight: $regular;
 				}
 			}
 		}

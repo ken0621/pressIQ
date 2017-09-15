@@ -45,6 +45,7 @@ class PayrollReportController extends Member
 		$year = 2017;
 		$shop_id = $this->shop_id();
 		$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
+		
 		$data["contri_info"] = $contri_info; 
 		$data["month"] = $month;
 		$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
@@ -64,7 +65,7 @@ class PayrollReportController extends Member
 		$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 		$data["year"] = $year;
 		$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
-
+		// dd($contri_info);
 		return view("member.payrollreport.government_forms_sss", $data);
 	}
 	public function government_forms_philhealth($month)

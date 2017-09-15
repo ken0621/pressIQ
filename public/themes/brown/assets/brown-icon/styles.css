@@ -1,0 +1,73 @@
+@charset "UTF-8";
+
+@font-face {
+  font-family: "brown-icon";
+  src:url("fonts/brown-icon.eot");
+  src:url("fonts/brown-icon.eot?#iefix") format("embedded-opentype"),
+    url("fonts/brown-icon.woff") format("woff"),
+    url("fonts/brown-icon.ttf") format("truetype"),
+    url("fonts/brown-icon.svg#brown-icon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+[data-icon]:before {
+  font-family: "brown-icon" !important;
+  content: attr(data-icon);
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[class^="icon-"]:before,
+[class*=" icon-"]:before {
+  font-family: "brown-icon" !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-dashboard:before {
+  content: "\61";
+}
+.icon-eoncard:before {
+  content: "\62";
+}
+.icon-genealogy:before {
+  content: "\63";
+}
+.icon-myslots:before {
+  content: "\64";
+}
+.icon-notification:before {
+  content: "\65";
+}
+.icon-orders:before {
+  content: "\66";
+}
+.icon-profile:before {
+  content: "\67";
+}
+.icon-reports:before {
+  content: "\68";
+}
+.icon-repurchase:before {
+  content: "\69";
+}
+.icon-wallet:before {
+  content: "\6a";
+}
+.icon-wishlist:before {
+  content: "\6b";
+}

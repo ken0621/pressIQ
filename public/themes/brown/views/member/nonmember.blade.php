@@ -98,7 +98,7 @@
   <!-- Buy a Kit -->
   <div class="popup-buy-a-kit">
       <div id="buy-a-kit-modal" class="modal fade">
-          <div class="modal-lg modal-dialog">
+          <div class="modal-dialog">
               <div class="modal-content">
                   <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -106,36 +106,43 @@
                   </div>
 
                   <div>
-                  <table class="table">
-                      <thead>
-                        <tr>
-                          <th>Image</th>
-                          <th>Product Name</th>
-                          <th>Unit Price</th>
-                          <th>Quantity</th>
-                          <th>Total</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td><img src="/themes/{{ $shop_theme }}/img/brown-cart-img1.png"></td>
-                          <td>P 9,500.00</td>
-                          <td>P 9,500.00</td>
-                          <td>
-                            <input class="item-qty" name="quantity" min="1" step="1" value="1"  type="number"></td>
-                          <td>P 9,500.00</td>
-                        </tr>
-                        <tr>
-                          <td><img src="/themes/{{ $shop_theme }}/img/brown-cart-img1.png"></td>
-                          <td>P 9,500.00</td>
-                          <td>P 9,500.00</td>
-                          <td>
-                            <input class="item-qty" name="quantity" min="1" step="1" value="1"  type="number">
-                          </td>
-                          <td>P 9,500.00</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th width="10%" style="padding-left: 10px;">Remove</th>
+                            <th>Image</th>
+                            <th>Product Name</th>
+                            <th>Unit Price</th>
+                            <th>Quantity</th>
+                            <th style="padding-right: 30px;">Total</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td style="padding-left: 10px;"><a href="#" role="button" class="btn-remove"><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>
+                            <td><img src="/themes/{{ $shop_theme }}/img/brown-cart-img1.png"></td>
+                            <td>P 9,500.00</td>
+                            <td>P 9,500.00</td>
+                            <td width="10%">
+                              <div style="width: 100%;">
+                                <input class="item-qty" name="quantity" min="1" step="1" value="1"  type="number">
+                              </div>
+                            <td style="padding-right: 30px;">P 9,500.00</td>
+                          </tr>
+                          <tr>
+                            <td style="padding-left: 10px;"><a href="#" role="button" class="btn-remove"><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>
+                            <td><img src="/themes/{{ $shop_theme }}/img/brown-cart-img1.png"></td>
+                            <td>P 9,500.00</td>
+                            <td>P 9,500.00</td>
+                            <td width="10%">
+                              <div style="width: 100%;">
+                                <input class="item-qty" name="quantity" min="1" step="1" value="1"  type="number">
+                              </div>
+                            </td>
+                            <td style="padding-right: 30px;">P 9,500.00</td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
 
                     <div class="modal-footer row clearfix">

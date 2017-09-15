@@ -22,6 +22,10 @@
         <!-- CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+        <!-- Brown Custom Icon -->
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/brown-icon/styles.css">
+
         @yield("css")
     </head>
     <body>

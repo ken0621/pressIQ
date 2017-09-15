@@ -65,7 +65,7 @@
 							<a href="/members/order"><div class="nav-holder"><div class="icon brown-icon-bag"></div> <span>Orders</span></div></a>
 						</li>
 						<li class="{{ Request::segment(2) == "wishlist" ? "active" : "" }}">
-							<a href="/members/wishlist"><div class="nav-holder"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/order.png"></div> <span>Wishlist</span></div></a>
+							<a href="/members/wishlist"><div class="nav-holder"><div class="icon brown-icon-heart-empty"></div> <span>Wishlist</span></div></a>
 						</li>
 					</ul>
 				</div>

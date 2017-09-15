@@ -66,12 +66,12 @@
 		}
 		.sidebar
 		{
-			background-color: #f6f6f4;
+			background-color: #301e10;
 			width: 300px;
 			position: absolute;
 			left: 0;
 			top: 0;
-			border-right: 5px solid #f6f6f4;
+			/* border-right: 5px solid #301e10; */
 			height: 100%;
 			z-index: 10;
 			transition: 0.3s all ease;
@@ -86,7 +86,7 @@
 			}
 			.profile-holder
 			{
-				width: 295px;
+				width: 300px;
 				overflow: hidden;
 				transition: 0.3s all ease;
 			}
@@ -120,14 +120,14 @@
 					margin-left: 15px;
 					.name
 					{
-						color: #344049;
+						color: #fff;
 						font-size: 14px;
 						font-weight: 700;
 					}
 					.sub
 					{
 						font-size: 13px;
-						color: #7e8285;
+						color: #dac5a6;
 					}
 				}
 			}
@@ -145,48 +145,60 @@
 						a
 						{
 							display: block;
-							width: 295px;
+							width: 300px;
 							transition: 0.3s all ease;
 							overflow: hidden;
 							text-decoration: none;
+
 							.nav-holder
 							{
 								padding: 15px 15px;
-								color: #808080;
+								color: #dac5a6;
 								font-size: 13px;
-								font-weight: 600;
+								font-weight: 400;
 								letter-spacing: 0.5px;
-								border-bottom: 1px solid #e3e3e3;
+								border-bottom: 1px solid #301e10;
 								padding-left: 25px;
-								width: 295px;
+								width: 300px;
 								transition: 0.3s all ease;
 								height: 50px;
+
 								.icon 
 								{
 									display: inline-block;
 									vertical-align: top;
 									width: 20px;
 									margin-right: 15px;
-									img
+
+									text-align: center;
+									font-size: 18px;
+									color: #dac5a6;
+
+									/* img
 									{
 										max-width: 20px;
-									}
+									} */
 								}
 							}
 							&:hover
 							{
 								.nav-holder
 								{
-									background-color: #36b1b9;
+									background-color: #3c2716;
 									color: #fff;
 									text-decoration: none;
-									border-color: #36b1b9;
+									border-color: #3c2716;
+									
+									.icon {
+										color: #fff;
+									}
 									img
 									{
 										-webkit-filter: brightness(2);
 										filter: brightness(2);
 										opacity: 1;
 									}
+
 								}
 							}
 						}
@@ -196,10 +208,13 @@
 							{
 								> .nav-holder
 								{
-									background-color: #36b1b9;
+									background-color: #3c2716;
 									color: #fff;
 									text-decoration: none;
-									border-color: #36b1b9;
+									border-color: #3c2716;
+									.icon {
+										color: #fff;
+									}
 									img
 									{
 										-webkit-filter: brightness(2);
@@ -245,14 +260,14 @@
 			&.small
 			{
 				width: 80px;
-				background-color: #78513e;
+				background-color: #502d19;
 				.shadow
 				{
 					display: none;
 				}
 				.profile-holder
 				{
-					width: 75px;
+					width: 80px;
 				}
 				.profile
 				{
@@ -281,7 +296,7 @@
 							a
 							{
 								text-align: left !important;
-								width: 75px;
+								width: 80px;
 								.nav-holder
 								{
 									span
@@ -309,7 +324,7 @@
 								{
 									.nav-holder
 									{
-										background-color: #5e3724;
+										background-color: #613922;
 										.icon
 										{
 											img

@@ -1,6 +1,6 @@
 body
 {
-	font-family: 'Open Sans', sans-serif;
+	font-family: 'Droid Sans', sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	font-smoothing: antialiased;
@@ -154,6 +154,7 @@ button
 			font-weight: 600;
 			padding: 7.5px 15px;
 			letter-spacing: 0.5px;
+			background-color: #fff;
 		}
 		.notif-container
 		{
@@ -261,11 +262,11 @@ button
 }
 header
 {
-	background-color: #693d28;
-	color: #fff;
+	background-color: #422311;
+	color: #dac5a6;
 	.header-top
 	{
-		background-color: #462211;
+		background-color: #301e10;
 		text-align: right;
 		font-weight: 300;
 		.holder
@@ -274,7 +275,7 @@ header
 			vertical-align: top;
 			font-size: 12px;
 			padding: 7.5px 15px;
-			color: rgba(255,255,255,0.5);
+			color: #dac5a6;
 			cursor: pointer;
 			&.active, &:hover, &:focus
 			{
@@ -285,29 +286,26 @@ header
 	}
 	.header-middle
 	{
-		border-bottom: 1px solid #78513e;
+		border-bottom: 1px solid #553929;
 		.logo
 		{
 			cursor: pointer;
-			@media screen and (min-width: 991px)
-			{
-				float: left;
-			}
+			float: left;
 			padding: 15px 0;
 		}
 		.search
 		{
 			margin: 15px 0;
 			position: relative;
-			@media screen and (min-width: 991px)
-			{
-				float: right;
-			}
+			float: right;
 			.form-control
 			{
 				border-radius: 15px;
 				background-color: rgba(255,255,255,0.1);
 				border: 0;
+				outline: none;
+				color: #fff;
+				box-shadow: none;
 			}
 			.search-icon
 			{
@@ -322,6 +320,53 @@ header
 	}
 	.header-bottom
 	{
+		@media (max-width: 990px) 
+		{
+		    .navbar-header 
+		    {
+		        float: none;
+		    }
+		    .navbar-left,.navbar-right 
+		    {
+		        float: none !important;
+		    }
+		    .navbar-toggle 
+		    {
+		        display: block;
+		    }
+		    .navbar-collapse 
+		    {
+		        border-top: 1px solid transparent;
+		        box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+		    }
+		    .navbar-fixed-top 
+		    {
+		        top: 0;
+		        border-width: 0 0 1px;
+		    }
+		    .navbar-collapse.collapse 
+		    {
+		        display: none!important;
+		    }
+		    .navbar-nav 
+		    {
+		        float: none!important;
+		        margin-top: 7.5px;
+		    }
+		    .navbar-nav>li 
+		    {
+		        float: none;
+		    }
+		    .navbar-nav>li>a 
+		    {
+		        padding-top: 10px;
+		        padding-bottom: 10px;
+		    }
+		    .collapse.in
+		    {
+		        display:block !important;
+		    }
+		}
 		.navbar-inner 
 		{
 		    background: transparent;
@@ -331,6 +376,17 @@ header
 			margin-bottom: 0;
 			.container
 			{
+				.navbar-header
+				{
+					.navbar-toggle
+					{
+						cursor: pointer;
+						.icon-bar
+						{
+							background-color: #fff;
+						}
+					}
+				}
 				.nav.navbar-nav
 				{
 					li
@@ -339,7 +395,7 @@ header
 						{
 							a
 							{
-								background-color: #5e3724;
+								background-color: #4c2e1d;
 							}
 						}
 						a
@@ -347,8 +403,15 @@ header
 							text-shadow: none;	
 							font-size: 13px;
 							font-weight: 300;
-							color: #fff;
+							color: #dac5a6;
 						}
+					}
+				}
+				.navbar-right
+				{
+					li
+					{
+
 					}
 				}
 			}
@@ -462,7 +525,7 @@ header
 /* Footer */
 footer
 {
-	background-color: #462211;
+	background-color: #422311;
 	padding: 35px 0;
 	.holder
 	{
@@ -499,7 +562,7 @@ footer
 				a
 				{
 					font-size: 11px;
-					color: rgba(255,255,255,0.5);
+					color: #dac5a6;
 					font-weight: 300;
 					&:active, &:focus, &:hover
 					{

@@ -13,8 +13,10 @@
         </div>
         <div class="col-md-4">
         <div class="join-container">
-          <div class="text-header1">Join the Movement!</div>
-          <div class="text-header2">Enroll now and become one of us!</div>
+          <div class="btn-text">
+            <div class="text-header1">Join the Movement!</div>
+            <div class="text-header2">Enroll now and become one of us!</div>
+          </div>
           <div class="btn-container">
             <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
             <img src="/themes/{{ $shop_theme }}/img/or.png"><br>
@@ -32,7 +34,7 @@
 
       <div class="row clearfix">
 
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-6">
               <div class="profile-info-container pic1">
                 <div class="icon-container">
 
@@ -57,7 +59,7 @@
               </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-6">
               <div class="profile-info-container pic2">
                 <div class="icon-container">
 
@@ -74,7 +76,7 @@
               </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-6">
               <div class="profile-info-container pic3">
                 <div class="icon-container">
 
@@ -98,61 +100,82 @@
   <!-- Buy a Kit -->
   <div class="popup-buy-a-kit">
       <div id="buy-a-kit-modal" class="modal fade">
-          <div class="modal-lg modal-dialog">
+          <div class="modal-size modal-dialog">
               <div class="modal-content">
                   <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                       <h4 class="modal-title"><img src="/themes/{{ $shop_theme }}/img/cart.png"> My Shopping Cart</h4>
                   </div>
-
+                  
                   <div>
-                  <table class="table">
+                    <table class="table">
                       <thead>
                         <tr>
+                          <th>Remove</th>
                           <th>Image</th>
                           <th>Product Name</th>
                           <th>Unit Price</th>
-                          <th>Quantity</th>
+                          <th width="160px">Quantity</th>
                           <th>Total</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
-                          <td><img src="/themes/{{ $shop_theme }}/img/brown-cart-img1.png"></td>
-                          <td>P 9,500.00</td>
-                          <td>P 9,500.00</td>
-                          <td>
-                            <input class="item-qty" name="quantity" min="1" step="1" value="1"  type="number"></td>
-                          <td>P 9,500.00</td>
+                          <td class="remove-holder">
+                            <a href="javascript:"><img src="/themes/{{ $shop_theme }}/img/remove.png"></a>
+                          </td>
+                          <td class="img-holder">
+                            <img src="/themes/{{ $shop_theme }}/img/wishlist-1.jpg">
+                          </td>
+                          <td class="name-holder">Brown 1 Membership Kit</td>
+                          <td class="price-holder">P 9,500.00</td>
+                          <td class="quantity-holder">
+                            <div class="another">
+                              <div class="equal small"><button class="control">-</button></div>
+                              <div class="equal">
+                                <input class="form-control" type="text" name="">
+                              </div>
+                              <div class="equal small"><button class="control">+</button></div>
+                            </div>
+                          </td>
+                          <td class="total-holder">P 9,500.00</td>
                         </tr>
                         <tr>
-                          <td><img src="/themes/{{ $shop_theme }}/img/brown-cart-img1.png"></td>
-                          <td>P 9,500.00</td>
-                          <td>P 9,500.00</td>
-                          <td>
-                            <input class="item-qty" name="quantity" min="1" step="1" value="1"  type="number">
+                          <td class="remove-holder">
+                            <a href="javascript:"><img src="/themes/{{ $shop_theme }}/img/remove.png"></a>
                           </td>
-                          <td>P 9,500.00</td>
+                          <td class="img-holder">
+                            <img src="/themes/{{ $shop_theme }}/img/wishlist-1.jpg">
+                          </td>
+                          <td class="name-holder">Brown 1 Membership Kit</td>
+                          <td class="price-holder">P 9,500.00</td>
+                          <td class="quantity-holder">
+                            <div class="another">
+                              <div class="equal small"><button class="control">-</button></div>
+                              <div class="equal">
+                                <input class="form-control" type="text" name="">
+                              </div>
+                              <div class="equal small"><button class="control">+</button></div>
+                            </div>
+                          </td>
+                          <td class="total-holder">P 9,500.00</td>
                         </tr>
                       </tbody>
                     </table>
-                    </div>
+                  </div>
 
-                    <div class="modal-footer row clearfix">
-                      
-                        <div class="col-md-8">
-                          <div class="left-btn-container">
-                            <div><i class="fa fa-long-arrow-left" aria-hidden="true">&nbsp;</i>&nbsp;Continue Shopping</div>
-                            <button class="btn-checkout">Checkout</button>
-                          </div>
+                  <div class="modal-footer row clearfix">
+                      <div class="col-md-8">
+                        <div class="left-btn-container">
+                          <div><i class="fa fa-long-arrow-left" aria-hidden="true">&nbsp;</i>&nbsp;Continue Shopping</div>
+                          <button class="btn-checkout">Checkout</button>
                         </div>
-
-                        <div class="col-md-4">
-                          <div class="total">Total: P 9,500.00</div>
-                        </div>
-                        
+                      </div>
+                      <div class="col-md-4">
+                        <div class="total">Total: P 9,500.00</div>
                       </div>
                     </div>
+                  </div>
               </div>
           </div>
       </div>
@@ -299,6 +322,7 @@
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js"></script>
 
 <script type="text/javascript">
+
       // /*Buy a Kit*/
       // $("#btn-buy-a-kit").click(function(){
       //   $("#buy-a-kit-modal").modal('show');

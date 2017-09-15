@@ -42,7 +42,7 @@
         <div class="header-top">
             <div class="container">
                 <a class="holder">GET THE APP</a>
-                <a class="holder">COMPANY</a>
+                <a href="/about" class="holder">COMPANY</a>
                 @if($customer)
                     <div style="display: inline-block; vertical-align: middle;" class="dropdown hidden">
                         <a class="holder" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="false">#272842 <span class="caret"></span></a>
@@ -108,8 +108,8 @@
                 </div>
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav">
-                      <li class="active"><a href="/">Brown</a></li>
-                      <li><a href="#">Phone Accessories</a></li>
+                      <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a href="/">Brown</a></li>
+                      <li class="{{ Request::segment(1) == "product" ? "active" : "product" }}"><a href="/product">Phone Accessories</a></li>
                       <li><a href="#">Internet Of Things</a></li>
                       <li><a href="#">Health Technology</a></li>
                     </ul>

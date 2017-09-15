@@ -361,6 +361,8 @@ class Payroll2
 				Tbl_payroll_time_sheet_record_approved::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->delete();
 				$update = null;
 			}
+
+			// $holiday = Payroll2::timesheet_get_is_holiday($employee_id, $from);
 			
 			$_timesheet[$from] = new stdClass();
 			$_timesheet[$from]->payroll_time_sheet_id = $timesheet_db->payroll_time_sheet_id;
@@ -370,8 +372,9 @@ class Payroll2
 			$_timesheet[$from]->day_number = Carbon::parse($from)->format("d");
 			$_timesheet[$from]->day_word = Carbon::parse($from)->format("D");
 			$_timesheet[$from]->record = Payroll2::timesheet_process_in_out($timesheet_db);
-			$_timesheet[$from]->is_holiday = Payroll2::timesheet_get_is_holiday($employee_id, $from);
-			
+			$_timesheet[$from]->is_holiday = Payroll2::timesheet_get_is_holiday($employee_id, $from); //$holiday["holiday_day_type"];
+			// $_timesheet[$from]->holiday_name = $holiday["holiday_name"];
+		
 
 			if(isset($_shift_real[0]))
 			{
@@ -832,20 +835,19 @@ class Payroll2
 		{
 			$day_type	= 'extra_day';
 		}
-		
 		return $day_type;
 	}
 	public static function timesheet_get_is_holiday($employee_id, $date)
 	{
 		$day_type	= 'not_holiday';
+		// $day_type["holiday_name"]	= '';
 		$company_id	= Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->value('payroll_employee_company_id');
 		$holiday	= Tbl_payroll_holiday_company::getholiday($company_id, $date)->first();
-		
 		if($holiday != null)
 		{
 			$day_type = strtolower($holiday->payroll_holiday_category);
+			// $day_type["holiday_name"] = strtolower($holiday->payroll_holiday_name);
 		}
-
 		return $day_type;
 	}
 	public static function timesheet_default_remarks($data)
@@ -855,16 +857,18 @@ class Payroll2
 		{
 			$remarks[] = "REST DAY";
 		}
-		
 		if($data->day_type == "extra_day")
 		{
 			$remarks[] = "EXTRA DAY";
 		}
-		
 		if($data->is_holiday != "not_holiday")
 		{
 			$remarks[] = "HOLIDAY";
 		}
+		// if (isset($data->holiday_name)) 
+		// {
+		// 	$remarks[] = $data->holiday_name;
+		// }
 		if($remarks)
 		{
 			return implode(",", $remarks);
@@ -873,7 +877,6 @@ class Payroll2
 		{
 			return "";
 		}
-		
 	}
 	public static function timesheet_process_in_out($timesheet_db)
 	{

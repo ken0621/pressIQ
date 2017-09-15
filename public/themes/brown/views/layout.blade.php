@@ -95,82 +95,91 @@
         <div class="header-bottom">
             <nav class="navbar">
               <div class="container">
-                <ul class="nav navbar-nav">
-                  <li class="active"><a href="/">Brown</a></li>
-                  <li><a href="#">Phone Accessories</a></li>
-                  <li><a href="#">Internet Of Things</a></li>
-                  <li><a href="#">Health Technology</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown">
-                        <a href="#" class="notif-holder dropdown-toggle" data-toggle="dropdown">
-                            <img src="/themes/{{ $shop_theme }}/img/bell-header.png"><span class="badge">500</span>
-                        </a>
-                        <ul class="dropdown-menu notif">
-                            <li>
-                                <div class="notif-header">Notifications</div>
-                                <div class="notif-container">
-                                    <div class="notif-holder">
-                                        <div class="first clearfix">
-                                            <div class="notif-id">
-                                                <img src="/themes/{{ $shop_theme }}/img/people.png">
-                                                <div class="number">111133</div>
+                <div class="navbar-header">
+                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>                        
+                  </button>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                      <li class="active"><a href="/">Brown</a></li>
+                      <li><a href="#">Phone Accessories</a></li>
+                      <li><a href="#">Internet Of Things</a></li>
+                      <li><a href="#">Health Technology</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="notif-holder dropdown-toggle" data-toggle="dropdown">
+                                <img src="/themes/{{ $shop_theme }}/img/bell-header.png"><span class="badge">500</span>
+                            </a>
+                            <ul class="dropdown-menu notif">
+                                <li>
+                                    <div class="notif-header">Notifications</div>
+                                    <div class="notif-container">
+                                        <div class="notif-holder">
+                                            <div class="first clearfix">
+                                                <div class="notif-id">
+                                                    <img src="/themes/{{ $shop_theme }}/img/people.png">
+                                                    <div class="number">111133</div>
+                                                </div>
+                                                <div class="notif-date">2017-09-01 03:20:47</div>
                                             </div>
-                                            <div class="notif-date">2017-09-01 03:20:47</div>
-                                        </div>
-                                        <div class="second">
-                                            <div class="text">Sorry, Your Slot has already reached the max level for matrix. Slot 111133's pairing reward will not be added. </div>
-                                        </div>
-                                    </div>
-                                    <div class="notif-holder">
-                                        <div class="first clearfix">
-                                            <div class="notif-id">
-                                                <img src="/themes/{{ $shop_theme }}/img/people.png">
-                                                <div class="number">111133</div>
+                                            <div class="second">
+                                                <div class="text">Sorry, Your Slot has already reached the max level for matrix. Slot 111133's pairing reward will not be added. </div>
                                             </div>
-                                            <div class="notif-date">2017-09-01 03:20:47</div>
                                         </div>
-                                        <div class="second">
-                                            <div class="text">Sorry, Your Slot has already reached the max level for matrix. Slot 111133's pairing reward will not be added. </div>
-                                        </div>
-                                    </div>
-                                    <div class="notif-holder">
-                                        <div class="first clearfix">
-                                            <div class="notif-id">
-                                                <img src="/themes/{{ $shop_theme }}/img/people.png">
-                                                <div class="number">111133</div>
+                                        <div class="notif-holder">
+                                            <div class="first clearfix">
+                                                <div class="notif-id">
+                                                    <img src="/themes/{{ $shop_theme }}/img/people.png">
+                                                    <div class="number">111133</div>
+                                                </div>
+                                                <div class="notif-date">2017-09-01 03:20:47</div>
                                             </div>
-                                            <div class="notif-date">2017-09-01 03:20:47</div>
-                                        </div>
-                                        <div class="second">
-                                            <div class="text">Sorry, Your Slot has already reached the max level for matrix. Slot 111133's pairing reward will not be added. </div>
-                                        </div>
-                                    </div>
-                                    <div class="notif-holder">
-                                        <div class="first clearfix">
-                                            <div class="notif-id">
-                                                <img src="/themes/{{ $shop_theme }}/img/people.png">
-                                                <div class="number">111133</div>
+                                            <div class="second">
+                                                <div class="text">Sorry, Your Slot has already reached the max level for matrix. Slot 111133's pairing reward will not be added. </div>
                                             </div>
-                                            <div class="notif-date">2017-09-01 03:20:47</div>
                                         </div>
-                                        <div class="second">
-                                            <div class="text">Sorry, Your Slot has already reached the max level for matrix. Slot 111133's pairing reward will not be added. </div>
+                                        <div class="notif-holder">
+                                            <div class="first clearfix">
+                                                <div class="notif-id">
+                                                    <img src="/themes/{{ $shop_theme }}/img/people.png">
+                                                    <div class="number">111133</div>
+                                                </div>
+                                                <div class="notif-date">2017-09-01 03:20:47</div>
+                                            </div>
+                                            <div class="second">
+                                                <div class="text">Sorry, Your Slot has already reached the max level for matrix. Slot 111133's pairing reward will not be added. </div>
+                                            </div>
+                                        </div>
+                                        <div class="notif-holder">
+                                            <div class="first clearfix">
+                                                <div class="notif-id">
+                                                    <img src="/themes/{{ $shop_theme }}/img/people.png">
+                                                    <div class="number">111133</div>
+                                                </div>
+                                                <div class="notif-date">2017-09-01 03:20:47</div>
+                                            </div>
+                                            <div class="second">
+                                                <div class="text">Sorry, Your Slot has already reached the max level for matrix. Slot 111133's pairing reward will not be added. </div>
+                                            </div>
+                                        </div>
+                                        <div class="notif-holder see-all">
+                                            <a href="javascript:">See all alerts</a>
                                         </div>
                                     </div>
-                                    <div class="notif-holder see-all">
-                                        <a href="javascript:">See all alerts</a>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#" class="cart-holder">
-                            <img src="/themes/{{ $shop_theme }}/img/cart.png"> <span>Cart (0 items)</span>
-                        </a>
-                    </li>
-                </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#" class="cart-holder">
+                                <img src="/themes/{{ $shop_theme }}/img/cart.png"> <span>Cart (0 items)</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
               </div>
             </nav>
         </div>

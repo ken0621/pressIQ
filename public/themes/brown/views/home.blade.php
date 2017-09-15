@@ -113,11 +113,91 @@
 					</div>
 				</div>
 			</div>
-			<div class="mid-container">
-				<div class="browseby-title-holder">
+			<div class="bottom-container">
+				<div class="featured-title-holder">
 					<p class="title">Featured</p>
 				</div>
 				<div class="product-carousel">
+					<div>
+						<div class="product-holder">
+							<img src="/themes/{{ $shop_theme }}/img/feature-1.jpg">
+						</div>
+						<div class="product-details">
+							<p class="product-name">Brown 1</p>
+							<p class="product-spec">4.7 HD IPS DISPLAY</p>
+							<p class="product-price">P 9,500.00</p>
+						</div>	
+					</div>
+					<div>
+						<div class="product-holder">
+							<img src="/themes/{{ $shop_theme }}/img/feature-2.jpg">
+						</div>
+						<div class="product-details">
+							<p class="product-name">Brown 2</p>
+							<p class="product-spec">5.0 HD IPS DISPLAY</p>
+							<p class="product-price">P 9,500.00</p>
+						</div>		
+					</div>
+					<div>
+						<div class="product-holder">
+							<img src="/themes/{{ $shop_theme }}/img/feature-3.jpg">
+						</div>
+						<div class="product-details">
+							<p class="product-name">Brown Tab 1</p>
+							<p class="product-spec">8mp Front Camera</p>
+							<p class="product-price">P 9,500.00</p>
+						</div>		
+					</div>
+					<div>
+						<div class="product-holder">
+							<img src="/themes/{{ $shop_theme }}/img/feature-4.jpg">
+						</div>
+						<div class="product-details">
+							<p class="product-name">Brown 1 Plus</p>
+							<p class="product-spec">13 MP Back Camera</p>
+							<p class="product-price">P 12,000.00</p>
+						</div>		
+					</div>
+					<div>
+						<div class="product-holder">
+							<img src="/themes/{{ $shop_theme }}/img/feature-1.jpg">
+						</div>
+						<div class="product-details">
+							<p class="product-name">Brown 1</p>
+							<p class="product-spec">4.7 HD IPS DISPLAY</p>
+							<p class="product-price">P 9,500.00</p>
+						</div>	
+					</div>
+					<div>
+						<div class="product-holder">
+							<img src="/themes/{{ $shop_theme }}/img/feature-2.jpg">
+						</div>
+						<div class="product-details">
+							<p class="product-name">Brown 2</p>
+							<p class="product-spec">5.0 HD IPS DISPLAY</p>
+							<p class="product-price">P 9,500.00</p>
+						</div>	
+					</div>
+					<div>
+						<div class="product-holder">
+							<img src="/themes/{{ $shop_theme }}/img/feature-3.jpg">
+						</div>
+						<div class="product-details">
+							<p class="product-name">Brown Tab 1</p>
+							<p class="product-spec">8mp Front Camera</p>
+							<p class="product-price">P 9,500.00</p>
+						</div>	
+					</div>
+					<div>
+						<div class="product-holder">
+							<img src="/themes/{{ $shop_theme }}/img/feature-4.jpg">
+						</div>
+						<div class="product-details">
+							<p class="product-name">Brown 1 Plus</p>
+							<p class="product-spec">13 MP Back Camera</p>
+							<p class="product-price">P 12,000.00</p>
+						</div>	
+					</div>
 					<div>
 						<div class="product-holder">
 							<img src="/themes/{{ $shop_theme }}/img/feature-1.jpg">
@@ -143,7 +223,10 @@
 		</div>
 	</div>
 	<!-- VIDEO ADS -->
-	<div class="wrapper-2"></div>
+	<div class="wrapper-2">
+		<div class="intro" style="background-image: url('/themes/{{ $shop_theme }}/img/brown-video.png')">
+		</div>
+	</div>
 	<!-- INTRODUCING BROWN EDITION -->
 	<div class="wrapper-3"></div>
 	<!-- BROWN ARTICLES -->

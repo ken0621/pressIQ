@@ -13,8 +13,10 @@
         </div>
         <div class="col-md-4">
         <div class="join-container">
-          <div class="text-header1">Join the Movement!</div>
-          <div class="text-header2">Enroll now and become one of us!</div>
+          <div class="btn-text">
+            <div class="text-header1">Join the Movement!</div>
+            <div class="text-header2">Enroll now and become one of us!</div>
+          </div>
           <div class="btn-container">
             <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
             <img src="/themes/{{ $shop_theme }}/img/or.png"><br>
@@ -32,7 +34,7 @@
 
       <div class="row clearfix">
 
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-6">
               <div class="profile-info-container pic1">
                 <div class="icon-container">
 
@@ -57,7 +59,7 @@
               </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-6">
               <div class="profile-info-container pic2">
                 <div class="icon-container">
 
@@ -74,7 +76,7 @@
               </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-6">
               <div class="profile-info-container pic3">
                 <div class="icon-container">
 
@@ -177,7 +179,7 @@
                   <div class="modal-body">
                       <form method="post" class="submit-verify-sponsor">  
                         <div class="labels">Enter <b>Nickname of Sponsor</b> or <b>Slot Number</b></div>
-                        <input class="input-verify-sponsor text-center" name="verify_sponsor" type="text" placeholder="">
+                        <input required="required" class="input-verify-sponsor text-center" name="verify_sponsor" type="text" placeholder="">
                         <div class="output-container">
                           
                         </div>
@@ -226,7 +228,6 @@
                 </div>
                 <div class="modal-body">
                   <form>
-                      <input class="input" type="text" placeholder="Julia Lim (Slot #215678)">
                       <input class="input" type="text" placeholder="Enter Code">
                       <input class="input" type="text" placeholder="Enter Pin">
 
@@ -307,55 +308,35 @@
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js"></script>
 
 <script type="text/javascript">
+      // /*Buy a Kit*/
+      // $("#btn-buy-a-kit").click(function(){
+      //   $("#buy-a-kit-modal").modal('show');
+      // });
 
-  /*Proceed 1*/
-  $(document).ready(function(){
-    $("#btn-verify").click(function(){
-      //$("#proceed-modal-1").modal('show');
-    });
-  });
+      // /*Enter a code*/
+      // $("#btn-enter-a-code").click(function(){
+      //   $("#enter-a-code-modal").modal('show');
+      // });
 
-  /*Proceed 2*/
-  $(document).ready(function(){
-    $("#btn-verify").click(function(){
-      //$("#proceed-modal-2").modal('show');
-    });
-  });
+      // /*Proceed 1*/
+      // $("#btn-verify").click(function(){
+      //   $("#proceed-modal-1").modal('show');
+      // });
 
-  /*Popups*/
-  $(document).ready(function(){
+      // /*Proceed 2*/
+      // $("#btn-verify").click(function(){
+      //   $("#proceed-modal-2").modal('show');
+      // });
 
-      /*Buy a Kit*/
-      $("#btn-buy-a-kit").click(function(){
-        $("#buy-a-kit-modal").modal('show');
-      });
+      // /*Success*/
+      // $("#btn-proceed-2").click(function(){
+      //   $("#success-modal").modal('show');
+      // });
 
-      /*Enter a code*/
-      $("#btn-enter-a-code").click(function(){
-        $("#enter-a-code-modal").modal('show');
-      });
-
-      /*Proceed 1*/
-      /*$("#btn-verify").click(function(){
-        $("#proceed-modal-1").modal('show');
-      });*/
-
-      /*Proceed 2*/
-      /*$("#btn-verify").click(function(){
-        $("#proceed-modal-2").modal('show');
-      });*/
-
-      /*Success*/
-      $("#btn-proceed-2").click(function(){
-        $("#success-modal").modal('show');
-      });
-
-      /*Failed*/
-      $("#btn-proceed-2").click(function(){
-        $("#failed-modal").modal('show');
-      });
-
-  });
+      // /*Failed*/
+      // $("#btn-proceed-2").click(function(){
+      //   $("#failed-modal").modal('show');
+      // });
 
 </script>
 

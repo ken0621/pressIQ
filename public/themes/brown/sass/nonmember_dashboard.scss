@@ -24,18 +24,21 @@ $bold: 700;
 		min-height: 403px;
 		max-height: 403px;
 
-		.text-header1
+		.btn-text
 		{
-			font-weight: $semi-bold;
-			font-size: 15px;
-			color: #344049;
-		}
+			.text-header1
+			{
+				font-weight: $semi-bold;
+				font-size: 15px;
+				color: #344049;
+			}
 
-		.text-header2
-		{
-			font-weight: $regular;
-			font-size: 13px;
-			color: #344049;
+			.text-header2
+			{
+				font-weight: $regular;
+				font-size: 13px;
+				color: #344049;
+			}
 		}
 
     	.btn-container
@@ -68,6 +71,39 @@ $bold: 700;
 				border: 2px solid #693d28;
 				border-radius: 2px;
 				//margin-bottom: 65px;
+			}
+		}
+
+		@media screen and (max-width: 991px)
+		{
+			text-align: center;
+			max-height: auto;
+			min-height: auto;
+			.btn-text
+			{
+				display: inline-block;
+				vertical-align: middle;
+				margin-right: 40px;
+			}
+
+	    	.btn-container
+	    	{
+	    		display: inline-block;
+				vertical-align: middle;
+				padding-top: 0;
+			}
+		}
+
+		@media screen and (max-width: 565px)
+		{
+			.btn-text
+			{
+				margin-right: 0;
+			}
+
+			.btn-container
+			{
+				padding-top: 25px;
 			}
 		}
 	}
@@ -126,6 +162,21 @@ $bold: 700;
 			{
 				font-size: 13px;
 				padding-left: 10px;
+			}
+		}
+
+		@media screen and (max-width: 990px)
+		{
+			.icon-container
+			{
+				.prof-info-text-header
+				{
+					text-align: left;
+				}
+			}
+			.personal-info-container
+			{
+				text-align: left;
 			}
 		}
 

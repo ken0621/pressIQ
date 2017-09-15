@@ -4,27 +4,27 @@
             <table class="table table-bordered table-condensed" style=" background-color:0066CC;">
                 <thead>
                     <tr>
-                    <th class="text-center" colspan="4">TOTAL ee/loan Amount:</th>
-                    <th class="text-center" colspan="5">{{ payroll_currency($contri_info["grand_total_pagibig_ee"]) }}</th>
-                    </tr>
-                     <tr>
-                    <th class="text-center" colspan="4">TOTAL er Amount</th>
-                    <th class="text-center" colspan="5">{{ payroll_currency($contri_info["grand_total_pagibig_er"]) }}</th>
+                        <th class="text-center" colspan="4">TOTAL ee/loan Amount:</th>
+                        <th class="text-center" colspan="5">{{ payroll_currency($contri_info["grand_total_pagibig_ee"]) }}</th>
                     </tr>
                     <tr>
-                    <th class="text-center" colspan="4">RECORD Count</th>
-                    <th class="text-center" colspan="5">TOTAL ee/loan Amount:</th>
+                        <th class="text-center" colspan="4">TOTAL er Amount</th>
+                        <th class="text-center" colspan="5">{{ payroll_currency($contri_info["grand_total_pagibig_er"]) }}</th>
                     </tr>
-                    <tr style=" background-color:0066CC;">
-                        <th class="text-center">#</th>
-                        <th class="text-center">PAG-IBIG NO.</th>
-                        <th class="text-center">TIN(Optional)</th>
-                        <th class="text-center">LAST NAME</th>
-                        <th class="text-center">FIRST NAME</th>
-                        <th class="text-center">MIDDLE NAME</th>
-                        <th class="text-center">PERIOD COVERED</th>
-                        <th class="text-center">EE SHARE</th>
-                        <th class="text-center">ER SHARE</th>
+                    <tr>
+                        <th class="text-center" colspan="4">RECORD Count</th>
+                        <th class="text-center" colspan="5">{{ count($contri_info["_employee_contribution"]) }}</th>
+                    </tr>
+                    <tr >
+                        <th class="text-center th4">#</th>
+                        <th class="text-center th4">PAG-IBIG NO.</th>
+                        <th class="text-center th4">TIN(Optional)</th>
+                        <th class="text-center th4">LAST NAME</th>
+                        <th class="text-center th4">FIRST NAME</th>
+                        <th class="text-center th4">MIDDLE NAME</th>
+                        <th class="text-center th4">PERIOD COVERED</th>
+                        <th class="text-center th4">EE SHARE</th>
+                        <th class="text-center th4">ER SHARE</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,8 +46,17 @@
             </table>
         </div>
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" ></i> &nbsp;EXPORT TO EXCEL</button>
-        <button class="btn btn-primary btn-custom-primary" type="submit">View PDF Form</button>
-    </div>
+    <style>
+   th{
+    background-color:#0066CC;
+   }
+   .th4{
+    border: 5px solid #2C2C2C;
+    background-color:#666666;
+   }
+   td{
+    border: 5px solid #2C2C2C;
+     background-color:#FBFBFB;
+    
+   }
+   </style>

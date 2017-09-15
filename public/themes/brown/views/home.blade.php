@@ -198,26 +198,6 @@
 							<p class="product-price">P 12,000.00</p>
 						</div>	
 					</div>
-					<div>
-						<div class="product-holder">
-							<img src="/themes/{{ $shop_theme }}/img/feature-1.jpg">
-						</div>	
-					</div>
-					<div>
-						<div class="product-holder">
-							<img src="/themes/{{ $shop_theme }}/img/feature-2.jpg">
-						</div>	
-					</div>
-					<div>
-						<div class="product-holder">
-							<img src="/themes/{{ $shop_theme }}/img/feature-3.jpg">
-						</div>	
-					</div>
-					<div>
-						<div class="product-holder">
-							<img src="/themes/{{ $shop_theme }}/img/feature-4.jpg">
-						</div>	
-					</div>
 				</div>
 			</div>
 		</div>
@@ -228,9 +208,70 @@
 		</div>
 	</div>
 	<!-- INTRODUCING BROWN EDITION -->
-	<div class="wrapper-3"></div>
+	<div class="wrapper-3">
+		<div class="container">
+			<div class="row clearfix">
+				<div class="col-sm-6">
+					<div class="img">
+						<img src="/themes/{{ $shop_theme }}/img/phone-brown.png">
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="info">
+						<div class="text-1">INTRODUCTION</div>
+						<div class="text-2">BROWN EDITION</div>
+						<div class="text-3">A PHONE FLIPINOS CAN BE PROUD OF</div>
+						<div class="text-4">Brown promote a future that is mindful of the needs of every Filipino.</div>
+						<div class="button-holder">
+							<button class="btn btn-transparent">Learn More <i class="fa fa-caret-right" aria-hidden="true"></i></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<!-- BROWN ARTICLES -->
-	<div class="wrapper-4"></div>
+	<div class="wrapper-4">
+		<div class="container">
+			<div class="row clearfix">
+				<div class="col-md-3">
+					<div class="holder pad match-height">
+						<div class="title-1">The Brown Phone <div class="border"></div></div>
+						<div class="desc" style="height: auto;">The Brown phone is your portal to a new world full of creativity and opportunities, bringing you closer to artists and entrepreneurs, while keeping you updated on the latest news, hottest trends, and innovative products and services, making your life better and more inspiring.</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="holder match-height">
+						<div class="img">
+							<img src="/themes/{{ $shop_theme }}/img/holder-1.png">
+						</div>
+						<div class="title-2">Our Philosophy</div>
+						<div class="desc">Filipinos work hard, dream big, and create with their hearts. And through bayanihan, we create opportunities to enable the world to patronize everything beautiful about being Filipino. </div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="holder match-height">
+						<div class="img">
+							<img src="/themes/{{ $shop_theme }}/img/holder-2.png">
+						</div>
+						<div class="title-2">Our Culture</div>
+						<div class="desc">We curate emerging Filipino talents and artists-always on the lookout for the latest and the best in fashion, music, business, and other lifestyles that are relevant to your daily life. Through our technology, we celebrate the diversity of the artists and the potential in their craft. </div>
+						<a href="javascript:" class="more">Show More</a>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="holder match-height">
+						<div class="img">
+							<img src="/themes/{{ $shop_theme }}/img/holder-3.png">
+						</div>
+						<div class="title-2">The Brown Movement</div>
+						<div class="desc">When culture and technology meet, opportunities are opened and resources are created to help every Filipino pursue their dreams while building the nation. With us at Brown, all it takes is to be proud of what we have, a phone, and others who wll work with us in inspiring the world with works of creativity and entrepreneurship. </div>
+						<a href="javascript:" class="more">Show More</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 @endsection
 @section("script")

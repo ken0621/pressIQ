@@ -187,12 +187,17 @@
 									color: #fff;
 									text-decoration: none;
 									border-color: #3c2716;
+									
+									.icon {
+										color: #fff;
+									}
 									img
 									{
 										-webkit-filter: brightness(2);
 										filter: brightness(2);
 										opacity: 1;
 									}
+
 								}
 							}
 						}
@@ -206,6 +211,9 @@
 									color: #fff;
 									text-decoration: none;
 									border-color: #3c2716;
+									.icon {
+										color: #fff;
+									}
 									img
 									{
 										-webkit-filter: brightness(2);

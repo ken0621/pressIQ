@@ -23,6 +23,8 @@ function home()
 		  slidesToShow: 4,
 		  slidesToScroll: 4,
 		  arrows: true,
+		  prevArrow:"<img style='width: 10px; height: 15px;' class='a-left control-c prev slick-prev' src='/themes/brown/img/left.png'>",
+		  nextArrow:"<img style='width: 10px; height: 15px;' class='a-right control-c next slick-next' src='/themes/brown/img/right.png'>",
 		  responsive: [
 		    {
 		      breakpoint: 1024,

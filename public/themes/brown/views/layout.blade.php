@@ -108,8 +108,8 @@
                 </div>
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav">
-                      <li class="active"><a href="/">Brown</a></li>
-                      <li><a href="#">Phone Accessories</a></li>
+                      <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a href="/">Brown</a></li>
+                      <li class="{{ Request::segment(1) == "product" ? "active" : "product" }}"><a href="/product">Phone Accessories</a></li>
                       <li><a href="#">Internet Of Things</a></li>
                       <li><a href="#">Health Technology</a></li>
                     </ul>

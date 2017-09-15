@@ -18,7 +18,7 @@ function home()
 	{
 		$('.product-carousel').slick({
 		  dots: true,
-		  infinite: false,
+		  infinite: true,
 		  speed: 300,
 		  slidesToShow: 4,
 		  slidesToScroll: 4,

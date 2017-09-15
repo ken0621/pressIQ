@@ -193,111 +193,65 @@ body{
 	}
 
 	.bottom-container {
-		.multi-item-carousel
+		margin-bottom: 60px;
+		.featured-title-holder
 		{
-  			.carousel-inner
-  			{
-    			> .item
-    			{
-      				transition: 500ms ease-in-out left;
-    			}
-    			.active
-    			{
-    				text-decoration: none;
-      				&.left
-      				{
-        				left:-25%;
-      				}
-      				&.right
-      				{
-        				left:25%;
-      				}
-    			}
-    			.next
-    			{
-      				left: 25%;
-    			}
-    			.prev
-    			{
-    				left: -25%;
-    			}
-    			@media all and (transform-3d), (-webkit-transform-3d) 
-    			{
-     				> .item
-     				{
-        				// use your favourite prefixer here
-        				transition: 500ms ease-in-out left;
-        				transition: 500ms ease-in-out all;
-        				backface-visibility: visible;
-        				transform: none!important;
-      				}
-    			}
-
-    			.item
-    			{
-    				.featuredphone-details-holder
-    				{
-    				    display: block;
-					    text-align: center;
-					    padding: 15px 0px 5px 0px;
-    					.featuredphone-name
-    					{
-    					    font-size: 15px;
-						    color: #1c1c1c;
-						    font-weight: bold;
-						    margin-bottom: 2px;
-    					}
-    					.featuredphone-spec
-    					{
-    						font-size: 13px;
-						    color: #656565;
-						    margin-bottom: 2px;
-    					}
-    					.featuredphone-price
-    					{
-    						font-size: 15px;
-						    color: #ff4200;
-						    font-weight: 600;
-						    margin: 0px;
-    					}
-    				}
-    			}
-  			}
-  			.carouse-control
-  			{
-    			&.left, &.right
-    			{
-      				background-image: none;
-    			}
-  			}
-  			.carousel-control.left 
-  			{
-  				background-image: linear-gradient(to right,rgba(0, 0, 0, 0) 0,rgba(0,0,0,.0001) 100%);
-  				.glyphicon-chevron-left
-  				{
-  					font-size: 18px;
-				    color: #333;
-				    margin-top: -50px;
-				    margin-left: -90px;
-  				}
-  			}
-  			.carousel-control.right
-  			{
-  				background-image: linear-gradient(to right,rgba(0,0,0,.0001) 0,rgba(0, 0, 0, 0) 100%);
-  				.glyphicon-chevron-right
-  				{
-  				    font-size: 18px;
-				    color: #333;
-				    margin-top: -50px;
-				    margin-right: -90px;
-  				}
-  			}
+		    display: block;
+    		padding: 20px 0px 15px 0px;
+			.title
+			{
+			    font-size: 15px;
+			    color: #1c1c1c;
+			    margin: 0px;
+			}
+		}
+		.product-carousel
+		{
+			.product-holder
+			{
+				img
+				{
+					width: 100%;
+				}
+			}
+			.product-details
+			{
+			    display: block;
+			    text-align: center;
+			    padding: 15px 0px 5px 0px;
+				.product-name
+				{
+					font-size: 15px;
+					font-weight: bold;
+				    color: #1c1c1c;
+				    margin-bottom: 2px;
+				}
+				.product-spec
+				{
+				    font-size: 13px;
+				    color: #656565;
+				    margin-bottom: 2px;
+				}
+				.product-price
+				{
+				    font-size: 15px;
+				    font-weight: 600;
+				    color: #ff4200;
+				    margin-bottom: 2px;
+				}
+			}
 		}
 	}
 }
 
 .wrapper-2 {
-
+	.intro
+	{
+		background-size: cover;
+	    background-position: center;
+	    min-height: 775px;		    
+	    position: relative;
+	}
 }
 
 .wrapper-3 {

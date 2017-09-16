@@ -2,7 +2,7 @@
 Route::group(array('prefix' => '/member/payroll'), function()
 {
 	Route::any('/payroll_api','Member\PayrollApiController@index');
-
+// /reports/payroll_ledger
 	Route::any('/reports/government_forms','Member\PayrollReportController@government_forms');
 	Route::any('/reports/government_forms_sss/{id}','Member\PayrollReportController@government_forms_sss');
 	Route::any('/reports/government_forms_philhealth/{id}','Member\PayrollReportController@government_forms_philhealth');
@@ -22,6 +22,10 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/reports/export_loan_summary_report_to_excel/{employee_id}/{payroll_deduction_id}','Member\PayrollReportController@export_loan_summary_report_to_excel');
 	/*END loan summar report*/
 
+	/*START payroll ledger*/
+	Route::any('/reports/payroll_ledger','Member\PayrollLedger@index');
+	Route::any('/reports/payroll_ledger/{employee_id}','Member\PayrollLedger@modal_ledger');
+	/*END payroll ledger/
 
 	/*START PAYROLL REGISTER REPORT*/
 	Route::any('/reports/payroll_register_report','Member\PayrollReportController@payroll_register_report');

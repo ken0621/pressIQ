@@ -4,7 +4,7 @@
 	<div class="main-member-header clearfix">
 		<div class="left">
 			<div class="icon">
-				<img src="/themes/{{ $shop_theme }}/img/eon-card.png">
+				<div class="brown-icon-credit-card-1"></div>
 			</div>
 			<div class="text">
 				<div class="name">Eon Card Registration</div>

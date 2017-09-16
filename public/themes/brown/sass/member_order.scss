@@ -1,5 +1,45 @@
+$content-text: 'Arimo', sans-serif;
+$regular: 400;
+$semi-bold: 600;
+$bold: 700;
+$text-light: #777;
+$text-dark: #272c2f;
+
 .member-order
 {
+	font-family: $content-text;
+	padding: 15px;
+	letter-spacing: 0.2px;
+
+	.main-member-header
+	{
+		.left {
+
+			.icon {
+
+				.brown-icon-orders {
+					font-size: 45px;
+					color: $text-light;
+					margin-top: 10px;
+				}
+			}
+
+			.text {
+
+				.name {
+					font-size: 21px;
+					font-weight: $bold;
+					color: $text-dark !important;
+				}
+				.sub {
+					font-size: 15px !important;
+					color: $text-light !important;
+				}
+			}
+		}
+	}
+
+
 	.order-content
 	{
 		margin-top: 50px;
@@ -34,9 +74,9 @@
 						margin-bottom: 15px;
 						.name
 						{
-							color: #344049;
-							font-size: 18px;
-							font-weight: 600;
+							color: $text-dark;
+							font-size: 17px;
+							font-weight: $bold;
 							@media screen and (min-width: 991px)
 							{
 								float: left;
@@ -55,7 +95,7 @@
 								border-radius: 25px;
 								color: #fff;
 								font-size: 13px;
-								font-weight: 600;
+								font-weight: $bold;
 							}
 						}
 					}
@@ -63,16 +103,16 @@
 					{
 						.detail-label
 						{
-							color: #344049;
-							font-weight: 600;
-							font-size: 13px;
+							color: $text-dark;
+							font-weight: $regular;
+							font-size: 15px;
 							width: 150px;
 						}
 						.detail-value
 						{
-							color: #6d7a87;
-							font-size: 13px;
-							font-weight: 400;
+							color: $text-light;
+							font-size: 15px;
+							font-weight: $regular;
 						}
 						td 
 						{

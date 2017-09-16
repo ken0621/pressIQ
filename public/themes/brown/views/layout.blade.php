@@ -42,7 +42,7 @@
         <div class="header-top">
             <div class="container">
                 <a class="holder">GET THE APP</a>
-                <a class="holder">COMPANY</a>
+                <a href="/about" class="holder">COMPANY</a>
                 @if($customer)
                     <div style="display: inline-block; vertical-align: middle;" class="dropdown hidden">
                         <a class="holder" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="false">#272842 <span class="caret"></span></a>

@@ -1,7 +1,9 @@
 @extends("member.member_layout")
 @section("member_content")
 <div class="member-wishlist">
-	<div class="wishlist-title">My Wishlist</div>
+	<div class="left">
+		<div class="wishlist-title">My Wishlist</div>
+	</div>
 	<div class="table-holder">
 		<table class="table">
 			<thead>

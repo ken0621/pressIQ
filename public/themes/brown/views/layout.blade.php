@@ -210,7 +210,7 @@
                 <div class="right">
                     <div class="dropdown">
                         <a href="#" class="notif-holders dropdown-toggle" data-toggle="dropdown">
-                            <div class="brown-icon-bell-o" style="font-size: 20px"></div> <span class="badge" style="margin-top: -4px;">500</span>
+                            <div class="brown-icon-bell-o" style="font-size: 20px"></div> <span class="badge">500</span>
                         </a>
                         <ul class="dropdown-menu notif">
                             <li>
@@ -273,7 +273,7 @@
                     </div>
                     <a href="#" class="cart-holder" style="text-decoration: none;">
                         <!-- <img style="width: 30px; height: 20px;" src="/themes/{{ $shop_theme }}/img/cart-blur.png"> <span class="badge">500</span> -->
-                       <div class="brown-icon-shopping-cart"></div> <span class="badge" style="margin-top: -4px;">500</span>
+                       <div class="brown-icon-shopping-cart"></div> <span class="badge">500</span>
                     </a>
                     @if($customer)
                         <div style="display: inline-block; vertical-align: middle;" class="dropdown hidden">

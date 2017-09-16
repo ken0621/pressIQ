@@ -269,6 +269,7 @@
                     </div>
                     <a href="#" class="cart-holder">
                         <img style="width: 30px; height: 20px;" src="/themes/{{ $shop_theme }}/img/cart-blur.png"> <span class="badge">500</span>
+                        <!-- <div class="brown-icon-shopping-cart"></div> <span class="badge">500</span> -->
                     </a>
                     @if($customer)
                         <div style="display: inline-block; vertical-align: middle;" class="dropdown hidden">

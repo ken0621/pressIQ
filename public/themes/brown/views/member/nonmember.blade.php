@@ -41,7 +41,7 @@
                   <div class="col-md-2">
                     <img src="/themes/{{ $shop_theme }}/img/brown-personal-info.png">
                   </div>
-
+                  
                   <div class="col-md-10">
                     <div class="prof-info-text-header">Personal Information</div>
                   </div>

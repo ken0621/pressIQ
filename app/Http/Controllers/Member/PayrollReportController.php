@@ -451,7 +451,6 @@ class PayrollReportController extends Member
 	                                              ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
 	                                              ->orderBy('tbl_payroll_period.payroll_period_start','asc')
 	                                              ->get();
-
 	     
 		return view("member.payrollreport.payroll_register_report", $data);
 	}
@@ -491,6 +490,7 @@ class PayrollReportController extends Member
 				$sheet->loadView('member.payrollreport.payroll_register_report_export_excel',$data);
 			});
 		})->download('xls');
+		
      }
 
 
@@ -562,7 +562,6 @@ class PayrollReportController extends Member
 
 
 
-			
 		foreach($data["_employee"] as $key => $employee)
 		{
 			
@@ -600,29 +599,34 @@ class PayrollReportController extends Member
 
 			$total_deduction += ($total_ee);
 
-			$time_performance = unserialize($employee->cutoff_breakdown)->_time_breakdown;
-			
-			$data["_employee"][$key]->time_spent 				= $time_performance["time_spent"]["time"];
-			$data["_employee"][$key]->time_overtime 			= $time_performance["overtime"]["time"];
-			$data["_employee"][$key]->time_night_differential 	= $time_performance["night_differential"]["time"];
-			$data["_employee"][$key]->time_leave_hours 			= $time_performance["leave_hours"]["time"];
-			$data["_employee"][$key]->time_undertime 			= $time_performance["undertime"]["time"];
-			$data["_employee"][$key]->time_late 				= $time_performance["late"]["time"];
-			$data["_employee"][$key]->time_regular_holiday 		= $time_performance["regular_holiday"]["float"];
-			$data["_employee"][$key]->time_special_holiday 		= $time_performance["special_holiday"]["float"];
-			$data["_employee"][$key]->time_absent 				= $time_performance["absent"]["float"];
+			if (isset($employee->cutoff_breakdown)) 
+			{
 
-			
+				$time_performance = unserialize($employee->cutoff_breakdown)->_time_breakdown;
 
-			$time_total_time_spent				+= $time_performance["time_spent"]["time"];
-			$time_total_overtime				+= $time_performance["overtime"]["time"];
-			$time_total_night_differential		+= $time_performance["night_differential"]["time"];
-			$time_total_leave_hours				+= $time_performance["leave_hours"]["time"];
-			$time_total_undertime				+= $time_performance["undertime"]["time"];
-			$time_total_late					+= $time_performance["late"]["time"];
-			$time_total_regular_holiday			+= $time_performance["regular_holiday"]["float"];
-			$time_total_special_holiday			+= $time_performance["special_holiday"]["float"];
-			$time_total_absent					+= $time_performance["absent"]["float"];
+				$data["_employee"][$key]->time_spent 				= $time_performance["time_spent"]["time"];
+				$data["_employee"][$key]->time_overtime 			= $time_performance["overtime"]["time"];
+				$data["_employee"][$key]->time_night_differential 	= $time_performance["night_differential"]["time"];
+				$data["_employee"][$key]->time_leave_hours 			= $time_performance["leave_hours"]["time"];
+				$data["_employee"][$key]->time_undertime 			= $time_performance["undertime"]["time"];
+				$data["_employee"][$key]->time_late 				= $time_performance["late"]["time"];
+				$data["_employee"][$key]->time_regular_holiday 		= $time_performance["regular_holiday"]["float"];
+				$data["_employee"][$key]->time_special_holiday 		= $time_performance["special_holiday"]["float"];
+				$data["_employee"][$key]->time_absent 				= $time_performance["absent"]["float"];
+
+				
+
+				$time_total_time_spent				+= $time_performance["time_spent"]["time"];
+				$time_total_overtime				+= $time_performance["overtime"]["time"];
+				$time_total_night_differential		+= $time_performance["night_differential"]["time"];
+				$time_total_leave_hours				+= $time_performance["leave_hours"]["time"];
+				$time_total_undertime				+= $time_performance["undertime"]["time"];
+				$time_total_late					+= $time_performance["late"]["time"];
+				$time_total_regular_holiday			+= $time_performance["regular_holiday"]["float"];
+				$time_total_special_holiday			+= $time_performance["special_holiday"]["float"];
+				$time_total_absent					+= $time_performance["absent"]["float"];
+			}
+
 
 			if(isset($employee->cutoff_breakdown))
 			{
@@ -1002,6 +1006,7 @@ class PayrollReportController extends Member
 		// dd($data["total_deduction_of_all_employee"]);
 		return $data;
 	}
+			
 
 	/*END PAYROLL REGISTER REPORT*/
 

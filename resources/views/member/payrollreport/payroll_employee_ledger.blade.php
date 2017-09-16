@@ -108,6 +108,7 @@
 							    	<td class="text-center" >{{ number_format($period->net_pay,2) }}</td>
 						    	</tr>
 					    	 @endforeach
+
 					    	  	<tr >
 							   		<td class="text-center" ><b>Total</b></td>
 							    	<td class="text-center" ><b>{{ number_format($total_basic,2) }}</b></td>

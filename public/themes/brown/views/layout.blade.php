@@ -75,7 +75,8 @@
                                     </div>
                                 </div>
                                 <div class="profile-footer">
-                                    <button type="button" class="btn btn-grey" onClick="location.href='/members/logout'">Sign Out</button>
+                                <!-- onClick="location.href='/members/logout'" -->
+                                    <button type="button" class="btn btn-grey brown-sign-out" onClick="location.href='/members/logout'" >Sign Out</button>
                                 </div>
                             </li>
                         </ul>
@@ -412,12 +413,23 @@
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/front/js/match-height.js"></script>
     <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
 
     <script type="text/javascript">
       $(".date-picker").datepicker({
         dateFormat:"yy-mm-dd"
       });
+
+      function onLoad() {
+      gapi.load('auth2', function() {
+        gapi.auth2.init();
+      });
+    }
+      // $('.brown-sign-out').unbind('click');
+      // $('.brown-sign-out').bind('click', function()
+      // {
+      //   window.location = "https://mail.google.com/mail/u/0/?logout&hl=en";
+      // });
     </script>
     @yield("script")
     </body>

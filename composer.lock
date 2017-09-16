@@ -4,8 +4,13 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
     "hash": "a65399b40f201816507ee2e16e19d354",
     "content-hash": "8d62ead4e3ae510fb2c4c71379157b30",
+=======
+    "hash": "d9846c21122fd113da4ee364ff6011b2",
+    "content-hash": "b3034fec81144c1a7743f22e2f401a39",
+>>>>>>> 2ad770e087828275562d0ef35f5b0daafe54732c
     "packages": [
         {
             "name": "barryvdh/laravel-snappy",
@@ -801,6 +806,7 @@
                 "parser"
             ],
             "time": "2017-05-14 14:47:48"
+<<<<<<< HEAD
         },
         {
             "name": "facebook/graph-sdk",
@@ -859,6 +865,8 @@
                 "sdk"
             ],
             "time": "2017-08-16 17:28:07"
+=======
+>>>>>>> 2ad770e087828275562d0ef35f5b0daafe54732c
         },
         {
             "name": "fideloper/proxy",
@@ -1105,7 +1113,11 @@
                 "google",
                 "oauth2"
             ],
+<<<<<<< HEAD
             "time": "2017-07-31 16:34:40"
+=======
+            "time": "2017-06-15 17:19:42"
+>>>>>>> 2ad770e087828275562d0ef35f5b0daafe54732c
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -1782,6 +1794,7 @@
         },
         {
             "name": "laravel/scout",
+<<<<<<< HEAD
             "version": "v3.0.9",
             "source": {
                 "type": "git",
@@ -1792,6 +1805,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/scout/zipball/84762c8ed51cb57f09b5f465e09993e48baf9d55",
                 "reference": "84762c8ed51cb57f09b5f465e09993e48baf9d55",
+=======
+            "version": "v3.0.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/scout.git",
+                "reference": "681c15a26bbc973528af2e77e0bb61981dc07206"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/scout/zipball/681c15a26bbc973528af2e77e0bb61981dc07206",
+                "reference": "681c15a26bbc973528af2e77e0bb61981dc07206",
+>>>>>>> 2ad770e087828275562d0ef35f5b0daafe54732c
                 "shasum": ""
             },
             "require": {
@@ -1843,7 +1868,11 @@
                 "laravel",
                 "search"
             ],
+<<<<<<< HEAD
             "time": "2017-09-13 18:24:31"
+=======
+            "time": "2017-09-14 12:32:30"
+>>>>>>> 2ad770e087828275562d0ef35f5b0daafe54732c
         },
         {
             "name": "laravel/tinker",
@@ -2788,6 +2817,7 @@
                 "xlsx"
             ],
             "time": "2015-05-01 07:00:55"
+<<<<<<< HEAD
         },
         {
             "name": "phpseclib/phpseclib",
@@ -2926,6 +2956,8 @@
                 "psr-6"
             ],
             "time": "2016-08-06 20:24:11"
+=======
+>>>>>>> 2ad770e087828275562d0ef35f5b0daafe54732c
         },
         {
             "name": "psr/container",

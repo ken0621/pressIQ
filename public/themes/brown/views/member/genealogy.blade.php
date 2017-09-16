@@ -3,8 +3,9 @@
 <div class="genealogy-container">
 	<div class="genealogy-header clearfix">
 		<div class="left">
+			
 			<div class="icon">
-				<img src="/themes/{{ $shop_theme }}/img/genealogy.png">
+				<div class="brown-icon-genealogy" style="font-size: 40px;"></div>
 			</div>
 			<div class="text">
 				<div class="name">Genealogy</div>

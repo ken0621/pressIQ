@@ -22,8 +22,13 @@ function non_member()
 		{
 			if($(e.currentTarget).find(".btn-verify-sponsor").hasClass("use"))
 			{
+				$("#enter-a-code-modal").modal('hide');
 
-				$("#proceed-modal-2").modal('show');	
+				setTimeout(function()
+				{
+					$("#proceed-modal-2").modal('show');
+				}, 350);
+				
 			}
 			else
 			{
@@ -49,17 +54,16 @@ function non_member()
 			type:"post",
 			success: function(data)
 			{
-				console.log(data);
 				$(".submit-verify-sponsor").find(".output-container").html(data);
-				
-				$(".submit-verify-sponsor").find("input").removeAttr("disabled");
-				
+				$(".card").hide().slideDown('fast');
+
 				if($(".card").length > 0)
 				{
 					$(".submit-verify-sponsor").find(".btn-verify-sponsor").html('<i class="fa fa-check"></i> USE THIS SPONSOR').removeAttr("disabled").addClass("use");
 				}	
 				else
 				{
+					$(".submit-verify-sponsor").find("input").removeAttr("disabled");
 					$(".submit-verify-sponsor").find(".btn-verify-sponsor").html('<i class="fa fa-check"></i> VERIFY SPONSOR').removeAttr("disabled").removeClass("use");
 				}
 			}
@@ -70,6 +74,10 @@ function non_member()
 	    $("#btn-enter-a-code").click(function()
 	    {
 			$("#enter-a-code-modal").modal('show');
+			$(".output-container").html("");
+
+			$(".submit-verify-sponsor").find(".btn-verify-sponsor").html('<i class="fa fa-check"></i> VERIFY SPONSOR').removeClass("use").removeAttr("disabled");
+			$(".submit-verify-sponsor").find("input").removeAttr("disabled").val("");
 	    });
 	}
 }

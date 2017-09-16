@@ -4,7 +4,7 @@
 	<div class="main-member-header clearfix">
 		<div class="left">
 			<div class="icon">
-				<img src="/themes/{{ $shop_theme }}/img/order.png">
+				<div class="brown-icon-orders"></div>
 			</div>
 			<div class="text">
 				<div class="name">My Orders</div>

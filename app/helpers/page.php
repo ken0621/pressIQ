@@ -200,11 +200,18 @@ function page_list()
     $code = "mlm-stairstep-compute";
     $nav[$page]['submenu'][$code]['label'] = "Distribute Stairstep";
     $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/stairstep_compute";
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/stairstep/distribution";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Layout (0%)";
+    $nav[$page]['submenu'][$code]['developer'] = "Erwin Guevarra";    
+
+    $code = "mlm-rank-compute";
+    $nav[$page]['submenu'][$code]['label'] = "Rank Update";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/rank/update";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Layout (0%)";
     $nav[$page]['submenu'][$code]['developer'] = "Erwin Guevarra";
-
 
     // $code = "mlm-product-repurchase-points";
     // $nav[$page]['submenu'][$code]['label'] = "Product Repurchase";

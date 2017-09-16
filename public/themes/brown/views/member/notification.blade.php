@@ -4,7 +4,7 @@
 	<div class="notification-header clearfix">
 		<div class="left">
 			<div class="icon">
-				<img src="/themes/{{ $shop_theme }}/img/bell-big.png">
+				<div class="brown-icon-bell-o"></div>
 			</div>
 			<div class="text">
 				<div class="name">Notifications</div>

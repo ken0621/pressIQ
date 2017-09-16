@@ -132,7 +132,7 @@ class ShopMemberController extends Shop
                 Self::store_login_session($email,$pass);
             }             
         }
-
+        dd("success");
         echo json_encode("success");
     }
     public function getLoginSubmit()

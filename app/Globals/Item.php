@@ -1519,7 +1519,7 @@ class Item
         $shop_id = Item::getShopId();
         return Tbl_membership::where('shop_id',$shop_id)->where('membership_archive',0)->get();
     }
-    public static function get_all_item_record_log($search_keyword = '', $status = '')
+    public static function get_all_item_record_log($search_keyword = '', $status = '', $paginate = 0)
     {
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
@@ -1546,10 +1546,18 @@ class Item
         {
             $query->where('record_inventory_status',0)->where('record_consume_ref_name',null)->orWhere('record_consume_ref_name','');
         }  
+        if($paginate != 0)
+        {
+            $data = $query->paginate($paginate);
+        }
+        else
+        {
+            $data = $query->get();            
+        }
 
-        return $query->paginate(10);
+        return $data;
     }
-    public static function get_assembled_kit($record_id = 0, $item_kit_id = 0, $item_membership_id = 0, $search_keyword = '', $status = '')
+    public static function get_assembled_kit($record_id = 0, $item_kit_id = 0, $item_membership_id = 0, $search_keyword = '', $status = '', $paginate = 0)
     {
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
@@ -1589,7 +1597,17 @@ class Item
         {
             $query->where('record_inventory_status',0)->where('record_consume_ref_name',null);
         }  
-        return $query->paginate(10); 
+
+
+        if($paginate != 0)
+        {
+            $data = $query->paginate($paginate);
+        }
+        else
+        {
+            $data = $query->get();            
+        }
+        return $data; 
     } 
 
     public static function assemble_membership_kit($shop_id, $warehouse_id, $item_id, $quantity)

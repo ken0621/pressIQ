@@ -10,7 +10,6 @@
 
         <meta name="google-signin-scope" content="profile email">
         <meta name="google-signin-client_id" content="{{$google_app_id or ''}}">
-        <script src="https://apis.google.com/js/platform.js" async defer></script>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -413,7 +412,7 @@
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/front/js/match-height.js"></script>
     <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
-    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
 
     <script type="text/javascript">
       $(".date-picker").datepicker({

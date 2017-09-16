@@ -1,8 +1,10 @@
-$open-sans: 'Open Sans', sans-serif;
-$light: 300;
+$content-text: 'Arimo', sans-serif;
 $regular: 400;
 $semi-bold: 600;
 $bold: 700;
+$text-light: #777;
+$text-dark: #272c2f;
+
 
 /* Dashboard Top */
 .dashboard-top
@@ -18,7 +20,7 @@ $bold: 700;
 
 	.join-container
 	{
-		font-family: $open-sans;
+		font-family: $content-text;
 		border: 1px solid #dfdfdf;
 		padding: 15px;
 		min-height: 403px;
@@ -28,16 +30,17 @@ $bold: 700;
 		{
 			.text-header1
 			{
-				font-weight: $semi-bold;
-				font-size: 15px;
-				color: #344049;
+				font-weight: $bold;
+				font-size: 21px;
+				color: $text-dark;
 			}
 
 			.text-header2
 			{
 				font-weight: $regular;
-				font-size: 13px;
-				color: #344049;
+				font-size: 15px;
+				color: $text-light;
+				letter-spacing: 0.2px;
 			}
 		}
 
@@ -45,7 +48,7 @@ $bold: 700;
     	{
     		text-align: center;
 			padding: 63px 0px 0px 0px;
-			font-family: $open-sans;
+			font-family: $content-text;
 			font-weight: $semi-bold;
 			font-size: 13px;
 		
@@ -113,13 +116,13 @@ $bold: 700;
 .dashboard-bottom
 {
 	margin: 10px 0px 10px 0px;
-	font-family: $open-sans;
+	font-family: $content-text;
 
 	.text-header
 	{
-		font-weight: $semi-bold;
-		font-size: 15px;
-		color: #344049;
+		font-weight: $bold;
+		font-size: 17px;
+		color: $text-dark;
 		padding-top: 10px;
 	}
 
@@ -131,7 +134,7 @@ $bold: 700;
 		border-radius: 4px;
 		min-height: 210px;
 		max-height: 210px;
-		font-weight: $semi-bold;
+
 
 		.icon-container
 		{
@@ -141,8 +144,9 @@ $bold: 700;
 			{
 				text-align: center;
 				padding-top: 10px;
-				font-weight: $semi-bold;
-				font-size: 15px;
+				font-weight: $bold;
+				font-size: 17px;
+				color: $text-dark;
 			}
 		}
 
@@ -154,14 +158,17 @@ $bold: 700;
 
 			label
 			{
-				font-size: 13px;
-				color: #aaaaaa;
+				font-size: 15px;
+				color: $text-dark;
+				font-weight: $regular;
 			}
 
 			span
 			{
-				font-size: 13px;
+				font-size: 15px;
 				padding-left: 10px;
+				color: $text-light;
+				letter-spacing: 0.2px;
 			}
 		}
 
@@ -182,8 +189,10 @@ $bold: 700;
 
 		p
 		{
-			font-size: 13px;
+			font-size: 15px;
+			color: $text-light;
 			padding: 10px;
+			letter-spacing: 0.2px;
 		}
 
 	}
@@ -205,7 +214,7 @@ $bold: 700;
 /* Buy a kit */
 .popup-buy-a-kit
 {
-	font-family: $open-sans;
+	font-family: $content-text;
 	
 	.modal-size 
 	{
@@ -393,7 +402,7 @@ $bold: 700;
 /* Enter a code */
 .popup-enter-a-code
 {
-	font-family: $open-sans;
+	font-family: $content-text;
 
 	.modal-sm
 	{  
@@ -528,7 +537,7 @@ $bold: 700;
 	    	.btn-container
 	    	{
 				text-align: center;
-				font-family: $open-sans;
+				font-family: $content-text;
 				font-weight: $semi-bold;
 				font-size: 13px;
 				padding-bottom: 20px;
@@ -560,7 +569,7 @@ $bold: 700;
 /* Proceed 1 */
 .popup-proceed1
 {
-	font-family: $open-sans;
+	font-family: $content-text;
 	
 	.modal-sm
 	{  
@@ -606,7 +615,7 @@ $bold: 700;
 	    	.btn-container
 	    	{
 				text-align: center;
-				font-family: $open-sans;
+				font-family: $content-text;
 				font-weight: $semi-bold;
 				font-size: 13px;
 				padding-bottom: 20px;
@@ -627,7 +636,7 @@ $bold: 700;
 /* Proceed 2 */
 .popup-proceed2
 {
-	font-family: $open-sans;
+	font-family: $content-text;
 	
 	.modal-sm
 	{  
@@ -692,7 +701,7 @@ $bold: 700;
 	    	.btn-container
 	    	{
 				text-align: center;
-				font-family: $open-sans;
+				font-family: $content-text;
 				font-weight: $semi-bold;
 				font-size: 13px;
 				padding-bottom: 20px;
@@ -754,7 +763,7 @@ $bold: 700;
 	    	.btn-container
 	    	{
 				text-align: center;
-				font-family: $open-sans;
+				font-family: $content-text;
 				font-weight: $semi-bold;
 				font-size: 13px;
 				padding-bottom: 20px;
@@ -818,7 +827,7 @@ $bold: 700;
 	    	.btn-container
 	    	{
 				text-align: center;
-				font-family: $open-sans;
+				font-family: $content-text;
 				font-weight: $semi-bold;
 				font-size: 14px;
 				padding-bottom: 20px;

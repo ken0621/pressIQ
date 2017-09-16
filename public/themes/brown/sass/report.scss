@@ -1,5 +1,16 @@
+$content-text: 'Arimo', sans-serif;
+$regular: 400;
+$semi-bold: 600;
+$bold: 700;
+$text-light: #777;
+$text-dark: #272c2f;
+
 .report-container
 {
+	font-family: $content-text;
+	padding: 15px;
+	letter-spacing: 0.2px;
+
 	.report-header
 	{
 		.left
@@ -25,13 +36,14 @@
 				text-align: left;
 				.name
 				{
-					color: #344049;
-					font-size: 20px;
+					color: $text-dark;
+					font-size: 21px;
+					font-weight: $bold;
 				}
 				.sub
 				{
-					color: #85939e;
-					font-size: 13px;
+					color: $text-light;
+					font-size: 15px;
 				}
 			}
 		}
@@ -47,8 +59,8 @@
 				margin: 6px 0;
 				.form-control
 				{
-					color: #85939e;
-					font-size: 13px;
+					color: $text-light;
+					font-size: 15px;
 					border-radius: 0;
 					box-shadow: none;
 					width: 300px;
@@ -58,6 +70,7 @@
 					position: absolute;
 					top: 7px;
 					right: 7px;
+					opacity: 0.5;
 				}
 			}
 		}
@@ -106,28 +119,28 @@
 						}
 						.sponsor
 						{
-							color: #344049;
-							font-size: 13px;
-							font-weight: 600;
+							color: $text-dark;
+							font-size: 15px;
+							font-weight: $bold;
 						}
 						.slot
 						{
-							color: #344049;
-							font-size: 13px;
-							font-weight: 600;
+							color: $text-light;
+							font-size: 15px;
+							font-weight: $regular;
 							span
 							{
-								color: #85939e;
+								color: $text-dark;
 							}
 						}
 						.report-notif
 						{
-							color: #344049;
-							font-size: 13px;
-							font-weight: 600;
+							color: $text-light;
+							font-size: 15px;
+							font-weight: $regular;
 							span
 							{
-								color: #85939e;
+								color: $text-dark;
 							}
 						}
 						.level
@@ -152,8 +165,8 @@
 							border-radius: 15px;
 							font-size: 13px;
 							color: #fff;
-							font-weight: 700;
-							padding: 6.5px 15px;
+							font-weight: $bold;
+							padding: 7px 15px 6px 15px;
 							letter-spacing: 0.5px;
 						}
 					}

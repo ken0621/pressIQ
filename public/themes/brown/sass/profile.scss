@@ -1,5 +1,14 @@
+$content-text: 'Arimo', sans-serif;
+$regular: 400;
+$semi-bold: 600;
+$bold: 700;
+$text-light: #777;
+$text-dark: #272c2f;
+
+
 .profile-container
 {
+	font-family: $content-text;
 	margin: -15px;
 	color: #344049;
 	.left
@@ -26,17 +35,18 @@
 		}
 		.name
 		{
-			color: #344049;
-			font-size: 15px;
-			font-weight: 600;
+			color: $text-dark;
+			font-size: 17px;
+			font-weight: $bold;
 			text-align: center;
 		}
 		.sub
 		{
-			color: #808080;
-			font-size: 13px;
-			font-weight: 600;
+			color: $text-light;
+			font-size: 15px;
+			font-weight: $regular;
 			text-align: center;
+			letter-spacing: 0.2px;
 		}
 	}
 	.profile-status
@@ -58,15 +68,15 @@
 		}
 		.status-number
 		{
-			color: #344049;
-			font-weight: 700;
-			font-size: 15px;
+			color: $text-dark;
+			font-weight: $bold;
+			font-size: 17px;
 		}
 		.status-label
 		{
-			color: #6d7a87;
-			font-size: 11px;
-			font-weight: 600;
+			color: $text-light;
+			font-size: 13px;
+			font-weight: $regular;
 			margin-top: 5px;
 		}
 		.green
@@ -89,10 +99,10 @@
 		margin-top: 0;
 		.title
 		{
-			color: #344049;
-			font-size: 15px;
+			color: $text-dark;
+			font-size: 17px;
 			margin-bottom: 25px;
-			font-weight: 600;
+			font-weight: $bold;
 		}
 		table
 		{
@@ -102,9 +112,9 @@
 			}
 			td:first-child
 			{
-				color: #344049;
-				font-weight: 600;
-				font-size: 13px;
+				color: $text-dark;
+				font-weight: $bold;
+				font-size: 15px;
 				width: 130px;
 				img
 				{
@@ -114,8 +124,8 @@
 			}
 			td:last-child
 			{
-				color: #788795;
-				font-size: 13px;
+				color: $text-light;
+				font-size: 15px;
 				.btn-orange
 				{
 					background-color: #ed5639;
@@ -124,7 +134,7 @@
 				.btn
 				{
 					padding: 7.5px 15px;
-					font-size: 11px;
+					font-size: 13px;
 				}
 			}
 		}
@@ -163,10 +173,10 @@
 				{
 					border: 0;
 					padding: 12.5px 25px;
-					font-size: 13px;
+					font-size: 17px;
 					text-align: center;
-					color: #6d7a87;
-					font-weight: 600;
+					color: $text-light;
+					font-weight: $regular;
 					@media screen and (min-width: 991px)
 					{
 						min-width: 150px;
@@ -181,8 +191,8 @@
 					border-bottom: 2.5px solid #78513e;
 					a
 					{
-						font-weight: 700;
-						color: #344049;
+						font-weight: $regular;
+						color: $text-dark;
 					}
 				}
 			}
@@ -196,9 +206,9 @@
 				{
 					label
 					{
-						color: #344049;
-						font-size: 13px;
-						font-weight: 400;
+						color: $text-dark;
+						font-size: 15px;
+						font-weight: $regular;
 					}
 					.form-control
 					{
@@ -225,7 +235,7 @@
 						border-radius: 2.5px;
 						padding: 10px 25px;
 						color: #fff;
-						font-weight: 600;
+						font-weight: $bold;
 						font-size: 13px;
 						@media screen and (min-width: 150px)
 						{

@@ -16,7 +16,7 @@ button
 {
 	color: #ffffff;
 	font-size: 13px;
-	background-color: #693d28;
+	background-color: #502d19;
 	padding: 7.5px 25px;
 	border-radius: 25px;
 	font-weight: 600;
@@ -218,12 +218,15 @@ button
 .notif-holder
 {
 	padding: 13.5px 15px !important;
-	img
+
+	.brown-icon-bell-o
 	{
 		margin-right: 5px;
 		display: inline-block;
 		vertical-align: middle;
+		font-size: 22px;
 	}
+
 	.badge
 	{
 		display: inline-block;
@@ -236,12 +239,15 @@ button
 .cart-holder
 {
 	padding: 13.5px 15px !important;
-	img
+
+	.brown-icon-shopping-cart
 	{
+		margin-right: 5px;
 		display: inline-block;
-		vertical-align: top;
-		margin-right: 7.5px;
+		vertical-align: middle;
+		font-size: 22px;
 	}
+
 	span
 	{
 		display: inline-block;
@@ -301,7 +307,7 @@ header
 			.form-control
 			{
 				border-radius: 15px;
-				background-color: rgba(255,255,255,0.1);
+				background-color: #4c2e1d;
 				border: 0;
 				outline: none;
 				color: #fff;
@@ -424,7 +430,7 @@ header
 	top: 0;
 	left: 0;
 	right: 0;
-	background-color: #462211;
+	background-color: #301e10;
 	height: 50px;
 	width: 100%;
 	z-index: 1000;
@@ -456,7 +462,8 @@ header
 		}
 		.list-category
 		{
-			background-color: #693d28;
+			margin-top: -2px;
+			background-color: #422311;
 			position: absolute;
 			top: 100%;
 			left: 0;
@@ -464,7 +471,7 @@ header
 			width: 100%;
 			a
 			{
-				color: #fff;
+				color: #dac5a6;
 				font-size: 13px;
 				font-weight: 300;
 				padding: 10px 15px;
@@ -503,12 +510,16 @@ header
 		{
 			padding: 13.5px 15px;
 			display: block;
-			img
+
+			.brown-icon-bell-o
 			{
 				margin-right: 5px;
 				display: inline-block;
 				vertical-align: middle;
+				font-size: 22px;
+				color: #dac5a6;
 			}
+			
 			.badge
 			{
 				display: inline-block;

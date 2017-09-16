@@ -103,23 +103,42 @@ body
 			}
 			.holder.gp.g-signin2
 			{
+				text-decoration: none;
 				.abcRioButton
 				{
 					background-color: #cf4332 !important;
 					color: #fff !important;
-					font-size: 12.24px !important;
-					font-weight: 600 !important;
 					text-align: left !important;
 					padding: 5px 10px !important;
 					letter-spacing: 0.5px !important;
-					height: 32px !important;
+					height: 35px !important;
 					width: auto !important;
 					padding: 0 !important;
 					text-decoration: none !important;
 				}
 				.abcRioButtonContents
 				{
-					
+					font-size: 12.24px !important;
+					font-weight: 600 !important;
+					padding: 0 10px;
+					span
+					{
+						display: none !important;
+					}
+					&:before
+					{
+						font-family: FontAwesome;
+						content: "\f0d5";
+						font-size: 22.25px;
+						vertical-align: middle;
+						margin-right: 7.5px;
+					}
+					&:after
+					{
+						content: "Sign in with Google+";
+						font-family: $content-text !important;
+						letter-spacing: 0.5px !important;
+					}
 				}
 				.abcRioButtonIcon
 				{

@@ -7,8 +7,6 @@ $text-dark: #272c2f;
 
 body
 {
-	font-family: $content-text;
-	letter-spacing: 0.2px;
 	background-color: #ededed;
 }
 
@@ -21,6 +19,8 @@ body
 
 .register
 {
+	font-family: $content-text;
+	letter-spacing: 0.2px;
 	margin: 25px 0;
 	background-color: #fff;
 	table
@@ -218,6 +218,9 @@ body
 					@media screen and (min-width: 125px)
 					{
 						width: 125px;
+					}
+					&:hover {
+						background-color: #613922;
 					}
 				}
 			}

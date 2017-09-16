@@ -7,13 +7,13 @@ $text-dark: #272c2f;
 
 body
 {
-	font-family: $content-text;
-	letter-spacing: 0.2px;
 	background-color: #ededed;
 }
 
 .register
 {
+	font-family: $content-text;
+	letter-spacing: 0.2px;
 	margin: 25px 0;
 	background-color: #fff;
 	table
@@ -46,7 +46,7 @@ body
 		border-bottom: 1px solid #e3e5e8;
 		.title
 		{
-			color: #344049;
+			color: $text-dark;
 			font-size: 20px;
 			font-weight: 700;
 			padding: 15px 0;
@@ -137,13 +137,13 @@ body
 			}
 			.register-label
 			{
-				color: #344049;
+				color: $text-dark;
 				font-size: 13px;
 				font-weight: 600;
 			}
 			.radio-inline
 			{
-				color: #344049;
+				color: $text-dark;
 				font-size: 13px;
 				font-weight: 600;
 				margin-right: 25px;
@@ -209,6 +209,11 @@ body
 						color: #422311 !important;
 						font-size: 15px !important;
 					}
+					.btn-brown {
+						&:hover {
+							background-color: #613922;
+						}
+					}
 				}
 				.or
 				{
@@ -241,7 +246,7 @@ body
 	{
 		.contract
 		{
-			color: #344049;
+			color: $text-dark;
 			font-size: 13px;
 			font-weight: 600;
 			white-space: pre-wrap;

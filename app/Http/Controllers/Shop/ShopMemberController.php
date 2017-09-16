@@ -12,6 +12,7 @@ use App\Rules\Uniqueonshop;
 use App\Globals\MLM2;
 use App\Globals\FacebookGlobals;
 use App\Models\Tbl_customer;
+use Validator;
 
 class ShopMemberController extends Shop
 {
@@ -23,7 +24,7 @@ class ShopMemberController extends Shop
 
         session($sess);
     }
-    /* LOGIN AND REGISTRATION - START */
+
     public function getLogin()
     {
         $data["page"] = "Login";
@@ -74,6 +75,7 @@ class ShopMemberController extends Shop
     public function getRegisterSubmit()
     {
         $user_profile = FacebookGlobals::user_profile();
+
         if(count($user_profile) > 0)
         {
             $data = collect($user_profile)->toArray();
@@ -99,6 +101,7 @@ class ShopMemberController extends Shop
                 $email = $check->email;
                 $pass = Crypt::decrypt($check->password);
             }
+
             if($email && $pass)
             {
                 Self::store_login_session($email,$pass);
@@ -154,6 +157,8 @@ class ShopMemberController extends Shop
     public function getIndex()
     {
         $data["page"] = "Dashboard";
+        $data["mode"] = session("get_success_mode");
+        session()->forget("get_success_mode");
         $view = "member.dashboard";
 
         if(Self::$customer_info)
@@ -232,12 +237,13 @@ class ShopMemberController extends Shop
         dd($error);
     }
 
-    /*BROWN CHECKOUT PAGE*/
+
     public function getCheckout()
     {
         $data["page"] = "Checkout";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.checkout", $data));
     }
+
     /* AJAX */
     public function postVerifySponsor(Request $request)
     {
@@ -261,12 +267,119 @@ class ShopMemberController extends Shop
             $data["sponsor"] = $sponsor; 
             $data["sponsor_customer"] = Customer::get_info($shop_id, $sponsor->slot_owner);
             $data["sponsor_profile_image"] = $data["sponsor_customer"]->profile == "" ? "/themes/brown/img/user-placeholder.png" : $data["sponsor_customer"]->profile;
+
+            $store["sponsor"] = $sponsor->slot_no;
+            session($store);
+
             $return = (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.card", $data));
         }
-
 
         return $return;
     }
 
-    /* GLOBALS */
+    public function postVerifyCode(Request $request)
+    {
+        $shop_id                                = $this->shop_info->shop_id;
+        $validate["pin"]                        = ["required", "string", "alpha_dash"];
+        $validate["activation"]                 = ["required", "string", "alpha_dash"];
+        $validator                              = Validator::make($request->all(), $validate);
+
+        $message = "";
+
+        if($validator->fails())
+        {
+            foreach($validator->errors()->all() as $error)
+            {
+                $message .= "<div>" . $error . "</div>";
+            }
+        }
+        else
+        {
+            $activation             = request("activation");
+            $pin                    = request("pin");
+            $check_membership_code  = MLM2::check_membership_code($shop_id, $pin, $activation);
+
+            if(!$check_membership_code)
+            {
+                $message = "Invalid PIN/ACTIVATION!";
+            }
+            else
+            {
+                if($check_membership_code->mlm_slot_id_created != "")
+                {
+                    $message = "PIN/ACTIVATION ALREADY USED";
+                }
+                else
+                {
+                    $store["temp_pin"] = $pin;
+                    $store["temp_activation"] = $activation;
+                    session($store);
+                }
+            }
+        }
+
+        echo $message;
+    }
+
+    public function getFinalVerify()
+    {
+        $data = $this->code_verification();
+
+        if($data)
+        {
+            return view('member.final_verification', $data);
+        }
+    }
+    public function postFinalVerify()
+    {
+        $data = $this->code_verification();
+
+        if($data)
+        {
+            $shop_id        = $this->shop_info->shop_id;
+            $customer_id    = Self::$customer_info->customer_id;
+            $membership_id  = $data["membership_code"]->membership_id;
+            $sponsor        = $data["sponsor"]->slot_id;
+            $create_slot = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $data["pin"]);
+
+            if(is_numeric($create_slot))
+            {
+                $slot_id = $create_slot;
+                $store["get_success_mode"] = "success";
+                session($store);
+                echo json_encode("success");
+            }
+            else
+            {
+                echo json_encode($create_slot);
+            }
+
+        }
+    }
+    public function code_verification()
+    {
+        $shop_id                    = $this->shop_info->shop_id;
+        $data["sponsor"]            = session('sponsor');
+        $data["sponsor"]            = $sponsor = MLM2::verify_sponsor($shop_id, $data["sponsor"]);
+        $data["sponsor_customer"]   = Customer::get_info($shop_id, $sponsor->slot_owner);
+        $data["pin"]                = session('temp_pin');
+        $data["activation"]         = session('temp_activation');
+        $data["membership_code"]    = MLM2::check_membership_code($shop_id, $data["pin"], $data["activation"]);
+
+        if($data["sponsor"] && $data["membership_code"])
+        {
+            if($data["membership_code"]->mlm_slot_id_created != "")
+            {
+                return false;
+            }
+            else
+            {
+                return $data;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

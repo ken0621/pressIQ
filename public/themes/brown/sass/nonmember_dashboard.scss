@@ -7,6 +7,7 @@ $bold: 700;
 /* Dashboard Top */
 .dashboard-top
 {
+
 	.img-container
 	{
 		img
@@ -305,7 +306,7 @@ $bold: 700;
 		.modal-body
 		{
 			font-weight: $semi-bold;
-			margin: 0px 20px 0px 20px;
+			margin: 0px 10px 0px 20px;
 
 			.labels
 			{
@@ -318,7 +319,6 @@ $bold: 700;
 				width: 100%;
 				border: 1px solid #693d28;
 				margin: 10px 0px 0px 0px;
-				background-color: #fff;
 				font-size: 20px;
 				&::-webkit-input-placeholder {
 				    color: #ddd;
@@ -443,7 +443,8 @@ $bold: 700;
 	
 	.modal-sm
 	{  
-		width: 25%;
+		width: 100%;
+		max-width: 400px;
 	}
 
 	.modal-content
@@ -469,10 +470,27 @@ $bold: 700;
 
 		.modal-body
 		{
-
 			font-weight: $semi-bold;
 			margin: 0px 20px 0px 20px;
 
+			.warning
+			{
+				margin-bottom: 20px;
+			}
+			.value-set
+			{
+				margin-bottom: 20px;
+				text-align: center;
+
+				.labels
+				{
+					color: #999;
+				}
+				.values
+				{
+					font-weight: bold;
+				}
+			}
 			input
 			{
 				font-size: 13px;
@@ -507,14 +525,17 @@ $bold: 700;
 .popup-proceed2
 {
 	font-family: $open-sans;
+	background-color: #EEEEEE;
 	
 	.modal-sm
 	{  
-		width: 25%;
+		width: 100%;
+		max-width: 500px;
 	}
 
 	.modal-content
 	{
+		background-color: #eee;
 		.modal-header
 		{
 			background-color: #693d28;
@@ -536,18 +557,31 @@ $bold: 700;
 
 		.modal-body
 		{
+			
 
 			font-weight: $semi-bold;
 			margin: 0px 20px 0px 20px;
 
+
+			.message
+			{
+				text-align: center;
+				margin-bottom: 10px;
+				color: red;
+				font-size: 14px;
+				text-transform: uppercase;
+			}
+
 			.input
 			{
 				width: 100%;
-				font-size: 13px;
+				font-size: 16px;
 				border: none;
-				border-bottom: 2px solid #d3d8db;
-				margin: 15px 0px;
+				border: 1px solid #693d28;
+				margin: 5px 0px;
+				margin-bottom: 15px;
 				padding: 5px;
+				border-radius: 2px;
 			}
 			
 			label
@@ -557,15 +591,23 @@ $bold: 700;
 				margin: 10px 0px;
 				padding: 10px;
 			}
+			.labeld
+			{
+				color: #693d28;
+				text-align: center;
+				text-transform: uppercase;
+			}
 
 			select
 			{
 				width: 100%;
+				font-size: 16px;
 				border: none;
-				border-bottom: 2px solid #d3d8db;
-				margin: 15px 0px;
+				border: 1px solid #693d28;
+				margin: 5px 0px;
+				margin-bottom: 15px;
 				padding: 5px;
-				font-size: 13px;
+				border-radius: 2px;
 			}
 
 	    	.btn-container
@@ -573,16 +615,32 @@ $bold: 700;
 				text-align: center;
 				font-family: $open-sans;
 				font-weight: $semi-bold;
-				font-size: 13px;
+				font-size: 14px;
+				text-transform: uppercase;
 				padding-bottom: 20px;
+
 
 				.btn-proceed-2
 				{
-					color: #fff;
-					background-color: #693d28;
-					padding: 12px 40px;
+					color: #693d28;
+					background-color: #fff;
+					padding: 10px 40px;
 					border: 2px solid #693d28;
 					border-radius: 2px;
+					opacity: 0.9;
+				  	-webkit-transition: all 0.2s ease-in-out;
+				  	-moz-transition: all 0.2s ease-in-out;
+				  	-o-transition: all 0.2s ease-in-out;
+				  	transition: all 0.2s ease-in-out;
+				  	width: 100%;
+				  	margin-top: 20px;
+				  	text-transform: uppercase;
+				}
+				.btn-proceed-2:hover
+				{
+					color: #fff;
+					background-color: #693d28;
+					opacity: 1.0;
 				}
 			}
 		}

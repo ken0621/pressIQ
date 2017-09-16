@@ -29,6 +29,10 @@ $text-dark: #272c2f;
 
 		.btn-text
 		{
+			@media screen and (min-width: 991px)
+			{
+				text-align: left;
+			}
 			.text-header1
 			{
 				font-weight: $bold;

@@ -75,7 +75,7 @@
 </div>
 @endsection
 @section("script")
-	<script type="text/javascript" src="/assets/member/js/google_script/google_script_auth.js"></script>
+<script type="text/javascript" src="/assets/member/js/google_script/google_script_auth.js"></script>
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/member_login.css">

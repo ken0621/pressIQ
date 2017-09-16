@@ -220,7 +220,7 @@
                         <div class="labels">Enter <b>Nickname of Sponsor</b> or <b>Slot Number</b></div>
                         <input required="required" class="input-verify-sponsor text-center" name="verify_sponsor" type="text" placeholder="">
                         <div class="output-container">
-                          
+                            
                         </div>
                         <div class="btn-container">
                           <button id="btn-verify" class="btn-verify btn-verify-sponsor"><i class="fa fa-check"></i>&nbsp;&nbsp;VERIFY SPONSOR</button>

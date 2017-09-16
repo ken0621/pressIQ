@@ -13,6 +13,7 @@ use App\Models\Tbl_ec_product;
 use App\Models\Tbl_country;
 use App\Models\Tbl_customer;
 use App\Globals\Ecom_Product;
+use App\Globals\SocialNetwork;
 use App\Globals\Cart;
 use App\Globals\Settings;
 use App\Models\Tbl_membership_code;
@@ -156,6 +157,8 @@ class Shop extends Controller
             });
         }
 
+        $data['google_app_id'] = SocialNetwork::get_keys($this->shop_info->shop_id, 'googleplus')['app_id'];
+
         View::share("slot_now", Self::$slot_now);
         
         View::addLocation(base_path() . '/public/themes/' . $this->shop_theme . '/views/');
@@ -168,6 +171,7 @@ class Shop extends Controller
         View::share("global_cart", $global_cart);
         View::share("country", $country);
         View::share("lead", $data['lead']);
+        View::share("google_app_id", $data['google_app_id']);
         View::share("customer_info", $data['customer_info']);
         View::share("lead_code", $data['lead_code']);
     }

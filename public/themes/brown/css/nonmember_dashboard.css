@@ -3,23 +3,24 @@
   width: 100%;
   height: auto; }
 .dashboard-top .join-container {
-  font-family: "Open Sans", sans-serif;
+  font-family: "Arimo", sans-serif;
   border: 1px solid #dfdfdf;
   padding: 15px;
   min-height: 403px;
   max-height: 403px; }
-  .dashboard-top .join-container .text-header1 {
-    font-weight: 600;
-    font-size: 15px;
-    color: #344049; }
-  .dashboard-top .join-container .text-header2 {
+  .dashboard-top .join-container .btn-text .text-header1 {
+    font-weight: 700;
+    font-size: 21px;
+    color: #272c2f; }
+  .dashboard-top .join-container .btn-text .text-header2 {
     font-weight: 400;
-    font-size: 13px;
-    color: #344049; }
+    font-size: 15px;
+    color: #777;
+    letter-spacing: 0.2px; }
   .dashboard-top .join-container .btn-container {
     text-align: center;
     padding: 63px 0px 0px 0px;
-    font-family: "Open Sans", sans-serif;
+    font-family: "Arimo", sans-serif;
     font-weight: 600;
     font-size: 13px; }
     .dashboard-top .join-container .btn-container .btn-buy-a-kit {
@@ -36,15 +37,33 @@
       padding: 12px 30px 12px 30px;
       border: 2px solid #693d28;
       border-radius: 2px; }
+  @media screen and (max-width: 991px) {
+    .dashboard-top .join-container {
+      text-align: center;
+      max-height: auto;
+      min-height: auto; }
+      .dashboard-top .join-container .btn-text {
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 40px; }
+      .dashboard-top .join-container .btn-container {
+        display: inline-block;
+        vertical-align: middle;
+        padding-top: 0; } }
+  @media screen and (max-width: 565px) {
+    .dashboard-top .join-container .btn-text {
+      margin-right: 0; }
+    .dashboard-top .join-container .btn-container {
+      padding-top: 25px; } }
 
 /* Dashboard Bottom */
 .dashboard-bottom {
   margin: 10px 0px 10px 0px;
-  font-family: "Open Sans", sans-serif; }
+  font-family: "Arimo", sans-serif; }
   .dashboard-bottom .text-header, .dashboard-bottom .popup-success .modal-content .modal-body .text-caption, .popup-success .modal-content .modal-body .dashboard-bottom .text-caption {
-    font-weight: 600;
-    font-size: 15px;
-    color: #344049;
+    font-weight: 700;
+    font-size: 17px;
+    color: #272c2f;
     padding-top: 10px; }
   .dashboard-bottom .profile-info-container {
     border: 1px solid #dfdfdf;
@@ -52,28 +71,38 @@
     margin-top: 15px;
     border-radius: 4px;
     min-height: 210px;
-    max-height: 210px;
-    font-weight: 600; }
+    max-height: 210px; }
     .dashboard-bottom .profile-info-container .icon-container {
       display: inline-block; }
       .dashboard-bottom .profile-info-container .icon-container .prof-info-text-header {
         text-align: center;
         padding-top: 10px;
-        font-weight: 600;
-        font-size: 15px; }
+        font-weight: 700;
+        font-size: 17px;
+        color: #272c2f; }
     .dashboard-bottom .profile-info-container .personal-info-container {
       padding: 10px;
       text-align: center;
       font-size: 15px; }
       .dashboard-bottom .profile-info-container .personal-info-container label {
-        font-size: 13px;
-        color: #aaaaaa; }
+        font-size: 15px;
+        color: #272c2f;
+        font-weight: 400; }
       .dashboard-bottom .profile-info-container .personal-info-container span {
-        font-size: 13px;
-        padding-left: 10px; }
+        font-size: 15px;
+        padding-left: 10px;
+        color: #777;
+        letter-spacing: 0.2px; }
+    @media screen and (max-width: 990px) {
+      .dashboard-bottom .profile-info-container .icon-container .prof-info-text-header {
+        text-align: left; }
+      .dashboard-bottom .profile-info-container .personal-info-container {
+        text-align: left; } }
     .dashboard-bottom .profile-info-container p {
-      font-size: 13px;
-      padding: 10px; }
+      font-size: 15px;
+      color: #777;
+      padding: 10px;
+      letter-spacing: 0.2px; }
   .dashboard-bottom .pic1 {
     border-top: 2px solid #63b944 !important; }
   .dashboard-bottom .pic2 {
@@ -83,9 +112,9 @@
 
 /* Buy a kit */
 .popup-buy-a-kit {
-  font-family: "Open Sans", sans-serif; }
-  .popup-buy-a-kit .modal-lg {
-    width: 50%; }
+  font-family: "Arimo", sans-serif; }
+  .popup-buy-a-kit .modal-size {
+    width: 65%; }
   .popup-buy-a-kit .modal-content {
     overflow: hidden; }
     .popup-buy-a-kit .modal-content .modal-header {
@@ -98,24 +127,58 @@
       .popup-buy-a-kit .modal-content .modal-header .modal-title {
         font-weight: 600;
         color: #FFF; }
-    .popup-buy-a-kit .modal-content .table thead {
-      background-color: #aca6a3; }
-      .popup-buy-a-kit .modal-content .table thead tr th {
-        font-weight: 600;
-        font-size: 15px;
-        text-align: center;
-        color: #fff;
-        border: none; }
+    .popup-buy-a-kit .modal-content .table thead tr th {
+      background-color: #ece8e8;
+      color: #272c2f;
+      font-weight: 600;
+      font-size: 15px;
+      border-bottom: 0;
+      text-align: center; }
+      .popup-buy-a-kit .modal-content .table thead tr th:first-child {
+        padding-left: 50px; }
+      .popup-buy-a-kit .modal-content .table thead tr th:last-child {
+        padding-right: 10px; }
     .popup-buy-a-kit .modal-content .table tbody tr td {
+      border-top: 0;
       text-align: center;
-      vertical-align: middle; }
-      .popup-buy-a-kit .modal-content .table tbody tr td img {
-        border: 1px solid #c7c7c7;
-        padding: 10px; }
-      .popup-buy-a-kit .modal-content .table tbody tr td .item-qty {
-        width: 30%;
-        padding: 5px;
-        border: 1px solid #cecece; }
+      vertical-align: middle;
+      color: #272c2f;
+      font-size: 15px;
+      font-weight: 400;
+      padding: 25px 17.5px;
+      border-bottom: 1px solid #ece8e8; }
+      .popup-buy-a-kit .modal-content .table tbody tr td:first-child {
+        padding-left: 50px; }
+      .popup-buy-a-kit .modal-content .table tbody tr td:last-child {
+        padding-right: 10px; }
+    .popup-buy-a-kit .modal-content .table tbody tr .img-holder img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      object-position: center; }
+    .popup-buy-a-kit .modal-content .table tbody tr .price-holder {
+      width: 20%; }
+    .popup-buy-a-kit .modal-content .table tbody tr .total-holder {
+      width: 20%; }
+    .popup-buy-a-kit .modal-content .table tbody tr .quantity-holder .another {
+      display: table; }
+      .popup-buy-a-kit .modal-content .table tbody tr .quantity-holder .another .equal {
+        display: table-cell;
+        vertical-align: middle; }
+      .popup-buy-a-kit .modal-content .table tbody tr .quantity-holder .another .control {
+        border: 1px solid #cecece;
+        background-color: #fff;
+        color: #71808c;
+        font-weight: 700;
+        font-size: 20px;
+        padding: 2px 12.5px;
+        margin: 0 -2.5px; }
+      .popup-buy-a-kit .modal-content .table tbody tr .quantity-holder .another .form-control {
+        border: 1px solid #cecece;
+        box-shadow: none;
+        border-radius: 0; }
+    .popup-buy-a-kit .modal-content .table tbody tr:last-child td {
+      border-bottom: 0; }
     .popup-buy-a-kit .modal-content .modal-footer .left-btn-container {
       width: 100%; }
       .popup-buy-a-kit .modal-content .modal-footer .left-btn-container div, .popup-buy-a-kit .modal-content .modal-footer .left-btn-container .btn-checkout {
@@ -133,7 +196,7 @@
 
 /* Enter a code */
 .popup-enter-a-code {
-  font-family: "Open Sans", sans-serif; }
+  font-family: "Arimo", sans-serif; }
   .popup-enter-a-code .modal-sm {
     width: 100%;
     max-width: 500px; }
@@ -221,7 +284,7 @@
               color: #eee; }
       .popup-enter-a-code .modal-content .modal-body .btn-container {
         text-align: center;
-        font-family: "Open Sans", sans-serif;
+        font-family: "Arimo", sans-serif;
         font-weight: 600;
         font-size: 13px;
         padding-bottom: 20px; }
@@ -243,7 +306,7 @@
 
 /* Proceed 1 */
 .popup-proceed1 {
-  font-family: "Open Sans", sans-serif; }
+  font-family: "Arimo", sans-serif; }
   .popup-proceed1 .modal-sm {
     width: 100%;
     max-width: 400px; }
@@ -277,7 +340,7 @@
       margin: 20px 0px 30px 0px; }
     .popup-proceed1 .modal-content .modal-body .btn-container {
       text-align: center;
-      font-family: "Open Sans", sans-serif;
+      font-family: "Arimo", sans-serif;
       font-weight: 600;
       font-size: 13px;
       padding-bottom: 20px; }
@@ -290,8 +353,8 @@
 
 /* Proceed 2 */
 .popup-proceed2 {
-  font-family: "Open Sans", sans-serif;
-  background-color: #EEEEEE; }
+  background-color: #EEEEEE;
+  font-family: "Arimo", sans-serif; }
   .popup-proceed2 .modal-sm {
     width: 100%;
     max-width: 500px; }
@@ -345,7 +408,7 @@
         border-radius: 2px; }
       .popup-proceed2 .modal-content .modal-body .btn-container {
         text-align: center;
-        font-family: "Open Sans", sans-serif;
+        font-family: "Arimo", sans-serif;
         font-weight: 600;
         font-size: 14px;
         text-transform: uppercase;
@@ -391,7 +454,7 @@
     padding-bottom: 30px; }
   .popup-success .modal-content .modal-body .btn-container {
     text-align: center;
-    font-family: "Open Sans", sans-serif;
+    font-family: "Arimo", sans-serif;
     font-weight: 600;
     font-size: 13px;
     padding-bottom: 20px; }
@@ -426,7 +489,7 @@
     padding-bottom: 30px; }
   .popup-failed .modal-content .modal-body .btn-container {
     text-align: center;
-    font-family: "Open Sans", sans-serif;
+    font-family: "Arimo", sans-serif;
     font-weight: 600;
     font-size: 14px;
     padding-bottom: 20px; }

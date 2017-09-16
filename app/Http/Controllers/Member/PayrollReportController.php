@@ -45,6 +45,7 @@ class PayrollReportController extends Member
 		$year = 2017;
 		$shop_id = $this->shop_id();
 		$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
+		
 		$data["contri_info"] = $contri_info; 
 		$data["month"] = $month;
 		$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
@@ -64,7 +65,7 @@ class PayrollReportController extends Member
 		$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 		$data["year"] = $year;
 		$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
-
+		// dd($contri_info);
 		return view("member.payrollreport.government_forms_sss", $data);
 	}
 	public function government_forms_philhealth($month)
@@ -450,7 +451,6 @@ class PayrollReportController extends Member
 	                                              ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
 	                                              ->orderBy('tbl_payroll_period.payroll_period_start','asc')
 	                                              ->get();
-
 	     
 		return view("member.payrollreport.payroll_register_report", $data);
 	}
@@ -469,7 +469,7 @@ class PayrollReportController extends Member
 		$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
 		$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
 		$data = $this->get_total($data);
-		// dd($data);
+		// dd($data["_employee"]);
 		return view('member.payrollreport.payroll_register_report_period',$data);
 	}
 
@@ -490,6 +490,7 @@ class PayrollReportController extends Member
 				$sheet->loadView('member.payrollreport.payroll_register_report_export_excel',$data);
 			});
 		})->download('xls');
+		
      }
 
 
@@ -520,37 +521,47 @@ class PayrollReportController extends Member
 		$_addition = null;
 		$_deduction = null;
 
-		$deduction_total 				= 0;
-		$cola_total 					= 0;
-		$sss_ee_total 					= 0;
-		$sss_er_total 					= 0;
-		$sss_ec_total 					= 0;
-		$hdmf_ee_total 					= 0;
-		$hdmf_er_total 					= 0;
-		$philhealth_ee_total 			= 0;
-		$philhealth_er_total 			= 0;
-		$witholding_tax_total 			= 0;
-		$adjustment_deduction_total 	= 0;
-		$adjustment_allowance_total 	= 0;
-		$allowance_total 				= 0;
-		$cash_bond_total 				= 0;
-		$cash_advance_total				= 0;
-		$hdmf_loan_total				= 0;
-		$sss_loan_total					= 0;
-		$other_loans_total				= 0;
+		$deduction_total 					= 0;
+		$cola_total 						= 0;
+		$sss_ee_total 						= 0;
+		$sss_er_total 						= 0;
+		$sss_ec_total 						= 0;
+		$hdmf_ee_total 						= 0;
+		$hdmf_er_total 						= 0;
+		$philhealth_ee_total 				= 0;
+		$philhealth_er_total 				= 0;
+		$witholding_tax_total 				= 0;
+		$adjustment_deduction_total 		= 0;
+		$adjustment_allowance_total 		= 0;
+		$allowance_total 					= 0;
+		$cash_bond_total 					= 0;
+		$cash_advance_total					= 0;
+		$hdmf_loan_total					= 0;
+		$sss_loan_total						= 0;
+		$other_loans_total					= 0;
 
-		$overtime_total 		 		= 0;
-		$special_holiday_total 			= 0;
-		$regular_holiday_total 			= 0;
-		$leave_pay_total 	     		= 0;
-		$late_total 			 		= 0;
-		$undertime_total 		 		= 0;
-		$absent_total 		 			= 0;
-		$nightdiff_total 		 		= 0;
-		$restday_total 		 			= 0;
+		$overtime_total 		 			= 0;
+		$special_holiday_total 				= 0;
+		$regular_holiday_total 				= 0;
+		$leave_pay_total 	     			= 0;
+		$late_total 			 			= 0;
+		$undertime_total 		 			= 0;
+		$absent_total 		 				= 0;
+		$nightdiff_total 		 			= 0;
+		$restday_total 		 				= 0;
+
+		$time_total_time_spent				= 0;
+		$time_total_overtime				= 0;
+		$time_total_night_differential		= 0;
+		$time_total_leave_hours				= 0;
+		$time_total_undertime				= 0;
+		$time_total_late					= 0;
+		$time_total_regular_holiday			= 0;
+		$time_total_special_holiday			= 0;
+		$time_total_absent					= 0;
 
 
-			
+
 		foreach($data["_employee"] as $key => $employee)
 		{
 			
@@ -588,10 +599,38 @@ class PayrollReportController extends Member
 
 			$total_deduction += ($total_ee);
 
+			if (isset($employee->cutoff_breakdown)) 
+			{
+
+				$time_performance = unserialize($employee->cutoff_breakdown)->_time_breakdown;
+
+				$data["_employee"][$key]->time_spent 				= $time_performance["time_spent"]["time"];
+				$data["_employee"][$key]->time_overtime 			= $time_performance["overtime"]["time"];
+				$data["_employee"][$key]->time_night_differential 	= $time_performance["night_differential"]["time"];
+				$data["_employee"][$key]->time_leave_hours 			= $time_performance["leave_hours"]["time"];
+				$data["_employee"][$key]->time_undertime 			= $time_performance["undertime"]["time"];
+				$data["_employee"][$key]->time_late 				= $time_performance["late"]["time"];
+				$data["_employee"][$key]->time_regular_holiday 		= $time_performance["regular_holiday"]["float"];
+				$data["_employee"][$key]->time_special_holiday 		= $time_performance["special_holiday"]["float"];
+				$data["_employee"][$key]->time_absent 				= $time_performance["absent"]["float"];
+
+				
+
+				$time_total_time_spent				+= $time_performance["time_spent"]["time"];
+				$time_total_overtime				+= $time_performance["overtime"]["time"];
+				$time_total_night_differential		+= $time_performance["night_differential"]["time"];
+				$time_total_leave_hours				+= $time_performance["leave_hours"]["time"];
+				$time_total_undertime				+= $time_performance["undertime"]["time"];
+				$time_total_late					+= $time_performance["late"]["time"];
+				$time_total_regular_holiday			+= $time_performance["regular_holiday"]["float"];
+				$time_total_special_holiday			+= $time_performance["special_holiday"]["float"];
+				$time_total_absent					+= $time_performance["absent"]["float"];
+			}
+
+
 			if(isset($employee->cutoff_breakdown))
 			{
 				$_duction_break_down = unserialize($employee->cutoff_breakdown)->_breakdown;
-
 				$deduction 				= 0;
 				$cola 					= 0;
 				$sss_ee 				= 0;
@@ -818,6 +857,11 @@ class PayrollReportController extends Member
 							}
 						}
 					}
+
+					if ($value) 
+					{
+					
+					}
 				}
 
 
@@ -895,8 +939,6 @@ class PayrollReportController extends Member
 					}
 				}
 			}
-
-
 		}
 
 		$data["total_basic"] 						= $total_basic;
@@ -949,10 +991,22 @@ class PayrollReportController extends Member
 		$data["absent_total"] 		 				= $absent_total;
 		$data["nightdiff_total"] 		 			= $nightdiff_total;
 		$data["restday_total"] 		 				= $restday_total;
+
+
+		$data["time_total_time_spent"]				=	$time_total_time_spent;				
+		$data["time_total_overtime"]				=	$time_total_overtime;				
+		$data["time_total_night_differential"]		=	$time_total_night_differential;		
+		$data["time_total_leave_hours"]				=	$time_total_leave_hours;				
+		$data["time_total_undertime"]				=	$time_total_undertime;				
+		$data["time_total_late"]					=	$time_total_late;					
+		$data["time_total_regular_holiday"]			=	$time_total_regular_holiday;		
+		$data["time_total_special_holiday"]			=	$time_total_special_holiday;
+		$data["time_total_absent"]					=	$time_total_absent;		
 		
 		// dd($data["total_deduction_of_all_employee"]);
 		return $data;
 	}
+			
 
 	/*END PAYROLL REGISTER REPORT*/
 

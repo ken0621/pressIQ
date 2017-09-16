@@ -11,6 +11,8 @@ use App\Globals\Customer;
 use App\Rules\Uniqueonshop;
 use App\Globals\MLM2;
 use App\Globals\FacebookGlobals;
+use App\Globals\SocialNetwork;
+use App\Globals\GoogleGlobals;
 use App\Models\Tbl_customer;
 use Validator;
 
@@ -28,13 +30,114 @@ class ShopMemberController extends Shop
     public function getLogin()
     {
         $data["page"] = "Login";
-        $data['fb_login_url'] = FacebookGlobals::get_link();
+        $get_fb = FacebookGlobals::check_app_key($this->shop_info->shop_id);
+        if($get_fb)
+        {
+            $data['fb_login_url'] = FacebookGlobals::get_link($this->shop_info->shop_id);
+        }
+        $get_google = GoogleGlobals::check_app_key($this->shop_info->shop_id);
+        if($get_google)
+        {
+            $data['google_app_id'] = SocialNetwork::get_keys($this->shop_info->shop_id, 'googleplus')['app_id'];
+        }
 
         return view("member.login", $data);
     }
+    public function getAuthCallback()
+    {
+        session_start();
+
+        $client_id = '431988284265-f8brg2nuvhmmgs3l5ip8bdogj62jkidp.apps.googleusercontent.com';
+        $client_secret = '1hArs-eRANIXj1uaubhajbu8';
+        $redirect_uri = 'http://myphone.digimahouse.dev/member';
+
+        $client = new Google_Client();
+        $client->setClientId($client_id);
+        $client->setClientSecret($client_secret);
+        $client->setRedirectUri($redirect_uri);
+        $client->addScope("https://www.googleapis.com/auth/plus/login");
+        $client->addScope("https://www.googleapis.com/auth/userinfo.profile");
+        $client->addScope("https://www.googleapis.com/auth/userinfo.email");
+
+        $plus = new Google_Service_Plus($client);
+        if (isset($_REQUEST['logout'])) 
+        {
+            unset($_SESSION['access_token']);
+        }
+        if (isset($_GET['code'])) 
+        {
+            $client->authenticate($_GET['code']);
+            $_SESSION['access_token'] = $client->getAccessToken();
+            $redirect = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
+            header('Location: ' . filter_var($redirect, FILTER_SANITIZE_URL));
+
+        }
+
+        if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
+            $client->setAccessToken($_SESSION['access_token']);
+            $_SESSION['token'] = $client->getAccessToken();
+
+        } else {
+            $authUrl = $client->createAuthUrl();
+        }
+
+        if (isset($authUrl)) 
+        {
+            print "<a class='login' href='$authUrl'><img src='logogoo/Red-signin-Medium-base-32dp.png'></a>";
+        } 
+        else 
+        {
+            print "<a class='logout' href='pruebas.php?logout'>Cerrar:</a>";
+        }
+        $correo = null;
+        if (isset($_SESSION['access_token']))
+        {
+            $me = $plus->people->get("me");
+
+            print "<br>ID: {$me['id']}\n<br>";
+            print "Display Name: {$me['displayName']}\n<br>";
+            print "Image Url: {$me['image']['url']}\n<br>";
+            print "Url: {$me['url']}\n<br>";
+            $name3 = $me['name']['givenName'];
+            echo "Nombre: $name3 <br>"; //Everything works fine until I try to get the email
+            $correo = ($me['emails'][0]['value']);
+            echo $correo;
+        }
+        dd($correo);
+    }
+    public function postLoginGoogleSubmit(Request $request)
+    {
+        $pass = isset($request->id) ? $request->id : null;
+        $email = isset($request->email) ? $request->email : null;
+        $check = Tbl_customer::where('email',$email)->first();
+        if($check && $pass)
+        {
+            Self::store_login_session($email,$pass);
+        }
+        else
+        {
+            $ins['email']           = $request->email;
+            $ins['first_name']      = ucfirst($request->first_name);
+            $ins['last_name']       = ucfirst($request->last_name);
+            $ins['password']        = Crypt::encrypt($request->id);
+            $ins['mlm_username']    = $request->email;
+            $ins['ismlm']           = 1;
+            $ins['created_at']      = Carbon::now();
+
+            $reg = Customer::register($this->shop_info->shop_id, $ins);  
+            if($reg)
+            {
+                $email = $request->email;
+                $pass = $request->id;
+                Self::store_login_session($email,$pass);
+            }             
+        }
+
+        echo json_encode("success");
+    }
     public function getLoginSubmit()
     {
-        $user_profile = FacebookGlobals::user_profile();
+        $user_profile = FacebookGlobals::user_profile($this->shop_info->shop_id);
         $email = isset($user_profile) ? $user_profile['email'] : null;
         $check = Tbl_customer::where('email',$email)->first();
         if(count($user_profile) > 0 && $check)
@@ -68,13 +171,17 @@ class ShopMemberController extends Shop
     public function getRegister()
     {
         $data["page"] = "Register";
-        $data['fb_login_url'] = FacebookGlobals::get_link_register();
+        $get = FacebookGlobals::check_app_key($this->shop_info->shop_id);
+        if($get)
+        {
+            $data['fb_login_url'] = FacebookGlobals::get_link_register($this->shop_info->shop_id);
+        }
 
         return view("member.register", $data);
     }
     public function getRegisterSubmit()
     {
-        $user_profile = FacebookGlobals::user_profile();
+        $user_profile = FacebookGlobals::user_profile($this->shop_info->shop_id);
 
         if(count($user_profile) > 0)
         {
@@ -111,10 +218,7 @@ class ShopMemberController extends Shop
         }
         else
         {
-            $data["page"] = "Register";
-            $data['fb_login_url'] = FacebookGlobals::get_link_register();
-
-            return view("member.register", $data);                
+            return Redirect::to("/members/register")->send();               
         }
     }
     public function postRegister(Request $request)
@@ -217,6 +321,11 @@ class ShopMemberController extends Shop
     {
         $data["page"] = "Orders";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.order", $data));
+    }
+    public function getWishlist()
+    {
+        $data["page"] = "Wishlist";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.wishlist", $data));
     }
 
     public function getNonMember()

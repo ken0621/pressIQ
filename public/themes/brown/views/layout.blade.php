@@ -7,10 +7,18 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>Brown</title>
+
+        <meta name="google-signin-scope" content="profile email">
+        <meta name="google-signin-client_id" content="{{$google_app_id or ''}}">
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <!-- FONTS -->
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css?family=Arimo:400,700" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,700" rel="stylesheet">
         <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap.min.css">
         <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/main.css">
@@ -22,6 +30,10 @@
         <!-- CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+        <!-- Brown Custom Icon -->
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/brown-icon/styles.css">
+
         @yield("css")
     </head>
     <body>
@@ -34,7 +46,7 @@
         <div class="header-top">
             <div class="container">
                 <a class="holder">GET THE APP</a>
-                <a class="holder">COMPANY</a>
+                <a href="/about" class="holder">COMPANY</a>
                 @if($customer)
                     <div style="display: inline-block; vertical-align: middle;" class="dropdown hidden">
                         <a class="holder" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="false">#272842 <span class="caret"></span></a>
@@ -91,82 +103,91 @@
         <div class="header-bottom">
             <nav class="navbar">
               <div class="container">
-                <ul class="nav navbar-nav">
-                  <li class="active"><a href="/">Brown</a></li>
-                  <li><a href="#">Phone Accessories</a></li>
-                  <li><a href="#">Internet Of Things</a></li>
-                  <li><a href="#">Health Technology</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown">
-                        <a href="#" class="notif-holder dropdown-toggle" data-toggle="dropdown">
-                            <img src="/themes/{{ $shop_theme }}/img/bell-header.png"><span class="badge">500</span>
-                        </a>
-                        <ul class="dropdown-menu notif">
-                            <li>
-                                <div class="notif-header">Notifications</div>
-                                <div class="notif-container">
-                                    <div class="notif-holder">
-                                        <div class="first clearfix">
-                                            <div class="notif-id">
-                                                <img src="/themes/{{ $shop_theme }}/img/people.png">
-                                                <div class="number">111133</div>
+                <div class="navbar-header">
+                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>                        
+                  </button>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                      <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a href="/">Brown</a></li>
+                      <li class="{{ Request::segment(1) == "product" ? "active" : "product" }}"><a href="/product">Phone Accessories</a></li>
+                      <li><a href="#">Internet Of Things</a></li>
+                      <li><a href="#">Health Technology</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="notif-holder dropdown-toggle" data-toggle="dropdown">
+                                <div class="brown-icon-bell-o"></div> <span class="badge">500</span>
+                            </a>
+                            <ul class="dropdown-menu notif">
+                                <li>
+                                    <div class="notif-header">Notifications</div>
+                                    <div class="notif-container">
+                                        <div class="notif-holder">
+                                            <div class="first clearfix">
+                                                <div class="notif-id">
+                                                    <img src="/themes/{{ $shop_theme }}/img/people.png">
+                                                    <div class="number">111133</div>
+                                                </div>
+                                                <div class="notif-date">2017-09-01 03:20:47</div>
                                             </div>
-                                            <div class="notif-date">2017-09-01 03:20:47</div>
-                                        </div>
-                                        <div class="second">
-                                            <div class="text">Sorry, Your Slot has already reached the max level for matrix. Slot 111133's pairing reward will not be added. </div>
-                                        </div>
-                                    </div>
-                                    <div class="notif-holder">
-                                        <div class="first clearfix">
-                                            <div class="notif-id">
-                                                <img src="/themes/{{ $shop_theme }}/img/people.png">
-                                                <div class="number">111133</div>
+                                            <div class="second">
+                                                <div class="text">Sorry, Your Slot has already reached the max level for matrix. Slot 111133's pairing reward will not be added. </div>
                                             </div>
-                                            <div class="notif-date">2017-09-01 03:20:47</div>
                                         </div>
-                                        <div class="second">
-                                            <div class="text">Sorry, Your Slot has already reached the max level for matrix. Slot 111133's pairing reward will not be added. </div>
-                                        </div>
-                                    </div>
-                                    <div class="notif-holder">
-                                        <div class="first clearfix">
-                                            <div class="notif-id">
-                                                <img src="/themes/{{ $shop_theme }}/img/people.png">
-                                                <div class="number">111133</div>
+                                        <div class="notif-holder">
+                                            <div class="first clearfix">
+                                                <div class="notif-id">
+                                                    <img src="/themes/{{ $shop_theme }}/img/people.png">
+                                                    <div class="number">111133</div>
+                                                </div>
+                                                <div class="notif-date">2017-09-01 03:20:47</div>
                                             </div>
-                                            <div class="notif-date">2017-09-01 03:20:47</div>
-                                        </div>
-                                        <div class="second">
-                                            <div class="text">Sorry, Your Slot has already reached the max level for matrix. Slot 111133's pairing reward will not be added. </div>
-                                        </div>
-                                    </div>
-                                    <div class="notif-holder">
-                                        <div class="first clearfix">
-                                            <div class="notif-id">
-                                                <img src="/themes/{{ $shop_theme }}/img/people.png">
-                                                <div class="number">111133</div>
+                                            <div class="second">
+                                                <div class="text">Sorry, Your Slot has already reached the max level for matrix. Slot 111133's pairing reward will not be added. </div>
                                             </div>
-                                            <div class="notif-date">2017-09-01 03:20:47</div>
                                         </div>
-                                        <div class="second">
-                                            <div class="text">Sorry, Your Slot has already reached the max level for matrix. Slot 111133's pairing reward will not be added. </div>
+                                        <div class="notif-holder">
+                                            <div class="first clearfix">
+                                                <div class="notif-id">
+                                                    <img src="/themes/{{ $shop_theme }}/img/people.png">
+                                                    <div class="number">111133</div>
+                                                </div>
+                                                <div class="notif-date">2017-09-01 03:20:47</div>
+                                            </div>
+                                            <div class="second">
+                                                <div class="text">Sorry, Your Slot has already reached the max level for matrix. Slot 111133's pairing reward will not be added. </div>
+                                            </div>
+                                        </div>
+                                        <div class="notif-holder">
+                                            <div class="first clearfix">
+                                                <div class="notif-id">
+                                                    <img src="/themes/{{ $shop_theme }}/img/people.png">
+                                                    <div class="number">111133</div>
+                                                </div>
+                                                <div class="notif-date">2017-09-01 03:20:47</div>
+                                            </div>
+                                            <div class="second">
+                                                <div class="text">Sorry, Your Slot has already reached the max level for matrix. Slot 111133's pairing reward will not be added. </div>
+                                            </div>
+                                        </div>
+                                        <div class="notif-holder see-all">
+                                            <a href="javascript:">See all alerts</a>
                                         </div>
                                     </div>
-                                    <div class="notif-holder see-all">
-                                        <a href="javascript:">See all alerts</a>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#" class="cart-holder">
-                            <img src="/themes/{{ $shop_theme }}/img/cart.png"> <span>Cart (0 items)</span>
-                        </a>
-                    </li>
-                </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#" class="cart-holder">
+                                <div class="brown-icon-shopping-cart"></div> <span>Cart (0 items)</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
               </div>
             </nav>
         </div>
@@ -189,7 +210,7 @@
                 <div class="right">
                     <div class="dropdown">
                         <a href="#" class="notif-holders dropdown-toggle" data-toggle="dropdown">
-                            <img style="width: 17px; height: 19px;" src="/themes/{{ $shop_theme }}/img/bell-blur.png"><span class="badge">500</span>
+                            <div class="brown-icon-bell-o"></div> <span class="badge">500</span>
                         </a>
                         <ul class="dropdown-menu notif">
                             <li>
@@ -391,6 +412,7 @@
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/front/js/match-height.js"></script>
     <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
 
     <script type="text/javascript">
       $(".date-picker").datepicker({

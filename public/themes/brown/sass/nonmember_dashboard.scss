@@ -1,8 +1,10 @@
-$open-sans: 'Open Sans', sans-serif;
-$light: 300;
+$content-text: 'Arimo', sans-serif;
 $regular: 400;
 $semi-bold: 600;
 $bold: 700;
+$text-light: #777;
+$text-dark: #272c2f;
+
 
 /* Dashboard Top */
 .dashboard-top
@@ -19,31 +21,35 @@ $bold: 700;
 
 	.join-container
 	{
-		font-family: $open-sans;
+		font-family: $content-text;
 		border: 1px solid #dfdfdf;
 		padding: 15px;
 		min-height: 403px;
 		max-height: 403px;
 
-		.text-header1
+		.btn-text
 		{
-			font-weight: $semi-bold;
-			font-size: 15px;
-			color: #344049;
-		}
+			.text-header1
+			{
+				font-weight: $bold;
+				font-size: 21px;
+				color: $text-dark;
+			}
 
-		.text-header2
-		{
-			font-weight: $regular;
-			font-size: 13px;
-			color: #344049;
+			.text-header2
+			{
+				font-weight: $regular;
+				font-size: 15px;
+				color: $text-light;
+				letter-spacing: 0.2px;
+			}
 		}
 
     	.btn-container
     	{
     		text-align: center;
 			padding: 63px 0px 0px 0px;
-			font-family: $open-sans;
+			font-family: $content-text;
 			font-weight: $semi-bold;
 			font-size: 13px;
 		
@@ -71,6 +77,39 @@ $bold: 700;
 				//margin-bottom: 65px;
 			}
 		}
+
+		@media screen and (max-width: 991px)
+		{
+			text-align: center;
+			max-height: auto;
+			min-height: auto;
+			.btn-text
+			{
+				display: inline-block;
+				vertical-align: middle;
+				margin-right: 40px;
+			}
+
+	    	.btn-container
+	    	{
+	    		display: inline-block;
+				vertical-align: middle;
+				padding-top: 0;
+			}
+		}
+
+		@media screen and (max-width: 565px)
+		{
+			.btn-text
+			{
+				margin-right: 0;
+			}
+
+			.btn-container
+			{
+				padding-top: 25px;
+			}
+		}
 	}
 }
 
@@ -78,13 +117,13 @@ $bold: 700;
 .dashboard-bottom
 {
 	margin: 10px 0px 10px 0px;
-	font-family: $open-sans;
+	font-family: $content-text;
 
 	.text-header
 	{
-		font-weight: $semi-bold;
-		font-size: 15px;
-		color: #344049;
+		font-weight: $bold;
+		font-size: 17px;
+		color: $text-dark;
 		padding-top: 10px;
 	}
 
@@ -96,7 +135,7 @@ $bold: 700;
 		border-radius: 4px;
 		min-height: 210px;
 		max-height: 210px;
-		font-weight: $semi-bold;
+
 
 		.icon-container
 		{
@@ -106,8 +145,9 @@ $bold: 700;
 			{
 				text-align: center;
 				padding-top: 10px;
-				font-weight: $semi-bold;
-				font-size: 15px;
+				font-weight: $bold;
+				font-size: 17px;
+				color: $text-dark;
 			}
 		}
 
@@ -119,21 +159,41 @@ $bold: 700;
 
 			label
 			{
-				font-size: 13px;
-				color: #aaaaaa;
+				font-size: 15px;
+				color: $text-dark;
+				font-weight: $regular;
 			}
 
 			span
 			{
-				font-size: 13px;
+				font-size: 15px;
 				padding-left: 10px;
+				color: $text-light;
+				letter-spacing: 0.2px;
+			}
+		}
+
+		@media screen and (max-width: 990px)
+		{
+			.icon-container
+			{
+				.prof-info-text-header
+				{
+					text-align: left;
+				}
+			}
+			.personal-info-container
+			{
+				text-align: left;
 			}
 		}
 
 		p
 		{
-			font-size: 13px;
+			font-size: 15px;
+			color: $text-light;
 			padding: 10px;
+			letter-spacing: 0.2px;
 		}
 
 	}
@@ -155,11 +215,11 @@ $bold: 700;
 /* Buy a kit */
 .popup-buy-a-kit
 {
-	font-family: $open-sans;
+	font-family: $content-text;
 	
-	.modal-lg
+	.modal-size 
 	{
-		width: 50%;
+		width: 65%;
 	}
 
 	.modal-content
@@ -189,50 +249,120 @@ $bold: 700;
 		{
 			thead
 			{
-				background-color: #aca6a3;
-
 				tr
 				{
 					th
 					{
-						font-weight: $semi-bold;
+						background-color: #ece8e8;
+						color: #272c2f;
+						font-weight: 600;
 						font-size: 15px;
+						border-bottom: 0;
 						text-align: center;
-						color: #fff;
-						border: none;
 
-					}					
-				}
-			}
-
-			tbody
-			{
-
-				tr
-				{
-					td
-					{
-						text-align: center;
-						vertical-align: middle;
-						
-						img
+						&:first-child
 						{
-							border: 1px solid #c7c7c7;
-							padding: 10px;
+							padding-left: 50px;
 						}
 
-
-
-						.item-qty
+						&:last-child
 						{
-							width: 30%;
-							padding: 5px;
-							border: 1px solid #cecece;
+							padding-right: 10px;
 						}
 					}
 				}
 			}
 
+			tbody
+			{
+				tr
+				{
+					td
+					{
+						border-top: 0;
+						text-align: center;
+						vertical-align: middle;
+						color: #272c2f;
+						font-size: 15px;
+						font-weight: 400;
+						padding: 25px 17.5px;
+						border-bottom: 1px solid #ece8e8;
+						
+						&:first-child
+						{
+							padding-left: 50px;
+						}
+
+						&:last-child
+						{
+							padding-right: 10px;
+						}
+
+					}
+
+					.img-holder
+					{
+						img
+						{
+							width: 100px;
+							height: 100px;
+							object-fit: contain;
+							object-position: center;
+						}
+					}
+					
+					.name-holder
+					{
+
+					}
+
+					.price-holder
+					{
+						width: 20%;
+					}
+
+					.total-holder
+					{
+						width: 20%;
+					}
+					
+					.quantity-holder
+					{
+						.another
+						{
+							display: table;
+							.equal
+							{
+								display: table-cell;
+								vertical-align: middle;
+							}
+							.control
+							{
+								border: 1px solid #cecece;
+								background-color: #fff;
+								color: #71808c;
+								font-weight: 700;
+								font-size: 20px;
+								padding: 2px 12.5px;
+								margin: 0 -2.5px;
+							}
+							.form-control
+							{
+								border: 1px solid #cecece;
+								box-shadow: none;
+								border-radius: 0;
+							}
+						}
+					}
+					&:last-child
+					{
+						td
+						{
+							border-bottom: 0;
+						}
+					}
+				}
+			}
 		}
 
 		.modal-footer
@@ -273,7 +403,7 @@ $bold: 700;
 /* Enter a code */
 .popup-enter-a-code
 {
-	font-family: $open-sans;
+	font-family: $content-text;
 
 	.modal-sm
 	{  
@@ -407,7 +537,7 @@ $bold: 700;
 	    	.btn-container
 	    	{
 				text-align: center;
-				font-family: $open-sans;
+				font-family: $content-text;
 				font-weight: $semi-bold;
 				font-size: 13px;
 				padding-bottom: 20px;
@@ -439,7 +569,7 @@ $bold: 700;
 /* Proceed 1 */
 .popup-proceed1
 {
-	font-family: $open-sans;
+	font-family: $content-text;
 	
 	.modal-sm
 	{  
@@ -449,6 +579,7 @@ $bold: 700;
 
 	.modal-content
 	{
+		
 		.modal-header
 		{
 			background-color: #693d28;
@@ -503,7 +634,7 @@ $bold: 700;
 	    	.btn-container
 	    	{
 				text-align: center;
-				font-family: $open-sans;
+				font-family: $content-text;
 				font-weight: $semi-bold;
 				font-size: 13px;
 				padding-bottom: 20px;
@@ -524,8 +655,8 @@ $bold: 700;
 /* Proceed 2 */
 .popup-proceed2
 {
-	font-family: $open-sans;
 	background-color: #EEEEEE;
+	font-family: $content-text;
 	
 	.modal-sm
 	{  
@@ -613,7 +744,7 @@ $bold: 700;
 	    	.btn-container
 	    	{
 				text-align: center;
-				font-family: $open-sans;
+				font-family: $content-text;
 				font-weight: $semi-bold;
 				font-size: 14px;
 				text-transform: uppercase;
@@ -691,7 +822,7 @@ $bold: 700;
 	    	.btn-container
 	    	{
 				text-align: center;
-				font-family: $open-sans;
+				font-family: $content-text;
 				font-weight: $semi-bold;
 				font-size: 13px;
 				padding-bottom: 20px;
@@ -755,7 +886,7 @@ $bold: 700;
 	    	.btn-container
 	    	{
 				text-align: center;
-				font-family: $open-sans;
+				font-family: $content-text;
 				font-weight: $semi-bold;
 				font-size: 14px;
 				padding-bottom: 20px;

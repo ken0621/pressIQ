@@ -36,7 +36,7 @@ class Payroll2
 		$month_number = $month;
 		$month = DateTime::createFromFormat('!m', $month)->format('F');
 		$data["_employee"] = Tbl_payroll_period::getContributions($shop_id, $month, $year)->get();
-
+		// dd($data["_employee"]);
 		$_contribution = null;
 		$count = 0;
 
@@ -52,12 +52,13 @@ class Payroll2
 		$grand_total_philhealth_ee = 0;
 		$grand_total_philhealth_er = 0;
 		$grand_total_philhealth_ee_er = 0;
-
+		
 		foreach($data["_employee"] as $key => $employee)
 		{
+			
+
 			if($employee->pagibig_ee != 0)
 			{
-				
 				if(!isset($_contribution[$employee->employee_id]))
 				{
 					$count++;
@@ -72,6 +73,7 @@ class Payroll2
 
 					$total_philhealth_ee = $employee->philhealth_ee;
 					$total_philhealth_er = $employee->philhealth_er;
+					
 				}
 				else
 				{
@@ -83,9 +85,13 @@ class Payroll2
 					$total_sss_er += $employee->sss_er;
 					$total_sss_ec += $employee->sss_ec;
 
+					
+
 					$total_philhealth_ee += $employee->philhealth_ee;
 					$total_philhealth_er += $employee->philhealth_er;
 				}
+
+
 
 				$total_pagibig_ee_er = $total_pagibig_ee + $total_pagibig_er;
 				$total_sss_ee_er = $total_sss_ee + $total_sss_er + $total_sss_ec;
@@ -108,7 +114,7 @@ class Payroll2
 				$_contribution[$employee->employee_id]->payroll_employee_first_name = strtoupper($employee->payroll_employee_first_name);
 				$_contribution[$employee->employee_id]->payroll_employee_suffix_name = $employee->payroll_employee_suffix_name == "" ? "N/A" : strtoupper($employee->payroll_employee_suffix_name);
 				$_contribution[$employee->employee_id]->payroll_employee_middle_name = ($employee->payroll_employee_middle_name == "" ? "N/A" : strtoupper($employee->payroll_employee_middle_name));
-				$_contribution[$employee->employee_id]->period_covered = $month_number . "/" . $year;
+				$_contribution[$employee->employee_id]->period_covered 	= $month_number . "/" . $year;
 				$_contribution[$employee->employee_id]->monthly_compensation = 0;
 
 				$_contribution[$employee->employee_id]->total_pagibig_ee = $total_pagibig_ee;
@@ -133,12 +139,15 @@ class Payroll2
 				$grand_total_sss_ec += $total_sss_ec;
 				$grand_total_sss_ee_er += $total_sss_ee_er;
 
+				$a[$key]=$total_sss_ec;
+
 				$grand_total_philhealth_ee += $total_philhealth_ee;
 				$grand_total_philhealth_er += $total_philhealth_er;
 				$grand_total_philhealth_ee_er += $total_philhealth_ee_er;
+
 			}
 		}
-
+	
 		$return["_employee_contribution"] = $_contribution;
 		$return["grand_total_pagibig_ee"] = $grand_total_pagibig_ee;
 		$return["grand_total_pagibig_er"] = $grand_total_pagibig_er;
@@ -361,6 +370,8 @@ class Payroll2
 				Tbl_payroll_time_sheet_record_approved::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->delete();
 				$update = null;
 			}
+
+			// $holiday = Payroll2::timesheet_get_is_holiday($employee_id, $from);
 			
 			$_timesheet[$from] = new stdClass();
 			$_timesheet[$from]->payroll_time_sheet_id = $timesheet_db->payroll_time_sheet_id;
@@ -370,8 +381,9 @@ class Payroll2
 			$_timesheet[$from]->day_number = Carbon::parse($from)->format("d");
 			$_timesheet[$from]->day_word = Carbon::parse($from)->format("D");
 			$_timesheet[$from]->record = Payroll2::timesheet_process_in_out($timesheet_db);
-			$_timesheet[$from]->is_holiday = Payroll2::timesheet_get_is_holiday($employee_id, $from);
-			
+			$_timesheet[$from]->is_holiday = Payroll2::timesheet_get_is_holiday($employee_id, $from); //$holiday["holiday_day_type"];
+			// $_timesheet[$from]->holiday_name = $holiday["holiday_name"];
+		
 
 			if(isset($_shift_real[0]))
 			{
@@ -832,20 +844,19 @@ class Payroll2
 		{
 			$day_type	= 'extra_day';
 		}
-		
 		return $day_type;
 	}
 	public static function timesheet_get_is_holiday($employee_id, $date)
 	{
 		$day_type	= 'not_holiday';
+		// $day_type["holiday_name"]	= '';
 		$company_id	= Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->value('payroll_employee_company_id');
 		$holiday	= Tbl_payroll_holiday_company::getholiday($company_id, $date)->first();
-		
 		if($holiday != null)
 		{
 			$day_type = strtolower($holiday->payroll_holiday_category);
+			// $day_type["holiday_name"] = strtolower($holiday->payroll_holiday_name);
 		}
-
 		return $day_type;
 	}
 	public static function timesheet_default_remarks($data)
@@ -855,16 +866,18 @@ class Payroll2
 		{
 			$remarks[] = "REST DAY";
 		}
-		
 		if($data->day_type == "extra_day")
 		{
 			$remarks[] = "EXTRA DAY";
 		}
-		
 		if($data->is_holiday != "not_holiday")
 		{
 			$remarks[] = "HOLIDAY";
 		}
+		// if (isset($data->holiday_name)) 
+		// {
+		// 	$remarks[] = $data->holiday_name;
+		// }
 		if($remarks)
 		{
 			return implode(",", $remarks);
@@ -873,7 +886,6 @@ class Payroll2
 		{
 			return "";
 		}
-		
 	}
 	public static function timesheet_process_in_out($timesheet_db)
 	{
@@ -3754,6 +3766,8 @@ class Payroll2
 
 	public static function cutoff_breakdown_government_contributions($return, $data)
 	{
+
+		// dd($data);
 		extract($data);
 
 		/* GET INITIAL SETTINGS */
@@ -3873,6 +3887,7 @@ class Payroll2
 						$sss_description .= "<br> NEW BRACKET (" . payroll_currency($sss_contribution["ee"]) . ") LESS PREVIOUS CUTOFF (" . payroll_currency($last_cutoff->sss_ee) . ")";
 						$sss_contribution["ee"] = $sss_contribution["ee"] - $last_cutoff->sss_ee;
 						$sss_contribution["er"] = $sss_contribution["er"] - $last_cutoff->sss_er;
+						$sss_contribution["ec"] = $sss_contribution["ec"] - $last_cutoff->sss_ec;
 						$last_cutoff->sss_salary;
 					}
 					else
@@ -4022,7 +4037,6 @@ class Payroll2
 						dd("Warning! This is not the 1st period of the month and the system can't find reference period for the month of $period_month($period_year).");
 					}
 				}
-				
 			}
 			else
 			{
@@ -4064,11 +4078,11 @@ class Payroll2
 		}
 
 		/* PAG-IBIG COMPUTATION */	
-		$pagibig_reference_amount = $pagibig_declared;
+		$pagibig_reference_amount 	= $pagibig_declared;
 		$pagibig_contribution["ee"] = $pagibig_declared;
 		$pagibig_contribution["er"] = $pagibig_declared;
-		$pagibig_description = payroll_currency($pagibig_declared) . " declared PAGIBIG Contribution";
-		$pagibig_tbl = tbl_payroll_pagibig::where("shop_id",$data["shop_id"])->first();
+		$pagibig_description 		= payroll_currency($pagibig_declared) . " declared PAGIBIG Contribution";
+		$pagibig_tbl 				= tbl_payroll_pagibig::where("shop_id",$data["shop_id"])->first();
 
 		if($pagibig_period == "Every Period") //DIVIDE CONTRIBUTION IF EVERY PERIOD
 		{

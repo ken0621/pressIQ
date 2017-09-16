@@ -3,13 +3,14 @@ namespace App\Globals;
 use App\Models\Tbl_chart_of_account;
 use App\Models\Tbl_default_chart_account;
 use App\Models\Tbl_shop;
+use App\Models\Tbl_user;
 
 use Carbon\carbon;
 use DB;
 use Facebook\Facebook as Facebook;
 use Facebook\Exceptions\FacebookResponseException as FacebookResponseException;
 use Facebook\Exceptions\FacebookSDKException as FacebookSDKException;
-
+use App\Globals\SocialNetwork;
 /**
  * Chart of Account Module - all account related module
  *
@@ -18,29 +19,41 @@ use Facebook\Exceptions\FacebookSDKException as FacebookSDKException;
 
 class FacebookGlobals
 {
-    public static function get_data()
+    public static function check_app_key($shop_id)
+    {  
+      $return = false;
+
+      $get = SocialNetwork::get_keys($shop_id, 'facebook');
+      if($get)
+      {
+        $return = true;
+      } 
+      return $return;     
+    }
+    public static function get_data($shop_id = 0)
     {      
+       $get_keys = SocialNetwork::get_keys($shop_id, 'facebook');
        $fb = new Facebook([
-          'app_id' => '898167800349883', // Replace {app-id} with your app id
-          'app_secret' => '94e57cf8f55689c4ccb69dea45532e20',
+          'app_id' => $get_keys['app_id'], // Replace {app-id} with your app id
+          'app_secret' => $get_keys['app_secret'],
           'default_graph_version' => 'v2.2'
           ]);
        return $fb;
     }
-    public static function get_data_session()
+    public static function get_data_session($shop_id)
     {      
-       session_start();
+       session_start(); 
+       $get_keys = SocialNetwork::get_keys($shop_id, 'facebook');
        $fb = new Facebook([
-          'app_id' => '898167800349883', // Replace {app-id} with your app id
-          'app_secret' => '94e57cf8f55689c4ccb69dea45532e20',
-          'default_graph_version' => 'v2.2',
+          'app_id' => $get_keys['app_id'], // Replace {app-id} with your app id
+          'app_secret' => $get_keys['app_secret'],
           'persistent_data_handler'=>'session'
           ]);
        return $fb;
     }
-	  public static function get_link()
+	  public static function get_link($shop_id)
     {
-    	  $fb = Self::get_data();
+    	  $fb = Self::get_data($shop_id);
         $helper = $fb->getRedirectLoginHelper();
         $loginUrl = $helper->getLoginUrl('http://'.$_SERVER['SERVER_NAME'].'/members/login-submit', array(
    'scope' => 'email'));
@@ -48,9 +61,9 @@ class FacebookGlobals
 
         return $login_url;
     }
-    public static function get_link_register()
+    public static function get_link_register($shop_id)
     {
-        $fb = Self::get_data();
+        $fb = Self::get_data($shop_id);
         $helper = $fb->getRedirectLoginHelper();
         $loginUrl = $helper->getLoginUrl('http://'.$_SERVER['SERVER_NAME'].'/members/register-submit', array(
    'scope' => 'email'));
@@ -58,9 +71,9 @@ class FacebookGlobals
 
         return $login_url;
     }
-    public static function get_facebook_session()
+    public static function get_facebook_session($shop_id)
     {     
-        $fb = Self::get_data_session();
+        $fb = Self::get_data_session($shop_id);
 
         $helper = $fb->getRedirectLoginHelper();
         $_SESSION['FBRLH_state'] = isset($_GET['state']) ? $_GET['state'] : null;
@@ -108,9 +121,9 @@ class FacebookGlobals
         return $return;
 
     }
-    public static function user_profile()
+    public static function user_profile($shop_id)
     {
-        $fb = Self::get_data_session();
+        $fb = Self::get_data_session($shop_id);
 
         $helper = $fb->getRedirectLoginHelper();
         $_SESSION['FBRLH_state'] = isset($_GET['state']) ? $_GET['state'] : null;
@@ -176,8 +189,9 @@ class FacebookGlobals
         // echo '<h3>Metadata</h3>';
         // $test = var_dump($tokenMetadata);
 
-        // Validation (these will throw FacebookSDKException's when they fail)
-        $tokenMetadata->validateAppId('898167800349883'); // Replace {app-id} with your app id
+        $get_keys = SocialNetwork::get_keys($shop_id, 'facebook');
+         // Validation (these will throw FacebookSDKException's when they fail)
+        $tokenMetadata->validateAppId($get_keys['app_id']); // Replace {app-id} with your app id
         // If you know the user ID this access token belongs to, you can validate it here
         //$tokenMetadata->validateUserId('123');
         $tokenMetadata->validateExpiration();
@@ -203,28 +217,5 @@ class FacebookGlobals
         $user = $response->getGraphUser();
         // dd($user);
         return $user;
-    }
-    public static function get_details()
-    { 
-      session_start();
-      $fb = new Facebook([
-          'app_id' => '898167800349883', // Replace {app-id} with your app id
-          'app_secret' => '94e57cf8f55689c4ccb69dea45532e20',
-          'default_graph_version' => 'v2.2',
-          'persistent_data_handler'=>'session'
-          ]);
-      $fb->setDefaultAccessToken($_SESSION['fb_access_token']);
-
-      $response = [];
-      try 
-      {
-        $response = $fb->get('/me',$_SESSION['fb_access_token'],['fields' => 'id,name,email,address,first_name,last_name,gender']);
-      }
-      catch(Exception $e)
-      {
-        dd($e);
-      }
-
-      dd($response);
     }
 }

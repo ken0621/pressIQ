@@ -1,6 +1,7 @@
 @extends("layout")
 @section("content")
 <div class="container">
+	<input type="hidden" id="_token" value="{{csrf_token()}}">
 	<div class="register">
 		<table>
 			<tbody>
@@ -16,8 +17,8 @@
 								<a href="{{$fb_login_url or '#'}}" class="holder fb">
 									<div class="name"><i class="fa fa-facebook" aria-hidden="true"></i> Sign in with Facebook</div>
 								</a>
-								<a href="javascript:" class="holder gp">
-									<div class="name"><i class="fa fa-google-plus" aria-hidden="true"></i> Sign in with Google+</div>
+								<a href="javascript:" class="holder gp g-signin2">
+									<div class="name "><i class="fa fa-google-plus" aria-hidden="true"></i> Sign in with Google+</div>
 								</a>
 							</div>
 
@@ -74,7 +75,7 @@
 </div>
 @endsection
 @section("script")
-
+	<script type="text/javascript" src="/assets/member/js/google_script/google_script_auth.js"></script>
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/member_login.css">

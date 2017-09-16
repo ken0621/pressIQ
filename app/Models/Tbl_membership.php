@@ -18,6 +18,15 @@ class Tbl_membership extends Model
     {
         $query->where("tbl_membership.shop_id", $shop_id);
     }
+    public function scopeCodes($query, $pin, $activation)
+    {
+        //dd($pin);
+        $query->join("tbl_item", "tbl_item.membership_id", "tbl_membership.membership_id");
+        $query->join("tbl_warehouse_inventory_record_log", "tbl_warehouse_inventory_record_log.record_item_id", "tbl_item.item_id");
+        $query->whereRaw("REPLACE(tbl_warehouse_inventory_record_log.mlm_pin, '\n','') = '" . $pin . "'");
+        $query->where("tbl_warehouse_inventory_record_log.mlm_activation", $activation);
+        return $query;
+    }
     public function scopeReverseOrder($query)
     {
         $query->orderBy("tbl_membership.membership_id", "desc");

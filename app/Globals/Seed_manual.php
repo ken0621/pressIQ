@@ -824,6 +824,21 @@ class Seed_manual
         }
 
     }
+    public static function put_name_social_networking_site($shop_id)
+    {
+        if(!DB::table('tbl_social_network_keys')->where("social_network_name","facebook")->where("shop_id", $shop_id)->first())
+        {   
+            $ins_fb['social_network_name'] = 'facebook';
+            $ins_fb['shop_id'] = $shop_id; 
+            DB::table('tbl_social_network_keys')->insert($ins_fb);
+        }
+        if(!DB::table('tbl_social_network_keys')->where("social_network_name","googleplus")->where("shop_id", $shop_id)->first())
+        {   
+            $ins_g['social_network_name'] = 'googleplus'; 
+            $ins_g['shop_id'] = $shop_id; 
+            DB::table('tbl_social_network_keys')->insert($ins_g);
+        }
+    }
 }
 
 

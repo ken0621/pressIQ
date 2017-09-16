@@ -634,7 +634,7 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/reports/loan_summary";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "Everyone";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "kim";
 
          /* -- REPORT => PRODUCTS  */
         $code = "payroll-register-report";
@@ -643,9 +643,17 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/reports/payroll_register_report";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "Everyone";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "kim";
 
 
+        /* -- REPORT => PRODUCTS  */
+        $code = "payroll-ledger";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Payroll Ledger";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/reports/payroll_ledger";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "kim";
 
     /* PAYROLL API */
     $code = "payroll-api";
@@ -1403,6 +1411,15 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
+    /* -- MAINTENACE => Social App Keys */
+    $code = "maintenance-social-app-keys";
+    $nav[$page]['submenu'][$code]['label'] = "Social Networking App Keys"; 
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/app_keys";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Arcylen Gutierrez</span>";
 
     /* -- MAINTENACE => Sms Settings */
     $code = "maintenance-sms-content";

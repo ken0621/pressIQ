@@ -7,6 +7,10 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>Brown</title>
+
+        <meta name="google-signin-scope" content="profile email">
+        <meta name="google-signin-client_id" content="{{$google_app_id or ''}}">
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -206,7 +210,7 @@
                 <div class="right">
                     <div class="dropdown">
                         <a href="#" class="notif-holders dropdown-toggle" data-toggle="dropdown">
-                            <div class="brown-icon-bell-o"></div> <span class="badge">500</span>
+                            <div class="brown-icon-bell-o" style="font-size: 20px"></div> <span class="badge">500</span>
                         </a>
                         <ul class="dropdown-menu notif">
                             <li>
@@ -267,8 +271,9 @@
                             </li>
                         </ul>
                     </div>
-                    <a href="#" class="cart-holder">
-                        <img style="width: 30px; height: 20px;" src="/themes/{{ $shop_theme }}/img/cart-blur.png"> <span class="badge">500</span>
+                    <a href="#" class="cart-holder" style="text-decoration: none;">
+                        <!-- <img style="width: 30px; height: 20px;" src="/themes/{{ $shop_theme }}/img/cart-blur.png"> <span class="badge">500</span> -->
+                       <div class="brown-icon-shopping-cart"></div> <span class="badge">500</span>
                     </a>
                     @if($customer)
                         <div style="display: inline-block; vertical-align: middle;" class="dropdown hidden">
@@ -408,6 +413,7 @@
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/front/js/match-height.js"></script>
     <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
 
     <script type="text/javascript">
       $(".date-picker").datepicker({

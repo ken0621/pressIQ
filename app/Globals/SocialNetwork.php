@@ -22,8 +22,11 @@ class SocialNetwork
 		$data = Tbl_social_network_keys::where('shop_id',$shop_id)->where('social_network_name',$app_name)->first();
 		if($data)
 		{
-			$return['app_id'] = $data->app_id;
-			$return['app_secret'] = $data->app_secret;
+			if($data->app_id && $data->app_secret)
+			{
+				$return['app_id'] = $data->app_id;
+				$return['app_secret'] = $data->app_secret;				
+			}
 		}
 
 		return $return;

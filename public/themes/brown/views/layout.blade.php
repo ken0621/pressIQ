@@ -412,6 +412,7 @@
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/front/js/match-height.js"></script>
     <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
 
     <script type="text/javascript">
       $(".date-picker").datepicker({

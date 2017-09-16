@@ -55,6 +55,7 @@ class GoogleGlobals
 		$client->setClientId($client_id);
 		$client->setClientSecret($client_secret);
 		$client->setRedirectUri($redirect_uri);
+		$client->addScope("https://www.googleapis.com/auth/plus/login");
 		$client->addScope("https://www.googleapis.com/auth/userinfo.profile");
 		$client->addScope("https://www.googleapis.com/auth/userinfo.email");
 

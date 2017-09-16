@@ -1,3 +1,10 @@
+$content-text: 'Arimo', sans-serif;
+$regular: 400;
+$semi-bold: 600;
+$bold: 700;
+$text-light: #777;
+$text-dark: #272c2f;
+
 body
 {
 	font-family: 'Droid Sans', sans-serif;
@@ -48,6 +55,7 @@ button
 }
 .dropdown-menu
 {
+
 	width: 285px;
 	padding-bottom: 0;
 	&.slot-picker
@@ -76,6 +84,7 @@ button
 	}
 	&.profile-menu
 	{
+
 		width: 315px;
 		padding: 25px;
 		.profile-pic
@@ -86,20 +95,22 @@ button
 		}
 		.profile-text
 		{
+			font-family: $content-text;
 			display: inline-block;
 			vertical-align: top;
 			width: 180px;
 			.name
 			{
-				color: #344049;
+				color: $text-dark;
 				font-size: 13px;
-				font-weight: 600;
+				font-weight: $bold;
 			}
 			.email
 			{
-				color: #6d7a87;
+				color: $text-light;
 				font-size: 13px;
-				font-weight: 400;
+				font-weight: $regular;
+				letter-spacing: 0.5px;
 			}
 			.button-holder
 			{
@@ -110,7 +121,7 @@ button
 					color: #ffffff;
 					font-size: 13px;
 					font-weight: 600;
-					border-radius: 5px;
+					border-radius: 3px;
 					text-align: center;
 					padding: 5px 15px;
 				}
@@ -138,8 +149,8 @@ button
 				padding: 3px 10px;
 				background-color: #e0e7ea;
 				border: 1px solid #b8cdd3;
-				color: #344049;
-				font-weight: 600;
+				color: $text-dark;
+				font-weight: $regular;
 				font-size: 13px;
 				border-radius: 2.5px
 			}
@@ -147,17 +158,20 @@ button
 	}
 	&.notif
 	{
+		font-family: $content-text;
+
 		.notif-header
 		{
-			color: #344049;
-			font-size: 11px;
-			font-weight: 600;
+			color: $text-dark;
+			font-size: 13px;
+			font-weight: $bold;
 			padding: 7.5px 15px;
 			letter-spacing: 0.5px;
 			background-color: #fff;
 		}
 		.notif-container
 		{
+			padding: 10px;
 			.notif-holder
 			{
 				&:nth-child(even) {background: #f2f2f2}
@@ -177,17 +191,18 @@ button
 						{
 							display: inline-block;
 							vertical-align: middle;
-							color: #344049;
-							font-size: 11px;
-							font-weight: 700;
+							color: $text-dark;
+							font-size: 13px;
+							font-weight: $bold;
 						}
 					}
 					.notif-date
 					{
-						color: #85939e;
-						font-weight: 600;
+						color: $text-light;
+						font-weight: $bold;
 						font-size: 11px;
 						float: right;
+						letter-spacing: 0.5px;
 					}
 				}
 				.second
@@ -195,8 +210,9 @@ button
 					margin-top: 10px;
 					.text
 					{
-						color: #7a8791;
-						font-size: 11px;
+						color: $text-light;
+						font-size: 13px;
+						letter-spacing: 0.5px;
 					}
 				}
 				&.see-all

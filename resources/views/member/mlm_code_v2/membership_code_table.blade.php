@@ -54,9 +54,6 @@
             <td class="text-center"><a href="">Block Code</a></td>
         </tr>  -->
     </tbody>
-<<<<<<< HEAD
-</table>
-=======
+
 </table>
 <div class="pull-right">{!! $_assembled_item_kit->render() !!}</div>
->>>>>>> master

@@ -439,6 +439,7 @@ class Warehouse2
     {       
         $return = 0; 
         $prefix = Tbl_settings::where("settings_key","mlm_pin_prefix")->where('shop_id',$shop_id)->value('settings_value');
+        
         if($prefix)
         {
             $ctr_item = Tbl_warehouse_inventory_record_log::where('record_shop_id',$shop_id)->count() + 1;

@@ -198,7 +198,7 @@
                           
                         </div>
                         <div class="btn-container">
-                          <button id="btn-verify" class="btn-verify btn-verify-sponsor"><i class="fa fa-check"></i> VERIFY SPONSOR</button>
+                          <button id="btn-verify" class="btn-verify btn-verify-sponsor"><i class="fa fa-check"></i>&nbsp;&nbsp;VERIFY SPONSOR</button>
                         </div>
                       </form>
                   </div>

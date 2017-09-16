@@ -407,15 +407,15 @@ $text-dark: #272c2f;
 	.modal-sm
 	{  
 		width: 100%;
-		max-width: 500px;
+		max-width: 370px;
 	}
 
 	.modal-content
 	{
-		background-color: #eee;
+		background-color: #fff;
 		.modal-header
 		{
-			background-color: #693d28;
+			background-color: #422311;
 			border-top-left-radius: 3px;
 			border-top-right-radius: 3px;
 
@@ -426,7 +426,7 @@ $text-dark: #272c2f;
 
 			.modal-title
 			{
-				font-weight: $semi-bold;
+				font-weight: $bold;
 				font-size: 15px;
 				color: #FFF;
 			}
@@ -434,8 +434,10 @@ $text-dark: #272c2f;
 
 		.modal-body
 		{
-			font-weight: $semi-bold;
+			font-weight: $regular;
+			font-size: 15px;
 			margin: 0px 20px 0px 20px;
+			padding: 20px 5px !important;
 
 			.labels
 			{
@@ -444,10 +446,12 @@ $text-dark: #272c2f;
 			}
 			input
 			{
+
 				padding: 5px;
-				width: 100%;
+				width: 85%;
 				border: 1px solid #693d28;
-				margin: 10px 0px 0px 0px;
+				margin-top: 20px;
+				margin-left: 7%;
 				background-color: #fff;
 				font-size: 20px;
 				&::-webkit-input-placeholder {
@@ -544,10 +548,10 @@ $text-dark: #272c2f;
 
 				.btn-verify
 				{
-					color: #693d28;
-					background-color: #fff;
+					color: #fff;
+					background-color: #f02432;
 					padding: 12px 40px;
-					border: 2px solid #693d28;
+					border: none;
 					border-radius: 2px;
 					opacity: 0.9;
 				  	-webkit-transition: all 0.2s ease-in-out;
@@ -558,8 +562,7 @@ $text-dark: #272c2f;
 				.btn-verify:hover
 				{
 					color: #fff;
-					background-color: #693d28;
-					opacity: 1.0;
+					opacity: 0.8;
 				}
 			}
 		}
@@ -616,9 +619,10 @@ $text-dark: #272c2f;
 	    	{
 				text-align: center;
 				font-family: $content-text;
-				font-weight: $semi-bold;
+				font-weight: $bold;
 				font-size: 13px;
 				padding-bottom: 20px;
+				margin-top: 20px;
 
 				.btn-proceed-1
 				{

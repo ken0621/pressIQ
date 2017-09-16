@@ -76,7 +76,7 @@
                                 </div>
                                 <div class="profile-footer">
                                 <!-- onClick="location.href='/members/logout'" -->
-                                    <button type="button" class="btn btn-grey brown-sign-out" >Sign Out</button>
+                                    <button type="button" class="btn btn-grey brown-sign-out" onClick="location.href='/members/logout'" >Sign Out</button>
                                 </div>
                             </li>
                         </ul>
@@ -425,11 +425,11 @@
         gapi.auth2.init();
       });
     }
-      $('.brown-sign-out').unbind('click');
-      $('.brown-sign-out').bind('click', function()
-      {
-        window.location = "https://mail.google.com/mail/u/0/?logout&hl=en";
-      });
+      // $('.brown-sign-out').unbind('click');
+      // $('.brown-sign-out').bind('click', function()
+      // {
+      //   window.location = "https://mail.google.com/mail/u/0/?logout&hl=en";
+      // });
     </script>
     @yield("script")
     </body>

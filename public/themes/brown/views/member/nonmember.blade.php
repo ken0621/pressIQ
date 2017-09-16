@@ -25,28 +25,7 @@
             </div>
         </div>
     </div>
-<<<<<<< HEAD
 
-  <!-- BOTTOM DASHBOARD -->
-  <div class="dashboard-bottom">
-
-      <div class="text-header">Profile Information</div>
-
-      <div class="row clearfix">
-
-            <div class="col-md-4 col-sm-6">
-              <div class="profile-info-container pic1">
-                <div class="icon-container">
-
-                  <div class="col-md-2">
-                    <img src="/themes/{{ $shop_theme }}/img/brown-personal-info.png">
-                  </div>
-                  
-                  <div class="col-md-10">
-                    <div class="prof-info-text-header">Personal Information</div>
-                  </div>
-              
-=======
     <!-- BOTTOM DASHBOARD -->
     <div class="dashboard-bottom">
         <div class="text-header">Profile Information</div>
@@ -68,7 +47,6 @@
                         <div><label>Birthday </label><span>Lorem Ipsum Dolor</span></div>
                         <div><label>Contact </label><span>Lorem Ipsum Dolor</span></div>
                     </div>
->>>>>>> 34bde085aadccedd0add11da11818113cbda3f44
                 </div>
             </div>
             <div class="col-md-4">
@@ -99,6 +77,7 @@
             </div>
         </div>
     </div>
+    
     <!--   POPUPS -->
     <!-- Buy a Kit -->
     <div class="popup-buy-a-kit">

@@ -138,6 +138,7 @@ class Shop extends Controller
         {
             $this->middleware(function ($request, $next)
             {  
+                /* FOR NEW VERSION MEMBER'S AREA */
                 $account                = session("mlm_member");
                 $check_account          = Customer::check_account($this->shop_info->shop_id, $account["email"], $account["auth"]);
                 Self::$customer_info    = $check_account;
@@ -149,8 +150,12 @@ class Shop extends Controller
                     $this->mlm_member   = $mlm_member;
                 }
 
+                //$profile_image = "/themes/brown/img/user-placeholder.png";
+                $profile_image = "/assets/front/img/sample-profile.jpg";
+
                 View::share("customer", Self::$customer_info);
                 View::share("mlm_member", $mlm_member);
+                View::share("profile_image", $profile_image);
                 return $next($request);
             });
         }

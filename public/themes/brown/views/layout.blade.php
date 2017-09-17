@@ -47,17 +47,16 @@
                 <a class="holder">GET THE APP</a>
                 <a href="/about" class="holder">COMPANY</a>
                 @if($customer)
-
                     <div style="display: inline-block; vertical-align: middle;" class="dropdown">
                         <a class="holder" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="false" style="text-transform: uppercase; color: #fff;">{{ $customer->first_name }} {{ $customer->last_name }} <span class="caret"></span></a>
                         <ul class="dropdown-menu dropdown-menu-right profile-menu" style="margin-top: -1px;">
                             <li>
                                 <div class="profile-pic">
-                                    <img src="/themes/{{ $shop_theme }}/img/profile-nav.png">
+                                    <img src="{{ $profile_image }}">
                                 </div>
                                 <div class="profile-text">
-                                    <div class="name">Mr. Brown Lorem Ipsum</div>
-                                    <div class="email">brownandproud@gmail.com</div>
+                                    <div class="name">{{ $customer->first_name }} {{ $customer->last_name }}</div>
+                                    <div class="email">{{ $customer->email }}</div>
                                     <div class="button-holder">
                                         <div class="clearfix">
                                             <button class="btn btn-brown" type="button" onClick="location.href='/members'">Profile</button>
@@ -103,6 +102,9 @@
                 </div>
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav">
+                        @if($customer)
+                            <li class="{{ Request::segment(1) == "members" ? "active" : "" }}"><a href="/members">My Account</a></li>
+                        @endif
                       <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a href="/">Brown</a></li>
                       <li class="{{ Request::segment(1) == "product" ? "active" : "product" }}"><a href="/product">Phone Accessories</a></li>
                       <li><a href="#">Internet Of Things</a></li>

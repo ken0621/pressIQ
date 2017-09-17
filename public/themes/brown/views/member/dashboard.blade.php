@@ -5,10 +5,36 @@
 <div class="dashboard">
 	<div class="row clearfix">
 		<div class="col-md-6">
-			<div class="title"><i class="fa fa-bar-chart-o"></i> Matrix Per Level</div>
+			<div class="title"><i class="fa fa-bar-chart-o"></i> Wallet Summary</div>
 			<div class="sub-container">
 				<div class="table-holder">
-					<table class="table">
+					<div class="chart-legend">
+						<div class="holder">
+							<div class="color" style="background-color: #76b6ec"></div>
+							<div class="name"><span>Current Wallet</span> PHP 0.00</div>
+						</div>
+						<div class="holder">
+							<div class="color" style="background-color: #8E5EA2"></div>
+							<div class="name"><span>Total Pending Pay-out</span> PHP 0.00</div>
+						</div>
+						<div class="holder">
+							<div class="color" style="background-color: #8E5EA2"></div>
+							<div class="name"><span>Total Received Pay-out</span> PHP 0.00</div>
+						</div>
+						<div class="chart-holder">
+							<canvas id="income_summary" style="max-width: 150px;" width="400" height="400"></canvas>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Current Slot(s)</span> 1 SLOT(S)</div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Total Reward</span> PHP 0.00</div>
+						</div>
+					</div>
+
+					<table class="table hidden">
 						<thead>
 							<tr>
 								<th width="33.3333333333%">Level</th>
@@ -78,7 +104,7 @@
 			</div>
 		</div>
 		<div class="col-md-6">
-			<div class="title"><i class="fa fa-table"></i> Income Summary</div>
+			<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
 			<div class="sub-container">
 				<div class="chart-legend">
 					<div class="holder">
@@ -98,9 +124,7 @@
 						<div class="name"><span>Leader Reward</span> PHP 0.00</div>
 					</div>
 				</div>
-				<div class="chart-holder hidden">
-					<canvas id="income_summary" style="max-width: 150px;" width="400" height="400"></canvas>
-				</div>
+
 			</div>
 
 			<div class="title"><i class="fa fa-gift"></i> Reward Points</div>
@@ -118,35 +142,15 @@
 			</div>
 
 			<div class="unilevel-holder">
-				<div class="title"><i class="fa fa-star"></i> Ranking</div>
+				<div class="title"><i class="fa fa-star"></i> My Slot(s)</div>
 				<div class="sub-container">
 					<div class="holder">
 						<div class="row clearfix">
-							<div class="col-sm-2">
-								<div class="label2">Dealer</div>
+							<div class="col-sm-4">
+								<div class="label2">MYPHONE0001</div>
 							</div>
-							<div class="col-sm-10">
-								<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 40%, rgb(237, 237, 237) 40%);">4/0 Enrollees</div>
-							</div>
-						</div>
-					</div>
-					<div class="holder">
-						<div class="row clearfix">
-							<div class="col-sm-2">
-								<div class="label2">Builder</div>
-							</div>
-							<div class="col-sm-10">
-								<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 40%, rgb(237, 237, 237) 40%);">4/25 Enrollees</div>
-							</div>
-						</div>
-					</div>
-					<div class="holder">
-						<div class="row clearfix">
-							<div class="col-sm-2">
-								<div class="label2">Leader</div>
-							</div>
-							<div class="col-sm-10">
-								<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 10%, rgb(237, 237, 237) 10%);">4/50 Enrollees</div>
+							<div class="col-sm-8">
+								<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 40%, rgb(237, 237, 237) 40%);">ROAD TO <b>BUILDER</b> (0/10)</div>
 							</div>
 						</div>
 					</div>
@@ -156,7 +160,7 @@
 	</div>
 	<div class="row clearfix">
 		<div class="col-md-6">
-			<div class="title"><i class="fa fa-user"></i> New Referral(s)</div>
+			<div class="title"><i class="fa fa-globe"></i> New Referral(s)</div>
 			<div class="sub-container border-holder">
 				<div class="clearfix wow">
 					<div class="badge right">6 New Members</div>
@@ -186,7 +190,7 @@
 		</div>
 		<div class="col-md-6">
 			<div class="match-height">
-				<div class="title"><i class="fa fa-money"></i> Recent Earnings</div>
+				<div class="title"><i class="fa fa-money"></i> Recent Rewards</div>
 				<div class="sub-container">
 					<div class="activities">
 						<div class="holder">
@@ -267,18 +271,14 @@ var myDoughnutChart = new Chart(ctx, {
         labels: ["Red", "Blue"],
         datasets: [{
             label: '# of Votes',
-            data: [3000.00, 13500.00, 500.00, 200.00],
+            data: [1.00, 1.00],
             backgroundColor: [
                 'rgba(142, 94, 162, 1)',
-                'rgba(62, 149, 205, 1)',
-                'rgba(0, 216, 216, 1)',
-                'rgba(191, 137, 3, 1)'
+                'rgba(62, 149, 205, 1)'
             ],
             borderColor: [
                 'rgba(142, 94, 162, 1)',
-                'rgba(62, 149, 205, 1)',
-                'rgba(0, 216, 216, 1)',
-                'rgba(191, 137, 3, 1)'
+                'rgba(62, 149, 205, 1)'
             ],
             borderWidth: 1
         }]

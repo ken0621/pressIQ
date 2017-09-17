@@ -34,7 +34,6 @@ class MLM_CodeControllerV2 extends Member
     public function membership_code_table(Request $request)
     {   
         $data['_assembled_item_kit'] = Item::get_assembled_kit(0, $request->item_kit_id, $request->item_membership_id, $request->search_keyword, $request->status);
-
         return view("member.mlm_code_v2.membership_code_table", $data);
 
     }

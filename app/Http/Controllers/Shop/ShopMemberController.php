@@ -265,9 +265,10 @@ class ShopMemberController extends Shop
         session()->forget("get_success_mode");
         $view = "member.dashboard";
 
+        //dd($this->mlm_member);
         if(Self::$customer_info)
         {
-            if(!Self::$customer_info->ismlm)
+            if(!$this->mlm_member)
             {
                 $view = "member.nonmember";
             }     
@@ -410,13 +411,13 @@ class ShopMemberController extends Shop
 
             if(!$check_membership_code)
             {
-                $message = "Invalid PIN/ACTIVATION!";
+                $message = "Invalid PIN / ACTIVATION!";
             }
             else
             {
                 if($check_membership_code->mlm_slot_id_created != "")
                 {
-                    $message = "PIN/ACTIVATION ALREADY USED";
+                    $message = "PIN / ACTIVATION ALREADY USED";
                 }
                 else
                 {
@@ -449,10 +450,13 @@ class ShopMemberController extends Shop
             $customer_id    = Self::$customer_info->customer_id;
             $membership_id  = $data["membership_code"]->membership_id;
             $sponsor        = $data["sponsor"]->slot_id;
-            $create_slot = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $data["pin"]);
+            $create_slot    = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $data["pin"]);
 
             if(is_numeric($create_slot))
             {
+                $remarks = "Code used by " . $data["sponsor_customer"]->first_name . " " . $data["sponsor_customer"]->last_name;
+                MLM2::use_membership_code($shop_id, $data["pin"], $data["activation"], $create_slot, $remarks);
+
                 $slot_id = $create_slot;
                 $store["get_success_mode"] = "success";
                 session($store);
@@ -462,7 +466,6 @@ class ShopMemberController extends Shop
             {
                 echo json_encode($create_slot);
             }
-
         }
     }
     public function code_verification()

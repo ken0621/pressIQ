@@ -778,67 +778,7 @@ $text-dark: #272c2f;
 	}
 }
 
-/* Success */
-.popup-success
-{
-	.modal-content
-	{
-		.modal-header
-		{
-			background-color: #693d28;
-			border-top-left-radius: 3px;
-			border-top-right-radius: 3px;
-			.modal-title
-			{
-				color: #FFF;
-				font-size: 15px;
-			}
-		}
 
-		.modal-body
-		{
-			text-align: center;
-
-			img
-			{
-				padding: 20px 0px;
-			}
-
-			.text-header
-			{
-				font-weight: $semi-bold;
-				font-size: 25px;
-				color: #344049;
-				padding-top: 5px;
-			}
-
-			.text-caption
-			{
-				@extend .text-header;
-				font-size: 15px;
-				padding-bottom: 30px;
-			}
-
-	    	.btn-container
-	    	{
-				text-align: center;
-				font-family: $content-text;
-				font-weight: $semi-bold;
-				font-size: 13px;
-				padding-bottom: 20px;
-
-				.btn-ok
-				{
-					color: #fff;
-					background-color: #693d28;
-					padding: 12px 60px;
-					border: 2px solid #693d28;
-					border-radius: 2px;
-				}
-			}
-		}
-	}
-}
 
 /* Failed */
 .popup-failed

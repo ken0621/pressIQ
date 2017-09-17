@@ -60,7 +60,7 @@
 .dashboard-bottom {
   margin: 10px 0px 10px 0px;
   font-family: "Arimo", sans-serif; }
-  .dashboard-bottom .text-header, .dashboard-bottom .popup-success .modal-content .modal-body .text-caption, .popup-success .modal-content .modal-body .dashboard-bottom .text-caption {
+  .dashboard-bottom .text-header {
     font-weight: 700;
     font-size: 17px;
     color: #272c2f;
@@ -431,39 +431,6 @@
           color: #fff;
           background-color: #693d28;
           opacity: 1.0; }
-
-/* Success */
-.popup-success .modal-content .modal-header {
-  background-color: #693d28;
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px; }
-  .popup-success .modal-content .modal-header .modal-title {
-    color: #FFF;
-    font-size: 15px; }
-.popup-success .modal-content .modal-body {
-  text-align: center; }
-  .popup-success .modal-content .modal-body img {
-    padding: 20px 0px; }
-  .popup-success .modal-content .modal-body .text-header, .popup-success .modal-content .modal-body .text-caption {
-    font-weight: 600;
-    font-size: 25px;
-    color: #344049;
-    padding-top: 5px; }
-  .popup-success .modal-content .modal-body .text-caption {
-    font-size: 15px;
-    padding-bottom: 30px; }
-  .popup-success .modal-content .modal-body .btn-container {
-    text-align: center;
-    font-family: "Arimo", sans-serif;
-    font-weight: 600;
-    font-size: 13px;
-    padding-bottom: 20px; }
-    .popup-success .modal-content .modal-body .btn-container .btn-ok {
-      color: #fff;
-      background-color: #693d28;
-      padding: 12px 60px;
-      border: 2px solid #693d28;
-      border-radius: 2px; }
 
 /* Failed */
 .popup-failed .modal-content .modal-header {

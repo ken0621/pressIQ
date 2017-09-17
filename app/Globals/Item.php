@@ -1579,7 +1579,7 @@ class Item
         }
         else if($status == 'used')
         {
-            $query->where('record_inventory_status', 1);
+            $query->where('record_consume_ref_name','used');
         }
         else if($status == 'sold')
         {

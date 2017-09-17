@@ -31,6 +31,7 @@ use App\Globals\Mlm_compute;
 use App\Globals\Mlm_gc;
 use App\Globals\Dragonpay2\Dragon_RequestPayment;
 use App\Globals\Cart;
+
 class MemberController extends Controller
 {
     public static $shop_id;

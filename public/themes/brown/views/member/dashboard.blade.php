@@ -1,5 +1,7 @@
 @extends("member.member_layout")
 @section("member_content")
+<input type="hidden" name="_mode" class="_mode" value="{{ $mode }}">
+
 <div class="dashboard">
 	<div class="row clearfix">
 		<div class="col-md-6">
@@ -196,6 +198,20 @@
 			</div>
 		</div>
 	</div>
+    <!-- Success -->
+    <div class="popup-success">
+        <div id="success-modal" class="modal success-modal fade">
+            <div class="modal-md modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div><img src="/themes/{{ $shop_theme }}/img/brown-done-img.png"></div>
+                        <div class="text-header">Done!</div>
+                        <div class="text-caption">You are now officially enrolled to<br><b>Brown & Proud</b> movement</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 @section("member_script")
@@ -249,6 +265,15 @@ var myDoughnutChart = new Chart(ctx, {
       }
     }
 });
+
+$(document).ready(function()
+{
+	//if($("._mode").val() == "success")
+	//{
+		$("#success-modal").modal("show");
+	//}
+});
+
 </script>
 @endsection
 @section("member_css")

@@ -61,8 +61,6 @@
 }
 .brown-icon-reports:before {
   content: "\68";
-  font-size: 18px;
-  vertical-align: middle;
 }
 .brown-icon-repurchase:before {
   content: "\69";
@@ -81,6 +79,8 @@
 }
 .brown-icon-list-alt:before {
   content: "\6e";
+  font-size: 18px;
+  vertical-align: middle;
 }
 .brown-icon-map-marker:before {
   content: "\6f";

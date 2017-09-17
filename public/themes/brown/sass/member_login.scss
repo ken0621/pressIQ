@@ -1,3 +1,10 @@
+$content-text: 'Arimo', sans-serif;
+$regular: 400;
+$semi-bold: 600;
+$bold: 700;
+$text-light: #777;
+$text-dark: #272c2f;
+
 body
 {
 	background-color: #ededed;
@@ -12,6 +19,8 @@ body
 
 .register
 {
+	font-family: $content-text;
+	letter-spacing: 0.2px;
 	margin: 25px 0;
 	background-color: #fff;
 	table
@@ -83,12 +92,57 @@ body
 					text-align: left;
 					padding: 5px 10px;
 					letter-spacing: 0.5px;
+					margin-top: 3px;
 					.fa
 					{
 						font-size: 22.25px;
 						vertical-align: middle;
 						margin-right: 7.5px;
 					}
+				}
+			}
+			.holder.gp.g-signin2
+			{
+				text-decoration: none;
+				.abcRioButton
+				{
+					background-color: #cf4332 !important;
+					color: #fff !important;
+					text-align: left !important;
+					padding: 5px 10px !important;
+					letter-spacing: 0.5px !important;
+					height: 35px !important;
+					width: auto !important;
+					padding: 0 !important;
+					text-decoration: none !important;
+				}
+				.abcRioButtonContents
+				{
+					font-size: 12.24px !important;
+					font-weight: 600 !important;
+					padding: 0 10px;
+					span
+					{
+						display: none !important;
+					}
+					&:before
+					{
+						font-family: FontAwesome;
+						content: "\f0d5";
+						font-size: 22.25px;
+						vertical-align: middle;
+						margin-right: 7.5px;
+					}
+					&:after
+					{
+						content: "Sign in with Google+";
+						font-family: $content-text !important;
+						letter-spacing: 0.5px !important;
+					}
+				}
+				.abcRioButtonIcon
+				{
+					display: none;
 				}
 			}
 		}
@@ -101,9 +155,9 @@ body
 			}
 			.register-label
 			{
-				color: #4a545b;
+				color: $text-dark;
 				font-size: 13px;
-				font-weight: 600;
+				font-weight: $bold;
 				letter-spacing: 0.5px;
 			}
 			.radio-inline
@@ -125,8 +179,8 @@ body
 					border: 0;
 					border-bottom: 1px solid #e0e0e0;
 					box-shadow: none;
-					color: #344049;
-					font-weight: 600;
+					color: $text-light;
+					font-weight: $regular;
 					font-size: 13px;
 					letter-spacing: 0.5px;
 				}
@@ -167,16 +221,16 @@ body
 				}
 				.or
 				{
-					color: #6e757a;
+					color: $text-light;
 					font-size: 11px;
-					font-weight: 600;
+					font-weight: $regular;
 					margin: 0 15px;
 				}
 				.login-href
 				{
-					color: #693d28;
-					font-size: 13px;
-					font-weight: 600;
+					color: #422311;
+					font-size: 15px;
+					font-weight: $regular;
 				}
 				.btn-brown
 				{
@@ -184,12 +238,22 @@ body
 					{
 						width: 125px;
 					}
+					&:hover {
+						background-color: #613922;
+					}
 				}
 			}
 			.forgot
 			{
 				margin-top: 25px;
 				font-size: 13px;
+				font-weight: $regular !important;
+				letter-spacing: 0.5px !important;
+
+				a {
+					color: $text-dark !important;
+					font-weight: $bold !important;
+				} 
 			}
 		}
 	}	

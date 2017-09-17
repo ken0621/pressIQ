@@ -1,11 +1,24 @@
 .dashboard
 {
+	font-family: "Arimo";
 	.title
 	{
-		color: #344049;
-		font-size: 20px;
+		color: #000;
+		font-size: 18px;
 		letter-spacing: 0.5px;
-		margin-bottom: 25px;
+		font-weight: normal;
+		background-color: #eee;
+		padding: 5px 15px;
+		margin-top: 5px;
+		border: 1px solid #ddd;
+	}
+	.sub-container
+	{
+		padding: 10px 20px;
+		border: 1px solid #ddd;
+		margin-top: -1px;
+		background-color: #fafafa;
+		margin-bottom: 10px;
 	}
 	.table-holder
 	{
@@ -20,9 +33,10 @@
 						border-bottom: 0;
 						text-align: left;
 						color: #344049;
-						font-size: 13px;
-						font-weight: 600;
+						font-size: 14px;
 						padding-bottom: 15px;
+						font-weight: bold;
+						text-transform: uppercase;
 					}
 				}
 			}
@@ -35,7 +49,7 @@
 					.progress
 					{
 						width: 10%;
-						background-color: #b8cdd3;
+						background-color: #ddd;
 						position: absolute;
 						top: 0;
 						left: 0;
@@ -48,9 +62,8 @@
 						border: 0;
 						text-align: left;
 						border-bottom: 1px solid #ededed;
-						font-size: 13px;
+						font-size: 14px;
 						color: #344049;
-						font-weight: 600;
 					}
 				}
 			}
@@ -58,9 +71,10 @@
 	}
 	.chart-legend
 	{
-		margin-bottom: 50px;
 		.holder
 		{
+			font-size: 16px;
+
 			.color
 			{
 				display: inline-block;
@@ -74,9 +88,18 @@
 			{
 				display: inline-block;
 				vertical-align: middle;
-				font-size: 13px;
-				font-weight: 600;
+				font-size: 16px;
 				letter-spacing: 0.5px;
+				font-weight: bold;
+				font-family: "Arimo";
+				color: #3E95CD;
+				span
+				{
+					color: #333;
+					width: 200px;
+					display: inline-block;
+					font-weight: normal;
+				}
 			}
 		}
 	}
@@ -90,22 +113,22 @@
 	}
 	.unilevel-holder
 	{
-		margin-top: 25px;
+		
 		.holder
 		{
 			margin-bottom: 7.5px;
 			.label2
 			{
 				color: #344049;
-				font-size: 13px;
+				font-size: 16px;
 				font-weight: 600;
 				margin-top: 5px;
 			}
 			.progress2
 			{
 				color: #344049;
-				font-size: 13px;
-				font-weight: 600;
+				font-size: 14px;
+
 				text-align: center;
 				background-color: #ededed;
 				padding: 5px 0;
@@ -119,8 +142,7 @@
 	}
 	.border-holder
 	{
-		border: 1px solid #d2d2d2;
-		padding: 25px;
+
 		.wow
 		{
 			margin-bottom: 15px;
@@ -194,20 +216,21 @@
 			.message
 			{
 				color: #344049;
-				font-size: 13px;
+				font-size: 12px;
 				margin-bottom: 10px;
 			}
 			.date
 			{
 				color: #85939e;
-				font-size: 13px;
-				font-weight: 600;
+				font-size: 14px;
+				opacity: 0.5;
 			}
 			.wallet
 			{
 				color: #3e95cd;
-				font-size: 11px;
+				font-size: 16px;
 				font-weight: 600;
+				float: right;
 			}
 			.circle-line
 			{

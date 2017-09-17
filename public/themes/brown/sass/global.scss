@@ -240,7 +240,7 @@ button
 		margin-right: 5px;
 		display: inline-block;
 		vertical-align: middle;
-		font-size: 22px;
+		font-size: 20px;
 	}
 
 	.badge
@@ -252,16 +252,25 @@ button
 		border-radius: 25px;
 	}
 }
+
 .cart-holder
 {
 	padding: 13.5px 15px !important;
+
+	.brown-icon-bell-o
+	{
+		margin-right: 5px;
+		display: inline-block;
+		vertical-align: middle;
+		font-size: 20px;
+	}
 
 	.brown-icon-shopping-cart
 	{
 		margin-right: 5px;
 		display: inline-block;
 		vertical-align: middle;
-		font-size: 22px;
+		font-size: 20px;
 	}
 
 	span
@@ -269,10 +278,12 @@ button
 		display: inline-block;
 		vertical-align: top;
 	}
+
 	&.active, &:focus, &:hover
 	{
 		background-color: #5e3724;
 	}
+
 	.badge
 	{
 		display: inline-block;
@@ -522,27 +533,41 @@ header
 				text-decoration: none;
 			}
 		}
+		.badge
+		{
+			display: inline-block;
+			vertical-align: middle;
+			background-color: #ed5639;
+			padding: 5px 10px;
+			border-radius: 25px;
+		}
+		.cart-holder
+		{
+			padding: 12.5px 15px !important;
+			text-decoration: none;
+			.brown-icon-shopping-cart
+			{
+				margin-right: 5px;
+				display: inline-block;
+				vertical-align: middle;
+				font-size: 20px;
+				color: #dac5a6;
+				height: 25px;
+			}
+		}
 		.notif-holders
 		{
-			padding: 13.5px 15px;
+			padding: 14px 15px;
 			display: block;
-
+			text-decoration: none;
 			.brown-icon-bell-o
 			{
 				margin-right: 5px;
 				display: inline-block;
 				vertical-align: middle;
-				font-size: 22px;
+				font-size: 20px;
 				color: #dac5a6;
-			}
-			
-			.badge
-			{
-				display: inline-block;
-				vertical-align: middle;
-				background-color: #ed5639;
-				padding: 5px 10px;
-				border-radius: 25px;
+				height: 21px;
 			}
 		}
 	}

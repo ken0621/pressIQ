@@ -11,6 +11,9 @@
 	            You can see product codes from here
 	            </small>
             </h1>
+            <div class="dropdown pull-right">
+                <button class="btn btn-def-white btn-custom-white popup" link="/member/mlm/print_codes?type=product_code" size='md'><i class="fa fa-print"></i> Print Membership Codes</button>
+            </div>
         </div>
     </div>
 </div>

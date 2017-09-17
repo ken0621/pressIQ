@@ -1,3 +1,10 @@
+$content-text: 'Arimo', sans-serif;
+$regular: 400;
+$semi-bold: 600;
+$bold: 700;
+$text-light: #777;
+$text-dark: #272c2f;
+
 body
 {
 	background-color: #ededed;
@@ -5,6 +12,8 @@ body
 
 .register
 {
+	font-family: $content-text;
+	letter-spacing: 0.2px;
 	margin: 25px 0;
 	background-color: #fff;
 	table
@@ -37,7 +46,7 @@ body
 		border-bottom: 1px solid #e3e5e8;
 		.title
 		{
-			color: #344049;
+			color: $text-dark;
 			font-size: 20px;
 			font-weight: 700;
 			padding: 15px 0;
@@ -89,6 +98,7 @@ body
 					text-align: left;
 					padding: 5px 10px;
 					letter-spacing: 0.5px;
+					margin-top: 3px;
 					.fa
 					{
 						font-size: 22.25px;
@@ -127,13 +137,13 @@ body
 			}
 			.register-label
 			{
-				color: #344049;
+				color: $text-dark;
 				font-size: 13px;
 				font-weight: 600;
 			}
 			.radio-inline
 			{
-				color: #344049;
+				color: $text-dark;
 				font-size: 13px;
 				font-weight: 600;
 				margin-right: 25px;
@@ -150,8 +160,8 @@ body
 					border: 0;
 					border-bottom: 1px solid #e0e0e0;
 					box-shadow: none;
-					color: #344049;
-					font-weight: 600;
+					color: $text-light;
+					font-weight: $regular;
 					font-size: 13px;
 					padding-left: 0;
 					padding-right: 0;
@@ -172,9 +182,9 @@ body
 				text-align: left;
 				label
 				{
-					font-size: 11px;
-					color: #9d9d9d;
-					font-weight: 600;
+					font-size: 13px;
+					color: $text-light;
+					font-weight: $regular;
 				}
 				input
 				{
@@ -193,12 +203,23 @@ body
 				{
 					display: inline-block;
 					vertical-align: middle;
+					a {
+						color: $text-dark !important;
+						font-weight: $regular;
+						color: #422311 !important;
+						font-size: 15px !important;
+					}
+					.btn-brown {
+						&:hover {
+							background-color: #613922;
+						}
+					}
 				}
 				.or
 				{
-					color: #6e757a;
+					color: $text-light;
 					font-size: 11px;
-					font-weight: 600;
+					font-weight: $regular;
 					margin: 0 15px;
 				}
 				.login-href
@@ -225,7 +246,7 @@ body
 	{
 		.contract
 		{
-			color: #344049;
+			color: $text-dark;
 			font-size: 13px;
 			font-weight: 600;
 			white-space: pre-wrap;
@@ -238,7 +259,7 @@ body
 		.btn
 		{
 			color: #ffffff;
-			font-weight: 600;
+			font-weight:$bold;
 			font-size: 13px;
 			border-radius: 1.5px;
 			padding: 10px 25px;

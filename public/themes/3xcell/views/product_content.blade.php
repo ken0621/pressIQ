@@ -58,7 +58,7 @@
 					<!-- PER ITEM -->
 					@foreach(limit_foreach($_related, 4) as $related)
 					<div class="col-md-3">
-						<div class="per-item">
+						<div class="per-item" style="cursor: pointer;" onClick="location.href='/product/view/{{ $related['eprod_id'] }}'">
 							<div class="image-container">
 								<img src="{{ get_product_first_image($related) }}">
 							</div>
@@ -84,7 +84,7 @@
 					<!-- PER ITEM -->
 					@foreach(limit_foreach($_package, 4) as $package)
 					<div class="col-md-3">
-						<div class="per-item">
+						<div class="per-item" style="cursor: pointer;" onClick="location.href='/product/view/{{ $related['eprod_id'] }}'">
 							<div class="image-container">
 								<img src="{{ get_product_first_image($package) }}">
 							</div>

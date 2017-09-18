@@ -75,7 +75,7 @@
 			<div class="profile-form">
 				<ul class="nav nav-tabs">
 				   <li class="active"><a data-toggle="tab" href="#basic_info">Basic Info</a></li>
-				   <li><a data-toggle="tab" href="#contact_info">Contact Info</a></li>
+				   <li><a data-toggle="tab" href="#contact_info">Reward Configuration</a></li>
 				   <li><a data-toggle="tab" href="#profile_picture">Profile Picture</a></li>
 				   <li><a data-toggle="tab" href="#password">Password</a></li>
 				</ul>
@@ -151,8 +151,32 @@
 					   		</div>
 				   		</div>
 				   </div>
+				   <!-- CONTACT INFO -->
 				   <div id="contact_info" class="tab-pane fade">
-				   	<h2>Under Development</h2>
+				   		<div class="contact_info_success_message hidden">
+							<div class="alert alert-success">
+							  <strong>Success!</strong> Sponsor Rule has been successfully updated.
+							</div>
+				   		</div>
+				   		<form method="post" class="reward-configuration-form">
+				   			{{ csrf_field() }}
+					   		<div class="row clearfix">
+					   			<div class="col-md-12">
+					   				<div class="form-group">
+							   			<label>New Sponsor Rule</label>
+							   			<select class="form-control">
+							   				<option name="auto" {{ $customer->downline_rule == "auto" ? "selected" : "" }}>AUTO PLACEMENT</option>
+							   				<option name="manual" {{ $customer->downline_rule == "manual" ? "selected" : "" }}>MANUAL PLACEMENT</option>
+							   			</select>
+							   		</div>
+					   			</div>
+						   		<div class="col-md-12">
+						   			<div class="form-group btn-holder">
+							   			<button type="submit" class="btn btn-brown"><i class="fa fa-save"></i> Update</button>
+							   		</div>
+						   		</div>
+					   		</div>
+				   		</form>
 				   </div>
 				   <div id="profile_picture" class="tab-pane fade">
 					<div class="upload-profile-pic">
@@ -174,6 +198,7 @@
 </div>
 @endsection
 @section("member_script")
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/profile.js"></script>
 @endsection
 @section("member_css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/profile.css">

@@ -95,7 +95,7 @@ class Shop extends Controller
 
         $this->shop_theme_info  = $shop_theme_info;
 
-        if ($this->shop_theme == "ecommerce-1")
+        if ($this->shop_theme == "ecommerce-1" || $this->shop_theme == "intogadgets" || $this->shop_theme == "3xcell")
         {
             $this->middleware(function ($request, $next)
             {  
@@ -134,7 +134,7 @@ class Shop extends Controller
             View::share("_categories", $product_category);
         }
         
-        if ($this->shop_theme != "ecommerce-1")
+        if ($this->shop_theme != "ecommerce-1" && $this->shop_theme != "intogadgets" && $this->shop_theme != "3xcell")
         {
             $this->middleware(function ($request, $next)
             {  
@@ -164,7 +164,8 @@ class Shop extends Controller
             $this->middleware(function ($request, $next)
             {  
                 View::share("customer", Self::$customer_info);
-                View::share("customer_info_a", $data["customer_info"]);
+                View::share("customer_info_a", Self::$customer_info);
+                
                 return $next($request);
             });
         }

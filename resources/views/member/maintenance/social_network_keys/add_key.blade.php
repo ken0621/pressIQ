@@ -17,7 +17,7 @@
         <div class="form-group">
             <div class="col-md-12">            
                 <label>App Name *</label>
-                <input type="text" class="form-control" required value="{{$app->social_network_name or ''}}" name="social_network_name">
+                <input type="text" class="form-control" {{isset($app->keys_id) ? 'disabled' : '' }} value="{{$app->social_network_name or ''}}" name="social_network_name">
             </div>
         </div>
         <div class="form-group">

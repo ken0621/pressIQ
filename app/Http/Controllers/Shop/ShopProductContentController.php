@@ -132,7 +132,7 @@ class ShopProductContentController extends Shop
 
                 $data["product"]["variant"][$keys]["variant_image"] = Ecom_Product::getVariantImage($values["evariant_id"])->toArray();
             }
-            // dd($data["product"]);
+            
             return view("product_content", $data);
         }
     }

@@ -33,17 +33,10 @@ class ShopMemberController extends Shop
 
         if(Self::$customer_info)
         {
-            if(!$this->mlm_member)
-            {
-                $view = "member.nonmember";
-            }   
-            else
-            {
-                $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
-                $data["wallet"]             = $data["customer_summary"]["_wallet"];
-                $data["points"]             = $data["customer_summary"]["_points"];
-
-            }
+            $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
+            $data["wallet"]             = $data["customer_summary"]["_wallet"];
+            $data["points"]             = $data["customer_summary"]["_points"];
+            $data["_slot"]              = $data["customer_summary"]["_slot"];
         }
 
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view($view, $data));

@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Shop;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Request as Request2;
 use Crypt;
 use Redirect;
 use View;
@@ -123,6 +124,10 @@ class ShopMemberController extends Shop
         $correo = null;
         $me = $plus->people->get("me");
     }
+    public function getSigninGoogle()
+    {
+        return view('signin_google');
+    }
     public function postLoginGoogleSubmit(Request $request)
     {
         $pass = isset($request->id) ? $request->id : null;
@@ -189,6 +194,8 @@ class ShopMemberController extends Shop
     public function getLogout()
     {
         session()->forget("mlm_member");
+        GoogleGlobals::revoke_access($this->shop_info->shop_id);
+
         return Redirect::to("/members/login");
     }
     public function getRegister()
@@ -293,6 +300,12 @@ class ShopMemberController extends Shop
         $data["_country"]        = Tbl_country::get();
 
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.profile", $data));
+    }
+    public function postProfileUpdateReward(Request $request)
+    {
+        $update_customer["downline_rule"] = $request->downline_rule;
+        Tbl_customer::where("customer_id", Self::$customer_info->customer_id)->update($update_customer);
+        echo json_encode("success");
     }
     public function getNotification()
     {

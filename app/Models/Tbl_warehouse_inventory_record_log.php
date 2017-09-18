@@ -22,4 +22,11 @@ class Tbl_warehouse_inventory_record_log extends Model
     {
     	return $query->leftjoin('tbl_warehouse','warehouse_id','=','record_warehouse_id');
     }
+    public function scopeCodes($query, $shop_id, $pin, $activation)
+    {
+        $query->where("tbl_warehouse_inventory_record_log.record_shop_id", $shop_id);
+        $query->whereRaw("REPLACE(tbl_warehouse_inventory_record_log.mlm_pin, '\n','') = '" . $pin . "'");
+        $query->where("tbl_warehouse_inventory_record_log.mlm_activation", $activation);
+        return $query;
+    }
 }

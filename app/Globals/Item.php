@@ -1519,7 +1519,7 @@ class Item
         $shop_id = Item::getShopId();
         return Tbl_membership::where('shop_id',$shop_id)->where('membership_archive',0)->get();
     }
-    public static function get_all_item_record_log($search_keyword = '', $status = '')
+    public static function get_all_item_record_log($search_keyword = '', $status = '', $paginate = 0)
     {
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
@@ -1546,10 +1546,18 @@ class Item
         {
             $query->where('record_inventory_status',0)->where('record_consume_ref_name',null)->orWhere('record_consume_ref_name','');
         }  
+        if($paginate != 0)
+        {
+            $data = $query->paginate($paginate);
+        }
+        else
+        {
+            $data = $query->get();            
+        }
 
-        return $query->paginate(10);
+        return $data;
     }
-    public static function get_assembled_kit($record_id = 0, $item_kit_id = 0, $item_membership_id = 0, $search_keyword = '', $status = '')
+    public static function get_assembled_kit($record_id = 0, $item_kit_id = 0, $item_membership_id = 0, $search_keyword = '', $status = '', $paginate = 0)
     {
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
@@ -1579,7 +1587,7 @@ class Item
         }
         else if($status == 'used')
         {
-            $query->where('record_inventory_status', 1);
+            $query->where('record_consume_ref_name','used');
         }
         else if($status == 'sold')
         {
@@ -1589,7 +1597,17 @@ class Item
         {
             $query->where('record_inventory_status',0)->where('record_consume_ref_name',null);
         }  
-        return $query->paginate(10); 
+
+
+        if($paginate != 0)
+        {
+            $data = $query->paginate($paginate);
+        }
+        else
+        {
+            $data = $query->get();            
+        }
+        return $data; 
     } 
 
     public static function assemble_membership_kit($shop_id, $warehouse_id, $item_id, $quantity)
@@ -1624,5 +1642,27 @@ class Item
 
            Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)->delete();
         }
+    }
+    public static function check_mlm_activation($shop_id, $mlm_activation = '')
+    {
+        $ctr = Tbl_warehouse_inventory_record_log::where("record_shop_id",$shop_id)->where('mlm_activation',$mlm_activation)->count();
+        if($ctr > 0)
+        {
+            $mlm_activation = Self::check_mlm_activation($shop_id, strtoupper(str_random(6)));
+        }
+
+        return $mlm_activation;
+    }
+    public static function get_mlm_activation($shop_id)
+    {
+        $mlm_activation = strtoupper(str_random(6));
+
+        $ctr = Tbl_warehouse_inventory_record_log::where("record_shop_id",$shop_id)->where('mlm_activation',$mlm_activation)->count();
+        if($ctr > 0)
+        {
+            $mlm_activation = Self::check_mlm_activation($shop_id, strtoupper(str_random(6)));
+        }
+
+        return $mlm_activation;
     }
 }

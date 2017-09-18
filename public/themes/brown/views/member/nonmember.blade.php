@@ -1,8 +1,6 @@
 @extends("member.member_layout")
 @section("member_content")
 <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
-<input type="hidden" name="_mode" class="_mode" value="{{ $mode }}">
-
 <div class="dashboard">
     <!-- TOP DASHBOARD-->
     <div class="dashboard-top">
@@ -14,8 +12,10 @@
             </div>
             <div class="col-md-4">
                 <div class="join-container">
-                    <div class="text-header1">Join the Movement!</div>
-                    <div class="text-header2">Enroll now and become one of us!</div>
+                    <div class="btn btn-text">
+                        <div class="text-header1">Join the Movement!</div>
+                        <div class="text-header2">Enroll now and become one of us!</div>
+                    </div>
                     <div class="btn-container">
                         <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
                         <img src="/themes/{{ $shop_theme }}/img/or.png"><br>
@@ -25,6 +25,7 @@
             </div>
         </div>
     </div>
+
     <!-- BOTTOM DASHBOARD -->
     <div class="dashboard-bottom">
         <div class="text-header">Profile Information</div>
@@ -76,6 +77,7 @@
             </div>
         </div>
     </div>
+    
     <!--   POPUPS -->
     <!-- Buy a Kit -->
     <div class="popup-buy-a-kit">
@@ -196,24 +198,99 @@
                             </div>
                         </form>
                     </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <!--  Enter a code -->
+  <div class="popup-enter-a-code">
+      <div id="enter-a-code-modal" class="modal fade">
+          <div class="modal-sm modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                      <h4 class="modal-title"><i class="fa fa-star"></i> SPONSOR</h4>
+                  </div>
+                  <div class="modal-body">
+                      <form method="post" class="submit-verify-sponsor">  
+                        <div class="labels">Enter <b>Nickname of Sponsor</b> or <b>Slot Number</b></div>
+                        <input required="required" class="input-verify-sponsor text-center" name="verify_sponsor" type="text" placeholder="">
+                        <div class="output-container">
+                            
+                        </div>
+                        <div class="btn-container">
+                          <button id="btn-verify" class="btn-verify btn-verify-sponsor"><i class="fa fa-check"></i>&nbsp;&nbsp;VERIFY SPONSOR</button>
+                        </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <!-- Proceed 1 -->
+  <div class="popup-proceed1">
+      <div id="proceed-modal-1" class="modal fade">
+          <div class="modal-sm modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                      <h4 class="modal-title">Sponsor</h4>
+                  </div>
+                  <div class="modal-body">
+                      <form>
+                          <input type="text" placeholder="Name">
+                          <input type="text" placeholder="Enter Code">
+                          <input type="text" placeholder="Enter Pin">
+                          <div class="btn-container">
+                            <button id="btn-proceed-1" class="btn-proceed-1">Proceed</button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  
+  <!-- Proceed 2 -->
+  <div class="popup-proceed2">
+    <div id="proceed-modal-2" class="modal fade">
+        <div class="modal-sm modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Sponsor</h4>
+                </div>
+                <div class="modal-body">
+                  <form>
+                      <input class="input" type="text" placeholder="Enter Code">
+                      <input class="input" type="text" placeholder="Enter Pin">
+
+                      <select name="" id="">
+                        <option value="Placement">Placement</option>
+                      </select>
+
+                      <div style="font-size: 13px;">Position: </div>
+
+                      <label class="radio-inline" style="padding-left: 78px;">
+                        <input type="radio" name="optradio">Left
+                      </label>
+
+                      <label class="radio-inline" style="margin-left: 50px;">
+                        <input type="radio" name="optradio">Right
+                      </label>
+
+                      <div class="btn-container">
+                        <button id="btn-proceed-2" class="btn-proceed-2">Proceed</button>
+                      </div>
+                  </form>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Success -->
-    <div class="popup-success">
-        <div id="success-modal" class="modal success-modal fade">
-            <div class="modal-md modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <div><img src="/themes/{{ $shop_theme }}/img/brown-done-img.png"></div>
-                        <div class="text-header">Done!</div>
-                        <div class="text-caption">You are now officially enrolled to<br><b>Brown & Proud</b> movement</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <!-- Failed -->
     <div class="popup-failed">
         <div id="failed-modal" class="modal">

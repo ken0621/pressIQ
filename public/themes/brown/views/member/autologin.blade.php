@@ -38,18 +38,18 @@
 							    </div>
 							@endif
 
-							<form method="post">
+							<form class="autoform" action="/members/login" method="post" method="post">
 								{{ csrf_field() }}
 								<div class="form-group">
 									<div class="register-label">EMAIL</div>
 									<div class="form-input">
-										<input class="form-control input-sm" type="email" name="email" placeholder="Type Your Email Here" value="">
+										<input class="form-control input-sm" type="email" name="email" placeholder="Type Your Email Here" value="{{ request()->email }}">
 									</div>
 								</div>
 								<div class="form-group">
 									<div class="register-label">PASSWORD</div>
 									<div class="form-input">
-										<input class="form-control input-sm" type="password" name="password" placeholder="Type Your Password Here" value="">
+										<input class="form-control input-sm" type="password" name="password" placeholder="Type Your Password Here" value="{{ request()->password }}">
 									</div>
 								</div>
 								<div class="form-group">
@@ -76,6 +76,16 @@
 @endsection
 @section("script")
 <script type="text/javascript" src="/assets/member/js/google_script/google_script_auth.js"></script>
+<script type="text/javascript">
+	$(document).ready(function()
+	{
+		setTimeout(function()
+		{
+			$(".autoform").submit();
+		}, 1000);
+		
+	});
+</script>
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/member_login.css">

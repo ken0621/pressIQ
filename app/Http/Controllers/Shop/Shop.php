@@ -19,13 +19,14 @@ use App\Globals\Settings;
 use App\Models\Tbl_membership_code;
 use App\Globals\Mlm_member;
 use App\Globals\Customer;
+use App\Globals\MLM2;
 
 class Shop extends Controller
 {
 	public $shop_info;
     public $shop_theme;
     public $shop_theme_color;
-    
+    public $mlm_member;
     public static $customer_info;
     public static $slot_now;
 
@@ -94,7 +95,7 @@ class Shop extends Controller
 
         $this->shop_theme_info  = $shop_theme_info;
 
-        if ($this->shop_theme == "ecommerce-1")
+        if ($this->shop_theme == "ecommerce-1" || $this->shop_theme == "intogadgets" || $this->shop_theme == "3xcell")
         {
             $this->middleware(function ($request, $next)
             {  
@@ -133,16 +134,28 @@ class Shop extends Controller
             View::share("_categories", $product_category);
         }
         
-        if ($this->shop_theme != "ecommerce-1")
+        if ($this->shop_theme != "ecommerce-1" && $this->shop_theme != "intogadgets" && $this->shop_theme != "3xcell")
         {
             $this->middleware(function ($request, $next)
             {  
-                $account        = session("mlm_member");
-                $check_account  = Customer::check_account($this->shop_info->shop_id, $account["email"], $account["auth"]);
-                Self::$customer_info = $check_account;
-                View::share("customer", Self::$customer_info);
-                View::share("customer_info_a", Self::$customer_info);
+                /* FOR NEW VERSION MEMBER'S AREA */
+                $account                = session("mlm_member");
+                $check_account          = Customer::check_account($this->shop_info->shop_id, $account["email"], $account["auth"]);
+                Self::$customer_info    = $check_account;
+                $mlm_member             = false;
                 
+                if(Self::$customer_info)
+                {
+                    $mlm_member        = MLM2::is_mlm_member($this->shop_info->shop_id, Self::$customer_info->customer_id);
+                    $this->mlm_member   = $mlm_member;
+                }
+
+                //$profile_image = "/themes/brown/img/user-placeholder.png";
+                $profile_image = "/assets/front/img/sample-profile.jpg";
+
+                View::share("customer", Self::$customer_info);
+                View::share("mlm_member", $mlm_member);
+                View::share("profile_image", $profile_image);
                 return $next($request);
             });
         }

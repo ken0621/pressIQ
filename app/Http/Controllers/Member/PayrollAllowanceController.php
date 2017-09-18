@@ -96,6 +96,9 @@ use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_time_keeping_approved_breakdown;
 use App\Models\Tbl_payroll_time_keeping_approved_performance;
 
+use App\Globals\AuditTrail;
+use App\Models\Tbl_audit_trail;
+
 class PayrollAllowanceController extends Member
 {
 
@@ -190,8 +193,13 @@ class PayrollAllowanceController extends Member
 
          if($allowance_id != 0 && !empty($insert_tag))
          {
-              Tbl_payroll_employee_allowance_v2::insert($insert_tag);
+            Tbl_payroll_employee_allowance_v2::insert($insert_tag);
+            $new_data= serialize($insert_tag);
+            $tag_me = Tbl_payroll_employee_basic::where('payroll_employee_id',$employee_tag)->first();
+            AuditTrail::record_logs('ADDED: Payroll Employee Allowance V2', 'Payroll Employee Name Tagged : '.$tag_me->payroll_employee_display_name, "", "" ,$new_data);
+          
          }
+
          Session::put('allowance_employee_tag',$array);
 
          $return['status']             = 'success';
@@ -243,7 +251,7 @@ class PayrollAllowanceController extends Member
          
 
          $allowance_id = Tbl_payroll_allowance_v2::insertGetId($insert);
-
+          AuditTrail::record_logs('CREATED: Payroll Allowance V2', 'Payroll Allowance Name: '.Request::input('payroll_allowance_name'),"", "" ,"");
          $per_employee_amount = Request::input('allowance_amount');
 
          $total_amount = 0;
@@ -292,8 +300,10 @@ class PayrollAllowanceController extends Member
     {
          $id = Request::input('id');
          $update['payroll_allowance_archived'] = Request::input('archived');
+        $allowance = Tbl_payroll_allowance_v2::where('payroll_allowance_id', $id)->first();
          Tbl_payroll_allowance_v2::where('payroll_allowance_id', $id)->update($update);
-
+        AuditTrail::record_logs('DELETED: Payroll Allowance V2', 'Payroll Allowance Name:'. $allowance->payroll_allowance_name,"", "" ,"");
+          
          $return['status']             = 'success';
          $return['function_name']      = 'payrollconfiguration.reload_allowancev2';
          return json_encode($return);
@@ -364,8 +374,10 @@ class PayrollAllowanceController extends Member
                 $update[$value] = 1;
              }
          }
-        
-         Tbl_payroll_allowance_v2::where('payroll_allowance_id', $payroll_allowance_id)->update($update);
+        $new_data=serialize($update);
+        Tbl_payroll_allowance_v2::where('payroll_allowance_id', $payroll_allowance_id)->update($update);
+        AuditTrail::record_logs('EDITED: Payroll Allowance V2', 'Payroll Allowance ID #: '.$payroll_allowance_id." From allowance name:".Request::input('payroll_allowance_name'), $payroll_allowance_id, "" ,$new_data);
+          
          Tbl_payroll_employee_allowance_v2::where('payroll_allowance_id',$payroll_allowance_id)->delete();
 
          $per_employee_amount = Request::input('allowance_amount');

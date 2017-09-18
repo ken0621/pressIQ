@@ -35,6 +35,7 @@ function modal_biometrics()
 				formdata.append("_token", $("._token").val());
 				formdata.append("file",file);
 				formdata.append("biometric", $("#biometric_name").val())
+				formdata.append("company", $("#company").val())
 
 				ajax.upload.addEventListener("progress",function(event)
 				{

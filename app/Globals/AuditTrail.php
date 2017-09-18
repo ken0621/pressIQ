@@ -1450,7 +1450,8 @@ class AuditTrail
                 else
                 {
                     $audit_trail[$key]->action = "";
-                    $audit_trail[$key]->transaction_txt = "Transaction not found.";
+                    // $audit_trail[$key]->transaction_txt = "Transaction not found.";
+                    $audit_trail[$key]->transaction_txt = ucwords(str_replace("_", " ",$value->remarks));
                 }
             }
             $audit_trail[$key]->transaction_date = $transaction_date;

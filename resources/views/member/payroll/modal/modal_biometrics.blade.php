@@ -27,7 +27,7 @@
 			<label class="btn btm-custom-green"><input type="file" name="" id="bio-file" class="hide" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/plain, .dat">Choose File</label>
 		</div>
 		<div class="col-md-6">
-			<select class="form-control" name="company">
+			<select class="form-control" id="company" name="company">
 				<option value="">Select Company</option>
 				@foreach($_company as $company)
 	              <option value="{{$company['company']->payroll_company_id}}">{{$company['company']->payroll_company_name}}</option> 

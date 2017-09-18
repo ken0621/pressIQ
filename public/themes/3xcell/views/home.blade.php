@@ -3,9 +3,15 @@
 <div class="content">
 	<!-- Media Slider -->
 	<div class="slider-wrapper single-item">
+		@if(loop_content_condition($shop_theme_info, "home", "home_slider"))
+			@foreach(loop_content_get($shop_theme_info, "home", "home_slider") as $slider)
+			<img src="{{ $slider }}">
+			@endforeach
+		@else
 		<img src="/themes/{{ $shop_theme }}/img/slide-img-2.jpg">
 		<img src="/themes/{{ $shop_theme }}/img/slide-img-1.png">
-		<img src="/themes/{{ $shop_theme }}/img/slide-img-3.jpg">		
+		<img src="/themes/{{ $shop_theme }}/img/slide-img-3.jpg">
+		@endif		
 	</div>
 	<!-- INFORMATIVE -->
 	<div class="top-1-container">

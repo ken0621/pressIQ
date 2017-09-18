@@ -128,11 +128,11 @@
 				<div class="chart-legend">
 					<div class="holder">
 						<div class="color"></div>
-						<div class="name"><span>Builder Point(s)</span> 0.00 POINT(S)</div>
+						<div class="name"><span>Builder Point(s)</span> {{ $points->display_brown_builder_points }}</div>
 					</div>
 					<div class="holder">
 						<div class="color"></div>
-						<div class="name"><span>Reward Point(s)</span> 0.00 POINT(S)</div>
+						<div class="name"><span>Reward Point(s)</span> {{ $points->display_brown_leader_points }}</div>
 					</div>
 				</div>
 			</div>

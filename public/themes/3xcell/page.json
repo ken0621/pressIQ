@@ -256,6 +256,13 @@
 			"type":"textarea",
 			"default":"To influence and empower others in achieving goal to be healthy and wealthy with the freedom of time especially in today’s very crowded populace.",
 			"size":"6"
+		},
+		"history_permit" :
+		{
+			"label":"Permits",
+			"type":"gallery",
+			"default":"",
+			"size":"12"
 		}
 	},
 	"How-To-Join":

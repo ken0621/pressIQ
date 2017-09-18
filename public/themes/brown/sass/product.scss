@@ -1,12 +1,21 @@
-$open-sans: 'Open Sans', sans-serif;
-$light: 300;
+$content-text: 'Arimo', sans-serif;
 $regular: 400;
 $semi-bold: 600;
 $bold: 700;
+$text-light: #777;
+$text-dark: #272c2f;
+
+@mixin transition($transition)
+{
+	-webkit-transition: all 0.2s ease-in-out;
+	-moz-transition: all 0.2s ease-in-out;
+	-o-transition: all 0.2s ease-in-out;
+	transition: all 0.2s ease-in-out;
+}
 
 .product-container
 {
-	font-family: $open-sans;
+	font-family: $content-text;
 	background-color: #ededed;
 
 	.bg-container-style
@@ -71,6 +80,7 @@ $bold: 700;
 
 		.btn-go
 		{
+			@include transition(0.2s);
 			font-size: 13px;
 			font-weight: $semi-bold;
 			color: #FFF;

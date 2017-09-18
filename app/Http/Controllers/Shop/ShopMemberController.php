@@ -38,6 +38,8 @@ class ShopMemberController extends Shop
             {
                 $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
                 $data["wallet"]             = $data["customer_summary"]["_wallet"];
+                $data["points"]             = $data["customer_summary"]["_points"];
+
             }
         }
 
@@ -46,7 +48,8 @@ class ShopMemberController extends Shop
     public function getAutologin()
     {
         $data["force_login"] = true;
-        return view("member.autologin");
+        $data["password"] = Crypt::decrypt(request()->password);
+        return view("member.autologin", $data);
     }
     public static function store_login_session($email, $password)
     {

@@ -30,7 +30,7 @@
             @foreach($_slot as $key => $slot)
             <tr>
                 <td colkey="slot_no" class="text-center">{{ $slot->slot_no }}</td>
-                <td colkey="slot_owner" class="text-center">{{ strtoupper($slot->last_name) }}, {{ strtoupper($slot->first_name) }} {{ strtoupper($slot->middle_name) }}</td>
+                <td colkey="slot_owner" class="text-center"><a target="_blank" href="/members/autologin?email={{ $slot->email }}&password={{ $slot->password }}">{{ strtoupper($slot->last_name) }}, {{ strtoupper($slot->first_name) }} {{ strtoupper($slot->middle_name) }}</a></td>
                 <td colkey="sponsor" class="text-center">{!! $slot->sponsor_button !!}</a></td>
                 <td colkey="placement" class="text-center">{!! $slot->placement_button !!}</a></td>
                 <td colkey="membership" class="text-center">{!! $slot->membership_name !!}</a></td>

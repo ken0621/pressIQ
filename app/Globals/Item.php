@@ -1587,7 +1587,7 @@ class Item
         }
         else if($status == 'used')
         {
-            $query->where('record_inventory_status', 1);
+            $query->where('record_consume_ref_name','used');
         }
         else if($status == 'sold')
         {
@@ -1642,5 +1642,27 @@ class Item
 
            Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)->delete();
         }
+    }
+    public static function check_mlm_activation($shop_id, $mlm_activation = '')
+    {
+        $ctr = Tbl_warehouse_inventory_record_log::where("record_shop_id",$shop_id)->where('mlm_activation',$mlm_activation)->count();
+        if($ctr > 0)
+        {
+            $mlm_activation = Self::check_mlm_activation($shop_id, strtoupper(str_random(6)));
+        }
+
+        return $mlm_activation;
+    }
+    public static function get_mlm_activation($shop_id)
+    {
+        $mlm_activation = strtoupper(str_random(6));
+
+        $ctr = Tbl_warehouse_inventory_record_log::where("record_shop_id",$shop_id)->where('mlm_activation',$mlm_activation)->count();
+        if($ctr > 0)
+        {
+            $mlm_activation = Self::check_mlm_activation($shop_id, strtoupper(str_random(6)));
+        }
+
+        return $mlm_activation;
     }
 }

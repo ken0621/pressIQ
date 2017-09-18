@@ -13,18 +13,10 @@ function non_member()
 	}
 	function document_ready()
 	{
-		action_show_success_if_mode_success();
 		add_event_enter_code_click();
 		add_event_submit_verify_sponsor();
 		add_event_submit_verify_code();
 		add_event_process_slot_creation();
-	}
-	function action_show_success_if_mode_success()
-	{
-		if($("._mode").val() == "success")
-		{
-			$("#success-modal").modal("show");
-		}
 	}
 	function add_event_process_slot_creation()
 	{

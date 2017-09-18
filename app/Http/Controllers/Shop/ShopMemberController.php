@@ -21,12 +21,38 @@ use Google_Service_Plus;
 
 class ShopMemberController extends Shop
 {
+    public function getIndex()
+    {
+        $data["page"] = "Dashboard";
+        $data["mode"] = session("get_success_mode");
+        session()->forget("get_success_mode");
+        $view = "member.dashboard";
+
+        if(Self::$customer_info)
+        {
+            if(!$this->mlm_member)
+            {
+                $view = "member.nonmember";
+            }   
+            else
+            {
+                $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
+                $data["wallet"]             = $data["customer_summary"]["_wallet"];
+            }
+        }
+
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view($view, $data));
+    }
+    public function getAutologin()
+    {
+        $data["force_login"] = true;
+        return view("member.autologin");
+    }
     public static function store_login_session($email, $password)
     {
         $store["email"]         = $email;
         $store["auth"]          = $password;
         $sess["mlm_member"]     = $store;
-
         session($sess);
     }
 
@@ -254,23 +280,6 @@ class ShopMemberController extends Shop
         return view("member.forgot_password");
     }
     /* LOGIN AND REGISTRATION - END */
-    public function getIndex()
-    {
-        $data["page"] = "Dashboard";
-        $data["mode"] = session("get_success_mode");
-        session()->forget("get_success_mode");
-        $view = "member.dashboard";
-
-        if(Self::$customer_info)
-        {
-            if(!Self::$customer_info->ismlm)
-            {
-                $view = "member.nonmember";
-            }     
-        }
-
-        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view($view, $data));
-    }
     public function getProfile()
     {
         $data["page"] = "Profile";
@@ -406,13 +415,13 @@ class ShopMemberController extends Shop
 
             if(!$check_membership_code)
             {
-                $message = "Invalid PIN/ACTIVATION!";
+                $message = "Invalid PIN / ACTIVATION!";
             }
             else
             {
                 if($check_membership_code->mlm_slot_id_created != "")
                 {
-                    $message = "PIN/ACTIVATION ALREADY USED";
+                    $message = "PIN / ACTIVATION ALREADY USED";
                 }
                 else
                 {
@@ -445,10 +454,13 @@ class ShopMemberController extends Shop
             $customer_id    = Self::$customer_info->customer_id;
             $membership_id  = $data["membership_code"]->membership_id;
             $sponsor        = $data["sponsor"]->slot_id;
-            $create_slot = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $data["pin"]);
+            $create_slot    = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $data["pin"]);
 
             if(is_numeric($create_slot))
             {
+                $remarks = "Code used by " . $data["sponsor_customer"]->first_name . " " . $data["sponsor_customer"]->last_name;
+                MLM2::use_membership_code($shop_id, $data["pin"], $data["activation"], $create_slot, $remarks);
+
                 $slot_id = $create_slot;
                 $store["get_success_mode"] = "success";
                 session($store);
@@ -458,7 +470,6 @@ class ShopMemberController extends Shop
             {
                 echo json_encode($create_slot);
             }
-
         }
     }
     public function code_verification()

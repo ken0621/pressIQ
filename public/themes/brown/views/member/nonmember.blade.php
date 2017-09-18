@@ -1,8 +1,6 @@
 @extends("member.member_layout")
 @section("member_content")
 <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
-<input type="hidden" name="_mode" class="_mode" value="{{ $mode }}">
-
 <div class="dashboard">
     <!-- TOP DASHBOARD-->
     <div class="dashboard-top">
@@ -292,20 +290,7 @@
             </div>
         </div>
     </div>
-    <!-- Success -->
-    <div class="popup-success">
-        <div id="success-modal" class="modal success-modal fade">
-            <div class="modal-md modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <div><img src="/themes/{{ $shop_theme }}/img/brown-done-img.png"></div>
-                        <div class="text-header">Done!</div>
-                        <div class="text-caption">You are now officially enrolled to<br><b>Brown & Proud</b> movement</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <!-- Failed -->
     <div class="popup-failed">
         <div id="failed-modal" class="modal">

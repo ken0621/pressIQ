@@ -290,6 +290,10 @@ class ShopMemberController extends Shop
     {
         $data["page"] = "Profile";
         $data["mlm"] = isset(Self::$customer_info->ismlm) ? Self::$customer_info->ismlm : 0;
+
+        $data["profile"]         = Tbl_customer::shop(Self::$customer_info->shop_id)->where("tbl_customer.customer_id", Self::$customer_info->customer_id)->first();
+        $data["profile_address"] = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->first();
+        dd($data["profile"]);
         
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.profile", $data));
     }

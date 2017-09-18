@@ -3,9 +3,11 @@ namespace App\Globals;
 use App\Models\Tbl_membership;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_warehouse_inventory_record_log;
+use App\Models\Tbl_mlm_slot_wallet_log;
 use Carbon\Carbon;
 use Validator;
 use Illuminate\Validation\Rule;
+use stdClass;
 
 
 class MLM2
@@ -22,6 +24,58 @@ class MLM2
 		}
 
 		return $slot_info;
+	}
+	public static function customer_income_summary($shop_id, $customer_id)
+	{
+		$_slot = Tbl_mlm_slot::where("slot_owner", $customer_id)->currentWallet()->get();
+
+		$return["_wallet"] = new stdClass();
+		$return["_wallet"]->current_wallet = 0;
+		$return["_wallet"]->total_earnings = 0;
+		$return["_wallet"]->total_payout = 0;
+		$return["_wallet"]->complan_direct = 0;
+		$return["_wallet"]->complan_binary = 0;
+		$return["_wallet"]->complan_builder = 0;
+		$return["_wallet"]->complan_leader = 0;
+
+		$return["slot_count"] = 0;
+
+		foreach($_slot as $slot)
+		{
+			$return["_wallet"]->current_wallet += $slot->current_wallet;
+			$return["_wallet"]->total_earnings += $slot->total_earnings;
+			$return["_wallet"]->total_payout += $slot->total_payout;
+			$return["slot_count"]++;	
+
+			$_slot_wallet = Tbl_mlm_slot_wallet_log::where("wallet_log_slot", $slot->slot_id)->get();
+
+			foreach($_slot_wallet as $slot_wallet)
+			{
+				$wallet_plan = strtolower("complan_" .$slot_wallet->wallet_log_plan);
+				if(!isset($return["_wallet"]->$wallet_plan))
+				{
+					$return["_wallet"]->$wallet_plan = $slot_wallet->wallet_log_amount;
+				}
+				else
+				{
+					$return["_wallet"]->$wallet_plan += $slot_wallet->wallet_log_amount;
+				}
+				
+			}
+		}
+
+		$_wallet = json_encode($return["_wallet"]);
+
+		/* DISPLAY FORMAT */
+		foreach(json_decode($_wallet) as $key => $wallet)
+		{
+			$display_string = "display_" . $key;
+			$return["_wallet"]->$display_string = Currency::format($wallet);
+		}
+
+		$return["display_slot_count"] = number_format($return["slot_count"], 0) . " SLOT(S)";
+
+		return $return;
 	}
 	public static function membership($shop_id)
 	{

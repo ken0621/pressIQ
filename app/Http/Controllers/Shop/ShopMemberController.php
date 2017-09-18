@@ -21,12 +21,38 @@ use Google_Service_Plus;
 
 class ShopMemberController extends Shop
 {
+    public function getIndex()
+    {
+        $data["page"] = "Dashboard";
+        $data["mode"] = session("get_success_mode");
+        session()->forget("get_success_mode");
+        $view = "member.dashboard";
+
+        if(Self::$customer_info)
+        {
+            if(!$this->mlm_member)
+            {
+                $view = "member.nonmember";
+            }   
+            else
+            {
+                $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
+                $data["wallet"]             = $data["customer_summary"]["_wallet"];
+            }
+        }
+
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view($view, $data));
+    }
+    public function getAutologin()
+    {
+        $data["force_login"] = true;
+        return view("member.autologin");
+    }
     public static function store_login_session($email, $password)
     {
         $store["email"]         = $email;
         $store["auth"]          = $password;
         $sess["mlm_member"]     = $store;
-
         session($sess);
     }
 
@@ -254,24 +280,6 @@ class ShopMemberController extends Shop
         return view("member.forgot_password");
     }
     /* LOGIN AND REGISTRATION - END */
-    public function getIndex()
-    {
-        $data["page"] = "Dashboard";
-        $data["mode"] = session("get_success_mode");
-        session()->forget("get_success_mode");
-        $view = "member.dashboard";
-
-        //dd($this->mlm_member);
-        if(Self::$customer_info)
-        {
-            if(!$this->mlm_member)
-            {
-                $view = "member.nonmember";
-            }     
-        }
-
-        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view($view, $data));
-    }
     public function getProfile()
     {
         $data["page"] = "Profile";

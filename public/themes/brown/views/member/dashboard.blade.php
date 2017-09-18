@@ -11,26 +11,22 @@
 					<div class="chart-legend">
 						<div class="holder">
 							<div class="color" style="background-color: #76b6ec"></div>
-							<div class="name"><span>Current Wallet</span> PHP 0.00</div>
+							<div class="name"><span>Current Wallet</span> {{ $wallet->display_current_wallet }}</div>
 						</div>
 						<div class="holder">
 							<div class="color" style="background-color: #8E5EA2"></div>
-							<div class="name"><span>Total Pending Pay-out</span> PHP 0.00</div>
-						</div>
-						<div class="holder">
-							<div class="color" style="background-color: #8E5EA2"></div>
-							<div class="name"><span>Total Received Pay-out</span> PHP 0.00</div>
+							<div class="name"><span>Total Pay-out</span> {{ $wallet->display_total_payout }}</div>
 						</div>
 						<div class="chart-holder">
 							<canvas id="income_summary" style="max-width: 150px;" width="400" height="400"></canvas>
 						</div>
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Current Slot(s)</span> 1 SLOT(S)</div>
+							<div class="name"><span>Current Slot(s)</span> {{ $customer_summary["display_slot_count"] }}</div>
 						</div>
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Total Reward</span> PHP 0.00</div>
+							<div class="name"><span>Total Reward</span> {{ $wallet->display_total_earnings }}</div>
 						</div>
 					</div>
 
@@ -109,19 +105,19 @@
 				<div class="chart-legend">
 					<div class="holder">
 						<div class="color"></div>
-						<div class="name"><span>Pairing Reward</span> PHP 0.00</div>
+						<div class="name"><span>Pairing Reward</span> {{ $wallet->display_complan_binary }}</div>
 					</div>
 					<div class="holder">
 						<div class="color"></div>
-						<div class="name"><span>Direct Referral Bonus</span> PHP 0.00</div>
+						<div class="name"><span>Direct Referral Bonus</span> {{ $wallet->display_complan_direct }}</div>
 					</div>
 					<div class="holder">
 						<div class="color"></div>
-						<div class="name"><span>Builder Reward</span> PHP 0.00</div>
+						<div class="name"><span>Builder Reward</span> {{ $wallet->display_complan_builder }}</div>
 					</div>
 					<div class="holder">
 						<div class="color"></div>
-						<div class="name"><span>Leader Reward</span> PHP 0.00</div>
+						<div class="name"><span>Leader Reward</span> {{ $wallet->display_complan_leader }}</div>
 					</div>
 				</div>
 
@@ -142,12 +138,13 @@
 			</div>
 
 			<div class="unilevel-holder">
-				<div class="title"><i class="fa fa-star"></i> My Slot(s)</div>
+				<div class="title"><i class="fa fa-star"></i> My Slot(s) <a href="javascript:" class="title-button pull-right"><i class="fa fa-plus"></i> New Slot</a></div>
 				<div class="sub-container">
 					<div class="holder">
 						<div class="row clearfix">
-							<div class="col-sm-4">
+							<div class="col-sm-4 text-center">
 								<div class="label2">MYPHONE0001</div>
+								<div class="label3">PHP 0.00</div>
 							</div>
 							<div class="col-sm-8">
 								<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 40%, rgb(237, 237, 237) 40%);">ROAD TO <b>BUILDER</b> (0/10)</div>

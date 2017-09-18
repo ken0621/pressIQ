@@ -15,6 +15,9 @@ use App\Globals\FacebookGlobals;
 use App\Globals\SocialNetwork;
 use App\Globals\GoogleGlobals;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_customer_address;
+use App\Models\Tbl_customer_other_info;
+use App\Models\Tbl_country;
 use Validator;
 use Google_Client; 
 use Google_Service_Drive;
@@ -31,17 +34,10 @@ class ShopMemberController extends Shop
 
         if(Self::$customer_info)
         {
-            if(!$this->mlm_member)
-            {
-                $view = "member.nonmember";
-            }   
-            else
-            {
-                $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
-                $data["wallet"]             = $data["customer_summary"]["_wallet"];
-                $data["points"]             = $data["customer_summary"]["_points"];
-
-            }
+            $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
+            $data["wallet"]             = $data["customer_summary"]["_wallet"];
+            $data["points"]             = $data["customer_summary"]["_points"];
+            $data["_slot"]              = $data["customer_summary"]["_slot"];
         }
 
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view($view, $data));
@@ -297,8 +293,19 @@ class ShopMemberController extends Shop
     {
         $data["page"] = "Profile";
         $data["mlm"] = isset(Self::$customer_info->ismlm) ? Self::$customer_info->ismlm : 0;
-        
+
+        $data["profile"]         = Tbl_customer::shop(Self::$customer_info->shop_id)->where("tbl_customer.customer_id", Self::$customer_info->customer_id)->first();
+        $data["profile_address"] = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->first();
+        $data["profile_info"]    = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();
+        $data["_country"]        = Tbl_country::get();
+
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.profile", $data));
+    }
+    public function postProfileUpdateReward(Request $request)
+    {
+        $update_customer["downline_rule"] = $request->downline_rule;
+        Tbl_customer::where("customer_id", Self::$customer_info->customer_id)->update($update_customer);
+        echo json_encode("success");
     }
     public function getNotification()
     {

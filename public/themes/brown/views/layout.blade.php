@@ -66,7 +66,7 @@
                                 </div>
                                 <div class="profile-footer">
                                 <!-- onClick="location.href='/members/logout'" -->
-                                    <button type="button" class="btn btn-grey brown-sign-out" onClick="location.href='/members/logout'" >Sign Out</button>
+                                    <button type="button" class="btn btn-grey brown-sign-out" onClick="location.href='https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://{{$_SERVER['SERVER_NAME']}}/members/logout'" >Sign Out</button>
                                 </div>
                             </li>
                         </ul>

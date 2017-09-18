@@ -133,7 +133,7 @@ class ShopMemberController extends Shop
         session_start();
         $_SESSION['access_token'] = $request->access_token;
 
-        $check = Tbl_customer::where('email',$email)->first();
+        $check = Tbl_customer::where('email',$email)->where('shop_id',$this->shop_info->shop_id)->first();
         if($check && $pass)
         {
             Self::store_login_session($email,$pass);
@@ -147,6 +147,7 @@ class ShopMemberController extends Shop
             $ins['mlm_username']    = $request->email;
             $ins['ismlm']           = 1;
             $ins['created_at']      = Carbon::now();
+            $ins['signup_with']     = 'googleplus';
 
             $reg = Customer::register($this->shop_info->shop_id, $ins);  
             if($reg)
@@ -156,6 +157,7 @@ class ShopMemberController extends Shop
                 Self::store_login_session($email,$pass);
             }             
         }
+
         echo json_encode("success");
     }
     public function getLoginSubmit()
@@ -209,7 +211,7 @@ class ShopMemberController extends Shop
         if(count($user_profile) > 0)
         {
             $data = collect($user_profile)->toArray();
-            $check = Tbl_customer::where('email',$data['email'])->first();
+            $check = Tbl_customer::where('email',$data['email'])->where('shop_id',$this->shop_info->shop_id)->first();
             $email = $data['email'];
             $pass = $data['id'];
             if(!$check)
@@ -223,6 +225,7 @@ class ShopMemberController extends Shop
                 $ins['mlm_username']    = $data['email'];
                 $ins['ismlm']           = 1;
                 $ins['created_at']      = Carbon::now();
+                $ins['signup_with']     = 'facebook';
 
                 Customer::register($this->shop_info->shop_id, $ins);            
             }

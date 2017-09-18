@@ -392,7 +392,7 @@ class Warehouse2
                 $insert['record_source_ref_id']      = isset($source['id']) ? $source['id'] : 0;
                 $insert['record_log_date_updated']   = Carbon::now();
                 $insert['mlm_pin']                   = Warehouse2::get_mlm_pin($shop_id);
-                $insert['mlm_activation']            = strtoupper(str_random(6));
+                $insert['mlm_activation']            = Item::get_mlm_activation($shop_id);
 
                 if($serial_qty > 0)
                 {

@@ -159,7 +159,7 @@ function non_member()
 	}
 	function add_event_enter_code_click()
 	{
-	    $("#btn-enter-a-code").click(function()
+	    $(".btn-enter-a-code").click(function()
 	    {
 			$("#enter-a-code-modal").modal('show');
 			$(".output-container").html("");

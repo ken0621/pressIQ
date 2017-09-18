@@ -47,8 +47,10 @@ class MLM2
 
 		$return["slot_count"] = 0;
 
-		foreach($_slot as $slot)
+		foreach($_slot as $key =>  $slot)
 		{
+			$_slot[$key]->display_total_earnings = Currency::format($slot->total_earnings);
+
 			$return["_wallet"]->current_wallet += $slot->current_wallet;
 			$return["_wallet"]->total_earnings += $slot->total_earnings;
 			$return["_wallet"]->total_payout += $slot->total_payout;
@@ -104,6 +106,7 @@ class MLM2
 			$return["_points"]->$display_string = number_format($points, 2) . " POINT(S)";
 		}
 
+		$return["_slot"] = $_slot;
 		$return["display_slot_count"] = number_format($return["slot_count"], 0) . " SLOT(S)";
 
 		return $return;

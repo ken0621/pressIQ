@@ -68,41 +68,53 @@
 				<div class="line-bot"></div>
 			</div>
 			<div class="bot-content row clearfix">
-				<div class="col-md-2">
-					<div class="img-container">
-						<a href="/themes/{{ $shop_theme }}/img/permit1.png" data-title="" data-lightbox="company-gallery">
-							<img src="/themes/{{ $shop_theme }}/img/permit1.png">
-						</a>
+				@if(loop_content_condition($shop_theme_info, "history", "history_permit"))
+					@foreach(loop_content_get($shop_theme_info, "history", "history_permit") as $permit)
+						<div class="col-md-2">
+							<div class="img-container">
+								<a href="{{ $permit }}" data-title="" data-lightbox="company-gallery">
+									<img src="{{ $permit }}">
+								</a>
+							</div>
+						</div>
+					@endforeach
+				@else
+					<div class="col-md-2">
+						<div class="img-container">
+							<a href="/themes/{{ $shop_theme }}/img/permit1.png" data-title="" data-lightbox="company-gallery">
+								<img src="/themes/{{ $shop_theme }}/img/permit1.png">
+							</a>
+						</div>
 					</div>
-				</div>
-				<div class="col-md-2">
-					<div class="img-container">
-						<a href="/themes/{{ $shop_theme }}/img/permit2.png" data-title="" data-lightbox="company-gallery">
-							<img src="/themes/{{ $shop_theme }}/img/permit2.png">
-						</a>
+					<div class="col-md-2">
+						<div class="img-container">
+							<a href="/themes/{{ $shop_theme }}/img/permit2.png" data-title="" data-lightbox="company-gallery">
+								<img src="/themes/{{ $shop_theme }}/img/permit2.png">
+							</a>
+						</div>
 					</div>
-				</div>
-				<div class="col-md-2">
-					<div class="img-container">
-						<a href="/themes/{{ $shop_theme }}/img/permit3.png" data-title="" data-lightbox="company-gallery">
-							<img src="/themes/{{ $shop_theme }}/img/permit3.png">
-						</a>
+					<div class="col-md-2">
+						<div class="img-container">
+							<a href="/themes/{{ $shop_theme }}/img/permit3.png" data-title="" data-lightbox="company-gallery">
+								<img src="/themes/{{ $shop_theme }}/img/permit3.png">
+							</a>
+						</div>
 					</div>
-				</div>
-				<div class="col-md-2">
-					<div class="img-container">
-						<a href="/themes/{{ $shop_theme }}/img/permit4.png" data-title="" data-lightbox="company-gallery">
-							<img src="/themes/{{ $shop_theme }}/img/permit4.png">
-						</a>
+					<div class="col-md-2">
+						<div class="img-container">
+							<a href="/themes/{{ $shop_theme }}/img/permit4.png" data-title="" data-lightbox="company-gallery">
+								<img src="/themes/{{ $shop_theme }}/img/permit4.png">
+							</a>
+						</div>
 					</div>
-				</div>
-				<div class="col-md-2">
-					<div class="img-container">
-						<a href="/themes/{{ $shop_theme }}/img/permit5.png" data-title="" data-lightbox="company-gallery">
-							<img src="/themes/{{ $shop_theme }}/img/permit5.png">
-						</a>
+					<div class="col-md-2">
+						<div class="img-container">
+							<a href="/themes/{{ $shop_theme }}/img/permit5.png" data-title="" data-lightbox="company-gallery">
+								<img src="/themes/{{ $shop_theme }}/img/permit5.png">
+							</a>
+						</div>
 					</div>
-				</div>
+				@endif
 			</div>
 		</div>
 	</div>

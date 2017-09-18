@@ -294,6 +294,12 @@ class ShopMemberController extends Shop
 
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.profile", $data));
     }
+    public function postProfileUpdateReward(Request $request)
+    {
+        $update_customer["downline_rule"] = $request->downline_rule;
+        Tbl_customer::where("customer_id", Self::$customer_info->customer_id)->update($update_customer);
+        echo json_encode("success");
+    }
     public function getNotification()
     {
         $data["page"] = "Notification";

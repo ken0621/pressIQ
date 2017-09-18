@@ -173,14 +173,14 @@
 					   				<div class="form-group">
 							   			<label>New Sponsor Rule</label>
 							   			<select name="downline_rule" class="form-control">
-							   				<option name="auto" {{ $customer->downline_rule == "auto" ? "selected" : "" }}>AUTO PLACEMENT</option>
-							   				<option name="manual" {{ $customer->downline_rule == "manual" ? "selected" : "" }}>MANUAL PLACEMENT</option>
+							   				<option value="auto" {{ $customer->downline_rule == "auto" ? "selected" : "" }}>AUTO PLACEMENT</option>
+							   				<option value="manual" {{ $customer->downline_rule == "manual" ? "selected" : "" }}>MANUAL PLACEMENT</option>
 							   			</select>
 							   		</div>
 					   			</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button type="submit" class="btn btn-brown"><i class="fa fa-save"></i> Update</button>
+							   			<button type="submit" class="submit-button btn btn-brown"><i class="fa fa-save"></i> Update</button>
 							   		</div>
 						   		</div>
 					   		</div>

@@ -56,6 +56,7 @@ class MLM2
 		$return["_wallet"]->complan_binary = 0;
 		$return["_wallet"]->complan_builder = 0;
 		$return["_wallet"]->complan_leader = 0;
+		$return["_wallet"]->complan_triangle = 0;
 
 		$return["_points"] = new stdClass();
 		$return["_points"]->brown_leader_points = 0;

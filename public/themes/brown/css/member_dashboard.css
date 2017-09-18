@@ -145,6 +145,8 @@
         color: #85939e;
         font-size: 16px;
         opacity: 0.5; }
+    .dashboard .border-holder .holder .action {
+      margin-top: 10px; }
   .dashboard .activities .holder {
     padding-bottom: 25px;
     position: relative;

@@ -223,6 +223,7 @@
 			{
 				display: inline-block;
 				vertical-align: top;
+
 				.name
 				{
 					color: #344049;
@@ -240,6 +241,10 @@
 					font-size: 16px;
 					opacity: 0.5;
 				}
+			}
+			.action
+			{
+				margin-top: 10px;
 			}
 		}
 	}

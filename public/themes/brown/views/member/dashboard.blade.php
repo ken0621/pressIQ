@@ -185,7 +185,7 @@
 					<div class="chart-legend">
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Pairing Reward</span> {{ $wallet->display_complan_binary }}</div>
+							<div class="name"><span>Pairing Reward</span> {{ $wallet->display_complan_triangle }}</div>
 						</div>
 						<div class="holder">
 							<div class="color"></div>
@@ -250,9 +250,18 @@
 							<img src="{{ $profile_image }}">
 						</div>	
 						<div class="text">
-							<div class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
-							<div class="email">{{ $direct->email }}</div>
-							<div class="date">{{ $direct->time_ago }}</div>
+							<div class="pull-left">
+								<div class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
+								<div class="email">{{ $direct->slot_no }}</div>
+								<div class="date">{{ $direct->time_ago }}</div>
+							</div>
+						</div>
+						<div class="action pull-right">
+							@if($direct->distributed == 1)
+								<button class="btn btn-default"><i class="fa fa-star"></i> VIEW INFO</button>
+							@else
+								<button class="btn btn-danger"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
+							@endif
 						</div>
 					</div>
 					@endforeach

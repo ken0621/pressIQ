@@ -46,7 +46,8 @@ class ShopMemberController extends Shop
     public function getAutologin()
     {
         $data["force_login"] = true;
-        return view("member.autologin");
+        $data["password"] = Crypt::decrypt(request()->password);
+        return view("member.autologin", $data);
     }
     public static function store_login_session($email, $password)
     {

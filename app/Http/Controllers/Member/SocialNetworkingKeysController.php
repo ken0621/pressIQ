@@ -62,7 +62,7 @@ class SocialNetworkingKeysController extends Member
     }
     public function postSubmitUpdate(Request $request)
     {
-    	$ins['social_network_name'] = strtolower(trim($request->social_network_name));
+    	// $ins['social_network_name'] = strtolower(trim($request->social_network_name));
     	$ins['app_id'] = $request->app_id;
     	$ins['app_secret'] = $request->app_secret;
     	$ins['app_created'] = Carbon::now();

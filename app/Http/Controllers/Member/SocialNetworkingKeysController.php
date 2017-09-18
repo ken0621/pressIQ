@@ -65,7 +65,7 @@ class SocialNetworkingKeysController extends Member
     	// $ins['social_network_name'] = strtolower(trim($request->social_network_name));
     	$ins['app_id'] = $request->app_id;
     	$ins['app_secret'] = $request->app_secret;
-    	$ins['app_created'] = Carbon::now();
+    	// $ins['app_created'] = Carbon::now();
 
     	$validate = SocialNetwork::validate($this->user_info->shop_id, $ins, $request->keys_id);
 

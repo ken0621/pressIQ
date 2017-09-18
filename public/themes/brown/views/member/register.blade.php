@@ -20,7 +20,7 @@
 										<a href="{{$fb_login_url or '#'}}" class="holder fb">
 											<div class="name"><i class="fa fa-facebook" aria-hidden="true"></i> Sign up with Facebook</div>
 										</a>
-										<a href="javascript:" class="holder gp">
+										<a href="javascript:" class="holder g-signin2" data-onsuccess="onSignIn">
 											<div class="name"><i class="fa fa-google-plus" aria-hidden="true"></i> Sign up with Google+</div>
 										</a>
 									</div>

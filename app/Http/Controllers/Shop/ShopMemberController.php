@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Shop;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Request as Request2;
 use Crypt;
 use Redirect;
 use View;
@@ -123,6 +124,10 @@ class ShopMemberController extends Shop
         // }
         $correo = null;
         $me = $plus->people->get("me");
+    }
+    public function getSigninGoogle()
+    {
+        
     }
     public function postLoginGoogleSubmit(Request $request)
     {

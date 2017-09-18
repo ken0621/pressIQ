@@ -1648,7 +1648,7 @@ class Item
         $ctr = Tbl_warehouse_inventory_record_log::where("record_shop_id",$shop_id)->where('mlm_activation',$mlm_activation)->count();
         if($ctr > 0)
         {
-            $mlm_activation = strtoupper(str_random(6));
+            $mlm_activation = Self::check_mlm_activation($shop_id, strtoupper(str_random(6)));
         }
 
         return $mlm_activation

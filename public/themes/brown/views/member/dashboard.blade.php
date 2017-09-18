@@ -22,7 +22,7 @@
 	                    <div class="btn-container">
 	                        <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
 	                        <img src="/themes/{{ $shop_theme }}/img/or.png"><br>
-	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
+	                        <a href="#" class="btn-enter-a-code" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
 	                    </div>
 	                </div>
 	            </div>
@@ -218,7 +218,7 @@
 				</div>
 
 				<div class="unilevel-holder">
-					<div class="title"><i class="fa fa-star"></i> My Slot(s) <a href="javascript:" class="title-button pull-right"><i class="fa fa-plus"></i> New Slot</a></div>
+					<div class="title"><i class="fa fa-star"></i> My Slot(s) <a href="javascript:" class="title-button pull-right btn-enter-a-code"><i class="fa fa-plus"></i> New Slot</a></div>
 					<div class="sub-container">
 						@foreach($_slot as $slot)
 						<div class="holder">

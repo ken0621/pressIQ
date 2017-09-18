@@ -127,7 +127,7 @@ class ShopMemberController extends Shop
     }
     public function getSigninGoogle()
     {
-        
+        return view('signin_google');
     }
     public function postLoginGoogleSubmit(Request $request)
     {

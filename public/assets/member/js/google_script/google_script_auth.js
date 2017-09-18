@@ -1,7 +1,5 @@
 function onSignIn(googleUser)
 {
-	console.log(googleUser);
-	alert(123);
 	// console.log(googleUser);
     // Useful data for your client-side scripts:
     var profile = googleUser.getBasicProfile();

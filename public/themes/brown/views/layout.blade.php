@@ -421,7 +421,7 @@
       // $('.brown-sign-out').unbind('click');
       // $('.brown-sign-out').bind('click', function()
       // {
-      //   gapi.auth.signOut();
+      //   gapi.auth.sign
       // });
     </script>
     @yield("script")

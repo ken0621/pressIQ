@@ -118,9 +118,35 @@ class MLM2
 
 		return $return;
 	}
+	public static function customer_direct($shop_id, $customer_id, $limit = 10)
+	{
+		$_slot = Tbl_mlm_slot::where("slot_owner", $customer_id)->get();
+
+		$query = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id", $shop_id)->customer();
+
+		$query->where(function($q) use ($_slot)
+		{
+			foreach($_slot as $slot)
+			{
+				$q->orWhere("slot_sponsor", $slot->slot_id);
+			}
+		});
+
+		$query->limit($limit);
+
+		$_direct = $query->orderBy("slot_id", "desc")->get();
+
+		foreach($_direct as $key => $direct)
+		{
+			$_direct[$key]->time_ago = time_ago($direct->slot_created_date);
+		}
+
+		return $_direct;
+
+	}
 	public static function customer_rewards($shop_id, $customer_id, $limit = 10)
 	{
-		$_slot = Tbl_mlm_slot::where("slot_owner", $customer_id)->currentWallet()->get();
+		$_slot = Tbl_mlm_slot::where("slot_owner", $customer_id)->get();
 		$query = Tbl_mlm_slot_wallet_log::where("shop_id", $shop_id);
 
 		$query->where(function($q) use ($_slot)

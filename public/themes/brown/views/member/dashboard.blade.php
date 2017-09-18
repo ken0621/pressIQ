@@ -239,32 +239,23 @@
 		</div>
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="title"><i class="fa fa-globe"></i> New Referral(s)</div>
+				<div class="title"><i class="fa fa-globe"></i> Newest Enrollee(s) Sponsored</div>
 				<div class="sub-container border-holder">
-					<div class="clearfix wow">
+					<div class="clearfix wow hidden">
 						<div class="badge right">6 New Members</div>
 					</div>
+					@foreach($_direct as $direct)
 					<div class="holder">
-						<div class="color"></div>
-						<div class="text">
-							<div class="name">JOAQUIN EUGENIO MATTHEW S. CHIPECO</div>
-							<div class="date">2017-08-15 08:51:00</div>
+						<div class="color">
+							<img src="{{ $profile_image }}">
 						</div>	
-					</div>
-					<div class="holder">
-						<div class="color"></div>
 						<div class="text">
-							<div class="name">JOAQUIN EUGENIO MATTHEW S. CHIPECO</div>
-							<div class="date">2017-08-15 08:51:00</div>
-						</div>	
+							<div class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
+							<div class="email">{{ $direct->email }}</div>
+							<div class="date">{{ $direct->time_ago }}</div>
+						</div>
 					</div>
-					<div class="holder">
-						<div class="color"></div>
-						<div class="text">
-							<div class="name">JOAQUIN EUGENIO MATTHEW S. CHIPECO</div>
-							<div class="date">2017-08-15 08:51:00</div>
-						</div>	
-					</div>
+					@endforeach
 				</div>
 			</div>
 			<div class="col-md-6">

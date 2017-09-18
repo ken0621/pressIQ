@@ -16,6 +16,7 @@ use App\Models\Tbl_item;
 use App\Globals\Currency;
 use App\Globals\Mlm_compute;
 use App\Globals\Reward;
+use App\Globals\MLM2;
 use App\Models\Tbl_mlm_item_points;
 use App\Models\Tbl_brown_rank;
 use DB;

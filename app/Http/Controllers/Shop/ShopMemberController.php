@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Shop;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Request as Request2;
 use Crypt;
 use Redirect;
 use View;
@@ -125,6 +126,10 @@ class ShopMemberController extends Shop
         $correo = null;
         $me = $plus->people->get("me");
     }
+    public function getSigninGoogle()
+    {
+        return view('signin_google');
+    }
     public function postLoginGoogleSubmit(Request $request)
     {
         $pass = isset($request->id) ? $request->id : null;
@@ -191,6 +196,8 @@ class ShopMemberController extends Shop
     public function getLogout()
     {
         session()->forget("mlm_member");
+        GoogleGlobals::revoke_access($this->shop_info->shop_id);
+
         return Redirect::to("/members/login");
     }
     public function getRegister()

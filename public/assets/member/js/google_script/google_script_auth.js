@@ -1,8 +1,11 @@
 var googleUser = {};
-var startApp = function() {
-    gapi.load('auth2', function(){
+var startApp = function() 
+{
+    gapi.load('auth2', function()
+    {
       // Retrieve the singleton for the GoogleAuth library and set up the client.
-      auth2 = gapi.auth2.init({
+      auth2 = gapi.auth2.init(
+      {
         client_id: $('.google_app_id').val(),
         cookiepolicy: 'single_host_origin',
         // Request scopes in addition to 'profile' and 'email'
@@ -11,20 +14,24 @@ var startApp = function() {
       attachSignin(document.getElementById('customBtn'));
     });
   };
-   function attachSignin(element) {
+   function attachSignin(element) 
+   {
     // console.log(element.id);
     auth2.attachClickHandler(element, {},
-        function(googleUser) {
+        function(googleUser) 
+        {
         	sign_in(googleUser);
           // document.getElementById('name').innerText = "Signed in: " +
           //     googleUser.getBasicProfile().getName();
-        }, function(error) {
+        },
+        function(error) 
+        {
           alert(JSON.stringify(error, undefined, 2));
         });
   }
 function sign_in(googleUser)
 {
-	console.log(googleUser);
+	// console.log(googleUser);
     // Useful data for your client-side scripts:
     var profile = googleUser.getBasicProfile();
 

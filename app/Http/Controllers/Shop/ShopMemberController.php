@@ -15,15 +15,44 @@ use App\Globals\SocialNetwork;
 use App\Globals\GoogleGlobals;
 use App\Models\Tbl_customer;
 use Validator;
+use Google_Client; 
+use Google_Service_Drive;
+use Google_Service_Plus;
 
 class ShopMemberController extends Shop
 {
+    public function getIndex()
+    {
+        $data["page"] = "Dashboard";
+        $data["mode"] = session("get_success_mode");
+        session()->forget("get_success_mode");
+        $view = "member.dashboard";
+
+        if(Self::$customer_info)
+        {
+            if(!$this->mlm_member)
+            {
+                $view = "member.nonmember";
+            }   
+            else
+            {
+                $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
+                $data["wallet"]             = $data["customer_summary"]["_wallet"];
+            }
+        }
+
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view($view, $data));
+    }
+    public function getAutologin()
+    {
+        $data["force_login"] = true;
+        return view("member.autologin");
+    }
     public static function store_login_session($email, $password)
     {
         $store["email"]         = $email;
         $store["auth"]          = $password;
         $sess["mlm_member"]     = $store;
-
         session($sess);
     }
 
@@ -43,10 +72,12 @@ class ShopMemberController extends Shop
 
         return view("member.login", $data);
     }
-    public function getAuthCallback()
+    public function postAuthCallback(Request $request)
     {
         session_start();
 
+        $pass = isset($request->id) ? $request->id : null;
+        $email = isset($request->email) ? $request->email : null;
         $client_id = '431988284265-f8brg2nuvhmmgs3l5ip8bdogj62jkidp.apps.googleusercontent.com';
         $client_secret = '1hArs-eRANIXj1uaubhajbu8';
         $redirect_uri = 'http://myphone.digimahouse.dev/member';
@@ -64,51 +95,43 @@ class ShopMemberController extends Shop
         {
             unset($_SESSION['access_token']);
         }
-        if (isset($_GET['code'])) 
+        if (isset($_POST['code'])) 
         {
-            $client->authenticate($_GET['code']);
+            $client->authenticate($_POST['code']);
             $_SESSION['access_token'] = $client->getAccessToken();
             $redirect = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
             header('Location: ' . filter_var($redirect, FILTER_SANITIZE_URL));
-
         }
 
-        if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
+        if (isset($_SESSION['access_token']) && $_SESSION['access_token']) 
+        {
             $client->setAccessToken($_SESSION['access_token']);
             $_SESSION['token'] = $client->getAccessToken();
 
-        } else {
+        } else 
+        {
             $authUrl = $client->createAuthUrl();
         }
 
-        if (isset($authUrl)) 
-        {
-            print "<a class='login' href='$authUrl'><img src='logogoo/Red-signin-Medium-base-32dp.png'></a>";
-        } 
-        else 
-        {
-            print "<a class='logout' href='pruebas.php?logout'>Cerrar:</a>";
-        }
+        // if (isset($authUrl)) 
+        // {
+        //     print "<a class='login' href='$authUrl'><img src='logogoo/Red-signin-Medium-base-32dp.png'></a>";
+        // } 
+        // else 
+        // {
+        //     print "<a class='logout' href='pruebas.php?logout'>Cerrar:</a>";
+        // }
         $correo = null;
-        if (isset($_SESSION['access_token']))
-        {
-            $me = $plus->people->get("me");
-
-            print "<br>ID: {$me['id']}\n<br>";
-            print "Display Name: {$me['displayName']}\n<br>";
-            print "Image Url: {$me['image']['url']}\n<br>";
-            print "Url: {$me['url']}\n<br>";
-            $name3 = $me['name']['givenName'];
-            echo "Nombre: $name3 <br>"; //Everything works fine until I try to get the email
-            $correo = ($me['emails'][0]['value']);
-            echo $correo;
-        }
-        dd($correo);
+        $me = $plus->people->get("me");
     }
     public function postLoginGoogleSubmit(Request $request)
     {
         $pass = isset($request->id) ? $request->id : null;
         $email = isset($request->email) ? $request->email : null;
+
+        session_start();
+        $_SESSION['access_token'] = $request->access_token;
+
         $check = Tbl_customer::where('email',$email)->first();
         if($check && $pass)
         {
@@ -132,7 +155,6 @@ class ShopMemberController extends Shop
                 Self::store_login_session($email,$pass);
             }             
         }
-
         echo json_encode("success");
     }
     public function getLoginSubmit()
@@ -258,23 +280,6 @@ class ShopMemberController extends Shop
         return view("member.forgot_password");
     }
     /* LOGIN AND REGISTRATION - END */
-    public function getIndex()
-    {
-        $data["page"] = "Dashboard";
-        $data["mode"] = session("get_success_mode");
-        session()->forget("get_success_mode");
-        $view = "member.dashboard";
-
-        if(Self::$customer_info)
-        {
-            if(!Self::$customer_info->ismlm)
-            {
-                $view = "member.nonmember";
-            }     
-        }
-
-        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view($view, $data));
-    }
     public function getProfile()
     {
         $data["page"] = "Profile";
@@ -410,13 +415,13 @@ class ShopMemberController extends Shop
 
             if(!$check_membership_code)
             {
-                $message = "Invalid PIN/ACTIVATION!";
+                $message = "Invalid PIN / ACTIVATION!";
             }
             else
             {
                 if($check_membership_code->mlm_slot_id_created != "")
                 {
-                    $message = "PIN/ACTIVATION ALREADY USED";
+                    $message = "PIN / ACTIVATION ALREADY USED";
                 }
                 else
                 {
@@ -449,10 +454,13 @@ class ShopMemberController extends Shop
             $customer_id    = Self::$customer_info->customer_id;
             $membership_id  = $data["membership_code"]->membership_id;
             $sponsor        = $data["sponsor"]->slot_id;
-            $create_slot = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $data["pin"]);
+            $create_slot    = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $data["pin"]);
 
             if(is_numeric($create_slot))
             {
+                $remarks = "Code used by " . $data["sponsor_customer"]->first_name . " " . $data["sponsor_customer"]->last_name;
+                MLM2::use_membership_code($shop_id, $data["pin"], $data["activation"], $create_slot, $remarks);
+
                 $slot_id = $create_slot;
                 $store["get_success_mode"] = "success";
                 session($store);
@@ -462,7 +470,6 @@ class ShopMemberController extends Shop
             {
                 echo json_encode($create_slot);
             }
-
         }
     }
     public function code_verification()

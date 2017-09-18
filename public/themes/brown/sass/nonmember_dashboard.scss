@@ -29,6 +29,10 @@ $text-dark: #272c2f;
 
 		.btn-text
 		{
+			@media screen and (min-width: 991px)
+			{
+				text-align: left;
+			}
 			.text-header1
 			{
 				font-weight: $bold;
@@ -388,7 +392,8 @@ $text-dark: #272c2f;
 					background-color: #4dac2b;
 					border-radius: 2px;
 					border: none;
-				} 
+				}
+
 			}
 
 			.total
@@ -407,15 +412,15 @@ $text-dark: #272c2f;
 	.modal-sm
 	{  
 		width: 100%;
-		max-width: 500px;
+		max-width: 370px;
 	}
 
 	.modal-content
 	{
-		background-color: #eee;
+		background-color: #fff;
 		.modal-header
 		{
-			background-color: #693d28;
+			background-color: #422311;
 			border-top-left-radius: 3px;
 			border-top-right-radius: 3px;
 
@@ -426,7 +431,7 @@ $text-dark: #272c2f;
 
 			.modal-title
 			{
-				font-weight: $semi-bold;
+				font-weight: $bold;
 				font-size: 15px;
 				color: #FFF;
 			}
@@ -434,8 +439,10 @@ $text-dark: #272c2f;
 
 		.modal-body
 		{
-			font-weight: $semi-bold;
-			margin: 0px 10px 0px 20px;
+			font-weight: $regular;
+			font-size: 15px;
+			margin: 0px 20px 0px 20px;
+			padding: 20px 5px !important;
 
 			.labels
 			{
@@ -444,11 +451,16 @@ $text-dark: #272c2f;
 			}
 			input
 			{
+
 				padding: 5px;
-				width: 100%;
-				border: 1px solid #693d28;
-				margin: 10px 0px 0px 0px;
-				font-size: 20px;
+				width: 85%;
+				border: 1px solid #c9c9c9;
+				margin-top: 20px;
+				margin-left: 7%;
+				background-color: #fff;
+				font-size: 15px;
+				letter-spacing: 0.5px;
+
 				&::-webkit-input-placeholder {
 				    color: #ddd;
 				    opacity: 1 !important; /* for older chrome versions. may no longer apply. */
@@ -475,60 +487,57 @@ $text-dark: #272c2f;
 				.error-message
 				{
 					text-align: center;
-					color: red;
-					font-size: 14px;
+					color: #f02432;
+					font-size: 13px;
+					letter-spacing: 0.5px;
 				}
 				.card
 				{
-					border: 1px solid #693d28;
-					background-color: #fafafa;
+					border: 1px solid #d4d4d4;
+					background-color: #f4f4f4;
 					padding: 10px;
 					margin: 10px;
 					border-radius: 2px;
-					background-color: #693D28;
-					color: #fff;
-					-webkit-box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.1);  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
-					-moz-box-shadow:    1px 1px 1px 1px rgba(0,0,0,0.1);  /* Firefox 3.5 - 3.6 */
-					box-shadow:         1px 1px 1px 1px rgba(0,0,0,0.1);  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
 
 
-					.profile-image
-					{
-						height: 100px;
-						width: 100px;
-						border: 1px solid #ddd;
-						display: inline-block; 
-						text-align: center;
-						border-radius: 100%;
-						overflow: hidden;
-						background-color: #fff;
+					.upper {
 
-						img
+						.profile-image
 						{
-							height: 100px;
-							width: 100px;
+							height: 75px;
+							width: 75px;
+							border-radius: 100%;
+							overflow: hidden;
+							margin-left: 34%;
 
+							img
+							{
+								/* height: 100px; */
+								width: 100%;
+
+							}
 						}
 					}
 					.info
 					{
 						margin-top: 20px;
-						text-align: left;
+						text-align: center;
+						letter-spacing: 0.5px;
 
 						.name
 						{
-							font-size: 16px;
-							font-weight: bold;
-							color: #ffeeaa;
+							font-size: 17px;
+							font-weight: $bold;
+							color: $text-dark;
 							text-transform: uppercase;
 						}
 						.email
 						{
-							color: #eee;
+							color: $text-light;
 						}
 						.slotno
 						{
-							color: #eee;
+							color: $text-light;
 						}
 					}
 				}
@@ -543,10 +552,10 @@ $text-dark: #272c2f;
 
 				.btn-verify
 				{
-					color: #693d28;
-					background-color: #fff;
-					padding: 12px 40px;
-					border: 2px solid #693d28;
+					color: #fff;
+					background-color: #f02432;
+					padding: 12px 25px;
+					border: none;
 					border-radius: 2px;
 					opacity: 0.9;
 				  	-webkit-transition: all 0.2s ease-in-out;
@@ -557,8 +566,7 @@ $text-dark: #272c2f;
 				.btn-verify:hover
 				{
 					color: #fff;
-					background-color: #693d28;
-					opacity: 1.0;
+					opacity: 0.8;
 				}
 			}
 		}
@@ -581,7 +589,7 @@ $text-dark: #272c2f;
 		
 		.modal-header
 		{
-			background-color: #693d28;
+			background-color: #422311;
 			border-top-left-radius: 3px;
 			border-top-right-radius: 3px;
 
@@ -600,12 +608,16 @@ $text-dark: #272c2f;
 
 		.modal-body
 		{
-			font-weight: $semi-bold;
+			font-weight: $regular;
 			margin: 0px 20px 0px 20px;
 
 			.warning
 			{
-				margin-bottom: 20px;
+				margin-top: 15px;
+				margin-bottom: 27px;
+				font-size: 13px !important;
+				letter-spacing: 0.3px;
+				color: #613922 !important;
 			}
 			.value-set
 			{
@@ -614,11 +626,12 @@ $text-dark: #272c2f;
 
 				.labels
 				{
-					color: #999;
+					color: $text-light;
 				}
 				.values
 				{
-					font-weight: bold;
+					font-weight: $regular;
+					color: $text-dark;
 				}
 			}
 			input
@@ -634,9 +647,10 @@ $text-dark: #272c2f;
 	    	{
 				text-align: center;
 				font-family: $content-text;
-				font-weight: $semi-bold;
+				font-weight: $bold;
 				font-size: 13px;
 				padding-bottom: 20px;
+				margin-top: 20px;
 
 				.btn-proceed-1
 				{
@@ -654,21 +668,21 @@ $text-dark: #272c2f;
 /* Proceed 2 */
 .popup-proceed2
 {
-	background-color: #EEEEEE;
+	background-color: #fff;
 	font-family: $content-text;
 	
 	.modal-sm
 	{  
 		width: 100%;
-		max-width: 500px;
+		max-width: 350px;
 	}
 
 	.modal-content
 	{
-		background-color: #eee;
+		background-color: #fff;
 		.modal-header
 		{
-			background-color: #693d28;
+			background-color: #422311;
 			border-top-left-radius: 3px;
 			border-top-right-radius: 3px;
 
@@ -697,17 +711,22 @@ $text-dark: #272c2f;
 			{
 				text-align: center;
 				margin-bottom: 10px;
-				color: red;
+				color: #f02432;
+				letter-spacing: 0.5px;
 				font-size: 14px;
+				font-weight: $bold !important;
 				text-transform: uppercase;
 			}
 
 			.input
 			{
 				width: 100%;
-				font-size: 16px;
+				font-size: 15px;
+				font-weight: $regular !important;
+				color: $text-light !important;
+				letter-spacing: 0.5px;
 				border: none;
-				border: 1px solid #693d28;
+				border: 1px solid #c9c9c9;
 				margin: 5px 0px;
 				margin-bottom: 15px;
 				padding: 5px;
@@ -723,7 +742,7 @@ $text-dark: #272c2f;
 			}
 			.labeld
 			{
-				color: #693d28;
+				color: $text-dark;
 				text-align: center;
 				text-transform: uppercase;
 			}
@@ -752,12 +771,12 @@ $text-dark: #272c2f;
 
 				.btn-proceed-2
 				{
-					color: #693d28;
-					background-color: #fff;
+					color: #fff;
+					background-color: #693d28;
 					padding: 10px 40px;
-					border: 2px solid #693d28;
 					border-radius: 2px;
-					opacity: 0.9;
+					border: 0px !important;
+
 				  	-webkit-transition: all 0.2s ease-in-out;
 				  	-moz-transition: all 0.2s ease-in-out;
 				  	-o-transition: all 0.2s ease-in-out;
@@ -768,76 +787,14 @@ $text-dark: #272c2f;
 				}
 				.btn-proceed-2:hover
 				{
-					color: #fff;
-					background-color: #693d28;
-					opacity: 1.0;
+					opacity: 0.9;
 				}
 			}
 		}
 	}
 }
 
-/* Success */
-.popup-success
-{
-	.modal-content
-	{
-		.modal-header
-		{
-			background-color: #693d28;
-			border-top-left-radius: 3px;
-			border-top-right-radius: 3px;
-			.modal-title
-			{
-				color: #FFF;
-				font-size: 15px;
-			}
-		}
 
-		.modal-body
-		{
-			text-align: center;
-
-			img
-			{
-				padding: 20px 0px;
-			}
-
-			.text-header
-			{
-				font-weight: $semi-bold;
-				font-size: 25px;
-				color: #344049;
-				padding-top: 5px;
-			}
-
-			.text-caption
-			{
-				@extend .text-header;
-				font-size: 15px;
-				padding-bottom: 30px;
-			}
-
-	    	.btn-container
-	    	{
-				text-align: center;
-				font-family: $content-text;
-				font-weight: $semi-bold;
-				font-size: 13px;
-				padding-bottom: 20px;
-
-				.btn-ok
-				{
-					color: #fff;
-					background-color: #693d28;
-					padding: 12px 60px;
-					border: 2px solid #693d28;
-					border-radius: 2px;
-				}
-			}
-		}
-	}
-}
 
 /* Failed */
 .popup-failed

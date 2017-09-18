@@ -18,12 +18,12 @@
 				<div class="profile-holder">
 					<div class="profile">
 						<div class="img">
-							<img src="/themes/{{ $shop_theme }}/img/big-thumb.jpg">
+							<img src="{{ $profile_image }}">
 						</div>
 						<div class="text">
 							<div class="name">{{ $customer->first_name }} {{ $customer->last_name }}</div>
-							<div class="sub">{{ $customer->customer_id }}</div>
-							<div class="sub">Subtitle Lorem Ipsum</div>
+							<div class="sub"><i>{{ $customer->email }}</i></div>
+							<div class="sub"><b>PHP 0.00</b></div>
 						</div>
 					</div>
 				</div>

@@ -49,7 +49,7 @@
 								<div class="form-group">
 									<div class="register-label">PASSWORD</div>
 									<div class="form-input">
-										<input class="form-control input-sm" type="password" name="password" placeholder="Type Your Password Here" value="{{ request()->password }}">
+										<input class="form-control input-sm" type="password" name="password" placeholder="Type Your Password Here" value="{{ $password }}">
 									</div>
 								</div>
 								<div class="form-group">

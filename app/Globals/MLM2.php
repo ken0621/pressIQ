@@ -4,6 +4,7 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_warehouse_inventory_record_log;
 use App\Models\Tbl_mlm_slot_wallet_log;
+use App\Models\Tbl_mlm_slot_points_log;
 use Carbon\Carbon;
 use Validator;
 use Illuminate\Validation\Rule;
@@ -38,10 +39,16 @@ class MLM2
 		$return["_wallet"]->complan_builder = 0;
 		$return["_wallet"]->complan_leader = 0;
 
+		$return["_points"] = new stdClass();
+		$return["_points"]->brown_leader_points = 0;
+		$return["_points"]->brown_builder_points = 0;
+
 		$return["slot_count"] = 0;
 
-		foreach($_slot as $slot)
+		foreach($_slot as $key =>  $slot)
 		{
+			$_slot[$key]->display_total_earnings = Currency::format($slot->total_earnings);
+
 			$return["_wallet"]->current_wallet += $slot->current_wallet;
 			$return["_wallet"]->total_earnings += $slot->total_earnings;
 			$return["_wallet"]->total_payout += $slot->total_payout;
@@ -52,6 +59,7 @@ class MLM2
 			foreach($_slot_wallet as $slot_wallet)
 			{
 				$wallet_plan = strtolower("complan_" .$slot_wallet->wallet_log_plan);
+
 				if(!isset($return["_wallet"]->$wallet_plan))
 				{
 					$return["_wallet"]->$wallet_plan = $slot_wallet->wallet_log_amount;
@@ -62,9 +70,25 @@ class MLM2
 				}
 				
 			}
+
+			$_slot_points = Tbl_mlm_slot_points_log::where("points_log_slot", $slot->slot_id)->get();
+
+			foreach($_slot_points as $slot_points)
+			{
+				$wallet_plan = strtolower($slot_points->points_log_complan);
+				if(!isset($return["_points"]->$wallet_plan))
+				{
+					$return["_points"]->$wallet_plan = $slot_points->points_log_points;
+				}
+				else
+				{
+					$return["_points"]->$wallet_plan += $slot_points->points_log_points;
+				}
+			}
 		}
 
 		$_wallet = json_encode($return["_wallet"]);
+		$_points = json_encode($return["_points"]);
 
 		/* DISPLAY FORMAT */
 		foreach(json_decode($_wallet) as $key => $wallet)
@@ -73,6 +97,14 @@ class MLM2
 			$return["_wallet"]->$display_string = Currency::format($wallet);
 		}
 
+		/* DISPLAY FORMAT */
+		foreach(json_decode($_points) as $key => $points)
+		{
+			$display_string = "display_" . $key;
+			$return["_points"]->$display_string = number_format($points, 2) . " POINT(S)";
+		}
+
+		$return["_slot"] = $_slot;
 		$return["display_slot_count"] = number_format($return["slot_count"], 0) . " SLOT(S)";
 
 		return $return;

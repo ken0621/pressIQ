@@ -37,7 +37,7 @@ body{
 						border-bottom: none;
 					}
 					
-					&:hover {
+					&:hover, &.active {
 						cursor: pointer;
 						color: #2161c8;
 					}

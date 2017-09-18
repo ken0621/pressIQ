@@ -164,7 +164,7 @@
 					   			<div class="col-md-12">
 					   				<div class="form-group">
 							   			<label>New Sponsor Rule</label>
-							   			<select class="form-control">
+							   			<select name="downline_rule" class="form-control">
 							   				<option name="auto" {{ $customer->downline_rule == "auto" ? "selected" : "" }}>AUTO PLACEMENT</option>
 							   				<option name="manual" {{ $customer->downline_rule == "manual" ? "selected" : "" }}>MANUAL PLACEMENT</option>
 							   			</select>

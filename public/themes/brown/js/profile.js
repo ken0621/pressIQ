@@ -18,7 +18,7 @@ function profile()
 	{
 		$(".reward-configuration-form").submit(function()
 		{
-			
+			console.log($(".reward-configuration-form").serialize());
 			return false;
 		});
 	}

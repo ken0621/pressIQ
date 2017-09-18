@@ -4,6 +4,14 @@ $regular: 400;
 $semi-bold: 600;
 $bold: 700;
 
+@mixin transition($transition)
+{
+	-webkit-transition: all 0.2s ease-in-out;
+	-moz-transition: all 0.2s ease-in-out;
+	-o-transition: all 0.2s ease-in-out;
+	transition: all 0.2s ease-in-out;
+}
+
 .product-container
 {
 	font-family: $open-sans;
@@ -71,6 +79,7 @@ $bold: 700;
 
 		.btn-go
 		{
+			@include transition(0.2s);
 			font-size: 13px;
 			font-weight: $semi-bold;
 			color: #FFF;

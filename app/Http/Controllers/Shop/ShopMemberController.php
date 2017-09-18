@@ -195,6 +195,8 @@ class ShopMemberController extends Shop
     public function getLogout()
     {
         session()->forget("mlm_member");
+        GoogleGlobals::revoke_access($this->shop_info->shop_id);
+
         return Redirect::to("/members/login");
     }
     public function getRegister()

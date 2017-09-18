@@ -1,8 +1,9 @@
-$open-sans: 'Open Sans', sans-serif;
-$light: 300;
+$content-text: 'Arimo', sans-serif;
 $regular: 400;
 $semi-bold: 600;
 $bold: 700;
+$text-light: #777;
+$text-dark: #272c2f;
 
 @mixin transition($transition)
 {
@@ -14,7 +15,7 @@ $bold: 700;
 
 .product-container
 {
-	font-family: $open-sans;
+	font-family: $content-text;
 	background-color: #ededed;
 
 	.bg-container-style

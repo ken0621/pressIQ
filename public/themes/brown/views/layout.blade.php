@@ -10,6 +10,7 @@
 
         <meta name="google-signin-scope" content="profile email">
         <meta name="google-signin-client_id" content="{{$google_app_id or ''}}">
+        <input type="hidden" name="" class="google_app_id" value="{{$google_app_id or ''}}">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -406,23 +407,26 @@
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/front/js/match-height.js"></script>
     <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
-    <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://apis.google.com/js/api:client.js"></script>
 
     <script type="text/javascript">
       $(".date-picker").datepicker({
         dateFormat:"yy-mm-dd"
       });
 
-      function onLoad() {
-      gapi.load('auth2', function() {
-        gapi.auth2.init();
-      });
-    }
       // $('.brown-sign-out').unbind('click');
       // $('.brown-sign-out').bind('click', function()
       // {
-      //   window.location = "https://mail.google.com/mail/u/0/?logout&hl=en";
+      //   signOut();
       // });
+      // function signOut() 
+      // {
+      //   var auth2 = gapi.auth2.getAuthInstance();
+      //   auth2.signOut().then(function () {
+      //     console.log('User signed out.');
+      //   });
+      // }
     </script>
     @yield("script")
     </body>

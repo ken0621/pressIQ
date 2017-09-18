@@ -218,7 +218,7 @@
 				</div>
 
 				<div class="unilevel-holder">
-					<div class="title"><i class="fa fa-star"></i> My Slot(s) <a href="javascript:" class="title-button pull-right btn-enter-a-code"><i class="fa fa-plus"></i> New Slot</a></div>
+					<div class="title"><i class="fa fa-star"></i> My Slot(s) <a href="javascript:" class="title-button pull-right btn-enter-a-code">Add New Slot</a></div>
 					<div class="sub-container">
 						@foreach($_slot as $slot)
 						<div class="holder">
@@ -269,54 +269,26 @@
 			</div>
 			<div class="col-md-6">
 				<div class="match-height">
-					<div class="title"><i class="fa fa-money"></i> Recent Rewards</div>
+					<div class="title"><i class="fa fa-money"></i> Recent Rewards <a href="javascript:" class="title-button pull-right">View All Rewards</a></div>
 					<div class="sub-container">
 						<div class="activities">
+							@foreach($_recent_rewards as $recent_reward)
 							<div class="holder">
 								<div class="circle-line">
 									<div class="circle"><img src="/themes/{{ $shop_theme }}/img/circle.png"></div>
 									<div class="line"><img src="/themes/{{ $shop_theme }}/img/line.jpg"></div>
 								</div>
-								<div class="message">Sorry, Your Slot has already reached the max level for matrix. Slot 454926's pairing reward will not be added.</div>
+								<div class="message">{!! $recent_reward->log !!}</div>
 								<div class="row clearfix">
 									<div class="col-sm-6">
-										<div class="date">3 Hours Ago</div>
+										<div class="date">{{ $recent_reward->time_ago }}</div>
 									</div>
 									<div class="col-sm-6">
-										<div class="wallet">PHP 0.00</div>
+										<div class="wallet"> EARNED BY {{ $recent_reward->slot_no }}</div>
 									</div>
 								</div>
 							</div>
-							<div class="holder">
-								<div class="circle-line">
-									<div class="circle"><img src="/themes/{{ $shop_theme }}/img/circle.png"></div>
-									<div class="line"><img src="/themes/{{ $shop_theme }}/img/line.jpg"></div>
-								</div>
-								<div class="message">Sorry, Your Slot has already reached the max level for matrix. Slot 454926's pairing reward will not be added.</div>
-								<div class="row clearfix">
-									<div class="col-sm-6">
-										<div class="date">3 Hours Ago</div>
-									</div>
-									<div class="col-sm-6">
-										<div class="wallet">PHP 0.00</div>
-									</div>
-								</div>
-							</div>
-							<div class="holder">
-								<div class="circle-line">
-									<div class="circle"><img src="/themes/{{ $shop_theme }}/img/circle.png"></div>
-									<div class="line"><img src="/themes/{{ $shop_theme }}/img/line.jpg"></div>
-								</div>
-								<div class="message">Sorry, Your Slot has already reached the max level for matrix. Slot 454926's pairing reward will not be added.</div>
-								<div class="row clearfix">
-									<div class="col-sm-6">
-										<div class="date">3 Hours Ago</div>
-									</div>
-									<div class="col-sm-6">
-										<div class="wallet">PHP 0.00</div>
-									</div>
-								</div>
-							</div>
+							@endforeach
 						</div>
 					</div>
 				</div>

@@ -29,17 +29,18 @@ class ShopMemberController extends Shop
         $data["page"] = "Dashboard";
         $data["mode"] = session("get_success_mode");
         session()->forget("get_success_mode");
-        $view = "member.dashboard";
 
         if(Self::$customer_info)
         {
             $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["wallet"]             = $data["customer_summary"]["_wallet"];
             $data["points"]             = $data["customer_summary"]["_points"];
-            $data["_slot"]              = $data["customer_summary"]["_slot"];
+            $data["_slot"]              = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
+            $data["_recent_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
+            //$data["_new_referrals"]     = MLM2::customer_referrals();
         }
 
-        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view($view, $data));
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.dashboard", $data));
     }
     public function getAutologin()
     {
@@ -52,6 +53,7 @@ class ShopMemberController extends Shop
         $store["email"]         = $email;
         $store["auth"]          = $password;
         $sess["mlm_member"]     = $store;
+
         session($sess);
     }
 
@@ -286,7 +288,6 @@ class ShopMemberController extends Shop
     {
         $data["page"] = "Profile";
         $data["mlm"] = isset(Self::$customer_info->ismlm) ? Self::$customer_info->ismlm : 0;
-
         $data["profile"]         = Tbl_customer::shop(Self::$customer_info->shop_id)->where("tbl_customer.customer_id", Self::$customer_info->customer_id)->first();
         $data["profile_address"] = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->first();
         $data["profile_info"]    = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();

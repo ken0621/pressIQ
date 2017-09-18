@@ -26,6 +26,17 @@ class MLM2
 
 		return $slot_info;
 	}
+	public static function customer_slots($shop_id, $customer_id)
+	{
+		$_slot = Tbl_mlm_slot::where("slot_owner", $customer_id)->currentWallet()->get();
+
+		foreach($_slot as $key =>  $slot)
+		{
+			$_slot[$key]->display_total_earnings = Currency::format($slot->total_earnings);
+		}
+
+		return $_slot;
+	}
 	public static function customer_income_summary($shop_id, $customer_id)
 	{
 		$_slot = Tbl_mlm_slot::where("slot_owner", $customer_id)->currentWallet()->get();
@@ -47,8 +58,6 @@ class MLM2
 
 		foreach($_slot as $key =>  $slot)
 		{
-			$_slot[$key]->display_total_earnings = Currency::format($slot->total_earnings);
-
 			$return["_wallet"]->current_wallet += $slot->current_wallet;
 			$return["_wallet"]->total_earnings += $slot->total_earnings;
 			$return["_wallet"]->total_payout += $slot->total_payout;
@@ -108,6 +117,56 @@ class MLM2
 		$return["display_slot_count"] = number_format($return["slot_count"], 0) . " SLOT(S)";
 
 		return $return;
+	}
+	public static function customer_rewards($shop_id, $customer_id, $limit = 10)
+	{
+		$_slot = Tbl_mlm_slot::where("slot_owner", $customer_id)->currentWallet()->get();
+		$query = Tbl_mlm_slot_wallet_log::where("shop_id", $shop_id);
+
+		$query->where(function($q) use ($_slot)
+		{
+			foreach($_slot as $slot)
+			{
+				$q->orWhere("wallet_log_slot", $slot->slot_id);
+			}
+		});
+
+		$query->limit($limit);
+
+		$_reward = $query->orderBy("wallet_log_id", "desc")->get();
+
+		foreach($_reward as $key => $reward)
+		{
+			$reward_slot = Tbl_mlm_slot::where("slot_id", $reward->wallet_log_slot)->first();
+			$_reward[$key]->display_wallet_log_amount = Currency::format($reward->wallet_log_amount);
+			$_reward[$key]->time_ago = time_ago($reward->wallet_log_date_created);
+			$_reward[$key]->log = Self::customer_rewards_contructor($reward);
+			$_reward[$key]->slot_no = $reward_slot->slot_no;
+		}
+
+		return $_reward;
+	}
+	public static function customer_rewards_contructor($reward)
+	{
+		switch ($reward->wallet_log_plan)
+		{
+			case 'DIRECT':
+				$sponsor = Tbl_mlm_slot::where("slot_id", $reward->wallet_log_slot_sponsor)->first();
+				$message = "You earned <b>" . Currency::format($reward->wallet_log_amount) . "</b> from <b><a href='javascript:'>direct referral bonus</a></b> because of <a href='javascript:'><b>" . $sponsor->slot_no . "</b></a>.";
+			break;
+			
+			case 'TRIANGLE':
+				$sponsor = Tbl_mlm_slot::where("slot_id", $reward->wallet_log_slot_sponsor)->first();
+				$sponsor_sponsor = Tbl_mlm_slot::where("slot_id", $sponsor->slot_placement)->first();
+				$message = "You earned <b>" . Currency::format($reward->wallet_log_amount) . "</b> from <b><a href='javascript:'>matrix bonus</a></b> because of pairing under <a href='javascript:'><b>" . $sponsor_sponsor->slot_no . "</b></a>.";
+			break;
+
+			default:
+				$message = "NOTIFICATION UNKNOWN";
+			break;
+		}
+
+		return $message;
 	}
 	public static function membership($shop_id)
 	{

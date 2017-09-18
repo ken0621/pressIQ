@@ -10,10 +10,18 @@
     margin-top: 5px;
     border: 1px solid #ddd; }
     .dashboard .title .title-button {
+      font-weight: bold;
       font-size: 14px;
       text-decoration: none;
       margin-top: 3px;
-      text-transform: uppercase; }
+      text-transform: uppercase;
+      opacity: 0;
+      -webkit-transition: all 0.2s ease-in-out;
+      -moz-transition: all 0.2s ease-in-out;
+      -o-transition: all 0.2s ease-in-out;
+      transition: all 0.2s ease-in-out; }
+    .dashboard .title:hover .title-button {
+      opacity: 1; }
   .dashboard .sub-container {
     padding: 10px 20px;
     border: 1px solid #ddd;
@@ -134,17 +142,17 @@
     padding-left: 30px; }
     .dashboard .activities .holder .message {
       color: #344049;
-      font-size: 14px;
-      margin-bottom: 10px; }
+      font-size: 16px;
+      margin-bottom: 5px; }
     .dashboard .activities .holder .date {
       color: #85939e;
-      font-size: 14px;
+      font-size: 16px;
       opacity: 0.5; }
     .dashboard .activities .holder .wallet {
-      color: #3e95cd;
-      font-size: 16px;
-      font-weight: 600;
-      float: right; }
+      color: #85939e;
+      font-size: 14px;
+      float: right;
+      opacity: 0.4; }
     .dashboard .activities .holder .circle-line {
       position: absolute;
       left: 0;

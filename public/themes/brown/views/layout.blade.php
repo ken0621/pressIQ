@@ -62,7 +62,7 @@
                         <ul class="dropdown-menu dropdown-menu-right profile-menu" style="margin-top: -1px;">
                             <li>
                                 <div class="profile-pic">
-                                    <img src="/themes/{{ $shop_theme }}/img/profile-nav.png">
+                                    <img src="/themes/{{ $shop_theme }}/img/sample-profile.jpg">
                                 </div>
                                 <div class="profile-text">
                                     <div class="name">Mr. Brown Lorem Ipsum</div>

@@ -1651,7 +1651,7 @@ class Item
             $mlm_activation = Self::check_mlm_activation($shop_id, strtoupper(str_random(6)));
         }
 
-        return $mlm_activation
+        return $mlm_activation;
     }
     public static function get_mlm_activation($shop_id)
     {
@@ -1663,6 +1663,6 @@ class Item
             $mlm_activation = Self::check_mlm_activation($shop_id, strtoupper(str_random(6)));
         }
 
-        return $mlm_activation
+        return $mlm_activation;
     }
 }

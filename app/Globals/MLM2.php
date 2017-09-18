@@ -8,10 +8,13 @@ use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Models\Tbl_mlm_slot_points_log;
 use App\Models\Tbl_mlm_plan;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_brown_rank;
+use App\Models\Tbl_tree_sponsor;
 use App\Globals\Mlm_tree;
 use App\Globals\Mlm_complan_manager;
 use App\Globals\Mlm_complan_manager_cd;
 use App\Globals\Mlm_compute;
+
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 use Validator;
@@ -40,6 +43,40 @@ class MLM2
 		foreach($_slot as $key =>  $slot)
 		{
 			$_slot[$key]->display_total_earnings = Currency::format($slot->total_earnings);
+
+
+			if($slot->brown_rank_id == null)
+			{
+				$slot->brown_rank_id = Tbl_brown_rank::where("rank_shop_id", $shop_id)->orderBy("required_slot", "asc")->value("rank_id");
+			}
+
+			/* BROWN RANKING - TODO: FOR MYPHONE ONLY */
+            if($slot->brown_rank_id)
+            {
+                $brown_next_rank = Tbl_brown_rank::where("rank_id",">", $slot->brown_rank_id)->orderBy("rank_id")->first();
+            }
+            else
+            {
+                $brown_next_rank = null;
+            }
+
+            if($brown_next_rank)
+            {
+                $_slot[$key]->brown_next_rank = strtoupper($brown_next_rank->rank_name);
+                $brown_rank_required_slots = $brown_next_rank->required_slot;
+                $brown_count_required = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot->slot_id)->where("sponsor_tree_level", "<=", $brown_next_rank->required_uptolevel)->count();
+                $_slot[$key]->brown_next_rank_requirements = $brown_rank_required_slots;
+                $_slot[$key]->brown_next_rank_current = $brown_count_required;
+                $_slot[$key]->brown_rank_rank_percentage = ($brown_count_required / $brown_rank_required_slots) * 100;
+            }
+            else
+            {
+                $_slot[$key]->brown_next_rank = strtoupper("NO NEXT RANK");
+                $brown_rank_required_slots = "NO NEXT RANK";
+                $brown_count_required = "NO NEXT RANK";
+                $_slot[$key]->brown_next_rank_requirements = "NO NEXT RANK";
+            }
+
 		}
 
 		return $_slot;

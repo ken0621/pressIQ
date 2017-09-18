@@ -228,7 +228,11 @@
 									<div class="label3">{{ $slot->display_total_earnings }}</div>
 								</div>
 								<div class="col-sm-8">
-									<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 40%, rgb(237, 237, 237) 40%);">ROAD TO <b>BUILDER</b> (0/10)</div>
+									@if($slot->brown_next_rank != "NO NEXT RANK")
+									<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) {{ $slot->brown_rank_rank_percentage }}%, rgb(237, 237, 237) {{ $slot->brown_rank_rank_percentage }}%);">ROAD TO <b>{{ $slot->brown_next_rank }}</b> ({{ $slot->brown_next_rank_current }}/{{ $slot->brown_next_rank_requirements }})</div>
+									@else
+									<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 40%);">YOU ARE A <b>LEADER</b></div>
+									@endif
 								</div>
 							</div>
 						</div>

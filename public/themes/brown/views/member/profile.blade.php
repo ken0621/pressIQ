@@ -85,79 +85,81 @@
 				</ul>
 				<div class="tab-content">
 				   <div id="basic_info" class="tab-pane fade in active">
-				   		<div class="row clearfix">
-				   			<div class="col-md-6">
-				   				<div class="form-group">
-						   			<label>First Name</label>
-						   			<input type="text" class="form-control" name="" value="{{ $profile->first_name }}">
+					   <form method="post" action="/members/profile/submit-profile">
+					   		<div class="row clearfix">
+					   			<div class="col-md-6">
+					   				<div class="form-group">
+							   			<label>First Name</label>
+							   			<input type="text" class="form-control" name="first_name" value="{{ $profile->first_name }}">
+							   		</div>
+							   		<div class="form-group">
+							   			<label>Middle Name</label>
+							   			<input type="text" class="form-control" name="middle_name" value="{{ $profile->middle_name }}">
+							   		</div>
+							   		<div class="form-group">
+							   			<label>Last Name</label>
+							   			<input type="text" class="form-control" name="last_name" value="{{ $profile->last_name }}">
+							   		</div>
+							   		<div class="form-group">
+							   			<label>Birth Date</label>
+							   			<div style="margin-top: 5px;">
+							   				<div class="date-holder">
+												<select name="b_month" class="form-control">
+													@for($ctr = 1; $ctr <= 12; $ctr++)
+													<option {{ date("mm", strtotime($profile->birthday)) == $ctr ? 'selected' : '' }} value="{{ $ctr }}">{{ date("F", strtotime($ctr . "/01/17")) }}</option>
+													@endfor
+												</select>
+											</div>
+											<div class="date-holder">
+												<select name="b_day" class="form-control">
+													@for($ctr = 1; $ctr <= 31; $ctr++)
+													<option {{ date("d", strtotime($profile->birthday)) == $ctr ? 'selected' : '' }} value="{{ $ctr }}">{{ $ctr }}</option>
+													@endfor
+												</select>
+											</div>
+											<div class="date-holder">
+												<select name="b_year" class="form-control">
+													@for($ctr = date("Y"); $ctr >= (date("Y")-100); $ctr--)
+													<option {{ date("Y", strtotime($profile->birthday)) == $ctr ? 'selected' : '' }} value="{{ $ctr }}">{{ $ctr }}</option>
+													@endfor
+												</select>
+											</div>
+							   			</div>
+							   		</div>
+							   		<div class="form-group">
+							   			<label>Country</label>
+							   			<select class="form-control" name="country_id">
+							   				@foreach($_country as $country)
+							   				<option {{ $profile->country_id == $country->country_id ? "selected" : "" }} value="{{ $country->country_id }}">{{ $country->country_name }}</option>
+							   				@endforeach
+							   			</select>
+							   		</div>
+					   			</div>
+						   		<div class="col-md-6">
+						   			<div class="form-group">
+							   			<label>Province</label>
+							   			<select firstload="true" default="{{ isset($profile_address->state_id) ? $profile_address->state_id : '' }}" class="form-control load-location" name="customer_state" level="1"></select>
+							   		</div>
+							   		<div class="form-group">
+							   			<label>City</label>
+							   			<select firstload="true" default="{{ isset($profile_address->city_id) ? $profile_address->city_id : '' }}" class="form-control load-location" name="customer_city" level="2"></select>
+							   		</div>
+							   		<div class="form-group">
+							   			<label>Barangay</label>
+							   			<select firstload="true" default="{{ isset($profile_address->zipcode_id) ? $profile_address->zipcode_id : '' }}" class="form-control load-location" name="customer_zip" level="3"></select>
+							   		</div>
+							   		<div class="form-group">
+							   			<label>Full Address</label>
+							   			<textarea style="height: 107px" class="form-control" name="customer_street" value="{{ isset($profile_address->customer_address) ? $profile_address->customer_address : '' }}"></textarea>
+							   		</div>
 						   		</div>
-						   		<div class="form-group">
-						   			<label>Middle Name</label>
-						   			<input type="text" class="form-control" name="" value="{{ $profile->middle_name }}">
-						   		</div>
-						   		<div class="form-group">
-						   			<label>Last Name</label>
-						   			<input type="text" class="form-control" name="" value="{{ $profile->last_name }}">
-						   		</div>
-						   		<div class="form-group">
-						   			<label>Birth Date</label>
-						   			<div style="margin-top: 5px;">
-						   				<div class="date-holder">
-											<select name="b_month" class="form-control">
-												@for($ctr = 1; $ctr <= 12; $ctr++)
-												<option {{ date("mm", strtotime($profile->birthday)) == $ctr ? 'selected' : '' }} value="{{ $ctr }}">{{ date("F", strtotime($ctr . "/01/17")) }}</option>
-												@endfor
-											</select>
-										</div>
-										<div class="date-holder">
-											<select name="b_day" class="form-control">
-												@for($ctr = 1; $ctr <= 31; $ctr++)
-												<option {{ date("d", strtotime($profile->birthday)) == $ctr ? 'selected' : '' }} value="{{ $ctr }}">{{ $ctr }}</option>
-												@endfor
-											</select>
-										</div>
-										<div class="date-holder">
-											<select name="b_year" class="form-control">
-												@for($ctr = date("Y"); $ctr >= (date("Y")-100); $ctr--)
-												<option {{ date("Y", strtotime($profile->birthday)) == $ctr ? 'selected' : '' }} value="{{ $ctr }}">{{ $ctr }}</option>
-												@endfor
-											</select>
-										</div>
-						   			</div>
-						   		</div>
-						   		<div class="form-group">
-						   			<label>Country</label>
-						   			<select class="form-control">
-						   				@foreach($_country as $country)
-						   				<option {{ $profile->country_id == $country->country_id ? "selected" : "" }} value="{{ $country->country_id }}">{{ $country->country_name }}</option>
-						   				@endforeach
-						   			</select>
-						   		</div>
-				   			</div>
-					   		<div class="col-md-6">
-					   			<div class="form-group">
-						   			<label>Province</label>
-						   			<input type="text" class="form-control" name="">
-						   		</div>
-						   		<div class="form-group">
-						   			<label>City</label>
-						   			<input type="text" class="form-control" name="">
-						   		</div>
-						   		<div class="form-group">
-						   			<label>Barangay</label>
-						   			<input type="text" class="form-control" name="">
-						   		</div>
-						   		<div class="form-group">
-						   			<label>Full Address</label>
-						   			<textarea style="height: 107px" class="form-control" name=""></textarea>
+						   		<div class="col-md-12">
+						   			<div class="form-group btn-holder">
+							   			<button class="btn btn-brown">Update</button>
+							   		</div>
 						   		</div>
 					   		</div>
-					   		<div class="col-md-12">
-					   			<div class="form-group btn-holder">
-						   			<button class="btn btn-brown">Update</button>
-						   		</div>
-					   		</div>
-				   		</div>
+					   </form>
 				   </div>
 				   <!-- CONTACT INFO -->
 				   <div id="contact_info" class="tab-pane fade">
@@ -206,6 +208,7 @@
 </div>
 @endsection
 @section("member_script")
+<script type="text/javascript" src="/assets/front/js/global_checkout.js"></script>
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/profile.js"></script>
 @endsection
 @section("member_css")

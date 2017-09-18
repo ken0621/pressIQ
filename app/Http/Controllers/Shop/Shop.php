@@ -95,7 +95,7 @@ class Shop extends Controller
 
         $this->shop_theme_info  = $shop_theme_info;
 
-        if ($this->shop_theme == "ecommerce-1" || $this->shop_theme == "intogadgets")
+        if ($this->shop_theme == "ecommerce-1" || $this->shop_theme == "intogadgets" || $this->shop_theme == "3xcell")
         {
             $this->middleware(function ($request, $next)
             {  
@@ -134,7 +134,7 @@ class Shop extends Controller
             View::share("_categories", $product_category);
         }
         
-        if ($this->shop_theme != "ecommerce-1" && $this->shop_theme != "intogadgets")
+        if ($this->shop_theme != "ecommerce-1" && $this->shop_theme != "intogadgets" && $this->shop_theme != "3xcell")
         {
             $this->middleware(function ($request, $next)
             {  

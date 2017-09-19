@@ -179,6 +179,7 @@
 					</div>
 				</div>
 			</div>
+
 			<div class="col-md-6">
 				<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
 				<div class="sub-container">
@@ -205,7 +206,7 @@
 
 				<div class="title"><i class="fa fa-gift"></i> Reward Points</div>
 				<div class="sub-container">
-					<div class="chart-legend">
+					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
 						<div class="holder">
 							<div class="color"></div>
 							<div class="name"><span>Builder Point(s)</span> {{ $points->display_brown_builder_points }}</div>
@@ -214,29 +215,6 @@
 							<div class="color"></div>
 							<div class="name"><span>Reward Point(s)</span> {{ $points->display_brown_leader_points }}</div>
 						</div>
-					</div>
-				</div>
-
-				<div class="unilevel-holder">
-					<div class="title"><i class="fa fa-star"></i> My Slot(s) <a href="javascript:" class="title-button pull-right btn-enter-a-code">Add New Slot</a></div>
-					<div class="sub-container">
-						@foreach($_slot as $slot)
-						<div class="holder">
-							<div class="row clearfix">
-								<div class="col-sm-4 text-center">
-									<div class="label2">{{ $slot->slot_no }}</div>
-									<div class="label3">{{ $slot->display_total_earnings }}</div>
-								</div>
-								<div class="col-sm-8">
-									@if($slot->brown_next_rank != "NO NEXT RANK")
-									<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) {{ $slot->brown_rank_rank_percentage }}%, rgb(237, 237, 237) {{ $slot->brown_rank_rank_percentage }}%);">ROAD TO <b>{{ $slot->brown_next_rank }}</b> ({{ $slot->brown_next_rank_current }}/{{ $slot->brown_next_rank_requirements }})</div>
-									@else
-									<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 40%);">YOU ARE A <b>LEADER</b></div>
-									@endif
-								</div>
-							</div>
-						</div>
-						@endforeach
 					</div>
 				</div>
 			</div>
@@ -294,6 +272,34 @@
 							</div>
 							@endforeach
 						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row clearfix">
+
+			<div class="col-md-12">
+				<div class="unilevel-holder">
+					<div class="title"><i class="fa fa-star"></i> My Slot(s) <a href="javascript:" class="title-button pull-right btn-enter-a-code">Add New Slot</a></div>
+					<div class="sub-container">
+						@foreach($_slot as $slot)
+						<div class="holder">
+							<div class="row clearfix">
+								<div class="col-sm-4 text-center">
+									<div class="label2">{{ $slot->slot_no }}</div>
+									<div class="label3">{{ $slot->display_total_earnings }}</div>
+								</div>
+								<div class="col-sm-8">
+									@if($slot->brown_next_rank != "NO NEXT RANK")
+									<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) {{ $slot->brown_rank_rank_percentage }}%, rgb(237, 237, 237) {{ $slot->brown_rank_rank_percentage }}%);">ROAD TO <b>{{ $slot->brown_next_rank }}</b> ({{ $slot->brown_next_rank_current }}/{{ $slot->brown_next_rank_requirements }})</div>
+									@else
+									<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 40%);">YOU ARE A <b>LEADER</b></div>
+									@endif
+								</div>
+							</div>
+						</div>
+						@endforeach
 					</div>
 				</div>
 			</div>

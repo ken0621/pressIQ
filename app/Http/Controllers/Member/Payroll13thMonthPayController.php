@@ -11,8 +11,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Member\PayrollDeductionController;
 
 
-
-
 use App\Models\Tbl_payroll_period_company;
 use App\Models\Tbl_payroll_employee_contract;
 use App\Models\Tbl_payroll_employee_basic;
@@ -47,12 +45,23 @@ use App\Models\Tbl_payroll_deduction_payment_v2;
 
 use DB;
 
-class PayrollLedger extends Member
+class Payroll13thMonthPayController extends Member
 {
-
-	public function shop_id()
+	public function shop_id($return = 'shop_id')
 	{
-		return $this->user_info->shop_id;
+	      switch ($return) {
+	           case 'shop_id':
+	                return $shop_id = $this->user_info->user_shop;
+	                break;
+
+	           case 'user_id':
+	                return $shop_id = $this->user_info->user_id;
+	                break;
+	           
+	           default:
+	               
+	                break;
+	      }
 	}
 
 	public function index()
@@ -62,24 +71,16 @@ class PayrollLedger extends Member
 		$parameter['employement_status']	= 0;
 		$parameter['shop_id'] 				= $this->shop_id();
 		$data["_employee"] = Tbl_payroll_employee_basic::selemployee($parameter)->orderby("tbl_payroll_employee_basic.payroll_employee_number")->get();
-		// dd($data["_employee"]);
-		return view("member.payrollreport.payroll_ledger",$data);
+		return view("member.payrollreport.payroll_13th_mont_pay_report_v2", $data );
 	}
 
-	public function modal_ledger($employee_id)
+	public function employee_13_month_pay_report($employee_id)
 	{
 		$data["employee"] = Tbl_payroll_employee_basic::where("tbl_payroll_employee_basic.payroll_employee_id",$employee_id)->first();
 		$data["_period"]  = Tbl_payroll_period::GetEmployeeAllPeriodRecords($employee_id)
 		->where("tbl_payroll_period_company.payroll_period_status","!=","pending")
 		->get();
 
-
-		$data = Payroll2::get_grand_total_whole_year($data);
-		$data = Payroll2::get_total_per_period($data);
-
-		// dd($data);
-		return view("member.payrollreport.payroll_employee_ledger",$data);
+		return view('member.payrollreport.payroll_13th_mont_pay_report_v2',$data);
 	}
-
-
 }

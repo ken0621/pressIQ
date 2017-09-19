@@ -655,6 +655,15 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "kim";
 
+        /* -- REPORT => PRODUCTS  */
+        $code = "13th Month Pay";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "13th Month Pay";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/reports/13th_month_pay";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "kim";
+
     /* PAYROLL API */
     $code = "payroll-api";
     $nav[$page]['submenu'][$code]['label'] = "Payroll API";

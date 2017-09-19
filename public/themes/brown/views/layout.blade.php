@@ -321,7 +321,7 @@
     <footer>
         <div class="container">
             <div class="row clearfix">
-                <div class="col-md-3 col-sm-6">
+                <div class="col-md-3 col-xs-6 match-height">
                     <div class="holder">
                         <div class="title">Exclusive Offer</div>
                         <div class="desc">Subscribe to brown&proud Newsletter</div>
@@ -331,7 +331,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 col-sm-6">
+                <div class="col-md-3 col-xs-6 match-height">
                     <div class="holder">
                         <div class="title">Customer Care</div>
                         <ul>
@@ -343,7 +343,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-md-3 col-sm-6">
+                <div class="col-md-3 col-xs-6 match-height">
                     <div class="holder">
                         <div class="title">Brown&Proud</div>
                         <ul>
@@ -355,7 +355,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-md-3 col-sm-6">
+                <div class="col-md-3 col-xs-6 match-height">
                     <div class="holder">
                         <div class="title">Get Intouch With Us</div>
                         <div class="social-logo">

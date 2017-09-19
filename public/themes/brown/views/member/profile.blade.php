@@ -4,7 +4,7 @@
 	<div class="row clearfix row-no-padding">
 		<div class="col-md-4 left match-height">
 			<div class="profile-main">
-				<div class="img"><img src="{{ $profile->profile }}"></div>
+				<div class="img"><img src="{{ $profile->profile ? $profile->profile : '/themes/brown/img/user-placeholder.png' }}"></div>
 				<div class="name">{{ $profile->first_name }} {{ $profile->middle_name }} {{ $profile->last_name }}</div>
 				<div class="sub">{{ $profile->email }}</div>
 			</div>
@@ -85,7 +85,8 @@
 				</ul>
 				<div class="tab-content">
 				   <div id="basic_info" class="tab-pane fade in active">
-					   <form method="post" action="/members/profile/submit-profile">
+					   <form class="info-form">
+					   	<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					   		<div class="row clearfix">
 					   			<div class="col-md-6">
 					   				<div class="form-group">
@@ -146,7 +147,7 @@
 							   		</div>
 							   		<div class="form-group">
 							   			<label>Barangay</label>
-							   			<select firstload="true" default="{{ isset($profile_address->zipcode_id) ? $profile_address->zipcode_id : '' }}" class="form-control load-location" name="customer_zip" level="3"></select>
+							   			<select firstload="true" default="{{ isset($profile_address->zipcode_id) ? $profile_address->zipcode_id : '' }}" class="form-control load-location" name="customer_zipcode" level="3"></select>
 							   		</div>
 							   		<div class="form-group">
 							   			<label>Full Address</label>

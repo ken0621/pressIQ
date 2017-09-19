@@ -2,77 +2,79 @@
 @section("member_content")
 <div class="profile-container">
 	<div class="row clearfix row-no-padding">
-		<div class="col-md-4 left match-height">
-			<div class="profile-main">
-				<div class="img"><img src="{{ $profile->profile ? $profile->profile : '/themes/brown/img/user-placeholder.png' }}"></div>
-				<div class="name">{{ $profile->first_name }} {{ $profile->middle_name }} {{ $profile->last_name }}</div>
-				<div class="sub">{{ $profile->email }}</div>
-			</div>
-			<div class="profile-status">
-				<table>
-					<tr>
-						<td class="green">
-							<div class="status-number">0</div>
-							<div class="status-label">Direct Employee</div>
-						</td>
-						<td class="blue">
-							<div class="status-number">0</div>
-							<div class="status-label">Active Slot</div>
-						</td>
-						<td class="orange">
-							<div class="status-number">P 0.00</div>
-							<div class="status-label">Current Wallet</div>
-						</td>
-					</tr>
-				</table>
-			</div>
-			@if($mlm == 1)
-			<div class="profile-lead">
-				<a data-toggle="modal" data-target="#leads_modal" href="javascript:">
-					<img src="/themes/{{ $shop_theme }}/img/leads.png"> Leads Link
-				</a>
-				<!-- Modal -->
-				<div id="leads_modal" class="modal fade leads-modal" role="dialog">
-				   <div class="modal-dialog">
-				      <!-- Modal content-->
-				      <div class="modal-content">
-				         <div class="modal-header">
-				            {{-- <button type="button" class="close" data-dismiss="modal">&times;</button> --}}
-				            <h4 class="modal-title">LEADS LINK</h4>
-				         </div>
-				         <div class="modal-body">
-				         	<div class="leads-holder">
-				         		<input class="form-control" type="text" name="" value="http://brownandproud/myleadslink/link#000123">
-				         	</div>
-				         	<div class="leads-button">
-				         		<button class="btn btn-grey">Copy Link</button>
-				         	</div>
-				         </div>
-				      </div>
-				   </div>
+		<div class="col-md-4 left match-height load-profile">
+			<div class="load-profile-holder">
+				<div class="profile-main">
+					<div class="img"><img src="{{ $profile->profile ? $profile->profile : '/themes/brown/img/user-placeholder.png' }}"></div>
+					<div class="name">{{ $profile->first_name }} {{ $profile->middle_name }} {{ $profile->last_name }}</div>
+					<div class="sub">{{ $profile->email }}</div>
 				</div>
-			</div>
-			@endif
-			<div class="profile-about">
-				<div class="title">About Me</div>
-				<table>
-					<tr>
-						<td>
-							<img src="/themes/{{ $shop_theme }}/img/calendar.png"> Date Joined
-						</td>
-						<td>{{ $profile->created_date }}</td>
-					</tr>
-					<tr>
-						<td>
-							<img src="/themes/{{ $shop_theme }}/img/location.png"> Location
-						</td>
-						@if($profile_address)
-							<td>{{ $profile_address->customer_state }} {{ $profile_address->customer_city }} {{ $profile_address->customer_zipcode }} {{ $profile_address->customer_street }}</td>
-						@else
-							<td><button class="btn btn-orange" type="button">+ Add Location</button></td>
-						@endif
-					</tr>
-				</table>
+				<div class="profile-status">
+					<table>
+						<tr>
+							<td class="green">
+								<div class="status-number">0</div>
+								<div class="status-label">Direct Employee</div>
+							</td>
+							<td class="blue">
+								<div class="status-number">0</div>
+								<div class="status-label">Active Slot</div>
+							</td>
+							<td class="orange">
+								<div class="status-number">P 0.00</div>
+								<div class="status-label">Current Wallet</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				@if($mlm == 1)
+				<div class="profile-lead">
+					<a data-toggle="modal" data-target="#leads_modal" href="javascript:">
+						<img src="/themes/{{ $shop_theme }}/img/leads.png"> Leads Link
+					</a>
+					<!-- Modal -->
+					<div id="leads_modal" class="modal fade leads-modal" role="dialog">
+					   <div class="modal-dialog">
+					      <!-- Modal content-->
+					      <div class="modal-content">
+					         <div class="modal-header">
+					            {{-- <button type="button" class="close" data-dismiss="modal">&times;</button> --}}
+					            <h4 class="modal-title">LEADS LINK</h4>
+					         </div>
+					         <div class="modal-body">
+					         	<div class="leads-holder">
+					         		<input class="form-control" type="text" name="" value="http://brownandproud/myleadslink/link#000123">
+					         	</div>
+					         	<div class="leads-button">
+					         		<button class="btn btn-grey">Copy Link</button>
+					         	</div>
+					         </div>
+					      </div>
+					   </div>
+					</div>
+				</div>
+				@endif
+				<div class="profile-about">
+					<div class="title">About Me</div>
+					<table>
+						<tr>
+							<td>
+								<img src="/themes/{{ $shop_theme }}/img/calendar.png"> Date Joined
+							</td>
+							<td>{{ $profile->created_date }}</td>
+						</tr>
+						<tr>
+							<td>
+								<img src="/themes/{{ $shop_theme }}/img/location.png"> Location
+							</td>
+							@if($profile_address)
+								<td>{{ $profile_address->customer_state }} {{ $profile_address->customer_city }} {{ $profile_address->customer_zipcode }} {{ $profile_address->customer_street }}</td>
+							@else
+								<td><button class="btn btn-orange" type="button">+ Add Location</button></td>
+							@endif
+						</tr>
+					</table>
+				</div>
 			</div>
 		</div>
 		<div class="col-md-8 right match-height">
@@ -85,6 +87,11 @@
 				</ul>
 				<div class="tab-content">
 				   <div id="basic_info" class="tab-pane fade in active">
+				   		<div class="profile_info_success_message hidden">
+							<div class="alert alert-success">
+							  <strong>Success!</strong> Your info has been successfully updated.
+							</div>
+				   		</div>
 					   <form class="info-form">
 					   	<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					   		<div class="row clearfix">
@@ -147,16 +154,16 @@
 							   		</div>
 							   		<div class="form-group">
 							   			<label>Barangay</label>
-							   			<select firstload="true" default="{{ isset($profile_address->zipcode_id) ? $profile_address->zipcode_id : '' }}" class="form-control load-location" name="customer_zipcode" level="3"></select>
+							   			<select firstload="true" default="{{ isset($profile_address->barangay_id) ? $profile_address->barangay_id : '' }}" class="form-control load-location" name="customer_zipcode" level="3"></select>
 							   		</div>
 							   		<div class="form-group">
 							   			<label>Full Address</label>
-							   			<textarea style="height: 107px" class="form-control" name="customer_street" value="{{ isset($profile_address->customer_address) ? $profile_address->customer_address : '' }}"></textarea>
+							   			<textarea style="height: 107px" class="form-control" name="customer_street">{{ isset($profile_address->customer_street) ? $profile_address->customer_street : '' }}</textarea>
 							   		</div>
 						   		</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button class="btn btn-brown">Update</button>
+							   			<button class="btn btn-brown" type="submit">Update</button>
 							   		</div>
 						   		</div>
 					   		</div>

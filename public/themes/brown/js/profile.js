@@ -63,12 +63,19 @@ function profile()
 				{
 					if(data == "success")
 					{
-						$(".contact_info_success_message").removeClass("hidden");
+						$(".load-profile").load('/members/profile .load-profile-holder', function()
+						{
+							$(".info-form").find("button[type=submit]").html("<i class='fa fa-save'></i> Update");
+							$(".profile_info_success_message").removeClass("hidden");
+						});
 					}
-				},
-				complete: function(data)
-				{
-					$(".info-form").find("button[type=submit]").html("<i class='fa fa-save'></i> Update");
+					else
+					{
+						$.each(data, function(index, val) 
+						{
+							alert(val);
+						});
+					}
 				}
 			})
 

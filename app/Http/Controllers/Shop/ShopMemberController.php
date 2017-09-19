@@ -297,7 +297,7 @@ class ShopMemberController extends Shop
         $data["page"] = "Profile";
         $data["mlm"] = isset(Self::$customer_info->ismlm) ? Self::$customer_info->ismlm : 0;
         $data["profile"]         = Tbl_customer::shop(Self::$customer_info->shop_id)->where("tbl_customer.customer_id", Self::$customer_info->customer_id)->first();
-        $data["profile_address"] = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->first();
+        $data["profile_address"] = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->first();
         $data["profile_info"]    = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();
         $data["_country"]        = Tbl_country::get();
 
@@ -359,7 +359,7 @@ class ShopMemberController extends Shop
                 /* Update */
                 $insert_customer_address["updated_at"] = Carbon::now();
 
-                Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->insert($insert_customer_address);
+                Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->update($insert_customer_address);
             }
             else
             {
@@ -375,8 +375,8 @@ class ShopMemberController extends Shop
         }
         else
         {
-            dd($validator->errors());
-            echo json_encode("fail");
+            $result = $validator->errors();
+            echo json_encode($result);
         }
     }
     public function postProfileUpdateReward(Request $request)

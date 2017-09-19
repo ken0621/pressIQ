@@ -22,7 +22,7 @@
 	                    <div class="btn-container">
 	                        <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
 	                        <img src="/themes/{{ $shop_theme }}/img/or.png"><br>
-	                        <a href="#" class="btn-enter-a-code" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
+	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
 	                    </div>
 	                </div>
 	            </div>

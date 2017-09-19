@@ -17,28 +17,39 @@ $text-dark: #272c2f;
 {
 	font-family: $content-text;
 
+	.align-icon
+	{
+		vertical-align: middle;
+		display: inline-block;
+	}
+
+	.brown-icon-money
+	{
+		margin-top: -7px;
+	}
+
 	.title
 	{
-		//mixin
-		@include transition(0.2s);
 		color: #000;
 		font-size: 21px;
 		letter-spacing: 0.5px;
 		font-weight: normal;
-		background-color: #eee;
+		background-color: #fff;
 		padding: 5px 15px;
 		margin-top: 5px;
 		border: 1px solid #ddd;
 
 		.title-button
 		{
+			//mixin
+			@include transition(0.2s);
+
 			font-weight: bold;
 			font-size: 14px;
 			text-decoration: none;
 			margin-top: 3px;
 			text-transform: uppercase;
 			opacity: 0;
-
 		}
 
 		&:hover
@@ -55,7 +66,7 @@ $text-dark: #272c2f;
 		padding: 10px 20px;
 		border: 1px solid #ddd;
 		margin-top: -1px;
-		background-color: #fafafa;
+		background-color: #fff;
 		margin-bottom: 10px;
 	}
 

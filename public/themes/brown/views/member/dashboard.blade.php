@@ -85,7 +85,7 @@
 	<div class="dashboard">
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="title"><i class="fa fa-bar-chart-o"></i> Wallet Summary</div>
+				<div class="title"><i class="align-icon brown-icon-bar-chart"></i> Wallet Summary</div>
 				<div class="sub-container">
 					<div class="table-holder">
 						<div class="chart-legend">
@@ -204,7 +204,7 @@
 
 				</div>
 
-				<div class="title"><i class="fa fa-gift"></i> Reward Points</div>
+				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
 				<div class="sub-container">
 					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
 						<div class="holder">
@@ -221,7 +221,7 @@
 		</div>
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="title"><i class="fa fa-globe"></i> Newest Enrollee(s) Sponsored</div>
+				<div class="title"><i class="align-icon brown-icon-globe"></i> Newest Enrollee(s) Sponsored</div>
 				<div class="sub-container border-holder">
 					<div class="clearfix wow hidden">
 						<div class="badge right">6 New Members</div>
@@ -251,7 +251,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="match-height">
-					<div class="title"><i class="fa fa-money"></i> Recent Rewards <a href="javascript:" class="title-button pull-right">View All Rewards</a></div>
+					<div class="title"><i class="align-icon brown-icon-money"></i> Recent Rewards <a href="javascript:" class="title-button pull-right">View All Rewards</a></div>
 					<div class="sub-container">
 						<div class="activities">
 							@foreach($_recent_rewards as $recent_reward)
@@ -281,7 +281,7 @@
 
 			<div class="col-md-12">
 				<div class="unilevel-holder">
-					<div class="title"><i class="fa fa-star"></i> My Slot(s) <a href="javascript:" class="title-button pull-right btn-enter-a-code">Add New Slot</a></div>
+					<div class="title"><i class="align-icon brown-icon-star"></i> My Slot(s) <a href="javascript:" class="title-button pull-right btn-enter-a-code">Add New Slot</a></div>
 					<div class="sub-container">
 						@foreach($_slot as $slot)
 						<div class="holder">

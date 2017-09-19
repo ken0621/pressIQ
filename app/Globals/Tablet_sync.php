@@ -10,6 +10,9 @@ use App\Models\Tbl_manual_receive_payment;
 use App\Models\Tbl_sir_inventory;
 use App\Models\Tbl_receive_payment;
 use App\Models\Tbl_receive_payment_line;
+use App\Models\Tbl_customer;
+use App\Models\Tbl_customer_address;
+use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_sir;
 
 use App\Globals\Invoice;
@@ -499,7 +502,6 @@ class tablet_sync
 					$update['rejection_reason'] = $sir_data->rejection_reason;
 					Tbl_sir::where('sir_id',$sir_id)->update($update);
 				}
-
 				if($agent_data)
 				{
 					$agent_update['email'] = $agent_data->email;
@@ -521,17 +523,33 @@ class tablet_sync
 						$ins_customer['suffix_name'] = $value_customer->shop_id;
 						$ins_customer['email'] = $value_customer->shop_id;
 						$ins_customer['company'] = $value_customer->shop_id;
-						$ins_customer['approved'] = $value_customer->approved
+						$ins_customer['approved'] = $value_customer->approved;
 
 						$new_customer_id = Tbl_customer::insertGetId($ins_customer);
 						foreach($all_customer_address as $key_address => $value_address) 
 						{
 							if($value_address->customer_id == $value_customer->customer_id)
 							{
-								$ins_add['']
+								$ins_add['customer_id'] = $new_customer_id;
+								$ins_add['country_id'] = $value_address->country_id;
+								$ins_add['customer_state'] = $value_address->customer_state;
+								$ins_add['customer_city'] = $value_address->customer_city;
+								$ins_add['customer_zipcode'] = $value_address->customer_zipcode;
+								$ins_add['customer_street'] = $value_address->customer_street;
+								$ins_add['created_at'] = $value_address->created_at;
+								$ins_add['updated_at'] = $value_address->updated_at;
+								$ins_add['purpose'] = $value_address->purpose;
 
+								Tbl_customer_address::insert($ins_add);
 							}
 						}
+
+						$ins_other_info['customer_id'] = $new_customer_id;
+						$ins_other_info['customer_phone'] = $value_customer->customer_phone;
+						$ins_other_info['customer_mobile'] = $value_customer->customer_mobile;
+						$ins_other_info['customer_fax'] = $value_customer->customer_fax;
+
+						Tbl_customer_other_info::insert($ins_other_info);
 					}
 				}
 				

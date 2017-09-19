@@ -43,6 +43,18 @@ class GoogleGlobals
 
 		dd($client);
 	}
+	public static function revoke_access($shop_id)
+	{
+		session_start();
+		$get_key = SocialNetwork::get_keys($shop_id, 'googleplus');
+		$client = new Google_Client();
+		$client->setApplicationName("My Application");
+		$client->setDeveloperKey($get_key['app_id']);
+		$client->revokeToken($_SESSION['access_token']);
+
+		session_destroy();    
+
+	}
 	public static function test()
 	{
 		session_start();

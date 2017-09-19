@@ -5099,42 +5099,61 @@ class PayrollController extends Member
           $data = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
           $key = 0;
           $tc = 0;
+          $count=0;
+          foreach ($data as  $value1) {
+                    if($value1['employee_id']!=null && $value1['shift_code_name']!=null)
+                         {
+                              if($value1['employee_id']!=null && $value1['shift_code_name']!=null)
+                              {
+                              $count++;
 
-          foreach ($data as  $value) {
-               if($value['employee_id']!=null && $value['shift_code_name']!=null)
-               {
-               $insert_code['shift_code_name']    = $value['shift_code_name'];
-               $insert_code['shop_id']            = Self::shop_id();
-               $shift_code_id                     = Tbl_payroll_shift_code::insertGetId($insert_code);
-               $update['shift_code_id']           = $shift_code_id;
-                                                    Tbl_payroll_employee_basic::where('payroll_employee_number',$value['employee_id'])->where("shop_id", Self::shop_id())->update($update);
-               $insert_shift = array();
-               $shop=Self::shop_id();
-               }
-               else
-               {
+                              $insert_code['shift_code_name']    = $value1['shift_code_name'];
+                              $insert_code['shop_id']            = Self::shop_id();
+                              $shift_code_id                     = Tbl_payroll_shift_code::insertGetId($insert_code);
+                              
+                              $update['shift_code_id']           = $shift_code_id;
+                              $count_update =  Tbl_payroll_employee_basic::where('payroll_employee_number',$value1['employee_id'])->where("shop_id", Self::shop_id())->update($update);
+                                                               
+                                                                 
 
-                   return "<center>SUCCESS</center>";
-               }
-               foreach ($data as  $value1) {
-                    $insert_day["shift_day"] = ucfirst($value1['shift_day']);
-                    $insert_day["shift_code_id"] = $shift_code_id;
-                    $insert_day["shift_break_hours"] = number_format($value1['shift_break_hours'], 2, '.', '');
-                    $insert_day["shift_target_hours"] = $value1['shift_target_hours'];
-                    $insert_day["shift_flexi_time"] = $value1['shift_flexi_time']== 1 ? 1 : 0;
-                    $insert_day["shift_rest_day"] = $value1['shift_rest_day']== 1 ? 1 : 0;
-                    $insert_day["shift_extra_day"] = $value1['shift_extra_day']== 1 ? 1 : 0;
-                    $shift_day_id = Tbl_payroll_shift_day::insertGetId($insert_day);
-                    $insert_time[$tc]["shift_day_id"] = $shift_day_id;
-                    $insert_time[$tc]["shift_work_start"] = date("H:i:s", strtotime($value1['shift_start_time'])) ;
-                    $insert_time[$tc]["shift_work_end"] = date("H:i:s", strtotime($value1['shift_end_time'])) ;
-                    Tbl_payroll_shift_time::insert($insert_time);
-                    $insert_time = null;
+                              $insert_shift = array();
+                              $shop=Self::shop_id();
+                              }
+                    
+                              $insert_day["shift_day"] = ucfirst($value1['shift_day']);
+                              $insert_day["shift_code_id"] = $shift_code_id;
+                              $insert_day["shift_break_hours"] = number_format($value1['shift_break_hours'], 2, '.', '');
+                              $insert_day["shift_target_hours"] = $value1['shift_target_hours'];
+                              $insert_day["shift_flexi_time"] = $value1['shift_flexi_time']== 1 ? 1 : 0;
+                              $insert_day["shift_rest_day"] = $value1['shift_rest_day']== 1 ? 1 : 0;
+                              $insert_day["shift_extra_day"] = $value1['shift_extra_day']== 1 ? 1 : 0;
+                              $shift_day_id = Tbl_payroll_shift_day::insertGetId($insert_day);
+                              $insert_time[$tc]["shift_day_id"] = $shift_day_id;
+                              $insert_time[$tc]["shift_work_start"] = date("H:i:s", strtotime($value1['shift_start_time'])) ;
+                              $insert_time[$tc]["shift_work_end"] = date("H:i:s", strtotime($value1['shift_end_time'])) ;
+                              Tbl_payroll_shift_time::insert($insert_time);
+                              $insert_time = null;    
+                         }
+                    
                     }
-               } 
-          $return['function_name'] = 'payrollconfiguration.reload_shift_template';
-          $return['status']        = 'success';
-          return collect($return)->toJson();
+                    $total_count = $count;
+                    if($total_count!=null || $total_count!=0)
+                    {
+                       $message = '<center><span class="color-green">'.$total_count.' employees schedules are already updated.</span></center>';
+                      
+                    }
+                    else
+                    {
+                       $message = '<center><span class="color-red">Nothing to insert Please Check your file.</span></center>';
+                         
+                    }
+     return $message;
+               
+               
+          // $return['function_name'] = 'payrollconfiguration.reload_shift_template';
+          // $return['status']        = 'success';
+          // return collect($return)->toJson();
+               
      }
 
      public function get_template123()

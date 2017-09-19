@@ -50,9 +50,12 @@ class SocialNetwork
 		$return = null;
 		if($data)
 		{
-			if($data->social_network_name == $info['social_network_name'])
+			if(isset($info['social_network_name']))
 			{
-				$return .= "App name already exist";
+				if($data->social_network_name == $info['social_network_name'])
+				{
+					$return .= "App name already exist";
+				}
 			}
 		}
 

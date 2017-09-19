@@ -16,6 +16,7 @@ use App\Models\Tbl_item;
 use App\Globals\Currency;
 use App\Globals\Mlm_compute;
 use App\Globals\Reward;
+use App\Globals\MLM2;
 use App\Models\Tbl_mlm_item_points;
 use App\Models\Tbl_brown_rank;
 use DB;
@@ -51,7 +52,7 @@ class MlmDeveloperController extends Member
         	$data["_slot"][$key]->total_earnings_format = "<a href='javascript:' link='/member/mlm/developer/popup_earnings?slot_id=" . $slot->slot_id . "' class='popup' size='lg'>" . Currency::format($data["_slot"][$key]->total_earnings) . "</a>";
         	$data["_slot"][$key]->total_payout_format = "<a href='javascript:'>" . Currency::format($data["_slot"][$key]->total_payout * -1) . "</a>";
             $data["_slot"][$key]->total_gc_format = Currency::format(0);
-            
+
             /* BROWN RANK DETAILS */
             $brown_current_rank = Tbl_brown_rank::where("rank_id", $slot->brown_rank_id)->first();
 
@@ -67,12 +68,19 @@ class MlmDeveloperController extends Member
 
             if($slot->brown_rank_id)
             {
-
                 $brown_next_rank = Tbl_brown_rank::where("rank_id",">", $slot->brown_rank_id)->orderBy("rank_id")->first();
+            }
+            else
+            {
+                $brown_next_rank = null;
+            }
+
+            if($brown_next_rank)
+            {
                 $data["_slot"][$key]->brown_next_rank = strtoupper($brown_next_rank->rank_name);
                 $brown_rank_required_slots = $brown_next_rank->required_slot;
                 $brown_count_required = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot->slot_id)->where("sponsor_tree_level", "<=", $brown_next_rank->required_uptolevel)->count();
-                $data["_slot"][$key]->brown_next_rank_requirements = "<b><a href='javascript:'>" . $brown_count_required . " SLOT(S)</a></b> OUT OF <b>" . $brown_rank_required_slots . " (LIMIT " . strtoupper(ordinal($brown_next_rank->required_uptolevel)) .  " LEVEL)</b>";
+                $data["_slot"][$key]->brown_next_rank_requirements = "<b><a class='popup' size='md' link='/member/mlm/developer/popup_slot_created?level=".$brown_next_rank->required_uptolevel."&slot_id=". $slot->slot_id."'>" . $brown_count_required . " SLOT(S)</a></b> OUT OF <b>" . $brown_rank_required_slots . " (LIMIT " . strtoupper(ordinal($brown_next_rank->required_uptolevel)) .  " LEVEL)</b>";
             }
             else
             {
@@ -147,6 +155,17 @@ class MlmDeveloperController extends Member
         $data['slot_id'] = Tbl_mlm_slot::where('shop_id',$this->user_info->shop_id)->where('slot_no', Request::input('slot_no'))->value('slot_id');
         $data['mode'] = Request::input('mode');
         return view('member.mlm_developer.modal_genealogy',$data);
+    }
+    public function popup_slot_created()
+    {
+        $data['page'] = 'Popup Slot Created';
+        $slot_id = Request::input('slot_id');
+        // dd($slot_id);
+        $data['owner'] = Tbl_mlm_slot::customer()->where('slot_id',$slot_id)->first();
+        $level = Request::input('level');
+        $data['_slot'] = Tbl_tree_sponsor::child_info()->customer()->where('sponsor_tree_parent_id',$slot_id)->where('sponsor_tree_level','<=',$level)->orderBy('sponsor_tree_level', 'ASC')->get();
+
+        return view('member.mlm_developer.popup_slots_created',$data);
     }
     public function popup_earnings()
     {

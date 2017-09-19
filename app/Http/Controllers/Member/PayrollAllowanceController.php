@@ -292,12 +292,16 @@ class PayrollAllowanceController extends Member
     {
          $id = Request::input('id');
          $update['payroll_allowance_archived'] = Request::input('archived');
+         // $update['payroll_employee_allowance_archived'] = Request::input('archived');
+
          Tbl_payroll_allowance_v2::where('payroll_allowance_id', $id)->update($update);
 
          $return['status']             = 'success';
          $return['function_name']      = 'payrollconfiguration.reload_allowancev2';
+
          return json_encode($return);
     }
+
 
     public function modal_edit_allowance($id)
     {

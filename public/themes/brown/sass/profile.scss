@@ -1,10 +1,24 @@
+$content-text: 'Arimo', sans-serif;
+$regular: 400;
+$semi-bold: 600;
+$bold: 700;
+$text-light: #777;
+$text-dark: #272c2f;
+
+
 .profile-container
 {
-	background-color: #ededed;
+	font-family: $content-text;
 	margin: -15px;
+	color: #344049;
+	.left
+	{
+		border-right: 1px solid #e2e2e2;
+		min-height: 620px;
+	}
 	.profile-main
 	{
-		padding-top: 30px;
+		padding-top: 50px;
 		background-color: #fff;
 		.img
 		{
@@ -21,17 +35,18 @@
 		}
 		.name
 		{
-			color: #344049;
-			font-size: 20px;
-			font-weight: 600;
+			color: $text-dark;
+			font-size: 17px;
+			font-weight: $bold;
 			text-align: center;
 		}
 		.sub
 		{
-			color: #808080;
-			font-size: 13px;
-			font-weight: 600;
+			color: $text-light;
+			font-size: 15px;
+			font-weight: $regular;
 			text-align: center;
+			letter-spacing: 0.2px;
 		}
 	}
 	.profile-status
@@ -41,6 +56,7 @@
 		table
 		{
 			width: 100%;
+			border-top: 1px solid #e2e2e2;
 			table-layout: fixed;
 			td
 			{
@@ -52,15 +68,15 @@
 		}
 		.status-number
 		{
-			color: #344049;
-			font-weight: 600;
-			font-size: 20px;
+			color: $text-dark;
+			font-weight: $bold;
+			font-size: 17px;
 		}
 		.status-label
 		{
-			color: #6d7a87;
+			color: $text-light;
 			font-size: 13px;
-			font-weight: 600;
+			font-weight: $regular;
 			margin-top: 5px;
 		}
 		.green
@@ -79,19 +95,14 @@
 	.profile-about
 	{
 		background-color: #fff;
-		margin: 5px;
 		padding: 15px 25px;
 		margin-top: 0;
-		padding-top: 30px;
-		@media screen and (min-width: 991px)
-		{
-			min-height: 268px;
-		}
 		.title
 		{
-			color: #344049;
-			font-size: 20px;
+			color: $text-dark;
+			font-size: 17px;
 			margin-bottom: 25px;
+			font-weight: $bold;
 		}
 		table
 		{
@@ -101,27 +112,36 @@
 			}
 			td:first-child
 			{
-				color: #344049;
-				font-weight: 600;
-				font-size: 13px;
+				color: $text-dark;
+				font-weight: $bold;
+				font-size: 15px;
 				width: 130px;
 				img
 				{
 					margin-right: 10px;
+					width: 16px;
 				}
 			}
 			td:last-child
 			{
-				color: #788795;
-				font-size: 13px;
+				color: $text-light;
+				font-size: 15px;
+				.btn-orange
+				{
+					background-color: #ed5639;
+					color: #fff;
+				}
+				.btn
+				{
+					padding: 7.5px 15px;
+					font-size: 13px;
+				}
 			}
 		}
 	}
 	.profile-lead
 	{
 		background-color: #fff;
-		margin-left: 5px;
-		margin-right: 5px;
 		text-align: center;
 		@media screen and (min-width: 991px)
 		{
@@ -130,7 +150,7 @@
 		a
 		{
 			display: block;
-			padding: 15px 0;
+			padding: 25px 0;
 			color: #344049;
 			font-size: 13px;
 			font-weight: 600;
@@ -145,7 +165,6 @@
 	.profile-form
 	{
 		background-color: #fff;
-		padding-top: 50px;
 		.nav.nav-tabs
 		{
 			li
@@ -153,23 +172,27 @@
 				a
 				{
 					border: 0;
-					padding: 10px 25px;
-					font-size: 13px;
+					padding: 12.5px 25px;
+					font-size: 17px;
 					text-align: center;
-					color: #a6a6a6;
-					font-weight: 600;
+					color: $text-light;
+					font-weight: $regular;
 					@media screen and (min-width: 991px)
 					{
 						min-width: 150px;
 					}
+					&:hover
+					{
+						background-color: #fff;
+					}
 				}
 				&.active
 				{
-					border-bottom: 2.5px solid #36b1b9;
+					border-bottom: 2.5px solid #78513e;
 					a
 					{
-						font-weight: 700;
-						color: #344049;
+						font-weight: $regular;
+						color: $text-dark;
 					}
 				}
 			}
@@ -183,9 +206,9 @@
 				{
 					label
 					{
-						color: #344049;
-						font-size: 13px;
-						font-weight: 400;
+						color: $text-dark;
+						font-size: 15px;
+						font-weight: $regular;
 					}
 					.form-control
 					{
@@ -193,17 +216,26 @@
 						border-radius: 0;
 						border: 1px solid #d0d0d0;
 					}
+					.date-holder
+					{
+						display: inline-block;
+						vertical-align: top;
+						&:last-child
+						{
+							margin-right: 0;
+						}
+					}
 				}
 				.btn-holder
 				{
 					text-align: right;
-					.btn-update
+					margin-top: 15px;
+					.btn-brown
 					{
-						background-color: #36b1b9;
-						border-radius: 0;
+						border-radius: 2.5px;
 						padding: 10px 25px;
 						color: #fff;
-						font-weight: 600;
+						font-weight: $bold;
 						font-size: 13px;
 						@media screen and (min-width: 150px)
 						{

@@ -14,53 +14,58 @@
 				</div>
 			</div>
 			<div class="sidebar small">
-				<img class="shadow" src="/themes/{{ $shop_theme }}/img/shadow.png">
-				<div class="profile">
-					<div class="img">
-						<img src="/themes/{{ $shop_theme }}/img/big-thumb.jpg">
-					</div>
-					<div class="text">
-						<div class="name">{{ $customer->first_name }} {{ $customer->last_name }}</div>
-						<div class="sub">{{ $customer->customer_id }}</div>
-						<div class="sub">Subtitle Lorem Ipsum</div>
+				<!-- <img class="shadow" src="/themes/{{ $shop_theme }}/img/shadow.png"> -->
+				<div class="profile-holder">
+					<div class="profile">
+						<div class="img">
+							<img src="{{ $profile_image }}">
+						</div>
+						<div class="text">
+							<div class="name">{{ $customer->first_name }} {{ $customer->last_name }}</div>
+							<div class="sub"><i>{{ $customer->email }}</i></div>
+							<div class="sub"><b>PHP 0.00</b></div>
+						</div>
 					</div>
 				</div>
 				<div class="side-nav">
 					<ul>
 						<li class="{{ Request::segment(2) == "" ? "active" : "" }}">
-							<a href="/members"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/dashboard.png"></div> <span>Dashboard</span></a>
+							<a href="/members"><div class="nav-holder"><div class="icon brown-icon-dashboard"></div> <span>Dashboard</span></div></a>
 						</li>
 						<li class="{{ Request::segment(2) == "profile" ? "active" : "" }}">
-							<a href="/members/profile"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/profile.png"></div> <span>Profile</span></a>
+							<a href="/members/profile"><div class="nav-holder"><div class="icon brown-icon-profile"></div> <span>Profile</span></div></a>
 						</li>
 						<li class="{{ Request::segment(2) == "notification" ? "active" : "" }}">
-							<a href="/members/notification"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/notif.png"></div> <span>Notification</span></a>
+							<a href="/members/notification"><div class="nav-holder"><div class="icon brown-icon-bell-o"></div> <span>Notification</span></div></a>
 						</li>
 						<li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}">
-							<a href="/members/genealogy"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/genealogy.png"></div> <span>Genealogy</span></a>
+							<a href="/members/genealogy"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Genealogy</span></div></a>
 						</li>
 						<li class="{{ Request::segment(2) == "report" ? "active" : "" }}">
-							<a href="/members/report"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/report.png"></div> <span>Reports</span></a>
+							<a href="/members/report"><div class="nav-holder"><div class="icon brown-icon-bar-chart"></div> <span>Reports</span></div></a>
 						</li>
-						<li class="{{ Request::segment(2) == "wallet" ? "active" : "" }}">
-							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/wallet.png"></div> <span>Wallet</span></a>
+						<li class="{{ Request::segment(2) == "wallet-logs" || Request::segment(2) == "wallet-encashment" ? "active" : "" }}">
+							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-wallet"></div> <span>Wallet</span></div></a>
 							<ul>
 								<li>
-									<a href="javascript:">Wallet Logs</a>
+									<a href="/members/wallet-logs"><div class="icon brown-icon-list-alt nav-holder"> &nbsp;&nbsp;Wallet Logs</div></a>
 								</li>
 								<li>
-									<a href="javascript:">Wallet Encashment</a>
+									<a href="/members/wallet-encashment"><div class="icon brown-icon-money nav-holder"> &nbsp;&nbsp;Wallet Encashment</div></a>
 								</li>
 							</ul>
 						</li>
-						<li class="{{ Request::segment(2) == "slots" ? "active" : "" }}">
-							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/slots.png"></div> <span>My Slots</span></a>
+						<li class="{{ Request::segment(2) == "slot" ? "active" : "" }}">
+							<a href="/members/slot"><div class="nav-holder"><div class="icon brown-icon-cubes"></div> <span>My Slots</span></div></a>
 						</li>
-						<li class="{{ Request::segment(2) == "eoncard" ? "active" : "" }}">
-							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/eon-card.png"></div> <span>Eon Card</span></a>
+						<li class="{{ Request::segment(2) == "eon-card" ? "active" : "" }}">
+							<a href="/members/eon-card"><div class="nav-holder"><dic class="icon brown-icon-credit-card"></dic> <span>Eon Card</span></div></a>
 						</li>
 						<li class="{{ Request::segment(2) == "order" ? "active" : "" }}">
-							<a href="javascript:"><div class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-nav/order.png"></div> <span>Orders</span></a>
+							<a href="/members/order"><div class="nav-holder"><div class="icon brown-icon-bag"></div> <span>Orders</span></div></a>
+						</li>
+						<li class="{{ Request::segment(2) == "wishlist" ? "active" : "" }}">
+							<a href="/members/wishlist"><div class="nav-holder"><div class="icon brown-icon-heart-empty"></div> <span>Wishlist</span></div></a>
 						</li>
 					</ul>
 				</div>

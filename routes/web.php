@@ -1,4 +1,5 @@
 <?php
+Route::any('/ncabot', 'SampleTesting@ncabot');
 Route::any('/oliver/{id}', 'SampleTesting@index');
 Route::any('/oliver/samp2', 'SampleTesting@samp2');
 Route::any('/s', 'TesterController@samptest');
@@ -22,6 +23,8 @@ Route::get('/barcode', 'MemberController@barcodes');
 // for testing only
 // Route::get('/card', 'MemberController@card');
 // Route::get('/card/all', 'MemberController@all_slot');
+
+Route::any('/login/geturl', 'Member\TesterController@test_login'); 
 
 Route::get('member/register/session', 'MemberController@session');
 Route::get('member/register', 'MemberController@register');
@@ -1025,6 +1028,10 @@ AdvancedRoute::controller('/member/ecommerce/trackings', 'Member\TrackingsContro
 
 /* MEMBER SHIPPING*/
 AdvancedRoute::controller('/member/register/shipping', 'MemberController');
+/* End */
+
+/* MEMBER SHIPPING*/
+AdvancedRoute::controller('/member/maintenance/app_keys', 'Member\SocialNetworkingKeysController');
 /* End */
 
 

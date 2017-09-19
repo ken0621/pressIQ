@@ -1,4 +1,5 @@
 <?php
+Route::any('/ncabot', 'SampleTesting@ncabot');
 Route::any('/oliver/{id}', 'SampleTesting@index');
 Route::any('/oliver/samp2', 'SampleTesting@samp2');
 Route::any('/s', 'TesterController@samptest');
@@ -1027,6 +1028,10 @@ AdvancedRoute::controller('/member/ecommerce/trackings', 'Member\TrackingsContro
 
 /* MEMBER SHIPPING*/
 AdvancedRoute::controller('/member/register/shipping', 'MemberController');
+/* End */
+
+/* MEMBER SHIPPING*/
+AdvancedRoute::controller('/member/maintenance/app_keys', 'Member\SocialNetworkingKeysController');
 /* End */
 
 

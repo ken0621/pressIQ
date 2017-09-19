@@ -3,9 +3,15 @@
 <div class="content">
 	<!-- Media Slider -->
 	<div class="slider-wrapper single-item">
+		@if(loop_content_condition($shop_theme_info, "home", "home_slider"))
+			@foreach(loop_content_get($shop_theme_info, "home", "home_slider") as $slider)
+			<img src="{{ $slider }}">
+			@endforeach
+		@else
 		<img src="/themes/{{ $shop_theme }}/img/slide-img-2.jpg">
 		<img src="/themes/{{ $shop_theme }}/img/slide-img-1.png">
-		<img src="/themes/{{ $shop_theme }}/img/slide-img-3.jpg">		
+		<img src="/themes/{{ $shop_theme }}/img/slide-img-3.jpg">
+		@endif		
 	</div>
 	<!-- INFORMATIVE -->
 	<div class="top-1-container">
@@ -69,7 +75,7 @@
 							<div class="hover-detail-container">
 								<h3>TAKE IT EVERYDAY</h3>
 								<h4>FEEL IT ALL THE WAY</h4>
-								<div class="medium-button blue-button">SHOP NOW</div>								
+								<div class="medium-button blue-button" onClick="location.href='/product?type=212'">SHOP NOW</div>								
 							</div>
 							<div class="hover-bg"></div>
 							<img src="{{ get_content($shop_theme_info, "home", "home_division4_img1") }}">
@@ -85,7 +91,7 @@
 							<div class="hover-detail-container">
 								<h5>FEEL THE</h5>
 								<h6 class="h-red">NATURE'S BEAUTY</h6>
-								<div class="medium-button red-button">SHOP NOW</div>								
+								<div class="medium-button red-button" onClick="location.href='/product?type=211'">SHOP NOW</div>								
 							</div>
 							<div class="hover-bg"></div>
 							<img src="{{ get_content($shop_theme_info, "home", "home_division_4_img3") }}">
@@ -103,7 +109,7 @@
 							<div class="hover-detail-container">
 								<h5>YOUR EVERYDAY</h5>
 								<h6 class="h-green">HEALTHY DRINK</h6>
-								<div class="medium-button green-button">SHOP NOW</div>								
+								<div class="medium-button green-button" onClick="location.href='/product?type=213'">SHOP NOW</div>								
 							</div>
 							<div class="hover-bg"></div>
 							<img src="{{ get_content($shop_theme_info, "home", "home_division4_img2") }}">
@@ -121,7 +127,7 @@
 									<div class="hover-detail-container hover-detail-container-sml">
 										<h3 class="h-gray">BUSINESS</h3>
 										<h4>PACKAGE</h4>
-										<div class="medium-button blue-button gray-button-short">SHOP NOW</div>								
+										<div class="medium-button blue-button gray-button-short" onClick="location.href='/product?type=216'">SHOP NOW</div>								
 									</div>
 									<div class="hover-bg"></div>
 									<img src="{{ get_content($shop_theme_info, "home", "home_division_4_img4") }}">
@@ -139,7 +145,7 @@
 									<div class="hover-detail-container hover-detail-container-sml">
 										<h3 class="h-gray">RETAIL</h3>
 										<h4>PACKAGE</h4>
-										<div class="medium-button green-button gray-button-short">SHOP NOW</div>								
+										<div class="medium-button green-button gray-button-short" onClick="location.href='/product?type=237'">SHOP NOW</div>								
 									</div>
 									<div class="hover-bg"></div>
 									<img src="{{ get_content($shop_theme_info, "home", "home_division_4_img5") }}">

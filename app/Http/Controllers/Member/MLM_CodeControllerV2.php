@@ -3,6 +3,10 @@ namespace App\Http\Controllers\Member;
 use App\Globals\Item;
 use App\Globals\MLM2;
 use App\Globals\Warehouse2;
+use App\Globals\Pdf_global;
+
+use App\Globals\BarcodeGenerator;
+use Redirect;
 use Illuminate\Http\Request;
 
 class MLM_CodeControllerV2 extends Member
@@ -33,8 +37,7 @@ class MLM_CodeControllerV2 extends Member
     }
     public function membership_code_table(Request $request)
     {   
-        $data['_assembled_item_kit'] = Item::get_assembled_kit(0, $request->item_kit_id, $request->item_membership_id, $request->search_keyword, $request->status);
-
+        $data['_assembled_item_kit'] = Item::get_assembled_kit(0, $request->item_kit_id, $request->item_membership_id, $request->search_keyword, $request->status,10);
         return view("member.mlm_code_v2.membership_code_table", $data);
 
     }
@@ -167,5 +170,39 @@ class MLM_CodeControllerV2 extends Member
     {
         $data['_item_product_code'] = Item::get_all_item_record_log($request->search_keyword, $request->status);
         return view("member.mlm_code_v2.product_code_table",$data);
+    }
+    public function print_codes(Request $request)
+    {
+        $column[0]['name'] = 'PIN No';
+        $column[0]['code'] = 'pin_num';
+
+        $column[1]['name'] = 'Activation';
+        $column[1]['code'] = 'activation';
+
+        $column[2]['name'] = 'Membership';
+        $column[2]['code'] = 'membership';
+
+        $column[3]['name'] = 'Membership Kit';
+        $column[3]['code'] = 'membership_kit';
+
+        $data['columns'] = $column;
+        $data['type'] = $request->type;
+
+        return view("member.mlm_code_v2.print_code_columns",$data);
+    }
+    public function print_codes_submit(Request $request)
+    {
+        return Redirect::to('/member/mlm/print?t='.$request->type);
+    }
+    public function print(Request $request)
+    {
+        $data['_item_product_code'] = Item::get_all_item_record_log();
+        if($request->t == 'membership_code')
+        {
+            $data['_item_product_code'] = Item::get_assembled_kit();
+        }
+        
+        $pdf = view('member.mlm_code_v2.print_code_pdf', $data);
+        return Pdf_global::show_pdf($pdf);
     }
 }

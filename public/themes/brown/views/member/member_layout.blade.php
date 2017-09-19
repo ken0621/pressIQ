@@ -18,12 +18,12 @@
 				<div class="profile-holder">
 					<div class="profile">
 						<div class="img">
-							<img src="/themes/{{ $shop_theme }}/img/big-thumb.jpg">
+							<img src="{{ $profile_image }}">
 						</div>
 						<div class="text">
 							<div class="name">{{ $customer->first_name }} {{ $customer->last_name }}</div>
-							<div class="sub">{{ $customer->customer_id }}</div>
-							<div class="sub">Subtitle Lorem Ipsum</div>
+							<div class="sub"><i>{{ $customer->email }}</i></div>
+							<div class="sub"><b>PHP 0.00</b></div>
 						</div>
 					</div>
 				</div>
@@ -48,7 +48,7 @@
 							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-wallet"></div> <span>Wallet</span></div></a>
 							<ul>
 								<li>
-									<a href="/members/wallet-logs"><div class="icon brown-icon-reports nav-holder"> &nbsp;&nbsp;Wallet Logs</div></a>
+									<a href="/members/wallet-logs"><div class="icon brown-icon-list-alt nav-holder"> &nbsp;&nbsp;Wallet Logs</div></a>
 								</li>
 								<li>
 									<a href="/members/wallet-encashment"><div class="icon brown-icon-money nav-holder"> &nbsp;&nbsp;Wallet Encashment</div></a>

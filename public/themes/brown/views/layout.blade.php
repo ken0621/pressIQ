@@ -7,6 +7,10 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>Brown</title>
+
+        <meta name="google-signin-scope" content="profile email">
+        <meta name="google-signin-client_id" content="{{$google_app_id or ''}}">
+        <input type="hidden" name="" class="google_app_id" value="{{$google_app_id or ''}}">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -44,26 +48,16 @@
                 <a class="holder">GET THE APP</a>
                 <a href="/about" class="holder">COMPANY</a>
                 @if($customer)
-                    <div style="display: inline-block; vertical-align: middle;" class="dropdown hidden">
-                        <a class="holder" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="false">#272842 <span class="caret"></span></a>
-                        <ul class="dropdown-menu dropdown-menu-right slot-picker">
-                            <li class="slot-title">Slot Number</li>
-                            <li><a href="#">#272841</a></li>
-                            <li><a href="#">#272841</a></li>
-                            <li><a href="#">#272841</a></li>
-                            <li><a href="#">#272841</a></li>
-                        </ul>
-                    </div>
                     <div style="display: inline-block; vertical-align: middle;" class="dropdown">
                         <a class="holder" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="false" style="text-transform: uppercase; color: #fff;">{{ $customer->first_name }} {{ $customer->last_name }} <span class="caret"></span></a>
                         <ul class="dropdown-menu dropdown-menu-right profile-menu" style="margin-top: -1px;">
                             <li>
                                 <div class="profile-pic">
-                                    <img src="/themes/{{ $shop_theme }}/img/profile-nav.png">
+                                    <img src="{{ $profile_image }}">
                                 </div>
                                 <div class="profile-text">
-                                    <div class="name">Mr. Brown Lorem Ipsum</div>
-                                    <div class="email">brownandproud@gmail.com</div>
+                                    <div class="name">{{ $customer->first_name }} {{ $customer->last_name }}</div>
+                                    <div class="email">{{ $customer->email }}</div>
                                     <div class="button-holder">
                                         <div class="clearfix">
                                             <button class="btn btn-brown" type="button" onClick="location.href='/members'">Profile</button>
@@ -72,7 +66,8 @@
                                     </div>
                                 </div>
                                 <div class="profile-footer">
-                                    <button type="button" class="btn btn-grey" onClick="location.href='/members/logout'">Sign Out</button>
+                                <!-- onClick="location.href='/members/logout'" -->
+                                    <button type="button" class="btn btn-grey brown-sign-out" onClick="location.href='/members/logout'" >Sign Out</button>
                                 </div>
                             </li>
                         </ul>
@@ -108,6 +103,9 @@
                 </div>
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav">
+                        @if($customer)
+                            <li class="{{ Request::segment(1) == "members" ? "active" : "" }}"><a href="/members">My Account</a></li>
+                        @endif
                       <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a href="/">Brown</a></li>
                       <li class="{{ Request::segment(1) == "product" ? "active" : "product" }}"><a href="/product">Phone Accessories</a></li>
                       <li><a href="#">Internet Of Things</a></li>
@@ -206,7 +204,7 @@
                 <div class="right">
                     <div class="dropdown">
                         <a href="#" class="notif-holders dropdown-toggle" data-toggle="dropdown">
-                            <div class="brown-icon-bell-o"></div> <span class="badge">500</span>
+                            <div class="brown-icon-bell-o" style="font-size: 20px"></div> <span class="badge">500</span>
                         </a>
                         <ul class="dropdown-menu notif">
                             <li>
@@ -267,8 +265,9 @@
                             </li>
                         </ul>
                     </div>
-                    <a href="#" class="cart-holder">
-                        <img style="width: 30px; height: 20px;" src="/themes/{{ $shop_theme }}/img/cart-blur.png"> <span class="badge">500</span>
+                    <a href="#" class="cart-holder" style="text-decoration: none;">
+                        <!-- <img style="width: 30px; height: 20px;" src="/themes/{{ $shop_theme }}/img/cart-blur.png"> <span class="badge">500</span> -->
+                       <div class="brown-icon-shopping-cart"></div> <span class="badge">500</span>
                     </a>
                     @if($customer)
                         <div style="display: inline-block; vertical-align: middle;" class="dropdown hidden">
@@ -408,11 +407,26 @@
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/front/js/match-height.js"></script>
     <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://apis.google.com/js/api:client.js"></script>
 
     <script type="text/javascript">
       $(".date-picker").datepicker({
         dateFormat:"yy-mm-dd"
       });
+
+      // $('.brown-sign-out').unbind('click');
+      // $('.brown-sign-out').bind('click', function()
+      // {
+      //   signOut();
+      // });
+      // function signOut() 
+      // {
+      //   var auth2 = gapi.auth2.getAuthInstance();
+      //   auth2.signOut().then(function () {
+      //     console.log('User signed out.');
+      //   });
+      // }
     </script>
     @yield("script")
     </body>

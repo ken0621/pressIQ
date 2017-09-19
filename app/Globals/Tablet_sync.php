@@ -64,7 +64,7 @@ class tablet_sync
     			$all_customer = $all_transaction['customer'];
     			$all_customer_address = $all_transaction['customer_address'];
     			/*FOR INVOICE*/
-    			foreach ($all_inv as $key => $value) 
+    			foreach ($all_inv as $key => $value)
     			{
     				$customer_info                      = [];
 					$customer_info['customer_id']       = $value->inv->inv_customer_id;
@@ -526,28 +526,35 @@ class tablet_sync
 						$ins_customer['approved'] = $value_customer->approved;
 
 						$new_customer_id = Tbl_customer::insertGetId($ins_customer);
+
 						foreach($all_customer_address as $key_address => $value_address) 
 						{
-							if($value_address->customer_id == $value_customer->customer_id)
+							foreach ($value_address as $key_add => $value_add) 
 							{
-								$ins_add['customer_id'] = $new_customer_id;
-								$ins_add['country_id'] = $value_address->country_id;
-								$ins_add['customer_state'] = $value_address->customer_state;
-								$ins_add['customer_city'] = $value_address->customer_city;
-								$ins_add['customer_zipcode'] = $value_address->customer_zipcode;
-								$ins_add['customer_street'] = $value_address->customer_street;
-								$ins_add['created_at'] = $value_address->created_at;
-								$ins_add['updated_at'] = $value_address->updated_at;
-								$ins_add['purpose'] = $value_address->purpose;
+								foreach ($value_add as $key_adds => $value_adds) 
+								{
+									if($value_adds->customer_id == $value_customer->customer_id)
+									{
+										$ins_add['customer_id'] = $new_customer_id;
+										$ins_add['country_id'] = $value_adds->country_id;
+										$ins_add['customer_state'] = $value_adds->customer_state;
+										$ins_add['customer_city'] = $value_adds->customer_city;
+										$ins_add['customer_zipcode'] = $value_adds->customer_zipcode;
+										$ins_add['customer_street'] = $value_adds->customer_street;
+										$ins_add['created_at'] = $value_adds->created_at;
+										$ins_add['updated_at'] = $value_adds->updated_at;
+										$ins_add['purpose'] = $value_adds->purpose;
 
-								Tbl_customer_address::insert($ins_add);
+										Tbl_customer_address::insert($ins_add);
+									}
+								}
 							}
 						}
 
 						$ins_other_info['customer_id'] = $new_customer_id;
-						$ins_other_info['customer_phone'] = $value_customer->customer_phone;
-						$ins_other_info['customer_mobile'] = $value_customer->customer_mobile;
-						$ins_other_info['customer_fax'] = $value_customer->customer_fax;
+						$ins_other_info['customer_phone'] = $value_customer->customer_phone != null ? $value_customer->customer_phone : '';
+						$ins_other_info['customer_mobile'] =$value_customer->customer_mobile != null ? $value_customer->customer_mobile : '';
+						$ins_other_info['customer_fax'] =$value_customer->customer_fax != null ? $value_customer->customer_fax : '';
 
 						Tbl_customer_other_info::insert($ins_other_info);
 					}

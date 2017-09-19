@@ -222,8 +222,8 @@ class Shop extends Controller
         if(Session::get('mlm_member') != null)
         {
             $session = Session::get('mlm_member');
-            Self::$customer_info = $session['customer_info'];
-            if($session['slot_now'])
+            Self::$customer_info = isset($session['customer_info']) ? $session['customer_info'] : null;
+            if(isset($session['slot_now']) && $session['slot_now'])
             {
                 Self::$slot_now = $session['slot_now'];
             }

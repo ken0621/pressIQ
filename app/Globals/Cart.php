@@ -108,7 +108,7 @@ class Cart
                                 ->update($_cart["cart"][$key]);
                     }
                 }
-
+                
                 if($condition == false)
                 {
                     $_cart["cart"][$product_id] = $insert["cart"][$product_id];

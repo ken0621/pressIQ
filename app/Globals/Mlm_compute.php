@@ -164,8 +164,9 @@ class Mlm_compute
         foreach($plan_settings as $key => $value)
         {
             $points_title  = $value->marketing_plan_code; 
-            if(isset($data[$points_title]))
-            {  
+
+            // if(isset($data[$points_title]))
+            // {
                 if($points_title == "STAIRSTEP")
                 {
                     $stairstep_points       = $data["STAIRSTEP"];
@@ -180,6 +181,13 @@ class Mlm_compute
                     $plan              = strtolower($points_title);
                     Mlm_complan_manager_repurchasev2::$plan($slot_info,$rank_points,$rank_group_points);
                 }
+                else if($points_title == "BROWN_REPURCHASE")
+                {
+                    $price              = $data["price"];
+                    $plan               = strtolower($points_title);
+
+                    Mlm_complan_manager_repurchasev2::$plan($slot_info, $price);
+                }
                 else
                 {
                     if($points_title != "TRIANGLE_REPURCHASE")
@@ -189,48 +197,48 @@ class Mlm_compute
                         Mlm_complan_manager_repurchasev2::$plan($slot_info,$points);
                     }
                 }
-            }
-            else if(isset($data["item_code_id"]))
-            {
-                $item_code_id  = $data["item_code_id"];
-                $item_code     = Tbl_item_code::where("item_code_id",$item_code_id)->first();
-                if($item_code)
-                {
-                    $mlm_item_points  = Tbl_mlm_item_points::where("item_id",$item_code->item_id)->where('membership_id', $slot_info->membership_id)->first();
+            //}
+            // else if(isset($data["item_code_id"]))
+            // {
+            //     $item_code_id  = $data["item_code_id"];
+            //     $item_code     = Tbl_item_code::where("item_code_id",$item_code_id)->first();
+            //     if($item_code)
+            //     {
+            //         $mlm_item_points  = Tbl_mlm_item_points::where("item_id",$item_code->item_id)->where('membership_id', $slot_info->membership_id)->first();
 
-                    if($mlm_item_points)
-                    {
-                        if(isset($mlm_item_points->$points_title))
-                        {
-                            if($points_title == "STAIRSTEP")
-                            {
-                                $stairstep_points       = $mlm_item_points->STAIRSTEP;
-                                $stairstep_group_points = $mlm_item_points->STAIRSTEP_GROUP;
+            //         if($mlm_item_points)
+            //         {
+            //             if(isset($mlm_item_points->$points_title))
+            //             {
+            //                 if($points_title == "STAIRSTEP")
+            //                 {
+            //                     $stairstep_points       = $mlm_item_points->STAIRSTEP;
+            //                     $stairstep_group_points = $mlm_item_points->STAIRSTEP_GROUP;
 
-                                $plan   = strtolower($points_title);
-                                Mlm_complan_manager_repurchasev2::$plan($slot_info,$stairstep_points,$stairstep_group_points);
-                            }
-                            else if($points_title == "RANK")
-                            {
-                                $rank_points       = $mlm_item_points->RANK;
-                                $rank_group_points = $mlm_item_points->RANK_GROUP;
-                                $plan              = strtolower($points_title);
-                                Mlm_complan_manager_repurchasev2::$plan($slot_info,$rank_points,$rank_group_points);
-                            }
-                            else if($points_title == "TRIANGLE_REPURCHASE")
-                            {
-                                Mlm_complan_manager_repurchasev2::$plan($slot_info,$item_code_id);
-                            }
-                            else
-                            {
-                                $points = $mlm_item_points->$points_title;
-                                $plan   = strtolower($points_title);
-                                Mlm_complan_manager_repurchasev2::$plan($slot_info,$points);
-                            }
-                        }
-                    }
-                }
-            }
+            //                     $plan   = strtolower($points_title);
+            //                     Mlm_complan_manager_repurchasev2::$plan($slot_info,$stairstep_points,$stairstep_group_points);
+            //                 }
+            //                 else if($points_title == "RANK")
+            //                 {
+            //                     $rank_points       = $mlm_item_points->RANK;
+            //                     $rank_group_points = $mlm_item_points->RANK_GROUP;
+            //                     $plan              = strtolower($points_title);
+            //                     Mlm_complan_manager_repurchasev2::$plan($slot_info,$rank_points,$rank_group_points);
+            //                 }
+            //                 else if($points_title == "TRIANGLE_REPURCHASE")
+            //                 {
+            //                     Mlm_complan_manager_repurchasev2::$plan($slot_info,$item_code_id);
+            //                 }
+            //                 else
+            //                 {
+            //                     $points = $mlm_item_points->$points_title;
+            //                     $plan   = strtolower($points_title);
+            //                     Mlm_complan_manager_repurchasev2::$plan($slot_info,$points);
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
         }
     }
 

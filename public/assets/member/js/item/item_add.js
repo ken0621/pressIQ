@@ -14,6 +14,16 @@ function item_add()
 			add_event_select_item_type();
 			add_event_change_type();
 			add_action_initialize_select();
+			add_event_click_save();
+		});
+	}
+	function add_event_click_save()
+	{
+		$('.add-submit-button').unbind("click");
+		$('.add-submit-button').bind("click", function()
+		{
+			$('.remove-this-type').remove();
+			$('#form_submit').submit();
 		});
 	}
 	function add_event_auto_generate_code()
@@ -117,31 +127,38 @@ function item_add()
 		$(".expense-account").removeClass("col-md-12");
 		$(".expense-account").addClass("col-md-6");
 
+		$(".item-add-main").addClass('remove-this-type');
+		$(".item-bundle").addClass('remove-this-type');
 		if($type_id == 1)
 		{
 			$(".item-add-main").fadeIn();
 			$(".for-inventory").fadeIn();
 			$(".for-non-service").fadeIn();
+			$(".item-add-main").removeClass('remove-this-type');
 		}
 		else if($type_id == 2)
 		{
 			$(".item-add-main").fadeIn();
 			$(".for-non-service").fadeIn();
+			$(".item-add-main").removeClass('remove-this-type');
 		}
 		else if($type_id == 3)
 		{
 			$(".item-add-main").fadeIn();
 			$(".expense-account").removeClass("col-md-6");
 			$(".expense-account").addClass("col-md-12");
+			$(".item-add-main").removeClass('remove-this-type');
 		}
 		else if($type_id == 4)
 		{
 			$(".item-bundle").fadeIn();
+			$(".item-bundle").removeClass('remove-this-type');
 		}
 		else if($type_id == 5)
 		{
 			$(".item-bundle").fadeIn();	
 			$(".for-membership-kit").fadeIn();
+			$(".item-bundle").removeClass('remove-this-type');
 		}	
 	}
 	function add_event_change_type()
@@ -155,6 +172,22 @@ function item_add()
 		});
 	}
 }
+function remove_item(id)
+{
+	$('.choose-item-list').html('<tr><td class="text-center" colspan="5"><i class="fa fa-spinner fa-pulse fa-fw fa-3x"></i></td></tr>');
+	$.ajax({
+		url : '/member/item/choose/remove_item',
+		data : {item_id : id},
+		type : 'get',
+		success : function()
+		{
+	        $('.choose-item-list').load('/member/item/choose/load_item', function()
+	        {
+	        	console.log('success');
+	        });
+		}
+	});
+}
 function success_item(data)
 {
 	if(data.status == 'success')
@@ -162,6 +195,18 @@ function success_item(data)
         toastr.success(data.message);
         data.element.modal("hide");
         item_list.action_load_table();
+	}
+}
+function success_choose_item(data)
+{
+	if(data.status == 'success')
+	{
+        data.element.modal("hide");
+        $('.choose-item-list').html('<tr><td class="text-center" colspan="5"><i class="fa fa-spinner fa-pulse fa-fw fa-3x"></i></td></tr>');
+        $('.choose-item-list').load('/member/item/choose/load_item', function()
+        {
+        	console.log('success');
+        });
 	}
 }
 function submit_done(data)

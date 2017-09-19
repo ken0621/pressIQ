@@ -13,17 +13,20 @@ use App\Models\Tbl_ec_product;
 use App\Models\Tbl_country;
 use App\Models\Tbl_customer;
 use App\Globals\Ecom_Product;
+use App\Globals\SocialNetwork;
 use App\Globals\Cart;
 use App\Globals\Settings;
 use App\Models\Tbl_membership_code;
 use App\Globals\Mlm_member;
+use App\Globals\Customer;
+use App\Globals\MLM2;
 
 class Shop extends Controller
 {
 	public $shop_info;
     public $shop_theme;
     public $shop_theme_color;
-    
+    public $mlm_member;
     public static $customer_info;
     public static $slot_now;
 
@@ -36,8 +39,6 @@ class Shop extends Controller
         $data['lead_code'] = null;
         $data['customer_info'] = null;
     	$check_domain = Tbl_shop::where("shop_domain", $domain)->first();
-  
-        $this->get_account_logged_in();
 
         if(hasSubdomain())
         {
@@ -94,6 +95,16 @@ class Shop extends Controller
 
         $this->shop_theme_info  = $shop_theme_info;
 
+        if ($this->shop_theme == "ecommerce-1" || $this->shop_theme == "intogadgets" || $this->shop_theme == "3xcell")
+        {
+            $this->middleware(function ($request, $next)
+            {  
+                $this->get_account_logged_in();
+                
+                return $next($request);
+            });
+        }
+
         $company_column         = array('company_name', 'company_acronym', 'company_logo', 'receipt_logo', 'company_address', 'company_email', 'company_mobile', 'company_hour');
         $company_info           = collect(Tbl_content::where("shop_id", $this->shop_info->shop_id)->whereIn('key', $company_column)->get())->keyBy('key');
         $global_cart            = Cart::get_cart($this->shop_info->shop_id);
@@ -123,8 +134,46 @@ class Shop extends Controller
             View::share("_categories", $product_category);
         }
         
+        if ($this->shop_theme != "ecommerce-1" && $this->shop_theme != "intogadgets" && $this->shop_theme != "3xcell")
+        {
+            $this->middleware(function ($request, $next)
+            {  
+                /* FOR NEW VERSION MEMBER'S AREA */
+                $account                = session("mlm_member");
+                $check_account          = Customer::check_account($this->shop_info->shop_id, $account["email"], $account["auth"]);
+                Self::$customer_info    = $check_account;
+                $mlm_member             = false;
+                
+                if(Self::$customer_info)
+                {
+                    $mlm_member        = MLM2::is_mlm_member($this->shop_info->shop_id, Self::$customer_info->customer_id);
+                    $this->mlm_member   = $mlm_member;
+                }
+
+                $profile_image = "/themes/brown/img/user-placeholder.png";
+                //$profile_image = "/assets/front/img/sample-profile.jpg";
+
+                View::share("customer", Self::$customer_info);
+                View::share("mlm_member", $mlm_member);
+                View::share("profile_image", $profile_image);
+                return $next($request);
+            });
+        }
+        else
+        {
+            $this->middleware(function ($request, $next)
+            {  
+                View::share("customer", Self::$customer_info);
+                View::share("customer_info_a", Self::$customer_info);
+                
+                return $next($request);
+            });
+        }
+
+        $data['google_app_id'] = SocialNetwork::get_keys($this->shop_info->shop_id, 'googleplus')['app_id'];
+
         View::share("slot_now", Self::$slot_now);
-        View::share("customer_info_a", Self::$customer_info);
+        
         View::addLocation(base_path() . '/public/themes/' . $this->shop_theme . '/views/');
         View::share("shop_info", $this->shop_info);
         View::share("shop_theme", $this->shop_info->shop_theme);
@@ -135,12 +184,38 @@ class Shop extends Controller
         View::share("global_cart", $global_cart);
         View::share("country", $country);
         View::share("lead", $data['lead']);
+        View::share("google_app_id", $data['google_app_id']);
         View::share("customer_info", $data['customer_info']);
         View::share("lead_code", $data['lead_code']);
     }
     public function file($theme, $type, $filename)
     {
         echo require_once(base_path("resources/views/themes/" . $theme . "/" . $type . "/" . $filename));
+    }
+    public function guest_only()
+    {
+        if(session("mlm_member"))
+        {
+            return Redirect::to("/members")->send();
+        }
+    }
+    public function logged_in_member_only()
+    {
+
+        if(!session("mlm_member"))
+        {
+            return Redirect::to("/members/login")->with("error", "<b>Session Expired</b><br>Try loggin in again.");
+        }
+        else
+        {
+            $account        = session("mlm_member");
+            $check_account  = Customer::check_account($this->shop_info->shop_id, $account["email"], $account["auth"]);
+            
+            if(!$check_account)
+            {
+                return Redirect::to("/members/login")->with("error", "<b>Authentication Problem</b><br>The email/password you entered doesn't exist.");
+            }
+        }
     }
     public function get_account_logged_in()
     {

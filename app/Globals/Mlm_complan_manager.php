@@ -437,13 +437,13 @@ class Mlm_complan_manager
                         $count_tri_income = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $key)->where('wallet_log_matrix_triangle', $selected)->count();
                         if($count_tri_income == 0)
                         {
-                            $log = 'Congratulations you earned ' . $binary_settings_matrix_income . ' from the matrix triangle of ' . $slot_a->slot_no;
+                            $log = 'Congratulations you earned <b>' . Currency::format($binary_settings_matrix_income) . '</b> from the matrix triangle of ' . $slot_a->slot_no;
                             $arry_log['wallet_log_slot']            = $key;
                             $arry_log['shop_id']                    = $slot_info->shop_id;
                             $arry_log['wallet_log_slot_sponsor']    = $slot_info->slot_id;
                             $arry_log['wallet_log_details']         = $log;
                             $arry_log['wallet_log_amount']          = $binary_settings_matrix_income;
-                            $arry_log['wallet_log_plan']            = "BINARY";
+                            $arry_log['wallet_log_plan']            = "TRIANGLE";
                             $arry_log['wallet_log_status']          = "released";   
                             $arry_log['wallet_log_matrix_triangle'] = $selected;
                             $arry_log['wallet_log_claimbale_on']    = Mlm_complan_manager::cutoff_date_claimable('BINARY', $slot_info->shop_id); 

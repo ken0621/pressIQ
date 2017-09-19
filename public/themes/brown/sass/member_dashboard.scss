@@ -13,10 +13,24 @@
 		border: 1px solid #ddd;
 		.title-button
 		{
+			font-weight: bold;
 			font-size: 14px;
 			text-decoration: none;
 			margin-top: 3px;
 			text-transform: uppercase;
+			opacity: 0;
+			  -webkit-transition: all 0.2s ease-in-out;
+			  -moz-transition: all 0.2s ease-in-out;
+			  -o-transition: all 0.2s ease-in-out;
+			  transition: all 0.2s ease-in-out;
+		}
+
+		&:hover
+		{
+			.title-button
+			{
+				opacity: 1;
+			}
 		}
 	}
 	.sub-container
@@ -180,37 +194,57 @@
 		.holder
 		{
 			margin-bottom: 15px;
+			border-bottom: 1px solid #eee;
+			padding-bottom: 10px;
+
 			&:last-child
 			{
 				margin-bottom: 0;
+				border-bottom: none;
 			}
 			.color
 			{
-				background-color: #36b1b9;
-				width: 6px;
-				height: 6px;
+				width: 50px;
+				height: 50px;
 				display: inline-block;
 				vertical-align: top;
 				margin-right: 10px;
 				margin-top: 5px;
+				overflow: hidden;
+				border-radius: 100%;
+
+				img
+				{
+					width: 50px;
+					height: 50px;
+				}
 			}
 			.text
 			{
 				display: inline-block;
 				vertical-align: top;
+
 				.name
 				{
 					color: #344049;
-					font-size: 13px;
+					font-size: 16px;
 					font-weight: 600;
-					margin-bottom: 7.5px;
+				}
+				.email
+				{
+					color: #344049;
+					font-size: 16px;
 				}
 				.date
 				{
 					color: #85939e;
-					font-size: 11px;
-					font-weight: 600;
+					font-size: 16px;
+					opacity: 0.5;
 				}
+			}
+			.action
+			{
+				margin-top: 10px;
 			}
 		}
 	}
@@ -224,21 +258,22 @@
 			.message
 			{
 				color: #344049;
-				font-size: 14px;
-				margin-bottom: 10px;
+				font-size: 16px;
+				margin-bottom: 5px;
 			}
 			.date
 			{
 				color: #85939e;
-				font-size: 14px;
+				font-size: 16px;
 				opacity: 0.5;
 			}
 			.wallet
 			{
-				color: #3e95cd;
-				font-size: 16px;
-				font-weight: 600;
+				color: #85939e;
+				font-size: 14px;
 				float: right;
+				opacity: 0.4;
+
 			}
 			.circle-line
 			{

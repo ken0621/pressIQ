@@ -18,6 +18,7 @@ use App\Models\Tbl_customer;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_country;
+use App\Models\Tbl_locale;
 use Validator;
 use Google_Client; 
 use Google_Service_Drive;
@@ -30,17 +31,18 @@ class ShopMemberController extends Shop
         $data["page"] = "Dashboard";
         $data["mode"] = session("get_success_mode");
         session()->forget("get_success_mode");
-        $view = "member.dashboard";
 
         if(Self::$customer_info)
         {
             $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["wallet"]             = $data["customer_summary"]["_wallet"];
             $data["points"]             = $data["customer_summary"]["_points"];
-            $data["_slot"]              = $data["customer_summary"]["_slot"];
+            $data["_slot"]              = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
+            $data["_recent_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
+            $data["_direct"]  = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
         }
 
-        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view($view, $data));
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.dashboard", $data));
     }
     public function getAutologin()
     {
@@ -53,6 +55,7 @@ class ShopMemberController extends Shop
         $store["email"]         = $email;
         $store["auth"]          = $password;
         $sess["mlm_member"]     = $store;
+
         session($sess);
     }
 
@@ -293,13 +296,88 @@ class ShopMemberController extends Shop
     {
         $data["page"] = "Profile";
         $data["mlm"] = isset(Self::$customer_info->ismlm) ? Self::$customer_info->ismlm : 0;
-
         $data["profile"]         = Tbl_customer::shop(Self::$customer_info->shop_id)->where("tbl_customer.customer_id", Self::$customer_info->customer_id)->first();
-        $data["profile_address"] = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->first();
+        $data["profile_address"] = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->first();
         $data["profile_info"]    = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();
         $data["_country"]        = Tbl_country::get();
 
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.profile", $data));
+    }
+    public function postProfileUpdateInfo(Request $request)
+    {
+        $form = $request->all();
+        $validate['first_name'] = 'required';
+        $validate['middle_name'] = 'required';
+        $validate['last_name'] = 'required';
+        $validate['b_month'] = 'required';
+        $validate['b_day'] = 'required';
+        $validate['b_year'] = 'required';
+        $validate['country_id'] = 'required';
+        $validate['customer_state'] = 'required';
+        $validate['customer_city'] = 'required';
+        $validate['customer_zipcode'] = 'required';
+        $validate['customer_street'] = 'required';
+
+        $validator = Validator::make($form, $validate);
+        
+        if (!$validator->fails()) 
+        {           
+            /* Birthday Fix */
+            $birthday = date("YY-MM-DD", strtotime($request->b_month . "/" . $request->b_day . "/" . $request->b_year));
+
+            /* Customer Data */
+            $insert_customer["first_name"]  = $request->first_name;
+            $insert_customer["middle_name"] = $request->middle_name;
+            $insert_customer["last_name"]   = $request->last_name;
+            $insert_customer["b_day"]       = $birthday;
+            $insert_customer["birthday"]    = $birthday;
+            $insert_customer["country_id"]  = $request->country_id;
+            $insert_customer["updated_at"]  = Carbon::now();
+
+            Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
+                        ->shop(Self::$customer_info->shop_id)
+                        ->update($insert_customer);
+
+            /* Customer Address */
+            $state_name    = Tbl_locale::where("locale_id", $request->customer_state)->first();
+            $city_name     = Tbl_locale::where("locale_id", $request->customer_city)->first();
+            $barangay_name = Tbl_locale::where("locale_id", $request->customer_zipcode)->first();
+
+            $insert_customer_address["country_id"] = $request->country_id;
+            $insert_customer_address["customer_state"] = isset($state_name) ? $state_name->locale_name : '';
+            $insert_customer_address["customer_city"] = isset($city_name)  ? $city_name->locale_name : '';
+            $insert_customer_address["customer_zipcode"] = isset($barangay_name) ? $barangay_name->locale_name : '';
+            $insert_customer_address["customer_street"] = $request->customer_street;
+            $insert_customer_address["state_id"] = $request->customer_state;
+            $insert_customer_address["city_id"] = $request->customer_city;
+            $insert_customer_address["barangay_id"] = $request->customer_zipcode;
+
+            $exist = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->first();
+
+            if ($exist) 
+            {
+                /* Update */
+                $insert_customer_address["updated_at"] = Carbon::now();
+
+                Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->update($insert_customer_address);
+            }
+            else
+            {
+                /* Insert */
+                $insert_customer_address["created_at"] = Carbon::now();
+                $insert_customer_address["customer_id"] = Self::$customer_info->customer_id;
+                $insert_customer_address["purpose"] = "permanent";
+                
+                Tbl_customer_address::insert($insert_customer_address);
+            }
+            
+            echo json_encode("success");
+        }
+        else
+        {
+            $result = $validator->errors();
+            echo json_encode($result);
+        }
     }
     public function postProfileUpdateReward(Request $request)
     {

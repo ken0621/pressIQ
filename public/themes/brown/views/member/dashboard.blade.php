@@ -22,7 +22,7 @@
 	                    <div class="btn-container">
 	                        <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
 	                        <img src="/themes/{{ $shop_theme }}/img/or.png"><br>
-	                        <a href="#" class="btn-enter-a-code" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
+	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
 	                    </div>
 	                </div>
 	            </div>
@@ -185,7 +185,7 @@
 					<div class="chart-legend">
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Pairing Reward</span> {{ $wallet->display_complan_binary }}</div>
+							<div class="name"><span>Pairing Reward</span> {{ $wallet->display_complan_triangle }}</div>
 						</div>
 						<div class="holder">
 							<div class="color"></div>
@@ -218,7 +218,7 @@
 				</div>
 
 				<div class="unilevel-holder">
-					<div class="title"><i class="fa fa-star"></i> My Slot(s) <a href="javascript:" class="title-button pull-right btn-enter-a-code"><i class="fa fa-plus"></i> New Slot</a></div>
+					<div class="title"><i class="fa fa-star"></i> My Slot(s) <a href="javascript:" class="title-button pull-right btn-enter-a-code">Add New Slot</a></div>
 					<div class="sub-container">
 						@foreach($_slot as $slot)
 						<div class="holder">
@@ -228,7 +228,11 @@
 									<div class="label3">{{ $slot->display_total_earnings }}</div>
 								</div>
 								<div class="col-sm-8">
-									<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 40%, rgb(237, 237, 237) 40%);">ROAD TO <b>BUILDER</b> (0/10)</div>
+									@if($slot->brown_next_rank != "NO NEXT RANK")
+									<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) {{ $slot->brown_rank_rank_percentage }}%, rgb(237, 237, 237) {{ $slot->brown_rank_rank_percentage }}%);">ROAD TO <b>{{ $slot->brown_next_rank }}</b> ({{ $slot->brown_next_rank_current }}/{{ $slot->brown_next_rank_requirements }})</div>
+									@else
+									<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 40%);">YOU ARE A <b>LEADER</b></div>
+									@endif
 								</div>
 							</div>
 						</div>
@@ -239,84 +243,56 @@
 		</div>
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="title"><i class="fa fa-globe"></i> New Referral(s)</div>
+				<div class="title"><i class="fa fa-globe"></i> Newest Enrollee(s) Sponsored</div>
 				<div class="sub-container border-holder">
-					<div class="clearfix wow">
+					<div class="clearfix wow hidden">
 						<div class="badge right">6 New Members</div>
 					</div>
+					@foreach($_direct as $direct)
 					<div class="holder">
-						<div class="color"></div>
-						<div class="text">
-							<div class="name">JOAQUIN EUGENIO MATTHEW S. CHIPECO</div>
-							<div class="date">2017-08-15 08:51:00</div>
+						<div class="color">
+							<img src="{{ $profile_image }}">
 						</div>	
-					</div>
-					<div class="holder">
-						<div class="color"></div>
 						<div class="text">
-							<div class="name">JOAQUIN EUGENIO MATTHEW S. CHIPECO</div>
-							<div class="date">2017-08-15 08:51:00</div>
-						</div>	
+							<div class="pull-left">
+								<div class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
+								<div class="email">{{ $direct->slot_no }}</div>
+								<div class="date">{{ $direct->time_ago }}</div>
+							</div>
+						</div>
+						<div class="action pull-right">
+							@if($direct->distributed == 1)
+								<button class="btn btn-default"><i class="fa fa-star"></i> VIEW INFO</button>
+							@else
+								<button class="btn btn-danger"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
+							@endif
+						</div>
 					</div>
-					<div class="holder">
-						<div class="color"></div>
-						<div class="text">
-							<div class="name">JOAQUIN EUGENIO MATTHEW S. CHIPECO</div>
-							<div class="date">2017-08-15 08:51:00</div>
-						</div>	
-					</div>
+					@endforeach
 				</div>
 			</div>
 			<div class="col-md-6">
 				<div class="match-height">
-					<div class="title"><i class="fa fa-money"></i> Recent Rewards</div>
+					<div class="title"><i class="fa fa-money"></i> Recent Rewards <a href="javascript:" class="title-button pull-right">View All Rewards</a></div>
 					<div class="sub-container">
 						<div class="activities">
+							@foreach($_recent_rewards as $recent_reward)
 							<div class="holder">
 								<div class="circle-line">
 									<div class="circle"><img src="/themes/{{ $shop_theme }}/img/circle.png"></div>
 									<div class="line"><img src="/themes/{{ $shop_theme }}/img/line.jpg"></div>
 								</div>
-								<div class="message">Sorry, Your Slot has already reached the max level for matrix. Slot 454926's pairing reward will not be added.</div>
+								<div class="message">{!! $recent_reward->log !!}</div>
 								<div class="row clearfix">
 									<div class="col-sm-6">
-										<div class="date">3 Hours Ago</div>
+										<div class="date">{{ $recent_reward->time_ago }}</div>
 									</div>
 									<div class="col-sm-6">
-										<div class="wallet">PHP 0.00</div>
+										<div class="wallet"> EARNED BY {{ $recent_reward->slot_no }}</div>
 									</div>
 								</div>
 							</div>
-							<div class="holder">
-								<div class="circle-line">
-									<div class="circle"><img src="/themes/{{ $shop_theme }}/img/circle.png"></div>
-									<div class="line"><img src="/themes/{{ $shop_theme }}/img/line.jpg"></div>
-								</div>
-								<div class="message">Sorry, Your Slot has already reached the max level for matrix. Slot 454926's pairing reward will not be added.</div>
-								<div class="row clearfix">
-									<div class="col-sm-6">
-										<div class="date">3 Hours Ago</div>
-									</div>
-									<div class="col-sm-6">
-										<div class="wallet">PHP 0.00</div>
-									</div>
-								</div>
-							</div>
-							<div class="holder">
-								<div class="circle-line">
-									<div class="circle"><img src="/themes/{{ $shop_theme }}/img/circle.png"></div>
-									<div class="line"><img src="/themes/{{ $shop_theme }}/img/line.jpg"></div>
-								</div>
-								<div class="message">Sorry, Your Slot has already reached the max level for matrix. Slot 454926's pairing reward will not be added.</div>
-								<div class="row clearfix">
-									<div class="col-sm-6">
-										<div class="date">3 Hours Ago</div>
-									</div>
-									<div class="col-sm-6">
-										<div class="wallet">PHP 0.00</div>
-									</div>
-								</div>
-							</div>
+							@endforeach
 						</div>
 					</div>
 				</div>

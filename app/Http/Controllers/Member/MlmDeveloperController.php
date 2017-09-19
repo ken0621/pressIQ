@@ -30,11 +30,6 @@ class MlmDeveloperController extends Member
 
     public function index()
     {
-        $shop_id                        = $this->user_info->shop_id;
-        $rule                           = "random";
-        $return                         = MLM2::matrix_auto($shop_id,1468,$rule);
-
-        // dd($return);
     	$data["page"]           = "MLM Developer";
         return view("member.mlm_developer.mlm_developer", $data);
     }

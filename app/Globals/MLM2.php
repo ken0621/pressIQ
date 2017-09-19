@@ -3,13 +3,18 @@ namespace App\Globals;
 use App\Models\Tbl_membership;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_tree_placement;
-use App\Globals\Mlm_tree;
 use App\Models\Tbl_warehouse_inventory_record_log;
 use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Models\Tbl_mlm_slot_points_log;
+use App\Models\Tbl_mlm_plan;
+use App\Models\Tbl_customer;
+use App\Globals\Mlm_tree;
+use App\Globals\Mlm_complan_manager;
+use App\Globals\Mlm_complan_manager_cd;
+use App\Globals\Mlm_compute;
+use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 use Validator;
-use Illuminate\Validation\Rule;
 use stdClass;
 use DB;
 
@@ -159,6 +164,7 @@ class MLM2
 		$insert["slot_status"]			= $slot_type;
 		$insert["slot_placement"]		= 0;
 		$insert["slot_position"]		= "";
+		$insert["distributed"]			= 0;
 
 		$rules["shop_id"] 				= ["required","exists:tbl_shop"];
 		$rules["slot_owner"] 			= ["required","exists:tbl_customer,customer_id"];
@@ -186,7 +192,15 @@ class MLM2
 		}
 		else
 		{
-			$slot_id = Tbl_mlm_slot::insertGetId($insert);
+			$slot_id  = Tbl_mlm_slot::insertGetId($insert);
+			$customer = Tbl_customer::where("shop_id",$shop_id)->where("customer_id",$customer_id)->first();
+
+			if($customer->downline_rule == "auto")
+			{
+				$rules    = $customer->autoplacement_rule;
+				MLM2::matrix_auto($shop_id,$slot_id,$rules);
+			}
+
 			return $slot_id;
 		}
 	}
@@ -199,7 +213,10 @@ class MLM2
 			Tbl_mlm_slot::where("shop_id",$shop_id)->where("slot_id",$slot_id)->update($update);
 
 	        $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
+
+	        Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
        		Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
+       		MLM2::entry($shop_id,$slot_id);
 			return "success";
 		}
 		else
@@ -212,10 +229,12 @@ class MLM2
     	if($rule == "random")
     	{
     		$response = MLM2::matrix_position_random($shop_id,$slot_id);
+    					MLM2::entry($shop_id,$slot_id);
     	}
-		else if($rule == "auto_balance")
+		else if($rule == "autofill")
 		{
 			$response = MLM2::matrix_position_auto_balance($shop_id,$slot_id);
+						MLM2::entry($shop_id,$slot_id);
 		}
 		else
 		{
@@ -261,6 +280,7 @@ class MLM2
         Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",$shop_id)->update($update);
 
         $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
+        Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1);
         Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
 
         return "success";
@@ -376,6 +396,7 @@ class MLM2
                     Tbl_mlm_slot::where('slot_id', $slot_info->slot_id)->update($update);
 
                     $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_info->slot_id)->first();
+                    Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1);
                     Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
                 }
             }
@@ -399,4 +420,47 @@ class MLM2
 	    	return 0;
 	    }                  								
     }
+	public static function entry($shop_id,$slot_id)
+	{
+        $slot_info = Tbl_mlm_slot::where('slot_id', $slot_id)->where("tbl_mlm_slot.shop_id",$shop_id)
+        						 ->membership()
+        						 ->membership_points()
+        						 ->customer()
+        						 ->first();
+            // Mlm Computation Plan
+            $plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
+            ->where('marketing_plan_enable', 1)
+            ->where('marketing_plan_trigger', 'Slot Creation')
+            ->get();
+
+            if($slot_info->slot_status == 'PS')
+            {
+                foreach($plan_settings as $key => $value)
+                {
+                    $plan = strtolower($value->marketing_plan_code);
+                    $a = Mlm_complan_manager::$plan($slot_info);
+                }
+            }
+            else if($slot_info->slot_status == 'CD')
+            {
+                $a = Mlm_complan_manager_cd::enter_cd($slot_info);
+
+            }
+            else if($slot_info->slot_status == 'FS')
+            {
+                // no income for fs.
+            }
+
+
+
+            // check if there are cd graduate
+            $b = Mlm_complan_manager_cd::graduate_check($slot_info);
+            // $c = Mlm_gc::slot_gc($slot_id);
+
+            Mlm_compute::set_slot_nick_name_2($slot_info);
+
+            $update_slot["distributed"] = 1;
+            Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",$shop_id)->update($update_slot);
+            // End Computation Plan
+	}
 }

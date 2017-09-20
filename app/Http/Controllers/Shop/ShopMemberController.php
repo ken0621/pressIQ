@@ -519,7 +519,7 @@ class ShopMemberController extends Shop
         if($check)
         {
             $data = MemberSlotGenealogy::tree($shop_id, $check->slot_id, $mode);
-            return view('member.mlm_slot.mlm_slot_genealogy', $data);            
+            return view('member.genealogy_tree', $data);            
         }
         else
         {

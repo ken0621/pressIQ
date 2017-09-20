@@ -46,7 +46,6 @@
 					            <th valign="center" rowspan="2" class="text-center" style="width: 100px">TOTAL DEDUCTION</th>
 					            <th valign="center" rowspan="2" class="text-center" style="width: 100px">GROSS PAY</th>
 								<th valign="center" rowspan="2" class="text-center" style="width: 100px">NET HOME PAY</th>
-													           
 					        </tr>
 					        
 					        <tr>
@@ -81,7 +80,7 @@
 					    	<td class="text-center" >{{ number_format($employee->special_holiday,2) }} <br> ({{$employee->time_special_holiday}} times)</td>
 					    	<td class="text-center" >{{ number_format($employee->regular_holiday,2) }} <br> ({{$employee->time_regular_holiday}} times)</td>
 					    	<td class="text-center" >{{ number_format($employee->restday,2 )}}</td>
-					    	<td class="text-center" >{{ number_format($employee->leave_pay,2) }} <br> ({{$employee->time_spent}} hours)</td>
+					    	<td class="text-center" >{{ number_format($employee->leave_pay,2) }} <br> ({{$employee->time_leave_hours}} hours)</td>
 					    	<td class="text-center" >{{ number_format($employee->cola,2) }}</td>
 					    	<td class="text-center" >{{ number_format($employee->late,2) }} <br> ({{$employee->time_late}} hours)</td>
 					    	<td class="text-center" >{{ number_format($employee->undertime,2) }} <br> ({{$employee->time_undertime}} hours)</td>
@@ -107,7 +106,7 @@
 					    	<td class="text-center" >{{ number_format($employee->net_pay,2) }}</td>
 					    </tr>
 					   @endforeach		
-					   <tr >
+					   	<tr>
 					   		<td class="text-center" ><b>Total</b></td>
 					    	<td class="text-center" ><b>{{ number_format($total_basic,2) }}</b></td>
 					    	<td class="text-center" ><b>{{ number_format($overtime_total,2) }}</b></td>
@@ -139,7 +138,7 @@
 					    	<td class="text-center" ><b>{{ number_format($deduction_total,2) }}</b></td>
 					    	<td class="text-center" ><b>{{ number_format($total_gross,2) }}</b></td>
 					    	<td class="text-center" ><b>{{ number_format($total_net,2) }}</b></td>
-					   </tr>
+					   	</tr>
 				      
 					       
 					    </tbody>

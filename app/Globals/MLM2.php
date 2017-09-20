@@ -315,12 +315,13 @@ class MLM2
 		}
 		else
 		{
-			$slot_id  = Tbl_mlm_slot::insertGetId($insert);
-			$customer = Tbl_customer::where("shop_id",$shop_id)->where("customer_id",$customer_id)->first();
+			$slot_id    	  = Tbl_mlm_slot::insertGetId($insert);
+			$sponsor_slot 	  = Tbl_mlm_slot::where("slot_id",$sponsor)->where("shop_id",$shop_id)->first();
+			$customer_sponsor = Tbl_customer::where("shop_id",$shop_id)->where("customer_id",$sponsor_slot->slow_owner)->first();
 
-			if($customer->downline_rule == "auto")
+			if($customer_sponsor->downline_rule == "auto")
 			{
-				$rules    = $customer->autoplacement_rule;
+				$rules    = $customer_sponsor->autoplacement_rule;
 				MLM2::matrix_auto($shop_id,$slot_id,$rules);
 			}
 
@@ -533,14 +534,22 @@ class MLM2
                         								->where('placement_tree_parent_id', $placement)
                         								->where('shop_id', $shop_id)
                         								->count();
-	    
-	    if($count_tree_if_exist != 0)
+
+	    if($count_tree_if_exist != 0 || !$placement ||  !$position)
 	    {
 	    	return 1;
 	    }   
 	    else
 	    {
-	    	return 0;
+		    $check_shop_slot            = Tbl_mlm_slot::where("slot_id",$placement)->where("shop_id",$shop_id)->where("slot_placement","!=",0)->first();
+		    if($check_shop_slot)
+		    {	
+		    	return 0;
+		    }
+		    else
+		    {	
+	    		return 1;
+		    }
 	    }                  								
     }
 	public static function entry($shop_id,$slot_id)

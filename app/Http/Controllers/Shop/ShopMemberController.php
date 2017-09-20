@@ -6,6 +6,8 @@ use Request as Request2;
 use Crypt;
 use Redirect;
 use View;
+use Input;
+use File;
 use Carbon\Carbon;
 use App\Globals\Payment;
 use App\Globals\Customer;
@@ -40,7 +42,7 @@ class ShopMemberController extends Shop
             $data["points"]             = $data["customer_summary"]["_points"];
             $data["_slot"]              = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["_recent_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
-            $data["_direct"]  = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
+            $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
         }
 
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.dashboard", $data));
@@ -275,6 +277,7 @@ class ShopMemberController extends Shop
         $raw_password                           = $insert["password"];
         $insert["birthday"]                     = $insert["b_month"] . "/" . $insert["b_day"] . "/" . $insert["b_year"];
         $insert["password"]                     = Crypt::encrypt($insert["password"]);
+        $insert["created_at"]                   = Carbon::now();
 
         unset($insert["b_month"]);
         unset($insert["b_year"]);
@@ -385,6 +388,91 @@ class ShopMemberController extends Shop
         $update_customer["downline_rule"] = $request->downline_rule;
         Tbl_customer::where("customer_id", Self::$customer_info->customer_id)->update($update_customer);
         echo json_encode("success");
+    }
+    public function postProfileUpdatePicture(Request $request)
+    {
+        $customer_id = $request->customer_id;
+        $input = $request->all();
+        $rules = array('profile_image' => 'required|mimes:jpeg,png,gif,bmp');
+        $validator = Validator::make($input, $rules);
+
+        if ($validator->fails()) 
+        {
+            $messages = $validator->messages();
+            return Redirect::back()
+                    ->withErrors($validator)
+                    ->withInput();
+        } 
+        else 
+        {
+            $file = Input::file("profile_image");
+            /* SAVE THE IMAGE IN THE FOLDER */
+            if ($file) 
+            {
+                $extension          = $file->getClientOriginalExtension();
+                $filename           = str_random(15).".".$extension;
+                $destinationPath    = 'uploads/'.$this->shop_info->shop_key."-".$this->shop_info->shop_id.'/ecommerce-upload';
+                
+                if(!File::exists($destinationPath)) 
+                {
+                    $create_result = File::makeDirectory(public_path($destinationPath), 0775, true, true);
+                }
+
+                $upload_success    = Input::file('profile_image')->move($destinationPath, $filename);
+
+                /* SAVE THE IMAGE PATH IN THE DATABASE */
+                $image_path = $destinationPath."/".$filename;
+
+                if( $upload_success ) 
+                {
+                   $exist = Tbl_customer::where("customer_id", $customer_id)->first();
+                   if ($exist->profile) 
+                   {
+                       $delete_file = $exist->profile;
+                       File::delete($delete_file);
+                   }
+
+                   $update['profile'] = $image_path;
+                   Tbl_customer::where("customer_id", $customer_id)->where("shop_id", $this->shop_info->shop_id)->update($update);
+
+                   echo json_encode("success");
+                } 
+                else 
+                {
+                   echo json_encode("failed");
+                }
+            }
+        }
+    }
+     public function postProfileUpdatePassword(Request $request)
+    {
+        $form = $request->all();
+        $validate['password'] = 'required|confirmed|min:6';
+        $validator = Validator::make($form, $validate);
+        
+        if (!$validator->fails()) 
+        {           
+            $insert_customer["password"]  = Crypt::encrypt($request->password);
+
+            Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
+                        ->shop(Self::$customer_info->shop_id)
+                        ->update($insert_customer);
+
+            $email = Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
+                        ->shop(Self::$customer_info->shop_id)
+                        ->value('email');
+
+            $pass = $request->password;
+
+            Self::store_login_session($email,$pass);
+            
+            echo json_encode("success");
+        }
+        else
+        {
+            $result = $validator->errors();
+            echo json_encode($result);
+        }
     }
     public function getNotification()
     {

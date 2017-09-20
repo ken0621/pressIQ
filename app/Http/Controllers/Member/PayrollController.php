@@ -87,6 +87,8 @@ use DateTime;
 use App\Models\Tbl_payroll_shift_day;
 use App\Models\Tbl_payroll_shift_time;
 use App\Globals\AuditTrail;
+use App\Models\Tbl_audit_trail;
+use App\Models\Tbl_user;
 use App\Globals\Accounting;
 
 use App\Models\Tbl_payroll_time_keeping_approved;
@@ -119,6 +121,16 @@ class PayrollController extends Member
           }
 
      }
+     //audit_trail_view_all
+     public function modal_view_all_transaction($id,$uid)
+     {
+          
+          $data['audit'] = Tbl_audit_trail::orderBy("tbl_audit_trail.created_at","DESC")->where('audit_trail_id',$id)->where("audit_shop_id",AuditTrail::getShopId())->first();
+          $data['user_info'] = Tbl_user::where('user_id',$uid)->where("user_shop",AuditTrail::getShopId())->first();
+           return view("member.payroll.modal.modal_view_all_transaction",$data);
+     }
+     //audit end
+
 
 
      /* PAYROLL TIME KEEPING START */

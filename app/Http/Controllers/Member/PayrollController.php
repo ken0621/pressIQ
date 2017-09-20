@@ -87,6 +87,8 @@ use DateTime;
 use App\Models\Tbl_payroll_shift_day;
 use App\Models\Tbl_payroll_shift_time;
 use App\Globals\AuditTrail;
+use App\Models\Tbl_audit_trail;
+use App\Models\Tbl_user;
 use App\Globals\Accounting;
 
 use App\Models\Tbl_payroll_time_keeping_approved;
@@ -119,6 +121,16 @@ class PayrollController extends Member
           }
 
      }
+     //audit_trail_view_all
+     public function modal_view_all_transaction($id,$uid)
+     {
+          
+          $data['audit'] = Tbl_audit_trail::orderBy("tbl_audit_trail.created_at","DESC")->where('audit_trail_id',$id)->where("audit_shop_id",AuditTrail::getShopId())->first();
+          $data['user_info'] = Tbl_user::where('user_id',$uid)->where("user_shop",AuditTrail::getShopId())->first();
+           return view("member.payroll.modal.modal_view_all_transaction",$data);
+     }
+     //audit end
+
 
 
      /* PAYROLL TIME KEEPING START */
@@ -5028,6 +5040,7 @@ class PayrollController extends Member
           return view('member.payroll.modal.modal_create_shift_template', $data);
      }
 
+
      public function modal_save_shift_template()
      {
 
@@ -5080,6 +5093,511 @@ class PayrollController extends Member
           $return['status']        = 'success';
           return collect($return)->toJson();
      }
+     //START-SHIFT IMPORT TEMPLATE//
+
+     public function modal_shift_import_template()
+     {
+          $data['_company'] = Payroll::company_heirarchy(Self::shop_id());
+          return view('member.payroll.modal.modal_shift_import_template', $data);
+     }
+     public function company_template()
+     {
+          $template_name = Request::input('template_name');
+          if($template_name == 'Template 1')
+          {
+               Self::template_1();
+          }
+     }
+     public function import_modal_shift_global()
+     {
+          $file  = Request::file('file');
+          $data = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
+          $key = 0;
+          $tc = 0;
+          $count=0;
+          foreach ($data as  $value1) {
+                    if($value1['employee_id']!=null && $value1['shift_code_name']!=null)
+                         {
+                              if($value1['employee_id']!=null && $value1['shift_code_name']!=null)
+                              {
+                              $count++;
+
+                              $insert_code['shift_code_name']    = $value1['shift_code_name'];
+                              $insert_code['shop_id']            = Self::shop_id();
+                              $shift_code_id                     = Tbl_payroll_shift_code::insertGetId($insert_code);
+                              
+                              $update['shift_code_id']           = $shift_code_id;
+                              $count_update =  Tbl_payroll_employee_basic::where('payroll_employee_number',$value1['employee_id'])->where("shop_id", Self::shop_id())->update($update);
+                                                               
+                                                                 
+
+                              $insert_shift = array();
+                              $shop=Self::shop_id();
+                              }
+                    
+                              $insert_day["shift_day"] = ucfirst($value1['shift_day']);
+                              $insert_day["shift_code_id"] = $shift_code_id;
+                              $insert_day["shift_break_hours"] = number_format($value1['shift_break_hours'], 2, '.', '');
+                              $insert_day["shift_target_hours"] = $value1['shift_target_hours'];
+                              $insert_day["shift_flexi_time"] = $value1['shift_flexi_time']== 1 ? 1 : 0;
+                              $insert_day["shift_rest_day"] = $value1['shift_rest_day']== 1 ? 1 : 0;
+                              $insert_day["shift_extra_day"] = $value1['shift_extra_day']== 1 ? 1 : 0;
+                              $shift_day_id = Tbl_payroll_shift_day::insertGetId($insert_day);
+                              $insert_time[$tc]["shift_day_id"] = $shift_day_id;
+                              $insert_time[$tc]["shift_work_start"] = date("H:i:s", strtotime($value1['shift_start_time'])) ;
+                              $insert_time[$tc]["shift_work_end"] = date("H:i:s", strtotime($value1['shift_end_time'])) ;
+                              Tbl_payroll_shift_time::insert($insert_time);
+                              $insert_time = null;    
+                         }
+                    
+                    }
+                    $total_count = $count;
+                    if($total_count!=null || $total_count!=0)
+                    {
+                       $message = '<center><span class="color-green">'.$total_count.' employees schedules are already updated.</span></center>';
+                      
+                    }
+                    else
+                    {
+                       $message = '<center><span class="color-red">Nothing to insert Please Check your file.</span></center>';
+                         
+                    }
+     return $message;
+               
+               
+          // $return['function_name'] = 'payrollconfiguration.reload_shift_template';
+          // $return['status']        = 'success';
+          // return collect($return)->toJson();
+               
+     }
+
+     public function get_template123()
+     {
+          $excels['number_of_rows'] = 15;
+
+          $excels['data'] = ['employee_id','shift_code_name','shift_day','shift_target_hours','shift_break_hours','shift_start_time','shift_end_time','shift_flexi_time','shift_rest_day','shift_extra_day'];
+
+          Excel::create('Shift Template', function($excel) use ($excels) {
+
+               $excel->sheet('template', function($sheet) use ($excels) {
+
+                $data = $excels['data'];
+                $number_of_rows = $excels['number_of_rows'];
+                $sheet->fromArray($data, null, 'A1', false, false);
+                $sheet->freezeFirstRow();
+                    
+
+                for($row = 1, $rowcell = 2; $row <= 1; $row++, $rowcell++)
+                {
+
+                    /* EMPLOYEE ID */
+                    $client_cell = $sheet->getCell('A'.$rowcell)->getDataValidation();
+                    $client_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
+                    $client_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
+                    $client_cell->setAllowBlank(false);
+                    $client_cell->setShowInputMessage(true);
+                    $client_cell->setShowErrorMessage(true);
+                    $client_cell->setShowDropDown(true);
+                    $client_cell->setErrorTitle('Input error');
+                    $client_cell->setError('Value is not in list.');
+                    $client_cell->setFormula1('employee_id');
+                    
+
+
+                         for($row = 1, $rowcell = 2; $row <= $number_of_rows; $row++, $rowcell++)
+                     {
+
+                         /* Shift Day */
+                         $gender_cell = $sheet->getCell('C'.$rowcell)->getDataValidation();
+                         $gender_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
+                         $gender_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
+                         $gender_cell->setAllowBlank(false);
+                         $gender_cell->setShowInputMessage(true);
+                         $gender_cell->setShowErrorMessage(true);
+                         $gender_cell->setShowDropDown(true);
+                         $gender_cell->setErrorTitle('Input error');
+                         $gender_cell->setError('Value is not in list.');
+                         $gender_cell->setFormula1('shift_day');
+
+                         /* Shift Day */
+                         $gender_cell = $sheet->getCell('D'.$rowcell)->getDataValidation();
+                         $gender_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
+                         $gender_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
+                         $gender_cell->setAllowBlank(false);
+                         $gender_cell->setShowInputMessage(true);
+                         $gender_cell->setShowErrorMessage(true);
+                         $gender_cell->setShowDropDown(true);
+                         $gender_cell->setErrorTitle('Input error');
+                         $gender_cell->setError('Value is not in list.');
+                         $gender_cell->setFormula1('shift_target_hours');
+                         /* Shift Day */
+                         $gender_cell = $sheet->getCell('E'.$rowcell)->getDataValidation();
+                         $gender_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
+                         $gender_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
+                         $gender_cell->setAllowBlank(false);
+                         $gender_cell->setShowInputMessage(true);
+                         $gender_cell->setShowErrorMessage(true);
+                         $gender_cell->setShowDropDown(true);
+                         $gender_cell->setErrorTitle('Input error');
+                         $gender_cell->setError('Value is not in list.');
+                         $gender_cell->setFormula1('shift_target_hours');
+                         /* Shift Day */
+                         $gender_cell = $sheet->getCell('F'.$rowcell)->getDataValidation();
+                         $gender_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
+                         $gender_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
+                         $gender_cell->setAllowBlank(false);
+                         $gender_cell->setShowInputMessage(true);
+                         $gender_cell->setShowErrorMessage(true);
+                         $gender_cell->setShowDropDown(true);
+                         $gender_cell->setErrorTitle('Input error');
+                         $gender_cell->setError('Value is not in list.');
+                         $gender_cell->setFormula1('shift_start_time');
+                         /* Shift Day */
+                         $gender_cell = $sheet->getCell('G'.$rowcell)->getDataValidation();
+                         $gender_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
+                         $gender_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
+                         $gender_cell->setAllowBlank(false);
+                         $gender_cell->setShowInputMessage(true);
+                         $gender_cell->setShowErrorMessage(true);
+                         $gender_cell->setShowDropDown(true);
+                         $gender_cell->setErrorTitle('Input error');
+                         $gender_cell->setError('Value is not in list.');
+                         $gender_cell->setFormula1('shift_end_time');
+                         /* Shift Day */
+                         $gender_cell = $sheet->getCell('H'.$rowcell)->getDataValidation();
+                         $gender_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
+                         $gender_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
+                         $gender_cell->setAllowBlank(false);
+                         $gender_cell->setShowInputMessage(true);
+                         $gender_cell->setShowErrorMessage(true);
+                         $gender_cell->setShowDropDown(true);
+                         $gender_cell->setErrorTitle('Input error');
+                         $gender_cell->setError('Value is not in list.');
+                         $gender_cell->setFormula1('shift_flexi_time');
+                         /* Shift Day */
+                         $gender_cell = $sheet->getCell('I'.$rowcell)->getDataValidation();
+                         $gender_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
+                         $gender_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
+                         $gender_cell->setAllowBlank(false);
+                         $gender_cell->setShowInputMessage(true);
+                         $gender_cell->setShowErrorMessage(true);
+                         $gender_cell->setShowDropDown(true);
+                         $gender_cell->setErrorTitle('Input error');
+                         $gender_cell->setError('Value is not in list.');
+                         $gender_cell->setFormula1('shift_rest_day');
+                         /* Shift Day */
+                         $gender_cell = $sheet->getCell('J'.$rowcell)->getDataValidation();
+                         $gender_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
+                         $gender_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
+                         $gender_cell->setAllowBlank(false);
+                         $gender_cell->setShowInputMessage(true);
+                         $gender_cell->setShowErrorMessage(true);
+                         $gender_cell->setShowDropDown(true);
+                         $gender_cell->setErrorTitle('Input error');
+                         $gender_cell->setError('Value is not in list.');
+                         $gender_cell->setFormula1('shift_extra_day');
+                    }
+               }
+
+          });
+
+            /* DATA VALIDATION (REFERENCE FOR DROPDOWN LIST) */
+            $excel->sheet('reference', function($sheet) {
+
+                $_employee         = Tbl_payroll_employee_basic::where('shop_id',Self::shop_id())->orderBy('payroll_employee_number')->get();
+
+                /* EMPLOYEE REFERENCES */
+                $sheet->SetCellValue("A1", "employee_id");
+                $client_number = 2;
+                foreach($_employee as $employee)
+                {
+                    $sheet->SetCellValue("A".$client_number, $employee->payroll_employee_number);
+                    $client_number++;
+                }
+                $client_number--;
+
+                /* SHIFT DAY REFERENCES */
+                $sheet->SetCellValue("C1", "shift_day");
+                $sheet->SetCellValue("C2", "Mon");
+                $sheet->SetCellValue("C3", "Tue");
+                $sheet->SetCellValue("C4", "Wed");
+                $sheet->SetCellValue("C5", "Thu");
+                $sheet->SetCellValue("C6", "Fri");
+                $sheet->SetCellValue("C7", "Sat");
+                $sheet->SetCellValue("C8", "Sun");
+
+                /* SHIFT DAY REFERENCES */
+                $sheet->SetCellValue("D1", "shift_target_hours");
+                $sheet->SetCellValue("D2", "0");
+                $sheet->SetCellValue("D3", "1");
+                $sheet->SetCellValue("D4", "2");
+                $sheet->SetCellValue("D5", "3");
+                $sheet->SetCellValue("D6", "4");
+                $sheet->SetCellValue("D7", "5");
+                $sheet->SetCellValue("D8", "6");
+                $sheet->SetCellValue("D9", "7");
+                $sheet->SetCellValue("D10", "8");
+                $sheet->SetCellValue("D11", "9");
+                /* SHIFT DAY REFERENCES */
+                $sheet->SetCellValue("E1", "shift_break_hours");
+                $sheet->SetCellValue("E2", "0");
+                $sheet->SetCellValue("E3", "1");
+                $sheet->SetCellValue("E4", "2");
+                $sheet->SetCellValue("E5", "3");
+                $sheet->SetCellValue("E6", "4");
+                $sheet->SetCellValue("E7", "5");
+                $sheet->SetCellValue("E8", "6");
+                $sheet->SetCellValue("E9", "7");
+                $sheet->SetCellValue("E10", "8");
+                $sheet->SetCellValue("E11", "9");
+                /* SHIFT DAY REFERENCES */
+                $sheet->SetCellValue("F1", "shift_start_time");
+                $sheet->SetCellValue("F2", "7:00");
+                $sheet->SetCellValue("F3", "7:30");
+                $sheet->SetCellValue("F4", "8:00");
+                $sheet->SetCellValue("F5", "8:30");
+                $sheet->SetCellValue("F6", "9:00");
+                $sheet->SetCellValue("F7", "9:30");
+                $sheet->SetCellValue("F8", "10:00");
+                $sheet->SetCellValue("F9", "10:30");
+                $sheet->SetCellValue("F10", "11:00");
+                $sheet->SetCellValue("F11", "11:30");
+                $sheet->SetCellValue("F12", "12:00");
+                $sheet->SetCellValue("F13", "12:30");
+                $sheet->SetCellValue("F14", "13:00");
+                $sheet->SetCellValue("F15", "13:30");
+                $sheet->SetCellValue("F16", "14:00");
+                $sheet->SetCellValue("F17", "14:30");
+                $sheet->SetCellValue("F18", "15:00");
+                $sheet->SetCellValue("F19", "15:30");
+                $sheet->SetCellValue("F20", "16:00");
+                $sheet->SetCellValue("F21", "16:30");
+                $sheet->SetCellValue("F22", "17:00");
+                $sheet->SetCellValue("F23", "17:30");
+                $sheet->SetCellValue("F24", "18:00");
+                $sheet->SetCellValue("F25", "18:30");
+                $sheet->SetCellValue("F26", "19:00");
+                $sheet->SetCellValue("F27", "19:30");
+                $sheet->SetCellValue("F28", "20:00");
+                $sheet->SetCellValue("F29", "20:30");
+                $sheet->SetCellValue("F30", "21:00");
+                $sheet->SetCellValue("F31", "21:30");
+                $sheet->SetCellValue("F32", "22:00");
+                $sheet->SetCellValue("F33", "22:30");
+                $sheet->SetCellValue("F34", "23:00");
+                $sheet->SetCellValue("F35", "23:30");
+                $sheet->SetCellValue("F36", "24:00");
+                $sheet->SetCellValue("F37", "24:30");
+                $sheet->SetCellValue("F38", "1:00");
+                $sheet->SetCellValue("F39", "1:30");
+                $sheet->SetCellValue("F40", "2:00");
+                $sheet->SetCellValue("F41", "2:30");
+                $sheet->SetCellValue("F42", "3:00");
+                $sheet->SetCellValue("F43", "3:30");
+                $sheet->SetCellValue("F44", "4:00");
+                $sheet->SetCellValue("F45", "4:30");
+                $sheet->SetCellValue("F46", "5:00");
+                $sheet->SetCellValue("F47", "5:30");
+                $sheet->SetCellValue("F48", "6:00");
+                $sheet->SetCellValue("F49", "6:30");
+                
+                
+                /* SHIFT DAY REFERENCES */
+                $sheet->SetCellValue("G1", "shift_end_time");
+                $sheet->SetCellValue("G2", "7:00");
+                $sheet->SetCellValue("G3", "7:30");
+                $sheet->SetCellValue("G4", "8:00");
+                $sheet->SetCellValue("G5", "8:30");
+                $sheet->SetCellValue("G6", "9:00");
+                $sheet->SetCellValue("G7", "9:30");
+                $sheet->SetCellValue("G8", "10:00");
+                $sheet->SetCellValue("G9", "10:30");
+                $sheet->SetCellValue("G10", "11:00");
+                $sheet->SetCellValue("G11", "11:30");
+                $sheet->SetCellValue("G12", "12:00");
+                $sheet->SetCellValue("G13", "12:30");
+                $sheet->SetCellValue("G14", "13:00");
+                $sheet->SetCellValue("G15", "13:30");
+                $sheet->SetCellValue("G16", "14:00");
+                $sheet->SetCellValue("G17", "14:30");
+                $sheet->SetCellValue("G18", "15:00");
+                $sheet->SetCellValue("G19", "15:30");
+                $sheet->SetCellValue("G20", "16:00");
+                $sheet->SetCellValue("G21", "16:30");
+                $sheet->SetCellValue("G22", "17:00");
+                $sheet->SetCellValue("G23", "17:30");
+                $sheet->SetCellValue("G24", "18:00");
+                $sheet->SetCellValue("G25", "18:30");
+                $sheet->SetCellValue("G26", "19:00");
+                $sheet->SetCellValue("G27", "19:30");
+                $sheet->SetCellValue("G28", "20:00");
+                $sheet->SetCellValue("G29", "20:30");
+                $sheet->SetCellValue("G30", "21:00");
+                $sheet->SetCellValue("G31", "21:30");
+                $sheet->SetCellValue("G32", "22:00");
+                $sheet->SetCellValue("G33", "22:30");
+                $sheet->SetCellValue("G34", "23:00");
+                $sheet->SetCellValue("G35", "23:30");
+                $sheet->SetCellValue("G36", "24:00");
+                $sheet->SetCellValue("G37", "24:30");
+                $sheet->SetCellValue("G38", "1:00");
+                $sheet->SetCellValue("G39", "1:30");
+                $sheet->SetCellValue("G40", "2:00");
+                $sheet->SetCellValue("G41", "2:30");
+                $sheet->SetCellValue("G42", "3:00");
+                $sheet->SetCellValue("G43", "3:30");
+                $sheet->SetCellValue("G44", "4:00");
+                $sheet->SetCellValue("G45", "4:30");
+                $sheet->SetCellValue("G46", "5:00");
+                $sheet->SetCellValue("G47", "5:30");
+                $sheet->SetCellValue("G48", "6:00");
+                $sheet->SetCellValue("G49", "6:30");
+                 /* EMPLOYMENT STATUS REFERENCES */
+                $sheet->SetCellValue("H1", "shift_flexi_time");
+                $sheet->SetCellValue("H2", "0");
+                $sheet->SetCellValue("H3", "1");
+                 /* EMPLOYMENT STATUS REFERENCES */
+                $sheet->SetCellValue("I1", "shift_rest_day");
+                $sheet->SetCellValue("I2", "0");
+                $sheet->SetCellValue("I3", "1");
+                  /* EMPLOYMENT STATUS REFERENCES */
+                $sheet->SetCellValue("J1", "shift_extra_day");
+                $sheet->SetCellValue("J2", "0");
+                $sheet->SetCellValue("J3", "1");
+                
+               
+
+                /* EMPLOYMENT STATUS REFERENCES */
+                $sheet->_parent->addNamedRange(
+                    new \PHPExcel_NamedRange(
+                    'employee_id', $sheet, 'A2:A'.$client_number
+                    )
+                );
+               /* EMPLOYMENT STATUS REFERENCES */
+                $sheet->_parent->addNamedRange(
+                    new \PHPExcel_NamedRange(
+                    'shift_day', $sheet, 'C2:C8'
+                    )
+                );
+                /* EMPLOYMENT STATUS REFERENCES */
+                $sheet->_parent->addNamedRange(
+                    new \PHPExcel_NamedRange(
+                    'shift_target_hours', $sheet, 'D2:D11'
+                    )
+                );
+                /* EMPLOYMENT STATUS REFERENCES */
+                $sheet->_parent->addNamedRange(
+                    new \PHPExcel_NamedRange(
+                    'shift_break_hours', $sheet, 'E2:E11'
+                    )
+                );
+                /* EMPLOYMENT STATUS REFERENCES */
+                $sheet->_parent->addNamedRange(
+                    new \PHPExcel_NamedRange(
+                    'shift_start_time', $sheet, 'F2:F49'
+                    )
+                );
+                /* EMPLOYMENT STATUS REFERENCES */
+                $sheet->_parent->addNamedRange(
+                    new \PHPExcel_NamedRange(
+                    'shift_end_time', $sheet, 'G2:G49'
+                    )
+                );
+                /* EMPLOYMENT STATUS REFERENCES */
+                $sheet->_parent->addNamedRange(
+                    new \PHPExcel_NamedRange(
+                    'shift_flexi_time', $sheet, 'H2:H3'
+                    )
+                );
+                /* EMPLOYMENT STATUS REFERENCES */
+                $sheet->_parent->addNamedRange(
+                    new \PHPExcel_NamedRange(
+                    'shift_rest_day', $sheet, 'I2:I3'
+                    )
+                );
+                /* EMPLOYMENT STATUS REFERENCES */
+                $sheet->_parent->addNamedRange(
+                    new \PHPExcel_NamedRange(
+                    'shift_extra_day', $sheet, 'I2:I3'
+                    )
+                );
+          });
+
+
+        })->download('xlsx');
+     }
+
+     //LUMANG VERSION NG EXPORT SHIFT TEMPLATE
+    //   public function template_1()
+    // {
+    //  $excels['data'][0] = ['employee_id','shift_code_name','day','target_hours','break_hours','start_time','end_time','flexi_time','rest_day','extra_day'];
+    //     $excels['data'][1] = ['','', '','','','','','','',''];
+    //     // dd($excels);
+    //     return Excel::create('template_1', function($excel) use ($excels) {
+
+    //         $data = $excels['data'];
+    //         $date = 'template';
+    //         $excel->setTitle('temp');
+    //         $excel->setCreator('LARAVEL')->setCompany('DIGIMA');
+    //         $excel->setDescription('payroll file');
+    //         $excel->sheet($date, function($sheet) use ($data) {
+    //             $sheet->fromArray($data, null, 'A1', false, false);
+    //         });
+
+    //     })->download('xlsx');
+    // }
+
+
+     //LUMANG VERSION NG IMPOTATION OF SHIFT TEMPLATE//
+     //  public function import_modal_shift_global()
+     // {
+     //      $file  = Request::file('file');
+     //       $data = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
+     //      // $data = Excel::load($file)->get();
+
+     //      $key = 0;
+     //      $tc = 0;
+
+     //      // dd($data->employee_id);
+          
+     //      foreach ($data as  $value) {
+
+     //           dd($value['employee_id']);
+     //           $insert_code['shift_code_name']    = $value->shift_code_name;
+     //           $insert_code['shop_id']            = Self::shop_id();
+     //           // dd($value->shift_code_name);
+     //           $shift_code_id                     = Tbl_payroll_shift_code::insertGetId($insert_code);
+     //           $update['shift_code_id']           = $shift_code_id;
+     //                                                Tbl_payroll_employee_basic::where('payroll_employee_number',$value->employee_id)->where("shop_id", Self::shop_id())->update($update);
+     //           $insert_shift = array();
+     //           $shop=Self::shop_id();
+               
+
+     //          foreach ($data as  $value1) {
+     //                /* INSERT SHIFT DAY */
+     //                $insert_day["shift_day"] = ucfirst($value1->day);
+     //                $insert_day["shift_code_id"] = $shift_code_id;
+     //                $insert_day["shift_break_hours"] = number_format($value1->break_hours, 2, '.', '');
+     //                $insert_day["shift_target_hours"] = $value1->target_hours;
+     //                $insert_day["shift_flexi_time"] = $value1->flexi_time== 1 ? 1 : 0;
+     //                $insert_day["shift_rest_day"] = $value1->rest_day== 1 ? 1 : 0;
+     //                $insert_day["shift_extra_day"] = $value1->extra_day== 1 ? 1 : 0;
+     //                // dd($insert_day);
+     //                $shift_day_id = Tbl_payroll_shift_day::insertGetId($insert_day);
+     //                $insert_time[$tc]["shift_day_id"] = $shift_day_id;
+     //                $insert_time[$tc]["shift_work_start"] = date("H:i:s", strtotime($value1->start_time)) ;
+     //                $insert_time[$tc]["shift_work_end"] = date("H:i:s", strtotime($value1->end_time)) ;
+     //                Tbl_payroll_shift_time::insert($insert_time);
+     //                $insert_time = null;
+     //                }
+     //       } 
+          
+     //      $return['function_name'] = 'payrollconfiguration.reload_shift_template';
+     //      $return['status']        = '<center>success</center>';
+     //      return collect($return)->toJson();
+     // }
+
+    //END-SHIFT IMPORT TEMPLATE//
 
      public function modal_view_shift_template($id)
      {

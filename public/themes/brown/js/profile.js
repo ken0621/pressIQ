@@ -13,6 +13,7 @@ function profile()
 	function document_ready()
 	{
 		add_event_reward_conf_save();
+		add_event_info_conf_save();
 	}
 	function add_event_reward_conf_save()
 	{
@@ -38,6 +39,43 @@ function profile()
 				complete: function(data)
 				{
 					$(".reward-configuration-form").find("button[type=submit]").html("<i class='fa fa-save'></i> Update");
+				}
+			})
+
+			return false;
+		});
+	}
+	function add_event_info_conf_save()
+	{
+		$(".info-form").submit(function()
+		{
+			$(".info-form").find("button[type=submit]").html("<i class='fa fa-spinner fa-pulse fa-fw'></i> Update");
+
+			var form_data = $(".info-form").serialize();
+
+			$.ajax(
+			{
+				url:"/members/profile-update-info",
+				dataType:"json",
+				data: form_data,
+				type: "post",
+				success: function(data)
+				{
+					if(data == "success")
+					{
+						$(".load-profile").load('/members/profile .load-profile-holder', function()
+						{
+							$(".info-form").find("button[type=submit]").html("<i class='fa fa-save'></i> Update");
+							$(".profile_info_success_message").removeClass("hidden");
+						});
+					}
+					else
+					{
+						$.each(data, function(index, val) 
+						{
+							alert(val);
+						});
+					}
 				}
 			})
 

@@ -499,6 +499,10 @@ header
 			vertical-align: middle;
 			color: #ffffff;
 			font-size: 13px;
+			@media screen and (max-width: 515px)
+			{
+				display: none;
+			}
 		}
 		.list-category
 		{
@@ -540,6 +544,10 @@ header
 			padding: 15px 15px;
 			color: rgba(255,255,255,0.5);
 			cursor: pointer;
+			@media screen and (max-width: 515px)
+			{
+				padding: 15px 2.5px;
+			}
 			&.active, &:hover, &:focus
 			{
 				color: rgba(255,255,255,1);
@@ -552,12 +560,16 @@ header
 			vertical-align: middle;
 			background-color: #ed5639;
 			padding: 5px 10px;
-			border-radius: 25px;
+			border-radius: 25px;	
 		}
 		.cart-holder
 		{
 			padding: 12.5px 15px !important;
 			text-decoration: none;
+			@media screen and (max-width: 515px)
+			{
+				padding: 12.5px 5px !important;
+			}
 			.brown-icon-shopping-cart
 			{
 				margin-right: 5px;
@@ -573,6 +585,10 @@ header
 			padding: 14px 15px;
 			display: block;
 			text-decoration: none;
+			@media screen and (max-width: 515px)
+			{
+				padding: 14px 5px;
+			}
 			.brown-icon-bell-o
 			{
 				margin-right: 5px;
@@ -595,6 +611,10 @@ footer
 	.holder
 	{
 		color: #fff;
+		@media screen and (max-width: 991px)
+		{
+			margin-bottom: 25px;
+		}
 		.title
 		{
 			font-size: 13px;
@@ -675,6 +695,10 @@ footer
 	}
 	.payment-container
 	{
+		@media screen and (max-width: 500px)
+		{
+			margin-bottom: 25px;
+		}
 		.holder
 		{
 			display: inline-block;
@@ -692,14 +716,14 @@ footer
 	}
 	.payment-method
 	{
-		@media screen and (min-width: 991px)
+		@media screen and (min-width: 500px)
 		{
 			float: left;
 		}
 	}
 	.delivery-services
 	{
-		@media screen and (min-width: 991px)
+		@media screen and (min-width: 500px)
 		{
 			float: right;
 		}
@@ -713,14 +737,14 @@ footer
 	border-top: 3px solid #dfdfdf;
 	.copy
 	{
-		@media screen and (min-width: 991px)
+		@media screen and (min-width: 500px)
 		{
 			float: left;
 		}
 	}
 	.power
 	{
-		@media screen and (min-width: 991px)
+		@media screen and (min-width: 500px)
 		{
 			float: right;
 		}

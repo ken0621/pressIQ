@@ -10,6 +10,9 @@ use App\Models\Tbl_manual_receive_payment;
 use App\Models\Tbl_sir_inventory;
 use App\Models\Tbl_receive_payment;
 use App\Models\Tbl_receive_payment_line;
+use App\Models\Tbl_customer;
+use App\Models\Tbl_customer_address;
+use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_sir;
 
 use App\Globals\Invoice;
@@ -57,8 +60,11 @@ class tablet_sync
     			$all_manual_inv = $all_transaction['manual_inv'];
     			$all_manual_rp = $all_transaction['manual_rp'];
     			$all_manual_cm = $all_transaction['manual_cm'];
+
+    			$all_customer = $all_transaction['customer'];
+    			$all_customer_address = $all_transaction['customer_address'];
     			/*FOR INVOICE*/
-    			foreach ($all_inv as $key => $value) 
+    			foreach ($all_inv as $key => $value)
     			{
     				$customer_info                      = [];
 					$customer_info['customer_id']       = $value->inv->inv_customer_id;
@@ -496,7 +502,6 @@ class tablet_sync
 					$update['rejection_reason'] = $sir_data->rejection_reason;
 					Tbl_sir::where('sir_id',$sir_id)->update($update);
 				}
-
 				if($agent_data)
 				{
 					$agent_update['email'] = $agent_data->email;
@@ -504,6 +509,55 @@ class tablet_sync
 					$agent_update['password'] = Crypt::encrypt($agent_data->password);
 
 					Tbl_employee::where('employee_id',$agent_data->employee_id)->update($agent_update);
+				}
+				if($all_customer)
+				{
+					foreach ($all_customer as $key_customer => $value_customer) 
+					{
+						$ins_customer['shop_id'] = $value_customer->shop_id;
+						$ins_customer['country_id'] = $value_customer->country_id;
+						$ins_customer['title_name'] = $value_customer->title_name;
+						$ins_customer['first_name'] = $value_customer->first_name;
+						$ins_customer['middle_name'] = $value_customer->shop_id;
+						$ins_customer['last_name'] = $value_customer->shop_id;
+						$ins_customer['suffix_name'] = $value_customer->shop_id;
+						$ins_customer['email'] = $value_customer->shop_id;
+						$ins_customer['company'] = $value_customer->shop_id;
+						$ins_customer['approved'] = $value_customer->approved;
+
+						$new_customer_id = Tbl_customer::insertGetId($ins_customer);
+
+						foreach($all_customer_address as $key_address => $value_address) 
+						{
+							foreach ($value_address as $key_add => $value_add) 
+							{
+								foreach ($value_add as $key_adds => $value_adds) 
+								{
+									if($value_adds->customer_id == $value_customer->customer_id)
+									{
+										$ins_add['customer_id'] = $new_customer_id;
+										$ins_add['country_id'] = $value_adds->country_id;
+										$ins_add['customer_state'] = $value_adds->customer_state;
+										$ins_add['customer_city'] = $value_adds->customer_city;
+										$ins_add['customer_zipcode'] = $value_adds->customer_zipcode;
+										$ins_add['customer_street'] = $value_adds->customer_street;
+										$ins_add['created_at'] = $value_adds->created_at;
+										$ins_add['updated_at'] = $value_adds->updated_at;
+										$ins_add['purpose'] = $value_adds->purpose;
+
+										Tbl_customer_address::insert($ins_add);
+									}
+								}
+							}
+						}
+
+						$ins_other_info['customer_id'] = $new_customer_id;
+						$ins_other_info['customer_phone'] = $value_customer->customer_phone != null ? $value_customer->customer_phone : '';
+						$ins_other_info['customer_mobile'] =$value_customer->customer_mobile != null ? $value_customer->customer_mobile : '';
+						$ins_other_info['customer_fax'] =$value_customer->customer_fax != null ? $value_customer->customer_fax : '';
+
+						Tbl_customer_other_info::insert($ins_other_info);
+					}
 				}
 				
 				return "success";	      

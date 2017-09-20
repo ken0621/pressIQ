@@ -4371,8 +4371,8 @@ class Payroll2
 	public static function cutoff_breakdown_allowance_v2($return, $data)
 	{
 
-		$_allowance = Tbl_payroll_employee_allowance_v2::where("payroll_employee_id", $data["employee_id"])->joinAllowance()->get();
-
+		$_allowance = Tbl_payroll_employee_allowance_v2::where("payroll_employee_id", $data["employee_id"])->where('tbl_payroll_allowance_v2.payroll_allowance_archived',0)->joinAllowance()->get();
+		
 		foreach($_allowance as $allowance)
 		{
 			$allowance_amount = $allowance->payroll_employee_allowance_amount;

@@ -491,9 +491,7 @@ class PayrollReportController extends Member
 			});
 		})->download('xls');
 		
-     }
-
-
+    }
 
 	public function get_total($data)
 	{
@@ -856,11 +854,6 @@ class PayrollReportController extends Member
 								$deduction += $values['rate'];
 							}
 						}
-					}
-
-					if ($value) 
-					{
-					
 					}
 				}
 

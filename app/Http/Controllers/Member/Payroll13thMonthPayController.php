@@ -126,9 +126,6 @@ class Payroll13thMonthPayController extends Member
 		foreach ($data["_period"] as $key_period => $period) 
 		{
 			$payroll_13th_month_basis = 0;
-			
-		
-			
 
 			$payroll_13th_month_basis += $period[$basis];
 			// dd($period);
@@ -136,7 +133,6 @@ class Payroll13thMonthPayController extends Member
 			// dd($period->cutoff_breakdown);
 			if (isset($period->cutoff_breakdown)) 
 			{
-
 				$period_cutoff_breakdown = unserialize($period->cutoff_breakdown);
 
 				foreach ($period_cutoff_breakdown->_breakdown as $key_cutoff_breakdown => $breakdown) 
@@ -160,7 +156,6 @@ class Payroll13thMonthPayController extends Member
 							}
 						}
 					}
-
 				}
 			}
 
@@ -197,17 +192,14 @@ class Payroll13thMonthPayController extends Member
 								$payroll_13th_month_basis += $values['rate'];
 							}
 						}
-						
+
 					}
 				}
 			}
-			
-		
-		
+
 			$data['_period'][$key_period]->payroll_13th_month_basis 		= $payroll_13th_month_basis;
 			$data['_period'][$key_period]->payroll_13th_month_contribution 	= @( $payroll_13th_month_basis / 12);
-
-			
+	
 		}
 
 		return $data;

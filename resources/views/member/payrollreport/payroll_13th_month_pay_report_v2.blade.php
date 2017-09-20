@@ -23,7 +23,6 @@
             <div id="all" class="tab-pane fade in active">
                 <div class="form-group order-tags"></div>
                 <div class="table-responsive tbl-13th-pay-table">
-              
                 </div>
             </div>
         </div> 

@@ -39,7 +39,9 @@ function submit_done(data)
 	if (data.function == 'load_13th_month_pay_table') 
 	{
 		load_13th_month_pay_table(data.employee_13_month_basis,data._token);
+		data.element.modal("hide");
 	}
+
 }
 
 function load_13th_month_pay_table(employee_13_month_basis,_token)

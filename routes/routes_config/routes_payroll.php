@@ -38,6 +38,9 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/*START 13th month pay*/
 	Route::any('/reports/13th_month_pay','Member\Payroll13thMonthPayController@index');
 	Route::any('/reports/employee_13_month_pay_report/{employee_id}','Member\Payroll13thMonthPayController@employee_13_month_pay_report');
+	Route::any('/reports/modal_employee_13_month_pay_report/{employee_id}','Member\Payroll13thMonthPayController@modal_employee_13_month_pay_report');
+	Route::any('/reports/employee_13_month_pay_basis_submit','Member\Payroll13thMonthPayController@employee_13_month_pay_basis_submit');
+	Route::any('/reports/employee_13_month_pay_report_table','Member\Payroll13thMonthPayController@employee_13_month_pay_report_table');
 	/*END 13th month pay*/
 
 	/* COMPANY START */

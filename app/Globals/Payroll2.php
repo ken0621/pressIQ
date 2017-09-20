@@ -4414,6 +4414,7 @@ class Payroll2
 				$standard_gross_pay = 0;
 				$val["label"] = $allowance_name;
 				$val["type"] = "additions";
+				$val["record_type"] = "allowance";
 				$ot_category = array('Rest Day OT', 'Over Time', 'Legal Holiday Rest Day OT', 'Legal OT', 'Special Holiday Rest Day OT', 'Special Holiday OT');
 				
 				if ($allowance->basic_pay==1) 
@@ -5969,14 +5970,13 @@ class Payroll2
 		$nightdiff_total 		 			= 0;
 		$restday_total 		 				= 0;
 
-	
+		
 
-
+		$count = 0;
 
 		foreach($data["_period"] as $key => $employee)
 		{
-			
-			
+
 			$total_basic 	+= $employee->net_basic_pay;
 			$total_gross 	+= $employee->gross_pay;
 			$total_net 		+= $employee->net_pay;
@@ -6010,10 +6010,12 @@ class Payroll2
 
 			$total_deduction += ($total_ee);
 
-
 			if(isset($employee->cutoff_breakdown))
 			{
+
 				$_duction_break_down = unserialize($employee->cutoff_breakdown)->_breakdown;
+				
+			
 				$deduction 				= 0;
 				$cola 					= 0;
 				$sss_ee 				= 0;
@@ -6032,6 +6034,9 @@ class Payroll2
 				$hdmf_loan				= 0;
 				$sss_loan				= 0;
 				$other_loans			= 0;
+
+				
+				
 
 				foreach($_duction_break_down as $breakdown)
 				{
@@ -6368,7 +6373,7 @@ class Payroll2
 		$data["nightdiff_total"] 		 			+= $nightdiff_total;
 		$data["restday_total"] 		 				+= $restday_total;
 		
-		// dd($data["total_deduction_of_all_employee"]);
+		
 		return $data;
 	}
 }

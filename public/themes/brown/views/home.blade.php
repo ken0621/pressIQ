@@ -47,8 +47,8 @@
 				</div>
 				<div class="browseby-tiles-holder">
 					<div class="browseby-paddingformat">
-						
-						<a class="browseby-active" href="">
+
+						<a class="browseby browseby-active" href="">
 							<div class="browseby-image-holder">
 								<img class="image-responsive" src="/themes/{{ $shop_theme }}/img/browseby-brown-androidphone-icon.png">
 							</div>
@@ -120,7 +120,7 @@
 				<div class="product-carousel">
 					<div>
 						<div class="product-holder">
-							<img src="/themes/{{ $shop_theme }}/img/feature-1.jpg">
+							<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/feature-1.jpg"></a>
 						</div>
 						<div class="product-details">
 							<p class="product-name">Brown 1</p>
@@ -130,7 +130,7 @@
 					</div>
 					<div>
 						<div class="product-holder">
-							<img src="/themes/{{ $shop_theme }}/img/feature-2.jpg">
+							<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/feature-2.jpg"></a>
 						</div>
 						<div class="product-details">
 							<p class="product-name">Brown 2</p>
@@ -140,7 +140,7 @@
 					</div>
 					<div>
 						<div class="product-holder">
-							<img src="/themes/{{ $shop_theme }}/img/feature-3.jpg">
+							<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/feature-3.jpg"></a>
 						</div>
 						<div class="product-details">
 							<p class="product-name">Brown Tab 1</p>
@@ -150,7 +150,7 @@
 					</div>
 					<div>
 						<div class="product-holder">
-							<img src="/themes/{{ $shop_theme }}/img/feature-4.jpg">
+							<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/feature-4.jpg"></a>
 						</div>
 						<div class="product-details">
 							<p class="product-name">Brown 1 Plus</p>
@@ -160,7 +160,7 @@
 					</div>
 					<div>
 						<div class="product-holder">
-							<img src="/themes/{{ $shop_theme }}/img/feature-1.jpg">
+							<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/feature-1.jpg"></a>
 						</div>
 						<div class="product-details">
 							<p class="product-name">Brown 1</p>
@@ -170,7 +170,7 @@
 					</div>
 					<div>
 						<div class="product-holder">
-							<img src="/themes/{{ $shop_theme }}/img/feature-2.jpg">
+							<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/feature-2.jpg"></a>
 						</div>
 						<div class="product-details">
 							<p class="product-name">Brown 2</p>
@@ -204,7 +204,8 @@
 	</div>
 	<!-- VIDEO ADS -->
 	<div class="wrapper-2">
-		<div class="intro" style="background-image: url('/themes/{{ $shop_theme }}/img/brown-video.png')">
+		<div class="intro">
+			<img src="/themes/{{ $shop_theme }}/img/brown-video.png">
 		</div>
 	</div>
 	<!-- INTRODUCING BROWN EDITION -->

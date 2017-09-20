@@ -34,7 +34,7 @@
 	        <div class="text-header">Profile Information</div>
 	        <div class="row clearfix">
 	            <div class="col-md-4">
-	                <div class="profile-info-container pic1">
+	                <div class="profile-info-container pic1 match-height">
 	                    <div class="icon-container">
 	                        <div class="col-md-2">
 	                            <img src="/themes/{{ $shop_theme }}/img/brown-personal-info.png">
@@ -53,7 +53,7 @@
 	                </div>
 	            </div>
 	            <div class="col-md-4">
-	                <div class="profile-info-container pic2">
+	                <div class="profile-info-container pic2 match-height">
 	                    <div class="icon-container">
 	                        <div class="col-md-2">
 	                            <img src="/themes/{{ $shop_theme }}/img/brown-default-shipping.png">
@@ -66,7 +66,7 @@
 	                </div>
 	            </div>
 	            <div class="col-md-4">
-	                <div class="profile-info-container pic3">
+	                <div class="profile-info-container pic3 match-height">
 	                    <div class="icon-container">
 	                        <div class="col-md-2">
 	                            <img src="/themes/{{ $shop_theme }}/img/brown-default-billing.png">

@@ -17,6 +17,8 @@ function non_member()
 		add_event_submit_verify_sponsor();
 		add_event_submit_verify_code();
 		add_event_process_slot_creation();
+		add_event_submit_verify_placement();
+		add_event_process_slot_placement();
 	}
 	function add_event_process_slot_creation()
 	{
@@ -74,6 +76,28 @@ function non_member()
 			else
 			{
 				action_verify_sponsor();
+			}
+			
+			return false;
+		});
+	}	
+	function add_event_submit_verify_placement()
+	{
+		$(".slot-placement-form").submit(function(e)
+		{
+			if($(e.currentTarget).find(".btn-verify-placement").hasClass("use"))
+			{
+				$("#slot-placement-modal").modal('hide');
+
+				setTimeout(function()
+				{
+					$("#slot-placement-modal").modal('show');
+				}, 350);
+				
+			}
+			else
+			{
+				action_verify_placement();
 			}
 			
 			return false;
@@ -167,5 +191,83 @@ function non_member()
 			$(".submit-verify-sponsor").find(".btn-verify-sponsor").html('<i class="fa fa-check"></i> VERIFY SPONSOR').removeClass("use").removeAttr("disabled");
 			$(".submit-verify-sponsor").find("input").removeAttr("disabled").val("");
 	    });
+	}
+	function action_verify_placement()
+	{
+		var form_data 			 = {};
+		form_data._token 		 = $("._token").val();
+		form_data.slot_placement = $(".input-slot-placement").val();
+		form_data.slot_position  = $(".input-slot-position").val();
+		form_data.slot_id 		 = $(".chosen_slot_id").val();
+		/* START LOADING AND DISABLE FORM */
+		$(".slot-placement-form").find(".btn-verify-placement").html('<i class="fa fa-spinner fa-pulse fa-fw"></i> VERIFYING').attr("disabled", "disabled");
+		// $(".slot-placement-form").find("select").attr("disabled", "disabled");
+
+		$.ajax(
+		{
+			url:"/members/verify-slot-placement",
+			data:form_data,
+			type:"post",
+			success: function(data)
+			{
+				$(".message-return-slot-placement-verify").html(data);
+				$(".slot-placement-form").find(".btn-verify-placement").html('<i class="fa fa-angle-double-right"></i> PROCEED').removeAttr("disabled");
+
+				if(data === '"success"')
+				{
+					$(".slot-placement-form").find("input").val("");
+					$("#slot-placement-modal").modal('hide');
+					setTimeout(function()
+					{
+						$("#proceed-modal-1").modal('show');
+						$("#proceed-modal-1").find(".load-final-verification").html('<div class="loading text-center" style="padding: 150px;"><i class="fa fa-spinner fa-pulse fa-fw fa-3x"></i></div>');
+						$(".load-final-verification").load("/members/final-verify-placement?slot_id="+form_data.slot_id+"&slot_position="+form_data.slot_position+"&slot_placement="+form_data.slot_placement);
+					}, 350);
+				}
+				else
+				{
+					
+				}
+			},
+			error: function(data)
+			{
+				alert("An ERROR occurred. Please contact administrator.");
+				$(".slot-placement-form").find(".btn-verify-placement").html('<i class="fa fa-angle-double-right"></i> PROCEED').removeAttr("disabled");
+			}
+		});
+
+	}
+	function add_event_process_slot_placement()
+	{
+		$("body").on("click", ".process-slot-placement", function()
+		{
+			var form_data 			 = {};
+			form_data._token 		 = $("._token").val();
+			form_data.slot_placement = $(".final_verification_slot_placement").val();
+			form_data.slot_position  = $(".final_verification_slot_position").val();
+			form_data.slot_id 		 = $(".final_verification_slot_id").val();
+			$(".process-slot-placement").html('<i class="fa fa-spinner fa-pulse fa-fw"></i> Processing');
+
+			$.ajax(
+			{
+				url:"/members/final-verify-placement",
+				dataType:"json",
+				type:"post",
+				data: form_data,
+				success: function(data)
+				{
+					if(data == "success")
+					{
+						$("#proceed-modal-1").modal('hide');
+						window.location.reload();
+					}
+					else
+					{
+						alert(data);
+						window.location.reload();
+					}
+				}
+			});
+		});
 	}
 }

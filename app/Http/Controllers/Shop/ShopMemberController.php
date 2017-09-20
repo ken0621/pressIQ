@@ -500,9 +500,17 @@ class ShopMemberController extends Shop
         $shop_id  = $this->shop_info->shop_id;
         $mode = $request->mode;
 
-        $data = MemberSlotGenealogy::tree($shop_id, $slot_id, $mode);
+        $check = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->where('slot_id',$slot_id)->first();
 
-        return view('member.mlm_slot.mlm_slot_genealogy', $data);
+        if($check)
+        {
+            $data = MemberSlotGenealogy::tree($shop_id, $slot_id, $mode);
+            return view('member.mlm_slot.mlm_slot_genealogy', $data);            
+        }
+        else
+        {
+            die('Invalid slot!');
+        }
     }   
     public function getNetwork()
     {

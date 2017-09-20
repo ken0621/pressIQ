@@ -25,8 +25,22 @@ class MLM2
 {
 	
 	public static $shop_id;
-	public static function verify_sponsor($shop_id, $sponsor_key)
+
+	public static function get_sponsor_network($shop_id, $slot_no)
 	{
+		$slot_id = Tbl_mlm_slot::where("shop_id", $shop_id)->where("slot_no", $slot_no)->value("slot_id");
+		$_tree = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot_id)->orderBy("sponsor_tree_level")->child_info()->customer()->get();
+	
+		foreach($_tree as $key => $tree)
+		{
+			$_tree[$key]->ordinal_level = ordinal($tree->sponsor_tree_level) . " Level";
+			$_tree[$key]->display_slot_date_created = date("F d, Y", strtotime($tree->slot_created_date));
+		}
+
+		return $_tree;
+	}	public static function verify_sponsor($shop_id, $sponsor_key)
+	{
+
 		$slot_info = Tbl_mlm_slot::shop($shop_id)->where("slot_nick_name", $sponsor_key)->where("slot_defaul", 1)->first();
 
 		if(!$slot_info)
@@ -229,7 +243,7 @@ class MLM2
 			case 'TRIANGLE':
 				$sponsor = Tbl_mlm_slot::where("slot_id", $reward->wallet_log_slot_sponsor)->first();
 				$sponsor_sponsor = Tbl_mlm_slot::where("slot_id", $sponsor->slot_placement)->first();
-				$message = "You earned <b>" . Currency::format($reward->wallet_log_amount) . "</b> from <b><a href='javascript:'>matrix bonus</a></b> because of pairing under <a href='javascript:'><b>" . $sponsor_sponsor->slot_no . "</b></a>.";
+				$message = "You earned <b>" . Currency::format($reward->wallet_log_amount) . "</b> from <b><a href='javascript:'>pairing bonus</a></b> because of pairing under <a href='javascript:'><b>" . $sponsor_sponsor->slot_no . "</b></a>.";
 			break;
 
 			default:

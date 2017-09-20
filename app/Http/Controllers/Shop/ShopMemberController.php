@@ -506,8 +506,18 @@ class ShopMemberController extends Shop
     }   
     public function getNetwork()
     {
-        $data["page"] = "Report";
-        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.network", $data));
+        $data["page"] = "Network List";
+
+        if(request()->input("slot_no") == "")
+        {
+            $slot_no = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->value("slot_no");
+            return Redirect::to("/members/network?slot_no=" . $slot_no);
+        }
+        else
+        {
+            $data["_tree"] = MLM2::get_sponsor_network($this->shop_info->shop_id, request()->input("slot_no"));
+            return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.network", $data));
+        }
     }
     public function getReport()
     {

@@ -35,30 +35,37 @@
 						<li class="{{ Request::segment(2) == "profile" ? "active" : "" }}">
 							<a href="/members/profile"><div class="nav-holder"><div class="icon brown-icon-profile"></div> <span>Profile</span></div></a>
 						</li>
-						<li class="{{ Request::segment(2) == "notification" ? "active" : "" }}">
+<!-- 						<li class="{{ Request::segment(2) == "notification" ? "active" : "" }}">
 							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-gift"></div> <span>Rewards</span></div></a>
 							<ul>
 								<li>
-									<a href="/members/wallet-logs"><div class="icon brown-icon-list-alt nav-holder"> &nbsp;&nbsp; Matrix Reward</div></a>
+									<a href="/members/wallet-logs"><div class="icon nav-holder">Pairing Rewaard</div></a>
 								</li>
 								<li>
-									<a href="/members/wallet-encashment"><div class="icon brown-icon-money nav-holder"> &nbsp;&nbsp;Wallet Encashment</div></a>
+									<a href="/members/wallet-encashment"><div class="icon nav-holder"> Direct Referral</div></a>
+								</li>
+								<li>
+									<a href="/members/wallet-encashment"><div class="icon nav-holder"> Builder Reward</div></a>
+								</li>
+								<li>
+									<a href="/members/wallet-encashment"><div class="icon nav-holder"> Leader Reward</div></a>
 								</li>
 							</ul>
-						</li>
+						</li> -->
 						<li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}">
 							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Genealogy</span></div></a>
 							<ul>
 								<li>
-									<a href="/members/genealogy?mode=sponsor"><div class="nav-holder"> &nbsp;&nbsp;Sponsor Genealogy</div></a>
+									<a href="/members/genealogy?mode=binary"><div class="nav-holder"> &nbsp;&nbsp;Brown Tree</div></a>
 								</li>
 								<li>
-									<a href="/members/genealogy?mode=binary"><div class="nav-holder"> &nbsp;&nbsp;Binary Genealogy</div></a>
+									<a href="/members/genealogy?mode=sponsor"><div class="nav-holder"> &nbsp;&nbsp;Solid Tree</div></a>
 								</li>
+
 							</ul>
 						</li>
 						<li class="{{ Request::segment(2) == "report" ? "active" : "" }}">
-							<a href="/members/report"><div class="nav-holder"><div class="icon brown-icon-bar-chart"></div> <span>Reward Reports</span></div></a>
+							<a href="/members/report"><div class="nav-holder"><div class="icon brown-icon-bar-chart"></div> <span>Reports</span></div></a>
 						</li>
 						<li class="{{ Request::segment(2) == "network" ? "active" : "" }}">
 							<a href="/members/network"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Network List</span></div></a>
@@ -74,9 +81,9 @@
 								</li>
 							</ul>
 						</li>
-						<li class="{{ Request::segment(2) == "slot" ? "active" : "" }}">
+<!-- 						<li class="{{ Request::segment(2) == "slot" ? "active" : "" }}">
 							<a href="/members/slot"><div class="nav-holder"><div class="icon brown-icon-cubes"></div> <span>My Slots</span></div></a>
-						</li>
+						</li> -->
 <!-- 						<li class="{{ Request::segment(2) == "eon-card" ? "active" : "" }}">
 							<a href="/members/eon-card"><div class="nav-holder"><dic class="icon brown-icon-credit-card"></dic> <span>Eon Card</span></div></a>
 						</li>

@@ -92,6 +92,13 @@
 							  <strong>Success!</strong> Your info has been successfully updated.
 							</div>
 				   		</div>
+				   		<div class="profile_info_failed_message hidden">
+							<div class="alert alert-danger">
+							  <ul>
+							  	
+							  </ul>
+							</div>
+				   		</div>
 					   <form class="info-form">
 					   	<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					   		<div class="row clearfix">
@@ -197,14 +204,18 @@
 				   		</form>
 				   </div>
 				   <div id="profile_picture" class="tab-pane fade">
-					<div class="upload-profile-pic">
-						<div class="icon">
-							<img src="/themes/{{ $shop_theme }}/img/cloud.png">
+				   	<form class="profile-pic-form" enctype="multipart/form-data">
+				   	<input class="get-token" type="hidden" name="_token" value="{{ csrf_token() }}">
+						<div class="upload-profile-pic">
+							<div class="icon">
+								<img style="width: 161px; height: 121px; object-fit: cover; object-fit: cover;" class="img-upload" src="/themes/{{ $shop_theme }}/img/cloud.png">
+							</div>
+							<div class="name">Choose New Profile Image</div>
+							<button class="btn btn-cloud" type="button" onClick="$('.upload-profile').trigger('click');">Browse</button>
+							<input type="file" class="hide upload-profile" name="profile_image">
+							<div class="file file-name">No File Selected</div>
 						</div>
-						<div class="name">Choose New Profile Image</div>
-						<button class="btn btn-cloud">Browse</button>
-						<div class="file">No File Selected</div>
-					</div>
+					</form>
 				   </div>
 				   <div id="password" class="tab-pane fade">
 				   	<h2>Under Development</h2>

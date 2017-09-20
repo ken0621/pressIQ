@@ -36,7 +36,7 @@
 							<a href="/members/profile"><div class="nav-holder"><div class="icon brown-icon-profile"></div> <span>Profile</span></div></a>
 						</li>
 						<li class="{{ Request::segment(2) == "notification" ? "active" : "" }}">
-							<a href="/members/notification"><div class="nav-holder"><div class="icon brown-icon-bell-o"></div> <span>Notification</span></div></a>
+							<a href="/members/notification"><div class="nav-holder"><div class="icon brown-icon-bell-o"></div> <span>Rewards</span></div></a>
 						</li>
 						<li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}">
 							<a href="/members/genealogy"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Genealogy</span></div></a>

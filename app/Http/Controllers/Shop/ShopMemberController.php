@@ -311,6 +311,7 @@ class ShopMemberController extends Shop
     public function getNotification()
     {
         $data["page"] = "Notification";
+        $data["_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.notification", $data));
     }
     public function getGenealogy()

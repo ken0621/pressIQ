@@ -809,7 +809,7 @@ class ShopMemberController extends Shop
             $check_sponsor = Tbl_mlm_slot::where("slot_id",$check_sponsor->slot_sponsor)->where("shop_id",$shop_id)->first();
             if($check_sponsor->slot_owner == Self::$customer_info->customer_id)
             {
-                $check_placement = MLM2::check_placement_exist($shop_id,$slot_placement,$slot_position);
+                $check_placement = MLM2::check_placement_exist($shop_id,$slot_placement,$slot_position,1,$check_sponsor->slot_id);
                 if($check_placement == 0)
                 {
                     $data["target_slot"] = Tbl_mlm_slot::where("slot_id",$slot_id)->customer()->first();

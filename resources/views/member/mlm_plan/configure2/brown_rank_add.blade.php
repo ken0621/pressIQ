@@ -16,6 +16,15 @@
                     </div>
                 </div>
                 <div class="form-group">
+
+                    <div class="col-md-6">
+                        <label for="basic-input">Direct</label>
+                        <input id="basic-input" value="{{$brown_rank->required_direct or ''}}" name="required_direct" class="form-control" placeholder="">
+                    </div>
+
+                </div>
+                <div class="form-group">
+
                     <div class="col-md-6">
                         <label for="basic-input">Required Slots</label>
                         <input id="basic-input" value="{{$brown_rank->required_slot or ''}}" name="required_slot" class="form-control" placeholder="">

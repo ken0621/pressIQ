@@ -502,7 +502,7 @@ class ShopMemberController extends Shop
         $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();
         if($slot)
         {
-            $data['slot_id'] = $slot->slot_id;
+            $data['slot_no'] = $slot->slot_no;
             $data['mode'] = $request->mode;
         }
 
@@ -510,15 +510,15 @@ class ShopMemberController extends Shop
     }
     public function getGenealogyTree(Request $request)
     {
-        $slot_id  = $request->slot_id;
+        $slot_no  = $request->slot_no;
         $shop_id  = $this->shop_info->shop_id;
         $mode = $request->mode;
 
-        $check = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->where('slot_id',$slot_id)->first();
+        $check = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->where('slot_no',$slot_no)->where('shop_id',$shop_id)->first();
 
         if($check)
         {
-            $data = MemberSlotGenealogy::tree($shop_id, $slot_id, $mode);
+            $data = MemberSlotGenealogy::tree($shop_id, $check->slot_id, $mode);
             return view('member.mlm_slot.mlm_slot_genealogy', $data);            
         }
         else

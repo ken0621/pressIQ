@@ -29,15 +29,19 @@ $text-dark: #272c2f;
 
 		.btn-text
 		{
+			width: 100%;
+			white-space: normal;
 			@media screen and (min-width: 991px)
 			{
 				text-align: left;
 			}
+
 			.text-header1
 			{
 				font-weight: $bold;
 				font-size: 21px;
 				color: $text-dark;
+				word-break: break-all;
 			}
 
 			.text-header2
@@ -46,6 +50,7 @@ $text-dark: #272c2f;
 				font-size: 15px;
 				color: $text-light;
 				letter-spacing: 0.2px;
+				word-break: break-all;
 			}
 		}
 
@@ -97,6 +102,7 @@ $text-dark: #272c2f;
 				display: inline-block;
 				vertical-align: middle;
 				margin-right: 40px;
+				margin-bottom: 15px;
 			}
 
 	    	.btn-container
@@ -112,6 +118,7 @@ $text-dark: #272c2f;
 			.btn-text
 			{
 				margin-right: 0;
+				margin-bottom: 0;
 			}
 
 			.btn-container
@@ -142,8 +149,8 @@ $text-dark: #272c2f;
 		padding: 10px;
 		margin-top: 15px;
 		border-radius: 4px;
-		min-height: 210px;
-		max-height: 210px;
+		// min-height: 210px;
+		// max-height: 210px;
 
 		.icon-container
 		{

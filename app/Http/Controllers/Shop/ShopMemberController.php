@@ -299,12 +299,14 @@ class ShopMemberController extends Shop
     /* LOGIN AND REGISTRATION - END */
     public function getProfile()
     {
-        $data["page"] = "Profile";
-        $data["mlm"] = isset(Self::$customer_info->ismlm) ? Self::$customer_info->ismlm : 0;
-        $data["profile"]         = Tbl_customer::shop(Self::$customer_info->shop_id)->where("tbl_customer.customer_id", Self::$customer_info->customer_id)->first();
-        $data["profile_address"] = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->first();
-        $data["profile_info"]    = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();
-        $data["_country"]        = Tbl_country::get();
+        $data["page"]                = "Profile";
+        $data["mlm"]                 = isset(Self::$customer_info->ismlm) ? Self::$customer_info->ismlm : 0;
+        $data["profile"]             = Tbl_customer::shop(Self::$customer_info->shop_id)->where("tbl_customer.customer_id", Self::$customer_info->customer_id)->first();
+        $data["profile_address"]     = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->first();
+        $data["profile_info"]        = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();
+        $data["_country"]            = Tbl_country::get();
+        // $data["allowed_change_pass"] = isset(Self::$customer_info->signup_with) ? (Self::$customer_info->signup_with == "member_register" ? true : false) : false;
+        $data["allowed_change_pass"] = true;
 
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.profile", $data));
     }
@@ -448,30 +450,42 @@ class ShopMemberController extends Shop
      public function postProfileUpdatePassword(Request $request)
     {
         $form = $request->all();
-        $validate['password'] = 'required|confirmed|min:6';
-        $validator = Validator::make($form, $validate);
-        
-        if (!$validator->fails()) 
-        {           
-            $insert_customer["password"]  = Crypt::encrypt($request->password);
 
-            Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
-                        ->shop(Self::$customer_info->shop_id)
-                        ->update($insert_customer);
+        $old = $request->old_password;
+        $new = Crypt::decrypt(Tbl_customer::where("customer_id", Self::$customer_info->customer_id)->where("shop_id", $this->shop_info->shop_id)->value("password"));
 
-            $email = Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
-                        ->shop(Self::$customer_info->shop_id)
-                        ->value('email');
-
-            $pass = $request->password;
-
-            Self::store_login_session($email,$pass);
+        if ($old == $new) 
+        {
+            $validate['password'] = 'required|confirmed|min:6';
+            $validator = Validator::make($form, $validate);
             
-            echo json_encode("success");
+            if (!$validator->fails()) 
+            {           
+                $insert_customer["password"]  = Crypt::encrypt($request->password);
+
+                Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
+                            ->shop(Self::$customer_info->shop_id)
+                            ->update($insert_customer);
+
+                $email = Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
+                            ->shop(Self::$customer_info->shop_id)
+                            ->value('email');
+
+                $pass = $request->password;
+
+                Self::store_login_session($email,$pass);
+                
+                echo json_encode("success");
+            }
+            else
+            {
+                $result = $validator->errors();
+                echo json_encode($result);
+            }
         }
         else
         {
-            $result = $validator->errors();
+            $result[0] = "Old password mismatched.";
             echo json_encode($result);
         }
     }

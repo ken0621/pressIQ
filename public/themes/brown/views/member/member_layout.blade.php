@@ -18,7 +18,7 @@
 				<div class="profile-holder">
 					<div class="profile">
 						<div class="img">
-							<img src="{{ $profile_image }}">
+							<img class="img-upload" src="{{ $profile_image }}">
 						</div>
 						<div class="text">
 							<div class="name">{{ $customer->first_name }} {{ $customer->last_name }}</div>

@@ -11,6 +11,7 @@ use Input;
 use App\Models\Tbl_shop;
 use App\Models\Tbl_partners;
 use App\Globals\Utilities;
+use App\Globals\AuditTrail;
 
 class Page_ThemesController extends Member
 {
@@ -25,7 +26,10 @@ class Page_ThemesController extends Member
     public function delete_company_info($id)
 	{
 		$update['archived']="1";
+		$whs_data = AuditTrail::get_table_data("tbl_partners","company_id",$id);
+		$part  = Tbl_partners::where("company_id", $id)->first();
 		Tbl_partners::where("company_id", $id)->update($update);
+		AuditTrail::record_logs("DELETED: Partners ","Partners Company Name : ".$part->company_name,$id,serialize($whs_data),"");
         Redirect::to("/member/page/partnerview")->send();
 	}
 
@@ -39,7 +43,11 @@ class Page_ThemesController extends Member
 		$insert["company_address"] = Request::input("company_address");
 		$insert["company_location"] = Request::input("company_location");
 		$insert["shop_id"] = $this->user_info->shop_id;
+		$whs_data = AuditTrail::get_table_data("tbl_partners","company_id",$id);
+		$part  = Tbl_partners::where("company_id", $id)->first();
 		Tbl_partners::where("company_id", $id)->update($insert);
+		$newdata =serialize($insert);
+		AuditTrail::record_logs("EDITED: Partners ","Partners Company Name : ".$part->company_name,$id,serialize($whs_data),$newdata);
         Redirect::to("/member/page/partnerview")->send();
 	}
 
@@ -52,7 +60,8 @@ class Page_ThemesController extends Member
 		$insert["company_address"] = Request::input("company_address");
 		$insert["company_location"] = Request::input("company_location");
 		$insert["shop_id"] = $this->user_info->shop_id;
-		Tbl_partners::insert($insert);
+		AuditTrail::record_logs("CREATED: Partners ","Partners Company Name : ".Request::input("company_name"),"","","");
+        Tbl_partners::insert($insert);
         Redirect::to("/member/page/partnerview")->send();
 	}
 

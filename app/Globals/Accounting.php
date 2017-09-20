@@ -93,7 +93,7 @@ class Accounting
 		if($search != null) $query->where("account_name","like","%".$search."%");
 
 		$query = $query->get();
-
+		$result = array();
 		foreach($query as $key => $item)
 		{
 			$result[$key]["account_id"] 			= $item->account_id;
@@ -121,7 +121,7 @@ class Accounting
 		}
 
 		if($query->count() > 0) return $result;
-		else 					return 'No Result Found!';
+		else 					return $result;
 	}
 
 	/**

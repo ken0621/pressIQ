@@ -1563,7 +1563,7 @@ class Item
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
 
         $query = Tbl_warehouse_inventory_record_log::where('item_type_id',5)->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->groupBy('record_log_id')->orderBy('record_log_id');
-        if($record_id)
+        if($record_id > 0)
         {
             $query = Tbl_warehouse_inventory_record_log::where('item_type_id',5)->where('record_log_id',$record_id)->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->groupBy('record_log_id')->orderBy('record_log_id');
         }

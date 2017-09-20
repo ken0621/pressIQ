@@ -150,8 +150,22 @@ class Shop extends Controller
                     $this->mlm_member   = $mlm_member;
                 }
 
-                $profile_image = "/themes/brown/img/user-placeholder.png";
-                //$profile_image = "/assets/front/img/sample-profile.jpg";
+                /* Set Profile Image */
+                if(isset(Self::$customer_info->profile)) 
+                {
+                    if(Self::$customer_info->profile) 
+                    {
+                        $profile_image = "/" . Self::$customer_info->profile;
+                    }
+                    else
+                    {
+                        $profile_image = "/themes/brown/img/user-placeholder.png";
+                    }
+                }
+                else
+                {
+                    $profile_image = "/themes/brown/img/user-placeholder.png";
+                }
 
                 View::share("customer", Self::$customer_info);
                 View::share("mlm_member", $mlm_member);

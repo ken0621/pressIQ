@@ -25,7 +25,7 @@ $bold: 700;
     background: linear-gradient(rgb(236,232,197),rgb(176,137,106),rgb(71,59,69)); /* Standard syntax (must be last) */
 }
 
-.downline
+.downline, .parent-reference
 {
     width: 130px !important;
 }

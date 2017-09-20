@@ -264,7 +264,7 @@
 							@if($direct->distributed == 1)
 								<button class="btn btn-default"><i class="fa fa-star"></i> VIEW INFO</button>
 							@else
-								<button class="btn btn-danger"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
+								<button class="btn btn-danger" slot_no="{{ $direct->slot_no }}" sid="{{ md5($direct->slot_id) }}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
 							@endif
 						</div>
 					</div>

@@ -13,7 +13,8 @@
 		</div>
 		<div class="right">
 			<div class="search">
-				<input type="text" name="" class="form-control" placeholder="Search By Name or Slot #">
+				<input type="text" name="">
+
 				<img src="/themes/{{ $shop_theme }}/img/search-icon.png">
 			</div>
 		</div>

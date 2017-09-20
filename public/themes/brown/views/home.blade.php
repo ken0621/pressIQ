@@ -47,8 +47,8 @@
 				</div>
 				<div class="browseby-tiles-holder">
 					<div class="browseby-paddingformat">
-						
-						<a class="browseby-active" href="">
+
+						<a class="browseby browseby-active" href="">
 							<div class="browseby-image-holder">
 								<img class="image-responsive" src="/themes/{{ $shop_theme }}/img/browseby-brown-androidphone-icon.png">
 							</div>
@@ -204,7 +204,8 @@
 	</div>
 	<!-- VIDEO ADS -->
 	<div class="wrapper-2">
-		<div class="intro" style="background-image: url('/themes/{{ $shop_theme }}/img/brown-video.png')">
+		<div class="intro">
+			<img src="/themes/{{ $shop_theme }}/img/brown-video.png">
 		</div>
 	</div>
 	<!-- INTRODUCING BROWN EDITION -->

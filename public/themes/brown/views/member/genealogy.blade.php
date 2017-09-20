@@ -3,6 +3,7 @@
 <div class="genealogy-container">
 	<div class="genealogy-header clearfix">
 		<div class="left">
+			<input type="hidden" class="mode-genealogy" name="" value="{{$mode or ''}}">
 			
 			<div class="icon">
 				<div class="brown-icon-genealogy" style="font-size: 40px;"></div>
@@ -15,19 +16,32 @@
 			<div class="legend">
 				<div class="legend-label">Legend:</div>
 				<div class="legend-select">
-					<select class="form-control">
-						<option>Occupied Slot</option>
+					<select class="form-control select-slot">
+						@foreach($_slot as $slot)
+							<option value="{{$slot->slot_id}}">SLOT# {{$slot->slot_no}}</option>
+						@endforeach
 					</select>
 				</div>
 			</div>
 		</div>
 	</div>
+	<div class="loading-content text-center hidden">
+		<i class="fa fa-spinner fa-spin fa-2x"></i>
+	</div>
 	<div class="genealogy-content">
-		<iframe frameborder="0"  width="100%" height="550px" src="/members/genealogy-tree?slot_id={{$slot_id}}&mode={{$mode}}"></iframe>
+		<iframe  class="genealogy-frame" frameborder="0"  width="100%" height="550px" src="/members/genealogy-tree?slot_id={{$slot_id}}&mode={{$mode}}"></iframe>
 	</div>
 </div>
 @endsection
 @section("member_script")
+<script type="text/javascript">
+	$(".select-slot").change(function()
+	{
+		$('.loading-content').removeClass('hidden');
+		$('.genealogy-frame').attr('src','/members/genealogy-tree?slot_id='+$(this).val()+'&mode='+$('.mode-genealogy').val());
+		$('.loading-content').addClass('hidden');
+	});	
+</script>
 @endsection
 @section("member_css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/genealogy.css">

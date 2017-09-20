@@ -452,14 +452,15 @@ class ShopMemberController extends Shop
         $data["page"] = "Notification";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.notification", $data));
     }
-    public function getGenealogy()
+    public function getGenealogy(Request $request)
     {
         $data["page"] = "Genealogy";
-        $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->currentWallet()->first();
+        $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
+        $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();
         if($slot)
         {
             $data['slot_id'] = $slot->slot_id;
-            $data['mode'] = 'sponsor';
+            $data['mode'] = $request->mode;
         }
 
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.genealogy", $data));
@@ -468,8 +469,9 @@ class ShopMemberController extends Shop
     {
         $slot_id  = $request->slot_id;
         $shop_id  = $this->shop_info->shop_id;
+        $mode = $request->mode;
 
-        $data = MemberSlotGenealogy::tree($shop_id, $slot_id);
+        $data = MemberSlotGenealogy::tree($shop_id, $slot_id, $mode);
 
         return view('member.mlm_slot.mlm_slot_genealogy', $data);
     }

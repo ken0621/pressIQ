@@ -15,6 +15,7 @@ function profile()
 		add_event_reward_conf_save();
 		add_event_info_conf_save();
 		add_event_picture_conf_save();
+		add_event_password_conf_save();
 	}
 	function add_event_reward_conf_save()
 	{
@@ -26,10 +27,10 @@ function profile()
 
 			$.ajax(
 			{
-				url:"/members/profile-update-reward",
-				dataType:"json",
-				data: form_data,
-				type: "post",
+				url      : "/members/profile-update-reward",
+				dataType : "json",
+				data     : form_data,
+				type     : "post",
 				success: function(data)
 				{
 					if(data == "success")
@@ -94,28 +95,38 @@ function profile()
 	}
 	function add_event_picture_conf_save()
 	{
-		$(".upload-profile").change(function()
+		$(".upload-profile").bind("change", function()
 		{
 			$(".tab-pane").css("opacity", "0.5");
+			$(".upload-profile").unbind("change");	
 		    readURL(this);
 		}); 	
 	}
 	function add_action_picture_conf_save()
 	{
-		var upload_data = new FormData($(".upload-profile-pic")[0]);
-		upload_data._token = $(".get-token").val();
-		console.log(upload_data);
+		$(".profile_picture_success_message").addClass("hidden");
+		$(".profile_picture_failed_message").addClass("hidden");
+
+		var upload_data = new FormData($(".profile-pic-form")[0]);
+
 		$.ajax({
-			url: '/members/profile-update-picture',
-			data: upload_data,
-			dataType: 'json',
-			async: false,
-			type: 'post',
-			processData: false,
-			contentType: false,
+			url      	: '/members/profile-update-picture',
+			data     	: upload_data,
+			dataType 	: 'json',
+			async    	: false,
+			type     	: 'post',
+			processData : false,
+			contentType : false,
 			success:function(response)
 			{
-				console.log(response);
+				if (response == "success") 
+				{
+					$(".profile_picture_success_message").removeClass("hidden");
+				}
+				else
+				{
+					$(".profile_picture_failed_message").removeClass("hidden");
+				}
 			},
 		});
 	}
@@ -136,11 +147,58 @@ function profile()
 	            $('.img-upload').attr('src', e.target.result);
 
 	            $(".tab-pane").css("opacity", "1");
+	            add_event_picture_conf_save();
 
 	            add_action_picture_conf_save();
 	        }
 	        
 	        reader.readAsDataURL(input.files[0]);
 	    }
+	}
+	function add_event_password_conf_save()
+	{
+		$(".password-form").submit(function()
+		{
+			$(".profile_password_success_message").addClass("hidden");
+			$(".profile_password_failed_message ul").empty();
+			$(".profile_password_failed_message").addClass("hidden");
+			$(".password-form").find("button[type=submit]").html("<i class='fa fa-spinner fa-pulse fa-fw'></i> Update");
+
+			var form_data = $(".password-form").serialize();
+
+			$.ajax(
+			{
+				url:"/members/profile-update-password",
+				dataType:"json",
+				data: form_data,
+				type: "post",
+				success: function(data)
+				{
+					if(data == "success")
+					{
+						$(".load-profile").load('/members/profile .load-profile-holder', function()
+						{
+							$(".password-form").find("button[type=submit]").html("<i class='fa fa-save'></i> Update");
+							$(".profile_password_success_message").removeClass("hidden");
+						});
+					}
+					else
+					{
+						var errors = '';
+
+						$.each(data, function(index, val) 
+						{
+							errors += '<li>'+val+'</li>';
+						});
+
+						$(".profile_password_failed_message ul").append(errors);
+						$(".profile_password_failed_message").removeClass("hidden");
+						$(".password-form").find("button[type=submit]").html("<i class='fa fa-save'></i> Update");
+					}
+				}
+			})
+
+			return false;
+		});
 	}
 }

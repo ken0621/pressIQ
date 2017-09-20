@@ -5,7 +5,7 @@
 		<div class="col-md-4 left match-height load-profile">
 			<div class="load-profile-holder">
 				<div class="profile-main">
-					<div class="img"><img src="{{ $profile->profile ? $profile->profile : '/themes/brown/img/user-placeholder.png' }}"></div>
+					<div class="img"><img class="img-upload" style="border-radius: 100%;" src="{{ $profile_image }}"></div>
 					<div class="name">{{ $profile->first_name }} {{ $profile->middle_name }} {{ $profile->last_name }}</div>
 					<div class="sub">{{ $profile->email }}</div>
 				</div>
@@ -204,8 +204,19 @@
 				   		</form>
 				   </div>
 				   <div id="profile_picture" class="tab-pane fade">
+				   	<div class="profile_picture_success_message hidden">
+						<div class="alert alert-success">
+						  <strong>Success!</strong> Your profile picture has been successfully updated.
+						</div>
+			   		</div>
+			   		<div class="profile_picture_failed_message hidden">
+						<div class="alert alert-danger">
+						  <strong>Failed!</strong> Please try again later.
+						</div>
+			   		</div>
 				   	<form class="profile-pic-form" enctype="multipart/form-data">
 				   	<input class="get-token" type="hidden" name="_token" value="{{ csrf_token() }}">
+				   	<input type="hidden" name="customer_id" value="{{ $profile->customer_id }}">
 						<div class="upload-profile-pic">
 							<div class="icon">
 								<img style="width: 161px; height: 121px; object-fit: cover; object-fit: cover;" class="img-upload" src="/themes/{{ $shop_theme }}/img/cloud.png">
@@ -218,7 +229,38 @@
 					</form>
 				   </div>
 				   <div id="password" class="tab-pane fade">
-				   	<h2>Under Development</h2>
+					   	<div class="profile_password_success_message hidden">
+							<div class="alert alert-success">
+							  <strong>Success!</strong> Your password has been successfully updated.
+							</div>
+				   		</div>
+				   		<div class="profile_password_failed_message hidden">
+							<div class="alert alert-danger">
+							  <ul>
+							  	
+							  </ul>
+							</div>
+				   		</div>
+					   <form class="password-form">
+					   	<input type="hidden" name="_token" value="{{ csrf_token() }}">
+					   		<div class="row clearfix">
+					   			<div class="col-md-12">
+					   				<div class="form-group">
+							   			<label>Password</label>
+							   			<input type="password" class="form-control" name="password" value="{{ Crypt::decrypt($profile->password) }}">
+							   		</div>
+							   		<div class="form-group">
+							   			<label>Confirm Password</label>
+							   			<input type="password" class="form-control" name="password_confirmation" value="{{ Crypt::decrypt($profile->password) }}">
+							   		</div>
+					   			</div>
+						   		<div class="col-md-12">
+						   			<div class="form-group btn-holder">
+							   			<button class="btn btn-brown" type="submit">Update</button>
+							   		</div>
+						   		</div>
+					   		</div>
+					   </form>
 				   </div>
 				</div>
 			</div>

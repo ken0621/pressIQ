@@ -7,6 +7,7 @@ use Crypt;
 use Redirect;
 use View;
 use Input;
+use File;
 use Carbon\Carbon;
 use App\Globals\Payment;
 use App\Globals\Customer;
@@ -42,7 +43,7 @@ class ShopMemberController extends Shop
             $data["points"]             = $data["customer_summary"]["_points"];
             $data["_slot"]              = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["_recent_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
-            $data["_direct"]  = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
+            $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
         }
 
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.dashboard", $data));
@@ -391,7 +392,7 @@ class ShopMemberController extends Shop
     }
     public function postProfileUpdatePicture(Request $request)
     {
-        dd(123);
+        $customer_id = $request->customer_id;
         $input = $request->all();
         $rules = array('profile_image' => 'required|mimes:jpeg,png,gif,bmp');
         $validator = Validator::make($input, $rules);
@@ -425,31 +426,59 @@ class ShopMemberController extends Shop
 
                 if( $upload_success ) 
                 {
-                   $update['ec_order_id'] = $id;
-                   $update['profile_image'] = "/" . $image_path;
-                   $update['order_status'] = "Pending";
-                   $update['payment_status'] = 0;
-                   $order = Ec_order::update_ec_order($update);
+                   $exist = Tbl_customer::where("customer_id", $customer_id)->first();
+                   if ($exist->profile) 
+                   {
+                       $delete_file = $exist->profile;
+                       File::delete($delete_file);
+                   }
 
-                   if ($order["status"] == "success") 
-                   {
-                       return Redirect::to("/");
-                   }
-                   else
-                   {
-                       return Redirect::back()->with('fail', 'Image upload failed. Please try again.')->send();
-                   }
+                   $update['profile'] = $image_path;
+                   Tbl_customer::where("customer_id", $customer_id)->where("shop_id", $this->shop_info->shop_id)->update($update);
+
+                   echo json_encode("success");
                 } 
                 else 
                 {
-                   return Redirect::back()->with('fail', 'Image upload failed. Please try again.')->send();
+                   echo json_encode("failed");
                 }
             }
+        }
+    }
+     public function postProfileUpdatePassword(Request $request)
+    {
+        $form = $request->all();
+        $validate['password'] = 'required|confirmed|min:6';
+        $validator = Validator::make($form, $validate);
+        
+        if (!$validator->fails()) 
+        {           
+            $insert_customer["password"]  = Crypt::encrypt($request->password);
+
+            Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
+                        ->shop(Self::$customer_info->shop_id)
+                        ->update($insert_customer);
+
+            $email = Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
+                        ->shop(Self::$customer_info->shop_id)
+                        ->value('email');
+
+            $pass = $request->password;
+
+            Self::store_login_session($email,$pass);
+            
+            echo json_encode("success");
+        }
+        else
+        {
+            $result = $validator->errors();
+            echo json_encode($result);
         }
     }
     public function getNotification()
     {
         $data["page"] = "Notification";
+        $data["_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.notification", $data));
     }
     public function getGenealogy(Request $request)
@@ -474,10 +503,16 @@ class ShopMemberController extends Shop
         $data = MemberSlotGenealogy::tree($shop_id, $slot_id, $mode);
 
         return view('member.mlm_slot.mlm_slot_genealogy', $data);
+    }   
+    public function getNetwork()
+    {
+        $data["page"] = "Report";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.network", $data));
     }
     public function getReport()
     {
         $data["page"] = "Report";
+        $data["_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.report", $data));
     }
     public function getWalletLogs()
@@ -621,7 +656,7 @@ class ShopMemberController extends Shop
         {
             return view('member.final_verification', $data);
         }
-    }
+    }    
     public function postFinalVerify()
     {
         $data = $this->code_verification();
@@ -675,5 +710,109 @@ class ShopMemberController extends Shop
         {
             return false;
         }
+    }
+    public function postVerifySlotPlacement(Request $request)
+    {
+        $shop_id         = $this->shop_info->shop_id;
+        $slot_id         = $request->slot_id;
+        $slot_placement  = $request->slot_placement;
+        $slot_position   = $request->slot_position;
+
+        $slot_placement  = Tbl_mlm_slot::where("slot_no",$slot_placement)->where("shop_id",$shop_id)->first() ? Tbl_mlm_slot::where("slot_no",$slot_placement)->where("shop_id",$shop_id)->first()->slot_id : null;
+
+
+        $data            = $this->check_placement($slot_id,$slot_placement,$slot_position);
+        $procceed        = $data["procceed"];
+        $message         = $data["message"];
+
+        if($procceed == 1)
+        {
+            echo json_encode('success');
+        }
+        else
+        {
+            echo json_encode($message); 
+        }
+    }
+    public function getFinalVerifyPlacement(Request $request)
+    {
+        $shop_id         = $this->shop_info->shop_id;
+        $slot_id         = $request->slot_id;
+        $slot_placement  = $request->slot_placement;
+        $slot_position   = $request->slot_position;
+
+        $slot_placement  = Tbl_mlm_slot::where("slot_no",$slot_placement)->where("shop_id",$shop_id)->first() ? Tbl_mlm_slot::where("slot_no",$slot_placement)->where("shop_id",$shop_id)->first()->slot_id : null;
+
+        $data            = $this->check_placement($slot_id,$slot_placement,$slot_position);
+        $procceed        = $data["procceed"];
+        
+        if($procceed == 1)
+        {
+            return view('member.final_verification_placement', $data);
+        }
+    }    
+    public function postFinalVerifyPlacement(Request $request)
+    {
+        $shop_id         = $this->shop_info->shop_id;
+        $slot_id         = $request->slot_id;
+        $slot_placement  = $request->slot_placement;
+        $slot_position   = $request->slot_position;
+        $data            = $this->check_placement($slot_id,$slot_placement,$slot_position);
+        $procceed        = $data["procceed"];
+        if($procceed == 1)
+        {
+            $return = MLM2::matrix_position($shop_id, $slot_id, $slot_placement, $slot_position);
+            if($return == "success")
+            {
+               echo json_encode("success");
+            }
+            else
+            {
+               echo json_encode("SOME ERROR OCCURRED");  
+            }
+            
+        }
+        else
+        {
+            echo json_encode("SOME ERROR OCCURRED");
+        }
+    }
+    public function check_placement($slot_id,$slot_placement,$slot_position)
+    {
+        $shop_id       = $this->shop_info->shop_id;
+        $check_sponsor = Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",$shop_id)->first();
+        $procceed      = 0;
+        if($check_sponsor)
+        {
+            $check_sponsor = Tbl_mlm_slot::where("slot_id",$check_sponsor->slot_sponsor)->where("shop_id",$shop_id)->first();
+            if($check_sponsor->slot_owner == Self::$customer_info->customer_id)
+            {
+                $check_placement = MLM2::check_placement_exist($shop_id,$slot_placement,$slot_position);
+                if($check_placement == 0)
+                {
+                    $data["target_slot"] = Tbl_mlm_slot::where("slot_id",$slot_id)->customer()->first();
+                    $data["placement"]   = Tbl_mlm_slot::where("slot_id",$slot_placement)->customer()->first();
+                    $data["position"]    = $slot_position;
+                    $data["message"]     = "success";
+                    $procceed            = 1;
+                }
+                else
+                {
+                    $data["message"]   = "Placement not available";
+                }
+            }
+            else
+            {
+                $data["message"]   = "Some error occurred please try again.";
+            }
+        }
+        else
+        {
+            $data["message"]   = "Some error occurred please try again.";
+        }
+
+
+        $data["procceed"] = $procceed;
+        return $data;
     }
 }

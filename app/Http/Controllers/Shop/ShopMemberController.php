@@ -10,12 +10,14 @@ use Input;
 use Carbon\Carbon;
 use App\Globals\Payment;
 use App\Globals\Customer;
+use App\Globals\MemberSlotGenealogy;
 use App\Rules\Uniqueonshop;
 use App\Globals\MLM2;
 use App\Globals\FacebookGlobals;
 use App\Globals\SocialNetwork;
 use App\Globals\GoogleGlobals;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_country;
@@ -453,7 +455,23 @@ class ShopMemberController extends Shop
     public function getGenealogy()
     {
         $data["page"] = "Genealogy";
+        $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->currentWallet()->first();
+        if($slot)
+        {
+            $data['slot_id'] = $slot->slot_id;
+            $data['mode'] = 'sponsor';
+        }
+
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.genealogy", $data));
+    }
+    public function getGenealogyTree(Request $request)
+    {
+        $slot_id  = $request->slot_id;
+        $shop_id  = $this->shop_info->shop_id;
+
+        $data = MemberSlotGenealogy::tree($shop_id, $slot_id);
+
+        return view('member.mlm_slot.mlm_slot_genealogy', $data);
     }
     public function getReport()
     {

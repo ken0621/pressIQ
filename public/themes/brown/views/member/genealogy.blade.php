@@ -23,7 +23,7 @@
 		</div>
 	</div>
 	<div class="genealogy-content">
-		<iframe src="" frameborder="0" style="overflow:hidden; height:100%; width:100%" height="100%" width="100%"></iframe>
+		<iframe frameborder="0"  width="100%" height="550px" src="/members/genealogy-tree?slot_id={{$slot_id}}&mode={{$mode}}"></iframe>
 	</div>
 </div>
 @endsection

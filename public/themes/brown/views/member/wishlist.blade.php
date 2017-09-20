@@ -4,7 +4,7 @@
 	<div class="left">
 		<div class="wishlist-title">My Wishlist</div>
 	</div>
-	<div class="table-holder">
+	<div class="table-holder table-responsive">
 		<table class="table">
 			<thead>
 				<tr>

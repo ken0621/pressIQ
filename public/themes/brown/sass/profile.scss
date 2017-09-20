@@ -47,6 +47,7 @@ $text-dark: #272c2f;
 			font-weight: $regular;
 			text-align: center;
 			letter-spacing: 0.2px;
+			word-break: break-all;
 		}
 	}
 	.profile-status
@@ -64,6 +65,16 @@ $text-dark: #272c2f;
 				text-align: center;
 				border-bottom: 2px solid;
 				padding: 15px 0;
+			}
+			@media screen and (max-width: 500px)
+			{
+				width: 100%;
+				display: block;
+				tbody, tr, td
+				{
+					width: 100%;
+					display: block;
+				}
 			}
 		}
 		.status-number
@@ -137,6 +148,16 @@ $text-dark: #272c2f;
 					font-size: 13px;
 				}
 			}
+			@media screen and (max-width: 500px)
+			{
+				width: 100%;
+				display: block;
+				tbody, tr, td
+				{
+					width: 100%;
+					display: block;
+				}
+			}
 		}
 	}
 	.profile-lead
@@ -169,6 +190,15 @@ $text-dark: #272c2f;
 		{
 			li
 			{
+				@media screen and (max-width: 518px)
+				{
+					width: 50%;
+					border-bottom: 2.5px solid #fff;
+				}
+				@media screen and (max-width: 410px)
+				{
+					width: 100%;
+				}
 				a
 				{
 					border: 0;
@@ -177,9 +207,20 @@ $text-dark: #272c2f;
 					text-align: center;
 					color: $text-light;
 					font-weight: $regular;
-					@media screen and (min-width: 991px)
+					min-width: 150px;
+					@media screen and (max-width: 1199px)
 					{
-						min-width: 150px;
+						padding: 12.5px 15px;
+						min-width: auto;
+					}
+					@media screen and (max-width: 657px)
+					{
+						padding: 12.5px 10px;
+						font-size: 15px;
+					}
+					@media screen and (max-width: 568px)
+					{
+						font-size: 13px;
 					}
 					&:hover
 					{

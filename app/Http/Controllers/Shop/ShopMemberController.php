@@ -299,12 +299,14 @@ class ShopMemberController extends Shop
     /* LOGIN AND REGISTRATION - END */
     public function getProfile()
     {
-        $data["page"] = "Profile";
-        $data["mlm"] = isset(Self::$customer_info->ismlm) ? Self::$customer_info->ismlm : 0;
-        $data["profile"]         = Tbl_customer::shop(Self::$customer_info->shop_id)->where("tbl_customer.customer_id", Self::$customer_info->customer_id)->first();
-        $data["profile_address"] = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->first();
-        $data["profile_info"]    = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();
-        $data["_country"]        = Tbl_country::get();
+        $data["page"]                = "Profile";
+        $data["mlm"]                 = isset(Self::$customer_info->ismlm) ? Self::$customer_info->ismlm : 0;
+        $data["profile"]             = Tbl_customer::shop(Self::$customer_info->shop_id)->where("tbl_customer.customer_id", Self::$customer_info->customer_id)->first();
+        $data["profile_address"]     = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->first();
+        $data["profile_info"]        = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();
+        $data["_country"]            = Tbl_country::get();
+        // $data["allowed_change_pass"] = isset(Self::$customer_info->signup_with) ? (Self::$customer_info->signup_with == "member_register" ? true : false) : false;
+        $data["allowed_change_pass"] = true;
 
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.profile", $data));
     }
@@ -448,30 +450,42 @@ class ShopMemberController extends Shop
      public function postProfileUpdatePassword(Request $request)
     {
         $form = $request->all();
-        $validate['password'] = 'required|confirmed|min:6';
-        $validator = Validator::make($form, $validate);
-        
-        if (!$validator->fails()) 
-        {           
-            $insert_customer["password"]  = Crypt::encrypt($request->password);
 
-            Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
-                        ->shop(Self::$customer_info->shop_id)
-                        ->update($insert_customer);
+        $old = $request->old_password;
+        $new = Crypt::decrypt(Tbl_customer::where("customer_id", Self::$customer_info->customer_id)->where("shop_id", $this->shop_info->shop_id)->value("password"));
 
-            $email = Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
-                        ->shop(Self::$customer_info->shop_id)
-                        ->value('email');
-
-            $pass = $request->password;
-
-            Self::store_login_session($email,$pass);
+        if ($old == $new) 
+        {
+            $validate['password'] = 'required|confirmed|min:6';
+            $validator = Validator::make($form, $validate);
             
-            echo json_encode("success");
+            if (!$validator->fails()) 
+            {           
+                $insert_customer["password"]  = Crypt::encrypt($request->password);
+
+                Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
+                            ->shop(Self::$customer_info->shop_id)
+                            ->update($insert_customer);
+
+                $email = Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
+                            ->shop(Self::$customer_info->shop_id)
+                            ->value('email');
+
+                $pass = $request->password;
+
+                Self::store_login_session($email,$pass);
+                
+                echo json_encode("success");
+            }
+            else
+            {
+                $result = $validator->errors();
+                echo json_encode($result);
+            }
         }
         else
         {
-            $result = $validator->errors();
+            $result[0] = "Old password mismatched.";
             echo json_encode($result);
         }
     }
@@ -488,7 +502,7 @@ class ShopMemberController extends Shop
         $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();
         if($slot)
         {
-            $data['slot_id'] = $slot->slot_id;
+            $data['slot_no'] = $slot->slot_no;
             $data['mode'] = $request->mode;
         }
 
@@ -496,14 +510,28 @@ class ShopMemberController extends Shop
     }
     public function getGenealogyTree(Request $request)
     {
-        $slot_id  = $request->slot_id;
+        $slot_no  = $request->slot_no;
         $shop_id  = $this->shop_info->shop_id;
         $mode = $request->mode;
 
-        $data = MemberSlotGenealogy::tree($shop_id, $slot_id, $mode);
+        $check = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->where('slot_no',$slot_no)->where('shop_id',$shop_id)->first();
 
-        return view('member.mlm_slot.mlm_slot_genealogy', $data);
-    }   
+        if($check)
+        {
+            $data = MemberSlotGenealogy::tree($shop_id, $check->slot_id, $mode);
+            return view('member.genealogy_tree', $data);            
+        }
+        else
+        {
+            die('Invalid slot!');
+        }
+    }
+    public function getGenealogyDownline(Request $request)
+    {
+        $data = MemberSlotGenealogy::downline($request->x, $request->mode);
+
+        return $data;
+    }
     public function getNetwork()
     {
         $data["page"] = "Network List";
@@ -797,7 +825,7 @@ class ShopMemberController extends Shop
             $check_sponsor = Tbl_mlm_slot::where("slot_id",$check_sponsor->slot_sponsor)->where("shop_id",$shop_id)->first();
             if($check_sponsor->slot_owner == Self::$customer_info->customer_id)
             {
-                $check_placement = MLM2::check_placement_exist($shop_id,$slot_placement,$slot_position);
+                $check_placement = MLM2::check_placement_exist($shop_id,$slot_placement,$slot_position,1,$check_sponsor->slot_id);
                 if($check_placement == 0)
                 {
                     $data["target_slot"] = Tbl_mlm_slot::where("slot_id",$slot_id)->customer()->first();

@@ -7,10 +7,10 @@ $text-dark: #272c2f;
 
 @mixin transition($transition)
 {
-	-webkit-transition: all 0.2s ease-in-out;
-	-moz-transition: all 0.2s ease-in-out;
-	-o-transition: all 0.2s ease-in-out;
-	transition: all 0.2s ease-in-out;
+	-webkit-transition: all $transition ease-in-out;
+	-moz-transition: all $transition ease-in-out;
+	-o-transition: all $transition ease-in-out;
+	transition: all $transition ease-in-out;
 }
 
 .product-container

@@ -17,6 +17,7 @@ use App\Globals\FacebookGlobals;
 use App\Globals\SocialNetwork;
 use App\Globals\GoogleGlobals;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_country;
@@ -476,6 +477,7 @@ class ShopMemberController extends Shop
     public function getNotification()
     {
         $data["page"] = "Notification";
+        $data["_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.notification", $data));
     }
     public function getGenealogy()
@@ -483,9 +485,15 @@ class ShopMemberController extends Shop
         $data["page"] = "Genealogy";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.genealogy", $data));
     }
+    public function getNetwork()
+    {
+        $data["page"] = "Report";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.network", $data));
+    }
     public function getReport()
     {
         $data["page"] = "Report";
+        $data["_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.report", $data));
     }
     public function getWalletLogs()
@@ -629,7 +637,7 @@ class ShopMemberController extends Shop
         {
             return view('member.final_verification', $data);
         }
-    }
+    }    
     public function postFinalVerify()
     {
         $data = $this->code_verification();
@@ -683,5 +691,109 @@ class ShopMemberController extends Shop
         {
             return false;
         }
+    }
+    public function postVerifySlotPlacement(Request $request)
+    {
+        $shop_id         = $this->shop_info->shop_id;
+        $slot_id         = $request->slot_id;
+        $slot_placement  = $request->slot_placement;
+        $slot_position   = $request->slot_position;
+
+        $slot_placement  = Tbl_mlm_slot::where("slot_no",$slot_placement)->where("shop_id",$shop_id)->first() ? Tbl_mlm_slot::where("slot_no",$slot_placement)->where("shop_id",$shop_id)->first()->slot_id : null;
+
+
+        $data            = $this->check_placement($slot_id,$slot_placement,$slot_position);
+        $procceed        = $data["procceed"];
+        $message         = $data["message"];
+
+        if($procceed == 1)
+        {
+            echo json_encode('success');
+        }
+        else
+        {
+            echo json_encode($message); 
+        }
+    }
+    public function getFinalVerifyPlacement(Request $request)
+    {
+        $shop_id         = $this->shop_info->shop_id;
+        $slot_id         = $request->slot_id;
+        $slot_placement  = $request->slot_placement;
+        $slot_position   = $request->slot_position;
+
+        $slot_placement  = Tbl_mlm_slot::where("slot_no",$slot_placement)->where("shop_id",$shop_id)->first() ? Tbl_mlm_slot::where("slot_no",$slot_placement)->where("shop_id",$shop_id)->first()->slot_id : null;
+
+        $data            = $this->check_placement($slot_id,$slot_placement,$slot_position);
+        $procceed        = $data["procceed"];
+        
+        if($procceed == 1)
+        {
+            return view('member.final_verification_placement', $data);
+        }
+    }    
+    public function postFinalVerifyPlacement(Request $request)
+    {
+        $shop_id         = $this->shop_info->shop_id;
+        $slot_id         = $request->slot_id;
+        $slot_placement  = $request->slot_placement;
+        $slot_position   = $request->slot_position;
+        $data            = $this->check_placement($slot_id,$slot_placement,$slot_position);
+        $procceed        = $data["procceed"];
+        if($procceed == 1)
+        {
+            $return = MLM2::matrix_position($shop_id, $slot_id, $slot_placement, $slot_position);
+            if($return == "success")
+            {
+               echo json_encode("success");
+            }
+            else
+            {
+               echo json_encode("SOME ERROR OCCURRED");  
+            }
+            
+        }
+        else
+        {
+            echo json_encode("SOME ERROR OCCURRED");
+        }
+    }
+    public function check_placement($slot_id,$slot_placement,$slot_position)
+    {
+        $shop_id       = $this->shop_info->shop_id;
+        $check_sponsor = Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",$shop_id)->first();
+        $procceed      = 0;
+        if($check_sponsor)
+        {
+            $check_sponsor = Tbl_mlm_slot::where("slot_id",$check_sponsor->slot_sponsor)->where("shop_id",$shop_id)->first();
+            if($check_sponsor->slot_owner == Self::$customer_info->customer_id)
+            {
+                $check_placement = MLM2::check_placement_exist($shop_id,$slot_placement,$slot_position);
+                if($check_placement == 0)
+                {
+                    $data["target_slot"] = Tbl_mlm_slot::where("slot_id",$slot_id)->customer()->first();
+                    $data["placement"]   = Tbl_mlm_slot::where("slot_id",$slot_placement)->customer()->first();
+                    $data["position"]    = $slot_position;
+                    $data["message"]     = "success";
+                    $procceed            = 1;
+                }
+                else
+                {
+                    $data["message"]   = "Placement not available";
+                }
+            }
+            else
+            {
+                $data["message"]   = "Some error occurred please try again.";
+            }
+        }
+        else
+        {
+            $data["message"]   = "Some error occurred please try again.";
+        }
+
+
+        $data["procceed"] = $procceed;
+        return $data;
     }
 }

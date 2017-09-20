@@ -221,7 +221,7 @@
 					<div class="info">
 						<div class="text-1">INTRODUCTION</div>
 						<div class="text-2">BROWN EDITION</div>
-						<div class="text-3">A PHONE FLIPINOS CAN BE PROUD OF</div>
+						<div class="text-3">A PHONE FILIPINOS CAN BE PROUD OF</div>
 						<div class="text-4">Brown promote a future that is mindful of the needs of every Filipino.</div>
 						<div class="button-holder">
 							<button class="btn btn-transparent">Learn More <i class="fa fa-caret-right" aria-hidden="true"></i></button>

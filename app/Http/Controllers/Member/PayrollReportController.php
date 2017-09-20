@@ -468,7 +468,7 @@ class PayrollReportController extends Member
 		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
 		$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
 		$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
-		$data = $this->get_total($data);
+		$data = $this->get_total_payroll_register($data);
 		// dd($data["_employee"]);
 		return view('member.payrollreport.payroll_register_report_period',$data);
 	}
@@ -482,7 +482,7 @@ class PayrollReportController extends Member
 		$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
 		$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
 		/*dd($data["show_period_start"]);*/
-		$data = $this->get_total($data);
+		$data = $this->get_total_payroll_register($data);
      	Excel::create($data["company"]->payroll_company_name,function($excel) use ($data)
 		{
 			$excel->sheet('clients',function($sheet) use ($data)
@@ -491,35 +491,33 @@ class PayrollReportController extends Member
 			});
 		})->download('xls');
 		
-     }
+    }
 
-
-
-	public function get_total($data)
+	public function get_total_payroll_register($data)
 	{
-		$total_basic = 0;
-		$total_gross = 0;
-		$total_net = 0;
-		$total_tax = 0;
+		$total_basic 				= 0;
+		$total_gross	 			= 0;
+		$total_net 					= 0;
+		$total_tax 					= 0;
 
-		$g_total_er = 0;
-		$g_total_ee = 0;
-		$g_total_ec = 0;
+		$g_total_er 				= 0;
+		$g_total_ee 				= 0;
+		$g_total_ec 				= 0;
 
-		$total_sss_ee = 0;
-		$total_sss_er = 0;
-		$total_sss_ec = 0;
-		$total_philhealth_ee = 0;
-		$total_philhealth_er = 0;
-		$total_pagibig_ee = 0;
-		$total_pagibig_er = 0;
-		$total_deduction = 0;
+		$total_sss_ee 				= 0;
+		$total_sss_er 				= 0;
+		$total_sss_ec 				= 0;
+		$total_philhealth_ee 		= 0;
+		$total_philhealth_er 		= 0;
+		$total_pagibig_ee 			= 0;
+		$total_pagibig_er 			= 0;
+		$total_deduction 			= 0;
 
-		$total_deduction_employee=0;
+		$total_deduction_employee 	= 0;
 
-		$_other_deduction = null;
-		$_addition = null;
-		$_deduction = null;
+		$_other_deduction 			= null;
+		$_addition 					= null;
+		$_deduction 				= null;
 
 		$deduction_total 					= 0;
 		$cola_total 						= 0;
@@ -856,11 +854,6 @@ class PayrollReportController extends Member
 								$deduction += $values['rate'];
 							}
 						}
-					}
-
-					if ($value) 
-					{
-					
 					}
 				}
 

@@ -8,7 +8,7 @@ function payroll_process()
 		$(document).ready(function()
 		{
 			document_ready();
-		})
+		});
 	}
 	function document_ready()
 	{

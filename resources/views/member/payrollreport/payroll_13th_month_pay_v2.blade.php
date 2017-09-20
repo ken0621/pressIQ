@@ -5,7 +5,7 @@
         <div>
             <i class="fa fa-tags"></i>
             <h1>
-                <span class="page-title">Payroll Reports &raquo; Payroll Ledger</span>
+                <span class="page-title">Payroll Reports &raquo; Payroll 13th Month Pay</span>
                 <small>
                	select employee
                 </small>
@@ -34,7 +34,7 @@
 				           			<td class="text-center">{{ $employee->payroll_employee_number }}</td>
 				           			<td class="text-center">{{$employee->payroll_employee_first_name}} {{$employee->payroll_employee_last_name}}</td>
 				           			<td class="text-center">{{ $employee->payroll_company_name }}</td>
-				           			<td class="text-center"><a href="/member/payroll/reports/payroll_ledger/{{$employee->payroll_employee_id}}">View Employee</a></td>
+				           			<td class="text-center"><a href="/member/payroll/reports/employee_13_month_pay_report/{{$employee->payroll_employee_id}}">View Employee</a></td>
 				           		</tr>
 				           	@endforeach
 				        </tbody>

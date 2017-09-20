@@ -61,7 +61,7 @@ function globalv2()
 
         $(window).resize(function()
         {
-            // $("body").scrollTop(0);
+            $("body").scrollTop(0);
             
             $("header").removeClass('hide'); 
             $('.sticky-nav').addClass('hide-sticky'); 

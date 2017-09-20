@@ -190,10 +190,10 @@ $text-dark: #272c2f;
 		{
 			li
 			{
-				border-bottom: 2.5px solid #fff;
 				@media screen and (max-width: 518px)
 				{
 					width: 50%;
+					border-bottom: 2.5px solid #fff;
 				}
 				@media screen and (max-width: 410px)
 				{

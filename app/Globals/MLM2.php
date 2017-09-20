@@ -94,7 +94,7 @@ class MLM2
 		$return["_wallet"]->complan_builder = 0;
 		$return["_wallet"]->complan_leader = 0;
 		$return["_wallet"]->complan_triangle = 0;
-
+		
 		$return["_points"] = new stdClass();
 		$return["_points"]->brown_leader_points = 0;
 		$return["_points"]->brown_builder_points = 0;
@@ -317,7 +317,7 @@ class MLM2
 		{
 			$slot_id    	  = Tbl_mlm_slot::insertGetId($insert);
 			$sponsor_slot 	  = Tbl_mlm_slot::where("slot_id",$sponsor)->where("shop_id",$shop_id)->first();
-			$customer_sponsor = Tbl_customer::where("shop_id",$shop_id)->where("customer_id",$sponsor_slot->slow_owner)->first();
+			$customer_sponsor = Tbl_customer::where("shop_id",$shop_id)->where("customer_id",$sponsor_slot->slot_owner)->first();
 
 			if($customer_sponsor->downline_rule == "auto")
 			{
@@ -528,7 +528,7 @@ class MLM2
 
         return "success";
     }
-    public static function check_placement_exist($shop_id,$placement,$position)
+    public static function check_placement_exist($shop_id,$placement,$position,$self_downline = 0,$self_owner = null)
     {
         $count_tree_if_exist 		= Tbl_tree_placement::where('placement_tree_position', $position)
                         								->where('placement_tree_parent_id', $placement)
@@ -538,7 +538,38 @@ class MLM2
 	    if($count_tree_if_exist != 0 || !$placement ||  !$position)
 	    {
 	    	return 1;
-	    }   
+	    } 
+	    else if ($self_downline == 1)
+	    {
+	    	/* IF DOWNLINE ONLY OF $SELF_OWNER*/
+		    $check_shop_slot            = Tbl_mlm_slot::where("slot_id",$placement)->where("shop_id",$shop_id)->where("slot_placement","!=",0)->first();
+		    if($check_shop_slot)
+		    {	
+		    	if($check_shop_slot->slot_sponsor == $self_owner)
+		    	{
+		    		return 0;
+		    	}
+		    	else
+		    	{
+		    		$owned = Tbl_tree_placement::where('placement_tree_parent_id', $self_owner)
+		    								   ->where('placement_tree_child_id',$placement)
+                							   ->where('shop_id', $shop_id)
+                							   ->first();
+                    if($owned)
+                    {
+                    	return 0;
+                    }            
+                    else
+                    {
+                    	return 1;
+                    }    							   
+		    	}
+		    }
+		    else
+		    {	
+	    		return 1;
+		    }
+	    }  
 	    else
 	    {
 		    $check_shop_slot            = Tbl_mlm_slot::where("slot_id",$placement)->where("shop_id",$shop_id)->where("slot_placement","!=",0)->first();

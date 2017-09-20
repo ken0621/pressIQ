@@ -266,6 +266,7 @@ class PayrollReportController extends Member
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 			$data["year"] = $year;
 			$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
+			// dd(count($contri_info["_employee_contribution"]));
 			Excel::create("Government Forms HDMF",function($excel) use ($data)
 			{
 				$excel->sheet('clients',function($sheet) use ($data)
@@ -310,11 +311,12 @@ class PayrollReportController extends Member
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 			$data["year"] = $year;
 			$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
+			// dd($data);
 			Excel::create("Government Forms SSS",function($excel) use ($data)
 			{
 				$excel->sheet('clients',function($sheet) use ($data)
 				{
-					$sheet->loadView('member.payrollreport.government_forms_hdmf_export_excel',$data);
+					$sheet->loadView('member.payrollreport.government_forms_sss_export_excel',$data);
 				});
 			})->download('xls');
 		}
@@ -335,7 +337,7 @@ class PayrollReportController extends Member
 			{
 				$excel->sheet('clients',function($sheet) use ($data)
 				{
-					$sheet->loadView('member.payrollreport.government_forms_hdmf_export_excel',$data);
+					$sheet->loadView('member.payrollreport.government_forms_sss_export_excel',$data);
 				});
 			})->download('xls');
 		}
@@ -358,7 +360,7 @@ class PayrollReportController extends Member
 			{
 				$excel->sheet('clients',function($sheet) use ($data)
 				{
-					$sheet->loadView('member.payrollreport.government_forms_hdmf_export_excel',$data);
+					$sheet->loadView('member.payrollreport.government_forms_philhealth_export_excel',$data);
 				});
 			})->download('xls');
 		}
@@ -379,7 +381,7 @@ class PayrollReportController extends Member
 			{
 				$excel->sheet('clients',function($sheet) use ($data)
 				{
-					$sheet->loadView('member.payrollreport.government_forms_hdmf_export_excel',$data);
+					$sheet->loadView('member.payrollreport.government_forms_philhealth_export_excel',$data);
 				});
 			})->download('xls');
 		}

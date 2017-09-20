@@ -1,6 +1,9 @@
 <?php
 Route::group(array('prefix' => '/member/payroll'), function()
 {
+	//audit_trail_transaction
+	Route::any('/employee_list/modal_view_all_transaction/{id}/{uid}','Member\PayrollController@modal_view_all_transaction');
+	//audit_trail_transaction
 	Route::any('/payroll_api','Member\PayrollApiController@index');
 // /reports/payroll_ledger
 	Route::any('/reports/government_forms','Member\PayrollReportController@government_forms');
@@ -433,6 +436,11 @@ Route::group(array('prefix' => '/member/payroll'), function()
      Route::any('/shift_template/archive_shift_template',"Member\PayrollController@archive_shift_template");
      /* SHIFT TEMPLATE END */
 
+     /* SHIFT TEMPLATE IMPORT START */
+	Route::any('/shift_template/modal_shift_import_template','Member\PayrollController@modal_shift_import_template');
+	Route::any('/shift_template/company_template','Member\PayrollController@get_template123');
+	Route::any('/shift_template/import_modal_shift_global','Member\PayrollController@import_modal_shift_global');
+    
 
 
 	/* BIO METRICS IMPORT START */

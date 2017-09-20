@@ -47,7 +47,15 @@
 							</ul>
 						</li>
 						<li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}">
-							<a href="/members/genealogy"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Genealogy</span></div></a>
+							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Genealogy</span></div></a>
+							<ul>
+								<li>
+									<a href="/members/genealogy?mode=sponsor"><div class="nav-holder"> &nbsp;&nbsp;Sponsor Genealogy</div></a>
+								</li>
+								<li>
+									<a href="/members/genealogy?mode=binary"><div class="nav-holder"> &nbsp;&nbsp;Binary Genealogy</div></a>
+								</li>
+							</ul>
 						</li>
 						<li class="{{ Request::segment(2) == "report" ? "active" : "" }}">
 							<a href="/members/report"><div class="nav-holder"><div class="icon brown-icon-bar-chart"></div> <span>Reward Reports</span></div></a>

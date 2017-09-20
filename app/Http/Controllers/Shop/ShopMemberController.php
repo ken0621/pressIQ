@@ -11,6 +11,7 @@ use File;
 use Carbon\Carbon;
 use App\Globals\Payment;
 use App\Globals\Customer;
+use App\Globals\MemberSlotGenealogy;
 use App\Rules\Uniqueonshop;
 use App\Globals\MLM2;
 use App\Globals\FacebookGlobals;
@@ -494,11 +495,29 @@ class ShopMemberController extends Shop
         $data["_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.notification", $data));
     }
-    public function getGenealogy()
+    public function getGenealogy(Request $request)
     {
         $data["page"] = "Genealogy";
+        $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
+        $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();
+        if($slot)
+        {
+            $data['slot_id'] = $slot->slot_id;
+            $data['mode'] = $request->mode;
+        }
+
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.genealogy", $data));
     }
+    public function getGenealogyTree(Request $request)
+    {
+        $slot_id  = $request->slot_id;
+        $shop_id  = $this->shop_info->shop_id;
+        $mode = $request->mode;
+
+        $data = MemberSlotGenealogy::tree($shop_id, $slot_id, $mode);
+
+        return view('member.mlm_slot.mlm_slot_genealogy', $data);
+    }   
     public function getNetwork()
     {
         $data["page"] = "Report";

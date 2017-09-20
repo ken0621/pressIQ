@@ -317,7 +317,7 @@ class MLM2
 		{
 			$slot_id    	  = Tbl_mlm_slot::insertGetId($insert);
 			$sponsor_slot 	  = Tbl_mlm_slot::where("slot_id",$sponsor)->where("shop_id",$shop_id)->first();
-			$customer_sponsor = Tbl_customer::where("shop_id",$shop_id)->where("customer_id",$sponsor_slot->slow_owner)->first();
+			$customer_sponsor = Tbl_customer::where("shop_id",$shop_id)->where("customer_id",$sponsor_slot->slot_owner)->first();
 
 			if($customer_sponsor->downline_rule == "auto")
 			{

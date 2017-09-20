@@ -43,7 +43,9 @@
                                         <div>L:{{$l}} R:{{$r}}</div>
                                     @endif
                                 </div>
-                                <div class="id">{{ $slot->slot_no }}</div>
+                                <div class="id">
+                                    {{ $slot->slot_no }}
+                                </div>
                             </span> 
                             <i class="downline-container">
                                 {!! $downline !!}

@@ -1,5 +1,11 @@
+$content-text: 'Arimo', sans-serif;
+$regular: 400;
+$semi-bold: 600;
+$bold: 700;
+
 /*Now the CSS*/ 
-* {
+*
+{
     margin: 0; 
     padding: 0;
 }
@@ -9,10 +15,21 @@
     vertical-align: middle;
     display: inline-block;
 }
+
 .tree-container
 {
-    background-image: url("../img/bg.jpg");    
+    //background-image: url("../img/bg.jpg");
+    background: -webkit-linear-gradient(rgb(236,232,197),rgb(176,137,106),rgb(71,59,69)); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient( rgb(236,232,197),rgb(176,137,106),rgb(71,59,69)); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(rgb(236,232,197),rgb(176,137,106),rgb(71,59,69)); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(rgb(236,232,197),rgb(176,137,106),rgb(71,59,69)); /* Standard syntax (must be last) */
 }
+
+.downline, .parent-reference
+{
+    width: 130px !important;
+}
+
 #info
 {
     position: absolute;
@@ -55,7 +72,7 @@
 
 #info-summary
 {
-    font-family: "arial";
+    font-family: $content-text;
     position: fixed;
     top: 0px;
     left: 0px;
@@ -67,10 +84,12 @@
     width: 300px;
     
 }
+
 #info-summary #batch-field
 {
     overtflow: auto;
 }
+
 #info-summary #batch-field #label
 {
     font-weight: bold;
@@ -78,6 +97,7 @@
     width: 200px;
     float: left;
 }
+
 #info-summary #batch-field #value
 {
     font-weight: bold;
@@ -85,62 +105,72 @@
     float: left;
 }
 
-.tree li {
+.tree li 
+{
     float: left; text-align: center;
     list-style-type: none;
     position: relative;
     padding: 20px 5px 0 5px;
     
 }
+
 .tree li img
 {
     height: 50px;
     width: 50px;
     padding: 5px;
 }
+
 .tree li .id
 {
     font-weight: bold;
     font-size: 15px;
     margin-top: 15px;
 }
+
 .tree li span img
 {
     height: 50px;
     width: 50px;
     border-radius: 100%;
 }
+
 .tree li span
 {
-    background-color: #519FCD;
+    background-color: #422311;
     color: #fff;
     position: relative;
     transition: background-color ease-out 0.5s;  
 }
+
 .tree li span:hover
 {
-    background-color: #519FCD;
+    background-color: #422311;
     color: #fff;
 }
+
 .tree li span.PS
 {
-    background-color: #519FCD;
+    background-color:#422311;
 }
+
 .tree li span.FS
 {
     background-color: #CC5351;
 }
+
 .tree li span.VC
 {
-    background-color: #86CC51;
+    background-color: #dac5a6;
 }
+
 .tree li span.SS
 {
     background-color: #851CB2;
 }
+
 .tree li span #paid-slot-seal
 {
-    
     position: absolute;
     top: -10px;
     right: -10px;
@@ -150,33 +180,36 @@
     font-weight: bold;
 }
 
-
 .tree li span:hover #info
 {
     display: block;
 }
+
 .tree li span:hover #info:hover
 {
     display: none;
 }
 
-
 /*We will use ::before and ::after to draw the connectors*/
 
-.tree li::before, .tree li::after{
+.tree li::before, .tree li::after
+{
     content: '';
     position: absolute; top: 0; right: 50%;
-    border-top: 1px solid #519FCD;
+    border-top: 1px solid #422311;
     width: 50%; height: 20px;
 }
-.tree li::after{
+
+.tree li::after
+{
     right: auto; left: 50%;
-    border-left: 1px solid #519FCD;
+    border-left: 1px solid #422311;
 }
 
 /*We need to remove left-right connectors from elements without 
 any siblings*/
-.tree li:only-child::after, .tree li:only-child::before {
+.tree li:only-child::after, .tree li:only-child::before
+{
     display: none;
 }
 
@@ -185,27 +218,32 @@ any siblings*/
 
 /*Remove left connector from first child and 
 right connector from last child*/
-.tree li:first-child::before, .tree li:last-child::after{
+.tree li:first-child::before, .tree li:last-child::after
+{
     border: 0 none;
 }
 /*Adding back the vertical connector to the last nodes*/
-.tree li:last-child::before{
-    border-right: 1px solid #519FCD;
+.tree li:last-child::before
+{
+    border-right: 1px solid #422311;
     border-radius: 0 5px 0 0;
     -webkit-border-radius: 0 5px 0 0;
     -moz-border-radius: 0 5px 0 0;
 }
-.tree li:first-child::after{
+
+.tree li:first-child::after
+{
     border-radius: 5px 0 0 0;
     -webkit-border-radius: 5px 0 0 0;
     -moz-border-radius: 5px 0 0 0;
 }
 
 /*Time to add downward connectors from parents*/
-.tree ul ul::before{
+.tree ul ul::before
+{
     content: '';
     position: absolute; top: 0; left: 50%;
-    border-left: 1px solid #519FCD;
+    border-left: 1px solid #422311;
     width: 0; height: 20px;
 }
 
@@ -215,7 +253,8 @@ right connector from last child*/
     height: 49px;
     width: 50px;
     text-decoration: none;
-    font-family: arial, verdana, tahoma;
+    /* font-family: arial, verdana, tahoma; */
+    font-family: $content-text;
     font-size: 11px;
     display: inline-block;
     opacity: 0.9;
@@ -223,16 +262,19 @@ right connector from last child*/
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
 }
+
 .tree li span:hover
 {
     opacity: 1.0;
 }
+
 .loading
 {
     bottom: -80px;
     position: absolute;
     text-align: center;
 }
+
 .loading img
 {
     border: none !important;;
@@ -242,13 +284,11 @@ right connector from last child*/
     background-color: transparent !important; 
 }
 
-
-
 /*Thats all. I */
 
 form    
 {
-
+    
 }
 
 form .field
@@ -267,7 +307,7 @@ form .field select
 {
     width: 100%;
     padding: 10px;
-    -webkit-box-sizing : border-box;‌
+    -webkit-box-sizing : border-box;
     -moz-box-sizing : border-box;
     box-sizing : border-box;
 }

@@ -446,7 +446,7 @@ class ShopMemberController extends Shop
      public function postProfileUpdatePassword(Request $request)
     {
         $form = $request->all();
-        $validate['password'] = 'required|confirmed';
+        $validate['password'] = 'required|confirmed|min:6';
         $validator = Validator::make($form, $validate);
         
         if (!$validator->fails()) 
@@ -456,6 +456,14 @@ class ShopMemberController extends Shop
             Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
                         ->shop(Self::$customer_info->shop_id)
                         ->update($insert_customer);
+
+            $email = Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
+                        ->shop(Self::$customer_info->shop_id)
+                        ->value('email');
+
+            $pass = $request->password;
+
+            Self::store_login_session($email,$pass);
             
             echo json_encode("success");
         }

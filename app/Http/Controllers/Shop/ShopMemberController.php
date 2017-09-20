@@ -7,6 +7,7 @@ use Crypt;
 use Redirect;
 use View;
 use Input;
+use File;
 use Carbon\Carbon;
 use App\Globals\Payment;
 use App\Globals\Customer;
@@ -40,7 +41,7 @@ class ShopMemberController extends Shop
             $data["points"]             = $data["customer_summary"]["_points"];
             $data["_slot"]              = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["_recent_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
-            $data["_direct"]  = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
+            $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
         }
 
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.dashboard", $data));
@@ -389,7 +390,7 @@ class ShopMemberController extends Shop
     }
     public function postProfileUpdatePicture(Request $request)
     {
-        dd(123);
+        $customer_id = $request->customer_id;
         $input = $request->all();
         $rules = array('profile_image' => 'required|mimes:jpeg,png,gif,bmp');
         $validator = Validator::make($input, $rules);
@@ -423,26 +424,45 @@ class ShopMemberController extends Shop
 
                 if( $upload_success ) 
                 {
-                   $update['ec_order_id'] = $id;
-                   $update['profile_image'] = "/" . $image_path;
-                   $update['order_status'] = "Pending";
-                   $update['payment_status'] = 0;
-                   $order = Ec_order::update_ec_order($update);
+                   $exist = Tbl_customer::where("customer_id", $customer_id)->first();
+                   if ($exist->profile) 
+                   {
+                       $delete_file = $exist->profile;
+                       File::delete($delete_file);
+                   }
 
-                   if ($order["status"] == "success") 
-                   {
-                       return Redirect::to("/");
-                   }
-                   else
-                   {
-                       return Redirect::back()->with('fail', 'Image upload failed. Please try again.')->send();
-                   }
+                   $update['profile'] = $image_path;
+                   Tbl_customer::where("customer_id", $customer_id)->where("shop_id", $this->shop_info->shop_id)->update($update);
+
+                   echo json_encode("success");
                 } 
                 else 
                 {
-                   return Redirect::back()->with('fail', 'Image upload failed. Please try again.')->send();
+                   echo json_encode("failed");
                 }
             }
+        }
+    }
+     public function postProfileUpdatePassword(Request $request)
+    {
+        $form = $request->all();
+        $validate['password'] = 'required|confirmed';
+        $validator = Validator::make($form, $validate);
+        
+        if (!$validator->fails()) 
+        {           
+            $insert_customer["password"]  = Crypt::encrypt($request->password);
+
+            Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
+                        ->shop(Self::$customer_info->shop_id)
+                        ->update($insert_customer);
+            
+            echo json_encode("success");
+        }
+        else
+        {
+            $result = $validator->errors();
+            echo json_encode($result);
         }
     }
     public function getNotification()

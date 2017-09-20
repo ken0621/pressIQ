@@ -36,13 +36,24 @@
 							<a href="/members/profile"><div class="nav-holder"><div class="icon brown-icon-profile"></div> <span>Profile</span></div></a>
 						</li>
 						<li class="{{ Request::segment(2) == "notification" ? "active" : "" }}">
-							<a href="/members/notification"><div class="nav-holder"><div class="icon brown-icon-bell-o"></div> <span>Rewards</span></div></a>
+							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-gift"></div> <span>Rewards</span></div></a>
+							<ul>
+								<li>
+									<a href="/members/wallet-logs"><div class="icon brown-icon-list-alt nav-holder"> &nbsp;&nbsp; Matrix Reward</div></a>
+								</li>
+								<li>
+									<a href="/members/wallet-encashment"><div class="icon brown-icon-money nav-holder"> &nbsp;&nbsp;Wallet Encashment</div></a>
+								</li>
+							</ul>
 						</li>
 						<li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}">
 							<a href="/members/genealogy"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Genealogy</span></div></a>
 						</li>
 						<li class="{{ Request::segment(2) == "report" ? "active" : "" }}">
-							<a href="/members/report"><div class="nav-holder"><div class="icon brown-icon-bar-chart"></div> <span>Reports</span></div></a>
+							<a href="/members/report"><div class="nav-holder"><div class="icon brown-icon-bar-chart"></div> <span>Reward Reports</span></div></a>
+						</li>
+						<li class="{{ Request::segment(2) == "network" ? "active" : "" }}">
+							<a href="/members/network"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Network List</span></div></a>
 						</li>
 						<li class="{{ Request::segment(2) == "wallet-logs" || Request::segment(2) == "wallet-encashment" ? "active" : "" }}">
 							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-wallet"></div> <span>Wallet</span></div></a>
@@ -58,7 +69,7 @@
 						<li class="{{ Request::segment(2) == "slot" ? "active" : "" }}">
 							<a href="/members/slot"><div class="nav-holder"><div class="icon brown-icon-cubes"></div> <span>My Slots</span></div></a>
 						</li>
-						<li class="{{ Request::segment(2) == "eon-card" ? "active" : "" }}">
+<!-- 						<li class="{{ Request::segment(2) == "eon-card" ? "active" : "" }}">
 							<a href="/members/eon-card"><div class="nav-holder"><dic class="icon brown-icon-credit-card"></dic> <span>Eon Card</span></div></a>
 						</li>
 						<li class="{{ Request::segment(2) == "order" ? "active" : "" }}">
@@ -66,7 +77,7 @@
 						</li>
 						<li class="{{ Request::segment(2) == "wishlist" ? "active" : "" }}">
 							<a href="/members/wishlist"><div class="nav-holder"><div class="icon brown-icon-heart-empty"></div> <span>Wishlist</span></div></a>
-						</li>
+						</li> -->
 					</ul>
 				</div>
 			</div>

@@ -396,9 +396,15 @@ class ShopMemberController extends Shop
         $data["page"] = "Genealogy";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.genealogy", $data));
     }
+    public function getNetwork()
+    {
+        $data["page"] = "Report";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.network", $data));
+    }
     public function getReport()
     {
         $data["page"] = "Report";
+        $data["_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.report", $data));
     }
     public function getWalletLogs()

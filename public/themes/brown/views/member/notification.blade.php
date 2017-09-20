@@ -36,7 +36,7 @@
 		  					<div>{{ $reward->slot_no }}</div>
 		  				</td>
 		  				<td class="text-left">{!! $reward->log !!}</td>
-		  				<td class="text-right"><b>{!! $reward->display_wallet_log_amount !!}</b></td>
+		  				<td class="text-right"><a href="javascript:"><b>{!! $reward->display_wallet_log_amount !!}</b></a></td>
 		  			</tr>
 		  			@endforeach
 		  		</tbody>

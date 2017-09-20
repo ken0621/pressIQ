@@ -19,7 +19,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="network-content">
+	<div class="network-content" style="margin-top: 40px;">
 		<div class="holder">
 		  	<table class="table">
 		  		<thead>

@@ -6,7 +6,7 @@
         <!-- <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script> -->
         <script type="text/javascript" src="/assets/external/jquery.minv1.js"></script>
         <script type="text/javascript" src="/assets/slot_genealogy/genealogy/drag.js"></script>
-        <link rel="stylesheet" type="text/css" href="/assets/member/css/old_genealogy.css" />
+        <link rel="stylesheet" type="text/css" href="/assets/slot_genealogy/member/css/genealogy.css" />
 
         <!-- Trial-->
         <link rel="stylesheet" href="/resources/assets/remodal/src/jquery.remodal.css">
@@ -147,7 +147,7 @@
                         
                         $.ajax(
                         {
-                            url:"/member/mlm/slot/genealogy/downline",
+                            url:"/members/genealogy-downline",
                             dataType:"json",
                             data:{x:$networker_account_id,complan_library:$genealogy,mode:mode},
                             type:"get",

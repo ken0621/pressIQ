@@ -78,9 +78,13 @@ class MemberSlotGenealogy
 
         return $data;
     }
-    public static function downline($x = 0)
+    public static function downline($x = 0, $mode = '')
     {
-        $format = Request::input("mode");
+        $format = $mode;
+        if(!$mode)
+        {
+            $format = Request::input("mode");
+        }
 
         if($x == 0)
         {
@@ -103,14 +107,20 @@ class MemberSlotGenealogy
         }
 
         $return .= "</ul>";
-
         if($x == 0)
         {
             return json_encode($return);
         }
         else
         {
-            return $return;
+            if($mode)
+            {
+                return json_encode($return);
+            }
+            else
+            {
+                return $return;
+            }
         }   
     }
     public static function binary_downline($slot_id)

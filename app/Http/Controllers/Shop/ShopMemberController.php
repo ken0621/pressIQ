@@ -525,7 +525,13 @@ class ShopMemberController extends Shop
         {
             die('Invalid slot!');
         }
-    }   
+    }
+    public function getGenealogyDownline(Request $request)
+    {
+        $data = MemberSlotGenealogy::downline($request->x, $request->mode);
+
+        return $data;
+    }
     public function getNetwork()
     {
         $data["page"] = "Report";

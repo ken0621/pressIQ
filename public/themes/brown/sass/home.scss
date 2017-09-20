@@ -19,6 +19,10 @@ body{
 	font-size: 13px;
 	font-weight: 600;
 	color: #693d28;
+	@media screen and (max-width: 700px)
+	{
+		margin: auto;
+	}
 	&:hover {
 		cursor: pointer;
 	}
@@ -60,10 +64,25 @@ body{
 			.slider-container {
 				position: relative;
 
+				img
+				{
+					max-width: 100%;
+					@media screen and (max-width: 700px)
+					{
+						display: none;
+					}
+				}
+
 				.caption-container {
 					position: absolute;
 					left: 10%;
 					bottom: 35%;
+					@media screen and (max-width: 700px)
+					{
+						position: static;
+						text-align: center;
+						margin-bottom: 50px;
+					}
 
 					h1{
 						font-size: 45px;
@@ -89,13 +108,19 @@ body{
 				}
 			}
 			.right-ads {
+				text-align: center;
 
 				.ad-container {
 					position: relative;
 					margin-top: 10px;
 					border: 1px solid #e0e0e0;
-					// max-width: 355px;
-					// display: inline-block;
+					max-width: 355px;
+					display: inline-block;
+
+					img
+					{
+						max-width: 100%;
+					}
 
 					.button-container {
 						width: 35%;
@@ -172,9 +197,9 @@ body{
 					{
 						display: inline-block;
 	    				width: 113px;
-	    				margin-left: 32px;
 	    				text-decoration: none;
 	    				padding: 15px 0px 0px 0px;
+	    				margin-left: 32px;
 						.browseby-image-holder
 						{
 						    display: block;
@@ -276,12 +301,23 @@ body{
 		padding: 100px 0;
 		.img
 		{
-			max-width: 100%;
-			margin: auto;
-			display: block;
+			img
+			{
+				max-width: 100%;
+				margin: auto;
+				display: block;
+			}
+			@media screen and (max-width: 991px)
+			{
+				margin-bottom: 25px;
+			}
 		}
 		.info
 		{
+			@media screen and (max-width: 991px)
+			{
+				text-align: center;
+			}
 			.text-1
 			{
 				color: #1c1c1c;

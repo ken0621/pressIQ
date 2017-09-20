@@ -234,13 +234,13 @@
 	<div class="wrapper-4">
 		<div class="container">
 			<div class="row clearfix">
-				<div class="col-md-3">
+				<div class="col-md-3 col-sm-6">
 					<div class="holder pad match-height">
 						<div class="title-1">The Brown Phone <div class="border"></div></div>
 						<div class="desc" style="height: auto;">The Brown phone is your portal to a new world full of creativity and opportunities, bringing you closer to artists and entrepreneurs, while keeping you updated on the latest news, hottest trends, and innovative products and services, making your life better and more inspiring.</div>
 					</div>
 				</div>
-				<div class="col-md-3">
+				<div class="col-md-3 col-sm-6">
 					<div class="holder match-height">
 						<div class="img">
 							<img src="/themes/{{ $shop_theme }}/img/holder-1.png">
@@ -249,7 +249,7 @@
 						<div class="desc">Filipinos work hard, dream big, and create with their hearts. And through bayanihan, we create opportunities to enable the world to patronize everything beautiful about being Filipino. </div>
 					</div>
 				</div>
-				<div class="col-md-3">
+				<div class="col-md-3 col-sm-6">
 					<div class="holder match-height">
 						<div class="img">
 							<img src="/themes/{{ $shop_theme }}/img/holder-2.png">
@@ -259,7 +259,7 @@
 						<a href="javascript:" class="more">Show More</a>
 					</div>
 				</div>
-				<div class="col-md-3">
+				<div class="col-md-3 col-sm-6">
 					<div class="holder match-height">
 						<div class="img">
 							<img src="/themes/{{ $shop_theme }}/img/holder-3.png">

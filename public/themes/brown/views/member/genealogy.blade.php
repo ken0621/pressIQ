@@ -39,11 +39,11 @@
 	{
 		$('.loading-content').removeClass('hidden');
 		$('.genealogy-frame').attr('src','/members/genealogy-tree?slot_no='+$(this).val()+'&mode='+$('.mode-genealogy').val());
-		$('.genealogy-frame').addClass('hidden');
+		$('.genealogy-frame').css('opacity', 0);
 		setInterval(function()
 		{
 			$('.loading-content').addClass('hidden');
-			$('.genealogy-frame').removeClass('hidden');
+			$('.genealogy-frame').css('opacity', 1);
 		},1000);
 	});	
 </script>

@@ -529,7 +529,6 @@ class ShopMemberController extends Shop
     public function getGenealogyDownline(Request $request)
     {
         $data = MemberSlotGenealogy::downline($request->x, $request->mode);
-
         return $data;
     }
     public function getNetwork()

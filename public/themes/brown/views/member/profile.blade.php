@@ -12,16 +12,12 @@
 				<div class="profile-status">
 					<table>
 						<tr>
-							<td class="green">
-								<div class="status-number">0</div>
-								<div class="status-label">Direct Employee</div>
-							</td>
 							<td class="blue">
-								<div class="status-number">0</div>
-								<div class="status-label">Active Slot</div>
+								<div class="status-number">{{ $customer_summary["display_slot_count"] }}</div>
+								<div class="status-label">Slot Owned</div>
 							</td>
 							<td class="orange">
-								<div class="status-number">P 0.00</div>
+								<div class="status-number">{{ $wallet->display_current_wallet }}</div>
 								<div class="status-label">Current Wallet</div>
 							</td>
 						</tr>

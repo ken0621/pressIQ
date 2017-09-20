@@ -41,6 +41,11 @@
 		  			@endforeach
 		  		</tbody>
 		  	</table>
+		  	<div class="clearfix">
+			  	<div class="pull-right">
+			  		{!! session('notification_paginate') !!}
+			  	</div>
+		  	</div>
 		</div>
 	</div>
 </div>

@@ -61,9 +61,9 @@
                     <div class="col-md-6">
                         <label for="basic-input">Up to Level</label>
                         <select class="form-control" name="leader_override_build_uptolevel">
-                            <option {{isset($brown_rank) ? ($brown_rank->leader_override_build_reward == 'unlimited' ? 'selected' : '') : ''}} value="unlimited">Unlimited</option>
+                            <option {{isset($brown_rank) ? ($brown_rank->leader_override_build_uptolevel == 'unlimited' ? 'selected' : '') : ''}} value="unlimited">Unlimited</option>
                             @for($ctr=1; $ctr<=20; $ctr++)
-                            <option {{isset($brown_rank) ? ($brown_rank->leader_override_build_reward == $ctr ? 'selected' : '') : ''}} value="{{$ctr}}">{{ ordinal($ctr) }} Level</option>
+                            <option {{isset($brown_rank) ? ($brown_rank->leader_override_build_uptolevel == $ctr ? 'selected' : '') : ''}} value="{{$ctr}}">{{ ordinal($ctr) }} Level</option>
                             @endfor
                         </select>
                     </div>

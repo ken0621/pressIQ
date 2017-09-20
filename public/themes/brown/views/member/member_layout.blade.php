@@ -23,7 +23,7 @@
 						<div class="text">
 							<div class="name">{{ $customer->first_name }} {{ $customer->last_name }}</div>
 							<div class="sub"><i>{{ $customer->email }}</i></div>
-							<div class="sub"><b>PHP 0.00</b></div>
+							<div class="sub hidden"><b>PHP 0.00</b></div>
 						</div>
 					</div>
 				</div>
@@ -102,6 +102,11 @@
 		</div>
 	</div>
 </div>
+
+
+
+
+
 @endsection
 @section("css")
 @yield("member_css")

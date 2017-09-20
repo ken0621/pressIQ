@@ -306,6 +306,15 @@ class ShopMemberController extends Shop
         $data["profile_info"]        = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();
         $data["_country"]            = Tbl_country::get();
         // $data["allowed_change_pass"] = isset(Self::$customer_info->signup_with) ? (Self::$customer_info->signup_with == "member_register" ? true : false) : false;
+      
+
+        if(Self::$customer_info)
+        {
+            $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
+            $data["wallet"]             = $data["customer_summary"]["_wallet"];
+        }
+
+
         $data["allowed_change_pass"] = true;
 
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.profile", $data));
@@ -549,7 +558,7 @@ class ShopMemberController extends Shop
     public function getReport()
     {
         $data["page"] = "Report";
-        $data["_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
+        $data["_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.report", $data));
     }
     public function getWalletLogs()

@@ -79,8 +79,15 @@ class MLM2
                 $_slot[$key]->brown_next_rank = strtoupper($brown_next_rank->rank_name);
                 $brown_rank_required_slots = $brown_next_rank->required_slot;
                 $brown_count_required = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot->slot_id)->where("sponsor_tree_level", "<=", $brown_next_rank->required_uptolevel)->count();
+                
                 $_slot[$key]->brown_next_rank_requirements = $brown_rank_required_slots;
                 $_slot[$key]->brown_next_rank_current = $brown_count_required;
+
+                $_slot[$key]->required_direct = $brown_next_rank->required_direct;
+                $_slot[$key]->current_direct = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot->slot_id)->where("sponsor_tree_level", "=", 1)->count();;
+
+
+                $_slot[$key]->brown_direct_rank_percentage = ($_slot[$key]->current_direct / $_slot[$key]->required_direct) * 100;
                 $_slot[$key]->brown_rank_rank_percentage = ($brown_count_required / $brown_rank_required_slots) * 100;
             }
             else
@@ -216,9 +223,22 @@ class MLM2
 			}
 		});
 
-		$query->limit($limit);
+		$query->where("wallet_log_amount", ">", 0);
 
-		$_reward = $query->orderBy("wallet_log_id", "desc")->get();
+		
+
+		if($limit == 0)
+		{
+			$_reward = $query->orderBy("wallet_log_id", "desc")->paginate(10);
+			$store_pagine["notification_paginate"] = $_reward->render();
+			session($store_pagine);
+		}
+		else
+		{
+			$query->limit($limit);
+			$_reward = $query->orderBy("wallet_log_id", "desc")->get();
+		}
+		
 
 		foreach($_reward as $key => $reward)
 		{
@@ -246,8 +266,14 @@ class MLM2
 				$message = "You earned <b>" . Currency::format($reward->wallet_log_amount) . "</b> from <b><a href='javascript:'>pairing bonus</a></b> because of pairing under <a href='javascript:'><b>" . $sponsor_sponsor->slot_no . "</b></a>.";
 			break;
 
+			case 'BINARY':
+				$sponsor = Tbl_mlm_slot::where("slot_id", $reward->wallet_log_slot_sponsor)->first();
+				$sponsor_sponsor = Tbl_mlm_slot::where("slot_id", $sponsor->slot_placement)->first();
+				$message = "You earned <b>" . Currency::format($reward->wallet_log_amount) . "</b> from <b><a href='javascript:'>pairing bonus</a></b> because of pairing under <a href='javascript:'><b>" . $sponsor_sponsor->slot_no . "</b></a>.";
+			break;
+
 			default:
-				$message = "NOTIFICATION UNKNOWN";
+				$message = $reward->wallet_log_plan;
 			break;
 		}
 

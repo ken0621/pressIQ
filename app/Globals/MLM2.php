@@ -528,7 +528,7 @@ class MLM2
 
         return "success";
     }
-    public static function check_placement_exist($shop_id,$placement,$position)
+    public static function check_placement_exist($shop_id,$placement,$position,$self_downline = 0,$self_owner = null)
     {
         $count_tree_if_exist 		= Tbl_tree_placement::where('placement_tree_position', $position)
                         								->where('placement_tree_parent_id', $placement)
@@ -538,7 +538,38 @@ class MLM2
 	    if($count_tree_if_exist != 0 || !$placement ||  !$position)
 	    {
 	    	return 1;
-	    }   
+	    } 
+	    else if ($self_downline == 1)
+	    {
+	    	/* IF DOWNLINE ONLY OF $SELF_OWNER*/
+		    $check_shop_slot            = Tbl_mlm_slot::where("slot_id",$placement)->where("shop_id",$shop_id)->where("slot_placement","!=",0)->first();
+		    if($check_shop_slot)
+		    {	
+		    	if($check_shop_slot->slot_sponsor == $self_owner)
+		    	{
+		    		return 0;
+		    	}
+		    	else
+		    	{
+		    		$owned = Tbl_tree_placement::where('placement_tree_parent_id', $self_owner)
+		    								   ->where('placement_tree_child_id',$placement)
+                							   ->where('shop_id', $shop_id)
+                							   ->first();
+                    if($owned)
+                    {
+                    	return 0;
+                    }            
+                    else
+                    {
+                    	return 1;
+                    }    							   
+		    	}
+		    }
+		    else
+		    {	
+	    		return 1;
+		    }
+	    }  
 	    else
 	    {
 		    $check_shop_slot            = Tbl_mlm_slot::where("slot_id",$placement)->where("shop_id",$shop_id)->where("slot_placement","!=",0)->first();

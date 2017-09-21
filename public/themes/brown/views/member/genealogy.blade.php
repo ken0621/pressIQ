@@ -29,7 +29,7 @@
 		<i class="fa fa-spinner fa-spin fa-2x"></i>
 	</div>
 	<div class="genealogy-content">
-		<iframe  class="genealogy-frame" frameborder="0"  width="100%" height="550px" src="/members/genealogy-tree?slot_no={{$slot_no}}&mode={{$mode}}"></iframe>
+		<iframe  class="genealogy-frame" frameborder="0"  width="100%" height="550px" src="/members/genealogy-tree?slot_no={{$slot_no or ''}}&mode={{$mode or ''}}"></iframe>
 	</div>
 </div>
 @endsection

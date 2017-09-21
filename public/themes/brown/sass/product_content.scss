@@ -22,6 +22,10 @@
 				background-color: #fff;
 				padding: 25px;
 				border-right: 7.5px solid #ededed;
+				@media screen and (max-width: 991px)
+				{
+					display: block;
+				}
 				.product-holder
 				{
 					.product-title
@@ -37,6 +41,10 @@
 						margin-top: 10px;
 						.product-img
 						{
+							@media screen and (max-width: 991px)
+							{
+								margin-bottom: 25px;
+							}
 							table
 							{
 								width: 100%;
@@ -48,6 +56,11 @@
 								.thumb-holder
 								{
 									width: 70px;
+									@media screen and (max-width: 500px)
+									{
+										display: block;
+										width: 100%;
+									}
 									.thumb
 									{
 										.holder
@@ -64,17 +77,32 @@
 											{
 												margin-bottom: 0;
 											}
+											@media screen and (max-width: 500px)
+											{
+												display: inline-block;
+												vertical-align: top;
+											}
 										}
 									}
 								}
 								.img-holder
 								{
+									@media screen and (max-width: 500px)
+									{
+										display: block;
+										width: 100%;
+									}
 									.img
 									{
 										max-width: 100%;
 										display: block;
 										margin: auto;
 										padding: 15px;
+										object-fit: contain;
+										@media screen and (max-width: 991px)
+										{
+											height: 300px;
+										}
 									}
 								}
 							}
@@ -210,6 +238,11 @@
 				width: 275px;
 				background-color: #fff;
 				padding: 25px;
+				@media screen and (max-width: 991px)
+				{
+					display: block;
+					width: 100%;
+				}
 				.side-holder
 				{
 					.side-title
@@ -226,6 +259,11 @@
 						.holder
 						{
 							padding-top: 25px;
+							@media screen and (max-width: 991px)
+							{
+								display: inline-block;
+								vertical-align: top;
+							}
 							&:first-child
 							{
 								padding-top: 35px;

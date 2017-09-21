@@ -510,6 +510,7 @@ class ShopMemberController extends Shop
         $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
         $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();
         $data['slot_no'] = 0;
+        $data['mode'] = 'sponsor';
         if($slot)
         {
             $data['slot_no'] = $slot->slot_no;

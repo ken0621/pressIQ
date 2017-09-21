@@ -8,6 +8,7 @@ use Redirect;
 use View;
 use Input;
 use File;
+use Image;
 use Carbon\Carbon;
 use App\Globals\Payment;
 use App\Globals\Customer;
@@ -430,7 +431,8 @@ class ShopMemberController extends Shop
                     $create_result = File::makeDirectory(public_path($destinationPath), 0775, true, true);
                 }
 
-                $upload_success    = Input::file('profile_image')->move($destinationPath, $filename);
+                /* RESIZE IMAGE */
+                $upload_success    = Image::make(Input::file('profile_image'))->fit(250, 250)->save($destinationPath."/".$filename);;
 
                 /* SAVE THE IMAGE PATH IN THE DATABASE */
                 $image_path = $destinationPath."/".$filename;

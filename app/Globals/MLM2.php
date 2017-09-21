@@ -25,8 +25,22 @@ class MLM2
 {
 	
 	public static $shop_id;
-	public static function verify_sponsor($shop_id, $sponsor_key)
+
+	public static function get_sponsor_network($shop_id, $slot_no)
 	{
+		$slot_id = Tbl_mlm_slot::where("shop_id", $shop_id)->where("slot_no", $slot_no)->value("slot_id");
+		$_tree = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot_id)->orderBy("sponsor_tree_level")->child_info()->customer()->get();
+	
+		foreach($_tree as $key => $tree)
+		{
+			$_tree[$key]->ordinal_level = ordinal($tree->sponsor_tree_level) . " Level";
+			$_tree[$key]->display_slot_date_created = date("F d, Y", strtotime($tree->slot_created_date));
+		}
+
+		return $_tree;
+	}	public static function verify_sponsor($shop_id, $sponsor_key)
+	{
+
 		$slot_info = Tbl_mlm_slot::shop($shop_id)->where("slot_nick_name", $sponsor_key)->where("slot_defaul", 1)->first();
 
 		if(!$slot_info)
@@ -65,8 +79,15 @@ class MLM2
                 $_slot[$key]->brown_next_rank = strtoupper($brown_next_rank->rank_name);
                 $brown_rank_required_slots = $brown_next_rank->required_slot;
                 $brown_count_required = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot->slot_id)->where("sponsor_tree_level", "<=", $brown_next_rank->required_uptolevel)->count();
+                
                 $_slot[$key]->brown_next_rank_requirements = $brown_rank_required_slots;
                 $_slot[$key]->brown_next_rank_current = $brown_count_required;
+
+                $_slot[$key]->required_direct = $brown_next_rank->required_direct;
+                $_slot[$key]->current_direct = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot->slot_id)->where("sponsor_tree_level", "=", 1)->count();;
+
+
+                $_slot[$key]->brown_direct_rank_percentage = ($_slot[$key]->current_direct / $_slot[$key]->required_direct) * 100;
                 $_slot[$key]->brown_rank_rank_percentage = ($brown_count_required / $brown_rank_required_slots) * 100;
             }
             else
@@ -94,7 +115,7 @@ class MLM2
 		$return["_wallet"]->complan_builder = 0;
 		$return["_wallet"]->complan_leader = 0;
 		$return["_wallet"]->complan_triangle = 0;
-
+		
 		$return["_points"] = new stdClass();
 		$return["_points"]->brown_leader_points = 0;
 		$return["_points"]->brown_builder_points = 0;
@@ -202,9 +223,22 @@ class MLM2
 			}
 		});
 
-		$query->limit($limit);
+		$query->where("wallet_log_amount", ">", 0);
 
-		$_reward = $query->orderBy("wallet_log_id", "desc")->get();
+		
+
+		if($limit == 0)
+		{
+			$_reward = $query->orderBy("wallet_log_id", "desc")->paginate(10);
+			$store_pagine["notification_paginate"] = $_reward->render();
+			session($store_pagine);
+		}
+		else
+		{
+			$query->limit($limit);
+			$_reward = $query->orderBy("wallet_log_id", "desc")->get();
+		}
+		
 
 		foreach($_reward as $key => $reward)
 		{
@@ -229,11 +263,17 @@ class MLM2
 			case 'TRIANGLE':
 				$sponsor = Tbl_mlm_slot::where("slot_id", $reward->wallet_log_slot_sponsor)->first();
 				$sponsor_sponsor = Tbl_mlm_slot::where("slot_id", $sponsor->slot_placement)->first();
-				$message = "You earned <b>" . Currency::format($reward->wallet_log_amount) . "</b> from <b><a href='javascript:'>matrix bonus</a></b> because of pairing under <a href='javascript:'><b>" . $sponsor_sponsor->slot_no . "</b></a>.";
+				$message = "You earned <b>" . Currency::format($reward->wallet_log_amount) . "</b> from <b><a href='javascript:'>pairing bonus</a></b> because of pairing under <a href='javascript:'><b>" . $sponsor_sponsor->slot_no . "</b></a>.";
+			break;
+
+			case 'BINARY':
+				$sponsor = Tbl_mlm_slot::where("slot_id", $reward->wallet_log_slot_sponsor)->first();
+				$sponsor_sponsor = Tbl_mlm_slot::where("slot_id", $sponsor->slot_placement)->first();
+				$message = "You earned <b>" . Currency::format($reward->wallet_log_amount) . "</b> from <b><a href='javascript:'>pairing bonus</a></b> because of pairing under <a href='javascript:'><b>" . $sponsor_sponsor->slot_no . "</b></a>.";
 			break;
 
 			default:
-				$message = "NOTIFICATION UNKNOWN";
+				$message = $reward->wallet_log_plan;
 			break;
 		}
 
@@ -317,7 +357,7 @@ class MLM2
 		{
 			$slot_id    	  = Tbl_mlm_slot::insertGetId($insert);
 			$sponsor_slot 	  = Tbl_mlm_slot::where("slot_id",$sponsor)->where("shop_id",$shop_id)->first();
-			$customer_sponsor = Tbl_customer::where("shop_id",$shop_id)->where("customer_id",$sponsor_slot->slow_owner)->first();
+			$customer_sponsor = Tbl_customer::where("shop_id",$shop_id)->where("customer_id",$sponsor_slot->slot_owner)->first();
 
 			if($customer_sponsor->downline_rule == "auto")
 			{
@@ -528,7 +568,7 @@ class MLM2
 
         return "success";
     }
-    public static function check_placement_exist($shop_id,$placement,$position)
+    public static function check_placement_exist($shop_id,$placement,$position,$self_downline = 0,$self_owner = null)
     {
         $count_tree_if_exist 		= Tbl_tree_placement::where('placement_tree_position', $position)
                         								->where('placement_tree_parent_id', $placement)
@@ -538,7 +578,38 @@ class MLM2
 	    if($count_tree_if_exist != 0 || !$placement ||  !$position)
 	    {
 	    	return 1;
-	    }   
+	    } 
+	    else if ($self_downline == 1)
+	    {
+	    	/* IF DOWNLINE ONLY OF $SELF_OWNER*/
+		    $check_shop_slot            = Tbl_mlm_slot::where("slot_id",$placement)->where("shop_id",$shop_id)->where("slot_placement","!=",0)->first();
+		    if($check_shop_slot)
+		    {	
+		    	if($check_shop_slot->slot_sponsor == $self_owner)
+		    	{
+		    		return 0;
+		    	}
+		    	else
+		    	{
+		    		$owned = Tbl_tree_placement::where('placement_tree_parent_id', $self_owner)
+		    								   ->where('placement_tree_child_id',$placement)
+                							   ->where('shop_id', $shop_id)
+                							   ->first();
+                    if($owned)
+                    {
+                    	return 0;
+                    }            
+                    else
+                    {
+                    	return 1;
+                    }    							   
+		    	}
+		    }
+		    else
+		    {	
+	    		return 1;
+		    }
+	    }  
 	    else
 	    {
 		    $check_shop_slot            = Tbl_mlm_slot::where("slot_id",$placement)->where("shop_id",$shop_id)->where("slot_placement","!=",0)->first();

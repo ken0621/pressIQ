@@ -23,7 +23,7 @@
 						<div class="text">
 							<div class="name">{{ $customer->first_name }} {{ $customer->last_name }}</div>
 							<div class="sub"><i>{{ $customer->email }}</i></div>
-							<div class="sub"><b>PHP 0.00</b></div>
+							<div class="sub hidden"><b>PHP 0.00</b></div>
 						</div>
 					</div>
 				</div>
@@ -35,14 +35,40 @@
 						<li class="{{ Request::segment(2) == "profile" ? "active" : "" }}">
 							<a href="/members/profile"><div class="nav-holder"><div class="icon brown-icon-profile"></div> <span>Profile</span></div></a>
 						</li>
-						<li class="{{ Request::segment(2) == "notification" ? "active" : "" }}">
-							<a href="/members/notification"><div class="nav-holder"><div class="icon brown-icon-bell-o"></div> <span>Notification</span></div></a>
-						</li>
+<!-- 						<li class="{{ Request::segment(2) == "notification" ? "active" : "" }}">
+							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-gift"></div> <span>Rewards</span></div></a>
+							<ul>
+								<li>
+									<a href="/members/wallet-logs"><div class="icon nav-holder">Pairing Rewaard</div></a>
+								</li>
+								<li>
+									<a href="/members/wallet-encashment"><div class="icon nav-holder"> Direct Referral</div></a>
+								</li>
+								<li>
+									<a href="/members/wallet-encashment"><div class="icon nav-holder"> Builder Reward</div></a>
+								</li>
+								<li>
+									<a href="/members/wallet-encashment"><div class="icon nav-holder"> Leader Reward</div></a>
+								</li>
+							</ul>
+						</li> -->
 						<li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}">
-							<a href="/members/genealogy"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Genealogy</span></div></a>
+							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Genealogy</span></div></a>
+							<ul>
+								<li>
+									<a href="/members/genealogy?mode=binary"><div class="nav-holder"> &nbsp;&nbsp;Brown Tree</div></a>
+								</li>
+								<li>
+									<a href="/members/genealogy?mode=sponsor"><div class="nav-holder"> &nbsp;&nbsp;Solid Tree</div></a>
+								</li>
+
+							</ul>
 						</li>
 						<li class="{{ Request::segment(2) == "report" ? "active" : "" }}">
 							<a href="/members/report"><div class="nav-holder"><div class="icon brown-icon-bar-chart"></div> <span>Reports</span></div></a>
+						</li>
+						<li class="{{ Request::segment(2) == "network" ? "active" : "" }}">
+							<a href="/members/network"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Network List</span></div></a>
 						</li>
 						<li class="{{ Request::segment(2) == "wallet-logs" || Request::segment(2) == "wallet-encashment" ? "active" : "" }}">
 							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-wallet"></div> <span>Wallet</span></div></a>
@@ -55,10 +81,10 @@
 								</li>
 							</ul>
 						</li>
-						<li class="{{ Request::segment(2) == "slot" ? "active" : "" }}">
+<!-- 						<li class="{{ Request::segment(2) == "slot" ? "active" : "" }}">
 							<a href="/members/slot"><div class="nav-holder"><div class="icon brown-icon-cubes"></div> <span>My Slots</span></div></a>
-						</li>
-						<li class="{{ Request::segment(2) == "eon-card" ? "active" : "" }}">
+						</li> -->
+<!-- 						<li class="{{ Request::segment(2) == "eon-card" ? "active" : "" }}">
 							<a href="/members/eon-card"><div class="nav-holder"><dic class="icon brown-icon-credit-card"></dic> <span>Eon Card</span></div></a>
 						</li>
 						<li class="{{ Request::segment(2) == "order" ? "active" : "" }}">
@@ -66,7 +92,7 @@
 						</li>
 						<li class="{{ Request::segment(2) == "wishlist" ? "active" : "" }}">
 							<a href="/members/wishlist"><div class="nav-holder"><div class="icon brown-icon-heart-empty"></div> <span>Wishlist</span></div></a>
-						</li>
+						</li> -->
 					</ul>
 				</div>
 			</div>
@@ -76,6 +102,11 @@
 		</div>
 	</div>
 </div>
+
+
+
+
+
 @endsection
 @section("css")
 @yield("member_css")

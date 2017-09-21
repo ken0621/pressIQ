@@ -12,16 +12,12 @@
 				<div class="profile-status">
 					<table>
 						<tr>
-							<td class="green">
-								<div class="status-number">0</div>
-								<div class="status-label">Direct Employee</div>
-							</td>
 							<td class="blue">
-								<div class="status-number">0</div>
-								<div class="status-label">Active Slot</div>
+								<div class="status-number">{{ $customer_summary["display_slot_count"] }}</div>
+								<div class="status-label">Slot Owned</div>
 							</td>
 							<td class="orange">
-								<div class="status-number">P 0.00</div>
+								<div class="status-number">{{ $wallet->display_current_wallet }}</div>
 								<div class="status-label">Current Wallet</div>
 							</td>
 						</tr>
@@ -83,7 +79,9 @@
 				   <li class="active"><a data-toggle="tab" href="#basic_info">Basic Info</a></li>
 				   <li><a data-toggle="tab" href="#contact_info">Reward Configuration</a></li>
 				   <li><a data-toggle="tab" href="#profile_picture">Profile Picture</a></li>
+				   @if($allowed_change_pass)
 				   <li><a data-toggle="tab" href="#password">Password</a></li>
+				   @endif
 				</ul>
 				<div class="tab-content">
 				   <div id="basic_info" class="tab-pane fade in active">
@@ -228,6 +226,7 @@
 						</div>
 					</form>
 				   </div>
+				   @if($allowed_change_pass)
 				   <div id="password" class="tab-pane fade">
 					   	<div class="profile_password_success_message hidden">
 							<div class="alert alert-success">
@@ -246,12 +245,16 @@
 					   		<div class="row clearfix">
 					   			<div class="col-md-12">
 					   				<div class="form-group">
+							   			<label>Old Password</label>
+							   			<input type="password" class="form-control" name="old_password">
+							   		</div>
+					   				<div class="form-group">
 							   			<label>Password</label>
-							   			<input type="password" class="form-control" name="password" value="{{ Crypt::decrypt($profile->password) }}">
+							   			<input type="password" class="form-control" name="password">
 							   		</div>
 							   		<div class="form-group">
 							   			<label>Confirm Password</label>
-							   			<input type="password" class="form-control" name="password_confirmation" value="{{ Crypt::decrypt($profile->password) }}">
+							   			<input type="password" class="form-control" name="password_confirmation">
 							   		</div>
 					   			</div>
 						   		<div class="col-md-12">
@@ -262,6 +265,7 @@
 					   		</div>
 					   </form>
 				   </div>
+				   @endif
 				</div>
 			</div>
 		</div>

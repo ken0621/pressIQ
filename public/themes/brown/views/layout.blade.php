@@ -106,7 +106,7 @@
                         @if($customer)
                             <li class="{{ Request::segment(1) == "members" ? "active" : "" }}"><a href="/members">My Account</a></li>
                         @endif
-                      <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a href="/">Brown</a></li>
+                      <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a href="/product">Brown</a></li>
                       <li class="{{ Request::segment(1) == "product" ? "active" : "product" }}"><a href="/product">Phone Accessories</a></li>
                       <li><a href="#">Internet Of Things</a></li>
                       <li><a href="#">Health Technology</a></li>
@@ -176,7 +176,7 @@
                             </ul>
                         </li>
                         <li>
-                            <a href="#" class="cart-holder">
+                            <a href="#" class="cart-holder show-cart">
                                 <div class="brown-icon-shopping-cart"></div> <span>Cart (0 items)</span>
                             </a>
                         </li>
@@ -265,7 +265,7 @@
                             </li>
                         </ul>
                     </div>
-                    <a href="#" class="cart-holder" style="text-decoration: none;">
+                    <a href="#" class="cart-holder show-cart" style="text-decoration: none;">
                         <!-- <img style="width: 30px; height: 20px;" src="/themes/{{ $shop_theme }}/img/cart-blur.png"> <span class="badge">500</span> -->
                        <div class="brown-icon-shopping-cart"></div> <span class="badge">500</span>
                     </a>
@@ -397,6 +397,68 @@
     </div>
     {{-- END FOOTER --}}
 
+
+    {{-- START GLOBALS POPUP --}}
+    <div class="popup-buy-a-kit">
+        <div id="buy-a-kit-modal" class="modal fade shopping-cart">
+            <div class="modal-lg modal-dialog">
+                <div class="modal-content cart">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title"><img src="/themes/{{ $shop_theme }}/img/cart.png"> My Shopping Cart</h4>
+                    </div>
+                    <div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Product Name</th>
+                                    <th>Unit Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><img src="/themes/{{ $shop_theme }}/img/brown-cart-img1.png"></td>
+                                    <td>P 9,500.00</td>
+                                    <td>P 9,500.00</td>
+                                    <td>
+                                        <input class="item-qty" name="quantity" min="1" step="1" value="1"  type="number"></td>
+                                        <td>P 9,500.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td><img src="/themes/{{ $shop_theme }}/img/brown-cart-img1.png"></td>
+                                        <td>P 9,500.00</td>
+                                        <td>P 9,500.00</td>
+                                        <td>
+                                            <input class="item-qty" name="quantity" min="1" step="1" value="1"  type="number">
+                                        </td>
+                                        <td>P 9,500.00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer row clearfix">
+                            
+                            <div class="col-md-8">
+                                <div class="left-btn-container">
+                                    <div><i class="fa fa-long-arrow-left" aria-hidden="true">&nbsp;</i>&nbsp;Continue Shopping</div>
+                                    <button class="btn-checkout" onclick="location.href='/members/checkout'">Checkout</button>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="total">Total: P 9,500.00</div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- END GLOBALS POPUP --}}
+
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
     <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/bootstrap.min.js"></script>
@@ -409,6 +471,7 @@
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://apis.google.com/js/api:client.js"></script>
+    <script type="text/javascript" src="/assets/js/cart.js"></script>
 
     <script type="text/javascript">
       $(".date-picker").datepicker({

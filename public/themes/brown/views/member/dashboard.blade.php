@@ -34,7 +34,7 @@
 	        <div class="text-header">Profile Information</div>
 	        <div class="row clearfix">
 	            <div class="col-md-4">
-	                <div class="profile-info-container pic1">
+	                <div class="profile-info-container pic1 match-height">
 	                    <div class="icon-container">
 	                        <div class="col-md-2">
 	                            <img src="/themes/{{ $shop_theme }}/img/brown-personal-info.png">
@@ -53,7 +53,7 @@
 	                </div>
 	            </div>
 	            <div class="col-md-4">
-	                <div class="profile-info-container pic2">
+	                <div class="profile-info-container pic2 match-height">
 	                    <div class="icon-container">
 	                        <div class="col-md-2">
 	                            <img src="/themes/{{ $shop_theme }}/img/brown-default-shipping.png">
@@ -66,7 +66,7 @@
 	                </div>
 	            </div>
 	            <div class="col-md-4">
-	                <div class="profile-info-container pic3">
+	                <div class="profile-info-container pic3 match-height">
 	                    <div class="icon-container">
 	                        <div class="col-md-2">
 	                            <img src="/themes/{{ $shop_theme }}/img/brown-default-billing.png">
@@ -85,7 +85,7 @@
 	<div class="dashboard">
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="title"><i class="fa fa-bar-chart-o"></i> Wallet Summary</div>
+				<div class="title"><i class="align-icon brown-icon-bar-chart"></i> Wallet Summary</div>
 				<div class="sub-container">
 					<div class="table-holder">
 						<div class="chart-legend">
@@ -179,6 +179,7 @@
 					</div>
 				</div>
 			</div>
+
 			<div class="col-md-6">
 				<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
 				<div class="sub-container">
@@ -203,9 +204,9 @@
 
 				</div>
 
-				<div class="title"><i class="fa fa-gift"></i> Reward Points</div>
+				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
 				<div class="sub-container">
-					<div class="chart-legend">
+					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
 						<div class="holder">
 							<div class="color"></div>
 							<div class="name"><span>Builder Point(s)</span> {{ $points->display_brown_builder_points }}</div>
@@ -216,9 +217,13 @@
 						</div>
 					</div>
 				</div>
+			</div>
+		</div>
+		<div class="row clearfix">
 
+			<div class="col-md-12">
 				<div class="unilevel-holder">
-					<div class="title"><i class="fa fa-star"></i> My Slot(s) <a href="javascript:" class="title-button pull-right btn-enter-a-code">Add New Slot</a></div>
+					<div class="title"><i class="align-icon brown-icon-star"></i> My Slot(s) <a href="javascript:" class="title-button pull-right btn-enter-a-code">Add New Slot</a></div>
 					<div class="sub-container">
 						@foreach($_slot as $slot)
 						<div class="holder">
@@ -227,11 +232,27 @@
 									<div class="label2">{{ $slot->slot_no }}</div>
 									<div class="label3">{{ $slot->display_total_earnings }}</div>
 								</div>
-								<div class="col-sm-8">
+								<div class="col-sm-8 text-center" style="margin-bottom: 5px;">ROAD TO <b>{{ $slot->brown_next_rank }}</b></div>
+								<div class="col-sm-4">
 									@if($slot->brown_next_rank != "NO NEXT RANK")
-									<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) {{ $slot->brown_rank_rank_percentage }}%, rgb(237, 237, 237) {{ $slot->brown_rank_rank_percentage }}%);">ROAD TO <b>{{ $slot->brown_next_rank }}</b> ({{ $slot->brown_next_rank_current }}/{{ $slot->brown_next_rank_requirements }})</div>
+										@if($slot->current_direct >= $slot->required_direct)
+											<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">DIRECT <b>QUALIFIED</b></div>
+										@else
+											<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) {{ $slot->brown_direct_rank_percentage }}%, rgb(237, 237, 237) {{ $slot->brown_direct_rank_percentage }}%);">DIRECT ({{ $slot->current_direct }}/{{ $slot->required_direct }})</div>
+										@endif
 									@else
-									<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 40%);">YOU ARE A <b>LEADER</b></div>
+									<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 40%);">NO MORE <b> NEXT RANK</b></div>
+									@endif
+								</div>
+								<div class="col-sm-4">
+									@if($slot->brown_next_rank != "NO NEXT RANK")
+										@if($slot->brown_next_rank_current >= $slot->brown_next_rank_requirements)
+											<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">GROUP <b>QUALIFIED</b></div>
+										@else
+											<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) {{ $slot->brown_rank_rank_percentage }}%, rgb(237, 237, 237) {{ $slot->brown_rank_rank_percentage }}%);">GROUP ({{ $slot->brown_next_rank_current }}/{{ $slot->brown_next_rank_requirements }})</div>
+										@endif
+									@else
+									<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 40%);">NO MORE <b> NEXT RANK</b></div>
 									@endif
 								</div>
 							</div>
@@ -243,7 +264,7 @@
 		</div>
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="title"><i class="fa fa-globe"></i> Newest Enrollee(s) Sponsored</div>
+				<div class="title"><i class="align-icon brown-icon-globe"></i> Newest Enrollee(s) Sponsored</div>
 				<div class="sub-container border-holder">
 					<div class="clearfix wow hidden">
 						<div class="badge right">6 New Members</div>
@@ -273,7 +294,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="match-height">
-					<div class="title"><i class="fa fa-money"></i> Recent Rewards <a href="javascript:" class="title-button pull-right">View All Rewards</a></div>
+					<div class="title"><i class="align-icon brown-icon-money"></i> Recent Rewards <a href="javascript:" class="title-button pull-right">View All Rewards</a></div>
 					<div class="sub-container">
 						<div class="activities">
 							@foreach($_recent_rewards as $recent_reward)
@@ -298,6 +319,8 @@
 				</div>
 			</div>
 		</div>
+
+
 	    <!-- Success -->
 	    <div class="popup-success">
 	        <div id="success-modal" class="modal success-modal fade">
@@ -315,65 +338,6 @@
 	</div>
 @endif
 
-<!-- POPUP BUY KIT -->
-<div class="popup-buy-a-kit">
-    <div id="buy-a-kit-modal" class="modal fade">
-        <div class="modal-lg modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"><img src="/themes/{{ $shop_theme }}/img/cart.png"> My Shopping Cart</h4>
-                </div>
-                <div>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Image</th>
-                                <th>Product Name</th>
-                                <th>Unit Price</th>
-                                <th>Quantity</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><img src="/themes/{{ $shop_theme }}/img/brown-cart-img1.png"></td>
-                                <td>P 9,500.00</td>
-                                <td>P 9,500.00</td>
-                                <td>
-                                    <input class="item-qty" name="quantity" min="1" step="1" value="1"  type="number"></td>
-                                    <td>P 9,500.00</td>
-                                </tr>
-                                <tr>
-                                    <td><img src="/themes/{{ $shop_theme }}/img/brown-cart-img1.png"></td>
-                                    <td>P 9,500.00</td>
-                                    <td>P 9,500.00</td>
-                                    <td>
-                                        <input class="item-qty" name="quantity" min="1" step="1" value="1"  type="number">
-                                    </td>
-                                    <td>P 9,500.00</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer row clearfix">
-                        
-                        <div class="col-md-8">
-                            <div class="left-btn-container">
-                                <div><i class="fa fa-long-arrow-left" aria-hidden="true">&nbsp;</i>&nbsp;Continue Shopping</div>
-                                <button class="btn-checkout">Checkout</button>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="total">Total: P 9,500.00</div>
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <!--  Enter a code -->
 <div class="popup-enter-a-code">
     <div id="enter-a-code-modal" class="modal fade">

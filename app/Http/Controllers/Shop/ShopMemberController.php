@@ -11,6 +11,7 @@ use File;
 use Carbon\Carbon;
 use App\Globals\Payment;
 use App\Globals\Customer;
+use App\Globals\MemberSlotGenealogy;
 use App\Rules\Uniqueonshop;
 use App\Globals\MLM2;
 use App\Globals\FacebookGlobals;
@@ -298,12 +299,23 @@ class ShopMemberController extends Shop
     /* LOGIN AND REGISTRATION - END */
     public function getProfile()
     {
-        $data["page"] = "Profile";
-        $data["mlm"] = isset(Self::$customer_info->ismlm) ? Self::$customer_info->ismlm : 0;
-        $data["profile"]         = Tbl_customer::shop(Self::$customer_info->shop_id)->where("tbl_customer.customer_id", Self::$customer_info->customer_id)->first();
-        $data["profile_address"] = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->first();
-        $data["profile_info"]    = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();
-        $data["_country"]        = Tbl_country::get();
+        $data["page"]                = "Profile";
+        $data["mlm"]                 = isset(Self::$customer_info->ismlm) ? Self::$customer_info->ismlm : 0;
+        $data["profile"]             = Tbl_customer::shop(Self::$customer_info->shop_id)->where("tbl_customer.customer_id", Self::$customer_info->customer_id)->first();
+        $data["profile_address"]     = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->first();
+        $data["profile_info"]        = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();
+        $data["_country"]            = Tbl_country::get();
+        // $data["allowed_change_pass"] = isset(Self::$customer_info->signup_with) ? (Self::$customer_info->signup_with == "member_register" ? true : false) : false;
+      
+
+        if(Self::$customer_info)
+        {
+            $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
+            $data["wallet"]             = $data["customer_summary"]["_wallet"];
+        }
+
+
+        $data["allowed_change_pass"] = true;
 
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.profile", $data));
     }
@@ -447,46 +459,108 @@ class ShopMemberController extends Shop
      public function postProfileUpdatePassword(Request $request)
     {
         $form = $request->all();
-        $validate['password'] = 'required|confirmed|min:6';
-        $validator = Validator::make($form, $validate);
-        
-        if (!$validator->fails()) 
-        {           
-            $insert_customer["password"]  = Crypt::encrypt($request->password);
 
-            Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
-                        ->shop(Self::$customer_info->shop_id)
-                        ->update($insert_customer);
+        $old = $request->old_password;
+        $new = Crypt::decrypt(Tbl_customer::where("customer_id", Self::$customer_info->customer_id)->where("shop_id", $this->shop_info->shop_id)->value("password"));
 
-            $email = Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
-                        ->shop(Self::$customer_info->shop_id)
-                        ->value('email');
-
-            $pass = $request->password;
-
-            Self::store_login_session($email,$pass);
+        if ($old == $new) 
+        {
+            $validate['password'] = 'required|confirmed|min:6';
+            $validator = Validator::make($form, $validate);
             
-            echo json_encode("success");
+            if (!$validator->fails()) 
+            {           
+                $insert_customer["password"]  = Crypt::encrypt($request->password);
+
+                Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
+                            ->shop(Self::$customer_info->shop_id)
+                            ->update($insert_customer);
+
+                $email = Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
+                            ->shop(Self::$customer_info->shop_id)
+                            ->value('email');
+
+                $pass = $request->password;
+
+                Self::store_login_session($email,$pass);
+                
+                echo json_encode("success");
+            }
+            else
+            {
+                $result = $validator->errors();
+                echo json_encode($result);
+            }
         }
         else
         {
-            $result = $validator->errors();
+            $result[0] = "Old password mismatched.";
             echo json_encode($result);
         }
     }
     public function getNotification()
     {
         $data["page"] = "Notification";
+        $data["_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.notification", $data));
     }
-    public function getGenealogy()
+    public function getGenealogy(Request $request)
     {
         $data["page"] = "Genealogy";
+        $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
+        $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();
+        $data['slot_no'] = 0;
+        $data['mode'] = 'sponsor';
+        if($slot)
+        {
+            $data['slot_no'] = $slot->slot_no;
+            $data['mode'] = $request->mode;
+        }
+
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.genealogy", $data));
+    }
+    public function getGenealogyTree(Request $request)
+    {
+        $slot_no  = $request->slot_no;
+        $shop_id  = $this->shop_info->shop_id;
+        $mode = $request->mode;
+
+        $check = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->where('slot_no',$slot_no)->where('shop_id',$shop_id)->first();
+
+        if($check)
+        {
+            $data = MemberSlotGenealogy::tree($shop_id, $check->slot_id, $mode);
+            return view('member.genealogy_tree', $data);            
+        }
+        else
+        {
+            die('Invalid slot!');
+        }
+    }
+    public function getGenealogyDownline(Request $request)
+    {
+        $data = MemberSlotGenealogy::downline($request->x, $request->mode);
+        return $data;
+    }
+    public function getNetwork()
+    {
+        $data["page"] = "Network List";
+
+        if(request()->input("slot_no") == "")
+        {
+            $slot_no = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->value("slot_no");
+            return Redirect::to("/members/network?slot_no=" . $slot_no);
+        }
+        else
+        {
+            $data["_tree"] = MLM2::get_sponsor_network($this->shop_info->shop_id, request()->input("slot_no"));
+            return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.network", $data));
+        }
     }
     public function getReport()
     {
         $data["page"] = "Report";
+        $data["_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.report", $data));
     }
     public function getWalletLogs()
@@ -761,7 +835,7 @@ class ShopMemberController extends Shop
             $check_sponsor = Tbl_mlm_slot::where("slot_id",$check_sponsor->slot_sponsor)->where("shop_id",$shop_id)->first();
             if($check_sponsor->slot_owner == Self::$customer_info->customer_id)
             {
-                $check_placement = MLM2::check_placement_exist($shop_id,$slot_placement,$slot_position);
+                $check_placement = MLM2::check_placement_exist($shop_id,$slot_placement,$slot_position,1,$check_sponsor->slot_id);
                 if($check_placement == 0)
                 {
                     $data["target_slot"] = Tbl_mlm_slot::where("slot_id",$slot_id)->customer()->first();

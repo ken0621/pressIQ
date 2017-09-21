@@ -7,53 +7,40 @@
 				<div class="brown-icon-bell-o"></div>
 			</div>
 			<div class="text">
-				<div class="name">Notifications</div>
-				<div class="sub">All income notification are shown here. </div>
+				<div class="name">Rewards</div>
+				<div class="sub">All rewards notification are shown here. </div>
 			</div>
 		</div>
 		<div class="right">
 			<div class="search">
-				<input type="text" name="" class="form-control" placeholder="Search By Name or Slot #">
-				<img src="/themes/{{ $shop_theme }}/img/search-icon.png">
+				<select class="form-control">
+					<option>All Slots</option>
+				</select>
 			</div>
 		</div>
 	</div>
 	<div class="notification-content">
-		<div class="holder">
-			<div class="member-info clearfix">
-				<div class="left">
-					<div class="pic">
-						<img src="/themes/{{ $shop_theme }}/img/profile-nav.png">
-					</div>
-					<div class="text">
-						<div class="name">Mr. Brown Lorem Ipsum</div>
-						<div class="date">2017-09-01 03:20:47</div>
-					</div>
-				</div>
-				<div class="right">
-					<div class="read"><img src="/themes/{{ $shop_theme }}/img/read.png"></div>
-				</div>
-			</div>
-			<div class="desc">Sorry, Your Slot has already reached the max level for matrix. Slot 111133's pairing reward will not be added. </div>
-		</div>
-		<div class="holder">
-			<div class="member-info clearfix">
-				<div class="left">
-					<div class="pic">
-						<img src="/themes/{{ $shop_theme }}/img/profile-nav.png">
-					</div>
-					<div class="text">
-						<div class="name">Mr. Brown Lorem Ipsum</div>
-						<div class="date">2017-09-01 03:20:47</div>
-					</div>
-				</div>
-				<div class="right">
-					<div class="read">
-						<button class="btn btn-orange">Mark As Read</button>
-					</div>
-				</div>
-			</div>
-			<div class="desc">Sorry, Your Slot has already reached the max level for matrix. Slot 111133's pairing reward will not be added. </div>
+		<div class="table table-responsive table-condensed">
+		  	<table class="table">
+		  		<thead>
+		  			<tr>
+		  				<th class="text-left" width="200px">SLOT</th>
+		  				<th class="text-left">DETAILS</th>
+		  				<th class="text-right">AMOUNT</th>
+		  			</tr>
+		  		</thead>
+		  		<tbody>
+		  			@foreach($_rewards as $reward)
+		  			<tr>
+		  				<td class="text-left">
+		  					<div>{{ $reward->slot_no }}</div>
+		  				</td>
+		  				<td class="text-left">{!! $reward->log !!}</td>
+		  				<td class="text-right"><a href="javascript:"><b>{!! $reward->display_wallet_log_amount !!}</b></a></td>
+		  			</tr>
+		  			@endforeach
+		  		</tbody>
+		  	</table>
 		</div>
 	</div>
 </div>

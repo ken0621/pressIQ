@@ -129,7 +129,7 @@ class Mlm_complan_manager_repurchasev2
             }
 
             /* PERCENTAGE OVERRIDING */
-            $leader_percentage = $leader_percentage - $trigger_percentage;
+            //$leader_percentage = $leader_percentage - $trigger_percentage;
 
             /* START COMPUTE */
             $compute_points = $amount * $leader_percentage;

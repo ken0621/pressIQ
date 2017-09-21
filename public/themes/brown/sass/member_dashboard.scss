@@ -1,28 +1,55 @@
+$content-text: 'Arimo', sans-serif;
+$regular: 400;
+$semi-bold: 600;
+$bold: 700;
+$text-light: #777;
+$text-dark: #272c2f;
+
+@mixin transition($transition)
+{
+	  -webkit-transition: all $transition ease-in-out;
+	  -moz-transition: all $transition ease-in-out;
+	  -o-transition: all $transition ease-in-out;
+	  transition: all $transition ease-in-out;
+}
+
 .dashboard
 {
-	font-family: "Arimo";
+	font-family: $content-text;
+
+	.align-icon
+	{
+		vertical-align: middle;
+		display: inline-block;
+	}
+
+	.brown-icon-money
+	{
+		margin-top: -7px;
+	}
+
 	.title
 	{
 		color: #000;
-		font-size: 18px;
+		font-size: 21px;
 		letter-spacing: 0.5px;
 		font-weight: normal;
-		background-color: #eee;
+		background-color: #fff;
 		padding: 5px 15px;
 		margin-top: 5px;
 		border: 1px solid #ddd;
+
 		.title-button
 		{
+			//mixin
+			@include transition(0.2s);
+
 			font-weight: bold;
 			font-size: 14px;
 			text-decoration: none;
 			margin-top: 3px;
 			text-transform: uppercase;
 			opacity: 0;
-			  -webkit-transition: all 0.2s ease-in-out;
-			  -moz-transition: all 0.2s ease-in-out;
-			  -o-transition: all 0.2s ease-in-out;
-			  transition: all 0.2s ease-in-out;
 		}
 
 		&:hover
@@ -33,14 +60,16 @@
 			}
 		}
 	}
+
 	.sub-container
 	{
 		padding: 10px 20px;
 		border: 1px solid #ddd;
 		margin-top: -1px;
-		background-color: #fafafa;
+		background-color: #fff;
 		margin-bottom: 10px;
 	}
+
 	.table-holder
 	{
 		.table
@@ -92,9 +121,10 @@
 	}
 	.chart-legend
 	{
+
 		.holder
 		{
-			font-size: 16px;
+			font-size: 15px;
 
 			.color
 			{
@@ -109,11 +139,12 @@
 			{
 				display: inline-block;
 				vertical-align: middle;
-				font-size: 16px;
+				font-size: 15px;
 				letter-spacing: 0.5px;
 				font-weight: bold;
-				font-family: "Arimo";
+				font-family: $content-text;
 				color: #3E95CD;
+
 				span
 				{
 					color: #333;
@@ -124,6 +155,7 @@
 			}
 		}
 	}
+
 	.chart-holder
 	{
 		margin: 20px;
@@ -133,12 +165,16 @@
 			margin: auto !important;
 		}
 	}
+
 	.unilevel-holder
 	{
 		
 		.holder
 		{
 			margin-bottom: 7.5px;
+			border-bottom: 1px solid #eee;
+			padding-bottom: 10px;
+
 			.label2
 			{
 				color: #344049;
@@ -159,6 +195,7 @@
 			&:last-child
 			{
 				margin-bottom: 0;
+				border-bottom: none;
 			}
 		}
 	}

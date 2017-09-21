@@ -78,7 +78,16 @@ button
 	}
 }
 
-
+.side-nav-dim
+{
+	background-color: rgba(0,0,0,0.4);
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 1000;
+}
 
 /* Buy a kit */
 .popup-buy-a-kit
@@ -555,6 +564,10 @@ header
 				text-decoration: none;
 			}
 		}
+		@media screen and (max-width: 991px)
+		{
+			display: none;
+		}
 	}
 	.header-middle
 	{
@@ -658,6 +671,10 @@ header
 							background-color: #fff;
 						}
 					}
+					.open-side-bar
+					{
+
+					}
 				}
 				.nav.navbar-nav
 				{
@@ -714,6 +731,10 @@ header
 	{
 		float: left;
 		padding: 15px 0;
+		@media screen and (max-width: 991px)
+		{
+			display: none;
+		}
 		img
 		{
 			display: inline-block;
@@ -824,6 +845,33 @@ header
 				font-size: 20px;
 				color: #dac5a6;
 				height: 21px;
+			}
+		}
+		.open-side-bar
+		{
+			display: none;
+			.icon-bar
+			{
+				background-color: #fff;
+			}
+		}
+		@media screen and (max-width: 991px)
+		{
+			.notif-holders
+			{
+				display: none;
+			}
+			.cart-holder
+			{
+				display: none;
+			}
+			.holder
+			{
+				display: none;
+			}
+			.open-side-bar
+			{
+				display: block;
 			}
 		}
 	}

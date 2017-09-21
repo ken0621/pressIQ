@@ -30,7 +30,7 @@
         <!-- CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/drawer.css">
         <!-- Brown Custom Icon -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/brown-icon/styles.css">
 
@@ -40,6 +40,20 @@
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
+
+    {{-- SIDE NAV --}}
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        @if($customer)
+            <a class="{{ Request::segment(1) == "members" ? "active" : "" }}" href="/members">My Account</a>
+        @endif
+        <a class="{{ Request::segment(1) == "" ? "active" : "" }}" href="/product">Brown</a>
+        <a class="{{ Request::segment(1) == "product" ? "active" : "product" }}" href="/product">Phone Accessories</a>
+        <a href="#">Internet Of Things</a>
+        <a href="#">Health Technology</a>
+    </div>
+
+    <div class="side-nav-dim" style="display: none;"></div>
 
     {{-- HEADER --}}
     <header>
@@ -95,7 +109,12 @@
             <nav class="navbar">
               <div class="container">
                 <div class="navbar-header">
-                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                  {{-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>                        
+                  </button> --}}
+                  <button type="button" class="navbar-toggle open-side-bar" onClick="openNav();">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>                        
@@ -307,13 +326,18 @@
                         <a class="holder" href="/members/register">JOIN THE MOVEMENT</a>
                         <a class="holder" href="/members/login">LOGIN</a>
                     @endif
+                    <button type="button" class="navbar-toggle open-side-bar" onClick="openNav();">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>                        
+                    </button>
                 </div>
             </div>
         </div>
     </div>
     {{-- END HEADER --}}
 
-    <div class="main-content-scroll">
+    <div class="main-content-scroll" id="main">
         @yield("content")
     </div>
 
@@ -472,6 +496,7 @@
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://apis.google.com/js/api:client.js"></script>
     <script type="text/javascript" src="/assets/js/cart.js"></script>
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/drawer.js"></script>
 
     <script type="text/javascript">
       $(".date-picker").datepicker({

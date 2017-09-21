@@ -76,6 +76,10 @@
 			z-index: 10;
 			transition: 0.3s all ease;
 			// overflow: hidden;
+			@media screen and (max-width: 500px)
+			{
+				display: none;
+			}
 			.shadow
 			{
 				position: absolute;
@@ -346,6 +350,10 @@
 		{
 			margin-left: 80px;
 			padding: 15px;
+			@media screen and (max-width: 500px)
+			{
+				margin-left: 0;
+			}
 			.main-member-header
 			{
 				.left

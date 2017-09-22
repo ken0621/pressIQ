@@ -28,6 +28,8 @@
         <link href="/themes/{{ $shop_theme }}/css/{{ $shop_theme_color }}.css" rel="stylesheet" type="text/css">
         <!-- PARALLAX -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/parallax.css">
+        <!-- Brown Custom Icon -->
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/brown-icon/styles.css">
         
         <!-- LIGHTBOX -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/lightbox/css/lightbox.css">

@@ -28,6 +28,8 @@
         <link href="/themes/{{ $shop_theme }}/css/{{ $shop_theme_color }}.css" rel="stylesheet" type="text/css">
         <!-- PARALLAX -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/parallax.css">
+        <!-- Brown Custom Icon -->
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/brown-icon/styles.css">
         
         <!-- LIGHTBOX -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/lightbox/css/lightbox.css">
@@ -59,7 +61,7 @@
     <div class="subheader-container">
         <div class="container">
             <div class="left-container"><span><i class="fa fa-heart-o" aria-hidden="true"></i></span><span>BECOME A MEMBER</span></div>
-            <div class="right-container"><span>LOGIN</span><span>REGISTER</span></div>
+            <div class="right-container"><span style="cursor: pointer;" onClick="location.href='/members/login'">LOGIN</span><span style="cursor: pointer;" onClick="location.href='/members/register'">REGISTER</span></div>
         </div>
     </div>
     <div class="header-container">

@@ -43,23 +43,31 @@
 			</div>
 		</div>
 	</div>
+	<!-- WHY JCA -->
 	<div class="wrapper-2">
-		<div class="title-container">
+		<div class="container">
 			<div class="title-container">
-				<span>Why</span>
-				<span>JCA International</span>
+				<div class="title-container">
+					<span>Why</span>
+					<span>JCA International</span>
+				</div>
 			</div>
-		</div>
-		<div class="content-container row clearfix">
-			<div class="col-md-4">
-				<div class="per-image-container">
-					<img src="/themes/{{ $shop_theme }}/img/logo-caption.png">
+			<div class="content-container row clearfix">
+				<div class="col-md-4">
+					<div class="per-image-container">
+						<img src="/themes/{{ $shop_theme }}/img/we-believe.png">
+						<div class="content-text-container">
+							<h1>We Believe</h1>
+							<div class="title-line"></div>
+							<p>
+								
+							</p>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!-- WHY JCA -->
-	<div class="wrapper-2"></div>
 	<!-- BENEFITS IN JCA -->
 	<div class="wrapper-3"></div>
 	<!-- COMPANY MISISON VISION -->

@@ -88,6 +88,7 @@ body{
 
 /* WHY JCA */
 .wrapper-2 {
+	background-color: #f4f4f4;
 	font-family: $content-text;
 	padding: 25px 0px;
 	
@@ -108,6 +109,31 @@ body{
 		.per-image-container {
 			position: relative;
 			font-family: $content-text;
+			img {
+				width: 100%;
+			}
+
+			.content-text-container {
+				position: absolute;
+				top: 15%;
+				left: 15%;
+				color: #fff;
+
+				h1 {
+					font-family: $display-text;
+					font-size: 25px;
+					font-weight: $regular;
+				}
+
+				.title-line {
+					padding-top: 3px;
+					width: 20px;
+					background-color: #ffd185;
+				}
+				p {
+					
+				}
+			}
 		}
 	}
 }

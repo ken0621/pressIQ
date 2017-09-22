@@ -231,6 +231,7 @@
 								<div class="col-sm-4 text-center">
 									<div class="label2">{{ $slot->slot_no }}</div>
 									<div class="label3">{{ $slot->display_total_earnings }}</div>
+									<div class="label3">{{ $slot->current_direct }} / {{ $slot->brown_next_rank_current }}</div>
 								</div>
 								<div class="col-sm-8 text-center" style="margin-bottom: 5px;">ROAD TO <b>{{ $slot->brown_next_rank }}</b></div>
 								<div class="col-sm-4">

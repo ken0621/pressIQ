@@ -10,6 +10,8 @@ use App\Models\Tbl_mlm_plan;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_brown_rank;
 use App\Models\Tbl_tree_sponsor;
+use App\Models\Tbl_item;
+use App\Models\Tbl_mlm_item_points;
 use App\Globals\Mlm_tree;
 use App\Globals\Mlm_complan_manager;
 use App\Globals\Mlm_complan_manager_cd;
@@ -38,7 +40,8 @@ class MLM2
 		}
 
 		return $_tree;
-	}	public static function verify_sponsor($shop_id, $sponsor_key)
+	}	
+	public static function verify_sponsor($shop_id, $sponsor_key)
 	{
 
 		$slot_info = Tbl_mlm_slot::shop($shop_id)->where("slot_nick_name", $sponsor_key)->where("slot_defaul", 1)->first();
@@ -665,5 +668,38 @@ class MLM2
             $update_slot["distributed"] = 1;
             Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",$shop_id)->update($update_slot);
             // End Computation Plan
+	}
+	public static function purchase($shop_id, $slot_id, $item_id)
+	{
+		$data = MLM2::item_points($shop_id,$item_id);
+		if($data)
+		{
+			MLM_compute::repurchasev2($slot_id,$shop_id,$data);
+		}
+	}	
+	public static function item_points($shop_id,$item_id)
+	{
+        $item          = Tbl_item::where("item_id",$item_id)->where("shop_id",$shop_id)->first();  
+        $item_points   = Tbl_mlm_item_points::where("item_id",$item_id)->first();     
+        if($item)
+        {
+	        $data["UNILEVEL"]					= $item_points->UNILEVEL;
+			$data["REPURCHASE_POINTS"]			= $item_points->REPURCHASE_POINTS;
+			$data["UNILEVEL_REPURCHASE_POINTS"]	= $item_points->UNILEVEL_REPURCHASE_POINTS;
+			$data["REPURCHASE_CASHBACK"]		= $item_points->REPURCHASE_CASHBACK;
+			$data["DISCOUNT_CARD_REPURCHASE"]	= $item_points->DISCOUNT_CARD_REPURCHASE;
+			$data["STAIRSTEP"]					= $item_points->STAIRSTEP;
+			$data["BINARY_REPURCHASE"]			= $item_points->BINARY_REPURCHASE;
+			$data["STAIRSTEP_GROUP"]			= $item_points->STAIRSTEP_GROUP;
+			$data["RANK"]						= $item_points->RANK;
+			$data["RANK_GROUP"]					= $item_points->RANK_GROUP;
+			$data["price"]						= $item->item_price;
+
+			return $data;
+        }
+        else
+        {
+        	return null;
+        }
 	}
 }

@@ -213,7 +213,7 @@ class Reward
 
         $insert['shop_id'] = $request['shop_id'];
         $insert['slot_owner'] = $validate['slot_owner'];
-        $insert['slot_created_date'] = Carbon::now();
+        $insert['slot_created_date'] = $request["date_created"];
         $insert['slot_membership'] = $membership->membership_id;
         $insert['slot_status'] = $membership->membership_type;
         $insert['slot_sponsor'] = $validate['slot_sponsor'];

@@ -1,5 +1,6 @@
 var mlm_developer_import = new mlm_developer_import();
 var result_import;
+var range;
 
 function mlm_developer_import()
 {
@@ -33,6 +34,14 @@ function mlm_developer_import()
 	{
 		var import_data = {};
 
+    	$(".import-button").hide();
+		$(".show-progress").show();
+		var percentage = (pointer / range) * 100;
+
+		$(".show-progress .progress").css("width", percentage + "%");
+		console.log(percentage);
+
+
 		$target_source = $(".tr-slot-import-data[key=" + pointer + "]");
 
 		import_data["slot_no"] = $target_source.attr("slot_no");
@@ -40,6 +49,10 @@ function mlm_developer_import()
 		import_data["placement"] = $target_source.attr("placement");
 		import_data["position"] = $target_source.attr("position");
 		import_data["package_number"] = $target_source.attr("package_number");
+		import_data["email"] = $target_source.attr("email");
+		import_data["first_name"] = $target_source.attr("first_name");
+		import_data["last_name"] = $target_source.attr("last_name");
+		import_data["date_created"] = $target_source.attr("date_created");
 		import_data["_token"] = $(".import-token").val();
 
 		$target_source.find(".status").html("<span><i class='fa fa-spinner fa-pulse fa-fw'></i></span>");
@@ -119,8 +132,12 @@ function mlm_developer_import()
     	$.each(result_import, function(key, val)
     	{
 
-    		$append = 		"<tr class='tr-slot-import-data' key='" + key + "' slot_no='" + val["SLOT NO"] + "' sponsor='" + val["SPONSOR"] + "' placement='" + val["PLACEMENT"] + "' position ='" + val["POSITION"] + "' package_number='" + val["PACKAGE NUMBER"] + "' status='pending'>" +
+    		$append = 		"<tr class='tr-slot-import-data' key='" + key + "' email='" + val["EMAIL"] + "' first_name='" + val["FIRST NAME"] + "' last_name='" + val["LAST_NAME"] + "' date_created='" + val["DATE CREATED"] + "' slot_no='" + val["SLOT NO"] + "' sponsor='" + val["SPONSOR"] + "' placement='" + val["PLACEMENT"] + "' position ='" + val["POSITION"] + "' package_number='" + val["PACKAGE NUMBER"] + "' status='pending'>" +
+    							"<td class='text-center'>" + val["EMAIL"] + "</td>" +
+    							"<td class='text-center'>" + val["FIRST NAME"] + "</td>" +
+    							"<td class='text-center'>" + val["LAST NAME"] + "</td>" +
     							"<td class='text-center'>" + val["SLOT NO"] + "</td>" +
+    							"<td class='text-center'>" + val["DATE CREATED"] + "</td>" +
     							"<td class='text-center'>" + val["SPONSOR"] + "</td>" +
     							"<td class='text-center'>" + val["POSITION"] + " OF " + val["PLACEMENT"] + "</td>" +
     							"<td class='text-center'>" + val["PACKAGE NUMBER"] + "</td>" +
@@ -128,6 +145,10 @@ function mlm_developer_import()
     					+	"</tr>";
 
     		$(".import-slot-list").append($append);
+    		$(".import-button").show();
+    		$(".import-excel").hide();
+
+    		range = key;
     	});
     }
 }

@@ -5,7 +5,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_list/modal_view_all_transaction/{id}/{uid}','Member\PayrollController@modal_view_all_transaction');
 	//audit_trail_transaction
 	Route::any('/payroll_api','Member\PayrollApiController@index');
-// /reports/payroll_ledger
+	// /reports/payroll_ledger
 	Route::any('/reports/government_forms','Member\PayrollReportController@government_forms');
 	Route::any('/reports/government_forms_sss/{id}','Member\PayrollReportController@government_forms_sss');
 	Route::any('/reports/government_forms_philhealth/{id}','Member\PayrollReportController@government_forms_philhealth');

@@ -15,6 +15,8 @@
         <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/main.css">
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+        {{-- FONT --}}
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/font/berling/styles.css">
         <!-- EXTERNAL CSS -->  
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/font-awesome/css/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/slick/slick.css">
@@ -74,9 +76,9 @@
             <span class="caret"></span></div>
             <ul class="dropdown-menu">
               {{-- @if(!$hasuser) --}}
-              <li><a class="account-modal-button" style="cursor: pointer;" type="login">LOGIN</a></li>
-              <li><a class="account-modal-button" style="cursor: pointer;" type="register">CREATE ACCOUNT</a></li>
-              <li><a href="#">FORGOT PASSWORD</a></li>
+              <li><a href="/mlm/login">LOGIN</a></li>
+              <li><a href="/mlm/register">CREATE ACCOUNT</a></li>
+              <li><a href="/mlm/login/forgot_password">FORGOT PASSWORD</a></li>
               {{-- @else
               <li><a href="/profile">PROFILE</a></li>
               <li><a href="/logout">LOG OUT</a></li>
@@ -136,7 +138,7 @@
             <li class="{{ Request::segment(1) == 'contact' ? 'active' : '' }}"><a href="/contact">CONTACT US</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li>
+            <li class="search-combine-holder">
               <div class="search-combine clearfix">
                 <input type="text" class="form-control search" id="search_field" val="{{Request::input('search') ? Request::input('search') : ''}}">
                 <i class="fa fa-search"></i>

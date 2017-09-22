@@ -66,6 +66,10 @@
 			{
 				color: #e22a51;
 			}
+			.product-title-price
+			{
+
+			}
 		}
 		.desc-title
 		{
@@ -180,6 +184,18 @@
 					margin-left: 10px;
 				}
 			}
+			.col-xs-6
+			{
+				@media screen and (max-width: 420px)
+				{
+					width: 100%;
+					margin-bottom: 15px;
+					&:last-child
+					{
+						margin-bottom: 0;
+					}
+				}
+			}
 		}
 	}
 }
@@ -291,12 +307,16 @@
 		font-size: 18.75px;
 		font-weight: 600;
 		color: #292b30;
-		padding-bottom: 1%;
+		padding-bottom: 7.5px;
 		border-bottom: 3px solid #b4b4b4;
-		margin-bottom: 1%;
+		margin-bottom: 15px;
 		.product
 		{
 			color: #de7c99;
+		}
+		@media screen and (max-width: 768px)
+		{
+			margin-bottom: 25px;
 		}
 	}
 	.list

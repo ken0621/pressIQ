@@ -8,6 +8,7 @@ use Redirect;
 use View;
 use Input;
 use File;
+use Image;
 use Carbon\Carbon;
 use App\Globals\Payment;
 use App\Globals\Customer;
@@ -305,7 +306,7 @@ class ShopMemberController extends Shop
         $data["profile_address"]     = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->first();
         $data["profile_info"]        = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();
         $data["_country"]            = Tbl_country::get();
-        // $data["allowed_change_pass"] = isset(Self::$customer_info->signup_with) ? (Self::$customer_info->signup_with == "member_register" ? true : false) : false;
+        $data["allowed_change_pass"] = isset(Self::$customer_info->signup_with) ? (Self::$customer_info->signup_with == "member_register" ? true : false) : false;
       
 
         if(Self::$customer_info)
@@ -315,7 +316,7 @@ class ShopMemberController extends Shop
         }
 
 
-        $data["allowed_change_pass"] = true;
+        // $data["allowed_change_pass"] = true;
 
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.profile", $data));
     }
@@ -430,7 +431,8 @@ class ShopMemberController extends Shop
                     $create_result = File::makeDirectory(public_path($destinationPath), 0775, true, true);
                 }
 
-                $upload_success    = Input::file('profile_image')->move($destinationPath, $filename);
+                /* RESIZE IMAGE */
+                $upload_success    = Image::make(Input::file('profile_image'))->fit(250, 250)->save($destinationPath."/".$filename);;
 
                 /* SAVE THE IMAGE PATH IN THE DATABASE */
                 $image_path = $destinationPath."/".$filename;
@@ -509,6 +511,8 @@ class ShopMemberController extends Shop
         $data["page"] = "Genealogy";
         $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
         $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();
+        $data['slot_no'] = 0;
+        $data['mode'] = 'sponsor';
         if($slot)
         {
             $data['slot_no'] = $slot->slot_no;

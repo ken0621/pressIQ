@@ -138,15 +138,6 @@ function submit_done(data)
         });
     }
 }
-
-function submit_selected_image_done(data) 
-{
-    if (data.akey == "manufacturer-image") 
-    {
-        $(".manufacturer-image").attr("src", data.image_data[0].image_path);
-        $(".manufacturer-image-input").val(data.image_data[0].image_id);
-    }
-}
 </script>
 <!-- <script type="text/javascript" src="/assets/member/js/warehouse.js"></script> -->
 @endsection

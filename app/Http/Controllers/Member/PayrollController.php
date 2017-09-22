@@ -3245,13 +3245,13 @@ class PayrollController extends Member
           {
                $statement = 'restore';
           }
-          $file_name               = Tbl_payroll_deduction_employee::getemployee($payroll_deduction_employee_id)->value('payroll_employee_display_name');
-          $data['title']           = 'Do you really want to '.$statement.' '.$file_name.'?';
-          $data['html']       = '';
-          $data['action']     = '/member/payroll/deduction/deduction_employee_tag_archive';
-          $data['id']         = $payroll_deduction_employee_id;
-          $data['archived']   = $archive;
-
+          $file_name                      = Tbl_payroll_deduction_employee::getemployee($payroll_deduction_employee_id)->value('payroll_employee_display_name');
+          $data['title']                  = 'Do you really want to '.$statement.' '.$file_name.'?';
+          $data['html']                   = '';
+          $data['action']                 = '/member/payroll/deduction/deduction_employee_tag_archive';
+          $data['id']                     = $payroll_deduction_employee_id;
+          $data['archived']               = $archive;
+          $data['payroll_deduction_type'] = "none";
           return view('member.modal.modal_confirm_archived', $data);
      }
 

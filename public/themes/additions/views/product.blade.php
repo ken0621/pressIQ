@@ -41,7 +41,7 @@
 				</div>
 
 				<div class="filter-search clearfix">
-					<ul class="nav navbar-nav pull-right">
+					<ul class="nav pull-right">
 					    <li>
 					      <div class="search-combine clearfix">
 					        <h5>SORTED BY : &nbsp;</h5>
@@ -72,10 +72,10 @@
 							<div class="load-table">
 								@if($_product)
 									@foreach($_product as $product)
-									<div class="col-md-4 col-sm-6 col-sm-bottom col-bottom match-height">
+									<div class="col-md-4 col-sm-6 col-xs-6 col-sm-bottom col-bottom match-height">
 										<div class="list-product" id="{{$product["eprod_id"]}}" class="prodimg">
 											<div class="img">
-												<img src="{{get_product_first_image($product)}}">
+												<img class="4-3-ratio" onClick="location.href='/product/view/{{ $product["eprod_id"] }}'" src="{{get_product_first_image($product)}}">
 												<div class="show-cart-view cart-hidden{{$product["eprod_id"]}} hidden">
 													<a href="/product/view/{{ $product["eprod_id"] }}"><img class="magnify-glass" src="/themes/{{ $shop_theme }}/front/magnify-black.png"></a>
 													<img src="/themes/{{ $shop_theme }}/front/bag-black.png" class='bag add-to-cart account-modal-button' style='cursor: pointer;'>

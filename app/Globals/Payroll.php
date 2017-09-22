@@ -3181,21 +3181,24 @@ class Payroll
 
 		foreach($_deduction as $deduction)
 		{
-			$temp['deduction_name'] 		= $deduction->payroll_deduction_name;
-			$temp['deduction_category'] 	= $deduction->payroll_deduction_category;
-			$temp['payroll_deduction_id'] 	= $deduction->payroll_deduction_id;
-			$temp['payroll_periodal_deduction'] = $deduction->payroll_periodal_deduction;
-			/* get total payment deduction per month */
-			$total_payment = Tbl_payroll_deduction_payment::getpayment($employee_id, $payroll_record_id, $deduction->payroll_deduction_id)->select(DB::raw('IFNULL(sum(payroll_payment_amount), 0) as total_payment'))->value('total_payment');
-
-			if($temp == 'Last Period')
+			if ($deduction->payroll_deduction_archived != 1) 
 			{
-				$temp['payroll_periodal_deduction'] = $deduction->payroll_monthly_amortization - $total_payment;
+				$temp['deduction_name'] 		= $deduction->payroll_deduction_name;
+				$temp['deduction_category'] 	= $deduction->payroll_deduction_category;
+				$temp['payroll_deduction_id'] 	= $deduction->payroll_deduction_id;
+				$temp['payroll_periodal_deduction'] = $deduction->payroll_periodal_deduction;
+				/* get total payment deduction per month */
+				$total_payment = Tbl_payroll_deduction_payment::getpayment($employee_id, $payroll_record_id, $deduction->payroll_deduction_id)->select(DB::raw('IFNULL(sum(payroll_payment_amount), 0) as total_payment'))->value('total_payment');
+
+				if($temp == 'Last Period')
+				{
+					$temp['payroll_periodal_deduction'] = $deduction->payroll_monthly_amortization - $total_payment;
+				}
+				$data['total_deduction'] += $temp['payroll_periodal_deduction'];
+				array_push($data['deduction'], $temp);
 			}
-			$data['total_deduction'] += $temp['payroll_periodal_deduction'];
-			array_push($data['deduction'], $temp);
 		}
-		// dd($data);
+		
 		return $data;
 	}
 

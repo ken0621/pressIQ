@@ -30,29 +30,35 @@
 </div>
 <div class="container">
 	<div class="clearfix maternity-products">
-		<div class="left">
+		<div class="left clearfix">
 			<div class="product-left1">
 			<img src="/themes/{{ $shop_theme }}/front/category2.jpg">
-			<div class="title">{{ get_content($shop_theme_info, "home", "maternity_bottom_title") }}</div>
-			<div class="shop-now">
-				<button onClick="location.href='/product?type_id=bottoms'">Shop Now</button>
+			<div class="title-shop-holder">
+				<div class="title">{{ get_content($shop_theme_info, "home", "maternity_bottom_title") }}</div>
+				<div class="shop-now">
+					<button onClick="location.href='/product?type_id=bottoms'">Shop Now</button>
+				</div>
 			</div>
 			</div>
 
 			<div class="product-left2">
 				<img src="/themes/{{ $shop_theme }}/front/category3.jpg">
-				<div class="title">{{ get_content($shop_theme_info, "home", "maternity_dress_title") }}</div>
-				<div class="shop-now">
-					<button onClick="location.href='/product?type_id=dress'">Shop Now</button>
+				<div class="title-shop-holder">
+					<div class="title">{{ get_content($shop_theme_info, "home", "maternity_dress_title") }}</div>
+					<div class="shop-now">
+						<button onClick="location.href='/product?type_id=dress'">Shop Now</button>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="right">
+		<div class="right clearfix">
 			<div class="product-right">
 				<img src="/themes/{{ $shop_theme }}/front/category4.jpg">
-				<div class="title">{{ get_content($shop_theme_info, "home", "maternity_bottom_title") }}</div>
-				<div class="shop-now">
-					<button onClick="location.href='/product?type_id=tops'">Shop Now</button>
+				<div class="title-shop-holder">
+					<div class="title">{{ get_content($shop_theme_info, "home", "maternity_bottom_title") }}</div>
+					<div class="shop-now">
+						<button onClick="location.href='/product?type_id=tops'">Shop Now</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -70,14 +76,14 @@
 			<div class="row clearfix">
 				@if($_product)
 					@foreach(limit_foreach($_product, 6) as $product)
-					<div class="col-md-4 col-sm-6 col-sm-bottom col-bottom">
+					<div class="col-md-4 col-sm-6 col-xs-6 col-sm-bottom col-bottom">
 						<div class="list-product" id="{{$product["eprod_id"]}}" class="prodimg">
 							<div class="triangle-topright">
 								<div class="label-name">New</div>
 								<div class="label-desc">Releases</div>
 							</div>
 							<div class="img">
-								<img class="4-3-ratio" src="{{get_product_first_image($product)}}">
+								<img onClick="location.href='/product/view/{{ $product["eprod_id"] }}'" class="4-3-ratio" src="{{get_product_first_image($product)}}">
 								<div class="show-cart-view cart-hidden{{$product["eprod_id"]}} hidden">
 									<a href="/product/view/{{ $product["eprod_id"] }}"><img class="magnify-glass" src="/themes/{{ $shop_theme }}/front/magnify-black.png"></a>
 									<img src="/themes/{{ $shop_theme }}/front/bag-black.png" class='bag add-to-cart account-modal-button' style='cursor: pointer;'>

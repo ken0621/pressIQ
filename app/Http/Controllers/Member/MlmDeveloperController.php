@@ -15,6 +15,7 @@ use App\Models\Tbl_tree_placement;
 use App\Models\Tbl_item;
 use App\Globals\Currency;
 use App\Globals\Mlm_compute;
+use App\Globals\Mlm_complan_manager;
 use App\Globals\Reward;
 use App\Globals\MLM2;
 use App\Models\Tbl_mlm_item_points;

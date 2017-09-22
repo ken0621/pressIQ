@@ -34,7 +34,7 @@
 							<div class="register-form">
 								<div class="form-group">
 									<div class="register-label">GENDER</div>
-									<div class="form-input" style="margin-top: 10px; margin-left: 25px;">
+									<div class="form-input gender-input">
 										<label class="radio-inline"><input checked type="radio" name="gender" value="male">MALE</label>
 										<label class="radio-inline"><input type="radio" name="gender" value="female">FEMALE</label>
 									</div>

@@ -8,6 +8,7 @@ use Redirect;
 use View;
 use Input;
 use File;
+use Image;
 use Carbon\Carbon;
 use App\Globals\Payment;
 use App\Globals\Customer;
@@ -305,8 +306,17 @@ class ShopMemberController extends Shop
         $data["profile_address"]     = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->first();
         $data["profile_info"]        = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();
         $data["_country"]            = Tbl_country::get();
-        // $data["allowed_change_pass"] = isset(Self::$customer_info->signup_with) ? (Self::$customer_info->signup_with == "member_register" ? true : false) : false;
-        $data["allowed_change_pass"] = true;
+        $data["allowed_change_pass"] = isset(Self::$customer_info->signup_with) ? (Self::$customer_info->signup_with == "member_register" ? true : false) : false;
+      
+
+        if(Self::$customer_info)
+        {
+            $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
+            $data["wallet"]             = $data["customer_summary"]["_wallet"];
+        }
+
+
+        // $data["allowed_change_pass"] = true;
 
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.profile", $data));
     }
@@ -421,7 +431,8 @@ class ShopMemberController extends Shop
                     $create_result = File::makeDirectory(public_path($destinationPath), 0775, true, true);
                 }
 
-                $upload_success    = Input::file('profile_image')->move($destinationPath, $filename);
+                /* RESIZE IMAGE */
+                $upload_success    = Image::make(Input::file('profile_image'))->fit(250, 250)->save($destinationPath."/".$filename);;
 
                 /* SAVE THE IMAGE PATH IN THE DATABASE */
                 $image_path = $destinationPath."/".$filename;
@@ -500,9 +511,11 @@ class ShopMemberController extends Shop
         $data["page"] = "Genealogy";
         $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
         $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();
+        $data['slot_no'] = 0;
+        $data['mode'] = 'sponsor';
         if($slot)
         {
-            $data['slot_id'] = $slot->slot_id;
+            $data['slot_no'] = $slot->slot_no;
             $data['mode'] = $request->mode;
         }
 
@@ -510,31 +523,46 @@ class ShopMemberController extends Shop
     }
     public function getGenealogyTree(Request $request)
     {
-        $slot_id  = $request->slot_id;
+        $slot_no  = $request->slot_no;
         $shop_id  = $this->shop_info->shop_id;
         $mode = $request->mode;
 
-        $check = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->where('slot_id',$slot_id)->first();
+        $check = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->where('slot_no',$slot_no)->where('shop_id',$shop_id)->first();
 
         if($check)
         {
-            $data = MemberSlotGenealogy::tree($shop_id, $slot_id, $mode);
-            return view('member.mlm_slot.mlm_slot_genealogy', $data);            
+            $data = MemberSlotGenealogy::tree($shop_id, $check->slot_id, $mode);
+            return view('member.genealogy_tree', $data);            
         }
         else
         {
             die('Invalid slot!');
         }
-    }   
+    }
+    public function getGenealogyDownline(Request $request)
+    {
+        $data = MemberSlotGenealogy::downline($request->x, $request->mode);
+        return $data;
+    }
     public function getNetwork()
     {
-        $data["page"] = "Report";
-        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.network", $data));
+        $data["page"] = "Network List";
+
+        if(request()->input("slot_no") == "")
+        {
+            $slot_no = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->value("slot_no");
+            return Redirect::to("/members/network?slot_no=" . $slot_no);
+        }
+        else
+        {
+            $data["_tree"] = MLM2::get_sponsor_network($this->shop_info->shop_id, request()->input("slot_no"));
+            return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.network", $data));
+        }
     }
     public function getReport()
     {
         $data["page"] = "Report";
-        $data["_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
+        $data["_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.report", $data));
     }
     public function getWalletLogs()

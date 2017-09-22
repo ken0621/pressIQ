@@ -172,6 +172,9 @@ $text-dark: #272c2f;
 		.holder
 		{
 			margin-bottom: 7.5px;
+			border-bottom: 1px solid #eee;
+			padding-bottom: 10px;
+
 			.label2
 			{
 				color: #344049;
@@ -192,6 +195,7 @@ $text-dark: #272c2f;
 			&:last-child
 			{
 				margin-bottom: 0;
+				border-bottom: none;
 			}
 		}
 	}

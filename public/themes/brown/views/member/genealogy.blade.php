@@ -18,7 +18,7 @@
 				<div class="legend-select">
 					<select class="form-control select-slot">
 						@foreach($_slot as $slot)
-							<option value="{{$slot->slot_id}}">SLOT# {{$slot->slot_no}}</option>
+							<option value="{{$slot->slot_no}}">SLOT# {{$slot->slot_no}}</option>
 						@endforeach
 					</select>
 				</div>
@@ -29,7 +29,7 @@
 		<i class="fa fa-spinner fa-spin fa-2x"></i>
 	</div>
 	<div class="genealogy-content">
-		<iframe  class="genealogy-frame" frameborder="0"  width="100%" height="550px" src="/members/genealogy-tree?slot_id={{$slot_id}}&mode={{$mode}}"></iframe>
+		<iframe  class="genealogy-frame" frameborder="0"  width="100%" height="550px" src="/members/genealogy-tree?slot_no={{$slot_no or ''}}&mode={{$mode or ''}}"></iframe>
 	</div>
 </div>
 @endsection
@@ -38,12 +38,12 @@
 	$(".select-slot").change(function()
 	{
 		$('.loading-content').removeClass('hidden');
-		$('.genealogy-frame').attr('src','/members/genealogy-tree?slot_id='+$(this).val()+'&mode='+$('.mode-genealogy').val());
-		$('.genealogy-frame').addClass('hidden');
+		$('.genealogy-frame').attr('src','/members/genealogy-tree?slot_no='+$(this).val()+'&mode='+$('.mode-genealogy').val());
+		$('.genealogy-frame').css('opacity', 0);
 		setInterval(function()
 		{
 			$('.loading-content').addClass('hidden');
-			$('.genealogy-frame').removeClass('hidden');
+			$('.genealogy-frame').css('opacity', 1);
 		},1000);
 	});	
 </script>

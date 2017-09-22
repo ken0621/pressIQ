@@ -19,6 +19,32 @@
 			</div>
 		</div>
 	</div>
+	<div class="network-content" style="margin-top: 40px;">
+		<div class="holder">
+		  	<table class="table">
+		  		<thead>
+		  			<tr>
+		  				<th class="text-left" width="200px">LEVEL</th>
+		  				<th class="text-left" width="200px">SLOT</th>
+		  				<th class="text-left">NAME</th>
+		  				<th class="text-right">DATE JOINED</th>
+		  			</tr>
+		  		</thead>
+		  		<tbody>
+		  			@foreach($_tree as $tree)
+		  			<tr>
+		  				<td class="text-left">{!! $tree->ordinal_level !!}</td>
+		  				<td class="text-left">
+		  					<div>{{ $tree->slot_no }}</div>
+		  				</td>
+		  				<td class="text-left">{!! $tree->first_name !!} {!! $tree->last_name !!}</td>
+		  				<td class="text-right"><a href="javascript:"><b>{!! $tree->display_slot_date_created !!}</b></a></td>
+		  			</tr>
+		  			@endforeach
+		  		</tbody>
+		  	</table>
+		</div>
+	</div>
 </div>
 @endsection
 @section("member_script")

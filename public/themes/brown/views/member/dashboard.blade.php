@@ -232,11 +232,27 @@
 									<div class="label2">{{ $slot->slot_no }}</div>
 									<div class="label3">{{ $slot->display_total_earnings }}</div>
 								</div>
-								<div class="col-sm-8">
+								<div class="col-sm-8 text-center" style="margin-bottom: 5px;">ROAD TO <b>{{ $slot->brown_next_rank }}</b></div>
+								<div class="col-sm-4">
 									@if($slot->brown_next_rank != "NO NEXT RANK")
-									<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) {{ $slot->brown_rank_rank_percentage }}%, rgb(237, 237, 237) {{ $slot->brown_rank_rank_percentage }}%);">ROAD TO <b>{{ $slot->brown_next_rank }}</b> ({{ $slot->brown_next_rank_current }}/{{ $slot->brown_next_rank_requirements }})</div>
+										@if($slot->current_direct >= $slot->required_direct)
+											<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">DIRECT <b>QUALIFIED</b></div>
+										@else
+											<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) {{ $slot->brown_direct_rank_percentage }}%, rgb(237, 237, 237) {{ $slot->brown_direct_rank_percentage }}%);">DIRECT ({{ $slot->current_direct }}/{{ $slot->required_direct }})</div>
+										@endif
 									@else
-									<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 40%);">YOU ARE A <b>LEADER</b></div>
+									<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 40%);">NO MORE <b> NEXT RANK</b></div>
+									@endif
+								</div>
+								<div class="col-sm-4">
+									@if($slot->brown_next_rank != "NO NEXT RANK")
+										@if($slot->brown_next_rank_current >= $slot->brown_next_rank_requirements)
+											<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">GROUP <b>QUALIFIED</b></div>
+										@else
+											<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) {{ $slot->brown_rank_rank_percentage }}%, rgb(237, 237, 237) {{ $slot->brown_rank_rank_percentage }}%);">GROUP ({{ $slot->brown_next_rank_current }}/{{ $slot->brown_next_rank_requirements }})</div>
+										@endif
+									@else
+									<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 40%);">NO MORE <b> NEXT RANK</b></div>
 									@endif
 								</div>
 							</div>
@@ -322,65 +338,6 @@
 	</div>
 @endif
 
-<!-- POPUP BUY KIT -->
-<div class="popup-buy-a-kit">
-    <div id="buy-a-kit-modal" class="modal fade">
-        <div class="modal-lg modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"><img src="/themes/{{ $shop_theme }}/img/cart.png"> My Shopping Cart</h4>
-                </div>
-                <div>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Image</th>
-                                <th>Product Name</th>
-                                <th>Unit Price</th>
-                                <th>Quantity</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><img src="/themes/{{ $shop_theme }}/img/brown-cart-img1.png"></td>
-                                <td>P 9,500.00</td>
-                                <td>P 9,500.00</td>
-                                <td>
-                                    <input class="item-qty" name="quantity" min="1" step="1" value="1"  type="number"></td>
-                                    <td>P 9,500.00</td>
-                                </tr>
-                                <tr>
-                                    <td><img src="/themes/{{ $shop_theme }}/img/brown-cart-img1.png"></td>
-                                    <td>P 9,500.00</td>
-                                    <td>P 9,500.00</td>
-                                    <td>
-                                        <input class="item-qty" name="quantity" min="1" step="1" value="1"  type="number">
-                                    </td>
-                                    <td>P 9,500.00</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer row clearfix">
-                        
-                        <div class="col-md-8">
-                            <div class="left-btn-container">
-                                <div><i class="fa fa-long-arrow-left" aria-hidden="true">&nbsp;</i>&nbsp;Continue Shopping</div>
-                                <button class="btn-checkout">Checkout</button>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="total">Total: P 9,500.00</div>
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <!--  Enter a code -->
 <div class="popup-enter-a-code">
     <div id="enter-a-code-modal" class="modal fade">
@@ -484,54 +441,54 @@
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js"></script>
 <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
 <script>
-var ctx = document.getElementById("income_summary").getContext('2d');
+// var ctx = document.getElementById("income_summary").getContext('2d');
 
-// And for a doughnut chart
-var myDoughnutChart = new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-        labels: ["Red", "Blue"],
-        datasets: [{
-            label: '# of Votes',
-            data: [1.00, 1.00],
-            backgroundColor: [
-                'rgba(142, 94, 162, 1)',
-                'rgba(62, 149, 205, 1)'
-            ],
-            borderColor: [
-                'rgba(142, 94, 162, 1)',
-                'rgba(62, 149, 205, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: 
-    {
-      legend: 
-      {
-        responsive: true,
-        display: false,
-      },
-      tooltips: 
-      {
-        callbacks: 
-        {
-          label: function(tooltipItems, data) 
-          {
-            var sum = data.datasets[0].data.reduce(add, 0);
-            function add(a, b) {
-              return a + b;
-            }
+// // And for a doughnut chart
+// var myDoughnutChart = new Chart(ctx, {
+//     type: 'doughnut',
+//     data: {
+//         labels: ["Red", "Blue"],
+//         datasets: [{
+//             label: '# of Votes',
+//             data: [1.00, 1.00],
+//             backgroundColor: [
+//                 'rgba(142, 94, 162, 1)',
+//                 'rgba(62, 149, 205, 1)'
+//             ],
+//             borderColor: [
+//                 'rgba(142, 94, 162, 1)',
+//                 'rgba(62, 149, 205, 1)'
+//             ],
+//             borderWidth: 1
+//         }]
+//     },
+//     options: 
+//     {
+//       legend: 
+//       {
+//         responsive: true,
+//         display: false,
+//       },
+//       tooltips: 
+//       {
+//         callbacks: 
+//         {
+//           label: function(tooltipItems, data) 
+//           {
+//             var sum = data.datasets[0].data.reduce(add, 0);
+//             function add(a, b) {
+//               return a + b;
+//             }
 
-            return data.datasets[0].data[tooltipItems.index] + ' %';
-          },
-          // beforeLabel: function(tooltipItems, data) {
-          //   return data.datasets[0].data[tooltipItems.index] + ' hrs';
-          // }
-        }
-      }
-    }
-});
+//             return data.datasets[0].data[tooltipItems.index] + ' %';
+//           },
+//           // beforeLabel: function(tooltipItems, data) {
+//           //   return data.datasets[0].data[tooltipItems.index] + ' hrs';
+//           // }
+//         }
+//       }
+//     }
+// });
 
 $(document).ready(function()
 {

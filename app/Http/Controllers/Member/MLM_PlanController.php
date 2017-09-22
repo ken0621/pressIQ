@@ -2493,6 +2493,7 @@ class MLM_PlanController extends Member
     {
         $insert['rank_name'] = Request::input('rank_name');
         $insert['rank_shop_id'] = $this->user_info->shop_id;
+        $insert['required_direct'] = Request::input('required_direct');
         $insert['required_slot'] = Request::input('required_slot');
         $insert['required_uptolevel'] = Request::input('required_uptolevel');
         $insert['builder_reward_percentage'] = Request::input('builder_reward_percentage');
@@ -2520,6 +2521,7 @@ class MLM_PlanController extends Member
     {
         $update['rank_name'] = Request::input('rank_name');
         $update['required_slot'] = Request::input('required_slot');
+        $update['required_direct'] = Request::input('required_direct');
         $update['required_uptolevel'] = Request::input('required_uptolevel');
         $update['builder_reward_percentage'] = Request::input('builder_reward_percentage');
         $update['builder_uptolevel'] = Request::input('builder_uptolevel');

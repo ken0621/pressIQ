@@ -1254,14 +1254,12 @@ class Payroll2
 			if($target_hours!=0)
 			{
 				//$target_hours += $break_hours;
-				$target_hours =( Payroll2::float_time($target_hours)+$break_hours);
-				$target_time  = Payroll2::time_float($target_hours);
+				$target_hours = $target_hours+$break_hours;
 				$target_hours = Payroll2::convert_time_in_minutes($target_hours);
 			}
 			else
 			{
 				$target_hours = "00:00:00";
-				$target_time  = Payroll2::float_time($target_hours);
 				$target_hours = 0;
 			}
 

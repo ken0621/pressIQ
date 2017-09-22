@@ -20,17 +20,40 @@ body
 	{
 		table-layout: fixed;
 		width: 100%;
+		tr
+		{
+			@media screen and (max-width: 768px)
+			{
+				width: 100%;
+				display: block;
+			}
+		}
 		td
 		{
 			vertical-align: top;
+			@media screen and (max-width: 768px)
+			{
+				width: 100%;
+				display: block;
+			}
 		}
 		.c1
 		{
 			width: 50%;
+			@media screen and (max-width: 768px)
+			{
+				width: 100%;
+				display: block;
+			}
 		}
 		.c2
 		{
 			width: 50%;
+			@media screen and (max-width: 768px)
+			{
+				width: 100%;
+				display: block;
+			}
 		}
 	}
 	.register-side
@@ -44,28 +67,60 @@ body
 	{
 		padding: 10px 40px;
 		border-bottom: 1px solid #e3e5e8;
+		@media screen and (max-width: 500px)
+		{
+			padding: 15px;
+		}
 		.title
 		{
 			color: $text-dark;
 			font-size: 20px;
 			font-weight: 700;
 			padding: 15px 0;
+			@media screen and (max-width: 581px)
+			{
+				text-align: center;
+			}
 		}
 		.or
 		{
 			display: inline-block;
 			vertical-align: middle;
 			margin-right: 30px;
+			@media screen and (max-width: 581px)
+			{
+				display: block;
+				text-align: center;
+				margin-bottom: 25px;
+				margin-right: 0;
+			}
 		}
 		.social-button
 		{
 			display: inline-block;
 			vertical-align: middle;
+			@media screen and (max-width: 581px)
+			{
+				display: block;
+				text-align: center;
+			}
 			.holder
 			{
 				display: inline-block;
 				vertical-align: middle;
 				margin-right: 25px;
+				@media screen and (max-width: 523px)
+				{
+					margin-right: 0;
+				}
+				@media screen and (max-width: 448px)
+				{
+					margin-bottom: 15px;
+					&:last-child
+					{
+						margin-bottom: 0;
+					}
+				}
 				&.fb
 				{
 					background-color: #3c66c4;
@@ -128,6 +183,12 @@ body
 		padding: 50px;
 		padding-top: 25px;
 		padding-left: 75px;
+		@media screen and (max-width: 500px)
+		{
+			padding: 15px;
+			max-width: 420px;
+			margin: auto;
+		}
 		.form-group
 		{
 			margin-bottom: 25px;
@@ -150,6 +211,15 @@ body
 				input
 				{
 					margin-top: 3px;
+				}
+			}
+			.gender-input
+			{
+				margin-top: 10px; 
+				margin-left: 25px;
+				@media screen and (max-width: 768px)
+				{
+					margin-left: 0;
 				}
 			}
 			.form-input
@@ -199,18 +269,32 @@ body
 			.choice
 			{
 				text-align: left;
+				@media screen and (max-width: 991px)
+				{
+					text-align: center;
+				}
 				.holder
 				{
 					display: inline-block;
 					vertical-align: middle;
+					@media screen and (max-width: 991px)
+					{
+						display: block;
+					}
 					a {
 						color: $text-dark !important;
 						font-weight: $regular;
 						color: #422311 !important;
 						font-size: 15px !important;
 					}
-					.btn-brown {
-						&:hover {
+					.btn-brown 
+					{
+						@media screen and (max-width: 991px)
+						{
+							width: 100%;
+						}
+						&:hover 
+						{
 							background-color: #613922;
 						}
 					}
@@ -220,13 +304,21 @@ body
 					color: $text-light;
 					font-size: 11px;
 					font-weight: $regular;
-					margin: 0 15px;
+					margin: 15px 15px;
+					@media screen and (max-width: 991px)
+					{
+						display: block;
+					}
 				}
 				.login-href
 				{
 					color: #693d28;
 					font-size: 13px;
 					font-weight: 600;
+					@media screen and (max-width: 991px)
+					{
+						display: block;
+					}
 				}
 			}
 		}

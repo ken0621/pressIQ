@@ -17,7 +17,11 @@
             <td class="text-center">{{$rank->rank_name}}</td>
             @if($rank->required_slot)
             <td class="text-center">
-                <b>{{$rank->required_slot}}</b> SLOTS UP TO <b>{{strtoupper(ordinal($rank->required_uptolevel))}} LEVEL</b>
+                <b>{{$rank->required_direct}}</b> DIRECT and <b>{{$rank->required_slot}}</b> SLOTS UP TO <b>{{strtoupper(ordinal($rank->required_uptolevel))}} LEVEL</b>
+            </td>
+            @elseif($rank->required_direct)
+            <td class="text-center">
+            <b>{{$rank->required_direct}}</b> DIRECT
             </td>
             @else
             <td class="text-center">NO REQUIREMENTS</td>

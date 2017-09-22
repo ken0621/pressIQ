@@ -34,10 +34,16 @@ body
 		.c1
 		{
 			width: 494px;
+			@media screen and (max-width: 991px)
+			{
+				width: 100%;
+				display: none;
+			}
 		}
 		.c2
 		{
-
+			width: 100%;
+			display: block;
 		}
 	}
 	.register-side
@@ -52,14 +58,43 @@ body
 		padding: 50px;
 		padding-top: 25px;
 		padding-left: 75px;
+		@media screen and (max-width: 500px)
+		{
+			padding: 15px;
+		}
 		.social-button
 		{
 			margin-bottom: 100px;
+			@media screen and (max-width: 1199px)
+			{
+				text-align: left;
+			}
+			@media screen and (max-width: 991px)
+			{
+				margin-bottom: 25px;
+			}
 			.holder
 			{
 				display: inline-block;
 				vertical-align: middle;
 				margin-right: 25px;
+				@media screen and (max-width: 1199px)
+				{
+					margin-right: 0;
+					margin-bottom: 15px;
+					&:last-child
+					{
+						margin-bottom: 0;
+					}
+				}
+				@media screen and (max-width: 991px)
+				{
+					margin-bottom: 0;
+				}
+				@media screen and (max-width: 535px)
+				{
+					width: 100%;
+				}
 				&.fb
 				{
 					background-color: #3c66c4;
@@ -219,6 +254,10 @@ body
 				{
 					display: inline-block;
 					vertical-align: middle;
+					@media screen and (max-width: 370px)
+					{
+						display: block;
+					}
 				}
 				.or
 				{
@@ -226,12 +265,21 @@ body
 					font-size: 11px;
 					font-weight: $regular;
 					margin: 0 15px;
+					@media screen and (max-width: 370px)
+					{
+						display: block;
+						margin: 15px 15px;
+					}
 				}
 				.login-href
 				{
 					color: #422311;
 					font-size: 15px;
 					font-weight: $regular;
+					@media screen and (max-width: 370px)
+					{
+						display: block;
+					}
 				}
 				.btn-brown
 				{

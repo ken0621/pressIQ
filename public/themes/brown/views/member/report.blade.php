@@ -21,26 +21,33 @@
 	</div>
 	<div class="report-content">
 		<div class="holder">
-		  	<table class="table">
-		  		<thead>
-		  			<tr>
-		  				<th class="text-left" width="200px">SLOT</th>
-		  				<th class="text-left">DETAILS</th>
-		  				<th class="text-right">AMOUNT</th>
-		  			</tr>
-		  		</thead>
-		  		<tbody>
-		  			@foreach($_rewards as $reward)
-		  			<tr>
-		  				<td class="text-left">
-		  					<div>{{ $reward->slot_no }}</div>
-		  				</td>
-		  				<td class="text-left">{!! $reward->log !!}</td>
-		  				<td class="text-right"><a href="javascript:"><b>{!! $reward->display_wallet_log_amount !!}</b></a></td>
-		  			</tr>
-		  			@endforeach
-		  		</tbody>
-		  	</table>
+		  	<div class="table-responsive">
+		  		<table class="table">
+			  		<thead>
+			  			<tr>
+			  				<th class="text-left" width="200px">SLOT</th>
+			  				<th class="text-left">DETAILS</th>
+			  				<th class="text-right">AMOUNT</th>
+			  			</tr>
+			  		</thead>
+			  		<tbody>
+			  			@foreach($_rewards as $reward)
+			  			<tr>
+			  				<td class="text-left">
+			  					<div>{{ $reward->slot_no }}</div>
+			  				</td>
+			  				<td class="text-left">{!! $reward->log !!}</td>
+			  				<td class="text-right"><a href="javascript:"><b>{!! $reward->display_wallet_log_amount !!}</b></a></td>
+			  			</tr>
+			  			@endforeach
+			  		</tbody>
+			  	</table>
+		  	</div>
+		  	<div class="clearfix">
+			  	<div class="pull-right">
+			  		{!! session('notification_paginate') !!}
+			  	</div>
+		  	</div>
 		</div>
 	</div>
 </div>

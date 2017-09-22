@@ -26,11 +26,26 @@
 	}
 }*/
 
+/* Mixin */
+@mixin vertical-align() 
+{
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.product-container
+{
+	width: 100%;
+	table-layout: fixed;
+}
+
 .head-data
 {
 	.product-filter
 	{
-		float:left;
+		float: left;
 		z-index: 100;
 		margin-left: 10%;
 		position: absolute;
@@ -45,35 +60,53 @@
 	.product-header
 	{
 		position: relative;
-
+		min-height: 130px;
+		@media screen and (max-width: 768px)
+		{
+			min-height: auto;
+			height: 130px;
+		}
 		img
 		{
-			max-width: 100%;
+			width: 100%;
+			object-fit: cover;
+			object-position: center;
+			@media screen and (max-width: 768px)
+			{
+				height: 100%;
+			}
 		}
 		
 		.header-container
 		{
-			width: 100%;
-			
+			position: absolute;
+			display: inline-block;
+			right: 200px;
+			@include vertical-align();
+			@media screen and (max-width: 991px)
+			{
+				right: 150px;
+			}
+			@media screen and (max-width: 768px)
+			{
+				left: auto;
+				right: 25px;
+			}
 			.header-title
 			{
-				position: absolute;
-				top: 40%;
-    			left: 60%;
 			    font-size: 30.46px;
 			    letter-spacing: 20px;
-			    // font-family: "";
 			    border-bottom: 3px solid #6c6c6c;
 			    text-align: center;
 			}
 			.header-link
 			{
-				position: absolute;
-			    top: 70%;
-    			left: 60%;
 			    font-size: 12.5px;
 			    font-family: "Oswald", sans-serif;
-			    width: 30%;
+			    @media screen and (max-width: 991px)
+			    {
+			    	margin-top: 10px;
+			    }
 	
 			    .greater-than
 			    {
@@ -109,8 +142,8 @@
 
 .filter-search
 {
-	margin-top: 1%;
-	padding-bottom: 1%;
+	margin-top: 10px;
+	padding-bottom: 15px;;
 	border-bottom: 3px solid #ddd;
 }
 .content
@@ -149,6 +182,10 @@
 	bottom: 0px;
 	width: 100%;
 	text-align: center;
+	@media screen and (max-width: 500px)
+	{
+		display: none;
+	}
 	img
 	{
 		display: inline-block;
@@ -240,4 +277,25 @@
     {
    		width: 50px;
     }
+}
+
+.product-container
+{
+	.product-filter
+	{
+		@media screen and (max-width: 768px)
+		{
+			width: 100%;
+			display: block;
+			margin-bottom: 25px;
+		}
+	}
+	.body-content
+	{
+		@media screen and (max-width: 768px)
+		{
+			width: 100%;
+			display: block;
+		}
+	}
 }

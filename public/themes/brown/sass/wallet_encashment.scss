@@ -28,6 +28,17 @@ $text-dark: #272c2f;
 				}
 			}
 		}
+		.right
+		{
+			@media screen and (max-width: 991px)
+			{
+				margin-top: 25px;
+				.text-right
+				{
+					text-align: left !important;
+				}
+			}
+		}
 	}
 
 	.wallet-encashment-content

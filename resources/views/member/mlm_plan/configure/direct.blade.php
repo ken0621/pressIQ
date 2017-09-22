@@ -28,6 +28,7 @@
                             <th>MEMEBERSHIP NAME</th>
                             <th>DIRECT SPONSOR BONUS</th>
                             <th>DIRECT INCOME LIMIT</th>
+                            <th>GC INCOME</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -42,16 +43,20 @@
                                                 <input type="hidden" name="membership_id" value="{{$mem->membership_id}}">
                                                 <input type='hidden' class='form-control membership_points_direct_container' name='membership_points_direct' value=''>
                                                 <input type='hidden' class='form-control membership_direct_income_limit_container' name='membership_direct_income_limit' value=''>
+                                                <input type='hidden' class='form-control membership_points_direct_gc_container' name='membership_points_direct_gc' value=''>
                                             </form>
                                             <td>
                                                 <span class="membership_points_direct{{$mem->membership_id}}">{{$mem->membership_points_direct == "" ? 0 : $mem->membership_points_direct }}</span>
                                             </td>                                      
                                             <td>
                                                 <span class="membership_points_direct_limit{{$mem->membership_id}}">{{$mem->membership_direct_income_limit == "" ? 0 : $mem->membership_direct_income_limit }}</span>
+                                            </td>                                            
+                                            <td>
+                                                <span class="membership_points_direct_gc{{$mem->membership_id}}">{{$mem->membership_points_direct_gc == "" ? 0 : $mem->membership_points_direct_gc }}</span>
                                             </td>
                                         <td>
                                             <span class="membership_points_direct_edit{{$mem->membership_id}}">
-                                                <a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="edit_direct_points('{{$mem->membership_id}}','{{$mem->membership_points_direct}}', '{{$mem->membership_direct_income_limit}}')">Edit</a>
+                                                <a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="edit_direct_points('{{$mem->membership_id}}','{{$mem->membership_points_direct}}', '{{$mem->membership_direct_income_limit}}','{{$mem->membership_points_direct_gc}}')">Edit</a>
                                             </span>
                                         </td>
                                     </tr>
@@ -76,8 +81,10 @@ function save_direct_points_membership(membershipid)
 {
     var directpoints      = $('.membership_points_directinput' + membershipid).val();
     var directlimitpoints = $('.membership_points_direct_limitinput' + membershipid).val();
+    var directpointsgc    = $('.membership_points_direct_gcinput' + membershipid).val();
     $(".membership_points_direct_container").val(directpoints);
     $(".membership_direct_income_limit_container").val(directlimitpoints);
+    $(".membership_points_direct_gc_container").val(directpointsgc);
 
     console.log($('#form' + membershipid));
     $('#form' + membershipid).submit();
@@ -87,8 +94,10 @@ function cancel(membershipid)
 {
     var directpoints = $('.membership_points_directinput' + membershipid).val();
     var directlimitpoints = $('.membership_points_direct_limitinput' + membershipid).val();
+    var directpointsgc = $('.membership_points_direct_gcinput' + membershipid).val();
     directpoints = parseInt(directpoints);
     directlimitpoints = parseInt(directlimitpoints);
+    directpointsgc = parseInt(directpointsgc);
 
     console.log(Number.isInteger(directpoints));
     console.log(Number.isInteger(directlimitpoints));
@@ -99,15 +108,17 @@ function cancel(membershipid)
         console.log(directlimitpoints);
         $('.membership_points_direct' + membershipid).html(directpoints);
         $('.membership_points_direct_limit' + membershipid).html(directlimitpoints);
+        $('.membership_points_direct_gcinput' + membershipid).html(directpointsgc);
         
-        var edit = '<a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="edit_direct_points('+membershipid+', '+directpoints+')">Edit</a>';
+        var edit = '<a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="edit_direct_points('+membershipid+', '+directpoints+','+directlimitpoints+','+directpointsgc+')">Edit</a>';
         $('.membership_points_direct_edit' + membershipid).html(edit)
     }
 }
-function edit_direct_points(membershipid,  directpoints,  income_limit)
+function edit_direct_points(membershipid,directpoints,income_limit,gc)
 {
     $('.membership_points_direct' + membershipid).html("<input type='number' class='form-control membership_points_directinput"+ membershipid +"' name='membership_points_direct' value='"+directpoints+"'>");
     $('.membership_points_direct_limit' + membershipid).html("<input type='number' class='form-control membership_points_direct_limitinput"+ membershipid +"' name='membership_direct_income_limit' value='"+income_limit+"'>");
+    $('.membership_points_direct_gc' + membershipid).html("<input type='number' class='form-control membership_points_direct_gcinput"+ membershipid +"' name='membership_points_direct_gc' value='"+gc+"'>");
 
     $('.membership_points_direct_edit' + membershipid).html('<a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="#" onClick="save_direct_points_membership(' + membershipid +')">Save</a>');
 }

@@ -32,10 +32,10 @@ $text-dark: #272c2f;
 	border-radius: 15px;
 	width: 25px;
 	outline: none;
-	margin-left: 0;
+	// margin-left: 0;
 	&:last-child
 	{
-		margin-left: -25px;
+		// margin-left: -25px;
 	}
 }
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus, .ui-button:hover, .ui-button:focus

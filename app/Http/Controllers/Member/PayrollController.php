@@ -3196,6 +3196,7 @@ class PayrollController extends Member
           $data['action']     = '/member/payroll/deduction/archived_deduction_action';
           $data['id']         = $id;
           $data['archived']   = $archived;
+          $data['payroll_deduction_type'] = 0;
 
           return view('member.modal.modal_confirm_archived', $data);
      }

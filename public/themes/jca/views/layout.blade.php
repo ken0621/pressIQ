@@ -59,7 +59,7 @@
     <div class="subheader-container">
         <div class="container">
             <div class="left-container"><span><i class="fa fa-heart-o" aria-hidden="true"></i></span><span>BECOME A MEMBER</span></div>
-            <div class="right-container"><span>LOGIN</span><span>REGISTER</span></div>
+            <div class="right-container"><span style="cursor: pointer;" onClick="location.href='/members/login'">LOGIN</span><span style="cursor: pointer;" onClick="location.href='/members/register'">REGISTER</span></div>
         </div>
     </div>
     <div class="header-container">

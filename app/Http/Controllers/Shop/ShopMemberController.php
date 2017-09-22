@@ -306,7 +306,7 @@ class ShopMemberController extends Shop
         $data["profile_address"]     = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->first();
         $data["profile_info"]        = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();
         $data["_country"]            = Tbl_country::get();
-        // $data["allowed_change_pass"] = isset(Self::$customer_info->signup_with) ? (Self::$customer_info->signup_with == "member_register" ? true : false) : false;
+        $data["allowed_change_pass"] = isset(Self::$customer_info->signup_with) ? (Self::$customer_info->signup_with == "member_register" ? true : false) : false;
       
 
         if(Self::$customer_info)
@@ -316,7 +316,7 @@ class ShopMemberController extends Shop
         }
 
 
-        $data["allowed_change_pass"] = true;
+        // $data["allowed_change_pass"] = true;
 
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.profile", $data));
     }

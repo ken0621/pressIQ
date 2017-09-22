@@ -98,10 +98,7 @@ function global()
                     {
                         window[data.call_function](data);
                     }
-
-				    $(".modal-loader").addClass("hidden");
-                    
-                    if(data.type == 'item')
+                    else if(data.type == 'item')
                     {
                         if(typeof submit_done_item == 'function')
                         {
@@ -115,6 +112,8 @@ function global()
                             submit_done(data);
                         }
                     }
+
+                    $(".modal-loader").addClass("hidden");
 				}
             },
             error: function(x,t,m)

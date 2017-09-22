@@ -22,11 +22,15 @@
     </div>
 </form>
 <script type="text/javascript">
-    function success_confirm(data) 
+    function success_used(data) 
     {
         if(data.status == 'success')
         {
-            action_load_link_to_modal('/mlm/slot/use_product_code/to_slot?mlm_pin='+data.mlm_pin+'&mlm_activation='+data.mlm_activation, 'md');
+            toastr.success('Success');
+            setInterval(function()
+            {
+                location.reload();
+            },1000)
         }
     }
 </script>

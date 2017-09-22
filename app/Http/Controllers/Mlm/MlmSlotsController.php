@@ -24,6 +24,7 @@ use App\Globals\Mlm_member;
 use App\Globals\Warehouse2;
 use App\Globals\Item_code;
 use App\Globals\Mlm_plan;
+use App\Globals\MLM2;
 use App\Globals\Item;
 class MlmSlotsController extends Mlm
 {
@@ -725,13 +726,28 @@ class MlmSlotsController extends Mlm
     }
     public function use_submit()
     {
-        $data['mlm_pin'] = Request::input('mlm_pin');
-        $data['mlm_activation'] = Request::input('mlm_activation');
-        $data['slot_no'] = Request::input('slot_no');
+        $mlm_pin = Request::input('mlm_pin');
+        $mlm_activation = Request::input('mlm_activation');
+        $slot_no = Request::input('slot_no');
+
+        $slot_id    = Tbl_mlm_slot::where('slot_no', $slot_no)->where('slot_owner', Self::$customer_id)->value('slot_id');
 
         $shop_id = Self::$shop_id;
-        $return = Warehouse2::consume_product_codes($shop_id)
+        $val = Warehouse2::consume_product_codes($shop_id, $mlm_pin, $mlm_activation, Self::$customer_id);
 
+        if(is_numeric($val))
+        {
+            MLM2::purchase($shop_id, $slot_id, $val);
+            $return['status'] = 'success';
+            $return['call_function'] = 'success_used';
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['status'] = $val;
+        }
+
+        return json_encode($return);
     }
 
     public function message()

@@ -648,6 +648,10 @@ class Warehouse2
 
         return $validate;
     }
+    public static function consume_product_codes($shop_id = 0, $mlm_pin = '', $mlm_activation = '')
+    {
+
+    }
     public static function get_user_login()
     {
         $user_id = 0;

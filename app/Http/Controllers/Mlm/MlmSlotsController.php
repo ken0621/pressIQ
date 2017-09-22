@@ -21,6 +21,7 @@ use App\Models\Tbl_warehouse_inventory_record_log;
 
 use App\Globals\Mlm_compute;
 use App\Globals\Mlm_member;
+use App\Globals\Warehouse2;
 use App\Globals\Item_code;
 use App\Globals\Mlm_plan;
 use App\Globals\Item;
@@ -719,11 +720,17 @@ class MlmSlotsController extends Mlm
         $data['slot_no'] = Request::input('slot_no');
         
         $data['message'] = "&nbsp; &nbsp; Are you sure you wan't to use this PIN (<b>".$data['mlm_pin']."</b>) and Activation code (<b>".$data['mlm_activation']."</b>) in your Slot No <b>".$data['slot_no']."</b> ?";
-        
+
         return view('mlm.slots.confirm_product_code',$data);
     }
     public function use_submit()
     {
+        $data['mlm_pin'] = Request::input('mlm_pin');
+        $data['mlm_activation'] = Request::input('mlm_activation');
+        $data['slot_no'] = Request::input('slot_no');
+
+        $shop_id = Self::$shop_id;
+        $return = Warehouse2::consume_product_codes($shop_id)
 
     }
 

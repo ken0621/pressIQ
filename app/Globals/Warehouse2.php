@@ -60,7 +60,7 @@ class Warehouse2
             $prefix = Tbl_settings::where("settings_key","inventory_wis_prefix")->value('settings_value');
         }
 
-        return $prefix.sprintf("%'.05d\n", $history_ctr+1);
+        return $prefix.sprintf("%'.05d", $history_ctr+1);
 
     }
     public static function transfer_validation($shop_id, $wh_from, $wh_to, $item_id, $quantity, $remarks, $serial = array())
@@ -443,7 +443,7 @@ class Warehouse2
         if($prefix)
         {
             $ctr_item = Tbl_warehouse_inventory_record_log::where('record_shop_id',$shop_id)->count() + 1;
-            $return = $prefix.sprintf("%'.05d\n",$ctr_item);
+            $return = $prefix.sprintf("%'.05d",$ctr_item);
         }
 
         return $return;

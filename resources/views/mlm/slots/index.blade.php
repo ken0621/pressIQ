@@ -30,6 +30,7 @@ $data['icon'] = 'icon-sitemap';
   <div class="box clearfix" style="overflow: hidden !important;">
     <div class="box-header with-border">
       <h3 class="box-title">Code Vault</h3>
+      <button class="btn btn-primary pull-right popup" link="/mlm/slot/use_product_code" size='md'>Use Product Code</button>
     </div>
     <!-- /.box-header -->
     <form class="global-submit" method="post" action="/mlm/slot/check_add">
@@ -53,8 +54,6 @@ $data['icon'] = 'icon-sitemap';
     </div>
     </form>
   </div>
-
-
 
   {{--
   <div class="box clearfix" style="overflow: hidden !important;">

@@ -70,7 +70,6 @@ function global()
             {
 
                 data.element = modal;
-
 				if(data.response_status == "error")
 				{
 					//$(".modal-loader").addClass("hidden");

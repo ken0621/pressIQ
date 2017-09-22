@@ -90,6 +90,9 @@ Route::any('/member/mlm/plan/binary/edit/membership/pairing/save', 'Member\MLM_P
 /* start indirect PLAN */
 Route::any('/member/mlm/plan/indirect/edit/settings/{membership_id}', 'Member\MLM_PlanController@edit_indirect_setting');//Luke
 Route::any('/member/mlm/plan/indirect/edit/settings/addlevel/save', 'Member\MLM_PlanController@edit_indirect_setting_add_level');//Luke
+
+/* START PASS UP DIRECT */
+Route::any('/member/mlm/plan/direct_pass_up/edit/settings', 'Member\MLM_PlanController@direct_pass_up_save_direct_number');//ERWIN
 /* end stairstep Plan */
 
 /* start RANK PLAN */

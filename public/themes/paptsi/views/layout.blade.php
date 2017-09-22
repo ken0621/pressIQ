@@ -15,8 +15,8 @@
         <!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700" rel="stylesheet"> -->
         
         <!-- BOOTSTRAP -->
-        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap.min.css">
-        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/bootstrap/css/bootstrap.min.css">
+        <!-- <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/inbootstrap/css/bootstrap-theme.min.css"> -->
 
         <!-- FONT AWESOME -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/font-awesome/css/font-awesome.min.css">
@@ -34,7 +34,7 @@
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/one.css">
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/style.css">
 
-        <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+        <!-- <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script> -->
 
     </head>
 
@@ -48,10 +48,10 @@
             <div class="col-sm-6">
               <ul class="list-unstyled list-inline">
                 <li>
-                  <p><i class="fa fa-envelope"></i><a href="mailto:support@sbtechnosoft.com">support@sbtechnosoft.com</a></p>
+                  <p><i class="fa fa-envelope"></i><a href="mailto:support@sbtechnosoft.com">lorem@email.com</a></p>
                 </li>
                 <li>
-                  <p><i class="fa fa-phone"></i> Call us +1 0123 456 789</p>
+                  <p><i class="fa fa-phone"></i> Call us +93 9452 456 789</p>
                 </li>
               </ul>
             </div>
@@ -92,9 +92,9 @@
                     <li><a class="smoth-scroll" href="#home">Home</a></li>
                     <li><a class="smoth-scroll" href="#aboutus">About Us</a></li>
                     <li><a class="smoth-scroll" href="#services">Services</a></li>
-                    <li><a class="smoth-scroll" href="#testimonials">Testimonials</a></li>
-                    <li><a class="smoth-scroll" href="#pricing">Pricing</a></li>
-                    <li><a class="smoth-scroll" href="#our-team">Our Team</a></li>
+                    <!-- <li><a class="smoth-scroll" href="#testimonials">Testimonials</a></li> -->
+                    <!-- <li><a class="smoth-scroll" href="#pricing">Pricing</a></li> -->
+                    <!-- <li><a class="smoth-scroll" href="#our-team">Our Team</a></li> -->
                     <li><a class="smoth-scroll" href="#contactus">Contact Us</a></li>
                   </ul>
                 </div>
@@ -110,7 +110,7 @@
         <div class="container">
           <div class="banner-content">
             <div class="banner-content-table-cell">
-              <h1>We are <span id="js-rotating">Creative | Professional | Innovative</span></h1>
+              <h1>Lorem Ipsum <span id="js-rotating">Dolor | Sit | Amit</span></h1>
               <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit</p>
               <a href="javascript:void(0)" class="btn btn-default">Learn More</a></div>
           </div>
@@ -137,12 +137,12 @@
               <h4>What We Do</h4>
               <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer.</p>
               <ul>
-                <li><i class="fa fa-check" aria-hidden="true"></i>HTML & CSS</li>
-                <li><i class="fa fa-check" aria-hidden="true"></i>CSS3</li>
-                <li><i class="fa fa-check" aria-hidden="true"></i>Bootstrap</li>
-                <li><i class="fa fa-check" aria-hidden="true"></i>Photoshop</li>
-                <li><i class="fa fa-check" aria-hidden="true"></i>jQuery</li>
-                <li><i class="fa fa-check" aria-hidden="true"></i>Javascript</li>
+                <li><i class="fa fa-check" aria-hidden="true"></i>Lorem Ipsum</li>
+                <li><i class="fa fa-check" aria-hidden="true"></i>Lorem Ipsum</li>
+                <li><i class="fa fa-check" aria-hidden="true"></i>Lorem Ipsum</li>
+                <li><i class="fa fa-check" aria-hidden="true"></i>Lorem Ipsum</li>
+                <li><i class="fa fa-check" aria-hidden="true"></i>Lorem Ipsum</li>
+                <li><i class="fa fa-check" aria-hidden="true"></i>Lorem Ipsum</li>
               </ul>
             </div>
           </div>
@@ -150,37 +150,37 @@
             <div class="skill">
               <h4>Our Progress</h4>
               <div class="skill-progress">
-                <div>HTML & CSS</div>
+                <div>Lorem Ipsum</div>
                 <div class="progress">
                   <div class="progress-bar html wow fadeInLeft" data-wow-delay="2s" role="progressbar" aria-valuenow="82" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
                 <span class="web-bar bar1 wow fadeInLeft" data-wow-delay="2s">82%</span> </div>
               <div class="skill-progress">
-                <div>CSS3</div>
+                <div>Lorem Ipsum</div>
                 <div class="progress wow fadeInLeft" >
                   <div class="progress-bar css3 wow fadeInLeft" data-wow-delay="2s" role="progressbar" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
                 <span class="web-bar bar2 wow fadeInLeft" data-wow-delay="2s">78%</span> </div>
               <div class="skill-progress">
-                <div>Bootstrap</div>
+                <div>Lorem Ipsum</div>
                 <div class="progress">
                   <div class="progress-bar bootstrap wow fadeInLeft" data-wow-delay="2s" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
                 <span class="web-bar bar3 wow fadeInLeft" data-wow-delay="2s">85%</span> </div>
               <div class="skill-progress">
-                <div>Photoshop</div>
+                <div>Lorem Ipsum</div>
                 <div class="progress">
                   <div class="progress-bar photoshop wow fadeInLeft" data-wow-delay="2s" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
                 <span class="web-bar bar4 wow fadeInLeft" data-wow-delay="2s">65%</span> </div>
               <div class="skill-progress">
-                <div>jQuery</div>
+                <div>Lorem Ipsum</div>
                 <div class="progress">
                   <div class="progress-bar jquery wow fadeInLeft" data-wow-delay="2s" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
                 <span class="web-bar bar5 wow fadeInLeft" data-wow-delay="2s">90%</span> </div>
               <div class="skill-progress">
-                <div>Javascript</div>
+                <div>Lorem Ipsum</div>
                 <div class="progress">
                   <div class="progress-bar javascript wow fadeInLeft" data-wow-delay="2s" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
@@ -202,37 +202,37 @@
           <div class="service-callouts">
             <div class="col-sm-6 col-md-4">
               <div class="service-box"> <i class="fa fa-desktop" aria-hidden="true"></i>
-                <h3 class="subtitle">Website Design</h3>
+                <h3 class="subtitle">Lorem Ipsum</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur a elit, sed do eiu tempor incididunt ute labore etrt dolore.</p>
               </div>
             </div>
             <div class="col-sm-6 col-md-4">
               <div class="service-box"> <i class="fa fa-code" aria-hidden="true"></i>
-                <h3 class="subtitle">Web Development</h3>
+                <h3 class="subtitle">Lorem Ipsum</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur a elit, sed do eiu tempor incididunt ute labore etrt dolore.</p>
               </div>
             </div>
             <div class="col-sm-6 col-md-4">
               <div class="service-box"> <i class="fa fa-html5" aria-hidden="true"></i>
-                <h3 class="subtitle">HTML5</h3>
+                <h3 class="subtitle">Lorem Ipsum</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur a elit, sed do eiu tempor incididunt ute labore etrt dolore.</p>
               </div>
             </div>
             <div class="col-sm-6 col-md-4">
               <div class="service-box"><i class="fa fa-wordpress" aria-hidden="true"></i>
-                <h3 class="subtitle">WordPress</h3>
+                <h3 class="subtitle">Lorem Ipsum</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur a elit, sed do eiu tempor incididunt ute labore etrt dolore.</p>
               </div>
             </div>
             <div class="col-sm-6 col-md-4">
               <div class="service-box"><i class="fa fa-joomla" aria-hidden="true"></i>
-                <h3 class="subtitle">Joomla</h3>
+                <h3 class="subtitle">Lorem Ipsum</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur a elit, sed do eiu tempor incididunt ute labore etrt dolore.</p>
               </div>
             </div>
             <div class="col-sm-6 col-md-4">
               <div class="service-box"><i class="fa fa-life-ring" aria-hidden="true"></i>
-                <h3 class="subtitle">Customer Support</h3>
+                <h3 class="subtitle">Lorem Ipsum</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur a elit, sed do eiu tempor incididunt ute labore etrt dolore.</p>
               </div>
             </div>
@@ -242,7 +242,7 @@
     </section>
     <!-- Services End --> 
     <!-- Testimonials Wrapper Start -->
-    <section id="testimonials" class="testimonials-wrapper white">
+    <!-- <section id="testimonials" class="testimonials-wrapper white">
       <div class="container">
         <div class="row">
           <div class="section-title">
@@ -250,13 +250,13 @@
           </div>
         </div>
         <div id="myCarousel" class="carousel slide" data-ride="carousel"> 
-          <!-- Testimonials Indicators -->
+          Testimonials Indicators
           <ol class="carousel-indicators">
             <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
             <li data-target="#myCarousel" data-slide-to="1"></li>
             <li data-target="#myCarousel" data-slide-to="2"></li>
           </ol>
-          <!-- Testimonials slides -->
+          Testimonials slides
           <div class="carousel-inner" role="listbox">
             <div class="item active">
               <div class="col-md-3">
@@ -324,7 +324,7 @@
           </div>
         </div>
       </div>
-    </section>
+    </section> -->
     <!-- Testimonials Wrapper End --> 
     <!-- Satisfied Wrapper start -->
     <div class="satisfied-wrapper">
@@ -361,7 +361,7 @@
     </div>
     <!-- satisfied Wrapper start --> 
     <!-- Pricing Table Start -->
-    <section id="pricing" class="pricing-table-wrapper">
+    <!-- <section id="pricing" class="pricing-table-wrapper">
       <div class="container">
         <div class="row">
           <div class="section-title">
@@ -388,7 +388,7 @@
               <p class="availability">Free Software Installer</p>
               <a href="javascript:void(0)" class="readmore">GET IT NOW</a> </div>
           </div>
-          <!--end item-->
+          end item
           
           <div class="col-sm-4">
             <div class="pricing_item active">
@@ -409,7 +409,7 @@
               <p class="availability">Free Software Installer</p>
               <a href="javascript:void(0)" class="readmore">GET IT NOW</a> </div>
           </div>
-          <!--end item-->
+          end item
           
           <div class="col-sm-4">
             <div class="pricing_item">
@@ -430,14 +430,14 @@
               <p class="availability">Free Software Installer</p>
               <a href="javascript:void(0)" class="readmore">GET IT NOW</a> </div>
           </div>
-          <!--end item--> 
+          end item 
           
-          <!--end item--> 
+          end item 
         </div>
       </div>
-    </section>
+    </section> -->
     <!-- Pricing Table Start -->
-    <section id="our-team" class="our-team">
+    <!-- <section id="our-team" class="our-team">
       <div class="container">
         <div class="row">
           <div class="section-title">
@@ -519,7 +519,7 @@
           </div>
         </div>
       </div>
-    </section>
+    </section> -->
     <!-- Contact Us Start -->
     <section id="contactus" class="contactus">
       <div class="container">
@@ -583,10 +583,7 @@
     <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/bootstrap.min.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/match-height.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/fit-text.js"></script>
-    <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
-    <!-- <script type="text/javascript" src="/assets/front/js/global.js"></script>
-    <script src="/themes/{{ $shop_theme }}/js/global.js"></script> -->
-    <!-- <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/parallax.js"></script> -->
+    <!-- <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script> -->
 
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/themes/{{ $shop_theme }}/assets/jquery/jquery.animateNumber.min.js"></script>

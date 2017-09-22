@@ -325,7 +325,7 @@ header .logo:before {
 header .logo {
 	height: 100%;
 	margin: 0;
-	padding: 29px 0;
+	//padding: 29px 0;
 	position: relative;
 }
 /*
@@ -402,10 +402,17 @@ span.separator {
 	position: fixed;
 	box-shadow: 0 3px 4.7px 0.3px rgba(0, 0, 0, 0.24);
 }
-.menu-bg .logo {
-	padding: 18px 0;
+.menu-bg .logo
+{
+	//padding: 18px 0;
 	transition: all 0.3s ease 0s;
 	margin-bottom: -1px;
+
+	img
+	{
+		transition: all 0.3s ease 0s;
+		width: 65%;
+	}
 }
 .navbar-default {
 	background-color: inherit;
@@ -476,7 +483,7 @@ span.separator {
 	width: 100%;
 	margin: 0;
 	padding: 0;
-	background-image: url("../img/banner.png");
+	background-image: url("../img/banner1.png");
 	background-position: 50% 0;
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -558,12 +565,24 @@ span.separator {
 9. About Us
 ================================================
 */
-.aboutus {
+
+.aboutus
+{
 	padding: 65px 0 50px;
+
+	.about-details img
+	{
+		width: 100%;
+	}
 }
-.about-details img {
+
+
+/* .aboutus {
+	padding: 65px 0 50px;
+} */
+/* .about-details img {
 	width: 100%;
-}
+} */
 .aboutus h4 {
 	font-size: 22px;
 	letter-spacing: 0.6px;

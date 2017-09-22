@@ -1,176 +1,401 @@
+$color_1: #FCC209;
+$color_2: #fff;
+$color_3: #000;
+$background_color_1: #FCC209;
+$border_color_1: #000;
+
 /*
 ================================================
 Common CSS
 ================================================
 */
-.section-title h2:before {
-	background-color: #fbb829;
-}
-.section-title h2:after {
-   background-color: #fbb829;
-}
-#switcher .theme-click {
-	background-color: #fbb829;
-}
-.section-title h2 span {
-	color: #fbb829;
-}
 /*
 ================================================
 Scroll top Arrow
 ================================================
 */
-#scrollUp i:hover {
-	background: #fbb829;
-	color:#fff;
-}
 /*
 ================================================
 Logo
 ================================================
 */
-header .logo:before {
-	//background: #fbb829;
-}
 /*
 ================================================
 Navigation
 ================================================
 */
-.header-top-area  .navbar-nav > li.active > a::before {
-  background: #fbb829;
-}
-.navbar-default .navbar-nav > li > a:focus, .navbar-default .navbar-nav > li > a:hover {
-	color: #fbb829;
-}
-.menu-bg .navbar-default .navbar-nav li a:hover {
-	color: #fbb829;
-}
 /*
 ================================================
 Banner Content
 ================================================
 */
-.banner-content .btn:before {
-	background: #fbb829;
-}
-.banner-content .btn {
-	color: #fbb829;
-	border: 1px solid #fbb829;
-}
-.banner-content .btn:hover, .banner-content .btn:focus, .banner-content .btn:active {
-	color: #000;
-}
 /*
 ================================================
 About Us
 ================================================
 */
-.readmore {
-	color: #fbb829;
-	border: 1px solid #fbb829;
-}
-.readmore:before {
-	background: #fbb829;
-}
-.readmore:hover, .readmore:focus, .readmore:active {
-	color: #000;
-	border: 1px solid #fbb829;
-}
-.readmore:hover:before, .readmore:focus:before, .readmore:active:before {
-	border: 1px solid #fbb829;
-}
-.we-do > ul li i {
-	color: #fbb829;
-}
-.progress-bar {
- background-color: #fbb829;
-}
 /*
 ================================================
 Services
 ================================================
 */
-.service-callouts .service-box i.fa {
-	color: #fbb829;
-}		
 /*
 ================================================
 Testimonials Wrapper 
 ================================================
-*/	
-.testimonial-img > i {
-	background: #fbb829;
-}
-.testimonial-rating li i {
-	color: #fbb829;
-}
-.testimonials-wrapper .carousel-indicators .active {
-	background: #fbb829;
-}
-.textimonial-text > i {
-	color: #fbb829;
-}
+*/
 /*
 ================================================
 Satisfied-wrapper
 ================================================
 */
-.satisfied-wrapper .counter .icon span {
-	border: 2px solid #fbb829;
-	color: #fbb829;
-}
 /*
 ================================================
 Pricing Table
 ================================================
 */
-.pricebox .price_title .ratings i {
-	color: #fbb829;
-}
-.pricing_item.active {
-	background: #fbb829;
-	color: #fff;
-}
-.pricing_item.active .pricebox {
-  border-color: #000;
-}
-.pricing_item.active .pricebox .price p > strong {
-	color: #000;
-}
-.pricing_item.active p, .pricing_item.active {
-	color: #000;
-}
-.pricing_item.active h3 {
-	color: #000;
-}
-.pricing_item.active .availability:before, .pricing_item.active .pricebox .price_title .ratings i {
-	color: #000;
-}
 /*
 ================================================
 Our Team
 ================================================
-*/	
-.team-social a {
-  background: #fbb829;
-}
-.team-social a:hover {
-	color: #fbb829;
-}
-.caption-text h3 > a:hover {
-	color: #fbb829
-}
+*/
 /*
 ================================================
 Contact us
 ================================================
 */
-.contact-form .fa {
-  color: #fbb829;
+.section-title 
+{
+	h2 
+	{
+		&:before 
+		{
+			background-color: $background_color_1;
+		}
+		&:after 
+		{
+			background-color: $background_color_1;
+		}
+		span 
+		{
+			color: $color_1;
+		}
+	}
 }
-.contact-address .contact-info .contact-icon {
-	color: #fbb829;
+#switcher 
+{
+	.theme-click 
+	{
+		background-color: $background_color_1;
+	}
 }
-
-	
+#scrollUp 
+{
+	i 
+	{
+		&:hover 
+		{
+			background: #FCC209;
+			color: $color_2;
+		}
+	}
+}
+header 
+{
+	.logo 
+	{
+		&:before 
+		{
+			//background: #fbb829;
+		}
+	}
+}
+.header-top-area 
+{
+	.navbar-nav 
+	{
+		>li.active 
+		{
+			>a 
+			{
+				&::before 
+				{
+					background: #FCC209;
+				}
+			}
+		}
+	}
+}
+.navbar-default 
+{
+	.navbar-nav 
+	{
+		>li 
+		{
+			>a 
+			{
+				&:focus 
+				{
+					color: $color_1;
+				}
+				&:hover 
+				{
+					color: $color_1;
+				}
+			}
+		}
+	}
+}
+.menu-bg 
+{
+	.navbar-default 
+	{
+		.navbar-nav 
+		{
+			li 
+			{
+				a 
+				{
+					&:hover 
+					{
+						color: $color_1;
+					}
+				}
+			}
+		}
+	}
+}
+.banner-content 
+{
+	.btn 
+	{
+		&:before 
+		{
+			background: #FCC209;
+		}
+		color: $color_1;
+		border: 1px solid #FCC209;
+		&:hover 
+		{
+			color: $color_3;
+		}
+		&:focus 
+		{
+			color: $color_3;
+		}
+		&:active 
+		{
+			color: $color_3;
+		}
+	}
+}
+.readmore 
+{
+	color: $color_1;
+	border: 1px solid #FCC209;
+	&:before 
+	{
+		background: #FCC209;
+	}
+	&:hover 
+	{
+		color: $color_3;
+		border: 1px solid #FCC209;
+		&:before 
+		{
+			border: 1px solid #FCC209;
+		}
+	}
+	&:focus 
+	{
+		color: $color_3;
+		border: 1px solid #FCC209;
+		&:before 
+		{
+			border: 1px solid #FCC209;
+		}
+	}
+	&:active 
+	{
+		color: $color_3;
+		border: 1px solid #FCC209;
+		&:before 
+		{
+			border: 1px solid #FCC209;
+		}
+	}
+}
+.we-do 
+{
+	>ul 
+	{
+		li 
+		{
+			i 
+			{
+				color: $color_1;
+			}
+		}
+	}
+}
+.progress-bar 
+{
+	background-color: $background_color_1;
+}
+.service-callouts 
+{
+	.service-box 
+	{
+		i.fa 
+		{
+			color: $color_1;
+		}
+	}
+}
+.testimonial-img 
+{
+	>i 
+	{
+		background: #FCC209;
+	}
+}
+.testimonial-rating 
+{
+	li 
+	{
+		i 
+		{
+			color: $color_1;
+		}
+	}
+}
+.testimonials-wrapper 
+{
+	.carousel-indicators 
+	{
+		.active 
+		{
+			background: #FCC209;
+		}
+	}
+}
+.textimonial-text 
+{
+	>i 
+	{
+		color: $color_1;
+	}
+}
+.satisfied-wrapper 
+{
+	.counter 
+	{
+		.icon 
+		{
+			span 
+			{
+				border: 2px solid #FCC209;
+				color: $color_1;
+			}
+		}
+	}
+}
+.pricebox 
+{
+	.price_title 
+	{
+		.ratings 
+		{
+			i 
+			{
+				color: $color_1;
+			}
+		}
+	}
+}
+.pricing_item.active 
+{
+	background: #FCC209;
+	color: $color_2;
+	color: $color_3;
+	.pricebox 
+	{
+		border-color: $border_color_1;
+		.price 
+		{
+			p 
+			{
+				>strong 
+				{
+					color: $color_3;
+				}
+			}
+		}
+		.price_title 
+		{
+			.ratings 
+			{
+				i 
+				{
+					color: $color_3;
+				}
+			}
+		}
+	}
+	p 
+	{
+		color: $color_3;
+	}
+	h3 
+	{
+		color: $color_3;
+	}
+	.availability 
+	{
+		&:before 
+		{
+			color: $color_3;
+		}
+	}
+}
+.team-social 
+{
+	a 
+	{
+		background: #FCC209;
+		&:hover 
+		{
+			color: $color_1;
+		}
+	}
+}
+.caption-text 
+{
+	h3 
+	{
+		>a 
+		{
+			&:hover 
+			{
+				color: $color_1;
+			}
+		}
+	}
+}
+.contact-form 
+{
+	.fa 
+	{
+		color: $color_1;
+	}
+}
+.contact-address 
+{
+	.contact-info 
+	{
+		.contact-icon 
+		{
+			color: $color_1;
+		}
+	}
+}

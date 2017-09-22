@@ -49,7 +49,6 @@ class Reward
             {
                 $membership = Tbl_membership_package::where('shop_id', $shop_id)->where('membership_package_id', $membership_id)->membership()->first();
             }
-            
 
             if(!$membership)
             {

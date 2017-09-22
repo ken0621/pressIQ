@@ -401,7 +401,7 @@ class MlmDeveloperController extends Member
 
 
 
-        $existing_customer          = Tbl_customer::where("email", Request::input("email"))->first();
+        $existing_customer          = Tbl_customer::where("shop_id", $shop_id)->where("email", Request::input("email"))->first();
         $slot_date_created          = date("Y-m-d", strtotime(Request::input("date_created")));
 
 

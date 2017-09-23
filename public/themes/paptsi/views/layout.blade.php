@@ -596,4 +596,17 @@
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/custom.js"></script>
 
     </body>
+
+
+
+
+    <!-- FOOTER -->
+    <footer id="bottom-footer" style="background-color: #ef8805; font-size: 13px;">
+        <div class="container">
+            <div class="bottom" style="color: #fff;">                           
+                <div class="ftr-title">© 2017 Philippine Archipelago Ports and Terminal Services, INC. All Rights Reserved.</div>
+                <div class="ftr-title-2" style="font-size: 10px;">Powered By: DIGIMA WEB SOLUTIONS, Inc.</div>
+            </div>
+        </div>
+    </footer>
 </html>

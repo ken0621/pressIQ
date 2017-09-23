@@ -30,9 +30,10 @@
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/parallax.css">
         <!-- Brown Custom Icon -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/brown-icon/styles.css">
-        
         <!-- LIGHTBOX -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/lightbox/css/lightbox.css">
+        <!-- WOW JS -->
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/wow/css/animate.css">
 
         <!-- OTHER CSS -->
         @yield("css")

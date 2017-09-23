@@ -8,17 +8,18 @@ $border_color_1: #000;
 {
 	h2 
 	{
+		color: #ef8807;
 		&:before 
 		{
-			background-color: $background_color_1;
+			background-color: #ef8807;
 		}
 		&:after 
 		{
-			background-color: $background_color_1;
+			background-color: #ef8807;
 		}
 		span 
 		{
-			color: $color_1;
+			color: #30a9e0;
 		}
 	}
 }
@@ -188,7 +189,7 @@ header
 	{
 		i.fa 
 		{
-			color: $color_1;
+			color: #ef8807;
 		}
 	}
 }

@@ -508,6 +508,11 @@ span.separator {
 		img {
 			width: 100%;
 		}
+		@media screen and (max-width: 414px)
+		{
+			width: 55%;
+			margin-left: 24% !important;
+		}
 	}
 }
 .banner-content h1 {
@@ -520,6 +525,10 @@ span.separator {
 
 	span {
 		color: #ffbe0b;
+	}
+	@media screen and (max-width: 414px)
+	{
+		font-size: 25px !important;
 	}
 }
 .banner-content p {

@@ -60,7 +60,7 @@ class Warehouse2
             $prefix = Tbl_settings::where("settings_key","inventory_wis_prefix")->value('settings_value');
         }
 
-        return $prefix.sprintf("%'.05d\n", $history_ctr+1);
+        return $prefix.sprintf("%'.05d", $history_ctr+1);
 
     }
     public static function transfer_validation($shop_id, $wh_from, $wh_to, $item_id, $quantity, $remarks, $serial = array())
@@ -443,7 +443,7 @@ class Warehouse2
         if($prefix)
         {
             $ctr_item = Tbl_warehouse_inventory_record_log::where('record_shop_id',$shop_id)->count() + 1;
-            $return = $prefix.sprintf("%'.05d\n",$ctr_item);
+            $return = $prefix.sprintf("%'.05d",$ctr_item);
         }
 
         return $return;
@@ -610,8 +610,8 @@ class Warehouse2
             $inventory_details['history_description'] = "Consume items from ". $insert_slip['inventroy_source_reason']." #".$insert_slip['inventory_source_id'];
             $inventory_details['history_remarks'] = $remarks;
             $inventory_details['history_type'] = "WIS";
-            $inventory_details['history_reference'] = $insert_slip['record_consume_ref_name'];
-            $inventory_details['history_reference_id'] = $insert_slip['record_consume_ref_id'];
+            $inventory_details['history_reference'] = $insert_slip['inventroy_source_reason'];
+            $inventory_details['history_reference_id'] = $insert_slip['inventory_source_id'];
             $inventory_details['history_number'] = Warehouse2::get_history_number($shop_id, $warehouse_id, $inventory_details['history_type']);
 
             $history_item[0]['item_id'] = $item_id;
@@ -647,6 +647,76 @@ class Warehouse2
         }
 
         return $validate;
+    }
+    public static function consume_product_codes($shop_id = 0, $mlm_pin = '', $mlm_activation = '', $customer_id = 0)
+    {
+        $return = null;
+        $val = Tbl_warehouse_inventory_record_log::where("record_shop_id",$shop_id)
+                                                 ->where('mlm_activation',$mlm_activation)
+                                                 ->where('mlm_pin',$mlm_pin)
+                                                 ->where('record_inventory_status',0)
+                                                 ->first();
+        if($val)
+        {
+            $consume['name'] = 'customer_product_code';
+            $consume['id'] = $customer_id;
+            Warehouse2::consume_record_log($shop_id, $val->record_warehouse_id, $val->record_item_id,$val->record_log_id, 1, "Consume using product codes.", $consume);
+            $return = $val->record_item_id;
+        }
+        else
+        {
+            $return = "Pin number and activation code doesn't exist.";
+        }
+
+        return $return;
+
+    }
+    public static function consume_record_log($shop_id, $warehouse_id, $item_id = 0, $recor_log_id = 0, $quantity = 1, $remarks = '', $consume = array(), $inventory_history = '')
+    {
+        $return = null;
+
+        $insert_slip['warehouse_id']                 = $warehouse_id;
+        $insert_slip['inventory_remarks']            = $remarks;
+        $insert_slip['inventory_slip_date']          = Carbon::now();
+        $insert_slip['inventory_slip_shop_id']       = $shop_id;
+        $insert_slip['slip_user_id']                 = Warehouse::getUserid();
+        $insert_slip['inventroy_source_reason']      = isset($consume['name']) ? $consume['name'] : '';
+        $insert_slip['inventory_source_id']          = isset($consume['id']) ? $consume['id'] : 0;
+        $insert_slip['slip_user_id']                 = Warehouse::getUserid();
+        $slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
+       
+        $insert['record_shop_id']            = $shop_id;
+        $insert['record_item_id']            = $item_id;
+        $insert['record_warehouse_id']       = $warehouse_id;
+        $insert['record_item_remarks']       = $remarks;
+        $insert['record_warehouse_slip_id']  = $slip_id;
+        $insert['record_consume_ref_name']   = isset($consume['name']) ? $consume['name'] : '';
+        $insert['record_consume_ref_id']     = isset($consume['id']) ? $consume['id'] : 0;
+        $insert['record_inventory_status']   = 1;
+        $insert['record_log_date_updated']   = Carbon::now();
+       
+        Warehouse2::insert_item_history($recor_log_id);
+        Tbl_warehouse_inventory_record_log::where('record_log_id',$recor_log_id)->update($insert);
+
+        if(!$inventory_history)
+        {
+            $inventory_details['history_description'] = "Consume items from ". $insert_slip['inventroy_source_reason']." #".$insert_slip['inventory_source_id'];
+            $inventory_details['history_remarks'] = $remarks;
+            $inventory_details['history_type'] = "WIS";
+            $inventory_details['history_reference'] = $insert_slip['inventroy_source_reason'];
+            $inventory_details['history_reference_id'] = $insert_slip['inventory_source_id'];
+            $inventory_details['history_number'] = Warehouse2::get_history_number($shop_id, $warehouse_id, $inventory_details['history_type']);
+
+            $history_item[0]['item_id'] = $item_id;
+            $history_item[0]['quantity'] = $quantity;
+            $history_item[0]['item_remarks'] = $remarks;
+
+            Warehouse2::insert_inventory_history($shop_id, $warehouse_id, $inventory_details, $history_item);
+        }
+
+        Warehouse2::update_inventory_count($warehouse_id, $slip_id, $item_id, -($quantity));
+
+        return $return;
     }
     public static function get_user_login()
     {

@@ -315,7 +315,7 @@ class MlmDeveloperController extends Member
 
         return $membership_code_id;
     }
-    public static function create_slot_submit_create_slot($customer_id, $membership_code_id, $slot_sponsor, $slot_placement, $slot_position, $shop_id, $slot_no = null)
+    public static function create_slot_submit_create_slot($customer_id, $membership_code_id, $slot_sponsor, $slot_placement, $slot_position, $shop_id, $slot_no = null, $date_created)
     {
         $lowest_rank                            = Tbl_brown_rank::where("rank_shop_id", $shop_id)->min("rank_id");
         $request_check['slot_no']               = $slot_no;
@@ -325,6 +325,7 @@ class MlmDeveloperController extends Member
         $request_check['slot_sponsor']          = $slot_sponsor; // required
         $request_check['slot_placement']        = $slot_placement; // optional defends on settings
         $request_check['slot_position']         = $slot_position; // optional defends on settings
+        $request_check['date_created']          = $date_created; // optional defends on settings
 
         if($lowest_rank)
         {
@@ -347,8 +348,8 @@ class MlmDeveloperController extends Member
     }
     public function reset()
     {
-        $shop_id    = $this->user_info->shop_id;
-        $_slot      = Tbl_mlm_slot::where("shop_id", $shop_id)->get();
+        $shop_id        = $this->user_info->shop_id;
+        $_slot          = Tbl_mlm_slot::where("shop_id", $shop_id)->get();
 
         Tbl_tree_placement::where("shop_id", $shop_id)->delete();
         Tbl_tree_sponsor::where("shop_id", $shop_id)->delete();
@@ -360,8 +361,17 @@ class MlmDeveloperController extends Member
             Tbl_mlm_slot::where("slot_id", $slot->slot_id)->delete();
             Tbl_mlm_slot::where("slot_owner", $slot->slot_owner)->delete();
             Tbl_customer_address::where("customer_id", $slot->slot_owner)->delete();
-            Tbl_customer::where("customer_id", $slot->slot_owner)->delete(); 
         }
+        
+        $_customer      = Tbl_customer::where("shop_id", $shop_id)->get(); 
+
+        foreach($_customer as $customer)
+        {
+            Tbl_customer_address::where("customer_id", $customer->customer_id)->delete();
+            Tbl_customer::where("customer_id", $customer->customer_id)->delete();
+        }
+
+
 
         return Redirect::to("/member/mlm/developer");
     }
@@ -388,10 +398,36 @@ class MlmDeveloperController extends Member
 
         /* SLOT GENERATION */
         $membership_package_id      = Request::input("package_number");
-        $customer_id                = Self::create_slot_submit_random_customer($shop_id);
+
+
+
+        $existing_customer          = Tbl_customer::where("email", Request::input("email"))->first();
+        $slot_date_created          = date("Y-m-d", strtotime(Request::input("date_created")));
+
+
+        if($existing_customer)
+        {
+            $customer_id            = $existing_customer->customer_id;
+        }
+        else
+        {
+            $random_user = Tbl_customer::orderBy(DB::raw("rand()"))->where("archived", 0)->first();
+
+            $insert_customer["shop_id"]        = $shop_id;
+            $insert_customer["first_name"]     = (Request::input("first_name") == "undefined" ? "" : ucfirst(Request::input("first_name")));
+            $insert_customer["last_name"]      = (Request::input("last_name") == "undefined" ? "" : ucfirst(Request::input("last_name")));
+            $insert_customer["email"]          = Request::input("email");
+            $insert_customer["ismlm"]          = 1;
+            $insert_customer["mlm_username"]   = Request::input("slot_no");
+            $insert_customer["password"]       = Crypt::encrypt(randomPassword());
+            $insert_customer["created_date"]   = $slot_date_created;
+
+            $customer_id = Tbl_customer::insertGetId($insert_customer);
+        }
+
         $membership_code_return     = Reward::generate_membership_code($customer_id, $membership_package_id);
         $membership_code_id         = (isset($membership_code_return["membership_code_id"]) ? $membership_code_return["membership_code_id"] : null);
-        $slot_id                    = Self::create_slot_submit_create_slot($customer_id, $membership_code_id, $slot_sponsor, $slot_placement, $slot_position, $shop_id, Request::input("slot_no"));
+        $slot_id                    = Self::create_slot_submit_create_slot($customer_id, $membership_code_id, $slot_sponsor, $slot_placement, $slot_position, $shop_id, Request::input("slot_no"), $slot_date_created);
         
         if(!$membership_code_id)
         {

@@ -896,10 +896,12 @@ class MLM_PlanController extends Member
             $validate['membership_id'] = Request::input("membership_id");
             $validate['membership_points_direct'] = Request::input("membership_points_direct");
             $validate['membership_direct_income_limit'] = Request::input("membership_direct_income_limit");
+            $validate['membership_points_direct_gc'] = Request::input("membership_points_direct_gc");
             
             $rules['membership_id']   = "required";
             $rules['membership_points_direct']    = "required";
             $rules['membership_direct_income_limit']    = "required";
+            $rules['membership_points_direct_gc']    = "required";
             
             
             $validator = Validator::make($validate,$rules);
@@ -911,12 +913,14 @@ class MLM_PlanController extends Member
                     $insert['membership_id'] = $validate['membership_id'];
                     $insert['membership_points_direct'] = $validate['membership_points_direct'];
                     $insert['membership_direct_income_limit'] = $validate['membership_direct_income_limit'];
+                    $insert['membership_points_direct_gc'] = $validate['membership_points_direct_gc'];
                     Tbl_membership_points::insert($insert);
                 }
                 else
                 {
                     $update['membership_points_direct'] = $validate['membership_points_direct'];
                     $update['membership_direct_income_limit'] = $validate['membership_direct_income_limit'];
+                    $update['membership_points_direct_gc'] = $validate['membership_points_direct_gc'];
                     Tbl_membership_points::where('membership_id', $validate['membership_id'])->update($update);
                 }
             }

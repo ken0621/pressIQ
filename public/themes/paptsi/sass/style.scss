@@ -500,14 +500,36 @@ span.separator {
 	display: table-cell;
 	text-align: center;
 	vertical-align: middle;
+
+	.banner-logo-container {
+		padding-bottom: 15px;
+		width: 30%;
+		margin-left: 35%;
+		img {
+			width: 100%;
+		}
+		@media screen and (max-width: 414px)
+		{
+			width: 55%;
+			margin-left: 24% !important;
+		}
+	}
 }
 .banner-content h1 {
-	font-size: 60px;
+	font-size: 40px;
 	font-weight: 500;
 	letter-spacing: 0.06em;
 	padding: 0;
 	margin: 0 0 25px;
 	color: #fff;
+
+	span {
+		color: #ffbe0b;
+	}
+	@media screen and (max-width: 414px)
+	{
+		font-size: 25px !important;
+	}
 }
 .banner-content p {
 	color: #fff;

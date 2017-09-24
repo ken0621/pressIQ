@@ -24,6 +24,7 @@ use DB;
 use Redirect;
 use Request;
 use Crypt;
+use Carbon\Carbon;
 
 class MlmDeveloperController extends Member
 {
@@ -249,7 +250,7 @@ class MlmDeveloperController extends Member
         $membership_package_id      = Request::input("membership");
     	$customer_id                = Self::create_slot_submit_random_customer($shop_id);
         $membership_code_id         = Self::create_slot_submit_create_code($customer_id, $membership_package_id);
-        $slot_id                    = Self::create_slot_submit_create_slot($customer_id, $membership_code_id, $slot_sponsor, $slot_placement, $slot_position, $shop_id);
+        $slot_id                    = Self::create_slot_submit_create_slot($customer_id, $membership_code_id, $slot_sponsor, $slot_placement, $slot_position, $shop_id,null,Carbon::now());
         
         /* RANDOM WHILE PLACEMENT IS STILL TAKEN */
         if(Request::input("placement") == "")

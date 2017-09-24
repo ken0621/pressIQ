@@ -48,10 +48,10 @@
             <div class="col-sm-6">
               <ul class="list-unstyled list-inline">
                 <li>
-                  <p><i class="fa fa-envelope"></i><a href="mailto:support@sbtechnosoft.com">lorem@email.com</a></p>
+                  <p><i class="fa fa-envelope"></i><a href="mailto:support@sbtechnosoft.com">paptsi@gmail.com</a></p>
                 </li>
                 <li>
-                  <p><i class="fa fa-phone"></i> Call us +93 9452 456 789</p>
+                  <p><i class="fa fa-phone"></i> Call us 02-833-7634</p>
                 </li>
               </ul>
             </div>
@@ -110,8 +110,9 @@
         <div class="container">
           <div class="banner-content">
             <div class="banner-content-table-cell">
-              <h1>Lorem Ipsum <span id="js-rotating">Dolor | Sit | Amit</span></h1>
-              <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit</p>
+              <div class="banner-logo-container"><img src="/themes/{{ $shop_theme }}/img/logo-inverted.png"></div>
+              <h1>We Aim For The Best <span id="js-rotating">Services | Operations | Management</span></h1>
+              <p>In the Industry of ports and Terminal Services</p>
               <a href="javascript:void(0)" class="btn btn-default">Learn More</a></div>
           </div>
         </div>
@@ -129,7 +130,7 @@
             <div class="about-details">
               <h4>About Experts</h4>
               <img src="images/about-img.jpg" alt="">
-              <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard.</p>
+              <p>Philippine Archipelago Ports and Terminal Services Inc. aims to be a key player in the industry of port operation and management. We provide safe, clean and convenient port facilities and passenger terminal building.</p>
               <a class="readmore" href="#">Read More</a> </div>
           </div>
           <div class="col-md-4 col-sm-6">
@@ -201,31 +202,31 @@
         <div class="row">
           <div class="service-callouts">
             <div class="col-sm-6 col-md-4">
-              <div class="service-box"> <i class="fa fa-desktop" aria-hidden="true"></i>
+              <div class="service-box"> <i class="fa fa-ship" aria-hidden="true"></i>
                 <h3 class="subtitle">Lorem Ipsum</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur a elit, sed do eiu tempor incididunt ute labore etrt dolore.</p>
               </div>
             </div>
             <div class="col-sm-6 col-md-4">
-              <div class="service-box"> <i class="fa fa-code" aria-hidden="true"></i>
+              <div class="service-box"> <i class="fa fa-building-o" aria-hidden="true"></i>
                 <h3 class="subtitle">Lorem Ipsum</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur a elit, sed do eiu tempor incididunt ute labore etrt dolore.</p>
               </div>
             </div>
             <div class="col-sm-6 col-md-4">
-              <div class="service-box"> <i class="fa fa-html5" aria-hidden="true"></i>
+              <div class="service-box"> <i class="fa fa-handshake-o" aria-hidden="true"></i>
                 <h3 class="subtitle">Lorem Ipsum</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur a elit, sed do eiu tempor incididunt ute labore etrt dolore.</p>
               </div>
             </div>
             <div class="col-sm-6 col-md-4">
-              <div class="service-box"><i class="fa fa-wordpress" aria-hidden="true"></i>
+              <div class="service-box"><i class="fa fa-crosshairs" aria-hidden="true"></i>
                 <h3 class="subtitle">Lorem Ipsum</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur a elit, sed do eiu tempor incididunt ute labore etrt dolore.</p>
               </div>
             </div>
             <div class="col-sm-6 col-md-4">
-              <div class="service-box"><i class="fa fa-joomla" aria-hidden="true"></i>
+              <div class="service-box"><i class="fa fa-line-chart" aria-hidden="true"></i>
                 <h3 class="subtitle">Lorem Ipsum</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur a elit, sed do eiu tempor incididunt ute labore etrt dolore.</p>
               </div>
@@ -327,7 +328,7 @@
     </section> -->
     <!-- Testimonials Wrapper End --> 
     <!-- Satisfied Wrapper start -->
-    <div class="satisfied-wrapper">
+    <div class="satisfied-wrapper" style="display: none;">
       <div class="container">
         <div class="col-sm-6 col-md-3">
           <div class="counter">
@@ -562,8 +563,8 @@
         <div class="contact-address text-center">
           <div class="contact-info">
             <div class="contact-icon"> <i class="fa fa-map-marker"></i> </div>
-            <p>201 Oak Street Building 27  <span> San Francisco, CA 94103 </span> <span>USA</span></p>
-            <p> <abbr title="Email">E:</abbr> support@sbtechnosoft.com <span> <abbr title="Phone">P:</abbr> (012) 345-6789 </span> <span> <abbr title="Fax">F:</abbr> (012) 345-6789 </span></p>
+            <p>Unit 4B 4th Floor UNIOIL Center Bldg.  <span> Business Park Alyala Alabang </span> <span>Muntinlupa City PH</span></p>
+            <p> <abbr title="Email">E:</abbr> paptsi@gmail.com <span> <abbr title="Phone">P:</abbr> 02-833-7634 </span> <!-- <span> <abbr title="Fax">F:</abbr> (012) 345-6789 </span> --></p>
           </div>
         </div>
       </div>
@@ -574,7 +575,7 @@
     <!-- Contact Us End --> 
     <!-- Google Map Start -->
     <div class="google-map">
-      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d198710.35112897935!2d-98.51489117772236!3d38.904562823631146!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54eab584e432360b%3A0x1c3bb99243deb742!2sUnited+States!5e0!3m2!1sen!2sin!4v1471865832140" allowfullscreen></iframe>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1932.0173736412858!2d121.0236813759334!3d14.425160545116888!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397d1ce5020a0cb%3A0x7ed15c029251ee8a!2sMadrigal+Business+Park!5e0!3m2!1sen!2sph!4v1506135550439" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
     </div>
     <!-- Google Map end --> 
 
@@ -595,4 +596,17 @@
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/custom.js"></script>
 
     </body>
+
+
+
+
+    <!-- FOOTER -->
+    <footer id="bottom-footer" style="background-color: #ef8805; font-size: 13px;">
+        <div class="container">
+            <div class="bottom" style="color: #fff;">                           
+                <div class="ftr-title">© 2017 Philippine Archipelago Ports and Terminal Services, INC. All Rights Reserved.</div>
+                <div class="ftr-title-2" style="font-size: 10px;">Powered By: DIGIMA WEB SOLUTIONS, Inc.</div>
+            </div>
+        </div>
+    </footer>
 </html>

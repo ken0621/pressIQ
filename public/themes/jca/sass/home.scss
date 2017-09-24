@@ -88,6 +88,7 @@ body{
 
 /* WHY JCA */
 .wrapper-2 {
+	background-color: #f4f4f4;
 	font-family: $content-text;
 	padding: 25px 0px;
 	
@@ -103,11 +104,51 @@ body{
 		}
 	}
 	.content-container {
-		padding: 25px 0px 40px 0px;
+		padding: 25px 0px 50px 0px;
 
 		.per-image-container {
 			position: relative;
 			font-family: $content-text;
+			overflow: hidden;
+			&:hover {
+				cursor: pointer;
+				img {
+					-moz-transform: scale(1.1);
+					-webkit-transform: scale(1.1);
+					transform: scale(1.1);
+				}
+			}
+
+			img {
+				width: 100%;
+				-moz-transition: all 0.3s;
+				-webkit-transition: all 0.3s;
+				transition: all 0.3s;
+			}
+
+			.content-text-container {
+				position: absolute;
+				top: 7%;
+				left: 10%;
+				color: #fff;
+
+				h1 {
+					font-family: $display-text;
+					font-size: 25px;
+					font-weight: $regular;
+				}
+
+				.title-line {
+					padding-top: 2px;
+					width: 40px;
+					background-color: #ffd185;
+				}
+				p {
+					font-size: 15px;
+					margin-top: 15px;
+					padding-right: 30px;
+				}
+			}
 		}
 	}
 }

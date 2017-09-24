@@ -15,6 +15,7 @@ use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Models\Tbl_mlm_indirect_setting;
 use App\Models\Tbl_mlm_binary_setttings;
 use App\Models\Tbl_mlm_unilevel_settings;
+use App\Models\Tbl_direct_gc_logs;
 use App\Models\Tbl_mlm_item_points;
 use App\Models\Tbl_mlm_matching;
 use App\Models\Tbl_mlm_matching_log;
@@ -105,6 +106,18 @@ class Mlm_complan_manager
                 else
                 {
                     $direct_points_given = $slot_info->membership_points_direct;
+                }
+
+                $direct_points_gc_given = $slot_info->membership_points_direct_gc;
+                if($direct_points_gc_given != 0)
+                {
+                    $insert_direct_gc["gc_log_amount"]  = $direct_points_gc_given;
+                    $insert_direct_gc["slot_id"]        = $slot_sponsor->slot_id;
+                    $insert_direct_gc["shop_id"]        = $slot_info->shop_id;
+                    $insert_direct_gc["date_created"]   = Carbon::now();
+                    $insert_direct_gc["gc_claimed"]     = 0;
+                    Tbl_direct_gc_logs::insert($insert_direct_gc);
+
                 }
 
 

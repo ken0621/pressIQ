@@ -17,11 +17,15 @@ use App\Models\Tbl_mlm_transfer_slot_log;
 use App\Models\Tbl_item_code;
 use App\Models\Tbl_item_code_transfer_log;
 use App\Models\Tbl_membership_code_transfer_log;
+use App\Models\Tbl_warehouse_inventory_record_log;
 
 use App\Globals\Mlm_compute;
 use App\Globals\Mlm_member;
+use App\Globals\Warehouse2;
 use App\Globals\Item_code;
 use App\Globals\Mlm_plan;
+use App\Globals\MLM2;
+use App\Globals\Item;
 class MlmSlotsController extends Mlm
 {
     public function index()
@@ -662,5 +666,93 @@ class MlmSlotsController extends Mlm
                                         ->first();
 
         return $customer;                                      
+    }
+    public function use_product_code()
+    {
+        return view('mlm.slots.use_product_code');
+    }
+    public function use_product_code_validate()
+    {
+        $mlm_pin = Request::input('mlm_pin');
+        $mlm_activation = Request::input('mlm_activation');
+
+        $shop_id = Self::$shop_id;
+
+        $check = Item::check_product_code($shop_id, $mlm_pin, $mlm_activation);
+        $return = [];
+        if($check == true)
+        {
+            $return['status'] = 'success';
+            $return['mlm_pin'] = $mlm_pin;
+            $return['mlm_activation'] = $mlm_activation;
+            $return['call_function'] = 'success_validation';
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['message'] = "Pin number and activation code doesn't exist.";
+        }
+
+        return json_encode($return);
+    }
+    public function to_slot()
+    {
+        $data['mlm_pin'] = Request::input('mlm_pin');
+        $data['mlm_activation'] = Request::input('mlm_activation');
+        $data["_slot"]    = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->membership()->get();
+
+        return view('mlm.slots.choose_slot',$data);
+    }
+    public function confirmation()
+    {
+        $data['mlm_pin'] = Request::input('mlm_pin');
+        $data['mlm_activation'] = Request::input('mlm_activation');
+        $data['slot_no'] = Request::input('slot_no');
+
+        $data['status'] = 'success';
+        $data['call_function'] = 'success_slot';
+
+        return json_encode($data);
+    }
+    public function confirmation_submit()
+    {
+        $data['mlm_pin'] = Request::input('mlm_pin');
+        $data['mlm_activation'] = Request::input('mlm_activation');
+        $data['slot_no'] = Request::input('slot_no');
+        
+        $data['message'] = "&nbsp; &nbsp; Are you sure you wan't to use this PIN (<b>".$data['mlm_pin']."</b>) and Activation code (<b>".$data['mlm_activation']."</b>) in your Slot No <b>".$data['slot_no']."</b> ?";
+
+        return view('mlm.slots.confirm_product_code',$data);
+    }
+    public function use_submit()
+    {
+        $mlm_pin = Request::input('mlm_pin');
+        $mlm_activation = Request::input('mlm_activation');
+        $slot_no = Request::input('slot_no');
+
+        $slot_id    = Tbl_mlm_slot::where('slot_no', $slot_no)->where('slot_owner', Self::$customer_id)->value('slot_id');
+
+        $shop_id = Self::$shop_id;
+        $val = Warehouse2::consume_product_codes($shop_id, $mlm_pin, $mlm_activation, Self::$customer_id);
+
+        if(is_numeric($val))
+        {
+            MLM2::purchase($shop_id, $slot_id, $val);
+            $return['status'] = 'success';
+            $return['call_function'] = 'success_used';
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['status'] = $val;
+        }
+
+        return json_encode($return);
+    }
+
+    public function message()
+    {
+        $data["message"] = Request::input("message");
+        return view("member.message", $data);
     }
 }

@@ -186,7 +186,7 @@
 					<div class="chart-legend">
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Pairing Reward</span> {{ $wallet->display_complan_triangle }}</div>
+							<div class="name"><span>Repurchase Cashback</span> {{ $wallet->display_complan_repurchase_cashback }}</div>
 						</div>
 						<div class="holder">
 							<div class="color"></div>
@@ -194,12 +194,17 @@
 						</div>
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Builder Reward</span> {{ $wallet->display_complan_builder }}</div>
+							<div class="name"><span>Indirect Referral Bonus</span> {{ $wallet->display_complan_indirect }}</div>
 						</div>
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Leader Reward</span> {{ $wallet->display_complan_leader }}</div>
+							<div class="name"><span>Matching Bonus</span> {{ $wallet->display_complan_membership_matching }}</div>
 						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Unilevel Bonus</span> {{ $wallet->display_complan_unilevel }}</div>
+						</div>
+
 					</div>
 
 				</div>
@@ -220,49 +225,6 @@
 			</div>
 		</div>
 		<div class="row clearfix">
-
-			<div class="col-md-12">
-				<div class="unilevel-holder">
-					<div class="title"><i class="align-icon brown-icon-star"></i> My Slot(s) <a href="javascript:" class="title-button pull-right btn-enter-a-code">Add New Slot</a></div>
-					<div class="sub-container">
-						@foreach($_slot as $slot)
-						<div class="holder">
-							<div class="row clearfix">
-								<div class="col-sm-4 text-center">
-									<div class="label2">{{ $slot->slot_no }}</div>
-									<div class="label3">{{ $slot->display_total_earnings }}</div>
-								</div>
-								<div class="col-sm-8 text-center" style="margin-bottom: 5px;">ROAD TO <b>{{ $slot->brown_next_rank }}</b></div>
-								<div class="col-sm-4">
-									@if($slot->brown_next_rank != "NO NEXT RANK")
-										@if($slot->current_direct >= $slot->required_direct)
-											<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">DIRECT <b>QUALIFIED</b></div>
-										@else
-											<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) {{ $slot->brown_direct_rank_percentage }}%, rgb(237, 237, 237) {{ $slot->brown_direct_rank_percentage }}%);">DIRECT ({{ $slot->current_direct }}/{{ $slot->required_direct }})</div>
-										@endif
-									@else
-									<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 40%);">NO MORE <b> NEXT RANK</b></div>
-									@endif
-								</div>
-								<div class="col-sm-4">
-									@if($slot->brown_next_rank != "NO NEXT RANK")
-										@if($slot->brown_next_rank_current >= $slot->brown_next_rank_requirements)
-											<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">GROUP <b>QUALIFIED</b></div>
-										@else
-											<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) {{ $slot->brown_rank_rank_percentage }}%, rgb(237, 237, 237) {{ $slot->brown_rank_rank_percentage }}%);">GROUP ({{ $slot->brown_next_rank_current }}/{{ $slot->brown_next_rank_requirements }})</div>
-										@endif
-									@else
-									<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 40%);">NO MORE <b> NEXT RANK</b></div>
-									@endif
-								</div>
-							</div>
-						</div>
-						@endforeach
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="row clearfix">
 			<div class="col-md-6">
 				<div class="title"><i class="align-icon brown-icon-globe"></i> Newest Enrollee(s) Sponsored</div>
 				<div class="sub-container border-holder">
@@ -272,7 +234,7 @@
 					@foreach($_direct as $direct)
 					<div class="holder">
 						<div class="color">
-							<img src="{{ $profile_image }}">
+							<img src="{{ $direct->profile_image }}">
 						</div>	
 						<div class="text">
 							<div class="pull-left">

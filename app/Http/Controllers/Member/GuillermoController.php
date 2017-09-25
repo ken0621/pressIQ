@@ -269,7 +269,7 @@ class GuillermoController extends Controller
                     $updateWebhook = new Webhook();
                     $updateWebhook->name = Webhook::CHECKOUT_FAILURE;
                     $updateWebhook->id = $value->id;
-                    $updateWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/paymaya/failure");
+                    $updateWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/failure");
                     $updateWebhook->delete();
                 }
                 elseif($value->name == "CHECKOUT_DROPOUT")
@@ -277,7 +277,7 @@ class GuillermoController extends Controller
                     $updateWebhook = new Webhook();
                     $updateWebhook->name = Webhook::CHECKOUT_DROPOUT;
                     $updateWebhook->id = $value->id;
-                    $updateWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/paymaya/cancel");
+                    $updateWebhook->callbackUrl = URL::to("/payment/paymaya/webhook/cancel");
                     $updateWebhook->delete();
                 }
             }

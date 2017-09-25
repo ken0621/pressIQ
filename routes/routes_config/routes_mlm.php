@@ -1,4 +1,16 @@
 <?php
+Route::any('/admin/profile','Super\AdminControllers@getview');
+Route::any('admin/login','Super\AdminControllers@view');
+Route::any('/admin/signup', 'Super\AdminControllers@add');
+Route::post('/admin/login', 'Super\AdminControllers@login_submit');
+Route::any('/admin/layout', 'Super\AdminControllers@layout');
+Route::any('/admin/shop_user_accounts', 'Super\AdminProfileController@get_user_accounts');
+Route::any('/admin/shop_user_accounts_filter1', 'Super\AdminProfileController@getview11');
+Route::any('/admin/web_cam', 'Super\AdminProfileController@web_cam_pic');
+Route::any('/admin/shop_user_accounts_update/{id}', 'Super\AdminProfileController@edit_user_password');
+Route::post('/admin/shop_user_accounts_update_submit/{id}', 'Super\AdminProfileController@submit_user_password');
+
+
 Route::get('/mlm/membership_active_code/{pin}', 'Mlm\MlmLoginController@membership_active_code'); 
 Route::post('/mlm/membership_active_code/active/code', 'Mlm\MlmLoginController@membership_active_code_post'); 
 Route::get('/mlm/login', 'Mlm\MlmLoginController@index'); 

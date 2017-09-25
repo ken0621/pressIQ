@@ -106,7 +106,7 @@ class MlmDeveloperController extends Member
             }
             else
             {
-                $data["_slot"][$key]->sponsor_button = "<a link='/member/mlm/developer/popup_genealogy?mode=sponsor&slot_no=".$slot->sponsor->slot_no."' class='popup' size='lg'> SLOT NO. " . $slot->sponsor->slot_no . "</a>";
+                $data["_slot"][$key]->sponsor_button = "<a link='/member/mlm/developer/popup_genealogy?mode=sponsor&slot_no=".$slot->sponsor->slot_no."' class='popup' size='lg'>" . $slot->sponsor->slot_no . "</a>";
             }
 
             /* PLACEMENT BUTTON */
@@ -403,7 +403,16 @@ class MlmDeveloperController extends Member
 
 
         $existing_customer          = Tbl_customer::where("shop_id", $shop_id)->where("email", Request::input("email"))->first();
-        $slot_date_created          = date("Y-m-d", strtotime(Request::input("date_created")));
+
+        if(Request::input("date_created") == "undefined")
+        {
+            $slot_date_created      = date("Y-m-d h:i");
+        }
+        else
+        {
+            $slot_date_created      = date("Y-m-d", strtotime(Request::input("date_created")));
+        }
+        
 
 
         if($existing_customer)
@@ -415,15 +424,20 @@ class MlmDeveloperController extends Member
             $random_user = Tbl_customer::orderBy(DB::raw("rand()"))->where("archived", 0)->first();
 
             $insert_customer["shop_id"]        = $shop_id;
-            $insert_customer["first_name"]     = (Request::input("first_name") == "undefined" ? "" : ucfirst(Request::input("first_name")));
-            $insert_customer["last_name"]      = (Request::input("last_name") == "undefined" ? "" : ucfirst(Request::input("last_name")));
-            $insert_customer["email"]          = Request::input("email");
+            $insert_customer["first_name"]     = (Request::input("first_name") == "undefined" ? "John" : ucfirst(Request::input("first_name")));
+            $insert_customer["last_name"]      = (Request::input("last_name") == "undefined" ? "Doe" : ucfirst(Request::input("last_name")));
+            $insert_customer["email"]          = (Request::input("emaail") == "undefined" ? "dummy@gmail.com" : Request::input("email"));
             $insert_customer["ismlm"]          = 1;
             $insert_customer["mlm_username"]   = Request::input("slot_no");
             $insert_customer["password"]       = Crypt::encrypt(randomPassword());
             $insert_customer["created_date"]   = $slot_date_created;
-
+            
             $customer_id = Tbl_customer::insertGetId($insert_customer);
+        }
+
+        if($membership_package_id == "undefined")
+        {
+            $membership_package_id  = null;
         }
 
         $membership_code_return     = Reward::generate_membership_code($customer_id, $membership_package_id);

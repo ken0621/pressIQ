@@ -26,6 +26,7 @@
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/slick/slick.css">
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/slick/slick-theme.css">
+    <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -413,6 +414,7 @@
         </div>
     </div>
     {{-- END FOOTER --}}
+    
     {{-- START GLOBALS POPUP --}}
     <div class="popup-buy-a-kit">
         <div id="buy-a-kit-modal" class="modal fade shopping-cart">
@@ -473,6 +475,18 @@
         </div>
     </div>
     {{-- END GLOBALS POPUP --}}
+    {{-- START GLOBAL MODAL --}}
+    <div id="global_modal" class="modal fade" role="dialog" >
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content modal-content-global">
+            </div>
+        </div>
+    </div>
+    {{-- END GLOBAL MODAL --}}
+    {{-- GLOBAL MULTIPLE MODAL --}}
+    <div class="multiple_global_modal_container"></div>
+    {{-- END GLOBAL MULTIPLE MODAL --}}
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
     <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/bootstrap.min.js"></script>
@@ -487,6 +501,7 @@
     <script src="https://apis.google.com/js/api:client.js"></script>
     <script type="text/javascript" src="/assets/js/cart.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/drawer.js"></script>
+    <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
     <script type="text/javascript">
     $(".date-picker").datepicker({
     dateFormat:"yy-mm-dd"

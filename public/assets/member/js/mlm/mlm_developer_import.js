@@ -132,7 +132,7 @@ function mlm_developer_import()
     	$.each(result_import, function(key, val)
     	{
 
-    		$append = 		"<tr class='tr-slot-import-data' key='" + key + "' email='" + val["EMAIL"] + "' first_name='" + val["FIRST NAME"] + "' last_name='" + val["LAST_NAME"] + "' date_created='" + val["DATE CREATED"] + "' slot_no='" + val["SLOT NO"] + "' sponsor='" + val["SPONSOR"] + "' placement='" + val["PLACEMENT"] + "' position ='" + val["POSITION"] + "' package_number='" + val["PACKAGE NUMBER"] + "' status='pending'>" +
+    		$append = 		"<tr class='tr-slot-import-data' key='" + key + "' email='" + val["EMAIL"] + "' first_name='" + val["FIRST NAME"] + "' last_name='" + val["LAST NAME"] + "' date_created='" + val["DATE CREATED"] + "' slot_no='" + val["SLOT NO"] + "' sponsor='" + val["SPONSOR"] + "' placement='" + val["PLACEMENT"] + "' position ='" + val["POSITION"] + "' package_number='" + val["PACKAGE NUMBER"] + "' status='pending'>" +
     							"<td class='text-center'>" + val["EMAIL"] + "</td>" +
     							"<td class='text-center'>" + val["FIRST NAME"] + "</td>" +
     							"<td class='text-center'>" + val["LAST NAME"] + "</td>" +

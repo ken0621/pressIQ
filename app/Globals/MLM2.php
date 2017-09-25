@@ -25,7 +25,6 @@ use DB;
 
 class MLM2
 {
-	
 	public static $shop_id;
 
 	public static function get_sponsor_network($shop_id, $slot_no)
@@ -118,7 +117,11 @@ class MLM2
 		$return["_wallet"]->complan_builder = 0;
 		$return["_wallet"]->complan_leader = 0;
 		$return["_wallet"]->complan_triangle = 0;
-		
+		$return["_wallet"]->complan_repurchase_cashback = 0;
+		$return["_wallet"]->complan_membership_matching = 0;
+		$return["_wallet"]->complan_unilevel = 0;
+		$return["_wallet"]->complan_indirect = 0;
+
 		$return["_points"] = new stdClass();
 		$return["_points"]->brown_leader_points = 0;
 		$return["_points"]->brown_builder_points = 0;
@@ -129,7 +132,7 @@ class MLM2
 		{
 			$return["_wallet"]->current_wallet += $slot->current_wallet;
 			$return["_wallet"]->total_earnings += $slot->total_earnings;
-			$return["_wallet"]->total_payout += $slot->total_payout;
+			$return["_wallet"]->total_payout += ($slot->total_payout) * -1;
 			$return["slot_count"]++;	
 
 			$_slot_wallet = Tbl_mlm_slot_wallet_log::where("wallet_log_slot", $slot->slot_id)->get();
@@ -208,6 +211,8 @@ class MLM2
 		foreach($_direct as $key => $direct)
 		{
 			$_direct[$key]->time_ago = time_ago($direct->slot_created_date);
+
+			$_direct[$key]->profile_image = ($direct->profile == "" ? "/themes/brown/img/user-placeholder.png" : $direct->profile);
 		}
 
 		return $_direct;
@@ -273,6 +278,11 @@ class MLM2
 				$sponsor = Tbl_mlm_slot::where("slot_id", $reward->wallet_log_slot_sponsor)->first();
 				$sponsor_sponsor = Tbl_mlm_slot::where("slot_id", $sponsor->slot_placement)->first();
 				$message = "You earned <b>" . Currency::format($reward->wallet_log_amount) . "</b> from <b><a href='javascript:'>pairing bonus</a></b> because of pairing under <a href='javascript:'><b>" . $sponsor_sponsor->slot_no . "</b></a>.";
+			break;
+
+			case 'REPURCHASE_CASHBACK':
+				$sponsor = Tbl_mlm_slot::where("slot_id", $reward->wallet_log_slot_sponsor)->first();
+				$message = "You earned <b>" . Currency::format($reward->wallet_log_amount) . "</b> from <b><a href='javascript:'>repurchase cashback</a></b> because slot <a href='javascript:'><b>" . $sponsor->slot_no . "</b></a> purchased a product.";
 			break;
 
 			default:

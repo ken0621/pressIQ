@@ -65,7 +65,7 @@
 		}
 		.sidebar
 		{
-			background-color: #242d34;
+			background-color: #16185b;
 			width: 300px;
 			position: absolute;
 			left: 0;
@@ -292,7 +292,7 @@
 			&.small
 			{
 				width: 80px;
-				background-color: #344049;
+				background-color: #262874;
 				.shadow
 				{
 					display: none;
@@ -356,7 +356,7 @@
 								{
 									.nav-holder
 									{
-										background-color: #1f262c;
+										background-color: rgba(0,0,0,0.2);
 										.icon
 										{
 											img
@@ -378,6 +378,8 @@
 		{
 			margin-left: 80px;
 			padding: 15px;
+			border: 1px solid #ccc;
+			overflow: hidden;
 			@media screen and (max-width: 500px)
 			{
 				margin-left: 0;

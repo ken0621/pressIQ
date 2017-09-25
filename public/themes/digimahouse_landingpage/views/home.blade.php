@@ -370,7 +370,6 @@
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css">
 @endsection
 
-@section("js")
 
 <script type="text/javascript">
 $(document).ready(function()

@@ -129,7 +129,7 @@ class Mlm_complan_manager_repurchasev2
             }
 
             /* PERCENTAGE OVERRIDING */
-            $leader_percentage = $leader_percentage - $trigger_percentage;
+            //$leader_percentage = $leader_percentage - $trigger_percentage;
 
             /* START COMPUTE */
             $compute_points = $amount * $leader_percentage;
@@ -494,7 +494,7 @@ class Mlm_complan_manager_repurchasev2
 
             if($slot_stairstep->stairstep_bonus != 0)
             {
-                $computed_points = ($slot_stairstep->stairstep_bonus/100) * $slot_pv;
+                $computed_points = ($slot_stairstep->stairstep_bonus/100) * $stairstep_group_points;
                 $percentage      = $slot_stairstep->stairstep_bonus;
             }  
         }
@@ -546,6 +546,11 @@ class Mlm_complan_manager_repurchasev2
                     
                     $slot_logs_id = Mlm_slot_log::slot_log_points_array($array);
 
+                    if($old_percentage == null)
+                    {
+                        $old_percentage = 0;
+                    }
+                    
                     $insert_stairstep_logs["stairstep_points_amount"]       = $stairstep_group_points;
                     $insert_stairstep_logs["stairstep_percentage"]          = $percentage;
                     $insert_stairstep_logs["stairstep_reduced_percentage"]  = $old_percentage;

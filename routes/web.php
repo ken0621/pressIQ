@@ -1,4 +1,5 @@
 <?php
+Route::any('/ncabot', 'SampleTesting@ncabot');
 Route::any('/oliver/{id}', 'SampleTesting@index');
 Route::any('/oliver/samp2', 'SampleTesting@samp2');
 Route::any('/s', 'TesterController@samptest');
@@ -6,6 +7,7 @@ Route::any('/pmigrate', 'PasswordMigrateController@index');
 Route::any('/dd','TesterController@connection_test');
 Route::any('/member/payroll/api_login','Api\PayrollConnectController@index');
 Route::any('/member/payroll/get_cutoff_data','Api\PayrollConnectController@get_cutoff_data');
+
 
 Route::any('/member/popup/message','MemberController@message');	
 Route::get('/member/mail_setting', 'Member\MailSettingController@index');
@@ -22,6 +24,8 @@ Route::get('/barcode', 'MemberController@barcodes');
 // for testing only
 // Route::get('/card', 'MemberController@card');
 // Route::get('/card/all', 'MemberController@all_slot');
+
+Route::any('/login/geturl', 'Member\TesterController@test_login'); 
 
 Route::get('member/register/session', 'MemberController@session');
 Route::get('member/register', 'MemberController@register');
@@ -1025,6 +1029,10 @@ AdvancedRoute::controller('/member/ecommerce/trackings', 'Member\TrackingsContro
 
 /* MEMBER SHIPPING*/
 AdvancedRoute::controller('/member/register/shipping', 'MemberController');
+/* End */
+
+/* MEMBER SHIPPING*/
+AdvancedRoute::controller('/member/maintenance/app_keys', 'Member\SocialNetworkingKeysController');
 /* End */
 
 

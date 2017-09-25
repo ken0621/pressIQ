@@ -37,9 +37,7 @@ class Item
 
     public static function create_validation($shop_id, $item_type, $insert)
     {
-        $return['item_id'] = 0;
-        $return['status'] = null;
-        $return['message'] = null;
+        $return = null;
 
         $rules['item_name'] = 'required';
         $rules['item_sku'] = 'required';
@@ -50,18 +48,16 @@ class Item
             $rules['item_cost'] = 'required';
             if($insert['item_cost'] > $insert['item_price'])
             {       
-                $return['status'] = 'error';
-                $return['message'] .= 'The cost is greater than the sales price.'."<br>";
+                $return .= 'The cost is greater than the sales price.'."<br>";
             }            
         }
         $validator = Validator::make($insert, $rules);
 
         if($validator->fails())
         {
-            $return["status"] = "error";
             foreach ($validator->messages()->all('') as $keys => $message)
             {
-                $return["message"] .= $message."<br>";
+                $return .= $message."<br>";
             }
         }
         if($shop_id)
@@ -69,8 +65,7 @@ class Item
             $shop_data = Tbl_shop::where('shop_id',$shop_id)->first();
             if(!$shop_data)
             {
-                $return['status'] = 'error';
-                $return['message'] .= 'Your account does not exist. <br>';                
+                $return .= 'Your account does not exist. <br>';                
             }
         }
         if($item_type)
@@ -78,8 +73,7 @@ class Item
             $type_data = Tbl_item_type::where('item_type_id',$item_type)->first();
             if(!$type_data)
             {
-                $return['status'] = 'error';
-                $return['message'] .= 'Item type does not exist. <br>';            
+                $return .= 'Item type does not exist. <br>';            
             }
         }
         if($insert['item_category_id'] != 0)
@@ -87,8 +81,7 @@ class Item
             $category_data = Tbl_category::where('type_id',$insert['item_category_id'])->where('type_shop',$shop_id)->first();
             if(!$category_data)
             {
-                $return['status'] = 'error';
-                $return['message'] .= 'Category does not exist. <br>';            
+                $return .= 'Category does not exist. <br>';            
             }            
         }
         if($insert['item_manufacturer_id'] != 0)
@@ -96,8 +89,7 @@ class Item
             $category_data = Tbl_manufacturer::where('manufacturer_id',$insert['item_manufacturer_id'])->where('manufacturer_shop_id',$shop_id)->first();
             if(!$category_data)
             {
-                $return['status'] = 'error';
-                $return['message'] .= 'Manufacturer does not exist. <br>';            
+                $return .= 'Manufacturer does not exist. <br>';            
             }            
         }
         if($insert['item_asset_account_id'] != 0)
@@ -105,8 +97,7 @@ class Item
             $asset_data = Tbl_chart_of_account::where('account_id',$insert['item_asset_account_id'])->where('account_shop_id',$shop_id)->first();
             if(!$asset_data)
             {
-                $return['status'] = 'error';
-                $return['message'] .= 'Asset account does not exist. <br>';            
+                $return .= 'Asset account does not exist. <br>';            
             }            
         }
         if($insert['item_income_account_id'] != 0)
@@ -114,8 +105,7 @@ class Item
             $income_data = Tbl_chart_of_account::where('account_id',$insert['item_income_account_id'])->where('account_shop_id',$shop_id)->first();
             if(!$income_data)
             {
-                $return['status'] = 'error';
-                $return['message'] .= 'Income account does not exist. <br>';            
+                $return .= 'Income account does not exist. <br>';            
             }            
         }
         if($insert['item_expense_account_id'] != 0)
@@ -123,8 +113,7 @@ class Item
             $expense_data = Tbl_chart_of_account::where('account_id',$insert['item_expense_account_id'])->where('account_shop_id',$shop_id)->first();
             if(!$expense_data)
             {
-                $return['status'] = 'error';
-                $return['message'] .= 'Expense account does not exist. <br>';            
+                $return .= 'Expense account does not exist. <br>';            
             }            
         }
 
@@ -218,12 +207,13 @@ class Item
         {
             $update['updated_at'] = Carbon::now();
 
-            $item_id = Tbl_item::where("shop_id", $shop_id)->where("item_id", $item_id)->update($update);
+            Tbl_item::where("shop_id", $shop_id)->where("item_id", $item_id)->update($update);
 
             $return['item_id']       = $item_id;
             $return['status']        = 'success';
-            $return['message']       = 'Item successfully created.';
+            $return['message']       = 'Item successfully updated.';
             $return['call_function'] = 'success_item';
+
         }
 
         return $return;
@@ -1519,7 +1509,7 @@ class Item
         $shop_id = Item::getShopId();
         return Tbl_membership::where('shop_id',$shop_id)->where('membership_archive',0)->get();
     }
-    public static function get_all_item_record_log($search_keyword = '', $status = '')
+    public static function get_all_item_record_log($search_keyword = '', $status = '', $paginate = 0)
     {
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
@@ -1546,16 +1536,24 @@ class Item
         {
             $query->where('record_inventory_status',0)->where('record_consume_ref_name',null)->orWhere('record_consume_ref_name','');
         }  
+        if($paginate != 0)
+        {
+            $data = $query->paginate($paginate);
+        }
+        else
+        {
+            $data = $query->get();            
+        }
 
-        return $query->paginate(10);
+        return $data;
     }
-    public static function get_assembled_kit($record_id = 0, $item_kit_id = 0, $item_membership_id = 0, $search_keyword = '', $status = '')
+    public static function get_assembled_kit($record_id = 0, $item_kit_id = 0, $item_membership_id = 0, $search_keyword = '', $status = '', $paginate = 0)
     {
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
 
         $query = Tbl_warehouse_inventory_record_log::where('item_type_id',5)->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->groupBy('record_log_id')->orderBy('record_log_id');
-        if($record_id)
+        if($record_id > 0)
         {
             $query = Tbl_warehouse_inventory_record_log::where('item_type_id',5)->where('record_log_id',$record_id)->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->groupBy('record_log_id')->orderBy('record_log_id');
         }
@@ -1579,7 +1577,7 @@ class Item
         }
         else if($status == 'used')
         {
-            $query->where('record_inventory_status', 1);
+            $query->where('record_consume_ref_name','used');
         }
         else if($status == 'sold')
         {
@@ -1589,7 +1587,17 @@ class Item
         {
             $query->where('record_inventory_status',0)->where('record_consume_ref_name',null);
         }  
-        return $query->paginate(10); 
+
+
+        if($paginate != 0)
+        {
+            $data = $query->paginate($paginate);
+        }
+        else
+        {
+            $data = $query->get();            
+        }
+        return $data; 
     } 
 
     public static function assemble_membership_kit($shop_id, $warehouse_id, $item_id, $quantity)
@@ -1624,5 +1632,42 @@ class Item
 
            Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)->delete();
         }
+    }
+    public static function check_mlm_activation($shop_id, $mlm_activation = '')
+    {
+        $ctr = Tbl_warehouse_inventory_record_log::where("record_shop_id",$shop_id)->where('mlm_activation',$mlm_activation)->count();
+        if($ctr > 0)
+        {
+            $mlm_activation = Self::check_mlm_activation($shop_id, strtoupper(str_random(6)));
+        }
+
+        return $mlm_activation;
+    }
+    public static function get_mlm_activation($shop_id)
+    {
+        $mlm_activation = strtoupper(str_random(6));
+
+        $ctr = Tbl_warehouse_inventory_record_log::where("record_shop_id",$shop_id)->where('mlm_activation',$mlm_activation)->count();
+        if($ctr > 0)
+        {
+            $mlm_activation = Self::check_mlm_activation($shop_id, strtoupper(str_random(6)));
+        }
+
+        return $mlm_activation;
+    }
+    public static function check_product_code($shop_id = 0, $mlm_pin = '', $mlm_activation = '')
+    {
+        $ctr = Tbl_warehouse_inventory_record_log::where("record_shop_id",$shop_id)
+                                                 ->where('mlm_activation',$mlm_activation)
+                                                 ->where('mlm_pin',$mlm_pin)
+                                                 ->where('record_inventory_status',0)
+                                                 ->count();
+        $return = false;
+        if($ctr > 0)
+        {
+            $return = true;
+        }
+
+        return $return;
     }
 }

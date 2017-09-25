@@ -988,7 +988,7 @@ class AuditTrail
 
     public static function getAudit_data()
     {        
-        $audit_trail = Tbl_audit_trail::user()->orderBy("tbl_audit_trail.created_at","DESC")->where("audit_shop_id",AuditTrail::getShopId())->paginate(15);
+        $audit_trail = Tbl_audit_trail::user()->select(DB::raw('tbl_audit_trail.created_at as audit_created_at, tbl_user.created_at as user_created_at, tbl_audit_trail.* , tbl_user.*'))->orderBy("tbl_audit_trail.created_at","DESC")->where("audit_shop_id",AuditTrail::getShopId())->paginate(15);
 
         foreach ($audit_trail as $key => $value) 
         {            
@@ -1446,7 +1446,7 @@ class AuditTrail
                 else
                 {
                     $audit_trail[$key]->action = "";
-                    $audit_trail[$key]->transaction_txt = "Transaction not found.";
+                    $audit_trail[$key]->transaction_txt = ucwords(str_replace("_", " ",$value->remarks));
                 }
             }
             $audit_trail[$key]->transaction_date = $transaction_date;

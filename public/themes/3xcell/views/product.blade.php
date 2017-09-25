@@ -15,7 +15,7 @@
 							<div class="cat-list-container">
 								@if(count($_category) > 0)
 									@foreach($_category as $category)
-										<div class="cat-list" onClick="location.href='/product?type={{ $category['type_id'] }}'">{{ $category['type_name'] }}</div>
+										<div class="cat-list {{ $category['type_id'] == Request::input('type') ? 'active' : '' }}" onClick="location.href='/product?type={{ $category['type_id'] }}'">{{ $category['type_name'] }}</div>
 									@endforeach
 								@else
 									<div class="cat-list">Beauty Skin Care</div>

@@ -111,4 +111,8 @@ class Tbl_customer extends Model
         
         return $query->selectRaw("*, ($balance) as balance");
     }
+    public function scopeShop($query, $shop_id)
+    {
+        return $query->where("shop_id", $shop_id);
+    }
 }

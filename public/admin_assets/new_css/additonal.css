@@ -1,5 +1,7 @@
-
-
+.filter {
+    width: 970px;
+    margin-bottom: 84px;
+}
 @CHARSET "UTF-8";
 /*
 over-ride "Weak" message, show font in dark grey
@@ -90,6 +92,7 @@ form[role=login] {
   left: 216px;
   margin-left: 23px;
   margin-top: -19px;
+  margin-bottom: 20px;
   width: 266px;
   height: 31px;
   padding-left: 77px;
@@ -150,11 +153,10 @@ form[role=login] {
 }
 .table-condensed
 {
-    margin-top: 50px !important;
     background: white !important;
     overflow: hidden !important;
-    width:99% !important;
-    margin-left: 5px !important;
+    width:100% !important;
+    margin-left: 1px !important;
 }
 
 th

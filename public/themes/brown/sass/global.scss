@@ -1,6 +1,13 @@
+$content-text: 'Arimo', sans-serif;
+$regular: 400;
+$semi-bold: 600;
+$bold: 700;
+$text-light: #777;
+$text-dark: #272c2f;
+
 body
 {
-	font-family: 'Open Sans', sans-serif;
+	font-family: 'Droid Sans', sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	font-smoothing: antialiased;
@@ -16,7 +23,7 @@ button
 {
 	color: #ffffff;
 	font-size: 13px;
-	background-color: #693d28;
+	background-color: #502d19;
 	padding: 7.5px 25px;
 	border-radius: 25px;
 	font-weight: 600;
@@ -37,13 +44,253 @@ button
 	}
 }
 
+
+.cart
+{
+	.left-btn-container
+	{
+
+		width: 100%;
+
+		div
+		{
+			float: left;
+			padding-top: 10px;
+		}
+
+		.btn-checkout
+		{
+			@extend div;
+			margin-left: 15px;
+
+			padding: 12px 30px;
+			color: #fff;
+			background-color: #4dac2b;
+			border-radius: 2px;
+			border: none;
+		}
+
+	}
+
+	.total
+	{
+		padding-top: 10px;
+	}
+}
+
+.side-nav-dim
+{
+	background-color: rgba(0,0,0,0.4);
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 1000;
+}
+
+/* Buy a kit */
+.popup-buy-a-kit
+{
+	font-family: $content-text;
+	
+	.modal-size 
+	{
+		width: 65%;
+	}
+
+	.modal-content
+	{
+		overflow: hidden;
+
+		.modal-header
+		{
+			background-color: #693d28;
+			border-top-left-radius: 3px;
+			border-top-right-radius: 3px;
+			border-bottom: none;
+
+			.close
+			{
+				color: #FFF;
+			}
+
+			.modal-title
+			{
+				font-weight: $semi-bold;
+				color: #FFF;
+			}
+		}
+
+		.table
+		{
+			thead
+			{
+				tr
+				{
+					th
+					{
+						background-color: #ece8e8;
+						color: #272c2f;
+						font-weight: 600;
+						font-size: 15px;
+						border-bottom: 0;
+						text-align: center;
+
+						&:first-child
+						{
+							padding-left: 50px;
+						}
+
+						&:last-child
+						{
+							padding-right: 10px;
+						}
+					}
+				}
+			}
+
+			tbody
+			{
+				tr
+				{
+					td
+					{
+						border-top: 0;
+						text-align: center;
+						vertical-align: middle;
+						color: #272c2f;
+						font-size: 15px;
+						font-weight: 400;
+						padding: 25px 17.5px;
+						border-bottom: 1px solid #ece8e8;
+						
+						&:first-child
+						{
+							padding-left: 50px;
+						}
+
+						&:last-child
+						{
+							padding-right: 10px;
+						}
+
+					}
+
+					.img-holder
+					{
+						img
+						{
+							width: 100px;
+							height: 100px;
+							object-fit: contain;
+							object-position: center;
+						}
+					}
+					
+					.name-holder
+					{
+
+					}
+
+					.price-holder
+					{
+						width: 20%;
+					}
+
+					.total-holder
+					{
+						width: 20%;
+					}
+					
+					.quantity-holder
+					{
+						.another
+						{
+							display: table;
+							.equal
+							{
+								display: table-cell;
+								vertical-align: middle;
+							}
+							.control
+							{
+								border: 1px solid #cecece;
+								background-color: #fff;
+								color: #71808c;
+								font-weight: 700;
+								font-size: 20px;
+								padding: 2px 12.5px;
+								margin: 0 -2.5px;
+							}
+							.form-control
+							{
+								border: 1px solid #cecece;
+								box-shadow: none;
+								border-radius: 0;
+							}
+						}
+					}
+					&:last-child
+					{
+						td
+						{
+							border-bottom: 0;
+						}
+					}
+				}
+			}
+		}
+
+		.modal-footer
+		{
+
+			.left-btn-container
+			{
+
+				width: 100%;
+
+				div
+				{
+					float: left;
+					padding-top: 10px;
+				}
+
+				.btn-checkout
+				{
+					@extend div;
+					margin-left: 15px;
+
+					padding: 12px 30px;
+					color: #fff;
+					background-color: #4dac2b;
+					border-radius: 2px;
+					border: none;
+				}
+
+			}
+
+			.total
+			{
+				padding-top: 10px;
+			}
+		}
+	}
+}
+
+
 /* Header */
 .nav .open>a, .nav .open>a:hover, .nav .open>a:focus
 {
 	background-color: #5e3724;
 }
+.nav>li>a:hover, .nav>li>a:focus
+{
+	background-color: #5E3724;
+}
 .dropdown-menu
 {
+
 	width: 285px;
 	padding-bottom: 0;
 	&.slot-picker
@@ -72,30 +319,46 @@ button
 	}
 	&.profile-menu
 	{
+
 		width: 315px;
 		padding: 25px;
 		.profile-pic
 		{
+
 			display: inline-block;
 			vertical-align: top;
 			margin-right: 10px;
+			border-radius: 100%;
+			width: 60px;
+			height: 60px;
+			overflow: hidden;
+
+
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
 		}
 		.profile-text
 		{
+			font-family: $content-text;
 			display: inline-block;
 			vertical-align: top;
 			width: 180px;
 			.name
 			{
-				color: #344049;
+				color: $text-dark;
 				font-size: 13px;
-				font-weight: 600;
+				font-weight: $bold;
 			}
 			.email
 			{
-				color: #6d7a87;
+				color: $text-light;
 				font-size: 13px;
-				font-weight: 400;
+				font-weight: $regular;
+				letter-spacing: 0.5px;
+				word-wrap: break-word;
 			}
 			.button-holder
 			{
@@ -106,7 +369,7 @@ button
 					color: #ffffff;
 					font-size: 13px;
 					font-weight: 600;
-					border-radius: 5px;
+					border-radius: 3px;
 					text-align: center;
 					padding: 5px 15px;
 				}
@@ -134,8 +397,8 @@ button
 				padding: 3px 10px;
 				background-color: #e0e7ea;
 				border: 1px solid #b8cdd3;
-				color: #344049;
-				font-weight: 600;
+				color: $text-dark;
+				font-weight: $regular;
 				font-size: 13px;
 				border-radius: 2.5px
 			}
@@ -143,16 +406,20 @@ button
 	}
 	&.notif
 	{
+		font-family: $content-text;
+
 		.notif-header
 		{
-			color: #344049;
-			font-size: 11px;
-			font-weight: 600;
+			color: $text-dark;
+			font-size: 13px;
+			font-weight: $bold;
 			padding: 7.5px 15px;
 			letter-spacing: 0.5px;
+			background-color: #fff;
 		}
 		.notif-container
 		{
+			padding: 10px;
 			.notif-holder
 			{
 				&:nth-child(even) {background: #f2f2f2}
@@ -172,17 +439,18 @@ button
 						{
 							display: inline-block;
 							vertical-align: middle;
-							color: #344049;
-							font-size: 11px;
-							font-weight: 700;
+							color: $text-dark;
+							font-size: 13px;
+							font-weight: $bold;
 						}
 					}
 					.notif-date
 					{
-						color: #85939e;
-						font-weight: 600;
+						color: $text-light;
+						font-weight: $bold;
 						font-size: 11px;
 						float: right;
+						letter-spacing: 0.5px;
 					}
 				}
 				.second
@@ -190,8 +458,9 @@ button
 					margin-top: 10px;
 					.text
 					{
-						color: #7a8791;
-						font-size: 11px;
+						color: $text-light;
+						font-size: 13px;
+						letter-spacing: 0.5px;
 					}
 				}
 				&.see-all
@@ -212,13 +481,16 @@ button
 }
 .notif-holder
 {
-	padding: 13.5px 15px;
-	img
+	padding: 13.5px 15px !important;
+
+	.brown-icon-bell-o
 	{
 		margin-right: 5px;
 		display: inline-block;
 		vertical-align: middle;
+		font-size: 20px;
 	}
+
 	.badge
 	{
 		display: inline-block;
@@ -228,24 +500,38 @@ button
 		border-radius: 25px;
 	}
 }
+
 .cart-holder
 {
-	padding: 13.5px 15px;
-	img
+	padding: 13.5px 15px !important;
+
+	.brown-icon-bell-o
 	{
+		margin-right: 5px;
 		display: inline-block;
-		vertical-align: top;
-		margin-right: 7.5px;
+		vertical-align: middle;
+		font-size: 20px;
 	}
+
+	.brown-icon-shopping-cart
+	{
+		margin-right: 5px;
+		display: inline-block;
+		vertical-align: middle;
+		font-size: 20px;
+	}
+
 	span
 	{
 		display: inline-block;
 		vertical-align: top;
 	}
+
 	&.active, &:focus, &:hover
 	{
 		background-color: #5e3724;
 	}
+
 	.badge
 	{
 		display: inline-block;
@@ -257,11 +543,12 @@ button
 }
 header
 {
-	background-color: #693d28;
-	color: #fff;
+	background-color: #422311;
+	color: #dac5a6;
+	transition: margin-left .5s;
 	.header-top
 	{
-		background-color: #462211;
+		background-color: #301e10;
 		text-align: right;
 		font-weight: 300;
 		.holder
@@ -270,7 +557,7 @@ header
 			vertical-align: top;
 			font-size: 12px;
 			padding: 7.5px 15px;
-			color: rgba(255,255,255,0.5);
+			color: #dac5a6;
 			cursor: pointer;
 			&.active, &:hover, &:focus
 			{
@@ -278,31 +565,33 @@ header
 				text-decoration: none;
 			}
 		}
+		@media screen and (max-width: 991px)
+		{
+			display: none;
+		}
 	}
 	.header-middle
 	{
-		border-bottom: 1px solid #78513e;
+		border-bottom: 1px solid #553929;
 		.logo
 		{
-			@media screen and (min-width: 991px)
-			{
-				float: left;
-			}
+			cursor: pointer;
+			float: left;
 			padding: 15px 0;
 		}
 		.search
 		{
 			margin: 15px 0;
 			position: relative;
-			@media screen and (min-width: 991px)
-			{
-				float: right;
-			}
+			float: right;
 			.form-control
 			{
 				border-radius: 15px;
-				background-color: rgba(255,255,255,0.1);
+				background-color: #4c2e1d;
 				border: 0;
+				outline: none;
+				color: #fff;
+				box-shadow: none;
 			}
 			.search-icon
 			{
@@ -317,6 +606,53 @@ header
 	}
 	.header-bottom
 	{
+		@media (max-width: 990px) 
+		{
+		    .navbar-header 
+		    {
+		        float: none;
+		    }
+		    .navbar-left,.navbar-right 
+		    {
+		        float: none !important;
+		    }
+		    .navbar-toggle 
+		    {
+		        display: block;
+		    }
+		    .navbar-collapse 
+		    {
+		        border-top: 1px solid transparent;
+		        box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+		    }
+		    .navbar-fixed-top 
+		    {
+		        top: 0;
+		        border-width: 0 0 1px;
+		    }
+		    .navbar-collapse.collapse 
+		    {
+		        display: none!important;
+		    }
+		    .navbar-nav 
+		    {
+		        float: none!important;
+		        margin-top: 7.5px;
+		    }
+		    .navbar-nav>li 
+		    {
+		        float: none;
+		    }
+		    .navbar-nav>li>a 
+		    {
+		        padding-top: 10px;
+		        padding-bottom: 10px;
+		    }
+		    .collapse.in
+		    {
+		        display:block !important;
+		    }
+		}
 		.navbar-inner 
 		{
 		    background: transparent;
@@ -326,6 +662,21 @@ header
 			margin-bottom: 0;
 			.container
 			{
+				.navbar-header
+				{
+					.navbar-toggle
+					{
+						cursor: pointer;
+						.icon-bar
+						{
+							background-color: #fff;
+						}
+					}
+					.open-side-bar
+					{
+
+					}
+				}
 				.nav.navbar-nav
 				{
 					li
@@ -334,7 +685,7 @@ header
 						{
 							a
 							{
-								background-color: #5e3724;
+								background-color: #4c2e1d;
 							}
 						}
 						a
@@ -342,8 +693,15 @@ header
 							text-shadow: none;	
 							font-size: 13px;
 							font-weight: 300;
-							color: #fff;
+							color: #dac5a6;
 						}
+					}
+				}
+				.navbar-right
+				{
+					li
+					{
+
 					}
 				}
 			}
@@ -356,7 +714,7 @@ header
 	top: 0;
 	left: 0;
 	right: 0;
-	background-color: #462211;
+	background-color: #301e10;
 	height: 50px;
 	width: 100%;
 	z-index: 1000;
@@ -368,11 +726,16 @@ header
 	.relative
 	{
 		position: relative;
+		background-color: #301E10;
 	}
 	.left
 	{
 		float: left;
 		padding: 15px 0;
+		@media screen and (max-width: 991px)
+		{
+			display: none;
+		}
 		img
 		{
 			display: inline-block;
@@ -385,10 +748,15 @@ header
 			vertical-align: middle;
 			color: #ffffff;
 			font-size: 13px;
+			@media screen and (max-width: 515px)
+			{
+				display: none;
+			}
 		}
 		.list-category
 		{
-			background-color: #693d28;
+			margin-top: -2px;
+			background-color: #422311;
 			position: absolute;
 			top: 100%;
 			left: 0;
@@ -396,7 +764,7 @@ header
 			width: 100%;
 			a
 			{
-				color: #fff;
+				color: #dac5a6;
 				font-size: 13px;
 				font-weight: 300;
 				padding: 10px 15px;
@@ -425,29 +793,86 @@ header
 			padding: 15px 15px;
 			color: rgba(255,255,255,0.5);
 			cursor: pointer;
+			@media screen and (max-width: 515px)
+			{
+				padding: 15px 2.5px;
+			}
 			&.active, &:hover, &:focus
 			{
 				color: rgba(255,255,255,1);
 				text-decoration: none;
 			}
 		}
-		.notif-holders
+		.badge
 		{
-			padding: 13.5px 15px;
-			display: block;
-			img
+			display: inline-block;
+			vertical-align: middle;
+			background-color: #ed5639;
+			padding: 5px 10px;
+			border-radius: 25px;	
+		}
+		.cart-holder
+		{
+			padding: 12.5px 15px !important;
+			text-decoration: none;
+			@media screen and (max-width: 515px)
+			{
+				padding: 12.5px 5px !important;
+			}
+			.brown-icon-shopping-cart
 			{
 				margin-right: 5px;
 				display: inline-block;
 				vertical-align: middle;
+				font-size: 20px;
+				color: #dac5a6;
+				height: 25px;
 			}
-			.badge
+		}
+		.notif-holders
+		{
+			padding: 14px 15px;
+			display: block;
+			text-decoration: none;
+			@media screen and (max-width: 515px)
 			{
+				padding: 14px 5px;
+			}
+			.brown-icon-bell-o
+			{
+				margin-right: 5px;
 				display: inline-block;
 				vertical-align: middle;
-				background-color: #ed5639;
-				padding: 5px 10px;
-				border-radius: 25px;
+				font-size: 20px;
+				color: #dac5a6;
+				height: 21px;
+			}
+		}
+		.open-side-bar
+		{
+			display: none;
+			.icon-bar
+			{
+				background-color: #fff;
+			}
+		}
+		@media screen and (max-width: 991px)
+		{
+			.notif-holders
+			{
+				display: none;
+			}
+			.cart-holder
+			{
+				display: none;
+			}
+			.holder
+			{
+				display: none;
+			}
+			.open-side-bar
+			{
+				display: block;
 			}
 		}
 	}
@@ -457,11 +882,15 @@ header
 /* Footer */
 footer
 {
-	background-color: #462211;
+	background-color: #422311;
 	padding: 35px 0;
 	.holder
 	{
 		color: #fff;
+		@media screen and (max-width: 991px)
+		{
+			margin-bottom: 25px;
+		}
 		.title
 		{
 			font-size: 13px;
@@ -494,7 +923,7 @@ footer
 				a
 				{
 					font-size: 11px;
-					color: rgba(255,255,255,0.5);
+					color: #dac5a6;
 					font-weight: 300;
 					&:active, &:focus, &:hover
 					{
@@ -542,6 +971,10 @@ footer
 	}
 	.payment-container
 	{
+		@media screen and (max-width: 500px)
+		{
+			margin-bottom: 25px;
+		}
 		.holder
 		{
 			display: inline-block;
@@ -559,14 +992,14 @@ footer
 	}
 	.payment-method
 	{
-		@media screen and (min-width: 991px)
+		@media screen and (min-width: 500px)
 		{
 			float: left;
 		}
 	}
 	.delivery-services
 	{
-		@media screen and (min-width: 991px)
+		@media screen and (min-width: 500px)
 		{
 			float: right;
 		}
@@ -580,14 +1013,14 @@ footer
 	border-top: 3px solid #dfdfdf;
 	.copy
 	{
-		@media screen and (min-width: 991px)
+		@media screen and (min-width: 500px)
 		{
 			float: left;
 		}
 	}
 	.power
 	{
-		@media screen and (min-width: 991px)
+		@media screen and (min-width: 500px)
 		{
 			float: right;
 		}
@@ -608,4 +1041,14 @@ footer
 		padding-right: 0;
 	}
 }
+
+/* FONTAWESOME ICON */
+.fa-caret-right {
+	color: #693d28;
+	font-size: 13px;
+}
+
+
+
+
 /* Footer End */

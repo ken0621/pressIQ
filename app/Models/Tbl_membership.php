@@ -18,6 +18,15 @@ class Tbl_membership extends Model
     {
         $query->where("tbl_membership.shop_id", $shop_id);
     }
+    public function scopeCodes($query, $pin, $activation)
+    {
+        //dd($pin);
+        $query->join("tbl_item", "tbl_item.membership_id", "tbl_membership.membership_id");
+        $query->join("tbl_warehouse_inventory_record_log", "tbl_warehouse_inventory_record_log.record_item_id", "tbl_item.item_id");
+        $query->whereRaw("REPLACE(tbl_warehouse_inventory_record_log.mlm_pin, '\n','') = '" . $pin . "'");
+        $query->where("tbl_warehouse_inventory_record_log.mlm_activation", $activation);
+        return $query;
+    }
     public function scopeReverseOrder($query)
     {
         $query->orderBy("tbl_membership.membership_id", "desc");
@@ -38,7 +47,7 @@ class Tbl_membership extends Model
     }
     public function scopeMembership_points($query)
     {
-        $query->selectRaw('tbl_membership_points.membership_direct_income_limit,tbl_membership_points.membership_points_repurchase, tbl_membership_points.membership_points_direct_not_bonus, tbl_membership_points.membership_points_leadership, tbl_membership_points.membership_points_binary, tbl_membership_points.membership_points_executive, tbl_membership_points.membership_points_binary_max_pair, tbl_membership_points.membership_points_direct, tbl_membership_points.membership_points_initial_points, tbl_membership_points.membership_points_repurchase_cashback, tbl_membership_points.membership_points_binary_limit, tbl_membership_points.membership_points_binary_single_line, tbl_membership_points.membership_points_binary_single_line_limit, tbl_membership_points.membership_points_binary_max_income, tbl_membership_points.membership_points_binary_single_line_level' )
+        $query->selectRaw('tbl_membership_points.membership_points_direct_gc,tbl_membership_points.membership_points_direct_pass_up,tbl_membership_points.membership_direct_income_limit,tbl_membership_points.membership_points_repurchase, tbl_membership_points.membership_points_direct_not_bonus, tbl_membership_points.membership_points_leadership, tbl_membership_points.membership_points_binary, tbl_membership_points.membership_points_executive, tbl_membership_points.membership_points_binary_max_pair, tbl_membership_points.membership_points_direct, tbl_membership_points.membership_points_initial_points, tbl_membership_points.membership_points_repurchase_cashback, tbl_membership_points.membership_points_binary_limit, tbl_membership_points.membership_points_binary_single_line, tbl_membership_points.membership_points_binary_single_line_limit, tbl_membership_points.membership_points_binary_max_income, tbl_membership_points.membership_points_binary_single_line_level' )
 
         ->leftjoin('tbl_membership_points', 'tbl_membership_points.membership_id', '=', 'tbl_membership.membership_id');
         return $query;

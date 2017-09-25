@@ -3,6 +3,10 @@ namespace App\Http\Controllers\Member;
 use App\Globals\Item;
 use App\Globals\MLM2;
 use App\Globals\Warehouse2;
+use App\Globals\Pdf_global;
+
+use App\Globals\BarcodeGenerator;
+use Redirect;
 use Illuminate\Http\Request;
 
 class MLM_CodeControllerV2 extends Member
@@ -33,8 +37,7 @@ class MLM_CodeControllerV2 extends Member
     }
     public function membership_code_table(Request $request)
     {   
-        $data['_assembled_item_kit'] = Item::get_assembled_kit(0, $request->item_kit_id, $request->item_membership_id, $request->search_keyword, $request->status);
-
+        $data['_assembled_item_kit'] = Item::get_assembled_kit(0, $request->item_kit_id, $request->item_membership_id, $request->search_keyword, $request->status,10);
         return view("member.mlm_code_v2.membership_code_table", $data);
 
     }
@@ -165,7 +168,55 @@ class MLM_CodeControllerV2 extends Member
     }
     public function product_code_table(Request $request)
     {
-        $data['_item_product_code'] = Item::get_all_item_record_log($request->search_keyword, $request->status);
+        $data['_item_product_code'] = Item::get_all_item_record_log($request->search_keyword, $request->status, 10);
         return view("member.mlm_code_v2.product_code_table",$data);
+    }
+    public function print_codes(Request $request)
+    {
+        $column[0]['name'] = 'PIN No';
+        $column[0]['code'] = 'pin_num';
+        $column[0]['status'] = 'true';
+
+        $column[1]['name'] = 'Activation';
+        $column[1]['code'] = 'activation';
+        $column[1]['status'] = 'true';
+
+        $column[2]['name'] = 'Membership';
+        $column[2]['code'] = 'membership';
+        $column[2]['status'] = 'true';
+
+        $column[3]['name'] = 'Item name';
+        $column[3]['code'] = 'membership_kit';
+        $column[3]['status'] = 'true';
+
+        $data['columns'] = $column;
+        $data['type'] = $request->type;
+
+        Item::get_filter_type(5);
+        $data["_item_kit"] = Item::get($this->user_info->shop_id);
+        $data["_membership"] = MLM2::membership($this->user_info->shop_id);
+
+        return view("member.mlm_code_v2.print_code_columns",$data);
+    }
+    public function print_codes_submit(Request $request)
+    {
+        $r['pin_num']        = $request->pin_num ? '' : 'hidden';
+        $r['activation']     = $request->activation ? '' : 'hidden';
+        $r['membership']     = $request->membership ? '' : 'hidden';
+        $r['membership_kit'] = $request->membership_kit ? '' : 'hidden';
+        $rt = serialize($r); 
+
+        return Redirect::to('/member/mlm/print?t='.$request->type.'&Y='.$rt.'&status='.$request->status.'&membership='.$request->membership.'&membership_kit='.$request->membership_kit);
+    }
+    public function print(Request $request)
+    {
+        $data['on_show'] = unserialize($request->Y);
+        $data['_item_product_code'] = Item::get_all_item_record_log('', $request->status);
+        if($request->t == 'membership_code')
+        {
+            $data['_item_product_code'] = Item::get_assembled_kit(0,$request->membership_kit,$request->membership,'',$request->status);
+        }
+        $pdf = view('member.mlm_code_v2.print_code_pdf', $data);
+        return Pdf_global::show_pdf($pdf);
     }
 }

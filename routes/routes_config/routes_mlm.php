@@ -98,6 +98,17 @@ Route::post('/mlm/slots/manual_add_slot_post', 'Mlm\MlmSlotsController@manual_ad
 Route::post('/mlm/slots/before_transfer_slot', 'Mlm\MlmSlotsController@before_transfer_slot'); 
 Route::get('/mlm/slots/transfer_slot', 'Mlm\MlmSlotsController@transfer_slot'); 
 Route::post('/mlm/slots/transfer_slot_post', 'Mlm\MlmSlotsController@transfer_slot_post'); 
+
+/* ---- PRODUCT CODE V2 ----*/
+Route::any('/mlm/slot/use_product_code','Mlm\MlmSlotsController@use_product_code');
+Route::any('/mlm/slot/use_product_code/validate','Mlm\MlmSlotsController@use_product_code_validate');
+Route::any('/mlm/slot/use_product_code/to_slot','Mlm\MlmSlotsController@to_slot');
+Route::any('/mlm/slot/use_product_code/confirmation','Mlm\MlmSlotsController@confirmation');
+Route::any('/mlm/slot/use_product_code/confirmation/submit','Mlm\MlmSlotsController@confirmation_submit');
+Route::any('/mlm/slot/use_product_code/confirmation/used','Mlm\MlmSlotsController@use_submit');
+
+Route::any('/mlm/popup/message','Mlm\MlmSlotsController@message');	
+
 /* ---- PRODUCT CODE */
 Route::get('/mlm/slots/item_code', 'Mlm\MlmSlotsController@item_code'); 
 Route::post('/mlm/slots/item_code_post', 'Mlm\MlmSlotsController@item_code_post');

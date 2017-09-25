@@ -27,6 +27,36 @@ class MLM2
 {
 	public static $shop_id;
 
+	public static function current_wallet($shop_id, $slot_id)
+	{
+		return Tbl_mlm_slot_wallet_log::where("shop_id", $shop_id)->where("wallet_log_slot", $slot_id)->sum("wallet_log_amount");
+	}
+	public static function slot_payout($shop_id, $slot_id, $method, $remarks, $amount, $tax = 0, $service = 0, $other = 0, $date = null, $status = "DONE")
+	{
+		$total = floatval(str_replace(",","",$amount)) + floatval(str_replace(",","",$tax)) + floatval(str_replace(",","",$service)) + floatval(str_replace(",","",$other));
+		$current_wallet = Self::current_wallet($shop_id, $slot_id);
+
+		if($current_wallet < $total)
+		{
+			return "The current wallet of slot is not enough.";
+		}
+		else
+		{
+			$insert["shop_id"] 						= $shop_id;
+			$insert["wallet_log_slot"] 				= $slot_id;
+			$insert["wallet_log_details"] 			= $remarks;
+			$insert["wallet_log_amount"] 			= floatval((str_replace(",","",$total))) * -1;
+			$insert["wallet_log_plan"] 				= $method;
+			$insert["wallet_log_request"] 			= floatval((str_replace(",","",$amount)));
+			$insert["wallet_log_tax"] 				= floatval((str_replace(",","",$tax)));
+			$insert["wallet_log_service_charge"] 	= floatval((str_replace(",","",$service)));
+			$insert["wallet_log_other_charge"] 		= floatval((str_replace(",","",$other)));
+			$insert["wallet_log_payout_status"] 	= "DONE";
+			$insert["wallet_log_date_created"]		= ($date == null ? Carbon::now() : date("Y-m-d", strtotime($date)));
+
+			return Tbl_mlm_slot_wallet_log::insertGetId($insert);
+		}
+	}
 	public static function get_sponsor_network($shop_id, $slot_no)
 	{
 		$slot_id = Tbl_mlm_slot::where("shop_id", $shop_id)->where("slot_no", $slot_no)->value("slot_id");

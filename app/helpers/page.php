@@ -254,6 +254,15 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
 
+        $code = "mlm-wallet-payout";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Payout Releasing V2";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/payout";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
+
+
         $code = "mlm-report";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Report";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;

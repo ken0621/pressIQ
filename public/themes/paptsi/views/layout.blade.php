@@ -16,7 +16,6 @@
         
         <!-- BOOTSTRAP -->
         <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/bootstrap/css/bootstrap.min.css">
-        <!-- <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/inbootstrap/css/bootstrap-theme.min.css"> -->
 
         <!-- FONT AWESOME -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/font-awesome/css/font-awesome.min.css">

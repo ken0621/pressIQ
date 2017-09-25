@@ -1,6 +1,7 @@
 <?php
 Route::group(array('prefix' => '/member/payroll'), function()
 {
+	
 	//audit_trail_transaction
 	Route::any('/employee_list/modal_view_all_transaction/{id}/{uid}','Member\PayrollController@modal_view_all_transaction');
 	//audit_trail_transaction

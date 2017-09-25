@@ -733,7 +733,9 @@ class MlmSlotsController extends Mlm
         $slot_id    = Tbl_mlm_slot::where('slot_no', $slot_no)->where('slot_owner', Self::$customer_id)->value('slot_id');
 
         $shop_id = Self::$shop_id;
-        $val = Warehouse2::consume_product_codes($shop_id, $mlm_pin, $mlm_activation, Self::$customer_id);
+        $consume['name'] = 'customer_product_code';
+        $consume['id'] = Self::$customer_id;
+        $val = Warehouse2::consume_product_codes($shop_id, $mlm_pin, $mlm_activation, $consume);
 
         if(is_numeric($val))
         {

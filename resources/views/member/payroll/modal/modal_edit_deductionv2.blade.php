@@ -62,6 +62,7 @@
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<div class="row">
+
 							<div class="col-md-6">
 								<div class="radio">
 									<label><input type="radio" name="payroll_deduction_period" value="First Period" {{$deduction->payroll_deduction_period == 'First Period' ? 'checked':''}}>First Period</label>
@@ -79,7 +80,7 @@
 							</div>
 							<div class="col-md-6">
 								<div class="radio">
-									<label><input type="radio" name="payroll_deduction_period" checked value="Every Period" {{$deduction->payroll_deduction_period == 'Every Period' ? 'checked':''}}>Every Period</label>
+									<label><input type="radio" name="payroll_deduction_period" value="Every Period" {{$deduction->payroll_deduction_period == 'Every Period' ? 'checked':''}}>Every Period</label>
 								</div>
 							</div>
 						</div>

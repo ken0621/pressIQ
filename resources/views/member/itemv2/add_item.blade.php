@@ -78,7 +78,7 @@
     </div>
 
     <!-- ITEM ADD MAIN -->
-    <div class="item-add-main" style="{{ $item_type['type_main'] }}">
+    <div class="item-add-main {{$item_type['type_remove_main']}}" style="{{ $item_type['type_main'] }}">
         <div class="clearfix modal-body modallarge-body-layout"> 
             <div class="form-horizontal">
                 <!-- BASIC INFORMATION -->
@@ -214,7 +214,7 @@
     </div>
 
     <!-- ITEM ADD BUNDLE -->
-    <div class="item-bundle"  style="{{ $item_type['type_bundle_main'] }}">
+    <div class="item-bundle {{$item_type['type_remove_bundle']}}"  style="{{ $item_type['type_bundle_main'] }}">
         <div class="clearfix modal-body modallarge-body-layout"> 
             <div class="form-horizontal">
                 <div class="form-group">

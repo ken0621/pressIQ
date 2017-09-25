@@ -55,6 +55,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
   <link rel="stylesheet" href="/assets/external/chosen/chosen/chosen.css" media="screen"/>
   <link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
+
+
+
+  @yield('css')
   <script type="text/javascript" src="/resources/assets/external/jquery.min.js"></script>
   <script src="/resources/assets/distributor/scripts/vendor/modernizr.js"></script>
   <script src="/resources/assets/distributor/scripts/vendor/jquery.cookie.js"></script>
@@ -71,8 +75,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     document.write('<script src="' + js + '"><\/script>');
     }());
     </script>
-
-  @yield('css')
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -644,6 +646,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div>
     </div>
 
+    <!-- GLOBAL MULTIPLE MODAL -->
+    <div class="multiple_global_modal_container"></div>
+
   <div class="modal-loader hidden"></div>
   <!-- Modal -->
       <div class="modal fade" id="myModal" role="dialog">
@@ -669,6 +674,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- ./wrapper -->
 
 <!-- REQUIRED JS SCRIPTS -->
+    <script type="text/javascript" src="/assets/member/global.js?version=6.2"></script>
 
 <!-- jQuery 2.2.3 -->
 <script src="/plugins/jQuery/jquery-2.2.3.min.js"></script>
@@ -702,7 +708,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- ADDITIONALS -->
     
     <script type="text/javascript" src="/assets/mlm/js/slot_change.js"></script>
-    <script type="text/javascript" src="/assets/member/global.js"></script>
     <script type="text/javascript" src="/assets/external/chosen/chosen/chosen.jquery.js"></script> 
     <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
      <script type="text/javascript" src="/assets/external/chosen/chosen/chosen.jquery.js"></script>

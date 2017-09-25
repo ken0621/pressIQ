@@ -13,6 +13,40 @@ $text-dark: #272c2f;
 	transition: all $transition ease-in-out;
 }
 
+.ui-widget.ui-widget-content
+{
+	background-color: #D8D8D8;
+	border: 0;
+	border-radius: 15px;
+}
+.ui-slider-horizontal .ui-slider-range
+{
+	border-radius: 15px;
+}
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default, .ui-button, html .ui-button.ui-state-disabled:hover, html .ui-button.ui-state-disabled:active
+{
+	background-color: #351308;
+	border: 0;
+	height: 11.19px;
+	top: 0;
+	border-radius: 15px;
+	width: 25px;
+	outline: none;
+	// margin-left: 0;
+	&:last-child
+	{
+		// margin-left: -25px;
+	}
+}
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus, .ui-button:hover, .ui-button:focus
+{
+	background-color: #351308;
+}
+.ui-widget-header
+{
+	background-color: #693626;
+}
+
 .product-container
 {
 	font-family: $content-text;
@@ -113,6 +147,7 @@ $text-dark: #272c2f;
 				height: auto;
 				object-fit: contain;
 				cursor: pointer;
+				height: 206px;
 			}
 
 			.lbl-item-name

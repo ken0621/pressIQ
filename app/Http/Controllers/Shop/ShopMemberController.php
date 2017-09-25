@@ -67,7 +67,6 @@ class ShopMemberController extends Shop
 
         session($sess);
     }
-
     public function getLogin()
     {
         $data["page"] = "Login";
@@ -462,7 +461,7 @@ class ShopMemberController extends Shop
             }
         }
     }
-     public function postProfileUpdatePassword(Request $request)
+    public function postProfileUpdatePassword(Request $request)
     {
         $form = $request->all();
 
@@ -602,13 +601,16 @@ class ShopMemberController extends Shop
         $data["page"] = "Wishlist";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.wishlist", $data));
     }
-
+    public function getCheckout()
+    {
+        $data["page"] = "Checkout";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.checkout", $data));
+    }
     public function getNonMember()
     {
         $data["page"] = "NonMember";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.nonmember", $data));
     }
-
     public function getTest()
     {
         $shop_id    = $this->shop_info->shop_id; //tbl_shop
@@ -619,13 +621,6 @@ class ShopMemberController extends Shop
 
         $error = Payment::payment_redirect($shop_id, $key, $success, $failed, $debug);
         dd($error);
-    }
-
-
-    public function getCheckout()
-    {
-        $data["page"] = "Checkout";
-        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.checkout", $data));
     }
 
     /* AJAX */
@@ -660,7 +655,6 @@ class ShopMemberController extends Shop
 
         return $return;
     }
-
     public function postVerifyCode(Request $request)
     {
         $shop_id                                = $this->shop_info->shop_id;
@@ -704,7 +698,6 @@ class ShopMemberController extends Shop
 
         echo $message;
     }
-
     public function getFinalVerify()
     {
         $data = $this->code_verification();

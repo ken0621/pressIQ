@@ -596,9 +596,6 @@
 
     </body>
 
-
-
-
     <!-- FOOTER -->
     <footer id="bottom-footer" style="background-color: #ef8805; font-size: 13px;">
         <div class="container">

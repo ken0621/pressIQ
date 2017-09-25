@@ -24,6 +24,7 @@ use App\Models\Tbl_customer_address;
 use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_country;
 use App\Models\Tbl_locale;
+use App\Globals\Currency;
 use Validator;
 use Google_Client; 
 use Google_Service_Drive;
@@ -35,6 +36,7 @@ class ShopMemberController extends Shop
     {
         $data["page"] = "Dashboard";
         $data["mode"] = session("get_success_mode");
+        $data["zero_currency"] = Currency::format(0);
         session()->forget("get_success_mode");
 
         if(Self::$customer_info)
@@ -42,6 +44,8 @@ class ShopMemberController extends Shop
             $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["wallet"]             = $data["customer_summary"]["_wallet"];
             $data["points"]             = $data["customer_summary"]["_points"];
+            $data["_wallet_plan"]       = $data["customer_summary"]["_wallet_plan"];
+            $data["_point_plan"]        = $data["customer_summary"]["_point_plan"];
             $data["_slot"]              = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["_recent_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
             $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
@@ -561,8 +565,8 @@ class ShopMemberController extends Shop
     }
     public function getReport()
     {
-        $data["page"] = "Report";
-        $data["_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
+        $data["page"]           = "Report";
+        $data["_rewards"]       = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.report", $data));
     }
     public function getWalletLogs()
@@ -572,7 +576,10 @@ class ShopMemberController extends Shop
     }
     public function getWalletEncashment()
     {
-        $data["page"] = "Wallet Encashment";
+        $data["page"]           = "Wallet Encashment";
+        $data["_encashment"]    = MLM2::customer_payout($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
+        $total_payout           = MLM2::customer_total_payout(Self::$customer_info->customer_id);
+        $data["total_payout"]   = Currency::format($total_payout);
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.wallet_encashment", $data));
     }
     public function getSlot()

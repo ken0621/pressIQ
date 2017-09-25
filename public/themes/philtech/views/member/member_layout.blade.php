@@ -65,10 +65,10 @@
 							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-wallet"></div> <span>Wallet</span></div></a>
 							<ul>
 								<li>
-									<a href="/members/wallet-logs"><div class="icon brown-icon-list-alt nav-holder"> &nbsp;&nbsp;<span>Wallet Logs</span></div></a>
+									<a href="/members/wallet-encashment"><div class="icon brown-icon-money nav-holder"> &nbsp;&nbsp;<span>Wallet Encashment</span></div></a>
 								</li>
 								<li>
-									<a href="/members/wallet-encashment"><div class="icon brown-icon-money nav-holder"> &nbsp;&nbsp;<span>Wallet Encashment</span></div></a>
+									<a href="/members/wallet-logs"><div class="icon brown-icon-list-alt nav-holder"> &nbsp;&nbsp;<span>Wallet Transfer</span></div></a>
 								</li>
 							</ul>
 						</li>
@@ -88,7 +88,9 @@
 				</div>
 			</div>
 			<div class="members-content">
-				@yield("member_content")
+				<div class="clearfix">
+					@yield("member_content")
+				</div>
 			</div>	
 		</div>
 	</div>

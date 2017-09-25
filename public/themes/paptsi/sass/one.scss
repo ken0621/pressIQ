@@ -1,25 +1,24 @@
-$color_1: #2EA9E2;
+$color_1: #FCC209;
 $color_2: #fff;
 $color_3: #000;
-$background_color_1: #2EA9E2;
+$background_color_1: #FCC209;
 $border_color_1: #000;
 
 .section-title 
 {
 	h2 
 	{
-		color: #ef8807;
 		&:before 
 		{
-			background-color: #ef8807;
+			background-color: $background_color_1;
 		}
 		&:after 
 		{
-			background-color: #ef8807;
+			background-color: $background_color_1;
 		}
 		span 
 		{
-			color: #30a9e0;
+			color: $color_1;
 		}
 	}
 }
@@ -61,7 +60,7 @@ header
 			{
 				&::before 
 				{
-					background: $color_1; //#FCC209
+					background: #FCC209;
 				}
 			}
 		}
@@ -189,7 +188,7 @@ header
 	{
 		i.fa 
 		{
-			color: #ef8807;
+			color: $color_1;
 		}
 	}
 }
@@ -235,7 +234,7 @@ header
 		{
 			span 
 			{
-				border: 2px solid $color_1; //#FCC209
+				border: 2px solid #FCC209;
 				color: $color_1;
 			}
 		}

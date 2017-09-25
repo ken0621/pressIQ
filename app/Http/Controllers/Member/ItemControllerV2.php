@@ -158,7 +158,6 @@ class ItemControllerV2 extends Member
 			if($item_type_id <= 3)
 			{
 				$validate = Item::create_validation($shop_id, $item_type_id, $insert);
-
 				if(!$validate)
 				{
 					$return  	  = Item::modify($shop_id, $item_id, $insert);
@@ -173,7 +172,6 @@ class ItemControllerV2 extends Member
 			{
 				$_item = Session::get('choose_item');
 				$validate = Item::create_bundle_validation($shop_id, $item_type_id, $insert, $_item);
-
 				if(!$validate)
 				{
 					$return = Item::modify_bundle($shop_id, $item_id, $insert, $_item);

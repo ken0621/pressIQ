@@ -648,7 +648,44 @@ class Warehouse2
 
         return $validate;
     }
-    public static function consume_product_codes($shop_id = 0, $mlm_pin = '', $mlm_activation = '', $customer_id = 0)
+
+    /* PARAM
+        $code[0]['mlm_pin']
+        $code[0]['mlm_activation']
+
+     */
+    public static function consume_bulk_product_codes($shop_id = 0, $codes = array(), $consume = array())
+    {
+        foreach ($code as $key => $value) 
+        {
+            $ret .= Warehouse2::consume_product_code_validation($shop_id, $value['mlm_pin'], $value['mlm_activation'], $consume);
+        }
+        if(!$ret)
+        {
+            foreach ($code as $key => $value) 
+            {
+                Warehouse2::consume_product_codes($shop_id, $value['mlm_pin'], $value['mlm_activation'], $consume);
+            }            
+        }
+
+    }
+    public static function consume_product_code_validation($shop_id = 0, $mlm_pin = '', $mlm_activation = '' )
+    {
+        $return = null;
+        $val = Tbl_warehouse_inventory_record_log::where("record_shop_id",$shop_id)
+                                                 ->where('mlm_activation',$mlm_activation)
+                                                 ->where('mlm_pin',$mlm_pin)
+                                                 ->where('record_inventory_status',0)
+                                                 ->first();
+        if(!$val)
+        {
+            $return ="<b>". $mlm_pin."</b> and <b>".$mlm_activation ."</b> doesn't exist.<br>";
+        }
+
+        return $return;
+
+    }
+    public static function consume_product_codes($shop_id = 0, $mlm_pin = '', $mlm_activation = '', $consume = array())
     {
         $return = null;
         $val = Tbl_warehouse_inventory_record_log::where("record_shop_id",$shop_id)
@@ -658,8 +695,6 @@ class Warehouse2
                                                  ->first();
         if($val)
         {
-            $consume['name'] = 'customer_product_code';
-            $consume['id'] = $customer_id;
             Warehouse2::consume_record_log($shop_id, $val->record_warehouse_id, $val->record_item_id,$val->record_log_id, 1, "Consume using product codes.", $consume);
             $return = $val->record_item_id;
         }

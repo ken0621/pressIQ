@@ -32,7 +32,7 @@ class MlmDeveloperController extends Member
 
     public function index()
     {
-    	$data["page"]           = "MLM Developer";
+        $data["page"]           = "MLM Developer";
         return view("member.mlm_developer.mlm_developer", $data);
     }
     public function index_table()

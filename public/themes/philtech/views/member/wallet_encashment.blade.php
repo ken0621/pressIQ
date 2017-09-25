@@ -15,7 +15,7 @@
 		</div>
 		<div class="right">
 			<div class="text-right">
-				<button type="button" class="btn btn-default"><i class="fa fa-bank"></i> PAYOUT METHOD</button>
+				<!-- <button type="button" class="btn btn-default"><i class="fa fa-bank"></i> PAYOUT METHOD</button> -->
 				<button type="button" class="btn btn-primary request-payout"><i class="fa fa-credit-card"></i> REQUEST PAYOUT</button>
 			</div>
 		</div>
@@ -47,7 +47,7 @@
 		  					<div>{{ $encashment->slot_no }}</div>
 		  				</td>
 						<td class="text-center">{!! $encashment->log !!}</td>
-						<td class="text-center"><b>DONE</b></td>
+						<td class="text-center"><b>{{ $encashment->wallet_log_payout_status }}</b></td>
 						<td class="text-right"><b>{!! $encashment->display_wallet_log_request !!}</b></td>
 						<td class="text-right">{!! $encashment->display_wallet_log_tax !!}</td>
 						<td class="text-right">{!! $encashment->display_wallet_log_service_charge !!}</td>

@@ -11,7 +11,10 @@
             </small>
             </h1>
             <div class="dropdown pull-right">
-                <button onclick="location.href=''" class="btn btn-primary"><i class="fa fa-file-excel-o"></i> Create Payout Import Template</button>
+                <form method="post">
+                    <button type="submit"  class="btn btn-primary"><i class="fa fa-file-excel-o"></i> CREATE PAYOUT TEMPLATE</button>
+                    {{ csrf_field() }}
+                </form>
             </div>
         </div>
     </div>
@@ -29,7 +32,7 @@
                                     <th class="text-center">Slot No</th>
                                     <th class="text-center">Customer Name</th>
                                     <th class="text-right" width="140px">Current<br>Wallet</th>
-                                    <th class="text-right" width="140px">Payout<br>Amount</th>
+                                    <th class="text-right" width="140px">Gross Pay</th>
                                     <th class="text-right" width="140px">Balance<br>After Payout</th>
                                     <th class="text-right" width="140px">Service Charge</th>
                                     <th class="text-right" width="140px">Other Charge</th>
@@ -52,6 +55,19 @@
                                 </tr>
                                 @endforeach
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th class="text-center"></th>
+                                    <th class="text-center"></th>
+                                    <th class="text-right" width="140px"></th>
+                                    <th class="text-right" width="140px">{{ $total_payout }}</th>
+                                    <th class="text-right" width="140px"></th>
+                                    <th class="text-right" width="140px"></th>
+                                    <th class="text-right" width="140px"></th>
+                                    <th class="text-right" width="140px"></th>
+                                    <th class="text-right" width="140px">{{ $total_net }}</th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>

@@ -10,6 +10,7 @@ use App\Models\Tbl_mlm_slot;
 use App\Globals\Currency;
 use Redirect;
 use App\Globals\MLM2;
+use Excel;
 
 class MLM_PayoutController extends Member
 {
@@ -126,17 +127,19 @@ class MLM_PayoutController extends Member
 	{
 		return view("member.mlm_payout.payout_process");
 	}
-	public function getProcessOutput()
+	public function anyProcessOutput()
 	{
 		$source 				= Request::input("source");
 		$method 				= Request::input("method");
-		$tax 					= Request::input("tax");
+		$tax_amount 			= Request::input("tax");
 		$service_charge 		= Request::input("service-charge");
 		$minimum 				= Request::input("minimum");
 		$other_charge 			= Request::input("other-charge");
 		$data["cutoff_date"]	= $cutoff_date = Request::input("cutoff-date");
-
+		$total_payout 			= 0;
+		$total_net 				= 0;
 		$minimum_encashment		= $minimum;
+
 
 		if($source == "wallet")
 		{
@@ -148,8 +151,20 @@ class MLM_PayoutController extends Member
 				$encashment_amount 	= $slot->current_wallet - $earnings_as_of;
 				$remaining 			= $slot->current_wallet - $encashment_amount;
 				$compute_net 		= $encashment_amount;
-				$tax 				= ($encashment_amount - $service_charge - $other_charge) - (($encashment_amount - $service_charge) / (1 + (12/100)));
-				$compute_net 		= $compute_net - $service_charge - $other_charge - $tax;
+				$tax 				= ($encashment_amount - ($service_charge + $other_charge)) - (($encashment_amount - ($service_charge + $other_charge)) / (1 + ($tax_amount/100)));
+				$compute_net 		= $compute_net - ($service_charge + $other_charge + $tax);
+
+
+				$_slot[$key]->real_wallet 		= number_format($slot->current_wallet, 2, '.', '');
+				$_slot[$key]->real_earnings 	= number_format($slot->total_earnings, 2, '.', '');
+				$_slot[$key]->real_payout 		= number_format($slot->total_payout, 2, '.', '');
+				$_slot[$key]->real_encash 		= number_format($encashment_amount, 2, '.', '');
+				$_slot[$key]->real_remaining 	= number_format($remaining, 2, '.', '');
+				$_slot[$key]->real_service 		= number_format($service_charge, 2, '.', '');
+				$_slot[$key]->real_other 		= number_format($other_charge, 2, '.', '');
+				$_slot[$key]->real_tax 			= number_format($tax, 2, '.', '');
+				$_slot[$key]->real_net 			= number_format($compute_net, 2, '.', '');
+
 
 				$_slot[$key]->display_wallet = Currency::format($slot->current_wallet);
 				$_slot[$key]->display_earnings = Currency::format($slot->total_earnings);
@@ -166,11 +181,35 @@ class MLM_PayoutController extends Member
 				{
 					unset($_slot[$key]);
 				}
+				else
+				{
+					$total_payout += $encashment_amount;
+					$total_net += $compute_net;
+
+				}
 			}
 		}
 
+
+		$data["total_payout"] = Currency::format($total_payout);
+		$data["total_net"] = Currency::format($total_net);
 		$data["_slot"] = $_slot;
 
-		return view("member.mlm_payout.payout_process_report", $data);
+		if(Request::isMethod("post"))
+		{
+			Excel::create("payout-$method-$cutoff_date", function($excel) use ($data)
+			{
+			    $excel->sheet("Payout List", function($sheet) use ($data)
+			    {
+			        $sheet->setOrientation('landscape');
+			        $sheet->loadView('member.mlm_payout.payout_process_excel', $data);
+			    });
+
+			})->export('xlsx');
+		}
+		else
+		{
+			return view("member.mlm_payout.payout_process_report", $data);
+		}
 	}
 }

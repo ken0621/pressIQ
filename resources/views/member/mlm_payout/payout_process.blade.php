@@ -1,5 +1,4 @@
 <form target="_blank" action="/member/mlm/payout/process-output" method="get">
-    {{ csrf_field() }}
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">×</button>
         <h4 class="modal-title"><i class="fa fa-money"></i> PROCESS PAYOUT</h4>

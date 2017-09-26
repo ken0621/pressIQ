@@ -144,8 +144,8 @@ function payout()
     	{
     		$append = 		"<tr class='tr-slot-import-data' key='" + key + "' payout_date='" + val["PAYOUT DATE"] + "' slot_no='" + val["SLOT NO"] + "' payout_amount='" + val["PAYOUT AMOUNT"] + "' tax='" + val["TAX"] + "' service_charge='" + val["SERVICE CHARGE"] + "' other_charge='" + val["OTHER CHARGE"] + "' total='" + val["TOTAL"] + "' method='" + val["METHOD"] + "' status='pending'>" +
     							"<td class='text-center'>" + val["PAYOUT DATE"] + "</td>" +
+    							"<td class='text-center'>" + val["METHOD"] + "</td>" +	
     							"<td class='text-center'>" + val["SLOT NO"] + "</td>" +
-    							"<td class='text-center'>" + val["METHOD"] + "</td>" +
     							"<td class='text-center'>" + val["PAYOUT AMOUNT"] + "</td>" +
     							"<td class='text-center'>" + val["TAX"] + "</td>" +
     							"<td class='text-center'>" + val["SERVICE CHARGE"] + "</td>" +

@@ -60,33 +60,31 @@ class PayrollBiometricsController
 		
 		//Carbon::parse($value->DateTimeRecord)->format("Y-m-d");
 		//date("H:i:s", strtotime($value->DateTimeRecord))
-		$employee_in_out = array();
+		$employee_in_out = null;
 
 		foreach ($all_data as $key => $value) 
 		{
-
-			if (!isset($employee_in_out[$value->EmployeeID]->time_in)) 
+			if (!isset($employee_in_out[$value->EmployeeID]["time_in"])) 
 			{
-				$employee_in_out[$value->EmployeeID]->time_in = date("H:i:s", strtotime($value->DateTimeRecord));
+				$employee_in_out[$value->EmployeeID]["time_in"] = date("H:i:s", strtotime($value->DateTimeRecord));
 			}
 			else
 			{
-				if (  date("H:i:s", strtotime($value->DateTimeRecord)) < $employee_in_out[$value->EmployeeID]->time_in ) 
+				if (  date("H:i:s", strtotime($value->DateTimeRecord)) < $employee_in_out[$value->EmployeeID]["time_in"] ) 
 				{
-					$employee_in_out[$value->EmployeeID]->time_in = date("H:i:s", strtotime($value->DateTimeRecord));
+					$employee_in_out[$value->EmployeeID]["time_in"] = date("H:i:s", strtotime($value->DateTimeRecord));
 				}
 			}
 
-
-			if (!isset($employee_in_out[$value->EmployeeID]->time_out))
+			if (!isset($employee_in_out[$value->EmployeeID]["time_out"]))
 			{
-				$employee_in_out[$value->EmployeeID]->time_out = date("H:i:s", strtotime($value->DateTimeRecord));
+				$employee_in_out[$value->EmployeeID]["time_out"] = date("H:i:s", strtotime($value->DateTimeRecord));
 			}
 			else
 			{
-				if ($employee_in_out[$value->EmployeeID]->time_out < date("H:i:s", strtotime($value->DateTimeRecord))) 
+				if ($employee_in_out[$value->EmployeeID]["time_out"] < date("H:i:s", strtotime($value->DateTimeRecord))) 
 				{
-					$employee_in_out[$value->EmployeeID]->time_out = date("H:i:s", strtotime($value->DateTimeRecord));
+					$employee_in_out[$value->EmployeeID]["time_out"] = date("H:i:s", strtotime($value->DateTimeRecord));
 				}
 			}
 		}

@@ -24,6 +24,7 @@ use DB;
 use Redirect;
 use Request;
 use Crypt;
+use Session;
 use Carbon\Carbon;
 
 class MlmDeveloperController extends Member
@@ -32,7 +33,7 @@ class MlmDeveloperController extends Member
 
     public function index()
     {
-    	$data["page"]           = "MLM Developer";
+        $data["page"]           = "MLM Developer";
         return view("member.mlm_developer.mlm_developer", $data);
     }
     public function index_table()
@@ -262,7 +263,7 @@ class MlmDeveloperController extends Member
                     while($slot_id["message"] == "Placement Alread Taken")
                     {
                         $slot_placement = Tbl_mlm_slot::where("shop_id", $shop_id)->orderBy(DB::raw("rand()"))->value("slot_id"); 
-                        $slot_id = Self::create_slot_submit_create_slot($customer_id, $membership_code_id, $slot_sponsor, $slot_placement, $slot_position, $shop_id);
+                        $slot_id = Self::create_slot_submit_create_slot($customer_id, $membership_code_id, $slot_sponsor, $slot_placement, $slot_position, $shop_id,null,Carbon::now());
                     }
                 }
             }

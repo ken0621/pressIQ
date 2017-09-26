@@ -786,6 +786,39 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "Still developing";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
 
+
+    /* -- ITEM => WAREHOUSE V2  */
+    // $code = "item-warehouse-v2";
+    // $nav[$page]['submenu'][$code]['label'] = "Warehouse V2";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/v2/warehouse";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','edit','transfer','refill','adjust','add-serial','archived','restore','merchantwarehouse'];
+    // $nav[$page]['submenu'][$code]['status'] = "Still developing";
+    // $nav[$page]['submenu'][$code]['developer'] = "Arcylen Garcia Gutierrez";
+
+        $segment = "submenu-warehouse-v2";
+        $nav[$page]['submenu'][$segment]['name']   = "Warehouse V2";
+        $nav[$page]['submenu'][$segment]['segment']= $segment;
+        $nav[$page]['submenu'][$segment]['type']   = "submenu";
+
+             /* -- WAREHOUSE - WIS */
+            $code = "warehouse-issuance-slip";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Warehouse Issuance Slip";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/warehouse/wis";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','issue','confirm'];
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
+             /* -- WAREHOUSE - WIS */
+            $code = "warehouse-receiving-report";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Receiving Report";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/warehouse/rr";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','received'];
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+
     /* -- ITEM => INVENTORY LOGS  */
     $code = "item-inventory-log";
     $nav[$page]['submenu'][$code]['label'] = "Inventory Logs";

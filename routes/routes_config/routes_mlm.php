@@ -67,6 +67,7 @@ Route::get('/mlm/transfer/get/customer/{id}', 'Mlm\MlmTransferController@transfe
 Route::get('/mlm/encashment', 'Mlm\MlmTransferController@encashment'); 
 Route::post('/mlm/encashment/request', 'Mlm\MlmTransferController@encashment_request'); 
 Route::any('/mlm/encashment/view/breakdown/{encashment_process}/{slot_id}', 'Mlm\MlmTransferController@breakdown_slot');//luke
+
 /* MLM VOUCHERS */
 Route::get('/mlm/vouchers', 'Mlm\MlmVouchersController@index'); 
 Route::get('/mlm/vouchers/view_voucher', 'Mlm\MlmVouchersController@view_voucher'); 

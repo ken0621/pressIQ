@@ -196,6 +196,13 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "Layout Only";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Everyone</span>";
     
+    $code = "mlm-developer";
+    $nav[$page]['submenu'][$code]['label'] = "Reward Slots V2";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/developer";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Layout (0%)";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: blue'>Guillermo Tabligan</span>";
 
     $code = "mlm-stairstep-compute";
     $nav[$page]['submenu'][$code]['label'] = "Distribute Stairstep";
@@ -239,12 +246,12 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "<span style='color: blue'>Everyone</span>";
 
         $code = "mlm-report";
-        $nav[$page]['submenu'][$code]['label'] = "Reports";
-        $nav[$page]['submenu'][$code]['code'] = $code;
-        $nav[$page]['submenu'][$code]['url'] = $path . $page . "/report";
-        $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-        $nav[$page]['submenu'][$code]['status'] = "Layout (0%)";
-        $nav[$page]['submenu'][$code]['developer'] = "Luke Glenn Jordan";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Reports";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/report";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Luke Glenn Jordan";
 
         $code = "mlm-wallet-encashment";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Payout Releasing";
@@ -253,6 +260,15 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
+
+        $code = "mlm-wallet-payout";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Payout Releasing V2";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/payout";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
+
 
         $code = "mlm-report";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Report";
@@ -379,13 +395,7 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
 
-    $code = "mlm-developer";
-    $nav[$page]['submenu'][$code]['label'] = "Testing Menu";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/developer";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "Layout (0%)";
-    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: blue'>Guillermo Tabligan</span>";
+
 
     /* ACCOUNTING*/
     $page = "accounting"; 
@@ -656,7 +666,7 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "kim";
 
         /* -- REPORT => PRODUCTS  */
-        $code = "13th Month Pay";
+        $code = "13th-Month-Pay";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "13th Month Pay";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
         $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/reports/13th_month_pay";

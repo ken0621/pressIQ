@@ -445,7 +445,7 @@ class PayrollProcessController extends Member
 
 		$data["employee"]   	= Tbl_payroll_employee_basic::where("payroll_employee_id",$employee_id)->first();
 
-		$period = Tbl_payroll_period::where('payroll_period_id',$data["period_company"]->payroll_period_id)->first();
+		$period 				= Tbl_payroll_period::where('payroll_period_id',$data["period_company"]->payroll_period_id)->first();
 
 		
 		$data['_timesheet'] = [];
@@ -498,6 +498,7 @@ class PayrollProcessController extends Member
 				}
 
 				$time_serialize = unserialize($value->payroll_time_serialize);
+
 				if($time_serialize)
 				{
 					$total_late += $time_serialize->late;
@@ -510,12 +511,16 @@ class PayrollProcessController extends Member
 			}
 		}
 
+		$time_keeping_approved = Tbl_payroll_time_keeping_approved::where("employee_id",$employee_id)->where("payroll_period_company_id",$period_company_id)->first();
+
+
+		$_time_breakdown = unserialize($time_keeping_approved->cutoff_breakdown)->_time_breakdown;
 		$data["days_worked"]	= $days_worked;
 		$data["days_absent"]	= $days_absent;
 		$data['total_late'] = date('i',strtotime($total_late));
 		$data['total_undertime'] = date('i',strtotime($total_undertime));
 		$data['total_overtime'] = date('i',strtotime($total_overtime));
-
+		
 		return view("member.payroll2.payroll_process_modal_view_timesheet2", $data);
 	}
 }

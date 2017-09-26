@@ -196,6 +196,13 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "Layout Only";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Everyone</span>";
     
+    $code = "mlm-developer";
+    $nav[$page]['submenu'][$code]['label'] = "Reward Slots V2";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/developer";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Layout (0%)";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: blue'>Guillermo Tabligan</span>";
 
     $code = "mlm-stairstep-compute";
     $nav[$page]['submenu'][$code]['label'] = "Distribute Stairstep";
@@ -388,13 +395,7 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
 
-    $code = "mlm-developer";
-    $nav[$page]['submenu'][$code]['label'] = "Testing Menu";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/developer";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "Layout (0%)";
-    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: blue'>Guillermo Tabligan</span>";
+
 
     /* ACCOUNTING*/
     $page = "accounting"; 

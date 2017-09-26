@@ -21,6 +21,18 @@ function mlm_developer()
 	{
 		action_load_table();
 		add_event_pagination();
+		add_event_search();
+	}
+	function add_event_search()
+	{
+		$(".search-employee-name").keypress(function(e)
+		{
+			if(e.which == 13)
+			{
+				slot_table_data.page = 1;
+				action_load_table();
+			}
+		});
 	}
 	function add_event_pagination()
 	{
@@ -37,7 +49,9 @@ function mlm_developer()
 	function action_load_table()
 	{
 		$html_test_slots = '<div class="text-center" style="padding: 180px 30px; font-size: 26px;"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>';
-		
+	
+		slot_table_data.search = $(".search-employee-name").val();
+
 		$(".load-test-slots").html($html_test_slots);
 
 		$.ajax(

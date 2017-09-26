@@ -41,8 +41,21 @@ class MlmDeveloperController extends Member
     {
         /* INITIAL DATA */
         $data               = Self::get_initial_settings();
+        $search             = Request::input("search");
     	$data["slot_count"] = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->count();
-    	$data["_slot_page"] = $_slot = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->membership()->customer()->currentWallet()->orderBy("slot_id", "desc")->paginate(5);
+        $slot_query         = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->membership()->customer()->currentWallet()->orderBy("slot_id", "desc");
+    	
+        if($search != "")
+        {
+            $slot_query->where(function($q) use ($search)
+            {
+                $q->orWhere("first_name", "LIKE", "%$search%");
+                $q->orWhere("last_name", "LIKE", "%$search%");
+                $q->orWhere("slot_no", "LIKE", "%$search%");
+            });
+        }
+
+        $data["_slot_page"] = $_slot = $slot_query->paginate(5);
 
         /* CUSTOM SLOT TABLE */
         foreach($_slot as $key => $slot)
@@ -132,6 +145,8 @@ class MlmDeveloperController extends Member
     	$total_payout       = Tbl_mlm_slot_wallet_log::slot()->where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->where("wallet_log_amount", "<", 0)->sum("wallet_log_amount") * -1;
     	$total_earnings     = Tbl_mlm_slot_wallet_log::slot()->where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->where("wallet_log_amount", ">", 0)->sum("wallet_log_amount");
     	
+
+
         /* FORMAT TOTALS */
     	$data["total_slot_wallet"]     = Currency::format($total_slot_wallet);
     	$data["total_slot_earnings"]   = Currency::format($total_earnings);
@@ -160,7 +175,15 @@ class MlmDeveloperController extends Member
         $default[]          = ["CURRENT GC","total_gc_format", false];
         $default[]          = ["CURRENT WALLET","current_wallet_format", true];
 
-        $data["_slot"]      = Columns::filterColumns($this->user_info->shop_id, $this->user_info->user_id, "slot_module", $data["_slot"], $default);
+        if(isset($data["_slot"]))
+        {
+            $data["_slot"]      = Columns::filterColumns($this->user_info->shop_id, $this->user_info->user_id, "slot_module", $data["_slot"], $default);
+        }
+        else
+        {
+            $data["_slot"]      = null;
+        }
+
 
     	return view("member.mlm_developer.mlm_developer_table", $data);
     }

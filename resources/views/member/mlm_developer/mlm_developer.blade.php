@@ -39,7 +39,7 @@
                         </li>
                     </ul>
                 </div>
-                <button class="btn btn-def-white btn-custom-white customize-column"><i class="fa fa-gear"></i> COLUMNS</button>
+                <button class="btn btn-def-white btn-custom-white" onclick="action_load_link_to_modal('/member/columns/slot_module', 'md')"><i class="fa fa-gear"></i> COLUMNS</button>
                 <button class="btn btn-def-white btn-custom-white" onclick="action_load_link_to_modal('/member/mlm/developer/import', 'lg')"><i class="fa fa-arrow-circle-up"></i> IMPORT SLOTS</button>
                 <a href="/downloadables/mlm-template.xlsx"><button class="btn btn-def-white btn-custom-white"><i class="fa fa-arrow-circle-down"></i> TEMPLATE</button></a>
            
@@ -52,16 +52,15 @@
 <div class="panel panel-default panel-block panel-title-block" style="margin-bottom: -10px;">
 
     <div class="form-group col-md-12" style="margin-top: 15px;">
-            <div class="pull-left">
-                <select class="form-control" style="width: 250px;">
-                    <option value="0">All Membership</option>
-                </select>
-            </div>
-            <div class="input-group pull-right" style="width: 300px;">
-                <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control search-employee-name" placeholder="Search customer or slot number" aria-describedby="basic-addon1">
-            </div>
-    
+        <div class="pull-left">
+            <select class="form-control" style="width: 250px;">
+                <option value="0">All Membership</option>
+            </select>
+        </div>
+        <div class="input-group pull-right" style="width: 300px;">
+            <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+            <input type="text" class="form-control search-employee-name" placeholder="Search customer or slot number" aria-describedby="basic-addon1">
+        </div>
     </div>
     <div class="form-group panel-body employee-container">
         <div id="all" class="tab-pane fade in active">

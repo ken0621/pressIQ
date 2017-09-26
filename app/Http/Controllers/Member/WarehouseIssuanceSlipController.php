@@ -29,4 +29,14 @@ class WarehouseIssuanceSlipController extends Member
 
         return view('member.warehousev2.wis.wis_table_item',$data);
     }
+    public function getViewSerial()
+    {
+
+        return view('member.warehousev2.wis.wis_serial');
+    }
+    public function getConfirm()
+    {
+
+        return view('member.warehousev2.wis.wis_confirm');
+    }
 }

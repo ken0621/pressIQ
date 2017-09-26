@@ -30,7 +30,7 @@
                 <td class="text-center">{{ $item->quantity }}</td>
                 <td class="text-center"><a href="javascript:">{{ $item->quantity }}</a></td>
                 <td class="text-right">{{ $item->display_subtotal }}</td>
-                <td class="text-center"><a href="javascript:">View Serials</a></td>
+                <td class="text-center"><a class="popup" link="/member/item/warehouse/wis/view-serial">View Serials</a></td>
                 <td class="text-center red-button remove-item-from-cart"><i class="fa fa-close fa-fw"></i></td>
             </tr>
             @endforeach

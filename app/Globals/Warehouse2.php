@@ -33,6 +33,10 @@ use App\Globals\Merchant;
 use Validator;
 class Warehouse2
 {   
+    public static function get_all_warehouse($shop_id)
+    {
+        return Tbl_warehouse::where('warehouse_shop_id',$shop_id)->where('archived',0)->get();
+    }
 	public static function get_current_warehouse($shop_id)
 	{
 		return session('warehouse_id_'.$shop_id);

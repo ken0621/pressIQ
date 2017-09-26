@@ -109,4 +109,5 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/cartv2/remove', 'Shop\ShopCart2Controller@remove_cart');
 	Route::get('/cartv2/update', 'Shop\ShopCart2Controller@update_cart');
 	Route::get('/cartv2/clear', 'Shop\ShopCart2Controller@clear_cart');
+	Route::get('/cartv2/quantity', 'Shop\ShopCart2Controller@quantity_cart');
 }

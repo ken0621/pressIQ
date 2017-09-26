@@ -192,7 +192,7 @@
                             </li>
                             <li>
                                 <a href="#" class="cart-holder popup" link="/cartv2" size="lg">
-                                    <div class="brown-icon-shopping-cart"></div> <span>Cart (0 items)</span>
+                                    <div class="brown-icon-shopping-cart"></div> Cart (<span class="quantity-item-holder" style="vertical-align: middle;">0</span> items)
                                 </a>
                             </li>
                         </ul>

@@ -128,4 +128,10 @@ class ShopCart2Controller extends Shop
     {
         
     }    
+    public function quantity_cart(Request $request)
+    {
+        $quantity = Cart2::get_cart_quantity();
+        
+        return response()->json($quantity);
+    }
 }

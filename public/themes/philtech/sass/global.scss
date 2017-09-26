@@ -16,14 +16,35 @@ body
 	background: none;
 	border: 0;
 	background-color: #585de8;
+	border: 1px solid #585de8;
 	font-size: 12.5px;
 	font-weight: 600;
-	padding: 10px 30px;
+	padding: 8px 25px;
+	transition: 0.3s all ease;
+	&:hover
+	{
+		background-color: #474ed8;
+	}
+}
+
+.btn-default
+{
+	background: none;
+	border: 1px solid #585de8;
+	background-color: #fff;
+	font-size: 12.5px;
+	font-weight: 600;
+	padding: 8px 25px;
+	color: #585de8;
+	transition: 0.3s all ease;
+	text-shadow: none;
 	&:hover
 	{
 		background-color: #585de8;
+		color: #fff;
 	}
 }
+
 .navbar-default .navbar-toggle .icon-bar
 {
 	background-color: #fff;

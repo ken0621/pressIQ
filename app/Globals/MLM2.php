@@ -79,18 +79,20 @@ class MLM2
             if($brown_next_rank)
             {
                 $_slot[$key]->brown_next_rank = strtoupper($brown_next_rank->rank_name);
-                $brown_rank_required_slots = $brown_next_rank->required_slot;
-                $brown_count_required = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot->slot_id)->where("sponsor_tree_level", "<=", $brown_next_rank->required_uptolevel)->count();
+                $brown_rank_required_slots    = $brown_next_rank->required_slot;
+                $brown_count_required         = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot->slot_id)->where("sponsor_tree_level", "<=", $brown_next_rank->required_uptolevel)->count();
                 
                 $_slot[$key]->brown_next_rank_requirements = $brown_rank_required_slots;
-                $_slot[$key]->brown_next_rank_current = $brown_count_required;
+                $_slot[$key]->brown_next_rank_current      = $brown_count_required;
 
                 $_slot[$key]->required_direct = $brown_next_rank->required_direct;
-                $_slot[$key]->current_direct = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot->slot_id)->where("sponsor_tree_level", "=", 1)->count();;
+                $_slot[$key]->current_direct  = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot->slot_id)->where("sponsor_tree_level", "=", 1)->count();;
 
-
-                $_slot[$key]->brown_direct_rank_percentage = ($_slot[$key]->current_direct / $_slot[$key]->required_direct) * 100;
-                $_slot[$key]->brown_rank_rank_percentage = ($brown_count_required / $brown_rank_required_slots) * 100;
+                $brown_direct_rank_percentage = @($_slot[$key]->current_direct / $_slot[$key]->required_direct) == INF ? 1 : $_slot[$key]->current_direct / $_slot[$key]->required_direct;
+                $brown_rank_rank_percentage   = @($brown_count_required / $brown_rank_required_slots) == INF ? 1 : $brown_count_required / $brown_rank_required_slots;  
+                
+                $_slot[$key]->brown_direct_rank_percentage = $brown_direct_rank_percentage * 100;
+                $_slot[$key]->brown_rank_rank_percentage   = $brown_rank_rank_percentage * 100;
             }
             else
             {

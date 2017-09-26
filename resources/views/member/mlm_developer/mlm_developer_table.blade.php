@@ -1,24 +1,9 @@
 <table class="table table-bordered table-condensed custom-column-table">
     <thead>
         <tr>
-            <th colkey="slot_no" class="text-center">SLOT NO</th>
-            <th colkey="slot_owner" class="text-center">SLOT OWNER</th>
-            <th colkey="sponsor" class="text-center">SPONSOR</th>
-            <th colkey="placement" default="hide" class="text-center">PLACEMENT</th>
-            <th colkey="membership" default="hide" class="text-center">MEMBERSHIP</th>
-            <th colkey="binary_left" default="hide" class="text-center">BINARY<BR>LEFT</th>
-            <th colkey="binary_right" default="hide" class="text-center">BINARY<BR>RIGHT</th>
-            <th colkey="brown_current_rank" default="hide" class="text-center">BROWN CURRENT RANK</th>
-            <th colkey="brown_next_rank" default="hide" class="text-center">BROWN NEXT RANK</th>
-            <th colkey="brown_next_rank_requirements" default="hide" class="text-center">BROWN NEXT RANK REQ</th>
-            <th colkey="brown_builder_points" default="hide" class="text-center">BROWN BUILDER POINTS</th>
-            <th colkey="brown_leader_points" default="hide" class="text-center">BROWN LEADER POINTS</th>
-            <th colkey="date_created" class="text-center">DATE<br>CREATED</th>
-            <th colkey="time_created" class="text-center">TIME<br>CREATED</th>
-            <th colkey="earnings" class="text-right">EARNINGS</th>
-            <th colkey="payout" class="text-right">PAYOUT</th>
-            <th colkey="current_gc" default="hide" class="text-right">CURRENT GC</th>
-            <th colkey="current_wallet" class="text-right">CURRENT<br>WALLET</th>
+            @foreach($_slot[0] as $column)
+            <th class="text-center">{{ $column["label"] }}</th>
+            @endforeach
         </tr>
     </thead>
     <tbody>
@@ -27,35 +12,16 @@
                 <td class="text-center" colspan="9">NO SLOT YET</td>
             </tr>
         @else
-            @foreach($_slot as $key => $slot)
+        @foreach($_slot as $slot)
             <tr>
-                <td colkey="slot_no" class="text-center">{{ $slot->slot_no }}</td>
-                <td colkey="slot_owner" class="text-center"><a target="_blank" href="/members/autologin?email={{ $slot->email }}&password={{ $slot->password }}">{{ strtoupper($slot->last_name) }}, {{ strtoupper($slot->first_name) }} {{ strtoupper($slot->middle_name) }}</a></td>
-                <td colkey="sponsor" class="text-center">{!! $slot->sponsor_button !!}</a></td>
-                <td colkey="placement" class="text-center">{!! $slot->placement_button !!}</a></td>
-                <td colkey="membership" class="text-center">{!! $slot->membership_name !!}</a></td>
-                <td colkey="binary_left" class="text-center">{!! number_format($slot->slot_binary_left, 2) !!}</a></td>
-                <td colkey="binary_right" class="text-center">{!! number_format($slot->slot_binary_right, 2) !!}</a></td>
-                <td colkey="brown_current_rank" class="text-center">{!! $slot->brown_current_rank !!}</a></td>
-                <td colkey="brown_next_rank" class="text-center">{!! $slot->brown_next_rank !!}</a></td>
-                <td colkey="brown_next_rank_requirements" class="text-center">{!! $slot->brown_next_rank_requirements !!}</a></td>
-
-                <td colkey="brown_builder_points" class="text-center">{!! $slot->brown_builder_points !!}</a></td>
-                <td colkey="brown_leader_points" class="text-center">{!! $slot->brown_leader_points !!}</a></td>
-
-
-                <td colkey="date_created" class="text-center">{{ date("F d, Y", strtotime($slot->slot_created_date)) }}</td>
-                <td colkey="time_created" class="text-center">{{ date("h:i A", strtotime($slot->slot_created_date)) }}</td>
-                <td colkey="earnings" class="text-right">{!! $slot->total_earnings_format !!}</td>
-                <td colkey="payout" class="text-right">{!! $slot->total_payout_format !!}</td>
-                <td colkey="current_gc" class="text-right">{!! $slot->total_gc_format !!}</td>
-                <td colkey="current_wallet" class="text-right">{!! $slot->current_wallet_format !!}</td>
-            </tr>
+                @foreach($slot as $column)
+                <td class="text-center">{!! $column["data"] !!}</td>
+                @endforeach
             @endforeach
         @endif
     </tbody>
     <tfoot>
-        <tr>
+<!--         <tr>
             <td colkey="slot_no" class="text-center"></td>
             <td colkey="slot_owner" class="text-center"></td>
             <td colkey="sponsor" class="text-center"></a></td>
@@ -74,7 +40,7 @@
             <td colkey="payout" class="text-right text-bold"><a href="javascript:">{{ $total_payout }}</a></td>
             <td colkey="current_gc" class="text-right text-bold"><a href="javascript:">PHP 0.00</a></td>
             <td colkey="current_wallet" class="text-right text-bold"><a href="javascript:">{{ $total_slot_wallet }}</a></td>
-        </tr>
+        </tr> -->
     </tfoot>
 </table>
 

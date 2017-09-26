@@ -1,11 +1,12 @@
 var mlm_developer = new mlm_developer();
 var table_key = "slot_list_test_menu";
+var slot_table_data = {};
 
 function mlm_developer()
 {
 	this.action_load_data = function()
 	{
-		action_load_data();
+		action_load_table();
 	}
 
 	init();
@@ -18,24 +19,35 @@ function mlm_developer()
 	}
 	function document_ready()
 	{
-		action_load_data();
-		event_pagination_clicked();
+		action_load_table();
+		add_event_pagination();
 	}
-	function event_pagination_clicked()
+	function add_event_pagination()
 	{
 		$("body").on("click", ".pagination a", function(e)
 		{
-			action_load_data($(e.currentTarget).attr("href"));
-			e.preventDefault();
+			$url = $(e.currentTarget).attr("href");
+			var url = new URL($url);
+			$page = url.searchParams.get("page");
+			slot_table_data.page = $page;
+			action_load_table();
+			return false;
 		});
 	}
-	function action_load_data(link = "/member/mlm/developer/table")
+	function action_load_table()
 	{
-		$html_test_slots = '<div class="text-center" style="padding: 50px 100px; font-size: 20px;"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>';
+		$html_test_slots = '<div class="text-center" style="padding: 180px 30px; font-size: 26px;"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>';
+		
 		$(".load-test-slots").html($html_test_slots);
-		$(".load-test-slots").load(link, function()
+
+		$.ajax(
 		{
-			column.show_hide_columns();
+			url:"/member/mlm/developer/table",
+			data:slot_table_data,
+			success: function(data)
+			{
+				$(".load-test-slots").html(data);
+			}
 		});
 	}
 }

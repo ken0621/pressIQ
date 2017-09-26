@@ -6,9 +6,9 @@
         <div>
             <i class="fa fa-calendar"></i>
             <h1>
-            <span class="page-title">Testing Menu for MLM Slot Creation</span>
+            <span class="page-title">Reward Slots</span>
             <small style="font-size: 14px; color: gray;">
-                You can use this page to perform actions that can't be performaned even by <b>SUPER ADMINS</b>
+                List of <b>REWARD SLOTS</b>
             </small>
             </h1>
             <div class="dropdown-pull-right" style="text-align: right;">

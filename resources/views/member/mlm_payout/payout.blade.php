@@ -14,10 +14,10 @@
             </small>
             </h1>
             <div class="dropdown pull-right">
-                <button onclick="location.href='/downloadables/payout-import.xlsx'" class="btn btn-def-white btn-custom-white"><i class="fa fa-gear"></i> Payout Template</button>
-                <button class="btn btn-def-white btn-custom-white reset-payout"><i class="fa fa-file-excel-o"></i> Reset Manual Payout</button>
-                <button onclick="action_load_link_to_modal('/member/mlm/payout/import', 'lg')" class="btn btn-def-white btn-custom-white"><i class="fa fa-file-excel-o"></i> Import Payout</button>
-                <button onclick="location.href=''" class="btn btn-primary"><i class="fa fa-star"></i> Process Payout</button>
+                <button onclick="location.href='/downloadables/payout-import.xlsx'" class="btn btn-def-white btn-custom-white"><i class="fa fa-arrow-circle-down""></i> TEMPLATE</button>
+                <button onclick="action_load_link_to_modal('/member/mlm/payout/import', 'lg')" class="btn btn-def-white btn-custom-white"><i class="fa fa-arrow-circle-up""></i> IMPORT</button>
+                <button class="btn btn-def-white btn-custom-white reset-payout"><i class="fa fa-file-excel-o"></i> RESET IMPORT</button>
+                <button onclick="action_load_link_to_modal('/member/mlm/payout/process')" class="btn btn-primary"><i class="fa fa-star"></i> PROCESS PAYOUT</button>
             </div>
         </div>
     </div>
@@ -25,7 +25,7 @@
 <div class="panel panel-default panel-block panel-title-block panel-gray" style="border-bottom: 0; margin-bottom: -10px;">
     <ul class="nav nav-tabs">
         <li class="active change-tab pending-tab cursor-pointer" mode="pending"><a class="cursor-pointer"><i class="fa fa-check"></i> Processed</a></li>
-        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="fa fa-trash"></i> Pending</a></li>
+        <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="fa fa-money"></i> Pending</a></li>
     </ul>
     <div class="search-filter-box">
         <div class="col-md-3" style="padding: 10px">

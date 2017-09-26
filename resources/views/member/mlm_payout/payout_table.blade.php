@@ -42,7 +42,11 @@
             </tr>
         </tfoot>
     </table>
-
+    <div class="pull-left" style="margin: 10px;">
+        <div style="display: inline-block; padding: 10px; font-weight: bold; width: 200px; text-align: center; color: #999; border: 1px solid #ddd; background-color: #fff;">TOTAL EARNINGS <br><span style="color: #333;">{{ $grand_total_slot_earnings }}</span></div>
+        <div style="display: inline-block; padding: 10px; font-weight: bold; width: 200px; text-align: center; color: #999; border: 1px solid #ddd; background-color: #fff;"">TOTAL WALLET <br><span style="color: #333;">{{ $grand_total_slot_wallet }}</span></div>
+        <div style="display: inline-block; padding: 10px; font-weight: bold; width: 200px; text-align: center; color: #999; border: 1px solid #ddd; background-color: #fff;"">TOTAL PAYOUT <br><span style="color: #333;">{{ $grand_total_payout }}</span></div>
+    </div>
     <div class="pull-right">{!! $__payout->render() !!}</div>
 @else
     <div class="text-center" style="padding: 100px 0;">NO RESULT FOUND</div>

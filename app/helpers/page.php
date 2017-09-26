@@ -239,12 +239,12 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "<span style='color: blue'>Everyone</span>";
 
         $code = "mlm-report";
-        $nav[$page]['submenu'][$code]['label'] = "Reports";
-        $nav[$page]['submenu'][$code]['code'] = $code;
-        $nav[$page]['submenu'][$code]['url'] = $path . $page . "/report";
-        $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-        $nav[$page]['submenu'][$code]['status'] = "Layout (0%)";
-        $nav[$page]['submenu'][$code]['developer'] = "Luke Glenn Jordan";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Reports";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/report";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Luke Glenn Jordan";
 
         $code = "mlm-wallet-encashment";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Payout Releasing";
@@ -665,7 +665,7 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "kim";
 
         /* -- REPORT => PRODUCTS  */
-        $code = "13th Month Pay";
+        $code = "13th-Month-Pay";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "13th Month Pay";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
         $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/reports/13th_month_pay";

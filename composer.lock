@@ -4,7 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    "hash": "a858791e62229465209538ea88d4f9db",
+    "content-hash": "8e288fc2e0a19233c1ea9411d90d1592",
+=======
+    "hash": "f17d310d9d756f6341c546ac8e141c7a",
+    "content-hash": "3afb5f02fccafbd0c7ae5745763ffac6",
+>>>>>>> 3376eb34d65d8cdfb6a4a2aec8e67ac8eb9e9758
+=======
+    "hash": "a65399b40f201816507ee2e16e19d354",
+>>>>>>> b111a498c9863a9d52a2231a73e45e075ea6eec0
     "content-hash": "8d62ead4e3ae510fb2c4c71379157b30",
+>>>>>>> 572e9191f975e67dd575acd8014cbcfeebe4908a
     "packages": [
         {
             "name": "barryvdh/laravel-snappy",
@@ -1056,7 +1070,11 @@
             "keywords": [
                 "google"
             ],
+<<<<<<< HEAD
             "time": "2017-09-16T00:23:43+00:00"
+=======
+            "time": "2017-09-16 00:23:43"
+>>>>>>> b111a498c9863a9d52a2231a73e45e075ea6eec0
         },
         {
             "name": "google/auth",
@@ -1780,6 +1798,8 @@
             "time": "2017-09-13T13:36:29+00:00"
         },
         {
+<<<<<<< HEAD
+=======
             "name": "laravel/scout",
             "version": "v3.0.10",
             "source": {
@@ -1845,6 +1865,7 @@
             "time": "2017-09-14T12:32:30+00:00"
         },
         {
+>>>>>>> 572e9191f975e67dd575acd8014cbcfeebe4908a
             "name": "laravel/tinker",
             "version": "v1.0.2",
             "source": {

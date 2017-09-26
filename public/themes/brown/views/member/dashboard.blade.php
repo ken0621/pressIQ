@@ -20,9 +20,9 @@
 	                        <div class="text-header2">Enroll now and become one of us!</div>
 	                    </div>
 	                    <div class="btn-container">
-	                        <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
-	                        <img src="/themes/{{ $shop_theme }}/img/or.png"><br>
-	                        <a href="#" class="btn-enter-a-code" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
+	                        <a class="popup" link="/cart" size="lg" href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
+	                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
+	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
 	                    </div>
 	                </div>
 	            </div>
@@ -34,7 +34,7 @@
 	        <div class="text-header">Profile Information</div>
 	        <div class="row clearfix">
 	            <div class="col-md-4">
-	                <div class="profile-info-container pic1">
+	                <div class="profile-info-container pic1 match-height">
 	                    <div class="icon-container">
 	                        <div class="col-md-2">
 	                            <img src="/themes/{{ $shop_theme }}/img/brown-personal-info.png">
@@ -53,7 +53,7 @@
 	                </div>
 	            </div>
 	            <div class="col-md-4">
-	                <div class="profile-info-container pic2">
+	                <div class="profile-info-container pic2 match-height">
 	                    <div class="icon-container">
 	                        <div class="col-md-2">
 	                            <img src="/themes/{{ $shop_theme }}/img/brown-default-shipping.png">
@@ -66,7 +66,7 @@
 	                </div>
 	            </div>
 	            <div class="col-md-4">
-	                <div class="profile-info-container pic3">
+	                <div class="profile-info-container pic3 match-height">
 	                    <div class="icon-container">
 	                        <div class="col-md-2">
 	                            <img src="/themes/{{ $shop_theme }}/img/brown-default-billing.png">
@@ -85,7 +85,7 @@
 	<div class="dashboard">
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="title"><i class="fa fa-bar-chart-o"></i> Wallet Summary</div>
+				<div class="title"><i class="align-icon brown-icon-bar-chart"></i> Wallet Summary</div>
 				<div class="sub-container">
 					<div class="table-holder">
 						<div class="chart-legend">
@@ -179,6 +179,7 @@
 					</div>
 				</div>
 			</div>
+
 			<div class="col-md-6">
 				<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
 				<div class="sub-container">
@@ -203,9 +204,9 @@
 
 				</div>
 
-				<div class="title"><i class="fa fa-gift"></i> Reward Points</div>
+				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
 				<div class="sub-container">
-					<div class="chart-legend">
+					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
 						<div class="holder">
 							<div class="color"></div>
 							<div class="name"><span>Builder Point(s)</span> {{ $points->display_brown_builder_points }}</div>
@@ -216,9 +217,13 @@
 						</div>
 					</div>
 				</div>
+			</div>
+		</div>
+		<div class="row clearfix">
 
+			<div class="col-md-12">
 				<div class="unilevel-holder">
-					<div class="title"><i class="fa fa-star"></i> My Slot(s) <a href="javascript:" class="title-button pull-right btn-enter-a-code">Add New Slot</a></div>
+					<div class="title"><i class="align-icon brown-icon-star"></i> My Slot(s) <a href="javascript:" class="title-button pull-right btn-enter-a-code">Add New Slot</a></div>
 					<div class="sub-container">
 						@foreach($_slot as $slot)
 						<div class="holder">
@@ -226,12 +231,29 @@
 								<div class="col-sm-4 text-center">
 									<div class="label2">{{ $slot->slot_no }}</div>
 									<div class="label3">{{ $slot->display_total_earnings }}</div>
+									<div class="label3">{{ $slot->current_direct }} / {{ $slot->brown_next_rank_current }}</div>
 								</div>
-								<div class="col-sm-8">
+								<div class="col-sm-8 text-center" style="margin-bottom: 5px;">ROAD TO <b>{{ $slot->brown_next_rank }}</b></div>
+								<div class="col-sm-4">
 									@if($slot->brown_next_rank != "NO NEXT RANK")
-									<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) {{ $slot->brown_rank_rank_percentage }}%, rgb(237, 237, 237) {{ $slot->brown_rank_rank_percentage }}%);">ROAD TO <b>{{ $slot->brown_next_rank }}</b> ({{ $slot->brown_next_rank_current }}/{{ $slot->brown_next_rank_requirements }})</div>
+										@if($slot->current_direct >= $slot->required_direct)
+											<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">DIRECT <b>QUALIFIED</b></div>
+										@else
+											<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) {{ $slot->brown_direct_rank_percentage }}%, rgb(237, 237, 237) {{ $slot->brown_direct_rank_percentage }}%);">DIRECT ({{ $slot->current_direct }}/{{ $slot->required_direct }})</div>
+										@endif
 									@else
-									<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 40%);">YOU ARE A <b>LEADER</b></div>
+									<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 40%);">NO MORE <b> NEXT RANK</b></div>
+									@endif
+								</div>
+								<div class="col-sm-4">
+									@if($slot->brown_next_rank != "NO NEXT RANK")
+										@if($slot->brown_next_rank_current >= $slot->brown_next_rank_requirements)
+											<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">GROUP <b>QUALIFIED</b></div>
+										@else
+											<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) {{ $slot->brown_rank_rank_percentage }}%, rgb(237, 237, 237) {{ $slot->brown_rank_rank_percentage }}%);">GROUP ({{ $slot->brown_next_rank_current }}/{{ $slot->brown_next_rank_requirements }})</div>
+										@endif
+									@else
+									<div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 40%);">NO MORE <b> NEXT RANK</b></div>
 									@endif
 								</div>
 							</div>
@@ -243,7 +265,7 @@
 		</div>
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="title"><i class="fa fa-globe"></i> Newest Enrollee(s) Sponsored</div>
+				<div class="title"><i class="align-icon brown-icon-globe"></i> Newest Enrollee(s) Sponsored</div>
 				<div class="sub-container border-holder">
 					<div class="clearfix wow hidden">
 						<div class="badge right">6 New Members</div>
@@ -264,7 +286,7 @@
 							@if($direct->distributed == 1)
 								<button class="btn btn-default"><i class="fa fa-star"></i> VIEW INFO</button>
 							@else
-								<button class="btn btn-danger"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
+								<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
 							@endif
 						</div>
 					</div>
@@ -273,7 +295,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="match-height">
-					<div class="title"><i class="fa fa-money"></i> Recent Rewards <a href="javascript:" class="title-button pull-right">View All Rewards</a></div>
+					<div class="title"><i class="align-icon brown-icon-money"></i> Recent Rewards <a href="javascript:" class="title-button pull-right">View All Rewards</a></div>
 					<div class="sub-container">
 						<div class="activities">
 							@foreach($_recent_rewards as $recent_reward)
@@ -298,6 +320,8 @@
 				</div>
 			</div>
 		</div>
+
+
 	    <!-- Success -->
 	    <div class="popup-success">
 	        <div id="success-modal" class="modal success-modal fade">
@@ -315,65 +339,6 @@
 	</div>
 @endif
 
-<!-- POPUP BUY KIT -->
-<div class="popup-buy-a-kit">
-    <div id="buy-a-kit-modal" class="modal fade">
-        <div class="modal-lg modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"><img src="/themes/{{ $shop_theme }}/img/cart.png"> My Shopping Cart</h4>
-                </div>
-                <div>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Image</th>
-                                <th>Product Name</th>
-                                <th>Unit Price</th>
-                                <th>Quantity</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><img src="/themes/{{ $shop_theme }}/img/brown-cart-img1.png"></td>
-                                <td>P 9,500.00</td>
-                                <td>P 9,500.00</td>
-                                <td>
-                                    <input class="item-qty" name="quantity" min="1" step="1" value="1"  type="number"></td>
-                                    <td>P 9,500.00</td>
-                                </tr>
-                                <tr>
-                                    <td><img src="/themes/{{ $shop_theme }}/img/brown-cart-img1.png"></td>
-                                    <td>P 9,500.00</td>
-                                    <td>P 9,500.00</td>
-                                    <td>
-                                        <input class="item-qty" name="quantity" min="1" step="1" value="1"  type="number">
-                                    </td>
-                                    <td>P 9,500.00</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer row clearfix">
-                        
-                        <div class="col-md-8">
-                            <div class="left-btn-container">
-                                <div><i class="fa fa-long-arrow-left" aria-hidden="true">&nbsp;</i>&nbsp;Continue Shopping</div>
-                                <button class="btn-checkout">Checkout</button>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="total">Total: P 9,500.00</div>
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <!--  Enter a code -->
 <div class="popup-enter-a-code">
     <div id="enter-a-code-modal" class="modal fade">
@@ -438,60 +403,93 @@
           </div>
       </div>
   </div>
+<!-- MANUAL PLACING OF SLOT -->
+<div class="popup-verify-placement">
+    <div id="slot-placement-modal" class="modal fade">
+        <div class="modal-sm modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"><i class="fa fa-shield"></i> MANUAL PLACEMENT</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="message message-return-slot-placement-verify"></div>
+                    <form class="slot-placement-form">
+                        <div>
+                            <div class="labeld">Slot Placement</div>
+                            <input class="input input-slot-placement text-center" name="slot_placement" type="text">
+                            <input class="chosen_slot_id" name="chosen_slot_id" type="hidden">
+                        </div>
+                        <div>
+                            <div class="labeld">Slot Position</div>
+                            <select class="input input-slot-position text-center" name="slot_position" type="text" style="text-align-last:center;">
+                            	<option value="left">LEFT</option>
+                            	<option value="right">RIGHT</option>
+                            </select>
+                        </div>
+                        <div class="btn-container">
+                            <button id="check_placement" class="btn-verify-placement">VERIFY</button>
+                        </div>
+                    </form>
+                </div>
+              </div>
+          </div>
+      </div>
+  </div>
 @endsection
 
 @section("member_script")
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js"></script>
 <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
 <script>
-var ctx = document.getElementById("income_summary").getContext('2d');
+// var ctx = document.getElementById("income_summary").getContext('2d');
 
-// And for a doughnut chart
-var myDoughnutChart = new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-        labels: ["Red", "Blue"],
-        datasets: [{
-            label: '# of Votes',
-            data: [1.00, 1.00],
-            backgroundColor: [
-                'rgba(142, 94, 162, 1)',
-                'rgba(62, 149, 205, 1)'
-            ],
-            borderColor: [
-                'rgba(142, 94, 162, 1)',
-                'rgba(62, 149, 205, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: 
-    {
-      legend: 
-      {
-        responsive: true,
-        display: false,
-      },
-      tooltips: 
-      {
-        callbacks: 
-        {
-          label: function(tooltipItems, data) 
-          {
-            var sum = data.datasets[0].data.reduce(add, 0);
-            function add(a, b) {
-              return a + b;
-            }
+// // And for a doughnut chart
+// var myDoughnutChart = new Chart(ctx, {
+//     type: 'doughnut',
+//     data: {
+//         labels: ["Red", "Blue"],
+//         datasets: [{
+//             label: '# of Votes',
+//             data: [1.00, 1.00],
+//             backgroundColor: [
+//                 'rgba(142, 94, 162, 1)',
+//                 'rgba(62, 149, 205, 1)'
+//             ],
+//             borderColor: [
+//                 'rgba(142, 94, 162, 1)',
+//                 'rgba(62, 149, 205, 1)'
+//             ],
+//             borderWidth: 1
+//         }]
+//     },
+//     options: 
+//     {
+//       legend: 
+//       {
+//         responsive: true,
+//         display: false,
+//       },
+//       tooltips: 
+//       {
+//         callbacks: 
+//         {
+//           label: function(tooltipItems, data) 
+//           {
+//             var sum = data.datasets[0].data.reduce(add, 0);
+//             function add(a, b) {
+//               return a + b;
+//             }
 
-            return data.datasets[0].data[tooltipItems.index] + ' %';
-          },
-          // beforeLabel: function(tooltipItems, data) {
-          //   return data.datasets[0].data[tooltipItems.index] + ' hrs';
-          // }
-        }
-      }
-    }
-});
+//             return data.datasets[0].data[tooltipItems.index] + ' %';
+//           },
+//           // beforeLabel: function(tooltipItems, data) {
+//           //   return data.datasets[0].data[tooltipItems.index] + ' hrs';
+//           // }
+//         }
+//       }
+//     }
+// });
 
 $(document).ready(function()
 {
@@ -499,6 +497,14 @@ $(document).ready(function()
 	{
 		$("#success-modal").modal("show");
 	}
+
+
+	$(".place_slot_btn").click(function()
+	{
+		$(".message-return-slot-placement-verify").empty();
+		$(".chosen_slot_id").val($(this).attr("place_slot_id"));
+		$("#slot-placement-modal").modal("show");
+	});
 });
 
 </script>
@@ -506,4 +512,91 @@ $(document).ready(function()
 @section("member_css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/member_dashboard.css">
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/nonmember_dashboard.css">
+<style type="text/css">
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px white inset;
+}
+
+/* PLACEMENT VERIFIER */
+.popup-verify-placement {
+  background-color: #EEEEEE;
+  font-family: "Arimo", sans-serif; }
+  .popup-verify-placement .modal-sm {
+    width: 100%;
+    max-width: 500px; }
+  .popup-verify-placement .modal-content {
+    background-color: #eee; }
+    .popup-verify-placement .modal-content .modal-header {
+      background-color: #693d28;
+      border-top-left-radius: 3px;
+      border-top-right-radius: 3px; }
+      .popup-verify-placement .modal-content .modal-header .close {
+        color: #FFF; }
+      .popup-verify-placement .modal-content .modal-header .modal-title {
+        font-weight: 600;
+        color: #FFF;
+        font-size: 15px; }
+    .popup-verify-placement .modal-content .modal-body {
+      font-weight: 600;
+      margin: 0px 20px 0px 20px; }
+      .popup-verify-placement .modal-content .modal-body .message {
+        text-align: center;
+        margin-bottom: 10px;
+        color: red;
+        font-size: 14px;
+        text-transform: uppercase; }
+      .popup-verify-placement .modal-content .modal-body .input {
+        width: 100%;
+        font-size: 16px;
+        border: none;
+        border: 1px solid #693d28;
+        margin: 5px 0px;
+        margin-bottom: 15px;
+        padding: 5px;
+        border-radius: 2px; }
+      .popup-verify-placement .modal-content .modal-body label {
+        font-size: 13px;
+        text-align: center !important;
+        margin: 10px 0px;
+        padding: 10px; }
+      .popup-verify-placement .modal-content .modal-body .labeld {
+        color: #693d28;
+        text-align: center;
+        text-transform: uppercase; }
+      .popup-verify-placement .modal-content .modal-body select {
+        width: 100%;
+        font-size: 16px;
+        border: none;
+        border: 1px solid #693d28;
+        margin: 5px 0px;
+        margin-bottom: 15px;
+        padding: 5px;
+        border-radius: 2px; }
+      .popup-verify-placement .modal-content .modal-body .btn-container {
+        text-align: center;
+        font-family: "Arimo", sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+        text-transform: uppercase;
+        padding-bottom: 20px; }
+        .popup-verify-placement .modal-content .modal-body .btn-container .btn-verify-placement {
+          color: #693d28;
+          background-color: #fff;
+          padding: 10px 40px;
+          border: 2px solid #693d28;
+          border-radius: 2px;
+          opacity: 0.9;
+          -webkit-transition: all 0.2s ease-in-out;
+          -moz-transition: all 0.2s ease-in-out;
+          -o-transition: all 0.2s ease-in-out;
+          transition: all 0.2s ease-in-out;
+          width: 100%;
+          margin-top: 20px;
+          text-transform: uppercase; }
+        .popup-verify-placement .modal-content .modal-body .btn-container .btn-verify-placement:hover {
+          color: #fff;
+          background-color: #693d28;
+          opacity: 1.0; }
+</style>
 @endsection

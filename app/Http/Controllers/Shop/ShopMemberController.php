@@ -6,18 +6,25 @@ use Request as Request2;
 use Crypt;
 use Redirect;
 use View;
+use Input;
+use File;
+use Image;
 use Carbon\Carbon;
 use App\Globals\Payment;
 use App\Globals\Customer;
+use App\Globals\MemberSlotGenealogy;
 use App\Rules\Uniqueonshop;
 use App\Globals\MLM2;
 use App\Globals\FacebookGlobals;
 use App\Globals\SocialNetwork;
 use App\Globals\GoogleGlobals;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_country;
+use App\Models\Tbl_locale;
+use App\Globals\Currency;
 use Validator;
 use Google_Client; 
 use Google_Service_Drive;
@@ -29,6 +36,7 @@ class ShopMemberController extends Shop
     {
         $data["page"] = "Dashboard";
         $data["mode"] = session("get_success_mode");
+        $data["zero_currency"] = Currency::format(0);
         session()->forget("get_success_mode");
 
         if(Self::$customer_info)
@@ -36,9 +44,11 @@ class ShopMemberController extends Shop
             $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["wallet"]             = $data["customer_summary"]["_wallet"];
             $data["points"]             = $data["customer_summary"]["_points"];
+            $data["_wallet_plan"]       = $data["customer_summary"]["_wallet_plan"];
+            $data["_point_plan"]        = $data["customer_summary"]["_point_plan"];
             $data["_slot"]              = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["_recent_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
-            $data["_direct"]  = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
+            $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
         }
 
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.dashboard", $data));
@@ -57,7 +67,6 @@ class ShopMemberController extends Shop
 
         session($sess);
     }
-
     public function getLogin()
     {
         $data["page"] = "Login";
@@ -273,6 +282,7 @@ class ShopMemberController extends Shop
         $raw_password                           = $insert["password"];
         $insert["birthday"]                     = $insert["b_month"] . "/" . $insert["b_day"] . "/" . $insert["b_year"];
         $insert["password"]                     = Crypt::encrypt($insert["password"]);
+        $insert["created_at"]                   = Carbon::now();
 
         unset($insert["b_month"]);
         unset($insert["b_year"]);
@@ -293,14 +303,101 @@ class ShopMemberController extends Shop
     /* LOGIN AND REGISTRATION - END */
     public function getProfile()
     {
-        $data["page"] = "Profile";
-        $data["mlm"] = isset(Self::$customer_info->ismlm) ? Self::$customer_info->ismlm : 0;
-        $data["profile"]         = Tbl_customer::shop(Self::$customer_info->shop_id)->where("tbl_customer.customer_id", Self::$customer_info->customer_id)->first();
-        $data["profile_address"] = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->first();
-        $data["profile_info"]    = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();
-        $data["_country"]        = Tbl_country::get();
+        $data["page"]                = "Profile";
+        $data["mlm"]                 = isset(Self::$customer_info->ismlm) ? Self::$customer_info->ismlm : 0;
+        $data["profile"]             = Tbl_customer::shop(Self::$customer_info->shop_id)->where("tbl_customer.customer_id", Self::$customer_info->customer_id)->first();
+        $data["profile_address"]     = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->first();
+        $data["profile_info"]        = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();
+        $data["_country"]            = Tbl_country::get();
+        $data["allowed_change_pass"] = isset(Self::$customer_info->signup_with) ? (Self::$customer_info->signup_with == "member_register" ? true : false) : false;
+      
+
+        if(Self::$customer_info)
+        {
+            $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
+            $data["wallet"]             = $data["customer_summary"]["_wallet"];
+        }
+
+
+        // $data["allowed_change_pass"] = true;
 
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.profile", $data));
+    }
+    public function postProfileUpdateInfo(Request $request)
+    {
+        $form = $request->all();
+        $validate['first_name'] = 'required';
+        $validate['middle_name'] = 'required';
+        $validate['last_name'] = 'required';
+        $validate['b_month'] = 'required';
+        $validate['b_day'] = 'required';
+        $validate['b_year'] = 'required';
+        $validate['country_id'] = 'required';
+        $validate['customer_state'] = 'required';
+        $validate['customer_city'] = 'required';
+        $validate['customer_zipcode'] = 'required';
+        $validate['customer_street'] = 'required';
+
+        $validator = Validator::make($form, $validate);
+        
+        if (!$validator->fails()) 
+        {           
+            /* Birthday Fix */
+            $birthday = date("YY-MM-DD", strtotime($request->b_month . "/" . $request->b_day . "/" . $request->b_year));
+
+            /* Customer Data */
+            $insert_customer["first_name"]  = $request->first_name;
+            $insert_customer["middle_name"] = $request->middle_name;
+            $insert_customer["last_name"]   = $request->last_name;
+            $insert_customer["b_day"]       = $birthday;
+            $insert_customer["birthday"]    = $birthday;
+            $insert_customer["country_id"]  = $request->country_id;
+            $insert_customer["updated_at"]  = Carbon::now();
+
+            Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
+                        ->shop(Self::$customer_info->shop_id)
+                        ->update($insert_customer);
+
+            /* Customer Address */
+            $state_name    = Tbl_locale::where("locale_id", $request->customer_state)->first();
+            $city_name     = Tbl_locale::where("locale_id", $request->customer_city)->first();
+            $barangay_name = Tbl_locale::where("locale_id", $request->customer_zipcode)->first();
+
+            $insert_customer_address["country_id"] = $request->country_id;
+            $insert_customer_address["customer_state"] = isset($state_name) ? $state_name->locale_name : '';
+            $insert_customer_address["customer_city"] = isset($city_name)  ? $city_name->locale_name : '';
+            $insert_customer_address["customer_zipcode"] = isset($barangay_name) ? $barangay_name->locale_name : '';
+            $insert_customer_address["customer_street"] = $request->customer_street;
+            $insert_customer_address["state_id"] = $request->customer_state;
+            $insert_customer_address["city_id"] = $request->customer_city;
+            $insert_customer_address["barangay_id"] = $request->customer_zipcode;
+
+            $exist = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->first();
+
+            if ($exist) 
+            {
+                /* Update */
+                $insert_customer_address["updated_at"] = Carbon::now();
+
+                Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->update($insert_customer_address);
+            }
+            else
+            {
+                /* Insert */
+                $insert_customer_address["created_at"] = Carbon::now();
+                $insert_customer_address["customer_id"] = Self::$customer_info->customer_id;
+                $insert_customer_address["purpose"] = "permanent";
+                
+                Tbl_customer_address::insert($insert_customer_address);
+            }
+            
+            echo json_encode("success");
+        }
+        else
+        {
+            $result = $validator->errors();
+            echo json_encode($result);
+        }
     }
     public function postProfileUpdateReward(Request $request)
     {
@@ -308,19 +405,167 @@ class ShopMemberController extends Shop
         Tbl_customer::where("customer_id", Self::$customer_info->customer_id)->update($update_customer);
         echo json_encode("success");
     }
+    public function postProfileUpdatePicture(Request $request)
+    {
+        $customer_id = $request->customer_id;
+        $input = $request->all();
+        $rules = array('profile_image' => 'required|mimes:jpeg,png,gif,bmp');
+        $validator = Validator::make($input, $rules);
+
+        if ($validator->fails()) 
+        {
+            $messages = $validator->messages();
+            return Redirect::back()
+                    ->withErrors($validator)
+                    ->withInput();
+        } 
+        else 
+        {
+            $file = Input::file("profile_image");
+            /* SAVE THE IMAGE IN THE FOLDER */
+            if ($file) 
+            {
+                $extension          = $file->getClientOriginalExtension();
+                $filename           = str_random(15).".".$extension;
+                $destinationPath    = 'uploads/'.$this->shop_info->shop_key."-".$this->shop_info->shop_id.'/ecommerce-upload';
+                
+                if(!File::exists($destinationPath)) 
+                {
+                    $create_result = File::makeDirectory(public_path($destinationPath), 0775, true, true);
+                }
+
+                /* RESIZE IMAGE */
+                $upload_success    = Image::make(Input::file('profile_image'))->fit(250, 250)->save($destinationPath."/".$filename);;
+
+                /* SAVE THE IMAGE PATH IN THE DATABASE */
+                $image_path = $destinationPath."/".$filename;
+
+                if( $upload_success ) 
+                {
+                   $exist = Tbl_customer::where("customer_id", $customer_id)->first();
+                   if ($exist->profile) 
+                   {
+                       $delete_file = $exist->profile;
+                       File::delete($delete_file);
+                   }
+
+                   $update['profile'] = $image_path;
+                   Tbl_customer::where("customer_id", $customer_id)->where("shop_id", $this->shop_info->shop_id)->update($update);
+
+                   echo json_encode("success");
+                } 
+                else 
+                {
+                   echo json_encode("failed");
+                }
+            }
+        }
+    }
+    public function postProfileUpdatePassword(Request $request)
+    {
+        $form = $request->all();
+
+        $old = $request->old_password;
+        $new = Crypt::decrypt(Tbl_customer::where("customer_id", Self::$customer_info->customer_id)->where("shop_id", $this->shop_info->shop_id)->value("password"));
+
+        if ($old == $new) 
+        {
+            $validate['password'] = 'required|confirmed|min:6';
+            $validator = Validator::make($form, $validate);
+            
+            if (!$validator->fails()) 
+            {           
+                $insert_customer["password"]  = Crypt::encrypt($request->password);
+
+                Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
+                            ->shop(Self::$customer_info->shop_id)
+                            ->update($insert_customer);
+
+                $email = Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
+                            ->shop(Self::$customer_info->shop_id)
+                            ->value('email');
+
+                $pass = $request->password;
+
+                Self::store_login_session($email,$pass);
+                
+                echo json_encode("success");
+            }
+            else
+            {
+                $result = $validator->errors();
+                echo json_encode($result);
+            }
+        }
+        else
+        {
+            $result[0] = "Old password mismatched.";
+            echo json_encode($result);
+        }
+    }
     public function getNotification()
     {
         $data["page"] = "Notification";
+        $data["_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.notification", $data));
     }
-    public function getGenealogy()
+    public function getGenealogy(Request $request)
     {
         $data["page"] = "Genealogy";
+        $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
+        $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();
+        $data['slot_no'] = 0;
+        $data['mode'] = 'sponsor';
+        if($slot)
+        {
+            $data['slot_no'] = $slot->slot_no;
+            $data['mode'] = $request->mode;
+        }
+
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.genealogy", $data));
+    }
+    public function getGenealogyTree(Request $request)
+    {
+        $slot_no  = $request->slot_no;
+        $shop_id  = $this->shop_info->shop_id;
+        $mode = $request->mode;
+
+        $check = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->where('slot_no',$slot_no)->where('shop_id',$shop_id)->first();
+
+        if($check)
+        {
+            $data = MemberSlotGenealogy::tree($shop_id, $check->slot_id, $mode);
+            return view('member.genealogy_tree', $data);            
+        }
+        else
+        {
+            die('Invalid slot!');
+        }
+    }
+    public function getGenealogyDownline(Request $request)
+    {
+        $data = MemberSlotGenealogy::downline($request->x, $request->mode);
+        return $data;
+    }
+    public function getNetwork()
+    {
+        $data["page"] = "Network List";
+
+        if(request()->input("slot_no") == "")
+        {
+            $slot_no = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->value("slot_no");
+            return Redirect::to("/members/network?slot_no=" . $slot_no);
+        }
+        else
+        {
+            $data["_tree"] = MLM2::get_sponsor_network($this->shop_info->shop_id, request()->input("slot_no"));
+            return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.network", $data));
+        }
     }
     public function getReport()
     {
-        $data["page"] = "Report";
+        $data["page"]           = "Report";
+        $data["_rewards"]       = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.report", $data));
     }
     public function getWalletLogs()
@@ -330,7 +575,10 @@ class ShopMemberController extends Shop
     }
     public function getWalletEncashment()
     {
-        $data["page"] = "Wallet Encashment";
+        $data["page"]           = "Wallet Encashment";
+        $data["_encashment"]    = MLM2::customer_payout($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
+        $total_payout           = MLM2::customer_total_payout(Self::$customer_info->customer_id);
+        $data["total_payout"]   = Currency::format($total_payout);
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.wallet_encashment", $data));
     }
     public function getSlot()
@@ -353,13 +601,16 @@ class ShopMemberController extends Shop
         $data["page"] = "Wishlist";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.wishlist", $data));
     }
-
+    public function getCheckout()
+    {
+        $data["page"] = "Checkout";
+        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.checkout", $data));
+    }
     public function getNonMember()
     {
         $data["page"] = "NonMember";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.nonmember", $data));
     }
-
     public function getTest()
     {
         $shop_id    = $this->shop_info->shop_id; //tbl_shop
@@ -370,13 +621,6 @@ class ShopMemberController extends Shop
 
         $error = Payment::payment_redirect($shop_id, $key, $success, $failed, $debug);
         dd($error);
-    }
-
-
-    public function getCheckout()
-    {
-        $data["page"] = "Checkout";
-        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.checkout", $data));
     }
 
     /* AJAX */
@@ -411,7 +655,6 @@ class ShopMemberController extends Shop
 
         return $return;
     }
-
     public function postVerifyCode(Request $request)
     {
         $shop_id                                = $this->shop_info->shop_id;
@@ -455,7 +698,6 @@ class ShopMemberController extends Shop
 
         echo $message;
     }
-
     public function getFinalVerify()
     {
         $data = $this->code_verification();
@@ -464,7 +706,7 @@ class ShopMemberController extends Shop
         {
             return view('member.final_verification', $data);
         }
-    }
+    }    
     public function postFinalVerify()
     {
         $data = $this->code_verification();
@@ -518,5 +760,109 @@ class ShopMemberController extends Shop
         {
             return false;
         }
+    }
+    public function postVerifySlotPlacement(Request $request)
+    {
+        $shop_id         = $this->shop_info->shop_id;
+        $slot_id         = $request->slot_id;
+        $slot_placement  = $request->slot_placement;
+        $slot_position   = $request->slot_position;
+
+        $slot_placement  = Tbl_mlm_slot::where("slot_no",$slot_placement)->where("shop_id",$shop_id)->first() ? Tbl_mlm_slot::where("slot_no",$slot_placement)->where("shop_id",$shop_id)->first()->slot_id : null;
+
+
+        $data            = $this->check_placement($slot_id,$slot_placement,$slot_position);
+        $procceed        = $data["procceed"];
+        $message         = $data["message"];
+
+        if($procceed == 1)
+        {
+            echo json_encode('success');
+        }
+        else
+        {
+            echo json_encode($message); 
+        }
+    }
+    public function getFinalVerifyPlacement(Request $request)
+    {
+        $shop_id         = $this->shop_info->shop_id;
+        $slot_id         = $request->slot_id;
+        $slot_placement  = $request->slot_placement;
+        $slot_position   = $request->slot_position;
+
+        $slot_placement  = Tbl_mlm_slot::where("slot_no",$slot_placement)->where("shop_id",$shop_id)->first() ? Tbl_mlm_slot::where("slot_no",$slot_placement)->where("shop_id",$shop_id)->first()->slot_id : null;
+
+        $data            = $this->check_placement($slot_id,$slot_placement,$slot_position);
+        $procceed        = $data["procceed"];
+        
+        if($procceed == 1)
+        {
+            return view('member.final_verification_placement', $data);
+        }
+    }    
+    public function postFinalVerifyPlacement(Request $request)
+    {
+        $shop_id         = $this->shop_info->shop_id;
+        $slot_id         = $request->slot_id;
+        $slot_placement  = $request->slot_placement;
+        $slot_position   = $request->slot_position;
+        $data            = $this->check_placement($slot_id,$slot_placement,$slot_position);
+        $procceed        = $data["procceed"];
+        if($procceed == 1)
+        {
+            $return = MLM2::matrix_position($shop_id, $slot_id, $slot_placement, $slot_position);
+            if($return == "success")
+            {
+               echo json_encode("success");
+            }
+            else
+            {
+               echo json_encode("SOME ERROR OCCURRED");  
+            }
+            
+        }
+        else
+        {
+            echo json_encode("SOME ERROR OCCURRED");
+        }
+    }
+    public function check_placement($slot_id,$slot_placement,$slot_position)
+    {
+        $shop_id       = $this->shop_info->shop_id;
+        $check_sponsor = Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",$shop_id)->first();
+        $procceed      = 0;
+        if($check_sponsor)
+        {
+            $check_sponsor = Tbl_mlm_slot::where("slot_id",$check_sponsor->slot_sponsor)->where("shop_id",$shop_id)->first();
+            if($check_sponsor->slot_owner == Self::$customer_info->customer_id)
+            {
+                $check_placement = MLM2::check_placement_exist($shop_id,$slot_placement,$slot_position,1,$check_sponsor->slot_id);
+                if($check_placement == 0)
+                {
+                    $data["target_slot"] = Tbl_mlm_slot::where("slot_id",$slot_id)->customer()->first();
+                    $data["placement"]   = Tbl_mlm_slot::where("slot_id",$slot_placement)->customer()->first();
+                    $data["position"]    = $slot_position;
+                    $data["message"]     = "success";
+                    $procceed            = 1;
+                }
+                else
+                {
+                    $data["message"]   = "Placement not available";
+                }
+            }
+            else
+            {
+                $data["message"]   = "Some error occurred please try again.";
+            }
+        }
+        else
+        {
+            $data["message"]   = "Some error occurred please try again.";
+        }
+
+
+        $data["procceed"] = $procceed;
+        return $data;
     }
 }

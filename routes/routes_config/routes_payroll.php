@@ -1,8 +1,12 @@
 <?php
 Route::group(array('prefix' => '/member/payroll'), function()
 {
+	
+	//audit_trail_transaction
+	Route::any('/employee_list/modal_view_all_transaction/{id}/{uid}','Member\PayrollController@modal_view_all_transaction');
+	//audit_trail_transaction
 	Route::any('/payroll_api','Member\PayrollApiController@index');
-// /reports/payroll_ledger
+	// /reports/payroll_ledger
 	Route::any('/reports/government_forms','Member\PayrollReportController@government_forms');
 	Route::any('/reports/government_forms_sss/{id}','Member\PayrollReportController@government_forms_sss');
 	Route::any('/reports/government_forms_philhealth/{id}','Member\PayrollReportController@government_forms_philhealth');
@@ -33,8 +37,15 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/reports/payroll_register_report_period/{id}','Member\PayrollReportController@payroll_register_report_period');
 	
 	Route::any('/reports/payroll_register_report_period/export_excel/{id}','Member\PayrollReportController@payroll_register_report_export_excel');
-	
 	/*END PAYROLL REGISTER REPORT*/
+
+	/*START 13th month pay*/
+	Route::any('/reports/13th_month_pay','Member\Payroll13thMonthPayController@index');
+	Route::any('/reports/employee_13_month_pay_report/{employee_id}','Member\Payroll13thMonthPayController@employee_13_month_pay_report');
+	Route::any('/reports/modal_employee_13_month_pay_report/{employee_id}','Member\Payroll13thMonthPayController@modal_employee_13_month_pay_report');
+	Route::any('/reports/employee_13_month_pay_basis_submit','Member\Payroll13thMonthPayController@employee_13_month_pay_basis_submit');
+	Route::any('/reports/employee_13_month_pay_report_table','Member\Payroll13thMonthPayController@employee_13_month_pay_report_table');
+	/*END 13th month pay*/
 
 	/* COMPANY START */
 	Route::any('/company_list','Member\PayrollController@company_list');
@@ -434,6 +445,11 @@ Route::group(array('prefix' => '/member/payroll'), function()
      Route::any('/shift_template/archive_shift_template',"Member\PayrollController@archive_shift_template");
      /* SHIFT TEMPLATE END */
 
+     /* SHIFT TEMPLATE IMPORT START */
+	Route::any('/shift_template/modal_shift_import_template','Member\PayrollController@modal_shift_import_template');
+	Route::any('/shift_template/company_template','Member\PayrollController@get_template123');
+	Route::any('/shift_template/import_modal_shift_global','Member\PayrollController@import_modal_shift_global');
+    
 
 
 	/* BIO METRICS IMPORT START */

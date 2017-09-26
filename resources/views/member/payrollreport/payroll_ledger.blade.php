@@ -42,7 +42,7 @@
       		</div>
         </div>
     </div>
-</div>
+
 @endsection
 @section('script')
 <script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>

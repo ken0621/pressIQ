@@ -75,11 +75,11 @@
 						</div>
 
 						<div class="row quantity">
-							<div class="col-md-6">
+							<div class="col-xs-6">
 								<button class="btn add-cart add-to-cart-button" type="button" variant-id="{{ $product_variant['evariant_id'] }}">ADD TO CART <img src="/themes/{{ $shop_theme }}/assets/front/img/loader.gif" style="width:18px" class="ajax-loading-cart hide"><img src="/themes/{{ $shop_theme }}/front/add-to-cart-white.png"></button>
 								<!-- <span class="note variant-note">*Select a Variant</span> -->
 							</div>
-							<div class="input-count col-md-6">
+							<div class="input-count col-xs-6">
 								<table>
 									<tbody>
 										<tr>
@@ -102,10 +102,10 @@
 			<div class="rel-product-title">RELATED <font class="product">PRODUCT</font></div>
 			@if($_related)
 				@foreach($_related as $related)
-				<div class="col-md-3 col-sm-33 col-sm-bottom col-bottom">
+				<div class="col-md-3 col-xs-6 col-sm-bottom col-bottom">
 					<div class="list-product"  class="prodimg">
 						<div class="img">
-							<img src="{{ get_product_first_image($related) }}">
+							<img class="4-3-ratio" src="{{ get_product_first_image($related) }}">
 							<div class="show-cart-view cart-hidden hidden">
 								<a href="/product/view?id={{ $related["eprod_id"] }}"><img class="magnify-glass" src="/themes/{{ $shop_theme }}/front/magnify-black.png"></a>
 								{{-- @if($related->product_has_variations == 0) --}}

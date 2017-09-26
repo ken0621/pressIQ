@@ -44,6 +44,241 @@ button
 	}
 }
 
+
+.cart
+{
+	.left-btn-container
+	{
+
+		width: 100%;
+
+		div
+		{
+			float: left;
+			padding-top: 10px;
+		}
+
+		.btn-checkout
+		{
+			@extend div;
+			margin-left: 15px;
+
+			padding: 12px 30px;
+			color: #fff;
+			background-color: #4dac2b;
+			border-radius: 2px;
+			border: none;
+		}
+
+	}
+
+	.total
+	{
+		padding-top: 10px;
+	}
+}
+
+.side-nav-dim
+{
+	background-color: rgba(0,0,0,0.4);
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 1000;
+}
+
+/* Buy a kit */
+.popup-buy-a-kit
+{
+	font-family: $content-text;
+	
+	.modal-size 
+	{
+		width: 65%;
+	}
+
+	.modal-content
+	{
+		overflow: hidden;
+
+		.modal-header
+		{
+			background-color: #693d28;
+			border-top-left-radius: 3px;
+			border-top-right-radius: 3px;
+			border-bottom: none;
+
+			.close
+			{
+				color: #FFF;
+			}
+
+			.modal-title
+			{
+				font-weight: $semi-bold;
+				color: #FFF;
+			}
+		}
+
+		.table
+		{
+			thead
+			{
+				tr
+				{
+					th
+					{
+						background-color: #ece8e8;
+						color: #272c2f;
+						font-weight: 600;
+						font-size: 15px;
+						border-bottom: 0;
+						text-align: center;
+
+						&:first-child
+						{
+							padding-left: 50px;
+						}
+
+						&:last-child
+						{
+							padding-right: 10px;
+						}
+					}
+				}
+			}
+
+			tbody
+			{
+				tr
+				{
+					td
+					{
+						border-top: 0;
+						text-align: center;
+						vertical-align: middle;
+						color: #272c2f;
+						font-size: 15px;
+						font-weight: 400;
+						padding: 25px 17.5px;
+						border-bottom: 1px solid #ece8e8;
+						
+						&:first-child
+						{
+							padding-left: 50px;
+						}
+
+						&:last-child
+						{
+							padding-right: 10px;
+						}
+
+					}
+
+					.img-holder
+					{
+						img
+						{
+							width: 100px;
+							height: 100px;
+							object-fit: contain;
+							object-position: center;
+						}
+					}
+					
+					.name-holder
+					{
+
+					}
+
+					.price-holder
+					{
+						width: 20%;
+					}
+
+					.total-holder
+					{
+						width: 20%;
+					}
+					
+					.quantity-holder
+					{
+						.another
+						{
+							display: table;
+							.equal
+							{
+								display: table-cell;
+								vertical-align: middle;
+							}
+							.control
+							{
+								border: 1px solid #cecece;
+								background-color: #fff;
+								color: #71808c;
+								font-weight: 700;
+								font-size: 20px;
+								padding: 2px 12.5px;
+								margin: 0 -2.5px;
+							}
+							.form-control
+							{
+								border: 1px solid #cecece;
+								box-shadow: none;
+								border-radius: 0;
+							}
+						}
+					}
+					&:last-child
+					{
+						td
+						{
+							border-bottom: 0;
+						}
+					}
+				}
+			}
+		}
+
+		.modal-footer
+		{
+
+			.left-btn-container
+			{
+
+				width: 100%;
+
+				div
+				{
+					float: left;
+					padding-top: 10px;
+				}
+
+				.btn-checkout
+				{
+					@extend div;
+					margin-left: 15px;
+
+					padding: 12px 30px;
+					color: #fff;
+					background-color: #4dac2b;
+					border-radius: 2px;
+					border: none;
+				}
+
+			}
+
+			.total
+			{
+				padding-top: 10px;
+			}
+		}
+	}
+}
+
+
 /* Header */
 .nav .open>a, .nav .open>a:hover, .nav .open>a:focus
 {
@@ -310,6 +545,7 @@ header
 {
 	background-color: #422311;
 	color: #dac5a6;
+	transition: margin-left .5s;
 	.header-top
 	{
 		background-color: #301e10;
@@ -328,6 +564,10 @@ header
 				color: rgba(255,255,255,1);
 				text-decoration: none;
 			}
+		}
+		@media screen and (max-width: 991px)
+		{
+			display: none;
 		}
 	}
 	.header-middle
@@ -432,6 +672,10 @@ header
 							background-color: #fff;
 						}
 					}
+					.open-side-bar
+					{
+
+					}
 				}
 				.nav.navbar-nav
 				{
@@ -482,11 +726,16 @@ header
 	.relative
 	{
 		position: relative;
+		background-color: #301E10;
 	}
 	.left
 	{
 		float: left;
 		padding: 15px 0;
+		@media screen and (max-width: 991px)
+		{
+			display: none;
+		}
 		img
 		{
 			display: inline-block;
@@ -499,6 +748,10 @@ header
 			vertical-align: middle;
 			color: #ffffff;
 			font-size: 13px;
+			@media screen and (max-width: 515px)
+			{
+				display: none;
+			}
 		}
 		.list-category
 		{
@@ -540,6 +793,10 @@ header
 			padding: 15px 15px;
 			color: rgba(255,255,255,0.5);
 			cursor: pointer;
+			@media screen and (max-width: 515px)
+			{
+				padding: 15px 2.5px;
+			}
 			&.active, &:hover, &:focus
 			{
 				color: rgba(255,255,255,1);
@@ -552,12 +809,16 @@ header
 			vertical-align: middle;
 			background-color: #ed5639;
 			padding: 5px 10px;
-			border-radius: 25px;
+			border-radius: 25px;	
 		}
 		.cart-holder
 		{
 			padding: 12.5px 15px !important;
 			text-decoration: none;
+			@media screen and (max-width: 515px)
+			{
+				padding: 12.5px 5px !important;
+			}
 			.brown-icon-shopping-cart
 			{
 				margin-right: 5px;
@@ -573,6 +834,10 @@ header
 			padding: 14px 15px;
 			display: block;
 			text-decoration: none;
+			@media screen and (max-width: 515px)
+			{
+				padding: 14px 5px;
+			}
 			.brown-icon-bell-o
 			{
 				margin-right: 5px;
@@ -581,6 +846,33 @@ header
 				font-size: 20px;
 				color: #dac5a6;
 				height: 21px;
+			}
+		}
+		.open-side-bar
+		{
+			display: none;
+			.icon-bar
+			{
+				background-color: #fff;
+			}
+		}
+		@media screen and (max-width: 991px)
+		{
+			.notif-holders
+			{
+				display: none;
+			}
+			.cart-holder
+			{
+				display: none;
+			}
+			.holder
+			{
+				display: none;
+			}
+			.open-side-bar
+			{
+				display: block;
 			}
 		}
 	}
@@ -595,6 +887,10 @@ footer
 	.holder
 	{
 		color: #fff;
+		@media screen and (max-width: 991px)
+		{
+			margin-bottom: 25px;
+		}
 		.title
 		{
 			font-size: 13px;
@@ -675,6 +971,10 @@ footer
 	}
 	.payment-container
 	{
+		@media screen and (max-width: 500px)
+		{
+			margin-bottom: 25px;
+		}
 		.holder
 		{
 			display: inline-block;
@@ -692,14 +992,14 @@ footer
 	}
 	.payment-method
 	{
-		@media screen and (min-width: 991px)
+		@media screen and (min-width: 500px)
 		{
 			float: left;
 		}
 	}
 	.delivery-services
 	{
-		@media screen and (min-width: 991px)
+		@media screen and (min-width: 500px)
 		{
 			float: right;
 		}
@@ -713,14 +1013,14 @@ footer
 	border-top: 3px solid #dfdfdf;
 	.copy
 	{
-		@media screen and (min-width: 991px)
+		@media screen and (min-width: 500px)
 		{
 			float: left;
 		}
 	}
 	.power
 	{
-		@media screen and (min-width: 991px)
+		@media screen and (min-width: 500px)
 		{
 			float: right;
 		}
@@ -747,6 +1047,8 @@ footer
 	color: #693d28;
 	font-size: 13px;
 }
+
+
 
 
 /* Footer End */

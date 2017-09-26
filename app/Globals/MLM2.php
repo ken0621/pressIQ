@@ -10,6 +10,8 @@ use App\Models\Tbl_mlm_plan;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_brown_rank;
 use App\Models\Tbl_tree_sponsor;
+use App\Models\Tbl_item;
+use App\Models\Tbl_mlm_item_points;
 use App\Globals\Mlm_tree;
 use App\Globals\Mlm_complan_manager;
 use App\Globals\Mlm_complan_manager_cd;
@@ -23,10 +25,24 @@ use DB;
 
 class MLM2
 {
-	
 	public static $shop_id;
+
+	public static function get_sponsor_network($shop_id, $slot_no)
+	{
+		$slot_id = Tbl_mlm_slot::where("shop_id", $shop_id)->where("slot_no", $slot_no)->value("slot_id");
+		$_tree = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot_id)->orderBy("sponsor_tree_level")->child_info()->customer()->get();
+	
+		foreach($_tree as $key => $tree)
+		{
+			$_tree[$key]->ordinal_level = ordinal($tree->sponsor_tree_level) . " Level";
+			$_tree[$key]->display_slot_date_created = date("F d, Y", strtotime($tree->slot_created_date));
+		}
+
+		return $_tree;
+	}	
 	public static function verify_sponsor($shop_id, $sponsor_key)
 	{
+
 		$slot_info = Tbl_mlm_slot::shop($shop_id)->where("slot_nick_name", $sponsor_key)->where("slot_defaul", 1)->first();
 
 		if(!$slot_info)
@@ -63,11 +79,20 @@ class MLM2
             if($brown_next_rank)
             {
                 $_slot[$key]->brown_next_rank = strtoupper($brown_next_rank->rank_name);
-                $brown_rank_required_slots = $brown_next_rank->required_slot;
-                $brown_count_required = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot->slot_id)->where("sponsor_tree_level", "<=", $brown_next_rank->required_uptolevel)->count();
+                $brown_rank_required_slots    = $brown_next_rank->required_slot;
+                $brown_count_required         = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot->slot_id)->where("sponsor_tree_level", "<=", $brown_next_rank->required_uptolevel)->count();
+                
                 $_slot[$key]->brown_next_rank_requirements = $brown_rank_required_slots;
-                $_slot[$key]->brown_next_rank_current = $brown_count_required;
-                $_slot[$key]->brown_rank_rank_percentage = ($brown_count_required / $brown_rank_required_slots) * 100;
+                $_slot[$key]->brown_next_rank_current      = $brown_count_required;
+
+                $_slot[$key]->required_direct = $brown_next_rank->required_direct;
+                $_slot[$key]->current_direct  = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot->slot_id)->where("sponsor_tree_level", "=", 1)->count();;
+
+                $brown_direct_rank_percentage = @($_slot[$key]->current_direct / $_slot[$key]->required_direct);
+                $brown_rank_rank_percentage   = @($brown_count_required / $brown_rank_required_slots);
+
+                $_slot[$key]->brown_direct_rank_percentage = $brown_direct_rank_percentage * 100;
+                $_slot[$key]->brown_rank_rank_percentage   = $brown_rank_rank_percentage * 100;
             }
             else
             {
@@ -89,15 +114,53 @@ class MLM2
 		$return["_wallet"]->current_wallet = 0;
 		$return["_wallet"]->total_earnings = 0;
 		$return["_wallet"]->total_payout = 0;
-		$return["_wallet"]->complan_direct = 0;
-		$return["_wallet"]->complan_binary = 0;
-		$return["_wallet"]->complan_builder = 0;
-		$return["_wallet"]->complan_leader = 0;
-		$return["_wallet"]->complan_triangle = 0;
 
+
+		$_plan = Tbl_mlm_slot_wallet_log::groupBy("wallet_log_plan")->where("shop_id", $shop_id)->get();
+		$_plan_ignore = array("E Money", "Repurchase", "Tours Wallet Points", "Tours Wallet", "Encashment");
+
+		foreach($_plan as $key => $plan)
+		{
+			$string_plan = "complan_" . strtolower($plan->wallet_log_plan);
+			$label = Self::complan_to_label($shop_id, $string_plan);
+
+			if(in_array($label, $_plan_ignore))
+			{
+				unset($_plan[$key]);
+			}
+			else
+			{
+				$_plan[$key]->string_plan			= $string_plan;
+				$_plan[$key]->label 				= $label;
+				$return["_wallet"]->$string_plan 	= 0;
+			}
+		}
+
+		$return["_wallet"]->complan_triangle 		= 0;
+		$return["_wallet"]->complan_direct 			= 0;
+		$return["_wallet"]->complan_builder 		= 0;
+		$return["_wallet"]->complan_leader 			= 0;
+
+		$return["_wallet_plan"] = $_plan;
+		
 		$return["_points"] = new stdClass();
-		$return["_points"]->brown_leader_points = 0;
-		$return["_points"]->brown_builder_points = 0;
+
+
+
+
+		$_plan_points = Tbl_mlm_slot_points_log::where("shop_id", $shop_id)->slot()->groupBy("points_log_complan")->get();
+
+		foreach($_plan_points as $key=> $plan)
+		{
+			$string_plan 						= strtolower($plan->points_log_complan);
+			$_plan_points[$key]->string_plan	= $string_plan;
+			$_plan_points[$key]->label 			= Self::complan_to_label($shop_id, $string_plan);
+			$return["_points"]->$string_plan 	= 0;
+		}
+
+		$return["_points"]->brown_builder_points 	= 0;
+		$return["_points"]->brown_leader_points 	= 0;
+		$return["_point_plan"] = $_plan_points;
 
 		$return["slot_count"] = 0;
 
@@ -105,7 +168,7 @@ class MLM2
 		{
 			$return["_wallet"]->current_wallet += $slot->current_wallet;
 			$return["_wallet"]->total_earnings += $slot->total_earnings;
-			$return["_wallet"]->total_payout += $slot->total_payout;
+			$return["_wallet"]->total_payout += ($slot->total_payout) * -1;
 			$return["slot_count"]++;	
 
 			$_slot_wallet = Tbl_mlm_slot_wallet_log::where("wallet_log_slot", $slot->slot_id)->get();
@@ -163,6 +226,26 @@ class MLM2
 
 		return $return;
 	}
+	public static function complan_to_label($shop_id, $string)
+	{
+		switch ($string)
+		{
+			case "":
+				$string = strtolower($string);
+				$string = str_replace("complan_", "", $string);
+				$string = ucwords($string);
+			break;
+
+			default:
+				$string = strtolower($string);
+				$string = str_replace("complan_", "", $string);
+				$string = str_replace("_", " ", $string);
+				$string = ucwords($string);
+			break;
+		}
+
+		return $string;
+	}
 	public static function customer_direct($shop_id, $customer_id, $limit = 10)
 	{
 		$_slot = Tbl_mlm_slot::where("slot_owner", $customer_id)->get();
@@ -184,10 +267,11 @@ class MLM2
 		foreach($_direct as $key => $direct)
 		{
 			$_direct[$key]->time_ago = time_ago($direct->slot_created_date);
+
+			$_direct[$key]->profile_image = ($direct->profile == "" ? "/themes/brown/img/user-placeholder.png" : $direct->profile);
 		}
 
 		return $_direct;
-
 	}
 	public static function customer_rewards($shop_id, $customer_id, $limit = 10)
 	{
@@ -202,17 +286,88 @@ class MLM2
 			}
 		});
 
-		$query->limit($limit);
+		$query->where("wallet_log_amount", ">", 0);
 
-		$_reward = $query->orderBy("wallet_log_id", "desc")->get();
+		
+
+		if($limit == 0)
+		{
+			$_reward = $query->orderBy("wallet_log_id", "desc")->paginate(10);
+			$store_pagine["notification_paginate"] = $_reward->render();
+			session($store_pagine);
+		}
+		else
+		{
+			$query->limit($limit);
+			$_reward = $query->orderBy("wallet_log_id", "desc")->get();
+		}
+		
 
 		foreach($_reward as $key => $reward)
 		{
 			$reward_slot = Tbl_mlm_slot::where("slot_id", $reward->wallet_log_slot)->first();
 			$_reward[$key]->display_wallet_log_amount = Currency::format($reward->wallet_log_amount);
 			$_reward[$key]->time_ago = time_ago($reward->wallet_log_date_created);
+			$_reward[$key]->display_date = date("F d, Y", strtotime($reward->wallet_log_date_created));
 			$_reward[$key]->log = Self::customer_rewards_contructor($reward);
 			$_reward[$key]->slot_no = $reward_slot->slot_no;
+		}
+
+		return $_reward;
+	}
+	public static function customer_total_payout($customer_id)
+	{
+		$_slot = Tbl_mlm_slot::where("slot_owner", $customer_id)->currentWallet()->get();
+		$total_payout = 0;
+
+		foreach($_slot as $key =>  $slot)
+		{
+			$total_payout += ($slot->total_payout) * -1;
+		}
+
+		return $total_payout;
+	}
+	public static function customer_payout($shop_id, $customer_id, $limit = 10)
+	{
+		$_slot = Tbl_mlm_slot::where("slot_owner", $customer_id)->get();
+		$query = Tbl_mlm_slot_wallet_log::where("shop_id", $shop_id);
+
+		$query->where(function($q) use ($_slot)
+		{
+			foreach($_slot as $slot)
+			{
+				$q->orWhere("wallet_log_slot", $slot->slot_id);
+			}
+		});
+
+		$query->where("wallet_log_amount", "<", 0);	
+
+		if($limit == 0)
+		{
+			$_reward = $query->orderBy("wallet_log_id", "desc")->paginate(50);
+			$store_pagine["payout_paginate"] = $_reward->render();
+			session($store_pagine);
+		}
+		else
+		{
+			$query->limit($limit);
+			$_reward = $query->orderBy("wallet_log_id", "desc")->get();
+		}
+		
+
+		foreach($_reward as $key => $reward)
+		{
+			$reward_slot = Tbl_mlm_slot::where("slot_id", $reward->wallet_log_slot)->first();
+			$_reward[$key]->display_wallet_log_amount = Currency::format($reward->wallet_log_amount * -1);
+			$_reward[$key]->time_ago = time_ago($reward->wallet_log_date_created);
+			$_reward[$key]->display_date = date("F d, Y", strtotime($reward->wallet_log_date_created));
+			$_reward[$key]->log = Self::customer_rewards_contructor($reward);
+			$_reward[$key]->slot_no = $reward_slot->slot_no;
+
+			$_reward[$key]->display_wallet_log_request = Currency::format($reward->wallet_log_request);
+			$_reward[$key]->display_wallet_log_tax = Currency::format($reward->wallet_log_tax);
+			$_reward[$key]->display_wallet_log_service_charge = Currency::format($reward->wallet_log_service_charge);
+			$_reward[$key]->display_wallet_log_other_charge = Currency::format($reward->wallet_log_other_charge);
 		}
 
 		return $_reward;
@@ -222,18 +377,51 @@ class MLM2
 		switch ($reward->wallet_log_plan)
 		{
 			case 'DIRECT':
-				$sponsor = Tbl_mlm_slot::where("slot_id", $reward->wallet_log_slot_sponsor)->first();
-				$message = "You earned <b>" . Currency::format($reward->wallet_log_amount) . "</b> from <b><a href='javascript:'>direct referral bonus</a></b> because of <a href='javascript:'><b>" . $sponsor->slot_no . "</b></a>.";
+				$sponsor = Tbl_mlm_slot::where("slot_id", $reward->wallet_log_slot_sponsor)->customer()->first();
+				$message = "You earned <b>" . Currency::format($reward->wallet_log_amount) . "</b> from <b><a href='javascript:'>direct referral bonus</a></b> because of <a href='javascript:'><b>" . $sponsor->slot_no . " (" . $sponsor->first_name . " " . $sponsor->last_name . ")</b></a>.";
 			break;
 			
 			case 'TRIANGLE':
 				$sponsor = Tbl_mlm_slot::where("slot_id", $reward->wallet_log_slot_sponsor)->first();
 				$sponsor_sponsor = Tbl_mlm_slot::where("slot_id", $sponsor->slot_placement)->first();
-				$message = "You earned <b>" . Currency::format($reward->wallet_log_amount) . "</b> from <b><a href='javascript:'>matrix bonus</a></b> because of pairing under <a href='javascript:'><b>" . $sponsor_sponsor->slot_no . "</b></a>.";
+				$message = "You earned <b>" . Currency::format($reward->wallet_log_amount) . "</b> from <b><a href='javascript:'>pairing bonus</a></b> because of pairing under <a href='javascript:'><b>" . $sponsor_sponsor->slot_no . "</b></a>.";
 			break;
 
+			case 'BINARY':
+				$sponsor = Tbl_mlm_slot::where("slot_id", $reward->wallet_log_slot_sponsor)->first();
+				$sponsor_sponsor = Tbl_mlm_slot::where("slot_id", $sponsor->slot_placement)->first();
+				$message = "You earned <b>" . Currency::format($reward->wallet_log_amount) . "</b> from <b><a href='javascript:'>pairing bonus</a></b> because of pairing under <a href='javascript:'><b>" . $sponsor_sponsor->slot_no . "</b></a>.";
+			break;
+
+			case 'REPURCHASE_CASHBACK':
+				$message = "You earned <b>" . Currency::format($reward->wallet_log_amount) . "</b> from <b><a href='javascript:'>repurchase cashback</a></b> because of your personal purchase.";
+			break;
+
+			case 'UNILEVEL':
+				$sponsor = Tbl_mlm_slot::where("slot_id", $reward->wallet_log_slot_sponsor)->customer()->first();
+				$slot_sponsor = "<a href='javascript'><b>" . $sponsor->slot_no . " (" . $sponsor->first_name . " " . $sponsor->last_name . ")</b></a>";
+				$message = "You earned <b>" . Currency::format($reward->wallet_log_amount) . "</b> from <b><a href='javascript:'>unilevel cashback</a></b> because " . $slot_sponsor . " purchased something using her account.";
+			break;
+
+			case 'MEMBERSHIP_MATCHING':
+				$message = "You earned <b>" . Currency::format($reward->wallet_log_amount) . "</b> from <b><a href='javascript:'>matching bonus</a></b>.";
+			break;
+
+			case 'INDIRECT':
+				$sponsor = Tbl_mlm_slot::where("slot_id", $reward->wallet_log_slot_sponsor)->customer()->first();
+				$slot_sponsor = "<a href='javascript'><b>" . $sponsor->slot_no . " (" . $sponsor->first_name . " " . $sponsor->last_name . ")</b></a>";
+				$message = "You earned <b>" . Currency::format($reward->wallet_log_amount) . "</b> from <b><a href='javascript:'>indirect referral bonus</a></b> because of " . $slot_sponsor . ".";
+			break;
+
+			case 'WALLET_TRANSFER':
+				$sponsor = Tbl_mlm_slot::where("slot_id", $reward->wallet_log_slot_sponsor)->customer()->first();
+				$slot_sponsor = "<a href='javascript'><b>" . $sponsor->slot_no . " (" . $sponsor->first_name . " " . $sponsor->last_name . ")</b></a>";
+				$message = "You earned <b>" . Currency::format($reward->wallet_log_amount) . "</b> from <b><a href='javascript:'>wallet transfer</a></b> of " . $slot_sponsor . ".";
+			break;
+
+
 			default:
-				$message = "NOTIFICATION UNKNOWN";
+				$message = $reward->wallet_log_plan;
 			break;
 		}
 
@@ -315,12 +503,13 @@ class MLM2
 		}
 		else
 		{
-			$slot_id  = Tbl_mlm_slot::insertGetId($insert);
-			$customer = Tbl_customer::where("shop_id",$shop_id)->where("customer_id",$customer_id)->first();
+			$slot_id    	  = Tbl_mlm_slot::insertGetId($insert);
+			$sponsor_slot 	  = Tbl_mlm_slot::where("slot_id",$sponsor)->where("shop_id",$shop_id)->first();
+			$customer_sponsor = Tbl_customer::where("shop_id",$shop_id)->where("customer_id",$sponsor_slot->slot_owner)->first();
 
-			if($customer->downline_rule == "auto")
+			if($customer_sponsor->downline_rule == "auto")
 			{
-				$rules    = $customer->autoplacement_rule;
+				$rules    = $customer_sponsor->autoplacement_rule;
 				MLM2::matrix_auto($shop_id,$slot_id,$rules);
 			}
 
@@ -527,20 +716,59 @@ class MLM2
 
         return "success";
     }
-    public static function check_placement_exist($shop_id,$placement,$position)
+    public static function check_placement_exist($shop_id,$placement,$position,$self_downline = 0,$self_owner = null)
     {
         $count_tree_if_exist 		= Tbl_tree_placement::where('placement_tree_position', $position)
                         								->where('placement_tree_parent_id', $placement)
                         								->where('shop_id', $shop_id)
                         								->count();
-	    
-	    if($count_tree_if_exist != 0)
+
+	    if($count_tree_if_exist != 0 || !$placement ||  !$position)
 	    {
 	    	return 1;
-	    }   
+	    } 
+	    else if ($self_downline == 1)
+	    {
+	    	/* IF DOWNLINE ONLY OF $SELF_OWNER*/
+		    $check_shop_slot            = Tbl_mlm_slot::where("slot_id",$placement)->where("shop_id",$shop_id)->where("slot_placement","!=",0)->first();
+		    if($check_shop_slot)
+		    {	
+		    	if($check_shop_slot->slot_sponsor == $self_owner)
+		    	{
+		    		return 0;
+		    	}
+		    	else
+		    	{
+		    		$owned = Tbl_tree_placement::where('placement_tree_parent_id', $self_owner)
+		    								   ->where('placement_tree_child_id',$placement)
+                							   ->where('shop_id', $shop_id)
+                							   ->first();
+                    if($owned)
+                    {
+                    	return 0;
+                    }            
+                    else
+                    {
+                    	return 1;
+                    }    							   
+		    	}
+		    }
+		    else
+		    {	
+	    		return 1;
+		    }
+	    }  
 	    else
 	    {
-	    	return 0;
+		    $check_shop_slot            = Tbl_mlm_slot::where("slot_id",$placement)->where("shop_id",$shop_id)->where("slot_placement","!=",0)->first();
+		    if($check_shop_slot)
+		    {	
+		    	return 0;
+		    }
+		    else
+		    {	
+	    		return 1;
+		    }
 	    }                  								
     }
 	public static function entry($shop_id,$slot_id)
@@ -585,5 +813,38 @@ class MLM2
             $update_slot["distributed"] = 1;
             Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",$shop_id)->update($update_slot);
             // End Computation Plan
+	}
+	public static function purchase($shop_id, $slot_id, $item_id)
+	{
+		$data = MLM2::item_points($shop_id,$item_id);
+		if($data)
+		{
+			MLM_compute::repurchasev2($slot_id,$shop_id,$data);
+		}
+	}	
+	public static function item_points($shop_id,$item_id)
+	{
+        $item          = Tbl_item::where("item_id",$item_id)->where("shop_id",$shop_id)->first();  
+        $item_points   = Tbl_mlm_item_points::where("item_id",$item_id)->first();     
+        if($item)
+        {
+	        $data["UNILEVEL"]					= $item_points->UNILEVEL;
+			$data["REPURCHASE_POINTS"]			= $item_points->REPURCHASE_POINTS;
+			$data["UNILEVEL_REPURCHASE_POINTS"]	= $item_points->UNILEVEL_REPURCHASE_POINTS;
+			$data["REPURCHASE_CASHBACK"]		= $item_points->REPURCHASE_CASHBACK;
+			$data["DISCOUNT_CARD_REPURCHASE"]	= $item_points->DISCOUNT_CARD_REPURCHASE;
+			$data["STAIRSTEP"]					= $item_points->STAIRSTEP;
+			$data["BINARY_REPURCHASE"]			= $item_points->BINARY_REPURCHASE;
+			$data["STAIRSTEP_GROUP"]			= $item_points->STAIRSTEP_GROUP;
+			$data["RANK"]						= $item_points->RANK;
+			$data["RANK_GROUP"]					= $item_points->RANK_GROUP;
+			$data["price"]						= $item->item_price;
+
+			return $data;
+        }
+        else
+        {
+        	return null;
+        }
 	}
 }

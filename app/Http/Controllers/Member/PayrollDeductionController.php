@@ -387,7 +387,7 @@ class PayrollDeductionController extends Member
           $data['deduction'] = Tbl_payroll_deduction_v2::where('payroll_deduction_id',$id)->first();
           $data['_type'] = Tbl_payroll_deduction_type::where('shop_id', Self::shop_id())->where('payroll_deduction_archived', 0)->orderBy('payroll_deduction_type_name')->get();
           $data['emp'] = Payroll::getbalancev2(Self::shop_id(), $id);
-         
+          // dd($data["deduction"]->payroll_deduction_period);
           return view('member.payroll.modal.modal_edit_deductionv2', $data);
      }
 

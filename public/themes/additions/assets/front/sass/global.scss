@@ -580,13 +580,6 @@ body, html
 			background-color: #191919;
 		}
 	}
-	.navbar-right
-	{
-		@media screen and (min-width: 991px)
-		{
-			padding: 8px 0;
-		}
-	}
 	.navbar-nav
 	{
 		> li
@@ -666,6 +659,32 @@ body, html
 			}
 		}
 	}
+	.navbar-right
+	{
+		@media screen and (min-width: 768px)
+		{
+			padding: 8px 0;
+		}
+		@media screen and (max-width: 768px)
+		{
+			li
+			{
+				display: inline-block;
+				vertical-align: middle;
+			}
+			.search-combine-holder
+			{
+				width: calc(100% - 60px);
+			}
+		}
+	}
+	.navbar-collapse
+	{
+		@media screen and (max-width: 768px)
+		{
+			width: 100%;
+		}
+	}
 }
 
 
@@ -677,6 +696,13 @@ footer
 	margin-top: 40px;
 	font-family: "Roboto", sans-serif;
 
+	.pull-right
+	{
+		@media screen and (max-width: 991px)
+		{
+			float: left !important;
+		}
+	}
 	.col-md-3
 	{
 		@media screen and (max-width: 991px)

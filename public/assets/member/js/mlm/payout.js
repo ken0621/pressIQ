@@ -20,7 +20,6 @@ function payout()
 		event_change_import_excel();
 		event_click_start_importation();
 		event_reset_payout();
-
 	}
 	function event_reset_payout()
 	{

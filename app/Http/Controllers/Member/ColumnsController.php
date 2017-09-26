@@ -13,7 +13,7 @@ use Session;
 
 class ColumnsController extends Member
 {
-    public function getIndex($from)
+    public function anyIndex($from)
     {
         if (Request::isMethod('post'))
         {

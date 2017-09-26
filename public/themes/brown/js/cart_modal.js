@@ -21,8 +21,8 @@ function cart_modal()
 
 	function event_quantity_price()
 	{
-		$(".item-qty").unbind("keyup mouseup");
-		$(".item-qty").bind("keyup mouseup", function(e)
+		$(".item-qty").unbind("change");
+		$(".item-qty").bind("change", function(e)
 		{
 			action_quantity_price(e.currentTarget);
 		});
@@ -46,7 +46,7 @@ function cart_modal()
 		})
 		.done(function() 
 		{
-			reload_cart();
+			reload_cart(quantity);
 		})
 		.fail(function() 
 		{
@@ -94,12 +94,17 @@ function cart_modal()
 		
 	}
 
-	function reload_cart()
+	function reload_cart(quantity = null)
 	{
 		$(".popup-buy-a-kit").load('/cartv2 .modal-content', function()
 		{
 			cart_loader_hide();
 			document_ready();
+
+			if (quantity) 
+			{
+				$(".item-qty").val(quantity);
+			}
 		});
 	}
 

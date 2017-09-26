@@ -31,6 +31,7 @@ function globalv2()
         event_sticky_nav();
         event_list_category();
         event_add_to_cart();
+        action_quantity_cart();
     }
     function window_load()
     {
@@ -140,7 +141,26 @@ function globalv2()
         {
             console.log("complete");
         });
-        
+    }
+    function action_quantity_cart()
+    {
+        $.ajax({
+            url: '/cartv2/quantity',
+            type: 'GET',
+            dataType: 'json'
+        })
+        .done(function(quantity) 
+        {
+            $(".quantity-item-holder").text(quantity);
+        })
+        .fail(function() 
+        {
+            console.log("error");
+        })
+        .always(function() 
+        {
+            console.log("complete");
+        });
     }
 }
 

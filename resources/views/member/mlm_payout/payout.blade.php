@@ -14,7 +14,7 @@
             </small>
             </h1>
             <div class="dropdown pull-right">
-                <button onclick="location.href=''" class="btn btn-def-white btn-custom-white"><i class="fa fa-gear"></i> Payout Settings</button>
+                <button onclick="location.href='/downloadables/payout-import.xlsx'" class="btn btn-def-white btn-custom-white"><i class="fa fa-gear"></i> Payout Template</button>
                 <button class="btn btn-def-white btn-custom-white reset-payout"><i class="fa fa-file-excel-o"></i> Reset Manual Payout</button>
                 <button onclick="action_load_link_to_modal('/member/mlm/payout/import', 'lg')" class="btn btn-def-white btn-custom-white"><i class="fa fa-file-excel-o"></i> Import Payout</button>
                 <button onclick="location.href=''" class="btn btn-primary"><i class="fa fa-star"></i> Process Payout</button>

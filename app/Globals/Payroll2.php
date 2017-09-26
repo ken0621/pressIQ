@@ -383,8 +383,6 @@ class Payroll2
 			$_timesheet[$from]->record = Payroll2::timesheet_process_in_out($timesheet_db);
 			$_timesheet[$from]->is_holiday = Payroll2::timesheet_get_is_holiday($employee_id, $from); //$holiday["holiday_day_type"];
 			// $_timesheet[$from]->holiday_name = $holiday["holiday_name"];
-		
-			dd($_timesheet);
 			if(isset($_shift_real[0]))
 			{
 				$_timesheet[$from]->day_type = $day_type = Payroll2::timesheet_get_day_type($_shift_real[0]->shift_rest_day, $_shift_real[0]->shift_extra_day);

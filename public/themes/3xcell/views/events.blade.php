@@ -11,7 +11,7 @@
 			<div class="events-container row clearfix">
 				@if(count(get_front_news($shop_id)) > 0)
 					@foreach(get_front_news($shop_id) as $news)
-							<div class="col-md-6">
+							<div class="col-md-6 col-sm-6 col-xs-6 company-events-holder">
 								<div class="per-event row clearfix">
 									<div class="col-md-6">
 										<div class="event-image-container">

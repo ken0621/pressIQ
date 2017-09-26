@@ -9,7 +9,7 @@
 	<div class="top-2-container">
 		<div class="container">
 			<div class="top-2-content-container row clearfix">
-				<div class="col-md-8">
+				<div class="col-md-8 col-sm-8 col-xs-8 about-holder">
 					<div class="title-container">{{ get_content($shop_theme_info, "history", "history_content_title") }}</div>
 					<div class="top-2-content">
 						<p>
@@ -17,7 +17,7 @@
 						</p>
 					</div>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-4 col-sm-4 col-xs-4 image-holder">
 					<div class="img-container">
 						<img src="{{ get_content($shop_theme_info, "history", "history_content_img") }}">
 					</div>
@@ -29,11 +29,11 @@
 	<div class="mid-container" style="background-image: url('/themes/{{ $shop_theme }}/img/vision-mission-img.png')">
 		<div class="container">
 			<div class="mid-content row clearfix">
-				<div class="col-md-6">
+				<div class="col-md-6 col-sm-6 col-xs-6 vision-holder">
 					<div class="mid-content-single">
 						<div class="title-container row clearfix">
-							<div class="col-sm-4"><i class="fa fa-binoculars" aria-hidden="true" style="color: white; font-size: 35px;"></i></div>
-							<div class="col-sm-8">
+							<div class="col-sm-4 col-xs-4"><i class="fa fa-binoculars" aria-hidden="true" style="color: white; font-size: 35px;"></i></div>
+							<div class="col-sm-8 col-xs-8">
 								<h1>VISION</h1>
 								<h2>Major Views</h2>
 							</div>
@@ -43,11 +43,11 @@
 						</div>			
 					</div>
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-6 col-sm-6 col-xs-6 mission-holder">
 					<div class="mid-content-single">
 						<div class="title-container row clearfix">
-							<div class="col-sm-4"><i class="fa fa-rocket" aria-hidden="true" style="color: white; font-size: 35px;"></i></div>
-							<div class="col-sm-8">
+							<div class="col-sm-4 col-xs-4"><i class="fa fa-rocket" aria-hidden="true" style="color: white; font-size: 35px;"></i></div>
+							<div class="col-sm-8 col-xs-8">
 								<h1>MISSION</h1>
 								<h2>Our Aims</h2>
 							</div>
@@ -79,35 +79,35 @@
 						</div>
 					@endforeach
 				@else
-					<div class="col-md-2">
+					<div class="col-md-2 col-sm-2 col-xs-2 permit-holder">
 						<div class="img-container">
 							<a href="/themes/{{ $shop_theme }}/img/permit1.png" data-title="" data-lightbox="company-gallery">
 								<img src="/themes/{{ $shop_theme }}/img/permit1.png">
 							</a>
 						</div>
 					</div>
-					<div class="col-md-2">
+					<div class="col-md-2 col-sm-2 col-xs-2 permit-holder">
 						<div class="img-container">
 							<a href="/themes/{{ $shop_theme }}/img/permit2.png" data-title="" data-lightbox="company-gallery">
 								<img src="/themes/{{ $shop_theme }}/img/permit2.png">
 							</a>
 						</div>
 					</div>
-					<div class="col-md-2">
+					<div class="col-md-2 col-sm-2 col-xs-2 permit-holder">
 						<div class="img-container">
 							<a href="/themes/{{ $shop_theme }}/img/permit3.png" data-title="" data-lightbox="company-gallery">
 								<img src="/themes/{{ $shop_theme }}/img/permit3.png">
 							</a>
 						</div>
 					</div>
-					<div class="col-md-2">
+					<div class="col-md-2 col-sm-2 col-xs-2 permit-holder">
 						<div class="img-container">
 							<a href="/themes/{{ $shop_theme }}/img/permit4.png" data-title="" data-lightbox="company-gallery">
 								<img src="/themes/{{ $shop_theme }}/img/permit4.png">
 							</a>
 						</div>
 					</div>
-					<div class="col-md-2">
+					<div class="col-md-2 col-sm-2 col-xs-2 permit-holder">
 						<div class="img-container">
 							<a href="/themes/{{ $shop_theme }}/img/permit5.png" data-title="" data-lightbox="company-gallery">
 								<img src="/themes/{{ $shop_theme }}/img/permit5.png">

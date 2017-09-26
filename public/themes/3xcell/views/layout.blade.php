@@ -112,7 +112,7 @@
                 </div>
                 <div class="col-md-10">
                 <!-- NAVIGATION -->
-                    <nav class="navirino">
+                    <nav class="navirino clearfix">
                         <ul>
                             <li><a href="/" class="head-button link-nav {{ Request::segment(1) == '' ? 'active' : '' }}" id="home">HOME</a></li>
                             <li class="product-hover">
@@ -229,15 +229,15 @@
     <footer id="bottom-footer">
         <div class="container">
             <div class="upper row clearfix">
-                <div class="col-md-4">
+                <div class="col-md-4 col-sm-4 col-xs-4 footer-holder">
                     <div class="footer-img-container">
-                        <img src="/themes/{{ $shop_theme }}/img/footer-img.png">
-                        <p>
+                        <img class="footer-img" src="/themes/{{ $shop_theme }}/img/footer-img.png">
+                        <p class="description">
                             3xcell-E Sales & Marketing Inc. is composed of five dynamic individuals who share the same motivation and common values strengthened and lead by their principal incorporator.
                         </p>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 col-sm-4 col-xs-4 footer-holder">
                     <div class="upper-mid">
                         <div class="upper-mid-title">INFORMATION</div>
                         <div class="upper-mid-link-container">
@@ -249,7 +249,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 col-sm-4 col-xs-4 footer-holder">
                     <div class="upper-right">
                         <div class="upper-mid-title">CONTACT US TODAY</div>
                         <div class="upper-mid-title-2">PRINCIPAL OFFICE 2</div>
@@ -379,6 +379,13 @@
         {
             $('.cart-dropdown').stop();
             $('.cart-dropdown').fadeOut(400);
+        });
+
+
+        // NAVIRINO CLICK TOGGLE
+        $(".menu-nav").click(function()
+        {
+            $(".navirino").toggle("slow");
         });
 
     </script>

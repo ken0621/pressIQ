@@ -191,7 +191,7 @@
                                 </ul>
                             </li>
                             <li>
-                                <a href="#" class="cart-holder show-cart">
+                                <a href="#" class="cart-holder popup" link="/cartv2" size="lg">
                                     <div class="brown-icon-shopping-cart"></div> <span>Cart (0 items)</span>
                                 </a>
                             </li>
@@ -479,7 +479,7 @@
     <div id="global_modal" class="modal fade" role="dialog" >
         <div class="modal-dialog">
             <!-- Modal content-->
-            <div class="modal-content modal-content-global">
+            <div class="modal-content modal-content-global clearfix">
             </div>
         </div>
     </div>

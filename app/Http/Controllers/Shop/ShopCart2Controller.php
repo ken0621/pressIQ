@@ -18,14 +18,20 @@ class ShopCart2Controller extends Shop
 {
     public function index(Request $request)
     {
+        /* Set Cart Key */
+        $this->set_cart_key($request);
+
+        /* Get Cart */
         $data["cart"] = Cart2::get_cart_info();
-        // dd($data);
+
+        /* Return View */
         return view("cart_modal", $data);
     }
-    public function add_cart(Request $request)
+    public function set_cart_key($request)
     {
         /* Get Active Cart */
         $active_cart_key = Cart2::get_cart_key();
+
         if (!$active_cart_key) 
         {
             /* Define Cart Key and Customer ID */
@@ -78,6 +84,11 @@ class ShopCart2Controller extends Shop
 
             Cart2::set($key, $value);
         }
+    }
+    public function add_cart(Request $request)
+    {
+        /* Set Cart Key */
+        $this->set_cart_key($request);
 
         /* Define Item */
         $item_id = $request->item_id;
@@ -89,5 +100,32 @@ class ShopCart2Controller extends Shop
 
         /* Return Success */
         return response()->json("success");
+    }
+    public function remove_cart(Request $request)
+    {
+        /* Item ID */
+        $item_id = $request->item_id;
+
+        /* Delete from Cart */
+        Cart2::delete_item_from_cart($item_id);
+
+        /* Return Success */
+        return response()->json("success");
+    }   
+    public function update_cart(Request $request)
+    {
+        /* Parameters */
+        $item_id    = $request->item_id; //tbl_item
+        $quantity   = $request->quantity; //number of items
+        
+        /* Edit Function */
+        Cart2::edit_item_from_cart($item_id, $quantity);
+
+        /* Return Success */
+        return response()->json("success");
+    }   
+    public function clear_cart(Request $request)
+    {
+        
     }    
 }

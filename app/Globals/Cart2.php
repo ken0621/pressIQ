@@ -182,6 +182,30 @@ class Cart2
 			return $data;
 		}
 	}
+	public static function get_cart_quantity()
+	{
+		$quantity = 0;
+		$cart_key = Self::get_cart_key();
+
+		if($cart_key)
+		{
+			$_cart = Tbl_cart::where("unique_id_per_pc", $cart_key)->where("status", "Not Processed")->get();
+ 		}
+
+		if(count($_cart) < 1)
+		{
+			return null;
+		}
+		else
+		{
+			foreach($_cart as $key => $cart)
+			{
+				$quantity += $cart->quantity;
+			}
+		}
+
+		return $quantity;
+	}
 	public static function clear_cart()
 	{
 	}

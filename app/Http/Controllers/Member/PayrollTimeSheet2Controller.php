@@ -237,9 +237,7 @@ class PayrollTimeSheet2Controller extends Member
 				$insert["payroll_time_sheet_origin"] = "Manually Encoded";
 			}
 		}
-			
-		
-		
+
 		if($insert)
 		{
 			Tbl_payroll_time_sheet_record::insert($insert);

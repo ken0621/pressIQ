@@ -182,17 +182,17 @@ class PayrollTimeSheet2Controller extends Member
 		/*added for remark not saving in absent*/
 		$check_time_sheet_record = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->first();
 		
-
-
 		/*added for remark not saving in absent*/
+		//
 		if ($check_time_sheet_record) 
 		{
+
 			/* UPDATE REMARKS */
 			$update_remarks["payroll_time_shee_activity"] = isset(Request::input("remarks")[0]) ? Request::input("remarks")[0] : "";
 			Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->update($update_remarks);
 		}
 		
-
+	 	
 		
 		/* DELETE TIME SHEET RECORD */
 		Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->where("payroll_time_sheet_origin", "Manually Encoded")->delete();
@@ -225,14 +225,17 @@ class PayrollTimeSheet2Controller extends Member
 				}
 			}
 		}
-
+		
 		/*added for remark not saving in absent*/
-		if(!$check_time_sheet_record)
+		if($insert == null)
 		{
-			$insert["payroll_time_shee_activity"] = isset(Request::input("remarks")[0]) ? Request::input("remarks")[0] : "";
-			$insert["payroll_time_sheet_id"] = $timesheet_db->payroll_time_sheet_id;
-			$insert["payroll_company_id"] = $data["period"]->payroll_company_id;
-			$insert["payroll_time_sheet_origin"] = "Manually Encoded";
+			if(!$check_time_sheet_record)
+			{
+				$insert["payroll_time_shee_activity"] = isset(Request::input("remarks")[0]) ? Request::input("remarks")[0] : "";
+				$insert["payroll_time_sheet_id"] = $timesheet_db->payroll_time_sheet_id;
+				$insert["payroll_company_id"] = $data["period"]->payroll_company_id;
+				$insert["payroll_time_sheet_origin"] = "Manually Encoded";
+			}
 		}
 
 		if($insert)

@@ -212,6 +212,25 @@ button:hover{
 		}
 	}
 
+	.product-hover{
+		display: inline-block;
+		cursor: context-menu;
+		@media screen and (max-width: 900px)
+		{
+			cursor: pointer;
+			display: block;
+		}
+	}
+	.company-hover{
+		display: inline-block;
+		cursor: context-menu;
+		@media screen and (max-width: 900px)
+		{
+			cursor: pointer;
+			display: block;
+		}	
+	}
+
 	a {
 		color: #222;
 	}
@@ -242,6 +261,49 @@ button:hover{
 			  	cursor: pointer;
 			}
 		}
+
+		.minimize-product-holder
+		{
+			display: none;
+			@media screen and (min-width: 901px)
+			{
+				display: none !important;
+			}
+			@media screen and (max-width: 900px)
+			{
+				padding: 0px 10px 0px 50px;
+			}
+			.minimize-tabs
+			{
+				@media screen and (max-width: 900px)
+				{
+					padding: 5px 0px 5px 0px;
+					border-top: 1px solid #ddd;
+				}
+			}
+		}
+
+		.minimize-cat-holder
+		{
+			display: none;	
+			@media screen and (min-width: 901px)
+			{
+				display: none !important;
+			}
+			@media screen and (max-width: 900px)
+			{
+				padding: 0px 10px 0px 50px;
+			}
+			.minimize-tabs
+			{
+				@media screen and (max-width: 900px)
+				{
+					padding: 5px 0px 5px 0px;
+					border-top: 1px solid #ddd;
+				}
+			}
+		}
+
 	@media screen and (max-width: 991px)
 	{
 		float: none;

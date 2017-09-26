@@ -63,10 +63,13 @@ class Mlm_complan_manager
             //TODO: LEVEL LIMIT IMPLEMENTATION
             if($brown_next_rank)
             {
-                $brown_rank_required_slots = $brown_next_rank->required_slot;
-                $brown_count_required = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $sponsor_tree->slot_id)->where("sponsor_tree_level", "<=", $brown_next_rank->required_uptolevel)->count();
+                $brown_rank_required_slots   = $brown_next_rank->required_slot;
+                $brown_count_required        = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $sponsor_tree->slot_id)->where("sponsor_tree_level", "<=", $brown_next_rank->required_uptolevel)->count();
                 
-                if($brown_count_required >= $brown_rank_required_slots)
+                $brown_rank_required_direct  = $brown_next_rank->required_direct;
+                $brown_count_required_direct = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $sponsor_tree->slot_id)->where("sponsor_tree_level",1)->count();
+               
+                if($brown_count_required >= $brown_rank_required_slots && $brown_count_required_direct >= $brown_rank_required_direct)
                 {
                     $update_brown_rank["brown_rank_id"] = $brown_next_rank->rank_id;
                     Tbl_mlm_slot::where("slot_id", $sponsor_tree->slot_id)->update($update_brown_rank);

@@ -25,7 +25,6 @@ function item_list()
 	}
 	function add_event_pagination()
 	{
-
 		$("body").on("click", ".pagination a", function(e)
 		{
 			$url = $(e.currentTarget).attr("href");

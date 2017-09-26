@@ -5,7 +5,8 @@
     border-radius: 2.5px;
     margin: 25px 0;
     position: relative;
-    min-height: 620px; }
+    min-height: 620px;
+    border: 1px solid #ccc; }
     .member .members .header {
       border-bottom: 1px solid #e9e9e9;
       text-align: right;
@@ -219,7 +220,6 @@
     .member .members .members-content {
       margin-left: 80px;
       padding: 15px;
-      border: 1px solid #ccc;
       overflow: hidden; }
       @media screen and (max-width: 500px) {
         .member .members .members-content {

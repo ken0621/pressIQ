@@ -90,6 +90,9 @@ class Cart2
 	}
 	public static function edit_item_from_cart($item_id, $quantity)
 	{
+		$cart_key = Self::get_cart_key();
+		$update["quantity"] = $quantity;
+		Tbl_cart::where("unique_id_per_pc", $cart_key)->where("product_id", $item_id)->where("status", "Not Processed")->update($update);
 	}
 	public static function delete_item_from_cart($item_id)
 	{

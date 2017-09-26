@@ -35,57 +35,82 @@ body{
 
 	.detail-container {
 
-		.description-container {
-			
-			.title-container {
-				position: relative;
-				padding: 10px 0px 10px 0px;
-				font-size: 20px;
-				font-weight: 600;
-				color: #1c1c1c;
-				border-bottom: 1px solid #d1d1d1;
-
-				.line-bot {
-					position: absolute;
-					width: 10%;
-					height: 1px;
-					bottom: -1px;
-					left: 0px;
-					background-color: #2161c8;
-				}
-
-				.line-bot-2 {
-					position: absolute;
-					width: 10%;
-					height: 1px;
-					bottom: -1px;
-					left: 0px;
-					background-color: #48b920;
-				}
-
-				.line-bot-3 {
-					position: absolute;
-					width: 10%;
-					height: 1px;
-					bottom: -1px;
-					left: 0px;
-					background-color: #e10616;
-				}
+		.desc-holder
+		{		
+			@media screen and (max-width: 414px)
+			{
+				display: block;
+				width: 100%;
 			}
-			.description-content{
-				margin-top: 10px;
-				font-size: 13px;
-				color: #1c1c1c;
-			}		
+			.description-container {
+				
+				.title-container {
+					position: relative;
+					padding: 10px 0px 10px 0px;
+					font-size: 20px;
+					font-weight: 600;
+					color: #1c1c1c;
+					border-bottom: 1px solid #d1d1d1;
+					@media screen and (max-width: 600px)
+					{
+						font-size: 16px;
+					}
+
+					.line-bot {
+						position: absolute;
+						width: 10%;
+						height: 1px;
+						bottom: -1px;
+						left: 0px;
+						background-color: #2161c8;
+					}
+
+					.line-bot-2 {
+						position: absolute;
+						width: 10%;
+						height: 1px;
+						bottom: -1px;
+						left: 0px;
+						background-color: #48b920;
+					}
+
+					.line-bot-3 {
+						position: absolute;
+						width: 10%;
+						height: 1px;
+						bottom: -1px;
+						left: 0px;
+						background-color: #e10616;
+					}
+				}
+				.description-content{
+					margin-top: 10px;
+					font-size: 13px;
+					color: #1c1c1c;
+					@media screen and (max-width: 600px)
+					{
+						font-size: 11px;
+					}
+				}		
+			}
 		}
 
-		.img-container {
-			margin-top: 40px;
-			width: 100%;
-			text-align: center;
-
-			img {
+		.image-in-join-holder
+		{
+			@media screen and (max-width: 414px)
+			{
+				display: block;
 				width: 100%;
+				margin-bottom: 50px;
+			}
+			.img-container {
+				margin-top: 40px;
+				width: 100%;
+				text-align: center;
+
+				img {
+					width: 100%;
+				}
 			}
 		}
 	}

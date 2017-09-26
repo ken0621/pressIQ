@@ -219,6 +219,8 @@ Route::any('/member/mlm/encashment/add/to/list/date', 'Member\Mlm_EncashmentCont
 Route::any('/member/mlm/encashment/view/all/selected', 'Member\Mlm_EncashmentController@view_all_selected');//luke
 Route::any('/member/mlm/encashment/request/all/selected', 'Member\Mlm_EncashmentController@request_all_selected');//luke
 Route::any('/member/mlm/encashment/deny/all/selected', 'Member\Mlm_EncashmentController@deny_all_selected');//luke
+
+AdvancedRoute::controller("/member/mlm/payout","Member\MLM_PayoutController");
 /* end MLM Product */
 
 /* start MLM Product */

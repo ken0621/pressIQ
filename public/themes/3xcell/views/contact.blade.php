@@ -14,28 +14,28 @@
 					<div class="fill-up-container">
 						<!-- TEXTFIELD CONTAINER -->
 						<div class="textfield-container row clearfix">
-							<div class="col-md-6">
+							<div class="col-md-6 col-sm-6 col-xs-6 form-holder">
 								<input type="text" class="form-control" placeholder="First Name*">
 							</div>
-							<div class="col-md-6">
+							<div class="col-md-6 col-sm-6 col-xs-6 form-holder">
 								<input type="text" class="form-control" placeholder="Last Name*">
 							</div>
 						</div>
 						<div class="textfield-container row clearfix">
-							<div class="col-md-6">
+							<div class="col-md-6 col-sm-6 col-xs-6 form-holder">
 								<input type="text" class="form-control" placeholder="Phone Number*">
 							</div>
-							<div class="col-md-6">
+							<div class="col-md-6 col-sm-6 col-xs-6 form-holder">
 								<input type="text" class="form-control" placeholder="Email Address*">
 							</div>
 						</div>
 						<div class="textfield-container row clearfix">
-							<div class="col-md-6">
+							<div class="col-md-6 col-sm-6 col-xs-6 form-holder">
 								<input type="text" class="form-control" placeholder="Subject">
 							</div>
 						</div>
 						<div class="textfield-container">
-							<textarea style="max-width: 525px; min-width: 525px; min-height: 175px; max-height: 200px;" class="form-control" placeholder="Message"></textarea>
+							<textarea class="form-control message-textarea" placeholder="Message"></textarea>
 						</div>
 						<div class="textfield-container">
 							<button>SEND</button>
@@ -72,13 +72,13 @@
 		<div class="container">
 			<div class="title-container">Find Us On Google Map</div>
 			<div class="content-container row clearfix">
-				<div class="col-md-6">
+				<div class="col-md-6 col-sm-6">
 					<div class="map-container">
 						<iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15439.672607472603!2d121.03694842734843!3d14.660586160660534!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b719dcc15bd1%3A0xfd4fe4f1c0982e9a!2sVicars+Building!5e0!3m2!1sen!2sph!4v1501901215371" width="" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
 					</div>
-					<div class="title-container">PRINCIPAL OFFICE</div>
+					<div class="title-container first-title">PRINCIPAL OFFICE</div>
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-6 col-sm-6">
 					<div class="map-container">
 						<iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3967.108523067281!2d125.17183721482861!3d6.116090629461948!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x32f79fa64c22dedb%3A0xd952833de2ffdf90!2sPerla+Insurance!5e0!3m2!1sen!2sph!4v1501901631315" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
 					</div>

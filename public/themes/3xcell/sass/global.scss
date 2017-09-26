@@ -58,6 +58,11 @@ button:hover{
 
 		.social-media-container {
 			float: left;
+			@media screen and (max-width: 320px)
+			{
+				float: unset;
+				display: inline-block;
+			}
 			span {
 				color: white;
 				font-size: 20px;
@@ -71,6 +76,11 @@ button:hover{
 
 		.login-container{
 			float: left;
+			@media screen and (max-width: 320px)
+			{
+				float: unset;
+				display: inline-block;
+			}
 			.login-button{
 				padding: 5px 15px 5px 5px;
 
@@ -89,6 +99,11 @@ button:hover{
 		.join-us-container{
 			float: left;
 			background-color: #48b920;
+			@media screen and (max-width: 320px)
+			{
+				float: unset;
+				display: inline-block;
+			}
 			a {
 				text-decoration: none;
 				color: white;
@@ -97,6 +112,10 @@ button:hover{
 			.join-us-button{
 				
 				padding: 5px 12px 5px 12px;
+				@media screen and (max-width: 320px)
+				{
+					padding: 5px 10px 5px 10px;
+				}
 
 				&:hover {
 					cursor: pointer;
@@ -105,6 +124,10 @@ button:hover{
 				span {
 					color: white;
 					font-size: 10px;
+					@media screen and (max-width: 320px)
+					{
+						font-size: 9px;
+					}
 				}
 			}
 		}
@@ -165,16 +188,28 @@ button:hover{
 	}
 }
 
-nav{
+.navirino{
 	float: right;
 	padding: 11px 15px 3px 15px;
 	margin-top: 25px;
 	font-family: 'Open Sans', sans-serif;
 	font-size: 12px;
 	font-weight: 400;
-	
+	@media screen and (max-width: 1280px)
+	{
+		display: block;
+	}
+	@media screen and (max-width: 900px)
+	{
+		margin-top: 50px;
+		display: none;
+	}
 	li {
 		display: inline-block;
+		@media screen and (max-width: 900px)
+		{
+			display: block;
+		}
 	}
 
 	a {
@@ -182,6 +217,11 @@ nav{
 	}
 	.cart-header {
 			margin-top: -7px;
+			@media screen and (max-width: 900px)
+			{
+				margin-top: 7px;
+				margin-left: 12px;
+			}
 
 			&:hover {
 				cursor: pointer;
@@ -263,6 +303,33 @@ nav{
 	{
 		padding-left: 0;
 		padding-right: 0;
+		@media screen and (max-width: 900px)
+		{
+			display: inline-block;
+			vertical-align: top;
+		}
+	}
+	.events-holder
+	{
+		@media screen and (max-width: 414px)
+		{
+			width: 44%;
+		}
+		@media screen and (max-width: 375px)
+		{
+			width: 100%;
+		}
+	}
+	.fb-fanpage-holder
+	{
+		@media screen and (max-width: 414px)
+		{
+			width: 56%;
+		}
+		@media screen and (max-width: 375px)
+		{
+			width: 100%;
+		}
 	}
 }
 
@@ -276,58 +343,102 @@ nav{
 	.upper {
 		padding: 30px 0px 20px 0px;
 		
-		p {
-			padding-top: 20px;
-			font-size: 11px;
-			color: white;
-		}
-
-		.upper-mid {
-			padding: 0px 20px 0px 20px;
-
-			.upper-mid-title {
-				padding: 10px 0px 10px 0px;
-				border-bottom: 1px solid rgba(255,255,255, 0.3);
-				font-size: 11px;
-				color: white;
+		.footer-holder
+		{
+			@media screen and (max-width: 414px)
+			{
+				width: 100%;
 			}
-			.upper-mid-link-container {
-				a {
-					text-decoration: none;
+			.footer-img
+			{
+				@media screen and (max-width: 414px)
+				{
+					display: inline-block;
+					width: 40%;
+					float: left;
 				}
-				padding-top: 10px;
-				.upper-mid-link {
-					padding: 2px 0px 2px 0px;
-					color: #ababab;
-					font-size: 11px;
+				@media screen and (max-width: 320px)
+				{
+					display: block;
+					width: unset;
+					float: unset;
+					margin-left: auto;
+					margin-right: auto;
 				}
 			}
-		}
-		.upper-right {
-			padding-left: 20px;
-
-			.upper-mid-title {
-				padding: 10px 0px 10px 0px;
-				border-bottom: 1px solid rgba(255,255,255, 0.3);
-				font-size: 11px;
-				color: white;
-			}
-			.upper-mid-title-2 {
-				padding: 20px 0px 10px 0px;
-				font-size: 11px;
-				color: white;
-
-				span {
-					padding-right: 10px;
-				}
-			}
-			.upper-mid-link {
-				p {
+			.description
+			{
+				@media screen and (max-width: 414px)
+				{
+					display: inline-block;
+					width: 55%;
+					float: right;
 					padding-top: 0px;
 				}
+				@media screen and (max-width: 320px)
+				{
+					display: block;
+					width: 100%;
+					margin-top: 15px;
+					text-align: justify;
+				}
+			}
+			p {
+				padding-top: 20px;
+				font-size: 11px;
+				color: white;
+			}
+
+			.upper-mid {
+				padding: 0px 20px 0px 20px;
+
+				.upper-mid-title {
+					padding: 10px 0px 10px 0px;
+					border-bottom: 1px solid rgba(255,255,255, 0.3);
+					font-size: 11px;
+					color: white;
+				}
+				.upper-mid-link-container {
+					a {
+						text-decoration: none;
+					}
+					padding-top: 10px;
+					.upper-mid-link {
+						padding: 2px 0px 2px 0px;
+						color: #ababab;
+						font-size: 11px;
+					}
+				}
+			}
+			.upper-right {
+				padding-left: 20px;
+
+				.upper-mid-title {
+					padding: 10px 0px 10px 0px;
+					border-bottom: 1px solid rgba(255,255,255, 0.3);
+					font-size: 11px;
+					color: white;
+				}
+				.upper-mid-title-2 {
+					padding: 20px 0px 10px 0px;
+					font-size: 11px;
+					color: white;
+					@media screen and (max-width: 900px)
+					{
+						padding: 15px 0px 5px 0px;
+					}
+
+					span {
+						padding-right: 10px;
+					}
+				}
+				.upper-mid-link {
+					p {
+						padding-top: 0px;
+					}
+				}
 			}
 		}
-
 	}
 	.bottom
 	{
@@ -344,6 +455,11 @@ nav{
 		    left: 12px;
 		    font-size: 11px;
 		    padding-top: 5px;
+		    @media screen and (max-width: 414px)
+		    {
+		    	float: unset;
+				text-align: center;
+		    }
 		}
 		.ftr-title-2
 		{
@@ -351,6 +467,11 @@ nav{
 		    left: 12px;
 		    font-size: 11px;
 		    padding-top: 5px;
+		    @media screen and (max-width: 414px)
+		    {
+		    	float: unset;
+				text-align: center;
+		    }
 		}
 
 

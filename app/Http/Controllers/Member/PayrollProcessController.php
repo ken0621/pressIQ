@@ -515,11 +515,12 @@ class PayrollProcessController extends Member
 
 
 		$_time_breakdown = unserialize($time_keeping_approved->cutoff_breakdown)->_time_breakdown;
-		$data["days_worked"]	= $days_worked;
-		$data["days_absent"]	= $days_absent;
-		$data['total_late'] = date('i',strtotime($total_late));
-		$data['total_undertime'] = date('i',strtotime($total_undertime));
-		$data['total_overtime'] = date('i',strtotime($total_overtime));
+
+		$data["days_worked"]		= $_time_breakdown["day_spent"]["time"];
+		$data["days_absent"]		= $_time_breakdown["absent"]["time"];
+		$data['total_late'] 		= $_time_breakdown["late"]["time"];
+		$data['total_undertime'] 	= $_time_breakdown["undertime"]["time"];
+		$data['total_overtime'] 	= $_time_breakdown["overtime"]["time"];
 		
 		return view("member.payroll2.payroll_process_modal_view_timesheet2", $data);
 	}

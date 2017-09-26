@@ -268,7 +268,7 @@ function wis()
 		}
 
 		
-		$(".load-item-table-pos").load("/member/item/warehouse/wis/table_item", function()
+		$(".load-item-table-pos").load("/member/item/warehouse/wis/table-item", function()
 		{
 			action_update_big_totals();
 			$(".load-item-table-pos").css("opacity", 1);

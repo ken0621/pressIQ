@@ -24,6 +24,7 @@
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
         <link rel="stylesheet" type="text/css" href="/assets/front/css/loader.css">
+        <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
         <!-- Brown Custom Icon -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/brown-icon/styles.css">
         <!-- THEME COLOR -->
@@ -85,9 +86,9 @@
                         </a>
                     </div>    
                 @else
-                    <div class="holder"><a href="/mlm/login"><i class="fa fa-lock" aria-hidden="true"></i> Login</a></div>
+                    <div class="holder"><a href="/members/login"><i class="fa fa-lock" aria-hidden="true"></i> Login</a></div>
                     <div class="holder"><div class="linya"></div></div>
-                    <div class="holder"><a href="/mlm/register"><i class="fa fa-user" aria-hidden="true"></i> Register</a></div>
+                    <div class="holder"><a href="/members/register"><i class="fa fa-user" aria-hidden="true"></i> Register</a></div>
                 @endif
 
                 {{-- <!--<div class="holder"><div class="linya"></div></div>-->
@@ -281,6 +282,19 @@
       </div>
     </div>
 
+    {{-- START GLOBAL MODAL --}}
+    <div id="global_modal" class="modal fade" role="dialog" >
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content modal-content-global clearfix">
+            </div>
+        </div>
+    </div>
+    {{-- END GLOBAL MODAL --}}
+    {{-- GLOBAL MULTIPLE MODAL --}}
+    <div class="multiple_global_modal_container"></div>
+    {{-- END GLOBAL MULTIPLE MODAL --}}
+
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
     <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/bootstrap.min.js"></script>
@@ -288,6 +302,7 @@
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/fit-text.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/slick/slick.min.js"></script>
     <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
+    <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
     <script type="text/javascript" src="/assets/front/js/global.js"></script>
     <script src="/themes/{{ $shop_theme }}/js/global.js"></script>
     @yield("js")

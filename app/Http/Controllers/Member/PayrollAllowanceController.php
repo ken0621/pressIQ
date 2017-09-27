@@ -338,7 +338,6 @@ class PayrollAllowanceController extends Member
          $id = Request::input('id');
          $update['payroll_employee_allowance_archived'] = Request::input('archived');
          Tbl_payroll_employee_allowance_v2::where('payroll_employee_allowance_id', $id)->update($update);
-
          $return['status']             = 'success';
          $return['function_name']      = 'create_allowance.load_employee_tag';
          return json_encode($return);

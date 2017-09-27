@@ -34,7 +34,7 @@
                 </table>
                 @else
                 <br>
-                <h3 style="text-align: center; font-weight: 300;">NO PRODUCT IN CART YET</h3>
+                <h3 style="text-align: center; font-weight: 300; color: #1c1c1c;">NO PRODUCT IN CART YET</h3>
                 <br>
                 @endif
             </div>
@@ -42,8 +42,8 @@
         <div class="modal-footer row clearfix">
             <div class="col-md-8">
                 <div class="left-btn-container">
-                    <div><i class="fa fa-long-arrow-left" aria-hidden="true">&nbsp;</i>&nbsp;Continue Shopping</div>
-                    <button class="btn-checkout" onclick="location.href='/members/checkout'">Checkout</button>
+                    <div style="color: #1c1c1c;"><i class="fa fa-long-arrow-left" aria-hidden="true">&nbsp;</i>&nbsp;Continue Shopping</div>
+                    <button class="btn-checkout" onclick="location.href='/members/test'">Checkout</button>
                 </div>
             </div>
             <div class="col-md-4">

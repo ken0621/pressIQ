@@ -117,6 +117,23 @@
                             <li><a href="/" class="head-button link-nav {{ Request::segment(1) == '' ? 'active' : '' }}" id="home">HOME</a></li>
                             <li class="product-hover">
                                 <a class="head-button link-nav">PRODUCTS</a>
+
+                                <!--MINIMIZE VERSION STARTS HERE -->
+                                <div class="minimize-product-holder">                                    
+                                    @if(count($_categories) > 0)
+                                        @foreach($_categories as $categories)
+                                        <a href="/product?type={{ $categories["type_id"] }}">
+                                            <div class="minimize-tabs">{{ $categories["type_name"] }}</div>
+                                        </a>   
+                                        @endforeach
+                                    @else
+                                        <a href="">
+                                            <div class="minimize-tabs"></div>
+                                        </a>   
+                                    @endif
+                                </div>
+                                <!-- ENDS HERE -->
+
                                 <!-- PRODUCT DROPDOWN -->
                                 <div class="product-dropdown" style="display: none;">
                                     @if(count($_categories) > 0)
@@ -177,6 +194,21 @@
                             <li><a href="/promos" class="head-button link-nav">PROMOS</a></li>
                             <li class="company-hover">
                                 <a class="head-button link-nav">COMPANY</a>
+
+                                <!--MINIMIZE VERSION STARTS HERE -->
+                                <div class="minimize-cat-holder">
+                                    <a href="/history">
+                                        <div class="cat-name minimize-tabs">OUR HISTORY</div>
+                                    </a>
+                                    <a href="/how_to_join">
+                                        <div class="cat-name minimize-tabs">HOW TO JOIN</div>
+                                    </a>
+                                    <a href="/events">
+                                        <div class="cat-name minimize-tabs">COMPANY EVENTS</div>
+                                    </a>
+                                </div>
+                                <!-- ENDS HERE -->
+
                                 <!-- COMPANY DROPDOWN -->
                                 <div class="company-dropdown" style="display: none;">
                                     <a href="/history">
@@ -387,6 +419,19 @@
         {
             $(".navirino").toggle("slow");
         });
+
+
+        // COMPANY CLICK TOGGLE
+        $(".company-hover").click(function()
+        {
+            $(".minimize-cat-holder").toggle("slow");
+        });
+
+        // PRODUCT CLICK TOGGLE
+        $(".product-hover").click(function()
+        {
+            $(".minimize-product-holder").toggle("slow");
+        });        
 
     </script>
 

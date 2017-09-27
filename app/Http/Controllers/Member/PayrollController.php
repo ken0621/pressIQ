@@ -3766,6 +3766,7 @@ class PayrollController extends Member
           $data['action']     = '/member/payroll/leave/archived_leave_temp';
           $data['id']         = $leave_temp_id;
           $data['archived']   = $archived;
+          $data['payroll_deduction_type'] = "";
 
           return view('member.modal.modal_confirm_archived', $data);
      }

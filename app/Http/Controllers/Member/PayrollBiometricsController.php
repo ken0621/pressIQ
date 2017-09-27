@@ -54,13 +54,32 @@ class PayrollBiometricsController
 		$_time_in_out 	= json_decode(Request::input("data_input"));
 		$check_access 	= Tbl_shop::where('shop_api_key',$app_key)->first();
 		
-		$return = "";
-		$employee_in_out = null;
+		$return = null;
+		
 
 		if ($check_access->shop_api_key) 
 		{
-			$return = "success";
 			$shop_id = $check_access->shop_id;
+			$this->import_data_from_biometric($_time_in_out, $shop_id);
+			$return = "success";
+		}
+		else
+		{
+			$return = "failed";
+		}
+		
+		echo $return;
+	}
+
+
+	public function import_data_from_biometric($_time_in_out, $shop_id)
+	{	
+		$employee_in_out = null;
+		$insert = null;
+
+		$date = date("Y-m-d");
+
+
 			foreach ($_time_in_out as $key => $value) 
 			{
 				if (!isset($employee_in_out[$value->EmployeeID]["time_in"])) 
@@ -88,26 +107,47 @@ class PayrollBiometricsController
 				}
 			}
 
-			$date = date('Y/m/d');
-			$insert = null;
 
 			foreach ($employee_in_out as $key => $value) 
 			{
-				// $insert[$key]["payroll_employee_id"]
+				$employee_info = Tbl_payroll_employee_basic::where('shop_id',$shop_id)->where('payroll_employee_number',$key)->first();
+
+				$check_biometric_exist = Tbl_payroll_biometric_time_sheet::where("shop_id",$shop_id)
+				->where("payroll_employee_id",$employee_info["payroll_employee_id"])
+				->where("payroll_company_id",$employee_info["payroll_employee_company_id"])
+				->where("payroll_time_date",$date)
+				->first();
+
+				$update = null;
+
+				if ($check_biometric_exist) 
+				{
+					
+					$payroll_biometric_id = $check_biometric_exist["payroll_biometric_time_sheet_id"];
+					$update["shop_id"] 					= $shop_id;
+					$update["payroll_employee_id"] 		= $employee_info["payroll_employee_id"];
+					$update["payroll_company_id"] 		= $employee_info["payroll_employee_company_id"];
+					$update["payroll_time_in"] 			= $value["time_in"];
+					$update["payroll_time_out"] 		= $value["time_out"];
+					$update["payroll_time_date"] 		= $date;
+					$_update[] = $update;
+					Tbl_payroll_biometric_time_sheet::where("payroll_biometric_time_sheet_id", $payroll_biometric_id)->update($update);
+				}
+				else
+				{
+					$insert[$key]["shop_id"] 				= $shop_id;
+					$insert[$key]["payroll_employee_id"] 	= $employee_info["payroll_employee_id"];
+					$insert[$key]["payroll_company_id"] 	= $employee_info["payroll_employee_company_id"];
+					$insert[$key]["payroll_time_in"] 		= $value["time_in"];
+					$insert[$key]["payroll_time_out"] 		= $value["time_out"];
+					$insert[$key]["payroll_time_date"] 		= $date;
+				}
 			}
 
-
-
-		}
-		else
-		{
-			$return = "failed";
-		}
-
-		// $data['payroll_input_data'] = Request::input("data_input");
-		// DB::table('payroll_biometrics_data')->insert($data);
-		
-		echo $return;
+			if ($insert != null) 
+			{
+				Tbl_payroll_biometric_time_sheet::insert($insert);
+			}
 	}
 
 
@@ -145,22 +185,53 @@ class PayrollBiometricsController
 				}
 			}
 		}
-
-		$insert = null;
+		
 		$date = date("Y-m-d");
 		foreach ($employee_in_out as $key => $value) 
 		{
 			$employee_info = Tbl_payroll_employee_basic::where('shop_id',17)->where('payroll_employee_number',$key)->first();
-			// dd($employee_info);
-			$insert[$key]["shop_id"] 				= 17;
-			$insert[$key]["payroll_employee_id"] 	= $employee_info["payroll_employee_id"];
-			$insert[$key]["payroll_company_id"] 	= $employee_info["payroll_employee_company_id"];
-			$insert[$key]["payroll_time_in"] 		= $value["time_in"];
-			$insert[$key]["payroll_time_out"] 		= $value["time_out"];
-			$insert[$key]["payroll_time_date"] 		= $date;
+
+
+			$check_biometric_exist = Tbl_payroll_biometric_time_sheet::where("shop_id",17)
+			->where("payroll_employee_id",$employee_info["payroll_employee_id"])
+			->where("payroll_company_id",$employee_info["payroll_employee_company_id"])
+			->where("payroll_time_date",$date)
+			->first();
+
+			$update = null;
+
+			if ($check_biometric_exist) 
+			{
+				
+				$biometric_id[$key] = $check_biometric_exist["payroll_biometric_time_sheet_id"];
+				$update["shop_id"] 					= 17;
+				$update["payroll_employee_id"] 		= $employee_info["payroll_employee_id"];
+				$update["payroll_company_id"] 		= $employee_info["payroll_employee_company_id"];
+				$update["payroll_time_in"] 			= $value["time_in"];
+				$update["payroll_time_out"] 		= $value["time_out"];
+				$update["payroll_time_date"] 		= $date;
+				$_update[] = $update;
+				Tbl_payroll_biometric_time_sheet::where("payroll_biometric_time_sheet_id", $biometric_id)->update($update);
+			}
+			else
+			{
+				$insert[$key]["shop_id"] 				= 17;
+				$insert[$key]["payroll_employee_id"] 	= $employee_info["payroll_employee_id"];
+				$insert[$key]["payroll_company_id"] 	= $employee_info["payroll_employee_company_id"];
+				$insert[$key]["payroll_time_in"] 		= $value["time_in"];
+				$insert[$key]["payroll_time_out"] 		= $value["time_out"];
+				$insert[$key]["payroll_time_date"] 		= $date;
+			}
+
 		}
 
-
+		if ($insert != null) 
+		{
+			Tbl_payroll_biometric_time_sheet::insert($insert);
+		}
+		
+			
+		
 
 		dd($insert);
 	}

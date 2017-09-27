@@ -24,6 +24,17 @@
 		<div class="title">
 			Encashment History
 		</div>
+		@if (session('result'))
+			@if(session('result')["status"] == "error")
+			    <div class="alert alert-warning">
+			        {{ session('result')["message"] }}
+			    </div>
+		    @else
+		    	<div class="alert alert-success">
+		    		{{ session('result')["message"] }}
+		    	</div>
+		    @endif
+		@endif
 		<div class="table-holder table-responsive">
 			<table class="table table-striped">
 				<thead>

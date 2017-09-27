@@ -15,7 +15,8 @@
                         </div>
                         <div class="col-md-4">
                             <label>Amount</label>
-                            <input value="5000" type="number" class="form-control text-right current-wallet" name="wallet_amount" min="{{ $minimum }}">
+                            {{-- min="{{ $minimum }}" max="{{ $wallet }}" --}}
+                            <input value="{{ $minimum }}" type="number" class="form-control text-right current-wallet" name="wallet_amount"  step="any">
                         </div>
                     </div>
                     <div class="form-group">

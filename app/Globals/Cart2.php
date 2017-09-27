@@ -104,7 +104,8 @@ class Cart2
 		$cart_key = Self::get_cart_key();
 		$total = 0;
 		$grand_total = 0;
-
+		$_cart = null;
+		
 		if($cart_key)
 		{
 			$_cart 			= Tbl_cart::where("unique_id_per_pc", $cart_key)->where("status", "Not Processed")->get();

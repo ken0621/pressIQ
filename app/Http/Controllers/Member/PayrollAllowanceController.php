@@ -328,6 +328,7 @@ class PayrollAllowanceController extends Member
          $data['action']     = '/member/payroll/allowance/v2/archived_allowance_employee';
          $data['id']         = $id;
          $data['archived']   = $archived;
+         $data['payroll_deduction_type'] = "";
 
          return view('member.modal.modal_confirm_archived', $data);
     }

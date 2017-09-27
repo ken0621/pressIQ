@@ -32,6 +32,8 @@ use App\Globals\Accounting;
 use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_time_keeping_approved_breakdown;
 use App\Models\Tbl_payroll_time_keeping_approved_performance;
+use App\Models\Tbl_payroll_biometric_time_sheet;
+use App\Models\Tbl_payroll_employee_basic;
 
 
 
@@ -40,17 +42,72 @@ class PayrollBiometricsController
 {
 	public function save_data()
 	{
+		/*
 		$app_key = Request::input("appkey");
 		$app_secret = Request::input("appsecret");
 		$branch_id = Request::input("branchid");
-		$check_access = Tbl_shop::where('shop_api_key',$app_key)->get();
-	
+		*/
 
-
-		$data['payroll_input_data'] = Request::input("data_input");
-		DB::table('payroll_biometrics_data')->insert($data);
+		$app_key 		= Request::input("appkey");
+		$app_secret 	= Request::input("appsecret");
+		$branch_id 		= Request::input("branchid");
+		$_time_in_out 	= json_decode(Request::input("data_input"));
+		$check_access 	= Tbl_shop::where('shop_api_key',$app_key)->first();
 		
-		echo "rommel";
+		$return = "";
+		$employee_in_out = null;
+
+		if ($check_access->shop_api_key) 
+		{
+			$return = "success";
+			$shop_id = $check_access->shop_id;
+			foreach ($_time_in_out as $key => $value) 
+			{
+				if (!isset($employee_in_out[$value->EmployeeID]["time_in"])) 
+				{
+					$employee_in_out[$value->EmployeeID]["time_in"] = date("H:i:s", strtotime($value->DateTimeRecord));
+				}
+				else
+				{
+					if (  date("H:i:s", strtotime($value->DateTimeRecord)) < $employee_in_out[$value->EmployeeID]["time_in"] ) 
+					{
+						$employee_in_out[$value->EmployeeID]["time_in"] = date("H:i:s", strtotime($value->DateTimeRecord));
+					}
+				}
+
+				if (!isset($employee_in_out[$value->EmployeeID]["time_out"]))
+				{
+					$employee_in_out[$value->EmployeeID]["time_out"] = date("H:i:s", strtotime($value->DateTimeRecord));
+				}
+				else
+				{
+					if ($employee_in_out[$value->EmployeeID]["time_out"] < date("H:i:s", strtotime($value->DateTimeRecord))) 
+					{
+						$employee_in_out[$value->EmployeeID]["time_out"] = date("H:i:s", strtotime($value->DateTimeRecord));
+					}
+				}
+			}
+
+			$date = date('Y/m/d');
+			$insert = null;
+
+			foreach ($employee_in_out as $key => $value) 
+			{
+				// $insert[$key]["payroll_employee_id"]
+			}
+
+
+
+		}
+		else
+		{
+			$return = "failed";
+		}
+
+		// $data['payroll_input_data'] = Request::input("data_input");
+		// DB::table('payroll_biometrics_data')->insert($data);
+		
+		echo $return;
 	}
 
 
@@ -89,6 +146,22 @@ class PayrollBiometricsController
 			}
 		}
 
-		// dd($employee_in_out);
+		$insert = null;
+		$date = date("Y-m-d");
+		foreach ($employee_in_out as $key => $value) 
+		{
+			$employee_info = Tbl_payroll_employee_basic::where('shop_id',17)->where('payroll_employee_number',$key)->first();
+			// dd($employee_info);
+			$insert[$key]["shop_id"] 				= 17;
+			$insert[$key]["payroll_employee_id"] 	= $employee_info["payroll_employee_id"];
+			$insert[$key]["payroll_company_id"] 	= $employee_info["payroll_employee_company_id"];
+			$insert[$key]["payroll_time_in"] 		= $value["time_in"];
+			$insert[$key]["payroll_time_out"] 		= $value["time_out"];
+			$insert[$key]["payroll_time_date"] 		= $date;
+		}
+
+
+
+		dd($insert);
 	}
 }

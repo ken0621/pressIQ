@@ -39,4 +39,8 @@ use App\Globals\Merchant;
 use Validator;
 class WarehouseTransfer
 {   
+	// public static function get_all_wis($shop_id = 0, $status = 'pending')
+	// {
+	// 	return Tbl_warehouse_issuance_report::
+	// }
 }

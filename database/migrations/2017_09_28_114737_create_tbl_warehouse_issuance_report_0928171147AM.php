@@ -15,6 +15,7 @@ class CreateTblWarehouseIssuanceReport0928171147AM extends Migration
     {
         Schema::create('tbl_warehouse_issuance_report', function (Blueprint $table) {
             $table->increments('wis_id');
+            $table->integer('wis_shop_id')->unsigned();
             $table->string('wis_number');
             $table->integer('wis_from_warehouse')->unsigned();
             $table->longtext('wis_remarks');
@@ -26,6 +27,7 @@ class CreateTblWarehouseIssuanceReport0928171147AM extends Migration
             $table->timestamps();
 
             $table->foreign('wis_from_warehouse')->references('warehouse_id')->on('tbl_warehouse')->onDelete('cascade');
+            $table->foreign('wis_shop_id')->references('shop_id')->on('tbl_shop')->onDelete('cascade');
         });
         Schema::create('tbl_warehouse_issuance_report_item', function (Blueprint $table) {
             $table->increments('wis_item_id');
@@ -37,6 +39,7 @@ class CreateTblWarehouseIssuanceReport0928171147AM extends Migration
 
          Schema::create('tbl_warehouse_receiving_report', function (Blueprint $table) {
             $table->increments('rr_id');
+            $table->integer('rr_shop_id')->unsigned();
             $table->string('rr_number');
             $table->integer('wis_id');
             $table->integer('warehouse_id')->unsigned();
@@ -46,6 +49,7 @@ class CreateTblWarehouseIssuanceReport0928171147AM extends Migration
             $table->timestamps();
 
             $table->foreign('warehouse_id')->references('warehouse_id')->on('tbl_warehouse')->onDelete('cascade');
+            $table->foreign('rr_shop_id')->references('shop_id')->on('tbl_shop')->onDelete('cascade');
         });
         Schema::create('tbl_warehouse_receiving_report_item', function (Blueprint $table) {
             $table->increments('rr_item_id');

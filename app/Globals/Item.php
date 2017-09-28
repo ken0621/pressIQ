@@ -37,9 +37,7 @@ class Item
 
     public static function create_validation($shop_id, $item_type, $insert)
     {
-        $return['item_id'] = 0;
-        $return['status'] = null;
-        $return['message'] = null;
+        $return = null;
 
         $rules['item_name'] = 'required';
         $rules['item_sku'] = 'required';
@@ -50,18 +48,16 @@ class Item
             $rules['item_cost'] = 'required';
             if($insert['item_cost'] > $insert['item_price'])
             {       
-                $return['status'] = 'error';
-                $return['message'] .= 'The cost is greater than the sales price.'."<br>";
+                $return .= 'The cost is greater than the sales price.'."<br>";
             }            
         }
         $validator = Validator::make($insert, $rules);
 
         if($validator->fails())
         {
-            $return["status"] = "error";
             foreach ($validator->messages()->all('') as $keys => $message)
             {
-                $return["message"] .= $message."<br>";
+                $return .= $message."<br>";
             }
         }
         if($shop_id)
@@ -69,8 +65,7 @@ class Item
             $shop_data = Tbl_shop::where('shop_id',$shop_id)->first();
             if(!$shop_data)
             {
-                $return['status'] = 'error';
-                $return['message'] .= 'Your account does not exist. <br>';                
+                $return .= 'Your account does not exist. <br>';                
             }
         }
         if($item_type)
@@ -78,8 +73,7 @@ class Item
             $type_data = Tbl_item_type::where('item_type_id',$item_type)->first();
             if(!$type_data)
             {
-                $return['status'] = 'error';
-                $return['message'] .= 'Item type does not exist. <br>';            
+                $return .= 'Item type does not exist. <br>';            
             }
         }
         if($insert['item_category_id'] != 0)
@@ -87,8 +81,7 @@ class Item
             $category_data = Tbl_category::where('type_id',$insert['item_category_id'])->where('type_shop',$shop_id)->first();
             if(!$category_data)
             {
-                $return['status'] = 'error';
-                $return['message'] .= 'Category does not exist. <br>';            
+                $return .= 'Category does not exist. <br>';            
             }            
         }
         if($insert['item_manufacturer_id'] != 0)
@@ -96,8 +89,7 @@ class Item
             $category_data = Tbl_manufacturer::where('manufacturer_id',$insert['item_manufacturer_id'])->where('manufacturer_shop_id',$shop_id)->first();
             if(!$category_data)
             {
-                $return['status'] = 'error';
-                $return['message'] .= 'Manufacturer does not exist. <br>';            
+                $return .= 'Manufacturer does not exist. <br>';            
             }            
         }
         if($insert['item_asset_account_id'] != 0)
@@ -105,8 +97,7 @@ class Item
             $asset_data = Tbl_chart_of_account::where('account_id',$insert['item_asset_account_id'])->where('account_shop_id',$shop_id)->first();
             if(!$asset_data)
             {
-                $return['status'] = 'error';
-                $return['message'] .= 'Asset account does not exist. <br>';            
+                $return .= 'Asset account does not exist. <br>';            
             }            
         }
         if($insert['item_income_account_id'] != 0)
@@ -114,8 +105,7 @@ class Item
             $income_data = Tbl_chart_of_account::where('account_id',$insert['item_income_account_id'])->where('account_shop_id',$shop_id)->first();
             if(!$income_data)
             {
-                $return['status'] = 'error';
-                $return['message'] .= 'Income account does not exist. <br>';            
+                $return .= 'Income account does not exist. <br>';            
             }            
         }
         if($insert['item_expense_account_id'] != 0)
@@ -123,8 +113,7 @@ class Item
             $expense_data = Tbl_chart_of_account::where('account_id',$insert['item_expense_account_id'])->where('account_shop_id',$shop_id)->first();
             if(!$expense_data)
             {
-                $return['status'] = 'error';
-                $return['message'] .= 'Expense account does not exist. <br>';            
+                $return .= 'Expense account does not exist. <br>';            
             }            
         }
 
@@ -218,12 +207,13 @@ class Item
         {
             $update['updated_at'] = Carbon::now();
 
-            $item_id = Tbl_item::where("shop_id", $shop_id)->where("item_id", $item_id)->update($update);
+            Tbl_item::where("shop_id", $shop_id)->where("item_id", $item_id)->update($update);
 
             $return['item_id']       = $item_id;
             $return['status']        = 'success';
-            $return['message']       = 'Item successfully created.';
+            $return['message']       = 'Item successfully updated.';
             $return['call_function'] = 'success_item';
+
         }
 
         return $return;

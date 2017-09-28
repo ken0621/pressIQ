@@ -14,7 +14,7 @@
 			<div class="container">
 				<!-- PER DETAIL -->
 				<div class="detail-container row clearfix">
-					<div class="col-md-6">
+					<div class="col-md-6 col-sm-6 col-xs-6 desc-holder">
 						<div class="description-container">
 							<div class="title-container">{{ get_content($shop_theme_info, "How-To-Join", "howtojoin_division1_title") }}
 								<div class="line-bot"></div>
@@ -26,14 +26,14 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-6 col-sm-6 col-xs-6 image-in-join-holder">
 						<div class="img-container">
 							<img src="{{ get_content($shop_theme_info, "How-To-Join", "howtojoin_division1_img") }}">
 						</div>
 					</div>
 				</div>
 				<div class="detail-container row clearfix">
-					<div class="col-md-6">
+					<div class="col-md-6 col-sm-6 col-xs-6 desc-holder">
 						<div class="description-container">
 							<div class="title-container">{{ get_content($shop_theme_info, "How-To-Join", "howtojoin_division2_title") }}
 								<div class="line-bot-2"></div>
@@ -46,14 +46,14 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-6 col-sm-6 col-xs-6 image-in-join-holder">
 						<div class="img-container">
 							<img src="{{ get_content($shop_theme_info, "How-To-Join", "howtojoin_division2_img") }}">
 						</div>
 					</div>
 				</div>
 				<div class="detail-container row clearfix">
-					<div class="col-md-6">
+					<div class="col-md-6 col-sm-6 col-xs-6 desc-holder">
 						<div class="description-container">
 							<div class="title-container">{{ get_content($shop_theme_info, "How-To-Join", "howtojoin_division3_title") }}
 								<div class="line-bot-3"></div>
@@ -65,7 +65,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-6 col-sm-6 col-xs-6 image-in-join-holder">
 						<div class="img-container">
 				
 						</div>

@@ -20,7 +20,7 @@
 	                        <div class="text-header2">Enroll now and become one of us!</div>
 	                    </div>
 	                    <div class="btn-container">
-	                        <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
+	                        <button class="product-add-cart btn-buy-a-kit" item-id="2708" quantity="1">Buy a Kit</button><br>
 	                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
 	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
 	                    </div>
@@ -213,7 +213,7 @@
 						</div>
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Reward Point(s)</span> {{ $points->display_brown_leader_points }}</div>
+							<div class="name"><span>Leader Point(s)</span> {{ $points->display_brown_leader_points }}</div>
 						</div>
 					</div>
 				</div>

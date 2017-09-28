@@ -853,6 +853,9 @@ Route::group(array('prefix' => '/member/report'), function()
 
 	Route::any('/accounting/date_period','Member\ReportsController@get_date_period_covered');
 });
+
+AdvancedRoute::controller('/member/report', 'Member\ReportControllerV2');
+
 //reports end
 
 /* Customer */
@@ -1035,6 +1038,9 @@ AdvancedRoute::controller('/member/register/shipping', 'MemberController');
 AdvancedRoute::controller('/member/maintenance/app_keys', 'Member\SocialNetworkingKeysController');
 /* End */
 
+/* MEMBER COLUMNS */
+AdvancedRoute::controller('/member/columns', 'Member\ColumnsController');
+/* End */
 
 AdvancedRoute::controller('/tester','TesterController');
 

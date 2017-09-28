@@ -6,7 +6,11 @@
 		<input type="hidden" name="_token" value="{{csrf_token()}}">
 		<input type="hidden" name="id" value="{{$id}}">
 		<input type="hidden" name="archived" value="{{isset($archived) ? $archived : 0}}">
+		@if(isset($payroll_deduction_type))
 		<input type="hidden" class="payroll_deduction_type" value="{{ $payroll_deduction_type }} ">
+		@else
+		<input type="hidden" class="payroll_deduction_type" value="">
+		@endif
 	</div>
 	<div class="modal-body form-horizontal">
 		{!!isset($html) ? $html : ''!!}

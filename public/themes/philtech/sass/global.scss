@@ -667,8 +667,48 @@ body
 
 footer
 {
-	color:#9d9eb9;
-	background-color: #262874;
+	color: #fff;
+	background-color: #004884;
+	padding: 25px 0;
+	p
+	{
+		color: rgba(255,255,255,0.5);
+		font-size: 13px;
+		margin-top: 15px;
+		max-width: 262px;
+	}
+	ul
+	{
+		margin: 0;
+		padding: 0;
+		li
+		{
+			display: block;
+			a
+			{
+				color: rgba(255,255,255,0.5);
+				font-size: 13px;
+				font-weight: 300;
+			}
+		}
+	}
+	table
+	{
+		color: rgba(255,255,255,0.5);
+		font-size: 13px;
+		td
+		{
+			&:first-child
+			{
+				width: 30px;
+				padding-right: 15px;
+			}
+			&:last-child
+			{
+
+			}
+		}
+	}
 	.ftr 
 	{
 		padding-bottom: 15px;
@@ -723,11 +763,10 @@ footer
 	
 	.btm-title 
 	{
-		color: #d7d7e1;
-		font-size: 16px;
-		margin-top: 30px;
+		color: #fff;
+		font-size: 15px;
 		margin-bottom: 20px;
-		font-weight: 700;
+		font-weight: 400;
 	}
 
 	.btm-sub-title 
@@ -793,24 +832,20 @@ footer
 
 #bottom-footer
 {
-	background-color: #1a1b56;
-	padding: 10px;
+	background-color: #ededed;
+	padding: 20px 10px;
 
 	.bottom
 	{
 		position: relative;
-		min-height: 50px;
-		border:none;
-		background-color: #1a1b56;
-		
-
+		border: none;
+		background-color: #ededed;
 		.ftr-title
 		{
 			float: left;
-		    left: 12px;
-		    color: #fff;
-		    font-size: 14px;
-		    padding-top: 15px;
+		    color: #585858;
+		    font-size: 13px;
+		    font-weight: 300;
 		}
 
 		.image-logo

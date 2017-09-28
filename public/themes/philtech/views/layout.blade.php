@@ -180,52 +180,56 @@
         <div class="container ftr">
             <div class="row clearfix">
                 <div class="col-md-4 col-sm-6">
-                    <div class="btm-title">SHOP</div>
-                    <div class="row clearfix btm-link">
-                        {{-- @if(isset($_categories))
-                            @foreach($_categories as $category)     
-                            <div class="btm-sub-title col-xs-6"><a href="/product?type={{ $category['type_id'] }}">{{ $category['type_name'] }}</a></div>
-                            @endforeach
-                        @endif --}}
-                        <div class="btm-sub-title col-xs-6"><a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a></div>
-                        <div class="btm-sub-title col-xs-6"><a href="javascript:" onClick="alert('Under Development')">NEWS</a></div>
-                        <div class="btm-sub-title col-xs-6"><a href="/about">ABOUT US</a></div>
+                    <div class="img-footer">
+                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/philtech.jpg">
                     </div>
+                    <p>PHILTECH, INC. “We provide Business” Is a subsidiary company of ZENAR TELECOMS, INC. with highly experienced both in retail and distribution of technology industry for almost 20years.</p>
                 </div> 
-                <div class="col-md-3 col-sm-6">
-                    <div class="btm-title">CONTACT US</div>
-                    <table style="table-layout: fixed; width: 100%;">
-                        <tr>
-                            <td style="width: 35px;"><i class="fa fa-map-marker" aria-hidden="true"></i></td>
-                            <td class="contact-title">{{ isset($company_info['company_address']) ? $company_info['company_address']->value : '' }}</td>
-                        </tr>
-                        <tr>
-                            <td style="width: 35px;"><i class="fa fa-mobile" aria-hidden="true"></i></td>
-                            <td class="contact-title">{{ isset($company_info['company_mobile']) ? $company_info['company_mobile']->value : '' }}</td>
-                        </tr>
-                        <tr>
-                            <td style="width: 35px;"><i class="fa fa-envelope-o" aria-hidden="true"></i></td>
-                            <td class="contact-title">{{ isset($company_info['company_email']) ? $company_info['company_email']->value : '' }}</td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="btm-title">COMPANY</div>
-                    <div class="btm-sub-title">{{ substr(get_content($shop_theme_info, "about", "about_content"), 0, 200) }}... &nbsp;<a style="color: #fff;" href="/about">See More</a></div>
+                <div class="col-md-2 col-sm-6">
+                    <div class="btm-title">INFORMATION</div>
+                    <ul>
+                        <li><a href="javascript:">Our Partners</a></li>
+                        <li><a href="javascript:">E-loading Business</a></li>
+                        <li><a href="javascript:">Airline Ticketing</a></li>
+                        <li><a href="javascript:">Travel and Tours</a></li>
+                        <li><a href="javascript:">E-money</a></li>
+                        <li><a href="javascript:">Career</a></li>
+                        <li><a href="javascript:">Events</a></li>
+                        <li><a href="javascript:">Legalities</a></li>
+                        <li><a href="javascript:">Business Presentation</a></li>
+                        <li><a href="javascript:">News</a></li>
+                    </ul>
                 </div>
                 <div class="col-md-2 col-sm-6">
-                    <div class="btm-title">FOLLOW US ON</div>
-                    <div>
-                        @if(get_content($shop_theme_info, "info", "facebook_link"))
-                        <a href="{{ get_content($shop_theme_info, "info", "facebook_link") }}"><i class="fa fa-facebook site-icon" aria-hidden="true"></i></a>
-                        @endif
-                        @if(get_content($shop_theme_info, "info", "twitter_link"))
-                        <a href="{{ get_content($shop_theme_info, "info", "twitter_link") }}"><i class="fa fa-twitter site-icon" aria-hidden="true"></i></a>
-                        @endif
-                        @if(get_content($shop_theme_info, "info", "pinterest_link"))
-                        <a href="{{ get_content($shop_theme_info, "info", "pinterest_link") }}"><i class="fa fa-pinterest-p site-icon" aria-hidden="true"></i></i></a>
-                        @endif
-                    </div>
+                    <div class="btm-title">SHOP</div>
+                    <ul>
+                        <li><a href="javascript:">DTH Products</a></li>
+                        <li><a href="javascript:">Prepaid Cards</a></li>
+                        <li><a href="javascript:">Gadgets</a></li>
+                        <li><a href="javascript:">Electronics</a></li>
+                        <li><a href="javascript:">Services</a></li>
+                        <li><a href="javascript:">Entertainment</a></li>
+                        <li><a href="javascript:">Apparel</a></li>
+                        <li><a href="javascript:">Accessories</a></li>
+                        <li><a href="javascript:">Health & Wellness</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="btm-title">CONTACT US</div>
+                    <table>
+                        <tr>
+                            <td><img src="/themes/{{ $shop_theme }}/img/icon/location.png"></td>
+                            <td>PhilTECH Building, Gallera Road, Paseo de</br>Putik, Guiwan, Zamboanga City, Philippines</td>
+                        </tr>
+                        <tr>
+                            <td><img src="/themes/{{ $shop_theme }}/img/icon/phone.png"></td>
+                            <td>Tel No. (062) 310-2256, Cel No. 0917-542- 2614</br>Tel No. (062) 310-2256, Cel No. 0917-542- 2614</td>
+                        </tr>
+                        <tr>
+                            <td><img src="/themes/{{ $shop_theme }}/img/icon/email.png"></td>
+                            <td>philtechglobal@yahoo.com</br>philtechglobalmainoffice@gmail.com</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
@@ -233,17 +237,9 @@
 
     <footer id="bottom-footer">
         <div class="container bottom">
-            <div class="row clearfix">
-                <div class="col-md-12">                            
-                    <div class="ftr-title">© {{ isset($company_info['company_name']) ? $company_info['company_name']->value : 'Your Name' }} {{ date('Y') }}</div>
-                    <div class="image-logo">
-                    <img src="/themes/{{ $shop_theme }}/img/ftr-image1.jpg">
-                    <img src="/themes/{{ $shop_theme }}/img/ftr-image2.jpg">
-                    <img src="/themes/{{ $shop_theme }}/img/ftr-image3.jpg">
-                    <img src="/themes/{{ $shop_theme }}/img/ftr-image4.jpg">
-                    <img src="/themes/{{ $shop_theme }}/img/ftr-image5.jpg">
-                    </div>
-                </div>
+            <div class="clearfix">                
+                <div class="ftr-title pull-left">© {{ isset($company_info['company_name']) ? $company_info['company_name']->value : 'Your Name' }} {{ date('Y') }}</div>
+                <div class="ftr-title pull-right">Powered By: Digima Web Solutions, Inc.</div>
             </div>
         </div>
     </footer>

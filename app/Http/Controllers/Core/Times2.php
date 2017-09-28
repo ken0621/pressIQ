@@ -27,16 +27,23 @@ class Times2 extends Controller
 	public function time_shift()
 	{	
 		$_time[0] = new stdClass();
-		$_time[0]->time_in = "22:00:00"; 
-		$_time[0]->time_out = "24:00:00"; 
+		$_time[0]->time_in = "07:52:00"; 
+		$_time[0]->time_out = "17:34:00"; 
+		$_time[1] = new stdClass();
+		$_time[1]->time_in = "21:00:00"; 
+		$_time[1]->time_out = "23:03:00"; 
 		
 
 		//INPUT SHIFT 
+	
 		$_shift[0] = new stdClass();
-		$_shift[0]->shift_in = "19:00:00"; 
-		$_shift[0]->shift_out = "24:00:00"; 
+		$_shift[0]->shift_in = "08:00:00"; 
+		$_shift[0]->shift_out = "12:00:00";
+		$_shift[1] = new stdClass();
+		$_shift[1]->shift_in = "13:00:00"; 
+		$_shift[1]->shift_out = "17:00:00";
 		
-		$_output = Payroll2::clean_shift($_time, $_shift, false);	
+		$_output = Payroll2::clean_shift($_time, $_shift, true);	
 		
 		dd($_output);
 	}

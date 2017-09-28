@@ -1057,7 +1057,7 @@ class Payroll2
 					/*early overtime*/
 					if ($count_shift == 0 && ($time_out_minutes < $shift_in_minutes)) 
 					{
-						$reason = "<b>answer: ". Payroll2::convert_to_12_hour($time->time_in)." to ".Payroll2::convert_to_12_hour($time->time_out)."(0) - <span style='color: green; text-transform: uppercase'> Early OVERTIME time in and time out<span><br></b>";
+						$reason = "<b>answer: ". Payroll2::convert_to_12_hour($time->time_in)." to ".Payroll2::convert_to_12_hour($time->time_out)."(0) - <span style='color: green; text-transform: uppercase'> Early OVERTIME time in and time out 1<span><br></b>";
 						echo $testing == true ? $reason : "";
 						$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $time->time_in, $time->time_out, 0, $reason, "OVERTIME", "00:00:00", "00:00:00", Payroll::time_diff($time->time_in,$time->time_out));
 						break;
@@ -1067,7 +1067,8 @@ class Payroll2
 					//check if there is next last shift that has blank time in and time out
 					if ($count_time==(sizeof($_time)-1) && ($time_in_minutes>=Payroll2::convert_time_in_minutes($_shift[sizeof($_shift)-1]->shift_out)))
 					{
-						$reason = "<b>answer: ". Payroll2::convert_to_12_hour($time->time_in)." to ".Payroll2::convert_to_12_hour($time->time_out)." (0) - <span style='color: green; text-transform: uppercase'>OVERTIME time in and time out<span><br></b>";
+						// dd($time->time_in. ' '. $time->time_out);
+						$reason = "<b>answer: ". Payroll2::convert_to_12_hour($time->time_in)." to ".Payroll2::convert_to_12_hour($time->time_out)." (0) - <span style='color: green; text-transform: uppercase'>OVERTIME time in and time out 2<span><br></b>";
 						echo $testing == true ? $reason : "";
 						$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $time->time_in, $time->time_out, 0, $reason, "OVERTIME", "00:00:00", "00:00:00", Payroll::time_diff($time->time_in,$time->time_out));
 						break;

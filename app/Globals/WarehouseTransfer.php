@@ -50,4 +50,8 @@ class WarehouseTransfer
 	{
 		return Tbl_warehouse_receiving_report::where('rr_shop_id',$shop_id)->where('rr_status', $status)->get();
 	}
+	public static function scan_item($shop_id, $item_id)
+	{
+		
+	}
 }

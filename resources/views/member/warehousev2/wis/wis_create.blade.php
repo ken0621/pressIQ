@@ -52,6 +52,10 @@
 </div>
 @endsection
 
+@section('script')
+<script type="text/javascript" src="/assets/member/js/warehouse/wis_create.js"></script>
+@endsection
+
 @section('css')
 <link rel="stylesheet" type="text/css" href="/assets/member/css/pos.css">
 @endsection

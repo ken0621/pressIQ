@@ -24,7 +24,6 @@ function wis_create()
 		event_search_item();
 		event_click_search_result();
 		event_remote_item_from_cart();
-		action_convert_price_level_to_global_drop_list();
 		event_change_global_discount();
 
 	}
@@ -62,23 +61,6 @@ function wis_create()
 			success 	: function(data)
 			{
 				action_load_item_table();
-			}
-		});
-	}
-	function action_convert_price_level_to_global_drop_list()
-	{
-		$(".price-level-select").globalDropList(
-		{  
-			hasPopup                : "true",
-			link                    : "/member/item/price_level/add",
-			link_size               : "lg",
-			width                   : "100%",
-			maxHeight				: "129px",
-			placeholder             : "Select a Price Level",
-			no_result_message       : "No result found!",
-			onChangeValue			: function()
-			{
-				action_set_cart_info("price_level_id", $(".price-level-select").val());
 			}
 		});
 	}
@@ -204,7 +186,7 @@ function wis_create()
 
  		$.ajax(
 		{
-			url			: "/member/cashier/pos/scan_item",
+			url			: "/member/item/warehouse/wis/scan-item",
 			dataType	: "json",
 			type 		: "post",
 			data 		: scandata,

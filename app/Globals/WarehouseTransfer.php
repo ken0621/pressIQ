@@ -53,7 +53,7 @@ class WarehouseTransfer
 	}
 	public static function scan_item($shop_id, $item_id)
 	{
-		$chk = Tbl_item::where('item_id',$item_id)->where('shop_id',$shop_id)->first();
+		$chk = Tbl_item::where('item_id',$item_id)->where('item_type_id',1)->where('shop_id',$shop_id)->first();
 		$id = $item_id;
 		if(!$chk)
 		{

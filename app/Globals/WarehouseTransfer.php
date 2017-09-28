@@ -39,8 +39,15 @@ use App\Globals\Merchant;
 use Validator;
 class WarehouseTransfer
 {   
-	// public static function get_all_wis($shop_id = 0, $status = 'pending')
-	// {
-	// 	return Tbl_warehouse_issuance_report::
-	// }
+	public static function get_all_wis($shop_id = 0, $status = 'pending')
+	{
+		$data = Tbl_warehouse_issuance_report::inventory_item()->where('wis_shop_id',$shop_id)->where('wis_status', $status)->groupBy
+		('tbl_warehouse_issuance_report.wis_id')->get();
+
+		return $data;
+	}
+	public static function get_all_rr($shop_id = 0, $status = 'pending')
+	{
+		return Tbl_warehouse_receiving_report::where('rr_shop_id',$shop_id)->where('rr_status', $status)->get();
+	}
 }

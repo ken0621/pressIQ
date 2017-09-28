@@ -327,8 +327,8 @@ class Payroll2
 			/* CREATE TIMESHEET DB IF EMPTY */
 			if(!$timesheet_db)
 			{
-				$_shift_real =  Payroll2::db_get_shift_of_employee_by_code($shift_code_id, $from);
-				$_shift =  Payroll2::shift_raw(Payroll2::db_get_shift_of_employee_by_code($shift_code_id, $from));
+				$_shift_real 	=  Payroll2::db_get_shift_of_employee_by_code($shift_code_id, $from);
+				$_shift 		=  Payroll2::shift_raw(Payroll2::db_get_shift_of_employee_by_code($shift_code_id, $from));
 				
 				$insert = null;
 				$insert["payroll_employee_id"] = $employee_id;
@@ -2810,7 +2810,7 @@ class Payroll2
 	}
 
 
-	public static function compute_income_day_pay_monthly_fixed_cola ($_time = array(), $daily_rate = 0, $group_id = 0, $cola = 0, $compute_type="")
+	public static function compute_income_day_pay_monthly_fixed_cola($_time = array(), $daily_rate = 0, $group_id = 0, $cola = 0, $compute_type="")
 	{
 		$return = new stdClass();
 		$total_day_income 		= $daily_rate ;

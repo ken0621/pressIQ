@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Globals\Cart2;
+use App\Globals\WarehouseTransfer;
 
 class WarehouseIssuanceSlipController extends Member
 {

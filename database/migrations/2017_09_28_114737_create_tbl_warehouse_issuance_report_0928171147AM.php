@@ -18,7 +18,7 @@ class CreateTblWarehouseIssuanceReport0928171147AM extends Migration
             $table->string('wis_number');
             $table->integer('wis_from_warehouse')->unsigned();
             $table->longtext('wis_remarks');
-            $table->string('wis_status');
+            $table->string('wis_status')->default('pending');
             $table->text('confirm_image');
             $table->string('receiver_code');
             $table->string('ref_name');
@@ -41,7 +41,8 @@ class CreateTblWarehouseIssuanceReport0928171147AM extends Migration
             $table->integer('wis_id');
             $table->integer('warehouse_id')->unsigned();
             $table->longtext('rr_remarks');
-            $table->string('rr_status');
+            $table->string('rr_status')->default('pending');
+            $table->text('confirm_image');
             $table->timestamps();
 
             $table->foreign('warehouse_id')->references('warehouse_id')->on('tbl_warehouse')->onDelete('cascade');

@@ -37,7 +37,7 @@ class WarehouseIssuanceSlipController extends Member
     {
         $data['page'] = 'Table Item';
         $data["_wis_item"] = Session::get('wis_item');
-        dd($data["_wis_item"]);
+        
         foreach ($data['_wis_item'] as $key => $value) 
         {
             $data['_wis_item'][$key]['warehouse_qty'] = Warehouse2::get_item_qty(Warehouse2::get_current_warehouse($this->user_info->shop_id), $key);

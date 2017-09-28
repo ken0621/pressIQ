@@ -1,7 +1,7 @@
 body
 {
-	font-family: 'Open Sans', sans-serif;
-	background-color: #f7f7f7;
+	font-family: 'Rubik', sans-serif;
+	background-color: #ededed;
 }
 .add-to-cart
 {
@@ -97,10 +97,11 @@ body
 }
 .header-nav
 {
-	background-color: #2e3192;
+	background-color: #fff;
 	.header-nav-top
 	{
 		text-align: right;
+		background-color: #ff8500;
 		@media screen and (max-width: 991px)
 		{
 			.header-nav .header-nav-top
@@ -115,20 +116,11 @@ body
 			color: rgba(255,255,255,0.75);
 			display: inline-block;
 			vertical-align: middle;
-			padding: 5px 10px;
-			margin-top: 10px;
-
+			padding: 2.5px 7.5px;
 			a
 			{
-				color: #c7c8dd;
-				font-size: 11px;
-
-				i
-				{
-					font-size: 14px;
-					margin-right: 2px;
-					color: #c7c8dd;
-				}
+				color: #fff;
+				font-size: 13px;
 			}
 
 			a:hover
@@ -139,57 +131,135 @@ body
 			.linya
 			{
 				width: 1px;
-				height: 25px;
-				background-color: #7779b8;
+				height: 10px;
+				background-color: #f9bc7a;
 			}
 		}
 	}
 	.header-nav-middle
 	{
-		.search-bar
+		margin: 20px 0;
+		.logo-holder
 		{
-			margin-top: 20px;
-			margin-bottom: 35px;
-			@media screen and (max-width: 991px)
+			display: inline-block;
+			vertical-align: middle;
+			margin-right: 20px;
+			width: 175px;
+			.logo
 			{
-				margin-bottom: 15px;
+				max-width: 100%;
 			}
-			.search-category
+		}
+		.search-bar-holder
+		{
+			display: inline-block;
+			vertical-align: middle;
+			width: 295px;
+			margin-right: 20px;
+			.search-bar
 			{
-				border: 0;
-				border-right: 1px solid #c8c8c8;
-				color: #686868;
-				font-size: 12.5px;
-			}
-			.search-input
-			{
-				border: 0;
-			}
-			.search-button
-			{
-				color: #473e06;
-				background-color: #ffd800;
-				border: 0;
+				.search-category
+				{
+					border: 0;
+					border-right: 1px solid #c8c8c8;
+					color: #686868;
+					font-size: 12.5px;
+				}
+				.form-control
+				{
+					border-radius: 0;
+					border: 1px solid #cbcbcb;
+					box-shadow: none;
+					height: 40px;
+					&::-webkit-input-placeholder 
+					{ /* WebKit, Blink, Edge */
+					    color:    #a8a8a8;
+					}
+					&:-moz-placeholder 
+					{ /* Mozilla Firefox 4 to 18 */
+					   color:    #a8a8a8;
+					   opacity:  1;
+					}
+					&::-moz-placeholder 
+					{ /* Mozilla Firefox 19+ */
+					   color:    #a8a8a8;
+					   opacity:  1;
+					}
+					&:-ms-input-placeholder 
+					{ /* Internet Explorer 10-11 */
+					   color:    #a8a8a8;
+					}
+					&::-ms-input-placeholder 
+					{ /* Microsoft Edge */
+					   color:    #a8a8a8;
+					}
+				}
+				.search-input
+				{
+					border: 0;
+					border-radius: 0;
+					border-radius: 1px solid #cbcbcb;
+				}
+				.search-button
+				{
+					color: #fff;
+					background-color: #006cc5;
+					border: 0;
+					border-radius: 0;
+					height: 40px;
+					padding-left: 20px;
+					padding-right: 20px;
+					a
+					{
+						color: #fff;
+						font-size: 13px;
+						text-decoration: none;
+						img
+						{
+							vertical-align: middle;
+							display: inline-block;
+
+						}
+						.text-search
+						{
+							vertical-align: middle;
+							display: inline-block;
+							margin-right: 5px;
+						}
+					}
+				}
 			}
 		}
 		.woaw
 		{
 			position: relative;
-			@media screen and (min-width: 991px)
+			text-align: left;
+			display: inline-block;
+			vertical-align: middle;
+			width: 620px;
+			.holder
 			{
-				text-align: right;
+				display: inline-block;
+				vertical-align: middle;
+				margin-right: 20px;
+				img
+				{
+					max-width: 100%;
+				}
 			}
 		}
 		.shopping-cart-container
 		{
-			background-color: #24267a;
+			background-color: #006cc5;
 			color:#fff;
-			margin-top: 20px;
-			padding: 13px;
+			padding: 7.5px 15px;
 			font-size: 12.5px;
 			display: inline-block;
-			border-radius: 5px;
+			vertical-align: middle;
+			border-radius: 0px;
 			cursor: pointer;
+			font-size: 15px;
+			width: 154px;
 			@media screen and (max-width: 991px)
 			{
 				display: block;
@@ -197,18 +267,16 @@ body
 				margin-top: 0;
 				margin-bottom: 25px;
 			}
-			.fa
-			{
-				font-size: 20px;
-				vertical-align: middle;
-				margin-right: 10px;
-			}
 			.badge
 			{
-				background-color: #ffd800;
-				color: #202020;
+				background-color: #fff;
+				color: #585858;
 				vertical-align: middle;
 				margin-right: 10px;
+				font-weight: 400;
+				border-radius: 100%;
+				font-size: 15px;
+				padding: 4px 7px;
 			}
 			span
 			{
@@ -329,10 +397,10 @@ body
 {
 	width: 100%;
 	background-color: #fff;
-	color: #484848;
-	font-size: 12.5px;
-	font-weight: 600;
-	border-bottom: solid 1px #d9d9d9;
+	color: #5d5d5d;
+	font-size: 13px;
+	font-weight: 400;
+	border-bottom: solid 1px #e4e4e4;
 	cursor: pointer;
 	&:last-child
 	{
@@ -340,6 +408,10 @@ body
 	}
 	padding: 12px 12px 12px 20px;
 	position: relative;
+	img
+	{
+		vertical-align: middle;
+	}
 	.hover
 	{
 		visibility: hidden;
@@ -407,23 +479,23 @@ body
 .left-bar-categories
 {
 	background-color: #fff;
-	-moz-box-shadow: 0px 0px 7px rgba(0,0,0,0.2);
-    -webkit-box-shadow: 0px 0px 7px rgba(0,0,0,0.2);
-    box-shadow: 0px 0px 7px rgba(0,0,0,0.2);
 	.left-bar-title
 	{
 		padding: 12px 12px 12px 20px;
-		background-color: #ffd800;
-		color: #333333;
-		font-size: 16.5px;
-		font-weight: 700;
+		background-color: #ff8500;
+		color: #fff;
+		font-size: 15px;
+		font-weight: 400;
 		span
 		{
 			vertical-align: middle;
+			display: inline-block;
 		}
 		img
 		{
 			vertical-align: middle;
+			display: inline-block;
+			margin-right: 15px;
 		}
 	}
 }
@@ -497,7 +569,7 @@ body
 .navbar-default
 {
 	background: none;
-	background-color: #262874;
+	background-color: #006cc5;
 	border: none;
 	border-radius: 0px;
 	color: #fff;
@@ -508,11 +580,17 @@ body
 {
 	color: #fff !important;
 	text-shadow: none !important;
-	font-size: 14.58px;
-	font-weight: 600;
+	font-size: 13px;
+	font-weight: 400;
+	border-bottom: 4px solid transparent;
+	padding-bottom: 11px;
 	@media screen and (max-width: 1199px)
 	{
 		font-size: 12.5px;
+	}
+	&:hover
+	{
+		border-bottom: 4px solid #ff8500;
 	}
 }
 .navbar-default .navbar-nav>.open, .navbar-default .navbar-nav>.active
@@ -521,14 +599,16 @@ body
 }
 .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.active>a
 {
-	background-color: #fff !important;
-	color: #262874 !important;
+	background-color: transparent !important;
+	color: #fff !important;
 	border-radius: 4px 4px 0px 0px;
 	background-image: none !important;
+	border-bottom: 4px solid #ff8500;
+	box-shadow: none;
 }
 .nav-border
 {
-	border-right: solid 1px #515390;
+	// border-right: solid 1px #515390;
 	&:last-child
 	{
 		border-right: 0;

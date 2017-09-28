@@ -12,7 +12,7 @@
         <meta name='B-verify' content='8b63efb2920a681d6f877a59a414659d09831140' />
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- GOOGLE FONT -->
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet">
         <!-- BOOTSTRAP -->
         <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap.min.css">
         <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap-theme.min.css">
@@ -72,62 +72,32 @@
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
     <!-- HEADER -->
-    <div class="header-nav">
+    <div class="header-nav clearfix">
         <div class="header-nav-top">
             <div class="container">
-                {{-- <div class="holder"><a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a></div>
-                <div class="holder"><div class="linya"></div></div> --}}
-                @if($customer)
-                    <div class="holder"><a href="/mlm"><i class="fa fa-user" aria-hidden="true"></i> Member's Area
-                        @if($slot_now != null)
-                            (Membership Code # {{$slot_now->slot_no}})
-                        @endif
-                        </a>
-                    </div>    
-                @else
-                    <div class="holder"><a href="/mlm/login"><i class="fa fa-lock" aria-hidden="true"></i> Login</a></div>
-                    <div class="holder"><div class="linya"></div></div>
-                    <div class="holder"><a href="/mlm/register"><i class="fa fa-user" aria-hidden="true"></i> Register</a></div>
-                @endif
-
-                {{-- <!--<div class="holder"><div class="linya"></div></div>-->
-                <!--<div class="holder"><a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> My Cart</a></div>-->
+                <div class="holder"><a href="javascript:">COMPANY</a></div>
+                <div class="holder"><a href="javascript:">BUSINESS PRESENTATION</a></div>
+                <div class="holder"><a href="javascript:">NEWS</a></div>
+                <div class="holder"><a href="/mlm/login">LOGIN</a></div>
                 <div class="holder"><div class="linya"></div></div>
-                <div class="holder"><a href="/checkout"><i class="fa fa-check" aria-hidden="true"></i> Checkout</a></div>
-                <div class="holder"><div class="linya"></div></div>
-                <!-- <div class="holder"><a href="/about">About Us</a></div>
-                <div class="holder"><div class="linya"></div></div> -->
-                <div class="holder"><a href="/partners">Our Partner Merchant</a></div>
-                <div class="holder"><div class="linya"></div></div>
-                <div class="holder"><a href="/contact">Contact Us</a></div>
-                <div class="holder"><div class="linya"></div></div>
-                <div class="holder"><a href="https://loadcentral.net">eLOADING BUSINESS</a></div>
-                <div class="holder"><div class="linya"></div></div>
-                <div class="holder"><a href="http://tour.philtechglobalinc.com">Airline Ticketing</a></div>
-                <div class="holder"><div class="linya"></div></div>
-                <div class="holder"><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a></div>
-                <div class="holder"><div class="linya"></div></div>
-                <div class="holder"><a href="https://philtechglobalinc.vmoney.com">E-Money</a></div> --}}
+                <div class="holder"><a href="/mlm/register">REGISTER</a></div>
             </div>
         </div>
         <div class="header-nav-middle">
             <div class="container">
-                <div class="row clearfix">
-                    <div class="col-md-3">
-                        <img onClick="location.href='/'" style="cursor: pointer;" class="img-responsive" src="{{ $company_info['company_logo']->value }}">            
+                <div class="clearfix">
+                    <div class="logo-holder">
+                        <img onClick="location.href='/'" style="cursor: pointer;" class="img-responsive logo" src="/themes/{{ $shop_theme }}/img/logo.png">            
                     </div>
-                    <div class="col-md-6">
+                    <div class="search-bar-holder">
 
                         {{-- Search Bar --}}                          
                         <div class="search-bar">
                             <form action="/product_search" method="get" id="form-search">
-                                <div class="input-group input-group-lg">
-                                     <!-- <span class="input-group-addon search-category" id="sizing-addon1">Categories <span class="caret"></span></span> -->
-                                     <input type="text" class="form-control" name="keyword" id="keyword" aria-describedby="sizing-addon1">
+                                <div class="input-group">
+                                     <input type="text" class="form-control" name="keyword" id="keyword" aria-describedby="sizing-addon1" placeholder="Type the item you're looking for...">
                                      <span class="input-group-addon search-button" id="sizing-addon1">
-                                        <a href="" onclick="onSearch();" id="submit_link">
-                                            <i class="fa fa-search" aria-hidden="true" id="submit_link"></i>
-                                        </a>                                 
+                                        <a href="" onclick="onSearch();" id="submit_link"><img src="/themes/{{ $shop_theme }}/img/search-icon.png"></a>                          
                                      </span>
                                 </div>
                             </form>
@@ -135,9 +105,18 @@
                         {{-- End Search Bar --}}
 
                     </div>
-                    <div class="col-md-3 woaw">
+                    <div class="woaw">
+                        <div class="holder">
+                            <img src="/themes/{{ $shop_theme }}/img/header/cashback.png">
+                        </div>
+                        <div class="holder">
+                            <img src="/themes/{{ $shop_theme }}/img/header/delivery.png">
+                        </div>
+                        <div class="holder">
+                            <img src="/themes/{{ $shop_theme }}/img/header/card.png">
+                        </div>
                         <div class="shopping-cart-container">
-                            <div class="shopping-cart"><i class="fa fa-shopping-cart" aria-hidden="true"></i> <span class="badge mini-cart-quantity">{{ $global_cart['sale_information']['total_quantity'] }}</span> <span>CART PHP.</span> <span class="mini-cart-total-price">{{ number_format($global_cart['sale_information']['total_product_price'], 2) }}</span></div>
+                            <div class="shopping-cart"><img src="/themes/{{ $shop_theme }}/img/header/cart-icon.png"> <span class="badge mini-cart-quantity">{{ $global_cart['sale_information']['total_quantity'] }}</span> <span>P </span> <span class="mini-cart-total-price">{{ number_format($global_cart['sale_information']['total_product_price'], 2) }}</span></div>
                             <div class="container-cart mini-cart">
                                 <div class="text-center"><span class="cart-loader text-center"><img style="height: 50px; margin: auto;" src="/assets/front/img/loader.gif"></span></div>
                             </div>
@@ -145,9 +124,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="container">
-            <marquee style="color: #fff; font-size: 18px;">{{ get_content($shop_theme_info, "info", "marquee_message") }}</marquee>
         </div>
     </div>
     <!-- NAVIGATION -->
@@ -174,16 +150,17 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li class="nav-border {{ Request::segment(1) == '' ? 'active' : '' }}"><a href="/">HOME <span class="sr-only">(current)</span></a></li>
-            <li class="nav-border {{ Request::segment(1) == 'contact' ? 'active' : '' }}"><a href="/contact">CONTACT US</a></li>
-            <li class="nav-border {{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">OUR PARTNER MERCHANT</a></li>
+            <li class="nav-border {{ Request::segment(1) == '' ? 'active' : '' }}"><a href="/">HOME</a></li>
+            <li class="nav-border {{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">OUR PARTNERS</a></li>
             <li class="nav-border"><a href="https://loadcentral.net">ELOADING BUSINESS</a></li>
             <li class="nav-border"><a href="http://tour.philtechglobalinc.com">AIRLINE TICKETING</a></li>
             <li class="nav-border"><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">TRAVEL AND TOURS</a></li> 
             <li class="nav-border"><a href="https://philtechglobalinc.vmoney.com">E-MONEY</a></li>
-            <li class="nav-border"><a href="/legalities">LEGALITIES</a></li>
             <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">CAREER</a></li>
             <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">EVENTS</a></li>
+            <li class="nav-border"><a href="/legalities">LEGALITIES</a></li>
+            <li class="nav-border {{ Request::segment(1) == 'contact' ? 'active' : '' }}"><a href="/contact">CONTACT US</a></li> 
+            
             {{-- @if(isset($_categories))
                 @foreach($_categories as $category)     
                 <li class="nav-border {{ Request::input('type') == $category['type_id'] ? 'active' : '' }}"><a href="/product?type={{ $category['type_id'] }}" style="text-transform: uppercase;">{{ $category['type_name'] }}</a></li>

@@ -8,9 +8,9 @@
 				<div class="left-bar-categories">
 					<div class="left-bar-title">
 						<img src="/themes/{{ $shop_theme }}/img/menu.png">
-						<span>CATEGORIES</span>
+						<span>Shop By Category</span>
 					</div>
-					@if(isset($_categories))
+					{{-- @if(isset($_categories))
 						@foreach($_categories as $category)
 						<div class="button-shop">
 							<div class="text" style="cursor: pointer;" onClick="location.href='/product?type={{ $category['type_id'] }}'">
@@ -41,7 +41,61 @@
 							@endif
 						</div>
 						@endforeach
-					@endif
+					@endif --}}
+					<div class="button-shop">
+						<div class="text" style="cursor: pointer;" onClick="location.href='/product/test'">
+							<img src="/themes/{{ $shop_theme }}/img/sidebar/dth.png">
+							<span>DTH PRODUCTS</span>
+						</div>
+					</div>
+					<div class="button-shop">
+						<div class="text" style="cursor: pointer;" onClick="location.href='/product/test'">
+							<img src="/themes/{{ $shop_theme }}/img/sidebar/card.png">
+							<span>PREPAID CARDS</span>
+						</div>
+					</div>
+					<div class="button-shop">
+						<div class="text" style="cursor: pointer;" onClick="location.href='/product/test'">
+							<img src="/themes/{{ $shop_theme }}/img/sidebar/gadgets.png">
+							<span>GADGETS</span>
+						</div>
+					</div>
+					<div class="button-shop">
+						<div class="text" style="cursor: pointer;" onClick="location.href='/product/test'">
+							<img src="/themes/{{ $shop_theme }}/img/sidebar/electronics.png">
+							<span>ELECTRONICS</span>
+						</div>
+					</div>
+					<div class="button-shop">
+						<div class="text" style="cursor: pointer;" onClick="location.href='/product/test'">
+							<img src="/themes/{{ $shop_theme }}/img/sidebar/services.png">
+							<span>SERVICES</span>
+						</div>
+					</div>
+					<div class="button-shop">
+						<div class="text" style="cursor: pointer;" onClick="location.href='/product/test'">
+							<img src="/themes/{{ $shop_theme }}/img/sidebar/entertainment.png">
+							<span>ENTERTAINMENT</span>
+						</div>
+					</div>
+					<div class="button-shop">
+						<div class="text" style="cursor: pointer;" onClick="location.href='/product/test'">
+							<img src="/themes/{{ $shop_theme }}/img/sidebar/apparel.png">
+							<span>APPAREL</span>
+						</div>
+					</div>
+					<div class="button-shop">
+						<div class="text" style="cursor: pointer;" onClick="location.href='/product/test'">
+							<img src="/themes/{{ $shop_theme }}/img/sidebar/accessories.png">
+							<span>ACCESSORIES</span>
+						</div>
+					</div>
+					<div class="button-shop">
+						<div class="text" style="cursor: pointer;" onClick="location.href='/product/test'">
+							<img src="/themes/{{ $shop_theme }}/img/sidebar/health.png">
+							<span>HEALTH & WELLNESS</span>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="col-md-9">

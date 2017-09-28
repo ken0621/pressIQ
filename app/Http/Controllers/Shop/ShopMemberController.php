@@ -611,10 +611,10 @@ class ShopMemberController extends Shop
         $data["page"] = "NonMember";
         return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.nonmember", $data));
     }
-    public function getTest()
+    public function getTest($method)
     {
         $shop_id    = $this->shop_info->shop_id; //tbl_shop
-        $key        = "paymaya"; //link reference name
+        $key        = $method; //link reference name
         $success    = "/members?success=1"; //redirect if payment success
         $failed     = "/members?failed=1"; //redirect if payment failed
         $debug      = true;

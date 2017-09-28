@@ -8,7 +8,7 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 		<link rel="icon" href="../../favicon.ico">
-		<title>{{ ucfirst($shop_info->shop_key) }} | {{ $page }}</title>
+		<title>Sample Website</title>
 		<!-- Bootstrap core CSS -->
 		<link href="/assets/themes/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 		<link href="/themes/{{ $shop_theme }}/css/main.css" rel="stylesheet" type="text/css">

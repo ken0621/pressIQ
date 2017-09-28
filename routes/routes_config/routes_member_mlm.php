@@ -312,6 +312,7 @@ Route::post('member/mlm/developer/import', 'Member\MlmDeveloperController@import
 Route::get('member/mlm/developer/repurchase', 'Member\MlmDeveloperController@repurchase');
 Route::post('member/mlm/developer/repurchase', 'Member\MlmDeveloperController@repurchase_submit');
 Route::get('member/mlm/developer/reset', 'Member\MlmDeveloperController@reset');
+Route::post('member/mlm/developer/sample_upload', 'Member\MlmDeveloperController@sample_upload');
 
 Route::any('member/mlm/developer/popup_genealogy', 'Member\MlmDeveloperController@popup_genealogy');
 Route::any('member/mlm/developer/popup_slot_created', 'Member\MlmDeveloperController@popup_slot_created');

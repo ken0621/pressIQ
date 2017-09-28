@@ -12,6 +12,8 @@ use App\Models\Tbl_brown_rank;
 use App\Models\Tbl_tree_sponsor;
 use App\Models\Tbl_item;
 use App\Models\Tbl_mlm_item_points;
+use App\Models\Tbl_rank_repurchase_cashback_item;
+use App\Models\Tbl_mlm_stairstep_settings;
 use App\Globals\Mlm_tree;
 use App\Globals\Mlm_complan_manager;
 use App\Globals\Mlm_complan_manager_cd;
@@ -816,13 +818,13 @@ class MLM2
 	}
 	public static function purchase($shop_id, $slot_id, $item_id)
 	{
-		$data = MLM2::item_points($shop_id,$item_id);
+		$data = MLM2::item_points($shop_id,$item_id,$slot_id);
 		if($data)
 		{
 			MLM_compute::repurchasev2($slot_id,$shop_id,$data);
 		}
 	}	
-	public static function item_points($shop_id,$item_id)
+	public static function item_points($shop_id,$item_id,$slot_id = null)
 	{
         $item          = Tbl_item::where("item_id",$item_id)->where("shop_id",$shop_id)->first();  
         $item_points   = Tbl_mlm_item_points::where("item_id",$item_id)->first();     
@@ -839,12 +841,36 @@ class MLM2
 			$data["RANK"]						= $item_points->RANK;
 			$data["RANK_GROUP"]					= $item_points->RANK_GROUP;
 			$data["price"]						= $item->item_price;
-
+			$data["RANK_REPURCHASE_CASHBACK"]   = MLM2::rank_cashback_points($shop_id,$slot_id,$item_id);
 			return $data;
         }
         else
         {
         	return null;
         }
+	}
+
+	public static function rank_cashback_points($shop_id,$slot_id,$item_id)
+	{
+		$data["RANK_REPURCHASE_CASHBACK"] = 0;
+		
+		if($slot_id)
+		{
+			$slot = Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",$shop_id)->first();
+			if($slot)
+			{
+				$current_rank = Tbl_mlm_stairstep_settings::where("stairstep_id",$slot->stairstep_rank)->first();
+				if($current_rank)
+				{
+					$rank_cashback_points = Tbl_rank_repurchase_cashback_item::where("item_id",$item_id)->where("rank_id",$current_rank->stairstep_id)->first();
+					if($rank_cashback_points)
+					{
+						$data["RANK_REPURCHASE_CASHBACK"] = $rank_cashback_points->amount;
+					}
+				}
+			}
+		}
+
+		return $data["RANK_REPURCHASE_CASHBACK"];
 	}
 }

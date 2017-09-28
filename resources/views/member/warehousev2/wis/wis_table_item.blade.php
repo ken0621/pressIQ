@@ -19,13 +19,13 @@
     @else
         <tbody  class="item-cart-pos">
             @foreach($_wis_item as $item)
-            <tr class="item-info" item_id="{{ $item->item_id }}">
+            <tr class="item-info" item_id="{{ $item['item_id'] }}">
                 <td class="text-left">
-                    <div class="item-name">{{ $item->item_name }}</div>
-                    <div class="item-sku">{{ $item->item_sku }}</div>
+                    <div class="item-name">{{ $item['item_name'] }}</div>
+                    <div class="item-sku">{{ $item['item_sku'] }}</div>
                 </td>
-                <td class="text-center">{{ $item->quantity }}</td>
-                <td class="text-center"><a href="javascript:">{{ $item->quantity }}</a></td>
+                <td class="text-center">{{ $item['warehouse_qty'] }}</td>
+                <td class="text-center"><a href="javascript:">{{ $item['item_quantity'] }}</a></td>
                 <td class="text-center"><a class="popup" link="/member/item/warehouse/wis/view-serial">View Serials</a></td>
                 <td class="text-center red-button remove-item-from-cart"><i class="fa fa-close fa-fw"></i></td>
             </tr>

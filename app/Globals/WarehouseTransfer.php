@@ -29,6 +29,7 @@ use App\Models\Tbl_warehouse_receiving_report_item;
 
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
+use App\Globals\Warehouse2;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\Tablet_global;
 use App\Globals\Currency;
@@ -52,6 +53,43 @@ class WarehouseTransfer
 	}
 	public static function scan_item($shop_id, $item_id)
 	{
-		
+		$chk = Tbl_item::where('item_id',$item_id)->where('shop_id',$shop_id)->first();
+		$id = $item_id;
+		if(!$chk)
+		{
+			/* SEARCH FOR OTHER ITEM NUMBER HERE*/
+			$id = null;
+		}
+
+		return $id;
+	}
+	public static function add_item_to_list($shop_id, $item_id, $quantity = 1, $serial = array())
+	{
+		$first_data = Session::get('wis_item'); 
+
+		$data[$item_id]['item_id'] = $item_id;
+		$data[$item_id]['item_name'] = Item::info($item_id)->item_name;
+		$data[$item_id]['item_sku'] = Item::info($item_id)->item_sku;
+		$data[$item_id]['item_quantity'] = $quantity;
+		$data[$item_id]['item_serial'] = $serial;
+
+		$data = Session::get('wis_item');
+
+		$check = Session::get('wis_item');
+		if(count($check) > 0)
+		{
+			if(isset($first_data[$item_id]))
+			{
+				$data[$item_id]['item_id'] = $item_id;
+				$data[$item_id]['item_name'] = Item::info($item_id)->item_name;
+				$data[$item_id]['item_sku'] = Item::info($item_id)->item_sku;
+				$data[$item_id]['item_quantity'] = $first_data[$item_id]['item_quantity'] + $quantity;
+				$data[$item_id]['item_serial'] = $serial;
+
+				unset(Session::get('wis_item')[$item_id]);
+			}
+		}
+
+		Session::put('wis_item', $data);
 	}
 }

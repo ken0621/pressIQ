@@ -7,7 +7,9 @@ use App\Http\Controllers\Controller;
 
 use App\Globals\Cart2;
 use App\Globals\WarehouseTransfer;
+use App\Globals\Warehouse2;
 
+use Session;
 class WarehouseIssuanceSlipController extends Member
 {
     public function getIndex(Request $request)
@@ -34,7 +36,13 @@ class WarehouseIssuanceSlipController extends Member
     public function getTableItem()
     {
         $data['page'] = 'Table Item';
-        $data["_wis_item"] = Cart2::get_cart_info()['_item'];
+        $data["_wis_item"] = Session::get('wis_item');
+
+        foreach ($data['_wis_item'] as $key => $value) 
+        {
+            $data['_wis_item'][$key]['warehouse_qty'] = Warehouse2::get_item_qty(Warehouse2::get_current_warehouse($this->user_info->shop_id), $key);
+
+        }
 
         return view('member.warehousev2.wis.wis_table_item',$data);
     }
@@ -47,8 +55,8 @@ class WarehouseIssuanceSlipController extends Member
         if($data["item"])
         {
             $return["status"]   = "success";
-            $return["message"]  = "Item Number " .  $item->item_id . " has been added.";
-            Cart2::add_item_to_cart($shop_id, $item_id, 1);
+            $return["message"]  = "Item Number " .  $data["item"] . " has been added.";
+            WarehouseTransfer::add_item_to_list($shop_id, $item_id, 1);
         }
         else
         {

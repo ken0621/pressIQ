@@ -8,15 +8,21 @@
 {
 	.grid-1
 	{
-		height: 460px;
 		background-color: #fff;
 		margin-right: 7.5px;
+		img
+		{
+			width: 100%;
+		}
 	}
 	.grid-2
 	{
-		height: 226px;
 		background-color: #fff;
 		margin-bottom: 7.5px;
+		img
+		{
+			width: 100%;
+		}
 		&:last-child
 		{
 			margin-bottom: 0;

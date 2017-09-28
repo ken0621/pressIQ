@@ -10,38 +10,6 @@
 						<img src="/themes/{{ $shop_theme }}/img/menu.png">
 						<span>Shop By Category</span>
 					</div>
-					{{-- @if(isset($_categories))
-						@foreach($_categories as $category)
-						<div class="button-shop">
-							<div class="text" style="cursor: pointer;" onClick="location.href='/product?type={{ $category['type_id'] }}'">
-								<!-- <img src="/themes/{{ $shop_theme }}/img/electronics.png"> -->
-								{{ $category['type_name'] }}
-							</div>
-							@if($category['subcategory'])
-							<div class="hover">
-								<div class="hover-holder">
-									<div class="row clearfix">
-										<ul class="col-md-12">
-											@foreach($category['subcategory'] as $subcategory)
-											<li><a href="/product?type={{ $subcategory['type_id'] }}">{{ $subcategory['type_name'] }}</a></li>
-												@foreach($subcategory['subcategory'] as $subcategory1)
-												<li><a href="/product?type={{ $subcategory1['type_id'] }}">{{ $subcategory1['type_name'] }}></a></li>
-													@foreach($subcategory1['subcategory'] as $subcategory2)
-													<li><a href="/product?type={{ $subcategory2['type_id'] }}">{{ $subcategory2['type_name'] }}></a></li>
-													@endforeach
-												@endforeach
-											@endforeach
-										</ul>
-									</div>
-									<div class="banner-holder">
-										<img src="/themes/{{ $shop_theme }}/img/big-discount.jpg">
-									</div>
-								</div>
-							</div>
-							@endif
-						</div>
-						@endforeach
-					@endif --}}
 					<div class="button-shop">
 						<div class="text" style="cursor: pointer;" onClick="location.href='/product/test'">
 							<img src="/themes/{{ $shop_theme }}/img/sidebar/dth.png">
@@ -97,24 +65,6 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="col-md-9">
-				<div class="grid-holder">
-					<div class="row-no-padding clearfix">
-						<div class="col-md-8">
-							<div class="grid-1"></div>
-						</div>
-						<div class="col-md-4">
-							<div class="grid-2"></div>
-							<div class="grid-2"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- BOTTOM CONTENT -->
-		<div class="row clearfix">
-			<div class="col-md-3">
 				<div class="hot-deals-container">
 					<div class="wow-title">
 						<span class="orange">HOT</span><span class="blue">DEALS</span>
@@ -163,42 +113,6 @@
 						</div>
 					</div>
 				</div>
-				{{-- <div class="hot-deals-container">
-					<center>
-						<ins class="bookingaff" data-aid="1292959" data-target_aid="1292802" data-prod="banner" data-width="200" data-height="200" data-banner_id="48509">
-						    <!-- Anything inside will go away once widget is loaded. -->
-						    <a href="//www.booking.com?aid=1292802">Booking.com</a>
-						</ins>
-					</center>
-					<script type="text/javascript">
-					    (function(d, sc, u) {
-					      var s = d.createElement(sc), p = d.getElementsByTagName(sc)[0];
-					      s.type = 'text/javascript';
-					      s.async = true;
-					      s.src = u + '?v=' + (+new Date());
-					      p.parentNode.insertBefore(s,p);
-					      })(document, 'script', '//aff.bstatic.com/static/affiliate_base/js/flexiproduct.js');
-					</script>
-				</div> --}}
-				{{-- <div class="special-offers-container">
-					<div class="left-container-title">
-						<span class="orange">HOT</span><span class="blue">DEALS</span>
-						<span class="scroll-button"><a class="left" href="#"><img src="/themes/{{ $shop_theme }}/img/left-button-scroll.png"></a><a class="right" href="#"><img src="/themes/{{ $shop_theme }}/img/right-button-scroll.png"></a></span>
-					</div>
-					<div class="item-container">
-						@foreach(get_collection(get_content($shop_theme_info, "home", "special_offers"), $shop_id) as $collection)
-						<div class="row-no-padding clearfix per-item">
-							<div class="col-xs-4"><img class="item-img 4-3-ratio" src="{{ get_collection_first_image($collection) }}"></div>
-							<div class="col-xs-8">
-								<div class=" item-details-container">
-									<a href="/product/view/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ $collection['product']['eprod_name'] }}</div></a>
-									<div class="item-price">{{ get_collection_first_price($collection) }}</div>
-								</div>
-							</div>
-						</div>
-						@endforeach
-					</div>
-				</div> --}}
 				<div class="hot-deals-container">
 					<div class="wow-title">
 						<span class="orange">SPECIAL</span><span class="blue">OFFERS</span>
@@ -243,9 +157,31 @@
 					</div>
 				</div>
 			</div>
-			
 			<div class="col-md-9">
-			<!-- FEATURED TODAY -->
+				<div class="grid-holder">
+					<div class="row-no-padding clearfix">
+						<div class="col-md-8">
+							<div class="grid-1">
+								<div class="single-slide">
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide1.png">
+									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide2.png">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="grid-2">
+								<img src="/themes/{{ $shop_theme }}/img/slide/banner2.png">
+							</div>
+							<div class="grid-2">
+								<img src="/themes/{{ $shop_theme }}/img/slide/banner3.png">
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="featured-container">
 					<div class="wow-title">
 						<span class="orange">FEATURED</span><span class="blue">TODAY</span>
@@ -751,12 +687,6 @@
 					</div>
 				</div>
 			</div>
-			
-
-			<div class="col-md-9">
-			<!-- BEST SELLER -->
-				
-			</div>
 		</div>
 	</div>	
 </div>
@@ -777,6 +707,18 @@
 <script type="text/javascript">
 $(document).ready(function()
 {
+	$('.single-slide').slick({
+	  infinite: true,
+	  slidesToShow: 1,
+	  slidesToScroll: 1,
+	  autoplay: true,
+  	  autoplaySpeed: 4000,
+  	  arrows: false,
+  	  speed: 500,
+	  fade: true,
+	  cssEase: 'linear'
+	});
+
 	$('.multiple-item').slick({
 	  infinite: true,
 	  slidesToShow: 4,

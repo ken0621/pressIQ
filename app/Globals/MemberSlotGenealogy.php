@@ -167,11 +167,11 @@ class MemberSlotGenealogy
         {
             $l = Tbl_tree_placement::where('placement_tree_parent_id',$slot_info->slot_id)->where('placement_tree_position','left')->count();
             $r = Tbl_tree_placement::where('placement_tree_parent_id',$slot_info->slot_id)->where('placement_tree_position','right')->count();
-            
+
+
+            $abb = strtoupper(substr($slot_info->first_name, 0, 3));
 
             $str_slot = '<span class="downline parent parent-reference PS SILVER" x="' . $slot_info->slot_id . '">';    
-
-
 
             if($slot_info->image == "")
             {
@@ -181,14 +181,13 @@ class MemberSlotGenealogy
                                             <img src="/assets/slot_genealogy/member/img/default-image.jpg" alt="" />
                                         </div>
                                         <div id="cont">
+                                            <div><b>' . strtoupper($slot_info->slot_id) . '</b></div>
                                             <div>' . strtoupper($slot_info->first_name) . ' </div>
-                                            <b>' . $slot_info->membership_name . ' </b>
                                         </div>
-                                        <div>' . $slot_info->slot_status . '</div>
                                         <div>
                                         </div>
                                     </div>
-                                    <div class="id">' . $slot_info->slot_no . '</div>
+                                    <div class="id">' . $abb . '</div>
                                 </span>
                                 <i class="downline-container"></i>
                             </li>';
@@ -201,10 +200,9 @@ class MemberSlotGenealogy
                                             <img src="/assets/slot_genealogy/member/img/default-image.jpg">
                                         </div>
                                         <div id="cont">
+                                            <div><b>' . strtoupper($slot_info->slot_id) . '</b></div>  
                                             <div>' . strtoupper($slot_info->first_name) . ' </div>
-                                            <b>' . $slot_info->membership_name . ' </b>
                                         </div>
-                                        <div>' . $slot_info->slot_status . '</div>
                                         <div>
                                         </div>
                                     </div>
@@ -243,6 +241,8 @@ class MemberSlotGenealogy
             $r = Tbl_tree_placement::where('placement_tree_parent_id',$slot_info->slot_id)->where('placement_tree_position','right')->count();
             
 
+            $abb = strtoupper(substr($slot_info->first_name, 0, 3));
+
             $str_slot = '<span class="downline parent parent-reference PS SILVER" x="' . $slot_info->slot_id . '">';    
 
 
@@ -255,15 +255,14 @@ class MemberSlotGenealogy
                                             <img src="/assets/slot_genealogy/member/img/default-image.jpg" alt="" />
                                         </div>
                                         <div id="cont">
+                                            <div><b>' . strtoupper($slot_info->slot_id) . '</b></div>
                                             <div>' . strtoupper($slot_info->first_name) . ' </div>
-                                            <b>' . $slot_info->membership_name . ' </b>
                                         </div>
-                                        <div>' . $slot_info->slot_status . '</div>
                                         <div>' . "L:".$l." R:".$r.'</div>
                                         <div>
                                         </div>
                                     </div>
-                                    <div class="id">' . $slot_info->slot_no . '</div>
+                                    <div class="id">' . $abb . '</div>
                                 </span>
                                 <i class="downline-container"></i>
                             </li>';
@@ -276,10 +275,9 @@ class MemberSlotGenealogy
                                             <img src="/assets/slot_genealogy/member/img/default-image.jpg">
                                         </div>
                                         <div id="cont">
+                                            <div><b>' . strtoupper($slot_info->slot_id) . '</b></div> 
                                             <div>' . strtoupper($slot_info->first_name) . ' </div>
-                                            <b>' . $slot_info->membership_name . ' </b>
                                         </div>
-                                        <div>' . $slot_info->slot_status . '</div>
                                         <div>' . "L:".$l."</br>R:".$r.'</div>
                                         <div>
                                         </div>

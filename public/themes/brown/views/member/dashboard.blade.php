@@ -213,7 +213,7 @@
 						</div>
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Reward Point(s)</span> {{ $points->display_brown_leader_points }}</div>
+							<div class="name"><span>Leader Point(s)</span> {{ $points->display_brown_leader_points }}</div>
 						</div>
 					</div>
 				</div>

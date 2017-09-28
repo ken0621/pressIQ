@@ -413,6 +413,7 @@ class MlmDeveloperController extends Member
         {
             Tbl_mlm_slot_wallet_log::where("wallet_log_slot", $slot->slot_id)->delete();
             Tbl_mlm_slot::where("slot_id", $slot->slot_id)->delete();
+            Tbl_mlm_slot_wallet_log::where("tbl_mlm_slot.shop_id", $shop_id)->slot()->where("slot_owner", $slot->slot_owner)->delete();
             Tbl_mlm_slot::where("slot_owner", $slot->slot_owner)->delete();
             Tbl_customer_address::where("customer_id", $slot->slot_owner)->delete();
         }

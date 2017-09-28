@@ -643,6 +643,25 @@ body
 	border-bottom: 4px solid #ff8500;
 	box-shadow: none;
 }
+.navbar.sticky
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+@media screen and (max-width: 991px)
+{
+    .navbar.sticky
+    {
+        position: static;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+    }
+}
 .nav-border
 {
 	// border-right: solid 1px #515390;

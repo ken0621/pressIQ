@@ -716,7 +716,8 @@ $(document).ready(function()
   	  arrows: false,
   	  speed: 500,
 	  fade: true,
-	  cssEase: 'linear'
+	  cssEase: 'linear',
+	  pauseOnHover: false
 	});
 
 	$('.multiple-item').slick({
@@ -727,7 +728,8 @@ $(document).ready(function()
   	  autoplaySpeed: 5000,
   	  arrows: true,
   	  prevArrow:"<img class='a-left control-c prev slick-prev' src='/themes/{{ $shop_theme }}/img/left-carousel.jpg'>",
-      nextArrow:"<img class='a-right control-c next slick-next' src='/themes/{{ $shop_theme }}/img/right-carousel.jpg'>"
+      nextArrow:"<img class='a-right control-c next slick-next' src='/themes/{{ $shop_theme }}/img/right-carousel.jpg'>",
+       pauseOnHover: false
 	});
 
 	$('.add-slider .add-top').slick({

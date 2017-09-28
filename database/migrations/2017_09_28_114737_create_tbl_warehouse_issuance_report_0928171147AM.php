@@ -16,7 +16,7 @@ class CreateTblWarehouseIssuanceReport0928171147AM extends Migration
         Schema::create('tbl_warehouse_issuance_report', function (Blueprint $table) {
             $table->increments('wis_id');
             $table->string('wis_number');
-            $table->integer('wis_from_warehouse');
+            $table->integer('wis_from_warehouse')->unsigned();
             $table->longtext('wis_remarks');
             $table->string('wis_status');
             $table->text('confirm_image');

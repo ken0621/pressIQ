@@ -11,17 +11,18 @@
            		These are list of Brown Ranking
             </small>
             </h1>
+
             <div class="dropdown pull-right">
-                
-                <button onclick="location.href=''" class="btn btn-primary"><i class="fa fa-file-excel-o"></i>&nbsp; Export to Excel</button>
+                <button onclick="action_load_link_to_modal('/member/report/reward-brown-rank-compute','lg')" class="btn btn-def-white btn-custom-white"><i class="fa fa-check"></i> Re-Compute Ranking</button>
+                <button onclick="location.href='/member/report/reward-brown-rank-excel'" class="btn btn-primary"><i class="fa fa-file-excel-o"></i>&nbsp; Export to Excel</button>
             </div>
         </div>
     </div>
 </div>
-<div class="panel panel-default panel-block panel-title-block panel-gray "  style="margin-bottom: -10px;">
+<div class="panel panel-default panel-block panel-title-block panel-gray"  style="margin-bottom: -10px;">
     <div class="search-filter-box">
         <div class="col-md-3" style="padding: 10px">
-            <select class="form-control">
+            <select class="form-control change-rank">
             	@foreach($_rank as $rank)
                 <option value="{{ $rank->rank_id }}">{{ $rank->rank_name }}</option>
                 @endforeach
@@ -53,8 +54,7 @@
                                     <th class="text-center" width="120px">E-Mail</th>
                                     <th class="text-center" width="120px">Contact Number</th>
                                     <th class="text-center" width="120px">Current Rank</th>
-                                    <th class="text-center" width="120px">Current Direct</th>
-                                    <th class="text-center" width="120px">Current Builder Group</th>
+                                    <th class="text-center" width="120px">RANK STATUS</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -64,9 +64,8 @@
                                     <td class="text-center">{{ $slot->first_name }} {{ $slot->last_name }}</td>
                                     <td class="text-center">{{ $slot->email }}</td>
                                     <td class="text-center">{{ ($slot->contact == "" ? $slot->customer_mobile : $slot->contact) }}</td>
-                                    <td class="text-center">{{ $slot->current_rank }}</td>
-                                    <td class="text-center">5 SLOT(S)</td>
-                                    <td class="text-center">10 SLOT(S)</td>
+                                    <td class="text-center">{{ $slot->brown_current_rank }}</td>
+                                    <td class="text-center">{!! $slot->brown_next_rank_requirements !!} </td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -78,4 +77,14 @@
     </div>
 </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function()
+    {
+        $(".change-rank").change(function(e)
+        {
+            window.location.href = '/member/report/reward-brown-rank?rank_id=' + $(e.currentTarget).val();
+        })
+    });
+</script>
 @endsection

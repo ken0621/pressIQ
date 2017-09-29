@@ -1,0 +1,36 @@
+@import "variables";
+
+.page
+{
+	.navbar
+	{
+		background-color: $color-1;
+		.navbar-inner
+		{
+			.left
+			{
+
+			}
+			.right
+			{
+				margin-right: 15px;
+				position: relative;
+				img
+				{
+					width: 40px;
+				}
+				.text
+				{
+					position: absolute;
+					font-size: 12px;
+					font-weight: 700;
+					right: 21px;
+					color: #1c1c1c;
+					text-align: center;
+					width: 19px;
+					top: 4px;
+				}
+			}
+		}
+	}
+}

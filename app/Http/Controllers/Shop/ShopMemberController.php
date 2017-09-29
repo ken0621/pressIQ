@@ -194,12 +194,13 @@ class ShopMemberController extends Shop
     public function getLoginSubmit()
     {
         $user_profile = FacebookGlobals::user_profile($this->shop_info->shop_id);
-        $email = isset($user_profile) ? $user_profile['email'] : null;
-        $check = Tbl_customer::where('email',$email)->first();
-        if(count($user_profile) > 0 && $check)
-        {
-            $data = collect($user_profile)->toArray();
+        $email = isset($user_profile['email']) ? $user_profile['email'] : null;
+        $check = Tbl_customer::where('email',$email)->where('shop_id', $this->shop_info->shop_id)->first();
 
+        $data = collect($user_profile)->toArray();
+
+        if(count($user_profile) > 0 && $check && isset($data['email']) && isset($data['id']))
+        {
             Self::store_login_session($data['email'],$data['id']);
 
             return Redirect::to("/members")->send();
@@ -244,36 +245,51 @@ class ShopMemberController extends Shop
         if(count($user_profile) > 0)
         {
             $data = collect($user_profile)->toArray();
-            $check = Tbl_customer::where('email',$data['email'])->where('shop_id',$this->shop_info->shop_id)->first();
-            $email = $data['email'];
+            $email = isset($data['email']) ? $data['email'] : '';
             $pass = $data['id'];
-            if(!$check)
-            {
-                $ins['email']           = $data['email'];
-                $ins['first_name']      = $data['first_name'];
-                $ins['last_name']       = $data['last_name'];
-                $ins['middle_name']     = $data['middle_name'] == null ? '' : $data['middle_name'] ;
-                $ins['gender']          = $data['gender'] == null ? 'male' : $data['gender'];
-                $ins['password']        = Crypt::encrypt($data['id']);
-                $ins['mlm_username']    = $data['email'];
-                $ins['ismlm']           = 1;
-                $ins['created_at']      = Carbon::now();
-                $ins['signup_with']     = 'facebook';
+            $check = Tbl_customer::where('email',$email)->where('shop_id',$this->shop_info->shop_id)->first();
 
-                Customer::register($this->shop_info->shop_id, $ins);            
+            $ins['email'] = $email;
+
+            $rules['email'] = 'required';
+
+            $validator = Validator::make($ins, $rules);
+
+            if($validator->fails()) 
+            {
+                $messages = $validator->messages();
+                return Redirect::to('/members/register')->with('error', $messages);
             }
             else
-            {
-                $email = $check->email;
-                $pass = Crypt::decrypt($check->password);
-            }
+            {    
+                if(!$check)
+                {
+                    $ins['first_name']      = $data['first_name'];
+                    $ins['last_name']       = $data['last_name'];
+                    $ins['middle_name']     = $data['middle_name'] == null ? '' : $data['middle_name'] ;
+                    $ins['gender']          = $data['gender'] == null ? 'male' : $data['gender'];
+                    $ins['password']        = Crypt::encrypt($data['id']);
+                    $ins['mlm_username']    = $data['email'];
+                    $ins['ismlm']           = 1;
+                    $ins['created_at']      = Carbon::now();
+                    $ins['signup_with']     = 'facebook';
 
-            if($email && $pass)
-            {
-                Self::store_login_session($email,$pass);
-            }
+                    
+                    Customer::register($this->shop_info->shop_id, $ins);  
+                }
+                else
+                {
+                    $email = $check->email;
+                    $pass = Crypt::decrypt($check->password);
+                }
 
-            return Redirect::to("/members")->send();
+                if($email && $pass)
+                {
+                    Self::store_login_session($email,$pass);
+
+                    return Redirect::to("/members")->send();
+                }
+            }   
         }
         else
         {

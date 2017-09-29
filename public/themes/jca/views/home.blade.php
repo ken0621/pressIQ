@@ -132,42 +132,60 @@
 	<!-- BENEFITS IN JCA -->
 	<div class="wrapper-3" style="background-image: url('/themes/{{ $shop_theme }}/img/mission-vision-background.png');">
 		<div class="container">
-			<div class="mission-vision-container">
 				<div class="content-container row clearfix">	
 					<div class="col-md-8">
 						<div class="content-container row clearfix">
 							<div class="col-md-12">
 								<div class="jca-title-container">
 									<p class="title-company">COMPANY</p>
-									<p class="title-mission">MISSION</p>
-									<p class="title-vision">VISION</p>
+									<div class="title-mission highlighted">MISSION</div>
+									<div class="title-vision">VISION</div>
 								</div>
 							</div>
 						</div>
-						<div class="content-container row clearfix">
-							<div class="col-md-6">
-								<p class="animated fadeInLeft sub-title">Bring innovation in the beauty and wellness market.</p>
-								<p class="animated fadeInLeft content">In this world full of chemical-based beauty and wellness product, JCA Wellness International Corp., aims to divert the market’s attention to change their usual beauty and wellness product to safe and organic products that will guarantee them a life-long benefits.</p>
-							</div>
-							<div class="col-md-6">
-								<p class="animated fadeInLeft sub-title">To build business opportunities that will start in the Philippines and provide financial freedom.</p>
-								<p class="animated fadeInLeft content">JCA Wellness International Corporation will start its initial market in the Philippines and it aims to help fellow aspiring Filipino entrepreneurs to start their business venture with the right products and the right investment.</p>
-							</div>
-							<div class="col-md-6">
-								<p class="animated fadeInLeft sub-title">To build a continuous brand and consumer loyalty.</p>
-								<p class="animated fadeInLeft content">As JCA Wellness International Corporation marks it image in the market as a company that focuses on using and promoting organic and safe products, it also aims to maintain the brand positioning and the consumer loyalty by continuously providing its product and taking care of its consumers as well.</p>
-							</div>
-							<div class="col-md-6">
-								<p class="animated fadeInLeft sub-title">To expand the network globally.</p>
-								<p class="animated fadeInLeft content">As this company will start its market in the Philippines, it also aims to go globally. It aims to build network, promote the products globally and give a higher opportunity to its future potential business partners.</p>
+						<div id="mission" class="mission-vision-container">
+							<div class="content-container row clearfix">
+								<div class="col-md-6">
+									<p class="animated fadeInLeft sub-title">Bring innovation in the beauty and wellness market.</p>
+									<p class="animated fadeInLeft content">In this world full of chemical-based beauty and wellness product, JCA Wellness International Corp., aims to divert the market’s attention to change their usual beauty and wellness product to safe and organic products that will guarantee them a life-long benefits.</p>
+								</div>
+								<div class="col-md-6">
+									<p class="animated fadeInLeft sub-title">To build business opportunities that will start in the Philippines and provide financial freedom.</p>
+									<p class="animated fadeInLeft content">JCA Wellness International Corporation will start its initial market in the Philippines and it aims to help fellow aspiring Filipino entrepreneurs to start their business venture with the right products and the right investment.</p>
+								</div>
+								<div class="col-md-6">
+									<p class="animated fadeInLeft sub-title">To build a continuous brand and consumer loyalty.</p>
+									<p class="animated fadeInLeft content">As JCA Wellness International Corporation marks it image in the market as a company that focuses on using and promoting organic and safe products, it also aims to maintain the brand positioning and the consumer loyalty by continuously providing its product and taking care of its consumers as well.</p>
+								</div>
+								<div class="col-md-6">
+									<p class="animated fadeInLeft sub-title">To expand the network globally.</p>
+									<p class="animated fadeInLeft content">As this company will start its market in the Philippines, it also aims to go globally. It aims to build network, promote the products globally and give a higher opportunity to its future potential business partners.</p>
+								</div>
 							</div>
 						</div>
-					</div>
+						<div id="vision" class="mission-vision-container hide">
+							<div class="content-container row clearfix">
+								<div class="col-md-6">
+
+									<li class="animated fadeInLeft bulleted-list">
+										<p class="animated fadeInLeft content">JCA Wellness International Corporation is working towards seeing itself grow into one of the most well-known network market that will expand globally.</p>
+									</li>
+									
+									<!-- <p class="animated fadeInLeft content">JCA Wellness International Corporation is working towards seeing itself grow into one of the most well-known network market that will expand globally.</p> -->
+								</div>
+								<div class="col-md-6">
+									<p class="animated fadeInLeft content">As this corporation will be build up by various entrepreneurs that focuses on building network, planning strategic ways to keep up with the market trends, innovating their organic products and to keep on building the trust and loyalty of its consumers and network.</p>
+								</div>
+								<div class="col-md-6">
+									<p class="animated fadeInLeft content">Through this work and strategies that will be applied, JCA Wellness International Corporation guarantees to fulfill its mission in the near future.</p>
+								</div>
+							</div>
+						</div>
+						</div>
 					<!-- <div class="col-md-4">
 						<img class="img-background" src="/themes/{{ $shop_theme }}/img/mission-vision-background.png">
 					</div> -->
 				</div>
-			</div>
 		</div>
 	</div>
 	<!-- COMPANY MISISON VISION -->
@@ -198,6 +216,9 @@
 	<!-- SCROLL TO TOP -->
 	<div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
 </div>
+<script type="text/javascript">
+	
+</script>
 @endsection
 
 @section("css")
@@ -206,7 +227,7 @@
 @endsection
 
 
-@section("js")
+@section("script")
 <script src="js/wow.min.js"></script>
 <script>
 	new WOW().init();
@@ -239,5 +260,22 @@ $(document).ready(function()
 	});
 
 });
+
+$(".title-vision").click(function()
+{
+    $("#vision").removeClass("hide");
+    $("#mission").addClass("hide");
+    $(".title-vision").addClass("highlighted");
+    $(".title-mission").removeClass("highlighted");
+    
+});
+$(".title-mission").click(function()
+{
+    $("#vision").addClass("hide");
+    $("#mission").removeClass("hide");
+    $(".title-mission").addClass("highlighted");
+    $(".title-vision").removeClass("highlighted");
+});
+
 </script>
 @endsection

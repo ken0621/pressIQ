@@ -9,6 +9,7 @@ use View;
 use Input;
 use File;
 use Image;
+use Mail;
 use Carbon\Carbon;
 use App\Globals\Payment;
 use App\Globals\Customer;
@@ -18,10 +19,13 @@ use App\Globals\MLM2;
 use App\Globals\FacebookGlobals;
 use App\Globals\SocialNetwork;
 use App\Globals\GoogleGlobals;
+use App\Globals\EmailContent;
+use App\Globals\Mail_global;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_customer_other_info;
+use App\Models\Tbl_email_template;
 use App\Models\Tbl_country;
 use App\Models\Tbl_locale;
 use App\Globals\Currency;
@@ -316,6 +320,64 @@ class ShopMemberController extends Shop
     {
         $data["page"] = "Forgot Password";
         return view("member.forgot_password");
+    }
+    public function postForgotPasswordSubmit()
+    {
+        $shop_id = $this->shop_info->shop_id;
+        $validate = Customer::check_email($shop_id, Request2::input('email'));
+        
+        $return_data = null;
+        if($validate)
+        {
+            $content_key = "front_forgot_password";
+            if(EmailContent::checkIfexisting($content_key, $shop_id) != 0)
+            {
+                $email_content["subject"] = EmailContent::getSubject($content_key, $shop_id);
+                $email_content["shop_key"] = $this->shop_info->shop_key;
+                $data["email"] = $validate->email;
+                $new_password = Crypt::decrypt($validate->password);
+
+                $txt[0]["txt_to_be_replace"] = "[name]";
+                $txt[0]["txt_to_replace"] = $validate->first_name." ".$validate->middle_name." ".$validate->last_name;
+
+                $txt[1]["txt_to_be_replace"] = "[domain_name]";
+                $txt[1]["txt_to_replace"] = $_SERVER["SERVER_NAME"];
+
+                $txt[2]["txt_to_be_replace"] = "[password]";
+                $txt[2]["txt_to_replace"] = $new_password;
+
+                $change_content = $txt;
+
+                $email_content["content"] = EmailContent::email_txt_replace($content_key, $change_content);
+
+                $data["template"] = Tbl_email_template::where("shop_id", $shop_id)->first();
+                if(isset($data['template']->header_image))
+                {
+                    if (!File::exists(public_path() . $data['template']->header_image))
+                    {
+                        $data['template']->header_image = null;
+                    }
+                }   
+
+                Mail_global::send_email($data['template'], $email_content, $shop_id, $validate->email);
+
+
+                $return_data['status'] = 'success';
+                $return_data['status_message'] = "Successfully Sent Email.";
+            }
+            else
+            {
+                $return_data['status'] = 'danger';
+                $return_data['status_message'] = "Something wen't wrong please contact your admin.";
+            }
+        }
+        else
+        {
+            $return_data['status'] = 'danger';
+            $return_data['status_message'] = "Can't find your record.";
+        }
+
+        return Redirect::back()->with($return_data['status'], $return_data['status_message']);
     }
     /* LOGIN AND REGISTRATION - END */
     public function getProfile()

@@ -14,11 +14,11 @@
 		</div>
 		<div class="right">
 			<div class="legend">
-				<div class="legend-label">Legend:</div>
+				<div class="legend-label">SLOT </div>
 				<div class="legend-select">
 					<select class="form-control select-slot">
 						@foreach($_slot as $slot)
-							<option value="{{$slot->slot_no}}">SLOT# {{$slot->slot_no}}</option>
+							<option value="{{$slot->slot_no}}">{{$slot->slot_no}}</option>
 						@endforeach
 					</select>
 				</div>

@@ -243,8 +243,7 @@ body{
 	background-repeat: no-repeat;
 	background-position: right;
 	margin-top: 50px;
-	.mission-vision-container
-	{
+	height: 548.467px;
 		.jca-title-container
 		{
 			.title-company
@@ -257,9 +256,11 @@ body{
 			.title-mission
 			{
 				font-size: 40px;
-				color: #019771;
+				// color: #019771;
+				color: #acacac;
 				display: inline-block;
 				margin-bottom: 25px;
+				cursor: pointer;
 			}
 			.title-vision
 			{
@@ -268,23 +269,59 @@ body{
 				display: inline-block;
 				margin-left: 20px;
 				margin-bottom: 25px;
+				cursor: pointer;
+			}
+		}
+		.mission-vision-container
+		{
+			height: 438.6px;
+			.sub-title
+			{
+				font-size: 20px;
+				color: #019771;
+				margin-bottom: -5px;
+			}
+			.content
+			{
+				font-size: 15px;
+				color: #555555;
+				text-align: justify;
+				margin-bottom: 30px;
+			}
+		}
+		.mission-vision-container
+		{
+			height: 438.6px;
+			.bulleted-list:before
+			{
+				content: "";
+				background-color: #b07d2a;
+				line-height: 1em;
+				width: .5em;
+				height: .5em;
+				float: left;
+				margin: .40em .25em 0;
+				.content
+				{
+					font-size: 15px;
+					color: #555555;
+					text-align: justify;
+					margin-bottom: 30px;
+				}
+			}
+			.bulleted-list
+			{
+				display: inline-block;
+				.content
+				{
+					font-size: 15px;
+					color: #555555;
+					text-align: justify;
+					margin-bottom: 30px;
+				}
 			}
 		}
 
-		.sub-title
-		{
-			font-size: 20px;
-			color: #019771;
-			margin-bottom: -5px;
-		}
-		.content
-		{
-			font-size: 15px;
-			color: #555555;
-			text-align: justify;
-			margin-bottom: 30px;
-		}
-	}
 
 	.img-background
 	{
@@ -338,3 +375,7 @@ body{
 	}
 }
 
+.highlighted
+{
+	color: #019771 !important;
+}

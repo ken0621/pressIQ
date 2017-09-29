@@ -192,11 +192,7 @@ class Cart2
 			$_cart = Tbl_cart::where("unique_id_per_pc", $cart_key)->where("status", "Not Processed")->get();
  		}
 
-		if(count($_cart) < 1)
-		{
-			return null;
-		}
-		else
+		if(count($_cart) > 0)
 		{
 			foreach($_cart as $key => $cart)
 			{

@@ -707,13 +707,13 @@ class ShopMemberController extends Shop
         $data["page"] = "NonMember";
         return (Self::load_view_for_members("member.nonmember", $data));
     }
-    public function getTest()
+    public function getTest($method)
     {
         $shop_id    = $this->shop_info->shop_id; //tbl_shop
-        $key        = "paymaya"; //link reference name
-        $success    = "/checkout/finish/success"; //redirect if payment success
-        $failed     = "/checkout/finish/error"; //redirect if payment failed
-        $debug      = false;
+        $key        = $method; //link reference name
+        $success    = "/members?success=1"; //redirect if payment success
+        $failed     = "/members?failed=1"; //redirect if payment failed
+        $debug      = true;
 
         $error = Payment::payment_redirect($shop_id, $key, $success, $failed, $debug);
         dd($error);

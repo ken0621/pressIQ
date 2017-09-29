@@ -44,7 +44,7 @@
                                     @endif
                                 </div>
                                 <div class="id">
-                                    {{ $slot->slot_no }}
+                                    YOU
                                 </div>
                             </span> 
                             <i class="downline-container">

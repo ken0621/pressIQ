@@ -20,10 +20,12 @@ use App\Globals\FacebookGlobals;
 use App\Globals\SocialNetwork;
 use App\Globals\GoogleGlobals;
 use App\Globals\EmailContent;
+use App\Globals\Mail_global;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_customer_other_info;
+use App\Models\Tbl_email_template;
 use App\Models\Tbl_country;
 use App\Models\Tbl_locale;
 use App\Globals\Currency;
@@ -323,14 +325,15 @@ class ShopMemberController extends Shop
     {
         $shop_id = $this->shop_info->shop_id;
         $validate = Customer::check_email($shop_id, Request2::input('email'));
+        
         $return_data = null;
         if($validate)
         {
             $content_key = "front_forgot_password";
             if(EmailContent::checkIfexisting($content_key, $shop_id) != 0)
             {
-                $data["subject"] = EmailContent::getSubject($content_key);
-                $data["shop_key"] = EmailContent::getShopkey();
+                $email_content["subject"] = EmailContent::getSubject($content_key, $shop_id);
+                $email_content["shop_key"] = $this->shop_info->shop_key;
                 $data["email"] = $validate->email;
                 $new_password = Crypt::decrypt($validate->password);
 
@@ -345,17 +348,19 @@ class ShopMemberController extends Shop
 
                 $change_content = $txt;
 
-                $data["content"] = EmailContent::email_txt_replace($content_key, $change_content);
+                $email_content["content"] = EmailContent::email_txt_replace($content_key, $change_content);
 
-                $update_new_password["password"] = Crypt::encrypt($new_password);
-                Tbl_customer::where("customer_id",$validate->customer_id)->update($update_new_password);
-
-                Mail::send('emails.test', $data, function ($message) use ($data)
+                $data["template"] = Tbl_email_template::where("shop_id", $shop_id)->first();
+                if(isset($data['template']->header_image))
                 {
-                    $message->from(env('MAIL_USERNAME'), $data["shop_key"]);
+                    if (!File::exists(public_path() . $data['template']->header_image))
+                    {
+                        $data['template']->header_image = null;
+                    }
+                }   
 
-                    $message->to($data["email"])->subject($data["subject"]);
-                });
+                Mail_global::send_email($data['template'], $email_content, $shop_id, $validate->email);
+
 
                 $return_data['status'] = 'success';
                 $return_data['status_message'] = "Successfully Sent Email.";

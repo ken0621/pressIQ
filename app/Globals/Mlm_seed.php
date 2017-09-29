@@ -77,16 +77,16 @@ class Mlm_seed
 
         $insert[9]['email_content_key'] = 'front_forgot_password';
         $insert[9]['email_content'] = '<p>Hi [name],</p>
-                                    <p>&nbsp;</p>
-                                    <p>This email was sent automatically by [domain_name] in response to recover your password. This is done for your protection.</p>
-                                    <p>&nbsp;</p>
-                                    <p><h3>Here is your new password : <strong>[password]</strong></h3></p>
-                                    <p>&nbsp;</p>
-                                    <p>If you did not forget your password, please ignore this email.</p>
-                                    <p>&nbsp;</p>
-                                    <p>Thanks,</p>
-                                    <p>[admin]</p>
-                                    <p>&nbsp;</p>';
+                                        <p>&nbsp;</p>
+                                        <p>This email was sent automatically by [domain_name] in response to recover your password. This is done for your protection.</p>
+                                        <p>&nbsp;</p>
+                                        <p><h3>Here is your new password : <strong>[password]</strong></h3></p>
+                                        <p>&nbsp;</p>
+                                        <p>If you did not forget your password, please ignore this email.</p>
+                                        <p>&nbsp;</p>
+                                        <p>Thanks,</p>
+                                        <p>[admin]</p>
+                                        <p>&nbsp;</p>';
         $insert[9]['email_content_subject'] = 'Forgot Password'; 
 
         $count = Tbl_email_content::where('shop_id', $shop_id)->where('archived',0)->count();

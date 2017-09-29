@@ -2,6 +2,8 @@
 @section('content')
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<form class="global-submit form-to-submit-add" action="/member/item/warehouse/wis/create-submit" method="post">
+<input type="hidden" name="_token" value="{{csrf_token()}}">
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
@@ -11,7 +13,7 @@
             </h1>
             <div class="text-right">
                 <a class="btn btn-custom-white panel-buttons">Cancel</a>
-                <a class="btn btn-primary panel-buttons">Save</a>
+                <button class="btn btn-primary panel-buttons" type="submit">Save</button>
             </div>
         </div>
     </div>
@@ -34,7 +36,7 @@
             <div class="col-md-12">
                 <label>Remarks</label>
                 <div>
-                    <textarea class="form-control"></textarea>
+                    <textarea class="form-control" name="wis_remarks"></textarea>
                 </div>
             </div>
         </div>
@@ -50,6 +52,7 @@
         </div>
     </div>
 </div>
+</form>
 @endsection
 
 @section('script')

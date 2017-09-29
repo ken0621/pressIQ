@@ -83,6 +83,16 @@ class WarehouseIssuanceSlipController extends Member
 
         return view('member.warehousev2.wis.wis_serial',$data);
     }
+    public function postCreateSubmit(Request $request)
+    {
+        $remarks = $request->remarks;
+        $_item = Session::get('wis_item');
+        $shop_id = $this->user_info->shop_id;
+
+        $return = WarehouseTransfer::create_wis($shop_id, $remarks, $_item);
+
+        return json_encode($return);
+    }
     public function getConfirm()
     {
 

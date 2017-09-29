@@ -80,10 +80,10 @@
 							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-wallet"></div> <span>Wallet</span></div></a>
 							<ul>
 								<li>
-									<a href="/members/wallet-encashment"><div class="brown-icon-money nav-holder"> &nbsp;&nbsp;<span>Wallet Encashment</span></div></a>
+									<a href="/members/wallet-encashment"><div class="nav-holder"> &nbsp;&nbsp;<span>Wallet Encashment</span></div></a>
 								</li>
 								<li>
-									<a href="/members/wallet-logs"><div class="brown-icon-list-alt nav-holder"> &nbsp;&nbsp;<span>Wallet Transfer</span></div></a>
+									<a href="/members/wallet-logs"><div class="nav-holder"> &nbsp;&nbsp;<span>Wallet Transfer</span></div></a>
 								</li>
 							</ul>
 						</li>

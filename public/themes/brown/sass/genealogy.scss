@@ -1,9 +1,10 @@
-$content-text: 'Arimo', sans-serif;
+$content-text: 'Open Sans', sans-serif;
 $regular: 400;
 $semi-bold: 600;
 $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
+
 
 .genealogy-container
 {
@@ -84,4 +85,9 @@ $text-dark: #272c2f;
 	{
 		margin-top: 25px;
 	}
+
+}
+.genealogy-frame
+{
+	border: 2px solid #ddd;
 }

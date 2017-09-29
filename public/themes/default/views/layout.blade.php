@@ -8,7 +8,7 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 		<link rel="icon" href="../../favicon.ico">
-		<title>{{ ucfirst($shop_info->shop_key) }} | {{ $page }}</title>
+		<title>Sample Website</title>
 		<!-- Bootstrap core CSS -->
 		<link href="/assets/themes/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 		<link href="/themes/{{ $shop_theme }}/css/main.css" rel="stylesheet" type="text/css">
@@ -45,8 +45,25 @@
 		<!-- START OF CONTENT -->
 		@yield('content');
 		<!-- END OF CONTENT -->
+
+	    {{-- START GLOBAL MODAL --}}
+	    <div id="global_modal" class="modal fade" role="dialog" >
+	        <div class="modal-dialog">
+	            <!-- Modal content-->
+	            <div class="modal-content modal-content-global clearfix">
+	            </div>
+	        </div>
+	    </div>
+	    {{-- END GLOBAL MODAL --}}
+	    {{-- GLOBAL MULTIPLE MODAL --}}
+	    <div class="multiple_global_modal_container"></div>
+	    {{-- END GLOBAL MULTIPLE MODAL --}}
+
+
+		
 		<script src="/assets/themes/js/jquery.min.js"></script>
 		<script src="/assets/themes/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="/assets/front/js/global_function.js"></script>
 		@yield("script")
 	</body>
 </html>

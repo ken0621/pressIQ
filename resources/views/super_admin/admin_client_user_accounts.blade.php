@@ -22,13 +22,13 @@
         </div>
             <!-- /.box-header -->
     <div class="box-body-user-account">
-   <div class="container filter">
+  
    <select class="selectpicker" id="filteredrr">
     @foreach($_shop as $shop)
     <option value="{{$shop->shop_id}}">{{$shop->shop_key}}</option>
     @endforeach
   </select>
-  </div>
+ 
 <input type="hidden" value="{{csrf_token()}}" class="token" name="">
 <!-- <div class="border"> -->
 <div class="shop_table_container">

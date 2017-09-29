@@ -1,3 +1,4 @@
+
 .background-carousel
 {
   width:100%;
@@ -11,7 +12,7 @@
 .pagination-container1
 {
   position: relative;
-  top:-60px;
+  top:-10px;
 }
 
 .info_table
@@ -239,7 +240,7 @@ form[role=login] {
 {
  position: relative;
  top: 5px;
- left: -161px;
+ left: -17px;
  margin-left: 23px;
  margin-top: -19px;
  margin-bottom: 20px;
@@ -528,7 +529,7 @@ td
 .table 
 {
   position: relative;
-  top: -81px;
+  top: 8px;
   width: 100%;
   margin-bottom: 20px;
   background-color: transparent;
@@ -644,6 +645,7 @@ thead
 {
   border-radius: 186px !important;
   width: 52px;
+  max-width: 100%;
 
 }
 

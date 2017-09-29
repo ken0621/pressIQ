@@ -312,7 +312,7 @@
         <!-- Sidebar user panel -->
         <div class="user-panel">
           <div class="pull-left image">
-           <a data-toggle="modal" href="#normalModal"> <img src= "/uploads/Digima-17/{{ Session::get('image_src')}}" alt="User Image" class="img-rounded profile_image"></a>
+           <a data-toggle="modal" href="#normalModal"> <img src= "/uploads/Digima-17/{{ Session::get('image_src')}}" alt="User Image" class="img-rounded bigger"></a>
           </div>
           <div class="pull-left info">
             <p>{{ Session::get('user')->first_name }}</p>

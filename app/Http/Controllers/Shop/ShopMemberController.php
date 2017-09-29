@@ -374,7 +374,7 @@ class ShopMemberController extends Shop
             $return_data['status_message'] = "Can't find your record.";
         }
 
-        return Redirect::back()->with($return['status'], $return['status_message']);
+        return Redirect::back()->with($return_data['status'], $return_data['status_message']);
     }
     /* LOGIN AND REGISTRATION - END */
     public function getProfile()

@@ -76,7 +76,7 @@ function wis_create()
 
 			$.ajax(
 			{
-				url:"/member/cashier/pos/remove_item",
+				url:"/member/item/warehouse/wis/create-remove-item",
 				dataType:"json",
 				data: {"item_id":$item_id},
 				type:"get",

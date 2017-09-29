@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Globals\Cart2;
 use App\Globals\WarehouseTransfer;
 use App\Globals\Warehouse2;
+use App\Globals\Item;
 
 use Session;
 class WarehouseIssuanceSlipController extends Member
@@ -49,13 +50,14 @@ class WarehouseIssuanceSlipController extends Member
     {
         $data["shop_id"]    = $shop_id = $this->user_info->shop_id;
         $data["item_id"]    = $item_id = $request->item_id;
-        $data["item"]       = $item = WarehouseTransfer::scan_item($data["shop_id"], $data["item_id"]);
+        $return             = $item = WarehouseTransfer::scan_item($data["shop_id"], $data["item_id"]);
 
-        if($data["item"])
+        if($return)
         {
             $return["status"]   = "success";
-            $return["message"]  = "Item Number " .  $data["item"] . " has been added.";
-            WarehouseTransfer::add_item_to_list($shop_id, $item_id, 1);
+            $return["message"]  = "Item Number " .  $return['item_id'] . " has been added.";
+            $serial = isset($return['item_serial']) ? $return['item_serial'] : null;
+            WarehouseTransfer::add_item_to_list($shop_id, $return['item_id'], 1, $serial);
         }
         else
         {
@@ -65,10 +67,21 @@ class WarehouseIssuanceSlipController extends Member
 
         echo json_encode($return);
     }
-    public function getViewSerial()
+    public function getCreateRemoveItem(Request $request)
+    {        
+        $item_id = $request->item_id;
+        WarehouseTransfer::delete_item_from_list($item_id);
+        $return["status"] = "success";
+        $return["item_id"] = $item_id;
+        echo json_encode($return);
+    }
+    public function getViewSerial(Request $request, $item_id)
     {
+        $item = Session::get('wis_item');
+        $data['item'] = Item::info($item_id);
+        $data['_serial'] = $item[$item_id]['item_serial'];
 
-        return view('member.warehousev2.wis.wis_serial');
+        return view('member.warehousev2.wis.wis_serial',$data);
     }
     public function getConfirm()
     {

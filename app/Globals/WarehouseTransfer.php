@@ -51,29 +51,37 @@ class WarehouseTransfer
 	{
 		return Tbl_warehouse_receiving_report::where('rr_shop_id',$shop_id)->where('rr_status', $status)->get();
 	}
-	public static function scan_item($shop_id, $item_id)
+	public static function scan_item($shop_id, $item_code)
 	{
-		$chk = Tbl_item::where('item_id',$item_id)->where('item_type_id',1)->where('shop_id',$shop_id)->first();
-		$id = $item_id;
+		$chk = Tbl_item::where('item_id',$item_code)->where('item_type_id',1)->where('shop_id',$shop_id)->first();
+		$data['item_id'] = $item_code;
 		if(!$chk)
 		{
+			$data = null;
 			/* SEARCH FOR OTHER ITEM NUMBER HERE*/
-			$id = null;
+
+			/* - WAREHOUSE SERIAL - */
+			$a = Tbl_warehouse_inventory_record_log::where('record_shop_id', $shop_id)->where('record_serial_number',$item_code)->value('record_item_id');
+			if($a)
+			{
+				$data['item_id'] = $a;
+				$data['item_serial'] = $item_code;
+			}
 		}
 
-		return $id;
+		return $data;
 	}
-	public static function add_item_to_list($shop_id, $item_id, $quantity = 1, $serial = array())
+	public static function add_item_to_list($shop_id, $item_id, $quantity = 1, $serial = '')
 	{
 		$first_data = Session::get('wis_item'); 
+
+		$data = Session::get('wis_item');
 
 		$data[$item_id]['item_id'] = $item_id;
 		$data[$item_id]['item_name'] = Item::info($item_id)->item_name;
 		$data[$item_id]['item_sku'] = Item::info($item_id)->item_sku;
 		$data[$item_id]['item_quantity'] = $quantity;
-		$data[$item_id]['item_serial'] = $serial;
-
-		$data = Session::get('wis_item');
+		$data[$item_id]['item_serial'][0] = $serial;
 
 		$check = Session::get('wis_item');
 		if(count($check) > 0)
@@ -84,11 +92,25 @@ class WarehouseTransfer
 				$data[$item_id]['item_name'] = Item::info($item_id)->item_name;
 				$data[$item_id]['item_sku'] = Item::info($item_id)->item_sku;
 				$data[$item_id]['item_quantity'] = $first_data[$item_id]['item_quantity'] + $quantity;
-				$data[$item_id]['item_serial'] = $serial;
+
+				foreach ($first_data[$item_id]['item_serial'] as $key => $value) 
+				{
+					if($value != $serial)
+					{
+						$data[$item_id]['item_serial'][$key] = $value;
+					}
+				}
+				$data[$item_id]['item_serial'][count($first_data[$item_id]['item_serial']) + 1] = $serial;
 
 				unset(Session::get('wis_item')[$item_id]);
 			}
 		}
+		Session::put('wis_item', $data);
+	}
+	public static function delete_item_from_list($item_id)
+	{
+		$data = Session::get('wis_item');
+		unset($data[$item_id]);
 
 		Session::put('wis_item', $data);
 	}

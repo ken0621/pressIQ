@@ -5,6 +5,10 @@
 </div>
 <div class="modal-body modallarge-body-layout background-white form-horizontal menu_container">
     <div class="panel-body form-horizontal">
+        <div class="form-group text-center">
+        	<h4><b>{{$item->item_name or ''}}</b></h4>
+        	<h4>{{$item->item_sku or ''}}</h4>
+        </div>
         <div class="form-group">
         	<table class="table table-bordered text-center">
         		<thead>
@@ -13,15 +17,13 @@
 	        			<th class="text-center">Barcode/Serial</th>
 	        		</tr>
 	        	</thead>
-	        	<tbody>
+	        	<tbody {{$ctr = 1}}>
+	        		@foreach($_serial as $key => $serial)
 	        		<tr>
-	        			<td>1</td>
-	        			<td>12346545</td>
+	        			<td class="text-center">{{$ctr++}}</td>
+	        			<td class="text-center">{{$serial}}</td>
 	        		</tr>
-	        		<tr>
-	        			<td>2</td>
-	        			<td>98755552</td>
-	        		</tr>
+	        		@endforeach
 	        	</tbody>
         	</table>
         </div>

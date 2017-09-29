@@ -23,7 +23,7 @@
 .button_submit
 {
   position:absolute;
-  width:460px;
+  width:460px !important;
   left:598px;
   top:426px;
 }

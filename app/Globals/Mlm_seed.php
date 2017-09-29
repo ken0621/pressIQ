@@ -85,7 +85,7 @@ class Mlm_seed
                                         <p>If you did not forget your password, please ignore this email.</p>
                                         <p>&nbsp;</p>
                                         <p>Thanks,</p>
-                                        <p>[admin]</p>
+                                        <p>Admin</p>
                                         <p>&nbsp;</p>';
         $insert[9]['email_content_subject'] = 'Forgot Password'; 
 

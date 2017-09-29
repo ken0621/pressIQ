@@ -85,12 +85,12 @@
 	<div class="dashboard">
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="title"><i class="align-icon brown-icon-bar-chart"></i> Wallet Summary</div>
+				<div class="title">Wallet Summary</div>
 				<div class="sub-container">
 					<div class="table-holder">
 						<div class="chart-legend">
 							<div class="holder">
-								<div class="color" style="background-color: #76b6ec"></div>
+								<div class="color" style="background-color: #019771"></div>
 								<div class="name"><span>Current Wallet</span> {{ $wallet->display_current_wallet }}</div>
 							</div>
 							<div class="holder">
@@ -114,7 +114,7 @@
 			</div>
 
 			<div class="col-md-6">
-				<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
+				<div class="title">Reward Summary</div>
 				<div class="sub-container">
 					<div class="chart-legend">
 						@foreach($_wallet_plan as $plan)
@@ -127,9 +127,7 @@
 
 				</div>
 
-
-
-				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
+				<div class="title">Reward Points</div>
 				<div class="sub-container">
 					@if(count($_point_plan) > 0)
 					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
@@ -148,7 +146,7 @@
 		</div>
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="title"><i class="align-icon brown-icon-globe"></i> Newest Direct Referrals</div>
+				<div class="title">Newest Direct Referrals</div>
 				<div class="sub-container border-holder">
 					<div class="clearfix wow hidden">
 						<div class="badge right">6 New Members</div>
@@ -183,7 +181,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="match-height">
-					<div class="title"><i class="align-icon brown-icon-money"></i> Recent Rewards <a href="javascript:" class="title-button pull-right">View All Rewards</a></div>
+					<div class="title">Recent Rewards <a href="javascript:" class="title-button pull-right">View All Rewards</a></div>
 					<div class="sub-container">
 						<div class="activities">
 							@if(count($_recent_rewards) > 0)

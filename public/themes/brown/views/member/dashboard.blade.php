@@ -98,7 +98,7 @@
 								<div class="name"><span>Total Pay-out</span> {{ $wallet->display_total_payout }}</div>
 							</div>
 							<div class="chart-holder">
-								<canvas id="income_summary" style="max-width: 150px;" width="400" height="400"></canvas>
+								<canvas id="income_summary" class="chart-income" wallet="{{ $wallet->current_wallet }}"  payout="{{ $wallet->total_payout }}" style="max-width: 150px;" width="400" height="400"></canvas>
 							</div>
 							<div class="holder">
 								<div class="color"></div>
@@ -213,7 +213,7 @@
 						</div>
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Reward Point(s)</span> {{ $points->display_brown_leader_points }}</div>
+							<div class="name"><span>Leader Point(s)</span> {{ $points->display_brown_leader_points }}</div>
 						</div>
 					</div>
 				</div>
@@ -442,55 +442,59 @@
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js"></script>
 <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
 <script>
-// var ctx = document.getElementById("income_summary").getContext('2d');
 
-// // And for a doughnut chart
-// var myDoughnutChart = new Chart(ctx, {
-//     type: 'doughnut',
-//     data: {
-//         labels: ["Red", "Blue"],
-//         datasets: [{
-//             label: '# of Votes',
-//             data: [1.00, 1.00],
-//             backgroundColor: [
-//                 'rgba(142, 94, 162, 1)',
-//                 'rgba(62, 149, 205, 1)'
-//             ],
-//             borderColor: [
-//                 'rgba(142, 94, 162, 1)',
-//                 'rgba(62, 149, 205, 1)'
-//             ],
-//             borderWidth: 1
-//         }]
-//     },
-//     options: 
-//     {
-//       legend: 
-//       {
-//         responsive: true,
-//         display: false,
-//       },
-//       tooltips: 
-//       {
-//         callbacks: 
-//         {
-//           label: function(tooltipItems, data) 
-//           {
-//             var sum = data.datasets[0].data.reduce(add, 0);
-//             function add(a, b) {
-//               return a + b;
-//             }
+$(document).ready(function()
+{
+	$wallet = $(".chart-income").attr("wallet");
+	$payout = $(".chart-income").attr("payout");
 
-//             return data.datasets[0].data[tooltipItems.index] + ' %';
-//           },
-//           // beforeLabel: function(tooltipItems, data) {
-//           //   return data.datasets[0].data[tooltipItems.index] + ' hrs';
-//           // }
-//         }
-//       }
-//     }
-// });
+	var ctx = document.getElementById("income_summary").getContext('2d');
 
+	var myDoughnutChart = new Chart(ctx,
+	{
+	    type: 'doughnut',
+	    data: {
+	        labels: ["Red", "Blue"],
+	        datasets: [{
+	            label: '# of Votes',
+	            data: [$payout, $wallet],
+	            backgroundColor: [
+	                'rgba(142, 94, 162, 1)',
+	                'rgba(62, 149, 205, 1)'
+	            ],
+	            borderColor: [
+	                'rgba(142, 94, 162, 1)',
+	                'rgba(62, 149, 205, 1)'
+	            ],
+	            borderWidth: 1
+	        }]
+	    },
+	    options: 
+	    {
+	      legend: 
+	      {
+	        responsive: true,
+	        display: false,
+	      },
+	      tooltips: 
+	      {
+	        callbacks: 
+	        {
+	          label: function(tooltipItems, data) 
+	          {
+	            var sum = data.datasets[0].data.reduce(add, 0);
+	            function add(a, b) {
+	              return a + b;
+	            }
+
+	            return data.datasets[0].data[tooltipItems.index];
+	          },
+	        }
+	      }
+	    }
+	});
+
+});
 $(document).ready(function()
 {
 	if($("._mode").val() == "success")

@@ -63,7 +63,7 @@ class MlmDeveloperController extends Member
             $total_gc = Tbl_mlm_gc::where("mlm_gc_slot", $slot->slot_id)->value("mlm_gc_amount");
 
         	$data["_slot"][$key] = $slot;
-            $data["_slot"][$key]->customer = '<a target="_blank" href="/members/autologin?email=' . $slot->email . '&password=' . $slot->password . '">' . strtoupper($slot->last_name) . ',' . strtoupper($slot->first_name) . ' ' . strtoupper($slot->middle_name) . '</a>';
+            $data["_slot"][$key]->customer = '<a target="_blank" href="/members/autologin?email=' . $slot->email . '&password=' . $slot->password . '">' . strtoupper($slot->first_name) . " " . strtoupper($slot->last_name) . '</a>';
             $data["_slot"][$key]->sponsor = Tbl_mlm_slot::customer()->where("slot_id", $slot->slot_sponsor)->first();
             $data["_slot"][$key]->placement = Tbl_mlm_slot::customer()->where("slot_id", $slot->slot_placement)->first();
         	$data["_slot"][$key]->current_wallet_format = "<a href='javascript:' link='/member/mlm/developer/popup_earnings?slot_id=" . $slot->slot_id . "' class='popup' size='lg'>" . Currency::format($data["_slot"][$key]->current_wallet) . "</a>";
@@ -413,6 +413,7 @@ class MlmDeveloperController extends Member
         {
             Tbl_mlm_slot_wallet_log::where("wallet_log_slot", $slot->slot_id)->delete();
             Tbl_mlm_slot::where("slot_id", $slot->slot_id)->delete();
+            Tbl_mlm_slot_wallet_log::where("tbl_mlm_slot.shop_id", $shop_id)->slot()->where("slot_owner", $slot->slot_owner)->delete();
             Tbl_mlm_slot::where("slot_owner", $slot->slot_owner)->delete();
             Tbl_customer_address::where("customer_id", $slot->slot_owner)->delete();
         }

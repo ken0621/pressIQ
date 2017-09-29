@@ -324,50 +324,6 @@ class ShopCheckoutController extends Shop
             dd($dragonpay->content);
         }
     }
-    public function paymaya_webhook_success()
-    {
-        $this->paymaya_logs();
-    }
-    public function paymaya_webhook_failure()
-    {
-        $this->paymaya_logs();
-    }
-    public function paymaya_webhook_cancel()
-    {
-        $this->paymaya_logs();
-    }
-    public function paymaya_logs()
-    {
-        /* Insert Logs */
-        $insert["payment_log_type"]       = "received";
-        $insert["payment_log_method"]     = "paymaya";
-        $insert["payment_log_created"]    = Carbon::now();
-        $insert["payment_log_url"]        = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : "Unknown");
-        $insert["payment_log_data"]       = serialize(Request::input());
-        $insert["payment_log_ip_address"] = get_ip_address();
-        $shop_id = $this->shop_info->shop_id;
-        Payment::insert_logs($insert, $shop_id);
-    }
-    public function failmaya($order_id)
-    {
-        $update['ec_order_id']    = $order_id;
-        $update['order_status']   = "Failed";
-        $update['payment_status'] = 0;
-        $order = Ec_order::update_ec_order($update);
-
-        // $customer = DB::table("tbl_ec_order")->select("tbl_ec_order.ec_order_id", "tbl_ec_order.customer_id as order_customer_id", "tbl_customer.*")
-        //                                      ->join("tbl_customer", "tbl_customer.customer_id", "=", "tbl_ec_order.customer_id")
-        //                                      ->where("tbl_ec_order.ec_order_id", $order_id)
-        //                                      ->first();
-    
-        // $update_customer["email"] = "f_" . $customer->email;
-        // $update_customer["first_name"] = "f_" . $customer->first_name;
-        // $update_customer["last_name"] = "f_" . $customer->last_name;
-        // $update_customer["middle_name"] = "f_" . $customer->middle_name;
-        // $update_customer["mlm_username"] = "f_" . $customer->mlm_username;
-
-        // DB::table("tbl_customer")->where("customer_id", $customer->customer_id)->update($update_customer);
-    }
     public function after_email_payment($order_id)
     {
         /* Email  */

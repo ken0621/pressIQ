@@ -262,7 +262,7 @@ class ShopMemberController extends Shop
             if($validator->fails()) 
             {
                 $messages = $validator->messages();
-                return Redirect::to('/members/register')->with('error', $messages);
+                return Redirect::to('/members/register')->with('error', 'We need your email address for you to register.');
             }
             else
             {    
@@ -277,7 +277,6 @@ class ShopMemberController extends Shop
                     $ins['ismlm']           = 1;
                     $ins['created_at']      = Carbon::now();
                     $ins['signup_with']     = 'facebook';
-
                     
                     Customer::register($this->shop_info->shop_id, $ins);  
                 }

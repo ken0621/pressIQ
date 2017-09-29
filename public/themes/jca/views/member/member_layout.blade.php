@@ -61,14 +61,14 @@
 
 							<ul>
 								<li>
-									<a href="/members/genealogy?mode=binary"><div class="nav-holder"> &nbsp;&nbsp;Binary Tree</div></a>
+									<a href="/members/genealogy?mode=binary"><div class="nav-holder"> &nbsp;&nbsp;<span>Binary Tree</span></div></a>
 								</li>
 								<li>
-									<a href="/members/genealogy?mode=sponsor"><div class="nav-holder"> &nbsp;&nbsp;Unilevel Tree</div></a>
+									<a href="/members/genealogy?mode=sponsor"><div class="nav-holder"> &nbsp;&nbsp;<span>Unilevel Tree</span></div></a>
 								</li>
 
 							</ul>
-							
+
 						</li>
 						<li class="{{ Request::segment(2) == "report" ? "active" : "" }}">
 							<a href="/members/report"><div class="nav-holder"><div class="icon brown-icon-bar-chart"></div> <span>Reports</span></div></a>
@@ -80,10 +80,10 @@
 							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-wallet"></div> <span>Wallet</span></div></a>
 							<ul>
 								<li>
-									<a href="/members/wallet-encashment"><div class="icon brown-icon-money nav-holder"> &nbsp;&nbsp;<span>Wallet Encashment</span></div></a>
+									<a href="/members/wallet-encashment"><div class="brown-icon-money nav-holder"> &nbsp;&nbsp;<span>Wallet Encashment</span></div></a>
 								</li>
 								<li>
-									<a href="/members/wallet-logs"><div class="icon brown-icon-list-alt nav-holder"> &nbsp;&nbsp;<span>Wallet Transfer</span></div></a>
+									<a href="/members/wallet-logs"><div class="brown-icon-list-alt nav-holder"> &nbsp;&nbsp;<span>Wallet Transfer</span></div></a>
 								</li>
 							</ul>
 						</li>

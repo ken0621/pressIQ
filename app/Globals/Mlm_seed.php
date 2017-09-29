@@ -91,8 +91,8 @@ class Mlm_seed
 
         $count = Tbl_email_content::where('shop_id', $shop_id)->where('archived',0)->count();
         $count_mail_c = count($insert);
-        if($count_mail_c > $count)
-        {
+        // if($count_mail_c > $count)
+        // {
             foreach ($insert as $key => $value) 
             {
                $count = Tbl_email_content::where('shop_id', $shop_id)
@@ -110,6 +110,6 @@ class Mlm_seed
                     Tbl_email_content::insert($insert_mail);
                }
             }
-        }
+        // }
     }
 }

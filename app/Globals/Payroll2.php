@@ -1033,6 +1033,7 @@ class Payroll2
 			$count_time=0;
 			$output_array=array();
 			$one_time=true;
+			$last_overtime = true;
 
 			foreach ($_time as $time)
 			{
@@ -1143,8 +1144,7 @@ class Payroll2
 						$reason = "<b>answer: ". Payroll2::convert_to_12_hour($shift->shift_in)." to ".Payroll2::convert_to_12_hour($time->time_out)." (1) - <span style='color: green; text-transform: uppercase'>ONTIME BUT UNDERTIME<span><br></b>".Payroll::time_diff($time->time_out,$shift->shift_out);
 						 
 						$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $shift->shift_in, $time->time_out, 1,$reason,"UNDERTIME","00:00:00",Payroll::time_diff($time->time_out,$shift->shift_out),"00:00:00");
-						
-						
+
 					}
 					//late and undertime
 					else if (($time_in_minutes>$shift_in_minutes) && ($time_out_minutes<$shift_out_minutes)) 
@@ -1164,6 +1164,20 @@ class Payroll2
 						if ($time_out_minutes>$shift_out_minutes) 
 						{
 							$reason = "<b>answer: ". Payroll2::convert_to_12_hour($shift->shift_out)." to ". Payroll2::convert_to_12_hour($time->time_out)." (0)- <span style='color: green; text-transform: uppercase'>LAST OVERTIME<span><br></b>";
+							echo $testing == true ? $reason : "";
+							$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $shift->shift_out, $time->time_out, 0,$reason,"OVERTIME","00:00:00","00:00:00",Payroll::time_diff($shift->shift_out,$time->time_out));
+						}
+						$last_overtime = false;
+					}
+
+
+
+					//Last Overtime with next overtime that has no shift
+					if ($count_shift == sizeof($_shift) && $last_overtime) 
+					{
+						if ($time_out_minutes>$shift_out_minutes) 
+						{
+							$reason = "<b>answer: ". Payroll2::convert_to_12_hour($shift->shift_out)." to ". Payroll2::convert_to_12_hour($time->time_out)." (0)- <span style='color: green; text-transform: uppercase'>LAST OVERTIME 2<span><br></b>";
 							echo $testing == true ? $reason : "";
 							$_output = Payroll2::time_shift_output($time, $_output, $output_ctr++, $shift->shift_out, $time->time_out, 0,$reason,"OVERTIME","00:00:00","00:00:00",Payroll::time_diff($shift->shift_out,$time->time_out));
 						}

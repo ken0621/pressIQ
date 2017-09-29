@@ -32,7 +32,6 @@ class Times2 extends Controller
 		$_time[1] = new stdClass();
 		$_time[1]->time_in = "21:00:00"; 
 		$_time[1]->time_out = "23:03:00"; 
-		
 
 		//INPUT SHIFT 
 	

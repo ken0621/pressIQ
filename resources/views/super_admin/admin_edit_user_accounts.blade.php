@@ -77,53 +77,63 @@
 	          </div>
 
 			<div class="box-body">
-				<form class ="update_form" method="post" action="/admin/shop_user_accounts_update_submit/{{$_user_info_update->user_id}}" role="login">
-				<div class="form-group">
-        			{{ csrf_field() }}
-
-						<div class="col-md-6">
-							<div class="form-group">
-								<label class="form_label">First Name</label>
-								<input type="text" name="user_first_name" required class="form-control input_first_name input-lg" value="{{$_user_info_update->user_first_name}}" /> 
-							</div>
-							<div class="form-group">
-								<label class="form_label_last-name">Last Name</label>
-								<input type="text" name="user_last_name" required class="form-control input_last_name input-lg" value="{{$_user_info_update->user_last_name}}" /> 
-							</div>
-						</div>
-
-						<div class="">
-							<div class="form-group">
-								<label class="form_label_email">Email</label>
-								<input type="text" name="user_email" required class="form-control input_email input-lg" value="{{$_user_info_update->user_email}}" /> 
-							</div>
-							<div class="form-group">
-								<label class="form_label_contact_number">Contact Number</label>
-								<input type="text" name="user_contact_number" required class="form-control input_contact_number input-lg" value="{{$_user_info_update->user_contact_number}}" /> 
-							</div>
-						</div>
-
-						<div class="">
-							<div class="form-group">
-								<label class="form_label_user_level">User Level</label>
-								<input type="text" name="user_level" required class="form-control input_user_level input-lg" value="{{$_user_info_update->user_level}}" /> 
-							</div>
-							<div class="form-group">
-								<label class="form_label_shop">Shop</label>
-								<input type="text" name="shop_key" required class="form-control input_shop input-lg" value="{{$_user_info_update->shop_key}}" /> 
-							</div>
-						</div>
-
-						<div class="">
-							<div class="form-group">
-								<label class="form_label_password">Password</label>
-								<input type="text" name="password" required class="form-control input_password input-lg" value="{{$password1}}" /> 
-							</div>
-						</div>
-						<button type="submit" name="go" class="btn btn-lg btn-primary button_submit btn-block">Update Password</button>   
-				</div>
-			</form>
-			</div>
+        <form class ="update_form" method="post" action="/admin/shop_user_accounts_update_submit/{{$_user_info_update->user_id}}" role="login">
+            {{ csrf_field() }}
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group1">
+                <label class="form_label">First Name</label>
+                <input type="text" name="user_first_name" required class="form-control input-lg" style="width:550px;" value="{{$_user_info_update->user_first_name}}" /> 
+              </div>
+              <!-- /.form-group -->
+              <div class="form-group">
+                <label class="form_label">Last Name</label>
+                <input type="text" name="user_last_name" required class="form-control input-lg" style="width:550px;" value="{{$_user_info_update->user_last_name}}" /> 
+              </div>
+              <!-- /.form-group -->
+            </div>
+            <!-- /.col -->
+            <div class="col-md-6 col-form">
+              <div class="form-group2">
+                <label class="form_label">Email</label>
+                <input type="text" name="user_email" required class="form-control input-lg" style="width:550px;" value="{{$_user_info_update->user_email}}" /> 
+              </div>
+              <!-- /.form-group -->
+              <div class="form-group">
+                <label class="form_label">Contact Number</label>
+                <input type="text" name="user_contact_number" required class="form-control input-lg" style="width:550px;" value="{{$_user_info_update->user_contact_number}}" /> 
+              </div>
+              <!-- /.form-group -->
+            </div>
+            <div class="col-md-6 col-form1">
+              <div class="form-group3">
+                <label class="form_label">User Level</label>
+                <input type="text" name="user_email" required class="form-control input-lg" style="width:550px"; value="{{$_user_info_update->user_level}}" /> 
+              </div>
+              <!-- /.form-group -->
+              <div class="form-group">
+                <label class="form_label">Shop</label>
+                <input type="text" name="shop_key" required class="form-control input-lg" style="width:550px"; value="{{$_user_info_update->shop_key}}" /> 
+              </div>
+              <!-- /.form-group -->
+            </div>
+            <div class="col-md-6 col-form2">
+              <div class="form-group">
+                <label class="form_label">Password</label>
+                <input type="text" name="password" required class="form-control input-lg" style="width:550px"; value="{{$password1}}" /> 
+              </div>
+              <!-- /.form-group -->
+              <div class="form-group">
+                <button type="submit" name="go" class="btn btn-lg btn-primary btn-block button_submit" style="width:550px";>Update Password</button>   
+              </div>
+              <!-- /.form-group -->
+            </div>
+            <!-- /.col -->
+          </div>
+          <!-- /.row -->
+          </form>
+        </div>
+        <!-- /.box-body -->
 
 
 		</div>

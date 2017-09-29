@@ -20,106 +20,55 @@
   width:100%;
 }
 
-.button_submit
+ .button_submit
+ {
+  position: relative;
+  margin-top:53px !important;
+ }
+
+.col-form2
 {
-  position:absolute;
-  width:460px !important;
-  left:598px;
-  top:426px;
+  position: relative;
+  top:-127px;
 }
 
-.input_password
+
+.col-form1
 {
-  position: absolute;
-  left: 14px !important;
-  top: 10px !important;
-  width: 460px !important;
+  position: relative;
+  top:-127px;
 }
 
-.form_label_password
+.form-group3
 {
-  position: absolute;
-  left:58px !important;
-  top: 429px !important;
+  padding:1px;
+  height:100px;
 }
 
-.input_shop
+.form-group2
 {
-  width: 460px !important;
-  margin-top: -116px !important;
-  margin-left: 601px !important
+  padding:1px;
+  height:100px;
 }
 
-.form_label_shop
+.col-form
 {
-  position: absolute;
-  left:620px !important;
-  top: 334px !important;
-}
-
-.input_user_level
-{
-  position: absolute;
-  left:14px !important;
-  top:-30px !important;
-  width: 460px !important;
-}
-
-.input_contact_number
-{
-  margin-top: 10px !important;
-  width: 460px !important;
-}
-
-.box-header.with-border
-{
-    height: 800px !important;
-}
-
-.form_label_contact_number
-{
-  margin-left: -488px !important;
-  margin-top: 0px !important;
-}
-
-.form_label_email
-{
-  margin-left: -555px !important;
-  margin-top: 55px !important;
-}
-
-.input_email
-{
-  margin-top: 8px !important;
-  width: 460px !important;
-}
-
-.input_last_name
-{
-   margin-top: 12px !important;
-   width: 460px !important;
-}
-
-.form_label_user_level
-{
-  margin-left: -1059px !important;
-}
-
-.form_label_last-name
-{
- margin-left: -453px !important;
-}
-
-.input_first_name
-{
-  margin-top: 10px !important;
-  width: 460px !important;
+  height:329px;
 }
 
 .form_label
 {
-  margin-left: -443px !important;
-  margin-top: 50px !important;
+ position: relative;
+ margin-left: 26px;
+ text-align: left;
+ top:29px;
+  
+}
+
+.form-group1
+{
+  padding:1px;
+  height:100px;
 }
 
 .update_form
@@ -131,7 +80,7 @@
     padding-bottom: 15px;
     padding: 0px !important;
     border-radius: 10px;
-    margin-bottom: 20px !important;
+    margin-bottom: 248px !important;
 }
 
 .pic_cotent
@@ -222,9 +171,9 @@ form[role=login] {
     width: 347px;
     margin-left: 26px;
   }
-  form[role=login] > div {
-    text-align: center;
-  }
+ /*  form[role=login] > div {
+   text-align: center;
+ } */
   
 .form-links {
   text-align: center;

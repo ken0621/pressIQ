@@ -21,7 +21,7 @@ class Customer
 		Tbl_customer::insert($info);
 		return true;	
 	}
-	public static function check_account($shop_id, $email, $password)
+	public static function check_account($shop_id, $email, $password = '')
 	{
 		$check_account =  Tbl_customer::where("shop_id", $shop_id)->where("email", $email)->first();
 		//dd(Crypt::decrypt($check_account->password));
@@ -41,6 +41,20 @@ class Customer
 			return false;
 		}
 
+	}
+
+	public static function check_email($shop_id, $email)
+	{
+		$check_account =  Tbl_customer::where("shop_id", $shop_id)->where("email", $email)->first();
+		//dd(Crypt::decrypt($check_account->password));
+		if($check_account)
+		{
+	        return $check_account;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	public static function get_info($shop_id, $customer_id)
 	{

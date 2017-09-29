@@ -239,10 +239,12 @@ body{
 
 .wrapper-3
 {
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: right;
+	margin-top: 50px;
 	.mission-vision-container
 	{
-		padding: 50px 0px 0px 0px;
-		
 		.jca-title-container
 		{
 			.title-company

@@ -130,7 +130,7 @@
 		</div>
 	</div>
 	<!-- BENEFITS IN JCA -->
-	<div class="wrapper-3">
+	<div class="wrapper-3" style="background-image: url('/themes/{{ $shop_theme }}/img/mission-vision-background.png');">
 		<div class="container">
 			<div class="mission-vision-container">
 				<div class="content-container row clearfix">	
@@ -163,9 +163,9 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-md-4">
+					<!-- <div class="col-md-4">
 						<img class="img-background" src="/themes/{{ $shop_theme }}/img/mission-vision-background.png">
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>

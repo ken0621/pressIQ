@@ -9,6 +9,7 @@ use View;
 use Input;
 use File;
 use Image;
+use Mail;
 use Carbon\Carbon;
 use App\Globals\Payment;
 use App\Globals\Customer;
@@ -18,10 +19,13 @@ use App\Globals\MLM2;
 use App\Globals\FacebookGlobals;
 use App\Globals\SocialNetwork;
 use App\Globals\GoogleGlobals;
+use App\Globals\EmailContent;
+use App\Globals\Mail_global;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_customer_other_info;
+use App\Models\Tbl_email_template;
 use App\Models\Tbl_country;
 use App\Models\Tbl_locale;
 use App\Globals\Currency;
@@ -194,12 +198,13 @@ class ShopMemberController extends Shop
     public function getLoginSubmit()
     {
         $user_profile = FacebookGlobals::user_profile($this->shop_info->shop_id);
-        $email = isset($user_profile) ? $user_profile['email'] : null;
-        $check = Tbl_customer::where('email',$email)->first();
-        if(count($user_profile) > 0 && $check)
-        {
-            $data = collect($user_profile)->toArray();
+        $email = isset($user_profile['email']) ? $user_profile['email'] : null;
+        $check = Tbl_customer::where('email',$email)->where('shop_id', $this->shop_info->shop_id)->first();
 
+        $data = collect($user_profile)->toArray();
+
+        if(count($user_profile) > 0 && $check && isset($data['email']) && isset($data['id']))
+        {
             Self::store_login_session($data['email'],$data['id']);
 
             return Redirect::to("/members")->send();
@@ -244,36 +249,50 @@ class ShopMemberController extends Shop
         if(count($user_profile) > 0)
         {
             $data = collect($user_profile)->toArray();
-            $check = Tbl_customer::where('email',$data['email'])->where('shop_id',$this->shop_info->shop_id)->first();
-            $email = $data['email'];
+            $email = isset($data['email']) ? $data['email'] : '';
             $pass = $data['id'];
-            if(!$check)
-            {
-                $ins['email']           = $data['email'];
-                $ins['first_name']      = $data['first_name'];
-                $ins['last_name']       = $data['last_name'];
-                $ins['middle_name']     = $data['middle_name'] == null ? '' : $data['middle_name'] ;
-                $ins['gender']          = $data['gender'] == null ? 'male' : $data['gender'];
-                $ins['password']        = Crypt::encrypt($data['id']);
-                $ins['mlm_username']    = $data['email'];
-                $ins['ismlm']           = 1;
-                $ins['created_at']      = Carbon::now();
-                $ins['signup_with']     = 'facebook';
+            $check = Tbl_customer::where('email',$email)->where('shop_id',$this->shop_info->shop_id)->first();
 
-                Customer::register($this->shop_info->shop_id, $ins);            
+            $ins['email'] = $email;
+
+            $rules['email'] = 'required';
+
+            $validator = Validator::make($ins, $rules);
+
+            if($validator->fails()) 
+            {
+                $messages = $validator->messages();
+                return Redirect::to('/members/register')->with('error', 'We need your email address for you to register.');
             }
             else
-            {
-                $email = $check->email;
-                $pass = Crypt::decrypt($check->password);
-            }
+            {    
+                if(!$check)
+                {
+                    $ins['first_name']      = $data['first_name'];
+                    $ins['last_name']       = $data['last_name'];
+                    $ins['middle_name']     = $data['middle_name'] == null ? '' : $data['middle_name'] ;
+                    $ins['gender']          = $data['gender'] == null ? 'male' : $data['gender'];
+                    $ins['password']        = Crypt::encrypt($data['id']);
+                    $ins['mlm_username']    = $data['email'];
+                    $ins['ismlm']           = 1;
+                    $ins['created_at']      = Carbon::now();
+                    $ins['signup_with']     = 'facebook';
+                    
+                    Customer::register($this->shop_info->shop_id, $ins);  
+                }
+                else
+                {
+                    $email = $check->email;
+                    $pass = Crypt::decrypt($check->password);
+                }
 
-            if($email && $pass)
-            {
-                Self::store_login_session($email,$pass);
-            }
+                if($email && $pass)
+                {
+                    Self::store_login_session($email,$pass);
 
-            return Redirect::to("/members")->send();
+                    return Redirect::to("/members")->send();
+                }
+            }   
         }
         else
         {
@@ -316,6 +335,64 @@ class ShopMemberController extends Shop
     {
         $data["page"] = "Forgot Password";
         return view("member.forgot_password");
+    }
+    public function postForgotPasswordSubmit()
+    {
+        $shop_id = $this->shop_info->shop_id;
+        $validate = Customer::check_email($shop_id, Request2::input('email'));
+        
+        $return_data = null;
+        if($validate)
+        {
+            $content_key = "front_forgot_password";
+            if(EmailContent::checkIfexisting($content_key, $shop_id) != 0)
+            {
+                $email_content["subject"] = EmailContent::getSubject($content_key, $shop_id);
+                $email_content["shop_key"] = $this->shop_info->shop_key;
+                $data["email"] = $validate->email;
+                $new_password = Crypt::decrypt($validate->password);
+
+                $txt[0]["txt_to_be_replace"] = "[name]";
+                $txt[0]["txt_to_replace"] = $validate->first_name." ".$validate->middle_name." ".$validate->last_name;
+
+                $txt[1]["txt_to_be_replace"] = "[domain_name]";
+                $txt[1]["txt_to_replace"] = $_SERVER["SERVER_NAME"];
+
+                $txt[2]["txt_to_be_replace"] = "[password]";
+                $txt[2]["txt_to_replace"] = $new_password;
+
+                $change_content = $txt;
+
+                $email_content["content"] = EmailContent::email_txt_replace($content_key, $change_content);
+
+                $data["template"] = Tbl_email_template::where("shop_id", $shop_id)->first();
+                if(isset($data['template']->header_image))
+                {
+                    if (!File::exists(public_path() . $data['template']->header_image))
+                    {
+                        $data['template']->header_image = null;
+                    }
+                }   
+
+                Mail_global::send_email($data['template'], $email_content, $shop_id, $validate->email);
+
+
+                $return_data['status'] = 'success';
+                $return_data['status_message'] = "Successfully Sent Email.";
+            }
+            else
+            {
+                $return_data['status'] = 'danger';
+                $return_data['status_message'] = "Something wen't wrong please contact your admin.";
+            }
+        }
+        else
+        {
+            $return_data['status'] = 'danger';
+            $return_data['status_message'] = "Can't find your record.";
+        }
+
+        return Redirect::back()->with($return_data['status'], $return_data['status_message']);
     }
     /* LOGIN AND REGISTRATION - END */
     public function getProfile()
@@ -645,13 +722,13 @@ class ShopMemberController extends Shop
         $data["page"] = "NonMember";
         return (Self::load_view_for_members("member.nonmember", $data));
     }
-    public function getTest()
+    public function getTest($method)
     {
         $shop_id    = $this->shop_info->shop_id; //tbl_shop
-        $key        = "paymaya"; //link reference name
-        $success    = "/checkout/finish/success"; //redirect if payment success
-        $failed     = "/checkout/finish/error"; //redirect if payment failed
-        $debug      = false;
+        $key        = $method; //link reference name
+        $success    = "/members?success=1"; //redirect if payment success
+        $failed     = "/members?failed=1"; //redirect if payment failed
+        $debug      = true;
 
         $error = Payment::payment_redirect($shop_id, $key, $success, $failed, $debug);
         dd($error);

@@ -14,6 +14,7 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_payment_logs;
 use App\Globals\Cart2;
 use App\Globals\Cart;
+use App\Globals\Payment;
 // IPAY 88
 use App\IPay88\RequestPayment;
 // DRAGON PAY
@@ -88,7 +89,10 @@ class Payment
 	public static function payment_redirect($shop_id, $key, $success, $failed, $debug)
 	{
 		/* Testing Purposes */
-		Self::testing_cart($shop_id);
+        if ($debug) 
+        {
+            Self::testing_cart($shop_id);
+        }
 
 		/* Get Cart */
 		$cart = Cart2::get_cart_info();
@@ -444,5 +448,19 @@ class Payment
 						       ->where("shop_id", $shop_id)
 						       ->take($limit)
 						       ->get();
+    }
+
+    public static function done($data)
+    {
+        /* Insert Logs */
+        $insert["payment_log_type"]       = "received";
+        $insert["payment_log_method"]     = "paymaya";
+        $insert["payment_log_created"]    = Carbon::now();
+        $insert["payment_log_url"]        = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : "Unknown");
+        $insert["payment_log_data"]       = serialize($data);
+        $insert["payment_log_ip_address"] = get_ip_address();
+        $shop_id                          = $this->shop_info->shop_id;
+        
+        Payment::insert_logs($insert, $shop_id);
     }
 }

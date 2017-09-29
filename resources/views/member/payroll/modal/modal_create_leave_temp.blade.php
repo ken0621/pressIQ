@@ -15,7 +15,7 @@
 		<div class="form-group">
 			<div class="col-md-6">
 				<small>No. of Hours</small>
-				<input type="number" step="0.01" name="payroll_leave_temp_days_cap" class="form-control text-right" required>
+				<input type="number" name="payroll_leave_temp_days_cap" class="form-control text-right"  step="0.01" required>
 			</div>
 		</div>
 

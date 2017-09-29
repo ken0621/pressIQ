@@ -77,17 +77,17 @@
             <div class="container">
                 {{-- <div class="holder"><a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a></div>
                 <div class="holder"><div class="linya"></div></div> --}}
-                @if(isset($customer_info_a) && $customer_info_a == null)
-                <div class="holder"><a href="/mlm/login"><i class="fa fa-lock" aria-hidden="true"></i> Login</a></div>
-                <div class="holder"><div class="linya"></div></div>
-                <div class="holder"><a href="/mlm/register"><i class="fa fa-user" aria-hidden="true"></i> Register</a></div>
+                @if($customer)
+                    <div class="holder"><a href="/mlm"><i class="fa fa-user" aria-hidden="true"></i> Member's Area
+                        @if($slot_now != null)
+                            (Membership Code # {{$slot_now->slot_no}})
+                        @endif
+                        </a>
+                    </div>    
                 @else
-                <div class="holder"><a href="/mlm"><i class="fa fa-user" aria-hidden="true"></i> Member's Area
-                    @if($slot_now != null)
-                        (Membership Code # {{$slot_now->slot_no}})
-                    @endif
-                    </a>
-                </div>    
+                    <div class="holder"><a href="/mlm/login"><i class="fa fa-lock" aria-hidden="true"></i> Login</a></div>
+                    <div class="holder"><div class="linya"></div></div>
+                    <div class="holder"><a href="/mlm/register"><i class="fa fa-user" aria-hidden="true"></i> Register</a></div>
                 @endif
 
                 {{-- <!--<div class="holder"><div class="linya"></div></div>-->

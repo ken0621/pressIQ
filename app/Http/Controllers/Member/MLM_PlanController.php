@@ -35,6 +35,8 @@ use App\Models\Tbl_mlm_discount_card_settings;
 use App\Models\Tbl_item;
 use App\Models\Tbl_mlm_plan_binary_promotions;
 use App\Models\Tbl_direct_pass_up_settings;
+use App\Models\Tbl_advertisement_bonus_settings;
+use App\Models\Tbl_leadership_advertisement_settings;
 
 use App\Http\Controllers\Member\MLM_ProductController;
 use App\Http\Controllers\Member\MLM_PlanController;
@@ -569,6 +571,34 @@ class MLM_PlanController extends Member
             $insert['marketing_plan_name'] = "Direct Pass Up";
             $insert['marketing_plan_trigger'] = "Slot Creation";
             $insert['marketing_plan_label'] = "Direct Pass Up";
+            $insert['marketing_plan_enable'] = 0;
+            $insert['marketing_plan_release_schedule'] = 1;
+            $insert['marketing_plan_release_schedule_date'] = Carbon::now();
+            Tbl_mlm_plan::insert($insert);
+        }
+
+        if($count == 24)
+        {
+            // start STAIRSTEP complan settings insert
+            $insert['shop_id'] = $shop_id;
+            $insert['marketing_plan_code'] = "ADVERTISEMENT_BONUS";
+            $insert['marketing_plan_name'] = "Advertisement Bonus";
+            $insert['marketing_plan_trigger'] = "Slot Creation";
+            $insert['marketing_plan_label'] = "Advertisement Bonus";
+            $insert['marketing_plan_enable'] = 0;
+            $insert['marketing_plan_release_schedule'] = 1;
+            $insert['marketing_plan_release_schedule_date'] = Carbon::now();
+            Tbl_mlm_plan::insert($insert);
+        }
+
+        if($count == 25)
+        {
+            // start STAIRSTEP complan settings insert
+            $insert['shop_id'] = $shop_id;
+            $insert['marketing_plan_code'] = "LEADERSHIP_ADVERTISEMENT_BONUS";
+            $insert['marketing_plan_name'] = "Leadership Advertisement Bonus";
+            $insert['marketing_plan_trigger'] = "Slot Creation";
+            $insert['marketing_plan_label'] = "Leadership Advertisement Bonus";
             $insert['marketing_plan_enable'] = 0;
             $insert['marketing_plan_release_schedule'] = 1;
             $insert['marketing_plan_release_schedule_date'] = Carbon::now();
@@ -2589,5 +2619,71 @@ class MLM_PlanController extends Member
         $data['response_status'] = "success";
 
         echo json_encode($data);          
+    }
+
+    public static function advertisement_bonus($shop_id)
+    {
+        $data['basic_settings'] = MLM_PlanController::basic_settings('ADVERTISEMENT_BONUS');
+        $data['adsetting']      = Tbl_advertisement_bonus_settings::where("shop_id",$shop_id)->first();
+
+        return view('member.mlm_plan.configure.advertisement_bonus', $data);
+    }
+
+    public function advertisement_bonus_submit()
+    {
+        $shop_id   = $this->user_info->shop_id;
+        $adsetting = Tbl_advertisement_bonus_settings::where("shop_id",$shop_id)->first();
+        if(!$adsetting)
+        {
+            $insert["level_end"]                            = Request::input("level_end");
+            $insert["advertisement_income"]                 = Request::input("advertisement_income");
+            $insert["shop_id"]                              = $shop_id;
+            Tbl_advertisement_bonus_settings::insert($insert);
+        }
+        else
+        {
+            $update["level_end"]                            = Request::input("level_end");
+            $update["advertisement_income"]                 = Request::input("advertisement_income");
+            $update["shop_id"]                              = $shop_id;
+            Tbl_advertisement_bonus_settings::where("shop_id",$shop_id)->update($update);
+        }
+
+        $data['response_status'] = "success";
+        echo json_encode($data);  
+    }
+
+    public static function leadership_advertisement_bonus($shop_id)
+    {
+        $data['basic_settings'] = MLM_PlanController::basic_settings('LEADERSHIP_ADVERTISEMENT_BONUS');
+        $data['ldsetting']      = Tbl_leadership_advertisement_settings::where("shop_id",$shop_id)->first();
+
+        return view('member.mlm_plan.configure.leadership_advertisement_bonus', $data);
+    }
+
+    public function leadership_advertisement_bonus_submit()
+    {
+        $shop_id   = $this->user_info->shop_id;
+        $adsetting = Tbl_leadership_advertisement_settings::where("shop_id",$shop_id)->first();
+        if(!$adsetting)
+        {
+            $insert["left"]                                 = Request::input("left");
+            $insert["right"]                                = Request::input("right");
+            $insert["level_start"]                          = Request::input("level_start");
+            $insert["leadership_advertisement_income"]      = Request::input("leadership_advertisement_income");
+            $insert["shop_id"]                              = $shop_id;
+            Tbl_leadership_advertisement_settings::insert($insert);
+        }
+        else
+        {
+            $update["left"]                                 = Request::input("left");
+            $update["right"]                                = Request::input("right");
+            $update["level_start"]                          = Request::input("level_start");
+            $update["leadership_advertisement_income"]      = Request::input("leadership_advertisement_income");
+            $update["shop_id"]                              = $shop_id;
+            Tbl_leadership_advertisement_settings::where("shop_id",$shop_id)->update($update);
+        }
+
+        $data['response_status'] = "success";
+        echo json_encode($data);  
     }
 }

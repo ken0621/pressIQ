@@ -19,6 +19,7 @@ use App\Globals\Mlm_complan_manager;
 use App\Globals\Reward;
 use App\Globals\MLM2;
 use App\Globals\Mlm_complan_manager_repurchase;
+use App\Globals\Columns;
 use App\Models\Tbl_mlm_item_points;
 use App\Models\Tbl_brown_rank;
 use DB;
@@ -41,8 +42,21 @@ class MlmDeveloperController extends Member
     {
         /* INITIAL DATA */
         $data               = Self::get_initial_settings();
+        $search             = Request::input("search");
     	$data["slot_count"] = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->count();
-    	$data["_slot_page"] = $_slot = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->membership()->customer()->currentWallet()->orderBy("slot_id", "desc")->paginate(5);
+        $slot_query         = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->membership()->customer()->currentWallet()->orderBy("slot_id", "desc");
+    	
+        if($search != "")
+        {
+            $slot_query->where(function($q) use ($search)
+            {
+                $q->orWhere("first_name", "LIKE", "%$search%");
+                $q->orWhere("last_name", "LIKE", "%$search%");
+                $q->orWhere("slot_no", "LIKE", "%$search%");
+            });
+        }
+
+        $data["_slot_page"] = $_slot = $slot_query->paginate(5);
 
         /* CUSTOM SLOT TABLE */
         foreach($_slot as $key => $slot)
@@ -50,12 +64,17 @@ class MlmDeveloperController extends Member
             $total_gc = Tbl_mlm_gc::where("mlm_gc_slot", $slot->slot_id)->value("mlm_gc_amount");
 
         	$data["_slot"][$key] = $slot;
+            $data["_slot"][$key]->customer = '<a target="_blank" href="/members/autologin?email=' . $slot->email . '&password=' . $slot->password . '">' . strtoupper($slot->last_name) . ',' . strtoupper($slot->first_name) . ' ' . strtoupper($slot->middle_name) . '</a>';
             $data["_slot"][$key]->sponsor = Tbl_mlm_slot::customer()->where("slot_id", $slot->slot_sponsor)->first();
             $data["_slot"][$key]->placement = Tbl_mlm_slot::customer()->where("slot_id", $slot->slot_placement)->first();
         	$data["_slot"][$key]->current_wallet_format = "<a href='javascript:' link='/member/mlm/developer/popup_earnings?slot_id=" . $slot->slot_id . "' class='popup' size='lg'>" . Currency::format($data["_slot"][$key]->current_wallet) . "</a>";
         	$data["_slot"][$key]->total_earnings_format = "<a href='javascript:' link='/member/mlm/developer/popup_earnings?slot_id=" . $slot->slot_id . "' class='popup' size='lg'>" . Currency::format($data["_slot"][$key]->total_earnings) . "</a>";
         	$data["_slot"][$key]->total_payout_format = "<a href='javascript:'>" . Currency::format($data["_slot"][$key]->total_payout * -1) . "</a>";
             $data["_slot"][$key]->total_gc_format = Currency::format(0);
+            $data["_slot"][$key]->display_slot_binary_left = number_format($slot->slot_binary_left);
+            $data["_slot"][$key]->display_slot_binary_right = number_format($slot->slot_binary_right);
+            $data["_slot"][$key]->display_date = date("F d, Y", strtotime($slot->slot_created_date));
+            $data["_slot"][$key]->display_time = date("h:i A", strtotime($slot->slot_created_date));
 
             /* BROWN RANK DETAILS */
             $brown_current_rank = Tbl_brown_rank::where("rank_id", $slot->brown_rank_id)->first();
@@ -126,11 +145,44 @@ class MlmDeveloperController extends Member
         $total_slot_wallet  = Tbl_mlm_slot_wallet_log::slot()->where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->sum("wallet_log_amount");
     	$total_payout       = Tbl_mlm_slot_wallet_log::slot()->where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->where("wallet_log_amount", "<", 0)->sum("wallet_log_amount") * -1;
     	$total_earnings     = Tbl_mlm_slot_wallet_log::slot()->where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->where("wallet_log_amount", ">", 0)->sum("wallet_log_amount");
-    	
+
         /* FORMAT TOTALS */
     	$data["total_slot_wallet"]     = Currency::format($total_slot_wallet);
     	$data["total_slot_earnings"]   = Currency::format($total_earnings);
     	$data["total_payout"]          = Currency::format($total_payout);
+
+
+        $default[]          = ["SLOT NO","slot_no", true];
+        $default[]          = ["SLOT OWNER","customer", false];
+        $default[]          = ["SPONSOR","sponsor_button", false];
+        $default[]          = ["PLACEMENT","placement_button", false];
+        $default[]          = ["MEMBERSHIP","membership_name", true];
+        $default[]          = ["BINARY LEFT","display_slot_binary_left", false];
+        $default[]          = ["BINARY RIGHT","display_slot_binary_right", false];
+
+        $default[]          = ["BROWN CURRENT RANK","brown_current_rank", false];
+        $default[]          = ["BROWN NEXT RANK","brown_next_rank", false];
+        $default[]          = ["BROWN NEXT RANK REQ","brown_next_rank_requirements", false];
+        $default[]          = ["BROWN BUILDER POINTS","brown_builder_points", false];
+        $default[]          = ["BROWN LEADER POINTS","brown_leader_points", false];
+
+        $default[]          = ["DATE CREATED","display_date", true];
+        $default[]          = ["TIME CREATED","display_time", false];
+
+        $default[]          = ["EARNINGS","total_earnings_format", true];
+        $default[]          = ["PAYOUT","total_payout_format", false];
+        $default[]          = ["CURRENT GC","total_gc_format", false];
+        $default[]          = ["CURRENT WALLET","current_wallet_format", true];
+
+        if(isset($data["_slot"]))
+        {
+            $data["_slot"]      = Columns::filterColumns($this->user_info->shop_id, $this->user_info->user_id, "slot_module", $data["_slot"], $default);
+        }
+        else
+        {
+            $data["_slot"]      = null;
+        }
+
 
     	return view("member.mlm_developer.mlm_developer_table", $data);
     }
@@ -362,6 +414,7 @@ class MlmDeveloperController extends Member
         {
             Tbl_mlm_slot_wallet_log::where("wallet_log_slot", $slot->slot_id)->delete();
             Tbl_mlm_slot::where("slot_id", $slot->slot_id)->delete();
+            Tbl_mlm_slot_wallet_log::where("tbl_mlm_slot.shop_id", $shop_id)->slot()->where("slot_owner", $slot->slot_owner)->delete();
             Tbl_mlm_slot::where("slot_owner", $slot->slot_owner)->delete();
             Tbl_customer_address::where("customer_id", $slot->slot_owner)->delete();
         }

@@ -27,6 +27,7 @@ use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_mlm_discount_card_settings;
 use App\Models\Tbl_mlm_binary_report;
 use App\Models\Tbl_brown_rank;
+use App\Models\Tbl_advertisement_bonus_settings;
 use App\Globals\Mlm_gc;
 use App\Globals\Mlm_complan_manager_repurchasev2;
 use App\Models\Tbl_mlm_gc;

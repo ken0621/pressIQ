@@ -90,6 +90,9 @@ class Cart2
 	}
 	public static function edit_item_from_cart($item_id, $quantity)
 	{
+		$cart_key = Self::get_cart_key();
+		$update["quantity"] = $quantity;
+		Tbl_cart::where("unique_id_per_pc", $cart_key)->where("product_id", $item_id)->where("status", "Not Processed")->update($update);
 	}
 	public static function delete_item_from_cart($item_id)
 	{
@@ -178,6 +181,30 @@ class Cart2
 			$data["info"]								= $cart_info;
 			return $data;
 		}
+	}
+	public static function get_cart_quantity()
+	{
+		$quantity = 0;
+		$cart_key = Self::get_cart_key();
+
+		if($cart_key)
+		{
+			$_cart = Tbl_cart::where("unique_id_per_pc", $cart_key)->where("status", "Not Processed")->get();
+ 		}
+
+		if(count($_cart) < 1)
+		{
+			return null;
+		}
+		else
+		{
+			foreach($_cart as $key => $cart)
+			{
+				$quantity += $cart->quantity;
+			}
+		}
+
+		return $quantity;
 	}
 	public static function clear_cart()
 	{

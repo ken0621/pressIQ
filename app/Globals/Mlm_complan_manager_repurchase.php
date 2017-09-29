@@ -962,4 +962,8 @@ class Mlm_complan_manager_repurchase
             }
         }
     }
+    public static function brown_repurchase()
+    {
+        
+    }
 }

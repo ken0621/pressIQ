@@ -85,7 +85,11 @@ Route::any('/member/mlm/plan/wallet/type/add', 'Member\MLM_PlanController@add_wa
 Route::any('/member/mlm/plan/binary/edit/membership/points', 'Member\MLM_PlanController@edit_binary_membership_points');//Luke
 Route::any('/member/mlm/plan/binary/get/membership/pairing/{membership_id}', 'Member\MLM_PlanController@get_binary_pairing_combination'); //Luke
 Route::any('/member/mlm/plan/binary/edit/membership/pairing/save', 'Member\MLM_PlanController@save_binary_pairing_combinartion'); //Luke
-/* start binary PLAN */
+
+
+/* start advertisement plan */
+Route::any('/member/mlm/plan/advertisement_bonus/settings/submit', 'Member\MLM_PlanController@advertisement_bonus_submit'); //Erwin
+Route::any('/member/mlm/plan/leadership_advertisement_bonus/settings/submit', 'Member\MLM_PlanController@leadership_advertisement_bonus_submit'); //Erwin
 
 /* start indirect PLAN */
 Route::any('/member/mlm/plan/indirect/edit/settings/{membership_id}', 'Member\MLM_PlanController@edit_indirect_setting');//Luke
@@ -219,6 +223,8 @@ Route::any('/member/mlm/encashment/add/to/list/date', 'Member\Mlm_EncashmentCont
 Route::any('/member/mlm/encashment/view/all/selected', 'Member\Mlm_EncashmentController@view_all_selected');//luke
 Route::any('/member/mlm/encashment/request/all/selected', 'Member\Mlm_EncashmentController@request_all_selected');//luke
 Route::any('/member/mlm/encashment/deny/all/selected', 'Member\Mlm_EncashmentController@deny_all_selected');//luke
+
+AdvancedRoute::controller("/member/mlm/payout","Member\MLM_PayoutController");
 /* end MLM Product */
 
 /* start MLM Product */

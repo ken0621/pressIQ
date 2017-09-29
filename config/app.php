@@ -163,6 +163,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Jenssegers\Agent\AgentServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -243,6 +244,7 @@ return [
         'Honeypot' => Msurguy\Honeypot\HoneypotFacade::class,
         'Input'     => Illuminate\Support\Facades\Input::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        'Agent' => Jenssegers\Agent\Facades\Agent::class,
 
     ],
 

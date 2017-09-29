@@ -34,7 +34,6 @@
 						</li>
 						
 						@if($mlm_member)
-						
 						<li class="{{ Request::segment(2) == "profile" ? "active" : "" }}">
 							<a href="/members/profile"><div class="nav-holder"><div class="icon brown-icon-profile"></div> <span>Profile</span></div></a>
 						</li>
@@ -91,15 +90,15 @@
 							<a href="/members/eon-card"><div class="nav-holder"><dic class="icon brown-icon-credit-card"></dic> <span>Eon Card</span></div></a>
 						</li> -->
 						@else
-		
+						@endif
+
 						<li class="{{ Request::segment(2) == "order" ? "active" : "" }}">
 							<a href="/members/order"><div class="nav-holder"><div class="icon brown-icon-bag"></div> <span>Orders</span></div></a>
 						</li>
-						<li class="{{ Request::segment(2) == "wishlist" ? "active" : "" }}">
+						<!-- <li class="{{ Request::segment(2) == "wishlist" ? "active" : "" }}">
 							<a href="/members/wishlist"><div class="nav-holder"><div class="icon brown-icon-heart-empty"></div> <span>Wishlist</span></div></a>
-						</li>
+						</li> -->
 
-						@endif
 						
 					</ul>
 				</div>

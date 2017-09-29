@@ -2991,7 +2991,6 @@ class Payroll2
 			}
 		}
 
-		
 		return $_output;
 	}
 

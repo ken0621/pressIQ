@@ -20,44 +20,53 @@ body{
 
 	.events-container {
 
-		.per-event {
-			padding: 10px 0px 40px 0px;
-
-			.event-image-container {
+		.company-events-holder
+		{
+			@media screen and (max-width: 414px)
+			{
+				display: block;
 				width: 100%;
-				img {
-					width: 100%;
-					height: auto;
-				}
-
-				&:hover {
-					cursor: pointer;
-					img {
-						opacity: 0.8;
-						transition: 0.3s all ease;
-					}
-				}
 			}
-			.event-details-container {
-				margin-top: -20px;
 
-				h1 {
-					font-size: 15px;
-					font-weight: 600;
-					color: #265fca;
+			.per-event {
+				padding: 10px 0px 40px 0px;
+
+				.event-image-container {
+					width: 100%;
+					img {
+						width: 100%;
+						height: auto;
+					}
 
 					&:hover {
-						text-decoration: underline;
 						cursor: pointer;
+						img {
+							opacity: 0.8;
+							transition: 0.3s all ease;
+						}
 					}
 				}
-				h2 {
-					font-size: 13px;
-					margin-top: -5px;
-				}
-				h3 {
-					font-size: 15px;
-					color: #1c1c1c;
+				.event-details-container {
+					margin-top: -20px;
+
+					h1 {
+						font-size: 15px;
+						font-weight: 600;
+						color: #265fca;
+
+						&:hover {
+							text-decoration: underline;
+							cursor: pointer;
+						}
+					}
+					h2 {
+						font-size: 13px;
+						margin-top: -5px;
+					}
+					h3 {
+						font-size: 15px;
+						color: #1c1c1c;
+					}
 				}
 			}
 		}

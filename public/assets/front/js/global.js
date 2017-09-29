@@ -82,7 +82,7 @@ function global()
 
 function image_crop(selector, width, height)
 {
-    $(selector).css("object-fit", "cover");
+    $(selector).css("object-fit", "contain").css("object-position", "center");
     $(selector).keepRatio({ ratio: width/height, calculate: 'height' });
 }
 function add_event_login_form()

@@ -24,6 +24,8 @@ use App\Models\Tbl_customer_address;
 use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_country;
 use App\Models\Tbl_locale;
+use App\Globals\Currency;
+use Jenssegers\Agent\Agent;
 use Validator;
 use Google_Client; 
 use Google_Service_Drive;
@@ -35,6 +37,7 @@ class ShopMemberController extends Shop
     {
         $data["page"] = "Dashboard";
         $data["mode"] = session("get_success_mode");
+        $data["zero_currency"] = Currency::format(0);
         session()->forget("get_success_mode");
 
         if(Self::$customer_info)
@@ -42,12 +45,30 @@ class ShopMemberController extends Shop
             $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["wallet"]             = $data["customer_summary"]["_wallet"];
             $data["points"]             = $data["customer_summary"]["_points"];
+            $data["_wallet_plan"]       = $data["customer_summary"]["_wallet_plan"];
+            $data["_point_plan"]        = $data["customer_summary"]["_point_plan"];
             $data["_slot"]              = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["_recent_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
             $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
         }
 
-        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.dashboard", $data));
+        return Self::load_view_for_members('member.dashboard', $data);
+    }
+    public function getSlotInfo()
+    {
+        $slot_id            = Crypt::decrypt(request("slot_no"));
+        $key                = request("key");
+        $data["slot_info"]  = $slot_info = Tbl_mlm_slot::where("slot_id", $slot_id)->customer()->first();
+
+        if(md5($slot_info->slot_id . $slot_info->slot_no) == $key)
+        {
+            return Self::load_view_for_members('member.slot_info', $data);   
+        }
+        else
+        {
+            return "ERROR OCCURRED";
+        }
+
     }
     public function getAutologin()
     {
@@ -317,7 +338,7 @@ class ShopMemberController extends Shop
 
         // $data["allowed_change_pass"] = true;
 
-        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.profile", $data));
+        return (Self::load_view_for_members("member.profile", $data));
     }
     public function postProfileUpdateInfo(Request $request)
     {
@@ -503,7 +524,7 @@ class ShopMemberController extends Shop
     {
         $data["page"] = "Notification";
         $data["_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
-        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.notification", $data));
+        return (Self::load_view_for_members("member.notification", $data));
     }
     public function getGenealogy(Request $request)
     {
@@ -518,7 +539,7 @@ class ShopMemberController extends Shop
             $data['mode'] = $request->mode;
         }
 
-        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.genealogy", $data));
+        return (Self::load_view_for_members("member.genealogy", $data));
     }
     public function getGenealogyTree(Request $request)
     {
@@ -531,7 +552,7 @@ class ShopMemberController extends Shop
         if($check)
         {
             $data = MemberSlotGenealogy::tree($shop_id, $check->slot_id, $mode);
-            return view('member.genealogy_tree', $data);            
+            return Self::load_view_for_members('member.genealogy_tree', $data);            
         }
         else
         {
@@ -546,6 +567,7 @@ class ShopMemberController extends Shop
     public function getNetwork()
     {
         $data["page"] = "Network List";
+        $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
 
         if(request()->input("slot_no") == "")
         {
@@ -554,63 +576,82 @@ class ShopMemberController extends Shop
         }
         else
         {
-            $data["_tree"] = MLM2::get_sponsor_network($this->shop_info->shop_id, request()->input("slot_no"));
-            return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.network", $data));
+            $data["_tree_level"] = MLM2::get_sponsor_network_tree($this->shop_info->shop_id, request()->input("slot_no"));
+            return (Self::load_view_for_members("member.network", $data));
+        }
+    }
+    public function getNetworkSlot()
+    {
+        $data["page"] = "Network List";
+        $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
+
+        if(request()->input("slot_no") == "")
+        {
+            $slot_no = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->value("slot_no");
+            return Redirect::to("/members/network?slot_no=" . $slot_no);
+        }
+        else
+        {
+            $data["_tree"] = MLM2::get_sponsor_network($this->shop_info->shop_id, request()->input("slot_no"), request('level'));
+            return (Self::load_view_for_members("member.network_slot", $data));
         }
     }
     public function getReport()
     {
-        $data["page"] = "Report";
-        $data["_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
-        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.report", $data));
+        $data["page"]           = "Report";
+        $data["_rewards"]       = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
+        return (Self::load_view_for_members("member.report", $data));
     }
     public function getWalletLogs()
     {
         $data["page"] = "Wallet Logs";
-        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.wallet_logs", $data));
+        return (Self::load_view_for_members("member.wallet_logs", $data));
     }
     public function getWalletEncashment()
     {
-        $data["page"] = "Wallet Encashment";
-        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.wallet_encashment", $data));
+        $data["page"]           = "Wallet Encashment";
+        $data["_encashment"]    = MLM2::customer_payout($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
+        $total_payout           = MLM2::customer_total_payout(Self::$customer_info->customer_id);
+        $data["total_payout"]   = Currency::format($total_payout);
+        return (Self::load_view_for_members("member.wallet_encashment", $data));
     }
     public function getSlot()
     {
         $data["page"] = "Slot";
-        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.slot", $data));
+        return (Self::load_view_for_members("member.slot", $data));
     }
     public function getEonCard()
     {
         $data["page"] = "Eon Card";
-        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.eon_card", $data));
+        return (Self::load_view_for_members("member.eon_card", $data));
     }
     public function getOrder()
     {
         $data["page"] = "Orders";
-        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.order", $data));
+        return (Self::load_view_for_members("member.order", $data));
     }
     public function getWishlist()
     {
         $data["page"] = "Wishlist";
-        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.wishlist", $data));
+        return (Self::load_view_for_members("member.wishlist", $data));
     }
     public function getCheckout()
     {
         $data["page"] = "Checkout";
-        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.checkout", $data));
+        return (Self::load_view_for_members("member.checkout", $data));
     }
     public function getNonMember()
     {
         $data["page"] = "NonMember";
-        return (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.nonmember", $data));
+        return (Self::load_view_for_members("member.nonmember", $data));
     }
-    public function getTest()
+    public function getTest($method)
     {
         $shop_id    = $this->shop_info->shop_id; //tbl_shop
-        $key        = "paymaya"; //link reference name
-        $success    = "/checkout/finish/success"; //redirect if payment success
-        $failed     = "/checkout/finish/error"; //redirect if payment failed
-        $debug      = false;
+        $key        = $method; //link reference name
+        $success    = "/members?success=1"; //redirect if payment success
+        $failed     = "/members?failed=1"; //redirect if payment failed
+        $debug      = true;
 
         $error = Payment::payment_redirect($shop_id, $key, $success, $failed, $debug);
         dd($error);
@@ -643,7 +684,7 @@ class ShopMemberController extends Shop
             $store["sponsor"] = $sponsor->slot_no;
             session($store);
 
-            $return = (Self::logged_in_member_only() ? Self::logged_in_member_only() : view("member.card", $data));
+            $return = (Self::load_view_for_members("member.card", $data));
         }
 
         return $return;
@@ -857,5 +898,21 @@ class ShopMemberController extends Shop
 
         $data["procceed"] = $procceed;
         return $data;
+    }
+
+    public function load_view_for_members($view, $data)
+    {
+        $agent = new Agent();
+
+        if($agent->isMobile())
+        {
+            $new_view = str_replace("member.", "member.mobile.", $view);
+            if(view()->exists($new_view))
+            {
+                $view = $new_view;
+            }
+        }
+
+        return Self::logged_in_member_only() ? Self::logged_in_member_only() : view($view, $data);
     }
 }

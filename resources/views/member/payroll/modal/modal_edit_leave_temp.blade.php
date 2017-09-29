@@ -19,7 +19,7 @@
 			<div class="col-md-6">
 				<small>No. of Hours</small>
 				<input type="number" name="payroll_leave_temp_days_cap" class="form-control text-right"
-				value="{{$leave_temp->payroll_leave_temp_days_cap}}" required>
+				value="{{$leave_temp->payroll_leave_temp_days_cap}}" step="0.01" required>
 			</div>
 		</div>
 

@@ -102,4 +102,12 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/partners', 'Shop\ShopPartnersController@index');
 	Route::get('/partner-filtering-location', 'Shop\ShopPartnersController@partnerFilterByLocation');
 	Route::get('/legalities', 'Shop\ShopLegalitiesController@index');
+
+	/* Cart V2 */
+	Route::get('/cartv2', 'Shop\ShopCart2Controller@index');
+	Route::get('/cartv2/add', 'Shop\ShopCart2Controller@add_cart');
+	Route::get('/cartv2/remove', 'Shop\ShopCart2Controller@remove_cart');
+	Route::get('/cartv2/update', 'Shop\ShopCart2Controller@update_cart');
+	Route::get('/cartv2/clear', 'Shop\ShopCart2Controller@clear_cart');
+	Route::get('/cartv2/quantity', 'Shop\ShopCart2Controller@quantity_cart');
 }

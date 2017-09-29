@@ -273,7 +273,7 @@ function action_load_main_modal(url, size)
     $("#global_modal").find(".modal-dialog").removeClass("modal-lg");
     $("#global_modal").find(".modal-dialog").removeClass("modal-sm");
     $("#global_modal").find(".modal-dialog").addClass("modal-" + size);
-    $("#global_modal").find(".modal-content").append('<div style="margin: 100px auto;" class="loader-16-gray"></div>')
+    $("#global_modal").find(".modal-content").append('<div style="margin: 100px auto; text-align: center; font-size: 30px;"><i class="fa fa-spinner fa-pulse"></i></div>')
     $("#global_modal").find(".modal-content").load(url, function(response, status, xhr)
     {
         if(status == "error")
@@ -343,6 +343,7 @@ function action_load_after_multiple_modal(url, size)
 
 function action_load_link_to_modal(url, size)
 {
+
     if (isEmpty($('#global_modal').find(".modal-content")))
     {
         action_load_main_modal(url, size);

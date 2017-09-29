@@ -97,9 +97,9 @@
 								<div class="color" style="background-color: #8E5EA2"></div>
 								<div class="name"><span>Total Pay-out</span> {{ $wallet->display_total_payout }}</div>
 							</div>
-							<div class="chart-holder">
+							<!-- <div class="chart-holder">
 								<canvas id="income_summary" style="max-width: 150px;" width="400" height="400"></canvas>
-							</div>
+							</div> -->
 							<div class="holder">
 								<div class="color"></div>
 								<div class="name"><span>Current Slot(s)</span> {{ $customer_summary["display_slot_count"] }}</div>
@@ -109,73 +109,6 @@
 								<div class="name"><span>Total Reward</span> {{ $wallet->display_total_earnings }}</div>
 							</div>
 						</div>
-
-						<table class="table hidden">
-							<thead>
-								<tr>
-									<th width="33.3333333333%">Level</th>
-									<th width="33.3333333333%">Count</th>
-									<th width="33.3333333333%">Percentage</th>
-								</tr>
-							</thead>
-							<tbody class="table-body">
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">
-									<td>1</td>
-									<td>2/2</td>
-									<td>100%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">
-									<td>2</td>
-									<td>4/4</td>
-									<td>100%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">
-									<td>4</td>
-									<td>8/8</td>
-									<td>100%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">
-									<td>5</td>
-									<td>16/16</td>
-									<td>100%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 98.875%, rgb(237, 237, 237) 98.875%);">
-									<td>6</td>
-									<td>31/32</td>
-									<td>98.875%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 40.625%, rgb(237, 237, 237) 40.625%);">
-									<td>7</td>
-									<td>26/64</td>
-									<td>40.625%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 28.90625%, rgb(237, 237, 237) 28.90625%);">
-									<td>8</td>
-									<td>37/128</td>
-									<td>28.90625%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 20.3125%, rgb(237, 237, 237) 20.3125%);">
-									<td>9</td>
-									<td>52/256</td>
-									<td>20.3125%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 13.4765625%, rgb(237, 237, 237) 13.4765625%);">
-									<td>10</td>
-									<td>69/512</td>
-									<td>13.4765625%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 4.1015625%, rgb(237, 237, 237) 4.1015625%);">
-									<td>11</td>
-									<td>42/1024</td>
-									<td>4.1015625%</td>	
-								</tr>
-								<tr style="background: linear-gradient(to right, rgb(220, 220, 220) 1.953125%, rgb(237, 237, 237) 1.953125%);">
-									<td>12</td>
-									<td>40/2048</td>
-									<td>1.953125%</td>	
-								</tr>
-							</tbody>
-						</table>
 					</div>
 				</div>
 			</div>
@@ -184,27 +117,12 @@
 				<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
 				<div class="sub-container">
 					<div class="chart-legend">
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Repurchase Cashback</span> {{ $wallet->display_complan_repurchase_cashback }}</div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Direct Referral Bonus</span> {{ $wallet->display_complan_direct }}</div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Indirect Referral Bonus</span> {{ $wallet->display_complan_indirect }}</div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Matching Bonus</span> {{ $wallet->display_complan_membership_matching }}</div>
-						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Unilevel Bonus</span> {{ $wallet->display_complan_unilevel }}</div>
-						</div>
-
+						@foreach($_wallet_plan as $plan)
+							<div class="holder">
+								<div class="color"></div>
+								<div class="name"><span>{{ $plan->label }}</span> {{ $wallet->{ "display_" . $plan->string_plan } }}</div>
+							</div>
+						@endforeach
 					</div>
 
 				</div>
@@ -212,46 +130,49 @@
 				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
 				<div class="sub-container">
 					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
+						@foreach($_point_plan as $plan)
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Builder Point(s)</span> {{ $points->display_brown_builder_points }}</div>
+							<div class="name"><span>{{ $plan->label }}</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
 						</div>
-						<div class="holder">
-							<div class="color"></div>
-							<div class="name"><span>Reward Point(s)</span> {{ $points->display_brown_leader_points }}</div>
-						</div>
+						@endforeach
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="title"><i class="align-icon brown-icon-globe"></i> Newest Enrollee(s) Sponsored</div>
+				<div class="title"><i class="align-icon brown-icon-globe"></i> Newest Direct Referrals</div>
 				<div class="sub-container border-holder">
 					<div class="clearfix wow hidden">
 						<div class="badge right">6 New Members</div>
 					</div>
-					@foreach($_direct as $direct)
-					<div class="holder">
-						<div class="color">
-							<img src="{{ $direct->profile_image }}">
-						</div>	
-						<div class="text">
-							<div class="pull-left">
-								<div class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
-								<div class="email">{{ $direct->slot_no }}</div>
-								<div class="date">{{ $direct->time_ago }}</div>
+					@if(count($_direct) > 0)
+						@foreach($_direct as $direct)
+						<div class="holder">
+							<div class="color">
+								<img src="{{ $direct->profile_image }}">
+							</div>	
+							<div class="text">
+								<div class="pull-left">
+									<div class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
+									<div class="email">{{ $direct->slot_no }}</div>
+									<div class="date">{{ $direct->time_ago }}</div>
+								</div>
+							</div>
+							<div class="action pull-right">
+								@if($direct->distributed == 1)
+									<button class="btn btn-default"><i class="fa fa-star"></i> VIEW INFO</button>
+								@else
+									<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
+								@endif
 							</div>
 						</div>
-						<div class="action pull-right">
-							@if($direct->distributed == 1)
-								<button class="btn btn-default"><i class="fa fa-star"></i> VIEW INFO</button>
-							@else
-								<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
-							@endif
-						</div>
-					</div>
-					@endforeach
+						@endforeach
+					@else
+
+						<div class="text-center" style="padding: 20px">You don't have any direct referral yet.</div>
+					@endif
 				</div>
 			</div>
 			<div class="col-md-6">
@@ -259,23 +180,27 @@
 					<div class="title"><i class="align-icon brown-icon-money"></i> Recent Rewards <a href="javascript:" class="title-button pull-right">View All Rewards</a></div>
 					<div class="sub-container">
 						<div class="activities">
-							@foreach($_recent_rewards as $recent_reward)
-							<div class="holder">
-								<div class="circle-line">
-									<div class="circle"><img src="/themes/{{ $shop_theme }}/img/circle.png"></div>
-									<div class="line"><img src="/themes/{{ $shop_theme }}/img/line.jpg"></div>
-								</div>
-								<div class="message">{!! $recent_reward->log !!}</div>
-								<div class="row clearfix">
-									<div class="col-sm-6">
-										<div class="date">{{ $recent_reward->time_ago }}</div>
+							@if(count($_recent_rewards) > 0)
+								@foreach($_recent_rewards as $recent_reward)
+								<div class="holder">
+									<div class="circle-line">
+										<div class="circle"><img src="/themes/{{ $shop_theme }}/img/circle.png"></div>
+										<div class="line"><img src="/themes/{{ $shop_theme }}/img/line.jpg"></div>
 									</div>
-									<div class="col-sm-6">
-										<div class="wallet"> EARNED BY {{ $recent_reward->slot_no }}</div>
+									<div class="message">{!! $recent_reward->log !!}</div>
+									<div class="row clearfix">
+										<div class="col-sm-6">
+											<div class="date">{{ $recent_reward->time_ago }}</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="wallet"> EARNED BY {{ $recent_reward->slot_no }}</div>
+										</div>
 									</div>
 								</div>
-							</div>
-							@endforeach
+								@endforeach
+							@else
+								<div class="text-center" style="padding: 20px">You don't have any reward yet.</div>
+							@endif
 						</div>
 					</div>
 				</div>

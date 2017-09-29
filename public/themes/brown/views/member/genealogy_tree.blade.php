@@ -33,7 +33,7 @@
                                         <img src="/assets/slot_genealogy/member/img/default-image.jpg">
                                     </div>
                                     <div id="cont">
-                                        <div>{{ strtoupper($slot->first_name) }}</div>
+                                        <div>YOU</div>
                                         <b>{{ $slot->membership_name }}</b>
                                     </div>
                                     <div>{{ $slot->slot_status }}</div>

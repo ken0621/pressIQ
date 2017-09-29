@@ -352,7 +352,7 @@ class ShopMemberController extends Shop
                 $update_new_password["password"] = Crypt::encrypt($new_password);
                 Tbl_customer::where("customer_id",$validate->customer_id)->update($update_new_password);
 
-                Mail::send('emails.test', $data, function ($message) use ($return)
+                Mail::send('emails.test', $data, function ($message) use ($data)
                 {
                     $message->from(env('MAIL_USERNAME'), $data["shop_key"]);
 

@@ -5,6 +5,7 @@ $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
 
+
 .genealogy-container
 {
 	font-family: $content-text;
@@ -84,4 +85,9 @@ $text-dark: #272c2f;
 	{
 		margin-top: 25px;
 	}
+
+}
+.genealogy-frame
+{
+	border: 2px solid #ddd;
 }

@@ -330,9 +330,9 @@ class ShopMemberController extends Shop
             $content_key = "front_forgot_password";
             if(EmailContent::checkIfexisting($content_key, $shop_id) != 0)
             {
-                $return["subject"] = EmailContent::getSubject($content_key);
-                $return["shop_key"] = EmailContent::getShopkey();
-                $return["email"] = $validate->email;
+                $data["subject"] = EmailContent::getSubject($content_key);
+                $data["shop_key"] = EmailContent::getShopkey();
+                $data["email"] = $validate->email;
 
                 $new_password = Crypt::decrypt($validate->password);
 
@@ -347,16 +347,16 @@ class ShopMemberController extends Shop
 
                 $change_content = $txt;
 
-                $return["content"] = EmailContent::email_txt_replace($content_key, $change_content);
+                $data["content"] = EmailContent::email_txt_replace($content_key, $change_content);
 
                 $update_new_password["password"] = Crypt::encrypt($new_password);
                 Tbl_customer::where("customer_id",$validate->customer_id)->update($update_new_password);
 
-                Mail::send('emails.test', $return, function ($message) use ($return)
+                Mail::send('emails.test', $data, function ($message) use ($return)
                 {
-                    $message->from(env('MAIL_USERNAME'), $return["shop_key"]);
+                    $message->from(env('MAIL_USERNAME'), $data["shop_key"]);
 
-                    $message->to($return["email"])->subject($return["subject"]);
+                    $message->to($data["email"])->subject($data["subject"]);
                 });
 
                 $return_data['status'] = 'success';

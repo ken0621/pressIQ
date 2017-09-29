@@ -323,7 +323,6 @@ class ShopMemberController extends Shop
     {
         $shop_id = $this->shop_info->shop_id;
         $validate = Customer::check_email($shop_id, Request2::input('email'));
-
         $return_data = null;
         if($validate)
         {
@@ -333,7 +332,6 @@ class ShopMemberController extends Shop
                 $data["subject"] = EmailContent::getSubject($content_key);
                 $data["shop_key"] = EmailContent::getShopkey();
                 $data["email"] = $validate->email;
-
                 $new_password = Crypt::decrypt($validate->password);
 
                 $txt[0]["txt_to_be_replace"] = "[name]";

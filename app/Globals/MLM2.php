@@ -60,11 +60,17 @@ class MLM2
 			return Tbl_mlm_slot_wallet_log::insertGetId($insert);
 		}
 	}
-	public static function get_sponsor_network($shop_id, $slot_no)
+	public static function get_sponsor_network($shop_id, $slot_no, $level = null)
 	{
 		$slot_id = Tbl_mlm_slot::where("shop_id", $shop_id)->where("slot_no", $slot_no)->value("slot_id");
-		$_tree = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot_id)->orderBy("sponsor_tree_level")->child_info()->customer()->get();
-	
+		$_tree_query = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot_id)->orderBy("sponsor_tree_level")->child_info()->customer();
+
+		if($level)
+		{
+			$_tree_query->where("sponsor_tree_level", $level);
+		}
+		
+		$_tree = $_tree_query->get();
 		foreach($_tree as $key => $tree)
 		{
 			$_tree[$key]->ordinal_level = ordinal($tree->sponsor_tree_level) . " Level";
@@ -72,7 +78,21 @@ class MLM2
 		}
 
 		return $_tree;
-	}	
+	}
+
+	public static function get_sponsor_network_tree($shop_id, $slot_no)
+	{
+		$slot_id = Tbl_mlm_slot::where("shop_id", $shop_id)->where("slot_no", $slot_no)->value("slot_id");
+		$_tree = Tbl_tree_sponsor::select(DB::raw("*, count(slot_id) AS slot_count"))->where("sponsor_tree_parent_id", $slot_id)->groupBy("sponsor_tree_level")->orderBy("sponsor_tree_level")->child_info()->customer()->get();
+	
+		foreach($_tree as $key => $tree)
+		{
+			$_tree[$key]->ordinal_level = ordinal($tree->sponsor_tree_level) . " Level";
+			$_tree[$key]->display_slot_count = number_format($tree->slot_count) . " SLOT(S)";
+		}
+
+		return $_tree;
+	}
 	public static function verify_sponsor($shop_id, $sponsor_key)
 	{
 

@@ -94,11 +94,11 @@ class PayrollTimeSheet2Controller extends Member
 	}
 	public function timesheet($period_id, $employee_id)
 	{
-		// dd();
 		$data["page"]					= "Employee Timesheet";
 		$data["employee_id"]			= $this->$employee_id = $employee_id;
 		$data["employee_info"]			= $this->db_get_employee_information($employee_id); 
 		$data["company_period"] 		= $this->db_get_company_period_information($period_id);
+
 		$data["show_period_start"]		= date("F d, Y", strtotime($data["company_period"]->payroll_period_start));
 		$data["show_period_end"]		= date("F d, Y", strtotime($data["company_period"]->payroll_period_end));
 		$data["_timesheet"] 			= Payroll2::timesheet_info($data["company_period"], $employee_id);
@@ -111,6 +111,7 @@ class PayrollTimeSheet2Controller extends Member
 		$data["compute_type"] = $employee_contract->payroll_group_salary_computation;
 
 		$data["period_id"] = $period_id;
+
 
 		if($data["compute_type"] == "Flat Rate")
 		{

@@ -93,12 +93,107 @@
 					</div>
 				</div>
 			</div>
+			<div class="jca-title-container">
+				<p class="main-title"><font class="shade-green">Benefits In</font> JCA International</p>
+				<p class="sub-title"><font class="shade-black">BENEFITS</font> of becoming a Member of JCA Wellness International </p>
+			</div>
+			<div class="bulleted-list-container">
+				<div class="content-container row clearfix">
+					<div class="col-md-3">
+						<li class="animated fadeInLeft bulleted-list">
+							<p class="list-content">Membership ID which entitles the distributor up to 36 % Lifetime Discount on all JCA Wellness Products upon repeat purchase</p>
+						</li>
+					</div>
+					<div class="col-md-3">
+						<li class="animated fadeInLeft bulleted-list">
+							<p class="list-content">Package worth almost 9,000 pesos for a Standard Package, 27,000 pesos for a Premium Package and 63,000 pesos for a VIP Package</p>
+						</li>
+					</div>
+					<div class="col-md-3">
+						<li class="animated fadeInLeft bulleted-list">
+							<p class="list-content">Opportunity to earn 15,000 a day, 90,000 a week, 360,000 a month for Override Sales Commission</p>
+						</li>
+					</div>
+					<div class="col-md-3">
+						<li class="animated fadeInLeft bulleted-list">
+							<p class="list-content">Product Gift Certificates for JCA Wellness Product Purchases</p>
+						</li>
+					</div>
+				</div>
+			</div>
+			<div class="button-container">
+				<button class="legalities-button">
+					<img class="button-img" src="/themes/{{ $shop_theme }}/img/legalities-icon-button.png">
+					<p class="button-name">LEGALITIES</p>
+				</button>
+			</div>
 		</div>
 	</div>
 	<!-- BENEFITS IN JCA -->
-	<div class="wrapper-3"></div>
+	<div class="wrapper-3" style="background-image: url('/themes/{{ $shop_theme }}/img/mission-vision-background.png');">
+		<div class="container">
+			<div class="mission-vision-container">
+				<div class="content-container row clearfix">	
+					<div class="col-md-8">
+						<div class="content-container row clearfix">
+							<div class="col-md-12">
+								<div class="jca-title-container">
+									<p class="title-company">COMPANY</p>
+									<p class="title-mission">MISSION</p>
+									<p class="title-vision">VISION</p>
+								</div>
+							</div>
+						</div>
+						<div class="content-container row clearfix">
+							<div class="col-md-6">
+								<p class="animated fadeInLeft sub-title">Bring innovation in the beauty and wellness market.</p>
+								<p class="animated fadeInLeft content">In this world full of chemical-based beauty and wellness product, JCA Wellness International Corp., aims to divert the market’s attention to change their usual beauty and wellness product to safe and organic products that will guarantee them a life-long benefits.</p>
+							</div>
+							<div class="col-md-6">
+								<p class="animated fadeInLeft sub-title">To build business opportunities that will start in the Philippines and provide financial freedom.</p>
+								<p class="animated fadeInLeft content">JCA Wellness International Corporation will start its initial market in the Philippines and it aims to help fellow aspiring Filipino entrepreneurs to start their business venture with the right products and the right investment.</p>
+							</div>
+							<div class="col-md-6">
+								<p class="animated fadeInLeft sub-title">To build a continuous brand and consumer loyalty.</p>
+								<p class="animated fadeInLeft content">As JCA Wellness International Corporation marks it image in the market as a company that focuses on using and promoting organic and safe products, it also aims to maintain the brand positioning and the consumer loyalty by continuously providing its product and taking care of its consumers as well.</p>
+							</div>
+							<div class="col-md-6">
+								<p class="animated fadeInLeft sub-title">To expand the network globally.</p>
+								<p class="animated fadeInLeft content">As this company will start its market in the Philippines, it also aims to go globally. It aims to build network, promote the products globally and give a higher opportunity to its future potential business partners.</p>
+							</div>
+						</div>
+					</div>
+					<!-- <div class="col-md-4">
+						<img class="img-background" src="/themes/{{ $shop_theme }}/img/mission-vision-background.png">
+					</div> -->
+				</div>
+			</div>
+		</div>
+	</div>
 	<!-- COMPANY MISISON VISION -->
-	<div class="wrapper-4"></div>
+	<div class="wrapper-4">
+		<div class="container">
+			<div class="jca-title-container">
+				<p class="main-title"><font class="shade-green">Products &</font> Services</p>
+			</div>
+			<div class="products-services-container">
+				<div class="content-container row clearfix">
+					<div class="col-md-4">
+						<img class="products-services-img" src="/themes/{{ $shop_theme }}/img/product&services-001.png">
+						<p class="animated fadeInLeft img-title">Swiss Apple Stem Cell Soap with Glutathione and Collagen</p>
+					</div>
+					<div class="col-md-4">
+						<img class="products-services-img" src="/themes/{{ $shop_theme }}/img/product&services-002.png">
+						<p class="animated fadeInLeft img-title">Swiss Apple Stem Cell Serum</p>
+					</div>
+					<div class="col-md-4">
+						<img class="products-services-img" src="/themes/{{ $shop_theme }}/img/product&services-003.png">
+						<p class="animated fadeInLeft img-title">Stem Cell Anti-Aging Injectable</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="wrapper-5"></div>
 	<!-- SCROLL TO TOP -->
 	<div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>

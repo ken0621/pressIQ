@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>{{ ucfirst($shop_info->shop_key) }} | {{ $page }}</title>
+        <title>{{ ucfirst($shop_info->shop_key) }} | {{ isset($page) ? $page : "" }}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -61,8 +61,13 @@
     <!-- HEADER -->
     <div class="subheader-container">
         <div class="container">
+            @if($customer)
+            <div class="left-container"><span><i class="fa fa-heart-o" aria-hidden="true"></i></span><span>BECOME A MEMBER</span></div>
+            <div class="right-container"><span style="cursor: pointer;" onClick="location.href='/members/logout'">LOGOUT</span><span style="cursor: pointer;" onClick="location.href='/members'">MY ACCOUNT</span></div>
+            @else
             <div class="left-container"><span><i class="fa fa-heart-o" aria-hidden="true"></i></span><span>BECOME A MEMBER</span></div>
             <div class="right-container"><span style="cursor: pointer;" onClick="location.href='/members/login'">LOGIN</span><span style="cursor: pointer;" onClick="location.href='/members/register'">REGISTER</span></div>
+            @endif
         </div>
     </div>
     <div class="header-container">
@@ -279,5 +284,23 @@
         });
 
     </script>
+
+    {{-- START GLOBAL MODAL --}}
+    <div id="global_modal" class="modal fade" role="dialog" >
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content modal-content-global clearfix">
+            </div>
+        </div>
+    </div>
+    {{-- END GLOBAL MODAL --}}
+    {{-- GLOBAL MULTIPLE MODAL --}}
+    <div class="multiple_global_modal_container"></div>
+    {{-- END GLOBAL MULTIPLE MODAL --}}
+
+
+    
+    <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
+    @yield("script")
     </body>
 </html>

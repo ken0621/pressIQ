@@ -27,6 +27,7 @@ use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_mlm_discount_card_settings;
 use App\Models\Tbl_mlm_binary_report;
 use App\Models\Tbl_brown_rank;
+use App\Models\Tbl_advertisement_bonus_settings;
 use App\Globals\Mlm_gc;
 use App\Globals\Mlm_complan_manager_repurchasev2;
 use App\Models\Tbl_mlm_gc;
@@ -47,6 +48,14 @@ use App\Globals\Membership_code;
 use App\Globals\Binary_pairing;
 class Mlm_complan_manager
 {   
+    public static function advertisement_bonus()
+    {
+        
+    }   
+    public static function leadership_advertisement_bonus()
+    {
+
+    }
     public static function brown_rank($slot_info)
     {
         /* SET TO LOWEST RANK */

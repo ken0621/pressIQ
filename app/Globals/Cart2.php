@@ -208,12 +208,16 @@ class Cart2
 			$_cart = Tbl_cart::where("unique_id_per_pc", $cart_key)->where("status", "Not Processed")->get();
  		}
 
-		if(count($_cart) > 0)
+		if(isset($_cart) && count($_cart) > 0)
 		{
 			foreach($_cart as $key => $cart)
 			{
 				$quantity += $cart->quantity;
 			}
+		}
+		else
+		{
+			$quantity = 0;
 		}
 
 		return $quantity;

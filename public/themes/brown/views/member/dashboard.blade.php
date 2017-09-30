@@ -8,11 +8,11 @@
 	    <!-- TOP DASHBOARD-->
 	    <div class="dashboard-top">
 	        <div class="row clearfix">
-	            <div class="animated fadeInDown col-md-8">
-	                <div class="img-container">
-	                    <img src="/themes/{{ $shop_theme }}/img/brown-img1.png">
-	                </div>
-	            </div>
+		        <div class="col-md-8">
+		        	<video width="676" height="380" autoplay="" loop>
+						<source src="/themes/{{ $shop_theme }}/img/intro2.mp4" type="video/mp4">
+					</video>
+		        </div>
 	            <div class="animated fadeInRight col-md-4">
 	                <div class="join-container">
 	                    <div class="btn btn-text">
@@ -230,8 +230,8 @@
 					</div>
 					<div class="col-md-8">
 						<div class="detail-container">
-							<h1>PHP</h1>
-							<h2>500.00</h2>
+							<!-- <h1>PHP</h1> -->
+							<h2>{{ $wallet->display_current_wallet }}</h2>
 							<h3>Current Wallet</h3>
 						</div>
 					</div>
@@ -246,8 +246,8 @@
 					</div>
 					<div class="col-md-8">
 						<div class="detail-container">
-							<h1>PHP</h1>
-							<h2>500.00</h2>
+							<!-- <h1>PHP</h1> -->
+							<h2>{{ $wallet->display_total_payout }}</h2>
 							<h3>Total Pay-out</h3>
 						</div>
 					</div>
@@ -262,8 +262,7 @@
 					</div>
 					<div class="col-md-8">
 						<div class="detail-container">
-							<h1>PHP</h1>
-							<h2>500.00</h2>
+							<h2>{{ $customer_summary["display_slot_count"] }}</h2>
 							<h3>Current Slot(s)</h3>
 						</div>
 					</div>
@@ -278,8 +277,8 @@
 					</div>
 					<div class="col-md-8">
 						<div class="detail-container">
-							<h1>PHP</h1>
-							<h2>500.00</h2>
+							<!-- <h1>PHP</h1> -->
+							<h2>{{ $wallet->display_total_earnings }}</h2>
 							<h3>Total Reward</h3>
 						</div>
 					</div>

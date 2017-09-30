@@ -37,22 +37,50 @@
     <![endif]-->
     <div class="main-container">
         <div class="logo"><img src="/themes/{{ $shop_theme }}/assets/mobile/img/app-logo.png"></div>
-        <form>
+        <form method="post">
+            {{ csrf_field() }}
+
+            @if (session("error"))
+                <div class="alert" style="color: #fff; border: 0;">
+                    {!! session("error") !!}
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="alert" style="color: #fff; border: 0;">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <div class="form-group email">
                 <input type="text" name="email" class="form-control input-lg" placeholder="Email">
             </div>
             <div class="form-group password">
-                <input type="text" name="password" class="form-control input-lg" placeholder="Password">
+                <input type="password" name="password" class="form-control input-lg" placeholder="Password">
             </div>
             <div class="form-group action">
-                <button class="btn">Continue</button>
+                <button class="btn" type="submit">Continue</button>
                 <div class="register-label">Don't have an account yet?</div>
                 <a href="/members/register" class="register">Sign Up Here</a>
+            </div>
+            <div class="social-button">
+                <a href="{{$fb_login_url or '#'}}" class="holder fb">
+                    <div class="name"><i class="fa fa-facebook" aria-hidden="true"></i> Sign in with Facebook</div>
+                </a>
+                <a href="javascript:" class="holder gp" id="customBtn">
+                    <div class="name "><i class="fa fa-google-plus" aria-hidden="true"></i> Sign in with Google+</div>
+                </a>
             </div>
         </form>
     </div>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
     <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/assets/member/js/google_script/google_script_auth.js"></script>
+    <script>startApp();</script>
 </body>
 </html>

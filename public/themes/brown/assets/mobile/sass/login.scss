@@ -13,6 +13,27 @@ body
 .main-container
 {
 	padding: 0 25px;
+	.social-button
+	{
+		.holder
+		{
+			background-color: transparent;
+			border-radius: 50px;
+			padding: 12.5px 0;
+			color: #fff;
+			border: 1px solid rgba(255,255,255,0.5);
+			width: 100%;
+			font-weight: 500;
+			font-size: 16px;
+			display: block;
+			text-align: center;
+			margin-bottom: 15px;
+			&:last-child
+			{
+				margin-bottom: 0;
+			}
+		}
+	}
 	.logo
 	{
 		width: 150px;

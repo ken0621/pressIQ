@@ -106,6 +106,16 @@
                                  </div>
                               </a>
                            </li>
+                           <li>
+                              <a href="javascript:" onClick="location.href='/members/logout'" class="item-link close-panel">
+                                 <div class="item-content">
+                                    <div class="item-media"></div>
+                                    <div class="item-inner">
+                                       <div class="item-title">Logout</div>
+                                    </div>
+                                 </div>
+                              </a>
+                           </li>
                         </ul>
                      </div>
                   </div>

@@ -104,7 +104,7 @@ class ShopMemberController extends Shop
             $data['google_app_id'] = SocialNetwork::get_keys($this->shop_info->shop_id, 'googleplus')['app_id'];
         }
 
-        return view("member.login", $data);
+        return Self::load_view_for_members("member.login", $data);
     }
     public function postAuthCallback(Request $request)
     {
@@ -242,7 +242,7 @@ class ShopMemberController extends Shop
             $data['fb_login_url'] = FacebookGlobals::get_link_register($this->shop_info->shop_id);
         }
 
-        return view("member.register", $data);
+        return Self::load_view_for_members("member.register", $data);
     }
     public function getRegisterSubmit()
     {

@@ -187,6 +187,13 @@ class Mlm_compute
                 $price              = $data["price"];
                 $plan               = strtolower($points_title);
                 Mlm_complan_manager_repurchasev2::$plan($slot_info, $price);
+            }           
+            else if($points_title == "REPURCHASE_CASHBACK")
+            {      
+                $cashback       = $data["REPURCHASE_CASHBACK"];
+                $rank_cashback  = $data["RANK_REPURCHASE_CASHBACK"];
+                $plan           = strtolower($points_title);
+                Mlm_complan_manager_repurchasev2::$plan($slot_info, $cashback,$rank_cashback);
             }
             else
             {

@@ -1,7 +1,7 @@
 @extends("member.member_layout")
 @section("member_content")
 <div class="wallet-encashment">
-	<div class="main-member-header clearfix">
+	<div class="animated fadeInRight main-member-header clearfix">
 		<div class="left">
 			<div class="icon">
 				<img src="/themes/{{ $shop_theme }}/img/wallet-encashment.png">
@@ -20,7 +20,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="wallet-encashment-content">
+	<div class="animated fadeInUp wallet-encashment-content">
 		<div class="title">
 			Encashment History
 

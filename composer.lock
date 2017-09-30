@@ -139,7 +139,11 @@
                 "laravel",
                 "restful"
             ],
+<<<<<<< HEAD
             "time": "2017-02-10T00:56:04+00:00"
+=======
+            "time": "2017-02-10 00:56:04"
+>>>>>>> af821d72de4b9e6f87f97b96b22df98527704391
         },
         {
             "name": "dingo/blueprint",
@@ -195,7 +199,11 @@
                 "docs",
                 "laravel"
             ],
+<<<<<<< HEAD
             "time": "2017-09-20T13:50:06+00:00"
+=======
+            "time": "2017-09-20 13:50:06"
+>>>>>>> af821d72de4b9e6f87f97b96b22df98527704391
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -296,7 +304,11 @@
                 "docblock",
                 "parser"
             ],
+<<<<<<< HEAD
             "time": "2017-02-24T16:22:25+00:00"
+=======
+            "time": "2017-02-24 16:22:25"
+>>>>>>> af821d72de4b9e6f87f97b96b22df98527704391
         },
         {
             "name": "doctrine/cache",
@@ -1433,7 +1445,11 @@
                 "thumbnail",
                 "watermark"
             ],
+<<<<<<< HEAD
             "time": "2017-09-21T16:29:17+00:00"
+=======
+            "time": "2017-09-21 16:29:17"
+>>>>>>> af821d72de4b9e6f87f97b96b22df98527704391
         },
         {
             "name": "jakub-onderka/php-console-color",
@@ -1760,7 +1776,11 @@
                 "thumbnail",
                 "wkhtmltopdf"
             ],
+<<<<<<< HEAD
             "time": "2017-09-21T11:34:49+00:00"
+=======
+            "time": "2017-09-21 11:34:49"
+>>>>>>> af821d72de4b9e6f87f97b96b22df98527704391
         },
         {
             "name": "laravel/framework",
@@ -1892,7 +1912,11 @@
                 "framework",
                 "laravel"
             ],
+<<<<<<< HEAD
             "time": "2017-09-24T19:09:38+00:00"
+=======
+            "time": "2017-09-24 19:09:38"
+>>>>>>> af821d72de4b9e6f87f97b96b22df98527704391
         },
         {
             "name": "laravel/scout",
@@ -1957,7 +1981,11 @@
                 "laravel",
                 "search"
             ],
+<<<<<<< HEAD
             "time": "2017-09-14T12:32:30+00:00"
+=======
+            "time": "2017-09-14 12:32:30"
+>>>>>>> af821d72de4b9e6f87f97b96b22df98527704391
         },
         {
             "name": "laravel/tinker",
@@ -2294,7 +2322,11 @@
                 "import",
                 "laravel"
             ],
+<<<<<<< HEAD
             "time": "2017-09-19T19:36:48+00:00"
+=======
+            "time": "2017-09-19 19:36:48"
+>>>>>>> af821d72de4b9e6f87f97b96b22df98527704391
         },
         {
             "name": "mobiledetect/mobiledetectlib",
@@ -2799,7 +2831,11 @@
                 "pseudorandom",
                 "random"
             ],
+<<<<<<< HEAD
             "time": "2017-09-27T21:40:39+00:00"
+=======
+            "time": "2017-09-27 21:40:39"
+>>>>>>> af821d72de4b9e6f87f97b96b22df98527704391
         },
         {
             "name": "paypal/rest-api-sdk-php",
@@ -2904,6 +2940,60 @@
             "time": "2017-09-11T18:02:19+00:00"
         },
         {
+            "name": "phpdocumentor/reflection-common",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpDocumentor/ReflectionCommon.git",
+                "reference": "21bdeb5f65d7ebf9f43b1b25d404f87deab5bfb6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionCommon/zipball/21bdeb5f65d7ebf9f43b1b25d404f87deab5bfb6",
+                "reference": "21bdeb5f65d7ebf9f43b1b25d404f87deab5bfb6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.6"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "phpDocumentor\\Reflection\\": [
+                        "src"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jaap van Otterdijk",
+                    "email": "opensource@ijaap.nl"
+                }
+            ],
+            "description": "Common reflection classes used by phpdocumentor to reflect the code structure",
+            "homepage": "http://www.phpdoc.org",
+            "keywords": [
+                "FQSEN",
+                "phpDocumentor",
+                "phpdoc",
+                "reflection",
+                "static analysis"
+            ],
+            "time": "2017-09-11 18:02:19"
+        },
+        {
             "name": "phpdocumentor/reflection-docblock",
             "version": "3.3.0",
             "source": {
@@ -2946,7 +3036,11 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
+<<<<<<< HEAD
             "time": "2017-09-11T18:06:56+00:00"
+=======
+            "time": "2017-09-11 18:06:56"
+>>>>>>> af821d72de4b9e6f87f97b96b22df98527704391
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -2993,7 +3087,11 @@
                     "email": "me@mikevanriel.com"
                 }
             ],
+<<<<<<< HEAD
             "time": "2017-07-14T14:27:02+00:00"
+=======
+            "time": "2017-07-14 14:27:02"
+>>>>>>> af821d72de4b9e6f87f97b96b22df98527704391
         },
         {
             "name": "phpoffice/phpexcel",
@@ -3537,7 +3635,11 @@
                 "identifier",
                 "uuid"
             ],
+<<<<<<< HEAD
             "time": "2017-09-22T20:46:04+00:00"
+=======
+            "time": "2017-09-22 20:46:04"
+>>>>>>> af821d72de4b9e6f87f97b96b22df98527704391
         },
         {
             "name": "setasign/fpdi",
@@ -4593,7 +4695,11 @@
                 "env",
                 "environment"
             ],
+<<<<<<< HEAD
             "time": "2016-09-01T10:05:43+00:00"
+=======
+            "time": "2016-09-01 10:05:43"
+>>>>>>> af821d72de4b9e6f87f97b96b22df98527704391
         },
         {
             "name": "webmozart/assert",
@@ -4643,7 +4749,11 @@
                 "check",
                 "validate"
             ],
+<<<<<<< HEAD
             "time": "2016-11-23T20:04:58+00:00"
+=======
+            "time": "2016-11-23 20:04:58"
+>>>>>>> af821d72de4b9e6f87f97b96b22df98527704391
         }
     ],
     "packages-dev": [
@@ -5461,7 +5571,11 @@
                 "testing",
                 "xunit"
             ],
+<<<<<<< HEAD
             "time": "2017-09-24T07:25:54+00:00"
+=======
+            "time": "2017-09-24 07:25:54"
+>>>>>>> af821d72de4b9e6f87f97b96b22df98527704391
         },
         {
             "name": "phpunit/phpunit-mock-objects",

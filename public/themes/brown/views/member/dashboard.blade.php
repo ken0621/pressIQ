@@ -83,7 +83,7 @@
 	</div>
 @else
 	<div class="dashboard">
-		<div class="row clearfix">
+		<!-- <div class="row clearfix">
 			<div class="col-md-6">
 				<div class="title"><i class="align-icon brown-icon-bar-chart"></i> Wallet Summary</div>
 				<div class="sub-container">
@@ -109,7 +109,7 @@
 								<div class="name"><span>Total Reward</span> {{ $wallet->display_total_earnings }}</div>
 							</div>
 						</div>
-
+		
 						<table class="table hidden">
 							<thead>
 								<tr>
@@ -179,7 +179,7 @@
 					</div>
 				</div>
 			</div>
-
+		
 			<div class="col-md-6">
 				<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
 				<div class="sub-container">
@@ -201,9 +201,116 @@
 							<div class="name"><span>Leader Reward</span> {{ $wallet->display_complan_leader }}</div>
 						</div>
 					</div>
-
+		
 				</div>
-
+		
+				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
+				<div class="sub-container">
+					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Builder Point(s)</span> {{ $points->display_brown_builder_points }}</div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Leader Point(s)</span> {{ $points->display_brown_leader_points }}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div> -->
+		<!-- WALLET SUMMARY -->
+		<div class="row clearfix">
+			<div class="animated fadeInRight col-md-3">
+				<div class="per-summary-container box1 row clearfix">
+					<div class="col-md-4">
+						<div class="icon-container">
+							<img src="/themes/{{ $shop_theme }}/img/wallet-icon.png">
+						</div>
+					</div>
+					<div class="col-md-8">
+						<div class="detail-container">
+							<h1>PHP</h1>
+							<h2>500.00</h2>
+							<h3>Current Wallet</h3>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="animated fadeInRight col-md-3">
+				<div class="per-summary-container box2 row clearfix">
+					<div class="col-md-4">
+						<div class="icon-container">
+							<img src="/themes/{{ $shop_theme }}/img/total-payout.png">
+						</div>
+					</div>
+					<div class="col-md-8">
+						<div class="detail-container">
+							<h1>PHP</h1>
+							<h2>500.00</h2>
+							<h3>Total Pay-out</h3>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="animated fadeInRight col-md-3">
+				<div class="per-summary-container box3 row clearfix">
+					<div class="col-md-4">
+						<div class="icon-container">
+							<img src="/themes/{{ $shop_theme }}/img/current-slots.png">
+						</div>
+					</div>
+					<div class="col-md-8">
+						<div class="detail-container">
+							<h1>PHP</h1>
+							<h2>500.00</h2>
+							<h3>Current Slot(s)</h3>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="animated fadeInRight col-md-3">
+				<div class="per-summary-container box4 row clearfix">
+					<div class="col-md-4">
+						<div class="icon-container">
+							<img src="/themes/{{ $shop_theme }}/img/total-rewards.png">
+						</div>
+					</div>
+					<div class="col-md-8">
+						<div class="detail-container">
+							<h1>PHP</h1>
+							<h2>500.00</h2>
+							<h3>Total Reward</h3>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row clearfix">
+			<div class="animated fadeInUp col-md-6">
+				<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
+				<div class="sub-container" style="padding-bottom: 46px !important;">
+					<div class="chart-legend">
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Pairing Reward</span><span class="value">{{ $wallet->display_complan_triangle }}</span></div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Direct Referral Bonus</span><span class="value">{{ $wallet->display_complan_direct }}</span></div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Builder Reward</span><span class="value">{{ $wallet->display_complan_builder }}</span></div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Leader Reward</span><span class="value">{{ $wallet->display_complan_leader }}</span></div>
+						</div>
+					</div>	
+				</div>
+			</div>
+			<div class="animated fadeInUp col-md-6">
 				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
 				<div class="sub-container">
 					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
@@ -219,9 +326,9 @@
 				</div>
 			</div>
 		</div>
-		<div class="row clearfix">
 
-			<div class="col-md-12">
+		<div class="row clearfix">
+			<div class="animated fadeInUp col-md-12">
 				<div class="unilevel-holder">
 					<div class="title"><i class="align-icon brown-icon-star"></i> My Slot(s) <a href="javascript:" class="title-button pull-right btn-enter-a-code">Add New Slot</a></div>
 					<div class="sub-container">
@@ -264,57 +371,66 @@
 			</div>
 		</div>
 		<div class="row clearfix">
-			<div class="col-md-6">
+			<div class="animated fadeInUp col-md-6">
 				<div class="title"><i class="align-icon brown-icon-globe"></i> Newest Enrollee(s) Sponsored</div>
 				<div class="sub-container border-holder">
 					<div class="clearfix wow hidden">
 						<div class="badge right">6 New Members</div>
 					</div>
-					@foreach($_direct as $direct)
-					<div class="holder">
-						<div class="color">
-							<img src="{{ $profile_image }}">
-						</div>	
-						<div class="text">
-							<div class="pull-left">
-								<div class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
-								<div class="email">{{ $direct->slot_no }}</div>
-								<div class="date">{{ $direct->time_ago }}</div>
+					@if(count($_direct) > 0)
+						@foreach($_direct as $direct)
+						<div class="holder">
+							<div class="color">
+								<img src="{{ $direct->profile_image }}">
+							</div>	
+							<div class="text">
+								<div class="pull-left">
+									<div class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
+									<div class="email">{{ $direct->slot_no }}</div>
+									<div class="date">{{ $direct->time_ago }}</div>
+								</div>
+							</div>
+							<div class="action pull-right">
+								@if($direct->distributed == 1)
+									<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-default"><i class="fa fa-star"></i> VIEW INFO</button>
+								@else
+									<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
+								@endif
 							</div>
 						</div>
-						<div class="action pull-right">
-							@if($direct->distributed == 1)
-								<button class="btn btn-default"><i class="fa fa-star"></i> VIEW INFO</button>
-							@else
-								<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
-							@endif
-						</div>
-					</div>
-					@endforeach
+						@endforeach
+					@else
+
+						<div class="text-center" style="padding: 20px">You don't have any direct referral yet.</div>
+					@endif
 				</div>
 			</div>
-			<div class="col-md-6">
+			<div class="animated fadeInUp col-md-6">
 				<div class="match-height">
 					<div class="title"><i class="align-icon brown-icon-money"></i> Recent Rewards <a href="javascript:" class="title-button pull-right">View All Rewards</a></div>
 					<div class="sub-container">
 						<div class="activities">
-							@foreach($_recent_rewards as $recent_reward)
-							<div class="holder">
-								<div class="circle-line">
-									<div class="circle"><img src="/themes/{{ $shop_theme }}/img/circle.png"></div>
-									<div class="line"><img src="/themes/{{ $shop_theme }}/img/line.jpg"></div>
-								</div>
-								<div class="message">{!! $recent_reward->log !!}</div>
-								<div class="row clearfix">
-									<div class="col-sm-6">
-										<div class="date">{{ $recent_reward->time_ago }}</div>
+							@if(count($_recent_rewards) > 0)
+								@foreach($_recent_rewards as $recent_reward)
+								<div class="holder">
+									<div class="circle-line">
+										<div class="circle"><img src="/themes/{{ $shop_theme }}/img/circle.png"></div>
+										<div class="line"><img src="/themes/{{ $shop_theme }}/img/line.jpg"></div>
 									</div>
-									<div class="col-sm-6">
-										<div class="wallet"> EARNED BY {{ $recent_reward->slot_no }}</div>
+									<div class="message">{!! $recent_reward->log !!}</div>
+									<div class="row clearfix">
+										<div class="col-sm-6">
+											<div class="date">{{ $recent_reward->time_ago }}</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="wallet"> EARNED BY {{ $recent_reward->slot_no }}</div>
+										</div>
 									</div>
 								</div>
-							</div>
-							@endforeach
+								@endforeach
+							@else
+								<div class="text-center" style="padding: 20px">You don't have any reward yet.</div>
+							@endif
 						</div>
 					</div>
 				</div>

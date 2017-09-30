@@ -1,9 +1,11 @@
 $content-text: 'Arimo', sans-serif;
+$light: 300;
 $regular: 400;
+$medium: 500;
 $semi-bold: 600;
 $bold: 700;
-$text-light: #777;
-$text-dark: #272c2f;
+$text-light: #585858;
+$text-dark: #404040;
 
 body
 {
@@ -192,8 +194,8 @@ body
 			.register-label
 			{
 				color: $text-dark;
-				font-size: 13px;
-				font-weight: $bold;
+				font-size: 15px;
+				font-weight: $medium;
 				letter-spacing: 0.5px;
 			}
 			.radio-inline
@@ -301,7 +303,7 @@ body
 
 				a {
 					color: $text-dark !important;
-					font-weight: $bold !important;
+					font-weight: $medium !important;
 				} 
 			}
 		}

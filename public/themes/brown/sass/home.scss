@@ -110,6 +110,21 @@ body{
 				margin: 0;
 				color: #dac5a6;
 				letter-spacing: 0.5px;
+
+				@media screen and (max-width: 700px)
+				{
+					font-size: 32px;
+				}
+
+				@media screen and (max-width: 414px)
+				{
+					font-size: 32px;
+				}
+
+				@media screen and (max-width: 360px)
+				{
+					font-size: 28px;
+				}
 			}
 			h3
 			{
@@ -123,13 +138,18 @@ body{
 			video
 			{
 				margin-top: 25px;
+				@media screen and (max-width: 803px)
+				{
+					width: 100%;
+					height: auto;
+				}
 			}
 
 			.join-button
 			{
-				margin-left: 39%;
+				margin: auto;
 				margin-top: 15px;
-				width: 20%;
+				max-width: 228px;
 				padding: 10px 0px;
 				text-align: center;
 				border: 1px solid #fff;
@@ -512,10 +532,23 @@ body{
 		color: #585858;
 		font-weight: $light;
 		overflow: hidden;
-
+		@media screen and (max-width: 991px)
+		{
+			margin: 25px 0;
+		}
 		.img-container
 		{
 			padding: 75px;
+			max-width: 555px;
+			margin: auto;
+			@media screen and (max-width: 991px)
+			{
+				padding: 15px;
+			}
+			@media screen and (max-width: 768px)
+			{
+				max-width: 300px;
+			}
 			img 
 			{
 				width: 100%;
@@ -524,6 +557,14 @@ body{
 		.detail-container
 		{
 			margin-top: 125px;
+			@media screen and (max-width: 991px)
+			{
+				margin-top: 15px;
+			}
+			@media screen and (max-width: 768px)
+			{
+				text-align: center;
+			}
 			h1
 			{
 				padding-top: 10px;
@@ -531,18 +572,30 @@ body{
 				color: #404040;
 				margin: 0;
 				font-weight: $light !important;
+				@media screen and (max-width: 991px)
+				{
+					font-size: 30px;
+				}
 			}
 			h2
 			{
 				font-size: 21px;
 				margin: 0;
 				font-weight: $light !important;
+				@media screen and (max-width: 991px)
+				{
+					font-size: 16px;
+				}
 			}
 			p 
 			{
 				margin-top: 20px;
 				font-size: 21px;
 				line-height: 130%;
+				@media screen and (max-width: 991px)
+				{
+					font-size: 16px;
+				}
 			}
 		}
 		/* .intro
@@ -563,18 +616,55 @@ body{
 		font-weight: $light;
 		overflow: hidden;
 		background-color: #efefef;
+		@media screen and (max-width: 991px)
+		{
+			display: table;
+			width: 100%;
+		}
+		.video-holder
+		{
+			@media screen and (max-width: 991px)
+			{
+				display: table-footer-group;
+			}
+		}
+		.desc-holder
+		{
+			background-color: #110B01;
+			@media screen and (max-width: 991px)
+			{
+				display: table-header-group;
+			}
+		}
 		video
 		{
 			width: 100%;
+			height: auto;
 		}
 
 
-
+		@media screen and (max-width: 991px)
+		{
+			text-align: center;
+		}
 		.detail-container
 		{
-			margin-left: 30%;
+			margin-left: 180px;
 			margin-top: 40px;
-
+			@media screen and (max-width: 1300px)
+			{
+				margin-left: 100px;
+			}
+			@media screen and (max-width: 1199px)
+			{
+				margin-left: 10px;
+			}
+			@media screen and (max-width: 991px)
+			{
+				display: inline-block;
+				margin-left: 0;
+				margin-bottom: 40px;
+			}
 			table,th,td
 			{
 				margin-top: 20px;
@@ -619,12 +709,28 @@ body{
 
 		.bottom-container
 		{
+			.title
+			{
+				@media screen and (max-width: 479px)
+				{
+					text-align: center;
+				}
+			}
 			.featured-title-holder
 			{
 				font-size: 40px;
 				color: #404040;
 				margin: 0;
 				font-weight: $light !important;
+			}
+			.product-holder
+			{
+				img
+				{
+					max-width: 100%;
+					display: block;
+					margin: auto;
+				}
 			}
 			.product-details
 			{

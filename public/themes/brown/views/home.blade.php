@@ -204,13 +204,13 @@
 		<div class="fullscreen background parallax" style="background-image: url('/themes/{{ $shop_theme }}/img/brown-banner.jpg');" data-img-width="1600" data-img-height="1395" data-diff="100">
 			<div class="container">
 				<div class="top-container">
-					<h1 class="animated fadeInDown">www.brown.com.ph</h1>
-					<h2 class="animated fadeInUp">Change Starts Here</h2>
+					<h1 class="animated fadeInDown" data-wow-delay="0.3s">www.brown.com.ph</h1>
+					<h2 class="animated fadeInUp" data-wow-delay="0.3s">Change Starts Here</h2>
 					<video class="animated zoomInDown" width="803" height="450" autoplay="" loop>
 						<source src="/themes/{{ $shop_theme }}/img/brown-font-video.mp4" type="video/mp4">
 					</video>
 					<h3 class="animated fadeInUp">It’s not the color of your skin, but the color of your heart.</h3>
-					<div class="join-button">JOIN THE MOVEMENT</div>
+					<div class="join-button animated fadeInUp">JOIN THE MOVEMENT</div>
 				</div>
 			</div>
 		</div>
@@ -223,12 +223,12 @@
 		<div class="container">
 			<div class="row clearfix">
 				<div class="col-md-6">
-					<div class="img-container">
+					<div class="img-container wow fadeInLeft" data-wow-offset="50" data-wow-delay="0.2s">
 						<img src="/themes/{{ $shop_theme }}/img/ad-phone.png">
 					</div>
 				</div>
 				<div class="col-md-6">
-					<div class="detail-container wow slideInRight" data-wow-offset="10"  data-wow-iteration="10">
+					<div class="detail-container wow fadeInRight" data-wow-offset="10" data-wow-delay="0.3s">
 						<h2>Introducing</h2>
 						<h1>THE BROWN EDITION</h1>
 						<h2>A PHONE FILIPINOS CAN BE PROUD OF</h2>
@@ -238,6 +238,141 @@
 			</div>
 		</div>
 	</div>
+	<!-- FEATURES -->
+	<div class="wrapper-3 row-no-padding clearfix">
+		<div class="col-md-6">
+			<div class="detail-container">
+				<div class="title-container wow fadeInDown" data-wow-offset="10" data-wow-delay="0.2s">FEATURES</div>
+				<table class="wow fadeInLeft" data-wow-offset="10" data-wow-delay="0.2s">
+					<tr>
+						<td><p><i class="fa fa-circle" aria-hidden="true"></i>4.7 HD IPS Display</p></td>
+						<td><p><i class="fa fa-circle" aria-hidden="true"></i>8 MP Front Camera</p></td>
+					</tr>
+					<tr>
+						<td><p><i class="fa fa-circle" aria-hidden="true"></i>LTE Connection</p></td>
+						<td><p><i class="fa fa-circle" aria-hidden="true"></i>OTG Support</p></td>
+					</tr>
+					<tr>
+						<td><p><i class="fa fa-circle" aria-hidden="true"></i>Android Nougat</p></td>
+						<td><p><i class="fa fa-circle" aria-hidden="true"></i>Finger print sensor</p></td>
+					</tr>
+					<tr>
+						<td><p><i class="fa fa-circle" aria-hidden="true"></i>13 MP Back Camera</p></td>
+						<td><p><i class="fa fa-circle" aria-hidden="true"></i>Infrared Sensor</p></td>
+					</tr>
+				</table>
+				<table class="wow fadeInLeft" data-wow-offset="10" data-wow-delay="0.2s">
+					<tr>
+						<th>WITH PREMIUM CONTENT AND REWARDS APP</th>
+					</tr>
+					<tr>
+						<td><p><i class="fa fa-circle" aria-hidden="true"></i>With Brown App and Portal</p></td>
+					</tr>
+					<tr>
+						<td><p><i class="fa fa-circle" aria-hidden="true"></i>Agila Rewards Ready</p></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<video class="wow fadeInRight" data-wow-delay="0.3s" width="" height="468" autoplay="" controls="" loop data-wow-offset="10">
+				<source src="/themes/{{ $shop_theme }}/img/features.m4v" type="video/mp4">
+			</video>
+		</div>
+	</div>
+	<!-- THE PRODUCTS -->
+	<div class="wrapper-4">
+		<div class="container">
+			<div class="bottom-container">
+				<div class="featured-title-holder wow fadeInDown" data-wow-offset="10" data-wow-delay="0.3s">
+					<p class="title">THE PRODUCT</p>
+				</div>
+				<div class="product-carousel wow fadeInUp" data-wow-offset="10" data-wow-delay="0.2s">
+					<div>
+						<div class="product-holder">
+							<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/item1.png"></a>
+						</div>
+						<div class="product-details">
+							<p class="product-name">Brown 1</p>
+							<p class="product-spec">4.7 HD IPS DISPLAY</p>
+							<p class="product-price">P 9,500.00</p>
+						</div>	
+					</div>
+					<div>
+						<div class="product-holder">
+							<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/item2.png"></a>
+						</div>
+						<div class="product-details">
+							<p class="product-name">Brown 2</p>
+							<p class="product-spec">5.0 HD IPS DISPLAY</p>
+							<p class="product-price">P 9,500.00</p>
+						</div>		
+					</div>
+					<div>
+						<div class="product-holder">
+							<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/item3.png"></a>
+						</div>
+						<div class="product-details">
+							<p class="product-name">Brown Tab 1</p>
+							<p class="product-spec">8mp Front Camera</p>
+							<p class="product-price">P 9,500.00</p>
+						</div>		
+					</div>
+					<div>
+						<div class="product-holder">
+							<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/item4.png"></a>
+						</div>
+						<div class="product-details">
+							<p class="product-name">Brown 1 Plus</p>
+							<p class="product-spec">13 MP Back Camera</p>
+							<p class="product-price">P 12,000.00</p>
+						</div>		
+					</div>
+					<div>
+						<div class="product-holder">
+							<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/item1.png"></a>
+						</div>
+						<div class="product-details">
+							<p class="product-name">Brown 1</p>
+							<p class="product-spec">4.7 HD IPS DISPLAY</p>
+							<p class="product-price">P 9,500.00</p>
+						</div>	
+					</div>
+					<div>
+						<div class="product-holder">
+							<a href="/product/view/test"><img src="/themes/{{ $shop_theme }}/img/item2.png"></a>
+						</div>
+						<div class="product-details">
+							<p class="product-name">Brown 2</p>
+							<p class="product-spec">5.0 HD IPS DISPLAY</p>
+							<p class="product-price">P 9,500.00</p>
+						</div>	
+					</div>
+					<div>
+						<div class="product-holder">
+							<img src="/themes/{{ $shop_theme }}/img/item3.png">
+						</div>
+						<div class="product-details">
+							<p class="product-name">Brown Tab 1</p>
+							<p class="product-spec">8mp Front Camera</p>
+							<p class="product-price">P 9,500.00</p>
+						</div>	
+					</div>
+					<div>
+						<div class="product-holder">
+							<img src="/themes/{{ $shop_theme }}/img/item4.png">
+						</div>
+						<div class="product-details">
+							<p class="product-name">Brown 1 Plus</p>
+							<p class="product-spec">13 MP Back Camera</p>
+							<p class="product-price">P 12,000.00</p>
+						</div>	
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<!-- INTRODUCING BROWN EDITION -->
 	<!-- <div class="wrapper-3">
 		<div class="container">
@@ -263,16 +398,16 @@
 	</div> -->
 
 	<!-- BROWN ARTICLES -->
-	<div class="wrapper-4">
+	<div class="wrapper-5">
 		<div class="container">
 			<div class="row clearfix">
-				<div class="col-md-3 col-sm-6">
+				<div class="col-md-3 col-sm-6 wow fadeInUp" data-wow-offset="10" data-wow-delay="0.1s">
 					<div class="holder pad match-height">
 						<div class="title-1">The Brown Phone <div class="border"></div></div>
-						<div class="desc" style="height: auto;">The Brown phone is your portal to a new world full of creativity and opportunities, bringing you closer to artists and entrepreneurs, while keeping you updated on the latest news, hottest trends, and innovative products and services, making your life better and more inspiring.</div>
+						<div class="desc-side" style="height: auto;">The Brown phone is your portal to a new world full of creativity and opportunities, bringing you closer to artists and entrepreneurs, while keeping you updated on the latest news, hottest trends, and innovative products and services, making your life better and more inspiring.</div>
 					</div>
 				</div>
-				<div class="col-md-3 col-sm-6">
+				<div class="col-md-3 col-sm-6 wow fadeInUp" data-wow-offset="10" data-wow-delay="0.2s">
 					<div class="holder match-height">
 						<div class="img">
 							<img src="/themes/{{ $shop_theme }}/img/holder-1.png">
@@ -281,7 +416,7 @@
 						<div class="desc">Filipinos work hard, dream big, and create with their hearts. And through bayanihan, we create opportunities to enable the world to patronize everything beautiful about being Filipino. </div>
 					</div>
 				</div>
-				<div class="col-md-3 col-sm-6">
+				<div class="col-md-3 col-sm-6 wow fadeInUp" data-wow-offset="10" data-wow-delay="0.3s">
 					<div class="holder match-height">
 						<div class="img">
 							<img src="/themes/{{ $shop_theme }}/img/holder-2.png">
@@ -291,7 +426,7 @@
 						<a href="javascript:" class="more">Show More</a>
 					</div>
 				</div>
-				<div class="col-md-3 col-sm-6">
+				<div class="col-md-3 col-sm-6 wow fadeInUp" data-wow-offset="10" data-wow-delay="0.4s">
 					<div class="holder match-height">
 						<div class="img">
 							<img src="/themes/{{ $shop_theme }}/img/holder-3.png">

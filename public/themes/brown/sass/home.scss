@@ -511,6 +511,7 @@ body{
 	{
 		color: #585858;
 		font-weight: $light;
+		overflow: hidden;
 
 		.img-container
 		{
@@ -556,7 +557,103 @@ body{
 		} */
 	}
 
-	.wrapper-3 
+	.wrapper-3
+	{
+		color: #585858;
+		font-weight: $light;
+		overflow: hidden;
+		background-color: #efefef;
+		video
+		{
+			width: 100%;
+		}
+
+
+
+		.detail-container
+		{
+			margin-left: 30%;
+			margin-top: 40px;
+
+			table,th,td
+			{
+				margin-top: 20px;
+				border-collapse: collapse;
+				font-size: 18px;
+				padding: 0px 10px;
+				
+				i 
+				{
+					font-size: 6px;
+					padding-right: 10px;
+					vertical-align: middle;
+					margin-top: -3px;
+				}
+
+				th 
+				{
+					font-size: 21px;
+					font-weight: $light;
+					padding-bottom: 10px;
+					color: #404040;
+				}
+			}
+
+			.title-container
+			{
+				font-size: 40px;
+				color: #404040;
+				margin: 0;
+				font-weight: $light !important;
+			}
+		}
+	}
+
+	.wrapper-4
+	{
+		padding: 45px 0px;
+		color: #585858;
+		font-weight: $light;
+		overflow: hidden;
+		background-color: #fff;
+
+		.bottom-container
+		{
+			.featured-title-holder
+			{
+				font-size: 40px;
+				color: #404040;
+				margin: 0;
+				font-weight: $light !important;
+			}
+			.product-details
+			{
+				text-align: center;
+				p 
+				{
+					margin: 0;
+				}
+
+				.product-name
+				{
+					font-size: 21px;
+					color: #404040;
+				}
+				.product-spec
+				{
+					font-size: 15px;
+				}
+				.product-price
+				{
+					font-size: 21px;
+					color: #ed5639;
+					font-weight: $regular;
+				}
+			}
+		}
+	}
+
+	/* .wrapper-3 
 	{
 		background-image: url("/themes/brown/img/bg-home.png");
 		background-size: cover;
@@ -684,11 +781,13 @@ body{
 			}
 
 		}
-	}
+	} */
 
-	.wrapper-4 
+	.wrapper-5 
 	{
-		background-color: #ededed;
+		font-weight: $light;
+		overflow: hidden;
+		background-color: #efefef;
 		padding: 100px 0;
 
 		.holder
@@ -708,9 +807,9 @@ body{
 			}
 			.title-1
 			{
-				color: #1c1c1c;
-				font-size: 17px;
-				font-weight: 700;
+				color: #404040;
+				font-size: 21px;
+				font-weight: $regular;
 				padding: 15px 25px 0;
 				.border
 				{
@@ -722,22 +821,32 @@ body{
 			}
 			.title-2
 			{
-				color: #1c1c1c;
-				font-size: 15px;
-				font-weight: 700;
+				color: #404040;
+				font-size: 21px;
+				font-weight: $regular;
 				padding: 15px 25px 0;
+			}
+			.desc-side
+			{
+				color: #585858;
+				font-size: 15px;
+				padding: 15px 25px;
+				min-height: 142px;
+				overflow: hidden;
+				letter-spacing: 0.5px;
 			}
 			.desc
 			{
-				color: #5e5e5e;
-				font-size: 13px;
+				color: #585858;
+				font-size: 15px;
 				padding: 15px 25px;
-				height: 140px;
+				max-height: 142px;
 				overflow: hidden;
+				letter-spacing: 0.5px;
 			}
 			.more
 			{
-				color: #1c1c1c;
+				color: #404040;
 				font-size: 11px;
 				font-weight: 700;
 				padding-left: 25px;

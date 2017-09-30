@@ -2,7 +2,7 @@
 @section("member_content")
 <div class="member-order">
 	<div class="main-member-header clearfix">
-		<div class="animated fadeInRight left">
+		<div class="animated zoomIn left">
 			<div class="icon">
 				<div class="brown-icon-orders"></div>
 			</div>

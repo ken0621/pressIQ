@@ -5,9 +5,9 @@
 		<div class="animated fadeInUp col-md-4 left match-height load-profile">
 			<div class="load-profile-holder">
 				<div class="profile-main">
-					<div class="animated fadeInUp img"><img class="img-upload" style="border-radius: 100%;" src="{{ $profile_image }}"></div>
-					<div class="animated fadeInUp name">{{ $profile->first_name }} {{ $profile->middle_name }} {{ $profile->last_name }}</div>
-					<div class="animated fadeInUp sub">{{ $profile->email }}</div>
+					<div class="animated zoomIn img"><img class="img-upload" style="border-radius: 100%;" src="{{ $profile_image }}"></div>
+					<div class="animated slideInUp name">{{ $profile->first_name }} {{ $profile->middle_name }} {{ $profile->last_name }}</div>
+					<div class="animated slideInUp sub">{{ $profile->email }}</div>
 				</div>
 				<div class="animated fadeInUp profile-status">
 					<table>

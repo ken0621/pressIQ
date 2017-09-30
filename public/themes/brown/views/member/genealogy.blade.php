@@ -2,7 +2,7 @@
 @section("member_content")
 <div class="genealogy-container" style="overflow: hidden;">
 	<div class="genealogy-header clearfix">
-		<div class="animated fadeInRight left">
+		<div class="animated zoomIn left">
 			<input type="hidden" class="mode-genealogy" name="" value="{{$mode or ''}}">
 			
 			<div class="icon">

@@ -1031,6 +1031,10 @@ AdvancedRoute::controller('/member/ecommerce/trackings', 'Member\TrackingsContro
 
 
 /* MEMBER SHIPPING*/
+AdvancedRoute::controller('/member/warehouse/migration', 'Member\WarehouseMigrateController');
+/* End */
+
+/* MEMBER SHIPPING*/
 AdvancedRoute::controller('/member/register/shipping', 'MemberController');
 /* End */
 

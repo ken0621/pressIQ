@@ -5,6 +5,10 @@ var trasnfer_option = "";
 var id = "";
 var cat_id = "";
 var item_selected = "";
+
+var item_inventory = null;
+var key = 0;
+var ctr_item = 0;
 function warehouse() 
 {
     init();
@@ -512,5 +516,46 @@ function submit_done_item(data)
         {
           toastr.warning(data.error[index]);
         });
+    }
+}
+function merge_warehouse()
+{
+    /* Get All warehouse */
+    $.ajax({
+        url : '/member/warehouse/migration/all-item-inventory',
+        type : 'get',
+        dataType : 'json',
+        data : {},
+        success : function(all_item_inventory)
+        {
+            ctr_item = all_item_inventory.length;
+            item_inventory = all_item_inventory;
+            item_warehouse(item_inventory[key]);
+        }
+    });
+}
+function item_warehouse(item)
+{
+    console.log(item);
+    if(!(ctr_item == (key - 1)))
+    {
+        $('.testing-text').html(key+' out of '+ctr_item);
+        JSON.stringify(item);
+        $.ajax({
+            url : '/member/warehouse/migration/migrate-per-item',
+            type : 'POST',
+            dataType : 'json',
+            data : {item : item, _token : $('#_token').val()},
+            success : function(data)
+            {
+                console.log(data);
+                key++;
+                item_warehouse(item_inventory[key]);
+            }
+        });
+    }
+    else
+    {
+        alert('Success');
     }
 }

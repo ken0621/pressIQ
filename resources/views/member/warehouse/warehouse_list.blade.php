@@ -3,6 +3,7 @@
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <div class="panel panel-default panel-block panel-title-block" id="top">
+    <input type="hidden" id="_token" value="{{csrf_token()}}" name="">
     <div class="panel-heading">
         <div>
             <i class="fa fa-building"></i>
@@ -13,6 +14,8 @@
                 </small>
             </h1>
             <div class="text-right">
+                <p class="testing-text"></p>
+                <a class="btn btn-warning" onClick="merge_warehouse()">Merging Script</a>
                 <a class="btn btn-custom-white panel-buttons popup" link="/member/item/transferinventory" size="md" data-toggle="modal" data-target="#global_modal">Transfer Inventory</a>
                 <a class="btn btn-primary panel-buttons popup" link="/member/item/warehouse/add" size="lg" data-toggle="modal" data-target="#global_modal">Add Warehouse</a>
             </div>

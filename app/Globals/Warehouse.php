@@ -753,8 +753,8 @@ class Warehouse
                 $for_serial_item[$key]["product_id"] = $refill_product['product_id'];
                 $for_serial_item[$key]["inventory_id"] = $inventory_id;
             }
-             $data['status'] = '';
-            
+           
+            $data['status'] = ''; 
 
             $serial = Tbl_settings::where("settings_key","item_serial")->where("settings_value","enable")->where("shop_id",$shop_id)->first();
 

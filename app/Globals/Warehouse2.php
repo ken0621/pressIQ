@@ -17,6 +17,7 @@ use App\Models\Tbl_inventory_history_items;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_item_discount;
 use App\Models\Tbl_audit_trail;
+use App\Models\Tbl_inventory_serial_number;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
@@ -381,23 +382,28 @@ class Warehouse2
             $insert_slip['slip_user_id']                 = Warehouse2::get_user_login();
             $slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
 
+            $insert = null;
             for ($ctr_qty = 0; $ctr_qty < $quantity; $ctr_qty++) 
             {
-                $insert['record_shop_id']            = $shop_id;
-                $insert['record_item_id']            = $item_id;
-                $insert['record_warehouse_id']       = $warehouse_id;
-                $insert['record_item_remarks']       = $remarks;
-                $insert['record_warehouse_slip_id']  = $slip_id;
-                $insert['record_source_ref_name']    = isset($source['name']) ? $source['name'] : '';
-                $insert['record_source_ref_id']      = isset($source['id']) ? $source['id'] : 0;
-                $insert['record_log_date_updated']   = Carbon::now();
-                $insert['mlm_pin']                   = Warehouse2::get_mlm_pin($shop_id);
-                $insert['mlm_activation']            = Item::get_mlm_activation($shop_id);
+                $insert[$ctr_qty]['record_shop_id']            = $shop_id;
+                $insert[$ctr_qty]['record_item_id']            = $item_id;
+                $insert[$ctr_qty]['record_warehouse_id']       = $warehouse_id;
+                $insert[$ctr_qty]['record_item_remarks']       = $remarks;
+                $insert[$ctr_qty]['record_warehouse_slip_id']  = $slip_id;
+                $insert[$ctr_qty]['record_source_ref_name']    = isset($source['name']) ? $source['name'] : '';
+                $insert[$ctr_qty]['record_source_ref_id']      = isset($source['id']) ? $source['id'] : 0;
+                $insert[$ctr_qty]['record_log_date_updated']   = Carbon::now();
+                $insert[$ctr_qty]['mlm_pin']                   = Warehouse2::get_mlm_pin($shop_id);
+                $insert[$ctr_qty]['mlm_activation']            = Item::get_mlm_activation($shop_id);
 
                 if($serial_qty > 0)
                 {
-                    $insert['record_serial_number'] = $serial[$ctr_qty];
+                    $insert[$ctr_qty]['record_serial_number'] = $serial[$ctr_qty];
                 }
+            }
+            if($insert)
+            {
+
                 Tbl_warehouse_inventory_record_log::insert($insert);
             }
 
@@ -419,7 +425,7 @@ class Warehouse2
             }
 
 
-            Warehouse2::update_inventory_count($warehouse_id, $slip_id, $item_id, $quantity);
+            // Warehouse2::update_inventory_count($warehouse_id, $slip_id, $item_id, $quantity);
         }       
 
         return $return;
@@ -749,7 +755,7 @@ class Warehouse2
             Warehouse2::insert_inventory_history($shop_id, $warehouse_id, $inventory_details, $history_item);
         }
 
-        Warehouse2::update_inventory_count($warehouse_id, $slip_id, $item_id, -($quantity));
+        // Warehouse2::update_inventory_count($warehouse_id, $slip_id, $item_id, -($quantity));
 
         return $return;
     }
@@ -838,5 +844,58 @@ class Warehouse2
     {
         Warehouse2::insert_item_history($record_log_id);
         Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)->update($update);
+    }
+
+    public static function get_all_warehouse()
+    {
+        return Tbl_warehouse::selectRaw('warehouse_id, warehouse_shop_id')->where('archived',0)->get();        
+    }
+    public static function item_warehouse($warehouse_id)
+    {
+        return Tbl_item::inventory()->where('warehouse_id',$warehouse_id)->get();
+    }
+    public static function migrate_warehouse_inventory()
+    {
+        $all_warehouse = Tbl_warehouse::where('archived',0)->get();
+        $return = null;
+
+        $all_serial = Tbl_inventory_serial_number::selectRaw("item_id, serial_number")->where('archived',0)->where("item_consumed",0)->where("sold",0)->groupBy('serial_number')->get()->toArray();
+            $_item = null;
+        foreach ($all_warehouse as $key_warehouse => $value_warehouse) 
+        {
+            $all_item = Tbl_item::inventory()->where('warehouse_id',$value_warehouse->warehouse_id)->get();
+            
+            $total_inventory = 0;
+            foreach ($all_item as $key => $value)
+            {
+                $log_count = 0;
+
+                $get_log_count = Tbl_item::recordloginventory()
+                                     ->where('item_id',$value->item_id)
+                                     ->where('record_inventory_status',0)
+                                     ->value('log_count');
+                if($get_log_count)
+                {
+                    $log_count = $get_log_count;
+                }
+
+                $total_inventory = $value->inventory_count - $log_count;
+                if($total_inventory > 0)
+                {
+                    $_item[$key]["item_id"]              = $value->item_id;
+                    $_item[$key]["quantity"]             = $total_inventory;
+                    $_item[$key]["remarks"]              = "Refill - Inventory Migrated from old warehouse";    
+                    $_item[$key]["warehouse_shop_id"]    = $value_warehouse->warehouse_shop_id;        
+                    $_item[$key]["warehouse_id"]         = $value_warehouse->warehouse_id;          
+                    $_item[$key]["ref_name"]             = 'inventory_migrate';
+                }
+            }
+            // if(count($_item) > 0)
+            // {
+            //     $return = Warehouse2::refill_bulk($value_warehouse->warehouse_shop_id, $value_warehouse->warehouse_id, "inventory_migrate", 0 , "Refill - Inventory Migrated from old warehouse", $_item);
+            // }
+        }
+
+        return $_item;       
     }
 }

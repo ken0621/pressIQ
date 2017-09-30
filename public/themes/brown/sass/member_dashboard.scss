@@ -257,7 +257,7 @@ $text-dark: #404040;
 				vertical-align: middle;
 				font-size: 15px;
 				letter-spacing: 0.5px;
-				font-weight: $medium;
+				font-weight: $regular;
 				font-family: $content-text;
 				color: #3E95CD;
 
@@ -416,6 +416,11 @@ $text-dark: #404040;
 				{
 					font-weight: $medium;
 					color: $text-dark;
+					a 
+					{
+						color: #768997;
+						font-weight: $medium;
+					}
 				}
 
 			}

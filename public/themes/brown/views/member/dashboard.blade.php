@@ -20,7 +20,7 @@
 	                        <div class="text-header2">Enroll now and become one of us!</div>
 	                    </div>
 	                    <div class="btn-container">
-	                        <button class="product-add-cart btn-buy-a-kit" item-id="2708" quantity="1">Buy a Kit</button><br>
+	                        <button class="product-add-cart btn-buy-a-kit" item-id="54" quantity="1">Buy a Kit</button><br>
 	                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
 	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
 	                    </div>
@@ -447,53 +447,57 @@ $(document).ready(function()
 {
 	$wallet = $(".chart-income").attr("wallet");
 	$payout = $(".chart-income").attr("payout");
-
-	var ctx = document.getElementById("income_summary").getContext('2d');
-
-	var myDoughnutChart = new Chart(ctx,
+	
+	var exist = document.getElementById("income_summary");
+	
+	if (exist != null) 
 	{
-	    type: 'doughnut',
-	    data: {
-	        labels: ["Red", "Blue"],
-	        datasets: [{
-	            label: '# of Votes',
-	            data: [$payout, $wallet],
-	            backgroundColor: [
-	                'rgba(142, 94, 162, 1)',
-	                'rgba(62, 149, 205, 1)'
-	            ],
-	            borderColor: [
-	                'rgba(142, 94, 162, 1)',
-	                'rgba(62, 149, 205, 1)'
-	            ],
-	            borderWidth: 1
-	        }]
-	    },
-	    options: 
-	    {
-	      legend: 
-	      {
-	        responsive: true,
-	        display: false,
-	      },
-	      tooltips: 
-	      {
-	        callbacks: 
-	        {
-	          label: function(tooltipItems, data) 
-	          {
-	            var sum = data.datasets[0].data.reduce(add, 0);
-	            function add(a, b) {
-	              return a + b;
-	            }
-
-	            return data.datasets[0].data[tooltipItems.index];
-	          },
-	        }
-	      }
-	    }
-	});
-
+		var ctx = document.getElementById("income_summary").getContext('2d');
+		
+		var myDoughnutChart = new Chart(ctx,
+		{
+		    type: 'doughnut',
+		    data: {
+		        labels: ["Red", "Blue"],
+		        datasets: [{
+		            label: '# of Votes',
+		            data: [$payout, $wallet],
+		            backgroundColor: [
+		                'rgba(142, 94, 162, 1)',
+		                'rgba(62, 149, 205, 1)'
+		            ],
+		            borderColor: [
+		                'rgba(142, 94, 162, 1)',
+		                'rgba(62, 149, 205, 1)'
+		            ],
+		            borderWidth: 1
+		        }]
+		    },
+		    options: 
+		    {
+		      legend: 
+		      {
+		        responsive: true,
+		        display: false,
+		      },
+		      tooltips: 
+		      {
+		        callbacks: 
+		        {
+		          label: function(tooltipItems, data) 
+		          {
+		            var sum = data.datasets[0].data.reduce(add, 0);
+		            function add(a, b) {
+		              return a + b;
+		            }
+	
+		            return data.datasets[0].data[tooltipItems.index];
+		          },
+		        }
+		      }
+		    }
+		});
+	} 
 });
 $(document).ready(function()
 {

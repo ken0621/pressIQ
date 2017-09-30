@@ -132,16 +132,20 @@ class Cart2
 				Item::get_apply_price_level($cart_info->price_level_id);
 				
 				$item_info 							= Item::info($cart->product_id);
-				$_cart[$key] 						= $cart;
-				$_cart[$key]->item_id 				= $item_info->item_id;
-				$_cart[$key]->item_name 			= $item_info->item_name;
-				$_cart[$key]->item_sku 				= $item_info->item_sku;
-				$_cart[$key]->item_price 			= $item_info->item_price;
-				$_cart[$key]->discount 				= 0;
-				$_cart[$key]->subtotal 				= $_cart[$key]->item_price * $cart->quantity;
-				$_cart[$key]->display_item_price 	= Currency::format($_cart[$key]->item_price);
-				$_cart[$key]->display_subtotal 		= Currency::format($_cart[$key]->subtotal);
-				$total += $_cart[$key]->subtotal;
+				
+				if ($item_info) 
+				{
+					$_cart[$key] 						= $cart;
+					$_cart[$key]->item_id 				= $item_info->item_id;
+					$_cart[$key]->item_name 			= $item_info->item_name;
+					$_cart[$key]->item_sku 				= $item_info->item_sku;
+					$_cart[$key]->item_price 			= $item_info->item_price;
+					$_cart[$key]->discount 				= 0;
+					$_cart[$key]->subtotal 				= $_cart[$key]->item_price * $cart->quantity;
+					$_cart[$key]->display_item_price 	= Currency::format($_cart[$key]->item_price);
+					$_cart[$key]->display_subtotal 		= Currency::format($_cart[$key]->subtotal);
+					$total += $_cart[$key]->subtotal;
+				}
 			}
 
 			$grand_total = $total;

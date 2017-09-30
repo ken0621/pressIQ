@@ -14,6 +14,10 @@
       <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/mobile/framework7/kitchen-sink-material/css/material-icons.css">
       <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/mobile/framework7/kitchen-sink-material/css/kitchen-sink.css">
       <link rel="icon" href="/themes/{{ $shop_theme }}/assets/mobile/framework7/kitchen-sink-material/img/icon.png">
+      {{-- FONT AWESOME --}}
+      <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/font-awesome/css/font-awesome.min.css">
+      <!-- Brown Custom Icon -->
+      <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/brown-icon/styles.css">
       <!-- GLOBAL CSS -->
       <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/mobile/css/global.css">
    </head>
@@ -24,122 +28,84 @@
          <div class="view navbar-fixed">
             <div class="pages">
                <div data-page="panel-left" class="page">
-                  <div class="navbar">
+                  <div class="navbar sidebar-left">
                      <div class="navbar-inner">
-                        <div class="center">Left Panel</div>
+                        <div class="title-holder">
+                           <div class="title">Mr. Brown</div>
+                           <div class="sub">Premium</div>
+                        </div>
+                        <div class="right">
+                           <div class="dot"></div>
+                        </div>
                      </div>
                   </div>
-                  <div class="page-content">
-                     <div class="content-block">
-                        <p>This is a side panel/drawer. You can close it by clicking outsite or on this link:<a href="#" class="close-panel">close me</a>. You can put here anything, even another isolated view like in<a href="#" data-panel="right" class="open-panel">Right Panel</a></p>
+                  <div class="page-content sidebar-left">
+                     <div class="image-profile">
+                        <img src="/themes/{{ $shop_theme }}/assets/mobile/img/img-holder.png">
                      </div>
-                     <div class="content-block-title">Framework7 Kitchen Sink</div>
                      <div class="list-block">
                         <ul>
                            <li>
+                              <a href="/members" class="item-link close-panel">
+                                 <div class="item-content">
+                                    <div class="item-media"><i class="icon brown-icon-dashboard"></i></div>
+                                    <div class="item-inner">
+                                       <div class="item-title">Dashboard</div>
+                                    </div>
+                                 </div>
+                              </a>
+                           </li>
+                           <li>
+                              <a href="/members/profile" class="item-link close-panel">
+                                 <div class="item-content">
+                                    <div class="item-media"><i class="icon brown-icon-profile"></i></div>
+                                    <div class="item-inner">
+                                       <div class="item-title">Profile</div>
+                                    </div>
+                                 </div>
+                              </a>
+                           </li>
+                           <li>
                               <a href="forms.html" class="item-link close-panel">
                                  <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
+                                    <div class="item-media"><i class="icon brown-icon-flow-tree"></i></div>
                                     <div class="item-inner">
-                                       <div class="item-title">Forms</div>
+                                       <div class="item-title">Genealogy</div>
                                     </div>
                                  </div>
                               </a>
                            </li>
                            <li>
-                              <a href="list-view.html" class="item-link close-panel">
+                              <a href="forms.html" class="item-link close-panel">
                                  <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
+                                    <div class="item-media"><i class="icon brown-icon-bar-chart"></i></div>
                                     <div class="item-inner">
-                                       <div class="item-title">List View</div>
+                                       <div class="item-title">Reports</div>
                                     </div>
                                  </div>
                               </a>
                            </li>
                            <li>
-                              <a href="media-lists.html" class="item-link close-panel">
+                              <a href="forms.html" class="item-link close-panel">
                                  <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
+                                    <div class="item-media"><i class="icon brown-icon-flow-tree"></i></div>
                                     <div class="item-inner">
-                                       <div class="item-title">Media Lists</div>
+                                       <div class="item-title">Network List</div>
                                     </div>
                                  </div>
                               </a>
                            </li>
                            <li>
-                              <a href="modals.html" class="item-link close-panel">
+                              <a href="forms.html" class="item-link close-panel">
                                  <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
+                                    <div class="item-media"><i class="icon brown-icon-wallet"></i></div>
                                     <div class="item-inner">
-                                       <div class="item-title">Modals</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="bars.html" class="item-link close-panel">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Navbars And Toolbars</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="popover.html" class="item-link close-panel">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Popover</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="panels.html" class="item-link close-panel">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Side Panels</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="swipe-delete.html" class="item-link close-panel">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Swipe To Delete</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="swiper.html" class="item-link close-panel">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Swiper Slider</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="tabs.html" class="item-link close-panel">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Tabs</div>
+                                       <div class="item-title">Wallet</div>
                                     </div>
                                  </div>
                               </a>
                            </li>
                         </ul>
-                     </div>
-                     <div class="content-block">
-                        <p>Long text block goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sem urna, gravida non scelerisque id, fringilla ac velit. Phasellus elementum a ipsum at ornare. Mauris sagittis rhoncus euismod. Integer convallis augue eu lacus ultrices, in dictum elit consequat. Nulla faucibus massa id felis egestas eleifend. Proin consequat dignissim magna ut scelerisque. Vestibulum ac lorem semper, posuere sapien nec, pharetra massa. Nulla a tellus facilisis, sollicitudin quam porta, aliquam lorem. Fusce dignissim eros ac diam molestie, ut ultrices lorem tristique. Ut facilisis augue ac nisi egestas malesuada. Nunc posuere tortor quis eleifend mollis. Aliquam erat volutpat. Donec feugiat elit tellus, nec convallis orci elementum in. Sed urna mi, vestibulum id tempus id, pretium et ante. Pellentesque eget sollicitudin ligula. Phasellus pellentesque velit eu porta suscipit.</p>
                      </div>
                   </div>
                </div>
@@ -201,402 +167,157 @@
                      </div>
                   </div>
                   <div class="page-content">
-                     <div class="content-block-title">Welcome To Framework7</div>
-                     <div class="content-block"><a href="about.html" class="button button-raised">About Framework7</a></div>
-                     <div class="content-block-title">Framework7 Kitchen Sink</div>
-                     <div class="list-block">
-                        <ul>
-                           <li>
-                              <a href="accordion.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Accordion</div>
+                     <div class="dashboard-view">
+                        <div class="profile-holder">
+                           <table>
+                              <tr>
+                                 <td class="img">
+                                    <img src="/themes/{{ $shop_theme }}/assets/mobile/img/img-holder.png">
+                                 </td>
+                                 <td class="text">
+                                    <div class="name">Mr. Brown</div>
+                                    <div class="sub">Premium</div>
+                                 </td>
+                              </tr>
+                           </table>
+                        </div>
+                        <div class="summary-holder">
+                           <div class="title"><i class="align-icon brown-icon-bar-chart"></i> Wallet Summary</div>
+                           <div class="body">
+                              <div class="chart-legend">
+                                 <div class="row">
+                                    <!-- Each "cell" has col-[widht in percents] class -->
+                                    <div class="col-50">
+                                       <div class="holder">
+                                          <div class="color-name"><div class="color" style="background-color: #76b6ec"></div><span>Current Wallet</span></div>
+                                          <div class="name">{{ $wallet->display_current_wallet }}</div>
+                                       </div>
+                                    </div>
+                                    <div class="col-50">
+                                       <div class="holder">
+                                          <div class="color-name"><div class="color" style="background-color: #8E5EA2"></div><span>Total Pay-out</span></div>
+                                          <div class="name">{{ $wallet->display_total_payout }}</div>
+                                       </div>
                                     </div>
                                  </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="autocomplete.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Autocomplete</div>
+                                 
+                                 
+                                 <div class="chart-holder">
+                                    <canvas id="income_summary" class="chart-income" wallet="{{ $wallet->current_wallet }}"  payout="{{ $wallet->total_payout }}" style="max-width: 150px;" width="150" height="150"></canvas>
+                                 </div>
+                                 <div class="row">
+                                    <!-- Each "cell" has col-[widht in percents] class -->
+                                    <div class="col-50">
+                                       <div class="holder">
+                                          <div class="color-name"><div class="color"></div><span>Current Slot(s)</span></div>
+                                          <div class="name">{{ $customer_summary["display_slot_count"] }}</div>
+                                       </div>
+                                    </div>
+                                    <div class="col-50">
+                                       <div class="holder">
+                                          <div class="color-name"><div class="color"></div><span>Total Reward</span></div>
+                                          <div class="name">{{ $wallet->display_total_earnings }}</div>
+                                       </div>
                                     </div>
                                  </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="calendar.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Calendar / Datepicker</div>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="summary-holder">
+                           <div class="title"><i class="fa fa-table"></i> Reward Summary</div>
+                           <div class="body">
+                              <div class="chart-legend">
+                                 <div class="row">
+                                    <div class="col-50">
+                                       <div class="holder">
+                                          <div class="color-name"><div class="color"></div><span>Pairing </br>Reward</span></span></div>
+                                          <div class="name">{{ $wallet->display_complan_triangle }}</div>
+                                       </div>
+                                    </div>
+                                    <div class="col-50">
+                                       <div class="holder">
+                                          <div class="color-name"><div class="color"></div><span>Direct Referral Bonus</span></div>
+                                          <div class="name">{{ $wallet->display_complan_direct }}</div>
+                                       </div>
+                                    </div>
+                                    <div class="col-50">
+                                       <div class="holder">
+                                          <div class="color-name"><div class="color"></div><span>Builder Reward</span></div>
+                                          <div class="name">{{ $wallet->display_complan_builder }}</div>
+                                       </div>
+                                    </div>
+                                    <div class="col-50">
+                                       <div class="holder">
+                                          <div class="color-name"><div class="color"></div><span>Leader Reward</span></div>
+                                          <div class="name">{{ $wallet->display_complan_leader }}</div>
+                                       </div>
                                     </div>
                                  </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="cards.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Cards</div>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="summary-holder">
+                           <div class="title"><i class="align-icon brown-icon-bar-chart"></i> Reward Points</div>
+                           <div class="body">
+                              <div class="chart-legend">
+                                 <div class="row">
+                                    <div class="col-50">
+                                       <div class="holder">
+                                          <div class="color-name"><div class="color"></div><span>Builder Point(s)</span></div>
+                                          <div class="name">{{ $points->display_brown_builder_points }}</div>
+                                       </div>
+                                    </div>
+                                    <div class="col-50">
+                                       <div class="holder">
+                                          <div class="color-name"><div class="color"></div><span>Leader Point(s)</span></div>
+                                          <div class="name">{{ $points->display_brown_leader_points }}</div>
+                                       </div>
                                     </div>
                                  </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="chips.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Chips</div>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="summary-holder">
+                           <div class="title"><i class="align-icon brown-icon-star"></i> My Slot(s)</div>
+                           <div class="body">
+                              <div class="unilevel-holder">
+                                 @foreach($_slot as $slot)
+                                 <div class="holder">
+                                    <div class="row clearfix">
+                                       <div class="col-sm-4 text-center">
+                                          <div class="label2">{{ $slot->slot_no }}</div>
+                                          <div class="label3">{{ $slot->display_total_earnings }}</div>
+                                          <div class="label3">{{ $slot->current_direct }} / {{ $slot->brown_next_rank_current }}</div>
+                                       </div>
+                                       <div class="col-sm-8 text-center" style="margin-bottom: 5px;">ROAD TO <b>{{ $slot->brown_next_rank }}</b></div>
+                                       <div class="col-sm-4">
+                                          @if($slot->brown_next_rank != "NO NEXT RANK")
+                                          @if($slot->current_direct >= $slot->required_direct)
+                                          <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">DIRECT <b>QUALIFIED</b></div>
+                                          @else
+                                          <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) {{ $slot->brown_direct_rank_percentage }}%, rgb(237, 237, 237) {{ $slot->brown_direct_rank_percentage }}%);">DIRECT ({{ $slot->current_direct }}/{{ $slot->required_direct }})</div>
+                                          @endif
+                                          @else
+                                          <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 40%);">NO MORE <b> NEXT RANK</b></div>
+                                          @endif
+                                       </div>
+                                       <div class="col-sm-4">
+                                          @if($slot->brown_next_rank != "NO NEXT RANK")
+                                          @if($slot->brown_next_rank_current >= $slot->brown_next_rank_requirements)
+                                          <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">GROUP <b>QUALIFIED</b></div>
+                                          @else
+                                          <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) {{ $slot->brown_rank_rank_percentage }}%, rgb(237, 237, 237) {{ $slot->brown_rank_rank_percentage }}%);">GROUP ({{ $slot->brown_next_rank_current }}/{{ $slot->brown_next_rank_requirements }})</div>
+                                          @endif
+                                          @else
+                                          <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 40%);">NO MORE <b> NEXT RANK</b></div>
+                                          @endif
+                                       </div>
                                     </div>
                                  </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="contacts.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Contacts List</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="data-table.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Data Tables</div>
-                                       <div class="item-after"><span class="badge bg-green">NEW</span></div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="floating-button.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Floating Action Button</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="forms.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Forms</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="grid.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Grid</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="icons.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Icons</div>
-                                       <div class="item-after"><span class="badge bg-green">932</span></div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="infinite-scroll.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Infinite Scroll</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="lazy-load.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Lazy Load Images</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="list-view.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">List View</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="login-screen.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Login Screen</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="media-lists.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Media Lists</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="messages.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Messages</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="modals.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Modals</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="bars.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Navbars And Toolbars</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="notifications.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Notifications</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="photo-browser.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Photo Browser</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="picker.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Picker</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="popover.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Popover</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="preloader.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Preloader</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="progressbar.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Progress Bar</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="pull-to-refresh.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Pull To Refresh</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="searchbar.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Search Bar</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="panels.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Side Panels</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="sortable-list.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Sortable List</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="swipe-delete.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Swipe To Delete</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="swiper.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Swiper Slider</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="tabs.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Tabs</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="timeline.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Timeline</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="virtual-list.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Virtual List</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                        </ul>
-                     </div>
-                     <div class="list-block">
-                        <ul>
-                           <li>
-                              <a href="animation.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Animation</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="color-themes.html" class="item-link">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Color Themes</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                           <li>
-                              <a href="#" class="item-link ks-generate-page">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Dynamically Generated Content</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                        </ul>
-                     </div>
-                     <div class="list-block">
-                        <ul>
-                           <li>
-                              <a href="core-features.html" class="item-link ks-generate-page">
-                                 <div class="item-content">
-                                    <div class="item-media"><i class="icon icon-f7"></i></div>
-                                    <div class="item-inner">
-                                       <div class="item-title">Core Features</div>
-                                    </div>
-                                 </div>
-                              </a>
-                           </li>
-                        </ul>
+                                 @endforeach
+                              </div>
+                           </div>
+                        </div>
                      </div>
                   </div>
                </div>
@@ -773,6 +494,8 @@
       <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
       <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/mobile/framework7/dist/js/framework7.js"></script>
       <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/mobile/framework7/kitchen-sink-material/js/kitchen-sink.js"></script>
+      {{-- EXTERNAL JS --}}
+      <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
       <!-- GLOBAL JS -->
       <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/mobile/js/global.js"></script>
    </body>

@@ -75,10 +75,24 @@ class Mlm_seed
         $insert[8]['email_content'] = '<p>&nbsp;<span style="text-align: justify;">Greetings!</span></p><p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p><p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">You have successfully redeemed <u>[points]</u>. You may claim your <u>[item_redeem]</u>&nbsp;at any BCO branch Nationwide. Please present your VIP Card and any valid ID when claiming.</p><p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p><p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">For inquiries, please feel free to contact us at (0917) 542-2614 (Globe Mobile), (062) 310-2256 (Globe Landline), <a href="mailto:philtechglobalmainoffice@gmail.com">philtechglobalmainoffice@gmail.com</a> (Email), or you may visit our Main Office located at PhilTECH Bldg. (2<sup>nd</sup> Level), Gallera Road, Guiwan, Zamboanga City.</p><p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p><p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Best Regards,</p><p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;"><strong>The PhilTECH Admin Team</strong></p>';
         $insert[8]['email_content_subject'] = 'Redeem Points'; 
 
-        $count = Tbl_email_content::where('shop_id', $shop_id)->count();
+        $insert[9]['email_content_key'] = 'front_forgot_password';
+        $insert[9]['email_content'] = '<p>Hi [name],</p>
+                                        <p>&nbsp;</p>
+                                        <p>This email was sent automatically by [domain_name] in response to recover your password. This is done for your protection.</p>
+                                        <p>&nbsp;</p>
+                                        <p><h3>Here is your new password : <strong>[password]</strong></h3></p>
+                                        <p>&nbsp;</p>
+                                        <p>If you did not forget your password, please ignore this email.</p>
+                                        <p>&nbsp;</p>
+                                        <p>Thanks,</p>
+                                        <p>Admin</p>
+                                        <p>&nbsp;</p>';
+        $insert[9]['email_content_subject'] = 'Forgot Password'; 
+
+        $count = Tbl_email_content::where('shop_id', $shop_id)->where('archived',0)->count();
         $count_mail_c = count($insert);
-        if($count_mail_c > $count)
-        {
+        // if($count_mail_c > $count)
+        // {
             foreach ($insert as $key => $value) 
             {
                $count = Tbl_email_content::where('shop_id', $shop_id)
@@ -96,6 +110,6 @@ class Mlm_seed
                     Tbl_email_content::insert($insert_mail);
                }
             }
-        }
+        // }
     }
 }

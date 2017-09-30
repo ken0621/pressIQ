@@ -377,27 +377,32 @@
 					<div class="clearfix wow hidden">
 						<div class="badge right">6 New Members</div>
 					</div>
-					@foreach($_direct as $direct)
-					<div class="holder">
-						<div class="color">
-							<img src="{{ $profile_image }}">
-						</div>	
-						<div class="text">
-							<div class="pull-left">
-								<div class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
-								<div class="email">{{ $direct->slot_no }}</div>
-								<div class="date">{{ $direct->time_ago }}</div>
+					@if(count($_direct) > 0)
+						@foreach($_direct as $direct)
+						<div class="holder">
+							<div class="color">
+								<img src="{{ $direct->profile_image }}">
+							</div>	
+							<div class="text">
+								<div class="pull-left">
+									<div class="name">{{ $direct->first_name }} {{ $direct->last_name }}</div>
+									<div class="email">{{ $direct->slot_no }}</div>
+									<div class="date">{{ $direct->time_ago }}</div>
+								</div>
+							</div>
+							<div class="action pull-right">
+								@if($direct->distributed == 1)
+									<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-default"><i class="fa fa-star"></i> VIEW INFO</button>
+								@else
+									<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
+								@endif
 							</div>
 						</div>
-						<div class="action pull-right">
-							@if($direct->distributed == 1)
-								<button class="btn btn-default"><i class="fa fa-star"></i> VIEW INFO</button>
-							@else
-								<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
-							@endif
-						</div>
-					</div>
-					@endforeach
+						@endforeach
+					@else
+
+						<div class="text-center" style="padding: 20px">You don't have any direct referral yet.</div>
+					@endif
 				</div>
 			</div>
 			<div class="col-md-6">
@@ -405,23 +410,27 @@
 					<div class="title"><i class="align-icon brown-icon-money"></i> Recent Rewards <a href="javascript:" class="title-button pull-right">View All Rewards</a></div>
 					<div class="sub-container">
 						<div class="activities">
-							@foreach($_recent_rewards as $recent_reward)
-							<div class="holder">
-								<div class="circle-line">
-									<div class="circle"><img src="/themes/{{ $shop_theme }}/img/circle.png"></div>
-									<div class="line"><img src="/themes/{{ $shop_theme }}/img/line.jpg"></div>
-								</div>
-								<div class="message">{!! $recent_reward->log !!}</div>
-								<div class="row clearfix">
-									<div class="col-sm-6">
-										<div class="date">{{ $recent_reward->time_ago }}</div>
+							@if(count($_recent_rewards) > 0)
+								@foreach($_recent_rewards as $recent_reward)
+								<div class="holder">
+									<div class="circle-line">
+										<div class="circle"><img src="/themes/{{ $shop_theme }}/img/circle.png"></div>
+										<div class="line"><img src="/themes/{{ $shop_theme }}/img/line.jpg"></div>
 									</div>
-									<div class="col-sm-6">
-										<div class="wallet"> EARNED BY {{ $recent_reward->slot_no }}</div>
+									<div class="message">{!! $recent_reward->log !!}</div>
+									<div class="row clearfix">
+										<div class="col-sm-6">
+											<div class="date">{{ $recent_reward->time_ago }}</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="wallet"> EARNED BY {{ $recent_reward->slot_no }}</div>
+										</div>
 									</div>
 								</div>
-							</div>
-							@endforeach
+								@endforeach
+							@else
+								<div class="text-center" style="padding: 20px">You don't have any reward yet.</div>
+							@endif
 						</div>
 					</div>
 				</div>

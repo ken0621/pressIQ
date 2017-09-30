@@ -230,8 +230,8 @@
 					</div>
 					<div class="col-md-8">
 						<div class="detail-container">
-							<h1>PHP</h1>
-							<h2>500.00</h2>
+							<!-- <h1>PHP</h1> -->
+							<h2>{{ $wallet->display_current_wallet }}</h2>
 							<h3>Current Wallet</h3>
 						</div>
 					</div>
@@ -246,8 +246,8 @@
 					</div>
 					<div class="col-md-8">
 						<div class="detail-container">
-							<h1>PHP</h1>
-							<h2>500.00</h2>
+							<!-- <h1>PHP</h1> -->
+							<h2>{{ $wallet->display_total_payout }}</h2>
 							<h3>Total Pay-out</h3>
 						</div>
 					</div>
@@ -262,8 +262,7 @@
 					</div>
 					<div class="col-md-8">
 						<div class="detail-container">
-							<h1>PHP</h1>
-							<h2>500.00</h2>
+							<h2>{{ $customer_summary["display_slot_count"] }}</h2>
 							<h3>Current Slot(s)</h3>
 						</div>
 					</div>
@@ -278,8 +277,8 @@
 					</div>
 					<div class="col-md-8">
 						<div class="detail-container">
-							<h1>PHP</h1>
-							<h2>500.00</h2>
+							<!-- <h1>PHP</h1> -->
+							<h2>{{ $wallet->display_total_earnings }}</h2>
 							<h3>Total Reward</h3>
 						</div>
 					</div>

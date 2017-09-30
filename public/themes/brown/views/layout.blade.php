@@ -17,7 +17,9 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Arimo:400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,700" rel="stylesheet"> 
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,700" rel="stylesheet">
+
     <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap.min.css">
     <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/main.css">
@@ -33,6 +35,9 @@
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/drawer.css">
     <!-- Brown Custom Icon -->
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/brown-icon/styles.css">
+    <!-- WOW JS -->
+    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/wow/css/animate.css">
+
     @yield("css")
 </head>
 <body>
@@ -502,6 +507,14 @@
     <script type="text/javascript" src="/assets/js/cart.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/drawer.js"></script>
     <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
+
+
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/wow/js/wow.min.js"></script>
+
+    <script>
+          new WOW().init();
+    </script>
+
     <script type="text/javascript">
     $(".date-picker").datepicker({
     dateFormat:"yy-mm-dd"

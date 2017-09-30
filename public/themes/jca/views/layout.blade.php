@@ -6,7 +6,8 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>{{ ucfirst($shop_info->shop_key) }} | {{ $page }}</title>
+
+        <title>{{ ucfirst($shop_info->shop_key) }} | {{ isset($page) ? $page : "" }}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -61,8 +62,13 @@
     <!-- HEADER -->
     <div class="subheader-container">
         <div class="container">
+            @if($customer)
+            <div class="left-container"><span><i class="fa fa-heart-o" aria-hidden="true"></i></span><span>BECOME A MEMBER</span></div>
+            <div class="right-container"><span style="cursor: pointer;" onClick="location.href='/members/logout'">LOGOUT</span><span style="cursor: pointer;" onClick="location.href='/members'">MY ACCOUNT</span></div>
+            @else
             <div class="left-container"><span><i class="fa fa-heart-o" aria-hidden="true"></i></span><span>BECOME A MEMBER</span></div>
             <div class="right-container"><span style="cursor: pointer;" onClick="location.href='/members/login'">LOGIN</span><span style="cursor: pointer;" onClick="location.href='/members/register'">REGISTER</span></div>
+            @endif
         </div>
     </div>
     <div class="header-container">
@@ -89,62 +95,89 @@
     </div> 
     <!-- CONTENT -->
     <div id="scroll-to" class="clearfix">
-	   @yield("content")
+       @yield("content")
     </div>
 
     <!-- FOOTER -->
     <footer id="bottom-footer">
         <div class="container">
-            <div class="upper row clearfix">
-                <div class="col-md-4">
-                    <div class="footer-img-container">
-                        <img src="/themes/{{ $shop_theme }}/img/footer-img.png">
-                        <p>
-                            3xcell-E Sales & Marketing Inc. is composed of five dynamic individuals who share the same motivation and common values strengthened and lead by their principal incorporator.
-                        </p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="upper-mid">
-                        <div class="upper-mid-title">INFORMATION</div>
-                        <div class="upper-mid-link-container">
-                            <a href="/"><div class="upper-mid-link">HOME</div></a>
-                            <a href="/product"><div class="upper-mid-link">PRODUCTS</div></a>
-                            <a href="/how_to_join"><div class="upper-mid-link">OPPORTUNITY</div></a>
-                            <a href="/gallery"><div class="upper-mid-link">GALLERY</div></a>
-                            <a href="/contact"><div class="upper-mid-link">CONTACT US</div></a>
+            <div class="footer-container">
+                <div class="upper row clearfix">
+                    <div class="col-md-4">
+                        <div class="reach-us-holder">
+                            <div class="jca-footer-title-container">
+                                <p class="footer-title">Reach Us</p>
+                            </div>
+                            <div class="jca-footer-details-container">
+                                <div class="icon-holder">
+                                    <img class="jca-footer-icon" src="/themes/{{ $shop_theme }}/img/location-logo.png">
+                                </div>
+                                <p class="footer-details">Unit 810 8/F Raffles Corporate Center, F. Ortigas Ave., Ortigas Center, San Antonio, Pasig City</p>
+                            </div>
+                            <div class="jca-footer-details-container">
+                                <div class="icon-holder">
+                                    <img class="jca-footer-icon" src="/themes/{{ $shop_theme }}/img/telephone-logo.png">
+                                </div>
+                                <p class="footer-details">(02)631-6997 | 0917-5326968</p>
+                            </div>
+                            <div class="jca-footer-details-container">
+                                <div class="icon-holder">
+                                    <img class="jca-footer-icon" src="/themes/{{ $shop_theme }}/img/mail-logo.png">
+                                </div>
+                                <p class="footer-details">jcainternationalcorp@gmail.com</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="upper-right">
-                        <div class="upper-mid-title">CONTACT US TODAY</div>
-                        <div class="upper-mid-title-2">PRINCIPAL OFFICE 2</div>
-                        <div class="upper-mid-link">
-                            <p>
-                                Vicar's Bldg. #31 Visayas Avenue Corner Road 1 Vasra, 
-                                Quezon City
-                            </p>
+                    <div class="col-md-2">
+                        <div class="jca-footer-title-container">
+                            <p class="footer-title">Quick Links</p>
                         </div>
-                        <div class="upper-mid-title-2">GENSAN BRANCH OFFICE</div>
-                        <div class="upper-mid-link">
-                            <p>
-                                Door #2 Perla Compania de Seguros Bldg.
-                                Jp. Laurel East, Corner Sampaguita Street,
-                                General Santos City 
-                            </p>
+                        <div class="jca-footer-details-container">
+                            <p class="footer-detail-list">Company Policy</p>
+                            <p class="footer-detail-list">Dealer’s Policy</p>
+                            <p class="footer-detail-list">Disclaimer</p>
+                            <p class="footer-detail-list">Terms & Condition</p>
+                            <p class="footer-detail-list">Privacy Policy</p>
+                            <p class="footer-detail-list">Product Policy</p>
                         </div>
-                        <div class="upper-mid-title-2"><span><img src="/themes/{{ $shop_theme }}/img/footer-mail.png"></span><span>sales@3xcell.com</span></div>
-                        <div class="upper-mid-title-2"><span><img src="/themes/{{ $shop_theme }}/img/footer-phone.png"></span><span>+63 2 518 8637</span></div>
                     </div>
+                    <div class="col-md-3">
+                        <div class="jca-footer-title-container">
+                            <p class="footer-title">Overview</p>
+                        </div>
+                        <div class="jca-footer-details-container">
+                            <p class="footer-detail-list">Marketing Plan</p>
+                            <p class="footer-detail-list">Packages</p>
+                            <p class="footer-detail-list">Product Packages</p>
+                            <p class="footer-detail-list">Direct Selling</p>
+                            <p class="footer-detail-list">Unilevel</p>
+                            <p class="footer-detail-list">Sales Comission</p>
+                            <p class="footer-detail-list">Overide Sales Comission</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="jca-footer-title-container">
+                            <p class="footer-title">Product Portfolio</p>
+                        </div>
+                        <div class="jca-footer-details-container">
+                            <p class="footer-detail-list">JCA Wellness Body Cream</p>
+                            <p class="footer-detail-list">JCA Wellness Day Cream</p>
+                            <p class="footer-detail-list">JCA Wellness Night Cream</p>
+                            <p class="footer-detail-list">Swiss Apple Stemcell Cerum</p>
+                            <p class="footer-detail-list">Swiss Apple Stemcell Soap with</p>
+                            <p class="footer-detail-list">gulthathione and collagen</p>
+                        </div>
+                    </div> 
                 </div>
-            </div>
-            <div class="bottom">                           
-                <div class="ftr-title">© 2017 3XCELL E-SALES & MARKETING, INC. All Rights Reserved.</div>
-                <div class="ftr-title-2">Powered By: DIGIMA WEB SOLUTIONS, Inc.</div>
             </div>
         </div>
     </footer>
+    <div class="container">
+        <div class="bottom">                           
+            <div class="ftr-title">© JCA International Corporation. All Right Reserved</div>
+            <div class="ftr-title-2">Powered By: DIGIMA WEB SOLUTIONS, Inc.</div>
+        </div>
+    </div>
     
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
@@ -161,6 +194,9 @@
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/parallax.js"></script>
 
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/lightbox/js/lightbox.js"></script>
+
+    <!-- FROM HOME.BLADE -->
+    <!-- <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css"> -->
 
     <!-- FB WIDGET -->
     <div id="fb-root"></div>
@@ -250,6 +286,22 @@
 
     </script>
 
-    @yield("js")
+    {{-- START GLOBAL MODAL --}}
+    <div id="global_modal" class="modal fade" role="dialog" >
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content modal-content-global clearfix">
+            </div>
+        </div>
+    </div>
+    {{-- END GLOBAL MODAL --}}
+    {{-- GLOBAL MULTIPLE MODAL --}}
+    <div class="multiple_global_modal_container"></div>
+    {{-- END GLOBAL MULTIPLE MODAL --}}
+
+
+    
+    <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
+    @yield("script")
     </body>
 </html>

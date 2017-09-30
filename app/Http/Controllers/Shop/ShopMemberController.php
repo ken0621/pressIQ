@@ -9,6 +9,7 @@ use View;
 use Input;
 use File;
 use Image;
+use Mail;
 use Carbon\Carbon;
 use App\Globals\Payment;
 use App\Globals\Customer;
@@ -18,13 +19,18 @@ use App\Globals\MLM2;
 use App\Globals\FacebookGlobals;
 use App\Globals\SocialNetwork;
 use App\Globals\GoogleGlobals;
+use App\Globals\EmailContent;
+use App\Globals\Mail_global;
+use App\Globals\Transaction;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_customer_other_info;
+use App\Models\Tbl_email_template;
 use App\Models\Tbl_country;
 use App\Models\Tbl_locale;
 use App\Globals\Currency;
+use App\Globals\Cart2;
 use Jenssegers\Agent\Agent;
 use Validator;
 use Google_Client; 
@@ -194,12 +200,13 @@ class ShopMemberController extends Shop
     public function getLoginSubmit()
     {
         $user_profile = FacebookGlobals::user_profile($this->shop_info->shop_id);
-        $email = isset($user_profile) ? $user_profile['email'] : null;
-        $check = Tbl_customer::where('email',$email)->first();
-        if(count($user_profile) > 0 && $check)
-        {
-            $data = collect($user_profile)->toArray();
+        $email = isset($user_profile['email']) ? $user_profile['email'] : null;
+        $check = Tbl_customer::where('email',$email)->where('shop_id', $this->shop_info->shop_id)->first();
 
+        $data = collect($user_profile)->toArray();
+
+        if(count($user_profile) > 0 && $check && isset($data['email']) && isset($data['id']))
+        {
             Self::store_login_session($data['email'],$data['id']);
 
             return Redirect::to("/members")->send();
@@ -244,36 +251,50 @@ class ShopMemberController extends Shop
         if(count($user_profile) > 0)
         {
             $data = collect($user_profile)->toArray();
-            $check = Tbl_customer::where('email',$data['email'])->where('shop_id',$this->shop_info->shop_id)->first();
-            $email = $data['email'];
+            $email = isset($data['email']) ? $data['email'] : '';
             $pass = $data['id'];
-            if(!$check)
-            {
-                $ins['email']           = $data['email'];
-                $ins['first_name']      = $data['first_name'];
-                $ins['last_name']       = $data['last_name'];
-                $ins['middle_name']     = $data['middle_name'] == null ? '' : $data['middle_name'] ;
-                $ins['gender']          = $data['gender'] == null ? 'male' : $data['gender'];
-                $ins['password']        = Crypt::encrypt($data['id']);
-                $ins['mlm_username']    = $data['email'];
-                $ins['ismlm']           = 1;
-                $ins['created_at']      = Carbon::now();
-                $ins['signup_with']     = 'facebook';
+            $check = Tbl_customer::where('email',$email)->where('shop_id',$this->shop_info->shop_id)->first();
 
-                Customer::register($this->shop_info->shop_id, $ins);            
+            $ins['email'] = $email;
+
+            $rules['email'] = 'required';
+
+            $validator = Validator::make($ins, $rules);
+
+            if($validator->fails()) 
+            {
+                $messages = $validator->messages();
+                return Redirect::to('/members/register')->with('error', 'We need your email address for you to register.');
             }
             else
-            {
-                $email = $check->email;
-                $pass = Crypt::decrypt($check->password);
-            }
+            {    
+                if(!$check)
+                {
+                    $ins['first_name']      = $data['first_name'];
+                    $ins['last_name']       = $data['last_name'];
+                    $ins['middle_name']     = $data['middle_name'] == null ? '' : $data['middle_name'] ;
+                    $ins['gender']          = $data['gender'] == null ? 'male' : $data['gender'];
+                    $ins['password']        = Crypt::encrypt($data['id']);
+                    $ins['mlm_username']    = $data['email'];
+                    $ins['ismlm']           = 1;
+                    $ins['created_at']      = Carbon::now();
+                    $ins['signup_with']     = 'facebook';
+                    
+                    Customer::register($this->shop_info->shop_id, $ins);  
+                }
+                else
+                {
+                    $email = $check->email;
+                    $pass = Crypt::decrypt($check->password);
+                }
 
-            if($email && $pass)
-            {
-                Self::store_login_session($email,$pass);
-            }
+                if($email && $pass)
+                {
+                    Self::store_login_session($email,$pass);
 
-            return Redirect::to("/members")->send();
+                    return Redirect::to("/members")->send();
+                }
+            }   
         }
         else
         {
@@ -316,6 +337,64 @@ class ShopMemberController extends Shop
     {
         $data["page"] = "Forgot Password";
         return view("member.forgot_password");
+    }
+    public function postForgotPasswordSubmit()
+    {
+        $shop_id = $this->shop_info->shop_id;
+        $validate = Customer::check_email($shop_id, Request2::input('email'));
+        
+        $return_data = null;
+        if($validate)
+        {
+            $content_key = "front_forgot_password";
+            if(EmailContent::checkIfexisting($content_key, $shop_id) != 0)
+            {
+                $email_content["subject"] = EmailContent::getSubject($content_key, $shop_id);
+                $email_content["shop_key"] = $this->shop_info->shop_key;
+                $data["email"] = $validate->email;
+                $new_password = Crypt::decrypt($validate->password);
+
+                $txt[0]["txt_to_be_replace"] = "[name]";
+                $txt[0]["txt_to_replace"] = $validate->first_name." ".$validate->middle_name." ".$validate->last_name;
+
+                $txt[1]["txt_to_be_replace"] = "[domain_name]";
+                $txt[1]["txt_to_replace"] = $_SERVER["SERVER_NAME"];
+
+                $txt[2]["txt_to_be_replace"] = "[password]";
+                $txt[2]["txt_to_replace"] = $new_password;
+
+                $change_content = $txt;
+
+                $email_content["content"] = EmailContent::email_txt_replace($content_key, $change_content);
+
+                $data["template"] = Tbl_email_template::where("shop_id", $shop_id)->first();
+                if(isset($data['template']->header_image))
+                {
+                    if (!File::exists(public_path() . $data['template']->header_image))
+                    {
+                        $data['template']->header_image = null;
+                    }
+                }   
+
+                Mail_global::send_email($data['template'], $email_content, $shop_id, $validate->email);
+
+
+                $return_data['status'] = 'success';
+                $return_data['status_message'] = "Successfully Sent Email.";
+            }
+            else
+            {
+                $return_data['status'] = 'danger';
+                $return_data['status_message'] = "Something wen't wrong please contact your admin.";
+            }
+        }
+        else
+        {
+            $return_data['status'] = 'danger';
+            $return_data['status_message'] = "Can't find your record.";
+        }
+
+        return Redirect::back()->with($return_data['status'], $return_data['status_message']);
     }
     /* LOGIN AND REGISTRATION - END */
     public function getProfile()
@@ -637,8 +716,31 @@ class ShopMemberController extends Shop
     }
     public function getCheckout()
     {
-        $data["page"] = "Checkout";
+        $data["page"]       = "Checkout";
+        $shop_id            = $this->shop_info->shop_id;
+        $data["_payment"]   = $_payment = Payment::get_list($shop_id);
         return (Self::load_view_for_members("member.checkout", $data));
+    }
+    public function postcheckout()
+    {
+        $method                                             = request('method');
+        $shop_id                                            = $this->shop_info->shop_id;
+        $transaction_new["transaction_reference_table"]     = "tbl_customer";
+        $transaction_new["transaction_reference_id"]        = 1;
+        $transaction_type                                   = "ORDER";
+        $transaction_date                                   = Carbon::now();
+        $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date);
+
+        if(is_numeric($transaction_list_id))
+        {
+            $success    = "/members?success=1"; //redirect if payment success
+            $failed     = "/members?failed=1"; //redirect if payment failed
+            $error      = Payment::payment_redirect($shop_id, $method, $success, $failed);
+        }
+        else
+        {
+            return $transaction_id;
+        }
     }
     public function getNonMember()
     {
@@ -654,15 +756,13 @@ class ShopMemberController extends Shop
         $debug      = true;
 
         $error = Payment::payment_redirect($shop_id, $key, $success, $failed, $debug);
-        dd($error);
     }
 
     /* AJAX */
     public function postVerifySponsor(Request $request)
     {
-        $shop_id = $this->shop_info->shop_id;
-        $sponsor = MLM2::verify_sponsor($shop_id, $request->verify_sponsor);
-
+        $shop_id                = $this->shop_info->shop_id;
+        $sponsor                = MLM2::verify_sponsor($shop_id, $request->verify_sponsor);
         if(!$sponsor)
         {
             if($request->verify_sponsor == "")
@@ -676,15 +776,23 @@ class ShopMemberController extends Shop
         }
         else
         {
-            $data["page"] = "CARD";
-            $data["sponsor"] = $sponsor; 
-            $data["sponsor_customer"] = Customer::get_info($shop_id, $sponsor->slot_owner);
-            $data["sponsor_profile_image"] = $data["sponsor_customer"]->profile == "" ? "/themes/brown/img/user-placeholder.png" : $data["sponsor_customer"]->profile;
+            $sponsor_have_placement = MLM2::check_sponsor_have_placement($shop_id,$sponsor->slot_id);
+            if($sponsor_have_placement == 0)
+            {
+                $return = "<div class='error-message'>Sponsor \"<b>" . $request->verify_sponsor . "</b>\".<br>should have a placement first.</div>";
+            }
+            else
+            {    
+                $data["page"] = "CARD";
+                $data["sponsor"] = $sponsor; 
+                $data["sponsor_customer"] = Customer::get_info($shop_id, $sponsor->slot_owner);
+                $data["sponsor_profile_image"] = $data["sponsor_customer"]->profile == "" ? "/themes/brown/img/user-placeholder.png" : $data["sponsor_customer"]->profile;
 
-            $store["sponsor"] = $sponsor->slot_no;
-            session($store);
+                $store["sponsor"] = $sponsor->slot_no;
+                session($store);
 
-            $return = (Self::load_view_for_members("member.card", $data));
+                $return = (Self::load_view_for_members("member.card", $data));
+            }
         }
 
         return $return;
@@ -841,6 +949,7 @@ class ShopMemberController extends Shop
         $slot_id         = $request->slot_id;
         $slot_placement  = $request->slot_placement;
         $slot_position   = $request->slot_position;
+        $customer_id     = Self::$customer_info->customer_id;
         $data            = $this->check_placement($slot_id,$slot_placement,$slot_position);
         $procceed        = $data["procceed"];
         if($procceed == 1)
@@ -850,15 +959,18 @@ class ShopMemberController extends Shop
             {
                echo json_encode("success");
             }
+            else if($return == "Placement Error")
+            {
+               echo json_encode("Target placement cannot be used.");
+            }
             else
             {
-               echo json_encode("SOME ERROR OCCURRED");  
+               echo json_encode($return);  
             }
-            
         }
         else
         {
-            echo json_encode("SOME ERROR OCCURRED");
+            echo json_encode("Placement does not exists.");
         }
     }
     public function check_placement($slot_id,$slot_placement,$slot_position)
@@ -874,15 +986,24 @@ class ShopMemberController extends Shop
                 $check_placement = MLM2::check_placement_exist($shop_id,$slot_placement,$slot_position,1,$check_sponsor->slot_id);
                 if($check_placement == 0)
                 {
-                    $data["target_slot"] = Tbl_mlm_slot::where("slot_id",$slot_id)->customer()->first();
-                    $data["placement"]   = Tbl_mlm_slot::where("slot_id",$slot_placement)->customer()->first();
-                    $data["position"]    = $slot_position;
-                    $data["message"]     = "success";
-                    $procceed            = 1;
+                    $sponsor_have_placement = MLM2::check_sponsor_have_placement($shop_id,$check_sponsor->slot_id);
+
+                    if($sponsor_have_placement == 1)
+                    {
+                        $data["target_slot"] = Tbl_mlm_slot::where("slot_id",$slot_id)->customer()->first();
+                        $data["placement"]   = Tbl_mlm_slot::where("slot_id",$slot_placement)->customer()->first();
+                        $data["position"]    = $slot_position;
+                        $data["message"]     = "success";
+                        $procceed            = 1;
+                    }
+                    else
+                    {
+                        $data["message"]   = "Your upline should placed your first.";
+                    }
                 }
                 else
                 {
-                    $data["message"]   = "Placement not available";
+                    $data["message"]   = "Placement not available.";
                 }
             }
             else

@@ -127,6 +127,17 @@ class Cart2
 		}
 		else
 		{
+			/* DISCARD IN CART IF NO ITEM INFO */
+			foreach($_cart as $key => $cart)
+			{
+				$item_info 							= Item::info($cart->product_id);
+				
+				if(!$item_info)
+				{
+					unset($_cart[$key]);
+				}
+			}
+
 			foreach($_cart as $key => $cart)
 			{
 				Item::get_apply_price_level($cart_info->price_level_id);

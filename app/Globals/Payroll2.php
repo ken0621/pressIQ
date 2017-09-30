@@ -4352,13 +4352,13 @@ class Payroll2
 	{
 		$total_cola = 0;
 
-		if ($data["cutoff_input"][$data["start_date"]]->compute_type=="daily") 
-		{
+		// if ($data["cutoff_input"][$data["start_date"]]->compute_type=="daily") 
+		// {
 			foreach($data["cutoff_input"] as $cutoff_input)
 			{
 				$total_cola += $cutoff_input->compute->cola;
 			}
-		}
+		// }
 
 		$val["label"] = "COLA";
 		$val["type"] = "additions";

@@ -20,7 +20,7 @@
 		</div>
 	</div>
 	<div class="report-content">
-		<div class="animated fadeInDown holder">
+		<div class="animated fadeInUp holder">
 		  	<div class="table-responsive">
 		  		<table class="table">
 			  		<thead>

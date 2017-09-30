@@ -20,7 +20,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="animated fadeInDown wallet-encashment-content">
+	<div class="animated fadeInUp wallet-encashment-content">
 		<div class="title">
 			Encashment History
 

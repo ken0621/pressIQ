@@ -22,7 +22,7 @@
 		</div>
 	</div>
 	<div class="network-content" style="margin-top: 40px;">
-		<div class="animated fadeInDown holder">
+		<div class="animated fadeInUp holder">
 		  	<table class="table">
 		  		<thead>
 		  			<tr>

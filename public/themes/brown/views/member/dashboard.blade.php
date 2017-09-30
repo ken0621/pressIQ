@@ -316,11 +316,11 @@
 					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Builder Point(s)</span> {{ $points->display_brown_builder_points }}</div>
+							<div class="name"><span>Builder Point(s)</span><span class="value">{{ $points->display_brown_builder_points }}</span></div>
 						</div>
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Leader Point(s)</span> {{ $points->display_brown_leader_points }}</div>
+							<div class="name"><span>Leader Point(s)</span><span class="value">{{ $points->display_brown_leader_points }}</span></div>
 						</div>
 					</div>
 				</div>

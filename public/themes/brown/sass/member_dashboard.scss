@@ -3,8 +3,8 @@ $light: 300;
 $regular: 400;
 $medium: 500;
 $bold: 700;
-$text-light: #777;
-$text-dark: #272c2f;
+$text-light: #585858;
+$text-dark: #404040;
 
 @mixin transition($transition)
 {
@@ -257,7 +257,7 @@ $text-dark: #272c2f;
 				vertical-align: middle;
 				font-size: 15px;
 				letter-spacing: 0.5px;
-				font-weight: $bold;
+				font-weight: $medium;
 				font-family: $content-text;
 				color: #3E95CD;
 
@@ -266,7 +266,6 @@ $text-dark: #272c2f;
 					color: #333;
 					width: 200px;
 					display: inline-block;
-					font-weight: normal;
 				}
 			}
 		}

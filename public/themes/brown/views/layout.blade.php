@@ -507,6 +507,14 @@
     <script type="text/javascript" src="/assets/js/cart.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/drawer.js"></script>
     <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
+
+
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/wow/js/wow.min.js"></script>
+
+    <script>
+          new WOW().init();
+    </script>
+
     <script type="text/javascript">
     $(".date-picker").datepicker({
     dateFormat:"yy-mm-dd"

@@ -1,8 +1,8 @@
 @extends("member.member_layout")
 @section("member_content")
-<div class="report-container">
+<div class="report-container" style="overflow: hidden;">
 	<div class="report-header clearfix">
-		<div class="left">
+		<div class="animated fadeInRight left">
 			<div class="icon">
 				<img src="/themes/{{ $shop_theme }}/img/report-icon.png">
 			</div>
@@ -11,7 +11,7 @@
 				<div class="sub">All rewards logs are shown here. </div>
 			</div>
 		</div>
-		<div class="right">
+		<div class="animated fadeInRight right">
 			<div class="search">
 				<select class="form-control">
 					<option>All Slots</option>
@@ -20,7 +20,7 @@
 		</div>
 	</div>
 	<div class="report-content">
-		<div class="holder">
+		<div class="animated fadeInDown holder">
 		  	<div class="table-responsive">
 		  		<table class="table">
 			  		<thead>

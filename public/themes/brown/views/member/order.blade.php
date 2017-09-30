@@ -1,8 +1,8 @@
 @extends("member.member_layout")
 @section("member_content")
 <div class="member-order">
-	<div class="animated fadeInRight main-member-header clearfix">
-		<div class="left">
+	<div class="main-member-header clearfix">
+		<div class="animated fadeInRight left">
 			<div class="icon">
 				<div class="brown-icon-orders"></div>
 			</div>
@@ -10,7 +10,7 @@
 				<div class="name">My Orders</div>
 			</div>
 		</div>
-		<div class="right">
+		<div class="animated fadeInRight right">
 			
 		</div>
 	</div>

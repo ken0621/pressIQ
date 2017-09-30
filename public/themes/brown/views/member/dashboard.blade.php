@@ -220,9 +220,9 @@
 			</div>
 		</div> -->
 		<!-- WALLET SUMMARY -->
-		<div class="row clearfix">
-			<div class="animated fadeInRight col-md-3">
-				<div class="per-summary-container box1 row clearfix">
+		<div class="row clearfix" style="overflow: hidden;">
+			<div class="col-md-3">
+				<div class="animated fadeInRight per-summary-container box1 row clearfix">
 					<div class="col-md-4">
 						<div class="icon-container">
 							<img src="/themes/{{ $shop_theme }}/img/wallet-icon.png">
@@ -237,8 +237,8 @@
 					</div>
 				</div>
 			</div>
-			<div class="animated fadeInRight col-md-3">
-				<div class="per-summary-container box2 row clearfix">
+			<div class="col-md-3">
+				<div class="animated fadeInRight per-summary-container box2 row clearfix">
 					<div class="col-md-4">
 						<div class="icon-container">
 							<img src="/themes/{{ $shop_theme }}/img/total-payout.png">
@@ -253,8 +253,8 @@
 					</div>
 				</div>
 			</div>
-			<div class="animated fadeInRight col-md-3">
-				<div class="per-summary-container box3 row clearfix">
+			<div class="col-md-3">
+				<div class="animated fadeInRight per-summary-container box3 row clearfix">
 					<div class="col-md-4">
 						<div class="icon-container">
 							<img src="/themes/{{ $shop_theme }}/img/current-slots.png">
@@ -269,8 +269,8 @@
 					</div>
 				</div>
 			</div>
-			<div class="animated fadeInRight col-md-3">
-				<div class="per-summary-container box4 row clearfix">
+			<div class="col-md-3">
+				<div class="animated fadeInRight per-summary-container box4 row clearfix">
 					<div class="col-md-4">
 						<div class="icon-container">
 							<img src="/themes/{{ $shop_theme }}/img/total-rewards.png">

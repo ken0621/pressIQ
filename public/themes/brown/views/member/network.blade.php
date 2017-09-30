@@ -1,8 +1,8 @@
 @extends("member.member_layout")
 @section("member_content")
-<div class="report-container">
+<div class="report-container" style="overflow: hidden;">
 	<div class="report-header clearfix">
-		<div class="left">
+		<div class="animated fadeInRight left">
 			<div class="icon">
 				<img src="/themes/{{ $shop_theme }}/img/report-icon.png">
 			</div>
@@ -11,7 +11,7 @@
 				<div class="sub">List of network on your <b>SOLID TREE</b></div>
 			</div>
 		</div>
-		<div class="right">
+		<div class="animated fadeInRight right">
 			<div class="search">
 				<select class="form-control select-slot">
 					@foreach($_slot as $slot)
@@ -22,7 +22,7 @@
 		</div>
 	</div>
 	<div class="network-content" style="margin-top: 40px;">
-		<div class="holder">
+		<div class="animated fadeInDown holder">
 		  	<table class="table">
 		  		<thead>
 		  			<tr>

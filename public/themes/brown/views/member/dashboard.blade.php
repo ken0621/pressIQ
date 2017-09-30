@@ -6,21 +6,21 @@
 @if(!$mlm_member)
 	<div class="dashboard">
 	    <!-- TOP DASHBOARD-->
-	    <div class="dashboard-top">
+	    <div class="dashboard-top" style="overflow: hidden;">
 	        <div class="row clearfix">
-	            <div class="col-md-8">
+	            <div class="animated fadeInUp col-md-8">
 	                <div class="img-container">
 	                    <img src="/themes/{{ $shop_theme }}/img/brown-img1.png">
 	                </div>
 	            </div>
-	            <div class="col-md-4">
+	            <div class="animated fadeInRight col-md-4">
 	                <div class="join-container">
 	                    <div class="btn btn-text">
 	                        <div class="text-header1">Join the Movement!</div>
 	                        <div class="text-header2">Enroll now and become one of us!</div>
 	                    </div>
 	                    <div class="btn-container">
-	                        <button class="product-add-cart btn-buy-a-kit" item-id="54" quantity="1">Enroll Now</button><br>
+	                        <button class="product-add-cart btn-buy-a-kit" item-id="2708" quantity="1">Buy a Kit</button><br>
 	                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
 	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
 	                    </div>
@@ -30,7 +30,7 @@
 	    </div>
 
 	    <!-- BOTTOM DASHBOARD -->
-	    <div class="dashboard-bottom">
+	    <div class="dashboard-bottom" style="overflow: hidden;">
 	        <div class="text-header">Profile Information</div>
 	        <div class="row clearfix">
 	            <div class="col-md-4">
@@ -82,7 +82,7 @@
 	    </div>
 	</div>
 @else
-	<div class="dashboard">
+	<div class="dashboard" style="overflow: hidden;">
 		<!-- <div class="row clearfix">
 			<div class="col-md-6">
 				<div class="title"><i class="align-icon brown-icon-bar-chart"></i> Wallet Summary</div>
@@ -220,7 +220,7 @@
 			</div>
 		</div> -->
 		<!-- WALLET SUMMARY -->
-		<div class="row clearfix" style="overflow: hidden;">
+		<div class="row clearfix">
 			<div class="col-md-3">
 				<div class="animated fadeInRight per-summary-container box1 row clearfix">
 					<div class="col-md-4">

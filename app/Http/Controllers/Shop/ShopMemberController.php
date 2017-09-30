@@ -104,7 +104,7 @@ class ShopMemberController extends Shop
             $data['google_app_id'] = SocialNetwork::get_keys($this->shop_info->shop_id, 'googleplus')['app_id'];
         }
 
-        return Self::load_view_for_members("member.login", $data);
+        return Self::load_view_for_members("member.login", $data, false);
     }
     public function postAuthCallback(Request $request)
     {
@@ -242,7 +242,7 @@ class ShopMemberController extends Shop
             $data['fb_login_url'] = FacebookGlobals::get_link_register($this->shop_info->shop_id);
         }
 
-        return Self::load_view_for_members("member.register", $data);
+        return Self::load_view_for_members("member.register", $data, false);
     }
     public function getRegisterSubmit()
     {
@@ -1023,7 +1023,7 @@ class ShopMemberController extends Shop
         return $data;
     }
 
-    public function load_view_for_members($view, $data)
+    public function load_view_for_members($view, $data, $memberonly = true)
     {
         $agent = new Agent();
 
@@ -1036,6 +1036,13 @@ class ShopMemberController extends Shop
             }
         }
 
-        return Self::logged_in_member_only() ? Self::logged_in_member_only() : view($view, $data);
+        if ($memberonly) 
+        {
+            return Self::logged_in_member_only() ? Self::logged_in_member_only() : view($view, $data);
+        }
+        else
+        {
+            return view($view, $data);
+        }
     }
 }

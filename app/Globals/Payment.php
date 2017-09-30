@@ -12,6 +12,8 @@ use App\Models\Tbl_customer;
 use App\Models\Tbl_online_pymnt_api;
 use App\Models\Tbl_item;
 use App\Models\Tbl_payment_logs;
+use App\Models\Tbl_transaction;
+use App\Models\Tbl_transaction_list;
 use App\Globals\Cart2;
 use App\Globals\Cart;
 use App\Globals\Payment;
@@ -86,7 +88,7 @@ class Payment
 		return $return;
 	}
 
-	public static function payment_redirect($shop_id, $key, $success, $failed, $debug = false)
+	public static function payment_redirect($shop_id, $key, $transaction_list_id, $success, $failed, $debug = false)
 	{
 		/* Testing Purposes */
         if ($debug) 
@@ -127,9 +129,9 @@ class Payment
 			            switch ($method_information->link_reference_name)
 			            {
 			                case 'paypal2': dd("UNDER DEVELOPMENT"); break;
-			                case 'paymaya': return Self::method_paymaya($cart, $shop_id, $api, $success, $failed); break;
+			                case 'paymaya': return Self::method_paymaya($cart, $shop_id, $api, $transaction_list_id, $success, $failed); break;
 			                case 'paynamics': dd("UNDER DEVELOPMENT"); break;
-			                case 'dragonpay': return Self::method_dragonpay($cart, $shop_id, $api); break;
+			                case 'dragonpay': return Self::method_dragonpay($cart, $shop_id, $api, $success, $failed); break;
 			                case 'ipay88': dd("UNDER DEVELOPMENT"); break;
 			                case 'other': dd("UNDER DEVELOPMENT");  break;
 			                case 'e_wallet': dd("UNDER DEVELOPMENT"); break;
@@ -159,7 +161,7 @@ class Payment
 	}
 
 	/** Payment Method **/
-	public static function method_dragonpay($cart, $shop_id, $api)
+	public static function method_dragonpay($cart, $shop_id, $api, $success, $failed)
     {
         /* Set Summary */
         foreach ($cart["_item"] as $key => $value) 
@@ -175,8 +177,16 @@ class Payment
         }
         
         /* Set API Details */
-        $merchant_id  = $api->api_client_id;
-        $merchant_key = $api->api_secret_id;
+        if (get_domain() == "c9users.io") 
+		{
+		    $merchant_id  = "MYPHONE";
+            $merchant_key = "Ez9MiNqWBS2BHuO";
+		}
+		else
+		{
+		    $merchant_id  = $api->api_client_id;
+            $merchant_key = $api->api_secret_id;
+		}
 
         /* Request Set */
         $requestpayment    = new Dragon_RequestPayment($merchant_key);
@@ -196,17 +206,29 @@ class Payment
             'description'   => $requestpayment->setDescription($request['description']),
             'email'         => $requestpayment->setEmail($request['email']),
             'digest'        => $requestpayment->getdigest(),
-            'param1'        => "test"
+            'param1'        => $success,
+            'param2'        => $failed
         );
+        
+        Cart2::clear_cart();
         
         /* Request Transaction */
         Dragon_RequestPayment::make($merchant_key, $dragon_request); 
     }
 	
-	public static function method_paymaya($cart, $shop_id, $api, $success, $failed)
+	public static function method_paymaya($cart, $shop_id, $api, $transaction_list_id, $success, $failed)
 	{
 		/* Init Paymaya */
-        PayMayaSDK::getInstance()->initCheckout($api->api_client_id, $api->api_secret_id, "SANDBOX");
+		if (get_domain() == "c9users.io") 
+		{
+		    $environment = "SANDBOX";
+		}
+		else
+		{
+		    $environment = "PRODUCTION";
+		}
+		
+        PayMayaSDK::getInstance()->initCheckout("pk-sEt9FzRUWI2PCBI2axjZ7xdBHoPiVDEEWSulD78CW9c", "sk-cJFYCGhH4stZZTS52Z3dpNbrpRyu6a9iJaBiVlcIqZ5", $environment);
 
         /* Customization */
         $shopCustomization = new Customization();
@@ -326,7 +348,7 @@ class Payment
         /* Set Item Checkout */
         $itemCheckout->items = $item;
         $itemCheckout->totalAmount = $totalAmount;
-        $itemCheckout->requestReferenceNumber = $shop_id . time();
+        $itemCheckout->requestReferenceNumber = (string)$transaction_list_id;
 
         /* Set Item Checkout URL */
         $itemCheckout->redirectUrl = array(
@@ -339,16 +361,18 @@ class Payment
         $insert["payment_log_type"] 	  = "sent";
         $insert["payment_log_method"] 	  = "paymaya";
         $insert["payment_log_created"] 	  = Carbon::now();
-        $insert["payment_log_url"] 		  = Constants::CHECKOUT_SANDBOX_URL;
+        $insert["payment_log_url"] 		  = $environment == "SANDBOX" ? Constants::CHECKOUT_SANDBOX_URL : Constants::CHECKOUT_PRODUCTION_URL;
         $insert["payment_log_data"] 	  = serialize($itemCheckout);
         $insert["payment_log_ip_address"] = get_ip_address();
+        $insert["transaction_list_id"]    = $transaction_list_id;
         Self::insert_logs($insert, $shop_id);
 
         $itemCheckout->execute();
 
         // echo $itemCheckout->id; // Checkout ID
         // echo $itemCheckout->url; // Checkout URL
-
+        Cart2::clear_cart();
+            
         return Redirect::to($itemCheckout->url)->send();
 	}
 
@@ -435,6 +459,7 @@ class Payment
         DB::table("tbl_ipay88_temp")->insert($temp);
 
         // Cart::clear_all($shop_id);
+        Cart2::clear_cart();
         
         RequestPayment::make($data["merchantKey"], $ipay88request);  
     }
@@ -491,10 +516,20 @@ class Payment
     /** Logs **/
     public static function logs($shop_id, $limit)
     {
-    	return Tbl_payment_logs::select("payment_log_id", "payment_log_type", "payment_log_method", "payment_log_created", "payment_log_url", "payment_log_data", "payment_log_ip_address")
+    	$_logs = Tbl_payment_logs::select("transaction_list_id","payment_log_id", "payment_log_url","payment_log_type", "payment_log_method", "payment_log_created", "payment_log_url", "payment_log_data", "payment_log_ip_address")
 						       ->where("shop_id", $shop_id)
 						       ->take($limit)
+						       ->orderBy("payment_log_id", "desc")
 						       ->get();
+						       
+		foreach($_logs as $key => $log)
+		{
+		    $_logs[$key] = $log;
+		    $_logs[$key]->display_date = date("F d, Y - h:i A", strtotime($log->payment_log_created));
+		    $_logs[$key]->display_transaction_list_id = $log->transaction_list_id;
+		}
+		
+		return $_logs;
     }
 
     public static function done($data, $from)
@@ -506,8 +541,39 @@ class Payment
         $insert["payment_log_url"]        = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : "Unknown");
         $insert["payment_log_data"]       = serialize($data);
         $insert["payment_log_ip_address"] = get_ip_address();
-        $shop_id                          = $this->shop_info->shop_id;
         
-        Payment::insert_logs($insert, $shop_id);
+        try
+        {
+            if($from == "paymaya")
+            {
+                $transaction_list_id            = $data["requestReferenceNumber"];
+                $insert["transaction_list_id"]  = $transaction_list_id;
+                $transaction_list               = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->first();
+                $shop_id                        = $transaction_list->shop_id;
+                
+                if($data["paymentStatus"] == "PAYMENT_SUCCESS")
+                {
+                    $transaction_type                                   = "RECEIPT";
+                    $transaction_id                                     = $transaction_list->transaction_id;
+                    $transaction_date                                   = Carbon::now();
+                    $source                                             = $transaction_list_id;
+                    
+                    Transaction::create($shop_id, $transaction_id, $transaction_type, $transaction_date, "+", $source);
+                }
+            }
+            else
+            {
+                $shop_id = 5;
+            }
+            
+            Payment::insert_logs($insert, $shop_id);
+        }
+        catch(\Exception $e)
+        {
+            $insert["payment_log_type"] = "error";
+            $insert["payment_log_data"] = serialize($e->getMessage());
+            $shop_id                    = 5;
+            Payment::insert_logs($insert, $shop_id);
+        }
     }
 }

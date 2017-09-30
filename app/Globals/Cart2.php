@@ -5,6 +5,7 @@ use App\Models\Tbl_user;
 use App\Models\Tbl_item;
 use App\Models\Tbl_cart;
 use App\Models\Tbl_cart_info;
+use App\Models\Tbl_transaction_item;
 use Session;
 use Carbon\Carbon;
 use App\Globals\Currency;
@@ -219,6 +220,8 @@ class Cart2
 	}
 	public static function clear_cart()
 	{
+		$cart_key = Self::get_cart_key();
+		Tbl_cart::where("unique_id_per_pc", $cart_key)->delete();
 	}
 	public static function validate_cart()
 	{
@@ -246,5 +249,16 @@ class Cart2
 	}
 	public static function clear_customer()
 	{
+	}
+	public static function copy_item_from_cart_transaction($shop_id, $transaction_list_id)
+	{
+		Self::clear_cart();
+		
+        $_item = Tbl_transaction_item::where("transaction_list_id", $transaction_list_id)->get();
+        
+        foreach($_item as $item)
+        {
+            Self::add_item_to_cart($shop_id, $item->item_id, $item->quantity);
+        }
 	}
 }

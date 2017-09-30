@@ -103,6 +103,8 @@ Route::any('/member/developer/reset_slot/submit/re_com_phil_lost', 'Member\Devel
 Route::any('/member/developer/reset_slot/submit/re_com_phil_uni', 'Member\Developer_StatusController@re_com_phil_uni'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/recompute', 'Member\Developer_StatusController@recompute'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/recompute/membership_matching', 'Member\Developer_StatusController@recompute_membership_matching'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/payment_logs', 'Member\Developer_StatusController@payment_logs'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/payment_logs/{id}', 'Member\Developer_StatusController@payment_logs_data'); //GUILLERMO TABLIGAN
 /* END MEMBER - VENDOR - GUILLERMO TABLIGAN */
 
 /* MEMBER - ACCOUNTING - CHART OF ACCOUNTS */

@@ -612,6 +612,7 @@ class ShopMemberController extends Shop
         $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();
         $data['slot_no'] = 0;
         $data['mode'] = 'sponsor';
+        
         if($slot)
         {
             $data['slot_no'] = $slot->slot_no;
@@ -625,7 +626,6 @@ class ShopMemberController extends Shop
         $slot_no  = $request->slot_no;
         $shop_id  = $this->shop_info->shop_id;
         $mode = $request->mode;
-
         $check = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->where('slot_no',$slot_no)->where('shop_id',$shop_id)->first();
 
         if($check)
@@ -727,20 +727,20 @@ class ShopMemberController extends Shop
         $method                                             = request('method');
         $shop_id                                            = $this->shop_info->shop_id;
         $transaction_new["transaction_reference_table"]     = "tbl_customer";
-        $transaction_new["transaction_reference_id"]        = 1;
+        $transaction_new["transaction_reference_id"]        = Self::$customer_info->customer_id;
         $transaction_type                                   = "ORDER";
         $transaction_date                                   = Carbon::now();
-        $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date);
+        $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, "-");
 
         if(is_numeric($transaction_list_id))
         {
             $success    = "/members?success=1"; //redirect if payment success
             $failed     = "/members?failed=1"; //redirect if payment failed
-            $error      = Payment::payment_redirect($shop_id, $method, $success, $failed);
+            $error      = Payment::payment_redirect($shop_id, $method, $transaction_list_id, $success, $failed);
         }
         else
         {
-            return $transaction_id;
+            return Redirect::to("/members/checkout")->with("error", "Your cart is empty.");
         }
     }
     public function getNonMember()
@@ -778,17 +778,18 @@ class ShopMemberController extends Shop
         else
         {
             $sponsor_have_placement = MLM2::check_sponsor_have_placement($shop_id,$sponsor->slot_id);
+            
             if($sponsor_have_placement == 0)
             {
                 $return = "<div class='error-message'>Sponsor \"<b>" . $request->verify_sponsor . "</b>\".<br>should have a placement first.</div>";
             }
             else
             {    
-                $data["page"] = "CARD";
-                $data["sponsor"] = $sponsor; 
-                $data["sponsor_customer"] = Customer::get_info($shop_id, $sponsor->slot_owner);
-                $data["sponsor_profile_image"] = $data["sponsor_customer"]->profile == "" ? "/themes/brown/img/user-placeholder.png" : $data["sponsor_customer"]->profile;
-
+                $data["page"]                   = "CARD";
+                $data["sponsor"]                = $sponsor; 
+                $data["sponsor_customer"]       = Customer::get_info($shop_id, $sponsor->slot_owner);
+                $data["sponsor_profile_image"]  = $data["sponsor_customer"]->profile == "" ? "/themes/brown/img/user-placeholder.png" : $data["sponsor_customer"]->profile;
+                
                 $store["sponsor"] = $sponsor->slot_no;
                 session($store);
 

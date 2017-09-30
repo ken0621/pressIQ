@@ -4,6 +4,11 @@
 	<div class="top-container">
 		<div class="container">
 			<div class="top-container-content">Payment Summary</div>
+			@if(session('error'))
+			<div class="alert alert-danger">
+			  <strong>Error!</strong> {{ session('error') }}
+			</div>
+			@endif
 		</div>
 	</div>
 

@@ -1,0 +1,395 @@
+@import "variables";
+
+body
+{
+	color: $font-color-1;
+}
+.page
+{
+	.navbar
+	{
+		background-color: $color-1;
+		.navbar-inner
+		{
+			.left
+			{
+
+			}
+			.right
+			{
+				margin-right: 15px;
+				position: relative;
+				img
+				{
+					width: 40px;
+				}
+				.text
+				{
+					position: absolute;
+					font-size: 12px;
+					font-weight: 700;
+					right: 21px;
+					color: #1c1c1c;
+					text-align: center;
+					width: 19px;
+					top: 4px;
+				}
+			}
+		}
+		/* Sidebar */
+		&.sidebar-left
+		{
+			background-color: $color-2;
+			box-shadow: none;
+			.navbar-inner
+			{
+				
+			}
+			.title-holder
+			{
+				margin-left: 15px;
+				margin-top: 15px;
+				margin-bottom: 15px;
+				.title
+				{
+					color: #fff;
+					font-size: 20px;
+				}
+				.sub
+				{
+					color: #868686;
+					font-size: 14px;
+					line-height: 14px;
+				}
+			}
+			.right
+			{
+				align-self: flex-start;
+				.dot
+				{
+					background-color: $online;
+					height: 10px;
+					width: 10px;
+					border-radius: 100%;
+					margin-top: 25px;
+				}
+			}
+		}
+	}
+}
+
+.page-content
+{
+	background-color: #e2e2e2;
+	.dashboard-view
+	{
+		.profile-holder
+		{
+			padding: 15px;
+			background-color: #ffffff;
+			min-height: 30px;
+			margin: 10px;
+			border-radius: 3.5px;
+			table
+			{
+				min-width: 300px;
+				width: auto;
+				margin: auto;
+				tr
+				{
+					td
+					{
+						vertical-align: top;
+					}
+					.img
+					{
+						width: 75px;
+						padding-right: 15px;
+						img
+						{
+							width: 100%;
+							border-radius: 100%;
+						}
+					}
+					.text
+					{
+						.name
+						{
+							font-weight: $bold;
+							font-size: 18px;
+							line-height: 18px;
+							margin-top: 7.5px;
+						}
+						.sub
+						{
+							font-size: 14px;
+							line-height: 14px;
+							margin-top: 7.5px;
+							font-weight: $semi-bold;
+							color: $font-color-2;
+						}
+					}
+				}
+			}
+		}
+		.summary-holder
+		{
+			background-color: #ffffff;
+			min-height: 30px;
+			margin: 10px;
+			border-radius: 3.5px;
+			.title
+			{
+				font-size: 21px;
+				letter-spacing: 0.5px;
+				font-weight: normal;
+				background-color: #fff;
+				padding: 5px 15px;
+				margin-top: 5px;
+				border: 1px solid #ddd;
+			}
+			.body
+			{
+				padding: 10px 20px;
+			    border: 1px solid #ddd;
+			    margin-top: -1px;
+			    background-color: #fff;
+			    margin-bottom: 10px;
+			    .chart-legend
+				{
+					.holder
+					{
+						font-size: 15px;
+						text-align: center;
+						.color-name
+						{
+							width: 100%;
+							position: relative;
+							padding-left: 20px;
+							text-align: left;
+						}
+						.color
+						{
+							display: inline-block;
+							vertical-align: middle;
+							background-color: #ddd;
+							width: 12px;
+							height: 6px;
+							margin-right: 7.5px;
+							position: absolute;
+							left: 0;
+							top: 50%;
+							-webkit-transform: translateY(-50%);
+							-ms-transform: translateY(-50%);
+							transform: translateY(-50%);
+						}
+						.name
+						{
+							display: inline-block;
+							vertical-align: middle;
+							font-size: 15px;
+							letter-spacing: 0.5px;
+							font-weight: bold;
+							color: #3E95CD;
+							span
+							{
+								color: #333;
+								display: inline-block;
+								font-weight: normal;
+							}
+						}
+					}
+				}
+				.chart-holder
+				{
+					margin: 20px;
+					text-align: center;
+					#income_summary
+					{
+						margin: auto !important;
+					}
+				}
+				.unilevel-holder
+				{
+					.holder
+					{
+						margin-bottom: 7.5px;
+						border-bottom: 1px solid #eee;
+						padding-bottom: 10px;
+
+						.label2
+						{
+							color: #344049;
+							font-size: 16px;
+							font-weight: 600;
+							margin-top: 5px;
+						}
+						.progress2
+						{
+							color: #344049;
+							font-size: 14px;
+
+							text-align: center;
+							background-color: #ededed;
+							padding: 5px 0;
+							letter-spacing: 0.5px;
+						}
+						&:last-child
+						{
+							margin-bottom: 0;
+							border-bottom: none;
+						}
+					}
+				}
+			}
+		}
+	}
+	.profile-view
+	{
+		.holder-info
+		{
+			@include panel-container;
+			.profile-holder
+			{
+				text-align: center;
+				position: relative;
+				.brown-cover
+				{
+					background-color: #573021;
+					height: 75px;
+					width: 100%;
+					top: 0;
+					left: 0;
+					right: 0;
+					position: absolute;
+					z-index: 1;
+				}
+				.img
+				{
+					width: 75px;
+					margin: auto;
+					padding-top: 40px;
+					position: relative;
+					z-index: 2;
+					img
+					{
+						width: 100%;
+						border-radius: 100%;
+					}
+				}
+				.name
+				{
+					font-weight: $bold;
+					font-size: 18px;
+					line-height: 18px;
+					margin-top: 7.5px;
+				}
+				.sub
+				{
+					font-size: 14px;
+					line-height: 14px;
+					margin-top: 7.5px;
+					font-weight: $semi-bold;
+					color: $font-color-2;
+				}
+			}
+			.profile-info
+			{
+				text-align: center;
+				margin-top: 25px;
+				border-top: 2px solid #e0e0e0;
+				.holder
+				{
+					padding: 15px 0;
+					&.green
+					{
+						border-bottom: 2px solid #63b944;
+					}
+					&.orange
+					{
+						border-bottom: 2px solid #ef5525;
+					}
+					&.blue
+					{
+						border-bottom: 2px solid #6075f7;
+					}
+				}
+				.value
+				{
+					font-weight: $bold;
+					font-size: 15px;
+				}
+				.label
+				{
+					color: #868686;
+					font-weight: $semi-bold;
+					font-size: 13px;
+				}
+			}
+		}
+		.profile-leads
+		{
+			@include panel-container;
+			margin-top: 15px;
+			text-align: center;
+			a
+			{
+				font-weight: $bold;
+				color: $font-color-1;
+				font-size: 16px;
+				display: block;
+				padding: 20px 0;
+			}
+		}
+	}
+	/* Sidebar */
+	&.sidebar-left
+	{
+		background-color: $color-2;
+		color: #fff;
+		.image-profile
+		{
+			img
+			{
+				width: 75px;
+				display: block;
+				margin: 15px auto;
+			}
+		}
+		.list-block
+		{
+			margin-top: 0;
+			ul
+			{
+				li
+				{
+					a
+					{
+						.item-content
+						{
+							.item-media
+							{
+								.icon
+								{
+									opacity: 0.5;
+									font-size: 25px;
+									height: 25px;
+									width: 25px;
+									line-height: 25px;
+								}
+							}
+							.item-inner
+							{
+								background: none;
+								.item-title
+								{
+									font-size: 20px;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,17 +1,21 @@
 $content-text: 'Arimo', sans-serif;
+$light: 300;
 $regular: 400;
+$medium: 500;
 $semi-bold: 600;
 $bold: 700;
-$text-light: #777;
-$text-dark: #272c2f;
+$text-light: #585858;
+$text-dark: #404040;
 
 body
 {
-	font-family: 'Droid Sans', sans-serif;
+	font-family: 'Rubik', sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	font-smoothing: antialiased;
 	font-weight: 400;
+	color: $text-dark;
+
 }
 
 button
@@ -26,7 +30,7 @@ button
 	background-color: #502d19;
 	padding: 7.5px 25px;
 	border-radius: 25px;
-	font-weight: 600;
+	font-weight: $medium;
 	&:hover
 	{
 		color: #fff;

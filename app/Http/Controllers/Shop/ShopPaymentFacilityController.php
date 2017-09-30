@@ -60,30 +60,11 @@ class ShopPaymentFacilityController extends Shop
     {
         if (Request::input("status") == "S") 
         {
-            $from = Request::input('param1');
-            if ($from == "checkout") 
-            {
-                $order_id = Request::input("param2");
-                $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
-
-                if($order)
-                {  
-                    $update['ec_order_id'] = $order_id;
-                    $update['order_status'] = "Processing";
-                    $update['payment_status'] = 1;
-                    $order = Ec_order::update_ec_order($update);
-
-                    return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)));
-                }
-            }
-            elseif ($from == "register")
-            {
-                return Redirect::to('/mlm/login?notify=1&success=1');
-            }
+            return Redirect::to(Request::input("param1"));
         }
         else
         {
-            return Redirect::to('/mlm/login?notify=2&success=1');
+            return Redirect::to(Request::input("param2"));
         }
     }
     public function dragonpay_postback()

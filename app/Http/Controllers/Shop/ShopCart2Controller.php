@@ -31,7 +31,7 @@ class ShopCart2Controller extends Shop
     {
         /* Define Cart Key and Customer ID */
         if(Self::$customer_info)
-        {    
+        {
             $customer_id = Self::$customer_info->customer_id;
         }
         else

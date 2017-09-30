@@ -1,9 +1,11 @@
-$content-text: 'Arimo', sans-serif;
+$content-text: 'Rubik', sans-serif;
+$light: 300;
 $regular: 400;
+$medium: 500;
 $semi-bold: 600;
 $bold: 700;
-$text-light: #777;
-$text-dark: #272c2f;
+$text-light: #585858;
+$text-dark: #404040;
 
 @mixin transition($transition)
 {
@@ -51,6 +53,7 @@ $text-dark: #272c2f;
 {
 	font-family: $content-text;
 	background-color: #ededed;
+	font-weight: $regular;
 
 	.bg-container-style
 	{

@@ -1,4 +1,4 @@
-$content-text: 'Arimo', sans-serif;
+$content-text: 'Rubik', sans-serif;
 $light: 300;
 $regular: 400;
 $medium: 500;
@@ -126,7 +126,7 @@ button
 
 			.modal-title
 			{
-				font-weight: $semi-bold;
+				font-weight: $regular;
 				color: #FFF;
 			}
 		}
@@ -140,8 +140,8 @@ button
 					th
 					{
 						background-color: #ece8e8;
-						color: #272c2f;
-						font-weight: 600;
+						color: $text-dark;
+						font-weight: $regular;
 						font-size: 15px;
 						border-bottom: 0;
 						text-align: center;

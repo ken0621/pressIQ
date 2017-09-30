@@ -77,6 +77,7 @@ class AdminControllers extends Controller
 			/*return $password."=".$request_password;*/
 			if($password == $request_password){
 				Session::put('user', $check_login);
+				Session::put('image_src', $check_login->user_pic);
 				return "true";
 
 			}
@@ -106,5 +107,12 @@ class AdminControllers extends Controller
 	{
 		
 		return view("super_admin.sample");
+	}
+
+	public function admin_logout()
+	{
+		
+		Session::forget('user');
+		return view("super_admin.login_admin");
 	}
 }

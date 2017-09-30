@@ -1,3 +1,103 @@
+
+.background-carousel
+{
+  width:100%;
+}
+
+.box-body-user-account
+{
+  height:850px !important;
+}
+
+.pagination-container1
+{
+  position: relative;
+  top:-10px;
+}
+
+.info_table
+{
+  width:100%;
+}
+
+ .button_submit
+ {
+  position: relative;
+  margin-top:53px !important;
+ }
+
+.col-form2
+{
+  position: relative;
+  top:-127px;
+}
+
+
+.col-form1
+{
+  position: relative;
+  top:-127px;
+}
+
+.form-group3
+{
+  padding:1px;
+  height:100px;
+}
+
+.form-group2
+{
+  padding:1px;
+  height:100px;
+}
+
+.col-form
+{
+  height:329px;
+}
+
+.form_label
+{
+ position: relative;
+ margin-left: 26px;
+ text-align: left;
+ top:29px;
+  
+}
+
+.form-group1
+{
+  padding:1px;
+  height:100px;
+}
+
+.update_form
+{
+  color: #5d5d5d;
+    background: #FFFFFF !important;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+    padding-bottom: 15px;
+    padding: 0px !important;
+    border-radius: 10px;
+    margin-bottom: 248px !important;
+}
+
+.pic_cotent
+{
+  height: 335px !important;
+}
+
+.update_user_profile_image
+{
+  font-size: 20px;
+  font-family: 'Open Sans Condensed', sans-serif;
+  position: absolute;
+  font-weight: 600;
+  top:85px;
+  left: 301px;
+}
+
 .filter {
     width: 970px;
     margin-bottom: 84px;
@@ -71,9 +171,9 @@ form[role=login] {
     width: 347px;
     margin-left: 26px;
   }
-  form[role=login] > div {
-    text-align: center;
-  }
+ /*  form[role=login] > div {
+   text-align: center;
+ } */
   
 .form-links {
   text-align: center;
@@ -87,16 +187,16 @@ form[role=login] {
 
 .selectpicker
 {
-  position: absolute;
-  top: 127px;
-  left: 216px;
-  margin-left: 23px;
-  margin-top: -19px;
-  margin-bottom: 20px;
-  width: 266px;
-  height: 31px;
-  padding-left: 77px;
-}
+ position: relative;
+ top: 5px;
+ left: -17px;
+ margin-left: 23px;
+ margin-top: -19px;
+ margin-bottom: 20px;
+ width: 266px;
+ height: 31px;
+ padding-left: 77px;
+  }
 
 .dropdown-menu-custom-update
 {
@@ -122,9 +222,11 @@ form[role=login] {
     box-shadow: 0 6px 12px rgba(0,0,0,.175);
 }
 
-#upload
+#fileToUpload
 {
-    display:none
+  position: absolute;
+  top:135px;
+  left: 301px;
 }
 
 .text_upload-profile
@@ -161,7 +263,7 @@ form[role=login] {
 
 th
 {
-  background: black;
+  background: #4F99C4  !important;
   color: white;
   text-align: center;
   padding: 15px !important;
@@ -171,7 +273,7 @@ td
 {
   text-align: center;
   padding: 15px !important;
-  height:100px;
+  height:80px;
 }
 
 .skin-blue .sidebar-menu>li.active>a 
@@ -181,13 +283,12 @@ td
 }
 .name1
 {
-  text-align: center;
-  font-size: 25px;
+  font-size: 48px;
   font-family: 'Open Sans Condensed', sans-serif;
   position: absolute;
   font-weight: 600;
   top:16px;
-  left: 397px;
+  left: 301px;
 
 }
 .pic
@@ -368,22 +469,24 @@ td
 
 .table-bordered 
 {
-  border: 1px solid #dddddd;
-  border-collapse: separate;
-  border-left: 0;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
+  border-left: 0 !important;
+  -webkit-border-radius: 4px !important;
+  -moz-border-radius: 4px !important;
+  border-radius: 4px !important;
 }
 
 .table 
 {
+  position: relative;
+  top: 8px;
   width: 100%;
   margin-bottom: 20px;
   background-color: transparent;
   border-collapse: collapse;
   border-spacing: 0;
   display: table;
+  margin-left: 1px;
+  border: 1px solid #dddddd;
 }
 
 .widget.widget-table .table 
@@ -491,6 +594,7 @@ thead
 {
   border-radius: 186px !important;
   width: 52px;
+  max-width: 100%;
 
 }
 

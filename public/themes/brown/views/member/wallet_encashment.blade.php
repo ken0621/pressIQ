@@ -2,7 +2,7 @@
 @section("member_content")
 <div class="wallet-encashment" style="overflow: hidden;">
 	<div class="main-member-header clearfix">
-		<div class="animated fadeInRight left">
+		<div class="animated zoomIn left">
 			<div class="icon">
 				<img src="/themes/{{ $shop_theme }}/img/wallet-encashment.png">
 			</div>

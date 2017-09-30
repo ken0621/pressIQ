@@ -1332,6 +1332,31 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";
 
+    /* REWARD CONFIG */
+    $segment = "submenu-page-email";
+    $nav[$page]['submenu'][$segment]['name']   = "Press Release Email";
+    $nav[$page]['submenu'][$segment]['segment']= $segment;
+    $nav[$page]['submenu'][$segment]['type']   = "submenu";
+
+
+        /* -- MLM => MEMBERSHIP CODES */
+        $code = "page-email-create";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Create Press Release";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/press_release_email/create_press_release";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page', 'claim'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout Only";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "<span style='color: blue'>Ephraim John Dognidon</span>";
+
+        $code = "page-email-view";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "View Press Release";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/email";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page', 'claim'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout Only";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "<span style='color: blue'>Ephraim John Dognidon</span>";
+
+
     // $code = "page-partnerview";
     // $nav[$page]['submenu'][$code]['label'] = "partnerview";
     // $nav[$page]['submenu'][$code]['code'] = $code;

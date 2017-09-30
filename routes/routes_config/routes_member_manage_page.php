@@ -22,4 +22,7 @@ Route::any('/member/page/partnerview/edit/{id}', 'Member\Page_ThemesController@p
 Route::any('/member/page/partnerview/delete/{id}', 'Member\Page_ThemesController@delete_company_info');
 Route::get('/member/page/partnerview/partner-filter-by-location', 'Member\Page_ThemesController@partnerFilterByLocation');
 
+/*Press Release Email System*/
+Route::get('/member/page/press_release_email/create_press_release', 'Member\Press_Release_Controller@press_create_email');
+
 

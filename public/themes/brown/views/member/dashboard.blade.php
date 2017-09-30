@@ -9,7 +9,7 @@
 	    <div class="dashboard-top">
 	        <div class="row clearfix">
 		        <div class="col-md-8">
-		        	<video width="676" height="380" autoplay="" loop>
+		        	<video autoplay="" loop>
 						<source src="/themes/{{ $shop_theme }}/img/intro2.mp4" type="video/mp4">
 					</video>
 		        </div>

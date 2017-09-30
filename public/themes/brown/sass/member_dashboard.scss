@@ -378,9 +378,9 @@ $text-dark: #404040;
 
 				.name
 				{
-					color: #344049;
+					color: $text-dark;
 					font-size: 16px;
-					font-weight: 600;
+					font-weight: $medium;
 				}
 				.email
 				{
@@ -409,9 +409,15 @@ $text-dark: #404040;
 			padding-left: 30px;
 			.message
 			{
-				color: #344049;
+				color: $text-light;
 				font-size: 16px;
 				margin-bottom: 5px;
+				b 
+				{
+					font-weight: $medium;
+					color: $text-dark;
+				}
+
 			}
 			.date
 			{

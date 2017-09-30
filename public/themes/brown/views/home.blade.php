@@ -275,7 +275,7 @@
 			</div>
 		</div>
 		<div class="col-md-6">
-			<video class="wow fadeInRight" data-wow-delay="0.3s" width="" height="468" autoplay="" controls="" loop data-wow-offset="10">
+			<video class="wow fadeInRight" data-wow-delay="0.3s" width="" height="468" muted autoplay="" controls="" loop data-wow-offset="10">
 				<source src="/themes/{{ $shop_theme }}/img/features.m4v" type="video/mp4">
 			</video>
 		</div>

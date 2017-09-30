@@ -3433,9 +3433,10 @@ class Payroll2
 		{
 			if ($group->payroll_group_cola_basis == "Daily Computation") 
 			{
-
+				dd();
 				$return = Payroll2::cutoff_breakdown_cola($return, $data);
 			}
+				
 			else if($group->payroll_group_cola_basis == "Monthly Fixed")
 			{
 				$return = Payroll2::cutoff_fixed_montly_cola($return, $data);

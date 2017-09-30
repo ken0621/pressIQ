@@ -222,12 +222,12 @@
 		</div> -->
 		<div class="container">
 			<div class="row clearfix">
-				<div class="col-md-6">
+				<div class="col-md-6 col-sm-6">
 					<div class="img-container wow fadeInLeft" data-wow-offset="50" data-wow-delay="0.2s">
 						<img src="/themes/{{ $shop_theme }}/img/ad-phone.png">
 					</div>
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-6 col-sm-6">
 					<div class="detail-container wow fadeInRight" data-wow-offset="10" data-wow-delay="0.3s">
 						<h2>Introducing</h2>
 						<h1>THE BROWN EDITION</h1>
@@ -240,7 +240,7 @@
 	</div>
 	<!-- FEATURES -->
 	<div class="wrapper-3 row-no-padding clearfix">
-		<div class="col-md-6">
+		<div class="col-md-6 video-holder match-height">
 			<div class="detail-container">
 				<div class="title-container wow fadeInDown" data-wow-offset="10" data-wow-delay="0.2s">FEATURES</div>
 				<table class="wow fadeInLeft" data-wow-offset="10" data-wow-delay="0.2s">
@@ -274,8 +274,8 @@
 				</table>
 			</div>
 		</div>
-		<div class="col-md-6">
-			<video class="wow fadeInRight" data-wow-delay="0.3s" width="" height="468" autoplay="" controls="" loop data-wow-offset="10">
+		<div class="col-md-6 desc-holder match-height">
+			<video class="wow fadeInRight" data-wow-delay="0.3s" width="" height="" autoplay="" controls="" loop data-wow-offset="10">
 				<source src="/themes/{{ $shop_theme }}/img/features.m4v" type="video/mp4">
 			</video>
 		</div>

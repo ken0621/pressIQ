@@ -1,16 +1,34 @@
-$content-text: 'Arimo', sans-serif;
+$content-text: 'Rubik', sans-serif;
+$light: 300;
 $regular: 400;
+$medium: 500;
 $semi-bold: 600;
 $bold: 700;
-$text-light: #777;
-$text-dark: #272c2f;
+$text-light: #585858;
+$text-dark: #404040;
 
 .report-container
 {
 	font-family: $content-text;
 	padding: 15px;
 	letter-spacing: 0.2px;
-
+	table
+	{
+		th
+		{
+			font-weight: $regular;
+		}
+		tbody 
+		{
+			td 
+			{
+				b 
+				{
+					font-weight: $medium;
+				}
+			}
+		}
+	}
 	.report-header
 	{
 		.left
@@ -38,12 +56,17 @@ $text-dark: #272c2f;
 				{
 					color: $text-dark;
 					font-size: 21px;
-					font-weight: $bold;
+					font-weight: $regular;
 				}
 				.sub
 				{
 					color: $text-light;
 					font-size: 15px;
+
+					b 
+					{
+						font-weight: $medium;
+					}
 				}
 			}
 		}

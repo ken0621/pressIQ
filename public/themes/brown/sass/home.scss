@@ -694,12 +694,28 @@ body{
 
 		.bottom-container
 		{
+			.title
+			{
+				@media screen and (max-width: 479px)
+				{
+					text-align: center;
+				}
+			}
 			.featured-title-holder
 			{
 				font-size: 40px;
 				color: #404040;
 				margin: 0;
 				font-weight: $light !important;
+			}
+			.product-holder
+			{
+				img
+				{
+					max-width: 100%;
+					display: block;
+					margin: auto;
+				}
 			}
 			.product-details
 			{

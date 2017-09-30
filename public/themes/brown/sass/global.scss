@@ -9,12 +9,13 @@ $text-dark: #404040;
 
 body
 {
-	font-family: 'rubik', sans-serif;
+	font-family: 'Rubik', sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	font-smoothing: antialiased;
 	font-weight: 400;
-	
+	color: $text-dark;
+
 }
 
 button

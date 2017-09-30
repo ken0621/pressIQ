@@ -110,6 +110,21 @@ body{
 				margin: 0;
 				color: #dac5a6;
 				letter-spacing: 0.5px;
+
+				@media screen and (max-width: 700px)
+				{
+					font-size: 32px;
+				}
+
+				@media screen and (max-width: 414px)
+				{
+					font-size: 32px;
+				}
+
+				@media screen and (max-width: 360px)
+				{
+					font-size: 28px;
+				}
 			}
 			h3
 			{

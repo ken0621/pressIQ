@@ -591,7 +591,6 @@
     <script src="/themes/{{ $shop_theme }}/assets/easing/jquery.easing.min.js"></script>
     <script src="/themes/{{ $shop_theme }}/assets/jquery/morphext.min.js"></script>
     <script src="/themes/{{ $shop_theme }}/assets/wow/wow.min.js"></script>
-    <script src="/themes/{{ $shop_theme }}/assets/wow/wow.min.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/custom.js"></script>
 
     </body>

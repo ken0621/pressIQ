@@ -2,7 +2,6 @@ $content-text: 'Rubik', sans-serif;
 $light: 300;
 $regular: 400;
 $medium: 500;
-$semi-bold: 600;
 $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
@@ -156,7 +155,7 @@ $text-dark: #272c2f;
 			//mixin
 			@include transition(0.2s);
 
-			font-weight: bold;
+			font-weight: $bold;
 			font-size: 14px;
 			text-decoration: none;
 			margin-top: 3px;
@@ -197,7 +196,7 @@ $text-dark: #272c2f;
 						color: #344049;
 						font-size: 14px;
 						padding-bottom: 15px;
-						font-weight: bold;
+						font-weight: $bold;
 						text-transform: uppercase;
 					}
 				}
@@ -258,7 +257,7 @@ $text-dark: #272c2f;
 				vertical-align: middle;
 				font-size: 15px;
 				letter-spacing: 0.5px;
-				font-weight: bold;
+				font-weight: $bold;
 				font-family: $content-text;
 				color: #3E95CD;
 
@@ -497,7 +496,7 @@ $text-dark: #272c2f;
 
 			.text-header
 			{
-				font-weight: bold;
+				font-weight: $bold;
 				font-size: 25px;
 				color: #344049;
 				padding-top: 5px;
@@ -513,8 +512,8 @@ $text-dark: #272c2f;
 	    	.btn-container
 	    	{
 				text-align: center;
-				font-family: "Arial";
-				font-weight: bold;
+				//font-family: "Arial";
+				font-weight: $bold;
 				font-size: 13px;
 				padding-bottom: 20px;
 

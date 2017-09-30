@@ -221,7 +221,7 @@
 		</div> -->
 		<!-- WALLET SUMMARY -->
 		<div class="row clearfix">
-			<div class="col-md-3">
+			<div class="animated fadeInRight col-md-3">
 				<div class="per-summary-container box1 row clearfix">
 					<div class="col-md-4">
 						<div class="icon-container">
@@ -237,7 +237,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-3">
+			<div class="animated fadeInRight col-md-3">
 				<div class="per-summary-container box2 row clearfix">
 					<div class="col-md-4">
 						<div class="icon-container">
@@ -253,7 +253,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-3">
+			<div class="animated fadeInRight col-md-3">
 				<div class="per-summary-container box3 row clearfix">
 					<div class="col-md-4">
 						<div class="icon-container">
@@ -269,7 +269,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-3">
+			<div class="animated fadeInRight col-md-3">
 				<div class="per-summary-container box4 row clearfix">
 					<div class="col-md-4">
 						<div class="icon-container">
@@ -287,7 +287,7 @@
 			</div>
 		</div>
 		<div class="row clearfix">
-			<div class="col-md-6">
+			<div class="animated fadeInUp col-md-6">
 				<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
 				<div class="sub-container" style="padding-bottom: 46px !important;">
 					<div class="chart-legend">
@@ -310,7 +310,7 @@
 					</div>	
 				</div>
 			</div>
-			<div class="col-md-6">
+			<div class="animated fadeInUp col-md-6">
 				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
 				<div class="sub-container">
 					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
@@ -328,7 +328,7 @@
 		</div>
 
 		<div class="row clearfix">
-			<div class="col-md-12">
+			<div class="animated fadeInUp col-md-12">
 				<div class="unilevel-holder">
 					<div class="title"><i class="align-icon brown-icon-star"></i> My Slot(s) <a href="javascript:" class="title-button pull-right btn-enter-a-code">Add New Slot</a></div>
 					<div class="sub-container">
@@ -371,7 +371,7 @@
 			</div>
 		</div>
 		<div class="row clearfix">
-			<div class="col-md-6">
+			<div class="animated fadeInUp col-md-6">
 				<div class="title"><i class="align-icon brown-icon-globe"></i> Newest Enrollee(s) Sponsored</div>
 				<div class="sub-container border-holder">
 					<div class="clearfix wow hidden">
@@ -405,7 +405,7 @@
 					@endif
 				</div>
 			</div>
-			<div class="col-md-6">
+			<div class="animated fadeInUp col-md-6">
 				<div class="match-height">
 					<div class="title"><i class="align-icon brown-icon-money"></i> Recent Rewards <a href="javascript:" class="title-button pull-right">View All Rewards</a></div>
 					<div class="sub-container">

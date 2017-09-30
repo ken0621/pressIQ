@@ -17,8 +17,9 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Arimo:400,700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,700" rel="stylesheet"> 
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,700" rel="stylesheet">
+
     <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap.min.css">
     <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/main.css">
@@ -34,6 +35,9 @@
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/drawer.css">
     <!-- Brown Custom Icon -->
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/brown-icon/styles.css">
+    <!-- WOW JS -->
+    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/wow/css/animate.css">
+
     @yield("css")
 </head>
 <body>

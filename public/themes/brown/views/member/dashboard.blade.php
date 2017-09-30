@@ -4,11 +4,11 @@
 <input type="hidden" name="_mode" class="_mode" value="{{ $mode }}">
 <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
 @if(!$mlm_member)
-	<div class="dashboard">
+	<div class="dashboard" style="overflow: hidden;">
 	    <!-- TOP DASHBOARD-->
-	    <div class="dashboard-top" style="overflow: hidden;">
+	    <div class="dashboard-top">
 	        <div class="row clearfix">
-	            <div class="animated fadeInUp col-md-8">
+	            <div class="animated fadeInDown col-md-8">
 	                <div class="img-container">
 	                    <img src="/themes/{{ $shop_theme }}/img/brown-img1.png">
 	                </div>
@@ -31,8 +31,8 @@
 
 	    <!-- BOTTOM DASHBOARD -->
 	    <div class="dashboard-bottom" style="overflow: hidden;">
-	        <div class="text-header">Profile Information</div>
-	        <div class="row clearfix">
+	        <div class="animated fadeInRight text-header">Profile Information</div>
+	        <div class="animated fadeInRight row clearfix">
 	            <div class="col-md-4">
 	                <div class="profile-info-container pic1 match-height">
 	                    <div class="icon-container">

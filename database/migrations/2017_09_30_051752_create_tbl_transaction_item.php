@@ -13,9 +13,10 @@ class CreateTblTransactionItem extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_transaction_list', function (Blueprint $table)
+        Schema::create('tbl_transaction_item', function (Blueprint $table)
         {
             $table->increments('transaction_item_id');
+            $table->integer('transaction_list_id')->unsigned();
             $table->integer('item_id')->unsigned();
             $table->string('item_name');
             $table->string('item_sku');
@@ -24,6 +25,7 @@ class CreateTblTransactionItem extends Migration
             $table->double('discount');
             $table->double('subtotal');
             $table->foreign('item_id')->references('item_id')->on('tbl_item')->onDelete('cascade');
+            $table->foreign('transaction_list_id')->references('transaction_list_id')->on('tbl_transaction_list')->onDelete('cascade');
         });
     }
 

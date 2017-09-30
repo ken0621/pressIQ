@@ -130,10 +130,11 @@
 								<div class="top-title">How do you want to pay?</div>
 								<div class="option">
 									<div class="form-input">
-										<select required="required">
+										<select name="method" required="required">
 											<option value="" hidden>Select Payment Method</option>
-											<option value="volvo">Paymaya</option>
-											<option value="saab">Bank Deposit</option>
+											@foreach($_payment as $payment)
+												<option value="{{ $payment->link_reference_name }}">{{ $payment->method_name }}</option>
+											@endforeach
 										</select>	
 									</div>
 								</div>

@@ -11,7 +11,7 @@ use App\Models\Tbl_item;
 
 use App\Models\Tbl_transaction;
 use App\Models\Tbl_transaction_list;
-
+use App\Models\Tbl_transaction_item;
 use App\Globals\AuditTrail;
 use App\Globals\Tablet_global;
 
@@ -60,11 +60,12 @@ class Transaction
             $insert_list["transaction_discount"]        = $cart["_total"]->global_discount;
             $insert_list["transaction_total"]           = $cart["_total"]->grand_total;
             $insert_list["transaction_posted"]          = ($posted ? $cart["_total"]->grand_total : 0);
-            
+            $transaction_list_id                        = Tbl_transaction_list::insertGetId($insert_list);    
+
             /* INSERT ITEMS */
             foreach($cart["_item"] as $key => $item)
             {
-                $insert_item[$key]["transaction_list_id"]           = Tbl_transaction_list::insertGetId($insert_list);
+                $insert_item[$key]["transaction_list_id"]           = $transaction_list_id;
                 $insert_item[$key]["item_id"]                       = $item->item_id;
                 $insert_item[$key]["item_name"]                     = $item->item_name;
                 $insert_item[$key]["item_sku"]                      = $item->item_sku;
@@ -72,10 +73,17 @@ class Transaction
                 $insert_item[$key]["quantity"]                      = $item->quantity;
                 $insert_item[$key]["discount"]                      = $item->discount;
                 $insert_item[$key]["subtotal"]                      = $item->subtotal;
-                $insert_item[$key]["remarks"]                       = "FROM CART";
-                
             }
+
+            Tbl_transaction_item::insert($insert_item);
+            $return = $transaction_list_id;
         }
+        else
+        {
+            $return = "CARTY IS EMPTY";
+        }
+
+        return $return;
     }
     public static function generate_transaction_number($shop_id, $transaction_type)
     {

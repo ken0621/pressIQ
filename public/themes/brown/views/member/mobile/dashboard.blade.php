@@ -11,6 +11,7 @@
       <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/mobile/framework7/dist/css/framework7.material.css">
       <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/mobile/framework7/dist/css/framework7.material.colors.css">
       <link href="http://fonts.googleapis.com/css?family=Roboto:400,300,500,700" rel="stylesheet" type="text/css">
+      <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,700" rel="stylesheet"> 
       <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/mobile/framework7/kitchen-sink-material/css/material-icons.css">
       <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/mobile/framework7/kitchen-sink-material/css/kitchen-sink.css">
       <link rel="icon" href="/themes/{{ $shop_theme }}/assets/mobile/framework7/kitchen-sink-material/img/icon.png">
@@ -65,7 +66,7 @@
                                  </div>
                               </a>
                            </li>
-                           <li>
+                           {{-- <li>
                               <a href="forms.html" class="item-link close-panel">
                                  <div class="item-content">
                                     <div class="item-media"><i class="icon brown-icon-flow-tree"></i></div>
@@ -74,9 +75,9 @@
                                     </div>
                                  </div>
                               </a>
-                           </li>
+                           </li> --}}
                            <li>
-                              <a href="forms.html" class="item-link close-panel">
+                              <a href="/members/report" class="item-link close-panel">
                                  <div class="item-content">
                                     <div class="item-media"><i class="icon brown-icon-bar-chart"></i></div>
                                     <div class="item-inner">
@@ -86,7 +87,7 @@
                               </a>
                            </li>
                            <li>
-                              <a href="forms.html" class="item-link close-panel">
+                              <a href="/members/network" class="item-link close-panel">
                                  <div class="item-content">
                                     <div class="item-media"><i class="icon brown-icon-flow-tree"></i></div>
                                     <div class="item-inner">
@@ -96,7 +97,7 @@
                               </a>
                            </li>
                            <li>
-                              <a href="forms.html" class="item-link close-panel">
+                              <a href="/members/wallet-encashment" class="item-link close-panel">
                                  <div class="item-content">
                                     <div class="item-media"><i class="icon brown-icon-wallet"></i></div>
                                     <div class="item-inner">

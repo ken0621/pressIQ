@@ -53,6 +53,9 @@
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         @if($customer)
         <a class="{{ Request::segment(1) == "members" ? "active" : "" }}" href="/members">My Account</a>
+        @else
+        <a class="{{ Request::segment(1) == "members" ? "active" : "" }}" href="/members/login">Login</a>
+        <a class="{{ Request::segment(1) == "members" ? "active" : "" }}" href="/members/register">Register</a>
         @endif
         <a class="{{ Request::segment(1) == "" ? "active" : "" }}" href="/product">Brown</a>
         <a class="{{ Request::segment(1) == "product" ? "active" : "product" }}" href="/product">Phone Accessories</a>

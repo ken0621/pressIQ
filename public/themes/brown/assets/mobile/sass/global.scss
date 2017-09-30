@@ -3,6 +3,11 @@
 body
 {
 	color: $font-color-1;
+	font-family: "Rubik", sans-serif;
+}
+select
+{
+	font-family: "Rubik", sans-serif;
 }
 .page
 {
@@ -378,6 +383,42 @@ body
 					}
 				}
 			}
+		}
+	}
+	.report-view
+	{
+		.select-holder
+		{
+			background-color: #fff;
+			margin: 8px;
+			margin-bottom: 0;
+			padding: 8px;
+			text-align: right;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+			select
+			{
+				padding: 5px 15px;
+				font-size: 16px;
+				font-weight: 400;
+				border: 1px solid #bcbcbc;
+				border-radius: 2.5px;
+				width: 100%;
+			}
+			.desc
+			{
+				font-size: 14px;
+				font-weight: 400;
+				line-height: 16px;
+				text-align: left;
+			}
+		}
+		.title
+		{
+			font-size: 16px;
+			font-weight: 500;
+			margin-bottom: 10px;
+			padding: 15px;
+			padding-bottom: 0;
 		}
 	}
 	/* Sidebar */

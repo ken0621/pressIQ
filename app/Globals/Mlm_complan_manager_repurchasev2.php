@@ -594,7 +594,7 @@ class Mlm_complan_manager_repurchasev2
             Mlm_slot_log::slot_log_points_array($array);
         }
     }
-    public static function repurchase_cashback($slot_info,$points)
+    public static function repurchase_cashback($slot_info,$points,$rank_points = 0)
     {
         $membership_points_repurchase_cashback = $points;
 
@@ -613,6 +613,28 @@ class Mlm_complan_manager_repurchasev2
             $arry_log['wallet_log_details'] = $log;
             $arry_log['wallet_log_amount'] = $membership_points_repurchase_cashback;
             $arry_log['wallet_log_plan'] = "REPURCHASE_CASHBACK";
+            $arry_log['wallet_log_status'] = "released";   
+            $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('REPURCHASE_CASHBACK', $slot_info->shop_id); 
+            Mlm_slot_log::slot_array($arry_log);
+        }        
+
+        $membership_points_rank_repurchase_cashback = $rank_points;
+
+        if($membership_points_rank_repurchase_cashback != 0)
+        {
+            $log_array['earning'] = $membership_points_rank_repurchase_cashback;
+            $log_array['level'] = 0;
+            $log_array['level_tree'] = 'Sponsor Tree';
+            $log_array['complan'] = 'RANK_REPURCHASE_CASHBACK';
+
+            $log = Mlm_slot_log::log_constructor($slot_info, $slot_info,  $log_array);
+
+            $arry_log['wallet_log_slot'] = $slot_info->slot_id;
+            $arry_log['shop_id'] = $slot_info->shop_id;
+            $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
+            $arry_log['wallet_log_details'] = $log;
+            $arry_log['wallet_log_amount'] = $membership_points_rank_repurchase_cashback;
+            $arry_log['wallet_log_plan'] = "RANK_REPURCHASE_CASHBACK";
             $arry_log['wallet_log_status'] = "released";   
             $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('REPURCHASE_CASHBACK', $slot_info->shop_id); 
             Mlm_slot_log::slot_array($arry_log);

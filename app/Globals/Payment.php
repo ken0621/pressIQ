@@ -86,7 +86,7 @@ class Payment
 		return $return;
 	}
 
-	public static function payment_redirect($shop_id, $key, $success, $failed, $debug)
+	public static function payment_redirect($shop_id, $key, $success, $failed, $debug = false)
 	{
 		/* Testing Purposes */
         if ($debug) 
@@ -234,6 +234,7 @@ class Payment
         $total = 0;
 
         /* Set Item */
+        $ctr = 0;
         foreach ($cart["_item"] as $key => $value) 
         {
         	/* Get Item Details */
@@ -264,13 +265,15 @@ class Payment
             $total += $product->item_price * $value->quantity;
 
             /* Set Item Details */
-            $item[$key] = new Item();
-            $item[$key]->name = $product->item_name;
-            $item[$key]->code = $product->item_sku;
-            $item[$key]->description = $product->item_sales_information ? $product->item_sales_information : "Product #" . $product->item_id;
-            $item[$key]->quantity = (string)$value->quantity;
-            $item[$key]->amount = $itemAmount;
-            $item[$key]->totalAmount = $itemTotalAmount;
+            $item[$ctr] = new Item();
+            $item[$ctr]->name = $product->item_name;
+            $item[$ctr]->code = $product->item_sku;
+            $item[$ctr]->description = $product->item_sales_information ? $product->item_sales_information : "Product #" . $product->item_id;
+            $item[$ctr]->quantity = (string)$value->quantity;
+            $item[$ctr]->amount = $itemAmount;
+            $item[$ctr]->totalAmount = $itemTotalAmount;
+
+            $ctr++;
         }
 
         /* Set Total Amount Value */

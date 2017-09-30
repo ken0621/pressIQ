@@ -1,8 +1,8 @@
 @extends("member.member_layout")
 @section("member_content")
-<div class="wallet-encashment">
+<div class="wallet-encashment" style="overflow: hidden;">
 	<div class="main-member-header clearfix">
-		<div class="left">
+		<div class="animated fadeInRight left">
 			<div class="icon">
 				<img src="/themes/{{ $shop_theme }}/img/wallet-encashment.png">
 			</div>
@@ -13,14 +13,14 @@
 				<div class="sub">In this tab you can request/view encashment history. </div>
 			</div>
 		</div>
-		<div class="right">
+		<div class="animated fadeInRight right">
 			<div class="text-right">
 <!-- 				<button type="button" class="btn btn-default"><i class="fa fa-bank"></i> PAYOUT METHOD</button>
 				<button type="button" class="btn btn-primary request-payout"><i class="fa fa-credit-card"></i> REQUEST PAYOUT</button> -->
 			</div>
 		</div>
 	</div>
-	<div class="wallet-encashment-content">
+	<div class="animated fadeInUp wallet-encashment-content">
 		<div class="title">
 			Encashment History
 

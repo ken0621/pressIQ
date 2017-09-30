@@ -568,22 +568,28 @@ class MLM2
 				{
 					$response = "Sponsor should have a placement";
 				}
-			}
 
-			if($proceed_to_create == 1)
-			{
-				$slot_id  = Tbl_mlm_slot::insertGetId($insert);
-				$rules    = $customer_sponsor->autoplacement_rule;
-				$response = MLM2::matrix_auto($shop_id,$slot_id,$rules);
-				if($response != "success")
+				if($proceed_to_create == 1)
+				{
+					$slot_id  = Tbl_mlm_slot::insertGetId($insert);
+					$rules    = $customer_sponsor->autoplacement_rule;
+					$response = MLM2::matrix_auto($shop_id,$slot_id,$rules);
+					if($response != "success")
+					{
+						$slot_id = $response;
+					}
+				}
+				else
 				{
 					$slot_id = $response;
 				}
 			}
 			else
 			{
-				$slot_id = $response;
+				$slot_id  = Tbl_mlm_slot::insertGetId($insert);
 			}
+
+
 
 			return $slot_id;
 		}

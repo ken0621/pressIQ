@@ -1,4 +1,4 @@
-<div data-page="profile" class="page">
+<div data-page="index" class="page">
     <div class="navbar">
         <div class="navbar-inner">
             <div class="left"><a href="index.html" class="back link icon-only"><i class="icon icon-back"></i></a></div>
@@ -47,8 +47,21 @@
                 <div class="title">About Me</div>
                 <table>
                     <tr>
-                        <td>Date Joined</td>
-                        <td></td>
+                        <td><i class="fa fa-calendar" aria-hidden="true"></i> Date Joined</td>
+                        <td>2017-00-00</td>
+                    </tr>
+                    <tr>
+                        <td><i class="fa fa-map-marker" aria-hidden="true"></i> Location</td>
+                        <td>Pasong Tamo</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="profile-about">
+                <div class="title">New Referral</div>
+                <table>
+                    <tr>
+                        <td>Mrs. Brown Phone</td>
+                        <td>2017-03-08 09:20:33</td>
                     </tr>
                 </table>
             </div>

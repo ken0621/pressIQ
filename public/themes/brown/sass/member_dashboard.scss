@@ -1,5 +1,7 @@
-$content-text: 'Arimo', sans-serif;
+$content-text: 'Rubik', sans-serif;
+$light: 300;
 $regular: 400;
+$medium: 500;
 $semi-bold: 600;
 $bold: 700;
 $text-light: #777;
@@ -17,6 +19,117 @@ $text-dark: #272c2f;
 {
 	font-family: $content-text;
 
+	.per-summary-container
+	{
+		padding-bottom: 20px;
+		.icon-container
+		{
+			text-align: center;
+			width: 75px;
+			height: 75px;
+
+			img
+			{
+				margin-top: 25px;
+			}
+		}
+		.detail-container
+		{
+			padding: 10px;
+
+			h3
+			{
+				font-size: 15px;
+				margin: 0;
+				font-weight: $regular;
+			}
+		}
+	}
+	.box1
+	{
+		.icon-container
+		{
+			background-color: #128dd3;
+		}
+		.detail-container
+		{
+			h1,h2
+			{
+				color: #128dd3;
+				font-size: 13px;
+				margin: 0;
+				font-weight: $regular;
+			}
+			h2
+			{
+				font-size: 26px !important;
+			}
+		}
+	}
+	.box2
+	{
+		.icon-container
+		{
+			background-color: #8f4bab;
+		}
+		.detail-container
+		{
+			h1,h2
+			{
+				color: #8f4bab;
+				font-size: 13px;
+				margin: 0;
+				font-weight: $regular;
+			}
+			h2
+			{
+				font-size: 26px !important;
+			}
+		}
+	}
+	.box3
+	{
+		.icon-container
+		{
+			background-color: #63b944;
+		}
+		.detail-container
+		{
+			h1,h2
+			{
+				color: #63b944;
+				font-size: 13px;
+				margin: 0;
+				font-weight: $regular;
+			}
+			h2
+			{
+				font-size: 26px !important;
+			}
+		}
+	}
+	.box4
+	{
+		.icon-container
+		{
+			background-color: #ec4e2f;
+		}
+		.detail-container
+		{
+			h1,h2
+			{
+				color: #ec4e2f;
+				font-size: 13px;
+				margin: 0;
+				font-weight: $regular;
+			}
+			h2
+			{
+				font-size: 26px !important;
+			}
+		}
+	}
+
 	.align-icon
 	{
 		vertical-align: middle;
@@ -30,7 +143,6 @@ $text-dark: #272c2f;
 
 	.title
 	{
-		color: #000;
 		font-size: 21px;
 		letter-spacing: 0.5px;
 		font-weight: normal;
@@ -63,7 +175,7 @@ $text-dark: #272c2f;
 
 	.sub-container
 	{
-		padding: 10px 20px;
+		padding: 10px 20px 20px 20px;
 		border: 1px solid #ddd;
 		margin-top: -1px;
 		background-color: #fff;
@@ -125,6 +237,11 @@ $text-dark: #272c2f;
 		.holder
 		{
 			font-size: 15px;
+			.value
+			{
+				color: #768997 !important;
+				font-weight: $medium !important;
+			}
 
 			.color
 			{

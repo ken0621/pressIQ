@@ -21,6 +21,7 @@ use App\Globals\SocialNetwork;
 use App\Globals\GoogleGlobals;
 use App\Globals\EmailContent;
 use App\Globals\Mail_global;
+use App\Globals\Transaction;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_customer_address;
@@ -29,6 +30,7 @@ use App\Models\Tbl_email_template;
 use App\Models\Tbl_country;
 use App\Models\Tbl_locale;
 use App\Globals\Currency;
+use App\Globals\Cart2;
 use Jenssegers\Agent\Agent;
 use Validator;
 use Google_Client; 
@@ -714,8 +716,32 @@ class ShopMemberController extends Shop
     }
     public function getCheckout()
     {
-        $data["page"] = "Checkout";
+        $data["page"]       = "Checkout";
+        $shop_id            = $this->shop_info->shop_id;
+        $data["_payment"]   = $_payment = Payment::get_list($shop_id);
+        $data["_locale"]    = Tbl_locale::where("locale_parent", 0)->get();
         return (Self::load_view_for_members("member.checkout", $data));
+    }
+    public function postcheckout()
+    {
+        $method                                             = request('method');
+        $shop_id                                            = $this->shop_info->shop_id;
+        $transaction_new["transaction_reference_table"]     = "tbl_customer";
+        $transaction_new["transaction_reference_id"]        = 1;
+        $transaction_type                                   = "ORDER";
+        $transaction_date                                   = Carbon::now();
+        $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date);
+
+        if(is_numeric($transaction_list_id))
+        {
+            $success    = "/members?success=1"; //redirect if payment success
+            $failed     = "/members?failed=1"; //redirect if payment failed
+            $error      = Payment::payment_redirect($shop_id, $method, $success, $failed);
+        }
+        else
+        {
+            return $transaction_id;
+        }
     }
     public function getNonMember()
     {
@@ -731,7 +757,6 @@ class ShopMemberController extends Shop
         $debug      = true;
 
         $error = Payment::payment_redirect($shop_id, $key, $success, $failed, $debug);
-        dd($error);
     }
 
     /* AJAX */

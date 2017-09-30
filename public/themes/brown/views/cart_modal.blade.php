@@ -43,8 +43,7 @@
             <div class="col-md-8">
                 <div class="left-btn-container">
                     <div style="color: #1c1c1c;"><i class="fa fa-long-arrow-left" aria-hidden="true">&nbsp;</i>&nbsp;Continue Shopping</div>
-                    <button class="btn-checkout" onclick="location.href='/members/test/paymaya'">Paymaya</button>
-                    <button class="btn-checkout" onclick="location.href='/members/test/dragonpay'">Dragonpay</button>
+                    <button class="btn-checkout" onclick="location.href='/members/checkout'">Checkout</button>
                 </div>
             </div>
             <div class="col-md-4">

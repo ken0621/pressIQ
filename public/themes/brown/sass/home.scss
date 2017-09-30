@@ -671,7 +671,16 @@ body{
 				border-collapse: collapse;
 				font-size: 18px;
 				padding: 0px 10px;
-				
+
+				@media screen and (max-width: 420px)
+				{
+					font-size: 13px !important;
+				}
+				@media screen and (max-width: 320px)
+				{
+					font-size: 13px !important;
+				}
+
 				i 
 				{
 					font-size: 6px;

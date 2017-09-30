@@ -478,6 +478,38 @@ $text-dark: #404040;
 	}
 }
 
+.dashboard-top
+{
+	.join-container
+	{
+		.text-header1
+		{
+			font-weight: $medium !important;
+			color: $text-dark !important;
+		}
+	}
+}
+
+.dashboard-bottom
+{
+	font-weight: $regular !important;
+
+	.text-header
+	{
+		font-weight: $medium !important;
+		color: $text-dark !important;
+	}
+
+	.profile-info-container
+	{
+		.prof-info-text-header
+		{
+			font-weight: $medium !important;
+			color: $text-dark !important;
+		}
+	}
+}
+
 /* Success */
 .popup-success
 {

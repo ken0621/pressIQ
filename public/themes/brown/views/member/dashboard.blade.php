@@ -20,7 +20,7 @@
 	                        <div class="text-header2">Enroll now and become one of us!</div>
 	                    </div>
 	                    <div class="btn-container">
-	                        <button class="product-add-cart btn-buy-a-kit" item-id="2708" quantity="1">Buy a Kit</button><br>
+	                        <button class="product-add-cart btn-buy-a-kit" item-id="54" quantity="1">Enroll Now</button><br>
 	                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
 	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
 	                    </div>
@@ -83,7 +83,7 @@
 	</div>
 @else
 	<div class="dashboard">
-		<div class="row clearfix">
+		<!-- <div class="row clearfix">
 			<div class="col-md-6">
 				<div class="title"><i class="align-icon brown-icon-bar-chart"></i> Wallet Summary</div>
 				<div class="sub-container">
@@ -109,7 +109,7 @@
 								<div class="name"><span>Total Reward</span> {{ $wallet->display_total_earnings }}</div>
 							</div>
 						</div>
-
+		
 						<table class="table hidden">
 							<thead>
 								<tr>
@@ -179,7 +179,7 @@
 					</div>
 				</div>
 			</div>
-
+		
 			<div class="col-md-6">
 				<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
 				<div class="sub-container">
@@ -201,9 +201,116 @@
 							<div class="name"><span>Leader Reward</span> {{ $wallet->display_complan_leader }}</div>
 						</div>
 					</div>
-
+		
 				</div>
-
+		
+				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
+				<div class="sub-container">
+					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Builder Point(s)</span> {{ $points->display_brown_builder_points }}</div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Leader Point(s)</span> {{ $points->display_brown_leader_points }}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div> -->
+		<!-- WALLET SUMMARY -->
+		<div class="row clearfix">
+			<div class="animated fadeInRight col-md-3">
+				<div class="per-summary-container box1 row clearfix">
+					<div class="col-md-4">
+						<div class="icon-container">
+							<img src="/themes/{{ $shop_theme }}/img/wallet-icon.png">
+						</div>
+					</div>
+					<div class="col-md-8">
+						<div class="detail-container">
+							<h1>PHP</h1>
+							<h2>500.00</h2>
+							<h3>Current Wallet</h3>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="animated fadeInRight col-md-3">
+				<div class="per-summary-container box2 row clearfix">
+					<div class="col-md-4">
+						<div class="icon-container">
+							<img src="/themes/{{ $shop_theme }}/img/total-payout.png">
+						</div>
+					</div>
+					<div class="col-md-8">
+						<div class="detail-container">
+							<h1>PHP</h1>
+							<h2>500.00</h2>
+							<h3>Total Pay-out</h3>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="animated fadeInRight col-md-3">
+				<div class="per-summary-container box3 row clearfix">
+					<div class="col-md-4">
+						<div class="icon-container">
+							<img src="/themes/{{ $shop_theme }}/img/current-slots.png">
+						</div>
+					</div>
+					<div class="col-md-8">
+						<div class="detail-container">
+							<h1>PHP</h1>
+							<h2>500.00</h2>
+							<h3>Current Slot(s)</h3>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="animated fadeInRight col-md-3">
+				<div class="per-summary-container box4 row clearfix">
+					<div class="col-md-4">
+						<div class="icon-container">
+							<img src="/themes/{{ $shop_theme }}/img/total-rewards.png">
+						</div>
+					</div>
+					<div class="col-md-8">
+						<div class="detail-container">
+							<h1>PHP</h1>
+							<h2>500.00</h2>
+							<h3>Total Reward</h3>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row clearfix">
+			<div class="animated fadeInUp col-md-6">
+				<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
+				<div class="sub-container" style="padding-bottom: 46px !important;">
+					<div class="chart-legend">
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Pairing Reward</span><span class="value">{{ $wallet->display_complan_triangle }}</span></div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Direct Referral Bonus</span><span class="value">{{ $wallet->display_complan_direct }}</span></div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Builder Reward</span><span class="value">{{ $wallet->display_complan_builder }}</span></div>
+						</div>
+						<div class="holder">
+							<div class="color"></div>
+							<div class="name"><span>Leader Reward</span><span class="value">{{ $wallet->display_complan_leader }}</span></div>
+						</div>
+					</div>	
+				</div>
+			</div>
+			<div class="animated fadeInUp col-md-6">
 				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
 				<div class="sub-container">
 					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
@@ -219,9 +326,9 @@
 				</div>
 			</div>
 		</div>
-		<div class="row clearfix">
 
-			<div class="col-md-12">
+		<div class="row clearfix">
+			<div class="animated fadeInUp col-md-12">
 				<div class="unilevel-holder">
 					<div class="title"><i class="align-icon brown-icon-star"></i> My Slot(s) <a href="javascript:" class="title-button pull-right btn-enter-a-code">Add New Slot</a></div>
 					<div class="sub-container">
@@ -264,7 +371,7 @@
 			</div>
 		</div>
 		<div class="row clearfix">
-			<div class="col-md-6">
+			<div class="animated fadeInUp col-md-6">
 				<div class="title"><i class="align-icon brown-icon-globe"></i> Newest Enrollee(s) Sponsored</div>
 				<div class="sub-container border-holder">
 					<div class="clearfix wow hidden">
@@ -298,7 +405,7 @@
 					@endif
 				</div>
 			</div>
-			<div class="col-md-6">
+			<div class="animated fadeInUp col-md-6">
 				<div class="match-height">
 					<div class="title"><i class="align-icon brown-icon-money"></i> Recent Rewards <a href="javascript:" class="title-button pull-right">View All Rewards</a></div>
 					<div class="sub-container">

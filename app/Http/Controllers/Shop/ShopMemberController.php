@@ -21,6 +21,7 @@ use App\Globals\SocialNetwork;
 use App\Globals\GoogleGlobals;
 use App\Globals\EmailContent;
 use App\Globals\Mail_global;
+use App\Globals\Transaction;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_customer_address;
@@ -29,6 +30,7 @@ use App\Models\Tbl_email_template;
 use App\Models\Tbl_country;
 use App\Models\Tbl_locale;
 use App\Globals\Currency;
+use App\Globals\Cart2;
 use Jenssegers\Agent\Agent;
 use Validator;
 use Google_Client; 
@@ -714,8 +716,31 @@ class ShopMemberController extends Shop
     }
     public function getCheckout()
     {
-        $data["page"] = "Checkout";
+        $data["page"]       = "Checkout";
+        $shop_id            = $this->shop_info->shop_id;
+        $data["_payment"]   = $_payment = Payment::get_list($shop_id);
         return (Self::load_view_for_members("member.checkout", $data));
+    }
+    public function postcheckout()
+    {
+        $method                                             = request('method');
+        $shop_id                                            = $this->shop_info->shop_id;
+        $transaction_new["transaction_reference_table"]     = "tbl_customer";
+        $transaction_new["transaction_reference_id"]        = 1;
+        $transaction_type                                   = "ORDER";
+        $transaction_date                                   = Carbon::now();
+        $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date);
+
+        if(is_numeric($transaction_list_id))
+        {
+            $success    = "/members?success=1"; //redirect if payment success
+            $failed     = "/members?failed=1"; //redirect if payment failed
+            $error      = Payment::payment_redirect($shop_id, $method, $success, $failed);
+        }
+        else
+        {
+            return $transaction_id;
+        }
     }
     public function getNonMember()
     {
@@ -731,15 +756,13 @@ class ShopMemberController extends Shop
         $debug      = true;
 
         $error = Payment::payment_redirect($shop_id, $key, $success, $failed, $debug);
-        dd($error);
     }
 
     /* AJAX */
     public function postVerifySponsor(Request $request)
     {
-        $shop_id = $this->shop_info->shop_id;
-        $sponsor = MLM2::verify_sponsor($shop_id, $request->verify_sponsor);
-
+        $shop_id                = $this->shop_info->shop_id;
+        $sponsor                = MLM2::verify_sponsor($shop_id, $request->verify_sponsor);
         if(!$sponsor)
         {
             if($request->verify_sponsor == "")
@@ -753,15 +776,23 @@ class ShopMemberController extends Shop
         }
         else
         {
-            $data["page"] = "CARD";
-            $data["sponsor"] = $sponsor; 
-            $data["sponsor_customer"] = Customer::get_info($shop_id, $sponsor->slot_owner);
-            $data["sponsor_profile_image"] = $data["sponsor_customer"]->profile == "" ? "/themes/brown/img/user-placeholder.png" : $data["sponsor_customer"]->profile;
+            $sponsor_have_placement = MLM2::check_sponsor_have_placement($shop_id,$sponsor->slot_id);
+            if($sponsor_have_placement == 0)
+            {
+                $return = "<div class='error-message'>Sponsor \"<b>" . $request->verify_sponsor . "</b>\".<br>should have a placement first.</div>";
+            }
+            else
+            {    
+                $data["page"] = "CARD";
+                $data["sponsor"] = $sponsor; 
+                $data["sponsor_customer"] = Customer::get_info($shop_id, $sponsor->slot_owner);
+                $data["sponsor_profile_image"] = $data["sponsor_customer"]->profile == "" ? "/themes/brown/img/user-placeholder.png" : $data["sponsor_customer"]->profile;
 
-            $store["sponsor"] = $sponsor->slot_no;
-            session($store);
+                $store["sponsor"] = $sponsor->slot_no;
+                session($store);
 
-            $return = (Self::load_view_for_members("member.card", $data));
+                $return = (Self::load_view_for_members("member.card", $data));
+            }
         }
 
         return $return;
@@ -918,6 +949,7 @@ class ShopMemberController extends Shop
         $slot_id         = $request->slot_id;
         $slot_placement  = $request->slot_placement;
         $slot_position   = $request->slot_position;
+        $customer_id     = Self::$customer_info->customer_id;
         $data            = $this->check_placement($slot_id,$slot_placement,$slot_position);
         $procceed        = $data["procceed"];
         if($procceed == 1)
@@ -927,15 +959,18 @@ class ShopMemberController extends Shop
             {
                echo json_encode("success");
             }
+            else if($return == "Placement Error")
+            {
+               echo json_encode("Target placement cannot be used.");
+            }
             else
             {
-               echo json_encode("SOME ERROR OCCURRED");  
+               echo json_encode($return);  
             }
-            
         }
         else
         {
-            echo json_encode("SOME ERROR OCCURRED");
+            echo json_encode("Placement does not exists.");
         }
     }
     public function check_placement($slot_id,$slot_placement,$slot_position)
@@ -951,15 +986,24 @@ class ShopMemberController extends Shop
                 $check_placement = MLM2::check_placement_exist($shop_id,$slot_placement,$slot_position,1,$check_sponsor->slot_id);
                 if($check_placement == 0)
                 {
-                    $data["target_slot"] = Tbl_mlm_slot::where("slot_id",$slot_id)->customer()->first();
-                    $data["placement"]   = Tbl_mlm_slot::where("slot_id",$slot_placement)->customer()->first();
-                    $data["position"]    = $slot_position;
-                    $data["message"]     = "success";
-                    $procceed            = 1;
+                    $sponsor_have_placement = MLM2::check_sponsor_have_placement($shop_id,$check_sponsor->slot_id);
+
+                    if($sponsor_have_placement == 1)
+                    {
+                        $data["target_slot"] = Tbl_mlm_slot::where("slot_id",$slot_id)->customer()->first();
+                        $data["placement"]   = Tbl_mlm_slot::where("slot_id",$slot_placement)->customer()->first();
+                        $data["position"]    = $slot_position;
+                        $data["message"]     = "success";
+                        $procceed            = 1;
+                    }
+                    else
+                    {
+                        $data["message"]   = "Your upline should placed your first.";
+                    }
                 }
                 else
                 {
-                    $data["message"]   = "Placement not available";
+                    $data["message"]   = "Placement not available.";
                 }
             }
             else

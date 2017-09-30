@@ -42,6 +42,7 @@ use App\Globals\Mlm_slot_log;
 use App\Globals\Mlm_complan_manager_repurchase;
 use App\Globals\Mlm_tree;
 use App\Globals\Membership_code;
+use App\Globals\MLM2;
 
 
 
@@ -669,8 +670,8 @@ class Mlm_complan_manager_repurchase
     }
     public static function repurchase_cashback($slot_info,$item_code_id)
     {
-       $item_code     = Tbl_item_code::where("item_code_id",$item_code_id)->first();  
-       if($item_code)
+        $item_code     = Tbl_item_code::where("item_code_id",$item_code_id)->first();  
+        if($item_code)
         {
             $mlm_item_points  = Tbl_mlm_item_points::where("item_id",$item_code->item_id)
             ->where('membership_id', $slot_info->membership_id)
@@ -687,6 +688,7 @@ class Mlm_complan_manager_repurchase
 
             }
         }
+
         if($membership_points_repurchase_cashback != 0)
         {
             $log_array['earning'] = $membership_points_repurchase_cashback;
@@ -705,6 +707,35 @@ class Mlm_complan_manager_repurchase
             $arry_log['wallet_log_status'] = "released";   
             $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('REPURCHASE_CASHBACK', $slot_info->shop_id); 
             Mlm_slot_log::slot_array($arry_log);
+        }
+
+
+
+        if($item_code)
+        {
+            $rank_points = MLM2::rank_cashback_points($slot_info->shop_id,$slot_info->slot_id,$item_code->item_id);
+    
+            $membership_points_rank_repurchase_cashback = $rank_points;
+    
+            if($membership_points_rank_repurchase_cashback != 0)
+            {
+                $log_array['earning'] = $membership_points_rank_repurchase_cashback;
+                $log_array['level'] = 0;
+                $log_array['level_tree'] = 'Sponsor Tree';
+                $log_array['complan'] = 'RANK_REPURCHASE_CASHBACK';
+    
+                $log = Mlm_slot_log::log_constructor($slot_info, $slot_info,  $log_array);
+    
+                $arry_log['wallet_log_slot'] = $slot_info->slot_id;
+                $arry_log['shop_id'] = $slot_info->shop_id;
+                $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
+                $arry_log['wallet_log_details'] = $log;
+                $arry_log['wallet_log_amount'] = $membership_points_rank_repurchase_cashback;
+                $arry_log['wallet_log_plan'] = "RANK_REPURCHASE_CASHBACK";
+                $arry_log['wallet_log_status'] = "released";   
+                $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('REPURCHASE_CASHBACK', $slot_info->shop_id); 
+                Mlm_slot_log::slot_array($arry_log);
+            }
         }
     }
     public static function unilevel_repurchase_points($slot_info, $item_code_id)
@@ -930,5 +961,9 @@ class Mlm_complan_manager_repurchase
                 
             }
         }
+    }
+    public static function brown_repurchase()
+    {
+        
     }
 }

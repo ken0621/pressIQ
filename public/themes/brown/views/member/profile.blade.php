@@ -2,12 +2,12 @@
 @section("member_content")
 <div class="profile-container">
 	<div class="row clearfix row-no-padding">
-		<div class="col-md-4 left match-height load-profile">
+		<div class="animated fadeInUp col-md-4 left match-height load-profile">
 			<div class="load-profile-holder">
 				<div class="profile-main">
-					<div class="img"><img class="img-upload" style="border-radius: 100%;" src="{{ $profile_image }}"></div>
-					<div class="name">{{ $profile->first_name }} {{ $profile->middle_name }} {{ $profile->last_name }}</div>
-					<div class="sub">{{ $profile->email }}</div>
+					<div class="animated fadeInUp img"><img class="img-upload" style="border-radius: 100%;" src="{{ $profile_image }}"></div>
+					<div class="animated fadeInUp name">{{ $profile->first_name }} {{ $profile->middle_name }} {{ $profile->last_name }}</div>
+					<div class="animated fadeInUp sub">{{ $profile->email }}</div>
 				</div>
 				<div class="profile-status">
 					<table>
@@ -73,7 +73,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-8 right match-height">
+		<div class="animated fadeInRight col-md-8 right match-height">
 			<div class="profile-form">
 				<ul class="nav nav-tabs">
 				   <li class="active"><a data-toggle="tab" href="#basic_info">Basic Info</a></li>

@@ -1,7 +1,7 @@
 @extends("member.member_layout")
 @section("member_content")
 <div class="member-order">
-	<div class="main-member-header clearfix">
+	<div class="animated fadeInRight main-member-header clearfix">
 		<div class="left">
 			<div class="icon">
 				<div class="brown-icon-orders"></div>
@@ -15,7 +15,7 @@
 		</div>
 	</div>
 	<div class="order-content">
-		<div class="holder">
+		<div class="animated fadeInUp holder">
 			<table>
 				<tr>
 					<td class="img">
@@ -54,7 +54,7 @@
 				</tr>
 			</table>
 		</div>
-		<div class="holder">
+		<div class="animated fadeInUp holder">
 			<table>
 				<tr>
 					<td class="img">
@@ -93,7 +93,7 @@
 				</tr>
 			</table>
 		</div>
-		<div class="holder">
+		<div class="animated fadeInUp holder">
 			<table>
 				<tr>
 					<td class="img">

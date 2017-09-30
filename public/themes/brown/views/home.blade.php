@@ -2,9 +2,9 @@
 @section("content")
 <div class="content">
 	<div class="wrapper-1">
-		<div class="container">
+		<!-- <div class="container">
 			<div class="top-container row clearfix">
-				<!-- SLIDER -->
+				SLIDER
 				<div class="col-md-8">
 					<div class="slider-container">
 						<div class="caption-container">
@@ -17,7 +17,7 @@
 						<img src="/themes/{{ $shop_theme }}/img/slider-main.png">
 					</div>
 				</div>
-				<!-- RIGHT ADS -->
+				RIGHT ADS
 				<div class="col-md-4">
 					<div class="right-ads">
 						<div class="ad-container">
@@ -47,7 +47,7 @@
 				</div>
 				<div class="browseby-tiles-holder">
 					<div class="browseby-paddingformat">
-
+		
 						<a class="browseby browseby-active" href="">
 							<div class="browseby-image-holder">
 								<img class="image-responsive" src="/themes/{{ $shop_theme }}/img/browseby-brown-androidphone-icon.png">
@@ -56,7 +56,7 @@
 								<p class="browseby-icon-title">Brown Phone</p>
 							</div>
 						</a>
-
+		
 						<a class="browseby" href="">
 							<div class="browseby-image-holder">
 								<img class="image-responsive" src="/themes/{{ $shop_theme }}/img/browseby-phonecase-icon.png">
@@ -65,7 +65,7 @@
 								<p class="browseby-icon-title">Phone Case</p>
 							</div>
 						</a>
-
+		
 						<a class="browseby" href="">
 							<div class="browseby-image-holder">
 								<img class="image-responsive" src="/themes/{{ $shop_theme }}/img/browseby-headphone-icon.png">
@@ -74,7 +74,7 @@
 								<p class="browseby-icon-title">Head Phones</p>
 							</div>
 						</a>
-
+		
 						<a class="browseby" href="">
 							<div class="browseby-image-holder">
 								<img class="image-responsive" src="/themes/{{ $shop_theme }}/img/browseby-powerbank-icon.png">
@@ -83,7 +83,7 @@
 								<p class="browseby-icon-title">Power Bank</p>
 							</div>
 						</a>
-
+		
 						<a class="browseby" href="">
 							<div class="browseby-image-holder">
 								<img class="image-responsive" src="/themes/{{ $shop_theme }}/img/browseby-dongles-icon.png">
@@ -92,7 +92,7 @@
 								<p class="browseby-icon-title">Dongles</p>
 							</div>
 						</a>
-
+		
 						<a class="browseby" href="">
 							<div class="browseby-image-holder">
 								<img class="image-responsive" src="/themes/{{ $shop_theme }}/img/browseby-internetofthings-icon.png">
@@ -101,7 +101,7 @@
 								<p class="browseby-icon-title">Internet Of Things</p>
 							</div>
 						</a>
-
+		
 						<a class="browseby" href="">
 							<div class="browseby-image-holder">
 								<img class="image-responsive" src="/themes/{{ $shop_theme }}/img/browseby-healthtechnology-icon.png">
@@ -200,16 +200,46 @@
 					</div>
 				</div>
 			</div>
+		</div> -->
+		<div class="fullscreen background parallax" style="background-image: url('/themes/{{ $shop_theme }}/img/brown-banner.jpg');" data-img-width="1600" data-img-height="1395" data-diff="100">
+			<div class="container">
+				<div class="top-container">
+					<h1 class="animated fadeInDown">www.brown.com.ph</h1>
+					<h2 class="animated fadeInUp">Change Starts Here</h2>
+					<video class="animated zoomInDown" width="803" height="450" autoplay="" loop>
+						<source src="/themes/{{ $shop_theme }}/img/brown-font-video.mp4" type="video/mp4">
+					</video>
+					<h3 class="animated fadeInUp">It’s not the color of your skin, but the color of your heart.</h3>
+					<div class="join-button">JOIN THE MOVEMENT</div>
+				</div>
+			</div>
 		</div>
 	</div>
-	<!-- VIDEO ADS -->
+	<!-- INTRODUCING BROWN -->
 	<div class="wrapper-2">
-		<div class="intro">
+		<!-- <div class="intro">
 			<img src="/themes/{{ $shop_theme }}/img/brown-video.png">
+		</div> -->
+		<div class="container">
+			<div class="row clearfix">
+				<div class="col-md-6">
+					<div class="img-container">
+						<img src="/themes/{{ $shop_theme }}/img/ad-phone.png">
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="detail-container wow slideInRight" data-wow-offset="10"  data-wow-iteration="10">
+						<h2>Introducing</h2>
+						<h1>THE BROWN EDITION</h1>
+						<h2>A PHONE FILIPINOS CAN BE PROUD OF</h2>
+						<P>Brown promotes a future that is mindful<BR>of the needs of every Filipino. </P>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<!-- INTRODUCING BROWN EDITION -->
-	<div class="wrapper-3">
+	<!-- <div class="wrapper-3">
 		<div class="container">
 			<div class="row clearfix">
 				<div class="col-sm-6">
@@ -230,7 +260,8 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> -->
+
 	<!-- BROWN ARTICLES -->
 	<div class="wrapper-4">
 		<div class="container">
@@ -277,6 +308,10 @@
 @endsection
 @section("script")
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/home.js"></script>
+<script src="js/wow.min.js"></script>
+<script>
+	new WOW().init();
+</script>
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css">

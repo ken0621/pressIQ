@@ -32,6 +32,10 @@
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/drawer.css">
+    <!-- PARALLAX -->
+    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/parallax.css">
+    <!-- WOW JS -->
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/wow/css/animate.css">
     <!-- Brown Custom Icon -->
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/brown-icon/styles.css">
     @yield("css")
@@ -503,6 +507,7 @@
     <script type="text/javascript" src="/assets/js/cart.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/drawer.js"></script>
     <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/parallax.js"></script>
     <script type="text/javascript">
     $(".date-picker").datepicker({
     dateFormat:"yy-mm-dd"

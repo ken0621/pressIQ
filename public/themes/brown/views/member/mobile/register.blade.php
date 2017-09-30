@@ -49,6 +49,10 @@
                 <input class="form-control" type="text" name="first_name" value="">
             </div>
             <div class="form-group">
+                <label>Middle Name</label>
+                <input class="form-control" type="text" name="middle_name" value="">
+            </div>
+            <div class="form-group">
                 <label>Last Name</label>
                 <input class="form-control" type="text" name="last_name" value="">
             </div>
@@ -57,40 +61,15 @@
                 <input class="form-control" type="date" name="birthday" value="">
             </div>
             <div class="form-group">
-                <label>Country</label>
-                <select class="form-control">
-                    <option></option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Permanent Address</label>
-                <textarea class="form-control"></textarea>
-            </div>
-            <div class="form-group">
                 <label>Gender</label>
                 <select class="form-control">
-                    <option></option>
+                    <option>Male</option>
+                    <option>Female</option>
                 </select>
             </div>
             <div class="form-group">
                 <label>E-mail</label>
                 <input class="form-control" type="email" name="">
-            </div>
-            <div class="form-group">
-                <label>Confirm E-mail</label>
-                <input class="form-control" type="email" name="">
-            </div>
-            <div class="form-group">
-                <label>TIN Number</label>
-                <input class="form-control" type="number" name="tin" value="">
-            </div>
-            <div class="form-group">
-                <label>Confirm TIN Number</label>
-                <input class="form-control" type="number" name="tin" value="">
-            </div>
-            <div class="form-group">
-                <label>Referror Upline</label>
-                <input class="form-control" type="text" name="referror" value="">
             </div>
         </div>
     </div>

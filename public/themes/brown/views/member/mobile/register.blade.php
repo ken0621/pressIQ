@@ -46,15 +46,15 @@
         <div class="holder">
             <div class="form-group">
                 <label>First Name</label>
-                <input type="text" name="first_name" value="">
+                <input class="form-control" type="text" name="first_name" value="">
             </div>
             <div class="form-group">
                 <label>Last Name</label>
-                <input type="text" name="last_name" value="">
+                <input class="form-control" type="text" name="last_name" value="">
             </div>
             <div class="form-group">
                 <label>Date of Birth</label>
-                <input type="date" name="birthday" value="">
+                <input class="form-control" type="date" name="birthday" value="">
             </div>
             <div class="form-group">
                 <label>Country</label>
@@ -68,7 +68,7 @@
             </div>
             <div class="form-group">
                 <label>Gender</label>
-                <select>
+                <select class="form-control">
                     <option></option>
                 </select>
             </div>
@@ -82,15 +82,15 @@
             </div>
             <div class="form-group">
                 <label>TIN Number</label>
-                <input type="number" name="tin" value="">
+                <input class="form-control" type="number" name="tin" value="">
             </div>
             <div class="form-group">
                 <label>Confirm TIN Number</label>
-                <input type="number" name="tin" value="">
+                <input class="form-control" type="number" name="tin" value="">
             </div>
             <div class="form-group">
                 <label>Referror Upline</label>
-                <input type="text" name="referror" value="">
+                <input class="form-control" type="text" name="referror" value="">
             </div>
         </div>
     </div>

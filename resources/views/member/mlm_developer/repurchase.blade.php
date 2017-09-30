@@ -50,6 +50,13 @@
                     <label>REPURCHASE CASHBACK</label>
                     <input name="REPURCHASE_CASHBACK" type="text" class="form-control" placeholder="100 (IF EMPTY)">
                 </div>
+            </div>          
+
+            <div class="form-group">
+                <div class="col-md-12">            
+                    <label>RANK REPURCHASE CASHBACK</label>
+                    <input name="RANK_REPURCHASE_CASHBACK" type="text" class="form-control" placeholder="100 (IF EMPTY)">
+                </div>
             </div>
             @endif
         @endif

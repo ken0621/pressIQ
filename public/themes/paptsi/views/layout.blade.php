@@ -16,7 +16,6 @@
         
         <!-- BOOTSTRAP -->
         <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/bootstrap/css/bootstrap.min.css">
-        <!-- <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/inbootstrap/css/bootstrap-theme.min.css"> -->
 
         <!-- FONT AWESOME -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/font-awesome/css/font-awesome.min.css">
@@ -592,13 +591,9 @@
     <script src="/themes/{{ $shop_theme }}/assets/easing/jquery.easing.min.js"></script>
     <script src="/themes/{{ $shop_theme }}/assets/jquery/morphext.min.js"></script>
     <script src="/themes/{{ $shop_theme }}/assets/wow/wow.min.js"></script>
-    <script src="/themes/{{ $shop_theme }}/assets/wow/wow.min.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/custom.js"></script>
 
     </body>
-
-
-
 
     <!-- FOOTER -->
     <footer id="bottom-footer" style="background-color: #ef8805; font-size: 13px;">

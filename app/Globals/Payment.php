@@ -14,6 +14,7 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_payment_logs;
 use App\Globals\Cart2;
 use App\Globals\Cart;
+use App\Globals\Payment;
 // IPAY 88
 use App\IPay88\RequestPayment;
 // DRAGON PAY
@@ -85,10 +86,13 @@ class Payment
 		return $return;
 	}
 
-	public static function payment_redirect($shop_id, $key, $success, $failed, $debug)
+	public static function payment_redirect($shop_id, $key, $success, $failed, $debug = false)
 	{
 		/* Testing Purposes */
-		Self::testing_cart($shop_id);
+        if ($debug) 
+        {
+            Self::testing_cart($shop_id);
+        }
 
 		/* Get Cart */
 		$cart = Cart2::get_cart_info();
@@ -230,6 +234,7 @@ class Payment
         $total = 0;
 
         /* Set Item */
+        $ctr = 0;
         foreach ($cart["_item"] as $key => $value) 
         {
         	/* Get Item Details */
@@ -260,13 +265,15 @@ class Payment
             $total += $product->item_price * $value->quantity;
 
             /* Set Item Details */
-            $item[$key] = new Item();
-            $item[$key]->name = $product->item_name;
-            $item[$key]->code = $product->item_sku;
-            $item[$key]->description = $product->item_sales_information ? $product->item_sales_information : "Product #" . $product->item_id;
-            $item[$key]->quantity = (string)$value->quantity;
-            $item[$key]->amount = $itemAmount;
-            $item[$key]->totalAmount = $itemTotalAmount;
+            $item[$ctr] = new Item();
+            $item[$ctr]->name = $product->item_name;
+            $item[$ctr]->code = $product->item_sku;
+            $item[$ctr]->description = $product->item_sales_information ? $product->item_sales_information : "Product #" . $product->item_id;
+            $item[$ctr]->quantity = (string)$value->quantity;
+            $item[$ctr]->amount = $itemAmount;
+            $item[$ctr]->totalAmount = $itemTotalAmount;
+
+            $ctr++;
         }
 
         /* Set Total Amount Value */
@@ -444,5 +451,19 @@ class Payment
 						       ->where("shop_id", $shop_id)
 						       ->take($limit)
 						       ->get();
+    }
+
+    public static function done($data)
+    {
+        /* Insert Logs */
+        $insert["payment_log_type"]       = "received";
+        $insert["payment_log_method"]     = "paymaya";
+        $insert["payment_log_created"]    = Carbon::now();
+        $insert["payment_log_url"]        = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : "Unknown");
+        $insert["payment_log_data"]       = serialize($data);
+        $insert["payment_log_ip_address"] = get_ip_address();
+        $shop_id                          = $this->shop_info->shop_id;
+        
+        Payment::insert_logs($insert, $shop_id);
     }
 }

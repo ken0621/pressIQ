@@ -79,7 +79,10 @@
                                         <th><small>{{$value}}</small></th>
                                         @if($value == "STAIRSTEP")
                                             <th><small>STAIRSTEP GROUP</small></th>
-                                        @endif
+                                        @endif                                         
+                                        @if($value == "REPURCHASE_CASHBACK")
+                                            <th><small>RANK REPURCHASE CASHBACK</small></th>
+                                        @endif                                       
                                     @endforeach
                                 @endif
                                 <th>
@@ -124,6 +127,19 @@
                                         </div>
                                         @endforeach
                                         </td>
+                                        @if($value == "REPURCHASE_CASHBACK")
+                                            <td>
+                                                <div class="col-md-12 hide">
+                                                    <input type="number" class="form-control " name="{{$value}}" value="{{$variant[$value]}}" form="formvariant{{$variant['item_id']}}">
+                                                </div>    
+                                                @foreach($rank_settings as $key2 => $value2)
+                                                <div class="col-md-12">
+                                                   <small><label>{{$value2->stairstep_name}}</label> </small>
+                                                   <input type="number" class="form-control input-sm" name="rank_cashback_points[{{$value2->stairstep_id}}]" value="{{$variant['rank_cashback'][$value2->stairstep_id]->amount}}" form="formvariant{{$variant['item_id']}}">
+                                                </div>
+                                                @endforeach
+                                            </td>
+                                        @endif   
                                     @endforeach
                                 </form>    
                             @endif

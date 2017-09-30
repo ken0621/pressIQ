@@ -207,7 +207,7 @@
 					<h1 class="animated fadeInDown" data-wow-delay="0.3s">www.brown.com.ph</h1>
 					<h2 class="animated fadeInUp" data-wow-delay="0.3s">Change Starts Here</h2>
 					<video class="animated zoomInDown" width="803" height="450" autoplay="" loop>
-						<source src="/themes/{{ $shop_theme }}/img/brown-font-video.mp4" type="video/mp4">
+						<source src="/themes/{{ $shop_theme }}/img/intro.mp4" type="video/mp4">
 					</video>
 					<h3 class="animated fadeInUp">It’s not the color of your skin, but the color of your heart.</h3>
 					<div class="join-button animated fadeInUp">JOIN THE MOVEMENT</div>

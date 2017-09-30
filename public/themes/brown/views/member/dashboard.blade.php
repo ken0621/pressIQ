@@ -8,11 +8,11 @@
 	    <!-- TOP DASHBOARD-->
 	    <div class="dashboard-top">
 	        <div class="row clearfix">
-	            <div class="animated fadeInDown col-md-8">
-	                <div class="img-container">
-	                    <img src="/themes/{{ $shop_theme }}/img/brown-img1.png">
-	                </div>
-	            </div>
+		        <div class="col-md-8">
+		        	<video width="676" height="380" autoplay="" loop>
+						<source src="/themes/{{ $shop_theme }}/img/intro2.mp4" type="video/mp4">
+					</video>
+		        </div>
 	            <div class="animated fadeInRight col-md-4">
 	                <div class="join-container">
 	                    <div class="btn btn-text">

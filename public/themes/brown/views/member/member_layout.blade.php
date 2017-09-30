@@ -79,7 +79,7 @@
 									<a href="/members/wallet-logs"><div class="icon brown-icon-list-alt nav-holder"> &nbsp;&nbsp;Wallet Logs</div></a>
 								</li> -->
 								<li>
-									<a href="/members/wallet-encashment"><div class="icon brown-icon-money nav-holder"> &nbsp;&nbsp;Wallet Encashment</div></a>
+									<a href="/members/wallet-encashment"><div class="nav-holder"> &nbsp;&nbsp;Wallet Encashment</div></a>
 								</li>
 							</ul>
 						</li>

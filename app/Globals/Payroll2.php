@@ -2162,7 +2162,7 @@ class Payroll2
  
 	public static function compute_income_day_pay($_time = array(), $daily_rate = 0, $group_id = 0, $cola = 0, $compute_type="", $time_compute_mode="regular")
 	{
-			
+		
 		$return = new stdClass();
 
 		$time_spent = Self::time_float($_time['time_spent']);

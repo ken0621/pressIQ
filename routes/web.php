@@ -90,6 +90,8 @@ Route::any('/member/developer/documentation', 'Member\Developer_DocumentationCon
 
 Route::any('/member/developer/auto_entry', 'Member\Developer_AutoentryController@index'); //EVERYONE
 Route::post('/member/developer/auto_entry/instant_add_slot', 'Member\Developer_AutoentryController@instant_add_slot'); //EVERYONE
+Route::any('/member/developer/auto_entry_independent/', 'Member\Developer_AutoentryController@index_independent'); //EVERYONE
+Route::post('/member/developer/auto_entry_independent/create_slot', 'Member\Developer_AutoentryController@independent_create_slot'); //EVERYONE
 
 Route::any('/member/developer/simulate', 'Member\Developer_RematrixController@simulate'); //EVERYONE
 Route::any('/member/developer/simulate/submit', 'Member\Developer_RematrixController@simulate_submit'); //EVERYONE

@@ -88,6 +88,23 @@
 									</div>
 								</div>
 							</div>
+							<div class="col-md-4">
+								<small>COLA Basis</small>
+								<div class="panel-default panel">
+									<div class="panel-body">
+										<label>Compute COLA Basis</label>
+										<div class="radio">
+											<label><input type="radio" name="payroll_group_cola_basis" value="Monthly Fixed">Monthly Fixed</label>
+										</div>
+										<div class="radio">
+											<label><input type="radio" name="payroll_group_cola_basis" value="Pro Rated Monthly" checked>Pro Rated Monthly</label>
+										</div>
+										<div class="radio">
+											<label><input type="radio" name="payroll_group_cola_basis" value="Daily Computation">Daily Computation</label>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div id="deduction-basis" class="tab-pane fade form-horizontal">

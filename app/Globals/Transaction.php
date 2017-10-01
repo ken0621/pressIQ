@@ -26,7 +26,7 @@ use Carbon\carbon;
 
 class Transaction
 {
-    public static function create($shop_id, $transaction_id, $transaction_type, $transaction_date, $posted = false, $source = null, $transaction_number = null)
+    public static function create($shop_id, $transaction_id, $transaction_type, $transaction_date, $posted = false, $source = null, $transaction_number = null, $hidden_remarks = null)
     {
         if($source == null)
         {
@@ -138,6 +138,19 @@ class Transaction
         }
 
         return $return;
+    }
+    public static function consume_in_warehouse($shop_id, $transaction_list_id)
+    {
+        $warehouse_id = Warehouse2::get_main_warehouse($shop_id);
+        
+        $get_item = Tbl_transaction_item::where('transaction_list_id',$transaction_list_id)->get();
+        
+        $consume['name'] = 'transaction_list';
+        $consume['id'] = $transaction_list_id;
+        foreach ($get_item as $key => $value) 
+        {
+            Warehouse2::consume($shop_id, $warehouse_id, $value->item_id, $value->quantity, 'Enroll kit', $consume);
+        }
     }
     public static function update_transaction_balance($transaction_id)
     {

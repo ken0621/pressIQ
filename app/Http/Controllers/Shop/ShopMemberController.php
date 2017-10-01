@@ -31,6 +31,7 @@ use App\Models\Tbl_country;
 use App\Models\Tbl_locale;
 use App\Globals\Currency;
 use App\Globals\Cart2;
+use App\Globals\Item;
 use Jenssegers\Agent\Agent;
 use Validator;
 use Google_Client; 
@@ -57,6 +58,16 @@ class ShopMemberController extends Shop
             $data["_recent_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
             $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
         }
+        
+        $data['mlm_pin'] = '';
+        $data['mlm_activation'] = '';
+        if(MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id) && $this->mlm_member == false)
+        {
+            $data['check_unused_code'] = MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
+            $data['mlm_pin'] = MLM2::get_code($data['check_unused_code'])['mlm_pin'];
+            $data['mlm_activation'] = MLM2::get_code($data['check_unused_code'])['mlm_activation'];
+        }
+        $data["item_kit_id"] = Item::get_first_assembled_kit($this->shop_info->shop_id);
 
         return Self::load_view_for_members('member.dashboard', $data);
     }
@@ -720,6 +731,7 @@ class ShopMemberController extends Shop
         $shop_id            = $this->shop_info->shop_id;
         $data["_payment"]   = $_payment = Payment::get_list($shop_id);
         $data["_locale"]    = Tbl_locale::where("locale_parent", 0)->get();
+        $data["cart"]       = Cart2::get_cart_info();
         return (Self::load_view_for_members("member.checkout", $data));
     }
     public function postcheckout()

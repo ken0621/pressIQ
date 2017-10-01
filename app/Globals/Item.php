@@ -1547,6 +1547,10 @@ class Item
 
         return $data;
     }
+    public static function get_first_assembled_kit($shop_id)
+    {
+        return Tbl_item::where('shop_id',$shop_id)->where('item_type_id',5)->value('item_id');
+    }
     public static function get_assembled_kit($record_id = 0, $item_kit_id = 0, $item_membership_id = 0, $search_keyword = '', $status = '', $paginate = 0)
     {
         $shop_id = Item::getShopId();

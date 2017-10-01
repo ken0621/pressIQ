@@ -38,7 +38,7 @@
                                 @foreach($_payment_logs as $log)
                                 <tr>
                                     <td class="text-center">{{ $log->payment_log_id }}</td>
-                                    <td class="text-center">{{ $log->display_transaction_list_id }}</td>
+                                    <td class="text-center">{!! $log->display_transaction_list_id !!}</td>
                                     <td class="text-center">{{ $log->payment_log_type }}</td>
                                     <td class="text-center">{{ $log->payment_log_method }}</td>
                                     <td class="text-center">{{ $log->display_date }}</td>

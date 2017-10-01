@@ -3,6 +3,7 @@
 
 <input type="hidden" name="_mode" class="_mode" value="{{ $mode }}">
 <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
+<input type="hidden" name="code" class="check_unused_code" value="{{ $check_unused_code or 0 }}">
 @if(!$mlm_member)
 	<div class="dashboard" style="overflow: hidden;">
 	    <!-- TOP DASHBOARD-->
@@ -20,7 +21,7 @@
 	                        <div class="text-header2">Enroll now and become one of us!</div>
 	                    </div>
 	                    <div class="btn-container">
-	                        <button class="product-add-cart btn-buy-a-kit" item-id="54" quantity="1">Buy a Kit</button><br>
+	                        <button class="product-add-cart btn-buy-a-kit" item-id="{{$item_kit_id or '54'}}" quantity="1">Buy a Kit</button><br>
 	                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
 	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
 	                    </div>
@@ -455,6 +456,27 @@
 @endif
 
 <!--  Enter a code -->
+<div class="popup-notification">
+    <div id="popup-notification-modal" class="modal fade">
+        <div class="modal-sm modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"><i class="fa fa-star"></i> CONGRATULATION</h4>
+                </div>
+                <div class="modal-body">
+                    <form method="post" class="submit-verify-sponsor">
+                        <div class="labels">You are one step ahead ..</div>
+                        <div class="btn-container">
+                            <button id="btn-notification" class="btn-verify-notification btn-notification"><i class="fa fa-arrow-right "></i> Next</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  Enter a code -->
 <div class="popup-enter-a-code">
     <div id="enter-a-code-modal" class="modal fade">
         <div class="modal-sm modal-dialog">
@@ -503,11 +525,11 @@
                     <form class="code-verification-form">
                         <div>
                             <div class="labeld">Pin Code</div>
-                            <input class="input input-pin text-center" name="pin" type="text">
+                            <input class="input input-pin text-center" name="pin" type="text" value="{{$mlm_pin or ''}}">
                         </div>
                         <div>
                             <div class="labeld">Activation</div>
-                            <input class="input input-activation text-center" name="activation" type="text">
+                            <input class="input input-activation text-center" name="activation" type="text" value="{{$mlm_activation or ''}}">
                         </div>
                         <div class="btn-container">
                             <button id="btn-proceed-2" class="btn-proceed-2"><i class="fa fa-angle-double-right"></i> Proceed</button>
@@ -613,6 +635,17 @@ $(document).ready(function()
 		    }
 		});
 	} 
+	
+	if($('.check_unused_code').val() != 0)
+	{
+		$('#popup-notification-modal').modal('show');
+	}
+	$('#btn-notification').unbind('click');
+	$('#btn-notification').bind('click', function()
+	{
+		$('#popup-notification-modal').modal('hide');
+		$('#enter-a-code-modal').modal('show');
+	});
 });
 $(document).ready(function()
 {

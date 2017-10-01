@@ -740,7 +740,6 @@ class MLM2
 	            if($sponsor)
 	            {
 	            	$proceed_to_auto = MLM2::check_sponsor_have_placement($shop_id,$sponsor->slot_id);
-
 	            	if($proceed_to_auto == 1)
 	            	{
 		                $condition_update = false;
@@ -830,8 +829,6 @@ class MLM2
 
 		                    $current_level++;
 		                }
-
-
 
 		                if($condition_update == true)
 		                {

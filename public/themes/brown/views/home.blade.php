@@ -213,7 +213,7 @@
 					<div style="max-width: 803px; margin: auto;">
 						<div class="embed-responsive embed-responsive-16by9 animated zoomInDown" style="margin-top: 25px;">
 						  <div class="overlay"></div>
-						  <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/nUjdRoNaNYE?autoplay=1&showinfo=0&controls=0&loop=1&disablekb=1&modestbranding=1&playlist=nUjdRoNaNYE"></iframe>
+						  <!--<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/nUjdRoNaNYE?autoplay=1&showinfo=0&controls=0&loop=1&disablekb=1&modestbranding=1&playlist=nUjdRoNaNYE"></iframe>-->
 						</div>
 					</div>
 					<h3 class="animated fadeInUp">It’s not the color of your skin, but the color of your heart.</h3>
@@ -287,7 +287,7 @@
 			<!--</video>-->
 			<div class="embed-responsive embed-responsive-16by9 animated zoomInDown">
 			  <div class="overlay"></div>
-			  <!--<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/DglLgQYkQX4?autoplay=1&showinfo=0&controls=0&loop=1&disablekb=1&modestbranding=1&playlist=DglLgQYkQX4&mute=1"></iframe>-->
+			  <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/DglLgQYkQX4?autoplay=1&showinfo=0&controls=0&loop=1&disablekb=1&modestbranding=1&playlist=DglLgQYkQX4&mute=1"></iframe>
 			</div>
 		</div>
 	</div>

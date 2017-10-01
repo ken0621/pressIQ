@@ -1,38 +1,4 @@
-@extends('member.layout')
-@section('content')
-<div class="panel panel-default panel-block panel-title-block" id="top">
-    <div class="panel-heading">
-        <div>
-            <i class="fa fa-tags"></i>
-            <h1>
-                <span class="page-title">Payroll Reports &raquo; Register Report</span>
-                <small>
-               	{{ $company->payroll_company_name }}
-                </small>
-            </h1>
-            <a href="/member/payroll/reports/payroll_register_report_period/export_excel/{{$period_info->payroll_period_company_id}}"><button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" style="font-size:25px;color:white"></i> &nbsp;EXPORT TO EXCEL</button></a>
-        </div>
-    </div>
-</div>
-
-
-<div class=" panel panel-default panel-block panel-title-block" style="overflow-x: scroll; ">
-    <div class="panel-body form-horizontal">
-    	<div class="col-md-2 padding-lr-1">
-            <small>Filter by Company</small>
-            <select class="form-control" id="filter_report" data-id="{{$filtering_company}}">
-              <option value="0">All Company</option>
-              @foreach($_filter_company as $filter_company)
-              <option value="{{$filter_company->payroll_company_id}}" >{{$filter_company->payroll_company_name}}</option> 
-              @endforeach
-            </select>
-          </div>
-        <div class="form-group tab-content panel-body employee-container">
-            <div id="all" class="tab-pane fade in active">
-                <div class="form-group order-tags"></div>
-                <div class="labas_mo_dito table-responsive " id="show_me_something">
-                	<div class="filterResult">
-                    <table class="table table-bordered table-striped table-condensed" style="table-layout: fixed;">
+ <table class="table table-bordered table-striped table-condensed" style="table-layout: fixed;">
 					    <thead style="text-transform: uppercase">
 					        <tr>
 					            <th valign="center" rowspan="2" class="text-center" style="width: 200px">NAME</th>
@@ -153,14 +119,4 @@
 					       
 					    </tbody>
 					</table>
-				</div>
-                </div>
-            </div>
-        </div> 
-    </div>
-</div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-{{-- <script type="text/javascript" src="/assets/js/ajax_offline.js"></script> --}}
-<script type="text/javascript" src="/assets/js/payroll_register_report_filter.js"></script>
-
-@endsection
+               

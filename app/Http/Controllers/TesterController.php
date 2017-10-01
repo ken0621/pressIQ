@@ -54,7 +54,7 @@ class TesterController extends Controller
             
             Cart2::clear_cart();
             Cart2::add_item_to_cart($shop_id, 57, 1);
-            dd(Cart::get_cart_info());
+            dd(Cart2::get_cart_info());
             
             echo "<br>" . $invoice->invoice_number . " (" . $customer->first_name . " " . $customer->last_name . ")";
             

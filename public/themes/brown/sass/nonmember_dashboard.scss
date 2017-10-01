@@ -263,7 +263,7 @@ $text-dark: #272c2f;
 
 			.modal-title
 			{
-				font-weight: $bold;
+				font-weight: $medium;
 				font-size: 15px;
 				color: #FFF;
 			}
@@ -280,6 +280,10 @@ $text-dark: #272c2f;
 			{
 				margin-top: 10px;
 				text-align: center;
+				b 
+				{
+					font-weight: $medium;
+				}
 			}
 			input
 			{

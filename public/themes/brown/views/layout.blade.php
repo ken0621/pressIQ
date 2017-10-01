@@ -229,7 +229,7 @@
                     </div>
                 </div>
                 <div class="right">
-                    <div class="dropdown">
+                    <div class="dropdown hidden">
                         <a href="#" class="notif-holders dropdown-toggle" data-toggle="dropdown">
                             <div class="brown-icon-bell-o" style="font-size: 20px"></div> <span class="badge">500</span>
                         </a>
@@ -292,7 +292,7 @@
                             </li>
                         </ul>
                     </div>
-                    <a href="#" class="cart-holder show-cart" style="text-decoration: none;">
+                    <a href="#" class="cart-holder show-cart hidden" style="text-decoration: none;">
                         <!-- <img style="width: 30px; height: 20px;" src="/themes/{{ $shop_theme }}/img/cart-blur.png"> <span class="badge">500</span> -->
                         <div class="brown-icon-shopping-cart"></div> <span class="badge">500</span>
                     </a>

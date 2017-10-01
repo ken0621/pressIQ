@@ -27,6 +27,8 @@ use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_email_template;
+use App\Models\Tbl_transaction_list;
+use App\Models\Tbl_transaction_item;
 use App\Models\Tbl_country;
 use App\Models\Tbl_locale;
 use App\Globals\Currency;
@@ -57,15 +59,15 @@ class ShopMemberController extends Shop
             $data["_slot"]              = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["_recent_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
             $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
-        }
-        
-        $data['mlm_pin'] = '';
-        $data['mlm_activation'] = '';
-        if(MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id) && $this->mlm_member == false)
-        {
-            $data['check_unused_code'] = MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
-            $data['mlm_pin'] = MLM2::get_code($data['check_unused_code'])['mlm_pin'];
-            $data['mlm_activation'] = MLM2::get_code($data['check_unused_code'])['mlm_activation'];
+            
+            $data['mlm_pin'] = '';
+            $data['mlm_activation'] = '';
+            if(MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id) && $this->mlm_member == false)
+            {
+                $data['check_unused_code'] = MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
+                $data['mlm_pin'] = MLM2::get_code($data['check_unused_code'])['mlm_pin'];
+                $data['mlm_activation'] = MLM2::get_code($data['check_unused_code'])['mlm_activation'];
+            }
         }
         $data["item_kit_id"] = Item::get_first_assembled_kit($this->shop_info->shop_id);
 
@@ -690,6 +692,7 @@ class ShopMemberController extends Shop
     {
         $data["page"]           = "Report";
         $data["_rewards"]       = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
+        $data["_codes"]         = MLM2::check_purchased_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
         return (Self::load_view_for_members("member.report", $data));
     }
     public function getWalletLogs()
@@ -718,7 +721,28 @@ class ShopMemberController extends Shop
     public function getOrder()
     {
         $data["page"] = "Orders";
+        $shop_id = $this->shop_info->shop_id;
+        Transaction::get_transaction_filter_customer(Self::$customer_info->customer_id);
+        $data["_order"] = Transaction::get_transaction_list($shop_id, 'ORDER', '', 20);
         return (Self::load_view_for_members("member.order", $data));
+    }
+    public function getOrderDetails(Request $request, $transaction_list_id)
+    {
+        $data['shop_key'] = strtoupper($this->shop_info->shop_key);
+        $data['shop_address'] = ucwords($this->shop_info->shop_street_address.' '.$this->shop_info->shop_city.', '.$this->shop_info->shop_zip);
+        Transaction::get_transaction_filter_customer(Self::$customer_info->customer_id);
+        $data['list'] = Tbl_transaction_list::transaction()->where('transaction_list_id',$transaction_list_id);
+        
+        if(session('get_transaction_filter_customer_id'))
+        {
+            $data['list']->where('transaction_reference_table', 'tbl_customer')->where('tbl_transaction.transaction_reference_id', session('get_transaction_filter_customer_id'));
+            $data['list']->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id');
+        }
+        $data['list'] = $data['list']->first();
+        $data['_item'] = Tbl_transaction_item::where('transaction_list_id',$transaction_list_id)->get();
+        $data['customer_name'] = Transaction::getCustomerNameTransaction($data['list']->transaction_id);
+        
+        return (Self::load_view_for_members("member.order_details", $data));
     }
     public function getWishlist()
     {
@@ -734,14 +758,35 @@ class ShopMemberController extends Shop
         $data["cart"]       = Cart2::get_cart_info();
         return (Self::load_view_for_members("member.checkout", $data));
     }
-    public function postcheckout()
+    public function postCheckout()
     {
+        /* Update Address */
+        $exist_address = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->first();
+        if ($exist_address) 
+        {
+            $update["customer_street"] = request('customer_street');
+            Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->update($update);
+        }
+        else
+        {
+            $insert["customer_street"] = request('customer_street');
+            $insert["customer_id"] = Self::$customer_info->customer_id;
+            $insert["country_id"] = 420;
+            $insert["purpose"] = "billing";
+            $insert["archived"] = 0;
+            Tbl_customer_address::insert($insert);
+            $insert["purpose"] = "shipping";
+            Tbl_customer_address::insert($insert);
+        }
+        
         $method                                             = request('method');
         $shop_id                                            = $this->shop_info->shop_id;
         $transaction_new["transaction_reference_table"]     = "tbl_customer";
         $transaction_new["transaction_reference_id"]        = Self::$customer_info->customer_id;
         $transaction_type                                   = "ORDER";
         $transaction_date                                   = Carbon::now();
+        
+        Transaction::create_set_method($method);
         $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, "-");
 
         if(is_numeric($transaction_list_id))

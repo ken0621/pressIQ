@@ -41,9 +41,11 @@ class TransactionController extends Member
     {
         $data['shop_key'] = strtoupper($this->user_info->shop_key);
         $data['shop_address'] = ucwords($this->user_info->shop_street_address.' '.$this->user_info->shop_city.', '.$this->user_info->shop_zip);
-        $data['list'] = Tbl_transaction_list::where('transaction_list_id',$transaction_list_id)->first();
+        
+        $data['list'] = Tbl_transaction_list::transaction()->where('transaction_list_id',$transaction_list_id)->first();
         $data['_item'] = Tbl_transaction_item::where('transaction_list_id',$transaction_list_id)->get();
         $data['customer_name'] = Transaction::getCustomerNameTransaction($data['list']->transaction_id);
+        $data['transaction_details'] = unserialize($data["list"]->transaction_details);
         
         return view("member.transaction.transaction_item", $data);
     }
@@ -56,7 +58,6 @@ class TransactionController extends Member
     public function transaction_list_table(Request $request)
     {
         $data['_list'] = Transaction::get_transaction_list($this->user_info->shop_id, $request->transaction_type, $request->search_keyword);
-        
         return view("member.transaction.all_transaction_list_table", $data);
     }
     

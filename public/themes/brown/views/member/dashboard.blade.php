@@ -21,7 +21,7 @@
 	                        <div class="text-header2">Enroll now and become one of us!</div>
 	                    </div>
 	                    <div class="btn-container">
-	                        <button class="product-add-cart btn-buy-a-kit" item-id="{{$item_kit_id or '54'}}" quantity="1">Buy a Kit</button><br>
+	                        <button class="product-add-cart btn-buy-a-kit" item-id="{{$item_kit_id or '54'}}" quantity="1">Enroll Now</button><br>
 	                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
 	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
 	                    </div>
@@ -330,7 +330,7 @@
 		<div class="row clearfix">
 			<div class="animated fadeInUp col-md-12">
 				<div class="unilevel-holder">
-					<div class="title"><i class="align-icon brown-icon-star"></i> My Slot(s) <a href="javascript:" class="title-button pull-right btn-enter-a-code">Add New Slot</a></div>
+					<div class="title"><i class="align-icon brown-icon-star"></i> My Slot(s) </div>
 					<div class="sub-container">
 						@foreach($_slot as $slot)
 						<div class="holder">
@@ -460,17 +460,21 @@
     <div id="popup-notification-modal" class="modal fade">
         <div class="modal-sm modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"><i class="fa fa-star"></i> CONGRATULATION</h4>
-                </div>
+                <!--<div class="modal-header">-->
+                <!--    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
+                <!--    <h4 class="modal-title"><i class="fa fa-star"></i> CONGRATULATION</h4>-->
+                <!--</div>-->
                 <div class="modal-body">
-                    <form method="post" class="submit-verify-sponsor">
-                        <div class="labels">You are one step ahead ..</div>
-                        <div class="btn-container">
-                            <button id="btn-notification" class="btn-verify-notification btn-notification"><i class="fa fa-arrow-right "></i> Next</button>
-                        </div>
-                    </form>
+                	<div class="congrats-holder">
+	                	<div class="title">CONGRATULATIONS!</div>
+	                    <div class="img">
+	                    	<img src="/themes/{{ $shop_theme }}/assets/mobile/img/trophy.png">
+	                    </div>
+	                    <div class="desc">You are one step away from your membership!</div>
+	                    <div class="btn-container">
+	                        <button id="btn-notification" class="btn-verify-notification btn-notification" type="button">Continue</button>
+	                    </div>
+                	</div>
                 </div>
             </div>
         </div>
@@ -636,15 +640,21 @@ $(document).ready(function()
 		});
 	} 
 	
+	/*Auto pop-up*/
 	if($('.check_unused_code').val() != 0)
 	{
 		$('#popup-notification-modal').modal('show');
 	}
+	
 	$('#btn-notification').unbind('click');
 	$('#btn-notification').bind('click', function()
 	{
 		$('#popup-notification-modal').modal('hide');
+		$(".submit-verify-sponsor").find(".btn-verify-sponsor").html('<i class="fa fa-check"></i> VERIFY SPONSOR').removeClass("use").removeAttr("disabled");
+		$(".submit-verify-sponsor").find("input").removeAttr("disabled").val("");
+		$(".output-container").html("");
 		$('#enter-a-code-modal').modal('show');
+		
 	});
 });
 $(document).ready(function()

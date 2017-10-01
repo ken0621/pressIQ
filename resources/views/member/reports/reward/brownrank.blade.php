@@ -24,7 +24,7 @@
         <div class="col-md-3" style="padding: 10px">
             <select class="form-control change-rank">
             	@foreach($_rank as $rank)
-                <option value="{{ $rank->rank_id }}">{{ $rank->rank_name }}</option>
+                <option {{ request('rank_id') == $rank->rank_id ? 'selected' : '' }} value="{{ $rank->rank_id }}">{{ $rank->rank_name }}</option>
                 @endforeach
             </select>
         </div>

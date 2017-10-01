@@ -59,6 +59,58 @@ class MLM2
 		}
 		return $return;
 	}
+	public static function check_purchased_code($shop_id, $customer_id)
+	{
+		$return = null;
+		
+		$query = Tbl_warehouse_inventory_record_log::where('record_consume_ref_name','transaction_list');
+		
+		$_list = Tbl_transaction_list::
+										join("tbl_transaction", "tbl_transaction.transaction_id", "=", "tbl_transaction_list.transaction_id")
+										->where('transaction_reference_table','tbl_customer')
+										->where('tbl_transaction.transaction_reference_id', $customer_id)
+										->get();
+										
+		if(count($_list) > 0)
+		{
+			$query->where(function($q) use ($_list)
+			{
+				foreach($_list as $key2 => $list)
+				{
+					$q->orWhere("record_consume_ref_id", $list->transaction_list_id);
+				}
+			});
+			
+			$_codes = $query->get();
+			
+			foreach($_codes as $key => $code)
+			{
+				$slot = Tbl_mlm_slot::where("slot_id", $code->mlm_slot_id_created)->customer()->first();
+				$transaction_list = Tbl_transaction_list::where("transaction_list_id", $code->record_consume_ref_id)->first();
+				
+				$_codes[$key]->transaction_number = $transaction_list->transaction_number;
+				
+				if($slot)
+				{
+					$_codes[$key]->used_by = ($slot ? $slot->slot_no : "-") . " (" . $slot->first_name . " " . $slot->last_name .")";
+				}
+				else
+				{
+					$_codes[$key]->used_by = "-";
+				}
+			}
+		}
+		else
+		{
+			$_codes = array();	
+		}
+			
+
+		
+
+		
+		return $_codes;
+	}
 	public static function get_code($record_log_id)
 	{
 		$data =	Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)
@@ -535,10 +587,16 @@ class MLM2
 	{
 		return Tbl_membership::shop($shop_id)->codes($pin, $activation)->first();
 	}
-	public static function use_membership_code($shop_id, $pin, $activation, $slot_id_created, $remarks = null)
+	public static function use_membership_code($shop_id, $pin, $activation, $slot_id_created, $remarks = null, $consume = array())
 	{
 		$update["mlm_slot_id_created"] 		= $slot_id_created;
-		$update["record_consume_ref_name"] 	= "used";
+		$update["item_in_use"] 				= "used";
+		
+		if(count($consume) > 0)
+		{
+			$update["record_consume_ref_name"] 	= $consume['name'];
+			$update["record_consume_ref_id"]	= $consume['id'];
+		}
 
 		if($remarks)
 		{

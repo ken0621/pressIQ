@@ -26,7 +26,17 @@ use Carbon\carbon;
 
 class Transaction
 {
-    public static function create($shop_id, $transaction_id, $transaction_type, $transaction_date, $posted = false, $source = null, $transaction_number = null, $hidden_remarks = null)
+    public static function create_update_transaction_details($details)
+    {
+        $store["create_update_transaction_details"] = $details;
+        session($store);
+    }
+    public static function create_set_method($method)
+    {
+        $store["create_set_method"] = $method;
+        session($store);
+    }
+    public static function create($shop_id, $transaction_id, $transaction_type, $transaction_date, $posted = false, $source = null, $transaction_number = null)
     {
         if($source == null)
         {
@@ -46,6 +56,13 @@ class Transaction
                 $insert_transaction["transaction_id_shop"]          = Self::shop_increment($shop_id);  
                 $insert_transaction["transaction_reference_table"]  = $transaction_id["transaction_reference_table"];
                 $insert_transaction["transaction_reference_id"]     = $transaction_id["transaction_reference_id"];
+                
+                if(session('create_set_method'))
+                {
+                    $insert_transaction["payment_method"] = session("create_set_method");
+                    session()->forget('create_set_method');
+                }
+
                 $transaction_id = Tbl_transaction::insertGetId($insert_transaction);
             }
 
@@ -59,6 +76,7 @@ class Transaction
             $insert_list["transaction_type"]            = $transaction_type;
             $insert_list["transaction_number"]          =  ($transaction_number ? $transaction_number :  Self::generate_transaction_number($shop_id, $transaction_type));
             
+
             if($source == null)
             {
                 $insert_list["transaction_subtotal"]        = $cart["_total"]->total;
@@ -130,12 +148,17 @@ class Transaction
             }
             
             $return = $transaction_list_id;
+            
+            
+            
             Self::update_transaction_balance($transaction_id);
         }
         else
         {
             $return = "CARTY IS EMPTY";
         }
+
+
 
         return $return;
     }
@@ -155,6 +178,22 @@ class Transaction
     public static function update_transaction_balance($transaction_id)
     {
         $balance = Tbl_transaction_list::where("transaction_id", $transaction_id)->groupBy("transaction_id")->sum("transaction_posted");
+        
+        if(session('create_update_transaction_details'))
+        {
+            $update["transaction_details"] = session('create_update_transaction_details');
+            session()->forget('create_update_transaction_details');
+        }
+        
+        if($balance == 0)
+        {
+            $update["payment_status"] = "paid";
+        }
+        else
+        {
+            $update["payment_status"] = "pending";
+        }
+        
         $update["transaction_balance"] = $balance;
         $balance = Tbl_transaction::where("transaction_id", $transaction_id)->update($update);
     }
@@ -168,6 +207,14 @@ class Transaction
            
             case 'RECEIPT':
                 $prefix = "";
+            break;
+            
+            case 'FAILED':
+                $prefix = "FAIL-";
+            break;
+
+            case 'PENDING':
+                $prefix = "PENDING-";
             break;
 
             default:
@@ -211,13 +258,24 @@ class Transaction
         }
         return $customer_name;
     }
+    
+    
+    
+    public static function get_transaction_filter_customer($customer_id) //filter result of transaction list by customer
+    {
+        $store["get_transaction_filter_customer_id"] = $customer_id;
+        session($store);
+    }
     public static function get_transaction_list($shop_id, $transaction_type = 'all', $search_keyword = '', $paginate = 5, $transaction_id = 0)
     {
-        $data = Tbl_transaction_list::where('shop_id',$shop_id);
+        $data = Tbl_transaction_list::where('tbl_transaction_list.shop_id',$shop_id);
+        
         if($transaction_id != 0)
         {
-            $data = Tbl_transaction_list::where('transaction_id',$transaction_id)->where('shop_id',$shop_id);
+            $data = Tbl_transaction_list::where('tbl_transaction_list.transaction_id',$transaction_id)->where('tbl_transaction_list.shop_id',$shop_id);
         }
+        
+        $data->transaction();
         
         if(isset($transaction_type))
         {
@@ -226,6 +284,13 @@ class Transaction
                 $data->where('transaction_type', $transaction_type);
             }
         }
+        
+        if(session('get_transaction_filter_customer_id'))
+        {
+            $data->where('transaction_reference_table', 'tbl_customer')->where('tbl_transaction.transaction_reference_id', session('get_transaction_filter_customer_id'));
+            $data->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id');
+        }
+        
         if(isset($search_keyword))
         {
             $data->where('transaction_number', "LIKE", "%" . $search_keyword . "%");
@@ -233,7 +298,7 @@ class Transaction
         
         if($paginate)
         {
-            $data = $data->paginate(5);
+            $data = $data->paginate($paginate);
         }
         else
         {
@@ -245,13 +310,16 @@ class Transaction
             $data[$key]->customer_name = Transaction::getCustomerNameTransaction($value->transaction_id);
         }
         
+        session()->forget('get_transaction_filter_customer_id');
+        
         return $data;
     }
     public static function get_all_transaction_type()
     {
         $type[0] = 'order';
         $type[1] = 'receipt';
-        
+        $type[2] = 'failed';
+        $type[3] = 'pending';
         return $type;
     }
     public static function shop_increment($shop_id)

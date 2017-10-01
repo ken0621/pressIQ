@@ -8,4 +8,10 @@ class Tbl_transaction_list extends Model
 	protected $table = 'tbl_transaction_list';
 	protected $primaryKey = "transaction_list_id";
 	public $timestamps = false;
+	
+	
+	public function scopeTransaction($query)
+	{
+		return $query->join("tbl_transaction", "tbl_transaction.transaction_id", "=", "tbl_transaction_list.transaction_id");
+	}
 }

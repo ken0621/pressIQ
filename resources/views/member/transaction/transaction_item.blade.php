@@ -62,11 +62,10 @@
         </div>
     </div>
 </div>
-<!--<div class="modal-body">-->
-<!--    <div class="form-group">-->
-        
-<!--    </div>-->
-<!--</div>-->
-<div class="modal-footer">
-	<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-</div>
+
+@if($transaction_details)
+    <div class="text-center" style="padding-bottom: 10px;"><a href="javascript:" onclick="$('.payment-details').removeClass('hidden')">SHOW PAYMENT DETAILS</a></div>
+    <div class="payment-details hidden" style="padding-bottom: 10px; margin: 10px;">
+        {!! dd($transaction_details) !!}
+    </div>
+@endif

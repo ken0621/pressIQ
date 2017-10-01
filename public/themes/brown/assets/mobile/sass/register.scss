@@ -55,6 +55,48 @@ body
 				border-radius: 0;
 				border-bottom: 1px solid #cccccc;
 			}
+			.agreement
+			{
+				color: #7b7b7b;
+				font-size: 14px;
+				font-weight: 500;
+				a
+				{
+					color: #1c1c1c;
+				}
+			}
+			.btn
+			{
+				background-color: #573021;
+				font-weight: 500;
+				font-size: 16px;
+				color: #fff;
+				width: 100%;
+				padding: 12.5px 15px;
+			}
+			.form-input
+			{
+				text-align: left;
+				.form-control
+				{
+					border: 0;
+					border-bottom: 1px solid #e0e0e0;
+					box-shadow: none;
+					font-size: 13px;
+					padding-left: 0;
+					padding-right: 0;
+				}
+			}
+			.date-holder
+			{
+				display: inline-block;
+				vertical-align: top;
+				margin-right: 25px;
+				&:last-child
+				{
+					margin-right: 0;
+				}
+			}
 		}
 	}
 }

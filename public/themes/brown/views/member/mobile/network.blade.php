@@ -15,7 +15,9 @@
                     </div>
                     <div class="col-50">
                         <select>
-                            <option>1</option>
+                            @foreach($_slot as $slot)
+                            <option value="{{ $slot->slot_no }}" {{ $slot->slot_no == request('slot_no') ? 'selected' : '' }}>{{ $slot->slot_no }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -29,10 +31,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="label-cell">Throw</td>
-                            <td class="numeric-cell">322</td>
-                        </tr>
+                        @if(count($_tree_level) > 0)
+                            @foreach($_tree_level as $tree)
+                            <tr>
+                                <td class="label-cell">{!! $tree->ordinal_level !!}</td>
+                                <td class="numeric-cell"><a onclick="action_load_link_to_modal('/members/network-slot?slot_no={{ request("slot_no") }}&level={{ $tree->sponsor_tree_level }}','lg')" href="javascript:"><b>{!! $tree->display_slot_count !!}</b></a></td>
+                            </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td colspan="2" class="text-center"><b>{{ request("slot_no") }}</b> doesn't have any network yet.</td>
+                            </tr>
+                        @endif
                     </tbody>
                 </table>
             </div>

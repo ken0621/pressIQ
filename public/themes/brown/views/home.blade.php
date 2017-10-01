@@ -213,7 +213,9 @@
 					<div style="max-width: 803px; margin: auto;">
 						<div class="embed-responsive embed-responsive-16by9 animated zoomInDown" style="margin-top: 25px;">
 						  <div class="overlay"></div>
-						  <!--<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/nUjdRoNaNYE?autoplay=1&showinfo=0&controls=0&loop=1&disablekb=1&modestbranding=1&playlist=nUjdRoNaNYE"></iframe>-->
+				        	<video autoplay="" controls="">
+								<source src="/themes/{{ $shop_theme }}/img/intro2.mp4" type="video/mp4">
+							</video>
 						</div>
 					</div>
 					<h3 class="animated fadeInUp">It’s not the color of your skin, but the color of your heart.</h3>

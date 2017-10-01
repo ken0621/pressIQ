@@ -234,13 +234,16 @@ class Payment
 		if (get_domain() == "c9users.io") 
 		{
 		    $environment = "SANDBOX";
+		    PayMayaSDK::getInstance()->initCheckout("pk-sEt9FzRUWI2PCBI2axjZ7xdBHoPiVDEEWSulD78CW9c", "sk-cJFYCGhH4stZZTS52Z3dpNbrpRyu6a9iJaBiVlcIqZ5", $environment);
 		}
 		else
 		{
-		    $environment = "PRODUCTION";
+		  //  $environment = "PRODUCTION";
+		  //  PayMayaSDK::getInstance()->initCheckout($api->api_client_id, $api->api_secret_id, $environment);
+
+		    $environment = "SANDBOX";
+		    PayMayaSDK::getInstance()->initCheckout("pk-sEt9FzRUWI2PCBI2axjZ7xdBHoPiVDEEWSulD78CW9c", "sk-cJFYCGhH4stZZTS52Z3dpNbrpRyu6a9iJaBiVlcIqZ5", $environment);
 		}
-		
-        PayMayaSDK::getInstance()->initCheckout("pk-sEt9FzRUWI2PCBI2axjZ7xdBHoPiVDEEWSulD78CW9c", "sk-cJFYCGhH4stZZTS52Z3dpNbrpRyu6a9iJaBiVlcIqZ5", $environment);
 
         /* Customization */
         $shopCustomization = new Customization();

@@ -49,13 +49,12 @@ class TesterController extends Controller
          Tbl_transaction::where("shop_id", 5)->delete();
         foreach($_invoice as $invoice)
         {
-           
-            
             $customer = Tbl_customer::where("customer_id", $invoice->customer_id)->first();
             $shop_id = 5;
             
             Cart2::clear_cart();
-            Cart2::add_item_to_cart($shop_id, 54, 1);
+            Cart2::add_item_to_cart($shop_id, 57, 1);
+
             echo "<br>" . $invoice->invoice_number . " (" . $customer->first_name . " " . $customer->last_name . ")";
             
             $transaction_new["transaction_reference_table"]     = "tbl_customer";

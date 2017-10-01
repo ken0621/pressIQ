@@ -67,14 +67,14 @@
                 <div class="register-label">Don't have an account yet?</div>
                 <a href="/members/register" class="register">Sign Up Here</a>
             </div>
-            <div class="social-button">
-                <a href="{{$fb_login_url or '#'}}" class="holder fb">
-                    <div class="name"><i class="fa fa-facebook" aria-hidden="true"></i> Sign in with Facebook</div>
-                </a>
-                <a href="javascript:" class="holder gp" id="customBtn">
-                    <div class="name "><i class="fa fa-google-plus" aria-hidden="true"></i> Sign in with Google+</div>
-                </a>
-            </div>
+            <!--<div class="social-button">-->
+            <!--    <a href="{{$fb_login_url or '#'}}" class="holder fb">-->
+            <!--        <div class="name"><i class="fa fa-facebook" aria-hidden="true"></i> Sign in with Facebook</div>-->
+            <!--    </a>-->
+            <!--    <a href="javascript:" class="holder gp" id="customBtn">-->
+            <!--        <div class="name "><i class="fa fa-google-plus" aria-hidden="true"></i> Sign in with Google+</div>-->
+            <!--    </a>-->
+            <!--</div>-->
         </form>
     </div>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>

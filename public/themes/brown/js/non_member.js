@@ -267,7 +267,7 @@ function non_member()
 					}
 					else
 					{
-						alert(data);
+						console.log(data);
 						window.location.reload();
 					}
 				}

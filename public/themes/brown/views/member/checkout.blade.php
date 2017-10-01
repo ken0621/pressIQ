@@ -38,7 +38,7 @@
 								<div class="form-container">
 									<div class="form-label">Complete Shipping Address</div>
 									<div class="form-input">
-										<textarea name="customer_street" placeholder="Type your complete address here"></textarea>
+										<textarea required name="customer_street" placeholder="Type your complete address here"></textarea>
 									</div>
 								</div>
 							</div>

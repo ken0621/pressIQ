@@ -747,7 +747,7 @@
       					}
       					else
       					{
-      						alert(data);
+      						console.log(data);
       						window.location.reload();
       					}
       				}

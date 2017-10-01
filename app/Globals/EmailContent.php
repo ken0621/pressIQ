@@ -25,15 +25,15 @@ class EmailContent
     {
     	return Tbl_email_content::where("archived",0)->where("shop_id",EmailContent::getShopId())->get();
     }
-    public static function getSubject($content_key)
+    public static function getSubject($content_key, $shop_id = 1)
     {
-        return Tbl_email_content::where("email_content_key",$content_key)->value("email_content_subject");
+        return Tbl_email_content::where("email_content_key",$content_key)->where('shop_id',$shop_id)->value("email_content_subject");
     }
-    public static function checkIfexisting($content_key)
+    public static function checkIfexisting($content_key, $shop_id = 1)
     {
-        return Tbl_email_content::where("email_content_key",$content_key)->count();
+        return Tbl_email_content::where("email_content_key",$content_key)->where('shop_id',$shop_id)->count();
     }
-    public static function checkIfexisting_shop_id($content_key, $shop_id =1)
+    public static function checkIfexisting_shop_id($content_key, $shop_id = 1)
     {
         return Tbl_email_content::where("email_content_key",$content_key)->where("shop_id",$shop_id)->count();
     }

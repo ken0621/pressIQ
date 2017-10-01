@@ -17,7 +17,9 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Arimo:400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,700" rel="stylesheet"> 
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,700" rel="stylesheet">
+
     <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap.min.css">
     <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/main.css">
@@ -31,8 +33,15 @@
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/drawer.css">
+    <!-- PARALLAX -->
+    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/parallax.css">
+    <!-- WOW JS -->
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/wow/css/animate.css">
     <!-- Brown Custom Icon -->
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/brown-icon/styles.css">
+    <!-- WOW JS -->
+    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/wow/css/animate.css">
+
     @yield("css")
 </head>
 <body>
@@ -44,6 +53,9 @@
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         @if($customer)
         <a class="{{ Request::segment(1) == "members" ? "active" : "" }}" href="/members">My Account</a>
+        @else
+        <a class="{{ Request::segment(1) == "members" ? "active" : "" }}" href="/members/login">Login</a>
+        <a class="{{ Request::segment(1) == "members" ? "active" : "" }}" href="/members/register">Register</a>
         @endif
         <a class="{{ Request::segment(1) == "" ? "active" : "" }}" href="/product">Brown</a>
         <a class="{{ Request::segment(1) == "product" ? "active" : "product" }}" href="/product">Phone Accessories</a>
@@ -502,6 +514,16 @@
     <script type="text/javascript" src="/assets/js/cart.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/drawer.js"></script>
     <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/parallax.js"></script>
+
+
+
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/wow/js/wow.min.js"></script>
+
+    <script>
+          new WOW().init();
+    </script>
+
     <script type="text/javascript">
     $(".date-picker").datepicker({
     dateFormat:"yy-mm-dd"

@@ -92,6 +92,13 @@
 						<td class="c2">
 							
 							<div class="register-form">
+								@if(Session::has('error'))
+								    <div class="alert alert-danger">
+								        <ul>
+								            <li>{!! session('error') !!}</li>
+								        </ul>
+								    </div>
+								@endif
 
 								@if ($errors->any())
 								    <div class="alert alert-danger">

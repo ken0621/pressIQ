@@ -32,10 +32,12 @@
 						<li class="{{ Request::segment(2) == "" ? "active" : "" }}">
 							<a href="/members"><div class="nav-holder"><div class="icon brown-icon-dashboard"></div> <span>Dashboard</span></div></a>
 						</li>
+						
+						@if($mlm_member)
 						<li class="{{ Request::segment(2) == "profile" ? "active" : "" }}">
 							<a href="/members/profile"><div class="nav-holder"><div class="icon brown-icon-profile"></div> <span>Profile</span></div></a>
 						</li>
-<!-- 						<li class="{{ Request::segment(2) == "notification" ? "active" : "" }}">
+						<!--<li class="{{ Request::segment(2) == "notification" ? "active" : "" }}">
 							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-gift"></div> <span>Rewards</span></div></a>
 							<ul>
 								<li>
@@ -73,26 +75,31 @@
 						<li class="{{ Request::segment(2) == "wallet-logs" || Request::segment(2) == "wallet-encashment" ? "active" : "" }}">
 							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-wallet"></div> <span>Wallet</span></div></a>
 							<ul>
-								<li>
+							<!--<li>
 									<a href="/members/wallet-logs"><div class="icon brown-icon-list-alt nav-holder"> &nbsp;&nbsp;Wallet Logs</div></a>
-								</li>
+								</li> -->
 								<li>
-									<a href="/members/wallet-encashment"><div class="icon brown-icon-money nav-holder"> &nbsp;&nbsp;Wallet Encashment</div></a>
+									<a href="/members/wallet-encashment"><div class="nav-holder"> &nbsp;&nbsp;Wallet Encashment</div></a>
 								</li>
 							</ul>
 						</li>
-<!-- 						<li class="{{ Request::segment(2) == "slot" ? "active" : "" }}">
+						<!-- <li class="{{ Request::segment(2) == "slot" ? "active" : "" }}">
 							<a href="/members/slot"><div class="nav-holder"><div class="icon brown-icon-cubes"></div> <span>My Slots</span></div></a>
 						</li> -->
-<!-- 						<li class="{{ Request::segment(2) == "eon-card" ? "active" : "" }}">
+						<!-- <li class="{{ Request::segment(2) == "eon-card" ? "active" : "" }}">
 							<a href="/members/eon-card"><div class="nav-holder"><dic class="icon brown-icon-credit-card"></dic> <span>Eon Card</span></div></a>
-						</li>
+						</li> -->
+						@else
+						@endif
+
 						<li class="{{ Request::segment(2) == "order" ? "active" : "" }}">
 							<a href="/members/order"><div class="nav-holder"><div class="icon brown-icon-bag"></div> <span>Orders</span></div></a>
 						</li>
-						<li class="{{ Request::segment(2) == "wishlist" ? "active" : "" }}">
+						<!-- <li class="{{ Request::segment(2) == "wishlist" ? "active" : "" }}">
 							<a href="/members/wishlist"><div class="nav-holder"><div class="icon brown-icon-heart-empty"></div> <span>Wishlist</span></div></a>
 						</li> -->
+
+						
 					</ul>
 				</div>
 			</div>

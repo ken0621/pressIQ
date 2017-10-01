@@ -25,21 +25,32 @@
 		  		<table class="table">
 			  		<thead>
 			  			<tr>
-			  				<th class="text-left" width="200px">SLOT</th>
+			  				<th class="text-center" width="200px">DATE</th>
+			  				<th class="text-center" width="100px">SLOT</th>
 			  				<th class="text-left">DETAILS</th>
-			  				<th class="text-right">AMOUNT</th>
+			  				<th class="text-right" width="200px">AMOUNT</th>
 			  			</tr>
 			  		</thead>
 			  		<tbody>
-			  			@foreach($_rewards as $reward)
-			  			<tr>
-			  				<td class="text-left">
-			  					<div>{{ $reward->slot_no }}</div>
-			  				</td>
-			  				<td class="text-left">{!! $reward->log !!}</td>
-			  				<td class="text-right"><a href="javascript:"><b>{!! $reward->display_wallet_log_amount !!}</b></a></td>
-			  			</tr>
-			  			@endforeach
+			  			@if(count($_rewards) > 0)
+				  			@foreach($_rewards as $reward)
+				  			<tr>
+				  				<td class="text-center">
+				  					<div><b>{{ $reward->display_date }}</b></div>
+				  					<div>{{ $reward->time_ago }}</div>
+				  				</td>
+				  				<td class="text-center">
+				  					<div>{{ $reward->slot_no }}</div>
+				  				</td>
+				  				<td class="text-left">{!! $reward->log !!}</td>
+				  				<td class="text-right"><b>{!! $reward->display_wallet_log_amount !!}</b></td>
+				  			</tr>
+				  			@endforeach
+				  		@else
+				  			<tr class="text-center" >
+				  				<td colspan="4">NO REWARD YET</td>
+				  			</tr>
+			  			@endif
 			  		</tbody>
 			  	</table>
 		  	</div>

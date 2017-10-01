@@ -2,7 +2,7 @@
 @section("member_content")
 <div class="member-order">
 	<div class="main-member-header clearfix">
-		<div class="left">
+		<div class="animated fadeInLeft left">
 			<div class="icon">
 				<div class="brown-icon-orders"></div>
 			</div>
@@ -10,12 +10,12 @@
 				<div class="name">My Orders</div>
 			</div>
 		</div>
-		<div class="right">
+		<div class="animated fadeInRight right">
 			
 		</div>
 	</div>
 	<div class="order-content">
-		<div class="holder">
+		<div class="animated fadeInUp holder">
 			<table>
 				<tr>
 					<td class="img">
@@ -54,7 +54,7 @@
 				</tr>
 			</table>
 		</div>
-		<div class="holder">
+		<div class="animated fadeInUp holder">
 			<table>
 				<tr>
 					<td class="img">
@@ -93,7 +93,7 @@
 				</tr>
 			</table>
 		</div>
-		<div class="holder">
+		<div class="animated fadeInUp holder">
 			<table>
 				<tr>
 					<td class="img">

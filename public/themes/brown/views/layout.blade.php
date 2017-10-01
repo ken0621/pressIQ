@@ -133,7 +133,7 @@
                             @if($customer)
                             <li class="{{ Request::segment(1) == "members" ? "active" : "" }}"><a href="/members">My Account</a></li>
                             @endif
-                            <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a href="/product">Brown</a></li>
+                            <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a href="/">Brown</a></li>
                             <li class="{{ Request::segment(1) == "product" ? "active" : "product" }}"><a href="/product">Phone Accessories</a></li>
                             <li><a href="#">Internet Of Things</a></li>
                             <li><a href="#">Health Technology</a></li>

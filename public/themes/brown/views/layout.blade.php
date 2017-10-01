@@ -404,7 +404,7 @@
                 <div class="payment-method">
                     <div class="title">Payment Methods</div>
                     <div class="payment-container">
-                        <div class="holder"><img src="/themes/{{ $shop_theme }}/img/cod.png"></div>
+                        <!--<div class="holder"><img src="/themes/{{ $shop_theme }}/img/cod.png"></div>-->
                         <div class="holder"><img src="/themes/{{ $shop_theme }}/img/paymaya.png"></div>
                     </div>
                 </div>

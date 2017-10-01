@@ -107,6 +107,7 @@ class ShopMemberController extends Shop
     {
         $data["page"] = "Login";
         $get_fb = FacebookGlobals::check_app_key($this->shop_info->shop_id);
+        
         if($get_fb)
         {
             $data['fb_login_url'] = FacebookGlobals::get_link($this->shop_info->shop_id);
@@ -117,10 +118,10 @@ class ShopMemberController extends Shop
             $data['google_app_id'] = SocialNetwork::get_keys($this->shop_info->shop_id, 'googleplus')['app_id'];
         }
         
-        if(request("pass") != "123")
-        {
-            return view("member.coming");
-        }
+        // if(request("pass") != "123")
+        // {
+        //     return view("member.coming");
+        // }
 
         return Self::load_view_for_members("member.login", $data, false);
     }

@@ -44,47 +44,37 @@ class Mlm_tree
                 ->where('placement_tree_level', '=', $level)
                 ->first();
             }
-            
-            if(!$check_if_exist)
-            {  
-                if($upline_info)
-                {
+
+            if($upline_info)
+            {
+                if(!$check_if_exist)
+                {    
                     $insert['shop_id'] = $slot_info->shop_id;
                     $insert["placement_tree_parent_id"] = $upline_info->slot_id;
                     $insert["placement_tree_child_id"] = $new_slot->slot_id;
                     $insert["placement_tree_position"] = $slot_info->slot_position;
                     $insert["placement_tree_level"] = $level;
                     Tbl_tree_placement::insert($insert);
-                    $level++;
-                    Mlm_tree::insert_tree_placement($upline_info, $new_slot, $level);  
-                }  
-                if($old_level == 1)
-                {
-                    MLM_tree::update_auto_balance_position($new_slot,$old_level);
                 }
+                $level++;
+                Mlm_tree::insert_tree_placement($upline_info, $new_slot, $level);  
             }
+
+            // if(!$check_if_exist)
+            // {    
+            if($old_level == 1)
+            {
+                MLM_tree::update_auto_balance_position($new_slot,$old_level);
+            }
+            // }
         }
     }
     public static function update_auto_balance_position($new_slot,$level)
     {
-        $top_slot                        = Tbl_mlm_slot::where("shop_id",$new_slot->shop_id)->orderBy("slot_id","ASC")->first();
-        $get_top_level                   = Tbl_tree_placement::where("placement_tree_parent_id",$top_slot->slot_id)->where("placement_tree_child_id",$new_slot->slot_placement)->first();
-        $placement                       = Tbl_mlm_slot::where("slot_id",$new_slot->slot_placement)->first();
-        if($get_top_level)
-        {     
-            if($new_slot->slot_position == "left")
-            {
-                $auto_balance_position  = $placement->auto_balance_position + pow(2,$get_top_level->placement_tree_level);
-            }
-            else
-            {
-                $auto_balance_position  = $placement->auto_balance_position + (pow(2,$get_top_level->placement_tree_level) * 2);
-            }
-        }
-        else
-        {
-            $top_slot                  = Tbl_mlm_slot::where("shop_id",$new_slot->shop_id)->orderBy("slot_id","ASC")->first();
-            if($new_slot->slot_sponsor == $top_slot->slot_id)
+        $top_slot                            = Tbl_tree_placement::where("placement_tree_child_id",$new_slot->slot_id)->orderBy("placement_tree_level","DESC")->first();
+        if($top_slot)
+        {  
+            if($top_slot->placement_tree_level == 1)
             {
                 if($new_slot->slot_position == "left")
                 {
@@ -95,7 +85,26 @@ class Mlm_tree
                     $auto_balance_position = 3;
                 }
             }
+            else
+            {
+                $placement                       = Tbl_mlm_slot::where("slot_id",$new_slot->slot_placement)->first();
+                $top_slot                        = Tbl_tree_placement::where("placement_tree_child_id",$new_slot->slot_placement)->orderBy("placement_tree_level","DESC")->first();
+                $get_top_level                   = Tbl_tree_placement::where("placement_tree_parent_id",$top_slot->placement_tree_parent_id)->where("placement_tree_child_id",$new_slot->slot_placement)->first();
+                if($get_top_level)
+                {     
+                    $new_level = $get_top_level->placement_tree_level;
+                    if($new_slot->slot_position == "left")
+                    {
+                        $auto_balance_position  = $placement->auto_balance_position + pow(2,$new_level);
+                    }
+                    else
+                    {
+                        $auto_balance_position  = $placement->auto_balance_position + (pow(2,$new_level) * 2);
+                    }
+                }
+            }
         }
+
         if(isset($auto_balance_position))
         {
             $update["auto_balance_position"] = $auto_balance_position;
@@ -122,19 +131,19 @@ class Mlm_tree
             }
             if($upline_info)
             {
-                if(!$check_if_exist)
-                {
                     if($upline_info)
                     {
-                        $insert['shop_id'] = $new_slot->shop_id;
-                        $insert["sponsor_tree_parent_id"] = $upline_info->slot_id;
-                        $insert["sponsor_tree_child_id"] = $new_slot->slot_id;
-                        $insert["sponsor_tree_level"] = $level;
-                        Tbl_tree_sponsor::insert($insert);
+                        if(!$check_if_exist)
+                        {
+                            $insert['shop_id'] = $new_slot->shop_id;
+                            $insert["sponsor_tree_parent_id"] = $upline_info->slot_id;
+                            $insert["sponsor_tree_child_id"] = $new_slot->slot_id;
+                            $insert["sponsor_tree_level"] = $level;
+                            Tbl_tree_sponsor::insert($insert);
+                        }
                         $level++;
                         Mlm_tree::insert_tree_sponsor($upline_info, $new_slot, $level);  
                     }
-                }
             }
         }
     }

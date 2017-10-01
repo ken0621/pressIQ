@@ -1538,14 +1538,14 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "<span style='color: green'>(DONE)</span> You are looking at this page now.";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";   
 
-     /* -- DEVELOPERS => REMATRIX */
-    $code = "developer-rematrix";
-    $nav[$page]['submenu'][$code]['label'] = "Rematrix";
+    /* -- DEVELOPERS => DOCUMENTATION */
+    $code = "developer-single-entry";
+    $nav[$page]['submenu'][$code]['label'] = "Single Entry";
     $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/rematrix";
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/single_entry";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Developing";
-    $nav[$page]['submenu'][$code]['developer'] = "Erwin Guevarra";
+    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
 
     /* -- DEVELOPERS => DOCUMENTATION */
     $code = "developer-auto-entry-independent";
@@ -1555,6 +1555,15 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Developing";
     $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+
+     /* -- DEVELOPERS => REMATRIX */
+    $code = "developer-rematrix";
+    $nav[$page]['submenu'][$code]['label'] = "Rematrix";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/rematrix";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Erwin Guevarra";
 
      /* -- DEVELOPERS => DOCUMENTATION */
     $code = "developer-auto-entry";

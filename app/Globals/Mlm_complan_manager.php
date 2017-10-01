@@ -195,7 +195,8 @@ class Mlm_complan_manager
 
         foreach($_sponsor_tree as $sponsor_tree)
         {
-            $brown_next_rank = Tbl_brown_rank::where("rank_id",">", $sponsor_tree->brown_rank_id)->orderBy("rank_id")->first();
+            $rank_number     = $sponsor_tree->brown_rank_id == null ? 0 : $sponsor_tree->brown_rank_id;
+            $brown_next_rank = Tbl_brown_rank::where("rank_id",">", $rank_number)->orderBy("rank_id")->first();
             //TODO: LEVEL LIMIT IMPLEMENTATION
             if($brown_next_rank)
             {

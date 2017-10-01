@@ -217,7 +217,7 @@
 						</div>
 					</div>
 					<h3 class="animated fadeInUp">It’s not the color of your skin, but the color of your heart.</h3>
-					<div class="join-button animated fadeInUp">JOIN THE MOVEMENT</div>
+					<div onclick="location.href='/members/register'" class="join-button animated fadeInUp">JOIN THE MOVEMENT</div>
 				</div>
 			</div>
 		</div>

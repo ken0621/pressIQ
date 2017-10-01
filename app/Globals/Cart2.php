@@ -108,7 +108,6 @@ class Cart2
 		$cart_key = Self::get_cart_key();
 		$total = 0;
 		$grand_total = 0;
-		$_cart = array();
 
 		if($cart_key)
 		{

@@ -292,7 +292,7 @@
 		</div>
 	</div>
 	<!-- THE PRODUCTS -->
-	<div class="wrapper-4">
+	<div class="wrapper-4 hidden">
 		<div class="container">
 			<div class="bottom-container">
 				<div class="featured-title-holder wow fadeInDown" data-wow-offset="10" data-wow-delay="0.3s">

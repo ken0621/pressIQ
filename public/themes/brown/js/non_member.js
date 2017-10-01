@@ -74,7 +74,11 @@ function non_member()
 				
 				if($('.input-pin').val() != '')
 				{
-					$('#btn-proceed-2').trigger('click');	
+					setTimeout(function()
+					{
+						$('#btn-proceed-2').trigger('click');	
+					}, 1000);
+					
 				}
 			}
 			else

@@ -32,8 +32,8 @@
                   <div class="navbar sidebar-left">
                      <div class="navbar-inner">
                         <div class="title-holder">
-                           <div class="title">Mr. Brown</div>
-                           <div class="sub">Premium</div>
+                           <div class="title">{{ $customer->first_name }} {{ $customer->last_name }}</div>
+                           <div class="sub">Member</div>
                         </div>
                         <div class="right">
                            <div class="dot"></div>
@@ -42,7 +42,7 @@
                   </div>
                   <div class="page-content sidebar-left">
                      <div class="image-profile">
-                        <img src="/themes/{{ $shop_theme }}/assets/mobile/img/img-holder.png">
+                        <img style="border-radius: 100%;" src="{{ $profile_image }}">
                      </div>
                      <div class="list-block">
                         <ul>
@@ -56,6 +56,7 @@
                                  </div>
                               </a>
                            </li>
+                           @if($mlm_member)
                            <li>
                               <a href="/members/profile" class="item-link close-panel">
                                  <div class="item-content">
@@ -106,6 +107,7 @@
                                  </div>
                               </a>
                            </li>
+                           @endif
                            <li>
                               <a href="javascript:" onClick="location.href='/members/logout'" class="item-link close-panel">
                                  <div class="item-content">
@@ -171,164 +173,189 @@
                      <div class="navbar-inner">
                         <div class="left"><a href="#" class="open-panel link icon-only"><i class="icon icon-bars"></i></a></div>
                         <div class="left">Dashboard</div>
-                        <div class="right">
+                        {{-- <div class="right">
                            <div class="text">3</div>
                            <img src="/themes/{{ $shop_theme }}/assets/mobile/img/notification.png">
-                        </div>
+                        </div> --}}
                      </div>
                   </div>
                   <div class="page-content">
                      <div class="dashboard-view">
-                        <div class="profile-holder">
-                           <table>
-                              <tr>
-                                 <td class="img">
-                                    <img src="/themes/{{ $shop_theme }}/assets/mobile/img/img-holder.png">
-                                 </td>
-                                 <td class="text">
-                                    <div class="name">Mr. Brown</div>
-                                    <div class="sub">Premium</div>
-                                 </td>
-                              </tr>
-                           </table>
-                        </div>
-                        <div class="summary-holder">
-                           <div class="title"><i class="align-icon brown-icon-bar-chart"></i> Wallet Summary</div>
-                           <div class="body">
-                              <div class="chart-legend">
-                                 <div class="row">
-                                    <!-- Each "cell" has col-[widht in percents] class -->
-                                    <div class="col-50">
-                                       <div class="holder">
-                                          <div class="color-name"><div class="color" style="background-color: #76b6ec"></div><span>Current Wallet</span></div>
-                                          <div class="name">{{ $wallet->display_current_wallet }}</div>
-                                       </div>
-                                    </div>
-                                    <div class="col-50">
-                                       <div class="holder">
-                                          <div class="color-name"><div class="color" style="background-color: #8E5EA2"></div><span>Total Pay-out</span></div>
-                                          <div class="name">{{ $wallet->display_total_payout }}</div>
-                                       </div>
-                                    </div>
+                        @if(!$mlm_member)
+                           <div class="non-member">
+                              <div class="row">
+                                 <div class="col-100">
+                                    <video autoplay="" controls="">
+                                       <source src="/themes/{{ $shop_theme }}/img/intro2.mp4" type="video/mp4">
+                                    </video>
                                  </div>
-                                 
-                                 
-                                 <div class="chart-holder">
-                                    <canvas id="income_summary" class="chart-income" wallet="{{ $wallet->current_wallet }}"  payout="{{ $wallet->total_payout }}" style="max-width: 150px;" width="150" height="150"></canvas>
-                                 </div>
-                                 <div class="row">
-                                    <!-- Each "cell" has col-[widht in percents] class -->
-                                    <div class="col-50">
-                                       <div class="holder">
-                                          <div class="color-name"><div class="color"></div><span>Current Slot(s)</span></div>
-                                          <div class="name">{{ $customer_summary["display_slot_count"] }}</div>
+                                 <div class="col-100">
+                                    <div class="join-container">
+                                       <div class="text">
+                                          <div class="text-header1">Join the Movement!</div>
+                                          <div class="text-header2">Enroll now and become one of us!</div>
                                        </div>
-                                    </div>
-                                    <div class="col-50">
-                                       <div class="holder">
-                                          <div class="color-name"><div class="color"></div><span>Total Reward</span></div>
-                                          <div class="name">{{ $wallet->display_total_earnings }}</div>
+                                       <div class="btn-container">
+                                          <button class="product-add-cart btn-buy-a-kit" item-id="2708" quantity="1">Buy a Kit</button><br>
+                                          <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
+                                          <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
                                        </div>
                                     </div>
                                  </div>
                               </div>
                            </div>
-                        </div>
-                        <div class="summary-holder">
-                           <div class="title"><i class="fa fa-table"></i> Reward Summary</div>
-                           <div class="body">
-                              <div class="chart-legend">
-                                 <div class="row">
-                                    <div class="col-50">
-                                       <div class="holder">
-                                          <div class="color-name"><div class="color"></div><span>Pairing </br>Reward</span></span></div>
-                                          <div class="name">{{ $wallet->display_complan_triangle }}</div>
+                        @else
+                           <div class="profile-holder">
+                              <table>
+                                 <tr>
+                                    <td class="img">
+                                       <img src="{{ $profile_image }}">
+                                    </td>
+                                    <td class="text">
+                                       <div class="name">{{ $customer->first_name }} {{ $customer->last_name }}</div>
+                                       <div class="sub">Member</div>
+                                    </td>
+                                 </tr>
+                              </table>
+                           </div>
+                           <div class="summary-holder">
+                              <div class="title"><i class="align-icon brown-icon-bar-chart"></i> Wallet Summary</div>
+                              <div class="body">
+                                 <div class="chart-legend">
+                                    <div class="row">
+                                       <!-- Each "cell" has col-[widht in percents] class -->
+                                       <div class="col-50">
+                                          <div class="holder">
+                                             <div class="color-name"><div class="color" style="background-color: #76b6ec"></div><span>Current Wallet</span></div>
+                                             <div class="name">{{ $wallet->display_current_wallet }}</div>
+                                          </div>
+                                       </div>
+                                       <div class="col-50">
+                                          <div class="holder">
+                                             <div class="color-name"><div class="color" style="background-color: #8E5EA2"></div><span>Total Pay-out</span></div>
+                                             <div class="name">{{ $wallet->display_total_payout }}</div>
+                                          </div>
                                        </div>
                                     </div>
-                                    <div class="col-50">
-                                       <div class="holder">
-                                          <div class="color-name"><div class="color"></div><span>Direct Referral Bonus</span></div>
-                                          <div class="name">{{ $wallet->display_complan_direct }}</div>
-                                       </div>
+                                    
+                                    
+                                    <div class="chart-holder">
+                                       <canvas id="income_summary" class="chart-income" wallet="{{ $wallet->current_wallet }}"  payout="{{ $wallet->total_payout }}" style="max-width: 150px;" width="150" height="150"></canvas>
                                     </div>
-                                    <div class="col-50">
-                                       <div class="holder">
-                                          <div class="color-name"><div class="color"></div><span>Builder Reward</span></div>
-                                          <div class="name">{{ $wallet->display_complan_builder }}</div>
+                                    <div class="row">
+                                       <!-- Each "cell" has col-[widht in percents] class -->
+                                       <div class="col-50">
+                                          <div class="holder">
+                                             <div class="color-name"><div class="color"></div><span>Current Slot(s)</span></div>
+                                             <div class="name">{{ $customer_summary["display_slot_count"] }}</div>
+                                          </div>
                                        </div>
-                                    </div>
-                                    <div class="col-50">
-                                       <div class="holder">
-                                          <div class="color-name"><div class="color"></div><span>Leader Reward</span></div>
-                                          <div class="name">{{ $wallet->display_complan_leader }}</div>
+                                       <div class="col-50">
+                                          <div class="holder">
+                                             <div class="color-name"><div class="color"></div><span>Total Reward</span></div>
+                                             <div class="name">{{ $wallet->display_total_earnings }}</div>
+                                          </div>
                                        </div>
                                     </div>
                                  </div>
                               </div>
                            </div>
-                        </div>
-                        <div class="summary-holder">
-                           <div class="title"><i class="align-icon brown-icon-bar-chart"></i> Reward Points</div>
-                           <div class="body">
-                              <div class="chart-legend">
-                                 <div class="row">
-                                    <div class="col-50">
-                                       <div class="holder">
-                                          <div class="color-name"><div class="color"></div><span>Builder Point(s)</span></div>
-                                          <div class="name">{{ $points->display_brown_builder_points }}</div>
+                           <div class="summary-holder">
+                              <div class="title"><i class="fa fa-table"></i> Reward Summary</div>
+                              <div class="body">
+                                 <div class="chart-legend">
+                                    <div class="row">
+                                       <div class="col-50">
+                                          <div class="holder">
+                                             <div class="color-name"><div class="color"></div><span>Pairing </br>Reward</span></span></div>
+                                             <div class="name">{{ $wallet->display_complan_triangle }}</div>
+                                          </div>
                                        </div>
-                                    </div>
-                                    <div class="col-50">
-                                       <div class="holder">
-                                          <div class="color-name"><div class="color"></div><span>Leader Point(s)</span></div>
-                                          <div class="name">{{ $points->display_brown_leader_points }}</div>
+                                       <div class="col-50">
+                                          <div class="holder">
+                                             <div class="color-name"><div class="color"></div><span>Direct Referral Bonus</span></div>
+                                             <div class="name">{{ $wallet->display_complan_direct }}</div>
+                                          </div>
+                                       </div>
+                                       <div class="col-50">
+                                          <div class="holder">
+                                             <div class="color-name"><div class="color"></div><span>Builder Reward</span></div>
+                                             <div class="name">{{ $wallet->display_complan_builder }}</div>
+                                          </div>
+                                       </div>
+                                       <div class="col-50">
+                                          <div class="holder">
+                                             <div class="color-name"><div class="color"></div><span>Leader Reward</span></div>
+                                             <div class="name">{{ $wallet->display_complan_leader }}</div>
+                                          </div>
                                        </div>
                                     </div>
                                  </div>
                               </div>
                            </div>
-                        </div>
-                        <div class="summary-holder">
-                           <div class="title"><i class="align-icon brown-icon-star"></i> My Slot(s)</div>
-                           <div class="body">
-                              <div class="unilevel-holder">
-                                 @foreach($_slot as $slot)
-                                 <div class="holder">
-                                    <div class="row clearfix">
-                                       <div class="col-sm-4 text-center">
-                                          <div class="label2">{{ $slot->slot_no }}</div>
-                                          <div class="label3">{{ $slot->display_total_earnings }}</div>
-                                          <div class="label3">{{ $slot->current_direct }} / {{ $slot->brown_next_rank_current }}</div>
+                           <div class="summary-holder">
+                              <div class="title"><i class="align-icon brown-icon-bar-chart"></i> Reward Points</div>
+                              <div class="body">
+                                 <div class="chart-legend">
+                                    <div class="row">
+                                       <div class="col-50">
+                                          <div class="holder">
+                                             <div class="color-name"><div class="color"></div><span>Builder Point(s)</span></div>
+                                             <div class="name">{{ $points->display_brown_builder_points }}</div>
+                                          </div>
                                        </div>
-                                       <div class="col-sm-8 text-center" style="margin-bottom: 5px;">ROAD TO <b>{{ $slot->brown_next_rank }}</b></div>
-                                       <div class="col-sm-4">
-                                          @if($slot->brown_next_rank != "NO NEXT RANK")
-                                          @if($slot->current_direct >= $slot->required_direct)
-                                          <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">DIRECT <b>QUALIFIED</b></div>
-                                          @else
-                                          <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) {{ $slot->brown_direct_rank_percentage }}%, rgb(237, 237, 237) {{ $slot->brown_direct_rank_percentage }}%);">DIRECT ({{ $slot->current_direct }}/{{ $slot->required_direct }})</div>
-                                          @endif
-                                          @else
-                                          <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 40%);">NO MORE <b> NEXT RANK</b></div>
-                                          @endif
-                                       </div>
-                                       <div class="col-sm-4">
-                                          @if($slot->brown_next_rank != "NO NEXT RANK")
-                                          @if($slot->brown_next_rank_current >= $slot->brown_next_rank_requirements)
-                                          <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">GROUP <b>QUALIFIED</b></div>
-                                          @else
-                                          <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) {{ $slot->brown_rank_rank_percentage }}%, rgb(237, 237, 237) {{ $slot->brown_rank_rank_percentage }}%);">GROUP ({{ $slot->brown_next_rank_current }}/{{ $slot->brown_next_rank_requirements }})</div>
-                                          @endif
-                                          @else
-                                          <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 40%);">NO MORE <b> NEXT RANK</b></div>
-                                          @endif
+                                       <div class="col-50">
+                                          <div class="holder">
+                                             <div class="color-name"><div class="color"></div><span>Leader Point(s)</span></div>
+                                             <div class="name">{{ $points->display_brown_leader_points }}</div>
+                                          </div>
                                        </div>
                                     </div>
                                  </div>
-                                 @endforeach
                               </div>
                            </div>
-                        </div>
+                           <div class="summary-holder">
+                              <div class="title"><i class="align-icon brown-icon-star"></i> My Slot(s)</div>
+                              <div class="body">
+                                 <div class="unilevel-holder">
+                                    @foreach($_slot as $slot)
+                                    <div class="holder">
+                                       <div class="row clearfix">
+                                          <div class="col-sm-4 text-center">
+                                             <div class="label2">{{ $slot->slot_no }}</div>
+                                             <div class="label3">{{ $slot->display_total_earnings }}</div>
+                                             <div class="label3">{{ $slot->current_direct }} / {{ $slot->brown_next_rank_current }}</div>
+                                          </div>
+                                          <div class="col-sm-8 text-center" style="margin-bottom: 5px;">ROAD TO <b>{{ $slot->brown_next_rank }}</b></div>
+                                          <div class="col-sm-4">
+                                             @if($slot->brown_next_rank != "NO NEXT RANK")
+                                             @if($slot->current_direct >= $slot->required_direct)
+                                             <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">DIRECT <b>QUALIFIED</b></div>
+                                             @else
+                                             <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) {{ $slot->brown_direct_rank_percentage }}%, rgb(237, 237, 237) {{ $slot->brown_direct_rank_percentage }}%);">DIRECT ({{ $slot->current_direct }}/{{ $slot->required_direct }})</div>
+                                             @endif
+                                             @else
+                                             <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 40%);">NO MORE <b> NEXT RANK</b></div>
+                                             @endif
+                                          </div>
+                                          <div class="col-sm-4">
+                                             @if($slot->brown_next_rank != "NO NEXT RANK")
+                                             @if($slot->brown_next_rank_current >= $slot->brown_next_rank_requirements)
+                                             <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">GROUP <b>QUALIFIED</b></div>
+                                             @else
+                                             <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) {{ $slot->brown_rank_rank_percentage }}%, rgb(237, 237, 237) {{ $slot->brown_rank_rank_percentage }}%);">GROUP ({{ $slot->brown_next_rank_current }}/{{ $slot->brown_next_rank_requirements }})</div>
+                                             @endif
+                                             @else
+                                             <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 40%);">NO MORE <b> NEXT RANK</b></div>
+                                             @endif
+                                          </div>
+                                       </div>
+                                    </div>
+                                    @endforeach
+                                 </div>
+                              </div>
+                           </div>
+                        @endif
                      </div>
                   </div>
                </div>

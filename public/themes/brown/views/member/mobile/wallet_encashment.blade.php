@@ -29,11 +29,11 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>#1</td>
-                            <td class="label-cell">Throw</td>
-                            <td class="numeric-cell">322</td>
-                            <td class="numeric-cell">322</td>
-                            <td class="numeric-cell">322</td>
+                            <td></td>
+                            <td class="label-cell"> </td>
+                            <td class="numeric-cell"> </td>
+                            <td class="numeric-cell"> </td>
+                            <td class="numeric-cell"> </td>
                         </tr>
                     </tbody>
                 </table>

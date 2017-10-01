@@ -59,6 +59,10 @@ select
 				{
 					color: #fff;
 					font-size: 20px;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					width: 220px;
 				}
 				.sub
 				{
@@ -88,6 +92,68 @@ select
 	background-color: #e2e2e2;
 	.dashboard-view
 	{
+		.non-member
+		{
+			video
+			{
+				width: 100%;
+			}
+			.join-container
+			{
+				text-align: center;
+				@include panel-container;
+				margin-top: 5px;
+				padding: 25px 10px;
+				.text
+				{
+					.text-header1
+					{
+						font-weight: 700;
+					    font-size: 21px;
+					    color: #272c2f;
+					    word-break: break-all;
+					}
+					.text-header2
+					{
+						font-weight: 400;
+					    font-size: 15px;
+					    color: #777;
+					    letter-spacing: 0.2px;
+					    word-break: break-all;
+					}
+				}
+				.btn-container
+				{
+					.btn-buy-a-kit
+					{
+						font-family: "Rubik", sans-serif;
+						color: #fff;
+						background-color: #693d28;
+						padding: 12px 40px 12px 40px;
+						border: 2px solid #693d28;
+						border-radius: 2px;
+						margin-top: 25px;
+						font-weight: 500;
+					}
+					img
+					{
+						margin: 20px auto;
+						display: block;
+						margin-bottom: 0;
+					}
+					.btn-enter-a-code
+					{
+						font-family: "Rubik", sans-serif;
+						color: #693d28;
+						background-color: inherit;
+						padding: 12px 30px 12px 30px;
+						border: 2px solid #693d28;
+						border-radius: 2px;
+						font-weight: 500;
+					}
+				}
+			}
+		}
 		.profile-holder
 		{
 			padding: 15px;
@@ -97,9 +163,10 @@ select
 			border-radius: 3.5px;
 			table
 			{
-				min-width: 300px;
+				width: 100%;
 				width: auto;
 				margin: auto;
+				table-layout: fixed;
 				tr
 				{
 					td
@@ -109,15 +176,16 @@ select
 					.img
 					{
 						width: 75px;
-						padding-right: 15px;
 						img
 						{
-							width: 100%;
+							width: 75px;
 							border-radius: 100%;
 						}
 					}
 					.text
 					{
+						padding-left: 15px;
+						width: auto;
 						.name
 						{
 							font-weight: $bold;
@@ -132,6 +200,7 @@ select
 							margin-top: 7.5px;
 							font-weight: $semi-bold;
 							color: $font-color-2;
+							word-break: break-all;
 						}
 					}
 				}

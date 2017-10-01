@@ -36,7 +36,7 @@
     <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     <div class="main-container clearfix">
-        <div class="holder">
+        <div class="holder" style="cursor: pointer;" onClick="location.href='/members/login'">
             <div class="lock">
                 <img src="/themes/{{ $shop_theme }}/assets/mobile/img/lock.jpg">
                 <div class="text">Already have an account?</div>
@@ -44,33 +44,93 @@
             </div>
         </div>
         <div class="holder">
-            <div class="form-group">
-                <label>First Name</label>
-                <input class="form-control" type="text" name="first_name" value="">
-            </div>
-            <div class="form-group">
-                <label>Middle Name</label>
-                <input class="form-control" type="text" name="middle_name" value="">
-            </div>
-            <div class="form-group">
-                <label>Last Name</label>
-                <input class="form-control" type="text" name="last_name" value="">
-            </div>
-            <div class="form-group">
-                <label>Date of Birth</label>
-                <input class="form-control" type="date" name="birthday" value="">
-            </div>
-            <div class="form-group">
-                <label>Gender</label>
-                <select class="form-control">
-                    <option>Male</option>
-                    <option>Female</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>E-mail</label>
-                <input class="form-control" type="email" name="">
-            </div>
+            <form method="post">
+            {{ csrf_field() }}
+            @if(Session::has('error'))
+                <div class="alert alert-danger">
+                    <ul>
+                        <li>{!! session('error') !!}</li>
+                    </ul>
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input class="form-control" type="text" name="first_name" value="{{ old('first_name') }}">
+                </div>
+                <div class="form-group">
+                    <label>Middle Name</label>
+                    <input class="form-control" type="text" name="middle_name" value="{{ old('middle_name') }}">
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input class="form-control" type="text" name="last_name" value="{{ old('last_name') }}">
+                </div>
+                <div class="form-group">
+                    <label>Date of Birth</label>
+                    <div class="form-input">
+                        <div class="date-holder">
+                            <select name="b_month" class="form-control">
+                                @for($ctr = 1; $ctr <= 12; $ctr++)
+                                <option {{ old('b_month') == $ctr ? 'selected' : '' }} value="{{ $ctr }}">{{ date("F", strtotime($ctr . "/01/17")) }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                        <div class="date-holder">
+                            <select name="b_day" class="form-control">
+                                @for($ctr = 1; $ctr <= 31; $ctr++)
+                                <option {{ old('b_day') == $ctr ? 'selected' : '' }} value="{{ $ctr }}">{{ $ctr }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                        <div class="date-holder">
+                            <select name="b_year" class="form-control">
+                                @for($ctr = date("Y"); $ctr >= (date("Y")-100); $ctr--)
+                                <option {{ old('b_year') == $ctr ? 'selected' : '' }} value="{{ $ctr }}">{{ $ctr }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Gender</label>
+                    <select name="gender" class="form-control">
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Contact</label>
+                    <input class="form-control" type="number" name="contact" value="{{ old('contact') }}">
+                </div>
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <input class="form-control" type="email" name="email" {{ old('email') }}>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input class="form-control" type="password" name="password" value="{{ old('password') }}">
+                </div>
+                <div class="form-group">
+                    <label>Repeat Password</label>
+                    <input class="form-control" type="password" name="password_confirmation" value="{{ old('password_confirmation') }}">
+                </div>
+                <div class="form-group">
+                    <div class="agreement">I agree with Brown <a href="javascript:">Terms of Use</a> and <a href="javascript:">Privacy Policy</a></div>
+                </div>
+                <div class="form-group">
+                    <button class="btn" type="submit">Sign Up</button>
+                </div>
+            </form>
         </div>
     </div>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>

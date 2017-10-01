@@ -207,7 +207,7 @@
 					<h1 class="animated fadeInDown" data-wow-delay="0.3s">www.brown.com.ph</h1>
 					<h2 class="animated fadeInUp" data-wow-delay="0.3s">Change Starts Here</h2>
 					<video class="animated zoomInDown" width="803" height="450" autoplay="">
-						<source src="/themes/{{ $shop_theme }}/img/intro.mp4" type="video/mp4">
+						<source src="/themes/{{ $shop_theme }}/img/intro2.mp4" type="video/mp4">
 					</video>
 					<!-- 16:9 aspect ratio -->
 					<!--<div style="max-width: 803px; margin: auto;">-->

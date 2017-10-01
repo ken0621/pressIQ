@@ -238,11 +238,11 @@ class Payment
 		}
 		else
 		{
-		  //  $environment = "PRODUCTION";
-		  //  PayMayaSDK::getInstance()->initCheckout($api->api_client_id, $api->api_secret_id, $environment);
+		  $environment = "PRODUCTION";
+		  PayMayaSDK::getInstance()->initCheckout($api->api_client_id, $api->api_secret_id, $environment);
 
-		    $environment = "SANDBOX";
-		    PayMayaSDK::getInstance()->initCheckout("pk-sEt9FzRUWI2PCBI2axjZ7xdBHoPiVDEEWSulD78CW9c", "sk-cJFYCGhH4stZZTS52Z3dpNbrpRyu6a9iJaBiVlcIqZ5", $environment);
+		    //$environment = "SANDBOX";
+		    //PayMayaSDK::getInstance()->initCheckout("pk-sEt9FzRUWI2PCBI2axjZ7xdBHoPiVDEEWSulD78CW9c", "sk-cJFYCGhH4stZZTS52Z3dpNbrpRyu6a9iJaBiVlcIqZ5", $environment);
 		}
 
         /* Customization */

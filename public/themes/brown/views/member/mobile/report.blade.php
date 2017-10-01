@@ -30,11 +30,15 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach($_rewards as $reward)
                         <tr>
-                            <td>#1</td>
-                            <td class="label-cell">Throw</td>
-                            <td class="numeric-cell">322</td>
+                            <td>{{ $reward->slot_no }}</td>
+                            <td class="label-cell">
+                                <div class="rewards-log">{!! $reward->log !!}</div>
+                            </td>
+                            <td class="numeric-cell"><a href="javascript:"><b>{!! $reward->display_wallet_log_amount !!}</b></a></td>
                         </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

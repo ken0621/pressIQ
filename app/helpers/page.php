@@ -178,6 +178,8 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Guilermo Tabligan";
 
 
+
+
     /* -- REPORT => AGENT TRANSACTIONS */
     $code = "report-agent-transaction";
     $nav[$page]['submenu'][$code]['label'] = "Agent Profit & Loss";
@@ -259,6 +261,24 @@ function page_list()
     $nav[$page]['submenu'][$code]['label'] = "Issue Stocks";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/issue_stocks";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "90% Working";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";  
+
+    /* -- E-COMMERCE => PRODUCT ORDERS */
+    $code = "cashier-transactions";
+    $nav[$page]['submenu'][$code]['label'] = "Transactions";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/transactions";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "90% Working";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";  
+    
+    /* -- E-COMMERCE => PRODUCT ORDERS */
+    $code = "cashier-all-transactions";
+    $nav[$page]['submenu'][$code]['label'] = "Transactions List";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/transactions_list";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "90% Working";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";  
@@ -1558,6 +1578,14 @@ function page_list()
     $nav[$page]['submenu'][$code]['label'] = "Code Documentation";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/documentation";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+    
+    $code = "developer-payment-logs";
+    $nav[$page]['submenu'][$code]['label'] = "Payment Logs";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payment_logs";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Developing";
     $nav[$page]['submenu'][$code]['developer'] = "Everyone";

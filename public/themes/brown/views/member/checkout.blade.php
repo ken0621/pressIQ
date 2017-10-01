@@ -4,6 +4,11 @@
 	<div class="top-container">
 		<div class="container">
 			<div class="top-container-content">Payment Summary</div>
+			@if(session('error'))
+			<div class="alert alert-danger">
+			  <strong>Error!</strong> {{ session('error') }}
+			</div>
+			@endif
 		</div>
 	</div>
 
@@ -22,19 +27,18 @@
 								<div class="form-container">
 									<div class="form-label">Province</div>
 									<div class="form-input">
-										<select required="required">
+										<select name="customer_state">
 											<option value="" hidden>Select Province</option>
-											<option value="volvo">Abra</option>
-											<option value="saab">Bulacan</option>
-											<option value="opel">Cagayan Province</option>
-											<option value="audi">Davao</option>
+											@foreach($_locale as $locale)
+											<option value="{{ $locale->locale_name }}">{{ $locale->locale_name }}</option>
+											@endforeach
 										</select>
 									</div>
 								</div>
 								<div class="form-container">
 									<div class="form-label">Complete Shipping Address</div>
 									<div class="form-input">
-											<textarea placeholder="Type your complete address here"></textarea>
+										<textarea name="customer_street" placeholder="Type your complete address here"></textarea>
 									</div>
 								</div>
 							</div>
@@ -81,49 +85,46 @@
 										<div class="per-title" style="border-bottom: 2px solid #6075f7;">Price</div>
 									</div>
 								</div>
-								<!-- PER ITEM SUMMARY -->
-								<div class="per-summary-content row-no-padding clearfix">
-									<div class="col-md-4">
-										<div class="per-summary-details">Brown 1</div>
+								@if($cart)
+								
+									@foreach($cart["_item"] as $c)
+									<!-- PER ITEM SUMMARY -->
+									<div class="per-summary-content row-no-padding clearfix">
+										<div class="col-md-4">
+											<div class="per-summary-details">{{ $c->item_name }}</div>
+										</div>
+										<div class="col-md-4">
+											<div class="per-summary-details">{{ $c->quantity }}</div>
+										</div>
+										<div class="col-md-4">
+											<div class="per-summary-details">{{ $c->display_subtotal }}</div>
+										</div>
 									</div>
-									<div class="col-md-4">
-										<div class="per-summary-details">1</div>
+									@endforeach
+									
+									<!-- SUMMARY TOTAL CONTAINER -->
+									<div class="total-container row clearfix">
+										<!-- SUBTOTAL -->
+										<!--<div class="col-md-6">-->
+										<!--	<div class="left-detail">Subtotal</div>-->
+										<!--</div>-->
+										<!--<div class="col-md-6">-->
+										<!--	<div class="right-detail">{{ $cart["_total"]->display_total }}</div>-->
+										<!--</div>-->
+										<!-- TOTAL -->
+										<div class="col-md-6">
+											<div class="left-detail">Total</div>
+										</div>
+										<div class="col-md-6">
+											<div class="right-detail">{{ $cart["_total"]->display_grand_total }}</div>
+										</div>
 									</div>
-									<div class="col-md-4">
-										<div class="per-summary-details">P 9,500.00</div>
-									</div>
-								</div>
-								<!-- PER ITEM SUMMARY -->
-								<div class="per-summary-content row-no-padding clearfix">
-									<div class="col-md-4">
-										<div class="per-summary-details">Eon Card</div>
-									</div>
-									<div class="col-md-4">
-										<div class="per-summary-details">1</div>
-									</div>
-									<div class="col-md-4">
-										<div class="per-summary-details">Free</div>
-									</div>
-								</div>
-								<!-- SUMMARY TOTAL CONTAINER -->
-								<div class="total-container row clearfix">
-									<!-- SUBTOTAL -->
-									<div class="col-md-6">
-										<div class="left-detail">Subtotal</div>
-									</div>
-									<div class="col-md-6">
-										<div class="right-detail">P 9,500.00</div>
-									</div>
-									<!-- TOTAL -->
-									<div class="col-md-6">
-										<div class="left-detail">Total</div>
-									</div>
-									<div class="col-md-6">
-										<div class="right-detail">P 9,500.00</div>
-									</div>
-								</div>
-								<!-- SHIPPING FEE -->
-								<div class="shipping-fee">Shipping Fee is included</div>
+									<!-- SHIPPING FEE -->
+									<div class="shipping-fee">Shipping Fee is included</div>
+								@else
+									<div class="text-center" style="padding: 50px;">CART IS EMPTY</div>
+								@endif
+							
 							</div>
 							<!-- PAYMENT OPTION -->
 							<div class="payment-option">

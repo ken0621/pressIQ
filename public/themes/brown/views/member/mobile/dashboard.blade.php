@@ -14,7 +14,6 @@
       <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,700" rel="stylesheet"> 
       <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/mobile/framework7/kitchen-sink-material/css/material-icons.css">
       <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/mobile/framework7/kitchen-sink-material/css/kitchen-sink.css">
-      <link rel="icon" href="/themes/{{ $shop_theme }}/assets/mobile/framework7/kitchen-sink-material/img/icon.png">
       {{-- FONT AWESOME --}}
       <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/font-awesome/css/font-awesome.min.css">
       <!-- Brown Custom Icon -->
@@ -23,6 +22,8 @@
       <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/mobile/css/global.css">
    </head>
    <body>
+      <input type="hidden" name="code" class="check_unused_code" value="{{ $check_unused_code or 0 }}">
+      <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
       <div class="statusbar-overlay"></div>
       <div class="panel-overlay"></div>
       <div class="panel panel-left panel-cover">
@@ -196,9 +197,9 @@
                                           <div class="text-header2">Enroll now and become one of us!</div>
                                        </div>
                                        <div class="btn-container">
-                                          <button class="product-add-cart btn-buy-a-kit" item-id="2708" quantity="1">Buy a Kit</button><br>
+                                          <button class="product-add-cart btn-buy-a-kit" type="button" onClick="location.href='/cartv2/buy_kit_mobile/{{ $item_kit_id }}'">Buy a Kit</button><br>
                                           <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
-                                          <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
+                                          <a href="#" data-popup=".popup-code" class="open-popup" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
                                        </div>
                                     </div>
                                  </div>
@@ -239,9 +240,9 @@
                                     </div>
                                     
                                     
-                                    <div class="chart-holder">
-                                       <canvas id="income_summary" class="chart-income" wallet="{{ $wallet->current_wallet }}"  payout="{{ $wallet->total_payout }}" style="max-width: 150px;" width="150" height="150"></canvas>
-                                    </div>
+                                    <!--<div class="chart-holder">-->
+                                    <!--   <canvas id="income_summary" class="chart-income" wallet="{{ $wallet->current_wallet }}"  payout="{{ $wallet->total_payout }}" style="max-width: 150px;" width="150" height="150"></canvas>-->
+                                    <!--</div>-->
                                     <div class="row">
                                        <!-- Each "cell" has col-[widht in percents] class -->
                                        <div class="col-50">
@@ -264,15 +265,15 @@
                               <div class="title"><i class="fa fa-table"></i> Reward Summary</div>
                               <div class="body">
                                  <div class="chart-legend">
-                                    <div class="row">
-                                       <div class="col-50">
-                                          <div class="holder">
-                                             <div class="color-name"><div class="color"></div><span>Pairing </br>Reward</span></span></div>
+                                    <div class="row" style="text-align: center;">
+                                       <div class="col-100">
+                                          <div class="holder" style="text-align: center; display: inline-block;">
+                                             <div class="color-name"><div class="color"></div><span>Pairing Reward</span></span></div>
                                              <div class="name">{{ $wallet->display_complan_triangle }}</div>
                                           </div>
                                        </div>
-                                       <div class="col-50">
-                                          <div class="holder">
+                                       <div class="col-100">
+                                          <div class="holder" style="text-align: center; display: inline-block;">
                                              <div class="color-name"><div class="color"></div><span>Direct Referral Bonus</span></div>
                                              <div class="name">{{ $wallet->display_complan_direct }}</div>
                                           </div>
@@ -320,14 +321,14 @@
                                  <div class="unilevel-holder">
                                     @foreach($_slot as $slot)
                                     <div class="holder">
-                                       <div class="row clearfix">
-                                          <div class="col-sm-4 text-center">
+                                       <div class="row">
+                                          <div class="col-40 text-center">
                                              <div class="label2">{{ $slot->slot_no }}</div>
                                              <div class="label3">{{ $slot->display_total_earnings }}</div>
                                              <div class="label3">{{ $slot->current_direct }} / {{ $slot->brown_next_rank_current }}</div>
                                           </div>
-                                          <div class="col-sm-8 text-center" style="margin-bottom: 5px;">ROAD TO <b>{{ $slot->brown_next_rank }}</b></div>
-                                          <div class="col-sm-4">
+                                          <div class="col-60 text-center" style="margin-bottom: 5px;">ROAD TO <b>{{ $slot->brown_next_rank }}</b></div>
+                                          <div class="col-40">
                                              @if($slot->brown_next_rank != "NO NEXT RANK")
                                              @if($slot->current_direct >= $slot->required_direct)
                                              <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">DIRECT <b>QUALIFIED</b></div>
@@ -338,7 +339,7 @@
                                              <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 40%);">NO MORE <b> NEXT RANK</b></div>
                                              @endif
                                           </div>
-                                          <div class="col-sm-4">
+                                          <div class="col-60">
                                              @if($slot->brown_next_rank != "NO NEXT RANK")
                                              @if($slot->brown_next_rank_current >= $slot->brown_next_rank_requirements)
                                              <div class="progress2" style="background: linear-gradient(to right, rgb(220, 220, 220) 100%, rgb(237, 237, 237) 100%);">GROUP <b>QUALIFIED</b></div>
@@ -357,6 +358,68 @@
                            </div>
                         @endif
                      </div>
+                  </div>
+                  <!-- Notification Popup -->
+                  <div class="popup popup-notification">
+                      <div class="congrats-holder">
+                         <div class="title">CONGRATULATIONS!</div>
+                         <div class="img">
+                             <img src="/themes/{{ $shop_theme }}/assets/mobile/img/trophy.png">
+                         </div>
+                         <div class="desc">You are one step away from your membership!</div>
+                         <div class="btn-container">
+                             <button id="btn-notification" href="#" data-popup=".popup-code" class="btn-verify-notification btn-notification open-popup" type="button">Continue</button>
+                         </div>
+                     </div>
+                  </div>
+                  <!-- Code Popup -->
+                  <div class="popup popup-code">
+                      <form method="post" class="submit-verify-sponsor">
+                         <div class="code-holder">
+                            <div class="modal-header">
+                                <div class="modal-title"><i class="fa fa-star"></i> SPONSOR</div>
+                            </div>
+                            <div class="labels">Enter <b>Nickname of Sponsor</b> or <b>Slot Number</b></div>
+                            <input required="required" class="input-verify-sponsor text-center" name="verify_sponsor" type="text" placeholder="">
+                            <div class="output-container">
+                            </div>
+                            <div class="btn-container">
+                                <button id="btn-verify" class="btn-verify btn-verify-sponsor"><i class="fa fa-check"></i> VERIFY SPONSOR</button>
+                            </div>
+                         </div>
+                     </form>
+                  </div>
+                  <!-- Verification Popup -->
+                  <div class="popup popup-verification">
+                      <div class="verification-holder">
+                         <div class="modal-header">
+                             <div class="modal-title"><i class="fa fa-shield"></i> CODE VERIFICATION</div>
+                         </div>
+                         <div class="modal-body">
+                             <div class="message message-return-code-verify"></div>
+                             <form method="post" class="code-verification-form">
+                                 <div>
+                                     <div class="labeld">Pin Code</div>
+                                     <input class="input input-pin text-center" name="pin" type="text" value="{{$mlm_pin or ''}}">
+                                 </div>
+                                 <div>
+                                     <div class="labeld">Activation</div>
+                                     <input class="input input-activation text-center" name="activation" type="text" value="{{$mlm_activation or ''}}">
+                                 </div>
+                                 <div class="btn-container">
+                                     <button id="btn-proceed-2" class="btn-proceed-2" type='submit'><i class="fa fa-angle-double-right"></i> Proceed</button>
+                                 </div>
+                             </form>
+                         </div>
+                      </div>
+                  </div>
+                  <!-- Final Verification Popup -->
+                  <div class="popup final-popup-verification">
+                      <form method="post" class="submit-verify-sponsor">
+                         <div class="verification-holder">
+                            <div class="load-final-verification"></div>
+                         </div>
+                     </form>
                   </div>
                </div>
             </div>
@@ -536,5 +599,161 @@
       <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
       <!-- GLOBAL JS -->
       <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/mobile/js/global.js"></script>
+      <script type="text/javascript">
+         var myApp = new Framework7();
+ 
+         var $$ = Dom7;
+      	add_event_submit_verify_sponsor();
+      	add_event_submit_verify_code();
+      	add_event_process_slot_creation();
+          
+         /*Auto pop-up*/
+      	if($('.check_unused_code').val() != 0)
+      	{
+      		myApp.popup('.popup-notification');
+      	}
+      	function add_event_submit_verify_sponsor()
+      	{
+      		$(".submit-verify-sponsor").submit(function(e)
+      		{
+      			if($(e.currentTarget).find(".btn-verify-sponsor").hasClass("use"))
+      			{
+      				myApp.popup('.popup-verification');
+      				setTimeout(function()
+      				{
+      				   myApp.popup('.popup-verification');
+      				}, 350);
+      				
+      				if($('.input-pin').val() != '')
+      				{
+      					$$('.btn-proceed-2').click();	
+      				}
+      			}
+      			else
+      			{
+      				action_verify_sponsor();
+      			}
+      			
+      			return false;
+      		});
+      	}	
+      	function action_verify_sponsor()
+      	{
+      		$(".submit-verify-sponsor").find(".btn-verify-sponsor").html('<i class="fa fa-spinner fa-pulse fa-fw"></i> VERIFYING SPONSOR').attr("disabled", "disabled");
+      		$(".submit-verify-sponsor").find("input").attr("disabled", "disabled");
+      
+      		var form_data = {};
+      		form_data._token = $("._token").val();
+      		form_data.verify_sponsor = $(".input-verify-sponsor").val();
+      
+      		$.ajax(
+      		{
+      			url:"/members/verify-sponsor",
+      			data:form_data,
+      			type:"post",
+      			success: function(data)
+      			{
+      				$(".submit-verify-sponsor").find(".output-container").html(data);
+      				$(".card").hide().slideDown('fast');
+      
+      				if($(".card").length > 0)
+      				{
+      					$(".submit-verify-sponsor").find(".btn-verify-sponsor").html('<i class="fa fa-check"></i> USE THIS SPONSOR').removeAttr("disabled").addClass("use");
+      				}	
+      				else
+      				{
+      					$(".submit-verify-sponsor").find("input").removeAttr("disabled");
+      					$(".submit-verify-sponsor").find(".btn-verify-sponsor").html('<i class="fa fa-check"></i> VERIFY SPONSOR').removeAttr("disabled").removeClass("use");
+      				}
+      			},
+      			error: function()
+      			{
+      				alert("An ERROR occurred. Please contact administrator.");
+      				$(".submit-verify-sponsor").find("input").removeAttr("disabled");
+      				$(".submit-verify-sponsor").find(".btn-verify-sponsor").html('<i class="fa fa-check"></i> VERIFY SPONSOR').removeAttr("disabled").removeClass("use");
+      			}
+      		});
+      	}
+      	function add_event_submit_verify_code()
+      	{
+      		$(".code-verification-form").submit(function()
+      		{
+      			action_verify_code();
+      			return false;
+      		});
+      	}
+      	function action_verify_code()
+      	{
+      		var form_data = {};
+      		form_data._token = $("._token").val();
+      		form_data.pin = $(".input-pin").val();
+      		form_data.activation = $(".input-activation").val();
+      
+      		/* START LOADING AND DISABLE FORM */
+      		$(".code-verification-form").find(".btn-proceed-2").html('<i class="fa fa-spinner fa-pulse fa-fw"></i> VERIFYING').attr("disabled", "disabled");
+      		$(".code-verification-form").find("select").attr("disabled", "disabled");
+      
+      		$.ajax(
+      		{
+      			url:"/members/verify-code",
+      			data:form_data,
+      			type:"post",
+      			success: function(data)
+      			{
+      				$(".message-return-code-verify").html(data);
+      				$(".code-verification-form").find(".btn-proceed-2").html('<i class="fa fa-angle-double-right"></i> PROCEED').removeAttr("disabled");
+      
+      				if(data == "")
+      				{
+      					$(".code-verification-form").find("input").val("");
+      			// 		$("#proceed-modal-2").modal('hide');
+      					setTimeout(function()
+      					{
+      				      myApp.popup('.final-popup-verification');
+      						$(".final-popup-verification").find(".load-final-verification").html('<div class="loading text-center" style="padding: 150px;"><i class="fa fa-spinner fa-pulse fa-fw fa-3x"></i></div>');
+      						$(".load-final-verification").load("/members/final-verify");
+      					}, 350);
+      				}
+      			},
+      			error: function(data)
+      			{
+      				alert("An ERROR occurred. Please contact administrator.");
+      				$(".code-verification-form").find(".btn-proceed-2").html('<i class="fa fa-angle-double-right"></i> PROCEED').removeAttr("disabled");
+      			}
+      		});
+      
+      	}
+      	function add_event_process_slot_creation()
+      	{
+      		$("body").on("click", ".process-slot-creation", function()
+      		{
+      			var form_data = {};
+      			form_data._token = $("._token").val();
+      
+      			$(".process-slot-creation").html('<i class="fa fa-spinner fa-pulse fa-fw"></i> Processing');
+      
+      			$.ajax(
+      			{
+      				url:"/members/final-verify",
+      				dataType:"json",
+      				type:"post",
+      				data: form_data,
+      				success: function(data)
+      				{
+      					if(data == "success")
+      					{
+      						// $("#proceed-modal-1").modal('hide');
+      						window.location.reload();
+      					}
+      					else
+      					{
+      						alert(data);
+      						window.location.reload();
+      					}
+      				}
+      			});
+      		});
+      	}
+      </script>
    </body>
 </html>

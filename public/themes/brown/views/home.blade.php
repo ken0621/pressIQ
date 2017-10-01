@@ -206,9 +206,13 @@
 				<div class="top-container">
 					<h1 class="animated fadeInDown" data-wow-delay="0.3s">www.brown.com.ph</h1>
 					<h2 class="animated fadeInUp" data-wow-delay="0.3s">Change Starts Here</h2>
-					<video class="animated zoomInDown" width="803" height="450" autoplay="">
-						<source src="/themes/{{ $shop_theme }}/img/intro.mp4" type="video/mp4">
-					</video>
+					<!--<video class="animated zoomInDown" width="803" height="450" autoplay="">-->
+					<!--	<source src="/themes/{{ $shop_theme }}/img/intro.mp4" type="video/mp4">-->
+					<!--</video>-->
+					<!-- 16:9 aspect ratio -->
+					<div class="embed-responsive embed-responsive-16by9 animated zoomInDown" style="margin-top: 25px;">
+					  <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/nUjdRoNaNYE?autoplay=1&showinfo=0&controls=0&loop=1&disablekb=1&modestbranding=1&playlist=nUjdRoNaNYE"></iframe>
+					</div>
 					<h3 class="animated fadeInUp">It’s not the color of your skin, but the color of your heart.</h3>
 					<div class="join-button animated fadeInUp">JOIN THE MOVEMENT</div>
 				</div>

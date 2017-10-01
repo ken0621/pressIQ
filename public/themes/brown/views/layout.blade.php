@@ -67,7 +67,7 @@
     <header>
         <div class="header-top">
             <div class="container">
-                <a class="holder">GET THE APP</a>
+                <!--<a class="holder">GET THE APP</a>-->
                 <a href="/about" class="holder">COMPANY</a>
                 @if($customer)
                 <div style="display: inline-block; vertical-align: middle;" class="dropdown">
@@ -140,7 +140,7 @@
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
                             <li class="dropdown">
-                                <a href="#" class="notif-holder dropdown-toggle" data-toggle="dropdown">
+                                <a href="#" class="notif-holder dropdown-toggle hidden" data-toggle="dropdown">
                                     <div class="brown-icon-bell-o"></div> <span class="badge">500</span>
                                 </a>
                                 <ul class="dropdown-menu notif">
@@ -229,7 +229,7 @@
                     </div>
                 </div>
                 <div class="right">
-                    <div class="dropdown">
+                    <div class="dropdown hidden">
                         <a href="#" class="notif-holders dropdown-toggle" data-toggle="dropdown">
                             <div class="brown-icon-bell-o" style="font-size: 20px"></div> <span class="badge">500</span>
                         </a>
@@ -292,7 +292,7 @@
                             </li>
                         </ul>
                     </div>
-                    <a href="#" class="cart-holder show-cart" style="text-decoration: none;">
+                    <a href="#" class="cart-holder show-cart hidden" style="text-decoration: none;">
                         <!-- <img style="width: 30px; height: 20px;" src="/themes/{{ $shop_theme }}/img/cart-blur.png"> <span class="badge">500</span> -->
                         <div class="brown-icon-shopping-cart"></div> <span class="badge">500</span>
                     </a>
@@ -312,11 +312,11 @@
                         <ul class="dropdown-menu dropdown-menu-right profile-menu">
                             <li>
                                 <div class="profile-pic">
-                                    <img src="/themes/{{ $shop_theme }}/img/profile-nav.png">
+                                    <img src="{{ $profile_image }}">
                                 </div>
                                 <div class="profile-text">
-                                    <div class="name">Mr. Brown Lorem Ipsum</div>
-                                    <div class="email">brownandproud@gmail.com</div>
+                                    <div class="name">{{ $customer->first_name }} {{ $customer->last_name }}</div>
+                                    <div class="email">{{ $customer->email }}</div>
                                     <div class="button-holder">
                                         <div class="clearfix">
                                             <button class="btn btn-brown">Profile</button>

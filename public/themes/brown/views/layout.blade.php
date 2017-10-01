@@ -58,7 +58,7 @@
         <a class="{{ Request::segment(1) == "members" ? "active" : "" }}" href="/members/register">Register</a>
         @endif
         <a class="{{ Request::segment(1) == "" ? "active" : "" }}" href="/product">Brown</a>
-        <a class="{{ Request::segment(1) == "product" ? "active" : "product" }}" href="/product">Phone Accessories</a>
+        <!--<a class="{{ Request::segment(1) == "product" ? "active" : "product" }}" href="/product">Phone Accessories</a>-->
         <a href="#">Internet Of Things</a>
         <a href="#">Health Technology</a>
     </div>
@@ -134,7 +134,7 @@
                             <li class="{{ Request::segment(1) == "members" ? "active" : "" }}"><a href="/members">My Account</a></li>
                             @endif
                             <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a href="/">Brown</a></li>
-                            <li class="{{ Request::segment(1) == "product" ? "active" : "product" }}"><a href="/product">Phone Accessories</a></li>
+                            <!--<li class="{{ Request::segment(1) == "product" ? "active" : "product" }}"><a href="/product">Phone Accessories</a></li>-->
                             <li><a href="#">Internet Of Things</a></li>
                             <li><a href="#">Health Technology</a></li>
                         </ul>
@@ -222,7 +222,7 @@
                     <div class="list-category hide">
                         <div class="container">
                             <a href="/" class="head-button link-nav {{ Request::segment(1) == '' ? 'active' : '' }}" id="home">Brown</a>
-                            <a href="javascript:">Phone Accessories</a>
+                            <!--<a href="javascript:">Phone Accessories</a>-->
                             <a href="javascript:">Internet Of Things</a>
                             <a href="javascript:">Health Technology</a>
                         </div>

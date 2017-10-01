@@ -260,7 +260,7 @@ class ShopMemberController extends Shop
             $data['fb_login_url'] = FacebookGlobals::get_link_register($this->shop_info->shop_id);
         }
 
-        if(request("pass") != "123")
+        if(request("pass") != "456")
         {
             return view("member.coming");
         }

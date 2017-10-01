@@ -181,8 +181,8 @@ class MemberSlotGenealogy
                                             <img src="/assets/slot_genealogy/member/img/default-image.jpg" alt="" />
                                         </div>
                                         <div id="cont">
-                                            <div><b>' . strtoupper($slot_info->slot_id) . '</b></div>
-                                            <div>' . strtoupper($slot_info->first_name) . ' </div>
+                                            <div><b>' . strtoupper($slot_info->slot_no) . '</b></div>
+                                            <div>'  . ' </div>
                                         </div>
                                         <div>
                                         </div>
@@ -200,8 +200,8 @@ class MemberSlotGenealogy
                                             <img src="/assets/slot_genealogy/member/img/default-image.jpg">
                                         </div>
                                         <div id="cont">
-                                            <div><b>' . strtoupper($slot_info->slot_id) . '</b></div>  
-                                            <div>' . strtoupper($slot_info->first_name) . ' </div>
+                                            <div><b>' . strtoupper($slot_info->slot_no) . '</b></div>  
+                                            <div>' . ' </div>
                                         </div>
                                         <div>
                                         </div>
@@ -255,8 +255,8 @@ class MemberSlotGenealogy
                                             <img src="/assets/slot_genealogy/member/img/default-image.jpg" alt="" />
                                         </div>
                                         <div id="cont">
-                                            <div><b>' . strtoupper($slot_info->slot_id) . '</b></div>
-                                            <div>' . strtoupper($slot_info->first_name) . ' </div>
+                                            <div><b>' . strtoupper($slot_info->slot_no) . '</b></div>
+                                            <div>' . ' </div>
                                         </div>
                                         <div>' . "L:".$l." R:".$r.'</div>
                                         <div>
@@ -275,14 +275,14 @@ class MemberSlotGenealogy
                                             <img src="/assets/slot_genealogy/member/img/default-image.jpg">
                                         </div>
                                         <div id="cont">
-                                            <div><b>' . strtoupper($slot_info->slot_id) . '</b></div> 
-                                            <div>' . strtoupper($slot_info->first_name) . ' </div>
+                                            <div><b>' . strtoupper($slot_info->slot_no) . '</b></div> 
+                                            <div>' . ' </div>
                                         </div>
                                         <div>' . "L:".$l."</br>R:".$r.'</div>
                                         <div>
                                         </div>
                                     </div>
-                                    <div class="id">' . $slot_info->slot_id . '</div>
+                                    <div class="id">' . $slot_info->slot_no . '</div>
                                 </span>
                                 <i class="downline-container"></i>
                             </li>';             

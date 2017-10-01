@@ -581,7 +581,7 @@ class Payment
                     Transaction::consume_in_warehouse($shop_id, $transaction_list_id);
                     
                 }
-                elseif($data["paymentStatus"] == "PAYMENT_FAIL" || $data["paymentStatus"] == "AUTH_FAILURE")
+                elseif($data["paymentStatus"] == "PAYMENT_FAIL" || $data["paymentStatus"] == "AUTH_FAILURE" || $data["paymentStatus"] = "PAYMENT_FAILURE")
                 {
                     $transaction_type                                   = "FAILED";
                     $transaction_id                                     = $transaction_list->transaction_id;

@@ -30,7 +30,20 @@
 	    </div>
 
 	    <!-- BOTTOM DASHBOARD -->
-	    <div class="dashboard-bottom" style="overflow: hidden;">
+		<div class="dash-bot row clearfix">
+			<div class="col-md-3">
+				<img src="/themes/{{ $shop_theme }}/img/nonmember-ad.jpg" style="width: 100%;">
+			</div>
+			<div class="col-md-9">
+				<h1>The Brown Phone</h1>
+				<p>The Brown phone is your portal to a new world full of creativity and opportunities, bringing you closer to artists and entrepreneurs, while keeping you updated on the latest news, hottest trends, and innovative products and services, making your life better and more inspiring.</p>
+				<h2>With Premium Content and Rewards App</h2>
+				<p><i class="fa fa-circle" aria-hidden="true"></i>With Brown App and Portal</p>
+				<p><i class="fa fa-circle" aria-hidden="true"></i>Agila Rewards Ready</p>
+			</div>
+		</div>
+
+	    <!-- <div class="dashboard-bottom" style="overflow: hidden;">
 	        <div class="animated fadeInRight text-header">Profile Information</div>
 	        <div class="animated fadeInRight row clearfix">
 	            <div class="col-md-4">
@@ -79,7 +92,7 @@
 	                </div>
 	            </div>
 	        </div>
-	    </div>
+	    </div> -->
 	</div>
 @else
 	<div class="dashboard" style="overflow: hidden;">

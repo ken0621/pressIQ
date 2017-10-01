@@ -236,6 +236,36 @@ $text-dark: #272c2f;
 	}
 }
 
+.dash-bot 
+{
+	padding: 25px 0px;
+
+	h1 
+	{
+		font-size: 28px;
+		font-weight: $regular;
+	}
+	h2 
+	{
+		font-size: 21px;
+		font-weight: $regular;
+	}
+	p 
+	{
+		margin-top: 10px;
+		font-size: 15px;
+		font-weight: $light;
+		color: $text-light;
+
+		i 
+		{
+			font-size: 5px;
+			padding: 5px;
+			vertical-align: middle;
+		}
+	}
+}
+
 /* Enter a code */
 .popup-enter-a-code
 {

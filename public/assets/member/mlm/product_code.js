@@ -9,7 +9,7 @@ function credit_memo(){
 	{
 		iniatilize_select();
 		draggable_row.dragtable();
-
+		
 		event_remove_tr();
 		event_accept_number_only();
 		event_compute_class_change();

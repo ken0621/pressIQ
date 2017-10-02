@@ -3433,15 +3433,15 @@ class Payroll2
 		{
 			if ($group->payroll_group_cola_basis == "Daily Computation") 
 			{
-
 				$return = Payroll2::cutoff_breakdown_cola($return, $data);
 			}
-
+			else if($group->payroll_group_cola_basis == "Daily Fixed") 
+			{
+				$return = Payroll2::cutoff_daily_fixed_cola($return, $data);
+			}
 			else if($group->payroll_group_cola_basis == "Monthly Fixed")
 			{
-
 				$return = Payroll2::cutoff_fixed_montly_cola($return, $data);
-
 			}
 			else if($group->payroll_group_cola_basis == "Pro Rated Monthly")
 			{
@@ -3467,9 +3467,6 @@ class Payroll2
 		$return = Payroll2::cutoff_breakdown_compute_taxable_salary($return, $data);
 
 		$return = Payroll2::cutoff_breakdown_compute_tax($return, $data);	
-		
-	
-
 		$return = Payroll2::cutoff_breakdown_compute_net($return, $data);
 		
 		
@@ -3478,7 +3475,6 @@ class Payroll2
 
 	public static function cutoff_breakdown_compute_time($return, $data)
 	{
-
 		$show_time_breakdown = array('target_hours','time_spent', 'undertime', 'overtime','late','night_differential','leave_hours');
 
 		$return->_time_breakdown['day_spent']["float"] = 0;
@@ -3486,7 +3482,6 @@ class Payroll2
 
 		$return->_time_breakdown['absent']["float"] = 0;
 		$return->_time_breakdown['absent']["time"] = "No Absent";
-
 
 		//dd($data["cutoff_input"]);
 		foreach($data["cutoff_input"] as $cutoff_input)
@@ -4146,7 +4141,6 @@ class Payroll2
 			{
 				$divisor = 1;
 			}
-			
 			/* CHECK EXCEED MONTH */
 			$_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();
 			$total_cutoff = 0;

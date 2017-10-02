@@ -3433,13 +3433,15 @@ class Payroll2
 		{
 			if ($group->payroll_group_cola_basis == "Daily Computation") 
 			{
-				dd();
+
 				$return = Payroll2::cutoff_breakdown_cola($return, $data);
 			}
-				
+
 			else if($group->payroll_group_cola_basis == "Monthly Fixed")
 			{
+
 				$return = Payroll2::cutoff_fixed_montly_cola($return, $data);
+
 			}
 			else if($group->payroll_group_cola_basis == "Pro Rated Monthly")
 			{
@@ -4381,9 +4383,9 @@ class Payroll2
 	{
 
 		$total_cola = 0;
-
-		if ($data["cutoff_input"][$data["start_date"]]->compute_type=="monthly" || $data["cutoff_input"][$data["start_date"]]->compute_type=="fix" ) 
-		{
+		// dd($data["salary"]->monthly_cola);
+		// if ($data["cutoff_input"][$data["start_date"]]->compute_type=="monthly" || $data["cutoff_input"][$data["start_date"]]->compute_type=="fix" ) 
+		// {
 			if ($data["period_category"]=="Semi-monthly") 
 			{
 				$total_cola = @($data["salary"]->monthly_cola/2);
@@ -4396,7 +4398,8 @@ class Payroll2
 			{
 				$total_cola = $data["salary"]->monthly_cola;
 			}
-		}
+		// }
+		
 
 		$val["label"] = "COLA";
 		$val["type"] = "additions";

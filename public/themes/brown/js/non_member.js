@@ -72,6 +72,14 @@ function non_member()
 					$("#proceed-modal-2").modal('show');
 				}, 350);
 				
+				if($('.input-pin').val() != '')
+				{
+					setTimeout(function()
+					{
+						$('#btn-proceed-2').trigger('click');	
+					}, 1000);
+					
+				}
 			}
 			else
 			{
@@ -263,7 +271,7 @@ function non_member()
 					}
 					else
 					{
-						alert(data);
+						console.log(data);
 						window.location.reload();
 					}
 				}

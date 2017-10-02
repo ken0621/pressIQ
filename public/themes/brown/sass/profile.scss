@@ -1,9 +1,11 @@
-$content-text: 'Arimo', sans-serif;
+$content-text: 'Rubik', sans-serif;
+$light: 300;
 $regular: 400;
+$medium: 500;
 $semi-bold: 600;
 $bold: 700;
-$text-light: #777;
-$text-dark: #272c2f;
+$text-light: #585858;
+$text-dark: #404040;
 
 
 @mixin transition($transition)
@@ -45,7 +47,7 @@ $text-dark: #272c2f;
 		{
 			color: $text-dark;
 			font-size: 17px;
-			font-weight: $bold;
+			font-weight: $medium;
 			text-align: center;
 		}
 		.sub
@@ -88,7 +90,7 @@ $text-dark: #272c2f;
 		.status-number
 		{
 			color: $text-dark;
-			font-weight: $bold;
+			font-weight: $medium;
 			font-size: 17px;
 		}
 		.status-label
@@ -119,9 +121,9 @@ $text-dark: #272c2f;
 		.title
 		{
 			color: $text-dark;
-			font-size: 17px;
+			font-size: 18px;
 			margin-bottom: 25px;
-			font-weight: $bold;
+			font-weight: $medium;
 		}
 		table
 		{
@@ -132,7 +134,7 @@ $text-dark: #272c2f;
 			td:first-child
 			{
 				color: $text-dark;
-				font-weight: $bold;
+				font-weight: $medium;
 				font-size: 15px;
 				width: 130px;
 				img
@@ -180,9 +182,9 @@ $text-dark: #272c2f;
 		{
 			display: block;
 			padding: 25px 0;
-			color: #344049;
+			color: $text-dark;
 			font-size: 13px;
-			font-weight: 600;
+			font-weight: $medium;
 			text-decoration: none;
 			outline: none;
 			img
@@ -287,7 +289,7 @@ $text-dark: #272c2f;
 						border-radius: 2.5px;
 						padding: 10px 25px;
 						color: #fff;
-						font-weight: $bold;
+						font-weight: $medium;
 						font-size: 13px;
 
 						@media screen and (min-width: 150px)
@@ -316,8 +318,8 @@ $text-dark: #272c2f;
 					}
 					.name
 					{
-						color: #344049;
-						font-weight: 600;
+						color: $text-dark;
+						font-weight: $medium;
 						font-size: 13px;
 						margin: 25px 0;
 						margin-bottom: 15px;
@@ -329,12 +331,12 @@ $text-dark: #272c2f;
 						border-radius: 0;
 						padding: 5px 50px;
 						font-size: 13px;
-						font-weight: 600;
+						font-weight: $medium;
 					}
 					.file
 					{
 						margin-top: 15px;
-						color: #344049;
+						color: $text-dark;
 						font-size: 13px;
 					}
 				}

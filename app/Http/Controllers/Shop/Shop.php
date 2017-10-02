@@ -20,6 +20,7 @@ use App\Models\Tbl_membership_code;
 use App\Globals\Mlm_member;
 use App\Globals\Customer;
 use App\Globals\MLM2;
+use App\Globals\Item;
 
 class Shop extends Controller
 {

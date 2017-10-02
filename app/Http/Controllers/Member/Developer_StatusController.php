@@ -4,10 +4,12 @@ use App\Http\Controllers\Controller;
 use DB;
 use Request;
 use App\Globals\Item_code;
+use App\Globals\Payment;
 use App\Models\Tbl_item_code_invoice;
 use App\Models\Tbl_journal_entry_line;
 use App\Models\Tbl_journal_entry;
 use App\Models\Tbl_tree_sponsor;
+use App\Models\Tbl_payment_logs;
 use App\Globals\Mlm_compute;
 use App\Globals\Mlm_tree;
 use App\Globals\Mlm_complan_manager;
@@ -244,5 +246,18 @@ class Developer_StatusController extends Member
 		}
 
 		dd($platinum);
+	}
+	public function payment_logs()
+	{
+		$data["page"]			= "Paymnet Logs";
+		$shop_id				= $this->user_info->shop_id;
+		$data["_payment_logs"]	=  Payment::logs($shop_id, 100);
+		return view('member.developer.payment_logs', $data);
+	}
+	public function payment_logs_data($payment_log_id)
+	{
+		$data = Tbl_payment_logs::where("payment_log_id", $payment_log_id)->value('payment_log_data');
+		$data = unserialize($data);
+		dd($data);
 	}
 }

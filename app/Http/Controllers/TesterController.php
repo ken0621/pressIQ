@@ -13,7 +13,9 @@ use App\Models\Tbl_user;
 use App\Models\Tbl_item;
 use App\Models\Tbl_shop;
 use App\Models\Tbl_ec_product;
-    
+use App\Models\Tbl_ec_order;
+use App\Models\Tbl_transaction;
+use App\Models\Tbl_transaction_list;
 use App\Globals\Accounting;
 use App\Globals\Account;
 use App\Globals\Invoice;
@@ -25,11 +27,12 @@ use App\Globals\Sms;
 use App\Globals\PayrollJournalEntries;
 use App\Globals\Payroll;
 use App\Globals\Report;
+use App\Globals\Cart2;
 use App\Globals\Utilities;
 use Facebook\Facebook as Facebook;
 use Facebook\Exceptions\FacebookResponseException as FacebookResponseException;
 use Facebook\Exceptions\FacebookSDKException as FacebookSDKException;
-
+use App\Globals\Transaction;
 use Request;
 use Carbon\Carbon;
 use Session;
@@ -40,6 +43,39 @@ use DB;
 
 class TesterController extends Controller
 {
+    public function getBrownInvoiceNumber()
+    {
+        $_invoice = Tbl_ec_order::where("invoice_number", "!=", null)->orderBy("invoice_number", "asc")->get();
+         Tbl_transaction::where("shop_id", 5)->delete();
+        foreach($_invoice as $invoice)
+        {
+            $customer = Tbl_customer::where("customer_id", $invoice->customer_id)->first();
+            $shop_id = 5;
+            
+            Cart2::clear_cart();
+            Cart2::add_item_to_cart($shop_id, 57, 1);
+
+            echo "<br>" . $invoice->invoice_number . " (" . $customer->first_name . " " . $customer->last_name . ")";
+            
+            $transaction_new["transaction_reference_table"]     = "tbl_customer";
+            $transaction_new["transaction_reference_id"]        = $invoice->customer_id;
+            $transaction_type                                   = "ORDER";
+            $transaction_date                                   = Carbon::now();
+            $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, "-");
+            
+            $tr_info = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->first();
+            
+            
+            $transaction_id = $tr_info->transaction_id;
+            
+            $transaction_new["transaction_reference_table"]     = "tbl_customer";
+            $transaction_new["transaction_reference_id"]        = $invoice->customer_id;
+            $transaction_type                                   = "RECEIPT";
+            $transaction_date                                   = Carbon::now();
+            
+            Transaction::create($shop_id, $transaction_id, $transaction_type, $transaction_date, "+", $tr_info->transaction_list_id, $invoice->invoice_number);
+        }
+    }
     public function connection_test()
     {
         $_test = DB::table("tbl_connection_test")->orderBy("connection_test_id", "desc")->limit(5)->get();

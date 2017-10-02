@@ -2612,6 +2612,7 @@ class Payroll2
 		$return->subtotal_after_addition	= $subtotal_after_addition;
 		$return->rendered_days 				= @($time_spent/$target_float);
 		$return->cola						= $cola->cola_day_pay;
+		$return->cola_daily 				= $cola->cola_daily;
 		$return->total_day_income_plus_cola = $cola->cola_plus_daily_rate;
 		$return->total_day_income			= $total_day_income;
 		$return->total_day_cola 			= 0;
@@ -2624,6 +2625,7 @@ class Payroll2
 		$return->rendered_tardiness			= @(($late_float + $undertime_float) / $target_float) + $absent_float;
 
 		return $return;
+
 	}
 	
 	public static function cutoff_compute_gross_pay($compute_type, $cutoff_rate, $cutoff_cola, $cutoff_target_days = 0,  $_date_compute)
@@ -2774,6 +2776,7 @@ class Payroll2
 		$target_float 			= Self::time_float($_time['target_hours']);
 		$daily_rate_plus_cola	= $daily_rate + $cola;
 		$cola_rate_per_hour 	= @($cola/$target_float);
+		$daily_cola 			= $cola;
 		
 		/* GET INITIAL DATA */
 		$param_rate 			= Tbl_payroll_overtime_rate::where('payroll_group_id', $group_id)->get()->toArray();
@@ -2802,6 +2805,12 @@ class Payroll2
 			$cola_daily_deduction = $cola;
 			$cola = $cola - $cola;
 		}
+
+		//for daily fixed cola
+		if ($time_spent==0) 
+		{
+			$daily_cola = $daily_cola - $daily_cola;
+		}
 		
 		/*breakdown deduction*/
 		$late_float			= Self::time_float($_time['late']);
@@ -2818,12 +2827,12 @@ class Payroll2
 			$cola_daily_deduction = ($undertime_float * $cola_rate_per_hour);
 			$cola = $cola - ($undertime_float * $cola_rate_per_hour);
 		}
-	
+		$return->cola_daily 		  = $daily_cola;
 		$return->cola_day_pay 		  = $cola;
 		$return->cola_plus_daily_rate = $daily_rate+$cola;
 		$return->cola_daily_deduction = $cola_daily_deduction;
 		$return->cola_daily_addition  = $cola_daily_addition;
-		$return->cola_percentile = @($cola / ($daily_rate+$cola));
+		$return->cola_percentile 	  = @($cola / ($daily_rate+$cola));
 		
 		return $return;
 		
@@ -4373,6 +4382,36 @@ class Payroll2
 	}
 
 
+	public static function cutoff_daily_fixed_cola($return, $data)
+	{
+		$total_cola = 0;
+	
+		// if ($data["cutoff_input"][$data["start_date"]]->compute_type=="daily") 
+		// {
+			foreach($data["cutoff_input"] as $cutoff_input)
+			{
+				$total_cola += $cutoff_input->compute->cola_daily;
+			}
+		// }
+
+		$val["label"] = "COLA";
+		$val["type"] = "additions";
+		$val["amount"] = $total_cola;
+		$val["add.gross_pay"] = true;
+		$val["deduct.gross_pay"] = false;
+		$val["add.taxable_salary"] = false;
+		$val["deduct.taxable_salary"] = false;
+		$val["add.net_pay"] = false;
+		$val["deduct.net_pay"] = false;
+		array_push($return->_breakdown, $val);
+		$val = null;
+
+		return $return;
+	}
+
+	
+
+
 	public static function cutoff_fixed_montly_cola($return, $data)
 	{
 
@@ -4394,7 +4433,6 @@ class Payroll2
 			}
 		// }
 		
-
 		$val["label"] = "COLA";
 		$val["type"] = "additions";
 		$val["amount"] = $total_cola;

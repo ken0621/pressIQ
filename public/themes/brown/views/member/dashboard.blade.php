@@ -38,7 +38,7 @@
 			<div class="col-md-9">
 				<h1 class="wow fadeInDown">The Brown Phone</h1>
 				<p class="wow fadeInRight">The Brown phone is your portal to a new world full of creativity and opportunities, bringing you closer to artists and entrepreneurs, while keeping you updated on the latest news, hottest trends, and innovative products and services, making your life better and more inspiring.</p>
-				<h2 class="animated fadeInDown" >With Premium Content and Rewards App</h2>
+				<h2 class="wow fadeInDown" >With Premium Content and Rewards App</h2>
 				<p class="wow fadeInRight"><i class="fa fa-circle" aria-hidden="true"></i>With Brown App and Portal</p>
 				<p class="wow fadeInRight"><i class="fa fa-circle" aria-hidden="true"></i>Agila Rewards Ready</p>
 			</div>

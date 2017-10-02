@@ -164,9 +164,9 @@
                     <div class="per-image-container">
                         <img src="/themes/{{ $shop_theme }}/img/we-believe.png">
                         <div class="content-text-container">
-                            <h1>We Believe</h1>
+                            <h1 class="wow fadeInDown" data-wow-delay="0.1s">We Believe</h1>
                             <div class="title-line"></div>
-                            <p class="wow fadeInLeft">
+                            <p class="wow fadeInLeft" data-wow-delay="0.1s">
                                 JCA International Corporation believes that natural health and wellness has the ability to change the lives of humanity. This inspired its founders to introduce a product that will provide opportunities to aspiring entrepreneurs ways.
                             </p>
                         </div>
@@ -177,9 +177,9 @@
                     <div class="per-image-container">
                         <img src="/themes/{{ $shop_theme }}/img/we-are-safe.png">
                         <div class="content-text-container">
-                            <h1>We Believe</h1>
+                            <h1 class="wow fadeInDown" data-wow-delay="0.3s">We Believe</h1>
                             <div class="title-line"></div>
-                            <p class="wow fadeInLeft">
+                            <p class="wow fadeInLeft" data-wow-delay="0.3s">
                                 Instead of the usual chemical-based beauty and wellness products, JCA International Corporation’s products are 100% safe and organic that will definitely have an everlasting benefits to its buyers and users.
                             </p>
                         </div>
@@ -190,9 +190,9 @@
                     <div class="per-image-container">
                         <img src="/themes/{{ $shop_theme }}/img/we-aim.png">
                         <div class="content-text-container">
-                            <h1>We Believe</h1>
+                            <h1 class="wow fadeInDown" data-wow-delay="0.5s">We Believe</h1>
                             <div class="title-line"></div>
-                            <p class="wow fadeInLeft">
+                            <p class="wow fadeInLeft" data-wow-delay="0.5s">
                                 Lastly, JCA Wellness International Corporation aims to deliver these broad selection of safe and organic products that will showcase its commitment to innovate today’s beauty and wellness.
                             </p>
                         </div>
@@ -272,18 +272,22 @@
                         <div id="vision" class="mission-vision-container hide">
                             <div class="content-container row clearfix">
                                 <div class="col-md-6">
-
-                                    <li class="animated fadeInLeft bulleted-list">
-                                        <p class="animated fadeInLeft content">JCA Wellness International Corporation is working towards seeing itself grow into one of the most well-known network market that will expand globally.</p>
+                                    <li class="wow fadeInLeft bulleted-list" data-wow-delay="0.1s">
+                                        <p class="list-content">
+                                        JCA Wellness International Corporation is working towards seeing itself grow into one of the most well-known network market that will expand globally.
+                                        </p>
                                     </li>
-                                    
-                                    <!-- <p class="animated fadeInLeft content">JCA Wellness International Corporation is working towards seeing itself grow into one of the most well-known network market that will expand globally.</p> -->
                                 </div>
                                 <div class="col-md-6">
-                                    <p class="animated fadeInLeft content">As this corporation will be build up by various entrepreneurs that focuses on building network, planning strategic ways to keep up with the market trends, innovating their organic products and to keep on building the trust and loyalty of its consumers and network.</p>
+                                    <li class="wow fadeInLeft bulleted-list" data-wow-delay="0.3s">
+                                        <p class="list-content">As this corporation will be build up by various entrepreneurs that focuses on building network, planning strategic ways to keep up with the market trends, innovating their organic products and to keep on building the trust and loyalty of its consumers and network.
+                                        </p>
+                                    </li>
                                 </div>
                                 <div class="col-md-6">
-                                    <p class="animated fadeInLeft content">Through this work and strategies that will be applied, JCA Wellness International Corporation guarantees to fulfill its mission in the near future.</p>
+                                    <li class="wow fadeInLeft bulleted-list" data-wow-delay="0.5s">
+                                        <p class="list-content">Through this work and strategies that will be applied, JCA Wellness International Corporation guarantees to fulfill its mission in the near future.</p>
+                                    </li>
                                 </div>
                             </div>
                         </div>

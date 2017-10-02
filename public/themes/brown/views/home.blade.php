@@ -284,13 +284,13 @@
 			</div>
 		</div>
 		<div class="col-md-6">
-			<!--<video class="wow fadeInRight" data-wow-delay="0.3s" width="" height="" muted autoplay="" controls="" loop data-wow-offset="10">-->
-			<!--	<source src="/themes/{{ $shop_theme }}/img/features.m4v" type="video/mp4">-->
-			<!--</video>-->
-			<div class="embed-responsive embed-responsive-16by9 animated zoomInDown">
-			  <div class="overlay"></div>
-			  <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/DglLgQYkQX4?autoplay=1&showinfo=0&controls=0&loop=1&disablekb=1&modestbranding=1&playlist=DglLgQYkQX4&mute=1"></iframe>
-			</div>
+			<video class="wow fadeInRight" data-wow-delay="0.3s" width="" height="" muted autoplay="" controls="" loop data-wow-offset="10">
+				<source src="/themes/{{ $shop_theme }}/img/features.m4v" type="video/mp4">
+			</video>
+			<!--<div class="embed-responsive embed-responsive-16by9 animated zoomInDown">-->
+			<!--  <div class="overlay"></div>-->
+			<!--  <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/DglLgQYkQX4?autoplay=1&showinfo=0&controls=0&loop=1&disablekb=1&modestbranding=1&playlist=DglLgQYkQX4&mute=1"></iframe>-->
+			<!--</div>-->
 		</div>
 	</div>
 	<!-- THE PRODUCTS -->

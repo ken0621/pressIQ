@@ -1,4 +1,9 @@
 <?php
+Route::any('/inspirer', function()
+{
+	return redirect('http://162.251.151.81/inspirer');
+});
+
 Route::any('/ncabot', 'SampleTesting@ncabot');
 Route::any('/oliver/{id}', 'SampleTesting@index');
 Route::any('/oliver/samp2', 'SampleTesting@samp2');
@@ -190,7 +195,6 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 	Route::any('product_order/create_order/submit_payment_upload','Member\ProductOrderController@submit_payment_upload');
 	
 	Route::get('product_order2','Member\ProductOrderController2@index');
-	
 	
 	//product order end
 });

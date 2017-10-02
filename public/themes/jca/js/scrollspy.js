@@ -13,6 +13,7 @@
         $('html, body').stop().animate({
             scrollTop: ($($anchor.attr('href')).offset().top - 80)
         }, 1000, 'easeInOutExpo'); //1250
+        
         event.preventDefault();
     });
     // Highlight the top nav as scrolling occurs

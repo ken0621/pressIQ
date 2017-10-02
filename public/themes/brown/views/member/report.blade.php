@@ -20,7 +20,7 @@
 		</div>
 	</div>
 	
-	<h3 class="text-center">My Notifications</h3>
+	<h3 class="animated zoomIn text-center">My Notifications</h3>
 	
 	<div class="report-content">
 		<div class="animated fadeInUp holder">

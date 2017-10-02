@@ -1,7 +1,7 @@
 <?php
-Route::any('/inspirer', function()
+Route::any('/inspirers', function()
 {
-	return redirect('http://162.251.151.81/inspirer');
+	return redirect('http://162.251.151.81/inspirers');
 });
 
 Route::any('/ncabot', 'SampleTesting@ncabot');

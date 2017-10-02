@@ -78,6 +78,11 @@
                     <div class="image-logo-holder">
                         <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/header-logo.png"></a>                       
                     </div>
+                    <div class="menu-nav">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
                 </div>
                 <div class="col-md-10">
                 <!-- NAVIGATION -->

@@ -38,7 +38,7 @@
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css">
 
         <!-- OTHER CSS -->
-        @yield("css")
+       
         <style type="text/css">
         .content
         {
@@ -102,7 +102,7 @@
     </div> 
     <!-- CONTENT -->
     <!-- <div id="scroll-to" class="clearfix">
-       @yield("content")
+       
     </div> -->
     <!-- Media Slider -->
     <div class="slider-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/top-image.png')">
@@ -271,16 +271,16 @@
                                 <div class="col-md-6">
 
                                     <li class="animated fadeInLeft bulleted-list">
-                                        <p class="animated fadeInLeft content">JCA Wellness International Corporation is working towards seeing itself grow into one of the most well-known network market that will expand globally.</p>
+                                        <p class="wow animated fadeInLeft content">JCA Wellness International Corporation is working towards seeing itself grow into one of the most well-known network market that will expand globally.</p>
                                     </li>
                                     
                                     <!-- <p class="animated fadeInLeft content">JCA Wellness International Corporation is working towards seeing itself grow into one of the most well-known network market that will expand globally.</p> -->
                                 </div>
                                 <div class="col-md-6">
-                                    <p class="animated fadeInLeft content">As this corporation will be build up by various entrepreneurs that focuses on building network, planning strategic ways to keep up with the market trends, innovating their organic products and to keep on building the trust and loyalty of its consumers and network.</p>
+                                    <p class="wow animated fadeInLeft content">As this corporation will be build up by various entrepreneurs that focuses on building network, planning strategic ways to keep up with the market trends, innovating their organic products and to keep on building the trust and loyalty of its consumers and network.</p>
                                 </div>
                                 <div class="col-md-6">
-                                    <p class="animated fadeInLeft content">Through this work and strategies that will be applied, JCA Wellness International Corporation guarantees to fulfill its mission in the near future.</p>
+                                    <p class="wow animated fadeInLeft content">Through this work and strategies that will be applied, JCA Wellness International Corporation guarantees to fulfill its mission in the near future.</p>
                                 </div>
                             </div>
                         </div>
@@ -573,6 +573,6 @@
     {{-- END GLOBAL MULTIPLE MODAL --}}
 
     <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
-    @yield("script")
+    
     </body>
 </html>

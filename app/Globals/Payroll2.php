@@ -4358,13 +4358,12 @@ class Payroll2
 	{
 		$total_cola = 0;
 
-		// if ($data["cutoff_input"][$data["start_date"]]->compute_type=="daily") 
-		// {
-			foreach($data["cutoff_input"] as $cutoff_input)
-			{
-				$total_cola += $cutoff_input->compute->cola;
-			}
-		// }
+		
+		foreach($data["cutoff_input"] as $cutoff_input)
+		{
+			$total_cola += $cutoff_input->compute->cola;
+		}
+		
 
 		$val["label"] = "COLA";
 		$val["type"] = "additions";
@@ -4386,13 +4385,10 @@ class Payroll2
 	{
 		$total_cola = 0;
 	
-		// if ($data["cutoff_input"][$data["start_date"]]->compute_type=="daily") 
-		// {
-			foreach($data["cutoff_input"] as $cutoff_input)
-			{
-				$total_cola += $cutoff_input->compute->cola_daily;
-			}
-		// }
+		foreach($data["cutoff_input"] as $cutoff_input)
+		{
+			$total_cola += $cutoff_input->compute->cola_daily;
+		}
 
 		$val["label"] = "COLA";
 		$val["type"] = "additions";
@@ -4414,34 +4410,30 @@ class Payroll2
 
 	public static function cutoff_fixed_montly_cola($return, $data)
 	{
-
 		$total_cola = 0;
-		// dd($data["salary"]->monthly_cola);
-		// if ($data["cutoff_input"][$data["start_date"]]->compute_type=="monthly" || $data["cutoff_input"][$data["start_date"]]->compute_type=="fix" ) 
-		// {
-			if ($data["period_category"]=="Semi-monthly") 
-			{
-				$total_cola = @($data["salary"]->monthly_cola/2);
-			}
-			else if($data["period_category"]=="Weekly")
-			{
-				$total_cola = @($data["salary"]->monthly_cola/4);
-			}
-			else if($data["period_category"]=="Monthly")
-			{
-				$total_cola = $data["salary"]->monthly_cola;
-			}
-		// }
 		
-		$val["label"] = "COLA";
-		$val["type"] = "additions";
-		$val["amount"] = $total_cola;
-		$val["add.gross_pay"] = true;
-		$val["deduct.gross_pay"] = false;
-		$val["add.taxable_salary"] = false;
-		$val["deduct.taxable_salary"] = false;
-		$val["add.net_pay"] = false;
-		$val["deduct.net_pay"] = false;
+		if ($data["period_category"]=="Semi-monthly") 
+		{
+			$total_cola = @($data["salary"]->monthly_cola/2);
+		}
+		else if($data["period_category"]=="Weekly")
+		{
+			$total_cola = @($data["salary"]->monthly_cola/4);
+		}
+		else if($data["period_category"]=="Monthly")
+		{
+			$total_cola = $data["salary"]->monthly_cola;
+		}
+			
+		$val["label"] 					= "COLA";
+		$val["type"] 					= "additions";
+		$val["amount"] 					= $total_cola;
+		$val["add.gross_pay"] 			= true;
+		$val["deduct.gross_pay"] 		= false;
+		$val["add.taxable_salary"] 		= false;
+		$val["deduct.taxable_salary"] 	= false;
+		$val["add.net_pay"] 			= false;
+		$val["deduct.net_pay"] 			= false;
 		array_push($return->_breakdown, $val);
 		$val = null;
 
@@ -4475,8 +4467,6 @@ class Payroll2
 			$total_cola = $total_cola - $cutoff_input->compute->total_day_cola_deduction;
 			$total_cola = $total_cola - $cutoff_input->compute->total_day_cola_addition;
 		}
-
-
 
 		$val["label"] = "COLA";
 		$val["type"] = "additions";

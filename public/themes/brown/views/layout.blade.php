@@ -135,7 +135,7 @@
                             @endif
                             <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a href="/">Brown</a></li>
                             <!--<li class="{{ Request::segment(1) == "product" ? "active" : "product" }}"><a href="/product">Phone Accessories</a></li>-->
-                            <li><a href="#">Internet Of Things</a></li>
+                            <li><a href="/inspirer">Inspirer Login</a></li>
                             <li><a href="#">Health Technology</a></li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
@@ -223,7 +223,7 @@
                         <div class="container">
                             <a href="/" class="head-button link-nav {{ Request::segment(1) == '' ? 'active' : '' }}" id="home">Brown</a>
                             <!--<a href="javascript:">Phone Accessories</a>-->
-                            <a href="javascript:">Internet Of Things</a>
+                            <a href="/inspirer">Inspirer Log</a>
                             <a href="javascript:">Health Technology</a>
                         </div>
                     </div>

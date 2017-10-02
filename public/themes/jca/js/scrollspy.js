@@ -23,16 +23,4 @@
         offset: 70
     });
 
-    /*------------------------------------------------------------------
-   	 Scrollup opacity downarrow 
-	 ------------------------------------------------------------------*/
-    var bottom_arrow = $('.bottom_row, .banner-content');
-    $(window).on('scroll', function()
-    {
-        var st = $(this).scrollTop();
-        bottom_arrow.css({
-            'opacity': (1 - (st / 350))
-        });
-    });
-
 })(jQuery);

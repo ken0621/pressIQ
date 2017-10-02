@@ -7,7 +7,7 @@
         <div>
             <i class="fa fa-tags"></i>
             <h1>
-                <span class="page-title">Auto Entry Independent</span>
+                <span class="page-title">Auto Entry Independent (For auto balance only)</span>
                 <small>
                     Auto Entry of slot (Independent Version)
                 </small>
@@ -38,22 +38,13 @@
             </div>
             <div class="col-md-6">
                 <label for="rematrix_status">Slot Root</label>
-                <select class="form-control slot_sponsor" name="slot_root">
-                        <option value="Auto"> New </option>
+                <select class="form-control slot_sponsor" name="slot_sponsor">
+                        <option value="New"> New </option>
                     @foreach($_slot_root as $slot)
                         <option value="{{$slot->slot_id}}"> {{$slot->slot_no}} </option>
                     @endforeach
                 </select>
             </div>           
-            <div class="col-md-6">
-                <label for="rematrix_status">Slot Sponsor</label>
-                <select class="form-control slot_sponsor" name="slot_sponsor">
-                        <option value="Auto"> Auto </option>
-                    @foreach($_slot as $slot)
-                        <option value="{{$slot->slot_id}}"> {{$slot->slot_no}} </option>
-                    @endforeach
-                </select>
-            </div>
             <div class="col-md-6">
                 <label for="rematrix_status">Membership</label>
                 <select class="form-control slot_membership" name="slot_membership">
@@ -102,12 +93,12 @@
         var slot_status      = $(".slot_status").val();    
 
         var request_amount    = $(".request_amount").val();
-
+        $(".apply_auto_entry").remove();
         auto_entry(slot_sponsor,slot_owner,slot_membership,slot_status,request_amount);
     });
 
 
-    function auto_entry($slot_id,$request_amount)
+    function auto_entry($slot_sponsor,$slot_owner,$slot_membership,$slot_status,$request_amount)
     {
         var link             = "/member/developer/auto_entry_independent/create_slot";
         $("#auto_entry_status").val("Number of slot created: "+count);
@@ -115,10 +106,12 @@
         {
             url:link,
             dataType:"json",
-            data: {_token: $(".token").val(),slot_id:$slot_id},
+            data: {_token: $(".token").val(),slot_sponsor: $slot_sponsor, slot_owner: $slot_owner,slot_membership: $slot_membership, slot_status : $slot_status},
             type:"post",
             success: function(data)
             {
+                console.log(data);
+                $slot_sponsor = data.slot_root;
                 if($request_amount > count)
                 {
                     auto_entry($slot_sponsor,$slot_owner,$slot_membership,$slot_status,$request_amount);
@@ -126,6 +119,7 @@
                 }
                 else
                 {
+                    alert("FINISH");
                     $("#slot_count").val(parseInt($("#slot_count").val()) + 1);
                     $("#auto_entry_status").val("Process complete");
                     $("#auto_entry_status").val("Number of slot created: "+count+" (Process complete)");

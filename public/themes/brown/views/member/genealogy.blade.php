@@ -44,7 +44,7 @@
 		$('.genealogy-frame').attr('src','/members/genealogy-tree?slot_no='+$(this).val()+'&mode='+$('.mode-genealogy').val()).load(function() 
 		{
 			$('.loading-content').addClass('hidden');
-			$('.genealogy-frame').css('opacity', 1).hide().fadeIn();
+			$('.genealogy-frame').css('opacity', 1);
 		});
 	});
 

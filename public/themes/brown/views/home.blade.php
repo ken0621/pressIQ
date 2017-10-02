@@ -207,10 +207,19 @@
 					<h1 class="animated fadeInDown" data-wow-delay="0.3s">www.brown.com.ph</h1>
 					<h2 class="animated fadeInUp" data-wow-delay="0.3s">Change Starts Here</h2>
 					<video class="animated zoomInDown" width="803" height="450" autoplay="">
-						<source src="/themes/{{ $shop_theme }}/img/intro.mp4" type="video/mp4">
+						<source src="/themes/{{ $shop_theme }}/img/intro2.mp4" type="video/mp4">
 					</video>
+					<!-- 16:9 aspect ratio -->
+					<!--<div style="max-width: 803px; margin: auto;">-->
+					<!--	<div class="embed-responsive embed-responsive-16by9 animated zoomInDown" style="margin-top: 25px;">-->
+					<!--	  <div class="overlay"></div>-->
+				 <!--       	<video autoplay="" controls="">-->
+					<!--			<source src="/themes/{{ $shop_theme }}/img/intro2.mp4" type="video/mp4">-->
+					<!--		</video>-->
+					<!--	</div>-->
+					<!--</div>-->
 					<h3 class="animated fadeInUp">It’s not the color of your skin, but the color of your heart.</h3>
-					<div class="join-button animated fadeInUp">JOIN THE MOVEMENT</div>
+					<div onclick="location.href='/members/register'" class="join-button animated fadeInUp">JOIN THE MOVEMENT</div>
 				</div>
 			</div>
 		</div>
@@ -224,7 +233,7 @@
 			<div class="row clearfix">
 				<div class="col-md-6 col-sm-6">
 					<div class="img-container wow fadeInLeft" data-wow-offset="50" data-wow-delay="0.2s">
-						<img src="/themes/{{ $shop_theme }}/img/ad-phone.png">
+						<img src="/themes/{{ $shop_theme }}/img/add-phone.png">
 					</div>
 				</div>
 				<div class="col-md-6 col-sm-6">
@@ -278,10 +287,14 @@
 			<video class="wow fadeInRight" data-wow-delay="0.3s" width="" height="" muted autoplay="" controls="" loop data-wow-offset="10">
 				<source src="/themes/{{ $shop_theme }}/img/features.m4v" type="video/mp4">
 			</video>
+			<!--<div class="embed-responsive embed-responsive-16by9 animated zoomInDown">-->
+			<!--  <div class="overlay"></div>-->
+			<!--  <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/DglLgQYkQX4?autoplay=1&showinfo=0&controls=0&loop=1&disablekb=1&modestbranding=1&playlist=DglLgQYkQX4&mute=1"></iframe>-->
+			<!--</div>-->
 		</div>
 	</div>
 	<!-- THE PRODUCTS -->
-	<div class="wrapper-4">
+	<div class="wrapper-4 hidden">
 		<div class="container">
 			<div class="bottom-container">
 				<div class="featured-title-holder wow fadeInDown" data-wow-offset="10" data-wow-delay="0.3s">

@@ -40,7 +40,7 @@
     <div class="loader hide">
       <span><img src="/resources/assets/frontend/img/loader.gif"></span>
     </div>
-
+    
     <div class="login-wrapper">
 		<div class="container">
 			<div class="login-holder">

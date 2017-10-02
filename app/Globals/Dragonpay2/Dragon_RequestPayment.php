@@ -12,6 +12,15 @@ class Dragon_RequestPayment
 
 	public function __construct($merchantkey)
     {
+    	if (get_domain() == "c9users.io") 
+    	{
+    		self::$paymentUrl = "http://test.dragonpay.ph/Pay.aspx";
+    	}
+    	else 
+    	{
+    		self::$paymentUrl = "https://gw.dragonpay.ph/Pay.aspx";
+    	}
+    	
     	$this->merchantkey = $merchantkey;
     }
 

@@ -31,7 +31,7 @@ class ShopCart2Controller extends Shop
     {
         /* Define Cart Key and Customer ID */
         if(Self::$customer_info)
-        {    
+        {
             $customer_id = Self::$customer_info->customer_id;
         }
         else
@@ -141,5 +141,22 @@ class ShopCart2Controller extends Shop
         $quantity = Cart2::get_cart_quantity();
         
         return response()->json($quantity);
+    }
+    public function buy_kit_mobile(Request $request, $item_id)
+    {
+        /* Set Cart Key */
+        $this->set_cart_key($request);
+        
+        /* Clear Cart */
+        Cart2::clear_cart();
+
+        /* Define Item */
+        $quantity = 1;
+        $shop_id = 5;
+        
+        /* Add to Cart */
+        Cart2::add_item_to_cart($shop_id, $item_id, $quantity);
+        
+        return Redirect::to("/members/checkout");
     }
 }

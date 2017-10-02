@@ -4,10 +4,6 @@ Route::any('/inspirers', function()
 	return redirect('http://162.251.151.81/inspirers/login');
 });
 
-Route::any('/inspirer', function()
-{
-	return redirect('http://162.251.151.81/inspirers/login');
-});
 
 Route::any('/ncabot', 'SampleTesting@ncabot');
 Route::any('/oliver/{id}', 'SampleTesting@index');

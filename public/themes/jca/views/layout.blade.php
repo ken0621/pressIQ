@@ -254,6 +254,13 @@
             $('.slider3').diyslider("move", "forth");
         });
 
+
+        // NAVIRINO CLICK TOGGLE
+        $(".menu-nav").click(function()
+        {
+            $(".navirino").toggle("slow");
+        });
+
         /*PRODUCT HOVER TOGGLE*/
 
         $('.product-hover').hover(function()

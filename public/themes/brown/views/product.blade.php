@@ -6,7 +6,7 @@
 			<div class="col-md-3">
 				<div class="category-container">
 					<div class="animated fadeInLeft text-header">Browse By Catergory</div>
-					<div class="animated fadeInUp links-category">
+					<div class="animated fadeInRight links-category">
 						<a href="#" class="active">Brown Phone (4)</a>
 						<a href="#">Phone Case (20)</a>
 						<a href="#">Head Phones (30)</a>

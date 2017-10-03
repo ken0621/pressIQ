@@ -36,7 +36,7 @@ class FacebookGlobals
        $fb = new Facebook([
           'app_id' => $get_keys['app_id'], // Replace {app-id} with your app id
           'app_secret' => $get_keys['app_secret'],
-          'default_graph_version' => 'v2.2'
+          'default_graph_version' => 'v2.1'
           ]);
        return $fb;
     }

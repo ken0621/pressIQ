@@ -396,6 +396,7 @@ class PayrollReportController extends Member
 
 		$data["page"] = "Loan Summary";
 		$data["_loan_data"] = PayrollDeductionController::get_deduction($this->shop_id());
+
 		return view("member.payrollreport.loan_summary", $data);
 
 	}

@@ -258,12 +258,12 @@
 
     <script type="text/javascript">
             
-            $('.slider3').diyslider({
-                width: "580px", // width of the slider
-                height: "120px", // height of the slider
-                display: 5, // number of slides you want it to display at once
-                loop: false // disable looping on slides
-                }); // this is all you need!
+        $('.slider3').diyslider({
+            width: "580px", // width of the slider
+            height: "120px", // height of the slider
+            display: 5, // number of slides you want it to display at once
+            loop: false // disable looping on slides
+            }); // this is all you need!
 
         // use buttons to change slide
         $('#gotoleft').bind("click", function(){

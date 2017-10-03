@@ -91,6 +91,7 @@ body{
 .wrapper-1 {
 	font-family: $content-text;
 	padding: 25px 0px;
+	overflow: hidden;
 
 	.title-container {
 		text-align: center;
@@ -128,6 +129,7 @@ body{
 
 			img {
 				width: 100%;
+				height: auto;
 			}
 		}
 	}
@@ -403,6 +405,8 @@ body{
 	background-color: #f4f4f4;
 	font-family: "Open Sans",sans-serif;
 	padding: 25px 0px;
+	overflow: hidden;
+
 	.jca-title-container
 	{
 		text-align: center;

@@ -31,6 +31,7 @@ Route::get('/barcode', 'MemberController@barcodes');
 Route::any('/login/geturl', 'Member\TesterController@test_login'); 
 
 Route::get('member/register/session', 'MemberController@session');
+Route::get('member/login', 'MemberController@login');
 Route::get('member/register', 'MemberController@register');
 Route::post('member/register/submit', 'MemberController@register_post');
 

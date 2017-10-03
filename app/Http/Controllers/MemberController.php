@@ -149,18 +149,26 @@ class MemberController extends Controller
 
     public function register()
     {
-        $customer_session = Session::get('mlm_member');
-        if($customer_session)
-        {
-            return $this->register_logged_in();
-        }
+        // $customer_session = Session::get('mlm_member');
+        // if($customer_session)
+        // {
+        //     return $this->register_logged_in();
+        // }
         
-        $data['country'] = Tbl_country::get();
-        $data['current'] = Cart::get_info(Self::$shop_id);
-        $data['sponsor_r'] = $this->check_if_required_sponsor(Self::$shop_id);
-        $data['terms_and_agreement'] = Tbl_settings::where('shop_id', Self::$shop_id)->where('settings_key', 'terms_and_agreement')->first();
-        return view("mlm.register.register", $data);
+        // $data['country'] = Tbl_country::get();
+        // $data['current'] = Cart::get_info(Self::$shop_id);
+        // $data['sponsor_r'] = $this->check_if_required_sponsor(Self::$shop_id);
+        // $data['terms_and_agreement'] = Tbl_settings::where('shop_id', Self::$shop_id)->where('settings_key', 'terms_and_agreement')->first();
+        // return view("mlm.register.register", $data);
+
+        return Redirect::to("/members/register");
     }
+    
+    public function login()
+    {
+        return Redirect::to("/members/login");
+    }
+
     public function register_logged_in()
     {
 

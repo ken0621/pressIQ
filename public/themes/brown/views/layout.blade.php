@@ -389,7 +389,7 @@
                     <div class="holder">
                         <div class="title">Get Intouch With Us</div>
                         <div class="social-logo">
-                            <a onclick='location.href="https://www.facebook.com/phbrownandproud/"' class="holder"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                            <a href="https://www.facebook.com/phbrownandproud/"' target="_blank" class="holder"><i class="fa fa-facebook" aria-hidden="true"></i></a>
                             <a class="holder"><i class="fa fa-twitter" aria-hidden="true"></i></a>
                             <a class="holder"><i class="fa fa-instagram" aria-hidden="true"></i></a>
                         </div>

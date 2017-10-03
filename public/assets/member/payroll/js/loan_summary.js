@@ -12,6 +12,7 @@ function loan_summary()
 	{
 		$(document).ready(function()
 			{
+				//select_company_name();
 				select_deduction_type();
 				load_summary_table('0');
 			});
@@ -33,6 +34,42 @@ function loan_summary()
 			}
 		});
 	}
+
+//-------------------------
+/*	function select_company_name()
+	{
+
+		$('.select-company-name').change(function()
+		{
+			var company_name = this.value;
+
+			//alert(company_name);
+			if (company_name!=0) 
+			{
+				load_summary_table(company_name);
+				alert(company_name);
+			}
+			else
+			{
+				load_summary_table('0');
+			}
+		});
+	}*/
+/*var team_name = $('#team_name').val();
+
+$.ajax({
+
+		url		:  '/supervisor/view/user',
+			data	: {team_name : team_name},
+			type	: 'GET',
+			success : function(data)
+			{
+				$('.panel-table').removeClass('hidden');
+				$('.continue-btn').html(data);
+			}
+});*/
+
+
 
 	function load_summary_table(deduction_type)
 	{

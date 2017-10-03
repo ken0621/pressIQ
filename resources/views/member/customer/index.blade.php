@@ -41,7 +41,7 @@
                 </select>
             </div>
             <div class="col-md-3" style="padding: 10px">
-                <select class="form-control" onChange="filter_customer_slot(this)">
+                <select class="form-control   {{isset($pis) ? 'hidden' : ''}}" onChange="filter_customer_slot(this)">
                     <option value="all" {{Request::input('filter_slot') == 'all' ? 'selected' : ''}}>All V.I.P.s</option>
                     <option value="w_slot" {{Request::input('filter_slot') == 'w_slot' ? 'selected' : ''}}>Active V.I.P.s</option>
                     <option value="w_o_slot" {{Request::input('filter_slot') == 'w_o_slot' ? 'selected' : ''}}>Inactive V.I.P.s</option>

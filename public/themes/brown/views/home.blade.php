@@ -435,8 +435,8 @@
 							<img src="/themes/{{ $shop_theme }}/img/holder-2.png">
 						</div>
 						<div class="title-2">Our Culture</div>
-						<div class="desc">We curate emerging Filipino talents and artists-always on the lookout for the latest and the best in fashion, music, business, and other lifestyles that are relevant to your daily life. Through our technology, we celebrate the diversity of the artists and the potential in their craft. </div>
-						<a href="javascript:" class="more">Show More</a>
+						<div class="desc show-1">We curate emerging Filipino talents and artists-always on the lookout for the latest and the best in fashion, music, business, and other lifestyles that are relevant to your daily life. Through our technology, we celebrate the diversity of the artists and the potential in their craft. </div>
+						<a href="javascript:" class="more" onClick="$('.show-1').addClass('now-height'); $(this).remove(); $('.match-height').matchHeight()">Show More</a>
 					</div>
 				</div>
 				<div class="col-md-3 col-sm-6 wow fadeInUp" data-wow-offset="10" data-wow-delay="0.4s">
@@ -445,8 +445,8 @@
 							<img src="/themes/{{ $shop_theme }}/img/holder-3.png">
 						</div>
 						<div class="title-2">The Brown Movement</div>
-						<div class="desc">When culture and technology meet, opportunities are opened and resources are created to help every Filipino pursue their dreams while building the nation. With us at Brown, all it takes is to be proud of what we have, a phone, and others who wll work with us in inspiring the world with works of creativity and entrepreneurship. </div>
-						<a href="javascript:" class="more">Show More</a>
+						<div class="desc show-2">When culture and technology meet, opportunities are opened and resources are created to help every Filipino pursue their dreams while building the nation. With us at Brown, all it takes is to be proud of what we have, a phone, and others who wll work with us in inspiring the world with works of creativity and entrepreneurship. </div>
+						<a href="javascript:" class="more" onClick="$('.show-2').addClass('now-height'); $(this).remove(); $('.match-height').matchHeight();">Show More</a>
 					</div>
 				</div>
 			</div>
@@ -463,4 +463,11 @@
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css">
+<style type="text/css">
+.now-height
+{
+	max-height: none !important;
+	height: auto !important;
+}
+</style>
 @endsection

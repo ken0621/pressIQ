@@ -38,7 +38,7 @@ class MemberLoginController extends Controller
 		// return Crypt::decrypt('eyJpdiI6InJJUjR1NFlvVURmWURPajBMdnpldXc9PSIsInZhbHVlIjoidGJPRTRmRHZkTkNKZENSU2lWZ3p2UT09IiwibWFjIjoiY2VhNTU2OTMzNTE0OTE0YzMzOGIyMzE5Y2VjY2NhZDgzMDcwNmI5ZTgyZjNmYTUwOWEwZTQ0MDA4M2ZkMGMxOCJ9');
 		if(Request::isMethod("post"))
 		{
-			$user_info = Tbl_user::where("user_email", Request::input("email"))->first();
+			$user_info = Tbl_user::where("user_email", Request::input("email"))->where("user_shop", $shop_id)->first();
 
 			/* CHECK E-MAIL EXIST */
 			if($user_info)

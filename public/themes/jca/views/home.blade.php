@@ -60,7 +60,7 @@
                         <div class="content-text-container">
                             <h1>We Believe</h1>
                             <div class="title-line"></div>
-                            <p class="wow fadeInLeft">
+                            <p class="wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".2s">
                                 JCA International Corporation believes that natural health and wellness has the ability to change the lives of humanity. This inspired its founders to introduce a product that will provide opportunities to aspiring entrepreneurs ways.
                             </p>
                         </div>
@@ -73,7 +73,7 @@
                         <div class="content-text-container">
                             <h1>We Believe</h1>
                             <div class="title-line"></div>
-                            <p class="wow fadeInLeft">
+                            <p class="wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".3s">
                                 Instead of the usual chemical-based beauty and wellness products, JCA International Corporation’s products are 100% safe and organic that will definitely have an everlasting benefits to its buyers and users.
                             </p>
                         </div>
@@ -86,7 +86,7 @@
                         <div class="content-text-container">
                             <h1>We Believe</h1>
                             <div class="title-line"></div>
-                            <p class="wow fadeInLeft">
+                            <p class="wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".4s">
                                 Lastly, JCA Wellness International Corporation aims to deliver these broad selection of safe and organic products that will showcase its commitment to innovate today’s beauty and wellness.
                             </p>
                         </div>
@@ -100,22 +100,22 @@
             <div class="bulleted-list-container">
                 <div class="content-container row clearfix">
                     <div class="col-md-3">
-                        <li class="wow fadeInLeft bulleted-list">
+                        <li class="wow fadeInLeft bulleted-list" data-wow-duration="1s" data-wow-delay=".2s">
                             <p class="list-content">Membership ID which entitles the distributor up to 36 % Lifetime Discount on all JCA Wellness Products upon repeat purchase</p>
                         </li>
                     </div>
                     <div class="col-md-3">
-                        <li class="wow fadeInLeft bulleted-list">
+                        <li class="wow fadeInLeft bulleted-list" data-wow-duration="1s" data-wow-delay=".3s">
                             <p class="list-content">Package worth almost 9,000 pesos for a Standard Package, 27,000 pesos for a Premium Package and 63,000 pesos for a VIP Package</p>
                         </li>
                     </div>
                     <div class="col-md-3">
-                        <li class="wow fadeInLeft bulleted-list">
+                        <li class="wow fadeInLeft bulleted-list" data-wow-duration="1s" data-wow-delay=".4s">
                             <p class="list-content">Opportunity to earn 15,000 a day, 90,000 a week, 360,000 a month for Override Sales Commission</p>
                         </li>
                     </div>
                     <div class="col-md-3">
-                        <li class="wow fadeInLeft bulleted-list">
+                        <li class="wow fadeInLeft bulleted-list" data-wow-duration="1s" data-wow-delay=".5s">
                             <p class="list-content">Product Gift Certificates for JCA Wellness Product Purchases</p>
                         </li>
                     </div>
@@ -146,20 +146,20 @@
                         <div id="mission" class="mission-vision-container">
                             <div class="content-container row clearfix">
                                 <div class="col-md-6">
-                                    <p class="wow animated fadeInLeft sub-title">Bring innovation in the beauty and wellness market.</p>
-                                    <p class="wow animated fadeInLeft content">In this world full of chemical-based beauty and wellness product, JCA Wellness International Corp., aims to divert the market’s attention to change their usual beauty and wellness product to safe and organic products that will guarantee them a life-long benefits.</p>
+                                    <p class="wow animated fadeInLeft sub-title" data-wow-duration="1s" data-wow-delay=".2s">Bring innovation in the beauty and wellness market.</p>
+                                    <p class="wow animated fadeInLeft content" data-wow-duration="1s" data-wow-delay=".2s">In this world full of chemical-based beauty and wellness product, JCA Wellness International Corp., aims to divert the market’s attention to change their usual beauty and wellness product to safe and organic products that will guarantee them a life-long benefits.</p>
                                 </div>
                                 <div class="col-md-6">
-                                    <p class="wow animated fadeInLeft sub-title">To build business opportunities that will start in the Philippines and provide financial freedom.</p>
-                                    <p class="wow animated fadeInLeft content">JCA Wellness International Corporation will start its initial market in the Philippines and it aims to help fellow aspiring Filipino entrepreneurs to start their business venture with the right products and the right investment.</p>
+                                    <p class="wow animated fadeInLeft sub-title" data-wow-duration="1s" data-wow-delay=".3s">To build business opportunities that will start in the Philippines and provide financial freedom.</p>
+                                    <p class="wow animated fadeInLeft content" data-wow-duration="1s" data-wow-delay=".3s">JCA Wellness International Corporation will start its initial market in the Philippines and it aims to help fellow aspiring Filipino entrepreneurs to start their business venture with the right products and the right investment.</p>
                                 </div>
                                 <div class="col-md-6">
-                                    <p class="wow animated fadeInLeft sub-title">To build a continuous brand and consumer loyalty.</p>
-                                    <p class="wow animated fadeInLeft content">As JCA Wellness International Corporation marks it image in the market as a company that focuses on using and promoting organic and safe products, it also aims to maintain the brand positioning and the consumer loyalty by continuously providing its product and taking care of its consumers as well.</p>
+                                    <p class="wow animated fadeInLeft sub-title" data-wow-duration="1s" data-wow-delay=".4s">To build a continuous brand and consumer loyalty.</p>
+                                    <p class="wow animated fadeInLeft content" data-wow-duration="1s" data-wow-delay=".4s">As JCA Wellness International Corporation marks it image in the market as a company that focuses on using and promoting organic and safe products, it also aims to maintain the brand positioning and the consumer loyalty by continuously providing its product and taking care of its consumers as well.</p>
                                 </div>
                                 <div class="col-md-6">
-                                    <p class="wow animated fadeInLeft sub-title">To expand the network globally.</p>
-                                    <p class="wow animated fadeInLeft content">As this company will start its market in the Philippines, it also aims to go globally. It aims to build network, promote the products globally and give a higher opportunity to its future potential business partners.</p>
+                                    <p class="wow animated fadeInLeft sub-title" data-wow-duration="1s" data-wow-delay=".5s">To expand the network globally.</p>
+                                    <p class="wow animated fadeInLeft content" data-wow-duration="1s" data-wow-delay=".5s">As this company will start its market in the Philippines, it also aims to go globally. It aims to build network, promote the products globally and give a higher opportunity to its future potential business partners.</p>
                                 </div>
                             </div>
                         </div>
@@ -219,11 +219,12 @@
 @endsection
 
 @section("css")
-<!-- <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css"> -->
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css">
 @endsection
 
 @section("js")
 
 <script type="text/javascript">
+
 </script>
 @endsection

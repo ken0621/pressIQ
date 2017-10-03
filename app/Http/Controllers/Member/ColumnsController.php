@@ -10,6 +10,7 @@ use App\Globals\Warehouse2;
 use App\Globals\Columns;
 use Request;
 use Session;
+use Redirect;
 
 class ColumnsController extends Member
 {
@@ -66,6 +67,6 @@ class ColumnsController extends Member
             $response["message"] = "Some error occurred.";
         }
 
-        return json_encode($response);
+        return Redirect::back();
     }
 }

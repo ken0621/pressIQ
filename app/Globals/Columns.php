@@ -174,4 +174,10 @@ class Columns
         
         return $new_data;
     }
+    public static function deleteColumns($shop_id, $user_id, $from)
+    {
+        Tbl_columns::user($user_id)->shop($shop_id)->from($from)->delete();
+
+        return true;
+    }
 }

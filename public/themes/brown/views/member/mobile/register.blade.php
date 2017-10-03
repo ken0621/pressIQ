@@ -10,6 +10,7 @@
     <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id" content="{{$google_app_id or ''}}">
     <input type="hidden" name="" class="google_app_id" value="{{$google_app_id or ''}}">
+    <input type="hidden" id="_token" value="{{csrf_token()}}">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -25,6 +26,7 @@
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/slick/slick-theme.css">
     <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
     <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/mobile/css/login.css">
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/mobile/css/register.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/drawer.css">
@@ -41,6 +43,16 @@
                 <img src="/themes/{{ $shop_theme }}/assets/mobile/img/lock.jpg">
                 <div class="text">Already have an account?</div>
                 <div class="right"><i class="fa fa-angle-right" aria-hidden="true"></i></div>
+            </div>
+        </div>
+        <div style="margin-top: 10px; ">
+            <div class="social-button">
+              <!--   <a href="{{$fb_login_url or '#'}}" class="holder fb">
+                    <div class="name"><i class="fa fa-facebook" aria-hidden="true"></i> Sign in with Facebook</div>
+                </a> -->
+                <a href="javascript:" class="holder gp" id="customBtn">
+                    <div class="name "><i class="fa fa-google-plus" aria-hidden="true"></i> Sign up with Google+</div>
+                </a>
             </div>
         </div>
         <div class="holder">
@@ -136,6 +148,11 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
     <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/bootstrap.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://apis.google.com/js/api:client.js"></script>
+    <script type="text/javascript" src="/assets/member/js/google_script/google_script_auth.js"></script>
+
+    <script>startApp();</script>
     <!-- BEGIN JIVOSITE CODE -->
     <script type='text/javascript'>
     (function(){ var widget_id = 'OcvyPjoHBr';var d=document;var w=window;function l(){ var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);}if(d.readyState=='complete'){l();}else{if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();

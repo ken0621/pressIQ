@@ -16,6 +16,7 @@ function payroll_biometric()
 		{
 			// biometric_load_table();
 			action_load_table();
+			biometric_import_data();
 		});
 	}
 
@@ -24,6 +25,24 @@ function payroll_biometric()
 		$('.btn-show').click(function()
 		{
 			biometric_load_table();
+		});
+	}
+
+	function biometric_import_data()
+	{
+		$('.btn-import-data').click(function()
+		{
+			var date_from = $('.date_from').val()
+			var date_to = $('.date_to').val();
+			
+			if (date_to != '' && date_from != '') 
+			{
+				biometric_import_record();
+			}
+			else
+			{
+				alert('Please Select Date');
+			}
 		});
 	}
 
@@ -53,7 +72,7 @@ function payroll_biometric()
 			type	: 'GET',
 			success : function(result)
 			{
-				alert("Data Imported");
+				$('.report-import').html(result);
 			}
 		});
 	}

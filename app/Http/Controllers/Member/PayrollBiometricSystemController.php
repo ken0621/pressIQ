@@ -60,6 +60,7 @@ class PayrollBiometricSystemController extends Member
 	{
 		$date["date_from"] 	= Carbon::parse(Request::input('date_from'))->format("Y-m-d");
 		$date["date_to"] 	= Carbon::parse(Request::input('date_to'))->format("Y-m-d");
+		
 		$shop_id = $this->user_info->shop_id;
 	
 		$data["_biometric_record"] = Tbl_payroll_biometric_record::getalldata($this->user_info->shop_id)
@@ -67,13 +68,18 @@ class PayrollBiometricSystemController extends Member
 		->orderBy('tbl_payroll_employee_basic.payroll_employee_number','asc')
 		->get();
 
-		return view('member.payroll2.payroll_biometric_record_table',$data);
+		return view('member.payroll2.payroll_biometric_record_table', $data);
+	}
+
+	public function modal_import_biometric()
+	{
+		return view('member.modal.modal_import_biometric');
 	}
 
 	public function biometric_import_record()
 	{
-		$date["date_from"] 	= Carbon::parse(Request::input('date_from'))->format("Y-m-d");
-		$date["date_to"] 	= Carbon::parse(Request::input('date_to'))->format("Y-m-d");
+		$data["date_from"] 	= $date["date_from"] 	= Carbon::parse(Request::input('date_from'))->format("Y-m-d");
+		$data["date_to"]	= 	$date["date_to"] 	= Carbon::parse(Request::input('date_to'))->format("Y-m-d");
 		$shop_id = $this->user_info->shop_id;
 
 		$data["_biometric_record"] = Tbl_payroll_biometric_record::getalldata($this->user_info->shop_id)
@@ -103,21 +109,23 @@ class PayrollBiometricSystemController extends Member
 				$_shift_real 	=  Payroll2::db_get_shift_of_employee_by_code($shift_code_id, $date);
 				$_shift 		=  Payroll2::shift_raw(Payroll2::db_get_shift_of_employee_by_code($shift_code_id, $date));
 				
-				$insert = null;
-				$insert["payroll_employee_id"] 			= $employee_id;
-				$insert["payroll_time_date"] 			= $date;
-				$insert["payroll_time_shift_raw"] 		= serialize($_shift);
+				$insert_report 								= null;
+				$insert 									= null;
+				$insert_report["payroll_employee_id"]		=	$insert["payroll_employee_id"] 			= $employee_id;
+				$insert_report["payroll_time_date"]			=	$insert["payroll_time_date"] 			= $date;
+				$insert_report["payroll_time_shift_raw"]	=	$insert["payroll_time_shift_raw"] 		= serialize($_shift);
 
 				$payroll_time_sheet_id = Tbl_payroll_time_sheet::insertGetId($insert);
 
 				$insert = null;
-				$insert_time['payroll_time_sheet_id'] 	= $payroll_time_sheet_id;
-				$insert_time['payroll_company_id'] 		= $payroll_company_id;
-				$insert_time['payroll_time_sheet_in'] 	= $biometric_record->payroll_time_in;
-				$insert_time['payroll_time_sheet_out'] 	= $biometric_record->payroll_time_out;
-				$insert_time['payroll_time_sheet_origin'] = "ZKTeco TX628";
+				$insert_report['payroll_time_sheet_id']		=	$insert_time['payroll_time_sheet_id'] 		= $payroll_time_sheet_id;
+				$insert_report['payroll_company_id']		=	$insert_time['payroll_company_id'] 			= $payroll_company_id;
+				$insert_report['payroll_time_sheet_in']		=	$insert_time['payroll_time_sheet_in'] 		= $biometric_record->payroll_time_in;
+				$insert_report['payroll_time_sheet_out']	=	$insert_time['payroll_time_sheet_out'] 		= $biometric_record->payroll_time_out;
+				$insert_report['payroll_time_sheet_origin']	=	$insert_time['payroll_time_sheet_origin'] 	= "ZKTeco TX628";
 
 				Tbl_payroll_time_sheet_record::insert($insert_time);
+				$_insert[] = $insert_report;
 			}
 			else
 			{
@@ -131,10 +139,14 @@ class PayrollBiometricSystemController extends Member
 				$update['payroll_time_sheet_origin'] = "ZKTeco TX628";
 
 				Tbl_payroll_time_sheet_record::insert($update);
-				$_update = $update;
+				$_insert[] = $update;
 			}
 		}
 
+		// $data["_insert"] 		= $_insert;
+		$data["imported_count"]	= count($_insert);
 
+		// return view('member.payroll2.payroll_biometric_imported_data_table',$data);
+		return "<h4 class='color-green' > " .count($_insert). " record/s found and successfully imported </h4>";
 	}
 }

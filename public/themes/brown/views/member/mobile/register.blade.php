@@ -26,7 +26,6 @@
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/slick/slick-theme.css">
     <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
     <!-- CSS -->
-    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/mobile/css/login.css">
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/mobile/css/register.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/drawer.css">
@@ -50,8 +49,8 @@
               <!--   <a href="{{$fb_login_url or '#'}}" class="holder fb">
                     <div class="name"><i class="fa fa-facebook" aria-hidden="true"></i> Sign in with Facebook</div>
                 </a> -->
-                <a href="javascript:" class="holder gp" id="customBtn">
-                    <div class="name "><i class="fa fa-google-plus" aria-hidden="true"></i> Sign up with Google+</div>
+                <a href="javascript:" class="holder gp" id="customBtn" style="display: block; color: font-size: 15px; font-weight: 500; color: #333">
+                    <div class="name "><i class="fa fa-google-plus" aria-hidden="true" style="color: #DE5245; font-size: 25px; vertical-align: middle; padding-right: 15px;"></i> Sign up with Google+</div>
                 </a>
             </div>
         </div>

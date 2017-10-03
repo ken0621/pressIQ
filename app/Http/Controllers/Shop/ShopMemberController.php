@@ -117,11 +117,12 @@ class ShopMemberController extends Shop
         {
             $data['google_app_id'] = SocialNetwork::get_keys($this->shop_info->shop_id, 'googleplus')['app_id'];
         }
-        
-        // if(request("pass") != "123")
-        // {
-        //     return view("member.coming");
-        // }
+
+        $data['show_fb'] = null;
+        if(request("pass") == "123")
+        {
+            $data['show_fb'] = 123;
+        }
 
         return Self::load_view_for_members("member.login", $data, false);
     }

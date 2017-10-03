@@ -83,7 +83,7 @@
                                 <div class="button-holder">
                                     <div class="clearfix">
                                         <button class="btn btn-brown" type="button" onClick="location.href='/members'">Profile</button>
-                                        <button class="btn btn-green">Settings</button>
+                                        <button class="btn btn-green" type="button" onClick="location.href='/members/profile'">Settings</button>
                                     </div>
                                 </div>
                             </div>
@@ -319,8 +319,8 @@
                                     <div class="email">{{ $customer->email }}</div>
                                     <div class="button-holder">
                                         <div class="clearfix">
-                                            <button class="btn btn-brown">Profile</button>
-                                            <button class="btn btn-green">Settings</button>
+                                            <button class="btn btn-brown" type="button" onClick="location.href='/members'">Profile</button>
+                                            <button class="btn btn-green" type="button" onClick="location.href='/members/profile'">Settings</button>
                                         </div>
                                     </div>
                                 </div>

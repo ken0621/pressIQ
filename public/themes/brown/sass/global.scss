@@ -991,10 +991,15 @@ footer
 				&:first-child
 				{
 					margin-left: 0;
-					
 					&:hover
 					{
 						background-color: #3B5998;
+						
+						i
+						{
+							@include transition(0.2s);
+							font-size: 24px;
+						}
 					}
 
 				}
@@ -1004,6 +1009,12 @@ footer
 					&:hover
 					{
 						background-color: #1DA1F3;
+
+						i
+						{
+							@include transition(0.2s);
+							font-size: 24px;
+						}
 					}
 				}
 
@@ -1014,6 +1025,12 @@ footer
 					&:hover
 					{
 						background-color: #CD486B;
+
+						i
+						{
+							@include transition(0.2s);
+							font-size: 24px;
+						}
 					}
 				}
 			}

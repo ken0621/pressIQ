@@ -188,6 +188,15 @@
                                     <td colspan="40"><center>Email</center></td>
                                 </tr>
                                 <tr>
+                                    <td>Default Downline Rule</td>
+                                    <td>
+                                        <select name="plan_settings_default_downline_rule" class="form-control">
+                                            <option value="manual" {{$plan_settings->plan_settings_default_downline_rule == "manual" ? 'selected' : ''}}>Manual Placement</option>
+                                            <option value="auto" {{$plan_settings->plan_settings_default_downline_rule == "auto" ? 'selected' : ''}}>Auto Position</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td>Membership Code Email</td>
                                     <td>
                                         <select name="plan_settings_email_membership_code" class="form-control">

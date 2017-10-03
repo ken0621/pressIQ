@@ -283,6 +283,7 @@
             $(".navirino").toggle("slow");
         });
 
+
         /*PRODUCT HOVER TOGGLE*/
         $('.product-hover').hover(function()
         {

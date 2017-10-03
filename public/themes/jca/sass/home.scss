@@ -20,12 +20,35 @@ body{
 	background-attachment: fixed;
 	background-repeat: no-repeat;
 	background-size: cover;
+
+	@media screen and (max-width: 991px)
+	{
+		background-image: none !important;
+		height: 400px;
+	}
+	@media screen and (max-width: 414px)
+	{
+		background-image: none !important;
+		height: 350px;
+	}
+
 	.container {
 		position: relative;
 		.caption-logo-container {
 			position: absolute;
 			top: 100px;
 			right: 17%;
+			img 
+			{
+				width: 100%;
+			}
+
+			@media screen and (max-width: 991px)
+			{
+				width: 50% !important;
+				right: 25% !important;
+				top: 50px;
+			}
 		}
 		.caption-container {
 			text-align: center;
@@ -41,6 +64,24 @@ body{
 				&:last-child {
 					color: #b2802e;
 					margin-top: -10px;
+				}
+			}
+			@media screen and (max-width: 991px)
+			{
+				top: 282px;
+				right: 26%;
+				h1
+				{
+					font-size: 27px;
+				}
+			}
+			@media screen and (max-width: 414px)
+			{
+				top: 170px;
+				right: 5%;
+				h1
+				{
+					font-size: 27px;
 				}
 			}
 		}
@@ -79,6 +120,12 @@ body{
 		}
 		.image-container {
 			padding-left: 85px;
+
+			@media screen and (max-width: 991px)
+			{
+				padding-left: 0px;
+			}
+
 			img {
 				width: 100%;
 			}
@@ -104,12 +151,18 @@ body{
 		}
 	}
 	.content-container {
-		padding: 25px 0px 50px 0px;
+		padding: 25px 0px 15px 0px;
 
 		.per-image-container {
 			position: relative;
 			font-family: $content-text;
 			overflow: hidden;
+			
+			@media screen and (max-width: 991px)
+			{
+				margin-top: 10px;
+			}
+
 			&:hover {
 				img {
 					-moz-transform: scale(1.1);
@@ -180,7 +233,7 @@ body{
 	.bulleted-list-container
 	{
 		display: inline-block;
-		padding: 55px 0px 45px 0px;
+		padding: 15px 0px 15px 0px;
 		border-bottom: 1px solid #dedede;
 		.bulleted-list::before
 		{
@@ -242,44 +295,71 @@ body{
 	background-repeat: no-repeat;
 	background-position: right;
 	margin-top: 50px;
-	height: 548.467px;
-		.jca-title-container
+	padding-bottom: 40px;
+
+	@media screen and (max-width: 991px)
+	{
+		background-image: none !important;
+		padding-bottom: 135px !important;
+	}
+	@media screen and (max-width: 991px)
+	{
+		padding-bottom: 350px !important;
+	}
+
+	.jca-title-container
+	{
+		.title-company
 		{
-			.title-company
-			{
-				font-family: "Raleway Regular", sans-serif;
-				font-size: 25px;
-				color: #b07d2a;
-				margin-bottom: -8px;
-			}
-			.title-mission
-			{
-				font-size: 40px;
-				// color: #019771;
-				color: #acacac;
-				display: inline-block;
-				margin-bottom: 25px;
-				cursor: pointer;
-			}
-			.title-vision
-			{
-				font-size: 40px;
-				color: #acacac;
-				display: inline-block;
-				margin-left: 20px;
-				margin-bottom: 25px;
-				cursor: pointer;
-			}
+			font-family: "Raleway Regular", sans-serif;
+			font-size: 25px;
+			color: #b07d2a;
+			margin-bottom: -8px;
 		}
-		.mission-vision-container
+		.title-mission
 		{
-			height: 438.6px;
-			.sub-title
-			{
-				font-size: 20px;
-				color: #019771;
-				margin-bottom: -5px;
-			}
+			font-size: 40px;
+			// color: #019771;
+			color: #acacac;
+			display: inline-block;
+			margin-bottom: 25px;
+			cursor: pointer;
+		}
+		.title-vision
+		{
+			font-size: 40px;
+			color: #acacac;
+			display: inline-block;
+			margin-left: 20px;
+			margin-bottom: 25px;
+			cursor: pointer;
+		}
+	}
+	.mission-vision-container
+	{
+		height: 438.6px;
+		.sub-title
+		{
+			font-size: 20px;
+			color: #019771;
+			margin-bottom: -5px;
+		}
+		.content
+		{
+			font-size: 15px;
+			color: #555555;
+			text-align: justify;
+			margin-bottom: 30px;
+		}
+		.bulleted-list:before
+		{
+			content: "";
+			background-color: #b07d2a;
+			line-height: 1em;
+			width: .5em;
+			height: .5em;
+			float: left;
+			margin: .40em .25em 0;
 			.content
 			{
 				font-size: 15px;
@@ -288,38 +368,22 @@ body{
 				margin-bottom: 30px;
 			}
 		}
-		.mission-vision-container
+		.bulleted-list
 		{
-			height: 438.6px;
-			.bulleted-list:before
+			display: inline-block;
+			.content
 			{
-				content: "";
-				background-color: #b07d2a;
-				line-height: 1em;
-				width: .5em;
-				height: .5em;
-				float: left;
-				margin: .40em .25em 0;
-				.content
-				{
-					font-size: 15px;
-					color: #555555;
-					text-align: justify;
-					margin-bottom: 30px;
-				}
-			}
-			.bulleted-list
-			{
-				display: inline-block;
-				.content
-				{
-					font-size: 15px;
-					color: #555555;
-					text-align: justify;
-					margin-bottom: 30px;
-				}
+				font-size: 15px;
+				color: #555555;
+				text-align: justify;
+				margin-bottom: 30px;
 			}
 		}
+		.list-content
+		{
+			padding-left:15px;
+		}
+	}
 
 
 	.img-background

@@ -50,44 +50,13 @@
             <div class="form-group order-tags"></div>
             <div class="clearfix">
                 <div class="col-md-12">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-condensed">
-                            <thead style="text-transform: uppercase">
-                                <tr>
-                                    <th class="text-center">RECEIPT NO.</th>
-                                    <th class="text-center">CUSTOMER</th>
-                                    <th class="text-center">DATE ORDERED</th>
-                                    <th class="text-center">DATE PAID</th>
-                                    <th class="text-center">DATE SHIPPED</th>
-                                    <th class="text-center" width="120px">E-MAIL</th>
-                                    <th class="text-center" width="120px">CONTACT NO</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($_order as $order)
-                                <tr>
-                                  
-                                    <td class="text-center">{{ $order->transaction_number }}</td>
-                                    <td class="text-center">{{ $order->first_name }}</td>
-                                    <td class="text-center">{{ $order->display_date_order }}</td>
-                                    <td class="text-center">{{ $order->display_date_paid }}</td>
-                                    <td class="text-center">{{ $order->display_date_deliver }}</td>
-                                    <td class="text-center">{{ $order->email }}</td>
-                                    <td class="text-center">{{ $order->phone_number }}</td>
-                                    <td class="text-center"><a href="javascript:">DETAILS</a></td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                        <div class="pull-right">
-                            {{ $_order->render() }}
-                        </div>
+                    <div class="table-responsive load-table">
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-</div>
+
+<script type="text/javascript" src="/assets/member/js/global_table.js"></script>
 @endsection

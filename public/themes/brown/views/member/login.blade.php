@@ -14,9 +14,11 @@
 					<td class="c2">
 						<div class="register-form">
 							<div class="text-right social-button">
-								<!--<a href="{{$fb_login_url or '#'}}" class="holder fb">-->
-								<!--	<div class="name"><i class="fa fa-facebook" aria-hidden="true"></i> Sign in with Facebook</div>-->
-								<!--</a>-->
+								@if($show_fb == 123)
+								<a href="{{$fb_login_url or '#'}}" class="holder fb">
+									<div class="name"><i class="fa fa-facebook" aria-hidden="true"></i> Sign in with Facebook</div>
+								</a>
+								@endif
 								<a href="javascript:" class="holder gp" id="customBtn">
 									<div class="name "><i class="fa fa-google-plus" aria-hidden="true"></i> Sign in with Google+</div>
 								</a>

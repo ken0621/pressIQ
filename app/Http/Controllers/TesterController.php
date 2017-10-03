@@ -33,6 +33,7 @@ use Facebook\Facebook as Facebook;
 use Facebook\Exceptions\FacebookResponseException as FacebookResponseException;
 use Facebook\Exceptions\FacebookSDKException as FacebookSDKException;
 use App\Globals\Transaction;
+use App\Globals\Payment;
 use Request;
 use Carbon\Carbon;
 use Session;
@@ -43,6 +44,13 @@ use DB;
 
 class TesterController extends Controller
 {
+    public function getTestingPayment()
+    {
+        $from = 'paymaya';
+        $data["requestReferenceNumber"] = 1;
+        $data["paymentStatus"] = "PAYMENT_SUCCESS";
+        dd(Payment::done($data, $from));
+    }
     public function getBrownInvoiceNumber()
     {
         $_invoice = Tbl_ec_order::where("invoice_number", "!=", null)->orderBy("invoice_number", "asc")->get();

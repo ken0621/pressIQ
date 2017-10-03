@@ -85,7 +85,7 @@
 	<div class="dashboard">
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="title">Wallet Summary</div>
+				<div class="title">Wallet Summary <a href="javascript:" class="title-button pull-right btn-enter-a-code">Create New Slot</a></div>
 				<div class="sub-container">
 					<div class="table-holder">
 						<div class="chart-legend">
@@ -220,7 +220,7 @@
 	                    <div class="modal-body">
 	                        <div><img src="/themes/{{ $shop_theme }}/img/brown-done-img.png"></div>
 	                        <div class="text-header">Done!</div>
-	                        <div class="text-caption">You are now officially enrolled to<br><b>Brown & Proud</b> movement</div>
+	                        <div class="text-caption">You are now officially enrolled to<br><b>JCA Wellness</b></div>
 	                    </div>
 	                </div>
 	            </div>

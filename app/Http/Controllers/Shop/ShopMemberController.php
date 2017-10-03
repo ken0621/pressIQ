@@ -431,7 +431,6 @@ class ShopMemberController extends Shop
         $data["profile_info"]        = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();
         $data["_country"]            = Tbl_country::get();
         $data["allowed_change_pass"] = isset(Self::$customer_info->signup_with) ? (Self::$customer_info->signup_with == "member_register" ? true : false) : false;
-      
 
         if(Self::$customer_info)
         {
@@ -464,8 +463,8 @@ class ShopMemberController extends Shop
         if (!$validator->fails()) 
         {           
             /* Birthday Fix */
-            $birthday = date("YY-MM-DD", strtotime($request->b_month . "/" . $request->b_day . "/" . $request->b_year));
-
+            $birthday = date("Y-m-d", strtotime($request->b_month . "/" . $request->b_day . "/" . $request->b_year));
+            
             /* Customer Data */
             $insert_customer["first_name"]  = $request->first_name;
             $insert_customer["middle_name"] = $request->middle_name;

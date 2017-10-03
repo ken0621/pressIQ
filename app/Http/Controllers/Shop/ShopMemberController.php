@@ -112,7 +112,9 @@ class ShopMemberController extends Shop
         {
             $data['fb_login_url'] = FacebookGlobals::get_link($this->shop_info->shop_id);
         }
+        
         $get_google = GoogleGlobals::check_app_key($this->shop_info->shop_id);
+        
         if($get_google)
         {
             $data['google_app_id'] = SocialNetwork::get_keys($this->shop_info->shop_id, 'googleplus')['app_id'];
@@ -238,9 +240,16 @@ class ShopMemberController extends Shop
     }
     public function postLogin(Request $request)
     {
-        $validate["email"]      = ["required","email"];
+        $validate["email"]      = ["required"];
         $validate["password"]   = ["required"];
         $data                   = $this->validate(request(), $validate);
+        
+        $email = Tbl_mlm_slot::where("slot_no", $data["email"])->customer()->value('email');
+        
+        if($email)
+        {
+            $data["email"] = $email;
+        }
 
         Self::store_login_session($data["email"], $data["password"]);
 

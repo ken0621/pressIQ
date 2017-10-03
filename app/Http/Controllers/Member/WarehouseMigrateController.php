@@ -28,7 +28,7 @@ class WarehouseMigrateController extends Member
             $source['name'] = $_item['ref_name'];
             $source['id'] = 0;
             $retrun = Warehouse2::refill($_item['warehouse_shop_id'], $_item['warehouse_id'], $_item['item_id'] ,$_item['quantity'],$_item['remarks'], $source);
-        }
+        }	
 
         return json_encode('success');
     }

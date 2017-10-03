@@ -57,8 +57,8 @@ class FacebookGlobals
         $helper = $fb->getRedirectLoginHelper();
         $loginUrl = $helper->getLoginUrl('http://'.$_SERVER['SERVER_NAME'].'/members/login-submit', array(
    'scope' => 'email'));
-        $login_url =  htmlspecialchars($loginUrl);
-
+        $login_url =  preg_replace('/\x20(\x0e|\x0f)/', '', htmlspecialchars($loginUrl));
+        
         return $login_url;
     }
     public static function get_link_register($shop_id)

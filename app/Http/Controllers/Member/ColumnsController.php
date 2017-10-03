@@ -47,4 +47,25 @@ class ColumnsController extends Member
             return view("member.columns", $data);
         }
     }
+    public function anyReset($from)
+    {
+        $shop_id         = $this->user_info->shop_id;
+        $user_id         = $this->user_info->user_id;
+
+        $result = Columns::deleteColumns($shop_id, $user_id, $from);
+
+        if($result)
+        {
+            $response["response_status"] = "success";
+            $response["message"] = "Column has been reset.";
+            $response["call_function"] = "columns_submit_done";
+        }
+        else
+        {
+            $response["response_status"] = "error";
+            $response["message"] = "Some error occurred.";
+        }
+
+        return json_encode($response);
+    }
 }

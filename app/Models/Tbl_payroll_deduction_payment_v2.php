@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class Tbl_payroll_deduction_payment_v2 extends Model
 {
     protected $table = 'tbl_payroll_deduction_payment_v2';
-	protected $primaryKey = "payroll_deduction_payment_id";
+     protected $primaryKey = "payroll_deduction_payment_id";
     public $timestamps = false;
 
     /* COLUMN REFERENCE NAME */
@@ -62,7 +62,7 @@ class Tbl_payroll_deduction_payment_v2 extends Model
           }
           if ($payroll_employee_id!=0) 
           {
-          	$query->where('tbl_payroll_employee_basic.payroll_employee_id',$payroll_employee_id);
+          	$query->where('tbl_payroll_employee_basic.payroll_employee_company_id',$payroll_employee_id);
           }
           if ($payroll_deduction_id!=0)
           {

@@ -398,16 +398,15 @@ class PayrollReportController extends Member
 		$data["page"] = "Loan Summary";
 		$data["_loan_data"] = PayrollDeductionController::get_deduction($this->shop_id());
 		$data["_company"] = Tbl_payroll_company::where("shop_id", Self::shop_id())->where('payroll_parent_company_id', 0)->get();
-        /*  $data['_period'] = Tbl_payroll_period::sel(Self::shop_id())
+/*        $data['_period'] = Tbl_payroll_period::sel(Self::shop_id())
                                                   ->where('payroll_parent_company_id', 0)
                                                   ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
                                                   ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
                                                   ->orderBy('tbl_payroll_period.payroll_period_start','asc')
                                                   ->get();
-          $data['access'] = Utilities::checkAccess('payroll-timekeeping','salary_rates');
+          $data['access'] = Utilities::checkAccess('payroll-timekeeping','salary_rates');*/
 
-          return view('member.payroll.payroll_timekeeping', $data);*/
-          //**********
+        //return view('member.payroll.payroll_timekeeping', $data);
 		return view("member.payrollreport.loan_summary", $data);
 	}
 
@@ -417,6 +416,14 @@ class PayrollReportController extends Member
 		$deduction_type = str_replace("_"," ",$deduction_type);
 		$data["_loan_data"] = PayrollDeductionController::get_deduction_by_type($this->shop_id(),$deduction_type);
 		return view("member.payrollreport.loan_summary_table", $data);
+	}
+
+	public function table_company_loan_summary()
+	{
+		$data['company_id'] = Request::input('company_id');
+		$data['_loan_data'] = Tbl_payroll_deduction_payment_v2::getallinfo($this->shop_id(),$data['company_id'],0)->get();
+
+		return view('member.payrollreport.table_company_loan_summary',$data);
 	}
 
 	public function modal_loan_summary($employee_id = 0,$payroll_deduction_id = 0)

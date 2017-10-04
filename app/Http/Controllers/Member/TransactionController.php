@@ -83,23 +83,31 @@ class TransactionController extends Member
         $old = DB::table("tbl_ec_order")->where("invoice_number", $data['list']->transaction_number)->first();
         if ($old) 
         {
+            $data["list"]->transaction_date = $old->created_date;
             /* Old */
             $payment_method = DB::table("tbl_online_pymnt_link")->where("link_method_id", $old->payment_method_id)->first();
-            $data["customer_payment"]->payment_method = $payment_method->link_reference_name;
-            if($payment_method->link_reference_name == "paymaya") 
+            if($payment_method)
             {
-                $paymaya = DB::table("tbl_paymaya_logs")->where("order_id", $old->ec_order_id)->first();
-                $data["customer_payment"]->checkout_id = $paymaya->checkout_id;
-            }
-            elseif($payment_method->link_reference_name == "dragonpay")
-            {
-                $dragonpay = DB::table("tbl_dragonpay_logs")->where("order_id", $old->ec_order_id)->first();
-                if (is_serialized($dragonpay->response)) 
+                $data["customer_payment"]->payment_method = $payment_method->link_reference_name;
+                if($payment_method->link_reference_name == "paymaya") 
                 {
-                    $unserialize_dragonpay = unserialize($dragonpay->response);
-                    if (isset($unserialize_dragonpay['txnid']) && $unserialize_dragonpay['txnid']) 
+                    $paymaya = DB::table("tbl_paymaya_logs")->where("order_id", $old->ec_order_id)->first();
+                    $data["customer_payment"]->checkout_id = $paymaya->checkout_id;
+                }
+                elseif($payment_method->link_reference_name == "dragonpay")
+                {
+                    $dragonpay = DB::table("tbl_dragonpay_logs")->where("order_id", $old->ec_order_id)->first();
+                    if (is_serialized($dragonpay->response)) 
                     {
-                        $data["customer_payment"]->checkout_id = $unserialize_dragonpay['txnid'];
+                        $unserialize_dragonpay = unserialize($dragonpay->response);
+                        if (isset($unserialize_dragonpay['txnid']) && $unserialize_dragonpay['txnid']) 
+                        {
+                            $data["customer_payment"]->checkout_id = $unserialize_dragonpay['txnid'];
+                        }
+                        else
+                        {
+                            $data["customer_payment"]->checkout_id = "None";
+                        }
                     }
                     else
                     {
@@ -113,6 +121,8 @@ class TransactionController extends Member
             }
             else
             {
+                /* New */
+                $data["customer_payment"]->payment_method = "None";
                 $data["customer_payment"]->checkout_id = "None";
             }
         }

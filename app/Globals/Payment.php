@@ -18,6 +18,7 @@ use App\Globals\Cart2;
 use App\Globals\Cart;
 use App\Globals\Payment;
 use App\Globals\Warehouse2;
+use App\Globals\Transaction;
 // IPAY 88
 use App\IPay88\RequestPayment;
 // DRAGON PAY

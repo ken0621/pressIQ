@@ -181,6 +181,7 @@ class MemberSlotGenealogy
                                             <img src="/assets/slot_genealogy/member/img/default-image.jpg" alt="" />
                                         </div>
                                         <div id="cont">
+                                            <div><b>' . strtoupper($slot_info->first_name) . ' ' . strtoupper($slot_info->last_name) . '</b></div> 
                                             <div><b>' . strtoupper($slot_info->slot_no) . '</b></div>
                                             <div>'  . ' </div>
                                         </div>
@@ -200,6 +201,7 @@ class MemberSlotGenealogy
                                             <img src="/assets/slot_genealogy/member/img/default-image.jpg">
                                         </div>
                                         <div id="cont">
+                                            <div><b>' . strtoupper($slot_info->first_name) . ' ' . strtoupper($slot_info->last_name) . '</b></div> 
                                             <div><b>' . strtoupper($slot_info->slot_no) . '</b></div>  
                                             <div>' . ' </div>
                                         </div>
@@ -255,6 +257,7 @@ class MemberSlotGenealogy
                                             <img src="/assets/slot_genealogy/member/img/default-image.jpg" alt="" />
                                         </div>
                                         <div id="cont">
+                                            <div><b>' . strtoupper($slot_info->first_name) . ' ' . strtoupper($slot_info->last_name) . '</b></div> 
                                             <div><b>' . strtoupper($slot_info->slot_no) . '</b></div>
                                             <div>' . ' </div>
                                         </div>
@@ -275,6 +278,7 @@ class MemberSlotGenealogy
                                             <img src="/assets/slot_genealogy/member/img/default-image.jpg">
                                         </div>
                                         <div id="cont">
+                                            <div><b>' . strtoupper($slot_info->first_name) . ' ' . strtoupper($slot_info->last_name) . '</b></div> 
                                             <div><b>' . strtoupper($slot_info->slot_no) . '</b></div> 
                                             <div>' . ' </div>
                                         </div>

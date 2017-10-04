@@ -11,7 +11,6 @@
 			</div>
 		</div>
 		<div class="animated fadeInRight right">
-			
 		</div>
 	</div>
 	<div class="order-content">

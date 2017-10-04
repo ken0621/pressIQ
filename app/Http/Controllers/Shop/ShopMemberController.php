@@ -112,16 +112,19 @@ class ShopMemberController extends Shop
         {
             $data['fb_login_url'] = FacebookGlobals::get_link($this->shop_info->shop_id);
         }
+        
         $get_google = GoogleGlobals::check_app_key($this->shop_info->shop_id);
+        
         if($get_google)
         {
             $data['google_app_id'] = SocialNetwork::get_keys($this->shop_info->shop_id, 'googleplus')['app_id'];
         }
-        
-        // if(request("pass") != "123")
-        // {
-        //     return view("member.coming");
-        // }
+
+        $data['show_fb'] = null;
+        if(request("pass") == "123")
+        {
+            $data['show_fb'] = 123;
+        }
 
         return Self::load_view_for_members("member.login", $data, false);
     }
@@ -237,9 +240,16 @@ class ShopMemberController extends Shop
     }
     public function postLogin(Request $request)
     {
-        $validate["email"]      = ["required","email"];
+        $validate["email"]      = ["required"];
         $validate["password"]   = ["required"];
         $data                   = $this->validate(request(), $validate);
+        
+        $email = Tbl_mlm_slot::where("slot_no", $data["email"])->customer()->value('email');
+        
+        if($email)
+        {
+            $data["email"] = $email;
+        }
 
         Self::store_login_session($data["email"], $data["password"]);
 
@@ -430,7 +440,6 @@ class ShopMemberController extends Shop
         $data["profile_info"]        = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();
         $data["_country"]            = Tbl_country::get();
         $data["allowed_change_pass"] = isset(Self::$customer_info->signup_with) ? (Self::$customer_info->signup_with == "member_register" ? true : false) : false;
-      
 
         if(Self::$customer_info)
         {
@@ -463,8 +472,8 @@ class ShopMemberController extends Shop
         if (!$validator->fails()) 
         {           
             /* Birthday Fix */
-            $birthday = date("YY-MM-DD", strtotime($request->b_month . "/" . $request->b_day . "/" . $request->b_year));
-
+            $birthday = date("Y-m-d", strtotime($request->b_month . "/" . $request->b_day . "/" . $request->b_year));
+            
             /* Customer Data */
             $insert_customer["first_name"]  = $request->first_name;
             $insert_customer["middle_name"] = $request->middle_name;

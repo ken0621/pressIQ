@@ -33,10 +33,12 @@
 		  		<tbody>
 		  			@if(count($_tree_level) > 0)
 			  			@foreach($_tree_level as $tree)
-			  			<tr>
-			  				<td class="text-left">{!! $tree->ordinal_level !!}</td>
-			  				<td class="text-right"><a onclick="action_load_link_to_modal('/members/network-slot?slot_no={{ request("slot_no") }}&level={{ $tree->sponsor_tree_level }}','lg')" href="javascript:"><b>{!! $tree->display_slot_count !!}</b></a></td>
-			  			</tr>
+				  			@if($tree->sponsor_tree_level <= 5)
+					  			<tr>
+					  				<td class="text-left">{!! $tree->ordinal_level !!}</td>
+					  				<td class="text-right"><a onclick="action_load_link_to_modal('/members/network-slot?slot_no={{ request("slot_no") }}&level={{ $tree->sponsor_tree_level }}','lg')" href="javascript:"><b>{!! $tree->display_slot_count !!}</b></a></td>
+					  			</tr>
+				  			@endif
 			  			@endforeach
 			  		@else
 			  			<tr>

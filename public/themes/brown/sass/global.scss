@@ -18,6 +18,15 @@ body
 
 }
 
+@mixin transition($transition)
+{
+  	-webkit-transition: all $transition ease-in-out;
+  	-moz-transition: all $transition ease-in-out;
+  	-o-transition: all $transition ease-in-out;
+  	transition: all $transition ease-in-out;
+}/* apply @inlude transition(0.2s); */
+
+
 .embed-responsive
 {
 	position: relative;
@@ -965,6 +974,7 @@ footer
 		{
 			.holder
 			{
+				@include transition(0.2s);
 				background-color: #5d4239;
 				color: #fff;
 				padding: 10px;
@@ -976,13 +986,52 @@ footer
 				display: inline-block;
 				text-align: center;
 				margin: 0 2.5px;
+				cursor: pointer;
+
 				&:first-child
 				{
 					margin-left: 0;
+					&:hover
+					{
+						background-color: #3B5998;
+						
+						i
+						{
+							@include transition(0.2s);
+							font-size: 24px;
+						}
+					}
+
 				}
+				
+				&:nth-child(2)
+				{
+					&:hover
+					{
+						background-color: #1DA1F3;
+
+						i
+						{
+							@include transition(0.2s);
+							font-size: 24px;
+						}
+					}
+				}
+
 				&:last-child
 				{
 					margin-right: 0;
+
+					&:hover
+					{
+						background-color: #CD486B;
+
+						i
+						{
+							@include transition(0.2s);
+							font-size: 24px;
+						}
+					}
 				}
 			}
 		}

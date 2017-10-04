@@ -83,7 +83,7 @@
                                 <div class="button-holder">
                                     <div class="clearfix">
                                         <button class="btn btn-brown" type="button" onClick="location.href='/members'">Profile</button>
-                                        <button class="btn btn-green">Settings</button>
+                                        <button class="btn btn-green" type="button" onClick="location.href='/members/profile'">Settings</button>
                                     </div>
                                 </div>
                             </div>
@@ -135,7 +135,7 @@
                             @endif
                             <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a href="/">Brown</a></li>
                             <!--<li class="{{ Request::segment(1) == "product" ? "active" : "product" }}"><a href="/product">Phone Accessories</a></li>-->
-                            <li><a href="#">Internet Of Things</a></li>
+                            <li><a href="/inspirers">Inspirer Page Login</a></li>
                             <li><a href="#">Health Technology</a></li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
@@ -223,7 +223,7 @@
                         <div class="container">
                             <a href="/" class="head-button link-nav {{ Request::segment(1) == '' ? 'active' : '' }}" id="home">Brown</a>
                             <!--<a href="javascript:">Phone Accessories</a>-->
-                            <a href="javascript:">Internet Of Things</a>
+                            <a href="/inspirers">Inspirer Page Login</a>
                             <a href="javascript:">Health Technology</a>
                         </div>
                     </div>
@@ -319,8 +319,8 @@
                                     <div class="email">{{ $customer->email }}</div>
                                     <div class="button-holder">
                                         <div class="clearfix">
-                                            <button class="btn btn-brown">Profile</button>
-                                            <button class="btn btn-green">Settings</button>
+                                            <button class="btn btn-brown" type="button" onClick="location.href='/members'">Profile</button>
+                                            <button class="btn btn-green" type="button" onClick="location.href='/members/profile'">Settings</button>
                                         </div>
                                     </div>
                                 </div>
@@ -389,7 +389,7 @@
                     <div class="holder">
                         <div class="title">Get Intouch With Us</div>
                         <div class="social-logo">
-                            <a class="holder"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                            <a href="https://www.facebook.com/phbrownandproud/"' target="_blank" class="holder"><i class="fa fa-facebook" aria-hidden="true"></i></a>
                             <a class="holder"><i class="fa fa-twitter" aria-hidden="true"></i></a>
                             <a class="holder"><i class="fa fa-instagram" aria-hidden="true"></i></a>
                         </div>
@@ -542,5 +542,10 @@
     // }
     </script>
     @yield("script")
+    <!-- BEGIN JIVOSITE CODE -->
+    <script type='text/javascript'>
+    (function(){ var widget_id = 'OcvyPjoHBr';var d=document;var w=window;function l(){ var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);}if(d.readyState=='complete'){l();}else{if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
+    </script>
+    <!-- END JIVOSITE CODE -->
 </body>
 </html>

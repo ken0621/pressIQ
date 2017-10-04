@@ -266,6 +266,17 @@ class Transaction
         $store["get_transaction_filter_customer_id"] = $customer_id;
         session($store);
     }
+    public static function get_transaction_customer_details() //filter result of transaction list by customer
+    {
+        $store["get_transaction_customer_details"]  = true;
+        session($store);
+    }
+    public static function get_transaction_date() //filter result of transaction list by customer
+    {
+        $store["get_transaction_date"]  = true;
+        session($store);
+    }
+    
     public static function get_transaction_list($shop_id, $transaction_type = 'all', $search_keyword = '', $paginate = 5, $transaction_id = 0)
     {
         $data = Tbl_transaction_list::where('tbl_transaction_list.shop_id',$shop_id);
@@ -275,7 +286,8 @@ class Transaction
             $data = Tbl_transaction_list::where('tbl_transaction_list.transaction_id',$transaction_id)->where('tbl_transaction_list.shop_id',$shop_id);
         }
         
-        $data->transaction();
+        $data->transaction(); //join table transaction
+        $data->orderBy("transaction_number");
         
         if(isset($transaction_type))
         {
@@ -289,11 +301,21 @@ class Transaction
         {
             $data->where('transaction_reference_table', 'tbl_customer')->where('tbl_transaction.transaction_reference_id', session('get_transaction_filter_customer_id'));
             $data->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id');
+            session()->forget('get_transaction_filter_customer_id');
         }
         
         if(isset($search_keyword))
         {
             $data->where('transaction_number', "LIKE", "%" . $search_keyword . "%");
+        }
+        
+        
+        if(session('get_transaction_customer_details'))
+        {
+            $data->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id');
+            $data->leftJoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_customer.customer_id');
+            $data->leftJoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_customer.customer_id');
+            $data->groupBy("tbl_customer.customer_id");
         }
         
         if($paginate)
@@ -308,10 +330,26 @@ class Transaction
         foreach($data as $key => $value)
         {
             $data[$key]->customer_name = Transaction::getCustomerNameTransaction($value->transaction_id);
+            
+            if(session('get_transaction_customer_details'))
+            {
+                $data[$key]->phone_number           = $value->customer_mobile or $value->contact;
+            }
+            
+            if(session('get_transaction_date'))
+            {
+                $data[$key]->date_order             = Tbl_transaction_list::where('transaction_type', 'ORDER')->where("transaction_id", $value->transaction_id)->value('transaction_date');
+                $data[$key]->date_paid              = Tbl_transaction_list::where('transaction_type', 'RECEIPT')->where("transaction_id", $value->transaction_id)->value('transaction_date');
+                $data[$key]->date_deliver           = Tbl_transaction_list::where('transaction_type', 'WAYBILL')->where("transaction_id", $value->transaction_id)->value('transaction_date');;
+                $data[$key]->display_date_order     = $data[$key]->date_order != null ? date("m/d/Y", strtotime($data[$key]->date_order)) : "-";
+                $data[$key]->display_date_paid      = $data[$key]->date_paid != null ? date("m/d/Y", strtotime($data[$key]->date_paid)) : "-";
+                $data[$key]->display_date_deliver   = $data[$key]->date_deliver != null ? date("m/d/Y", strtotime($data[$key]->date_deliver)) : "-";
+            }
         }
         
-        session()->forget('get_transaction_filter_customer_id');
-        
+        session()->forget('get_transaction_customer_details');
+        session()->forget('get_transaction_date');
+
         return $data;
     }
     public static function get_all_transaction_type()

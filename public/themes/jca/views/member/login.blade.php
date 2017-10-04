@@ -41,9 +41,9 @@
 							<form method="post">
 								{{ csrf_field() }}
 								<div class="form-group">
-									<div class="register-label">EMAIL</div>
+									<div class="register-label">EMAIL or SLOT CODE</div>
 									<div class="form-input">
-										<input class="form-control input-sm" type="email" name="email" placeholder="Type Your Email Here" value="">
+										<input class="form-control input-sm" type="text" name="email" placeholder="Type Your Email Here" value="">
 									</div>
 								</div>
 								<div class="form-group">
@@ -55,7 +55,7 @@
 								<div class="form-group">
 									<div class="choice">
 										<div class="holder">
-											<button class="btn btn-primary">Login</button>
+											<button class="btn">Login</button>
 										</div>
 										<div class="holder"><span class="or">OR</span></div>
 										<div class="holder"><a class="login-href" href="/members/register">Create an Account</a></div>

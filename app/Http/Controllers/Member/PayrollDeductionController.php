@@ -561,7 +561,6 @@ class PayrollDeductionController extends Member
           return $data;
      }
 
-
      public static function get_deduction_by_type_config($shop_id = 0, $deduction_type='',$archive = 0)
      {
 

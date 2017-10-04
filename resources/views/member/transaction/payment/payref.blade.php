@@ -28,10 +28,10 @@
 <body>
 	<table>
 		<tr>
-			<td class="title" colspan="7">Paymaya Checkout Cross Reference</td>
+			<td class="title" colspan="18">Paymaya Checkout Cross Reference</td>
 		</tr>
 		<tr>
-			<td class="sub" colspan="8">This page allows to get corresponding checkout ID and status of payment.</td>
+			<td class="sub" colspan="18">This page allows to get corresponding checkout ID and status of payment.</td>
 		</tr>
 		<tr class="head">
 			<td>Order ID</td>

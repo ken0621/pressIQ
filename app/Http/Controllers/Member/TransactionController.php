@@ -140,12 +140,14 @@ class TransactionController extends Member
     }
     public function payref()
     {
-        Excel::create('Paymaya Report', function($excel) 
+        $data = [];
+
+        Excel::create('Paymaya Report', function($excel) use ($data)
         {
-            $excel->sheet('Paymaya', function($sheet) 
+            $excel->sheet('Paymaya', function($sheet) use ($data)
             {
-                $sheet->loadView('member.transaction.payment.payref');
+                $sheet->loadView('member.transaction.payment.payref', $data);
             });
-        });
+        })->download('xls');
     }
 }

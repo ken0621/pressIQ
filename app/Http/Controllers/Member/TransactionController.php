@@ -10,6 +10,7 @@ use App\Globals\Currency;
 use App\Globals\Transaction;
 use App\Globals\Pdf_global;
 use DB;
+use Excel;
 
 class TransactionController extends Member
 {
@@ -136,5 +137,15 @@ class TransactionController extends Member
         $html = view("member.transaction.view_pdf", $data);
         $pdf = Pdf_global::show_pdfv2($html);
         return $pdf;
+    }
+    public function payref()
+    {
+        Excel::create('Paymaya Report', function($excel) 
+        {
+            $excel->sheet('Paymaya', function($sheet) 
+            {
+                $sheet->loadView('member.transaction.payment.payref');
+            });
+        });
     }
 }

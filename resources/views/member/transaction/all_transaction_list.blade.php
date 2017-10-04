@@ -13,7 +13,7 @@
             </h1>
             <div class="dropdown pull-right">
                 <button onclick="location.href=''" class="btn btn-def-white btn-custom-white"><i class="fa fa-check"></i> Secondary Command</button>
-                <button onclick="location.href=''" class="btn btn-primary"><i class="fa fa-star"></i> Primary Command</button>
+                <button onclick="location.href='/member/cashier/transactions_list/payref'" class="btn btn-primary"><i class="fa fa-star"></i> Paymaya Reference</button>
             </div>
         </div>
     </div>

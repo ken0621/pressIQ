@@ -1,10 +1,10 @@
-$content-text: 'Open Sans', sans-serif;
+$content-text: 'Rubik', sans-serif;
+$light: 300;
 $regular: 400;
-$semi-bold: 600;
+$semi-bold: 500;
 $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
-
 
 /* Dashboard Top */
 .dashboard-top
@@ -14,8 +14,8 @@ $text-dark: #272c2f;
 	{
 		img
 		{
-			width: 100%;
-			height: auto;
+			//width: 100%;
+			//height: auto;
 		}
 	}
 
@@ -38,10 +38,12 @@ $text-dark: #272c2f;
 
 			.text-header1
 			{
-				font-weight: $bold;
-				font-size: 21px;
+				font-weight: $semi-bold;
+				font-size: 24px;
 				color: $text-dark;
 				word-break: break-all;
+				text-align: center;
+				padding-top: 20px;
 			}
 
 			.text-header2
@@ -57,7 +59,7 @@ $text-dark: #272c2f;
     	.btn-container
     	{
     		text-align: center;
-			padding: 63px 0px 0px 0px;
+			padding: 40px 0px 0px 0px;
 			font-family: $content-text;
 			font-weight: $semi-bold;
 			font-size: 13px;
@@ -65,9 +67,9 @@ $text-dark: #272c2f;
 			.btn-buy-a-kit
 			{
 				color: #fff;
-				background-color: #693d28;
+				background-color: #F34B56;
 				padding: 12px 40px 12px 40px;
-				border: 2px solid #693d28;
+				border: 2px solid #F34B56;
 				border-radius: 2px;
 			}
 			
@@ -83,10 +85,10 @@ $text-dark: #272c2f;
 
 			.btn-enter-a-code
 			{
-				color: #693d28;
+				color: #F34B56;
 				background-color: inherit;
 				padding: 12px 30px 12px 30px;
-				border: 2px solid #693d28;
+				border: 2px solid #F34B56;
 				border-radius: 2px;
 				//margin-bottom: 65px;
 			}
@@ -137,7 +139,7 @@ $text-dark: #272c2f;
 
 	.text-header
 	{
-		font-weight: $bold;
+		font-weight: $semi-bold;
 		font-size: 17px;
 		color: $text-dark;
 		padding-top: 10px;
@@ -160,7 +162,7 @@ $text-dark: #272c2f;
 			{
 				text-align: center;
 				padding-top: 10px;
-				font-weight: $bold;
+				font-weight: $semi-bold;
 				font-size: 17px;
 				color: $text-dark;
 			}
@@ -243,7 +245,7 @@ $text-dark: #272c2f;
 		background-color: #fff;
 		.modal-header
 		{
-			background-color: #422311;
+			background-color: #191919;
 			border-top-left-radius: 3px;
 			border-top-right-radius: 3px;
 
@@ -254,7 +256,7 @@ $text-dark: #272c2f;
 
 			.modal-title
 			{
-				font-weight: $bold;
+				font-weight: $semi-bold;
 				font-size: 15px;
 				color: #FFF;
 			}
@@ -350,7 +352,7 @@ $text-dark: #272c2f;
 						.name
 						{
 							font-size: 17px;
-							font-weight: $bold;
+							font-weight: $semi-bold;
 							color: $text-dark;
 							text-transform: uppercase;
 						}
@@ -470,7 +472,7 @@ $text-dark: #272c2f;
 	    	{
 				text-align: center;
 				font-family: $content-text;
-				font-weight: $bold;
+				font-weight: $semi-bold;
 				font-size: 13px;
 				padding-bottom: 20px;
 				margin-top: 20px;
@@ -537,7 +539,7 @@ $text-dark: #272c2f;
 				color: #f02432;
 				letter-spacing: 0.5px;
 				font-size: 14px;
-				font-weight: $bold !important;
+				font-weight: $semi-bold !important;
 				text-transform: uppercase;
 			}
 

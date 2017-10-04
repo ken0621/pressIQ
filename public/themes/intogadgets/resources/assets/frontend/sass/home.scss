@@ -631,6 +631,22 @@ body
             top: 50%;
         }
     }
+    .best-ads
+    {
+        .per-ads
+        {
+            padding: 4px;
+            @media screen and (max-width: 414px)
+            {
+                padding: 2px;
+            }
+
+            img
+            {
+                width: 100%;
+            }
+        }
+    }
     .best-content
     {
         margin: 5px auto;

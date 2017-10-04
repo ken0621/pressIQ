@@ -4,7 +4,6 @@
 	<div class="container">
 		<div class="members">
 			<div class="header hidden">
-				
 				<div class="notification">
 					<img src="/themes/{{ $shop_theme }}/img/bell.png">
 					<span class="badge">500</span>
@@ -55,7 +54,7 @@
 <!-- 						<li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}">
 							<a href="/members/genealogy?mode=sponsor"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Genealogy</span></div></a>
 						</li> -->
-
+						@if($mlm_member)
 						<li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}">
 							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Genealogy</span></div></a>
 
@@ -66,7 +65,6 @@
 								<li>
 									<a href="/members/genealogy?mode=sponsor"><div class="nav-holder"> &nbsp;&nbsp;<span>Unilevel Tree</span></div></a>
 								</li>
-
 							</ul>
 
 						</li>
@@ -87,6 +85,13 @@
 								</li>
 							</ul>
 						</li>
+						@else
+						@endif
+
+						<li class="{{ Request::segment(2) == "order" ? "active" : "" }}">
+							<a href="/members/order"><div class="nav-holder"><div class="icon brown-icon-bag"></div> <span>Orders</span></div></a>
+						</li>
+
 <!-- 						<li class="{{ Request::segment(2) == "slot" ? "active" : "" }}">
 							<a href="/members/slot"><div class="nav-holder"><div class="icon brown-icon-cubes"></div> <span>My Slots</span></div></a>
 						</li> -->

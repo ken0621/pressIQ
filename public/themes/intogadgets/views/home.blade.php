@@ -144,6 +144,17 @@
         <div class="line"></div>
         <div class="text">{{ get_content($shop_theme_info, 'home', 'home_best_seller_title') }}</div>
     </div>
+    <div class="container">
+      <div class="best-ads row-no-padding clearfix">
+        <div class="col-md-4 col-sm-4 col-xs-4"><div class="per-ads"><img src="/themes/{{ $shop_theme }}/img/bs1.jpg"></div></div>
+        <div class="col-md-4 col-sm-4 col-xs-4"><div class="per-ads"><img src="/themes/{{ $shop_theme }}/img/bs2.jpg"></div></div>
+        <div class="col-md-4 col-sm-4 col-xs-4"><div class="per-ads"><img src="/themes/{{ $shop_theme }}/img/bs3.jpg"></div></div>
+        <div class="col-md-4 col-sm-4 col-xs-4"><div class="per-ads"><img src="/themes/{{ $shop_theme }}/img/bs4.jpg"></div></div>
+        <div class="col-md-4 col-sm-4 col-xs-4"><div class="per-ads"><img src="/themes/{{ $shop_theme }}/img/bs5.jpg"></div></div>
+        <div class="col-md-2 col-sm-2 col-xs-2"><div class="per-ads"><img src="/themes/{{ $shop_theme }}/img/bs6.jpg"></div></div>
+        <div class="col-md-2 col-sm-2 col-xs-2"><div class="per-ads"><img src="/themes/{{ $shop_theme }}/img/bs7.jpg"></div></div>
+      </div>
+    </div>
     <div class="best-content container">
         @foreach(limit_foreach(get_collection_random(get_content($shop_theme_info, "home", "home_best_seller"), $shop_id), 8) as $collection)
         <div class="holder col-md-3 col-sm-6">

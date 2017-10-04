@@ -13,6 +13,7 @@ use App\Globals\AuditTrail;
 use App\Globals\Item;
 
 use App\Models\Tbl_mlm_indirect_setting;
+use App\Models\Tbl_brown_rank;
 use App\Models\Tbl_mlm_stairstep_settings;
 use App\Models\Tbl_mlm_stairstep_points_settings;
 use App\Models\Tbl_mlm_binary_pairing;
@@ -33,6 +34,7 @@ use App\Models\Tbl_mlm_unilevel_points_settings;
 use App\Models\Tbl_mlm_discount_card_settings;
 use App\Models\Tbl_item;
 use App\Models\Tbl_mlm_plan_binary_promotions;
+use App\Models\Tbl_direct_pass_up_settings;
 
 use App\Http\Controllers\Member\MLM_ProductController;
 use App\Http\Controllers\Member\MLM_PlanController;
@@ -54,7 +56,7 @@ class MLM_PlanController extends Member
         
         // datas
         $data["page"] = "Membership";
-        $data['mlm_plan'] = Tbl_mlm_plan::where('shop_id', $this->user_info->shop_id)->orderBy('marketing_plan_trigger', 'DESC')->orderBy('marketing_plan_enable', 'ASC')->get();
+        $data['mlm_plan'] = Tbl_mlm_plan::where('shop_id', $this->user_info->shop_id)->orderBy('marketing_plan_enable', 'DESC')->orderBy('marketing_plan_code', 'ASC')->get();
         $data['plan_settings'] = Tbl_mlm_plan_setting::where('shop_id', $this->user_info->shop_id)->first();
         // end datas
         
@@ -531,6 +533,49 @@ class MLM_PlanController extends Member
             Tbl_mlm_plan::insert($insert);
         }
 
+        if($count == 21)
+        {
+            // start STAIRSTEP complan settings insert
+            $insert['shop_id'] = $shop_id;
+            $insert['marketing_plan_code'] = "BROWN_RANK";
+            $insert['marketing_plan_name'] = "Brown Rank";
+            $insert['marketing_plan_trigger'] = "Slot Creation";
+            $insert['marketing_plan_label'] = "Brown Rank";
+            $insert['marketing_plan_enable'] = 0;
+            $insert['marketing_plan_release_schedule'] = 1;
+            $insert['marketing_plan_release_schedule_date'] = Carbon::now();
+            Tbl_mlm_plan::insert($insert);
+        }
+
+        if($count == 22)
+        {
+            // start STAIRSTEP complan settings insert
+            $insert['shop_id'] = $shop_id;
+            $insert['marketing_plan_code'] = "BROWN_REPURCHASE";
+            $insert['marketing_plan_name'] = "Brown Repurchase";
+            $insert['marketing_plan_trigger'] = "Product Repurchase";
+            $insert['marketing_plan_label'] = "Brown Repurchase";
+            $insert['marketing_plan_enable'] = 0;
+            $insert['marketing_plan_release_schedule'] = 1;
+            $insert['marketing_plan_release_schedule_date'] = Carbon::now();
+            Tbl_mlm_plan::insert($insert);
+        }
+
+        if($count == 23)
+        {
+            // start STAIRSTEP complan settings insert
+            $insert['shop_id'] = $shop_id;
+            $insert['marketing_plan_code'] = "DIRECT_PASS_UP";
+            $insert['marketing_plan_name'] = "Direct Pass Up";
+            $insert['marketing_plan_trigger'] = "Slot Creation";
+            $insert['marketing_plan_label'] = "Direct Pass Up";
+            $insert['marketing_plan_enable'] = 0;
+            $insert['marketing_plan_release_schedule'] = 1;
+            $insert['marketing_plan_release_schedule_date'] = Carbon::now();
+            Tbl_mlm_plan::insert($insert);
+        }
+
+
         // end basic complan
         
         
@@ -845,16 +890,54 @@ class MLM_PlanController extends Member
         	}
         	
 	    }
-	    elseif(isset($_POST['membership_points_direct']))
-	    {
-	    	
-	        $validate['membership_id'] = Request::input("membership_id");
+        elseif(isset($_POST['membership_points_direct']))
+        {
+            
+            $validate['membership_id'] = Request::input("membership_id");
             $validate['membership_points_direct'] = Request::input("membership_points_direct");
             $validate['membership_direct_income_limit'] = Request::input("membership_direct_income_limit");
+            $validate['membership_points_direct_gc'] = Request::input("membership_points_direct_gc");
             
             $rules['membership_id']   = "required";
             $rules['membership_points_direct']    = "required";
             $rules['membership_direct_income_limit']    = "required";
+            $rules['membership_points_direct_gc']    = "required";
+            
+            
+            $validator = Validator::make($validate,$rules);
+            if ($validator->passes())
+            {
+                $count = Tbl_membership_points::where('membership_id', $validate['membership_id'])->count();
+                if($count == 0)
+                {
+                    $insert['membership_id'] = $validate['membership_id'];
+                    $insert['membership_points_direct'] = $validate['membership_points_direct'];
+                    $insert['membership_direct_income_limit'] = $validate['membership_direct_income_limit'];
+                    $insert['membership_points_direct_gc'] = $validate['membership_points_direct_gc'];
+                    Tbl_membership_points::insert($insert);
+                }
+                else
+                {
+                    $update['membership_points_direct'] = $validate['membership_points_direct'];
+                    $update['membership_direct_income_limit'] = $validate['membership_direct_income_limit'];
+                    $update['membership_points_direct_gc'] = $validate['membership_points_direct_gc'];
+                    Tbl_membership_points::where('membership_id', $validate['membership_id'])->update($update);
+                }
+            }
+            else
+            {
+                $data['response_status'] = "warning";
+                $data['warning_validator'] = $validator->messages();
+            }
+        }	    
+        elseif(isset($_POST['membership_points_direct_pass_up']))
+	    {
+	    	
+	        $validate['membership_id'] = Request::input("membership_id");
+            $validate['membership_points_direct_pass_up'] = Request::input("membership_points_direct_pass_up");
+            
+            $rules['membership_id']                     = "required";
+            $rules['membership_points_direct_pass_up']  = "required";
             
     	    
     	    $validator = Validator::make($validate,$rules);
@@ -864,14 +947,12 @@ class MLM_PlanController extends Member
         	    if($count == 0)
         	    {
         	        $insert['membership_id'] = $validate['membership_id'];
-                    $insert['membership_points_direct'] = $validate['membership_points_direct'];
-            	    $insert['membership_direct_income_limit'] = $validate['membership_direct_income_limit'];
+                    $insert['membership_points_direct_pass_up'] = $validate['membership_points_direct_pass_up'];
             	    Tbl_membership_points::insert($insert);
         	    }
         	    else
         	    {
-                    $update['membership_points_direct'] = $validate['membership_points_direct'];
-        	        $update['membership_direct_income_limit'] = $validate['membership_direct_income_limit'];
+                    $update['membership_points_direct_pass_up'] = $validate['membership_points_direct_pass_up'];
             	    Tbl_membership_points::where('membership_id', $validate['membership_id'])->update($update);
         	    }
         	}
@@ -1199,12 +1280,16 @@ class MLM_PlanController extends Member
         $validate['stairstep_bonus'] = Request::input('stairstep_bonus');
         $validate['stairstep_leg_id'] = Request::input('stairstep_leg_id');
         $validate['stairstep_leg_count'] = Request::input('stairstep_leg_count');
+        $validate['stairstep_pv_maintenance'] = Request::input('stairstep_pv_maintenance');
+        $validate['commission_multiplier'] = Request::input('commission_multiplier');
        
         $rules['stairstep_level'] ="required";
         $rules['stairstep_name'] = "required";
         $rules['stairstep_required_gv'] = "required";
         $rules['stairstep_required_pv'] = "required";
         $rules['stairstep_bonus'] = "required";
+        $rules['stairstep_pv_maintenance'] = "required";
+        $rules['commission_multiplier'] = "required";
         
         $validator = Validator::make($validate,$rules);
         if ($validator->passes())
@@ -1216,6 +1301,8 @@ class MLM_PlanController extends Member
             $insert['stairstep_bonus'] = Request::input('stairstep_bonus');
             $insert['stairstep_leg_id'] = Request::input('stairstep_leg_id');
             $insert['stairstep_leg_count'] = Request::input('stairstep_leg_count');
+            $insert['stairstep_pv_maintenance'] = Request::input('stairstep_pv_maintenance');
+            $insert['commission_multiplier'] = Request::input('commission_multiplier');
             $insert['shop_id'] = $this->user_info->shop_id;
             Tbl_mlm_stairstep_settings::insert($insert);
             $data['response_status'] = "success_add_stairstep";
@@ -1240,6 +1327,8 @@ class MLM_PlanController extends Member
         $validate['stairstep_bonus'] = Request::input('stairstep_bonus');
         $validate['stairstep_leg_id'] = Request::input('stairstep_leg_id');
         $validate['stairstep_leg_count'] = Request::input('stairstep_leg_count');
+        $validate['stairstep_pv_maintenance'] = Request::input('stairstep_pv_maintenance');
+        $validate['commission_multiplier'] = Request::input('commission_multiplier');
 
         $rules['stairstep_id'] ="required";
         $rules['stairstep_level'] ="required";
@@ -1247,6 +1336,8 @@ class MLM_PlanController extends Member
         $rules['stairstep_required_gv'] = "required";
         $rules['stairstep_required_pv'] = "required";
         $rules['stairstep_bonus'] = "required";
+        $rules['stairstep_pv_maintenance'] = "required";
+        $rules['commission_multiplier'] = "required";
         
         $validator = Validator::make($validate,$rules);
         if ($validator->passes())
@@ -1259,6 +1350,8 @@ class MLM_PlanController extends Member
             $update['shop_id'] = $this->user_info->shop_id;
             $update['stairstep_leg_id'] = Request::input('stairstep_leg_id');
             $update['stairstep_leg_count'] = Request::input('stairstep_leg_count');
+            $update['stairstep_pv_maintenance'] = Request::input('stairstep_pv_maintenance');
+            $update['commission_multiplier'] = Request::input('commission_multiplier');
             Tbl_mlm_stairstep_settings::where('stairstep_id', Request::input('stairstep_id'))->update($update);
             $data['response_status'] = "success_edit_stairstep";
         }
@@ -2373,5 +2466,128 @@ class MLM_PlanController extends Member
         {
             return $this->binary_promotions_save();
         }
+    }
+    public function brown_rank()
+    {
+        $data["page"] = "Brown Rank";
+        $data['basic_settings'] = MLM_PlanController::basic_settings('BROWN_RANK');
+
+        return view("member.mlm_plan.configure2.brown_rank", $data);
+    }
+    public function brown_rank_table()
+    {        
+        $data['_brown_rank'] = Tbl_brown_rank::where('rank_shop_id',$this->user_info->shop_id)->where('archived',0)->get();
+
+        return view("member.mlm_plan.configure2.brown_rank_table", $data);
+    }
+    public function brown_rank_add()
+    {
+        $data["page"] = "Brown Rank";
+        $data["process"] = "CREATE";
+        $data['action'] = '/member/mlm/plan/brown_rank/add_rank_submit';
+        if(Request::input('id'))
+        {
+            $data["process"] = "EDIT";
+            $data['action'] = '/member/mlm/plan/brown_rank/update_rank_submit';
+            $data['brown_rank'] = Tbl_brown_rank::where('rank_id',Request::input('id'))->first();
+        }
+        return view("member.mlm_plan.configure2.brown_rank_add", $data);
+    }
+    public function add_rank_submit()
+    {
+        $insert['rank_name'] = Request::input('rank_name');
+        $insert['rank_shop_id'] = $this->user_info->shop_id;
+        $insert['required_direct'] = Request::input('required_direct');
+        $insert['required_slot'] = Request::input('required_slot');
+        $insert['required_uptolevel'] = Request::input('required_uptolevel');
+        $insert['builder_reward_percentage'] = Request::input('builder_reward_percentage');
+        $insert['builder_uptolevel'] = Request::input('builder_uptolevel');
+        $insert['leader_override_build_reward'] = Request::input('leader_override_build_reward');
+        $insert['leader_override_build_uptolevel'] = Request::input('leader_override_build_uptolevel');
+        $insert['leader_override_direct_reward'] = Request::input('leader_override_direct_reward');
+        $insert['leader_override_direct_uptolevel'] = Request::input('leader_override_direct_uptolevel');
+        $insert['rank_created'] = Carbon::now();
+
+        if($insert['rank_name'])
+        {
+            Tbl_brown_rank::insert($insert);
+            $return['status'] = 'success';
+            $return['call_function'] = 'success_created_rank'; 
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['message'] = 'Rank name is required.';
+        }   
+        return json_encode($return);
+    }
+    public function update_rank_submit()
+    {
+        $update['rank_name'] = Request::input('rank_name');
+        $update['required_slot'] = Request::input('required_slot');
+        $update['required_direct'] = Request::input('required_direct');
+        $update['required_uptolevel'] = Request::input('required_uptolevel');
+        $update['builder_reward_percentage'] = Request::input('builder_reward_percentage');
+        $update['builder_uptolevel'] = Request::input('builder_uptolevel');
+        $update['leader_override_build_reward'] = Request::input('leader_override_build_reward');
+        $update['leader_override_build_uptolevel'] = Request::input('leader_override_build_uptolevel');
+        $update['leader_override_direct_reward'] = Request::input('leader_override_direct_reward');
+        $update['leader_override_direct_uptolevel'] = Request::input('leader_override_direct_uptolevel');
+
+        if($update['rank_name'])
+        {
+            Tbl_brown_rank::where('rank_id',Request::input('rank_id'))->update($update);
+            $return['status'] = 'success';
+            $return['call_function'] = 'success_created_rank';
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['message'] = 'Rank name is required.';
+        }   
+        return json_encode($return);
+    }
+    public function brown_repurchase()
+    {
+        $data["page"] = "Brown Repurchase";
+        $data['basic_settings'] = MLM_PlanController::basic_settings('BROWN_REPURCHASE');
+
+        return view("member.mlm_plan.configure2.brown_rank", $data);
+    }
+    public static function direct_pass_up($shop_id)
+    {
+        $data['membership']               = Tbl_membership::getactive(0, $shop_id)->membership_points()->get();
+        $data['direct_count']             = Tbl_direct_pass_up_settings::where("shop_id",$shop_id)->count();
+        $data['direct_number_settings']   = Tbl_direct_pass_up_settings::where("shop_id",$shop_id)->get();
+        $data['basic_settings']           = MLM_PlanController::basic_settings('DIRECT_PASS_UP');
+        return view('member.mlm_plan.configure.direct_pass_up', $data);
+    }   
+
+    public function direct_pass_up_save_direct_number()
+    {
+        $shop_id     = $this->user_info->shop_id;
+        $old_count   = Tbl_direct_pass_up_settings::where("shop_id",$shop_id)->count();
+        $new_count   = count(Request::input("direct_number"));
+        $array       = array();
+
+        if($new_count != 0)
+        {
+            foreach(Request::input("direct_number") as $key => $direct_number)
+            {
+                array_push($array, Request::input("direct_number")[$key]);
+                $exist  = Tbl_direct_pass_up_settings::where("shop_id",$shop_id)->where("direct_number",Request::input("direct_number")[$key])->first(); 
+                if(!$exist)
+                {
+                    $insert["direct_number"]     = Request::input("direct_number")[$key];
+                    $insert["shop_id"]           = $shop_id;
+                    Tbl_direct_pass_up_settings::insert($insert);
+                }
+            }
+        }   
+
+        Tbl_direct_pass_up_settings::where("shop_id",$shop_id)->whereNotIn("direct_number",$array)->delete();
+        $data['response_status'] = "success";
+
+        echo json_encode($data);          
     }
 }

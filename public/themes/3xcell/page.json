@@ -4,13 +4,8 @@
 		"home_slider" :
 		{
 			"label":"Slider Maintenance",
-			"type":"maintenance",
+			"type":"gallery",
 			"default":"",
-			"field":[
-				{"name":"image", "type":"image"},
-				{"name":"title", "type":"text"},
-				{"name":"subtitle", "type":"text"}
-			],
 			"size":"12"
 		},
 		"home_top_left_title" :
@@ -261,6 +256,13 @@
 			"type":"textarea",
 			"default":"To influence and empower others in achieving goal to be healthy and wealthy with the freedom of time especially in today’s very crowded populace.",
 			"size":"6"
+		},
+		"history_permit" :
+		{
+			"label":"Permits",
+			"type":"gallery",
+			"default":"",
+			"size":"12"
 		}
 	},
 	"How-To-Join":

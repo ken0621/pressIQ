@@ -108,7 +108,7 @@ class Cart
                                 ->update($_cart["cart"][$key]);
                     }
                 }
-
+                
                 if($condition == false)
                 {
                     $_cart["cart"][$product_id] = $insert["cart"][$product_id];
@@ -258,6 +258,10 @@ class Cart
                 $data["cart"][$key]["cart_product_information"]["product_discounted_value"]       = isset($item_discounted_value) ? $item_discounted_value : null;
                 $data["cart"][$key]["cart_product_information"]["product_discounted_remark"]      = isset($item_discounted_remark) ? $item_discounted_remark : null;
                 $data["cart"][$key]["cart_product_information"]["product_current_price"]          = $current_price;
+                if ($item_discounted_value != 0) 
+                {
+                    $data["cart"][$key]["cart_product_information"]["product_price"] = $current_price;
+                }
 
                 $total_product_price = $total_product_price + ($current_price * $info['quantity']);
                 $total_quantity += $info['quantity'];

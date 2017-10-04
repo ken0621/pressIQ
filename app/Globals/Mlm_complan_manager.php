@@ -15,6 +15,7 @@ use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Models\Tbl_mlm_indirect_setting;
 use App\Models\Tbl_mlm_binary_setttings;
 use App\Models\Tbl_mlm_unilevel_settings;
+use App\Models\Tbl_direct_gc_logs;
 use App\Models\Tbl_mlm_item_points;
 use App\Models\Tbl_mlm_matching;
 use App\Models\Tbl_mlm_matching_log;
@@ -25,12 +26,14 @@ use App\Models\Tbl_mlm_indirect_points_settings;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_mlm_discount_card_settings;
 use App\Models\Tbl_mlm_binary_report;
+use App\Models\Tbl_brown_rank;
 use App\Globals\Mlm_gc;
+use App\Globals\Mlm_complan_manager_repurchasev2;
 use App\Models\Tbl_mlm_gc;
 use App\Models\Tbl_mlm_binary_pairing_log;
+use App\Models\Tbl_direct_pass_up_settings;
 use App\Http\Controllers\Member\MLM_MembershipController;
 use App\Http\Controllers\Member\MLM_ProductController;
-
 use Schema;
 use Session;
 use DB;
@@ -44,7 +47,36 @@ use App\Globals\Membership_code;
 use App\Globals\Binary_pairing;
 class Mlm_complan_manager
 {   
+    public static function brown_rank($slot_info)
+    {
+        /* SET TO LOWEST RANK */
+        $shop_id                    =  $slot_info->shop_id;
+        $lowest_rank                = Tbl_brown_rank::where("rank_shop_id", $shop_id)->min("rank_id");
+        $update["brown_rank_id"]    = $lowest_rank;
+        Tbl_mlm_slot::where("slot_id", $slot_info->slot_id)->update($update);
 
+        $_sponsor_tree = Tbl_tree_sponsor::orderby("sponsor_tree_level", "asc")->child($slot_info->slot_id)->parent_info()->get();
+
+        foreach($_sponsor_tree as $sponsor_tree)
+        {
+            $brown_next_rank = Tbl_brown_rank::where("rank_id",">", $sponsor_tree->brown_rank_id)->orderBy("rank_id")->first();
+            //TODO: LEVEL LIMIT IMPLEMENTATION
+            if($brown_next_rank)
+            {
+                $brown_rank_required_slots   = $brown_next_rank->required_slot;
+                $brown_count_required        = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $sponsor_tree->slot_id)->where("sponsor_tree_level", "<=", $brown_next_rank->required_uptolevel)->count();
+                
+                $brown_rank_required_direct  = $brown_next_rank->required_direct;
+                $brown_count_required_direct = Tbl_tree_sponsor::where("sponsor_tree_parent_id", $sponsor_tree->slot_id)->where("sponsor_tree_level",1)->count();
+               
+                if($brown_count_required >= $brown_rank_required_slots && $brown_count_required_direct >= $brown_rank_required_direct)
+                {
+                    $update_brown_rank["brown_rank_id"] = $brown_next_rank->rank_id;
+                    Tbl_mlm_slot::where("slot_id", $sponsor_tree->slot_id)->update($update_brown_rank);
+                }
+            }
+        }
+    }
     // DIRECT
 	public static function direct($slot_info)
 	{
@@ -54,7 +86,6 @@ class Mlm_complan_manager
         {
             if($slot_info->membership_points_direct != null || $slot_info->membership_points_direct != 0)
             {
-
                 /* DIRECT INCOME LIMIT */
                 $check_points = Tbl_membership_points::where("membership_id",$slot_sponsor->slot_membership)->first();
                 if($check_points)
@@ -80,6 +111,18 @@ class Mlm_complan_manager
                     $direct_points_given = $slot_info->membership_points_direct;
                 }
 
+                $direct_points_gc_given = $slot_info->membership_points_direct_gc;
+                if($direct_points_gc_given != 0)
+                {
+                    $insert_direct_gc["gc_log_amount"]  = $direct_points_gc_given;
+                    $insert_direct_gc["slot_id"]        = $slot_sponsor->slot_id;
+                    $insert_direct_gc["shop_id"]        = $slot_info->shop_id;
+                    $insert_direct_gc["date_created"]   = Carbon::now();
+                    $insert_direct_gc["gc_claimed"]     = 0;
+                    Tbl_direct_gc_logs::insert($insert_direct_gc);
+
+                }
+
 
                 $log_array['earning'] = $direct_points_given;
                 $log_array['level'] = 1;
@@ -97,10 +140,25 @@ class Mlm_complan_manager
                 $arry_log['wallet_log_status'] = "n_ready";   
                 $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('DIRECT', $slot_info->shop_id); 
                 Mlm_slot_log::slot_array($arry_log);
+
+                if(Self::plan_check_if_enabled($slot_info->shop_id, "BROWN_RANK")->marketing_plan_enable == 1)
+                {
+                    /* LEADER REWARD FOR BROWN RANK */
+                    $_sponsor_tree = Tbl_tree_sponsor::orderby("sponsor_tree_level", "asc")->child($slot_sponsor->slot_id)->parent_info()->get();
+
+                    foreach($_sponsor_tree as $sponsor_tree)
+                    {
+                        Mlm_complan_manager_repurchasev2::brown_leader_reward($sponsor_tree, $slot_sponsor , "Direct Referral", $direct_points_given);
+                    }
+                }
             }
         }   
         Mlm_complan_manager::cutoff_direct('DIRECT', $slot_info->shop_id);      
 	}
+    public static function plan_check_if_enabled($shop_id, $marketing_plan_code)
+    {
+        return Tbl_mlm_plan::where("shop_id", $shop_id)->where("marketing_plan_code", $marketing_plan_code)->first();
+    }
     public static function cutoff_direct($code, $shop_id)
     {
         // function releasing income from cutoff
@@ -396,13 +454,13 @@ class Mlm_complan_manager
                         $count_tri_income = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $key)->where('wallet_log_matrix_triangle', $selected)->count();
                         if($count_tri_income == 0)
                         {
-                            $log = 'Congratulations you earned ' . $binary_settings_matrix_income . ' from the matrix triangle of ' . $slot_a->slot_no;
+                            $log = 'Congratulations you earned <b>' . Currency::format($binary_settings_matrix_income) . '</b> from the matrix triangle of ' . $slot_a->slot_no;
                             $arry_log['wallet_log_slot']            = $key;
                             $arry_log['shop_id']                    = $slot_info->shop_id;
                             $arry_log['wallet_log_slot_sponsor']    = $slot_info->slot_id;
                             $arry_log['wallet_log_details']         = $log;
                             $arry_log['wallet_log_amount']          = $binary_settings_matrix_income;
-                            $arry_log['wallet_log_plan']            = "BINARY";
+                            $arry_log['wallet_log_plan']            = "TRIANGLE";
                             $arry_log['wallet_log_status']          = "released";   
                             $arry_log['wallet_log_matrix_triangle'] = $selected;
                             $arry_log['wallet_log_claimbale_on']    = Mlm_complan_manager::cutoff_date_claimable('BINARY', $slot_info->shop_id); 
@@ -1679,7 +1737,77 @@ class Mlm_complan_manager
         }   
     }
 
+    // DIRECT
+    public static function direct_pass_up($slot_info)
+    {
+        $slot_sponsor = Tbl_mlm_slot::where('slot_id', $slot_info->slot_sponsor)->membership()->first();
+        /* CHECK IF SLOT RECIPIENT EXIST */
+        if($slot_sponsor)
+        {
+            if($slot_info->membership_points_direct_pass_up != null || $slot_info->membership_points_direct_pass_up != 0)
+            {
 
+                $received_by_slot_id = null;
+                $condition           = false;
+                $child_slot          = $slot_info;
+                $level               = 1;
+                while ($condition == false) 
+                {
+                    if($child_slot)
+                    {
+                        $current_count           = Tbl_tree_sponsor::where("sponsor_tree_parent_id",$child_slot->slot_sponsor)
+                                                                   ->where("shop_id",$slot_info->shop_id)
+                                                                   ->where("sponsor_tree_child_id","<=",$child_slot->slot_id)
+                                                                   ->where("sponsor_tree_level",1)
+                                                                   ->count();
+
+                        $pass_up_settings        = Tbl_direct_pass_up_settings::where("shop_id",$slot_info->shop_id)->where("direct_number",$current_count)->first();
+                        if($pass_up_settings)
+                        {
+                          $child_slot = Tbl_mlm_slot::where("slot_id",$child_slot->slot_sponsor)->where("shop_id",$slot_info->shop_id)->first();
+                          $level++;
+                        }
+                        else
+                        {
+                            $received_by_slot_id = $child_slot->slot_sponsor;
+                            $condition = true;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                $direct_points_given = $slot_info->membership_points_direct_pass_up;
+
+                if($condition == true && $received_by_slot_id)
+                {
+                    $earner                  = Tbl_mlm_slot::where("slot_id",$received_by_slot_id)->where("shop_id",$slot_info->shop_id)->first();
+                    $log_array['earning']    = $direct_points_given;
+                    $log_array['level']      = $level;
+                    $log_array['level_tree'] = 'Sponsor Tree';
+                    $log_array['complan']    = 'DIRECT_PASS_UP';
+
+                    $log = Mlm_slot_log::log_constructor($earner, $slot_info,  $log_array);
+
+                    $arry_log['wallet_log_slot']         = $received_by_slot_id;
+                    $arry_log['shop_id']                 = $slot_info->shop_id;
+                    $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
+                    $arry_log['wallet_log_details']      = $log;
+                    $arry_log['wallet_log_amount']       = $direct_points_given;
+                    $arry_log['wallet_log_plan']         = "DIRECT_PASS_UP";
+                    $arry_log['wallet_log_status']       = "n_ready";   
+                    $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('DIRECT_PASS_UP', $slot_info->shop_id); 
+                    Mlm_slot_log::slot_array($arry_log);
+                }
+            }
+        }   
+
+
+        Mlm_complan_manager::cutoff_direct('DIRECT', $slot_info->shop_id);      
+    }
 
     // OTHER FUNCTIONS
     public static function date_current($type)

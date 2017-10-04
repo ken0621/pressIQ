@@ -49,7 +49,6 @@ class Reward
             {
                 $membership = Tbl_membership_package::where('shop_id', $shop_id)->where('membership_package_id', $membership_id)->membership()->first();
             }
-            
 
             if(!$membership)
             {
@@ -103,6 +102,7 @@ class Reward
         $request_check['slot_sponsor']          = null;
         $request_check['slot_placement']        = null;
         $request_check['slot_position']         = null;
+        $request_check['brown_rank_id']         = null;
 
         foreach($request_check as $key => $value)
         {
@@ -212,10 +212,15 @@ class Reward
 
         $insert['shop_id'] = $request['shop_id'];
         $insert['slot_owner'] = $validate['slot_owner'];
-        $insert['slot_created_date'] = Carbon::now();
+        $insert['slot_created_date'] = $request["date_created"];
         $insert['slot_membership'] = $membership->membership_id;
         $insert['slot_status'] = $membership->membership_type;
         $insert['slot_sponsor'] = $validate['slot_sponsor'];
+
+        if(isset($request['brown_rank_id']))
+        {
+            $insert['brown_rank_id'] = $request['brown_rank_id'];
+        }
         
         $id = Tbl_mlm_slot::insertGetId($insert);
         $slot_info = Tbl_mlm_slot::where('slot_id', $id)->membership()->membership_points()->customer()->first();
@@ -223,9 +228,9 @@ class Reward
         $update['used'] = 1;
         $update['date_used'] = Carbon::now();
         $update['slot_id'] = $id;
+        
         Tbl_membership_code::where('membership_code_id', $validate['membership_code_id'])->update($update);            
           
-
         $return['status'] = "success"; 
         $return['message'] = 'Slot Inserted'; 
         $return['slot_id'] = $id;

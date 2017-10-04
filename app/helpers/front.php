@@ -185,6 +185,21 @@ function get_front_news($shop_id)
     return Tbl_post::where("shop_id", $shop_id)->where("archived", 0)->orderBy("post_date", "DESC")->get();
 }
 
+function get_front_divide_string($data, $tab, $content, $count, $index)
+{
+    $return = explode(' ', get_content($data, $tab, $content), $count);
+    if (isset($return[$index])) 
+    {
+        $result = $return[$index];
+    }
+    else
+    {
+        $result = '';
+    }
+
+    return $result;
+}
+
 function validateDate($date)
 {
     $d = DateTime::createFromFormat('Y-m-d', $date);

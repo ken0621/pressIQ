@@ -1,9 +1,13 @@
 <?php
+Route::any('/ncabot', 'SampleTesting@ncabot');
+Route::any('/oliver/{id}', 'SampleTesting@index');
+Route::any('/oliver/samp2', 'SampleTesting@samp2');
 Route::any('/s', 'TesterController@samptest');
 Route::any('/pmigrate', 'PasswordMigrateController@index');
 Route::any('/dd','TesterController@connection_test');
 Route::any('/member/payroll/api_login','Api\PayrollConnectController@index');
 Route::any('/member/payroll/get_cutoff_data','Api\PayrollConnectController@get_cutoff_data');
+
 
 Route::any('/member/popup/message','MemberController@message');	
 Route::get('/member/mail_setting', 'Member\MailSettingController@index');
@@ -20,6 +24,8 @@ Route::get('/barcode', 'MemberController@barcodes');
 // for testing only
 // Route::get('/card', 'MemberController@card');
 // Route::get('/card/all', 'MemberController@all_slot');
+
+Route::any('/login/geturl', 'Member\TesterController@test_login'); 
 
 Route::get('member/register/session', 'MemberController@session');
 Route::get('member/register', 'MemberController@register');
@@ -847,6 +853,9 @@ Route::group(array('prefix' => '/member/report'), function()
 
 	Route::any('/accounting/date_period','Member\ReportsController@get_date_period_covered');
 });
+
+AdvancedRoute::controller('/member/report', 'Member\ReportControllerV2');
+
 //reports end
 
 /* Customer */
@@ -1025,6 +1034,13 @@ AdvancedRoute::controller('/member/ecommerce/trackings', 'Member\TrackingsContro
 AdvancedRoute::controller('/member/register/shipping', 'MemberController');
 /* End */
 
+/* MEMBER SHIPPING*/
+AdvancedRoute::controller('/member/maintenance/app_keys', 'Member\SocialNetworkingKeysController');
+/* End */
+
+/* MEMBER COLUMNS */
+AdvancedRoute::controller('/member/columns', 'Member\ColumnsController');
+/* End */
 
 AdvancedRoute::controller('/tester','TesterController');
 
@@ -1100,5 +1116,5 @@ include_once('routes_config/routes_reward.php');
 include_once('routes_config/routes_cashier.php');
 include_once('routes_config/routes_item.php');
 
-
-
+/* Members Area */
+include_once('routes_config/routes_members_area.php');

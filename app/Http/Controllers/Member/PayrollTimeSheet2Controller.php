@@ -94,6 +94,7 @@ class PayrollTimeSheet2Controller extends Member
 	}
 	public function timesheet($period_id, $employee_id)
 	{
+		// dd();
 		$data["page"]					= "Employee Timesheet";
 		$data["employee_id"]			= $this->$employee_id = $employee_id;
 		$data["employee_info"]			= $this->db_get_employee_information($employee_id); 
@@ -102,11 +103,9 @@ class PayrollTimeSheet2Controller extends Member
 		$data["show_period_end"]		= date("F d, Y", strtotime($data["company_period"]->payroll_period_end));
 		$data["_timesheet"] 			= Payroll2::timesheet_info($data["company_period"], $employee_id);
 		$data["access_salary_rates"]	= $access = Utilities::checkAccess('payroll-timekeeping','salary_rates');
+		$check_approved 				= Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_id)->first();
+		$data["time_keeping_approved"] 	= $check_approved ? true : false;
 
-		$check_approved = Tbl_payroll_time_keeping_approved::where("employee_id", $employee_id)->where("payroll_period_company_id", $period_id)->first();
-		$data["time_keeping_approved"] = $check_approved ? true : false;
-		
-		
 		$employee_contract = $this->db_get_current_employee_contract($employee_id, $data["company_period"]->payroll_period_start);
 
 		$data["compute_type"] = $employee_contract->payroll_group_salary_computation;
@@ -117,6 +116,7 @@ class PayrollTimeSheet2Controller extends Member
 		{
 			echo "<div style='padding: 100px; text-align: center;'>FLAT RATE COMPUTATION DOES'T HAVE TIMESHEET</div>";
 		}
+		
 		else
 		{
 			return view('member.payroll2.employee_timesheet', $data);
@@ -171,17 +171,28 @@ class PayrollTimeSheet2Controller extends Member
 
 		echo json_encode("success");
 	}
+
 	public function time_change($period_id, $employee_id)
 	{
 		$data["period"] = $period = $this->db_get_company_period_information($period_id);
 		$data["request"] = Request::input();
-
 		/* GET CURRENT TIMESHEET FOR THE DAY */
 		$data["timesheet_db"] = $timesheet_db = $this->timesheet_info_db($employee_id, Request::input("date"));
+		
+		/*added for remark not saving in absent*/
+		$check_time_sheet_record = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->first();
+		
+		/*added for remark not saving in absent*/
+		//
+		if ($check_time_sheet_record) 
+		{
 
-		/* UPDATE REMARKS */
-		$update_remarks["payroll_time_shee_activity"] = isset(Request::input("remarks")[0]) ? Request::input("remarks")[0] : "";
-		Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->update($update_remarks);
+			/* UPDATE REMARKS */
+			$update_remarks["payroll_time_shee_activity"] = isset(Request::input("remarks")[0]) ? Request::input("remarks")[0] : "";
+			Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->update($update_remarks);
+		}
+		
+	 	
 		
 		/* DELETE TIME SHEET RECORD */
 		Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->where("payroll_time_sheet_origin", "Manually Encoded")->delete();
@@ -196,13 +207,13 @@ class PayrollTimeSheet2Controller extends Member
 		
 		$insert = null;
 		
-
 		if(Request::input("time-in"))
 		{
 			foreach(Request::input("time-in") as $key => $time_in)
 			{
 				$time_out = Request::input("time-out")[$key];
 				$remarks = Request::input("remarks")[$key];
+				
 				if($time_in != "" || $time_out != "")
 				{
 					$insert[$key]["payroll_time_sheet_id"] = $timesheet_db->payroll_time_sheet_id;
@@ -215,6 +226,18 @@ class PayrollTimeSheet2Controller extends Member
 			}
 		}
 		
+		/*added for remark not saving in absent*/
+		if($insert == null)
+		{
+			if(!$check_time_sheet_record)
+			{
+				$insert["payroll_time_shee_activity"] = isset(Request::input("remarks")[0]) ? Request::input("remarks")[0] : "";
+				$insert["payroll_time_sheet_id"] = $timesheet_db->payroll_time_sheet_id;
+				$insert["payroll_company_id"] = $data["period"]->payroll_company_id;
+				$insert["payroll_time_sheet_origin"] = "Manually Encoded";
+			}
+		}
+
 		if($insert)
 		{
 			Tbl_payroll_time_sheet_record::insert($insert);
@@ -228,6 +251,7 @@ class PayrollTimeSheet2Controller extends Member
 		
 		$return["income"] = $daily_income;
 		$return["string_income"] = $data["daily_info"]->value_html;
+		
 		echo json_encode($return);
 	}
 
@@ -1127,7 +1151,6 @@ class PayrollTimeSheet2Controller extends Member
 		$update_sheet["custom_shift"] = 1;
 		$update_sheet["custom_shift_id"] = $shift_code_id;
 		Tbl_payroll_time_sheet::where("payroll_time_sheet_id", $timesheet_id)->update($update_sheet);
-
 
 		$timesheet_info = $this->timesheet_info_db_by_id($timesheet_id);
 		$return['function_name'] = 'custom_shift_success';

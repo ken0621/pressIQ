@@ -25,7 +25,6 @@ function item_list()
 	}
 	function add_event_pagination()
 	{
-
 		$("body").on("click", ".pagination a", function(e)
 		{
 			$url = $(e.currentTarget).attr("href");
@@ -182,5 +181,14 @@ function item_list()
 		load_table_data.search = search;
 	    load_table_data.page = 1;
 	    action_load_table();
+	}
+}
+function success_refill(data)
+{
+	if(data.status == 'success')
+	{
+        toastr.success("Success refilling item");
+        data.element.modal("hide");
+        item_list.action_load_table();
 	}
 }

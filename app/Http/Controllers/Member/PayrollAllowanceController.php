@@ -300,14 +300,21 @@ class PayrollAllowanceController extends Member
     {
          $id = Request::input('id');
          $update['payroll_allowance_archived'] = Request::input('archived');
+
         $allowance = Tbl_payroll_allowance_v2::where('payroll_allowance_id', $id)->first();
+
+         // $update['payroll_employee_allowance_archived'] = Request::input('archived');
+
+
          Tbl_payroll_allowance_v2::where('payroll_allowance_id', $id)->update($update);
         AuditTrail::record_logs('DELETED: Payroll Allowance V2', 'Payroll Allowance Name:'. $allowance->payroll_allowance_name,"", "" ,"");
           
          $return['status']             = 'success';
          $return['function_name']      = 'payrollconfiguration.reload_allowancev2';
+
          return json_encode($return);
     }
+
 
     public function modal_edit_allowance($id)
     {
@@ -334,6 +341,7 @@ class PayrollAllowanceController extends Member
          $data['action']     = '/member/payroll/allowance/v2/archived_allowance_employee';
          $data['id']         = $id;
          $data['archived']   = $archived;
+         $data['payroll_deduction_type'] = "";
 
          return view('member.modal.modal_confirm_archived', $data);
     }
@@ -343,7 +351,6 @@ class PayrollAllowanceController extends Member
          $id = Request::input('id');
          $update['payroll_employee_allowance_archived'] = Request::input('archived');
          Tbl_payroll_employee_allowance_v2::where('payroll_employee_allowance_id', $id)->update($update);
-
          $return['status']             = 'success';
          $return['function_name']      = 'create_allowance.load_employee_tag';
          return json_encode($return);

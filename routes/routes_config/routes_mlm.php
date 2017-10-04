@@ -1,4 +1,16 @@
 <?php
+Route::any('/admin/profile','Super\AdminControllers@getview');
+Route::any('admin/login','Super\AdminControllers@view');
+Route::any('/admin/signup', 'Super\AdminControllers@add');
+Route::post('/admin/login', 'Super\AdminControllers@login_submit');
+Route::any('/admin/layout', 'Super\AdminControllers@layout');
+Route::any('/admin/shop_user_accounts', 'Super\AdminProfileController@get_user_accounts');
+Route::any('/admin/shop_user_accounts_filter1', 'Super\AdminProfileController@getview11');
+Route::any('/admin/web_cam', 'Super\AdminProfileController@web_cam_pic');
+Route::any('/admin/shop_user_accounts_update/{id}', 'Super\AdminProfileController@edit_user_password');
+Route::post('/admin/shop_user_accounts_update_submit/{id}', 'Super\AdminProfileController@submit_user_password');
+
+
 Route::get('/mlm/membership_active_code/{pin}', 'Mlm\MlmLoginController@membership_active_code'); 
 Route::post('/mlm/membership_active_code/active/code', 'Mlm\MlmLoginController@membership_active_code_post'); 
 Route::get('/mlm/login', 'Mlm\MlmLoginController@index'); 
@@ -55,6 +67,7 @@ Route::get('/mlm/transfer/get/customer/{id}', 'Mlm\MlmTransferController@transfe
 Route::get('/mlm/encashment', 'Mlm\MlmTransferController@encashment'); 
 Route::post('/mlm/encashment/request', 'Mlm\MlmTransferController@encashment_request'); 
 Route::any('/mlm/encashment/view/breakdown/{encashment_process}/{slot_id}', 'Mlm\MlmTransferController@breakdown_slot');//luke
+
 /* MLM VOUCHERS */
 Route::get('/mlm/vouchers', 'Mlm\MlmVouchersController@index'); 
 Route::get('/mlm/vouchers/view_voucher', 'Mlm\MlmVouchersController@view_voucher'); 
@@ -86,6 +99,17 @@ Route::post('/mlm/slots/manual_add_slot_post', 'Mlm\MlmSlotsController@manual_ad
 Route::post('/mlm/slots/before_transfer_slot', 'Mlm\MlmSlotsController@before_transfer_slot'); 
 Route::get('/mlm/slots/transfer_slot', 'Mlm\MlmSlotsController@transfer_slot'); 
 Route::post('/mlm/slots/transfer_slot_post', 'Mlm\MlmSlotsController@transfer_slot_post'); 
+
+/* ---- PRODUCT CODE V2 ----*/
+Route::any('/mlm/slot/use_product_code','Mlm\MlmSlotsController@use_product_code');
+Route::any('/mlm/slot/use_product_code/validate','Mlm\MlmSlotsController@use_product_code_validate');
+Route::any('/mlm/slot/use_product_code/to_slot','Mlm\MlmSlotsController@to_slot');
+Route::any('/mlm/slot/use_product_code/confirmation','Mlm\MlmSlotsController@confirmation');
+Route::any('/mlm/slot/use_product_code/confirmation/submit','Mlm\MlmSlotsController@confirmation_submit');
+Route::any('/mlm/slot/use_product_code/confirmation/used','Mlm\MlmSlotsController@use_submit');
+
+Route::any('/mlm/popup/message','Mlm\MlmSlotsController@message');	
+
 /* ---- PRODUCT CODE */
 Route::get('/mlm/slots/item_code', 'Mlm\MlmSlotsController@item_code'); 
 Route::post('/mlm/slots/item_code_post', 'Mlm\MlmSlotsController@item_code_post');

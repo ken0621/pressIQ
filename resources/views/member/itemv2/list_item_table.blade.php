@@ -39,6 +39,14 @@
                                 Item Information
                             </a>
                         </li>
+                        @if($column["default"]->item_type_id == 1)
+                        <li>
+                            <a onclick="action_load_link_to_modal('/member/item/v2/refill_item?item_id={{ $column["default"]->item_id}}','md')">
+                                <div style="display: inline-block; width: 17px; text-align: center;"><i class="fa fa-cubes"></i> &nbsp;</div>
+                                Refill Item
+                            </a>
+                        </li>
+                        @endif
                     </ul>
                 </div>
             </td>

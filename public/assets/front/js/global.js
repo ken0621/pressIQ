@@ -32,6 +32,32 @@ function global()
         init_no_stock_err();
         init_forgot_pass();
         if_no_value_quickview();
+        check_if_image_loaded_success();
+    }
+    function check_if_image_loaded_success()
+    {
+        var check_url = document.location.origin;
+
+        if(check_url.indexOf(".dev"))
+        {
+            $("img").error(function(e)
+            {
+                var url_src= $(e.currentTarget).attr("src");
+
+                console.log("IMAGE ERROR " + url_src);
+
+                if(!$(e.currentTarget).hasClass("retried"))
+                {
+                    var url = document.location.origin;
+                    var live_url = url.replace(".dev", ".com");
+
+                    console.log("Redirect loading with LIVE PATH " + url_src);
+
+                    $(e.currentTarget).attr("src", live_url + url_src);
+                    $(e.currentTarget).addClass("retried");
+                }
+            });
+        }
     }
     function window_load()
     {
@@ -56,7 +82,7 @@ function global()
 
 function image_crop(selector, width, height)
 {
-    $(selector).css("object-fit", "cover");
+    $(selector).css("object-fit", "contain").css("object-position", "center");
     $(selector).keepRatio({ ratio: width/height, calculate: 'height' });
 }
 function add_event_login_form()

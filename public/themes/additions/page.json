@@ -4,448 +4,169 @@
 		"home_slider" :
 		{
 			"label":"Slider Maintenance",
-			"type":"maintenance",
+			"type":"gallery",
 			"default":"",
-			"field":[
-				{"name":"image", "type":"image"},
-				{"name":"title", "type":"text"},
-				{"name":"subtitle", "type":"text"}
-			],
 			"size":"12"
 		},
-		"home_top_left_title" :
+		"maternity_title":
 		{
-			"label":"Blue Box",
+			"label":"Maternity Title",
 			"type":"textbox",
-			"default":"Who We Are",
-			"size":"4"
+			"default":"MATERNITY CLOTHES",
+			"size":"6"
 		},
-		"home_top_middle_title" :
+		"maternity_bottom_title":
 		{
-			"label":"Green Box",
+			"label":"Maternity Bottom Title",
 			"type":"textbox",
-			"default":"Opportunity",
-			"size":"4"
+			"default":"BOTTOMS",
+			"size":"6"
 		},
-		"home_top_right_title" :
+		"maternity_dress_title":
 		{
-			"label":"Red Box",
+			"label":"Maternity Dress Title",
 			"type":"textbox",
-			"default":"Buah Merah",
-			"size":"4"
+			"default":"BOTTOMS",
+			"size":"6"
 		},
-		"home_top_left_description" :
+		"maternity_tops_title":
 		{
-			"label":"Blue Box Description",
-			"type":"textarea",
-			"default":"3xcell-E Sales & Marketing Inc. is composed of five dynamic individuals who share the same motivation and common values strengthened and lead by their principal incorporator. .",
-			"size":"4"
-		},
-		"home_top_middle_description" :
-		{
-			"label":"Green Box Description",
-			"type":"tinymce",
-			"default":"insert text here",
-			"size":"4"
-		},
-		"home_top_right_description" :
-		{
-			"label":"Red Box Description",
-			"type":"textarea",
-			"default":"Until now, red fruit still used by Papua's people. Most of the population that consume red fruit, wether in pasta for daily food and also the oil. ",
-			"size":"4"
-		},
-		"home_division_3_title" :
-		{
-			"label":"Division 3 Title",
+			"label":"Maternity Tops Title",
 			"type":"textbox",
-			"default":"Featured Products",
+			"default":"TOPS",
+			"size":"6"
+		},
+		"new_title":
+		{
+			"label":"New Title",
+			"type":"textbox",
+			"default":"WHAT'S NEW",
 			"size":"12"
-		},
-		"home_division4_img1" :
-		{
-			"label":"Division 4 Image 1 (Minimum Dimension 823x419)",
-			"type":"image",
-			"default":"/themes/3xcell/img/supplement-cat-2.png",
-			"size":"6"
-		},
-		"home_division4_img2" :
-		{
-			"label":"Division 4 Image 2 (Minimum Dimension 823x419)",
-			"type":"image",
-			"default":"/themes/3xcell/img/healthy-drink-cat-2.png",
-			"size":"6"
-		},
-		"home_division_4_img1_Description" :
-		{
-			"label":"Image 1 Description",
-			"type":"textbox",
-			"default":"Food Supplement",
-			"size":"6"
-		},
-		"home_division_4_img2_Description" :
-		{
-			"label":"Image 2 Description",
-			"type":"textbox",
-			"default":"Healthy Drinks",
-			"size":"6"
-		},
-		"home_division_4_img3" :
-		{
-			"label":"Division 4 Image 3 (Minimum Dimension 823x419)",
-			"type":"image",
-			"default":"/themes/3xcell/img/beauty-cat-2.png",
-			"size":"6"
-		},
-		"home_division_4_img4" :
-		{
-			"label":"Division 4 Image 4 (Minimum Dimension 412x419)",
-			"type":"image",
-			"default":"/themes/3xcell/img/package-cat-2.png",
-			"size":"3"
-		},
-		"home_division_4_img5" :
-		{
-			"label":"Division 4 Image 5 (Minimum Dimension 823x419)",
-			"type":"image",
-			"default":"/themes/3xcell/img/retail-cat.png",
-			"size":"3"
-		},
-		"home_division_4_img3_Description" :
-		{
-			"label":"Image 3 Description",
-			"type":"textbox",
-			"default":"Beauty Skin Care",
-			"size":"6"
-		},
-		"home_division_4_img4_Description" :
-		{
-			"label":"Image 4 Description",
-			"type":"textbox",
-			"default":"Business Package",
-			"size":"3"
-		},
-		"home_division_4_img5_Description" :
-		{
-			"label":"Image 5 Description",
-			"type":"textbox",
-			"default":"Retail Package",
-			"size":"3"
-		},
-		"home_division_5_left_title" :
-		{
-			"label":"Division 5 Left Title",
-			"type":"textbox",
-			"default":"TRUSTED",
-			"size":"4"
-		},
-		"home_division_5_middle_title" :
-		{
-			"label":"Division 5 Middle Title",
-			"type":"textbox",
-			"default":"QUALITY PRODUCTS",
-			"size":"4"
-		},
-		"home_division_5_right_title" :
-		{
-			"label":"Division 5 Right Title",
-			"type":"textbox",
-			"default":"FAST SHIPPING",
-			"size":"4"
-		},
-		"home_division_5_left_description" :
-		{
-			"label":"Division 5 Left Description",
-			"type":"textarea",
-			"default":"Secured transactions Satisfaction Guaranteed ",
-			"size":"4"
-		},
-		"home_division_5_middle_description" :
-		{
-			"label":"Division 5 Middle Description",
-			"type":"textarea",
-			"default":"We assure that we provide the best protection and wuality at amazing prices. This is the ultimate protection. ",
-			"size":"4"
-		},
-		"home_division_5_right_description" :
-		{
-			"label":"Division 5 Right Description",
-			"type":"textarea",
-			"default":"Fast Delivery on all places locally ",
-			"size":"4"
-		},
-		"home_division_6_title" :
-		{
-			"label":"Division 6 Title",
-			"type":"textbox",
-			"default":"Company Images",
-			"size":"12"
-		},
-		"home_division_7_banner" :
-		{
-			"label":"Division 7 Banner",
-			"type":"textbox",
-			"default":"Subscribe for Promos and Update",
-			"size":"12"
-		},
-
-		"home_division_7_img" :
-		{
-			"label":"Division 7 Image",
-			"type":"image",
-			"default":"/themes/3xcell/img/healthy-people.png",
-			"size":"6"
-		},
-		"home_division_7_title" :
-		{
-			"label":"Division 7 Title",
-			"type":"textbox",
-			"default":"Live Healthy, Be Wealthy!",
-			"size":"6"
-		},
-		"home_division_7_description" :
-		{
-			"label":"Division 7 Description",
-			"type":"textarea",
-			"default":"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. ",
-			"size":"6"
 		}
 	},
-	"history":
+	"about":
 	{
-		"history_banner_img" :
+		"about_image" :
 		{
-			"label":"Banner Image",
+			"label":"About Us Cover Image",
 			"type":"image",
-			"default":"",
-			"size":"12"
-		},
-		"history_banner_title" :
-		{
-			"label":"Banner Title",
-			"type":"textbox",
-			"default":"Our History",
+			"default":"/themes/additions/front/about.jpg",
 			"size":"6"
 		},
-		"history_content_title" :
+		"about_title" :
 		{
-			"label":"Main Title",
+			"label":"About Us Title",
 			"type":"textbox",
-			"default":"About 3XCELL",
-			"size":"12"
-		},
-		"history_content_description" :
-		{
-			"label":"Main Decription",
-			"type":"tinymce",
-			"default":"It was in 2004 when the principal incorporator of the company, who is then and now into logistics and trading business started joining network marketing companies. He has seen the beauty of how a network of people worked together to attain a company’s goal with the freedom of time and financial entitlement.",
-			"size":"8"
-		},
-		"history_content_img" :
-		{
-			"label":"content Image",
-			"type":"image",
-			"default":"/themes/3xcell/img/founder-img.png",
-			"size":"4"
-		},
-		"history_vision_description" :
-		{
-			"label":"Vision Description",
-			"type":"textarea",
-			"default":"To be an instrument of inspiration to others through the knowledge of leveraging time, money and effort. ",
+			"default":"ABOUT US",
 			"size":"6"
 		},
-		"history_mission_description" :
+		"about_description" :
+		{
+			"label":"About Us Description",
+			"type":"textbox",
+			"default":"Our company was formed on August 2009. Our typical customers are pregnant women and we do our best provide them the products and services they need at a competitive price. The company pays homepage to the fundamental philosophy we have utilized in building our businesses. We believe in 'mutual success'. We build mutually beneficial professional alliances with our customers, suppliers, and our employees that help all to grow and prosper. Our main business office is Taytay, Rizal and we have branches in all leading Department Stores nationwide. From all of our locations, we want to provide superior products and the best customer service.",
+			"size":"6"
+		},
+		"mission_title" : 
+		{
+			"label":"Mission Title",
+			"type":"textbox",
+			"default":"OUR MISSION",
+			"size":"12"
+		},
+		"mission_description" : 
 		{
 			"label":"Mission Description",
-			"type":"textarea",
-			"default":"To influence and empower others in achieving goal to be healthy and wealthy with the freedom of time especially in today’s very crowded populace.",
-			"size":"6"
-		}
-	},
-	"How-To-Join":
-	{
-		"howtojoin_banner_img" :
-		{
-			"label":"Banner Image (Minimum Dimension 1600x659)",
-			"type":"image",
-			"default":"/themes/3xcell/img/how-to-join-bg.png",	
-			"size":"12"
-		},
-		"howtojoin_banner_title" :
-		{
-			"label":"Banner Title",
 			"type":"textbox",
-			"default":"How To Join",
+			"default":"We are the #1 supplier of garments in the country, a hassle-free one stop solution to expectant mothers needs in all their maternity wear requirements. Our key strength lies in the production of the best quality and style to suit even discriminating tastes with our able in-house design and development team as well as management team.",
 			"size":"12"
 		},
-		"howtojoin_banner_description" :
+		"vision_title" : 
 		{
-			"label":"Banner Description",
+			"label":"Vision Title",
 			"type":"textbox",
-			"default":"There are three ways to be a 3xcell-E distributor",
+			"default":"OUR VISION",
 			"size":"12"
 		},
-		"howtojoin_division1_title" :
+		"vision_description" : 
 		{
-			"label":" Division 1 Title",
+			"label":"Vision Description",
 			"type":"textbox",
-			"default":"Be a Retailer ",
+			"default":"The top and most sought maternity garments leader in the country.",
 			"size":"12"
 		},
-		"howtojoin_division1_description" :
+		"core_title" : 
 		{
-			"label":" Division 1 Description",
+			"label":"Core Values Title",
+			"type":"textbox",
+			"default":"OUR VISION",
+			"size":"12"
+		},
+		"core_description" : 
+		{
+			"label":"Core Values Description",
 			"type":"tinymce",
-			"default":"Insert Text Here",
-			"size":"6"
-		},
-		"howtojoin_division1_img" :
-		{
-			"label":" Division 1 Image",
-			"type":"image",
-			"default":"/themes/3xcell/img/retail-img.png",
-			"size":"6"
-		},
-		"howtojoin_division2_title" :
-		{
-			"label":" Division 2 Title",
-			"type":"textbox",
-			"default":"Be a FULL PLEDGED DISTRIBUTOR",
+			"default":"<p>INTEGRITYRESPECT</p><p>PROFESSIONALISM</p><p>EMPOWERMENT</p><p>QUALITY SERVICE</p><p>CUSTOMER SATISFACTION</p><p>PASSION FOR EXCELLENCE</p>",
 			"size":"12"
-		},
-		"howtojoin_division2_description" :
-		{
-			"label":" Division 2 Description",
-			"type":"tinymce",
-			"default":"Insert Text Here",
-			"size":"6"
-		},
-		"howtojoin_division2_img" :
-		{
-			"label":" Division 2 Image",
-			"type":"image",
-			"default":"/themes/3xcell/img/full-pledge.png",
-			"size":"6"
-		},
-		"howtojoin_division3_title" :
-		{
-			"label":" Division 3 Title",
-			"type":"textbox",
-			"default":"Insert Text Here",
-			"size":"12"
-		},
-		"howtojoin_division3_description" :
-		{
-			"label":" Division 3 Description",
-			"type":"tinymce",
-			"default":"Insert Text Here",
-			"size":"6"
 		}
 	},
 	"contact":
 	{
-		"contactus_banner_title" :
+		"contact_title" :
 		{
-			"label":"Banner Title",
+			"label":"Contact Title",
 			"type":"textbox",
-			"default":"Contact Us",
-			"size":"12"
-		},
-		"contactus_office1" :
-		{
-			"label":"Head Quarters 1",
-			"type":"textbox",
-			"default":"PRINCIPAL OFFICE",
+			"default":"Get In Touch With Us",
 			"size":"6"
 		},
-		"contactus_office1_address" :
+		"location_title" :
 		{
-			"label":"Head Quarters 1 Address",
-			"type":"textarea",
-			"default":"Vicar's Bldg. #31 Visayas Avenue Corner Road 1 Vasra, Quezon City ",
+			"label":"Location Title",
+			"type":"textbox",
+			"default":"Location",
 			"size":"6"
 		},
-		"contactus_office2" :
+		"location_address" :
 		{
-			"label":"Head Quarters 2",
+			"label":"Location Address",
 			"type":"textbox",
-			"default":"GENSAN BRANCH OFFICE",
+			"default":"Business Hours",
 			"size":"6"
 		},
-		"contactus_office2_address" :
+		"location_phone" :
 		{
-			"label":"Head Quarters 2 Address",
-			"type":"textarea",
-			"default":"Door #2 Perla Compania de Seguros Bldg. Jp. Laurel East, Corner Sampaguita Street, General Santos City",
+			"label":"Location Phone",
+			"type":"textbox",
+			"default":"123456789",
 			"size":"6"
 		},
-		"contactus_phone_number" :
+		"location_email" :
 		{
-			"label":"Phone Number",
+			"label":"Location Email",
 			"type":"textbox",
-			"default":"+63 2 518 8637",
-			"size":"12"
-		},
-		"contactus_email" :
-		{
-			"label":"Email Address",
-			"type":"textbox",
-			"default":"sales@3xcell.com",
-			"size":"12"
-		},
-		
-		"contactus_business_hours" :
-		{
-			"label":"Business Hours Title",
-			"type":"textbox",
-			"default":"BUSINESS HOURS",
-			"size":"12"
-		},
-		"contactus_google_map1" :
-		{
-			"label":"Google Map Office 1",
-			"type":"textbox",
-			"default":"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15439.672607472603!2d121.03694842734843!3d14.660586160660534!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b719dcc15bd1%3A0xfd4fe4f1c0982e9a!2sVicars+Building!5e0!3m2!1sen!2sph!4v1501901215371",
+			"default":"test@test.com",
 			"size":"6"
 		},
-		"contactus_google_map2" :
+		"business_title" :
 		{
-			"label":"Google Map Office 2",
+			"label":"Business Title",
 			"type":"textbox",
-			"default":"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3967.108523067281!2d125.17183721482861!3d6.116090629461948!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x32f79fa64c22dedb%3A0xd952833de2ffdf90!2sPerla+Insurance!5e0!3m2!1sen!2sph!4v1501901631315",
+			"default":"Business Hours",
 			"size":"6"
-		}		
-	},
-	"gallery":
-	{
-		"gallery_maintenance" :
+		},
+		"business_hours" :
 		{
-			"label":"Gallery Maintenance",
-			"type":"maintenance",
-			"default":"",
-			"field":[
-				{"name":"image", "type":"image_gallery"},
-				{"name":"title", "type":"text"},
-				{"name":"posted", "type":"timestamp"}
-			],
-			"size":"12"
-		}
-	},
-	"promo":
-	{
-		"promo_maintenance" :
+			"label":"Business Hours",
+			"type":"textbox",
+			"default":"Monday - Friday at 9:00am - 6:00pm",
+			"size":"6"
+		},
+		"map_title" :
 		{
-			"label":"Promo Maintenance",
-			"type":"maintenance",
-			"default":"",
-			"field":[
-				{"name":"image", "type":"image"},
-				{"name":"title", "type":"text"},
-				{"name":"description", "type":"textarea"},
-				{"name":"posted", "type":"timestamp"}
-			],
-			"size":"12"
+			"label":"Map Title",
+			"type":"textbox",
+			"default":"FIND US ON MAP",
+			"size":"6"
 		}
 	}
 }

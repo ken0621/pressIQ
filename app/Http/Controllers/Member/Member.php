@@ -178,6 +178,12 @@ class Member extends Controller
 			Seed_manual::put_default_tbl_terms($this->user_info->shop_id);
 			/* INSERT DEFAULT PAYMENT METHOD */
 			Seed_manual::put_default_tbl_payment_method($this->user_info->shop_id);
+			/* INSERT DEFAULT INVENTORY PREFIX */
+			Seed_manual::put_inventory_prefix($this->user_info->shop_id);
+			/* INSERT DEFAULT MLM PIN PREFIX */
+			Seed_manual::put_mlm_pin_prefix($this->user_info->shop_id, $this->user_info->shop_key);
+			/* INSERT DEFAULT NAME FOR SOCIAL NETWORKING SITE */
+			Seed_manual::put_name_social_networking_site($this->user_info->shop_id);
 
 			/* INSERT MAIN WAREHOUSE */
 			Warehouse::mainwarehouse_for_developer($this->user_info->user_id, $this->user_info->shop_id);

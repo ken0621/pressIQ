@@ -5,7 +5,7 @@
 		<div class="container">
 			<div class="prod-container">
 				<div class="row clearfix">
-					<div class="col-md-3">
+					<div class="cat-promo-holder col-md-3 col-sm-3 col-xs-4">
 						<!-- PRODUCT CATEGORIES -->
 						<div class="cat-container">
 							<div class="cat-title-container">
@@ -15,7 +15,7 @@
 							<div class="cat-list-container">
 								@if(count($_category) > 0)
 									@foreach($_category as $category)
-										<div class="cat-list" onClick="location.href='/product?type={{ $category['type_id'] }}'">{{ $category['type_name'] }}</div>
+										<div class="cat-list {{ $category['type_id'] == Request::input('type') ? 'active' : '' }}" onClick="location.href='/product?type={{ $category['type_id'] }}'">{{ $category['type_name'] }}</div>
 									@endforeach
 								@else
 									<div class="cat-list">Beauty Skin Care</div>
@@ -35,7 +35,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-md-9">
+					<div class="product-list-holder col-md-9 col-sm-9 col-xs-8">
 						<div class="prod-list-container">
 							<div class="title-container">{{ $category_name }}<div class="line-bot"></div></div>
 							<div class="prod-list row clearfix">
@@ -43,7 +43,7 @@
 								@if(count($_product) > 0)
 									@foreach($_product as $product)
 									<a href="/product/view/{{ $product['eprod_id'] }}">
-										<div class="col-md-4">
+										<div class="col-md-4 col-sm-6">
 											<div class="per-item">
 												<div class="image-container">
 													<img class="1-1-ratio" src="{{ get_product_first_image($product) }}">
@@ -61,7 +61,7 @@
 									@endforeach
 								@else
 									<a href="/product/view/test">
-										<div class="col-md-4">
+										<div class="col-md-4 col-sm-6">
 											<div class="per-item">
 												<div class="image-container">
 													<img src="/themes/{{ $shop_theme }}/img/item-sample.png">

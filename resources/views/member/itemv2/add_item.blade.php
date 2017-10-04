@@ -1,8 +1,8 @@
-<form class="global-submit form-horizontal" role="form" action="{{$link_submit_here}}" method="post">
+<form class="global-submit form-horizontal" id="form_submit" role="form" action="{{$link_submit_here}}" method="post">
     <div class="modal-header">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <button type="button" class="close" data-dismiss="modal">×</button>
-        <h4 class="modal-title"><i class="fa fa-cart-plus"></i> CREATE NEW ITEM</h4>
+        <h4 class="modal-title"><i class="fa fa-cart-plus"></i> {{$page_title or ''}}</h4>
         <div>Enter the information of your items below</div>
     </div>
     
@@ -78,7 +78,7 @@
     </div>
 
     <!-- ITEM ADD MAIN -->
-    <div class="item-add-main" style="{{ $item_main }}">
+    <div class="item-add-main {{$item_type['type_remove_main']}}" style="{{ $item_type['type_main'] }}">
         <div class="clearfix modal-body modallarge-body-layout"> 
             <div class="form-horizontal">
                 <!-- BASIC INFORMATION -->
@@ -113,7 +113,7 @@
                     <div class="col-md-3">
                         <label for="basic-input">Item Type</label>
                         <div class="input-group change-type">
-                          <input  type="text" class="form-control" name="item_type_id" readonly value="{{ get_request_old($item_info, 'item_type_id') }}" aria-describedby="basic-addon1">
+                          <input  type="text" class="form-control" name="item_type_id" readonly value="{{ get_request_old($item_info, 'item_type_name') }}" aria-describedby="basic-addon1">
                           <span style="background-color: #eee; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-edit"></i></span>
                         </div>
                     </div>
@@ -174,7 +174,7 @@
                 </div>
    
                 <!-- INVENTORY -->
-                <div class="for-inventory">
+                <div class="for-inventory" style="{{$item_type['inventory_type']}}">
                     <h4 class="section-title {{ $item_picker }}">Inventory</h4>
                     <div class="form-group {{ $item_picker }}">
                         <div class="col-md-4">
@@ -214,7 +214,7 @@
     </div>
 
     <!-- ITEM ADD BUNDLE -->
-    <div class="item-bundle" style="display: none;">
+    <div class="item-bundle {{$item_type['type_remove_bundle']}}"  style="{{ $item_type['type_bundle_main'] }}">
         <div class="clearfix modal-body modallarge-body-layout"> 
             <div class="form-horizontal">
                 <div class="form-group">
@@ -251,32 +251,32 @@
                     <div class="col-md-3">
                         <label for="basic-input">Item Type</label>
                         <div class="input-group change-type">
-                          <input  type="text" class="form-control" name="item_type_id" readonly value="{{ get_request_old($item_info, 'item_type_id') }}" aria-describedby="basic-addon1">
+                          <input  type="text" class="form-control" name="item_type_id" readonly value="{{ get_request_old($item_info, 'item_type_name') }}" aria-describedby="basic-addon1">
                           <span style="background-color: #eee; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-edit"></i></span>
                         </div>
                     </div>
                 </div>
 
-                <div class="form-group for-membership-kit">
+                <div class="form-group for-membership-kit" style="{{$item_type['membership_kit_type']}}">
                     <div class="col-md-3">
                         <label for="basic-input">Reorder Point</label>
-                        <input type="text" class="form-control " placeholder="0" value="{{ get_request_old($item_info, 'item_price') }}" name="item_price">
+                        <input type="text" class="form-control " placeholder="0" value="{{ get_request_old($item_info, 'item_reorder_point') }}" name="item_reorder_point">
                     </div>
                     <div class="col-md-3">
                         <label for="basic-input">Asset Account</label>
-                        <select class="form-control select-income-account" name="item_income_account_id">
-                            @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_income, 'account_id' => get_request_old($item_info, 'item_income_account_id') != '' ? get_request_old($item_info, 'item_income_account_id') : $default_income])
+                        <select class="form-control select-asset-account" name="item_asset_account_id">
+                            @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_asset, 'account_id' => get_request_old($item_info, 'item_asset_account_id') != '' ? get_request_old($item_info, 'item_asset_account_id') : $default_asset])
                         </select>
                     </div>
                     <div class="col-md-3">
                         <label for="basic-input">Membership</label>
-                        <select class="form-control">
-                            <option>Silver</option>
+                        <select class="form-control" name="membership_id">
+                            @include("member.load_ajax_data.load_membership", ['membership_id' => get_request_old($item_info, 'membership_id')])
                         </select>
                     </div>
                     <div class="col-md-3">
                         <label for="basic-input">GC Earnings</label>
-                        <input type="text" class="form-control" name="">
+                        <input type="text" class="form-control" name="gc_earning" value="{{ get_request_old($item_info, 'gc_earning') }}">
                     </div>
                 </div>
 
@@ -298,11 +298,12 @@
                                     <th class="text-center" width="50px"></th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="choose-item-list">
+                                @include('member.load_ajax_data.load_choose_item')
+                                <!--
                                 <tr>
                                     <td colspan="5" class="text-center">NO ITEM YET</td>
                                 </tr>
-                                <!--
                                 <tr>
                                     <td class="text-center">IPHONE6PLUSGOLD</td>
                                     <td class="text-center">PHP 1,500.00</td>
@@ -320,7 +321,7 @@
 
     <div class="modal-footer">
         <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-        <button {{ $item_button }} class="btn btn-primary btn-custom-primary" type="submit"><i class="fa fa-save"></i> Save Item</button>
+        <button {{ $item_button }} class="btn btn-primary btn-custom-primary add-submit-button" type="button"><i class="fa fa-save"></i> Save Item</button>
     </div>
 </form>
 <script type="text/javascript" src="/assets/member/js/item/item_add.js"></script>

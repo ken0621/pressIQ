@@ -4,7 +4,6 @@
 	<div class="container">
 		<div class="members">
 			<div class="header hidden">
-				
 				<div class="notification">
 					<img src="/themes/{{ $shop_theme }}/img/bell.png">
 					<span class="badge">500</span>

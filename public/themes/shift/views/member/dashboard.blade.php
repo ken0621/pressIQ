@@ -45,10 +45,10 @@
 	                        
 	                    </div>
 	                    <div class="personal-info-container">
-	                        <div><label>Name </label><span>Lorem Ipsum Dolor</span></div>
-	                        <div><label>Email </label><span>Lorem Ipsum Dolor</span></div>
-	                        <div><label>Birthday </label><span>Lorem Ipsum Dolor</span></div>
-	                        <div><label>Contact </label><span>Lorem Ipsum Dolor</span></div>
+	                        <div><label>Name </label><span>{{$customer->first_name}} {{$customer->middle_name}} {{$customer->last_name}}</span></div>
+	                        <div><label>Email </label><span>{{$customer->email}}</span></div>
+	                        <div><label>Birthday </label><span>{{$customer->birthday}}</span></div>
+	                        <div><label>Contact </label><span>{{$customer->contact}}</span></div>
 	                    </div>
 	                </div>
 	            </div>

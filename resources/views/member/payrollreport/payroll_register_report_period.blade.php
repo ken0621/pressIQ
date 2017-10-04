@@ -10,7 +10,7 @@
                	{{ $company->payroll_company_name }}
                 </small>
             </h1>
-            <a href="/member/payroll/reports/payroll_register_report_period/export_excel/{{$period_info->payroll_period_company_id}}"><button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" style="font-size:25px;color:white"></i> &nbsp;EXPORT TO EXCEL</button></a>
+            
         </div>
     </div>
 </div>
@@ -32,6 +32,9 @@
                 <div class="form-group order-tags"></div>
                 <div class="labas_mo_dito table-responsive " id="show_me_something">
                 	<div class="filterResult">
+            		<div >
+            			<a href="/member/payroll/reports/payroll_register_report_period/export_excel/{{$period_info->payroll_period_company_id}}"><button style="margin-bottom: 20px;" type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" style="font-size:25px;color:white"></i> &nbsp;EXPORT TO EXCEL</button></a>
+            		</div>
                     <table class="table table-bordered table-striped table-condensed" style="table-layout: fixed;">
 					    <thead style="text-transform: uppercase">
 					        <tr>

@@ -1,27 +1,78 @@
-<div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal">×</button>
+<style type="text/css">
+    body
+    {
+        color: #333;
+    }
+    .labels
+    {
+        color: #555;
+        font-size: 9px;
+        padding: 1px;
+        padding-left: 5px;
+    }
+    .answers
+    {
+        color: #000;
+        padding-left: 5px;
+    }
+    .sub-group
+    {
+        float: left;
+    }
+    .divider
+    {
+        border-bottom: 1px solid #aaa;
+    }
+    .table-main thead tr td
+    {
+        text-align: center;
+        font-size: 10px;
+        padding: 3px;
+        color: #555;
+        border-right: 1px solid #aaa;
+        border-bottom: 1px solid #aaa;
+    }
+    .table-main tbody tr td 
+    {
+        text-align: center;
+        font-size: 10px;
+        padding: 3px;
+        color: #000;
+        border-right: 1px solid #aaa;
+        border-bottom: 1px solid #aaa;
+    }
+    .thdesign
+    {
+        text-align: center;
+        font-size: 11px;
+        padding: 3px;
+        color: #000;
+        border-right: 1px solid #aaa;
+        border-bottom: 1px solid #aaa;
+    }
+</style>
+<div class="divider"></div>
     <h4 class="modal-title"><b>{{ucfirst($employee->payroll_employee_title_name." ".$employee->payroll_employee_first_name." ".$employee->payroll_employee_middle_name." ".$employee->payroll_employee_last_name." ".$employee->payroll_employee_suffix_name)}} - TIMESHEET</b></h4>
-</div>
+<div class="divider"></div>
 
 <div class="modal-body clearfix employee-timesheet-modal">
-    <div class="col-md-2 padding-lr-1 pull-right">
-            <a role="form" target="_blank" href="/member/payroll/process_payroll/income_summary/timesheet_view_pdf/{{$period_company_id_pdf}}/{{$employee_id_pdf}}"><button type="button" class="btn btn-success" style="margin:10px 10px 10px 0px"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> View PDF</button></a>
-    </div>
+
     @if($employee)
-        <table class="table table-bordered table-striped table-condensed">
+    <div style="border: 2px solid #000;">
+        <table class="table-main" cellspacing="0" cellpadding="0" width="100%">
             <thead style="text-transform: uppercase">
                 <tr>
-                    <th class="text-center" rowspan="2" width="120px">Date</th>
-                    <th class="text-center" colspan="2">Actual</th>
-                    <th class="text-center" colspan="2">Approved</th>
-                    <th class="text-center" rowspan="2" width="100px">Remarks</th>
-                    <th class="text-center" rowspan="2" width="100px">Branch</th>
+                    <th class="text-center thdesign" rowspan="2" width="120px">Date</th>
+                    <th class="text-center thdesign" colspan="2">Actual</th>
+                    <th class="text-center thdesign" colspan="2">Approved</th>
+                    <th class="text-center thdesign" rowspan="2" width="100px">Remarks</th>
+                    <th class="text-center thdesign" rowspan="2" width="100px">Branch</th>
                 </tr>
                 <tr>
-                    <th class="text-center">Time In</th>
-                    <th class="text-center">Time Out</th>
-                    <th class="text-center">Time In</th>
-                    <th class="text-center">Time Out</th>
+                    <th class="text-center thdesign">Time In</th>
+                    <th class="text-center thdesign">Time Out</th>
+                    <th class="text-center thdesign">Time In</th>
+                    <th class="text-center thdesign">Time Out</th>
                    
                 </tr>
             </thead>
@@ -66,6 +117,7 @@
                 @endforeach
             </tbody>
         </table>
+        </div>
         <div class="modal-body clearfix">
             <div class="row">
                 <div class="col-md-12">
@@ -75,6 +127,7 @@
                     <div class="col-md-3 text-center title_description">{{$days_worked or 0}}</div>
                 </div>
             </div>
+            <div class="divider"></div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="col-md-3"></div>
@@ -83,6 +136,7 @@
                     <div class="col-md-3 text-center title_description">{{$days_absent or 0}}</div>
                 </div>
             </div>
+            <div class="divider"></div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="col-md-3"></div>
@@ -91,6 +145,7 @@
                     <div class="col-md-3 text-center title_description">{{$total_late or 0}}</div>
                 </div>
             </div>
+            <div class="divider"></div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="col-md-3"></div>
@@ -99,6 +154,7 @@
                     <div class="col-md-3 text-center title_description">{{$total_undertime or 0}}</div>
                 </div>
             </div>
+            <div class="divider"></div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="col-md-3"></div>
@@ -107,6 +163,7 @@
                     <div class="col-md-3 text-center title_description">{{$total_undertime or 0}}</div>
                 </div>
             </div>
+            <div class="divider"></div>
         </div>
     @else
         <div class="text-center" style="padding: 150px 0">NO DATA</div>

@@ -58,7 +58,7 @@
             @endif
 
             <div class="form-group email">
-                <input type="text" name="email" class="form-control input-lg" placeholder="Email">
+                <input type="text" name="email" class="form-control input-lg" placeholder="Email or Slot Code">
             </div>
             <div class="form-group password">
                 <input type="password" name="password" class="form-control input-lg" placeholder="Password">

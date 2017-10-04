@@ -22,6 +22,13 @@ class Mlm_plan
 		$data['mlm_plan'] = Tbl_mlm_plan::where('shop_id', $shop_id)->get();
 		return $data;
 	}
+	
+	public static function get_settings($shop_id)
+	{
+		return Tbl_mlm_plan_setting::where('shop_id', $shop_id)->first();
+
+	}
+	
 	public static function get_all_active_plan_repurchase($shop_id)
 	{
 		$data = Tbl_mlm_plan::where('shop_id', $shop_id)

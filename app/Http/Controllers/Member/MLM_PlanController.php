@@ -78,6 +78,7 @@ class MLM_PlanController extends Member
         $validate['plan_settings_email_membership_code'] = Request::input('plan_settings_email_membership_code');
         $validate['plan_settings_email_product_code'] = Request::input('plan_settings_email_product_code');
         $validate['plan_settings_upgrade_slot'] = Request::input('plan_settings_upgrade_slot');
+        $validate['plan_settings_default_downline_rule'] = Request::input('plan_settings_default_downline_rule');
     	// end input from form
     	   
     	// Validator rules
@@ -91,6 +92,7 @@ class MLM_PlanController extends Member
         $rules['plan_settings_email_membership_code'] = 'required';
         $rules['plan_settings_email_product_code'] = 'required';
         $rules['plan_settings_upgrade_slot'] = 'required';
+        $rules['plan_settings_default_downline_rule'] = 'required';
 		// end validator rules
 		
 		// validate
@@ -117,6 +119,7 @@ class MLM_PlanController extends Member
             $update['plan_settings_email_membership_code'] = Request::input('plan_settings_email_membership_code');
             $update['plan_settings_email_product_code'] = Request::input('plan_settings_email_product_code');
             $update['plan_settings_upgrade_slot'] = Request::input('plan_settings_upgrade_slot');
+            $update['plan_settings_default_downline_rule'] = Request::input('plan_settings_default_downline_rule');
     		// end
     		
     		// update settings

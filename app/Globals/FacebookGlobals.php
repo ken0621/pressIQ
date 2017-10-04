@@ -36,7 +36,7 @@ class FacebookGlobals
        $fb = new Facebook([
           'app_id' => $get_keys['app_id'], // Replace {app-id} with your app id
           'app_secret' => $get_keys['app_secret'],
-          'default_graph_version' => 'v2.2'
+          'default_graph_version' => 'v2.1'
           ]);
        return $fb;
     }
@@ -57,8 +57,8 @@ class FacebookGlobals
         $helper = $fb->getRedirectLoginHelper();
         $loginUrl = $helper->getLoginUrl('http://'.$_SERVER['SERVER_NAME'].'/members/login-submit', array(
    'scope' => 'email'));
-        $login_url =  htmlspecialchars($loginUrl);
-
+        $login_url =  preg_replace('/\x20(\x0e|\x0f)/', '', htmlspecialchars($loginUrl));
+        
         return $login_url;
     }
     public static function get_link_register($shop_id)

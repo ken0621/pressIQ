@@ -1,5 +1,4 @@
 
-<form class="global-submit form-to-submit-add" action="/member/item/warehouse/edit_submit" method="post">
 <style type="text/css">
     .chosen-container
     {
@@ -57,26 +56,8 @@
 <div class="modal-footer" >
     <button type="button" class="btn btn-custom-white" data-dismiss="modal">Close</button>
 </div>
-</form>
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
+<script type="text/javascript" src="/assets/member/js/draggable_row.js"></script>
 <script type="text/javascript" src="/assets/member/js/transfer_warehouse.js"></script>
 <script type="text/javascript" src="/assets/member/js/warehouse.js"></script>
 <script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
-
-<script type="text/javascript">
-    function toggle(className, obj) 
-    {
-        $(".modal-loader").removeClass("hidden");
-        var $input = $(obj);
-        if($input.prop('checked'))
-        {
-            $(".modal-loader").addClass("hidden");
-            $(".show-container").toggleClass("hidden");   
-        }
-        else
-        { 
-            $(".modal-loader").addClass("hidden");
-            $(".show-container").toggleClass("hidden");
-        }
-    }
-</script>

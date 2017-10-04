@@ -516,7 +516,7 @@ class PayrollProcessController extends Member
 
 		$_time_breakdown = unserialize($time_keeping_approved->cutoff_breakdown)->_time_breakdown;
 
-		$data["days_worked"]		= $_time_breakdown["day_spent"]["time"];
+		$data["days_worked"]		= isset($_time_breakdown["day_spent"]["time"]) ? $_time_breakdown["day_spent"]["time"] : "no data" ;
 		$data["days_absent"]		= $_time_breakdown["absent"]["time"];
 		$data['total_late'] 		= $_time_breakdown["late"]["time"];
 		$data['total_undertime'] 	= $_time_breakdown["undertime"]["time"];

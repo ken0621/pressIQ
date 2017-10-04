@@ -12,6 +12,9 @@
                     Warehouse Inventory
                 </small>
             </h1>
+            <div class="text-right">
+                <a href="javascript:" class="btn btn-primary">Print Inventory</a>
+            </div>
         </div>
     </div>
 </div>
@@ -32,7 +35,7 @@
                     <i class="fa fa-search scan-icon"></i>
                     <i style="display: none;" class="fa fa-spinner fa-pulse fa-fw scan-load"></i>
                   </span>
-                  <input type="text" class="form-control event_search_item" placeholder="Enter item SKU" aria-describedby="basic-addon1">
+                  <input type="text" class="form-control event_search_item" placeholder="Enter item SKU or Manufaturer" aria-describedby="basic-addon1">
                 </div>
             </div>
         </div>
@@ -44,13 +47,13 @@
                     @include("member.load_ajax_data.load_bundle_item")
                 </div>
             </div>
-            <div id="odd-inventory" class="tab-pane fade in active">
+            <div id="odd-inventory" class="tab-pane fade">
                 <div class="form-group order-tags"></div>
                 <div class="table-responsive">
-                    @include("member.load_ajax_data.load_bundle_item")
+                    @include("member.load_ajax_data.load_bundle_item_inventory")
                 </div>
             </div>
-            <div id="unused-empties" class="tab-pane fade in active">
+            <div id="unused-empties" class="tab-pane fade">
                 <div class="form-group order-tags"></div>
                 <div class="table-responsive">
                     @include("member.load_ajax_data.load_bundle_item")

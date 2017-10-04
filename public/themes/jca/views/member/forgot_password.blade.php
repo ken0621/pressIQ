@@ -16,17 +16,13 @@
 							<div class="register-form">
 								<div class="form-group">
 										<div class="choice">
+
 											<h2 class ="h2-Forgot">Forgot Password</h2>
 											<h2 class="h2-Lost">Lost Password</h2>
 											<p class="p-Follow">Follow these simple steps to reset your password</p>
 											<p class="p-Enter">1. Enter your brown.com.ph E-mail Address</p>
 											<p class="p-Wait">2. Wait for your recovery details to be sent</p>
 											<p class="p-Follow-instruction">3. Follow instruction to login your account again	</p>
-											<div class="register-label">EMAIL</div>
-											<div class="form-input">
-												<input class="form-control input-sm" type="email" name="email" value="{{old('email')}}" placeholder="Type Your Email Here">
-											</div>
-
 											<div class="form-input alert-message">
 												@if(Session::has('success'))
 												<div class="alert alert-success">
@@ -38,6 +34,11 @@
 													{!! Session::get('danger') !!}
 												</div>
 												@endif
+											</div>
+											<div class="register-label">EMAIL</div>
+
+											<div class="form-input">
+												<input class="form-control input-sm" type="email" name="email" value="{{old('email')}}" placeholder="Type Your Email Here">
 											</div>
 										<div class="holder">
 											<button type="submit" class="btn btn-brown">Get New Password</button>

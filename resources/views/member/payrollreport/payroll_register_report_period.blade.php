@@ -16,12 +16,22 @@
 </div>
 
 
-<div class="panel panel-default panel-block panel-title-block" style="overflow-x: scroll; ">
+<div class=" panel panel-default panel-block panel-title-block" style="overflow-x: scroll; ">
     <div class="panel-body form-horizontal">
+    	<div class="col-md-2 padding-lr-1">
+            <small>Filter by Company</small>
+            <select class="form-control" id="filter_report" data-id="{{$filtering_company}}">
+              <option value="0">All Company</option>
+              @foreach($_filter_company as $filter_company)
+              <option value="{{$filter_company->payroll_company_id}}" >{{$filter_company->payroll_company_name}}</option> 
+              @endforeach
+            </select>
+          </div>
         <div class="form-group tab-content panel-body employee-container">
             <div id="all" class="tab-pane fade in active">
                 <div class="form-group order-tags"></div>
-                <div class="table-responsive">
+                <div class="labas_mo_dito table-responsive " id="show_me_something">
+                	<div class="filterResult">
                     <table class="table table-bordered table-striped table-condensed" style="table-layout: fixed;">
 					    <thead style="text-transform: uppercase">
 					        <tr>
@@ -143,9 +153,14 @@
 					       
 					    </tbody>
 					</table>
+				</div>
                 </div>
             </div>
         </div> 
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+{{-- <script type="text/javascript" src="/assets/js/ajax_offline.js"></script> --}}
+<script type="text/javascript" src="/assets/js/payroll_register_report_filter.js"></script>
+
 @endsection

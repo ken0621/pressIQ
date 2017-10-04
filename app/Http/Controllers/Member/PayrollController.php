@@ -3943,11 +3943,12 @@ class PayrollController extends Member
      public function modal_save_payroll_group()
      {
           
-          $insert['shop_id']                                     = Self::shop_id();
-          $insert['payroll_group_code']                          = Request::input('payroll_group_code');
-          $insert['payroll_group_salary_computation']  = Request::input('payroll_group_salary_computation');
+          $insert['shop_id']                                = Self::shop_id();
+          $insert['payroll_group_code']                     = Request::input('payroll_group_code');
+          $insert['payroll_group_salary_computation']       = Request::input('payroll_group_salary_computation');
           $insert['payroll_group_period']                   = Request::input('payroll_group_period');
           $insert['payroll_group_13month_basis']            = Request::input('payroll_group_13month_basis');
+          $insert['payroll_group_cola_basis']               = Request::input('payroll_group_cola_basis');
           
           if( Request::has('payroll_group_deduct_before_absences'))
           {
@@ -4175,10 +4176,11 @@ class PayrollController extends Member
      {
           $payroll_group_id = Request::input("payroll_group_id");
 
-          $update['payroll_group_code']                          = Request::input('payroll_group_code');
-          $update['payroll_group_salary_computation']     = Request::input('payroll_group_salary_computation');
+          $update['payroll_group_code']                     = Request::input('payroll_group_code');
+          $update['payroll_group_salary_computation']       = Request::input('payroll_group_salary_computation');
           $update['payroll_group_period']                   = Request::input('payroll_group_period');
           $update['payroll_group_13month_basis']            = Request::input('payroll_group_13month_basis');
+          $update['payroll_group_cola_basis']               = Request::input('payroll_group_cola_basis');
 
           $update['payroll_group_grace_time']               = Request::input('payroll_group_grace_time');
           // $update['payroll_group_break']                      = Request::input('payroll_group_break');

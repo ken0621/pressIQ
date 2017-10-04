@@ -18,6 +18,7 @@ use App\Globals\Mlm_compute;
 use App\Globals\Mlm_complan_manager;
 use App\Globals\Reward;
 use App\Globals\MLM2;
+use App\Globals\Mlm_complan_manager_repurchase;
 use App\Globals\Columns;
 use App\Models\Tbl_mlm_item_points;
 use App\Models\Tbl_brown_rank;
@@ -63,7 +64,9 @@ class MlmDeveloperController extends Member
             $total_gc = Tbl_mlm_gc::where("mlm_gc_slot", $slot->slot_id)->value("mlm_gc_amount");
 
         	$data["_slot"][$key] = $slot;
-            $data["_slot"][$key]->customer = '<a target="_blank" href="/members/autologin?email=' . $slot->email . '&password=' . $slot->password . '">' . strtoupper($slot->first_name) . " " . strtoupper($slot->last_name) . '</a>';
+            $data["_slot"][$key]->customer = "<a href='javascript:'  link='/member/customer/customeredit/" . $slot->customer_id . "' class='popup' size='lg'>" . strtoupper($slot->first_name) . " " . strtoupper($slot->last_name) . '</a>';
+            $data["_slot"][$key]->display_slot_no = '<a target="_blank" href="/members/autologin?email=' . $slot->email . '&password=' . $slot->password . '">' . $slot->slot_no . '</a>';
+            $data["_slot"][$key]->sponsor = Tbl_mlm_slot::customer()->where("slot_id", $slot->slot_sponsor)->first();
             $data["_slot"][$key]->sponsor = Tbl_mlm_slot::customer()->where("slot_id", $slot->slot_sponsor)->first();
             $data["_slot"][$key]->placement = Tbl_mlm_slot::customer()->where("slot_id", $slot->slot_placement)->first();
         	$data["_slot"][$key]->current_wallet_format = "<a href='javascript:' link='/member/mlm/developer/popup_earnings?slot_id=" . $slot->slot_id . "' class='popup' size='lg'>" . Currency::format($data["_slot"][$key]->current_wallet) . "</a>";
@@ -151,7 +154,7 @@ class MlmDeveloperController extends Member
     	$data["total_payout"]          = Currency::format($total_payout);
 
 
-        $default[]          = ["SLOT NO","slot_no", true];
+        $default[]          = ["SLOT NO","display_slot_no", true];
         $default[]          = ["SLOT OWNER","customer", false];
         $default[]          = ["SPONSOR","sponsor_button", false];
         $default[]          = ["PLACEMENT","placement_button", false];

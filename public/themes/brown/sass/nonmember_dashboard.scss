@@ -1,10 +1,19 @@
-$content-text: 'Arimo', sans-serif;
+$content-text: 'Rubik', sans-serif;
+$light: 300;
 $regular: 400;
-$semi-bold: 600;
+$medium: 500;
 $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
 
+
+@mixin transition($transition)
+{
+	  -webkit-transition: all $transition ease-in-out;
+	  -moz-transition: all $transition ease-in-out;
+	  -o-transition: all $transition ease-in-out;
+	  transition: all $transition ease-in-out;
+}
 
 /* Dashboard Top */
 .dashboard-top
@@ -59,7 +68,7 @@ $text-dark: #272c2f;
     		text-align: center;
 			padding: 63px 0px 0px 0px;
 			font-family: $content-text;
-			font-weight: $semi-bold;
+			font-weight: $medium;
 			font-size: 13px;
 		
 			.btn-buy-a-kit
@@ -369,7 +378,7 @@ $text-dark: #272c2f;
 	    	{
 				text-align: center;
 				font-family: $content-text;
-				font-weight: $semi-bold;
+				font-weight: $medium;
 				font-size: 13px;
 				padding-bottom: 20px;
 
@@ -423,7 +432,7 @@ $text-dark: #272c2f;
 
 			.modal-title
 			{
-				font-weight: $semi-bold;
+				font-weight: $medium;
 				color: #FFF;
 				font-size: 15px;
 			}
@@ -516,7 +525,7 @@ $text-dark: #272c2f;
 
 			.modal-title
 			{
-				font-weight: $semi-bold;
+				font-weight: $medium;
 				color: #FFF;
 				font-size: 15px;
 			}
@@ -526,7 +535,7 @@ $text-dark: #272c2f;
 		{
 			
 
-			font-weight: $semi-bold;
+			font-weight: $medium;
 			margin: 0px 20px 0px 20px;
 
 
@@ -586,7 +595,7 @@ $text-dark: #272c2f;
 	    	{
 				text-align: center;
 				font-family: $content-text;
-				font-weight: $semi-bold;
+				font-weight: $medium;
 				font-size: 14px;
 				text-transform: uppercase;
 				padding-bottom: 20px;
@@ -654,7 +663,7 @@ $text-dark: #272c2f;
 
 			.text-caption
 			{	
-				font-weight: $semi-bold;
+				font-weight: $medium;
 				color: #344049;
 				padding-top: 5px;
 				font-size: 13px;
@@ -666,7 +675,7 @@ $text-dark: #272c2f;
 	    	{
 				text-align: center;
 				font-family: $content-text;
-				font-weight: $semi-bold;
+				font-weight: $medium;
 				font-size: 14px;
 				padding-bottom: 20px;
 

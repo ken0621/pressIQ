@@ -69,3 +69,6 @@
         {!! dd($transaction_details) !!}
     </div>
 @endif
+<div class="modal-footer text-right">
+    <a class="btn btn-primary" href='/member/cashier/transactions_list/view/{{ $list->transaction_list_id }}' target="_blank">View PDF</a>
+</div>

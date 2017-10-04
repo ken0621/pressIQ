@@ -40,6 +40,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/reports/payroll_register_report_period_filtering','Member\PayrollReportController@payroll_register_report_period_filtering');
 	
 	Route::any('/reports/payroll_register_report_period/export_excel/{id}','Member\PayrollReportController@payroll_register_report_export_excel');
+	Route::any('/reports/payroll_register_report_period/export_excel_filter/{id}/{uid}','Member\PayrollReportController@payroll_register_report_export_excel_filter');
 	/*END PAYROLL REGISTER REPORT*/
 
 	/*START 13th month pay*/
@@ -505,6 +506,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/process_payroll/table/{period_company_id}','Member\PayrollProcessController@index_table');
 	Route::any('/process_payroll/modal_view_summary/{period_company_id}','Member\PayrollProcessController@modal_view_summary');
 	Route::any('/process_payroll/income_summary/timesheet/{period_id}/{employee_id}','Member\PayrollProcessController@income_summary_timesheet_v3');
+	Route::any('/process_payroll/income_summary/timesheet_view_pdf/{period_id}/{employee_id}','Member\PayrollProcessController@income_summary_timesheet_v3_view_pdf');
+	
 	Route::any('/process_payroll/modal_approved_summary/{period_company_id}','Member\PayrollProcessController@modal_approved_summary');
 
 

@@ -5,6 +5,7 @@ use Request;
 use stdClass;
 use Redirect;
 use Carbon\Carbon;
+use PDF2;
 
 use App\Globals\AuditTrail;
 use App\Http\Controllers\Controller;
@@ -521,7 +522,104 @@ class PayrollProcessController extends Member
 		$data['total_late'] 		= $_time_breakdown["late"]["time"];
 		$data['total_undertime'] 	= $_time_breakdown["undertime"]["time"];
 		$data['total_overtime'] 	= $_time_breakdown["overtime"]["time"];
+
+		//additional by james omosora
+		$data['employee_id_pdf'] = $employee_id;
+		$data['period_company_id_pdf'] = $period_company_id;
 		
 		return view("member.payroll2.payroll_process_modal_view_timesheet2", $data);
+	}
+
+	public function income_summary_timesheet_v3_view_pdf($period_company_id,$employee_id)
+	{
+		//arcy
+		$data["period_company"] = $period_company = Tbl_payroll_period_company::where("payroll_period_company_id",$period_company_id)->first();
+
+		$data["employee"]   	= Tbl_payroll_employee_basic::where("payroll_employee_id",$employee_id)->first();
+
+		$period 				= Tbl_payroll_period::where('payroll_period_id',$data["period_company"]->payroll_period_id)->first();
+
+		
+		$data['_timesheet'] = [];
+		$data["days_worked"]	= 0;
+		$data["days_absent"]	= 0;
+		$data['total_late'] = 0;
+		$data['total_undertime'] = 0;
+		$data['total_overtime'] = 0;
+		$days_worked = 0;
+		$days_absent = 0;
+		$total_late = 0;
+		$total_undertime = 0;
+		$total_overtime = 0;
+		if($period)
+		{
+			$date_start = $period->payroll_period_start;
+			$date_end = $period->payroll_period_end;
+
+			$get_timesheet = Tbl_payroll_time_sheet::whereBetween('payroll_time_date', array($date_start, $date_end))->where('payroll_employee_id',$employee_id)->groupBy('payroll_time_date')->get();
+
+			foreach ($get_timesheet as $key => $value) 
+			{
+
+				$data['_timesheet'][$key] = [];
+				$data['_timesheet'][$key]["covered_date"] = date('M d, Y', strtotime($value->payroll_time_date));
+				
+				$_record = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $value->payroll_time_sheet_id)->join("tbl_payroll_company", "tbl_payroll_company.payroll_company_id", "=", "tbl_payroll_time_sheet_record.payroll_company_id")->get();
+				$_record_approved = Tbl_payroll_time_sheet_record_approved::where("payroll_time_sheet_id", $value->payroll_time_sheet_id)->get();
+
+				$data['_timesheet'][$key]["actual_time"] = $_record;
+				$data['_timesheet'][$key]["approve_time"] = $_record_approved;
+
+
+
+				if(count($_record) > 0)
+				{
+					$days_worked++;
+					$data['_timesheet'][$key]["actual_in"] = date('h:i:s A', strtotime($value->actual_in));
+					$data['_timesheet'][$key]["actual_out"] = date('h:i:s A', strtotime($value->actual_out));
+					$data['_timesheet'][$key]["approved_in"] = date('h:i:s A', strtotime($value->approved_in));
+					$data['_timesheet'][$key]["approved_out"] = date('h:i:s A', strtotime($value->approved_out));
+				}
+				else
+				{		
+					$days_absent++;
+					$data['_timesheet'][$key]["actual_in"] = 'NO TIME';
+					$data['_timesheet'][$key]["actual_out"] = 'NO TIME';
+					$data['_timesheet'][$key]["approved_in"] = 'NO TIME';
+					$data['_timesheet'][$key]["approved_out"] = 'NO TIME';
+				}
+
+				$time_serialize = unserialize($value->payroll_time_serialize);
+
+				if($time_serialize)
+				{
+					$total_late += $time_serialize->late;
+					$total_undertime += $time_serialize->undertime;
+					$total_overtime += $time_serialize->overtime;
+				}
+				$data['_timesheet'][$key]["remarks"] = $value->payroll_time_shee_activity;
+				$data['_timesheet'][$key]["branch"] = $value->payroll_company_name;
+
+			}
+		}
+
+		$time_keeping_approved = Tbl_payroll_time_keeping_approved::where("employee_id",$employee_id)->where("payroll_period_company_id",$period_company_id)->first();
+
+
+		$_time_breakdown = unserialize($time_keeping_approved->cutoff_breakdown)->_time_breakdown;
+
+		$data["days_worked"]		= isset($_time_breakdown["day_spent"]["time"]) ? $_time_breakdown["day_spent"]["time"] : "no data" ;
+		$data["days_absent"]		= $_time_breakdown["absent"]["time"];
+		$data['total_late'] 		= $_time_breakdown["late"]["time"];
+		$data['total_undertime'] 	= $_time_breakdown["undertime"]["time"];
+		$data['total_overtime'] 	= $_time_breakdown["overtime"]["time"];
+
+		$format["title"] = $data['employee']->payroll_employee_first_name." timesheet";
+		$format["format"] = "A4";
+		$format["default_font"] = "sans-serif";
+		$pdf = PDF2::loadView('member.payroll2.payroll_process_modal_view_timesheet2_view_pdf', $data, [], $format);
+		return $pdf->stream('document.pdf');
+		
+		// return view("member.payroll2.payroll_process_modal_view_timesheet2_view_pdf", $data);
 	}
 }

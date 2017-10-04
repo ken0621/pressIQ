@@ -240,98 +240,27 @@ button:hover{
 	.footer-container
 	{
 		padding: 35px 0px 55px 0px;
-		.reach-us-holder
+		
+		.inner-content
 		{
-			width: 84%;
-			.jca-footer-title-container
+			img 
 			{
-				.footer-title
-				{
-					font-family: "Raleway Bold", sans-serif;
-					font-size: 15px;
-					font-weight: bold;
-					color: #ffffff;
-					margin-bottom: 25px;
-				}
+				width: 100%;
 			}
-			.jca-footer-details-container
+
+			.inner-content-title
 			{
-				.icon-holder
-				{
-					display: inline-block;
-					vertical-align: top;
-					width: 21px;
-					text-align: right;
-					.jca-footer-icon
-					{
-						
-					}
-				}
-				.footer-details
-				{
-					font-family: "Raleway Regular", sans-serif;
-					font-size: 12px;
-					margin: 0px;
-					color: #ffffff;
-					display: inline-block;
-					width: 85%;
-					text-align: justify;
-					margin-left: 14px;
-					margin-bottom: 10px;
-				}
-				.footer-detail-list
-				{
-					font-family: "Raleway Regular", sans-serif;
-					font-size: 12px;
-					margin: 0px;
-					color: #ffffff;
-					margin-bottom: 5px;
-				}
-			}
-		}
-		.jca-footer-title-container
-		{
-			.footer-title
-			{
-				font-family: "Raleway Bold", sans-serif;
-				font-size: 15px;
-				font-weight: bold;
-				color: #ffffff;
-				margin-bottom: 25px;
-			}
-		}
-		.jca-footer-details-container
-		{
-			.icon-holder
-			{
-				display: inline-block;
-				vertical-align: top;
-				width: 21px;
-				text-align: right;
-				.jca-footer-icon
-				{
-						
-				}
-			}
-			.footer-details
-			{
-				font-family: "Raleway Regular", sans-serif;
-				font-size: 12px;
-				margin: 0px;
-				color: #ffffff;
-				display: inline-block;
-				width: 85%;
-				text-align: justify;
-				margin-left: 14px;
+				color: #fff;
+				font-size: 18px;
+				padding: 10px 0px;
+				border-bottom: 1px solid #6e7071;
 				margin-bottom: 10px;
 			}
-			.footer-detail-list
+			p 
 			{
-				font-family: "Raleway Regular", sans-serif;
-				font-size: 12px;
-				margin: 0px;
-				color: #ffffff;
-				margin-bottom: 5px;
+				padding: 5px 0px;
+				margin: 0;
+				color: #aeaeaf !important;
 			}
 		}
 	}

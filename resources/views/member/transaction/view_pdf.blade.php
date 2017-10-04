@@ -48,7 +48,7 @@
                                     </tr>
                                     <tr>
                                         <td class="do-label">DATE.</td>
-                                        <td class="do-value">: {{date('M d, Y',strtotime($list->transaction_date))}}</td>
+                                        <td class="do-value">: {{date('M d, Y',strtotime($list->transaction_date_created))}}</td>
                                     </tr>
                                     <tr>
                                         <td class="do-label">DO No.</td>
@@ -110,7 +110,7 @@
             <div class="holder">
                 <div class="clearfix">
                     <div class="payment-detail pull-left">
-                        <div class="rows"><strong>Payment Date :</strong> {{date('M d, Y',strtotime($list->transaction_date))}}</div>
+                        <div class="rows"><strong>Payment Date :</strong> {{date('M d, Y',strtotime($list->transaction_date_created))}}</div>
                         <div class="rows"><strong>Payment Type :</strong> {{ ucfirst($customer_payment->payment_method) }}</div>
                         <div class="rows"><strong>Payment Receipt Number :</strong> {{ $customer_payment->checkout_id }}</div>
                     </div>

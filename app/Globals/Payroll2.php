@@ -1376,6 +1376,8 @@ class Payroll2
 		$excess_leave_hours 	= $leave;
 		$is_half_day			= false;
 		$is_absent				= true;
+
+		$overtime_grace_time = "00:00:00"; // remove if there is a client that use gracetime overtime
 		
 		//target time is the same from shift hours
 		if($target_hours == 0)
@@ -1864,6 +1866,8 @@ class Payroll2
 		$excess_leave_hours 	= $leave_hours;
 		$is_half_day 			= false;
 		$is_absent 				= false;
+
+		$overtime_grace_time = "00:00:00"; // remove if there is a client that use gracetime overtime
 
 		// if ($use_leave) 
 		// {

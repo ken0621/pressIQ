@@ -267,12 +267,12 @@ body
 					.btn
 					{
 						@include transition(0.2s);
-						background-color: #B17D2A;
+						background-color: #00A4E6;
 						color: #fff;
 
 						&:hover
 						{
-							background-color: #019771;
+							background-color: #76B83F;
 						}
 					}
 
@@ -297,7 +297,7 @@ body
 				.login-href
 				{
 					@include transition(0.2s);
-					color: #B17D2A;
+					color: #00A4E6;
 					font-size: 15px;
 					font-weight: $regular;
 
@@ -308,7 +308,7 @@ body
 
 					&:hover
 					{
-						color: #019771;
+						color: #76B83F;
 					}
 				}
 				.btn-brown

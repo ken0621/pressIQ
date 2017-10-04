@@ -8,6 +8,8 @@ use App\Models\Tbl_transaction_list;
 use App\Models\Tbl_transaction_item;
 use App\Globals\Currency;
 use App\Globals\Transaction;
+use App\Globals\Pdf_global;
+use DB;
 
 class TransactionController extends Member
 {
@@ -60,5 +62,69 @@ class TransactionController extends Member
         $data['_list'] = Transaction::get_transaction_list($this->user_info->shop_id, $request->transaction_type, $request->search_keyword);
         return view("member.transaction.all_transaction_list_table", $data);
     }
-    
+    public function view_pdf(Request $request, $transaction_list_id)
+    {
+        $data['shop_key']            = strtoupper($this->user_info->shop_key);
+        $data['shop_address']        = ucwords($this->user_info->shop_street_address.' '.$this->user_info->shop_city.', '.$this->user_info->shop_zip);
+        
+        $data['list']                = Tbl_transaction_list::transaction()->where('transaction_list_id',$transaction_list_id)->first();
+        $data['_item']               = Tbl_transaction_item::where('transaction_list_id',$transaction_list_id)->get();
+        $data['customer_name']       = Transaction::getCustomerNameTransaction($data['list']->transaction_id);
+        $data['transaction_details'] = unserialize($data["list"]->transaction_details);
+        $data['customer_info']       = Transaction::getCustomerInfoTransaction($data['list']->transaction_id);
+        $data['customer_address']    = Transaction::getCustomerAddressTransaction($data['list']->transaction_id);
+        
+        /* Item */
+        $data['list']->vat           = $data['list']->transaction_subtotal / 1.12 * 0.12;
+        $data['list']->vatable       = $data['list']->transaction_subtotal - $data['list']->vat;
+
+        /* Get Payment Method */
+        $data["customer_payment"]    = new \stdClass();
+        $old = DB::table("tbl_ec_order")->where("invoice_number", $data['list']->transaction_number)->first();
+        if ($old) 
+        {
+            /* Old */
+            $payment_method = DB::table("tbl_online_pymnt_link")->where("link_method_id", $old->payment_method_id)->first();
+            $data["customer_payment"]->payment_method = $payment_method->link_reference_name;
+            if($payment_method->link_reference_name == "paymaya") 
+            {
+                $paymaya = DB::table("tbl_paymaya_logs")->where("order_id", $old->ec_order_id)->first();
+                $data["customer_payment"]->checkout_id = $paymaya->checkout_id;
+            }
+            elseif($payment_method->link_reference_name == "dragonpay")
+            {
+                $dragonpay = DB::table("tbl_dragonpay_logs")->where("order_id", $old->ec_order_id)->first();
+                if (is_serialized($dragonpay->response)) 
+                {
+                    $unserialize_dragonpay = unserialize($dragonpay->response);
+                    if (isset($unserialize_dragonpay['txnid']) && $unserialize_dragonpay['txnid']) 
+                    {
+                        $data["customer_payment"]->checkout_id = $unserialize_dragonpay['txnid'];
+                    }
+                    else
+                    {
+                        $data["customer_payment"]->checkout_id = "None";
+                    }
+                }
+                else
+                {
+                    $data["customer_payment"]->checkout_id = "None";
+                }
+            }
+            else
+            {
+                $data["customer_payment"]->checkout_id = "None";
+            }
+        }
+        else
+        {
+            /* New */
+            $data["customer_payment"]->payment_method = "None";
+            $data["customer_payment"]->checkout_id = "None";
+        }
+        
+        $html = view("member.transaction.view_pdf", $data);
+        $pdf = Pdf_global::show_pdfv2($html);
+        return $pdf;
+    }
 }

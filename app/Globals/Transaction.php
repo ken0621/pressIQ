@@ -9,6 +9,7 @@ use App\Models\Tbl_temp_customer_invoice_line;
 use App\Models\Tbl_user;
 use App\Models\Tbl_item;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_customer_address;
 
 use App\Models\Tbl_transaction;
 use App\Models\Tbl_transaction_list;
@@ -258,9 +259,52 @@ class Transaction
         }
         return $customer_name;
     }
-    
-    
-    
+    public static function getCustomerInfoTransaction($transaction_id = 0)
+    {
+        $customer_info = null;
+        if($transaction_id)
+        {
+            $data = Tbl_transaction::where('transaction_id',$transaction_id)->first();
+            
+            if($data)
+            {
+                if($data->transaction_reference_table == 'tbl_customer' && $data->transaction_reference_id != 0)
+                {
+                    $chck = Tbl_customer::where('customer_id', $data->transaction_reference_id)->first();
+                    if($chck)
+                    {
+                        $customer_info = $chck;
+                    }
+                }
+            }
+        }
+        return $customer_info;
+    }
+    public static function getCustomerAddressTransaction($transaction_id = 0)
+    {
+        $customer_address = null;
+        if($transaction_id)
+        {
+            $data = Tbl_transaction::where('transaction_id',$transaction_id)->first();
+            
+            if($data)
+            {
+                if($data->transaction_reference_table == 'tbl_customer' && $data->transaction_reference_id != 0)
+                {
+                    $chck = Tbl_customer_address::where('customer_id', $data->transaction_reference_id)
+                                                ->where("purpose", "shipping")
+                                                ->orWhere("purpose", "permanent")
+                                                ->orWhere("purpose", "billing")
+                                                ->first();
+                    if($chck)
+                    {
+                        $customer_address = $chck;
+                    }
+                }
+            }
+        }
+        return $customer_address;
+    }
     public static function get_transaction_filter_customer($customer_id) //filter result of transaction list by customer
     {
         $store["get_transaction_filter_customer_id"] = $customer_id;

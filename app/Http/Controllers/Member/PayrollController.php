@@ -132,13 +132,13 @@ class PayrollController extends Member
      //audit end
 
 
-     public function modal_view_all_transaction($id,$uid)
-     {
+     // public function modal_view_all_transaction($id,$uid)
+     // {
           
-          $data['audit'] = Tbl_audit_trail::orderBy("tbl_audit_trail.created_at","DESC")->where('audit_trail_id',$id)->where("audit_shop_id",AuditTrail::getShopId())->first();
-          $data['user_info'] = Tbl_user::where('user_id',$uid)->where("user_shop",AuditTrail::getShopId())->first();
-           return view("member.payroll.modal.modal_view_all_transaction",$data);
-     }
+     //      $data['audit'] = Tbl_audit_trail::orderBy("tbl_audit_trail.created_at","DESC")->where('audit_trail_id',$id)->where("audit_shop_id",AuditTrail::getShopId())->first();
+     //      $data['user_info'] = Tbl_user::where('user_id',$uid)->where("user_shop",AuditTrail::getShopId())->first();
+     //       return view("member.payroll.modal.modal_view_all_transaction",$data);
+     // }
 
 
      /* PAYROLL TIME KEEPING START */

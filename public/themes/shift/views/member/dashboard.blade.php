@@ -8,16 +8,16 @@
 	    <!-- TOP DASHBOARD-->
 	    <div class="dashboard-top">
 	        <div class="row clearfix">
-	            <div class="col-md-8">
+	            <!-- <div class="col-md-8">
 	                <div class="img-container">
 	                    <img src="/themes/{{ $shop_theme }}/img/brown-img1.png">
 	                </div>
-	            </div>
-	            <div class="col-md-4">
+	            </div> -->
+	            <div class="col-md-12">
 	                <div class="join-container">
 	                    <div class="btn btn-text">
-	                        <div class="text-header1">Join the Movement!</div>
-	                        <div class="text-header2">Enroll now and become one of us!</div>
+	                        <div class="text-header1">Become a member now!</div>
+	                        <!-- <div class="text-header2">Enroll now and become one of us!</div> -->
 	                    </div>
 	                    <div class="btn-container">
 	                        <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
@@ -45,10 +45,10 @@
 	                        
 	                    </div>
 	                    <div class="personal-info-container">
-	                        <div><label>Name </label><span>Lorem Ipsum Dolor</span></div>
-	                        <div><label>Email </label><span>Lorem Ipsum Dolor</span></div>
-	                        <div><label>Birthday </label><span>Lorem Ipsum Dolor</span></div>
-	                        <div><label>Contact </label><span>Lorem Ipsum Dolor</span></div>
+	                        <div><label>Name </label><span>{{$customer->first_name}} {{$customer->middle_name}} {{$customer->last_name}}</span></div>
+	                        <div><label>Email </label><span>{{$customer->email}}</span></div>
+	                        <div><label>Birthday </label><span>{{$customer->birthday}}</span></div>
+	                        <div><label>Contact </label><span>{{$customer->contact}}</span></div>
 	                    </div>
 	                </div>
 	            </div>

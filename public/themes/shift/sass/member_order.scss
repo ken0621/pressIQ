@@ -1,6 +1,7 @@
-$content-text: 'Open Sans', sans-serif;
+$content-text: 'Rubik', sans-serif;
+$light: 300;
 $regular: 400;
-$semi-bold: 600;
+$semi-bold: 500;
 $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
@@ -28,7 +29,7 @@ $text-dark: #272c2f;
 
 				.name {
 					font-size: 21px;
-					font-weight: $bold;
+					font-weight: $semi-bold;
 					color: $text-dark !important;
 				}
 				.sub {
@@ -81,7 +82,7 @@ $text-dark: #272c2f;
 						{
 							color: $text-dark;
 							font-size: 17px;
-							font-weight: $bold;
+							font-weight: $semi-bold;
 							@media screen and (min-width: 991px)
 							{
 								float: left;
@@ -104,7 +105,7 @@ $text-dark: #272c2f;
 								border-radius: 25px;
 								color: #fff;
 								font-size: 13px;
-								font-weight: $bold;
+								font-weight: $semi-bold;
 							}
 						}
 					}

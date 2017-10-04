@@ -185,6 +185,8 @@ class WarehouseController extends Member
             }
             $data["enable_serial"] = Tbl_settings::where("shop_id",$this->user_info->shop_id)->where("settings_key","item_serial")->value("settings_value");
 
+            $data['pis'] = Purchasing_inventory_system::check();
+
             return view("member.warehouse.warehouse_list",$data);
         }
         else
@@ -1315,6 +1317,29 @@ class WarehouseController extends Member
         
         return json_encode($data);
         
+    }
+    public function view_v2($warehouse_id)
+    {
+        $type = 'bundle';
+        $data = Warehouse::get_inventory_item($warehouse_id, $type);
+
+        $data['pis'] = Purchasing_inventory_system::check();
+        $data['warehouse'] = Tbl_warehouse::where('warehouse_id',$warehouse_id)->first();
+        $data['page'] = "View Warehouse";
+        $data['warehouse_name'] = 'Main Warehouse';
+
+        return view("member.warehouse.warehouse_view_v2",$data);
+    }
+    public function view_inventory_table()
+    {
+        $type = 'bundle';
+        if(Request::input('type'))
+        {
+            $type = Request::input('type');   
+        }
+        $data = Warehouse::get_inventory_item($type);
+
+        return view("member.warehouse.warehouse_view_v2_inventory_table",$data);
     }
 
     /**

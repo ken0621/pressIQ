@@ -70,7 +70,7 @@ class Warehouse
             }
 
             foreach($value_bundle_data["item"] as $item_id_key => $value_item) 
-            {   
+            {
                 $rem_item[$value_bundle_data["bundle_id"].".".$item_id_key]["item_id"] = $item_id_key;
                 $rem_item[$value_bundle_data["bundle_id"].".".$item_id_key]["item_quantity"] = ($value_item - $bundle_stocks) * $value_bundle_data["bundle_qty"][$item_id_key];
             }
@@ -308,7 +308,20 @@ class Warehouse
     		$data = json_encode($data);
     	}
     	return $data; 
-    }  
+    }
+    public static function get_inventory_item($warehouse_id, $type = '')
+    {
+        $_item = [];
+        $data['warehouse_item_bundle'] = [];
+        $data['_inventory'] = [];
+        $data['_empties'] = [];
+        if($type == 'bundle')
+        {
+            $data['warehouse_item_bundle'] = Warehouse::select_item_warehouse_per_bundle($warehouse_id); 
+        }
+
+        return $data;
+    }
     public static function select_item_warehouse_single($warehouse_id = 0, $return = 'array')
     {
         $data = Tbl_warehouse::Warehouseitem()

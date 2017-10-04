@@ -1,63 +1,66 @@
 
-<style type="text/css">
-    .chosen-container
-    {
-        width: 100% !important;
-    }
-</style>
-<input type="hidden" name="_token" value="{{csrf_token()}}">
-<div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal">&times;</button>
-    <h4 class="modal-title layout-modallarge-title item_title">Warehouse Information</h4>
-</div>
-<div class="modal-body modallarge-body-layout background-white form-horizontal menu_container" >
-    <div class="panel-body form-horizontal">
-        <div class="form-group">
-            <div class="col-md-6">            
-                <h2>{{$warehouse->warehouse_name}}</h2>
-            </div>
+@extends('member.layout')
+@section('content')
+<div class="panel panel-default panel-block panel-title-block" id="top">
+    <input type="hidden" name="_token" value="{{csrf_token()}}">
+    <div class="panel-heading">
+        <div>
+            <i class="fa fa-area-chart"></i>
+            <h1>
+                <span class="page-title">View Warehouse &raquo; {{ucwords($warehouse_name)}}</span>
+                <small>
+                    Warehouse Inventory
+                </small>
+            </h1>
         </div>
-        <div class="form-group">
-       <!--  <div class="col-md-12"><h3>Select Item</h3></div>        
-            <div class="col-md-3" >
-                <select class="form-control">
-                    <option>All Items</option>
-                </select>
-            </div>
-            <div class="col-md-9" > 
-                <div class="input-group">
-                    <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                    <input type="search" name="" class="form-control" placeholder="Start typing item">
-                </div>
-            </div>
-        </div> -->
-        <div class="form-group">
-            <div class="col-md-12 text-left">            
-                <input type="checkbox" onclick="toggle('.show-container', this)" value="update_password" class="up-check" name="update_password"> <label class="label-type"> View Item Per Bundle/Group</label>
-            </div>
-        </div>
-        <div class="row clearfix draggable-container show-container per-item">
-            <div class="table-responsive">
-                <div class="load-data" target="warehouse_data">
-                    <div id="warehouse_data">                        
-                       @include("member.warehouse.load_data_warehouse.load_view_warehouse")
-                    </div>
-                </div>
-            </div>
-        </div>  
-        <div class="row clearfix draggable-container show-container per-bundle hidden">
-            <div class="table-responsive">                   
-                @include("member.warehouse.load_data_warehouse.bundle_load_view_warehouse")
-            </div>
-        </div>    
     </div>
 </div>
 
-<div class="modal-footer" >
-    <button type="button" class="btn btn-custom-white" data-dismiss="modal">Close</button>
+<div class="panel panel-default panel-block panel-title-block">
+    <div class="panel-body form-horizontal">
+        <div class="form-group">
+            <div class="col-md-6">
+                <ul class="nav nav-tabs">
+                  <li id="all-list" class="active"><a data-toggle="tab" href="#bundle"><i class="fa fa-yelp" aria-hidden="true"></i>&nbsp;Bundle/Group</a></li>
+                  <li id="archived-list"><a data-toggle="tab" href="#odd-inventory"><i class="fa fa-opencart" aria-hidden="true"></i>&nbsp;Odd Inventory</a></li>
+                  <li id="archived-list"><a data-toggle="tab" href="#unused-empties"><i class="fa fa-slack" aria-hidden="true"></i>&nbsp;Unused Empties</a></li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group pos-search">
+                  <span style="background-color: #eee" class="input-group-addon button-scan" id="basic-addon1">
+                    <i class="fa fa-search scan-icon"></i>
+                    <i style="display: none;" class="fa fa-spinner fa-pulse fa-fw scan-load"></i>
+                  </span>
+                  <input type="text" class="form-control event_search_item" placeholder="Enter item SKU" aria-describedby="basic-addon1">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group tab-content panel-body">
+            <div id="bundle" class="tab-pane fade in active">
+                <div class="form-group order-tags"></div>
+                <div class="table-responsive">
+                    @include("member.load_ajax_data.load_bundle_item")
+                </div>
+            </div>
+            <div id="odd-inventory" class="tab-pane fade in active">
+                <div class="form-group order-tags"></div>
+                <div class="table-responsive">
+                    @include("member.load_ajax_data.load_bundle_item")
+                </div>
+            </div>
+            <div id="unused-empties" class="tab-pane fade in active">
+                <div class="form-group order-tags"></div>
+                <div class="table-responsive">
+                    @include("member.load_ajax_data.load_bundle_item")
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
-<script type="text/javascript" src="/assets/member/js/draggable_row.js"></script>
-<script type="text/javascript" src="/assets/member/js/transfer_warehouse.js"></script>
-<script type="text/javascript" src="/assets/member/js/warehouse.js"></script>
-<script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
+
+@endsection
+
+@section('script')
+@endsection

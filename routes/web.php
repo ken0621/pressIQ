@@ -404,6 +404,9 @@ Route::post('/member/item/warehouse/transfer_submit','Member\WarehouseController
 Route::any('/member/item/warehouse/archived/{id}','Member\WarehouseController@archived');
 Route::any('/member/item/warehouse/archive_submit','Member\WarehouseController@archived_submit');
 Route::any('/member/item/warehouse/view/{id}','Member\WarehouseController@view');
+
+Route::any('/member/item/warehouse/view_v2/{id}','Member\WarehouseController@view_v2');
+
 Route::any('/member/item/warehouse/refill','Member\WarehouseController@refill');
 Route::any('/member/item/warehouse/refill_submit','Member\WarehouseController@refill_submit');
 Route::any('/item/warehouse/refill/by_vendor/{warehouse_id}/{id}','Member\WarehouseController@refill_item_vendor');

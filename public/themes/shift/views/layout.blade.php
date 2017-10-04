@@ -125,70 +125,27 @@
             <div class="footer-container">
                 <div class="upper row clearfix">
                     <div class="col-md-4">
-                        <div class="reach-us-holder">
-                            <div class="jca-footer-title-container">
-                                <p class="footer-title">Reach Us</p>
-                            </div>
-                            <div class="jca-footer-details-container">
-                                <div class="icon-holder">
-                                    <img class="jca-footer-icon" src="/themes/{{ $shop_theme }}/img/location-logo.png">
-                                </div>
-                                <p class="footer-details">Unit 810 8/F Raffles Corporate Center, F. Ortigas Ave., Ortigas Center, San Antonio, Pasig City</p>
-                            </div>
-                            <div class="jca-footer-details-container">
-                                <div class="icon-holder">
-                                    <img class="jca-footer-icon" src="/themes/{{ $shop_theme }}/img/telephone-logo.png">
-                                </div>
-                                <p class="footer-details">(02)631-6997 | 0917-5326968</p>
-                            </div>
-                            <div class="jca-footer-details-container">
-                                <div class="icon-holder">
-                                    <img class="jca-footer-icon" src="/themes/{{ $shop_theme }}/img/mail-logo.png">
-                                </div>
-                                <p class="footer-details">jcainternationalcorp@gmail.com</p>
-                            </div>
+                        <div class="inner-content">
+                            <img src="/themes/{{ $shop_theme }}/img/footer-banner.jpg">
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="jca-footer-title-container">
-                            <p class="footer-title">Quick Links</p>
-                        </div>
-                        <div class="jca-footer-details-container">
-                            <p class="footer-detail-list">Company Policy</p>
-                            <p class="footer-detail-list">Dealer’s Policy</p>
-                            <p class="footer-detail-list">Disclaimer</p>
-                            <p class="footer-detail-list">Terms & Condition</p>
-                            <p class="footer-detail-list">Privacy Policy</p>
-                            <p class="footer-detail-list">Product Policy</p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="jca-footer-title-container">
-                            <p class="footer-title">Overview</p>
-                        </div>
-                        <div class="jca-footer-details-container">
-                            <p class="footer-detail-list">Marketing Plan</p>
-                            <p class="footer-detail-list">Packages</p>
-                            <p class="footer-detail-list">Product Packages</p>
-                            <p class="footer-detail-list">Direct Selling</p>
-                            <p class="footer-detail-list">Unilevel</p>
-                            <p class="footer-detail-list">Sales Comission</p>
-                            <p class="footer-detail-list">Overide Sales Comission</p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="jca-footer-title-container">
-                            <p class="footer-title">Product Portfolio</p>
-                        </div>
-                        <div class="jca-footer-details-container">
-                            <p class="footer-detail-list">JCA Wellness Body Cream</p>
-                            <p class="footer-detail-list">JCA Wellness Day Cream</p>
-                            <p class="footer-detail-list">JCA Wellness Night Cream</p>
-                            <p class="footer-detail-list">Swiss Apple Stemcell Cerum</p>
-                            <p class="footer-detail-list">Swiss Apple Stemcell Soap with</p>
-                            <p class="footer-detail-list">gulthathione and collagen</p>
-                        </div>
-                    </div> 
+                     <div class="col-md-4">
+                         <div class="inner-content">
+                             <div class="inner-content-title">Information</div>
+                             <p>FAQ</p>
+                             <p>Downloadables</p>
+                             <p>Get In Touch</p>
+                             <p>Company</p>
+                         </div>
+                     </div> 
+                     <div class="col-md-4">
+                         <div class="inner-content">
+                             <div class="inner-content-title">Contact Information</div>
+                             <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. </p>
+                             <p>042 0000</p>
+                             <p>youremailhere@gmail.com</p>
+                         </div>
+                     </div>
                 </div>
             </div>
         </div>

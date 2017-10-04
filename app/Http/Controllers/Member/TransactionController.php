@@ -122,7 +122,6 @@ class TransactionController extends Member
             }
             else
             {
-                /* New */
                 $data["customer_payment"]->payment_method = "None";
                 $data["customer_payment"]->checkout_id = "None";
             }
@@ -130,8 +129,46 @@ class TransactionController extends Member
         else
         {
             /* New */
-            $data["customer_payment"]->payment_method = "None";
-            $data["customer_payment"]->checkout_id = "None";
+            $payment_logs = DB::table("tbl_payment_logs")->where("transaction_list_id", $transaction_list_id)->first();
+
+            if ($payment_logs) 
+            {
+                $data["customer_payment"]->payment_method = $payment_logs->payment_log_method;
+
+                switch ($payment_logs->payment_log_method) 
+                {
+                    case 'paymaya':
+                        if (isset($data["transaction_details"]["id"])) 
+                        {
+                            $data["customer_payment"]->checkout_id = $data["transaction_details"]["id"];
+                        }
+                        else
+                        {
+                            $data["customer_payment"]->checkout_id = "None";
+                        }
+                    break;
+
+                    case 'dragonpay':
+                        if (isset($data["transaction_details"]["refno"])) 
+                        {
+                            $data["customer_payment"]->checkout_id = $data["transaction_details"]["refno"];
+                        }
+                        else
+                        {
+                            $data["customer_payment"]->checkout_id = "None";
+                        }
+                    break;
+                    
+                    default:
+                        $data["customer_payment"]->checkout_id = "None";
+                    break;
+                }
+            }
+            else
+            {
+                $data["customer_payment"]->payment_method = "None";
+                $data["customer_payment"]->checkout_id = "None";
+            }
         }
         
         $html = view("member.transaction.view_pdf", $data);

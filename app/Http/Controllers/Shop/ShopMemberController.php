@@ -62,6 +62,7 @@ class ShopMemberController extends Shop
             
             $data['mlm_pin'] = '';
             $data['mlm_activation'] = '';
+            
             if(MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id) && $this->mlm_member == false)
             {
                 $data['check_unused_code'] = MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
@@ -69,6 +70,7 @@ class ShopMemberController extends Shop
                 $data['mlm_activation'] = MLM2::get_code($data['check_unused_code'])['mlm_activation'];
             }
         }
+        
         $data["item_kit_id"] = Item::get_first_assembled_kit($this->shop_info->shop_id);
 
         return Self::load_view_for_members('member.dashboard', $data);
@@ -266,18 +268,26 @@ class ShopMemberController extends Shop
     {
         $data["page"] = "Register";
         $get = FacebookGlobals::check_app_key($this->shop_info->shop_id);
+        
         if($get)
         {
             $data['fb_login_url'] = FacebookGlobals::get_link_register($this->shop_info->shop_id);
         }
-
-        // if(request("pass") != "456")
-        // {
-        //     return view("member.coming");
-        // }
-
+        
+        if(request("d") == 1)
+        {
+            $dummy["email"] = strtolower(randomPassword()) . "@gmail.com";
+            $dummy["first_name"] = ucfirst(randomPassword());
+            $dummy["last_name"] = ucfirst(randomPassword());
+            $dummy["middle_name"] = ucfirst(randomPassword());
+            $dummy["contact"] = ucfirst(randomPassword()) . ucfirst(randomPassword());
+            $dummy["password"] = ucfirst(randomPassword());
+            $data["dummy"] = $dummy;
+        }
+        
         return Self::load_view_for_members("member.register", $data, false);
     }
+
     public function getRegisterSubmit()
     {
         $user_profile = FacebookGlobals::user_profile($this->shop_info->shop_id);
@@ -919,43 +929,7 @@ class ShopMemberController extends Shop
 
         echo $message;
     }
-    public function getFinalVerify()
-    {
-        $data = $this->code_verification();
 
-        if($data)
-        {
-            return view('member.final_verification', $data);
-        }
-    }    
-    public function postFinalVerify()
-    {
-        $data = $this->code_verification();
-
-        if($data)
-        {
-            $shop_id        = $this->shop_info->shop_id;
-            $customer_id    = Self::$customer_info->customer_id;
-            $membership_id  = $data["membership_code"]->membership_id;
-            $sponsor        = $data["sponsor"]->slot_id;
-            $create_slot    = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $data["pin"]);
-
-            if(is_numeric($create_slot))
-            {
-                $remarks = "Code used by " . $data["sponsor_customer"]->first_name . " " . $data["sponsor_customer"]->last_name;
-                MLM2::use_membership_code($shop_id, $data["pin"], $data["activation"], $create_slot, $remarks);
-
-                $slot_id = $create_slot;
-                $store["get_success_mode"] = "success";
-                session($store);
-                echo json_encode("success");
-            }
-            else
-            {
-                echo json_encode($create_slot);
-            }
-        }
-    }
     public function code_verification()
     {
         $shop_id                    = $this->shop_info->shop_id;
@@ -1052,6 +1026,55 @@ class ShopMemberController extends Shop
             echo json_encode("Placement does not exists.");
         }
     }
+    public function getEnterCode()
+    {
+        $data["page"] = "Enter Sponsor";
+        $data["message"] = "Enter <b>Slot Code</b> of your <b>Sponsor</b>";
+        return view('member2.enter_code', $data);
+    }
+    public function getEnterSponsor()
+    {
+        $data["page"] = "Enter Code";
+        $data["message"] = "Enter <b>Slot Code</b> of your <b>Sponsor</b>";
+        return view('member2.enter_sponsor', $data);
+    }
+    public function getFinalVerify()
+    {
+        $data = $this->code_verification();
+
+        if($data)
+        {
+            return view('member2.final_verify', $data);
+        }
+    }    
+    public function postFinalVerify()
+    {
+        $data = $this->code_verification();
+
+        if($data)
+        {
+            $shop_id        = $this->shop_info->shop_id;
+            $customer_id    = Self::$customer_info->customer_id;
+            $membership_id  = $data["membership_code"]->membership_id;
+            $sponsor        = $data["sponsor"]->slot_id;
+            $create_slot    = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $data["pin"]);
+
+            if(is_numeric($create_slot))
+            {
+                $remarks = "Code used by " . $data["sponsor_customer"]->first_name . " " . $data["sponsor_customer"]->last_name;
+                MLM2::use_membership_code($shop_id, $data["pin"], $data["activation"], $create_slot, $remarks);
+
+                $slot_id = $create_slot;
+                $store["get_success_mode"] = "success";
+                session($store);
+                echo json_encode("success");
+            }
+            else
+            {
+                echo json_encode($create_slot);
+            }
+        }
+    }
     public function check_placement($slot_id,$slot_placement,$slot_position)
     {
         $shop_id       = $this->shop_info->shop_id;
@@ -1099,6 +1122,7 @@ class ShopMemberController extends Shop
         $data["procceed"] = $procceed;
         return $data;
     }
+    
 
     public function load_view_for_members($view, $data, $memberonly = true)
     {

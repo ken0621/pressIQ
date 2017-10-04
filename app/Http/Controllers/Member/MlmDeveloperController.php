@@ -154,7 +154,7 @@ class MlmDeveloperController extends Member
     	$data["total_payout"]          = Currency::format($total_payout);
 
 
-        $default[]          = ["SLOT NO","display_slot_no", true];
+        $default[]          = ["SLOT CODE","display_slot_no", true];
         $default[]          = ["SLOT OWNER","customer", false];
         $default[]          = ["SPONSOR","sponsor_button", false];
         $default[]          = ["PLACEMENT","placement_button", false];

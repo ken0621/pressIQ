@@ -39,10 +39,11 @@ class MLM2
 	{
 		$return = 0;
 		$data = Tbl_transaction::where('transaction_reference_table','tbl_customer')->where('transaction_reference_id', $customer_id)->get();
-		
+	
 		foreach($data as $key => $value)
 		{
 			$list = Tbl_transaction_list::where('transaction_id', $value->transaction_id)->get();
+
 
 			foreach($list as $key2 => $value2)
 			{
@@ -57,6 +58,7 @@ class MLM2
 				}
 			}
 		}
+
 		return $return;
 	}
 	public static function check_purchased_code($shop_id, $customer_id)

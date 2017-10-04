@@ -11,14 +11,36 @@ function non_member()
 			document_ready();
 		});
 	}
+	
 	function document_ready()
 	{
-		add_event_enter_code_click();
 		add_event_submit_verify_sponsor();
 		add_event_submit_verify_code();
 		add_event_process_slot_creation();
 		add_event_submit_verify_placement();
 		add_event_process_slot_placement();
+		add_event_place_slot();
+		
+		auto_popup_success_if_paid();
+		auto_popup_if_slot_creation_success();
+	}
+	function add_event_place_slot()
+	{
+		
+	}
+	function auto_popup_if_slot_creation_success()
+	{
+		if($("._mode").val() == "success")
+		{
+			$("#success-modal").modal("show");
+		}
+	}
+	function auto_popup_success_if_paid()
+	{
+		if($('.check_unused_code').val() != 0)
+		{
+			$('#popup-notification-modal').modal('show');
+		}
 	}
 	function add_event_process_slot_creation()
 	{
@@ -53,7 +75,7 @@ function non_member()
 	}
 	function add_event_submit_verify_code()
 	{
-		$(".code-verification-form").submit(function()
+		$("body").on("submit", ".code-verification-form", function()
 		{
 			action_verify_code();
 			return false;
@@ -61,25 +83,24 @@ function non_member()
 	}
 	function add_event_submit_verify_sponsor()
 	{
-		$(".submit-verify-sponsor").submit(function(e)
+		$("body").on("submit", ".submit-verify-sponsor", function(e)
 		{
 			if($(e.currentTarget).find(".btn-verify-sponsor").hasClass("use"))
 			{
-				$("#enter-a-code-modal").modal('hide');
+				$("#global_modal").modal("hide");
 
 				setTimeout(function()
 				{
-					$("#proceed-modal-2").modal('show');
+					action_load_link_to_modal("/members/final-verify");
 				}, 350);
 				
-				if($('.input-pin').val() != '')
-				{
-					setTimeout(function()
-					{
-						$('#btn-proceed-2').trigger('click');	
-					}, 1000);
-					
-				}
+				// if($('.input-pin').val() != '')
+				// {
+				// 	setTimeout(function()
+				// 	{
+				// 		$('#btn-proceed-2').trigger('click');	
+				// 	}, 1000);
+				// }
 			}
 			else
 			{
@@ -135,13 +156,13 @@ function non_member()
 				if(data == "")
 				{
 					$(".code-verification-form").find("input").val("");
-					$("#proceed-modal-2").modal('hide');
+					$("#global_modal").modal('hide');
+					
 					setTimeout(function()
 					{
-						$("#proceed-modal-1").modal('show');
-						$("#proceed-modal-1").find(".load-final-verification").html('<div class="loading text-center" style="padding: 150px;"><i class="fa fa-spinner fa-pulse fa-fw fa-3x"></i></div>');
-						$(".load-final-verification").load("/members/final-verify");
+						action_load_link_to_modal('/members/enter-sponsor');
 					}, 350);
+					
 				}
 			},
 			error: function(data)
@@ -188,17 +209,6 @@ function non_member()
 				$(".submit-verify-sponsor").find(".btn-verify-sponsor").html('<i class="fa fa-check"></i> VERIFY SPONSOR').removeAttr("disabled").removeClass("use");
 			}
 		});
-	}
-	function add_event_enter_code_click()
-	{
-	    $(".btn-enter-a-code").click(function()
-	    {
-			$("#enter-a-code-modal").modal('show');
-			$(".output-container").html("");
-
-			$(".submit-verify-sponsor").find(".btn-verify-sponsor").html('<i class="fa fa-check"></i> VERIFY SPONSOR').removeClass("use").removeAttr("disabled");
-			$(".submit-verify-sponsor").find("input").removeAttr("disabled").val("");
-	    });
 	}
 	function action_verify_placement()
 	{

@@ -10,7 +10,7 @@
 	    <div class="dashboard-top">
 	        <div class="row clearfix">
 		        <div class="animated fadeInLeft col-md-8">
-		        	<video autoplay="" controls="">
+		        	<video controls="">
 						<source src="/themes/{{ $shop_theme }}/img/intro2.mp4" type="video/mp4">
 					</video>
 		        </div>
@@ -23,7 +23,7 @@
 	                    <div class="btn-container">
 	                        <button class="product-add-cart btn-buy-a-kit" item-id="{{$item_kit_id or '54'}}" quantity="1">Enroll Now</button><br>
 	                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
-	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
+	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code" onclick="action_load_link_to_modal('/members/enter-code')">Enter a Code</button></a>
 	                    </div>
 	                </div>
 	            </div>
@@ -493,70 +493,7 @@
         </div>
     </div>
 </div>
-<!--  Enter a code -->
-<div class="popup-enter-a-code">
-    <div id="enter-a-code-modal" class="modal fade">
-        <div class="modal-sm modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"><i class="fa fa-star"></i> SPONSOR</h4>
-                </div>
-                <div class="modal-body">
-                    <form method="post" class="submit-verify-sponsor">
-                        <div class="labels">Enter <b>Enrolle Number / Code</b></div>
-                        <input required="required" class="input-verify-sponsor text-center" name="verify_sponsor" type="text" placeholder="">
-                        <div class="output-container">
-                            
-                        </div>
-                        <div class="btn-container">
-                            <button id="btn-verify" class="btn-verify btn-verify-sponsor"><i class="fa fa-check"></i> VERIFY SPONSOR</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Proceed 1 -->
-<div class="popup-proceed1">
-    <div id="proceed-modal-1" class="modal fade">
-        <div class="modal-sm modal-dialog">
-            <div class="modal-content load-final-verification">
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Proceed 2 -->
-<div class="popup-proceed2">
-    <div id="proceed-modal-2" class="modal fade">
-        <div class="modal-sm modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"><i class="fa fa-shield"></i> CODE VERIFICATION</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="message message-return-code-verify"></div>
-                    <form class="code-verification-form">
-                        <div>
-                            <div class="labeld">Pin Code</div>
-                            <input class="input input-pin text-center" name="pin" type="text" value="{{$mlm_pin or ''}}">
-                        </div>
-                        <div>
-                            <div class="labeld">Activation</div>
-                            <input class="input input-activation text-center" name="activation" type="text" value="{{$mlm_activation or ''}}">
-                        </div>
-                        <div class="btn-container">
-                            <button id="btn-proceed-2" class="btn-proceed-2"><i class="fa fa-angle-double-right"></i> Proceed</button>
-                        </div>
-                    </form>
-                </div>
-              </div>
-          </div>
-      </div>
-  </div>
 <!-- MANUAL PLACING OF SLOT -->
 <div class="popup-verify-placement">
     <div id="slot-placement-modal" class="modal fade">
@@ -593,7 +530,7 @@
 @endsection
 
 @section("member_script")
-<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js"></script>
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js?version=2.0"></script>
 <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
 <script>
 
@@ -653,31 +590,10 @@ $(document).ready(function()
 		});
 	} 
 	
-	/*Auto pop-up*/
-	if($('.check_unused_code').val() != 0)
-	{
-		$('#popup-notification-modal').modal('show');
-	}
-	
-	$('#btn-notification').unbind('click');
-	$('#btn-notification').bind('click', function()
-	{
-		$('#popup-notification-modal').modal('hide');
-		$(".submit-verify-sponsor").find(".btn-verify-sponsor").html('<i class="fa fa-check"></i> VERIFY SPONSOR').removeClass("use").removeAttr("disabled");
-		$(".submit-verify-sponsor").find("input").removeAttr("disabled").val("");
-		$(".output-container").html("");
-		$('#enter-a-code-modal').modal('show');
-		
-	});
+
 });
 $(document).ready(function()
 {
-	if($("._mode").val() == "success")
-	{
-		$("#success-modal").modal("show");
-	}
-
-
 	$(".place_slot_btn").click(function()
 	{
 		$(".message-return-slot-placement-verify").empty();

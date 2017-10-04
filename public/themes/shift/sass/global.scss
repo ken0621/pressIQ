@@ -118,6 +118,22 @@ button:hover{
 			width: 100%;
 			z-index: 999;
 			top: 0;
+			background-color: #000;
+			padding: 2px 0px;
+
+			.image-logo-holder
+			{
+				width: 60%;
+				margin-top: 8px;
+			}
+			.navirino
+			{
+				margin-top: 10px;
+				a 
+				{
+					font-size: 13px;
+				}
+			}
 		}
 		&.subheader-container
 		{

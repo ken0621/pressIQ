@@ -118,13 +118,15 @@ $text-dark: #272c2f;
 			{
 				border: none !important;
 			}
-
+		
 			.btn-enter-a-code
 			{
-				color: #EDAC0E;
+				@include transition(0.2s);
+				font-weight: $semi-bold;
+				color: #fff;
 				background-color: inherit;
 				padding: 12px 30px 12px 30px;
-				border: 1px solid #EDAC0E;
+				border: 2px solid #fff;
 				border-radius: 2px;
 				//margin-bottom: 65px;
 

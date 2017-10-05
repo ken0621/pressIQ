@@ -69,9 +69,9 @@
 							</ul>
 						</li>
 						
-						<li class="{{ Request::segment(2) == "network" ? "active" : "" }}">
-							<a href="/members/lead-list"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>My Leads</span></div></a>
-						</li>
+						<!--<li class="{{ Request::segment(2) == "network" ? "active" : "" }}">-->
+						<!--	<a href="/members/lead-list"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>My Leads</span></div></a>-->
+						<!--</li>-->
 						
 						<!-- <li class="{{ Request::segment(2) == "slot" ? "active" : "" }}">
 							<a href="/members/slot"><div class="nav-holder"><div class="icon brown-icon-cubes"></div> <span>My Slots</span></div></a>

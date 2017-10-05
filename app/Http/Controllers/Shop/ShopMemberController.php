@@ -1148,7 +1148,11 @@ class ShopMemberController extends Shop
             $customer_id    = Self::$customer_info->customer_id;
             $membership_id  = $data["membership_code"]->membership_id;
             $sponsor        = $data["sponsor"]->slot_id;
-            $create_slot    = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $data["pin"]);
+            
+            $new_slot_no    = $data["pin"];
+            $new_slot_no    = str_replace("MYPHONE", "BROWN", $new_slot_no);
+            
+            $create_slot    = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $new_slot_no);
 
             if(is_numeric($create_slot))
             {

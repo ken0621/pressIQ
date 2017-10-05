@@ -6,28 +6,28 @@
 @if(!$mlm_member)
 	<div class="dashboard">
 	    <!-- TOP DASHBOARD-->
-<!-- 	    <div class="dashboard-top">
-    <div class="row clearfix">
-        <div class="col-md-8">
-            <div class="img-container">
-                <img src="/themes/{{ $shop_theme }}/img/brown-img1.png">
-            </div>
-        </div>
-        <div class="col-md-12">
-            <div class="join-container">
-                <div class="btn btn-text">
-                    <div class="text-header1">Become a member now!</div>
-                    <div class="text-header2">Enroll now and become one of us!</div>
-                </div>
-                <div class="btn-container">
-                    <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
-                    <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
-                    <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
+		<!-- 	    <div class="dashboard-top">
+		    <div class="row clearfix">
+		        <div class="col-md-8">
+		            <div class="img-container">
+		                <img src="/themes/{{ $shop_theme }}/img/brown-img1.png">
+		            </div>
+		        </div>
+		        <div class="col-md-12">
+		            <div class="join-container">
+		                <div class="btn btn-text">
+		                    <div class="text-header1">Become a member now!</div>
+		                    <div class="text-header2">Enroll now and become one of us!</div>
+		                </div>
+		                <div class="btn-container">
+		                    <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
+		                    <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
+		                    <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</div> -->
 
 	    <div class="dashboard-top">
 	        <div class="row clearfix">

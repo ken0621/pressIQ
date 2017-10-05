@@ -10,14 +10,14 @@
 	        <div class="row clearfix">
 	            <div class="col-md-8">
 	                <div class="img-container">
-	                    <img src="/themes/{{ $shop_theme }}/img/brown-img1.png">
+	                    <img src="/themes/{{ $shop_theme }}/img/db-img.png">
 	                </div>
 	            </div>
 	            <div class="col-md-4">
 	                <div class="join-container">
 	                    <div class="btn btn-text">
-	                        <div class="text-header1">Join the Movement!</div>
-	                        <div class="text-header2">Enroll now and become one of us!</div>
+	                        <div class="text-header1">Join us today!</div>
+	                        <!-- <div class="text-header2">Enroll now and become one of us!</div> -->
 	                    </div>
 	                    <div class="btn-container">
 	                        <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>

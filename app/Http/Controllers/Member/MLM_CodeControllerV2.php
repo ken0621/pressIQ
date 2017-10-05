@@ -174,6 +174,7 @@ class MLM_CodeControllerV2 extends Member
     public function product_code_table(Request $request)
     {
         $data['_item_product_code'] = Item::get_all_item_record_log($request->search_keyword, $request->status, 10);
+
         return view("member.mlm_code_v2.product_code_table",$data);
     }
     public function print_codes(Request $request)

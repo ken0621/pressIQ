@@ -83,7 +83,7 @@ class Member extends Controller
 							$check_exist   = Tbl_warehouse::where("warehouse_shop_id",$shop_id_used)->where("warehouse_id",$check_session)->first();
 							if(!$check_exist)
 							{
-								$current_warehouse = Tbl_warehouse::where("warehouse_shop_id",$shop_id_used)->orderBy("main_warehouse","DESC")->first();
+								$current_warehouse = Tbl_warehouse::where("warehouse_shop_id",$shop_id_used)->orderBy("main_warehouse","ASC")->first();
 							}
 							else
 							{

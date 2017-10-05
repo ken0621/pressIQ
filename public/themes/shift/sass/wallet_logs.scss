@@ -1,6 +1,7 @@
-$content-text: 'Open Sans', sans-serif;
+$content-text: 'Rubik', sans-serif;
+$light: 300;
 $regular: 400;
-$semi-bold: 600;
+$semi-bold: 500;
 $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
@@ -15,7 +16,7 @@ $text-dark: #272c2f;
 	{
 		.name {
 			font-size: 21px;
-			font-weight: $bold;
+			font-weight: $semi-bold;
 			color: $text-dark !important;
 		}
 		.sub {
@@ -38,7 +39,7 @@ $text-dark: #272c2f;
 			.name
 			{
 				font-size: 21px;
-				font-weight: $bold;
+				font-weight: $semi-bold;
 				color: $text-dark;
 				
 			}
@@ -93,7 +94,7 @@ $text-dark: #272c2f;
 
 	.income-salary
 	{
-		font-weight: $bold;
+		font-weight: $semi-bold;
 		padding-top: 50px;
 		margin-left: 5px;
 		padding-bottom: 20px;

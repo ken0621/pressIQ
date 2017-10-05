@@ -209,8 +209,8 @@ class PayrollProcessController extends Member
 
 			if(isset($employee->cutoff_breakdown))
 			{
-
-				$_duction_break_down = unserialize($employee->cutoff_breakdown)->_breakdown;
+				
+				$_duction_break_down = $employee->cutoff_breakdown->_breakdown;
 
 				
 					foreach($_duction_break_down as $breakdown)

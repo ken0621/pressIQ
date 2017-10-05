@@ -37,7 +37,7 @@
 	                <div class="profile-info-container pic1 match-height">
 	                    <div class="icon-container">
 	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/brown-personal-info.png">
+	                            <img src="/themes/{{ $shop_theme }}/img/personal-info.png">
 	                        </div>
 	                        <div class="col-md-10">
 	                            <div class="prof-info-text-header">Personal Information</div>
@@ -56,7 +56,7 @@
 	                <div class="profile-info-container pic2 match-height">
 	                    <div class="icon-container">
 	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/brown-default-shipping.png">
+	                            <img src="/themes/{{ $shop_theme }}/img/default-shipping.png">
 	                        </div>
 	                        <div class="col-md-10">
 	                            <div class="prof-info-text-header">Default Shipping Address</div>
@@ -69,7 +69,7 @@
 	                <div class="profile-info-container pic3 match-height">
 	                    <div class="icon-container">
 	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/brown-default-billing.png">
+	                            <img src="/themes/{{ $shop_theme }}/img/default-billing.png">
 	                        </div>
 	                        <div class="col-md-10">
 	                            <div class="prof-info-text-header">Default Billing Address</div>

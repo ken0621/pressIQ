@@ -1,3 +1,11 @@
+@mixin transition($transition)
+{
+	  -webkit-transition: all $transition ease-in-out;
+	  -moz-transition: all $transition ease-in-out;
+	  -o-transition: all $transition ease-in-out;
+	  transition: all $transition ease-in-out;
+}
+
 body
 {
 	font-family: 'Raleway', sans-serif;
@@ -104,7 +112,6 @@ button:hover{
 }
 
 
-
 /* HEADER-FIXED */
 .header-fixed
 {
@@ -124,13 +131,20 @@ button:hover{
 				margin-top: 15px;
 				a 
 				{
+					@include transition(0.2s);
 					font-size: 13px !important;
 				}
 			}
 			.image-logo-holder
 			{
 				padding: 5px 0px;
-				width: 70%;
+
+				img
+				{
+					@include transition(0.2s);
+					width: 70%;
+				}
+				
 			}
 		}
 		&.subheader-container

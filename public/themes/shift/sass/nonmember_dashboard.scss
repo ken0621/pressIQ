@@ -442,7 +442,7 @@ $text-dark: #272c2f;
 		
 		.modal-header
 		{
-			background-color: #422311;
+			background-color: #191919;
 			border-top-left-radius: 3px;
 			border-top-right-radius: 3px;
 
@@ -470,7 +470,7 @@ $text-dark: #272c2f;
 				margin-bottom: 27px;
 				font-size: 13px !important;
 				letter-spacing: 0.3px;
-				color: #613922 !important;
+				color: #191919 !important;
 			}
 			.value-set
 			{
@@ -508,9 +508,9 @@ $text-dark: #272c2f;
 				.btn-proceed-1
 				{
 					color: #fff;
-					background-color: #693d28;
+					background-color: #191919;
 					padding: 12px 40px;
-					border: 2px solid #693d28;
+					border: 2px solid #191919;
 					border-radius: 2px;
 				}
 			}
@@ -535,7 +535,7 @@ $text-dark: #272c2f;
 		background-color: #fff;
 		.modal-header
 		{
-			background-color: #422311;
+			background-color: #191919;
 			border-top-left-radius: 3px;
 			border-top-right-radius: 3px;
 
@@ -605,7 +605,7 @@ $text-dark: #272c2f;
 				width: 100%;
 				font-size: 16px;
 				border: none;
-				border: 1px solid #693d28;
+				border: 1px solid #191919;
 				margin: 5px 0px;
 				margin-bottom: 15px;
 				padding: 5px;
@@ -625,7 +625,7 @@ $text-dark: #272c2f;
 				.btn-proceed-2
 				{
 					color: #fff;
-					background-color: #693d28;
+					background-color: #191919;
 					padding: 10px 40px;
 					border-radius: 2px;
 					border: 0px !important;
@@ -646,8 +646,6 @@ $text-dark: #272c2f;
 		}
 	}
 }
-
-
 
 /* Failed */
 .popup-failed

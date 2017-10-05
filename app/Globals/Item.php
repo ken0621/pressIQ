@@ -1526,7 +1526,7 @@ class Item
         }
         else if($status == 'used')
         {
-            $query->where('record_inventory_status', 1);
+            $query->where('item_in_use', 'used');
         }
         else if($status == 'sold')
         {
@@ -1534,8 +1534,9 @@ class Item
         }
         else
         {
-            $query->where('record_inventory_status',0)->where('record_consume_ref_name',null)->orWhere('record_consume_ref_name','');
+            $query->where('record_inventory_status',0)->where('record_consume_ref_name',null)->where('item_in_use','unused');
         }  
+
         if($paginate != 0)
         {
             $data = $query->paginate($paginate);

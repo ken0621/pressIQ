@@ -1,3 +1,11 @@
+@mixin transition($transition)
+{
+	  -webkit-transition: all $transition ease-in-out;
+	  -moz-transition: all $transition ease-in-out;
+	  -o-transition: all $transition ease-in-out;
+	  transition: all $transition ease-in-out;
+}
+
 body
 {
 	font-family: 'Lato', sans-serif;
@@ -115,7 +123,6 @@ button:hover{
 }
 
 
-
 /* HEADER-FIXED */
 .header-fixed
 {
@@ -123,6 +130,7 @@ button:hover{
 	{
 		&.header-container
 		{
+			
 			background-color: #fff;
 			padding: 3px 0px;
 			position: fixed;

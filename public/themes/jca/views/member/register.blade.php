@@ -149,7 +149,7 @@
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header">Accept JCA Contract</div>
+            <div class="modal-header">Accept JCA Privacy Policy</div>
             <div class="modal-body">
                 <div class="contract">
                 	<div class="header">Privacy Policy</div>
@@ -228,6 +228,7 @@
         </div>
     </div>
 </div>
+
 @endsection
 @section("script")
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/member_register.js"></script>

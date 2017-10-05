@@ -395,27 +395,7 @@ body
 				}
 			}
 
-			.personal-info
-			{
-				@extend .introduction;
-			}
-
-			.share-protect
-			{
-				@extend .introduction;
-			}
-
-			.contact-us
-			{
-				@extend .introduction;
-			}
-
-			.disclaimer
-			{
-				@extend .introduction;
-			}
-
-			.dealers-policy
+			.personal-info, .share-protect, .contact-us, .disclaimer, .dealers-policy
 			{
 				@extend .introduction;
 			}

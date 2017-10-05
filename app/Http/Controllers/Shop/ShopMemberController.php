@@ -381,7 +381,6 @@ class ShopMemberController extends Shop
         if($validate)
         {
             $content_key = "front_forgot_password";
-            dd(EmailContent::checkIfexisting($content_key, $shop_id));
             if(EmailContent::checkIfexisting($content_key, $shop_id) != 0)
             {
                 $email_content["subject"] = EmailContent::getSubject($content_key, $shop_id);
@@ -401,7 +400,7 @@ class ShopMemberController extends Shop
                 $change_content = $txt;
 
                 $email_content["content"] = EmailContent::email_txt_replace($content_key, $change_content);
-
+                dd($email_content["content"]);
                 $data["template"] = Tbl_email_template::where("shop_id", $shop_id)->first();
                 if(isset($data['template']->header_image))
                 {

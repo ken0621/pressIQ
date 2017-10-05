@@ -399,8 +399,8 @@ class ShopMemberController extends Shop
 
                 $change_content = $txt;
 
-                $email_content["content"] = EmailContent::email_txt_replace($content_key, $change_content);
-                dd($email_content["content"]);
+                $email_content["content"] = EmailContent::email_txt_replace($content_key, $change_content, $shop_id);
+                
                 $data["template"] = Tbl_email_template::where("shop_id", $shop_id)->first();
                 if(isset($data['template']->header_image))
                 {

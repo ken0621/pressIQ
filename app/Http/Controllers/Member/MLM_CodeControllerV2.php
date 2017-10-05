@@ -116,6 +116,11 @@ class MLM_CodeControllerV2 extends Member
             {
                 Item::disassemble_membership_kit($value);
             }
+            
+            $return['status'] = 'success';
+            $return['call_function'] = 'success_dissamble';
+            
+            return json_encode($return);
         }
         else
         {
@@ -206,15 +211,15 @@ class MLM_CodeControllerV2 extends Member
         $r['membership_kit'] = $request->membership_kit ? '' : 'hidden';
         $rt = serialize($r); 
 
-        return Redirect::to('/member/mlm/print?t='.$request->type.'&Y='.$rt.'&status='.$request->status.'&membership='.$request->membership.'&membership_kit='.$request->membership_kit);
+        return Redirect::to('/member/mlm/print?t='.$request->type.'&Y='.$rt.'&status='.$request->status.'&print_limit='.$request->print_limit.'&membership='.$request->membership.'&membership_kit='.$request->membership_kit);
     }
     public function print(Request $request)
     {
         $data['on_show'] = unserialize($request->Y);
-        $data['_item_product_code'] = Item::get_all_item_record_log('', $request->status);
+        $data['_item_product_code'] = Item::get_all_item_record_log('', $request->status, $request->print_limit);
         if($request->t == 'membership_code')
         {
-            $data['_item_product_code'] = Item::get_assembled_kit(0,$request->membership_kit,$request->membership,'',$request->status);
+            $data['_item_product_code'] = Item::get_assembled_kit(0,$request->membership_kit,$request->membership,'',$request->status, $request->print_limit);
         }
         $pdf = view('member.mlm_code_v2.print_code_pdf', $data);
         return Pdf_global::show_pdf($pdf);

@@ -178,6 +178,8 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Guilermo Tabligan";
 
 
+
+
     /* -- REPORT => AGENT TRANSACTIONS */
     $code = "report-agent-transaction";
     $nav[$page]['submenu'][$code]['label'] = "Agent Profit & Loss";
@@ -263,6 +265,24 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "90% Working";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";  
 
+    /* -- E-COMMERCE => PRODUCT ORDERS */
+    $code = "cashier-transactions";
+    $nav[$page]['submenu'][$code]['label'] = "Transactions";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/transactions";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "90% Working";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";  
+    
+    /* -- E-COMMERCE => PRODUCT ORDERS */
+    $code = "cashier-all-transactions";
+    $nav[$page]['submenu'][$code]['label'] = "Transactions List";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/transactions_list";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "90% Working";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";  
+
 
     /* E-COMMERCE */
     $page = "ecommerce";  
@@ -279,6 +299,16 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "90% Working";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Erwin Guevara</span>";    
+
+    /* -- E-COMMERCE => PRODUCT ORDERS */
+    $code = "ecommerce-product-order2";
+    $nav[$page]['submenu'][$code]['label'] = "Product Orders V2";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/product_order2";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "90% Working";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";    
+
 
     /* -- E-COMMERCE => WEBSITE ORDERS */
     // $code = "ecommerce-order-list";
@@ -1529,6 +1559,24 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "<span style='color: green'>(DONE)</span> You are looking at this page now.";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Guillermo Tabligan</span>";   
 
+    /* -- DEVELOPERS => DOCUMENTATION */
+    $code = "developer-single-entry";
+    $nav[$page]['submenu'][$code]['label'] = "Single Entry";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/single_entry";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+
+    /* -- DEVELOPERS => DOCUMENTATION */
+    $code = "developer-auto-entry-independent";
+    $nav[$page]['submenu'][$code]['label'] = "Auto Entry (Independent)";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/auto_entry_independent";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+
      /* -- DEVELOPERS => REMATRIX */
     $code = "developer-rematrix";
     $nav[$page]['submenu'][$code]['label'] = "Rematrix";
@@ -1545,7 +1593,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/auto_entry";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Developing";
-    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+    $nav[$page]['submenu'][$code]['developer'] = "Everyone";   
     
     $code = "developer-simulate";
     $nav[$page]['submenu'][$code]['label'] = "Simulate";
@@ -1560,6 +1608,14 @@ function page_list()
     $nav[$page]['submenu'][$code]['label'] = "Code Documentation";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/documentation";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+    
+    $code = "developer-payment-logs";
+    $nav[$page]['submenu'][$code]['label'] = "Payment Logs";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payment_logs";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Developing";
     $nav[$page]['submenu'][$code]['developer'] = "Everyone";

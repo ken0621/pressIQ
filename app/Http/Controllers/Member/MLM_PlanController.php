@@ -78,6 +78,7 @@ class MLM_PlanController extends Member
         $validate['plan_settings_email_membership_code'] = Request::input('plan_settings_email_membership_code');
         $validate['plan_settings_email_product_code'] = Request::input('plan_settings_email_product_code');
         $validate['plan_settings_upgrade_slot'] = Request::input('plan_settings_upgrade_slot');
+        $validate['plan_settings_default_downline_rule'] = Request::input('plan_settings_default_downline_rule');
     	// end input from form
     	   
     	// Validator rules
@@ -91,6 +92,7 @@ class MLM_PlanController extends Member
         $rules['plan_settings_email_membership_code'] = 'required';
         $rules['plan_settings_email_product_code'] = 'required';
         $rules['plan_settings_upgrade_slot'] = 'required';
+        $rules['plan_settings_default_downline_rule'] = 'required';
 		// end validator rules
 		
 		// validate
@@ -117,6 +119,7 @@ class MLM_PlanController extends Member
             $update['plan_settings_email_membership_code'] = Request::input('plan_settings_email_membership_code');
             $update['plan_settings_email_product_code'] = Request::input('plan_settings_email_product_code');
             $update['plan_settings_upgrade_slot'] = Request::input('plan_settings_upgrade_slot');
+            $update['plan_settings_default_downline_rule'] = Request::input('plan_settings_default_downline_rule');
     		// end
     		
     		// update settings
@@ -577,33 +580,33 @@ class MLM_PlanController extends Member
             Tbl_mlm_plan::insert($insert);
         }
 
-        // if($count == 24)
-        // {
-        //     // start STAIRSTEP complan settings insert
-        //     $insert['shop_id'] = $shop_id;
-        //     $insert['marketing_plan_code'] = "ADVERTISEMENT_BONUS";
-        //     $insert['marketing_plan_name'] = "Advertisement Bonus";
-        //     $insert['marketing_plan_trigger'] = "Slot Creation";
-        //     $insert['marketing_plan_label'] = "Advertisement Bonus";
-        //     $insert['marketing_plan_enable'] = 0;
-        //     $insert['marketing_plan_release_schedule'] = 1;
-        //     $insert['marketing_plan_release_schedule_date'] = Carbon::now();
-        //     Tbl_mlm_plan::insert($insert);
-        // }
+        if($count == 24)
+        {
+             // start STAIRSTEP complan settings insert
+            $insert['shop_id'] = $shop_id;
+            $insert['marketing_plan_code'] = "ADVERTISEMENT_BONUS";
+            $insert['marketing_plan_name'] = "Advertisement Bonus";
+            $insert['marketing_plan_trigger'] = "Slot Creation";
+            $insert['marketing_plan_label'] = "Advertisement Bonus";
+            $insert['marketing_plan_enable'] = 0;
+            $insert['marketing_plan_release_schedule'] = 1;
+            $insert['marketing_plan_release_schedule_date'] = Carbon::now();
+            Tbl_mlm_plan::insert($insert);
+        }
 
-        // if($count == 25)
-        // {
-        //     // start STAIRSTEP complan settings insert
-        //     $insert['shop_id'] = $shop_id;
-        //     $insert['marketing_plan_code'] = "LEADERSHIP_ADVERTISEMENT_BONUS";
-        //     $insert['marketing_plan_name'] = "Leadership Advertisement Bonus";
-        //     $insert['marketing_plan_trigger'] = "Slot Creation";
-        //     $insert['marketing_plan_label'] = "Leadership Advertisement Bonus";
-        //     $insert['marketing_plan_enable'] = 0;
-        //     $insert['marketing_plan_release_schedule'] = 1;
-        //     $insert['marketing_plan_release_schedule_date'] = Carbon::now();
-        //     Tbl_mlm_plan::insert($insert);
-        // }
+        if($count == 25)
+        {
+             // start STAIRSTEP complan settings insert
+            $insert['shop_id'] = $shop_id;
+            $insert['marketing_plan_code'] = "LEADERSHIP_ADVERTISEMENT_BONUS";
+            $insert['marketing_plan_name'] = "Leadership Advertisement Bonus";
+            $insert['marketing_plan_trigger'] = "Slot Creation";
+            $insert['marketing_plan_label'] = "Leadership Advertisement Bonus";
+            $insert['marketing_plan_enable'] = 0;
+            $insert['marketing_plan_release_schedule'] = 1;
+            $insert['marketing_plan_release_schedule_date'] = Carbon::now();
+            Tbl_mlm_plan::insert($insert);
+        }
 
 
         // end basic complan

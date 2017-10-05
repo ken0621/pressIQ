@@ -3,7 +3,7 @@ namespace App\Http\Controllers\Member;
 use App\Models\Tbl_brown_rank;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_tree_sponsor;
-use App\Globals\MLM_complan_manager;
+use App\Globals\Mlm_complan_manager;
 use Request;
 use Excel;
 
@@ -140,6 +140,6 @@ class ReportControllerV2 extends Member
     {
         $slot_id = Request::input("slot_id");
         $slot_info = Tbl_mlm_slot::where("slot_id", $slot_id)->first();
-        MLM_complan_manager::brown_rank($slot_info);
+        Mlm_complan_manager::brown_rank($slot_info);
     }
 }

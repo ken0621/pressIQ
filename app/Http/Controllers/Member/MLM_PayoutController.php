@@ -147,11 +147,11 @@ class MLM_PayoutController extends Member
 			
 			foreach($_slot as $key => $slot)
 			{
-				$earnings_as_of 	= Tbl_mlm_slot_wallet_log::where("wallet_log_slot", $slot->slot_id)->where("wallet_log_date_created", ">", date("Y-m-d", strtotime($cutoff_date)))->sum("wallet_log_amount");
+				$earnings_as_of 	= Tbl_mlm_slot_wallet_log::where("wallet_log_slot", $slot->slot_id)->where("wallet_log_date_created", ">=", date("Y-m-d", strtotime($cutoff_date)))->sum("wallet_log_amount");
 				$encashment_amount 	= $slot->current_wallet - $earnings_as_of;
 				$remaining 			= $slot->current_wallet - $encashment_amount;
 				$compute_net 		= $encashment_amount;
-				$tax 				= ($encashment_amount - ($service_charge + $other_charge)) - (($encashment_amount - ($service_charge + $other_charge)) / (1 + ($tax_amount/100)));
+				$tax 				= (($encashment_amount * ($tax_amount/100)));
 				$compute_net 		= $compute_net - ($service_charge + $other_charge + $tax);
 
 

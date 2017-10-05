@@ -27,6 +27,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/reports/table_loan_summary/{deduction_type}','Member\PayrollReportController@table_loan_summary');
 	Route::any('/reports/modal_loan_summary_report/{employee_id}/{payroll_deduction_id}','Member\PayrollReportController@modal_loan_summary');
 	Route::any('/reports/export_loan_summary_report_to_excel/{employee_id}/{payroll_deduction_id}','Member\PayrollReportController@export_loan_summary_report_to_excel');
+	Route::any('/reports/table_company_loan_summary','Member\PayrollReportController@table_company_loan_summary');
+
 	/*END loan summar report*/
 
 	/*START payroll ledger*/
@@ -583,6 +585,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_reports/view_report/{id}','Member\PayrollController@view_report');
 	Route::any('/payroll_reports/download_excel_report','Member\PayrollController@download_excel_report');
 	Route::any('/payroll_reports/date_change_report','Member\PayrollController@date_change_report');
+
+
 	/* PAYROLL REPORTS END */
 
 

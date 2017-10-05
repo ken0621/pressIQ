@@ -100,6 +100,9 @@
 											<label><input type="radio" name="payroll_group_cola_basis" value="Pro Rated Monthly" {{$group->payroll_group_cola_basis == 'Pro Rated Monthly' ? 'checked':''}}>Pro Rated Monthly</label>
 										</div>
 										<div class="radio">
+											<label><input type="radio" name="payroll_group_cola_basis" value="Daily Fixed" {{$group->payroll_group_cola_basis == 'Daily Fixed' ? 'checked':''}}>Daily Fixed</label>
+										</div>
+										<div class="radio">
 											<label><input type="radio" name="payroll_group_cola_basis" value="Daily Computation" {{$group->payroll_group_cola_basis == 'Daily Computation' ? 'checked':''}}>Daily Computation</label>
 										</div>
 									</div>

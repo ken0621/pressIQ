@@ -20,6 +20,10 @@ class SampleTesting extends Controller
 		
 		return view('sample_testing',$data);
 	}
+	public function inspirer()
+	{
+		return redirect('http://162.251.151.81/inspirers/login');
+	}
 
 	public function samp2()
 	{

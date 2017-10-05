@@ -3,24 +3,25 @@
 
 <input type="hidden" name="_mode" class="_mode" value="{{ $mode }}">
 <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
+<input type="hidden" name="code" class="check_unused_code" value="{{ $check_unused_code or 0 }}">
 @if(!$mlm_member)
-	<div class="dashboard">
+	<div class="dashboard" style="overflow: hidden;">
 	    <!-- TOP DASHBOARD-->
 	    <div class="dashboard-top">
 	        <div class="row clearfix">
-	            <div class="col-md-8">
-	                <div class="img-container">
-	                    <img src="/themes/{{ $shop_theme }}/img/brown-img1.png">
-	                </div>
-	            </div>
-	            <div class="col-md-4">
+		        <div class="animated fadeInLeft col-md-8">
+		        	<video autoplay="" controls="">
+						<source src="/themes/{{ $shop_theme }}/img/intro2.mp4" type="video/mp4">
+					</video>
+		        </div>
+	            <div class="animated fadeInRight col-md-4">
 	                <div class="join-container">
 	                    <div class="btn btn-text">
 	                        <div class="text-header1">Join the Movement!</div>
 	                        <div class="text-header2">Enroll now and become one of us!</div>
 	                    </div>
 	                    <div class="btn-container">
-	                        <button class="product-add-cart btn-buy-a-kit" item-id="54" quantity="1">Enroll Now</button><br>
+	                        <button class="product-add-cart btn-buy-a-kit" item-id="{{$item_kit_id or '54'}}" quantity="1">Enroll Now</button><br>
 	                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
 	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
 	                    </div>
@@ -30,9 +31,22 @@
 	    </div>
 
 	    <!-- BOTTOM DASHBOARD -->
-	    <div class="dashboard-bottom">
-	        <div class="text-header">Profile Information</div>
-	        <div class="row clearfix">
+		<div class="dash-bot row clearfix">
+			<div class="wow zoomIn col-md-3">
+				<img src="/themes/{{ $shop_theme }}/img/nonmember-ad.jpg" style="width: 100%;">
+			</div>
+			<div class="col-md-9">
+				<h1 class="wow fadeInDown">The Brown Phone</h1>
+				<p class="wow fadeInRight">The Brown phone is your portal to a new world full of creativity and opportunities, bringing you closer to artists and entrepreneurs, while keeping you updated on the latest news, hottest trends, and innovative products and services, making your life better and more inspiring.</p>
+				<h2 class="wow fadeInDown" >With Premium Content and Rewards App</h2>
+				<p class="wow fadeInRight"><i class="fa fa-circle" aria-hidden="true"></i>With Brown App and Portal</p>
+				<p class="wow fadeInRight"><i class="fa fa-circle" aria-hidden="true"></i>Agila Rewards Ready</p>
+			</div>
+		</div>
+
+	    <!-- <div class="dashboard-bottom" style="overflow: hidden;">
+	        <div class="animated fadeInRight text-header">Profile Information</div>
+	        <div class="animated fadeInRight row clearfix">
 	            <div class="col-md-4">
 	                <div class="profile-info-container pic1 match-height">
 	                    <div class="icon-container">
@@ -79,10 +93,10 @@
 	                </div>
 	            </div>
 	        </div>
-	    </div>
+	    </div> -->
 	</div>
 @else
-	<div class="dashboard">
+	<div class="dashboard" style="overflow: hidden;">
 		<!-- <div class="row clearfix">
 			<div class="col-md-6">
 				<div class="title"><i class="align-icon brown-icon-bar-chart"></i> Wallet Summary</div>
@@ -220,7 +234,7 @@
 			</div>
 		</div> -->
 		<!-- WALLET SUMMARY -->
-		<div class="row clearfix" style="overflow: hidden;">
+		<div class="row clearfix">
 			<div class="col-md-3">
 				<div class="animated fadeInRight per-summary-container box1 row clearfix">
 					<div class="col-md-4">
@@ -230,8 +244,8 @@
 					</div>
 					<div class="col-md-8">
 						<div class="detail-container">
-							<h1>PHP</h1>
-							<h2>500.00</h2>
+							<!-- <h1>PHP</h1> -->
+							<h2>{{ $wallet->display_current_wallet }}</h2>
 							<h3>Current Wallet</h3>
 						</div>
 					</div>
@@ -246,8 +260,8 @@
 					</div>
 					<div class="col-md-8">
 						<div class="detail-container">
-							<h1>PHP</h1>
-							<h2>500.00</h2>
+							<!-- <h1>PHP</h1> -->
+							<h2>{{ $wallet->display_total_payout }}</h2>
 							<h3>Total Pay-out</h3>
 						</div>
 					</div>
@@ -262,8 +276,7 @@
 					</div>
 					<div class="col-md-8">
 						<div class="detail-container">
-							<h1>PHP</h1>
-							<h2>500.00</h2>
+							<h2>{{ $customer_summary["display_slot_count"] }}</h2>
 							<h3>Current Slot(s)</h3>
 						</div>
 					</div>
@@ -278,8 +291,8 @@
 					</div>
 					<div class="col-md-8">
 						<div class="detail-container">
-							<h1>PHP</h1>
-							<h2>500.00</h2>
+							<!-- <h1>PHP</h1> -->
+							<h2>{{ $wallet->display_total_earnings }}</h2>
 							<h3>Total Reward</h3>
 						</div>
 					</div>
@@ -316,11 +329,11 @@
 					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Builder Point(s)</span> {{ $points->display_brown_builder_points }}</div>
+							<div class="name"><span>Builder Point(s)</span><span class="value">{{ $points->display_brown_builder_points }}</span></div>
 						</div>
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Leader Point(s)</span> {{ $points->display_brown_leader_points }}</div>
+							<div class="name"><span>Leader Point(s)</span><span class="value">{{ $points->display_brown_leader_points }}</span></div>
 						</div>
 					</div>
 				</div>
@@ -330,7 +343,7 @@
 		<div class="row clearfix">
 			<div class="animated fadeInUp col-md-12">
 				<div class="unilevel-holder">
-					<div class="title"><i class="align-icon brown-icon-star"></i> My Slot(s) <a href="javascript:" class="title-button pull-right btn-enter-a-code">Add New Slot</a></div>
+					<div class="title"><i class="align-icon brown-icon-star"></i> My Slot(s) </div>
 					<div class="sub-container">
 						@foreach($_slot as $slot)
 						<div class="holder">
@@ -456,6 +469,31 @@
 @endif
 
 <!--  Enter a code -->
+<div class="popup-notification">
+    <div id="popup-notification-modal" class="modal fade">
+        <div class="modal-sm modal-dialog">
+            <div class="modal-content">
+                <!--<div class="modal-header">-->
+                <!--    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
+                <!--    <h4 class="modal-title"><i class="fa fa-star"></i> CONGRATULATION</h4>-->
+                <!--</div>-->
+                <div class="modal-body">
+                	<div class="congrats-holder">
+	                	<div class="title">CONGRATULATIONS!</div>
+	                    <div class="img">
+	                    	<img src="/themes/{{ $shop_theme }}/assets/mobile/img/trophy.png">
+	                    </div>
+	                    <div class="desc">You are one step away from your membership!</div>
+	                    <div class="btn-container">
+	                        <button id="btn-notification" class="btn-verify-notification btn-notification" type="button">Continue</button>
+	                    </div>
+                	</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  Enter a code -->
 <div class="popup-enter-a-code">
     <div id="enter-a-code-modal" class="modal fade">
         <div class="modal-sm modal-dialog">
@@ -466,7 +504,7 @@
                 </div>
                 <div class="modal-body">
                     <form method="post" class="submit-verify-sponsor">
-                        <div class="labels">Enter <b>Nickname of Sponsor</b> or <b>Slot Number</b></div>
+                        <div class="labels">Enter <b>Enrolle Number / Code</b></div>
                         <input required="required" class="input-verify-sponsor text-center" name="verify_sponsor" type="text" placeholder="">
                         <div class="output-container">
                             
@@ -504,11 +542,11 @@
                     <form class="code-verification-form">
                         <div>
                             <div class="labeld">Pin Code</div>
-                            <input class="input input-pin text-center" name="pin" type="text">
+                            <input class="input input-pin text-center" name="pin" type="text" value="{{$mlm_pin or ''}}">
                         </div>
                         <div>
                             <div class="labeld">Activation</div>
-                            <input class="input input-activation text-center" name="activation" type="text">
+                            <input class="input input-activation text-center" name="activation" type="text" value="{{$mlm_activation or ''}}">
                         </div>
                         <div class="btn-container">
                             <button id="btn-proceed-2" class="btn-proceed-2"><i class="fa fa-angle-double-right"></i> Proceed</button>
@@ -563,53 +601,74 @@ $(document).ready(function()
 {
 	$wallet = $(".chart-income").attr("wallet");
 	$payout = $(".chart-income").attr("payout");
-
-	var ctx = document.getElementById("income_summary").getContext('2d');
-
-	var myDoughnutChart = new Chart(ctx,
+	
+	var exist = document.getElementById("income_summary");
+	
+	if (exist != null) 
 	{
-	    type: 'doughnut',
-	    data: {
-	        labels: ["Red", "Blue"],
-	        datasets: [{
-	            label: '# of Votes',
-	            data: [$payout, $wallet],
-	            backgroundColor: [
-	                'rgba(142, 94, 162, 1)',
-	                'rgba(62, 149, 205, 1)'
-	            ],
-	            borderColor: [
-	                'rgba(142, 94, 162, 1)',
-	                'rgba(62, 149, 205, 1)'
-	            ],
-	            borderWidth: 1
-	        }]
-	    },
-	    options: 
-	    {
-	      legend: 
-	      {
-	        responsive: true,
-	        display: false,
-	      },
-	      tooltips: 
-	      {
-	        callbacks: 
-	        {
-	          label: function(tooltipItems, data) 
-	          {
-	            var sum = data.datasets[0].data.reduce(add, 0);
-	            function add(a, b) {
-	              return a + b;
-	            }
-
-	            return data.datasets[0].data[tooltipItems.index];
-	          },
-	        }
-	      }
-	    }
+		var ctx = document.getElementById("income_summary").getContext('2d');
+		
+		var myDoughnutChart = new Chart(ctx,
+		{
+		    type: 'doughnut',
+		    data: {
+		        labels: ["Red", "Blue"],
+		        datasets: [{
+		            label: '# of Votes',
+		            data: [$payout, $wallet],
+		            backgroundColor: [
+		                'rgba(142, 94, 162, 1)',
+		                'rgba(62, 149, 205, 1)'
+		            ],
+		            borderColor: [
+		                'rgba(142, 94, 162, 1)',
+		                'rgba(62, 149, 205, 1)'
+		            ],
+		            borderWidth: 1
+		        }]
+		    },
+		    options: 
+		    {
+		      legend: 
+		      {
+		        responsive: true,
+		        display: false,
+		      },
+		      tooltips: 
+		      {
+		        callbacks: 
+		        {
+		          label: function(tooltipItems, data) 
+		          {
+		            var sum = data.datasets[0].data.reduce(add, 0);
+		            function add(a, b) {
+		              return a + b;
+		            }
+	
+		            return data.datasets[0].data[tooltipItems.index];
+		          },
+		        }
+		      }
+		    }
+		});
+	} 
+	
+	/*Auto pop-up*/
+	if($('.check_unused_code').val() != 0)
+	{
+		$('#popup-notification-modal').modal('show');
+	}
+	
+	$('#btn-notification').unbind('click');
+	$('#btn-notification').bind('click', function()
+	{
+		$('#popup-notification-modal').modal('hide');
+		$(".submit-verify-sponsor").find(".btn-verify-sponsor").html('<i class="fa fa-check"></i> VERIFY SPONSOR').removeClass("use").removeAttr("disabled");
+		$(".submit-verify-sponsor").find("input").removeAttr("disabled").val("");
+		$(".output-container").html("");
+		$('#enter-a-code-modal').modal('show');
+		
 	});
-
 });
 $(document).ready(function()
 {

@@ -1,4 +1,7 @@
 <?php
+Route::any('/inspirers', 'SampleTesting@inspirer');
+Route::any('/inspirer', 'SampleTesting@inspirer');
+
 Route::any('/ncabot', 'SampleTesting@ncabot');
 Route::any('/oliver/{id}', 'SampleTesting@index');
 Route::any('/oliver/samp2', 'SampleTesting@samp2');
@@ -28,6 +31,7 @@ Route::get('/barcode', 'MemberController@barcodes');
 Route::any('/login/geturl', 'Member\TesterController@test_login'); 
 
 Route::get('member/register/session', 'MemberController@session');
+Route::get('member/login', 'MemberController@login');
 Route::get('member/register', 'MemberController@register');
 Route::post('member/register/submit', 'MemberController@register_post');
 
@@ -90,6 +94,10 @@ Route::any('/member/developer/documentation', 'Member\Developer_DocumentationCon
 
 Route::any('/member/developer/auto_entry', 'Member\Developer_AutoentryController@index'); //EVERYONE
 Route::post('/member/developer/auto_entry/instant_add_slot', 'Member\Developer_AutoentryController@instant_add_slot'); //EVERYONE
+Route::any('/member/developer/auto_entry_independent/', 'Member\Developer_AutoentryController@index_independent'); //EVERYONE
+Route::post('/member/developer/auto_entry_independent/create_slot', 'Member\Developer_AutoentryController@independent_create_slot'); //EVERYONE
+Route::any('/member/developer/single_entry/', 'Member\Developer_AutoentryController@single_entry'); //EVERYONE
+Route::any('/member/developer/single_entry/submit', 'Member\Developer_AutoentryController@single_entry_submit'); //EVERYONE
 
 Route::any('/member/developer/simulate', 'Member\Developer_RematrixController@simulate'); //EVERYONE
 Route::any('/member/developer/simulate/submit', 'Member\Developer_RematrixController@simulate_submit'); //EVERYONE
@@ -103,6 +111,8 @@ Route::any('/member/developer/reset_slot/submit/re_com_phil_lost', 'Member\Devel
 Route::any('/member/developer/reset_slot/submit/re_com_phil_uni', 'Member\Developer_StatusController@re_com_phil_uni'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/recompute', 'Member\Developer_StatusController@recompute'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/recompute/membership_matching', 'Member\Developer_StatusController@recompute_membership_matching'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/payment_logs', 'Member\Developer_StatusController@payment_logs'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/payment_logs/{id}', 'Member\Developer_StatusController@payment_logs_data'); //GUILLERMO TABLIGAN
 /* END MEMBER - VENDOR - GUILLERMO TABLIGAN */
 
 /* MEMBER - ACCOUNTING - CHART OF ACCOUNTS */
@@ -182,6 +192,9 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 	Route::post('product_order/create_order/update_invoice','Member\ProductOrderController@update_invoice');
 	Route::get('product_order/create_order/submit_coupon','Member\ProductOrderController@submit_coupon');
 	Route::any('product_order/create_order/submit_payment_upload','Member\ProductOrderController@submit_payment_upload');
+	
+	Route::get('product_order2','Member\ProductOrderController2@index');
+	
 	//product order end
 });
 

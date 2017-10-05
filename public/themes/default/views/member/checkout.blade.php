@@ -19,12 +19,11 @@
 							<div class="form-container">
 								<div class="form-label">Province</div>
 								<div class="form-input">
-									<select >
+									<select name="customer_state">
 										<option value="" hidden>Select Province</option>
-										<option value="volvo">Abra</option>
-										<option value="saab">Bulacan</option>
-										<option value="opel">Cagayan Province</option>
-										<option value="audi">Davao</option>
+										@foreach($_locale as $locale)
+										<option value="{{ $locale->locale_name }}">{{ $locale->locale_name }}</option>
+										@endforeach
 									</select>
 								</div>
 							</div>

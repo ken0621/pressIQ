@@ -278,11 +278,10 @@ class PayrollDeductionController extends Member
           $insert['payroll_deduction_date_filed'] = date('Y-m-d',strtotime(Request::input('payroll_deduction_date_filed')));
           $insert['payroll_deduction_date_start'] = date('Y-m-d',strtotime(Request::input('payroll_deduction_date_start')));
           $insert['payroll_deduction_period']     = Request::input('payroll_deduction_period');
-          $insert['payroll_deduction_category']     = Request::input('payroll_deduction_category');
-          $insert['payroll_deduction_terms']    = Request::input('payroll_deduction_terms');
+          $insert['payroll_deduction_category']   = Request::input('payroll_deduction_category');
+          $insert['payroll_deduction_terms']      = Request::input('payroll_deduction_terms');
           $insert['payroll_deduction_number_of_payments']   = Request::input('payroll_deduction_number_of_payments');
          
-
          //payroll_deduction_category
 
           //dd($insert);
@@ -586,7 +585,6 @@ class PayrollDeductionController extends Member
           $data = $query->get();
           return $data;
      }
-
 
      public static function get_deduction_by_type_config($shop_id = 0, $deduction_type='',$archive = 0)
      {

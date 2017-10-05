@@ -1,7 +1,5 @@
 $(document).ready(function()
 {	
-
-    
 	add_to_cart_init();
 	load_cart();
 	remove_to_cart_init();

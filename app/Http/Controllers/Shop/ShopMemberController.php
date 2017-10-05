@@ -27,10 +27,13 @@ use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_email_template;
+use App\Models\Tbl_transaction_list;
+use App\Models\Tbl_transaction_item;
 use App\Models\Tbl_country;
 use App\Models\Tbl_locale;
 use App\Globals\Currency;
 use App\Globals\Cart2;
+use App\Globals\Item;
 use Jenssegers\Agent\Agent;
 use Validator;
 use Google_Client; 
@@ -56,7 +59,17 @@ class ShopMemberController extends Shop
             $data["_slot"]              = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["_recent_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
             $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
+            
+            $data['mlm_pin'] = '';
+            $data['mlm_activation'] = '';
+            if(MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id) && $this->mlm_member == false)
+            {
+                $data['check_unused_code'] = MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
+                $data['mlm_pin'] = MLM2::get_code($data['check_unused_code'])['mlm_pin'];
+                $data['mlm_activation'] = MLM2::get_code($data['check_unused_code'])['mlm_activation'];
+            }
         }
+        $data["item_kit_id"] = Item::get_first_assembled_kit($this->shop_info->shop_id);
 
         return Self::load_view_for_members('member.dashboard', $data);
     }
@@ -94,17 +107,26 @@ class ShopMemberController extends Shop
     {
         $data["page"] = "Login";
         $get_fb = FacebookGlobals::check_app_key($this->shop_info->shop_id);
+        
         if($get_fb)
         {
             $data['fb_login_url'] = FacebookGlobals::get_link($this->shop_info->shop_id);
         }
+        
         $get_google = GoogleGlobals::check_app_key($this->shop_info->shop_id);
+        
         if($get_google)
         {
             $data['google_app_id'] = SocialNetwork::get_keys($this->shop_info->shop_id, 'googleplus')['app_id'];
         }
 
-        return view("member.login", $data);
+        $data['show_fb'] = null;
+        if(request("pass") == "123")
+        {
+            $data['show_fb'] = 123;
+        }
+
+        return Self::load_view_for_members("member.login", $data, false);
     }
     public function postAuthCallback(Request $request)
     {
@@ -218,9 +240,16 @@ class ShopMemberController extends Shop
     }
     public function postLogin(Request $request)
     {
-        $validate["email"]      = ["required","email"];
+        $validate["email"]      = ["required"];
         $validate["password"]   = ["required"];
         $data                   = $this->validate(request(), $validate);
+        
+        $email = Tbl_mlm_slot::where("slot_no", $data["email"])->customer()->value('email');
+        
+        if($email)
+        {
+            $data["email"] = $email;
+        }
 
         Self::store_login_session($data["email"], $data["password"]);
 
@@ -242,7 +271,12 @@ class ShopMemberController extends Shop
             $data['fb_login_url'] = FacebookGlobals::get_link_register($this->shop_info->shop_id);
         }
 
-        return view("member.register", $data);
+        // if(request("pass") != "456")
+        // {
+        //     return view("member.coming");
+        // }
+
+        return Self::load_view_for_members("member.register", $data, false);
     }
     public function getRegisterSubmit()
     {
@@ -406,7 +440,6 @@ class ShopMemberController extends Shop
         $data["profile_info"]        = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();
         $data["_country"]            = Tbl_country::get();
         $data["allowed_change_pass"] = isset(Self::$customer_info->signup_with) ? (Self::$customer_info->signup_with == "member_register" ? true : false) : false;
-      
 
         if(Self::$customer_info)
         {
@@ -439,8 +472,8 @@ class ShopMemberController extends Shop
         if (!$validator->fails()) 
         {           
             /* Birthday Fix */
-            $birthday = date("YY-MM-DD", strtotime($request->b_month . "/" . $request->b_day . "/" . $request->b_year));
-
+            $birthday = date("Y-m-d", strtotime($request->b_month . "/" . $request->b_day . "/" . $request->b_year));
+            
             /* Customer Data */
             $insert_customer["first_name"]  = $request->first_name;
             $insert_customer["middle_name"] = $request->middle_name;
@@ -612,6 +645,7 @@ class ShopMemberController extends Shop
         $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();
         $data['slot_no'] = 0;
         $data['mode'] = 'sponsor';
+        
         if($slot)
         {
             $data['slot_no'] = $slot->slot_no;
@@ -625,7 +659,6 @@ class ShopMemberController extends Shop
         $slot_no  = $request->slot_no;
         $shop_id  = $this->shop_info->shop_id;
         $mode = $request->mode;
-
         $check = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->where('slot_no',$slot_no)->where('shop_id',$shop_id)->first();
 
         if($check)
@@ -679,6 +712,7 @@ class ShopMemberController extends Shop
     {
         $data["page"]           = "Report";
         $data["_rewards"]       = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
+        $data["_codes"]         = MLM2::check_purchased_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
         return (Self::load_view_for_members("member.report", $data));
     }
     public function getWalletLogs()
@@ -707,7 +741,28 @@ class ShopMemberController extends Shop
     public function getOrder()
     {
         $data["page"] = "Orders";
+        $shop_id = $this->shop_info->shop_id;
+        Transaction::get_transaction_filter_customer(Self::$customer_info->customer_id);
+        $data["_order"] = Transaction::get_transaction_list($shop_id, 'ORDER', '', 20);
         return (Self::load_view_for_members("member.order", $data));
+    }
+    public function getOrderDetails(Request $request, $transaction_list_id)
+    {
+        $data['shop_key'] = strtoupper($this->shop_info->shop_key);
+        $data['shop_address'] = ucwords($this->shop_info->shop_street_address.' '.$this->shop_info->shop_city.', '.$this->shop_info->shop_zip);
+        Transaction::get_transaction_filter_customer(Self::$customer_info->customer_id);
+        $data['list'] = Tbl_transaction_list::transaction()->where('transaction_list_id',$transaction_list_id);
+        
+        if(session('get_transaction_filter_customer_id'))
+        {
+            $data['list']->where('transaction_reference_table', 'tbl_customer')->where('tbl_transaction.transaction_reference_id', session('get_transaction_filter_customer_id'));
+            $data['list']->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id');
+        }
+        $data['list'] = $data['list']->first();
+        $data['_item'] = Tbl_transaction_item::where('transaction_list_id',$transaction_list_id)->get();
+        $data['customer_name'] = Transaction::getCustomerNameTransaction($data['list']->transaction_id);
+        
+        return (Self::load_view_for_members("member.order_details", $data));
     }
     public function getWishlist()
     {
@@ -719,27 +774,50 @@ class ShopMemberController extends Shop
         $data["page"]       = "Checkout";
         $shop_id            = $this->shop_info->shop_id;
         $data["_payment"]   = $_payment = Payment::get_list($shop_id);
+        $data["_locale"]    = Tbl_locale::where("locale_parent", 0)->get();
+        $data["cart"]       = Cart2::get_cart_info();
         return (Self::load_view_for_members("member.checkout", $data));
     }
-    public function postcheckout()
+    public function postCheckout()
     {
+        /* Update Address */
+        $exist_address = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->first();
+        if ($exist_address) 
+        {
+            $update["customer_street"] = request('customer_street');
+            Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->update($update);
+        }
+        else
+        {
+            $insert["customer_street"] = request('customer_street');
+            $insert["customer_id"] = Self::$customer_info->customer_id;
+            $insert["country_id"] = 420;
+            $insert["purpose"] = "billing";
+            $insert["archived"] = 0;
+            Tbl_customer_address::insert($insert);
+            $insert["purpose"] = "shipping";
+            Tbl_customer_address::insert($insert);
+        }
+        
         $method                                             = request('method');
         $shop_id                                            = $this->shop_info->shop_id;
         $transaction_new["transaction_reference_table"]     = "tbl_customer";
-        $transaction_new["transaction_reference_id"]        = 1;
+        $transaction_new["transaction_reference_id"]        = Self::$customer_info->customer_id;
         $transaction_type                                   = "ORDER";
         $transaction_date                                   = Carbon::now();
-        $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date);
+        
+        Transaction::create_set_method($method);
+        $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, "-");
 
         if(is_numeric($transaction_list_id))
         {
             $success    = "/members?success=1"; //redirect if payment success
             $failed     = "/members?failed=1"; //redirect if payment failed
-            $error      = Payment::payment_redirect($shop_id, $method, $success, $failed);
+            $error      = Payment::payment_redirect($shop_id, $method, $transaction_list_id, $success, $failed);
         }
         else
         {
-            return $transaction_id;
+            return Redirect::to("/members/checkout")->with("error", "Your cart is empty.");
         }
     }
     public function getNonMember()
@@ -777,17 +855,18 @@ class ShopMemberController extends Shop
         else
         {
             $sponsor_have_placement = MLM2::check_sponsor_have_placement($shop_id,$sponsor->slot_id);
+            
             if($sponsor_have_placement == 0)
             {
                 $return = "<div class='error-message'>Sponsor \"<b>" . $request->verify_sponsor . "</b>\".<br>should have a placement first.</div>";
             }
             else
             {    
-                $data["page"] = "CARD";
-                $data["sponsor"] = $sponsor; 
-                $data["sponsor_customer"] = Customer::get_info($shop_id, $sponsor->slot_owner);
-                $data["sponsor_profile_image"] = $data["sponsor_customer"]->profile == "" ? "/themes/brown/img/user-placeholder.png" : $data["sponsor_customer"]->profile;
-
+                $data["page"]                   = "CARD";
+                $data["sponsor"]                = $sponsor; 
+                $data["sponsor_customer"]       = Customer::get_info($shop_id, $sponsor->slot_owner);
+                $data["sponsor_profile_image"]  = $data["sponsor_customer"]->profile == "" ? "/themes/brown/img/user-placeholder.png" : $data["sponsor_customer"]->profile;
+                
                 $store["sponsor"] = $sponsor->slot_no;
                 session($store);
 
@@ -1021,7 +1100,7 @@ class ShopMemberController extends Shop
         return $data;
     }
 
-    public function load_view_for_members($view, $data)
+    public function load_view_for_members($view, $data, $memberonly = true)
     {
         $agent = new Agent();
 
@@ -1034,6 +1113,13 @@ class ShopMemberController extends Shop
             }
         }
 
-        return Self::logged_in_member_only() ? Self::logged_in_member_only() : view($view, $data);
+        if ($memberonly) 
+        {
+            return Self::logged_in_member_only() ? Self::logged_in_member_only() : view($view, $data);
+        }
+        else
+        {
+            return view($view, $data);
+        }
     }
 }

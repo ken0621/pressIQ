@@ -69,6 +69,7 @@ body{
     <td rowspan="2">ABSENT</td>
     <td colspan="2">ALLOWANCES</td>
     <td colspan="6">DEDUCTION</td>
+    <td colspan="9">ADJUSTMENT</td>
     <td colspan="3">SSS CONTRIBUTION</td>
     <td colspan="2">PAG-IBIG CONTRIBUTION</td>
     <td colspan="2">PHIL-HEALTH CONTRIBUTION</td>
@@ -98,6 +99,17 @@ body{
     <td >CASH ADVANCE</td>
     <td >OTHER DEDUCTIONS</td>
     <td >ADJUSTMENT DEDUCTION</td>
+
+    <td>ALLOWANCE</td>
+    <td>BONUS</td>
+    <td>COMMISSION</td>
+    <td>INCENTIVES</td>
+    <td>CASH ADVANCE</td>
+    <td>CASH BOND</td>
+    <td>ADDITIONS</td>
+    <td>DEDUCTIONS</td>
+    <td>OTHERS</td>
+
     <td >SSS EE</td>
     <td >SSS ER</td>
     <td >SSS EC</td>
@@ -129,6 +141,17 @@ body{
     <td  >{{ number_format($employee->cash_advance,2) }}</td>
     <td  >{{ number_format($employee->other_loans,2) }}</td>
     <td  >{{ number_format($employee->adjustment_deduction,2) }}</td>
+
+    <td>{{ number_format($employee->adjsutment_allowance,2) }}</td>
+    <td>{{ number_format($employee->adjsutment_bonus,2) }}</td>
+    <td>{{ number_format($employee->adjsutment_commission,2) }}</td>
+    <td>{{ number_format($employee->adjsutment_incentives,2) }}</td>
+    <td>{{ number_format($employee->adjsutment_cash_advance,2) }}</td>
+    <td>{{ number_format($employee->adjsutment_cash_bond,2) }}</td>
+    <td>{{ number_format($employee->adjsutment_additions,2) }}</td>
+    <td>{{ number_format($employee->adjsutment_deductions,2) }}</td>
+    <td>{{ number_format($employee->adjsutment_others,2) }}</td>
+
     <td  >{{ number_format($employee->sss_ee,2) }}</td>
     <td  >{{ number_format($employee->sss_er,2) }}</td>
     <td  >{{ number_format($employee->sss_ec,2) }}</td>
@@ -163,6 +186,17 @@ body{
     <td class="text-center" ><b>{{ number_format($cash_advance_total,2) }}</b></td>
     <td class="text-center" ><b>{{ number_format($other_loans_total,2) }}</b></td>
     <td class="text-center" ><b>{{ number_format($adjustment_deduction_total,2) }}</b></td>
+
+    <td class="text-center" ><b>{{ number_format($total_adjsutment_allowance,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($total_adjsutment_bonus,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($total_adjsutment_commission,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($total_adjsutment_incentives,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($total_adjsutment_cash_advance,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($total_adjsutment_cash_bond,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($total_adjsutment_additions,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($total_adjsutment_deductions,2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($total_adjsutment_others,2) }}</b></td>
+
     <td class="text-center" ><b>{{ number_format($sss_ee_total,2) }}</b></td>
     <td class="text-center" ><b>{{ number_format($sss_er_total,2) }}</b></td>
     <td class="text-center" ><b>{{ number_format($sss_ec_total,2) }}</b></td>

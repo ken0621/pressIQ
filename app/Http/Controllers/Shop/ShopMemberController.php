@@ -375,6 +375,7 @@ class ShopMemberController extends Shop
     public function postForgotPasswordSubmit()
     {
         $shop_id = $this->shop_info->shop_id;
+        dd($shop_id);
         $validate = Customer::check_email($shop_id, Request2::input('email'));
         
         $return_data = null;

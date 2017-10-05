@@ -9,9 +9,9 @@
 	    <div class="dashboard-top">
 	        <div class="row clearfix">
 	            <div class="col-md-8">
-	                <div class="img-container">
-	                    <img src="/themes/{{ $shop_theme }}/img/db-img.png">
-	                </div>
+	                <div class="embed-responsive embed-responsive-16by9">
+					  <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/sy655Z-7TZE" frameborder="0" allowfullscreen></iframe>
+					</div>
 	            </div>
 	            <div class="col-md-4">
 	                <div class="join-container">

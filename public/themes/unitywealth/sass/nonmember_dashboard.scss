@@ -17,22 +17,22 @@ $text-dark: #272c2f;
 .dashboard-top
 {
 
-	.img-container
+	/* .img-container
 	{
 		img
 		{
 			width: 100%;
 			height: auto;
 		}
-	}
+	} */
 
 	.join-container
 	{
 		font-family: $content-text;
 		border: 1px solid #dfdfdf;
 		padding: 15px;
-		min-height: 403px;
-		max-height: 403px;
+		min-height: 378px;
+		max-height: 378px;
 
 		.btn-text
 		{

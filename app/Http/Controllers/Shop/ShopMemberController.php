@@ -380,46 +380,54 @@ class ShopMemberController extends Shop
         $return_data = null;
         if($validate)
         {
-            $content_key = "front_forgot_password";
-            if(EmailContent::checkIfexisting($content_key, $shop_id) != 0)
-            {
-                $email_content["subject"] = EmailContent::getSubject($content_key, $shop_id);
-                $email_content["shop_key"] = $this->shop_info->shop_key;
-                $data["email"] = $validate->email;
-                $new_password = Crypt::decrypt($validate->password);
-
-                $txt[0]["txt_to_be_replace"] = "[name]";
-                $txt[0]["txt_to_replace"] = $validate->first_name." ".$validate->middle_name." ".$validate->last_name;
-
-                $txt[1]["txt_to_be_replace"] = "[domain_name]";
-                $txt[1]["txt_to_replace"] = $_SERVER["SERVER_NAME"];
-
-                $txt[2]["txt_to_be_replace"] = "[password]";
-                $txt[2]["txt_to_replace"] = $new_password;
-
-                $change_content = $txt;
-
-                $email_content["content"] = EmailContent::email_txt_replace($content_key, $change_content, $shop_id);
-                
-                $data["template"] = Tbl_email_template::where("shop_id", $shop_id)->first();
-                if(isset($data['template']->header_image))
-                {
-                    if (!File::exists(public_path() . $data['template']->header_image))
-                    {
-                        $data['template']->header_image = null;
-                    }
-                }   
-
-                Mail_global::send_email($data['template'], $email_content, $shop_id, $validate->email);
-
-
-                $return_data['status'] = 'success';
-                $return_data['status_message'] = "Successfully Sent Email.";
-            }
-            else
+            if($validate->signup_with != 'member_register')
             {
                 $return_data['status'] = 'danger';
-                $return_data['status_message'] = "Something wen't wrong please contact your admin.";
+                $return_data['status_message'] = "We're not able forgot password when your account was sign up with Facebook or Google+";
+            }
+            else
+            {               
+                $content_key = "front_forgot_password";
+                if(EmailContent::checkIfexisting($content_key, $shop_id) != 0)
+                {
+                    $email_content["subject"] = EmailContent::getSubject($content_key, $shop_id);
+                    $email_content["shop_key"] = $this->shop_info->shop_key;
+                    $data["email"] = $validate->email;
+                    $new_password = Crypt::decrypt($validate->password);
+
+                    $txt[0]["txt_to_be_replace"] = "[name]";
+                    $txt[0]["txt_to_replace"] = $validate->first_name." ".$validate->middle_name." ".$validate->last_name;
+
+                    $txt[1]["txt_to_be_replace"] = "[domain_name]";
+                    $txt[1]["txt_to_replace"] = $_SERVER["SERVER_NAME"];
+
+                    $txt[2]["txt_to_be_replace"] = "[password]";
+                    $txt[2]["txt_to_replace"] = $new_password;
+
+                    $change_content = $txt;
+
+                    $email_content["content"] = EmailContent::email_txt_replace($content_key, $change_content, $shop_id);
+
+                    $data["template"] = Tbl_email_template::where("shop_id", $shop_id)->first();
+                    if(isset($data['template']->header_image))
+                    {
+                        if (!File::exists(public_path() . $data['template']->header_image))
+                        {
+                            $data['template']->header_image = null;
+                        }
+                    }   
+
+                    Mail_global::send_email($data['template'], $email_content, $shop_id, $validate->email);
+
+
+                    $return_data['status'] = 'success';
+                    $return_data['status_message'] = "Successfully Sent Email.";
+                }
+                else
+                {
+                    $return_data['status'] = 'danger';
+                    $return_data['status_message'] = "Something wen't wrong please contact your admin.";
+                } 
             }
         }
         else

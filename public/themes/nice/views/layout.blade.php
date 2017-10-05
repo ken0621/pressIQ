@@ -83,8 +83,8 @@
                 <span>Facebook</span>
             </div>
             <div class="right-container">
-                <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/members/login'">REGISTER</span>
-                <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/members/register'">
+                <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/members/register'">REGISTER</span>
+                <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/members/login'">
                     <div class="subhead-btn">SIGN IN</div>
                 </span>
             </div>

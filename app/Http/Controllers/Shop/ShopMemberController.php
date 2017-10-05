@@ -39,6 +39,7 @@ use Validator;
 use Google_Client; 
 use Google_Service_Drive;
 use Google_Service_Plus;
+use stdClass;
 
 class ShopMemberController extends Shop
 {
@@ -59,7 +60,6 @@ class ShopMemberController extends Shop
             $data["_slot"]              = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["_recent_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
             $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
-            
             $data['mlm_pin'] = '';
             $data['mlm_activation'] = '';
             
@@ -68,12 +68,36 @@ class ShopMemberController extends Shop
                 $data['check_unused_code'] = MLM2::check_unused_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
                 $data['mlm_pin'] = MLM2::get_code($data['check_unused_code'])['mlm_pin'];
                 $data['mlm_activation'] = MLM2::get_code($data['check_unused_code'])['mlm_activation'];
+                
+                $store["temp_pin"] = $data['mlm_pin'];
+                $store["temp_activation"] = $data['mlm_activation'];
+                session($store);
+            }
+   
+            $data["not_placed_slot"] = new stdClass();
+            $data["not_placed_slot"]->slot_id = 0;
+            $data["not_placed_slot"]->slot_no = 0;
+   
+            $data["_unplaced"] = MLM2::unplaced_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
+            if(isset($data["_unplaced"][0]))
+            {
+                if($data["_unplaced"][0]->slot_placement == 0)
+                {
+                    $data["not_placed_yet"] = true;
+                    $data["not_placed_slot"] = $data["_unplaced"][0];
+                }
             }
         }
         
         $data["item_kit_id"] = Item::get_first_assembled_kit($this->shop_info->shop_id);
 
         return Self::load_view_for_members('member.dashboard', $data);
+    }
+    public function getLead()
+    {
+        $data["page"] = "LEAD";
+        $data["url"] = "http://" . $_SERVER["SERVER_NAME"];
+        return view('member2.lead', $data);
     }
     public function getSlotInfo()
     {
@@ -377,6 +401,7 @@ class ShopMemberController extends Shop
 
         return Redirect::to("/members")->send();
     }
+
     public function getForgotPassword()
     {
         $data["page"] = "Forgot Password";
@@ -725,6 +750,34 @@ class ShopMemberController extends Shop
         $data["_codes"]         = MLM2::check_purchased_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
         return (Self::load_view_for_members("member.report", $data));
     }
+    public function getLeadList()
+    {
+        $data["page"]       = "Lead List";
+        $shop_id            = $this->shop_info->shop_id;
+        $_slot              = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
+        
+        $query              = Tbl_customer::where("shop_id", $shop_id);
+
+        if(count($_slot) > 0)
+        {
+    		$query->where(function($q) use ($_slot)
+    		{
+    			foreach($_slot as $slot)
+    			{
+    				$q->orWhere("customer_lead", $slot->slot_id);
+    			}
+    		});
+        }
+        else
+        {
+            $query->where("customer_lead", "-1");
+        }
+        
+
+        $data["_lead"]      = $query->get();
+        
+        return (Self::load_view_for_members("member.lead", $data)); 
+    }
     public function getWalletLogs()
     {
         $data["page"] = "Wallet Logs";
@@ -878,6 +931,7 @@ class ShopMemberController extends Shop
                 $data["sponsor_profile_image"]  = $data["sponsor_customer"]->profile == "" ? "/themes/brown/img/user-placeholder.png" : $data["sponsor_customer"]->profile;
                 
                 $store["sponsor"] = $sponsor->slot_no;
+                
                 session($store);
 
                 $return = (Self::load_view_for_members("member.card", $data));
@@ -993,7 +1047,7 @@ class ShopMemberController extends Shop
         
         if($procceed == 1)
         {
-            return view('member.final_verification_placement', $data);
+        return view('member2.final_verification_placement', $data);
         }
     }    
     public function postFinalVerifyPlacement(Request $request)
@@ -1005,6 +1059,7 @@ class ShopMemberController extends Shop
         $customer_id     = Self::$customer_info->customer_id;
         $data            = $this->check_placement($slot_id,$slot_placement,$slot_position);
         $procceed        = $data["procceed"];
+        
         if($procceed == 1)
         {
             $return = MLM2::matrix_position($shop_id, $slot_id, $slot_placement, $slot_position);
@@ -1037,6 +1092,34 @@ class ShopMemberController extends Shop
         $data["page"] = "Enter Code";
         $data["message"] = "Enter <b>Slot Code</b> of your <b>Sponsor</b>";
         return view('member2.enter_sponsor', $data);
+    }
+    public function getEnterPlacement()
+    {
+        $data["page"] = "Enter Code";
+        $data["message"] = "Enter <b>Slot Code</b> of your <b>Sponsor</b>";
+        
+
+        $slot_id            = Crypt::decrypt(request("slot_no"));
+        $key                = request("key");
+        $data["slot_info"]  = $slot_info = Tbl_mlm_slot::where("slot_id", $slot_id)->customer()->first();
+
+        if($slot_info->slot_owner == Self::$customer_info->customer_id)
+        {
+            $data["iamowner"] = true;
+        }
+        else
+        {
+            $data["iamowner"] = false;
+        }
+
+        if(md5($slot_info->slot_id . $slot_info->slot_no) == $key)
+        {
+            return view('member2.enter_placement', $data);
+        }
+        else
+        {
+            return "ERROR OCCURRED";
+        }
     }
     public function getFinalVerify()
     {
@@ -1075,48 +1158,60 @@ class ShopMemberController extends Shop
             }
         }
     }
-    public function check_placement($slot_id,$slot_placement,$slot_position)
+    public function check_placement($slot_id, $slot_placement, $slot_position)
     {
         $shop_id       = $this->shop_info->shop_id;
         $check_sponsor = Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",$shop_id)->first();
+        $this_slot_owner     = $check_sponsor->slot_owner;
+        $this_slot_placement = $check_sponsor->slot_placement;
         $procceed      = 0;
-        if($check_sponsor)
+        
+        if($this_slot_placement == 0)
         {
-            $check_sponsor = Tbl_mlm_slot::where("slot_id",$check_sponsor->slot_sponsor)->where("shop_id",$shop_id)->first();
-            if($check_sponsor->slot_owner == Self::$customer_info->customer_id)
+            if($check_sponsor)
             {
-                $check_placement = MLM2::check_placement_exist($shop_id,$slot_placement,$slot_position,1,$check_sponsor->slot_id);
-                if($check_placement == 0)
+                $check_sponsor = Tbl_mlm_slot::where("slot_id",$check_sponsor->slot_sponsor)->where("shop_id",$shop_id)->first();
+                if($check_sponsor->slot_owner == Self::$customer_info->customer_id || $this_slot_owner == Self::$customer_info->customer_id)
                 {
-                    $sponsor_have_placement = MLM2::check_sponsor_have_placement($shop_id,$check_sponsor->slot_id);
-
-                    if($sponsor_have_placement == 1)
+                    $check_placement = MLM2::check_placement_exist($shop_id,$slot_placement,$slot_position,1,$check_sponsor->slot_id);
+                    
+                    if($check_placement == 0)
                     {
-                        $data["target_slot"] = Tbl_mlm_slot::where("slot_id",$slot_id)->customer()->first();
-                        $data["placement"]   = Tbl_mlm_slot::where("slot_id",$slot_placement)->customer()->first();
-                        $data["position"]    = $slot_position;
-                        $data["message"]     = "success";
-                        $procceed            = 1;
+                        $sponsor_have_placement = MLM2::check_sponsor_have_placement($shop_id,$check_sponsor->slot_id);
+    
+                        if($sponsor_have_placement == 1)
+                        {
+                            $data["target_slot"] = Tbl_mlm_slot::where("slot_id",$slot_id)->customer()->first();
+                            $data["placement"]   = Tbl_mlm_slot::where("slot_id",$slot_placement)->customer()->first();
+                            $data["position"]    = $slot_position;
+                            $data["message"]     = "success";
+                            $procceed            = 1;
+                        }
+                        else
+                        {
+                            $data["message"]   = "Your upline should placed you first.";
+                        }
                     }
                     else
                     {
-                        $data["message"]   = "Your upline should placed your first.";
+                        $data["message"]   = "Placement not available.";
                     }
                 }
                 else
                 {
-                    $data["message"]   = "Placement not available.";
+                    $data["message"]   = "Some error occurred please try again. (659)";
                 }
             }
             else
             {
-                $data["message"]   = "Some error occurred please try again.";
+                $data["message"]   = "Some error occurred please try again. (388)";
             }
         }
         else
         {
-            $data["message"]   = "Some error occurred please try again.";
+            $data["message"]   = "This slot is already placed. (111)";
         }
+        
 
 
         $data["procceed"] = $procceed;

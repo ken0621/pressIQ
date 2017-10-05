@@ -111,7 +111,7 @@
 								@endif
 								
 								<div class="form-group">
-									<div class="register-label">CONTACT</div>
+									<div class="register-label">CONTACT NUMBER</div>
 									<div class="form-input">
 										<input class="form-control input-sm" type="text" name="contact" value="{{ $dummy['contact'] or old('contact') }}">
 									</div>

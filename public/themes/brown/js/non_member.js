@@ -20,26 +20,42 @@ function non_member()
 		add_event_submit_verify_placement();
 		add_event_process_slot_placement();
 		add_event_place_slot();
-		
-		auto_popup_success_if_paid();
+		add_event_congratulation_proceed();
 		auto_popup_if_slot_creation_success();
+	}
+	function add_event_congratulation_proceed()
+	{
+		$(".btn-congratulation").bind("click", function()
+		{
+			$("#popup-notification-modal").modal("hide");
+			
+			setTimeout(function()
+			{
+				action_load_link_to_modal("/members/enter-sponsor");
+			}, 350);
+		});
 	}
 	function add_event_place_slot()
 	{
-		
+		$(".place_slot_btn").click(function()
+		{
+			$(".message-return-slot-placement-verify").empty();
+			$(".chosen_slot_id").val($(this).attr("place_slot_id"));
+			$("#slot-placement-modal").modal("show");
+		});
 	}
 	function auto_popup_if_slot_creation_success()
 	{
-		if($("._mode").val() == "success")
+		if($(".not_placed_yet").val() == 1)
 		{
-			$("#success-modal").modal("show");
+			action_load_link_to_modal($(".not_placed_yet").attr("link"));
 		}
-	}
-	function auto_popup_success_if_paid()
-	{
-		if($('.check_unused_code').val() != 0)
+		else
 		{
-			$('#popup-notification-modal').modal('show');
+			if($("._mode").val() == "success")
+			{
+				$("#success-modal").modal("show");
+			}
 		}
 	}
 	function add_event_process_slot_creation()
@@ -112,7 +128,7 @@ function non_member()
 	}	
 	function add_event_submit_verify_placement()
 	{
-		$(".slot-placement-form").submit(function(e)
+		$("body").on("submit", ".slot-placement-form", function(e)
 		{
 			if($(e.currentTarget).find(".btn-verify-placement").hasClass("use"))
 			{
@@ -233,14 +249,32 @@ function non_member()
 
 				if(data === '"success"')
 				{
-					$(".slot-placement-form").find("input").val("");
-					$("#slot-placement-modal").modal('hide');
-					setTimeout(function()
+					if($(".iamowner").length > 0)
 					{
-						$("#proceed-modal-1").modal('show');
-						$("#proceed-modal-1").find(".load-final-verification").html('<div class="loading text-center" style="padding: 150px;"><i class="fa fa-spinner fa-pulse fa-fw fa-3x"></i></div>');
-						$(".load-final-verification").load("/members/final-verify-placement?slot_id="+form_data.slot_id+"&slot_position="+form_data.slot_position+"&slot_placement="+form_data.slot_placement);
-					}, 350);
+						$("#global_modal").hide();
+						
+						setTimeout(function()
+						{
+							action_load_link_to_modal("/members/final-verify-placement?slot_id="+form_data.slot_id+"&slot_position="+form_data.slot_position+"&slot_placement="+form_data.slot_placement);
+						});
+					}
+					else
+					{
+						$("#global_modal").hide();
+						
+						setTimeout(function()
+						{
+							action_load_link_to_modal("/members/final-verify-placement?slot_id="+form_data.slot_id+"&slot_position="+form_data.slot_position+"&slot_placement="+form_data.slot_placement);
+						});
+					}
+					// $(".slot-placement-form").find("input").val("");
+					// $("#slot-placement-modal").modal('hide');
+					// setTimeout(function()
+					// {
+					// 	$("#proceed-modal-1").modal('show');
+					// 	$("#proceed-modal-1").find(".load-final-verification").html('<div class="loading text-center" style="padding: 150px;"><i class="fa fa-spinner fa-pulse fa-fw fa-3x"></i></div>');
+					// 	$(".load-final-verification").load("/members/final-verify-placement?slot_id="+form_data.slot_id+"&slot_position="+form_data.slot_position+"&slot_placement="+form_data.slot_placement);
+					// }, 350);
 				}
 				else
 				{

@@ -4,96 +4,71 @@
 <input type="hidden" name="_mode" class="_mode" value="{{ $mode }}">
 <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
 <input type="hidden" name="code" class="check_unused_code" value="{{ $check_unused_code or 0 }}">
+<input type="hidden" name="not_placed_yet" class="not_placed_yet" value="{{ $not_placed_yet or 0 }}" link="/members/enter-placement?slot_no={{ Crypt::encrypt($not_placed_slot->slot_id) }}&key={{ md5($not_placed_slot->slot_id . $not_placed_slot->slot_no) }}">
 @if(!$mlm_member)
 	<div class="dashboard" style="overflow: hidden;">
-	    <!-- TOP DASHBOARD-->
-	    <div class="dashboard-top">
-	        <div class="row clearfix">
-		        <div class="animated fadeInLeft col-md-8">
-		        	<video controls="">
-						<source src="/themes/{{ $shop_theme }}/img/intro2.mp4" type="video/mp4">
-					</video>
+    	@if(isset($check_unused_code))
+			<!--  CONGRATULATION -->
+			<div class="popup-notification">
+			    <div id="popup-notification-modal">
+		            <div class="modal-content">
+		                <!--<div class="modal-header">-->
+		                <!--    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
+		                <!--    <h4 class="modal-title"><i class="fa fa-star"></i> CONGRATULATION</h4>-->
+		                <!--</div>-->
+		                <div class="modal-body">
+		                	<div class="congrats-holder">
+			                	<div class="title">CONGRATULATIONS!</div>
+			                    <div class="img">
+			                    	<img src="/themes/{{ $shop_theme }}/assets/mobile/img/trophy.png">
+			                    </div>
+			                    <div class="desc">You are one step away from your membership!</div>
+			                    <div class="btn-container">
+			                        <button id="btn-notification" class="btn-verify-notification btn-congratulation btn-notification" type="button">Continue</button>
+			                    </div>
+		                	</div>
+		                </div>
+		            </div>
 		        </div>
-	            <div class="animated fadeInRight col-md-4">
-	                <div class="join-container">
-	                    <div class="btn btn-text">
-	                        <div class="text-header1">Join the Movement!</div>
-	                        <div class="text-header2">Enroll now and become one of us!</div>
-	                    </div>
-	                    <div class="btn-container">
-	                        <button class="product-add-cart btn-buy-a-kit" item-id="{{$item_kit_id or '54'}}" quantity="1">Enroll Now</button><br>
-	                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
-	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code" onclick="action_load_link_to_modal('/members/enter-code')">Enter a Code</button></a>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	    </div>
-
-	    <!-- BOTTOM DASHBOARD -->
-		<div class="dash-bot row clearfix">
-			<div class="wow zoomIn col-md-3">
-				<img src="/themes/{{ $shop_theme }}/img/nonmember-ad.jpg" style="width: 100%;">
 			</div>
-			<div class="col-md-9">
-				<h1 class="wow fadeInDown">The Brown Phone</h1>
-				<p class="wow fadeInRight">The Brown phone is your portal to a new world full of creativity and opportunities, bringing you closer to artists and entrepreneurs, while keeping you updated on the latest news, hottest trends, and innovative products and services, making your life better and more inspiring.</p>
-				<h2 class="wow fadeInDown" >With Premium Content and Rewards App</h2>
-				<p class="wow fadeInRight"><i class="fa fa-circle" aria-hidden="true"></i>With Brown App and Portal</p>
-				<p class="wow fadeInRight"><i class="fa fa-circle" aria-hidden="true"></i>Agila Rewards Ready</p>
+    	@else
+		    <!-- TOP DASHBOARD-->
+		    <div class="dashboard-top">
+		        <div class="row clearfix">
+			        <div class="animated fadeInLeft col-md-8">
+			        	<video controls="">
+							<source src="/themes/{{ $shop_theme }}/img/intro2.mp4" type="video/mp4">
+						</video>
+			        </div>
+		            <div class="animated fadeInRight col-md-4">
+		                <div class="join-container">
+		                    <div class="btn btn-text">
+		                        <div class="text-header1">Join the Movement!</div>
+		                        <div class="text-header2">Enroll now and become one of us!</div>
+		                    </div>
+		                    <div class="btn-container">
+		                        <button class="product-add-cart btn-buy-a-kit" item-id="{{$item_kit_id or '54'}}" quantity="1">Enroll Now</button><br>
+		                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
+		                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code" onclick="action_load_link_to_modal('/members/enter-code')">Enter a Code</button></a>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		    <!-- BOTTOM DASHBOARD -->
+			<div class="dash-bot row clearfix">
+				<div class="wow zoomIn col-md-3">
+					<img src="/themes/{{ $shop_theme }}/img/nonmember-ad.jpg" style="width: 100%;">
+				</div>
+				<div class="col-md-9">
+					<h1 class="wow fadeInDown">The Brown Phone</h1>
+					<p class="wow fadeInRight">The Brown phone is your portal to a new world full of creativity and opportunities, bringing you closer to artists and entrepreneurs, while keeping you updated on the latest news, hottest trends, and innovative products and services, making your life better and more inspiring.</p>
+					<h2 class="wow fadeInDown" >With Premium Content and Rewards App</h2>
+					<p class="wow fadeInRight"><i class="fa fa-circle" aria-hidden="true"></i>With Brown App and Portal</p>
+					<p class="wow fadeInRight"><i class="fa fa-circle" aria-hidden="true"></i>Agila Rewards Ready</p>
+				</div>
 			</div>
-		</div>
-
-	    <!-- <div class="dashboard-bottom" style="overflow: hidden;">
-	        <div class="animated fadeInRight text-header">Profile Information</div>
-	        <div class="animated fadeInRight row clearfix">
-	            <div class="col-md-4">
-	                <div class="profile-info-container pic1 match-height">
-	                    <div class="icon-container">
-	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/brown-personal-info.png">
-	                        </div>
-	                        <div class="col-md-10">
-	                            <div class="prof-info-text-header">Personal Information</div>
-	                        </div>
-	                        
-	                    </div>
-	                    <div class="personal-info-container">
-	                        <div><label>Name </label><span>Lorem Ipsum Dolor</span></div>
-	                        <div><label>Email </label><span>Lorem Ipsum Dolor</span></div>
-	                        <div><label>Birthday </label><span>Lorem Ipsum Dolor</span></div>
-	                        <div><label>Contact </label><span>Lorem Ipsum Dolor</span></div>
-	                    </div>
-	                </div>
-	            </div>
-	            <div class="col-md-4">
-	                <div class="profile-info-container pic2 match-height">
-	                    <div class="icon-container">
-	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/brown-default-shipping.png">
-	                        </div>
-	                        <div class="col-md-10">
-	                            <div class="prof-info-text-header">Default Shipping Address</div>
-	                        </div>
-	                    </div>
-	                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae similique nulla amet illum labore nostrum sapiente fugiat, pariatur ipsa distinctio.</p>
-	                </div>
-	            </div>
-	            <div class="col-md-4">
-	                <div class="profile-info-container pic3 match-height">
-	                    <div class="icon-container">
-	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/brown-default-billing.png">
-	                        </div>
-	                        <div class="col-md-10">
-	                            <div class="prof-info-text-header">Default Billing Address</div>
-	                        </div>
-	                    </div>
-	                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos quibusdam nesciunt, dolor culpa architecto enim ratione error ipsum, animi sunt.</p>
-	                </div>
-	            </div>
-	        </div>
-	    </div> -->
+		@endif
 	</div>
 @else
 	<div class="dashboard" style="overflow: hidden;">
@@ -244,7 +219,6 @@
 					</div>
 					<div class="col-md-8">
 						<div class="detail-container">
-							<!-- <h1>PHP</h1> -->
 							<h2>{{ $wallet->display_current_wallet }}</h2>
 							<h3>Current Wallet</h3>
 						</div>
@@ -260,7 +234,6 @@
 					</div>
 					<div class="col-md-8">
 						<div class="detail-container">
-							<!-- <h1>PHP</h1> -->
 							<h2>{{ $wallet->display_total_payout }}</h2>
 							<h3>Total Pay-out</h3>
 						</div>
@@ -350,10 +323,12 @@
 							<div class="row clearfix">
 								<div class="col-sm-4 text-center">
 									<div class="label2">{{ $slot->slot_no }}</div>
+									<div class="label3"> <a href="javascript:" onclick="action_load_link_to_modal('/members/lead?slot_no={{ $slot->slot_no }}')"> VIEW LEAD LINK</a></b></div>
 									<div class="label3">{{ $slot->display_total_earnings }}</div>
-									<div class="label3">{{ $slot->current_direct }} / {{ $slot->brown_next_rank_current }}</div>
+									{{-- $slot->current_direct }} / {{ $slot->brown_next_rank_current --}}
 								</div>
-								<div class="col-sm-8 text-center" style="margin-bottom: 5px;">ROAD TO <b>{{ $slot->brown_next_rank }}</b></div>
+								<div class="col-sm-8 text-center" style="margin-bottom: 5px;">ROAD TO <b>{{ $slot->brown_next_rank }}</div>
+							
 								<div class="col-sm-4">
 									@if($slot->brown_next_rank != "NO NEXT RANK")
 										@if($slot->current_direct >= $slot->required_direct)
@@ -407,7 +382,7 @@
 								@if($direct->distributed == 1)
 									<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-default"><i class="fa fa-star"></i> VIEW INFO</button>
 								@else
-									<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
+									<button onclick="action_load_link_to_modal('/members/enter-placement?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-danger"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
 								@endif
 							</div>
 						</div>
@@ -468,65 +443,6 @@
 	</div>
 @endif
 
-<!--  Enter a code -->
-<div class="popup-notification">
-    <div id="popup-notification-modal" class="modal fade">
-        <div class="modal-sm modal-dialog">
-            <div class="modal-content">
-                <!--<div class="modal-header">-->
-                <!--    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
-                <!--    <h4 class="modal-title"><i class="fa fa-star"></i> CONGRATULATION</h4>-->
-                <!--</div>-->
-                <div class="modal-body">
-                	<div class="congrats-holder">
-	                	<div class="title">CONGRATULATIONS!</div>
-	                    <div class="img">
-	                    	<img src="/themes/{{ $shop_theme }}/assets/mobile/img/trophy.png">
-	                    </div>
-	                    <div class="desc">You are one step away from your membership!</div>
-	                    <div class="btn-container">
-	                        <button id="btn-notification" class="btn-verify-notification btn-notification" type="button">Continue</button>
-	                    </div>
-                	</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- MANUAL PLACING OF SLOT -->
-<div class="popup-verify-placement">
-    <div id="slot-placement-modal" class="modal fade">
-        <div class="modal-sm modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"><i class="fa fa-shield"></i> MANUAL PLACEMENT</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="message message-return-slot-placement-verify"></div>
-                    <form class="slot-placement-form">
-                        <div>
-                            <div class="labeld">Slot Placement</div>
-                            <input class="input input-slot-placement text-center" name="slot_placement" type="text">
-                            <input class="chosen_slot_id" name="chosen_slot_id" type="hidden">
-                        </div>
-                        <div>
-                            <div class="labeld">Slot Position</div>
-                            <select class="input input-slot-position text-center" name="slot_position" type="text" style="text-align-last:center;">
-                            	<option value="left">LEFT</option>
-                            	<option value="right">RIGHT</option>
-                            </select>
-                        </div>
-                        <div class="btn-container">
-                            <button id="check_placement" class="btn-verify-placement">VERIFY</button>
-                        </div>
-                    </form>
-                </div>
-              </div>
-          </div>
-      </div>
-  </div>
 @endsection
 
 @section("member_script")
@@ -592,24 +508,20 @@ $(document).ready(function()
 	
 
 });
-$(document).ready(function()
-{
-	$(".place_slot_btn").click(function()
-	{
-		$(".message-return-slot-placement-verify").empty();
-		$(".chosen_slot_id").val($(this).attr("place_slot_id"));
-		$("#slot-placement-modal").modal("show");
-	});
-});
 
 </script>
 @endsection
 @section("member_css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/member_dashboard.css">
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/nonmember_dashboard.css">
+
+
+
+
 <style type="text/css">
 
-input:-webkit-autofill {
+input:-webkit-autofill
+{
     -webkit-box-shadow: 0 0 0 30px white inset;
 }
 

@@ -592,7 +592,7 @@ class MLM_SlotController extends Member
                                         <div>
                                         </div>
                                     </div>
-                                    <div class="id">' . $slot_info->slot_id . '</div>
+                                    <div class="id">' . $slot_info->slot_no . '</div>
                                 </span>
                                 <i class="downline-container"></i>
                             </li>';             
@@ -668,7 +668,7 @@ class MLM_SlotController extends Member
                                         <div>
                                         </div>
                                     </div>
-                                    <div class="id">' . $slot_info->slot_id . '</div>
+                                    <div class="id">' . $slot_info->slot_no . '</div>
                                 </span>
                                 <i class="downline-container"></i>
                             </li>';             

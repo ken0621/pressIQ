@@ -33,6 +33,10 @@
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/drawer.css">
+    <!-- PARALLAX -->
+    <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/parallax.css">
+    <!-- WOW JS -->
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/wow/css/animate.css">
     <!-- Brown Custom Icon -->
     <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/brown-icon/styles.css">
     <!-- WOW JS -->
@@ -49,9 +53,12 @@
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         @if($customer)
         <a class="{{ Request::segment(1) == "members" ? "active" : "" }}" href="/members">My Account</a>
+        @else
+        <a class="{{ Request::segment(1) == "members" ? "active" : "" }}" href="/members/login">Login</a>
+        <a class="{{ Request::segment(1) == "members" ? "active" : "" }}" href="/members/register">Register</a>
         @endif
         <a class="{{ Request::segment(1) == "" ? "active" : "" }}" href="/product">Brown</a>
-        <a class="{{ Request::segment(1) == "product" ? "active" : "product" }}" href="/product">Phone Accessories</a>
+        <!--<a class="{{ Request::segment(1) == "product" ? "active" : "product" }}" href="/product">Phone Accessories</a>-->
         <a href="#">Internet Of Things</a>
         <a href="#">Health Technology</a>
     </div>
@@ -60,7 +67,7 @@
     <header>
         <div class="header-top">
             <div class="container">
-                <a class="holder">GET THE APP</a>
+                <!--<a class="holder">GET THE APP</a>-->
                 <a href="/about" class="holder">COMPANY</a>
                 @if($customer)
                 <div style="display: inline-block; vertical-align: middle;" class="dropdown">
@@ -76,7 +83,7 @@
                                 <div class="button-holder">
                                     <div class="clearfix">
                                         <button class="btn btn-brown" type="button" onClick="location.href='/members'">Profile</button>
-                                        <button class="btn btn-green">Settings</button>
+                                        <button class="btn btn-green" type="button" onClick="location.href='/members/profile'">Settings</button>
                                     </div>
                                 </div>
                             </div>
@@ -126,14 +133,14 @@
                             @if($customer)
                             <li class="{{ Request::segment(1) == "members" ? "active" : "" }}"><a href="/members">My Account</a></li>
                             @endif
-                            <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a href="/product">Brown</a></li>
-                            <li class="{{ Request::segment(1) == "product" ? "active" : "product" }}"><a href="/product">Phone Accessories</a></li>
-                            <li><a href="#">Internet Of Things</a></li>
+                            <li class="{{ Request::segment(1) == "" ? "active" : "" }}"><a href="/">Brown</a></li>
+                            <!--<li class="{{ Request::segment(1) == "product" ? "active" : "product" }}"><a href="/product">Phone Accessories</a></li>-->
+                            <li><a href="/inspirers">Inspirer Page Login</a></li>
                             <li><a href="#">Health Technology</a></li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
                             <li class="dropdown">
-                                <a href="#" class="notif-holder dropdown-toggle" data-toggle="dropdown">
+                                <a href="#" class="notif-holder dropdown-toggle hidden" data-toggle="dropdown">
                                     <div class="brown-icon-bell-o"></div> <span class="badge">500</span>
                                 </a>
                                 <ul class="dropdown-menu notif">
@@ -215,14 +222,14 @@
                     <div class="list-category hide">
                         <div class="container">
                             <a href="/" class="head-button link-nav {{ Request::segment(1) == '' ? 'active' : '' }}" id="home">Brown</a>
-                            <a href="javascript:">Phone Accessories</a>
-                            <a href="javascript:">Internet Of Things</a>
+                            <!--<a href="javascript:">Phone Accessories</a>-->
+                            <a href="/inspirers">Inspirer Page Login</a>
                             <a href="javascript:">Health Technology</a>
                         </div>
                     </div>
                 </div>
                 <div class="right">
-                    <div class="dropdown">
+                    <div class="dropdown hidden">
                         <a href="#" class="notif-holders dropdown-toggle" data-toggle="dropdown">
                             <div class="brown-icon-bell-o" style="font-size: 20px"></div> <span class="badge">500</span>
                         </a>
@@ -285,7 +292,7 @@
                             </li>
                         </ul>
                     </div>
-                    <a href="#" class="cart-holder show-cart" style="text-decoration: none;">
+                    <a href="#" class="cart-holder show-cart hidden" style="text-decoration: none;">
                         <!-- <img style="width: 30px; height: 20px;" src="/themes/{{ $shop_theme }}/img/cart-blur.png"> <span class="badge">500</span> -->
                         <div class="brown-icon-shopping-cart"></div> <span class="badge">500</span>
                     </a>
@@ -305,15 +312,15 @@
                         <ul class="dropdown-menu dropdown-menu-right profile-menu">
                             <li>
                                 <div class="profile-pic">
-                                    <img src="/themes/{{ $shop_theme }}/img/profile-nav.png">
+                                    <img src="{{ $profile_image }}">
                                 </div>
                                 <div class="profile-text">
-                                    <div class="name">Mr. Brown Lorem Ipsum</div>
-                                    <div class="email">brownandproud@gmail.com</div>
+                                    <div class="name">{{ $customer->first_name }} {{ $customer->last_name }}</div>
+                                    <div class="email">{{ $customer->email }}</div>
                                     <div class="button-holder">
                                         <div class="clearfix">
-                                            <button class="btn btn-brown">Profile</button>
-                                            <button class="btn btn-green">Settings</button>
+                                            <button class="btn btn-brown" type="button" onClick="location.href='/members'">Profile</button>
+                                            <button class="btn btn-green" type="button" onClick="location.href='/members/profile'">Settings</button>
                                         </div>
                                     </div>
                                 </div>
@@ -382,7 +389,7 @@
                     <div class="holder">
                         <div class="title">Get Intouch With Us</div>
                         <div class="social-logo">
-                            <a class="holder"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                            <a href="https://www.facebook.com/phbrownandproud/"' target="_blank" class="holder"><i class="fa fa-facebook" aria-hidden="true"></i></a>
                             <a class="holder"><i class="fa fa-twitter" aria-hidden="true"></i></a>
                             <a class="holder"><i class="fa fa-instagram" aria-hidden="true"></i></a>
                         </div>
@@ -397,7 +404,7 @@
                 <div class="payment-method">
                     <div class="title">Payment Methods</div>
                     <div class="payment-container">
-                        <div class="holder"><img src="/themes/{{ $shop_theme }}/img/cod.png"></div>
+                        <!--<div class="holder"><img src="/themes/{{ $shop_theme }}/img/cod.png"></div>-->
                         <div class="holder"><img src="/themes/{{ $shop_theme }}/img/paymaya.png"></div>
                     </div>
                 </div>
@@ -507,6 +514,8 @@
     <script type="text/javascript" src="/assets/js/cart.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/drawer.js"></script>
     <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/parallax.js"></script>
+
 
 
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/wow/js/wow.min.js"></script>
@@ -533,5 +542,10 @@
     // }
     </script>
     @yield("script")
+    <!-- BEGIN JIVOSITE CODE -->
+    <script type='text/javascript'>
+    (function(){ var widget_id = 'OcvyPjoHBr';var d=document;var w=window;function l(){ var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);}if(d.readyState=='complete'){l();}else{if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
+    </script>
+    <!-- END JIVOSITE CODE -->
 </body>
 </html>

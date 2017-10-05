@@ -379,6 +379,8 @@ class PayrollReportController extends Member
 		else
 		{
 			$data["page"] = "Monthly Government Forms";
+
+
 			$year = 2017;
 			$shop_id = $this->shop_id();
 			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
@@ -405,11 +407,12 @@ class PayrollReportController extends Member
 	/*START LOAN SUMMARY*/
 	public function loan_summary()
 	{
-
 		$data["page"] = "Loan Summary";
 		$data["_loan_data"] = PayrollDeductionController::get_deduction($this->shop_id());
-		return view("member.payrollreport.loan_summary", $data);
 
+		$data["_company"] = Tbl_payroll_company::where("shop_id", Self::shop_id())->where('payroll_parent_company_id', 0)->get();
+
+		return view("member.payrollreport.loan_summary", $data);
 	}
 
 	public function table_loan_summary($deduction_type='')
@@ -418,6 +421,14 @@ class PayrollReportController extends Member
 		$deduction_type = str_replace("_"," ",$deduction_type);
 		$data["_loan_data"] = PayrollDeductionController::get_deduction_by_type($this->shop_id(),$deduction_type);
 		return view("member.payrollreport.loan_summary_table", $data);
+	}
+
+	public function table_company_loan_summary()
+	{
+		$data['company_id'] = Request::input('company_id');
+		$data['_loan_data'] = Tbl_payroll_deduction_payment_v2::getallinfo($this->shop_id(),$data['company_id'],0)->get();
+
+		return view('member.payrollreport.table_company_loan_summary',$data);
 	}
 
 	public function modal_loan_summary($employee_id = 0,$payroll_deduction_id = 0)
@@ -1079,7 +1090,6 @@ class PayrollReportController extends Member
 			
 
 	/*END PAYROLL REGISTER REPORT*/
-
 
 
 }

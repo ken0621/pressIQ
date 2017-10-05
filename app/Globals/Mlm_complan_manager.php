@@ -33,6 +33,8 @@ use App\Globals\Mlm_complan_manager_repurchasev2;
 use App\Models\Tbl_mlm_gc;
 use App\Models\Tbl_mlm_binary_pairing_log;
 use App\Models\Tbl_direct_pass_up_settings;
+use App\Models\Tbl_leadership_advertisement_points;
+use App\Models\Tbl_leadership_advertisement_settings;
 use App\Http\Controllers\Member\MLM_MembershipController;
 use App\Http\Controllers\Member\MLM_ProductController;
 use Schema;
@@ -48,13 +50,138 @@ use App\Globals\Membership_code;
 use App\Globals\Binary_pairing;
 class Mlm_complan_manager
 {   
-    public static function advertisement_bonus()
+    public static function advertisement_bonus($slot_info)
     {
-        
-    }   
-    public static function leadership_advertisement_bonus()
-    {
+        $settings_tree = Tbl_tree_placement::child($slot_info->slot_id)->distinct_level()->parentslot()->get();
+        $setting      = Tbl_advertisement_bonus_settings::where("shop_id",$slot_info->shop_id)->first();
+        // DISTRIBUTE BINARY POINTS
+        if($setting)
+        {
+            $level_end = $setting->level_end;
+            if($level_end > 0)
+            {
+                foreach($settings_tree as $tree)
+                {
+                    $parent_slot = Tbl_mlm_slot::where("slot_id",$tree->slot_id)->first();
+                    $amount_given = $setting->advertisement_income;
+                    if($parent_slot->advertisement_bonus_distributed == 0 && $amount_given != 0)
+                    {
+                        $required_downline = pow(2,$level_end);
+                        $current_downline  = Tbl_tree_placement::where("placement_tree_parent_id",$tree->slot_id)->where("placement_tree_level",$level_end)->count();   
+                        if($required_downline == $current_downline)
+                        {
+                            $log_array['earning']    = $amount_given;
+                            $log_array['level']      = $level_end;
+                            $log_array['level_tree'] = 'Binary Tree';
+                            $log_array['complan']    = 'ADVERTISEMENT_BONUS';
 
+                            $log = Mlm_slot_log::log_constructor($parent_slot, $slot_info,  $log_array);
+
+                            $arry_log['wallet_log_slot']         = $parent_slot->slot_id;
+                            $arry_log['shop_id']                 = $parent_slot->shop_id;
+                            $arry_log['wallet_log_slot_sponsor'] = $parent_slot->slot_id;
+                            $arry_log['wallet_log_details']      = $log;
+                            $arry_log['wallet_log_amount']       = $amount_given;
+                            $arry_log['wallet_log_plan']         = "ADVERTISEMENT_BONUS";
+                            $arry_log['wallet_log_status']       = "n_ready";   
+                            $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('ADVERTISEMENT_BONUS', $parent_slot->shop_id); 
+                            Mlm_slot_log::slot_array($arry_log);
+
+                            $update_slot["advertisement_bonus_distributed"] = 1;
+                            Tbl_mlm_slot::where("slot_id",$parent_slot->slot_id)->update($update_slot);
+                        }
+                    }
+                }
+            }
+        }
+    }   
+    public static function leadership_advertisement_bonus($slot_info)
+    {
+        $setting = Tbl_leadership_advertisement_settings::where("shop_id",$slot_info->shop_id)->first();
+        if($setting)
+        {
+            $level_start = $setting->level_start;
+            if($level_start > 0 && $setting->leadership_advertisement_income != 0)
+            {
+                $settings_tree = Tbl_tree_placement::child($slot_info->slot_id)->distinct_level()->parentslot()->where("placement_tree_level",">=",$level_start)->get();
+                foreach($settings_tree as $tree)
+                {
+                    $parent_slot   = Tbl_mlm_slot::where("slot_id",$tree->slot_id)->first();
+                    $points_gained = 1;
+                    $position      = $tree->placement_tree_position;
+                    $log           = "Your slot ".$parent_slot->slot_no.", earned 1 point from ".$tree->placement_tree_position." in level ".$tree->placement_tree_level." of Binary Tree. Downline :".$slot_info->slot_no;
+         
+                    $insert_points["points_amount"]  = $points_gained;
+                    $insert_points["position"]       = $position;
+                    $insert_points["log"]            = $log;
+                    $insert_points["slot_id"]        = $parent_slot->slot_id;
+                    $insert_points["shop_id"]        = $parent_slot->shop_id;
+                    $insert_points["reason_slot"]    = $slot_info->slot_id;
+                    $insert_points["date_created"]   = Carbon::now();
+
+                    Tbl_leadership_advertisement_points::insert($insert_points);  
+
+
+
+                    if($parent_slot->advertisement_bonus_distributed == 1)
+                    {
+                        $left                = Tbl_leadership_advertisement_points::where("position","left")->where("slot_id",$parent_slot->slot_id)->sum("points_amount");
+                        $right               = Tbl_leadership_advertisement_points::where("position","right")->where("slot_id",$parent_slot->slot_id)->sum("points_amount");
+                        $pairing_point_left  = $setting->left;
+                        $pairing_point_right = $setting->right;
+
+                        while($left >= $pairing_point_left && $right >= $pairing_point_right)
+                        {
+                          $left               = Tbl_leadership_advertisement_points::where("position","left")->where("slot_id",$parent_slot->slot_id)->sum("points_amount");
+                          $right              = Tbl_leadership_advertisement_points::where("position","right")->where("slot_id",$parent_slot->slot_id)->sum("points_amount");                           
+                          
+                          if($left >= $pairing_point_left && $right >= $pairing_point_right)
+                          {
+                              $remaining_left     = $left - $pairing_point_left;
+                              $remaining_right    = $right - $pairing_point_right;
+                              $log                = "Paired ".$pairing_point_left." is to ".$pairing_point_right.", Remaining left and right(".$remaining_left.":".$remaining_right.")";
+
+
+                              $insert_points["points_amount"]  = -1 * $pairing_point_left;
+                              $insert_points["position"]       = "left";
+                              $insert_points["log"]            = $log;
+                              $insert_points["slot_id"]        = $parent_slot->slot_id;
+                              $insert_points["shop_id"]        = $parent_slot->shop_id;
+                              $insert_points["reason_slot"]    = $slot_info->slot_id;
+                              $insert_points["date_created"]   = Carbon::now();
+      
+                              Tbl_leadership_advertisement_points::insert($insert_points); 
+
+                              $insert_points["points_amount"]  = -1 * $pairing_point_right;
+                              $insert_points["position"]       = "right";
+                              Tbl_leadership_advertisement_points::insert($insert_points);  
+
+                              $amount_given            = $setting->leadership_advertisement_income;
+                              $log_array['earning']    = $amount_given;
+                              $log_array['level']      = $tree->placement_tree_level;
+                              $log_array['level_tree'] = 'Binary Tree';
+                              $log_array['complan']    = 'LEADERSHIP_ADVERTISEMENT_BONUS';
+
+                              $log = Mlm_slot_log::log_constructor($parent_slot, $slot_info,  $log_array);
+
+                              $arry_log['wallet_log_slot']         = $parent_slot->slot_id;
+                              $arry_log['shop_id']                 = $parent_slot->shop_id;
+                              $arry_log['wallet_log_slot_sponsor'] = $parent_slot->slot_id;
+                              $arry_log['wallet_log_details']      = $log;
+                              $arry_log['wallet_log_amount']       = $amount_given;
+                              $arry_log['wallet_log_plan']         = "LEADERSHIP_ADVERTISEMENT_BONUS";
+                              $arry_log['wallet_log_status']       = "n_ready";   
+                              $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('ADVERTISEMENT_BONUS', $parent_slot->shop_id); 
+                              Mlm_slot_log::slot_array($arry_log);
+                          }
+
+                          $left               = Tbl_leadership_advertisement_points::where("position","left")->where("slot_id",$parent_slot->slot_id)->sum("points_amount");
+                          $right              = Tbl_leadership_advertisement_points::where("position","right")->where("slot_id",$parent_slot->slot_id)->sum("points_amount");   
+                        }
+                    }    
+                }
+            }
+        }
     }
     public static function brown_rank($slot_info)
     {
@@ -68,7 +195,8 @@ class Mlm_complan_manager
 
         foreach($_sponsor_tree as $sponsor_tree)
         {
-            $brown_next_rank = Tbl_brown_rank::where("rank_id",">", $sponsor_tree->brown_rank_id)->orderBy("rank_id")->first();
+            $rank_number     = $sponsor_tree->brown_rank_id == null ? 0 : $sponsor_tree->brown_rank_id;
+            $brown_next_rank = Tbl_brown_rank::where("rank_id",">", $rank_number)->orderBy("rank_id")->first();
             //TODO: LEVEL LIMIT IMPLEMENTATION
             if($brown_next_rank)
             {

@@ -19,7 +19,7 @@
             <tr>
                 <td>{{ date("m/d/Y") }}</td>
                 <td>{{ $slot->slot_no }}</td>
-                <td>EON CARD</td>
+                <td>BANK DEPOSIT</td>
                 <td>{{ $slot->first_name }} {{ $slot->last_name }}</td>
                 <td>{{ $slot->real_net }}</td>
                 <td>{{ $slot->real_service }}</td>

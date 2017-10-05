@@ -5,9 +5,9 @@
 		<div class="animated fadeInUp col-md-4 left match-height load-profile">
 			<div class="load-profile-holder">
 				<div class="profile-main">
-					<div class="animated fadeInUp img"><img class="img-upload" style="border-radius: 100%;" src="{{ $profile_image }}"></div>
-					<div class="animated fadeInUp name">{{ $profile->first_name }} {{ $profile->middle_name }} {{ $profile->last_name }}</div>
-					<div class="animated fadeInUp sub">{{ $profile->email }}</div>
+					<div class="animated zoomIn img"><img class="img-upload" style="border-radius: 100%;" src="{{ $profile_image }}"></div>
+					<div class="animated slideInUp name">{{ $profile->first_name }} {{ $profile->middle_name }} {{ $profile->last_name }}</div>
+					<div class="animated slideInUp sub">{{ $profile->email }}</div>
 				</div>
 				<div class="animated fadeInUp profile-status">
 					<table>
@@ -25,9 +25,9 @@
 				</div>
 				@if($mlm == 1)
 				<div class="profile-lead">
-					<a data-toggle="modal" data-target="#leads_modal" href="javascript:">
+					{{-- <a data-toggle="modal" data-target="#leads_modal" href="javascript:">
 						<img src="/themes/{{ $shop_theme }}/img/leads.png"> Leads Link
-					</a>
+					</a> --}}
 					<!-- Modal -->
 					<div id="leads_modal" class="modal fade leads-modal" role="dialog">
 					   <div class="modal-dialog">
@@ -119,7 +119,7 @@
 							   				<div class="date-holder">
 												<select name="b_month" class="form-control">
 													@for($ctr = 1; $ctr <= 12; $ctr++)
-													<option {{ date("mm", strtotime($profile->birthday)) == $ctr ? 'selected' : '' }} value="{{ $ctr }}">{{ date("F", strtotime($ctr . "/01/17")) }}</option>
+													<option {{ date("m", strtotime($profile->birthday)) == $ctr ? 'selected' : '' }} value="{{ $ctr }}">{{ date("F", strtotime($ctr . "/01/17")) }}</option>
 													@endfor
 												</select>
 											</div>

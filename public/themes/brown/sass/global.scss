@@ -1,17 +1,49 @@
-$content-text: 'Arimo', sans-serif;
+$content-text: 'Rubik', sans-serif;
+$light: 300;
 $regular: 400;
+$medium: 500;
 $semi-bold: 600;
 $bold: 700;
-$text-light: #777;
-$text-dark: #272c2f;
+$text-light: #585858;
+$text-dark: #404040;
 
 body
 {
-	font-family: 'Droid Sans', sans-serif;
+	font-family: 'Rubik', sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	font-smoothing: antialiased;
 	font-weight: 400;
+	color: $text-dark;
+
+}
+
+@mixin transition($transition)
+{
+  	-webkit-transition: all $transition ease-in-out;
+  	-moz-transition: all $transition ease-in-out;
+  	-o-transition: all $transition ease-in-out;
+  	transition: all $transition ease-in-out;
+}/* apply @inlude transition(0.2s); */
+
+
+.embed-responsive
+{
+	position: relative;
+	.overlay
+	{
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: transparent;
+		z-index: 2;
+	}
+	.embed-responsive-item
+	{
+		z-index: 1;
+	}
 }
 
 button
@@ -26,7 +58,7 @@ button
 	background-color: #502d19;
 	padding: 7.5px 25px;
 	border-radius: 25px;
-	font-weight: 600;
+	font-weight: $medium;
 	&:hover
 	{
 		color: #fff;
@@ -122,7 +154,7 @@ button
 
 			.modal-title
 			{
-				font-weight: $semi-bold;
+				font-weight: $regular;
 				color: #FFF;
 			}
 		}
@@ -136,8 +168,8 @@ button
 					th
 					{
 						background-color: #ece8e8;
-						color: #272c2f;
-						font-weight: 600;
+						color: $text-dark;
+						font-weight: $regular;
 						font-size: 15px;
 						border-bottom: 0;
 						text-align: center;
@@ -355,7 +387,7 @@ button
 			{
 				color: $text-dark;
 				font-size: 13px;
-				font-weight: $bold;
+				font-weight: $medium;
 			}
 			.email
 			{
@@ -373,7 +405,7 @@ button
 				{
 					color: #ffffff;
 					font-size: 13px;
-					font-weight: 600;
+					font-weight: $regular;
 					border-radius: 3px;
 					text-align: center;
 					padding: 5px 15px;
@@ -942,6 +974,7 @@ footer
 		{
 			.holder
 			{
+				@include transition(0.2s);
 				background-color: #5d4239;
 				color: #fff;
 				padding: 10px;
@@ -953,13 +986,52 @@ footer
 				display: inline-block;
 				text-align: center;
 				margin: 0 2.5px;
+				cursor: pointer;
+
 				&:first-child
 				{
 					margin-left: 0;
+					&:hover
+					{
+						background-color: #3B5998;
+						
+						i
+						{
+							@include transition(0.2s);
+							font-size: 24px;
+						}
+					}
+
 				}
+				
+				&:nth-child(2)
+				{
+					&:hover
+					{
+						background-color: #1DA1F3;
+
+						i
+						{
+							@include transition(0.2s);
+							font-size: 24px;
+						}
+					}
+				}
+
 				&:last-child
 				{
 					margin-right: 0;
+
+					&:hover
+					{
+						background-color: #CD486B;
+
+						i
+						{
+							@include transition(0.2s);
+							font-size: 24px;
+						}
+					}
 				}
 			}
 		}

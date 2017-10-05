@@ -56,7 +56,6 @@ class Mlm_compute
         $slot_info = Mlm_compute::get_slot_info($slot_id);
         // slot_info must have membership info and membership_points;
         // <-- error if not -->
-
 	    // Sponsor Tree
         // not redundant, needed two slot_info for retainment of loop
         /* CHECK IF IT IS A SLOT CREATION OR USED FOR UPGRADING SLOT */
@@ -105,6 +104,7 @@ class Mlm_compute
             ->where('marketing_plan_enable', 1)
             ->where('marketing_plan_trigger', 'Slot Creation')
             ->get();
+
             if($slot_info->slot_status == 'PS')
             {
                 foreach($plan_settings as $key => $value)

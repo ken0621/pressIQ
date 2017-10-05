@@ -35,6 +35,7 @@
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/lightbox/css/lightbox.css">
         <!-- WOW JS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/wow/css/animate.css">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css">
 
         <!-- OTHER CSS -->
         @yield("css")
@@ -60,14 +61,20 @@
     </div>
 
     <!-- HEADER -->
-    <div class="subheader-container">
+    <div id="home" class="subheader-container">
         <div class="container">
             @if($customer)
             <div class="left-container"><span><i class="fa fa-heart-o" aria-hidden="true"></i></span><span>BECOME A MEMBER</span></div>
             <div class="right-container"><span style="cursor: pointer;" onClick="location.href='/members/logout'">LOGOUT</span><span style="cursor: pointer;" onClick="location.href='/members'">MY ACCOUNT</span></div>
             @else
-            <div class="left-container"><span><i class="fa fa-heart-o" aria-hidden="true"></i></span><span>BECOME A MEMBER</span></div>
-            <div class="right-container"><span style="cursor: pointer;" onClick="location.href='/members/login'">LOGIN</span><span style="cursor: pointer;" onClick="location.href='/members/register'">REGISTER</span></div>
+            <div class="left-container">
+                <span><i class="fa fa-heart-o" aria-hidden="true"></i></span>
+                <span>BECOME A MEMBER</span>
+            </div>
+            <div class="right-container">
+                <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/members/login'">LOGIN</span>
+                <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/members/register'">REGISTER</span>
+            </div>
             @endif
         </div>
     </div>
@@ -78,21 +85,34 @@
                     <div class="image-logo-holder">
                         <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/header-logo.png"></a>                       
                     </div>
+                    <div class="menu-nav">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
                 </div>
                 <div class="col-md-10">
                 <!-- NAVIGATION -->
                     <nav class="navirino">
                         <ul>
-                            <li><a href="/" {{ Request::segment(1) == '' ? 'active' : '' }}" id="home">HOME</a></li>
-                            <li><a>ABOUT US</a></li>
-                            <li><a>MISSION & VISION</a></li>
-                            <li><a>PRODUCTS</a></li>
+                            @if(Request::segment(1)=="members")
+                                <li><a class="smoth-scroll" href="/#home">HOME</a></li>
+                                <li><a class="smoth-scroll" href="/#aboutus">ABOUT US</a></li>
+                                <li><a class="smoth-scroll" href="/#mission-vision">MISSION & VISION</a></li>
+                                <li><a class="smoth-scroll" href="/#products">PRODUCTS</a></li>
+                            @else
+                                <li><a class="smoth-scroll" href="#home">HOME</a></li>
+                                <li><a class="smoth-scroll" href="#aboutus">ABOUT US</a></li>
+                                <li><a class="smoth-scroll" href="#mission-vision">MISSION & VISION</a></li>
+                                <li><a class="smoth-scroll" href="#products">PRODUCTS</a></li>
+                            @endif
                         </ul>
                     </nav>
                 </div>
             </div>
         </div>
     </div> 
+    
     <!-- CONTENT -->
     <div id="scroll-to" class="clearfix">
        @yield("content")
@@ -194,6 +214,13 @@
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/parallax.js"></script>
 
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/lightbox/js/lightbox.js"></script>
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/scrollspy.js"></script>
+    <script src="/themes/{{ $shop_theme }}/assets/easing/jquery.easing.min.js"></script>
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/wow/js/wow.min.js"></script>
+
+    <script>
+          new WOW().init();
+    </script>
 
     <!-- FROM HOME.BLADE -->
     <!-- <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css"> -->
@@ -231,12 +258,12 @@
 
     <script type="text/javascript">
             
-            $('.slider3').diyslider({
-                width: "580px", // width of the slider
-                height: "120px", // height of the slider
-                display: 5, // number of slides you want it to display at once
-                loop: false // disable looping on slides
-                }); // this is all you need!
+        $('.slider3').diyslider({
+            width: "580px", // width of the slider
+            height: "120px", // height of the slider
+            display: 5, // number of slides you want it to display at once
+            loop: false // disable looping on slides
+            }); // this is all you need!
 
         // use buttons to change slide
         $('#gotoleft').bind("click", function(){
@@ -249,8 +276,15 @@
             $('.slider3').diyslider("move", "forth");
         });
 
-        /*PRODUCT HOVER TOGGLE*/
 
+        // NAVIRINO CLICK TOGGLE
+        $(".menu-nav").click(function()
+        {
+            $(".navirino").toggle("slow");
+        });
+
+
+        /*PRODUCT HOVER TOGGLE*/
         $('.product-hover').hover(function()
         {
             $('.product-dropdown').stop();
@@ -284,6 +318,22 @@
             $('.cart-dropdown').fadeOut(400);
         });
 
+        /*scroll up*/
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 700) {
+                $('.scroll-up').fadeIn();
+            } else {
+                $('.scroll-up').fadeOut();
+            }
+        });
+
+        $('.scroll-up').click(function () {
+            $("html, body").animate({
+                scrollTop: 0
+            }, 700);
+            return false;
+        });
+
     </script>
 
     {{-- START GLOBAL MODAL --}}
@@ -299,8 +349,6 @@
     <div class="multiple_global_modal_container"></div>
     {{-- END GLOBAL MULTIPLE MODAL --}}
 
-
-    
     <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
     @yield("script")
     </body>

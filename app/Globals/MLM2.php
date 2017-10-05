@@ -13,6 +13,8 @@ use App\Models\Tbl_tree_sponsor;
 use App\Models\Tbl_item;
 use App\Models\Tbl_mlm_item_points;
 use App\Models\Tbl_rank_repurchase_cashback_item;
+use App\Models\Tbl_transaction;
+use App\Models\Tbl_transaction_list;
 use App\Models\Tbl_mlm_stairstep_settings;
 use App\Globals\Mlm_tree;
 use App\Globals\Mlm_complan_manager;
@@ -32,6 +34,91 @@ class MLM2
 	public static function current_wallet($shop_id, $slot_id)
 	{
 		return Tbl_mlm_slot_wallet_log::where("shop_id", $shop_id)->where("wallet_log_slot", $slot_id)->sum("wallet_log_amount");
+	}
+	public static function check_unused_code($shop_id, $customer_id)
+	{
+		$return = 0;
+		$data = Tbl_transaction::where('transaction_reference_table','tbl_customer')->where('transaction_reference_id', $customer_id)->get();
+		
+		foreach($data as $key => $value)
+		{
+			$list = Tbl_transaction_list::where('transaction_id', $value->transaction_id)->get();
+
+			foreach($list as $key2 => $value2)
+			{
+				$get_item_warehouse = Tbl_warehouse_inventory_record_log::where('record_consume_ref_name','transaction_list')
+																	    ->where('record_consume_ref_id',$value2->transaction_list_id)
+																	    ->where('item_in_use','unused')
+																	    ->first();
+			
+				if($get_item_warehouse)
+				{
+					$return = $get_item_warehouse->record_log_id;
+				}
+			}
+		}
+		return $return;
+	}
+	public static function check_purchased_code($shop_id, $customer_id)
+	{
+		$return = null;
+		
+		$query = Tbl_warehouse_inventory_record_log::where('record_consume_ref_name','transaction_list');
+		
+		$_list = Tbl_transaction_list::
+										join("tbl_transaction", "tbl_transaction.transaction_id", "=", "tbl_transaction_list.transaction_id")
+										->where('transaction_reference_table','tbl_customer')
+										->where('tbl_transaction.transaction_reference_id', $customer_id)
+										->get();
+										
+		if(count($_list) > 0)
+		{
+			$query->where(function($q) use ($_list)
+			{
+				foreach($_list as $key2 => $list)
+				{
+					$q->orWhere("record_consume_ref_id", $list->transaction_list_id);
+				}
+			});
+			
+			$_codes = $query->get();
+			
+			foreach($_codes as $key => $code)
+			{
+				$slot = Tbl_mlm_slot::where("slot_id", $code->mlm_slot_id_created)->customer()->first();
+				$transaction_list = Tbl_transaction_list::where("transaction_list_id", $code->record_consume_ref_id)->first();
+				
+				$_codes[$key]->transaction_number = $transaction_list->transaction_number;
+				
+				if($slot)
+				{
+					$_codes[$key]->used_by = ($slot ? $slot->slot_no : "-") . " (" . $slot->first_name . " " . $slot->last_name .")";
+				}
+				else
+				{
+					$_codes[$key]->used_by = "-";
+				}
+			}
+		}
+		else
+		{
+			$_codes = array();	
+		}
+			
+
+		
+
+		
+		return $_codes;
+	}
+	public static function get_code($record_log_id)
+	{
+		$data =	Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)
+										    		->first();
+		$return['mlm_pin'] = $data->mlm_pin;
+		$return['mlm_activation'] = $data->mlm_activation;
+		
+		return $return;
 	}
 	public static function slot_payout($shop_id, $slot_id, $method, $remarks, $amount, $tax = 0, $service = 0, $other = 0, $date = null, $status = "DONE")
 	{
@@ -500,10 +587,16 @@ class MLM2
 	{
 		return Tbl_membership::shop($shop_id)->codes($pin, $activation)->first();
 	}
-	public static function use_membership_code($shop_id, $pin, $activation, $slot_id_created, $remarks = null)
+	public static function use_membership_code($shop_id, $pin, $activation, $slot_id_created, $remarks = null, $consume = array())
 	{
 		$update["mlm_slot_id_created"] 		= $slot_id_created;
-		$update["record_consume_ref_name"] 	= "used";
+		$update["item_in_use"] 				= "used";
+		
+		if(count($consume) > 0)
+		{
+			$update["record_consume_ref_name"] 	= $consume['name'];
+			$update["record_consume_ref_id"]	= $consume['id'];
+		}
 
 		if($remarks)
 		{
@@ -557,7 +650,7 @@ class MLM2
 		else
 		{
 			$sponsor_slot 	  = Tbl_mlm_slot::where("slot_id",$sponsor)->where("shop_id",$shop_id)->first();
-			$customer_sponsor = Tbl_customer::where("shop_id",$shop_id)->where("customer_id",$customer_id)->first();
+			$customer_sponsor = Tbl_customer::where("shop_id",$shop_id)->where("customer_id",$sponsor_slot->slot_owner)->first();
 			$proceed_to_create = 0;
 
 
@@ -568,22 +661,28 @@ class MLM2
 				{
 					$response = "Sponsor should have a placement";
 				}
-			}
 
-			if($proceed_to_create == 1)
-			{
-				$slot_id  = Tbl_mlm_slot::insertGetId($insert);
-				$rules    = $customer_sponsor->autoplacement_rule;
-				$response = MLM2::matrix_auto($shop_id,$slot_id,$rules);
-				if($response != "success")
+				if($proceed_to_create == 1)
+				{
+					$slot_id  = Tbl_mlm_slot::insertGetId($insert);
+					$rules    = $customer_sponsor->autoplacement_rule;
+					$response = MLM2::matrix_auto($shop_id,$slot_id,$rules);
+					if($response != "success")
+					{
+						$slot_id = $response;
+					}
+				}
+				else
 				{
 					$slot_id = $response;
 				}
 			}
 			else
 			{
-				$slot_id = $response;
+				$slot_id  = Tbl_mlm_slot::insertGetId($insert);
 			}
+
+
 
 			return $slot_id;
 		}
@@ -734,7 +833,6 @@ class MLM2
 	            if($sponsor)
 	            {
 	            	$proceed_to_auto = MLM2::check_sponsor_have_placement($shop_id,$sponsor->slot_id);
-
 	            	if($proceed_to_auto == 1)
 	            	{
 		                $condition_update = false;
@@ -824,8 +922,6 @@ class MLM2
 
 		                    $current_level++;
 		                }
-
-
 
 		                if($condition_update == true)
 		                {

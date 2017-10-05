@@ -1,3 +1,11 @@
+@mixin transition($transition)
+{
+	  -webkit-transition: all $transition ease-in-out;
+	  -moz-transition: all $transition ease-in-out;
+	  -o-transition: all $transition ease-in-out;
+	  transition: all $transition ease-in-out;
+}
+
 body
 {
 	font-family: 'Raleway', sans-serif;
@@ -118,6 +126,29 @@ button:hover{
 			width: 100%;
 			z-index: 999;
 			top: 0;
+			background-color: #000;
+			padding: 2px 0px;
+
+			.image-logo-holder
+			{
+				margin-top: 8px;
+				
+				img
+				{
+					@include transition(0.2s);
+					width: 60%;	
+				}
+			}
+
+			.navirino
+			{
+				margin-top: 10px;
+				a 
+				{
+					@include transition(0.2s);
+					font-size: 13px;
+				}
+			}
 		}
 		&.subheader-container
 		{
@@ -240,98 +271,27 @@ button:hover{
 	.footer-container
 	{
 		padding: 35px 0px 55px 0px;
-		.reach-us-holder
+		
+		.inner-content
 		{
-			width: 84%;
-			.jca-footer-title-container
+			img 
 			{
-				.footer-title
-				{
-					font-family: "Raleway Bold", sans-serif;
-					font-size: 15px;
-					font-weight: bold;
-					color: #ffffff;
-					margin-bottom: 25px;
-				}
+				width: 100%;
 			}
-			.jca-footer-details-container
+
+			.inner-content-title
 			{
-				.icon-holder
-				{
-					display: inline-block;
-					vertical-align: top;
-					width: 21px;
-					text-align: right;
-					.jca-footer-icon
-					{
-						
-					}
-				}
-				.footer-details
-				{
-					font-family: "Raleway Regular", sans-serif;
-					font-size: 12px;
-					margin: 0px;
-					color: #ffffff;
-					display: inline-block;
-					width: 85%;
-					text-align: justify;
-					margin-left: 14px;
-					margin-bottom: 10px;
-				}
-				.footer-detail-list
-				{
-					font-family: "Raleway Regular", sans-serif;
-					font-size: 12px;
-					margin: 0px;
-					color: #ffffff;
-					margin-bottom: 5px;
-				}
-			}
-		}
-		.jca-footer-title-container
-		{
-			.footer-title
-			{
-				font-family: "Raleway Bold", sans-serif;
-				font-size: 15px;
-				font-weight: bold;
-				color: #ffffff;
-				margin-bottom: 25px;
-			}
-		}
-		.jca-footer-details-container
-		{
-			.icon-holder
-			{
-				display: inline-block;
-				vertical-align: top;
-				width: 21px;
-				text-align: right;
-				.jca-footer-icon
-				{
-						
-				}
-			}
-			.footer-details
-			{
-				font-family: "Raleway Regular", sans-serif;
-				font-size: 12px;
-				margin: 0px;
-				color: #ffffff;
-				display: inline-block;
-				width: 85%;
-				text-align: justify;
-				margin-left: 14px;
+				color: #fff;
+				font-size: 18px;
+				padding: 10px 0px;
+				border-bottom: 1px solid #6e7071;
 				margin-bottom: 10px;
 			}
-			.footer-detail-list
+			p 
 			{
-				font-family: "Raleway Regular", sans-serif;
-				font-size: 12px;
-				margin: 0px;
-				color: #ffffff;
-				margin-bottom: 5px;
+				padding: 5px 0px;
+				margin: 0;
+				color: #aeaeaf !important;
 			}
 		}
 	}

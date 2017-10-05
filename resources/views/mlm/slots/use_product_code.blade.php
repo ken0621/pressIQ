@@ -1,4 +1,4 @@
-<form class="global-submit" method="POST" action="/mlm/slot/use_product_code/validate">
+<form class="global-submit" method="POST" action="{{$action}}">
     <input type="hidden" value="{{csrf_token()}}" name="_token">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -30,7 +30,7 @@
     {
         if(data.status == 'success')
         {
-            action_load_link_to_modal('/mlm/slot/use_product_code/to_slot?mlm_pin='+data.mlm_pin+'&mlm_activation='+data.mlm_activation, 'md');
+            action_load_link_to_modal('{{$confirm_action}}?mlm_pin='+data.mlm_pin+'&mlm_activation='+data.mlm_activation, 'md');
         }
     }
 </script>

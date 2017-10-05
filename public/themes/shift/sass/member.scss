@@ -67,7 +67,7 @@
 
 		.sidebar
 		{
-			background-color: #B17D2A;
+			background-color: #191919;
 			width: 300px;
 			position: absolute;
 			left: 0;
@@ -152,7 +152,7 @@
 					{
 						display: block;
 						position: relative;
-						background-color: #B17D2A;
+						background-color: #191919;
 						a
 						{
 							display: block;
@@ -201,7 +201,7 @@
 							{
 								.nav-holder
 								{
-									background-color: rgba(0,0,0,0.1);
+									background-color: rgba(0,0,0,0.2);
 									color: #fff;
 									text-decoration: none;
 									border-color: #1F262C;
@@ -232,7 +232,7 @@
 							{
 								> .nav-holder
 								{
-									background-color: rgba(0,0,0,0.1);
+									background-color: rgba(0,0,0,0.2);
 									color: #fff;
 									text-decoration: none;
 									border-color: #1F262C;
@@ -272,7 +272,7 @@
 								{
 									.nav-holder
 									{
-										background-color: #B17D2A;
+										background-color: #191919;
 										span, &:before
 										{
 											opacity: 0.5;
@@ -301,7 +301,7 @@
 			&.small
 			{
 				width: 80px;
-				background-color: #B17D2A;
+				background-color: #191919;
 				.shadow
 				{
 					display: none;
@@ -366,7 +366,7 @@
 								{
 									.nav-holder
 									{
-										background-color: rgba(0,0,0,0.1);
+										background-color: rgba(0,0,0,0.2);
 										.icon
 										{
 											img

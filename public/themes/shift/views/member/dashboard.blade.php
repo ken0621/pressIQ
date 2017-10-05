@@ -39,9 +39,9 @@
 	                        <div class="text-header2">Opportunity awaits you. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.<br>Aenean commodo ligula eget dolor.</div>
 	                    </div>
 	                    <div class="btn-container">
-	                        <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">BUY A KIT</button></a>
+	                        <!-- <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">BUY A KIT</button></a> -->
 	                        <!-- <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br> -->
-	                        <span class="or">OR</span>
+	                        <!-- <span class="or">OR</span> -->
 	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">ENTER A CODE</button></a>
 	                    </div>
 	                </div>

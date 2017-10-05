@@ -228,7 +228,6 @@ class Payroll_BioImportController extends Member
 	public function modal_biometrics()
 	{
 		$data['_company'] = Payroll::company_heirarchy(Self::shop_id());
-
 		return view('member.payroll.modal.modal_biometrics', $data);
 	}
 

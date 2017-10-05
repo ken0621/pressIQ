@@ -1,4 +1,5 @@
 <?php
+
 Route::group(array('prefix' => '/member/payroll'), function()
 {
 
@@ -601,4 +602,19 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* PAYROLL 13TH MONTH PAY REPORT */
 	Route::get('/report_13th_month_pay','Member\PayrollController@report_13th_month_pay');
 	Route::get('/report_13th_month_pay/excel_export','Member\PayrollController@report_13th_month_pay_excel_export');
+
+	/*START payroll biometrics*/
+	//system controllers
+	Route::any('/payroll_biometric','Member\PayrollBiometricSystemController@index');
+	Route::any('/payroll_biometric/biometric_record_table','Member\PayrollBiometricSystemController@biometric_record_table');
+	Route::any('/payroll_biometric/biometric_import_record','Member\PayrollBiometricSystemController@biometric_import_record');
+	
+	Route::any('/payroll_biometric/modal_import_biometric','Member\PayrollBiometricSystemController@modal_import_biometric');
+	Route::any('/payroll_biometric/biometric_import_record','Member\PayrollBiometricSystemController@biometric_import_record');
+
+	
+	//software controllers
+	Route::post('/biometrics/save_data','Member\PayrollBiometricsController@save_data');
+	Route::any('/biometrics/sample','Member\PayrollBiometricsController@sample');
+	/*END payroll biometrics*/
 });	 

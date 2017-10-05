@@ -144,8 +144,8 @@ class PayrollController extends Member
      /* PAYROLL TIME KEEPING START */
      public function time_keeping()
      {
-          $data["_company"] = Tbl_payroll_company::where("shop_id", Self::shop_id())->where('payroll_parent_company_id', 0)->get();
-          $data['_period'] = Tbl_payroll_period::sel(Self::shop_id())
+          $data["_company"]   = Tbl_payroll_company::where("shop_id", Self::shop_id())->where('payroll_parent_company_id', 0)->get();
+          $data['_period']    = Tbl_payroll_period::sel(Self::shop_id())
                                                   ->where('payroll_parent_company_id', 0)
                                                   ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
                                                   ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')

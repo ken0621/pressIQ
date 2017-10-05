@@ -1,8 +1,8 @@
-					<div >
-            			<a href="/member/payroll/reports/payroll_register_report_period/export_excel_filter/{{$period_company_id_filter}}/{{$payroll_employee_company_id_filter}}"><button style="margin-bottom: 20px;" type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" style="font-size:25px;color:white"></i> &nbsp;EXPORT TO EXCEL</button></a>
+	                <div >
+            			<a href="/member/payroll/reports/payroll_register_report_period/export_excel/{{$period_info->payroll_period_company_id}}"><button style="margin-bottom: 20px;" type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" style="font-size:25px;color:white"></i> &nbsp;EXPORT TO EXCEL</button></a>
             		</div>
             		<div style="overflow-x: scroll;" class="col-md-12">
- 					<table class="table table-bordered table-striped table-condensed" style="table-layout: fixed;">
+                    <table class="table table-bordered table-striped table-condensed" style="table-layout: fixed;">
 					    <thead style="text-transform: uppercase">
 					        <tr>
 					            <th valign="center" rowspan="2" class="text-center" style="width: 200px">NAME</th>
@@ -17,8 +17,9 @@
 					            <th valign="center" rowspan="2" class="text-center" style="width: 120px">LATE</th>
 					            <th valign="center" rowspan="2" class="text-center" style="width: 120px">UNDERTIME</th>
 					            <th valign="center" rowspan="2" class="text-center" style="width: 120px">ABSENT</th>
-					            <th colspan="2" class="text-center" style="width: 200px">ALLOWANCES</th>
-					            <th colspan="6" class="text-center" style="width: 600px">DEDUCTIONS</th>
+					            <th valign="center" rowspan="2" class="text-center" style="width: 120px">ALLOWANCES</th>
+					            <th colspan="5" class="text-center" style="width: 600px">DEDUCTIONS</th>
+					            <th colspan="9" class="text-center" style="width: 900px">ADJUSTMENT</th>
 					            <th colspan="3" class="text-center" style="width: 300px">SSS Contribution</th>
 					            <th colspan="2" class="text-center" style="width: 200px">PAG-IBIG Contribution</th>
 					            <th colspan="2" class="text-center" style="width: 200px">PHILHEALTH Contribution</th>
@@ -29,15 +30,26 @@
 					        </tr>
 					        
 					        <tr>
-	                            <th class="text-center" style="width: 100px">Allowances</th>
-	                            <th class="text-center" style="width: 100px">Adjustment Allowances</th>
+	                          <!-- <th class="text-center" style="width: 100px">Allowances</th>
+	                            <th class="text-center" style="width: 100px">Adjustment Allowances</th> -->
 
 	                            <th class="text-center" style="width: 100px">SSS LOAN</th>
 	                            <th class="text-center" style="width: 100px">HDMF LOAN</th>
 	                            <th class="text-center" style="width: 100px">CASH BOND</th>
 	                            <th class="text-center" style="width: 100px">CASH ADVANCE</th>
 	                            <th class="text-center" style="width: 100px">OTHER DEDUCTIONS</th>
-	                            <th class="text-center" style="width: 100px">ADJUSTMENT DEDUCTION</th>
+	                           <!--  <th class="text-center" style="width: 100px">ADJUSTMENT DEDUCTION</th> -->
+
+	                            <th class="text-center" style="width: 100px">ALLOWANCE</th>
+	                            <th class="text-center" style="width: 100px">BONUS</th>
+	                            <th class="text-center" style="width: 100px">COMMISSION</th>
+	                            <th class="text-center" style="width: 100px">INCENTIVES</th>
+	                            <th class="text-center" style="width: 100px">CASH ADVANCE</th>
+	                            <th class="text-center" style="width: 100px">CASH BOND</th>
+	                            <th class="text-center" style="width: 100px">ADDITIONS</th>
+	                            <th class="text-center" style="width: 100px">DEDUCTIONS</th>
+	                            <th class="text-center" style="width: 100px">OTHERS</th>
+
 
 	                            <th class="text-center" style="width: 100px">SSS EE</th>
 	                            <th class="text-center" style="width: 100px">SSS ER</th>
@@ -66,13 +78,24 @@
 					    	<td class="text-center" >{{ number_format($employee->undertime,2) }} <br> ({{$employee->time_undertime}} hours)</td>
 					    	<td class="text-center" >{{ number_format($employee->absent,2) }} <br> ({{$employee->time_absent}} times)</td>
 					    	<td class="text-center" >{{ number_format($employee->allowance,2) }}</td>
-					    	<td class="text-center" >{{ number_format($employee->adjustment_allowance,2) }}</td>
+					    	<!-- <td class="text-center" >{{ number_format($employee->adjustment_allowance,2) }}</td> -->
 					    	<td class="text-center" >{{ number_format($employee->sss_loan,2) }}</td>
 					    	<td class="text-center" >{{ number_format($employee->hdmf_loan,2) }}</td>
 					    	<td class="text-center" >{{ number_format($employee->cash_bond,2) }}</td>
 					    	<td class="text-center" >{{ number_format($employee->cash_advance,2) }}</td>
 					    	<td class="text-center" >{{ number_format($employee->other_loans,2) }}</td>
-					    	<td class="text-center" >{{ number_format($employee->adjustment_deduction,2) }}</td>
+					    	<!-- <td class="text-center" >{{ number_format($employee->adjustment_deduction,2) }}</td> -->
+
+							<td class="text-center" >{{ number_format($employee->adjsutment_allowance,2) }}</td>
+					    	<td class="text-center" >{{ number_format($employee->adjsutment_bonus,2) }}</td>
+					    	<td class="text-center" >{{ number_format($employee->adjsutment_commission,2) }}</td>
+					    	<td class="text-center" >{{ number_format($employee->adjsutment_incentives,2) }}</td>
+					    	<td class="text-center" >{{ number_format($employee->adjsutment_cash_advance,2) }}</td>
+					    	<td class="text-center" >{{ number_format($employee->adjsutment_cash_bond,2) }}</td>
+					    	<td class="text-center" >{{ number_format($employee->adjsutment_additions,2) }}</td>
+					    	<td class="text-center" >{{ number_format($employee->adjsutment_deductions,2) }}</td>
+					    	<td class="text-center" >{{ number_format($employee->adjsutment_others,2) }}</td>
+
 					    	<td class="text-center" >{{ number_format($employee->sss_ee,2) }}</td>
 					    	<td class="text-center" >{{ number_format($employee->sss_er,2) }}</td>
 					    	<td class="text-center" >{{ number_format($employee->sss_ec,2) }}</td>
@@ -100,13 +123,25 @@
 					    	<td class="text-center" ><b>{{ number_format($undertime_total,2) }}</b></td>
 					    	<td class="text-center" ><b>{{ number_format($absent_total,2) }}</b></td>
 					    	<td class="text-center" ><b>{{ number_format($allowance_total,2) }}</b></td>
-					    	<td class="text-center" ><b>{{ number_format($adjustment_allowance_total,2) }}</b></td>
+					    	<!-- <td class="text-center" ><b>{{ number_format($adjustment_allowance_total,2) }}</b></td> -->
+					    	
 					    	<td class="text-center" ><b>{{ number_format($sss_loan_total,2) }}</b></td>
 					    	<td class="text-center" ><b>{{ number_format($hdmf_loan_total,2) }}</b></td>
 					    	<td class="text-center" ><b>{{ number_format($cash_bond_total,2) }}</b></td>
 					    	<td class="text-center" ><b>{{ number_format($cash_advance_total,2) }}</b></td>
 					    	<td class="text-center" ><b>{{ number_format($other_loans_total,2) }}</b></td>
-					    	<td class="text-center" ><b>{{ number_format($adjustment_deduction_total,2) }}</b></td>
+					    	<!-- <td class="text-center" ><b>{{ number_format($adjustment_deduction_total,2) }}</b></td> -->
+
+							<td class="text-center" ><b>{{ number_format($total_adjsutment_allowance,2) }}</b></td>
+					    	<td class="text-center" ><b>{{ number_format($total_adjsutment_bonus,2) }}</b></td>
+					    	<td class="text-center" ><b>{{ number_format($total_adjsutment_commission,2) }}</b></td>
+					    	<td class="text-center" ><b>{{ number_format($total_adjsutment_incentives,2) }}</b></td>
+					    	<td class="text-center" ><b>{{ number_format($total_adjsutment_cash_advance,2) }}</b></td>
+					    	<td class="text-center" ><b>{{ number_format($total_adjsutment_cash_bond,2) }}</b></td>
+					    	<td class="text-center" ><b>{{ number_format($total_adjsutment_additions,2) }}</b></td>
+					    	<td class="text-center" ><b>{{ number_format($total_adjsutment_deductions,2) }}</b></td>
+					    	<td class="text-center" ><b>{{ number_format($total_adjsutment_others,2) }}</b></td>
+
 					    	<td class="text-center" ><b>{{ number_format($sss_ee_total,2) }}</b></td>
 					    	<td class="text-center" ><b>{{ number_format($sss_er_total,2) }}</b></td>
 					    	<td class="text-center" ><b>{{ number_format($sss_ec_total,2) }}</b></td>
@@ -124,4 +159,3 @@
 					    </tbody>
 					</table>
 				</div>
-               

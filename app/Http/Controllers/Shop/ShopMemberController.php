@@ -375,13 +375,13 @@ class ShopMemberController extends Shop
     public function postForgotPasswordSubmit()
     {
         $shop_id = $this->shop_info->shop_id;
-        dd($shop_id);
         $validate = Customer::check_email($shop_id, Request2::input('email'));
         
         $return_data = null;
         if($validate)
         {
             $content_key = "front_forgot_password";
+            dd(EmailContent::checkIfexisting($content_key, $shop_id));
             if(EmailContent::checkIfexisting($content_key, $shop_id) != 0)
             {
                 $email_content["subject"] = EmailContent::getSubject($content_key, $shop_id);

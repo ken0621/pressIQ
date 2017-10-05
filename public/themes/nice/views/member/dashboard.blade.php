@@ -124,9 +124,7 @@
 							</div>
 						@endforeach
 					</div>
-
 				</div>
-
 				<div class="title">Reward Points</div>
 				<div class="sub-container">
 					@if(count($_point_plan) > 0)
@@ -141,6 +139,12 @@
 					@else
 						<div class="text-center" style="padding: 20px">You don't have any points yet.</div>
 					@endif
+				</div>
+				<div class="title">Enter Product Code</div>
+				<div class="sub-container">
+					<div class="chart-legend text-center">
+						<button class="btn btn-default" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -415,7 +419,6 @@ $(document).ready(function()
 input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0 30px white inset;
 }
-
 /* PLACEMENT VERIFIER */
 .popup-verify-placement {
   background-color: #EEEEEE;
@@ -496,5 +499,6 @@ input:-webkit-autofill {
           color: #fff;
           background-color: #693d28;
           opacity: 1.0; }
+
 </style>
 @endsection

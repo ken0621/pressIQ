@@ -11,6 +11,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet"> 
         <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700" rel="stylesheet">    
@@ -196,6 +197,7 @@
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/scrollspy.js"></script>
     <script src="/themes/{{ $shop_theme }}/assets/easing/jquery.easing.min.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/wow/js/wow.min.js"></script>
+        <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
 
     <script>
           new WOW().init();

@@ -1,4 +1,4 @@
-<form class="global-submit" method="POST" action="/mlm/slot/use_product_code/confirmation">
+<form class="global-submit" method="POST" action="{{$action}}">
     <input type="hidden" value="{{csrf_token()}}" name="_token">
     <input type="hidden" value="{{$mlm_pin}}" name="mlm_pin">
     <input type="hidden" value="{{$mlm_activation}}" name="mlm_activation">
@@ -30,7 +30,7 @@
     {
         if(data.status == 'success')
         {
-            action_load_link_to_modal('/mlm/slot/use_product_code/confirmation/submit?mlm_pin='+data.mlm_pin+'&mlm_activation='+data.mlm_activation+'&slot_no='+data.slot_no, 'md');
+            action_load_link_to_modal('{{$confirm_action}}?mlm_pin='+data.mlm_pin+'&mlm_activation='+data.mlm_activation+'&slot_no='+data.slot_no, 'md');
         }
     }
 </script>

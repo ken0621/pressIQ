@@ -143,13 +143,21 @@ button:hover{
 				margin-top: 15px;
 				a 
 				{
+					@include transition(0.2s);
 					font-size: 13px !important;
 				}
 			}
+
 			.image-logo-holder
 			{
 				padding: 5px 0px;
-				width: 70%;
+
+				img
+				{
+					@include transition(0.2s);
+					width: 70%;
+				}
+				
 			}
 		}
 		&.subheader-container

@@ -45,10 +45,11 @@ $text-dark: #272c2f;
 
 			.text-header1
 			{
-				font-weight: $bold;
+				font-weight: $semi-bold;
 				font-size: 21px;
 				color: $text-dark;
 				word-break: break-all;
+				text-align: center;
 			}
 
 			.text-header2
@@ -90,12 +91,19 @@ $text-dark: #272c2f;
 
 			.btn-enter-a-code
 			{
+				@include transition(0.2s);
 				color: #76B83F;
 				background-color: inherit;
 				padding: 12px 30px 12px 30px;
 				border: 2px solid #76B83F;
 				border-radius: 2px;
-				//margin-bottom: 65px;
+				margin-top: 35px;
+
+				&:hover
+				{
+					background-color: #76B83F;
+					color: #fff;
+				}
 			}
 		}
 

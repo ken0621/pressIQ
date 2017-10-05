@@ -5,11 +5,17 @@ $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
 
+@mixin transition($transition)
+{
+	  -webkit-transition: all $transition ease-in-out;
+	  -moz-transition: all $transition ease-in-out;
+	  -o-transition: all $transition ease-in-out;
+	  transition: all $transition ease-in-out;
+}
 
 /* Dashboard Top */
 .dashboard-top
 {
-
 	.img-container
 	{
 		img
@@ -42,6 +48,7 @@ $text-dark: #272c2f;
 				font-size: 21px;
 				color: $text-dark;
 				word-break: break-all;
+				text-align: center;
 			}
 
 			.text-header2
@@ -83,12 +90,19 @@ $text-dark: #272c2f;
 
 			.btn-enter-a-code
 			{
+				@include transition(0.2s);
 				color: #EDAC0E;
 				background-color: inherit;
 				padding: 12px 30px 12px 30px;
 				border: 2px solid #EDAC0E;
 				border-radius: 2px;
-				//margin-bottom: 65px;
+				margin-top: 35px;
+
+				&:hover
+				{
+					background-color: #EDAC0E;
+					color: #fff;
+				}
 			}
 		}
 

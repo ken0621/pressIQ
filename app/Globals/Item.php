@@ -1514,7 +1514,7 @@ class Item
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
 
-        $query = Tbl_warehouse_inventory_record_log::where('record_inventory_status',0)->slotinfo()->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->groupBy('record_log_id')->orderBy('record_log_id');
+        $query = Tbl_warehouse_inventory_record_log::slotinfo()->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->groupBy('record_log_id')->orderBy('record_log_id');
         
         if($search_keyword)
         {
@@ -1526,7 +1526,7 @@ class Item
         }
         else if($status == 'used')
         {
-            $query->where('record_inventory_status', 1);
+            $query->where('item_in_use', 'used');
         }
         else if($status == 'sold')
         {
@@ -1534,8 +1534,9 @@ class Item
         }
         else
         {
-            $query->where('record_inventory_status',0)->where('record_consume_ref_name',null)->orWhere('record_consume_ref_name','');
+            $query->where('record_inventory_status',0)->where('record_consume_ref_name',null)->where('item_in_use','unused');
         }  
+
         if($paginate != 0)
         {
             $data = $query->paginate($paginate);
@@ -1544,7 +1545,6 @@ class Item
         {
             $data = $query->get();            
         }
-
         return $data;
     }
     public static function get_first_assembled_kit($shop_id)

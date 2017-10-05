@@ -397,16 +397,9 @@ class PayrollReportController extends Member
 	{
 		$data["page"] = "Loan Summary";
 		$data["_loan_data"] = PayrollDeductionController::get_deduction($this->shop_id());
-		$data["_company"] = Tbl_payroll_company::where("shop_id", Self::shop_id())->where('payroll_parent_company_id', 0)->get();
-/*        $data['_period'] = Tbl_payroll_period::sel(Self::shop_id())
-                                                  ->where('payroll_parent_company_id', 0)
-                                                  ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
-                                                  ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
-                                                  ->orderBy('tbl_payroll_period.payroll_period_start','asc')
-                                                  ->get();
-          $data['access'] = Utilities::checkAccess('payroll-timekeeping','salary_rates');*/
 
-        //return view('member.payroll.payroll_timekeeping', $data);
+		$data["_company"] = Tbl_payroll_company::where("shop_id", Self::shop_id())->where('payroll_parent_company_id', 0)->get();
+
 		return view("member.payrollreport.loan_summary", $data);
 	}
 

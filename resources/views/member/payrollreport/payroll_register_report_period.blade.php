@@ -16,7 +16,7 @@
 </div>
 
 
-<div class=" panel panel-default panel-block panel-title-block" style="overflow-x: scroll; ">
+<div class=" panel panel-default panel-block panel-title-block" >
     <div class="panel-body form-horizontal">
     	<div class="col-md-2 padding-lr-1">
             <small>Filter by Company</small>
@@ -35,6 +35,7 @@
             		<div >
             			<a href="/member/payroll/reports/payroll_register_report_period/export_excel/{{$period_info->payroll_period_company_id}}"><button style="margin-bottom: 20px;" type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" style="font-size:25px;color:white"></i> &nbsp;EXPORT TO EXCEL</button></a>
             		</div>
+            		<div style="overflow-x: scroll;" class="col-md-12">
                     <table class="table table-bordered table-striped table-condensed" style="table-layout: fixed;">
 					    <thead style="text-transform: uppercase">
 					        <tr>
@@ -156,6 +157,7 @@
 					       
 					    </tbody>
 					</table>
+				</div>
 				</div>
                 </div>
             </div>

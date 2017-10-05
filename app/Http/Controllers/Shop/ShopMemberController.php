@@ -482,7 +482,6 @@ class ShopMemberController extends Shop
         {           
             /* Birthday Fix */
             $birthday = date("Y-m-d", strtotime($request->b_month . "/" . $request->b_day . "/" . $request->b_year));
-            
             /* Customer Data */
             $insert_customer["first_name"]  = $request->first_name;
             $insert_customer["middle_name"] = $request->middle_name;
@@ -1216,7 +1215,7 @@ class ShopMemberController extends Shop
         else
         {
             $return['status'] = 'error';
-            $return['status'] = $val;
+            $return['status_message'] = $val;
         }
 
         return json_encode($return);

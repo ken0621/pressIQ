@@ -1094,8 +1094,18 @@ class MLM2
 	}	
 	public static function item_points($shop_id,$item_id,$slot_id = null)
 	{
-        $item          = Tbl_item::where("item_id",$item_id)->where("shop_id",$shop_id)->first();  
-        $item_points   = Tbl_mlm_item_points::where("item_id",$item_id)->first();     
+        $item          = Tbl_item::where("item_id",$item_id)->where("shop_id",$shop_id)->first();
+        $membership_id = null;
+        if($slot_id)
+        {
+        	$membership_id = Tbl_mlm_slot::where("shop_id",$shop_id)->where('slot_id',$slot_id)->value('slot_membership');
+        }
+        $item_points   = Tbl_mlm_item_points::joinItem()->where("tbl_item.item_id",$item_id)->where('shop_id',$shop_id)->first();
+        if($membership_id)
+        {
+        	$item_points   = Tbl_mlm_item_points::joinItem()->where("tbl_item.item_id",$item_id)->where('shop_id',$shop_id)->where('tbl_mlm_item_points.membership_id',$membership_id)->first();
+
+        }
         if($item)
         {
 	        $data["UNILEVEL"]					= $item_points->UNILEVEL;

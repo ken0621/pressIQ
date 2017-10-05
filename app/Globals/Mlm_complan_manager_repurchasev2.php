@@ -597,7 +597,7 @@ class Mlm_complan_manager_repurchasev2
     public static function repurchase_cashback($slot_info,$points,$rank_points = 0)
     {
         $membership_points_repurchase_cashback = $points;
-
+        
         if($membership_points_repurchase_cashback != 0)
         {
             $log_array['earning'] = $membership_points_repurchase_cashback;

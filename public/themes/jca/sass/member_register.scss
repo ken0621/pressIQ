@@ -369,10 +369,56 @@ body
 		{
 			color: $text-dark;
 			font-size: 13px;
-			font-weight: 600;
-			white-space: pre-wrap;
+			//white-space: pre-wrap;
 			height: 420px;
 			overflow-y: auto;
+
+			.header
+			{
+				font-size: 15px;
+				font-weight: $semi-bold;
+				padding-bottom: 10px;
+			}
+			
+			.introduction
+			{
+				.title
+				{
+					font-weight: $semi-bold;
+					font-size: 13px;
+					padding-bottom: 10px;
+				}
+
+				.para-container
+				{
+					font-weight: $regular;
+				}
+			}
+
+			.personal-info
+			{
+				@extend .introduction;
+			}
+
+			.share-protect
+			{
+				@extend .introduction;
+			}
+
+			.contact-us
+			{
+				@extend .introduction;
+			}
+
+			.disclaimer
+			{
+				@extend .introduction;
+			}
+
+			.dealers-policy
+			{
+				@extend .introduction;
+			}
 		}
 	}
 	.modal-footer

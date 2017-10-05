@@ -9,6 +9,7 @@ use App\Models\Tbl_customer_address;
 use App\Models\Tbl_user;
 use App\Models\Tbl_customer_other_info;
 use App\Globals\Tablet_global;
+use App\Globals\Mlm_plan;
 use DB;
 use Carbon\Carbon;
 use Request;
@@ -18,6 +19,9 @@ class Customer
 	public static function register($shop_id, $info)
 	{
 		$info["shop_id"] = $shop_id;
+		$plan_settings = Mlm_plan::get_settings($shop_id);
+		$info["downline_rule"] = $plan_settings->plan_settings_default_downline_rule;
+		
 		Tbl_customer::insert($info);
 		return true;	
 	}

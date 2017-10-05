@@ -123,7 +123,7 @@
 								</div>
 								<div class="form-group clearfix" style="margin-top: 15px;">
 									<div class="checkbox agreement-checkbox">
-									  <label><input type="checkbox" value="" required> I agree to the Brown <span>Terms of Use and Privacy Policy</span></label>
+									  <label><input type="checkbox" value="" required> I agree to the JCA <span>Terms of Use and Privacy Policy</span></label>
 									</div>
 								</div>
 								<div class="form-group">

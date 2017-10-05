@@ -256,57 +256,57 @@ class Payment
         $shopCustomization->set();
 
         /* Set Webhook */
-        $webhook = Webhook::retrieve();
+  //       $webhook = Webhook::retrieve();
 
-		$webhook_success = "/payment/paymaya/webhook/success";
-		$webhook_failure = "/payment/paymaya/webhook/failure";
-		$webhook_cancel = "/payment/paymaya/webhook/cancel";
+		// $webhook_success = "/payment/paymaya/webhook/success";
+		// $webhook_failure = "/payment/paymaya/webhook/failure";
+		// $webhook_cancel = "/payment/paymaya/webhook/cancel";
 
-        if (isset($webhook) && $webhook && count($webhook) > 0) 
-        {
-            foreach ($webhook as $value) 
-            {
-                if ($value->name == "CHECKOUT_SUCCESS") 
-                {
-                    $updateWebhook = new Webhook();
-                    $updateWebhook->name = Webhook::CHECKOUT_SUCCESS;
-                    $updateWebhook->id = $value->id;
-                    $updateWebhook->callbackUrl = URL::to($webhook_success);
-                    $updateWebhook->delete();
-                }
-                elseif($value->name == "CHECKOUT_FAILURE")
-                {
-                    $updateWebhook = new Webhook();
-                    $updateWebhook->name = Webhook::CHECKOUT_FAILURE;
-                    $updateWebhook->id = $value->id;
-                    $updateWebhook->callbackUrl = URL::to($webhook_failure);
-                    $updateWebhook->delete();
-                }
-                elseif($value->name == "CHECKOUT_DROPOUT")
-                {
-                    $updateWebhook = new Webhook();
-                    $updateWebhook->name = Webhook::CHECKOUT_DROPOUT;
-                    $updateWebhook->id = $value->id;
-                    $updateWebhook->callbackUrl = URL::to($webhook_cancel);
-                    $updateWebhook->delete();
-                }
-            }
-        }
+  //       if (isset($webhook) && $webhook && count($webhook) > 0) 
+  //       {
+  //           foreach ($webhook as $value) 
+  //           {
+  //               if ($value->name == "CHECKOUT_SUCCESS") 
+  //               {
+  //                   $updateWebhook = new Webhook();
+  //                   $updateWebhook->name = Webhook::CHECKOUT_SUCCESS;
+  //                   $updateWebhook->id = $value->id;
+  //                   $updateWebhook->callbackUrl = URL::to($webhook_success);
+  //                   $updateWebhook->delete();
+  //               }
+  //               elseif($value->name == "CHECKOUT_FAILURE")
+  //               {
+  //                   $updateWebhook = new Webhook();
+  //                   $updateWebhook->name = Webhook::CHECKOUT_FAILURE;
+  //                   $updateWebhook->id = $value->id;
+  //                   $updateWebhook->callbackUrl = URL::to($webhook_failure);
+  //                   $updateWebhook->delete();
+  //               }
+  //               elseif($value->name == "CHECKOUT_DROPOUT")
+  //               {
+  //                   $updateWebhook = new Webhook();
+  //                   $updateWebhook->name = Webhook::CHECKOUT_DROPOUT;
+  //                   $updateWebhook->id = $value->id;
+  //                   $updateWebhook->callbackUrl = URL::to($webhook_cancel);
+  //                   $updateWebhook->delete();
+  //               }
+  //           }
+  //       }
         
-        $successWebhook = new Webhook();
-        $successWebhook->name = Webhook::CHECKOUT_SUCCESS;
-        $successWebhook->callbackUrl = URL::to($webhook_success);
-        $successWebhook->register();
+  //       $successWebhook = new Webhook();
+  //       $successWebhook->name = Webhook::CHECKOUT_SUCCESS;
+  //       $successWebhook->callbackUrl = URL::to($webhook_success);
+  //       $successWebhook->register();
         
-        $failureWebhook = new Webhook();
-        $failureWebhook->name = Webhook::CHECKOUT_FAILURE;
-        $failureWebhook->callbackUrl = URL::to($webhook_failure);
-        $failureWebhook->register();
+  //       $failureWebhook = new Webhook();
+  //       $failureWebhook->name = Webhook::CHECKOUT_FAILURE;
+  //       $failureWebhook->callbackUrl = URL::to($webhook_failure);
+  //       $failureWebhook->register();
         
-        $cancelWebhook = new Webhook();
-        $cancelWebhook->name = Webhook::CHECKOUT_DROPOUT;
-        $cancelWebhook->callbackUrl = URL::to($webhook_cancel);
-        $cancelWebhook->register();
+  //       $cancelWebhook = new Webhook();
+  //       $cancelWebhook->name = Webhook::CHECKOUT_DROPOUT;
+  //       $cancelWebhook->callbackUrl = URL::to($webhook_cancel);
+  //       $cancelWebhook->register();
         
         /* Set Variable */
         $itemCheckout = new Checkout();

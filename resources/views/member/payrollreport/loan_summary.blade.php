@@ -25,6 +25,15 @@
                 <option value="Others">Others...</option>
             </select>
         </div>
+
+         <div>
+            <select class="select-company-name pull-right form-control" style="width: 300px">    
+                <option value="0">All Company</option>
+                @foreach($_company as $company)
+                    <option value="{{ $company->payroll_company_id }}">{{ $company->payroll_company_name }}</option>
+                @endforeach
+            </select>
+        </div>
         <div class="form-group tab-content panel-body employee-container">
             <div id="all" class="tab-pane fade in active">
                 <div class="form-group order-tags"></div>

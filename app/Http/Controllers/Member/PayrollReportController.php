@@ -9,6 +9,7 @@ use Excel;
 use Carbon\Carbon;
 
 use App\Http\Controllers\Controller;
+use App\Globals\Payroll;
 use PDF2;
 use App\Globals\Payroll2;
 use DateTime;
@@ -397,8 +398,7 @@ class PayrollReportController extends Member
 	{
 		$data["page"] = "Loan Summary";
 		$data["_loan_data"] = PayrollDeductionController::get_deduction($this->shop_id());
-
-		$data["_company"] = Tbl_payroll_company::where("shop_id", Self::shop_id())->where('payroll_parent_company_id', 0)->get();
+		$data["_company"] = Payroll::company_heirarchy(Self::shop_id());//Tbl_payroll_company::where("shop_id", Self::shop_id())->where('payroll_parent_company_id', 0)->get();
 
 		return view("member.payrollreport.loan_summary", $data);
 	}

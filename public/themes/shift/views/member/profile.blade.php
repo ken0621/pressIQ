@@ -119,7 +119,7 @@
 							   				<div class="date-holder">
 												<select name="b_month" class="form-control">
 													@for($ctr = 1; $ctr <= 12; $ctr++)
-													<option {{ date("mm", strtotime($profile->birthday)) == $ctr ? 'selected' : '' }} value="{{ $ctr }}">{{ date("F", strtotime($ctr . "/01/17")) }}</option>
+													<option {{ date("m", strtotime($profile->birthday)) == $ctr ? 'selected' : '' }} value="{{ $ctr }}">{{ date("F", strtotime($ctr . "/01/17")) }}</option>
 													@endfor
 												</select>
 											</div>

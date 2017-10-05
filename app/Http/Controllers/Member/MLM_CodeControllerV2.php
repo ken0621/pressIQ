@@ -175,6 +175,10 @@ class MLM_CodeControllerV2 extends Member
     {
         $data['_item_product_code'] = Item::get_all_item_record_log($request->search_keyword, $request->status, 10);
 
+        foreach ($data['_item_product_code'] as $key => $value) 
+        {
+        }
+
         return view("member.mlm_code_v2.product_code_table",$data);
     }
     public function print_codes(Request $request)

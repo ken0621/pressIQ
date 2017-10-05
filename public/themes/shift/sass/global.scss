@@ -1,3 +1,11 @@
+@mixin transition($transition)
+{
+	  -webkit-transition: all $transition ease-in-out;
+	  -moz-transition: all $transition ease-in-out;
+	  -o-transition: all $transition ease-in-out;
+	  transition: all $transition ease-in-out;
+}
+
 body
 {
 	font-family: 'Raleway', sans-serif;
@@ -123,14 +131,21 @@ button:hover{
 
 			.image-logo-holder
 			{
-				width: 60%;
 				margin-top: 8px;
+				
+				img
+				{
+					@include transition(0.2s);
+					width: 60%;	
+				}
 			}
+
 			.navirino
 			{
 				margin-top: 10px;
 				a 
 				{
+					@include transition(0.2s);
 					font-size: 13px;
 				}
 			}

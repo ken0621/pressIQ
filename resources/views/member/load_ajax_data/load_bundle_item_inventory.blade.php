@@ -19,15 +19,16 @@
                         <label class="count-select">{{$inventory["item_sku"]}}</label>
                     </td>
                     <td class="text-center">
-                        <label class="count-select">{{$inventory["orig_stock_um"]}}</label>
+                        <label class="count-select">{{$inventory["item_barcode"]}}</label>
                     </td>
                     <td class="text-center">
-                        <label >{{$inventory["less_stock_um"]}}</label>
+                        <label >{{$inventory["item_actual_stock_um"]}}</label>
                     </td>
                     @if($pis != 0)
-                    <td class="text-center"><a class="popup" link="/warehouse/sir/{{$warehouse->warehouse_id}}/$inventory['item_sku']" size="md">{{$inventory["sir_stock"]}}</a></td>
+                    <td class="text-center"><a class="popup" link="/warehouse/sir/{{$warehouse->warehouse_id}}/{{$inventory['item_id']}}" size="md">{{$inventory["sir_stock"]}}</a></td>
                     @endif
                     <td class="text-center">
+                        <label class="count-select">{{$inventory["less_stock_um"]}}</label>
                     </td>
                 </tr>
                 @endforeach

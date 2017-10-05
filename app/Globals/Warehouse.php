@@ -34,10 +34,13 @@ class Warehouse
         $bundle_data = [];
         foreach($bundle as $key => $value) 
         {
+            //onhand = current
             $bundle_data[$key]["bundle_id"] = $value->item_id;
             $bundle_data[$key]["bundle_item_name"] = $value->item_name;
             $bundle_data[$key]["bundle_item_bardcode"] = $value->item_barcode;
             $bundle_data[$key]["bundle_item_um"] = $value->item_measurement_id;
+            $bundle_data[$key]["bundle_actual_stocks"] = null;
+            $bundle_data[$key]["bundle_actual_stocks_um"] = null;
             $bundle_data[$key]["bundle_current_stocks"] = null;
             $bundle_data[$key]["bundle_current_stocks_um"] = null;
 
@@ -80,6 +83,9 @@ class Warehouse
 
             $qty = Purchasing_inventory_system::get_sir_stocks($warehouse_id, $value_bundle_data["bundle_id"]);
             $bundle_data[$key_bundle_data]['total_stock_sir'] = UnitMeasurement::um_view($qty,$value_bundle_data["bundle_item_um"]);
+
+            $bundle_data[$key_bundle_data]["bundle_actual_stocks"] = $bundle_stocks + $qty;
+            $bundle_data[$key_bundle_data]["bundle_actual_stocks_um"] = UnitMeasurement::um_view($bundle_data[$key_bundle_data]["bundle_actual_stocks"],$value_bundle_data["bundle_item_um"]);
         }
 
         // dd($rem_item);
@@ -133,6 +139,9 @@ class Warehouse
             $item_data = Item::info($value->product_id);
             $_return[$key]['item_name'] = $item_data->item_name;
             $_return[$key]['item_sku'] = $item_data->item_sku;
+            $_return[$key]['item_barcode'] = $item_data->item_barcode;
+            $_return[$key]['item_actual_stock'] = null;
+            $_return[$key]['item_actual_stock_um'] = null;
 
             $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$value->product_um)->where("is_base",0)->value("multi_id");
 
@@ -163,6 +172,10 @@ class Warehouse
 
             $qty = Purchasing_inventory_system::get_sir_stocks($warehouse_id, $value->product_id);
             $_return[$key]['sir_stock'] = UnitMeasurement::um_view($qty,$item_data->item_measurement_id, $um_issued);
+
+
+            $_return[$key]['item_actual_stock'] = $_return[$key]['less_stock'] + $qty;
+            $_return[$key]['item_actual_stock_um'] = UnitMeasurement::um_view($_return[$key]['item_actual_stock'],$item_data->item_measurement_id, $um_issued);
         }
         return $_return;
     }

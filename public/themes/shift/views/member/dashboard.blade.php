@@ -261,7 +261,7 @@
                 </div>
                 <div class="modal-body">
                     <form method="post" class="submit-verify-sponsor">
-                        <div class="labels">Enter a Slot Number</b></div>
+                        <div class="labels"><b>Enter a Slot Number</b></div>
                         <input required="required" class="input-verify-sponsor text-center" name="verify_sponsor" type="text" placeholder="">
                         <div class="output-container">
                             

@@ -190,7 +190,6 @@ class MLM_CodeControllerV2 extends Member
     public function product_code_table(Request $request)
     {
         $data['_item_product_code'] = Item::get_all_item_record_log($request->search_keyword, $request->status, 10);
-
         foreach ($data['_item_product_code'] as $key => $value) 
         {
             $data['_item_product_code'][$key]->used_by = null;

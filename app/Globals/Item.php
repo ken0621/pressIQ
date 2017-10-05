@@ -1514,7 +1514,7 @@ class Item
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
 
-        $query = Tbl_warehouse_inventory_record_log::where('record_inventory_status',0)->slotinfo()->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->groupBy('record_log_id')->orderBy('record_log_id');
+        $query = Tbl_warehouse_inventory_record_log::slotinfo()->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->groupBy('record_log_id')->orderBy('record_log_id');
         
         if($search_keyword)
         {
@@ -1545,7 +1545,6 @@ class Item
         {
             $data = $query->get();            
         }
-
         return $data;
     }
     public static function get_first_assembled_kit($shop_id)

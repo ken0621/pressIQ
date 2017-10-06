@@ -22,6 +22,7 @@ class Tbl_warehouse extends Model
             $user_id = Merchant::getuserid();
             return $query->leftjoin('tbl_sub_warehouse', 'tbl_sub_warehouse.warehouse_id', '=', 'tbl_warehouse.warehouse_id')
                  ->leftjoin('tbl_item','tbl_item.item_id','=','tbl_sub_warehouse.item_id')
+                 ->leftjoin('tbl_category','type_id','=','item_category_id')
                  ->leftjoin('tbl_unit_measurement','tbl_unit_measurement.um_id','=','tbl_item.item_measurement_id')
                 ->join("tbl_item_merchant_request","tbl_item_merchant_request.merchant_item_id","=","tbl_item.item_id")
                 ->where('item_merchant_requested_by', $user_id)
@@ -33,6 +34,7 @@ class Tbl_warehouse extends Model
         {
             return $query->leftjoin('tbl_sub_warehouse', 'tbl_sub_warehouse.warehouse_id', '=', 'tbl_warehouse.warehouse_id')
                  ->leftjoin('tbl_item','tbl_item.item_id','=','tbl_sub_warehouse.item_id')
+                     ->leftjoin('tbl_category','type_id','=','item_category_id')
                  ->leftjoin('tbl_unit_measurement','tbl_unit_measurement.um_id','=','tbl_item.item_measurement_id')
                 ->where("tbl_item.archived",0);
         } 

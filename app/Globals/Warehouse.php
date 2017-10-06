@@ -32,6 +32,7 @@ class Warehouse
         $bundle_qty_warehouse = [];
         $bundle_qty_ = [];
         $bundle_data = [];
+
         foreach($bundle as $key => $value) 
         {
             //onhand = current
@@ -49,10 +50,10 @@ class Warehouse
             $warehouse_bundle_qty = [];
             foreach ($bundle_item as $key_bundle => $value_bundle) 
             {
-               $warehouse_qty = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value_bundle->bundle_item_id)->value('inventory_count');      
+               $warehouse_qty = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value_bundle->bundle_item_id)->value('inventory_count');   
+
 
                $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty;
-
                $bundle_qty_warehouse[$value_bundle->bundle_item_id] = $warehouse_qty / $bundle_qty;
                $bundle_qty_[$value_bundle->bundle_item_id] = $bundle_qty;
             }
@@ -114,20 +115,9 @@ class Warehouse
 
     public static function get_inventory_item($warehouse_id, $type = '')
     {
-        $_item = [];
-        $data['warehouse_item_bundle'] = [];
-        $data['_inventory'] = [];
-        $data['_empties'] = [];
-        if($type == 'bundle')
-        {
-            $data['warehouse_item_bundle'] = Warehouse::select_item_warehouse_per_bundle($warehouse_id); 
-        }
-        // dd($data['warehouse_item_bundle']);
-        // if($type == 'odd_inventory')
-        // {
-            $data['_inventory'] = Warehouse::get_all_inventory_item($warehouse_id, $data['warehouse_item_bundle']);
-            $data['_empties'] = Warehouse::get_all_inventory_item($warehouse_id, $data['warehouse_item_bundle'], 1);
-        // }
+        $data['warehouse_item_bundle'] = Warehouse::select_item_warehouse_per_bundle($warehouse_id);    
+        $data['_inventory'] = Warehouse::get_all_inventory_item($warehouse_id, $data['warehouse_item_bundle']);
+        $data['_empties'] = Warehouse::get_all_inventory_item($warehouse_id, $data['warehouse_item_bundle'], 1);
 
         return $data;
     }
@@ -146,11 +136,8 @@ class Warehouse
 
             $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$value->product_um)->where("is_base",0)->value("multi_id");
 
-            $_return[$key]['item_id'] = $value->product_id;
-            $_return[$key]['orig_stock'] = $value->product_current_qty;
-            $_return[$key]['orig_stock_um'] = UnitMeasurement::um_view($value->product_current_qty, $item_data->item_measurement_id, $um_issued);
-
             $less = 0;
+            $item_inventory = [];
             foreach ($bundled_item as $key_b => $value_b) 
             {
                 $bundle_item = Tbl_item_bundle::where("bundle_bundle_id",$value_b['bundle_id'])->get();
@@ -161,19 +148,32 @@ class Warehouse
                     {
                         $bundle_inventory_qty = $value_b['bundle_current_stocks'];
 
-                        $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty;
+                        if($is_mts == 1) 
+                        {
+                            if(isset($item_inventory[$value_bundle->bundle_item_id]))
+                            {
+                                 $item_inventory[$value_bundle->bundle_item_id] = $bundle_inventory_qty - $item_inventory[$value_bundle->bundle_item_id];
+                            }
+                            else
+                            {
+                                 $item_inventory[$value_bundle->bundle_item_id] = $bundle_inventory_qty;
+                            }                            
+                        }
 
+                        $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty;
                         $less = $bundle_inventory_qty * $bundle_qty;
                     }
                 }
             }
+            $_return[$key]['item_id'] = $value->product_id;
+            $_return[$key]['orig_stock'] = $value->product_current_qty + (isset($item_inventory[$value->product_id]) ? $item_inventory[$value->product_id] : 0);
+            $_return[$key]['orig_stock_um'] = UnitMeasurement::um_view($_return[$key]['orig_stock'], $item_data->item_measurement_id, $um_issued);
 
             $_return[$key]['less_stock'] = $value->product_current_qty - $less;
             $_return[$key]['less_stock_um'] = UnitMeasurement::um_view($_return[$key]['less_stock'], $item_data->item_measurement_id, $um_issued);
 
             $qty = Purchasing_inventory_system::get_sir_stocks($warehouse_id, $value->product_id);
             $_return[$key]['sir_stock'] = UnitMeasurement::um_view($qty,$item_data->item_measurement_id, $um_issued);
-
 
             $_return[$key]['item_actual_stock'] = $_return[$key]['less_stock'] + $qty;
             $_return[$key]['item_actual_stock_um'] = UnitMeasurement::um_view($_return[$key]['item_actual_stock'],$item_data->item_measurement_id, $um_issued);

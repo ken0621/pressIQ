@@ -478,10 +478,10 @@ $(document).ready(function($){
 	}
   
 	//open popup
-	$('.bts-popup-trigger').on('click', function(event){
-		event.preventDefault();
-		$('.bts-popup').addClass('is-visible');
-	});
+	// $('.bts-popup-trigger').on('click', function(event){
+	// 	event.preventDefault();
+	// 	$('.bts-popup').addClass('is-visible');
+	// });
 	
 	//close popup
 	$('.bts-popup').on('click', function(event){

@@ -62,7 +62,9 @@
         </div>
     </div>
 </div>
-
+<div class="modal-footer text-right">
+    <a class="btn btn-primary" href='/member/cashier/transactions_list/view/{{ $list->transaction_list_id }}' target="_blank">View PDF</a>
+</div>
 @if($transaction_details)
     <div class="text-center" style="padding-bottom: 10px;"><a href="javascript:" onclick="$('.payment-details').removeClass('hidden')">SHOW PAYMENT DETAILS</a></div>
     <div class="payment-details hidden" style="padding-bottom: 10px; margin: 10px;">

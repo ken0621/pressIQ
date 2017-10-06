@@ -3,12 +3,14 @@ namespace App\Globals;
 use App\Models\Tbl_variant;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_customer_search;
+use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_order;
 use App\Models\Tbl_order_item;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_user;
 use App\Models\Tbl_customer_other_info;
 use App\Globals\Tablet_global;
+use App\Globals\Mlm_plan;
 use DB;
 use Carbon\Carbon;
 use Request;
@@ -18,6 +20,21 @@ class Customer
 	public static function register($shop_id, $info)
 	{
 		$info["shop_id"] = $shop_id;
+		$plan_settings = Mlm_plan::get_settings($shop_id);
+		$info["downline_rule"] = $plan_settings->plan_settings_default_downline_rule;
+		
+		if(session("lead_sponsor"))
+		{
+			$slot_info = Tbl_mlm_slot::where("shop_id", $shop_id)->where("slot_no", session("lead_sponsor"))->first();
+			
+			if($slot_info)
+			{
+				$info["customer_lead"] = $slot_info->slot_id;
+			}
+			
+			session()->forget("lead_sponsor");
+		}
+		
 		Tbl_customer::insert($info);
 		return true;	
 	}

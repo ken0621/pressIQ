@@ -71,7 +71,7 @@
                     <div class="per-image-container">
                         <img src="/themes/{{ $shop_theme }}/img/we-are-safe.png">
                         <div class="content-text-container">
-                            <h1 class="wow fadeInLeft" data-wow-delay=".2s">We Believe</h1>
+                            <h1 class="wow fadeInLeft" data-wow-delay=".2s">We Are Safe</h1>
                             <div class="title-line"></div>
                             <p class="wow fadeInLeft" data-wow-delay=".4s">
                                 Instead of the usual chemical-based beauty and wellness products, JCA International Corporation’s products are 100% safe and organic that will definitely have an everlasting benefits to its buyers and users.
@@ -84,7 +84,7 @@
                     <div class="per-image-container">
                         <img src="/themes/{{ $shop_theme }}/img/we-aim.png">
                         <div class="content-text-container">
-                            <h1 class="wow fadeInLeft" data-wow-delay=".3s">We Believe</h1>
+                            <h1 class="wow fadeInLeft" data-wow-delay=".3s">We Aim</h1>
                             <div class="title-line"></div>
                             <p class="wow fadeInLeft" data-wow-delay=".5s">
                                 Lastly, JCA Wellness International Corporation aims to deliver these broad selection of safe and organic products that will showcase its commitment to innovate today’s beauty and wellness.

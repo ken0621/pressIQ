@@ -144,7 +144,7 @@ class PayrollController extends Member
                                                   ->orderBy('tbl_payroll_period.payroll_period_start','asc')
                                                   ->get();
           $data['access'] = Utilities::checkAccess('payroll-timekeeping','salary_rates');
-
+         
           return view('member.payroll.payroll_timekeeping', $data);
      }
 
@@ -264,10 +264,9 @@ class PayrollController extends Member
           // dd($data['_separated']);
 		
           $data['_company']                       = Payroll::company_heirarchy(Self::shop_id());
-		
 		$data['_status_active']				= Tbl_payroll_employment_status::whereIn('payroll_employment_status_id', $active_status)->orderBy('employment_status')->paginate($this->paginate_count);
-
           $data['_status_separated']              = Tbl_payroll_employment_status::whereIn('payroll_employment_status_id', $separated_status)->orderBy('employment_status')->paginate($this->paginate_count);
+         
           return view('member.payroll.employeelist', $data);
      }   
 
@@ -3956,7 +3955,6 @@ class PayrollController extends Member
           $insert['philhealth_reference']         = Request::input('philhealth_reference');
           $insert['pagibig_reference']            = Request::input('pagibig_reference');
           
-          
           $group_id = Tbl_payroll_group::insertGetId($insert);
 
           $insert_rate = array();
@@ -4095,7 +4093,7 @@ class PayrollController extends Member
           $data['_day']            = Payroll::restday_checked($id); 
           $data['_period']         = Tbl_payroll_tax_period::check(Self::shop_id())->get();
           $data['_shift_code']     = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->get();
-
+          // dd($data);
           return view('member.payroll.modal.modal_edit_payroll_group',$data);
      }
 

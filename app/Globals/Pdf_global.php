@@ -4,7 +4,7 @@ use PDF;
 use App;
 class Pdf_global
 {
-	public static function show_pdf($html, $orient = null,$footer = '')
+	public static function show_pdf($html, $orient = null, $footer = '')
 	{
 		$html_b = Pdf_global::bootstrap($html);
         $pdf = App::make('snappy.pdf.wrapper');
@@ -18,6 +18,20 @@ class Pdf_global
         	$pdf->setOrientation('landscape');
         }
         $pdf->setOption('viewport-size', '1366x1024');
+        return $pdf->inline();
+	}
+	public static function show_pdfv2($html, $orient = null, $footer = '')
+	{
+		$html_b = Pdf_global::bootstrap($html);
+        $pdf = App::make('snappy.pdf.wrapper');
+
+        if($footer != '')
+        {
+	        $pdf->setOption('footer-right', $footer.' Page [page] of [topage]');
+        }
+
+        $pdf->loadHTML($html_b);
+
         return $pdf->inline();
 	}
 	public static function show_image($html)

@@ -6,8 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Tbl_transaction;
 use App\Models\Tbl_transaction_list;
 use App\Models\Tbl_transaction_item;
+use App\Models\Tbl_payment_logs;
 use App\Globals\Currency;
 use App\Globals\Transaction;
+use App\Globals\Pdf_global;
+use DB;
+use Excel;
 
 class TransactionController extends Member
 {
@@ -60,5 +64,34 @@ class TransactionController extends Member
         $data['_list'] = Transaction::get_transaction_list($this->user_info->shop_id, $request->transaction_type, $request->search_keyword);
         return view("member.transaction.all_transaction_list_table", $data);
     }
-    
+    public function view_pdf(Request $request, $transaction_list_id)
+    {
+        $data['shop_key']            = strtoupper($this->user_info->shop_key);
+        $data['shop_address']        = ucwords($this->user_info->shop_street_address.' '.$this->user_info->shop_city.', '.$this->user_info->shop_zip);
+        
+        $data['list']                = Tbl_transaction_list::transaction()->where('transaction_list_id',$transaction_list_id)->first();
+        $data['_item']               = Tbl_transaction_item::where('transaction_list_id',$transaction_list_id)->get();
+        $data['customer_name']       = Transaction::getCustomerNameTransaction($data['list']->transaction_id);
+        $data['transaction_details'] = unserialize($data["list"]->transaction_details);
+        $data['customer_info']       = Transaction::getCustomerInfoTransaction($data['list']->transaction_id);
+        $data['customer_address']    = Transaction::getCustomerAddressTransaction($data['list']->transaction_id);
+        
+        /* Item */
+        $data['list']->vat           = $data['list']->transaction_subtotal / 1.12 * 0.12;
+        $data['list']->vatable       = $data['list']->transaction_subtotal - $data['list']->vat;
+
+        /* Get Payment Method */
+        $data['customer_payment'] = Transaction::getPaymentMethod($data["list"]->transaction_number, $transaction_list_id, $data['transaction_details']);
+
+        /* Old Date */
+        $old = DB::table("tbl_ec_order")->where("invoice_number", $data["list"]->transaction_number)->first();
+        if ($old) 
+        {
+            $data["list"]->transaction_date_created = $old->created_date;
+        }
+        
+        $html = view("member.transaction.view_pdf", $data);
+        $pdf = Pdf_global::show_pdfv2($html);
+        return $pdf;
+    }
 }

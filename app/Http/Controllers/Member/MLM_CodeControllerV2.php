@@ -4,6 +4,7 @@ use App\Globals\Item;
 use App\Globals\MLM2;
 use App\Globals\Warehouse2;
 use App\Globals\Pdf_global;
+use App\Globals\Customer;
 
 use App\Globals\BarcodeGenerator;
 use Redirect;
@@ -38,6 +39,21 @@ class MLM_CodeControllerV2 extends Member
     public function membership_code_table(Request $request)
     {   
         $data['_assembled_item_kit'] = Item::get_assembled_kit(0, $request->item_kit_id, $request->item_membership_id, $request->search_keyword, $request->status,10);
+
+        foreach ($data['_assembled_item_kit'] as $key => $value) 
+        {
+            $data['_assembled_item_kit'][$key]->used_by = null;
+            if($value->record_consume_ref_name == 'customer_product_code')
+            {
+                $customer_info = Customer::info($value->record_consume_ref_id, $this->user_info->shop_id)['customer'];
+                $data['_assembled_item_kit'][$key]->used_by = 'Used By Customer - '.ucwords($customer_info->first_name.' '.$customer_info->last_name);
+            }
+            if($value->record_consume_ref_name == 'transaction_list')
+            {
+                $data['_assembled_item_kit'][$key]->used_by = 'Used By SLOT NUMBER-'.strtoupper($value->slot_no).'';
+            }
+        }
+
         return view("member.mlm_code_v2.membership_code_table", $data);
 
     }
@@ -174,6 +190,20 @@ class MLM_CodeControllerV2 extends Member
     public function product_code_table(Request $request)
     {
         $data['_item_product_code'] = Item::get_all_item_record_log($request->search_keyword, $request->status, 10);
+        foreach ($data['_item_product_code'] as $key => $value) 
+        {
+            $data['_item_product_code'][$key]->used_by = null;
+            if($value->record_consume_ref_name == 'customer_product_code')
+            {
+                $customer_info = Customer::info($value->record_consume_ref_id, $this->user_info->shop_id)['customer'];
+                $data['_item_product_code'][$key]->used_by = 'Used By Customer - '.ucwords($customer_info->first_name.' '.$customer_info->last_name);
+            }
+            if($value->record_consume_ref_name == 'transaction_list')
+            {
+                $data['_item_product_code'][$key]->used_by = 'Used By SLOT NUMBER-'.strtoupper($value->slot_no);
+            }
+        }
+
         return view("member.mlm_code_v2.product_code_table",$data);
     }
     public function print_codes(Request $request)

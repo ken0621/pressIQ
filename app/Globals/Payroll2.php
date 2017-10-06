@@ -1376,6 +1376,8 @@ class Payroll2
 		$excess_leave_hours 	= $leave;
 		$is_half_day			= false;
 		$is_absent				= true;
+
+		$overtime_grace_time = "00:00:00"; // remove if there is a client that use gracetime overtime
 		
 		//target time is the same from shift hours
 		if($target_hours == 0)
@@ -1864,6 +1866,8 @@ class Payroll2
 		$excess_leave_hours 	= $leave_hours;
 		$is_half_day 			= false;
 		$is_absent 				= false;
+
+		$overtime_grace_time = "00:00:00"; // remove if there is a client that use gracetime overtime
 
 		// if ($use_leave) 
 		// {
@@ -4358,13 +4362,12 @@ class Payroll2
 	{
 		$total_cola = 0;
 
-		// if ($data["cutoff_input"][$data["start_date"]]->compute_type=="daily") 
-		// {
-			foreach($data["cutoff_input"] as $cutoff_input)
-			{
-				$total_cola += $cutoff_input->compute->cola;
-			}
-		// }
+		
+		foreach($data["cutoff_input"] as $cutoff_input)
+		{
+			$total_cola += $cutoff_input->compute->cola;
+		}
+		
 
 		$val["label"] = "COLA";
 		$val["type"] = "additions";
@@ -4386,13 +4389,10 @@ class Payroll2
 	{
 		$total_cola = 0;
 	
-		// if ($data["cutoff_input"][$data["start_date"]]->compute_type=="daily") 
-		// {
-			foreach($data["cutoff_input"] as $cutoff_input)
-			{
-				$total_cola += $cutoff_input->compute->cola_daily;
-			}
-		// }
+		foreach($data["cutoff_input"] as $cutoff_input)
+		{
+			$total_cola += $cutoff_input->compute->cola_daily;
+		}
 
 		$val["label"] = "COLA";
 		$val["type"] = "additions";
@@ -4414,34 +4414,30 @@ class Payroll2
 
 	public static function cutoff_fixed_montly_cola($return, $data)
 	{
-
 		$total_cola = 0;
-		// dd($data["salary"]->monthly_cola);
-		// if ($data["cutoff_input"][$data["start_date"]]->compute_type=="monthly" || $data["cutoff_input"][$data["start_date"]]->compute_type=="fix" ) 
-		// {
-			if ($data["period_category"]=="Semi-monthly") 
-			{
-				$total_cola = @($data["salary"]->monthly_cola/2);
-			}
-			else if($data["period_category"]=="Weekly")
-			{
-				$total_cola = @($data["salary"]->monthly_cola/4);
-			}
-			else if($data["period_category"]=="Monthly")
-			{
-				$total_cola = $data["salary"]->monthly_cola;
-			}
-		// }
 		
-		$val["label"] = "COLA";
-		$val["type"] = "additions";
-		$val["amount"] = $total_cola;
-		$val["add.gross_pay"] = true;
-		$val["deduct.gross_pay"] = false;
-		$val["add.taxable_salary"] = false;
-		$val["deduct.taxable_salary"] = false;
-		$val["add.net_pay"] = false;
-		$val["deduct.net_pay"] = false;
+		if ($data["period_category"]=="Semi-monthly") 
+		{
+			$total_cola = @($data["salary"]->monthly_cola/2);
+		}
+		else if($data["period_category"]=="Weekly")
+		{
+			$total_cola = @($data["salary"]->monthly_cola/4);
+		}
+		else if($data["period_category"]=="Monthly")
+		{
+			$total_cola = $data["salary"]->monthly_cola;
+		}
+			
+		$val["label"] 					= "COLA";
+		$val["type"] 					= "additions";
+		$val["amount"] 					= $total_cola;
+		$val["add.gross_pay"] 			= true;
+		$val["deduct.gross_pay"] 		= false;
+		$val["add.taxable_salary"] 		= false;
+		$val["deduct.taxable_salary"] 	= false;
+		$val["add.net_pay"] 			= false;
+		$val["deduct.net_pay"] 			= false;
 		array_push($return->_breakdown, $val);
 		$val = null;
 
@@ -4475,8 +4471,6 @@ class Payroll2
 			$total_cola = $total_cola - $cutoff_input->compute->total_day_cola_deduction;
 			$total_cola = $total_cola - $cutoff_input->compute->total_day_cola_addition;
 		}
-
-
 
 		$val["label"] = "COLA";
 		$val["type"] = "additions";
@@ -4700,6 +4694,7 @@ class Payroll2
 		{
 			$val["label"] 					= $adjustment->payroll_adjustment_name;
 			$val["type"] 					= "adjustment";
+			$val["category"]				= $adjustment->payroll_adjustment_category;
 			$val["description"] 			= "This is a manual adjustment.<br>Click <a class='delete-adjustment' adjustment_id='" . $adjustment->payroll_adjustment_id . "' href='javascript:'>here</a> to delete this adjustment.";
 			$val["amount"] 					= $adjustment->payroll_adjustment_amount;
 			$val["add.gross_pay"] 			= ($adjustment->add_gross_pay == 1 ? true : false);

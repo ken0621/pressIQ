@@ -927,7 +927,7 @@ class PayrollTimeSheet2Controller extends Member
 		$data["time_keeping_approved"]  = $check_approved ? true : false;
 		$data["employee_salary"]   		=  $this->get_salary($employee_id,$data["start_date"]);
 		$data['access_salary_rate'] 	=  Utilities::checkAccess('payroll-timekeeping','salary_rates');
-		// dd($data);
+		
 		switch ($computation_type)
 		{
 			case "Daily Rate":
@@ -1008,7 +1008,7 @@ class PayrollTimeSheet2Controller extends Member
 			$insert["payroll_employee_id"] 				= $employee_id;
 			$insert["payroll_period_company_id"]		= $period_company_id;
 			$insert["payroll_adjustment_name"] 			= Request::input("adjustment_name");
-			$insert["payroll_adjustment_category"] 		= Request::input("adjustment_type");
+			$insert["payroll_adjustment_category"] 		=  Request::input("adjustment_category"); //Request::input("adjustment_type");
 			$insert["payroll_adjustment_amount"] 		= Request::input("adjustment_amount");
 			$insert["adjustment_setting"] 				= Request::input("adjustment_setting");
 

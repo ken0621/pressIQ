@@ -39,10 +39,11 @@ class MLM2
 	{
 		$return = 0;
 		$data = Tbl_transaction::where('transaction_reference_table','tbl_customer')->where('transaction_reference_id', $customer_id)->get();
-		
+	
 		foreach($data as $key => $value)
 		{
 			$list = Tbl_transaction_list::where('transaction_id', $value->transaction_id)->get();
+
 
 			foreach($list as $key2 => $value2)
 			{
@@ -57,6 +58,7 @@ class MLM2
 				}
 			}
 		}
+
 		return $return;
 	}
 	public static function check_purchased_code($shop_id, $customer_id)
@@ -192,6 +194,12 @@ class MLM2
 
 		return $slot_info;
 	}
+	public static function unplaced_slots($shop_id, $customer_id)
+	{
+		$_slot = Tbl_mlm_slot::where("slot_owner", $customer_id)->where("slot_placement", 0)->where("slot_position", "")->get();
+		return $_slot;
+	}
+	
 	public static function customer_slots($shop_id, $customer_id)
 	{
 		$_slot = Tbl_mlm_slot::where("slot_owner", $customer_id)->currentWallet()->get();
@@ -606,6 +614,11 @@ class MLM2
 
 		Tbl_warehouse_inventory_record_log::codes($shop_id, $pin, $activation)->update($update);
 	}
+	public static function create_slot_no_rule()
+	{
+		$store["create_slot_no_rule"] = true;
+		session($store);
+	}
 	public static function create_slot($shop_id, $customer_id, $membership_id, $sponsor, $slot_no = null, $slot_type = "PS")
 	{
 		if($slot_no)
@@ -626,10 +639,15 @@ class MLM2
 		$rules["shop_id"] 				= ["required","exists:tbl_shop"];
 		$rules["slot_owner"] 			= ["required","exists:tbl_customer,customer_id"];
 		$rules["slot_membership"] 		= ["required","exists:tbl_membership,membership_id"];
-		$rules["slot_sponsor"]			= ["required","exists:tbl_mlm_slot,slot_id"];
+		
+		if(!session("create_slot_no_rule"))
+		{
+			$rules["slot_sponsor"]			= ["required","exists:tbl_mlm_slot,slot_id"];
+		}
+	
 		$rules["slot_created_date"]		= ["required"];
 		$rules["slot_status"]			= ["required"];
-
+		
 
 		Self::$shop_id					= $shop_id;
 		$rules["slot_no"]				= 	Rule::unique('tbl_mlm_slot')->where(function ($query)
@@ -644,64 +662,72 @@ class MLM2
 			$errors = $validator->errors();
 			foreach ($errors->all() as $message)
 			{
+				session()->forget("create_slot_no_rule");
 				return $message;
 			}
 		}
 		else
 		{
 			$sponsor_slot 	  = Tbl_mlm_slot::where("slot_id",$sponsor)->where("shop_id",$shop_id)->first();
-			$customer_sponsor = Tbl_customer::where("shop_id",$shop_id)->where("customer_id",$sponsor_slot->slot_owner)->first();
-			$proceed_to_create = 0;
 
 
-			if($customer_sponsor->downline_rule == "auto")
+			if(!session("create_slot_no_rule"))
 			{
-				$proceed_to_create = MLM2::check_sponsor_have_placement($shop_id,$sponsor);
-				if($proceed_to_create == 0)
+				$customer_sponsor = Tbl_customer::where("shop_id",$shop_id)->where("customer_id",$sponsor_slot->slot_owner)->first();
+				$proceed_to_create = 0;
+				
+				if($customer_sponsor->downline_rule == "auto")
 				{
-					$response = "Sponsor should have a placement";
-				}
-
-				if($proceed_to_create == 1)
-				{
-					$slot_id  = Tbl_mlm_slot::insertGetId($insert);
-					$rules    = $customer_sponsor->autoplacement_rule;
-					$response = MLM2::matrix_auto($shop_id,$slot_id,$rules);
-					if($response != "success")
+					$proceed_to_create = MLM2::check_sponsor_have_placement($shop_id,$sponsor);
+					if($proceed_to_create == 0)
+					{
+						$response = "Sponsor should have a placement";
+					}
+	
+					if($proceed_to_create == 1)
+					{
+						$slot_id  = Tbl_mlm_slot::insertGetId($insert);
+						$rules    = $customer_sponsor->autoplacement_rule;
+						$response = MLM2::matrix_auto($shop_id,$slot_id,$rules);
+						if($response != "success")
+						{
+							$slot_id = $response;
+						}
+					}
+					else
 					{
 						$slot_id = $response;
 					}
 				}
 				else
 				{
-					$slot_id = $response;
+					$slot_id  = Tbl_mlm_slot::insertGetId($insert);
 				}
 			}
 			else
 			{
 				$slot_id  = Tbl_mlm_slot::insertGetId($insert);
 			}
-
-
-
+			
+			session()->forget("create_slot_no_rule");
 			return $slot_id;
 		}
 	}
 	public static function matrix_position($shop_id, $slot_id, $placement, $position)
 	{
-
     	$check_target_slot 			= Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",$shop_id)->first();
     	$check_target_slot_sponsor  = Tbl_mlm_slot::where("slot_id",$check_target_slot->slot_sponsor)->where("shop_id",$shop_id)->first();
+    	
     	if($placement == $slot_id)
     	{
-    		return "Placement not available";
+    		$message = "Placement not available";
     	}
 
     	if($check_target_slot_sponsor->slot_placement == 0 || $check_target_slot_sponsor->slot_placement == null)
     	{
     		if($check_target_slot_sponsor->slot_sponsor != null)
     		{
-    			return "Your upline should placed your first.";
+    			$message = "Your upline should placed your first.";
     		}
     	}
 
@@ -710,33 +736,39 @@ class MLM2
 			if($position == "left" || $position == "right")
 			{	
 				$check_placement = MLM2::check_placement_exist($shop_id,$placement,$position);
+				
 				if($check_placement == 0)
 				{
-					$update["slot_placement"]  = $placement;
-					$update["slot_position"]   = strtolower($position);
-					Tbl_mlm_slot::where("shop_id",$shop_id)->where("slot_id",$slot_id)->update($update);
-
-			        $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
-
-			        Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
-		       		Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
-		       		MLM2::entry($shop_id,$slot_id);
-					return "success";
+					Self::matrix_position_success($shop_id, $slot_id, $placement, $position);
+					$message = "success";
 				}
 				else
 				{
-					return "Placement Error";
+					$message = "Placement Already Taken";
 				}
 			}
 			else
 			{
-				return "Wrong position";
+				$message =  "Wrong position";
 			}
 		}
 		else
 		{
-			return "Already placed";
+			$message = "Already placed";
 		}
+		return $message;
+    }
+    public static function matrix_position_success($shop_id, $slot_id, $placement, $position)
+    {
+		$update["slot_placement"]  = $placement;
+		$update["slot_position"]   = strtolower($position);
+		Tbl_mlm_slot::where("shop_id",$shop_id)->where("slot_id",$slot_id)->update($update);
+
+        $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
+
+        Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
+   		Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
+   		MLM2::entry($shop_id,$slot_id);
     }
     public static function matrix_auto($shop_id, $slot_id, $rule)
     {
@@ -1094,21 +1126,30 @@ class MLM2
 	}	
 	public static function item_points($shop_id,$item_id,$slot_id = null)
 	{
-        $item          = Tbl_item::where("item_id",$item_id)->where("shop_id",$shop_id)->first();  
-        $item_points   = Tbl_mlm_item_points::where("item_id",$item_id)->first();     
+        $item          = Tbl_item::where("item_id",$item_id)->where("shop_id",$shop_id)->first();
+        $membership_id = null;
+        if($slot_id)
+        {
+        	$membership_id = Tbl_mlm_slot::where("shop_id",$shop_id)->where('slot_id',$slot_id)->value('slot_membership');
+        }
+        $item_points   = Tbl_mlm_item_points::joinItem()->where("tbl_item.item_id",$item_id)->where('shop_id',$shop_id)->first();
+        if($membership_id)
+        {
+        	$item_points   = Tbl_mlm_item_points::joinItem()->where("tbl_item.item_id",$item_id)->where('shop_id',$shop_id)->where('tbl_mlm_item_points.membership_id',$membership_id)->first();
+        }
         if($item)
         {
-	        $data["UNILEVEL"]					= $item_points->UNILEVEL;
-			$data["REPURCHASE_POINTS"]			= $item_points->REPURCHASE_POINTS;
-			$data["UNILEVEL_REPURCHASE_POINTS"]	= $item_points->UNILEVEL_REPURCHASE_POINTS;
-			$data["REPURCHASE_CASHBACK"]		= $item_points->REPURCHASE_CASHBACK;
-			$data["DISCOUNT_CARD_REPURCHASE"]	= $item_points->DISCOUNT_CARD_REPURCHASE;
-			$data["STAIRSTEP"]					= $item_points->STAIRSTEP;
-			$data["BINARY_REPURCHASE"]			= $item_points->BINARY_REPURCHASE;
-			$data["STAIRSTEP_GROUP"]			= $item_points->STAIRSTEP_GROUP;
-			$data["RANK"]						= $item_points->RANK;
-			$data["RANK_GROUP"]					= $item_points->RANK_GROUP;
-			$data["price"]						= $item->item_price;
+	        $data["UNILEVEL"]					= isset($item_points->UNILEVEL) ? $item_points->UNILEVEL : 0;
+			$data["REPURCHASE_POINTS"]			= isset($item_points->REPURCHASE_POINTS) ? $item_points->REPURCHASE_POINTS : 0;
+			$data["UNILEVEL_REPURCHASE_POINTS"]	= isset($item_points->UNILEVEL_REPURCHASE_POINTS) ? $item_points->UNILEVEL_REPURCHASE_POINTS : 0;
+			$data["REPURCHASE_CASHBACK"]		= isset($item_points->REPURCHASE_CASHBACK) ? $item_points->REPURCHASE_CASHBACK : 0;
+			$data["DISCOUNT_CARD_REPURCHASE"]	= isset($item_points->DISCOUNT_CARD_REPURCHASE) ? $item_points->DISCOUNT_CARD_REPURCHASE : 0;
+			$data["STAIRSTEP"]					= isset($item_points->STAIRSTEP) ? $item_points->STAIRSTEP : 0;
+			$data["BINARY_REPURCHASE"]			= isset($item_points->BINARY_REPURCHASE) ? $item_points->BINARY_REPURCHASE : 0;
+			$data["STAIRSTEP_GROUP"]			= isset($item_points->STAIRSTEP_GROUP) ? $item_points->STAIRSTEP_GROUP : 0;
+			$data["RANK"]						= isset($item_points->RANK) ? $item_points->RANK : 0;
+			$data["RANK_GROUP"]					= isset($item_points->RANK_GROUP) ? $item_points->RANK_GROUP : 0;
+			$data["price"]						= isset($item->item_price) ? $item->item_price : 0;
 			$data["RANK_REPURCHASE_CASHBACK"]   = MLM2::rank_cashback_points($shop_id,$slot_id,$item_id);
 			return $data;
         }

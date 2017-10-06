@@ -1,4 +1,5 @@
 <?php
+Route::get('/ref/{id}', 'LeadController@ref');
 Route::any('/inspirers', 'SampleTesting@inspirer');
 Route::any('/inspirer', 'SampleTesting@inspirer');
 
@@ -194,6 +195,8 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 	Route::any('product_order/create_order/submit_payment_upload','Member\ProductOrderController@submit_payment_upload');
 	
 	Route::get('product_order2','Member\ProductOrderController2@index');
+	Route::get('product_order2/payref','Member\ProductOrderController2@payref');
+	Route::get('product_order2/draref','Member\ProductOrderController2@draref');
 	
 	//product order end
 });

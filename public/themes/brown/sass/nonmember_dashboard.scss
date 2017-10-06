@@ -277,163 +277,161 @@ $text-dark: #272c2f;
 		max-width: 370px;
 	}
 
-	.modal-content
+
+	background-color: #fff;
+	.modal-header
 	{
-		background-color: #fff;
-		.modal-header
+		background-color: #422311;
+		border-top-left-radius: 3px;
+		border-top-right-radius: 3px;
+
+		.close
 		{
-			background-color: #422311;
-			border-top-left-radius: 3px;
-			border-top-right-radius: 3px;
+			color: #FFF;
+		}
 
-			.close
-			{
-				color: #FFF;
-			}
+		.modal-title
+		{
+			font-weight: $medium;
+			font-size: 15px;
+			color: #FFF;
+		}
+	}
 
-			.modal-title
+	.modal-body
+	{
+		font-weight: $regular;
+		font-size: 15px;
+		margin: 0px 20px 0px 20px;
+		padding: 20px 5px !important;
+
+		.labels
+		{
+			margin-top: 10px;
+			text-align: center;
+			b 
 			{
 				font-weight: $medium;
-				font-size: 15px;
-				color: #FFF;
+			}
+		}
+		input
+		{
+
+			padding: 5px;
+			width: 85%;
+			border: 1px solid #c9c9c9;
+			margin-top: 20px;
+			margin-left: 7%;
+			background-color: #fff;
+			font-size: 15px;
+			letter-spacing: 0.5px;
+
+			&::-webkit-input-placeholder {
+			    color: #ddd;
+			    opacity: 1 !important; /* for older chrome versions. may no longer apply. */
+			}
+
+			&:-moz-placeholder { /* Firefox 18- */
+			    color: #ddd;
+			    opacity: 1 !important;
+			}
+
+			&::-moz-placeholder {  /* Firefox 19+ */
+			    color: #ddd;
+			    opacity: 1 !important;
+			}
+
+			&:-ms-input-placeholder {  
+			   color: #ddd;
 			}
 		}
 
-		.modal-body
+		.output-container
 		{
-			font-weight: $regular;
-			font-size: 15px;
-			margin: 0px 20px 0px 20px;
-			padding: 20px 5px !important;
-
-			.labels
+			padding: 10px;
+			.error-message
 			{
-				margin-top: 10px;
 				text-align: center;
-				b 
-				{
-					font-weight: $medium;
-				}
-			}
-			input
-			{
-
-				padding: 5px;
-				width: 85%;
-				border: 1px solid #c9c9c9;
-				margin-top: 20px;
-				margin-left: 7%;
-				background-color: #fff;
-				font-size: 15px;
-				letter-spacing: 0.5px;
-
-				&::-webkit-input-placeholder {
-				    color: #ddd;
-				    opacity: 1 !important; /* for older chrome versions. may no longer apply. */
-				}
-
-				&:-moz-placeholder { /* Firefox 18- */
-				    color: #ddd;
-				    opacity: 1 !important;
-				}
-
-				&::-moz-placeholder {  /* Firefox 19+ */
-				    color: #ddd;
-				    opacity: 1 !important;
-				}
-
-				&:-ms-input-placeholder {  
-				   color: #ddd;
-				}
-			}
-
-			.output-container
-			{
-				padding: 10px;
-				.error-message
-				{
-					text-align: center;
-					color: #f02432;
-					font-size: 13px;
-					letter-spacing: 0.5px;
-				}
-				.card
-				{
-					border: 1px solid #d4d4d4;
-					background-color: #f4f4f4;
-					padding: 10px;
-					margin: 10px;
-					border-radius: 2px;
-
-
-					.upper {
-
-						.profile-image
-						{
-							height: 75px;
-							width: 75px;
-							border-radius: 100%;
-							overflow: hidden;
-							margin-left: 34%;
-
-							img
-							{
-								/* height: 100px; */
-								width: 100%;
-
-							}
-						}
-					}
-					.info
-					{
-						margin-top: 20px;
-						text-align: center;
-						letter-spacing: 0.5px;
-
-						.name
-						{
-							font-size: 17px;
-							font-weight: $bold;
-							color: $text-dark;
-							text-transform: uppercase;
-						}
-						.email
-						{
-							color: $text-light;
-						}
-						.slotno
-						{
-							color: $text-light;
-						}
-					}
-				}
-			}
-	    	.btn-container
-	    	{
-				text-align: center;
-				font-family: $content-text;
-				font-weight: $medium;
+				color: #f02432;
 				font-size: 13px;
-				padding-bottom: 20px;
+				letter-spacing: 0.5px;
+			}
+			.card
+			{
+				border: 1px solid #d4d4d4;
+				background-color: #f4f4f4;
+				padding: 10px;
+				margin: 10px;
+				border-radius: 2px;
 
-				.btn-verify
-				{
-					color: #fff;
-					background-color: #f02432;
-					padding: 12px 25px;
-					border: none;
-					border-radius: 2px;
-					opacity: 0.9;
-				  	-webkit-transition: all 0.2s ease-in-out;
-				  	-moz-transition: all 0.2s ease-in-out;
-				  	-o-transition: all 0.2s ease-in-out;
-				  	transition: all 0.2s ease-in-out;
+
+				.upper {
+
+					.profile-image
+					{
+						height: 75px;
+						width: 75px;
+						border-radius: 100%;
+						overflow: hidden;
+						margin-left: 34%;
+
+						img
+						{
+							/* height: 100px; */
+							width: 100%;
+
+						}
+					}
 				}
-				.btn-verify:hover
+				.info
 				{
-					color: #fff;
-					opacity: 0.8;
+					margin-top: 20px;
+					text-align: center;
+					letter-spacing: 0.5px;
+
+					.name
+					{
+						font-size: 17px;
+						font-weight: $bold;
+						color: $text-dark;
+						text-transform: uppercase;
+					}
+					.email
+					{
+						color: $text-light;
+					}
+					.slotno
+					{
+						color: $text-light;
+					}
 				}
+			}
+		}
+    	.btn-container
+    	{
+			text-align: center;
+			font-family: $content-text;
+			font-weight: $medium;
+			font-size: 13px;
+			padding-bottom: 20px;
+
+			.btn-verify
+			{
+				color: #fff;
+				background-color: #f02432;
+				padding: 12px 25px;
+				border: none;
+				border-radius: 2px;
+				opacity: 0.9;
+			  	-webkit-transition: all 0.2s ease-in-out;
+			  	-moz-transition: all 0.2s ease-in-out;
+			  	-o-transition: all 0.2s ease-in-out;
+			  	transition: all 0.2s ease-in-out;
+			}
+			.btn-verify:hover
+			{
+				color: #fff;
+				opacity: 0.8;
 			}
 		}
 	}

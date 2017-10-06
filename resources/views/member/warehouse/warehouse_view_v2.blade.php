@@ -25,8 +25,8 @@
             <div class="col-md-6">
                 <ul class="nav nav-tabs">
                   <li id="all-list" class="active"><a data-toggle="tab" href="#bundle"><i class="fa fa-yelp" aria-hidden="true"></i>&nbsp;Bundle/Group</a></li>
-                  <li id="archived-list"><a data-toggle="tab" href="#odd-inventory"><i class="fa fa-opencart" aria-hidden="true"></i>&nbsp;Odd Inventory</a></li>
-                  <li id="archived-list"><a data-toggle="tab" href="#unused-empties"><i class="fa fa-slack" aria-hidden="true"></i>&nbsp;Unused Empties</a></li>
+                  <li id="archived-list"><a data-toggle="tab" href="#odd-inventory"><i class="fa fa-opencart" aria-hidden="true"></i>&nbsp;Single Inventory</a></li>
+                  <li id="archived-list"><a data-toggle="tab" href="#unused-empties"><i class="fa fa-slack" aria-hidden="true"></i>&nbsp;Empties</a></li>
                 </ul>
             </div>
             <div class="col-md-6">

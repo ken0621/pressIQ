@@ -1233,8 +1233,6 @@ class ShopMemberController extends Shop
             $data["message"]   = "This slot is already placed. (111)";
         }
         
-
-
         $data["procceed"] = $procceed;
         return $data;
     }

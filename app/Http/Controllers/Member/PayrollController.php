@@ -264,10 +264,9 @@ class PayrollController extends Member
           // dd($data['_separated']);
 		
           $data['_company']                       = Payroll::company_heirarchy(Self::shop_id());
-		
 		$data['_status_active']				= Tbl_payroll_employment_status::whereIn('payroll_employment_status_id', $active_status)->orderBy('employment_status')->paginate($this->paginate_count);
-
           $data['_status_separated']              = Tbl_payroll_employment_status::whereIn('payroll_employment_status_id', $separated_status)->orderBy('employment_status')->paginate($this->paginate_count);
+         
           return view('member.payroll.employeelist', $data);
      }   
 

@@ -13,7 +13,13 @@
             </h1>
             <div class="dropdown pull-right">
                 <button onclick="location.href=''" class="btn btn-def-white btn-custom-white"><i class="fa fa-upload"></i> Import Shipping</button>
-                <button onclick="location.href=''" class="btn btn-def-white btn-custom-white"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
+                <div class="dropdown" style="display: inline-block;">
+                    <button class="btn btn-def-white btn-custom-white dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-file-excel-o"></i> Export to Excel <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="/member/ecommerce/product_order2/payref" target="_blank">Paymaya</a></li>
+                        <li><a href="/member/ecommerce/product_order2/draref" target="_blank">Dragonpay</a></li>
+                    </ul>
+                </div>
                 <button onclick="location.href=''" class="btn btn-primary"><i class="fa fa-truck"></i> Process Shipping</button>
             </div>
         </div>

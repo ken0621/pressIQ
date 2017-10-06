@@ -470,8 +470,8 @@ class Transaction
                 }
                 else
                 {
-                    $data[$key]->slot_no = "None";
-                    $data[$key]->slot_upline_no = "None";
+                    $data[$key]->slot_no = "Unused";
+                    $data[$key]->slot_upline_no = "Unused";
                 }
             }
         }
@@ -632,7 +632,7 @@ class Transaction
                                      ->groupBy("ec_order_id")
                                      ->orderBy("ec_order_id", "asc")
                                      ->first(); 
-
+            
             // if (!isset($slot->slot_id)) 
             // {
             //     $slot_temp = DB::table("tbl_ec_order_slot")->where("order_slot_ec_order_id", $old->ec_order_id)->first();
@@ -658,5 +658,4 @@ class Transaction
         }
 
         return $slot;
-    }
-}
+    

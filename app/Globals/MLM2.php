@@ -756,6 +756,8 @@ class MLM2
 		{
 			$message = "Already placed";
 		}
+		
+		
 		return $message;
     }
     public static function matrix_position_success($shop_id, $slot_id, $placement, $position)
@@ -763,12 +765,6 @@ class MLM2
 		$update["slot_placement"]  = $placement;
 		$update["slot_position"]   = strtolower($position);
 		Tbl_mlm_slot::where("shop_id",$shop_id)->where("slot_id",$slot_id)->update($update);
-
-        $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
-
-        Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
-   		Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
-   		MLM2::entry($shop_id,$slot_id);
     }
     public static function matrix_auto($shop_id, $slot_id, $rule)
     {

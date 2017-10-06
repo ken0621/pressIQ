@@ -35,6 +35,7 @@ use App\Models\Tbl_locale;
 use App\Globals\Currency;
 use App\Globals\Cart2;
 use App\Globals\Item;
+use App\Globals\Mlm_tree;
 use Jenssegers\Agent\Agent;
 use Validator;
 use Google_Client; 
@@ -1071,9 +1072,16 @@ class ShopMemberController extends Shop
         if($procceed == 1)
         {
             $return = MLM2::matrix_position($shop_id, $slot_id, $slot_placement, $slot_position);
+            
             if($return == "success")
             {
-               echo json_encode("success");
+                $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
+                
+                Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
+           		Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
+           		MLM2::entry($shop_id,$slot_id);
+                
+                echo json_encode("success");
             }
             else if($return == "Placement Error")
             {
@@ -1151,6 +1159,7 @@ class ShopMemberController extends Shop
             
             $new_slot_no    = $data["pin"];
             $new_slot_no    = str_replace("MYPHONE", "BROWN", $new_slot_no);
+            $new_slot_no    = str_replace("JCAWELLNESSINTCORP", "JCA", $new_slot_no);
             
             $create_slot    = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $new_slot_no);
 

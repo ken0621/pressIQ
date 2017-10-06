@@ -21,6 +21,23 @@
 <div class="panel panel-default">
   <div class="panel-body">
 
+    <form class="global-submit" method="post" id="save_include" action="/member/mlm/plan/rank/edit/save_include">
+        {!! csrf_field() !!}
+        <div class="col-md-12 pull">
+            <label for="include_rpv_on_rgpv">Include RPV on RGPV</label>
+            <input type="checkbox" id="include_rpv_on_rgpv" name="include_rpv_on_rgpv" value="1" {{$include_rpv_on_rgpv == 1 ? 'checked' : ''}}>
+        </div> 
+        <div class="col-md-1 pull-right">
+            <a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="save_include()">Save</a>
+        </div> 
+    </form>       
+
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-body">
+
     <div class="col-md-12">
         <div class="col-md-4">
             <label for="membership_name">No. of levels</label>
@@ -102,6 +119,10 @@ function load_stair()
 function save_stairstep()
 {
  $('#save_stairstep').submit();   
+}
+function save_include()
+{
+ $('#save_include').submit();   
 }
 function edit_stairstep(key)
 {

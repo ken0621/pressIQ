@@ -106,7 +106,10 @@ class MLM_ProductController extends Member
             }
 
             $_inventory[$key]->item_points   = $item_points;
-            $_inventory[$key]->rank_cashback = $rank_cashback;
+            if(isset($rank_cashback))
+            {
+                $_inventory[$key]->rank_cashback = $rank_cashback;
+            }
         }
         // dd($_inventory);
 	    $data['active'] = [];

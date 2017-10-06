@@ -10,14 +10,14 @@
 	        <div class="row clearfix">
 	            <div class="col-md-8">
 	                <div class="img-container">
-	                    <img src="/themes/{{ $shop_theme }}/img/brown-img1.png">
+	                    <img src="/themes/{{ $shop_theme }}/img/db-img.png">
 	                </div>
 	            </div>
 	            <div class="col-md-4">
 	                <div class="join-container">
 	                    <div class="btn btn-text">
-	                        <div class="text-header1">Join the Movement!</div>
-	                        <div class="text-header2">Enroll now and become one of us!</div>
+	                        <div class="text-header1">Enroll Now!</div>
+	                        <div class="text-header2">and become one of us!</div>
 	                    </div>
 	                    <div class="btn-container">
 	                        <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
@@ -37,7 +37,7 @@
 	                <div class="profile-info-container pic1 match-height">
 	                    <div class="icon-container">
 	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/brown-personal-info.png">
+	                            <img src="/themes/{{ $shop_theme }}/img/personal-info.png">
 	                        </div>
 	                        <div class="col-md-10">
 	                            <div class="prof-info-text-header">Personal Information</div>
@@ -56,7 +56,7 @@
 	                <div class="profile-info-container pic2 match-height">
 	                    <div class="icon-container">
 	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/brown-default-shipping.png">
+	                            <img src="/themes/{{ $shop_theme }}/img/default-shipping.png">
 	                        </div>
 	                        <div class="col-md-10">
 	                            <div class="prof-info-text-header">Default Shipping Address</div>
@@ -69,7 +69,7 @@
 	                <div class="profile-info-container pic3 match-height">
 	                    <div class="icon-container">
 	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/brown-default-billing.png">
+	                            <img src="/themes/{{ $shop_theme }}/img/default-billing.png">
 	                        </div>
 	                        <div class="col-md-10">
 	                            <div class="prof-info-text-header">Default Billing Address</div>

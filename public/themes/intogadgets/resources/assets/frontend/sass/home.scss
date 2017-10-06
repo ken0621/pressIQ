@@ -633,6 +633,18 @@ body
     }
     .best-ads
     {
+        a 
+        {
+            &:hover
+            {
+                cursor: pointer;
+                img 
+                {
+                    opacity: 0.8;
+                    transition: 0.3s all ease;
+                }
+            }
+        }
         .per-ads
         {
             padding: 4px;

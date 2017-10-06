@@ -9,19 +9,19 @@
 	    <div class="dashboard-top">
 	        <div class="row clearfix">
 	            <div class="col-md-8">
-	                <div class="img-container">
-	                    <img src="/themes/{{ $shop_theme }}/img/brown-img1.png">
-	                </div>
+	                <div class="embed-responsive embed-responsive-16by9">
+					  <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/sy655Z-7TZE?autoplay=1" frameborder="0" allowfullscreen></iframe>
+					</div>
 	            </div>
 	            <div class="col-md-4">
 	                <div class="join-container">
 	                    <div class="btn btn-text">
-	                        <div class="text-header1">Join the Movement!</div>
-	                        <div class="text-header2">Enroll now and become one of us!</div>
+	                        <div class="text-header1">Become a member!</div>
+	                        <!-- <div class="text-header2">Enroll now and become one of us!</div> -->
 	                    </div>
 	                    <div class="btn-container">
-	                        <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
-	                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
+	                        <!-- <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
+	                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br> -->
 	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
 	                    </div>
 	                </div>
@@ -30,7 +30,7 @@
 	    </div>
 
 	    <!-- BOTTOM DASHBOARD -->
-	    <div class="dashboard-bottom">
+	    <!-- <div class="dashboard-bottom">
 	        <div class="text-header">Profile Information</div>
 	        <div class="row clearfix">
 	            <div class="col-md-4">
@@ -79,7 +79,7 @@
 	                </div>
 	            </div>
 	        </div>
-	    </div>
+	    </div> -->
 	</div>
 @else
 	<div class="dashboard">

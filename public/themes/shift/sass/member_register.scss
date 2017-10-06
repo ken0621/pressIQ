@@ -10,6 +10,14 @@ body
 	background-color: #ededed;
 }
 
+@mixin transition($transition)
+{
+	  -webkit-transition: all $transition ease-in-out;
+	  -moz-transition: all $transition ease-in-out;
+	  -o-transition: all $transition ease-in-out;
+	  transition: all $transition ease-in-out;
+}
+
 .register
 {
 	font-family: $content-text;
@@ -263,7 +271,13 @@ body
 				}
 				span
 				{
-					color: #693d28;
+					@include transition(0.2s);
+					color: #D4B044;
+
+					&:hover
+					{
+						color: #BE9340;
+					}
 				}
 			}
 			.choice
@@ -273,6 +287,7 @@ body
 				{
 					text-align: center;
 				}
+
 				.holder
 				{
 					display: inline-block;
@@ -281,21 +296,33 @@ body
 					{
 						display: block;
 					}
-					a {
-						color: $text-dark !important;
+					a
+					{
+						@include transition(0.2s);
+						/* color: $text-dark !important; */
 						font-weight: $regular;
-						color: #422311 !important;
+						color: #D4B044 !important;
 						font-size: 15px !important;
+
+						&:hover
+						{
+							color: #BE9340 !important;
+						}
 					}
 					.btn-brown 
 					{
+						@include transition(0.2s);
+						background-color: #D4B044;
+						color: #fff;
+
 						@media screen and (max-width: 991px)
 						{
 							width: 100%;
 						}
 						&:hover 
 						{
-							background-color: #613922;
+							background-color: #BE9340;
+							color: #fff;
 						}
 					}
 				}
@@ -312,9 +339,11 @@ body
 				}
 				.login-href
 				{
-					color: #693d28;
+					@include transition(0.2s);
+					color: #BE9340 !important;
 					font-size: 13px;
 					font-weight: 600;
+
 					@media screen and (max-width: 991px)
 					{
 						display: block;
@@ -329,7 +358,7 @@ body
 {
 	.modal-header
 	{
-		background-color: #693d28;
+		background-color: #171717;
 		color: #fff;
 		font-size: 13px;
 		font-weight: 600;
@@ -363,11 +392,23 @@ body
 		}
 		.btn-semi
 		{
-			background-color: #693d28;
+			@include transition(0.2s);
+			background-color: #BE9340;
+
+			&:hover
+			{
+				background-color: #f34e4e;
+			}
 		}
 		.btn-pure
 		{
-			background-color: #462211;
+			@include transition(0.2s);
+			background-color: #D4B044;
+
+			&:hover
+			{
+				background-color: #BE9340;
+			}
 		}
 	}
 }

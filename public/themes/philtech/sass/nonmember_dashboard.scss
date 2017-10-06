@@ -1,9 +1,18 @@
 $content-text: 'Open Sans', sans-serif;
+$light: 300;
 $regular: 400;
 $semi-bold: 600;
 $bold: 700;
 $text-light: #777;
 $text-dark: #272c2f;
+
+@mixin transition($transition)
+{
+	  -webkit-transition: all $transition ease-in-out;
+	  -moz-transition: all $transition ease-in-out;
+	  -o-transition: all $transition ease-in-out;
+	  transition: all $transition ease-in-out;
+}
 
 
 /* Dashboard Top */
@@ -14,23 +23,41 @@ $text-dark: #272c2f;
 	{
 		img
 		{
-			width: 100%;
-			height: auto;
+			//width: 100%;
+			//height: auto;
+		}
+	}
+
+	.title
+	{
+		color: $text-light;
+		border: none;
+		border-bottom: 1px solid #d7d7d7;
+		font-size: 21px;
+		margin-bottom: 20px;
+
+		span
+		{
+			font-weight: $bold;
 		}
 	}
 
 	.join-container
 	{
 		font-family: $content-text;
-		border: 1px solid #dfdfdf;
+		//border: 1px solid #dfdfdf;
 		padding: 15px;
-		min-height: 403px;
-		max-height: 403px;
+		min-height: 550px;
+		max-height: 550px;
+		background-repeat: no-repeat;
+		background-size: cover;
 
 		.btn-text
 		{
 			width: 100%;
 			white-space: normal;
+			cursor: default;
+
 			@media screen and (min-width: 991px)
 			{
 				text-align: left;
@@ -38,42 +65,54 @@ $text-dark: #272c2f;
 
 			.text-header1
 			{
-				font-weight: $bold;
-				font-size: 21px;
-				color: $text-dark;
+				font-weight: $regular;
+				font-size: 24px;
+				color: #fff;
 				word-break: break-all;
+				text-align: center;
+				padding-top: 100px;
 			}
 
 			.text-header2
 			{
-				font-weight: $regular;
-				font-size: 15px;
-				color: $text-light;
+				font-weight: $light;
+				font-size: 14px;
+				text-align: center;
+				color: #fff;
 				letter-spacing: 0.2px;
 				word-break: break-all;
+				padding-top: 20px;
 			}
 		}
 
     	.btn-container
     	{
     		text-align: center;
-			padding: 63px 0px 0px 0px;
+			padding: 40px 0px 100px 0px;
 			font-family: $content-text;
-			font-weight: $semi-bold;
+			font-weight: $light;
 			font-size: 13px;
 		
 			.btn-buy-a-kit
 			{
 				color: #fff;
-				background-color: #693d28;
+				background-color: #F34B56;
 				padding: 12px 40px 12px 40px;
-				border: 2px solid #693d28;
+				border: 1px solid #F34B56;
 				border-radius: 2px;
 			}
 			
-			img
+			/* img
 			{
 				padding: 20px 0px 20px 0px;
+			} */
+
+			.or
+			{
+				font-weight: $regular;
+				font-size: 13px;
+				color: #fff;
+				padding: 20px;
 			}
 			
 			a
@@ -83,12 +122,20 @@ $text-dark: #272c2f;
 
 			.btn-enter-a-code
 			{
-				color: #693d28;
+				@include transition(0.2s);
+				color: #fff;
 				background-color: inherit;
 				padding: 12px 30px 12px 30px;
-				border: 2px solid #693d28;
+				border: 1px solid #fff;
 				border-radius: 2px;
 				//margin-bottom: 65px;
+
+				&:hover
+				{
+					background-color: #FF8500;
+					border: 1px solid #FF8500;
+					color: #fff;
+				}
 			}
 		}
 
@@ -243,7 +290,7 @@ $text-dark: #272c2f;
 		background-color: #fff;
 		.modal-header
 		{
-			background-color: #422311;
+			background-color: #006CC5;
 			border-top-left-radius: 3px;
 			border-top-right-radius: 3px;
 
@@ -375,16 +422,13 @@ $text-dark: #272c2f;
 
 				.btn-verify
 				{
+					@include transition(0.2s);
 					color: #fff;
-					background-color: #f02432;
+					background-color: #FF8500;
 					padding: 12px 25px;
 					border: none;
 					border-radius: 2px;
 					opacity: 0.9;
-				  	-webkit-transition: all 0.2s ease-in-out;
-				  	-moz-transition: all 0.2s ease-in-out;
-				  	-o-transition: all 0.2s ease-in-out;
-				  	transition: all 0.2s ease-in-out;
 				}
 				.btn-verify:hover
 				{
@@ -412,7 +456,7 @@ $text-dark: #272c2f;
 		
 		.modal-header
 		{
-			background-color: #422311;
+			background-color: #006CC5;
 			border-top-left-radius: 3px;
 			border-top-right-radius: 3px;
 
@@ -478,9 +522,9 @@ $text-dark: #272c2f;
 				.btn-proceed-1
 				{
 					color: #fff;
-					background-color: #693d28;
+					background-color: #006CC5;
 					padding: 12px 40px;
-					border: 2px solid #693d28;
+					border: 2px solid #006CC5;
 					border-radius: 2px;
 				}
 			}
@@ -505,7 +549,7 @@ $text-dark: #272c2f;
 		background-color: #fff;
 		.modal-header
 		{
-			background-color: #422311;
+			background-color: #006CC5;
 			border-top-left-radius: 3px;
 			border-top-right-radius: 3px;
 

@@ -10,10 +10,14 @@ use App\Models\Tbl_user;
 use App\Models\Tbl_item;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_customer_address;
+use App\Models\Tbl_warehouse_inventory_record_log;
+use App\Models\Tbl_mlm_slot;
+use App\Models\Tbl_tree_sponsor;
 
 use App\Models\Tbl_transaction;
 use App\Models\Tbl_transaction_list;
 use App\Models\Tbl_transaction_item;
+use App\Models\Tbl_payment_logs;
 use App\Globals\AuditTrail;
 use App\Globals\Tablet_global;
 
@@ -259,6 +263,28 @@ class Transaction
         }
         return $customer_name;
     }
+    public static function getCustomerEmailTransaction($transaction_id = 0)
+    {
+        $customer_email = 'No Email found!';
+        if($transaction_id)
+        {
+            $data = Tbl_transaction::where('transaction_id',$transaction_id)->first();
+            
+            if($data)
+            {
+                if($data->transaction_reference_table == 'tbl_customer' && $data->transaction_reference_id != 0)
+                {
+                    $chck = Tbl_customer::where('customer_id', $data->transaction_reference_id)->first();
+                    if($chck)
+                    {
+                        $customer_email = $chck->email;
+                    }
+                }
+            }
+        }
+        return $customer_email;
+    }
+
     public static function getCustomerInfoTransaction($transaction_id = 0)
     {
         $customer_info = null;
@@ -318,6 +344,16 @@ class Transaction
     public static function get_transaction_date() //filter result of transaction list by customer
     {
         $store["get_transaction_date"]  = true;
+        session($store);
+    }
+    public static function get_transaction_payment_method()
+    {
+        $store["get_transaction_payment_method"] = true;
+        session($store);
+    }
+    public static function get_transaction_slot_id()
+    {
+        $store["get_transaction_slot_id"] = true;
         session($store);
     }
     
@@ -389,10 +425,62 @@ class Transaction
                 $data[$key]->display_date_paid      = $data[$key]->date_paid != null ? date("m/d/Y", strtotime($data[$key]->date_paid)) : "-";
                 $data[$key]->display_date_deliver   = $data[$key]->date_deliver != null ? date("m/d/Y", strtotime($data[$key]->date_deliver)) : "-";
             }
+
+            if (session('get_transaction_payment_method')) 
+            {
+                $payment_method = Transaction::getPaymentMethod($value->transaction_number, $value->transaction_list_id, is_serialized($value->transaction_details) ? unserialize($value->transaction_details) : null);
+                
+                $data[$key]->payment_method         = isset($payment_method->payment_method) ? $payment_method->payment_method : "None";
+                $data[$key]->checkout_id            = isset($payment_method->checkout_id) ? $payment_method->checkout_id : "None";
+                $data[$key]->paymaya_response       = isset($payment_method->paymaya_response) ? $payment_method->paymaya_response : "None";
+                $data[$key]->paymaya_status         = isset($payment_method->paymaya_status) ? $payment_method->paymaya_status : "None";
+                $data[$key]->dragonpay_response     = isset($payment_method->dragonpay_response) ? $payment_method->dragonpay_response : "None";
+
+                /* Old Date */
+                $old = DB::table("tbl_ec_order")->where("invoice_number", $value->transaction_number)->first();
+                if ($old) 
+                {
+                    $data[$key]->transaction_date_created = $old->created_date;
+                }
+            }
+
+            if (session('get_transaction_slot_id')) 
+            {
+                $slot = Transaction::getSlotId($value->transaction_number, $value->transaction_list_id);
+                if ($slot) 
+                {
+                    $tree = Tbl_tree_sponsor::where("sponsor_tree_child_id", $slot->slot_id)->first();
+                    if ($tree) 
+                    {
+                        $upline_slot = Tbl_mlm_slot::where("slot_id", $tree->sponsor_tree_parent_id)->first();
+                        if ($upline_slot) 
+                        {
+                            $data[$key]->slot_upline_no = $upline_slot->slot_no;
+                        }
+                        else
+                        {
+                            $data[$key]->slot_upline_no = "None";
+                        }
+                    }
+                    else
+                    {
+                        $data[$key]->slot_upline_no = "HEAD";
+                    }
+                    $data[$key]->slot_no = $slot->slot_no;
+                }
+                else
+                {
+                    $data[$key]->slot_no = "None";
+                    $data[$key]->slot_upline_no = "None";
+                }
+            }
         }
         
+        session()->forget('get_transaction_filter_customer_id');
         session()->forget('get_transaction_customer_details');
         session()->forget('get_transaction_date');
+        session()->forget('get_transaction_payment_method');
+        session()->forget('get_transaction_slot_id');
 
         return $data;
     }
@@ -455,5 +543,120 @@ class Transaction
     public static function getAllTransaction($filter = null)
     {
 
+    }
+
+    public static function getPaymentMethod($transaction_number, $transaction_list_id = null, $transaction_details = null)
+    {
+        $data = new \stdClass();
+        $old = DB::table("tbl_ec_order")->where("invoice_number", $transaction_number)->first();
+        if ($old) 
+        {
+            /* Old */
+            $payment_method = DB::table("tbl_online_pymnt_link")->where("link_method_id", $old->payment_method_id)->first();
+            if($payment_method)
+            {
+                $data->payment_method = $payment_method->link_reference_name;
+                if($payment_method->link_reference_name == "paymaya") 
+                {
+                    $paymaya = DB::table("tbl_paymaya_logs")->where("order_id", $old->ec_order_id)->first();
+                    $data->paymaya_status   = $paymaya->confirm_response;
+                    $data->paymaya_response = $paymaya->confirm_response_information;
+                    $data->checkout_id      = $paymaya->checkout_id;
+                }
+                elseif($payment_method->link_reference_name == "dragonpay")
+                {
+                    $dragonpay = DB::table("tbl_dragonpay_logs_other")->where("order_id", $old->ec_order_id)->orderBy("log_date", "desc")->first();
+                    if (!$dragonpay) 
+                    {
+                        $dragonpay = DB::table("tbl_dragonpay_logs")->where("order_id", $old->ec_order_id)->first();
+                    }
+                    $unserialize_dragonpay    = is_serialized($dragonpay->response) ? unserialize($dragonpay->response) : [];
+
+                    $data->checkout_id        = isset($unserialize_dragonpay['txnid']) ? $unserialize_dragonpay['txnid'] : null;
+                    $data->dragonpay_response = isset($unserialize_dragonpay['message']) ? $unserialize_dragonpay['message'] : null;
+                }
+            }
+        }
+        else
+        {
+            /* New */
+            $transaction = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->first();
+            $transaction = Tbl_transaction_list::where("transaction_id", $transaction->transaction_id)->where("transaction_type", "ORDER")->first();
+            $payment_logs = Tbl_payment_logs::where("transaction_list_id", $transaction->transaction_list_id)->first();
+            
+            if ($payment_logs) 
+            {
+                $data->payment_method = $payment_logs->payment_log_method;
+
+                switch ($payment_logs->payment_log_method) 
+                {
+                    case 'paymaya':
+                        if (isset($transaction_details["id"]) && isset($transaction_details["paymentDetails"]["cardType"]) && isset($transaction_details["paymentDetails"]["last4"]) && isset($transaction_details["paymentStatus"])) 
+                        {
+                            $data->checkout_id      = $transaction_details["id"];
+                            $data->paymaya_response = "PAID with " . $transaction_details["paymentDetails"]["cardType"] . " ending in ". $transaction_details["paymentDetails"]["last4"];
+                            $data->paymaya_status   = $transaction_details["paymentStatus"];
+                        }
+                    break;
+
+                    case 'dragonpay':
+                        if (isset($transaction_details["refno"])) 
+                        {
+                            $data->checkout_id        = $transaction_details["refno"];
+                            $data->dragonpay_response = $transaction_details["message"];
+                        }
+                    break;
+                    
+                    default:
+                        $data->checkout_id = "None";
+                    break;
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    public static function getSlotId($transaction_number, $transaction_list_id = null)
+    {
+        $old = DB::table("tbl_ec_order")->where("invoice_number", $transaction_number)->first();
+        if ($old) 
+        {
+            $slot = DB::table("tbl_ec_order")->where("invoice_number", $transaction_number)
+                                     // ->join("tbl_paymaya_logs", "tbl_paymaya_logs.order_id", "=", "tbl_ec_order.ec_order_id")
+                                     ->leftJoin("tbl_customer", "tbl_customer.customer_id", "=", "tbl_ec_order.customer_id")
+                                     ->leftJoin("tbl_ec_order_slot", "tbl_ec_order_slot.order_slot_ec_order_id", "=", "tbl_ec_order.ec_order_id")
+                                     ->leftJoin("tbl_mlm_slot", "tbl_mlm_slot.slot_id", "=", "tbl_ec_order_slot.order_slot_id_c")
+                                     ->leftJoin("tbl_customer_address", "tbl_customer_address.customer_id", "=", "tbl_customer.customer_id")
+                                     ->leftJoin("tbl_customer_other_info", "tbl_customer_other_info.customer_id", "=", "tbl_customer.customer_id")
+                                     ->groupBy("ec_order_id")
+                                     ->orderBy("ec_order_id", "asc")
+                                     ->first(); 
+
+            // if (!isset($slot->slot_id)) 
+            // {
+            //     $slot_temp = DB::table("tbl_ec_order_slot")->where("order_slot_ec_order_id", $old->ec_order_id)->first();
+            //     if ($slot_temp) 
+            //     {
+            //         $slot = DB::table("tbl_mlm_slot")->where("slot_id", $slot_temp->order_slot_id_c)->first();
+            //     }
+            // }                  
+        }
+        else
+        {
+            $transaction = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->first();
+            $transaction = Tbl_transaction_list::where("transaction_id", $transaction->transaction_id)->where("transaction_type", "RECEIPT")->first();
+            $slot_ref = Tbl_warehouse_inventory_record_log::where("record_consume_ref_name", "transaction_list")->where("record_consume_ref_id", $transaction->transaction_list_id)->first();
+            if ($slot_ref) 
+            {
+                $slot = Tbl_mlm_slot::where("slot_id", $slot_ref->mlm_slot_id_created)->first();
+            }
+            else
+            {
+                $slot = 0;
+            }
+        }
+
+        return $slot;
     }
 }

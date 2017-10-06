@@ -13,7 +13,7 @@
             </h1>
             <div class="dropdown pull-right">
                 <a href="javascript:" class="btn btn-def-white btn-custom-white"><i class="fa fa-check"></i> Secondary Command</a>
-                <a href="/member/cashier/transactions_list/payref" target="_blank" class="btn btn-primary"><i class="fa fa-star"></i> Paymaya Reference</a>
+                <a href="javascript:" target="_blank" class="btn btn-primary"><i class="fa fa-star"></i> Primary Command</a>
             </div>
         </div>
     </div>

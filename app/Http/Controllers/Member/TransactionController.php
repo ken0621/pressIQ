@@ -81,113 +81,17 @@ class TransactionController extends Member
         $data['list']->vatable       = $data['list']->transaction_subtotal - $data['list']->vat;
 
         /* Get Payment Method */
-        $data["customer_payment"]    = new \stdClass();
-        $old = DB::table("tbl_ec_order")->where("invoice_number", $data['list']->transaction_number)->first();
+        $data['customer_payment'] = Transaction::getPaymentMethod($data["list"]->transaction_number, $transaction_list_id, $data['transaction_details']);
+
+        /* Old Date */
+        $old = DB::table("tbl_ec_order")->where("invoice_number", $data["list"]->transaction_number)->first();
         if ($old) 
         {
             $data["list"]->transaction_date_created = $old->created_date;
-            /* Old */
-            $payment_method = DB::table("tbl_online_pymnt_link")->where("link_method_id", $old->payment_method_id)->first();
-            if($payment_method)
-            {
-                $data["customer_payment"]->payment_method = $payment_method->link_reference_name;
-                if($payment_method->link_reference_name == "paymaya") 
-                {
-                    $paymaya = DB::table("tbl_paymaya_logs")->where("order_id", $old->ec_order_id)->first();
-                    $data["customer_payment"]->checkout_id = $paymaya->checkout_id;
-                }
-                elseif($payment_method->link_reference_name == "dragonpay")
-                {
-                    $dragonpay = DB::table("tbl_dragonpay_logs")->where("order_id", $old->ec_order_id)->first();
-                    if (is_serialized($dragonpay->response)) 
-                    {
-                        $unserialize_dragonpay = unserialize($dragonpay->response);
-                        if (isset($unserialize_dragonpay['txnid']) && $unserialize_dragonpay['txnid']) 
-                        {
-                            $data["customer_payment"]->checkout_id = $unserialize_dragonpay['txnid'];
-                        }
-                        else
-                        {
-                            $data["customer_payment"]->checkout_id = "None";
-                        }
-                    }
-                    else
-                    {
-                        $data["customer_payment"]->checkout_id = "None";
-                    }
-                }
-                else
-                {
-                    $data["customer_payment"]->checkout_id = "None";
-                }
-            }
-            else
-            {
-                $data["customer_payment"]->payment_method = "None";
-                $data["customer_payment"]->checkout_id = "None";
-            }
-        }
-        else
-        {
-            /* New */
-            $transaction = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->first();
-            $transaction = Tbl_transaction_list::where("transaction_id", $transaction->transaction_id)->where("transaction_type", "ORDER")->first();
-            $payment_logs = Tbl_payment_logs::where("transaction_list_id", $transaction->transaction_list_id)->first();
-            
-            if ($payment_logs) 
-            {
-                $data["customer_payment"]->payment_method = $payment_logs->payment_log_method;
-
-                switch ($payment_logs->payment_log_method) 
-                {
-                    case 'paymaya':
-                        if (isset($data["transaction_details"]["id"])) 
-                        {
-                            $data["customer_payment"]->checkout_id = $data["transaction_details"]["id"];
-                        }
-                        else
-                        {
-                            $data["customer_payment"]->checkout_id = "None";
-                        }
-                    break;
-
-                    case 'dragonpay':
-                        if (isset($data["transaction_details"]["refno"])) 
-                        {
-                            $data["customer_payment"]->checkout_id = $data["transaction_details"]["refno"];
-                        }
-                        else
-                        {
-                            $data["customer_payment"]->checkout_id = "None";
-                        }
-                    break;
-                    
-                    default:
-                        $data["customer_payment"]->checkout_id = "None";
-                    break;
-                }
-            }
-            else
-            {
-                $data["customer_payment"]->payment_method = "None";
-                $data["customer_payment"]->checkout_id = "None";
-            }
         }
         
         $html = view("member.transaction.view_pdf", $data);
         $pdf = Pdf_global::show_pdfv2($html);
         return $pdf;
-    }
-    public function payref()
-    {
-        $data = [];
-
-        Excel::create('Paymaya Report', function($excel) use ($data)
-        {
-            $excel->sheet('Paymaya', function($sheet) use ($data)
-            {
-                $sheet->loadView('member.transaction.payment.payref', $data);
-            });
-        })->download('xls');
     }
 }

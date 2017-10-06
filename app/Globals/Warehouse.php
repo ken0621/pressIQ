@@ -115,7 +115,7 @@ class Warehouse
 
     public static function get_inventory_item($warehouse_id, $type = '')
     {
-        $data['warehouse_item_bundle'] = Warehouse::select_item_warehouse_per_bundle($warehouse_id);    
+        $data['warehouse_item_bundle'] = Warehouse::select_item_warehouse_per_bundle($warehouse_id);
         $data['_inventory'] = Warehouse::get_all_inventory_item($warehouse_id, $data['warehouse_item_bundle']);
         $data['_empties'] = Warehouse::get_all_inventory_item($warehouse_id, $data['warehouse_item_bundle'], 1);
 

@@ -56,7 +56,7 @@
             <div id="unused-empties" class="tab-pane fade">
                 <div class="form-group order-tags"></div>
                 <div class="table-responsive">
-                    @include("member.load_ajax_data.load_bundle_item")
+                    @include("member.load_ajax_data.load_bundle_item_inventory_empties")
                 </div>
             </div>
         </div>

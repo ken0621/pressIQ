@@ -126,13 +126,14 @@ class Warehouse
         // if($type == 'odd_inventory')
         // {
             $data['_inventory'] = Warehouse::get_all_inventory_item($warehouse_id, $data['warehouse_item_bundle']);
+            $data['_empties'] = Warehouse::get_all_inventory_item($warehouse_id, $data['warehouse_item_bundle'], 1);
         // }
 
         return $data;
     }
-    public static function get_all_inventory_item($warehouse_id, $bundled_item)
+    public static function get_all_inventory_item($warehouse_id, $bundled_item, $is_mts = 0)
     {
-        $original_inventory = Warehouse::select_item_warehouse_single($warehouse_id);
+        $original_inventory = Warehouse::select_item_warehouse_single_empties($warehouse_id, $is_mts);
         $_return = [];
         foreach ($original_inventory as $key => $value) 
         {
@@ -179,6 +180,37 @@ class Warehouse
         }
         return $_return;
     }
+    public static function select_item_warehouse_single_empties($warehouse_id = 0, $is_mts = 0)
+    {
+        $data = Tbl_warehouse::Warehouseitem_woempties()
+                             ->select_inventory($warehouse_id)
+                             ->orderBy('product_name','asc')
+                             ->get();
+                             
+        foreach($data as $key => $value)
+        {  
+            //cycy
+            $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$value->product_um)->where("is_base",0)->value("multi_id");
+            $data[$key]->product_qty_um = UnitMeasurement::um_view($value->product_current_qty,$value->product_um,$um_issued);
+            $data[$key]->product_reorderqty_um = UnitMeasurement::um_view($value->product_reorder_point,$value->product_um,$um_issued);
+
+            if($is_mts == 0)
+            {
+                if($value->is_mts == 1)
+                {
+                    unset($data[$key]);
+                }                
+            }
+            else
+            {
+                if($value->is_mts == 0)
+                {
+                    unset($data[$key]);
+                }
+            }
+        }
+        return $data; 
+    }  
     public static function insert_item_to_all_warehouse($item_id, $reorder_point = 0)
     {
         if($item_id)
@@ -391,7 +423,8 @@ class Warehouse
                              ->get();
                              
         foreach($data as $key => $value)
-        {   //cycy
+        {  
+            //cycy
             $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$value->product_um)->where("is_base",0)->value("multi_id");
             $data[$key]->product_qty_um = UnitMeasurement::um_view($value->product_current_qty,$value->product_um,$um_issued);
             $data[$key]->product_reorderqty_um = UnitMeasurement::um_view($value->product_reorder_point,$value->product_um,$um_issued);

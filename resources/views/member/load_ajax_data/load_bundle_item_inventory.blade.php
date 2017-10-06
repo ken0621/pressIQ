@@ -6,7 +6,7 @@
                 <th class="text-center" style="width: 40px">ITEM BARCODE</th>
                 <th class="text-center" style="width: 100px;">ACTUAL STOCKS</th>
                 @if($pis != 0)
-                <th class="text-center" style="width: 100px;">SIR Stocks</th>
+                <th class="text-center" style="width: 100px;">SIR STOCKS</th>
                 <th class="text-center" style="width: 100px;">ON HAND STOCKS</th>
                 @endif
             </tr>

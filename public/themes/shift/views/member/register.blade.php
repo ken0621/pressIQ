@@ -123,7 +123,7 @@
 								</div>
 								<div class="form-group clearfix" style="margin-top: 15px;">
 									<div class="checkbox agreement-checkbox">
-									  <label><input type="checkbox" value="" required> I agree to the Brown <span>Terms of Use and Privacy Policy</span></label>
+									  <label><input type="checkbox" value="" required> I agree to the Shift <span>Terms of Use and Privacy Policy</span></label>
 									</div>
 								</div>
 								<div class="form-group">
@@ -149,7 +149,7 @@
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header">Accept Brown Contract</div>
+            <div class="modal-header">Accept Shift Contract</div>
             <div class="modal-body">
                 <div class="contract">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. 
 

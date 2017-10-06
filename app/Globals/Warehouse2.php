@@ -762,6 +762,7 @@ class Warehouse2
         $insert['record_consume_ref_id']     = isset($consume['id']) ? $consume['id'] : 0;
         $insert['record_inventory_status']   = 1;
         $insert['record_log_date_updated']   = Carbon::now();
+        $insert['item_in_use']               = 'used';
        
         Warehouse2::insert_item_history($recor_log_id);
         Tbl_warehouse_inventory_record_log::where('record_log_id',$recor_log_id)->update($insert);

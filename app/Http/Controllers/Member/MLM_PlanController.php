@@ -120,6 +120,7 @@ class MLM_PlanController extends Member
             $update['plan_settings_email_product_code'] = Request::input('plan_settings_email_product_code');
             $update['plan_settings_upgrade_slot'] = Request::input('plan_settings_upgrade_slot');
             $update['plan_settings_default_downline_rule'] = Request::input('plan_settings_default_downline_rule');
+            $update['plan_settings_new_gen_placement'] = Request::input('plan_settings_new_gen_placement');
     		// end
     		
     		// update settings

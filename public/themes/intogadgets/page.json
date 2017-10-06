@@ -182,6 +182,104 @@
 			"type":"collection",
 			"default":"",
 			"size":"6"
+		},
+		"home_best_seller_ad1" :
+		{
+			"label":"Best Seller Ads 1 Image",
+			"type":"image",
+			"default":"/themes/intogadgets/img/bs1.jpg",
+			"size":"3"
+		},
+		"home_best_seller_ad1_link" :
+		{
+			"label":"Best Seller Ads 1 Link",
+			"type":"textarea",
+			"default":"",
+			"size":"3"
+		},
+		"home_best_seller_ad2" :
+		{
+			"label":"Best Seller Ads 2 Image",
+			"type":"image",
+			"default":"/themes/intogadgets/img/bs2.jpg",
+			"size":"3"
+		},
+		"home_best_seller_ad2_link" :
+		{
+			"label":"Best Seller Ads 2 Link",
+			"type":"textarea",
+			"default":"",
+			"size":"3"
+		},
+		"home_best_seller_ad3" :
+		{
+			"label":"Best Seller Ads 3 Image",
+			"type":"image",
+			"default":"/themes/intogadgets/img/bs3.jpg",
+			"size":"3"
+		},
+		"home_best_seller_ad3_link" :
+		{
+			"label":"Best Seller Ads 3 Link",
+			"type":"textarea",
+			"default":"",
+			"size":"3"
+		},
+		"home_best_seller_ad4" :
+		{
+			"label":"Best Seller Ads 4 Image",
+			"type":"image",
+			"default":"/themes/intogadgets/img/bs4.jpg",
+			"size":"3"
+		},
+		"home_best_seller_ad4_link" :
+		{
+			"label":"Best Seller Ads 4 Link",
+			"type":"textarea",
+			"default":"",
+			"size":"3"
+		},
+		"home_best_seller_ad5" :
+		{
+			"label":"Best Seller Ads 5 Image",
+			"type":"image",
+			"default":"/themes/intogadgets/img/bs5.jpg",
+			"size":"3"
+		},
+		"home_best_seller_ad5_link" :
+		{
+			"label":"Best Seller Ads 5 Link",
+			"type":"textarea",
+			"default":"",
+			"size":"3"
+		},
+		"home_best_seller_ad6" :
+		{
+			"label":"Best Seller Ads 6 Image",
+			"type":"image",
+			"default":"/themes/intogadgets/img/bs6.jpg",
+			"size":"3"
+		},
+		"home_best_seller_ad6_link" :
+		{
+			"label":"Best Seller Ads 6 Link",
+			"type":"textarea",
+			"default":"",
+			"size":"3"
+		},
+		"home_best_seller_ad7" :
+		{
+			"label":"Best Seller Ads 7 Image",
+			"type":"image",
+			"default":"/themes/intogadgets/img/bs7.jpg",
+			"size":"3"
+		},
+		"home_best_seller_ad7_link" :
+		{
+			"label":"Best Seller Ads 7 Link",
+			"type":"textarea",
+			"default":"",
+			"size":"3"
 		}
 	},
 	"about":

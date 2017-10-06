@@ -105,11 +105,32 @@ class MLM_ProductController extends Member
                 $rank_cashback[$value2->stairstep_id] = Tbl_rank_repurchase_cashback_item::where('item_id', $value->item_id)->where('rank_id', $value2->stairstep_id)->first();
             }
 
+<<<<<<< HEAD
             $_inventory[$key]->item_points   = $item_points;
             if(isset($rank_cashback))
             {
                 $_inventory[$key]->rank_cashback = $rank_cashback;
             }
+=======
+            if (isset($item_points))
+            {
+                $_inventory[$key]->item_points   = $item_points;
+            }
+            else
+            {
+                $_inventory[$key]->item_points   = null;
+            }
+            
+
+            if (isset($rank_cashback)) 
+            {
+                $_inventory[$key]->rank_cashback = $rank_cashback;
+            }
+            else
+            {
+                $_inventory[$key]->rank_cashback = null;
+            }
+>>>>>>> 5abb8a1cf54ffd951d3aa261ea21f6a1e8beb305
         }
         // dd($_inventory);
 	    $data['active'] = [];

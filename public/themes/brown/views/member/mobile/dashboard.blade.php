@@ -197,7 +197,7 @@
                                           <div class="text-header2">Enroll now and become one of us!</div>
                                        </div>
                                        <div class="btn-container">
-                                          <button class="product-add-cart btn-buy-a-kit" type="button" onClick="location.href='/cartv2/buy_kit_mobile/{{ $item_kit_id }}'">Buy a Kit</button><br>
+                                          <button class="product-add-cart btn-buy-a-kit" type="button" onClick="location.href='/cartv2/buy_kit_mobile/{{ $item_kit_id }}'">Enroll Now</button><br>
                                           <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
                                           <a href="#" data-popup=".popup-code" class="open-popup" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
                                        </div>

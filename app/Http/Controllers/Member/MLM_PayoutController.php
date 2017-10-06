@@ -139,15 +139,29 @@ class MLM_PayoutController extends Member
 		$total_payout 			= 0;
 		$total_net 				= 0;
 		$minimum_encashment		= $minimum;
+		$data["method"]			= $method;
 
 
 		if($source == "wallet")
 		{
-			$_slot = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->membership()->customer()->currentWallet()->orderBy("customer_id", "asc")->get();
+			$slot_query = Tbl_mlm_slot::where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->membership()->customer()->currentWallet()->orderBy("customer_id", "asc");
+			
+			if($method == "eon")
+			{
+				$slot_query->where("customer_payout_method", "eon");
+				$slot_query->where("slot_eon", "!=", "");
+				$slot_query->where("slot_eon_account_no", "!=", "");
+			}
+			
+			$_slot = $slot_query->get();
 			
 			foreach($_slot as $key => $slot)
 			{
-				$earnings_as_of 	= Tbl_mlm_slot_wallet_log::where("wallet_log_slot", $slot->slot_id)->where("wallet_log_date_created", ">=", date("Y-m-d", strtotime($cutoff_date)))->sum("wallet_log_amount");
+				$earnings_as_of 	= Tbl_mlm_slot_wallet_log::where("wallet_log_slot", $slot->slot_id)->where("wallet_log_date_created", ">", date("Y-m-d", strtotime($cutoff_date) + 86400))->sum("wallet_log_amount");
+				
+				
+
+				
 				$encashment_amount 	= $slot->current_wallet - $earnings_as_of;
 				$remaining 			= $slot->current_wallet - $encashment_amount;
 				$compute_net 		= $encashment_amount;
@@ -176,7 +190,6 @@ class MLM_PayoutController extends Member
 				$_slot[$key]->display_tax = Currency::format($tax);
 				$_slot[$key]->display_net = Currency::format($compute_net);
 
-
 				if($encashment_amount <= $minimum_encashment || $remaining < 0)
 				{
 					unset($_slot[$key]);
@@ -185,11 +198,9 @@ class MLM_PayoutController extends Member
 				{
 					$total_payout += $encashment_amount;
 					$total_net += $compute_net;
-
 				}
 			}
 		}
-
 
 		$data["total_payout"] = Currency::format($total_payout);
 		$data["total_net"] = Currency::format($total_net);

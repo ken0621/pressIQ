@@ -272,6 +272,41 @@
 				</div>
 			</div>
 		</div>
+		
+		<!-- ACADEMY -->
+		<div class="academy-container">
+			<!-- <div class="academy-img-container">
+				<a data-toggle="modal" data-target="#academy-modal"><img src="/themes/{{ $shop_theme }}/img/top-dash-img.jpg" alt=""></a>
+			</div> -->
+			<div class="row clearfix">
+
+				<div class="col-md-6">
+
+					<form action="">
+						<img src="/themes/{{ $shop_theme }}/img/left.jpg" alt="">
+						<div class="row row-no-padding">
+							<div class="col-md-4">
+								<input style="border-radius: 0px; border-right: 0; box-shadow: none !important;" class="form-control input-sm" type="text">
+							</div>
+							<div class="col-md-4">
+								<input style="border-radius: 0px; border-left: 0; box-shadow: none !important;" class="form-control input-sm" type="text">
+							</div>
+							<div class="col-md-4">
+								<input style="border-radius: 0px; box-shadow: none !important;" class="form-control input-sm" type="text">
+							</div>
+						</div>
+					</form>
+
+				</div>
+				
+				<div class="col-md-6">
+					<img src="/themes/{{ $shop_theme }}/img/right.jpg" alt="">
+				</div>
+
+			</div>
+		</div>
+		<!-- END ACADEMY -->
+
 		<div class="row clearfix">
 			<div class="animated fadeInUp col-md-6">
 				<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
@@ -425,6 +460,39 @@
 			</div>
 		</div>
 
+		<!-- Popup Academy -->
+	    <div class="popup-academy">
+	        <div id="academy-modal" class="modal academy-modal fade">
+	            <div class="modal-lg modal-dialog">
+	                <div class="modal-content">
+	                    
+	                    <div class="modal-header">
+	                    	<div class="container">
+								<div class="row clearfix">
+							        <div class="col-md-4">
+							        	<div class="logo-container">
+							        		Logo Here
+							        	</div>
+							        </div>
+
+							        <div class="cold-md-8">
+							        	<div class="header-container">
+							        		<h2>BROWN&PROUD ACADEMY</h2>
+							        		<h3>MATERCLASS IN CREATIVE ENTREPRENEURSHIP</h3>
+							        	</div>
+							        </div>
+								</div>
+							</div>
+					    </div>
+
+						<div class="modal-body">
+							
+						</div>
+
+	                </div>
+	            </div>
+	        </div>
+	    </div>
 
 	    <!-- Success -->
 	    <div class="popup-success">
@@ -514,8 +582,6 @@ $(document).ready(function()
 @section("member_css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/member_dashboard.css">
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/nonmember_dashboard.css">
-
-
 
 
 <style type="text/css">

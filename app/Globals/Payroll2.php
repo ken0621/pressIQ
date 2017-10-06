@@ -4694,6 +4694,7 @@ class Payroll2
 		{
 			$val["label"] 					= $adjustment->payroll_adjustment_name;
 			$val["type"] 					= "adjustment";
+			$val["category"]				= $adjustment->payroll_adjustment_category;
 			$val["description"] 			= "This is a manual adjustment.<br>Click <a class='delete-adjustment' adjustment_id='" . $adjustment->payroll_adjustment_id . "' href='javascript:'>here</a> to delete this adjustment.";
 			$val["amount"] 					= $adjustment->payroll_adjustment_amount;
 			$val["add.gross_pay"] 			= ($adjustment->add_gross_pay == 1 ? true : false);

@@ -144,7 +144,6 @@
 					    </tbody>
 					</table>
                 </div>
-                {{ $_employee->links() }}
             </div>
         </div> 
     </div>

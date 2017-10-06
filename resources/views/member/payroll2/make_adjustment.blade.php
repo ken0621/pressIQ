@@ -29,15 +29,31 @@
             </div>
         </div>
         
-        <div class="form-group addition-setting">
-            <div class="col-md-12">
-                <small>Addition Settings</small>
-                <select name="adjustment_setting" class="form-control adjustment_setting">
-                    <option value="non-taxable">Non-Taxable</option>
-                    <option value="taxable">Taxable</option>
-                    <option value="hidden">Hidden</option>
-                </select>
-            </div>
+        <div class="form-group "> <!-- class = addition-setting removed -->
+            
+                <div class="col-md-6">
+                    <small>Adjustment Category</small>
+                    <select name="adjustment_category" class="form-control adjustment_setting">
+                        <option value="Allowance">Allowance</option>
+                        <option value="Bonus">Bonus</option>
+                        <option value="Commission">Commission</option>
+                        <option value="Incentives">Incentives</option>
+                        <option value="Cash Advance">Cash Advance</option>
+                        <option value="Cash Bond">Cash Bond</option>
+                        <option value="Additions">Additions</option>
+                        <option value="Deductions">Deductions</option>
+                        <option value="Others">Others</option>
+                    </select>
+                </div>
+            
+                <div class="col-md-6">
+                    <small>Addition Settings</small>
+                    <select name="adjustment_setting" class="form-control adjustment_setting">
+                        <option value="non-taxable">Non-Taxable</option>
+                        <option value="taxable">Taxable</option>
+                        <option value="hidden">Hidden</option>
+                    </select>
+                </div>
         </div>
         
     </div>

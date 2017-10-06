@@ -16,6 +16,7 @@ use App\Models\Tbl_membership_package;
 use App\Models\Tbl_item;
 use App\Globals\Currency;
 use App\Globals\Mlm_compute;
+use App\Globals\Mlm_tree;
 use App\Globals\Mlm_complan_manager;
 use App\Globals\Reward;
 use App\Globals\MLM2;
@@ -514,11 +515,26 @@ class MlmDeveloperController extends Member
         {
             $slot_id = MLM2::create_slot($shop_id, $customer_id, $membership_id, $slot_sponsor, $slot_no, $slot_type = "PS");
 
-            if(is_numeric($slot_id))
+            if(Request::input("placement") != "0")
             {
-                $return_position = MLM2::matrix_position($shop_id, $slot_id, $slot_placement, $slot_position);
+                if(is_numeric($slot_id))
+                {
+                    $return_position = MLM2::matrix_position($shop_id, $slot_id, $slot_placement, $slot_position);
+                    
+                    if($return_position == "success")
+                    {
+                        $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
+                        Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
+                   		Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
+                   		MLM2::entry($shop_id,$slot_id);
+                    }
+                }
             }
-        
+            else
+            {
+                $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
+                Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
+            }
         }
 
         if(!$membership_code_id)

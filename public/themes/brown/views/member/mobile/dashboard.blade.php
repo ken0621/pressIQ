@@ -48,7 +48,7 @@
                      <div class="list-block">
                         <ul>
                            <li>
-                              <a href="/members" class="item-link close-panel">
+                              <a href="javascript:" class="item-link close-panel">
                                  <div class="item-content">
                                     <div class="item-media"><i class="icon brown-icon-dashboard"></i></div>
                                     <div class="item-inner">
@@ -68,8 +68,8 @@
                                  </div>
                               </a>
                            </li>
-                           {{-- <li>
-                              <a href="forms.html" class="item-link close-panel">
+                           <li>
+                              <a href="/members/genealogy" class="item-link close-panel">
                                  <div class="item-content">
                                     <div class="item-media"><i class="icon brown-icon-flow-tree"></i></div>
                                     <div class="item-inner">
@@ -77,7 +77,7 @@
                                     </div>
                                  </div>
                               </a>
-                           </li> --}}
+                           </li>
                            <li>
                               <a href="/members/report" class="item-link close-panel">
                                  <div class="item-content">
@@ -174,10 +174,6 @@
                      <div class="navbar-inner">
                         <div class="left"><a href="#" class="open-panel link icon-only"><i class="icon icon-bars"></i></a></div>
                         <div class="left">Dashboard</div>
-                        {{-- <div class="right">
-                           <div class="text">3</div>
-                           <img src="/themes/{{ $shop_theme }}/assets/mobile/img/notification.png">
-                        </div> --}}
                      </div>
                   </div>
                   <div class="page-content">
@@ -322,12 +318,12 @@
                                     @foreach($_slot as $slot)
                                     <div class="holder">
                                        <div class="row">
-                                          <div class="col-40 text-center">
+                                          <div class="col-100 text-center">
                                              <div class="label2">{{ $slot->slot_no }}</div>
                                              <div class="label3">{{ $slot->display_total_earnings }}</div>
                                              <div class="label3">{{ $slot->current_direct }} / {{ $slot->brown_next_rank_current }}</div>
                                           </div>
-                                          <div class="col-60 text-center" style="margin-bottom: 5px;">ROAD TO <b>{{ $slot->brown_next_rank }}</b></div>
+                                          <div class="col-100 text-center" style="margin-bottom: 5px;">ROAD TO <b>{{ $slot->brown_next_rank }}</b></div>
                                           <div class="col-40">
                                              @if($slot->brown_next_rank != "NO NEXT RANK")
                                              @if($slot->current_direct >= $slot->required_direct)

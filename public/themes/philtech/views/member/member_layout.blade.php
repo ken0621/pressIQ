@@ -117,7 +117,7 @@
 @yield("member_css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/member.css">
 @endsection
-@section("script")
+@section("js")
 @yield("member_script")
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/member.js"></script>
 @endsection

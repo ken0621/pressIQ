@@ -658,4 +658,5 @@ class Transaction
         }
 
         return $slot;
-    
+    }
+}

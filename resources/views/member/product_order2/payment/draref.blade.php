@@ -32,7 +32,7 @@
 <body>
 	<table>
 		<tr>
-			<td class="title" colspan="18">Paymaya Checkout Cross Reference</td>
+			<td class="title" colspan="18">Dragonpay Checkout Cross Reference</td>
 		</tr>
 		<tr>
 			<td class="sub" colspan="18">This page allows to get corresponding checkout ID and status of payment.</td>

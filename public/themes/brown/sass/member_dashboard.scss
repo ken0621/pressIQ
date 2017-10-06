@@ -514,6 +514,42 @@ $text-dark: #404040;
 	}
 }
 
+.academy-container
+{
+
+	form
+	{
+		img
+		{
+			width: 100%;
+			margin-bottom: 20px;
+		}
+	}
+
+}
+
+.popup-academy
+{
+	.modal-content
+	{
+		.modal-header
+		{
+			background-color: #422311;
+
+			.header-container
+			{
+				text-align: center;
+				color: #fff;
+			}
+		}
+
+		.modal-body
+		{
+
+		}
+	}
+}
+
 /* Success */
 .popup-success
 {

@@ -93,6 +93,7 @@ class PayrollProcessController extends Member
 		$data["period_info"] = $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
 		$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
 		$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
+
 		$data = $this->get_total($data);
 		
 		return view("member.payroll2.payroll_process_modal_view_summary", $data);
@@ -147,6 +148,7 @@ class PayrollProcessController extends Member
 
 	public function get_total($data)
 	{
+
 		$total_basic = 0;
 		$total_gross = 0;
 		$total_net = 0;
@@ -209,9 +211,7 @@ class PayrollProcessController extends Member
 
 			if(isset($employee->cutoff_breakdown))
 			{
-				
-				$_duction_break_down = $employee->cutoff_breakdown->_breakdown;
-
+				$_duction_break_down = unserialize($employee->cutoff_breakdown)->_breakdown;
 				
 					foreach($_duction_break_down as $breakdown)
 					{
@@ -238,6 +238,7 @@ class PayrollProcessController extends Member
 					$data["_employee"][$key]->total_deduction_employee = $deduction;
 					
 			}
+
 			if (isset($employee["cutoff_breakdown"]->_breakdown )) 
 			{
 				# code...
@@ -319,6 +320,7 @@ class PayrollProcessController extends Member
 		// dd($data["total_deduction_of_all_employee"]);
 		return $data;
 	}
+
 
 	public function income_summary_timesheet($period_company_id,$employee_id)
 	{

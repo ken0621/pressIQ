@@ -6,23 +6,21 @@
 @if(!$mlm_member)
 	<div class="dashboard">
 	    <!-- TOP DASHBOARD-->
+
 	    <div class="dashboard-top">
 	        <div class="row clearfix">
-	            <div class="col-md-8">
-	                <div class="img-container">
-	                    <img src="/themes/{{ $shop_theme }}/img/brown-img1.png">
-	                </div>
-	            </div>
-	            <div class="col-md-4">
-	                <div class="join-container">
+	            <div class="col-md-12">
+	            	<div class="title">NON-MEMBER | <span>DASHBOARD</span> </div>
+	                <div class="join-container" style="background-image: url('/themes/{{ $shop_theme }}/img/nonmember-bg.png');">
 	                    <div class="btn btn-text">
-	                        <div class="text-header1">Join the Movement!</div>
-	                        <div class="text-header2">Enroll now and become one of us!</div>
+	                        <div class="text-header1">Join Us Now!</div>
+	                        <div class="text-header2">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.<br>Aenean commodo ligula eget dolor.</div>
 	                    </div>
 	                    <div class="btn-container">
-	                        <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
-	                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
-	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
+	                        <!-- <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">BUY A KIT</button></a> -->
+	                        <!-- <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br> -->
+	                        <!-- <span class="or">OR</span> -->
+	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">ENTER A CODE</button></a>
 	                    </div>
 	                </div>
 	            </div>
@@ -30,14 +28,14 @@
 	    </div>
 
 	    <!-- BOTTOM DASHBOARD -->
-	    <div class="dashboard-bottom">
+	    <!-- <div class="dashboard-bottom">
 	        <div class="text-header">Profile Information</div>
 	        <div class="row clearfix">
 	            <div class="col-md-4">
 	                <div class="profile-info-container pic1 match-height">
 	                    <div class="icon-container">
 	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/brown-personal-info.png">
+	                            <img src="/themes/{{ $shop_theme }}/img/personal-info.png">
 	                        </div>
 	                        <div class="col-md-10">
 	                            <div class="prof-info-text-header">Personal Information</div>
@@ -56,7 +54,7 @@
 	                <div class="profile-info-container pic2 match-height">
 	                    <div class="icon-container">
 	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/brown-default-shipping.png">
+	                            <img src="/themes/{{ $shop_theme }}/img/default-shipping.png">
 	                        </div>
 	                        <div class="col-md-10">
 	                            <div class="prof-info-text-header">Default Shipping Address</div>
@@ -69,7 +67,7 @@
 	                <div class="profile-info-container pic3 match-height">
 	                    <div class="icon-container">
 	                        <div class="col-md-2">
-	                            <img src="/themes/{{ $shop_theme }}/img/brown-default-billing.png">
+	                            <img src="/themes/{{ $shop_theme }}/img/default-billing.png">
 	                        </div>
 	                        <div class="col-md-10">
 	                            <div class="prof-info-text-header">Default Billing Address</div>
@@ -79,7 +77,7 @@
 	                </div>
 	            </div>
 	        </div>
-	    </div>
+	    </div> -->
 	</div>
 @else
 	<div class="dashboard">
@@ -124,9 +122,7 @@
 							</div>
 						@endforeach
 					</div>
-
 				</div>
-
 				<div class="title">Reward Points</div>
 				<div class="sub-container">
 					@if(count($_point_plan) > 0)
@@ -141,6 +137,12 @@
 					@else
 						<div class="text-center" style="padding: 20px">You don't have any points yet.</div>
 					@endif
+				</div>
+				<div class="title">Enter Product Code</div>
+				<div class="sub-container">
+					<div class="chart-legend text-center">
+						<button class="btn btn-default" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -415,7 +417,6 @@ $(document).ready(function()
 input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0 30px white inset;
 }
-
 /* PLACEMENT VERIFIER */
 .popup-verify-placement {
   background-color: #EEEEEE;
@@ -496,5 +497,6 @@ input:-webkit-autofill {
           color: #fff;
           background-color: #693d28;
           opacity: 1.0; }
+
 </style>
 @endsection

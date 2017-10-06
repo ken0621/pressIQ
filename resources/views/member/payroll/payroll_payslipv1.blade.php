@@ -20,7 +20,7 @@
           td
           {
             padding: 5px !important;
-            font-size: 11px;
+            font-size: 10px;
             line-height: 11px;
           }
           .payslip-wrapper
@@ -48,7 +48,7 @@
 
     <div style="vertical-align: top; text-align: center;">
       <div class="clearfix">
-        
+     
         
           @foreach($_employee as $key => $employee)
           <div class="col-md-6">
@@ -69,7 +69,7 @@
                       <div class="col-md-12">
                           <table style="width: 100%;" class="table table-bordered">
                               <tbody>
-                                  <tr >
+                                  <tr>
                                       <td width="40%" style="font-weight: bold;">BASIC PAY</td>
                                       <td width="30%" style="font-weight: bold;" class="text-right">{{ payroll_currency($employee->net_basic_pay) }}</td>
                                       <td width="30%" style="font-weight: bold;"></td>
@@ -127,6 +127,23 @@
                                       <td style="font-weight: bold;" class="text-right">{{ payroll_currency($employee->net_pay) }}</td>
                                   </tr>
 
+                                  <div>
+                                  </div>
+                              </tbody>
+                          </table>
+                      </div>
+                  <div class="row" >
+                    <div class="col-md-12 text-center" style="font-weight: bold; font-size: 12px;">PERFORMANCE SUMMARY</div>
+                  </div>
+                      <div class="col-md-12">
+                        <table style="width: 100%;" class="table table-bordered">
+                              <tbody>
+                                  @foreach($employee->cutoff_breakdown->_time_breakdown as $key => $time_breakdown)
+                                      <tr>
+                                          <td style="text-transform:uppercase">{{ str_replace("_"," ",$key) }}</td>
+                                          <td class="text-right">{{ $time_breakdown["time"] }}</td>
+                                      </tr>
+                                  @endforeach
                               </tbody>
                           </table>
                       </div>

@@ -1,4 +1,5 @@
 <?php
+Route::get('/ref/{id}', 'LeadController@ref');
 Route::any('/inspirers', 'SampleTesting@inspirer');
 Route::any('/inspirer', 'SampleTesting@inspirer');
 

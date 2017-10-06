@@ -83,8 +83,9 @@ function mlm_developer_import()
 				else
 				{
 					$target_source.find(".status").html("<span style='color: red'>" + data.message +"</span>");
+					next_pointer = pointer + 1;
+					action_import_slot_data(next_pointer);
 				}
-				
 			}
 		});
 	}

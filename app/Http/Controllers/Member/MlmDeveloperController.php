@@ -12,6 +12,7 @@ use App\Models\Tbl_mlm_binary_setttings;
 use App\Models\Tbl_mlm_gc;
 use App\Models\Tbl_tree_sponsor;
 use App\Models\Tbl_tree_placement;
+use App\Models\Tbl_membership_package;
 use App\Models\Tbl_item;
 use App\Globals\Currency;
 use App\Globals\Mlm_compute;
@@ -154,7 +155,7 @@ class MlmDeveloperController extends Member
     	$data["total_payout"]          = Currency::format($total_payout);
 
 
-        $default[]          = ["SLOT NO","display_slot_no", true];
+        $default[]          = ["SLOT CODE","display_slot_no", true];
         $default[]          = ["SLOT OWNER","customer", false];
         $default[]          = ["SPONSOR","sponsor_button", false];
         $default[]          = ["PLACEMENT","placement_button", false];
@@ -458,7 +459,7 @@ class MlmDeveloperController extends Member
         $membership_package_id      = Request::input("package_number");
 
 
-
+        /* JUST ADD TO SLOT IF EXISTING CUSTOMER */
         $existing_customer          = Tbl_customer::where("shop_id", $shop_id)->where("email", Request::input("email"))->first();
 
         if(Request::input("date_created") == "undefined")
@@ -499,26 +500,44 @@ class MlmDeveloperController extends Member
 
         $membership_code_return     = Reward::generate_membership_code($customer_id, $membership_package_id);
         $membership_code_id         = (isset($membership_code_return["membership_code_id"]) ? $membership_code_return["membership_code_id"] : null);
-        $slot_id                    = Self::create_slot_submit_create_slot($customer_id, $membership_code_id, $slot_sponsor, $slot_placement, $slot_position, $shop_id, Request::input("slot_no"), $slot_date_created);
+        $membership_id              = Tbl_membership_package::where("membership_package_id", $membership_package_id)->value("membership_id");
+        $slot_no = Request::input("slot_no");
+
         
+        if(Request::input("sponsor") == "0")
+        {
+            MLM2::create_slot_no_rule();
+            $slot_id = MLM2::create_slot($shop_id, $customer_id, $membership_id, $slot_sponsor, $slot_no, $slot_type = "PS");
+            $return_position = "success";
+        }
+        else
+        {
+            $slot_id = MLM2::create_slot($shop_id, $customer_id, $membership_id, $slot_sponsor, $slot_no, $slot_type = "PS");
+
+            if(is_numeric($slot_id))
+            {
+                $return_position = MLM2::matrix_position($shop_id, $slot_id, $slot_placement, $slot_position);
+            }
+        
+        }
+
         if(!$membership_code_id)
         {
             $return["status"] = "error";
             $return["message"] = "Invalid Package Number";
         }
-        elseif(isset($slot_id["status"]))
+        elseif(!is_numeric($slot_id))
         {
             $return["status"] = "error";
-            $return["message"] = $slot_id["message"];
+            $return["message"] = $slot_id;
+        }
+        elseif($return_position != "success")
+        {
+            $return["status"] = "error";
+            $return["message"] = $return_position;
         }
         else
         {
-            /* CHECK IF SPONSOR 0 - IT MEANS NO COMPUTATION */
-            if($sponsor != 0)
-            {
-                Mlm_compute::entry($slot_id);
-            }
-
             $return["status"] = "success";
         }
 

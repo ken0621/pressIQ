@@ -6,28 +6,28 @@
 @if(!$mlm_member)
 	<div class="dashboard">
 	    <!-- TOP DASHBOARD-->
-<!-- 	    <div class="dashboard-top">
-    <div class="row clearfix">
-        <div class="col-md-8">
-            <div class="img-container">
-                <img src="/themes/{{ $shop_theme }}/img/brown-img1.png">
-            </div>
-        </div>
-        <div class="col-md-12">
-            <div class="join-container">
-                <div class="btn btn-text">
-                    <div class="text-header1">Become a member now!</div>
-                    <div class="text-header2">Enroll now and become one of us!</div>
-                </div>
-                <div class="btn-container">
-                    <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
-                    <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
-                    <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
+		<!-- 	    <div class="dashboard-top">
+		    <div class="row clearfix">
+		        <div class="col-md-8">
+		            <div class="img-container">
+		                <img src="/themes/{{ $shop_theme }}/img/brown-img1.png">
+		            </div>
+		        </div>
+		        <div class="col-md-12">
+		            <div class="join-container">
+		                <div class="btn btn-text">
+		                    <div class="text-header1">Become a member now!</div>
+		                    <div class="text-header2">Enroll now and become one of us!</div>
+		                </div>
+		                <div class="btn-container">
+		                    <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">Buy a Kit</button></a><br>
+		                    <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
+		                    <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</div> -->
 
 	    <div class="dashboard-top">
 	        <div class="row clearfix">
@@ -39,9 +39,9 @@
 	                        <div class="text-header2">Opportunity awaits you. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.<br>Aenean commodo ligula eget dolor.</div>
 	                    </div>
 	                    <div class="btn-container">
-	                        <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">BUY A KIT</button></a>
+	                        <!-- <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">BUY A KIT</button></a> -->
 	                        <!-- <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br> -->
-	                        <span class="or">OR</span>
+	                        <!-- <span class="or">OR</span> -->
 	                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">ENTER A CODE</button></a>
 	                    </div>
 	                </div>
@@ -261,7 +261,7 @@
                 </div>
                 <div class="modal-body">
                     <form method="post" class="submit-verify-sponsor">
-                        <div class="labels">Enter <b>Nickname of Sponsor</b> or <b>Slot Number</b></div>
+                        <div class="labels"><b>Enter a Slot Number</b></div>
                         <input required="required" class="input-verify-sponsor text-center" name="verify_sponsor" type="text" placeholder="">
                         <div class="output-container">
                             

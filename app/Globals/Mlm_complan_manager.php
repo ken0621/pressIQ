@@ -35,6 +35,7 @@ use App\Models\Tbl_mlm_binary_pairing_log;
 use App\Models\Tbl_direct_pass_up_settings;
 use App\Models\Tbl_leadership_advertisement_points;
 use App\Models\Tbl_leadership_advertisement_settings;
+use App\Models\Tbl_rank_points_log;
 use App\Http\Controllers\Member\MLM_MembershipController;
 use App\Http\Controllers\Member\MLM_ProductController;
 use Schema;
@@ -50,6 +51,48 @@ use App\Globals\Membership_code;
 use App\Globals\Binary_pairing;
 class Mlm_complan_manager
 {   
+    public static function direct_referral_pv($slot_info)
+    {
+        $slot_sponsor = Tbl_mlm_slot::where('slot_id', $slot_info->slot_sponsor)->membership()->first();
+        /* CHECK IF SLOT RECIPIENT EXIST */
+        if($slot_sponsor)
+        {
+            if($slot_info->direct_referral_rpv != null || $slot_info->direct_referral_rpv != 0)
+            {
+                /* DIRECT INCOME LIMIT */
+                $check_points = Tbl_membership_points::where("membership_id",$slot_sponsor->slot_membership)->first();
+                if($check_points)
+                {
+                    $direct_referral_rpv = $slot_info->direct_referral_rpv;
+                }
+                else
+                {
+                    $direct_referral_rpv = 0;
+                }
+
+                if($direct_referral_rpv != 0)
+                {
+                    $array['points_log_complan']        = "DIRECT_REFERRAL_PV";
+                    $array['points_log_level']          = 0;
+                    $array['points_log_slot']           = $slot_sponsor->slot_id;
+                    $array['points_log_Sponsor']        = $slot_info->slot_id;
+                    $array['points_log_date_claimed']   = Carbon::now();
+                    $array['points_log_converted']      = 0;
+                    $array['points_log_converted_date'] = Carbon::now();
+                    $array['points_log_type']           = 'RPV';
+                    $array['points_log_from']           = 'Slot Creation';
+                    $array['points_log_points']         = $direct_referral_rpv;
+
+                    $slot_logs_id                       = Mlm_slot_log::slot_log_points_array($array);
+
+                    $insert_rank_log["rank_original_amount"] = $direct_referral_rpv;
+                    $insert_rank_log["rank_percentage_used"] = 0;
+                    $insert_rank_log["slot_points_log_id"]   = $slot_logs_id;
+                    Tbl_rank_points_log::insert($insert_rank_log);
+                }
+            }
+        }   
+    }
     public static function advertisement_bonus($slot_info)
     {
         $settings_tree = Tbl_tree_placement::child($slot_info->slot_id)->distinct_level()->parentslot()->get();

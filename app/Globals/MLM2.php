@@ -1136,21 +1136,20 @@ class MLM2
         if($membership_id)
         {
         	$item_points   = Tbl_mlm_item_points::joinItem()->where("tbl_item.item_id",$item_id)->where('shop_id',$shop_id)->where('tbl_mlm_item_points.membership_id',$membership_id)->first();
-
         }
         if($item)
         {
-	        $data["UNILEVEL"]					= $item_points->UNILEVEL;
-			$data["REPURCHASE_POINTS"]			= $item_points->REPURCHASE_POINTS;
-			$data["UNILEVEL_REPURCHASE_POINTS"]	= $item_points->UNILEVEL_REPURCHASE_POINTS;
-			$data["REPURCHASE_CASHBACK"]		= $item_points->REPURCHASE_CASHBACK;
-			$data["DISCOUNT_CARD_REPURCHASE"]	= $item_points->DISCOUNT_CARD_REPURCHASE;
-			$data["STAIRSTEP"]					= $item_points->STAIRSTEP;
-			$data["BINARY_REPURCHASE"]			= $item_points->BINARY_REPURCHASE;
-			$data["STAIRSTEP_GROUP"]			= $item_points->STAIRSTEP_GROUP;
-			$data["RANK"]						= $item_points->RANK;
-			$data["RANK_GROUP"]					= $item_points->RANK_GROUP;
-			$data["price"]						= $item->item_price;
+	        $data["UNILEVEL"]					= isset($item_points->UNILEVEL) ? $item_points->UNILEVEL : 0;
+			$data["REPURCHASE_POINTS"]			= isset($item_points->REPURCHASE_POINTS) ? $item_points->REPURCHASE_POINTS : 0;
+			$data["UNILEVEL_REPURCHASE_POINTS"]	= isset($item_points->UNILEVEL_REPURCHASE_POINTS) ? $item_points->UNILEVEL_REPURCHASE_POINTS : 0;
+			$data["REPURCHASE_CASHBACK"]		= isset($item_points->REPURCHASE_CASHBACK) ? $item_points->REPURCHASE_CASHBACK : 0;
+			$data["DISCOUNT_CARD_REPURCHASE"]	= isset($item_points->DISCOUNT_CARD_REPURCHASE) ? $item_points->DISCOUNT_CARD_REPURCHASE : 0;
+			$data["STAIRSTEP"]					= isset($item_points->STAIRSTEP) ? $item_points->STAIRSTEP : 0;
+			$data["BINARY_REPURCHASE"]			= isset($item_points->BINARY_REPURCHASE) ? $item_points->BINARY_REPURCHASE : 0;
+			$data["STAIRSTEP_GROUP"]			= isset($item_points->STAIRSTEP_GROUP) ? $item_points->STAIRSTEP_GROUP : 0;
+			$data["RANK"]						= isset($item_points->RANK) ? $item_points->RANK : 0;
+			$data["RANK_GROUP"]					= isset($item_points->RANK_GROUP) ? $item_points->RANK_GROUP : 0;
+			$data["price"]						= isset($item->item_price) ? $item->item_price : 0;
 			$data["RANK_REPURCHASE_CASHBACK"]   = MLM2::rank_cashback_points($shop_id,$slot_id,$item_id);
 			return $data;
         }

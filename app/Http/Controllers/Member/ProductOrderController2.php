@@ -3,6 +3,8 @@ namespace App\Http\Controllers\Member;
 
 use App\Globals\Transaction;
 use App\Globals\Columns;
+use Excel;
+use DB;
 
 class ProductOrderController2 extends Member
 {
@@ -28,5 +30,49 @@ class ProductOrderController2 extends Member
         $data["_table"]     = Columns::filterColumns($this->user_info->shop_id, $this->user_info->user_id, "Order List V2", $data["_raw_table"], $default);
         
         return view('member.global_table', $data);
+    }
+    public function payref()
+    {
+        Transaction::get_transaction_customer_details();
+        Transaction::get_transaction_payment_method();
+        Transaction::get_transaction_slot_id();
+        $data["_transaction"] = Transaction::get_transaction_list($this->user_info->shop_id, 'receipt', '', 0);
+        foreach ($data["_transaction"] as $key => $value) 
+        {
+            if ($value->payment_method != "paymaya") 
+            {
+                unset($data["_transaction"][$key]);
+            }
+        }
+        Excel::create('Paymaya Report', function($excel) use ($data)
+        {
+            $excel->sheet('Paymaya', function($sheet) use ($data)
+            {
+                $sheet->loadView('member.product_order2.payment.payref', $data);
+            });
+        })
+        ->download('xls');
+    }
+    public function draref()
+    {
+        Transaction::get_transaction_customer_details();
+        Transaction::get_transaction_payment_method();
+        Transaction::get_transaction_slot_id();
+        $data["_transaction"] = Transaction::get_transaction_list($this->user_info->shop_id, 'receipt', '', 0);
+        foreach ($data["_transaction"] as $key => $value) 
+        {
+            if ($value->payment_method != "dragonpay") 
+            {
+                unset($data["_transaction"][$key]);
+            }
+        }
+        Excel::create('Dragonpay Report', function($excel) use ($data)
+        {
+            $excel->sheet('Dragonpay', function($sheet) use ($data)
+            {
+                $sheet->loadView('member.product_order2.payment.draref', $data);
+            });
+        })
+        ->download('xls');
     }
 }

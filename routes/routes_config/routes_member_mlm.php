@@ -104,6 +104,7 @@ Route::any('/member/mlm/plan/rank/get', 'Member\MLM_PlanController@get_rank');//
 Route::any('/member/mlm/plan/rank/save', 'Member\MLM_PlanController@save_rank');//Erwin
 Route::any('/member/mlm/plan/rank/edit/save', 'Member\MLM_PlanController@edit_save_rank');//Erwin
 Route::any('/member/mlm/plan/rank/edit/save_level', 'Member\MLM_PlanController@save_rank_level');//Erwin
+Route::any('/member/mlm/plan/rank/edit/save_include', 'Member\MLM_PlanController@save_include');//Erwin
 
 /* start stairstep PLAN */
 // Route::any('/member/mlm/plan/stairstep/get', 'Member\MLM_PlanController@get_stairstep');//Luke

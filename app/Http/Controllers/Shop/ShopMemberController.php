@@ -846,8 +846,9 @@ class ShopMemberController extends Shop
         $data["page"]       = "Checkout";
         $shop_id            = $this->shop_info->shop_id;
         $data["_payment"]   = $_payment = Payment::get_list($shop_id);
-        $data["_locale"]    = Tbl_locale::where("locale_parent", 0)->get();
+        $data["_locale"]    = Tbl_locale::where("locale_parent", 0)->orderBy("locale_name", "asc")->get();
         $data["cart"]       = Cart2::get_cart_info();
+        
         return (Self::load_view_for_members("member.checkout", $data));
     }
     public function postCheckout()
@@ -1115,7 +1116,7 @@ class ShopMemberController extends Shop
             $data["lock_sponsor"] = $sponsor_no;
         }
         
-        return view('member2.enter_sponsor', $data);
+        return Self::load_view_for_members('member2.enter_sponsor', $data);
     }
     public function getEnterPlacement()
     {
@@ -1151,7 +1152,7 @@ class ShopMemberController extends Shop
 
         if($data)
         {
-            return view('member2.final_verify', $data);
+            return Self::load_view_for_members('member2.final_verify', $data);
         }
     }    
     public function postFinalVerify()
@@ -1252,7 +1253,15 @@ class ShopMemberController extends Shop
 
         if($agent->isMobile())
         {
-            $new_view = str_replace("member.", "member.mobile.", $view);
+            if (strpos($view, 'member2.') !== false)
+            {
+                $new_view = str_replace("member2.", "member2.mobile.", $view);
+            }
+            else
+            {
+                $new_view = str_replace("member.", "member.mobile.", $view);
+            }
+
             if(view()->exists($new_view))
             {
                 $view = $new_view;

@@ -1,5 +1,5 @@
 var non_member = new non_member();
-var mainView = myApp.addView('.view-main');
+
 function non_member()
 {
 	init();
@@ -27,20 +27,12 @@ function non_member()
 	{
 		$(".btn-congratulation").bind("click", function()
 		{
-			if($(".mobile-mode").length > 0)
-			{
-				mainView.router.loadPage('/members/enter-sponsor');
-			}
-			else
-			{
-				$("#popup-notification-modal").modal("hide");
+			$("#popup-notification-modal").modal("hide");
 			
-				setTimeout(function()
-				{
-					action_load_link_to_modal("/members/enter-sponsor");
-				}, 350);	
-			}
-
+			setTimeout(function()
+			{
+				action_load_link_to_modal("/members/enter-sponsor");
+			}, 350);
 		});
 	}
 	function add_event_place_slot()
@@ -111,19 +103,20 @@ function non_member()
 		{
 			if($(e.currentTarget).find(".btn-verify-sponsor").hasClass("use"))
 			{
-				if($(".mobile-mode").length > 0)
+				$("#global_modal").modal("hide");
+
+				setTimeout(function()
 				{
-					mainView.router.loadPage('/members/final-verify');
-				}
-				else
-				{
-					$("#global_modal").modal("hide");
-	
-					setTimeout(function()
-					{
-						action_load_link_to_modal("/members/final-verify");
-					}, 350);
-				}
+					action_load_link_to_modal("/members/final-verify");
+				}, 350);
+				
+				// if($('.input-pin').val() != '')
+				// {
+				// 	setTimeout(function()
+				// 	{
+				// 		$('#btn-proceed-2').trigger('click');	
+				// 	}, 1000);
+				// }
 			}
 			else
 			{

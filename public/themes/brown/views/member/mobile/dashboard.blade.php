@@ -22,6 +22,7 @@
       <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/mobile/css/global.css">
    </head>
    <body>
+      <input type="hidden" class="mobile-mode">
       <input type="hidden" name="code" class="check_unused_code" value="{{ $check_unused_code or 0 }}">
       <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
       <div class="statusbar-overlay"></div>
@@ -183,10 +184,22 @@
                   <div class="page-content">
                      <div class="dashboard-view">
                         @if(!$mlm_member)
+                           @if(isset($check_unused_code))
+                           <div class="congrats-holder">
+                              <div class="title">CONGRATULATIONS!</div>
+                                 <div class="img">
+                                 <img src="/themes/{{ $shop_theme }}/assets/mobile/img/trophy.png">
+                              </div>
+                              <div class="desc">You are one step away from your membership!</div>
+                                 <div class="btn-container">
+                                 <button id="btn-notification" class="btn-verify-notification btn-congratulation btn-notification" type="button">Continue</button>
+                              </div>
+                           </div>
+                           @else
                            <div class="non-member">
                               <div class="row">
                                  <div class="col-100">
-                                    <video autoplay="" controls="">
+                                    <video controls="">
                                        <source src="/themes/{{ $shop_theme }}/img/intro2.mp4" type="video/mp4">
                                     </video>
                                  </div>
@@ -205,6 +218,7 @@
                                  </div>
                               </div>
                            </div>
+                           @endif
                         @else
                            <div class="profile-holder">
                               <table>
@@ -360,67 +374,67 @@
                      </div>
                   </div>
                   <!-- Notification Popup -->
-                  <div class="popup popup-notification">
-                      <div class="congrats-holder">
-                         <div class="title">CONGRATULATIONS!</div>
-                         <div class="img">
-                             <img src="/themes/{{ $shop_theme }}/assets/mobile/img/trophy.png">
-                         </div>
-                         <div class="desc">You are one step away from your membership!</div>
-                         <div class="btn-container">
-                             <button id="btn-notification" href="#" data-popup=".popup-code" class="btn-verify-notification btn-notification open-popup" type="button">Continue</button>
-                         </div>
-                     </div>
-                  </div>
+                  <!--<div class="popup popup-notification">-->
+                  <!--    <div class="congrats-holder">-->
+                  <!--       <div class="title">CONGRATULATIONS!</div>-->
+                  <!--       <div class="img">-->
+                  <!--           <img src="/themes/{{ $shop_theme }}/assets/mobile/img/trophy.png">-->
+                  <!--       </div>-->
+                  <!--       <div class="desc">You are one step away from your membership!</div>-->
+                  <!--       <div class="btn-container">-->
+                  <!--           <button id="btn-notification" href="#" data-popup=".popup-code" class="btn-verify-notification btn-notification open-popup" type="button">Continue</button>-->
+                  <!--       </div>-->
+                  <!--   </div>-->
+                  <!--</div>-->
                   <!-- Code Popup -->
-                  <div class="popup popup-code">
-                      <form method="post" class="submit-verify-sponsor">
-                         <div class="code-holder">
-                            <div class="modal-header">
-                                <div class="modal-title"><i class="fa fa-star"></i> SPONSOR</div>
-                            </div>
-                            <div class="labels">Enter <b>Nickname of Sponsor</b> or <b>Slot Number</b></div>
-                            <input required="required" class="input-verify-sponsor text-center" name="verify_sponsor" type="text" placeholder="">
-                            <div class="output-container">
-                            </div>
-                            <div class="btn-container">
-                                <button id="btn-verify" class="btn-verify btn-verify-sponsor"><i class="fa fa-check"></i> VERIFY SPONSOR</button>
-                            </div>
-                         </div>
-                     </form>
-                  </div>
+                  <!--<div class="popup popup-code">-->
+                  <!--    <form method="post" class="submit-verify-sponsor">-->
+                  <!--       <div class="code-holder">-->
+                  <!--          <div class="modal-header">-->
+                  <!--              <div class="modal-title"><i class="fa fa-star"></i> SPONSOR</div>-->
+                  <!--          </div>-->
+                  <!--          <div class="labels">Enter <b>Nickname of Sponsor</b> or <b>Slot Number</b></div>-->
+                  <!--          <input required="required" class="input-verify-sponsor text-center" name="verify_sponsor" type="text" placeholder="">-->
+                  <!--          <div class="output-container">-->
+                  <!--          </div>-->
+                  <!--          <div class="btn-container">-->
+                  <!--              <button id="btn-verify" class="btn-verify btn-verify-sponsor"><i class="fa fa-check"></i> VERIFY SPONSOR</button>-->
+                  <!--          </div>-->
+                  <!--       </div>-->
+                  <!--   </form>-->
+                  <!--</div>-->
                   <!-- Verification Popup -->
-                  <div class="popup popup-verification">
-                      <div class="verification-holder">
-                         <div class="modal-header">
-                             <div class="modal-title"><i class="fa fa-shield"></i> CODE VERIFICATION</div>
-                         </div>
-                         <div class="modal-body">
-                             <div class="message message-return-code-verify"></div>
-                             <form method="post" class="code-verification-form">
-                                 <div>
-                                     <div class="labeld">Pin Code</div>
-                                     <input class="input input-pin text-center" name="pin" type="text" value="{{$mlm_pin or ''}}">
-                                 </div>
-                                 <div>
-                                     <div class="labeld">Activation</div>
-                                     <input class="input input-activation text-center" name="activation" type="text" value="{{$mlm_activation or ''}}">
-                                 </div>
-                                 <div class="btn-container">
-                                     <button id="btn-proceed-2" class="btn-proceed-2" type='submit'><i class="fa fa-angle-double-right"></i> Proceed</button>
-                                 </div>
-                             </form>
-                         </div>
-                      </div>
-                  </div>
+                  <!--<div class="popup popup-verification">-->
+                  <!--    <div class="verification-holder">-->
+                  <!--       <div class="modal-header">-->
+                  <!--           <div class="modal-title"><i class="fa fa-shield"></i> CODE VERIFICATION</div>-->
+                  <!--       </div>-->
+                  <!--       <div class="modal-body">-->
+                  <!--           <div class="message message-return-code-verify"></div>-->
+                  <!--           <form method="post" class="code-verification-form">-->
+                  <!--               <div>-->
+                  <!--                   <div class="labeld">Pin Code</div>-->
+                  <!--                   <input class="input input-pin text-center" name="pin" type="text" value="{{$mlm_pin or ''}}">-->
+                  <!--               </div>-->
+                  <!--               <div>-->
+                  <!--                   <div class="labeld">Activation</div>-->
+                  <!--                   <input class="input input-activation text-center" name="activation" type="text" value="{{$mlm_activation or ''}}">-->
+                  <!--               </div>-->
+                  <!--               <div class="btn-container">-->
+                  <!--                   <button id="btn-proceed-2" class="btn-proceed-2" type='submit'><i class="fa fa-angle-double-right"></i> Proceed</button>-->
+                  <!--               </div>-->
+                  <!--           </form>-->
+                  <!--       </div>-->
+                  <!--    </div>-->
+                  <!--</div>-->
                   <!-- Final Verification Popup -->
-                  <div class="popup final-popup-verification">
-                      <form method="post" class="submit-verify-sponsor">
-                         <div class="verification-holder">
-                            <div class="load-final-verification"></div>
-                         </div>
-                     </form>
-                  </div>
+                  <!--<div class="popup final-popup-verification">-->
+                  <!--    <form method="post" class="submit-verify-sponsor">-->
+                  <!--       <div class="verification-holder">-->
+                  <!--          <div class="load-final-verification"></div>-->
+                  <!--       </div>-->
+                  <!--   </form>-->
+                  <!--</div>-->
                </div>
             </div>
          </div>
@@ -599,6 +613,7 @@
       <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
       <!-- GLOBAL JS -->
       <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/mobile/js/global.js"></script>
+      <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js?version=2.0"></script>
       <script type="text/javascript">
          var myApp = new Framework7();
  
@@ -607,11 +622,12 @@
       	add_event_submit_verify_code();
       	add_event_process_slot_creation();
           
-         /*Auto pop-up*/
+         /* AUTO POP-UP */
       	if($('.check_unused_code').val() != 0)
       	{
       		myApp.popup('.popup-notification');
       	}
+      	
       	function add_event_submit_verify_sponsor()
       	{
       		$(".submit-verify-sponsor").submit(function(e)

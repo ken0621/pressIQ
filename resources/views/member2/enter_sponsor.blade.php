@@ -6,7 +6,13 @@
     <div class="modal-body">
         <form method="post" class="submit-verify-sponsor">
             <div class="labels">{!! $message !!}</b></div>
-            <input required="required" class="input-verify-sponsor text-center" name="verify_sponsor" type="text" placeholder="">
+            
+            @if($lock_sponsor)
+                <input disabled required="required" class="input-verify-sponsor text-center" name="verify_sponsor" type="text" value="{{ $lock_sponsor }}">
+            @else
+                <input required="required" class="input-verify-sponsor text-center" name="verify_sponsor" type="text" placeholder="">
+            @endif
+            
             <div class="output-container">
                 
             </div>

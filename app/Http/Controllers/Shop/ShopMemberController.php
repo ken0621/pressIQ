@@ -1107,6 +1107,14 @@ class ShopMemberController extends Shop
     {
         $data["page"] = "Enter Code";
         $data["message"] = "Enter <b>Slot Code</b> of your <b>Sponsor</b>";
+        $data["lock_sponsor"] = false;
+        
+        if(!$this->mlm_member && Self::$customer_info->customer_lead != "")
+        {
+            $sponsor_no = Tbl_mlm_slot::where("slot_id", Self::$customer_info->customer_lead)->value("slot_no");
+            $data["lock_sponsor"] = $sponsor_no;
+        }
+        
         return view('member2.enter_sponsor', $data);
     }
     public function getEnterPlacement()

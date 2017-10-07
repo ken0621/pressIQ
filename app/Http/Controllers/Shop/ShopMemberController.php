@@ -1215,7 +1215,7 @@ class ShopMemberController extends Shop
                     }
                     else
                     {
-                        $data["message"]   = "Placement not available.";
+                        $data["message"]   = "Placement not available 391.";
                     }
                 }
                 else

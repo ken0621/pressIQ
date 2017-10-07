@@ -717,10 +717,10 @@ class MLM2
 	{
     	$check_target_slot 			= Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",$shop_id)->first();
     	$check_target_slot_sponsor  = Tbl_mlm_slot::where("slot_id",$check_target_slot->slot_sponsor)->where("shop_id",$shop_id)->first();
-    	
+
     	if($placement == $slot_id)
     	{
-    		$message = "Placement not available";
+    		$message = "Placement not available 001";
     	}
 
     	if($check_target_slot_sponsor->slot_placement == 0 || $check_target_slot_sponsor->slot_placement == null)
@@ -993,14 +993,20 @@ class MLM2
                         								->where('shop_id', $shop_id)
                         								->count();
 
+		
+
 	    if($count_tree_if_exist != 0 || !$placement ||  !$position)
 	    {
 	    	return 1;
 	    } 
 	    else if ($self_downline == 1)
 	    {
+	    	
 	    	/* IF DOWNLINE ONLY OF $SELF_OWNER*/
 		    $check_shop_slot            = Tbl_mlm_slot::where("slot_id",$placement)->where("shop_id",$shop_id)->first();
+		    
+		   
+		    
 		    if($check_shop_slot)
 		    {	
 		    	if($check_shop_slot->slot_placement != 0 && $check_shop_slot->slot_placement != null)
@@ -1015,6 +1021,8 @@ class MLM2
 			    								   ->where('placement_tree_child_id',$placement)
 	                							   ->where('shop_id', $shop_id)
 	                							   ->first();
+	                							   
+	                							   
 	                    if($owned)
 	                    {
 	                    	return 0;
@@ -1044,6 +1052,7 @@ class MLM2
 	    }  
 	    else
 	    {
+	    	
 		    $check_shop_slot            = Tbl_mlm_slot::where("slot_id",$placement)->where("shop_id",$shop_id)->first();
 		    if($check_shop_slot)
 		    {	

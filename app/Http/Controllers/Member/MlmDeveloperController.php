@@ -442,7 +442,6 @@ class MlmDeveloperController extends Member
     }
     public function import_submit()
     {
-        
         $data                       = Self::get_initial_settings();
 
         /* INITIALIZE AND CAPTURE DATA */
@@ -471,7 +470,7 @@ class MlmDeveloperController extends Member
         {
             $slot_date_created      = date("Y-m-d", strtotime(Request::input("date_created")));
         }
-        
+      
 
 
         if($existing_customer)
@@ -498,7 +497,7 @@ class MlmDeveloperController extends Member
         {
             $membership_package_id  = null;
         }
-
+        
         $membership_code_return     = Reward::generate_membership_code($customer_id, $membership_package_id);
         $membership_code_id         = (isset($membership_code_return["membership_code_id"]) ? $membership_code_return["membership_code_id"] : null);
         $membership_id              = Tbl_membership_package::where("membership_package_id", $membership_package_id)->value("membership_id");
@@ -520,14 +519,6 @@ class MlmDeveloperController extends Member
                 if(is_numeric($slot_id))
                 {
                     $return_position = MLM2::matrix_position($shop_id, $slot_id, $slot_placement, $slot_position);
-                    
-                    if($return_position == "success")
-                    {
-                        $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
-                        Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
-                   		Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
-                   		MLM2::entry($shop_id,$slot_id);
-                    }
                 }
             }
             else
@@ -550,10 +541,16 @@ class MlmDeveloperController extends Member
         elseif($return_position != "success")
         {
             $return["status"] = "error";
+            $return["data"] = "$shop_id, $slot_id, $slot_placement, $slot_position";
             $return["message"] = $return_position;
+            Tbl_mlm_slot::where("slot_id", $slot_id)->delete();
         }
         else
         {
+            $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
+            Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
+       		Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
+       		MLM2::entry($shop_id,$slot_id);
             $return["status"] = "success";
         }
 

@@ -607,7 +607,7 @@
       <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
       <!-- GLOBAL JS -->
       <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/mobile/js/global.js"></script>
-      <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js?version=2.0"></script>
+      <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js?version=2.1"></script>
       <script type="text/javascript">
          var myApp = new Framework7();
          var $$ = Dom7;

@@ -1,9 +1,8 @@
-
 <div data-page="report" class="page">
     <div class="navbar">
         <div class="navbar-inner">
             <div class="left"><a href="index.html" class="back link icon-only"><i class="icon icon-back"></i></a></div>
-            <div class="center">Final Verification</div>
+            <div class="center">Sponsor Verification</div>
             <div class="right"><a href="#" class="open-panel link icon-only"><i class="icon icon-bars"></i></a></div>
         </div>
     </div>
@@ -14,7 +13,7 @@
                     <form class="final-verification-submit" method="post">
                     	<div class="modal-header">
                     		<button type="button" class="close" data-dismiss="modal">×</button>
-                    		<h4 class="modal-title">FINAL VERIFICATION</h4>
+                    		<h4 class="modal-title">Verify sponsor details</h4>
                     	</div>
                     	<div class="modal-body clearfix">
                     		<div class="warning"><b><i class="fa fa-warning"></i> WARNING!</b> Once you process this transaction, you will not be able to undo your actions. Your slot will be created using the information below.</div>
@@ -51,5 +50,6 @@
                 </div>
             </div>
         </div>
+    </div>
 </div>
 

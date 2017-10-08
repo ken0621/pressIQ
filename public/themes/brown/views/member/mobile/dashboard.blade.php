@@ -25,8 +25,12 @@
       <input type="hidden" class="mobile-mode">
       <input type="hidden" name="code" class="check_unused_code" value="{{ $check_unused_code or 0 }}">
       <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
+      <input type="hidden" name="not_placed_yet" class="not_placed_yet" value="{{ $not_placed_yet or 0 }}" link="/members/enter-placement?slot_no={{ Crypt::encrypt($not_placed_slot->slot_id) }}&key={{ md5($not_placed_slot->slot_id . $not_placed_slot->slot_no) }}">
       <div class="statusbar-overlay"></div>
       <div class="panel-overlay"></div>
+      
+
+      
       <div class="panel panel-left panel-cover">
          <div class="view navbar-fixed">
             <div class="pages">
@@ -175,6 +179,7 @@
                      <div class="navbar-inner">
                         <div class="left"><a href="#" class="open-panel link icon-only"><i class="icon icon-bars"></i></a></div>
                         <div class="left">Dashboard</div>
+                        
                         {{-- <div class="right">
                            <div class="text">3</div>
                            <img src="/themes/{{ $shop_theme }}/assets/mobile/img/notification.png">
@@ -183,6 +188,8 @@
                   </div>
                   <div class="page-content">
                      <div class="dashboard-view">
+
+                        
                         @if(!$mlm_member)
                            @if(isset($check_unused_code))
                            <div class="congrats-holder">
@@ -212,7 +219,7 @@
                                        <div class="btn-container">
                                           <button class="product-add-cart btn-buy-a-kit" type="button" onClick="location.href='/cartv2/buy_kit_mobile/{{ $item_kit_id }}'">Enroll Now</button><br>
                                           <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
-                                          <a href="#" data-popup=".popup-code" class="open-popup" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
+                                          <button class="btn-enter-a-code">Enter a Code</button>
                                        </div>
                                     </div>
                                  </div>
@@ -373,19 +380,6 @@
                         @endif
                      </div>
                   </div>
-                  <!-- Notification Popup -->
-                  <!--<div class="popup popup-notification">-->
-                  <!--    <div class="congrats-holder">-->
-                  <!--       <div class="title">CONGRATULATIONS!</div>-->
-                  <!--       <div class="img">-->
-                  <!--           <img src="/themes/{{ $shop_theme }}/assets/mobile/img/trophy.png">-->
-                  <!--       </div>-->
-                  <!--       <div class="desc">You are one step away from your membership!</div>-->
-                  <!--       <div class="btn-container">-->
-                  <!--           <button id="btn-notification" href="#" data-popup=".popup-code" class="btn-verify-notification btn-notification open-popup" type="button">Continue</button>-->
-                  <!--       </div>-->
-                  <!--   </div>-->
-                  <!--</div>-->
                   <!-- Code Popup -->
                   <!--<div class="popup popup-code">-->
                   <!--    <form method="post" class="submit-verify-sponsor">-->
@@ -616,160 +610,7 @@
       <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js?version=2.0"></script>
       <script type="text/javascript">
          var myApp = new Framework7();
- 
          var $$ = Dom7;
-      	add_event_submit_verify_sponsor();
-      	add_event_submit_verify_code();
-      	add_event_process_slot_creation();
-          
-         /* AUTO POP-UP */
-      	if($('.check_unused_code').val() != 0)
-      	{
-      		myApp.popup('.popup-notification');
-      	}
-      	
-      	function add_event_submit_verify_sponsor()
-      	{
-      		$(".submit-verify-sponsor").submit(function(e)
-      		{
-      			if($(e.currentTarget).find(".btn-verify-sponsor").hasClass("use"))
-      			{
-      				myApp.popup('.popup-verification');
-      				setTimeout(function()
-      				{
-      				   myApp.popup('.popup-verification');
-      				}, 350);
-      				
-      				if($('.input-pin').val() != '')
-      				{
-      					$$('.btn-proceed-2').click();	
-      				}
-      			}
-      			else
-      			{
-      				action_verify_sponsor();
-      			}
-      			
-      			return false;
-      		});
-      	}	
-      	function action_verify_sponsor()
-      	{
-      		$(".submit-verify-sponsor").find(".btn-verify-sponsor").html('<i class="fa fa-spinner fa-pulse fa-fw"></i> VERIFYING SPONSOR').attr("disabled", "disabled");
-      		$(".submit-verify-sponsor").find("input").attr("disabled", "disabled");
-      
-      		var form_data = {};
-      		form_data._token = $("._token").val();
-      		form_data.verify_sponsor = $(".input-verify-sponsor").val();
-      
-      		$.ajax(
-      		{
-      			url:"/members/verify-sponsor",
-      			data:form_data,
-      			type:"post",
-      			success: function(data)
-      			{
-      				$(".submit-verify-sponsor").find(".output-container").html(data);
-      				$(".card").hide().slideDown('fast');
-      
-      				if($(".card").length > 0)
-      				{
-      					$(".submit-verify-sponsor").find(".btn-verify-sponsor").html('<i class="fa fa-check"></i> USE THIS SPONSOR').removeAttr("disabled").addClass("use");
-      				}	
-      				else
-      				{
-      					$(".submit-verify-sponsor").find("input").removeAttr("disabled");
-      					$(".submit-verify-sponsor").find(".btn-verify-sponsor").html('<i class="fa fa-check"></i> VERIFY SPONSOR').removeAttr("disabled").removeClass("use");
-      				}
-      			},
-      			error: function()
-      			{
-      				alert("An ERROR occurred. Please contact administrator.");
-      				$(".submit-verify-sponsor").find("input").removeAttr("disabled");
-      				$(".submit-verify-sponsor").find(".btn-verify-sponsor").html('<i class="fa fa-check"></i> VERIFY SPONSOR').removeAttr("disabled").removeClass("use");
-      			}
-      		});
-      	}
-      	function add_event_submit_verify_code()
-      	{
-      		$(".code-verification-form").submit(function()
-      		{
-      			action_verify_code();
-      			return false;
-      		});
-      	}
-      	function action_verify_code()
-      	{
-      		var form_data = {};
-      		form_data._token = $("._token").val();
-      		form_data.pin = $(".input-pin").val();
-      		form_data.activation = $(".input-activation").val();
-      
-      		/* START LOADING AND DISABLE FORM */
-      		$(".code-verification-form").find(".btn-proceed-2").html('<i class="fa fa-spinner fa-pulse fa-fw"></i> VERIFYING').attr("disabled", "disabled");
-      		$(".code-verification-form").find("select").attr("disabled", "disabled");
-      
-      		$.ajax(
-      		{
-      			url:"/members/verify-code",
-      			data:form_data,
-      			type:"post",
-      			success: function(data)
-      			{
-      				$(".message-return-code-verify").html(data);
-      				$(".code-verification-form").find(".btn-proceed-2").html('<i class="fa fa-angle-double-right"></i> PROCEED').removeAttr("disabled");
-      
-      				if(data == "")
-      				{
-      					$(".code-verification-form").find("input").val("");
-      			// 		$("#proceed-modal-2").modal('hide');
-      					setTimeout(function()
-      					{
-      				      myApp.popup('.final-popup-verification');
-      						$(".final-popup-verification").find(".load-final-verification").html('<div class="loading text-center" style="padding: 150px;"><i class="fa fa-spinner fa-pulse fa-fw fa-3x"></i></div>');
-      						$(".load-final-verification").load("/members/final-verify");
-      					}, 350);
-      				}
-      			},
-      			error: function(data)
-      			{
-      				alert("An ERROR occurred. Please contact administrator.");
-      				$(".code-verification-form").find(".btn-proceed-2").html('<i class="fa fa-angle-double-right"></i> PROCEED').removeAttr("disabled");
-      			}
-      		});
-      
-      	}
-      	function add_event_process_slot_creation()
-      	{
-      		$("body").on("click", ".process-slot-creation", function()
-      		{
-      			var form_data = {};
-      			form_data._token = $("._token").val();
-      
-      			$(".process-slot-creation").html('<i class="fa fa-spinner fa-pulse fa-fw"></i> Processing');
-      
-      			$.ajax(
-      			{
-      				url:"/members/final-verify",
-      				dataType:"json",
-      				type:"post",
-      				data: form_data,
-      				success: function(data)
-      				{
-      					if(data == "success")
-      					{
-      						// $("#proceed-modal-1").modal('hide');
-      						window.location.reload();
-      					}
-      					else
-      					{
-      						console.log(data);
-      						window.location.reload();
-      					}
-      				}
-      			});
-      		});
-      	}
       </script>
       <!-- BEGIN JIVOSITE CODE -->
       <script type='text/javascript'>

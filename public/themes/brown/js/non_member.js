@@ -14,6 +14,7 @@ function non_member()
 	
 	function document_ready()
 	{
+		add_event_click_enter_a_code();
 		add_event_submit_verify_sponsor();
 		add_event_submit_verify_code();
 		add_event_process_slot_creation();
@@ -22,6 +23,20 @@ function non_member()
 		add_event_place_slot();
 		add_event_congratulation_proceed();
 		auto_popup_if_slot_creation_success();
+	}
+	function add_event_click_enter_a_code()
+	{
+		$(".btn-enter-a-code").click(function()
+		{
+			if($(".mobile-mode").length > 0)
+			{
+				mainView.router.loadPage('/members/enter-code');
+			}
+			else
+			{
+				action_load_link_to_modal("/members/enter-code");
+			}
+		});
 	}
 	function add_event_congratulation_proceed()
 	{
@@ -56,7 +71,22 @@ function non_member()
 	{
 		if($(".not_placed_yet").val() == 1)
 		{
-			action_load_link_to_modal($(".not_placed_yet").attr("link"));
+			setTimeout(function()
+			{
+				var enter_placement_link = $(".not_placed_yet").attr("link");
+				
+				if($(".mobile-mode").length > 0)
+				{
+					myApp.confirm('Brown App detected that you are not yet placed. Would you like to place yourself now?', 'Brown Tree Notification',  function ()
+					{
+						mainView.router.loadPage(enter_placement_link);
+					});
+				}
+				else
+				{
+					action_load_link_to_modal(enter_placement_link);
+				}
+			}, 350);
 		}
 		else
 		{
@@ -85,7 +115,14 @@ function non_member()
 				{
 					if(data == "success")
 					{
-						$("#proceed-modal-1").modal('hide');
+						if($(".mobile-mode").length > 0)
+						{
+						}
+						else
+						{
+							$("#proceed-modal-1").modal('hide');
+						}
+
 						window.location.reload();
 					}
 					else
@@ -137,21 +174,7 @@ function non_member()
 	{
 		$("body").on("submit", ".slot-placement-form", function(e)
 		{
-			if($(e.currentTarget).find(".btn-verify-placement").hasClass("use"))
-			{
-				$("#slot-placement-modal").modal('hide');
-
-				setTimeout(function()
-				{
-					$("#slot-placement-modal").modal('show');
-				}, 350);
-				
-			}
-			else
-			{
-				action_verify_placement();
-			}
-			
+			action_verify_placement();
 			return false;
 		});
 	}
@@ -179,12 +202,22 @@ function non_member()
 				if(data == "")
 				{
 					$(".code-verification-form").find("input").val("");
-					$("#global_modal").modal('hide');
 					
-					setTimeout(function()
+					if($(".mobile-mode").length > 0)
 					{
-						action_load_link_to_modal('/members/enter-sponsor');
-					}, 350);
+						mainView.router.loadPage('/members/enter-sponsor');
+					}
+					else
+					{
+						$("#global_modal").modal('hide');
+						
+						setTimeout(function()
+						{
+							action_load_link_to_modal('/members/enter-sponsor');
+						}, 350);	
+					}
+						
+
 					
 				}
 			},
@@ -256,14 +289,9 @@ function non_member()
 
 				if(data === '"success"')
 				{
-					if($(".iamowner").length > 0)
+					if($(".mobile-mode").length > 0)
 					{
-						$("#global_modal").hide();
-						
-						setTimeout(function()
-						{
-							action_load_link_to_modal("/members/final-verify-placement?slot_id="+form_data.slot_id+"&slot_position="+form_data.slot_position+"&slot_placement="+form_data.slot_placement);
-						});
+						mainView.router.loadPage("/members/final-verify-placement?slot_id="+form_data.slot_id+"&slot_position="+form_data.slot_position+"&slot_placement="+form_data.slot_placement);
 					}
 					else
 					{
@@ -272,16 +300,10 @@ function non_member()
 						setTimeout(function()
 						{
 							action_load_link_to_modal("/members/final-verify-placement?slot_id="+form_data.slot_id+"&slot_position="+form_data.slot_position+"&slot_placement="+form_data.slot_placement);
-						});
+						});	
 					}
-					// $(".slot-placement-form").find("input").val("");
-					// $("#slot-placement-modal").modal('hide');
-					// setTimeout(function()
-					// {
-					// 	$("#proceed-modal-1").modal('show');
-					// 	$("#proceed-modal-1").find(".load-final-verification").html('<div class="loading text-center" style="padding: 150px;"><i class="fa fa-spinner fa-pulse fa-fw fa-3x"></i></div>');
-					// 	$(".load-final-verification").load("/members/final-verify-placement?slot_id="+form_data.slot_id+"&slot_position="+form_data.slot_position+"&slot_placement="+form_data.slot_placement);
-					// }, 350);
+				
+
 				}
 				else
 				{
@@ -317,7 +339,14 @@ function non_member()
 				{
 					if(data == "success")
 					{
-						$("#proceed-modal-1").modal('hide');
+						if($(".mobile-mode").length > 0)
+						{
+						}
+						else
+						{
+							$("#proceed-modal-1").modal('hide');
+						}
+						
 						window.location.reload();
 					}
 					else

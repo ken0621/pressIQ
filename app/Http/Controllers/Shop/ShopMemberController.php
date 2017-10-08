@@ -1057,7 +1057,7 @@ class ShopMemberController extends Shop
         
         if($procceed == 1)
         {
-        return view('member2.final_verification_placement', $data);
+            return Self::load_view_for_members('member2.final_verification_placement', $data);
         }
     }    
     public function postFinalVerifyPlacement(Request $request)
@@ -1102,7 +1102,7 @@ class ShopMemberController extends Shop
     {
         $data["page"] = "Enter Sponsor";
         $data["message"] = "Enter <b>Slot Code</b> of your <b>Sponsor</b>";
-        return view('member2.enter_code', $data);
+        return Self::load_view_for_members('member2.enter_code', $data);
     }
     public function getEnterSponsor()
     {
@@ -1139,7 +1139,7 @@ class ShopMemberController extends Shop
 
         if(md5($slot_info->slot_id . $slot_info->slot_no) == $key)
         {
-            return view('member2.enter_placement', $data);
+            return Self::load_view_for_members('member2.enter_placement', $data);
         }
         else
         {
@@ -1219,27 +1219,27 @@ class ShopMemberController extends Shop
                         }
                         else
                         {
-                            $data["message"]   = "Your upline should placed you first.";
+                            $data["message"]   = "Your upline should placed you first.  (ERROR182)";
                         }
                     }
                     else
                     {
-                        $data["message"]   = "Placement not available 391.";
+                        $data["message"]   = "Placement not available. (ERROR391)";
                     }
                 }
                 else
                 {
-                    $data["message"]   = "Some error occurred please try again. (659)";
+                    $data["message"]   = "Some error occurred please try again. (ERROR659)";
                 }
             }
             else
             {
-                $data["message"]   = "Some error occurred please try again. (388)";
+                $data["message"]   = "Some error occurred please try again. (ERROR388)";
             }
         }
         else
         {
-            $data["message"]   = "This slot is already placed. (111)";
+            $data["message"]   = "This slot is already placed. (ERROR111)";
         }
         
         $data["procceed"] = $procceed;

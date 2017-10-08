@@ -49,7 +49,7 @@
 		                    <div class="btn-container">
 		                        <button class="product-add-cart btn-buy-a-kit" item-id="{{$item_kit_id or '54'}}" quantity="1">Enroll Now</button><br>
 		                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
-		                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code" onclick="action_load_link_to_modal('/members/enter-code')">Enter a Code</button></a>
+		                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
 		                    </div>
 		                </div>
 		            </div>

@@ -7,21 +7,23 @@
         </div>
     </div>
     <div class="page-content">
-        <form method="post" class="submit-verify-sponsor">
-            <div class="labels">{!! $message !!}</b></div>
-            
-            @if($lock_sponsor)
-                <input disabled required="required" class="input-verify-sponsor text-center" name="verify_sponsor" type="text" value="{{ $lock_sponsor }}">
-            @else
-                <input required="required" class="input-verify-sponsor text-center" name="verify_sponsor" type="text" placeholder="">
-            @endif
-            
-            <div class="output-container">
+        <div class="enter-sponsor-holder">
+            <form method="post" class="submit-verify-sponsor">
+                <div class="labels">{!! $message !!}</b></div>
                 
-            </div>
-            <div class="btn-container">
-                <button id="btn-verify" class="btn-verify btn-verify-sponsor"><i class="fa fa-check"></i> VERIFY SPONSOR</button>
-            </div>
-        </form>
+                @if($lock_sponsor)
+                    <input disabled required="required" class="input-verify-sponsor text-center" name="verify_sponsor" type="text" value="{{ $lock_sponsor }}">
+                @else
+                    <input required="required" class="input-verify-sponsor text-center" name="verify_sponsor" type="text" placeholder="">
+                @endif
+                
+                <div class="output-container">
+                </div>
+                
+                <div class="btn-container">
+                    <button id="btn-verify" class="btn-verify btn-verify-sponsor"><i class="fa fa-check"></i> VERIFY SPONSOR</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>

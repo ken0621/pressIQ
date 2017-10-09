@@ -20,6 +20,7 @@ use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_unit_measurement_multi;
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
+use App\Globals\Manufacturer;
 use Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -1328,6 +1329,7 @@ class WarehouseController extends Member
         $data['warehouse'] = Tbl_warehouse::where('warehouse_id',$warehouse_id)->first();
         $data['page'] = "View Warehouse";
         $data['warehouse_name'] = 'Main Warehouse';
+        $data["_manufacturer"]   = Manufacturer::getAllManufaturer();
 
         return view("member.warehouse.warehouse_view_v2",$data);
     }
@@ -1338,7 +1340,10 @@ class WarehouseController extends Member
         $data['pis'] = Purchasing_inventory_system::check();
         $data['owner'] = Tbl_warehouse::shop()->where('warehouse_id',$warehouse_id)->first();
 
-        return view("member.warehouse.warehouse_inventory_print",$data);
+        // return view("member.warehouse.warehouse_inventory_print",$data);
+
+        $pdf = view("member.warehouse.warehouse_inventory_print",$data);
+        return Pdf_global::show_pdf($pdf);
     }
     public function view_inventory_table()
     {

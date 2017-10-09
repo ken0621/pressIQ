@@ -30,13 +30,18 @@
                   <li id="archived-list"><a data-toggle="tab" href="#unused-empties" onClick="select_inventory('empties');"><i class="fa fa-slack" aria-hidden="true"></i>&nbsp;Empties</a></li>
                 </ul>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-3">
+              <select class="form-control select-manufacturer " placeholder="Enter Manufacturer" >
+                  @include("member.load_ajax_data.load_manufacturer")
+              </select>
+            </div>
+            <div class="col-md-3">
                 <div class="input-group pos-search">
                   <span style="background-color: #eee" class="input-group-addon button-scan" id="basic-addon1">
                     <i class="fa fa-search scan-icon"></i>
                     <i style="display: none;" class="fa fa-spinner fa-pulse fa-fw scan-load"></i>
                   </span>
-                  <input type="text" class="form-control event_search_item" placeholder="Enter item SKU or Manufaturer" aria-describedby="basic-addon1">
+                  <input type="text" class="form-control event_search_item" placeholder="Enter item SKU" aria-describedby="basic-addon1">
                 </div>
             </div>
         </div>
@@ -75,5 +80,10 @@
         var id = $('#warehouse_id').val();
         $('.print-inventory').attr('href','/member/item/warehouse/view_v2/print/'+id+'/'+type);
     }
+    $('.select-manufacturer').globalDropList(
+    {
+        hasPopup : 'false',
+        widht : '100%'
+    });
 </script>
 @endsection

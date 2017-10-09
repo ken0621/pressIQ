@@ -16,6 +16,7 @@ use App\Models\Tbl_user_warehouse_access ;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 
+use App\Models\Tbl_manufacturer;
 use App\Globals\ItemSerial;
 use App\Globals\AuditTrail;
 use App\Models\Tbl_unit_measurement_multi;
@@ -24,7 +25,7 @@ use Carbon\Carbon;
 use Session;
 class Warehouse
 {   
-    public static function select_item_warehouse_per_bundle($warehouse_id)
+    public static function select_item_warehouse_per_bundle($warehouse_id, $manufacturer_id = 0, $keyword_search = '')
     {
         $bundle = Tbl_item::where("item_type_id",4)->where("shop_id",Warehouse::getShopId())->get();
 
@@ -48,6 +49,7 @@ class Warehouse
             $bundle_item = Tbl_item_bundle::where("bundle_bundle_id",$value->item_id)->get();
 
             $warehouse_bundle_qty = [];
+            $boo = false;
             foreach ($bundle_item as $key_bundle => $value_bundle) 
             {
                $warehouse_qty = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value_bundle->bundle_item_id)->value('inventory_count');   
@@ -56,11 +58,25 @@ class Warehouse
                $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty;
                $bundle_qty_warehouse[$value_bundle->bundle_item_id] = $warehouse_qty / $bundle_qty;
                $bundle_qty_[$value_bundle->bundle_item_id] = $bundle_qty;
+               if(isset(Item::info($value_bundle->bundle_item_id)->item_manufacturer_id))
+               {
+                    $manufacturer = Tbl_manufacturer::where('manufacturer_id', Item::info($value_bundle->bundle_item_id)->item_manufacturer_id)->where('manufacturer_shop_id',Warehouse::getShopId())->first();
+                    if(!$manufacturer)
+                    {
+                        $boo = true;
+                    }
+               }
             }
 
             $bundle_data[$key]["item"] = $bundle_qty_warehouse;
             $bundle_data[$key]["bundle_qty"] = $bundle_qty_;
+
+            if($boo == true)
+            {
+                unset($bundle_data[$key]);
+            }
         }
+
 
         $um = null;
         $rem_item = [];
@@ -118,7 +134,7 @@ class Warehouse
         $data['warehouse_item_bundle'] = Warehouse::select_item_warehouse_per_bundle($warehouse_id);
         $data['_inventory'] = Warehouse::get_all_inventory_item($warehouse_id, $data['warehouse_item_bundle']);
         $data['_empties'] = Warehouse::get_all_inventory_item($warehouse_id, $data['warehouse_item_bundle'], 1);
-        
+
         return $data;
     }
     public static function get_all_inventory_item($warehouse_id, $bundled_item, $is_mts = 0)

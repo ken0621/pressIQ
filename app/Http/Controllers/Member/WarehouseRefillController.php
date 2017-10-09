@@ -48,10 +48,24 @@ class WarehouseRefillController extends Member
         {
             if($value != 0)
             {
-                $warehouse_refill_product[$key]['product_id'] = $value;
-                $warehouse_refill_product[$key]['quantity'] = str_replace(",","",UnitMeasurement::um_qty($item_um[$key]) * $quantity_product[$key]);                
+                $item_type = Item::type($value);    
+                if($item_type == 1)
+                {
+                    $warehouse_refill_product[$key]['product_id'] = $value;
+                    $warehouse_refill_product[$key]['quantity'] = str_replace(",","",UnitMeasurement::um_qty($item_um[$key]) * $quantity_product[$key]);
+                }
+                else if ($item_type >= 4)
+                {
+                    $bundle_item = Item::get_item_bundle($value)["bundle"];
+                    foreach ($bundle_item as $key_b => $value_b) 
+                    {
+                        $warehouse_refill_product['b'.$key]['product_id'] = $value_b['bundle_item_id'];
+                        $warehouse_refill_product['b'.$key]['quantity'] = str_replace(",","",UnitMeasurement::um_qty($value_b['bundle_um_id']) * $value_b['bundle_qty']);
+                    }
+                }
             }
         }
+
         dd($warehouse_refill_product);
         $data = Warehouse::inventory_refill($warehouse_id, $reason_refill, $refill_source, $remarks, $warehouse_refill_product,'json');
 

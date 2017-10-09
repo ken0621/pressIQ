@@ -1674,4 +1674,8 @@ class Item
 
         return $return;
     }
+    public static function type($item_id = 0)
+    {
+        return Tbl_item::where("item_id",$item_id)->value('item_type_id');
+    }
 }

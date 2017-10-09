@@ -24,9 +24,9 @@
         <div class="form-group">
             <div class="col-md-6">
                 <ul class="nav nav-tabs">
-                  <li id="all-list" class="active"><a data-toggle="tab" href="#bundle"><i class="fa fa-yelp" aria-hidden="true"></i>&nbsp;Bundle/Group</a></li>
-                  <li id="archived-list"><a data-toggle="tab" href="#odd-inventory"><i class="fa fa-opencart" aria-hidden="true"></i>&nbsp;Single Inventory</a></li>
-                  <li id="archived-list"><a data-toggle="tab" href="#unused-empties"><i class="fa fa-slack" aria-hidden="true"></i>&nbsp;Empties</a></li>
+                  <li id="all-list" class="active"><a data-toggle="tab" href="#bundle" onClick="select_inventory('bundle');"><i class="fa fa-yelp" aria-hidden="true"></i>&nbsp;Bundle/Group</a></li>
+                  <li id="archived-list"><a data-toggle="tab" href="#odd-inventory" onClick="select_inventory('inventory');"><i class="fa fa-opencart" aria-hidden="true"></i>&nbsp;Single Inventory</a></li>
+                  <li id="archived-list"><a data-toggle="tab" href="#unused-empties" onClick="select_inventory('empties');"><i class="fa fa-slack" aria-hidden="true"></i>&nbsp;Empties</a></li>
                 </ul>
             </div>
             <div class="col-md-6">
@@ -47,13 +47,13 @@
                     @include("member.load_ajax_data.load_bundle_item")
                 </div>
             </div>
-            <div id="odd-inventory" class="tab-pane fade">
+            <div id="inventory" class="tab-pane fade">
                 <div class="form-group order-tags"></div>
                 <div class="table-responsive">
                     @include("member.load_ajax_data.load_bundle_item_inventory")
                 </div>
             </div>
-            <div id="unused-empties" class="tab-pane fade">
+            <div id="empties" class="tab-pane fade">
                 <div class="form-group order-tags"></div>
                 <div class="table-responsive">
                     @include("member.load_ajax_data.load_bundle_item_inventory_empties")
@@ -66,4 +66,10 @@
 @endsection
 
 @section('script')
+<script type="text/javascript">
+    function select_inventory(type = '') 
+    {
+
+    }
+</script>
 @endsection

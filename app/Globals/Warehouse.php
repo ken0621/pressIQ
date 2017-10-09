@@ -148,25 +148,30 @@ class Warehouse
                     {
                         $bundle_inventory_qty = $value_b['bundle_current_stocks'];
 
-                        if($is_mts == 1) 
-                        {
-                            if(isset($item_inventory[$value_bundle->bundle_item_id]))
-                            {
-                                 $item_inventory[$value_bundle->bundle_item_id] = $bundle_inventory_qty - $item_inventory[$value_bundle->bundle_item_id];
-                            }
-                            else
-                            {
-                                 $item_inventory[$value_bundle->bundle_item_id] = $bundle_inventory_qty;
-                            }                            
-                        }
+                        // if($is_mts == 1) 
+                        // {
+                        //     if(isset($item_inventory[$value_bundle->bundle_item_id]))
+                        //     {
+                        //          $item_inventory[$value_bundle->bundle_item_id] = $bundle_inventory_qty - $item_inventory[$value_bundle->bundle_item_id];
+                        //     }
+                        //     else
+                        //     {
+                        //          $item_inventory[$value_bundle->bundle_item_id] = $bundle_inventory_qty;
+                        //     }                            
+                        // }
 
                         $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty;
                         $less = $bundle_inventory_qty * $bundle_qty;
                     }
                 }
             }
+            if($is_mts == 1)
+            {
+                $less = 0;
+            }
+            
             $_return[$key]['item_id'] = $value->product_id;
-            $_return[$key]['orig_stock'] = $value->product_current_qty + (isset($item_inventory[$value->product_id]) ? $item_inventory[$value->product_id] : 0);
+            $_return[$key]['orig_stock'] = $value->product_current_qty;
             $_return[$key]['orig_stock_um'] = UnitMeasurement::um_view($_return[$key]['orig_stock'], $item_data->item_measurement_id, $um_issued);
 
             $_return[$key]['less_stock'] = $value->product_current_qty - $less;

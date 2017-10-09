@@ -222,18 +222,27 @@
       </div>
     </div>
 
-    @include('member2.layout_assets')
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
+    <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/match-height.js"></script>
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/fit-text.js"></script>
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/slick/slick.min.js"></script>
+    <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
+    <script type="text/javascript" src="/assets/front/js/global.js"></script>
+    <script src="/themes/{{ $shop_theme }}/js/global.js"></script>
+    <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
     @yield("js")
-    @yield("script")
     </body>
 
-    <script type="text/javascript">
-        
-        function onSearch()
-        {
-            var keyword = $('#keyword').val();
-            $("#submit_link").attr("href", "/product_search?keyword="+$('#keyword').val());
-        }
+<script type="text/javascript">
     
-    </script>
+    function onSearch()
+    {
+        var keyword = $('#keyword').val();
+        $("#submit_link").attr("href", "/product_search?keyword="+$('#keyword').val());
+    }
+
+</script>
+    
 </html>

@@ -33,10 +33,6 @@
 					   <div class="modal-dialog">
 					      <!-- Modal content-->
 					      <div class="modal-content">
-					         <div class="modal-header">
-					            {{-- <button type="button" class="close" data-dismiss="modal">&times;</button> --}}
-					            <h4 class="modal-title">LEADS LINK</h4>
-					         </div>
 					         <div class="modal-body">
 					         	<div class="leads-holder">
 					         		<input class="form-control" type="text" name="" value="http://brownandproud/myleadslink/link#000123">
@@ -77,7 +73,6 @@
 			<div class="profile-form">
 				<ul class="nav nav-tabs">
 				   <li class="active"><a data-toggle="tab" href="#basic_info">Basic Info</a></li>
-				   <li><a data-toggle="tab" href="#contact_info">Reward Configuration</a></li>
 				   <li><a data-toggle="tab" href="#profile_picture">Profile Picture</a></li>
 				   @if($allowed_change_pass)
 				   <li><a data-toggle="tab" href="#password">Password</a></li>

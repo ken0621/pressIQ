@@ -27,7 +27,7 @@ use Request;
 use Session;
 use Validator;
 use Redirect;
-use Carbon\carbon;
+use Carbon\Carbon;
 
 class Transaction
 {

@@ -156,16 +156,16 @@
                 <div class="col-md-2 col-sm-6">
                     <div class="btm-title">INFORMATION</div>
                     <ul>
-                        <li><a href="javascript:">Our Partners</a></li>
-                        <li><a href="javascript:">E-loading Business</a></li>
-                        <li><a href="javascript:">Airline Ticketing</a></li>
-                        <li><a href="javascript:">Travel and Tours</a></li>
-                        <li><a href="javascript:">E-money</a></li>
-                        <li><a href="javascript:">Career</a></li>
-                        <li><a href="javascript:">Events</a></li>
-                        <li><a href="javascript:">Legalities</a></li>
-                        <li><a href="javascript:">Business Presentation</a></li>
-                        <li><a href="javascript:">News</a></li>
+                        <li><a href="/partners">Our Partners</a></li>
+                        <li><a href="https://loadcentral.net">E-loading Business</a></li>
+                        <li><a href="http://tour.philtechglobalinc.com">Airline Ticketing</a></li>
+                        <li><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a></li>
+                        <li><a href="https://philtechglobalinc.vmoney.com/">E-money</a></li>
+                        <li><a href="javascript:" onClick="alert('Under Development');">Career</a></li>
+                        <li><a href="javascript:" onClick="alert('Under Development');">Events</a></li>
+                        <li><a href="/legalities">Legalities</a></li>
+                        <li><a href="https://drive.google.com/file/d/0B9C_Tfe9UZCmemJFeXA3dWRyYjVKOVY1MlVkUlNiWlVDang4/view">Business Presentation</a></li>
+                        <li><a href="javascript:" onClick="alert('Under Development');">News</a></li>
                     </ul>
                 </div>
                 <div class="col-md-2 col-sm-6">

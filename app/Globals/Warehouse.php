@@ -118,7 +118,7 @@ class Warehouse
         $data['warehouse_item_bundle'] = Warehouse::select_item_warehouse_per_bundle($warehouse_id);
         $data['_inventory'] = Warehouse::get_all_inventory_item($warehouse_id, $data['warehouse_item_bundle']);
         $data['_empties'] = Warehouse::get_all_inventory_item($warehouse_id, $data['warehouse_item_bundle'], 1);
-
+        
         return $data;
     }
     public static function get_all_inventory_item($warehouse_id, $bundled_item, $is_mts = 0)

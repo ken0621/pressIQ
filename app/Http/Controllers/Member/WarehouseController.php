@@ -1324,11 +1324,21 @@ class WarehouseController extends Member
         $data = Warehouse::get_inventory_item($warehouse_id, $type);
 
         $data['pis'] = Purchasing_inventory_system::check();
+        $data['warehouse_id'] = $warehouse_id;
         $data['warehouse'] = Tbl_warehouse::where('warehouse_id',$warehouse_id)->first();
         $data['page'] = "View Warehouse";
         $data['warehouse_name'] = 'Main Warehouse';
 
         return view("member.warehouse.warehouse_view_v2",$data);
+    }
+    public function print_inventory($warehouse_id, $type = '')
+    {
+        $data = Warehouse::get_inventory_item($warehouse_id, $type);
+        $data['type'] = $type;
+        $data['pis'] = Purchasing_inventory_system::check();
+        $data['owner'] = Tbl_warehouse::shop()->where('warehouse_id',$warehouse_id)->first();
+
+        return view("member.warehouse.warehouse_inventory_print",$data);
     }
     public function view_inventory_table()
     {

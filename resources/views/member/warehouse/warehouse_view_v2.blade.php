@@ -3,6 +3,7 @@
 @section('content')
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <input type="hidden" name="_token" value="{{csrf_token()}}">
+    <input type="hidden" name="w_id" id='warehouse_id' value="{{$warehouse_id}}">
     <div class="panel-heading">
         <div>
             <i class="fa fa-area-chart"></i>
@@ -13,7 +14,7 @@
                 </small>
             </h1>
             <div class="text-right">
-                <a href="javascript:" class="btn btn-primary">Print Inventory</a>
+                <a href="/member/item/warehouse/view_v2/print/{{$warehouse_id}}/bundle" class="btn btn-primary print-inventory">Print Inventory</a>
             </div>
         </div>
     </div>
@@ -41,19 +42,19 @@
         </div>
 
         <div class="form-group tab-content panel-body">
-            <div id="bundle" class="tab-pane fade in active">
+            <div id="bundle" class="bundle tab-pane fade in active">
                 <div class="form-group order-tags"></div>
                 <div class="table-responsive">
                     @include("member.load_ajax_data.load_bundle_item")
                 </div>
             </div>
-            <div id="inventory" class="tab-pane fade">
+            <div id="inventory" class="inventory tab-pane fade">
                 <div class="form-group order-tags"></div>
                 <div class="table-responsive">
                     @include("member.load_ajax_data.load_bundle_item_inventory")
                 </div>
             </div>
-            <div id="empties" class="tab-pane fade">
+            <div id="empties" class="empties tab-pane fade">
                 <div class="form-group order-tags"></div>
                 <div class="table-responsive">
                     @include("member.load_ajax_data.load_bundle_item_inventory_empties")
@@ -67,9 +68,12 @@
 
 @section('script')
 <script type="text/javascript">
-    function select_inventory(type = '') 
+    function select_inventory(type = '')
     {
-
+        $('.tab-pane').removeClass('active');
+        $('#'+type).addClass('active in');
+        var id = $('#warehouse_id').val();
+        $('.print-inventory').attr('href','/member/item/warehouse/view_v2/print/'+id+'/'+type);
     }
 </script>
 @endsection

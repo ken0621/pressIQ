@@ -123,13 +123,13 @@
 								</div>
 								<div class="form-group clearfix" style="margin-top: 15px;">
 									<div class="checkbox agreement-checkbox">
-									  <label><input type="checkbox" value="" required> I agree to the Brown <span>Terms of Use and Privacy Policy</span></label>
+									  <label><input type="checkbox" value="" required> I agree to the Philtech <span>Terms of Use and Privacy Policy</span></label>
 									</div>
 								</div>
 								<div class="form-group">
 									<div class="choice">
 										<div class="holder">
-											<button class="btn btn-brown">Sign Up</button>
+											<button class="btn btn-phil">Sign Up</button>
 										</div>
 										<div class="holder"><span class="or">OR</span></div>
 										<div class="holder"><a class="login-href" href="javascript:">Login an Account</a></div>
@@ -149,7 +149,7 @@
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header">Accept Brown Contract</div>
+            <div class="modal-header">Accept Philtech Contract</div>
             <div class="modal-body">
                 <div class="contract">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. 
 

@@ -8,7 +8,7 @@
 				<tr>
 					<td class="c1" style="background-color: #ddd;">
 						<div class="register-side">
-							<img src="/themes/{{ $shop_theme }}/img/login-bg.jpg">
+					
 						</div>
 					</td>
 					<td class="c2">
@@ -55,7 +55,7 @@
 								<div class="form-group">
 									<div class="choice">
 										<div class="holder">
-											<button class="btn btn-primary">Login</button>
+											<button class="btn">Login</button>
 										</div>
 										<div class="holder"><span class="or">OR</span></div>
 										<div class="holder"><a class="login-href" href="/members/register">Create an Account</a></div>

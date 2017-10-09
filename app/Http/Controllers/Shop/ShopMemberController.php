@@ -35,6 +35,7 @@ use App\Models\Tbl_locale;
 use App\Globals\Currency;
 use App\Globals\Cart2;
 use App\Globals\Item;
+use App\Globals\Mlm_tree;
 use Jenssegers\Agent\Agent;
 use Validator;
 use Google_Client; 
@@ -845,8 +846,9 @@ class ShopMemberController extends Shop
         $data["page"]       = "Checkout";
         $shop_id            = $this->shop_info->shop_id;
         $data["_payment"]   = $_payment = Payment::get_list($shop_id);
-        $data["_locale"]    = Tbl_locale::where("locale_parent", 0)->get();
+        $data["_locale"]    = Tbl_locale::where("locale_parent", 0)->orderBy("locale_name", "asc")->get();
         $data["cart"]       = Cart2::get_cart_info();
+        
         return (Self::load_view_for_members("member.checkout", $data));
     }
     public function postCheckout()
@@ -1055,7 +1057,7 @@ class ShopMemberController extends Shop
         
         if($procceed == 1)
         {
-        return view('member2.final_verification_placement', $data);
+            return Self::load_view_for_members('member2.final_verification_placement', $data);
         }
     }    
     public function postFinalVerifyPlacement(Request $request)
@@ -1071,9 +1073,16 @@ class ShopMemberController extends Shop
         if($procceed == 1)
         {
             $return = MLM2::matrix_position($shop_id, $slot_id, $slot_placement, $slot_position);
+            
             if($return == "success")
             {
-               echo json_encode("success");
+                $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
+                
+                Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
+           		Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
+           		MLM2::entry($shop_id,$slot_id);
+                
+                echo json_encode("success");
             }
             else if($return == "Placement Error")
             {
@@ -1093,13 +1102,21 @@ class ShopMemberController extends Shop
     {
         $data["page"] = "Enter Sponsor";
         $data["message"] = "Enter <b>Slot Code</b> of your <b>Sponsor</b>";
-        return view('member2.enter_code', $data);
+        return Self::load_view_for_members('member2.enter_code', $data);
     }
     public function getEnterSponsor()
     {
         $data["page"] = "Enter Code";
         $data["message"] = "Enter <b>Slot Code</b> of your <b>Sponsor</b>";
-        return view('member2.enter_sponsor', $data);
+        $data["lock_sponsor"] = false;
+        
+        if(!$this->mlm_member && Self::$customer_info->customer_lead != "")
+        {
+            $sponsor_no = Tbl_mlm_slot::where("slot_id", Self::$customer_info->customer_lead)->value("slot_no");
+            $data["lock_sponsor"] = $sponsor_no;
+        }
+        
+        return Self::load_view_for_members('member2.enter_sponsor', $data);
     }
     public function getEnterPlacement()
     {
@@ -1122,7 +1139,7 @@ class ShopMemberController extends Shop
 
         if(md5($slot_info->slot_id . $slot_info->slot_no) == $key)
         {
-            return view('member2.enter_placement', $data);
+            return Self::load_view_for_members('member2.enter_placement', $data);
         }
         else
         {
@@ -1135,7 +1152,7 @@ class ShopMemberController extends Shop
 
         if($data)
         {
-            return view('member2.final_verify', $data);
+            return Self::load_view_for_members('member2.final_verify', $data);
         }
     }    
     public function postFinalVerify()
@@ -1151,6 +1168,7 @@ class ShopMemberController extends Shop
             
             $new_slot_no    = $data["pin"];
             $new_slot_no    = str_replace("MYPHONE", "BROWN", $new_slot_no);
+            $new_slot_no    = str_replace("JCAWELLNESSINTCORP", "JCA", $new_slot_no);
             
             $create_slot    = MLM2::create_slot($shop_id, $customer_id, $membership_id, $sponsor, $new_slot_no);
 
@@ -1201,31 +1219,29 @@ class ShopMemberController extends Shop
                         }
                         else
                         {
-                            $data["message"]   = "Your upline should placed you first.";
+                            $data["message"]   = "Your upline should placed you first.  (ERROR182)";
                         }
                     }
                     else
                     {
-                        $data["message"]   = "Placement not available.";
+                        $data["message"]   = "Placement not available. (ERROR391)";
                     }
                 }
                 else
                 {
-                    $data["message"]   = "Some error occurred please try again. (659)";
+                    $data["message"]   = "Some error occurred please try again. (ERROR659)";
                 }
             }
             else
             {
-                $data["message"]   = "Some error occurred please try again. (388)";
+                $data["message"]   = "Some error occurred please try again. (ERROR388)";
             }
         }
         else
         {
-            $data["message"]   = "This slot is already placed. (111)";
+            $data["message"]   = "This slot is already placed. (ERROR111)";
         }
         
-
-
         $data["procceed"] = $procceed;
         return $data;
     }
@@ -1237,7 +1253,15 @@ class ShopMemberController extends Shop
 
         if($agent->isMobile())
         {
-            $new_view = str_replace("member.", "member.mobile.", $view);
+            if (strpos($view, 'member2.') !== false)
+            {
+                $new_view = str_replace("member2.", "member2.mobile.", $view);
+            }
+            else
+            {
+                $new_view = str_replace("member.", "member.mobile.", $view);
+            }
+
             if(view()->exists($new_view))
             {
                 $view = $new_view;

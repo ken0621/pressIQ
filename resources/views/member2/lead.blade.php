@@ -1,27 +1,26 @@
-<?php
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal">×</button>
+	<h4 class="modal-title">COPY LEAD LINK BELOW</h4>
+</div>
+<div class="modal-body clearfix">
+	<input class="leadlink" style="width: calc(100% - 200px)" class="form-control pull-left" type="text" value="{{ $url }}/ref/{{ request('slot_no') }}"/>
+    <button onclick="return ClipBoard()" class="pull-right btn btn-primary" style="width: 190px;">COPY LINK</button>
+</div>
 
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
-
-class AlterTblItemCodeInvoiceAddSlot extends Migration
+<script type="text/javascript">
+    
+function ClipBoard()
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('tbl_item_code_invoice', function (Blueprint $table) {
-            $table->integer('slot_id')->after('customer_id')->unsigned()->nullable();
-        });
-    }
+   copyToClipboard(".leadlink");
+}
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('tbl
+function copyToClipboard(element) {
+  var $temp = $("<input>");
+  $("body").append($temp);
+  $temp.val($(element).val()).select();
+  document.execCommand("copy");
+  $temp.remove();
+}
+
+
+</script>

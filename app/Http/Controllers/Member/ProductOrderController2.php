@@ -33,6 +33,14 @@ class ProductOrderController2 extends Member
     }
     public function payref()
     {
+        /* Session */
+        session()->forget('get_transaction_filter_customer_id');
+        session()->forget('get_transaction_customer_details');
+        session()->forget('get_transaction_date');
+        session()->forget('get_transaction_payment_method');
+        session()->forget('get_transaction_slot_id');
+        session()->forget('get_transaction_customer_details_v2');
+
         Transaction::get_transaction_customer_details_v2();
         Transaction::get_transaction_payment_method();
         Transaction::get_transaction_slot_id();
@@ -46,14 +54,6 @@ class ProductOrderController2 extends Member
             }
         }
 
-        /* Session */
-        session()->forget('get_transaction_filter_customer_id');
-        session()->forget('get_transaction_customer_details');
-        session()->forget('get_transaction_date');
-        session()->forget('get_transaction_payment_method');
-        session()->forget('get_transaction_slot_id');
-        session()->forget('get_transaction_customer_details_v2');
-
         Excel::create('Paymaya Report', function($excel) use ($data)
         {
             $excel->sheet('Paymaya', function($sheet) use ($data)
@@ -65,6 +65,14 @@ class ProductOrderController2 extends Member
     }
     public function draref()
     {
+        /* Session */
+        session()->forget('get_transaction_filter_customer_id');
+        session()->forget('get_transaction_customer_details');
+        session()->forget('get_transaction_date');
+        session()->forget('get_transaction_payment_method');
+        session()->forget('get_transaction_slot_id');
+        session()->forget('get_transaction_customer_details_v2');
+        
         Transaction::get_transaction_customer_details_v2();
         Transaction::get_transaction_payment_method();
         Transaction::get_transaction_slot_id();
@@ -77,14 +85,6 @@ class ProductOrderController2 extends Member
                 unset($data["_transaction"][$key]);
             }
         }
-
-        /* Session */
-        session()->forget('get_transaction_filter_customer_id');
-        session()->forget('get_transaction_customer_details');
-        session()->forget('get_transaction_date');
-        session()->forget('get_transaction_payment_method');
-        session()->forget('get_transaction_slot_id');
-        session()->forget('get_transaction_customer_details_v2');
 
         Excel::create('Dragonpay Report', function($excel) use ($data)
         {

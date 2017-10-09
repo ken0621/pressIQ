@@ -717,10 +717,10 @@ class MLM2
 	{
     	$check_target_slot 			= Tbl_mlm_slot::where("slot_id",$slot_id)->where("shop_id",$shop_id)->first();
     	$check_target_slot_sponsor  = Tbl_mlm_slot::where("slot_id",$check_target_slot->slot_sponsor)->where("shop_id",$shop_id)->first();
-    	
+
     	if($placement == $slot_id)
     	{
-    		$message = "Placement not available";
+    		$message = "Placement not available 001";
     	}
 
     	if($check_target_slot_sponsor->slot_placement == 0 || $check_target_slot_sponsor->slot_placement == null)
@@ -756,6 +756,8 @@ class MLM2
 		{
 			$message = "Already placed";
 		}
+		
+		
 		return $message;
     }
     public static function matrix_position_success($shop_id, $slot_id, $placement, $position)
@@ -763,12 +765,6 @@ class MLM2
 		$update["slot_placement"]  = $placement;
 		$update["slot_position"]   = strtolower($position);
 		Tbl_mlm_slot::where("shop_id",$shop_id)->where("slot_id",$slot_id)->update($update);
-
-        $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
-
-        Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
-   		Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
-   		MLM2::entry($shop_id,$slot_id);
     }
     public static function matrix_auto($shop_id, $slot_id, $rule)
     {
@@ -997,14 +993,20 @@ class MLM2
                         								->where('shop_id', $shop_id)
                         								->count();
 
+		
+
 	    if($count_tree_if_exist != 0 || !$placement ||  !$position)
 	    {
 	    	return 1;
 	    } 
 	    else if ($self_downline == 1)
 	    {
+	    	
 	    	/* IF DOWNLINE ONLY OF $SELF_OWNER*/
 		    $check_shop_slot            = Tbl_mlm_slot::where("slot_id",$placement)->where("shop_id",$shop_id)->first();
+		    
+		   
+		    
 		    if($check_shop_slot)
 		    {	
 		    	if($check_shop_slot->slot_placement != 0 && $check_shop_slot->slot_placement != null)
@@ -1019,6 +1021,8 @@ class MLM2
 			    								   ->where('placement_tree_child_id',$placement)
 	                							   ->where('shop_id', $shop_id)
 	                							   ->first();
+	                							   
+	                							   
 	                    if($owned)
 	                    {
 	                    	return 0;
@@ -1048,6 +1052,7 @@ class MLM2
 	    }  
 	    else
 	    {
+	    	
 		    $check_shop_slot            = Tbl_mlm_slot::where("slot_id",$placement)->where("shop_id",$shop_id)->first();
 		    if($check_shop_slot)
 		    {	
@@ -1136,21 +1141,20 @@ class MLM2
         if($membership_id)
         {
         	$item_points   = Tbl_mlm_item_points::joinItem()->where("tbl_item.item_id",$item_id)->where('shop_id',$shop_id)->where('tbl_mlm_item_points.membership_id',$membership_id)->first();
-
         }
         if($item)
         {
-	        $data["UNILEVEL"]					= $item_points->UNILEVEL;
-			$data["REPURCHASE_POINTS"]			= $item_points->REPURCHASE_POINTS;
-			$data["UNILEVEL_REPURCHASE_POINTS"]	= $item_points->UNILEVEL_REPURCHASE_POINTS;
-			$data["REPURCHASE_CASHBACK"]		= $item_points->REPURCHASE_CASHBACK;
-			$data["DISCOUNT_CARD_REPURCHASE"]	= $item_points->DISCOUNT_CARD_REPURCHASE;
-			$data["STAIRSTEP"]					= $item_points->STAIRSTEP;
-			$data["BINARY_REPURCHASE"]			= $item_points->BINARY_REPURCHASE;
-			$data["STAIRSTEP_GROUP"]			= $item_points->STAIRSTEP_GROUP;
-			$data["RANK"]						= $item_points->RANK;
-			$data["RANK_GROUP"]					= $item_points->RANK_GROUP;
-			$data["price"]						= $item->item_price;
+	        $data["UNILEVEL"]					= isset($item_points->UNILEVEL) ? $item_points->UNILEVEL : 0;
+			$data["REPURCHASE_POINTS"]			= isset($item_points->REPURCHASE_POINTS) ? $item_points->REPURCHASE_POINTS : 0;
+			$data["UNILEVEL_REPURCHASE_POINTS"]	= isset($item_points->UNILEVEL_REPURCHASE_POINTS) ? $item_points->UNILEVEL_REPURCHASE_POINTS : 0;
+			$data["REPURCHASE_CASHBACK"]		= isset($item_points->REPURCHASE_CASHBACK) ? $item_points->REPURCHASE_CASHBACK : 0;
+			$data["DISCOUNT_CARD_REPURCHASE"]	= isset($item_points->DISCOUNT_CARD_REPURCHASE) ? $item_points->DISCOUNT_CARD_REPURCHASE : 0;
+			$data["STAIRSTEP"]					= isset($item_points->STAIRSTEP) ? $item_points->STAIRSTEP : 0;
+			$data["BINARY_REPURCHASE"]			= isset($item_points->BINARY_REPURCHASE) ? $item_points->BINARY_REPURCHASE : 0;
+			$data["STAIRSTEP_GROUP"]			= isset($item_points->STAIRSTEP_GROUP) ? $item_points->STAIRSTEP_GROUP : 0;
+			$data["RANK"]						= isset($item_points->RANK) ? $item_points->RANK : 0;
+			$data["RANK_GROUP"]					= isset($item_points->RANK_GROUP) ? $item_points->RANK_GROUP : 0;
+			$data["price"]						= isset($item->item_price) ? $item->item_price : 0;
 			$data["RANK_REPURCHASE_CASHBACK"]   = MLM2::rank_cashback_points($shop_id,$slot_id,$item_id);
 			return $data;
         }

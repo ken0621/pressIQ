@@ -46,9 +46,9 @@
                 <div class="holder"><a href="javascript:">COMPANY</a></div>
                 <div class="holder"><a href="javascript:">BUSINESS PRESENTATION</a></div>
                 <div class="holder"><a href="javascript:">NEWS</a></div>
-                <div class="holder"><a href="/mlm/login">LOGIN</a></div>
+                <div class="holder"><a href="/members/login">LOGIN</a></div>
                 <div class="holder"><div class="linya"></div></div>
-                <div class="holder"><a href="/mlm/register">REGISTER</a></div>
+                <div class="holder"><a href="/members/register">REGISTER</a></div>
             </div>
         </div>
         <div class="header-nav-middle">
@@ -231,6 +231,7 @@
     <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
     <script type="text/javascript" src="/assets/front/js/global.js"></script>
     <script src="/themes/{{ $shop_theme }}/js/global.js"></script>
+    <script type="text/javascript" src="/assets/front/js/global_function.js"></script>
     @yield("js")
     </body>
 

@@ -29,6 +29,7 @@ class Payroll_BioImportController extends Member
 		$biometric 	= Request::input('biometric');
 		$company 	= Request::input('company');
 
+
 		if($biometric == 'ZKTime 5.0')
 		{
 			return Self::import_ZKTime_5_0($file , $company);
@@ -67,6 +68,22 @@ class Payroll_BioImportController extends Member
 		{
 			return Self::import_touchlink_v1($file, $company);
 		}
+		
+		if($biometric == 'Testing Import')
+		{
+			return Self::import_testing($file , $company);
+		}
+	}
+	public function import_testing($file, $company)
+	{
+		 $_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('column1', 'column2'));
+
+		 foreach($_time as $key => $excel)
+		 {
+		 	$output[$key] = $excel["column2"];
+		 }
+		 
+		 dd($output);
 	}
     public function import_touchlink_v1($file, $company) /* BIO METRICS START */
     {
@@ -729,6 +746,9 @@ class Payroll_BioImportController extends Member
 
 
     	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('employee_no','employee_name','date','time_in','time_out'));
+
+
+		dd($_time);
 
     	if(!isset($_time[0]['employee_no']))
     	{

@@ -49,7 +49,7 @@
 		                    <div class="btn-container">
 		                        <button class="product-add-cart btn-buy-a-kit" item-id="{{$item_kit_id or '54'}}" quantity="1">Enroll Now</button><br>
 		                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
-		                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code" onclick="action_load_link_to_modal('/members/enter-code')">Enter a Code</button></a>
+		                        <a href="#" id="btn-enter-a-code"><button class="btn-enter-a-code">Enter a Code</button></a>
 		                    </div>
 		                </div>
 		            </div>
@@ -272,6 +272,33 @@
 				</div>
 			</div>
 		</div>
+		
+		<!-- ACADEMY -->
+		<!-- <div class="academy-container">
+			<div class="row-no-padding clearfix">
+				<div class="col-md-6 left-section">
+					<form action="">
+						<img src="/themes/{{ $shop_theme }}/img/left.jpg" alt="">
+						<div class="row row-no-padding">
+							<div class="col-md-4">
+								<input style="border-radius: 0px; border-right: 0; box-shadow: none !important;" class="form-control input-sm" type="text" placeholder="Family Name">
+							</div>
+							<div class="col-md-4">
+								<input style="border-radius: 0px; border-left: 0; box-shadow: none !important;" class="form-control input-sm" type="text" placeholder="First Name">
+							</div>
+							<div class="col-md-4" style="padding-left: 3px !important;">
+								<input style="border-radius: 0px; box-shadow: none !important;" class="form-control input-sm" type="text" placeholder="Middle Name">
+							</div>
+						</div>
+						<textarea name="" class="address form-control input-sm" id="" placeholder="Address"></textarea>
+					</form>
+				</div>	
+				<div class="col-md-6 right-section">
+					<img src="/themes/{{ $shop_theme }}/img/right.jpg" alt="">
+				</div>
+			</div>
+		</div> -->
+
 		<div class="row clearfix">
 			<div class="animated fadeInUp col-md-6">
 				<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
@@ -425,6 +452,39 @@
 			</div>
 		</div>
 
+		<!-- Popup Academy -->
+	    <div class="popup-academy">
+	        <div id="academy-modal" class="modal academy-modal fade">
+	            <div class="modal-lg modal-dialog">
+	                <div class="modal-content">
+	                    
+	                    <div class="modal-header">
+	                    	<div class="container">
+								<div class="row clearfix">
+							        <div class="col-md-4">
+							        	<div class="logo-container">
+							        		Logo Here
+							        	</div>
+							        </div>
+
+							        <div class="cold-md-8">
+							        	<div class="header-container">
+							        		<h2>BROWN&PROUD ACADEMY</h2>
+							        		<h3>MATERCLASS IN CREATIVE ENTREPRENEURSHIP</h3>
+							        	</div>
+							        </div>
+								</div>
+							</div>
+					    </div>
+
+						<div class="modal-body">
+							
+						</div>
+
+	                </div>
+	            </div>
+	        </div>
+	    </div>
 
 	    <!-- Success -->
 	    <div class="popup-success">
@@ -446,7 +506,7 @@
 @endsection
 
 @section("member_script")
-<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js?version=2.0"></script>
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/non_member.js?version=2.1"></script>
 <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
 <script>
 
@@ -514,8 +574,6 @@ $(document).ready(function()
 @section("member_css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/member_dashboard.css">
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/nonmember_dashboard.css">
-
-
 
 
 <style type="text/css">

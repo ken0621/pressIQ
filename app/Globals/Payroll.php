@@ -275,7 +275,7 @@ class Payroll
 			$temp['branch'] = Tbl_payroll_company::selcompany($shop_id)->where('payroll_parent_company_id', $parent->payroll_company_id)->orderBy('payroll_company_name')->get();
 			array_push($data, $temp);
 		}
-
+		
 		return $data;
 
 	}

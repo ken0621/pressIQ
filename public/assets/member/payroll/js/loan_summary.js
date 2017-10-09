@@ -42,7 +42,7 @@ function loan_summary()
 		$('.select-company-name').change(function()
 		{
 			var company_id = this.value;
-
+			
 			$.ajax({
 
 				url : '/member/payroll/reports/table_company_loan_summary',

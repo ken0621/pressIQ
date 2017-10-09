@@ -440,6 +440,10 @@ Route::any('/member/item/warehouse/refill_log/{id}','Member\WarehouseController@
 Route::any('/member/item/warehouse/view_pdf/{id}','Member\WarehouseController@view_pdf');
 Route::any('/member/item/warehouse/stock_input_report/{id}','Member\WarehouseController@stock_input');
 /* END WAREHOUSE ARCY*/
+
+/* REFILL WAREHOUSE */
+AdvancedRoute::controller("/member/item/warehouse/v2/refill","Member\WarehouseRefillController");
+
 /* INVENTORY LOG*/
 Route::any('/member/item/inventory_log','Member\InventoryLogController@index');
 /*END INVENTORY LOG*/

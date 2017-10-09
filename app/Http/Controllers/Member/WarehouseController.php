@@ -534,7 +534,7 @@ class WarehouseController extends Member
     }
     public function refill_item_vendor($warehouse_id,$vendor_id)
     {        
-            $data["_cat"] = Tbl_category::where("type_category","inventory")->where("type_parent_id",0)
+        $data["_cat"] = Tbl_category::where("type_category","inventory")->where("type_parent_id",0)
                                                                             ->where("type_shop",$this->user_info->shop_id)
                                                                             ->get();
         $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$warehouse_id)->first();

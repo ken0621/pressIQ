@@ -4,6 +4,9 @@
 </div>
 
 <div class="modal-body clearfix employee-timesheet-modal">
+    <div class="col-md-2 padding-lr-1 pull-right">
+            <a role="form" target="_blank" href="/member/payroll/process_payroll/income_summary/timesheet_view_pdf/{{$period_company_id_pdf}}/{{$employee_id_pdf}}"><button type="button" class="btn btn-success" style="margin:10px 10px 10px 0px"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> View PDF</button></a>
+    </div>
     @if($employee)
         <table class="table table-bordered table-striped table-condensed">
             <thead style="text-transform: uppercase">

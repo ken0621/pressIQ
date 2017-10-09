@@ -1,8 +1,16 @@
 .content 
 {
-
 	background-color:white;
+	margin-top: 60px;
 	margin-bottom: 60px;
+
+	@mixin transition($transition)
+	{
+		  -webkit-transition: all $transition ease-in-out;
+		  -moz-transition: all $transition ease-in-out;
+		  -o-transition: all $transition ease-in-out;
+		  transition: all $transition ease-in-out;
+	}
 
 	.content-title 
 	{
@@ -29,18 +37,22 @@
 
 	button 
 	{
+		@include transition(0.2s);
 		margin-top: 10px;
 	    border:none;
 	    border-radius: 20px;
 	    padding: 13px;
 	    width: 30%;
 	    color: white;
-	    background-color: #2e3192;
+	    background-color: #006CC5;
 	    font-weight: 700;
-		
-	}
+	    margin-bottom: 20px;
 
-	
+	    &:hover
+	    {
+	    	background-color: #FF8500;
+	    }
+	}
 
 	img 
 	{

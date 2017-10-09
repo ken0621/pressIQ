@@ -151,7 +151,7 @@
                     <div class="img-footer">
                         <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/philtech.jpg">
                     </div>
-                    <p>PHILTECH, INC. “We provide Business” Is a subsidiary company of ZENAR TELECOMS, INC. with highly experienced both in retail and distribution of technology industry for almost 20years.</p>
+                    <p>PHILTECH, INC. “We provide Business” Is a subsidiary company of ZENAR TELECOMS, INC. with highly experienced both in retail and distribution of technology industry for almost 20years. PHILTE... <a style="color: #fff" href="/about">See more</a></p>
                 </div> 
                 <div class="col-md-2 col-sm-6">
                     <div class="btm-title">INFORMATION</div>

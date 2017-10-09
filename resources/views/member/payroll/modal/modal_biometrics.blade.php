@@ -1,3 +1,4 @@
+
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal">×</button>
 	<h4 class="modal-title"><i class="fa fa-file-excel-o color-green" aria-hidden="true"></i>&nbsp;Import Time Sheet</h4>
@@ -22,13 +23,16 @@
 				<!-- <option value="C7">C7</option> -->
 			</select>
 		</div>
+
+		
+		 
 	</form>
 	<div class="form-group">
 		<div class="col-md-6">
 			<label class="btn btm-custom-green"><input type="file" name="" id="bio-file" class="hide" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/plain, .dat">Choose File</label>
 		</div>
 		<div class="col-md-6">
-			<select class="form-control" name="company">
+			<select class="form-control" id="company" name="company">
 				<option value="">Select Company</option>
 				@foreach($_company as $company)
 	              <option value="{{$company['company']->payroll_company_id}}">{{$company['company']->payroll_company_name}}</option> 
@@ -45,6 +49,11 @@
 	<div class="form-group">
 		<div class="col-md-6">
 			<button class="btn btn-custom-primary btn-import">Import File</button>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-md-6">
+			<button class="btn btn-custom-primary btn-import-biometric"><i class="fa fa-calendar" aria-hidden="true"></i> &nbsp; Import From Biometric</button>
 		</div>
 	</div>
 	<div class="form-group">

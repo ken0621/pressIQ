@@ -327,8 +327,8 @@ class Payroll2
 			/* CREATE TIMESHEET DB IF EMPTY */
 			if(!$timesheet_db)
 			{
-				$_shift_real =  Payroll2::db_get_shift_of_employee_by_code($shift_code_id, $from);
-				$_shift =  Payroll2::shift_raw(Payroll2::db_get_shift_of_employee_by_code($shift_code_id, $from));
+				$_shift_real 	=  Payroll2::db_get_shift_of_employee_by_code($shift_code_id, $from);
+				$_shift 		=  Payroll2::shift_raw(Payroll2::db_get_shift_of_employee_by_code($shift_code_id, $from));
 				
 				$insert = null;
 				$insert["payroll_employee_id"] = $employee_id;
@@ -383,8 +383,6 @@ class Payroll2
 			$_timesheet[$from]->record = Payroll2::timesheet_process_in_out($timesheet_db);
 			$_timesheet[$from]->is_holiday = Payroll2::timesheet_get_is_holiday($employee_id, $from); //$holiday["holiday_day_type"];
 			// $_timesheet[$from]->holiday_name = $holiday["holiday_name"];
-		
-
 			if(isset($_shift_real[0]))
 			{
 				$_timesheet[$from]->day_type = $day_type = Payroll2::timesheet_get_day_type($_shift_real[0]->shift_rest_day, $_shift_real[0]->shift_extra_day);
@@ -888,14 +886,17 @@ class Payroll2
 	public static function timesheet_process_in_out($timesheet_db)
 	{
 		$_timesheet_record = null;
+		// dd($_timesheet_record);
 		if($timesheet_db)
 		{
 			$_timesheet_record_db = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->get();
 			$_timesheet_record = Payroll2::timesheet_process_in_out_record($_timesheet_record_db);
+			// dd($_timesheet_record);
 		}
 		else
 		{
 			$_timesheet_record = Payroll2::timesheet_process_in_out_default();
+
 		}
 
 		return $_timesheet_record;
@@ -2843,7 +2844,7 @@ class Payroll2
 	}
 
 
-	public static function compute_income_day_pay_monthly_fixed_cola ($_time = array(), $daily_rate = 0, $group_id = 0, $cola = 0, $compute_type="")
+	public static function compute_income_day_pay_monthly_fixed_cola($_time = array(), $daily_rate = 0, $group_id = 0, $cola = 0, $compute_type="")
 	{
 		$return = new stdClass();
 		$total_day_income 		= $daily_rate ;
@@ -4753,7 +4754,7 @@ class Payroll2
 		}
 
 		$deduction = Payroll::getdeduction($employee_id, $start_date, $period_category_arr['period_category'], $period_category, $shop_id);
-		
+			
 		if(isset($deduction["deduction"]))
 		{
 			if(count($deduction["deduction"]) > 0)
@@ -4776,6 +4777,8 @@ class Payroll2
 				}
 			}
 		}
+
+
 
 		$deduction = Payroll::getdeductionv2($employee_id, $start_date, $period_category_arr['period_category'], $period_category, $shop_id);
 

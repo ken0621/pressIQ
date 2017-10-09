@@ -137,6 +137,10 @@ Route::get('/logout', 'Login\MemberLoginController@logout');
 Route::any('/register', 'Login\MemberLoginController@register');
 Route::post('/createAccount', 'Frontend\HomeController@createAccount');
 
+
+Route::any('/employee_login', 'Login\EmployeeLoginController@employee_login');
+
+
 Route::group(array('prefix' => '/member/{page}/'), function()
 {
 	//order start

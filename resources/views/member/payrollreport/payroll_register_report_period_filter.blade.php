@@ -1,5 +1,5 @@
 	                <div >
-            			<a href="/member/payroll/reports/payroll_register_report_period/export_excel/{{$period_info->payroll_period_company_id}}"><button style="margin-bottom: 20px;" type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" style="font-size:25px;color:white"></i> &nbsp;EXPORT TO EXCEL</button></a>
+            			<a href="/member/payroll/reports/payroll_register_report_period/export_excel_filter/{{$period_company_id_filter}}/{{$payroll_employee_company_id_filter}}"><button style="margin-bottom: 20px;" type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" style="font-size:25px;color:white"></i> &nbsp;EXPORT TO EXCEL</button></a>
             		</div>
             		<div style="overflow-x: scroll;" class="col-md-12">
                     <table class="table table-bordered table-striped table-condensed" style="table-layout: fixed;">

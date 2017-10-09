@@ -16,6 +16,7 @@ use App\Models\Tbl_membership_package;
 use App\Models\Tbl_item;
 use App\Globals\Currency;
 use App\Globals\Mlm_compute;
+use App\Globals\Mlm_tree;
 use App\Globals\Mlm_complan_manager;
 use App\Globals\Reward;
 use App\Globals\MLM2;
@@ -441,7 +442,6 @@ class MlmDeveloperController extends Member
     }
     public function import_submit()
     {
-        
         $data                       = Self::get_initial_settings();
 
         /* INITIALIZE AND CAPTURE DATA */
@@ -470,7 +470,7 @@ class MlmDeveloperController extends Member
         {
             $slot_date_created      = date("Y-m-d", strtotime(Request::input("date_created")));
         }
-        
+      
 
 
         if($existing_customer)
@@ -497,7 +497,7 @@ class MlmDeveloperController extends Member
         {
             $membership_package_id  = null;
         }
-
+        
         $membership_code_return     = Reward::generate_membership_code($customer_id, $membership_package_id);
         $membership_code_id         = (isset($membership_code_return["membership_code_id"]) ? $membership_code_return["membership_code_id"] : null);
         $membership_id              = Tbl_membership_package::where("membership_package_id", $membership_package_id)->value("membership_id");
@@ -514,11 +514,18 @@ class MlmDeveloperController extends Member
         {
             $slot_id = MLM2::create_slot($shop_id, $customer_id, $membership_id, $slot_sponsor, $slot_no, $slot_type = "PS");
 
-            if(is_numeric($slot_id))
+            if(Request::input("placement") != "0")
             {
-                $return_position = MLM2::matrix_position($shop_id, $slot_id, $slot_placement, $slot_position);
+                if(is_numeric($slot_id))
+                {
+                    $return_position = MLM2::matrix_position($shop_id, $slot_id, $slot_placement, $slot_position);
+                }
             }
-        
+            else
+            {
+                $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
+                Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
+            }
         }
 
         if(!$membership_code_id)
@@ -534,10 +541,16 @@ class MlmDeveloperController extends Member
         elseif($return_position != "success")
         {
             $return["status"] = "error";
+            $return["data"] = "$shop_id, $slot_id, $slot_placement, $slot_position";
             $return["message"] = $return_position;
+            Tbl_mlm_slot::where("slot_id", $slot_id)->delete();
         }
         else
         {
+            $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
+            Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
+       		Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
+       		MLM2::entry($shop_id,$slot_id);
             $return["status"] = "success";
         }
 

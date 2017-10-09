@@ -274,38 +274,30 @@
 		</div>
 		
 		<!-- ACADEMY -->
-		<div class="academy-container">
-			<!-- <div class="academy-img-container">
-				<a data-toggle="modal" data-target="#academy-modal"><img src="/themes/{{ $shop_theme }}/img/top-dash-img.jpg" alt=""></a>
-			</div> -->
-			<div class="row clearfix">
-
-				<div class="col-md-6">
-
+		<!-- <div class="academy-container">
+			<div class="row-no-padding clearfix">
+				<div class="col-md-6 left-section">
 					<form action="">
 						<img src="/themes/{{ $shop_theme }}/img/left.jpg" alt="">
 						<div class="row row-no-padding">
 							<div class="col-md-4">
-								<input style="border-radius: 0px; border-right: 0; box-shadow: none !important;" class="form-control input-sm" type="text">
+								<input style="border-radius: 0px; border-right: 0; box-shadow: none !important;" class="form-control input-sm" type="text" placeholder="Family Name">
 							</div>
 							<div class="col-md-4">
-								<input style="border-radius: 0px; border-left: 0; box-shadow: none !important;" class="form-control input-sm" type="text">
+								<input style="border-radius: 0px; border-left: 0; box-shadow: none !important;" class="form-control input-sm" type="text" placeholder="First Name">
 							</div>
-							<div class="col-md-4">
-								<input style="border-radius: 0px; box-shadow: none !important;" class="form-control input-sm" type="text">
+							<div class="col-md-4" style="padding-left: 3px !important;">
+								<input style="border-radius: 0px; box-shadow: none !important;" class="form-control input-sm" type="text" placeholder="Middle Name">
 							</div>
 						</div>
+						<textarea name="" class="address form-control input-sm" id="" placeholder="Address"></textarea>
 					</form>
-
-				</div>
-				
-				<div class="col-md-6">
+				</div>	
+				<div class="col-md-6 right-section">
 					<img src="/themes/{{ $shop_theme }}/img/right.jpg" alt="">
 				</div>
-
 			</div>
-		</div>
-		<!-- END ACADEMY -->
+		</div> -->
 
 		<div class="row clearfix">
 			<div class="animated fadeInUp col-md-6">

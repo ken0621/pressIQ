@@ -46,9 +46,9 @@
                 <div class="holder"><a href="javascript:">COMPANY</a></div>
                 <div class="holder"><a href="javascript:">BUSINESS PRESENTATION</a></div>
                 <div class="holder"><a href="javascript:">NEWS</a></div>
-                <div class="holder"><a href="/mlm/login">LOGIN</a></div>
+                <div class="holder"><a href="/members/login">LOGIN</a></div>
                 <div class="holder"><div class="linya"></div></div>
-                <div class="holder"><a href="/mlm/register">REGISTER</a></div>
+                <div class="holder"><a href="/members/register">REGISTER</a></div>
             </div>
         </div>
         <div class="header-nav-middle">
@@ -222,26 +222,18 @@
       </div>
     </div>
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
-    <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/match-height.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/fit-text.js"></script>
-    <script type="text/javascript" src="/themes/{{ $shop_theme }}/assets/slick/slick.min.js"></script>
-    <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
-    <script type="text/javascript" src="/assets/front/js/global.js"></script>
-    <script src="/themes/{{ $shop_theme }}/js/global.js"></script>
+    @include('member2.layout_assets')
     @yield("js")
+    @yield("script")
     </body>
 
-<script type="text/javascript">
+    <script type="text/javascript">
+        
+        function onSearch()
+        {
+            var keyword = $('#keyword').val();
+            $("#submit_link").attr("href", "/product_search?keyword="+$('#keyword').val());
+        }
     
-    function onSearch()
-    {
-        var keyword = $('#keyword').val();
-        $("#submit_link").attr("href", "/product_search?keyword="+$('#keyword').val());
-    }
-
-</script>
-    
+    </script>
 </html>

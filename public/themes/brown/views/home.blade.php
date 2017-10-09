@@ -1,5 +1,13 @@
 @extends("layout")
 @section("content")
+<div class="bts-popup" role="alert">
+    <div class="bts-popup-container">
+		<img src="/themes/{{ $shop_theme }}/img/front-popup-img.jpg">
+		<div class="button-container">
+			<div class="link-btn"><a href="">ENROLL NOW</a></div>
+		</div>
+    </div>
+</div>
 <div class="content">
 	<div class="wrapper-1">
 		<!-- <div class="container">
@@ -206,7 +214,7 @@
 				<div class="top-container">
 					<h1 class="animated fadeInDown" data-wow-delay="0.3s">www.brown.com.ph</h1>
 					<h2 class="animated fadeInUp" data-wow-delay="0.3s">Change Starts Here</h2>
-					<video class="animated zoomInDown" width="803" height="450" autoplay="">
+					<video autoplay class="animated zoomInDown" width="803" height="450">
 						<source src="/themes/{{ $shop_theme }}/img/intro2.mp4" type="video/mp4">
 					</video>
 					<!-- 16:9 aspect ratio -->
@@ -460,6 +468,39 @@
 <script>
 	new WOW().init();
 </script>
+
+<!-- BTS POPUP -->
+<script>
+// $(document).ready(function($){
+  
+//   window.onload = function (){
+//     $(".bts-popup").delay(1000).addClass('is-visible');
+// 	}
+  
+
+// 	$('.bts-popup-trigger').on('click', function(event){
+// 		event.preventDefault();
+// 		$('.bts-popup').addClass('is-visible');
+// 	});
+	
+
+// 	$('.bts-popup').on('click', function(event){
+// 		if( $(event.target).is('.bts-popup-close') || $(event.target).is('.bts-popup') ) {
+// 			event.preventDefault();
+// 			$(this).removeClass('is-visible');
+// 		}
+// 	});
+
+// 	$(document).keyup(function(event){
+//     	if(event.which=='27'){
+//     		$('.bts-popup').removeClass('is-visible');
+// 	    }
+//     });
+// });
+
+</script>
+
+
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css">

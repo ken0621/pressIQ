@@ -513,43 +513,41 @@ $text-dark: #404040;
 		}
 	}
 }
-
-.academy-container
+/* ACADEMY CONTAINER */
+/* .academy-container
 {
-
-	form
+	img
 	{
-		img
-		{
-			width: 100%;
-			margin-bottom: 20px;
-		}
+		width: 100%;
+		margin-bottom: 20px;
 	}
-
-}
-
-.popup-academy
-{
-	.modal-content
+	.left-section
 	{
-		.modal-header
+		input
 		{
-			background-color: #422311;
-
-			.header-container
-			{
-				text-align: center;
-				color: #fff;
-			}
+			border-color: #b5a195 !important;
+			margin-top: 5px !important;
+			box-shadow: none !important;
+			border-radius: 0 !important;
+		}
+		.address
+		{
+			max-width: 100%;
+			min-width: 100%;
+			min-height: 60px;
+			max-height: 60px;
+			border-color: #b5a195 !important;
+			margin-top: 5px !important;
+			border-radius: 0 !important;
+			box-shadow: none !important;
 		}
 
-		.modal-body
-		{
-
-		}
 	}
-}
-
+	.right-section
+	{
+		padding-left: 10px !important;
+	}
+} */
 /* Success */
 .popup-success
 {

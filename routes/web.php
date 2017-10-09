@@ -409,6 +409,7 @@ Route::any('/member/item/warehouse/archive_submit','Member\WarehouseController@a
 Route::any('/member/item/warehouse/view/{id}','Member\WarehouseController@view');
 
 Route::any('/member/item/warehouse/view_v2/{id}','Member\WarehouseController@view_v2');
+Route::any('/member/item/warehouse/view_v2/table/{id}','Member\WarehouseController@view_inventory_table');
 
 Route::any('/member/item/warehouse/view_v2/print/{id}/{type}','Member\WarehouseController@print_inventory');
 

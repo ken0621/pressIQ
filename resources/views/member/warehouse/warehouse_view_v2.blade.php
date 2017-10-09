@@ -31,7 +31,7 @@
                 </ul>
             </div>
             <div class="col-md-3">
-              <select class="form-control select-manufacturer " placeholder="Enter Manufacturer" >
+              <select class="form-control select-manufacturer" placeholder="Enter Manufacturer" >
                   @include("member.load_ajax_data.load_manufacturer")
               </select>
             </div>
@@ -45,26 +45,8 @@
                 </div>
             </div>
         </div>
-
-        <div class="form-group tab-content panel-body">
-            <div id="bundle" class="bundle tab-pane fade in active">
-                <div class="form-group order-tags"></div>
-                <div class="table-responsive">
-                    @include("member.load_ajax_data.load_bundle_item")
-                </div>
-            </div>
-            <div id="inventory" class="inventory tab-pane fade">
-                <div class="form-group order-tags"></div>
-                <div class="table-responsive">
-                    @include("member.load_ajax_data.load_bundle_item_inventory")
-                </div>
-            </div>
-            <div id="empties" class="empties tab-pane fade">
-                <div class="form-group order-tags"></div>
-                <div class="table-responsive">
-                    @include("member.load_ajax_data.load_bundle_item_inventory_empties")
-                </div>
-            </div>
+        <div class="inventory-table">
+           @include("member.warehouse.warehouse_view_v2_inventory_table")
         </div>
     </div>
 </div>
@@ -73,17 +55,35 @@
 
 @section('script')
 <script type="text/javascript">
+    var global_type = 'bundle';
+    var global_m_id = null;
     function select_inventory(type = '')
     {
         $('.tab-pane').removeClass('active');
         $('#'+type).addClass('active in');
         var id = $('#warehouse_id').val();
-        $('.print-inventory').attr('href','/member/item/warehouse/view_v2/print/'+id+'/'+type);
+        global_type = type;
+        $('.print-inventory').attr('href','/member/item/warehouse/view_v2/print/'+id+'/'+type+'?m_id='+global_m_id);
     }
     $('.select-manufacturer').globalDropList(
     {
         hasPopup : 'false',
-        widht : '100%'
+        widht : '100%',
+        onChangeValue : function ()
+        {
+            if($(this).val())
+            {
+                var id = $('#warehouse_id').val();
+                var m_id = $(this).val();
+                $('.inventory-table').load('/member/item/warehouse/view_v2/table/'+id+'?type='+global_type+'&m_id='+m_id+' .inventory-container', function()
+                {
+                    $('.tab-pane').removeClass('active');
+                    $('#'+global_type).addClass('active in');
+                    global_m_id = m_id;
+                    $('.print-inventory').attr('href','/member/item/warehouse/view_v2/print/'+id+'/bundle?m_id='+global_m_id);
+                })
+            }
+        }
     });
 </script>
 @endsection

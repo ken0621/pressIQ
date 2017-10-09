@@ -60,10 +60,12 @@ class Warehouse
                $bundle_qty_[$value_bundle->bundle_item_id] = $bundle_qty;
                if(isset(Item::info($value_bundle->bundle_item_id)->item_manufacturer_id))
                {
-                    $manufacturer = Tbl_manufacturer::where('manufacturer_id', Item::info($value_bundle->bundle_item_id)->item_manufacturer_id)->where('manufacturer_shop_id',Warehouse::getShopId())->first();
-                    if(!$manufacturer)
+                    if($manufacturer_id != 0 && $manufacturer_id != null)
                     {
-                        $boo = true;
+                        if(Item::info($value_bundle->bundle_item_id)->item_manufacturer_id != $manufacturer_id)
+                        {
+                            $boo = true;
+                        }
                     }
                }
             }
@@ -129,15 +131,15 @@ class Warehouse
 
     }
 
-    public static function get_inventory_item($warehouse_id, $type = '')
+    public static function get_inventory_item($warehouse_id, $type = '', $manufacturer_id = 0)
     {
-        $data['warehouse_item_bundle'] = Warehouse::select_item_warehouse_per_bundle($warehouse_id);
-        $data['_inventory'] = Warehouse::get_all_inventory_item($warehouse_id, $data['warehouse_item_bundle']);
-        $data['_empties'] = Warehouse::get_all_inventory_item($warehouse_id, $data['warehouse_item_bundle'], 1);
+        $data['warehouse_item_bundle'] = Warehouse::select_item_warehouse_per_bundle($warehouse_id, $manufacturer_id);
+        $data['_inventory'] = Warehouse::get_all_inventory_item($warehouse_id, $data['warehouse_item_bundle'], $manufacturer_id);
+        $data['_empties'] = Warehouse::get_all_inventory_item($warehouse_id, $data['warehouse_item_bundle'], $manufacturer_id, 1);
 
         return $data;
     }
-    public static function get_all_inventory_item($warehouse_id, $bundled_item, $is_mts = 0)
+    public static function get_all_inventory_item($warehouse_id, $bundled_item, $manufacturer_id = 0, $is_mts = 0)
     {
         $original_inventory = Warehouse::select_item_warehouse_single_empties($warehouse_id, $is_mts);
         $_return = [];
@@ -198,6 +200,15 @@ class Warehouse
 
             $_return[$key]['item_actual_stock'] = $_return[$key]['less_stock'] + $qty;
             $_return[$key]['item_actual_stock_um'] = UnitMeasurement::um_view($_return[$key]['item_actual_stock'],$item_data->item_measurement_id, $um_issued);
+
+
+            if($manufacturer_id != 0 && $manufacturer_id != null)
+            {
+                if($item_data->item_manufacturer_id != $manufacturer_id)
+                {
+                    unset($_return[$key]);
+                }
+            }
         }
         return $_return;
     }
@@ -263,7 +274,7 @@ class Warehouse
         }
     }
     public static function insert_item_to_warehouse($warehouse, $item_id, $item_quantity, $item_reorder_point)
-    {         
+    {
         $shop_id = Warehouse::getShopId();
         $slip_id = 0 ;
         $inventory_id = 0;

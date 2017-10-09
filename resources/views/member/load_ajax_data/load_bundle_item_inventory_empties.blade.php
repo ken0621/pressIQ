@@ -8,20 +8,26 @@
             </tr>
         </thead>
         <tbody class="draggable">
-            @if($_empties != null)
-                @foreach($_empties as $keys => $empties)
-                <tr class="tr-draggable tr-draggable-html count_row">
-                    <td class="text-center">
-                        <label class="count-select">{{$empties["item_sku"]}}</label>
-                    </td>
-                    <td class="text-center">
-                        <label class="count-select">{{$empties["item_barcode"]}}</label>
-                    </td>
-                    <td class="text-center">
-                        <label >{{$empties["item_actual_stock_um"]}}</label>
-                    </td>
-                </tr>
-                @endforeach
+            @if(count($_empties) > 0)
+                @if($_empties != null)
+                    @foreach($_empties as $keys => $empties)
+                    <tr class="tr-draggable tr-draggable-html count_row">
+                        <td class="text-center">
+                            <label class="count-select">{{$empties["item_sku"]}}</label>
+                        </td>
+                        <td class="text-center">
+                            <label class="count-select">{{$empties["item_barcode"]}}</label>
+                        </td>
+                        <td class="text-center">
+                            <label >{{$empties["item_actual_stock_um"]}}</label>
+                        </td>
+                    </tr>
+                    @endforeach
+                @endif
+            @else
+            <tr>
+                <td colspan="3" class="text-center">NO ITEM</td>
+            </tr>
             @endif
         </tbody>
     </table>

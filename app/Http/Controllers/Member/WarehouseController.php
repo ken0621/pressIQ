@@ -9,6 +9,7 @@ use App\Globals\Vendor;
 use App\Globals\Pdf_global;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_warehouse_inventory;
+use App\Models\Tbl_manufacturer;
 use App\Models\Tbl_sub_warehouse;
 use App\Models\Tbl_user_warehouse_access;
 use App\Models\Tbl_inventory_slip;
@@ -1335,24 +1336,31 @@ class WarehouseController extends Member
     }
     public function print_inventory($warehouse_id, $type = '')
     {
-        $data = Warehouse::get_inventory_item($warehouse_id, $type);
+        $manufacturer_id = Request::input('m_id');
+        $data = Warehouse::get_inventory_item($warehouse_id, $type, $manufacturer_id);
         $data['type'] = $type;
         $data['pis'] = Purchasing_inventory_system::check();
         $data['owner'] = Tbl_warehouse::shop()->where('warehouse_id',$warehouse_id)->first();
+        $data['manufacturer_name'] = Tbl_manufacturer::where('manufacturer_id',$manufacturer_id)->value('manufacturer_name');
 
         // return view("member.warehouse.warehouse_inventory_print",$data);
 
         $pdf = view("member.warehouse.warehouse_inventory_print",$data);
         return Pdf_global::show_pdf($pdf);
     }
-    public function view_inventory_table()
+    public function view_inventory_table($warehouse_id = 0)
     {
         $type = 'bundle';
+        $manufacturer_id = Request::input('m_id');
         if(Request::input('type'))
         {
             $type = Request::input('type');   
         }
-        $data = Warehouse::get_inventory_item($type);
+
+        $data = Warehouse::get_inventory_item($warehouse_id, $type, $manufacturer_id);
+        $data['pis'] = Purchasing_inventory_system::check();
+        $data['warehouse_id'] = $warehouse_id;
+        $data['warehouse'] = Tbl_warehouse::where('warehouse_id',$warehouse_id)->first();
 
         return view("member.warehouse.warehouse_view_v2_inventory_table",$data);
     }

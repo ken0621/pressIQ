@@ -263,7 +263,7 @@ class Warehouse
         }
     }
     public static function insert_item_to_warehouse($warehouse, $item_id, $item_quantity, $item_reorder_point)
-    {        
+    {         
         $shop_id = Warehouse::getShopId();
         $slip_id = 0 ;
         $inventory_id = 0;
